@@ -38,6 +38,8 @@ sector_t    *backsector;
 drawseg_t   *ds_p;
 drawseg_t    drawsegs[MAXDRAWSEGS];
 
+// [JN] killough 4/7/98: indicates doors closed wrt automap bugfix:
+int doorclosed;
 
 void R_StoreWallRange (int start, int stop);
 
@@ -234,6 +236,30 @@ void R_ClearClipSegs (void)
     newend = solidsegs+2;
 }
 
+// [JN] killough 1/18/98 -- This function is used to fix the automap bug which
+// showed lines behind closed doors simply because the door had a dropoff.
+//
+// It assumes that Doom has already ruled out a door being closed because
+// of front-back closure (e.g. front floor is taller than back ceiling).
+
+int R_DoorClosed (void)
+{
+    return
+
+    // if door is closed because back is shut:
+    backsector->ceilingheight <= backsector->floorheight
+
+    // preserve a kind of transparent door/lift special effect:
+    && (backsector->ceilingheight >= frontsector->ceilingheight
+    ||  curline->sidedef->toptexture)
+
+    && (backsector->floorheight <= frontsector->floorheight
+    ||  curline->sidedef->bottomtexture)
+
+    // properly render skies (consider door "open" if both ceilings are sky):
+    && (backsector->ceilingpic != skyflatnum
+    ||  frontsector->ceilingpic != skyflatnum);
+}
 
 //
 // R_AddLine
@@ -308,10 +334,17 @@ void R_AddLine (seg_t *line)
     if (!backsector)
     goto clipsolid;		
 
+    doorclosed = 0; // [JN] killough 4/16/98
+
     // Closed door.
     if (backsector->ceilingheight <= frontsector->floorheight
     ||  backsector->floorheight >= frontsector->ceilingheight)
     goto clipsolid;		
+
+    // [JN] This fixes the automap floor height bug -- killough 1/18/98:
+    // killough 4/7/98: optimize: save result in doorclosed for use in r_segs.c
+    if ((doorclosed = R_DoorClosed()))
+    goto clipsolid;
 
     // Window.
     if (backsector->ceilingheight != frontsector->ceilingheight
