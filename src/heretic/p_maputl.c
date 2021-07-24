@@ -149,28 +149,37 @@ void P_MakeDivline (line_t *li, divline_t *dl)
 = P_InterceptVector
 =
 = Returns the fractional intercept point along the first divline.
-=
 = This is only called by the addthings and addlines traversers.
+=
+= [JN] killough 5/3/98: reformatted, cleaned up
 =
 ================================================================================
 */
 
 fixed_t P_InterceptVector(divline_t *v2, divline_t *v1)
 {
-    fixed_t frac, num, den;
-
-    den = FixedMul(v1->dy >> 8, v2->dx) - FixedMul(v1->dx >> 8, v2->dy);
-
-    if (den == 0)
+    if (singleplayer)
     {
-        return 0;
+        // [JN] cph - no precision/overflow problems
+        int64_t den = (int64_t)v1->dy * v2->dx - (int64_t)v1->dx * v2->dy;
+        den >>= 16;
+        
+        if (!den)
+        {
+            return 0;
+        }
+
+        return (fixed_t)(((int64_t)(v1->x - v2->x) * v1->dy
+                        - (int64_t)(v1->y - v2->y) * v1->dx) / den);
     }
+    else
+    {
+        // [JN] Original demo-safe code.
+        fixed_t den = FixedMul(v1->dy >> 8, v2->dx) - FixedMul(v1->dx >> 8, v2->dy);
 
-    num = FixedMul((v1->x - v2->x) >> 8, v1->dy)
-        + FixedMul((v2->y - v1->y) >> 8, v1->dx);
-    frac = FixedDiv(num, den);
-
-    return frac;
+        return den ? FixedDiv((FixedMul((v1->x-v2->x) >> 8, v1->dy)
+                   + FixedMul((v2->y-v1->y) >> 8, v1->dx)), den) : 0;
+    }
 }
 
 /*
