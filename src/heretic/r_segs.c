@@ -717,6 +717,30 @@ void R_StoreWallRange (int start, int stop)
             ds_p->silhouette |= SIL_TOP;
         }
 
+        // [JN] killough 1/17/98: this test is required if the fix
+        // for the automap bug (r_bsp.c) is used, or else some
+        // sprites will be displayed behind closed doors. That
+        // fix prevents lines behind closed doors with dropoffs
+        // from being displayed on the automap.
+        //
+        // killough 4/7/98: make doorclosed external variable
+        {
+            extern int doorclosed;  // killough 1/17/98, 2/8/98, 4/7/98
+
+            if (doorclosed || backsector->interpceilingheight <= frontsector->interpfloorheight)
+            {
+                ds_p->sprbottomclip = negonearray;
+                ds_p->bsilheight = INT_MAX;
+                ds_p->silhouette |= SIL_BOTTOM;
+            }
+            if (doorclosed || backsector->interpfloorheight >= frontsector->interpceilingheight)
+            {   // killough 1/17/98, 2/8/98
+                ds_p->sprtopclip = screenheightarray;
+                ds_p->tsilheight = INT_MIN;
+                ds_p->silhouette |= SIL_TOP;
+            }
+        }
+
         worldhigh = backsector->interpceilingheight - viewz;
         worldlow = backsector->interpfloorheight - viewz;
 

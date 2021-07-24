@@ -34,6 +34,9 @@ drawseg_t *ds_p;
 
 int numdrawsegs = 0;
 
+// [JN] killough 4/7/98: indicates doors closed wrt automap bugfix:
+int doorclosed;
+
 void R_StoreWallRange (int start, int stop);
 
 /*
@@ -232,6 +235,37 @@ void R_ClearClipSegs(void)
 /*
 ================================================================================
 =
+= [JN] killough 1/18/98 -- This function is used to fix the automap bug which
+= showed lines behind closed doors simply because the door had a dropoff.
+=
+= It assumes that Doom has already ruled out a door being closed because
+= of front-back closure (e.g. front floor is taller than back ceiling).
+=
+================================================================================
+*/
+
+int R_DoorClosed (void)
+{
+    return
+
+    // if door is closed because back is shut:
+    backsector->interpceilingheight <= backsector->interpfloorheight
+
+    // preserve a kind of transparent door/lift special effect:
+    && (backsector->interpceilingheight >= frontsector->interpceilingheight
+    ||  curline->sidedef->toptexture)
+
+    && (backsector->interpfloorheight <= frontsector->interpfloorheight
+    ||  curline->sidedef->bottomtexture)
+
+    // properly render skies (consider door "open" if both ceilings are sky):
+    && (backsector->ceilingpic != skyflatnum
+    ||  frontsector->ceilingpic != skyflatnum);
+}
+
+/*
+================================================================================
+=
 = R_MaybeInterpolateSector
 =
 = [AM] Interpolate the passed sector, if prudent.
@@ -355,6 +389,8 @@ void R_AddLine(seg_t * line)
     if (!backsector)
     goto clipsolid;
 
+    doorclosed = 0; // [JN] killough 4/16/98
+
     // [AM] Interpolate sector movement before
     //      running clipping tests.  Frontsector
     //      should already be interpolated.
@@ -363,6 +399,11 @@ void R_AddLine(seg_t * line)
     // Closed door.
     if (backsector->interpceilingheight <= frontsector->interpfloorheight
     ||  backsector->interpfloorheight >= frontsector->interpceilingheight)
+    goto clipsolid;
+
+    // [JN] This fixes the automap floor height bug -- killough 1/18/98:
+    // killough 4/7/98: optimize: save result in doorclosed for use in r_segs.c
+    if ((doorclosed = R_DoorClosed()))
     goto clipsolid;
 
     // Window.
