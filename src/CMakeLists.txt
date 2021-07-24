@@ -1,4 +1,5 @@
-foreach(SUBDIR doom heretic hexen strife setup)
+# [Dasperal] Disable "strife" from the compilation
+foreach(SUBDIR doom heretic hexen setup)
     add_subdirectory("${SUBDIR}")
 endforeach()
 
@@ -139,7 +140,8 @@ target_link_libraries(SetupCommon PUBLIC
 )
 
 # Create executables
-foreach(TARGET doom heretic hexen strife)
+# [Dasperal] Disable "strife" from the compilation
+foreach(TARGET doom heretic hexen)
     add_executable("${PROGRAM_PREFIX}${TARGET}" WIN32
         i_main.c
         "${PROJECT_SOURCE_DIR}/data/${TARGET}_icon.c"
@@ -189,7 +191,8 @@ endforeach()
 
 # MSVC link flags
 if(MSVC)
-    foreach(TARGET doom heretic hexen strife)
+    # [Dasperal] Disable "strife" from the compilation
+    foreach(TARGET doom heretic hexen)
         set_target_properties("${PROGRAM_PREFIX}${TARGET}" PROPERTIES
             LINK_FLAGS "/MANIFEST:NO"
         )
@@ -213,12 +216,14 @@ foreach(SRC_FILE_PATH ${GUS_PATCHES_SRC_FILES})
 endforeach()
 add_custom_target(gus-patches DEPENDS ${GUS_PATCHES_DEST_FILES})
 
-foreach(TARGET doom heretic hexen strife)
+# [Dasperal] Disable "strife" from the compilation
+foreach(TARGET doom heretic hexen)
     add_dependencies("${PROGRAM_PREFIX}${TARGET}" gus-patches)
 endforeach()
 
 # Copying game support wads
-foreach(TARGET doom heretic hexen strife)
+# [Dasperal] Disable "strife" from the compilation
+foreach(TARGET doom heretic hexen)
 
     file(GLOB WADS "${CMAKE_CURRENT_SOURCE_DIR}/base/${TARGET}-*.wad")
     foreach(SRC_FILE_PATH ${WADS})
@@ -249,7 +254,8 @@ if(WIN32)
     endforeach()
     add_custom_target(win-libs DEPENDS ${WIN_LIBS_DEST_FILES})
 
-    foreach(TARGET doom heretic hexen strife)
+    # [Dasperal] Disable "strife" from the compilation
+    foreach(TARGET doom heretic hexen)
         add_dependencies("${PROGRAM_PREFIX}${TARGET}" win-libs)
         add_dependencies("${PROGRAM_PREFIX}${TARGET}-setup" win-libs)
     endforeach()
