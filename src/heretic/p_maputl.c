@@ -382,31 +382,33 @@ If the function returns false, exit with false without checking anything else.
 = The validcount flags are used to avoid checking lines
 = that are marked in multiple mapblocks, so increment validcount before
 = the first call to P_BlockLinesIterator, then make one or more calls to it.
+=
+= [JN] killough 5/3/98: reformatted, cleaned up
+=
 ================================================================================
 */
 
 boolean P_BlockLinesIterator (int x, int y, boolean(*func) (line_t *))
 {
-    int       offset;
-    int32_t  *list;
-    line_t   *ld;
+    int offset;
+    int32_t *list;  // [crispy] BLOCKMAP limit
 
     if (x < 0 || y < 0 || x >= bmapwidth || y >= bmapheight)
     {
         return true;
     }
 
-    offset = y * bmapwidth + x;
-    offset = *(blockmap + offset);
+    offset = y*bmapwidth+x;
+    offset = *(blockmap+offset);
+    list = blockmaplump+offset;
 
-    for (list = blockmaplump + offset; *list != -1; list++)
+    for ( ; *list != -1 ; list++)
     {
-        ld = &lines[*list];
+        line_t *ld = &lines[*list];
 
         if (ld->validcount == validcount)
         {
-            // line has already been checked
-            continue;
+            continue;  // line has already been checked
         }
 
         ld->validcount = validcount;
@@ -417,8 +419,7 @@ boolean P_BlockLinesIterator (int x, int y, boolean(*func) (line_t *))
         }
     }
 
-    // everything was checked
-    return true;
+    return true;  // everything was checked
 }
 
 /*

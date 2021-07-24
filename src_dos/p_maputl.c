@@ -334,56 +334,47 @@ void P_SetThingPosition (mobj_t *thing)
 //
 
 
-//
+// -----------------------------------------------------------------------------
 // P_BlockLinesIterator
-// The validcount flags are used to avoid checking lines
-// that are marked in multiple mapblocks,
-// so increment validcount before the first call
-// to P_BlockLinesIterator, then make one or more calls
-// to it.
+// The validcount flags are used to avoid checking lines that are marked in 
+// multiple mapblocks, so increment validcount before the first call to 
+// P_BlockLinesIterator, then make one or more calls to it.
 //
-boolean
-P_BlockLinesIterator
-( int			x,
-  int			y,
-  boolean(*func)(line_t*) )
+// [JN] killough 5/3/98: reformatted, cleaned up
+// -----------------------------------------------------------------------------
+
+boolean P_BlockLinesIterator (int x, int y, boolean(*func)(line_t*))
 {
-    int			offset;
-    short*		list;
-    line_t*		ld;
-	
-    if (x<0
-	|| y<0
-	|| x>=bmapwidth
-	|| y>=bmapheight)
+    int offset;
+    short *list;
+
+    if (x < 0 || y < 0 || x >= bmapwidth || y >= bmapheight)
     {
-	return true;
+        return true;
     }
-    
+
     offset = y*bmapwidth+x;
-	
     offset = *(blockmap+offset);
+    list = blockmaplump+offset;
 
-    // [JN] Fixes bug: https://doomwiki.org/wiki/Hitscan_attacks_hit_invisible_barriers_in_large_open_areas
-    // Not safe for demos, strictly for single player.
-    // Many thanks to Fabian Greffrath for this solution and Dmitry D. Chernov aka Black Doomer!
-
-    if (singleplayer)
-    offset++;
-
-    for ( list = blockmaplump+offset ; *list != -1 ; list++)
+    for ( ; *list != -1 ; list++)
     {
-	ld = &lines[*list];
+        line_t *ld = &lines[*list];
 
-	if (ld->validcount == validcount)
-	    continue; 	// line has already been checked
+        if (ld->validcount == validcount)
+        {
+            continue;  // line has already been checked
+        }
 
-	ld->validcount = validcount;
-		
-	if ( !func(ld) )
-	    return false;
+        ld->validcount = validcount;
+
+        if (!func(ld))
+        {
+            return false;
+        }
     }
-    return true;	// everything was checked
+
+    return true;  // everything was checked
 }
 
 
