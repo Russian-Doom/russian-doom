@@ -373,13 +373,6 @@ P_BlockLinesIterator
 	
     offset = *(blockmap+offset);
 
-    // [JN] Исправление бага: https://doomwiki.org/wiki/Hitscan_attacks_hit_invisible_barriers_in_large_open_areas
-    // Исключительно для одиночной игры, т.к. исправление может вызывать рассинхронизацию демозаписией.
-    // Many thanks to Fabian Greffrath for this solution and Dmitry D. Chernov aka Black Doomer!
-
-    if (singleplayer)
-    offset++;
-
     for ( list = blockmaplump+offset ; *list != -1 ; list++)
     {
 
