@@ -145,9 +145,11 @@ inline void RD_Menu_SpinInt_Step(int* var, int minValue, int maxValue, int step,
             (*var) += step;
             if (*var > maxValue)
                 *var = minValue;
-        default:
             break;
+        default:
+            return;
     }
+    RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
 }
 
 /**
@@ -169,11 +171,17 @@ inline void RD_Menu_SlideInt_Step(int* var, int minValue, int maxValue, int step
     {
         case LEFT_DIR:
             if (*var > minValue)
+            {
                 (*var) -= step;
+                RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
+            }
             break;
         case RIGHT_DIR:
             if (*var < maxValue)
+            {
                 (*var) += step;
+                RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
+            }
         default:
             break;
     }
@@ -189,11 +197,17 @@ inline void RD_Menu_SlideFloat_Step(float* var, float minValue, float maxValue, 
     {
         case LEFT_DIR:
             if (*var > minValue)
+            {
                 (*var) -= step;
+                RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
+            }
             break;
         case RIGHT_DIR:
             if (*var < maxValue)
+            {
                 (*var) += step;
+                RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
+            }
         default:
             break;
     }
@@ -216,9 +230,11 @@ inline void RD_Menu_ShiftSpinInt(int* var, int minValue, int maxValue, Direction
             (*var) <<= 1;
             if (*var > maxValue)
                 *var = minValue;
-        default:
             break;
+        default:
+            return;
     }
+    RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
 }
 
 /**
@@ -231,11 +247,17 @@ inline void RD_Menu_ShiftSlideInt(int* var, int minValue, int maxValue, Directio
     {
         case LEFT_DIR:
             if (*var > minValue)
+            {
                 (*var) >>= 1;
+                RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
+            }
             break;
         case RIGHT_DIR:
             if (*var < maxValue)
+            {
                 (*var) <<= 1;
+                RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
+            }
         default:
             break;
     }
@@ -473,7 +495,6 @@ boolean RD_Menu_Responder(int key, int charTyped)
         if (item->type == ITT_LRFUNC && item->pointer != NULL)
         {
             ((void (*)(Direction_t)) item->pointer)(LEFT_DIR);
-            RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
         }
         return true;
     }
@@ -482,7 +503,6 @@ boolean RD_Menu_Responder(int key, int charTyped)
         if (item->type == ITT_LRFUNC && item->pointer != NULL)
         {
             ((void (*)(Direction_t)) item->pointer)(RIGHT_DIR);
-            RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
         }
         return true;
     }
