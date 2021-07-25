@@ -40,7 +40,6 @@
 #include "i_video.h"
 #include "p_setup.h"
 #include "p_saveg.h"
-#include "p_tick.h"
 #include "d_main.h"
 #include "wi_stuff.h"
 #include "hu_stuff.h"

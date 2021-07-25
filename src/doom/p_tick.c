@@ -19,46 +19,40 @@
 //
 
 
-
 #include "z_zone.h"
 #include "p_local.h"
-
 #include "doomstat.h"
 #include "crispy.h"
 
 
 int	leveltime;
 
-//
+// =============================================================================
 // THINKERS
-// All thinkers should be allocated by Z_Malloc
-// so they can be operated on uniformly.
-// The actual structures will vary in size,
-// but the first element must be thinker_t.
 //
-
-
+// All thinkers should be allocated by Z_Malloc so they can be operated
+// on uniformly. The actual structures will vary in size, but the first 
+// element must be thinker_t.
+// =============================================================================
 
 // Both the head and tail of the thinker list.
-thinker_t	thinkercap;
+thinker_t thinkercap;
 
-
-//
+// -----------------------------------------------------------------------------
 // P_InitThinkers
-//
+// -----------------------------------------------------------------------------
+
 void P_InitThinkers (void)
 {
     thinkercap.prev = thinkercap.next  = &thinkercap;
 }
 
-
-
-
-//
+// -----------------------------------------------------------------------------
 // P_AddThinker
 // Adds a new thinker at the end of the list.
-//
-void P_AddThinker (thinker_t* thinker)
+// -----------------------------------------------------------------------------
+
+void P_AddThinker (thinker_t *thinker)
 {
     thinkercap.prev->next = thinker;
     thinker->next = &thinkercap;
@@ -66,34 +60,21 @@ void P_AddThinker (thinker_t* thinker)
     thinkercap.prev = thinker;
 }
 
-
-
-//
+// -----------------------------------------------------------------------------
 // P_RemoveThinker
-// Deallocation is lazy -- it will not actually be freed
+// Deallocation is lazy -- it will not actually be freed 
 // until its thinking turn comes up.
-//
-void P_RemoveThinker (thinker_t* thinker)
+// -----------------------------------------------------------------------------
+
+void P_RemoveThinker (thinker_t *thinker)
 {
-  // FIXME: NOP.
-  thinker->function.acv = (actionf_v)(-1);
+    thinker->function.acv = (actionf_v)(-1);
 }
 
-
-
-//
-// P_AllocateThinker
-// Allocates memory and adds a new thinker at the end of the list.
-//
-void P_AllocateThinker (thinker_t*	thinker)
-{
-}
-
-
-
-//
+// -----------------------------------------------------------------------------
 // P_RunThinkers
-//
+// -----------------------------------------------------------------------------
+
 void P_RunThinkers (void)
 {
     thinker_t *currentthinker, *nextthinker;
@@ -104,82 +85,82 @@ void P_RunThinkers (void)
     if (singleplayer)
     {
         currentthinker = thinkercap.next;
+
         while (currentthinker != &thinkercap)
         {
-        {
             if (currentthinker->function.acp1)
-            if (currentthinker->function.acp1 == (actionf_p1)P_MobjThinker)
-            currentthinker->function.acp1 (currentthinker);
-                nextthinker = currentthinker->next;
-        }
-        currentthinker = nextthinker;
+                if (currentthinker->function.acp1 == (actionf_p1)P_MobjThinker)
+                    currentthinker->function.acp1 (currentthinker);
+
+            nextthinker = currentthinker->next;
+            currentthinker = nextthinker;
         }
     }
 
     currentthinker = thinkercap.next;
+
     while (currentthinker != &thinkercap)
     {
-	if ( currentthinker->function.acv == (actionf_v)(-1) )
-	{
-	    // time to remove it
-            nextthinker = currentthinker->next;
-	    currentthinker->next->prev = currentthinker->prev;
-	    currentthinker->prev->next = currentthinker->next;
-	    Z_Free(currentthinker);
-	}
-	else
-	{
-        // [JN] Prevent dropped item from jittering on moving platforms.
-        if (singleplayer)
+        if (currentthinker->function.acv == (actionf_v)(-1))
         {
-            if (currentthinker->function.acp1)
-                if (currentthinker->function.acp1 != (actionf_p1)P_MobjThinker)
-                    currentthinker->function.acp1 (currentthinker);
+            // Time to remove it.
             nextthinker = currentthinker->next;
+            currentthinker->next->prev = currentthinker->prev;
+            currentthinker->prev->next = currentthinker->next;
+            Z_Free(currentthinker);
         }
         else
         {
-            if (currentthinker->function.acp1)
-                currentthinker->function.acp1 (currentthinker);
-            nextthinker = currentthinker->next;
+            // [JN] Prevent dropped item from jittering on moving platforms.
+            if (singleplayer)
+            {
+                if (currentthinker->function.acp1)
+                    if (currentthinker->function.acp1 != (actionf_p1)P_MobjThinker)
+                        currentthinker->function.acp1 (currentthinker);
+
+                nextthinker = currentthinker->next;
+            }
+            else
+            {
+                if (currentthinker->function.acp1)
+                    currentthinker->function.acp1 (currentthinker);
+
+                nextthinker = currentthinker->next;
+            }
         }
-	}
-	currentthinker = nextthinker;
+
+        currentthinker = nextthinker;
     }
 }
 
-
-
-//
+// -----------------------------------------------------------------------------
 // P_Ticker
-//
+// -----------------------------------------------------------------------------
 
 void P_Ticker (void)
 {
-    int		i;
-    
-    // run the tic
-    if (paused)
-	return;
-		
-    // pause if in menu and at least one tic has been run
-    if ( !netgame
-	 && menuactive
-	 && !demoplayback
-	 && players[consoleplayer].viewz != 1)
-    {
-	return;
-    }
-    
-		
-    for (i=0 ; i<MAXPLAYERS ; i++)
-	if (playeringame[i])
-	    P_PlayerThink (&players[i]);
-			
-    P_RunThinkers ();
-    P_UpdateSpecials ();
-    P_RespawnSpecials ();
+    int i;
 
-    // for par times
+    // Run the tic.
+    if (paused)
+    {
+        return;
+    }
+		
+    // Pause if in menu and at least one tic has been run.
+    if (!netgame && menuactive && !demoplayback && players[consoleplayer].viewz != 1)
+    {
+        return;
+    }
+
+    for (i=0 ; i < MAXPLAYERS ; i++)
+        if (playeringame[i])
+            P_PlayerThink (&players[i]);
+
+    P_RunThinkers();
+    P_UpdateSpecials();
+    P_RespawnSpecials();
+
+    // For par times.
     leveltime++;	
 }

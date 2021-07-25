@@ -49,7 +49,7 @@ add_library(doom STATIC
             p_spec.c        p_spec.h
             p_switch.c
             p_telept.c
-            p_tick.c        p_tick.h
+            p_tick.c
             p_user.c
             r_bmaps.c       r_bmaps.h
             r_bsp.c         r_bsp.h
