@@ -59,6 +59,4 @@ void M_ClearMenus (void);
 // [JN] Called by ST_InitColors.
 void M_RD_Define_SBarColorValue(byte** sbar_color_set, int color);
 
-void M_WriteTimeAndFPS (int x, int y, char *string);
-
 #endif    
