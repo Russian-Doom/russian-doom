@@ -1826,7 +1826,7 @@ void M_RD_Define_Msg_Color (MessageType_t messageType, int color)
             colorVar = &messages_chat_color_set;
             break;
         default:
-            break;
+            return;
     }
 
     // [JN] No coloring in vanilla.

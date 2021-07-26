@@ -2570,8 +2570,9 @@ void M_RD_Define_Msg_Color(MessageType_t messageType, int color)
             break;
         case msg_chat: // Netgame chat
             colorVar = &messages_chat_color_set;
-        default:
             break;
+        default:
+            return;
     }
 
     // [JN] No coloring in vanilla or Jaguar Doom.
