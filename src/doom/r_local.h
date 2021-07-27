@@ -45,4 +45,7 @@
 #include "r_things.h"
 #include "r_draw.h"
 
+
+extern boolean scaled_sky;
+
 #endif		// __R_LOCAL__
