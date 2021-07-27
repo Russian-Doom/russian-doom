@@ -33,10 +33,6 @@
 #include "jn.h"
 
 
-#define HEIGHTBITS  12
-#define HEIGHTUNIT  (1<<HEIGHTBITS)
-
-
 int toptexture, bottomtexture, midtexture;
 int rw_angle1;      // angle to line origin
 int rw_x, rw_stopx; // regular wall
@@ -129,7 +125,7 @@ static const struct
 {
     int clamp;
     int heightbits;
-} scale_values[8] = {
+} scale_values[9] = {
     {2048 * FRACUNIT, 12},
     {1024 * FRACUNIT, 12},
     {1024 * FRACUNIT, 11},
@@ -137,7 +133,8 @@ static const struct
     { 512 * FRACUNIT, 10},
     { 256 * FRACUNIT, 10},
     { 256 * FRACUNIT,  9},
-    { 128 * FRACUNIT,  9}
+    { 128 * FRACUNIT,  9},
+    {  64 * FRACUNIT,  9}
 };
 
 // -------------------------------------------------------------------------
