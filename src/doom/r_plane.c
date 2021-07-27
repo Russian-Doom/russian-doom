@@ -85,8 +85,6 @@ static int spanstart[SCREENHEIGHT];
 
 static lighttable_t **planezlight;
 static fixed_t planeheight;
-static fixed_t basexscale;
-static fixed_t baseyscale;
 static fixed_t cachedheight[SCREENHEIGHT];
 static fixed_t cacheddistance[SCREENHEIGHT];
 static fixed_t cachedxstep[SCREENHEIGHT];
@@ -103,8 +101,6 @@ fixed_t  distscale[WIDESCREENWIDTH];
 // Uses global vars:
 //  - planeheight
 //  - ds_source
-//  - basexscale
-//  - baseyscale
 //  - viewx
 //  - viewy
 //
@@ -200,10 +196,6 @@ void R_ClearPlanes (void)
 
     // texture calculation
     memset (cachedheight, 0, sizeof(cachedheight));
-
-    // scale will be unit scale at SCREENWIDTH/2 distance
-    basexscale = FixedDiv(viewsin,projection);
-    baseyscale = FixedDiv(viewcos,projection);
 }
 
 // -----------------------------------------------------------------------------
@@ -260,7 +252,7 @@ visplane_t *R_FindPlane (fixed_t height, int picnum, int lightlevel)
     check->minx = WIDESCREENWIDTH;
     check->maxx = -1;
 
-    memset(check->top, 0xff, sizeof(check->top));
+    memset(check->top, UINT_MAX, sizeof(check->top));
 
     return check;
 }
@@ -271,8 +263,7 @@ visplane_t *R_FindPlane (fixed_t height, int picnum, int lightlevel)
 
 visplane_t *R_DupPlane(const visplane_t *pl, int start, int stop)
 {
-    unsigned int  hash = visplane_hash(pl->picnum, pl->lightlevel, pl->height);
-    visplane_t   *new_pl = new_visplane(hash);
+    visplane_t  *new_pl = new_visplane(visplane_hash(pl->picnum, pl->lightlevel, pl->height));
 
     new_pl->height = pl->height;
     new_pl->picnum = pl->picnum;
@@ -280,7 +271,7 @@ visplane_t *R_DupPlane(const visplane_t *pl, int start, int stop)
     new_pl->minx = start;
     new_pl->maxx = stop;
 
-    memset(new_pl->top, 0xff, sizeof(new_pl->top));
+    memset(new_pl->top, UINT_MAX, sizeof(new_pl->top));
 
     return new_pl;
 }
@@ -311,7 +302,7 @@ visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop)
         unionh = pl->maxx, intrh  = stop;
     }
 
-    for (x=intrl ; x <= intrh && pl->top[x] == 0xffffffffu; x++); // [crispy] hires / 32-bit integer math
+    for (x=intrl ; x <= intrh && pl->top[x] == UINT_MAX; x++); // [crispy] hires / 32-bit integer math
     // [crispy] fix HOM if ceilingplane and floorplane are the same visplane (e.g. both are skies)
     if (!(pl == floorplane && markceiling && floorplane == ceilingplane) && x > intrh)
     {
@@ -398,7 +389,7 @@ void R_DrawPlanes (void)
 
             for (x=pl->minx ; x <= pl->maxx ; x++)
             {
-                if ((unsigned)(dc_yl = pl->top[x]) <= (dc_yh = pl->bottom[x])) // [crispy] 32-bit integer math
+                if ((dc_yl = pl->top[x]) != UINT_MAX && dc_yl <= (dc_yh = pl->bottom[x])) // [crispy] 32-bit integer math
                 {
                     // [crispy] Optionally draw skies horizontally linear.
                     int angle = ((viewangle + (linear_sky && !vanillaparm ? linearskyangle[x] : 
@@ -433,7 +424,7 @@ void R_DrawPlanes (void)
 
             stop = pl->maxx + 1;
             planezlight = zlight[light];
-            pl->top[pl->minx-1] = pl->top[stop] = 0xffffffffu; // [crispy] 32-bit integer math
+            pl->top[pl->minx-1] = pl->top[stop] = UINT_MAX; // [crispy] 32-bit integer math
 
             // [JN] Apply brightmaps to floor/ceiling...
             if (brightmaps && brightmaps_allowed)
