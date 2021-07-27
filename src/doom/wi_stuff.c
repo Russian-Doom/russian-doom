@@ -2154,9 +2154,9 @@ void WI_initVariables (wbstartstruct_t* wbstartstruct)
     if (!wbs->maxsecret)
     wbs->maxsecret = 1;
 
-    if ( gamemode != retail )
+    if (gamemode != retail && (!sgl_loaded || wbs->epsd == 3))
         if (wbs->epsd > 2)
-        wbs->epsd -= 3;
+            wbs->epsd -= 3;
 }
 
 

@@ -796,7 +796,8 @@ static Menu_t MainMenuBeta = {
 static MenuItem_t DoomEpisodeItems [] = {
     {ITT_EFUNC, "kM_EPI1", "gRD_EPI1", M_Episode, 0},
     {ITT_EFUNC, "tM_EPI2", "gRD_EPI2", M_Episode, 1},
-    {ITT_EFUNC, "iM_EPI3", "bRD_EPI3", M_Episode, 2}
+    {ITT_EFUNC, "iM_EPI3", "bRD_EPI3", M_Episode, 2},
+    {ITT_EFUNC, "sM_EPI5", "cRD_EPI5", M_Episode, 4} // [Dasperal]
 };
 
 static MenuItem_t UltimateEpisodeItems [] = {
@@ -812,6 +813,17 @@ static Menu_t DoomEpisodeMenu = {
     63,
     NULL, NULL, true,
     3, DoomEpisodeItems, true,
+    M_DrawEpisode,
+    NULL, 0,
+    &DoomMenu,
+    0
+};
+
+static Menu_t DoomSigilEpisodeMenu = {
+    48, 48,
+    63,
+    NULL, NULL, true,
+    4, DoomEpisodeItems, true,
     M_DrawEpisode,
     NULL, 0,
     &DoomMenu,
@@ -4734,15 +4746,25 @@ void M_RD_Change_Selective_Skill(Direction_t direction)
 
 void M_RD_Change_Selective_Episode(Direction_t direction)
 {
-    // [JN] Shareware have only 1 episode, 
+    int epiWas;
+
+    // [JN] Shareware have only 1 episode,
     // Doom 2 doest not have episodes at all.
     if (gamemode == shareware || gamemode == commercial)
         return;
 
+    epiWas = selective_episode;
     RD_Menu_SlideInt(&selective_episode, 1,
-                    (gamemode == registered ? 3 :
-                    gamemode == pressbeta ? 3 :
-                    sgl_loaded ? 5 : 4), direction);
+                     (gamemode == pressbeta || (gamemode == registered && !sgl_loaded) ? 3 :
+                     (gamemode == retail && sgl_loaded) ? 5 : 4), direction);
+    // [Dasperal] Skip 4 episode for Registered with Sigil
+    if(gamemode == registered && sgl_loaded && selective_episode == 4)
+    {
+        if(epiWas == 5)
+            selective_episode = 3;
+        else
+            selective_episode = 5;
+    }
 }
 
 void M_RD_Change_Selective_Map(Direction_t direction)
@@ -5922,7 +5944,7 @@ void M_Episode(int choice)
     }
 
     // Yet another hack...
-    if ( (gamemode == registered) && (choice > 2))
+    if ( (gamemode == registered) && (choice == 3))
     {
         fprintf (stderr, english_language ?
                         "M_Episode: fourth episode available only in Ultimate DOOM\n" :
@@ -7269,7 +7291,11 @@ void M_Init (void)
     // (should crash if missing).
     if (gameversion < exe_ultimate)
     {
-        EpisodeMenu = &DoomEpisodeMenu;
+        // [Dasperal] Sigil
+        if (sgl_loaded)
+            EpisodeMenu = &DoomSigilEpisodeMenu;
+        else
+            EpisodeMenu = &DoomEpisodeMenu;
     }
     else
     {

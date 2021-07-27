@@ -2293,7 +2293,7 @@ G_InitNew
         {
             episode = 1;
         }
-        if (episode > 3)
+        if ((episode > 3 && !sgl_loaded) || (episode == 4 && sgl_loaded))
         {
             episode = 3;
         }
