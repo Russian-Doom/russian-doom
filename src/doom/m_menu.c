@@ -738,7 +738,7 @@ static Menu_t DoomMenu = {
     NULL, NULL, true,
     6, DoomItems, true,
     M_DrawMainMenu,
-    NULL, 0,
+    NULL,
     NULL,
     0
 };
@@ -761,7 +761,7 @@ static Menu_t Doom2Menu = {
     NULL, NULL, true,
     5, Doom2Items, true,
     M_DrawMainMenu,
-    NULL, 0,
+    NULL,
     NULL,
     0
 };
@@ -784,7 +784,7 @@ static Menu_t MainMenuBeta = {
     NULL, NULL, true,
     5, MainMenuBetaItems, true,
     M_DrawMainMenu,
-    NULL, 0,
+    NULL,
     NULL,
     0
 };
@@ -814,7 +814,7 @@ static Menu_t DoomEpisodeMenu = {
     NULL, NULL, true,
     3, DoomEpisodeItems, true,
     M_DrawEpisode,
-    NULL, 0,
+    NULL,
     &DoomMenu,
     0
 };
@@ -825,7 +825,7 @@ static Menu_t DoomSigilEpisodeMenu = {
     NULL, NULL, true,
     4, DoomEpisodeItems, true,
     M_DrawEpisode,
-    NULL, 0,
+    NULL,
     &DoomMenu,
     0
 };
@@ -836,7 +836,7 @@ static Menu_t UltimateEpisodeMenu = {
     NULL, NULL, true,
     4, UltimateEpisodeItems, true,
     M_DrawEpisode,
-    NULL, 0,
+    NULL,
     &DoomMenu,
     0
 };
@@ -847,7 +847,7 @@ static Menu_t UltimateSigilEpisodeMenu = {
     NULL, NULL, true,
     5, UltimateEpisodeItems, true,
     M_DrawEpisode,
-    NULL, 0,
+    NULL,
     &DoomMenu,
     0
 };
@@ -871,7 +871,7 @@ static Menu_t NewGameMenu = {
     NULL, NULL, true,
     6, NewGameItems, true,
     M_DrawNewGame,
-    NULL, 0,
+    NULL,
     &DoomEpisodeMenu,
     0
 };
@@ -898,7 +898,7 @@ static Menu_t OptionsMenu = {
     "OPTIONS", "YFCNHJQRB", false,
     9, OptionsItems, true,
     NULL,
-    NULL, 0,
+    NULL,
     &DoomMenu,
     0
 };
@@ -929,7 +929,7 @@ static Menu_t RenderingMenu = {
     "RENDERING OPTIONS", "YFCNHJQRB DBLTJ", false, // НАСТРОЙКИ ВИДЕО
     13, RenderingItems, false,
     M_RD_Draw_Rendering,
-    NULL, 0,
+    NULL,
     &OptionsMenu,
     1
 };
@@ -961,7 +961,7 @@ static Menu_t DisplayMenu = {
     "DISPLAY OPTIONS", "YFCNHJQRB \"RHFYF", false, // НАСТРОЙКИ ЭКРАНА
     14, DisplayItems, false,
     M_RD_Draw_Display,
-    NULL, 0,
+    NULL,
     &OptionsMenu,
     1
 };
@@ -993,7 +993,7 @@ static Menu_t MessagesMenu = {
     "MESSAGES AND TEXTS", "CJJ<OTYBZ B NTRCNS", false, // СООБЩЕНИЯ И ТЕКСТЫ
     14, MessagesItems, false,
     M_RD_Draw_MessagesSettings,
-    NULL, 0,
+    NULL,
     &DisplayMenu,
     1
 };
@@ -1024,7 +1024,7 @@ static Menu_t AutomapMenu = {
     "AUTOMAP AND STATS", "RFHNF B CNFNBCNBRF", false, // КАРТА И СТАТИСТИКА
     13, AutomapItems, false,
     M_RD_Draw_AutomapSettings,
-    NULL, 0,
+    NULL,
     &DisplayMenu,
     1
 };
@@ -1052,7 +1052,7 @@ static Menu_t SoundMenu = {
     "SOUND OPTIONS", "YFCNHJQRB PDERF", false, // НАСТРОЙКИ ЗВУКА
     10, SoundItems, false,
     M_RD_Draw_Audio,
-    NULL, 0,
+    NULL,
     &OptionsMenu,
     1
 };
@@ -1079,7 +1079,7 @@ static Menu_t SoundSysMenu = {
     "SOUND SYSTEM", "PDERJDFZ CBCNTVF", false, // ЗВУКОВАЯ СИСТЕМА
     9, SoundSysItems, false,
     M_RD_Draw_Audio_System,
-    NULL, 0,
+    NULL,
     &SoundMenu,
     1
 };
@@ -1110,7 +1110,7 @@ static Menu_t ControlsMenu = {
     "CONTROL SETTINGS", "EGHFDKTYBT", false, // УПРАВЛЕНИЕ
     13, ControlsItems, false,
     M_RD_Draw_Controls,
-    NULL, 0,
+    NULL,
     &OptionsMenu,
     1
 };
@@ -1118,6 +1118,12 @@ static Menu_t ControlsMenu = {
 // -----------------------------------------------------------------------------
 // Key bindings (1)
 // -----------------------------------------------------------------------------
+
+static const PageDescriptor_t BindingsPageDescriptor = {
+    4, BindingsMenuPages,
+    229, 165,
+    CR_WHITE
+};
 
 static MenuItem_t Bindings1Items[] = {
     {ITT_TITLE,   "Movement",      "ldb;tybt",        NULL,           0},
@@ -1144,7 +1150,7 @@ static Menu_t Bindings1Menu = {
     "Keyboard bindings", "Yfcnhjqrb rkfdbfnehs", false, // Настройки клавиатуры
     16, Bindings1Items, false,
     M_RD_Draw_Bindings,
-    BindingsMenuPages, 4,
+    &BindingsPageDescriptor,
     &ControlsMenu,
     1
 };
@@ -1178,7 +1184,7 @@ static Menu_t Bindings2Menu = {
     "Keyboard bindings", "Yfcnhjqrb rkfdbfnehs", false, // Настройки клавиатуры
     16, Bindings2Items, false,
     M_RD_Draw_Bindings,
-    BindingsMenuPages, 4,
+    &BindingsPageDescriptor,
     &ControlsMenu,
     1
 };
@@ -1213,7 +1219,7 @@ static Menu_t Bindings3Menu = {
     "Keyboard bindings", "Yfcnhjqrb rkfdbfnehs", false, // Настройки клавиатуры
     16, Bindings3Items, false,
     M_RD_Draw_Bindings,
-    BindingsMenuPages, 4,
+    &BindingsPageDescriptor,
     &ControlsMenu,
     1
 };
@@ -1247,7 +1253,7 @@ static Menu_t Bindings4Menu = {
     "Keyboard bindings", "Yfcnhjqrb rkfdbfnehs", false, // Настройки клавиатуры
     16, Bindings4Items, false,
     M_RD_Draw_Bindings,
-    BindingsMenuPages, 4,
+    &BindingsPageDescriptor,
     &ControlsMenu,
     1
 };
@@ -1276,7 +1282,7 @@ static Menu_t MouseBindingsMenu = {
     "Mouse bindings", "Yfcnhjqrb vsib", false, // Настройки мыши
     10, MouseBindingsItems, false,
     M_RD_Draw_Mouse_Bindings,
-    NULL, 0,
+    NULL,
     &ControlsMenu,
     1
 };
@@ -1284,6 +1290,12 @@ static Menu_t MouseBindingsMenu = {
 // -----------------------------------------------------------------------------
 // Gameplay enhancements
 // -----------------------------------------------------------------------------
+
+static const PageDescriptor_t GameplayPageDescriptor = {
+    5, GameplayMenuPages,
+    229, 155,
+    CR_WHITE
+};
 
 static MenuItem_t Gameplay1Items[] = {
     {ITT_TITLE,   "Graphical",                    "uhfabrf",                        NULL,                       0}, // Графика
@@ -1308,7 +1320,7 @@ static Menu_t Gameplay1Menu = {
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     15, Gameplay1Items, false,
     M_RD_Draw_Gameplay_1,
-    GameplayMenuPages, 5,
+    &GameplayPageDescriptor,
     &OptionsMenu,
     1
 };
@@ -1336,7 +1348,7 @@ static Menu_t Gameplay2Menu = {
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     14, Gameplay2Items, false,
     M_RD_Draw_Gameplay_2,
-    GameplayMenuPages, 5,
+    &GameplayPageDescriptor,
     &OptionsMenu,
     1
 };
@@ -1364,7 +1376,7 @@ static Menu_t Gameplay3Menu = {
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     14, Gameplay3Items, false,
     M_RD_Draw_Gameplay_3,
-    GameplayMenuPages, 5,
+    &GameplayPageDescriptor,
     &OptionsMenu,
     1
 };
@@ -1392,7 +1404,7 @@ static Menu_t Gameplay4Menu = {
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     14, Gameplay4Items, false,
     M_RD_Draw_Gameplay_4,
-    GameplayMenuPages, 5,
+    &GameplayPageDescriptor,
     &OptionsMenu,
     1
 };
@@ -1420,7 +1432,7 @@ static Menu_t Gameplay5Menu = {
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     14, Gameplay5Items, false,
     M_RD_Draw_Gameplay_5,
-    GameplayMenuPages, 5,
+    &GameplayPageDescriptor,
     &OptionsMenu,
     1
 };
@@ -1428,6 +1440,12 @@ static Menu_t Gameplay5Menu = {
 // -----------------------------------------------------------------------------
 // Level select
 // -----------------------------------------------------------------------------
+
+static const PageDescriptor_t LevelSelectPageDescriptor = {
+    2, LevelSelectMenuPages,
+    240, 180,
+    CR_WHITE
+};
 
 static MenuItem_t LevelSelect1Items[] = {
     {ITT_LRFUNC,  "skill level",      "ckj;yjcnm",          M_RD_Change_Selective_Skill,        0}, // Сложность
@@ -1456,7 +1474,7 @@ static Menu_t LevelSelect1Menu = {
     "LEVEL SELECT", "DS<JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     18, LevelSelect1Items, false,
     M_RD_Draw_Level_1,
-    LevelSelectMenuPages, 2,
+    &LevelSelectPageDescriptor,
     &OptionsMenu,
     0
 };
@@ -1488,7 +1506,7 @@ static Menu_t LevelSelect2Menu = {
     "LEVEL SELECT", "DS<JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     18, LevelSelect2Items, false,
     M_RD_Draw_Level_2,
-    LevelSelectMenuPages, 2,
+    &LevelSelectPageDescriptor,
     &OptionsMenu,
     0
 };
@@ -1508,7 +1526,7 @@ static Menu_t ResetMenu = {
     NULL, NULL, false,
     2, ResetItems, false,
     M_RD_Draw_Reset,
-    NULL, 0,
+    NULL,
     &OptionsMenu,
     0
 };
@@ -1534,7 +1552,7 @@ static Menu_t LoadMenu = {
     NULL, NULL, false,
     8, LoadItems, true,
     M_DrawLoad,
-    NULL, 0,
+    NULL,
     &DoomMenu,
     0
 };
@@ -1560,7 +1578,7 @@ static Menu_t SaveMenu = {
     NULL, NULL, false,
     8, SaveItems, true,
     M_DrawSave,
-    NULL, 0,
+    NULL,
     &DoomMenu,
     0
 };
@@ -1586,7 +1604,7 @@ static Menu_t OptionsMenu_Vanilla = {
     NULL, NULL, true,
     8, OptionsItems_Vanilla, true,
     M_Vanilla_DrawOptions,
-    NULL, 0,
+    NULL,
     &DoomMenu,
     0
 };
@@ -1607,7 +1625,7 @@ static Menu_t Options2Menu_Vanilla = {
     NULL, NULL, true,
     3, Options2Items_Vanilla, true,
     M_Vanilla_DrawSound,
-    NULL, 0,
+    NULL,
     &OptionsMenu_Vanilla,
     0
 };
@@ -3034,7 +3052,6 @@ void M_RD_Draw_Bindings()
     {
         RD_M_DrawTextSmallENG(CurrentMenu == &Bindings4Menu ? "first page >" : "next page >", 35 + wide_delta, 155, CR_WHITE);
         RD_M_DrawTextSmallENG(CurrentMenu == &Bindings1Menu ? "< last page" : "< prev page", 35 + wide_delta, 165, CR_WHITE);
-        //RD_M_DrawTextSmallENG(keyPage->pageNumber_eng, x + wide_delta, 165, CR_WHITE); // [Dasperal] TODO replace with paging system
 
         RD_M_DrawTextSmallENG("enter to change, del to clear", 55 + wide_delta, 180, CR_DARKRED);
         RD_M_DrawTextSmallENG("pgup/pgdn to turn pages", 75 + wide_delta, 189, CR_DARKRED);
@@ -3043,7 +3060,6 @@ void M_RD_Draw_Bindings()
     {
         RD_M_DrawTextSmallRUS(RD_NEXT_RUS, 35 + wide_delta, 155, CR_WHITE);
         RD_M_DrawTextSmallRUS(RD_PREV_RUS, 35 + wide_delta, 165, CR_WHITE);
-        //RD_M_DrawTextSmallRUS(keyPage->pageNumber_rus, x + wide_delta, 165, CR_WHITE); // [Dasperal] TODO replace with paging system
 
         RD_M_DrawTextSmallENG("enter =", 44 + wide_delta, 180, CR_DARKRED);
         RD_M_DrawTextSmallRUS("= yfpyfxbnm<", 88 + wide_delta, 180, CR_DARKRED);
@@ -3353,7 +3369,6 @@ void M_RD_Draw_Gameplay_1(void)
         //
         RD_M_DrawTextSmallENG("next page >", 35 + wide_delta, 145, CR_WHITE);
         RD_M_DrawTextSmallENG("< last page", 35 + wide_delta, 155, CR_WHITE);
-        RD_M_DrawTextSmallENG("page 1/5", 231 + wide_delta, 155, CR_WHITE);
     }
     else
     {
@@ -3402,7 +3417,6 @@ void M_RD_Draw_Gameplay_1(void)
         //
         RD_M_DrawTextSmallRUS(RD_NEXT_RUS, 35 + wide_delta, 145, CR_WHITE);
         RD_M_DrawTextSmallRUS(RD_PREV_RUS, 35 + wide_delta, 155, CR_WHITE);
-        RD_M_DrawTextSmallRUS("cnhfybwf 1*5", 197 + wide_delta, 155, CR_WHITE);
     }
 }
 
@@ -3528,7 +3542,6 @@ void M_RD_Draw_Gameplay_2(void)
         //
         RD_M_DrawTextSmallENG("next page >", 35 + wide_delta, 145, CR_WHITE);
         RD_M_DrawTextSmallENG("< prev page", 35 + wide_delta, 155, CR_WHITE);
-        RD_M_DrawTextSmallENG("page 2/5", 231 + wide_delta, 155, CR_WHITE);
     }
     else
     {
@@ -3642,7 +3655,6 @@ void M_RD_Draw_Gameplay_2(void)
         //
         RD_M_DrawTextSmallRUS(RD_NEXT_RUS, 35 + wide_delta, 145, CR_WHITE);
         RD_M_DrawTextSmallRUS(RD_PREV_RUS, 35 + wide_delta, 155, CR_WHITE);
-        RD_M_DrawTextSmallRUS("cnhfybwf 2*5", 197 + wide_delta, 155, CR_WHITE);
     }
 }
 
@@ -3690,7 +3702,6 @@ void M_RD_Draw_Gameplay_3(void)
         //
         RD_M_DrawTextSmallENG("next page >", 35 + wide_delta, 145, CR_WHITE);
         RD_M_DrawTextSmallENG("< prev page", 35 + wide_delta, 155, CR_WHITE);
-        RD_M_DrawTextSmallENG("page 3/5", 231 + wide_delta, 155, CR_WHITE);
     }
     else
     {
@@ -3725,7 +3736,6 @@ void M_RD_Draw_Gameplay_3(void)
         // Footer
         RD_M_DrawTextSmallRUS(RD_NEXT_RUS, 35 + wide_delta, 145, CR_WHITE);
         RD_M_DrawTextSmallRUS(RD_PREV_RUS, 35 + wide_delta, 155, CR_WHITE);
-        RD_M_DrawTextSmallRUS("cnhfybwf 3*5", 197 + wide_delta, 155, CR_WHITE);
     }
 }
 
@@ -3788,7 +3798,6 @@ void M_RD_Draw_Gameplay_4(void)
         //
         RD_M_DrawTextSmallENG("next page >", 35 + wide_delta, 145, CR_WHITE);
         RD_M_DrawTextSmallENG("< prev page", 35 + wide_delta, 155, CR_WHITE);
-        RD_M_DrawTextSmallENG("page 4/5", 231 + wide_delta, 155, CR_WHITE);
     }
     else
     {
@@ -3840,7 +3849,6 @@ void M_RD_Draw_Gameplay_4(void)
         //
         RD_M_DrawTextSmallRUS(RD_NEXT_RUS, 35 + wide_delta, 145, CR_WHITE);
         RD_M_DrawTextSmallRUS(RD_PREV_RUS, 35 + wide_delta, 155, CR_WHITE);
-        RD_M_DrawTextSmallRUS("cnhfybwf 4*5", 197 + wide_delta, 155, CR_WHITE);
     }
 }
 
@@ -3899,7 +3907,6 @@ void M_RD_Draw_Gameplay_5(void)
         //
         RD_M_DrawTextSmallENG("first page >", 35 + wide_delta, 145, CR_WHITE);
         RD_M_DrawTextSmallENG("< prev page", 35 + wide_delta, 155, CR_WHITE);
-        RD_M_DrawTextSmallENG("page 5/5", 231 + wide_delta, 155, CR_WHITE);
     }
     else
     {
@@ -3949,7 +3956,6 @@ void M_RD_Draw_Gameplay_5(void)
         //
         RD_M_DrawTextSmallRUS(RD_NEXT_RUS, 35 + wide_delta, 145, CR_WHITE);
         RD_M_DrawTextSmallRUS(RD_PREV_RUS, 35 + wide_delta, 155, CR_WHITE);
-        RD_M_DrawTextSmallRUS("cnhfybwf 5*5", 197 + wide_delta, 155, CR_WHITE);
     }
 }
 

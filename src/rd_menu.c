@@ -21,6 +21,7 @@
 #include "i_video.h"
 #include "jn.h"
 #include "m_controls.h"
+#include "m_misc.h"
 #include "v_patch.h"
 #include "v_video.h"
 #include "w_wad.h"
@@ -432,6 +433,20 @@ void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos)
         item++;
     }
 
+    if(CurrentMenu->pageDescriptor != NULL)
+    {
+        char string[8];
+        const PageDescriptor_t* descriptor = CurrentMenu->pageDescriptor;
+
+        for(i = 0; i < descriptor->pageCount; i++)
+            if(descriptor->pagesArray[i] == CurrentMenu)
+                break;
+
+        M_snprintf(string, 8, "(%d/%d)", i + 1, descriptor->pageCount);
+        RD_M_DrawTextSmallENG(string, descriptor->pageNumber_x + wide_delta,
+                              descriptor->pageNumber_y, descriptor->translation);
+    }
+
     if (menu->bigFont)
     {
         y = menu->y + (currentItPos * item_Height) + cursor_Y_Offset;
@@ -555,42 +570,44 @@ boolean RD_Menu_Responder(int key, int charTyped)
     // [JN] Scroll menus by PgUp/PgDn keys
     else if (key == KEY_PGUP)
     {
-        if (CurrentMenu->pagesArray != NULL)
+        if (CurrentMenu->pageDescriptor != NULL)
         {
             int j;
-            for (j = 0; j < CurrentMenu->pageCount; ++j)
+            const PageDescriptor_t* descriptor = CurrentMenu->pageDescriptor;
+            for (j = 0; j < descriptor->pageCount; ++j)
             {
-                if(CurrentMenu->pagesArray[j] == CurrentMenu)
+                if(descriptor->pagesArray[j] == CurrentMenu)
                 {
                     j--;
                     if(j < 0)
-                        j = CurrentMenu->pageCount - 1;
+                        j = descriptor->pageCount - 1;
                     break;
                 }
             }
 
-            SetMenu(CurrentMenu->pagesArray[j]);
+            SetMenu(descriptor->pagesArray[j]);
             RD_Menu_StartSound(MENU_SOUND_PAGE);
             return true;
         }
     }
     else if (key == KEY_PGDN)
     {
-        if (CurrentMenu->pagesArray != NULL)
+        if (CurrentMenu->pageDescriptor != NULL)
         {
             int j;
-            for (j = 0; j < CurrentMenu->pageCount; ++j)
+            const PageDescriptor_t* descriptor = CurrentMenu->pageDescriptor;
+            for (j = 0; j < descriptor->pageCount; ++j)
             {
-                if(CurrentMenu->pagesArray[j] == CurrentMenu)
+                if(descriptor->pagesArray[j] == CurrentMenu)
                 {
                     j++;
-                    if(j >= CurrentMenu->pageCount)
+                    if(j >= descriptor->pageCount)
                         j = 0;
                     break;
                 }
             }
 
-            SetMenu(CurrentMenu->pagesArray[j]);
+            SetMenu(descriptor->pagesArray[j]);
             RD_Menu_StartSound(MENU_SOUND_PAGE);
             return true;
         }

@@ -357,7 +357,7 @@ static Menu_t MainMenu = {
     NULL, NULL, true,
     5, MainItems, true,
     DrawMainMenu,
-    NULL, 0,
+    NULL,
     NULL,
     0
 };
@@ -376,7 +376,7 @@ static Menu_t RegisteredEpisodeMenu = {
     NULL, NULL, true,
     3, EpisodeItems, true,
     NULL,
-    NULL, 0,
+    NULL,
     &MainMenu,
     0
 };
@@ -387,7 +387,7 @@ static Menu_t RetailEpisodeMenu = {
     NULL, NULL, true,
     5, EpisodeItems, true,
     NULL,
-    NULL, 0,
+    NULL,
     &MainMenu,
     0
 };
@@ -407,7 +407,7 @@ static Menu_t SkillMenu = {
     NULL, NULL, true,
     6, SkillItems, true,
     NULL,
-    NULL, 0,
+    NULL,
     &RegisteredEpisodeMenu,
     2
 };
@@ -433,7 +433,7 @@ static Menu_t OptionsMenu = {
     "OPTIONS", "YFCNHJQRB", false, // НАСТРОЙКИ
     8, OptionsItems, true,
     DrawOptionsMenu,
-    NULL, 0,
+    NULL,
     &MainMenu,
     0
 };
@@ -462,7 +462,7 @@ static Menu_t RenderingMenu = {
     "RENDERING OPTIONS", "YFCNHJQRB DBLTJ", false, // НАСТРОЙКИ ВИДЕО
     11, RenderingItems, false,
     DrawRenderingMenu,
-    NULL, 0,
+    NULL,
     &OptionsMenu,
     1
 };
@@ -491,7 +491,7 @@ static Menu_t DisplayMenu = {
     "DISPLAY OPTIONS", "YFCNHJQRB \'RHFYF", false, // НАСТРОЙКИ ЭКРАНА
     11, DisplayItems, false,
     DrawDisplayMenu,
-    NULL, 0,
+    NULL,
     &OptionsMenu,
     1
 };
@@ -523,7 +523,7 @@ static Menu_t MessagesMenu = {
     "MESSAGES AND TEXTS", "CJJ,OTYBZ B NTRCNS", false, // СООБЩЕНИЯ И ТЕКСТЫ
     14, MessagesItems, false,
     DrawMessagesMenu,
-    NULL, 0,
+    NULL,
     &DisplayMenu,
     1
 };
@@ -552,7 +552,7 @@ static Menu_t AutomapMenu = {
     "AUTOMAP AND STATISTICS", "RFHNF B CNFNBCNBRF", false, // КАРТА И СТАТИСТИКА
     11, AutomapItems, false,
     DrawAutomapMenu,
-    NULL, 0,
+    NULL,
     &DisplayMenu,
     1
 };
@@ -580,7 +580,7 @@ static Menu_t SoundMenu = {
     "SOUND OPTIONS", "YFCNHJQRB PDERF", false, // НАСТРОЙКИ ЗВУКА
     10, SoundItems, false,
     DrawSoundMenu,
-    NULL, 0,
+    NULL,
     &OptionsMenu,
     1
 };
@@ -607,7 +607,7 @@ static Menu_t SoundSysMenu = {
     "SOUND SYSTEM SETTINGS", "YFCNHJQRB PDERJDJQ CBCNTVS", false, // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ
     9, SoundSysItems, false,
     DrawSoundSystemMenu,
-    NULL, 0,
+    NULL,
     &SoundMenu,
     1
 };
@@ -637,7 +637,7 @@ static Menu_t ControlsMenu = {
     "CONTROL SETTINGS", "EGHFDKTYBT", false, // УПРАВЛЕНИЕ
     12, ControlsItems, false,
     DrawControlsMenu,
-    NULL, 0,
+    NULL,
     &OptionsMenu,
     1
 };
@@ -645,6 +645,12 @@ static Menu_t ControlsMenu = {
 // -----------------------------------------------------------------------------
 // Gameplay features (1)
 // -----------------------------------------------------------------------------
+
+static const PageDescriptor_t GameplayPageDescriptor = {
+    3, GameplayMenuPages,
+    254, 166,
+    CR_WHITE2GRAY_HERETIC
+};
 
 static MenuItem_t Gameplay1Items[] = {
     {ITT_TITLE,   "VISUAL",                       "UHFABRF",                        NULL,                 0}, // ГРАФИКА
@@ -670,7 +676,7 @@ static Menu_t Gameplay1Menu = {
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     15, Gameplay1Items, false,
     DrawGameplay1Menu,
-    GameplayMenuPages, 3,
+    &GameplayPageDescriptor,
     &OptionsMenu,
     1
 };
@@ -703,7 +709,7 @@ static Menu_t Gameplay2Menu = {
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     15, Gameplay2Items, false,
     DrawGameplay2Menu,
-    GameplayMenuPages, 3,
+    &GameplayPageDescriptor,
     &OptionsMenu,
     1
 };
@@ -736,7 +742,7 @@ static Menu_t Gameplay3Menu = {
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     15, Gameplay3Items, false,
     DrawGameplay3Menu,
-    GameplayMenuPages, 3,
+    &GameplayPageDescriptor,
     &OptionsMenu,
     1
 };
@@ -744,6 +750,12 @@ static Menu_t Gameplay3Menu = {
 // -----------------------------------------------------------------------------
 // Level select (1)
 // -----------------------------------------------------------------------------
+
+static const PageDescriptor_t LevelSelectPageDescriptor = {
+    3, LevelSelectMenuPages,
+    254, 176,
+    CR_WHITE2GRAY_HERETIC
+};
 
 static MenuItem_t Level1Items[] = {
     {ITT_LRFUNC,  "SKILL LEVEL:",       "CKJ;YJCNM:",            M_RD_SelectiveSkill,      0}, // СЛОЖНОСТЬ
@@ -771,7 +783,7 @@ static Menu_t LevelSelectMenu1 = {
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     17, Level1Items, false,
     DrawLevelSelect1Menu,
-    LevelSelectMenuPages, 3,
+    &LevelSelectPageDescriptor,
     &OptionsMenu,
     0
 };
@@ -806,7 +818,7 @@ static Menu_t LevelSelectMenu2 = {
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     17, Level2Items, false,
     DrawLevelSelect2Menu,
-    LevelSelectMenuPages, 3,
+    &LevelSelectPageDescriptor,
     &OptionsMenu,
     0
 };
@@ -841,7 +853,7 @@ static Menu_t LevelSelectMenu3 = {
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     17, Level3Items, false,
     DrawLevelSelect3Menu,
-    LevelSelectMenuPages, 3,
+    &LevelSelectPageDescriptor,
     &OptionsMenu,
     1
 };
@@ -864,7 +876,7 @@ static Menu_t OptionsMenu_Vanilla = {
     NULL, NULL, true,
     5, OptionsItems_Vanilla, true,
     DrawOptionsMenu_Vanilla,
-    NULL, 0,
+    NULL,
     &MainMenu,
     0,
 };
@@ -888,7 +900,7 @@ static Menu_t Options2Menu_Vanilla = {
     NULL, NULL, true,
     6, Options2Items_Vanilla, true,
     DrawOptions2Menu_Vanilla,
-    NULL, 0,
+    NULL,
     &OptionsMenu_Vanilla,
     0
 };
@@ -904,7 +916,7 @@ static Menu_t FilesMenu = {
     NULL, NULL, true,
     2, FilesItems, true,
     DrawFilesMenu,
-    NULL, 0,
+    NULL,
     &MainMenu,
     0
 };
@@ -924,7 +936,7 @@ static Menu_t LoadMenu = {
     "LOAD GAME", "PFUHEPBNM BUHE", true, // ЗАГРУЗИТЬ ИГРУ
     6, LoadItems, true,
     DrawSaveLoadMenu,
-    NULL, 0,
+    NULL,
     &FilesMenu,
     0
 };
@@ -944,7 +956,7 @@ static Menu_t SaveMenu = {
     "SAVE GAME", "CJ[HFYBNM BUHE", true, // СОХРАНИТЬ ИГРУ
     6, SaveItems, true,
     DrawSaveLoadMenu,
-    NULL, 0,
+    NULL,
     &FilesMenu,
     0
 };
@@ -2574,9 +2586,6 @@ static void DrawGameplay1Menu(void)
                                          floating_powerups == 2 ? "EVTHTYYFZ" : "DSRK"),
                               188 + wide_delta, 146, floating_powerups ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
     }
-
-    // (1/3)
-    RD_M_DrawTextSmallENG(DEH_String("(1/3)"), 254 + wide_delta, 166, CR_WHITE2GRAY_HERETIC);
 }
 
 static void M_RD_Brightmaps(Direction_t direction)
@@ -2729,9 +2738,6 @@ static void DrawGameplay2Menu(void)
         RD_M_DrawTextSmallRUS(DEH_String(crosshair_scale ? "DRK" : "DSRK"), 181 + wide_delta, 126,
                           crosshair_scale ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
     }
-
-    // (2/3)
-    RD_M_DrawTextSmallENG(DEH_String("(2/3)"), 254 + wide_delta, 166, CR_WHITE2GRAY_HERETIC);
 }
 
 static void M_RD_ColoredSBar(Direction_t direction)
@@ -2880,9 +2886,6 @@ static void DrawGameplay3Menu(void)
                               217 + wide_delta, 136,
                           pistol_start ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
     }
-
-    // (3/3)
-    RD_M_DrawTextSmallENG(DEH_String("(3/3)"), 254 + wide_delta, 166, CR_WHITE2GRAY_HERETIC);
 }
 
 static void M_RD_ZAxisSFX(Direction_t direction)

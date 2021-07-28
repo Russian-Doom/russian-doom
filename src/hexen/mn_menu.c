@@ -292,7 +292,7 @@ static Menu_t MainMenu = {
     NULL, NULL, true,
     5, MainItems, true,
     DrawMainMenu,
-    NULL, 0,
+    NULL,
     NULL,
     0
 };
@@ -309,7 +309,7 @@ static Menu_t ClassMenu = {
     NULL, NULL, true,
     3, ClassItems, true,
     DrawClassMenu,
-    NULL, 0,
+    NULL,
     &MainMenu,
     0
 };
@@ -329,7 +329,7 @@ static Menu_t SkillMenu_F = {
     "CHOOSE SKILL LEVEL:", "EHJDTYM CKJ;YJCNB:", true, // УРОВЕНЬ СЛОЖНОСТИ:
     6, SkillItems_F, true,
     DrawSkillMenu,
-    NULL, 0,
+    NULL,
     &ClassMenu,
     2
 };
@@ -349,7 +349,7 @@ static Menu_t SkillMenu_C = {
     "CHOOSE SKILL LEVEL:", "EHJDTYM CKJ;YJCNB:", true, // УРОВЕНЬ СЛОЖНОСТИ:
     6, SkillItems_C, true,
     DrawSkillMenu,
-    NULL, 0,
+    NULL,
     &ClassMenu,
     2
 };
@@ -369,7 +369,7 @@ static Menu_t SkillMenu_M = {
     "CHOOSE SKILL LEVEL:", "EHJDTYM CKJ;YJCNB:", true, // УРОВЕНЬ СЛОЖНОСТИ:
     6, SkillItems_M, true,
     DrawSkillMenu,
-    NULL, 0,
+    NULL,
     &ClassMenu,
     2
 };
@@ -395,7 +395,7 @@ static Menu_t OptionsMenu = {
     "OPTIONS", "YFCNHJQRB", false,
     8, OptionsItems, true,
     DrawOptionsMenu,
-    NULL, 0,
+    NULL,
     &MainMenu,
     0
 };
@@ -423,7 +423,7 @@ static Menu_t RenderingMenu = {
     "RENDERING OPTIONS", "YFCNHJQRB DBLTJ", false, // НАСТРОЙКИ ВИДЕО
     10, RenderingItems, false,
     DrawRenderingMenu,
-    NULL, 0,
+    NULL,
     &OptionsMenu,
     1
 };
@@ -453,7 +453,7 @@ static Menu_t DisplayMenu = {
     "DISPLAY OPTIONS", "YFCNHJQRB \'RHFYF", false, // НАСТРОЙКИ ЭКРАНА
     12, DisplayItems, false,
     DrawDisplayMenu,
-    NULL, 0,
+    NULL,
     &OptionsMenu,
     1
 };
@@ -475,7 +475,7 @@ static Menu_t AutomapMenu = {
     "AUTOMAP SETTINGS", "YFCNHJQRB RFHNS", false, // НАСТРОЙКИ КАРТЫ
     4, AutomapItems, false,
     DrawAutomapMenu,
-    NULL, 0,
+    NULL,
     &DisplayMenu,
     0
 };
@@ -503,7 +503,7 @@ static Menu_t SoundMenu = {
     "SOUND OPTIONS", "YFCNHJQRB PDERF", false, // НАСТРОЙКИ ЗВУКА
     10, SoundItems, false,
     DrawSoundMenu,
-    NULL, 0,
+    NULL,
     &OptionsMenu,
     1
 };
@@ -530,7 +530,7 @@ static Menu_t SoundSysMenu = {
     "SOUND SYSTEM SETTINGS", "YFCNHJQRB PDERJDJQ CBCNTVS", false, // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ
     9, SoundSysItems, false,
     DrawSoundSystemMenu,
-    NULL, 0,
+    NULL,
     &SoundMenu,
     1
 };
@@ -556,7 +556,7 @@ static Menu_t ControlsMenu = {
     "CONTROL SETTINGS", "EGHFDKTYBT", false, // УПРАВЛЕНИЕ
     8, ControlsItems, false,
     DrawControlsMenu,
-    NULL, 0,
+    NULL,
     &OptionsMenu,
     1
 };
@@ -584,7 +584,7 @@ static Menu_t GameplayMenu = {
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     10, GameplayItems, false,
     DrawGameplayMenu,
-    NULL, 0,
+    NULL,
     &OptionsMenu,
     1
 };
@@ -592,6 +592,12 @@ static Menu_t GameplayMenu = {
 // -----------------------------------------------------------------------------
 // Level select (1)
 // -----------------------------------------------------------------------------
+
+static const PageDescriptor_t LevelSelectPageDescriptor = {
+    5, LevelSelectMenuPages,
+    248, 176,
+    CR_GRAY2GDARKGRAY_HEXEN
+};
 
 static MenuItem_t Level1Items[] = {
     {ITT_LRFUNC,  "CLASS:",             "RKFCC:",                M_RD_SelectiveClass,   0}, // КЛАСС
@@ -619,7 +625,7 @@ static Menu_t LevelSelectMenu1 = {
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     17, Level1Items, false,
     DrawLevelSelect1Menu,
-    LevelSelectMenuPages, 5,
+    &LevelSelectPageDescriptor,
     &OptionsMenu,
     0
 };
@@ -654,7 +660,7 @@ static Menu_t LevelSelectMenu2_F = {
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     17, Level2Items_F, false,
     DrawLevelSelect2Menu,
-    LevelSelectMenuPages, 5,
+    &LevelSelectPageDescriptor,
     &OptionsMenu,
     1
 };
@@ -685,7 +691,7 @@ static Menu_t LevelSelectMenu2_C = {
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     17, Level2Items_C, false,
     DrawLevelSelect2Menu,
-    LevelSelectMenuPages, 5,
+    &LevelSelectPageDescriptor,
     &OptionsMenu,
     1
 };
@@ -716,7 +722,7 @@ static Menu_t LevelSelectMenu2_M = {
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     17, Level2Items_M, false,
     DrawLevelSelect2Menu,
-    LevelSelectMenuPages, 5,
+    &LevelSelectPageDescriptor,
     &OptionsMenu,
     1
 };
@@ -751,7 +757,7 @@ static Menu_t LevelSelectMenu3 = {
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     17, Level3Items, false,
     DrawLevelSelect3Menu,
-    LevelSelectMenuPages, 5,
+    &LevelSelectPageDescriptor,
     &OptionsMenu,
     0
 };
@@ -786,7 +792,7 @@ static Menu_t LevelSelectMenu4 = {
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     17, Level4Items, false,
     DrawLevelSelect4Menu,
-    LevelSelectMenuPages, 5,
+    &LevelSelectPageDescriptor,
     &OptionsMenu,
     0
 };
@@ -821,7 +827,7 @@ static Menu_t LevelSelectMenu5 = {
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     17, Level5Items, false,
     DrawLevelSelect5Menu,
-    LevelSelectMenuPages, 5,
+    &LevelSelectPageDescriptor,
     &OptionsMenu,
     0
 };
@@ -840,7 +846,7 @@ static Menu_t OptionsMenu_Vanilla = {
     NULL, NULL, true,
     5, OptionsItems_Vanilla, true,
     DrawOptionsMenu_Vanilla,
-    NULL, 0,
+    NULL,
     &MainMenu,
     0,
 };
@@ -860,7 +866,7 @@ static Menu_t Options2Menu_Vanilla = {
     NULL, NULL, true,
     6, Options2Items_Vanilla, true,
     DrawOptions2Menu_Vanilla,
-    NULL, 0,
+    NULL,
     &OptionsMenu_Vanilla,
     0
 };
@@ -876,7 +882,7 @@ static Menu_t FilesMenu = {
     NULL, NULL, true,
     2, FilesItems, true,
     DrawFilesMenu,
-    NULL, 0,
+    NULL,
     &MainMenu,
     0
 };
@@ -896,7 +902,7 @@ static Menu_t LoadMenu = {
     "LOAD GAME", "PFUHEPBNM BUHE", true, // ЗАГРУЗИТЬ ИГРУ
     6, LoadItems, true,
     DrawSaveLoadMenu,
-    NULL, 0,
+    NULL,
     &FilesMenu,
     0
 };
@@ -916,7 +922,7 @@ static Menu_t SaveMenu = {
     "SAVE GAME", "CJ[HFYBNM BUHE", true, // СОХРАНИТЬ ИГРУ
     6, SaveItems, true,
     DrawSaveLoadMenu,
-    NULL, 0,
+    NULL,
     &FilesMenu,
     0
 };

@@ -80,6 +80,15 @@ typedef struct
     const int option;
 } MenuItem_t;
 
+typedef struct
+{
+    const int pageCount;
+    const struct Menu_s** const pagesArray;
+    const int pageNumber_x;
+    const int pageNumber_y;
+    const Translation_CR_t translation;
+} PageDescriptor_t;
+
 typedef struct Menu_s
 {
     int x_eng; //
@@ -92,14 +101,10 @@ typedef struct Menu_s
     const MenuItem_t* const items;
     const boolean bigFont;
     void (*drawFunc) (void);
-    /** If the menu supports PageUp and PageDn this field must point to an array of page menus
+    /** If the menu supports PageUp and PageDn this field must point to a pagination descriptor struct
      *  otherwise, this field must be NULL.
      */
-    const struct Menu_s** const pagesArray;
-    /** If the menu supports PageUp and PageDn this field must contain length of an array of page menus
-     *  otherwise, this field must be 0.
-     */
-    const int pageCount;
+    const PageDescriptor_t* const pageDescriptor;
     const struct Menu_s* prevMenu;
 
     /** The initial value of this field must be the index of the first clickable menu item */
