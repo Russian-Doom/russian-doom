@@ -525,13 +525,13 @@ boolean RD_Menu_Responder(int key, int charTyped)
     {
         if (item->type == ITT_SETMENU)
         {
-            SetMenu((Menu_t *) item->pointer);
+            RD_Menu_SetMenu((Menu_t *) item->pointer);
         }
         if (item->type == ITT_SETMENU_NONET)
         {
             if (SCNetCheck(item->option))
             {
-                SetMenu((Menu_t *) item->pointer);
+                RD_Menu_SetMenu((Menu_t *) item->pointer);
             }
         }
         else if (item->pointer != NULL)
@@ -563,7 +563,7 @@ boolean RD_Menu_Responder(int key, int charTyped)
         }
         else
         {
-            SetMenu(CurrentMenu->prevMenu);
+            RD_Menu_SetMenu(CurrentMenu->prevMenu);
         }
         return true;
     }
@@ -585,7 +585,7 @@ boolean RD_Menu_Responder(int key, int charTyped)
                 }
             }
 
-            SetMenu(descriptor->pagesArray[j]);
+            RD_Menu_SetMenu(descriptor->pagesArray[j]);
             RD_Menu_StartSound(MENU_SOUND_PAGE);
             return true;
         }
@@ -607,7 +607,7 @@ boolean RD_Menu_Responder(int key, int charTyped)
                 }
             }
 
-            SetMenu(descriptor->pagesArray[j]);
+            RD_Menu_SetMenu(descriptor->pagesArray[j]);
             RD_Menu_StartSound(MENU_SOUND_PAGE);
             return true;
         }
@@ -654,4 +654,11 @@ boolean RD_Menu_Responder(int key, int charTyped)
     }
 
     return false;
+}
+
+void RD_Menu_SetMenu(const Menu_t* menu)
+{
+    CurrentMenu->lastOn = CurrentItPos;
+    CurrentMenu = (Menu_t*) menu;
+    CurrentItPos = CurrentMenu->lastOn;
 }

@@ -186,8 +186,9 @@ void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos);
 
 boolean RD_Menu_Responder(int key, int charTyped);
 
+void RD_Menu_SetMenu(const Menu_t* menu);
+
 extern boolean SCNetCheck(int option);
-extern void SetMenu(const Menu_t* menu);
 extern void RD_Menu_StartSound(MenuSound_t sound);
 
 #endif //RD_MENU_H

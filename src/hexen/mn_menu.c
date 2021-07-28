@@ -256,8 +256,9 @@ static int quicksave;
 static int quickload;
 
 //[Dasperal] Predeclare menu variables to allow referencing them before they initialized
+static Menu_t* OptionsMenu;
 static Menu_t ClassMenu;
-static Menu_t OptionsMenu;
+static Menu_t RDOptionsMenu;
 static Menu_t RenderingMenu;
 static Menu_t DisplayMenu;
 static Menu_t AutomapMenu;
@@ -273,17 +274,17 @@ static Menu_t LevelSelectMenu3;
 static Menu_t LevelSelectMenu4;
 static Menu_t LevelSelectMenu5;
 static const Menu_t* LevelSelectMenuPages[] = {&LevelSelectMenu1, &LevelSelectMenu2_F, &LevelSelectMenu3, &LevelSelectMenu4, &LevelSelectMenu5};
-static Menu_t Options2Menu_Vanilla;
+static Menu_t VanillaOptions2Menu;
 static Menu_t FilesMenu;
 static Menu_t LoadMenu;
 static Menu_t SaveMenu;
 
 static MenuItem_t MainItems[] = {
-    {ITT_SETMENU_NONET, "NEW GAME",   "YJDFZ BUHF", &ClassMenu,   1}, // НОВАЯ ИГРА
-    {ITT_SETMENU,       "OPTIONS",    "YFCNHJQRB",  &OptionsMenu, 0}, // НАСТРОЙКИ
-    {ITT_SETMENU,       "GAME FILES", "AFQKS BUHS", &FilesMenu,   0}, // ФАЙЛЫ ИГРЫ
-    {ITT_EFUNC,         "INFO",       "BYAJHVFWBZ", SCInfo,       0}, // ИНФОРМАЦИЯ
-    {ITT_EFUNC,         "QUIT GAME",  "DS[JL",      SCQuitGame,   0}  // ВЫХОД
+    {ITT_SETMENU_NONET, "NEW GAME",   "YJDFZ BUHF", &ClassMenu,     1}, // НОВАЯ ИГРА
+    {ITT_SETMENU,       "OPTIONS",    "YFCNHJQRB",  &RDOptionsMenu, 0}, // НАСТРОЙКИ
+    {ITT_SETMENU,       "GAME FILES", "AFQKS BUHS", &FilesMenu,     0}, // ФАЙЛЫ ИГРЫ
+    {ITT_EFUNC,         "INFO",       "BYAJHVFWBZ", SCInfo,         0}, // ИНФОРМАЦИЯ
+    {ITT_EFUNC,         "QUIT GAME",  "DS[JL",      SCQuitGame,     0}  // ВЫХОД
 };
 
 static Menu_t MainMenu = {
@@ -378,7 +379,7 @@ static Menu_t SkillMenu_M = {
 // [JN] Custom options menu
 // -----------------------------------------------------------------------------
 
-static MenuItem_t OptionsItems[] = {
+static MenuItem_t RDOptionsItems[] = {
     {ITT_SETMENU, "RENDERING",         "DBLTJ",          &RenderingMenu,      0}, // ВИДЕО
     {ITT_SETMENU, "DISPLAY",           "\'RHFY",         &DisplayMenu,        0}, // ЭКРАН
     {ITT_SETMENU, "SOUND",             "FELBJ",          &SoundMenu,          0}, // АУДИО
@@ -389,11 +390,11 @@ static MenuItem_t OptionsItems[] = {
     {ITT_EFUNC,   "LANGUAGE: ENGLISH", "ZPSR: HECCRBQ",  M_RD_ChangeLanguage, 0}  // ЯЗЫК: РУССКИЙ
 };
 
-static Menu_t OptionsMenu = {
+static Menu_t RDOptionsMenu = {
     77, 77,
     31,
     "OPTIONS", "YFCNHJQRB", false,
-    8, OptionsItems, true,
+    8, RDOptionsItems, true,
     DrawOptionsMenu,
     NULL,
     &MainMenu,
@@ -424,7 +425,7 @@ static Menu_t RenderingMenu = {
     10, RenderingItems, false,
     DrawRenderingMenu,
     NULL,
-    &OptionsMenu,
+    &RDOptionsMenu,
     1
 };
 
@@ -454,7 +455,7 @@ static Menu_t DisplayMenu = {
     12, DisplayItems, false,
     DrawDisplayMenu,
     NULL,
-    &OptionsMenu,
+    &RDOptionsMenu,
     1
 };
 
@@ -504,7 +505,7 @@ static Menu_t SoundMenu = {
     10, SoundItems, false,
     DrawSoundMenu,
     NULL,
-    &OptionsMenu,
+    &RDOptionsMenu,
     1
 };
 
@@ -557,7 +558,7 @@ static Menu_t ControlsMenu = {
     8, ControlsItems, false,
     DrawControlsMenu,
     NULL,
-    &OptionsMenu,
+    &RDOptionsMenu,
     1
 };
 
@@ -585,7 +586,7 @@ static Menu_t GameplayMenu = {
     10, GameplayItems, false,
     DrawGameplayMenu,
     NULL,
-    &OptionsMenu,
+    &RDOptionsMenu,
     1
 };
 
@@ -626,7 +627,7 @@ static Menu_t LevelSelectMenu1 = {
     17, Level1Items, false,
     DrawLevelSelect1Menu,
     &LevelSelectPageDescriptor,
-    &OptionsMenu,
+    &RDOptionsMenu,
     0
 };
 
@@ -661,7 +662,7 @@ static Menu_t LevelSelectMenu2_F = {
     17, Level2Items_F, false,
     DrawLevelSelect2Menu,
     &LevelSelectPageDescriptor,
-    &OptionsMenu,
+    &RDOptionsMenu,
     1
 };
 
@@ -692,7 +693,7 @@ static Menu_t LevelSelectMenu2_C = {
     17, Level2Items_C, false,
     DrawLevelSelect2Menu,
     &LevelSelectPageDescriptor,
-    &OptionsMenu,
+    &RDOptionsMenu,
     1
 };
 
@@ -723,7 +724,7 @@ static Menu_t LevelSelectMenu2_M = {
     17, Level2Items_M, false,
     DrawLevelSelect2Menu,
     &LevelSelectPageDescriptor,
-    &OptionsMenu,
+    &RDOptionsMenu,
     1
 };
 
@@ -758,7 +759,7 @@ static Menu_t LevelSelectMenu3 = {
     17, Level3Items, false,
     DrawLevelSelect3Menu,
     &LevelSelectPageDescriptor,
-    &OptionsMenu,
+    &RDOptionsMenu,
     0
 };
 
@@ -793,7 +794,7 @@ static Menu_t LevelSelectMenu4 = {
     17, Level4Items, false,
     DrawLevelSelect4Menu,
     &LevelSelectPageDescriptor,
-    &OptionsMenu,
+    &RDOptionsMenu,
     0
 };
 
@@ -828,30 +829,30 @@ static Menu_t LevelSelectMenu5 = {
     17, Level5Items, false,
     DrawLevelSelect5Menu,
     &LevelSelectPageDescriptor,
-    &OptionsMenu,
+    &RDOptionsMenu,
     0
 };
 
-static MenuItem_t OptionsItems_Vanilla[] = {
+static MenuItem_t VanillaOptionsItems[] = {
     {ITT_EFUNC,   "END GAME",          "PFRJYXBNM BUHE",   SCEndGame,             0}, // ЗАКОНЧИТЬ ИГРУ
     {ITT_EFUNC,   "MESSAGES : ",        "CJJ,OTYBZ : ",    SCMessages,            0}, // СООБЩЕНИЯ:
     {ITT_LRFUNC,  "MOUSE SENSITIVITY", "CRJHJCNM VSIB",    M_RD_Sensitivity,      0}, // СКОРОСТЬ МЫШИ
     {ITT_EMPTY,   NULL,                NULL,               NULL,                  0},
-    {ITT_SETMENU, "MORE...",           "LJGJKYBNTKMYJ>>>", &Options2Menu_Vanilla, 0}  // ДОПОЛНИТЕЛЬНО...
+    {ITT_SETMENU, "MORE...",           "LJGJKYBNTKMYJ>>>", &VanillaOptions2Menu, 0}  // ДОПОЛНИТЕЛЬНО...
 };
 
-static Menu_t OptionsMenu_Vanilla = {
+static Menu_t VanillaOptionsMenu = {
     88, 88,
     30,
     NULL, NULL, true,
-    5, OptionsItems_Vanilla, true,
+    5, VanillaOptionsItems, true,
     DrawOptionsMenu_Vanilla,
     NULL,
     &MainMenu,
     0,
 };
 
-static MenuItem_t Options2Items_Vanilla[] = {
+static MenuItem_t VanillaOptions2Items[] = {
     {ITT_LRFUNC, "SCREEN SIZE",  "HFPVTH 'RHFYF",    M_RD_ScreenSize, 0}, // РАЗМЕР ЭКРАНА
     {ITT_EMPTY,  NULL,           NULL,               NULL,            0},
     {ITT_LRFUNC, "SFX VOLUME",   "UHJVRJCNM PDERF",  M_RD_SfxVolume,  0}, // ГРОМКОСТЬ ЗВУКА
@@ -860,14 +861,14 @@ static MenuItem_t Options2Items_Vanilla[] = {
     {ITT_EMPTY,  NULL,           NULL,               NULL,            0}
 };
 
-static Menu_t Options2Menu_Vanilla = {
+static Menu_t VanillaOptions2Menu = {
     90, 90,
     20,
     NULL, NULL, true,
-    6, Options2Items_Vanilla, true,
+    6, VanillaOptions2Items, true,
     DrawOptions2Menu_Vanilla,
     NULL,
-    &OptionsMenu_Vanilla,
+    &VanillaOptionsMenu,
     0
 };
 
@@ -1018,6 +1019,13 @@ void MN_Init(void)
                         "INVGEMR1",
                         "INVGEMR2",
                         -1, -1, -28, -14);
+
+    if(vanillaparm)
+        OptionsMenu = &VanillaOptionsMenu;
+    else
+        OptionsMenu = &RDOptionsMenu;
+
+    MainItems[1].pointer = OptionsMenu;
 
     menuactive = false;
 //      messageson = true;              // Set by defaults in .CFG
@@ -3074,21 +3082,21 @@ static void DrawOptionsMenu_Vanilla(void)
         RD_M_DrawTextBigRUS(messageson ? "DRK>" : "DSRK>", 223 + wide_delta, 50);	// ВКЛ. / ВЫКЛ.
     }
 
-    RD_Menu_DrawSlider(&OptionsMenu_Vanilla, 92, 10, mouseSensitivity);
+    RD_Menu_DrawSlider(&VanillaOptionsMenu, 92, 10, mouseSensitivity);
 }
 
 static void DrawOptions2Menu_Vanilla(void)
 {
     if (aspect_ratio_temp >= 2)
     {
-        RD_Menu_DrawSlider(&Options2Menu_Vanilla, 42, 4, screenblocks - 9);
+        RD_Menu_DrawSlider(&VanillaOptions2Menu, 42, 4, screenblocks - 9);
     }
     else
     {
-        RD_Menu_DrawSlider(&Options2Menu_Vanilla, 42, 10, screenblocks - 3);
+        RD_Menu_DrawSlider(&VanillaOptions2Menu, 42, 10, screenblocks - 3);
     }
-    RD_Menu_DrawSlider(&Options2Menu_Vanilla, 82, 16, snd_MaxVolume);
-    RD_Menu_DrawSlider(&Options2Menu_Vanilla, 122, 16, snd_MusicVolume);
+    RD_Menu_DrawSlider(&VanillaOptions2Menu, 82, 16, snd_MaxVolume);
+    RD_Menu_DrawSlider(&VanillaOptions2Menu, 122, 16, snd_MusicVolume);
 }
 
 //---------------------------------------------------------------------------
@@ -3440,13 +3448,13 @@ static void SCClass(int option)
     switch (MenuPClass)
     {
         case PCLASS_FIGHTER:
-            SetMenu(&SkillMenu_F);
+            RD_Menu_SetMenu(&SkillMenu_F);
             break;
         case PCLASS_CLERIC:
-            SetMenu(&SkillMenu_C);
+            RD_Menu_SetMenu(&SkillMenu_C);
             break;
         case PCLASS_MAGE:
-            SetMenu(&SkillMenu_M);
+            RD_Menu_SetMenu(&SkillMenu_M);
         default:
             break;
     }
@@ -3737,7 +3745,7 @@ boolean MN_Responder(event_t * event)
             menuactive = true;
             FileMenuKeySteal = false;
             MenuTime = 0;
-            CurrentMenu = vanillaparm ? &Options2Menu_Vanilla : &SoundMenu;
+            CurrentMenu = vanillaparm ? &VanillaOptions2Menu : &SoundMenu;
             CurrentItPos = CurrentMenu->lastOn;
             if (!netgame && !demoplayback)
             {
@@ -4080,28 +4088,6 @@ void MN_DrawInfo(void)
                         InfoType == 2 ? "RD_HELP2" :
                                  isDK ? "RD_CREDK" :
                                         "RD_CREDT"), PU_CACHE));
-    }
-}
-
-//---------------------------------------------------------------------------
-//
-// PROC SetMenu
-//
-//---------------------------------------------------------------------------
-
-void SetMenu(const Menu_t* menu)
-{
-    CurrentMenu->lastOn = CurrentItPos;
-    CurrentMenu = (Menu_t*) menu;
-    CurrentItPos = CurrentMenu->lastOn;
-
-    // [Dasperal] Force to use vanilla options menu in -vanilla game mode.
-    if (vanillaparm)
-    {
-        if (CurrentMenu == &OptionsMenu)
-        {
-            CurrentMenu = &OptionsMenu_Vanilla;
-        }
     }
 }
 

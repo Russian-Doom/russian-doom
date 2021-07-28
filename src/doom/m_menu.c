@@ -690,8 +690,9 @@ static char *M_RD_ColorName_RUS (int color)
 
 static Menu_t* MainMenu;
 static Menu_t* EpisodeMenu;
+static Menu_t* OptionsMenu;
 static Menu_t NewGameMenu;
-static Menu_t OptionsMenu;
+static Menu_t RDOptionsMenu;
 static Menu_t RenderingMenu;
 static Menu_t DisplayMenu;
 static Menu_t MessagesMenu;
@@ -715,7 +716,7 @@ static Menu_t LevelSelect1Menu;
 static Menu_t LevelSelect2Menu;
 static const Menu_t* LevelSelectMenuPages[] = {&LevelSelect1Menu, &LevelSelect2Menu};
 static Menu_t ResetMenu;
-static Menu_t Options2Menu_Vanilla;
+static Menu_t VanillaOptions2Menu;
 static Menu_t LoadMenu;
 static Menu_t SaveMenu;
 
@@ -724,12 +725,12 @@ static Menu_t SaveMenu;
 // =============================================================================
 
 static MenuItem_t DoomItems[] = {
-    {ITT_EFUNC,   "nM_NGAME",  "yRD_NGAME", M_NewGame,    0},
-    {ITT_SETMENU, "oM_OPTION", "yRD_OPTN",  &OptionsMenu, 0},
-    {ITT_EFUNC,   "lM_LOADG",  "pRD_LOADG", M_LoadGame,   0},
-    {ITT_EFUNC,   "sM_SAVEG",  "cRD_SAVEG", M_SaveGame,   0},
-    {ITT_EFUNC,   "rM_RDTHIS", "bRD_INFO",  M_ReadThis,   0},
-    {ITT_EFUNC,   "qM_QUITG",  "dRD_QUITG", M_QuitDOOM,   0}
+    {ITT_EFUNC,   "nM_NGAME",  "yRD_NGAME", M_NewGame,      0},
+    {ITT_SETMENU, "oM_OPTION", "yRD_OPTN",  &RDOptionsMenu, 0},
+    {ITT_EFUNC,   "lM_LOADG",  "pRD_LOADG", M_LoadGame,     0},
+    {ITT_EFUNC,   "sM_SAVEG",  "cRD_SAVEG", M_SaveGame,     0},
+    {ITT_EFUNC,   "rM_RDTHIS", "bRD_INFO",  M_ReadThis,     0},
+    {ITT_EFUNC,   "qM_QUITG",  "dRD_QUITG", M_QuitDOOM,     0}
 };
 
 static Menu_t DoomMenu = {
@@ -748,11 +749,11 @@ static Menu_t DoomMenu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Doom2Items[] = {
-    {ITT_EFUNC,   "nM_NGAME",  "yRD_NGAME", M_NewGame,    0},
-    {ITT_SETMENU, "oM_OPTION", "yRD_OPTN",  &OptionsMenu, 0},
-    {ITT_EFUNC,   "lM_LOADG",  "pRD_LOADG", M_LoadGame,   0},
-    {ITT_EFUNC,   "sM_SAVEG",  "cRD_SAVEG", M_SaveGame,   0},
-    {ITT_EFUNC,   "qM_QUITG",  "dRD_QUITG", M_QuitDOOM,   0}
+    {ITT_EFUNC,   "nM_NGAME",  "yRD_NGAME", M_NewGame,      0},
+    {ITT_SETMENU, "oM_OPTION", "yRD_OPTN",  &RDOptionsMenu, 0},
+    {ITT_EFUNC,   "lM_LOADG",  "pRD_LOADG", M_LoadGame,     0},
+    {ITT_EFUNC,   "sM_SAVEG",  "cRD_SAVEG", M_SaveGame,     0},
+    {ITT_EFUNC,   "qM_QUITG",  "dRD_QUITG", M_QuitDOOM,     0}
 };
 
 static Menu_t Doom2Menu = {
@@ -771,11 +772,11 @@ static Menu_t Doom2Menu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t MainMenuBetaItems[] = {
-    {ITT_EFUNC,   "dM_BLVL1",  "eRD_BLVL1", M_Episode,    0},
-    {ITT_EFUNC,   "dM_BLVL2",  "eRD_BLVL2", M_Episode,    1},
-    {ITT_EFUNC,   "dM_BLVL3",  "eRD_BLVL3", M_Episode,    2},
-    {ITT_SETMENU, "oM_OPTION", "yRD_OPTN",  &OptionsMenu, 0},
-    {ITT_EFUNC,   "qM_QUITG",  "dRD_QUITG", M_QuitDOOM,   0}
+    {ITT_EFUNC,   "dM_BLVL1",  "eRD_BLVL1", M_Episode,      0},
+    {ITT_EFUNC,   "dM_BLVL2",  "eRD_BLVL2", M_Episode,      1},
+    {ITT_EFUNC,   "dM_BLVL3",  "eRD_BLVL3", M_Episode,      2},
+    {ITT_SETMENU, "oM_OPTION", "yRD_OPTN",  &RDOptionsMenu, 0},
+    {ITT_EFUNC,   "qM_QUITG",  "dRD_QUITG", M_QuitDOOM,     0}
 };
 
 static Menu_t MainMenuBeta = {
@@ -880,7 +881,7 @@ static Menu_t NewGameMenu = {
 // [JN] NEW OPTIONS MENU: STRUCTURE
 // =============================================================================
 
-static MenuItem_t OptionsItems[] = {
+static MenuItem_t RDOptionsItems[] = {
     {ITT_SETMENU, "Rendering",        "Dbltj",          &RenderingMenu,      0},
     {ITT_SETMENU, "Display",          "\"rhfy",         &DisplayMenu,        0},
     {ITT_SETMENU, "Sound",            "Felbj",          &SoundMenu,          0},
@@ -892,11 +893,11 @@ static MenuItem_t OptionsItems[] = {
     {ITT_EFUNC,   "Language:english", "Zpsr#heccrbq",   M_RD_ChangeLanguage, 0}
 };
 
-static Menu_t OptionsMenu = {
+static Menu_t RDOptionsMenu = {
     60, 60,
     22,
     "OPTIONS", "YFCNHJQRB", false,
-    9, OptionsItems, true,
+    9, RDOptionsItems, true,
     NULL,
     NULL,
     &DoomMenu,
@@ -930,7 +931,7 @@ static Menu_t RenderingMenu = {
     13, RenderingItems, false,
     M_RD_Draw_Rendering,
     NULL,
-    &OptionsMenu,
+    &RDOptionsMenu,
     1
 };
 
@@ -962,7 +963,7 @@ static Menu_t DisplayMenu = {
     14, DisplayItems, false,
     M_RD_Draw_Display,
     NULL,
-    &OptionsMenu,
+    &RDOptionsMenu,
     1
 };
 
@@ -1053,7 +1054,7 @@ static Menu_t SoundMenu = {
     10, SoundItems, false,
     M_RD_Draw_Audio,
     NULL,
-    &OptionsMenu,
+    &RDOptionsMenu,
     1
 };
 
@@ -1111,7 +1112,7 @@ static Menu_t ControlsMenu = {
     13, ControlsItems, false,
     M_RD_Draw_Controls,
     NULL,
-    &OptionsMenu,
+    &RDOptionsMenu,
     1
 };
 
@@ -1321,7 +1322,7 @@ static Menu_t Gameplay1Menu = {
     15, Gameplay1Items, false,
     M_RD_Draw_Gameplay_1,
     &GameplayPageDescriptor,
-    &OptionsMenu,
+    &RDOptionsMenu,
     1
 };
 
@@ -1349,7 +1350,7 @@ static Menu_t Gameplay2Menu = {
     14, Gameplay2Items, false,
     M_RD_Draw_Gameplay_2,
     &GameplayPageDescriptor,
-    &OptionsMenu,
+    &RDOptionsMenu,
     1
 };
 
@@ -1377,7 +1378,7 @@ static Menu_t Gameplay3Menu = {
     14, Gameplay3Items, false,
     M_RD_Draw_Gameplay_3,
     &GameplayPageDescriptor,
-    &OptionsMenu,
+    &RDOptionsMenu,
     1
 };
 
@@ -1405,7 +1406,7 @@ static Menu_t Gameplay4Menu = {
     14, Gameplay4Items, false,
     M_RD_Draw_Gameplay_4,
     &GameplayPageDescriptor,
-    &OptionsMenu,
+    &RDOptionsMenu,
     1
 };
 
@@ -1433,7 +1434,7 @@ static Menu_t Gameplay5Menu = {
     14, Gameplay5Items, false,
     M_RD_Draw_Gameplay_5,
     &GameplayPageDescriptor,
-    &OptionsMenu,
+    &RDOptionsMenu,
     1
 };
 
@@ -1475,7 +1476,7 @@ static Menu_t LevelSelect1Menu = {
     18, LevelSelect1Items, false,
     M_RD_Draw_Level_1,
     &LevelSelectPageDescriptor,
-    &OptionsMenu,
+    &RDOptionsMenu,
     0
 };
 
@@ -1507,7 +1508,7 @@ static Menu_t LevelSelect2Menu = {
     18, LevelSelect2Items, false,
     M_RD_Draw_Level_2,
     &LevelSelectPageDescriptor,
-    &OptionsMenu,
+    &RDOptionsMenu,
     0
 };
 
@@ -1527,7 +1528,7 @@ static Menu_t ResetMenu = {
     2, ResetItems, false,
     M_RD_Draw_Reset,
     NULL,
-    &OptionsMenu,
+    &RDOptionsMenu,
     0
 };
 
@@ -1587,7 +1588,7 @@ static Menu_t SaveMenu = {
 // [JN] VANILLA OPTIONS MENU
 // =============================================================================
 
-static MenuItem_t OptionsItems_Vanilla[] = {
+static MenuItem_t VanillaOptionsItems[] = {
     {ITT_EFUNC,   "eM_ENDGAM", "pRD_ENDGM", M_EndGame,               0}, // Закончить игру
     {ITT_EFUNC,   "mM_MESSG",  "cRD_MESSG", M_RD_Change_Messages,    0}, // Сообщения
     {ITT_EFUNC,   "gM_DETAIL", "lRD_DETL",  M_RD_Change_Detail,      0}, // Детализация:
@@ -1595,14 +1596,14 @@ static MenuItem_t OptionsItems_Vanilla[] = {
     {ITT_EMPTY,   NULL,       NULL,       NULL,                    0},
     {ITT_LRFUNC,  "mM_MSENS",  "cRD_MSENS", M_RD_Change_Sensitivity, 0}, // Скорость мыши
     {ITT_EMPTY,   NULL,       NULL,       NULL,                    0},
-    {ITT_SETMENU, "sM_SVOL",   "uRD_SVOL",  &Options2Menu_Vanilla,   0}  // Громкость
+    {ITT_SETMENU, "sM_SVOL",   "uRD_SVOL",  &VanillaOptions2Menu,    0}  // Громкость
 };
 
-static Menu_t OptionsMenu_Vanilla = {
+static Menu_t VanillaOptionsMenu = {
     60, 60,
     37,
     NULL, NULL, true,
-    8, OptionsItems_Vanilla, true,
+    8, VanillaOptionsItems, true,
     M_Vanilla_DrawOptions,
     NULL,
     &DoomMenu,
@@ -1613,20 +1614,20 @@ static Menu_t OptionsMenu_Vanilla = {
 // Sound Menu
 // -----------------------------------------------------------------------------
 
-static MenuItem_t Options2Items_Vanilla[] = {
+static MenuItem_t VanillaOptions2Items[] = {
     {ITT_LRFUNC, "sM_SFXVOL", "pRD_SFXVL", M_RD_Change_SfxVol,   0}, // Звук
     {ITT_EMPTY,  NULL,       NULL,       NULL,                 0},
     {ITT_LRFUNC, "mM_MUSVOL", "vRD_MUSVL", M_RD_Change_MusicVol, 0}  // Музыка
 };
 
-static Menu_t Options2Menu_Vanilla = {
+static Menu_t VanillaOptions2Menu = {
     80, 80,
     64,
     NULL, NULL, true,
-    3, Options2Items_Vanilla, true,
+    3, VanillaOptions2Items, true,
     M_Vanilla_DrawSound,
     NULL,
-    &OptionsMenu_Vanilla,
+    &VanillaOptionsMenu,
     0
 };
 
@@ -1671,15 +1672,15 @@ void M_Vanilla_DrawOptions(void)
     if (aspect_ratio >= 2)
     {
         // [JN] Wide screen: only 6 sizes are available
-        RD_Menu_DrawSlider(&OptionsMenu_Vanilla, 102, 6, screenblocks - 9);
+        RD_Menu_DrawSlider(&VanillaOptionsMenu, 102, 6, screenblocks - 9);
     }
     else
     {
-        RD_Menu_DrawSlider(&OptionsMenu_Vanilla, 102, 12, screenblocks - 3);
+        RD_Menu_DrawSlider(&VanillaOptionsMenu, 102, 12, screenblocks - 3);
     }
 
     // - Mouse sensivity slider ------------------------------------------------
-    RD_Menu_DrawSlider(&OptionsMenu_Vanilla, 134, 10, mouseSensitivity);
+    RD_Menu_DrawSlider(&VanillaOptionsMenu, 134, 10, mouseSensitivity);
 }
 
 void M_Vanilla_DrawSound(void)
@@ -1697,10 +1698,10 @@ void M_Vanilla_DrawSound(void)
     }
 
     // - Sfx volume slider -----------------------------------------------------
-    RD_Menu_DrawSlider(&Options2Menu_Vanilla, 81, 16, sfxVolume);
+    RD_Menu_DrawSlider(&VanillaOptions2Menu, 81, 16, sfxVolume);
 
     // - Music volume slider ---------------------------------------------------
-    RD_Menu_DrawSlider(&Options2Menu_Vanilla, 113, 16, musicVolume);
+    RD_Menu_DrawSlider(&VanillaOptions2Menu, 113, 16, musicVolume);
 }
 
 // =============================================================================
@@ -4343,7 +4344,7 @@ void M_LevelSelect(int choice)
                        NEWGAME : NEWGAME_RUS), NULL,false);
         return;
     }
-    SetMenu(&LevelSelect1Menu);
+    RD_Menu_SetMenu(&LevelSelect1Menu);
 }
 
 void M_RD_Draw_Level_1(void)
@@ -5499,7 +5500,7 @@ void M_LoadGame (int choice)
         return;
     }
 
-    SetMenu(&LoadMenu);
+    RD_Menu_SetMenu(&LoadMenu);
     if (!slottextloaded)
         M_ReadSaveStrings();
 }
@@ -5592,7 +5593,7 @@ void M_SaveGame (int choice)
     if (gamestate != GS_LEVEL)
         return;
 
-    SetMenu(&SaveMenu);
+    RD_Menu_SetMenu(&SaveMenu);
     if (!slottextloaded)
         M_ReadSaveStrings();
 }
@@ -5628,7 +5629,7 @@ void M_QuickSave(void)
         M_StartControlPanel();
         if (!slottextloaded)
             M_ReadSaveStrings();
-        SetMenu(&SoundMenu);
+        RD_Menu_SetMenu(&SoundMenu);
         quickSaveSlot = -2;	// means to pick a slot now
         return;
     }
@@ -5869,9 +5870,9 @@ void M_NewGame(int choice)
     // Chex Quest disabled the episode select screen, as did Doom II.
 
     if (gamemode == commercial || gameversion == exe_chex)
-        SetMenu(&NewGameMenu);
+        RD_Menu_SetMenu(&NewGameMenu);
     else
-        SetMenu(EpisodeMenu);
+        RD_Menu_SetMenu(EpisodeMenu);
 }
 
 
@@ -5945,7 +5946,7 @@ void M_Episode(int choice)
                                   SWSTRING : SWSTRING_RUS),
                                   NULL,false);
         // [JN] Return to Episode menu.
-        SetMenu(EpisodeMenu);
+        RD_Menu_SetMenu(EpisodeMenu);
         return;
     }
 
@@ -5959,7 +5960,7 @@ void M_Episode(int choice)
     }
 
     epi = choice;
-    SetMenu(&NewGameMenu);
+    RD_Menu_SetMenu(&NewGameMenu);
 }
 
 //
@@ -6027,7 +6028,7 @@ void M_ReadThis2(int choice)
 void M_FinishReadThis(int choice)
 {
     InfoType = 0;
-    SetMenu(MainMenu);
+    RD_Menu_SetMenu(MainMenu);
 }
 
 
@@ -6757,7 +6758,7 @@ boolean M_Responder (event_t* ev)
         // [JN] Do not close Episode menu after closing "purchase entire trilogy" message in Shareware.
         &&  (CurrentMenu != EpisodeMenu && gamemode == shareware)
         // [JN] Do not close Options menu after pressing "N" in End Game.
-        &&  CurrentMenu != &OptionsMenu
+        &&  CurrentMenu != OptionsMenu
         // [JN] Do not close bindings menu after binding key / mouse button.
         &&  CurrentMenu != &Bindings1Menu
         &&  CurrentMenu != &Bindings2Menu
@@ -6838,7 +6839,7 @@ boolean M_Responder (event_t* ev)
             M_StartControlPanel ();
             if (vanillaparm)
             {
-                CurrentMenu = &Options2Menu_Vanilla;
+                CurrentMenu = &VanillaOptions2Menu;
             }
             else
             {
@@ -7288,7 +7289,7 @@ void M_Init (void)
     // [JN] Move up Jaguar options menu to don't draw it over status bar
     if (gamemission == jaguar)
     {
-        OptionsMenu.y -= 6;
+        RDOptionsMenu.y -= 6;
     }
 
     // Versions of doom.exe before the Ultimate Doom release only had
@@ -7312,13 +7313,21 @@ void M_Init (void)
             EpisodeMenu = &UltimateEpisodeMenu;
     }
 
+    if(vanillaparm)
+        OptionsMenu = &VanillaOptionsMenu;
+    else
+        OptionsMenu = &RDOptionsMenu;
+
+    DoomItems[1].pointer = OptionsMenu;
+    Doom2Items[1].pointer = OptionsMenu;
+    MainMenuBetaItems[3].pointer = OptionsMenu;
+
     // [JN] Correct return to previous menu
     if (NewGameMenu.prevMenu != MainMenu)
         NewGameMenu.prevMenu = EpisodeMenu;
-    OptionsMenu.prevMenu = MainMenu;
+    OptionsMenu->prevMenu = MainMenu;
     LoadMenu.prevMenu = MainMenu;
     SaveMenu.prevMenu = MainMenu;
-    OptionsMenu_Vanilla.prevMenu = MainMenu;
 
     CurrentMenu = MainMenu;
     CurrentItPos = CurrentMenu->lastOn;
@@ -7410,22 +7419,6 @@ boolean SCNetCheck(int option)
     menuactive = false;
 
     return false;
-}
-
-void SetMenu(const Menu_t* menu)
-{
-    CurrentMenu->lastOn = CurrentItPos;
-    CurrentMenu = (Menu_t*) menu;
-    CurrentItPos = CurrentMenu->lastOn;
-
-    // [JN] Force to use vanilla options menu in -vanilla game mode.
-    if (vanillaparm)
-    {
-        if (CurrentMenu == &OptionsMenu)
-        {
-            CurrentMenu = &OptionsMenu_Vanilla;
-        }
-    }
 }
 
 void RD_Menu_StartSound(MenuSound_t sound)
