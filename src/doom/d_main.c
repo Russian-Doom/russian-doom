@@ -3128,8 +3128,8 @@ void D_DoomMain (void)
     M_Init ();
 
     DEH_printf(english_language ?
-               "R_Init: Init DOOM refresh daemon - " :
-               "R_Init: Инициализация процесса запуска DOOM - ");
+               "R_Init: Init DOOM refresh daemon - [" :
+               "R_Init: Инициализация процесса запуска DOOM - [");
     R_Init ();
 
     DEH_printf(english_language ?

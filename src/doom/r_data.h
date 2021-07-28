@@ -19,7 +19,6 @@
 //
 
 
-
 #ifndef __R_DATA__
 #define __R_DATA__
 
@@ -33,32 +32,27 @@
 
 
 // Retrieve column data for span blitting.
-byte*
-R_GetColumn
-( int		tex,
-  int		col,
-  boolean	opaque );
+byte *R_GetColumn (int tex, int col);
 
+// [crispy] wrapping column getter function for composited
+// translucent mid-textures on 1S walls
+byte *R_GetColumnMod (int tex, int col);
 
 // I/O, setting up the stuff.
 void R_InitData (void);
 void R_PrecacheLevel (void);
 
-// [JN] Brightmaps: define where they can be applied.
-extern boolean brightmaps_allowed;
-
 // Retrieval.
-// Floor/ceiling opaque texture tiles,
-// lookup by name. For animation?
-int R_FlatNumForName (char* name);
-
+// Floor/ceiling opaque texture tiles, lookup by name. For animation?
+int R_FlatNumForName (char *name);
 
 // Called by P_Ticker for switches and animations,
 // returns the texture number for the texture name.
 int R_TextureNumForName (char *name);
 int R_CheckTextureNumForName (char *name);
 
-// [JN] Transparency initialization.
-void R_InitTranMap (void);
+// [JN] Brightmaps: define where they can be applied.
+extern boolean brightmaps_allowed;
+
 
 #endif

@@ -395,7 +395,7 @@ void R_DrawPlanes (void)
                     int angle = ((viewangle + (linear_sky && !vanillaparm ? linearskyangle[x] : 
                                                xtoviewangle[x]))^flip_levels)>>ANGLETOSKYSHIFT;
                     dc_x = x;
-                    dc_source = R_GetColumn(skytexture, angle, false);
+                    dc_source = R_GetColumn(skytexture, angle);
                     colfunc ();
                 }
             }
