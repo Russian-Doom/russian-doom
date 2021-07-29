@@ -16,6 +16,7 @@
 #define RD_MENU_H
 
 #include "rd_text.h"
+#include "rd_menu_control.h"
 
 typedef enum
 {
@@ -111,11 +112,13 @@ typedef struct Menu_s
     int lastOn;
 } Menu_t;
 
-extern Menu_t *CurrentMenu;
+extern Menu_t* MainMenu;
+extern Menu_t* CurrentMenu;
 extern int CurrentItPos;
 extern int MenuTime;
 
-void RD_Menu_InitMenu(int Item_Height, int Item_Height_Small);
+void RD_Menu_InitMenu(int Item_Height, int Item_Height_Small,
+                      void (*OnActivateMenu)(void), void (*OnDeactivateMenu)(void));
 
 void RD_Menu_InitSliders(char* BigSlider_left_patch,
                          char* BigSlider_middle1_patch,

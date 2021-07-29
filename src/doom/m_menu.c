@@ -60,7 +60,6 @@ void (*messageRoutine)(int response);
 
 boolean inhelpscreens;
 int InfoType = 0;
-boolean menuactive;
 
 // [JN] Save strings and messages 
 int     quickSaveSlot;      // -1 = no quicksave slot picked!
@@ -688,7 +687,6 @@ static char *M_RD_ColorName_RUS (int color)
     }
 }
 
-static Menu_t* MainMenu;
 static Menu_t* EpisodeMenu;
 static Menu_t* OptionsMenu;
 static Menu_t NewGameMenu;
@@ -5482,7 +5480,7 @@ void M_LoadSelect(int choice)
     M_StringCopy(name, P_SaveGameFile(choice), sizeof(name));
 
     G_LoadGame (name);
-    M_ClearMenus ();
+    RD_Menu_DeactivateMenu();
 }
 
 
@@ -5552,7 +5550,7 @@ void M_DoSave(int slot)
 {
     G_SaveGame (slot,savegamestrings[slot]);
     saveStatus[slot] = true;
-    M_ClearMenus ();
+    RD_Menu_DeactivateMenu();
 
     // PICK QUICKSAVE SLOT YET?
     if (quickSaveSlot == -2)
@@ -5626,7 +5624,7 @@ void M_QuickSave(void)
 
     if (quickSaveSlot < 0)
     {
-        M_StartControlPanel();
+        RD_Menu_ActivateMenu();
         if (!slottextloaded)
             M_ReadSaveStrings();
         RD_Menu_SetMenu(&SoundMenu);
@@ -5905,7 +5903,7 @@ void M_VerifyNightmare(int key)
         return;
 
     G_DeferedInitNew(4,epi+1,1);
-    M_ClearMenus ();
+    RD_Menu_DeactivateMenu();
 }
 
 void M_VerifyUltraNightmare(int key)
@@ -5914,7 +5912,7 @@ void M_VerifyUltraNightmare(int key)
         return;
 
     G_DeferedInitNew(5,epi+1,1);
-    M_ClearMenus ();
+    RD_Menu_DeactivateMenu();
 }
 
 void M_ChooseSkill(int choice)
@@ -5935,7 +5933,7 @@ void M_ChooseSkill(int choice)
     }
 
     G_DeferedInitNew(choice,epi+1,1);
-    M_ClearMenus ();
+    RD_Menu_DeactivateMenu();
 }
 
 void M_Episode(int choice)
@@ -5972,7 +5970,7 @@ void M_EndGameResponse(int key)
         return;
 
     CurrentMenu->lastOn = CurrentItPos;
-    M_ClearMenus ();
+    RD_Menu_DeactivateMenu();
     D_StartTitle ();
 }
 
@@ -6809,34 +6807,31 @@ boolean M_Responder (event_t* ev)
     {
         if (key == key_menu_help)     // Help key
         {
-            M_StartControlPanel ();
+            RD_Menu_ActivateMenu();
 
             if ( gamemode == retail )
                 InfoType = 2;
             else
                 InfoType = 1;
 
-            S_StartSound(NULL,sfx_swtchn);
             return true;
         }
         else if (key == key_menu_save)     // Save
         {
             QuickSaveTitle = false;
-            M_StartControlPanel();
-            S_StartSound(NULL,sfx_swtchn);
+            RD_Menu_ActivateMenu();
             M_SaveGame(0);
             return true;
         }
         else if (key == key_menu_load)     // Load
         {
-            M_StartControlPanel();
-            S_StartSound(NULL,sfx_swtchn);
+            RD_Menu_ActivateMenu();
             M_LoadGame(0);
             return true;
         }
         else if (key == key_menu_volume)   // Sound Volume
         {
-            M_StartControlPanel ();
+            RD_Menu_ActivateMenu();
             if (vanillaparm)
             {
                 CurrentMenu = &VanillaOptions2Menu;
@@ -6845,7 +6840,6 @@ boolean M_Responder (event_t* ev)
             {
                 CurrentMenu = &SoundMenu;
             }
-            S_StartSound(NULL,sfx_swtchn);
             return true;
         }
         else if (key == key_menu_qsave)    // Quicksave
@@ -6942,8 +6936,7 @@ boolean M_Responder (event_t* ev)
     {
         if (key == key_menu_activate)
         {
-            M_StartControlPanel ();
-            S_StartSound(NULL,sfx_swtchn);
+            RD_Menu_ActivateMenu();
             return true;
         }
         return false;
@@ -7021,26 +7014,6 @@ boolean M_Responder (event_t* ev)
 
     // Keys usable within menu
     return RD_Menu_Responder(key, ch);
-}
-
-
-//
-// M_StartControlPanel
-//
-void M_StartControlPanel (void)
-{
-    // intro might call this repeatedly
-    if (menuactive)
-        return;
-
-    menuactive = 1;
-    CurrentMenu = MainMenu;         // JDC
-    CurrentItPos = CurrentMenu->lastOn;   // JDC
-}
-
-void MN_ActivateMenu(void)
-{
-    M_StartControlPanel();
 }
 
 // Display OPL debug messages - hack for GENMIDI development.
@@ -7164,21 +7137,6 @@ void M_Drawer (void)
     RD_Menu_DrawMenu(CurrentMenu, MenuTime, CurrentItPos);
 }
 
-
-//
-// M_ClearMenus
-//
-void M_ClearMenus (void)
-{
-    menuactive = 0;
-    RD_Menu_StartSound(MENU_SOUND_DEACTIVATE);
-}
-
-void MN_DeactivateMenu(void)
-{
-    M_ClearMenus();
-}
-
 //
 // M_Ticker
 //
@@ -7214,7 +7172,7 @@ void M_Init (void)
                    DEH_String("FNTSR033"),
                    DEH_String("FNTBR033"));
 
-    RD_Menu_InitMenu(16, 10);
+    RD_Menu_InitMenu(16, 10, NULL, NULL);
 
     RD_Menu_InitSliders(// [Dasperal] Big slider
                         DEH_String("M_THERML"),

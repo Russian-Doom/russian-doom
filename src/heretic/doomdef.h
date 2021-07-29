@@ -61,6 +61,7 @@
 
 #include "d_loop.h"
 
+#include "rd_menu_control.h"
 #include "rd_text.h"
 
 // [JN] Extended name from "hticsav".
@@ -864,11 +865,7 @@ void SB_Drawer(void);
 // MENU (MN_menu.c)
 //-----------------
 
-extern boolean menuactive;
-
 void MN_Init(void);
-void MN_ActivateMenu(void);
-void MN_DeactivateMenu(void);
 boolean MN_Responder(event_t * event);
 void MN_Ticker(void);
 void MN_Drawer(void);

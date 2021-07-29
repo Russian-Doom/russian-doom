@@ -55,16 +55,24 @@ static lumpindex_t bigCursor2_patch;
 static lumpindex_t smallCursor1_patch;
 static lumpindex_t smallCursor2_patch;
 
-Menu_t *CurrentMenu;
+static void (*onActivateMenu)(void);
+static void (*onDeactivateMenu)(void);
+
+boolean menuactive;
+Menu_t* MainMenu;
+Menu_t* CurrentMenu;
 int CurrentItPos;
 int MenuTime;
 
 extern void (*drawShadowedPatch)(int x, int y, patch_t *patch);
 
-void RD_Menu_InitMenu(int Item_Height, int Item_Height_Small)
+void RD_Menu_InitMenu(int Item_Height, int Item_Height_Small,
+                      void (*OnActivateMenu)(void), void (*OnDeactivateMenu)(void))
 {
     item_Height = Item_Height;
     item_Height_Small = Item_Height_Small;
+    onActivateMenu = OnActivateMenu;
+    onDeactivateMenu = OnDeactivateMenu;
 }
 
 void RD_Menu_InitSliders(char* BigSlider_left_patch,
@@ -461,9 +469,6 @@ void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos)
     }
 }
 
-extern void MN_ActivateMenu(void);
-extern void MN_DeactivateMenu(void);
-
 boolean RD_Menu_Responder(int key, int charTyped)
 {
     int i;
@@ -551,7 +556,7 @@ boolean RD_Menu_Responder(int key, int charTyped)
     }
     else if (key == key_menu_activate)     // Toggle menu
     {
-        MN_DeactivateMenu();
+        RD_Menu_DeactivateMenu();
         return true;
     }
     else if (key == key_menu_back)         // Go back to previous menu
@@ -559,7 +564,7 @@ boolean RD_Menu_Responder(int key, int charTyped)
         RD_Menu_StartSound(MENU_SOUND_BACK);
         if (CurrentMenu->prevMenu == NULL)
         {
-            MN_DeactivateMenu();
+            RD_Menu_DeactivateMenu();
         }
         else
         {
@@ -661,4 +666,36 @@ void RD_Menu_SetMenu(const Menu_t* menu)
     CurrentMenu->lastOn = CurrentItPos;
     CurrentMenu = (Menu_t*) menu;
     CurrentItPos = CurrentMenu->lastOn;
+}
+
+void RD_Menu_ActivateMenu(void)
+{
+    if (menuactive)
+    {
+        return;
+    }
+    menuactive = true;
+    MenuTime = 0;
+
+    CurrentMenu = MainMenu;
+    CurrentItPos = CurrentMenu->lastOn;
+
+    RD_Menu_StartSound(MENU_SOUND_ACTIVATE);
+
+    if(onActivateMenu)
+        onActivateMenu();
+}
+
+void RD_Menu_DeactivateMenu(void)
+{
+    if (CurrentMenu != NULL)
+    {
+        CurrentMenu->lastOn = CurrentItPos;
+    }
+    menuactive = false;
+
+    RD_Menu_StartSound(MENU_SOUND_DEACTIVATE);
+
+    if(onDeactivateMenu)
+        onDeactivateMenu();
 }

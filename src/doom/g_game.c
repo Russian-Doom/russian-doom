@@ -954,7 +954,7 @@ boolean G_Responder (event_t *ev)
         || (ev->type == ev_mouse && ev->data1)
         || (ev->type == ev_joystick && ev->data1))
         { 
-            M_StartControlPanel (); 
+            RD_Menu_ActivateMenu();
             return true; 
         } 
         return false; 
@@ -2139,7 +2139,7 @@ void G_DoSelectiveGame (int choice)
     flag667 = false;
 
     // Close "Level select" menu
-    M_ClearMenus ();
+    RD_Menu_DeactivateMenu();
 
     G_InitNew (selective_skill,
                // Set appropriate episode

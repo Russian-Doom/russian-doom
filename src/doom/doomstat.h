@@ -32,6 +32,7 @@
 #include "d_player.h"
 #include "d_mode.h"
 #include "net_defs.h"
+#include "rd_menu_control.h"
 
 
 //
@@ -137,7 +138,6 @@ extern int snd_DesiredSfxDevice;
 extern boolean statusbaractive;
 extern boolean automapactive;   // In AutoMap mode?
 extern boolean inhelpscreens;
-extern boolean menuactive;      // Menu overlayed?
 extern boolean paused;          // Game Pause?
 extern boolean viewactive;
 extern boolean nodrawers;

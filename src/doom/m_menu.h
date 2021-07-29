@@ -49,13 +49,6 @@ void M_Drawer (void);
 // loads the config file.
 void M_Init (void);
 
-// Called by intro code to force menu up upon a keypress,
-// does nothing if menu is already up.
-void M_StartControlPanel (void);
-
-// [JN] Called by G_DoSelectiveGame.
-void M_ClearMenus (void);
-
 // [JN] Called by ST_InitColors.
 void M_RD_Define_SBarColorValue(byte** sbar_color_set, int color);
 

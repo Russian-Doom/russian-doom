@@ -49,6 +49,7 @@
 
 #include "d_loop.h"
 #include "net_defs.h"
+#include "rd_menu_control.h"
 #include "rd_text.h"
 
 #include "jn.h"
@@ -632,8 +633,6 @@ extern boolean netgame;         // only true if >1 player
 
 extern boolean cmdfrag;         // true if a CMD_FRAG packet should be sent out every
                                                 // kill
-extern boolean menuactive;
-
 extern boolean automapactive;
 
 extern boolean devparm;         // [JN] DEBUG: launched with -devparm
@@ -1073,8 +1072,6 @@ void Draw_LoadIcon(void);
 //-----------------
 
 void MN_Init(void);
-void MN_ActivateMenu(void);
-void MN_DeactivateMenu(void);
 boolean MN_Responder(event_t * event);
 void MN_Ticker(void);
 void MN_Drawer(void);

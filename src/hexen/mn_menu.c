@@ -71,6 +71,8 @@ static void DrawFilesMenu(void);
 static void MN_DrawInfo(void);
 static void DrawSaveLoadMenu(void);
 void MN_LoadSlotText(void);
+void OnActivateMenu(void);
+void OnDeactivateMenu(void);
 
 // -----------------------------------------------------------------------------
 // [JN] Custom RD menu
@@ -226,8 +228,6 @@ extern boolean gamekeydown[256];        // The NUMKEYS macro is local to g_game
 extern int MapCount;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
-
-boolean menuactive;
 int InfoType;
 int messageson = true;
 boolean mn_SuicideConsole;
@@ -279,7 +279,7 @@ static Menu_t FilesMenu;
 static Menu_t LoadMenu;
 static Menu_t SaveMenu;
 
-static MenuItem_t MainItems[] = {
+static MenuItem_t HMainItems[] = {
     {ITT_SETMENU_NONET, "NEW GAME",   "YJDFZ BUHF", &ClassMenu,     1}, // НОВАЯ ИГРА
     {ITT_SETMENU,       "OPTIONS",    "YFCNHJQRB",  &RDOptionsMenu, 0}, // НАСТРОЙКИ
     {ITT_SETMENU,       "GAME FILES", "AFQKS BUHS", &FilesMenu,     0}, // ФАЙЛЫ ИГРЫ
@@ -287,11 +287,11 @@ static MenuItem_t MainItems[] = {
     {ITT_EFUNC,         "QUIT GAME",  "DS[JL",      SCQuitGame,     0}  // ВЫХОД
 };
 
-static Menu_t MainMenu = {
+static Menu_t HMainMenu = {
     110, 104,
     56,
     NULL, NULL, true,
-    5, MainItems, true,
+    5, HMainItems, true,
     DrawMainMenu,
     NULL,
     NULL,
@@ -311,7 +311,7 @@ static Menu_t ClassMenu = {
     3, ClassItems, true,
     DrawClassMenu,
     NULL,
-    &MainMenu,
+    &HMainMenu,
     0
 };
 
@@ -397,7 +397,7 @@ static Menu_t RDOptionsMenu = {
     8, RDOptionsItems, true,
     DrawOptionsMenu,
     NULL,
-    &MainMenu,
+    &HMainMenu,
     0
 };
 
@@ -848,7 +848,7 @@ static Menu_t VanillaOptionsMenu = {
     5, VanillaOptionsItems, true,
     DrawOptionsMenu_Vanilla,
     NULL,
-    &MainMenu,
+    &HMainMenu,
     0,
 };
 
@@ -884,7 +884,7 @@ static Menu_t FilesMenu = {
     2, FilesItems, true,
     DrawFilesMenu,
     NULL,
-    &MainMenu,
+    &HMainMenu,
     0
 };
 
@@ -994,7 +994,7 @@ void MN_Init(void)
                    "FONTF_S",
                    "FONTG_S");
 
-    RD_Menu_InitMenu(20, 10);
+    RD_Menu_InitMenu(20, 10, OnActivateMenu, OnDeactivateMenu);
 
     RD_Menu_InitSliders(// [Dasperal] Big slider
                         "M_SLDLT",
@@ -1025,7 +1025,8 @@ void MN_Init(void)
     else
         OptionsMenu = &RDOptionsMenu;
 
-    MainItems[1].pointer = OptionsMenu;
+    HMainItems[1].pointer = OptionsMenu;
+    MainMenu = &HMainMenu;
 
     menuactive = false;
 //      messageson = true;              // Set by defaults in .CFG
@@ -3370,7 +3371,7 @@ static void SCLoadGame(int option)
         return;
     }
     G_LoadGame(option);
-    MN_DeactivateMenu();
+    RD_Menu_DeactivateMenu();
     BorderNeedRefresh = true;
     if (quickload == -1)
     {
@@ -3418,7 +3419,7 @@ static void SCSaveGame(int option)
         G_SaveGame(option, SlotText[option]);
         FileMenuKeySteal = false;
         I_StopTextInput();
-        MN_DeactivateMenu();
+        RD_Menu_DeactivateMenu();
     }
     BorderNeedRefresh = true;
     if (quicksave == -1)
@@ -3478,7 +3479,7 @@ static void SCSkill(int option)
     G_DeferredNewGame(option);
     SB_SetClassData();
     SB_state = -1;
-    MN_DeactivateMenu();
+    RD_Menu_DeactivateMenu();
 }
 
 //---------------------------------------------------------------------------
@@ -3558,7 +3559,7 @@ boolean MN_Responder(event_t * event)
     {
         if (joybmenu >= 0 && (event->data1 & (1 << joybmenu)) != 0)
         {
-            MN_ActivateMenu();
+            RD_Menu_ActivateMenu();
             return true;
         }
     }
@@ -3587,7 +3588,7 @@ boolean MN_Responder(event_t * event)
             {
                 paused = false;
             }
-            MN_DeactivateMenu();
+            RD_Menu_DeactivateMenu();
             SB_state = -1;      //refresh the statbar
             BorderNeedRefresh = true;
         }
@@ -3905,7 +3906,7 @@ boolean MN_Responder(event_t * event)
     {
         if (key == key_menu_activate || gamestate == GS_DEMOSCREEN || demoplayback)
         {
-            MN_ActivateMenu();
+            RD_Menu_ActivateMenu();
             return (true);
         }
         return (false);
@@ -3937,7 +3938,7 @@ boolean MN_Responder(event_t * event)
             M_StringCopy(SlotText[currentSlot], oldSlotText,
                          sizeof(SlotText[currentSlot]));
             SlotStatus[currentSlot]--;
-            MN_DeactivateMenu();
+            RD_Menu_DeactivateMenu();
             return (true);
         }
         if (key == KEY_ENTER)
@@ -3997,30 +3998,21 @@ boolean MN_Responder(event_t * event)
 
 //---------------------------------------------------------------------------
 //
-// PROC MN_ActivateMenu
+// PROC OnActivateMenu
 //
 //---------------------------------------------------------------------------
 
-void MN_ActivateMenu(void)
+void OnActivateMenu(void)
 {
-    if (menuactive)
-    {
-        return;
-    }
     if (paused)
     {
         S_ResumeSound();
     }
-    menuactive = true;
     FileMenuKeySteal = false;
-    MenuTime = 0;
-    CurrentMenu = &MainMenu;
-    CurrentItPos = CurrentMenu->lastOn;
     if (!netgame && !demoplayback)
     {
         paused = true;
     }
-    S_StartSound(NULL, SFX_PLATFORM_STOP);
     slottextloaded = false;     //reload the slot text, when needed
 }
 
@@ -4030,14 +4022,9 @@ void MN_ActivateMenu(void)
 //
 //---------------------------------------------------------------------------
 
-void MN_DeactivateMenu(void)
+void OnDeactivateMenu(void)
 {
-    if (CurrentMenu != NULL)
-    {
-        CurrentMenu->lastOn = CurrentItPos;
-    }
     S_ResumeSound();    // [JN] Fix vanilla Hexen bug: resume music playing
-    menuactive = false;
     if (FileMenuKeySteal)
     {
         I_StopTextInput();
@@ -4046,7 +4033,6 @@ void MN_DeactivateMenu(void)
     {
         paused = false;
     }
-    S_StartSound(NULL, SFX_PLATFORM_STOP);
     P_ClearMessage(&players[consoleplayer]);
 }
 
