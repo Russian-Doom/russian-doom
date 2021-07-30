@@ -5627,7 +5627,7 @@ void M_QuickSave(void)
         RD_Menu_ActivateMenu();
         if (!slottextloaded)
             M_ReadSaveStrings();
-        RD_Menu_SetMenu(&SoundMenu);
+        RD_Menu_SetMenu(&SaveMenu);
         quickSaveSlot = -2;	// means to pick a slot now
         return;
     }
