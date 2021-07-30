@@ -130,7 +130,8 @@ void RD_Menu_InitCursor(char* BigCursor1_patch,
 
 /**
  * Increments or decrements 'var' depending on 'direction'. LEFT_DIR = decrement, RIGHT_DIR = increment.
- * If value of var exits range specified by 'minValue' and 'maxValue' then it will wrap to other end of the range
+ * If value of var exits range specified by 'minValue' and 'maxValue' then it will wrap to other end of the range.
+ * Plays MENU_SOUND_SLIDER_MOVE sound
  */
 inline void RD_Menu_SpinInt(int* var, int minValue, int maxValue, Direction_t direction)
 {
@@ -139,7 +140,8 @@ inline void RD_Menu_SpinInt(int* var, int minValue, int maxValue, Direction_t di
 
 /**
  * Increments or decrements 'var' depending on 'direction' by 'step'. LEFT_DIR = decrement, RIGHT_DIR = increment.
- * If value of var exits range specified by 'minValue' and 'maxValue' then it will wrap to other end of the range
+ * If value of var exits range specified by 'minValue' and 'maxValue' then it will wrap to other end of the range.
+ * Plays MENU_SOUND_SLIDER_MOVE sound
  */
 inline void RD_Menu_SpinInt_Step(int* var, int minValue, int maxValue, int step, Direction_t direction)
 {
@@ -163,7 +165,8 @@ inline void RD_Menu_SpinInt_Step(int* var, int minValue, int maxValue, int step,
 
 /**
  * Increments or decrements 'var' depending on 'direction', LEFT_DIR = decrement, RIGHT_DIR = increment.
- * Value can not exit range specified by 'minValue' and 'maxValue'
+ * Value can not exit range specified by 'minValue' and 'maxValue'.
+ * Plays MENU_SOUND_SLIDER_MOVE sound if value actually changed
  */
 inline void RD_Menu_SlideInt(int* var, int minValue, int maxValue, Direction_t direction)
 {
@@ -172,7 +175,8 @@ inline void RD_Menu_SlideInt(int* var, int minValue, int maxValue, Direction_t d
 
 /**
  * Increments or decrements 'var' by 'step' depending on 'direction', LEFT_DIR = decrement, RIGHT_DIR = increment.
- * Value can not exit range specified by 'minValue' and 'maxValue'
+ * Value can not exit range specified by 'minValue' and 'maxValue'.
+ * Plays MENU_SOUND_SLIDER_MOVE sound if value actually changed
  */
 inline void RD_Menu_SlideInt_Step(int* var, int minValue, int maxValue, int step, Direction_t direction)
 {
@@ -198,7 +202,8 @@ inline void RD_Menu_SlideInt_Step(int* var, int minValue, int maxValue, int step
 
 /**
  * Increments or decrements 'var' by 'step' depending on 'direction', LEFT_DIR = decrement, RIGHT_DIR = increment.
- * Value can not exit range specified by 'minValue' and 'maxValue'
+ * Value can not exit range specified by 'minValue' and 'maxValue'.
+ * Plays MENU_SOUND_SLIDER_MOVE sound if value actually changed
  */
 inline void RD_Menu_SlideFloat_Step(float* var, float minValue, float maxValue, float step, Direction_t direction)
 {
@@ -224,7 +229,8 @@ inline void RD_Menu_SlideFloat_Step(float* var, float minValue, float maxValue, 
 
 /**
  * Shifts value of 'var' by 1 in 'direction', LEFT_DIR = left, RIGHT_DIR = right.
- * If value of 'var' exits range specified by 'minValue' and 'maxValue' then it will wrap to other end of the range
+ * If value of 'var' exits range specified by 'minValue' and 'maxValue' then it will wrap to other end of the range.
+ * Plays MENU_SOUND_SLIDER_MOVE sound
  */
 inline void RD_Menu_ShiftSpinInt(int* var, int minValue, int maxValue, Direction_t direction)
 {
@@ -248,7 +254,8 @@ inline void RD_Menu_ShiftSpinInt(int* var, int minValue, int maxValue, Direction
 
 /**
  * Shifts value of 'var' by 1 in 'direction', LEFT_DIR = left, RIGHT_DIR = right.
- * Value can not exit range specified by 'minValue' and 'maxValue'
+ * Value can not exit range specified by 'minValue' and 'maxValue'.
+ * Plays MENU_SOUND_SLIDER_MOVE sound if value actually changed
  */
 inline void RD_Menu_ShiftSlideInt(int* var, int minValue, int maxValue, Direction_t direction)
 {
@@ -516,6 +523,11 @@ boolean RD_Menu_Responder(int key, int charTyped)
         {
             ((void (*)(Direction_t)) item->pointer)(LEFT_DIR);
         }
+        else if (item->type == ITT_SWITCH && item->pointer != NULL)
+        {
+            ((void (*)(void)) item->pointer)();
+            RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
+        }
         return true;
     }
     else if (key == key_menu_right)      // Slider right
@@ -524,6 +536,11 @@ boolean RD_Menu_Responder(int key, int charTyped)
         {
             ((void (*)(Direction_t)) item->pointer)(RIGHT_DIR);
         }
+        else if (item->type == ITT_SWITCH && item->pointer != NULL)
+        {
+            ((void (*)(void)) item->pointer)();
+            RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
+        }
         return true;
     }
     else if (key == key_menu_forward)    // Activate item (enter)
@@ -531,12 +548,14 @@ boolean RD_Menu_Responder(int key, int charTyped)
         if (item->type == ITT_SETMENU)
         {
             RD_Menu_SetMenu((Menu_t *) item->pointer);
+            RD_Menu_StartSound(MENU_SOUND_CLICK);
         }
         if (item->type == ITT_SETMENU_NONET)
         {
             if (SCNetCheck(item->option))
             {
                 RD_Menu_SetMenu((Menu_t *) item->pointer);
+                RD_Menu_StartSound(MENU_SOUND_CLICK);
             }
         }
         else if (item->pointer != NULL)
@@ -549,9 +568,14 @@ boolean RD_Menu_Responder(int key, int charTyped)
             else if (item->type == ITT_EFUNC)
             {
                 ((void (*)(int)) item->pointer)(item->option);
+                RD_Menu_StartSound(MENU_SOUND_CLICK);
+            }
+            else if (item->type == ITT_SWITCH)
+            {
+                ((void (*)(void)) item->pointer)();
+                RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
             }
         }
-        RD_Menu_StartSound(MENU_SOUND_CLICK);
         return true;
     }
     else if (key == key_menu_activate)     // Toggle menu

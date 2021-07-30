@@ -52,11 +52,17 @@ typedef enum
      *  Field 'option' is an argument for the function specified by 'pointer'
      */
     ITT_EFUNC,
-    /** Slider or Spinner menu item.
+    /** Slider or Spinner menu item. Sound handled in associated function.
      *  The type of field 'pointer' is void (*) (Direction_t direction).
      *  Field 'option' is not used and should be 0
      */
     ITT_LRFUNC,
+    /** A menu item that represents a switch that can be activated with Use, Left, and Right keys.
+     *  Plays MENU_SOUND_SLIDER_MOVE sound when clicked.
+     *  The type of field 'pointer' is void (*) (void).
+     *  Field 'option' is not used and should be 0
+     */
+    ITT_SWITCH,
     /** A menu item that changes the current menu to one specified by 'pointer'.
      *  The type of field 'pointer' is Menu_t*.
      *  Field 'option' is not used and should be 0
@@ -155,17 +161,20 @@ extern void RD_Menu_SpinInt_Step(int* var, int minValue, int maxValue, int step,
 
 /**
  * Increments or decrements 'var' depending on 'direction', LEFT_DIR = decrement, RIGHT_DIR = increment.
- * Value can not exit range specified by 'minValue' and 'maxValue'
+ * Value can not exit range specified by 'minValue' and 'maxValue'.
+ * Plays MENU_SOUND_SLIDER_MOVE sound if value actually changed
  */
 extern void RD_Menu_SlideInt(int* var, int minValue, int maxValue, Direction_t direction);
 /**
  * Increments or decrements 'var' by 'step' depending on 'direction', LEFT_DIR = decrement, RIGHT_DIR = increment.
- * Value can not exit range specified by 'minValue' and 'maxValue'
+ * Value can not exit range specified by 'minValue' and 'maxValue'.
+ * Plays MENU_SOUND_SLIDER_MOVE sound if value actually changed
  */
 extern void RD_Menu_SlideInt_Step(int* var, int minValue, int maxValue, int step, Direction_t direction);
 /**
  * Increments or decrements 'var' by 'step' depending on 'direction', LEFT_DIR = decrement, RIGHT_DIR = increment.
- * Value can not exit range specified by 'minValue' and 'maxValue'
+ * Value can not exit range specified by 'minValue' and 'maxValue'.
+ * Plays MENU_SOUND_SLIDER_MOVE sound if value actually changed
  */
 extern void RD_Menu_SlideFloat_Step(float* var, float minValue, float maxValue, float step, Direction_t direction);
 
@@ -176,7 +185,8 @@ extern void RD_Menu_SlideFloat_Step(float* var, float minValue, float maxValue, 
 extern void RD_Menu_ShiftSpinInt(int* var, int minValue, int maxValue, Direction_t direction);
 /**
  * Shifts value of 'var' by 2 in 'direction', LEFT_DIR = left, RIGHT_DIR = right.
- * Value can not exit range specified by 'minValue' and 'maxValue'
+ * Value can not exit range specified by 'minValue' and 'maxValue'.
+ * Plays MENU_SOUND_SLIDER_MOVE sound if value actually changed
  */
 extern void RD_Menu_ShiftSlideInt(int* var, int minValue, int maxValue, Direction_t direction);
 
