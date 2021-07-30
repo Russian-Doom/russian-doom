@@ -6832,14 +6832,7 @@ boolean M_Responder (event_t* ev)
         else if (key == key_menu_volume)   // Sound Volume
         {
             RD_Menu_ActivateMenu();
-            if (vanillaparm)
-            {
-                CurrentMenu = &VanillaOptions2Menu;
-            }
-            else
-            {
-                CurrentMenu = &SoundMenu;
-            }
+            RD_Menu_SetMenu(vanillaparm ? &VanillaOptions2Menu : &SoundMenu);
             return true;
         }
         else if (key == key_menu_qsave)    // Quicksave

@@ -1028,6 +1028,9 @@ void MN_Init(void)
     HMainItems[1].pointer = OptionsMenu;
     MainMenu = &HMainMenu;
 
+    CurrentMenu = MainMenu;
+    CurrentItPos = CurrentMenu->lastOn;
+
     menuactive = false;
 //      messageson = true;              // Set by defaults in .CFG
     MauloBaseLump = W_GetNumForName("FBULA0");  // ("M_SKL00");
@@ -3712,8 +3715,7 @@ boolean MN_Responder(event_t * event)
                 menuactive = true;
                 FileMenuKeySteal = false;
                 MenuTime = 0;
-                CurrentMenu = &SaveMenu;
-                CurrentItPos = CurrentMenu->lastOn;
+                RD_Menu_SetMenu(&SaveMenu);
                 if (!netgame && !demoplayback)
                 {
                     paused = true;
@@ -3730,8 +3732,7 @@ boolean MN_Responder(event_t * event)
                 menuactive = true;
                 FileMenuKeySteal = false;
                 MenuTime = 0;
-                CurrentMenu = &LoadMenu;
-                CurrentItPos = CurrentMenu->lastOn;
+                RD_Menu_SetMenu(&LoadMenu);
                 if (!netgame && !demoplayback)
                 {
                     paused = true;
@@ -3746,8 +3747,7 @@ boolean MN_Responder(event_t * event)
             menuactive = true;
             FileMenuKeySteal = false;
             MenuTime = 0;
-            CurrentMenu = vanillaparm ? &VanillaOptions2Menu : &SoundMenu;
-            CurrentItPos = CurrentMenu->lastOn;
+            RD_Menu_SetMenu(vanillaparm ? &VanillaOptions2Menu : &SoundMenu);
             if (!netgame && !demoplayback)
             {
                 paused = true;
@@ -3772,8 +3772,7 @@ boolean MN_Responder(event_t * event)
                     menuactive = true;
                     FileMenuKeySteal = false;
                     MenuTime = 0;
-                    CurrentMenu = &SaveMenu;
-                    CurrentItPos = CurrentMenu->lastOn;
+                    RD_Menu_SetMenu(&SaveMenu);
                     if (!netgame && !demoplayback)
                     {
                         paused = true;
@@ -3825,8 +3824,7 @@ boolean MN_Responder(event_t * event)
                     menuactive = true;
                     FileMenuKeySteal = false;
                     MenuTime = 0;
-                    CurrentMenu = &LoadMenu;
-                    CurrentItPos = CurrentMenu->lastOn;
+                    RD_Menu_SetMenu(&LoadMenu);
                     if (!netgame && !demoplayback)
                     {
                         paused = true;
