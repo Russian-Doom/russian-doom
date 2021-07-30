@@ -3071,13 +3071,13 @@ void M_RD_Draw_Bindings()
 
     for (int i = 0; i < CurrentMenu->itemCount; ++i)
     {
-        if (CurrentMenu->items->option != 0)
+        if (CurrentMenu->items[i].option != 0)
         {
             boolean bindingThis = messageToBind && i == CurrentItPos;
 
-            RD_M_DrawTextSmallENG(bindingThis ? "?" : BK_getBoundKeysString(CurrentMenu->items->option),
-                                  x + wide_delta, i * 10 + 35,
-                                  bindingThis ? CR_WHITE : BK_KeyHasNoBinds(CurrentMenu->items->option) ?
+            RD_M_DrawTextSmallENG(bindingThis ? "?" : BK_getBoundKeysString(CurrentMenu->items[i].option),
+                                  x + wide_delta, i * 10 + 25,
+                                  bindingThis ? CR_WHITE : BK_KeyHasNoBinds(CurrentMenu->items[i].option) ?
                                   CR_DARKRED : CR_NONE);
         }
     }
