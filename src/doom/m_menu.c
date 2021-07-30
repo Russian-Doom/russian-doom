@@ -872,7 +872,7 @@ static Menu_t NewGameMenu = {
     M_DrawNewGame,
     NULL,
     &DoomEpisodeMenu,
-    0
+    2
 };
 
 // =============================================================================
