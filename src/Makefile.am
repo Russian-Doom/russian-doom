@@ -1,16 +1,17 @@
-
-SUBDIRS = doom heretic hexen strife setup
+# [Dasperal] Disable "strife" from the compilation
+SUBDIRS = doom heretic hexen setup
 
 execgamesdir = ${bindir}
 
+# [Dasperal] Disable "strife" from the compilation
 execgames_PROGRAMS = @PROGRAM_PREFIX@doom          \
                      @PROGRAM_PREFIX@heretic       \
                      @PROGRAM_PREFIX@hexen         \
-                     @PROGRAM_PREFIX@strife        \
                      @PROGRAM_PREFIX@doom-setup    \
                      @PROGRAM_PREFIX@heretic-setup \
-                     @PROGRAM_PREFIX@hexen-setup   \
-                     @PROGRAM_PREFIX@strife-setup
+                     @PROGRAM_PREFIX@hexen-setup
+#                    @PROGRAM_PREFIX@strife
+#                    @PROGRAM_PREFIX@strife-setup
 
 AM_CFLAGS = -I$(top_srcdir)/textscreen            \
             -I$(top_srcdir)/opl                   \
@@ -77,6 +78,8 @@ net_server.c         net_server.h          \
 net_structrw.c       net_structrw.h        \
 rd_keybinds.c        rd_keybinds.h         \
 rd_menu.c            rd_menu.h             \
+                     rd_menu_control.h     \
+rd_text.c            rd_text.h             \
 sha1.c               sha1.h                \
 memio.c              memio.h               \
 tables.c             tables.h              \
@@ -145,13 +148,14 @@ endif
 
 @PROGRAM_PREFIX@hexen_LDADD = hexen/libhexen.a $(EXTRA_LIBS)
 
-if HAVE_WINDRES
-@PROGRAM_PREFIX@strife_SOURCES=$(SOURCE_FILES_WITH_DEH) $(top_builddir)/data/strife_icon.c strife/resource.rc
-else
-@PROGRAM_PREFIX@strife_SOURCES=$(SOURCE_FILES_WITH_DEH) $(top_builddir)/data/strife_icon.c
-endif
+# [Dasperal] Disable "strife" from the compilation
+# if HAVE_WINDRES
+# @PROGRAM_PREFIX@strife_SOURCES=$(SOURCE_FILES_WITH_DEH) $(top_builddir)/data/strife_icon.c strife/resource.rc
+# else
+# @PROGRAM_PREFIX@strife_SOURCES=$(SOURCE_FILES_WITH_DEH) $(top_builddir)/data/strife_icon.c
+# endif
 
-@PROGRAM_PREFIX@strife_LDADD = strife/libstrife.a $(EXTRA_LIBS)
+# @PROGRAM_PREFIX@strife_LDADD = strife/libstrife.a $(EXTRA_LIBS)
 
 # Source files needed for russian-setup:
 
@@ -199,13 +203,14 @@ endif
 
 @PROGRAM_PREFIX@hexen_setup_LDADD = $(SETUP_LIBS)
 
-if HAVE_WINDRES
-@PROGRAM_PREFIX@strife_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c setup/strife-resource.rc
-else
-@PROGRAM_PREFIX@strife_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c
-endif
+# [Dasperal] Disable "strife" from the compilation
+# if HAVE_WINDRES
+# @PROGRAM_PREFIX@strife_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c setup/strife-resource.rc
+# else
+# @PROGRAM_PREFIX@strife_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c
+# endif
 
-@PROGRAM_PREFIX@strife_setup_LDADD = $(SETUP_LIBS)
+# @PROGRAM_PREFIX@strife_setup_LDADD = $(SETUP_LIBS)
 
 .rc.o:
 	$(WINDRES) $< -o $@

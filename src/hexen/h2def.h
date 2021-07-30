@@ -49,6 +49,8 @@
 
 #include "d_loop.h"
 #include "net_defs.h"
+#include "rd_menu_control.h"
+#include "rd_text.h"
 
 #include "jn.h"
 
@@ -631,7 +633,7 @@ extern boolean netgame;         // only true if >1 player
 
 extern boolean cmdfrag;         // true if a CMD_FRAG packet should be sent out every
                                                 // kill
-extern boolean menuactive;
+extern boolean automapactive;
 
 extern boolean devparm;         // [JN] DEBUG: launched with -devparm
 
@@ -777,6 +779,8 @@ void G_DeferedInitNew(skill_t skill, int episode, int map);
 // a normal game starts at map 1, but a warp test can start elsewhere
 
 void G_DeferredNewGame(skill_t skill);
+
+void G_DoSelectiveGame(int direction);
 
 void G_DeferedPlayDemo(char *demo);
 
@@ -1068,20 +1072,11 @@ void Draw_LoadIcon(void);
 //-----------------
 
 void MN_Init(void);
-void MN_ActivateMenu(void);
-void MN_DeactivateMenu(void);
 boolean MN_Responder(event_t * event);
 void MN_Ticker(void);
 void MN_Drawer(void);
-void MN_DrTextA(char *text, int x, int y);
 void MN_DrTextAYellow(char *text, int x, int y);
-int MN_TextAWidth(char *text);
-void MN_DrTextB(char *text, int x, int y);
-int MN_TextBWidth(char *text);
-void MN_DrTextC(char *text, int x, int y);
-void MN_DrTextSmallRUS(char *text, int x, int y);
 void MN_DrTextSmallYellowRUS(char *text, int x, int y);
-int MN_DrTextSmallRUSWidth(char *text);
 
 extern int messageson;
 

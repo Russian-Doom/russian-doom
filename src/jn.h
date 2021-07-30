@@ -111,6 +111,7 @@ extern int mouse_y_invert;
 // Selective game
 // -----------------------------------------------------------------------------
 
+extern int selective_class; // Hexen player class
 extern int selective_skill;
 extern int selective_episode;
 extern int selective_map;
@@ -118,6 +119,10 @@ extern int selective_map;
 extern int selective_health;
 extern int selective_armor;
 extern int selective_armortype;
+extern int selective_armor_0; // Hexen armor: MESH ARMOR
+extern int selective_armor_1; // Hexen armor: FALCON SHIELD
+extern int selective_armor_2; // Hexen armor: PLATINUM HELMET
+extern int selective_armor_3; // Hexen armor: AMULET OF WARDING
 
 // Doom weapons
 extern int selective_wp_chainsaw;
@@ -136,21 +141,34 @@ extern int selective_wp_hellstaff;
 extern int selective_wp_phoenixrod;
 extern int selective_wp_firemace;
 
+// Hexen weapons
+extern int selective_wp_second;
+extern int selective_wp_third;
+extern int selective_wp_fourth;
+extern int selective_wp_piece_0;
+extern int selective_wp_piece_1;
+extern int selective_wp_piece_2;
+
 extern int selective_backpack;
 
-extern int selective_ammo_0;   // bullets | wand crystals
-extern int selective_ammo_1;   // shells  | ethereal arrows
-extern int selective_ammo_2;   // cells   | claw orbs
-extern int selective_ammo_3;   // rockets | hellstaff runes
-extern int selective_ammo_4;   //         | flame orbs
-extern int selective_ammo_5;   //         | mace spheres
+extern int selective_ammo_0;   // bullets | wand crystals   | blue mana
+extern int selective_ammo_1;   // shells  | ethereal arrows | green mana
+extern int selective_ammo_2;   // cells   | claw orbs       |
+extern int selective_ammo_3;   // rockets | hellstaff runes |
+extern int selective_ammo_4;   //         | flame orbs      |
+extern int selective_ammo_5;   //         | mace spheres    |
 
-extern int selective_key_0;
-extern int selective_key_1;
-extern int selective_key_2;
-extern int selective_key_3;
-extern int selective_key_4;
-extern int selective_key_5;
+extern int selective_key_0;  // blue keycard     | yellow key | EMERALD KEY
+extern int selective_key_1;  // yellow keycard   | green key  | SILVER KEY
+extern int selective_key_2;  // red keycard      | blue key   | FIRE KEY
+extern int selective_key_3;  // blue skull key   |            | STEEL KEY
+extern int selective_key_4;  // yellow skull key |            | HORN KEY
+extern int selective_key_5;  // red skull key    |            | CAVE KEY
+extern int selective_key_6;  //                  |            | CASTLE KEY
+extern int selective_key_7;  //                  |            | SWAMP KEY
+extern int selective_key_8;  //                  |            | RUSTED KEY
+extern int selective_key_9;  //                  |            | DUNGEON KEY
+extern int selective_key_10; //                  |            | AXE KEY
 
 extern int selective_fast;
 extern int selective_respawn;
@@ -158,14 +176,37 @@ extern int selective_respawn;
 // Heretic artifacts
 extern int selective_arti_0;   // Quartz Flask
 extern int selective_arti_1;   // Mystic Urn
-extern int selective_arti_2;   // Timebomb
-extern int selective_arti_3;   // Tome of Power
-extern int selective_arti_4;   // Ring of Invincibility
-extern int selective_arti_5;   // Morph Ovum
+extern int selective_arti_2;   // Timebomb              | FLECHETTE
+extern int selective_arti_3;   // Tome of Power         | DISC OF REPULSION
+extern int selective_arti_4;   // Ring of Invincibility | ICON OF THE DEFENDER
+extern int selective_arti_5;   // Morph Ovum            | PORKALATOR
 extern int selective_arti_6;   // Chaos Device
-extern int selective_arti_7;   // Shadowsphere
+extern int selective_arti_7;   // Shadowsphere          | BANISHMENT DEVICE
 extern int selective_arti_8;   // Wings of Wrath
 extern int selective_arti_9;   // Torch
+extern int selective_arti_10;  //                       | KRATER OF MIGHT
+extern int selective_arti_11;  //                       | DRAGONSKIN BRACERS
+extern int selective_arti_12;  //                       | DARK SERVANT
+extern int selective_arti_13;  //                       | BOOTS OF SPEED
+extern int selective_arti_14;  //                       | MYSTIC AMBIT INCANT
+
+extern int selective_puzzle_0;  // FLAME MASK
+extern int selective_puzzle_1;  // HEART OF D'SPARIL
+extern int selective_puzzle_2;  // RUBY PLANET
+extern int selective_puzzle_3;  // EMERALD PLANET 1
+extern int selective_puzzle_4;  // EMERALD PLANET 2
+extern int selective_puzzle_5;  // SAPPHIRE PLANET 1
+extern int selective_puzzle_6;  // SAPPHIRE PLANET 2
+extern int selective_puzzle_7;  // CLOCK GEAR ((S)
+extern int selective_puzzle_8;  // CLOCK GEAR ((B)
+extern int selective_puzzle_9;  // CLOCK GEAR ((S B)
+extern int selective_puzzle_10; // CLOCK GEAR ((B S)
+extern int selective_puzzle_11; // DAEMON CODEX
+extern int selective_puzzle_12; // LIBER OSCURA
+extern int selective_puzzle_13; // YORICK'S SKULL
+extern int selective_puzzle_14; // GLAIVE SEAL
+extern int selective_puzzle_15; // HOlY RELIC
+extern int selective_puzzle_16; // SIGIL OF THE MAGUS
 
 // -----------------------------------------------------------------------------
 // Gameplay feautures

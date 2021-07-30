@@ -36,7 +36,7 @@ if(MSVC)
     # MSVC already has /O2 in Release flags
 else()
     add_compile_options("-Wall" "-Wdeclaration-after-statement"
-                        "-Wredundant-decls" "-Wno-unknown-pragmas")
+                        "-Wredundant-decls" "-Wno-unknown-pragmas" "-Wno-unused-result")
     string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
 endif()
 

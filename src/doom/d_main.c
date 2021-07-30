@@ -73,6 +73,7 @@
 #include "net_dedicated.h"
 #include "net_query.h"
 #include "p_setup.h"
+#include "rd_text.h"
 #include "r_local.h"
 #include "d_main.h"
 #include "d_name.h"
@@ -84,6 +85,7 @@
 // -----------------------------------------------------------------------------
 char* RD_Project_Name = PACKAGE_PREFIX " Doom";
 char* RD_Project_String = PACKAGE_PREFIX " Doom " BUILD_DOOM_VERSION;
+GameType_t RD_GameType = gt_Doom;
 
 // -----------------------------------------------------------------------------
 // [JN] Support for fallback to the English language.
@@ -364,18 +366,18 @@ static void DrawTimeAndFPS (void)
                      local_time == 4 ? "%H:%M:%S" :    // 24-hour (HH:MM:SS)
                                        "", tm);        // No time
     
-            M_WriteTimeAndFPS((local_time == 1 ? 282 :
-                               local_time == 2 ? 270 :
-                               local_time == 3 ? 294 :
-                               local_time == 4 ? 282 : 0) 
-                               + (wide_4_3 ? wide_delta : wide_delta*2), 10, s);
+            RD_M_DrawTextC(s, (local_time == 1 ? 282 :
+                              local_time == 2 ? 270 :
+                              local_time == 3 ? 294 :
+                              local_time == 4 ? 282 : 0)
+                              + (wide_4_3 ? wide_delta : wide_delta*2), 10);
         }
 
         if (show_fps)
         {
             sprintf (fps, "%d", f);
-            M_WriteTimeAndFPS(278 + (wide_4_3 ? wide_delta : wide_delta*2), 20, "FPS:");
-            M_WriteTimeAndFPS(298 + (wide_4_3 ? wide_delta : wide_delta*2), 20, fps);   // [JN] fps digits
+            RD_M_DrawTextC("FPS:", 278 + (wide_4_3 ? wide_delta : wide_delta*2), 20);
+            RD_M_DrawTextC(fps, 298 + (wide_4_3 ? wide_delta : wide_delta*2), 20);   // [JN] fps digits
         }
     }
 }

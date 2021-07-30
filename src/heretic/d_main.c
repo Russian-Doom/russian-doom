@@ -57,7 +57,6 @@
 #include "r_local.h"
 #include "s_sound.h"
 #include "w_main.h"
-#include "v_trans.h"
 #include "v_video.h"
 #include "w_merge.h"
 #include "jn.h"
@@ -76,6 +75,7 @@
 // -----------------------------------------------------------------------------
 char* RD_Project_Name = PACKAGE_PREFIX " Heretic";
 char* RD_Project_String = PACKAGE_PREFIX " Heretic " BUILD_HERETIC_VERSION;
+GameType_t RD_GameType = gt_Heretic;
 
 GameMode_t gamemode = indetermined;
 char *gamedescription = "unknown";
@@ -257,7 +257,6 @@ void D_PageDrawer(void);
 void D_AdvanceDemo(void);
 boolean F_Responder(event_t * ev);
 
-
 //---------------------------------------------------------------------------
 //
 // PROC D_ProcessEvents
@@ -308,31 +307,31 @@ void DrawMessage(void)
     }
 
     // [JN] Colorize depending on given color type.
-    switch (player->messageColor)
+    switch (player->messageType)
     {
-        case 1: // Item pickup.
-            dp_translation = messages_pickup_color_set;
-        break;
-        case 2: // Revealed secret
-            dp_translation = messages_secret_color_set;
-        break;
-        case 3: // System message
-            dp_translation = messages_system_color_set;
-        break;
-        case 4: // Netgame chat
-            dp_translation = messages_chat_color_set;
-        break;
-        case 0: // Not supposed to be colored.
+        case msg_pickup: // Item pickup.
+            dp_translation = messages_pickup_color_set == CR_NONE ? NULL : cr[messages_pickup_color_set];
+            break;
+        case msg_secret: // Revealed secret
+            dp_translation = messages_secret_color_set == CR_NONE ? NULL : cr[messages_secret_color_set];
+            break;
+        case msg_system: // System message
+            dp_translation = messages_system_color_set == CR_NONE ? NULL : cr[messages_system_color_set];
+            break;
+        case msg_chat: // Netgame chat
+            dp_translation = messages_chat_color_set == CR_NONE ? NULL : cr[messages_chat_color_set];
+            break;
+        case msg_uncolored: // Not supposed to be colored.
         default:
-        break;
+            break;
     }
 
     if (english_language)
     {
         if (player->messageTics < 10 && message_fade && !vanillaparm)
         {
-            MN_DrTextAFade(player->message,
-                           messages_alignment == 0 ? 160 - MN_TextAWidth(player->message) / 2 + wide_delta :  // centered
+            RD_M_DrawTextAFade(player->message,
+                           messages_alignment == 0 ? 160 - RD_M_TextAWidth(player->message) / 2 + wide_delta :  // centered
                            messages_alignment == 1 ? 4 + wide_4_3 :   // left edge of the screen
                                                      wide_delta, 1,   // left edge of the status bar
                            player->messageTics >= 9 ? transtable90 :
@@ -347,8 +346,8 @@ void DrawMessage(void)
         }
         else
         {
-            MN_DrTextA(player->message,
-                       messages_alignment == 0 ? 160 - MN_TextAWidth(player->message) / 2 + wide_delta :  // centered
+            RD_M_DrawTextA(player->message,
+                       messages_alignment == 0 ? 160 - RD_M_TextAWidth(player->message) / 2 + wide_delta :  // centered
                        messages_alignment == 1 ? 4 + wide_4_3 :       // left edge of the screen
                                                  wide_delta, 1);      // left edge of the status bar
         }
@@ -357,26 +356,26 @@ void DrawMessage(void)
     {
         if (player->messageTics < 10 && message_fade && !vanillaparm)
         {
-            MN_DrTextSmallRUSFade(player->message,
-                                  messages_alignment == 0 ? 160 - MN_DrTextSmallRUSWidth(player->message) / 2 + wide_delta :  // по центру
-                                  messages_alignment == 1 ? 4 + wide_4_3 :      // по краю экрана
-                                                                wide_delta, 1,  // по краю статус-бара
-                                  player->messageTics >= 9 ? transtable90 :
-                                  player->messageTics >= 8 ? transtable80 :
-                                  player->messageTics >= 7 ? transtable70 :
-                                  player->messageTics >= 6 ? transtable60 :
-                                  player->messageTics >= 5 ? transtable50 :
-                                  player->messageTics >= 4 ? transtable40 :
-                                  player->messageTics >= 3 ? transtable30 :
-                                  player->messageTics >= 2 ? transtable20 :
-                                                             transtable10);
+            RD_M_DrawTextSmallRUSFade(player->message,
+                                      messages_alignment == 0 ? 160 - RD_M_TextSmallRUSWidth(player->message) / 2 + wide_delta :  // по центру
+                                      messages_alignment == 1 ? 4 + wide_4_3 :      // по краю экрана
+                                                                    wide_delta, 1,  // по краю статус-бара
+                                      player->messageTics >= 9 ? transtable90 :
+                                      player->messageTics >= 8 ? transtable80 :
+                                      player->messageTics >= 7 ? transtable70 :
+                                      player->messageTics >= 6 ? transtable60 :
+                                      player->messageTics >= 5 ? transtable50 :
+                                      player->messageTics >= 4 ? transtable40 :
+                                      player->messageTics >= 3 ? transtable30 :
+                                      player->messageTics >= 2 ? transtable20 :
+                                                                 transtable10);
         }
         else
         {
-            MN_DrTextSmallRUS(player->message,
-                              messages_alignment == 0 ? 160 - MN_DrTextSmallRUSWidth(player->message) / 2 + wide_delta :  // по центру
-                              messages_alignment == 1 ? 4 + wide_4_3 :          // по краю экрана
-                                                        wide_delta, 1);         // по краю статус-бара
+            RD_M_DrawTextSmallRUS(player->message,
+                                  messages_alignment == 0 ? 160 - RD_M_TextSmallRUSWidth(player->message) / 2 + wide_delta :  // по центру
+                                  messages_alignment == 1 ? 4 + wide_4_3 :           // по краю экрана
+                                                            wide_delta, 1, CR_NONE); // по краю статус-бара
         }
     }
 
@@ -412,19 +411,19 @@ void DrawTimeAndFPS(void)
                      local_time == 3 ? "%H:%M" :       // 24-hour (HH:MM)
                      local_time == 4 ? "%H:%M:%S" :    // 24-hour (HH:MM:SS)
                                        "", tm);        // No time
-    
-            MN_DrTextC(s, (local_time == 1 ? 281 :
-                       local_time == 2 ? 269 :
-                       local_time == 3 ? 293 :
-                       local_time == 4 ? 281 : 0) 
-                       + (wide_4_3 ? wide_delta : wide_delta*2), 13);
+
+            RD_M_DrawTextC(s, (local_time == 1 ? 281 :
+                               local_time == 2 ? 269 :
+                               local_time == 3 ? 293 :
+                               local_time == 4 ? 281 : 0)
+                              + (wide_4_3 ? wide_delta : wide_delta * 2), 13);
         }
 
         if (show_fps)
         {
             sprintf (fps, "%d", f);
-            MN_DrTextC("FPS:", 279 + (wide_4_3 ? wide_delta : wide_delta*2), 23);
-            MN_DrTextC(fps, 297 + (wide_4_3 ? wide_delta : wide_delta*2), 23);   // [JN] fps digits
+            RD_M_DrawTextC("FPS:", 279 + (wide_4_3 ? wide_delta : wide_delta * 2), 23);
+            RD_M_DrawTextC(fps, 297 + (wide_4_3 ? wide_delta : wide_delta * 2), 23);   // [JN] fps digits
         }
     }
 }

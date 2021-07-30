@@ -61,6 +61,9 @@
 
 #include "d_loop.h"
 
+#include "rd_menu_control.h"
+#include "rd_text.h"
+
 // [JN] Extended name from "hticsav".
 #define	SAVEGAMENAME "heretic-save-"
 
@@ -102,17 +105,6 @@ typedef enum
     ga_worlddone,
     ga_screenshot
 } gameaction_t;
-
-typedef enum
-{
-    wipe_0,
-    wipe_1,
-    wipe_2,
-    wipe_3,
-    wipe_4,
-    NUMWIPES,
-    wipe_random
-} wipe_t;
 
 /*
 ===============================================================================
@@ -491,7 +483,7 @@ typedef struct player_s
     int yellowkeyTics;          // [JN] Counter for missing yellow key
     int greenkeyTics;           // [JN] Counter for missing green key
     int bluekeyTics;            // [JN] Counter for missing blue key
-    int messageColor;           // [JN] Colored message type
+    MessageType_t messageType; // [JN] Colored message type
     int damagecount, bonuscount;        // for screen flashing
     int flamecount;             // for flame thrower duration
     mobj_t *attacker;           // who did damage (NULL for floors)
@@ -701,7 +693,7 @@ void G_DeferedInitNew(skill_t skill, int episode, int map);
 // can be called by the startup code or M_Responder
 // a normal game starts at map 1, but a warp test can start elsewhere
 
-void G_DoSelectiveGame(intptr_t option);
+void G_DoSelectiveGame(int option);
 
 void G_DeferedPlayDemo(char *demo);
 
@@ -873,29 +865,10 @@ void SB_Drawer(void);
 // MENU (MN_menu.c)
 //-----------------
 
-extern boolean menuactive;
-
 void MN_Init(void);
-void MN_ActivateMenu(void);
-void MN_DeactivateMenu(void);
 boolean MN_Responder(event_t * event);
 void MN_Ticker(void);
 void MN_Drawer(void);
-void MN_DrTextA(char *text, int x, int y);
-int MN_TextAWidth(char *text);
-void MN_DrTextAFade(char *text, int x, int y, byte *table);
-void MN_DrTextB(char *text, int x, int y);
-int MN_TextBWidth(char *text);
-void MN_DrTextC(char *text, int x, int y);
-void MN_DrTextSmallENG(char *text, int x, int y);
-int MN_DrTextSmallENGWidth(char *text);
-void MN_DrTextBigENG(char *text, int x, int y);
-int MN_DrTextBigENGWidth(char *text);
-void MN_DrTextSmallRUS(char *text, int x, int y);
-int MN_DrTextSmallRUSWidth(char *text);
-void MN_DrTextSmallRUSFade(char *text, int x, int y, byte *table);
-void MN_DrTextBigRUS(char *text, int x, int y);
-int MN_DrTextBigRUSWidth(char *text);
 
 #include "sounds.h"
 

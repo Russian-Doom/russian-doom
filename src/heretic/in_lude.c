@@ -45,7 +45,6 @@ typedef enum
 
 // Public functions
 
-
 boolean intermission;
 
 // Private functions
@@ -610,24 +609,24 @@ void IN_DrawOldLevel(void)
 
     if (english_language)
     {
-        x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) 
+        x = 160 - RD_M_TextBWidth(LevelNames[(gameepisode - 1)
                 * 9 + prevmap - 1] + 7) / 2;
-        MN_DrTextB(LevelNames[(gameepisode - 1) * 9 + prevmap - 1]
-                                                + 7, x + wide_delta, 3);
+        RD_M_DrawTextB(LevelNames[(gameepisode - 1) * 9 + prevmap - 1]
+                       + 7, x + wide_delta, 3);
 
-        x = 160 - MN_TextAWidth(DEH_String("FINISHED")) / 2;
-        MN_DrTextA(DEH_String("FINISHED"), x + wide_delta, 25);
+        x = 160 - RD_M_TextAWidth(DEH_String("FINISHED")) / 2;
+        RD_M_DrawTextA(DEH_String("FINISHED"), x + wide_delta, 25);
     }
     else
     {
-        x = 160 - MN_DrTextBigRUSWidth(LevelNames_Rus[(gameepisode - 1)
-                * 9 + prevmap - 1] + 7) / 2;
-        MN_DrTextBigRUS(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1]
+        x = 160 - RD_M_TextBigRUSWidth(LevelNames_Rus[(gameepisode - 1)
+            * 9 + prevmap - 1] + 7) / 2;
+        RD_M_DrawTextBigRUS(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1]
                                                          + 7, x + wide_delta, 3);
 
         // УРОВЕНЬ ЗАВЕРШЕН
-        x = 160 - MN_DrTextSmallRUSWidth(DEH_String("EHJDTYM PFDTHITY")) / 2;
-        MN_DrTextSmallRUS(DEH_String("EHJDTYM PFDTHITY"), x + wide_delta, 25);
+        x = 160 - RD_M_TextSmallRUSWidth(DEH_String("EHJDTYM PFDTHITY")) / 2;
+        RD_M_DrawTextSmallRUS(DEH_String("EHJDTYM PFDTHITY"), x + wide_delta, 25, CR_NONE);
     }
 
     if (prevmap == 9)
@@ -677,23 +676,23 @@ void IN_DrawYAH(void)
 
     if (english_language)
     {
-        x = 160 - MN_TextAWidth(DEH_String("NOW ENTERING:")) / 2;
-        MN_DrTextA(DEH_String("NOW ENTERING:"), x + wide_delta, 10);
+        x = 160 - RD_M_TextAWidth(DEH_String("NOW ENTERING:")) / 2;
+        RD_M_DrawTextA(DEH_String("NOW ENTERING:"), x + wide_delta, 10);
 
-        x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) 
+        x = 160 - RD_M_TextBWidth(LevelNames[(gameepisode - 1)
                 * 9 + gamemap - 1] + 7) / 2;
-        MN_DrTextB(LevelNames[(gameepisode - 1) * 9 + gamemap - 1]
-                                                + 7, x + wide_delta, 20);
+        RD_M_DrawTextB(LevelNames[(gameepisode - 1) * 9 + gamemap - 1]
+                       + 7, x + wide_delta, 20);
     }
     else
     {
         // СЛЕДУЮЩИЙ УРОВЕНЬ:
-        x = 160 - MN_DrTextSmallRUSWidth(DEH_String("CKTLE.OBQ EHJDTYM:")) / 2;
-        MN_DrTextSmallRUS(DEH_String("CKTLE.OBQ EHJDTYM:"), x + wide_delta, 10);
+        x = 160 - RD_M_TextSmallRUSWidth(DEH_String("CKTLE.OBQ EHJDTYM:")) / 2;
+        RD_M_DrawTextSmallRUS(DEH_String("CKTLE.OBQ EHJDTYM:"), x + wide_delta, 10, CR_NONE);
 
-        x = 160 - MN_DrTextBigRUSWidth(LevelNames_Rus[(gameepisode - 1)
-                * 9 + gamemap - 1] + 7) / 2;
-        MN_DrTextBigRUS(LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1]
+        x = 160 - RD_M_TextBigRUSWidth(LevelNames_Rus[(gameepisode - 1)
+            * 9 + gamemap - 1] + 7) / 2;
+        RD_M_DrawTextBigRUS(LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1]
                                                          + 7, x + wide_delta, 20);
     }
 
@@ -740,27 +739,27 @@ void IN_DrawSingleStats(void)
 
     if (english_language)
     {
-        MN_DrTextB(DEH_String("KILLS"), 50 + wide_delta, classic_stats ? 65 : 44);
-        MN_DrTextB(DEH_String("ITEMS"), 50 + wide_delta, classic_stats ? 90 : 66);
-        MN_DrTextB(DEH_String("SECRETS"), 50 + wide_delta, classic_stats ? 115 : 88);
+        RD_M_DrawTextB(DEH_String("KILLS"), 50 + wide_delta, classic_stats ? 65 : 44);
+        RD_M_DrawTextB(DEH_String("ITEMS"), 50 + wide_delta, classic_stats ? 90 : 66);
+        RD_M_DrawTextB(DEH_String("SECRETS"), 50 + wide_delta, classic_stats ? 115 : 88);
 
-        x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7) / 2;
-        MN_DrTextB(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7, x + wide_delta, 3);
+        x = 160 - RD_M_TextBWidth(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7) / 2;
+        RD_M_DrawTextB(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7, x + wide_delta, 3);
 
-        x = 160 - MN_TextAWidth(DEH_String("FINISHED")) / 2;
-        MN_DrTextA(DEH_String("FINISHED"), x + wide_delta, 25);
+        x = 160 - RD_M_TextAWidth(DEH_String("FINISHED")) / 2;
+        RD_M_DrawTextA(DEH_String("FINISHED"), x + wide_delta, 25);
     }
     else
     {
-        MN_DrTextBigRUS(DEH_String("DHFUB"), 50 + wide_delta, classic_stats ? 65 : 44);    // ВРАГИ
-        MN_DrTextBigRUS(DEH_String("GHTLVTNS"), 50 + wide_delta, classic_stats ? 90 : 66); // ПРЕДМЕТЫ
-        MN_DrTextBigRUS(DEH_String("NFQYBRB"), 50 + wide_delta, classic_stats ? 115 : 88); // ТАЙНИКИ
+        RD_M_DrawTextBigRUS(DEH_String("DHFUB"), 50 + wide_delta, classic_stats ? 65 : 44);    // ВРАГИ
+        RD_M_DrawTextBigRUS(DEH_String("GHTLVTNS"), 50 + wide_delta, classic_stats ? 90 : 66); // ПРЕДМЕТЫ
+        RD_M_DrawTextBigRUS(DEH_String("NFQYBRB"), 50 + wide_delta, classic_stats ? 115 : 88); // ТАЙНИКИ
 
-        x = 160 - MN_DrTextBigRUSWidth(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1] + 7) / 2;
-        MN_DrTextBigRUS(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1] + 7, x + wide_delta, 3);
+        x = 160 - RD_M_TextBigRUSWidth(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1] + 7) / 2;
+        RD_M_DrawTextBigRUS(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1] + 7, x + wide_delta, 3);
 
-        x = 160 - MN_DrTextSmallRUSWidth(DEH_String("EHJDTYM PFDTHITY")) / 2;         // УРОВЕНЬ ЗАВЕРШЕН
-        MN_DrTextSmallRUS(DEH_String("EHJDTYM PFDTHITY"), x + wide_delta, 25); // УРОВЕНЬ ЗАВЕРШЕН
+        x = 160 - RD_M_TextSmallRUSWidth(DEH_String("EHJDTYM PFDTHITY")) / 2;         // УРОВЕНЬ ЗАВЕРШЕН
+        RD_M_DrawTextSmallRUS(DEH_String("EHJDTYM PFDTHITY"), x + wide_delta, 25, CR_NONE); // УРОВЕНЬ ЗАВЕРШЕН
     }
 
     if (intertime < 30)
@@ -819,18 +818,18 @@ void IN_DrawSingleStats(void)
     // [JN] Draw level time and total time even for 4 and 5 episodes!
     if (english_language)
     {
-        MN_DrTextB(DEH_String("TIME"), 50 + wide_delta, classic_stats ? 145 : 114);
+        RD_M_DrawTextB(DEH_String("TIME"), 50 + wide_delta, classic_stats ? 145 : 114);
         IN_DrawTime(192 + wide_delta, classic_stats ? 145 : 114, hours, minutes, seconds);
 
-        MN_DrTextB(DEH_String("TOTAL"), 50 + wide_delta, classic_stats ? 165 : 134);
+        RD_M_DrawTextB(DEH_String("TOTAL"), 50 + wide_delta, classic_stats ? 165 : 134);
         IN_DrawTime(192 + wide_delta, classic_stats ? 165 : 134, ttime/3600, (ttime%3600)/60, ttime%60);
     }
     else
     {
-        MN_DrTextBigRUS(DEH_String("DHTVZ"), 50 + wide_delta, classic_stats ? 145 : 114);   // ВРЕМЯ
+        RD_M_DrawTextBigRUS(DEH_String("DHTVZ"), 50 + wide_delta, classic_stats ? 145 : 114);   // ВРЕМЯ
         IN_DrawTime(192 + wide_delta, classic_stats ? 145 : 114, hours, minutes, seconds);
 
-        MN_DrTextBigRUS(DEH_String("J,OTT DHTVZ"), 50 + wide_delta, classic_stats ? 165 : 134); // ОБЩЕЕ ВРЕМЯ
+        RD_M_DrawTextBigRUS(DEH_String("J,OTT DHTVZ"), 50 + wide_delta, classic_stats ? 165 : 134); // ОБЩЕЕ ВРЕМЯ
         IN_DrawTime(192 + wide_delta, classic_stats ? 165 : 134, ttime/3600, (ttime%3600)/60, ttime%60);
     }
 
@@ -839,19 +838,19 @@ void IN_DrawSingleStats(void)
     {
         if (english_language)
         {
-            x = 160 - MN_TextAWidth(DEH_String("NOW ENTERING:")) / 2;
-            MN_DrTextA(DEH_String("NOW ENTERING:"), x + wide_delta, 160);
+            x = 160 - RD_M_TextAWidth(DEH_String("NOW ENTERING:")) / 2;
+            RD_M_DrawTextA(DEH_String("NOW ENTERING:"), x + wide_delta, 160);
 
-            x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] + 7) / 2;
-            MN_DrTextB(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] + 7, x + wide_delta, 170);
+            x = 160 - RD_M_TextBWidth(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] + 7) / 2;
+            RD_M_DrawTextB(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] + 7, x + wide_delta, 170);
         }
         else
         {
-            x = 160 - MN_DrTextSmallRUSWidth(DEH_String("CKTLE.OBQ EHJDTYM:")) / 2;    // СЛЕДУЮЩИЙ УРОВЕНЬ:
-            MN_DrTextSmallRUS(DEH_String("CKTLE.OBQ EHJDTYM:"), x + wide_delta, 160);  // СЛЕДУЮЩИЙ УРОВЕНЬ:
+            x = 160 - RD_M_TextSmallRUSWidth(DEH_String("CKTLE.OBQ EHJDTYM:")) / 2;    // СЛЕДУЮЩИЙ УРОВЕНЬ:
+            RD_M_DrawTextSmallRUS(DEH_String("CKTLE.OBQ EHJDTYM:"), x + wide_delta, 160, CR_NONE);  // СЛЕДУЮЩИЙ УРОВЕНЬ:
 
-            x = 160 - MN_DrTextBigRUSWidth(LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1] + 7) / 2;
-            MN_DrTextBigRUS(LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1] + 7, x + wide_delta, 170);
+            x = 160 - RD_M_TextBigRUSWidth(LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1] + 7) / 2;
+            RD_M_DrawTextBigRUS(LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1] + 7, x + wide_delta, 170);
         }
         skipintermission = false;
     }
@@ -881,32 +880,32 @@ void IN_DrawCoopStats(void)
 
     if (english_language)
     {
-        MN_DrTextB(DEH_String("KILLS"), 95 + wide_delta, 35);
-        MN_DrTextB(DEH_String("BONUS"), 155 + wide_delta, 35);
-        MN_DrTextB(DEH_String("SECRET"), 232 + wide_delta, 35);
+        RD_M_DrawTextB(DEH_String("KILLS"), 95 + wide_delta, 35);
+        RD_M_DrawTextB(DEH_String("BONUS"), 155 + wide_delta, 35);
+        RD_M_DrawTextB(DEH_String("SECRET"), 232 + wide_delta, 35);
     }
     else
     {
-        MN_DrTextB(DEH_String("DHFUB"), 81 + wide_delta, 35);    // ВРАГИ (95, 35)
-        MN_DrTextB(DEH_String(",JYECS"), 150 + wide_delta, 35);  // БОНУСЫ (155, 35)
-        MN_DrTextB(DEH_String("NFQYBRB"), 232 + wide_delta, 35); // ТАЙНИКИ (232, 35)
+        RD_M_DrawTextB(DEH_String("DHFUB"), 81 + wide_delta, 35);    // ВРАГИ (95, 35)
+        RD_M_DrawTextB(DEH_String(",JYECS"), 150 + wide_delta, 35);  // БОНУСЫ (155, 35)
+        RD_M_DrawTextB(DEH_String("NFQYBRB"), 232 + wide_delta, 35); // ТАЙНИКИ (232, 35)
     }
 
     if (english_language)
     {
-        x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7) / 2;
-        MN_DrTextB(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7, x + wide_delta, 3);
+        x = 160 - RD_M_TextBWidth(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7) / 2;
+        RD_M_DrawTextB(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7, x + wide_delta, 3);
 
-        x = 160 - MN_TextAWidth(DEH_String("FINISHED")) / 2;
-        MN_DrTextA(DEH_String("FINISHED"), x + wide_delta, 25);
+        x = 160 - RD_M_TextAWidth(DEH_String("FINISHED")) / 2;
+        RD_M_DrawTextA(DEH_String("FINISHED"), x + wide_delta, 25);
     }
     else
     {
-        x = 160 - MN_DrTextBigRUSWidth(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1] + 7) / 2;
-        MN_DrTextBigRUS(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1] + 7, x + wide_delta, 3);
+        x = 160 - RD_M_TextBigRUSWidth(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1] + 7) / 2;
+        RD_M_DrawTextBigRUS(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1] + 7, x + wide_delta, 3);
 
-        x = 160 - MN_DrTextSmallRUSWidth(DEH_String("EHJDTYM PFDTHITY")) / 2;   // УРОВЕНЬ ЗАВЕРШЕН
-        MN_DrTextSmallRUS(DEH_String("EHJDTYM PFDTHITY"), x + wide_delta, 25);  // УРОВЕНЬ ЗАВЕРШЕН
+        x = 160 - RD_M_TextSmallRUSWidth(DEH_String("EHJDTYM PFDTHITY")) / 2;   // УРОВЕНЬ ЗАВЕРШЕН
+        RD_M_DrawTextSmallRUS(DEH_String("EHJDTYM PFDTHITY"), x + wide_delta, 25, CR_NONE);  // УРОВЕНЬ ЗАВЕРШЕН
     }
 
     ypos = 50;
@@ -975,21 +974,21 @@ void IN_DrawDMStats(void)
 
     if (english_language)
     {
-        MN_DrTextB(DEH_String("TOTAL"), 265 + wide_delta, 30);
-        MN_DrTextA(DEH_String("VICTIMS"), 140 + wide_delta, 8);
+        RD_M_DrawTextB(DEH_String("TOTAL"), 265 + wide_delta, 30);
+        RD_M_DrawTextA(DEH_String("VICTIMS"), 140 + wide_delta, 8);
     }
     else
     {
-        MN_DrTextBigRUS(DEH_String("BNJU"), 265 + wide_delta, 30);    // ИТОГ
-        MN_DrTextSmallRUS(DEH_String(";THNDS"), 140 + wide_delta, 8); // ЖЕРТВЫ
+        RD_M_DrawTextBigRUS(DEH_String("BNJU"), 265 + wide_delta, 30);    // ИТОГ
+        RD_M_DrawTextSmallRUS(DEH_String(";THNDS"), 140 + wide_delta, 8, CR_NONE); // ЖЕРТВЫ
     }
 
     for (i = 0; i < 7; i++)
     {
         if (english_language)
-        MN_DrTextA(DEH_String(KillersText[i]), 10 + wide_delta, 80 + 9 * i);
+            RD_M_DrawTextA(DEH_String(KillersText[i]), 10 + wide_delta, 80 + 9 * i);
         else
-        MN_DrTextSmallRUS(DEH_String(KillersText_Rus[i]), 10 + wide_delta, 80 + 9 * i);
+            RD_M_DrawTextSmallRUS(DEH_String(KillersText_Rus[i]), 10 + wide_delta, 80 + 9 * i, CR_NONE);
     }
     if (intertime < 20)
     {
@@ -1080,7 +1079,7 @@ void IN_DrawTime(int x, int y, int h, int m, int s)
     if (h)
     {
         IN_DrawNumber(h, x, y, 2);
-        MN_DrTextB(DEH_String(":"), x + 26, y);
+        RD_M_DrawTextB(DEH_String(":"), x + 26, y);
     }
     x += 34;
     if (m || h)
@@ -1090,15 +1089,15 @@ void IN_DrawTime(int x, int y, int h, int m, int s)
     x += 34;
     if (s)
     {
-        MN_DrTextB(DEH_String(":"), x - 8, y);
+        RD_M_DrawTextB(DEH_String(":"), x - 8, y);
         IN_DrawNumber(s, x, y, 2);
     }
 
     // [JN] If seconds = 0 (i.e. 23:00), draw it as "23:00", not as "23:".
     if (s == 0)
     {
-        MN_DrTextB(DEH_String(":"), x - 8, y);
-        MN_DrTextB(DEH_String("00"), x, y);
+        RD_M_DrawTextB(DEH_String(":"), x - 8, y);
+        RD_M_DrawTextB(DEH_String("00"), x, y);
     }
 }
 

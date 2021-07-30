@@ -43,29 +43,23 @@
 #include "p_saveg.h"
 #include "s_sound.h"
 #include "doomstat.h"
-#include "sounds.h"
 #include "m_menu.h"
-#include "p_local.h"
 #include "st_stuff.h"
 #include "v_trans.h"
 #include "am_map.h"         // [JN] AM_initColors();
-#include "st_stuff.h"
 
 #include "rd_keybinds.h"
 #include "rd_lang.h"
+#include "rd_menu.h"
 #include "crispy.h"
 #include "jn.h"
 
-
-#define SKULLXOFF      -32
 #define LINEHEIGHT      16
-#define LINEHEIGHT_SML  10  // [JN] Line height for small font
-
 
 void (*messageRoutine)(int response);
 
 boolean inhelpscreens;
-boolean menuactive;
+int InfoType = 0;
 
 // [JN] Save strings and messages 
 int     quickSaveSlot;      // -1 = no quicksave slot picked!
@@ -73,6 +67,8 @@ int     messageToPrint;     // 1 = message to be printed
 int     messageToBind;      // [JN] Indicates if we are binding key
 int    *keyToBind;          // [Dasperal] Pointer to key_var to bind
 char   *messageString;      // ...and here is the message string!
+static boolean slottextloaded;
+boolean saveStatus[8];
 char    savegamestrings[10][SAVESTRINGSIZE];
 char    saveOldString[SAVESTRINGSIZE];  // old save description before edit
 char	endstring[160];
@@ -84,12 +80,6 @@ int     messx;
 int     messy;
 int     messageLastMenuActive;
 
-// [JN] Choosen message colors, used in HUlib_drawTextLine.
-byte   *messages_pickup_color_set;
-byte   *messages_secret_color_set;
-byte   *messages_system_color_set;
-byte   *messages_chat_color_set;
-
 // we are going to be entering a savegame string
 int     saveStringEnter;              
 int     saveSlot;           // which slot to save in
@@ -99,83 +89,15 @@ int     saveCharIndex;      // which char we're editing
 static boolean opldev;
 extern boolean sendpause;
 
-
-//
-// MENU TYPEDEFS
-//
-
-typedef struct
-{
-    // 0 = no cursor here, 1 = ok, 2 = arrows ok
-    short   status;
-    char*    name;  // [JN] Extended from 10 to 128, so long text string may appear
-
-    // choice = menu item #.
-    // if status = 2, choice=0:leftarrow, 1:rightarrow
-    // [JN] Routine 3 is same to 2, but not playing activity sound itself.
-    // Activity sounds are invoking by called functions / actions themselves.
-    void    (*routine)(int choice);
-
-    // hotkey in menu
-    char    alphaKey;			
-} menuitem_t;
-
-
-typedef struct menu_s
-{
-    short           numitems;       // # of menu items
-    struct menu_s  *prevMenu;       // previous menu
-    menuitem_t     *menuitems;      // menu items
-    void            (*routine)();   // draw routine
-    short           x;
-    short           y;              // x,y of menu
-    short           lastOn;         // last item user was on in menu
-} menu_t;
-
-typedef struct
-{
-    int y;
-    char eng_text[128];
-    char rus_text[128];
-} subtitle_t;
-
-typedef struct
-{
-    struct menu_s* prevMenu_eng;    // previous menu eng
-    struct menu_s* prevMenu_rus;    // previous menu rus
-    void (*prevPage_routine)(int);  // routine for choosing previous page
-    void (*nextPage_routine)(int);  // routine for choosing next page
-    char prevPage_HotKey_eng;       // eng hotkey for prev page menu item
-    char prevPage_HotKey_rus;       // rus hotkey for prev page menu item
-    char nextPage_HotKey_eng;       // eng hotkey for next page menu item
-    char nextPage_HotKey_rus;       // rus hotkey for next page menu item
-    char pageNumber_eng[9];         // 8 chars and one \0 char
-    char pageNumber_rus[13];        // 12 chars and one \0 char
-    subtitle_t* subtitles;          // pointer to array of subtitle_t
-    char num_of_subtitles;          // uint_8 size of subtitles array
-    bound_key_t keys[11];           // keys what can be bound on this page
-} key_page_t;
-
-short   itemOn;             // menu item skull is on
 short   skullAnimCounter;   // skull animation counter
 short   whichSkull;         // which skull to draw
 
 // graphic name of skulls
 char   *skullName[2] = {"M_SKULL1", "M_SKULL2"};
 
-// current menudef
-menu_t *currentMenu;                          
-
-
 // -----------------------------------------------------------------------------
 // [JN] Custom RD menu: font writing prototypes
 // -----------------------------------------------------------------------------
-
-void M_WriteText(int x, int y, char *string);
-void M_WriteTextSmall_ENG(int x, int y, char *string, byte *cr);
-void M_WriteTextSmall_RUS(int x, int y, char *string, byte *cr);
-void M_WriteTextBig_ENG(int x, int y, char *string);
-void M_WriteTextBig_RUS(int x, int y, char *string);
 void M_WriteTextBigCentered_ENG(int y, char *string);
 void M_WriteTextBigCentered_RUS(int y, char *string);
 void M_WriteTextSmallCentered_ENG(int y, char *string);
@@ -186,20 +108,15 @@ void M_WriteTextSmallCentered_RUS(int y, char *string);
 // PROTOTYPES
 //
 
-menu_t* getMenuFromKeyPage(key_page_t* keyPage, boolean isEngMenu);
-
 void M_NewGame(int choice);
 void M_Episode(int choice);
 void M_ChooseSkill(int choice);
 void M_LoadGame(int choice);
 void M_SaveGame(int choice);
-void M_Options(int choice);
 void M_EndGame(int choice);
 void M_ReadThis(int choice);
 void M_ReadThis2(int choice);
 void M_QuitDOOM(int choice);
-
-void M_StartGame(int choice);
 
 void M_FinishReadThis(int choice);
 void M_LoadSelect(int choice);
@@ -217,13 +134,9 @@ void M_DrawLoad(void);
 void M_DrawSave(void);
 
 void M_DrawSaveLoadBorder(int x,int y);
-void M_SetupNextMenu(menu_t *menudef);
-void M_DrawThermo(int x,int y,int thermWidth,int thermDot);
-void M_DrawThermo_Small(int x,int y,int thermWidth,int thermDot);
 int  M_StringWidth(char *string);
 int  M_StringHeight(char *string);
 void M_StartMessage(char *string,void *routine,boolean input);
-void M_StopMessage(void);
 void M_RD_StartBinding(int* key_var);
 void M_RD_StartBinding_Mouse(int* key_var);
 
@@ -231,100 +144,85 @@ void M_RD_StartBinding_Mouse(int* key_var);
 // [JN] Custom RD menu prototypes
 // -----------------------------------------------------------------------------
 
-// Main Options menu
-void M_RD_Draw_Options(void);
-
 // Rendering
-void M_RD_Choose_Rendering(int choice);
 void M_RD_Draw_Rendering(void);
-void M_RD_Change_Widescreen(int choice);
-void M_RD_Change_VSync(int choice);
-void M_RD_Change_Uncapped(int choice);
-void M_RD_Change_FPScounter(int choice);
-void M_RD_Change_DiskIcon(int choice);
-void M_RD_Change_Smoothing(int choice);
-void M_RD_Change_Wiping(int choice);
-void M_RD_Change_Screenshots(int choice);
-void M_RD_Change_ENDOOM(int choice);
-void M_RD_Change_Renderer(int choice);
-void M_RD_Change_PorchFlashing(int choice);
+void M_RD_Change_Widescreen(Direction_t direction);
+void M_RD_Change_VSync(Direction_t direction);
+void M_RD_Change_Uncapped(Direction_t direction);
+void M_RD_Change_FPScounter(Direction_t direction);
+void M_RD_Change_DiskIcon(Direction_t direction);
+void M_RD_Change_Smoothing(Direction_t direction);
+void M_RD_Change_Wiping(Direction_t direction);
+void M_RD_Change_Screenshots(Direction_t direction);
+void M_RD_Change_ENDOOM(Direction_t direction);
+void M_RD_Change_Renderer(Direction_t direction);
+void M_RD_Change_PorchFlashing(Direction_t direction);
 
 // Display
-void M_RD_Choose_Display(int choice);
 void M_RD_Draw_Display(void);
-void M_RD_Change_ScreenSize(int choice);
-void M_RD_Change_Gamma(int choice);
-void M_RD_Change_LevelBrightness(int choice);
-void M_RD_Change_MenuShading(int choice);
-void M_RD_Change_Detail(int choice);
-void M_RD_Change_HUD_Detail(int choice);
-void M_RD_Change_LocalTime(int choice);
+void M_RD_Change_ScreenSize(Direction_t direction);
+void M_RD_Change_Gamma(Direction_t direction);
+void M_RD_Change_LevelBrightness(Direction_t direction);
+void M_RD_Change_MenuShading(Direction_t direction);
+void M_RD_Change_Detail(Direction_t direction);
+void M_RD_Change_HUD_Detail(Direction_t direction);
+void M_RD_Change_LocalTime(Direction_t direction);
 
 // Messages
-void M_RD_Choose_MessagesAndTextSettings(int choice);
 void M_RD_Draw_MessagesSettings(void);
-void M_RD_Change_Messages(int choice);
-void M_RD_Change_Msg_Alignment(int choice);
-void M_RD_Change_Msg_TimeOut(int choice);
-void M_RD_Change_Msg_Fade(int choice);
-void M_RD_Change_ShadowedText(int choice);
-void M_RD_Change_Msg_Pickup_Color(int choice);
-void M_RD_Change_Msg_Secret_Color(int choice);
-void M_RD_Change_Msg_System_Color(int choice);
-void M_RD_Change_Msg_Chat_Color(int choice);
+void M_RD_Change_Messages(Direction_t direction);
+void M_RD_Change_Msg_Alignment(Direction_t direction);
+void M_RD_Change_Msg_TimeOut(Direction_t direction);
+void M_RD_Change_Msg_Fade(Direction_t direction);
+void M_RD_Change_ShadowedText(Direction_t direction);
+void M_RD_Change_Msg_Pickup_Color(Direction_t direction);
+void M_RD_Change_Msg_Secret_Color(Direction_t direction);
+void M_RD_Change_Msg_System_Color(Direction_t direction);
+void M_RD_Change_Msg_Chat_Color(Direction_t direction);
 
 // Automap
-void M_RD_Choose_AutomapAndStatsSettings(int choice);
 void M_RD_Draw_AutomapSettings(void);
-void M_RD_Change_AutomapColor(int choice);
-void M_RD_Change_AutomapAntialias(int choice);
-void M_RD_Change_AutomapOverlay(int choice);
-void M_RD_Change_AutomapRotate(int choice);
-void M_RD_Change_AutomapFollow(int choice);
-void M_RD_Change_AutomapGrid(int choice);
-void M_RD_Change_AutomapGridSize(int choice);
-void M_RD_Change_AutomapStats(int choice);
-void M_RD_Change_AutomapLevelTime(int choice);
-void M_RD_Change_AutomapTotalTime(int choice);
-void M_RD_Change_AutomapCoords(int choice);
+void M_RD_Change_AutomapColor(Direction_t direction);
+void M_RD_Change_AutomapAntialias(Direction_t direction);
+void M_RD_Change_AutomapOverlay(Direction_t direction);
+void M_RD_Change_AutomapRotate(Direction_t direction);
+void M_RD_Change_AutomapFollow(Direction_t direction);
+void M_RD_Change_AutomapGrid(Direction_t direction);
+void M_RD_Change_AutomapGridSize(Direction_t direction);
+void M_RD_Change_AutomapStats(Direction_t direction);
+void M_RD_Change_AutomapLevelTime(Direction_t direction);
+void M_RD_Change_AutomapTotalTime(Direction_t direction);
+void M_RD_Change_AutomapCoords(Direction_t direction);
 
 // Sound
-void M_RD_Choose_Audio(int choice);
 void M_RD_Draw_Audio(void);
-void M_RD_Change_SfxVol(int choice);
-void M_RD_Change_MusicVol(int choice);
-void M_RD_Change_SfxChannels(int choice);
+void M_RD_Change_SfxVol(Direction_t direction);
+void M_RD_Change_MusicVol(Direction_t direction);
+void M_RD_Change_SfxChannels(Direction_t direction);
 
 // Sound system
-void M_RD_Choose_SoundSystem(int choice);
 void M_RD_Draw_Audio_System(void);
-void M_RD_Change_SoundDevice(int choice);
-void M_RD_Change_MusicDevice(int choice);
-void M_RD_Change_Sampling(int choice);
-void M_RD_Change_SndMode(int choice);
-void M_RD_Change_PitchShifting(int choice);
-void M_RD_Change_MuteInactive(int choice);
+void M_RD_Change_SoundDevice(Direction_t direction);
+void M_RD_Change_MusicDevice(Direction_t direction);
+void M_RD_Change_Sampling(Direction_t direction);
+void M_RD_Change_SndMode(Direction_t direction);
+void M_RD_Change_PitchShifting(Direction_t direction);
+void M_RD_Change_MuteInactive(Direction_t direction);
 
 // Controls
-void M_RD_Choose_Controls(int choice);
 void M_RD_Draw_Controls(void);
-void M_RD_Change_MouseLook(int choice);
-void M_RD_Change_InvertY(int choice);
-void M_RD_Change_Novert(int choice);
-void M_RD_Change_Sensitivity(int choice);
-void M_RD_Change_Acceleration(int choice);
-void M_RD_Change_Threshold(int choice);
+void M_RD_Change_MouseLook(Direction_t direction);
+void M_RD_Change_InvertY(Direction_t direction);
+void M_RD_Change_Novert(Direction_t direction);
+void M_RD_Change_Sensitivity(Direction_t direction);
+void M_RD_Change_Acceleration(Direction_t direction);
+void M_RD_Change_Threshold(Direction_t direction);
 
 // Key bindings (1)
 void M_RD_Bind_Key(int choice);
 void M_RD_Draw_Bindings();
-void M_RD_Choose_Bindings_1(int choice);
-void M_RD_Choose_Bindings_2(int choice);
-void M_RD_Choose_Bindings_3(int choice);
-void M_RD_Choose_Bindings_4(int choice);
 
 // Mouse bindings
-void M_RD_Choose_Mouse_Bindings(int choice);
 void M_RD_Draw_Mouse_Bindings(void);
 void M_RD_Mouse_Bind_FireAttack(int choice);
 void M_RD_Mouse_Bind_Use(int choice);
@@ -337,107 +235,101 @@ void M_RD_Mouse_Bind_PrevWeapon(int choice);
 void M_RD_Mouse_Bind_NextWeapon(int choice);
 
 // Gameplay
-void M_RD_Choose_Gameplay_1(int choice);
-void M_RD_Choose_Gameplay_2(int choice);
-void M_RD_Choose_Gameplay_3(int choice);
-void M_RD_Choose_Gameplay_4(int choice);
-void M_RD_Choose_Gameplay_5(int choice);
 void M_RD_Draw_Gameplay_1(void);
 void M_RD_Draw_Gameplay_2(void);
 void M_RD_Draw_Gameplay_3(void);
 void M_RD_Draw_Gameplay_4(void);
 void M_RD_Draw_Gameplay_5(void);
 
-void M_RD_Change_Brightmaps(int choice);
-void M_RD_Change_FakeContrast(int choice);
-void M_RD_Change_Translucency(int choice);
-void M_RD_Change_ImprovedFuzz(int choice);
-void M_RD_Change_ColoredBlood(int choice);
-void M_RD_Change_SwirlingLiquids(int choice);
-void M_RD_Change_InvulSky(int choice);
-void M_RD_Change_LinearSky(int choice);
-void M_RD_Change_FlipWeapons(int choice);
+void M_RD_Change_Brightmaps(Direction_t direction);
+void M_RD_Change_FakeContrast(Direction_t direction);
+void M_RD_Change_Translucency(Direction_t direction);
+void M_RD_Change_ImprovedFuzz(Direction_t direction);
+void M_RD_Change_ColoredBlood(Direction_t direction);
+void M_RD_Change_SwirlingLiquids(Direction_t direction);
+void M_RD_Change_InvulSky(Direction_t direction);
+void M_RD_Change_LinearSky(Direction_t direction);
+void M_RD_Change_FlipWeapons(Direction_t direction);
 
-void M_RD_Change_ExtraPlayerFaces(int choice);
-void M_RD_Change_NegativeHealth(int choice);
-void M_RD_Change_SBarColored(int choice);
-void M_RD_Change_SBarHighValue(int choice);
-void M_RD_Change_SBarNormalValue(int choice);
-void M_RD_Change_SBarLowValue(int choice);
-void M_RD_Change_SBarCriticalValue(int choice);
-void M_RD_Change_SBarArmorType1(int choice);
-void M_RD_Change_SBarArmorType2(int choice);
-void M_RD_Change_SBarArmorType0(int choice);
+void M_RD_Change_ExtraPlayerFaces(Direction_t direction);
+void M_RD_Change_NegativeHealth(Direction_t direction);
+void M_RD_Change_SBarColored(Direction_t direction);
+void M_RD_Change_SBarHighValue(Direction_t direction);
+void M_RD_Change_SBarNormalValue(Direction_t direction);
+void M_RD_Change_SBarLowValue(Direction_t direction);
+void M_RD_Change_SBarCriticalValue(Direction_t direction);
+void M_RD_Change_SBarArmorType1(Direction_t direction);
+void M_RD_Change_SBarArmorType2(Direction_t direction);
+void M_RD_Change_SBarArmorType0(Direction_t direction);
 
-void M_RD_Change_ZAxisSfx(int choice);
-void M_RD_Change_ExitSfx(int choice);
-void M_RD_Change_CrushingSfx(int choice);
-void M_RD_Change_BlazingSfx(int choice);
-void M_RD_Change_AlertSfx(int choice);
-void M_RD_Change_SecretNotify(int choice);
-void M_RD_Change_InfraGreenVisor(int choice);
+void M_RD_Change_ZAxisSfx(Direction_t direction);
+void M_RD_Change_ExitSfx(Direction_t direction);
+void M_RD_Change_CrushingSfx(Direction_t direction);
+void M_RD_Change_BlazingSfx(Direction_t direction);
+void M_RD_Change_AlertSfx(Direction_t direction);
+void M_RD_Change_SecretNotify(Direction_t direction);
+void M_RD_Change_InfraGreenVisor(Direction_t direction);
 
-void M_RD_Change_WalkOverUnder(int choice);
-void M_RD_Change_Torque(int choice);
-void M_RD_Change_Bobbing(int choice);
-void M_RD_Change_SSGBlast(int choice);
-void M_RD_Change_FlipCorpses(int choice);
-void M_RD_Change_FloatPowerups(int choice);
-void M_RD_Change_TossDrop(int choice);
-void M_RD_Change_CrosshairDraw(int choice);
-void M_RD_Change_CrosshairType(int choice);
-void M_RD_Change_CrosshairScale(int choice);
+void M_RD_Change_WalkOverUnder(Direction_t direction);
+void M_RD_Change_Torque(Direction_t direction);
+void M_RD_Change_Bobbing(Direction_t direction);
+void M_RD_Change_SSGBlast(Direction_t direction);
+void M_RD_Change_FlipCorpses(Direction_t direction);
+void M_RD_Change_FloatPowerups(Direction_t direction);
+void M_RD_Change_TossDrop(Direction_t direction);
+void M_RD_Change_CrosshairDraw(Direction_t direction);
+void M_RD_Change_CrosshairType(Direction_t direction);
+void M_RD_Change_CrosshairScale(Direction_t direction);
 
-void M_RD_Change_FixMapErrors(int choice);
-void M_RD_Change_FlipLevels(int choice);
-void M_RD_Change_LostSoulsQty(int choice);
-void M_RD_Change_LostSoulsAgr(int choice);
-void M_RD_Change_PistolStart(int choice);
-void M_RD_Change_DemoTimer(int choice);
-void M_RD_Change_DemoTimerDir(int choice);
-void M_RD_Change_DemoBar(int choice);
-void M_RD_Change_NoInternalDemos(int choice);
+void M_RD_Change_FixMapErrors(Direction_t direction);
+void M_RD_Change_FlipLevels(Direction_t direction);
+void M_RD_Change_LostSoulsQty(Direction_t direction);
+void M_RD_Change_LostSoulsAgr(Direction_t direction);
+void M_RD_Change_PistolStart(Direction_t direction);
+void M_RD_Change_DemoTimer(Direction_t direction);
+void M_RD_Change_DemoTimerDir(Direction_t direction);
+void M_RD_Change_DemoBar(Direction_t direction);
+void M_RD_Change_NoInternalDemos(Direction_t direction);
 
 // Level select
-void M_RD_Choose_LevelSelect_1(int choice);
-void M_RD_Choose_LevelSelect_2(int choice);
+void M_LevelSelect(int choice);
+
 void M_RD_Draw_Level_1(void);
 void M_RD_Draw_Level_2(void);
 
-void M_RD_Change_Selective_Skill(int choice);
-void M_RD_Change_Selective_Episode(int choice);
-void M_RD_Change_Selective_Map(int choice);
-void M_RD_Change_Selective_Health(int choice);
-void M_RD_Change_Selective_Armor(int choice);
-void M_RD_Change_Selective_ArmorType(int choice);
+void M_RD_Change_Selective_Skill(Direction_t direction);
+void M_RD_Change_Selective_Episode(Direction_t direction);
+void M_RD_Change_Selective_Map(Direction_t direction);
+void M_RD_Change_Selective_Health(Direction_t direction);
+void M_RD_Change_Selective_Armor(Direction_t direction);
+void M_RD_Change_Selective_ArmorType(Direction_t direction);
 
-void M_RD_Change_Selective_WP_Chainsaw(int choice);
-void M_RD_Change_Selective_WP_Shotgun(int choice);
-void M_RD_Change_Selective_WP_SSgun(int choice);
-void M_RD_Change_Selective_WP_Chaingun(int choice);
-void M_RD_Change_Selective_WP_RLauncher(int choice);
-void M_RD_Change_Selective_WP_Plasmagun(int choice);
-void M_RD_Change_Selective_WP_BFG9000(int choice);
+void M_RD_Change_Selective_WP_Chainsaw(Direction_t direction);
+void M_RD_Change_Selective_WP_Shotgun(Direction_t direction);
+void M_RD_Change_Selective_WP_SSgun(Direction_t direction);
+void M_RD_Change_Selective_WP_Chaingun(Direction_t direction);
+void M_RD_Change_Selective_WP_RLauncher(Direction_t direction);
+void M_RD_Change_Selective_WP_Plasmagun(Direction_t direction);
+void M_RD_Change_Selective_WP_BFG9000(Direction_t direction);
 
-void M_RD_Change_Selective_Backpack(int choice);
+void M_RD_Change_Selective_Backpack(Direction_t direction);
 
-void M_RD_Change_Selective_Ammo_0(int choice);
-void M_RD_Change_Selective_Ammo_1(int choice);
-void M_RD_Change_Selective_Ammo_2(int choice);
-void M_RD_Change_Selective_Ammo_3(int choice);
+void M_RD_Change_Selective_Ammo_0(Direction_t direction);
+void M_RD_Change_Selective_Ammo_1(Direction_t direction);
+void M_RD_Change_Selective_Ammo_2(Direction_t direction);
+void M_RD_Change_Selective_Ammo_3(Direction_t direction);
 
-void M_RD_Change_Selective_Key_0(int choice);
-void M_RD_Change_Selective_Key_1(int choice);
-void M_RD_Change_Selective_Key_2(int choice);
-void M_RD_Change_Selective_Key_3(int choice);
-void M_RD_Change_Selective_Key_4(int choice);
-void M_RD_Change_Selective_Key_5(int choice);
+void M_RD_Change_Selective_Key_0(Direction_t direction);
+void M_RD_Change_Selective_Key_1(Direction_t direction);
+void M_RD_Change_Selective_Key_2(Direction_t direction);
+void M_RD_Change_Selective_Key_3(Direction_t direction);
+void M_RD_Change_Selective_Key_4(Direction_t direction);
+void M_RD_Change_Selective_Key_5(Direction_t direction);
 
-void M_RD_Change_Selective_Fast(int choice);
-void M_RD_Change_Selective_Respawn(int choice);
+void M_RD_Change_Selective_Fast(Direction_t direction);
+void M_RD_Change_Selective_Respawn(Direction_t direction);
 
 // Reset settings
-void M_RD_Choose_Reset(int choice);
 void M_RD_Draw_Reset(void);
 void M_RD_BackToDefaults_Recommended(int choice);
 void M_RD_BackToDefaults_Original(int choice);
@@ -451,282 +343,6 @@ void M_RD_ChangeLanguage(int choice);
 
 void M_Vanilla_DrawOptions(void);
 void M_Vanilla_DrawSound(void);
-
-void setAsEmptyMenuItem(menuitem_t* item)
-{
-    item->status = -1;
-    item->name = "";
-    item->routine = NULL;
-    item->alphaKey = '\0';
-}
-
-menu_t* getMenuFromKeyPage(key_page_t* keyPage, boolean isEngMenu)
-{
-    menuitem_t* items;
-    menu_t* r_menu;
-
-    items = malloc(sizeof(menuitem_t) * 15);
-    for (int i = 0; i < 11; ++i)
-    {
-        if (keyPage->keys[i] == bk_null || keyPage->keys[i] == bk_size)
-            setAsEmptyMenuItem(&items[i]);
-        else
-        {
-            bound_key_descriptor *keyDescriptor = BK_getKeyDescriptor(keyPage->keys[i]);
-            items[i].status = 1;
-            items[i].name = isEngMenu ? keyDescriptor->eng_name : keyDescriptor->rus_name;
-            items[i].routine = M_RD_Bind_Key;
-            items[i].alphaKey = isEngMenu ? keyDescriptor->eng_HotKey : keyDescriptor->rus_HotKey;
-        }
-    }
-
-    setAsEmptyMenuItem(&items[11]);
-    setAsEmptyMenuItem(&items[14]);
-
-    items[12].status = items[13].status = 1;
-    items[12].name = items[13].name = "";
-
-    items[12].routine = keyPage->nextPage_routine;
-    items[12].alphaKey = isEngMenu ? keyPage->nextPage_HotKey_eng : keyPage->nextPage_HotKey_rus;
-
-    items[13].routine = keyPage->prevPage_routine;
-    items[13].alphaKey = isEngMenu ? keyPage->prevPage_HotKey_eng : keyPage->prevPage_HotKey_rus;
-
-    r_menu = malloc(sizeof(menu_t));
-    r_menu->numitems = 15;
-    r_menu->prevMenu = isEngMenu ? keyPage->prevMenu_eng : keyPage->prevMenu_rus;
-    r_menu->menuitems = items;
-    r_menu->routine = M_RD_Draw_Bindings;
-    r_menu->x = 35;
-    r_menu->y = 35;
-    r_menu->lastOn = 0;
-
-    return r_menu;
-}
-
-// -----------------------------------------------------------------------------
-// M_WriteText
-//
-// Write a string using the hu_font
-// -----------------------------------------------------------------------------
-void M_WriteText (int x, int y, char *string)
-{
-    int     w, c, cx, cy;
-    char*   ch;
-
-    ch = string;
-    cx = x;
-    cy = y;
-
-    while(1)
-    {
-        c = *ch++;
-        if (!c)
-            break;
-        if (c == '\n')
-        {
-            cx = x;
-            cy += 12;
-            continue;
-        }
-
-        c = toupper(c) - HU_FONTSTART;
-        if (c < 0 || c>= HU_FONTSIZE)
-        {
-            cx += 4;
-            continue;
-        }
-
-        w = SHORT (hu_font[c]->width);
-        if (cx+w > origwidth)
-            break;
-
-        V_DrawShadowedPatchDoom(cx, cy, hu_font[c]);
-
-        cx+=w;
-    }
-}
-
-// -----------------------------------------------------------------------------
-// M_WriteTextSmall_ENG
-//
-// [JN] Write a string using a small STCFS font
-// -----------------------------------------------------------------------------
-
-void M_WriteTextSmall_ENG (int x, int y, char *string, byte *cr)
-{
-    int     w, c;
-    int     cx = x;
-    int     cy = y;
-    char   *ch = string;
-
-    while(1)
-    {
-        c = *ch++;
-        if (!c)
-            break;
-        if (c == '\n')
-        {
-            cx = x;
-            cy += 12;
-            continue;
-        }
-
-        c = toupper(c) - HU_FONTSTART;
-        if (c < 0 || c>= HU_FONTSIZE)
-        {
-            cx += 4;
-            continue;
-        }
-
-        w = SHORT (hu_font_small_eng[c]->width);
-        if (cx+w > origwidth)
-            break;
-
-        dp_translation = cr;
-        V_DrawShadowedPatchDoom(cx, cy, hu_font_small_eng[c]);
-        dp_translation = NULL;
-
-        cx+=w;
-    }
-}
-
-// -----------------------------------------------------------------------------
-// M_WriteTextSmall_ENG
-//
-// [JN] Write a string using a small STCFS font
-// -----------------------------------------------------------------------------
-
-void M_WriteTextSmall_RUS (int x, int y, char *string, byte *cr)
-{
-    int     w, c;
-    int     cx = x;
-    int     cy = y;
-    char   *ch = string;
-
-    while(1)
-    {
-        c = *ch++;
-        if (!c)
-            break;
-        if (c == '\n')
-        {
-            cx = x;
-            cy += 12;
-            continue;
-        }
-
-        c = toupper(c) - HU_FONTSTART;
-        if (c < 0 || c>= HU_FONTSIZE)
-        {
-            cx += 4;
-            continue;
-        }
-
-        w = SHORT (hu_font_small_rus[c]->width);
-        if (cx+w > origwidth)
-            break;
-
-        dp_translation = cr;
-        V_DrawShadowedPatchDoom(cx, cy, hu_font_small_rus[c]);
-        dp_translation = NULL;
-
-        cx+=w;
-    }
-}
-
-// -----------------------------------------------------------------------------
-// M_WriteTextBig
-//
-// [JN] Write a string using a big STCFB font
-// -----------------------------------------------------------------------------
-
-void M_WriteTextBig_ENG (int x, int y, char *string)
-{
-    int    w, c, cx, cy;
-    char  *ch;
-
-    ch = string;
-    cx = x;
-    cy = y;
-
-    while(1)
-    {
-        c = *ch++;
-        if (!c)
-        break;
-
-        if (c == '\n')
-        {
-            cx = x;
-            cy += 12;
-            continue;
-        }
-
-        c = c - HU_FONTSTART2;
-        if (c < 0 || c>= HU_FONTSIZE2)
-        {
-            cx += 7;
-            continue;
-        }
-
-        w = SHORT (hu_font_big_eng[c]->width);
-        if (cx+w > origwidth)
-        break;
-
-        V_DrawShadowedPatchDoom(cx, cy, hu_font_big_eng[c]);
-
-        // Place one char to another with one pixel
-        cx += w-1;
-    }
-}
-
-// -----------------------------------------------------------------------------
-// M_WriteTextBig
-//
-// [JN] Write a string using a big STCFB font
-// -----------------------------------------------------------------------------
-
-void M_WriteTextBig_RUS (int x, int y, char *string)
-{
-    int    w, c, cx, cy;
-    char  *ch;
-
-    ch = string;
-    cx = x;
-    cy = y;
-
-    while(1)
-    {
-        c = *ch++;
-        if (!c)
-        break;
-
-        if (c == '\n')
-        {
-            cx = x;
-            cy += 12;
-            continue;
-        }
-
-        c = c - HU_FONTSTART2;
-        if (c < 0 || c>= HU_FONTSIZE2)
-        {
-            cx += 7;
-            continue;
-        }
-
-        w = SHORT (hu_font_big_rus[c]->width);
-        if (cx+w > origwidth)
-        break;
-
-        V_DrawShadowedPatchDoom(cx, cy, hu_font_big_rus[c]);
-
-        // Place one char to another with one pixel
-        cx += w-1;
-    }
-}
-
 
 // -----------------------------------------------------------------------------
 // HU_WriteTextBigCentered
@@ -982,76 +598,32 @@ void M_WriteTextSmallCentered_RUS (int y, char *string)
 }
 
 // -----------------------------------------------------------------------------
-// M_WriteTimeAndFPS
-// [JN] Write a time and FPS widget digits using a hu_font_gray.
-// -----------------------------------------------------------------------------
-
-void M_WriteTimeAndFPS (int x, int y, char *string)
-{
-    int    w, c, cx, cy;
-    char  *ch;
-
-    ch = string;
-    cx = x;
-    cy = y;
-
-    while(1)
-    {
-        c = *ch++;
-
-        if (!c)
-        {
-            break;
-        }
-
-        c = toupper(c) - HU_FONTSTART_GRAY;
-
-        if (c < 0 || c >= HU_FONTSIZE_GRAY)
-        {
-            cx += 4;
-            continue;
-        }
-
-        w = SHORT (hu_font_gray[c]->width);
-
-        if (cx + w > origwidth)
-        {
-            break;
-        }
-
-        V_DrawShadowedPatchDoom(cx, cy, hu_font_gray[c]);
-
-        cx += w;
-    }
-}
-
-// -----------------------------------------------------------------------------
 // M_RD_ColorTranslation
 // [JN] Returns a color translation for given variable.
 // -----------------------------------------------------------------------------
 
-static byte *M_RD_ColorTranslation (int color)
+static Translation_CR_t M_RD_ColorTranslation (int color)
 {
     switch (color)
     {
-        case 1:   return cr[CR_DARKRED];    break;
-        case 2:   return cr[CR_GREEN];      break;
-        case 3:   return cr[CR_DARKGREEN];  break;
-        case 4:   return cr[CR_OLIVE];      break;
-        case 5:   return cr[CR_BLUE2];      break;
-        case 6:   return cr[CR_DARKBLUE];   break;
-        case 7:   return cr[CR_YELLOW];     break;
-        case 8:   return cr[CR_ORANGE];     break;
-        case 9:   return cr[CR_WHITE];      break;
-        case 10:  return cr[CR_GRAY];       break;
-        case 11:  return cr[CR_DARKGRAY];   break;
-        case 12:  return cr[CR_TAN];        break;
-        case 13:  return cr[CR_BROWN];      break;
-        case 14:  return cr[CR_ALMOND];     break;
-        case 15:  return cr[CR_KHAKI];      break;
-        case 16:  return cr[CR_PINK];       break;
-        case 17:  return cr[CR_BURGUNDY];   break;
-        default:  return NULL;              break;
+        case 1:   return CR_DARKRED;    break;
+        case 2:   return CR_GREEN;      break;
+        case 3:   return CR_DARKGREEN;  break;
+        case 4:   return CR_OLIVE;      break;
+        case 5:   return CR_BLUE2;      break;
+        case 6:   return CR_DARKBLUE;   break;
+        case 7:   return CR_YELLOW;     break;
+        case 8:   return CR_ORANGE;     break;
+        case 9:   return CR_WHITE;      break;
+        case 10:  return CR_GRAY;       break;
+        case 11:  return CR_DARKGRAY;   break;
+        case 12:  return CR_TAN;        break;
+        case 13:  return CR_BROWN;      break;
+        case 14:  return CR_ALMOND;     break;
+        case 15:  return CR_KHAKI;      break;
+        case 16:  return CR_PINK;       break;
+        case 17:  return CR_BURGUNDY;   break;
+        default:  return CR_NONE;          break;
     }
 }
 
@@ -1115,68 +687,81 @@ static char *M_RD_ColorName_RUS (int color)
     }
 }
 
+static Menu_t* EpisodeMenu;
+static Menu_t* OptionsMenu;
+static Menu_t NewGameMenu;
+static Menu_t RDOptionsMenu;
+static Menu_t RenderingMenu;
+static Menu_t DisplayMenu;
+static Menu_t MessagesMenu;
+static Menu_t AutomapMenu;
+static Menu_t SoundMenu;
+static Menu_t SoundSysMenu;
+static Menu_t ControlsMenu;
+static Menu_t Bindings1Menu;
+static Menu_t Bindings2Menu;
+static Menu_t Bindings3Menu;
+static Menu_t Bindings4Menu;
+static const Menu_t* BindingsMenuPages[] = {&Bindings1Menu, &Bindings2Menu, &Bindings3Menu, &Bindings4Menu};
+static Menu_t MouseBindingsMenu;
+static Menu_t Gameplay1Menu;
+static Menu_t Gameplay2Menu;
+static Menu_t Gameplay3Menu;
+static Menu_t Gameplay4Menu;
+static Menu_t Gameplay5Menu;
+static const Menu_t* GameplayMenuPages[] = {&Gameplay1Menu, &Gameplay2Menu, &Gameplay3Menu, &Gameplay4Menu, &Gameplay5Menu};
+static Menu_t LevelSelect1Menu;
+static Menu_t LevelSelect2Menu;
+static const Menu_t* LevelSelectMenuPages[] = {&LevelSelect1Menu, &LevelSelect2Menu};
+static Menu_t ResetMenu;
+static Menu_t VanillaOptions2Menu;
+static Menu_t LoadMenu;
+static Menu_t SaveMenu;
 
 // =============================================================================
 // DOOM MENU
 // =============================================================================
 
-enum
-{
-    newgame = 0,
-    options,
-    loadgame,
-    savegame,
-    readthis,
-    quitdoom,
-    main_end
-} main_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t MainMenu[]=
-{
-    {1, "M_NGAME",  M_NewGame,  'n'},
-    {1, "M_OPTION", M_Options,  'o'},
-    {1, "M_LOADG",  M_LoadGame, 'l'},
-    {1, "M_SAVEG",  M_SaveGame, 's'},
-    // Another hickup with Special edition.
-    {1, "M_RDTHIS", M_ReadThis, 'r'},
-    {1, "M_QUITG",  M_QuitDOOM, 'q'}
+static MenuItem_t DoomItems[] = {
+    {ITT_EFUNC,   "nM_NGAME",  "yRD_NGAME", M_NewGame,      0},
+    {ITT_SETMENU, "oM_OPTION", "yRD_OPTN",  &RDOptionsMenu, 0},
+    {ITT_EFUNC,   "lM_LOADG",  "pRD_LOADG", M_LoadGame,     0},
+    {ITT_EFUNC,   "sM_SAVEG",  "cRD_SAVEG", M_SaveGame,     0},
+    {ITT_EFUNC,   "rM_RDTHIS", "bRD_INFO",  M_ReadThis,     0},
+    {ITT_EFUNC,   "qM_QUITG",  "dRD_QUITG", M_QuitDOOM,     0}
 };
 
-menu_t  MainDef =
-{
-    main_end,
-    NULL,
-    MainMenu,
+static Menu_t DoomMenu = {
+    97, 97,
+    64,
+    NULL, NULL, true,
+    6, DoomItems, true,
     M_DrawMainMenu,
-    97,64,
+    NULL,
+    NULL,
     0
 };
 
-// ------------
-// Russian menu
-// ------------
+// -----------------------------------------------------------------------------
+// [JN] Special menu for Commercial
+// -----------------------------------------------------------------------------
 
-menuitem_t MainMenu_Rus[]=
-{
-    {1, "RD_NGAME", M_NewGame,  'y'}, // Новая игра
-    {1, "RD_OPTN",  M_Options,  'y'}, // Настройки
-    {1, "RD_LOADG", M_LoadGame, 'p'}, // Загрузка
-    {1, "RD_SAVEG", M_SaveGame, 'c'}, // Сохранение
-    {1, "RD_INFO",  M_ReadThis, 'b'}, // Информация!
-    {1, "RD_QUITG", M_QuitDOOM, 'd'}  // Выход
+static MenuItem_t Doom2Items[] = {
+    {ITT_EFUNC,   "nM_NGAME",  "yRD_NGAME", M_NewGame,      0},
+    {ITT_SETMENU, "oM_OPTION", "yRD_OPTN",  &RDOptionsMenu, 0},
+    {ITT_EFUNC,   "lM_LOADG",  "pRD_LOADG", M_LoadGame,     0},
+    {ITT_EFUNC,   "sM_SAVEG",  "cRD_SAVEG", M_SaveGame,     0},
+    {ITT_EFUNC,   "qM_QUITG",  "dRD_QUITG", M_QuitDOOM,     0}
 };
 
-menu_t  MainDef_Rus =
-{
-    main_end,
-    NULL,
-    MainMenu_Rus,
+static Menu_t Doom2Menu = {
+    97, 97,
+    72,
+    NULL, NULL, true,
+    5, Doom2Items, true,
     M_DrawMainMenu,
-    97,64,
+    NULL,
+    NULL,
     0
 };
 
@@ -1184,437 +769,136 @@ menu_t  MainDef_Rus =
 // [JN] Special menu for Press Beta
 // -----------------------------------------------------------------------------
 
-// ------------
-// English menu
-// ------------
-
-menuitem_t MainMenuBeta[]=
-{
-    {1, "M_BLVL1",  M_Episode, '1'},
-    {1, "M_BLVL2",  M_Episode, '2'},
-    {1, "M_BLVL3",  M_Episode, '3'},
-    {1, "M_OPTION", M_Options, 'o'},
-    {1, "M_QUITG",  M_QuitDOOM,'q'}
+static MenuItem_t MainMenuBetaItems[] = {
+    {ITT_EFUNC,   "dM_BLVL1",  "eRD_BLVL1", M_Episode,      0},
+    {ITT_EFUNC,   "dM_BLVL2",  "eRD_BLVL2", M_Episode,      1},
+    {ITT_EFUNC,   "dM_BLVL3",  "eRD_BLVL3", M_Episode,      2},
+    {ITT_SETMENU, "oM_OPTION", "yRD_OPTN",  &RDOptionsMenu, 0},
+    {ITT_EFUNC,   "qM_QUITG",  "dRD_QUITG", M_QuitDOOM,     0}
 };
 
-menu_t  MainDefBeta =
-{
-    main_end,
-    NULL,
-    MainMenuBeta,
+static Menu_t MainMenuBeta = {
+    97, 97,
+    70,
+    NULL, NULL, true,
+    5, MainMenuBetaItems, true,
     M_DrawMainMenu,
-    97,70,
+    NULL,
+    NULL,
     0
 };
-
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t MainMenuBeta_Rus[]=
-{
-    {1, "RD_BLVL1", M_Episode, '1'},
-    {1, "RD_BLVL2", M_Episode, '2'},
-    {1, "RD_BLVL3", M_Episode, '3'},
-    {1, "RD_OPTN",  M_Options, 'o'},
-    {1, "RD_QUITG", M_QuitDOOM,'q'}
-};
-
-menu_t  MainDefBeta_Rus =
-{
-    main_end,
-    NULL,
-    MainMenuBeta_Rus,
-    M_DrawMainMenu,
-    97,70,
-    0
-};
-
 
 // =============================================================================
 // EPISODE SELECT
 // =============================================================================
 
-enum
-{
-    ep1,
-    ep2,
-    ep3,
-    ep4,
-    ep5, // [crispy] Sigil
-    ep_end
-} episodes_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t EpisodeMenu[]=
-{
-    {1, "M_EPI1", M_Episode,'k'},
-    {1, "M_EPI2", M_Episode,'t'},
-    {1, "M_EPI3", M_Episode,'i'},
-    {1, "M_EPI4", M_Episode,'t'},
-    {1, "M_EPI5", M_Episode,'s'} // [crispy] Sigil
+static MenuItem_t DoomEpisodeItems [] = {
+    {ITT_EFUNC, "kM_EPI1", "gRD_EPI1", M_Episode, 0},
+    {ITT_EFUNC, "tM_EPI2", "gRD_EPI2", M_Episode, 1},
+    {ITT_EFUNC, "iM_EPI3", "bRD_EPI3", M_Episode, 2},
+    {ITT_EFUNC, "sM_EPI5", "cRD_EPI5", M_Episode, 4} // [Dasperal]
 };
 
-menu_t  EpiDef =
-{
-    ep_end,                 // # of menu items
-    &MainDef,               // previous menu
-    EpisodeMenu,            // menuitem_t ->
-    M_DrawEpisode,          // drawing routine ->
-    48,63,                  // x,y
-    ep1                     // lastOn
+static MenuItem_t UltimateEpisodeItems [] = {
+    {ITT_EFUNC, "kM_EPI1", "gRD_EPI1",  M_Episode, 0},
+    {ITT_EFUNC, "tM_EPI2", "gRD_EPI2",  M_Episode, 1},
+    {ITT_EFUNC, "iM_EPI3", "bRD_EPI3",  M_Episode, 2},
+    {ITT_EFUNC, "tM_EPI4", "nRD_EPI4",  M_Episode, 3},
+    {ITT_EFUNC, "sM_EPI5", "cRD_EPI5", M_Episode, 4} // [crispy] Sigil
 };
 
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t EpisodeMenu_Rus[]=
-{
-    {1, "RD_EPI1", M_Episode, 'g'}, // По колено в трупах
-    {1, "RD_EPI2", M_Episode, 'g'}, // Прибрежье Ада
-    {1, "RD_EPI3", M_Episode, 'b'}, // Инферно
-    {1, "RD_EPI4", M_Episode, 'n'}, // Твоя плоть истощена
-    {1, "RD_EPI5", M_Episode, 'c'}  // Сигил
-};
-
-menu_t  EpiDef_Rus =
-{
-    ep_end,
-    &MainDef_Rus,
-    EpisodeMenu_Rus,
+static Menu_t DoomEpisodeMenu = {
+    48, 48,
+    63,
+    NULL, NULL, true,
+    3, DoomEpisodeItems, true,
     M_DrawEpisode,
-    48,63,
-    ep1
+    NULL,
+    &DoomMenu,
+    0
 };
 
+static Menu_t DoomSigilEpisodeMenu = {
+    48, 48,
+    63,
+    NULL, NULL, true,
+    4, DoomEpisodeItems, true,
+    M_DrawEpisode,
+    NULL,
+    &DoomMenu,
+    0
+};
+
+static Menu_t UltimateEpisodeMenu = {
+    48, 48,
+    63,
+    NULL, NULL, true,
+    4, UltimateEpisodeItems, true,
+    M_DrawEpisode,
+    NULL,
+    &DoomMenu,
+    0
+};
+
+static Menu_t UltimateSigilEpisodeMenu = {
+    48, 48,
+    63,
+    NULL, NULL, true,
+    5, UltimateEpisodeItems, true,
+    M_DrawEpisode,
+    NULL,
+    &DoomMenu,
+    0
+};
 
 // =============================================================================
 // NEW GAME
 // =============================================================================
 
-enum
-{
-    killthings,
-    toorough,
-    hurtme,
-    violence,
-    nightmare,
-    ultra_nm,
-    newg_end
-} newgame_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t NewGameMenu[]=
-{
-    {1, "M_JKILL",  M_ChooseSkill, 'i'},
-    {1, "M_ROUGH",  M_ChooseSkill, 'h'},
-    {1, "M_HURT",   M_ChooseSkill, 'h'},
-    {1, "M_ULTRA",  M_ChooseSkill, 'u'},
-    {1, "M_NMARE",  M_ChooseSkill, 'n'},
-    {1, "M_UNMARE", M_ChooseSkill, 'z'}
+static MenuItem_t NewGameItems[] = {
+    {ITT_EFUNC, "iM_JKILL",  "vRD_JKILL", M_ChooseSkill, 0},
+    {ITT_EFUNC, "hM_ROUGH",  "'RD_ROUGH", M_ChooseSkill, 1},
+    {ITT_EFUNC, "hM_HURT",   "cRD_HURT",  M_ChooseSkill, 2},
+    {ITT_EFUNC, "uM_ULTRA",  "eRD_ULTRA", M_ChooseSkill, 3},
+    {ITT_EFUNC, "nM_NMARE",  "rRD_NMARE", M_ChooseSkill, 4},
+    {ITT_EFUNC, "uM_UNMARE", "eRD_UNMAR", M_ChooseSkill, 5}
 };
 
-menu_t  NewDef =
-{
-    newg_end,               // # of menu items
-    &EpiDef,                // previous menu
-    NewGameMenu,            // menuitem_t ->
-    M_DrawNewGame,          // drawing routine ->
-    48,63,                  // x,y
-    hurtme                  // lastOn
-};
-
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t NewGameMenu_Rus[]=
-{
-    {1, "RD_JKILL", M_ChooseSkill, 'v'}, // Мне рано умирать.
-    {1, "RD_ROUGH", M_ChooseSkill, 'y'}, // Эй, не так грубо.
-    {1, "RD_HURT",  M_ChooseSkill, 'c'}, // Сделай мне больно.
-    {1, "RD_ULTRA", M_ChooseSkill, 'e'}, // Ультранасилие
-    {1, "RD_NMARE", M_ChooseSkill, 'r'}, // Кошмар.
-    {1, "RD_UNMAR", M_ChooseSkill, 'e'}  // Ультра кошмар!
-};
-
-menu_t  NewDef_Rus =
-{
-    newg_end,
-    &EpiDef_Rus,
-    NewGameMenu_Rus,
+static Menu_t NewGameMenu = {
+    48, 48,
+    63,
+    NULL, NULL, true,
+    6, NewGameItems, true,
     M_DrawNewGame,
-    48,63,
-    hurtme
-};
-
-
-// =============================================================================
-// LOAD GAME MENU
-// =============================================================================
-
-enum
-{
-    load1,
-    load2,
-    load3,
-    load4,
-    load5,
-    load6,
-    load7,
-    load8,
-    load_end
-} load_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t LoadMenu[]=
-{
-    {1, "", M_LoadSelect, '1'},
-    {1, "", M_LoadSelect, '2'},
-    {1, "", M_LoadSelect, '3'},
-    {1, "", M_LoadSelect, '4'},
-    {1, "", M_LoadSelect, '5'},
-    {1, "", M_LoadSelect, '6'},
-    {1, "", M_LoadSelect, '7'},
-    {1, "", M_LoadSelect, '8'}
-};
-
-menu_t  LoadDef =
-{
-    load_end,
-    &MainDef,
-    LoadMenu,
-    M_DrawLoad,
-    67,38,
+    NULL,
+    &DoomEpisodeMenu,
     0
 };
-
-// ------------
-// Russian menu
-// ------------
-
-menu_t  LoadDef_Rus =
-{
-    load_end,
-    &MainDef_Rus,
-    LoadMenu,
-    M_DrawLoad,
-    67,38,
-    0
-};
-
-// =============================================================================
-// SAVE GAME MENU
-// =============================================================================
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t SaveMenu[]=
-{
-    {1, "", M_SaveSelect, '1'},
-    {1, "", M_SaveSelect, '2'},
-    {1, "", M_SaveSelect, '3'},
-    {1, "", M_SaveSelect, '4'},
-    {1, "", M_SaveSelect, '5'},
-    {1, "", M_SaveSelect, '6'},
-    {1, "", M_SaveSelect, '7'},
-    {1, "", M_SaveSelect, '8'}
-};
-
-menu_t  SaveDef =
-{
-    load_end,
-    &MainDef,
-    SaveMenu,
-    M_DrawSave,
-    67,38,
-    0
-};
-
-// ------------
-// Russian menu
-// ------------
-
-menu_t  SaveDef_Rus =
-{
-    load_end,
-    &MainDef_Rus,
-    SaveMenu,
-    M_DrawSave,
-    67,38,
-    0
-};
-
-// =============================================================================
-// Read This! MENU 1 & 2
-// =============================================================================
-
-enum
-{
-    rdthsempty1,
-    read1_end
-} read_e;
-
-menuitem_t ReadMenu1[] =
-{
-    {1, "", M_ReadThis2, 0}
-};
-
-// ------------
-// English menu
-// ------------
-
-menu_t  ReadDef1 =
-{
-    read1_end,
-    &MainDef,
-    ReadMenu1,
-    M_DrawReadThis1,
-    280,185,
-    0
-};
-
-// ------------
-// Russian menu
-// ------------
-
-menu_t  ReadDef1_Rus =
-{
-    read1_end,
-    &MainDef_Rus,
-    ReadMenu1,
-    M_DrawReadThis1,
-    280,185,
-    0
-};
-
-enum
-{
-    rdthsempty2,
-    read2_end
-} read_e2;
-
-menuitem_t ReadMenu2[]=
-{
-    {1, "", M_FinishReadThis, 0}
-};
-
-// ------------
-// English menu
-// ------------
-
-menu_t  ReadDef2 =
-{
-    read2_end,
-    &ReadDef1,
-    ReadMenu2,
-    M_DrawReadThis2,
-    330,175,
-    0
-};
-
-// ------------
-// Russian menu
-// ------------
-
-menu_t  ReadDef2_Rus =
-{
-    read2_end,
-    &ReadDef1_Rus,
-    ReadMenu2,
-    M_DrawReadThis2,
-    330,175,
-    0
-};
-
 
 // =============================================================================
 // [JN] NEW OPTIONS MENU: STRUCTURE
 // =============================================================================
 
-// -----------------------------------------------------------------------------
-// Main Menu
-// -----------------------------------------------------------------------------
-
-enum
-{
-    rd_rendering,
-    rd_display,
-    rd_sound,
-    rd_controls,
-    rd_gameplay,
-    rd_levelselect,
-    rd_endgame,
-    rd_defaults,
-    rd_language,
-    rd_end
-} options_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t RD_Options_Menu[]=
-{
-    {1, "Rendering",        M_RD_Choose_Rendering,  'r'},
-    {1, "Display",          M_RD_Choose_Display,    'd'},
-    {1, "Sound",            M_RD_Choose_Audio,      's'},
-    {1, "Controls",         M_RD_Choose_Controls,   'c'},
-    {1, "Gameplay",         M_RD_Choose_Gameplay_1, 'g'},
-    {1, "Level select",     M_RD_Choose_LevelSelect_1,'l'},
-    {1, "End Game",         M_EndGame,              'e'},
-    {1, "Reset settings",   M_RD_Choose_Reset,      'r'},
-    {2, "Language:english", M_RD_ChangeLanguage,    'l'},
-    {-1,"",0,'\0'}
+static MenuItem_t RDOptionsItems[] = {
+    {ITT_SETMENU, "Rendering",        "Dbltj",          &RenderingMenu,      0},
+    {ITT_SETMENU, "Display",          "\"rhfy",         &DisplayMenu,        0},
+    {ITT_SETMENU, "Sound",            "Felbj",          &SoundMenu,          0},
+    {ITT_SETMENU, "Controls",         "Eghfdktybt",     &ControlsMenu,       0},
+    {ITT_SETMENU, "Gameplay",         "Utqvgktq",       &Gameplay1Menu,      0},
+    {ITT_EFUNC,   "Level select",     "Ds,jh ehjdyz",   M_LevelSelect,       0},
+    {ITT_EFUNC,   "End Game",         "Pfrjyxbnm buhe", M_EndGame,           0},
+    {ITT_SETMENU, "Reset settings",   "C,hjc yfcnhjtr", &ResetMenu,          0},
+    {ITT_EFUNC,   "Language:english", "Zpsr#heccrbq",   M_RD_ChangeLanguage, 0}
 };
 
-menu_t  RD_Options_Def =
-{
-    rd_end, 
-    &MainDef,
-    RD_Options_Menu,
-    M_RD_Draw_Options,
-    60, 22,
-    0
-};
-
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t RD_Options_Menu_Rus[]=
-{
-    {1, "Dbltj",          M_RD_Choose_Rendering,  'd'}, // Видео
-    {1, "\"rhfy",         M_RD_Choose_Display,   '\''}, // Экран
-    {1, "Felbj",          M_RD_Choose_Audio,      'f'}, // Аудио
-    {1, "Eghfdktybt",     M_RD_Choose_Controls,   'e'}, // Управление
-    {1, "Utqvgktq",       M_RD_Choose_Gameplay_1, 'u'}, // Геймплей
-    {1, "Ds,jh ehjdyz",   M_RD_Choose_LevelSelect_1,'d'}, // Выбор уровня
-    {1, "Pfrjyxbnm buhe", M_EndGame,              'p'}, // Закончить игру
-    {1, "C,hjc yfcnhjtr", M_RD_Choose_Reset,      'c'}, // Сброс настроек
-    {2, "Zpsr#heccrbq",   M_RD_ChangeLanguage,    'z'}, // Язык: русский
-    {-1,"",0,'\0'}
-};
-
-menu_t  RD_Options_Def_Rus =
-{
-    rd_end, 
-    &MainDef_Rus,
-    RD_Options_Menu_Rus,
-    M_RD_Draw_Options,
-    60, 22,
+static Menu_t RDOptionsMenu = {
+    60, 60,
+    22,
+    "OPTIONS", "YFCNHJQRB", false,
+    9, RDOptionsItems, true,
+    NULL,
+    NULL,
+    &DoomMenu,
     0
 };
 
@@ -1622,1488 +906,705 @@ menu_t  RD_Options_Def_Rus =
 // Video and Rendering
 // -----------------------------------------------------------------------------
 
-enum
-{
-    rd_rendering_widescreen,
-    rd_rendering_vsync,
-    rd_rendering_uncapped,
-    rd_rendering_fps,
-    rd_rendering_smoothing,
-    rd_rendering_vga_porch,
-    rd_rendering_software,
-    rd_rendering_empty1,
-    rd_rendering_diskicon,
-    rd_rendering_wiping,
-    rd_rendering_screenshots,
-    rd_rendering_endoom,
-    rd_rendering_end
-} rd_rendering_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t RD_Rendering_Menu[]=
-{
-    {2, "Display aspect ratio:",     M_RD_Change_Widescreen,  'd'},
-    {3, "Vertical synchronization:", M_RD_Change_VSync,       'v'},
-    {2, "Frame rate:",               M_RD_Change_Uncapped,    'f'},
-    {2, "Show FPS counter:",         M_RD_Change_FPScounter,  's'},
-    {3, "Pixel scaling:",            M_RD_Change_Smoothing,   'p'},
-    {2, "Porch palette changing:",   M_RD_Change_PorchFlashing,'v'},
-    {2, "Video renderer:",           M_RD_Change_Renderer,    'v'},
-    {-1,"",0,'\0'},
-    {2, "Show disk icon:",           M_RD_Change_DiskIcon,    's'},
-    {2, "Screen wiping effect:",     M_RD_Change_Wiping,      's'},
-    {2, "Screenshot format:",        M_RD_Change_Screenshots, 's'},
-    {2, "Show ENDOOM screen:",       M_RD_Change_ENDOOM,      's'},
-    {-1,"",0,'\0'}
+static MenuItem_t RenderingItems[] = {
+    {ITT_TITLE,  "Rendering",                 "htylthbyu",                       NULL,                      0}, // Рендеринг
+    {ITT_LRFUNC, "Display aspect ratio:",     "Cjjnyjitybt cnjhjy \'rhfyf:",     M_RD_Change_Widescreen,   0},
+    {ITT_LRFUNC, "Vertical synchronization:", "Dthnbrfkmyfz cby[hjybpfwbz:",     M_RD_Change_VSync,        0},
+    {ITT_LRFUNC, "Frame rate:",               "Rflhjdfz xfcnjnf:",               M_RD_Change_Uncapped,     0},
+    {ITT_LRFUNC, "Show FPS counter:",         "Cxtnxbr rflhjdjq xfcnjns:",       M_RD_Change_FPScounter,   0},
+    {ITT_LRFUNC, "Pixel scaling:",            "Gbrctkmyjt cukf;bdfybt:",         M_RD_Change_Smoothing,    0},
+    {ITT_LRFUNC, "Porch palette changing:",   "Bpvtytybt gfkbnhs rhftd 'rhfyf:", M_RD_Change_PorchFlashing,0},
+    {ITT_LRFUNC, "Video renderer:",           "J,hf,jnrf dbltj:",                M_RD_Change_Renderer,     0},
+    {ITT_TITLE,  "Extra",                     "ljgjkybntkmyj",                   NULL,                      0}, // Дополнительно
+    {ITT_LRFUNC, "Show disk icon:",           "Jnj,hf;fnm pyfxjr lbcrtns:",      M_RD_Change_DiskIcon,     0},
+    {ITT_LRFUNC, "Screen wiping effect:",     "\'aatrn cvtys \'rhfyjd:",         M_RD_Change_Wiping,       0},
+    {ITT_LRFUNC, "Screenshot format:",        "Ajhvfn crhbyijnjd:",              M_RD_Change_Screenshots,  0},
+    {ITT_LRFUNC, "Show ENDOOM screen:",       "Gjrfpsdfnm \'rhfy",               M_RD_Change_ENDOOM,       0}
 };
 
-menu_t  RD_Rendering_Def =
-{
-    rd_rendering_end,
-    &RD_Options_Def,
-    RD_Rendering_Menu,
+static Menu_t RenderingMenu = {
+    35, 35,
+    25,
+    "RENDERING OPTIONS", "YFCNHJQRB DBLTJ", false, // НАСТРОЙКИ ВИДЕО
+    13, RenderingItems, false,
     M_RD_Draw_Rendering,
-    35,35,
-    0
-};
-
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t RD_Rendering_Menu_Rus[]=
-{
-    {2, "Cjjnyjitybt cnjhjy \'rhfyf:",     M_RD_Change_Widescreen,  'c'}, // Соотношение сторон экрана
-    {3, "Dthnbrfkmyfz cby[hjybpfwbz:",     M_RD_Change_VSync,       'd'}, // Вертикальная синхронизация
-    {2, "Rflhjdfz xfcnjnf:",               M_RD_Change_Uncapped,    'r'}, // Кадровая частота
-    {2, "Cxtnxbr rflhjdjq xfcnjns:",       M_RD_Change_FPScounter,  'c'}, // Счетчик кадровой частоты
-    {3, "Gbrctkmyjt cukf;bdfybt:",         M_RD_Change_Smoothing,   'g'}, // Пиксельное сглаживание
-    {2, "Bpvtytybt gfkbnhs rhftd 'rhfyf:", M_RD_Change_PorchFlashing,'b'}, // Изменение палитры краёв экрана
-    {2, "J,hf,jnrf dbltj:",                M_RD_Change_Renderer,    'j'}, // Обработка видео
-    {-1,"",0,'\0'},                                                       // Дополнительно
-    {2, "Jnj,hf;fnm pyfxjr lbcrtns:",      M_RD_Change_DiskIcon,    'j'}, // Отображать значок дискеты
-    {2, "\'aatrn cvtys \'rhfyjd:",         M_RD_Change_Wiping,      '\''}, // Эффект смены экранов
-    {2, "Ajhvfn crhbyijnjd:",              M_RD_Change_Screenshots, 'a'}, // Формат скриншотов
-    {2, "Gjrfpsdfnm \'rhfy",               M_RD_Change_ENDOOM,      'g'}, // Показывать экран ENDOOM
-    {-1,"",0,'\0'}
-};
-
-menu_t  RD_Rendering_Def_Rus =
-{
-    rd_rendering_end,
-    &RD_Options_Def_Rus,
-    RD_Rendering_Menu_Rus,
-    M_RD_Draw_Rendering,
-    35,35,
-    0
+    NULL,
+    &RDOptionsMenu,
+    1
 };
 
 // -----------------------------------------------------------------------------
 // Display settings
 // -----------------------------------------------------------------------------
 
-enum
-{
-    rd_display_screensize,
-    rd_display_empty1,
-    rd_display_gamma,
-    rd_display_empty2,
-    rd_display_level_brightness,
-    rd_display_empty3,
-    rd_display_menu_shading,
-    rd_display_empty4,
-    rd_display_detail,
-    rd_display_hud,
-    rd_display_empty5,
-    rd_display_messages_settings,
-    rd_display_automap_settings,
-    rd_display_end
-} rd_display_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t RD_Display_Menu[]=
-{
-    {3, "screen size",         M_RD_Change_ScreenSize,      's'},
-    {-1,"",0,'\0'},
-    {3, "gamma-correction",    M_RD_Change_Gamma,           'g'},
-    {-1,"",0,'\0'},
-    {3, "level brightness",    M_RD_Change_LevelBrightness, 'l'},
-    {-1,"",0,'\0'},
-    {3, "menu shading",        M_RD_Change_MenuShading,     'm'},
-    {-1,"",0,'\0'},
-    {2, "graphics detail:",    M_RD_Change_Detail,          'g'},
-    {2, "hud background detail:", M_RD_Change_HUD_Detail,   'h'},
-    {-1,"",0,'\0'},
-    {1, "messages and texts",  M_RD_Choose_MessagesAndTextSettings, 'm'},
-    {1, "automap and statistics", M_RD_Choose_AutomapAndStatsSettings, 'a'},
-    {-1,"",0,'\0'}
+static MenuItem_t DisplayItems[] = {
+    {ITT_TITLE,   "Screen",                 "\'rhfy",                  NULL,                        0}, // Экран
+    {ITT_LRFUNC,  "screen size",            "hfpvth buhjdjuj \'rhfyf", M_RD_Change_ScreenSize,      0},
+    {ITT_EMPTY,   NULL,                     NULL,                      NULL,                        0},
+    {ITT_LRFUNC,  "gamma-correction",       "ehjdtym ufvvf-rjhhtrwbb", M_RD_Change_Gamma,           0},
+    {ITT_EMPTY,   NULL,                     NULL,                      NULL,                        0},
+    {ITT_LRFUNC,  "level brightness",       "ehjdtym jcdtotyyjcnb",    M_RD_Change_LevelBrightness, 0},
+    {ITT_EMPTY,   NULL,                     NULL,                      NULL,                        0},
+    {ITT_LRFUNC,  "menu shading",           "pfntvytybt ajyf vty.",    M_RD_Change_MenuShading,     0},
+    {ITT_EMPTY,   NULL,                     NULL,                      NULL,                        0},
+    {ITT_LRFUNC,  "graphics detail:",       "ltnfkbpfwbz uhfabrb:",    M_RD_Change_Detail,          0},
+    {ITT_LRFUNC,  "hud background detail:", "ltnfkbpfwbz ajyf",        M_RD_Change_HUD_Detail,      0},
+    {ITT_TITLE,   "Interface",              "bynthatqc",               NULL,                        0}, // Интерфейс
+    {ITT_SETMENU, "messages and texts",     "cjj,otybz b ntrcns",      &MessagesMenu,               0},
+    {ITT_SETMENU, "automap and statistics", "rfhnf b cnfnbcnbrf",      &AutomapMenu,                0}
 };
 
-menu_t  RD_Display_Def =
-{
-    rd_display_end,
-    &RD_Options_Def,
-    RD_Display_Menu,
+static Menu_t DisplayMenu = {
+    35, 35,
+    25,
+    "DISPLAY OPTIONS", "YFCNHJQRB \"RHFYF", false, // НАСТРОЙКИ ЭКРАНА
+    14, DisplayItems, false,
     M_RD_Draw_Display,
-    35,35,
-    0
-};
-
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t RD_Display_Menu_Rus[]=
-{
-    {3, "hfpvth buhjdjuj \'rhfyf",  M_RD_Change_ScreenSize,      'h'}, // Размер игрового экрана
-    {-1,"",0,'\0'},                                                    //
-    {3, "ehjdtym ufvvf-rjhhtrwbb",  M_RD_Change_Gamma,           'e'}, // Уровень гамма-коррекции
-    {-1,"",0,'\0'},                                                    //
-    {3, "ehjdtym jcdtotyyjcnb",     M_RD_Change_LevelBrightness, 'e'}, // Уровень освещенности
-    {-1,"",0,'\0'},                                                    //
-    {3, "pfntvytybt ajyf vty.",     M_RD_Change_MenuShading,     'p'}, // Затемнение фона меню
-    {-1,"",0,'\0'},                                                    //
-    {2, "ltnfkbpfwbz uhfabrb:",     M_RD_Change_Detail,          'l'}, // Детализация графики:
-    {2, "ltnfkbpfwbz ajyf",         M_RD_Change_HUD_Detail,      'l'}, // Детализация фона HUD:
-    {-1,"",0,'\0'},                                                    //
-    {1, "cjj,otybz b ntrcns",       M_RD_Choose_MessagesAndTextSettings,'c'}, // Сообщения и тексты
-    {1, "rfhnf b cnfnbcnbrf",       M_RD_Choose_AutomapAndStatsSettings, 'r'}, // Карта и статистика
-    {-1,"",0,'\0'}
-};
-
-menu_t  RD_Display_Def_Rus =
-{
-    rd_display_end,
-    &RD_Options_Def_Rus,
-    RD_Display_Menu_Rus,
-    M_RD_Draw_Display,
-    35,35,
-    0
+    NULL,
+    &RDOptionsMenu,
+    1
 };
 
 // -----------------------------------------------------------------------------
 // Messages settings
 // -----------------------------------------------------------------------------
 
-enum
-{
-    rd_messages_toggle,
-    rd_messages_alignment,
-    rd_messages_timeout,
-    rd_messages_empty1,
-    rd_messages_fade,
-    rd_messages_shadows,
-    rd_messages_empty2,
-    rd_display_localtime,
-    rd_messages_empty3,
-    rd_messages_pickup_color,
-    rd_messages_secret_color,
-    rd_messages_system_color,
-    rd_messages_chat_color,
-    rd_messages_end
-} rd_messages_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t RD_Messages_Menu[]=
-{
-    {2, "messages enabled:",   M_RD_Change_Messages,        'm'},
-    {2, "alignment:",          M_RD_Change_Msg_Alignment,   'a'},
-    {3, "message timeout",     M_RD_Change_Msg_TimeOut,     'm'},
-    {-1,"",0,'\0'},
-    {2, "fading effect:",      M_RD_Change_Msg_Fade,        'f'},
-    {2, "text casts shadows:", M_RD_Change_ShadowedText,    't'},
-    {-1,"",0,'\0'},
-    {2, "local time:",         M_RD_Change_LocalTime,       'l'},
-    {-1,"",0,'\0'},
-    {3, "item pickup:",        M_RD_Change_Msg_Pickup_Color,'i'},
-    {3, "revealed secret:",    M_RD_Change_Msg_Secret_Color,'r'},
-    {3, "system message:",     M_RD_Change_Msg_System_Color,'s'},
-    {3, "netgame chat:",       M_RD_Change_Msg_Chat_Color,  'n'},
-    {-1,"",0,'\0'}
+static MenuItem_t MessagesItems[] = {
+    {ITT_TITLE,  "General",             "jcyjdyjt",                 NULL,                         0}, // Основное
+    {ITT_LRFUNC, "messages enabled:",   "jnj,hf;tybt cjj,otybq:",   M_RD_Change_Messages,         0}, // Отображение сообщений:
+    {ITT_LRFUNC, "alignment:",          "dshfdybdfybt:",            M_RD_Change_Msg_Alignment,    0}, // Выравнивание:
+    {ITT_LRFUNC, "message timeout",     "nfqvfen jnj,hf;tybz",      M_RD_Change_Msg_TimeOut,      0}, // Таймаут отображения
+    {ITT_EMPTY,  NULL,                  NULL,                       NULL,                         0},
+    {ITT_LRFUNC, "fading effect:",      "gkfdyjt bcxtpyjdtybt:",    M_RD_Change_Msg_Fade,         0}, // Плавное исчезновение:
+    {ITT_LRFUNC, "text casts shadows:", "ntrcns jn,hfcsdf.n ntym:", M_RD_Change_ShadowedText,     0}, // Тексты отбрасывают тень:
+    {ITT_TITLE,  "Misc.",               "hfpyjt",                   NULL,                         0}, // Разное
+    {ITT_LRFUNC, "local time:",         "cbcntvyjt dhtvz:",         M_RD_Change_LocalTime,        0}, // Системное время:
+    {ITT_TITLE,  "Colors",              "wdtnf",                    NULL,                         0}, // Цвета
+    {ITT_LRFUNC, "item pickup:",        "gjkextybt ghtlvtnjd:",     M_RD_Change_Msg_Pickup_Color, 0}, // Получение предметов:
+    {ITT_LRFUNC, "revealed secret:",    "j,yfhe;tybt nfqybrjd:",    M_RD_Change_Msg_Secret_Color, 0}, // Обнаружение тайников:
+    {ITT_LRFUNC, "system message:",     "cbcntvyst cjj,otybz:",     M_RD_Change_Msg_System_Color, 0}, // Системные сообщения:
+    {ITT_LRFUNC, "netgame chat:",       "xfn ctntdjq buhs:",        M_RD_Change_Msg_Chat_Color,   0}  // Чат сетевой игры:
 };
 
-menu_t  RD_Messages_Def =
-{
-    rd_messages_end,
-    &RD_Display_Def,
-    RD_Messages_Menu,
+static Menu_t MessagesMenu = {
+    35, 35,
+    25,
+    "MESSAGES AND TEXTS", "CJJ<OTYBZ B NTRCNS", false, // СООБЩЕНИЯ И ТЕКСТЫ
+    14, MessagesItems, false,
     M_RD_Draw_MessagesSettings,
-    35,35,
-    0
-};
-
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t RD_Messages_Menu_Rus[]=
-{
-    {2, "jnj,hf;tybt cjj,otybq:",   M_RD_Change_Messages,        'j'}, // Отображение сообщений:
-    {2, "dshfdybdfybt:",            M_RD_Change_Msg_Alignment,   'd'}, // Выравнивание:
-    {3, "nfqvfen jnj,hf;tybz",      M_RD_Change_Msg_TimeOut,     'n'}, // Таймаут отображения
-    {-1,"",0,'\0'},
-    {2, "gkfdyjt bcxtpyjdtybt:",    M_RD_Change_Msg_Fade,        'g'}, // Плавное исчезновение:
-    {2, "ntrcns jn,hfcsdf.n ntym:", M_RD_Change_ShadowedText,    'n'}, // Тексты отбрасывают тень:
-    {-1,"",0,'\0'},
-    {2, "cbcntvyjt dhtvz:",         M_RD_Change_LocalTime,       'c'}, // Системное время:
-    {-1,"",0,'\0'},
-    {3, "gjkextybt ghtlvtnjd:",     M_RD_Change_Msg_Pickup_Color,'g'}, // Получение предметов:
-    {3, "j,yfhe;tybt nfqybrjd:",    M_RD_Change_Msg_Secret_Color,'j'}, // Обнаружение тайников:
-    {3, "cbcntvyst cjj,otybz:",     M_RD_Change_Msg_System_Color,'c'}, // Системные сообщения:
-    {3, "xfn ctntdjq buhs:",        M_RD_Change_Msg_Chat_Color,  'x'}, // Чат сетевой игры:
-    {-1,"",0,'\0'}
-};
-
-menu_t  RD_Messages_Def_Rus =
-{
-    rd_messages_end,
-    &RD_Display_Def_Rus,
-    RD_Messages_Menu_Rus,
-    M_RD_Draw_MessagesSettings,
-    35,35,
-    0
+    NULL,
+    &DisplayMenu,
+    1
 };
 
 // -----------------------------------------------------------------------------
 // Automap settings
 // -----------------------------------------------------------------------------
 
-enum
-{
-    rd_automap_colors,
-    rd_automap_antialias,
-    rd_automap_overlay,
-    rd_automap_rotate,
-    rd_automap_follow,
-    rd_automap_grid,
-    rd_automap_grid_size,
-    rd_automap_empty1,
-    rd_automap_stats,
-    rd_automap_l_time,
-    rd_automap_t_time,
-    rd_automap_coords,    
-    rd_automap_end
-} rd_automap_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t RD_Automap_Menu[]=
-{
-    {3, "color scheme:",      M_RD_Change_AutomapColor,     'c'},
-    {2, "line antialiasing:", M_RD_Change_AutomapAntialias, 'l'},
-    {2, "overlay mode:",      M_RD_Change_AutomapOverlay,   'o'},
-    {2, "rotate mode:",       M_RD_Change_AutomapRotate,    'r'},
-    {2, "follow mode:",       M_RD_Change_AutomapFollow,    'f'},
-    {2, "grid:",              M_RD_Change_AutomapGrid,      'g'},
-    {2, "grid size:",         M_RD_Change_AutomapGridSize,  'g'},
-    {-1,"",0,'\0'},
-    {2, "level stats:",       M_RD_Change_AutomapStats,     'l'},
-    {2, "level time:",        M_RD_Change_AutomapLevelTime, 'l'},
-    {2, "total time:",        M_RD_Change_AutomapTotalTime, 't'},
-    {2, "player coords:",     M_RD_Change_AutomapCoords,    'p'},
-    {-1,"",0,'\0'}
+static MenuItem_t AutomapItems[] = {
+    {ITT_TITLE,  "Automap",            "Rfhnf",              NULL,                          0}, // Карта
+    {ITT_LRFUNC, "color scheme:",      "wdtnjdfz c[tvf:",    M_RD_Change_AutomapColor,     0}, // Цветовая схема:
+    {ITT_LRFUNC, "line antialiasing:", "cukf;bdfybt kbybq:", M_RD_Change_AutomapAntialias, 0}, // Сглаживание линий:
+    {ITT_LRFUNC, "overlay mode:",      "ht;bv yfkj;tybz:",   M_RD_Change_AutomapOverlay,   0}, // Режим наложения:
+    {ITT_LRFUNC, "rotate mode:",       "ht;bv dhfotybz:",    M_RD_Change_AutomapRotate,    0}, // Режим вращения:
+    {ITT_LRFUNC, "follow mode:",       "ht;bv cktljdfybz:",  M_RD_Change_AutomapFollow,    0}, // Режим следования:
+    {ITT_LRFUNC, "grid:",              "ctnrf:",             M_RD_Change_AutomapGrid,      0}, // Сетка:
+    {ITT_LRFUNC, "grid size:",         "hfpvth ctnrb:",      M_RD_Change_AutomapGridSize,  0}, // Размер сетки:
+    {ITT_TITLE,  "Statistics",         "Cnfnbcnbrf",         NULL,                          0}, // Статистика
+    {ITT_LRFUNC, "level stats:",       "cnfnbcnbrf ehjdyz:", M_RD_Change_AutomapStats,     0}, // Статистика уровня:
+    {ITT_LRFUNC, "level time:",        "dhtvz ehjdyz:",      M_RD_Change_AutomapLevelTime, 0}, // Время уровня:
+    {ITT_LRFUNC, "total time:",        "j,ott dhtvz:",       M_RD_Change_AutomapTotalTime, 0}, // Общее время:
+    {ITT_LRFUNC, "player coords:",     "rjjhlbyfns buhjrf:", M_RD_Change_AutomapCoords,    0}  // Координаты игрока:
 };
 
-menu_t  RD_Automap_Def =
-{
-    rd_automap_end,
-    &RD_Display_Def,
-    RD_Automap_Menu,
+static Menu_t AutomapMenu = {
+    70, 70,
+    25,
+    "AUTOMAP AND STATS", "RFHNF B CNFNBCNBRF", false, // КАРТА И СТАТИСТИКА
+    13, AutomapItems, false,
     M_RD_Draw_AutomapSettings,
-    70,35,
-    0
-};
-
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t RD_Automap_Menu_Rus[]=
-{
-    {3, "wdtnjdfz c[tvf:",    M_RD_Change_AutomapColor,     'w'}, // Цветовая схема:
-    {2, "cukf;bdfybt kbybq:", M_RD_Change_AutomapAntialias, 'c'}, // Сглаживание линий:
-    {2, "ht;bv yfkj;tybz:",   M_RD_Change_AutomapOverlay,   'h'}, // Режим наложения:
-    {2, "ht;bv dhfotybz:",    M_RD_Change_AutomapRotate,    'h'}, // Режим вращения:
-    {2, "ht;bv cktljdfybz:",  M_RD_Change_AutomapFollow,    'h'}, // Режим следования:
-    {2, "ctnrf:",             M_RD_Change_AutomapGrid,      'c'}, // Сетка:
-    {2, "hfpvth ctnrb:",      M_RD_Change_AutomapGridSize,  'h'}, // Размер сетки:    
-    {-1,"",0,'\0'},
-    {2, "cnfnbcnbrf ehjdyz:", M_RD_Change_AutomapStats,     'c'}, // Статистика уровня:
-    {2, "dhtvz ehjdyz:",      M_RD_Change_AutomapLevelTime, 'd'}, // Время уровня:
-    {2, "j,ott dhtvz:",       M_RD_Change_AutomapTotalTime, 'j'}, // Общее время:
-    {2, "rjjhlbyfns buhjrf:", M_RD_Change_AutomapCoords,    'r'}, // Координаты игрока:
-    {-1,"",0,'\0'}
-};
-
-menu_t  RD_Automap_Def_Rus =
-{
-    rd_automap_end,
-    &RD_Display_Def_Rus,
-    RD_Automap_Menu_Rus,
-    M_RD_Draw_AutomapSettings,
-    70,35,
-    0
+    NULL,
+    &DisplayMenu,
+    1
 };
 
 // -----------------------------------------------------------------------------
 // Sound and Music
 // -----------------------------------------------------------------------------
 
-enum
-{
-    rd_audio_sfxvolume,
-    rd_audio_empty1,
-    rd_audio_musvolume,
-    rd_audio_empty2,
-    rd_audio_empty3,
-    rd_audio_sfxchannels,
-    rd_audio_empty4,
-    rd_audio_empty5,
-    rd_audio_soundsystem,
-    rd_audio_end
-} rd_audio_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t RD_Audio_Menu[]=
-{
-    {3, "sfx volume",              M_RD_Change_SfxVol,      's'},
-    {-1,"",0,'\0'},
-    {3, "music volume",            M_RD_Change_MusicVol,    'm'},
-    {-1,"",0,'\0'},
-    {-1,"",0,'\0'},
-    {3, "sound channels",          M_RD_Change_SfxChannels, 's'},
-    {-1,"",0,'\0'},
-    {-1,"",0,'\0'},
-    {1,"sound system settings",    M_RD_Choose_SoundSystem, 's'},
-    {-1,"",0,'\0'}
+static MenuItem_t SoundItems[] = {
+    {ITT_TITLE,   "volume",                "uhjvrjcnm",                  NULL,                    0}, // Громкость
+    {ITT_LRFUNC,  "sfx volume",            "pder",                       M_RD_Change_SfxVol,      0}, // Звук
+    {ITT_EMPTY,   NULL,                    NULL,                         NULL,                    0},
+    {ITT_LRFUNC,  "music volume",          "vepsrf",                     M_RD_Change_MusicVol,    0}, // Музыка
+    {ITT_EMPTY,   NULL,                    NULL,                         NULL,                    0},
+    {ITT_TITLE,   "channels",              "djcghjbpdtltybt",            NULL,                    0}, // Воспроизведение
+    {ITT_LRFUNC,  "sound channels",        "Pderjdst rfyfks",            M_RD_Change_SfxChannels, 0}, // Звуковые каналы
+    {ITT_EMPTY,   NULL,                    NULL,                         NULL,                    0},
+    {ITT_TITLE,   "advanced",              "ljgjkybntkmyj",              NULL,                    0}, // Дополнительно
+    {ITT_SETMENU, "sound system settings", "yfcnhjqrb pderjdjq cbcntvs", &SoundSysMenu,           0}  // Настройки звуковой системы...
 };
 
-menu_t RD_Audio_Def =
-{
-    rd_audio_end,
-    &RD_Options_Def,
-    RD_Audio_Menu,
+static Menu_t SoundMenu = {
+    35, 35,
+    25,
+    "SOUND OPTIONS", "YFCNHJQRB PDERF", false, // НАСТРОЙКИ ЗВУКА
+    10, SoundItems, false,
     M_RD_Draw_Audio,
-    35,35,
-    0
-};
-
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t RD_Audio_Menu_Rus[]=
-{
-    {3, "pder",                         M_RD_Change_SfxVol,      'p'}, // Звук
-    {-1,"",0,'\0'},                                                    //
-    {3, "vepsrf",                       M_RD_Change_MusicVol,    'v'}, // Музыка
-    {-1,"",0,'\0'},                                                    //
-    {-1,"",0,'\0'},                                                    //
-    {3, "Pderjdst rfyfks",              M_RD_Change_SfxChannels, 'p'}, // Звуковые каналы
-    {-1,"",0,'\0'},                                                    //
-    {-1,"",0,'\0'},                                                    //
-    {1,"yfcnhjqrb pderjdjq cbcntvs",    M_RD_Choose_SoundSystem, 'y'}, // Настройки звуковой системы...
-    {-1,"",0,'\0'}
-};
-
-menu_t RD_Audio_Def_Rus =
-{
-    rd_audio_end,
-    &RD_Options_Def_Rus,
-    RD_Audio_Menu_Rus,
-    M_RD_Draw_Audio,
-    35,35,
-    0
+    NULL,
+    &RDOptionsMenu,
+    1
 };
 
 // -----------------------------------------------------------------------------
 // Sound system
 // -----------------------------------------------------------------------------
 
-enum
-{
-    rd_audio_sys_sfx,
-    rd_audio_sys_music,
-    rd_audio_sys_empty1,
-    rd_audio_sys_sampling,
-    rd_audio_sys_empty2,
-    rd_audio_sys_sndmode,
-    rd_audio_sys_sndpitch,
-    rd_audio_sys_muteinactive,
-    rd_audio_sys_end
-} rd_audio_sys_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t RD_Audio_System_Menu[]=
-{
-    {2, "sound effects:",        M_RD_Change_SoundDevice,   's'},
-    {2, "music:",                M_RD_Change_MusicDevice,   'm'},
-    {-1,"",0,'\0'},
-    {2, "sampling frequency:",   M_RD_Change_Sampling,      's'},
-    {-1,"",0,'\0'},
-    {2, "sound effects mode:",   M_RD_Change_SndMode,       's'},
-    {2, "pitch-shifted sounds:", M_RD_Change_PitchShifting, 'p'},
-    {2, "mute inactive window:", M_RD_Change_MuteInactive,  'm'},
-    {-1,"",0,'\0'}
+static MenuItem_t SoundSysItems[] = {
+    {ITT_TITLE,  "sound system",          "pderjdfz cbcntvf",           NULL,                       0}, // ЗВУКОВАЯ СИСТЕМА
+    {ITT_LRFUNC, "sound effects:",        "pderjdst \'aatrns:",         M_RD_Change_SoundDevice,   0}, // Звуковые эффекты
+    {ITT_LRFUNC, "music:",                "vepsrf:",                    M_RD_Change_MusicDevice,   0}, // Музыка
+    {ITT_TITLE,  "quality",               "rfxtcndj pdexfybz",                 NULL,                       0}, // Качество звучания
+    {ITT_LRFUNC, "sampling frequency:",   "xfcnjnf lbcrhtnbpfwbb:",     M_RD_Change_Sampling,      0}, // Частота дискретизации
+    {ITT_TITLE,  "Miscellaneous",         "hfpyjt",                            NULL,                       0}, // Разное
+    {ITT_LRFUNC, "sound effects mode:",   "Ht;bv pderjds[ \'aatrnjd:",  M_RD_Change_SndMode,       0}, // Режим звуковых эффектов
+    {ITT_LRFUNC, "pitch-shifted sounds:", "ghjbpdjkmysq gbnx-ibanbyu:", M_RD_Change_PitchShifting, 0}, // Произвольный питч-шифтинг
+    {ITT_LRFUNC, "mute inactive window:", "pder d ytfrnbdyjv jryt:",    M_RD_Change_MuteInactive,  0}  // Звук в неактивном окне
 };
 
-menu_t RD_Audio_System_Def =
-{
-    rd_audio_end,
-    &RD_Audio_Def,
-    RD_Audio_System_Menu,
+static Menu_t SoundSysMenu = {
+    35, 35,
+    25,
+    "SOUND SYSTEM", "PDERJDFZ CBCNTVF", false, // ЗВУКОВАЯ СИСТЕМА
+    9, SoundSysItems, false,
     M_RD_Draw_Audio_System,
-    35,35,
-    0
-};
-
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t RD_Audio_System_Menu_Rus[]=
-{
-    {2, "pderjdst \'aatrns:",         M_RD_Change_SoundDevice,   'p'}, // Звуковые эффекты
-    {2, "vepsrf:",                    M_RD_Change_MusicDevice,   'v'}, // Музыка
-    {-1,"",0,'\0'},                                                    //
-    {2, "xfcnjnf lbcrhtnbpfwbb:",     M_RD_Change_Sampling,      'x'}, // Частота дискретизации
-    {-1,"",0,'\0'},                                                    //
-    {2, "Ht;bv pderjds[ \'aatrnjd:",  M_RD_Change_SndMode,       'h'}, // Режим звуковых эффектов
-    {2, "ghjbpdjkmysq gbnx-ibanbyu:", M_RD_Change_PitchShifting, 'g'}, // Произвольный питч-шифтинг
-    {2, "pder d ytfrnbdyjv jryt:",    M_RD_Change_MuteInactive,  'p'}, // Звук в неактивном окне
-    {-1,"",0,'\0'}
-};
-
-menu_t RD_Audio_System_Def_Rus =
-{
-    rd_audio_end,
-    &RD_Audio_Def_Rus,
-    RD_Audio_System_Menu_Rus,
-    M_RD_Draw_Audio_System,
-    35,35,
-    0
+    NULL,
+    &SoundMenu,
+    1
 };
 
 // -----------------------------------------------------------------------------
 // Keyboard and Mouse
 // -----------------------------------------------------------------------------
 
-enum
-{
-    rd_controls_kdb_bindings,
-    rd_controls_mouse_bindings,
-    rd_controls_empty1,
-    rd_controls_sensitivity,
-    rd_controls_empty2,
-    rd_controls_acceleration,
-    rd_controls_empty3,
-    rd_controls_threshold,
-    rd_controls_empty4,
-    rd_controls_mouselook,
-    rd_controls_novert,
-    rd_controls_inverty,
-    rd_controls_empty5,
-    
-    rd_controls_end
-} rd_controls_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t RD_Controls_Menu[]=
-{
-    {1, "keyboard bindings",  M_RD_Choose_Bindings_1,     'k'},
-    {1, "mouse bindings",     M_RD_Choose_Mouse_Bindings, 'm'},
-    {-1,"",0,'\0'},
-    {3, "sensivity",          M_RD_Change_Sensitivity,    'm'},
-    {-1,"",0,'\0'},
-    {3, "acceleration",       M_RD_Change_Acceleration,   'a'},
-    {-1,"",0,'\0'},
-    {3, "acceleration threshold", M_RD_Change_Threshold,  't'},
-    {-1,"",0,'\0'},
-    {2, "mouse look:",        M_RD_Change_MouseLook,      'm'},
-    {2, "invert y axis:",     M_RD_Change_InvertY,        'i'},
-    {2, "vertical movement:", M_RD_Change_Novert,         'v'},
-    {-1,"",0,'\0'}
-
+static MenuItem_t ControlsItems[] = {
+    {ITT_TITLE,   "Controls",               "eghfdktybt",                NULL,                       0}, // Управление
+    {ITT_SETMENU, "keyboard bindings",      "yfcnhjqrb rkfdbfnehs",      &Bindings1Menu,              0}, // Настройки клавиатуры
+    {ITT_SETMENU, "mouse bindings",         "yfcnhjqrb vsib",            &MouseBindingsMenu,         0}, // Настройки мыши
+    {ITT_TITLE,   "mouse",                  "vsim",                      NULL,                       0}, // Мышь
+    {ITT_LRFUNC,  "sensivity",              "crjhjcnm",                  M_RD_Change_Sensitivity,    0}, // Скорость
+    {ITT_EMPTY,   NULL,                     NULL,                        NULL,                       0},
+    {ITT_LRFUNC,  "acceleration",           "frctkthfwbz",               M_RD_Change_Acceleration,   0}, // Акселерация
+    {ITT_EMPTY,   NULL,                     NULL,                        NULL,                       0},
+    {ITT_LRFUNC,  "acceleration threshold", "gjhju frctkthfwbb",         M_RD_Change_Threshold,      0}, // Порог акселерации
+    {ITT_EMPTY,   NULL,                     NULL,                        NULL,                       0},
+    {ITT_LRFUNC,  "mouse look:",            "j,pjh vsim.:",              M_RD_Change_MouseLook,      0}, // Обзор мышью
+    {ITT_LRFUNC,  "invert y axis:",         "dthnbrfkmyfz bydthcbz:",    M_RD_Change_InvertY,        0}, // Вертикальная инверсия
+    {ITT_LRFUNC,  "vertical movement:",     "dthnbrfkmyjt gthtvtotybt:", M_RD_Change_Novert,         0}  // Вертикальное перемещение
 };
 
-menu_t  RD_Controls_Def =
-{
-    rd_controls_end,
-    &RD_Options_Def,
-    RD_Controls_Menu,
+static Menu_t ControlsMenu = {
+    35, 35,
+    25,
+    "CONTROL SETTINGS", "EGHFDKTYBT", false, // УПРАВЛЕНИЕ
+    13, ControlsItems, false,
     M_RD_Draw_Controls,
-    35,35,
-    0
+    NULL,
+    &RDOptionsMenu,
+    1
 };
-
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t RD_Controls_Menu_Rus[]=
-{
-    {1, "yfcnhjqrb rkfdbfnehs",      M_RD_Choose_Bindings_1,  'k'}, // Настройки клавиатуры
-    {1, "yfcnhjqrb vsib",            M_RD_Choose_Mouse_Bindings,'k'}, // Настройки мыши
-    {-1,"",0,'\0'},                                                 //
-    {3, "crjhjcnm",                  M_RD_Change_Sensitivity, 'c'}, // Скорость
-    {-1,"",0,'\0'},                                                 //
-    {3, "frctkthfwbz",               M_RD_Change_Acceleration,'f'}, // Акселерация
-    {-1,"",0,'\0'},
-    {3, "gjhju frctkthfwbb",         M_RD_Change_Threshold,   'g'}, // Порог акселерации
-    {-1,"",0,'\0'},
-    {2, "j,pjh vsim.:",              M_RD_Change_MouseLook,   'j'}, // Обзор мышью
-    {2, "dthnbrfkmyfz bydthcbz:",    M_RD_Change_InvertY,     'd'}, // Вертикальная инверсия
-    {2, "dthnbrfkmyjt gthtvtotybt:", M_RD_Change_Novert,      'd'}, // Вертикальное перемещение
-    {-1,"",0,'\0'}
-};
-
-menu_t  RD_Controls_Def_Rus =
-{
-    rd_controls_end,
-    &RD_Options_Def_Rus,
-    RD_Controls_Menu_Rus,
-    M_RD_Draw_Controls,
-    35,35,
-    0
-};
-
 
 // -----------------------------------------------------------------------------
 // Key bindings (1)
 // -----------------------------------------------------------------------------
 
-subtitle_t RD_Bindings_1_subtitles[] = {
-    {25, "Movement", "ldb;tybt"},
-    {115, "Action", "ltqcndbt"}
+static const PageDescriptor_t BindingsPageDescriptor = {
+    4, BindingsMenuPages,
+    229, 165,
+    CR_WHITE
 };
 
-key_page_t RD_Bindings_1 = {
-     &RD_Controls_Def,
-     &RD_Controls_Def_Rus,
-     M_RD_Choose_Bindings_4,
-     M_RD_Choose_Bindings_2,
-     'l', 'y', 'n', 'l',
-     "page 1/4", "cnhfybwf 1*4",
-     RD_Bindings_1_subtitles,
-     2,
-     {bk_forward,
-    bk_backward,
-    bk_turn_left,
-    bk_turn_right,
-    bk_strafe_left,
-    bk_strafe_right,
-    bk_speed,
-    bk_strafe,
-    bk_null,
-    bk_fire,
-    bk_use}
+static MenuItem_t Bindings1Items[] = {
+    {ITT_TITLE,   "Movement",      "ldb;tybt",        NULL,           0},
+    {ITT_EFUNC,   "Move Forward",  "ldb;tybt dgthtl", M_RD_Bind_Key,  bk_forward},      // Движение вперед
+    {ITT_EFUNC,   "Move Backward", "ldb;tybt yfpfl",  M_RD_Bind_Key,  bk_backward},     // Движение назад
+    {ITT_EFUNC,   "Turn Left",     "gjdjhjn yfktdj",  M_RD_Bind_Key,  bk_turn_left},    // Поворот налево
+    {ITT_EFUNC,   "Turn Right",    "gjdjhjn yfghfdj", M_RD_Bind_Key,  bk_turn_right},   // Поворот направо
+    {ITT_EFUNC,   "Strafe Left",   ",jrjv dktdj",     M_RD_Bind_Key,  bk_strafe_left},  // Боком влево
+    {ITT_EFUNC,   "Strafe Right",  ",jrjv dghfdj",    M_RD_Bind_Key,  bk_strafe_right}, // Боком вправо
+    {ITT_EFUNC,   "Speed On",      ",tu",             M_RD_Bind_Key,  bk_speed},        // Бег
+    {ITT_EFUNC,   "Strafe On",     "ldb;tybt ,jrjv",  M_RD_Bind_Key,  bk_strafe},       // Движение боком
+    {ITT_TITLE,   "Action",        "ltqcndbt",        NULL,           0},
+    {ITT_EFUNC,   "Fire/Attack",   "fnfrf*cnhtkm,f",  M_RD_Bind_Key,  bk_fire},         // Атака/стрельба
+    {ITT_EFUNC,   "Use",           "bcgjkmpjdfnm",    M_RD_Bind_Key,  bk_use},          // Использовать
+    {ITT_EMPTY,   NULL,            NULL,              NULL,           0},
+    {ITT_SETMENU, NULL,            NULL,              &Bindings2Menu, 0},               // Далее >
+    {ITT_SETMENU, NULL,            NULL,              &Bindings4Menu, 0},               // < Назад
+    {ITT_EMPTY,   NULL,            NULL,              NULL,           0}
 };
 
-menu_t* RD_Bindings_Menu_Def_1;
-menu_t* RD_Bindings_Menu_Def_1_Rus;
+static Menu_t Bindings1Menu = {
+    35, 35,
+    25,
+    "Keyboard bindings", "Yfcnhjqrb rkfdbfnehs", false, // Настройки клавиатуры
+    16, Bindings1Items, false,
+    M_RD_Draw_Bindings,
+    &BindingsPageDescriptor,
+    &ControlsMenu,
+    1
+};
 
 // -----------------------------------------------------------------------------
 // Key bindings (2)
 // -----------------------------------------------------------------------------
 
-subtitle_t RD_Bindings_2_subtitles[] = {
-    {25, "Weapons", "jhe;bt"}
+static MenuItem_t Bindings2Items[] = {
+    {ITT_TITLE,   "Weapons",         "jhe;bt",            NULL,           0},
+    {ITT_EFUNC,   "Weapon 1",        "jhe;bt 1",          M_RD_Bind_Key,  bk_weapon_1},    // Оружие 1
+    {ITT_EFUNC,   "Weapon 2",        "jhe;bt 2",          M_RD_Bind_Key,  bk_weapon_2},    // Оружие 2
+    {ITT_EFUNC,   "Weapon 3",        "jhe;bt 3",          M_RD_Bind_Key,  bk_weapon_3},    // Оружие 3
+    {ITT_EFUNC,   "Weapon 4",        "jhe;bt 4",          M_RD_Bind_Key,  bk_weapon_4},    // Оружие 4
+    {ITT_EFUNC,   "Weapon 5",        "jhe;bt 5",          M_RD_Bind_Key,  bk_weapon_5},    // Оружие 5
+    {ITT_EFUNC,   "Weapon 6",        "jhe;bt 6",          M_RD_Bind_Key,  bk_weapon_6},    // Оружие 6
+    {ITT_EFUNC,   "Weapon 7",        "jhe;bt 7",          M_RD_Bind_Key,  bk_weapon_7},    // Оружие 7
+    {ITT_EFUNC,   "Weapon 8",        "jhe;bt 8",          M_RD_Bind_Key,  bk_weapon_8},    // Оружие 8
+    {ITT_EFUNC,   "Previous weapon", "ghtlsleott jhe;bt", M_RD_Bind_Key,  bk_weapon_prev}, // Предыдущее оружие
+    {ITT_EFUNC,   "Next weapon",     "cktle.ott jhe;bt",  M_RD_Bind_Key,  bk_weapon_next}, // Следующее оружие
+    {ITT_EMPTY,   NULL,              NULL,                NULL,           0},
+    {ITT_EMPTY,   NULL,              NULL,                NULL,           0},
+    {ITT_SETMENU, NULL,              NULL,                &Bindings3Menu, 0},               // Далее >
+    {ITT_SETMENU, NULL,              NULL,                &Bindings1Menu, 0},               // < Назад
+    {ITT_EMPTY,   NULL,              NULL,                NULL,           0}
 };
 
-key_page_t RD_Bindings_2 = {
-    &RD_Controls_Def,
-    &RD_Controls_Def_Rus,
-    M_RD_Choose_Bindings_1,
-    M_RD_Choose_Bindings_3,
-    'p', 'y', 'n', 'l',
-    "page 2/4", "cnhfybwf 2*4",
-    RD_Bindings_2_subtitles,
-    1,
-    {bk_weapon_1,
-     bk_weapon_2,
-     bk_weapon_3,
-     bk_weapon_4,
-     bk_weapon_5,
-     bk_weapon_6,
-     bk_weapon_7,
-     bk_weapon_8,
-     bk_weapon_prev,
-     bk_weapon_next,
-     bk_null}
+static Menu_t Bindings2Menu = {
+    35, 35,
+    25,
+    "Keyboard bindings", "Yfcnhjqrb rkfdbfnehs", false, // Настройки клавиатуры
+    16, Bindings2Items, false,
+    M_RD_Draw_Bindings,
+    &BindingsPageDescriptor,
+    &ControlsMenu,
+    1
 };
-
-menu_t* RD_Bindings_Menu_Def_2;
-menu_t*  RD_Bindings_Menu_Def_2_Rus;
 
 // -----------------------------------------------------------------------------
 // Key bindings (3)
 // -----------------------------------------------------------------------------
 
-subtitle_t RD_Bindings_3_subtitles[] = {
-    {25, "Shortcut keys", ",scnhsq ljcneg"},
-    {95, "Toggleables", "gthtrk.xtybt"}
+
+static MenuItem_t Bindings3Items[] = {
+    {ITT_TITLE,   "Shortcut keys",         ",scnhsq ljcneg",        NULL,           0},
+    {ITT_EFUNC,   "Quick save",            ",scnhjt cj[hfytybt",    M_RD_Bind_Key,  bk_save},             // Быстрое сохранение
+    {ITT_EFUNC,   "Quick load",            ",scnhfz pfuheprf",      M_RD_Bind_Key,  bk_load},             // Быстрая загрузка
+    {ITT_EFUNC,   "Go to next level",      "cktle.obq ehjdtym",     M_RD_Bind_Key,  bk_nextlevel},        // Следующий уровень
+    {ITT_EFUNC,   "Restart level/demo",    "gthtpfgecr ehjdyz",     M_RD_Bind_Key,  bk_reloadlevel},      // Перезапуск уровня
+    {ITT_EFUNC,   "Save a screenshot",     "crhbyijn",              M_RD_Bind_Key,  bk_screenshot},       // Скриншот
+    {ITT_EFUNC,   "Finish demo recording", "pfrjyxbnm pfgbcm ltvj", M_RD_Bind_Key,  bk_finish_demo},      // Закончить запись демо
+    {ITT_TITLE,   "Toggleables",           "gthtrk.xtybt",          NULL,           0},
+    {ITT_EFUNC,   "Mouse look",            "j,pjh vsim.",           M_RD_Bind_Key,  bk_toggle_mlook},     // Обзор мышью
+    {ITT_EFUNC,   "Always run",            "gjcnjzyysq ,tu",        M_RD_Bind_Key,  bk_toggle_autorun},   // Постоянный бег
+    {ITT_EFUNC,   "Crosshair",             "ghbwtk",                M_RD_Bind_Key,  bk_toggle_crosshair}, // Прицел
+    {ITT_EFUNC,   "Level flipping",        "pthrfkbhjdfybt ehjdyz", M_RD_Bind_Key,  bk_toggle_fliplvls},  // Зеркалирование уровня
+    {ITT_EMPTY,   NULL,                    NULL,                    NULL,           0},
+    {ITT_SETMENU, NULL,                    NULL,                    &Bindings4Menu, 0},                   // Далее >
+    {ITT_SETMENU, NULL,                    NULL,                    &Bindings2Menu, 0},                   // < Назад
+    {ITT_EMPTY,   NULL,                    NULL,                    NULL,           0}
 };
 
-key_page_t RD_Bindings_3 = {
-    &RD_Controls_Def,
-    &RD_Controls_Def_Rus,
-    M_RD_Choose_Bindings_2,
-    M_RD_Choose_Bindings_4,
-    'p', 'y', 'n', 'l',
-    "page 3/4", "cnhfybwf 3*4",
-    RD_Bindings_3_subtitles,
-    2,
-    {bk_save,
-     bk_load,
-     bk_nextlevel,
-     bk_reloadlevel,
-     bk_screenshot,
-     bk_finish_demo,
-     bk_null,
-     bk_toggle_mlook,
-     bk_toggle_autorun,
-     bk_toggle_crosshair,
-     bk_toggle_fliplvls}
+static Menu_t Bindings3Menu = {
+    35, 35,
+    25,
+    "Keyboard bindings", "Yfcnhjqrb rkfdbfnehs", false, // Настройки клавиатуры
+    16, Bindings3Items, false,
+    M_RD_Draw_Bindings,
+    &BindingsPageDescriptor,
+    &ControlsMenu,
+    1
 };
-
-menu_t*  RD_Bindings_Menu_Def_3;
-menu_t*  RD_Bindings_Menu_Def_3_Rus;
 
 // -----------------------------------------------------------------------------
 // Key bindings (4)
 // -----------------------------------------------------------------------------
 
-subtitle_t RD_Bindings_4_subtitles[] = {
-    {25, "Automap", "rfhnf"}
+static MenuItem_t Bindings4Items[] = {
+    {ITT_TITLE,   "Automap",          "rfhnf",             NULL,           0},
+    {ITT_EFUNC,   "Toggle automap",   "jnrhsnm rfhne",     M_RD_Bind_Key,  bk_map_toggle},    // Открыть карту
+    {ITT_EFUNC,   "Zoom in",          "ghb,kbpbnm",        M_RD_Bind_Key,  bk_map_zoom_in},   // Приблизить
+    {ITT_EFUNC,   "Zoom out",         "jnlfkbnm",          M_RD_Bind_Key,  bk_map_zoom_out},  // Отдалить
+    {ITT_EFUNC,   "Maximum zoom out", "gjkysq vfcinf,",    M_RD_Bind_Key,  bk_map_zoom_max},  // Полный масштаб
+    {ITT_EFUNC,   "Follow mode",      "ht;bv cktljdfybz",  M_RD_Bind_Key,  bk_map_follow},    // Режим следования
+    {ITT_EFUNC,   "Overlay mode",     "ht;bv yfkj;tybz",   M_RD_Bind_Key,  bk_map_overlay},   // Режим наложения
+    {ITT_EFUNC,   "Rotate mode",      "ht;bv dhfotybz",    M_RD_Bind_Key,  bk_map_rotate},    // Режим вращения
+    {ITT_EFUNC,   "Toggle grid",      "ctnrf",             M_RD_Bind_Key,  bk_map_grid},      // Сетка
+    {ITT_EFUNC,   "Mark location",    "gjcnfdbnm jnvtnre", M_RD_Bind_Key,  bk_map_mark},      // Поставить отметку
+    {ITT_EFUNC,   "Clear all marks",  "e,hfnm jnvtnrb",    M_RD_Bind_Key,  bk_map_clearmark}, // Убрать отметки
+    {ITT_EMPTY,   NULL,               NULL,                NULL,           0},
+    {ITT_EMPTY,   NULL,               NULL,                NULL,           0},
+    {ITT_SETMENU, NULL,               NULL,                &Bindings1Menu, 0},                // Далее >
+    {ITT_SETMENU, NULL,               NULL,                &Bindings3Menu, 0},                // < Назад
+    {ITT_EMPTY,   NULL,               NULL,                NULL,           0}
 };
 
-key_page_t RD_Bindings_4 = {
-    &RD_Controls_Def,
-    &RD_Controls_Def_Rus,
-    M_RD_Choose_Bindings_3,
-    M_RD_Choose_Bindings_1,
-    'p', 'y', 'f', 'l',
-    "page 4/4", "cnhfybwf 4*4",
-    RD_Bindings_4_subtitles,
-    1,
-    {bk_map_toggle,
-     bk_map_zoom_in,
-     bk_map_zoom_out,
-     bk_map_zoom_max,
-     bk_map_follow,
-     bk_map_overlay,
-     bk_map_rotate,
-     bk_map_grid,
-     bk_map_mark,
-     bk_map_clearmark,
-     bk_null}
+static Menu_t Bindings4Menu = {
+    35, 35,
+    25,
+    "Keyboard bindings", "Yfcnhjqrb rkfdbfnehs", false, // Настройки клавиатуры
+    16, Bindings4Items, false,
+    M_RD_Draw_Bindings,
+    &BindingsPageDescriptor,
+    &ControlsMenu,
+    1
 };
-
-menu_t*  RD_Bindings_Menu_Def_4;
-menu_t*  RD_Bindings_Menu_Def_4_Rus;
 
 
 // -----------------------------------------------------------------------------
 // Mouse bindings
 // -----------------------------------------------------------------------------
 
-enum
-{
-    rd_mouse_bindings_attack,
-    rd_mouse_bindings_use,
-    rd_mouse_bindings_forward,
-    rd_mouse_bindings_backward,
-    rd_mouse_bindings_strafeon,
-    rd_mouse_bindings_strafeleft,
-    rd_mouse_bindings_straferight,
-    rd_mouse_bindings_prevweapon,
-    rd_mouse_bindings_nextweapon,
-    rd_mouse_bindings_end
-} rd_mouse_bindings_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t RD_Mouse_Bindings_Menu[]=
-{
-    {1, "Fire/Attack",     M_RD_Mouse_Bind_FireAttack,   'f'},
-    {1, "Use",             M_RD_Mouse_Bind_Use,          'u'},
-    {1, "Move Forward",    M_RD_Mouse_Bind_MoveForward,  'm'},
-    {1, "Move Backward",   M_RD_Mouse_Bind_MoveBackward, 'm'},
-    {1, "Strafe On",       M_RD_Mouse_Bind_StrafeOn,     's'},
-    {1, "Strafe Left",     M_RD_Mouse_Bind_StrafeLeft,   's'},
-    {1, "Strafe Right",    M_RD_Mouse_Bind_StrafeRight,  's'},
-    {1, "Previous Weapon", M_RD_Mouse_Bind_PrevWeapon,   't'},
-    {1, "Next Weapon",     M_RD_Mouse_Bind_NextWeapon,   't'},
-    {-1,"",0,'\0'}
+static MenuItem_t MouseBindingsItems[] = {
+    {ITT_TITLE, "Buttons",         "ryjgrb",            NULL,                          0}, // Кнопки
+    {ITT_EFUNC, "Fire/Attack",     "fnfrf*cnhtkm,f",    M_RD_Mouse_Bind_FireAttack,   0}, // Атака/стрельба
+    {ITT_EFUNC, "Use",             "bcgjkmpjdfnm",      M_RD_Mouse_Bind_Use,          0}, // Использовать
+    {ITT_EFUNC, "Move Forward",    "ldb;tybt dgthtl",   M_RD_Mouse_Bind_MoveForward,  0}, // Движение вперед
+    {ITT_EFUNC, "Move Backward",   "ldb;tybt yfpfl",    M_RD_Mouse_Bind_MoveBackward, 0}, // Движение назад
+    {ITT_EFUNC, "Strafe On",       "ldb;tybt ,jrjv",    M_RD_Mouse_Bind_StrafeOn,     0}, // Движение боком
+    {ITT_EFUNC, "Strafe Left",     ",jrjv dktdj",       M_RD_Mouse_Bind_StrafeLeft,   0}, // Боком влево
+    {ITT_EFUNC, "Strafe Right",    ",jrjv dghfdj",      M_RD_Mouse_Bind_StrafeRight,  0}, // Боком вправо
+    {ITT_EFUNC, "Previous Weapon", "ghtlsleott jhe;bt", M_RD_Mouse_Bind_PrevWeapon,   0}, // Предыдущее оружие
+    {ITT_EFUNC, "Next Weapon",     "cktle.ott jhe;bt",  M_RD_Mouse_Bind_NextWeapon,   0}  // Следующее оружие
 };
 
-menu_t  RD_Mouse_Bindings_Menu_Def =
-{
-    rd_mouse_bindings_end,
-    &RD_Controls_Def,
-    RD_Mouse_Bindings_Menu,
+static Menu_t MouseBindingsMenu = {
+    35, 35,
+    25,
+    "Mouse bindings", "Yfcnhjqrb vsib", false, // Настройки мыши
+    10, MouseBindingsItems, false,
     M_RD_Draw_Mouse_Bindings,
-    35,35,
-    0
+    NULL,
+    &ControlsMenu,
+    1
 };
-
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t RD_Mouse_Bindings_Menu_Rus[]=
-{
-    {1, "fnfrf*cnhtkm,f",    M_RD_Mouse_Bind_FireAttack,   'f'}, // Атака/стрельба
-    {1, "bcgjkmpjdfnm",      M_RD_Mouse_Bind_Use,          'b'}, // Использовать
-    {1, "ldb;tybt dgthtl",   M_RD_Mouse_Bind_MoveForward,  'l'}, // Движение вперед
-    {1, "ldb;tybt yfpfl",    M_RD_Mouse_Bind_MoveBackward, 'l'}, // Движение назад
-    {1, "ldb;tybt ,jrjv",    M_RD_Mouse_Bind_StrafeOn,     'l'}, // Движение боком
-    {1, ",jrjv dktdj",       M_RD_Mouse_Bind_StrafeLeft,   ','}, // Боком влево
-    {1, ",jrjv dghfdj",      M_RD_Mouse_Bind_StrafeRight,  ','}, // Боком вправо
-    {1, "ghtlsleott jhe;bt", M_RD_Mouse_Bind_PrevWeapon,   'g'}, // Предыдущее оружие
-    {1, "cktle.ott jhe;bt",  M_RD_Mouse_Bind_NextWeapon,   'c'}, // Следующее оружие
-    {-1,"",0,'\0'}
-};
-
-menu_t  RD_Mouse_Bindings_Menu_Def_Rus =
-{
-    rd_mouse_bindings_end,
-    &RD_Controls_Def_Rus,
-    RD_Mouse_Bindings_Menu_Rus,
-    M_RD_Draw_Mouse_Bindings,
-    35,35,
-    0
-};
-
 
 // -----------------------------------------------------------------------------
 // Gameplay enhancements
 // -----------------------------------------------------------------------------
 
-enum
-{
-    rd_gameplay_1_brightmaps,
-    rd_gameplay_1_fake_contrast,
-    rd_gameplay_1_translucency,
-    rd_gameplay_1_improved_fuzz,
-    rd_gameplay_1_colored_blood,
-    rd_gameplay_1_swirling_liquids,
-    rd_gameplay_1_invul_sky,
-    rd_gameplay_1_linear_sky,
-    rd_gameplay_1_flip_weapons,
-    rd_gameplay_1_empty1,
-    rd_gameplay_1_empty2,
-    rd_gameplay_1_empty3,
-    rd_gameplay_1_next_page,
-    rd_gameplay_1_last_page,
-    rd_gameplay_1_end
-} rd_gameplay_1_e;
-
-enum
-{
-    rd_gameplay_2_extra_player_faces,
-    rd_gameplay_2_negative_health,
-    rd_gameplay_2_sbar_colored,
-    rd_gameplay_2_empty1,
-    rd_gameplay_2_high_value,
-    rd_gameplay_2_normal_value,
-    rd_gameplay_2_low_value,
-    rd_gameplay_2_critical_value,
-    rd_gameplay_2_armor_type_1,
-    rd_gameplay_2_armor_type_2,
-    rd_gameplay_2_armor_type_0,
-    rd_gameplay_2_next_page,
-    rd_gameplay_2_last_page,
-    rd_gameplay_2_end
-} rd_gameplay_2_e;
-
-enum
-{
-    rd_gameplay_3_z_axis_sfx,
-    rd_gameplay_3_play_exit_sfx,
-    rd_gameplay_3_crushed_corpses_sfx,
-    rd_gameplay_3_blazing_door_fix_sfx,
-    rd_gameplay_3_noise_alert_sfx,
-    rd_gameplay_3_empty1,
-    rd_gameplay_3_secret_notification,
-    rd_gameplay_3_infragreen_visor,
-    rd_gameplay_3_empty2,
-    rd_gameplay_3_empty3,
-    rd_gameplay_3_empty4,
-    rd_gameplay_3_next_page,
-    rd_gameplay_3_prev_page,
-    rd_gameplay_3_end
-} rd_gameplay_3_e;
-
-enum
-{
-    rd_gameplay_4_over_under,
-    rd_gameplay_4_torque,
-    rd_gameplay_4_weapon_bobbing,
-    rd_gameplay_4_ssg_blast_enemies,
-    rd_gameplay_4_randomly_flipcorpses,
-    rd_gameplay_4_floating_powerups,
-    rd_gameplay_4_toss_drop,
-    rd_gameplay_4_empty1,
-    rd_gameplay_4_crosshair_draw,
-    rd_gameplay_4_crosshair_type,
-    rd_gameplay_4_crosshair_scale,
-    rd_gameplay_4_next_page,
-    rd_gameplay_4_prev_page,
-    rd_gameplay_4_end
-} rd_gameplay_4_e;
-
-enum
-{
-    rd_gameplay_5_fix_map_errors,
-    rd_gameplay_5_flip_levels,
-    rd_gameplay_5_unlimited_lost_souls,
-    rd_gameplay_5_agressive_lost_souls,
-    rd_gameplay_5_pistol_start,
-    rd_gameplay_5_empty1,
-    rd_gameplay_5_demotimer,
-    rd_gameplay_5_demotimerdir,
-    rd_gameplay_5_demobar,
-    rd_gameplay_5_no_internal_demos,
-    rd_gameplay_5_empty2,
-    rd_gameplay_5_first_page,
-    rd_gameplay_5_prev_page,
-    rd_gameplay_5_end
-} rd_gameplay_5_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t RD_Gameplay_Menu_1[]=
-{
-    {2,"Brightmaps:",                  M_RD_Change_Brightmaps,     'b'},
-    {2,"Fake contrast:",               M_RD_Change_FakeContrast,   'f'},
-    {2,"Translucency:",                M_RD_Change_Translucency,   't'},
-    {2,"Fuzz effect:",                 M_RD_Change_ImprovedFuzz,   'f'},
-    {2,"Colored blood and corpses:",   M_RD_Change_ColoredBlood,   'c'},
-    {2,"Swirling liquids:",            M_RD_Change_SwirlingLiquids,'s'},
-    {2,"Invulnerability affects sky:", M_RD_Change_InvulSky,       'i'},
-    {2,"Sky drawing mode:",            M_RD_Change_LinearSky,      's'},
-    {2,"Flip weapons:",                M_RD_Change_FlipWeapons,    'f'},
-    {-1,"",0,'\0'},
-    {-1,"",0,'\0'},
-    {1,"", /* Next Page > */           M_RD_Choose_Gameplay_2,     'n'},
-    {1,"", /* < Last Page */           M_RD_Choose_Gameplay_5,     'l'},
-    {-1,"",0,'\0'}
+static const PageDescriptor_t GameplayPageDescriptor = {
+    5, GameplayMenuPages,
+    229, 155,
+    CR_WHITE
 };
 
-menu_t  RD_Gameplay_Def_1 =
-{
-    rd_gameplay_1_end,
-    &RD_Options_Def,
-    RD_Gameplay_Menu_1,
+static MenuItem_t Gameplay1Items[] = {
+    {ITT_TITLE,   "Graphical",                    "uhfabrf",                        NULL,                       0}, // Графика
+    {ITT_LRFUNC,  "Brightmaps:",                  ",hfqnvfggbyu:",                  M_RD_Change_Brightmaps,      0}, // Брайтмаппинг
+    {ITT_LRFUNC,  "Fake contrast:",               "Bvbnfwbz rjynhfcnyjcnb:",        M_RD_Change_FakeContrast,    0}, // Имитация контрастности
+    {ITT_LRFUNC,  "Translucency:",                "Ghjphfxyjcnm j,]trnjd:",         M_RD_Change_Translucency,    0}, // Прозрачность объектов
+    {ITT_LRFUNC,  "Fuzz effect:",                 "\'aatrn ievf:",                  M_RD_Change_ImprovedFuzz,    0}, // Эффект шума
+    {ITT_LRFUNC,  "Colored blood and corpses:",   "Hfpyjwdtnyfz rhjdm b nhegs:",    M_RD_Change_ColoredBlood,    0}, // Разноцветная кровь и трупы
+    {ITT_LRFUNC,  "Swirling liquids:",            "ekexityyfz fybvfwbz ;blrjcntq:", M_RD_Change_SwirlingLiquids, 0}, // Улучшенная анимация жидкостей
+    {ITT_LRFUNC,  "Invulnerability affects sky:", "ytezpdbvjcnm jrhfibdftn yt,j:",  M_RD_Change_InvulSky,        0}, // Неуязвимость окрашивает небо
+    {ITT_LRFUNC,  "Sky drawing mode:",            "ht;bv jnhbcjdrb yt,f:",          M_RD_Change_LinearSky,       0}, // Режим отрисовки неба
+    {ITT_LRFUNC,  "Flip weapons:",                "pthrfkmyjt jnhf;tybt jhe;bz:",   M_RD_Change_FlipWeapons,     0}, // Зеркальное отражение оружия
+    {ITT_EMPTY,   NULL,                           NULL,                      NULL,                             0},
+    {ITT_EMPTY,   NULL,                           NULL,                      NULL,                             0},
+    {ITT_SETMENU, NULL, /* Next Page > */         NULL,                             &Gameplay2Menu,               0}, // Далее >
+    {ITT_SETMENU, NULL, /* < Last Page */         NULL,                             &Gameplay5Menu,               0}  // < Назад
+};
+
+static Menu_t Gameplay1Menu = {
+    35, 35,
+    25,
+    "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
+    15, Gameplay1Items, false,
     M_RD_Draw_Gameplay_1,
-    35,35,
-    0
+    &GameplayPageDescriptor,
+    &RDOptionsMenu,
+    1
 };
 
-menuitem_t RD_Gameplay_Menu_2[]=
-{
-    {2,"Extra player faces:",       M_RD_Change_ExtraPlayerFaces,  'e'},
-    {2,"Show negative health:",     M_RD_Change_NegativeHealth,    's'},
-    {2,"Colored elements:",         M_RD_Change_SBarColored,       'c'},
-    {-1,"",0,'\0'},
-    {3,"",                          M_RD_Change_SBarHighValue,     'h'},
-    {3,"",                          M_RD_Change_SBarNormalValue,   'n'},
-    {3,"",                          M_RD_Change_SBarLowValue,      'l'},
-    {3,"",                          M_RD_Change_SBarCriticalValue, 'c'},
-    {3,"",                          M_RD_Change_SBarArmorType1,    'a'},
-    {3,"",                          M_RD_Change_SBarArmorType2,    'a'},
-    {3,"",                          M_RD_Change_SBarArmorType0,    'n'},
-    {1,"", /* Next Page > */        M_RD_Choose_Gameplay_3,        'n'},
-    {1,"", /* < Prev page */        M_RD_Choose_Gameplay_1,        'p'},
-    {-1,"",0,'\0'}
+static MenuItem_t Gameplay2Items[] = {
+    {ITT_TITLE,  "Status bar",            "cnfnec-,fh",                  NULL,                             0}, // Статус-бар
+    {ITT_LRFUNC, "Extra player faces:",   "Ljgjkybntkmyst kbwf buhjrf:", M_RD_Change_ExtraPlayerFaces,  0}, // Дополнительные лица игрока
+    {ITT_LRFUNC, "Show negative health:", "jnhbwfntkmyjt pljhjdmt:",     M_RD_Change_NegativeHealth,    0}, // Отрицательное здоровье
+    {ITT_LRFUNC, "Colored elements:",     "Hfpyjwdtnyst 'ktvtyns:",      M_RD_Change_SBarColored,       0}, // Разноцветные элементы
+    {ITT_TITLE,  "Coloring",              "wdtnf",                       NULL,                             0}, // Цвета
+    {ITT_LRFUNC, NULL,                    NULL,                          M_RD_Change_SBarHighValue,     0}, // Высокое значение
+    {ITT_LRFUNC, NULL,                    NULL,                          M_RD_Change_SBarNormalValue,   0}, // Нормальное значение
+    {ITT_LRFUNC, NULL,                    NULL,                          M_RD_Change_SBarLowValue,      0}, // Низкое значение
+    {ITT_LRFUNC, NULL,                    NULL,                          M_RD_Change_SBarCriticalValue, 0}, // Критическое значение
+    {ITT_LRFUNC, NULL,                    NULL,                          M_RD_Change_SBarArmorType1,    0}, // Тип брони 1
+    {ITT_LRFUNC, NULL,                    NULL,                          M_RD_Change_SBarArmorType2,    0}, // Тип брони 2
+    {ITT_LRFUNC, NULL,                    NULL,                          M_RD_Change_SBarArmorType0,    0}, // Отсутствие брони
+    {ITT_SETMENU,NULL, /* Next Page > */  NULL,                          &Gameplay3Menu,                0}, // Далее >
+    {ITT_SETMENU,NULL, /* < Prev page */  NULL,                          &Gameplay1Menu,                0}  // < Назад
 };
 
-menu_t  RD_Gameplay_Def_2 =
-{
-    rd_gameplay_2_end,
-    &RD_Options_Def,
-    RD_Gameplay_Menu_2,
+static Menu_t Gameplay2Menu = {
+    35, 35,
+    25,
+    "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
+    14, Gameplay2Items, false,
     M_RD_Draw_Gameplay_2,
-    35,35,
-    0
+    &GameplayPageDescriptor,
+    &RDOptionsMenu,
+    1
 };
 
-menuitem_t RD_Gameplay_Menu_3[]=
-{
-    {2,"Sound attenuation axises:",       M_RD_Change_ZAxisSfx,        's'},
-    {2,"Play exit sounds:",               M_RD_Change_ExitSfx,         'p'},
-    {2,"Sound of crushing corpses:",      M_RD_Change_CrushingSfx,     's'},
-    {2,"Single sound of blazing door:",   M_RD_Change_BlazingSfx,      's'},
-    {2,"Monster alert waking up others:", M_RD_Change_AlertSfx,        'm'},
-    {-1,"",0,'\0'},
-    {2,"Notify of revealed secrets:",     M_RD_Change_SecretNotify,    'n'},
-    {2,"Infragreen light amp. visor:",    M_RD_Change_InfraGreenVisor, 'i'},
-    {-1,"",0,'\0'},
-    {-1,"",0,'\0'},
-    {-1,"",0,'\0'},
-    {1,"", /* Next page >   */            M_RD_Choose_Gameplay_4,      'n'},
-    {1,"", /* < Prev page > */            M_RD_Choose_Gameplay_2,      'p'},
-    {-1,"",0,'\0'}
+static MenuItem_t Gameplay3Items[] = {
+    {ITT_TITLE,   "Audible",                         "Pder",                            NULL,                      0}, // Звук
+    {ITT_LRFUNC,  "Sound attenuation axises:",       "pfne[fybt pderf gj jczv:",      M_RD_Change_ZAxisSfx,        0}, // Затухание звука по осям
+    {ITT_LRFUNC,  "Play exit sounds:",               "Pderb ghb ds[jlt bp buhs:",     M_RD_Change_ExitSfx,         0}, // Звук при выходе из игры
+    {ITT_LRFUNC,  "Sound of crushing corpses:",      "Pder hfplfdkbdfybz nhegjd:",    M_RD_Change_CrushingSfx,     0}, // Звук раздавливания трупов
+    {ITT_LRFUNC,  "Single sound of blazing door:",   "Jlbyjxysq pder ,scnhjq ldthb:", M_RD_Change_BlazingSfx,      0}, // Одиночный звук быстрой двери
+    {ITT_LRFUNC,  "Monster alert waking up others:", "J,ofz nhtdjuf e vjycnhjd:",     M_RD_Change_AlertSfx,        0}, // Общая тревога у монстров
+    {ITT_TITLE,   "Tactical",                        "Nfrnbrf",                            NULL,                   0}, // Тактика
+    {ITT_LRFUNC,  "Notify of revealed secrets:",     "Cjj,ofnm j yfqltyyjv nfqybrt:", M_RD_Change_SecretNotify,    0}, // Сообщать о найденном тайнике
+    {ITT_LRFUNC,  "Infragreen light amp. visor:",    "Byahfptktysq dbpjh jcdtotybz:", M_RD_Change_InfraGreenVisor, 0}, // Инфразеленый визор освещения
+    {ITT_EMPTY,   NULL,                              NULL,                            NULL,                        0},
+    {ITT_EMPTY,   NULL,                              NULL,                            NULL,                        0},
+    {ITT_EMPTY,   NULL,                              NULL,                            NULL,                        0},
+    {ITT_SETMENU, NULL, /* Next page >   */          NULL,                            &Gameplay4Menu,              0}, // Далее >
+    {ITT_SETMENU, NULL, /* < Prev page > */          NULL,                            &Gameplay2Menu,              0}  // < Назад
 };
 
-menu_t  RD_Gameplay_Def_3 =
-{
-    rd_gameplay_3_end,
-    &RD_Options_Def,
-    RD_Gameplay_Menu_3,
+static Menu_t Gameplay3Menu = {
+    35, 35,
+    25,
+    "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
+    14, Gameplay3Items, false,
     M_RD_Draw_Gameplay_3,
-    35,35,
-    0
+    &GameplayPageDescriptor,
+    &RDOptionsMenu,
+    1
 };
 
-menuitem_t RD_Gameplay_Menu_4[]=
-{
-    {2,"Walk over and under monsters:",       M_RD_Change_WalkOverUnder,   'w'},
-    {2,"Corpses sliding from the ledges:",    M_RD_Change_Torque,          'c'},
-    {2,"Weapon bobbing while firing:",        M_RD_Change_Bobbing,         'w'},
-    {2,"Lethal pellet of a point-blank SSG:", M_RD_Change_SSGBlast,        'l'},
-    {2,"Randomly mirrored corpses:",          M_RD_Change_FlipCorpses,     'r'},
-    {2,"Floating powerups:",                  M_RD_Change_FloatPowerups,   'f'},
-    {2,"Items are tossed when dropped:",      M_RD_Change_TossDrop,        'i'},
-    {-1,"",0,'\0'},
-    {2,"Draw crosshair:",                     M_RD_Change_CrosshairDraw,   'd'},
-    {2,"Indication:",                         M_RD_Change_CrosshairType,   'i'},
-    {2,"Increased size:",                     M_RD_Change_CrosshairScale,  'i'},
-    {1,"", /* Next page >   */                M_RD_Choose_Gameplay_5,      'n'},
-    {1,"", /* < Prev page > */                M_RD_Choose_Gameplay_3,      'p'},
-    {-1,"",0,'\0'}
+static MenuItem_t Gameplay4Items[] = {
+    {ITT_TITLE,   "Physical",                                  "Abpbrf",                              NULL,                       0}, // Физика
+    {ITT_LRFUNC,  "Walk over and under monsters:",       "Gthtvtotybt gjl*yfl vjycnhfvb:",  M_RD_Change_WalkOverUnder,  0}, // Перемещение над/под монстрами
+    {ITT_LRFUNC,  "Corpses sliding from the ledges:",    "Nhegs cgjkpf.n c djpdsitybq:",    M_RD_Change_Torque,         0}, // Трупы сползают с возвышений
+    {ITT_LRFUNC,  "Weapon bobbing while firing:",        "Ekexityyjt gjrfxbdfybt jhe;bz:",  M_RD_Change_Bobbing,        0}, // Улучшенное покачивание оружия
+    {ITT_LRFUNC,  "Lethal pellet of a point-blank SSG:", "ldecndjkrf hfphsdftn dhfujd:",    M_RD_Change_SSGBlast,       0}, // Двустволка разрывает врагов
+    {ITT_LRFUNC,  "Randomly mirrored corpses:",          "pthrfkbhjdfybt nhegjd:",          M_RD_Change_FlipCorpses,    0}, // Зеркалирование трупов
+    {ITT_LRFUNC,  "Floating powerups:",                  "Ktdbnbhe.obt caths-fhntafrns:",   M_RD_Change_FloatPowerups,  0}, // Левитирующие сферы-артефакты
+    {ITT_LRFUNC,  "Items are tossed when dropped:",      "Gjl,hfcsdfnm dsgfdibt ghtlvtns:", M_RD_Change_TossDrop,       0}, // Подбрасывать выпавшие предметы
+    {ITT_TITLE,   "Crosshair",                           "Ghbwtk",                          NULL,                       0}, // Прицел
+    {ITT_LRFUNC,  "Draw crosshair:",                     "Jnj,hf;fnm ghbwtk:",              M_RD_Change_CrosshairDraw,  0}, // Отображать прицел
+    {ITT_LRFUNC,  "Indication:",                         "Bylbrfwbz:",                      M_RD_Change_CrosshairType,  0}, // Индикация
+    {ITT_LRFUNC,  "Increased size:",                     "Edtkbxtyysq hfpvth:",             M_RD_Change_CrosshairScale, 0}, // Увеличенный размер
+    {ITT_SETMENU, NULL, /* Next page >   */              NULL,                              &Gameplay5Menu,             0}, // Далее >
+    {ITT_SETMENU, NULL, /* < Prev page > */              NULL,                              &Gameplay3Menu,             0}  // < Назад
 };
 
-menu_t  RD_Gameplay_Def_4 =
-{
-    rd_gameplay_4_end,
-    &RD_Options_Def,
-    RD_Gameplay_Menu_4,
+static Menu_t Gameplay4Menu = {
+    35, 35,
+    25,
+    "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
+    14, Gameplay4Items, false,
     M_RD_Draw_Gameplay_4,
-    35,35,
-    0
+    &GameplayPageDescriptor,
+    &RDOptionsMenu,
+    1
 };
 
-menuitem_t RD_Gameplay_Menu_5[]=
-{
-    {2,"Fix errors of vanilla maps:",         M_RD_Change_FixMapErrors,     'f'},
-    {2,"Flip game levels:",                   M_RD_Change_FlipLevels,       'f'},
-    {2,"Pain Elemental without Souls limit:", M_RD_Change_LostSoulsQty,     'p'},
-    {2,"More aggressive lost souls:",         M_RD_Change_LostSoulsAgr,     'm'},
-    {2,"Pistol start game mode:",             M_RD_Change_PistolStart,      's'},
-    {-1,"",0,'\0'},
-    {2,"Show demo timer:",                    M_RD_Change_DemoTimer,        's'},
-    {2,"timer direction:",                    M_RD_Change_DemoTimerDir,     't'},
-    {2,"Show progress bar:",                  M_RD_Change_DemoBar,          's'},
-    {2,"Play internal demos:",                M_RD_Change_NoInternalDemos,  'p'},
-    {-1,"",0,'\0'},
-    {1,"", /* First page >   */               M_RD_Choose_Gameplay_1,       'n'},
-    {1,"", /* < Prev page > */                M_RD_Choose_Gameplay_4,       'p'},
-    {-1,"",0,'\0'}
+static MenuItem_t Gameplay5Items[] = {
+    {ITT_TITLE,   "Gameplay",                            "Utqvgktq",                        NULL,                        0}, // Геймплей
+    {ITT_LRFUNC,  "Fix errors of vanilla maps:",         "ecnhfyznm jib,rb jhbu> ehjdytq:", M_RD_Change_FixMapErrors,    0}, // Устранять ошибки ориг. уровней
+    {ITT_LRFUNC,  "Flip game levels:",                   "pthrfkmyjt jnhf;tybt ehjdytq:",   M_RD_Change_FlipLevels,      0}, // Зеркальное отражение уровней
+    {ITT_LRFUNC,  "Pain Elemental without Souls limit:", "'ktvtynfkm ,tp juhfybxtybz lei:", M_RD_Change_LostSoulsQty,    0}, // Элементаль без ограничения душ
+    {ITT_LRFUNC,  "More aggressive lost souls:",         "gjdsityyfz fuhtccbdyjcnm lei:",   M_RD_Change_LostSoulsAgr,    0}, // Повышенная агрессивность душ
+    {ITT_LRFUNC,  "Pistol start game mode:",             NULL, /*[JN] Joint EN/RU string*/  M_RD_Change_PistolStart,     0}, // Режим игры "Pistol start"
+    {ITT_TITLE,   "Demos",                               "Ltvjpfgbcb",                      NULL,                        0}, // Демозаписи
+    {ITT_LRFUNC,  "Show demo timer:",                    "jnj,hf;fnm nfqvth:",              M_RD_Change_DemoTimer,       0}, // Отображать таймер
+    {ITT_LRFUNC,  "timer direction:",                    "dhtvz nfqvthf:",                  M_RD_Change_DemoTimerDir,    0}, // Время таймера
+    {ITT_LRFUNC,  "Show progress bar:",                  "irfkf ghjuhtccf:",                M_RD_Change_DemoBar,         0}, // Шкала прогресса
+    {ITT_LRFUNC,  "Play internal demos:",                "Ghjbuhsdfnm ltvjpfgbcb:",         M_RD_Change_NoInternalDemos, 0}, // Проигрывать демозаписи
+    {ITT_EMPTY,   NULL,                                  NULL,                              NULL,                        0},
+    {ITT_SETMENU, NULL, /* First page > */               NULL,                              &Gameplay1Menu,              0}, // Далее >
+    {ITT_SETMENU, NULL, /* < Prev page > */              NULL,                              &Gameplay4Menu,              0}  // < Назад
 };
 
-menu_t  RD_Gameplay_Def_5 =
-{
-    rd_gameplay_5_end,
-    &RD_Options_Def,
-    RD_Gameplay_Menu_5,
+static Menu_t Gameplay5Menu = {
+    35, 35,
+    25,
+    "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
+    14, Gameplay5Items, false,
     M_RD_Draw_Gameplay_5,
-    35,35,
-    0
-};
-
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t RD_Gameplay_Menu_1_Rus[]=
-{
-    {2,",hfqnvfggbyu:",                     M_RD_Change_Brightmaps,     ','},   // Брайтмаппинг
-    {2,"Bvbnfwbz rjynhfcnyjcnb:",           M_RD_Change_FakeContrast,   'b'},   // Имитация контрастности
-    {2,"Ghjphfxyjcnm j,]trnjd:",            M_RD_Change_Translucency,   'g'},   // Прозрачность объектов
-    {2,"\'aatrn ievf:",                     M_RD_Change_ImprovedFuzz,   '\''},  // Эффект шума
-    {2,"Hfpyjwdtnyfz rhjdm b nhegs:",       M_RD_Change_ColoredBlood,   'h'},   // Разноцветная кровь и трупы
-    {2,"ekexityyfz fybvfwbz ;blrjcntq:",    M_RD_Change_SwirlingLiquids,'e'},   // Улучшенная анимация жидкостей
-    {2,"ytezpdbvjcnm jrhfibdftn yt,j:",     M_RD_Change_InvulSky,       'y'},   // Неуязвимость окрашивает небо
-    {2,"ht;bv jnhbcjdrb yt,f:",             M_RD_Change_LinearSky,      'h'},   // Режим отрисовки неба
-    {2,"pthrfkmyjt jnhf;tybt jhe;bz:",      M_RD_Change_FlipWeapons,    'p'},   // Зеркальное отражение оружия
-    {-1,"",0,'\0'},
-    {-1,"",0,'\0'},
-    {1,"",                                  M_RD_Choose_Gameplay_2,     'l'},   // Далее >
-    {1,"",                                  M_RD_Choose_Gameplay_5,     'y'},   // < Назад
-    {-1,"",0,'\0'}
-};
-
-menu_t  RD_Gameplay_Def_1_Rus =
-{
-    rd_gameplay_1_end,
-    &RD_Options_Def_Rus,
-    RD_Gameplay_Menu_1_Rus,
-    M_RD_Draw_Gameplay_1,
-    35,35,
-    0
-};
-
-menuitem_t RD_Gameplay_Menu_2_Rus[]=
-{
-    {2,"Ljgjkybntkmyst kbwf buhjrf:",       M_RD_Change_ExtraPlayerFaces,  'l'},    // Дополнительные лица игрока
-    {2,"jnhbwfntkmyjt pljhjdmt:",           M_RD_Change_NegativeHealth,    'j'},    // Отрицательное здоровье
-    {2,"Hfpyjwdtnyst 'ktvtyns:",            M_RD_Change_SBarColored,       'h'},    // Разноцветные элементы
-    {-1,"",0,'\0'},
-    {3,"",                 M_RD_Change_SBarHighValue,     'd'},    // Высокое значение
-    {3,"",              M_RD_Change_SBarNormalValue,   'y'},    // Нормальное значение
-    {3,"",                  M_RD_Change_SBarLowValue,      'y'},    // Низкое значение
-    {3,"",             M_RD_Change_SBarCriticalValue, 'r'},    // Критическое значение
-    {3,"",                      M_RD_Change_SBarArmorType1,    'n'},    // Тип брони 1
-    {3,"",                      M_RD_Change_SBarArmorType2,    'n'},    // Тип брони 2
-    {3,"",                 M_RD_Change_SBarArmorType0,    'k'},    // Отсутствие брони
-    {1,"",                                  M_RD_Choose_Gameplay_3,        'l'},    // Далее >
-    {1,"",                                  M_RD_Choose_Gameplay_1,        'y'},    // < Назад
-    {-1,"",0,'\0'}
-};
-
-menu_t  RD_Gameplay_Def_2_Rus =
-{
-    rd_gameplay_2_end,
-    &RD_Options_Def_Rus,
-    RD_Gameplay_Menu_2_Rus,
-    M_RD_Draw_Gameplay_2,
-    35,35,
-    0
-};
-
-menuitem_t RD_Gameplay_Menu_3_Rus[]=
-{
-    {2,"pfne[fybt pderf gj jczv:",          M_RD_Change_ZAxisSfx,           'p'},   // Затухание звука по осям
-    {2,"Pderb ghb ds[jlt bp buhs:",         M_RD_Change_ExitSfx,            'p'},   // Звук при выходе из игры
-    {2,"Pder hfplfdkbdfybz nhegjd:",        M_RD_Change_CrushingSfx,        'p'},   // Звук раздавливания трупов
-    {2,"Jlbyjxysq pder ,scnhjq ldthb:",     M_RD_Change_BlazingSfx,         'j'},   // Одиночный звук быстрой двери
-    {2,"J,ofz nhtdjuf e vjycnhjd:",         M_RD_Change_AlertSfx,           'j'},   // Общая тревога у монстров
-    {-1,"",0,'\0'},                                                                 //
-    {2,"Cjj,ofnm j yfqltyyjv nfqybrt:",     M_RD_Change_SecretNotify,       'c'},   // Сообщать о найденном тайнике
-    {2,"Byahfptktysq dbpjh jcdtotybz:",     M_RD_Change_InfraGreenVisor,    'b'},   // Инфразеленый визор освещения
-    {-1,"",0,'\0'},                                                                 //
-    {-1,"",0,'\0'},
-    {-1,"",0,'\0'},
-    {1,"",                                  M_RD_Choose_Gameplay_4,         'l'},   // Далее >
-    {1,"",                                  M_RD_Choose_Gameplay_2,         'y'},   // < Назад
-    {-1,"",0,'\0'}
-};
-
-menu_t  RD_Gameplay_Def_3_Rus =
-{
-    rd_gameplay_3_end,
-    &RD_Options_Def_Rus,
-    RD_Gameplay_Menu_3_Rus,
-    M_RD_Draw_Gameplay_3,
-    35,35,
-    0
-};
-
-menuitem_t RD_Gameplay_Menu_4_Rus[]=
-{
-    {2,"Gthtvtotybt gjl*yfl vjycnhfvb:",    M_RD_Change_WalkOverUnder,      'g'},   // Перемещение над/под монстрами
-    {2,"Nhegs cgjkpf.n c djpdsitybq:",      M_RD_Change_Torque,             'n'},   // Трупы сползают с возвышений
-    {2,"Ekexityyjt gjrfxbdfybt jhe;bz:",    M_RD_Change_Bobbing,            'e'},   // Улучшенное покачивание оружия
-    {2,"ldecndjkrf hfphsdftn dhfujd:",      M_RD_Change_SSGBlast,           'l'},   // Двустволка разрывает врагов
-    {2,"pthrfkbhjdfybt nhegjd:",            M_RD_Change_FlipCorpses,        'p'},   // Зеркалирование трупов
-    {2,"Ktdbnbhe.obt caths-fhntafrns:",     M_RD_Change_FloatPowerups,      'k'},   // Левитирующие сферы-артефакты
-    {2,"Gjl,hfcsdfnm dsgfdibt ghtlvtns:",   M_RD_Change_TossDrop,           'g'},   // Подбрасывать выпавшие предметы
-    {-1,"",0,'\0'},                                                                 //
-    {2,"Jnj,hf;fnm ghbwtk:",                M_RD_Change_CrosshairDraw,      'j'},   // Отображать прицел
-    {2,"Bylbrfwbz:",                        M_RD_Change_CrosshairType,      'b'},   // Индикация
-    {2,"Edtkbxtyysq hfpvth:",               M_RD_Change_CrosshairScale,     'e'},   // Увеличенный размер
-    {1,"",                                  M_RD_Choose_Gameplay_5,         'l'},   // Далее >
-    {1,"",                                  M_RD_Choose_Gameplay_3,         'y'},   // < Назад
-    {-1,"",0,'\0'}
-};
-
-menu_t  RD_Gameplay_Def_4_Rus =
-{
-    rd_gameplay_4_end,
-    &RD_Options_Def_Rus,
-    RD_Gameplay_Menu_4_Rus,
-    M_RD_Draw_Gameplay_4,
-    35,35,
-    0
-};
-
-menuitem_t RD_Gameplay_Menu_5_Rus[]=
-{
-    {2,"ecnhfyznm jib,rb jhbu> ehjdytq:",   M_RD_Change_FixMapErrors,       'e'},   // Устранять ошибки ориг. уровней
-    {2,"pthrfkmyjt jnhf;tybt ehjdytq:",     M_RD_Change_FlipLevels,         'p'},   // Зеркальное отражение уровней
-    {2,"'ktvtynfkm ,tp juhfybxtybz lei:",   M_RD_Change_LostSoulsQty,       '\''},  // Элементаль без ограничения душ
-    {2,"gjdsityyfz fuhtccbdyjcnm lei:",     M_RD_Change_LostSoulsAgr,       'g'},   // Повышенная агрессивность душ
-    {2,"", /* [JN] Joint EN/RU string */    M_RD_Change_PistolStart,        'y'},   // Режим игры "Pistol start"
-    {-1,"",0,'\0'},
-    {2,"jnj,hf;fnm nfqvth:",                M_RD_Change_DemoTimer,          's'},   // Отображать таймер
-    {2,"dhtvz nfqvthf:",                    M_RD_Change_DemoTimerDir,       's'},   // Время таймера
-    {2,"irfkf ghjuhtccf:",                  M_RD_Change_DemoBar,            'g'},   // Шкала прогресса
-    {2,"Ghjbuhsdfnm ltvjpfgbcb:",           M_RD_Change_NoInternalDemos,    'g'},   // Проигрывать демозаписи
-    {-1,"",0,'\0'},
-    {1,"",                                  M_RD_Choose_Gameplay_1,         'n'},   // Далее >
-    {1,"",                                  M_RD_Choose_Gameplay_4,         'p'},   // < Назад
-    {-1,"",0,'\0'}
-};
-
-menu_t  RD_Gameplay_Def_5_Rus =
-{
-    rd_gameplay_5_end,
-    &RD_Options_Def_Rus,
-    RD_Gameplay_Menu_5_Rus,
-    M_RD_Draw_Gameplay_5,
-    35,35,
-    0
+    &GameplayPageDescriptor,
+    &RDOptionsMenu,
+    1
 };
 
 // -----------------------------------------------------------------------------
 // Level select
 // -----------------------------------------------------------------------------
 
-enum
-{
-    rd_level_1_1,
-    rd_level_1_2,
-    rd_level_1_3,
-    rd_level_1_4,
-    rd_level_1_5,
-    rd_level_1_6,
-    rd_level_1_7,
-    rd_level_1_8,
-    rd_level_1_9,
-    rd_level_1_10,
-    rd_level_1_11,
-    rd_level_1_12,
-    rd_level_1_13,
-    rd_level_1_14,
-    rd_level_1_15,
-    rd_level_1_16,
-    rd_level_1_17,
-    rd_level_1_18,
-    rd_level_1_end
-} rd_level_1_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t RD_Level_Menu_1[]=
-{
-    {2, "skill level",      M_RD_Change_Selective_Skill,        's'},
-    {3, "episode",          M_RD_Change_Selective_Episode,      'e'},
-    {3, "map",              M_RD_Change_Selective_Map,          'm'},
-    {-1,"",0,'\0'},         // Player
-    {2, "health",           M_RD_Change_Selective_Health,       'h'},
-    {2, "armor",            M_RD_Change_Selective_Armor,        'a'},
-    {2, "armor type",       M_RD_Change_Selective_ArmorType,    'a'},
-    {-1,"",0,'\0'},         // Weapons
-    {2, "chainsaw",         M_RD_Change_Selective_WP_Chainsaw,  'c'},
-    {2, "shotgun",          M_RD_Change_Selective_WP_Shotgun,   's'},
-    {3, "super shotgun",    M_RD_Change_Selective_WP_SSgun,     's'},
-    {2, "chaingun",         M_RD_Change_Selective_WP_Chaingun,  'c'},
-    {2, "rocket launcher",  M_RD_Change_Selective_WP_RLauncher, 'r'},
-    {3, "plasmagun",        M_RD_Change_Selective_WP_Plasmagun, 'p'},
-    {3, "bfg9000",          M_RD_Change_Selective_WP_BFG9000,   'b'},
-    {-1,"",0,'\0'},
-    {1, "",                 M_RD_Choose_LevelSelect_2,          'n'},
-    {1, "",                 G_DoSelectiveGame,                  's'},
-    {-1,"",0,'\0'}
+static const PageDescriptor_t LevelSelectPageDescriptor = {
+    2, LevelSelectMenuPages,
+    240, 180,
+    CR_WHITE
 };
 
-menu_t RD_Level_Def_1 =
-{
-    rd_level_1_end,
-    &RD_Options_Def,
-    RD_Level_Menu_1,
+static MenuItem_t LevelSelect1Items[] = {
+    {ITT_LRFUNC,  "skill level",      "ckj;yjcnm",          M_RD_Change_Selective_Skill,        0}, // Сложность
+    {ITT_LRFUNC,  "episode",          "\'gbpjl",            M_RD_Change_Selective_Episode,      0}, // Эпизод
+    {ITT_LRFUNC,  "map",              "ehjdtym",            M_RD_Change_Selective_Map,          0}, // Уровень
+    {ITT_TITLE,   "PLAYER",           "buhjr",              NULL,                               0}, // Игрок
+    {ITT_LRFUNC,  "health",           "pljhjdmt",           M_RD_Change_Selective_Health,       0}, // Здоровье
+    {ITT_LRFUNC,  "armor",            ",hjyz",              M_RD_Change_Selective_Armor,        0}, // Броня
+    {ITT_LRFUNC,  "armor type",       "nbg ,hjyb",          M_RD_Change_Selective_ArmorType,    0}, // Тип брони
+    {ITT_TITLE,   "WEAPONS",          "jhe;bt",             NULL,                               0}, // Оружие
+    {ITT_LRFUNC,  "chainsaw",         ",typjgbkf",          M_RD_Change_Selective_WP_Chainsaw,  0}, // Бензопила
+    {ITT_LRFUNC,  "shotgun",          "he;mt",              M_RD_Change_Selective_WP_Shotgun,   0}, // Ружье
+    {ITT_LRFUNC,  "super shotgun",    "ldecndjkmyjt he;mt", M_RD_Change_Selective_WP_SSgun,     0}, // Двуствольное ружье
+    {ITT_LRFUNC,  "chaingun",         "gektvtn",            M_RD_Change_Selective_WP_Chaingun,  0}, // Пулемет
+    {ITT_LRFUNC,  "rocket launcher",  "hfrtnybwf",          M_RD_Change_Selective_WP_RLauncher, 0}, // Ракетница
+    {ITT_LRFUNC,  "plasmagun",        "gkfpvtyyfz geirf",   M_RD_Change_Selective_WP_Plasmagun, 0}, // Плазменная пушка
+    {ITT_LRFUNC,  "bfg9000",          "&9000",              M_RD_Change_Selective_WP_BFG9000,   0}, // BFG9000
+    {ITT_EMPTY,   NULL,               NULL,                 NULL,                               0},
+    {ITT_SETMENU, NULL,               NULL,                 &LevelSelect2Menu,                  0},
+    {ITT_EFUNC,   NULL,               NULL,                 G_DoSelectiveGame,                  0}
+};
+
+static Menu_t LevelSelect1Menu = {
+    75, 72,
+    20,
+    "LEVEL SELECT", "DS<JH EHJDYZ", false, // ВЫБОР УРОВНЯ
+    18, LevelSelect1Items, false,
     M_RD_Draw_Level_1,
-    75,20,
+    &LevelSelectPageDescriptor,
+    &RDOptionsMenu,
     0
 };
 
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t RD_Level_Menu_1_Rus[]=
-{
-    {2, "ckj;yjcnm",        M_RD_Change_Selective_Skill,        's'}, // Сложность
-    {3, "\'gbpjl",          M_RD_Change_Selective_Episode,      'e'}, // Эпизод
-    {3, "ehjdtym",          M_RD_Change_Selective_Map,          'm'}, // Уровень
-    {-1,"",0,'\0'},         // Игрок
-    {2, "pljhjdmt",         M_RD_Change_Selective_Health,       'h'}, // Здоровье
-    {2, ",hjyz",            M_RD_Change_Selective_Armor,        'a'}, // Броня
-    {2, "nbg ,hjyb",        M_RD_Change_Selective_ArmorType,    'a'}, // Тип брони
-    {-1,"",0,'\0'},         // Оружие
-    {2, ",typjgbkf",        M_RD_Change_Selective_WP_Chainsaw,  'c'}, // Бензопила
-    {2, "he;mt",            M_RD_Change_Selective_WP_Shotgun,   's'}, // Ружье
-    {3, "ldecndjkmyjt he;mt",M_RD_Change_Selective_WP_SSgun,    's'}, // Двуствольное ружье
-    {2, "gektvtn",          M_RD_Change_Selective_WP_Chaingun,  'c'}, // Пулемет
-    {2, "hfrtnybwf",        M_RD_Change_Selective_WP_RLauncher, 'r'}, // Ракетница
-    {3, "gkfpvtyyfz geirf", M_RD_Change_Selective_WP_Plasmagun, 'p'}, // Плазменная пушка
-    {3, "&9000",            M_RD_Change_Selective_WP_BFG9000,   'b'}, // BFG9000
-    {-1,"",0,'\0'},
-    {1, "",                 M_RD_Choose_LevelSelect_2,          'n'},
-    {1, "",                 G_DoSelectiveGame,                  's'},
-    {-1,"",0,'\0'}
+static MenuItem_t LevelSelect2Items[] = {
+    {ITT_LRFUNC,  "backpack",            "h.rpfr",             M_RD_Change_Selective_Backpack, 0}, // Рюкзак
+    {ITT_LRFUNC,  "bullets",             "gekb",               M_RD_Change_Selective_Ammo_0,   0}, // Пули
+    {ITT_LRFUNC,  "shells",              "lhj,m",              M_RD_Change_Selective_Ammo_1,   0}, // Дробь
+    {ITT_LRFUNC,  "rockets",             "hfrtns",             M_RD_Change_Selective_Ammo_3,   0}, // Ракеты
+    {ITT_LRFUNC,  "cells",               "\'ythubz",           M_RD_Change_Selective_Ammo_2,   0}, // Энергия
+    {ITT_TITLE,   "KEYS",                "rk.xb",              NULL,                           0}, // Ключи
+    {ITT_LRFUNC,  "blue keycard",        "cbyzz rk.x-rfhnf",   M_RD_Change_Selective_Key_0,    0}, // Синяя ключ-карта
+    {ITT_LRFUNC,  "yellow keycard",      ";tknfz rk.x-rfhnf",  M_RD_Change_Selective_Key_1,    0}, // Желтая ключ-карта
+    {ITT_LRFUNC,  "red keycard",         "rhfcyfz rk.x-rfhnf", M_RD_Change_Selective_Key_2,    0}, // Красная ключ-карта
+    {ITT_LRFUNC,  "blue skull key",      "cbybq rk.x-xthtg",   M_RD_Change_Selective_Key_3,    0}, // Синий ключ-череп
+    {ITT_LRFUNC,  "yellow skull key",    ";tknsq rk.x-xthtg",  M_RD_Change_Selective_Key_4,    0}, // Желтый ключ-череп
+    {ITT_LRFUNC,  "red skull key",       "rhfcysq rk.x-xthtg", M_RD_Change_Selective_Key_5,    0}, // Красный ключ-череп
+    {ITT_TITLE,   "EXTRA",               "vjycnhs",            NULL,                           0}, // Монстры
+    {ITT_LRFUNC,  "fast monsters",       "ecrjhtyyst",         M_RD_Change_Selective_Fast,     0}, // Ускоренные
+    {ITT_LRFUNC,  "respawning monsters", "djcrhtif.obtcz",     M_RD_Change_Selective_Respawn,  0}, // Воскрешающиеся
+    {ITT_EMPTY,   NULL,                  NULL,                 NULL,                           0},
+    {ITT_SETMENU, NULL,                  NULL,                 &LevelSelect1Menu,              0},
+    {ITT_EFUNC,   NULL,                  NULL,                 G_DoSelectiveGame,              0}
 };
 
-menu_t RD_Level_Def_1_Rus =
-{
-    rd_level_1_end,
-    &RD_Options_Def_Rus,
-    RD_Level_Menu_1_Rus,
-    M_RD_Draw_Level_1,
-    72,20,
-    0
-};
-
-enum
-{
-    rd_level_2_1,
-    rd_level_2_2,
-    rd_level_2_3,
-    rd_level_2_4,
-    rd_level_2_5,
-    rd_level_2_6,
-    rd_level_2_7,
-    rd_level_2_8,
-    rd_level_2_9,
-    rd_level_2_10,
-    rd_level_2_11,
-    rd_level_2_12,
-    rd_level_2_13,
-    rd_level_2_14,
-    rd_level_2_15,
-    rd_level_2_16,
-    rd_level_2_17,
-    rd_level_2_18,
-    rd_level_2_end
-} rd_level_2_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t RD_Level_Menu_2[]=
-{
-    {2, "backpack",         M_RD_Change_Selective_Backpack,     'b'},
-    {2, "bullets",          M_RD_Change_Selective_Ammo_0,       'b'},
-    {2, "shells",           M_RD_Change_Selective_Ammo_1,       's'},
-    {2, "rockets",          M_RD_Change_Selective_Ammo_3,       'r'},
-    {2, "cells",            M_RD_Change_Selective_Ammo_2,       'c'},
-    {-1,"",0,'\0'},         // Keys
-    {2, "blue keycard",     M_RD_Change_Selective_Key_0,        'b'},
-    {2, "yellow keycard",   M_RD_Change_Selective_Key_1,        'y'},
-    {2, "red keycard",      M_RD_Change_Selective_Key_2,        'r'},
-    {2, "blue skull key",   M_RD_Change_Selective_Key_3,        'b'},
-    {2, "yellow skull key", M_RD_Change_Selective_Key_4,        'y'},
-    {2, "red skull key",    M_RD_Change_Selective_Key_5,        'r'},
-    {-1,"",0,'\0'},         // Extra
-    {2, "fast monsters",    M_RD_Change_Selective_Fast,         'f'},
-    {2, "respawning monsters",M_RD_Change_Selective_Respawn,    'r'},
-    {-1,"",0,'\0'},
-    {1, "",                 M_RD_Choose_LevelSelect_1,          'p'},
-    {1, "",                 G_DoSelectiveGame,                  's'},
-    {-1,"",0,'\0'}
-};
-
-menu_t RD_Level_Def_2 =
-{
-    rd_level_2_end,
-    &RD_Options_Def,
-    RD_Level_Menu_2,
+static Menu_t LevelSelect2Menu = {
+    75, 72,
+    20,
+    "LEVEL SELECT", "DS<JH EHJDYZ", false, // ВЫБОР УРОВНЯ
+    18, LevelSelect2Items, false,
     M_RD_Draw_Level_2,
-    75,20,
+    &LevelSelectPageDescriptor,
+    &RDOptionsMenu,
     0
 };
-
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t RD_Level_Menu_2_Rus[]=
-{
-    {2, "h.rpfr",               M_RD_Change_Selective_Backpack, 'b'}, // Рюкзак
-    {2, "gekb",                 M_RD_Change_Selective_Ammo_0,   'b'}, // Пули
-    {2, "lhj,m",                M_RD_Change_Selective_Ammo_1,   's'}, // Дробь
-    {2, "hfrtns",               M_RD_Change_Selective_Ammo_3,   'r'}, // Ракеты
-    {2, "\'ythubz",             M_RD_Change_Selective_Ammo_2,   'c'}, // Энергия
-    {-1,"",0,'\0'},             // Ключи
-    {2, "cbyzz rk.x-rfhnf",     M_RD_Change_Selective_Key_0,    'b'}, // Синяя ключ-карта
-    {2, ";tknfz rk.x-rfhnf",    M_RD_Change_Selective_Key_1,    'y'}, // Желтая ключ-карта
-    {2, "rhfcyfz rk.x-rfhnf",   M_RD_Change_Selective_Key_2,    'r'}, // Красная ключ-карта
-    {2, "cbybq rk.x-xthtg",     M_RD_Change_Selective_Key_3,    'b'}, // Синий ключ-череп
-    {2, ";tknsq rk.x-xthtg",    M_RD_Change_Selective_Key_4,    'y'}, // Желтый ключ-череп
-    {2, "rhfcysq rk.x-xthtg",   M_RD_Change_Selective_Key_5,    'r'}, // Красный ключ-череп
-    {-1,"",0,'\0'},             // Монстры
-    {2, "ecrjhtyyst",           M_RD_Change_Selective_Fast,     'f'}, // Ускоренные
-    {2, "djcrhtif.obtcz",       M_RD_Change_Selective_Respawn,  'r'}, // Воскрешающиеся
-    {-1,"",0,'\0'},
-    {1, "",                     M_RD_Choose_LevelSelect_1,      'p'},
-    {1, "",                     G_DoSelectiveGame,              's'},
-    {-1,"",0,'\0'}
-};
-
-menu_t RD_Level_Def_2_Rus =
-{
-    rd_level_2_end,
-    &RD_Options_Def_Rus,
-    RD_Level_Menu_2_Rus,
-    M_RD_Draw_Level_2,
-    72,20,
-    0
-};
-
 
 // -----------------------------------------------------------------------------
 // Reset settings
 // -----------------------------------------------------------------------------
 
-enum
-{
-    rd_reset_recommended,
-    rd_reset_vanilla,
-    rd_reset_end
-} rd_reset_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t RD_Reset_Menu[]=
-{
-    {1, "Recommended", M_RD_BackToDefaults_Recommended, 'r'},
-    {1, "Original",    M_RD_BackToDefaults_Original,    'o'},
-    {-1,"",0,'\0'}
+static MenuItem_t ResetItems[] = {
+    {ITT_EFUNC, "Recommended", "Htrjvtyljdfyysq", M_RD_BackToDefaults_Recommended, 0},
+    {ITT_EFUNC, "Original",    "Jhbubyfkmysq",    M_RD_BackToDefaults_Original,    0}
 };
 
-menu_t  RD_Reset_Def =
-{
-    rd_reset_end, 
-    &RD_Options_Def,
-    RD_Reset_Menu,
+static Menu_t ResetMenu = {
+    115, 98,
+    95,
+    NULL, NULL, false,
+    2, ResetItems, false,
     M_RD_Draw_Reset,
-    115, 95,
+    NULL,
+    &RDOptionsMenu,
     0
 };
 
-// ------------
-// Russian menu
-// ------------
+// =============================================================================
+// LOAD GAME MENU
+// =============================================================================
 
-menuitem_t RD_Reset_Menu_Rus[]=
-{
-    {1, "Htrjvtyljdfyysq", M_RD_BackToDefaults_Recommended, 'h'}, // Рекомендованный
-    {1, "Jhbubyfkmysq",    M_RD_BackToDefaults_Original,    'j'}, // Оригинальный
-    {-1,"",0,'\0'}
+static MenuItem_t LoadItems[] = {
+    {ITT_EFUNC, NULL, NULL, M_LoadSelect, 0},
+    {ITT_EFUNC, NULL, NULL, M_LoadSelect, 1},
+    {ITT_EFUNC, NULL, NULL, M_LoadSelect, 2},
+    {ITT_EFUNC, NULL, NULL, M_LoadSelect, 3},
+    {ITT_EFUNC, NULL, NULL, M_LoadSelect, 4},
+    {ITT_EFUNC, NULL, NULL, M_LoadSelect, 5},
+    {ITT_EFUNC, NULL, NULL, M_LoadSelect, 6},
+    {ITT_EFUNC, NULL, NULL, M_LoadSelect, 7}
 };
 
-menu_t  RD_Reset_Def_Rus =
-{
-    rd_reset_end, 
-    &RD_Options_Def_Rus,
-    RD_Reset_Menu_Rus,
-    M_RD_Draw_Reset,
-    98, 95,
+static Menu_t LoadMenu = {
+    67, 67,
+    37,
+    NULL, NULL, false,
+    8, LoadItems, true,
+    M_DrawLoad,
+    NULL,
+    &DoomMenu,
     0
 };
 
+// =============================================================================
+// SAVE GAME MENU
+// =============================================================================
+
+static MenuItem_t SaveItems[] = {
+    {ITT_EFUNC, NULL, NULL, M_SaveSelect,  0},
+    {ITT_EFUNC, NULL, NULL, M_SaveSelect,  1},
+    {ITT_EFUNC, NULL, NULL, M_SaveSelect,  2},
+    {ITT_EFUNC, NULL, NULL, M_SaveSelect,  3},
+    {ITT_EFUNC, NULL, NULL, M_SaveSelect,  4},
+    {ITT_EFUNC, NULL, NULL, M_SaveSelect,  5},
+    {ITT_EFUNC, NULL, NULL, M_SaveSelect,  6},
+    {ITT_EFUNC, NULL, NULL, M_SaveSelect,  7}
+};
+
+static Menu_t SaveMenu = {
+    67, 67,
+    37,
+    NULL, NULL, false,
+    8, SaveItems, true,
+    M_DrawSave,
+    NULL,
+    &DoomMenu,
+    0
+};
 
 // =============================================================================
 // [JN] VANILLA OPTIONS MENU
 // =============================================================================
 
-// -----------------------------------------------------------------------------
-// Main Menu
-// -----------------------------------------------------------------------------
-
-enum
-{
-    vanilla_endgame,
-    vanilla_messages,
-    vanilla_detail,
-    vanilla_scrnsize,
-    vanilla_option_empty1,
-    vanilla_mousesens,
-    vanilla_option_empty2,
-    vanilla_soundvol,
-    vanilla_opt_end
-} vanilla_options_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t Vanilla_Options_Menu[]=
-{
-    {1,"M_ENDGAM", M_EndGame,               'e'},
-    {1,"M_MESSG",  M_RD_Change_Messages,    'm'},
-    {1,"M_DETAIL", M_RD_Change_Detail,      'g'},
-    {2,"M_SCRNSZ", M_RD_Change_ScreenSize,  's'},
-    {-1,"",0,'\0'},
-    {2,"M_MSENS",  M_RD_Change_Sensitivity, 'm'},
-    {-1,"",0,'\0'},
-    {1,"M_SVOL",   M_RD_Choose_Audio,       's'}
+static MenuItem_t VanillaOptionsItems[] = {
+    {ITT_EFUNC,   "eM_ENDGAM", "pRD_ENDGM", M_EndGame,               0}, // Закончить игру
+    {ITT_EFUNC,   "mM_MESSG",  "cRD_MESSG", M_RD_Change_Messages,    0}, // Сообщения
+    {ITT_EFUNC,   "gM_DETAIL", "lRD_DETL",  M_RD_Change_Detail,      0}, // Детализация:
+    {ITT_LRFUNC,  "sM_SCRNSZ", "hRD_SCRSZ", M_RD_Change_ScreenSize,  0}, // Размер экрана
+    {ITT_EMPTY,   NULL,       NULL,       NULL,                    0},
+    {ITT_LRFUNC,  "mM_MSENS",  "cRD_MSENS", M_RD_Change_Sensitivity, 0}, // Скорость мыши
+    {ITT_EMPTY,   NULL,       NULL,       NULL,                    0},
+    {ITT_SETMENU, "sM_SVOL",   "uRD_SVOL",  &VanillaOptions2Menu,    0}  // Громкость
 };
 
-menu_t  Vanilla_OptionsDef =
-{
-    vanilla_opt_end,
-    &MainDef,
-    Vanilla_Options_Menu,
+static Menu_t VanillaOptionsMenu = {
+    60, 60,
+    37,
+    NULL, NULL, true,
+    8, VanillaOptionsItems, true,
     M_Vanilla_DrawOptions,
-    60,37,
-    0
-};
-
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t Vanilla_Options_Menu_Rus[]=
-{
-    {1,"Pfrjyxbnm buhe", M_EndGame,               'p'}, // Закончить игру
-    {1,"Cjj,otybz# ",    M_RD_Change_Messages,    'c'}, // Сообщения
-    {1,"Ltnfkbpfwbz#",   M_RD_Change_Detail,      'l'}, // Детализация:
-    {2,"Hfpvth \'rhfyf", M_RD_Change_ScreenSize,  'h'}, // Размер экрана
-    {-1,"",0,'\0'},
-    {2,"Crjhjcnm vsib",  M_RD_Change_Sensitivity, 'c'}, // Скорость мыши
-    {-1,"",0,'\0'},
-    {1,"Uhjvrjcnm",      M_RD_Choose_Audio,       'u'}  // Громкость
-};
-
-menu_t  Vanilla_OptionsDef_Rus =
-{
-    vanilla_opt_end,
-    &MainDef_Rus,
-    Vanilla_Options_Menu_Rus,
-    M_Vanilla_DrawOptions,
-    60,37,
+    NULL,
+    &DoomMenu,
     0
 };
 
@@ -3111,59 +1612,22 @@ menu_t  Vanilla_OptionsDef_Rus =
 // Sound Menu
 // -----------------------------------------------------------------------------
 
-enum
-{
-    vanilla_sfx_vol,
-    vanilla_sfx_empty1,
-    vanilla_music_vol,
-    vanilla_sfx_empty2,
-    vanilla_sound_end
-} vanilla_sound_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t Vanilla_SoundMenu[]=
-{
-    {2,"M_SFXVOL", M_RD_Change_SfxVol,   's'},
-    {-1,"",0,'\0'},
-    {2,"M_MUSVOL", M_RD_Change_MusicVol, 'm'},
-    {-1,"",0,'\0'}
+static MenuItem_t VanillaOptions2Items[] = {
+    {ITT_LRFUNC, "sM_SFXVOL", "pRD_SFXVL", M_RD_Change_SfxVol,   0}, // Звук
+    {ITT_EMPTY,  NULL,       NULL,       NULL,                 0},
+    {ITT_LRFUNC, "mM_MUSVOL", "vRD_MUSVL", M_RD_Change_MusicVol, 0}  // Музыка
 };
 
-menu_t  Vanilla_Audio_Def =
-{
-    vanilla_sound_end,
-    &Vanilla_OptionsDef,
-    Vanilla_SoundMenu,
+static Menu_t VanillaOptions2Menu = {
+    80, 80,
+    64,
+    NULL, NULL, true,
+    3, VanillaOptions2Items, true,
     M_Vanilla_DrawSound,
-    80,64,
+    NULL,
+    &VanillaOptionsMenu,
     0
 };
-
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t Vanilla_SoundMenu_Rus[]=
-{
-    {2,"Pder",   M_RD_Change_SfxVol,   's'},  // Звук
-    {-1,"",0,'\0'},
-    {2,"Vepsrf", M_RD_Change_MusicVol, 'm'}, // Музыка
-    {-1,"",0,'\0'}
-};
-
-menu_t  Vanilla_Audio_Def_Rus =
-{
-    vanilla_sound_end,
-    &Vanilla_OptionsDef_Rus,
-    Vanilla_SoundMenu_Rus,
-    M_Vanilla_DrawSound,
-    80,64,
-    0
-};
-
 
 // =============================================================================
 // [JN] VANILLA OPTIONS MENU: DRAWING
@@ -3191,27 +1655,30 @@ void M_Vanilla_DrawOptions(void)
     {
     // - "НАСТРОЙКИ" title -----------------------------------------------------
     M_WriteTextBigCentered_RUS(15, "YFCNHJQRB");
-    
-    M_WriteTextBig_RUS(206 + wide_delta, 53, 
-                       showMessages == 1 ? "drk/" : "dsrk/");
 
-    M_WriteTextBig_RUS(224 + wide_delta, 69, 
-                       detailLevel == 1 ? "ybp/" : "dsc/");
+    V_DrawPatch(180 + wide_delta, 53,
+                W_CacheLumpName(DEH_String(showMessages == 1 ?
+                "RD_MSGON" : "RD_MSGOF"), PU_CACHE));
+
+    V_DrawPatch(235 + wide_delta, 69,
+                W_CacheLumpName(DEH_String(detailLevel == 1 ?
+                "RD_GDL" : "RD_GDH"), PU_CACHE));
+
     }
 
     // - Screen size slider ----------------------------------------------------
     if (aspect_ratio >= 2)
     {
         // [JN] Wide screen: only 6 sizes are available
-        M_DrawThermo(60 + wide_delta, 102, 6, screenSize);
+        RD_Menu_DrawSlider(&VanillaOptionsMenu, 102, 6, screenblocks - 9);
     }
     else
     {
-        M_DrawThermo(60 + wide_delta, 102, 12, screenSize);
+        RD_Menu_DrawSlider(&VanillaOptionsMenu, 102, 12, screenblocks - 3);
     }
 
     // - Mouse sensivity slider ------------------------------------------------
-    M_DrawThermo(60 + wide_delta, 134, 10, mouseSensitivity);
+    RD_Menu_DrawSlider(&VanillaOptionsMenu, 134, 10, mouseSensitivity);
 }
 
 void M_Vanilla_DrawSound(void)
@@ -3229,65 +1696,33 @@ void M_Vanilla_DrawSound(void)
     }
 
     // - Sfx volume slider -----------------------------------------------------
-    M_DrawThermo(80 + wide_delta, 81, 16, sfxVolume);
+    RD_Menu_DrawSlider(&VanillaOptions2Menu, 81, 16, sfxVolume);
 
     // - Music volume slider ---------------------------------------------------
-    M_DrawThermo(80 + wide_delta, 113, 16, musicVolume);
+    RD_Menu_DrawSlider(&VanillaOptions2Menu, 113, 16, musicVolume);
 }
-
 
 // =============================================================================
 // [JN] NEW OPTIONS MENU: DRAWING
 // =============================================================================
 
 // -----------------------------------------------------------------------------
-// Main Options menu
-// -----------------------------------------------------------------------------
-
-void M_RD_Draw_Options(void)
-{
-    if (english_language)
-    {
-        M_WriteTextBigCentered_ENG(5, "OPTIONS");
-    }
-    else
-    {
-        // НАСТРОЙКИ
-        M_WriteTextBigCentered_RUS(5, "YFCNHJQRB");            
-    }
-}
-
-// -----------------------------------------------------------------------------
 // Rendering
 // -----------------------------------------------------------------------------
-
-void M_RD_Choose_Rendering(int choice)
-{
-    M_SetupNextMenu(english_language ?
-                    &RD_Rendering_Def :
-                    &RD_Rendering_Def_Rus);
-}
 
 void M_RD_Draw_Rendering(void)
 {
     // [JN] Jaguar Doom: clear remainings of bottom strings from the status bar.
     if (gamemission == jaguar)
-    inhelpscreens = true;
+        inhelpscreens = true;
 
     if (english_language)
     {
-        M_WriteTextBigCentered_ENG(5, "RENDERING OPTIONS");
-
-        //
-        // Rendering
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 25, "Rendering", cr[CR_YELLOW]);
-
         // Widescreen rendering
-        M_WriteTextSmall_ENG(185 + wide_delta, 35, aspect_ratio_temp == 1 ? "5:4" :
-                                                   aspect_ratio_temp == 2 ? "16:9" :
-                                                   aspect_ratio_temp == 3 ? "16:10" :
-                                                   aspect_ratio_temp == 4 ? "21:9" : "4:3", NULL);
+        RD_M_DrawTextSmallENG(aspect_ratio_temp == 1 ? "5:4" :
+                              aspect_ratio_temp == 2 ? "16:9" :
+                              aspect_ratio_temp == 3 ? "16:10" :
+                              aspect_ratio_temp == 4 ? "21:9" : "4:3", 185 + wide_delta, 35, CR_NONE);
         // Informative message
         if (aspect_ratio_temp != aspect_ratio)
         {
@@ -3299,69 +1734,57 @@ void M_RD_Draw_Rendering(void)
         // Vertical synchronization
         if (force_software_renderer == 1)
         {
-            M_WriteTextSmall_ENG(216 + wide_delta, 45, "n/a", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallENG("n/a", 216 + wide_delta, 45, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_ENG(216 + wide_delta, 45, vsync ? "on" : "off", NULL);
+            RD_M_DrawTextSmallENG(vsync ? "on" : "off", 216 + wide_delta, 45, CR_NONE);
         }
 
         // Frame rate
-        M_WriteTextSmall_ENG(120 + wide_delta, 55, uncapped_fps ? "uncapped" : "35 fps", NULL);
+        RD_M_DrawTextSmallENG(uncapped_fps ? "uncapped" : "35 fps", 120 + wide_delta, 55, CR_NONE);
 
         // Show FPS counter
-        M_WriteTextSmall_ENG(162 + wide_delta, 65, show_fps ? "on" : "off", NULL);
+        RD_M_DrawTextSmallENG(show_fps ? "on" : "off", 162 + wide_delta, 65, CR_NONE);
 
         // Pixel scaling
         if (force_software_renderer == 1)
         {
-            M_WriteTextSmall_ENG(135 + wide_delta, 75, "n/a", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallENG("n/a", 135 + wide_delta, 75, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_ENG(135 + wide_delta, 75, smoothing ? "smooth" : "sharp", NULL);
+            RD_M_DrawTextSmallENG(smoothing ? "smooth" : "sharp", 135 + wide_delta, 75, CR_NONE);
         }
 
         // Porch palette changing
-        M_WriteTextSmall_ENG(207 + wide_delta, 85, vga_porch_flash ? "on" : "off", NULL);
+        RD_M_DrawTextSmallENG(vga_porch_flash ? "on" : "off", 207 + wide_delta, 85, CR_NONE);
 
         // Video renderer
-        M_WriteTextSmall_ENG(146 + wide_delta, 95, force_software_renderer ? "software (cpu)" : "hardware (gpu)", NULL);
-
-        //
-        // Extra
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 105, "Extra", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallENG(force_software_renderer ? "software (cpu)" : "hardware (gpu)", 146 + wide_delta, 95, CR_NONE);
 
         // Show disk icon
-        M_WriteTextSmall_ENG(138 + wide_delta, 115, show_diskicon ? "on" : "off", NULL);
+        RD_M_DrawTextSmallENG(show_diskicon ? "on" : "off", 138 + wide_delta, 115, CR_NONE);
 
         // Screen wiping effect
-        M_WriteTextSmall_ENG(187 + wide_delta, 125, screen_wiping == 1 ? "standard" :
-                                                    screen_wiping == 2 ? "loading" :
-                                                                         "off", NULL);
+        RD_M_DrawTextSmallENG(screen_wiping == 1 ? "standard" :
+                              screen_wiping == 2 ? "loading" :
+                              "off", 187 + wide_delta, 125, CR_NONE);
 
         // Screenshot format
-        M_WriteTextSmall_ENG(174 + wide_delta, 135, png_screenshots ? "png" : "pcx", NULL);
+        RD_M_DrawTextSmallENG(png_screenshots ? "png" : "pcx", 174 + wide_delta, 135, CR_NONE);
 
         // Show ENDOOM screen
-        M_WriteTextSmall_ENG(179 + wide_delta, 145, show_endoom ? "on" : "off", NULL);
+        RD_M_DrawTextSmallENG(show_endoom ? "on" : "off", 179 + wide_delta, 145, CR_NONE);
     }
     else
     {
-        M_WriteTextBigCentered_RUS(5, "YFCNHJQRB DBLTJ"); // НАСТРОЙКИ ВИДЕО
-
-        //
-        // Рендеринг
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 25, "htylthbyu", cr[CR_YELLOW]);
-
         // Широкоформатный режим
-        M_WriteTextSmall_RUS(238 + wide_delta, 35, aspect_ratio_temp == 1 ? "5:4" :
-                                                   aspect_ratio_temp == 2 ? "16:9" :
-                                                   aspect_ratio_temp == 3 ? "16:10" :
-                                                   aspect_ratio_temp == 4 ? "21:9" :
-                                                                            "4:3", NULL);
+        RD_M_DrawTextSmallRUS(aspect_ratio_temp == 1 ? "5:4" :
+                              aspect_ratio_temp == 2 ? "16:9" :
+                              aspect_ratio_temp == 3 ? "16:10" :
+                              aspect_ratio_temp == 4 ? "21:9" :
+                              "4:3", 238 + wide_delta, 35, CR_NONE);
 
         // Informative message: Необходим перезапуск программы
         if (aspect_ratio_temp != aspect_ratio)
@@ -3374,93 +1797,73 @@ void M_RD_Draw_Rendering(void)
         // Вертикальная синхронизация
         if (force_software_renderer == 1)
         {
-            M_WriteTextSmall_RUS(249 + wide_delta, 45, "y*l", cr[CR_DARKRED]); // Н/Д
+            RD_M_DrawTextSmallRUS("y*l", 249 + wide_delta, 45, CR_DARKRED); // Н/Д
         }
         else
         {
-            M_WriteTextSmall_RUS(249 + wide_delta, 45, vsync ? "drk" : "dsrk", NULL);
+            RD_M_DrawTextSmallRUS(vsync ? "drk" : "dsrk", 249 + wide_delta, 45, CR_NONE);
         }
 
         // Кадровая частота
         if (uncapped_fps)
         {
-            M_WriteTextSmall_RUS(167 + wide_delta, 55, ",tp juhfybxtybz", NULL);
+            RD_M_DrawTextSmallRUS(",tp juhfybxtybz", 167 + wide_delta, 55, CR_NONE);
         }
         else
         {
-            M_WriteTextSmall_ENG(167 + wide_delta, 55, "35 fps", NULL);
+            RD_M_DrawTextSmallENG("35 fps", 167 + wide_delta, 55, CR_NONE);
         }
 
         // Счетчик кадровой частоты
-        M_WriteTextSmall_RUS(227 + wide_delta, 65, show_fps ? "drk" : "dsrk", NULL);
+        RD_M_DrawTextSmallRUS(show_fps ? "drk" : "dsrk", 227 + wide_delta, 65, CR_NONE);
 
         // Пиксельное сглаживание
         if (force_software_renderer == 1)
         {
-            M_WriteTextSmall_RUS(219 + wide_delta, 75, "y*l", cr[CR_DARKRED]); // Н/Д
+            RD_M_DrawTextSmallRUS("y*l", 219 + wide_delta, 75, CR_DARKRED); // Н/Д
         }
         else
         {
-            M_WriteTextSmall_RUS(219 + wide_delta, 75, smoothing ? "drk" : "dsrk", NULL);
+            RD_M_DrawTextSmallRUS(smoothing ? "drk" : "dsrk", 219 + wide_delta, 75, CR_NONE);
         }
 
         // Изменение палитры краёв экрана
-        M_WriteTextSmall_RUS(274 + wide_delta, 85, vga_porch_flash ? "drk" : "dsrk", NULL);
+        RD_M_DrawTextSmallRUS(vga_porch_flash ? "drk" : "dsrk", 274 + wide_delta, 85, CR_NONE);
 
         // Обработка видео
-        M_WriteTextSmall_RUS(160 + wide_delta, 95, force_software_renderer ? "ghjuhfvvyfz" : "fggfhfnyfz", NULL);
-        M_WriteTextSmall_ENG((force_software_renderer ? 254 : 244) + wide_delta, 95, 
-                              force_software_renderer ? "(cpu)" : "(gpu)", NULL);
-
-        //
-        // Дополнительно
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 105, "ljgjkybntkmyj", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallRUS(force_software_renderer ? "ghjuhfvvyfz" : "fggfhfnyfz", 160 + wide_delta, 95, CR_NONE);
+        RD_M_DrawTextSmallENG(force_software_renderer ? "(cpu)" : "(gpu)",
+                              (force_software_renderer ? 254 : 244) + wide_delta, 95, CR_NONE);
 
         // Отображать значок дискеты
-        M_WriteTextSmall_RUS(241 + wide_delta, 115, show_diskicon ? "drk" : "dsrk", NULL);
+        RD_M_DrawTextSmallRUS(show_diskicon ? "drk" : "dsrk", 241 + wide_delta, 115, CR_NONE);
 
         // Эффект смены экранов
-        M_WriteTextSmall_RUS(202 + wide_delta, 125, screen_wiping == 1 ? "cnfylfhnysq" :
-                                                    screen_wiping == 2 ? "pfuheprf" :
-                                                                         "dsrk", NULL);
+        RD_M_DrawTextSmallRUS(screen_wiping == 1 ? "cnfylfhnysq" :
+                              screen_wiping == 2 ? "pfuheprf" :
+                              "dsrk", 202 + wide_delta, 125, CR_NONE);
 
         // Формат скриншотов
-        M_WriteTextSmall_ENG(180 + wide_delta, 135, png_screenshots ? "png" : "pcx", NULL);
+        RD_M_DrawTextSmallENG(png_screenshots ? "png" : "pcx", 180 + wide_delta, 135, CR_NONE);
 
         // Показывать экран ENDOOM
-        M_WriteTextSmall_ENG(165 + wide_delta, 145, "ENDOOM:", NULL);
-        M_WriteTextSmall_RUS(222 + wide_delta, 145, show_endoom ? "drk" : "dsrk", NULL);
+        RD_M_DrawTextSmallENG("ENDOOM:", 165 + wide_delta, 145, CR_NONE);
+        RD_M_DrawTextSmallRUS(show_endoom ? "drk" : "dsrk", 222 + wide_delta, 145, CR_NONE);
     }
 }
 
-void M_SaveDefaults(void);
-
-void M_RD_Change_Widescreen(int choice)
+void M_RD_Change_Widescreen(Direction_t direction)
 {
     // [JN] Widescreen: changing only temp variable here.
     // Initially it is set in M_Init and stored into config file in M_QuitResponse.
-    switch(choice)
-    {
-        case 0:
-        aspect_ratio_temp--;
-        if (aspect_ratio_temp < 0)
-            aspect_ratio_temp = 4;
-        break;
-
-        case 1:
-        aspect_ratio_temp++;
-        if (aspect_ratio_temp > 4)
-            aspect_ratio_temp = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&aspect_ratio_temp, 0, 4, direction);
 }
 
-void M_RD_Change_VSync(int choice)
+void M_RD_Change_VSync(Direction_t direction)
 {
     // [JN] Disable "vsync" toggling in software renderer
     if (force_software_renderer == 1)
-    return;
+        return;
 
     vsync ^= 1;
 
@@ -3471,26 +1874,26 @@ void M_RD_Change_VSync(int choice)
     S_StartSound(NULL,sfx_stnmov);
 }
 
-void M_RD_Change_Uncapped(int choice)
+void M_RD_Change_Uncapped(Direction_t direction)
 {
     uncapped_fps ^= 1;
 }
 
-void M_RD_Change_FPScounter(int choice)
+void M_RD_Change_FPScounter(Direction_t direction)
 {
     show_fps ^= 1;
 }
 
-void M_RD_Change_DiskIcon(int choice)
+void M_RD_Change_DiskIcon(Direction_t direction)
 {
     show_diskicon ^= 1;
 }
 
-void M_RD_Change_Smoothing(int choice)
+void M_RD_Change_Smoothing(Direction_t direction)
 {
     // [JN] Disable "vsync" toggling in sofrware renderer
     if (force_software_renderer == 1)
-    return;
+        return;
 
     smoothing ^= 1;
 
@@ -3508,35 +1911,22 @@ void M_RD_Change_Smoothing(int choice)
     S_StartSound(NULL,sfx_stnmov);
 }
 
-void M_RD_Change_Wiping(int choice)
+void M_RD_Change_Wiping(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0:
-        screen_wiping--;
-        if (screen_wiping < 0)
-            screen_wiping = 2;
-        break;
-
-        case 1:
-        screen_wiping++;
-        if (screen_wiping > 2)
-            screen_wiping = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&screen_wiping, 0, 2, direction);
 }
 
-void M_RD_Change_Screenshots(int choice)
+void M_RD_Change_Screenshots(Direction_t direction)
 {
     png_screenshots ^= 1;
 }
 
-void M_RD_Change_ENDOOM(int choice)
+void M_RD_Change_ENDOOM(Direction_t direction)
 {
     show_endoom ^= 1;
 }
 
-void M_RD_Change_Renderer(int choice)
+void M_RD_Change_Renderer(Direction_t direction)
 {
     force_software_renderer ^= 1;
 
@@ -3551,7 +1941,7 @@ void M_RD_Change_Renderer(int choice)
     }
 }
 
-void M_RD_Change_PorchFlashing(int choice)
+void M_RD_Change_PorchFlashing(Direction_t direction)
 {
     vga_porch_flash ^= 1;
 
@@ -3559,17 +1949,9 @@ void M_RD_Change_PorchFlashing(int choice)
     I_DrawBlackBorders();
 }
 
-
 // -----------------------------------------------------------------------------
 // Display settings
 // -----------------------------------------------------------------------------
-
-void M_RD_Choose_Display(int choice)
-{
-    M_SetupNextMenu(english_language ?
-                    &RD_Display_Def :
-                    &RD_Display_Def_Rus);
-}
 
 void M_RD_Draw_Display(void)
 {
@@ -3577,109 +1959,65 @@ void M_RD_Draw_Display(void)
 
     // [JN] Jaguar Doom: clear remainings of bottom strings from the status bar.
     if (gamemission == jaguar)
-    inhelpscreens = true;
+        inhelpscreens = true;
 
     if (english_language)
     {
-        M_WriteTextBigCentered_ENG(5, "DISPLAY OPTIONS");
-
-        //
-        // Screen
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 25, "Screen", dp_translation = cr[CR_YELLOW]);
-
         // Graphics detail
-        M_WriteTextSmall_ENG(150 + wide_delta, 115, detailLevel ? "low" : "high", NULL);
+        RD_M_DrawTextSmallENG(detailLevel ? "low" : "high", 150 + wide_delta, 115, CR_NONE);
 
         // HUD background detail
-        M_WriteTextSmall_ENG(199 + wide_delta, 125, hud_detaillevel ? "low" : "high", NULL);
-
-        //
-        // Interface
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 135, "Interface", dp_translation = cr[CR_YELLOW]);
-
+        RD_M_DrawTextSmallENG(hud_detaillevel ? "low" : "high", 199 + wide_delta, 125, CR_NONE);
     }
     else
     {
-        M_WriteTextBigCentered_RUS(5, "YFCNHJQRB \"RHFYF"); // НАСТРОЙКИ ЭКРАНА
-
-        //
-        // Экран
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 25, "\'rhfy", cr[CR_YELLOW]);
-
         // Детализация графики
-        M_WriteTextSmall_RUS(195 + wide_delta, 115, detailLevel ? "ybprfz" : "dscjrfz", NULL);
+        RD_M_DrawTextSmallRUS(detailLevel ? "ybprfz" : "dscjrfz", 195 + wide_delta, 115, CR_NONE);
 
         // Детализация фона HUD
-        M_WriteTextSmall_ENG(167 + wide_delta, 125, "HUD: b", NULL);
-        M_WriteTextSmall_RUS(199 + wide_delta, 125, hud_detaillevel ? "ybprfz" : "dscjrfz", NULL);
+        RD_M_DrawTextSmallENG("HUD: b", 167 + wide_delta, 125, CR_NONE);
+        RD_M_DrawTextSmallRUS(hud_detaillevel ? "ybprfz" : "dscjrfz", 199 + wide_delta, 125, CR_NONE);
 
         //
         // Интерфейс
         //
-        M_WriteTextSmall_RUS(35 + wide_delta, 135, "bynthatqc", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallRUS("bynthatqc", 35 + wide_delta, 135, CR_YELLOW);
     }
 
     // Screen size slider
     if (aspect_ratio >= 2)
     {
         // [JN] Wide screen: only 6 sizes are available
-        M_DrawThermo_Small(35 + wide_delta, 44, 6, screenSize);
+        RD_Menu_DrawSliderSmall(&DisplayMenu, 44, 6, screenblocks - 9);
 
         // Numerical representation of slider position
         M_snprintf(num, 4, "%3d", screenblocks);
-        M_WriteTextSmall_ENG(96 + wide_delta, 45, num, NULL);
+        RD_M_DrawTextSmallENG(num, 96 + wide_delta, 45, CR_NONE);
     }
     else
     {
-        M_DrawThermo_Small(35 + wide_delta, 44, 12, screenSize);
+        RD_Menu_DrawSliderSmall(&DisplayMenu, 44, 12, screenblocks - 3);
 
         // Numerical representation of slider position
         M_snprintf(num, 4, "%3d", screenblocks);
-        M_WriteTextSmall_ENG(145 + wide_delta, 45, num, NULL);
+        RD_M_DrawTextSmallENG(num, 145 + wide_delta, 45, CR_NONE);
     }
 
     // Gamma-correction slider
-    M_DrawThermo_Small(35 + wide_delta, 64, 18, usegamma);
+    RD_Menu_DrawSliderSmall(&DisplayMenu, 64, 18, usegamma);
 
     // Level brightness slider
-    M_DrawThermo_Small(35 + wide_delta, 84, 5, level_brightness / 16);
+    RD_Menu_DrawSliderSmall(&DisplayMenu, 84, 5, level_brightness / 16);
 
     // Level brightness slider
-    M_DrawThermo_Small(35 + wide_delta, 104, 7, menu_shading / 4);
+    RD_Menu_DrawSliderSmall(&DisplayMenu, 104, 7, menu_shading / 4);
 }
 
-void M_RD_Change_ScreenSize(int choice)
+void M_RD_Change_ScreenSize(Direction_t direction)
 {
     extern void EnableLoadingDisk();
 
-    switch(choice)
-    {
-        case 0:
-        if (screenSize > 0)
-        {
-            screenblocks--;
-            screenSize--;
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-
-        case 1:
-        if (screenSize < 11)
-        {
-            screenblocks++;
-            screenSize++;
-            if (screenblocks <= 14)
-            {
-                // [JN] Routine №3: play sound only if necessary.
-                S_StartSound(NULL,sfx_stnmov);
-            }
-        }
-        break;
-    }
+    RD_Menu_SlideInt(&screenblocks, 0, 14, direction);
 
     if (aspect_ratio >= 2)
     {
@@ -3689,13 +2027,7 @@ void M_RD_Change_ScreenSize(int choice)
             screenblocks = 9;
         if (screenblocks > 14)
             screenblocks = 14;
-    
-        // screenSize - slider variable/lenght
-        if (screenSize < 0)
-            screenSize = 0;
-        if (screenSize > 5)
-            screenSize = 5;
-    
+
         // Reinitialize fps and time widget's horizontal offset
         if (gamestate == GS_LEVEL)
         {
@@ -3708,28 +2040,9 @@ void M_RD_Change_ScreenSize(int choice)
     R_SetViewSize (screenblocks, detailLevel);
 }
 
-void M_RD_Change_Gamma(int choice)
+void M_RD_Change_Gamma(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0:
-        if (usegamma > 0) 
-        {
-            usegamma--;
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-
-        case 1:
-        if (usegamma < 17) 
-        {
-            usegamma++;
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-    }
+    RD_Menu_SlideInt(&usegamma, 0, 17, direction);
 
     I_SetPalette ((byte *)W_CacheLumpName(DEH_String(usegamma <= 8 ?
                                                      "PALFIX" :
@@ -3741,55 +2054,17 @@ void M_RD_Change_Gamma(int choice)
                                                        gammamsg_rus[usegamma]);
 }
 
-void M_RD_Change_LevelBrightness(int choice)
+void M_RD_Change_LevelBrightness(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0:
-        if (level_brightness > 0)
-        {
-            level_brightness -= 16;
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-    
-        case 1:
-        if (level_brightness < 64)
-        {
-            level_brightness += 16;
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-    }
+    RD_Menu_SlideInt_Step(&level_brightness, 0, 64, 16, direction);
 }
 
-void M_RD_Change_MenuShading(int choice)
+void M_RD_Change_MenuShading(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0:
-        if (menu_shading > 0)
-        {
-            menu_shading -= 4;
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-    
-        case 1:
-        if (menu_shading < 24)
-        {
-            menu_shading += 4;
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-    }
+    RD_Menu_SlideInt_Step(&menu_shading, 0, 24, 4, direction);
 }
 
-void M_RD_Change_Detail(int choice)
+void M_RD_Change_Detail(Direction_t direction)
 {
     detailLevel ^= 1;
 
@@ -3803,7 +2078,7 @@ void M_RD_Change_Detail(int choice)
                                             DETAILLO : DETAILLO_RUS);
 }
 
-void M_RD_Change_HUD_Detail(int choice)
+void M_RD_Change_HUD_Detail(Direction_t direction)
 {
     extern boolean setsizeneeded;
 
@@ -3816,567 +2091,325 @@ void M_RD_Change_HUD_Detail(int choice)
     inhelpscreens = true;
 }
 
-void M_RD_Change_LocalTime(int choice)
+void M_RD_Change_LocalTime(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0: 
-        local_time--;
-        if (local_time < 0) 
-            local_time = 4;
-        // Reinitialize time widget's horizontal offset
-        if (gamestate == GS_LEVEL)
-        {
-            HU_Start();
-        }
-        break;
+    RD_Menu_SpinInt(&local_time, 0, 4, direction);
 
-        case 1:
-        local_time++;
-        if (local_time > 4)
-            local_time = 0;
-        // Reinitialize time widget's horizontal offset
-        if (gamestate == GS_LEVEL)
-        {    
-            HU_Start();
-        }
-        break;
+    // Reinitialize time widget's horizontal offset
+    if (gamestate == GS_LEVEL)
+    {
+        HU_Start();
     }
 }
-
 
 // -----------------------------------------------------------------------------
 // Messages settings
 // -----------------------------------------------------------------------------
 
-void M_RD_Choose_MessagesAndTextSettings(int choice)
-{
-    M_SetupNextMenu(english_language ? 
-                    &RD_Messages_Def :
-                    &RD_Messages_Def_Rus);
-}
-
 void M_RD_Draw_MessagesSettings(void)
 {
     if (english_language)
     {
-        M_WriteTextBigCentered_ENG(5, "MESSAGES AND TEXTS");
-
-        M_WriteTextSmall_ENG(35 + wide_delta, 25, "General", dp_translation = cr[CR_YELLOW]);
-
         // Messages
-        M_WriteTextSmall_ENG(165 + wide_delta, 35, showMessages ? "on" : "off", NULL);
+        RD_M_DrawTextSmallENG(showMessages ? "on" : "off", 165 + wide_delta, 35, CR_NONE);
 
         // Message alignment
-        M_WriteTextSmall_ENG(112 + wide_delta, 45, messages_alignment == 1 ? "centered" : 
-                                                   messages_alignment == 2 ? "left edge of the status bar" :
-                                                                             "left edge of the screen", NULL);
+        RD_M_DrawTextSmallENG(messages_alignment == 1 ? "centered" :
+                              messages_alignment == 2 ? "left edge of the status bar" :
+                              "left edge of the screen", 112 + wide_delta, 45, CR_NONE);
 
         // Message timeout. Print "second" or "seconds", depending of ammount.
         // [JN] Note: using M_StringJoin could be a smarter way,
         // but using it will make a notable delay in drawing routine, so here:
-        M_WriteTextSmall_ENG(133 + wide_delta, 65, messages_timeout == 1 ? "1 second" :
-                                                   messages_timeout == 2 ? "2 seconds" :
-                                                   messages_timeout == 3 ? "3 seconds" :
-                                                   messages_timeout == 4 ? "4 seconds" :
-                                                   messages_timeout == 5 ? "5 seconds" :
-                                                   messages_timeout == 6 ? "6 seconds" :
-                                                   messages_timeout == 7 ? "7 seconds" :
-                                                   messages_timeout == 8 ? "8 seconds" :
-                                                   messages_timeout == 9 ? "9 seconds" :
-                                                                           "10 seconds", NULL);
+        RD_M_DrawTextSmallENG(messages_timeout == 1 ? "1 second" :
+                              messages_timeout == 2 ? "2 seconds" :
+                              messages_timeout == 3 ? "3 seconds" :
+                              messages_timeout == 4 ? "4 seconds" :
+                              messages_timeout == 5 ? "5 seconds" :
+                              messages_timeout == 6 ? "6 seconds" :
+                              messages_timeout == 7 ? "7 seconds" :
+                              messages_timeout == 8 ? "8 seconds" :
+                              messages_timeout == 9 ? "9 seconds" :
+                              "10 seconds", 133 + wide_delta, 65, CR_NONE);
 
         // Fading effect
-        M_WriteTextSmall_ENG(139 + wide_delta, 75, message_fade ? "on" : "off", NULL);
+        RD_M_DrawTextSmallENG(message_fade ? "on" : "off", 139 + wide_delta, 75, CR_NONE);
 
         // Text casts shadows
-        M_WriteTextSmall_ENG(177 + wide_delta, 85, draw_shadowed_text ? "on" : "off", NULL);
-
-        M_WriteTextSmall_ENG(35 + wide_delta, 95, "Misc.", dp_translation = cr[CR_YELLOW]);
+        RD_M_DrawTextSmallENG(draw_shadowed_text ? "on" : "off", 177 + wide_delta, 85, CR_NONE);
 
         // Local time
-        M_WriteTextSmall_ENG(116 + wide_delta, 105, 
-                             local_time == 1 ? "12-hour (hh:mm)" :
-                             local_time == 2 ? "12-hour (hh:mm:ss)" :
-                             local_time == 3 ? "24-hour (hh:mm)" :
-                             local_time == 4 ? "24-hour (hh:mm:ss)" :
-                                               "off", NULL);
-
-        M_WriteTextSmall_ENG(35 + wide_delta, 115, "Colors", dp_translation = cr[CR_YELLOW]);
+        RD_M_DrawTextSmallENG(local_time == 1 ? "12-hour (hh:mm)" :
+                              local_time == 2 ? "12-hour (hh:mm:ss)" :
+                              local_time == 3 ? "24-hour (hh:mm)" :
+                              local_time == 4 ? "24-hour (hh:mm:ss)" :
+                              "off", 116 + wide_delta, 105, CR_NONE);
 
         // Item pickup
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_ENG(120 + wide_delta, 125, "n/a", NULL);
+            RD_M_DrawTextSmallENG("n/a", 120 + wide_delta, 125, CR_NONE);
         }
         else
         {
-            M_WriteTextSmall_ENG(120 + wide_delta, 125, M_RD_ColorName_ENG(message_pickup_color), 
-                                                        M_RD_ColorTranslation(message_pickup_color));
+            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(message_pickup_color), 120 + wide_delta, 125,
+                                  M_RD_ColorTranslation(message_pickup_color));
         }
 
         // Revealed secret
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_ENG(157 + wide_delta, 135, "n/a", NULL);
+            RD_M_DrawTextSmallENG("n/a", 157 + wide_delta, 135, CR_NONE);
         }
         else
         {
-            M_WriteTextSmall_ENG(157 + wide_delta, 135, M_RD_ColorName_ENG(message_secret_color),
-                                                        M_RD_ColorTranslation(message_secret_color));
+            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(message_secret_color), 157 + wide_delta, 135,
+                                  M_RD_ColorTranslation(message_secret_color));
         }
 
         // System message
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_ENG(149 + wide_delta, 145, "n/a", NULL);
+            RD_M_DrawTextSmallENG("n/a", 149 + wide_delta, 145, CR_NONE);
         }
         else
         {
-            M_WriteTextSmall_ENG(149 + wide_delta, 145, M_RD_ColorName_ENG(message_system_color),
-                                                        M_RD_ColorTranslation(message_system_color));
+            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(message_system_color), 149 + wide_delta, 145,
+                                  M_RD_ColorTranslation(message_system_color));
         }
 
         // Netgame chat
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_ENG(136 + wide_delta, 155, "n/a", NULL);
+            RD_M_DrawTextSmallENG("n/a", 136 + wide_delta, 155, CR_NONE);
         }
         else
         {
-            M_WriteTextSmall_ENG(136 + wide_delta, 155, M_RD_ColorName_ENG(message_chat_color),
-                                                        M_RD_ColorTranslation(message_chat_color));
+            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(message_chat_color), 136 + wide_delta, 155,
+                                  M_RD_ColorTranslation(message_chat_color));
         }
     }
     else
     {
-        M_WriteTextBigCentered_RUS(5, "CJJ<OTYBZ B NTRCNS"); // СООБЩЕНИЯ И ТЕКСТЫ
-
-        //
-        // Основное
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 25, "jcyjdyjt", cr[CR_YELLOW]);
-
         // Отображение сообщений
-        M_WriteTextSmall_RUS(214 + wide_delta, 35, showMessages ? "drk" : "dsrk", NULL);
+        RD_M_DrawTextSmallRUS(showMessages ? "drk" : "dsrk", 214 + wide_delta, 35, CR_NONE);
 
         // Выравнивание
-        M_WriteTextSmall_RUS(141 + wide_delta, 45, messages_alignment == 1 ? "gj wtynhe" :             // по центру
-                                                   messages_alignment == 2 ? "gj rhf. cnfnec-,fhf" :   // по краю статус-бара
-                                                                             "gj rhf. \'rhfyf", NULL); // по краю экрана
+        RD_M_DrawTextSmallRUS(messages_alignment == 1 ? "gj wtynhe" :             // по центру
+                              messages_alignment == 2 ? "gj rhf. cnfnec-,fhf" :   // по краю статус-бара
+                              "gj rhf. \'rhfyf", 141 + wide_delta, 45, CR_NONE); // по краю экрана
 
         // Таймаут отображения. Печатать секунд(а/ы) в зависимости от количества.
-        M_WriteTextSmall_RUS(133 + wide_delta, 65, messages_timeout == 1 ? "1 ctreylf" :
-                                                   messages_timeout == 2 ? "2 ctreyls" :
-                                                   messages_timeout == 3 ? "3 ctreyls" :
-                                                   messages_timeout == 4 ? "4 ctreyls" :
-                                                   messages_timeout == 5 ? "5 ctreyl"  :
-                                                   messages_timeout == 6 ? "6 ctreyl"  :
-                                                   messages_timeout == 7 ? "7 ctreyl"  :
-                                                   messages_timeout == 8 ? "8 ctreyl"  :
-                                                   messages_timeout == 9 ? "9 ctreyl"  :
-                                                                           "10 ctreyl", NULL);
+        RD_M_DrawTextSmallRUS(messages_timeout == 1 ? "1 ctreylf" :
+                              messages_timeout == 2 ? "2 ctreyls" :
+                              messages_timeout == 3 ? "3 ctreyls" :
+                              messages_timeout == 4 ? "4 ctreyls" :
+                              messages_timeout == 5 ? "5 ctreyl"  :
+                              messages_timeout == 6 ? "6 ctreyl"  :
+                              messages_timeout == 7 ? "7 ctreyl"  :
+                              messages_timeout == 8 ? "8 ctreyl"  :
+                              messages_timeout == 9 ? "9 ctreyl"  :
+                              "10 ctreyl", 133 + wide_delta, 65, CR_NONE);
 
         // Плавное исчезновение
-        M_WriteTextSmall_RUS(198 + wide_delta, 75, message_fade ? "drk" : "dsrk", NULL);
+        RD_M_DrawTextSmallRUS(message_fade ? "drk" : "dsrk", 198 + wide_delta, 75, CR_NONE);
 
         // Тексты отбрасывают тень
-        M_WriteTextSmall_RUS(226 + wide_delta, 85, draw_shadowed_text ? "drk" : "dsrk", NULL);
-
-        //
-        // Разное
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 95, "hfpyjt", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallRUS(draw_shadowed_text ? "drk" : "dsrk", 226 + wide_delta, 85, CR_NONE);
 
         // Системное время
-        M_WriteTextSmall_RUS(161 + wide_delta, 105, 
-                             local_time == 1 ? "12-xfcjdjt (xx:vv)" :
-                             local_time == 2 ? "12-xfcjdjt (xx:vv:cc)" :
-                             local_time == 3 ? "24-xfcjdjt (xx:vv)" :
-                             local_time == 4 ? "24-xfcjdjt (xx:vv:cc)" :
-                                               "dsrk", NULL);
-
-        //
-        // Цвета
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 115, "wdtnf", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallRUS(local_time == 1 ? "12-xfcjdjt (xx:vv)" :
+                              local_time == 2 ? "12-xfcjdjt (xx:vv:cc)" :
+                              local_time == 3 ? "24-xfcjdjt (xx:vv)" :
+                              local_time == 4 ? "24-xfcjdjt (xx:vv:cc)" :
+                              "dsrk", 161 + wide_delta, 105, CR_NONE);
 
         // Получение предметов
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_RUS(193 + wide_delta, 125, "y*l", NULL); // н/д
+            RD_M_DrawTextSmallRUS("y*l", 193 + wide_delta, 125, CR_NONE); // н/д
         }
         else
         {
-            M_WriteTextSmall_RUS(193 + wide_delta, 125, M_RD_ColorName_RUS(message_pickup_color),
-                                                        M_RD_ColorTranslation(message_pickup_color));
+            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(message_pickup_color), 193 + wide_delta, 125,
+                                  M_RD_ColorTranslation(message_pickup_color));
         }
 
         // Обнаружение тайников
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_RUS(203 + wide_delta, 135, "y*l", NULL); // н/д
+            RD_M_DrawTextSmallRUS("y*l", 203 + wide_delta, 135, CR_NONE); // н/д
         }
         else
         {
-            M_WriteTextSmall_RUS(203 + wide_delta, 135, M_RD_ColorName_RUS(message_secret_color),
-                                                        M_RD_ColorTranslation(message_secret_color));
+            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(message_secret_color), 203 + wide_delta, 135,
+                                  M_RD_ColorTranslation(message_secret_color));
         }
 
         // Системные сообщения
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_RUS(197 + wide_delta, 145, "y*l", NULL); // н/д
+            RD_M_DrawTextSmallRUS("y*l", 197 + wide_delta, 145, CR_NONE); // н/д
         }
         else
         {
-            M_WriteTextSmall_RUS(197 + wide_delta, 145, M_RD_ColorName_RUS(message_system_color),
-                                                        M_RD_ColorTranslation(message_system_color));
+            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(message_system_color), 197 + wide_delta, 145,
+                                  M_RD_ColorTranslation(message_system_color));
         }
 
         // Чат сетевой игры
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_RUS(164 + wide_delta, 155, "y*l", NULL); // н/д
+            RD_M_DrawTextSmallRUS("y*l", 164 + wide_delta, 155, CR_NONE); // н/д
         }
         else
         {
-            M_WriteTextSmall_RUS(164 + wide_delta, 155, M_RD_ColorName_RUS(message_chat_color),
-                                                        M_RD_ColorTranslation(message_chat_color));
+            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(message_chat_color), 164 + wide_delta, 155,
+                                  M_RD_ColorTranslation(message_chat_color));
         }
     }
 
     // Message timeout slider
-    M_DrawThermo_Small(35 + wide_delta, 64, 10, messages_timeout - 1);
+    RD_Menu_DrawSliderSmall(&MessagesMenu, 64, 10, messages_timeout - 1);
 }
 
-void M_RD_Change_Messages(int choice)
+void M_RD_Change_Messages(Direction_t direction)
 {
     showMessages ^= 1;
 
     if (!showMessages)
-    players[consoleplayer].message_system = DEH_String(english_language ?
+        players[consoleplayer].message_system = DEH_String(english_language ?
                                             MSGOFF : MSGOFF_RUS);
     else
-    players[consoleplayer].message_system = DEH_String(english_language ?
+        players[consoleplayer].message_system = DEH_String(english_language ?
                                             MSGON : MSGON_RUS);
 
     message_dontfuckwithme = true;
 }
 
-void M_RD_Change_Msg_Alignment(int choice)
+void M_RD_Change_Msg_Alignment(Direction_t direction)
 {
-    switch (choice)
-    {
-        case 0: 
-        messages_alignment--;
-        if (messages_alignment < 0) 
-            messages_alignment = 2;
-        break;
-
-        case 1:
-        messages_alignment++;
-        if (messages_alignment > 2)
-            messages_alignment = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&messages_alignment, 0, 2, direction);
 }
 
-void M_RD_Change_Msg_TimeOut(int choice)
+void M_RD_Change_Msg_TimeOut(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0:
-        if (messages_timeout > 1)
-        {
-            messages_timeout--;
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-
-        case 1:
-        if (messages_timeout < 10)
-        {
-            messages_timeout++;
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-    }
+    RD_Menu_SlideInt(&messages_timeout, 1, 10, direction);
 }
 
-void M_RD_Change_Msg_Fade(int choice)
+void M_RD_Change_Msg_Fade(Direction_t direction)
 {
     message_fade ^= 1;
 }
 
-void M_RD_Change_ShadowedText(int choice)
+void M_RD_Change_ShadowedText(Direction_t direction)
 {
     draw_shadowed_text ^= 1;
 }
 
-void M_RD_Define_Msg_Pickup_Color(void)
+void M_RD_Define_Msg_Color(MessageType_t messageType, int color)
 {
+    Translation_CR_t * colorVar;
+    switch (messageType)
+    {
+        case msg_pickup: // Item pickup.
+            colorVar = &messages_pickup_color_set;
+            break;
+        case msg_secret: // Revealed secret
+            colorVar = &messages_secret_color_set;
+            break;
+        case msg_system: // System message
+            colorVar = &messages_system_color_set;
+            break;
+        case msg_chat: // Netgame chat
+            colorVar = &messages_chat_color_set;
+            break;
+        default:
+            return;
+    }
+
     // [JN] No coloring in vanilla or Jaguar Doom.
     if (vanillaparm || gamemission == jaguar)
     {
-        messages_pickup_color_set = NULL;
+        *colorVar = CR_NONE;
     }
     else
     {
-        switch (message_pickup_color)
+        switch (color)
         {
-            case 1:   messages_pickup_color_set = cr[CR_DARKRED];    break;
-            case 2:   messages_pickup_color_set = cr[CR_GREEN];      break;
-            case 3:   messages_pickup_color_set = cr[CR_DARKGREEN];  break;
-            case 4:   messages_pickup_color_set = cr[CR_OLIVE];      break;
-            case 5:   messages_pickup_color_set = cr[CR_BLUE2];      break;
-            case 6:   messages_pickup_color_set = cr[CR_DARKBLUE];   break;
-            case 7:   messages_pickup_color_set = cr[CR_YELLOW];       break;
-            case 8:   messages_pickup_color_set = cr[CR_ORANGE];     break;
-            case 9:   messages_pickup_color_set = cr[CR_WHITE];      break;
-            case 10:  messages_pickup_color_set = cr[CR_GRAY];       break;
-            case 11:  messages_pickup_color_set = cr[CR_DARKGRAY];   break;
-            case 12:  messages_pickup_color_set = cr[CR_TAN];        break;
-            case 13:  messages_pickup_color_set = cr[CR_BROWN];    break;            
-            case 14:  messages_pickup_color_set = cr[CR_ALMOND];      break;
-            case 15:  messages_pickup_color_set = cr[CR_KHAKI];  break;
-            case 16:  messages_pickup_color_set = cr[CR_PINK];      break;
-            case 17:  messages_pickup_color_set = cr[CR_BURGUNDY];  break;
-            default:  messages_pickup_color_set = NULL;              break;
+            case 1:   *colorVar = CR_DARKRED;    break;
+            case 2:   *colorVar = CR_GREEN;      break;
+            case 3:   *colorVar = CR_DARKGREEN;  break;
+            case 4:   *colorVar = CR_OLIVE;      break;
+            case 5:   *colorVar = CR_BLUE2;      break;
+            case 6:   *colorVar = CR_DARKBLUE;   break;
+            case 7:   *colorVar = CR_YELLOW;     break;
+            case 8:   *colorVar = CR_ORANGE;     break;
+            case 9:   *colorVar = CR_WHITE;      break;
+            case 10:  *colorVar = CR_GRAY;       break;
+            case 11:  *colorVar = CR_DARKGRAY;   break;
+            case 12:  *colorVar = CR_TAN;        break;
+            case 13:  *colorVar = CR_BROWN;      break;
+            case 14:  *colorVar = CR_ALMOND;     break;
+            case 15:  *colorVar = CR_KHAKI;      break;
+            case 16:  *colorVar = CR_PINK;       break;
+            case 17:  *colorVar = CR_BURGUNDY;   break;
+            default:  *colorVar = CR_NONE;       break;
         }
     }
 }
 
-void M_RD_Change_Msg_Pickup_Color(int choice)
+void M_RD_Change_Msg_Pickup_Color(Direction_t direction)
 {
     // [JN] Disable colored messages toggling in Jaguar
     if (gamemission == jaguar)
-    return;
+        return;
 
-    switch(choice)
-    {
-        case 0:
-        message_pickup_color--;
-        if (message_pickup_color < 0)
-            message_pickup_color = 17;
-        break;
-
-        case 1:
-        message_pickup_color++;
-        if (message_pickup_color > 17)
-            message_pickup_color = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&message_pickup_color, 0, 17, direction);
 
     // [JN] Redefine pickup message color.
-    M_RD_Define_Msg_Pickup_Color();
-
-    // [JN] Routine №3: play sound only if necessary.
-    S_StartSound(NULL,sfx_stnmov);
+    M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);
 }
 
-void M_RD_Define_Msg_Secret_Color(void)
-{
-    // [JN] No coloring in vanilla or Jaguar Doom.
-    if (vanillaparm || gamemission == jaguar)
-    {
-        messages_secret_color_set = NULL;
-    }
-    else
-    {
-        switch (message_secret_color)
-        {
-            case 1:   messages_secret_color_set = cr[CR_DARKRED];    break;
-            case 2:   messages_secret_color_set = cr[CR_GREEN];      break;
-            case 3:   messages_secret_color_set = cr[CR_DARKGREEN];  break;
-            case 4:   messages_secret_color_set = cr[CR_OLIVE];      break;
-            case 5:   messages_secret_color_set = cr[CR_BLUE2];      break;
-            case 6:   messages_secret_color_set = cr[CR_DARKBLUE];   break;
-            case 7:   messages_secret_color_set = cr[CR_YELLOW];       break;
-            case 8:   messages_secret_color_set = cr[CR_ORANGE];     break;
-            case 9:   messages_secret_color_set = cr[CR_WHITE];      break;
-            case 10:  messages_secret_color_set = cr[CR_GRAY];       break;
-            case 11:  messages_secret_color_set = cr[CR_DARKGRAY];   break;
-            case 12:  messages_secret_color_set = cr[CR_TAN];        break;
-            case 13:  messages_secret_color_set = cr[CR_BROWN];    break;            
-            case 14:  messages_secret_color_set = cr[CR_ALMOND];      break;
-            case 15:  messages_secret_color_set = cr[CR_KHAKI];  break;
-            case 16:  messages_secret_color_set = cr[CR_PINK];      break;
-            case 17:  messages_secret_color_set = cr[CR_BURGUNDY];  break;
-            default:  messages_secret_color_set = NULL;              break;
-        }
-
-        // [JN] Routine №3: play sound only if necessary.
-        S_StartSound(NULL,sfx_stnmov);
-    }
-}
-
-void M_RD_Change_Msg_Secret_Color(int choice)
+void M_RD_Change_Msg_Secret_Color(Direction_t direction)
 {
     // [JN] Disable colored messages toggling in Jaguar
     if (gamemission == jaguar)
-    return;
+        return;
 
-    switch(choice)
-    {
-        case 0:
-        message_secret_color--;
-        if (message_secret_color < 0)
-            message_secret_color = 17;
-        break;
-
-        case 1:
-        message_secret_color++;
-        if (message_secret_color > 17)
-            message_secret_color = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&message_secret_color, 0, 17, direction);
 
     // [JN] Redefine revealed secret message color.
-    M_RD_Define_Msg_Secret_Color();
-
-    // [JN] Routine №3: play sound only if necessary.
-    S_StartSound(NULL,sfx_stnmov);
+    M_RD_Define_Msg_Color(msg_secret, message_secret_color);
 }
 
-void M_RD_Define_Msg_System_Color(void)
-{
-    // [JN] No coloring in vanilla or Jaguar Doom.
-    if (vanillaparm || gamemission == jaguar)
-    {
-        messages_system_color_set = NULL;
-    }
-    else
-    {
-        switch (message_system_color)
-        {
-            case 1:   messages_system_color_set = cr[CR_DARKRED];    break;
-            case 2:   messages_system_color_set = cr[CR_GREEN];      break;
-            case 3:   messages_system_color_set = cr[CR_DARKGREEN];  break;
-            case 4:   messages_system_color_set = cr[CR_OLIVE];      break;
-            case 5:   messages_system_color_set = cr[CR_BLUE2];      break;
-            case 6:   messages_system_color_set = cr[CR_DARKBLUE];   break;
-            case 7:   messages_system_color_set = cr[CR_YELLOW];       break;
-            case 8:   messages_system_color_set = cr[CR_ORANGE];     break;
-            case 9:   messages_system_color_set = cr[CR_WHITE];      break;
-            case 10:  messages_system_color_set = cr[CR_GRAY];       break;
-            case 11:  messages_system_color_set = cr[CR_DARKGRAY];   break;
-            case 12:  messages_system_color_set = cr[CR_TAN];        break;
-            case 13:  messages_system_color_set = cr[CR_BROWN];    break;            
-            case 14:  messages_system_color_set = cr[CR_ALMOND];      break;
-            case 15:  messages_system_color_set = cr[CR_KHAKI];  break;
-            case 16:  messages_system_color_set = cr[CR_PINK];      break;
-            case 17:  messages_system_color_set = cr[CR_BURGUNDY];  break;
-            default:  messages_system_color_set = NULL;              break;
-        }
-
-        // [JN] Routine №3: play sound only if necessary.
-        S_StartSound(NULL,sfx_stnmov);
-    }
-}
-
-void M_RD_Change_Msg_System_Color(int choice)
+void M_RD_Change_Msg_System_Color(Direction_t direction)
 {
     // [JN] Disable colored messages toggling in Jaguar
     if (gamemission == jaguar)
-    return;
+        return;
 
-    switch(choice)
-    {
-        case 0:
-        message_system_color--;
-        if (message_system_color < 0)
-            message_system_color = 17;
-        break;
-
-        case 1:
-        message_system_color++;
-        if (message_system_color > 17)
-            message_system_color = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&message_system_color, 0, 17, direction);
 
     // [JN] Redefine system message color.
-    M_RD_Define_Msg_System_Color();
-
-    // [JN] Routine №3: play sound only if necessary.
-    S_StartSound(NULL,sfx_stnmov);
+    M_RD_Define_Msg_Color(msg_system, message_system_color);
 }
 
-void M_RD_Define_Msg_Chat_Color(void)
-{
-    // [JN] No coloring in vanilla or Jaguar Doom.
-    if (vanillaparm || gamemission == jaguar)
-    {
-        messages_chat_color_set = NULL;
-    }
-    else
-    {
-        switch (message_chat_color)
-        {
-            case 1:   messages_chat_color_set = cr[CR_DARKRED];    break;
-            case 2:   messages_chat_color_set = cr[CR_GREEN];      break;
-            case 3:   messages_chat_color_set = cr[CR_DARKGREEN];  break;
-            case 4:   messages_chat_color_set = cr[CR_OLIVE];      break;
-            case 5:   messages_chat_color_set = cr[CR_BLUE2];      break;
-            case 6:   messages_chat_color_set = cr[CR_DARKBLUE];   break;
-            case 7:   messages_chat_color_set = cr[CR_YELLOW];       break;
-            case 8:   messages_chat_color_set = cr[CR_ORANGE];     break;
-            case 9:   messages_chat_color_set = cr[CR_WHITE];      break;
-            case 10:  messages_chat_color_set = cr[CR_GRAY];       break;
-            case 11:  messages_chat_color_set = cr[CR_DARKGRAY];   break;
-            case 12:  messages_chat_color_set = cr[CR_TAN];        break;
-            case 13:  messages_chat_color_set = cr[CR_BROWN];    break;            
-            case 14:  messages_chat_color_set = cr[CR_ALMOND];      break;
-            case 15:  messages_chat_color_set = cr[CR_KHAKI];  break;
-            case 16:  messages_chat_color_set = cr[CR_PINK];      break;
-            case 17:  messages_chat_color_set = cr[CR_BURGUNDY];  break;
-            default:  messages_chat_color_set = NULL;              break;
-        }
-
-        // [JN] Routine №3: play sound only if necessary.
-        S_StartSound(NULL,sfx_stnmov);
-    }
-}
-
-void M_RD_Change_Msg_Chat_Color(int choice)
+void M_RD_Change_Msg_Chat_Color(Direction_t direction)
 {
     // [JN] Disable colored messages toggling in Jaguar
     if (gamemission == jaguar)
-    return;
+        return;
 
-    switch(choice)
-    {
-        case 0:
-        message_chat_color--;
-        if (message_chat_color < 0)
-            message_chat_color = 17;
-        break;
-
-        case 1:
-        message_chat_color++;
-        if (message_chat_color > 17)
-            message_chat_color = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&message_chat_color, 0, 17, direction);
 
     // [JN] Redefine netgame chat message color.
-    M_RD_Define_Msg_Chat_Color();
+    M_RD_Define_Msg_Color(msg_chat, message_chat_color);
 }
-
 
 // -----------------------------------------------------------------------------
 // Automap settings
 // -----------------------------------------------------------------------------
-
-void M_RD_Choose_AutomapAndStatsSettings(int choice)
-{
-    M_SetupNextMenu(english_language ? 
-                    &RD_Automap_Def :
-                    &RD_Automap_Def_Rus);
-}
 
 void M_RD_Draw_AutomapSettings(void)
 {
@@ -4386,505 +2419,253 @@ void M_RD_Draw_AutomapSettings(void)
 
     if (english_language)
     {
-        M_WriteTextBigCentered_ENG(5, "AUTOMAP AND STATS");
-
-        //
-        // Automap
-        //
-        M_WriteTextSmall_ENG(70 + wide_delta, 25, "Automap", dp_translation = cr[CR_YELLOW]);
-
         // Automap colors (English only names, different placement)
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_ENG(170 + wide_delta, 35, "n/a", NULL);
+            RD_M_DrawTextSmallENG("n/a", 170 + wide_delta, 35, CR_NONE);
         }
         else
         {
-            M_WriteTextSmall_ENG (170 + wide_delta, 35, automap_color == 1 ? "boom"   :
-                                                        automap_color == 2 ? "jaguar" :
-                                                        automap_color == 3 ? "raven"  :
-                                                        automap_color == 4 ? "strife" :
-                                                        automap_color == 5 ? "unity"  :
-                                                                             "doom", NULL);
+            RD_M_DrawTextSmallENG(automap_color == 1 ? "boom" :
+                                  automap_color == 2 ? "jaguar" :
+                                  automap_color == 3 ? "raven"  :
+                                  automap_color == 4 ? "strife" :
+                                  automap_color == 5 ? "unity"  :
+                                  "doom", 170 + wide_delta, 35, CR_NONE);
         }
 
         // Line antialiasing
-        M_WriteTextSmall_ENG(193 + wide_delta, 45, automap_antialias ? "on" : "off", 
-                             automap_antialias ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(automap_antialias ? "on" : "off", 193 + wide_delta, 45,
+                              automap_antialias ? CR_GREEN : CR_DARKRED);
 
 
         // Overlay mode
-        M_WriteTextSmall_ENG(170 + wide_delta, 55, automap_overlay ? "on" : "off",
-                             automap_overlay ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(automap_overlay ? "on" : "off", 170 + wide_delta, 55,
+                              automap_overlay ? CR_GREEN : CR_DARKRED);
 
         // Rotate mode
-        M_WriteTextSmall_ENG(163 + wide_delta, 65, automap_rotate ? "on" : "off",
-                             automap_rotate ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(automap_rotate ? "on" : "off", 163 + wide_delta, 65,
+                              automap_rotate ? CR_GREEN : CR_DARKRED);
 
         // Follow mode
-        M_WriteTextSmall_ENG(164 + wide_delta, 75, automap_follow ? "on" : "off",
-                             automap_follow ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(automap_follow ? "on" : "off", 164 + wide_delta, 75,
+                              automap_follow ? CR_GREEN : CR_DARKRED);
 
         // Grid
-        M_WriteTextSmall_ENG(106 + wide_delta, 85, automap_grid ? "on" : "off",
-                             automap_grid ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(automap_grid ? "on" : "off", 106 + wide_delta, 85,
+                             automap_grid ? CR_GREEN : CR_DARKRED);
 
         // Grid size
-        M_WriteTextSmall_ENG(136 + wide_delta, 95, num, 
-                             automap_grid_size == 128 ? cr[CR_DARKRED] : cr[CR_GREEN]);
-
-        //
-        // Statistics
-        //
-        M_WriteTextSmall_ENG(70 + wide_delta, 105, "Statistics", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallENG(num, 136 + wide_delta, 95,
+                              automap_grid_size == 128 ? CR_DARKRED : CR_GREEN);
 
         // Level stats
 
-        M_WriteTextSmall_ENG(159 + wide_delta, 115, 
-                             automap_stats == 1 ? "in automap" :
-                             automap_stats == 2 ? "always" : "off",
-                             automap_stats ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(automap_stats == 1 ? "in automap" :
+                              automap_stats == 2 ? "always" : "off",
+                              159 + wide_delta, 115,
+                              automap_stats ? CR_GREEN : CR_DARKRED);
 
 
         // Level time
-        M_WriteTextSmall_ENG(150 + wide_delta, 125,
-                             automap_level_time == 1 ? "in automap" :
-                             automap_level_time == 2 ? "always" : "off",
-                             automap_level_time ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(automap_level_time == 1 ? "in automap" :
+                              automap_level_time == 2 ? "always" : "off",
+                              150 + wide_delta, 125,
+                              automap_level_time ? CR_GREEN : CR_DARKRED);
 
         // Total time
-        M_WriteTextSmall_ENG(151 + wide_delta, 135,
-                             automap_total_time == 1 ? "in automap" :
-                             automap_total_time == 2 ? "always" : "off",
-                             automap_total_time ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(automap_total_time == 1 ? "in automap" :
+                              automap_total_time == 2 ? "always" : "off",
+                              151 + wide_delta, 135,
+                              automap_total_time ? CR_GREEN : CR_DARKRED);
 
         // Player coords
-        M_WriteTextSmall_ENG(177 + wide_delta, 145,
-                             automap_coords == 1 ? "in automap" :
-                             automap_coords == 2 ? "always" : "off",
-                             automap_coords ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(automap_coords == 1 ? "in automap" :
+                              automap_coords == 2 ? "always" : "off",
+                              177 + wide_delta, 145,
+                              automap_coords ? CR_GREEN : CR_DARKRED);
     }
     else
     {
-        M_WriteTextBigCentered_RUS(5, "RFHNF B CNFNBCNBRF"); // КАРТА И СТАТИСТИКА
-
-        //
-        // Карта
-        //
-        M_WriteTextSmall_RUS(70 + wide_delta, 25, "Rfhnf", cr[CR_YELLOW]);
-
         // Automap colors (English only names, different placement)
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_RUS(191 + wide_delta, 35, "y*l", NULL); // н/д
+            RD_M_DrawTextSmallRUS("y*l", 191 + wide_delta, 35, CR_NONE); // н/д
         }
         else
         {
-            M_WriteTextSmall_ENG (189 + wide_delta, 35, automap_color == 1 ? "boom"   :
-                                                        automap_color == 2 ? "jaguar" :
-                                                        automap_color == 3 ? "raven"  :
-                                                        automap_color == 4 ? "strife" :
-                                                        automap_color == 5 ? "unity"  :
-                                                                             "doom", NULL);
+            RD_M_DrawTextSmallENG(automap_color == 1 ? "boom" :
+                                  automap_color == 2 ? "jaguar" :
+                                  automap_color == 3 ? "raven"  :
+                                  automap_color == 4 ? "strife" :
+                                  automap_color == 5 ? "unity"  :
+                                  "doom", 189 + wide_delta, 35, CR_NONE);
         }
 
         // Сглаживание линий
-        M_WriteTextSmall_RUS(214 + wide_delta, 45, automap_antialias ? "drk" : "dsrk",
-                                                   automap_antialias ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(automap_antialias ? "drk" : "dsrk", 214 + wide_delta, 45,
+                              automap_antialias ? CR_GREEN : CR_DARKRED);
 
         // Режим наложения
-        M_WriteTextSmall_RUS(203 + wide_delta, 55, automap_overlay ? "drk" : "dsrk",
-                                                   automap_overlay ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(automap_overlay ? "drk" : "dsrk", 203 + wide_delta, 55,
+                              automap_overlay ? CR_GREEN : CR_DARKRED);
 
         // Режим вращения
-        M_WriteTextSmall_RUS(194 + wide_delta, 65, automap_rotate ? "drk" : "dsrk",
-                                                   automap_rotate ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(automap_rotate ? "drk" : "dsrk", 194 + wide_delta, 65,
+                              automap_rotate ? CR_GREEN : CR_DARKRED);
 
         // Режим следования
-        M_WriteTextSmall_RUS(208 + wide_delta, 75, automap_follow ? "drk" : "dsrk",
-                                                   automap_follow ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(automap_follow ? "drk" : "dsrk", 208 + wide_delta, 75,
+                              automap_follow ? CR_GREEN : CR_DARKRED);
 
         // Сетка
-        M_WriteTextSmall_RUS(118 + wide_delta, 85, automap_grid ? "drk" : "dsrk",
-                                                   automap_grid ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(automap_grid ? "drk" : "dsrk", 118 + wide_delta, 85,
+                              automap_grid ? CR_GREEN : CR_DARKRED);
 
         // Размер сетки
-        M_WriteTextSmall_ENG(171 + wide_delta, 95, num, 
-                             automap_grid_size == 128 ? cr[CR_DARKRED] : cr[CR_GREEN]);
-        
-        //
-        // Статистика
-        //
-        M_WriteTextSmall_RUS(70 + wide_delta, 105, "Cnfnbcnbrf", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallENG(num, 171 + wide_delta, 95,
+                             automap_grid_size == 128 ? CR_DARKRED : CR_GREEN);
 
         // Статистика уровня
-        M_WriteTextSmall_RUS(210 + wide_delta, 115, automap_stats == 1 ? "yf rfhnt" :
-                                                    automap_stats == 2 ? "dctulf" :
-                                                                         "dsrk",
-                                                    automap_stats ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(automap_stats == 1 ? "yf rfhnt" :
+                              automap_stats == 2 ? "dctulf" :
+                              "dsrk", 210 + wide_delta, 115,
+                              automap_stats ? CR_GREEN : CR_DARKRED);
 
         // Время уровня
-        M_WriteTextSmall_RUS(171 + wide_delta, 125, automap_level_time == 1 ? "yf rfhnt" :
-                                                    automap_level_time == 2 ? "dctulf" :
-                                                                              "dsrk",
-                                                    automap_level_time ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(automap_level_time == 1 ? "yf rfhnt" :
+                              automap_level_time == 2 ? "dctulf" :
+                              "dsrk", 171 + wide_delta, 125,
+                              automap_level_time ? CR_GREEN : CR_DARKRED);
 
         // Общее время
-        M_WriteTextSmall_RUS(166 + wide_delta, 135, automap_total_time == 1 ? "yf rfhnt" :
-                                                    automap_total_time == 2 ? "dctulf" :
-                                                                              "dsrk",
-                                                    automap_total_time ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(automap_total_time == 1 ? "yf rfhnt" :
+                              automap_total_time == 2 ? "dctulf" :
+                              "dsrk", 166 + wide_delta, 135,
+                              automap_total_time ? CR_GREEN : CR_DARKRED);
 
         // Координаты игрока
-        M_WriteTextSmall_RUS(213 + wide_delta, 145, automap_coords == 1 ? "yf rfhnt" :
-                                                    automap_coords == 2 ? "dctulf" :
-                                                                          "dsrk",
-                                                    automap_coords ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(automap_coords == 1 ? "yf rfhnt" :
+                              automap_coords == 2 ? "dctulf" :
+                              "dsrk", 213 + wide_delta, 145,
+                              automap_coords ? CR_GREEN : CR_DARKRED);
     }
 }
 
-void M_RD_Change_AutomapColor(int choice)
+void M_RD_Change_AutomapColor(Direction_t direction)
 {
     // [JN] Disable automap colors changing in Jaguar
     if (gamemission == jaguar)
-    return;
+        return;
 
-    switch(choice)
-    {
-        case 0: 
-        automap_color--;
-        if (automap_color < 0) 
-            automap_color = 5;
-        break;
-    
-        case 1:
-        automap_color++;
-        if (automap_color > 5)
-            automap_color = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&automap_coords, 0, 2, direction);
 
     // [JN] Reinitialize automap color scheme.
     AM_initColors();
-
-    // [JN] Routine №3: play sound only if necessary.
-    S_StartSound(NULL,sfx_stnmov);
 }
 
-void M_RD_Change_AutomapAntialias(int choice)
+void M_RD_Change_AutomapAntialias(Direction_t direction)
 {
     automap_antialias ^= 1;
 }
 
-void M_RD_Change_AutomapOverlay(int choice)
+void M_RD_Change_AutomapOverlay(Direction_t direction)
 {
     automap_overlay ^= 1;
 }
 
-void M_RD_Change_AutomapRotate(int choice)
+void M_RD_Change_AutomapRotate(Direction_t direction)
 {
     automap_rotate ^= 1;
 }
 
-void M_RD_Change_AutomapFollow(int choice)
+void M_RD_Change_AutomapFollow(Direction_t direction)
 {
     automap_follow ^= 1;
 }
 
-void M_RD_Change_AutomapGrid(int choice)
+void M_RD_Change_AutomapGrid(Direction_t direction)
 {
     automap_grid ^= 1;
 }
 
-void M_RD_Change_AutomapGridSize(int choice)
+void M_RD_Change_AutomapGridSize(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0:
-            if (automap_grid_size == 512)
-            {
-                automap_grid_size = 256;
-            }
-            else if (automap_grid_size == 256)
-            {
-                automap_grid_size = 128;
-            }
-            else if (automap_grid_size == 128)
-            {
-                automap_grid_size = 64;
-            }
-            else if (automap_grid_size == 64)
-            {
-                automap_grid_size = 32;
-            }
-        break;
-
-        case 1:
-            if (automap_grid_size == 32)
-            {
-                automap_grid_size = 64;
-            }
-            else if (automap_grid_size == 64)
-            {
-                automap_grid_size = 128;
-            }
-            else if (automap_grid_size == 128)
-            {
-                automap_grid_size = 256;
-            }
-            else if (automap_grid_size == 256)
-            {
-                automap_grid_size = 512;
-            }
-        break;
-    }
+    RD_Menu_ShiftSlideInt(&automap_grid_size, 32, 512, direction);
 }
 
-void M_RD_Change_AutomapStats(int choice)
+void M_RD_Change_AutomapStats(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0: 
-        automap_stats--;
-        if (automap_stats < 0) 
-            automap_stats = 2;
-        break;
-    
-        case 1:
-        automap_stats++;
-        if (automap_stats > 2)
-            automap_stats = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&automap_stats, 0, 2, direction);
 }
 
-void M_RD_Change_AutomapLevelTime(int choice)
+void M_RD_Change_AutomapLevelTime(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0: 
-        automap_level_time--;
-        if (automap_level_time < 0) 
-            automap_level_time = 2;
-        break;
-    
-        case 1:
-        automap_level_time++;
-        if (automap_level_time > 2)
-            automap_level_time = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&automap_level_time, 0, 2, direction);
 }
 
-void M_RD_Change_AutomapTotalTime(int choice)
+void M_RD_Change_AutomapTotalTime(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0: 
-        automap_total_time--;
-        if (automap_total_time < 0) 
-            automap_total_time = 2;
-        break;
-    
-        case 1:
-        automap_total_time++;
-        if (automap_total_time > 2)
-            automap_total_time = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&automap_total_time, 0, 2, direction);
 }
 
-void M_RD_Change_AutomapCoords(int choice)
+void M_RD_Change_AutomapCoords(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0: 
-        automap_coords--;
-        if (automap_coords < 0) 
-            automap_coords = 2;
-        break;
-    
-        case 1:
-        automap_coords++;
-        if (automap_coords > 2)
-            automap_coords = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&automap_coords, 0, 2, direction);
 }
-
 
 // -----------------------------------------------------------------------------
 // Sound
 // -----------------------------------------------------------------------------
 
-void M_RD_Choose_Audio(int choice)
-{
-    if (vanillaparm)
-    {
-        M_SetupNextMenu(english_language ?
-                        &Vanilla_Audio_Def :
-                        &Vanilla_Audio_Def_Rus);
-    }
-    else
-    {
-        M_SetupNextMenu(english_language ?
-                        &RD_Audio_Def :
-                        &RD_Audio_Def_Rus);
-    }
-}
-
 void M_RD_Draw_Audio(void)
 {
     static char num[4];
 
-    if (english_language)
-    {
-        M_WriteTextBigCentered_ENG(5, "SOUND OPTIONS");
-
-        //
-        // Volume
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 25, "volume", cr[CR_YELLOW]);
-
-        //
-        // Channels
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 75, "channels", cr[CR_YELLOW]);
-
-        //
-        // System
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 105, "advanced", cr[CR_YELLOW]);
-    }
-    else
-    {
-        M_WriteTextBigCentered_RUS(5, "YFCNHJQRB PDERF"); // НАСТРОЙКИ ЗВУКА
-
-        //
-        // Громкость
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 25, "uhjvrjcnm", cr[CR_YELLOW]);
-
-        //
-        // Воспроизведение
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 75, "djcghjbpdtltybt", cr[CR_YELLOW]);
-
-        //
-        // Дополнительно
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 105, "ljgjkybntkmyj", cr[CR_YELLOW]);
-    }
-
     // SFX volume slider
-    M_DrawThermo_Small(35 + wide_delta, 44, 16, sfxVolume);
+    RD_Menu_DrawSliderSmall(&SoundMenu, 44, 16, sfxVolume);
     // Numerical representation of SFX volume
     M_snprintf(num, 4, "%3d", sfxVolume);
-    M_WriteTextSmall_ENG(177 + wide_delta, 45, num, NULL);
+    RD_M_DrawTextSmallENG(num,  177 + wide_delta, 45,CR_NONE);
 
     // Music volume slider
-    M_DrawThermo_Small(35 + wide_delta, 64, 16, musicVolume);
+    RD_Menu_DrawSliderSmall(&SoundMenu, 64, 16, musicVolume);
     // Numerical representation of music volume
     M_snprintf(num, 4, "%3d", musicVolume);
-    M_WriteTextSmall_ENG(177 + wide_delta, 65, num, NULL);
+    RD_M_DrawTextSmallENG(num,  177 + wide_delta, 65, CR_NONE);
 
     // SFX channels slider
-    M_DrawThermo_Small(35 + wide_delta, 94, 16, snd_channels / 4 - 1);
+    RD_Menu_DrawSliderSmall(&SoundMenu, 94, 16, snd_channels / 4 - 1);
     // Numerical representation of channels
     M_snprintf(num, 4, "%3d", snd_channels);
-    M_WriteTextSmall_ENG(177 + wide_delta, 95, num, NULL);
+    RD_M_DrawTextSmallENG(num,  177 + wide_delta, 95, CR_NONE);
 }
 
-void M_RD_Change_SfxVol(int choice)
+void M_RD_Change_SfxVol(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0:
-        if (sfxVolume)
-        {
-            sfxVolume--;
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-
-        case 1:
-        if (sfxVolume < 15)
-        {
-            sfxVolume++;
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-    }
+    RD_Menu_SlideInt(&sfxVolume, 0, 15, direction);
 
     S_SetSfxVolume(sfxVolume * 8);
 }
 
-void M_RD_Change_MusicVol(int choice)
+void M_RD_Change_MusicVol(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0:
-        if (musicVolume)
-        {
-            musicVolume--;
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-
-        case 1:
-        if (musicVolume < 15)
-        {
-            musicVolume++;
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-    }
+    RD_Menu_SlideInt(&musicVolume, 0, 15, direction);
 
     S_SetMusicVolume(musicVolume * 8);
 }
 
-void M_RD_Change_SfxChannels(int choice)
+void M_RD_Change_SfxChannels(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0:
-        if (snd_channels > 4)
-        {
-            snd_channels -= 4;
-            // Reallocate sound channels
-            S_ChannelsRealloc();
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-    
-        case 1:
-        if (snd_channels < 64)
-        {
-            snd_channels += 4;
-            // Reallocate sound channels
-            S_ChannelsRealloc();
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-    }
+    RD_Menu_SlideInt_Step(&snd_channels, 4, 64, 4, direction);
+
+    // Reallocate sound channels
+    S_ChannelsRealloc();
 }
 
 // -----------------------------------------------------------------------------
 // Sound system
 // -----------------------------------------------------------------------------
-
-void M_RD_Choose_SoundSystem(int choice)
-{
-    M_SetupNextMenu(english_language ?
-                    &RD_Audio_System_Def :
-                    &RD_Audio_System_Def_Rus);
-}
 
 void M_RD_Draw_Audio_System(void)
 {
@@ -4892,177 +2673,140 @@ void M_RD_Draw_Audio_System(void)
 
     if (english_language)
     {
-        M_WriteTextBigCentered_ENG(5, "SOUND SYSTEM");
-
-        //
-        // Sound system
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 25, "sound system", cr[CR_YELLOW]);
-
         // Sound effects
         if (snd_sfxdevice == 0)
         {
             
-            M_WriteTextSmall_ENG(141 + wide_delta, 35, "disabled", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallENG("disabled", 141 + wide_delta, 35, CR_DARKRED);
         }
         else if (snd_sfxdevice == 1)
         {
-            M_WriteTextSmall_ENG(141 + wide_delta, 35, "pc speaker", NULL);
+            RD_M_DrawTextSmallENG("pc speaker", 141 + wide_delta, 35, CR_NONE);
         }
         else if (snd_sfxdevice == 3)
         {
-            M_WriteTextSmall_ENG(141 + wide_delta, 35, "digital sfx", NULL);
+            RD_M_DrawTextSmallENG("digital sfx", 141 + wide_delta, 35, CR_NONE);
         }
 
         // Music
         if (snd_musicdevice == 0)
         {   
-            M_WriteTextSmall_ENG(79 + wide_delta, 45, "disabled", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallENG("disabled", 79 + wide_delta, 45, CR_DARKRED);
         }
         else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, ""))
         {
-            M_WriteTextSmall_ENG(79 + wide_delta, 45, "opl2 synth", NULL);
+            RD_M_DrawTextSmallENG("opl2 synth", 79 + wide_delta, 45, CR_NONE);
         }
         else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, "-opl3"))
         {
-            M_WriteTextSmall_ENG(79 + wide_delta, 45, "opl3 synth", NULL);
+            RD_M_DrawTextSmallENG("opl3 synth", 79 + wide_delta, 45, CR_NONE);
         }
         else if (snd_musicdevice == 5)
         {
-            M_WriteTextSmall_ENG(79 + wide_delta, 45, "gus emulation", NULL);
+            RD_M_DrawTextSmallENG("gus emulation", 79 + wide_delta, 45, CR_NONE);
         }
         else if (snd_musicdevice == 8)
         {
-            M_WriteTextSmall_ENG(79 + wide_delta, 45, "MIDI/MP3/OGG/FLAC/TRACKER", NULL);
+            RD_M_DrawTextSmallENG("MIDI/MP3/OGG/FLAC/TRACKER", 79 + wide_delta, 45, CR_NONE);
         }
-
-        //
-        // Quality
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 55, "quality", cr[CR_YELLOW]);
 
         // Sampling frequency
         sprintf(snd_frequency, "%d HZ", snd_samplerate);
-        M_WriteTextSmall_ENG(179 + wide_delta, 65, snd_frequency, NULL);
-
-        //
-        // Miscellaneous
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 75, "Miscellaneous", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallENG(snd_frequency, 179 + wide_delta, 65, CR_NONE);
 
         // Sfx mode
-        M_WriteTextSmall_ENG(178 + wide_delta, 85, snd_monomode ? "mono" : "stereo", NULL);
+        RD_M_DrawTextSmallENG(snd_monomode ? "mono" : "stereo", 178 + wide_delta, 85, CR_NONE);
 
         // Pitch-shifted sounds
-        M_WriteTextSmall_ENG(186 + wide_delta, 95, snd_pitchshift ? "on" : "off", NULL);
+        RD_M_DrawTextSmallENG(snd_pitchshift ? "on" : "off", 186 + wide_delta, 95, CR_NONE);
 
         // Mute inactive window
-        M_WriteTextSmall_ENG(185 + wide_delta, 105, mute_inactive_window ? "on" : "off", NULL);
+        RD_M_DrawTextSmallENG(mute_inactive_window ? "on" : "off", 185 + wide_delta, 105, CR_NONE);
     }
     else
     {
-        M_WriteTextBigCentered_RUS(5, "PDERJDFZ CBCNTVF"); // ЗВУКОВАЯ СИСТЕМА
-
-        //
-        // Звуковая система
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 25, "pderjdfz cbcntvf", cr[CR_YELLOW]);
-
         // Звуковые эффекты
         if (snd_sfxdevice == 0)
         {
             // Отключены
-            M_WriteTextSmall_RUS(175 + wide_delta, 35, "jnrk.xtys", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallRUS("jnrk.xtys", 175 + wide_delta, 35, CR_DARKRED);
         }
         else if (snd_sfxdevice == 1)
         {
             // Динамик ПК
-            M_WriteTextSmall_RUS(175 + wide_delta, 35, "lbyfvbr gr", NULL);
+            RD_M_DrawTextSmallRUS("lbyfvbr gr", 175 + wide_delta, 35, CR_NONE);
         }
         else if (snd_sfxdevice == 3)
         {
             // Цифровые
-            M_WriteTextSmall_RUS(175 + wide_delta, 35, "wbahjdst", NULL);
+            RD_M_DrawTextSmallRUS("wbahjdst", 175 + wide_delta, 35, CR_NONE);
         }
 
         // Музыка
         if (snd_musicdevice == 0)
         {
             // Отключена
-            M_WriteTextSmall_RUS(94 + wide_delta, 45, "jnrk.xtyf", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallRUS("jnrk.xtyf", 94 + wide_delta, 45, CR_DARKRED);
         }
         else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, ""))
         {
             // Синтез OPL2
-            M_WriteTextSmall_RUS(94 + wide_delta, 45, "cbyntp", NULL);
-            M_WriteTextSmall_ENG(146 + wide_delta, 45, "opl2", NULL);
+            RD_M_DrawTextSmallRUS("cbyntp", 94 + wide_delta, 45, CR_NONE);
+            RD_M_DrawTextSmallENG("opl2", 146 + wide_delta, 45, CR_NONE);
         }
         else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, "-opl3"))
         {
             // Синтез OPL3
-            M_WriteTextSmall_RUS(94 + wide_delta, 45, "cbyntp", NULL);
-            M_WriteTextSmall_ENG(146 + wide_delta, 45, "opl3", NULL);
+            RD_M_DrawTextSmallRUS("cbyntp", 94 + wide_delta, 45, CR_NONE);
+            RD_M_DrawTextSmallENG("opl3", 146 + wide_delta, 45, CR_NONE);
         }
         else if (snd_musicdevice == 5)
         {
             // Эмуляция GUS
-            M_WriteTextSmall_RUS(94 + wide_delta, 45, "\'vekzwbz", NULL);
-            M_WriteTextSmall_ENG(164 + wide_delta, 45, "gus", NULL);
+            RD_M_DrawTextSmallRUS("\'vekzwbz", 94 + wide_delta, 45, CR_NONE);
+            RD_M_DrawTextSmallENG("gus", 164 + wide_delta, 45, CR_NONE);
         }
         else if (snd_musicdevice == 8)
         {
-            M_WriteTextSmall_ENG(94 + wide_delta, 45, "MIDI/MP3/OGG/FLAC/TRACKER", NULL);
+            RD_M_DrawTextSmallENG("MIDI/MP3/OGG/FLAC/TRACKER", 94 + wide_delta, 45, CR_NONE);
         }
-
-        //
-        // Качество звучания
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 55, "rfxtcndj pdexfybz", cr[CR_YELLOW]);
 
         // Частота дискретизации (ГЦ)
         sprintf(snd_frequency, "%d UW", snd_samplerate);
-        M_WriteTextSmall_RUS(208 + wide_delta, 65, snd_frequency, NULL);
-
-        //
-        // Разное
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 75, "hfpyjt", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallRUS(snd_frequency, 208 + wide_delta, 65, CR_NONE);
 
         // Режим звука
-        M_WriteTextSmall_RUS(231 + wide_delta, 85, snd_monomode ? "vjyj" : "cnthtj", NULL);
+        RD_M_DrawTextSmallRUS(snd_monomode ? "vjyj" : "cnthtj", 231 + wide_delta, 85, CR_NONE);
 
         // Произвольный питч-шифтинг
-        M_WriteTextSmall_RUS(242 + wide_delta, 95, snd_pitchshift ? "drk" : "dsrk", NULL);
+        RD_M_DrawTextSmallRUS(snd_pitchshift ? "drk" : "dsrk", 242 + wide_delta, 95, CR_NONE);
 
         // Звук в неактивном окне
-        M_WriteTextSmall_RUS(208 + wide_delta, 105, mute_inactive_window ? "dsrk" : "drk", NULL);
+        RD_M_DrawTextSmallRUS(mute_inactive_window ? "dsrk" : "drk", 208 + wide_delta, 105, CR_NONE);
     }
 }
 
-void M_RD_Change_SoundDevice(int choice)
+void M_RD_Change_SoundDevice(Direction_t direction)
 {
-    switch(choice)
+    switch(direction)
     {
-        case 0:
-        if (snd_sfxdevice == 0)
-            snd_sfxdevice = 3;
-        else 
-        if (snd_sfxdevice == 3)
-            snd_sfxdevice = 1;
-        else 
-        if (snd_sfxdevice == 1)
-            snd_sfxdevice = 0;
-        break;
-        case 1:
-        if (snd_sfxdevice == 0)
-            snd_sfxdevice = 1;
-        else 
-        if (snd_sfxdevice == 1)
-            snd_sfxdevice = 3;
-        else 
-        if (snd_sfxdevice == 3)
-            snd_sfxdevice = 0;
-        break;
+        case LEFT_DIR:
+            if (snd_sfxdevice == 0)
+                snd_sfxdevice = 3;
+            else if (snd_sfxdevice == 3)
+                snd_sfxdevice = 1;
+            else if (snd_sfxdevice == 1)
+                snd_sfxdevice = 0;
+            break;
+        case RIGHT_DIR:
+            if (snd_sfxdevice == 0)
+                snd_sfxdevice = 1;
+            else if (snd_sfxdevice == 1)
+                snd_sfxdevice = 3;
+            else if (snd_sfxdevice == 3)
+                snd_sfxdevice = 0;
+        default:
+            break;
     }
 
     // Reinitialize SFX module
@@ -5075,11 +2819,11 @@ void M_RD_Change_SoundDevice(int choice)
     S_SetSfxVolume(sfxVolume * 8);
 }
 
-void M_RD_Change_MusicDevice(int choice)
+void M_RD_Change_MusicDevice(Direction_t direction)
 {
-    switch(choice)
+    switch(direction)
     {
-        case 0:
+        case LEFT_DIR:
             if (snd_musicdevice == 0)
             {
                 snd_musicdevice = 8;    // Set to MIDI/MP3/OGG/FLAC
@@ -5102,8 +2846,8 @@ void M_RD_Change_MusicDevice(int choice)
             {
                 snd_musicdevice = 0;    // Disable
             }
-        break;
-        case 1:
+            break;
+        case RIGHT_DIR:
             if (snd_musicdevice == 0)
             {
                 snd_musicdevice  = 3;   // Set to OPL2
@@ -5126,7 +2870,8 @@ void M_RD_Change_MusicDevice(int choice)
             {
                 snd_musicdevice  = 0;   // Disable
             }
-        break;
+        default:
+            break;
     }
 
     // Shut down current music
@@ -5145,39 +2890,9 @@ void M_RD_Change_MusicDevice(int choice)
     S_ChangeMusic(music_num_rd, true);
 }
 
-void M_RD_Change_Sampling(int choice)
+void M_RD_Change_Sampling(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0:
-            if (snd_samplerate == 44100)
-            {
-                snd_samplerate = 22050;
-            }
-            else if (snd_samplerate == 22050)
-            {
-                snd_samplerate = 11025;
-            }
-            else if (snd_samplerate == 11025)
-            {
-                snd_samplerate  = 44100;
-            }
-        break;
-        case 1:
-            if (snd_samplerate == 11025)
-            {
-                snd_samplerate = 22050;
-            }
-            else if (snd_samplerate == 22050)
-            {
-                snd_samplerate = 44100;
-            }
-            else if (snd_samplerate == 44100)
-            {
-                snd_samplerate = 11025;
-            }
-        break;
-    }
+    RD_Menu_ShiftSpinInt(&snd_samplerate, 11025, 44100, direction);
 
     // Shut down sound system
     I_ShutdownSound();
@@ -5207,7 +2922,7 @@ void M_RD_Change_Sampling(int choice)
     S_ChangeMusic(music_num_rd, true);
 }
 
-void M_RD_Change_SndMode(int choice)
+void M_RD_Change_SndMode(Direction_t direction)
 {
     snd_monomode ^= 1;
 
@@ -5215,27 +2930,19 @@ void M_RD_Change_SndMode(int choice)
     S_UpdateStereoSeparation();
 }
 
-void M_RD_Change_PitchShifting(int choice)
+void M_RD_Change_PitchShifting(Direction_t direction)
 {
     snd_pitchshift ^= 1;
 }
 
-void M_RD_Change_MuteInactive(int choice)
+void M_RD_Change_MuteInactive(Direction_t direction)
 {
     mute_inactive_window ^= 1;
 }
 
-
 // -----------------------------------------------------------------------------
 // Keyboard and Mouse
 // -----------------------------------------------------------------------------
-
-void M_RD_Choose_Controls(int choice)
-{
-    M_SetupNextMenu(english_language ?
-                    &RD_Controls_Def :
-                    &RD_Controls_Def_Rus);
-}
 
 void M_RD_Draw_Controls(void)
 {
@@ -5243,225 +2950,97 @@ void M_RD_Draw_Controls(void)
 
     if (english_language)
     {
-        M_WriteTextBigCentered_ENG(5, "CONTROL SETTINGS");
-
-        //
-        // Controls
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 25, "Controls", cr[CR_YELLOW]);
-
-        //
-        // Mouse
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 55, "mouse", cr[CR_YELLOW]);
-
         // Mouse look
-        M_WriteTextSmall_ENG(119 + wide_delta, 125, mlook ? "on" : "off", NULL);
+        RD_M_DrawTextSmallENG(mlook ? "on" : "off", 119 + wide_delta, 125, CR_NONE);
 
         // Invert Y axis
-        M_WriteTextSmall_ENG(130 + wide_delta, 135, mouse_y_invert ? "on" : "off",
-                             !mlook ? cr[CR_DARKRED] : NULL);
-
+        RD_M_DrawTextSmallENG(mouse_y_invert ? "on" : "off", 130 + wide_delta, 135,
+                              !mlook ? CR_DARKRED : CR_NONE);
 
         // Vertical movement
-        M_WriteTextSmall_ENG(171 + wide_delta, 145, !novert ? "on" : "off",
-                             mlook ? cr[CR_DARKRED] : NULL);
-
+        RD_M_DrawTextSmallENG(!novert ? "on" : "off", 171 + wide_delta, 145,
+                              mlook ? CR_DARKRED : CR_NONE);
     }
     else
     {
-        M_WriteTextBigCentered_RUS(5, "EGHFDKTYBT"); // УПРАВЛЕНИЕ
-
-        //
-        // Управление
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 25, "eghfdktybt", cr[CR_YELLOW]);
-
-        //
-        // Мышь
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 55, "vsim", cr[CR_YELLOW]);
-
         // Обзор мышью
-        M_WriteTextSmall_RUS(135 + wide_delta, 125, mlook ? "drk" : "dsrk", NULL);
+        RD_M_DrawTextSmallRUS(mlook ? "drk" : "dsrk", 135 + wide_delta, 125, CR_NONE);
 
         // Вертикальная инверсия
-        M_WriteTextSmall_RUS(207 + wide_delta, 135, mouse_y_invert ? "drk" : "dsrk",
-                             !mlook ? cr[CR_DARKRED] : NULL);
+        RD_M_DrawTextSmallRUS(mouse_y_invert ? "drk" : "dsrk", 207 + wide_delta, 135,
+                              !mlook ? CR_DARKRED : CR_NONE);
 
         // Вертикальное перемещение
-        M_WriteTextSmall_RUS(235 + wide_delta, 145, !novert ? "drk" : "dsrk",
-                             mlook ? cr[CR_DARKRED] : NULL);
+        RD_M_DrawTextSmallRUS(!novert ? "drk" : "dsrk", 235 + wide_delta, 145,
+                              mlook ? CR_DARKRED : CR_NONE);
     }
 
     // Mouse sensivity slider
-    M_DrawThermo_Small(35 + wide_delta, 74, 17, mouseSensitivity);
+    RD_Menu_DrawSliderSmall(&ControlsMenu, 74, 17, mouseSensitivity);
     // Numerical representation
     M_snprintf(num, 4, "%3d", mouseSensitivity);
-    M_WriteTextSmall_ENG(189 + wide_delta, 75, num, NULL);
+    RD_M_DrawTextSmallENG(num, 189 + wide_delta, 75, CR_NONE);
 
     // Acceleration slider
-    M_DrawThermo_Small(35 + wide_delta, 94, 17, mouse_acceleration * 4 - 4);
+    RD_Menu_DrawSliderSmall(&ControlsMenu, 94, 17, mouse_acceleration * 4 - 4);
     // Numerical representation
     M_snprintf(num, 4, "%f", mouse_acceleration);
-    M_WriteTextSmall_ENG(189 + wide_delta, 95, num, NULL);
+    RD_M_DrawTextSmallENG(num, 189 + wide_delta, 95, CR_NONE);
 
     // Acceleration threshold slider
-    M_DrawThermo_Small(35 + wide_delta, 114, 17, mouse_threshold / 2);
+    RD_Menu_DrawSliderSmall(&ControlsMenu, 114, 17, mouse_threshold / 2);
     // Numerical representation
     M_snprintf(num, 4, "%3d", mouse_threshold);
     if (mouse_acceleration < 1.1)
-    dp_translation = cr[CR_DARKRED];
-    M_WriteTextSmall_ENG(189 + wide_delta, 115, num, NULL);
-    dp_translation = NULL;
-}
-
-void M_RD_Change_AlwaysRun(int choice)
-{
-    static int joybspeed_old = 2;
-
-    if (joybspeed >= 20)
-    {
-        joybspeed = joybspeed_old;
-    }
+        RD_M_DrawTextSmallENG(num, 189 + wide_delta, 115, CR_DARKRED);
     else
-    {
-        joybspeed_old = joybspeed;
-        joybspeed = 29;
-    }
+        RD_M_DrawTextSmallENG(num, 189 + wide_delta, 115, CR_NONE);
 }
 
-void M_RD_Change_MouseLook(int choice)
+void M_RD_Change_MouseLook(Direction_t direction)
 {
     mlook ^= 1;
 
     if (!mlook)
-    players[consoleplayer].centering = true;
+        players[consoleplayer].centering = true;
 }
 
-void M_RD_Change_InvertY(int choice)
+void M_RD_Change_InvertY(Direction_t direction)
 {
     mouse_y_invert ^= 1;
 }
 
-void M_RD_Change_Novert(int choice)
+void M_RD_Change_Novert(Direction_t direction)
 {
     novert ^= 1;
 }
 
-void M_RD_Change_Sensitivity(int choice)
+void M_RD_Change_Sensitivity(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0:
-        if (mouseSensitivity)
-        {
-            mouseSensitivity--;
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-
-        case 1:
-        if (mouseSensitivity < 255) // [crispy] extended range
-        {
-            mouseSensitivity++;
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-    }
+    RD_Menu_SlideInt(&mouseSensitivity, 0, 255, direction); // [crispy] extended range
 }
 
-void M_RD_Change_Acceleration(int choice)
+void M_RD_Change_Acceleration(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0:
-        if (mouse_acceleration > 1.1)
-        {
-            mouse_acceleration -= 0.1;
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-
-        case 1:
-        if (mouse_acceleration < 5.0)
-        {
-            mouse_acceleration += 0.1;
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-    }
+    RD_Menu_SlideFloat_Step(&mouse_acceleration, 1.1F, 5.0F, 0.1F, direction);
 }
 
-void M_RD_Change_Threshold(int choice)
+void M_RD_Change_Threshold(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0:
-        if (mouse_threshold > 0)
-        {
-            mouse_threshold--;
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-
-        case 1:
-        if (mouse_threshold < 32)
-        {
-            mouse_threshold++;
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-        break;
-    }
+    RD_Menu_SlideInt(&mouse_threshold, 0, 32, direction);
 }
 
 // -----------------------------------------------------------------------------
 // Key bindings
 // -----------------------------------------------------------------------------
 
-key_page_t* getCurrentKeyPage()
-{
-    if(currentMenu == RD_Bindings_Menu_Def_1 ||
-       currentMenu == RD_Bindings_Menu_Def_1_Rus)
-    {
-        return &RD_Bindings_1;
-    }
-    else if(currentMenu == RD_Bindings_Menu_Def_2 ||
-            currentMenu == RD_Bindings_Menu_Def_2_Rus)
-    {
-        return &RD_Bindings_2;
-    }
-    else if(currentMenu == RD_Bindings_Menu_Def_3 ||
-            currentMenu == RD_Bindings_Menu_Def_3_Rus)
-    {
-        return &RD_Bindings_3;
-    }
-    else if(currentMenu == RD_Bindings_Menu_Def_4 ||
-            currentMenu == RD_Bindings_Menu_Def_4_Rus)
-    {
-        return &RD_Bindings_4;
-    }
-    else
-    {
-        return NULL;
-    }
-}
-
 void M_RD_Bind_Key(int choice)
 {
-    key_page_t* keyPage = getCurrentKeyPage();
-    if(keyPage) M_RD_StartBinding(BK_getKeyDescriptor(keyPage->keys[choice])->key_var);
+    M_RD_StartBinding(BK_getKeyDescriptor(choice)->key_var);
 }
 
 void M_RD_Draw_Bindings()
 {
-    key_page_t *keyPage = getCurrentKeyPage();
     int x = (english_language ? 209 : 210);
 
     // [JN] Erase the entire screen to a tiled background.
@@ -5469,82 +3048,39 @@ void M_RD_Draw_Bindings()
     V_FillFlat ("FLOOR4_8");
 
     if (english_language)
-        M_WriteTextBigCentered_ENG(5, "Keyboard bindings");
-    else
-        M_WriteTextBigCentered_RUS(5, "Yfcnhjqrb rkfdbfnehs"); // Настройки клавиатуры
-
-    for (int i = 0; i < keyPage->num_of_subtitles; ++i)
     {
-        if (english_language)
-            M_WriteTextSmall_ENG(35 + wide_delta, keyPage->subtitles[i].y, keyPage->subtitles[i].eng_text, cr[CR_YELLOW]);
-        else
-            M_WriteTextSmall_RUS(35 + wide_delta, keyPage->subtitles[i].y, keyPage->subtitles[i].rus_text, cr[CR_YELLOW]);
-    }
+        RD_M_DrawTextSmallENG(CurrentMenu == &Bindings4Menu ? "first page >" : "next page >", 35 + wide_delta, 155, CR_WHITE);
+        RD_M_DrawTextSmallENG(CurrentMenu == &Bindings1Menu ? "< last page" : "< prev page", 35 + wide_delta, 165, CR_WHITE);
 
-    if (english_language)
-    {
-        M_WriteTextSmall_ENG(35 + wide_delta, 155, currentMenu == RD_Bindings_Menu_Def_4 ? "first page >" : "next page >", cr[CR_WHITE]);
-        M_WriteTextSmall_ENG(35 + wide_delta, 165, currentMenu == RD_Bindings_Menu_Def_1 ? "< last page" : "< prev page", cr[CR_WHITE]);
-        M_WriteTextSmall_ENG(x + wide_delta, 165, keyPage->pageNumber_eng, cr[CR_WHITE]);
-
-        M_WriteTextSmall_ENG(55 + wide_delta, 180, "enter to change, del to clear", dp_translation = cr[CR_DARKRED]);
-        M_WriteTextSmall_ENG(75 + wide_delta, 189, "pgup/pgdn to turn pages", dp_translation = cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG("enter to change, del to clear", 55 + wide_delta, 180, CR_DARKRED);
+        RD_M_DrawTextSmallENG("pgup/pgdn to turn pages", 75 + wide_delta, 189, CR_DARKRED);
     }
     else
     {
-        M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_NEXT_RUS, cr[CR_WHITE]);
-        M_WriteTextSmall_RUS(35 + wide_delta, 165, RD_PREV_RUS, cr[CR_WHITE]);
-        M_WriteTextSmall_RUS(x + wide_delta, 165, keyPage->pageNumber_rus, cr[CR_WHITE]);
+        RD_M_DrawTextSmallRUS(RD_NEXT_RUS, 35 + wide_delta, 155, CR_WHITE);
+        RD_M_DrawTextSmallRUS(RD_PREV_RUS, 35 + wide_delta, 165, CR_WHITE);
 
-        M_WriteTextSmall_ENG(44 + wide_delta, 180, "enter =", cr[CR_DARKRED]);
-        M_WriteTextSmall_RUS(88 + wide_delta, 180, "= yfpyfxbnm<", cr[CR_DARKRED]);
-        M_WriteTextSmall_ENG(176 + wide_delta, 180, "del =", cr[CR_DARKRED]);
-        M_WriteTextSmall_RUS(213 + wide_delta, 180, "jxbcnbnm", cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG("enter =", 44 + wide_delta, 180, CR_DARKRED);
+        RD_M_DrawTextSmallRUS("= yfpyfxbnm<", 88 + wide_delta, 180, CR_DARKRED);
+        RD_M_DrawTextSmallENG("del =", 176 + wide_delta, 180, CR_DARKRED);
+        RD_M_DrawTextSmallRUS("jxbcnbnm", 213 + wide_delta, 180, CR_DARKRED);
 
-        M_WriteTextSmall_ENG(55 + wide_delta, 189, "pgup/pgdn =", cr[CR_DARKRED]);
-        M_WriteTextSmall_RUS(139 + wide_delta, 189, "kbcnfnm cnhfybws", cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG("pgup/pgdn =", 55 + wide_delta, 189, CR_DARKRED);
+        RD_M_DrawTextSmallRUS("kbcnfnm cnhfybws", 139 + wide_delta, 189, CR_DARKRED);
     }
 
-    for (int i = 0; i < 11; ++i)
+    for (int i = 0; i < CurrentMenu->itemCount; ++i)
     {
-        bound_key_t key = keyPage->keys[i];
-        if (key != bk_null)
+        if (CurrentMenu->items->option != 0)
         {
-            boolean bindingThis = messageToBind && i == itemOn;
+            boolean bindingThis = messageToBind && i == CurrentItPos;
 
-            M_WriteTextSmall_ENG(x + wide_delta, i * 10 + 35, bindingThis ? "?" : BK_getBoundKeysString(key),
-                                 bindingThis ? cr[CR_WHITE] : BK_KeyHasNoBinds(key) ? cr[CR_DARKRED] : NULL);
-
+            RD_M_DrawTextSmallENG(bindingThis ? "?" : BK_getBoundKeysString(CurrentMenu->items->option),
+                                  x + wide_delta, i * 10 + 35,
+                                  bindingThis ? CR_WHITE : BK_KeyHasNoBinds(CurrentMenu->items->option) ?
+                                  CR_DARKRED : CR_NONE);
         }
     }
-}
-
-void M_RD_Choose_Bindings_1(int choice)
-{
-    M_SetupNextMenu(english_language ?
-                    RD_Bindings_Menu_Def_1 :
-                    RD_Bindings_Menu_Def_1_Rus);
-}
-
-void M_RD_Choose_Bindings_2(int choice)
-{
-    M_SetupNextMenu(english_language ?
-                    RD_Bindings_Menu_Def_2 :
-                    RD_Bindings_Menu_Def_2_Rus);
-}
-
-void M_RD_Choose_Bindings_3(int choice)
-{
-    M_SetupNextMenu(english_language ?
-                    RD_Bindings_Menu_Def_3 :
-                    RD_Bindings_Menu_Def_3_Rus);
-}
-
-void M_RD_Choose_Bindings_4(int choice)
-{
-    M_SetupNextMenu(english_language ?
-                    RD_Bindings_Menu_Def_4 :
-                    RD_Bindings_Menu_Def_4_Rus);
 }
 
 // -----------------------------------------------------------------------------
@@ -5570,13 +3106,6 @@ static char *M_RD_MouseBtnDrawer (int i)
 // Mouse bindings
 // -----------------------------------------------------------------------------
 
-void M_RD_Choose_Mouse_Bindings(int choice)
-{
-    M_SetupNextMenu(english_language ?
-                    &RD_Mouse_Bindings_Menu_Def :
-                    &RD_Mouse_Bindings_Menu_Def_Rus);
-}
-
 void M_RD_Draw_Mouse_Bindings(void)
 {
     int x = 186;
@@ -5587,138 +3116,121 @@ void M_RD_Draw_Mouse_Bindings(void)
 
     if (english_language)
     {
-        M_WriteTextBigCentered_ENG(5, "Mouse bindings");
-
-        //
-        // Buttons
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 25, "Buttons", cr[CR_YELLOW]);
-
         //
         // Footer
         //
-        M_WriteTextSmall_ENG(55 + wide_delta, 180, "enter to change, del to clear", cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG("enter to change, del to clear", 55 + wide_delta, 180, CR_DARKRED);
     }
     else
     {
-        M_WriteTextBigCentered_RUS(5, "Yfcnhjqrb vsib"); // Настройки мыши
-
-        //
-        // Кнопки
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 25, "ryjgrb", cr[CR_YELLOW]);
-
         //
         // Footer
         //
-        M_WriteTextSmall_ENG(44 + wide_delta, 180, "enter =", cr[CR_DARKRED]);
-        M_WriteTextSmall_RUS(88 + wide_delta, 180, "= yfpyfxbnm<", cr[CR_DARKRED]);
-        M_WriteTextSmall_ENG(176 + wide_delta, 180, "del =", cr[CR_DARKRED]);
-        M_WriteTextSmall_RUS(213 + wide_delta, 180, "jxbcnbnm", cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG("enter =", 44 + wide_delta, 180, CR_DARKRED);
+        RD_M_DrawTextSmallRUS("= yfpyfxbnm<", 88 + wide_delta, 180, CR_DARKRED);
+        RD_M_DrawTextSmallENG("del =", 176 + wide_delta, 180, CR_DARKRED);
+        RD_M_DrawTextSmallRUS("jxbcnbnm", 213 + wide_delta, 180, CR_DARKRED);
     }
 
     // Fire/Attack
-    if (messageToBind && itemOn == rd_mouse_bindings_attack)
+    if (messageToBind && CurrentItPos == 1)
     {
-        M_WriteTextSmall_ENG(x + wide_delta, 35, "?", cr[CR_WHITE]);
+        RD_M_DrawTextSmallENG("?", x + wide_delta, 35, CR_WHITE);
     }
     else
     {
-        if (mousebfire == -1)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 35, M_RD_MouseBtnDrawer(mousebfire),
-                             mousebfire == -1 ? cr[CR_DARKRED] : NULL);
-        //dp_translation = NULL;
+        RD_M_DrawTextSmallENG(M_RD_MouseBtnDrawer(mousebfire), x + wide_delta, 35,
+                             mousebfire == -1 ? CR_DARKRED : CR_NONE);
     }
 
     // Use
-    if (messageToBind && itemOn == rd_mouse_bindings_use)
+    if (messageToBind && CurrentItPos == 2)
     {
-        M_WriteTextSmall_ENG(x + wide_delta, 45, "?", cr[CR_WHITE]);
+        RD_M_DrawTextSmallENG("?", x + wide_delta, 45, CR_WHITE);
     }
     else
     {
-        M_WriteTextSmall_ENG(x + wide_delta, 45, M_RD_MouseBtnDrawer(mousebuse),
-                             mousebuse == -1 ? cr[CR_DARKRED] : NULL);
+        RD_M_DrawTextSmallENG(M_RD_MouseBtnDrawer(mousebuse), x + wide_delta, 45,
+                              mousebuse == -1 ? CR_DARKRED : CR_NONE);
     }
 
     // Move Forward
-    if (messageToBind && itemOn == rd_mouse_bindings_forward)
+    if (messageToBind && CurrentItPos == 3)
     {
 
-        M_WriteTextSmall_ENG(x + wide_delta, 55, "?", cr[CR_WHITE]);
+        RD_M_DrawTextSmallENG("?", x + wide_delta, 55, CR_WHITE);
     }
     else
     {
-        M_WriteTextSmall_ENG(x + wide_delta, 55, M_RD_MouseBtnDrawer(mousebforward),
-                             mousebforward == -1 ? cr[CR_DARKRED] : NULL);
+        RD_M_DrawTextSmallENG(M_RD_MouseBtnDrawer(mousebforward), x + wide_delta, 55,
+                              mousebforward == -1 ? CR_DARKRED : CR_NONE);
     }
 
     // Move Backward
-    if (messageToBind && itemOn == rd_mouse_bindings_backward)
+    if (messageToBind && CurrentItPos == 4)
     {
-        M_WriteTextSmall_ENG(x + wide_delta, 65, "?", cr[CR_WHITE]);
+        RD_M_DrawTextSmallENG("?", x + wide_delta, 65, CR_WHITE);
     }
     else
     {
-        M_WriteTextSmall_ENG(x + wide_delta, 65, M_RD_MouseBtnDrawer(mousebbackward),
-                             mousebbackward == -1 ? cr[CR_DARKRED] : NULL);
+        RD_M_DrawTextSmallENG(M_RD_MouseBtnDrawer(mousebbackward), x + wide_delta, 65,
+                              mousebbackward == -1 ? CR_DARKRED : CR_NONE);
     }
 
     // Strafe On
-    if (messageToBind && itemOn == rd_mouse_bindings_strafeon)
+    if (messageToBind && CurrentItPos == 5)
     {
-        M_WriteTextSmall_ENG(x + wide_delta, 75, "?", cr[CR_WHITE]);
+        RD_M_DrawTextSmallENG("?", x + wide_delta, 75, CR_WHITE);
     }
     else
     {
-        M_WriteTextSmall_ENG(x + wide_delta, 75, M_RD_MouseBtnDrawer(mousebstrafe),
-                             mousebstrafe == -1 ? cr[CR_DARKRED] : NULL);
+        RD_M_DrawTextSmallENG(M_RD_MouseBtnDrawer(mousebstrafe), x + wide_delta, 75,
+                              mousebstrafe == -1 ? CR_DARKRED : CR_NONE);
 
     }
 
     // Strafe Left
-    if (messageToBind && itemOn == rd_mouse_bindings_strafeleft)
+    if (messageToBind && CurrentItPos == 6)
     {
-        M_WriteTextSmall_ENG(x + wide_delta, 85, "?", cr[CR_WHITE]);
+        RD_M_DrawTextSmallENG("?",  x + wide_delta, 85, CR_WHITE);
     }
     else
     {
-        M_WriteTextSmall_ENG(x + wide_delta, 85, M_RD_MouseBtnDrawer(mousebstrafeleft),
-                             mousebstrafeleft == -1 ? cr[CR_DARKRED] : NULL);
+        RD_M_DrawTextSmallENG(M_RD_MouseBtnDrawer(mousebstrafeleft), x + wide_delta, 85,
+                              mousebstrafeleft == -1 ? CR_DARKRED : CR_NONE);
     }
 
     // Strafe Right
-    if (messageToBind && itemOn == rd_mouse_bindings_straferight)
+    if (messageToBind && CurrentItPos == 7)
     {
-        M_WriteTextSmall_ENG(x + wide_delta, 95, "?", cr[CR_WHITE]);
+        RD_M_DrawTextSmallENG("?", x + wide_delta, 95, CR_WHITE);
     }
     else
     {
-        M_WriteTextSmall_ENG(x + wide_delta, 95, M_RD_MouseBtnDrawer(mousebstraferight),
-                             mousebstraferight == -1 ? cr[CR_DARKRED] : NULL);
+        RD_M_DrawTextSmallENG(M_RD_MouseBtnDrawer(mousebstraferight), x + wide_delta, 95,
+                              mousebstraferight == -1 ? CR_DARKRED : CR_NONE);
     }
 
     // Previous Weapon
-    if (messageToBind && itemOn == rd_mouse_bindings_prevweapon)
+    if (messageToBind && CurrentItPos == 8)
     {
-        M_WriteTextSmall_ENG(x + wide_delta, 105, "?", cr[CR_WHITE]);
+        RD_M_DrawTextSmallENG("?", x + wide_delta, 105, CR_WHITE);
     }
     else
     {
-        M_WriteTextSmall_ENG(x + wide_delta, 105, M_RD_MouseBtnDrawer(mousebprevweapon),
-                             mousebprevweapon == -1 ? cr[CR_DARKRED] : NULL);
+        RD_M_DrawTextSmallENG(M_RD_MouseBtnDrawer(mousebprevweapon), x + wide_delta, 105,
+                              mousebprevweapon == -1 ? CR_DARKRED : CR_NONE);
     }
 
     // Next Weapon
-    if (messageToBind && itemOn == rd_mouse_bindings_nextweapon)
+    if (messageToBind && CurrentItPos == 9)
     {
-        M_WriteTextSmall_ENG(x + wide_delta, 115, "?", cr[CR_WHITE]);
+        RD_M_DrawTextSmallENG("?", x + wide_delta, 115, CR_WHITE);
     }
     else
     {
-        M_WriteTextSmall_ENG(x + wide_delta, 115, M_RD_MouseBtnDrawer(mousebnextweapon),
-                             mousebnextweapon == -1 ? cr[CR_DARKRED] : NULL);
+        RD_M_DrawTextSmallENG(M_RD_MouseBtnDrawer(mousebnextweapon), x + wide_delta, 115,
+                              mousebnextweapon == -1 ? CR_DARKRED : CR_NONE);
     }
 }
 
@@ -5799,41 +3311,6 @@ void M_RD_Mouse_Bind_NextWeapon (int choice)
 // Gameplay features
 // -----------------------------------------------------------------------------
 
-void M_RD_Choose_Gameplay_1(int choice)
-{
-    M_SetupNextMenu(english_language ? 
-                    &RD_Gameplay_Def_1 :
-                    &RD_Gameplay_Def_1_Rus);
-}
-
-void M_RD_Choose_Gameplay_2(int choice)
-{
-    M_SetupNextMenu(english_language ? 
-                    &RD_Gameplay_Def_2 :
-                    &RD_Gameplay_Def_2_Rus);
-}
-
-void M_RD_Choose_Gameplay_3(int choice)
-{
-    M_SetupNextMenu(english_language ? 
-                    &RD_Gameplay_Def_3 :
-                    &RD_Gameplay_Def_3_Rus);
-}
-
-void M_RD_Choose_Gameplay_4(int choice)
-{
-    M_SetupNextMenu(english_language ? 
-                    &RD_Gameplay_Def_4 :
-                    &RD_Gameplay_Def_4_Rus);
-}
-
-void M_RD_Choose_Gameplay_5(int choice)
-{
-    M_SetupNextMenu(english_language ? 
-                    &RD_Gameplay_Def_5 :
-                    &RD_Gameplay_Def_5_Rus);
-}
-
 void M_RD_Draw_Gameplay_1(void)
 {   
     // Jaguar: hide game background, don't draw lines over the HUD
@@ -5845,118 +3322,100 @@ void M_RD_Draw_Gameplay_1(void)
 
     if (english_language)
     {
-        M_WriteTextBigCentered_ENG(5, "GAMEPLAY FEATURES");
-
-        //
-        // Graphical
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 25, "Graphical", cr[CR_YELLOW]);
-
         // Brightmaps
-        M_WriteTextSmall_ENG(119 + wide_delta, 35, brightmaps ? RD_ON : RD_OFF,
-                             brightmaps ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(brightmaps ? RD_ON : RD_OFF, 119 + wide_delta, 35,
+                              brightmaps ? CR_GREEN : CR_DARKRED);
 
 
         // Fake contrast
-        M_WriteTextSmall_ENG(142 + wide_delta, 45, fake_contrast ? RD_ON : RD_OFF,
-                             fake_contrast ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(fake_contrast ? RD_ON : RD_OFF,142 + wide_delta, 45,
+                              fake_contrast ? CR_GREEN : CR_DARKRED);
 
         // Translucency
-        M_WriteTextSmall_ENG(138 + wide_delta, 55, translucency ? RD_ON : RD_OFF,
-                             translucency ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(translucency ? RD_ON : RD_OFF, 138 + wide_delta, 55,
+                              translucency ? CR_GREEN : CR_DARKRED);
 
         // Fuzz effect
-        M_WriteTextSmall_ENG(125 + wide_delta, 65, 
-                             improved_fuzz == 0 ? "Original" :
-                             improved_fuzz == 1 ? "Original (b&w)" :
-                             improved_fuzz == 2 ? "Improved" :
-                             improved_fuzz == 3 ? "Improved (b&w)" :
-                                                  "Translucent",
-                             improved_fuzz > 0 ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(improved_fuzz == 0 ? "Original" :
+                              improved_fuzz == 1 ? "Original (b&w)" :
+                              improved_fuzz == 2 ? "Improved" :
+                              improved_fuzz == 3 ? "Improved (b&w)" :
+                              "Translucent", 125 + wide_delta, 65,
+                              improved_fuzz > 0 ? CR_GREEN : CR_DARKRED);
 
         // Colored blood and corpses
-        M_WriteTextSmall_ENG(229 + wide_delta, 75, colored_blood ? RD_ON : RD_OFF,
-                             colored_blood ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(colored_blood ? RD_ON : RD_OFF, 229 + wide_delta, 75,
+                             colored_blood ? CR_GREEN : CR_DARKRED);
 
         // Swirling liquids
-        M_WriteTextSmall_ENG(150 + wide_delta, 85, swirling_liquids ? RD_ON : RD_OFF,
-                             swirling_liquids ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(swirling_liquids ? RD_ON : RD_OFF, 150 + wide_delta, 85,
+                             swirling_liquids ? CR_GREEN : CR_DARKRED);
 
         // Invulnerability affects sky
-        M_WriteTextSmall_ENG(237 + wide_delta, 95, invul_sky ? RD_ON : RD_OFF,
-                             invul_sky ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(invul_sky ? RD_ON : RD_OFF, 237 + wide_delta, 95,
+                             invul_sky ? CR_GREEN : CR_DARKRED);
 
         // Horizontally linear sky drawing
-        M_WriteTextSmall_ENG(160 + wide_delta, 105, linear_sky ? "linear" : "original",
-                             linear_sky ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(linear_sky ? "linear" : "original", 160 + wide_delta, 105,
+                             linear_sky ? CR_GREEN : CR_DARKRED);
 
         // Flip weapons
-        M_WriteTextSmall_ENG(131 + wide_delta, 115, flip_weapons ? RD_ON : RD_OFF,
-                             flip_weapons ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(flip_weapons ? RD_ON : RD_OFF, 131 + wide_delta, 115,
+                             flip_weapons ? CR_GREEN : CR_DARKRED);
 
         //
         // Footer
         //
-        M_WriteTextSmall_ENG(35 + wide_delta, 145, "next page >", cr[CR_WHITE]); 
-        M_WriteTextSmall_ENG(35 + wide_delta, 155, "< last page", cr[CR_WHITE]); 
-        M_WriteTextSmall_ENG(231 + wide_delta, 155, "page 1/5", cr[CR_WHITE]);
+        RD_M_DrawTextSmallENG("next page >", 35 + wide_delta, 145, CR_WHITE);
+        RD_M_DrawTextSmallENG("< last page", 35 + wide_delta, 155, CR_WHITE);
     }
     else
     {
-        M_WriteTextBigCentered_RUS(5, "YFCNHJQRB UTQVGKTZ"); // НАСТРОЙКИ ГЕЙМПЛЕЯ
-
-        //
-        // Графика
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 25, "uhfabrf", cr[CR_YELLOW]);
-
         // Брайтмаппинг
-        M_WriteTextSmall_RUS(140 + wide_delta, 35, brightmaps ? RD_ON_RUS : RD_OFF_RUS,
-                                                   brightmaps ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(brightmaps ? RD_ON_RUS : RD_OFF_RUS, 140 + wide_delta, 35,
+                              brightmaps ? CR_GREEN : CR_DARKRED);
 
         // Имитация контрастности
-        M_WriteTextSmall_RUS(217 + wide_delta, 45, fake_contrast ? RD_ON_RUS : RD_OFF_RUS,
-                                                   fake_contrast ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(fake_contrast ? RD_ON_RUS : RD_OFF_RUS, 217 + wide_delta, 45,
+                              fake_contrast ? CR_GREEN : CR_DARKRED);
 
         // Прозрачность объектов
-        M_WriteTextSmall_RUS(207 + wide_delta, 55, translucency ? RD_ON_RUS : RD_OFF_RUS,
-                                                   translucency ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(translucency ? RD_ON_RUS : RD_OFF_RUS, 207 + wide_delta, 55,
+                              translucency ? CR_GREEN : CR_DARKRED);
 
         // Эффект шума
-        M_WriteTextSmall_RUS(134 + wide_delta, 65, 
-                             improved_fuzz == 0 ? "Jhbubyfkmysq" :
-                             improved_fuzz == 1 ? "Jhbubyfkmysq (x*,)" :
-                             improved_fuzz == 2 ? "Ekexityysq" :
-                             improved_fuzz == 3 ? "Ekexityysq (x*,)" :
-                                                  "Ghjphfxysq",
-                             improved_fuzz > 0 ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(improved_fuzz == 0 ? "Jhbubyfkmysq" :
+                              improved_fuzz == 1 ? "Jhbubyfkmysq (x*,)" :
+                              improved_fuzz == 2 ? "Ekexityysq" :
+                              improved_fuzz == 3 ? "Ekexityysq (x*,)" :
+                              "Ghjphfxysq", 134 + wide_delta, 65,
+                              improved_fuzz > 0 ? CR_GREEN : CR_DARKRED);
 
         // Разноцветная кровь и трупы
-        M_WriteTextSmall_RUS(242 + wide_delta, 75, colored_blood ? RD_ON_RUS : RD_OFF_RUS,
-                                                   colored_blood ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(colored_blood ? RD_ON_RUS : RD_OFF_RUS, 242 + wide_delta, 75,
+                              colored_blood ? CR_GREEN : CR_DARKRED);
 
         // Улучшенная анимация жидкостей
-        M_WriteTextSmall_RUS(275 + wide_delta, 85, swirling_liquids ? RD_ON_RUS : RD_OFF_RUS,
-                                                   swirling_liquids ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(swirling_liquids ? RD_ON_RUS : RD_OFF_RUS, 275 + wide_delta, 85,
+                              swirling_liquids ? CR_GREEN : CR_DARKRED);
 
         // Неуязвимость окрашивает небо
-        M_WriteTextSmall_RUS(262 + wide_delta, 95, invul_sky ? RD_ON_RUS : RD_OFF_RUS,
-                                                   invul_sky ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(invul_sky ? RD_ON_RUS : RD_OFF_RUS, 262 + wide_delta, 95,
+                              invul_sky ? CR_GREEN : CR_DARKRED);
 
         // Режим отрисовки неба
-        M_WriteTextSmall_RUS(200 + wide_delta, 105, linear_sky ? "kbytqysq" : "jhbubyfkmysq",
-                                                    linear_sky ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(linear_sky ? "kbytqysq" : "jhbubyfkmysq", 200 + wide_delta, 105,
+                              linear_sky ? CR_GREEN : CR_DARKRED);
 
         // Зеркальное отражение оружия
-        M_WriteTextSmall_RUS(259 + wide_delta, 115, flip_weapons ? RD_ON_RUS : RD_OFF_RUS,
-                                                    flip_weapons ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(flip_weapons ? RD_ON_RUS : RD_OFF_RUS, 259 + wide_delta, 115,
+                              flip_weapons ? CR_GREEN : CR_DARKRED);
 
         //
         // Footer
         //
-        M_WriteTextSmall_RUS(35 + wide_delta, 145, RD_NEXT_RUS, cr[CR_WHITE]); 
-        M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_PREV_RUS, cr[CR_WHITE]); 
-        M_WriteTextSmall_RUS(197 + wide_delta, 155, "cnhfybwf 1*5", cr[CR_WHITE]);
+        RD_M_DrawTextSmallRUS(RD_NEXT_RUS, 35 + wide_delta, 145, CR_WHITE);
+        RD_M_DrawTextSmallRUS(RD_PREV_RUS, 35 + wide_delta, 155, CR_WHITE);
     }
 }
 
@@ -5971,256 +3430,230 @@ void M_RD_Draw_Gameplay_2(void)
 
     if (english_language)
     {
-        M_WriteTextBigCentered_ENG(5, "GAMEPLAY FEATURES");
-        
-        //
-        // Status Bar
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 25, "Status bar", cr[CR_YELLOW]);
-
         // Extra player faces
-        M_WriteTextSmall_ENG(179 + wide_delta, 35, extra_player_faces ? RD_ON : RD_OFF,
-                                                   extra_player_faces ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(extra_player_faces ? RD_ON : RD_OFF, 179 + wide_delta, 35,
+                              extra_player_faces ? CR_GREEN : CR_DARKRED);
 
         // Show negative health
-        M_WriteTextSmall_ENG(190 + wide_delta, 45, negative_health ? RD_ON : RD_OFF,
-                                                   negative_health ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(negative_health ? RD_ON : RD_OFF, 190 + wide_delta, 45,
+                              negative_health ? CR_GREEN : CR_DARKRED);
 
         // Colored elements
-        M_WriteTextSmall_ENG(167 + wide_delta, 55, sbar_colored == 1 ? "ON (NO %)"  :
-                                                   sbar_colored == 2 ? "ON" : "OFF",
-                                                   sbar_colored ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(sbar_colored == 1 ? "ON (NO %)"  :
+                              sbar_colored == 2 ? "ON" : "OFF", 167 + wide_delta, 55,
+                              sbar_colored ? CR_GREEN : CR_DARKRED);
 
-        //
-        // Coloring
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 65, "Coloring", cr[CR_YELLOW]);
-
-        M_WriteTextSmall_ENG(35 + wide_delta, 75, "High value:", 
-                             sbar_colored == 0 || gamemission == jaguar ? cr[CR_DARKRED] : NULL);
-        M_WriteTextSmall_ENG(35 + wide_delta, 85, "Normal value:",
-                             sbar_colored == 0 || gamemission == jaguar ? cr[CR_DARKRED] : NULL);
-        M_WriteTextSmall_ENG(35 + wide_delta, 95, "Low value:",
-                             sbar_colored == 0 || gamemission == jaguar ? cr[CR_DARKRED] : NULL);
-        M_WriteTextSmall_ENG(35 + wide_delta, 105, "Critical value:",
-                             sbar_colored == 0 || gamemission == jaguar ? cr[CR_DARKRED] : NULL);
-        M_WriteTextSmall_ENG(35 + wide_delta, 115, "Armor type 1:",
-                             sbar_colored == 0 || gamemission == jaguar ? cr[CR_DARKRED] : NULL);
-        M_WriteTextSmall_ENG(35 + wide_delta, 125, "Armor type 2:",
-                             sbar_colored == 0 || gamemission == jaguar ? cr[CR_DARKRED] : NULL);
-        M_WriteTextSmall_ENG(35 + wide_delta, 135, "No armor:",
-                             sbar_colored == 0 || gamemission == jaguar? cr[CR_DARKRED] : NULL);
+        RD_M_DrawTextSmallENG("High value:",35 + wide_delta, 75,
+                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+        RD_M_DrawTextSmallENG("Normal value:",35 + wide_delta, 85,
+                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+        RD_M_DrawTextSmallENG("Low value:",35 + wide_delta, 95,
+                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+        RD_M_DrawTextSmallENG("Critical value:",35 + wide_delta, 105,
+                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+        RD_M_DrawTextSmallENG("Armor type 1:",35 + wide_delta, 115,
+                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+        RD_M_DrawTextSmallENG("Armor type 2:",35 + wide_delta, 125,
+                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+        RD_M_DrawTextSmallENG("No armor:", 35 + wide_delta, 135,
+                              sbar_colored == 0 || gamemission == jaguar? CR_DARKRED : CR_NONE);
         
         // High Value
         if (sbar_colored == 0 || gamemission == jaguar)
         {
-            M_WriteTextSmall_ENG(114 + wide_delta, 75, "n/a", 
-                                 sbar_colored == 0 || gamemission == jaguar ? cr[CR_DARKRED] : NULL);
+            RD_M_DrawTextSmallENG("n/a", 114 + wide_delta, 75,
+                                 sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
         }
         else
         {
-            M_WriteTextSmall_ENG(114 + wide_delta, 75, M_RD_ColorName_ENG(sbar_color_high),
-                                                       M_RD_ColorTranslation(sbar_color_high));
+            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(sbar_color_high), 114 + wide_delta, 75,
+                                  M_RD_ColorTranslation(sbar_color_high));
         }
 
         // Normal Value
         if (sbar_colored == 0 || gamemission == jaguar)
         {
-            M_WriteTextSmall_ENG(135 + wide_delta, 85, "n/a", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallENG("n/a", 135 + wide_delta, 85, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_ENG(135 + wide_delta, 85, M_RD_ColorName_ENG(sbar_color_normal),
-                                                       M_RD_ColorTranslation(sbar_color_normal));
+            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(sbar_color_normal), 135 + wide_delta, 85,
+                                  M_RD_ColorTranslation(sbar_color_normal));
         }
 
         // Low Value
         if (sbar_colored == 0 || gamemission == jaguar)
         {
-            M_WriteTextSmall_ENG(111 + wide_delta, 95, "n/a", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallENG("n/a", 111 + wide_delta, 95, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_ENG(111 + wide_delta, 95, M_RD_ColorName_ENG(sbar_color_low),
-                                                       M_RD_ColorTranslation(sbar_color_low));
+            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(sbar_color_low), 111 + wide_delta, 95,
+                                 M_RD_ColorTranslation(sbar_color_low));
         }
 
         // Critical value
         if (sbar_colored == 0 || gamemission == jaguar)
         {
-            M_WriteTextSmall_ENG(142 + wide_delta, 105, "n/a", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallENG("n/a", 142 + wide_delta, 105, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_ENG(142 + wide_delta, 105, M_RD_ColorName_ENG(sbar_color_critical),
-                                                        M_RD_ColorTranslation(sbar_color_critical));
+            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(sbar_color_critical), 142 + wide_delta, 105,
+                                  M_RD_ColorTranslation(sbar_color_critical));
         }
 
         // Armor type 1
         if (sbar_colored == 0 || gamemission == jaguar)
         {
-            M_WriteTextSmall_ENG(129 + wide_delta, 115, "n/a", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallENG("n/a", 129 + wide_delta, 115, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_ENG(129 + wide_delta, 115, M_RD_ColorName_ENG(sbar_color_armor_1),
-                                                        M_RD_ColorTranslation(sbar_color_armor_1));
+            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(sbar_color_armor_1), 129 + wide_delta, 115,
+                                  M_RD_ColorTranslation(sbar_color_armor_1));
         }
 
         // Armor type 2
         if (sbar_colored == 0 || gamemission == jaguar)
         {
-            M_WriteTextSmall_ENG(132 + wide_delta, 125, "n/a", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallENG("n/a", 132 + wide_delta, 125, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_ENG(132 + wide_delta, 125, M_RD_ColorName_ENG(sbar_color_armor_2),
-                                                        M_RD_ColorTranslation(sbar_color_armor_2));
+            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(sbar_color_armor_2), 132 + wide_delta, 125,
+                                  M_RD_ColorTranslation(sbar_color_armor_2));
         }
 
         // Armor type 0
         if (sbar_colored == 0 || gamemission == jaguar)
         {
-            M_WriteTextSmall_ENG(104 + wide_delta, 135, "n/a", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallENG("n/a", 104 + wide_delta, 135, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_ENG(104 + wide_delta, 135, M_RD_ColorName_ENG(sbar_color_armor_0),
-                                                        M_RD_ColorTranslation(sbar_color_armor_0));
+            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(sbar_color_armor_0), 104 + wide_delta, 135,
+                                  M_RD_ColorTranslation(sbar_color_armor_0));
         }
 
         //
         // Footer
         //
-        M_WriteTextSmall_ENG(35 + wide_delta, 145, "next page >", cr[CR_WHITE]);
-        M_WriteTextSmall_ENG(35 + wide_delta, 155, "< prev page", cr[CR_WHITE]);
-        M_WriteTextSmall_ENG(231 + wide_delta, 155, "page 2/5", cr[CR_WHITE]);
+        RD_M_DrawTextSmallENG("next page >", 35 + wide_delta, 145, CR_WHITE);
+        RD_M_DrawTextSmallENG("< prev page", 35 + wide_delta, 155, CR_WHITE);
     }
     else
     {
-        M_WriteTextBigCentered_RUS(5, "YFCNHJQRB UTQVGKTZ"); // НАСТРОЙКИ ГЕЙМПЛЕЯ
-
-        //
-        // Статус-бар
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 25, "cnfnec-,fh", cr[CR_YELLOW]);
-
         // Дополнительные лица игрока
-        M_WriteTextSmall_RUS(247 + wide_delta, 35, extra_player_faces ? "DRK" : "DSRK",
-                                                   extra_player_faces ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(extra_player_faces ? "DRK" : "DSRK", 247 + wide_delta, 35,
+                              extra_player_faces ? CR_GREEN : CR_DARKRED);
 
         // Отрицательное здоровье
-        M_WriteTextSmall_RUS(217 + wide_delta, 45, negative_health ? "DRK" : "DSRK",
-                                                   negative_health ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(negative_health ? "DRK" : "DSRK", 217 + wide_delta, 45,
+                              negative_health ? CR_GREEN : CR_DARKRED);
 
         // Разноцветные элементы
-        M_WriteTextSmall_RUS(213 + wide_delta, 55, sbar_colored == 1 ? "DRK (,TP %)"  :
-                                                   sbar_colored == 2 ? "DRK" : "DSRK",
-                                                   sbar_colored ? cr[CR_GREEN] : cr[CR_DARKRED]);
-
-        //
-        // Цвета
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 65, "wdtnf", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallRUS(sbar_colored == 1 ? "DRK (,TP %)"  :
+                              sbar_colored == 2 ? "DRK" : "DSRK", 213 + wide_delta, 55,
+                              sbar_colored ? CR_GREEN : CR_DARKRED);
 
         // Высокое значение
-        M_WriteTextSmall_RUS(35 + wide_delta, 75, "Dscjrjt pyfxtybt:",      // Высокое значение
-                             sbar_colored == 0 || gamemission == jaguar ? cr[CR_DARKRED] : NULL);
-        M_WriteTextSmall_RUS(35 + wide_delta, 85, "Yjhvfkmyjt pyfxtybt:",   // Нормальное значение
-                             sbar_colored == 0 || gamemission == jaguar ? cr[CR_DARKRED] : NULL);
-        M_WriteTextSmall_RUS(35 + wide_delta, 95, "Ybprjt pyfxtybt:",       // Низкое значение
-                             sbar_colored == 0 || gamemission == jaguar ? cr[CR_DARKRED] : NULL);
-        M_WriteTextSmall_RUS(35 + wide_delta, 105, "Rhbnbxtcrjt pyfxtybt:", // Критическое значение
-                             sbar_colored == 0 || gamemission == jaguar ? cr[CR_DARKRED] : NULL);
-        M_WriteTextSmall_RUS(35 + wide_delta, 115, "Nbg ,hjyb 1:",          // Тип брони 1
-                             sbar_colored == 0 || gamemission == jaguar ? cr[CR_DARKRED] : NULL);
-        M_WriteTextSmall_RUS(35 + wide_delta, 125, "Nbg ,hjyb 2:",          // Тип брони 2
-                             sbar_colored == 0 || gamemission == jaguar ? cr[CR_DARKRED] : NULL);
-        M_WriteTextSmall_RUS(35 + wide_delta, 135, "Jncencndbt ,hjyb:",     // Отсутствие брони
-                             sbar_colored == 0 || gamemission == jaguar ? cr[CR_DARKRED] : NULL);
+        RD_M_DrawTextSmallRUS("Dscjrjt pyfxtybt:", 35 + wide_delta, 75,      // Высокое значение
+                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+        RD_M_DrawTextSmallRUS("Yjhvfkmyjt pyfxtybt:", 35 + wide_delta, 85,   // Нормальное значение
+                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+        RD_M_DrawTextSmallRUS("Ybprjt pyfxtybt:", 35 + wide_delta, 95,       // Низкое значение
+                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+        RD_M_DrawTextSmallRUS("Rhbnbxtcrjt pyfxtybt:", 35 + wide_delta, 105, // Критическое значение
+                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+        RD_M_DrawTextSmallRUS("Nbg ,hjyb 1:", 35 + wide_delta, 115,          // Тип брони 1
+                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+        RD_M_DrawTextSmallRUS("Nbg ,hjyb 2:", 35 + wide_delta, 125,          // Тип брони 2
+                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+        RD_M_DrawTextSmallRUS("Jncencndbt ,hjyb:", 35 + wide_delta, 135,     // Отсутствие брони
+                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
         
         if (sbar_colored == 0 || gamemission == jaguar)
         {
-            M_WriteTextSmall_RUS(168 + wide_delta, 75, "y*l", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallRUS("y*l", 168 + wide_delta, 75, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_RUS(168 + wide_delta, 75, M_RD_ColorName_RUS(sbar_color_high),
-                                                       M_RD_ColorTranslation(sbar_color_high));
+            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(sbar_color_high), 168 + wide_delta, 75,
+                                 M_RD_ColorTranslation(sbar_color_high));
         }
 
         // Нормальное значение
         if (sbar_colored == 0 || gamemission == jaguar)
         {
-            M_WriteTextSmall_RUS(191 + wide_delta, 85, "y*l", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallRUS("y*l", 191 + wide_delta, 85, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_RUS(191 + wide_delta, 85, M_RD_ColorName_RUS(sbar_color_normal),
-                                                       M_RD_ColorTranslation(sbar_color_normal));
+            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(sbar_color_normal), 191 + wide_delta, 85,
+                                 M_RD_ColorTranslation(sbar_color_normal));
         }
 
         // Низкое значение
         if (sbar_colored == 0 || gamemission == jaguar)
         {
-            M_WriteTextSmall_RUS(158 + wide_delta, 95, "y*l", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallRUS("y*l", 158 + wide_delta, 95, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_RUS(158 + wide_delta, 95, M_RD_ColorName_RUS(sbar_color_low),
-                                                       M_RD_ColorTranslation(sbar_color_low));
+            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(sbar_color_low), 158 + wide_delta, 95,
+                                  M_RD_ColorTranslation(sbar_color_low));
         }
 
         // Низкое значение
         if (sbar_colored == 0 || gamemission == jaguar)
         {
-            M_WriteTextSmall_RUS(197 + wide_delta, 105, "y*l", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallRUS("y*l", 197 + wide_delta, 105, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_RUS(197 + wide_delta, 105, M_RD_ColorName_RUS(sbar_color_critical),
-                                                        M_RD_ColorTranslation(sbar_color_critical));
+            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(sbar_color_critical), 197 + wide_delta, 105,
+                                  M_RD_ColorTranslation(sbar_color_critical));
         }
 
         // Тип брони 1
         if (sbar_colored == 0 || gamemission == jaguar)
         {
-            M_WriteTextSmall_RUS(120 + wide_delta, 115, "y*l", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallRUS("y*l", 120 + wide_delta, 115, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_RUS(120 + wide_delta, 115, M_RD_ColorName_RUS(sbar_color_armor_1),
-                                                        M_RD_ColorTranslation(sbar_color_armor_1));
+            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(sbar_color_armor_1), 120 + wide_delta, 115,
+                                  M_RD_ColorTranslation(sbar_color_armor_1));
         }
 
         // Тип брони 2
         if (sbar_colored == 0 || gamemission == jaguar)
         {
-            M_WriteTextSmall_RUS(123 + wide_delta, 125, "y*l", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallRUS("y*l", 123 + wide_delta, 125, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_RUS(123 + wide_delta, 125, M_RD_ColorName_RUS(sbar_color_armor_2),
-                                                        M_RD_ColorTranslation(sbar_color_armor_2));
+            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(sbar_color_armor_2), 123 + wide_delta, 125,
+                                  M_RD_ColorTranslation(sbar_color_armor_2));
         }
 
         // Отсутствие брони
         if (sbar_colored == 0 || gamemission == jaguar)
         {
-            M_WriteTextSmall_RUS(167 + wide_delta, 135, "y*l", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallRUS("y*l", 167 + wide_delta, 135, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_RUS(167 + wide_delta, 135, M_RD_ColorName_RUS(sbar_color_armor_0),
-                                                        M_RD_ColorTranslation(sbar_color_armor_0));
+            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(sbar_color_armor_0), 167 + wide_delta, 135,
+                                  M_RD_ColorTranslation(sbar_color_armor_0));
         }
 
         //
         // Footer
         //
-        M_WriteTextSmall_RUS(35 + wide_delta, 145, RD_NEXT_RUS, cr[CR_WHITE]); 
-        M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_PREV_RUS, cr[CR_WHITE]); 
-        M_WriteTextSmall_RUS(197 + wide_delta, 155, "cnhfybwf 2*5", cr[CR_WHITE]);
+        RD_M_DrawTextSmallRUS(RD_NEXT_RUS, 35 + wide_delta, 145, CR_WHITE);
+        RD_M_DrawTextSmallRUS(RD_PREV_RUS, 35 + wide_delta, 155, CR_WHITE);
     }
 }
 
@@ -6235,100 +3668,73 @@ void M_RD_Draw_Gameplay_3(void)
 
     if (english_language)
     {
-        M_WriteTextBigCentered_ENG(5, "GAMEPLAY FEATURES");
-
-        //
-        // Audible
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 25, "Audible", cr[CR_YELLOW]);
-
         // Sound attenuation axises
-        M_WriteTextSmall_ENG(217 + wide_delta, 35, z_axis_sfx ? "x/y/z" : "x/y",
-                                                   z_axis_sfx ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(z_axis_sfx ? "x/y/z" : "x/y", 217 + wide_delta, 35,
+                              z_axis_sfx ? CR_GREEN : CR_DARKRED);
 
         // Play exit sounds
-        M_WriteTextSmall_ENG(158 + wide_delta, 45, play_exit_sfx ? RD_ON : RD_OFF,
-                                                   play_exit_sfx ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(play_exit_sfx ? RD_ON : RD_OFF, 158 + wide_delta, 45,
+                              play_exit_sfx ? CR_GREEN : CR_DARKRED);
 
         // Sound of crushing corpses
-        M_WriteTextSmall_ENG(223 + wide_delta, 55, crushed_corpses_sfx ? RD_ON : RD_OFF,
-                                                   crushed_corpses_sfx ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(crushed_corpses_sfx ? RD_ON : RD_OFF, 223 + wide_delta, 55,
+                              crushed_corpses_sfx ? CR_GREEN : CR_DARKRED);
 
         // Single sound of closing blazing door
-        M_WriteTextSmall_ENG(240 + wide_delta, 65, blazing_door_fix_sfx ? RD_ON : RD_OFF,
-                                                   blazing_door_fix_sfx ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(blazing_door_fix_sfx ? RD_ON : RD_OFF,240 + wide_delta, 65,
+                              blazing_door_fix_sfx ? CR_GREEN : CR_DARKRED);
 
         // Monster alert waking up other monsters
-        M_WriteTextSmall_ENG(263 + wide_delta, 75, noise_alert_sfx ? RD_ON : RD_OFF,
-                                                   noise_alert_sfx ? cr[CR_GREEN] : cr[CR_DARKRED]);
-
-        //
-        // Tactical
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 85, "Tactical", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallENG(noise_alert_sfx ? RD_ON : RD_OFF,263 + wide_delta, 75,
+                              noise_alert_sfx ? CR_GREEN : CR_DARKRED);
 
         // Notify of revealed secrets
-        M_WriteTextSmall_ENG(232 + wide_delta, 95, secret_notification ? RD_ON : RD_OFF,
-                                                   secret_notification ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(secret_notification ? RD_ON : RD_OFF,232 + wide_delta, 95,
+                               secret_notification ? CR_GREEN : CR_DARKRED);
 
         // Infragreen light amp. visor
-        M_WriteTextSmall_ENG(230 + wide_delta, 105, infragreen_visor ? RD_ON : RD_OFF,
-                                                    infragreen_visor ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(infragreen_visor ? RD_ON : RD_OFF,230 + wide_delta, 105,
+                              infragreen_visor ? CR_GREEN : CR_DARKRED);
 
         //
         // Footer
         //
-        M_WriteTextSmall_ENG(35 + wide_delta, 145, "next page >", cr[CR_WHITE]);
-        M_WriteTextSmall_ENG(35 + wide_delta, 155, "< prev page", cr[CR_WHITE]);
-        M_WriteTextSmall_ENG(231 + wide_delta, 155, "page 3/5", cr[CR_WHITE]);
+        RD_M_DrawTextSmallENG("next page >", 35 + wide_delta, 145, CR_WHITE);
+        RD_M_DrawTextSmallENG("< prev page", 35 + wide_delta, 155, CR_WHITE);
     }
     else
     {
-        M_WriteTextBigCentered_RUS(5, "YFCNHJQRB UTQVGKTZ"); // НАСТРОЙКИ ГЕЙМПЛЕЯ
-
-        //
-        // Звук
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 25, "Pder", cr[CR_YELLOW]);
-
         // Затухание звука по осям
-        M_WriteTextSmall_ENG(217 + wide_delta, 35, z_axis_sfx ? "x/y/z" : "x/y",
-                                                   z_axis_sfx ? cr[CR_GREEN] : cr[CR_DARKRED]);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallENG(z_axis_sfx ? "x/y/z" : "x/y", 217 + wide_delta, 35,
+                              z_axis_sfx ? CR_GREEN : CR_DARKRED);
 
         // Звуки при выходе из игры
-        M_WriteTextSmall_RUS(225 + wide_delta, 45, play_exit_sfx ? RD_ON_RUS : RD_OFF_RUS,
-                                                   play_exit_sfx ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(play_exit_sfx ? RD_ON_RUS : RD_OFF_RUS, 225 + wide_delta, 45,
+                              play_exit_sfx ? CR_GREEN : CR_DARKRED);
 
         // Звук раздавливания трупов
-        M_WriteTextSmall_RUS(236 + wide_delta, 55, crushed_corpses_sfx ? RD_ON_RUS : RD_OFF_RUS,
-                                                   crushed_corpses_sfx ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(crushed_corpses_sfx ? RD_ON_RUS : RD_OFF_RUS, 236 + wide_delta, 55,
+                              crushed_corpses_sfx ? CR_GREEN : CR_DARKRED);
 
         // Одиночный звук быстрой двери
-        M_WriteTextSmall_RUS(260 + wide_delta, 65, blazing_door_fix_sfx ? RD_ON_RUS : RD_OFF_RUS,
-                                                   blazing_door_fix_sfx ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(blazing_door_fix_sfx ? RD_ON_RUS : RD_OFF_RUS, 260 + wide_delta, 65,
+                              blazing_door_fix_sfx ? CR_GREEN : CR_DARKRED);
 
         // Общая тревога у монстров
-        M_WriteTextSmall_RUS(227 + wide_delta, 75, noise_alert_sfx ? RD_ON_RUS : RD_OFF_RUS,
-                                                   noise_alert_sfx ? cr[CR_GREEN] : cr[CR_DARKRED]);
-
-        //
-        // Тактика
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 85, "Nfrnbrf", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallRUS(noise_alert_sfx ? RD_ON_RUS : RD_OFF_RUS, 227 + wide_delta, 75,
+                              noise_alert_sfx ? CR_GREEN : CR_DARKRED);
 
         // Сообщать о найденном тайнике
-        M_WriteTextSmall_RUS(260 + wide_delta, 95, secret_notification ? RD_ON_RUS : RD_OFF_RUS,
-                                                   secret_notification ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(secret_notification ? RD_ON_RUS : RD_OFF_RUS, 260 + wide_delta, 95,
+                              secret_notification ? CR_GREEN : CR_DARKRED);
 
         // Инфразеленый визор освещения
-        M_WriteTextSmall_RUS(266 + wide_delta, 105, infragreen_visor ? RD_ON_RUS : RD_OFF_RUS,
-                                                    infragreen_visor ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(infragreen_visor ? RD_ON_RUS : RD_OFF_RUS, 266 + wide_delta, 105,
+                              infragreen_visor ? CR_GREEN : CR_DARKRED);
 
         // Footer
-        M_WriteTextSmall_RUS(35 + wide_delta, 145, RD_NEXT_RUS, cr[CR_WHITE]);
-        M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_PREV_RUS, cr[CR_WHITE]);
-        M_WriteTextSmall_RUS(197 + wide_delta, 155, "cnhfybwf 3*5", cr[CR_WHITE]);
+        RD_M_DrawTextSmallRUS(RD_NEXT_RUS, 35 + wide_delta, 145, CR_WHITE);
+        RD_M_DrawTextSmallRUS(RD_PREV_RUS, 35 + wide_delta, 155, CR_WHITE);
     }
 }
 
@@ -6343,133 +3749,105 @@ void M_RD_Draw_Gameplay_4(void)
 
     if (english_language)
     {
-        M_WriteTextBigCentered_ENG(5, "GAMEPLAY FEATURES");
-
-        //
-        // Physical
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 25, "Physical", cr[CR_YELLOW]);
-
         // Walk over and under monsters
-        M_WriteTextSmall_ENG(250 + wide_delta, 35, over_under ? RD_ON : RD_OFF,
-                                                   over_under ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(over_under ? RD_ON : RD_OFF, 250 + wide_delta, 35,
+                              over_under ? CR_GREEN : CR_DARKRED);
 
         // Corpses sliding from the ledges
-        M_WriteTextSmall_ENG(264 + wide_delta, 45, torque ? RD_ON : RD_OFF,
-                                                   torque ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(torque ? RD_ON : RD_OFF, 264 + wide_delta, 45,
+                              torque ? CR_GREEN : CR_DARKRED);
 
         // Weapon bobbing while firing
-        M_WriteTextSmall_ENG(233 + wide_delta, 55, weapon_bobbing ? RD_ON : RD_OFF,
-                                                   weapon_bobbing ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(weapon_bobbing ? RD_ON : RD_OFF, 233 + wide_delta, 55,
+                              weapon_bobbing ? CR_GREEN : CR_DARKRED);
 
         // Lethal pellet of a point-blank SSG
-        M_WriteTextSmall_ENG(287 + wide_delta, 65, ssg_blast_enemies ? RD_ON : RD_OFF,
-                                                   ssg_blast_enemies ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(ssg_blast_enemies ? RD_ON : RD_OFF, 287 + wide_delta, 65,
+                              ssg_blast_enemies ? CR_GREEN : CR_DARKRED);
 
         // Randomly mirrored corpses
-        M_WriteTextSmall_ENG(231 + wide_delta, 75, randomly_flipcorpses ? RD_ON : RD_OFF,
-                                                   randomly_flipcorpses ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(randomly_flipcorpses ? RD_ON : RD_OFF, 231 + wide_delta, 75,
+                              randomly_flipcorpses ? CR_GREEN : CR_DARKRED);
 
         // Floating powerups
-        M_WriteTextSmall_ENG(171 + wide_delta, 85, floating_powerups ? RD_ON : RD_OFF,
-                                                   floating_powerups ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(floating_powerups ? RD_ON : RD_OFF, 171 + wide_delta, 85,
+                              floating_powerups ? CR_GREEN : CR_DARKRED);
 
         // Items are tossed when dropped
-        M_WriteTextSmall_ENG(254 + wide_delta, 95, toss_drop ? RD_ON : RD_OFF,
-                                                   toss_drop ? cr[CR_GREEN] : cr[CR_DARKRED]);
-
-        //
-        // Crosshair
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 105, "Crosshair", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallENG(toss_drop ? RD_ON : RD_OFF, 254 + wide_delta, 95,
+                              toss_drop ? CR_GREEN : CR_DARKRED);
 
         // Draw crosshair
-        M_WriteTextSmall_ENG(146 + wide_delta, 115, crosshair_draw ? RD_ON : RD_OFF,
-                                                    crosshair_draw ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(crosshair_draw ? RD_ON : RD_OFF, 146 + wide_delta, 115,
+                              crosshair_draw ? CR_GREEN : CR_DARKRED);
 
         // Indication
-        M_WriteTextSmall_ENG(111 + wide_delta, 125, 
-                             crosshair_type == 1 ? "Health" :
-                             crosshair_type == 2 ? "Target highlighting" :
-                             crosshair_type == 3 ? "Target highlighting+Health" :
-                                                   "Static",
-                             crosshair_type ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(crosshair_type == 1 ? "Health" :
+                              crosshair_type == 2 ? "Target highlighting" :
+                              crosshair_type == 3 ? "Target highlighting+Health" :
+                              "Static", 111 + wide_delta, 125,
+                              crosshair_type ? CR_GREEN : CR_DARKRED);
 
         // Increased size
-        M_WriteTextSmall_ENG(140 + wide_delta, 135, crosshair_scale ? RD_ON : RD_OFF,
-                                                    crosshair_scale ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(crosshair_scale ? RD_ON : RD_OFF, 140 + wide_delta, 135,
+                              crosshair_scale ? CR_GREEN : CR_DARKRED);
 
         //
         // Footer
         //
-        M_WriteTextSmall_ENG(35 + wide_delta, 145, "next page >", cr[CR_WHITE]);
-        M_WriteTextSmall_ENG(35 + wide_delta, 155, "< prev page", cr[CR_WHITE]);
-        M_WriteTextSmall_ENG(231 + wide_delta, 155, "page 4/5", cr[CR_WHITE]);
+        RD_M_DrawTextSmallENG("next page >", 35 + wide_delta, 145, CR_WHITE);
+        RD_M_DrawTextSmallENG("< prev page", 35 + wide_delta, 155, CR_WHITE);
     }
     else
     {
-        M_WriteTextBigCentered_RUS(5, "YFCNHJQRB UTQVGKTZ"); // НАСТРОЙКИ ГЕЙМПЛЕЯ
-
-        //
-        // Физика
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 25, "Abpbrf", cr[CR_YELLOW]);
-
         // Перемещение под/над монстрами
-        M_WriteTextSmall_RUS(274 + wide_delta, 35, over_under ? RD_ON_RUS : RD_OFF_RUS,
-                                                   over_under ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(over_under ? RD_ON_RUS : RD_OFF_RUS, 274 + wide_delta, 35,
+                              over_under ? CR_GREEN : CR_DARKRED);
 
         // Трупы сползают с возвышений
-        M_WriteTextSmall_RUS(256 + wide_delta, 45, torque ? RD_ON_RUS : RD_OFF_RUS,
-                                                   torque ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(torque ? RD_ON_RUS : RD_OFF_RUS, 256 + wide_delta, 45,
+                              torque ? CR_GREEN : CR_DARKRED);
 
         // Улучшенное покачивание оружия
-        M_WriteTextSmall_RUS(271 + wide_delta, 55, weapon_bobbing ? RD_ON_RUS : RD_OFF_RUS,
-                                                   weapon_bobbing ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(weapon_bobbing ? RD_ON_RUS : RD_OFF_RUS, 271 + wide_delta, 55,
+                              weapon_bobbing ? CR_GREEN : CR_DARKRED);
 
         // Двустволка разрывает врагов
-        M_WriteTextSmall_RUS(254 + wide_delta, 65, ssg_blast_enemies ? RD_ON_RUS : RD_OFF_RUS,
-                                                   ssg_blast_enemies ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(ssg_blast_enemies ? RD_ON_RUS : RD_OFF_RUS, 254 + wide_delta, 65,
+                              ssg_blast_enemies ? CR_GREEN : CR_DARKRED);
 
         // Зеркалирование трупов
-        M_WriteTextSmall_RUS(207 + wide_delta, 75, randomly_flipcorpses ? RD_ON_RUS : RD_OFF_RUS,
-                                                   randomly_flipcorpses ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(randomly_flipcorpses ? RD_ON_RUS : RD_OFF_RUS, 207 + wide_delta, 75,
+                              randomly_flipcorpses ? CR_GREEN : CR_DARKRED);
 
         // Левитирующие сферы-артефакты
-        M_WriteTextSmall_RUS(275 + wide_delta, 85, floating_powerups ? RD_ON_RUS : RD_OFF_RUS,
-                                                   floating_powerups ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(floating_powerups ? RD_ON_RUS : RD_OFF_RUS, 275 + wide_delta, 85,
+                              floating_powerups ? CR_GREEN : CR_DARKRED);
 
         // Подбрасывать выпавшие предметы
-        M_WriteTextSmall_RUS(285 + wide_delta, 95, toss_drop ? RD_ON_RUS : RD_OFF_RUS,
-                                                   toss_drop ? cr[CR_GREEN] : cr[CR_DARKRED]);
-
-        //
-        // Прицел
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 105, "Ghbwtk", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallRUS(toss_drop ? RD_ON_RUS : RD_OFF_RUS, 285 + wide_delta, 95,
+                              toss_drop ? CR_GREEN : CR_DARKRED);
 
         // Отображать прицел
-        M_WriteTextSmall_RUS(180 + wide_delta, 115, crosshair_draw ? RD_ON_RUS : RD_OFF_RUS,
-                                                    crosshair_draw ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(crosshair_draw ? RD_ON_RUS : RD_OFF_RUS, 180 + wide_delta, 115,
+                              crosshair_draw ? CR_GREEN : CR_DARKRED);
 
         // Индикация
-        M_WriteTextSmall_RUS(117 + wide_delta, 125, 
-                             crosshair_type == 1 ? "Pljhjdmt" :       // Здоровье
-                             crosshair_type == 2 ? "Gjlcdtnrf wtkb" : // Подсветка цели
-                             crosshair_type == 3 ? "Gjlcdtnrf wtkb+pljhjdmt" : // Подсветка цели + здоровье
-                                                   "Cnfnbxyfz",
-                             crosshair_type ? cr[CR_GREEN] : cr[CR_DARKRED]);      // Статичная
+        RD_M_DrawTextSmallRUS(crosshair_type == 1 ? "Pljhjdmt" :       // Здоровье
+                              crosshair_type == 2 ? "Gjlcdtnrf wtkb" : // Подсветка цели
+                              crosshair_type == 3 ? "Gjlcdtnrf wtkb+pljhjdmt" : // Подсветка цели + здоровье
+                              "Cnfnbxyfz", 117 + wide_delta, 125, // Статичная
+                              crosshair_type ? CR_GREEN : CR_DARKRED);
 
         // Увеличенный размер
-        M_WriteTextSmall_RUS(185 + wide_delta, 135, crosshair_scale ? RD_ON_RUS : RD_OFF_RUS,
-                                                    crosshair_scale ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(crosshair_scale ? RD_ON_RUS : RD_OFF_RUS, 185 + wide_delta, 135,
+                              crosshair_scale ? CR_GREEN : CR_DARKRED);
 
         //
         // Footer
         //
-        M_WriteTextSmall_RUS(35 + wide_delta, 145, RD_NEXT_RUS, cr[CR_WHITE]);
-        M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_PREV_RUS, cr[CR_WHITE]);
-        M_WriteTextSmall_RUS(197 + wide_delta, 155, "cnhfybwf 4*5", cr[CR_WHITE]);
+        RD_M_DrawTextSmallRUS(RD_NEXT_RUS, 35 + wide_delta, 145, CR_WHITE);
+        RD_M_DrawTextSmallRUS(RD_PREV_RUS, 35 + wide_delta, 155, CR_WHITE);
     }
 }
 
@@ -6484,185 +3862,146 @@ void M_RD_Draw_Gameplay_5(void)
 
     if (english_language)
     {
-        M_WriteTextBigCentered_ENG(5, "GAMEPLAY FEATURES");
-
-        //
-        // Gameplay
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 25, "Gameplay", cr[CR_YELLOW]);
-
         // Fix errors of vanilla maps
-        M_WriteTextSmall_ENG(226 + wide_delta, 35, fix_map_errors ? RD_ON : RD_OFF,
-                                                   fix_map_errors ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(fix_map_errors ? RD_ON : RD_OFF, 226 + wide_delta, 35,
+                              fix_map_errors ? CR_GREEN : CR_DARKRED);
 
         // Flip game levels
-        M_WriteTextSmall_ENG(158 + wide_delta, 45, flip_levels ? RD_ON : RD_OFF,
-                                                   flip_levels ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(flip_levels ? RD_ON : RD_OFF, 158 + wide_delta, 45,
+                              flip_levels ? CR_GREEN : CR_DARKRED);
 
         // Pain Elemental without Souls limit
-        M_WriteTextSmall_ENG(284 + wide_delta, 55, unlimited_lost_souls ? RD_ON : RD_OFF,
-                                                   unlimited_lost_souls ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(unlimited_lost_souls ? RD_ON : RD_OFF, 284 + wide_delta, 55,
+                              unlimited_lost_souls ? CR_GREEN : CR_DARKRED);
 
         // More agressive lost souls
-        M_WriteTextSmall_ENG(230 + wide_delta, 65, agressive_lost_souls ? RD_ON : RD_OFF,
-                                                   agressive_lost_souls ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(agressive_lost_souls ? RD_ON : RD_OFF, 230 + wide_delta, 65,
+                              agressive_lost_souls ? CR_GREEN : CR_DARKRED);
 
         // Pistol start
-        M_WriteTextSmall_ENG(203 + wide_delta, 75, pistol_start ? RD_ON : RD_OFF,
-                                                   pistol_start ? cr[CR_GREEN] : cr[CR_DARKRED]);
-
-        //
-        // Demos
-        //
-        M_WriteTextSmall_ENG(35 + wide_delta, 85, "Demos", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallENG(pistol_start ? RD_ON : RD_OFF, 203 + wide_delta, 75,
+                              pistol_start ? CR_GREEN : CR_DARKRED);
 
         // Show demo timer
-        M_WriteTextSmall_ENG(153 + wide_delta, 95, demotimer == 1 ? "playback"  :
-                                                   demotimer == 2 ? "recording" :
-                                                   demotimer == 3 ? "always" :
-                                                                     "off",
-                                                   demotimer > 0 ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(demotimer == 1 ? "playback" :
+                              demotimer == 2 ? "recording" :
+                              demotimer == 3 ? "always" :
+                              "off", 153 + wide_delta, 95,
+                              demotimer > 0 ? CR_GREEN : CR_DARKRED);
 
         // Timer direction
-        M_WriteTextSmall_ENG(148 + wide_delta, 105, demotimerdir ? "backward" : "forward",
-                                                    demotimer > 0 ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(demotimerdir ? "backward" : "forward", 148 + wide_delta, 105,
+                              demotimer > 0 ? CR_GREEN : CR_DARKRED);
 
         // Show progress bar 
-        M_WriteTextSmall_ENG(169 + wide_delta, 115, demobar ? RD_ON : RD_OFF,
-                                                    demobar ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(demobar ? RD_ON : RD_OFF, 169 + wide_delta, 115,
+                              demobar ? CR_GREEN : CR_DARKRED);
 
         // Play internal demos
-        M_WriteTextSmall_ENG(183 + wide_delta, 125, no_internal_demos ? RD_OFF : RD_ON,
-                                                    no_internal_demos ? cr[CR_DARKRED] : cr[CR_GREEN]);
+        RD_M_DrawTextSmallENG(no_internal_demos ? RD_OFF : RD_ON, 183 + wide_delta, 125,
+                              no_internal_demos ? CR_DARKRED : CR_GREEN);
 
         //
         // Footer
         //
-        M_WriteTextSmall_ENG(35 + wide_delta, 145, "first page >", cr[CR_WHITE]);
-        M_WriteTextSmall_ENG(35 + wide_delta, 155, "< prev page", cr[CR_WHITE]);
-        M_WriteTextSmall_ENG(231 + wide_delta, 155, "page 5/5", cr[CR_WHITE]);
+        RD_M_DrawTextSmallENG("first page >", 35 + wide_delta, 145, CR_WHITE);
+        RD_M_DrawTextSmallENG("< prev page", 35 + wide_delta, 155, CR_WHITE);
     }
     else
     {
-        M_WriteTextBigCentered_RUS(5, "YFCNHJQRB UTQVGKTZ"); // НАСТРОЙКИ ГЕЙМПЛЕЯ
-
-        //
-        // Геймплей
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 25, "Utqvgktq", cr[CR_YELLOW]);
+        // Устранять ошибки ориг. уровней
+        RD_M_DrawTextSmallRUS(fix_map_errors ? RD_ON_RUS : RD_OFF_RUS, 269 + wide_delta, 35,
+                              fix_map_errors ? CR_GREEN : CR_DARKRED);
 
         // Устранять ошибки ориг. уровней
-        M_WriteTextSmall_RUS(269 + wide_delta, 35, fix_map_errors ? RD_ON_RUS : RD_OFF_RUS,
-                                                   fix_map_errors ? cr[CR_GREEN] : cr[CR_DARKRED]);
-
-        // Устранять ошибки ориг. уровней
-        M_WriteTextSmall_RUS(263 + wide_delta, 45, flip_levels ? RD_ON_RUS : RD_OFF_RUS,
-                                                   flip_levels ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(flip_levels ? RD_ON_RUS : RD_OFF_RUS, 263 + wide_delta, 45,
+                              flip_levels ? CR_GREEN : CR_DARKRED);
 
         // Элементаль без ограничения Душ
-        M_WriteTextSmall_RUS(274 + wide_delta, 55, unlimited_lost_souls ? RD_ON_RUS : RD_OFF_RUS,
-                                                   unlimited_lost_souls ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(unlimited_lost_souls ? RD_ON_RUS : RD_OFF_RUS, 274 + wide_delta, 55,
+                              unlimited_lost_souls ? CR_GREEN : CR_DARKRED);
 
         // Повышенная агрессивность Душ
-        M_WriteTextSmall_RUS(266 + wide_delta, 65, agressive_lost_souls ? RD_ON_RUS : RD_OFF_RUS,
-                                                   agressive_lost_souls ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(agressive_lost_souls ? RD_ON_RUS : RD_OFF_RUS, 266 + wide_delta, 65,
+                              agressive_lost_souls ? CR_GREEN : CR_DARKRED);
 
         // Режим игры "Pistol start"
-        M_WriteTextSmall_RUS(35 + wide_delta, 75, "ht;bv buhs ^", NULL);
-        M_WriteTextSmall_ENG(121 + wide_delta, 75, "\"Pistol start\":", NULL);
-        M_WriteTextSmall_RUS(229 + wide_delta, 75, pistol_start ? RD_ON_RUS : RD_OFF_RUS,
-                                                   pistol_start ? cr[CR_GREEN] : cr[CR_DARKRED]);
-
-        //
-        // Демозаписи
-        //
-        M_WriteTextSmall_RUS(35 + wide_delta, 85, "Ltvjpfgbcb", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallRUS("ht;bv buhs ^", 35 + wide_delta, 75, CR_NONE);
+        RD_M_DrawTextSmallENG("\"Pistol start\":", 121 + wide_delta, 75, CR_NONE);
+        RD_M_DrawTextSmallRUS(pistol_start ? RD_ON_RUS : RD_OFF_RUS, 229 + wide_delta, 75,
+                              pistol_start ? CR_GREEN : CR_DARKRED);
 
         // Отображать таймер
-        M_WriteTextSmall_RUS(180 + wide_delta, 95, demotimer == 1 ? "ghb ghjbuhsdfybb"  :
-                                                   demotimer == 2 ? "ghb pfgbcb" :
-                                                   demotimer == 3 ? "dctulf" :
-                                                                    "dsrk",
-                                                   demotimer > 0 ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(demotimer == 1 ? "ghb ghjbuhsdfybb" :
+                              demotimer == 2 ? "ghb pfgbcb" :
+                              demotimer == 3 ? "dctulf" :
+                              "dsrk", 180 + wide_delta, 95,
+                              demotimer > 0 ? CR_GREEN : CR_DARKRED);
 
         // Время таймера
-        M_WriteTextSmall_RUS(145 + wide_delta, 105, demotimerdir ? "jcnfdittcz" : "ghjitlitt",
-                                                    demotimer > 0 ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(demotimerdir ? "jcnfdittcz" : "ghjitlitt", 145 + wide_delta, 105,
+                              demotimer > 0 ? CR_GREEN : CR_DARKRED);
 
         // Шкала прогресса
-        M_WriteTextSmall_RUS(161 + wide_delta, 115, demobar ? RD_ON_RUS : RD_OFF_RUS,
-                                                    demobar ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(demobar ? RD_ON_RUS : RD_OFF_RUS, 161 + wide_delta, 115,
+                              demobar ? CR_GREEN : CR_DARKRED);
 
         // Проигрывать демозаписи
-        M_WriteTextSmall_RUS(219 + wide_delta, 125, no_internal_demos ? RD_OFF_RUS : RD_ON_RUS,
-                                                    no_internal_demos ? cr[CR_DARKRED] : cr[CR_GREEN]);
+        RD_M_DrawTextSmallRUS(no_internal_demos ? RD_OFF_RUS : RD_ON_RUS, 219 + wide_delta, 125,
+                              no_internal_demos ? CR_DARKRED : CR_GREEN);
 
         //
         // Footer
         //
-        M_WriteTextSmall_RUS(35 + wide_delta, 145, RD_NEXT_RUS, cr[CR_WHITE]);
-        M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_PREV_RUS, cr[CR_WHITE]);
-        M_WriteTextSmall_RUS(197 + wide_delta, 155, "cnhfybwf 5*5", cr[CR_WHITE]);
+        RD_M_DrawTextSmallRUS(RD_NEXT_RUS, 35 + wide_delta, 145, CR_WHITE);
+        RD_M_DrawTextSmallRUS(RD_PREV_RUS, 35 + wide_delta, 155, CR_WHITE);
     }
 }
 
-void M_RD_Change_Brightmaps(int choice)
+void M_RD_Change_Brightmaps(Direction_t direction)
 {
     brightmaps ^= 1;
 }
 
-void M_RD_Change_FakeContrast(int choice)
+void M_RD_Change_FakeContrast(Direction_t direction)
 {
     fake_contrast ^= 1;
 }
 
-void M_RD_Change_Translucency(int choice)
+void M_RD_Change_Translucency(Direction_t direction)
 {
     translucency ^= 1;
 }
 
-void M_RD_Change_ImprovedFuzz(int choice)
+void M_RD_Change_ImprovedFuzz(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0: 
-        improved_fuzz--;
-        if (improved_fuzz < 0) 
-            improved_fuzz = 4;
-        break;
-    
-        case 1:
-        improved_fuzz++;
-        if (improved_fuzz > 4)
-            improved_fuzz = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&improved_fuzz, 0, 4, direction);
 
     // Redraw game screen
     R_ExecuteSetViewSize();
 }
 
-void M_RD_Change_ColoredBlood(int choice)
+void M_RD_Change_ColoredBlood(Direction_t direction)
 {
     colored_blood ^= 1;
 }
 
-void M_RD_Change_SwirlingLiquids(int choice)
+void M_RD_Change_SwirlingLiquids(Direction_t direction)
 {
     swirling_liquids ^= 1;
 }
 
-void M_RD_Change_InvulSky(int choice)
+void M_RD_Change_InvulSky(Direction_t direction)
 {
     invul_sky ^= 1;
 }
 
-void M_RD_Change_LinearSky(int choice)
+void M_RD_Change_LinearSky(Direction_t direction)
 {
     linear_sky ^= 1;
 }
 
-void M_RD_Change_FlipWeapons(int choice)
+void M_RD_Change_FlipWeapons(Direction_t direction)
 {
     flip_weapons ^= 1;
 
@@ -6674,32 +4013,19 @@ void M_RD_Change_FlipWeapons(int choice)
 // Gameplay: Status Bar
 //
 
-void M_RD_Change_ExtraPlayerFaces(int choice)
+void M_RD_Change_ExtraPlayerFaces(Direction_t direction)
 {
     extra_player_faces ^= 1;
 }
 
-void M_RD_Change_NegativeHealth(int choice)
+void M_RD_Change_NegativeHealth(Direction_t direction)
 {
     negative_health ^= 1;
 }
 
-void M_RD_Change_SBarColored(int choice)
+void M_RD_Change_SBarColored(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0: 
-        sbar_colored--;
-        if (sbar_colored < 0) 
-            sbar_colored = 2;
-        break;
-    
-        case 1:
-        sbar_colored++;
-        if (sbar_colored > 2)
-            sbar_colored = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&sbar_colored, 0, 2, direction);
     
     // Update background of classic HUD and player face 
     if (gamestate == GS_LEVEL)
@@ -6709,464 +4035,175 @@ void M_RD_Change_SBarColored(int choice)
     }
 }
 
-void M_RD_Define_SBarHighValue (void)
+void M_RD_Define_SBarColorValue(byte** sbar_color_set, int color)
 {
     // [JN] No coloring in vanilla or Jaguar Doom.
     if (vanillaparm || gamemission == jaguar)
     {
-        sbar_color_high_set = NULL;
+        *sbar_color_set = NULL;
     }
     else
     {
-        switch (sbar_color_high)
+        switch (color)
         {
-            case 1:   sbar_color_high_set = cr[CR_DARKRED];    break;
-            case 2:   sbar_color_high_set = cr[CR_GREEN];      break;
-            case 3:   sbar_color_high_set = cr[CR_DARKGREEN];  break;
-            case 4:   sbar_color_high_set = cr[CR_OLIVE];      break;
-            case 5:   sbar_color_high_set = cr[CR_BLUE2];      break;
-            case 6:   sbar_color_high_set = cr[CR_DARKBLUE];   break;
-            case 7:   sbar_color_high_set = cr[CR_YELLOW];       break;
-            case 8:   sbar_color_high_set = cr[CR_ORANGE];     break;
-            case 9:   sbar_color_high_set = cr[CR_WHITE];      break;
-            case 10:  sbar_color_high_set = cr[CR_GRAY];       break;
-            case 11:  sbar_color_high_set = cr[CR_DARKGRAY];   break;
-            case 12:  sbar_color_high_set = cr[CR_TAN];        break;
-            case 13:  sbar_color_high_set = cr[CR_BROWN];    break;
-            case 14:  sbar_color_high_set = cr[CR_ALMOND];      break;
-            case 15:  sbar_color_high_set = cr[CR_KHAKI];  break;
-            case 16:  sbar_color_high_set = cr[CR_PINK];      break;
-            case 17:  sbar_color_high_set = cr[CR_BURGUNDY];  break;
-            default:  sbar_color_high_set = NULL;              break;
+            case 1:   *sbar_color_set = cr[CR_DARKRED];    break;
+            case 2:   *sbar_color_set = cr[CR_GREEN];      break;
+            case 3:   *sbar_color_set = cr[CR_DARKGREEN];  break;
+            case 4:   *sbar_color_set = cr[CR_OLIVE];      break;
+            case 5:   *sbar_color_set = cr[CR_BLUE2];      break;
+            case 6:   *sbar_color_set = cr[CR_DARKBLUE];   break;
+            case 7:   *sbar_color_set = cr[CR_YELLOW];       break;
+            case 8:   *sbar_color_set = cr[CR_ORANGE];     break;
+            case 9:   *sbar_color_set = cr[CR_WHITE];      break;
+            case 10:  *sbar_color_set = cr[CR_GRAY];       break;
+            case 11:  *sbar_color_set = cr[CR_DARKGRAY];   break;
+            case 12:  *sbar_color_set = cr[CR_TAN];        break;
+            case 13:  *sbar_color_set = cr[CR_BROWN];    break;
+            case 14:  *sbar_color_set = cr[CR_ALMOND];      break;
+            case 15:  *sbar_color_set = cr[CR_KHAKI];  break;
+            case 16:  *sbar_color_set = cr[CR_PINK];      break;
+            case 17:  *sbar_color_set = cr[CR_BURGUNDY];  break;
+            default:  *sbar_color_set = NULL;              break;
         }
     }
 }
 
-void M_RD_Change_SBarHighValue (int choice)
+void M_RD_Change_SBarHighValue(Direction_t direction)
 {
     // [JN] Disallow changing if not appropriate.
     if (sbar_colored == 0 || gamemission == jaguar)
-    return;
+        return;
 
-    switch(choice)
-    {
-        case 0: 
-        sbar_color_high--;
-        if (sbar_color_high < 0) 
-            sbar_color_high = 17;
-        break;
-    
-        case 1:
-        sbar_color_high++;
-        if (sbar_color_high > 17)
-            sbar_color_high = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&sbar_color_high, 0, 17, direction);
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarHighValue();
+    M_RD_Define_SBarColorValue(&sbar_color_high_set, sbar_color_high);
 
     // [JN] Routine №3: play sound only if necessary.
     S_StartSound(NULL,sfx_stnmov);
 }
 
-void M_RD_Define_SBarNormalValue (void)
-{
-    // [JN] No coloring in vanilla or Jaguar Doom.
-    if (vanillaparm || gamemission == jaguar)
-    {
-        sbar_color_normal_set = NULL;
-    }
-    else
-    {
-        switch (sbar_color_normal)
-        {
-            case 1:   sbar_color_normal_set = cr[CR_DARKRED];    break;
-            case 2:   sbar_color_normal_set = cr[CR_GREEN];      break;
-            case 3:   sbar_color_normal_set = cr[CR_DARKGREEN];  break;
-            case 4:   sbar_color_normal_set = cr[CR_OLIVE];      break;
-            case 5:   sbar_color_normal_set = cr[CR_BLUE2];      break;
-            case 6:   sbar_color_normal_set = cr[CR_DARKBLUE];   break;
-            case 7:   sbar_color_normal_set = cr[CR_YELLOW];       break;
-            case 8:   sbar_color_normal_set = cr[CR_ORANGE];     break;
-            case 9:   sbar_color_normal_set = cr[CR_WHITE];      break;
-            case 10:  sbar_color_normal_set = cr[CR_GRAY];       break;
-            case 11:  sbar_color_normal_set = cr[CR_DARKGRAY];   break;
-            case 12:  sbar_color_normal_set = cr[CR_TAN];        break;
-            case 13:  sbar_color_normal_set = cr[CR_BROWN];    break;
-            case 14:  sbar_color_normal_set = cr[CR_ALMOND];      break;
-            case 15:  sbar_color_normal_set = cr[CR_KHAKI];  break;
-            case 16:  sbar_color_normal_set = cr[CR_PINK];      break;
-            case 17:  sbar_color_normal_set = cr[CR_BURGUNDY];  break;
-            default:  sbar_color_normal_set = NULL;              break;
-        }
-    }
-}
-
-void M_RD_Change_SBarNormalValue (int choice)
+void M_RD_Change_SBarNormalValue(Direction_t direction)
 {
     // [JN] Disallow changing if not appropriate.
     if (sbar_colored == 0 || gamemission == jaguar)
-    return;
+        return;
 
-    switch(choice)
-    {
-        case 0: 
-        sbar_color_normal--;
-        if (sbar_color_normal < 0) 
-            sbar_color_normal = 17;
-        break;
-    
-        case 1:
-        sbar_color_normal++;
-        if (sbar_color_normal > 17)
-            sbar_color_normal = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&sbar_color_normal, 0, 17, direction);
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarNormalValue();
+    M_RD_Define_SBarColorValue(&sbar_color_normal_set, sbar_color_normal);
 
     // [JN] Routine №3: play sound only if necessary.
     S_StartSound(NULL,sfx_stnmov);
 }
 
-void M_RD_Define_SBarLowValue (void)
-{
-    // [JN] No coloring in vanilla or Jaguar Doom.
-    if (vanillaparm || gamemission == jaguar)
-    {
-        sbar_color_low_set = NULL;
-    }
-    else
-    {
-        switch (sbar_color_low)
-        {
-            case 1:   sbar_color_low_set = cr[CR_DARKRED];    break;
-            case 2:   sbar_color_low_set = cr[CR_GREEN];      break;
-            case 3:   sbar_color_low_set = cr[CR_DARKGREEN];  break;
-            case 4:   sbar_color_low_set = cr[CR_OLIVE];      break;
-            case 5:   sbar_color_low_set = cr[CR_BLUE2];      break;
-            case 6:   sbar_color_low_set = cr[CR_DARKBLUE];   break;
-            case 7:   sbar_color_low_set = cr[CR_YELLOW];       break;
-            case 8:   sbar_color_low_set = cr[CR_ORANGE];     break;
-            case 9:   sbar_color_low_set = cr[CR_WHITE];      break;
-            case 10:  sbar_color_low_set = cr[CR_GRAY];       break;
-            case 11:  sbar_color_low_set = cr[CR_DARKGRAY];   break;
-            case 12:  sbar_color_low_set = cr[CR_TAN];        break;
-            case 13:  sbar_color_low_set = cr[CR_BROWN];    break;
-            case 14:  sbar_color_low_set = cr[CR_ALMOND];      break;
-            case 15:  sbar_color_low_set = cr[CR_KHAKI];  break;
-            case 16:  sbar_color_low_set = cr[CR_PINK];      break;
-            case 17:  sbar_color_low_set = cr[CR_BURGUNDY];  break;
-            default:  sbar_color_low_set = NULL;              break;
-        }
-    }
-}
-
-void M_RD_Change_SBarLowValue (int choice)
+void M_RD_Change_SBarLowValue(Direction_t direction)
 {
     // [JN] Disallow changing if not appropriate.
     if (sbar_colored == 0 || gamemission == jaguar)
-    return;
+        return;
 
-    switch(choice)
-    {
-        case 0: 
-        sbar_color_low--;
-        if (sbar_color_low < 0) 
-            sbar_color_low = 17;
-        break;
-    
-        case 1:
-        sbar_color_low++;
-        if (sbar_color_low > 17)
-            sbar_color_low = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&sbar_color_low, 0, 17, direction);
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarLowValue();
+    M_RD_Define_SBarColorValue(&sbar_color_low_set, sbar_color_low);
 
     // [JN] Routine №3: play sound only if necessary.
     S_StartSound(NULL,sfx_stnmov);
 }
 
-void M_RD_Define_SBarCriticalValue (void)
-{
-    // [JN] No coloring in vanilla or Jaguar Doom.
-    if (vanillaparm || gamemission == jaguar)
-    {
-        sbar_color_critical_set = NULL;
-    }
-    else
-    {
-        switch (sbar_color_critical)
-        {
-            case 1:   sbar_color_critical_set = cr[CR_DARKRED];    break;
-            case 2:   sbar_color_critical_set = cr[CR_GREEN];      break;
-            case 3:   sbar_color_critical_set = cr[CR_DARKGREEN];  break;
-            case 4:   sbar_color_critical_set = cr[CR_OLIVE];      break;
-            case 5:   sbar_color_critical_set = cr[CR_BLUE2];      break;
-            case 6:   sbar_color_critical_set = cr[CR_DARKBLUE];   break;
-            case 7:   sbar_color_critical_set = cr[CR_YELLOW];       break;
-            case 8:   sbar_color_critical_set = cr[CR_ORANGE];     break;
-            case 9:   sbar_color_critical_set = cr[CR_WHITE];      break;
-            case 10:  sbar_color_critical_set = cr[CR_GRAY];       break;
-            case 11:  sbar_color_critical_set = cr[CR_DARKGRAY];   break;
-            case 12:  sbar_color_critical_set = cr[CR_TAN];        break;
-            case 13:  sbar_color_critical_set = cr[CR_BROWN];    break;
-            case 14:  sbar_color_critical_set = cr[CR_ALMOND];      break;
-            case 15:  sbar_color_critical_set = cr[CR_KHAKI];  break;
-            case 16:  sbar_color_critical_set = cr[CR_PINK];      break;
-            case 17:  sbar_color_critical_set = cr[CR_BURGUNDY];  break;
-            default:  sbar_color_critical_set = NULL;              break;
-        }
-    }
-}
-
-void M_RD_Change_SBarCriticalValue (int choice)
+void M_RD_Change_SBarCriticalValue(Direction_t direction)
 {
     // [JN] Disallow changing if not appropriate.
     if (sbar_colored == 0 || gamemission == jaguar)
-    return;
+        return;
 
-    switch(choice)
-    {
-        case 0: 
-        sbar_color_critical--;
-        if (sbar_color_critical < 0) 
-            sbar_color_critical = 17;
-        break;
-    
-        case 1:
-        sbar_color_critical++;
-        if (sbar_color_critical > 17)
-            sbar_color_critical = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&sbar_color_critical, 0, 17, direction);
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarCriticalValue();
+    M_RD_Define_SBarColorValue(&sbar_color_critical_set, sbar_color_critical);
 
     // [JN] Routine №3: play sound only if necessary.
     S_StartSound(NULL,sfx_stnmov);
 }
 
-void M_RD_Define_SBarArmorType1 (void)
-{
-    // [JN] No coloring in vanilla or Jaguar Doom.
-    if (vanillaparm || gamemission == jaguar)
-    {
-        sbar_color_armor_1_set = NULL;
-    }
-    else
-    {
-        switch (sbar_color_armor_1)
-        {
-            case 1:   sbar_color_armor_1_set = cr[CR_DARKRED];    break;
-            case 2:   sbar_color_armor_1_set = cr[CR_GREEN];      break;
-            case 3:   sbar_color_armor_1_set = cr[CR_DARKGREEN];  break;
-            case 4:   sbar_color_armor_1_set = cr[CR_OLIVE];      break;
-            case 5:   sbar_color_armor_1_set = cr[CR_BLUE2];      break;
-            case 6:   sbar_color_armor_1_set = cr[CR_DARKBLUE];   break;
-            case 7:   sbar_color_armor_1_set = cr[CR_YELLOW];       break;
-            case 8:   sbar_color_armor_1_set = cr[CR_ORANGE];     break;
-            case 9:   sbar_color_armor_1_set = cr[CR_WHITE];      break;
-            case 10:  sbar_color_armor_1_set = cr[CR_GRAY];       break;
-            case 11:  sbar_color_armor_1_set = cr[CR_DARKGRAY];   break;
-            case 12:  sbar_color_armor_1_set = cr[CR_TAN];        break;
-            case 13:  sbar_color_armor_1_set = cr[CR_BROWN];    break;
-            case 14:  sbar_color_armor_1_set = cr[CR_ALMOND];      break;
-            case 15:  sbar_color_armor_1_set = cr[CR_KHAKI];  break;
-            case 16:  sbar_color_armor_1_set = cr[CR_PINK];      break;
-            case 17:  sbar_color_armor_1_set = cr[CR_BURGUNDY];  break;
-            default:  sbar_color_armor_1_set = NULL;              break;
-        }
-    }
-}
-
-void M_RD_Change_SBarArmorType1 (int choice)
+void M_RD_Change_SBarArmorType1(Direction_t direction)
 {
     // [JN] Disallow changing if not appropriate.
     if (sbar_colored == 0 || gamemission == jaguar)
-    return;
+        return;
 
-    switch(choice)
-    {
-        case 0: 
-        sbar_color_armor_1--;
-        if (sbar_color_armor_1 < 0) 
-            sbar_color_armor_1 = 17;
-        break;
-    
-        case 1:
-        sbar_color_armor_1++;
-        if (sbar_color_armor_1 > 17)
-            sbar_color_armor_1 = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&sbar_color_armor_1, 0, 17, direction);
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarArmorType1();
+    M_RD_Define_SBarColorValue(&sbar_color_armor_1_set, sbar_color_armor_1);
 
     // [JN] Routine №3: play sound only if necessary.
     S_StartSound(NULL,sfx_stnmov);
 }
 
-void M_RD_Define_SBarArmorType2 (void)
-{
-    // [JN] No coloring in vanilla or Jaguar Doom.
-    if (vanillaparm || gamemission == jaguar)
-    {
-        sbar_color_armor_2_set = NULL;
-    }
-    else
-    {
-        switch (sbar_color_armor_2)
-        {
-            case 1:   sbar_color_armor_2_set = cr[CR_DARKRED];    break;
-            case 2:   sbar_color_armor_2_set = cr[CR_GREEN];      break;
-            case 3:   sbar_color_armor_2_set = cr[CR_DARKGREEN];  break;
-            case 4:   sbar_color_armor_2_set = cr[CR_OLIVE];      break;
-            case 5:   sbar_color_armor_2_set = cr[CR_BLUE2];      break;
-            case 6:   sbar_color_armor_2_set = cr[CR_DARKBLUE];   break;
-            case 7:   sbar_color_armor_2_set = cr[CR_YELLOW];       break;
-            case 8:   sbar_color_armor_2_set = cr[CR_ORANGE];     break;
-            case 9:   sbar_color_armor_2_set = cr[CR_WHITE];      break;
-            case 10:  sbar_color_armor_2_set = cr[CR_GRAY];       break;
-            case 11:  sbar_color_armor_2_set = cr[CR_DARKGRAY];   break;
-            case 12:  sbar_color_armor_2_set = cr[CR_TAN];        break;
-            case 13:  sbar_color_armor_2_set = cr[CR_BROWN];    break;
-            case 14:  sbar_color_armor_2_set = cr[CR_ALMOND];      break;
-            case 15:  sbar_color_armor_2_set = cr[CR_KHAKI];  break;
-            case 16:  sbar_color_armor_2_set = cr[CR_PINK];      break;
-            case 17:  sbar_color_armor_2_set = cr[CR_BURGUNDY];  break;
-            default:  sbar_color_armor_2_set = NULL;              break;
-        }
-    }
-}
-
-void M_RD_Change_SBarArmorType2 (int choice)
+void M_RD_Change_SBarArmorType2(Direction_t direction)
 {
     // [JN] Disallow changing if not appropriate.
     if (sbar_colored == 0 || gamemission == jaguar)
-    return;
+        return;
 
-    switch(choice)
-    {
-        case 0: 
-        sbar_color_armor_2--;
-        if (sbar_color_armor_2 < 0) 
-            sbar_color_armor_2 = 17;
-        break;
-    
-        case 1:
-        sbar_color_armor_2++;
-        if (sbar_color_armor_2 > 17)
-            sbar_color_armor_2 = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&sbar_color_armor_2, 0, 17, direction);
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarArmorType2();
+    M_RD_Define_SBarColorValue(&sbar_color_armor_2_set, sbar_color_armor_2);
 
     // [JN] Routine №3: play sound only if necessary.
     S_StartSound(NULL,sfx_stnmov);
 }
 
-void M_RD_Define_SBarArmorType0 (void)
-{
-    // [JN] No coloring in vanilla or Jaguar Doom.
-    if (vanillaparm || gamemission == jaguar)
-    {
-        sbar_color_armor_0_set = NULL;
-    }
-    else
-    {
-        switch (sbar_color_armor_0)
-        {
-            case 1:   sbar_color_armor_0_set = cr[CR_DARKRED];    break;
-            case 2:   sbar_color_armor_0_set = cr[CR_GREEN];      break;
-            case 3:   sbar_color_armor_0_set = cr[CR_DARKGREEN];  break;
-            case 4:   sbar_color_armor_0_set = cr[CR_OLIVE];      break;
-            case 5:   sbar_color_armor_0_set = cr[CR_BLUE2];      break;
-            case 6:   sbar_color_armor_0_set = cr[CR_DARKBLUE];   break;
-            case 7:   sbar_color_armor_0_set = cr[CR_YELLOW];       break;
-            case 8:   sbar_color_armor_0_set = cr[CR_ORANGE];     break;
-            case 9:   sbar_color_armor_0_set = cr[CR_WHITE];      break;
-            case 10:  sbar_color_armor_0_set = cr[CR_GRAY];       break;
-            case 11:  sbar_color_armor_0_set = cr[CR_DARKGRAY];   break;
-            case 12:  sbar_color_armor_0_set = cr[CR_TAN];        break;
-            case 13:  sbar_color_armor_0_set = cr[CR_BROWN];    break;
-            case 14:  sbar_color_armor_0_set = cr[CR_ALMOND];      break;
-            case 15:  sbar_color_armor_0_set = cr[CR_KHAKI];  break;
-            case 16:  sbar_color_armor_0_set = cr[CR_PINK];      break;
-            case 17:  sbar_color_armor_0_set = cr[CR_BURGUNDY];  break;
-            default:  sbar_color_armor_0_set = NULL;              break;
-        }
-    }
-}
-
-void M_RD_Change_SBarArmorType0 (int choice)
+void M_RD_Change_SBarArmorType0(Direction_t direction)
 {
     // [JN] Disallow changing if not appropriate.
     if (sbar_colored == 0 || gamemission == jaguar)
-    return;
+        return;
 
-    switch(choice)
-    {
-        case 0: 
-        sbar_color_armor_0--;
-        if (sbar_color_armor_0 < 0) 
-            sbar_color_armor_0 = 17;
-        break;
-    
-        case 1:
-        sbar_color_armor_0++;
-        if (sbar_color_armor_0 > 17)
-            sbar_color_armor_0 = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&sbar_color_armor_0, 0, 17, direction);
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarArmorType0();
+    M_RD_Define_SBarColorValue(&sbar_color_armor_0_set, sbar_color_armor_0);
 
     // [JN] Routine №3: play sound only if necessary.
     S_StartSound(NULL,sfx_stnmov);
 }
 
-void M_RD_Change_ZAxisSfx(int choice)
+void M_RD_Change_ZAxisSfx(Direction_t direction)
 {
     z_axis_sfx ^= 1;
 }
 
-void M_RD_Change_ExitSfx(int choice)
+void M_RD_Change_ExitSfx(Direction_t direction)
 {
     play_exit_sfx ^= 1;
 }
 
-void M_RD_Change_CrushingSfx(int choice)
+void M_RD_Change_CrushingSfx(Direction_t direction)
 {
     crushed_corpses_sfx ^= 1;
 }
 
-void M_RD_Change_BlazingSfx(int choice)
+void M_RD_Change_BlazingSfx(Direction_t direction)
 {
     blazing_door_fix_sfx ^= 1;
 }
 
-void M_RD_Change_AlertSfx(int choice)
+void M_RD_Change_AlertSfx(Direction_t direction)
 {
      noise_alert_sfx ^= 1;
 }
 
-void M_RD_Change_SecretNotify(int choice)
+void M_RD_Change_SecretNotify(Direction_t direction)
 {
     secret_notification ^= 1;
 }
 
-void M_RD_Change_InfraGreenVisor(int choice)
+void M_RD_Change_InfraGreenVisor(Direction_t direction)
 {
     infragreen_visor ^= 1;
 
@@ -7186,75 +4223,62 @@ void M_RD_Change_InfraGreenVisor(int choice)
     }
 }
 
-void M_RD_Change_WalkOverUnder(int choice)
+void M_RD_Change_WalkOverUnder(Direction_t direction)
 {
     over_under ^= 1;
 }
 
-void M_RD_Change_Torque(int choice)
+void M_RD_Change_Torque(Direction_t direction)
 {
     torque ^= 1;
 }
 
-void M_RD_Change_Bobbing(int choice)
+void M_RD_Change_Bobbing(Direction_t direction)
 {
     weapon_bobbing ^= 1;
 }
 
-void M_RD_Change_SSGBlast(int choice)
+void M_RD_Change_SSGBlast(Direction_t direction)
 {
     ssg_blast_enemies ^= 1;
 }
 
-void M_RD_Change_FlipCorpses(int choice)
+void M_RD_Change_FlipCorpses(Direction_t direction)
 {
     randomly_flipcorpses ^= 1;
 }
 
-void M_RD_Change_FloatPowerups(int choice)
+void M_RD_Change_FloatPowerups(Direction_t direction)
 {
     floating_powerups ^= 1;
 }
 
-void M_RD_Change_TossDrop(int choice)
+void M_RD_Change_TossDrop(Direction_t direction)
 {
     toss_drop ^= 1;
 }
 
-void M_RD_Change_CrosshairDraw(int choice)
+void M_RD_Change_CrosshairDraw(Direction_t direction)
 {
     crosshair_draw ^= 1;
 }
 
-void M_RD_Change_CrosshairType(int choice)
+void M_RD_Change_CrosshairType(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0: 
-        crosshair_type--;
-        if (crosshair_type < 0) 
-            crosshair_type = 3;
-        break;
-    
-        case 1:
-        crosshair_type++;
-        if (crosshair_type > 3)
-            crosshair_type = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&crosshair_type, 0, 3, direction);
 }
 
-void M_RD_Change_CrosshairScale(int choice)
+void M_RD_Change_CrosshairScale(Direction_t direction)
 {
     crosshair_scale ^= 1;
 }
 
-void M_RD_Change_FixMapErrors(int choice)
+void M_RD_Change_FixMapErrors(Direction_t direction)
 {
     fix_map_errors ^= 1;
 }
 
-void M_RD_Change_FlipLevels(int choice)
+void M_RD_Change_FlipLevels(Direction_t direction)
 {
     flip_levels ^= 1;
 
@@ -7265,45 +4289,32 @@ void M_RD_Change_FlipLevels(int choice)
     S_UpdateStereoSeparation();
 }
 
-void M_RD_Change_LostSoulsQty(int choice)
+void M_RD_Change_LostSoulsQty(Direction_t direction)
 {
     unlimited_lost_souls ^= 1;
 }
 
-void M_RD_Change_LostSoulsAgr(int choice)
+void M_RD_Change_LostSoulsAgr(Direction_t direction)
 {
     agressive_lost_souls ^= 1;
 }
 
-void M_RD_Change_PistolStart(int choice)
+void M_RD_Change_PistolStart(Direction_t direction)
 {
     pistol_start ^= 1;
 }
 
-void M_RD_Change_DemoTimer(int choice)
+void M_RD_Change_DemoTimer(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0: 
-        demotimer--;
-        if (demotimer < 0) 
-            demotimer = 3;
-        break;
-    
-        case 1:
-        demotimer++;
-        if (demotimer > 3)
-            demotimer = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&demotimer, 0, 3, direction);
 }
 
-void M_RD_Change_DemoTimerDir(int choice)
+void M_RD_Change_DemoTimerDir(Direction_t direction)
 {
     demotimerdir ^= 1;
 }
 
-void M_RD_Change_DemoBar(int choice)
+void M_RD_Change_DemoBar(Direction_t direction)
 {
     demobar ^= 1;
 
@@ -7314,7 +4325,7 @@ void M_RD_Change_DemoBar(int choice)
     }
 }
 
-void M_RD_Change_NoInternalDemos(int choice)
+void M_RD_Change_NoInternalDemos(Direction_t direction)
 {
     no_internal_demos ^= 1;
 }
@@ -7323,31 +4334,18 @@ void M_RD_Change_NoInternalDemos(int choice)
 // Level select
 // -----------------------------------------------------------------------------
 
-void M_RD_Choose_LevelSelect_1(int choice)
+void M_LevelSelect(int choice)
 {
     if (netgame && !demoplayback)
     {
         M_StartMessage(DEH_String(english_language ?
-                                  NEWGAME : NEWGAME_RUS),
-                                  NULL,false);
+                       NEWGAME : NEWGAME_RUS), NULL,false);
         return;
     }
-    else
-    {
-        M_SetupNextMenu(english_language ? 
-                        &RD_Level_Def_1 :
-                        &RD_Level_Def_1_Rus);
-    }
+    RD_Menu_SetMenu(&LevelSelect1Menu);
 }
 
-void M_RD_Choose_LevelSelect_2(int choice)
-{
-    M_SetupNextMenu(english_language ? 
-                    &RD_Level_Def_2 :
-                    &RD_Level_Def_2_Rus);
-}
-
-void M_RD_Draw_Level_1 (void)
+void M_RD_Draw_Level_1(void)
 {
     static char num[4];
 
@@ -7357,258 +4355,233 @@ void M_RD_Draw_Level_1 (void)
 
     if (english_language)
     {
-        M_WriteTextBigCentered_ENG(2, "LEVEL SELECT");
-        
         // Skill level
         M_snprintf(num, 4, "%d", selective_skill+1);
-        M_WriteTextSmall_ENG(226 + wide_delta, 20, num, NULL);
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 20, CR_NONE);
 
         // Episode
         if (logical_gamemission != doom)
         {
-            M_WriteTextSmall_ENG(226 + wide_delta, 30, "N/A", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallENG("N/A", 226 + wide_delta, 30, CR_DARKRED);
         }
         else
         {
             if (gamemode == shareware)
             {
-                M_WriteTextSmall_ENG(226 + wide_delta, 30, "1", cr[CR_DARKRED]);
+                RD_M_DrawTextSmallENG("1", 226 + wide_delta, 30, CR_DARKRED);
             }
             else
             {
                 M_snprintf(num, 4, "%d", selective_episode);
-                M_WriteTextSmall_ENG(226 + wide_delta, 30, num, NULL);
+                RD_M_DrawTextSmallENG( num, 226 + wide_delta, 30,CR_NONE);
             }
         }
 
         // Map
         if (gamemode == pressbeta)
         {
-            M_WriteTextSmall_ENG(226 + wide_delta, 40, "1", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallENG("1", 226 + wide_delta, 40, CR_DARKRED);
         }
         else
         {
             M_snprintf(num, 4, "%d", selective_map);
-            M_WriteTextSmall_ENG(226 + wide_delta, 40, num, NULL);
+            RD_M_DrawTextSmallENG(num, 226 + wide_delta, 40, CR_NONE);
         }
 
-        //
-        // Player
-        //
-        M_WriteTextSmall_ENG(75 + wide_delta, 50, "PLAYER", cr[CR_YELLOW]);
-
         // Health
-
         M_snprintf(num, 4, "%d", selective_health);
-        M_WriteTextSmall_ENG(226 + wide_delta, 60, num, 
-                             selective_health > 100 ? cr[CR_BLUE2] :
-                             selective_health >= 67 ? cr[CR_GREEN] :
-                             selective_health >= 34 ? cr[CR_YELLOW]  :
-                                                      cr[CR_RED]);
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 60,
+                              selective_health > 100 ? CR_BLUE2 :
+                              selective_health >= 67 ? CR_GREEN :
+                              selective_health >= 34 ? CR_YELLOW :
+                                                      CR_RED);
 
         // Armor
         M_snprintf(num, 4, "%d", selective_armor);
-        M_WriteTextSmall_ENG(226 + wide_delta, 70, num,
-                             selective_armor == 0 ? cr[CR_RED] : 
-                             selective_armortype == 1 ? cr[CR_GREEN] :
-                                                        cr[CR_BLUE2]);
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 70,
+                              selective_armor == 0 ? CR_RED :
+                              selective_armortype == 1 ? CR_GREEN :
+                                                        CR_BLUE2);
 
         // Armor type
         M_snprintf(num, 4, "%d", selective_armortype);
-        M_WriteTextSmall_ENG(226 + wide_delta, 80, num, 
-                             selective_armortype == 1 ? cr[CR_GREEN] : cr[CR_BLUE2]);
-
-        //
-        // Weapons
-        //
-        M_WriteTextSmall_ENG(75 + wide_delta, 90, "WEAPONS", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 80,
+                              selective_armortype == 1 ? CR_GREEN : CR_BLUE2);
 
         // Chainsaw
-        M_WriteTextSmall_ENG(226 + wide_delta, 100, selective_wp_chainsaw ? "YES" : "NO",
-                                                    selective_wp_chainsaw ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(selective_wp_chainsaw ? "YES" : "NO", 226 + wide_delta, 100,
+                              selective_wp_chainsaw ? CR_GREEN : CR_DARKRED);
 
         // Shotgun
-        M_WriteTextSmall_ENG(226 + wide_delta, 110, selective_wp_shotgun ? "YES" : "NO",
-                                                    selective_wp_shotgun ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(selective_wp_shotgun ? "YES" : "NO", 226 + wide_delta, 110,
+                              selective_wp_shotgun ? CR_GREEN : CR_DARKRED);
 
         // Super Shotgun
         if (logical_gamemission == doom || gamemission == jaguar)
         {
             // Not available in Doom 1 and Jaguar
-            M_WriteTextSmall_ENG(226 + wide_delta, 120, "N/A", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallENG("N/A", 226 + wide_delta, 120, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_ENG(226 + wide_delta, 120, selective_wp_supershotgun ? "YES" : "NO",
-                                                        selective_wp_supershotgun ? cr[CR_GREEN] : cr[CR_DARKRED]);
+            RD_M_DrawTextSmallENG(selective_wp_supershotgun ? "YES" : "NO", 226 + wide_delta, 120,
+                                  selective_wp_supershotgun ? CR_GREEN : CR_DARKRED);
         }
 
         // Chaingun
-        M_WriteTextSmall_ENG(226 + wide_delta, 130, selective_wp_chaingun ? "YES" : "NO",
-                                                    selective_wp_chaingun ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(selective_wp_chaingun ? "YES" : "NO", 226 + wide_delta, 130,
+                              selective_wp_chaingun ? CR_GREEN : CR_DARKRED);
 
         // Rocket Launcher
-        M_WriteTextSmall_ENG(226 + wide_delta, 140, selective_wp_missile ? "YES" : "NO",
-                                                    selective_wp_missile ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(selective_wp_missile ? "YES" : "NO", 226 + wide_delta, 140,
+                              selective_wp_missile ? CR_GREEN : CR_DARKRED);
 
         // Plasma Gun
         if (gamemode == shareware)
         {
             // Not available in shareware
-            M_WriteTextSmall_ENG(226 + wide_delta, 150, "N/A", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallENG("N/A", 226 + wide_delta, 150, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_ENG(226 + wide_delta, 150, selective_wp_plasma ? "YES" : "NO",
-                                                        selective_wp_plasma ? cr[CR_GREEN] : cr[CR_DARKRED]);
+            RD_M_DrawTextSmallENG(selective_wp_plasma ? "YES" : "NO", 226 + wide_delta, 150,
+                                  selective_wp_plasma ? CR_GREEN : CR_DARKRED);
         }
 
         // BFG9000
         if (gamemode == shareware)
         {
             // Not available in shareware
-            M_WriteTextSmall_ENG(226 + wide_delta, 160, "N/A", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallENG("N/A", 226 + wide_delta, 160, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_ENG(226 + wide_delta, 160, selective_wp_bfg ? "YES" : "NO",
-                                                        selective_wp_bfg ? cr[CR_GREEN] : cr[CR_DARKRED]);
+            RD_M_DrawTextSmallENG(selective_wp_bfg ? "YES" : "NO", 226 + wide_delta, 160,
+                                  selective_wp_bfg ? CR_GREEN : CR_DARKRED);
         }
 
         // Next page
-        M_WriteTextSmall_ENG(75 + wide_delta, 180, "NEXT PAGE", cr[CR_WHITE]);
+        RD_M_DrawTextSmallENG("NEXT PAGE", 75 + wide_delta, 180, CR_WHITE);
 
         // Start game
-        M_WriteTextSmall_ENG(75 + wide_delta, 190, "START GAME", cr[CR_WHITE]);
+        RD_M_DrawTextSmallENG("START GAME", 75 + wide_delta, 190, CR_WHITE);
     }
     else
     {
-        M_WriteTextBigCentered_RUS(2, "DS<JH EHJDYZ");
-
         // Сложность
         M_snprintf(num, 4, "%d", selective_skill+1);
-        M_WriteTextSmall_ENG(226 + wide_delta, 20, num, NULL);
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 20, CR_NONE);
 
         // Эпизод
         if (logical_gamemission != doom)
         {
-            M_WriteTextSmall_RUS(226 + wide_delta, 30, "y*l", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallRUS("y*l", 226 + wide_delta, 30, CR_DARKRED);
         }
         else
         {
             if (gamemode == shareware)
             {
-                M_WriteTextSmall_ENG(226 + wide_delta, 30, "1", cr[CR_DARKRED]);
+                RD_M_DrawTextSmallENG("1", 226 + wide_delta, 30, CR_DARKRED);
             }
             else
             {
                 M_snprintf(num, 4, "%d", selective_episode);
-                M_WriteTextSmall_ENG(226 + wide_delta, 30, num, NULL);
+                RD_M_DrawTextSmallENG(num, 226 + wide_delta, 30, CR_NONE);
             }
         }
 
         // Уровень
         if (gamemode == pressbeta)
         {
-            M_WriteTextSmall_ENG(226 + wide_delta, 40, "1", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallENG("1", 226 + wide_delta, 40, CR_DARKRED);
         }
         else
         {
             M_snprintf(num, 4, "%d", selective_map);
-            M_WriteTextSmall_ENG(226 + wide_delta, 40, num, NULL);
+            RD_M_DrawTextSmallENG(num, 226 + wide_delta, 40, CR_NONE);
         }
-
-        //
-        // Игрок
-        //
-        M_WriteTextSmall_RUS(72 + wide_delta, 50, "buhjr", cr[CR_YELLOW]);
 
         // Здоровье
         M_snprintf(num, 4, "%d", selective_health);
-        M_WriteTextSmall_ENG(226 + wide_delta, 60, num,
-                             selective_health > 100 ? cr[CR_BLUE2] :
-                             selective_health >= 67 ? cr[CR_GREEN] :
-                             selective_health >= 34 ? cr[CR_YELLOW]  :
-                                                      cr[CR_RED]);
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 60,
+                              selective_health > 100 ? CR_BLUE2 :
+                              selective_health >= 67 ? CR_GREEN :
+                              selective_health >= 34 ? CR_YELLOW :
+                              CR_RED);
 
         // Броня
         M_snprintf(num, 4, "%d", selective_armor);
-        M_WriteTextSmall_ENG(226 + wide_delta, 70, num, 
-                             selective_armor == 0 ? cr[CR_RED] :
-                             selective_armortype == 1 ? cr[CR_GREEN] :
-                                                        cr[CR_BLUE2]);
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 70,
+                              selective_armor == 0 ? CR_RED :
+                              selective_armortype == 1 ? CR_GREEN :
+                              CR_BLUE2);
 
         // Тип брони
         M_snprintf(num, 4, "%d", selective_armortype);
-        M_WriteTextSmall_ENG(226 + wide_delta, 80, num,
-                             selective_armortype == 1 ? cr[CR_GREEN] : cr[CR_BLUE2]);
-
-        //
-        // Оружие
-        //
-        M_WriteTextSmall_RUS(72 + wide_delta, 90, "jhe;bt", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 80,
+                              selective_armortype == 1 ? CR_GREEN : CR_BLUE2);
 
         // Бензопила
-        M_WriteTextSmall_RUS(226 + wide_delta, 100, selective_wp_chainsaw ? "lf" : "ytn",
-                                                    selective_wp_chainsaw ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(selective_wp_chainsaw ? "lf" : "ytn", 226 + wide_delta, 100,
+                              selective_wp_chainsaw ? CR_GREEN : CR_DARKRED);
 
         // Ружье
-        M_WriteTextSmall_RUS(226 + wide_delta, 110, selective_wp_shotgun ? "lf" : "ytn",
-                                                    selective_wp_shotgun ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(selective_wp_shotgun ? "lf" : "ytn", 226 + wide_delta, 110,
+                              selective_wp_shotgun ? CR_GREEN : CR_DARKRED);
 
         // Двуствольное ружье
         if (logical_gamemission == doom || gamemission == jaguar)
         {
             // Not available in Doom 1 and Jaguar
-            M_WriteTextSmall_RUS(226 + wide_delta, 120, "y*l", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallRUS("y*l", 226 + wide_delta, 120, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_RUS(226 + wide_delta, 120, selective_wp_supershotgun ? "lf" : "ytn",
-                                                        selective_wp_supershotgun ? cr[CR_GREEN] : cr[CR_DARKRED]);
+            RD_M_DrawTextSmallRUS(selective_wp_supershotgun ? "lf" : "ytn", 226 + wide_delta, 120,
+                                  selective_wp_supershotgun ? CR_GREEN : CR_DARKRED);
         }
 
         // Пулемет
-        M_WriteTextSmall_RUS(226 + wide_delta, 130, selective_wp_chaingun ? "lf" : "ytn",
-                                                    selective_wp_chaingun ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(selective_wp_chaingun ? "lf" : "ytn", 226 + wide_delta, 130,
+                              selective_wp_chaingun ? CR_GREEN : CR_DARKRED);
 
         // Ракетница
-        M_WriteTextSmall_RUS(226 + wide_delta, 140, selective_wp_missile ? "lf" : "ytn",
-                                                    selective_wp_missile ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(selective_wp_missile ? "lf" : "ytn", 226 + wide_delta, 140,
+                              selective_wp_missile ? CR_GREEN : CR_DARKRED);
 
         // Плазменная пушка
         if (gamemode == shareware)
         {
             // Not available in shareware
-            M_WriteTextSmall_RUS(226 + wide_delta, 150, "y*l", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallRUS("y*l", 226 + wide_delta, 150, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_RUS(226 + wide_delta, 150, selective_wp_plasma ? "lf" : "ytn",
-                                                        selective_wp_plasma ? cr[CR_GREEN] : cr[CR_DARKRED]);
+            RD_M_DrawTextSmallRUS(selective_wp_plasma ? "lf" : "ytn", 226 + wide_delta, 150,
+                                  selective_wp_plasma ? CR_GREEN : CR_DARKRED);
         }
 
         // BFG9000
         if (gamemode == shareware)
         {
             // Not available in shareware
-            M_WriteTextSmall_RUS(226 + wide_delta, 160, "y*l", cr[CR_DARKRED]);
+            RD_M_DrawTextSmallRUS("y*l", 226 + wide_delta, 160, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmall_RUS(226 + wide_delta, 160, selective_wp_bfg ? "lf" : "ytn",
-                                                        selective_wp_bfg ? cr[CR_GREEN] : cr[CR_DARKRED]);
+            RD_M_DrawTextSmallRUS(selective_wp_bfg ? "lf" : "ytn", 226 + wide_delta, 160,
+                                  selective_wp_bfg ? CR_GREEN : CR_DARKRED);
         }
 
         // Следующая страница
-        M_WriteTextSmall_RUS(72 + wide_delta, 180, "cktle.ofz cnhfybwf", cr[CR_WHITE]);
+        RD_M_DrawTextSmallRUS("cktle.ofz cnhfybwf", 72 + wide_delta, 180, CR_WHITE);
 
         // Начать игру
-        M_WriteTextSmall_RUS(72 + wide_delta, 190, "yfxfnm buhe", cr[CR_WHITE]);
+        RD_M_DrawTextSmallRUS("yfxfnm buhe", 72 + wide_delta, 190, CR_WHITE);
     }
 }
 
-void M_RD_Draw_Level_2 (void)
+void M_RD_Draw_Level_2(void)
 {
     static char num[4];
 
@@ -7618,283 +4591,209 @@ void M_RD_Draw_Level_2 (void)
 
     if (english_language)
     {
-        M_WriteTextBigCentered_ENG(2, "LEVEL SELECT");
-
         // Backpack
-        M_WriteTextSmall_ENG(226 + wide_delta, 20, selective_backpack ? "YES" : "NO",
-                                                   selective_backpack ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(selective_backpack ? "YES" : "NO", 226 + wide_delta, 20,
+                              selective_backpack ? CR_GREEN : CR_DARKRED);
 
         // Bullets
         M_snprintf(num, 4, "%d", selective_ammo_0);
-        M_WriteTextSmall_ENG(226 + wide_delta, 30, num,
-                             selective_ammo_0 >   200 ? cr[CR_BLUE2] :
-                             selective_ammo_0 >=  100 ? cr[CR_GREEN] :
-                             selective_ammo_0 >=  50  ? cr[CR_YELLOW]  :
-                                                        cr[CR_RED]);
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 30,
+                              selective_ammo_0 >   200 ? CR_BLUE2 :
+                              selective_ammo_0 >=  100 ? CR_GREEN :
+                              selective_ammo_0 >=  50  ? CR_YELLOW :
+                              CR_RED);
 
         // Shells
         M_snprintf(num, 4, "%d", selective_ammo_1);
-        M_WriteTextSmall_ENG(226 + wide_delta, 40, num,
-                             selective_ammo_1 >   50 ? cr[CR_BLUE2] :
-                             selective_ammo_1 >=  25 ? cr[CR_GREEN] :
-                             selective_ammo_1 >=  12 ? cr[CR_YELLOW] :
-                                                       cr[CR_RED]);
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 40,
+                              selective_ammo_1 >   50 ? CR_BLUE2 :
+                              selective_ammo_1 >=  25 ? CR_GREEN :
+                              selective_ammo_1 >=  12 ? CR_YELLOW :
+                              CR_RED);
 
         // Rockets
         M_snprintf(num, 4, "%d", selective_ammo_3);
-        M_WriteTextSmall_ENG(226 + wide_delta, 50, num,
-                             selective_ammo_3 >   50 ? cr[CR_BLUE2] :
-                             selective_ammo_3 >=  25 ? cr[CR_GREEN] :
-                             selective_ammo_3 >=  12 ? cr[CR_YELLOW] :
-                                                       cr[CR_RED]);
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 50,
+                              selective_ammo_3 >   50 ? CR_BLUE2 :
+                              selective_ammo_3 >=  25 ? CR_GREEN :
+                              selective_ammo_3 >=  12 ? CR_YELLOW :
+                              CR_RED);
 
         // Cells
         M_snprintf(num, 4, "%d", selective_ammo_2);
-        M_WriteTextSmall_ENG(226 + wide_delta, 60, num,
-                             selective_ammo_2 >  300 ? cr[CR_BLUE2] :
-                             selective_ammo_2 >= 150 ? cr[CR_GREEN] :
-                             selective_ammo_2 >=  75 ? cr[CR_YELLOW]  :
-                                                       cr[CR_RED]);
-
-        //
-        // Keys
-        //
-        M_WriteTextSmall_ENG(75 + wide_delta, 70, "KEYS", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 60,
+                              selective_ammo_2 >  300 ? CR_BLUE2 :
+                              selective_ammo_2 >= 150 ? CR_GREEN :
+                              selective_ammo_2 >=  75 ? CR_YELLOW :
+                              CR_RED);
 
         // Blue keycard
-        M_WriteTextSmall_ENG(226 + wide_delta, 80, selective_key_0 ? "YES" : "NO",
-                                                   selective_key_0 ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(selective_key_0 ? "YES" : "NO", 226 + wide_delta, 80,
+                              selective_key_0 ? CR_GREEN : CR_DARKRED);
 
         // Yellow keycard
-        M_WriteTextSmall_ENG(226 + wide_delta, 90, selective_key_1 ? "YES" : "NO",
-                                                   selective_key_1 ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(selective_key_1 ? "YES" : "NO", 226 + wide_delta, 90,
+                              selective_key_1 ? CR_GREEN : CR_DARKRED);
 
         // Red keycard
-        M_WriteTextSmall_ENG(226 + wide_delta, 100, selective_key_2 ? "YES" : "NO",
-                                                    selective_key_2 ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(selective_key_2 ? "YES" : "NO", 226 + wide_delta, 100,
+                               selective_key_2 ? CR_GREEN : CR_DARKRED);
 
         // Blue skull key
-        M_WriteTextSmall_ENG(226 + wide_delta, 110, selective_key_3 ? "YES" : "NO",
-                                                    selective_key_3 ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(selective_key_3 ? "YES" : "NO", 226 + wide_delta, 110,
+                               selective_key_3 ? CR_GREEN : CR_DARKRED);
 
         // Yellow skull key
-        M_WriteTextSmall_ENG(226 + wide_delta, 120, selective_key_4 ? "YES" : "NO",
-                                                    selective_key_4 ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(selective_key_4 ? "YES" : "NO", 226 + wide_delta, 120,
+                               selective_key_4 ? CR_GREEN : CR_DARKRED);
 
         // Red skull key
-        M_WriteTextSmall_ENG(226 + wide_delta, 130, selective_key_5 ? "YES" : "NO",
-                                                    selective_key_5 ? cr[CR_GREEN] : cr[CR_DARKRED]);
-
-        //
-        // Extra
-        //
-        M_WriteTextSmall_ENG(75 + wide_delta, 140, "EXTRA", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallENG(selective_key_5 ? "YES" : "NO", 226 + wide_delta, 130,
+                               selective_key_5 ? CR_GREEN : CR_DARKRED);
 
         // Fast monsters
-        M_WriteTextSmall_ENG(226 + wide_delta, 150, selective_fast ? "YES" : "NO",
-                                                    selective_fast ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(selective_fast ? "YES" : "NO", 226 + wide_delta, 150,
+                               selective_fast ? CR_GREEN : CR_DARKRED);
 
         // Respawning monsters
-        M_WriteTextSmall_ENG(226 + wide_delta, 160, selective_respawn ? "YES" : "NO",
-                                                    selective_respawn ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallENG(selective_respawn ? "YES" : "NO", 226 + wide_delta, 160,
+                               selective_respawn ? CR_GREEN : CR_DARKRED);
 
         // Previous page
-        M_WriteTextSmall_ENG(75 + wide_delta, 180, "PREVIOUS PAGE", cr[CR_WHITE]);
+        RD_M_DrawTextSmallENG("PREVIOUS PAGE", 75 + wide_delta, 180, CR_WHITE);
 
         // Start game
-        M_WriteTextSmall_ENG(75 + wide_delta, 190, "START GAME", cr[CR_WHITE]);
+        RD_M_DrawTextSmallENG("START GAME", 75 + wide_delta, 190, CR_WHITE);
     }
     else
     {
-        M_WriteTextBigCentered_RUS(2, "DS<JH EHJDYZ");
 
         // Рюкзак
-        M_WriteTextSmall_RUS(226 + wide_delta, 20, selective_backpack ? "lf" : "ytn",
-                                                   selective_backpack ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(selective_backpack ? "lf" : "ytn", 226 + wide_delta, 20,
+                              selective_backpack ? CR_GREEN : CR_DARKRED);
 
         // Пули
         M_snprintf(num, 4, "%d", selective_ammo_0);
-        M_WriteTextSmall_ENG(226 + wide_delta, 30, num, 
-                             selective_ammo_0 >  200 ? cr[CR_BLUE2]  :
-                             selective_ammo_0 >= 100 ? cr[CR_GREEN]  :
-                             selective_ammo_0 >= 50  ? cr[CR_YELLOW] :
-                                                       cr[CR_RED]);
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 30,
+                              selective_ammo_0 >  200 ? CR_BLUE2 :
+                              selective_ammo_0 >= 100 ? CR_GREEN :
+                              selective_ammo_0 >= 50  ? CR_YELLOW :
+                                                       CR_RED);
 
         // Дробь
         M_snprintf(num, 4, "%d", selective_ammo_1);
-        M_WriteTextSmall_ENG(226 + wide_delta, 40, num, 
-                             selective_ammo_1 >  50 ? cr[CR_BLUE2]  :
-                             selective_ammo_1 >= 25 ? cr[CR_GREEN]  :
-                             selective_ammo_1 >= 12 ? cr[CR_YELLOW] :
-                                                      cr[CR_RED]);
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 40,
+                              selective_ammo_1 >  50 ? CR_BLUE2 :
+                              selective_ammo_1 >= 25 ? CR_GREEN :
+                              selective_ammo_1 >= 12 ? CR_YELLOW :
+                                                      CR_RED);
 
         // Ракеты
         M_snprintf(num, 4, "%d", selective_ammo_3);
-        M_WriteTextSmall_ENG(226 + wide_delta, 50, num,
-                             selective_ammo_3 >  50 ? cr[CR_BLUE2]  :
-                             selective_ammo_3 >= 25 ? cr[CR_GREEN]  :
-                             selective_ammo_3 >= 12 ? cr[CR_YELLOW] :
-                                                      cr[CR_RED]);
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 50,
+                              selective_ammo_3 >  50 ? CR_BLUE2 :
+                              selective_ammo_3 >= 25 ? CR_GREEN :
+                              selective_ammo_3 >= 12 ? CR_YELLOW :
+                                                      CR_RED);
 
         // Энергия
         M_snprintf(num, 4, "%d", selective_ammo_2);
-        M_WriteTextSmall_ENG(226 + wide_delta, 60, num,
-                             selective_ammo_2 >  300 ? cr[CR_BLUE2]  :
-                             selective_ammo_2 >= 150 ? cr[CR_GREEN]  :
-                             selective_ammo_2 >=  75 ? cr[CR_YELLOW] :
-                                                       cr[CR_RED]);
-
-        //
-        // Ключи
-        //
-        M_WriteTextSmall_RUS(72 + wide_delta, 70, "rk.xb", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 60,
+                              selective_ammo_2 >  300 ? CR_BLUE2 :
+                              selective_ammo_2 >= 150 ? CR_GREEN :
+                              selective_ammo_2 >=  75 ? CR_YELLOW :
+                                                       CR_RED);
 
         // Синяя ключ-карта
-        M_WriteTextSmall_RUS(226 + wide_delta, 80, selective_key_0 ? "lf" : "ytn",
-                                                   selective_key_0 ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(selective_key_0 ? "lf" : "ytn", 226 + wide_delta, 80,
+                              selective_key_0 ? CR_GREEN : CR_DARKRED);
 
         // Желтая ключ-карта
-        M_WriteTextSmall_RUS(226 + wide_delta, 90, selective_key_1 ? "lf" : "ytn",
-                                                   selective_key_1 ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(selective_key_1 ? "lf" : "ytn", 226 + wide_delta, 90,
+                              selective_key_1 ? CR_GREEN : CR_DARKRED);
 
         // Красная ключ-карта
-        M_WriteTextSmall_RUS(226 + wide_delta, 100, selective_key_2 ? "lf" : "ytn",
-                                                    selective_key_2 ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(selective_key_2 ? "lf" : "ytn", 226 + wide_delta, 100,
+                              selective_key_2 ? CR_GREEN : CR_DARKRED);
 
         // Синий ключ-череп
-        M_WriteTextSmall_RUS(226 + wide_delta, 110, selective_key_3 ? "lf" : "ytn",
-                                                    selective_key_3 ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(selective_key_3 ? "lf" : "ytn", 226 + wide_delta, 110,
+                              selective_key_3 ? CR_GREEN : CR_DARKRED);
 
         // Желтый ключ-череп
-        M_WriteTextSmall_RUS(226 + wide_delta, 120, selective_key_4 ? "lf" : "ytn",
-                                                    selective_key_4 ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(selective_key_4 ? "lf" : "ytn", 226 + wide_delta, 120,
+                              selective_key_4 ? CR_GREEN : CR_DARKRED);
 
         // Красный ключ-череп
-        M_WriteTextSmall_RUS(226 + wide_delta, 130, selective_key_5 ? "lf" : "ytn",
-                                                    selective_key_5 ? cr[CR_GREEN] : cr[CR_DARKRED]);
-
-        //
-        // Монстры
-        //
-        M_WriteTextSmall_RUS(72 + wide_delta, 140, "vjycnhs", cr[CR_YELLOW]);
+        RD_M_DrawTextSmallRUS(selective_key_5 ? "lf" : "ytn", 226 + wide_delta, 130,
+                              selective_key_5 ? CR_GREEN : CR_DARKRED);
 
         // Ускоренные
-        M_WriteTextSmall_RUS(226 + wide_delta, 150, selective_fast ? "lf" : "ytn",
-                                                    selective_fast ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(selective_fast ? "lf" : "ytn", 226 + wide_delta, 150,
+                              selective_fast ? CR_GREEN : CR_DARKRED);
 
         // Воскрешающиеся
-        M_WriteTextSmall_RUS(226 + wide_delta, 160, selective_respawn ? "lf" : "ytn",
-                                                    selective_respawn ? cr[CR_GREEN] : cr[CR_DARKRED]);
+        RD_M_DrawTextSmallRUS(selective_respawn ? "lf" : "ytn", 226 + wide_delta, 160,
+                              selective_respawn ? CR_GREEN : CR_DARKRED);
 
         // Предыдущая страница
-        M_WriteTextSmall_RUS(72 + wide_delta, 180, "ghtlsleofz cnhfybwf", cr[CR_WHITE]);
+        RD_M_DrawTextSmallRUS("ghtlsleofz cnhfybwf", 72 + wide_delta, 180, CR_WHITE);
 
         // Начать игру
-        M_WriteTextSmall_RUS(72 + wide_delta, 190, "yfxfnm buhe", cr[CR_WHITE]);
+        RD_M_DrawTextSmallRUS("yfxfnm buhe", 72 + wide_delta, 190, CR_WHITE);
     }
 }
 
-void M_RD_Change_Selective_Skill (int choice)
+void M_RD_Change_Selective_Skill(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0:
-        if (selective_skill > 0)
-            selective_skill--;
-        break;
-
-        case 1:
-        if (selective_skill < 5)
-            selective_skill++;
-        break;
-    }
+    RD_Menu_SlideInt(&selective_skill, 0, 5, direction);
 }
 
-void M_RD_Change_Selective_Episode (int choice)
+void M_RD_Change_Selective_Episode(Direction_t direction)
 {
-    // [JN] Shareware have only 1 episode, 
+    int epiWas;
+
+    // [JN] Shareware have only 1 episode,
     // Doom 2 doest not have episodes at all.
     if (gamemode == shareware || gamemode == commercial)
-    return;
+        return;
 
-    switch(choice)
+    epiWas = selective_episode;
+    RD_Menu_SlideInt(&selective_episode, 1,
+                     (gamemode == pressbeta || (gamemode == registered && !sgl_loaded) ? 3 :
+                     (gamemode == retail && sgl_loaded) ? 5 : 4), direction);
+    // [Dasperal] Skip 4 episode for Registered with Sigil
+    if(gamemode == registered && sgl_loaded && selective_episode == 4)
     {
-        case 0:
-        if (selective_episode > 1)
-            selective_episode--;
-        break;
-
-        case 1:
-        if (selective_episode < (gamemode == registered ? 3 :
-                                  gamemode == pressbeta ? 3 :
-                                             sgl_loaded ? 5 : 
-                                                          4))
-            selective_episode++;
-        break;
+        if(epiWas == 5)
+            selective_episode = 3;
+        else
+            selective_episode = 5;
     }
-
-    // [JN] Routine №3: play sound only if necessary.
-    S_StartSound(NULL,sfx_stnmov);
 }
 
-void M_RD_Change_Selective_Map (int choice)
+void M_RD_Change_Selective_Map(Direction_t direction)
 {
     // [JN] There are three episoder with one map for each in Press Beta.
     if (gamemode == pressbeta)
-    return;
+        return;
 
-    switch(choice)
-    {
-        case 0:
-        if (selective_map > 0)
-            selective_map--;
-        break;
-
-        case 1:
-        if (selective_map < (logical_gamemission == doom ? 9  :
-                                   gamemission == jaguar ? 25 :
-                                                           32))
-            selective_map++;
-        break;
-    }
-
-    // [JN] Routine №3: play sound only if necessary.
-    S_StartSound(NULL,sfx_stnmov);
+    RD_Menu_SlideInt(&selective_map, 1,
+                    (logical_gamemission == doom ? 9  :
+                    gamemission == jaguar ? 25 : 32), direction);
 }
 
-void M_RD_Change_Selective_Health (int choice)
+void M_RD_Change_Selective_Health(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0:
-        if (selective_health > 1)
-            selective_health--;
-        break;
-
-        case 1:
-        if (selective_health < 200)
-            selective_health++;
-        break;
-    }
+    RD_Menu_SlideInt(&selective_health, 1, 200, direction);
 }
 
-void M_RD_Change_Selective_Armor (int choice)
+void M_RD_Change_Selective_Armor(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0:
-        if (selective_armor > 0)
-            selective_armor--;
-        break;
-
-        case 1:
-        if (selective_armor < 200)
-            selective_armor++;
-        break;
-    }
+    RD_Menu_SlideInt(&selective_armor, 0, 200, direction);
 }
 
-void M_RD_Change_Selective_ArmorType (int choice)
+void M_RD_Change_Selective_ArmorType(Direction_t direction)
 {
     selective_armortype++;
     
@@ -7902,63 +4801,54 @@ void M_RD_Change_Selective_ArmorType (int choice)
         selective_armortype = 1;
 }
 
-void M_RD_Change_Selective_WP_Chainsaw (int choice)
+void M_RD_Change_Selective_WP_Chainsaw(Direction_t direction)
 {
     selective_wp_chainsaw ^= 1;
 }
 
-void M_RD_Change_Selective_WP_Shotgun (int choice)
+void M_RD_Change_Selective_WP_Shotgun(Direction_t direction)
 {
     selective_wp_shotgun ^= 1;
 }
 
-void M_RD_Change_Selective_WP_SSgun (int choice)
+void M_RD_Change_Selective_WP_SSgun(Direction_t direction)
 {
     // Not available in Doom 1 and Jaguar
     if (logical_gamemission == doom || gamemission == jaguar)
-    return;
+        return;
 
     selective_wp_supershotgun ^= 1;
-
-    // [JN] Routine №3: play sound only if necessary.
-    S_StartSound(NULL,sfx_stnmov);
 }
 
-void M_RD_Change_Selective_WP_Chaingun (int choice)
+void M_RD_Change_Selective_WP_Chaingun(Direction_t direction)
 {
     selective_wp_chaingun ^= 1;
 }
 
-void M_RD_Change_Selective_WP_RLauncher (int choice)
+void M_RD_Change_Selective_WP_RLauncher(Direction_t direction)
 {
     selective_wp_missile ^= 1;
 }
 
-void M_RD_Change_Selective_WP_Plasmagun (int choice)
+void M_RD_Change_Selective_WP_Plasmagun(Direction_t direction)
 {
     // Not available in shareware
     if (gamemode == shareware)
-    return;
+        return;
 
     selective_wp_plasma ^= 1;
-
-    // [JN] Routine №3: play sound only if necessary.
-    S_StartSound(NULL,sfx_stnmov);
 }
 
-void M_RD_Change_Selective_WP_BFG9000 (int choice)
+void M_RD_Change_Selective_WP_BFG9000(Direction_t direction)
 {
     // Not available in shareware
     if (gamemode == shareware)
-    return;
+        return;
 
     selective_wp_bfg ^= 1;
-
-    // [JN] Routine №3: play sound only if necessary.
-    S_StartSound(NULL,sfx_stnmov);
 }
 
-void M_RD_Change_Selective_Backpack (int choice)
+void M_RD_Change_Selective_Backpack(Direction_t direction)
 {
     selective_backpack ^= 1;
 
@@ -7975,106 +4865,62 @@ void M_RD_Change_Selective_Backpack (int choice)
     }
 }
 
-void M_RD_Change_Selective_Ammo_0 (int choice)
+void M_RD_Change_Selective_Ammo_0(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0:
-        if (selective_ammo_0 > 0)
-            selective_ammo_0--;
-        break;
-
-        case 1:
-        if (selective_ammo_0 < (selective_backpack ? 400 : 200))
-            selective_ammo_0++;
-        break;
-    }
+    RD_Menu_SlideInt(&selective_ammo_0, 0, selective_backpack ? 400 : 200, direction);
 }
 
-void M_RD_Change_Selective_Ammo_1 (int choice)
+void M_RD_Change_Selective_Ammo_1(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0:
-        if (selective_ammo_1 > 0)
-            selective_ammo_1--;
-        break;
-
-        case 1:
-        if (selective_ammo_1 < (selective_backpack ? 100 : 50))
-            selective_ammo_1++;
-        break;
-    }
+    RD_Menu_SlideInt(&selective_ammo_1, 0, selective_backpack ? 100 : 50, direction);
 }
 
-void M_RD_Change_Selective_Ammo_2 (int choice)
+void M_RD_Change_Selective_Ammo_2(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0:
-        if (selective_ammo_2 > 0)
-            selective_ammo_2--;
-        break;
-
-        case 1:
-        if (selective_ammo_2 < (selective_backpack ? 600 : 300))
-            selective_ammo_2++;
-        break;
-    }
+    RD_Menu_SlideInt(&selective_ammo_2, 0, selective_backpack ? 600 : 300, direction);
 }
 
-void M_RD_Change_Selective_Ammo_3 (int choice)
+void M_RD_Change_Selective_Ammo_3(Direction_t direction)
 {
-    switch(choice)
-    {
-        case 0:
-        if (selective_ammo_3 > 0)
-            selective_ammo_3--;
-        break;
-
-        case 1:
-        if (selective_ammo_3 < (selective_backpack ? 100 : 50))
-            selective_ammo_3++;
-        break;
-    }
+    RD_Menu_SlideInt(&selective_ammo_3, 0, selective_backpack ? 100 : 50, direction);
 }
 
-void M_RD_Change_Selective_Key_0 (int choice)
+void M_RD_Change_Selective_Key_0(Direction_t direction)
 {
     selective_key_0 ^= 1;
 }
 
-void M_RD_Change_Selective_Key_1 (int choice)
+void M_RD_Change_Selective_Key_1(Direction_t direction)
 {
     selective_key_1 ^= 1;
 }
 
-void M_RD_Change_Selective_Key_2 (int choice)
+void M_RD_Change_Selective_Key_2(Direction_t direction)
 {
     selective_key_2 ^= 1;
 }
 
-void M_RD_Change_Selective_Key_3 (int choice)
+void M_RD_Change_Selective_Key_3(Direction_t direction)
 {
     selective_key_3 ^= 1;
 }
 
-void M_RD_Change_Selective_Key_4 (int choice)
+void M_RD_Change_Selective_Key_4(Direction_t direction)
 {
     selective_key_4 ^= 1;
 }
 
-void M_RD_Change_Selective_Key_5 (int choice)
+void M_RD_Change_Selective_Key_5(Direction_t direction)
 {
     selective_key_5 ^= 1;
 }
 
-void M_RD_Change_Selective_Fast (int choice)
+void M_RD_Change_Selective_Fast(Direction_t direction)
 {
     selective_fast ^= 1;
 }
 
-void M_RD_Change_Selective_Respawn (int choice)
+void M_RD_Change_Selective_Respawn(Direction_t direction)
 {
     selective_respawn ^= 1;
 }
@@ -8083,18 +4929,11 @@ void M_RD_Change_Selective_Respawn (int choice)
 // Back to Defaults
 // -----------------------------------------------------------------------------
 
-void M_RD_Choose_Reset(int choice)
-{
-    M_SetupNextMenu(english_language ?
-                    &RD_Reset_Def :
-                    &RD_Reset_Def_Rus);
-}
-
 void M_RD_Draw_Reset(void)
 {   
     // [JN] Jaguar Doom: clear remainings of bottom strings from the status bar.
     if (gamemission == jaguar)
-    inhelpscreens = true;
+        inhelpscreens = true;
 
     if (english_language)
     {
@@ -8103,7 +4942,7 @@ void M_RD_Draw_Reset(void)
         M_WriteTextSmallCentered_ENG(85, "Which level of values to use?");
 
         // Explanations
-        if (itemOn == rd_reset_recommended)
+        if (CurrentItPos == 0)
         {
             dp_translation = cr[CR_DARKRED];
             M_WriteTextSmallCentered_ENG(145, "Settings will be reset to");
@@ -8125,7 +4964,7 @@ void M_RD_Draw_Reset(void)
         M_WriteTextSmallCentered_RUS(85, "Ds,thbnt ehjdtym pyfxtybq:");              // Выберите уровень значений:
 
         // Пояснения
-        if (itemOn == rd_reset_recommended)
+        if (CurrentItPos == 0)
         {
             dp_translation = cr[CR_DARKRED];
             M_WriteTextSmallCentered_RUS(145, ",elen bcgjkmpjdfys pyfxtybz");       // Будут использованы значения
@@ -8136,9 +4975,9 @@ void M_RD_Draw_Reset(void)
         {
             dp_translation = cr[CR_DARKRED];
             M_WriteTextSmallCentered_RUS(145, ",elen bcgjkmpjdfys pyfxtybz");       // Будут использованы значения
-            M_WriteTextSmall_RUS(85 + wide_delta, 155, "jhbubyfkmyjuj", cr[CR_DARKRED]);            // оригинального Doom
-            M_WriteTextSmall_ENG(193 + wide_delta, 155, "Doom", cr[CR_DARKRED]);
             dp_translation = NULL;
+            RD_M_DrawTextSmallRUS("jhbubyfkmyjuj", 85 + wide_delta, 155, CR_DARKRED); // оригинального Doom
+            RD_M_DrawTextSmallENG("Doom", 193 + wide_delta, 155, CR_DARKRED);
         }
     }
 }
@@ -8218,7 +5057,7 @@ void M_RD_BackToDefaults_Recommended(int choice)
     joybspeed        = 29;
     mlook            = 0;  players[consoleplayer].centering = true;
     mouseSensitivity = 5;
-    mouse_acceleration = 2.0;
+    mouse_acceleration = 2.0F;
     mouse_threshold  = 10;
     novert           = 1;
 
@@ -8383,7 +5222,7 @@ void M_RD_BackToDefaults_Original(int choice)
     joybspeed          = 29;
     mlook              = 0;  players[consoleplayer].centering = true;
     mouseSensitivity   = 5;
-    mouse_acceleration = 2.0;
+    mouse_acceleration = 2.0F;
     mouse_threshold    = 10;
     novert             = 1;
 
@@ -8480,7 +5319,6 @@ void M_RD_BackToDefaults_Original(int choice)
 
 void M_RD_ChangeLanguage(int choice)
 {
-    extern void HU_Stop(void);
     extern void ST_createWidgetsJaguar(void);
     extern void F_CastDrawer(void);
     extern void F_CastDrawerJaguar(void);
@@ -8489,9 +5327,6 @@ void M_RD_ChangeLanguage(int choice)
     extern int  finalestage;
 
     english_language ^= 1;
-
-    // Reset options menu
-    currentMenu = english_language ? &RD_Options_Def : &RD_Options_Def_Rus;
 
     // Update messages
     RD_DefineLanguageStrings();
@@ -8559,23 +5394,23 @@ void M_ReadSaveStrings(void)
     int     i;
     char    name[256];
 
-    for (i = 0;i < load_end;i++)
+    for (i = 0;i < 8;i++)
     {
-        int retval;
         M_StringCopy(name, P_SaveGameFile(i), sizeof(name));
 
         handle = fopen(name, "rb");
         if (handle == NULL)
         {
             M_StringCopy(savegamestrings[i], EMPTYSTRING, SAVESTRINGSIZE);
-            LoadMenu[i].status = 0;
+            saveStatus[i] = false;
             continue;
         }
 
-        retval = fread(&savegamestrings[i], 1, SAVESTRINGSIZE, handle);
+        fread(&savegamestrings[i], 1, SAVESTRINGSIZE, handle);
         fclose(handle);
-        LoadMenu[i].status = retval = SAVESTRINGSIZE;
+        saveStatus[i] = true;
     }
+    slottextloaded = true;
 }
 
 
@@ -8586,6 +5421,9 @@ static int LoadDef_x = 72, LoadDef_y = 28;  // [JN] from Crispy Doom
 void M_DrawLoad(void)
 {
     int i;
+    int x;
+
+    x = english_language ? LoadMenu.x_eng : LoadMenu.x_rus;
 
     if (english_language)
     {
@@ -8598,15 +5436,15 @@ void M_DrawLoad(void)
         M_WriteTextBigCentered_RUS(LoadDef_y, "PFUHEPBNM BUHE");
     }
 
-    for (i = 0;i < load_end; i++)
+    for (i = 0;i < 8; i++)
     {
-        M_DrawSaveLoadBorder(LoadDef.x + wide_delta,LoadDef.y+LINEHEIGHT*i);
+        M_DrawSaveLoadBorder(x + wide_delta,LoadMenu.y+LINEHEIGHT*i);
 
         // [crispy] shade empty savegame slots
-        if (!LoadMenu[i].status && !vanillaparm)
-        dp_translation = cr[CR_DARKRED];
+        if (!saveStatus[i] && !vanillaparm)
+            dp_translation = cr[CR_DARKRED];
 
-        M_WriteText(LoadDef.x + wide_delta,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
+        RD_M_DrawTextA(savegamestrings[i], x + wide_delta,LoadMenu.y+LINEHEIGHT*i);
 
         dp_translation = NULL;
     }
@@ -8642,7 +5480,7 @@ void M_LoadSelect(int choice)
     M_StringCopy(name, P_SaveGameFile(choice), sizeof(name));
 
     G_LoadGame (name);
-    M_ClearMenus ();
+    RD_Menu_DeactivateMenu();
 }
 
 
@@ -8660,8 +5498,9 @@ void M_LoadGame (int choice)
         return;
     }
 
-    M_SetupNextMenu(english_language ? &LoadDef : &LoadDef_Rus);
-    M_ReadSaveStrings();
+    RD_Menu_SetMenu(&LoadMenu);
+    if (!slottextloaded)
+        M_ReadSaveStrings();
 }
 
 
@@ -8672,7 +5511,10 @@ static int SaveDef_x = 72, SaveDef_y = 28;  // [JN] from Crispy Doom
 void M_DrawSave(void)
 {
     int i;
-	
+    int x;
+
+    x = english_language ? LoadMenu.x_eng : LoadMenu.x_rus;
+
     if (english_language)
     {
         // [JN] Use standard centered title "M_SAVEG"
@@ -8682,21 +5524,21 @@ void M_DrawSave(void)
     else
     {
         if (QuickSaveTitle) // БЫСТРОЕ СОХРАНЕНИЕ
-        M_WriteTextBigCentered_RUS(SaveDef_y, "<SCNHJT CJ{HFYTYBT");
+            M_WriteTextBigCentered_RUS(SaveDef_y, "<SCNHJT CJ{HFYTYBT");
         else                // СОХРАНИТЬ ИГРУ
-        M_WriteTextBigCentered_RUS(SaveDef_y, "CJ{HFYBNM BUHE");
+            M_WriteTextBigCentered_RUS(SaveDef_y, "CJ{HFYBNM BUHE");
     }
 
-    for (i = 0;i < load_end; i++)
+    for (i = 0;i < 8; i++)
     {
-        M_DrawSaveLoadBorder(LoadDef.x + wide_delta,LoadDef.y+LINEHEIGHT*i);
-        M_WriteText(LoadDef.x + wide_delta,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
+        M_DrawSaveLoadBorder(x + wide_delta,LoadMenu.y+LINEHEIGHT*i);
+        RD_M_DrawTextA(savegamestrings[i], x + wide_delta,LoadMenu.y+LINEHEIGHT*i);
     }
 
     if (saveStringEnter)
     {
         i = M_StringWidth(savegamestrings[saveSlot]);
-        M_WriteText(LoadDef.x + i + wide_delta,LoadDef.y+LINEHEIGHT*saveSlot,"_");
+        RD_M_DrawTextA("_", x + i + wide_delta,LoadMenu.y+LINEHEIGHT*saveSlot);
     }
 }
 
@@ -8707,11 +5549,12 @@ void M_DrawSave(void)
 void M_DoSave(int slot)
 {
     G_SaveGame (slot,savegamestrings[slot]);
-    M_ClearMenus ();
+    saveStatus[slot] = true;
+    RD_Menu_DeactivateMenu();
 
     // PICK QUICKSAVE SLOT YET?
     if (quickSaveSlot == -2)
-    quickSaveSlot = slot;
+        quickSaveSlot = slot;
 }
 
 
@@ -8727,7 +5570,7 @@ void M_SaveSelect(int choice)
     M_StringCopy(saveOldString,savegamestrings[choice], SAVESTRINGSIZE);
 
     if (!strcmp(savegamestrings[choice], EMPTYSTRING))
-    savegamestrings[choice][0] = 0;
+        savegamestrings[choice][0] = 0;
     saveCharIndex = strlen(savegamestrings[choice]);
 }
 
@@ -8746,10 +5589,11 @@ void M_SaveGame (int choice)
     }
 
     if (gamestate != GS_LEVEL)
-    return;
+        return;
 
-    M_SetupNextMenu(english_language ? &SaveDef : &SaveDef_Rus);
-    M_ReadSaveStrings();
+    RD_Menu_SetMenu(&SaveMenu);
+    if (!slottextloaded)
+        M_ReadSaveStrings();
 }
 
 
@@ -8776,13 +5620,14 @@ void M_QuickSave(void)
     }
 
     if (gamestate != GS_LEVEL)
-    return;
+        return;
 
     if (quickSaveSlot < 0)
     {
-        M_StartControlPanel();
-        M_ReadSaveStrings();
-        M_SetupNextMenu(english_language ? &SaveDef : &SaveDef_Rus);
+        RD_Menu_ActivateMenu();
+        if (!slottextloaded)
+            M_ReadSaveStrings();
+        RD_Menu_SetMenu(&SoundMenu);
         quickSaveSlot = -2;	// means to pick a slot now
         return;
     }
@@ -8865,67 +5710,65 @@ void M_DrawReadThis1(void)
         case exe_doom_1_8:      // [JN] Needed for Shareware 1.8
         case exe_doom_1_9:
         case exe_hacx:
-		if (gamemode == commercial )
-        {
-            // Doom 2
-            if (english_language)
-            lumpname = "HELP";
-            else
-            lumpname = "HELPR";
-        
-            skullx = 330;
-            skully = 162;
-        }
+            if (gamemode == commercial )
+            {
+                // Doom 2
+                if (english_language)
+                    lumpname = "HELP";
+                else
+                    lumpname = "HELPR";
 
-        else
-        {
-            // Doom 1
-            // HELP2 is the first screen shown in Doom 1
-            if (english_language)
-            lumpname = "HELP2";
+                skullx = 330;
+                skully = 162;
+            }
             else
-            lumpname = "HELP2R";
+            {
+                // Doom 1
+                // HELP2 is the first screen shown in Doom 1
+                if (english_language)
+                    lumpname = "HELP2";
+                else
+                    lumpname = "HELP2R";
 
-            skullx = 280;
-            skully = 185;
-        }
-        break;
+                skullx = 280;
+                skully = 185;
+            }
+            break;
 
         case exe_ultimate:
         case exe_chex:
 
-        // Ultimate Doom always displays "HELP1".
+            // Ultimate Doom always displays "HELP1".
 
-        // Chex Quest version also uses "HELP1", even though it is based
-        // on Final Doom.
+            // Chex Quest version also uses "HELP1", even though it is based
+            // on Final Doom.
 
-        if (english_language)
-        lumpname = "HELP1";
-        else
-        lumpname = "HELP1R";
-        break;
-
+            if (english_language)
+                lumpname = "HELP1";
+            else
+                lumpname = "HELP1R";
+            break;
         case exe_final:
         case exe_final2:
 
-        // Final Doom always displays "HELP".
-        // [JN] Иконка черепа сдвинута чуть выше, по аналогии Doom 2,
-        // чтобы не загораживать фразу "джойстика 2".
+            // Final Doom always displays "HELP".
+            // [JN] Иконка черепа сдвинута чуть выше, по аналогии Doom 2,
+            // чтобы не загораживать фразу "джойстика 2".
 
-        if (english_language)
-        lumpname = "HELP";
-        else
-        lumpname = "HELPR";
+            if (english_language)
+                lumpname = "HELP";
+            else
+                lumpname = "HELPR";
     
-        skullx = 330;
-        skully = 165;
-        break;
+            skullx = 330;
+            skully = 165;
+            break;
 
         default:
-        I_Error(english_language ?
-                "Unknown game version" :
-                "Версия игры не определена");
-        break;
+            I_Error(english_language ?
+                    "Unknown game version" :
+                    "Версия игры не определена");
+            break;
     }
 
     // [JN] Для обоих Стадий Freedoom используется одинаковое положение
@@ -8947,8 +5790,8 @@ void M_DrawReadThis1(void)
 
     V_DrawPatchFullScreen (W_CacheLumpName(lumpname, PU_CACHE), false);
 
-    ReadDef1.x = ReadDef1_Rus.x = skullx;
-    ReadDef1.y = ReadDef1_Rus.y = skully;
+    V_DrawShadowedPatchDoom(skullx + -32 + wide_delta, skully - 5,
+                            W_CacheLumpName(DEH_String(skullName[whichSkull]), PU_CACHE));
 }
 
 
@@ -8959,22 +5802,11 @@ void M_DrawReadThis2(void)
 {
     inhelpscreens = true;
 
-    // [JN] Do not show HELP1 screen again (from M_DrawReadThis1) 
-    // in non-shareware versions. Fixes two "BackSpace" pressings.
-    if (gamemode != shareware)
-    {
-        ReadDef2.prevMenu = &MainDef;
-        ReadDef2_Rus.prevMenu = &MainDef_Rus;
-    }
-
-    // We only ever draw the second page if this is 
-    // gameversion == exe_doom_1_9 and gamemode == registered
-
     V_DrawPatchFullScreen(W_CacheLumpName(DEH_String
                (english_language ? "HELP1" : "HELP1R"), PU_CACHE), false);
 
-    ReadDef2.x = ReadDef2_Rus.x = 330;
-    ReadDef2.y = ReadDef2_Rus.y = 175;
+    V_DrawShadowedPatchDoom(298 + wide_delta, 175 - 5,
+                            W_CacheLumpName(DEH_String(skullName[whichSkull]), PU_CACHE));
 }
 
 
@@ -9036,9 +5868,9 @@ void M_NewGame(int choice)
     // Chex Quest disabled the episode select screen, as did Doom II.
 
     if (gamemode == commercial || gameversion == exe_chex)
-    M_SetupNextMenu(english_language ? &NewDef : &NewDef_Rus);
+        RD_Menu_SetMenu(&NewGameMenu);
     else
-    M_SetupNextMenu(english_language ? &EpiDef : &EpiDef_Rus);
+        RD_Menu_SetMenu(EpisodeMenu);
 }
 
 
@@ -9068,31 +5900,31 @@ void M_DrawEpisode(void)
 void M_VerifyNightmare(int key)
 {
     if (key != key_menu_confirm)
-    return;
+        return;
 
-    G_DeferedInitNew(nightmare,epi+1,1);
-    M_ClearMenus ();
+    G_DeferedInitNew(4,epi+1,1);
+    RD_Menu_DeactivateMenu();
 }
 
 void M_VerifyUltraNightmare(int key)
 {
     if (key != key_menu_confirm)
-    return;
+        return;
 
-    G_DeferedInitNew(ultra_nm,epi+1,1);
-    M_ClearMenus ();
+    G_DeferedInitNew(5,epi+1,1);
+    RD_Menu_DeactivateMenu();
 }
 
 void M_ChooseSkill(int choice)
 {
-    if (choice == nightmare)
+    if (choice == 4)
     {
         M_StartMessage(DEH_String(english_language ?
                                   NIGHTMARE : NIGHTMARE_RUS),
                                   M_VerifyNightmare,true);
         return;
     }
-    if (choice == ultra_nm)
+    if (choice == 5)
     {
         M_StartMessage(DEH_String(english_language ?
                                   ULTRANM : ULTRANM_RUS),
@@ -9101,7 +5933,7 @@ void M_ChooseSkill(int choice)
     }
 
     G_DeferedInitNew(choice,epi+1,1);
-    M_ClearMenus ();
+    RD_Menu_DeactivateMenu();
 }
 
 void M_Episode(int choice)
@@ -9112,12 +5944,12 @@ void M_Episode(int choice)
                                   SWSTRING : SWSTRING_RUS),
                                   NULL,false);
         // [JN] Return to Episode menu.
-        M_SetupNextMenu(english_language ? &EpiDef : &EpiDef_Rus);
+        RD_Menu_SetMenu(EpisodeMenu);
         return;
     }
 
     // Yet another hack...
-    if ( (gamemode == registered) && (choice > 2))
+    if ( (gamemode == registered) && (choice == 3))
     {
         fprintf (stderr, english_language ?
                         "M_Episode: fourth episode available only in Ultimate DOOM\n" :
@@ -9126,28 +5958,8 @@ void M_Episode(int choice)
     }
 
     epi = choice;
-    M_SetupNextMenu(english_language ? &NewDef : &NewDef_Rus);
+    RD_Menu_SetMenu(&NewGameMenu);
 }
-
-
-
-
-void M_Options(int choice)
-{
-    if (vanillaparm)
-    {
-        M_SetupNextMenu(english_language ? 
-                        &Vanilla_OptionsDef : 
-                        &Vanilla_OptionsDef_Rus);
-    }
-    else
-    {
-        M_SetupNextMenu(english_language ? 
-                        &RD_Options_Def : 
-                        &RD_Options_Def_Rus);
-    }
-}
-
 
 //
 // M_EndGame
@@ -9155,10 +5967,10 @@ void M_Options(int choice)
 void M_EndGameResponse(int key)
 {
     if (key != key_menu_confirm)
-    return;
+        return;
 
-    currentMenu->lastOn = itemOn;
-    M_ClearMenus ();
+    CurrentMenu->lastOn = CurrentItPos;
+    RD_Menu_DeactivateMenu();
     D_StartTitle ();
 }
 
@@ -9183,14 +5995,12 @@ void M_EndGame(int choice)
                               M_EndGameResponse,true);
 }
 
-
 //
-// M_ReadThis
+// M_ReadThis2
 //
 void M_ReadThis(int choice)
 {
-    choice = 0;
-    M_SetupNextMenu(english_language ? &ReadDef1 : &ReadDef1_Rus);
+    InfoType = 1;
 }
 
 void M_ReadThis2(int choice)
@@ -9204,8 +6014,7 @@ void M_ReadThis2(int choice)
     || (gameversion == exe_doom_1_666 && gamemode == shareware)
     || (gameversion == exe_doom_1_8 && gamemode == shareware))
     {
-        choice = 0;
-        M_SetupNextMenu(english_language ? &ReadDef2 : &ReadDef2_Rus);
+        InfoType = 2;
     }
     else
     {
@@ -9216,8 +6025,8 @@ void M_ReadThis2(int choice)
 
 void M_FinishReadThis(int choice)
 {
-    choice = 0;
-    M_SetupNextMenu(english_language ? &MainDef : &MainDef_Rus);
+    InfoType = 0;
+    RD_Menu_SetMenu(MainMenu);
 }
 
 
@@ -9252,15 +6061,15 @@ int quitsounds2[8] =
 void M_QuitResponse(int key)
 {
     if (key != key_menu_confirm)
-    return;
+        return;
 
     // [JN] Опциональное проигрывание звука при выходе из игры
     if ((!netgame && play_exit_sfx && sfxVolume > 0) || vanillaparm)
     {
         if (gamemode == commercial && gamemission != jaguar)
-        S_StartSound(NULL,quitsounds2[(gametic>>2)&7]);
+            S_StartSound(NULL,quitsounds2[(gametic>>2)&7]);
         else
-        S_StartSound(NULL,quitsounds[(gametic>>2)&7]);
+            S_StartSound(NULL,quitsounds[(gametic>>2)&7]);
 
         I_WaitVBL(105);
     }
@@ -9298,91 +6107,9 @@ void M_QuitDOOM(int choice)
     M_StartMessage(endstring,M_QuitResponse,true);
 }
 
-
-
-
-
 //
 // Menu Functions
 //
-
-// -----------------------------------------------------------------------------
-// [JN] Draw vanilla thermo
-// -----------------------------------------------------------------------------
-void M_DrawThermo (int x, int y, int thermWidth, int thermDot)
-{
-    int     xx;
-    int     i;
-
-    xx = x;
-
-    V_DrawPatch(xx, y, W_CacheLumpName(DEH_String("M_THERML"), PU_CACHE));
-
-    xx += 8;
-
-    for (i=0;i<thermWidth;i++)
-    {
-        V_DrawPatch(xx, y, W_CacheLumpName(DEH_String("M_THERMM"), PU_CACHE));
-        xx += 8;
-    }
-
-    // [crispy] do not crash anymore if value exceeds thermometer range
-    if (thermDot >= thermWidth)
-    {
-        thermDot = thermWidth - 1;
-    }
-
-    V_DrawPatch(xx, y, W_CacheLumpName(DEH_String("M_THERMR"), PU_CACHE));
-
-    V_DrawPatch((x + 8) + thermDot * 8, y,
-                W_CacheLumpName(DEH_String("M_THERMO"), PU_CACHE));
-}
-
-
-// -----------------------------------------------------------------------------
-// [JN] Draw small thermo for RD options menu
-// -----------------------------------------------------------------------------
-void M_DrawThermo_Small (int x, int y, int thermWidth, int thermDot)
-{
-    int		xx;
-    int		i;
-
-    xx = x;
-    V_DrawShadowedPatchDoom(xx, y, W_CacheLumpName(DEH_String("RD_THRML"), PU_CACHE));
-    xx += 8;
-    for (i=0;i<thermWidth;i++)
-    {
-	V_DrawShadowedPatchDoom(xx, y, W_CacheLumpName(DEH_String("RD_THRMM"), PU_CACHE));
-	xx += 8;
-    }
-    V_DrawShadowedPatchDoom(xx, y, W_CacheLumpName(DEH_String("RD_THRMR"), PU_CACHE));
-
-    // [crispy] do not crash anymore if value exceeds thermometer range
-    // [JN] Colorize gray if slider is placed most left.
-    if (thermDot == 0)
-    {
-        dp_translation = cr[CR_DARKGRAY];
-        V_DrawPatch((x + 8) + thermDot * 8, y,
-                W_CacheLumpName(DEH_String("RD_THRMW"), PU_CACHE));
-        dp_translation = NULL;
-    }
-    // [JN] Colorize red if slider exceeds thermometer range.
-    else if (thermDot >= thermWidth)
-    {
-        thermDot = thermWidth - 1;
-        V_DrawPatch((x + 8) + thermDot * 8, y,
-                W_CacheLumpName(DEH_String("RD_THRMW"), PU_CACHE));
-    }
-    // [JN] Colorize blue in common cases.
-    else
-    {
-        dp_translation = cr[CR_BLUE2];
-        V_DrawPatch((x + 8) + thermDot * 8, y,
-                W_CacheLumpName(DEH_String("RD_THRMW"), PU_CACHE));
-        dp_translation = NULL;
-    }
-}
-
 
 void
 M_StartMessage
@@ -9397,16 +6124,7 @@ M_StartMessage
     messageRoutine = routine;
     messageNeedsInput = input;
     menuactive = true;
-    return;
 }
-
-
-void M_StopMessage(void)
-{
-    menuactive = messageLastMenuActive;
-    messageToPrint = 0;
-}
-
 
 void M_RD_Key_Binding_Routine (int key)
 {
@@ -9440,7 +6158,6 @@ void M_RD_StartBinding (int* key_var)
     messageRoutine = M_RD_Key_Binding_Routine;
     messageNeedsInput = false;
     menuactive = true;
-    return;
 }
 
 void M_RD_MouseKey_Binding_Routine (int key)
@@ -9495,9 +6212,6 @@ void M_RD_MouseKey_Binding_Routine (int key)
             break;
         }
         case KEY_ESCAPE:
-        {
-            break;
-        }
         default:
         {
             break;
@@ -9514,7 +6228,6 @@ void M_RD_StartBinding_Mouse (int* key_var)
     messageRoutine = M_RD_MouseKey_Binding_Routine;
     messageNeedsInput = false;
     menuactive = true;
-    return;
 }
 
 //
@@ -9533,8 +6246,7 @@ int M_StringWidth(char* string)
             w += 4;
         else
         {
-            if (english_language || currentMenu == &SaveDef
-            ||  currentMenu == &SaveDef_Rus)
+            if (english_language || CurrentMenu == &SaveMenu)
             {
                 w += SHORT (hu_font[c]->width);
             }
@@ -9560,19 +6272,10 @@ int M_StringHeight(char* string)
 
     h = height;
     for (i = 0;i < strlen(string);i++)
-    if (string[i] == '\n')
-        h += height;
+        if (string[i] == '\n')
+            h += height;
 
     return h;
-}
-
-
-// These keys evaluate to a "null" key in Vanilla Doom that allows weird
-// jumping in the menus. Preserve this behavior for accuracy.
-
-static boolean IsNullKey(int key)
-{
-    return key == KEY_PAUSE || key == KEY_CAPSLOCK || key == KEY_SCRLCK || key == KEY_NUMLOCK;
 }
 
 // [crispy] reload current level / go to next level
@@ -9750,14 +6453,6 @@ boolean M_Responder (event_t* ev)
     int             i;
     static int      joywait = 0;
     static int      mousewait = 0;
-    key_page_t*     keyPage;
-    // [FG] disable menu control by mouse
-    /*
-    static int      mousey = 0;
-    static int      lasty = 0;
-    static int      mousex = 0;
-    static int      lastx = 0;
-    */
 
     // In testcontrols mode, none of the function keys should do anything
     // - the only key is escape to quit.
@@ -9809,32 +6504,28 @@ boolean M_Responder (event_t* ev)
     {
 
         // [JN] Disallow to use joystick keys while binding keyboard keys
-        if ((currentMenu == RD_Bindings_Menu_Def_1
-        ||   currentMenu == RD_Bindings_Menu_Def_1_Rus) && messageToBind)
+        if (CurrentMenu == &Bindings1Menu && messageToBind)
         {
             for (i = 0 ; i < 15 ; i++)
-                if (itemOn == i)
+                if (CurrentItPos == i)
                     return false;
         }
-        if ((currentMenu == RD_Bindings_Menu_Def_2
-        ||   currentMenu == RD_Bindings_Menu_Def_2_Rus) && messageToBind)
+        if (CurrentMenu == &Bindings2Menu && messageToBind)
         {
             for (i = 0 ; i < 15 ; i++)
-                if (itemOn == i)
+                if (CurrentItPos == i)
                     return false;
         }
-        if ((currentMenu == RD_Bindings_Menu_Def_3
-        ||   currentMenu == RD_Bindings_Menu_Def_3_Rus) && messageToBind)
+        if (CurrentMenu == &Bindings3Menu && messageToBind)
         {
             for (i = 0 ; i < 15 ; i++)
-                if (itemOn == i)
+                if (CurrentItPos == i)
                     return false;
         }
-        if ((currentMenu == RD_Bindings_Menu_Def_4
-        ||   currentMenu == RD_Bindings_Menu_Def_4_Rus) && messageToBind)
+        if (CurrentMenu == &Bindings4Menu && messageToBind)
         {
             for (i = 0 ; i < 15 ; i++)
-                if (itemOn == i)
+                if (CurrentItPos == i)
                     return false;
         }
 
@@ -9913,32 +6604,28 @@ boolean M_Responder (event_t* ev)
             */
 
             // [JN] Disallow to use mouse keys while binding keyboard keys
-            if ((currentMenu == RD_Bindings_Menu_Def_1
-            ||   currentMenu == RD_Bindings_Menu_Def_1_Rus) && messageToBind)
+            if (CurrentMenu == &Bindings1Menu && messageToBind)
             {
                 for (i = 0 ; i < 15 ; i++)
-                    if (itemOn == i)
+                    if (CurrentItPos == i)
                         return false;
             }
-            if ((currentMenu == RD_Bindings_Menu_Def_2
-            ||   currentMenu == RD_Bindings_Menu_Def_2_Rus) && messageToBind)
+            if (CurrentMenu == &Bindings2Menu && messageToBind)
             {
                 for (i = 0 ; i < 15 ; i++)
-                    if (itemOn == i)
+                    if (CurrentItPos == i)
                         return false;
             }
-            if ((currentMenu == RD_Bindings_Menu_Def_3
-            ||   currentMenu == RD_Bindings_Menu_Def_3_Rus) && messageToBind)
+            if (CurrentMenu == &Bindings3Menu && messageToBind)
             {
                 for (i = 0 ; i < 15 ; i++)
-                    if (itemOn == i)
+                    if (CurrentItPos == i)
                         return false;
             }
-            if ((currentMenu == RD_Bindings_Menu_Def_4
-            ||   currentMenu == RD_Bindings_Menu_Def_4_Rus) && messageToBind)
+            if (CurrentMenu == &Bindings4Menu && messageToBind)
             {
                 for (i = 0 ; i < 15 ; i++)
-                    if (itemOn == i)
+                    if (CurrentItPos == i)
                         return false;
             }
 
@@ -9987,7 +6674,7 @@ boolean M_Responder (event_t* ev)
     }
 
     if (key == -1)
-    return false;
+        return false;
 
     // Save Game string input
     if (saveStringEnter)
@@ -10003,15 +6690,15 @@ boolean M_Responder (event_t* ev)
             break;
 
             case KEY_ESCAPE:
-            saveStringEnter = 0;
-            M_StringCopy(savegamestrings[saveSlot], saveOldString, SAVESTRINGSIZE);
-            break;
+                saveStringEnter = 0;
+                M_StringCopy(savegamestrings[saveSlot], saveOldString, SAVESTRINGSIZE);
+                break;
 
             case KEY_ENTER:
-            saveStringEnter = 0;
-            if (savegamestrings[saveSlot][0])
-            M_DoSave(saveSlot);
-            break;
+                saveStringEnter = 0;
+                if (savegamestrings[saveSlot][0])
+                    M_DoSave(saveSlot);
+                break;
 
             default:
             // This is complicated.
@@ -10034,16 +6721,16 @@ boolean M_Responder (event_t* ev)
             }
 
             if (ch >= 32 && ch <= 127 &&
-            saveCharIndex < SAVESTRINGSIZE-1 &&
-            M_StringWidth(savegamestrings[saveSlot]) <
-            (SAVESTRINGSIZE-2)*8)
+                saveCharIndex < SAVESTRINGSIZE-1 &&
+                M_StringWidth(savegamestrings[saveSlot]) <
+                (SAVESTRINGSIZE-2)*8)
             {
                 savegamestrings[saveSlot][saveCharIndex++] = ch;
                 savegamestrings[saveSlot][saveCharIndex] = 0;
             }
             break;
-    }
-    return true;
+        }
+        return true;
     }
 
     // Take care of any messages that need input
@@ -10057,39 +6744,30 @@ boolean M_Responder (event_t* ev)
             }
         }
 
-    menuactive = messageLastMenuActive;
-    messageToPrint = 0;
+        menuactive = messageLastMenuActive;
+        messageToPrint = 0;
 
-    if (messageRoutine)
-        messageRoutine(key);
+        if (messageRoutine)
+            messageRoutine(key);
 
-    // [JN] Do not close Save/Load menu after deleting a savegame.
-    if (currentMenu != &SaveDef
-    &&  currentMenu != &SaveDef_Rus
-    &&  currentMenu != &LoadDef
-    &&  currentMenu != &LoadDef_Rus    
-    // [JN] Do not close Episode menu after closing "purchase entire trilogy" message in Shareware.
-    &&  (currentMenu != &EpiDef && gamemode == shareware)
-    &&  (currentMenu != &EpiDef_Rus && gamemode == shareware)
-    // [JN] Do not close Options menu after pressing "N" in End Game.
-    &&  currentMenu != &RD_Options_Def
-    &&  currentMenu != &RD_Options_Def_Rus
-    // [JN] Do not close bindings menu after binding key / mouse button.
-    &&  currentMenu != RD_Bindings_Menu_Def_1
-    &&  currentMenu != RD_Bindings_Menu_Def_1_Rus
-    &&  currentMenu != RD_Bindings_Menu_Def_2
-    &&  currentMenu != RD_Bindings_Menu_Def_2_Rus
-    &&  currentMenu != RD_Bindings_Menu_Def_3
-    &&  currentMenu != RD_Bindings_Menu_Def_3_Rus
-    &&  currentMenu != RD_Bindings_Menu_Def_4
-    &&  currentMenu != RD_Bindings_Menu_Def_4_Rus
-    &&  currentMenu != &RD_Mouse_Bindings_Menu_Def
-    &&  currentMenu != &RD_Mouse_Bindings_Menu_Def_Rus)
-    {
-        menuactive = false;
-    }
-    S_StartSound(NULL,sfx_swtchx);
-    return true;
+        // [JN] Do not close Save/Load menu after deleting a savegame.
+        if (CurrentMenu != &SaveMenu
+        &&  CurrentMenu != &LoadMenu
+        // [JN] Do not close Episode menu after closing "purchase entire trilogy" message in Shareware.
+        &&  (CurrentMenu != EpisodeMenu && gamemode == shareware)
+        // [JN] Do not close Options menu after pressing "N" in End Game.
+        &&  CurrentMenu != OptionsMenu
+        // [JN] Do not close bindings menu after binding key / mouse button.
+        &&  CurrentMenu != &Bindings1Menu
+        &&  CurrentMenu != &Bindings2Menu
+        &&  CurrentMenu != &Bindings3Menu
+        &&  CurrentMenu != &Bindings4Menu
+        &&  CurrentMenu != &MouseBindingsMenu)
+        {
+            menuactive = false;
+        }
+        S_StartSound(NULL,sfx_swtchx);
+        return true;
     }
 
     if ((devparm && key == key_menu_help) || (key != 0 && key == key_menu_screenshot))
@@ -10129,49 +6807,39 @@ boolean M_Responder (event_t* ev)
     {
         if (key == key_menu_help)     // Help key
         {
-        M_StartControlPanel ();
+            RD_Menu_ActivateMenu();
 
-        if ( gamemode == retail )
-            currentMenu = english_language ? &ReadDef2 : &ReadDef2_Rus;
-        else
-            currentMenu = english_language ? &ReadDef1 : &ReadDef1_Rus;
+            if ( gamemode == retail )
+                InfoType = 2;
+            else
+                InfoType = 1;
 
-        itemOn = 0;
-        S_StartSound(NULL,sfx_swtchn);
-        return true;
+            return true;
         }
         else if (key == key_menu_save)     // Save
         {
             QuickSaveTitle = false;
-            M_StartControlPanel();
-            S_StartSound(NULL,sfx_swtchn);
+            RD_Menu_ActivateMenu();
             M_SaveGame(0);
             return true;
         }
         else if (key == key_menu_load)     // Load
         {
-            M_StartControlPanel();
-            S_StartSound(NULL,sfx_swtchn);
+            RD_Menu_ActivateMenu();
             M_LoadGame(0);
             return true;
         }
         else if (key == key_menu_volume)   // Sound Volume
         {
-            M_StartControlPanel ();
+            RD_Menu_ActivateMenu();
             if (vanillaparm)
             {
-            currentMenu = english_language ?
-                          &Vanilla_Audio_Def : 
-                          &Vanilla_Audio_Def_Rus;
+                CurrentMenu = &VanillaOptions2Menu;
             }
             else
             {
-            currentMenu = english_language ?
-                          &RD_Audio_Def : 
-                          &RD_Audio_Def_Rus;
+                CurrentMenu = &SoundMenu;
             }
-            itemOn = rd_audio_sfxvolume;
-            S_StartSound(NULL,sfx_swtchn);
             return true;
         }
         else if (key == key_menu_qsave)    // Quicksave
@@ -10249,7 +6917,7 @@ boolean M_Responder (event_t* ev)
 	if (key == key_menu_decscreen)      // Screen size down
 	{
 		if (automapactive || chat_on)
-		return false;
+		    return false;
 		M_RD_Change_ScreenSize(0);
 		return true;
 	}
@@ -10258,7 +6926,7 @@ boolean M_Responder (event_t* ev)
 	if (key == key_menu_incscreen) // Screen size up
 	{
 		if (automapactive || chat_on)
-		return false;
+		    return false;
 		M_RD_Change_ScreenSize(1);
 		return true;
 	}
@@ -10268,145 +6936,23 @@ boolean M_Responder (event_t* ev)
     {
         if (key == key_menu_activate)
         {
-            M_StartControlPanel ();
-            S_StartSound(NULL,sfx_swtchn);
+            RD_Menu_ActivateMenu();
             return true;
         }
         return false;
     }
 
-    // Keys usable within menu
-
-    if (key == key_menu_down)
-    {
-        // Move down to next item
-
-        do
-        {
-            if (itemOn+1 > currentMenu->numitems-1)
-            itemOn = 0;
-            else itemOn++;
-            // [JN] Play sound only if there are few menu items.
-            if (currentMenu->numitems > 1)
-            S_StartSound(NULL,sfx_pstop);
-        } while(currentMenu->menuitems[itemOn].status==-1);
-
-        return true;
-    }
-    else if (key == key_menu_up)
-    {
-        // Move back up to previous item
-
-        do
-        {
-            if (!itemOn)
-            itemOn = currentMenu->numitems-1;
-            else itemOn--;
-            // [JN] Play sound only if there are few menu items.
-            if (currentMenu->numitems > 1)
-            S_StartSound(NULL,sfx_pstop);
-        } while(currentMenu->menuitems[itemOn].status==-1);
-
-        return true;
-    }
-    else if (key == key_menu_left)
-    {
-        // Slide slider left
-
-    if (currentMenu->menuitems[itemOn].routine
-    && (currentMenu->menuitems[itemOn].status == 2 
-    ||  currentMenu->menuitems[itemOn].status == 3))
-    {
-        if (currentMenu->menuitems[itemOn].status == 2)
-        {
-            // [JN] Routine №3: play sound only if necessary.
-            S_StartSound(NULL,sfx_stnmov);
-        }
-            
-        currentMenu->menuitems[itemOn].routine(0);
-    }
-    return true;
-    }
-    else if (key == key_menu_right)
-    {
-        // Slide slider right
-
-        if (currentMenu->menuitems[itemOn].routine
-        && (currentMenu->menuitems[itemOn].status == 2 
-        ||  currentMenu->menuitems[itemOn].status == 3))
-        {
-            if (currentMenu->menuitems[itemOn].status == 2)
-            {
-                // [JN] Routine №3: play sound only if necessary.
-                S_StartSound(NULL,sfx_stnmov);
-            }
-
-            currentMenu->menuitems[itemOn].routine(1);
-        }
-        return true;
-    }
-    else if (key == key_menu_forward)
-    {
-        // Activate menu item
-
-        if (currentMenu->menuitems[itemOn].routine && currentMenu->menuitems[itemOn].status)
-        {
-            currentMenu->lastOn = itemOn;
-            if (currentMenu->menuitems[itemOn].status == 2
-            ||  currentMenu->menuitems[itemOn].status == 3)
-            {
-                currentMenu->menuitems[itemOn].routine(1);      // right arrow
-                if (currentMenu->menuitems[itemOn].status == 2)
-                {
-                    // [JN] Routine №3: play sound only if necessary.
-                    S_StartSound(NULL,sfx_stnmov);
-                }
-            }
-            else
-            {
-                currentMenu->menuitems[itemOn].routine(itemOn);
-                S_StartSound(NULL,sfx_pistol);
-            }
-        }
-        return true;
-    }
-    else if (key == key_menu_activate)
-    {
-        // Deactivate menu
-
-        currentMenu->lastOn = itemOn;
-        M_ClearMenus ();
-        S_StartSound(NULL,sfx_swtchx);
-        return true;
-    }
-    else if (key == key_menu_back)
-    {
-        // Go back to previous menu
-
-        currentMenu->lastOn = itemOn;
-        if (currentMenu->prevMenu)
-        {
-            currentMenu = currentMenu->prevMenu;
-
-            itemOn = currentMenu->lastOn;
-            S_StartSound(NULL,sfx_swtchn);
-        }
-        return true;
-    }
-
     // [crispy] delete a savegame
     // [JN] Also used for clearing keyboard bindings
-    else if (key == KEY_DEL)
+    if (key == KEY_DEL)
     {
         // [JN] Save/load menu
-        if (currentMenu == &LoadDef
-        ||  currentMenu == &LoadDef_Rus
-        ||  currentMenu == &SaveDef
-        ||  currentMenu == &SaveDef_Rus)
+        if (CurrentMenu == &LoadMenu
+        ||  CurrentMenu == &SaveMenu)
         {
-            if (LoadMenu[itemOn].status)
+            if (saveStatus[CurrentItPos])
             {
-                currentMenu->lastOn = itemOn;
+                CurrentMenu->lastOn = CurrentItPos;
                 M_ConfirmDeleteGame();
                 return true;
             }
@@ -10417,296 +6963,57 @@ boolean M_Responder (event_t* ev)
         }
 
         //[Dasperal] Key bindings menus
-        keyPage = getCurrentKeyPage();
-        if(keyPage)
+        if(CurrentMenu == &Bindings1Menu ||
+           CurrentMenu == &Bindings2Menu ||
+           CurrentMenu == &Bindings3Menu ||
+           CurrentMenu == &Bindings4Menu)
         {
-            BK_ClearBinds(keyPage->keys[itemOn]);
+            BK_ClearBinds(CurrentMenu->items[CurrentItPos].option);
             S_StartSound(NULL,sfx_stnmov);
             return true;
         }
 
         // [JN] Mouse bindings menu
-        if (currentMenu == &RD_Mouse_Bindings_Menu_Def
-        ||  currentMenu == &RD_Mouse_Bindings_Menu_Def_Rus)
+        if (CurrentMenu == &MouseBindingsMenu)
         {
-            if (itemOn == rd_mouse_bindings_attack)      { mousebfire = -1; }
-            if (itemOn == rd_mouse_bindings_use)         { mousebuse = -1; }
-            if (itemOn == rd_mouse_bindings_forward)     { mousebforward = -1; }
-            if (itemOn == rd_mouse_bindings_backward)    { mousebbackward = -1; }
-            if (itemOn == rd_mouse_bindings_strafeon)    { mousebstrafe = -1; }
-            if (itemOn == rd_mouse_bindings_strafeleft)  { mousebstrafeleft = -1; }
-            if (itemOn == rd_mouse_bindings_straferight) { mousebstraferight = -1; }
-            if (itemOn == rd_mouse_bindings_prevweapon)  { mousebprevweapon = -1; }
-            if (itemOn == rd_mouse_bindings_nextweapon)  { mousebnextweapon = -1; }
+            if (CurrentItPos == 1) { mousebfire = -1; }
+            if (CurrentItPos == 2) { mousebuse = -1; }
+            if (CurrentItPos == 3) { mousebforward = -1; }
+            if (CurrentItPos == 4) { mousebbackward = -1; }
+            if (CurrentItPos == 5) { mousebstrafe = -1; }
+            if (CurrentItPos == 6) { mousebstrafeleft = -1; }
+            if (CurrentItPos == 7) { mousebstraferight = -1; }
+            if (CurrentItPos == 8) { mousebprevweapon = -1; }
+            if (CurrentItPos == 9) { mousebnextweapon = -1; }
 
             S_StartSound(NULL,sfx_stnmov);
             return true;
         }
     }
 
-    // [JN] Scroll Gameplay features menu by PgUp/PgDn keys
-    else if (key == KEY_PGUP)
+    if (InfoType)
     {
-        currentMenu->lastOn = itemOn;
-
-        // [JN] Keyboard bindings menu
-        if (currentMenu == RD_Bindings_Menu_Def_1
-        ||  currentMenu == RD_Bindings_Menu_Def_1_Rus)
+        if(key != key_menu_back)
         {
-            M_SetupNextMenu(english_language ?
-                           RD_Bindings_Menu_Def_4 :
-                           RD_Bindings_Menu_Def_4_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
+            RD_Menu_StartSound(MENU_SOUND_CLICK);
+            if(InfoType == 1)
+                M_ReadThis2(0);
+            else
+                M_FinishReadThis(0);
         }
-        if (currentMenu == RD_Bindings_Menu_Def_2
-        ||  currentMenu == RD_Bindings_Menu_Def_2_Rus)
+        else
         {
-            M_SetupNextMenu(english_language ?
-                           RD_Bindings_Menu_Def_1 :
-                           RD_Bindings_Menu_Def_1_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
+            RD_Menu_StartSound(MENU_SOUND_BACK);
+            if(InfoType == 1)
+                M_FinishReadThis(0);
+            else
+                M_ReadThis(0);
         }
-        if (currentMenu == RD_Bindings_Menu_Def_3
-        ||  currentMenu == RD_Bindings_Menu_Def_3_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                           RD_Bindings_Menu_Def_2 :
-                           RD_Bindings_Menu_Def_2_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-        if (currentMenu == RD_Bindings_Menu_Def_4
-        ||  currentMenu == RD_Bindings_Menu_Def_4_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                           RD_Bindings_Menu_Def_3 :
-                           RD_Bindings_Menu_Def_3_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-
-        // [JN] Gameplay features menu
-        if (currentMenu == &RD_Gameplay_Def_1
-        ||  currentMenu == &RD_Gameplay_Def_1_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                           &RD_Gameplay_Def_5 :
-                           &RD_Gameplay_Def_5_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-        if (currentMenu == &RD_Gameplay_Def_2
-        ||  currentMenu == &RD_Gameplay_Def_2_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                           &RD_Gameplay_Def_1 :
-                           &RD_Gameplay_Def_1_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-        if (currentMenu == &RD_Gameplay_Def_3
-        ||  currentMenu == &RD_Gameplay_Def_3_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                           &RD_Gameplay_Def_2 :
-                           &RD_Gameplay_Def_2_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-        if (currentMenu == &RD_Gameplay_Def_4
-        ||  currentMenu == &RD_Gameplay_Def_4_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                           &RD_Gameplay_Def_3 :
-                           &RD_Gameplay_Def_3_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-        if (currentMenu == &RD_Gameplay_Def_5
-        ||  currentMenu == &RD_Gameplay_Def_5_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                           &RD_Gameplay_Def_4 :
-                           &RD_Gameplay_Def_4_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-
-        if (currentMenu == &RD_Level_Def_1
-        ||  currentMenu == &RD_Level_Def_1_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                           &RD_Level_Def_2 :
-                           &RD_Level_Def_2_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-
-        if (currentMenu == &RD_Level_Def_2
-        ||  currentMenu == &RD_Level_Def_2_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                           &RD_Level_Def_1 :
-                           &RD_Level_Def_1_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-    }
-    else if (key == KEY_PGDN)
-    {
-        currentMenu->lastOn = itemOn;
-
-        // [JN] Keyboard bindings menu
-        if (currentMenu == RD_Bindings_Menu_Def_1
-        ||  currentMenu == RD_Bindings_Menu_Def_1_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                           RD_Bindings_Menu_Def_2 :
-                           RD_Bindings_Menu_Def_2_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-        if (currentMenu == RD_Bindings_Menu_Def_2
-        ||  currentMenu == RD_Bindings_Menu_Def_2_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                           RD_Bindings_Menu_Def_3 :
-                           RD_Bindings_Menu_Def_3_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-        if (currentMenu == RD_Bindings_Menu_Def_3
-        ||  currentMenu == RD_Bindings_Menu_Def_3_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                           RD_Bindings_Menu_Def_4 :
-                           RD_Bindings_Menu_Def_4_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-        if (currentMenu == RD_Bindings_Menu_Def_4
-        ||  currentMenu == RD_Bindings_Menu_Def_4_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                           RD_Bindings_Menu_Def_1 :
-                           RD_Bindings_Menu_Def_1_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-
-        // [JN] Gameplay features menu
-        if (currentMenu == &RD_Gameplay_Def_1
-        ||  currentMenu == &RD_Gameplay_Def_1_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                           &RD_Gameplay_Def_2 :
-                           &RD_Gameplay_Def_2_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-        if (currentMenu == &RD_Gameplay_Def_2
-        ||  currentMenu == &RD_Gameplay_Def_2_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                           &RD_Gameplay_Def_3 :
-                           &RD_Gameplay_Def_3_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-        if (currentMenu == &RD_Gameplay_Def_3
-        ||  currentMenu == &RD_Gameplay_Def_3_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                           &RD_Gameplay_Def_4 :
-                           &RD_Gameplay_Def_4_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-        if (currentMenu == &RD_Gameplay_Def_4
-        ||  currentMenu == &RD_Gameplay_Def_4_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                           &RD_Gameplay_Def_5 :
-                           &RD_Gameplay_Def_5_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-        if (currentMenu == &RD_Gameplay_Def_5
-        ||  currentMenu == &RD_Gameplay_Def_5_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                           &RD_Gameplay_Def_1 :
-                           &RD_Gameplay_Def_1_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-
-        if (currentMenu == &RD_Level_Def_1
-        ||  currentMenu == &RD_Level_Def_1_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                           &RD_Level_Def_2 :
-                           &RD_Level_Def_2_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-
-        if (currentMenu == &RD_Level_Def_2
-        ||  currentMenu == &RD_Level_Def_2_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                           &RD_Level_Def_1 :
-                           &RD_Level_Def_1_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
+        return true;
     }
 
-    // Keyboard shortcut?
-    // Vanilla Doom has a weird behavior where it jumps to the scroll bars
-    // when the certain keys are pressed, so emulate this.
-
-    else if (ch != 0 || IsNullKey(key))
-    {
-        for (i = itemOn+1;i < currentMenu->numitems;i++)
-        {
-            if (currentMenu->menuitems[i].alphaKey == ch)
-            {
-                itemOn = i;
-                S_StartSound(NULL,sfx_pstop);
-                return true;
-            }
-        }
-
-        for (i = 0;i <= itemOn;i++)
-        {
-            if (currentMenu->menuitems[i].alphaKey == ch)
-            {
-                itemOn = i;
-                S_StartSound(NULL,sfx_pstop);
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-
-//
-// M_StartControlPanel
-//
-void M_StartControlPanel (void)
-{
-    // intro might call this repeatedly
-    if (menuactive)
-    return;
-
-    menuactive = 1;
-    currentMenu = english_language ? &MainDef : &MainDef_Rus;         // JDC
-    itemOn = currentMenu->lastOn;   // JDC
+    // Keys usable within menu
+    return RD_Menu_Responder(key, ch);
 }
 
 // Display OPL debug messages - hack for GENMIDI development.
@@ -10731,7 +7038,7 @@ static void M_DrawOPLDev(void)
             *p = '\0';
         }
 
-        M_WriteTextSmall_ENG(0, line * 8, curr, NULL);
+        RD_M_DrawTextSmallENG(curr, 0, line * 8, CR_NONE);
         ++line;
 
         if (p == NULL)
@@ -10751,12 +7058,10 @@ static void M_DrawOPLDev(void)
 //
 void M_Drawer (void)
 {
-    static short    x;
-    static short    y;
+    static int      x;
+    static int      y;
     unsigned int    i;
-    unsigned int    max;
     char            string[80];
-    char            *name;
     int             start;
 
     inhelpscreens = false;
@@ -10797,12 +7102,12 @@ void M_Drawer (void)
 
             if (english_language)
             {
-                M_WriteText(x + wide_delta, y, string);
+                RD_M_DrawTextA(string, x + wide_delta, y);
                 y += SHORT(hu_font[0]->height);
             }
             else
             {
-                M_WriteTextSmall_RUS(x + wide_delta, y, string, NULL);
+                RD_M_DrawTextSmallRUS(string, x + wide_delta, y, CR_NONE);
                 y += SHORT(hu_font_small_rus[0]->height);                
             }
         }
@@ -10816,178 +7121,21 @@ void M_Drawer (void)
     }
 
     if (!menuactive)
-    return;
+        return;
 
-    if (currentMenu->routine)
-    currentMenu->routine();     // call Draw routine
-
-    // DRAW MENU
-    x = currentMenu->x;
-    y = currentMenu->y;
-    max = currentMenu->numitems;
-
-    for (i=0;i<max;i++)
+    if (InfoType == 1)
     {
-        name = DEH_String(currentMenu->menuitems[i].name);
-
-        // -----------------------------------------------------------------
-        // [JN] Write common menus by using standard graphical patches:
-        // -----------------------------------------------------------------
-        if (currentMenu == &MainDef                // Main Menu
-        ||  currentMenu == &MainDef_Rus            // Main Menu
-        ||  currentMenu == &MainDefBeta            // Main Menu (Press Beta) 
-        ||  currentMenu == &MainDefBeta_Rus        // Main Menu (Press Beta)
-        ||  currentMenu == &EpiDef                 // Episode selection
-        ||  currentMenu == &EpiDef_Rus             // Episode selection
-        ||  currentMenu == &NewDef                 // Skill level
-        ||  currentMenu == &NewDef_Rus             // Skill level
-        ||  currentMenu == &Vanilla_OptionsDef     // Vanilla options menu
-        ||  currentMenu == &Vanilla_Audio_Def)     // Vanilla sound menu
-        {
-            // [JN] Draw patch if it's name is present,
-            // i.e. don't try to draw placeholders as patches.
-            if (name[0])
-            V_DrawShadowedPatchDoom (x + wide_delta, y, W_CacheLumpName(name, PU_CACHE));
-
-            // [JN] Big vertical spacing
-            y += LINEHEIGHT;
-        }
-        // -----------------------------------------------------------------
-        // [JN] Write English options menu with big English font
-        // -----------------------------------------------------------------
-        else 
-        if (currentMenu == &RD_Options_Def)
-        {
-            M_WriteTextBig_ENG(x + wide_delta, y, name);
-
-            // [JN] Big vertical spacing
-            y += LINEHEIGHT;
-        }
-        // -----------------------------------------------------------------
-        // [JN] Write Russian options menu with big Russian font
-        // -----------------------------------------------------------------
-        else 
-        if (currentMenu == &MainDef_Rus
-        ||  currentMenu == &EpiDef_Rus
-        ||  currentMenu == &NewDef_Rus
-        ||  currentMenu == &RD_Options_Def_Rus
-        ||  currentMenu == &Vanilla_OptionsDef_Rus
-        ||  currentMenu == &Vanilla_Audio_Def_Rus)
-        {
-            M_WriteTextBig_RUS(x + wide_delta, y, name);
-
-            // [JN] Big vertical spacing
-            y += LINEHEIGHT;
-        }
-        // -----------------------------------------------------------------
-        // [JN] Write English submenus with small English font
-        // -----------------------------------------------------------------
-        else
-        if (currentMenu == &RD_Rendering_Def
-        ||  currentMenu == &RD_Display_Def
-        ||  currentMenu == &RD_Messages_Def
-        ||  currentMenu == &RD_Automap_Def
-        ||  currentMenu == &RD_Audio_Def
-        ||  currentMenu == &RD_Audio_System_Def
-        ||  currentMenu == &RD_Controls_Def
-        ||  currentMenu == RD_Bindings_Menu_Def_1
-        ||  currentMenu == RD_Bindings_Menu_Def_2
-        ||  currentMenu == RD_Bindings_Menu_Def_3
-        ||  currentMenu == RD_Bindings_Menu_Def_4
-        ||  currentMenu == &RD_Mouse_Bindings_Menu_Def
-        ||  currentMenu == &RD_Gameplay_Def_1
-        ||  currentMenu == &RD_Gameplay_Def_2
-        ||  currentMenu == &RD_Gameplay_Def_3
-        ||  currentMenu == &RD_Gameplay_Def_4
-        ||  currentMenu == &RD_Gameplay_Def_5
-        ||  currentMenu == &RD_Level_Def_1
-        ||  currentMenu == &RD_Level_Def_2
-        ||  currentMenu == &RD_Reset_Def)
-        {
-            M_WriteTextSmall_ENG(x + wide_delta, y, name, NULL);
-
-            // [JN] Small vertical spacing
-            y += LINEHEIGHT_SML;
-        }
-        // -----------------------------------------------------------------
-        // [JN] Write Russian submenus with small Russian font
-        // -----------------------------------------------------------------            
-        else
-        if (currentMenu == &RD_Rendering_Def_Rus
-        ||  currentMenu == &RD_Display_Def_Rus
-        ||  currentMenu == &RD_Messages_Def_Rus
-        ||  currentMenu == &RD_Automap_Def_Rus
-        ||  currentMenu == &RD_Audio_Def_Rus
-        ||  currentMenu == &RD_Audio_System_Def_Rus
-        ||  currentMenu == &RD_Controls_Def_Rus
-        ||  currentMenu == RD_Bindings_Menu_Def_1_Rus
-        ||  currentMenu == RD_Bindings_Menu_Def_2_Rus
-        ||  currentMenu == RD_Bindings_Menu_Def_3_Rus
-        ||  currentMenu == RD_Bindings_Menu_Def_4_Rus
-        ||  currentMenu == &RD_Mouse_Bindings_Menu_Def_Rus
-        ||  currentMenu == &RD_Gameplay_Def_1_Rus
-        ||  currentMenu == &RD_Gameplay_Def_2_Rus
-        ||  currentMenu == &RD_Gameplay_Def_3_Rus
-        ||  currentMenu == &RD_Gameplay_Def_4_Rus
-        ||  currentMenu == &RD_Gameplay_Def_5_Rus
-        ||  currentMenu == &RD_Level_Def_1_Rus
-        ||  currentMenu == &RD_Level_Def_2_Rus
-        ||  currentMenu == &RD_Reset_Def_Rus)
-        {
-            M_WriteTextSmall_RUS(x + wide_delta, y, name, NULL);
-        
-            // [JN] Small vertical spacing
-            y += LINEHEIGHT_SML;
-        }
+        M_DrawReadThis1();
+        return;
+    }
+    else if (InfoType == 2)
+    {
+        M_DrawReadThis2();
+        return;
     }
 
-    // [JN] Define where to draw blinking skull and where blinking ">" symbol.
-    if (currentMenu == &MainDef            || currentMenu == &MainDef_Rus
-    ||  currentMenu == &EpiDef             || currentMenu == &EpiDef_Rus 
-    ||  currentMenu == &NewDef             || currentMenu == &NewDef_Rus
-    ||  currentMenu == &ReadDef1           || currentMenu == &ReadDef1_Rus
-    ||  currentMenu == &ReadDef2           || currentMenu == &ReadDef2_Rus
-    ||  currentMenu == &LoadDef            || currentMenu == &LoadDef_Rus
-    ||  currentMenu == &SaveDef            || currentMenu == &SaveDef_Rus
-    ||  currentMenu == &RD_Options_Def     || currentMenu == &RD_Options_Def_Rus
-    ||  currentMenu == &Vanilla_OptionsDef || currentMenu == &Vanilla_OptionsDef_Rus
-    ||  currentMenu == &Vanilla_Audio_Def  || currentMenu == &Vanilla_Audio_Def_Rus)
-    {
-        // DRAW SKULL
-        V_DrawShadowedPatchDoom(x + SKULLXOFF + wide_delta, currentMenu->y - 5 + itemOn*LINEHEIGHT,
-        W_CacheLumpName(DEH_String(skullName[whichSkull]), PU_CACHE));
-    }
-    else
-    {
-        // [JN] Draw blinking ">" symbol
-        // [JN] Jaguar: no font color translation, draw SKULL1 as an empty symbol.
-        M_WriteTextSmall_ENG(x + SKULLXOFF + 24 + wide_delta, currentMenu->y + itemOn*LINEHEIGHT_SML,
-                             gamemission == jaguar && whichSkull == 0 ? " " : ">",
-                             whichSkull == 0 ? cr[CR_DARKRED] : NULL);
-    }
+    RD_Menu_DrawMenu(CurrentMenu, MenuTime, CurrentItPos);
 }
-
-
-//
-// M_ClearMenus
-//
-void M_ClearMenus (void)
-{
-    menuactive = 0;
-    // if (!netgame && usergame && paused)
-    //       sendpause = true;
-}
-
-
-//
-// M_SetupNextMenu
-//
-void M_SetupNextMenu(menu_t *menudef)
-{
-    currentMenu = menudef;
-    itemOn = currentMenu->lastOn;
-}
-
 
 //
 // M_Ticker
@@ -10999,58 +7147,77 @@ void M_Ticker (void)
         whichSkull ^= 1;
         skullAnimCounter = 8;
     }
+    MenuTime++;
 }
-
 
 //
 // M_Init
 //
 void M_Init (void)
 {
-    //[Dasperal] Init Bindings Menus
-    RD_Bindings_Menu_Def_1 = getMenuFromKeyPage(&RD_Bindings_1, true);
-    RD_Bindings_Menu_Def_1_Rus = getMenuFromKeyPage(&RD_Bindings_1, false);
-    RD_Bindings_Menu_Def_2 = getMenuFromKeyPage(&RD_Bindings_2, true);
-    RD_Bindings_Menu_Def_2_Rus = getMenuFromKeyPage(&RD_Bindings_2, false);
-    RD_Bindings_Menu_Def_3 = getMenuFromKeyPage(&RD_Bindings_3, true);
-    RD_Bindings_Menu_Def_3_Rus = getMenuFromKeyPage(&RD_Bindings_3, false);
-    RD_Bindings_Menu_Def_4 = getMenuFromKeyPage(&RD_Bindings_4, true);
-    RD_Bindings_Menu_Def_4_Rus = getMenuFromKeyPage(&RD_Bindings_4, false);
+    // [crispy] rearrange Load Game and Save Game menus
+    const patch_t *patchl, *patchs, *patchm;
+    short captionheight, vstep;
+
+    // [Dasperal] Init menu
+    RD_M_InitFonts(// [JN] Original English fonts
+                   DEH_String("STCFN033"),
+                   DEH_String("FNTBE033"),
+                   // [JN] Small special font used for time/fps widget
+                   DEH_String("STCFG033"),
+                   // [JN] Unchangable English fonts
+                   DEH_String("FNTSE033"),
+                   DEH_String("FNTBE033"),
+                   // [JN] Unchangable Russian fonts
+                   DEH_String("FNTSR033"),
+                   DEH_String("FNTBR033"));
+
+    RD_Menu_InitMenu(16, 10, NULL, NULL);
+
+    RD_Menu_InitSliders(// [Dasperal] Big slider
+                        DEH_String("M_THERML"),
+                        DEH_String("M_THERMM"),
+                        NULL,
+                        DEH_String("M_THERMR"),
+                        DEH_String("M_THERMO"),
+                        // [Dasperal] Small slider
+                        DEH_String("RD_THRML"),
+                        DEH_String("RD_THRMM"),
+                        DEH_String("RD_THRMR"),
+                        DEH_String("RD_THRMW"),
+                        // [Dasperal] Gem translations
+                        CR_BLUE2,
+                        CR_DARKGRAY,
+                        CR_NONE);
+
+    RD_Menu_InitCursor(// [Dasperal] Big cursor
+                       DEH_String(skullName[0]),
+                       DEH_String(skullName[1]),
+                       // [Dasperal] Small cursor
+                       DEH_String("FNTSE062"),
+                       // [Dasperal] Use FNTBE034 as empty patch for cursor in jaguar
+                       // and use RD_CURD (dark vwrsion of FNTSE062) for generic doom
+                       DEH_String(gamemission == jaguar ?
+                                                 "FNTBE034" : "RD_CURD"),
+                       -5, 0, -32, -8);
 
     // [JN] Init message colors.
-    M_RD_Define_Msg_Pickup_Color();
-    M_RD_Define_Msg_Secret_Color();
-    M_RD_Define_Msg_System_Color();
-    M_RD_Define_Msg_Chat_Color();
-
-    currentMenu = english_language ? &MainDef : &MainDef_Rus;
+    M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);
+    M_RD_Define_Msg_Color(msg_secret, message_secret_color);
+    M_RD_Define_Msg_Color(msg_system, message_system_color);
+    M_RD_Define_Msg_Color(msg_chat, message_chat_color);
 
     // [JN] Widescreen: set temp variable for rendering menu.
     aspect_ratio_temp = aspect_ratio;
 
     menuactive = 0;
-    itemOn = currentMenu->lastOn;
     whichSkull = 0;
     skullAnimCounter = 10;
-
-    if (aspect_ratio >= 2)
-    screenSize = screenblocks - 9;
-    else
-    screenSize = screenblocks - 3;
 
     messageToPrint = 0;
     messageString = NULL;
     messageLastMenuActive = menuactive;
     quickSaveSlot = -1;
-
-    if (aspect_ratio >= 2)
-    {
-        // [JN] Wide screen: place screen size slider correctly at starup
-        if (screenSize < 0)
-            screenSize = 0;
-        if (screenSize > 5)
-            screenSize = 5;
-    }
 
     // Here we could catch other version dependencies,
     //  like HELP1/2, and four episodes.
@@ -11058,54 +7225,29 @@ void M_Init (void)
     switch ( gamemode )
     {
         case commercial:
-        // Commercial has no "read this" entry.
-        MainMenu[readthis] = MainMenu[quitdoom];
-        MainMenu_Rus[readthis] = MainMenu_Rus[quitdoom];
-        MainDef.numitems--;
-        MainDef_Rus.numitems--;
-        MainDef.y += 8;
-        MainDef_Rus.y += 8;
-        NewDef.prevMenu = &MainDef;
-        NewDef_Rus.prevMenu = &MainDef_Rus;
-        break;
-
-        case shareware:
-        // Episode 2 and 3 are handled,
-        //  branching to an ad screen.
-        case registered:
-        break;
-
-        case retail:
-        // We are fine.
-        break;
-
+            // Commercial has no "read this" entry.
+            MainMenu = &Doom2Menu;
+            NewGameMenu.prevMenu = MainMenu;
+            break;
         case pressbeta:
-        // [JN] Use special menu for Press Beta
-        MainDef = MainDefBeta;
-        MainDef_Rus = MainDefBeta_Rus;
-        // [JN] Remove one lower menu item
-        MainDef.numitems--;
-        MainDef_Rus.numitems--;
-        // [JN] Correct return to previous menu
-        NewDef.prevMenu = &MainDef;
-        NewDef_Rus.prevMenu = &MainDef_Rus;
-        break;
-
+            // [JN] Use special menu for Press Beta
+            MainMenu = &MainMenuBeta;
+            break;
+        case shareware:
+            // Episode 2 and 3 are handled,
+            // branching to an ad screen.
+        case registered:
+        case retail:
+            // We are fine.
         default:
-        break;
+            MainMenu = &DoomMenu;
+            break;
     }
 
     // [JN] Move up Jaguar options menu to don't draw it over status bar
     if (gamemission == jaguar)
     {
-        RD_Options_Def.y -= 6;
-        RD_Options_Def_Rus.y -= 6;
-    }
-
-    // [crispy] & [JN] Sigil
-    if (!sgl_loaded)
-    {
-        EpiDef.numitems = EpiDef_Rus.numitems = 4;
+        RDOptionsMenu.y -= 6;
     }
 
     // Versions of doom.exe before the Ultimate Doom release only had
@@ -11114,37 +7256,63 @@ void M_Init (void)
     // (should crash if missing).
     if (gameversion < exe_ultimate)
     {
-        EpiDef.numitems--;
-        EpiDef_Rus.numitems--;
+        // [Dasperal] Sigil
+        if (sgl_loaded)
+            EpisodeMenu = &DoomSigilEpisodeMenu;
+        else
+            EpisodeMenu = &DoomEpisodeMenu;
+    }
+    else
+    {
+        // [crispy] & [JN] Sigil
+        if (sgl_loaded)
+            EpisodeMenu = &UltimateSigilEpisodeMenu;
+        else
+            EpisodeMenu = &UltimateEpisodeMenu;
     }
 
-    // [crispy] rearrange Load Game and Save Game menus
-    {
-	const patch_t *patchl, *patchs, *patchm;
-	short captionheight, vstep;
+    if(vanillaparm)
+        OptionsMenu = &VanillaOptionsMenu;
+    else
+        OptionsMenu = &RDOptionsMenu;
 
+    DoomItems[1].pointer = OptionsMenu;
+    Doom2Items[1].pointer = OptionsMenu;
+    MainMenuBetaItems[3].pointer = OptionsMenu;
+
+    // [JN] Correct return to previous menu
+    if (NewGameMenu.prevMenu != MainMenu)
+        NewGameMenu.prevMenu = EpisodeMenu;
+    OptionsMenu->prevMenu = MainMenu;
+    LoadMenu.prevMenu = MainMenu;
+    SaveMenu.prevMenu = MainMenu;
+
+    CurrentMenu = MainMenu;
+    CurrentItPos = CurrentMenu->lastOn;
+
+	// [crispy] rearrange Load Game and Save Game menus
 	patchl = W_CacheLumpName(DEH_String("M_LOADG"), PU_CACHE);
 	patchs = W_CacheLumpName(DEH_String("M_SAVEG"), PU_CACHE);
 	patchm = W_CacheLumpName(DEH_String("M_LSLEFT"), PU_CACHE);
 
 	LoadDef_x = (ORIGWIDTH - SHORT(patchl->width)) / 2 + SHORT(patchl->leftoffset);
 	SaveDef_x = (ORIGWIDTH - SHORT(patchs->width)) / 2 + SHORT(patchs->leftoffset);
-	LoadDef.x = SaveDef.x = (ORIGWIDTH - 24 * 8) / 2 + SHORT(patchm->leftoffset); // [crispy] see M_DrawSaveLoadBorder()
+	LoadMenu.x_eng = LoadMenu.x_rus = SaveMenu.x_eng = SaveMenu.x_rus =
+	        (ORIGWIDTH - 24 * 8) / 2 + SHORT(patchm->leftoffset); // [crispy] see M_DrawSaveLoadBorder()
 
 	captionheight = MAX(SHORT(patchl->height), SHORT(patchs->height));
 
 	vstep = ORIGHEIGHT - 32; // [crispy] ST_HEIGHT
 	vstep -= captionheight;
-	vstep -= (load_end - 1) * LINEHEIGHT + SHORT(patchm->height);
+	vstep -= (8 - 1) * LINEHEIGHT + SHORT(patchm->height);
 	vstep /= 3;
 
 	if (vstep > 0)
 	{
 		LoadDef_y = vstep + captionheight - SHORT(patchl->height) + SHORT(patchl->topoffset);
 		SaveDef_y = vstep + captionheight - SHORT(patchs->height) + SHORT(patchs->topoffset);
-		LoadDef.y = SaveDef.y = vstep + captionheight + vstep + SHORT(patchm->topoffset) - 7; // [crispy] see M_DrawSaveLoadBorder()
+	    LoadMenu.y = SaveMenu.y = vstep + captionheight + vstep + SHORT(patchm->topoffset) - 7; // [crispy] see M_DrawSaveLoadBorder()
 	}
-    }
 
     opldev = M_CheckParm("-opldev") > 0;
 }
@@ -11159,7 +7327,7 @@ static void M_ConfirmDeleteGameResponse (int key)
     {
         char name[256];
 
-        M_StringCopy(name, P_SaveGameFile(itemOn), sizeof(name));
+        M_StringCopy(name, P_SaveGameFile(CurrentItPos), sizeof(name));
         remove(name);
         M_ReadSaveStrings();
     }
@@ -11173,7 +7341,7 @@ void M_ConfirmDeleteGame ()
     {
         savegwarning =
             M_StringJoin("are you sure you want to\ndelete saved game\n\n\"",
-            savegamestrings[itemOn], "\"?\n\n", PRESSYN, NULL);
+            savegamestrings[CurrentItPos], "\"?\n\n", PRESSYN, NULL);
     }
     else
     {
@@ -11187,3 +7355,52 @@ void M_ConfirmDeleteGame ()
     S_StartSound(NULL,sfx_swtchn);
 }
 
+boolean SCNetCheck(int option)
+{
+    if (!netgame)
+    {                           // okay to go into the menu
+        return true;
+    }
+    switch (option)
+    {
+        case 1:
+            M_StartMessage(DEH_String(english_language ?
+                           NEWGAME : NEWGAME_RUS), NULL,false);
+            break;
+        case 2:
+            M_StartMessage(DEH_String(english_language ?
+                           LOADNET : LOADNET_RUS), NULL,false);
+            break;
+        default:
+            break;
+    }
+    menuactive = false;
+
+    return false;
+}
+
+void RD_Menu_StartSound(MenuSound_t sound)
+{
+    switch (sound)
+    {
+        case MENU_SOUND_CURSOR_MOVE:
+            S_StartSound(NULL,sfx_pstop);
+            break;
+        case MENU_SOUND_SLIDER_MOVE:
+            S_StartSound(NULL,sfx_stnmov);
+            break;
+        case MENU_SOUND_CLICK:
+        case MENU_SOUND_PAGE:
+            S_StartSound(NULL,sfx_pistol);
+            break;
+        case MENU_SOUND_DEACTIVATE:
+            S_StartSound(NULL,sfx_swtchx);
+            break;
+        case MENU_SOUND_BACK:
+        case MENU_SOUND_ACTIVATE:
+            S_StartSound(NULL,sfx_swtchn);
+            break;
+        default:
+            break;
+    }
+}

@@ -12,20 +12,14 @@
 // GNU General Public License for more details.
 //
 
-#ifndef RD_D_NAME_H
-#define RD_D_NAME_H
+#ifndef RD_MENU_CONTROL_H
+#define RD_MENU_CONTROL_H
 
-typedef enum
-{
-    gt_Doom,
-    gt_Heretic,
-    gt_Hexen,
-    gt_Strife
-} GameType_t;
+#include "doomtype.h"
 
-// [Dasperal] Those vars should be defined in game-specific code
-extern char* RD_Project_Name;
-extern char* RD_Project_String;
-extern GameType_t RD_GameType;
+extern boolean menuactive;
 
-#endif //RD_D_NAME_H
+void RD_Menu_ActivateMenu(void);
+void RD_Menu_DeactivateMenu(void);
+
+#endif //RD_MENU_CONTROL_H

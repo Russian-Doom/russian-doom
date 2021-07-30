@@ -47,8 +47,13 @@
 #include "sound.h"
 
 #define WINDOW_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/index.html"
+
+// -----------------------------------------------------------------------------
+// [Dasperal] d_name.h var definition
+// -----------------------------------------------------------------------------
 char* RD_Project_Name = PACKAGE_PREFIX " Setup";
 char* RD_Project_String = PACKAGE_PREFIX " Setup " BUILD_DOOM_VERSION;
+GameType_t RD_GameType = gt_Doom;
 
 //
 // [JN] Prototype for Main Menu

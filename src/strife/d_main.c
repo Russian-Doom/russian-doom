@@ -88,6 +88,7 @@
 // -----------------------------------------------------------------------------
 char* RD_Project_Name = PACKAGE_PREFIX " Strife";
 char* RD_Project_String = PACKAGE_PREFIX " Strife " BUILD_STRIFE_VERSION;
+GameType_t RD_GameType = gt_Strife;
 
 //
 // D-DoomLoop()

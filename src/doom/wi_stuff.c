@@ -34,9 +34,7 @@
 #include "doomstat.h"
 #include "d_main.h"     // [JN] D_StartTitle
 
-// Data.
-#include "sounds.h"
-
+#include "rd_text.h"
 // Needs access to LFB.
 #include "v_video.h"
 #include "st_stuff.h"
@@ -49,8 +47,6 @@
 void WI_drawStatsJaguar(void);
 void WI_updateStatsJaguar(void);
 
-extern void M_WriteTextBig_ENG();
-extern void M_WriteTextBig_RUS();
 extern void M_WriteTextBigCentered_ENG();
 extern void M_WriteTextBigCentered_RUS();
 extern void HU_DemoProgressBar(void);
@@ -2158,9 +2154,9 @@ void WI_initVariables (wbstartstruct_t* wbstartstruct)
     if (!wbs->maxsecret)
     wbs->maxsecret = 1;
 
-    if ( gamemode != retail )
+    if (gamemode != retail && (!sgl_loaded || wbs->epsd == 3))
         if (wbs->epsd > 2)
-        wbs->epsd -= 3;
+            wbs->epsd -= 3;
 }
 
 
@@ -2347,33 +2343,33 @@ void WI_drawStatsJaguar(void)
 
     // Kills | Враги
     if (english_language)
-    M_WriteTextBig_ENG(71 + wide_delta, 50, "Kills");
+        RD_M_DrawTextB("Kills", 71 + wide_delta, 50);
     else
-    M_WriteTextBig_RUS(80 + wide_delta, 50, "Dhfub");
+        RD_M_DrawTextBigRUS("Dhfub", 80 + wide_delta, 50);
 
     WI_drawPercent(origwidth - SP_STATSX, SP_STATSY, cnt_kills[0]);
 
     // Items | Предметы
     if (english_language)
-    M_WriteTextBig_ENG(66 + wide_delta, 68, "Items");
+        RD_M_DrawTextB("Items", 66 + wide_delta, 68);
     else
-    M_WriteTextBig_RUS(32 + wide_delta, 68, "Ghtlvtns");
+        RD_M_DrawTextBigRUS("Ghtlvtns", 32 + wide_delta, 68);
 
     WI_drawPercent(origwidth - SP_STATSX, SP_STATSY+lh, cnt_items[0]);
 
     // Secrets | Тайники
     if (english_language)
-    M_WriteTextBig_ENG(30 + wide_delta, 86, "Secrets");
+        RD_M_DrawTextB("Secrets", 30 + wide_delta, 86);
     else
-    M_WriteTextBig_RUS(45 + wide_delta, 86, "Nfqybrb");
+        RD_M_DrawTextBigRUS("Nfqybrb", 45 + wide_delta, 86);
 
     WI_drawPercent(origwidth - SP_STATSX, SP_STATSY+2*lh, cnt_secret[0]);
 
     // Time
     if (english_language)
-    M_WriteTextBig_ENG(74 + wide_delta, 113, "Time");
+        RD_M_DrawTextB("Time", 74 + wide_delta, 113);
     else
-    M_WriteTextBig_RUS(77 + wide_delta, 113, "Dhtvz");
+        RD_M_DrawTextBigRUS("Dhtvz", 77 + wide_delta, 113);
 
     WI_drawTime(origwidth - SP_STATSX, SP_STATSY+4*lh-8+2, cnt_time, true);
 
@@ -2385,9 +2381,9 @@ void WI_drawStatsJaguar(void)
 
         // Total | Итог
         if (english_language)
-        M_WriteTextBig_ENG(59 + wide_delta, 131, "Total");
+            RD_M_DrawTextB("Total", 59 + wide_delta, 131);
         else
-        M_WriteTextBig_RUS(95 + wide_delta, 131, "Bnju");
+            RD_M_DrawTextBigRUS("Bnju", 95 + wide_delta, 131);
         
         // Show total time only after level time is counted
         if (cnt_time == plrs[me].stime / TICRATE)
