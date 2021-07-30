@@ -7225,6 +7225,7 @@ void M_Init (void)
         case pressbeta:
             // [JN] Use special menu for Press Beta
             MainMenu = &MainMenuBeta;
+            NewGameMenu.prevMenu = MainMenu;
             break;
         case shareware:
             // Episode 2 and 3 are handled,
