@@ -603,7 +603,7 @@ static const PageDescriptor_t LevelSelectPageDescriptor = {
 static MenuItem_t Level1Items[] = {
     {ITT_LRFUNC,  "CLASS:",             "RKFCC:",                M_RD_SelectiveClass,   0}, // КЛАСС
     {ITT_LRFUNC,  "SKILL LEVEL:",       "CKJ;YJCNM:",            M_RD_SelectiveSkill,   0}, // СЛОЖНОСТЬ
-    {ITT_LRFUNC,  "HUB:",               "{F,:",                  M_RD_SelectiveHub,     0}, // ХАБ
+    {ITT_LRFUNC,  "HUB:",               "[F,:",                  M_RD_SelectiveHub,     0}, // ХАБ
     {ITT_LRFUNC,  "MAP:",               "EHJDTYM:",              M_RD_SelectiveMap,     0}, // УРОВЕНЬ
     {ITT_TITLE,   "PLAYER",             "BUHJR",                 NULL,                  0}, // ИГРОК
     {ITT_LRFUNC,  "HEALTH:",            "PLJHJDMT:",             M_RD_SelectiveHealth,  0}, // ЗДОРОВЬЕ
@@ -1016,8 +1016,8 @@ void MN_Init(void)
                         "M_SLCTR1",
                         "M_SLCTR2",
                         // [Dasperal] Small cursor
-                        "INVGEMR1",
-                        "INVGEMR2",
+                        "M_RDGEM1",
+                        "M_RDGEM2",
                         -1, -1, -28, -14);
 
     if(vanillaparm)
