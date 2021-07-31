@@ -537,12 +537,6 @@ void R_PrecacheLevel(void);
 // R_things.c
 //
 
-// [JN] MAXVISSPRITES увеличено в 16 раз
-#define MAXVISSPRITES   192*16
-
-extern vissprite_t vissprites[MAXVISSPRITES], *vissprite_p;
-extern vissprite_t vsprsortedhead;
-
 // constant arrays used for psprite clipping and initializing clipping
 extern int negonearray[WIDESCREENWIDTH];       // [crispy] 32-bit integer math
 extern int screenheightarray[WIDESCREENWIDTH]; // [crispy] 32-bit integer math
@@ -551,8 +545,7 @@ extern int screenheightarray[WIDESCREENWIDTH]; // [crispy] 32-bit integer math
 extern int*  mfloorclip;   // [crispy] 32-bit integer math
 extern int*  mceilingclip; // [crispy] 32-bit integer math
 extern fixed_t spryscale;
-extern fixed_t sprtopscreen;
-extern fixed_t sprbotscreen;
+extern int64_t sprtopscreen, sprbotscreen;
 
 extern fixed_t pspritescale, pspriteiscale;
 
