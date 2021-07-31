@@ -990,10 +990,12 @@ void P_PlayerInSpecialSector(player_t * player)
             // Used in (R_plane):R_Drawplanes
             break;
         default:
-            I_Error(english_language ?
-                    "P_PlayerInSpecialSector: unknown special %i" :
-                    "P_PlayerInSpecialSector: неизвестная специфика %i",
-                    sector->special);
+        // [JN] Made non-fatal:
+            printf(english_language ? 
+                   "P_PlayerInSpecialSector: unknown special %i" :
+                   "P_PlayerInSpecialSector: неизвестная специфика сектора %i",
+                                                              sector->special);
+            break;
     }
 }
 
