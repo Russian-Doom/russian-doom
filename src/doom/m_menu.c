@@ -1120,7 +1120,7 @@ static Menu_t ControlsMenu = {
 
 static const PageDescriptor_t BindingsPageDescriptor = {
     4, BindingsMenuPages,
-    229, 165,
+    252, 165,
     CR_WHITE
 };
 
@@ -1292,7 +1292,7 @@ static Menu_t MouseBindingsMenu = {
 
 static const PageDescriptor_t GameplayPageDescriptor = {
     5, GameplayMenuPages,
-    229, 155,
+    252, 155,
     CR_WHITE
 };
 
@@ -1442,7 +1442,7 @@ static Menu_t Gameplay5Menu = {
 
 static const PageDescriptor_t LevelSelectPageDescriptor = {
     2, LevelSelectMenuPages,
-    240, 180,
+    240, 181,
     CR_WHITE
 };
 
@@ -1469,7 +1469,7 @@ static MenuItem_t LevelSelect1Items[] = {
 
 static Menu_t LevelSelect1Menu = {
     75, 72,
-    20,
+    21,
     "LEVEL SELECT", "DS<JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     18, LevelSelect1Items, false,
     M_RD_Draw_Level_1,
@@ -1501,7 +1501,7 @@ static MenuItem_t LevelSelect2Items[] = {
 
 static Menu_t LevelSelect2Menu = {
     75, 72,
-    20,
+    21,
     "LEVEL SELECT", "DS<JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     18, LevelSelect2Items, false,
     M_RD_Draw_Level_2,
@@ -4334,40 +4334,40 @@ void M_RD_Draw_Level_1(void)
     {
         // Skill level
         M_snprintf(num, 4, "%d", selective_skill+1);
-        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 20, CR_NONE);
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 21, CR_NONE);
 
         // Episode
         if (logical_gamemission != doom)
         {
-            RD_M_DrawTextSmallENG("N/A", 226 + wide_delta, 30, CR_DARKRED);
+            RD_M_DrawTextSmallENG("N/A", 226 + wide_delta, 31, CR_DARKRED);
         }
         else
         {
             if (gamemode == shareware)
             {
-                RD_M_DrawTextSmallENG("1", 226 + wide_delta, 30, CR_DARKRED);
+                RD_M_DrawTextSmallENG("1", 226 + wide_delta, 31, CR_DARKRED);
             }
             else
             {
                 M_snprintf(num, 4, "%d", selective_episode);
-                RD_M_DrawTextSmallENG( num, 226 + wide_delta, 30,CR_NONE);
+                RD_M_DrawTextSmallENG( num, 226 + wide_delta, 31, CR_NONE);
             }
         }
 
         // Map
         if (gamemode == pressbeta)
         {
-            RD_M_DrawTextSmallENG("1", 226 + wide_delta, 40, CR_DARKRED);
+            RD_M_DrawTextSmallENG("1", 226 + wide_delta, 41, CR_DARKRED);
         }
         else
         {
             M_snprintf(num, 4, "%d", selective_map);
-            RD_M_DrawTextSmallENG(num, 226 + wide_delta, 40, CR_NONE);
+            RD_M_DrawTextSmallENG(num, 226 + wide_delta, 41, CR_NONE);
         }
 
         // Health
         M_snprintf(num, 4, "%d", selective_health);
-        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 60,
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 61,
                               selective_health > 100 ? CR_BLUE2 :
                               selective_health >= 67 ? CR_GREEN :
                               selective_health >= 34 ? CR_YELLOW :
@@ -4375,53 +4375,53 @@ void M_RD_Draw_Level_1(void)
 
         // Armor
         M_snprintf(num, 4, "%d", selective_armor);
-        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 70,
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 71,
                               selective_armor == 0 ? CR_RED :
                               selective_armortype == 1 ? CR_GREEN :
                                                         CR_BLUE2);
 
         // Armor type
         M_snprintf(num, 4, "%d", selective_armortype);
-        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 80,
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 81,
                               selective_armortype == 1 ? CR_GREEN : CR_BLUE2);
 
         // Chainsaw
-        RD_M_DrawTextSmallENG(selective_wp_chainsaw ? "YES" : "NO", 226 + wide_delta, 100,
+        RD_M_DrawTextSmallENG(selective_wp_chainsaw ? "YES" : "NO", 226 + wide_delta, 101,
                               selective_wp_chainsaw ? CR_GREEN : CR_DARKRED);
 
         // Shotgun
-        RD_M_DrawTextSmallENG(selective_wp_shotgun ? "YES" : "NO", 226 + wide_delta, 110,
+        RD_M_DrawTextSmallENG(selective_wp_shotgun ? "YES" : "NO", 226 + wide_delta, 111,
                               selective_wp_shotgun ? CR_GREEN : CR_DARKRED);
 
         // Super Shotgun
         if (logical_gamemission == doom || gamemission == jaguar)
         {
             // Not available in Doom 1 and Jaguar
-            RD_M_DrawTextSmallENG("N/A", 226 + wide_delta, 120, CR_DARKRED);
+            RD_M_DrawTextSmallENG("N/A", 226 + wide_delta, 121, CR_DARKRED);
         }
         else
         {
-            RD_M_DrawTextSmallENG(selective_wp_supershotgun ? "YES" : "NO", 226 + wide_delta, 120,
+            RD_M_DrawTextSmallENG(selective_wp_supershotgun ? "YES" : "NO", 226 + wide_delta, 121,
                                   selective_wp_supershotgun ? CR_GREEN : CR_DARKRED);
         }
 
         // Chaingun
-        RD_M_DrawTextSmallENG(selective_wp_chaingun ? "YES" : "NO", 226 + wide_delta, 130,
+        RD_M_DrawTextSmallENG(selective_wp_chaingun ? "YES" : "NO", 226 + wide_delta, 131,
                               selective_wp_chaingun ? CR_GREEN : CR_DARKRED);
 
         // Rocket Launcher
-        RD_M_DrawTextSmallENG(selective_wp_missile ? "YES" : "NO", 226 + wide_delta, 140,
+        RD_M_DrawTextSmallENG(selective_wp_missile ? "YES" : "NO", 226 + wide_delta, 141,
                               selective_wp_missile ? CR_GREEN : CR_DARKRED);
 
         // Plasma Gun
         if (gamemode == shareware)
         {
             // Not available in shareware
-            RD_M_DrawTextSmallENG("N/A", 226 + wide_delta, 150, CR_DARKRED);
+            RD_M_DrawTextSmallENG("N/A", 226 + wide_delta, 151, CR_DARKRED);
         }
         else
         {
-            RD_M_DrawTextSmallENG(selective_wp_plasma ? "YES" : "NO", 226 + wide_delta, 150,
+            RD_M_DrawTextSmallENG(selective_wp_plasma ? "YES" : "NO", 226 + wide_delta, 151,
                                   selective_wp_plasma ? CR_GREEN : CR_DARKRED);
         }
 
@@ -4429,58 +4429,58 @@ void M_RD_Draw_Level_1(void)
         if (gamemode == shareware)
         {
             // Not available in shareware
-            RD_M_DrawTextSmallENG("N/A", 226 + wide_delta, 160, CR_DARKRED);
+            RD_M_DrawTextSmallENG("N/A", 226 + wide_delta, 161, CR_DARKRED);
         }
         else
         {
-            RD_M_DrawTextSmallENG(selective_wp_bfg ? "YES" : "NO", 226 + wide_delta, 160,
+            RD_M_DrawTextSmallENG(selective_wp_bfg ? "YES" : "NO", 226 + wide_delta, 161,
                                   selective_wp_bfg ? CR_GREEN : CR_DARKRED);
         }
 
         // Next page
-        RD_M_DrawTextSmallENG("NEXT PAGE", 75 + wide_delta, 180, CR_WHITE);
+        RD_M_DrawTextSmallENG("NEXT PAGE", 75 + wide_delta, 181, CR_WHITE);
 
         // Start game
-        RD_M_DrawTextSmallENG("START GAME", 75 + wide_delta, 190, CR_WHITE);
+        RD_M_DrawTextSmallENG("START GAME", 75 + wide_delta, 191, CR_WHITE);
     }
     else
     {
         // Сложность
         M_snprintf(num, 4, "%d", selective_skill+1);
-        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 20, CR_NONE);
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 21, CR_NONE);
 
         // Эпизод
         if (logical_gamemission != doom)
         {
-            RD_M_DrawTextSmallRUS("y*l", 226 + wide_delta, 30, CR_DARKRED);
+            RD_M_DrawTextSmallRUS("y*l", 226 + wide_delta, 31, CR_DARKRED);
         }
         else
         {
             if (gamemode == shareware)
             {
-                RD_M_DrawTextSmallENG("1", 226 + wide_delta, 30, CR_DARKRED);
+                RD_M_DrawTextSmallENG("1", 226 + wide_delta, 31, CR_DARKRED);
             }
             else
             {
                 M_snprintf(num, 4, "%d", selective_episode);
-                RD_M_DrawTextSmallENG(num, 226 + wide_delta, 30, CR_NONE);
+                RD_M_DrawTextSmallENG(num, 226 + wide_delta, 31, CR_NONE);
             }
         }
 
         // Уровень
         if (gamemode == pressbeta)
         {
-            RD_M_DrawTextSmallENG("1", 226 + wide_delta, 40, CR_DARKRED);
+            RD_M_DrawTextSmallENG("1", 226 + wide_delta, 41, CR_DARKRED);
         }
         else
         {
             M_snprintf(num, 4, "%d", selective_map);
-            RD_M_DrawTextSmallENG(num, 226 + wide_delta, 40, CR_NONE);
+            RD_M_DrawTextSmallENG(num, 226 + wide_delta, 41, CR_NONE);
         }
 
         // Здоровье
         M_snprintf(num, 4, "%d", selective_health);
-        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 60,
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 61,
                               selective_health > 100 ? CR_BLUE2 :
                               selective_health >= 67 ? CR_GREEN :
                               selective_health >= 34 ? CR_YELLOW :
@@ -4488,53 +4488,53 @@ void M_RD_Draw_Level_1(void)
 
         // Броня
         M_snprintf(num, 4, "%d", selective_armor);
-        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 70,
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 71,
                               selective_armor == 0 ? CR_RED :
                               selective_armortype == 1 ? CR_GREEN :
                               CR_BLUE2);
 
         // Тип брони
         M_snprintf(num, 4, "%d", selective_armortype);
-        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 80,
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 81,
                               selective_armortype == 1 ? CR_GREEN : CR_BLUE2);
 
         // Бензопила
-        RD_M_DrawTextSmallRUS(selective_wp_chainsaw ? "lf" : "ytn", 226 + wide_delta, 100,
+        RD_M_DrawTextSmallRUS(selective_wp_chainsaw ? "lf" : "ytn", 226 + wide_delta, 101,
                               selective_wp_chainsaw ? CR_GREEN : CR_DARKRED);
 
         // Ружье
-        RD_M_DrawTextSmallRUS(selective_wp_shotgun ? "lf" : "ytn", 226 + wide_delta, 110,
+        RD_M_DrawTextSmallRUS(selective_wp_shotgun ? "lf" : "ytn", 226 + wide_delta, 111,
                               selective_wp_shotgun ? CR_GREEN : CR_DARKRED);
 
         // Двуствольное ружье
         if (logical_gamemission == doom || gamemission == jaguar)
         {
             // Not available in Doom 1 and Jaguar
-            RD_M_DrawTextSmallRUS("y*l", 226 + wide_delta, 120, CR_DARKRED);
+            RD_M_DrawTextSmallRUS("y*l", 226 + wide_delta, 121, CR_DARKRED);
         }
         else
         {
-            RD_M_DrawTextSmallRUS(selective_wp_supershotgun ? "lf" : "ytn", 226 + wide_delta, 120,
+            RD_M_DrawTextSmallRUS(selective_wp_supershotgun ? "lf" : "ytn", 226 + wide_delta, 121,
                                   selective_wp_supershotgun ? CR_GREEN : CR_DARKRED);
         }
 
         // Пулемет
-        RD_M_DrawTextSmallRUS(selective_wp_chaingun ? "lf" : "ytn", 226 + wide_delta, 130,
+        RD_M_DrawTextSmallRUS(selective_wp_chaingun ? "lf" : "ytn", 226 + wide_delta, 131,
                               selective_wp_chaingun ? CR_GREEN : CR_DARKRED);
 
         // Ракетница
-        RD_M_DrawTextSmallRUS(selective_wp_missile ? "lf" : "ytn", 226 + wide_delta, 140,
+        RD_M_DrawTextSmallRUS(selective_wp_missile ? "lf" : "ytn", 226 + wide_delta, 141,
                               selective_wp_missile ? CR_GREEN : CR_DARKRED);
 
         // Плазменная пушка
         if (gamemode == shareware)
         {
             // Not available in shareware
-            RD_M_DrawTextSmallRUS("y*l", 226 + wide_delta, 150, CR_DARKRED);
+            RD_M_DrawTextSmallRUS("y*l", 226 + wide_delta, 151, CR_DARKRED);
         }
         else
         {
-            RD_M_DrawTextSmallRUS(selective_wp_plasma ? "lf" : "ytn", 226 + wide_delta, 150,
+            RD_M_DrawTextSmallRUS(selective_wp_plasma ? "lf" : "ytn", 226 + wide_delta, 151,
                                   selective_wp_plasma ? CR_GREEN : CR_DARKRED);
         }
 
@@ -4542,19 +4542,19 @@ void M_RD_Draw_Level_1(void)
         if (gamemode == shareware)
         {
             // Not available in shareware
-            RD_M_DrawTextSmallRUS("y*l", 226 + wide_delta, 160, CR_DARKRED);
+            RD_M_DrawTextSmallRUS("y*l", 226 + wide_delta, 161, CR_DARKRED);
         }
         else
         {
-            RD_M_DrawTextSmallRUS(selective_wp_bfg ? "lf" : "ytn", 226 + wide_delta, 160,
+            RD_M_DrawTextSmallRUS(selective_wp_bfg ? "lf" : "ytn", 226 + wide_delta, 161,
                                   selective_wp_bfg ? CR_GREEN : CR_DARKRED);
         }
 
         // Следующая страница
-        RD_M_DrawTextSmallRUS("cktle.ofz cnhfybwf", 72 + wide_delta, 180, CR_WHITE);
+        RD_M_DrawTextSmallRUS("cktle.ofz cnhfybwf", 72 + wide_delta, 181, CR_WHITE);
 
         // Начать игру
-        RD_M_DrawTextSmallRUS("yfxfnm buhe", 72 + wide_delta, 190, CR_WHITE);
+        RD_M_DrawTextSmallRUS("yfxfnm buhe", 72 + wide_delta, 191, CR_WHITE);
     }
 }
 
@@ -4569,12 +4569,12 @@ void M_RD_Draw_Level_2(void)
     if (english_language)
     {
         // Backpack
-        RD_M_DrawTextSmallENG(selective_backpack ? "YES" : "NO", 226 + wide_delta, 20,
+        RD_M_DrawTextSmallENG(selective_backpack ? "YES" : "NO", 226 + wide_delta, 21,
                               selective_backpack ? CR_GREEN : CR_DARKRED);
 
         // Bullets
         M_snprintf(num, 4, "%d", selective_ammo_0);
-        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 30,
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 31,
                               selective_ammo_0 >   200 ? CR_BLUE2 :
                               selective_ammo_0 >=  100 ? CR_GREEN :
                               selective_ammo_0 >=  50  ? CR_YELLOW :
@@ -4582,7 +4582,7 @@ void M_RD_Draw_Level_2(void)
 
         // Shells
         M_snprintf(num, 4, "%d", selective_ammo_1);
-        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 40,
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 41,
                               selective_ammo_1 >   50 ? CR_BLUE2 :
                               selective_ammo_1 >=  25 ? CR_GREEN :
                               selective_ammo_1 >=  12 ? CR_YELLOW :
@@ -4590,7 +4590,7 @@ void M_RD_Draw_Level_2(void)
 
         // Rockets
         M_snprintf(num, 4, "%d", selective_ammo_3);
-        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 50,
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 51,
                               selective_ammo_3 >   50 ? CR_BLUE2 :
                               selective_ammo_3 >=  25 ? CR_GREEN :
                               selective_ammo_3 >=  12 ? CR_YELLOW :
@@ -4598,60 +4598,60 @@ void M_RD_Draw_Level_2(void)
 
         // Cells
         M_snprintf(num, 4, "%d", selective_ammo_2);
-        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 60,
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 61,
                               selective_ammo_2 >  300 ? CR_BLUE2 :
                               selective_ammo_2 >= 150 ? CR_GREEN :
                               selective_ammo_2 >=  75 ? CR_YELLOW :
                               CR_RED);
 
         // Blue keycard
-        RD_M_DrawTextSmallENG(selective_key_0 ? "YES" : "NO", 226 + wide_delta, 80,
+        RD_M_DrawTextSmallENG(selective_key_0 ? "YES" : "NO", 226 + wide_delta, 81,
                               selective_key_0 ? CR_GREEN : CR_DARKRED);
 
         // Yellow keycard
-        RD_M_DrawTextSmallENG(selective_key_1 ? "YES" : "NO", 226 + wide_delta, 90,
+        RD_M_DrawTextSmallENG(selective_key_1 ? "YES" : "NO", 226 + wide_delta, 91,
                               selective_key_1 ? CR_GREEN : CR_DARKRED);
 
         // Red keycard
-        RD_M_DrawTextSmallENG(selective_key_2 ? "YES" : "NO", 226 + wide_delta, 100,
+        RD_M_DrawTextSmallENG(selective_key_2 ? "YES" : "NO", 226 + wide_delta, 101,
                                selective_key_2 ? CR_GREEN : CR_DARKRED);
 
         // Blue skull key
-        RD_M_DrawTextSmallENG(selective_key_3 ? "YES" : "NO", 226 + wide_delta, 110,
+        RD_M_DrawTextSmallENG(selective_key_3 ? "YES" : "NO", 226 + wide_delta, 111,
                                selective_key_3 ? CR_GREEN : CR_DARKRED);
 
         // Yellow skull key
-        RD_M_DrawTextSmallENG(selective_key_4 ? "YES" : "NO", 226 + wide_delta, 120,
+        RD_M_DrawTextSmallENG(selective_key_4 ? "YES" : "NO", 226 + wide_delta, 121,
                                selective_key_4 ? CR_GREEN : CR_DARKRED);
 
         // Red skull key
-        RD_M_DrawTextSmallENG(selective_key_5 ? "YES" : "NO", 226 + wide_delta, 130,
+        RD_M_DrawTextSmallENG(selective_key_5 ? "YES" : "NO", 226 + wide_delta, 131,
                                selective_key_5 ? CR_GREEN : CR_DARKRED);
 
         // Fast monsters
-        RD_M_DrawTextSmallENG(selective_fast ? "YES" : "NO", 226 + wide_delta, 150,
+        RD_M_DrawTextSmallENG(selective_fast ? "YES" : "NO", 226 + wide_delta, 151,
                                selective_fast ? CR_GREEN : CR_DARKRED);
 
         // Respawning monsters
-        RD_M_DrawTextSmallENG(selective_respawn ? "YES" : "NO", 226 + wide_delta, 160,
+        RD_M_DrawTextSmallENG(selective_respawn ? "YES" : "NO", 226 + wide_delta, 161,
                                selective_respawn ? CR_GREEN : CR_DARKRED);
 
         // Previous page
-        RD_M_DrawTextSmallENG("PREVIOUS PAGE", 75 + wide_delta, 180, CR_WHITE);
+        RD_M_DrawTextSmallENG("PREVIOUS PAGE", 75 + wide_delta, 181, CR_WHITE);
 
         // Start game
-        RD_M_DrawTextSmallENG("START GAME", 75 + wide_delta, 190, CR_WHITE);
+        RD_M_DrawTextSmallENG("START GAME", 75 + wide_delta, 191, CR_WHITE);
     }
     else
     {
 
         // Рюкзак
-        RD_M_DrawTextSmallRUS(selective_backpack ? "lf" : "ytn", 226 + wide_delta, 20,
+        RD_M_DrawTextSmallRUS(selective_backpack ? "lf" : "ytn", 226 + wide_delta, 21,
                               selective_backpack ? CR_GREEN : CR_DARKRED);
 
         // Пули
         M_snprintf(num, 4, "%d", selective_ammo_0);
-        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 30,
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 31,
                               selective_ammo_0 >  200 ? CR_BLUE2 :
                               selective_ammo_0 >= 100 ? CR_GREEN :
                               selective_ammo_0 >= 50  ? CR_YELLOW :
@@ -4659,7 +4659,7 @@ void M_RD_Draw_Level_2(void)
 
         // Дробь
         M_snprintf(num, 4, "%d", selective_ammo_1);
-        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 40,
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 41,
                               selective_ammo_1 >  50 ? CR_BLUE2 :
                               selective_ammo_1 >= 25 ? CR_GREEN :
                               selective_ammo_1 >= 12 ? CR_YELLOW :
@@ -4667,7 +4667,7 @@ void M_RD_Draw_Level_2(void)
 
         // Ракеты
         M_snprintf(num, 4, "%d", selective_ammo_3);
-        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 50,
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 51,
                               selective_ammo_3 >  50 ? CR_BLUE2 :
                               selective_ammo_3 >= 25 ? CR_GREEN :
                               selective_ammo_3 >= 12 ? CR_YELLOW :
@@ -4675,49 +4675,49 @@ void M_RD_Draw_Level_2(void)
 
         // Энергия
         M_snprintf(num, 4, "%d", selective_ammo_2);
-        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 60,
+        RD_M_DrawTextSmallENG(num, 226 + wide_delta, 61,
                               selective_ammo_2 >  300 ? CR_BLUE2 :
                               selective_ammo_2 >= 150 ? CR_GREEN :
                               selective_ammo_2 >=  75 ? CR_YELLOW :
                                                        CR_RED);
 
         // Синяя ключ-карта
-        RD_M_DrawTextSmallRUS(selective_key_0 ? "lf" : "ytn", 226 + wide_delta, 80,
+        RD_M_DrawTextSmallRUS(selective_key_0 ? "lf" : "ytn", 226 + wide_delta, 81,
                               selective_key_0 ? CR_GREEN : CR_DARKRED);
 
         // Желтая ключ-карта
-        RD_M_DrawTextSmallRUS(selective_key_1 ? "lf" : "ytn", 226 + wide_delta, 90,
+        RD_M_DrawTextSmallRUS(selective_key_1 ? "lf" : "ytn", 226 + wide_delta, 91,
                               selective_key_1 ? CR_GREEN : CR_DARKRED);
 
         // Красная ключ-карта
-        RD_M_DrawTextSmallRUS(selective_key_2 ? "lf" : "ytn", 226 + wide_delta, 100,
+        RD_M_DrawTextSmallRUS(selective_key_2 ? "lf" : "ytn", 226 + wide_delta, 101,
                               selective_key_2 ? CR_GREEN : CR_DARKRED);
 
         // Синий ключ-череп
-        RD_M_DrawTextSmallRUS(selective_key_3 ? "lf" : "ytn", 226 + wide_delta, 110,
+        RD_M_DrawTextSmallRUS(selective_key_3 ? "lf" : "ytn", 226 + wide_delta, 111,
                               selective_key_3 ? CR_GREEN : CR_DARKRED);
 
         // Желтый ключ-череп
-        RD_M_DrawTextSmallRUS(selective_key_4 ? "lf" : "ytn", 226 + wide_delta, 120,
+        RD_M_DrawTextSmallRUS(selective_key_4 ? "lf" : "ytn", 226 + wide_delta, 121,
                               selective_key_4 ? CR_GREEN : CR_DARKRED);
 
         // Красный ключ-череп
-        RD_M_DrawTextSmallRUS(selective_key_5 ? "lf" : "ytn", 226 + wide_delta, 130,
+        RD_M_DrawTextSmallRUS(selective_key_5 ? "lf" : "ytn", 226 + wide_delta, 131,
                               selective_key_5 ? CR_GREEN : CR_DARKRED);
 
         // Ускоренные
-        RD_M_DrawTextSmallRUS(selective_fast ? "lf" : "ytn", 226 + wide_delta, 150,
+        RD_M_DrawTextSmallRUS(selective_fast ? "lf" : "ytn", 226 + wide_delta, 151,
                               selective_fast ? CR_GREEN : CR_DARKRED);
 
         // Воскрешающиеся
-        RD_M_DrawTextSmallRUS(selective_respawn ? "lf" : "ytn", 226 + wide_delta, 160,
+        RD_M_DrawTextSmallRUS(selective_respawn ? "lf" : "ytn", 226 + wide_delta, 161,
                               selective_respawn ? CR_GREEN : CR_DARKRED);
 
         // Предыдущая страница
-        RD_M_DrawTextSmallRUS("ghtlsleofz cnhfybwf", 72 + wide_delta, 180, CR_WHITE);
+        RD_M_DrawTextSmallRUS("ghtlsleofz cnhfybwf", 72 + wide_delta, 181, CR_WHITE);
 
         // Начать игру
-        RD_M_DrawTextSmallRUS("yfxfnm buhe", 72 + wide_delta, 190, CR_WHITE);
+        RD_M_DrawTextSmallRUS("yfxfnm buhe", 72 + wide_delta, 191, CR_WHITE);
     }
 }
 
