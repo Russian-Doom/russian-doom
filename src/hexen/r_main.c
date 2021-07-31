@@ -87,192 +87,231 @@ void (*transcolfunc) (void);
 void (*spanfunc) (void);
 
 /*
-===================
-=
-= R_AddPointToBox
-=
-===================
-*/
-
-/*
-void R_AddPointToBox (int x, int y, fixed_t *box)
-{
-	if (x< box[BOXLEFT])
-		box[BOXLEFT] = x;
-	if (x> box[BOXRIGHT])
-		box[BOXRIGHT] = x;
-	if (y< box[BOXBOTTOM])
-		box[BOXBOTTOM] = y;
-	if (y> box[BOXTOP])
-		box[BOXTOP] = y;
-}
-*/
-
-
-/*
-===============================================================================
+================================================================================
 =
 = R_PointOnSide
 =
-= Returns side 0 (front) or 1 (back)
-===============================================================================
+= Traverse BSP (sub) tree, check point against partition plane.
+= Returns side 0 (front) or 1 (back).
+=
+= [JN] killough 5/2/98: reformatted
+=
+================================================================================
 */
 
 int R_PointOnSide(fixed_t x, fixed_t y, node_t * node)
 {
-    fixed_t dx, dy;
-    fixed_t left, right;
-
     if (!node->dx)
-    {
-        if (x <= node->x)
-            return node->dy > 0;
-        return node->dy < 0;
-    }
+    return x <= node->x ? node->dy > 0 : node->dy < 0;
+
     if (!node->dy)
-    {
-        if (y <= node->y)
-            return node->dx < 0;
-        return node->dx > 0;
-    }
+    return y <= node->y ? node->dx < 0 : node->dx > 0;
 
-    dx = (x - node->x);
-    dy = (y - node->y);
+    x -= node->x;
+    y -= node->y;
 
-// try to quickly decide by looking at sign bits
-    if ((node->dy ^ node->dx ^ dx ^ dy) & 0x80000000)
-    {
-        if ((node->dy ^ dx) & 0x80000000)
-            return 1;           // (left is negative)
-        return 0;
-    }
+    // Try to quickly decide by looking at sign bits.
+    if ((node->dy ^ node->dx ^ x ^ y) < 0)
+    return (node->dy ^ x) < 0;  // (left is negative)
 
-    left = FixedMul(node->dy >> FRACBITS, dx);
-    right = FixedMul(dy, node->dx >> FRACBITS);
-
-    if (right < left)
-        return 0;               // front side
-    return 1;                   // back side
+    return FixedMul(y, node->dx>>FRACBITS) >= FixedMul(node->dy>>FRACBITS, x);		
 }
-
-
-int R_PointOnSegSide(fixed_t x, fixed_t y, seg_t * line)
-{
-    fixed_t lx, ly;
-    fixed_t ldx, ldy;
-    fixed_t dx, dy;
-    fixed_t left, right;
-
-    lx = line->v1->x;
-    ly = line->v1->y;
-
-    ldx = line->v2->x - lx;
-    ldy = line->v2->y - ly;
-
-    if (!ldx)
-    {
-        if (x <= lx)
-            return ldy > 0;
-        return ldy < 0;
-    }
-    if (!ldy)
-    {
-        if (y <= ly)
-            return ldx < 0;
-        return ldx > 0;
-    }
-
-    dx = (x - lx);
-    dy = (y - ly);
-
-// try to quickly decide by looking at sign bits
-    if ((ldy ^ ldx ^ dx ^ dy) & 0x80000000)
-    {
-        if ((ldy ^ dx) & 0x80000000)
-            return 1;           // (left is negative)
-        return 0;
-    }
-
-    left = FixedMul(ldy >> FRACBITS, dx);
-    right = FixedMul(dy, ldx >> FRACBITS);
-
-    if (right < left)
-        return 0;               // front side
-    return 1;                   // back side
-}
-
 
 /*
-===============================================================================
+================================================================================
 =
-= R_PointToAngle
+= R_PointOnSegSide
 =
-===============================================================================
+= [JN] killough 5/2/98: reformatted
+=
+================================================================================
 */
 
-#define	DBITS		(FRACBITS-SLOPEBITS)
-
-angle_t R_PointToAngle(fixed_t x, fixed_t y)
+int R_PointOnSegSide (fixed_t x, fixed_t y, seg_t *line)
 {
+    fixed_t lx = line->v1->x;
+    fixed_t ly = line->v1->y;
+    fixed_t ldx = line->v2->x - lx;
+    fixed_t ldy = line->v2->y - ly;
+
+    if (!ldx)
+    return x <= lx ? ldy > 0 : ldy < 0;
+
+    if (!ldy)
+    return y <= ly ? ldx < 0 : ldx > 0;
+
+    x -= lx;
+    y -= ly;
+
+    // Try to quickly decide by looking at sign bits.
+    if ((ldy ^ ldx ^ x ^ y) < 0)
+    return (ldy ^ x) < 0;   // (left is negative)
+
+    return FixedMul(y, ldx>>FRACBITS) >= FixedMul(ldy>>FRACBITS, x);	
+}
+
+/*
+================================================================================
+=
+= R_PointToAngleSlope
+=
+= To get a global angle from cartesian coordinates, the coordinates are flipped
+= until they are in the first octant of the coordinate system, then the y (<=x)
+= is scaled and divided by x to get a tangent (slope) value which is looked up 
+= in the tantoangle[] table.
+
+// [crispy] turned into a general R_PointToAngle() flavor
+// called with either slope_div = SlopeDivCrispy() from R_PointToAngleCrispy()
+// or slope_div = SlopeDiv() else
+================================================================================
+*/
+
+angle_t R_PointToAngleSlope (fixed_t x, fixed_t y, int (*slope_div) (unsigned int num, unsigned int den))
+{	
     x -= viewx;
     y -= viewy;
-    if ((!x) && (!y))
-        return 0;
-    if (x >= 0)
-    {                           // x >=0
-        if (y >= 0)
-        {                       // y>= 0
-            if (x > y)
-                return tantoangle[SlopeDiv(y, x)];      // octant 0
-            else
-                return ANG90 - 1 - tantoangle[SlopeDiv(x, y)];  // octant 1
-        }
-        else
-        {                       // y<0
-            y = -y;
-            if (x > y)
-                return -tantoangle[SlopeDiv(y, x)];     // octant 8
-            else
-                return ANG270 + tantoangle[SlopeDiv(x, y)];     // octant 7
-        }
+    
+    if ( (!x) && (!y) )
+	return 0;
+
+    if (x>= 0)
+    {
+	// x >=0
+	if (y>= 0)
+	{
+	    // y>= 0
+
+	    if (x>y)
+	    {
+		// octant 0
+		return tantoangle[slope_div(y,x)];
+	    }
+	    else
+	    {
+		// octant 1
+		return ANG90-1-tantoangle[slope_div(x,y)];
+	    }
+	}
+	else
+	{
+	    // y<0
+	    y = -y;
+
+	    if (x>y)
+	    {
+		// octant 8
+		return -tantoangle[slope_div(y,x)];
+	    }
+	    else
+	    {
+		// octant 7
+		return ANG270+tantoangle[slope_div(x,y)];
+	    }
+	}
     }
     else
-    {                           // x<0
-        x = -x;
-        if (y >= 0)
-        {                       // y>= 0
-            if (x > y)
-                return ANG180 - 1 - tantoangle[SlopeDiv(y, x)]; // octant 3
-            else
-                return ANG90 + tantoangle[SlopeDiv(x, y)];      // octant 2
-        }
-        else
-        {                       // y<0
-            y = -y;
-            if (x > y)
-                return ANG180 + tantoangle[SlopeDiv(y, x)];     // octant 4
-            else
-                return ANG270 - 1 - tantoangle[SlopeDiv(x, y)]; // octant 5
-        }
-    }
+    {
+	// x<0
+	x = -x;
 
+	if (y>= 0)
+	{
+	    // y>= 0
+	    if (x>y)
+	    {
+		// octant 3
+		return ANG180-1-tantoangle[slope_div(y,x)];
+	    }
+	    else
+	    {
+		// octant 2
+		return ANG90+ tantoangle[slope_div(x,y)];
+	    }
+	}
+	else
+	{
+	    // y<0
+	    y = -y;
+
+	    if (x>y)
+	    {
+		// octant 4
+		return ANG180+tantoangle[slope_div(y,x)];
+	    }
+	    else
+	    {
+		 // octant 5
+		return ANG270-1-tantoangle[slope_div(x,y)];
+	    }
+	}
+    }
     return 0;
 }
 
+/*
+================================================================================
+=
+= R_PointToAngle
+=
+================================================================================
+*/
 
-angle_t R_PointToAngle2(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2)
+angle_t R_PointToAngle (fixed_t x, fixed_t y)
+{
+    return R_PointToAngleSlope (x, y, SlopeDiv);
+}
+
+/*
+================================================================================
+=
+= R_PointToAngle
+=
+= [crispy] overflow-safe R_PointToAngle() flavor
+= called only from R_CheckBBox(), R_AddLine() and P_SegLengths()
+=
+================================================================================
+*/
+
+angle_t R_PointToAngleCrispy (fixed_t x, fixed_t y)
+{
+    // [crispy] fix overflows for very long distances
+    int64_t y_viewy = (int64_t)y - viewy;
+    int64_t x_viewx = (int64_t)x - viewx;
+
+    // [crispy] the worst that could happen is e.g. INT_MIN-INT_MAX = 2*INT_MIN
+    if (x_viewx < INT_MIN || x_viewx > INT_MAX ||
+        y_viewy < INT_MIN || y_viewy > INT_MAX)
+    {
+	// [crispy] preserving the angle by halfing the distance in both directions
+	x = x_viewx / 2 + viewx;
+	y = y_viewy / 2 + viewy;
+    }
+
+    return R_PointToAngleSlope (x, y, SlopeDivCrispy);
+}
+
+/*
+================================================================================
+=
+= R_PointToAngle2
+=
+================================================================================
+*/
+
+angle_t R_PointToAngle2 (fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2)
 {
     viewx = x1;
     viewy = y1;
-    return R_PointToAngle(x2, y2);
-}
 
+    // [crispy] R_PointToAngle2() is never called during rendering
+    return R_PointToAngleSlope (x2, y2, SlopeDiv);
+}
 
 fixed_t R_PointToDist(fixed_t x, fixed_t y)
 {
     int angle;
     fixed_t dx, dy, temp;
-    fixed_t dist;
+    fixed_t dist, frac;
 
     dx = abs(x - viewx);
     dy = abs(y - viewy);
@@ -284,8 +323,17 @@ fixed_t R_PointToDist(fixed_t x, fixed_t y)
         dy = temp;
     }
 
-    angle =
-        (tantoangle[FixedDiv(dy, dx) >> DBITS] + ANG90) >> ANGLETOFINESHIFT;
+    // [JN] Fix crashes in udm1.wad
+    if (dx != 0)
+    {
+        frac = FixedDiv(dy, dx);
+    }
+    else
+    {
+        frac = 0;
+    }
+
+    angle = (tantoangle[frac>>DBITS]+ANG90) >> ANGLETOFINESHIFT;
 
     dist = FixedDiv(dx, finesine[angle]);       // use as cosine
 

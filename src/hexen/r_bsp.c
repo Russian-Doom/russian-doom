@@ -91,15 +91,11 @@ void R_ClipSolidWallSegment(int first, int last)
         if (last < start->first - 1)
         {                       // post is entirely visible (above start), so insert a new clippost
             R_StoreWallRange(first, last);
-            next = newend;
-            newend++;
-            while (next != start)
-            {
-                *next = *(next - 1);
-                next--;
-            }
-            next->first = first;
-            next->last = last;
+
+            // [JN] 1/11/98 killough: performance tuning using fast memmove
+            memmove(start+1,start,(++newend-start)*sizeof(*start));
+            start->first = first;
+            start->last = last;
             return;
         }
 
@@ -252,8 +248,8 @@ void R_AddLine(seg_t * line)
 
 // OPTIMIZE: quickly reject orthogonal back sides
 
-    angle1 = R_PointToAngle(line->v1->x, line->v1->y);
-    angle2 = R_PointToAngle(line->v2->x, line->v2->y);
+    angle1 = R_PointToAngleCrispy(line->v1->x, line->v1->y);
+    angle2 = R_PointToAngleCrispy(line->v2->x, line->v2->y);
 
 //
 // clip to view edges
@@ -290,8 +286,13 @@ void R_AddLine(seg_t * line)
     angle2 = (angle2 + ANG90) >> ANGLETOFINESHIFT;
     x1 = viewangletox[angle1];
     x2 = viewangletox[angle2];
-    if (x1 == x2)
-        return;                 // does not cross a pixel
+
+    // does not cross a pixel
+    if (x1 >= x2)
+    {
+        // [JN] killough 1/31/98 -- change == to >= for robustness
+        return;
+    }
 
     backsector = line->backsector;
 
@@ -391,8 +392,8 @@ boolean R_CheckBBox(fixed_t * bspcoord)
 //
 // check clip list for an open space
 //
-    angle1 = R_PointToAngle(x1, y1) - viewangle;
-    angle2 = R_PointToAngle(x2, y2) - viewangle;
+    angle1 = R_PointToAngleCrispy(x1, y1) - viewangle;
+    angle2 = R_PointToAngleCrispy(x2, y2) - viewangle;
 
     span = angle1 - angle2;
     if (span >= ANG180)
@@ -519,38 +520,38 @@ void R_Subsector(int num)
 	*/
 }
 
-
 /*
-===============================================================================
+================================================================================
 =
 = RenderBSPNode
 =
-===============================================================================
+= Renders all subsectors below a given node, traversing subtree recursively.
+= Just call with BSP root.
+=
+= killough 5/2/98: reformatted, removed tail recursion
+=
+================================================================================
 */
 
-void R_RenderBSPNode(int bspnum)
+void R_RenderBSPNode (int bspnum)
 {
-    node_t *bsp;
-    int side;
-
-    if (bspnum & NF_SUBSECTOR)
+    while (!(bspnum & NF_SUBSECTOR))  // Found a subsector?
     {
-        if (bspnum == -1)
-            R_Subsector(0);
-        else
-            R_Subsector(bspnum & (~NF_SUBSECTOR));
+        node_t *bsp = &nodes[bspnum];
+
+        // Decide which side the view point is on.
+        int side = R_PointOnSide(viewx, viewy, bsp);
+
+        // Recursively divide front space.
+        R_RenderBSPNode(bsp->children[side]);
+
+        // Possibly divide back space.
+
+        if (!R_CheckBBox(bsp->bbox[side^=1]))
         return;
+
+        bspnum = bsp->children[side];
     }
 
-    bsp = &nodes[bspnum];
-
-//
-// decide which side the view point is on
-//
-    side = R_PointOnSide(viewx, viewy, bsp);
-
-    R_RenderBSPNode(bsp->children[side]);       // recursively divide front space
-
-    if (R_CheckBBox(bsp->bbox[side ^ 1]))       // possibly divide back space
-        R_RenderBSPNode(bsp->children[side ^ 1]);
+    R_Subsector(bspnum == -1 ? 0 : bspnum & ~NF_SUBSECTOR);
 }
