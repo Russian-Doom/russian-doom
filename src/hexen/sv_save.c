@@ -2105,6 +2105,15 @@ void SV_LoadGame(int slot)
         players[i].mo = mobj;
         if (i == consoleplayer)
         {
+            // [Dasperal] Init inv_ptr
+            for(int j = 0; j < players[i].inventorySlotNum; j++)
+            {
+                if(players[i].inventory[j].type == players[i].readyArtifact)
+                {
+                    inv_ptr = j;
+                    break;
+                }
+            }
             players[i].readyArtifact = players[i].inventory[inv_ptr].type;
         }
     }

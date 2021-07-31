@@ -1134,11 +1134,20 @@ void G_Ticker(void)
                 G_DoLoadGame();
                 // [JN] Reset looking direction if game is loaded w/o mouse look
                 if (!mlook)
-                players[consoleplayer].lookdir = 0;
+                    players[consoleplayer].lookdir = 0;
                 // [JN] Reset counters for missing key fading effects.
                 players[consoleplayer].yellowkeyTics = 0;
                 players[consoleplayer].greenkeyTics = 0;
                 players[consoleplayer].bluekeyTics = 0;
+                // [Dasperal] Init inv_ptr
+                for(i = 0; i < players[consoleplayer].inventorySlotNum; i++)
+                {
+                    if(players[consoleplayer].inventory[i].type == players[consoleplayer].readyArtifact)
+                    {
+                        inv_ptr = i;
+                        break;
+                    }
+                }
                 break;
             case ga_savegame:
                 G_DoSaveGame();
