@@ -242,8 +242,9 @@ typedef byte lighttable_t;      // this could be wider for >8 bit display
 // [JN] MAXOPENINGS увеличено в 4 раза
 #define MAXOPENINGS             WIDESCREENWIDTH*64*4
 
-typedef struct
+typedef struct visplane_s
 {
+    struct visplane_s *next; // [JN] Next visplane in hash chain -- killough
     fixed_t height;
     int picnum;
     int lightlevel;

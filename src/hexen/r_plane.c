@@ -16,30 +16,12 @@
 //
 
 
-
-// HEADER FILES ------------------------------------------------------------
-
 #include "h2def.h"
 #include "i_system.h"
 #include "r_local.h"
 
-// MACROS ------------------------------------------------------------------
 
-// TYPES -------------------------------------------------------------------
-
-// EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
-
-// PUBLIC FUNCTION PROTOTYPES ----------------------------------------------
-
-// PRIVATE FUNCTION PROTOTYPES ---------------------------------------------
-
-// EXTERNAL DATA DECLARATIONS ----------------------------------------------
-
-extern fixed_t Sky1ScrollDelta;
-extern fixed_t Sky2ScrollDelta;
-
-// PUBLIC DATA DEFINITIONS -------------------------------------------------
-
+// Sky mapping
 int Sky1Texture;
 int Sky2Texture;
 fixed_t Sky1ColumnOffset;
@@ -48,13 +30,22 @@ int skyflatnum;
 int skytexturemid;
 fixed_t skyiscale;
 boolean DoubleSky;
-planefunction_t floorfunc, ceilingfunc;
+extern fixed_t Sky1ScrollDelta;
+extern fixed_t Sky2ScrollDelta;
 
 // Opening
-visplane_t *visplanes = NULL;
-visplane_t *lastvisplane;
+static visplane_t *visplanes[MAXVISPLANES]; // [JN] killough
+static visplane_t *freetail;                // [JN] killough
+static visplane_t **freehead = &freetail;   // [JN] killough
 visplane_t *floorplane, *ceilingplane;
-static int numvisplanes;
+planefunction_t floorfunc, ceilingfunc;
+
+// [JN] killough -- hash function for visplanes
+// Empirically verified to be fairly uniform:
+
+#define visplane_hash(picnum, lightlevel, height) \
+    ((unsigned int)((picnum) * 3 + (lightlevel) + (height) * 7) & (MAXVISPLANES - 1))
+
 int  openings[MAXOPENINGS]; // [crispy] 32-bit integer math
 int* lastopening;           // [crispy] 32-bit integer math
 
@@ -71,7 +62,7 @@ int spanstop[SCREENHEIGHT];
 // Texture mapping
 lighttable_t **planezlight;
 fixed_t planeheight;
-fixed_t* yslope;
+fixed_t *yslope;
 fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
 fixed_t distscale[WIDESCREENWIDTH];
 fixed_t basexscale, baseyscale;
@@ -80,9 +71,6 @@ fixed_t cacheddistance[SCREENHEIGHT];
 fixed_t cachedxstep[SCREENHEIGHT];
 fixed_t cachedystep[SCREENHEIGHT];
 
-// PRIVATE DATA DEFINITIONS ------------------------------------------------
-
-// CODE --------------------------------------------------------------------
 
 //==========================================================================
 //
@@ -141,12 +129,9 @@ void R_InitPlanes(void)
 
 void R_MapPlane(int y, int x1, int x2)
 {
-    // [crispy] see below
-    // angle_t angle;
-    fixed_t distance;
-    // length;
-    unsigned index;
-    int dx, dy;
+    fixed_t   distance;
+    unsigned  index;
+    int       dx, dy;
 
 #ifdef RANGECHECK
     if (x2 < x1 || x1 < 0 || x2 >= viewwidth || (unsigned) y > viewheight)
@@ -160,12 +145,6 @@ void R_MapPlane(int y, int x1, int x2)
 
     // [crispy] visplanes with the same flats now match up far better than before
     // adapted from prboom-plus/src/r_plane.c:191-239, translated to fixed-point math
-
-    // [crispy] avoid division by zero if (y == centery)
-    if (y == centery)
-    {
-        return;
-    }
 
     if (!(dy = abs(centery - y)))
     {
@@ -223,49 +202,55 @@ void R_MapPlane(int y, int x1, int x2)
 void R_ClearPlanes(void)
 {
     int i;
-    angle_t angle;
+    const angle_t angle = (viewangle - ANG90) >> ANGLETOFINESHIFT; // left to right mapping
 
-    // Opening / clipping determination
+    // opening / clipping determination
     for (i = 0; i < viewwidth; i++)
     {
         floorclip[i] = viewheight;
         ceilingclip[i] = -1;
     }
 
-    lastvisplane = visplanes;
+    for (int i = 0; i < MAXVISPLANES; i++)
+        for (*freehead = visplanes[i], visplanes[i] = NULL; *freehead; )
+            freehead = &(*freehead)->next;
+
     lastopening = openings;
 
-    // Texture calculation
+    // texture calculation
     memset(cachedheight, 0, sizeof(cachedheight));
-    angle = (viewangle - ANG90) >> ANGLETOFINESHIFT;    // left to right mapping
-    // Scale will be unit scale at SCREENWIDTH/2 distance
+
+    // scale will be unit scale at SCREENWIDTH/2 distance
     basexscale = FixedDiv(finecosine[angle], centerxfrac);
     baseyscale = -FixedDiv(finesine[angle], centerxfrac);
 }
 
-// [crispy] remove MAXVISPLANES Vanilla limit
-void R_RaiseVisplanes (visplane_t** vp)
+/*
+================================================================================
+=
+= new_visplane
+=
+= [crispy] remove MAXVISPLANES Vanilla limit
+= New function, by Lee Killough
+=
+================================================================================
+*/
+
+static visplane_t *new_visplane(unsigned int hash)
 {
-    if (lastvisplane - visplanes == numvisplanes)
+    visplane_t *check = freetail;
+
+    if (!check)
     {
-        int numvisplanes_old = numvisplanes;
-        visplane_t* visplanes_old = visplanes;
-    
-        if (numvisplanes_old == MAXVISPLANES)
-            printf(english_language ?
-                   "R_FindPlane: Hit MAXVISPLANES (%d) Vanilla limit.\n" :
-                   "R_FindPlane: достигнут лимиn MAXVISPLANES (%d).\n",
-                   MAXVISPLANES);
-    
-        numvisplanes = numvisplanes ? 2 * numvisplanes : MAXVISPLANES;
-        visplanes = I_Realloc(visplanes, numvisplanes * sizeof(*visplanes));
-        lastvisplane = visplanes + numvisplanes_old;
-        floorplane = visplanes + (floorplane - visplanes_old);
-        ceilingplane = visplanes + (ceilingplane - visplanes_old);
-    
-        if (vp)
-        *vp = visplanes + (*vp - visplanes_old);
+        check = calloc(1, sizeof(*check));
     }
+    else if (!(freetail = freetail->next))
+    {
+        freehead = &freetail;
+    }
+    check->next = visplanes[hash];
+    visplanes[hash] = check;
+    return check;
 }
 
 //==========================================================================
@@ -274,46 +259,63 @@ void R_RaiseVisplanes (visplane_t** vp)
 //
 //==========================================================================
 
-visplane_t *R_FindPlane(fixed_t height, int picnum,
-                        int lightlevel, int special)
+visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel, int special)
 {
-    visplane_t *check;
-
-    if (special < 150)
-    {                           // Don't let low specials affect search
-        special = 0;
-    }
+    visplane_t   *check;
+    unsigned int  hash;
 
     if (picnum == skyflatnum)
-    {                           // All skies map together
+    {
+        // all skies map together
         height = 0;
         lightlevel = 0;
     }
 
-    for (check = visplanes; check < lastvisplane; check++)
-    {
-        if (height == check->height
-            && picnum == check->picnum
-            && lightlevel == check->lightlevel && special == check->special)
-            break;
-    }
+    // New visplane algorithm uses hash table -- killough
+    hash = visplane_hash(picnum, lightlevel, height);
 
-    if (check < lastvisplane)
-    {
-        return (check);
-    }
+    for (check = visplanes[hash]; check; check = check->next)
+        if (height == check->height && picnum == check->picnum
+        && lightlevel == check->lightlevel && special == check->special)
+            return check;
 
-    R_RaiseVisplanes(&check);
+    check = new_visplane(hash);
 
-    lastvisplane++;
     check->height = height;
     check->picnum = picnum;
     check->lightlevel = lightlevel;
     check->special = special;
     check->minx = screenwidth;
     check->maxx = -1;
+
     memset(check->top, 0xff, sizeof(check->top));
+
     return (check);
+}
+
+/*
+================================================================================
+=
+= R_DupPlane
+=
+================================================================================
+*/
+
+visplane_t *R_DupPlane (const visplane_t *pl, int start, int stop)
+{
+    unsigned int  hash = visplane_hash(pl->picnum, pl->lightlevel, pl->height);
+    visplane_t   *new_pl = new_visplane(hash);
+
+    new_pl->height = pl->height;
+    new_pl->picnum = pl->picnum;
+    new_pl->lightlevel = pl->lightlevel;
+    new_pl->special = pl->special;
+    new_pl->minx = start;
+    new_pl->maxx = stop;
+
+    memset(new_pl->top, USHRT_MAX, sizeof(new_pl->top));
+
+    return new_pl;
 }
 
 //==========================================================================
@@ -322,7 +324,7 @@ visplane_t *R_FindPlane(fixed_t height, int picnum,
 //
 //==========================================================================
 
-visplane_t *R_CheckPlane(visplane_t * pl, int start, int stop)
+visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop)
 {
     int intrl, intrh;
     int unionl, unionh;
@@ -338,6 +340,7 @@ visplane_t *R_CheckPlane(visplane_t * pl, int start, int stop)
         unionl = pl->minx;
         intrl = start;
     }
+
     if (stop > pl->maxx)
     {
         intrh = pl->maxx;
@@ -349,31 +352,18 @@ visplane_t *R_CheckPlane(visplane_t * pl, int start, int stop)
         intrh = stop;
     }
 
-    for (x = intrl; x <= intrh; x++)
+    for (x=intrl ; x <= intrh && pl->top[x] == 0xffffffffu; x++); // [crispy] hires / 32-bit integer math
+    // [crispy] fix HOM if ceilingplane and floorplane are the same visplane (e.g. both are skies)
+    if (!(pl == floorplane && markceiling && floorplane == ceilingplane) && x > intrh)
     {
-        if (pl->top[x] != 0xffffffffu) // [crispy] hires / 32-bit integer math
-        {
-            break;
-        }
+        // Can use existing plane; extend range
+        pl->minx = unionl, pl->maxx = unionh;
     }
-
-    if (x > intrh)
+    else
     {
-        pl->minx = unionl;
-        pl->maxx = unionh;
-        return pl;              // use the same visplane
+        // Cannot use existing plane; create a new one
+        return R_DupPlane(pl,start,stop);
     }
-
-    // Make a new visplane
-    R_RaiseVisplanes(&pl);
-    lastvisplane->height = pl->height;
-    lastvisplane->picnum = pl->picnum;
-    lastvisplane->lightlevel = pl->lightlevel;
-    lastvisplane->special = pl->special;
-    pl = lastvisplane++;
-    pl->minx = start;
-    pl->maxx = stop;
-    memset(pl->top, 0xff, sizeof(pl->top));
 
     return pl;
 }
@@ -423,6 +413,7 @@ void R_MakeSpans(int x,
 void R_DrawPlanes(void)
 {
     visplane_t *pl;
+    int i;
     int light;
     int x, stop;
     int angle;
@@ -442,36 +433,10 @@ void R_DrawPlanes(void)
     extern byte *ylookup[SCREENHEIGHT];
     extern int columnofs[WIDESCREENWIDTH];
 
-#ifdef RANGECHECK
-    if (ds_p - drawsegs > numdrawsegs)
+    for (i = 0 ; i < MAXVISPLANES ; i++)
+    for (pl = visplanes[i] ; pl ; pl = pl->next)
+    if (pl->minx <= pl->maxx)
     {
-        I_Error(english_language ?
-                "R_DrawPlanes: drawsegs overflow (%i)" :
-                "R_DrawPlanes: превышен лимит drawsegs (%i)",
-                ds_p - drawsegs);
-    }
-    if (lastvisplane - visplanes > numvisplanes)
-    {
-        I_Error(english_language ?
-                "R_DrawPlanes: visplane overflow (%i)" :
-                "R_DrawPlanes: превышен лимит visplane (%i)",
-                lastvisplane - visplanes);
-    }
-    if (lastopening - openings > MAXOPENINGS)
-    {
-        I_Error(english_language ?
-                "R_DrawPlanes: opening overflow (%i)" :
-                "R_DrawPlanes: превышен лимит opening (%i)",
-                lastopening - openings);
-    }
-#endif
-
-    for (pl = visplanes; pl < lastvisplane; pl++)
-    {
-        if (pl->minx > pl->maxx)
-        {
-            continue;
-        }
         if (pl->picnum == skyflatnum)
         {                       // Sky flat
             if (DoubleSky)
