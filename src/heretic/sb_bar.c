@@ -658,7 +658,7 @@ void SB_Drawer(void)
             }
             else
             {
-                RD_M_DrawTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 38, CR_NONE);
+                RD_M_DrawTextSmallRUS(text, 4 + (wide_4_3 ? wide_delta : 0), 38, CR_NONE);
             }
             M_snprintf(text, sizeof(text), english_language ? "ITEMS: %d/ %d" : "GHTLVTNS: %d/ %d",
                        players[consoleplayer].itemcount, totalitems);
@@ -668,7 +668,7 @@ void SB_Drawer(void)
             }
             else
             {
-                RD_M_DrawTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 48, CR_NONE);
+                RD_M_DrawTextSmallRUS(text, 4 + (wide_4_3 ? wide_delta : 0), 48, CR_NONE);
             }
             M_snprintf(text, sizeof(text), english_language ? "SECRETS: %d/ %d" : "NFQYBRB: %d/ %d",
                        players[consoleplayer].secretcount, totalsecret);
@@ -678,7 +678,7 @@ void SB_Drawer(void)
             }
             else
             {
-                RD_M_DrawTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 58, CR_NONE);
+                RD_M_DrawTextSmallRUS(text, 4 + (wide_4_3 ? wide_delta : 0), 58, CR_NONE);
             }
     
             M_snprintf(text, sizeof(text), english_language ? "SKILL: %d" : "CKJ;YJCNM: %d",  gameskill +1);
@@ -688,7 +688,7 @@ void SB_Drawer(void)
             }
             else
             {
-                RD_M_DrawTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 68, CR_NONE);
+                RD_M_DrawTextSmallRUS(text, 4 + (wide_4_3 ? wide_delta : 0), 68, CR_NONE);
             }
         }
 
@@ -701,7 +701,7 @@ void SB_Drawer(void)
             }
             else
             {
-                RD_M_DrawTextSmallRUS("EHJDTYM", 20 + (wide_4_3 ? wide_delta : 0), 78, CR_NONE);
+                RD_M_DrawTextSmallRUS("EHJDTYM", 4 + (wide_4_3 ? wide_delta : 0), 78, CR_NONE);
             }
 
             M_snprintf(text, sizeof(text), "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
@@ -717,7 +717,7 @@ void SB_Drawer(void)
             }
             else
             {
-                RD_M_DrawTextSmallRUS("J,OTT", 20 + (wide_4_3 ? wide_delta : 0), 98, CR_NONE);
+                RD_M_DrawTextSmallRUS("J,OTT", 4 + (wide_4_3 ? wide_delta : 0), 98, CR_NONE);
             }
 
             M_snprintf(text, sizeof(text), "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
