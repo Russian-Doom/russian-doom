@@ -297,8 +297,8 @@ void RD_Menu_DrawSlider(Menu_t * menu, int y, int width, int value)
     }
     V_DrawPatch(x2 + wide_delta, y, W_CacheLumpNum(bigSlider_right_patch, PU_CACHE));
 
-    if (value > width)
-        value = width;
+    if (value > width - 1)
+        value = width - 1;
 
     V_DrawPatch(x + (RD_GameType == gt_Doom ? 0 : 4) + value * 8 + wide_delta, y + (RD_GameType == gt_Doom ? 0 : 7), W_CacheLumpNum(bigSlider_gem_patch, PU_CACHE));
 }
@@ -325,9 +325,9 @@ void RD_Menu_DrawSliderSmall(Menu_t * menu, int y, int width, int value)
         dp_translation = gem_zero_translation == CR_NONE ? NULL : cr[gem_zero_translation];
     // [JN] Most right position that is "out of bounds" (red gem).
     // Only the mouse sensitivity menu requires this trick.
-    else if (value > width)
+    else if (value > width - 1)
     {
-        value = width;
+        value = width - 1;
         dp_translation = gem_max_translation == CR_NONE ? NULL : cr[gem_max_translation];
     }
     // [JN] Standard function (green gem)
