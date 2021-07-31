@@ -2976,7 +2976,7 @@ void M_RD_Draw_Controls(void)
     // Mouse sensivity slider
     RD_Menu_DrawSliderSmall(&ControlsMenu, 74, 17, mouseSensitivity);
     // Numerical representation
-    M_snprintf(num, 4, "%3d", mouseSensitivity);
+    M_snprintf(num, 4, "%d", mouseSensitivity);
     RD_M_DrawTextSmallENG(num, 189 + wide_delta, 75, CR_NONE);
 
     // Acceleration slider
@@ -2988,7 +2988,7 @@ void M_RD_Draw_Controls(void)
     // Acceleration threshold slider
     RD_Menu_DrawSliderSmall(&ControlsMenu, 114, 17, mouse_threshold / 2);
     // Numerical representation
-    M_snprintf(num, 4, "%3d", mouse_threshold);
+    M_snprintf(num, 4, "%d", mouse_threshold);
     if (mouse_acceleration < 1.1)
         RD_M_DrawTextSmallENG(num, 189 + wide_delta, 115, CR_DARKRED);
     else
