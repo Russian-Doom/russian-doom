@@ -427,8 +427,7 @@ If the function returns false, exit with false without checking anything else.
 boolean P_BlockLinesIterator(int x, int y, boolean(*func) (line_t *))
 {
     int offset;
-    short *list;
-    line_t *ld;
+    int32_t *list;  // [crispy] BLOCKMAP limit
 
     int i;
     polyblock_t *polyLink;
@@ -466,10 +465,11 @@ boolean P_BlockLinesIterator(int x, int y, boolean(*func) (line_t *))
     }
 
     offset = *(blockmap + offset);
+    list = blockmaplump+offset;
 
-    for (list = blockmaplump + offset; *list != -1; list++)
+    for ( ; *list != -1 ; list++)
     {
-        ld = &lines[*list];
+        line_t *ld = &lines[*list];
         if (ld->validcount == validcount)
             continue;           // line has already been checked
         ld->validcount = validcount;

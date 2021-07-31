@@ -91,7 +91,7 @@ boolean PTR_SightTraverse(intercept_t * in)
 boolean P_SightBlockLinesIterator(int x, int y)
 {
     int offset;
-    short *list;
+    int32_t *list;  // [crispy] BLOCKMAP limit
     line_t *ld;
     int s1, s2;
     divline_t dl;
@@ -145,8 +145,9 @@ boolean P_SightBlockLinesIterator(int x, int y)
     }
 
     offset = *(blockmap + offset);
+    list = blockmaplump+offset;
 
-    for (list = blockmaplump + offset; *list != -1; list++)
+    for ( ; *list != -1 ; list++)
     {
         ld = &lines[*list];
         if (ld->validcount == validcount)
