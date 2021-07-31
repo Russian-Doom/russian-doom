@@ -7164,11 +7164,8 @@ void M_Init (void)
                        DEH_String(skullName[0]),
                        DEH_String(skullName[1]),
                        // [Dasperal] Small cursor
-                       DEH_String("FNTSE062"),
-                       // [Dasperal] Use FNTBE034 as empty patch for cursor in jaguar
-                       // and use RD_CURD (dark vwrsion of FNTSE062) for generic doom
-                       DEH_String(gamemission == jaguar ?
-                                                 "FNTBE034" : "RD_CURD"),
+                       DEH_String("RD_CURB"),  // Bright
+                       DEH_String("RD_CURD"),  // Dimmed
                        -5, 0, -32, -8);
 
     // [JN] Init message colors.
