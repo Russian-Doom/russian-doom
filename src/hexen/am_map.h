@@ -16,7 +16,6 @@
 //
 
 
-
 #ifndef __AMMAP_H__
 #define __AMMAP_H__
 
@@ -43,49 +42,50 @@
 
 // Automap colors
 
-#define AM_PLR1_COLOR 157       // Blue
-#define AM_PLR2_COLOR 177       // Red
-#define AM_PLR3_COLOR 137       // Yellow
-#define AM_PLR4_COLOR 198       // Green
-#define AM_PLR5_COLOR 215       // Jade
-#define AM_PLR6_COLOR 32        // White
-#define AM_PLR7_COLOR 106       // Hazel
-#define AM_PLR8_COLOR 234       // Purple
+#define AM_PLR1_COLOR   157  // Blue
+#define AM_PLR2_COLOR   177  // Red
+#define AM_PLR3_COLOR   137  // Yellow
+#define AM_PLR4_COLOR   198  // Green
+#define AM_PLR5_COLOR   215  // Jade
+#define AM_PLR6_COLOR   32   // White
+#define AM_PLR7_COLOR   106  // Hazel
+#define AM_PLR8_COLOR   234  // Purple
 
-#define BACKGROUND	PARCH
-#define YOURCOLORS	WHITE
-#define YOURRANGE	0
-#define WALLCOLORS	REDS
-#define WALLRANGE	REDRANGE
-#define TSWALLCOLORS	GRAYS
-#define TSWALLRANGE	GRAYSRANGE
-#define FDWALLCOLORS	BROWNS
-#define FDWALLRANGE	BROWNRANGE
-#define CDWALLCOLORS	YELLOWS
-#define CDWALLRANGE	YELLOWRANGE
-#define THINGCOLORS	GREENS
-#define THINGRANGE	GREENRANGE
-#define SECRETWALLCOLORS WALLCOLORS
-#define SECRETWALLRANGE WALLRANGE
-#define GRIDCOLORS	(GRAYS + GRAYSRANGE/2)
-#define GRIDRANGE	0
-#define XHAIRCOLORS	GRAYS
+#define BACKGROUND      PARCH
+#define YOURCOLORS      WHITE
+#define YOURRANGE       0
+#define WALLCOLORS      REDS
+#define WALLRANGE       REDRANGE
+#define TSWALLCOLORS    GRAYS
+#define TSWALLRANGE     GRAYSRANGE
+#define FDWALLCOLORS    BROWNS
+#define FDWALLRANGE     BROWNRANGE
+#define CDWALLCOLORS    YELLOWS
+#define CDWALLRANGE     YELLOWRANGE
+#define THINGCOLORS     GREENS
+#define THINGRANGE      GREENRANGE
+#define GRIDCOLORS      (GRAYS + GRAYSRANGE/2)
+#define SECRETWALLCOLORS    WALLCOLORS
+#define SECRETWALLRANGE     WALLRANGE
 
 // drawing stuff
 
-#define AM_NUMMARKPOINTS 10
+#define AM_MSGHEADER    (('a'<<24)+('m'<<16))
+#define AM_MSGENTERED   (AM_MSGHEADER | ('e'<<8))
+#define AM_MSGEXITED    (AM_MSGHEADER | ('x'<<8))
 
-#define AM_MSGHEADER (('a'<<24)+('m'<<16))
-#define AM_MSGENTERED (AM_MSGHEADER | ('e'<<8))
-#define AM_MSGEXITED (AM_MSGHEADER | ('x'<<8))
+#define INITSCALEMTOF (.2 * FRACUNIT)     // scale on entry
 
-#define INITSCALEMTOF (.2*FRACUNIT)     // scale on entry
-// how much the automap moves window per tic in frame-buffer coordinates
-#define F_PANINC	4       // moves 140 pixels in 1 second
-// how much zoom-in per tic
-#define M_ZOOMIN        ((int) (1.02*FRACUNIT)) // goes to 2x in 1 second
-// how much zoom-out per tic
-#define M_ZOOMOUT       ((int) (FRACUNIT/1.02)) // pulls out to 0.5x in 1 second
+// [JN] How much the automap moves window per tic in frame-buffer coordinates.
+// Moves 280 (8) pixels in 1 second, increased from 140 (4) pixels.
+#define F_PANINC 8
+
+// [JN] How much zoom-in per tic goes to 2x in 1 second.
+// Increased from 1.02*FRACUNIT.
+#define M_ZOOMIN ((int) (1.04 * FRACUNIT))
+// [JN] How much zoom-out per tic pulls out to 0.5x in 1 second
+// Increased from 1.02*FRACUNIT.
+#define M_ZOOMOUT ((int) (FRACUNIT / 1.04))
 
 // translates between frame-buffer and map distances
 #define FTOM(x) (((int64_t)((x)<<16) * scale_ftom) >> FRACBITS)
@@ -94,8 +94,6 @@
 #define CXMTOF(x)  (f_x + MTOF((x)-m_x))
 #define CYMTOF(y)  (f_y + (f_h - MTOF((y)-m_y)))
 
-// the following is crap
-#define LINE_NEVERSEE ML_DONTDRAW
 
 typedef struct
 {
@@ -122,6 +120,5 @@ typedef struct
     fixed_t slp, islp;
 } islope_t;
 
-// extern int f_x, f_y, f_w, f_h;
 
 #endif

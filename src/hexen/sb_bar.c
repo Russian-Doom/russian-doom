@@ -1005,6 +1005,10 @@ static void DrawAnimatedIcons(void)
         BorderTopRefresh = true;
         UpdateState |= I_MESSAGES;
     }
+
+    // [JN] Always update whole status bar.
+    // TODO: remove bunch of other update conditions.
+    SB_state = -1;
 }
 
 //==========================================================================
