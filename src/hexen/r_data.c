@@ -606,27 +606,32 @@ void R_InitData(void)
 //=============================================================================
 
 /*
-================
+================================================================================
 =
 = R_FlatNumForName
 =
-================
+= Retrieval, get a flat number for a flat name.
+=
+================================================================================
 */
 
-int R_FlatNumForName(char *name)
+int R_FlatNumForName (char *name)
 {
-    int i;
-    char namet[9];
+    char  namet[9];
+    int   i = W_CheckNumForNameFromTo(name, lastflat, firstflat);
 
-    i = W_CheckNumForName(name);
     if (i == -1)
     {
         namet[8] = 0;
         memcpy(namet, name, 8);
-        I_Error(english_language ?
-                "R_FlatNumForName: %s not found" :
-                "R_FlatNumForName: %s не обнаружена",
-                namet);
+        // [crispy] make non-fatal
+        fprintf (stderr, english_language ?
+                         "R_FlatNumForName: %s not found\n" :
+                         "R_FlatNumForName: текстура поверхности %s не найдена\n",
+                         namet);
+        // [crispy] since there is no "No Flat" marker,
+        // render missing flats as SKY
+        return skyflatnum;
     }
     return i - firstflat;
 }
