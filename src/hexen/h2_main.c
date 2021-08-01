@@ -90,6 +90,7 @@ void H2_PageTicker(void);
 // PRIVATE FUNCTION PROTOTYPES ---------------------------------------------
 
 static void DrawMessage(void);
+static void DrawTimeAndFPS(void);
 static void PageDrawer(void);
 static void HandleArgs(void);
 static void CheckRecordFrom(void);
@@ -1190,6 +1191,9 @@ static void DrawAndBlit(void)
     // Draw Menu
     MN_Drawer();
 
+    // [JN] Draw local time and FPS widgets on top of everything.
+    DrawTimeAndFPS();
+
     // Send out any new accumulation
     NetUpdate();
 
@@ -1240,6 +1244,51 @@ static void DrawMessage(void)
             RD_M_DrawTextSmallRUS(player->message,
                               160 - RD_M_TextSmallRUSWidth(player->message) / 2
                               + wide_delta, 1, CR_NONE);
+        }
+    }
+}
+
+/*
+================================================================================
+=
+= DrawTimeAndFPS
+=
+= [JN] Draws local time and FPS widgets.
+=
+================================================================================
+*/
+
+static void DrawTimeAndFPS(void)
+{
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+    char   s[64], fps[9999];
+    int    f = real_fps;
+    const  boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
+
+    if (!vanillaparm)
+    {
+        if (local_time)
+        {
+            strftime(s, sizeof(s), 
+                     local_time == 1 ? "%I:%M %p" :    // 12-hour (HH:MM designation)
+                     local_time == 2 ? "%I:%M:%S %p" : // 12-hour (HH:MM:SS designation)
+                     local_time == 3 ? "%H:%M" :       // 24-hour (HH:MM)
+                     local_time == 4 ? "%H:%M:%S" :    // 24-hour (HH:MM:SS)
+                                       "", tm);        // No time
+
+            RD_M_DrawTextC(s, (local_time == 1 ? 279 :
+                               local_time == 2 ? 267 :
+                               local_time == 3 ? 291 :
+                               local_time == 4 ? 279 : 0)
+                              + (wide_4_3 ? wide_delta : wide_delta * 2), 32);
+        }
+
+        if (show_fps)
+        {
+            sprintf (fps, "%d", f);
+            RD_M_DrawTextC("FPS:", 279 + (wide_4_3 ? wide_delta : wide_delta * 2), 42);
+            RD_M_DrawTextC(fps, 297 + (wide_4_3 ? wide_delta : wide_delta * 2), 42);   // [JN] fps digits
         }
     }
 }
