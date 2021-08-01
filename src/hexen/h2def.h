@@ -568,6 +568,7 @@ typedef struct player_s
     int messageTics;            // counter for showing messages
     short ultimateMessage;
     short yellowMessage;
+    boolean engOnlyMessage;
     int damagecount, bonuscount;        // for screen flashing
     int poisoncount;            // screen flash for poison damage
     mobj_t *poisoner;           // NULL for non-player mobjs

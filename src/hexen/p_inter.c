@@ -90,6 +90,7 @@ void P_SetMessage(player_t * player, char *message, boolean ultmsg)
 //    strupr(player->message);
     player->messageTics = MESSAGETICS;
     player->yellowMessage = false;
+    player->engOnlyMessage = false;
     if (ultmsg)
     {
         player->ultimateMessage = true;
@@ -115,6 +116,7 @@ void P_SetYellowMessage(player_t * player, char *message, boolean ultmsg)
     M_StringCopy(player->message, message, sizeof(player->message));
     player->messageTics = 5 * MESSAGETICS;      // Bold messages last longer
     player->yellowMessage = true;
+    player->engOnlyMessage = false;
     if (ultmsg)
     {
         player->ultimateMessage = true;
