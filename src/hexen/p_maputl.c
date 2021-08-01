@@ -58,6 +58,11 @@ int P_PointOnLineSide(fixed_t x, fixed_t y, line_t * line)
     fixed_t dx, dy;
     fixed_t left, right;
 
+    // [JN] Fail-safe: no line found? Pretend to use front side.
+    if (!line)
+    {
+        return 0;
+    }
     if (!line->dx)
     {
         if (x <= line->v1->x)

@@ -1554,7 +1554,15 @@ void P_BounceWall(mobj_t * mo)
                    PT_ADDLINES, PTR_BounceTraverse);
 
     side = P_PointOnLineSide(mo->x, mo->y, bestslideline);
-    lineangle = R_PointToAngle2(0, 0, bestslideline->dx, bestslideline->dy);
+    // [JN] Fail-safe: no line returned? Don't go any farther.
+    if (bestslideline)
+    {
+        lineangle = R_PointToAngle2(0, 0, bestslideline->dx, bestslideline->dy);
+    }
+    else
+    {
+        return;
+    }
     if (side == 1)
         lineangle += ANG180;
     moveangle = R_PointToAngle2(0, 0, mo->momx, mo->momy);
