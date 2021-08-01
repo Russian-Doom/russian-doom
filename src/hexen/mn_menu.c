@@ -1387,10 +1387,8 @@ static void DrawFileSlots()
 
 static void DrawOptionsMenu(void)
 {
-    // [Dasperal] Update Status bar.
-    // [Dasperal] Once this line is deleted, Delete DrawOptionsMenu function and
-    // replace it's references to NULL
-    SB_state = -1;
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 }
 
 // -----------------------------------------------------------------------------
@@ -1399,6 +1397,9 @@ static void DrawOptionsMenu(void)
 
 static void DrawRenderingMenu(void)
 {
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
     if (english_language)
     {
         // Display aspect ratio
@@ -1579,6 +1580,9 @@ static void DrawDisplayMenu(void)
 {
     static char num[4];
 
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
     if (english_language)
     {
         // Local time
@@ -1699,6 +1703,9 @@ static void M_RD_LocalTime(Direction_t direction)
 
 static void DrawAutomapMenu(void)
 {
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
     if (english_language)
     {
         // Overlay mode
@@ -1757,6 +1764,9 @@ static void DrawSoundMenu(void)
 {
     static char num[4];
 
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
     // SFX Volume
     RD_Menu_DrawSliderSmall(&SoundMenu, 52, 16, snd_MaxVolume_tmp);
     M_snprintf(num, 4, "%3d", snd_MaxVolume_tmp);
@@ -1800,6 +1810,9 @@ static void M_RD_SfxChannels(Direction_t direction)
 
 static void DrawSoundSystemMenu(void)
 {
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
     if (english_language)
     {
         // Sound effects
@@ -2033,6 +2046,9 @@ static void DrawControlsMenu(void)
 {
     static char num[4];
 
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
     if (english_language)
     {
         // Always run
@@ -2115,6 +2131,9 @@ static void M_RD_Novert()
 
 static void DrawGameplayMenu(void)
 {
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
     if (english_language)
     {
         // Brightmaps
@@ -2237,6 +2256,9 @@ static void DrawLevelSelect1Menu(void)
 {
     char  num[20];
     int totalArmor;
+
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
     if(english_language)
     {
@@ -2443,6 +2465,9 @@ static void DrawLevelSelect2Menu(void)
 {
     char  num[4];
 
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
     if (english_language)
     {
         RD_M_DrawTextSmallENG(selective_wp_second ? "YES" : "NO", 248 + wide_delta, 36,
@@ -2600,6 +2625,9 @@ static void DrawLevelSelect3Menu(void)
 {
     char  num[4];
 
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
     //DISC OF REPULSION
     M_snprintf(num, 4, "%d", selective_arti_3);
     RD_M_DrawTextSmallENG(num, 248 + wide_delta, 26,
@@ -2749,6 +2777,9 @@ static void M_RD_SelectiveKey_0()
 static void DrawLevelSelect4Menu(void)
 {
     char  num[4];
+
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
     if (english_language)
     {
@@ -2924,6 +2955,9 @@ static void M_RD_SelectivePuzzle_2(Direction_t direction)
 static void DrawLevelSelect5Menu(void)
 {
     char  num[4];
+
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
     // EMERALD PLANET 1
     M_snprintf(num, 4, "%d", selective_puzzle_3);

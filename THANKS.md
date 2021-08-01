@@ -27,7 +27,7 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Invisible Warrior 
 - NormanSeven 
 
-#### ACS script enhancement for Russian translation
+#### Significant development and technical assistance
 - Dasperal 
 
 #### [RiscOS Doom](https://github.com/jeffdoggett/Doom) source port 
@@ -58,7 +58,7 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Optimized mapping file for Heretic by Tom Klok ([ht_gus1m.zip](https://www.doomworld.com/idgames/sounds/ht_gus1m))
 - Optimized mapping file for Hexen by Colin Caird
 
-#### Doom and Heretic 21:9 widescreen assets based on WidePix, created by
+#### Doom, Heretic and Hexen 21:9 widescreen assets based on WidePix, created by
 - Nash Muhandes
 
 #### [GENMIDI](https://www.doomworld.com/forum/topic/97388-update-hisymaks-genmidi-an-enhanced-genmidi-lump-for-opl-synth/) sound bank for Jaguar Doom TC
@@ -88,6 +88,7 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - hfc2x
 - Heretic widescreen HUD by Hellser, Neoworm, TerminusEst13 and PSTrooper
 - Hexen widescreen HUD and weapons by Neoworm
+- Hexen menu background based on art by [ULTRAZEALOt](https://www.deviantart.com/ultrazealot/art/Hexen-Title-Screen-572468821) and released under [CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/)
 - Daniil Petrov
 - Manuel Alfayate Corchete
 - Orfeus94
