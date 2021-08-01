@@ -1872,7 +1872,7 @@ static void DrawSoundSystemMenu(void)
         RD_M_DrawTextSmallENG(mute_inactive_window ? "ON" : "OFF", 184 + wide_delta, 112, CR_NONE);
 
         // Informative message:
-        if (CurrentItPos == 0 || CurrentItPos == 1 || CurrentItPos == 3)
+        if (CurrentItPos == 4)
         {
             RD_M_DrawTextSmallENG("CHANGING WILL REQUIRE RESTART OF THE PROGRAM", 3 + wide_delta, 132, CR_GRAY2RED_HEXEN);
         }
@@ -1959,6 +1959,16 @@ static void M_RD_SoundDevice()
             snd_sfxdevice = 3;
         else if (snd_sfxdevice == 3)
             snd_sfxdevice = 0;
+
+    // Reinitialize SFX module
+    InitSfxModule(snd_sfxdevice);
+
+    // Call sfx device changing routine
+    S_RD_Change_SoundDevice();
+
+    // Reinitialize sound volume, recalculate sound curve
+    snd_MaxVolume_tmp = snd_MaxVolume;
+    soundchanged = true;
 }
 
 static void M_RD_MusicDevice(Direction_t direction)
