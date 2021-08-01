@@ -14,8 +14,10 @@
 
 
 
-#include "rd_rushexen.h"
 #include "i_swap.h"
+#include "m_misc.h"
+#include "rd_rushexen.h"
+#include "w_wad.h"
 
 #define US "YTJ;BLFYYFZ CNHJRF! 'NJ <FU!" // НЕОжИДАННАЯ СТРОКА! эТО БАГ!
 
@@ -1065,4 +1067,27 @@ const CMDInjectionRecord_t* GetCMDInjectionTable(int map)
         }
     }
     return CMDInjectionTables[map]; //Hexen original, DK story
+}
+
+boolean cantApplyACSInstrumentation(int map)
+{
+    char lumpname[9];
+    int lumpCount;
+
+    if(!hasUnknownPWads)
+        return false;
+
+    if(map > 60)
+        return true;
+
+    M_snprintf(lumpname, sizeof(lumpname), "MAP%02d", map);
+    lumpCount = W_CheckMultipleLumps(lumpname);
+
+    if(lumpCount == 1 || (isDK && map == 33 && lumpCount == 2) || (isDK && map > 33 && map < 41))
+        return false;
+
+    if(stringTables[map] == NULL && CMDInjectionTables[map] == NULL && !(isDK && map == 33))
+        return false;
+
+    return true;
 }
