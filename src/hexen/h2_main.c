@@ -1218,7 +1218,7 @@ static void DrawMessage(void)
     }
     if (player->yellowMessage)
     {
-        if (english_language)
+        if (english_language || player->engOnlyMessage)
         {
             MN_DrTextAYellow(player->message,
                              160 - RD_M_TextAWidth(player->message) / 2
@@ -1233,7 +1233,7 @@ static void DrawMessage(void)
     }
     else
     {
-        if (english_language)
+        if (english_language || player->engOnlyMessage)
         {
             RD_M_DrawTextA(player->message,
                        160 - RD_M_TextAWidth(player->message) / 2

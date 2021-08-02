@@ -43,4 +43,6 @@ const char** GetRusStringTable(int map);
 
 const CMDInjectionRecord_t* GetCMDInjectionTable(int map);
 
+boolean cantApplyACSInstrumentation(int map);
+
 #endif //__RD_RUSHEXEN_H__

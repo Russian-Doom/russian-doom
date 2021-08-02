@@ -1766,6 +1766,8 @@ static int CmdEndPrint(void)
         player = &players[consoleplayer];
     }
     P_SetMessage(player, PrintBuffer, true);
+    if(!rusACStrings)
+        player->engOnlyMessage = true;
     return SCRIPT_CONTINUE;
 }
 
@@ -1778,6 +1780,8 @@ static int CmdEndPrintBold(void)
         if (playeringame[i])
         {
             P_SetYellowMessage(&players[i], PrintBuffer, true);
+            if(!rusACStrings)
+                players[i].engOnlyMessage = true;
         }
     }
     return SCRIPT_CONTINUE;
@@ -1815,6 +1819,8 @@ static int InternalCmdPrintBoldAlwaysWithTableDelayDirect(void)
         if (playeringame[i])
         {
             P_SetYellowMessage(&players[i], PrintBuffer, true);
+            if(!rusACStrings)
+                players[i].engOnlyMessage = true;
         }
     }
     i = delayTable[LONG(*PCodePtr)][english_language ? 0 : 1];
@@ -1874,6 +1880,8 @@ static int InternalCmdPrintAlwaysWithTableDelayDirect(void)
         player = &players[consoleplayer];
     }
     P_SetMessage(player, PrintBuffer, true);
+    if(!rusACStrings)
+        player->engOnlyMessage = true;
     i = delayTable[LONG(*PCodePtr)][english_language ? 0 : 1];
     ++PCodePtr;
     if (i > 0)
