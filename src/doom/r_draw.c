@@ -1308,9 +1308,6 @@ fixed_t     ds_ystep;
 // start of a 64*64 tile image 
 byte*   ds_source;	
 
-// just for profiling
-int dscount;
-
 
 //
 // Draws the actual span.
@@ -1330,7 +1327,6 @@ void R_DrawSpan (void)
                 "R_DrawSpan: %i к %i у %i",
                 ds_x1,ds_x2,ds_y);
     }
-    //	dscount++;
 #endif
 
     // Pack position and step variables into a single 32-bit integer,

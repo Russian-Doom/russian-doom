@@ -57,7 +57,6 @@ fixed_t dc_texturemid;
 int dc_texheight;
 byte *dc_source;                // first pixel in a column (possibly virtual)
 
-int dccount;                    // just for profiling
 
 void R_DrawColumn(void)
 {
@@ -850,7 +849,6 @@ fixed_t ds_xstep;
 fixed_t ds_ystep;
 byte *ds_source;                // start of a 64*64 tile image
 
-int dscount;                    // just for profiling
 
 void R_DrawSpan(void)
 {

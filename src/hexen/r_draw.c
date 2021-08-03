@@ -55,7 +55,6 @@ fixed_t dc_texturemid;
 int dc_texheight;
 byte *dc_source;                // first pixel in a column (possibly virtual)
 
-int dccount;                    // just for profiling
 
 void R_DrawColumn(void)
 {
@@ -156,7 +155,6 @@ void R_DrawColumnLow(void)
                 "R_DrawColumn: %i to %i at %i" :
                 "R_DrawColumn: %i к %i в %i",
                 dc_yl, dc_yh, dc_x);
-//      dccount++;
 #endif
 
     dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
@@ -421,7 +419,6 @@ fixed_t ds_xstep;
 fixed_t ds_ystep;
 byte *ds_source;                // start of a 64*64 tile image
 
-int dscount;                    // just for profiling
 
 void R_DrawSpan(void)
 {
@@ -436,7 +433,6 @@ void R_DrawSpan(void)
                 "R_DrawSpan: %i to %i at %i" :
                 "R_DrawSpan: %i к %i в %i",
                 ds_x1, ds_x2, ds_y);
-//      dscount++;
 #endif
 
     xfrac = ds_xfrac;
@@ -469,7 +465,6 @@ void R_DrawSpanLow(void)
                 "R_DrawSpan: %i to %i at %i" :
                 "R_DrawSpan: %i к %i в %i",
                 ds_x1, ds_x2, ds_y);
-//      dscount++;
 #endif
 
     xfrac = ds_xfrac;
