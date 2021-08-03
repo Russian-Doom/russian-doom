@@ -99,25 +99,6 @@ void (*transcolfunc) (void);
 void (*transtlcolfunc) (void);
 void (*spanfunc) (void);
 
-/*
-================================================================================
-=
-= R_AddPointToBox
-=
-================================================================================
-*/
-
-void R_AddPointToBox (int x, int y, fixed_t *box)
-{
-    if (x < box[BOXLEFT])
-        box[BOXLEFT] = x;
-    if (x > box[BOXRIGHT])
-        box[BOXRIGHT] = x;
-    if (y < box[BOXBOTTOM])
-        box[BOXBOTTOM] = y;
-    if (y > box[BOXTOP])
-        box[BOXTOP] = y;
-}
 
 /*
 ================================================================================

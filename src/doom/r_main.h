@@ -162,12 +162,6 @@ R_PointInSubsector
 ( fixed_t   x,
   fixed_t   y );
 
-void
-R_AddPointToBox
-( int       x,
-  int       y,
-  fixed_t*  box );
-
 
 // [AM] Interpolate between two angles.
 angle_t R_InterpolateAngle(angle_t oangle, angle_t nangle, fixed_t scale);
