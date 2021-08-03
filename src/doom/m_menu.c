@@ -3123,13 +3123,17 @@ static char *M_RD_MouseBtnDrawer (int i)
 {
     switch (i)
     {
-        case -1:    return "---";
-        case  0:    return "LEFT BUTTON";
-        case  1:    return "RIGHT BUTTON";
-        case  2:    return "MIDDLE BUTTON";
-        case  3:    return "BUTTON #3";
-        case  4:    return "BUTTON #4";
-        default:    return "?"; // [JN] Unknown key
+        case -1:                  return "---";
+        case  MOUSE_LEFT:         return "LEFT BUTTON";
+        case  MOUSE_RIGHT:        return "RIGHT BUTTON";
+        case  MOUSE_MIDDLE:       return "MIDDLE BUTTON";
+        case  MOUSE_4:            return "MOUSE 4";
+        case  MOUSE_5:            return "MOUSE 5";
+        case  MOUSE_SCROLL_UP:    return "SCROLL UP";
+        case  MOUSE_SCROLL_DOWN:  return "SCROLL DOWN";
+        case  MOUSE_SCROLL_RIGHT: return "SCROLL RIGHT";
+        case  MOUSE_SCROLL_LEFT:  return "SCROLL LEFT";
+        default:                  return "?"; // [JN] Unknown key
     }
 }
 

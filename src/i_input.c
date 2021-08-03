@@ -330,15 +330,15 @@ static void UpdateMouseButtonState(unsigned int button, boolean on)
     switch (button)
     {
         case SDL_BUTTON_LEFT:
-            button = 0;
+            button = MOUSE_LEFT;
             break;
 
         case SDL_BUTTON_RIGHT:
-            button = 1;
+            button = MOUSE_RIGHT;
             break;
 
         case SDL_BUTTON_MIDDLE:
-            button = 2;
+            button = MOUSE_MIDDLE;
             break;
 
         default:
@@ -371,31 +371,46 @@ static void MapMouseWheelToButtons(SDL_MouseWheelEvent *wheel)
     // SDL2 distinguishes button events from mouse wheel events.
     // We want to treat the mouse wheel as two buttons, as per
     // SDL1
-    static event_t up, down;
+    event_t up, down;
     int button;
 
-    if (wheel->y <= 0)
-    {   // scroll down
-        button = 4;
-    }
-    else
-    {   // scroll up
-        button = 3;
+    if(wheel->y)
+    {
+        button = MOUSE_SCROLL_UP + (wheel->y > 0 ? wheel->direction : !wheel->direction);
+
+        // post a button down event
+        mouse_button_state |= (1 << button);
+        down.type = ev_mouse;
+        down.data1 = mouse_button_state;
+        down.data2 = down.data3 = 0;
+        D_PostEvent(&down);
+
+        // post a button up event
+        mouse_button_state &= ~(1 << button);
+        up.type = ev_mouse;
+        up.data1 = mouse_button_state;
+        up.data2 = up.data3 = 0;
+        D_PostEvent(&up);
     }
 
-    // post a button down event
-    mouse_button_state |= (1 << button);
-    down.type = ev_mouse;
-    down.data1 = mouse_button_state;
-    down.data2 = down.data3 = 0;
-    D_PostEvent(&down);
+    if(wheel->x)
+    {
+        button = MOUSE_SCROLL_RIGHT + (wheel->x > 0 ? wheel->direction : !wheel->direction);
 
-    // post a button up event
-    mouse_button_state &= ~(1 << button);
-    up.type = ev_mouse;
-    up.data1 = mouse_button_state;
-    up.data2 = up.data3 = 0;
-    D_PostEvent(&up);
+        // post a button down event
+        mouse_button_state |= (1 << button);
+        down.type = ev_mouse;
+        down.data1 = mouse_button_state;
+        down.data2 = down.data3 = 0;
+        D_PostEvent(&down);
+
+        // post a button up event
+        mouse_button_state &= ~(1 << button);
+        up.type = ev_mouse;
+        up.data1 = mouse_button_state;
+        up.data2 = up.data3 = 0;
+        D_PostEvent(&up);
+    }
 }
 
 void I_HandleMouseEvent(SDL_Event *sdlevent)

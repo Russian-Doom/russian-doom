@@ -22,6 +22,7 @@
 #include "doomtype.h"
 #include "doomkeys.h"
 
+#include "i_input.h"
 #include "m_config.h"
 #include "m_misc.h"
 
@@ -131,8 +132,8 @@ int mousebstraferight = -1;
 int mousebbackward = -1;
 int mousebuse = -1;
 
-int mousebprevweapon = 4; // [crispy]
-int mousebnextweapon = 3; // [crispy]
+int mousebprevweapon = MOUSE_SCROLL_UP; // [crispy]
+int mousebnextweapon = MOUSE_SCROLL_DOWN; // [crispy]
 
 
 int key_message_refresh = KEY_ENTER;
