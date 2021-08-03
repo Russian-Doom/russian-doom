@@ -668,18 +668,26 @@ void F_CastTicker (void)
     }
     else
     {
-        // just advance to next state in animation
-        if (caststate == &states[S_PLAY_ATK1])
-        goto stopattack;	// Oh, gross hack!
-
-        st = caststate->nextstate;
+        // [crispy] fix Doomguy in casting sequence
+        if (!castdeath && caststate == &states[S_PLAY_ATK1])
+        {
+            st = S_PLAY_ATK2;
+        }
+        else if (!castdeath && caststate == &states[S_PLAY_ATK2])
+        {
+            goto stopattack;	// Oh, gross hack!
+        }
+        else
+        {
+            st = caststate->nextstate;
+        }
         caststate = &states[st];
         castframes++;
 
         // sound hacks....
         switch (st)
         {
-            case S_PLAY_ATK1:	sfx = sfx_dshtgn; break;
+            case S_PLAY_ATK2:	sfx = sfx_dshtgn; break; // [crispy] fix Doomguy in casting sequence
             case S_POSS_ATK2:	sfx = sfx_pistol; break;
             case S_SPOS_ATK2:	sfx = sfx_shotgn; break;
             case S_VILE_ATK2:	sfx = sfx_vilatk; break;
