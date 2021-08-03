@@ -2567,8 +2567,11 @@ void M_RD_Change_AutomapOverlay()
 {
     automap_overlay ^= 1;
 
-    // Update status bar
-    ST_doRefresh();
+    // Refresh status bar
+    if (gamestate == GS_LEVEL)
+    {
+        ST_doRefresh();
+    }
 }
 
 void M_RD_Change_AutomapRotate()
