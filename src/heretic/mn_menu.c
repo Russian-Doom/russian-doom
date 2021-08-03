@@ -3841,17 +3841,15 @@ boolean MN_Responder(event_t * event)
     // [JN] Support for mouse controls.
     else
     {
-        if (event->type == ev_mouse && mousewait < I_GetTime())
+        if (event->type == ev_mouse_keydown && mousewait < I_GetTime())
         {
             // [JN] Catch all incoming data1 mouse events. Makes middle mouse button
             // working for message interruption and for binding ability.
-            if (event->data1)
-            {
-                key = event->data1;
-                mousewait = I_GetTime() + 5;
-            }
+            key = event->data1;
+            mousewait = I_GetTime() + 5;
 
             // [JN] Do not read mouse events while typing and "typeofask" events.
+            /* [Dasperal] Disable this for now
             if (!FileMenuKeySteal)
             {
                 if (event->data1&1)
@@ -3876,7 +3874,7 @@ boolean MN_Responder(event_t * event)
             {
                 key = key_menu_up;
                 mousewait = I_GetTime() + 1;
-            }
+            }*/
         }
         else
         {

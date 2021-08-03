@@ -314,11 +314,12 @@ void I_StopTextInput(void)
     }
 }
 
-static void UpdateMouseButtonState(unsigned int button, boolean on)
+static void UpdateMouseButtonState(SDL_MouseButtonEvent *buttonEvent)
 {
-    static event_t event;
+    event_t event;
+    int button;
 
-    if (button < SDL_BUTTON_LEFT || button > MAX_MOUSE_BUTTONS)
+    if (buttonEvent->button < SDL_BUTTON_LEFT || buttonEvent->button > SDL_BUTTON_X2)
     {
         return;
     }
@@ -326,43 +327,39 @@ static void UpdateMouseButtonState(unsigned int button, boolean on)
     // Note: button "0" is left, button "1" is right,
     // button "2" is middle for Doom.  This is different
     // to how SDL sees things.
-
-    switch (button)
+    switch(buttonEvent->button)
     {
         case SDL_BUTTON_LEFT:
             button = MOUSE_LEFT;
             break;
-
         case SDL_BUTTON_RIGHT:
             button = MOUSE_RIGHT;
             break;
-
         case SDL_BUTTON_MIDDLE:
             button = MOUSE_MIDDLE;
             break;
-
         default:
             // SDL buttons are indexed from 1.
-            --button;
+            button = buttonEvent->button - 1;
             break;
     }
 
-    // Turn bit representing this button on or off.
-
-    if (on)
+    // Turn bit representing this button on or off
+    if (buttonEvent->state)
     {
         mouse_button_state |= (1 << button);
+        event.type = ev_mouse_keydown;
     }
     else
     {
         mouse_button_state &= ~(1 << button);
+        event.type = ev_mouse_keyup;
     }
 
-    // Post an event with the new button state.
-
-    event.type = ev_mouse;
-    event.data1 = mouse_button_state;
-    event.data2 = event.data3 = 0;
+    // Post an event
+    event.data1 = button;
+    event.data2 = buttonEvent->x;
+    event.data3 = buttonEvent->y;
     D_PostEvent(&event);
 }
 
@@ -379,16 +376,14 @@ static void MapMouseWheelToButtons(SDL_MouseWheelEvent *wheel)
         button = MOUSE_SCROLL_UP + (wheel->y > 0 ? wheel->direction : !wheel->direction);
 
         // post a button down event
-        mouse_button_state |= (1 << button);
-        down.type = ev_mouse;
-        down.data1 = mouse_button_state;
+        down.type = ev_mouse_keydown;
+        down.data1 = button;
         down.data2 = down.data3 = 0;
         D_PostEvent(&down);
 
         // post a button up event
-        mouse_button_state &= ~(1 << button);
-        up.type = ev_mouse;
-        up.data1 = mouse_button_state;
+        up.type = ev_mouse_keyup;
+        up.data1 = button;
         up.data2 = up.data3 = 0;
         D_PostEvent(&up);
     }
@@ -398,16 +393,14 @@ static void MapMouseWheelToButtons(SDL_MouseWheelEvent *wheel)
         button = MOUSE_SCROLL_RIGHT + (wheel->x > 0 ? wheel->direction : !wheel->direction);
 
         // post a button down event
-        mouse_button_state |= (1 << button);
-        down.type = ev_mouse;
-        down.data1 = mouse_button_state;
+        down.type = ev_mouse_keydown;
+        down.data1 = button;
         down.data2 = down.data3 = 0;
         D_PostEvent(&down);
 
         // post a button up event
-        mouse_button_state &= ~(1 << button);
-        up.type = ev_mouse;
-        up.data1 = mouse_button_state;
+        up.type = ev_mouse_keyup;
+        up.data1 = button;
         up.data2 = up.data3 = 0;
         D_PostEvent(&up);
     }
@@ -418,17 +411,12 @@ void I_HandleMouseEvent(SDL_Event *sdlevent)
     switch (sdlevent->type)
     {
         case SDL_MOUSEBUTTONDOWN:
-            UpdateMouseButtonState(sdlevent->button.button, true);
-            break;
-
         case SDL_MOUSEBUTTONUP:
-            UpdateMouseButtonState(sdlevent->button.button, false);
+            UpdateMouseButtonState(&(sdlevent->button));
             break;
-
         case SDL_MOUSEWHEEL:
             MapMouseWheelToButtons(&(sdlevent->wheel));
             break;
-
         default:
             break;
     }
@@ -463,7 +451,7 @@ void I_ReadMouse(void)
 
     if (x != 0 || y != 0) 
     {
-        ev.type = ev_mouse;
+        ev.type = ev_mouse_move;
         ev.data1 = mouse_button_state;
         ev.data2 = AccelerateMouse(x);
 
@@ -477,8 +465,6 @@ void I_ReadMouse(void)
             ev.data3 = 0;
         }
 
-        // XXX: undefined behaviour since event is scoped to
-        // this function
         D_PostEvent(&ev);
     }
 }

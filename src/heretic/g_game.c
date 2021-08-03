@@ -912,32 +912,6 @@ static void SetJoyButtons(unsigned int buttons_mask)
     }
 }
 
-static void SetMouseButtons(unsigned int buttons_mask)
-{
-    int i;
-
-    for (i=0; i<MAX_MOUSE_BUTTONS; ++i)
-    {
-        unsigned int button_on = (buttons_mask & (1 << i)) != 0;
-
-        // Detect button press:
-
-        if (!mousebuttons[i] && button_on)
-        {
-            if (i == mousebprevweapon)
-            {
-                next_weapon = -1;
-            }
-            else if (i == mousebnextweapon)
-            {
-                next_weapon = 1;
-            }
-        }
-
-        mousebuttons[i] = button_on;
-    }
-}
-
 /*
 ===============================================================================
 =
@@ -995,7 +969,7 @@ boolean G_Responder(event_t * ev)
         }
     }
 
-    if (ev->type == ev_mouse)
+    if (ev->type == ev_mouse_move)
     {
         testcontrols_mousespeed = abs(ev->data2);
     }
@@ -1078,8 +1052,29 @@ boolean G_Responder(event_t * ev)
             }
             return (false);     // always let key up events filter down
 
-        case ev_mouse:
-            SetMouseButtons(ev->data1);
+        case ev_mouse_keydown:
+            if(ev->data1 < MAX_MOUSE_BUTTONS)
+            {
+                if (ev->data1 == mousebprevweapon)
+                {
+                    next_weapon = -1;
+                }
+                else if (ev->data1 == mousebnextweapon)
+                {
+                    next_weapon = 1;
+                }
+                mousebuttons[ev->data1] = true;
+            }
+            return true;    // eat events
+
+        case ev_mouse_keyup:
+            if(ev->data1 < MAX_MOUSE_BUTTONS)
+            {
+                mousebuttons[ev->data1] = false;
+            }
+            return false;   // always let key up events filter down
+
+        case ev_mouse_move:
             mousex = ev->data2 * (mouseSensitivity + 5) / 10;
             mousey = ev->data3 * (mouseSensitivity + 5) / 10;
             return (true);      // eat events

@@ -33,38 +33,68 @@
 // Input event types.
 typedef enum
 {
-    // Key press/release events.
-    //    data1: Key code (from doomkeys.h) of the key that was
-    //           pressed or released. This is the key as it appears
-    //           on a US keyboard layout, and does not change with
-    //           layout.
-    // For ev_keydown only:
-    //    data2: ASCII representation of the key that was pressed that
-    //           changes with the keyboard layout; eg. if 'Z' is
-    //           pressed on a German keyboard, data1='y',data2='z'.
-    //           Not affected by modifier keys.
-    //    data3: ASCII input, fully modified according to keyboard
-    //           layout and any modifier keys that are held down.
-    //           Only set if I_StartTextInput() has been called.
+    /**
+     * Key press events.
+     *     data1: Key code (from doomkeys.h) of the key that was
+     *            pressed. This is the key as it appears
+     *            on a US keyboard layout, and does not change with
+     *            layout.
+     */
     ev_keydown,
+
+    /**
+     * Key release events.
+     *    data1: Key code (from doomkeys.h) of the key that was
+     *           released. This is the key as it appears
+     *           on a US keyboard layout, and does not change with
+     *           layout.
+     *    data2: ASCII representation of the key that was pressed that
+     *           changes with the keyboard layout; eg. if 'Z' is
+     *           pressed on a German keyboard, data1='y',data2='z'.
+     *           Not affected by modifier keys.
+     *    data3: ASCII input, fully modified according to keyboard
+     *           layout and any modifier keys that are held down.
+     *           Only set if I_StartTextInput() has been called.
+     */
     ev_keyup,
 
-    // Mouse movement event.
-    //    data1: Bitfield of buttons currently held down.
-    //           (bit 0 = left; bit 1 = right; bit 2 = middle).
-    //    data2: X axis mouse movement (turn).
-    //    data3: Y axis mouse movement (forward/backward).
-    ev_mouse,
+    /**
+     * Mouse movement event.
+     * data1: Bitfield of buttons currently held down.
+     * data2: X axis mouse movement (turn).
+     * data3: Y axis mouse movement (forward/backward).
+     */
+    ev_mouse_move,
 
-    // Joystick state.
-    //    data1: Bitfield of buttons currently pressed.
-    //    data2: X axis mouse movement (turn).
-    //    data3: Y axis mouse movement (forward/backward).
-    //    data4: Third axis mouse movement (strafe).
+    /**
+     * Mouse key press event.
+     * data1: Key code of the key that was pressed.
+     * data2: X coordinate.
+     * data3: Y coordinate.
+     */
+    ev_mouse_keydown,
+
+    /**
+     * Mouse key release event.
+     * data1: Key code of the key that was released.
+     * data2: X coordinate.
+     * data3: Y coordinate.
+     */
+    ev_mouse_keyup,
+
+    /**
+     * Joystick state.
+     *    data1: Bitfield of buttons currently pressed.
+     *    data2: X axis mouse movement (turn).
+     *    data3: Y axis mouse movement (forward/backward).
+     *    data4: Third axis mouse movement (strafe).
+     */
     ev_joystick,
 
-    // Quit event. Triggered when the user clicks the "close" button
-    // to terminate the application.
+    /**
+     * Quit event. Triggered when the user clicks the "close" button
+     * to terminate the application.
+     */
     ev_quit
 } evtype_t;
 

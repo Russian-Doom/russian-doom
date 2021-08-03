@@ -6189,59 +6189,10 @@ void M_RD_MouseKey_Binding_Routine (int key)
 {
     messageToBind = 0;
 
-    switch (key)
-    {
-        case 13:
-        {
-            if (*keyToBind == 0 && key == 13)
-                *keyToBind = -1;
-            else
-                *keyToBind = 0;
-            break;
-        }
-        case 127:
-        {
-            if (*keyToBind == 1 && key == 127)
-                *keyToBind = -1;
-            else
-                *keyToBind = 1;
-            break;
-        }
-        case 4:
-        {
-            if (*keyToBind == 2 && key == 4)
-                *keyToBind = -1;
-            else
-                *keyToBind = 2;
-            break;
-        }
-        case 8:
-        case 16:
-        case 173:
-        {
-            if ((*keyToBind == 3 && key == 8)
-                ||  (*keyToBind == 3 && key == 16)
-                ||  (*keyToBind == 3 && key == 173))
-                *keyToBind = -1;
-            else
-                *keyToBind = 3;
+    if(key == KEY_ESCAPE || key > MAX_MOUSE_BUTTONS)
+        return;
 
-            break;
-        }
-        case 175:
-        {
-            if (*keyToBind == 4 && key == 175)
-                *keyToBind = -1;
-            else
-                *keyToBind = 4;
-            break;
-        }
-        case KEY_ESCAPE:
-        default:
-        {
-            break;
-        }
-    }
+    *keyToBind = key;
 }
 
 void M_RD_StartBinding_Mouse (int* key_var)
@@ -6594,7 +6545,7 @@ boolean M_Responder (event_t* ev)
     }
     else
     {
-        if (ev->type == ev_mouse && mousewait < I_GetTime())
+        if (ev->type == ev_mouse_keydown && mousewait < I_GetTime())
         {
             // [FG] disable menu control by mouse
             /*
@@ -6656,12 +6607,9 @@ boolean M_Responder (event_t* ev)
 
             // [JN] Catch all incoming data1 mouse events. Makes middle mouse button 
             // working for message interruption and for binding ability.
-            if (ev->data1)
-            {
-                key = ev->data1;
-                mousewait = I_GetTime() + 5;
-            }
-
+            key = ev->data1;
+            mousewait = I_GetTime() + 5;
+            /* [Dasperal] Disable this for now
             if (ev->data1&1)
             {
                 key = key_menu_forward;
@@ -6686,7 +6634,7 @@ boolean M_Responder (event_t* ev)
             {
                 key = key_menu_up;
                 mousewait = I_GetTime() + 1;
-            }
+            }*/
         }
         else
         {
@@ -6817,7 +6765,7 @@ boolean M_Responder (event_t* ev)
     }
 
     // [JN] Toggle level flipping.
-    if (key == key_togglefliplvls)
+    if (ev->type == ev_keydown && key == key_togglefliplvls)
     {
         flip_levels ^= 1;
         R_ExecuteSetViewSize();         // Redraw game screen
