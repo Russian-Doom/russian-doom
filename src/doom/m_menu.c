@@ -2552,7 +2552,7 @@ void M_RD_Change_AutomapColor(Direction_t direction)
     if (gamemission == jaguar)
         return;
 
-    RD_Menu_SpinInt(&automap_coords, 0, 2, direction);
+    RD_Menu_SpinInt(&automap_color, 0, 5, direction);
 
     // [JN] Reinitialize automap color scheme.
     AM_initColors();
@@ -2566,6 +2566,9 @@ void M_RD_Change_AutomapAntialias()
 void M_RD_Change_AutomapOverlay()
 {
     automap_overlay ^= 1;
+
+    // Update status bar
+    ST_doRefresh();
 }
 
 void M_RD_Change_AutomapRotate()
