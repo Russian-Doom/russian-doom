@@ -678,20 +678,16 @@ void R_ProjectSprite (mobj_t* thing)
     tx -= flip ? spritewidth[lump] - spriteoffset[lump] : spriteoffset[lump];
     x1 = (centerxfrac + FixedMul (tx,xscale) ) >>FRACBITS;
 
-    // off the right side?
-    if (x1 > viewwidth)
-    return;
-
     tx +=  spritewidth[lump];
     x2 = ((centerxfrac + FixedMul (tx,xscale) ) >>FRACBITS) - 1;
 
-    // off the left side
-    if (x2 < 0)
+    gzt = interpz + spritetopoffset[lump];
+
+    // off the side?
+    if (x1 > viewwidth || x2 < 0)
     return;
 
     // [JN] killough 4/9/98: clip things which are out of view due to height
-    gzt = interpz + spritetopoffset[lump];
-
     if (interpz > viewz + FixedDiv(viewheight << FRACBITS, xscale)
     ||  gzt     < (int64_t)viewz - FixedDiv((viewheight << FRACBITS)-viewheight, xscale))
     return;
