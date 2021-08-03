@@ -6851,14 +6851,14 @@ boolean M_Responder (event_t* ev)
     // [JN] Allow detail toggle even while active menu.
     if (key == key_menu_detail)
     {
-        M_RD_Change_Detail(0);
+        M_RD_Change_Detail();
         S_StartSound(NULL,sfx_swtchn);
         return true;
     }
     // [JN] Allow to toggle messages even while active menu.
     else if (key == key_menu_messages)
     {
-        M_RD_Change_Messages(0);
+        M_RD_Change_Messages();
         S_StartSound(NULL,sfx_swtchn);
         return true;
     }

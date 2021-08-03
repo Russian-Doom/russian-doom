@@ -4073,7 +4073,7 @@ boolean MN_Responder(event_t * event)
         else if (key == key_menu_detail)          // F5 (detail)
         {
             // [JN] Restored variable detail mode.
-            M_RD_Detail(0);
+            M_RD_Detail();
             S_StartSound(NULL, sfx_chat);
             return true;
         }
