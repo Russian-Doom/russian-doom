@@ -24,7 +24,12 @@ typedef enum
     msg_pickup,     // 1: item pickup
     msg_secret,     // 2: revealed secret
     msg_system,     // 3: system message
-    msg_chat        // 4: netgame chat
+    msg_chat,       // 4: netgame chat
+    hud_stats,      // 5: HUD stats (KIS, time)
+    hud_coords,     // 6: HUD coords (x/y/z/ang)
+    hud_level,      // 7: HUD level name
+    hud_values      // 8: HUD values
+    
 } MessageType_t;
 
 extern Translation_CR_t messages_pickup_color_set;

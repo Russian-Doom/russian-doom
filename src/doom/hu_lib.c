@@ -25,6 +25,7 @@
 #include "v_video.h"
 #include "i_swap.h"
 #include "hu_lib.h"
+#include "hu_stuff.h"
 #include "r_local.h"
 #include "r_draw.h"
 #include "jn.h"
@@ -109,12 +110,17 @@ void HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor, MessageType_t typ
                 case msg_secret:  dp_translation = messages_secret_color_set == CR_NONE ? NULL : cr[messages_secret_color_set];  break;
                 case msg_system:  dp_translation = messages_system_color_set == CR_NONE ? NULL : cr[messages_system_color_set];  break;
                 case msg_chat:    dp_translation = messages_chat_color_set == CR_NONE ? NULL : cr[messages_chat_color_set];      break;
+                case hud_stats:   dp_translation = hud_stats_color_set;   break;
+                case hud_coords:  dp_translation = hud_coords_color_set;  break;
+                case hud_level:   dp_translation = hud_level_color_set;   break;
+                case hud_values:  dp_translation = hud_values_color_set;  break;
                 // [JN] No coloring, including for "msg_uncolored" and fps/time widgets.
                 default:  dp_translation = NULL;  break;
             }
 
             // [JN] Draw message.
-            if (message_fade && !vanillaparm && type != msg_uncolored)
+            if (message_fade && !vanillaparm && type != msg_uncolored
+            &&  type != hud_stats && type != hud_coords && type != hud_level && type != hud_values)
             {
                 if (message_counter >= 10)
                 V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0), l->y, l->f[c - l->sc]);

@@ -73,6 +73,12 @@ void HU_Drawer(void);
 char HU_dequeueChatChar(void);
 void HU_Erase(void);
 
+void HU_Init_Widgets(void);
+extern byte *hud_stats_color_set;
+extern byte *hud_coords_color_set;
+extern byte *hud_level_color_set;
+extern byte *hud_values_color_set;
+
 extern char *chat_macros[10];
 
 

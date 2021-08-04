@@ -152,6 +152,7 @@ static void SensibleDefaults(void)
     automap_rotate = 0;
     automap_grid = 0;
     automap_grid_size = 128;
+    hud_widget_colors = 0;
 
     // Gameplay: Graphical
     brightmaps = 1;

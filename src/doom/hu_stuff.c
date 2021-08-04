@@ -126,20 +126,32 @@ patch_t*    hu_font_big_rus[HU_FONTSIZE2];  // [JN] Big, unchangeable Russian fo
 patch_t*    hu_font_gray[HU_FONTSIZE_GRAY]; // [JN] Small gray STCFG font
 
 static      hu_textline_t w_title;
-static      hu_textline_t w_kills;
-static      hu_textline_t w_items;
-static      hu_textline_t w_scrts;
-static      hu_textline_t w_skill;
-static      hu_textline_t w_ltime_title;
-static      hu_textline_t w_ltime;
-static      hu_textline_t w_ttime_title;
-static      hu_textline_t w_ttime;
-static      hu_textline_t w_coord_x;
-static      hu_textline_t w_coord_y;
-static      hu_textline_t w_coord_z;
-static      hu_textline_t w_ang;
 boolean     chat_on;
 static      hu_itext_t w_chat;
+
+// [JN] Automap widgets
+static hu_textline_t w_kills_title, w_kills;
+static hu_textline_t w_items_title, w_items;
+static hu_textline_t w_scrts_title, w_scrts;
+static hu_textline_t w_skill_title, w_skill;
+static hu_textline_t w_ltime_title, w_ltime;
+static hu_textline_t w_ttime_title, w_ttime;
+static hu_textline_t w_coord_x_title, w_coord_x;
+static hu_textline_t w_coord_y_title, w_coord_y;
+static hu_textline_t w_coord_z_title, w_coord_z;
+static hu_textline_t w_ang_title, w_ang;
+static int w_kills_title_lengh;
+static int w_items_title_lengh;
+static int w_scrts_title_lengh;
+static int w_skill_title_lengh;
+static int w_coord_x_title_lengh;
+static int w_coord_y_title_lengh;
+static int w_coord_z_title_lengh;
+static int w_ang_title_lengh;
+byte *hud_stats_color_set;
+byte *hud_coords_color_set;
+byte *hud_level_color_set;
+byte *hud_values_color_set;
 
 static boolean always_off = false;
 static char	    chat_dest[MAXPLAYERS];
@@ -160,6 +172,8 @@ static hu_stext_t w_message_chat;   // [JN] Netgame chat
 int message_counter;                // [JN] Un-static for fading
 
 static boolean headsupactive = false;
+
+extern int M_StringWidth(char *string);
 
 
 //
@@ -725,6 +739,43 @@ void HU_Stop(void)
     headsupactive = false;
 }
 
+// -----------------------------------------------------------------------------
+// HU_Init_Widgets
+// [JN] Initialize HUD widget colors and lengths.
+// -----------------------------------------------------------------------------
+
+void HU_Init_Widgets (void)
+{
+    // Set lengths:
+    if (english_language)
+    {
+        w_kills_title_lengh = M_StringWidth("kills: ");
+        w_items_title_lengh = M_StringWidth("items: ");
+        w_scrts_title_lengh = M_StringWidth("secret: ");
+        w_skill_title_lengh = M_StringWidth("skill: ");
+        w_coord_x_title_lengh = M_StringWidth("x: ");
+        w_coord_y_title_lengh = M_StringWidth("y: ");
+        w_coord_z_title_lengh = M_StringWidth("z: ");
+        w_ang_title_lengh = M_StringWidth("ang: ");
+    }
+    else
+    {
+        w_kills_title_lengh = M_StringWidth("dhfub: ");     // враги:
+        w_items_title_lengh = M_StringWidth("ghtlvtns: ");  // предметы:
+        w_scrts_title_lengh = M_StringWidth("nfqybrb: ");   // тайники:
+        w_skill_title_lengh = M_StringWidth("ckj;yjcnm: "); // сложность:
+        w_coord_x_title_lengh = M_StringWidth("[: ");       // x:
+        w_coord_y_title_lengh = M_StringWidth("e: ");       // y:
+        w_coord_z_title_lengh = M_StringWidth("x: ");       // z:
+        w_ang_title_lengh = M_StringWidth("eujk: ");        // угол:
+    }
+
+    // Set colors:
+    hud_stats_color_set = NULL;
+    hud_coords_color_set = hud_widget_colors == 2 ? cr[CR_GREEN] : NULL;
+    hud_level_color_set = hud_widget_colors == 2 && !vanillaparm ? cr[CR_YELLOW] : NULL;
+    hud_values_color_set = hud_widget_colors == 0 ? NULL : cr[CR_WHITE];
+}
 
 void HU_Start(void)
 {
@@ -763,23 +814,43 @@ void HU_Start(void)
                                              english_language ? hu_font : hu_font_small_rus, 
                                              HU_FONTSTART);
 
-    HUlib_initTextLine(&w_kills,
+    HUlib_initTextLine(&w_kills_title,
 		       HU_TITLEX, (HU_MSGY+1) + 1 * 8,
 		       english_language ? hu_font : hu_font_small_rus,
 		       HU_FONTSTART);
 
-    HUlib_initTextLine(&w_items,
+    HUlib_initTextLine(&w_kills,
+		       HU_TITLEX + w_kills_title_lengh, (HU_MSGY+1) + 1 * 8,
+		       english_language ? hu_font : hu_font_small_rus,
+		       HU_FONTSTART);
+
+    HUlib_initTextLine(&w_items_title,
 		       HU_TITLEX, (HU_MSGY+1) + 2 * 8,
 		       english_language ? hu_font : hu_font_small_rus,
 		       HU_FONTSTART);
 
-    HUlib_initTextLine(&w_scrts,
+    HUlib_initTextLine(&w_items,
+		       HU_TITLEX + w_items_title_lengh, (HU_MSGY+1) + 2 * 8,
+		       english_language ? hu_font : hu_font_small_rus,
+		       HU_FONTSTART);
+
+    HUlib_initTextLine(&w_scrts_title,
 		       HU_TITLEX, (HU_MSGY+1) + 3 * 8,
 		       english_language ? hu_font : hu_font_small_rus,
 		       HU_FONTSTART);
 
-    HUlib_initTextLine(&w_skill,
+    HUlib_initTextLine(&w_scrts,
+		       HU_TITLEX + w_scrts_title_lengh, (HU_MSGY+1) + 3 * 8,
+		       english_language ? hu_font : hu_font_small_rus,
+		       HU_FONTSTART);
+
+    HUlib_initTextLine(&w_skill_title,
 		       HU_TITLEX, (HU_MSGY+1) + 4 * 8,
+		       english_language ? hu_font : hu_font_small_rus,
+		       HU_FONTSTART);
+
+    HUlib_initTextLine(&w_skill,
+		       HU_TITLEX + w_skill_title_lengh, (HU_MSGY+1) + 4 * 8,
 		       english_language ? hu_font : hu_font_small_rus,
 		       HU_FONTSTART);
 
@@ -803,23 +874,43 @@ void HU_Start(void)
 		       english_language ? hu_font : hu_font_small_rus,
 		       HU_FONTSTART);
 
-    HUlib_initTextLine(&w_coord_x,
+    HUlib_initTextLine(&w_coord_x_title,
 		       HU_TITLEX, (HU_MSGY+1) + 12 * 8,
 		       hu_font,
 		       HU_FONTSTART);
 
-    HUlib_initTextLine(&w_coord_y,
+    HUlib_initTextLine(&w_coord_x,
+		       HU_TITLEX + w_coord_x_title_lengh, (HU_MSGY+1) + 12 * 8,
+		       hu_font,
+		       HU_FONTSTART);
+
+    HUlib_initTextLine(&w_coord_y_title,
 		       HU_TITLEX, (HU_MSGY+1) + 13 * 8,
 		       hu_font,
 		       HU_FONTSTART);
 
-    HUlib_initTextLine(&w_coord_z,
+    HUlib_initTextLine(&w_coord_y,
+		       HU_TITLEX + w_coord_y_title_lengh, (HU_MSGY+1) + 13 * 8,
+		       hu_font,
+		       HU_FONTSTART);
+
+    HUlib_initTextLine(&w_coord_z_title,
 		       HU_TITLEX, (HU_MSGY+1) + 14 * 8,
 		       hu_font,
 		       HU_FONTSTART);
 
-    HUlib_initTextLine(&w_ang,
+    HUlib_initTextLine(&w_coord_z,
+		       HU_TITLEX + w_coord_z_title_lengh, (HU_MSGY+1) + 14 * 8,
+		       hu_font,
+		       HU_FONTSTART);
+
+    HUlib_initTextLine(&w_ang_title,
 		       HU_TITLEX, (HU_MSGY+1) + 15 * 8,
+		       english_language ? hu_font : hu_font_small_rus,
+		       HU_FONTSTART);
+
+    HUlib_initTextLine(&w_ang,
+		       HU_TITLEX + w_ang_title_lengh, (HU_MSGY+1) + 15 * 8,
 		       english_language ? hu_font : hu_font_small_rus,
 		       HU_FONTSTART);
 
@@ -912,135 +1003,246 @@ void HU_Drawer(void)
     // [JN] Level name (in automap only)
     if (automapactive)
     {
-        HUlib_drawTextLine(&w_title, false, msg_uncolored);
+        HUlib_drawTextLine(&w_title, false, hud_level);
     }
 
     // [JN] Show level stats in automap (from Crispy Doom).
     if (((automapactive && automap_stats == 1) || automap_stats == 2) && !vanillaparm)
     {
-        // [JN] Kills (show extra kills when necessary).
+        //
+        // Kills
+        //
+        sprintf(str, english_language ? "Kills:" : "dhfub:");
+        HUlib_clearTextLine(&w_kills_title);
+        s = str;
+        while (*s)
+        {
+            HUlib_addCharToTextLine(&w_kills_title, *(s++));
+        }
+        HUlib_drawTextLine(&w_kills_title, false, hud_stats);
+
+        // Counter
         if (players[consoleplayer].killcount <= totalkills)
         {
-            sprintf(str, english_language ?
-                        "Kills: %d/%d" : "dhfub: %d*%d",
-                        players[consoleplayer].killcount, totalkills);
+            sprintf(str, english_language ? "%d/%d" : "%d*%d",
+                    players[consoleplayer].killcount, totalkills);
         }
         else
         {
-            sprintf(str, english_language ?
-                        "Kills: %d/%d+%d" : "dhfub: %d*%d+%d",
-                        players[consoleplayer].killcount, totalkills, extrakills);                
+            sprintf(str, english_language ? "%d/%d+%d" : "%d*%d+%d",
+                    players[consoleplayer].killcount, totalkills, extrakills);                
         }
         HUlib_clearTextLine(&w_kills);
         s = str;
         while (*s)
+        {
             HUlib_addCharToTextLine(&w_kills, *(s++));
-        HUlib_drawTextLine(&w_kills, false, msg_uncolored);
-    
-        // [JN] Items
-        sprintf(str, english_language ?
-                     "Items: %d/%d" : "ghtlvtns: %d*%d",
-                     players[consoleplayer].itemcount, totalitems);
+        }
+        HUlib_drawTextLine(&w_kills, false, hud_values);
+
+        //
+        // Items
+        //
+        sprintf(str, english_language ? "Items:" : "ghtlvtns:");
+        HUlib_clearTextLine(&w_items_title);
+        s = str;
+        while (*s)
+        {
+            HUlib_addCharToTextLine(&w_items_title, *(s++));
+        }
+        HUlib_drawTextLine(&w_items_title, false, hud_stats);
+
+        // Counter
+        sprintf(str, english_language ? "%d/%d" : "%d*%d",
+                players[consoleplayer].itemcount, totalitems);
         HUlib_clearTextLine(&w_items);
         s = str;
         while (*s)
+        {
             HUlib_addCharToTextLine(&w_items, *(s++));
-        HUlib_drawTextLine(&w_items, false, msg_uncolored);
-    
-        // [JN] Secrets
-        sprintf(str, english_language ?
-                     "Secret: %d/%d" : "nfqybrb: %d*%d",
-                     players[consoleplayer].secretcount, totalsecret);
+        }
+        HUlib_drawTextLine(&w_items, false, hud_values);
+
+        //
+        // Secrets
+        //
+        sprintf(str, english_language ? "Secret:" : "nfqybrb:");
+        HUlib_clearTextLine(&w_scrts_title);
+        s = str;
+        while (*s)
+        {
+            HUlib_addCharToTextLine(&w_scrts_title, *(s++));
+        }
+        HUlib_drawTextLine(&w_scrts_title, false, hud_stats);
+
+        // Counter
+        sprintf(str, english_language ? "%d/%d" : "%d*%d",
+                players[consoleplayer].secretcount, totalsecret);
         HUlib_clearTextLine(&w_scrts);
         s = str;
         while (*s)
+        {
             HUlib_addCharToTextLine(&w_scrts, *(s++));
-        HUlib_drawTextLine(&w_scrts, false, msg_uncolored);
+        }
+        HUlib_drawTextLine(&w_scrts, false, hud_values);
 
-        // [JN] Skill
-        sprintf(str, english_language ?
-                     "Skill: %d" : "ckj;yjcnm: %d",
-                     gameskill+1);
+        //
+        // Skill
+        //
+        sprintf(str, english_language ? "Skill:" : "ckj;yjcnm:");
+        HUlib_clearTextLine(&w_skill_title);
+        s = str;
+        while (*s)
+        {
+            HUlib_addCharToTextLine(&w_skill_title, *(s++));
+        }
+        HUlib_drawTextLine(&w_skill_title, false, hud_stats);
+
+        // Indicator
+        sprintf(str, "%d", gameskill+1);
         HUlib_clearTextLine(&w_skill);
         s = str;
         while (*s)
+        {
             HUlib_addCharToTextLine(&w_skill, *(s++));
-        HUlib_drawTextLine(&w_skill, false, msg_uncolored);
+        }
+        HUlib_drawTextLine(&w_skill, false, hud_values);
     }
 
-    // [JN] Level time
+    //
+    // Level time
+    //
     if (((automapactive && automap_level_time == 1) || automap_level_time == 2) && !vanillaparm)
     {
-        sprintf(str, english_language ?
-                     "Level" : "ehjdtym"); // Уровень
+        sprintf(str, english_language ? "Level" : "ehjdtym"); // Уровень
         HUlib_clearTextLine(&w_ltime_title);
         s = str;
         while (*s)
+        {
             HUlib_addCharToTextLine(&w_ltime_title, *(s++));
-        HUlib_drawTextLine(&w_ltime_title, false, msg_uncolored);
+        }
+        HUlib_drawTextLine(&w_ltime_title, false, hud_stats);
 
+        // Indicator
         sprintf(str, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
         HUlib_clearTextLine(&w_ltime);
         s = str;
         while (*s)
+        {
             HUlib_addCharToTextLine(&w_ltime, *(s++));
-        HUlib_drawTextLine(&w_ltime, false, msg_uncolored);
+        }
+        HUlib_drawTextLine(&w_ltime, false, hud_values);
     }
 
-    // [JN] Total time
+    //
+    // Total time
+    //
     if (((automapactive && automap_total_time == 1) || automap_total_time == 2) && !vanillaparm)
     {
-        sprintf(str, english_language ?
-                     "Total" : "j,ott"); // Общее
+        sprintf(str, english_language ? "Total" : "j,ott"); // Общее
         HUlib_clearTextLine(&w_ttime_title);
         s = str;
         while (*s)
+        {
             HUlib_addCharToTextLine(&w_ttime_title, *(s++));
-        HUlib_drawTextLine(&w_ttime_title, false, msg_uncolored);
+        }
+        HUlib_drawTextLine(&w_ttime_title, false, hud_stats);
 
+        // Indicator
         sprintf(str, "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
         HUlib_clearTextLine(&w_ttime);
         s = str;
         while (*s)
+        {
             HUlib_addCharToTextLine(&w_ttime, *(s++));
-        HUlib_drawTextLine(&w_ttime, false, msg_uncolored);
+        }
+        HUlib_drawTextLine(&w_ttime, false, hud_values);
     }
 
-    // [JN] Player coords
+    //
+    // Player coords
+    //
     if (((automapactive && automap_coords == 1) || automap_coords == 2) && !vanillaparm)
     {
-        // [JN] X coord
-        sprintf(str, "X: %d", players[consoleplayer].mo->x >> FRACBITS);
+        // X:
+        sprintf(str, "X:");
+        HUlib_clearTextLine(&w_coord_x_title);
+        s = str;
+        while (*s)
+        {
+            HUlib_addCharToTextLine(&w_coord_x_title, *(s++));
+        }
+        HUlib_drawTextLine(&w_coord_x_title, false, hud_coords);
+        
+        // Indicator
+        sprintf(str, "%d", players[consoleplayer].mo->x >> FRACBITS);
         HUlib_clearTextLine(&w_coord_x);
         s = str;
         while (*s)
+        {
             HUlib_addCharToTextLine(&w_coord_x, *(s++));
-        HUlib_drawTextLine(&w_coord_x, false, msg_uncolored);
+        }
+        HUlib_drawTextLine(&w_coord_x, false, hud_values);
 
-        // [JN] Y coord
-        sprintf(str, "Y: %d", players[consoleplayer].mo->y >> FRACBITS);
+        // Y:
+        sprintf(str, "Y:");
+        HUlib_clearTextLine(&w_coord_y_title);
+        s = str;
+        while (*s)
+        {
+            HUlib_addCharToTextLine(&w_coord_y_title, *(s++));
+        }
+        HUlib_drawTextLine(&w_coord_y_title, false, hud_coords);
+
+        // Indicator
+        sprintf(str, "%d", players[consoleplayer].mo->y >> FRACBITS);
         HUlib_clearTextLine(&w_coord_y);
         s = str;
         while (*s)
+        {
             HUlib_addCharToTextLine(&w_coord_y, *(s++));
-        HUlib_drawTextLine(&w_coord_y, false, msg_uncolored);
+        }
+        HUlib_drawTextLine(&w_coord_y, false, hud_values);
 
-        // [JN] Y coord
-        sprintf(str, "Z: %d", players[consoleplayer].mo->z >> FRACBITS);
+        // Z:
+        sprintf(str, "Z:");
+        HUlib_clearTextLine(&w_coord_z_title);
+        s = str;
+        while (*s)
+        {
+            HUlib_addCharToTextLine(&w_coord_z_title, *(s++));
+        }
+        HUlib_drawTextLine(&w_coord_z_title, false, hud_coords);
+
+        // Indicator
+        sprintf(str, "%d", players[consoleplayer].mo->z >> FRACBITS);
         HUlib_clearTextLine(&w_coord_z);
         s = str;
         while (*s)
+        {
             HUlib_addCharToTextLine(&w_coord_z, *(s++));
-        HUlib_drawTextLine(&w_coord_z, false, msg_uncolored);
+        }
+        HUlib_drawTextLine(&w_coord_z, false, hud_values);
 
-        // [JN] Angle
-        sprintf(str, english_language ? "ANG: %d" : "EUJK: %d",
-                players[consoleplayer].mo->angle / ANG1);
+        // Angle
+        sprintf(str, english_language ? "ANG:" : "EUJK:");
+        HUlib_clearTextLine(&w_ang_title);
+        s = str;
+        while (*s)
+        {
+            HUlib_addCharToTextLine(&w_ang_title, *(s++));
+        }
+        HUlib_drawTextLine(&w_ang_title, false, hud_coords);
+
+        // Indicator
+        sprintf(str, "%d", players[consoleplayer].mo->angle / ANG1);
         HUlib_clearTextLine(&w_ang);
         s = str;
         while (*s)
+        {
             HUlib_addCharToTextLine(&w_ang, *(s++));
-        HUlib_drawTextLine(&w_ang, false, msg_uncolored);
+        }
+        HUlib_drawTextLine(&w_ang, false, hud_values);
     }
 
     // [JN] Draw crosshair. 

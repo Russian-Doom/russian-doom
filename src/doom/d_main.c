@@ -149,6 +149,7 @@ int automap_overlay = 0;
 int automap_rotate  = 0;
 int automap_grid    = 0;
 int automap_grid_size = 128;
+int hud_widget_colors = 0;
 
 // Sound
 int sfxVolume = 8;          // Maximum volume of a sound effect (internal: 0-15)
@@ -723,6 +724,7 @@ void D_BindVariables(void)
     M_BindIntVariable("automap_follow",         &automap_follow);
     M_BindIntVariable("automap_grid",           &automap_grid);
     M_BindIntVariable("automap_grid_size",      &automap_grid_size);
+    M_BindIntVariable("hud_widget_colors",      &hud_widget_colors);
 
     // Sound
     M_BindIntVariable("sfx_volume",             &sfxVolume);
@@ -3155,6 +3157,9 @@ void D_DoomMain (void)
                "HU_Init: Setting up heads up display.\n" :
                "HU_Init: Инициализация HUD.\n");
     HU_Init ();
+
+    // [JN] Predifine HUD widget colors and lengths.
+    HU_Init_Widgets ();
 
     DEH_printf(english_language ?
                "ST_Init: Init status bar.\n" :

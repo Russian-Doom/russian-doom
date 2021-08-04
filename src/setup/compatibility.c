@@ -49,6 +49,7 @@ int automap_rotate = 0;
 int automap_follow = 1;
 int automap_grid = 0;
 int automap_grid_size = 128;
+int hud_widget_colors = 0;
 
 // Gameplay: Graphical
 int brightmaps = 1;
@@ -355,6 +356,7 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("automap_follow",         &automap_follow);
     M_BindIntVariable("automap_grid",           &automap_grid);
     M_BindIntVariable("automap_grid_size",      &automap_grid_size);
+    M_BindIntVariable("hud_widget_colors",      &hud_widget_colors);
 
     // Gameplay: Graphical
     M_BindIntVariable("brightmaps",             &brightmaps);

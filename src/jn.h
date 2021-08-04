@@ -87,6 +87,7 @@ extern int automap_rotate;
 extern int automap_follow;
 extern int automap_grid;
 extern int automap_grid_size;
+extern int hud_widget_colors;
 
 // -----------------------------------------------------------------------------
 // Sound
