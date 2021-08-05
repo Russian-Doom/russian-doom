@@ -1553,13 +1553,16 @@ boolean HU_Responder(event_t *ev)
 
     if (!chat_on)
     {
+        // [JN] Disable last message showing.
+        /*
         if (ev->data1 == key_message_refresh)
         {
             message_on = true;
             message_counter = messages_timeout * TICRATE;
             eatkey = true;
         }
-        else if (netgame && ev->data2 == key_multi_msg)
+        else */
+        if (netgame && ev->data2 == key_multi_msg)
         {
             eatkey = true;
             StartChatInput(HU_BROADCAST);
