@@ -14,44 +14,58 @@
 
 #include <stddef.h>
 #include "rd_keybinds.h"
+#include "doomkeys.h"
+#include "i_input.h"
+#include "i_video.h"
 #include "m_controls.h"
+#include "m_misc.h"
+#include "rd_menu.h"
+
+boolean isBinding = false;
+bound_key_t keyToBind = bk_null;
+
+typedef struct
+{
+    int* key_var;
+    int* mouse_var;
+} bound_key_descriptor;
 
 bound_key_descriptor bound_key_descriptors[bk_size] = {
     // Movement
-    {NULL, "", "", '\0', '\0'}, // bk_null
-    {&key_up, "Move Forward", "ldb;tybt dgthtl", 'm', 'l'}, // bk_forward // Движение вперед
-    {&key_down, "Move Backward", "ldb;tybt yfpfl", 'm', 'l'}, // bk_backward // Движение назад
-    {&key_left, "Turn Left", "gjdjhjn yfktdj", 't', 'g'}, // bk_turn_left // Поворот налево
-    {&key_right, "Turn Right", "gjdjhjn yfghfdj", 't', 'g'}, // bk_turn_right // Поворот направо
-    {&key_strafeleft, "Strafe Left", ",jrjv dktdj", 's', ','}, // bk_strafe_left // Боком влево
-    {&key_straferight, "Strafe Right", ",jrjv dghfdj", 's', ','}, // bk_strafe_right // Боком вправо
-    {&key_flyup, "Fly up", "ktntnm ddth[", 'f', 'k'}, // bk_fly_up // Лететь вверх
-    {&key_flydown, "Fly down", "ktntnm dybp", 'f', 'k'}, // bk_fly_down // Лететь вниз
-    {&key_flycenter, "Drop", "ghbptvkbnmcz", 'd', 'g'}, // bk_fly_center // Приземлиться
-    {&key_speed, "Speed On", ",tu", 's', ','}, // bk_speed // Бег
-    {&key_strafe, "Strafe On", "ldb;tybt ,jrjv", 's', 'l'}, // bk_strafe // Движение боком
-    {&key_use, "Jump", "ghs;jr", 'j', 'g'}, // bk_jump // Прыжок
-    {&key_toggleautorun, "Always run", "gjcnjzyysq ,tu", 'a', 'g'}, // bk_toggle_autorun // Постоянный бег
-    {&key_use, "Use", "bcgjkmpjdfnm", 'u', 'b'}, // bk_use // Использовать
+    {NULL,               NULL}, // bk_null
+    {&key_up,            &mousebforward}, // bk_forward
+    {&key_down,          &mousebbackward}, // bk_backward
+    {&key_left,          NULL}, // bk_turn_left
+    {&key_right,         NULL}, // bk_turn_right
+    {&key_strafeleft,    &mousebstrafeleft}, // bk_strafe_left
+    {&key_straferight,   &mousebstraferight}, // bk_strafe_right
+    {&key_flyup,         NULL}, // bk_fly_up
+    {&key_flydown,       NULL}, // bk_fly_down
+    {&key_flycenter,     NULL}, // bk_fly_center
+    {&key_speed,         NULL}, // bk_speed
+    {&key_strafe,        &mousebstrafe}, // bk_strafe
+    {&key_jump,          &mousebjump}, // bk_jump
+    {&key_toggleautorun, NULL}, // bk_toggle_autorun
+    {&key_use,           &mousebuse}, // bk_use
 
     // Weapon
-    {&key_fire, "Fire/Attack", "fnfrf*cnhtkm,f", 'f', 'f'}, // bk_fire // Атака/стрельба
-    {&key_weapon1, "Weapon 1", "jhe;bt 1", 'w', 'j'}, // bk_weapon_1 // Оружие 1
-    {&key_weapon2, "Weapon 2", "jhe;bt 2", 'w', 'j'}, // bk_weapon_2 // Оружие 2
-    {&key_weapon3, "Weapon 3", "jhe;bt 3", 'w', 'j'}, // bk_weapon_3 // Оружие 3
-    {&key_weapon4, "Weapon 4", "jhe;bt 4", 'w', 'j'}, // bk_weapon_4 // Оружие 4
-    {&key_weapon5, "Weapon 5", "jhe;bt 5", 'w', 'j'}, // bk_weapon_5 // Оружие 5
-    {&key_weapon6, "Weapon 6", "jhe;bt 6", 'w', 'j'}, // bk_weapon_6 // Оружие 6
-    {&key_weapon7, "Weapon 7", "jhe;bt 7", 'w', 'j'}, // bk_weapon_7 // Оружие 7
-    {&key_weapon8, "Weapon 8", "jhe;bt 8", 'w', 'j'}, // bk_weapon_8 // Оружие 8
-    {&key_prevweapon, "Previous weapon", "ghtlsleott jhe;bt", 'p', 'g'}, // bk_weapon_prev // Предыдущее оружие
-    {&key_nextweapon, "Next weapon", "cktle.ott jhe;bt", 'n', 'c'}, // bk_weapon_next // Следующее оружие
+    {&key_fire,       &mousebfire}, // bk_fire
+    {&key_weapon1,    NULL}, // bk_weapon_1
+    {&key_weapon2,    NULL}, // bk_weapon_2
+    {&key_weapon3,    NULL}, // bk_weapon_3
+    {&key_weapon4,    NULL}, // bk_weapon_4
+    {&key_weapon5,    NULL}, // bk_weapon_5
+    {&key_weapon6,    NULL}, // bk_weapon_6
+    {&key_weapon7,    NULL}, // bk_weapon_7
+    {&key_weapon8,    NULL}, // bk_weapon_8
+    {&key_prevweapon, &mousebprevweapon}, // bk_weapon_prev
+    {&key_nextweapon, &mousebnextweapon}, // bk_weapon_next
 
     // Look
-    {&key_lookup, "Look up", "cvjnhtnm ddth[", 'l', 'c'}, // bk_look_up // Смотреть вверх
-    {&key_lookdown, "Look down", "cvjnhtnm dybp", 'l', 'c'}, // bk_look_down // Смотреть вниз
-    {&key_lookcenter, "Look forward", "wtynhbhjdfnm dpukzl", 'l', 'w'}, // bk_look_center // Центрировать взгляд
-    {&key_togglemlook, "Mouse look", "j,pjh vsim.", 'm', 'j'}, // bk_toggle_mlook // Обзор мышью
+    {&key_lookup,      NULL}, // bk_look_up
+    {&key_lookdown,    NULL}, // bk_look_down
+    {&key_lookcenter,  NULL}, // bk_look_center
+    {&key_togglemlook, NULL}, // bk_toggle_mlook
 
     // Inventory
 //  // bk_inv_left
@@ -91,42 +105,129 @@ bound_key_descriptor bound_key_descriptors[bk_size] = {
 //  // bk_arti_healingradius
 
     // Map keys
-    {&key_map_toggle, "Toggle automap", "jnrhsnm rfhne", 't', 'j'}, // bk_map_toggle // Открыть карту
-    {&key_map_zoomin, "Zoom in", "ghb,kbpbnm", 'z', 'g'}, // bk_map_zoom_in // Приблизить
-    {&key_map_zoomout, "Zoom out", "jnlfkbnm", 'z', 'j'}, // bk_map_zoom_out // Отдалить
-    {&key_map_maxzoom, "Maximum zoom out", "gjkysq vfcinf,", 'm', 'g'}, // bk_map_zoom_max // Полный масштаб
-    {&key_map_follow, "Follow mode", "ht;bv cktljdfybz", 'f', 'h'}, // bk_map_follow // Режим следования
-    {&key_map_overlay, "Overlay mode", "ht;bv yfkj;tybz", 'o', 'h'}, // bk_map_overlay // Режим наложения
-    {&key_map_rotate, "Rotate mode", "ht;bv dhfotybz", 'r', 'h'}, // bk_map_rotate // Режим вращения
-    {&key_map_grid, "Toggle grid", "ctnrf", 't', 'c'}, // bk_map_grid // Сетка
-    {&key_map_mark, "Mark location", "gjcnfdbnm jnvtnre", 'm', 'g'}, // bk_map_mark // Поставить отметку
-    {&key_map_clearmark, "Clear all marks", "e,hfnm jnvtnrb", 'c', 'e'}, // bk_map_clearmark // Убрать отметки
+    {&key_map_toggle,    NULL}, // bk_map_toggle
+    {&key_map_zoomin,    NULL}, // bk_map_zoom_in
+    {&key_map_zoomout,   NULL}, // bk_map_zoom_out
+    {&key_map_maxzoom,   NULL}, // bk_map_zoom_max
+    {&key_map_follow,    NULL}, // bk_map_follow
+    {&key_map_overlay,   NULL}, // bk_map_overlay
+    {&key_map_rotate,    NULL}, // bk_map_rotate
+    {&key_map_grid,      NULL}, // bk_map_grid
+    {&key_map_mark,      NULL}, // bk_map_mark
+    {&key_map_clearmark, NULL}, // bk_map_clearmark
 
     // Shortcuts and toggles
-    {&key_menu_qsave, "Quick save", ",scnhjt cj[hfytybt", 'q', ','}, // bk_save // Быстрое сохранение
-    {&key_menu_load, "Quick load", ",scnhfz pfuheprf", 'q', ','}, // bk_load // Быстрая загрузка
-    {&key_menu_nextlevel, "Go to next level", "cktle.obq ehjdtym", 'g', 'c'}, // bk_nextlevel // Следующий уровень
-    {&key_menu_reloadlevel, "Restart level/demo", "gthtpfgecr ehjdyz", 'r', 'g'}, // bk_reloadlevel // Перезапуск уровня
-    {&key_menu_screenshot, "Save a screenshot", "crhbyijn", 's', 'c'}, // bk_screenshot // Скриншот
-    {&key_demo_quit, "Finish demo recording", "pfrjyxbnm pfgbcm ltvj", 'f', 'p'}, // bk_finish_demo // Закончить запись демо
-    {&key_togglecrosshair, "Crosshair", "ghbwtk", 'c', 'g'}, // bk_toggle_crosshair // Прицел
-    {&key_togglefliplvls, "Level flipping", "pthrfkbhjdfybt ehjdyz", 'l', 'p'} // bk_toggle_fliplvls // Зеркалирование уровня
+    {&key_menu_qsave,       NULL}, // bk_qsave
+    {&key_menu_qload,       NULL}, // bk_qload
+    {&key_menu_nextlevel,   NULL}, // bk_nextlevel
+    {&key_menu_reloadlevel, NULL}, // bk_reloadlevel
+    {&key_menu_screenshot,  NULL}, // bk_screenshot
+    {&key_demo_quit,        NULL}, // bk_finish_demo
+    {&key_togglecrosshair,  NULL}, // bk_toggle_crosshair
+    {&key_togglefliplvls,   NULL}, // bk_toggle_fliplvls
+
+    //Multiplayer
+    {&key_spy,                  NULL}, // bk_spy
+    {&key_multi_msg,            NULL}, // bk_multi_msg
+    {&(key_multi_msgplayer[0]), NULL}, // bk_multi_msg_player_0
+    {&(key_multi_msgplayer[1]), NULL}, // bk_multi_msg_player_1
+    {&(key_multi_msgplayer[2]), NULL}, // bk_multi_msg_player_2
+    {&(key_multi_msgplayer[3]), NULL}, // bk_multi_msg_player_3
+    {&(key_multi_msgplayer[4]), NULL}, // bk_multi_msg_player_4
+    {&(key_multi_msgplayer[5]), NULL}, // bk_multi_msg_player_5
+    {&(key_multi_msgplayer[6]), NULL}, // bk_multi_msg_player_6
+    {&(key_multi_msgplayer[7]), NULL}, // bk_multi_msg_player_7
+
+    //F & Special keys
+    {&key_menu_activate,  NULL}, // bk_menu_activate
+    {&key_menu_help,      NULL}, // bk_menu_help
+    {&key_menu_save,      NULL}, // bk_menu_save
+    {&key_menu_load,      NULL}, // bk_menu_load
+    {&key_menu_volume,    NULL}, // bk_menu_volume
+    {&key_menu_detail,    NULL}, // bk_detail
+    {&key_menu_endgame,   NULL}, // bk_endgame
+    {&key_menu_messages,  NULL}, // bk_messages
+    {&key_menu_quit,      NULL}, // bk_quit
+    {&key_menu_gamma,     NULL}, // bk_gamma
+    {&key_menu_incscreen, NULL}, // bk_screen_inc
+    {&key_menu_decscreen, NULL}, // bk_screen_dec
+    {&key_pause,          NULL}, // bk_pause
+    {&key_menu_back,      NULL}, // bk_menu_back
+    {&key_menu_forward,   NULL}, // bk_menu_select
+
+    //System keys
+    {&key_menu_left,    NULL}, // bk_left
+    {&key_menu_right,   NULL}, // bk_right
+    {&key_menu_up,      NULL}, // bk_up
+    {&key_menu_down,    NULL}, // bk_down
+    {&key_menu_confirm, NULL}, // bk_confirm
+    {&key_menu_abort,   NULL}  // bk_abort
 };
 
-bound_key_descriptor* BK_getKeyDescriptor(bound_key_t key)
+boolean keyState[bk_size];
+
+void BK_ProcessKey(event_t* event)
 {
-    return &bound_key_descriptors[key];
+    for(int i = 0; i < bk_size; i++)
+    {
+        if((event->type == ev_keydown || event->type == ev_keyup) &&
+           bound_key_descriptors[i].key_var &&
+           *bound_key_descriptors[i].key_var == event->data1)
+        {
+            keyState[i] = event->type == ev_keydown;
+        }
+
+        if((event->type == ev_mouse_keydown || event->type == ev_mouse_keyup) &&
+           bound_key_descriptors[i].mouse_var &&
+           *bound_key_descriptors[i].mouse_var == event->data1)
+        {
+            keyState[i] = event->type == ev_mouse_keydown;
+        }
+    }
+}
+
+boolean BK_isKeyPressed(bound_key_t key)
+{
+    return keyState[key];
+}
+
+boolean BK_isKeyDown(event_t* event, bound_key_t key)
+{
+    return (event->type == ev_keydown && bound_key_descriptors[key].key_var && *bound_key_descriptors[key].key_var != 0 && *bound_key_descriptors[key].key_var == event->data1) ||
+    (event->type == ev_mouse_keydown && bound_key_descriptors[key].mouse_var && *bound_key_descriptors[key].mouse_var != -1 && *bound_key_descriptors[key].mouse_var == event->data1);
+}
+
+boolean BK_isKeyUp(event_t* event, bound_key_t key)
+{
+    return (event->type == ev_keyup && bound_key_descriptors[key].key_var && *bound_key_descriptors[key].key_var != 0 && *bound_key_descriptors[key].key_var == event->data1) ||
+    (event->type == ev_mouse_keyup && bound_key_descriptors[key].mouse_var && *bound_key_descriptors[key].mouse_var != -1 && *bound_key_descriptors[key].mouse_var == event->data1);
+}
+
+void BK_ReleaseKey(bound_key_t key)
+{
+    keyState[key] = false;
+}
+
+void BK_ReleaseAllKeys()
+{
+    memset(keyState, 0, sizeof(keyState));
 }
 
 // -----------------------------------------------------------------------------
-// BK_getBoundKeysString
-// Returns string of names for first 1 physical keys bound to given bound_key
+// BK_KeyHasNoBinds
+// Returns true if no keys have been bound to given bound_key
 // -----------------------------------------------------------------------------
-char* BK_getBoundKeysString(bound_key_t key)
+static boolean BK_KeyHasNoBinds(bound_key_t key)
+{
+    return *bound_key_descriptors[key].key_var == 0 &&
+    (bound_key_descriptors[key].mouse_var == NULL || *bound_key_descriptors[key].mouse_var == -1);
+}
+
+static char* getKeyboardKeyName(int key)
 {
     // [JN] Values are simple ASCII table:
     // https://upload.wikimedia.org/wikipedia/commons/7/7b/Ascii_Table-nocolor.svg
-    switch(*bound_key_descriptors[key].key_var)
+    switch(key)
     {
         case 0:     return "---";
         case 9:     return "TAB";
@@ -216,13 +317,99 @@ char* BK_getBoundKeysString(bound_key_t key)
     }
 }
 
-// -----------------------------------------------------------------------------
-// BK_KeyHasNoBinds
-// Returns true if no keys have been bound to given bound_key
-// -----------------------------------------------------------------------------
-boolean BK_KeyHasNoBinds(bound_key_t key)
+static char* getMouseKeyName(int i)
 {
-    return *bound_key_descriptors[key].key_var == 0;
+    switch (i)
+    {
+        case -1:                  return "---";
+        case  MOUSE_LEFT:         return "MOUSE 1";
+        case  MOUSE_RIGHT:        return "MOUSE 2";
+        case  MOUSE_MIDDLE:       return "MOUSE 3";
+        case  MOUSE_4:            return "MOUSE 4";
+        case  MOUSE_5:            return "MOUSE 5";
+        case  MOUSE_SCROLL_UP:    return "SCROLL UP";
+        case  MOUSE_SCROLL_DOWN:  return "SCROLL DOWN";
+        case  MOUSE_SCROLL_RIGHT: return "SCROLL RIGHT";
+        case  MOUSE_SCROLL_LEFT:  return "SCROLL LEFT";
+        default:                  return "?"; // [JN] Unknown key
+    }
+}
+
+static char* BK_getBoundKeysString(bound_key_t key)
+{
+    static char string[50];
+    boolean mouseBindExists;
+
+    memset(string, 0, sizeof(string));
+
+    mouseBindExists = bound_key_descriptors[key].mouse_var && *bound_key_descriptors[key].mouse_var != -1;
+    if(*bound_key_descriptors[key].key_var != 0)
+    {
+        M_StringConcat(string, getKeyboardKeyName(*bound_key_descriptors[key].key_var), 50);
+        if(mouseBindExists)
+            M_StringConcat(string, ", ", 50);
+    }
+    else if(!mouseBindExists)
+    {
+        return "---";
+    }
+
+    if(mouseBindExists)
+        M_StringConcat(string, getMouseKeyName(*bound_key_descriptors[key].mouse_var), 50);
+    
+    return string;
+}
+
+void RD_Menu_Draw_Bindings(int x)
+{
+    for (int i = 0; i < CurrentMenu->itemCount; ++i)
+    {
+        if (CurrentMenu->items[i].option != 0)
+        {
+            boolean bindingThis = isBinding && i == CurrentItPos;
+
+            RD_M_DrawTextSmallENG(bindingThis ? "?" : BK_getBoundKeysString(CurrentMenu->items[i].option),
+                                  x + wide_delta, i * 10 + 25,
+                                  bindingThis ? CR_WHITE : BK_KeyHasNoBinds(CurrentMenu->items[i].option) ?
+                                  CR_DARKRED : CR_NONE);
+        }
+    }
+}
+
+void BK_StartBindingKey(bound_key_t key)
+{
+    isBinding = true;
+    keyToBind = key;
+}
+
+void BK_BindKey(event_t* event)
+{
+    isBinding = false;
+
+    if (event->type == ev_keydown && bound_key_descriptors[keyToBind].key_var)
+    {
+        if (event->data1 == *(bound_key_descriptors[keyToBind].key_var))
+        {
+            *bound_key_descriptors[keyToBind].key_var = 0;
+        }
+        else if (event->data1 != KEY_ESCAPE)
+        {
+            *bound_key_descriptors[keyToBind].key_var = event->data1;
+        }
+    }
+    else if (event->type == ev_mouse_keydown && bound_key_descriptors[keyToBind].mouse_var)
+    {
+        if (event->data1 == *(bound_key_descriptors[keyToBind].mouse_var))
+        {
+            *bound_key_descriptors[keyToBind].mouse_var = -1;
+        }
+        else
+        {
+            *bound_key_descriptors[keyToBind].mouse_var = event->data1;
+        }
+    }
+
+    keyToBind = bk_null;
 }
 
 // -----------------------------------------------------------------------------
@@ -232,4 +419,6 @@ boolean BK_KeyHasNoBinds(bound_key_t key)
 void BK_ClearBinds(bound_key_t key)
 {
     *bound_key_descriptors[key].key_var = 0;
+    if(bound_key_descriptors[key].mouse_var)
+        *bound_key_descriptors[key].mouse_var = -1;
 }

@@ -195,6 +195,8 @@ void RD_Menu_DrawSlider(Menu_t * menu, int y, int width, int value);
 /** [JN] Draw small slider*/
 void RD_Menu_DrawSliderSmall(Menu_t * menu, int y, int width, int value);
 
+void RD_Menu_Draw_Bindings(int x);
+
 void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos);
 
 boolean RD_Menu_Responder(int key, int charTyped);

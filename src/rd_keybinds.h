@@ -1,5 +1,5 @@
 //
-// Copyright(C) 2020 Dasperal
+// Copyright(C) 2020-2021 Dasperal
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -12,10 +12,11 @@
 // GNU General Public License for more details.
 //
 
-#include "doomtype.h"
+#ifndef RD_KEYBINDS_H
+#define RD_KEYBINDS_H
 
-#ifndef __RD_KEYBINDS_H__
-#define __RD_KEYBINDS_H__
+#include "doomtype.h"
+#include "d_event.h"
 
 typedef enum
 {
@@ -106,8 +107,8 @@ typedef enum
     bk_map_clearmark,
 
     //Shortcuts and toggles
-    bk_save,
-    bk_load,
+    bk_qsave,
+    bk_qload,
     bk_nextlevel,
     bk_reloadlevel,
     bk_screenshot,
@@ -115,26 +116,66 @@ typedef enum
     bk_toggle_crosshair,
     bk_toggle_fliplvls,
 
+    //Multiplayer
+    bk_spy,
+    bk_multi_msg,
+    bk_multi_msg_player_0,
+    bk_multi_msg_player_1,
+    bk_multi_msg_player_2,
+    bk_multi_msg_player_3,
+    bk_multi_msg_player_4,
+    bk_multi_msg_player_5,
+    bk_multi_msg_player_6,
+    bk_multi_msg_player_7,
+
+    //F & Special keys
+    bk_menu_activate,
+    bk_menu_help,
+    bk_menu_save,
+    bk_menu_load,
+    bk_menu_volume,
+    bk_detail,
+    bk_endgame,
+    bk_messages,
+    bk_quit,
+    bk_gamma,
+    bk_screen_inc,
+    bk_screen_dec,
+    bk_pause,
+    bk_menu_back,
+    bk_menu_select,
+
+    //System keys
+    bk_left,
+    bk_right,
+    bk_up,
+    bk_down,
+    bk_confirm,
+    bk_abort,
+
     bk_size //size of bound_key_t
 
 } bound_key_t;
 
-typedef struct
-{
-    int*    key_var;
-    char    eng_name[128];
-    char    rus_name[128];
-    char    eng_HotKey;
-    char    rus_HotKey;
-} bound_key_descriptor; //TODO make descriptor private
+extern boolean isBinding;
 
-bound_key_descriptor* BK_getKeyDescriptor(bound_key_t key); //TODO make descriptor private
+void BK_ProcessKey(event_t* event);
 
-/** Returns string of names for first 1 physical keys bound to given bound_key */
-char* BK_getBoundKeysString(bound_key_t key);
-/** Returns true if no keys have been bound to given bound_key */
-boolean BK_KeyHasNoBinds(bound_key_t key);
+boolean BK_isKeyPressed(bound_key_t key);
+
+boolean BK_isKeyDown(event_t* event, bound_key_t key);
+
+boolean BK_isKeyUp(event_t* event, bound_key_t key);
+
+void BK_ReleaseKey(bound_key_t key);
+
+void BK_ReleaseAllKeys();
+
+void BK_StartBindingKey(bound_key_t key);
+
+void BK_BindKey(event_t* event);
+
 /** Clears all binds for given bound_key */
 void BK_ClearBinds(bound_key_t key);
 
-#endif //__RD_KEYBINDS_H__
+#endif //RD_KEYBINDS_H

@@ -39,7 +39,6 @@
 #include "hu_stuff.h"
 #include "g_game.h"
 #include "m_argv.h"
-#include "m_controls.h"
 #include "p_saveg.h"
 #include "s_sound.h"
 #include "doomstat.h"
@@ -56,7 +55,7 @@
 
 #define LINEHEIGHT      16
 
-void (*messageRoutine)(int response);
+void (*messageRoutine)(boolean);
 
 boolean inhelpscreens;
 int InfoType = 0;
@@ -64,8 +63,6 @@ int InfoType = 0;
 // [JN] Save strings and messages 
 int     quickSaveSlot;      // -1 = no quicksave slot picked!
 int     messageToPrint;     // 1 = message to be printed
-int     messageToBind;      // [JN] Indicates if we are binding key
-int    *keyToBind;          // [Dasperal] Pointer to key_var to bind
 char   *messageString;      // ...and here is the message string!
 static boolean slottextloaded;
 boolean saveStatus[8];
@@ -76,8 +73,6 @@ boolean messageNeedsInput;  // timed message = no input from user
 boolean QuickSaveTitle;     // [JN] Extra title "БЫСТРОЕ СОХРАНЕНИЕ"
 
 // message x & y
-int     messx;
-int     messy;
 int     messageLastMenuActive;
 
 // we are going to be entering a savegame string
@@ -136,8 +131,6 @@ void M_DrawSaveLoadBorder(int x,int y);
 int  M_StringWidth(char *string);
 int  M_StringHeight(char *string);
 void M_StartMessage(char *string,void *routine,boolean input);
-void M_RD_StartBinding(int* key_var);
-void M_RD_StartBinding_Mouse(int* key_var);
 
 // -----------------------------------------------------------------------------
 // [JN] Custom RD menu prototypes
@@ -219,20 +212,7 @@ void M_RD_Change_Acceleration(Direction_t direction);
 void M_RD_Change_Threshold(Direction_t direction);
 
 // Key bindings (1)
-void M_RD_Bind_Key(int choice);
 void M_RD_Draw_Bindings();
-
-// Mouse bindings
-void M_RD_Draw_Mouse_Bindings(void);
-void M_RD_Mouse_Bind_FireAttack(int choice);
-void M_RD_Mouse_Bind_Use(int choice);
-void M_RD_Mouse_Bind_MoveForward(int choice);
-void M_RD_Mouse_Bind_MoveBackward(int choice);
-void M_RD_Mouse_Bind_StrafeOn(int choice);
-void M_RD_Mouse_Bind_StrafeLeft(int choice);
-void M_RD_Mouse_Bind_StrafeRight(int choice);
-void M_RD_Mouse_Bind_PrevWeapon(int choice);
-void M_RD_Mouse_Bind_NextWeapon(int choice);
 
 // Gameplay
 void M_RD_Draw_Gameplay_1(void);
@@ -703,7 +683,6 @@ static Menu_t Bindings2Menu;
 static Menu_t Bindings3Menu;
 static Menu_t Bindings4Menu;
 static const Menu_t* BindingsMenuPages[] = {&Bindings1Menu, &Bindings2Menu, &Bindings3Menu, &Bindings4Menu};
-static Menu_t MouseBindingsMenu;
 static Menu_t Gameplay1Menu;
 static Menu_t Gameplay2Menu;
 static Menu_t Gameplay3Menu;
@@ -1090,8 +1069,8 @@ static Menu_t SoundSysMenu = {
 
 static MenuItem_t ControlsItems[] = {
     {ITT_TITLE,   "Controls",               "eghfdktybt",                NULL,                       0}, // Управление
-    {ITT_SETMENU, "keyboard bindings",      "yfcnhjqrb rkfdbfnehs",      &Bindings1Menu,              0}, // Настройки клавиатуры
-    {ITT_SETMENU, "mouse bindings",         "yfcnhjqrb vsib",            &MouseBindingsMenu,         0}, // Настройки мыши
+    {ITT_SETMENU, "Customize Controls",     "yfcnhjqrb eghfdktybz",      &Bindings1Menu,              0}, // Настройки управления
+    {ITT_EMPTY,   NULL,                     NULL,                        NULL,                       0}, // Reserved
     {ITT_TITLE,   "mouse",                  "vsim",                      NULL,                       0}, // Мышь
     {ITT_LRFUNC,  "sensivity",              "crjhjcnm",                  M_RD_Change_Sensitivity,    0}, // Скорость
     {ITT_EMPTY,   NULL,                     NULL,                        NULL,                       0},
@@ -1127,17 +1106,17 @@ static const PageDescriptor_t BindingsPageDescriptor = {
 
 static MenuItem_t Bindings1Items[] = {
     {ITT_TITLE,   "Movement",      "ldb;tybt",        NULL,           0},
-    {ITT_EFUNC,   "Move Forward",  "ldb;tybt dgthtl", M_RD_Bind_Key,  bk_forward},      // Движение вперед
-    {ITT_EFUNC,   "Move Backward", "ldb;tybt yfpfl",  M_RD_Bind_Key,  bk_backward},     // Движение назад
-    {ITT_EFUNC,   "Turn Left",     "gjdjhjn yfktdj",  M_RD_Bind_Key,  bk_turn_left},    // Поворот налево
-    {ITT_EFUNC,   "Turn Right",    "gjdjhjn yfghfdj", M_RD_Bind_Key,  bk_turn_right},   // Поворот направо
-    {ITT_EFUNC,   "Strafe Left",   ",jrjv dktdj",     M_RD_Bind_Key,  bk_strafe_left},  // Боком влево
-    {ITT_EFUNC,   "Strafe Right",  ",jrjv dghfdj",    M_RD_Bind_Key,  bk_strafe_right}, // Боком вправо
-    {ITT_EFUNC,   "Speed On",      ",tu",             M_RD_Bind_Key,  bk_speed},        // Бег
-    {ITT_EFUNC,   "Strafe On",     "ldb;tybt ,jrjv",  M_RD_Bind_Key,  bk_strafe},       // Движение боком
+    {ITT_EFUNC,   "Move Forward",  "ldb;tybt dgthtl", BK_StartBindingKey,  bk_forward},      // Движение вперед
+    {ITT_EFUNC,   "Move Backward", "ldb;tybt yfpfl",  BK_StartBindingKey,  bk_backward},     // Движение назад
+    {ITT_EFUNC,   "Turn Left",     "gjdjhjn yfktdj",  BK_StartBindingKey,  bk_turn_left},    // Поворот налево
+    {ITT_EFUNC,   "Turn Right",    "gjdjhjn yfghfdj", BK_StartBindingKey,  bk_turn_right},   // Поворот направо
+    {ITT_EFUNC,   "Strafe Left",   ",jrjv dktdj",     BK_StartBindingKey,  bk_strafe_left},  // Боком влево
+    {ITT_EFUNC,   "Strafe Right",  ",jrjv dghfdj",    BK_StartBindingKey,  bk_strafe_right}, // Боком вправо
+    {ITT_EFUNC,   "Speed On",      ",tu",             BK_StartBindingKey,  bk_speed},        // Бег
+    {ITT_EFUNC,   "Strafe On",     "ldb;tybt ,jrjv",  BK_StartBindingKey,  bk_strafe},       // Движение боком
     {ITT_TITLE,   "Action",        "ltqcndbt",        NULL,           0},
-    {ITT_EFUNC,   "Fire/Attack",   "fnfrf*cnhtkm,f",  M_RD_Bind_Key,  bk_fire},         // Атака/стрельба
-    {ITT_EFUNC,   "Use",           "bcgjkmpjdfnm",    M_RD_Bind_Key,  bk_use},          // Использовать
+    {ITT_EFUNC,   "Fire/Attack",   "fnfrf*cnhtkm,f",  BK_StartBindingKey,  bk_fire},         // Атака/стрельба
+    {ITT_EFUNC,   "Use",           "bcgjkmpjdfnm",    BK_StartBindingKey,  bk_use},          // Использовать
     {ITT_EMPTY,   NULL,            NULL,              NULL,           0},
     {ITT_SETMENU, NULL,            NULL,              &Bindings2Menu, 0},               // Далее >
     {ITT_SETMENU, NULL,            NULL,              &Bindings4Menu, 0},               // < Назад
@@ -1161,16 +1140,16 @@ static Menu_t Bindings1Menu = {
 
 static MenuItem_t Bindings2Items[] = {
     {ITT_TITLE,   "Weapons",         "jhe;bt",            NULL,           0},
-    {ITT_EFUNC,   "Weapon 1",        "jhe;bt 1",          M_RD_Bind_Key,  bk_weapon_1},    // Оружие 1
-    {ITT_EFUNC,   "Weapon 2",        "jhe;bt 2",          M_RD_Bind_Key,  bk_weapon_2},    // Оружие 2
-    {ITT_EFUNC,   "Weapon 3",        "jhe;bt 3",          M_RD_Bind_Key,  bk_weapon_3},    // Оружие 3
-    {ITT_EFUNC,   "Weapon 4",        "jhe;bt 4",          M_RD_Bind_Key,  bk_weapon_4},    // Оружие 4
-    {ITT_EFUNC,   "Weapon 5",        "jhe;bt 5",          M_RD_Bind_Key,  bk_weapon_5},    // Оружие 5
-    {ITT_EFUNC,   "Weapon 6",        "jhe;bt 6",          M_RD_Bind_Key,  bk_weapon_6},    // Оружие 6
-    {ITT_EFUNC,   "Weapon 7",        "jhe;bt 7",          M_RD_Bind_Key,  bk_weapon_7},    // Оружие 7
-    {ITT_EFUNC,   "Weapon 8",        "jhe;bt 8",          M_RD_Bind_Key,  bk_weapon_8},    // Оружие 8
-    {ITT_EFUNC,   "Previous weapon", "ghtlsleott jhe;bt", M_RD_Bind_Key,  bk_weapon_prev}, // Предыдущее оружие
-    {ITT_EFUNC,   "Next weapon",     "cktle.ott jhe;bt",  M_RD_Bind_Key,  bk_weapon_next}, // Следующее оружие
+    {ITT_EFUNC,   "Weapon 1",        "jhe;bt 1",          BK_StartBindingKey,  bk_weapon_1},    // Оружие 1
+    {ITT_EFUNC,   "Weapon 2",        "jhe;bt 2",          BK_StartBindingKey,  bk_weapon_2},    // Оружие 2
+    {ITT_EFUNC,   "Weapon 3",        "jhe;bt 3",          BK_StartBindingKey,  bk_weapon_3},    // Оружие 3
+    {ITT_EFUNC,   "Weapon 4",        "jhe;bt 4",          BK_StartBindingKey,  bk_weapon_4},    // Оружие 4
+    {ITT_EFUNC,   "Weapon 5",        "jhe;bt 5",          BK_StartBindingKey,  bk_weapon_5},    // Оружие 5
+    {ITT_EFUNC,   "Weapon 6",        "jhe;bt 6",          BK_StartBindingKey,  bk_weapon_6},    // Оружие 6
+    {ITT_EFUNC,   "Weapon 7",        "jhe;bt 7",          BK_StartBindingKey,  bk_weapon_7},    // Оружие 7
+    {ITT_EFUNC,   "Weapon 8",        "jhe;bt 8",          BK_StartBindingKey,  bk_weapon_8},    // Оружие 8
+    {ITT_EFUNC,   "Previous weapon", "ghtlsleott jhe;bt", BK_StartBindingKey,  bk_weapon_prev}, // Предыдущее оружие
+    {ITT_EFUNC,   "Next weapon",     "cktle.ott jhe;bt",  BK_StartBindingKey,  bk_weapon_next}, // Следующее оружие
     {ITT_EMPTY,   NULL,              NULL,                NULL,           0},
     {ITT_EMPTY,   NULL,              NULL,                NULL,           0},
     {ITT_SETMENU, NULL,              NULL,                &Bindings3Menu, 0},               // Далее >
@@ -1195,21 +1174,21 @@ static Menu_t Bindings2Menu = {
 
 
 static MenuItem_t Bindings3Items[] = {
-    {ITT_TITLE,   "Shortcut keys",         ",scnhsq ljcneg",        NULL,           0},
-    {ITT_EFUNC,   "Quick save",            ",scnhjt cj[hfytybt",    M_RD_Bind_Key,  bk_save},             // Быстрое сохранение
-    {ITT_EFUNC,   "Quick load",            ",scnhfz pfuheprf",      M_RD_Bind_Key,  bk_load},             // Быстрая загрузка
-    {ITT_EFUNC,   "Go to next level",      "cktle.obq ehjdtym",     M_RD_Bind_Key,  bk_nextlevel},        // Следующий уровень
-    {ITT_EFUNC,   "Restart level/demo",    "gthtpfgecr ehjdyz",     M_RD_Bind_Key,  bk_reloadlevel},      // Перезапуск уровня
-    {ITT_EFUNC,   "Save a screenshot",     "crhbyijn",              M_RD_Bind_Key,  bk_screenshot},       // Скриншот
-    {ITT_EFUNC,   "Finish demo recording", "pfrjyxbnm pfgbcm ltvj", M_RD_Bind_Key,  bk_finish_demo},      // Закончить запись демо
-    {ITT_TITLE,   "Toggleables",           "gthtrk.xtybt",          NULL,           0},
-    {ITT_EFUNC,   "Mouse look",            "j,pjh vsim.",           M_RD_Bind_Key,  bk_toggle_mlook},     // Обзор мышью
-    {ITT_EFUNC,   "Always run",            "gjcnjzyysq ,tu",        M_RD_Bind_Key,  bk_toggle_autorun},   // Постоянный бег
-    {ITT_EFUNC,   "Crosshair",             "ghbwtk",                M_RD_Bind_Key,  bk_toggle_crosshair}, // Прицел
-    {ITT_EFUNC,   "Level flipping",        "pthrfkbhjdfybt ehjdyz", M_RD_Bind_Key,  bk_toggle_fliplvls},  // Зеркалирование уровня
+    {ITT_TITLE,   "Shortcut keys",         ",scnhsq ljcneg",        NULL,               0},
+    {ITT_EFUNC,   "Quick save",            ",scnhjt cj[hfytybt",    BK_StartBindingKey, bk_qsave},            // Быстрое сохранение
+    {ITT_EFUNC,   "Quick load",            ",scnhfz pfuheprf",      BK_StartBindingKey, bk_qload},            // Быстрая загрузка
+    {ITT_EFUNC,   "Go to next level",      "cktle.obq ehjdtym",     BK_StartBindingKey, bk_nextlevel},        // Следующий уровень
+    {ITT_EFUNC,   "Restart level/demo",    "gthtpfgecr ehjdyz",     BK_StartBindingKey, bk_reloadlevel},      // Перезапуск уровня
+    {ITT_EFUNC,   "Save a screenshot",     "crhbyijn",              BK_StartBindingKey, bk_screenshot},       // Скриншот
+    {ITT_EFUNC,   "Finish demo recording", "pfrjyxbnm pfgbcm ltvj", BK_StartBindingKey, bk_finish_demo},      // Закончить запись демо
+    {ITT_TITLE,   "Toggleables",           "gthtrk.xtybt",          NULL,               0},
+    {ITT_EFUNC,   "Mouse look",            "j,pjh vsim.",           BK_StartBindingKey, bk_toggle_mlook},     // Обзор мышью
+    {ITT_EFUNC,   "Always run",            "gjcnjzyysq ,tu",        BK_StartBindingKey, bk_toggle_autorun},   // Постоянный бег
+    {ITT_EFUNC,   "Crosshair",             "ghbwtk",                BK_StartBindingKey, bk_toggle_crosshair}, // Прицел
+    {ITT_EFUNC,   "Level flipping",        "pthrfkbhjdfybt ehjdyz", BK_StartBindingKey, bk_toggle_fliplvls},  // Зеркалирование уровня
     {ITT_EMPTY,   NULL,                    NULL,                    NULL,           0},
-    {ITT_SETMENU, NULL,                    NULL,                    &Bindings4Menu, 0},                   // Далее >
-    {ITT_SETMENU, NULL,                    NULL,                    &Bindings2Menu, 0},                   // < Назад
+    {ITT_SETMENU, NULL,                    NULL,                    &Bindings4Menu, 0},                       // Далее >
+    {ITT_SETMENU, NULL,                    NULL,                    &Bindings2Menu, 0},                       // < Назад
     {ITT_EMPTY,   NULL,                    NULL,                    NULL,           0}
 };
 
@@ -1230,16 +1209,16 @@ static Menu_t Bindings3Menu = {
 
 static MenuItem_t Bindings4Items[] = {
     {ITT_TITLE,   "Automap",          "rfhnf",             NULL,           0},
-    {ITT_EFUNC,   "Toggle automap",   "jnrhsnm rfhne",     M_RD_Bind_Key,  bk_map_toggle},    // Открыть карту
-    {ITT_EFUNC,   "Zoom in",          "ghb,kbpbnm",        M_RD_Bind_Key,  bk_map_zoom_in},   // Приблизить
-    {ITT_EFUNC,   "Zoom out",         "jnlfkbnm",          M_RD_Bind_Key,  bk_map_zoom_out},  // Отдалить
-    {ITT_EFUNC,   "Maximum zoom out", "gjkysq vfcinf,",    M_RD_Bind_Key,  bk_map_zoom_max},  // Полный масштаб
-    {ITT_EFUNC,   "Follow mode",      "ht;bv cktljdfybz",  M_RD_Bind_Key,  bk_map_follow},    // Режим следования
-    {ITT_EFUNC,   "Overlay mode",     "ht;bv yfkj;tybz",   M_RD_Bind_Key,  bk_map_overlay},   // Режим наложения
-    {ITT_EFUNC,   "Rotate mode",      "ht;bv dhfotybz",    M_RD_Bind_Key,  bk_map_rotate},    // Режим вращения
-    {ITT_EFUNC,   "Toggle grid",      "ctnrf",             M_RD_Bind_Key,  bk_map_grid},      // Сетка
-    {ITT_EFUNC,   "Mark location",    "gjcnfdbnm jnvtnre", M_RD_Bind_Key,  bk_map_mark},      // Поставить отметку
-    {ITT_EFUNC,   "Clear all marks",  "e,hfnm jnvtnrb",    M_RD_Bind_Key,  bk_map_clearmark}, // Убрать отметки
+    {ITT_EFUNC,   "Toggle automap",   "jnrhsnm rfhne",     BK_StartBindingKey,  bk_map_toggle},    // Открыть карту
+    {ITT_EFUNC,   "Zoom in",          "ghb,kbpbnm",        BK_StartBindingKey,  bk_map_zoom_in},   // Приблизить
+    {ITT_EFUNC,   "Zoom out",         "jnlfkbnm",          BK_StartBindingKey,  bk_map_zoom_out},  // Отдалить
+    {ITT_EFUNC,   "Maximum zoom out", "gjkysq vfcinf,",    BK_StartBindingKey,  bk_map_zoom_max},  // Полный масштаб
+    {ITT_EFUNC,   "Follow mode",      "ht;bv cktljdfybz",  BK_StartBindingKey,  bk_map_follow},    // Режим следования
+    {ITT_EFUNC,   "Overlay mode",     "ht;bv yfkj;tybz",   BK_StartBindingKey,  bk_map_overlay},   // Режим наложения
+    {ITT_EFUNC,   "Rotate mode",      "ht;bv dhfotybz",    BK_StartBindingKey,  bk_map_rotate},    // Режим вращения
+    {ITT_EFUNC,   "Toggle grid",      "ctnrf",             BK_StartBindingKey,  bk_map_grid},      // Сетка
+    {ITT_EFUNC,   "Mark location",    "gjcnfdbnm jnvtnre", BK_StartBindingKey,  bk_map_mark},      // Поставить отметку
+    {ITT_EFUNC,   "Clear all marks",  "e,hfnm jnvtnrb",    BK_StartBindingKey,  bk_map_clearmark}, // Убрать отметки
     {ITT_EMPTY,   NULL,               NULL,                NULL,           0},
     {ITT_EMPTY,   NULL,               NULL,                NULL,           0},
     {ITT_SETMENU, NULL,               NULL,                &Bindings1Menu, 0},                // Далее >
@@ -1254,35 +1233,6 @@ static Menu_t Bindings4Menu = {
     16, Bindings4Items, false,
     M_RD_Draw_Bindings,
     &BindingsPageDescriptor,
-    &ControlsMenu,
-    1
-};
-
-
-// -----------------------------------------------------------------------------
-// Mouse bindings
-// -----------------------------------------------------------------------------
-
-static MenuItem_t MouseBindingsItems[] = {
-    {ITT_TITLE, "Buttons",         "ryjgrb",            NULL,                          0}, // Кнопки
-    {ITT_EFUNC, "Fire/Attack",     "fnfrf*cnhtkm,f",    M_RD_Mouse_Bind_FireAttack,   0}, // Атака/стрельба
-    {ITT_EFUNC, "Use",             "bcgjkmpjdfnm",      M_RD_Mouse_Bind_Use,          0}, // Использовать
-    {ITT_EFUNC, "Move Forward",    "ldb;tybt dgthtl",   M_RD_Mouse_Bind_MoveForward,  0}, // Движение вперед
-    {ITT_EFUNC, "Move Backward",   "ldb;tybt yfpfl",    M_RD_Mouse_Bind_MoveBackward, 0}, // Движение назад
-    {ITT_EFUNC, "Strafe On",       "ldb;tybt ,jrjv",    M_RD_Mouse_Bind_StrafeOn,     0}, // Движение боком
-    {ITT_EFUNC, "Strafe Left",     ",jrjv dktdj",       M_RD_Mouse_Bind_StrafeLeft,   0}, // Боком влево
-    {ITT_EFUNC, "Strafe Right",    ",jrjv dghfdj",      M_RD_Mouse_Bind_StrafeRight,  0}, // Боком вправо
-    {ITT_EFUNC, "Previous Weapon", "ghtlsleott jhe;bt", M_RD_Mouse_Bind_PrevWeapon,   0}, // Предыдущее оружие
-    {ITT_EFUNC, "Next Weapon",     "cktle.ott jhe;bt",  M_RD_Mouse_Bind_NextWeapon,   0}  // Следующее оружие
-};
-
-static Menu_t MouseBindingsMenu = {
-    35, 35,
-    25,
-    "Mouse bindings", "Yfcnhjqrb vsib", false, // Настройки мыши
-    10, MouseBindingsItems, false,
-    M_RD_Draw_Mouse_Bindings,
-    NULL,
     &ControlsMenu,
     1
 };
@@ -3064,16 +3014,8 @@ void M_RD_Change_Threshold(Direction_t direction)
 // -----------------------------------------------------------------------------
 // Key bindings
 // -----------------------------------------------------------------------------
-
-void M_RD_Bind_Key(int choice)
-{
-    M_RD_StartBinding(BK_getKeyDescriptor(choice)->key_var);
-}
-
 void M_RD_Draw_Bindings()
 {
-    int x = (english_language ? 209 : 210);
-
     // [JN] Erase the entire screen to a tiled background.
     inhelpscreens = true;
     V_FillFlat ("FLOOR4_8");
@@ -3100,247 +3042,8 @@ void M_RD_Draw_Bindings()
         RD_M_DrawTextSmallRUS("kbcnfnm cnhfybws", 139 + wide_delta, 189, CR_DARKRED);
     }
 
-    for (int i = 0; i < CurrentMenu->itemCount; ++i)
-    {
-        if (CurrentMenu->items[i].option != 0)
-        {
-            boolean bindingThis = messageToBind && i == CurrentItPos;
-
-            RD_M_DrawTextSmallENG(bindingThis ? "?" : BK_getBoundKeysString(CurrentMenu->items[i].option),
-                                  x + wide_delta, i * 10 + 25,
-                                  bindingThis ? CR_WHITE : BK_KeyHasNoBinds(CurrentMenu->items[i].option) ?
-                                  CR_DARKRED : CR_NONE);
-        }
-    }
+    RD_Menu_Draw_Bindings(english_language ? 189 : 210);
 }
-
-// -----------------------------------------------------------------------------
-// M_RD_MouseBtnDrawer
-// [JN] Returns button name for mouse bindings.
-// -----------------------------------------------------------------------------
-
-static char *M_RD_MouseBtnDrawer (int i)
-{
-    switch (i)
-    {
-        case -1:                  return "---";
-        case  MOUSE_LEFT:         return "LEFT BUTTON";
-        case  MOUSE_RIGHT:        return "RIGHT BUTTON";
-        case  MOUSE_MIDDLE:       return "MIDDLE BUTTON";
-        case  MOUSE_4:            return "MOUSE 4";
-        case  MOUSE_5:            return "MOUSE 5";
-        case  MOUSE_SCROLL_UP:    return "SCROLL UP";
-        case  MOUSE_SCROLL_DOWN:  return "SCROLL DOWN";
-        case  MOUSE_SCROLL_RIGHT: return "SCROLL RIGHT";
-        case  MOUSE_SCROLL_LEFT:  return "SCROLL LEFT";
-        default:                  return "?"; // [JN] Unknown key
-    }
-}
-
-// -----------------------------------------------------------------------------
-// Mouse bindings
-// -----------------------------------------------------------------------------
-
-void M_RD_Draw_Mouse_Bindings(void)
-{
-    int x = 186;
-    
-    // [JN] Erase the entire screen to a tiled background.
-    inhelpscreens = true;
-    V_FillFlat ("FLOOR4_8");
-
-    if (english_language)
-    {
-        //
-        // Footer
-        //
-        RD_M_DrawTextSmallENG("enter to change, del to clear", 55 + wide_delta, 180, CR_DARKRED);
-    }
-    else
-    {
-        //
-        // Footer
-        //
-        RD_M_DrawTextSmallENG("enter =", 44 + wide_delta, 180, CR_DARKRED);
-        RD_M_DrawTextSmallRUS("= yfpyfxbnm<", 88 + wide_delta, 180, CR_DARKRED);
-        RD_M_DrawTextSmallENG("del =", 176 + wide_delta, 180, CR_DARKRED);
-        RD_M_DrawTextSmallRUS("jxbcnbnm", 213 + wide_delta, 180, CR_DARKRED);
-    }
-
-    // Fire/Attack
-    if (messageToBind && CurrentItPos == 1)
-    {
-        RD_M_DrawTextSmallENG("?", x + wide_delta, 35, CR_WHITE);
-    }
-    else
-    {
-        RD_M_DrawTextSmallENG(M_RD_MouseBtnDrawer(mousebfire), x + wide_delta, 35,
-                             mousebfire == -1 ? CR_DARKRED : CR_NONE);
-    }
-
-    // Use
-    if (messageToBind && CurrentItPos == 2)
-    {
-        RD_M_DrawTextSmallENG("?", x + wide_delta, 45, CR_WHITE);
-    }
-    else
-    {
-        RD_M_DrawTextSmallENG(M_RD_MouseBtnDrawer(mousebuse), x + wide_delta, 45,
-                              mousebuse == -1 ? CR_DARKRED : CR_NONE);
-    }
-
-    // Move Forward
-    if (messageToBind && CurrentItPos == 3)
-    {
-
-        RD_M_DrawTextSmallENG("?", x + wide_delta, 55, CR_WHITE);
-    }
-    else
-    {
-        RD_M_DrawTextSmallENG(M_RD_MouseBtnDrawer(mousebforward), x + wide_delta, 55,
-                              mousebforward == -1 ? CR_DARKRED : CR_NONE);
-    }
-
-    // Move Backward
-    if (messageToBind && CurrentItPos == 4)
-    {
-        RD_M_DrawTextSmallENG("?", x + wide_delta, 65, CR_WHITE);
-    }
-    else
-    {
-        RD_M_DrawTextSmallENG(M_RD_MouseBtnDrawer(mousebbackward), x + wide_delta, 65,
-                              mousebbackward == -1 ? CR_DARKRED : CR_NONE);
-    }
-
-    // Strafe On
-    if (messageToBind && CurrentItPos == 5)
-    {
-        RD_M_DrawTextSmallENG("?", x + wide_delta, 75, CR_WHITE);
-    }
-    else
-    {
-        RD_M_DrawTextSmallENG(M_RD_MouseBtnDrawer(mousebstrafe), x + wide_delta, 75,
-                              mousebstrafe == -1 ? CR_DARKRED : CR_NONE);
-
-    }
-
-    // Strafe Left
-    if (messageToBind && CurrentItPos == 6)
-    {
-        RD_M_DrawTextSmallENG("?",  x + wide_delta, 85, CR_WHITE);
-    }
-    else
-    {
-        RD_M_DrawTextSmallENG(M_RD_MouseBtnDrawer(mousebstrafeleft), x + wide_delta, 85,
-                              mousebstrafeleft == -1 ? CR_DARKRED : CR_NONE);
-    }
-
-    // Strafe Right
-    if (messageToBind && CurrentItPos == 7)
-    {
-        RD_M_DrawTextSmallENG("?", x + wide_delta, 95, CR_WHITE);
-    }
-    else
-    {
-        RD_M_DrawTextSmallENG(M_RD_MouseBtnDrawer(mousebstraferight), x + wide_delta, 95,
-                              mousebstraferight == -1 ? CR_DARKRED : CR_NONE);
-    }
-
-    // Previous Weapon
-    if (messageToBind && CurrentItPos == 8)
-    {
-        RD_M_DrawTextSmallENG("?", x + wide_delta, 105, CR_WHITE);
-    }
-    else
-    {
-        RD_M_DrawTextSmallENG(M_RD_MouseBtnDrawer(mousebprevweapon), x + wide_delta, 105,
-                              mousebprevweapon == -1 ? CR_DARKRED : CR_NONE);
-    }
-
-    // Next Weapon
-    if (messageToBind && CurrentItPos == 9)
-    {
-        RD_M_DrawTextSmallENG("?", x + wide_delta, 115, CR_WHITE);
-    }
-    else
-    {
-        RD_M_DrawTextSmallENG(M_RD_MouseBtnDrawer(mousebnextweapon), x + wide_delta, 115,
-                              mousebnextweapon == -1 ? CR_DARKRED : CR_NONE);
-    }
-}
-
-//
-// Fire/Attack
-//
-void M_RD_Mouse_Bind_FireAttack (int choice) 
-{
-    M_RD_StartBinding_Mouse(&mousebfire);
-}
-
-//
-// Use
-//
-void M_RD_Mouse_Bind_Use (int choice) 
-{
-    M_RD_StartBinding_Mouse(&mousebuse);
-}
-
-//
-// Move Forward
-//
-void M_RD_Mouse_Bind_MoveForward (int choice) 
-{
-    M_RD_StartBinding_Mouse(&mousebforward);
-}
-
-//
-// Move Backward
-//
-void M_RD_Mouse_Bind_MoveBackward (int choice) 
-{
-    M_RD_StartBinding_Mouse(&mousebbackward);
-}
-
-//
-// Strafe On
-//
-void M_RD_Mouse_Bind_StrafeOn (int choice) 
-{
-    M_RD_StartBinding_Mouse(&mousebstrafe);
-}
-
-//
-// Strafe Left
-//
-void M_RD_Mouse_Bind_StrafeLeft (int choice) 
-{
-    M_RD_StartBinding_Mouse(&mousebstrafeleft);
-}
-
-//
-// Strafe Right
-//
-void M_RD_Mouse_Bind_StrafeRight (int choice) 
-{
-    M_RD_StartBinding_Mouse(&mousebstraferight);
-}
-
-//
-// Previous Weapon
-//
-void M_RD_Mouse_Bind_PrevWeapon (int choice) 
-{
-    M_RD_StartBinding_Mouse(&mousebprevweapon);
-}
-
-//
-// Previous Weapon
-//
-void M_RD_Mouse_Bind_NextWeapon (int choice) 
-{
-    M_RD_StartBinding_Mouse(&mousebnextweapon);
-}
-
 
 // -----------------------------------------------------------------------------
 // Gameplay features
@@ -5069,7 +4772,6 @@ void M_RD_BackToDefaults_Recommended(int choice)
     mute_inactive_window = 0;
 
     // Controls
-    joybspeed        = 29;
     mlook            = 0;  players[consoleplayer].centering = true;
     mouseSensitivity = 5;
     mouse_acceleration = 2.0F;
@@ -5238,7 +4940,6 @@ void M_RD_BackToDefaults_Original(int choice)
     mute_inactive_window = 0;
 
     // Controls
-    joybspeed          = 29;
     mlook              = 0;  players[consoleplayer].centering = true;
     mouseSensitivity   = 5;
     mouse_acceleration = 2.0F;
@@ -5627,9 +5328,9 @@ void M_SaveGame (int choice)
 //
 char tempstring[80];
 
-void M_QuickSaveResponse(int key)
+void M_QuickSaveResponse(boolean confirmed)
 {
-    if (key == key_menu_confirm)
+    if (confirmed)
     {
         M_DoSave(quickSaveSlot);
         S_StartSound(NULL,sfx_swtchx);
@@ -5674,9 +5375,9 @@ void M_QuickSave(void)
 //
 // M_QuickLoad
 //
-void M_QuickLoadResponse(int key)
+void M_QuickLoadResponse(boolean confirmed)
 {
-    if (key == key_menu_confirm)
+    if (confirmed)
     {
         M_LoadSelect(quickSaveSlot);
         S_StartSound(NULL,sfx_swtchx);
@@ -5922,18 +5623,18 @@ void M_DrawEpisode(void)
     }
 }
 
-void M_VerifyNightmare(int key)
+void M_VerifyNightmare(boolean confirmed)
 {
-    if (key != key_menu_confirm)
+    if (!confirmed)
         return;
 
     G_DeferedInitNew(4,epi+1,1);
     RD_Menu_DeactivateMenu();
 }
 
-void M_VerifyUltraNightmare(int key)
+void M_VerifyUltraNightmare(boolean confirmed)
 {
-    if (key != key_menu_confirm)
+    if (!confirmed)
         return;
 
     G_DeferedInitNew(5,epi+1,1);
@@ -5989,9 +5690,9 @@ void M_Episode(int choice)
 //
 // M_EndGame
 //
-void M_EndGameResponse(int key)
+void M_EndGameResponse(boolean confirmed)
 {
-    if (key != key_menu_confirm)
+    if (!confirmed)
         return;
 
     CurrentMenu->lastOn = CurrentItPos;
@@ -6083,9 +5784,9 @@ int quitsounds2[8] =
 };
 
 
-void M_QuitResponse(int key)
+void M_QuitResponse(boolean confirmed)
 {
-    if (key != key_menu_confirm)
+    if (!confirmed)
         return;
 
     // [JN] Опциональное проигрывание звука при выходе из игры
@@ -6144,65 +5845,9 @@ M_StartMessage
 {
     messageLastMenuActive = menuactive;
     messageToPrint = 1;
-    messageToBind = 0;  // [JN] NOT binding key now
     messageString = string;
     messageRoutine = routine;
     messageNeedsInput = input;
-    menuactive = true;
-}
-
-void M_RD_Key_Binding_Routine (int key)
-{
-    messageToBind = 0;
-
-    if (keyToBind)
-    {
-        if (key == *keyToBind)
-        {
-            *keyToBind = 0;
-        }
-        else if (!(key == KEY_ESCAPE))
-        {
-            *keyToBind = key;
-        }
-
-        keyToBind = 0;
-    }
-}
-
-//
-// M_StartBinding
-// [JN] Used for key binding routine.
-//
-void M_RD_StartBinding (int* key_var)
-{
-    messageLastMenuActive = menuactive;
-    messageToPrint = 1;
-    messageToBind = 1;  // [JN] Binding key now
-    keyToBind = key_var; // [Dasperal] Specify key to bind
-    messageRoutine = M_RD_Key_Binding_Routine;
-    messageNeedsInput = false;
-    menuactive = true;
-}
-
-void M_RD_MouseKey_Binding_Routine (int key)
-{
-    messageToBind = 0;
-
-    if(key == KEY_ESCAPE || key > MAX_MOUSE_BUTTONS)
-        return;
-
-    *keyToBind = key;
-}
-
-void M_RD_StartBinding_Mouse (int* key_var)
-{
-    messageLastMenuActive = menuactive;
-    messageToPrint = 1;
-    messageToBind = 1;  // [JN] Binding key now
-    keyToBind = key_var; // [Dasperal] Specify key to bind
-    messageRoutine = M_RD_MouseKey_Binding_Routine;
-    messageNeedsInput = false;
     menuactive = true;
 }
 
@@ -6424,19 +6069,14 @@ static int G_GotoNextLevel(void)
 //
 boolean M_Responder (event_t* ev)
 {
-    int             ch;
-    int             key;
-    int             i;
-    static int      joywait = 0;
-    static int      mousewait = 0;
+    int ch;
 
     // In testcontrols mode, none of the function keys should do anything
     // - the only key is escape to quit.
 
     if (testcontrols)
     {
-        if (ev->type == ev_quit || (ev->type == ev_keydown
-        && (ev->data1 == key_menu_activate || ev->data1 == key_menu_quit)))
+        if (ev->type == ev_quit || BK_isKeyDown(ev, bk_menu_activate) || BK_isKeyDown(ev, bk_quit))
         {
             I_Quit();
             return true;
@@ -6445,22 +6085,21 @@ boolean M_Responder (event_t* ev)
         return false;
     }
 
-    // [JN] Remember game settings and quit immediately
-    // in devparm mode by pressing "close" button on window.
-    if (devparm && ev->type == ev_quit)
-    {
-        M_QuitDOOM(0);
-    }
-
     // "close" button pressed on window?
     if (ev->type == ev_quit)
     {
+        // [JN] Remember game settings and quit immediately
+        // in devparm mode by pressing "close" button on window.
+        if (devparm)
+        {
+            M_QuitDOOM(0);
+        }
+
         // First click on close button = bring up quit confirm message.
         // Second click on close button = confirm quit
-
         if (menuactive && messageToPrint && messageRoutine == M_QuitResponse)
         {
-            M_QuitResponse(key_menu_confirm);
+            M_QuitResponse(true);
         }
         else
         {
@@ -6471,237 +6110,69 @@ boolean M_Responder (event_t* ev)
         return true;
     }
 
-    // key is the key pressed, ch is the actual character typed
-
-    ch = 0;
-    key = -1;
-
-    if (ev->type == ev_joystick && joywait < I_GetTime())
-    {
-
-        // [JN] Disallow to use joystick keys while binding keyboard keys
-        if (CurrentMenu == &Bindings1Menu && messageToBind)
-        {
-            for (i = 0 ; i < 15 ; i++)
-                if (CurrentItPos == i)
-                    return false;
-        }
-        if (CurrentMenu == &Bindings2Menu && messageToBind)
-        {
-            for (i = 0 ; i < 15 ; i++)
-                if (CurrentItPos == i)
-                    return false;
-        }
-        if (CurrentMenu == &Bindings3Menu && messageToBind)
-        {
-            for (i = 0 ; i < 15 ; i++)
-                if (CurrentItPos == i)
-                    return false;
-        }
-        if (CurrentMenu == &Bindings4Menu && messageToBind)
-        {
-            for (i = 0 ; i < 15 ; i++)
-                if (CurrentItPos == i)
-                    return false;
-        }
-
-        if (ev->data3 < 0)
-        {
-            key = key_menu_up;
-            joywait = I_GetTime() + 5;
-        }
-        else if (ev->data3 > 0)
-        {
-            key = key_menu_down;
-            joywait = I_GetTime() + 5;
-        }
-
-        if (ev->data2 < 0)
-        {
-            key = key_menu_left;
-            joywait = I_GetTime() + 2;
-        }
-        else if (ev->data2 > 0)
-        {
-            key = key_menu_right;
-            joywait = I_GetTime() + 2;
-        }
-
-        if (ev->data1&1)
-        {
-            key = key_menu_forward;
-            joywait = I_GetTime() + 5;
-        }
-        if (ev->data1&2)
-        {
-            key = key_menu_back;
-            joywait = I_GetTime() + 5;
-        }
-        if (joybmenu >= 0 && (ev->data1 & (1 << joybmenu)) != 0)
-        {
-            key = key_menu_activate;
-            joywait = I_GetTime() + 5;
-        }
-    }
-    else
-    {
-        if (ev->type == ev_mouse_keydown && mousewait < I_GetTime())
-        {
-            // [FG] disable menu control by mouse
-            /*
-            mousey += ev->data3;
-            if (mousey < lasty-30)
-            {
-                key = key_menu_down;
-                mousewait = I_GetTime() + 5;
-                mousey = lasty -= 30;
-            }
-            else if (mousey > lasty+30)
-            {
-                key = key_menu_up;
-                mousewait = I_GetTime() + 5;
-                mousey = lasty += 30;
-            }
-
-            mousex += ev->data2;
-
-            if (mousex < lastx-30)
-            {
-                key = key_menu_left;
-                mousewait = I_GetTime() + 5;
-                mousex = lastx -= 30;
-            }
-            else if (mousex > lastx+30)
-            {
-                key = key_menu_right;
-                mousewait = I_GetTime() + 5;
-                mousex = lastx += 30;
-            }
-            */
-
-            // [JN] Disallow to use mouse keys while binding keyboard keys
-            if (CurrentMenu == &Bindings1Menu && messageToBind)
-            {
-                for (i = 0 ; i < 15 ; i++)
-                    if (CurrentItPos == i)
-                        return false;
-            }
-            if (CurrentMenu == &Bindings2Menu && messageToBind)
-            {
-                for (i = 0 ; i < 15 ; i++)
-                    if (CurrentItPos == i)
-                        return false;
-            }
-            if (CurrentMenu == &Bindings3Menu && messageToBind)
-            {
-                for (i = 0 ; i < 15 ; i++)
-                    if (CurrentItPos == i)
-                        return false;
-            }
-            if (CurrentMenu == &Bindings4Menu && messageToBind)
-            {
-                for (i = 0 ; i < 15 ; i++)
-                    if (CurrentItPos == i)
-                        return false;
-            }
-
-            // [JN] Catch all incoming data1 mouse events. Makes middle mouse button 
-            // working for message interruption and for binding ability.
-            key = ev->data1;
-            mousewait = I_GetTime() + 5;
-            /* [Dasperal] Disable this for now
-            if (ev->data1&1)
-            {
-                key = key_menu_forward;
-                mousewait = I_GetTime() + 15;
-            }
-
-            if (ev->data1&2)
-            {
-                key = key_menu_back;
-                mousewait = I_GetTime() + 15;
-            }
-            
-            // [crispy] scroll menus with mouse wheel
-            // [JN] it also affecting mouse side buttons (forward/backward)
-            if (mousebprevweapon >= 0 && ev->data1 & (1 << mousebprevweapon))
-            {
-                key = key_menu_down;
-                mousewait = I_GetTime() + 1;
-            }
-            else
-            if (mousebnextweapon >= 0 && ev->data1 & (1 << mousebnextweapon))
-            {
-                key = key_menu_up;
-                mousewait = I_GetTime() + 1;
-            }*/
-        }
-        else
-        {
-            if (ev->type == ev_keydown)
-            {
-                key = ev->data1;
-                ch = ev->data2;
-            }
-        }
-    }
-
-    if (key == -1)
+    if(ev->type != ev_keydown &&
+       ev->type != ev_mouse_keydown)
         return false;
 
-    // Save Game string input
-    if (saveStringEnter)
+    if(isBinding)
     {
-        switch(key)
+        BK_BindKey(ev);
+        return true;
+    }
+
+    // Save Game string input
+    if (saveStringEnter && ev->type == ev_keydown)
+    {
+        switch(ev->data1)
         {
             case KEY_BACKSPACE:
-            if (saveCharIndex > 0)
-            {
-                saveCharIndex--;
-                savegamestrings[saveSlot][saveCharIndex] = 0;
-            }
-            break;
-
+                if (saveCharIndex > 0)
+                {
+                    saveCharIndex--;
+                    savegamestrings[saveSlot][saveCharIndex] = 0;
+                }
+                break;
             case KEY_ESCAPE:
                 saveStringEnter = 0;
                 M_StringCopy(savegamestrings[saveSlot], saveOldString, SAVESTRINGSIZE);
                 break;
-
             case KEY_ENTER:
                 saveStringEnter = 0;
                 if (savegamestrings[saveSlot][0])
                     M_DoSave(saveSlot);
                 break;
-
             default:
-            // This is complicated.
-            // Vanilla has a bug where the shift key is ignored when entering
-            // a savegame name. If vanilla_keyboard_mapping is on, we want
-            // to emulate this bug by using 'data1'. But if it's turned off,
-            // it implies the user doesn't care about Vanilla emulation: just
-            // use the correct 'data2'.
+                // This is complicated.
+                // Vanilla has a bug where the shift key is ignored when entering
+                // a savegame name. If vanilla_keyboard_mapping is on, we want
+                // to emulate this bug by using 'data1'. But if it's turned off,
+                // it implies the user doesn't care about Vanilla emulation: just
+                // use the correct 'data2'.
+                if (vanilla_keyboard_mapping)
+                {
+                    ch = ev->data1;
+                }
+                else
+                {
+                    ch = ev->data2;
+                }
 
-            if (vanilla_keyboard_mapping)
-            {
-                ch = key;
-            }
+                ch = toupper(ch);
 
-            ch = toupper(ch);
+                if (ch != ' ' && (ch - HU_FONTSTART < 0 || ch - HU_FONTSTART >= HU_FONTSIZE))
+                {
+                    break;
+                }
 
-            if (ch != ' ' && (ch - HU_FONTSTART < 0 || ch - HU_FONTSTART >= HU_FONTSIZE))
-            {
+                if (ch >= 32 && ch <= 127 &&
+                    saveCharIndex < SAVESTRINGSIZE-1 &&
+                    M_StringWidth(savegamestrings[saveSlot]) <
+                    (SAVESTRINGSIZE-2)*8)
+                {
+                    savegamestrings[saveSlot][saveCharIndex++] = ch;
+                    savegamestrings[saveSlot][saveCharIndex] = 0;
+                }
                 break;
-            }
-
-            if (ch >= 32 && ch <= 127 &&
-                saveCharIndex < SAVESTRINGSIZE-1 &&
-                M_StringWidth(savegamestrings[saveSlot]) <
-                (SAVESTRINGSIZE-2)*8)
-            {
-                savegamestrings[saveSlot][saveCharIndex++] = ch;
-                savegamestrings[saveSlot][saveCharIndex] = 0;
-            }
-            break;
         }
         return true;
     }
@@ -6711,7 +6182,7 @@ boolean M_Responder (event_t* ev)
     {
         if (messageNeedsInput)
         {
-            if (key != ' ' && key != KEY_ESCAPE && key != key_menu_confirm && key != key_menu_abort)
+            if (ev->data1 != ' ' && ev->data1 != KEY_ESCAPE && !BK_isKeyDown(ev, bk_confirm) && !BK_isKeyDown(ev, bk_abort))
             {
                 return false;
             }
@@ -6721,7 +6192,7 @@ boolean M_Responder (event_t* ev)
         messageToPrint = 0;
 
         if (messageRoutine)
-            messageRoutine(key);
+            messageRoutine(BK_isKeyDown(ev, bk_confirm));
 
         // [JN] Do not close Save/Load menu after deleting a savegame.
         if (CurrentMenu != &SaveMenu
@@ -6734,8 +6205,7 @@ boolean M_Responder (event_t* ev)
         &&  CurrentMenu != &Bindings1Menu
         &&  CurrentMenu != &Bindings2Menu
         &&  CurrentMenu != &Bindings3Menu
-        &&  CurrentMenu != &Bindings4Menu
-        &&  CurrentMenu != &MouseBindingsMenu)
+        &&  CurrentMenu != &Bindings4Menu)
         {
             menuactive = false;
         }
@@ -6743,14 +6213,14 @@ boolean M_Responder (event_t* ev)
         return true;
     }
 
-    if ((devparm && key == key_menu_help) || (key != 0 && key == key_menu_screenshot))
+    if ((devparm && BK_isKeyDown(ev, bk_menu_help)) || BK_isKeyDown(ev, bk_screenshot))
     {
         G_ScreenShot ();
         return true;
     }
 
     // [JN] Crosshair toggling. Disalloved in vanilla mode (no crosshair there).
-    if (key == key_togglecrosshair && !vanillaparm)
+    if (BK_isKeyDown(ev, bk_toggle_crosshair) && !vanillaparm)
     {
         static char crosshairmsg[24];
 
@@ -6765,7 +6235,7 @@ boolean M_Responder (event_t* ev)
     }
 
     // [JN] Toggle level flipping.
-    if (ev->type == ev_keydown && key == key_togglefliplvls)
+    if (BK_isKeyDown(ev, bk_toggle_fliplvls))
     {
         flip_levels ^= 1;
         R_ExecuteSetViewSize();         // Redraw game screen
@@ -6778,7 +6248,7 @@ boolean M_Responder (event_t* ev)
     // F-Keys
     if (!menuactive)
     {
-        if (key == key_menu_help)     // Help key
+        if (BK_isKeyDown(ev, bk_menu_help))     // Help key
         {
             RD_Menu_ActivateMenu();
 
@@ -6789,45 +6259,45 @@ boolean M_Responder (event_t* ev)
 
             return true;
         }
-        else if (key == key_menu_save)     // Save
+        else if (BK_isKeyDown(ev, bk_menu_save))     // Save
         {
             QuickSaveTitle = false;
             RD_Menu_ActivateMenu();
             M_SaveGame(0);
             return true;
         }
-        else if (key == key_menu_load)     // Load
+        else if (BK_isKeyDown(ev, bk_menu_load))     // Load
         {
             RD_Menu_ActivateMenu();
             M_LoadGame(0);
             return true;
         }
-        else if (key == key_menu_volume)   // Sound Volume
+        else if (BK_isKeyDown(ev, bk_menu_volume))   // Sound Volume
         {
             RD_Menu_ActivateMenu();
             RD_Menu_SetMenu(vanillaparm ? &VanillaOptions2Menu : &SoundMenu);
             return true;
         }
-        else if (key == key_menu_qsave)    // Quicksave
+        else if (BK_isKeyDown(ev, bk_qsave))    // Quicksave
         {
             QuickSaveTitle = true;
             S_StartSound(NULL,sfx_swtchn);
             M_QuickSave();
             return true;
         }
-        else if (key == key_menu_endgame)  // End game
+        else if (BK_isKeyDown(ev, bk_endgame))  // End game
         {
             S_StartSound(NULL,sfx_swtchn);
             M_EndGame(0);
             return true;
         }
-        else if (key == key_menu_qload)    // Quickload
+        else if (BK_isKeyDown(ev, bk_qload))    // Quickload
         {
             S_StartSound(NULL,sfx_swtchn);
             M_QuickLoad();
             return true;
         }
-        else if (key == key_menu_quit)     // Quit DOOM
+        else if (BK_isKeyDown(ev, bk_quit))     // Quit DOOM
         {
             S_StartSound(NULL,sfx_swtchn);
             M_QuitDOOM(0);
@@ -6836,12 +6306,12 @@ boolean M_Responder (event_t* ev)
 
         // [crispy] those two can be considered as shortcuts for the IDCLEV cheat
         // and should be treated as such, i.e. add "if (!netgame)"
-        else if (!netgame && key != 0 && key == key_menu_reloadlevel)
+        else if (!netgame && BK_isKeyDown(ev, bk_reloadlevel))
         {
             if (G_ReloadLevel())
             return true;
         }
-        else if (!netgame && key != 0 && key == key_menu_nextlevel)
+        else if (!netgame && BK_isKeyDown(ev, bk_nextlevel))
         {
             if (G_GotoNextLevel())
             return true;
@@ -6849,21 +6319,21 @@ boolean M_Responder (event_t* ev)
     }
 
     // [JN] Allow detail toggle even while active menu.
-    if (key == key_menu_detail)
+    if (BK_isKeyDown(ev, bk_detail))
     {
         M_RD_Change_Detail();
         S_StartSound(NULL,sfx_swtchn);
         return true;
     }
     // [JN] Allow to toggle messages even while active menu.
-    else if (key == key_menu_messages)
+    else if (BK_isKeyDown(ev, bk_messages))
     {
         M_RD_Change_Messages();
         S_StartSound(NULL,sfx_swtchn);
         return true;
     }
     // [JN] Allow gamma toggling even while active menu.
-    else if (key == key_menu_gamma)
+    else if (BK_isKeyDown(ev, bk_gamma))
     {
         usegamma++;
         if (usegamma > 17)
@@ -6880,7 +6350,7 @@ boolean M_Responder (event_t* ev)
     }
 
     // [JN] Allow screen decreasing even while active menu.
-	if (key == key_menu_decscreen)      // Screen size down
+	if (BK_isKeyDown(ev, bk_screen_dec)) // Screen size down
 	{
 		if (automapactive || chat_on)
 		    return false;
@@ -6889,7 +6359,7 @@ boolean M_Responder (event_t* ev)
 	}
 
     // [JN] Allow screen increasing even while active menu.
-	if (key == key_menu_incscreen) // Screen size up
+	if (BK_isKeyDown(ev, bk_screen_inc)) // Screen size up
 	{
 		if (automapactive || chat_on)
 		    return false;
@@ -6900,7 +6370,7 @@ boolean M_Responder (event_t* ev)
     // Pop-up menu?
     if (!menuactive)
     {
-        if (key == key_menu_activate)
+        if (BK_isKeyDown(ev, bk_menu_activate))
         {
             RD_Menu_ActivateMenu();
             return true;
@@ -6910,7 +6380,7 @@ boolean M_Responder (event_t* ev)
 
     // [crispy] delete a savegame
     // [JN] Also used for clearing keyboard bindings
-    if (key == KEY_DEL)
+    if (ev->type == ev_keydown && ev->data1 == KEY_DEL)
     {
         // [JN] Save/load menu
         if (CurrentMenu == &LoadMenu
@@ -6938,28 +6408,11 @@ boolean M_Responder (event_t* ev)
             S_StartSound(NULL,sfx_stnmov);
             return true;
         }
-
-        // [JN] Mouse bindings menu
-        if (CurrentMenu == &MouseBindingsMenu)
-        {
-            if (CurrentItPos == 1) { mousebfire = -1; }
-            if (CurrentItPos == 2) { mousebuse = -1; }
-            if (CurrentItPos == 3) { mousebforward = -1; }
-            if (CurrentItPos == 4) { mousebbackward = -1; }
-            if (CurrentItPos == 5) { mousebstrafe = -1; }
-            if (CurrentItPos == 6) { mousebstrafeleft = -1; }
-            if (CurrentItPos == 7) { mousebstraferight = -1; }
-            if (CurrentItPos == 8) { mousebprevweapon = -1; }
-            if (CurrentItPos == 9) { mousebnextweapon = -1; }
-
-            S_StartSound(NULL,sfx_stnmov);
-            return true;
-        }
     }
 
     if (InfoType)
     {
-        if(key != key_menu_back)
+        if(!BK_isKeyDown(ev, bk_menu_back))
         {
             RD_Menu_StartSound(MENU_SOUND_CLICK);
             if(InfoType == 1)
@@ -6970,7 +6423,7 @@ boolean M_Responder (event_t* ev)
         else
         {
             RD_Menu_StartSound(MENU_SOUND_BACK);
-            if(InfoType == 1)
+            if(gamemode == retail || InfoType == 1)
                 M_FinishReadThis(0);
             else
                 M_ReadThis(0);
@@ -6979,7 +6432,9 @@ boolean M_Responder (event_t* ev)
     }
 
     // Keys usable within menu
-    return RD_Menu_Responder(key, ch);
+    if(ev->type == ev_keydown) //todo
+        return RD_Menu_Responder(ev->data1, ev->data2);
+    return false;
 }
 
 
@@ -7000,7 +6455,7 @@ void M_Drawer (void)
 
     // Horiz. & Vertically center string and print it.
     // [JN] Do not invoke if we are binding key.
-    if (messageToPrint && !messageToBind)
+    if (messageToPrint)
     {
         start = 0;
         y = ORIGHEIGHT/2 - M_StringHeight(messageString) / 2;
@@ -7242,11 +6697,11 @@ void M_Init (void)
 
 // [from crispy] Возможность удаления сохраненных игр
 static char *savegwarning;
-static void M_ConfirmDeleteGameResponse (int key)
+static void M_ConfirmDeleteGameResponse(boolean confirmed)
 {
     free(savegwarning);
 
-    if (key == key_menu_confirm)
+    if (confirmed)
     {
         char name[256];
 
