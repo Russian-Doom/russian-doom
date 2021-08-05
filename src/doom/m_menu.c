@@ -2032,6 +2032,12 @@ void M_RD_Change_ScreenSize(Direction_t direction)
         
         EnableLoadingDisk();
     }
+    else
+    {
+        // Screen size can't go below 3.
+        if (screenblocks < 3)
+            screenblocks = 3;
+    }
 
     R_SetViewSize (screenblocks, detailLevel);
 }
