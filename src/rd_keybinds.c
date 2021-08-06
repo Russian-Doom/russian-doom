@@ -68,9 +68,9 @@ bound_key_descriptor bound_key_descriptors[bk_size] = {
     {&key_togglemlook, NULL}, // bk_toggle_mlook
 
     // Inventory
-//  // bk_inv_left
-//  // bk_inv_right
-//  // bk_inv_use_artifact
+    {&key_invleft,     NULL}, // bk_inv_left
+    {&key_invright,    NULL}, // bk_inv_right
+    {&key_useartifact, NULL}, // bk_inv_use_artifact
 //  // bk_inv_use_health
 //  // bk_inv_drop
 //  // bk_inv_pop
@@ -80,29 +80,26 @@ bound_key_descriptor bound_key_descriptors[bk_size] = {
 //  // bk_mission
 
     // Artifacts: Heretic
-//  // bk_arti_all
-//  // bk_arti_quartz
-//  // bk_arti_urn
-//  // bk_arti_bomb
+    {&key_arti_all,             NULL}, // bk_arti_all
+    {&key_arti_quartz,          NULL}, // bk_arti_quartz
+    {&key_arti_urn,             NULL}, // bk_arti_urn
+    {&key_arti_bomb,            NULL}, // bk_arti_bomb
 //  // bk_arti_tome
-//  // bk_arti_egg
+    {&key_arti_egg,             NULL}, // bk_arti_egg
 //  // bk_arti_shadowsphere
-//  // bk_arti_wings
-//  // bk_arti_torch
-//  // bk_arti_blastradius
-//  // bk_arti_ring
-//  // bk_arti_chaosdevice
+    {&key_arti_wings,           NULL}, // bk_arti_wings
+    {&key_arti_torch,           NULL}, // bk_arti_torch
+    {&key_arti_blastradius,     NULL}, // bk_arti_blastradius
+    {&key_arti_invulnerability, NULL}, // bk_arti_invulnerability
+    {&key_arti_chaosdevice,     NULL}, // bk_arti_chaosdevice
 
     // Artifacts: Hexen
-//  // bk_arti_poisonbag
-//  // bk_arti_pig
-//  // bk_arti_iconofdefender
-//  // bk_arti_teleportother
-//  // bk_arti_boostarmor
-//  // bk_arti_boostmana
-//  // bk_arti_summon
-//  // bk_arti_speed
-//  // bk_arti_healingradius
+    {&key_arti_teleportother, NULL}, // bk_arti_teleportother
+    {&key_arti_boostarmor,    NULL}, // bk_arti_boostarmor
+    {&key_arti_boostmana,     NULL}, // bk_arti_boostmana
+    {&key_arti_summon,        NULL}, // bk_arti_summon
+    {&key_arti_speed,         NULL}, // bk_arti_speed
+    {&key_arti_healingradius, NULL}, // bk_arti_healingradius
 
     // Map keys
     {&key_map_toggle,    NULL}, // bk_map_toggle

@@ -31,12 +31,12 @@
 #include "i_system.h"
 #include "i_swap.h"
 #include "i_video.h"
-#include "m_controls.h"
 #include "m_misc.h"
 #include "p_local.h"
 #include "s_sound.h"
 #include "v_trans.h"
 #include "v_video.h"
+#include "rd_keybinds.h"
 #include "rd_menu.h"
 #include "rd_rushexen.h"
 #include "crispy.h"
@@ -222,9 +222,8 @@ static void M_RD_ResetSettings(int option);
 static void M_RD_ChangeLanguage(int option);
 
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
-
-extern boolean gamekeydown[256];        // The NUMKEYS macro is local to g_game
 extern int MapCount;
+extern boolean alwaysRun;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 int InfoType;
@@ -2062,7 +2061,7 @@ static void DrawControlsMenu(void)
     if (english_language)
     {
         // Always run
-        RD_M_DrawTextSmallENG(joybspeed >= 20 ? "ON" : "OFF", 118 + wide_delta, 42, CR_NONE);
+        RD_M_DrawTextSmallENG(alwaysRun ? "ON" : "OFF", 118 + wide_delta, 42, CR_NONE);
 
         // Mouse look
         RD_M_DrawTextSmallENG(mlook ? "ON" : "OFF", 118 + wide_delta, 82, CR_NONE);
@@ -2078,7 +2077,7 @@ static void DrawControlsMenu(void)
     else
     {
         // Режим постоянного бега
-        RD_M_DrawTextSmallRUS(joybspeed >= 20 ? "DRK" : "DSRK", 209 + wide_delta, 42, CR_NONE);
+        RD_M_DrawTextSmallRUS(alwaysRun ? "DRK" : "DSRK", 209 + wide_delta, 42, CR_NONE);
 
         // Обзор мышью
         RD_M_DrawTextSmallRUS(mlook ? "DRK" : "DSRK", 132 + wide_delta, 82, CR_NONE);
@@ -2100,17 +2099,7 @@ static void DrawControlsMenu(void)
 
 static void M_RD_AlwaysRun()
 {
-    static int joybspeed_old = 2;
-
-    if (joybspeed >= 20)
-    {
-        joybspeed = joybspeed_old;
-    }
-    else
-    {
-        joybspeed_old = joybspeed;
-        joybspeed = 29;
-    }
+    alwaysRun ^= 1;
 }
 
 static void M_RD_MouseLook()
@@ -3191,7 +3180,6 @@ void M_RD_DoResetSettings(void)
     mute_inactive_window = 0;
 
     // Controls
-    joybspeed           = 29;
     mlook               = 0;
     players[consoleplayer].centering = true;
     mouseSensitivity    = 5;
@@ -3527,7 +3515,6 @@ static void SCInfo(int option)
 
 boolean MN_Responder(event_t * event)
 {
-    int key;
     int charTyped;
     MenuItem_t *item;
     extern void H2_StartTitle(void);
@@ -3539,10 +3526,7 @@ boolean MN_Responder(event_t * event)
 
     if (testcontrols)
     {
-        if (event->type == ev_quit
-         || (event->type == ev_keydown
-          && (event->data1 == key_menu_activate
-           || event->data1 == key_menu_quit)))
+        if (event->type == ev_quit || BK_isKeyDown(event, bk_menu_activate) || BK_isKeyDown(event, bk_quit))
         {
             I_Quit();
             return true;
@@ -3574,32 +3558,18 @@ boolean MN_Responder(event_t * event)
         return true;
     }
 
-    // Allow the menu to be activated from a joystick button if a button
-    // is bound for joybmenu.
-    if (event->type == ev_joystick)
-    {
-        if (joybmenu >= 0 && (event->data1 & (1 << joybmenu)) != 0)
-        {
-            RD_Menu_ActivateMenu();
-            return true;
-        }
-    }
-
     // Only care about keypresses beyond this point.
-
-    if (event->type != ev_keydown)
+    if (event->type != ev_keydown &&
+        event->type != ev_mouse_keydown)
     {
         return false;
     }
-
-    key = event->data1;
-    charTyped = event->data2;
 
     if (InfoType)
     {
         InfoType = (InfoType + 1) % 4;
 
-        if (key == KEY_ESCAPE)
+        if (event->type == ev_keydown && event->data1 == KEY_ESCAPE)
         {
             InfoType = 0;
         }
@@ -3617,8 +3587,7 @@ boolean MN_Responder(event_t * event)
         return (true);          //make the info screen eat the keypress
     }
 
-    if ((ravpic && key == KEY_F1) ||
-        (key != 0 && key == key_menu_screenshot))
+    if ((ravpic && event->data1 == KEY_F1) || BK_isKeyDown(event, bk_screenshot))
     {
         G_ScreenShot();
         return (true);
@@ -3626,7 +3595,7 @@ boolean MN_Responder(event_t * event)
 
     if (askforquit)
     {
-        if (key == key_menu_confirm)
+        if (BK_isKeyDown(event, bk_confirm))
         {
             switch (typeofask)
             {
@@ -3680,7 +3649,7 @@ boolean MN_Responder(event_t * event)
 
             return true;
         }
-        else if (key == key_menu_abort || key == KEY_ESCAPE)
+        else if (BK_isKeyDown(event, bk_abort) || event->data1 == KEY_ESCAPE)
         {
             players[consoleplayer].messageTics = 0;
             askforquit = false;
@@ -3696,7 +3665,7 @@ boolean MN_Responder(event_t * event)
     }
     if (!menuactive && !chatmodeon)
     {
-        if (key == key_menu_decscreen)
+        if (BK_isKeyDown(event, bk_screen_dec))
         {
             if (automapactive)
             {               // Don't screen size in automap
@@ -3708,7 +3677,7 @@ boolean MN_Responder(event_t * event)
             UpdateState |= I_FULLSCRN;
             return (true);
         }
-        else if (key == key_menu_incscreen)
+        else if (BK_isKeyDown(event, bk_screen_inc))
         {
             if (automapactive)
             {               // Don't screen size in automap
@@ -3720,13 +3689,13 @@ boolean MN_Responder(event_t * event)
             UpdateState |= I_FULLSCRN;
             return (true);
         }
-        else if (key == key_menu_help)           // F1 (help screen)
+        else if (BK_isKeyDown(event, bk_menu_help))           // F1 (help screen)
         {
             SCInfo(0);      // start up info screens
             menuactive = true;
             return (true);
         }
-        else if (key == key_menu_save)           // F2 (save game)
+        else if (BK_isKeyDown(event, bk_menu_save))           // F2 (save game)
         {
             if (gamestate == GS_LEVEL && !demoplayback)
             {
@@ -3743,7 +3712,7 @@ boolean MN_Responder(event_t * event)
             }
             return true;
         }
-        else if (key == key_menu_load)           // F3 (load game)
+        else if (BK_isKeyDown(event, bk_menu_load))           // F3 (load game)
         {
             if (SCNetCheck(2))
             {
@@ -3760,7 +3729,7 @@ boolean MN_Responder(event_t * event)
             }
             return true;
         }
-        else if (key == key_menu_volume)         // F4 (volume)
+        else if (BK_isKeyDown(event, bk_menu_volume))         // F4 (volume)
         {
             menuactive = true;
             FileMenuKeySteal = false;
@@ -3774,14 +3743,14 @@ boolean MN_Responder(event_t * event)
             slottextloaded = false; //reload the slot text, when needed
             return true;
         }
-        else if (key == key_menu_detail)         // F5 (suicide)
+        else if (BK_isKeyDown(event, bk_detail))         // F5 (suicide)
         {
             menuactive = false;
             askforquit = true;
             typeofask = 5;  // suicide
             return true;
         }
-        else if (key == key_menu_qsave)          // F6 (quicksave)
+        else if (BK_isKeyDown(event, bk_qsave))          // F6 (quicksave)
         {
             if (gamestate == GS_LEVEL && !demoplayback)
             {
@@ -3816,7 +3785,7 @@ boolean MN_Responder(event_t * event)
             }
             return true;
         }
-        else if (key == key_menu_endgame)        // F7 (end game)
+        else if (BK_isKeyDown(event, bk_endgame))        // F7 (end game)
         {
             if (SCNetCheck(3))
             {
@@ -3828,12 +3797,12 @@ boolean MN_Responder(event_t * event)
             }
             return true;
         }
-        else if (key == key_menu_messages)       // F8 (toggle messages)
+        else if (BK_isKeyDown(event, bk_messages))       // F8 (toggle messages)
         {
             M_RD_Messages(0);
             return true;
         }
-        else if (key == key_menu_qload)          // F9 (quickload)
+        else if (BK_isKeyDown(event, bk_qload))          // F9 (quickload)
         {
             if (SCNetCheck(2))
             {
@@ -3868,7 +3837,7 @@ boolean MN_Responder(event_t * event)
             }
             return true;
         }
-        else if (key == key_menu_quit)           // F10 (quit)
+        else if (BK_isKeyDown(event, bk_quit))           // F10 (quit)
         {
             if (gamestate == GS_LEVEL || gamestate == GS_FINALE)
             {
@@ -3877,7 +3846,7 @@ boolean MN_Responder(event_t * event)
             }
             return true;
         }
-        else if (key == key_menu_gamma)          // F11 (gamma correction)
+        else if (BK_isKeyDown(event, bk_gamma))          // F11 (gamma correction)
         {
             usegamma++;
             if (usegamma > 17)
@@ -3891,7 +3860,7 @@ boolean MN_Responder(event_t * event)
                          false);
             return true;
         }
-        else if (key == KEY_F12)                 // F12 (???)
+        else if (BK_isKeyDown(event, bk_reloadlevel))                 // F12 (???)
         {
             // F12 - reload current map (devmaps mode)
             // [JN] Allow only in devparm mode, see this comment:
@@ -3901,11 +3870,11 @@ boolean MN_Responder(event_t * event)
             {
                 return false;
             }
-            if (gamekeydown[key_speed])
+            if (BK_isKeyPressed(bk_speed))
             {               // Monsters ON
                 nomonsters = false;
             }
-            if (gamekeydown[key_strafe])
+            if (BK_isKeyPressed(bk_strafe))
             {               // Monsters OFF
                 nomonsters = true;
             }
@@ -3920,7 +3889,7 @@ boolean MN_Responder(event_t * event)
 
     if (!menuactive)
     {
-        if (key == key_menu_activate || gamestate == GS_DEMOSCREEN || demoplayback)
+        if (BK_isKeyDown(event, bk_menu_activate) || gamestate == GS_DEMOSCREEN || demoplayback)
         {
             RD_Menu_ActivateMenu();
             return (true);
@@ -3929,16 +3898,18 @@ boolean MN_Responder(event_t * event)
     }
     if (!FileMenuKeySteal)
     {
-        return RD_Menu_Responder(key, charTyped);
+        if(event->type == ev_keydown) // Todo
+            return RD_Menu_Responder(event->data1, event->data2);
+        else return false;
     }
-    else
+    else if(event->type == ev_keydown)
     {
         // Editing file names
         // When typing a savegame name, we use the fully shifted and
         // translated input value from event->data3.
         charTyped = event->data3;
         textBuffer = &SlotText[currentSlot][slotptr];
-        if (key == KEY_BACKSPACE)
+        if (event->data1 == KEY_BACKSPACE)
         {
             if (slotptr)
             {
@@ -3949,7 +3920,7 @@ boolean MN_Responder(event_t * event)
             }
             return (true);
         }
-        if (key == KEY_ESCAPE)
+        if (event->data1 == KEY_ESCAPE)
         {
             M_StringCopy(SlotText[currentSlot], oldSlotText,
                          sizeof(SlotText[currentSlot]));
@@ -3957,7 +3928,7 @@ boolean MN_Responder(event_t * event)
             RD_Menu_DeactivateMenu();
             return (true);
         }
-        if (key == KEY_ENTER)
+        if (event->data1 == KEY_ENTER)
         {
             SlotText[currentSlot][slotptr] = 0; // clear the cursor
             item = (MenuItem_t*) &CurrentMenu->items[CurrentItPos];
@@ -4010,6 +3981,7 @@ boolean MN_Responder(event_t * event)
         }
         return (true);
     }
+    return false;
 }
 
 //---------------------------------------------------------------------------

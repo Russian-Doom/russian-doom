@@ -21,9 +21,9 @@
 #include <ctype.h>
 #include "h2def.h"
 #include "i_input.h"
+#include "rd_keybinds.h"
 #include "s_sound.h"
 #include "doomkeys.h"
-#include "m_controls.h"
 #include "m_misc.h"
 #include "p_local.h"
 #include "v_video.h"
@@ -182,46 +182,43 @@ boolean CT_Responder(event_t * ev)
         shiftdown = (ev->type == ev_keydown);
         return false;
     }
-    if (gamestate != GS_LEVEL || ev->type != ev_keydown)
-    {
-        return false;
-    }
+
     if (!chatmodeon)
     {
         sendto = 0;
-        if (ev->data1 == key_multi_msg)
+        if (BK_isKeyDown(ev, bk_multi_msg))
         {
             sendto = CT_PLR_ALL;
         }
-        else if (ev->data1 == key_multi_msgplayer[0])
+        else if (BK_isKeyDown(ev, bk_multi_msg_player_0))
         {
             sendto = CT_PLR_BLUE;
         }
-        else if (ev->data1 == key_multi_msgplayer[1])
+        else if (BK_isKeyDown(ev, bk_multi_msg_player_1))
         {
             sendto = CT_PLR_RED;
         }
-        else if (ev->data1 == key_multi_msgplayer[2])
+        else if (BK_isKeyDown(ev, bk_multi_msg_player_2))
         {
             sendto = CT_PLR_YELLOW;
         }
-        else if (ev->data1 == key_multi_msgplayer[3])
+        else if (BK_isKeyDown(ev, bk_multi_msg_player_3))
         {
             sendto = CT_PLR_GREEN;
         }
-        else if (ev->data1 == key_multi_msgplayer[4])
+        else if (BK_isKeyDown(ev, bk_multi_msg_player_4))
         {
             sendto = CT_PLR_PLAYER5;
         }
-        else if (ev->data1 == key_multi_msgplayer[5])
+        else if (BK_isKeyDown(ev, bk_multi_msg_player_5))
         {
             sendto = CT_PLR_PLAYER6;
         }
-        else if (ev->data1 == key_multi_msgplayer[6])
+        else if (BK_isKeyDown(ev, bk_multi_msg_player_6))
         {
             sendto = CT_PLR_PLAYER7;
         }
-        else if (ev->data1 == key_multi_msgplayer[7])
+        else if (BK_isKeyDown(ev, bk_multi_msg_player_7))
         {
             sendto = CT_PLR_PLAYER8;
         }
@@ -235,7 +232,7 @@ boolean CT_Responder(event_t * ev)
         I_StartTextInput(25, 10, screenwidth, 18);
         return true;
     }
-    else
+    else if (gamestate == GS_LEVEL && ev->type == ev_keydown)
     {
         if (altdown)
         {
