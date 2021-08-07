@@ -28,9 +28,9 @@
 
 #include "deh_str.h"
 #include "i_input.h"
-#include "m_controls.h"
 #include "m_misc.h"
 #include "p_local.h"
+#include "rd_keybinds.h"
 #include "s_sound.h"
 #include "v_video.h"
 
@@ -171,30 +171,27 @@ boolean CT_Responder(event_t * ev)
         shiftdown = (ev->type == ev_keydown);
         return false;
     }
-    if (ev->type != ev_keydown)
-    {
-        return false;
-    }
+
     if (!chatmodeon)
     {
         sendto = 0;
-        if (ev->data1 == key_multi_msg)
+        if (BK_isKeyDown(ev, bk_multi_msg))
         {
             sendto = CT_PLR_ALL;
         }
-        else if (ev->data1 == key_multi_msgplayer[0])
+        else if (BK_isKeyDown(ev, bk_multi_msg_player_0))
         {
             sendto = CT_PLR_GREEN;
         }
-        else if (ev->data1 == key_multi_msgplayer[1])
+        else if (BK_isKeyDown(ev, bk_multi_msg_player_1))
         {
             sendto = CT_PLR_YELLOW;
         }
-        else if (ev->data1 == key_multi_msgplayer[2])
+        else if (BK_isKeyDown(ev, bk_multi_msg_player_2))
         {
             sendto = CT_PLR_RED;
         }
-        else if (ev->data1 == key_multi_msgplayer[3])
+        else if (BK_isKeyDown(ev, bk_multi_msg_player_3))
         {
             sendto = CT_PLR_BLUE;
         }
@@ -208,7 +205,7 @@ boolean CT_Responder(event_t * ev)
         I_StartTextInput(25, 10, screenwidth, 18);
         return true;
     }
-    else
+    else if (ev->type == ev_keydown)
     {
         if (altdown)
         {

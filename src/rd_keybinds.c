@@ -84,9 +84,9 @@ bound_key_descriptor bound_key_descriptors[bk_size] = {
     {&key_arti_quartz,          NULL}, // bk_arti_quartz
     {&key_arti_urn,             NULL}, // bk_arti_urn
     {&key_arti_bomb,            NULL}, // bk_arti_bomb
-//  // bk_arti_tome
+    {&key_arti_tome,            NULL}, // bk_arti_tome
     {&key_arti_egg,             NULL}, // bk_arti_egg
-//  // bk_arti_shadowsphere
+    {&key_arti_shadowsphere,    NULL}, // bk_arti_shadowsphere
     {&key_arti_wings,           NULL}, // bk_arti_wings
     {&key_arti_torch,           NULL}, // bk_arti_torch
     {&key_arti_blastradius,     NULL}, // bk_arti_blastradius

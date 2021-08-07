@@ -35,15 +35,15 @@
 #include "i_system.h"
 #include "i_swap.h"
 #include "i_timer.h" // [JN] I_GetTime()
-#include "m_controls.h"
 #include "m_misc.h"
 #include "p_local.h"
+#include "rd_keybinds.h"
+#include "rd_menu.h"
 #include "s_sound.h"
 #include "v_trans.h"
 #include "v_video.h"
 #include "crispy.h"
 #include "jn.h"
-#include "rd_menu.h"
 
 // Macros
 #define ITEM_HEIGHT 20
@@ -236,6 +236,7 @@ static void M_RD_ChangeLanguage(Direction_t direction);
 
 // Public Data
 int InfoType;
+extern boolean alwaysRun;
 
 // Private Data
 
@@ -259,24 +260,24 @@ static Translation_CR_t M_RD_ColorTranslation (int color)
 {
     switch (color)
     {
-        case 1:   return CR_WHITE2GRAY_HERETIC;      break;
-        case 2:   return CR_WHITE2DARKGRAY_HERETIC;  break;
-        case 3:   return CR_WHITE2RED_HERETIC;       break;
-        case 4:   return CR_WHITE2DARKRED_HERETIC;   break;
-        case 5:   return CR_WHITE2GREEN_HERETIC;     break;
-        case 6:   return CR_WHITE2DARKGREEN_HERETIC; break;
-        case 7:   return CR_WHITE2OLIVE_HERETIC;     break;
-        case 8:   return CR_WHITE2BLUE_HERETIC;      break;
-        case 9:   return CR_WHITE2DARKBLUE_HERETIC;  break;
-        case 10:  return CR_WHITE2PURPLE_HERETIC;    break;
-        case 11:  return CR_WHITE2NIAGARA_HERETIC;   break;
-        case 12:  return CR_WHITE2AZURE_HERETIC;     break;
-        case 13:  return CR_WHITE2YELLOW_HERETIC;    break;
-        case 14:  return CR_WHITE2GOLD_HERETIC;      break;
-        case 15:  return CR_WHITE2DARKGOLD_HERETIC;  break;
-        case 16:  return CR_WHITE2TAN_HERETIC;       break;
-        case 17:  return CR_WHITE2BROWN_HERETIC;     break;
-        default:  return CR_NONE;                    break;
+        case 1:   return CR_WHITE2GRAY_HERETIC;
+        case 2:   return CR_WHITE2DARKGRAY_HERETIC;
+        case 3:   return CR_WHITE2RED_HERETIC;
+        case 4:   return CR_WHITE2DARKRED_HERETIC;
+        case 5:   return CR_WHITE2GREEN_HERETIC;
+        case 6:   return CR_WHITE2DARKGREEN_HERETIC;
+        case 7:   return CR_WHITE2OLIVE_HERETIC;
+        case 8:   return CR_WHITE2BLUE_HERETIC;
+        case 9:   return CR_WHITE2DARKBLUE_HERETIC;
+        case 10:  return CR_WHITE2PURPLE_HERETIC;
+        case 11:  return CR_WHITE2NIAGARA_HERETIC;
+        case 12:  return CR_WHITE2AZURE_HERETIC;
+        case 13:  return CR_WHITE2YELLOW_HERETIC;
+        case 14:  return CR_WHITE2GOLD_HERETIC;
+        case 15:  return CR_WHITE2DARKGOLD_HERETIC;
+        case 16:  return CR_WHITE2TAN_HERETIC;
+        case 17:  return CR_WHITE2BROWN_HERETIC;
+        default:  return CR_NONE;
     }
 }
 
@@ -284,24 +285,24 @@ static char *M_RD_ColorName (int color)
 {
     switch (color)
     {
-        case 1:   return english_language ? "GRAY"       : "CTHSQ";          break;  // СЕРЫЙ
-        case 2:   return english_language ? "DARK GRAY"  : "NTVYJ-CTHSQ";    break;  // ТЁМНО-СЕРЫЙ
-        case 3:   return english_language ? "RED"        : "RHFCYSQ";        break;  // КРАСНЫЙ
-        case 4:   return english_language ? "DARK RED"   : "NTVYJ-RHFCYSQ";  break;  // ТЁМНО-КРАСНЫЙ
-        case 5:   return english_language ? "GREEN"      : "PTKTYSQ";        break;  // ЗЕЛЕНЫЙ
-        case 6:   return english_language ? "DARK GREEN" : "NTVYJ-PTKTYSQ";  break;  // ТЕМНО-ЗЕЛЕНЫЙ
-        case 7:   return english_language ? "OLIVE"      : "JKBDRJDSQ";      break;  // ОЛИВКОВЫЙ
-        case 8:   return english_language ? "BLUE"       : "CBYBQ";          break;  // СИНИЙ
-        case 9:   return english_language ? "DARK BLUE"  : "NTVYJ-CBYBQ";    break;  // ТЕМНО-СИНИЙ
-        case 10:  return english_language ? "PURPLE"     : "ABJKTNJDSQ";     break;  // ФИОЛЕТОВЫЙ
-        case 11:  return english_language ? "NIAGARA"    : "YBFUFHF";        break;  // НИАГАРА
-        case 12:  return english_language ? "AZURE"      : "KFPEHYSQ";       break;  // ЛАЗУРНЫЙ
-        case 13:  return english_language ? "YELLOW"     : ";TKNSQ";         break;  // ЖЕЛТЫЙ
-        case 14:  return english_language ? "GOLD"       : "PJKJNJQ";        break;  // ЗОЛОТОЙ
-        case 15:  return english_language ? "DARK GOLD"  : "NTVYJ-PJKJNJQ";  break;  // ТЕМНО-ЗОЛОТОЙ
-        case 16:  return english_language ? "TAN"        : ",T;TDSQ";        break;  // БЕЖЕВЫЙ
-        case 17:  return english_language ? "BROWN"      : "RJHBXYTDSQ";     break;  // КОРИЧНЕВЫЙ
-        default:  return english_language ? "WHITE"      : ",TKSQ";          break;  // БЕЛЫЙ
+        case 1:   return english_language ? "GRAY"       : "CTHSQ";         // СЕРЫЙ
+        case 2:   return english_language ? "DARK GRAY"  : "NTVYJ-CTHSQ";   // ТЁМНО-СЕРЫЙ
+        case 3:   return english_language ? "RED"        : "RHFCYSQ";       // КРАСНЫЙ
+        case 4:   return english_language ? "DARK RED"   : "NTVYJ-RHFCYSQ"; // ТЁМНО-КРАСНЫЙ
+        case 5:   return english_language ? "GREEN"      : "PTKTYSQ";       // ЗЕЛЕНЫЙ
+        case 6:   return english_language ? "DARK GREEN" : "NTVYJ-PTKTYSQ"; // ТЕМНО-ЗЕЛЕНЫЙ
+        case 7:   return english_language ? "OLIVE"      : "JKBDRJDSQ";     // ОЛИВКОВЫЙ
+        case 8:   return english_language ? "BLUE"       : "CBYBQ";         // СИНИЙ
+        case 9:   return english_language ? "DARK BLUE"  : "NTVYJ-CBYBQ";   // ТЕМНО-СИНИЙ
+        case 10:  return english_language ? "PURPLE"     : "ABJKTNJDSQ";    // ФИОЛЕТОВЫЙ
+        case 11:  return english_language ? "NIAGARA"    : "YBFUFHF";       // НИАГАРА
+        case 12:  return english_language ? "AZURE"      : "KFPEHYSQ";      // ЛАЗУРНЫЙ
+        case 13:  return english_language ? "YELLOW"     : ";TKNSQ";        // ЖЕЛТЫЙ
+        case 14:  return english_language ? "GOLD"       : "PJKJNJQ";       // ЗОЛОТОЙ
+        case 15:  return english_language ? "DARK GOLD"  : "NTVYJ-PJKJNJQ"; // ТЕМНО-ЗОЛОТОЙ
+        case 16:  return english_language ? "TAN"        : ",T;TDSQ";       // БЕЖЕВЫЙ
+        case 17:  return english_language ? "BROWN"      : "RJHBXYTDSQ";    // КОРИЧНЕВЫЙ
+        default:  return english_language ? "WHITE"      : ",TKSQ";         // БЕЛЫЙ
     }
 }
 
@@ -2357,7 +2358,7 @@ static void DrawControlsMenu(void)
     if (english_language)
     {
         // Always run
-        RD_M_DrawTextSmallENG(joybspeed >= 20 ? "ON" : "OFF", 118 + wide_delta, 42, CR_NONE);
+        RD_M_DrawTextSmallENG(alwaysRun ? "ON" : "OFF", 118 + wide_delta, 42, CR_NONE);
 
         // Mouse look
         RD_M_DrawTextSmallENG(mlook ? "ON" : "OFF", 118 + wide_delta, 122, CR_NONE);
@@ -2373,7 +2374,7 @@ static void DrawControlsMenu(void)
     else
     {
         // Режим постоянного бега
-        RD_M_DrawTextSmallRUS(joybspeed >= 20 ? "DRK" : "DSRK", 209 + wide_delta, 42, CR_NONE);
+        RD_M_DrawTextSmallRUS(alwaysRun ? "DRK" : "DSRK", 209 + wide_delta, 42, CR_NONE);
 
         // Обзор мышью
         RD_M_DrawTextSmallRUS(mlook ? "DRK" : "DSRK", 132 + wide_delta, 122, CR_NONE);
@@ -2409,17 +2410,7 @@ static void DrawControlsMenu(void)
 
 static void M_RD_AlwaysRun()
 {
-    static int joybspeed_old = 2;
-
-    if (joybspeed >= 20)
-    {
-        joybspeed = joybspeed_old;
-    }
-    else
-    {
-        joybspeed_old = joybspeed;
-        joybspeed = 29;
-    }
+    alwaysRun ^= 1;
 }
 
 static void M_RD_Sensitivity(Direction_t direction)
@@ -3484,7 +3475,6 @@ void M_RD_DoResetSettings(void)
     mute_inactive_window = 0;
 
     // Controls
-    joybspeed           = 29;
     mouseSensitivity    = 5;
     mlook               = 0;
     players[consoleplayer].centering = true;
@@ -3775,8 +3765,6 @@ static void SCInfo(int option)
 boolean MN_Responder(event_t * event)
 {
     int charTyped;
-    int key;
-    int mousewait = 0;
     MenuItem_t *item;
     extern void D_StartTitle(void);
     extern void G_CheckDemoStatus(void);
@@ -3787,10 +3775,7 @@ boolean MN_Responder(event_t * event)
 
     if (testcontrols)
     {
-        if (event->type == ev_quit
-         || (event->type == ev_keydown
-          && (event->data1 == key_menu_activate
-           || event->data1 == key_menu_quit)))
+        if (event->type == ev_quit || BK_isKeyDown(event, bk_menu_activate) || BK_isKeyDown(event, bk_quit))
         {
             // [JN] Widescreen: remember choosen widescreen variable before quit.
             aspect_ratio = aspect_ratio_temp;
@@ -3824,69 +3809,9 @@ boolean MN_Responder(event_t * event)
         return true;
     }
 
-    // [JN] Initialize events.
-    charTyped = 0;
-    key = -1;
-
-    // Allow the menu to be activated from a joystick button if a button
-    // is bound for joybmenu.
-    if (event->type == ev_joystick)
-    {
-        if (joybmenu >= 0 && (event->data1 & (1 << joybmenu)) != 0)
-        {
-            RD_Menu_ActivateMenu();
-            return true;
-        }
-    }
-    // [JN] Support for mouse controls.
-    else
-    {
-        if (event->type == ev_mouse_keydown && mousewait < I_GetTime())
-        {
-            // [JN] Catch all incoming data1 mouse events. Makes middle mouse button
-            // working for message interruption and for binding ability.
-            key = event->data1;
-            mousewait = I_GetTime() + 5;
-
-            // [JN] Do not read mouse events while typing and "typeofask" events.
-            /* [Dasperal] Disable this for now
-            if (!FileMenuKeySteal)
-            {
-                if (event->data1&1)
-                {
-                    key = key_menu_forward;
-                    mousewait = I_GetTime() + 15;
-                }
-                if (event->data1&2)
-                {
-                    key = key_menu_back;
-                    mousewait = I_GetTime() + 15;
-                }
-            }
-            // [crispy] scroll menus with mouse wheel
-            if (mousebprevweapon >= 0 && event->data1 & (1 << mousebprevweapon))
-            {
-                key = key_menu_down;
-                mousewait = I_GetTime() + 1;
-            }
-            else
-            if (mousebnextweapon >= 0 && event->data1 & (1 << mousebnextweapon))
-            {
-                key = key_menu_up;
-                mousewait = I_GetTime() + 1;
-            }*/
-        }
-        else
-        {
-            if (event->type == ev_keydown)
-            {
-                key = event->data1;
-                charTyped = event->data2;
-            }
-        }
-    }
-
-    if (key == -1)
+    // Only care about keypresses beyond this point.
+    if (event->type != ev_keydown &&
+        event->type != ev_mouse_keydown)
     {
         return false;
     }
@@ -3901,7 +3826,7 @@ boolean MN_Responder(event_t * event)
         {
             InfoType = (InfoType + 1) % 4;
         }
-        if (key == KEY_ESCAPE)
+        if (event->type == ev_keydown && event->data1 == KEY_ESCAPE)
         {
             InfoType = 0;
         }
@@ -3915,8 +3840,7 @@ boolean MN_Responder(event_t * event)
         return (true);          //make the info screen eat the keypress
     }
 
-    if ((ravpic && key == KEY_F1) ||
-        (key != 0 && key == key_menu_screenshot))
+    if ((ravpic && event->data1 == KEY_F1) || BK_isKeyDown(event, bk_screenshot))
     {
         G_ScreenShot();
         return (true);
@@ -3924,7 +3848,7 @@ boolean MN_Responder(event_t * event)
 
     if (askforquit)
     {
-        if (key == key_menu_confirm)
+        if (BK_isKeyDown(event, bk_confirm))
         {
             switch (typeofask)
             {
@@ -3973,7 +3897,7 @@ boolean MN_Responder(event_t * event)
 
             return true;
         }
-        else if (key == key_menu_abort || key == KEY_ESCAPE)
+        else if (BK_isKeyDown(event, bk_abort) || event->data1 == KEY_ESCAPE)
         {
             players[consoleplayer].messageTics = 1;  //set the msg to be cleared
             askforquit = false;
@@ -3990,7 +3914,7 @@ boolean MN_Responder(event_t * event)
 
     if (!menuactive && !chatmodeon)
     {
-        if (key == key_menu_decscreen)
+        if (BK_isKeyDown(event, bk_screen_dec))
         {
             if (automapactive)
             {               // Don't screen size in automap
@@ -4002,7 +3926,7 @@ boolean MN_Responder(event_t * event)
             UpdateState |= I_FULLSCRN;
             return (true);
         }
-        else if (key == key_menu_incscreen)
+        else if (BK_isKeyDown(event, bk_screen_inc))
         {
             if (automapactive)
             {               // Don't screen size in automap
@@ -4014,13 +3938,13 @@ boolean MN_Responder(event_t * event)
             UpdateState |= I_FULLSCRN;
             return (true);
         }
-        else if (key == key_menu_help)           // F1
+        else if (BK_isKeyDown(event, bk_menu_help))           // F1
         {
             SCInfo(0);      // start up info screens
             menuactive = true;
             return (true);
         }
-        else if (key == key_menu_save)           // F2 (save game)
+        else if (BK_isKeyDown(event, bk_menu_save))           // F2 (save game)
         {
             if (gamestate == GS_LEVEL && !demoplayback)
             {
@@ -4037,7 +3961,7 @@ boolean MN_Responder(event_t * event)
             }
             return true;
         }
-        else if (key == key_menu_load)           // F3 (load game)
+        else if (BK_isKeyDown(event, bk_menu_load))           // F3 (load game)
         {
             if (SCNetCheck(2))
             {
@@ -4054,7 +3978,7 @@ boolean MN_Responder(event_t * event)
             }
             return true;
         }
-        else if (key == key_menu_volume)         // F4 (volume)
+        else if (BK_isKeyDown(event, bk_menu_volume))         // F4 (volume)
         {
             menuactive = true;
             FileMenuKeySteal = false;
@@ -4070,14 +3994,14 @@ boolean MN_Responder(event_t * event)
             slottextloaded = false; //reload the slot text, when needed
             return true;
         }
-        else if (key == key_menu_detail)          // F5 (detail)
+        else if (BK_isKeyDown(event, bk_detail))          // F5 (detail)
         {
             // [JN] Restored variable detail mode.
             M_RD_Detail();
             S_StartSound(NULL, sfx_chat);
             return true;
         }
-        else if (key == key_menu_qsave)           // F6 (quicksave)
+        else if (BK_isKeyDown(event, bk_qsave))           // F6 (quicksave)
         {
             if (gamestate == GS_LEVEL && !demoplayback)
             {
@@ -4109,7 +4033,7 @@ boolean MN_Responder(event_t * event)
             }
             return true;
         }
-        else if (key == key_menu_endgame)         // F7 (end game)
+        else if (BK_isKeyDown(event, bk_endgame))         // F7 (end game)
         {
             if (gamestate == GS_LEVEL && !demoplayback)
             {
@@ -4118,12 +4042,12 @@ boolean MN_Responder(event_t * event)
             }
             return true;
         }
-        else if (key == key_menu_messages)        // F8 (toggle messages)
+        else if (BK_isKeyDown(event, bk_messages))        // F8 (toggle messages)
         {
             M_RD_Messages(0);
             return true;
         }
-        else if (key == key_menu_qload)           // F9 (quickload)
+        else if (BK_isKeyDown(event, bk_qload))           // F9 (quickload)
         {
             if (!quickload || quickload == -1)
             {
@@ -4152,14 +4076,14 @@ boolean MN_Responder(event_t * event)
             }
             return true;
         }
-        else if (key == key_menu_quit)            // F10 (quit)
+        else if (BK_isKeyDown(event, bk_quit))            // F10 (quit)
         {
             // [JN] Allow to invoke quit responce in any game states.
             SCQuitGame(0);
             S_StartSound(NULL, sfx_chat);
             return true;
         }
-        else if (key == key_menu_gamma)           // F11 (gamma correction)
+        else if (BK_isKeyDown(event, bk_gamma))           // F11 (gamma correction)
         {
             usegamma++;
             if (usegamma > 17)
@@ -4179,12 +4103,12 @@ boolean MN_Responder(event_t * event)
         }
         // [crispy] those two can be considered as shortcuts for the ENGAGE cheat
         // and should be treated as such, i.e. add "if (!netgame)"
-        else if (!netgame && key != 0 && key == key_menu_reloadlevel)
+        else if (!netgame && BK_isKeyDown(event, bk_reloadlevel))
         {
             if (G_ReloadLevel())
             return true;
         }
-        else if (!netgame && key != 0 && key == key_menu_nextlevel)
+        else if (!netgame && BK_isKeyDown(event, bk_nextlevel))
         {
             if (G_GotoNextLevel())
             return true;
@@ -4193,7 +4117,7 @@ boolean MN_Responder(event_t * event)
 
     if (!menuactive)
     {
-        if (key == key_menu_activate || gamestate == GS_DEMOSCREEN || demoplayback)
+        if (BK_isKeyDown(event, bk_menu_activate) || gamestate == GS_DEMOSCREEN || demoplayback)
         {
             RD_Menu_ActivateMenu();
             return (true);
@@ -4202,9 +4126,11 @@ boolean MN_Responder(event_t * event)
     }
     if (!FileMenuKeySteal)
     {
-        return RD_Menu_Responder(key, charTyped);
+        if(event->type == ev_keydown) // Todo
+            return RD_Menu_Responder(event->data1, event->data2);
+        else return false;
     }
-    else
+    else if(event->type == ev_keydown)
     {
         // Editing file names
         // When typing a savegame name, we use the fully shifted and
@@ -4212,7 +4138,7 @@ boolean MN_Responder(event_t * event)
         charTyped = event->data3;
 
         textBuffer = &SlotText[currentSlot][slotptr];
-        if (key == KEY_BACKSPACE)
+        if (event->data1 == KEY_BACKSPACE)
         {
             if (slotptr)
             {
@@ -4223,7 +4149,7 @@ boolean MN_Responder(event_t * event)
             }
             return (true);
         }
-        if (key == KEY_ESCAPE)
+        if (event->data1 == KEY_ESCAPE)
         {
             memset(SlotText[currentSlot], 0, SLOTTEXTLEN + 2);
             M_StringCopy(SlotText[currentSlot], oldSlotText,
@@ -4232,7 +4158,7 @@ boolean MN_Responder(event_t * event)
             RD_Menu_DeactivateMenu();
             return (true);
         }
-        if (key == KEY_ENTER)
+        if (event->data1 == KEY_ENTER)
         {
             SlotText[currentSlot][slotptr] = 0; // clear the cursor
             item = (MenuItem_t*) &CurrentMenu->items[CurrentItPos];
@@ -4285,6 +4211,7 @@ boolean MN_Responder(event_t * event)
         }
         return (true);
     }
+    return false;
 }
 
 //---------------------------------------------------------------------------
