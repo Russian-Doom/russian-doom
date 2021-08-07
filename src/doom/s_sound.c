@@ -258,7 +258,6 @@ void S_UpdateStereoSeparation(void)
 void S_Shutdown(void)
 {
     I_ShutdownSound();
-    I_ShutdownMusic();
 }
 
 static void S_StopChannel(int cnum)

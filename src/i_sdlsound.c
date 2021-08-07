@@ -904,11 +904,13 @@ static void I_SDL_PrecacheSounds(sfxinfo_t *sounds, int num_sounds)
     }
 
     printf(english_language ?
-           "I_SDL_PrecacheSounds: Precaching all sound effects.." :
-           "I_SDL_PrecacheSounds: Кэширование звуковых эффектов...");
+           "I_SDL_PrecacheSounds: Precaching all sound effects - " :
+           "I_SDL_PrecacheSounds: Кэширование звуковых эффектов - ");
 
+    printf("[");
     for (i=0; i<num_sounds; ++i)
     {
+        
         if ((i % 6) == 0)
         {
             printf(".");
@@ -924,6 +926,7 @@ static void I_SDL_PrecacheSounds(sfxinfo_t *sounds, int num_sounds)
             CacheSFX(&sounds[i]);
         }
     }
+    printf("]");
 
     printf("\n");
 }

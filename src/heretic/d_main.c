@@ -1704,7 +1704,6 @@ void D_DoomMain(void)
 
     I_InitTimer();
     I_InitSound(false);
-    I_InitMusic();
 
 #ifdef FEATURE_MULTIPLAYER
     tprintf(english_language ?

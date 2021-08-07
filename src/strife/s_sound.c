@@ -174,7 +174,6 @@ void S_Init(int sfxVolume, int musicVolume, int voiceVolume)
 void S_Shutdown(void)
 {
     I_ShutdownSound();
-    I_ShutdownMusic();
 }
 
 static void S_StopChannel(int cnum)

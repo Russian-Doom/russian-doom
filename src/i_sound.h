@@ -218,8 +218,6 @@ typedef struct
     void (*Poll)(void);
 } music_module_t;
 
-void I_InitMusic(void);
-void I_ShutdownMusic(void);
 void I_SetMusicVolume(int volume);
 void I_PauseSong(void);
 void I_ResumeSong(void);

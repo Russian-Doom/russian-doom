@@ -690,7 +690,6 @@ void D_DoomMain(void)
     I_InitTimer();
     I_InitJoystick();
     I_InitSound(false);
-    I_InitMusic();
 
 #ifdef FEATURE_MULTIPLAYER
     ST_Message(english_language ?

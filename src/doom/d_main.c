@@ -2978,7 +2978,6 @@ void D_DoomMain (void)
     I_InitTimer();
     I_InitJoystick();
     I_InitSound(true);
-    I_InitMusic();
 
 #ifdef FEATURE_MULTIPLAYER
     printf (english_language ?

@@ -353,15 +353,6 @@ void I_PrecacheSounds(sfxinfo_t *sounds, int num_sounds)
     }
 }
 
-void I_InitMusic(void)
-{
-}
-
-void I_ShutdownMusic(void)
-{
-
-}
-
 void I_SetMusicVolume(int volume)
 {
     if (music_module != NULL)
