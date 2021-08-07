@@ -2118,7 +2118,7 @@ void M_LoadDefaults (void)
 
     printf(english_language ?
            "saving config in %s\n" :
-           "Сохранение файла конфигурации: %s\n",
+           "Сохранение файла конфигурации:\n \t%s\n",
            doom_defaults.filename);
 
     //!
@@ -2396,7 +2396,7 @@ char *M_GetSaveGameDir()
         M_MakeDirectory(savegamedir);
     }
     printf(english_language ?
-            "Using %s for saves\n" :
+            "Savegames folder:\n \t%s\n" :
             "Сохраненные игры будут расположены в папке:\n \t%s\n",
             savegamedir);
     return savegamedir;
