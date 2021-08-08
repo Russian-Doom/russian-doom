@@ -6432,9 +6432,7 @@ boolean M_Responder (event_t* ev)
     }
 
     // Keys usable within menu
-    if(ev->type == ev_keydown) //todo
-        return RD_Menu_Responder(ev->data1, ev->data2);
-    return false;
+    return RD_Menu_Responder(ev);
 }
 
 

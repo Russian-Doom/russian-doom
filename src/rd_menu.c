@@ -20,8 +20,8 @@
 #include "doomkeys.h"
 #include "i_video.h"
 #include "jn.h"
-#include "m_controls.h"
 #include "m_misc.h"
+#include "rd_keybinds.h"
 #include "v_patch.h"
 #include "v_video.h"
 #include "w_wad.h"
@@ -477,14 +477,14 @@ void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos)
     }
 }
 
-boolean RD_Menu_Responder(int key, int charTyped)
+boolean RD_Menu_Responder(event_t* event)
 {
     int i;
     MenuItem_t *item;
 
     item = (MenuItem_t *) &CurrentMenu->items[CurrentItPos];
 
-    if (key == key_menu_down)            // Next menu item
+    if (BK_isKeyDown(event, bk_down))            // Next menu item
     {
         do
         {
@@ -501,7 +501,7 @@ boolean RD_Menu_Responder(int key, int charTyped)
         RD_Menu_StartSound(MENU_SOUND_CURSOR_MOVE);
         return true;
     }
-    else if (key == key_menu_up)         // Previous menu item
+    else if (BK_isKeyDown(event, bk_up))         // Previous menu item
     {
         do
         {
@@ -518,7 +518,7 @@ boolean RD_Menu_Responder(int key, int charTyped)
         RD_Menu_StartSound(MENU_SOUND_CURSOR_MOVE);
         return true;
     }
-    else if (key == key_menu_left)       // Slider left
+    else if (BK_isKeyDown(event, bk_left))       // Slider left
     {
         if (item->type == ITT_LRFUNC && item->pointer != NULL)
         {
@@ -531,7 +531,7 @@ boolean RD_Menu_Responder(int key, int charTyped)
         }
         return true;
     }
-    else if (key == key_menu_right)      // Slider right
+    else if (BK_isKeyDown(event, bk_right))      // Slider right
     {
         if (item->type == ITT_LRFUNC && item->pointer != NULL)
         {
@@ -544,7 +544,7 @@ boolean RD_Menu_Responder(int key, int charTyped)
         }
         return true;
     }
-    else if (key == key_menu_forward)    // Activate item (enter)
+    else if (BK_isKeyDown(event, bk_menu_select))    // Activate item (enter)
     {
         if (item->type == ITT_SETMENU)
         {
@@ -579,12 +579,12 @@ boolean RD_Menu_Responder(int key, int charTyped)
         }
         return true;
     }
-    else if (key == key_menu_activate)     // Toggle menu
+    else if (BK_isKeyDown(event, bk_menu_activate))     // Toggle menu
     {
         RD_Menu_DeactivateMenu();
         return true;
     }
-    else if (key == key_menu_back)         // Go back to previous menu
+    else if (BK_isKeyDown(event, bk_menu_back))         // Go back to previous menu
     {
         RD_Menu_StartSound(MENU_SOUND_BACK);
         if (CurrentMenu->prevMenu == NULL)
@@ -598,7 +598,7 @@ boolean RD_Menu_Responder(int key, int charTyped)
         return true;
     }
     // [JN] Scroll menus by PgUp/PgDn keys
-    else if (key == KEY_PGUP)
+    else if (event->type == ev_keydown && event->data1 == KEY_PGUP)
     {
         if (CurrentMenu->pageDescriptor != NULL)
         {
@@ -620,7 +620,7 @@ boolean RD_Menu_Responder(int key, int charTyped)
             return true;
         }
     }
-    else if (key == KEY_PGDN)
+    else if (event->type == ev_keydown && event->data1 == KEY_PGDN)
     {
         if (CurrentMenu->pageDescriptor != NULL)
         {
@@ -642,7 +642,7 @@ boolean RD_Menu_Responder(int key, int charTyped)
             return true;
         }
     }
-    else if (charTyped != 0)
+    else if (event->type == ev_keydown && event->data2 != 0)
     {
         // Jump to menu item based on first letter:
 
@@ -655,7 +655,7 @@ boolean RD_Menu_Responder(int key, int charTyped)
                                                           : CurrentMenu->items[i].text_rus;
                 if (textString)
                 {
-                    if (toupper(charTyped) == toupper(textString[0]))
+                    if (toupper(event->data2) == toupper(textString[0]))
                     {
                         CurrentItPos = i;
                         return true;
@@ -673,7 +673,7 @@ boolean RD_Menu_Responder(int key, int charTyped)
                                                           : CurrentMenu->items[i].text_rus;
                 if (textString)
                 {
-                    if (toupper(charTyped) == toupper(textString[0]))
+                    if (toupper(event->data2) == toupper(textString[0]))
                     {
                         CurrentItPos = i;
                         return true;

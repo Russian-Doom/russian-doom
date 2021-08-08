@@ -13,6 +13,8 @@
 //
 
 #include <stddef.h>
+#include <string.h>
+
 #include "rd_keybinds.h"
 #include "doomkeys.h"
 #include "i_input.h"

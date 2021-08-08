@@ -3898,9 +3898,7 @@ boolean MN_Responder(event_t * event)
     }
     if (!FileMenuKeySteal)
     {
-        if(event->type == ev_keydown) // Todo
-            return RD_Menu_Responder(event->data1, event->data2);
-        else return false;
+        return RD_Menu_Responder(event);
     }
     else if(event->type == ev_keydown)
     {

@@ -15,6 +15,7 @@
 #ifndef RD_MENU_H
 #define RD_MENU_H
 
+#include "d_event.h"
 #include "rd_text.h"
 #include "rd_menu_control.h"
 
@@ -199,7 +200,7 @@ void RD_Menu_Draw_Bindings(int x);
 
 void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos);
 
-boolean RD_Menu_Responder(int key, int charTyped);
+boolean RD_Menu_Responder(event_t* event);
 
 void RD_Menu_SetMenu(const Menu_t* menu);
 
