@@ -682,7 +682,8 @@ static Menu_t Bindings1Menu;
 static Menu_t Bindings2Menu;
 static Menu_t Bindings3Menu;
 static Menu_t Bindings4Menu;
-static const Menu_t* BindingsMenuPages[] = {&Bindings1Menu, &Bindings2Menu, &Bindings3Menu, &Bindings4Menu};
+static Menu_t Bindings5Menu;
+static const Menu_t* BindingsMenuPages[] = {&Bindings1Menu, &Bindings2Menu, &Bindings3Menu, &Bindings4Menu, &Bindings5Menu};
 static Menu_t Gameplay1Menu;
 static Menu_t Gameplay2Menu;
 static Menu_t Gameplay3Menu;
@@ -1099,7 +1100,7 @@ static Menu_t ControlsMenu = {
 // -----------------------------------------------------------------------------
 
 static const PageDescriptor_t BindingsPageDescriptor = {
-    4, BindingsMenuPages,
+    5, BindingsMenuPages,
     252, 165,
     CR_WHITE
 };
@@ -1119,14 +1120,14 @@ static MenuItem_t Bindings1Items[] = {
     {ITT_EFUNC,   "Use",           "bcgjkmpjdfnm",    BK_StartBindingKey,  bk_use},          // Использовать
     {ITT_EMPTY,   NULL,            NULL,              NULL,           0},
     {ITT_SETMENU, NULL,            NULL,              &Bindings2Menu, 0},               // Далее >
-    {ITT_SETMENU, NULL,            NULL,              &Bindings4Menu, 0},               // < Назад
+    {ITT_SETMENU, NULL,            NULL,              &Bindings5Menu, 0},               // < Назад
     {ITT_EMPTY,   NULL,            NULL,              NULL,           0}
 };
 
 static Menu_t Bindings1Menu = {
     35, 35,
     25,
-    "Keyboard bindings", "Yfcnhjqrb rkfdbfnehs", false, // Настройки клавиатуры
+    "Customize controls", "Yfcnhjqrb eghfdktybz", false, // Настройки управления
     16, Bindings1Items, false,
     M_RD_Draw_Bindings,
     &BindingsPageDescriptor,
@@ -1160,7 +1161,7 @@ static MenuItem_t Bindings2Items[] = {
 static Menu_t Bindings2Menu = {
     35, 35,
     25,
-    "Keyboard bindings", "Yfcnhjqrb rkfdbfnehs", false, // Настройки клавиатуры
+    "Customize controls", "Yfcnhjqrb eghfdktybz", false, // Настройки управления
     16, Bindings2Items, false,
     M_RD_Draw_Bindings,
     &BindingsPageDescriptor,
@@ -1195,7 +1196,7 @@ static MenuItem_t Bindings3Items[] = {
 static Menu_t Bindings3Menu = {
     35, 35,
     25,
-    "Keyboard bindings", "Yfcnhjqrb rkfdbfnehs", false, // Настройки клавиатуры
+    "Customize controls", "Yfcnhjqrb eghfdktybz", false, // Настройки управления
     16, Bindings3Items, false,
     M_RD_Draw_Bindings,
     &BindingsPageDescriptor,
@@ -1221,7 +1222,7 @@ static MenuItem_t Bindings4Items[] = {
     {ITT_EFUNC,   "Clear all marks",  "e,hfnm jnvtnrb",    BK_StartBindingKey,  bk_map_clearmark}, // Убрать отметки
     {ITT_EMPTY,   NULL,               NULL,                NULL,           0},
     {ITT_EMPTY,   NULL,               NULL,                NULL,           0},
-    {ITT_SETMENU, NULL,               NULL,                &Bindings1Menu, 0},                // Далее >
+    {ITT_SETMENU, NULL,               NULL,                &Bindings5Menu, 0},                // Далее >
     {ITT_SETMENU, NULL,               NULL,                &Bindings3Menu, 0},                // < Назад
     {ITT_EMPTY,   NULL,               NULL,                NULL,           0}
 };
@@ -1229,8 +1230,42 @@ static MenuItem_t Bindings4Items[] = {
 static Menu_t Bindings4Menu = {
     35, 35,
     25,
-    "Keyboard bindings", "Yfcnhjqrb rkfdbfnehs", false, // Настройки клавиатуры
+    "Customize controls", "Yfcnhjqrb eghfdktybz", false, // Настройки управления
     16, Bindings4Items, false,
+    M_RD_Draw_Bindings,
+    &BindingsPageDescriptor,
+    &ControlsMenu,
+    1
+};
+
+// -----------------------------------------------------------------------------
+// Key bindings (5)
+// -----------------------------------------------------------------------------
+
+static MenuItem_t Bindings5Items[] = {
+    {ITT_TITLE,   "Multiplayer",         "Ctntdfz buhf",        NULL,               0},                     // Сетевая игра
+    {ITT_EFUNC,   "Multiplayer spy",     "Dbl lheujuj buhjrf",  BK_StartBindingKey, bk_spy},                // Вид другого игрока
+    {ITT_EFUNC,   "Send message",        "Jnghfdbnm cjj,otybt", BK_StartBindingKey, bk_multi_msg},          // Отправить сообщение
+    {ITT_EFUNC,   "Message to player 1", "Cjj,otybt buhjre 1",  BK_StartBindingKey, bk_multi_msg_player_0}, // Сообщение игроку 1
+    {ITT_EFUNC,   "Message to player 2", "Cjj,otybt buhjre 2",  BK_StartBindingKey, bk_multi_msg_player_1}, // Сообщение игроку 2
+    {ITT_EFUNC,   "Message to player 3", "Cjj,otybt buhjre 3",  BK_StartBindingKey, bk_multi_msg_player_2}, // Сообщение игроку 3
+    {ITT_EFUNC,   "Message to player 4", "Cjj,otybt buhjre 4",  BK_StartBindingKey, bk_multi_msg_player_3}, // Сообщение игроку 4
+    {ITT_EMPTY,   NULL,                  NULL,                  NULL,               0},
+    {ITT_EMPTY,   NULL,                  NULL,                  NULL,               0},
+    {ITT_EMPTY,   NULL,                  NULL,                  NULL,               0},
+    {ITT_EMPTY,   NULL,                  NULL,                  NULL,               0},
+    {ITT_EMPTY,   NULL,                  NULL,                  NULL,               0},
+    {ITT_EMPTY,   NULL,                  NULL,                  NULL,               0},
+    {ITT_SETMENU, NULL,                  NULL,                  &Bindings1Menu,     0},                     // Далее >
+    {ITT_SETMENU, NULL,                  NULL,                  &Bindings4Menu,     0},                     // < Назад
+    {ITT_EMPTY,   NULL,                  NULL,                  NULL,               0}
+};
+
+static Menu_t Bindings5Menu = {
+    35, 35,
+    25,
+    "Customize controls", "Yfcnhjqrb eghfdktybz", false, // Настройки управления
+    16, Bindings5Items, false,
     M_RD_Draw_Bindings,
     &BindingsPageDescriptor,
     &ControlsMenu,
@@ -3022,7 +3057,7 @@ void M_RD_Draw_Bindings()
 
     if (english_language)
     {
-        RD_M_DrawTextSmallENG(CurrentMenu == &Bindings4Menu ? "first page >" : "next page >", 35 + wide_delta, 155, CR_WHITE);
+        RD_M_DrawTextSmallENG(CurrentMenu == &Bindings5Menu ? "first page >" : "next page >", 35 + wide_delta, 155, CR_WHITE);
         RD_M_DrawTextSmallENG(CurrentMenu == &Bindings1Menu ? "< last page" : "< prev page", 35 + wide_delta, 165, CR_WHITE);
 
         RD_M_DrawTextSmallENG("enter to change, del to clear", 55 + wide_delta, 180, CR_DARKRED);
@@ -3042,7 +3077,7 @@ void M_RD_Draw_Bindings()
         RD_M_DrawTextSmallRUS("kbcnfnm cnhfybws", 139 + wide_delta, 189, CR_DARKRED);
     }
 
-    RD_Menu_Draw_Bindings(english_language ? 189 : 210);
+    RD_Menu_Draw_Bindings(english_language ? 195 : 210);
 }
 
 // -----------------------------------------------------------------------------
@@ -6205,7 +6240,8 @@ boolean M_Responder (event_t* ev)
         &&  CurrentMenu != &Bindings1Menu
         &&  CurrentMenu != &Bindings2Menu
         &&  CurrentMenu != &Bindings3Menu
-        &&  CurrentMenu != &Bindings4Menu)
+        &&  CurrentMenu != &Bindings4Menu
+        &&  CurrentMenu != &Bindings5Menu)
         {
             menuactive = false;
         }
@@ -6402,7 +6438,8 @@ boolean M_Responder (event_t* ev)
         if(CurrentMenu == &Bindings1Menu ||
            CurrentMenu == &Bindings2Menu ||
            CurrentMenu == &Bindings3Menu ||
-           CurrentMenu == &Bindings4Menu)
+           CurrentMenu == &Bindings4Menu ||
+           CurrentMenu == &Bindings5Menu)
         {
             BK_ClearBinds(CurrentMenu->items[CurrentItPos].option);
             S_StartSound(NULL,sfx_stnmov);
