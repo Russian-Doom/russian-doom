@@ -59,6 +59,7 @@ void (*messageRoutine)(boolean);
 
 boolean inhelpscreens;
 int InfoType = 0;
+extern boolean alwaysRun;
 
 // [JN] Save strings and messages 
 int     quickSaveSlot;      // -1 = no quicksave slot picked!
@@ -207,6 +208,7 @@ void M_RD_Draw_Controls(void);
 void M_RD_Change_MouseLook();
 void M_RD_Change_InvertY();
 void M_RD_Change_Novert();
+void M_RD_Change_AlwaysRun();
 void M_RD_Change_Sensitivity(Direction_t direction);
 void M_RD_Change_Acceleration(Direction_t direction);
 void M_RD_Change_Threshold(Direction_t direction);
@@ -1070,8 +1072,9 @@ static Menu_t SoundSysMenu = {
 
 static MenuItem_t ControlsItems[] = {
     {ITT_TITLE,   "Controls",               "eghfdktybt",                NULL,                       0}, // Управление
-    {ITT_SETMENU, "Customize Controls",     "yfcnhjqrb eghfdktybz",      &Bindings1Menu,              0}, // Настройки управления
+    {ITT_SETMENU, "Customize Controls",     "yfcnhjqrb eghfdktybz",      &Bindings1Menu,             0}, // Настройки управления
     {ITT_EMPTY,   NULL,                     NULL,                        NULL,                       0}, // Reserved
+    {ITT_SWITCH,  "Always run:",            "Ht;bv gjcnjzyyjuj ,tuf:",   M_RD_Change_AlwaysRun,      0}, // Режим постоянного бега
     {ITT_TITLE,   "mouse",                  "vsim",                      NULL,                       0}, // Мышь
     {ITT_LRFUNC,  "sensivity",              "crjhjcnm",                  M_RD_Change_Sensitivity,    0}, // Скорость
     {ITT_EMPTY,   NULL,                     NULL,                        NULL,                       0},
@@ -1088,7 +1091,7 @@ static Menu_t ControlsMenu = {
     35, 35,
     25,
     "CONTROL SETTINGS", "EGHFDKTYBT", false, // УПРАВЛЕНИЕ
-    13, ControlsItems, false,
+    14, ControlsItems, false,
     M_RD_Draw_Controls,
     NULL,
     &RDOptionsMenu,
@@ -2966,51 +2969,57 @@ void M_RD_Draw_Controls(void)
 
     if (english_language)
     {
+        // Always run
+        RD_M_DrawTextSmallENG(alwaysRun ? "on" : "off", 118 + wide_delta, 55, CR_NONE);
+
         // Mouse look
-        RD_M_DrawTextSmallENG(mlook ? "on" : "off", 119 + wide_delta, 125, CR_NONE);
+        RD_M_DrawTextSmallENG(mlook ? "on" : "off", 119 + wide_delta, 135, CR_NONE);
 
         // Invert Y axis
-        RD_M_DrawTextSmallENG(mouse_y_invert ? "on" : "off", 130 + wide_delta, 135,
+        RD_M_DrawTextSmallENG(mouse_y_invert ? "on" : "off", 130 + wide_delta, 145,
                               !mlook ? CR_DARKRED : CR_NONE);
 
         // Vertical movement
-        RD_M_DrawTextSmallENG(!novert ? "on" : "off", 171 + wide_delta, 145,
+        RD_M_DrawTextSmallENG(!novert ? "on" : "off", 171 + wide_delta, 155,
                               mlook ? CR_DARKRED : CR_NONE);
     }
     else
     {
+        // Режим постоянного бега
+        RD_M_DrawTextSmallRUS(alwaysRun ? "drk" : "dsrk", 219 + wide_delta, 55, CR_NONE);
+
         // Обзор мышью
-        RD_M_DrawTextSmallRUS(mlook ? "drk" : "dsrk", 135 + wide_delta, 125, CR_NONE);
+        RD_M_DrawTextSmallRUS(mlook ? "drk" : "dsrk", 135 + wide_delta, 135, CR_NONE);
 
         // Вертикальная инверсия
-        RD_M_DrawTextSmallRUS(mouse_y_invert ? "drk" : "dsrk", 207 + wide_delta, 135,
+        RD_M_DrawTextSmallRUS(mouse_y_invert ? "drk" : "dsrk", 207 + wide_delta, 145,
                               !mlook ? CR_DARKRED : CR_NONE);
 
         // Вертикальное перемещение
-        RD_M_DrawTextSmallRUS(!novert ? "drk" : "dsrk", 235 + wide_delta, 145,
+        RD_M_DrawTextSmallRUS(!novert ? "drk" : "dsrk", 235 + wide_delta, 155,
                               mlook ? CR_DARKRED : CR_NONE);
     }
 
     // Mouse sensivity slider
-    RD_Menu_DrawSliderSmall(&ControlsMenu, 74, 17, mouseSensitivity);
+    RD_Menu_DrawSliderSmall(&ControlsMenu, 84, 17, mouseSensitivity);
     // Numerical representation
     M_snprintf(num, 4, "%d", mouseSensitivity);
-    RD_M_DrawTextSmallENG(num, 189 + wide_delta, 75, CR_NONE);
+    RD_M_DrawTextSmallENG(num, 189 + wide_delta, 85, CR_NONE);
 
     // Acceleration slider
-    RD_Menu_DrawSliderSmall(&ControlsMenu, 94, 17, mouse_acceleration * 4 - 4);
+    RD_Menu_DrawSliderSmall(&ControlsMenu, 104, 17, mouse_acceleration * 4 - 4);
     // Numerical representation
     M_snprintf(num, 4, "%f", mouse_acceleration);
-    RD_M_DrawTextSmallENG(num, 189 + wide_delta, 95, CR_NONE);
+    RD_M_DrawTextSmallENG(num, 189 + wide_delta, 105, CR_NONE);
 
     // Acceleration threshold slider
-    RD_Menu_DrawSliderSmall(&ControlsMenu, 114, 17, mouse_threshold / 2);
+    RD_Menu_DrawSliderSmall(&ControlsMenu, 124, 17, mouse_threshold / 2);
     // Numerical representation
     M_snprintf(num, 4, "%d", mouse_threshold);
     if (mouse_acceleration < 1.1)
-        RD_M_DrawTextSmallENG(num, 189 + wide_delta, 115, CR_DARKRED);
+        RD_M_DrawTextSmallENG(num, 189 + wide_delta, 125, CR_DARKRED);
     else
-        RD_M_DrawTextSmallENG(num, 189 + wide_delta, 115, CR_NONE);
+        RD_M_DrawTextSmallENG(num, 189 + wide_delta, 125, CR_NONE);
 }
 
 void M_RD_Change_MouseLook()
@@ -3029,6 +3038,11 @@ void M_RD_Change_InvertY()
 void M_RD_Change_Novert()
 {
     novert ^= 1;
+}
+
+void M_RD_Change_AlwaysRun()
+{
+    alwaysRun ^= 1;
 }
 
 void M_RD_Change_Sensitivity(Direction_t direction)
