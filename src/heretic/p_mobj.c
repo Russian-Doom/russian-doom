@@ -1137,6 +1137,46 @@ void P_RemoveMobj(mobj_t * mobj)
     P_RemoveThinker((thinker_t *) mobj);
 }
 
+/*
+================================================================================
+= P_FindDoomedNum
+=
+= Finds a mobj type with a matching doomednum
+= killough 8/24/98: rewrote to use hashing
+================================================================================
+*/
+
+static int P_FindDoomedNum (unsigned type)
+{
+    static struct { int first, next; } *hash;
+    int i;
+
+    if (!hash)
+    {
+        hash = Z_Malloc(sizeof *hash * NUMMOBJTYPES, PU_CACHE, (void **) &hash);
+
+        for (i = 0; i < NUMMOBJTYPES; i++)
+        hash[i].first = NUMMOBJTYPES;
+
+        for (i = 0; i < NUMMOBJTYPES; i++)
+        if (mobjinfo[i].doomednum != -1)
+        {
+            unsigned h = (unsigned) mobjinfo[i].doomednum % NUMMOBJTYPES;
+            hash[i].next = hash[h].first;
+            hash[h].first = i;
+        }
+    }
+
+    i = hash[type % NUMMOBJTYPES].first;
+
+    while ((i < NUMMOBJTYPES) && ((unsigned)mobjinfo[i].doomednum != type))
+    {
+        i = hash[i].next;
+    }
+
+    return i;
+}
+
 //=============================================================================
 
 
@@ -1280,9 +1320,8 @@ void P_SpawnMapThing(mapthing_t * mthing)
         return;
 
 // find which type to spawn
-    for (i = 0; i < NUMMOBJTYPES; i++)
-        if (mthing->type == mobjinfo[i].doomednum)
-            break;
+    // [JN] killough 8/23/98: use table for faster lookup
+    i = P_FindDoomedNum(mthing->type);
 
     if (i == NUMMOBJTYPES)
     {
