@@ -30,7 +30,7 @@ typedef enum
     bk_strafe_right,
     bk_fly_up,
     bk_fly_down,
-    bk_fly_center,
+    bk_fly_stop,
     bk_speed,
     bk_strafe,
     bk_jump,
@@ -70,7 +70,6 @@ typedef enum
 //  bk_mission,
 
     //Artifacts: Heretic
-    bk_arti_all,
     bk_arti_quartz,
     bk_arti_urn,
     bk_arti_bomb,
@@ -79,11 +78,12 @@ typedef enum
     bk_arti_shadowsphere,
     bk_arti_wings,
     bk_arti_torch,
-    bk_arti_blastradius,
     bk_arti_invulnerability,
     bk_arti_chaosdevice,
 
     //Artifacts: Hexen
+    bk_arti_all,
+    bk_arti_blastradius,
     bk_arti_teleportother,
     bk_arti_boostarmor,
     bk_arti_boostmana,

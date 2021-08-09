@@ -418,7 +418,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     {
         flyheight = -5;
     }
-    if (BK_isKeyPressed(bk_fly_center))
+    if (BK_isKeyPressed(bk_fly_stop))
     {
         flyheight = TOCENTER;
         // haleyjd: removed externdriver crap

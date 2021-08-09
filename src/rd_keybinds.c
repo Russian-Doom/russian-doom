@@ -16,6 +16,7 @@
 #include <string.h>
 
 #include "rd_keybinds.h"
+#include "d_name.h"
 #include "doomkeys.h"
 #include "i_input.h"
 #include "i_video.h"
@@ -43,7 +44,7 @@ bound_key_descriptor bound_key_descriptors[bk_size] = {
     {&key_straferight,   &mousebstraferight}, // bk_strafe_right
     {&key_flyup,         NULL}, // bk_fly_up
     {&key_flydown,       NULL}, // bk_fly_down
-    {&key_flycenter,     NULL}, // bk_fly_center
+    {&key_flycenter,     NULL}, // bk_fly_stop
     {&key_speed,         NULL}, // bk_speed
     {&key_strafe,        &mousebstrafe}, // bk_strafe
     {&key_jump,          &mousebjump}, // bk_jump
@@ -82,7 +83,6 @@ bound_key_descriptor bound_key_descriptors[bk_size] = {
 //  // bk_mission
 
     // Artifacts: Heretic
-    {&key_arti_all,             NULL}, // bk_arti_all
     {&key_arti_quartz,          NULL}, // bk_arti_quartz
     {&key_arti_urn,             NULL}, // bk_arti_urn
     {&key_arti_bomb,            NULL}, // bk_arti_bomb
@@ -91,11 +91,12 @@ bound_key_descriptor bound_key_descriptors[bk_size] = {
     {&key_arti_shadowsphere,    NULL}, // bk_arti_shadowsphere
     {&key_arti_wings,           NULL}, // bk_arti_wings
     {&key_arti_torch,           NULL}, // bk_arti_torch
-    {&key_arti_blastradius,     NULL}, // bk_arti_blastradius
     {&key_arti_invulnerability, NULL}, // bk_arti_invulnerability
     {&key_arti_chaosdevice,     NULL}, // bk_arti_chaosdevice
 
     // Artifacts: Hexen
+    {&key_arti_all,           NULL}, // bk_arti_all
+    {&key_arti_blastradius,   NULL}, // bk_arti_blastradius
     {&key_arti_teleportother, NULL}, // bk_arti_teleportother
     {&key_arti_boostarmor,    NULL}, // bk_arti_boostarmor
     {&key_arti_boostmana,     NULL}, // bk_arti_boostmana
@@ -361,6 +362,22 @@ static char* BK_getBoundKeysString(bound_key_t key)
 
 void RD_Menu_Draw_Bindings(int x)
 {
+    Translation_CR_t noBindTranslation;
+    Translation_CR_t bindingTranslation;
+
+    switch (RD_GameType)
+    {
+        default:
+        case gt_Doom:
+            noBindTranslation = CR_DARKRED;
+            bindingTranslation = CR_WHITE;
+            break;
+        case gt_Heretic:
+            noBindTranslation = CR_WHITE2GRAY_HERETIC;
+            bindingTranslation = CR_WHITE2DARKGOLD_HERETIC;
+            break;
+    }
+
     for (int i = 0; i < CurrentMenu->itemCount; ++i)
     {
         if (CurrentMenu->items[i].option != 0)
@@ -369,8 +386,8 @@ void RD_Menu_Draw_Bindings(int x)
 
             RD_M_DrawTextSmallENG(bindingThis ? "?" : BK_getBoundKeysString(CurrentMenu->items[i].option),
                                   x + wide_delta, i * 10 + 25,
-                                  bindingThis ? CR_WHITE : BK_KeyHasNoBinds(CurrentMenu->items[i].option) ?
-                                  CR_DARKRED : CR_NONE);
+                                  bindingThis ? bindingTranslation : BK_KeyHasNoBinds(CurrentMenu->items[i].option) ?
+                                  noBindTranslation : CR_NONE);
         }
     }
 }
