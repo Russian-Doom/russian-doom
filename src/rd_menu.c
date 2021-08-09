@@ -473,7 +473,8 @@ void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos)
     {
         y = menu->y + (currentItPos * item_Height_Small) + cursor_Y_Offset_Small;
         drawShadowedPatch(x + cursor_X_Offset_Small + wide_delta, y,
-            W_CacheLumpNum(menuTime & 8 ? smallCursor1_patch : smallCursor2_patch, PU_CACHE));
+            W_CacheLumpNum(menuTime & (RD_GameType == gt_Doom ? 8 : 16) ?
+                           smallCursor1_patch : smallCursor2_patch, PU_CACHE));
     }
 }
 
