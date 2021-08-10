@@ -51,21 +51,14 @@
 #include "i_video.h"
 #include "m_argv.h"
 #include "m_config.h"
-#include "m_controls.h"
 #include "m_misc.h"
 #include "p_local.h"
-#include "r_local.h"
+#include "rd_keybinds.h"
 #include "s_sound.h"
 #include "w_main.h"
 #include "v_video.h"
 #include "w_merge.h"
 #include "jn.h"
-
-
-#define CT_KEY_GREEN    'g'
-#define CT_KEY_YELLOW   'y'
-#define CT_KEY_RED      'r'
-#define CT_KEY_BLUE     'b'
 
 #define STARTUP_WINDOW_X 17
 #define STARTUP_WINDOW_Y 7
@@ -1119,25 +1112,14 @@ void D_BindVariables(void)
 {
     int i;
 
-    M_ApplyPlatformDefaults();
+    BK_AddBindingsToSystemKeys();
 
     I_BindInputVariables();
     I_BindVideoVariables();
     I_BindJoystickVariables();
     I_BindSoundVariables();
 
-    M_BindBaseControls();
-    M_BindHereticControls();
-    M_BindWeaponControls();
-    M_BindChatControls(MAXPLAYERS);
-
-    key_multi_msgplayer[0] = CT_KEY_GREEN;
-    key_multi_msgplayer[1] = CT_KEY_YELLOW;
-    key_multi_msgplayer[2] = CT_KEY_RED;
-    key_multi_msgplayer[3] = CT_KEY_BLUE;
-
-    M_BindMenuControls();
-    M_BindMapControls();
+    BK_ApplyDefaultBindings(); //TODO
 
 #ifdef FEATURE_MULTIPLAYER
     NET_BindVariables();

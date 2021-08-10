@@ -3860,7 +3860,7 @@ boolean MN_Responder(event_t * event)
     {
         InfoType = (InfoType + 1) % 4;
 
-        if (event->type == ev_keydown && event->data1 == KEY_ESCAPE)
+        if (BK_isKeyDown(event, bk_menu_activate))
         {
             InfoType = 0;
         }
@@ -3940,7 +3940,7 @@ boolean MN_Responder(event_t * event)
 
             return true;
         }
-        else if (BK_isKeyDown(event, bk_abort) || event->data1 == KEY_ESCAPE)
+        else if (BK_isKeyDown(event, bk_abort))
         {
             players[consoleplayer].messageTics = 0;
             askforquit = false;
@@ -4216,7 +4216,7 @@ boolean MN_Responder(event_t * event)
         // translated input value from event->data3.
         charTyped = event->data3;
         textBuffer = &SlotText[currentSlot][slotptr];
-        if (event->data1 == KEY_BACKSPACE)
+        if (BK_isKeyDown(event, bk_menu_back))
         {
             if (slotptr)
             {
@@ -4227,7 +4227,7 @@ boolean MN_Responder(event_t * event)
             }
             return (true);
         }
-        if (event->data1 == KEY_ESCAPE)
+        if (BK_isKeyDown(event, bk_menu_activate))
         {
             M_StringCopy(SlotText[currentSlot], oldSlotText,
                          sizeof(SlotText[currentSlot]));
@@ -4235,7 +4235,7 @@ boolean MN_Responder(event_t * event)
             RD_Menu_DeactivateMenu();
             return (true);
         }
-        if (event->data1 == KEY_ENTER)
+        if (BK_isKeyDown(event, bk_menu_select))
         {
             SlotText[currentSlot][slotptr] = 0; // clear the cursor
             item = (MenuItem_t*) &CurrentMenu->items[CurrentItPos];

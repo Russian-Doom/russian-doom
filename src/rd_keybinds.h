@@ -21,8 +21,7 @@
 typedef enum
 {
     //Movement
-    bk_null = 0,
-    bk_forward,
+    bk_forward = 1,
     bk_backward,
     bk_turn_left,
     bk_turn_right,
@@ -125,8 +124,7 @@ typedef enum
     bk_multi_msg_player_6,
     bk_multi_msg_player_7,
 
-    //F & Special keys
-    bk_menu_activate,
+    //F Keys
     bk_menu_help,
     bk_menu_save,
     bk_menu_load,
@@ -139,19 +137,24 @@ typedef enum
     bk_screen_inc,
     bk_screen_dec,
     bk_pause,
-    bk_menu_back,
-    bk_menu_select,
 
     //System keys
     bk_left,
     bk_right,
     bk_up,
     bk_down,
+
+    bk_menu_activate,
+    bk_menu_back,
+    bk_menu_select,
+    bk_menu_page_next,
+    bk_menu_page_prev,
+
     bk_confirm,
     bk_abort,
 
-    bk_size //size of bound_key_t
-
+    bk__size, //size of bound_key_t
+    bk__null
 } bound_key_t;
 
 extern boolean isBinding;
@@ -174,5 +177,9 @@ void BK_BindKey(event_t* event);
 
 /** Clears all binds for given bound_key */
 void BK_ClearBinds(bound_key_t key);
+
+void BK_AddBindingsToSystemKeys();
+
+void BK_ApplyDefaultBindings();
 
 #endif //RD_KEYBINDS_H

@@ -6170,58 +6170,59 @@ boolean M_Responder (event_t* ev)
     }
 
     // Save Game string input
-    if (saveStringEnter && ev->type == ev_keydown)
+    if (saveStringEnter)
     {
-        switch(ev->data1)
+        if(BK_isKeyDown(ev, bk_menu_back))
         {
-            case KEY_BACKSPACE:
-                if (saveCharIndex > 0)
-                {
-                    saveCharIndex--;
-                    savegamestrings[saveSlot][saveCharIndex] = 0;
-                }
-                break;
-            case KEY_ESCAPE:
-                saveStringEnter = 0;
-                M_StringCopy(savegamestrings[saveSlot], saveOldString, SAVESTRINGSIZE);
-                break;
-            case KEY_ENTER:
-                saveStringEnter = 0;
-                if (savegamestrings[saveSlot][0])
-                    M_DoSave(saveSlot);
-                break;
-            default:
-                // This is complicated.
-                // Vanilla has a bug where the shift key is ignored when entering
-                // a savegame name. If vanilla_keyboard_mapping is on, we want
-                // to emulate this bug by using 'data1'. But if it's turned off,
-                // it implies the user doesn't care about Vanilla emulation: just
-                // use the correct 'data2'.
-                if (vanilla_keyboard_mapping)
-                {
-                    ch = ev->data1;
-                }
-                else
-                {
-                    ch = ev->data2;
-                }
+            if (saveCharIndex > 0)
+            {
+                saveCharIndex--;
+                savegamestrings[saveSlot][saveCharIndex] = 0;
+            }
+        }
+        if(BK_isKeyDown(ev, bk_menu_activate))
+        {
+            saveStringEnter = 0;
+            M_StringCopy(savegamestrings[saveSlot], saveOldString, SAVESTRINGSIZE);
+        }
+        if(BK_isKeyDown(ev, bk_menu_select))
+        {
+            saveStringEnter = 0;
+            if (savegamestrings[saveSlot][0])
+                M_DoSave(saveSlot);
+        }
+        else if(ev->type == ev_keydown)
+        {
+            // This is complicated.
+            // Vanilla has a bug where the shift key is ignored when entering
+            // a savegame name. If vanilla_keyboard_mapping is on, we want
+            // to emulate this bug by using 'data1'. But if it's turned off,
+            // it implies the user doesn't care about Vanilla emulation: just
+            // use the correct 'data2'.
+            if (vanilla_keyboard_mapping)
+            {
+                ch = ev->data1;
+            }
+            else
+            {
+                ch = ev->data2;
+            }
 
-                ch = toupper(ch);
+            ch = toupper(ch);
 
-                if (ch != ' ' && (ch - HU_FONTSTART < 0 || ch - HU_FONTSTART >= HU_FONTSIZE))
-                {
-                    break;
-                }
+            if (ch != ' ' && (ch - HU_FONTSTART < 0 || ch - HU_FONTSTART >= HU_FONTSIZE))
+            {
+                return true;
+            }
 
-                if (ch >= 32 && ch <= 127 &&
-                    saveCharIndex < SAVESTRINGSIZE-1 &&
-                    M_StringWidth(savegamestrings[saveSlot]) <
-                    (SAVESTRINGSIZE-2)*8)
-                {
-                    savegamestrings[saveSlot][saveCharIndex++] = ch;
-                    savegamestrings[saveSlot][saveCharIndex] = 0;
-                }
-                break;
+            if (ch >= 32 && ch <= 127 &&
+                saveCharIndex < SAVESTRINGSIZE-1 &&
+                M_StringWidth(savegamestrings[saveSlot]) <
+                (SAVESTRINGSIZE-2)*8)
+            {
+                savegamestrings[saveSlot][saveCharIndex++] = ch;
+                savegamestrings[saveSlot][saveCharIndex] = 0;
+            }
         }
         return true;
     }
@@ -6231,7 +6232,7 @@ boolean M_Responder (event_t* ev)
     {
         if (messageNeedsInput)
         {
-            if (ev->data1 != ' ' && ev->data1 != KEY_ESCAPE && !BK_isKeyDown(ev, bk_confirm) && !BK_isKeyDown(ev, bk_abort))
+            if (ev->data1 != ' ' && !BK_isKeyDown(ev, bk_confirm) && !BK_isKeyDown(ev, bk_abort))
             {
                 return false;
             }

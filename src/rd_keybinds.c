@@ -13,6 +13,7 @@
 //
 
 #include <stddef.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "rd_keybinds.h"
@@ -20,168 +21,59 @@
 #include "doomkeys.h"
 #include "i_input.h"
 #include "i_video.h"
-#include "m_controls.h"
+#include "jn.h"
 #include "m_misc.h"
 #include "rd_menu.h"
 
-boolean isBinding = false;
-bound_key_t keyToBind = bk_null;
-
-typedef struct
+typedef enum
 {
-    int* key_var;
-    int* mouse_var;
-} bound_key_descriptor;
+    keyboard,
+    mouse
+} device_t;
 
-bound_key_descriptor bound_key_descriptors[bk_size] = {
-    // Movement
-    {NULL,               NULL}, // bk_null
-    {&key_up,            &mousebforward}, // bk_forward
-    {&key_down,          &mousebbackward}, // bk_backward
-    {&key_left,          NULL}, // bk_turn_left
-    {&key_right,         NULL}, // bk_turn_right
-    {&key_strafeleft,    &mousebstrafeleft}, // bk_strafe_left
-    {&key_straferight,   &mousebstraferight}, // bk_strafe_right
-    {&key_flyup,         NULL}, // bk_fly_up
-    {&key_flydown,       NULL}, // bk_fly_down
-    {&key_flycenter,     NULL}, // bk_fly_stop
-    {&key_speed,         NULL}, // bk_speed
-    {&key_strafe,        &mousebstrafe}, // bk_strafe
-    {&key_jump,          &mousebjump}, // bk_jump
-    {&key_toggleautorun, NULL}, // bk_toggle_autorun
-    {&key_use,           &mousebuse}, // bk_use
+typedef struct bind_descriptor_s
+{
+    struct bind_descriptor_s* next;
+    device_t device;
+    int key;
+} bind_descriptor_t;
 
-    // Weapon
-    {&key_fire,       &mousebfire}, // bk_fire
-    {&key_weapon1,    NULL}, // bk_weapon_1
-    {&key_weapon2,    NULL}, // bk_weapon_2
-    {&key_weapon3,    NULL}, // bk_weapon_3
-    {&key_weapon4,    NULL}, // bk_weapon_4
-    {&key_weapon5,    NULL}, // bk_weapon_5
-    {&key_weapon6,    NULL}, // bk_weapon_6
-    {&key_weapon7,    NULL}, // bk_weapon_7
-    {&key_weapon8,    NULL}, // bk_weapon_8
-    {&key_prevweapon, &mousebprevweapon}, // bk_weapon_prev
-    {&key_nextweapon, &mousebnextweapon}, // bk_weapon_next
+boolean isBinding = false;
+bound_key_t keyToBind = bk__null;
 
-    // Look
-    {&key_lookup,      NULL}, // bk_look_up
-    {&key_lookdown,    NULL}, // bk_look_down
-    {&key_lookcenter,  NULL}, // bk_look_center
-    {&key_togglemlook, NULL}, // bk_toggle_mlook
+bind_descriptor_t* bind_descriptor[bk__size];
+boolean keyState[bk__size];
 
-    // Inventory
-    {&key_invleft,     NULL}, // bk_inv_left
-    {&key_invright,    NULL}, // bk_inv_right
-    {&key_useartifact, NULL}, // bk_inv_use_artifact
-//  // bk_inv_use_health
-//  // bk_inv_drop
-//  // bk_inv_pop
-//  // bk_inv_key
-//  // bk_inv_home
-//  // bk_inv_end
-//  // bk_mission
-
-    // Artifacts: Heretic
-    {&key_arti_quartz,          NULL}, // bk_arti_quartz
-    {&key_arti_urn,             NULL}, // bk_arti_urn
-    {&key_arti_bomb,            NULL}, // bk_arti_bomb
-    {&key_arti_tome,            NULL}, // bk_arti_tome
-    {&key_arti_egg,             NULL}, // bk_arti_egg
-    {&key_arti_shadowsphere,    NULL}, // bk_arti_shadowsphere
-    {&key_arti_wings,           NULL}, // bk_arti_wings
-    {&key_arti_torch,           NULL}, // bk_arti_torch
-    {&key_arti_invulnerability, NULL}, // bk_arti_invulnerability
-    {&key_arti_chaosdevice,     NULL}, // bk_arti_chaosdevice
-
-    // Artifacts: Hexen
-    {&key_arti_all,           NULL}, // bk_arti_all
-    {&key_arti_blastradius,   NULL}, // bk_arti_blastradius
-    {&key_arti_teleportother, NULL}, // bk_arti_teleportother
-    {&key_arti_boostarmor,    NULL}, // bk_arti_boostarmor
-    {&key_arti_boostmana,     NULL}, // bk_arti_boostmana
-    {&key_arti_summon,        NULL}, // bk_arti_summon
-    {&key_arti_speed,         NULL}, // bk_arti_speed
-    {&key_arti_healingradius, NULL}, // bk_arti_healingradius
-
-    // Map keys
-    {&key_map_toggle,    NULL}, // bk_map_toggle
-    {&key_map_zoomin,    NULL}, // bk_map_zoom_in
-    {&key_map_zoomout,   NULL}, // bk_map_zoom_out
-    {&key_map_maxzoom,   NULL}, // bk_map_zoom_max
-    {&key_map_follow,    NULL}, // bk_map_follow
-    {&key_map_overlay,   NULL}, // bk_map_overlay
-    {&key_map_rotate,    NULL}, // bk_map_rotate
-    {&key_map_grid,      NULL}, // bk_map_grid
-    {&key_map_mark,      NULL}, // bk_map_mark
-    {&key_map_clearmark, NULL}, // bk_map_clearmark
-
-    // Shortcuts and toggles
-    {&key_menu_qsave,       NULL}, // bk_qsave
-    {&key_menu_qload,       NULL}, // bk_qload
-    {&key_menu_nextlevel,   NULL}, // bk_nextlevel
-    {&key_menu_reloadlevel, NULL}, // bk_reloadlevel
-    {&key_menu_screenshot,  NULL}, // bk_screenshot
-    {&key_demo_quit,        NULL}, // bk_finish_demo
-    {&key_togglecrosshair,  NULL}, // bk_toggle_crosshair
-    {&key_togglefliplvls,   NULL}, // bk_toggle_fliplvls
-
-    //Multiplayer
-    {&key_spy,                  NULL}, // bk_spy
-    {&key_multi_msg,            NULL}, // bk_multi_msg
-    {&(key_multi_msgplayer[0]), NULL}, // bk_multi_msg_player_0
-    {&(key_multi_msgplayer[1]), NULL}, // bk_multi_msg_player_1
-    {&(key_multi_msgplayer[2]), NULL}, // bk_multi_msg_player_2
-    {&(key_multi_msgplayer[3]), NULL}, // bk_multi_msg_player_3
-    {&(key_multi_msgplayer[4]), NULL}, // bk_multi_msg_player_4
-    {&(key_multi_msgplayer[5]), NULL}, // bk_multi_msg_player_5
-    {&(key_multi_msgplayer[6]), NULL}, // bk_multi_msg_player_6
-    {&(key_multi_msgplayer[7]), NULL}, // bk_multi_msg_player_7
-
-    //F & Special keys
-    {&key_menu_activate,  NULL}, // bk_menu_activate
-    {&key_menu_help,      NULL}, // bk_menu_help
-    {&key_menu_save,      NULL}, // bk_menu_save
-    {&key_menu_load,      NULL}, // bk_menu_load
-    {&key_menu_volume,    NULL}, // bk_menu_volume
-    {&key_menu_detail,    NULL}, // bk_detail
-    {&key_menu_endgame,   NULL}, // bk_endgame
-    {&key_menu_messages,  NULL}, // bk_messages
-    {&key_menu_quit,      NULL}, // bk_quit
-    {&key_menu_gamma,     NULL}, // bk_gamma
-    {&key_menu_incscreen, NULL}, // bk_screen_inc
-    {&key_menu_decscreen, NULL}, // bk_screen_dec
-    {&key_pause,          NULL}, // bk_pause
-    {&key_menu_back,      NULL}, // bk_menu_back
-    {&key_menu_forward,   NULL}, // bk_menu_select
-
-    //System keys
-    {&key_menu_left,    NULL}, // bk_left
-    {&key_menu_right,   NULL}, // bk_right
-    {&key_menu_up,      NULL}, // bk_up
-    {&key_menu_down,    NULL}, // bk_down
-    {&key_menu_confirm, NULL}, // bk_confirm
-    {&key_menu_abort,   NULL}  // bk_abort
-};
-
-boolean keyState[bk_size];
+static device_t getEventDevice(event_t* event)
+{
+    switch(event->type)
+    {
+        case ev_keydown:
+        case ev_keyup:
+            return keyboard;
+        case ev_mouse_keydown:
+        case ev_mouse_keyup:
+            return mouse;
+        default:
+            return -1;
+    }
+}
 
 void BK_ProcessKey(event_t* event)
 {
-    for(int i = 0; i < bk_size; i++)
-    {
-        if((event->type == ev_keydown || event->type == ev_keyup) &&
-           bound_key_descriptors[i].key_var &&
-           *bound_key_descriptors[i].key_var == event->data1)
-        {
-            keyState[i] = event->type == ev_keydown;
-        }
+    device_t device = getEventDevice(event);
 
-        if((event->type == ev_mouse_keydown || event->type == ev_mouse_keyup) &&
-           bound_key_descriptors[i].mouse_var &&
-           *bound_key_descriptors[i].mouse_var == event->data1)
+    for(int i = 0; i < bk__size; i++)
+    {
+        bind_descriptor_t* bind = bind_descriptor[i];
+        while(bind)
         {
-            keyState[i] = event->type == ev_mouse_keydown;
+            if(bind->device == device && bind->key == event->data1)
+            {
+                keyState[i] = event->type == ev_keydown || event->type == ev_mouse_keydown;
+                return;
+            }
+            bind = bind->next;
         }
     }
 }
@@ -193,14 +85,36 @@ boolean BK_isKeyPressed(bound_key_t key)
 
 boolean BK_isKeyDown(event_t* event, bound_key_t key)
 {
-    return (event->type == ev_keydown && bound_key_descriptors[key].key_var && *bound_key_descriptors[key].key_var != 0 && *bound_key_descriptors[key].key_var == event->data1) ||
-    (event->type == ev_mouse_keydown && bound_key_descriptors[key].mouse_var && *bound_key_descriptors[key].mouse_var != -1 && *bound_key_descriptors[key].mouse_var == event->data1);
+    if(event->type == ev_keydown
+    || event->type == ev_mouse_keydown)
+    {
+        device_t device = getEventDevice(event);
+        bind_descriptor_t* bind = bind_descriptor[key];
+        while(bind)
+        {
+            if(bind->device == device && bind->key == event->data1)
+                return true;
+            bind = bind->next;
+        }
+    }
+    return false;
 }
 
 boolean BK_isKeyUp(event_t* event, bound_key_t key)
 {
-    return (event->type == ev_keyup && bound_key_descriptors[key].key_var && *bound_key_descriptors[key].key_var != 0 && *bound_key_descriptors[key].key_var == event->data1) ||
-    (event->type == ev_mouse_keyup && bound_key_descriptors[key].mouse_var && *bound_key_descriptors[key].mouse_var != -1 && *bound_key_descriptors[key].mouse_var == event->data1);
+    if(event->type == ev_keyup
+    || event->type == ev_mouse_keyup)
+    {
+        device_t device = getEventDevice(event);
+        bind_descriptor_t* bind = bind_descriptor[key];
+        while(bind)
+        {
+            if(bind->device == device && bind->key == event->data1)
+                return true;
+            bind = bind->next;
+        }
+    }
+    return false;
 }
 
 void BK_ReleaseKey(bound_key_t key)
@@ -219,8 +133,7 @@ void BK_ReleaseAllKeys()
 // -----------------------------------------------------------------------------
 static boolean BK_KeyHasNoBinds(bound_key_t key)
 {
-    return *bound_key_descriptors[key].key_var == 0 &&
-    (bound_key_descriptors[key].mouse_var == NULL || *bound_key_descriptors[key].mouse_var == -1);
+    return bind_descriptor[key] == NULL;
 }
 
 static char* getKeyboardKeyName(int key)
@@ -338,24 +251,41 @@ static char* getMouseKeyName(int i)
 static char* BK_getBoundKeysString(bound_key_t key)
 {
     static char string[50];
-    boolean mouseBindExists;
+    bind_descriptor_t* bind;
+
+    if(bind_descriptor[key] == NULL)
+        return "---";
 
     memset(string, 0, sizeof(string));
 
-    mouseBindExists = bound_key_descriptors[key].mouse_var && *bound_key_descriptors[key].mouse_var != -1;
-    if(*bound_key_descriptors[key].key_var != 0)
+    bind = bind_descriptor[key];
+    while(bind)
     {
-        M_StringConcat(string, getKeyboardKeyName(*bound_key_descriptors[key].key_var), 50);
-        if(mouseBindExists)
-            M_StringConcat(string, ", ", 50);
-    }
-    else if(!mouseBindExists)
-    {
-        return "---";
-    }
+        switch(bind->device)
+        {
+            case keyboard:
+                M_StringConcat(string, getKeyboardKeyName(bind->key), 50);
+                break;
+            case mouse:
+                M_StringConcat(string, getMouseKeyName(bind->key), 50);
+                break;
+            default:
+                break;
+        }
 
-    if(mouseBindExists)
-        M_StringConcat(string, getMouseKeyName(*bound_key_descriptors[key].mouse_var), 50);
+        if(bind->next)
+        {
+            M_StringConcat(string, ", ", 50);
+
+            if(aspect_ratio < 2 || screenblocks  == 9)
+            {
+                M_StringConcat(string, "...", 50);
+                break;
+            }
+        }
+
+        bind = bind->next;
+    }
     
     return string;
 }
@@ -402,34 +332,60 @@ void BK_StartBindingKey(bound_key_t key)
     keyToBind = key;
 }
 
+static void AddBind(bound_key_t boundKey, device_t device, int key)
+{
+    bind_descriptor_t* bind = bind_descriptor[boundKey];
+
+    if(bind == NULL)
+    {
+        bind = malloc(sizeof(bind_descriptor));
+        bind->next = NULL;
+        bind->device = device;
+        bind->key = key;
+
+        bind_descriptor[boundKey] = bind;
+    }
+    else
+    {
+        bind_descriptor_t* prevBind = NULL;
+
+        // Iterate binds
+        while(bind)
+        {
+            if(bind->device == device && bind->key == key)
+            {
+                // Clear bind
+                if(prevBind)
+                    prevBind->next = bind->next;
+                else
+                    bind_descriptor[boundKey] = bind->next;
+                free(bind);
+                return;
+            }
+            prevBind = bind;
+            bind = bind->next;
+        }
+
+        // Add new bind
+        bind = malloc(sizeof(bind_descriptor));
+        bind->next = NULL;
+        bind->device = device;
+        bind->key = key;
+
+        prevBind->next = bind;
+    }
+}
+
 void BK_BindKey(event_t* event)
 {
     isBinding = false;
 
-    if (event->type == ev_keydown && bound_key_descriptors[keyToBind].key_var)
+    if(!BK_isKeyDown(event, bk_menu_activate))
     {
-        if (event->data1 == *(bound_key_descriptors[keyToBind].key_var))
-        {
-            *bound_key_descriptors[keyToBind].key_var = 0;
-        }
-        else if (event->data1 != KEY_ESCAPE)
-        {
-            *bound_key_descriptors[keyToBind].key_var = event->data1;
-        }
-    }
-    else if (event->type == ev_mouse_keydown && bound_key_descriptors[keyToBind].mouse_var)
-    {
-        if (event->data1 == *(bound_key_descriptors[keyToBind].mouse_var))
-        {
-            *bound_key_descriptors[keyToBind].mouse_var = -1;
-        }
-        else
-        {
-            *bound_key_descriptors[keyToBind].mouse_var = event->data1;
-        }
+        AddBind(keyToBind, getEventDevice(event), event->data1);
     }
 
-    keyToBind = bk_null;
+    keyToBind = bk__null;
 }
 
 // -----------------------------------------------------------------------------
@@ -438,7 +394,165 @@ void BK_BindKey(event_t* event)
 // -----------------------------------------------------------------------------
 void BK_ClearBinds(bound_key_t key)
 {
-    *bound_key_descriptors[key].key_var = 0;
-    if(bound_key_descriptors[key].mouse_var)
-        *bound_key_descriptors[key].mouse_var = -1;
+    bind_descriptor_t* tmp;
+
+    while(bind_descriptor[key])
+    {
+        tmp = bind_descriptor[key];
+        bind_descriptor[key] = bind_descriptor[key]->next;
+        free(tmp);
+    }
+}
+
+void BK_AddBindingsToSystemKeys()
+{
+    // Keyboard
+    AddBind(bk_left,  keyboard, KEY_LEFTARROW);
+    AddBind(bk_right, keyboard, KEY_RIGHTARROW);
+    AddBind(bk_up,    keyboard, KEY_UPARROW);
+    AddBind(bk_down,  keyboard, KEY_DOWNARROW);
+
+    AddBind(bk_menu_activate,  keyboard, KEY_ESCAPE);
+    AddBind(bk_menu_back,      keyboard, KEY_BACKSPACE);
+    AddBind(bk_menu_select,    keyboard, KEY_ENTER);
+    AddBind(bk_menu_page_next, keyboard, KEY_PGDN);
+    AddBind(bk_menu_page_prev, keyboard, KEY_PGUP);
+
+    AddBind(bk_confirm, keyboard, 'y');
+    AddBind(bk_abort,   keyboard, 'n');
+    AddBind(bk_abort,   keyboard, KEY_ESCAPE);
+
+    // Mouse
+    AddBind(bk_left,  mouse, MOUSE_SCROLL_LEFT);
+    AddBind(bk_right, mouse, MOUSE_SCROLL_RIGHT);
+    AddBind(bk_up,    mouse, MOUSE_SCROLL_UP);
+    AddBind(bk_down,  mouse, MOUSE_SCROLL_DOWN);
+
+    AddBind(bk_menu_back,      mouse, MOUSE_RIGHT);
+    AddBind(bk_menu_select,    mouse, MOUSE_LEFT);
+    AddBind(bk_menu_page_next, mouse, MOUSE_4);
+    AddBind(bk_menu_page_prev, mouse, MOUSE_5);
+};
+
+void BK_ApplyDefaultBindings()
+{
+    // Keyboard
+    AddBind(bk_forward,        keyboard, 'w');
+    AddBind(bk_backward,       keyboard, 's');
+    AddBind(bk_turn_left,      keyboard, KEY_LEFTARROW);
+    AddBind(bk_turn_right,     keyboard, KEY_RIGHTARROW);
+    AddBind(bk_strafe_left,    keyboard, 'a');
+    AddBind(bk_strafe_right,   keyboard, 'd');
+    AddBind(bk_speed,          keyboard, KEY_RSHIFT);
+    AddBind(bk_strafe,         keyboard, KEY_RALT);
+    AddBind(bk_jump,           keyboard, ' ');
+    AddBind(bk_toggle_autorun, keyboard, KEY_CAPSLOCK);
+
+    if(RD_GameType == gt_Heretic || RD_GameType == gt_Hexen)
+    {
+        AddBind(bk_fly_up,   keyboard, KEY_PGUP);
+        AddBind(bk_fly_down, keyboard, KEY_INS);
+        AddBind(bk_fly_stop, keyboard, KEY_HOME);
+    }
+
+    AddBind(bk_use, keyboard, 'e');
+
+    AddBind(bk_weapon_1,    keyboard, '1');
+    AddBind(bk_weapon_2,    keyboard, '2');
+    AddBind(bk_weapon_3,    keyboard, '3');
+    AddBind(bk_weapon_4,    keyboard, '4');
+
+    if(RD_GameType == gt_Doom || RD_GameType == gt_Heretic)
+    {
+        AddBind(bk_weapon_5, keyboard, '5');
+        AddBind(bk_weapon_6, keyboard, '6');
+        AddBind(bk_weapon_7, keyboard, '7');
+    }
+    if(RD_GameType == gt_Doom)
+    {
+        AddBind(bk_weapon_8, keyboard, '8');
+    }
+
+    AddBind(bk_toggle_mlook, keyboard, '`');
+
+    if(RD_GameType == gt_Heretic || RD_GameType == gt_Hexen)
+    {
+        AddBind(bk_look_up,     keyboard, KEY_PGDN);
+        AddBind(bk_look_down,   keyboard, KEY_DEL);
+        AddBind(bk_look_center, keyboard, KEY_END);
+
+        AddBind(bk_inv_left,         keyboard, '[');
+        AddBind(bk_inv_right,        keyboard, ']');
+        AddBind(bk_inv_use_artifact, keyboard, KEY_ENTER);
+    }
+
+    AddBind(bk_map_toggle,   keyboard, KEY_TAB);
+    AddBind(bk_map_zoom_in,  keyboard, '=');
+    AddBind(bk_map_zoom_out, keyboard, '-');
+    AddBind(bk_map_zoom_max, keyboard, '0');
+    AddBind(bk_map_follow,   keyboard, 'f');
+    AddBind(bk_map_overlay,  keyboard, 'o');
+    AddBind(bk_map_rotate,   keyboard, 'r');
+    AddBind(bk_map_grid,     keyboard, 'g');
+
+    if(RD_GameType == gt_Doom)
+    {
+        AddBind(bk_map_mark,      keyboard, 'm');
+        AddBind(bk_map_clearmark, keyboard, 'c');
+    }
+
+    AddBind(bk_qsave,            keyboard, KEY_F6);
+    AddBind(bk_qload,            keyboard, KEY_F9);
+    AddBind(bk_screenshot,       keyboard, KEY_PRTSCR);
+    AddBind(bk_finish_demo,      keyboard, 'q');
+    AddBind(bk_toggle_crosshair, keyboard, 'x');
+
+    AddBind(bk_spy,                keyboard, KEY_F12);
+    AddBind(bk_multi_msg,          keyboard, 't');
+
+    if(RD_GameType == gt_Doom)
+    {
+        AddBind(bk_multi_msg_player_0, keyboard, 'g');
+        AddBind(bk_multi_msg_player_1, keyboard, 'i');
+        AddBind(bk_multi_msg_player_2, keyboard, 'b');
+        AddBind(bk_multi_msg_player_3, keyboard, 'r');
+    }
+    if(RD_GameType == gt_Heretic)
+    {
+        AddBind(bk_multi_msg_player_0, keyboard, 'g');
+        AddBind(bk_multi_msg_player_1, keyboard, 'y');
+        AddBind(bk_multi_msg_player_2, keyboard, 'r');
+        AddBind(bk_multi_msg_player_3, keyboard, 'b');
+    }
+    if(RD_GameType == gt_Hexen)
+    {
+        AddBind(bk_multi_msg_player_0, keyboard, 'b');
+        AddBind(bk_multi_msg_player_1, keyboard, 'r');
+        AddBind(bk_multi_msg_player_2, keyboard, 'y');
+        AddBind(bk_multi_msg_player_3, keyboard, 'g');
+        AddBind(bk_multi_msg_player_4, keyboard, 'j');
+        AddBind(bk_multi_msg_player_5, keyboard, 'w');
+        AddBind(bk_multi_msg_player_6, keyboard, 'h');
+        AddBind(bk_multi_msg_player_7, keyboard, 'p');
+    }
+
+    AddBind(bk_menu_help,   keyboard, KEY_F1);
+    AddBind(bk_menu_save,   keyboard, KEY_F2);
+    AddBind(bk_menu_load,   keyboard, KEY_F3);
+    AddBind(bk_menu_volume, keyboard, KEY_F4);
+    AddBind(bk_detail,      keyboard, KEY_F5);
+    AddBind(bk_endgame,     keyboard, KEY_F7);
+    AddBind(bk_messages,    keyboard, KEY_F8);
+    AddBind(bk_quit,        keyboard, KEY_F10);
+    AddBind(bk_gamma,       keyboard, KEY_F11);
+    AddBind(bk_screen_inc,  keyboard, KEY_EQUALS);
+    AddBind(bk_screen_dec,  keyboard, KEY_MINUS);
+    AddBind(bk_pause,       keyboard, KEY_PAUSE);
+
+    // Mouse
+    AddBind(bk_fire,        mouse, MOUSE_LEFT);
+    AddBind(bk_weapon_prev, mouse, MOUSE_SCROLL_UP);
+    AddBind(bk_weapon_next, mouse, MOUSE_SCROLL_DOWN);
+    AddBind(bk_forward,     mouse, MOUSE_MIDDLE);
+    AddBind(bk_strafe,      mouse, MOUSE_RIGHT);
 }

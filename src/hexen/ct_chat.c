@@ -254,20 +254,20 @@ boolean CT_Responder(event_t * ev)
                 return true;
             }
         }
-        if (ev->data1 == KEY_ENTER)
+        if (BK_isKeyDown(ev, bk_menu_select))
         {
             CT_queueChatChar(KEY_ENTER);
             usearti = false;
             CT_Stop();
             return true;
         }
-        else if (ev->data1 == KEY_ESCAPE)
+        else if (BK_isKeyDown(ev, bk_menu_activate))
         {
             CT_queueChatChar(CT_ESCAPE);
             CT_Stop();
             return true;
         }
-        else if (ev->data1 == KEY_BACKSPACE)
+        else if (BK_isKeyDown(ev, bk_menu_back))
         {
             CT_queueChatChar(KEY_BACKSPACE);
             return true;

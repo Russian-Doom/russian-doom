@@ -599,7 +599,7 @@ boolean RD_Menu_Responder(event_t* event)
         return true;
     }
     // [JN] Scroll menus by PgUp/PgDn keys
-    else if (event->type == ev_keydown && event->data1 == KEY_PGUP)
+    else if (BK_isKeyDown(event, bk_menu_page_prev))
     {
         if (CurrentMenu->pageDescriptor != NULL)
         {
@@ -621,7 +621,7 @@ boolean RD_Menu_Responder(event_t* event)
             return true;
         }
     }
-    else if (event->type == ev_keydown && event->data1 == KEY_PGDN)
+    else if (BK_isKeyDown(event, bk_menu_page_next))
     {
         if (CurrentMenu->pageDescriptor != NULL)
         {
