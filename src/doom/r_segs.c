@@ -556,21 +556,12 @@ void R_StoreWallRange (int start, int stop)
     int64_t     dx, dy, dx1, dy1; // [crispy] fix long wall wobble
 
     // [crispy] remove MAXDRAWSEGS Vanilla limit
-    if (ds_p == &drawsegs[numdrawsegs])
+    if (ds_p == drawsegs+maxdrawsegs)
     {
-        int numdrawsegs_old = numdrawsegs;
-
-        numdrawsegs = numdrawsegs ? 2 * numdrawsegs : MAXDRAWSEGS;
-        drawsegs = I_Realloc(drawsegs, numdrawsegs * sizeof(*drawsegs));
-        memset(drawsegs + numdrawsegs_old, 0, (numdrawsegs - numdrawsegs_old) * sizeof(*drawsegs));
-
-        ds_p = drawsegs + numdrawsegs_old;
-
-        if (numdrawsegs_old)
-        fprintf(stderr, english_language ?
-                        "R_StoreWallRange: Hit MAXDRAWSEGS limit at %d, raised to %d.\n" :
-                        "R_StoreWallRange: достигнут лимит MAXDRAWSEGS (%d), увеличен до (%d).\n",
-                        numdrawsegs_old, numdrawsegs);
+        unsigned newmax = maxdrawsegs ? maxdrawsegs*2 : 128; // killough
+        drawsegs = realloc(drawsegs,newmax*sizeof(*drawsegs));
+        ds_p = drawsegs+maxdrawsegs;
+        maxdrawsegs = newmax;
     }
 
 #ifdef RANGECHECK
