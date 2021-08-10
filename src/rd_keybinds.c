@@ -376,6 +376,10 @@ void RD_Menu_Draw_Bindings(int x)
             noBindTranslation = CR_WHITE2GRAY_HERETIC;
             bindingTranslation = CR_WHITE2DARKGOLD_HERETIC;
             break;
+        case gt_Hexen:
+            noBindTranslation = CR_GRAY2GDARKGRAY_HEXEN;
+            bindingTranslation = CR_GRAY2DARKGOLD_HEXEN;
+            break;
     }
 
     for (int i = 0; i < CurrentMenu->itemCount; ++i)

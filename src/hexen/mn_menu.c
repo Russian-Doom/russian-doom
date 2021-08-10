@@ -127,6 +127,9 @@ static void M_RD_MouseLook();
 static void M_RD_InvertY();
 static void M_RD_Novert();
 
+// Key Bindings
+void M_RD_Draw_Bindings();
+
 // Gameplay
 static void DrawGameplayMenu(void);
 static void M_RD_Brightmaps();
@@ -263,6 +266,14 @@ static Menu_t AutomapMenu;
 static Menu_t SoundMenu;
 static Menu_t SoundSysMenu;
 static Menu_t ControlsMenu;
+static Menu_t Bindings1Menu;
+static Menu_t Bindings2Menu;
+static Menu_t Bindings3Menu;
+static Menu_t Bindings4Menu;
+static Menu_t Bindings5Menu;
+static Menu_t Bindings6Menu;
+static Menu_t Bindings7Menu;
+static const Menu_t* BindingsMenuPages[] = {&Bindings1Menu, &Bindings2Menu, &Bindings3Menu, &Bindings4Menu, &Bindings5Menu, &Bindings6Menu, &Bindings7Menu};
 static Menu_t GameplayMenu;
 static Menu_t LevelSelectMenu1;
 static Menu_t LevelSelectMenu2_F;
@@ -539,7 +550,9 @@ static Menu_t SoundSysMenu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t ControlsItems[] = {
-    {ITT_TITLE,  "MOVEMENT",           "GTHTLDB;TYBT",              NULL,             0}, // ПЕРЕДВИЖЕНИЕ
+    {ITT_TITLE,  "CONTROLS",           "EGHFDKTYBT",                NULL,              0}, // УПРАВЛЕНИЕ
+    {ITT_SETMENU,"CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ",      &Bindings1Menu,   0}, // Настройки управления
+    {ITT_EMPTY,  NULL,                 NULL,                        NULL,              0},
     {ITT_SWITCH, "ALWAYS RUN:",        "HT;BV GJCNJZYYJUJ ,TUF:",   M_RD_AlwaysRun,   0}, // РЕЖИМ ПОСТОЯННОГО БЕГА
     {ITT_TITLE,  "MOUSE",              "VSIM",                      NULL,             0}, // МЫШЬ
     {ITT_LRFUNC, "MOUSE SENSIVITY",    "CRJHJCNM VSIB",             M_RD_Sensitivity, 0}, // СКОРОСТЬ МЫШИ
@@ -553,10 +566,255 @@ static Menu_t ControlsMenu = {
     36, 36,
     32,
     "CONTROL SETTINGS", "EGHFDKTYBT", false, // УПРАВЛЕНИЕ
-    8, ControlsItems, false,
+    10, ControlsItems, false,
     DrawControlsMenu,
     NULL,
     &RDOptionsMenu,
+    1
+};
+
+// -----------------------------------------------------------------------------
+// Key bindings (1)
+// -----------------------------------------------------------------------------
+
+static const PageDescriptor_t BindingsPageDescriptor = {
+    7, BindingsMenuPages,
+    252, 165,
+    CR_WHITE
+};
+
+
+static MenuItem_t Bindings1Items[] = {
+    {ITT_TITLE,   "MOVEMENT",      "LDB;TYBT",               NULL,               0},
+    {ITT_EFUNC,   "MOVE FORWARD",  "LDB;TYBT DGTHEL",        BK_StartBindingKey, bk_forward},      // Движение вперед
+    {ITT_EFUNC,   "MOVE BACKWARD", "LDB;TYBT YFPFL",         BK_StartBindingKey, bk_backward},     // Движение назад
+    {ITT_EFUNC,   "TURN Left",     "GJDJHJN YFKTDJ",         BK_StartBindingKey, bk_turn_left},    // Поворот налево
+    {ITT_EFUNC,   "TURN Right",    "GJDJHJN YFGHFDJ",        BK_StartBindingKey, bk_turn_right},   // Поворот направо
+    {ITT_EFUNC,   "STRAFE LEFT",   ",JRJV DKTDJ",            BK_StartBindingKey, bk_strafe_left},  // Боком влево
+    {ITT_EFUNC,   "STRAFE RIGHT",  ",JRJV DGHFDJ",           BK_StartBindingKey, bk_strafe_right}, // Боком вправо
+    {ITT_EFUNC,   "SPEED ON",      ",TU",                    BK_StartBindingKey, bk_speed},        // Бег
+    {ITT_EFUNC,   "STRAFE ON",     "LDB;TYBT ,JRJV",         BK_StartBindingKey, bk_strafe},       // Движение боком
+    {ITT_EFUNC,   "FLY UP",        "KTNTNM DDTH[",           BK_StartBindingKey, bk_fly_up},       // Лететь вверх
+    {ITT_EFUNC,   "FLY DOWN",      "KTNTNM DYBP",            BK_StartBindingKey, bk_fly_down},     // Лететь вних
+    {ITT_EFUNC,   "STOP FLYING",   "JCNFYJDBNM GJKTN",       BK_StartBindingKey, bk_fly_stop},     // Остановить полёт
+    {ITT_EMPTY,   NULL,            NULL,                     NULL,               0},
+    {ITT_SETMENU, "NEXT PAGE...",  "CKTLE.OFZ CNHFYBWF>>>",  &Bindings2Menu,     0},               // Cледующая страница...
+    {ITT_SETMENU, "LAST PAGE...",  "GJCKTLYZZ CNHFYBWF>>>",  &Bindings7Menu,     0},               // Последняя страница...
+    {ITT_EMPTY,   NULL,            NULL,                     NULL,               0}
+};
+
+static Menu_t Bindings1Menu = {
+    35, 35,
+    25,
+    "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
+    16, Bindings1Items, false,
+    M_RD_Draw_Bindings,
+    &BindingsPageDescriptor,
+    &ControlsMenu,
+    1
+};
+
+// -----------------------------------------------------------------------------
+// Key bindings (2)
+// -----------------------------------------------------------------------------
+
+static MenuItem_t Bindings2Items[] = {
+    {ITT_TITLE,   "ACTION",          "LTQCNDBT",               NULL,               0},
+    {ITT_EFUNC,   "FIRE/ATTACK",     "FNFRF/CNHTKM,F",         BK_StartBindingKey, bk_fire},        // Атака/стрельба
+    {ITT_EFUNC,   "USE",             "BCGJKMPJDFNM",           BK_StartBindingKey, bk_use},         // Использовать
+    {ITT_TITLE,   "WEAPONS",         "JHE;BT",                 NULL,               0},       // Оружие
+    {ITT_EFUNC,   "WEAPON 1",        "JHE;BT 1",               BK_StartBindingKey, bk_weapon_1},    // Оружие 1
+    {ITT_EFUNC,   "WEAPON 2",        "JHE;BT 2",               BK_StartBindingKey, bk_weapon_2},    // Оружие 2
+    {ITT_EFUNC,   "WEAPON 3",        "JHE;BT 3",               BK_StartBindingKey, bk_weapon_3},    // Оружие 3
+    {ITT_EFUNC,   "WEAPON 4",        "JHE;BT 4",               BK_StartBindingKey, bk_weapon_4},    // Оружие 4
+    {ITT_EFUNC,   "PREVIOUS WEAPON", "GHTLSLEOTT JHE;BT",      BK_StartBindingKey, bk_weapon_prev}, // Предыдущее оружие
+    {ITT_EFUNC,   "NEXT WEAPON",     "CKTLE.OTT JHE;BT",       BK_StartBindingKey, bk_weapon_next}, // Следующее оружие
+    {ITT_EMPTY,   NULL,              NULL,                     NULL,               0},
+    {ITT_EMPTY,   NULL,              NULL,                     NULL,               0},
+    {ITT_EMPTY,   NULL,              NULL,                     NULL,               0},
+    {ITT_SETMENU, "NEXT PAGE...",    "CKTLE.OFZ CNHFYBWF>>>",  &Bindings3Menu,     0},              // Cледующая страница...
+    {ITT_SETMENU, "PREV PAGE...",    "GHTLSLEOFZ CNHFYBWF>>>", &Bindings1Menu,     0},              // Предыдущая страница...
+    {ITT_EMPTY,   NULL,              NULL,                     NULL,               0}
+};
+
+static Menu_t Bindings2Menu = {
+    35, 35,
+    25,
+    "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
+    16, Bindings2Items, false,
+    M_RD_Draw_Bindings,
+    &BindingsPageDescriptor,
+    &ControlsMenu,
+    1
+};
+
+// -----------------------------------------------------------------------------
+// Key bindings (3)
+// -----------------------------------------------------------------------------
+
+static MenuItem_t Bindings3Items[] = {
+    {ITT_TITLE,   "SHORTCUT KEYS",         ",SCNHSQ LJCNEG",         NULL,               0},
+    {ITT_EFUNC,   "QUICK SAVE",            ",SCNHJT CJ[HFYTYBT",     BK_StartBindingKey, bk_qsave},            // Быстрое сохранение
+    {ITT_EFUNC,   "QUICK LOAD",            ",SCNHFZ PFUHEPRF",       BK_StartBindingKey, bk_qload},            // Быстрая загрузка
+    {ITT_EFUNC,   "RESTART LEVEL/DEMO",    "GTHTPFGECR EHJDYZ",      BK_StartBindingKey, bk_reloadlevel},      // Перезапуск уровня
+    {ITT_EFUNC,   "SAVE A SCREENSHOT",     "CRHBYIJN",               BK_StartBindingKey, bk_screenshot},       // Скриншот
+    {ITT_EFUNC,   "FINISH DEMO RECORDING", "PFRJYXBNM PFGBCM LTVJ",  BK_StartBindingKey, bk_finish_demo},      // Закончить запись демо
+    {ITT_TITLE,   "TOGGLEABLES",           "GTHTRK.XTYBT",           NULL,               0},
+    {ITT_EFUNC,   "MOUSE LOOK",            "J,PJH VSIM.",            BK_StartBindingKey, bk_toggle_mlook},     // Обзор мышью
+    {ITT_EFUNC,   "ALWAYS RUN",            "GJCNJZYYSQ ,TU",         BK_StartBindingKey, bk_toggle_autorun},   // Постоянный бег
+    {ITT_EFUNC,   "CROSSHAIR",             "GHBWTK",                 BK_StartBindingKey, bk_toggle_crosshair}, // Прицел
+    {ITT_EFUNC,   "LEVEL FLIPPING",        "PTHRFKBHJDFYBT EHJDYZ",  BK_StartBindingKey, bk_toggle_fliplvls},  // Зеркалирование уровня
+    {ITT_EMPTY,   NULL,                    NULL,                     NULL,               0},
+    {ITT_EMPTY,   NULL,                    NULL,                     NULL,               0},
+    {ITT_SETMENU, "NEXT PAGE...",          "CKTLE.OFZ CNHFYBWF>>>",  &Bindings4Menu,     0},                   // Cледующая страница...
+    {ITT_SETMENU, "PREV PAGE...",          "GHTLSLEOFZ CNHFYBWF>>>", &Bindings2Menu,     0},                   // Предыдущая страница...
+    {ITT_EMPTY,   NULL,                    NULL,                     NULL,               0}
+};
+
+static Menu_t Bindings3Menu = {
+    35, 35,
+    25,
+    "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
+    16, Bindings3Items, false,
+    M_RD_Draw_Bindings,
+    &BindingsPageDescriptor,
+    &ControlsMenu,
+    1
+};
+
+// -----------------------------------------------------------------------------
+// Key bindings (4)
+// -----------------------------------------------------------------------------
+
+static MenuItem_t Bindings4Items[] = {
+    {ITT_TITLE,   "AUTOMAP",          "RFHNF",                 NULL,                0},
+    {ITT_EFUNC,   "TOGGLE AUTOMAP",   "JNRHSNM RFHNE",          BK_StartBindingKey, bk_map_toggle},    // Открыть карту
+    {ITT_EFUNC,   "ZOOM IN",          "GHB,KBPBNM",             BK_StartBindingKey, bk_map_zoom_in},   // Приблизить
+    {ITT_EFUNC,   "ZOOM OUT",         "JNLFKBNM",               BK_StartBindingKey, bk_map_zoom_out},  // Отдалить
+    {ITT_EFUNC,   "MAXIMUM ZOOM OUT", "GJKYSQ VFCINF,",         BK_StartBindingKey, bk_map_zoom_max},  // Полный масштаб
+    {ITT_EFUNC,   "FOLLOW MODE",      "HT;BV CKTLJDFYBZ",       BK_StartBindingKey, bk_map_follow},    // Режим следования
+    {ITT_EFUNC,   "OVERLAY MODE",     "HT;BV YFKJ;TYBZ",        BK_StartBindingKey, bk_map_overlay},   // Режим наложения
+    {ITT_EFUNC,   "ROTATE MODE",      "HT;BV DHFOTYBZ",         BK_StartBindingKey, bk_map_rotate},    // Режим вращения
+    {ITT_EFUNC,   "TOGGLE GRID",      "CTNRF",                  BK_StartBindingKey, bk_map_grid},      // Сетка
+    {ITT_EMPTY,   NULL,               NULL,                     NULL,               0},
+    {ITT_EMPTY,   NULL,               NULL,                     NULL,               0},
+    {ITT_EMPTY,   NULL,               NULL,                     NULL,               0},
+    {ITT_EMPTY,   NULL,               NULL,                     NULL,               0},
+    {ITT_SETMENU, "NEXT PAGE...",     "CKTLE.OFZ CNHFYBWF>>>",  &Bindings5Menu,     0},                // Cледующая страница...
+    {ITT_SETMENU, "PREV PAGE...",     "GHTLSLEOFZ CNHFYBWF>>>", &Bindings3Menu,     0},                // Предыдущая страница...
+    {ITT_EMPTY,   NULL,               NULL,                     NULL,               0}
+};
+
+static Menu_t Bindings4Menu = {
+    35, 35,
+    25,
+    "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
+    16, Bindings4Items, false,
+    M_RD_Draw_Bindings,
+    &BindingsPageDescriptor,
+    &ControlsMenu,
+    1
+};
+
+// -----------------------------------------------------------------------------
+// Key bindings (5)
+// -----------------------------------------------------------------------------
+
+static MenuItem_t Bindings5Items[] = {
+    {ITT_TITLE,   "INVENTORY",            "BYDTYNFHM",                 NULL,               0},
+    {ITT_EFUNC,   "NEXT ITEM",            "CKTLE.OBQ GHTLVTN",         BK_StartBindingKey, bk_inv_right},
+    {ITT_EFUNC,   "PREVIOUS ITEM",        "GHTLSLEOBQ GHTLVTN",        BK_StartBindingKey, bk_inv_left},
+    {ITT_EFUNC,   "ACTIVATE ITEM",        "BCGJKMPJDFNM GHTLVTN",      BK_StartBindingKey, bk_inv_use_artifact},
+    {ITT_EFUNC,   "USE ALL ITEMS",        "BCGJKMPJDFNM DCT GHTLVTNS", BK_StartBindingKey, bk_arti_all},           // Использовать все предметы
+    {ITT_EFUNC,   "QUARTZ FLASK",         "RDFHWTDSQ AKFRJY",          BK_StartBindingKey, bk_arti_quartz},
+    {ITT_EFUNC,   "MYSTIC URN",           "VBCNBXTCRFZ EHYF",          BK_StartBindingKey, bk_arti_urn},
+    {ITT_EFUNC,   "FLECHETTE",            "PTKMT",                     BK_StartBindingKey, bk_arti_bomb},
+    {ITT_EFUNC,   "DISC OF REPULSION",    "LBCR JNNJH;TYBZ",           BK_StartBindingKey, bk_arti_blastradius},
+    {ITT_EFUNC,   "ICON OF THE DEFENDER", "CBVDJK PFOBNYBRF",          BK_StartBindingKey, bk_arti_invulnerability},
+    {ITT_EFUNC,   "PORKALATOR",           "CDBYJVJHATH",               BK_StartBindingKey, bk_arti_egg},
+    {ITT_EFUNC,   "CHAOS DEVICE",         "'V,KTVF [FJCF",             BK_StartBindingKey, bk_arti_chaosdevice},
+    {ITT_EMPTY,   NULL,                   NULL,                        NULL,               0},
+    {ITT_SETMENU, "NEXT PAGE...",         "CKTLE.OFZ CNHFYBWF>>>",     &Bindings6Menu,     0},                     // Cледующая страница...
+    {ITT_SETMENU, "PREV PAGE...",         "GHTLSLEOFZ CNHFYBWF>>>",    &Bindings4Menu,     0},                     // Предыдущая страница...
+    {ITT_EMPTY,   NULL,                   NULL,                        NULL,               0}
+};
+
+static Menu_t Bindings5Menu = {
+    35, 35,
+    25,
+    "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
+    16, Bindings5Items, false,
+    M_RD_Draw_Bindings,
+    &BindingsPageDescriptor,
+    &ControlsMenu,
+    1
+};
+
+// -----------------------------------------------------------------------------
+// Key bindings (6)
+// -----------------------------------------------------------------------------
+
+static MenuItem_t Bindings6Items[] = {
+    {ITT_EFUNC,   "BANISHMENT DEVICE",   "'V,KTVF BPUYFYBZ",          BK_StartBindingKey, bk_arti_teleportother},
+    {ITT_EFUNC,   "WINGS OF WRATH",      "RHSKMZ UYTDF",              BK_StartBindingKey, bk_arti_wings},
+    {ITT_EFUNC,   "TORCH",               "AFRTK",                     BK_StartBindingKey, bk_arti_torch},
+    {ITT_EFUNC,   "KRATER OF MIGHT",     "XFIF VJUEOTCNDF",           BK_StartBindingKey, bk_arti_boostmana},
+    {ITT_EFUNC,   "DRAGONSKIN BRACERS",  "YFHEXB BP LHFRJYMTQ RJ;B",  BK_StartBindingKey, bk_arti_boostarmor},
+    {ITT_EFUNC,   "DARK SERVANT",        "NTVYSQ CKEUF",              BK_StartBindingKey, bk_arti_summon},
+    {ITT_EFUNC,   "BOOTS OF SPEED",      "CFGJUB-CRJHJ[JLS",          BK_StartBindingKey, bk_arti_speed},
+    {ITT_EFUNC,   "MYSTIC AMBIT INCANT", "XFHS VFUBXTCRJUJ TLBYCNDF", BK_StartBindingKey, bk_arti_healingradius},
+    {ITT_TITLE,   "LOOK",                "J,PJH",                     NULL,               0},              // Обзор
+    {ITT_EFUNC,   "LOOK UP",             "CVJNHTNM DDTH[",            BK_StartBindingKey, bk_look_up},            // Смотреть вверх
+    {ITT_EFUNC,   "LOOK DOWN",           "CVJNHTNM DYBP",             BK_StartBindingKey, bk_look_down},          // Смотреть вниз
+    {ITT_EFUNC,   "CENTER LOOK",         "CVJNHTNM GHZVJ",            BK_StartBindingKey, bk_look_center},        // Смотреть прямо
+    {ITT_EMPTY,   NULL,                  NULL,                        NULL,               0},
+    {ITT_SETMENU, "NEXT PAGE...",        "CKTLE.OFZ CNHFYBWF>>>",     &Bindings7Menu,     0},                     // Cледующая страница...
+    {ITT_SETMENU, "PREV PAGE...",        "GHTLSLEOFZ CNHFYBWF>>>",    &Bindings5Menu,     0},                     // Предыдущая страница...
+    {ITT_EMPTY,   NULL,                  NULL,                        NULL,               0}
+};
+
+static Menu_t Bindings6Menu = {
+    35, 35,
+    25,
+    "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
+    16, Bindings6Items, false,
+    M_RD_Draw_Bindings,
+    &BindingsPageDescriptor,
+    &ControlsMenu,
+    0
+};
+
+// -----------------------------------------------------------------------------
+// Key bindings (7)
+// -----------------------------------------------------------------------------
+
+static MenuItem_t Bindings7Items[] = {
+    {ITT_TITLE,   "MULTIPLAYER",         "CTNTDFZ BUHF",           NULL,               0},                     // Сетевая игра
+    {ITT_EFUNC,   "MULTIPLAYER SPY",     "DBL LHEUJUJ BUHJRF",     BK_StartBindingKey, bk_spy},                // Вид другого игрока
+    {ITT_EFUNC,   "SEND MESSAGE",        "JNGHFDBNM CJJ,OTYBT",    BK_StartBindingKey, bk_multi_msg},          // Отправить сообщение
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 1", "CJJ,OTYBT BUHJRE 1",     BK_StartBindingKey, bk_multi_msg_player_0}, // Сообщение игроку 1
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 2", "CJJ,OTYBT BUHJRE 2",     BK_StartBindingKey, bk_multi_msg_player_1}, // Сообщение игроку 2
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 3", "CJJ,OTYBT BUHJRE 3",     BK_StartBindingKey, bk_multi_msg_player_2}, // Сообщение игроку 3
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 4", "CJJ,OTYBT BUHJRE 4",     BK_StartBindingKey, bk_multi_msg_player_3}, // Сообщение игроку 4
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 5", "CJJ,OTYBT BUHJRE 5",     BK_StartBindingKey, bk_multi_msg_player_4}, // Сообщение игроку 5
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 6", "CJJ,OTYBT BUHJRE 6",     BK_StartBindingKey, bk_multi_msg_player_5}, // Сообщение игроку 6
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 7", "CJJ,OTYBT BUHJRE 7",     BK_StartBindingKey, bk_multi_msg_player_6}, // Сообщение игроку 7
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 8", "CJJ,OTYBT BUHJRE 8",     BK_StartBindingKey, bk_multi_msg_player_7}, // Сообщение игроку 8
+    {ITT_EMPTY,   NULL,                  NULL,                     NULL,               0},
+    {ITT_EMPTY,   NULL,                  NULL,                     NULL,               0},
+    {ITT_SETMENU, "FIRST PAGE...",       "GTHDFZ CNHFYBWF>>>",     &Bindings1Menu,     0},                     // Первая страница...
+    {ITT_SETMENU, "PREV PAGE...",        "GHTLSLEOFZ CNHFYBWF>>>", &Bindings6Menu,     0},                     // Предыдущая страница...
+    {ITT_EMPTY,   NULL,                  NULL,                     NULL,               0}
+};
+
+static Menu_t Bindings7Menu = {
+    35, 35,
+    25,
+    "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
+    16, Bindings7Items, false,
+    M_RD_Draw_Bindings,
+    &BindingsPageDescriptor,
+    &ControlsMenu,
     1
 };
 
@@ -2061,40 +2319,40 @@ static void DrawControlsMenu(void)
     if (english_language)
     {
         // Always run
-        RD_M_DrawTextSmallENG(alwaysRun ? "ON" : "OFF", 118 + wide_delta, 42, CR_NONE);
+        RD_M_DrawTextSmallENG(alwaysRun ? "ON" : "OFF", 118 + wide_delta, 62, CR_NONE);
 
         // Mouse look
-        RD_M_DrawTextSmallENG(mlook ? "ON" : "OFF", 118 + wide_delta, 82, CR_NONE);
+        RD_M_DrawTextSmallENG(mlook ? "ON" : "OFF", 118 + wide_delta, 102, CR_NONE);
 
         // Invert Y axis
-        RD_M_DrawTextSmallENG(mouse_y_invert ? "ON" : "OFF", 133 + wide_delta, 92,
+        RD_M_DrawTextSmallENG(mouse_y_invert ? "ON" : "OFF", 133 + wide_delta, 112,
                               !mlook ? CR_GRAY2GDARKGRAY_HEXEN : CR_NONE);
 
         // Novert
-        RD_M_DrawTextSmallENG(!novert ? "ON" : "OFF", 168 + wide_delta, 102,
+        RD_M_DrawTextSmallENG(!novert ? "ON" : "OFF", 168 + wide_delta, 122,
                               mlook ? CR_GRAY2GDARKGRAY_HEXEN : CR_NONE);
     }
     else
     {
         // Режим постоянного бега
-        RD_M_DrawTextSmallRUS(alwaysRun ? "DRK" : "DSRK", 209 + wide_delta, 42, CR_NONE);
+        RD_M_DrawTextSmallRUS(alwaysRun ? "DRK" : "DSRK", 209 + wide_delta, 62, CR_NONE);
 
         // Обзор мышью
-        RD_M_DrawTextSmallRUS(mlook ? "DRK" : "DSRK", 132 + wide_delta, 82, CR_NONE);
+        RD_M_DrawTextSmallRUS(mlook ? "DRK" : "DSRK", 132 + wide_delta, 102, CR_NONE);
 
         // Вертикальная инверсия
-        RD_M_DrawTextSmallRUS(mouse_y_invert ? "DRK" : "DSRK", 199 + wide_delta, 92,
+        RD_M_DrawTextSmallRUS(mouse_y_invert ? "DRK" : "DSRK", 199 + wide_delta, 112,
                               !mlook ? CR_GRAY2GDARKGRAY_HEXEN : CR_NONE);
 
         // Вертикальное перемещение
-        RD_M_DrawTextSmallRUS(!novert ? "DRK" : "DSRK", 227 + wide_delta, 102,
+        RD_M_DrawTextSmallRUS(!novert ? "DRK" : "DSRK", 227 + wide_delta, 122,
                               mlook ? CR_GRAY2GDARKGRAY_HEXEN : CR_NONE);
     }
 
     // Mouse sensivity
-    RD_Menu_DrawSliderSmall(&ControlsMenu, 72, 12, mouseSensitivity);
+    RD_Menu_DrawSliderSmall(&ControlsMenu, 92, 12, mouseSensitivity);
     M_snprintf(num, 4, "%3d", mouseSensitivity);
-    RD_M_DrawTextSmallENG(num, 152 + wide_delta, 73, CR_GRAY2GDARKGRAY_HEXEN);
+    RD_M_DrawTextSmallENG(num, 152 + wide_delta, 93, CR_GRAY2GDARKGRAY_HEXEN);
 }
 
 static void M_RD_AlwaysRun()
@@ -2122,6 +2380,33 @@ static void M_RD_InvertY()
 static void M_RD_Novert()
 {
     novert ^= 1;
+}
+
+// -----------------------------------------------------------------------------
+// Key bindings
+// -----------------------------------------------------------------------------
+void M_RD_Draw_Bindings()
+{
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    if (english_language)
+    {
+        RD_M_DrawTextSmallENG("ENTER TO CHANGE, DEL TO CLEAR", 55 + wide_delta, 176, CR_GRAY2RED_HEXEN);
+        RD_M_DrawTextSmallENG("PGUP/PGDN TO TURN PAGES", 75 + wide_delta, 185, CR_GRAY2RED_HEXEN);
+    }
+    else
+    {
+        RD_M_DrawTextSmallENG("ENTER =", 44 + wide_delta, 176, CR_GRAY2RED_HEXEN);
+        RD_M_DrawTextSmallRUS("= YFPYFXBNM<", 88 + wide_delta, 176, CR_GRAY2RED_HEXEN);
+        RD_M_DrawTextSmallENG("DEL =", 176 + wide_delta, 176, CR_GRAY2RED_HEXEN);
+        RD_M_DrawTextSmallRUS("JXBCNBNM", 213 + wide_delta, 176, CR_GRAY2RED_HEXEN);
+
+        RD_M_DrawTextSmallENG("PGUP/PGDN =", 55 + wide_delta, 185, CR_GRAY2RED_HEXEN);
+        RD_M_DrawTextSmallRUS("KBCNFNM CNHFYBWS", 139 + wide_delta, 185, CR_GRAY2RED_HEXEN);
+    }
+
+    RD_Menu_Draw_Bindings(english_language ? 195 : 230);
 }
 
 // -----------------------------------------------------------------------------
@@ -3565,6 +3850,12 @@ boolean MN_Responder(event_t * event)
         return false;
     }
 
+    if(isBinding)
+    {
+        BK_BindKey(event);
+        return true;
+    }
+
     if (InfoType)
     {
         InfoType = (InfoType + 1) % 4;
@@ -3896,6 +4187,24 @@ boolean MN_Responder(event_t * event)
         }
         return (false);
     }
+
+    if (event->type == ev_keydown && event->data1 == KEY_DEL)
+    {
+        //[Dasperal] Key bindings menus
+        if(CurrentMenu == &Bindings1Menu ||
+           CurrentMenu == &Bindings2Menu ||
+           CurrentMenu == &Bindings3Menu ||
+           CurrentMenu == &Bindings4Menu ||
+           CurrentMenu == &Bindings5Menu ||
+           CurrentMenu == &Bindings6Menu ||
+           CurrentMenu == &Bindings7Menu)
+        {
+            BK_ClearBinds(CurrentMenu->items[CurrentItPos].option);
+            RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
+            return true;
+        }
+    }
+
     if (!FileMenuKeySteal)
     {
         return RD_Menu_Responder(event);
