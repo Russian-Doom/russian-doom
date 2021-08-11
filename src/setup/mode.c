@@ -30,13 +30,10 @@
 #include "i_system.h"
 #include "m_argv.h"
 #include "m_config.h"
-#include "m_controls.h"
 #include "m_misc.h"
 
 #include "compatibility.h"
 #include "display.h"
-#include "joystick.h"
-#include "keyboard.h"
 #include "mouse.h"
 #include "multiplayer.h"
 #include "sound.h"
@@ -233,36 +230,8 @@ static void BindMiscVariables(void)
 
 void InitBindings(void)
 {
-    M_ApplyPlatformDefaults();
-
-    // Keyboard, mouse, joystick controls
-
-    M_BindBaseControls();
-    M_BindWeaponControls();
-    M_BindMapControls();
-    M_BindMenuControls();
-
-    if (gamemission == heretic || gamemission == hexen)
-    {
-        M_BindHereticControls();
-    }
-
-    if (gamemission == hexen)
-    {
-        M_BindHexenControls();
-    }
-
-    if (gamemission == strife)
-    {
-        M_BindStrifeControls();
-    }
-
-    // All other variables
-
     BindCompatibilityVariables();
     BindDisplayVariables();
-    BindJoystickVariables();
-    BindKeyboardVariables();
     BindMouseVariables();
     BindSoundVariables();
     BindMiscVariables();

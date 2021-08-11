@@ -161,6 +161,9 @@ int snd_Channels = 8;       // Default SFX channels
 int snd_Channels_RD;        // For hot-swapping
 int snd_monomode = 0;
 
+// Controls
+extern int alwaysRun;
+
 // Gameplay: Graphical
 int brightmaps = 1;
 int fake_contrast = 0;
@@ -1119,8 +1122,6 @@ void D_BindVariables(void)
     I_BindJoystickVariables();
     I_BindSoundVariables();
 
-    BK_ApplyDefaultBindings(); //TODO
-
 #ifdef FEATURE_MULTIPLAYER
     NET_BindVariables();
 #endif
@@ -1184,6 +1185,7 @@ void D_BindVariables(void)
     M_BindIntVariable("snd_channels",           &snd_Channels);
 
     // Controls
+    M_BindIntVariable("always_run",             &alwaysRun);
     M_BindIntVariable("mlook",                  &mlook);
     M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
 

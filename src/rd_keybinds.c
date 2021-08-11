@@ -40,9 +40,11 @@ typedef struct bind_descriptor_s
 
 boolean isBinding = false;
 bound_key_t keyToBind = bk__null;
+boolean isBindsLoaded = false;
 
 bind_descriptor_t* bind_descriptor[bk__size];
 boolean keyState[bk__size];
+boolean bindClearEnabled = true;
 
 static device_t getEventDevice(event_t* event)
 {
@@ -354,12 +356,15 @@ static void AddBind(bound_key_t boundKey, device_t device, int key)
         {
             if(bind->device == device && bind->key == key)
             {
-                // Clear bind
-                if(prevBind)
-                    prevBind->next = bind->next;
-                else
-                    bind_descriptor[boundKey] = bind->next;
-                free(bind);
+                if(bindClearEnabled)
+                {
+                    // Clear bind
+                    if (prevBind)
+                        prevBind->next = bind->next;
+                    else
+                        bind_descriptor[boundKey] = bind->next;
+                    free(bind);
+                }
                 return;
             }
             prevBind = bind;
@@ -555,4 +560,93 @@ void BK_ApplyDefaultBindings()
     AddBind(bk_weapon_next, mouse, MOUSE_SCROLL_DOWN);
     AddBind(bk_forward,     mouse, MOUSE_MIDDLE);
     AddBind(bk_strafe,      mouse, MOUSE_RIGHT);
+}
+
+void BK_LoadBindings(void* file)
+{
+    int bind;
+    char strparm[100];
+    char* ptr;
+
+    bindClearEnabled = false;
+    while(!feof(file))
+    {
+        if(fscanf(file, "%3d %99[^\n]\n", &bind, strparm) != 2)
+        {
+            // end of key binds section
+            break;
+        }
+
+        if(bind >= bk__serializable)
+            continue;
+
+        ptr = strparm;
+        while(*ptr != '\0')
+        {
+            char deviceChar;
+            int key;
+            int charsToSkip;
+            device_t device;
+
+            if(sscanf(ptr, "%c_%3d%n", &deviceChar, &key, &charsToSkip) != 2)
+            {
+                ptr += charsToSkip + 1;
+                continue;
+            }
+            ptr += charsToSkip + 1;
+
+            switch(deviceChar)
+            {
+                case 'k':
+                    device = keyboard;
+                    break;
+                case 'm':
+                    device = mouse;
+                    break;
+                default:
+                    device = -1;
+            }
+
+            AddBind(bind, device, key);
+        }
+    }
+    bindClearEnabled = true;
+    isBindsLoaded = true;
+}
+
+void BK_SaveBindings(void* file)
+{
+    int i;
+    bind_descriptor_t* bind;
+
+    fprintf(file, "%-30s%s\n", "Keybinds", "Start");
+
+    for(i = 0; i < bk__serializable; ++i)
+    {
+        if(bind_descriptor[i])
+        {
+            fprintf(file, "%-30d", i);
+            bind = bind_descriptor[i];
+            while(bind)
+            {
+                char deviceChar;
+                switch(bind->device)
+                {
+                    case keyboard:
+                        deviceChar = 'k';
+                        break;
+                    case mouse:
+                        deviceChar = 'm';
+                        break;
+                    default:
+                        deviceChar = ' ';
+                        break;
+                }
+                fprintf(file, "%c_%d ", deviceChar, bind->key);
+                bind = bind->next;
+            }
+            fprintf(file, "\n");
+        }
+    }
+    fprintf(file, "%-30s%s\n", "Keybinds", "End");
 }

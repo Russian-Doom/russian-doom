@@ -60,8 +60,10 @@ typedef enum
     bk_inv_left,
     bk_inv_right,
     bk_inv_use_artifact,
-//  bk_inv_use_health,
-//  bk_inv_drop,
+
+    //Inventory: Strife
+    bk_inv_use_health, // [Daspral] Reserved for safe addition of feature in future
+//  bk_inv_drop, // [Daspral] Uncommenting these lines will break binds in config files
 //  bk_inv_pop,
 //  bk_inv_key,
 //  bk_inv_home,
@@ -136,9 +138,11 @@ typedef enum
     bk_gamma,
     bk_screen_inc,
     bk_screen_dec,
+
     bk_pause,
 
     //System keys
+    bk__serializable, // [Dasperal] Bindings after this line are not saved to config file
     bk_left,
     bk_right,
     bk_up,
@@ -158,6 +162,7 @@ typedef enum
 } bound_key_t;
 
 extern boolean isBinding;
+extern boolean isBindsLoaded;
 
 void BK_ProcessKey(event_t* event);
 
@@ -181,5 +186,9 @@ void BK_ClearBinds(bound_key_t key);
 void BK_AddBindingsToSystemKeys();
 
 void BK_ApplyDefaultBindings();
+
+void BK_LoadBindings(void* file);
+
+void BK_SaveBindings(void* file);
 
 #endif //RD_KEYBINDS_H

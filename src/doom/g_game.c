@@ -95,7 +95,7 @@ boolean         usergame;   // ok to save / end game
 boolean         timingdemo; // if true, exit with report on completion
 boolean         nodrawers;  // for comparative timing purposes
 int             starttime;  // for comparative timing purposes
-boolean         alwaysRun;  // is always run enabled
+int             alwaysRun;  // is always run enabled
 
 boolean         viewactive;
 

@@ -239,7 +239,7 @@ static void M_RD_ChangeLanguage(Direction_t direction);
 
 // Public Data
 int InfoType;
-extern boolean alwaysRun;
+extern int alwaysRun;
 
 // Private Data
 

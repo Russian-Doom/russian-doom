@@ -86,6 +86,7 @@ static void WarpCheck(void);
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
 
 extern boolean askforquit;
+extern int alwaysRun;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
@@ -248,8 +249,6 @@ void D_BindVariables(void)
     I_BindJoystickVariables();
     I_BindSoundVariables();
 
-    BK_ApplyDefaultBindings(); //TODO
-
 #ifdef FEATURE_MULTIPLAYER
     NET_BindVariables();
 #endif
@@ -263,6 +262,7 @@ void D_BindVariables(void)
     M_BindIntVariable("messageson",             &messageson);
     M_BindIntVariable("screenblocks",           &screenblocks);
     M_BindIntVariable("snd_channels",           &snd_Channels);
+    M_BindIntVariable("always_run",             &alwaysRun);
     M_BindIntVariable("mlook",                  &mlook);
     M_BindIntVariable("level_brightness",       &level_brightness);
     M_BindIntVariable("local_time",             &local_time);

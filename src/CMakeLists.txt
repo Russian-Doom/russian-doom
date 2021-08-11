@@ -61,7 +61,6 @@ add_library(Game STATIC EXCLUDE_FROM_ALL
     m_bbox.c            m_bbox.h
     m_cheat.c           m_cheat.h
     m_config.c          m_config.h
-    m_controls.c        m_controls.h
     m_fixed.c           m_fixed.h
     net_client.c        net_client.h
     net_common.c        net_common.h
@@ -125,13 +124,16 @@ add_library(SetupCommon STATIC EXCLUDE_FROM_ALL
                         icon.h
     i_timer.c           i_timer.h
     m_config.c          m_config.h
-    m_controls.c        m_controls.h
     net_io.c            net_io.h
     net_packet.c        net_packet.h
     net_sdl.c           net_sdl.h
     net_query.c         net_query.h
     net_structrw.c      net_structrw.h
     z_native.c          z_zone.h
+)
+
+target_compile_definitions("SetupCommon"
+    PRIVATE "___RD_TARGET_SETUP___"
 )
 
 target_link_libraries(SetupCommon PUBLIC

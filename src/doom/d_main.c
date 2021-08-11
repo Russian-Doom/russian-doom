@@ -158,6 +158,7 @@ int snd_channels = 32;
 int snd_monomode = 0;
 
 // Controls
+extern int alwaysRun;
 int mouseSensitivity = 5;
 
 // Selective game
@@ -647,8 +648,6 @@ void D_BindVariables(void)
     I_BindJoystickVariables();
     I_BindSoundVariables();
 
-    BK_ApplyDefaultBindings(); //TODO
-
 #ifdef FEATURE_MULTIPLAYER
     NET_BindVariables();
 #endif
@@ -724,6 +723,7 @@ void D_BindVariables(void)
     M_BindIntVariable("snd_monomode",           &snd_monomode);
 
     // Controls
+    M_BindIntVariable("always_run",             &alwaysRun);
     M_BindIntVariable("mlook",                  &mlook);
     M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
 

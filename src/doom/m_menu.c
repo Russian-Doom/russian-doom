@@ -59,7 +59,7 @@ void (*messageRoutine)(boolean);
 
 boolean inhelpscreens;
 int InfoType = 0;
-extern boolean alwaysRun;
+extern int alwaysRun;
 
 // [JN] Save strings and messages 
 int     quickSaveSlot;      // -1 = no quicksave slot picked!
