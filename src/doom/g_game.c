@@ -52,7 +52,6 @@
 #include "rd_lang.h"
 #include "sounds.h"
 #include "r_data.h"
-#include "r_sky.h"
 #include "g_game.h"
 #include "crispy.h"
 #include "jn.h"

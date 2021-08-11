@@ -29,8 +29,8 @@
 #include "m_menu.h"
 #include "p_local.h"
 #include "r_local.h"
-#include "r_sky.h"
 #include "g_game.h"
+#include "z_zone.h"
 #include "crispy.h"
 #include "jn.h"
 
@@ -104,6 +104,10 @@ lighttable_t *fullbright_pileofskulls[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t *fullbright_redonly2[LIGHTLEVELS][MAXLIGHTSCALE];
 
 extern lighttable_t **walllights;
+
+// sky mapping
+int skyflatnum, skytexture, skytexturemid;
+
 
 void (*colfunc) (void);
 void (*basecolfunc) (void);
@@ -494,7 +498,7 @@ void R_InitTextureMapping (void)
 
 #define DISTMAP     2
 
-void R_InitLightTables (void)
+static void R_InitLightTables (void)
 {
     int i, j;
     int level;
@@ -530,6 +534,56 @@ void R_InitLightTables (void)
             // [JN] Floor brightmaps
             fullbright_notgrayorbrown_floor[i][j] = brightmaps_notgrayorbrown + level * 256;
             fullbright_orangeyellow_floor[i][j] = brightmaps_orangeyellow + level * 256;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// R_InitSkyMap
+// Called at program startup.
+// -----------------------------------------------------------------------------
+
+static void R_InitSkyMap (void)
+{
+    if (scaled_sky)
+    {
+        skytexturemid = ORIGHEIGHT/2*FRACUNIT;
+    }
+    else
+    {
+        skytexturemid = ORIGHEIGHT+199 * FRACUNIT;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// R_InitTranslationTables
+// Creates the translation tables to map the green color ramp to gray, 
+// brown, red. Assumes a given structure of the PLAYPAL.
+// Could be read from a lump instead.
+// -----------------------------------------------------------------------------
+
+static void R_InitTranslationTables (void)
+{
+    int i;
+
+    translationtables = Z_Malloc (256*3, PU_STATIC, 0);
+
+    // translate just the 16 green colors
+    for (i = 0 ; i < 256 ; i++)
+    {
+        if (i >= 0x70 && i <= 0x7f)
+        {
+            // map green ramp to gray, brown, red
+            translationtables[i] = 0x60 + (i&0xf);
+            translationtables [i+256] = 0x40 + (i&0xf);
+            translationtables [i+512] = 0x20 + (i&0xf);
+        }
+        else
+        {
+            // Keep all other colors as is.
+            translationtables[i] = 
+            translationtables[i+256] =
+            translationtables[i+512] = i;
         }
     }
 }
@@ -753,7 +807,8 @@ void R_Init (void)
 
     R_InitData ();
     printf (".");
-    R_SetViewSize (screenblocks, detailLevel);  // viewwidth / viewheight / detailLevel are set by the defaults
+    // viewwidth / viewheight / detailLevel are set by the defaults
+    R_SetViewSize (screenblocks, detailLevel);
     printf (".");
     R_InitLightTables ();
     printf (".");

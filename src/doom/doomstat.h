@@ -243,12 +243,6 @@ extern gamestate_t wipegamestate;
 extern int mouseSensitivity;
 extern int bodyqueslot;
 
-
-// Needed to store the number of the dummy sky flat.
-// Used for rendering,
-//  as well as tracking projectiles etc.
-extern int skyflatnum;
-
 // Netgame stuff (buffers and pointers, i.e. indices).
 extern int rndindex;
 extern ticcmd_t *netcmds;

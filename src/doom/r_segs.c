@@ -26,7 +26,6 @@
 #include "doomdef.h"
 #include "doomstat.h"
 #include "r_local.h"
-#include "r_sky.h"
 #include "g_game.h"
 #include "r_segs.h"
 #include "r_bmaps.h"

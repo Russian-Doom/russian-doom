@@ -96,6 +96,18 @@ extern lighttable_t *fullbright_redonly2[LIGHTLEVELS][MAXLIGHTSCALE];
 
 extern int extralight;
 
+
+//
+// Sky rendering
+//
+
+#define SKYFLATNAME "F_SKY1"    // Store the number for name.
+#define ANGLETOSKYSHIFT 22      // The sky map is 256*128*4 maps.
+
+extern int skyflatnum, skytexture, skytexturemid;
+extern boolean scaled_sky;
+
+
 // [AM] Fractional part of the current tic, in the half-open
 //      range of [0.0, 1.0).  Used for interpolation.
 extern fixed_t fractionaltic;
@@ -118,6 +130,7 @@ extern void (*spanfunc) (void);
 
 //
 // Utility functions.
+//
 int R_PointOnSide (fixed_t x, fixed_t y, const node_t *node);
 int R_PointOnSegSide (fixed_t x, fixed_t y, const seg_t *line);
 
