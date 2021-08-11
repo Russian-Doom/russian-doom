@@ -147,7 +147,7 @@ static char* getKeyboardKeyName(int key)
         case 0:     return "---";
         case 9:     return "TAB";
         case 13:    return "ENTER";
-        case 32:    return "SPACE BAR";
+        case 32:    return "SPACE";
         case 39:    return "'";
         case 42:    return "*";
         case 43:    return "+"; // [JN] NumPad +
@@ -197,12 +197,12 @@ static char* getKeyboardKeyName(int key)
         case 120:   return "X";
         case 121:   return "Y";
         case 122:   return "Z";
-        case 127:   return "BACKSPACE";
+        case 127:   return "BCKSP";
         case 157:   return "CTRL";
-        case 172:   return "LEFT ARROW";
-        case 173:   return "UP ARROW";
-        case 174:   return "RIGHT ARROW";
-        case 175:   return "DOWN ARROW";
+        case 172:   return "LEFT";
+        case 173:   return "UP";
+        case 174:   return "RIGHT";
+        case 175:   return "DOWN";
         case 182:   return "SHIFT";
         case 184:   return "ALT";
         case 186:   return "CAPS LOCK";
@@ -216,17 +216,17 @@ static char* getKeyboardKeyName(int key)
         case 194:   return "F8";
         case 195:   return "F9";
         case 197:   return "NUM LOCK";
-        case 198:   return "SCROLL LOCK";
+        case 198:   return "SCROLL";
         case 199:   return "HOME";
-        case 201:   return "PAGE UP";
+        case 201:   return "PGEUP";
         case 204:   return "5"; // [JN] NumPad 5
         case 207:   return "END";
-        case 209:   return "PAGE DOWN";
-        case 210:   return "INSERT";
-        case 211:   return "DELETE";
+        case 209:   return "PGDN";
+        case 210:   return "INS";
+        case 211:   return "DEL";
         case 215:   return "F11";
         case 216:   return "F12";
-        case 217:   return "PRINT SCREEN";
+        case 217:   return "SYS RQ";
         case 255:   return "PAUSE";
         default:    return "?"; // [JN] Unknown key
     }
@@ -236,16 +236,15 @@ static char* getMouseKeyName(int i)
 {
     switch (i)
     {
-        case -1:                  return "---";
         case  MOUSE_LEFT:         return "MOUSE 1";
         case  MOUSE_RIGHT:        return "MOUSE 2";
         case  MOUSE_MIDDLE:       return "MOUSE 3";
         case  MOUSE_4:            return "MOUSE 4";
         case  MOUSE_5:            return "MOUSE 5";
-        case  MOUSE_SCROLL_UP:    return "SCROLL UP";
-        case  MOUSE_SCROLL_DOWN:  return "SCROLL DOWN";
-        case  MOUSE_SCROLL_RIGHT: return "SCROLL RIGHT";
-        case  MOUSE_SCROLL_LEFT:  return "SCROLL LEFT";
+        case  MOUSE_SCROLL_UP:    return "MW_UP";
+        case  MOUSE_SCROLL_DOWN:  return "MW_DOWN";
+        case  MOUSE_SCROLL_RIGHT: return "MW_RIGHT";
+        case  MOUSE_SCROLL_LEFT:  return "MW_LEFT";
         default:                  return "?"; // [JN] Unknown key
     }
 }
