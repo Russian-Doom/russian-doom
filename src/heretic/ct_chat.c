@@ -166,7 +166,7 @@ boolean CT_Responder(event_t * ev)
         altdown = (ev->type == ev_keydown);
         return false;
     }
-    if (ev->data1 == KEY_RSHIFT)
+    if (ev->data1 == KEY_RSHIFT || ev->data1 == KEY_LSHIFT)
     {
         shiftdown = (ev->type == ev_keydown);
         return false;

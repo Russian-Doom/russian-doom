@@ -117,10 +117,14 @@ static int TranslateKey(SDL_Keysym *sym)
     switch (scancode)
     {
         case SDL_SCANCODE_LCTRL:
+            return KEY_LCTRL;
+
         case SDL_SCANCODE_RCTRL:
             return KEY_RCTRL;
 
         case SDL_SCANCODE_LSHIFT:
+            return KEY_LSHIFT;
+
         case SDL_SCANCODE_RSHIFT:
             return KEY_RSHIFT;
 
@@ -156,6 +160,44 @@ static int GetLocalizedKey(SDL_Keysym *sym)
     else
     {
         int result = sym->sym;
+
+        switch (result)
+        {
+            case SDLK_KP_1:
+                return SDLK_1;
+            case SDLK_KP_2:
+                return SDLK_2;
+            case SDLK_KP_3:
+                return SDLK_3;
+            case SDLK_KP_4:
+                return SDLK_4;
+            case SDLK_KP_5:
+                return SDLK_5;
+            case SDLK_KP_6:
+                return SDLK_6;
+            case SDLK_KP_7:
+                return SDLK_7;
+            case SDLK_KP_8:
+                return SDLK_8;
+            case SDLK_KP_9:
+                return SDLK_9;
+            case SDLK_KP_0:
+                return SDLK_0;
+            case SDLK_KP_PERIOD:
+                return SDLK_PERIOD;
+            case SDLK_KP_DIVIDE:
+                return SDLK_SLASH;
+            case SDLK_KP_MULTIPLY:
+                return SDLK_ASTERISK;
+            case SDLK_KP_MINUS:
+                return SDLK_MINUS;
+            case SDLK_KP_PLUS:
+                return SDLK_PLUS;
+            case SDLK_KP_EQUALS:
+                return SDLK_EQUALS;
+            default:
+                break;
+        }
 
         if (result < 0 || result >= 128)
         {

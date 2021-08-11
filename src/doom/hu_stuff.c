@@ -1538,7 +1538,7 @@ boolean HU_Responder(event_t *ev)
     for (i=0 ; i<MAXPLAYERS ; i++)
         numplayers += playeringame[i];
 
-    if (ev->data1 == KEY_RSHIFT)
+    if (ev->data1 == KEY_RSHIFT || ev->data1 == KEY_LSHIFT)
     {
         return false;
     }
@@ -1634,7 +1634,7 @@ boolean HU_Responder(event_t *ev)
                 // M_snprintf(buf, sizeof(buf), "KEY: %d => %d", ev->data1, c);
                 //        plr->message = buf;
             }
-            if (c == KEY_ENTER)
+            if (c == KEY_ENTER || c == KEYP_ENTER)
             {
                 StopChatInput();
                 if (w_chat.l.len)

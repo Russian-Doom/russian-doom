@@ -212,7 +212,7 @@ void HUlib_initSText (hu_stext_t* s, int x, int y, int h, patch_t** font, int st
     s->cl = 0;
     
     for (i=0;i<h;i++)
-	HUlib_initTextLine(&s->l[i], x, y - i*(SHORT(font[0]->height)+1)
+	    HUlib_initTextLine(&s->l[i], x, y - i*(SHORT(font[0]->height)+1)
                        // [JN] Critical: always draw HUD messages 1px below for
                        // preventing framebuffer overflow and normal "Й" apperance.
                        +1, font, startchar);
@@ -225,13 +225,13 @@ void HUlib_addLineToSText(hu_stext_t* s)
 
     // add a clear line
     if (++s->cl == s->h)
-    s->cl = 0;
+        s->cl = 0;
 
     HUlib_clearTextLine(&s->l[s->cl]);
 
     // everything needs updating
     for (i=0 ; i<s->h ; i++)
-    s->l[i].needsupdate = 4;
+        s->l[i].needsupdate = 4;
 }
 
 
@@ -240,11 +240,11 @@ void HUlib_addMessageToSText (hu_stext_t* s, char* prefix, char* msg)
     HUlib_addLineToSText(s);
     
     if (prefix)
-    while (*prefix)
-    HUlib_addCharToTextLine(&s->l[s->cl], *(prefix++));
+        while (*prefix)
+            HUlib_addCharToTextLine(&s->l[s->cl], *(prefix++));
 
     while (*msg)
-    HUlib_addCharToTextLine(&s->l[s->cl], *(msg++));
+        HUlib_addCharToTextLine(&s->l[s->cl], *(msg++));
 }
 
 
@@ -254,7 +254,7 @@ void HUlib_drawSText(hu_stext_t* s, MessageType_t type)
     const int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? 0 : wide_delta*2;
 
     if (!*s->on)
-    return; // if not on, don't draw
+        return; // if not on, don't draw
 
     // [JN] Optionally centered messages.
     // Center only selective types, i.e. not FPS / local time widgets.
@@ -290,7 +290,7 @@ void HUlib_drawSText(hu_stext_t* s, MessageType_t type)
         hu_textline_t *l = &s->l[idx];
 
         if (idx < 0)
-        idx += s->h; // handle queue of lines
+            idx += s->h; // handle queue of lines
 
         // need a decision made here on whether to skip the draw
         HUlib_drawTextLine(l, false, // no cursor, please
@@ -310,7 +310,7 @@ void HUlib_eraseSText(hu_stext_t* s)
     for (i=0 ; i<s->h ; i++)
     {
         if (s->laston && !*s->on)
-        s->l[i].needsupdate = 4;
+            s->l[i].needsupdate = 4;
 
         HUlib_eraseTextLine(&s->l[i]);
     }
@@ -333,14 +333,14 @@ void HUlib_initIText (hu_itext_t* it, int x, int y, patch_t** font, int startcha
 void HUlib_delCharFromIText(hu_itext_t* it)
 {
     if (it->l.len != it->lm)
-    HUlib_delCharFromTextLine(&it->l);
+        HUlib_delCharFromTextLine(&it->l);
 }
 
 
 void HUlib_eraseLineFromIText(hu_itext_t* it)
 {
     while (it->lm != it->l.len)
-    HUlib_delCharFromTextLine(&it->l);
+        HUlib_delCharFromTextLine(&it->l);
 }
 
 
@@ -355,7 +355,7 @@ void HUlib_resetIText(hu_itext_t* it)
 void HUlib_addPrefixToIText (hu_itext_t* it, char* str)
 {
     while (*str)
-    HUlib_addCharToTextLine(&it->l, *(str++));
+        HUlib_addCharToTextLine(&it->l, *(str++));
     it->lm = it->l.len;
 }
 
@@ -366,13 +366,18 @@ boolean HUlib_keyInIText (hu_itext_t* it, unsigned char ch)
 {
     ch = toupper(ch);
 
-    if (ch >= ' ' && ch <= '_') 
-    HUlib_addCharToTextLine(&it->l, (char) ch);
-    else if (ch == KEY_BACKSPACE) 
-    HUlib_delCharFromIText(it);
-	else if (ch != KEY_ENTER) 
-    return false; // did not eat key
-
+    if (ch >= ' ' && ch <= '_')
+    {
+        HUlib_addCharToTextLine(&it->l, (char) ch);
+    }
+    else if (ch == KEY_BACKSPACE)
+    {
+        HUlib_delCharFromIText(it);
+    }
+    else if (ch != KEY_ENTER && ch != KEYP_ENTER)
+    {
+        return false; // did not eat key
+    }
     return true; // ate the key
 }
 
@@ -381,7 +386,7 @@ void HUlib_drawIText(hu_itext_t* it)
     hu_textline_t *l = &it->l;
 
     if (!*it->on)
-    return;
+        return;
 
     HUlib_drawTextLine(l, true, msg_chat); // draw the line w/ cursor
 }
@@ -390,7 +395,7 @@ void HUlib_drawIText(hu_itext_t* it)
 void HUlib_eraseIText(hu_itext_t* it)
 {
     if (it->laston && !*it->on)
-    it->l.needsupdate = 4;
+        it->l.needsupdate = 4;
 
     HUlib_eraseTextLine(&it->l);
     it->laston = *it->on;
