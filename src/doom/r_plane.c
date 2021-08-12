@@ -177,8 +177,7 @@ static void R_MapPlane (int y, int x1, int x2)
 
 void R_ClearPlanes (void)
 {
-    int     i;
-    //const angle_t angle = (viewangle-ANG90) >> ANGLETOFINESHIFT; // left to right mapping
+    int i;
 
     // opening / clipping determination
     for (i = 0 ; i < viewwidth ; i++)
@@ -187,7 +186,7 @@ void R_ClearPlanes (void)
         ceilingclip[i] = -1;
     }
 
-    for (int i = 0; i < MAXVISPLANES; i++)  // [JN] new code -- killough
+    for (i = 0; i < MAXVISPLANES; i++)  // [JN] new code -- killough
         for (*freehead = visplanes[i], visplanes[i] = NULL ; *freehead ; )
             freehead = &(*freehead)->next;
 

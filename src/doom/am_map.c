@@ -2141,7 +2141,7 @@ static void AM_drawWalls (int automap_color_set)
                         // secret door
                         else if (lines[i].flags & ML_SECRET)
                         {
-                            AM_drawMline(&l, cheating ? SECRETWALLCOLORS : WALLCOLORS);
+                            AM_drawMline(&l, WALLCOLORS);
                         }
                         // floor level change
                         else if (lines[i].backsector->floorheight != lines[i].frontsector->floorheight) 

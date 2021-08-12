@@ -42,15 +42,6 @@
 #define BASEYCENTER (ORIGHEIGHT/2)
 
 
-typedef struct
-{
-    int x1;
-    int x2;
-    int column;
-    int topclip;
-    int bottomclip;
-} maskdraw_t;
-
 extern boolean chainsaw_attack_swing;
 
 
@@ -1019,11 +1010,8 @@ void R_DrawPSprite (pspdef_t *psp)
         {
             R_ApplyRaiseLowerBob(&psp_sx, true);
         }
-    }
 
-    // [crispy] squat down weapon sprite a bit after hitting the ground
-    if (weapon_bobbing && !vanillaparm)
-    {
+        // [crispy] squat down weapon sprite a bit after hitting the ground
         psp_sy += abs(viewplayer->psp_dy);
     }
 

@@ -549,7 +549,6 @@ fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
 
 void R_StoreWallRange (int start, int stop)
 {
-    angle_t     offsetangle;
     fixed_t     vtop;
     int         lightnum;
     int64_t     dx, dy, dx1, dy1; // [crispy] fix long wall wobble
@@ -558,7 +557,7 @@ void R_StoreWallRange (int start, int stop)
     if (ds_p == drawsegs+maxdrawsegs)
     {
         unsigned newmax = maxdrawsegs ? maxdrawsegs*2 : 128; // killough
-        drawsegs = realloc(drawsegs,newmax*sizeof(*drawsegs));
+        drawsegs = I_Realloc(drawsegs,newmax*sizeof(*drawsegs));
         ds_p = drawsegs+maxdrawsegs;
         maxdrawsegs = newmax;
     }
@@ -582,10 +581,6 @@ void R_StoreWallRange (int start, int stop)
 
     // calculate rw_distance for scale calculation
     rw_normalangle = curline->angle + ANG90;
-    offsetangle = abs(rw_normalangle-rw_angle1);
-
-    if (offsetangle > ANG90)
-    offsetangle = ANG90;
 
     // [crispy] fix long wall wobble
     // thank you very much Linguica, e6y and kb1
@@ -811,14 +806,6 @@ void R_StoreWallRange (int start, int stop)
 
     if (segtextured)
     {
-        offsetangle = rw_normalangle-rw_angle1;
-
-    if (offsetangle > ANG180)
-        offsetangle = -offsetangle;
-
-    if (offsetangle > ANG90)
-        offsetangle = ANG90;
-
     // [crispy] fix long wall wobble
     rw_offset = (fixed_t)((dx*dx1 + dy*dy1) / curline->length);
 
