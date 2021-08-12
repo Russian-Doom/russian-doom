@@ -43,8 +43,8 @@
 #include "d_iwad.h"
 #include "d_name.h"
 #include "i_endoom.h"
+#include "i_controller.h"
 #include "i_input.h"
-#include "i_joystick.h"
 #include "i_sound.h"
 #include "i_system.h"
 #include "i_timer.h"
@@ -1119,7 +1119,7 @@ void D_BindVariables(void)
 
     I_BindInputVariables();
     I_BindVideoVariables();
-    I_BindJoystickVariables();
+    I_BindControllerVariables();
     I_BindSoundVariables();
 
 #ifdef FEATURE_MULTIPLAYER
@@ -1753,7 +1753,7 @@ void D_DoomMain(void)
                        "I_Init: Setting up machine state.\n" :
                        "I_Init: Инициализация состояния компьютера.\n"), 1);
     I_CheckIsScreensaver();
-    I_InitJoystick();
+    I_InitController();
     IncThermo();
 
     tprintf(DEH_String(english_language ?

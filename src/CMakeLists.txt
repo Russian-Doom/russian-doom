@@ -43,9 +43,9 @@ add_library(Game STATIC EXCLUDE_FROM_ALL
     gusconf.c           gusconf.h
     i_cdmus.c           i_cdmus.h
                         icon.h
+    i_controller.c      i_controller.h
     i_endoom.c          i_endoom.h
     i_input.c           i_input.h
-    i_joystick.c        i_joystick.h
                         i_swap.h
     i_midipipe.c        i_midipipe.h
     i_pcsound.c

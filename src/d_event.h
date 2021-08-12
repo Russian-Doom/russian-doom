@@ -83,13 +83,25 @@ typedef enum
     ev_mouse_keyup,
 
     /**
-     * Joystick state.
-     *    data1: Bitfield of buttons currently pressed.
-     *    data2: X axis mouse movement (turn).
-     *    data3: Y axis mouse movement (forward/backward).
-     *    data4: Third axis mouse movement (strafe).
+     * Controller axis movement event.
+     *     data1: Axis move.
+     *     data2: Axis strafe.
+     *     data3: Axis turn.
+     *     data4: Axis vlook.
      */
-    ev_joystick,
+    ev_controller_move,
+
+    /**
+     * Controller key press event.
+     *     data1: Key code of the key that was pressed.
+     */
+    ev_controller_keydown,
+
+    /**
+     * Controller key release event.
+     *     data1: Key code of the key that was released.
+     */
+    ev_controller_keyup,
 
     /**
      * Quit event. Triggered when the user clicks the "close" button

@@ -58,8 +58,8 @@
 #include "m_menu.h"
 #include "p_saveg.h"
 #include "i_endoom.h"
+#include "i_controller.h"
 #include "i_input.h"
-#include "i_joystick.h"
 #include "i_system.h"
 #include "i_timer.h"
 #include "i_video.h"
@@ -645,7 +645,7 @@ void D_BindVariables(void)
 
     I_BindInputVariables();
     I_BindVideoVariables();
-    I_BindJoystickVariables();
+    I_BindControllerVariables();
     I_BindSoundVariables();
 
 #ifdef FEATURE_MULTIPLAYER
@@ -2967,7 +2967,7 @@ void D_DoomMain (void)
                "I_Init: Инициализация состояния компьютера.\n");
     I_CheckIsScreensaver();
     I_InitTimer();
-    I_InitJoystick();
+    I_InitController();
     I_InitSound(true);
 
 #ifdef FEATURE_MULTIPLAYER

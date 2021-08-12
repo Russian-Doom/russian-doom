@@ -212,7 +212,23 @@ static default_t extra_defaults_list[] =
     // If non-zero, joystick input is enabled.
     //
 
-    CONFIG_VARIABLE_INT(use_joystick),
+    CONFIG_VARIABLE_INT(use_controller),
+
+    CONFIG_VARIABLE_INT(controller_invert_move),
+
+    CONFIG_VARIABLE_INT(controller_invert_strafe),
+
+    CONFIG_VARIABLE_INT(controller_invert_turn),
+
+    CONFIG_VARIABLE_INT(controller_invert_vlook),
+
+    CONFIG_VARIABLE_INT(controller_bind_move),
+
+    CONFIG_VARIABLE_INT(controller_bind_strafe),
+
+    CONFIG_VARIABLE_INT(controller_bind_turn),
+
+    CONFIG_VARIABLE_INT(controller_bind_vlook),
 
     //!
     // @game strife
@@ -551,135 +567,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_STRING(player_name),
 
 #endif
-
-    //!
-    // SDL GUID string indicating the joystick to use. An empty string
-    // indicates that no joystick is configured.
-    //
-
-    CONFIG_VARIABLE_STRING(joystick_guid),
-
-    //!
-    // Index of SDL joystick to use; this is only used in the case where
-    // multiple identical joystick devices are connected which have the
-    // same GUID, to distinguish between devices.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_index),
-
-    //!
-    // Joystick axis to use to for horizontal (X) movement.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_x_axis),
-
-    //!
-    // If non-zero, movement on the horizontal joystick axis is inverted.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_x_invert),
-
-    //!
-    // Joystick axis to use to for vertical (Y) movement.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_y_axis),
-
-    //!
-    // If non-zero, movement on the vertical joystick axis is inverted.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_y_invert),
-
-    //!
-    // Joystick axis to use to for strafing movement.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_strafe_axis),
-
-    //!
-    // If non-zero, movement on the joystick axis used for strafing
-    // is inverted.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_strafe_invert),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #0.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button0),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #1.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button1),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #2.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button2),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #3.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button3),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #4.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button4),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #5.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button5),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #6.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button6),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #7.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button7),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #8.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button8),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #9.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button9),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #10.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button10),
 
 #ifdef FEATURE_SOUND
 

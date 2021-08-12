@@ -26,6 +26,7 @@
 #include "doomkeys.h"
 #include "d_main.h"
 #include "deh_main.h"
+#include "i_controller.h"
 #include "i_input.h"
 #include "i_swap.h"
 #include "i_system.h"
@@ -215,6 +216,18 @@ void M_RD_Change_Threshold(Direction_t direction);
 
 // Key bindings (1)
 void M_RD_Draw_Bindings();
+
+// Gamepad
+void DrawGamepadMenu();
+static void M_RD_UseGamepad();
+static void M_RD_BindAxis_Move(Direction_t direction);
+static void M_RD_InvertAxis_Move();
+static void M_RD_BindAxis_Strafe(Direction_t direction);
+static void M_RD_InvertAxis_Strafe();
+static void M_RD_BindAxis_Turn(Direction_t direction);
+static void M_RD_InvertAxis_Turn();
+static void M_RD_BindAxis_VLook(Direction_t direction);
+static void M_RD_InvertAxis_VLook();
 
 // Gameplay
 void M_RD_Draw_Gameplay_1(void);
@@ -685,6 +698,7 @@ static Menu_t Bindings2Menu;
 static Menu_t Bindings3Menu;
 static Menu_t Bindings4Menu;
 static Menu_t Bindings5Menu;
+static Menu_t GamepadMenu;
 static const Menu_t* BindingsMenuPages[] = {&Bindings1Menu, &Bindings2Menu, &Bindings3Menu, &Bindings4Menu, &Bindings5Menu};
 static Menu_t Gameplay1Menu;
 static Menu_t Gameplay2Menu;
@@ -1073,7 +1087,7 @@ static Menu_t SoundSysMenu = {
 static MenuItem_t ControlsItems[] = {
     {ITT_TITLE,   "Controls",               "eghfdktybt",                NULL,                       0}, // Управление
     {ITT_SETMENU, "Customize Controls",     "yfcnhjqrb eghfdktybz",      &Bindings1Menu,             0}, // Настройки управления
-    {ITT_EMPTY,   NULL,                     NULL,                        NULL,                       0}, // Reserved
+    {ITT_SETMENU, "Gamepad Settings",       "yfcnhjqrb utqvgflf",        &GamepadMenu,               0}, // Настройки геймпада
     {ITT_SWITCH,  "Always run:",            "Ht;bv gjcnjzyyjuj ,tuf:",   M_RD_Change_AlwaysRun,      0}, // Режим постоянного бега
     {ITT_TITLE,   "mouse",                  "vsim",                      NULL,                       0}, // Мышь
     {ITT_LRFUNC,  "sensivity",              "crjhjcnm",                  M_RD_Change_Sensitivity,    0}, // Скорость
@@ -1273,6 +1287,40 @@ static Menu_t Bindings5Menu = {
     &BindingsPageDescriptor,
     &ControlsMenu,
     1
+};
+
+// -----------------------------------------------------------------------------
+// Gamepad
+// -----------------------------------------------------------------------------
+
+static MenuItem_t GamepadItems[] = {
+    {ITT_SWITCH, "ENABLE GAMEPAD:",    "BCGJKMPJDFNM UTQVGFL:",    M_RD_UseGamepad,        0}, // Сетевая игра
+    {ITT_TITLE,  "MOVEMENT AXIS",      "JCM LDB;TYBZ",             NULL,                   0},
+    {ITT_LRFUNC, "PHYSICAL AXIS:",     "ABPBXTCRFZ JCM:",          M_RD_BindAxis_Move,     CONTROLLER_AXIS_MOVE},
+    {ITT_SWITCH, "INVERT AXIS:",       "BYDTHNBHJDFNM JCM:",       M_RD_InvertAxis_Move,   CONTROLLER_AXIS_MOVE},
+    {ITT_EMPTY,  NULL,                 NULL,                      NULL,                    0},
+    {ITT_TITLE,  "STRAFE AXIS",        "JCM LDB;TYBZ ,JRJV",       NULL,                   0},
+    {ITT_LRFUNC, "PHYSICAL AXIS:",     "ABPBXTCRFZ JCM:",          M_RD_BindAxis_Strafe,   CONTROLLER_AXIS_STRAFE},
+    {ITT_SWITCH, "INVERT AXIS:",       "BYDTHNBHJDFNM JCM:",       M_RD_InvertAxis_Strafe, CONTROLLER_AXIS_STRAFE},
+    {ITT_EMPTY,  NULL,                 NULL,                      NULL,                    0},
+    {ITT_TITLE,  "TURN AXIS",          "JCM GJDJHJNF",             NULL,                   0},
+    {ITT_LRFUNC, "PHYSICAL AXIS:",     "ABPBXTCRFZ JCM:",          M_RD_BindAxis_Turn,     CONTROLLER_AXIS_TURN},
+    {ITT_SWITCH, "INVERT AXIS:",       "BYDTHNBHJDFNM JCM:",       M_RD_InvertAxis_Turn,   CONTROLLER_AXIS_TURN},
+    {ITT_EMPTY,  NULL,                 NULL,                      NULL,                    0},
+    {ITT_TITLE,  "VERTICAL LOOK AXIS", "JCM DTHNBRFKMYJUJ J,PJHF", NULL,                   0},
+    {ITT_LRFUNC, "PHYSICAL AXIS:",     "ABPBXTCRFZ JCM:",          M_RD_BindAxis_VLook,    CONTROLLER_AXIS_VLOOK},
+    {ITT_SWITCH, "INVERT AXIS:",       "BYDTHNBHJDFNM JCM:",       M_RD_InvertAxis_VLook,  CONTROLLER_AXIS_VLOOK}
+};
+
+static Menu_t GamepadMenu = {
+    36, 36,
+    32,
+    "GAMEPAD SETTINGS", "YFCNHJQRB UTQVGFLF", false, //Настройки геймпада
+    16, GamepadItems, false,
+    DrawGamepadMenu,
+    NULL,
+    &ControlsMenu,
+    0
 };
 
 // -----------------------------------------------------------------------------
@@ -3092,6 +3140,134 @@ void M_RD_Draw_Bindings()
     }
 
     RD_Menu_Draw_Bindings(english_language ? 195 : 210);
+}
+
+// -----------------------------------------------------------------------------
+// DrawGamepadMenu
+// -----------------------------------------------------------------------------
+
+static char* GetAxisName(int axis)
+{
+    switch (axis)
+    {
+        case -1:
+            return "NONE";
+        case 0:
+            return "LEFT X";
+        case 1:
+            return "LEFT Y";
+        case 2:
+            return "RIGHT X";
+        case 3:
+            return "RIGHT Y";
+        default:
+            return "?";
+    }
+}
+
+void DrawGamepadMenu()
+{
+    // [JN] Erase the entire screen to a tiled background.
+    inhelpscreens = true;
+    V_FillFlat ("FLOOR4_8");
+
+    if (english_language)
+    {
+        RD_M_DrawTextSmallENG(useController ? "ON" : "OFF", 153 + wide_delta, 32,
+                              useController ? CR_GREEN : CR_DARKRED);
+
+        RD_M_DrawTextSmallENG(invertAxis[CONTROLLER_AXIS_MOVE] ? "ON" : "OFF", 120 + wide_delta, 62,
+                              invertAxis[CONTROLLER_AXIS_MOVE] ? CR_GREEN : CR_DARKRED);
+
+        RD_M_DrawTextSmallENG(invertAxis[CONTROLLER_AXIS_STRAFE] ? "ON" : "OFF", 120 + wide_delta, 102,
+                              invertAxis[CONTROLLER_AXIS_STRAFE] ? CR_GREEN : CR_DARKRED);
+
+        RD_M_DrawTextSmallENG(invertAxis[CONTROLLER_AXIS_TURN] ? "ON" : "OFF", 120 + wide_delta, 142,
+                              invertAxis[CONTROLLER_AXIS_TURN] ? CR_GREEN : CR_DARKRED);
+
+        RD_M_DrawTextSmallENG(invertAxis[CONTROLLER_AXIS_VLOOK] ? "ON" : "OFF", 120 + wide_delta, 182,
+                              invertAxis[CONTROLLER_AXIS_VLOOK] ? CR_GREEN : CR_DARKRED);
+
+        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_MOVE]), 135 + wide_delta, 52, CR_NONE);
+
+        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_STRAFE]), 135 + wide_delta, 92, CR_NONE);
+
+        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_TURN]), 135 + wide_delta, 132, CR_NONE);
+
+        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_VLOOK]), 135 + wide_delta, 172, CR_NONE);
+    }
+    else
+    {
+        RD_M_DrawTextSmallRUS(useController ? "DRK" : "DSRK", 203 + wide_delta, 32,
+                              useController ? CR_GREEN : CR_DARKRED);
+
+        RD_M_DrawTextSmallRUS(invertAxis[CONTROLLER_AXIS_MOVE] ? "DRK" : "DSRK", 175 + wide_delta, 62,
+                              invertAxis[CONTROLLER_AXIS_MOVE] ? CR_GREEN : CR_DARKRED);
+
+        RD_M_DrawTextSmallRUS(invertAxis[CONTROLLER_AXIS_STRAFE] ? "DRK" : "DSRK", 175 + wide_delta, 102,
+                              invertAxis[CONTROLLER_AXIS_STRAFE] ? CR_GREEN : CR_DARKRED);
+
+        RD_M_DrawTextSmallRUS(invertAxis[CONTROLLER_AXIS_TURN] ? "DRK" : "DSRK", 175 + wide_delta, 142,
+                              invertAxis[CONTROLLER_AXIS_TURN] ? CR_GREEN : CR_DARKRED);
+
+        RD_M_DrawTextSmallRUS(invertAxis[CONTROLLER_AXIS_VLOOK] ? "DRK" : "DSRK", 175 + wide_delta, 182,
+                              invertAxis[CONTROLLER_AXIS_VLOOK] ? CR_GREEN : CR_DARKRED);
+
+        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_MOVE]), 153 + wide_delta, 52, CR_NONE);
+
+        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_STRAFE]), 153 + wide_delta, 92, CR_NONE);
+
+        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_TURN]), 153 + wide_delta, 132, CR_NONE);
+
+        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_VLOOK]), 153 + wide_delta, 172, CR_NONE);
+    }
+}
+
+static void M_RD_UseGamepad()
+{
+    useController ^= 1;
+    I_ShutdownController();
+    I_InitController();
+}
+
+static void M_RD_BindAxis_Move(Direction_t direction)
+{
+    RD_Menu_SpinInt(&bindAxis[CONTROLLER_AXIS_MOVE], CONTROLLER_AXIS_NONE, CONTROLLER_AXIS_VLOOK, direction);
+}
+
+static void M_RD_InvertAxis_Move()
+{
+    invertAxis[CONTROLLER_AXIS_MOVE] ^= 1;
+}
+
+static void M_RD_BindAxis_Turn(Direction_t direction)
+{
+    RD_Menu_SpinInt(&bindAxis[CONTROLLER_AXIS_TURN], CONTROLLER_AXIS_NONE, CONTROLLER_AXIS_VLOOK, direction);
+}
+
+static void M_RD_InvertAxis_Turn()
+{
+    invertAxis[CONTROLLER_AXIS_TURN] ^= 1;
+}
+
+static void M_RD_BindAxis_Strafe(Direction_t direction)
+{
+    RD_Menu_SpinInt(&bindAxis[CONTROLLER_AXIS_STRAFE], CONTROLLER_AXIS_NONE, CONTROLLER_AXIS_VLOOK, direction);
+}
+
+static void M_RD_InvertAxis_Strafe()
+{
+    invertAxis[CONTROLLER_AXIS_STRAFE] ^= 1;
+}
+
+static void M_RD_BindAxis_VLook(Direction_t direction)
+{
+    RD_Menu_SpinInt(&bindAxis[CONTROLLER_AXIS_VLOOK], CONTROLLER_AXIS_NONE, CONTROLLER_AXIS_VLOOK, direction);
+}
+
+static void M_RD_InvertAxis_VLook()
+{
+    invertAxis[CONTROLLER_AXIS_VLOOK] ^= 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -6160,7 +6336,8 @@ boolean M_Responder (event_t* ev)
     }
 
     if(ev->type != ev_keydown &&
-       ev->type != ev_mouse_keydown)
+       ev->type != ev_mouse_keydown &&
+       ev->type != ev_controller_keydown)
         return false;
 
     if(isBinding)

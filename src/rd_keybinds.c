@@ -19,6 +19,7 @@
 #include "rd_keybinds.h"
 #include "d_name.h"
 #include "doomkeys.h"
+#include "i_controller.h"
 #include "i_input.h"
 #include "i_video.h"
 #include "jn.h"
@@ -28,7 +29,8 @@
 typedef enum
 {
     keyboard,
-    mouse
+    mouse,
+    controller
 } device_t;
 
 typedef struct bind_descriptor_s
@@ -56,6 +58,9 @@ static device_t getEventDevice(event_t* event)
         case ev_mouse_keydown:
         case ev_mouse_keyup:
             return mouse;
+        case ev_controller_keydown:
+        case ev_controller_keyup:
+            return controller;
         default:
             return -1;
     }
@@ -72,7 +77,9 @@ void BK_ProcessKey(event_t* event)
         {
             if(bind->device == device && bind->key == event->data1)
             {
-                keyState[i] = event->type == ev_keydown || event->type == ev_mouse_keydown;
+                keyState[i] = event->type == ev_keydown ||
+                        event->type == ev_mouse_keydown ||
+                        event->type == ev_controller_keydown;
                 return;
             }
             bind = bind->next;
@@ -88,7 +95,8 @@ boolean BK_isKeyPressed(bound_key_t key)
 boolean BK_isKeyDown(event_t* event, bound_key_t key)
 {
     if(event->type == ev_keydown
-    || event->type == ev_mouse_keydown)
+    || event->type == ev_mouse_keydown
+    || event->type == ev_controller_keydown)
     {
         device_t device = getEventDevice(event);
         bind_descriptor_t* bind = bind_descriptor[key];
@@ -105,7 +113,8 @@ boolean BK_isKeyDown(event_t* event, bound_key_t key)
 boolean BK_isKeyUp(event_t* event, bound_key_t key)
 {
     if(event->type == ev_keyup
-    || event->type == ev_mouse_keyup)
+    || event->type == ev_mouse_keyup
+    || event->type == ev_controller_keyup)
     {
         device_t device = getEventDevice(event);
         bind_descriptor_t* bind = bind_descriptor[key];
@@ -282,6 +291,37 @@ static char* getMouseKeyName(int i)
     }
 }
 
+static char* getControllerKeyName(int i)
+{
+    switch (i)
+    {
+        case CONTROLLER_A:              return "PAD_A";
+        case CONTROLLER_B:              return "PAD_B";
+        case CONTROLLER_X:              return "PAD_X";
+        case CONTROLLER_Y:              return "PAD_Y";
+        case CONTROLLER_BACK:           return "PAD_BACK";
+        case CONTROLLER_GUIDE:          return "PAD_GUIDE";
+        case CONTROLLER_START:          return "PAD_START";
+        case CONTROLLER_LEFT_STICK:     return "PAD_L3";
+        case CONTROLLER_RIGHT_STICK:    return "PAD_R3";
+        case CONTROLLER_LEFT_SHOULDER:  return "PAD_L1";
+        case CONTROLLER_RIGHT_SHOULDER: return "PAD_R1";
+        case CONTROLLER_DPAD_UP:        return "DPAD_UP";
+        case CONTROLLER_DPAD_DOWN:      return "DPAD_DOWN";
+        case CONTROLLER_DPAD_LEFT:      return "DPAD_LEFT";
+        case CONTROLLER_DPAD_RIGHT:     return "DPAD_RIGHT";
+        case CONTROLLER_MISC1:          return "PAD_MISC";
+        case CONTROLLER_PADDLE1:        return "PADDLE 1";
+        case CONTROLLER_PADDLE2:        return "PADDLE 2";
+        case CONTROLLER_PADDLE3:        return "PADDLE 3";
+        case CONTROLLER_PADDLE4:        return "PADDLE 4";
+        case CONTROLLER_TOUCHPAD:       return "PAD_TOUCH";
+        case CONTROLLER_LEFT_TRIGGER:   return "PAD_L2";
+        case CONTROLLER_RIGHT_TRIGGER:  return "PAD_R2";
+        default:                        return "?"; // [JN] Unknown key
+    }
+}
+
 static char* BK_getBoundKeysString(bound_key_t key)
 {
     static char string[50];
@@ -302,6 +342,9 @@ static char* BK_getBoundKeysString(bound_key_t key)
                 break;
             case mouse:
                 M_StringConcat(string, getMouseKeyName(bind->key), 50);
+                break;
+            case controller:
+                M_StringConcat(string, getControllerKeyName(bind->key), 50);
                 break;
             default:
                 break;
@@ -470,6 +513,21 @@ void BK_AddBindingsToSystemKeys()
     AddBind(bk_menu_select,    mouse, MOUSE_LEFT);
     AddBind(bk_menu_page_next, mouse, MOUSE_4);
     AddBind(bk_menu_page_prev, mouse, MOUSE_5);
+
+    // Controller
+    AddBind(bk_left,  controller, CONTROLLER_DPAD_LEFT);
+    AddBind(bk_right, controller, CONTROLLER_DPAD_RIGHT);
+    AddBind(bk_up,    controller, CONTROLLER_DPAD_UP);
+    AddBind(bk_down,  controller, CONTROLLER_DPAD_DOWN);
+
+    AddBind(bk_menu_activate,  controller, CONTROLLER_START);
+    AddBind(bk_menu_back,      controller, CONTROLLER_B);
+    AddBind(bk_menu_select,    controller, CONTROLLER_A);
+    AddBind(bk_menu_page_next, controller, CONTROLLER_RIGHT_SHOULDER);
+    AddBind(bk_menu_page_prev, controller, CONTROLLER_LEFT_SHOULDER);
+
+    AddBind(bk_confirm, controller, CONTROLLER_A);
+    AddBind(bk_abort,   controller, CONTROLLER_B);
 };
 
 void BK_ApplyDefaultBindings()
@@ -595,6 +653,9 @@ void BK_ApplyDefaultBindings()
     AddBind(bk_weapon_next, mouse, MOUSE_SCROLL_DOWN);
     AddBind(bk_forward,     mouse, MOUSE_MIDDLE);
     AddBind(bk_strafe,      mouse, MOUSE_RIGHT);
+
+    // Controller
+    AddBind(bk_look_center, controller, CONTROLLER_RIGHT_STICK);
 }
 
 void BK_LoadBindings(void* file)
@@ -638,6 +699,9 @@ void BK_LoadBindings(void* file)
                 case 'm':
                     device = mouse;
                     break;
+                case 'c':
+                    device = controller;
+                    break;
                 default:
                     device = -1;
             }
@@ -673,9 +737,11 @@ void BK_SaveBindings(void* file)
                     case mouse:
                         deviceChar = 'm';
                         break;
+                    case controller:
+                        deviceChar = 'c';
+                        break;
                     default:
                         deviceChar = ' ';
-                        break;
                 }
                 fprintf(file, "%c_%d ", deviceChar, bind->key);
                 bind = bind->next;

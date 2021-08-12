@@ -191,6 +191,7 @@ int             mousey;
 static int      joyxmove;
 static int      joyymove;
 static int      joystrafemove;
+static int      joyylook;
  
 static int      savegameslot; 
 static char     savedescription[32]; 
@@ -428,6 +429,16 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     ||  joystrafemove > 0)
     {
         side += sidemove[speed];
+    }
+
+    // Joystick Look
+    if (joyylook > 0)
+    {
+        look = 1;
+    }
+    if (joyylook < 0)
+    {
+        look = -1;
     }
 
     // buttons
@@ -761,8 +772,8 @@ boolean G_Responder (event_t *ev)
     if (gameaction == ga_nothing && !singledemo && (demoplayback || gamestate == GS_DEMOSCREEN)) 
     { 
         if (ev->type == ev_keydown
-        || (ev->type == ev_mouse_keydown)
-        || (ev->type == ev_joystick && ev->data1))
+        ||  ev->type == ev_mouse_keydown
+        ||  ev->type == ev_controller_keydown)
         { 
             RD_Menu_ActivateMenu();
             return true; 
@@ -817,11 +828,13 @@ boolean G_Responder (event_t *ev)
     { 
         case ev_keydown:
         case ev_mouse_keydown:
+        case ev_controller_keydown:
             BK_ProcessKey(ev);
             return true;    // eat key down events 
 
         case ev_keyup:
         case ev_mouse_keyup:
+        case ev_controller_keyup:
             BK_ProcessKey(ev);
             return false;   // always let key up events filter down
 
@@ -830,13 +843,12 @@ boolean G_Responder (event_t *ev)
             mousey = ev->data3*(mouseSensitivity+5)/10; 
             return true;    // eat events 
 
-        // [Dasperal] Disable joystick for now
-        //case ev_joystick:
-        //    SetJoyButtons(ev->data1);
-        //    joyxmove = ev->data2;
-        //    joyymove = ev->data3;
-        //    joystrafemove = ev->data4;
-        //    return true;    // eat events
+        case ev_controller_move:
+            joyymove = ev->data1;
+            joystrafemove = ev->data2;
+            joyxmove = ev->data3;
+            joyylook = ev->data4;
+            return true;    // eat events
 
         default: 
             break; 

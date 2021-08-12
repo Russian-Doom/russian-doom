@@ -185,6 +185,7 @@ int mousex, mousey;             // mouse values are used once
 
 int joyxmove, joyymove;         // joystick values are repeated
 int joystrafemove;
+int joyylook;
 int alwaysRun;              // is always run enabled
 
 int savegameslot;
@@ -408,11 +409,11 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         side -= sidemove[speed];
 
     // Look up/down/center keys
-    if (BK_isKeyPressed(bk_look_up))
+    if (BK_isKeyPressed(bk_look_up) || joyylook > 0)
     {
         look = lspeed;
     }
-    if (BK_isKeyPressed(bk_look_down))
+    if (BK_isKeyPressed(bk_look_down) || joyylook < 0)
     {
         look = -lspeed;
     }
@@ -897,11 +898,13 @@ boolean G_Responder(event_t * ev)
     {
         case ev_keydown:
         case ev_mouse_keydown:
+        case ev_controller_keydown:
             BK_ProcessKey(ev);
             return true;    // eat key down events
 
         case ev_keyup:
         case ev_mouse_keyup:
+        case ev_controller_keyup:
             BK_ProcessKey(ev);
             return false;   // always let key up events filter down
 
@@ -910,13 +913,12 @@ boolean G_Responder(event_t * ev)
             mousey = ev->data3 * (mouseSensitivity + 5) / 10;
             return true;      // eat events
 
-      // [Dasperal] Disable joystick for now
-      //case ev_joystick:
-      //    SetJoyButtons(ev->data1);
-      //    joyxmove = ev->data2;
-      //    joyymove = ev->data3;
-      //    joystrafemove = ev->data4;
-      //    return (true);      // eat events
+      case ev_controller_move:
+          joyymove = ev->data1;
+          joystrafemove = ev->data2;
+          joyxmove = ev->data3;
+          joyylook = ev->data4;
+          return (true);      // eat events
 
         default:
             break;
