@@ -426,7 +426,7 @@ void ST_Stop(void);
 
 void ST_refreshBackground(void)
 {
-    if (screenblocks >= 11 && (!automapactive || (automapactive && automap_overlay)))
+    if (screenblocks >= 11 && (!automapactive || automap_overlay))
     return;    
 
     if (st_statusbaron)
@@ -1027,8 +1027,6 @@ static int faceindex;
 void ST_updateFaceWidget(void)
 {
     int         i;
-    angle_t     badguyangle;
-    angle_t     diffang;
     static int  lastattackdown = -1;
     static int  priority = 0;
     boolean     doevilgrin;
@@ -1113,6 +1111,9 @@ void ST_updateFaceWidget(void)
     { 	    // being attacked
         if (plyr->damagecount && plyr->attacker && plyr->attacker != plyr->mo)
         {
+            angle_t badguyangle = R_PointToAngle2(plyr->mo->x, plyr->mo->y, plyr->attacker->x,plyr->attacker->y);
+            angle_t diffang;
+
             // [JN] Исправление бага с отсутствующим Ouch Face.
             // По методу Brad Harding (Doom Retro).
 
@@ -1128,9 +1129,6 @@ void ST_updateFaceWidget(void)
                 }
                 else
                 {
-                    angle_t badguyangle = R_PointToAngle2(plyr->mo->x, plyr->mo->y, plyr->attacker->x,plyr->attacker->y);
-                    angle_t diffang;
-
                     if (badguyangle > plyr->mo->angle)
                     {
                         // whether right or left
@@ -1175,8 +1173,6 @@ void ST_updateFaceWidget(void)
                 }
                 else
                 {
-                    badguyangle = R_PointToAngle2(plyr->mo->x, plyr->mo->y, plyr->attacker->x, plyr->attacker->y);
-
                     if (badguyangle > plyr->mo->angle)
                     {
                         // whether right or left
@@ -1433,13 +1429,6 @@ void ST_updateWidgets(void)
     {   
         st_artifactson = !deathmatch && st_statusbaron; 
         st_artifactscount = 0;
-
-        // [JN] Overflow guard, just for reliability
-        if (st_artifactscount < 0)
-            st_artifactscount = 0;
-        if (st_artifactscount > 99)
-            st_artifactscount = 99;
-
         st_artifactscount += artifactcount;
     }
 
@@ -1687,7 +1676,7 @@ void ST_drawWidgets(boolean refresh)
 
     // [crispy] draw "special widgets" in the Crispy HUD
     if ((screenblocks >= 11 && screenblocks <= 13)
-    && (!automapactive || (automapactive && automap_overlay)))
+    && (!automapactive || automap_overlay))
     {
         // [crispy] draw berserk pack instead of no ammo if appropriate
         if (plyr->readyweapon == wp_fist && plyr->powers[pw_strength])
@@ -1722,7 +1711,7 @@ void ST_drawWidgets(boolean refresh)
 
     // [JN] Signed Crispy HUD: no STBAR backbround, with player's face/background
     // Account player's color in network game, use only gray color in single player.
-    if (screenblocks == 11 && (!automapactive || (automapactive && automap_overlay)))
+    if (screenblocks == 11 && (!automapactive || automap_overlay))
     {
         // [JN] TODO - using different PU_CACHE backgrounds for netgame.
         /*
@@ -1741,7 +1730,7 @@ void ST_drawWidgets(boolean refresh)
     // [JN] Signed Crispy HUD: no STBAR backbround, without player's face/background
     if (screenblocks == 11 || screenblocks == 12)
     {
-        if (!automapactive || (automapactive && automap_overlay)) // [JN] Don't draw signs in automap
+        if (!automapactive || automap_overlay) // [JN] Don't draw signs in automap
         {
             // [JN] Don't draw ammo for fist and chainsaw
             if (weaponinfo[plyr->readyweapon].ammo != am_noammo)
@@ -2409,7 +2398,7 @@ void ST_drawWidgetsJaguar (boolean refresh)
 
     // [crispy] draw "special widgets" in the Crispy HUD
     if ((screenblocks == 11 || screenblocks == 12 || screenblocks == 13) 
-    && (!automapactive || (automapactive && automap_overlay)))
+    && (!automapactive || automap_overlay))
     {
         // [crispy] draw berserk pack instead of no ammo if appropriate
         if (plyr->readyweapon == wp_fist && plyr->powers[pw_strength])
@@ -2431,7 +2420,7 @@ void ST_drawWidgetsJaguar (boolean refresh)
     // Signed Crispy HUD: no STBAR backbround, without player's 
     // face/background. Also don't draw signs in automap.
     if ((screenblocks == 11 || screenblocks == 12) 
-    && (!automapactive || (automapactive && automap_overlay)))
+    && (!automapactive || automap_overlay))
     {
         // Don't draw ammo for fist and chainsaw
         if (plyr->readyweapon != wp_fist && plyr->readyweapon != wp_chainsaw)
@@ -2456,7 +2445,7 @@ void ST_drawWidgetsJaguar (boolean refresh)
                                            || screenblocks == 13);
 
     // Signed Crispy HUD: no STBAR backbround, with player's face/background
-    if (screenblocks == 11 && (!automapactive || (automapactive && automap_overlay)))
+    if (screenblocks == 11 && (!automapactive || automap_overlay))
     {
         V_DrawPatch(0 + wide_delta, 0, W_CacheLumpName(DEH_String("STPBG"), PU_CACHE));
     }
