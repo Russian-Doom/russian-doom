@@ -44,9 +44,9 @@ deh_str.c            deh_str.h             \
 gusconf.c            gusconf.h             \
 i_cdmus.c            i_cdmus.h             \
                      icon.h                \
+i_controller.c       i_controller.h        \
 i_endoom.c           i_endoom.h            \
 i_input.c            i_input.h             \
-i_joystick.c         i_joystick.h          \
                      i_swap.h              \
 i_midipipe.c         i_midipipe.h          \
 i_pcsound.c                                \
@@ -62,7 +62,6 @@ mus2mid.c            mus2mid.h             \
 m_bbox.c             m_bbox.h              \
 m_cheat.c            m_cheat.h             \
 m_config.c           m_config.h            \
-m_controls.c         m_controls.h          \
 m_fixed.c            m_fixed.h             \
 net_client.c         net_client.h          \
 net_common.c         net_common.h          \
@@ -166,7 +165,6 @@ d_iwad.c             d_iwad.h              \
                      icon.h                \
 i_timer.c            i_timer.h             \
 m_config.c           m_config.h            \
-m_controls.c         m_controls.h          \
 net_io.c             net_io.h              \
 net_packet.c         net_packet.h          \
 net_sdl.c            net_sdl.h             \
@@ -185,6 +183,7 @@ else
 @PROGRAM_PREFIX@doom_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c
 endif
 
+@PROGRAM_PREFIX@doom_setup_CFLAGS = -D___RD_TARGET_SETUP___
 @PROGRAM_PREFIX@doom_setup_LDADD = $(SETUP_LIBS)
 
 if HAVE_WINDRES
@@ -193,6 +192,7 @@ else
 @PROGRAM_PREFIX@heretic_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c
 endif
 
+@PROGRAM_PREFIX@heretic_setup_CFLAGS = -D___RD_TARGET_SETUP___
 @PROGRAM_PREFIX@heretic_setup_LDADD = $(SETUP_LIBS)
 
 if HAVE_WINDRES
@@ -201,6 +201,7 @@ else
 @PROGRAM_PREFIX@hexen_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c
 endif
 
+@PROGRAM_PREFIX@hexen_setup_CFLAGS = -D___RD_TARGET_SETUP___
 @PROGRAM_PREFIX@hexen_setup_LDADD = $(SETUP_LIBS)
 
 # [Dasperal] Disable "strife" from the compilation
@@ -210,6 +211,7 @@ endif
 # @PROGRAM_PREFIX@strife_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c
 # endif
 
+# @PROGRAM_PREFIX@strife_setup_CFLAGS = -D___RD_TARGET_SETUP___
 # @PROGRAM_PREFIX@strife_setup_LDADD = $(SETUP_LIBS)
 
 .rc.o:

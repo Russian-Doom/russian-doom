@@ -43,29 +43,22 @@
 #include "d_iwad.h"
 #include "d_name.h"
 #include "i_endoom.h"
+#include "i_controller.h"
 #include "i_input.h"
-#include "i_joystick.h"
 #include "i_sound.h"
 #include "i_system.h"
 #include "i_timer.h"
 #include "i_video.h"
 #include "m_argv.h"
 #include "m_config.h"
-#include "m_controls.h"
 #include "m_misc.h"
 #include "p_local.h"
-#include "r_local.h"
+#include "rd_keybinds.h"
 #include "s_sound.h"
 #include "w_main.h"
 #include "v_video.h"
 #include "w_merge.h"
 #include "jn.h"
-
-
-#define CT_KEY_GREEN    'g'
-#define CT_KEY_YELLOW   'y'
-#define CT_KEY_RED      'r'
-#define CT_KEY_BLUE     'b'
 
 #define STARTUP_WINDOW_X 17
 #define STARTUP_WINDOW_Y 7
@@ -167,6 +160,9 @@ int snd_MusicVolume = 10;
 int snd_Channels = 8;       // Default SFX channels
 int snd_Channels_RD;        // For hot-swapping
 int snd_monomode = 0;
+
+// Controls
+extern int alwaysRun;
 
 // Gameplay: Graphical
 int brightmaps = 1;
@@ -1119,25 +1115,12 @@ void D_BindVariables(void)
 {
     int i;
 
-    M_ApplyPlatformDefaults();
+    BK_AddBindingsToSystemKeys();
 
     I_BindInputVariables();
     I_BindVideoVariables();
-    I_BindJoystickVariables();
+    I_BindControllerVariables();
     I_BindSoundVariables();
-
-    M_BindBaseControls();
-    M_BindHereticControls();
-    M_BindWeaponControls();
-    M_BindChatControls(MAXPLAYERS);
-
-    key_multi_msgplayer[0] = CT_KEY_GREEN;
-    key_multi_msgplayer[1] = CT_KEY_YELLOW;
-    key_multi_msgplayer[2] = CT_KEY_RED;
-    key_multi_msgplayer[3] = CT_KEY_BLUE;
-
-    M_BindMenuControls();
-    M_BindMapControls();
 
 #ifdef FEATURE_MULTIPLAYER
     NET_BindVariables();
@@ -1202,6 +1185,7 @@ void D_BindVariables(void)
     M_BindIntVariable("snd_channels",           &snd_Channels);
 
     // Controls
+    M_BindIntVariable("always_run",             &alwaysRun);
     M_BindIntVariable("mlook",                  &mlook);
     M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
 
@@ -1769,7 +1753,7 @@ void D_DoomMain(void)
                        "I_Init: Setting up machine state.\n" :
                        "I_Init: Инициализация состояния компьютера.\n"), 1);
     I_CheckIsScreensaver();
-    I_InitJoystick();
+    I_InitController();
     IncThermo();
 
     tprintf(DEH_String(english_language ?

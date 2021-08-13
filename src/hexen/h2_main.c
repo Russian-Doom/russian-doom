@@ -41,33 +41,19 @@
 #include "d_name.h"
 #include "m_misc.h"
 #include "s_sound.h"
+#include "i_controller.h"
 #include "i_input.h"
-#include "i_joystick.h"
 #include "i_system.h"
 #include "i_timer.h"
 #include "m_argv.h"
 #include "m_config.h"
-#include "m_controls.h"
 #include "net_client.h"
 #include "p_local.h"
 #include "v_video.h"
 #include "w_main.h"
 #include "w_merge.h"
-#include "r_bmaps.h"
+#include "rd_keybinds.h"
 #include "rd_rushexen.h"
-
-// MACROS ------------------------------------------------------------------
-
-#define MAXWADFILES 20
-#define CT_KEY_BLUE         'b'
-#define CT_KEY_RED          'r'
-#define CT_KEY_YELLOW       'y'
-#define CT_KEY_GREEN        'g'
-#define CT_KEY_PLAYER5      'j'     // Jade
-#define CT_KEY_PLAYER6      'w'     // White
-#define CT_KEY_PLAYER7      'h'     // Hazel
-#define CT_KEY_PLAYER8      'p'     // Purple
-#define CT_KEY_ALL          't'
 
 // EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
 
@@ -100,6 +86,7 @@ static void WarpCheck(void);
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
 
 extern boolean askforquit;
+extern int alwaysRun;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
@@ -255,29 +242,12 @@ void D_BindVariables(void)
 {
     int i;
 
-    M_ApplyPlatformDefaults();
+    BK_AddBindingsToSystemKeys();
 
     I_BindInputVariables();
     I_BindVideoVariables();
-    I_BindJoystickVariables();
+    I_BindControllerVariables();
     I_BindSoundVariables();
-
-    M_BindBaseControls();
-    M_BindMapControls();
-    M_BindMenuControls();
-    M_BindWeaponControls();
-    M_BindChatControls(MAXPLAYERS);
-    M_BindHereticControls();
-    M_BindHexenControls();
-
-    key_multi_msgplayer[0] = CT_KEY_BLUE;
-    key_multi_msgplayer[1] = CT_KEY_RED;
-    key_multi_msgplayer[2] = CT_KEY_YELLOW;
-    key_multi_msgplayer[3] = CT_KEY_GREEN;
-    key_multi_msgplayer[4] = CT_KEY_PLAYER5;
-    key_multi_msgplayer[5] = CT_KEY_PLAYER6;
-    key_multi_msgplayer[6] = CT_KEY_PLAYER7;
-    key_multi_msgplayer[7] = CT_KEY_PLAYER8;
 
 #ifdef FEATURE_MULTIPLAYER
     NET_BindVariables();
@@ -292,6 +262,7 @@ void D_BindVariables(void)
     M_BindIntVariable("messageson",             &messageson);
     M_BindIntVariable("screenblocks",           &screenblocks);
     M_BindIntVariable("snd_channels",           &snd_Channels);
+    M_BindIntVariable("always_run",             &alwaysRun);
     M_BindIntVariable("mlook",                  &mlook);
     M_BindIntVariable("level_brightness",       &level_brightness);
     M_BindIntVariable("local_time",             &local_time);
@@ -688,7 +659,7 @@ void D_DoomMain(void)
                "I_Init: Инициализация состояния компьютера.\n");
     I_CheckIsScreensaver();
     I_InitTimer();
-    I_InitJoystick();
+    I_InitController();
     I_InitSound(false);
 
 #ifdef FEATURE_MULTIPLAYER

@@ -37,8 +37,8 @@
 #include "d_loop.h"
 #include "deh_str.h"
 #include "doomtype.h"
+#include "i_controller.h"
 #include "i_input.h"
-#include "i_joystick.h"
 #include "i_system.h"
 #include "i_timer.h"
 #include "i_video.h"
@@ -483,6 +483,7 @@ void I_GetEvent(void)
 {
     extern void I_HandleKeyboardEvent(SDL_Event *sdlevent);
     extern void I_HandleMouseEvent(SDL_Event *sdlevent);
+    extern void I_HandleControllerEvent(SDL_Event *sdlevent);
     SDL_Event sdlevent;
 
     SDL_PumpEvents();
@@ -500,7 +501,7 @@ void I_GetEvent(void)
                 // deliberate fall-though
 
             case SDL_KEYUP:
-		I_HandleKeyboardEvent(&sdlevent);
+		        I_HandleKeyboardEvent(&sdlevent);
                 break;
 
             case SDL_MOUSEBUTTONDOWN:
@@ -510,6 +511,12 @@ void I_GetEvent(void)
                 {
                     I_HandleMouseEvent(&sdlevent);
                 }
+                break;
+
+            case SDL_CONTROLLERBUTTONDOWN:
+            case SDL_CONTROLLERBUTTONUP:
+            case SDL_CONTROLLERAXISMOTION:
+                I_HandleControllerEvent(&sdlevent);
                 break;
 
             case SDL_QUIT:
@@ -555,7 +562,7 @@ void I_StartTic (void)
         I_ReadMouse();
     }
 
-    I_UpdateJoystick();
+    I_UpdateController();
 }
 
 

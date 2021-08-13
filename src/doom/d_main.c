@@ -54,13 +54,12 @@
 #include "f_wipe.h"
 #include "m_argv.h"
 #include "m_config.h"
-#include "m_controls.h"
 #include "m_misc.h"
 #include "m_menu.h"
 #include "p_saveg.h"
 #include "i_endoom.h"
+#include "i_controller.h"
 #include "i_input.h"
-#include "i_joystick.h"
 #include "i_system.h"
 #include "i_timer.h"
 #include "i_video.h"
@@ -73,6 +72,7 @@
 #include "net_dedicated.h"
 #include "net_query.h"
 #include "p_setup.h"
+#include "rd_keybinds.h"
 #include "rd_text.h"
 #include "r_local.h"
 #include "d_main.h"
@@ -158,6 +158,7 @@ int snd_channels = 32;
 int snd_monomode = 0;
 
 // Controls
+extern int alwaysRun;
 int mouseSensitivity = 5;
 
 // Selective game
@@ -640,23 +641,12 @@ void D_BindVariables(void)
 {
     int i;
 
-    M_ApplyPlatformDefaults();
+    BK_AddBindingsToSystemKeys();
 
     I_BindInputVariables();
     I_BindVideoVariables();
-    I_BindJoystickVariables();
+    I_BindControllerVariables();
     I_BindSoundVariables();
-
-    M_BindBaseControls();
-    M_BindWeaponControls();
-    M_BindMapControls();
-    M_BindMenuControls();
-    M_BindChatControls(MAXPLAYERS);
-
-    key_multi_msgplayer[0] = HUSTR_KEYGREEN;
-    key_multi_msgplayer[1] = HUSTR_KEYINDIGO;
-    key_multi_msgplayer[2] = HUSTR_KEYBROWN;
-    key_multi_msgplayer[3] = HUSTR_KEYRED;
 
 #ifdef FEATURE_MULTIPLAYER
     NET_BindVariables();
@@ -733,6 +723,7 @@ void D_BindVariables(void)
     M_BindIntVariable("snd_monomode",           &snd_monomode);
 
     // Controls
+    M_BindIntVariable("always_run",             &alwaysRun);
     M_BindIntVariable("mlook",                  &mlook);
     M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
 
@@ -2976,7 +2967,7 @@ void D_DoomMain (void)
                "I_Init: Инициализация состояния компьютера.\n");
     I_CheckIsScreensaver();
     I_InitTimer();
-    I_InitJoystick();
+    I_InitController();
     I_InitSound(true);
 
 #ifdef FEATURE_MULTIPLAYER

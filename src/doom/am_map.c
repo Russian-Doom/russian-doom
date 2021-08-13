@@ -18,29 +18,21 @@
 // DESCRIPTION:  the automap code
 //
 
-
-#include <stdio.h>
 #include "deh_main.h"
 #include "z_zone.h"
-#include "doomkeys.h"
 #include "doomdef.h"
 #include "st_stuff.h"
 #include "p_local.h"
 #include "w_wad.h"
 #include "m_cheat.h"
-#include "m_controls.h"
 #include "m_misc.h"
-#include "i_system.h"
-#include "i_timer.h"
 #include "v_trans.h"
 #include "v_video.h"
 #include "doomstat.h"
-#include "r_state.h"
+#include "rd_keybinds.h"
 #include "rd_lang.h"
 #include "am_map.h"
-#include "st_stuff.h"
 #include "jn.h"
-
 
 // For use if I do walls with outsides/insides
 #define REDS             176
@@ -738,47 +730,24 @@ boolean AM_Responder (event_t *ev)
 {
     int rc;
     static int bigstate=0;
-    static int joywait = 0;
     static char buffer[20];
-    int key;
 
     rc = false;
 
-    if (ev->type == ev_joystick && joybautomap >= 0
-    && (ev->data1 & (1 << joybautomap)) != 0 && joywait < I_GetTime())
-    {
-        joywait = I_GetTime() + 5;
-
-        if (!automapactive)
-        {
-            AM_Start ();
-            viewactive = false;
-        }
-        else
-        {
-            bigstate = 0;
-            viewactive = true;
-            AM_Stop ();
-        }
-
-        return true;
-    }
-
     if (!automapactive)
     {
-        if (ev->type == ev_keydown && ev->data1 == key_map_toggle)
+        if (BK_isKeyDown(ev, bk_map_toggle))
         {
             AM_Start ();
             viewactive = false;
             rc = true;
         }
     }
-    else if (ev->type == ev_keydown)
+    else
     {
         rc = true;
-        key = ev->data1;
 
-        if (key == key_map_east)        // pan right
+        if (BK_isKeyDown(ev, bk_right))        // pan right
         {
             // [crispy] keep the map static in overlay mode
             // if not following the player
@@ -791,7 +760,7 @@ boolean AM_Responder (event_t *ev)
                 rc = false;
             }
         }
-        else if (key == key_map_west)   // pan left
+        else if (BK_isKeyDown(ev, bk_left))   // pan left
         {
             if (!automap_follow && !automap_overlay)
             {
@@ -802,7 +771,7 @@ boolean AM_Responder (event_t *ev)
                 rc = false;
             }
         }
-        else if (key == key_map_north)  // pan up
+        else if (BK_isKeyDown(ev, bk_up))  // pan up
         {
             if (!automap_follow && !automap_overlay)
             {
@@ -813,7 +782,7 @@ boolean AM_Responder (event_t *ev)
                 rc = false;
             }
         }
-        else if (key == key_map_south)  // pan down
+        else if (BK_isKeyDown(ev, bk_down))  // pan down
         {
             if (!automap_follow && !automap_overlay)
             {
@@ -824,23 +793,23 @@ boolean AM_Responder (event_t *ev)
                 rc = false;
             }
         }
-        else if (key == key_map_zoomout)  // zoom out
+        else if (BK_isKeyDown(ev, bk_map_zoom_out))  // zoom out
         {
             mtof_zoommul = M_ZOOMOUT;
             ftom_zoommul = M_ZOOMIN;
         }
-        else if (key == key_map_zoomin)   // zoom in
+        else if (BK_isKeyDown(ev, bk_map_zoom_in))   // zoom in
         {
             mtof_zoommul = M_ZOOMIN;
             ftom_zoommul = M_ZOOMOUT;
         }
-        else if (key == key_map_toggle)
+        else if (BK_isKeyDown(ev, bk_map_toggle))
         {
             bigstate = 0;
             viewactive = true;
             AM_Stop ();
         }
-        else if (key == key_map_maxzoom)
+        else if (BK_isKeyDown(ev, bk_map_zoom_max))
         {
             bigstate = !bigstate;
             if (bigstate)
@@ -850,7 +819,7 @@ boolean AM_Responder (event_t *ev)
             }
             else AM_restoreScaleAndLoc();
         }
-        else if (key == key_map_follow)
+        else if (BK_isKeyDown(ev, bk_map_follow))
         {
             automap_follow = !automap_follow;
             f_oldloc.x = INT_MAX;
@@ -863,76 +832,70 @@ boolean AM_Responder (event_t *ev)
                 plr->message_system = DEH_String(amstr_followoff);
             }
         }
-        else if (key == key_map_grid)
+        else if (BK_isKeyDown(ev, bk_map_grid))
         {
             automap_grid = !automap_grid;
             plr->message_system = DEH_String(automap_grid ? amstr_gridon : amstr_gridoff);
         }
-        else if (key == key_map_mark)
+        else if (BK_isKeyDown(ev, bk_map_mark))
         {
             M_snprintf(buffer, sizeof(buffer), "%s %d",
                     DEH_String(amstr_markedspot), markpointnum);
             plr->message_system = buffer;
             AM_addMark();
         }
-        else if (key == key_map_clearmark)
+        else if (BK_isKeyDown(ev, bk_map_clearmark))
         {
             AM_clearMarks();
             plr->message_system = DEH_String(amstr_markscleared);
         }
-        else if (key == key_map_overlay)
+        else if (BK_isKeyDown(ev, bk_map_overlay))
         {
             // [crispy] force redraw status bar
             inhelpscreens = true;
             automap_overlay = !automap_overlay;
             plr->message_system = DEH_String(automap_overlay ? amstr_overlayon : amstr_overlayoff);
         }
-        else if (key == key_map_rotate)
+        else if (BK_isKeyDown(ev, bk_map_rotate))
         {
             automap_rotate = !automap_rotate;
             plr->message_system = DEH_String(automap_rotate ? amstr_rotateon : amstr_rotateoff);
         }
+
         else
         {
+            if (BK_isKeyUp(ev, bk_left))
+            {
+                if (!automap_follow) m_paninc.x = 0;
+            }
+            else if (BK_isKeyUp(ev, bk_right))
+            {
+                if (!automap_follow) m_paninc.x = 0;
+            }
+            else if (BK_isKeyUp(ev, bk_up))
+            {
+                if (!automap_follow) m_paninc.y = 0;
+            }
+            else if (BK_isKeyUp(ev, bk_down))
+            {
+                if (!automap_follow) m_paninc.y = 0;
+            }
+            else if (BK_isKeyUp(ev, bk_map_zoom_out) || BK_isKeyUp(ev, bk_map_zoom_in))
+            {
+                mtof_zoommul = FRACUNIT;
+                ftom_zoommul = FRACUNIT;
+            }
             rc = false;
         }
 
         // [JN] Press Beta: 'EEK' instead of 'IDDT'
-        if ((!deathmatch || gameversion <= exe_doom_1_8)
+        if ((!deathmatch || gameversion <= exe_doom_1_8) && ev->type == ev_keydown
         && cht_CheckCheat(gamemode == pressbeta ? &cheat_amap_beta : &cheat_amap, ev->data2))
         {
             rc = false;
             cheating = (cheating + 1) % 3;
         }
     }
-    else if (ev->type == ev_keyup)
-    {
-        rc = false;
-        key = ev->data1;
-
-        if (key == key_map_east)
-        {
-            if (!automap_follow) m_paninc.x = 0;
-        }
-        else if (key == key_map_west)
-        {
-            if (!automap_follow) m_paninc.x = 0;
-        }
-        else if (key == key_map_north)
-        {
-            if (!automap_follow) m_paninc.y = 0;
-        }
-        else if (key == key_map_south)
-        {
-            if (!automap_follow) m_paninc.y = 0;
-        }
-        else if (key == key_map_zoomout || key == key_map_zoomin)
-        {
-            mtof_zoommul = FRACUNIT;
-            ftom_zoommul = FRACUNIT;
-        }
-    }
-
     return rc;
 }
 

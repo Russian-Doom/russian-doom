@@ -13,216 +13,459 @@
 //
 
 #include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "rd_keybinds.h"
-#include "m_controls.h"
+#include "d_name.h"
+#include "doomkeys.h"
+#include "i_controller.h"
+#include "i_input.h"
+#include "i_video.h"
+#include "jn.h"
+#include "m_misc.h"
+#include "rd_menu.h"
 
-bound_key_descriptor bound_key_descriptors[bk_size] = {
-    // Movement
-    {NULL, "", "", '\0', '\0'}, // bk_null
-    {&key_up, "Move Forward", "ldb;tybt dgthtl", 'm', 'l'}, // bk_forward // Движение вперед
-    {&key_down, "Move Backward", "ldb;tybt yfpfl", 'm', 'l'}, // bk_backward // Движение назад
-    {&key_left, "Turn Left", "gjdjhjn yfktdj", 't', 'g'}, // bk_turn_left // Поворот налево
-    {&key_right, "Turn Right", "gjdjhjn yfghfdj", 't', 'g'}, // bk_turn_right // Поворот направо
-    {&key_strafeleft, "Strafe Left", ",jrjv dktdj", 's', ','}, // bk_strafe_left // Боком влево
-    {&key_straferight, "Strafe Right", ",jrjv dghfdj", 's', ','}, // bk_strafe_right // Боком вправо
-    {&key_flyup, "Fly up", "ktntnm ddth[", 'f', 'k'}, // bk_fly_up // Лететь вверх
-    {&key_flydown, "Fly down", "ktntnm dybp", 'f', 'k'}, // bk_fly_down // Лететь вниз
-    {&key_flycenter, "Drop", "ghbptvkbnmcz", 'd', 'g'}, // bk_fly_center // Приземлиться
-    {&key_speed, "Speed On", ",tu", 's', ','}, // bk_speed // Бег
-    {&key_strafe, "Strafe On", "ldb;tybt ,jrjv", 's', 'l'}, // bk_strafe // Движение боком
-    {&key_use, "Jump", "ghs;jr", 'j', 'g'}, // bk_jump // Прыжок
-    {&key_toggleautorun, "Always run", "gjcnjzyysq ,tu", 'a', 'g'}, // bk_toggle_autorun // Постоянный бег
-    {&key_use, "Use", "bcgjkmpjdfnm", 'u', 'b'}, // bk_use // Использовать
-
-    // Weapon
-    {&key_fire, "Fire/Attack", "fnfrf*cnhtkm,f", 'f', 'f'}, // bk_fire // Атака/стрельба
-    {&key_weapon1, "Weapon 1", "jhe;bt 1", 'w', 'j'}, // bk_weapon_1 // Оружие 1
-    {&key_weapon2, "Weapon 2", "jhe;bt 2", 'w', 'j'}, // bk_weapon_2 // Оружие 2
-    {&key_weapon3, "Weapon 3", "jhe;bt 3", 'w', 'j'}, // bk_weapon_3 // Оружие 3
-    {&key_weapon4, "Weapon 4", "jhe;bt 4", 'w', 'j'}, // bk_weapon_4 // Оружие 4
-    {&key_weapon5, "Weapon 5", "jhe;bt 5", 'w', 'j'}, // bk_weapon_5 // Оружие 5
-    {&key_weapon6, "Weapon 6", "jhe;bt 6", 'w', 'j'}, // bk_weapon_6 // Оружие 6
-    {&key_weapon7, "Weapon 7", "jhe;bt 7", 'w', 'j'}, // bk_weapon_7 // Оружие 7
-    {&key_weapon8, "Weapon 8", "jhe;bt 8", 'w', 'j'}, // bk_weapon_8 // Оружие 8
-    {&key_prevweapon, "Previous weapon", "ghtlsleott jhe;bt", 'p', 'g'}, // bk_weapon_prev // Предыдущее оружие
-    {&key_nextweapon, "Next weapon", "cktle.ott jhe;bt", 'n', 'c'}, // bk_weapon_next // Следующее оружие
-
-    // Look
-    {&key_lookup, "Look up", "cvjnhtnm ddth[", 'l', 'c'}, // bk_look_up // Смотреть вверх
-    {&key_lookdown, "Look down", "cvjnhtnm dybp", 'l', 'c'}, // bk_look_down // Смотреть вниз
-    {&key_lookcenter, "Look forward", "wtynhbhjdfnm dpukzl", 'l', 'w'}, // bk_look_center // Центрировать взгляд
-    {&key_togglemlook, "Mouse look", "j,pjh vsim.", 'm', 'j'}, // bk_toggle_mlook // Обзор мышью
-
-    // Inventory
-//  // bk_inv_left
-//  // bk_inv_right
-//  // bk_inv_use_artifact
-//  // bk_inv_use_health
-//  // bk_inv_drop
-//  // bk_inv_pop
-//  // bk_inv_key
-//  // bk_inv_home
-//  // bk_inv_end
-//  // bk_mission
-
-    // Artifacts: Heretic
-//  // bk_arti_all
-//  // bk_arti_quartz
-//  // bk_arti_urn
-//  // bk_arti_bomb
-//  // bk_arti_tome
-//  // bk_arti_egg
-//  // bk_arti_shadowsphere
-//  // bk_arti_wings
-//  // bk_arti_torch
-//  // bk_arti_blastradius
-//  // bk_arti_ring
-//  // bk_arti_chaosdevice
-
-    // Artifacts: Hexen
-//  // bk_arti_poisonbag
-//  // bk_arti_pig
-//  // bk_arti_iconofdefender
-//  // bk_arti_teleportother
-//  // bk_arti_boostarmor
-//  // bk_arti_boostmana
-//  // bk_arti_summon
-//  // bk_arti_speed
-//  // bk_arti_healingradius
-
-    // Map keys
-    {&key_map_toggle, "Toggle automap", "jnrhsnm rfhne", 't', 'j'}, // bk_map_toggle // Открыть карту
-    {&key_map_zoomin, "Zoom in", "ghb,kbpbnm", 'z', 'g'}, // bk_map_zoom_in // Приблизить
-    {&key_map_zoomout, "Zoom out", "jnlfkbnm", 'z', 'j'}, // bk_map_zoom_out // Отдалить
-    {&key_map_maxzoom, "Maximum zoom out", "gjkysq vfcinf,", 'm', 'g'}, // bk_map_zoom_max // Полный масштаб
-    {&key_map_follow, "Follow mode", "ht;bv cktljdfybz", 'f', 'h'}, // bk_map_follow // Режим следования
-    {&key_map_overlay, "Overlay mode", "ht;bv yfkj;tybz", 'o', 'h'}, // bk_map_overlay // Режим наложения
-    {&key_map_rotate, "Rotate mode", "ht;bv dhfotybz", 'r', 'h'}, // bk_map_rotate // Режим вращения
-    {&key_map_grid, "Toggle grid", "ctnrf", 't', 'c'}, // bk_map_grid // Сетка
-    {&key_map_mark, "Mark location", "gjcnfdbnm jnvtnre", 'm', 'g'}, // bk_map_mark // Поставить отметку
-    {&key_map_clearmark, "Clear all marks", "e,hfnm jnvtnrb", 'c', 'e'}, // bk_map_clearmark // Убрать отметки
-
-    // Shortcuts and toggles
-    {&key_menu_qsave, "Quick save", ",scnhjt cj[hfytybt", 'q', ','}, // bk_save // Быстрое сохранение
-    {&key_menu_load, "Quick load", ",scnhfz pfuheprf", 'q', ','}, // bk_load // Быстрая загрузка
-    {&key_menu_nextlevel, "Go to next level", "cktle.obq ehjdtym", 'g', 'c'}, // bk_nextlevel // Следующий уровень
-    {&key_menu_reloadlevel, "Restart level/demo", "gthtpfgecr ehjdyz", 'r', 'g'}, // bk_reloadlevel // Перезапуск уровня
-    {&key_menu_screenshot, "Save a screenshot", "crhbyijn", 's', 'c'}, // bk_screenshot // Скриншот
-    {&key_demo_quit, "Finish demo recording", "pfrjyxbnm pfgbcm ltvj", 'f', 'p'}, // bk_finish_demo // Закончить запись демо
-    {&key_togglecrosshair, "Crosshair", "ghbwtk", 'c', 'g'}, // bk_toggle_crosshair // Прицел
-    {&key_togglefliplvls, "Level flipping", "pthrfkbhjdfybt ehjdyz", 'l', 'p'} // bk_toggle_fliplvls // Зеркалирование уровня
-};
-
-bound_key_descriptor* BK_getKeyDescriptor(bound_key_t key)
+typedef enum
 {
-    return &bound_key_descriptors[key];
+    keyboard,
+    mouse,
+    controller
+} device_t;
+
+typedef struct bind_descriptor_s
+{
+    struct bind_descriptor_s* next;
+    device_t device;
+    int key;
+} bind_descriptor_t;
+
+boolean isBinding = false;
+bound_key_t keyToBind = bk__null;
+boolean isBindsLoaded = false;
+
+bind_descriptor_t* bind_descriptor[bk__size];
+boolean keyState[bk__size];
+boolean bindClearEnabled = true;
+
+static device_t getEventDevice(event_t* event)
+{
+    switch(event->type)
+    {
+        case ev_keydown:
+        case ev_keyup:
+            return keyboard;
+        case ev_mouse_keydown:
+        case ev_mouse_keyup:
+            return mouse;
+        case ev_controller_keydown:
+        case ev_controller_keyup:
+            return controller;
+        default:
+            return -1;
+    }
 }
 
-// -----------------------------------------------------------------------------
-// BK_getBoundKeysString
-// Returns string of names for first 1 physical keys bound to given bound_key
-// -----------------------------------------------------------------------------
-char* BK_getBoundKeysString(bound_key_t key)
+void BK_ProcessKey(event_t* event)
 {
-    // [JN] Values are simple ASCII table:
-    // https://upload.wikimedia.org/wikipedia/commons/7/7b/Ascii_Table-nocolor.svg
-    switch(*bound_key_descriptors[key].key_var)
+    device_t device = getEventDevice(event);
+
+    for(int i = 0; i < bk__size; i++)
     {
-        case 0:     return "---";
-        case 9:     return "TAB";
-        case 13:    return "ENTER";
-        case 32:    return "SPACE BAR";
-        case 39:    return "'";
-        case 42:    return "*";
-        case 43:    return "+"; // [JN] NumPad +
-        case 44:    return ",";
-        case 45:    return "-";
-        case 46:    return ".";
-        case 47:    return "/";
-        case 48:    return "0";
-        case 49:    return "1";
-        case 50:    return "2";
-        case 51:    return "3";
-        case 52:    return "4";
-        case 53:    return "5";
-        case 54:    return "6";
-        case 55:    return "7";
-        case 56:    return "8";
-        case 57:    return "9";
-        case 59:    return ";";
-        case 61:    return "="; // [JN] Indicated as "+" in help screens
-        case 91:    return "[";
-        case 93:    return "]";
-        case 92:    return "\\";
-        case 96:    return "TILDE";
-        case 97:    return "A";
-        case 98:    return "B";
-        case 99:    return "C";
-        case 100:   return "D";
-        case 101:   return "E";
-        case 102:   return "F";
-        case 103:   return "G";
-        case 104:   return "H";
-        case 105:   return "I";
-        case 106:   return "J";
-        case 107:   return "K";
-        case 108:   return "L";
-        case 109:   return "M";
-        case 110:   return "N";
-        case 111:   return "O";
-        case 112:   return "P";
-        case 113:   return "Q";
-        case 114:   return "R";
-        case 115:   return "S";
-        case 116:   return "T";
-        case 117:   return "U";
-        case 118:   return "V";
-        case 119:   return "W";
-        case 120:   return "X";
-        case 121:   return "Y";
-        case 122:   return "Z";
-        case 127:   return "BACKSPACE";
-        case 157:   return "CTRL";
-        case 172:   return "LEFT ARROW";
-        case 173:   return "UP ARROW";
-        case 174:   return "RIGHT ARROW";
-        case 175:   return "DOWN ARROW";
-        case 182:   return "SHIFT";
-        case 184:   return "ALT";
-        case 186:   return "CAPS LOCK";
-        case 187:   return "F1";
-        case 188:   return "F2";
-        case 189:   return "F3";
-        case 190:   return "F4";
-        case 191:   return "F5";
-        case 192:   return "F6";
-        case 193:   return "F7";
-        case 194:   return "F8";
-        case 195:   return "F9";
-        case 197:   return "NUM LOCK";
-        case 198:   return "SCROLL LOCK";
-        case 199:   return "HOME";
-        case 201:   return "PAGE UP";
-        case 204:   return "5"; // [JN] NumPad 5
-        case 207:   return "END";
-        case 209:   return "PAGE DOWN";
-        case 210:   return "INSERT";
-        case 211:   return "DELETE";
-        case 215:   return "F11";
-        case 216:   return "F12";
-        case 217:   return "PRINT SCREEN";
-        case 255:   return "PAUSE";
-        default:    return "?"; // [JN] Unknown key
+        bind_descriptor_t* bind = bind_descriptor[i];
+        while(bind)
+        {
+            if(bind->device == device && bind->key == event->data1)
+            {
+                keyState[i] = event->type == ev_keydown ||
+                        event->type == ev_mouse_keydown ||
+                        event->type == ev_controller_keydown;
+                return;
+            }
+            bind = bind->next;
+        }
     }
+}
+
+boolean BK_isKeyPressed(bound_key_t key)
+{
+    return keyState[key];
+}
+
+boolean BK_isKeyDown(event_t* event, bound_key_t key)
+{
+    if(event->type == ev_keydown
+    || event->type == ev_mouse_keydown
+    || event->type == ev_controller_keydown)
+    {
+        device_t device = getEventDevice(event);
+        bind_descriptor_t* bind = bind_descriptor[key];
+        while(bind)
+        {
+            if(bind->device == device && bind->key == event->data1)
+                return true;
+            bind = bind->next;
+        }
+    }
+    return false;
+}
+
+boolean BK_isKeyUp(event_t* event, bound_key_t key)
+{
+    if(event->type == ev_keyup
+    || event->type == ev_mouse_keyup
+    || event->type == ev_controller_keyup)
+    {
+        device_t device = getEventDevice(event);
+        bind_descriptor_t* bind = bind_descriptor[key];
+        while(bind)
+        {
+            if(bind->device == device && bind->key == event->data1)
+                return true;
+            bind = bind->next;
+        }
+    }
+    return false;
+}
+
+void BK_ReleaseKey(bound_key_t key)
+{
+    keyState[key] = false;
+}
+
+void BK_ReleaseAllKeys()
+{
+    memset(keyState, 0, sizeof(keyState));
 }
 
 // -----------------------------------------------------------------------------
 // BK_KeyHasNoBinds
 // Returns true if no keys have been bound to given bound_key
 // -----------------------------------------------------------------------------
-boolean BK_KeyHasNoBinds(bound_key_t key)
+static boolean BK_KeyHasNoBinds(bound_key_t key)
 {
-    return *bound_key_descriptors[key].key_var == 0;
+    return bind_descriptor[key] == NULL;
+}
+
+static char* getKeyboardKeyName(int key)
+{
+    // [JN] Values are simple ASCII table:
+    // https://upload.wikimedia.org/wikipedia/commons/7/7b/Ascii_Table-nocolor.svg
+    switch(key)
+    {
+        case 0:              return "---";
+        case KEY_TAB:        return "TAB";
+        case KEY_ENTER:      return "ENTER";
+        case ' ':            return "SPACE";
+        case '\'':           return "'";
+        case '*':            return "*";
+        case '+':            return "+";
+        case ',':            return ",";
+        case KEY_MINUS:      return "-";
+        case '.':            return ".";
+        case '/':            return "/";
+        case '0':            return "0";
+        case '1':            return "1";
+        case '2':            return "2";
+        case '3':            return "3";
+        case '4':            return "4";
+        case '5':            return "5";
+        case '6':            return "6";
+        case '7':            return "7";
+        case '8':            return "8";
+        case '9':            return "9";
+        case ';':            return ";";
+        case KEY_EQUALS:     return "="; // [JN] Indicated as "+" in help screens
+        case '[':            return "[";
+        case ']':            return "]";
+        case '\\':           return "\\";
+        case '`':            return "TILDE";
+        case 'a':            return "A";
+        case 'b':            return "B";
+        case 'c':            return "C";
+        case 'd':            return "D";
+        case 'e':            return "E";
+        case 'f':            return "F";
+        case 'g':            return "G";
+        case 'h':            return "H";
+        case 'i':            return "I";
+        case 'j':            return "J";
+        case 'k':            return "K";
+        case 'l':            return "L";
+        case 'm':            return "M";
+        case 'n':            return "N";
+        case 'o':            return "O";
+        case 'p':            return "P";
+        case 'q':            return "Q";
+        case 'r':            return "R";
+        case 's':            return "S";
+        case 't':            return "T";
+        case 'u':            return "U";
+        case 'v':            return "V";
+        case 'w':            return "W";
+        case 'x':            return "X";
+        case 'y':            return "Y";
+        case 'z':            return "Z";
+        case KEY_BACKSPACE:  return "BCKSP";
+        case KEY_RCTRL:      return "RCTRL";
+        case KEYP_ENTER:     return "KP_ENTER";
+        case KEYP_EQUALS:    return "KP_=";
+        case KEYP_PERIOD:    return "KP_.";
+        case KEY_LSHIFT:     return "LSHIFT";
+        case KEY_LCTRL:      return "LCTRL";
+        case KEY_LALT:       return "LALT";
+        case KEY_LEFTARROW:  return "LEFT";
+        case KEY_UPARROW:    return "UP";
+        case KEY_RIGHTARROW: return "RIGHT";
+        case KEY_DOWNARROW:  return "DOWN";
+        case KEYP_MULTIPLY:  return "KP_*";
+        case KEYP_MINUS:     return "KP_-";
+        case KEYP_PLUS:      return "KP_+";
+        case KEYP_DIVIDE:    return "KP_/";
+        case KEYP_9:         return "KP_9";
+        case KEYP_8:         return "KP_8";
+        case KEY_RSHIFT:     return "RSHIFT";
+        case KEYP_0:         return "KP_0";
+        case KEY_RALT:       return "RALT";
+        case KEYP_1:         return "KP_1";
+        case KEY_CAPSLOCK:   return "CAPS LOCK";
+        case KEY_F1:         return "F1";
+        case KEY_F2:         return "F2";
+        case KEY_F3:         return "F3";
+        case KEY_F4:         return "F4";
+        case KEY_F5:         return "F5";
+        case KEY_F6:         return "F6";
+        case KEY_F7:         return "F7";
+        case KEY_F8:         return "F8";
+        case KEY_F9:         return "F9";
+        case KEY_F10:        return "F10";
+        case KEY_NUMLOCK:    return "NUM LOCK";
+        case KEY_SCRLCK:     return "SCROLL";
+        case KEY_HOME:       return "HOME";
+        case KEYP_2:         return "KP_2";
+        case KEY_PGUP:       return "PGEUP";
+        case KEYP_3:         return "KP_3";
+        case KEYP_4:         return "KP_4";
+        case KEYP_5:         return "KP_5";
+        case KEYP_6:         return "KP_6";
+        case KEYP_7:         return "KP_7";
+        case KEY_END:        return "END";
+        case KEY_PGDN:       return "PGDN";
+        case KEY_INS:        return "INS";
+        case KEY_DEL:        return "DEL";
+        case KEY_F11:        return "F11";
+        case KEY_F12:        return "F12";
+        case KEY_PRTSCR:     return "SYS RQ";
+        case KEY_F13:        return "F13";
+        case KEY_F14:        return "F14";
+        case KEY_F15:        return "F15";
+        case KEY_F16:        return "F16";
+        case KEY_F17:        return "F17";
+        case KEY_F18:        return "F18";
+        case KEY_F19:        return "F19";
+        case KEY_F20:        return "F20";
+        case KEY_F21:        return "F21";
+        case KEY_F22:        return "F22";
+        case KEY_F23:        return "F23";
+        case KEY_F24:        return "F24";
+        case KEY_APP:        return "App";
+        case KEY_PAUSE:      return "PAUSE";
+        default:             return "?"; // [JN] Unknown key
+    }
+}
+
+static char* getMouseKeyName(int i)
+{
+    switch (i)
+    {
+        case  MOUSE_LEFT:         return "MOUSE 1";
+        case  MOUSE_RIGHT:        return "MOUSE 2";
+        case  MOUSE_MIDDLE:       return "MOUSE 3";
+        case  MOUSE_4:            return "MOUSE 4";
+        case  MOUSE_5:            return "MOUSE 5";
+        case  MOUSE_SCROLL_UP:    return "MW_UP";
+        case  MOUSE_SCROLL_DOWN:  return "MW_DOWN";
+        case  MOUSE_SCROLL_RIGHT: return "MW_RIGHT";
+        case  MOUSE_SCROLL_LEFT:  return "MW_LEFT";
+        default:                  return "?"; // [JN] Unknown key
+    }
+}
+
+static char* getControllerKeyName(int i)
+{
+    switch (i)
+    {
+        case CONTROLLER_A:              return "PAD_A";
+        case CONTROLLER_B:              return "PAD_B";
+        case CONTROLLER_X:              return "PAD_X";
+        case CONTROLLER_Y:              return "PAD_Y";
+        case CONTROLLER_BACK:           return "PAD_BACK";
+        case CONTROLLER_GUIDE:          return "PAD_GUIDE";
+        case CONTROLLER_START:          return "PAD_START";
+        case CONTROLLER_LEFT_STICK:     return "PAD_L3";
+        case CONTROLLER_RIGHT_STICK:    return "PAD_R3";
+        case CONTROLLER_LEFT_SHOULDER:  return "PAD_L1";
+        case CONTROLLER_RIGHT_SHOULDER: return "PAD_R1";
+        case CONTROLLER_DPAD_UP:        return "DPAD_UP";
+        case CONTROLLER_DPAD_DOWN:      return "DPAD_DOWN";
+        case CONTROLLER_DPAD_LEFT:      return "DPAD_LEFT";
+        case CONTROLLER_DPAD_RIGHT:     return "DPAD_RIGHT";
+        case CONTROLLER_MISC1:          return "PAD_MISC";
+        case CONTROLLER_PADDLE1:        return "PADDLE 1";
+        case CONTROLLER_PADDLE2:        return "PADDLE 2";
+        case CONTROLLER_PADDLE3:        return "PADDLE 3";
+        case CONTROLLER_PADDLE4:        return "PADDLE 4";
+        case CONTROLLER_TOUCHPAD:       return "PAD_TOUCH";
+        case CONTROLLER_LEFT_TRIGGER:   return "PAD_L2";
+        case CONTROLLER_RIGHT_TRIGGER:  return "PAD_R2";
+        default:                        return "?"; // [JN] Unknown key
+    }
+}
+
+static char* BK_getBoundKeysString(bound_key_t key)
+{
+    static char string[50];
+    bind_descriptor_t* bind;
+
+    if(bind_descriptor[key] == NULL)
+        return "---";
+
+    memset(string, 0, sizeof(string));
+
+    bind = bind_descriptor[key];
+    while(bind)
+    {
+        switch(bind->device)
+        {
+            case keyboard:
+                M_StringConcat(string, getKeyboardKeyName(bind->key), 50);
+                break;
+            case mouse:
+                M_StringConcat(string, getMouseKeyName(bind->key), 50);
+                break;
+            case controller:
+                M_StringConcat(string, getControllerKeyName(bind->key), 50);
+                break;
+            default:
+                break;
+        }
+
+        if(bind->next)
+        {
+            M_StringConcat(string, ", ", 50);
+
+            if(aspect_ratio < 2 || screenblocks  == 9)
+            {
+                M_StringConcat(string, "...", 50);
+                break;
+            }
+        }
+
+        bind = bind->next;
+    }
+    
+    return string;
+}
+
+void RD_Menu_Draw_Bindings(int x)
+{
+    Translation_CR_t noBindTranslation;
+    Translation_CR_t bindingTranslation;
+
+    switch (RD_GameType)
+    {
+        default:
+        case gt_Doom:
+            noBindTranslation = CR_DARKRED;
+            bindingTranslation = CR_WHITE;
+            break;
+        case gt_Heretic:
+            noBindTranslation = CR_WHITE2GRAY_HERETIC;
+            bindingTranslation = CR_WHITE2DARKGOLD_HERETIC;
+            break;
+        case gt_Hexen:
+            noBindTranslation = CR_GRAY2GDARKGRAY_HEXEN;
+            bindingTranslation = CR_GRAY2DARKGOLD_HEXEN;
+            break;
+    }
+
+    for (int i = 0; i < CurrentMenu->itemCount; ++i)
+    {
+        if (CurrentMenu->items[i].option != 0)
+        {
+            boolean bindingThis = isBinding && i == CurrentItPos;
+
+            RD_M_DrawTextSmallENG(bindingThis ? "?" : BK_getBoundKeysString(CurrentMenu->items[i].option),
+                                  x + wide_delta, i * 10 + 25,
+                                  bindingThis ? bindingTranslation : BK_KeyHasNoBinds(CurrentMenu->items[i].option) ?
+                                  noBindTranslation : CR_NONE);
+        }
+    }
+}
+
+void BK_StartBindingKey(bound_key_t key)
+{
+    isBinding = true;
+    keyToBind = key;
+}
+
+static void AddBind(bound_key_t boundKey, device_t device, int key)
+{
+    bind_descriptor_t* bind = bind_descriptor[boundKey];
+
+    if(bind == NULL)
+    {
+        bind = malloc(sizeof(bind_descriptor));
+        bind->next = NULL;
+        bind->device = device;
+        bind->key = key;
+
+        bind_descriptor[boundKey] = bind;
+    }
+    else
+    {
+        bind_descriptor_t* prevBind = NULL;
+
+        // Iterate binds
+        while(bind)
+        {
+            if(bind->device == device && bind->key == key)
+            {
+                if(bindClearEnabled)
+                {
+                    // Clear bind
+                    if (prevBind)
+                        prevBind->next = bind->next;
+                    else
+                        bind_descriptor[boundKey] = bind->next;
+                    free(bind);
+                }
+                return;
+            }
+            prevBind = bind;
+            bind = bind->next;
+        }
+
+        // Add new bind
+        bind = malloc(sizeof(bind_descriptor));
+        bind->next = NULL;
+        bind->device = device;
+        bind->key = key;
+
+        prevBind->next = bind;
+    }
+}
+
+void BK_BindKey(event_t* event)
+{
+    isBinding = false;
+
+    if(!BK_isKeyDown(event, bk_menu_activate))
+    {
+        AddBind(keyToBind, getEventDevice(event), event->data1);
+    }
+
+    keyToBind = bk__null;
 }
 
 // -----------------------------------------------------------------------------
@@ -231,5 +474,280 @@ boolean BK_KeyHasNoBinds(bound_key_t key)
 // -----------------------------------------------------------------------------
 void BK_ClearBinds(bound_key_t key)
 {
-    *bound_key_descriptors[key].key_var = 0;
+    bind_descriptor_t* tmp;
+
+    while(bind_descriptor[key])
+    {
+        tmp = bind_descriptor[key];
+        bind_descriptor[key] = bind_descriptor[key]->next;
+        free(tmp);
+    }
+}
+
+void BK_AddBindingsToSystemKeys()
+{
+    // Keyboard
+    AddBind(bk_left,  keyboard, KEY_LEFTARROW);
+    AddBind(bk_right, keyboard, KEY_RIGHTARROW);
+    AddBind(bk_up,    keyboard, KEY_UPARROW);
+    AddBind(bk_down,  keyboard, KEY_DOWNARROW);
+
+    AddBind(bk_menu_activate,  keyboard, KEY_ESCAPE);
+    AddBind(bk_menu_back,      keyboard, KEY_BACKSPACE);
+    AddBind(bk_menu_select,    keyboard, KEY_ENTER);
+    AddBind(bk_menu_select,    keyboard, KEYP_ENTER);
+    AddBind(bk_menu_page_next, keyboard, KEY_PGDN);
+    AddBind(bk_menu_page_prev, keyboard, KEY_PGUP);
+
+    AddBind(bk_confirm, keyboard, 'y');
+    AddBind(bk_abort,   keyboard, 'n');
+    AddBind(bk_abort,   keyboard, KEY_ESCAPE);
+
+    // Mouse
+    AddBind(bk_left,  mouse, MOUSE_SCROLL_LEFT);
+    AddBind(bk_right, mouse, MOUSE_SCROLL_RIGHT);
+    AddBind(bk_up,    mouse, MOUSE_SCROLL_UP);
+    AddBind(bk_down,  mouse, MOUSE_SCROLL_DOWN);
+
+    AddBind(bk_menu_back,      mouse, MOUSE_RIGHT);
+    AddBind(bk_menu_select,    mouse, MOUSE_LEFT);
+    AddBind(bk_menu_page_next, mouse, MOUSE_4);
+    AddBind(bk_menu_page_prev, mouse, MOUSE_5);
+
+    // Controller
+    AddBind(bk_left,  controller, CONTROLLER_DPAD_LEFT);
+    AddBind(bk_right, controller, CONTROLLER_DPAD_RIGHT);
+    AddBind(bk_up,    controller, CONTROLLER_DPAD_UP);
+    AddBind(bk_down,  controller, CONTROLLER_DPAD_DOWN);
+
+    AddBind(bk_menu_activate,  controller, CONTROLLER_START);
+    AddBind(bk_menu_back,      controller, CONTROLLER_B);
+    AddBind(bk_menu_select,    controller, CONTROLLER_A);
+    AddBind(bk_menu_page_next, controller, CONTROLLER_RIGHT_SHOULDER);
+    AddBind(bk_menu_page_prev, controller, CONTROLLER_LEFT_SHOULDER);
+
+    AddBind(bk_confirm, controller, CONTROLLER_A);
+    AddBind(bk_abort,   controller, CONTROLLER_B);
+};
+
+void BK_ApplyDefaultBindings()
+{
+    // Keyboard
+    AddBind(bk_forward,        keyboard, 'w');
+    AddBind(bk_backward,       keyboard, 's');
+    AddBind(bk_turn_left,      keyboard, KEY_LEFTARROW);
+    AddBind(bk_turn_right,     keyboard, KEY_RIGHTARROW);
+    AddBind(bk_strafe_left,    keyboard, 'a');
+    AddBind(bk_strafe_right,   keyboard, 'd');
+    AddBind(bk_speed,          keyboard, KEY_LSHIFT);
+    AddBind(bk_speed,          keyboard, KEY_RSHIFT);
+    AddBind(bk_strafe,         keyboard, KEY_LALT);
+    AddBind(bk_strafe,         keyboard, KEY_RALT);
+    AddBind(bk_jump,           keyboard, ' ');
+    AddBind(bk_toggle_autorun, keyboard, KEY_CAPSLOCK);
+
+    if(RD_GameType == gt_Heretic || RD_GameType == gt_Hexen)
+    {
+        AddBind(bk_fly_up,   keyboard, KEY_PGUP);
+        AddBind(bk_fly_down, keyboard, KEY_INS);
+        AddBind(bk_fly_stop, keyboard, KEY_HOME);
+    }
+
+    AddBind(bk_use, keyboard, 'e');
+
+    AddBind(bk_weapon_1,    keyboard, '1');
+    AddBind(bk_weapon_2,    keyboard, '2');
+    AddBind(bk_weapon_3,    keyboard, '3');
+    AddBind(bk_weapon_4,    keyboard, '4');
+
+    if(RD_GameType == gt_Doom || RD_GameType == gt_Heretic)
+    {
+        AddBind(bk_weapon_5, keyboard, '5');
+        AddBind(bk_weapon_6, keyboard, '6');
+        AddBind(bk_weapon_7, keyboard, '7');
+    }
+    if(RD_GameType == gt_Doom)
+    {
+        AddBind(bk_weapon_8, keyboard, '8');
+    }
+
+    AddBind(bk_toggle_mlook, keyboard, '`');
+
+    if(RD_GameType == gt_Heretic || RD_GameType == gt_Hexen)
+    {
+        AddBind(bk_look_up,     keyboard, KEY_PGDN);
+        AddBind(bk_look_down,   keyboard, KEY_DEL);
+        AddBind(bk_look_center, keyboard, KEY_END);
+
+        AddBind(bk_inv_left,         keyboard, '[');
+        AddBind(bk_inv_right,        keyboard, ']');
+        AddBind(bk_inv_use_artifact, keyboard, KEY_ENTER);
+    }
+
+    AddBind(bk_map_toggle,   keyboard, KEY_TAB);
+    AddBind(bk_map_zoom_in,  keyboard, '=');
+    AddBind(bk_map_zoom_out, keyboard, '-');
+    AddBind(bk_map_zoom_max, keyboard, '0');
+    AddBind(bk_map_follow,   keyboard, 'f');
+    AddBind(bk_map_overlay,  keyboard, 'o');
+    AddBind(bk_map_rotate,   keyboard, 'r');
+    AddBind(bk_map_grid,     keyboard, 'g');
+
+    if(RD_GameType == gt_Doom)
+    {
+        AddBind(bk_map_mark,      keyboard, 'm');
+        AddBind(bk_map_clearmark, keyboard, 'c');
+    }
+
+    AddBind(bk_qsave,            keyboard, KEY_F6);
+    AddBind(bk_qload,            keyboard, KEY_F9);
+    AddBind(bk_screenshot,       keyboard, KEY_PRTSCR);
+    AddBind(bk_finish_demo,      keyboard, 'q');
+    AddBind(bk_toggle_crosshair, keyboard, 'x');
+
+    AddBind(bk_spy,                keyboard, KEY_F12);
+    AddBind(bk_multi_msg,          keyboard, 't');
+
+    if(RD_GameType == gt_Doom)
+    {
+        AddBind(bk_multi_msg_player_0, keyboard, 'g');
+        AddBind(bk_multi_msg_player_1, keyboard, 'i');
+        AddBind(bk_multi_msg_player_2, keyboard, 'b');
+        AddBind(bk_multi_msg_player_3, keyboard, 'r');
+    }
+    if(RD_GameType == gt_Heretic)
+    {
+        AddBind(bk_multi_msg_player_0, keyboard, 'g');
+        AddBind(bk_multi_msg_player_1, keyboard, 'y');
+        AddBind(bk_multi_msg_player_2, keyboard, 'r');
+        AddBind(bk_multi_msg_player_3, keyboard, 'b');
+    }
+    if(RD_GameType == gt_Hexen)
+    {
+        AddBind(bk_multi_msg_player_0, keyboard, 'b');
+        AddBind(bk_multi_msg_player_1, keyboard, 'r');
+        AddBind(bk_multi_msg_player_2, keyboard, 'y');
+        AddBind(bk_multi_msg_player_3, keyboard, 'g');
+        AddBind(bk_multi_msg_player_4, keyboard, 'j');
+        AddBind(bk_multi_msg_player_5, keyboard, 'w');
+        AddBind(bk_multi_msg_player_6, keyboard, 'h');
+        AddBind(bk_multi_msg_player_7, keyboard, 'p');
+    }
+
+    AddBind(bk_menu_help,   keyboard, KEY_F1);
+    AddBind(bk_menu_save,   keyboard, KEY_F2);
+    AddBind(bk_menu_load,   keyboard, KEY_F3);
+    AddBind(bk_menu_volume, keyboard, KEY_F4);
+    AddBind(bk_detail,      keyboard, KEY_F5);
+    AddBind(bk_endgame,     keyboard, KEY_F7);
+    AddBind(bk_messages,    keyboard, KEY_F8);
+    AddBind(bk_quit,        keyboard, KEY_F10);
+    AddBind(bk_gamma,       keyboard, KEY_F11);
+    AddBind(bk_screen_inc,  keyboard, KEY_EQUALS);
+    AddBind(bk_screen_dec,  keyboard, KEY_MINUS);
+    AddBind(bk_pause,       keyboard, KEY_PAUSE);
+
+    // Mouse
+    AddBind(bk_fire,        mouse, MOUSE_LEFT);
+    AddBind(bk_weapon_prev, mouse, MOUSE_SCROLL_UP);
+    AddBind(bk_weapon_next, mouse, MOUSE_SCROLL_DOWN);
+    AddBind(bk_forward,     mouse, MOUSE_MIDDLE);
+    AddBind(bk_strafe,      mouse, MOUSE_RIGHT);
+
+    // Controller
+    AddBind(bk_look_center, controller, CONTROLLER_RIGHT_STICK);
+}
+
+void BK_LoadBindings(void* file)
+{
+    int bind;
+    char strparm[100];
+    char* ptr;
+
+    bindClearEnabled = false;
+    while(!feof(file))
+    {
+        if(fscanf(file, "%3d %99[^\n]\n", &bind, strparm) != 2)
+        {
+            // end of key binds section
+            break;
+        }
+
+        if(bind >= bk__serializable)
+            continue;
+
+        ptr = strparm;
+        while(*ptr != '\0')
+        {
+            char deviceChar;
+            int key;
+            int charsToSkip;
+            device_t device;
+
+            if(sscanf(ptr, "%c_%3d%n", &deviceChar, &key, &charsToSkip) != 2)
+            {
+                ptr += charsToSkip + 1;
+                continue;
+            }
+            ptr += charsToSkip + 1;
+
+            switch(deviceChar)
+            {
+                case 'k':
+                    device = keyboard;
+                    break;
+                case 'm':
+                    device = mouse;
+                    break;
+                case 'c':
+                    device = controller;
+                    break;
+                default:
+                    device = -1;
+            }
+
+            AddBind(bind, device, key);
+        }
+    }
+    bindClearEnabled = true;
+    isBindsLoaded = true;
+}
+
+void BK_SaveBindings(void* file)
+{
+    int i;
+    bind_descriptor_t* bind;
+
+    fprintf(file, "%-30s%s\n", "Keybinds", "Start");
+
+    for(i = 0; i < bk__serializable; ++i)
+    {
+        if(bind_descriptor[i])
+        {
+            fprintf(file, "%-30d", i);
+            bind = bind_descriptor[i];
+            while(bind)
+            {
+                char deviceChar;
+                switch(bind->device)
+                {
+                    case keyboard:
+                        deviceChar = 'k';
+                        break;
+                    case mouse:
+                        deviceChar = 'm';
+                        break;
+                    case controller:
+                        deviceChar = 'c';
+                        break;
+                    default:
+                        deviceChar = ' ';
+                }
+                fprintf(file, "%c_%d ", deviceChar, bind->key);
+                bind = bind->next;
+            }
+            fprintf(file, "\n");
+        }
+    }
+    fprintf(file, "%-30s%s\n", "Keybinds", "End");
 }

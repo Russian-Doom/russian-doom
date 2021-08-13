@@ -30,8 +30,8 @@
 #include "i_video.h"
 #include "hu_stuff.h"
 #include "hu_lib.h"
-#include "m_controls.h"
 #include "m_misc.h"
+#include "rd_keybinds.h"
 #include "w_wad.h"
 #include "s_sound.h"
 #include "doomstat.h"
@@ -1030,7 +1030,7 @@ void HU_Drawer(void)
         else
         {
             sprintf(str, english_language ? "%d/%d+%d" : "%d*%d+%d",
-                    players[consoleplayer].killcount, totalkills, extrakills);                
+                    players[consoleplayer].killcount, totalkills, extrakills);
         }
         HUlib_clearTextLine(&w_kills);
         s = str;
@@ -1173,7 +1173,7 @@ void HU_Drawer(void)
             HUlib_addCharToTextLine(&w_coord_x_title, *(s++));
         }
         HUlib_drawTextLine(&w_coord_x_title, false, hud_coords);
-        
+
         // Indicator
         sprintf(str, "%d", players[consoleplayer].mo->x >> FRACBITS);
         HUlib_clearTextLine(&w_coord_x);
@@ -1536,9 +1536,9 @@ boolean HU_Responder(event_t *ev)
 
     numplayers = 0;
     for (i=0 ; i<MAXPLAYERS ; i++)
-    numplayers += playeringame[i];
+        numplayers += playeringame[i];
 
-    if (ev->data1 == KEY_RSHIFT)
+    if (ev->data1 == KEY_RSHIFT || ev->data1 == KEY_LSHIFT)
     {
         return false;
     }
@@ -1548,21 +1548,9 @@ boolean HU_Responder(event_t *ev)
         return false;
     }
 
-    if (ev->type != ev_keydown)
-    return false;
-
     if (!chat_on)
     {
-        // [JN] Disable last message showing.
-        /*
-        if (ev->data1 == key_message_refresh)
-        {
-            message_on = true;
-            message_counter = messages_timeout * TICRATE;
-            eatkey = true;
-        }
-        else */
-        if (netgame && ev->data2 == key_multi_msg)
+        if (netgame && BK_isKeyDown(ev, bk_multi_msg))
         {
             eatkey = true;
             StartChatInput(HU_BROADCAST);
@@ -1571,7 +1559,7 @@ boolean HU_Responder(event_t *ev)
         {
             for (i=0; i<MAXPLAYERS ; i++)
             {
-                if (ev->data2 == key_multi_msgplayer[i])
+                if (BK_isKeyDown(ev, bk_multi_msg_player_0 + i))
                 {
                     if (playeringame[i] && i!=consoleplayer)
                     {
@@ -1606,58 +1594,61 @@ boolean HU_Responder(event_t *ev)
     }
     else
     {
-    // send a macro
-    if (altdown)
-    {
-        c = ev->data1 - '0';
-        if (c > 9)
-        return false;
-        // fprintf(stderr, "got here\n");
-        macromessage = chat_macros[c];
+        if (ev->type != ev_keydown)
+            return false;
 
-        // kill last message with a '\n'
-        HU_queueChatChar(KEY_ENTER); // DEBUG!!!
-
-        // send the macro message
-        while (*macromessage)
-        HU_queueChatChar(*macromessage++);
-        HU_queueChatChar(KEY_ENTER);
-
-        // leave chat mode and notify that it was sent
-        StopChatInput();
-        M_StringCopy(lastmessage, chat_macros[c], sizeof(lastmessage));
-        // [JN] Do not repeat typed message because of characters problem.
-        // plr->message = lastmessage;
-        eatkey = true;
-    }
-    else
-    {
-        c = ev->data3;
-
-        eatkey = HUlib_keyInIText(&w_chat, c);
-        if (eatkey)
+        // send a macro
+        if (altdown)
         {
-            // static unsigned char buf[20]; // DEBUG
-            HU_queueChatChar(c);
+            c = ev->data1 - '0';
+            if (c > 9)
+                return false;
+            // fprintf(stderr, "got here\n");
+            macromessage = chat_macros[c];
 
-            // M_snprintf(buf, sizeof(buf), "KEY: %d => %d", ev->data1, c);
-            //        plr->message = buf;
-        }
-        if (c == KEY_ENTER)
-        {
+            // kill last message with a '\n'
+            HU_queueChatChar(KEY_ENTER); // DEBUG!!!
+
+            // send the macro message
+            while (*macromessage)
+                HU_queueChatChar(*macromessage++);
+            HU_queueChatChar(KEY_ENTER);
+
+            // leave chat mode and notify that it was sent
             StopChatInput();
-            if (w_chat.l.len)
+            M_StringCopy(lastmessage, chat_macros[c], sizeof(lastmessage));
+            // [JN] Do not repeat typed message because of characters problem.
+            // plr->message = lastmessage;
+            eatkey = true;
+        }
+        else
+        {
+            c = ev->data3;
+
+            eatkey = HUlib_keyInIText(&w_chat, c);
+            if (eatkey)
             {
-                M_StringCopy(lastmessage, w_chat.l.l, sizeof(lastmessage));
-                // [JN] Do not repeat typed message because of characters problem.
-                // plr->message = lastmessage;
+                // static unsigned char buf[20]; // DEBUG
+                HU_queueChatChar(c);
+
+                // M_snprintf(buf, sizeof(buf), "KEY: %d => %d", ev->data1, c);
+                //        plr->message = buf;
+            }
+            if (c == KEY_ENTER || c == KEYP_ENTER)
+            {
+                StopChatInput();
+                if (w_chat.l.len)
+                {
+                    M_StringCopy(lastmessage, w_chat.l.l, sizeof(lastmessage));
+                    // [JN] Do not repeat typed message because of characters problem.
+                    // plr->message = lastmessage;
+                }
+            }
+            else if (c == KEY_ESCAPE)
+            {
+                StopChatInput();
             }
         }
-        else if (c == KEY_ESCAPE)
-        {
-            StopChatInput();
-        }
-    }
     }
 
     return eatkey;

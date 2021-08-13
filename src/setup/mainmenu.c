@@ -31,7 +31,6 @@
 #include "d_name.h"
 #include "m_argv.h"
 #include "m_config.h"
-#include "m_controls.h"
 #include "m_misc.h"
 #include "z_zone.h"
 
@@ -40,8 +39,6 @@
 
 #include "compatibility.h"
 #include "display.h"
-#include "joystick.h"
-#include "keyboard.h"
 #include "mouse.h"
 #include "multiplayer.h"
 #include "sound.h"
@@ -89,41 +86,9 @@ static unsigned int cheat_sequence_index = 0;
 
 static void SensibleDefaults(void)
 {
-    key_up = 'w';
-    key_down = 's';
-    key_strafeleft = 'a';
-    key_straferight = 'd';
-    key_jump = '/';
-    key_lookup = KEY_PGUP;
-    key_lookdown = KEY_PGDN;
-    key_lookcenter = KEY_HOME;
-    key_flyup = KEY_INS;
-    key_flydown = KEY_DEL;
-    key_flycenter = KEY_END;
-    key_prevweapon = ',';
-    key_nextweapon = '.';
-    key_invleft = '[';
-    key_invright = ']';
-    key_message_refresh = '\'';
-    key_mission = 'i';              // Strife keys
-    key_invpop = 'o';
-    key_invkey = 'p';
-    key_multi_msgplayer[0] = 'g';
-    key_multi_msgplayer[1] = 'h';
-    key_multi_msgplayer[2] = 'j';
-    key_multi_msgplayer[3] = 'k';
-    key_multi_msgplayer[4] = 'v';
-    key_multi_msgplayer[5] = 'b';
-    key_multi_msgplayer[6] = 'n';
-    key_multi_msgplayer[7] = 'm';
-    mousebprevweapon = 4;           // Scroll wheel = weapon cycle
-    mousebnextweapon = 3;
     snd_musicdevice = 3;
-    joybspeed = 29;                 // Always run
-    vanilla_keyboard_mapping = 0;
     graphical_startup = 0;
     show_endoom = 0;
-    dclick_use = 0;
     novert = 1;
     mouse_y_invert = 0; // [crispy]
     snd_dmxoption = "-opl3 -reverse";
@@ -388,17 +353,9 @@ void MainMenu(void)
                    "Настройки звука",
                    (TxtWidgetSignalFunc) ConfigSound, NULL),
     TXT_NewButton2(english_language ?
-                   "Configure Keyboard" :
-                   "Настройки клавиатуры",
-                   (TxtWidgetSignalFunc) ConfigKeyboard, NULL),
-    TXT_NewButton2(english_language ?
                    "Configure Mouse" :
                    "Настройки мыши",
                    (TxtWidgetSignalFunc) ConfigMouse, NULL),
-    TXT_NewButton2(english_language ?
-                   "Configure Gamepad/Joystick" :
-                   "Настройки джойстика/геймпада",
-                   (TxtWidgetSignalFunc) ConfigJoystick, NULL),
     // [JN] No longer used, now using in-game menu
     /*
     TXT_NewButton2(english_language ?

@@ -31,19 +31,20 @@
 #include "deh_str.h"
 #include "doomdef.h"
 #include "doomkeys.h"
+#include "i_controller.h"
 #include "i_input.h"
 #include "i_system.h"
 #include "i_swap.h"
 #include "i_timer.h" // [JN] I_GetTime()
-#include "m_controls.h"
 #include "m_misc.h"
 #include "p_local.h"
+#include "rd_keybinds.h"
+#include "rd_menu.h"
 #include "s_sound.h"
 #include "v_trans.h"
 #include "v_video.h"
 #include "crispy.h"
 #include "jn.h"
-#include "rd_menu.h"
 
 // Macros
 #define ITEM_HEIGHT 20
@@ -141,6 +142,21 @@ static void M_RD_MouseLook();
 static void M_RD_InvertY();
 static void M_RD_Novert();
 
+// Gamepad
+void DrawGamepadMenu();
+static void M_RD_UseGamepad();
+static void M_RD_BindAxis_Move(Direction_t direction);
+static void M_RD_InvertAxis_Move();
+static void M_RD_BindAxis_Strafe(Direction_t direction);
+static void M_RD_InvertAxis_Strafe();
+static void M_RD_BindAxis_Turn(Direction_t direction);
+static void M_RD_InvertAxis_Turn();
+static void M_RD_BindAxis_VLook(Direction_t direction);
+static void M_RD_InvertAxis_VLook();
+
+// Key Bindings
+void M_RD_Draw_Bindings();
+
 // Gameplay (page 1)
 static void DrawGameplay1Menu(void);
 static void M_RD_Brightmaps();
@@ -236,6 +252,7 @@ static void M_RD_ChangeLanguage(Direction_t direction);
 
 // Public Data
 int InfoType;
+extern int alwaysRun;
 
 // Private Data
 
@@ -259,24 +276,24 @@ static Translation_CR_t M_RD_ColorTranslation (int color)
 {
     switch (color)
     {
-        case 1:   return CR_WHITE2GRAY_HERETIC;      break;
-        case 2:   return CR_WHITE2DARKGRAY_HERETIC;  break;
-        case 3:   return CR_WHITE2RED_HERETIC;       break;
-        case 4:   return CR_WHITE2DARKRED_HERETIC;   break;
-        case 5:   return CR_WHITE2GREEN_HERETIC;     break;
-        case 6:   return CR_WHITE2DARKGREEN_HERETIC; break;
-        case 7:   return CR_WHITE2OLIVE_HERETIC;     break;
-        case 8:   return CR_WHITE2BLUE_HERETIC;      break;
-        case 9:   return CR_WHITE2DARKBLUE_HERETIC;  break;
-        case 10:  return CR_WHITE2PURPLE_HERETIC;    break;
-        case 11:  return CR_WHITE2NIAGARA_HERETIC;   break;
-        case 12:  return CR_WHITE2AZURE_HERETIC;     break;
-        case 13:  return CR_WHITE2YELLOW_HERETIC;    break;
-        case 14:  return CR_WHITE2GOLD_HERETIC;      break;
-        case 15:  return CR_WHITE2DARKGOLD_HERETIC;  break;
-        case 16:  return CR_WHITE2TAN_HERETIC;       break;
-        case 17:  return CR_WHITE2BROWN_HERETIC;     break;
-        default:  return CR_NONE;                    break;
+        case 1:   return CR_WHITE2GRAY_HERETIC;
+        case 2:   return CR_WHITE2DARKGRAY_HERETIC;
+        case 3:   return CR_WHITE2RED_HERETIC;
+        case 4:   return CR_WHITE2DARKRED_HERETIC;
+        case 5:   return CR_WHITE2GREEN_HERETIC;
+        case 6:   return CR_WHITE2DARKGREEN_HERETIC;
+        case 7:   return CR_WHITE2OLIVE_HERETIC;
+        case 8:   return CR_WHITE2BLUE_HERETIC;
+        case 9:   return CR_WHITE2DARKBLUE_HERETIC;
+        case 10:  return CR_WHITE2PURPLE_HERETIC;
+        case 11:  return CR_WHITE2NIAGARA_HERETIC;
+        case 12:  return CR_WHITE2AZURE_HERETIC;
+        case 13:  return CR_WHITE2YELLOW_HERETIC;
+        case 14:  return CR_WHITE2GOLD_HERETIC;
+        case 15:  return CR_WHITE2DARKGOLD_HERETIC;
+        case 16:  return CR_WHITE2TAN_HERETIC;
+        case 17:  return CR_WHITE2BROWN_HERETIC;
+        default:  return CR_NONE;
     }
 }
 
@@ -284,24 +301,24 @@ static char *M_RD_ColorName (int color)
 {
     switch (color)
     {
-        case 1:   return english_language ? "GRAY"       : "CTHSQ";          break;  // СЕРЫЙ
-        case 2:   return english_language ? "DARK GRAY"  : "NTVYJ-CTHSQ";    break;  // ТЁМНО-СЕРЫЙ
-        case 3:   return english_language ? "RED"        : "RHFCYSQ";        break;  // КРАСНЫЙ
-        case 4:   return english_language ? "DARK RED"   : "NTVYJ-RHFCYSQ";  break;  // ТЁМНО-КРАСНЫЙ
-        case 5:   return english_language ? "GREEN"      : "PTKTYSQ";        break;  // ЗЕЛЕНЫЙ
-        case 6:   return english_language ? "DARK GREEN" : "NTVYJ-PTKTYSQ";  break;  // ТЕМНО-ЗЕЛЕНЫЙ
-        case 7:   return english_language ? "OLIVE"      : "JKBDRJDSQ";      break;  // ОЛИВКОВЫЙ
-        case 8:   return english_language ? "BLUE"       : "CBYBQ";          break;  // СИНИЙ
-        case 9:   return english_language ? "DARK BLUE"  : "NTVYJ-CBYBQ";    break;  // ТЕМНО-СИНИЙ
-        case 10:  return english_language ? "PURPLE"     : "ABJKTNJDSQ";     break;  // ФИОЛЕТОВЫЙ
-        case 11:  return english_language ? "NIAGARA"    : "YBFUFHF";        break;  // НИАГАРА
-        case 12:  return english_language ? "AZURE"      : "KFPEHYSQ";       break;  // ЛАЗУРНЫЙ
-        case 13:  return english_language ? "YELLOW"     : ";TKNSQ";         break;  // ЖЕЛТЫЙ
-        case 14:  return english_language ? "GOLD"       : "PJKJNJQ";        break;  // ЗОЛОТОЙ
-        case 15:  return english_language ? "DARK GOLD"  : "NTVYJ-PJKJNJQ";  break;  // ТЕМНО-ЗОЛОТОЙ
-        case 16:  return english_language ? "TAN"        : ",T;TDSQ";        break;  // БЕЖЕВЫЙ
-        case 17:  return english_language ? "BROWN"      : "RJHBXYTDSQ";     break;  // КОРИЧНЕВЫЙ
-        default:  return english_language ? "WHITE"      : ",TKSQ";          break;  // БЕЛЫЙ
+        case 1:   return english_language ? "GRAY"       : "CTHSQ";         // СЕРЫЙ
+        case 2:   return english_language ? "DARK GRAY"  : "NTVYJ-CTHSQ";   // ТЁМНО-СЕРЫЙ
+        case 3:   return english_language ? "RED"        : "RHFCYSQ";       // КРАСНЫЙ
+        case 4:   return english_language ? "DARK RED"   : "NTVYJ-RHFCYSQ"; // ТЁМНО-КРАСНЫЙ
+        case 5:   return english_language ? "GREEN"      : "PTKTYSQ";       // ЗЕЛЕНЫЙ
+        case 6:   return english_language ? "DARK GREEN" : "NTVYJ-PTKTYSQ"; // ТЕМНО-ЗЕЛЕНЫЙ
+        case 7:   return english_language ? "OLIVE"      : "JKBDRJDSQ";     // ОЛИВКОВЫЙ
+        case 8:   return english_language ? "BLUE"       : "CBYBQ";         // СИНИЙ
+        case 9:   return english_language ? "DARK BLUE"  : "NTVYJ-CBYBQ";   // ТЕМНО-СИНИЙ
+        case 10:  return english_language ? "PURPLE"     : "ABJKTNJDSQ";    // ФИОЛЕТОВЫЙ
+        case 11:  return english_language ? "NIAGARA"    : "YBFUFHF";       // НИАГАРА
+        case 12:  return english_language ? "AZURE"      : "KFPEHYSQ";      // ЛАЗУРНЫЙ
+        case 13:  return english_language ? "YELLOW"     : ";TKNSQ";        // ЖЕЛТЫЙ
+        case 14:  return english_language ? "GOLD"       : "PJKJNJQ";       // ЗОЛОТОЙ
+        case 15:  return english_language ? "DARK GOLD"  : "NTVYJ-PJKJNJQ"; // ТЕМНО-ЗОЛОТОЙ
+        case 16:  return english_language ? "TAN"        : ",T;TDSQ";       // БЕЖЕВЫЙ
+        case 17:  return english_language ? "BROWN"      : "RJHBXYTDSQ";    // КОРИЧНЕВЫЙ
+        default:  return english_language ? "WHITE"      : ",TKSQ";         // БЕЛЫЙ
     }
 }
 
@@ -330,6 +347,14 @@ static Menu_t AutomapMenu;
 static Menu_t SoundMenu;
 static Menu_t SoundSysMenu;
 static Menu_t ControlsMenu;
+static Menu_t Bindings1Menu;
+static Menu_t Bindings2Menu;
+static Menu_t Bindings3Menu;
+static Menu_t Bindings4Menu;
+static Menu_t Bindings5Menu;
+static Menu_t Bindings6Menu;
+static Menu_t GamepadMenu;
+static const Menu_t* BindingsMenuPages[] = {&Bindings1Menu, &Bindings2Menu, &Bindings3Menu, &Bindings4Menu, &Bindings5Menu, &Bindings6Menu};
 static Menu_t Gameplay1Menu;
 static Menu_t Gameplay2Menu;
 static Menu_t Gameplay3Menu;
@@ -617,29 +642,275 @@ static Menu_t SoundSysMenu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t ControlsItems[] = {
-    {ITT_TITLE,  "MOVEMENT",               "GTHTLDB;TYBT",              NULL,              0}, // ПЕРЕДВИЖЕНИЕ
-    {ITT_SWITCH, "ALWAYS RUN:",            "HT;BV GJCNJZYYJUJ ,TUF:",   M_RD_AlwaysRun,    0}, // РЕЖИМ ПОСТОЯННОГО БЕГА
-    {ITT_TITLE,  "MOUSE",                  "VSIM",                      NULL,              0}, // МЫШЬ
-    {ITT_LRFUNC, "MOUSE SENSIVITY",        "CRJHJCNM VSIB",             M_RD_Sensitivity,  0}, // СКОРОСТЬ МЫШИ
-    {ITT_EMPTY,  NULL,                     NULL,                        NULL,              0},
-    {ITT_LRFUNC, "ACCELERATION",           "FRCTKTHFWBZ",               M_RD_Acceleration, 0}, // АКСЕЛЕРАЦИЯ
-    {ITT_EMPTY,  NULL,                     NULL,                        NULL,              0},
-    {ITT_LRFUNC, "ACCELERATION THRESHOLD", "GJHJU FRCTKTHFWBB",         M_RD_Threshold,    0}, // ПОРОГ АКСЕЛЕРАЦИИ
-    {ITT_EMPTY,  NULL,                     NULL,                        NULL,              0},
-    {ITT_SWITCH, "MOUSE LOOK:",            "J,PJH VSIM.:",              M_RD_MouseLook,    0}, // ОБЗОР МЫШЬЮ
-    {ITT_SWITCH, "INVERT Y AXIS:",         "DTHNBRFKMYFZ BYDTHCBZ:",    M_RD_InvertY,      0}, // ВЕРТИКАЛЬНАЯ ИНВЕРСИЯ
-    {ITT_SWITCH, "VERTICAL MOVEMENT:",     "DTHNBRFKMYJT GTHTVTOTYBT:", M_RD_Novert,       0}  // ВЕРТИКАЛЬНОЕ ПЕРЕМЕЩЕНИЕ
+    {ITT_TITLE,   "CONTROLS",               "EGHFDKTYBT",                NULL,              0}, // УПРАВЛЕНИЕ
+    {ITT_SETMENU, "CUSTOMIZE CONTROLS",     "YFCNHJQRB EGHFDKTYBZ",      &Bindings1Menu,    0}, // Настройки управления
+    {ITT_SETMENU, "GAMEPAD SETTINGS",       "YFCNHJQRB UTQVGFLF",        &GamepadMenu,      0}, // Настройки геймпада
+    {ITT_SWITCH,  "ALWAYS RUN:",            "HT;BV GJCNJZYYJUJ ,TUF:",   M_RD_AlwaysRun,    0}, // РЕЖИМ ПОСТОЯННОГО БЕГА
+    {ITT_TITLE,   "MOUSE",                  "VSIM",                      NULL,              0}, // МЫШЬ
+    {ITT_LRFUNC,  "MOUSE SENSIVITY",        "CRJHJCNM VSIB",             M_RD_Sensitivity,  0}, // СКОРОСТЬ МЫШИ
+    {ITT_EMPTY,   NULL,                     NULL,                        NULL,              0},
+    {ITT_LRFUNC,  "ACCELERATION",           "FRCTKTHFWBZ",               M_RD_Acceleration, 0}, // АКСЕЛЕРАЦИЯ
+    {ITT_EMPTY,   NULL,                     NULL,                        NULL,              0},
+    {ITT_LRFUNC,  "ACCELERATION THRESHOLD", "GJHJU FRCTKTHFWBB",         M_RD_Threshold,    0}, // ПОРОГ АКСЕЛЕРАЦИИ
+    {ITT_EMPTY,   NULL,                     NULL,                        NULL,              0},
+    {ITT_SWITCH,  "MOUSE LOOK:",            "J,PJH VSIM.:",              M_RD_MouseLook,    0}, // ОБЗОР МЫШЬЮ
+    {ITT_SWITCH,  "INVERT Y AXIS:",         "DTHNBRFKMYFZ BYDTHCBZ:",    M_RD_InvertY,      0}, // ВЕРТИКАЛЬНАЯ ИНВЕРСИЯ
+    {ITT_SWITCH,  "VERTICAL MOVEMENT:",     "DTHNBRFKMYJT GTHTVTOTYBT:", M_RD_Novert,       0}  // ВЕРТИКАЛЬНОЕ ПЕРЕМЕЩЕНИЕ
 };
 
 static Menu_t ControlsMenu = {
     36, 36,
     32,
     "CONTROL SETTINGS", "EGHFDKTYBT", false, // УПРАВЛЕНИЕ
-    12, ControlsItems, false,
+    14, ControlsItems, false,
     DrawControlsMenu,
     NULL,
     &RDOptionsMenu,
     1
+};
+
+// -----------------------------------------------------------------------------
+// Key bindings (1)
+// -----------------------------------------------------------------------------
+
+static const PageDescriptor_t BindingsPageDescriptor = {
+    6, BindingsMenuPages,
+    252, 165,
+    CR_WHITE
+};
+
+static MenuItem_t Bindings1Items[] = {
+    {ITT_TITLE,   "MOVEMENT",      "LDB;TYBT",               NULL,               0},
+    {ITT_EFUNC,   "MOVE FORWARD",  "LDB;TYBT DGTHEL",        BK_StartBindingKey, bk_forward},      // Движение вперед
+    {ITT_EFUNC,   "MOVE BACKWARD", "LDB;TYBT YFPFL",         BK_StartBindingKey, bk_backward},     // Движение назад
+    {ITT_EFUNC,   "TURN Left",     "GJDJHJN YFKTDJ",         BK_StartBindingKey, bk_turn_left},    // Поворот налево
+    {ITT_EFUNC,   "TURN Right",    "GJDJHJN YFGHFDJ",        BK_StartBindingKey, bk_turn_right},   // Поворот направо
+    {ITT_EFUNC,   "STRAFE LEFT",   ",JRJV DKTDJ",            BK_StartBindingKey, bk_strafe_left},  // Боком влево
+    {ITT_EFUNC,   "STRAFE RIGHT",  ",JRJV DGHFDJ",           BK_StartBindingKey, bk_strafe_right}, // Боком вправо
+    {ITT_EFUNC,   "SPEED ON",      ",TU",                    BK_StartBindingKey, bk_speed},        // Бег
+    {ITT_EFUNC,   "STRAFE ON",     "LDB;TYBT ,JRJV",         BK_StartBindingKey, bk_strafe},       // Движение боком
+    {ITT_EFUNC,   "FLY UP",        "KTNTNM DDTH[",           BK_StartBindingKey, bk_fly_up},       // Лететь вверх
+    {ITT_EFUNC,   "FLY DOWN",      "KTNTNM DYBP",            BK_StartBindingKey, bk_fly_down},     // Лететь вних
+    {ITT_EFUNC,   "STOP FLYING",   "JCNFYJDBNM GJKTN",       BK_StartBindingKey, bk_fly_stop},     // Остановить полёт
+    {ITT_EMPTY,   NULL,            NULL,                     NULL,               0},
+    {ITT_SETMENU, "NEXT PAGE...",  "CKTLE.OFZ CNHFYBWF>>>",  &Bindings2Menu,     0},               // Cледующая страница...
+    {ITT_SETMENU, "LAST PAGE...",  "GJCKTLYZZ CNHFYBWF>>>",  &Bindings6Menu,     0},               // Последняя страница...
+    {ITT_EMPTY,   NULL,            NULL,                     NULL,               0}
+};
+
+static Menu_t Bindings1Menu = {
+    35, 35,
+    25,
+    "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
+    16, Bindings1Items, false,
+    M_RD_Draw_Bindings,
+    &BindingsPageDescriptor,
+    &ControlsMenu,
+    1
+};
+
+// -----------------------------------------------------------------------------
+// Key bindings (2)
+// -----------------------------------------------------------------------------
+
+static MenuItem_t Bindings2Items[] = {
+    {ITT_TITLE,   "ACTION",          "LTQCNDBT",               NULL,               0},
+    {ITT_EFUNC,   "FIRE/ATTACK",     "FNFRF/CNHTKM,F",         BK_StartBindingKey, bk_fire},        // Атака/стрельба
+    {ITT_EFUNC,   "USE",             "BCGJKMPJDFNM",           BK_StartBindingKey, bk_use},         // Использовать
+    {ITT_TITLE,   "WEAPONS",         "JHE;BT",                 NULL,               0},       // Оружие
+    {ITT_EFUNC,   "WEAPON 1",        "JHE;BT 1",               BK_StartBindingKey, bk_weapon_1},    // Оружие 1
+    {ITT_EFUNC,   "WEAPON 2",        "JHE;BT 2",               BK_StartBindingKey, bk_weapon_2},    // Оружие 2
+    {ITT_EFUNC,   "WEAPON 3",        "JHE;BT 3",               BK_StartBindingKey, bk_weapon_3},    // Оружие 3
+    {ITT_EFUNC,   "WEAPON 4",        "JHE;BT 4",               BK_StartBindingKey, bk_weapon_4},    // Оружие 4
+    {ITT_EFUNC,   "WEAPON 5",        "JHE;BT 5",               BK_StartBindingKey, bk_weapon_5},    // Оружие 5
+    {ITT_EFUNC,   "WEAPON 6",        "JHE;BT 6",               BK_StartBindingKey, bk_weapon_6},    // Оружие 6
+    {ITT_EFUNC,   "WEAPON 7",        "JHE;BT 7",               BK_StartBindingKey, bk_weapon_7},    // Оружие 7
+    {ITT_EFUNC,   "PREVIOUS WEAPON", "GHTLSLEOTT JHE;BT",      BK_StartBindingKey, bk_weapon_prev}, // Предыдущее оружие
+    {ITT_EFUNC,   "NEXT WEAPON",     "CKTLE.OTT JHE;BT",       BK_StartBindingKey, bk_weapon_next}, // Следующее оружие
+    {ITT_SETMENU, "NEXT PAGE...",    "CKTLE.OFZ CNHFYBWF>>>",  &Bindings3Menu,     0},              // Cледующая страница...
+    {ITT_SETMENU, "PREV PAGE...",    "GHTLSLEOFZ CNHFYBWF>>>", &Bindings1Menu,     0},              // Предыдущая страница...
+    {ITT_EMPTY,   NULL,              NULL,                     NULL,               0}
+};
+
+static Menu_t Bindings2Menu = {
+    35, 35,
+    25,
+    "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
+    16, Bindings2Items, false,
+    M_RD_Draw_Bindings,
+    &BindingsPageDescriptor,
+    &ControlsMenu,
+    1
+};
+
+// -----------------------------------------------------------------------------
+// Key bindings (3)
+// -----------------------------------------------------------------------------
+
+static MenuItem_t Bindings3Items[] = {
+    {ITT_TITLE,   "SHORTCUT KEYS",         ",SCNHSQ LJCNEG",         NULL,               0},
+    {ITT_EFUNC,   "QUICK SAVE",            ",SCNHJT CJ[HFYTYBT",     BK_StartBindingKey, bk_qsave},            // Быстрое сохранение
+    {ITT_EFUNC,   "QUICK LOAD",            ",SCNHFZ PFUHEPRF",       BK_StartBindingKey, bk_qload},            // Быстрая загрузка
+    {ITT_EFUNC,   "GO TO NEXT LEVEL",      "CKTLE.OBQ EHJDTYM",      BK_StartBindingKey, bk_nextlevel},        // Следующий уровень
+    {ITT_EFUNC,   "RESTART LEVEL/DEMO",    "GTHTPFGECR EHJDYZ",      BK_StartBindingKey, bk_reloadlevel},      // Перезапуск уровня
+    {ITT_EFUNC,   "SAVE A SCREENSHOT",     "CRHBYIJN",               BK_StartBindingKey, bk_screenshot},       // Скриншот
+    {ITT_EFUNC,   "FINISH DEMO RECORDING", "PFRJYXBNM PFGBCM LTVJ",  BK_StartBindingKey, bk_finish_demo},      // Закончить запись демо
+    {ITT_TITLE,   "TOGGLEABLES",           "GTHTRK.XTYBT",           NULL,               0},
+    {ITT_EFUNC,   "MOUSE LOOK",            "J,PJH VSIM.",            BK_StartBindingKey, bk_toggle_mlook},     // Обзор мышью
+    {ITT_EFUNC,   "ALWAYS RUN",            "GJCNJZYYSQ ,TU",         BK_StartBindingKey, bk_toggle_autorun},   // Постоянный бег
+    {ITT_EFUNC,   "CROSSHAIR",             "GHBWTK",                 BK_StartBindingKey, bk_toggle_crosshair}, // Прицел
+    {ITT_EFUNC,   "LEVEL FLIPPING",        "PTHRFKBHJDFYBT EHJDYZ",  BK_StartBindingKey, bk_toggle_fliplvls},  // Зеркалирование уровня
+    {ITT_EMPTY,   NULL,                    NULL,                     NULL,               0},
+    {ITT_SETMENU, "NEXT PAGE...",          "CKTLE.OFZ CNHFYBWF>>>",  &Bindings4Menu,     0},                   // Cледующая страница...
+    {ITT_SETMENU, "PREV PAGE...",          "GHTLSLEOFZ CNHFYBWF>>>", &Bindings2Menu,     0},                   // Предыдущая страница...
+    {ITT_EMPTY,   NULL,                    NULL,                     NULL,               0}
+};
+
+static Menu_t Bindings3Menu = {
+    35, 35,
+    25,
+    "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
+    16, Bindings3Items, false,
+    M_RD_Draw_Bindings,
+    &BindingsPageDescriptor,
+    &ControlsMenu,
+    1
+};
+
+// -----------------------------------------------------------------------------
+// Key bindings (4)
+// -----------------------------------------------------------------------------
+
+static MenuItem_t Bindings4Items[] = {
+    {ITT_TITLE,   "AUTOMAP",          "RFHNF",                  NULL,               0},
+    {ITT_EFUNC,   "TOGGLE AUTOMAP",   "JNRHSNM RFHNE",          BK_StartBindingKey, bk_map_toggle},    // Открыть карту
+    {ITT_EFUNC,   "ZOOM IN",          "GHB,KBPBNM",             BK_StartBindingKey, bk_map_zoom_in},   // Приблизить
+    {ITT_EFUNC,   "ZOOM OUT",         "JNLFKBNM",               BK_StartBindingKey, bk_map_zoom_out},  // Отдалить
+    {ITT_EFUNC,   "MAXIMUM ZOOM OUT", "GJKYSQ VFCINF,",         BK_StartBindingKey, bk_map_zoom_max},  // Полный масштаб
+    {ITT_EFUNC,   "FOLLOW MODE",      "HT;BV CKTLJDFYBZ",       BK_StartBindingKey, bk_map_follow},    // Режим следования
+    {ITT_EFUNC,   "OVERLAY MODE",     "HT;BV YFKJ;TYBZ",        BK_StartBindingKey, bk_map_overlay},   // Режим наложения
+    {ITT_EFUNC,   "ROTATE MODE",      "HT;BV DHFOTYBZ",         BK_StartBindingKey, bk_map_rotate},    // Режим вращения
+    {ITT_EFUNC,   "TOGGLE GRID",      "CTNRF",                  BK_StartBindingKey, bk_map_grid},      // Сетка
+    {ITT_TITLE,   "INVENTORY",        "BYDTYNFHM",              NULL,               0},
+    {ITT_EFUNC,   "NEXT ITEM",        "CKTLE.OBQ GHTLVTN",      BK_StartBindingKey, bk_inv_right},
+    {ITT_EFUNC,   "PREVIOUS ITEM",    "GHTLSLEOBQ GHTLVTN",     BK_StartBindingKey, bk_inv_left},
+    {ITT_EMPTY,   NULL,               NULL,                     NULL,               0},
+    {ITT_SETMENU, "NEXT PAGE...",     "CKTLE.OFZ CNHFYBWF>>>",  &Bindings5Menu,     0},                // Cледующая страница...
+    {ITT_SETMENU, "PREV PAGE...",     "GHTLSLEOFZ CNHFYBWF>>>", &Bindings3Menu,     0},                // Предыдущая страница...
+    {ITT_EMPTY,   NULL,               NULL,                     NULL,               0}
+};
+
+static Menu_t Bindings4Menu = {
+    35, 35,
+    25,
+    "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
+    16, Bindings4Items, false,
+    M_RD_Draw_Bindings,
+    &BindingsPageDescriptor,
+    &ControlsMenu,
+    1
+};
+
+// -----------------------------------------------------------------------------
+// Key bindings (5)
+// -----------------------------------------------------------------------------
+
+static MenuItem_t Bindings5Items[] = {
+    {ITT_EFUNC,   "ACTIVATE ITEM",         "BCGJKMPJDFNM GHTLVTN",   BK_StartBindingKey, bk_inv_use_artifact},
+    {ITT_EFUNC,   "QUARTZ FLASK",          "RDFHWTDSQ AKFRJY",       BK_StartBindingKey, bk_arti_quartz},
+    {ITT_EFUNC,   "MYSTIC URN",            "VBCNBXTCRFZ EHYF",       BK_StartBindingKey, bk_arti_urn},
+    {ITT_EFUNC,   "TIME BOMB",             "XFCJDFZ ,JV,F",          BK_StartBindingKey, bk_arti_bomb},
+    {ITT_EFUNC,   "TOME OF POWER",         "NJV VJUEOTCNDF",         BK_StartBindingKey, bk_arti_tome},
+    {ITT_EFUNC,   "RING OF INVINCIBILITY", "RJKMWJ YTEZPDBVJCNB",    BK_StartBindingKey, bk_arti_invulnerability},
+    {ITT_EFUNC,   "MORPH OVUM",            "ZQWJ GHTDHFOTYBQ",       BK_StartBindingKey, bk_arti_egg},
+    {ITT_EFUNC,   "CHAOS DEVICE",          "\'V,KTVF [FJCF",         BK_StartBindingKey, bk_arti_chaosdevice},
+    {ITT_EFUNC,   "SHADOWSPHERE",          "NTYTDFZ CATHF",          BK_StartBindingKey, bk_arti_shadowsphere},
+    {ITT_EFUNC,   "WINGS OF WRATH",        "RHSKMZ UYTDF",           BK_StartBindingKey, bk_arti_wings},
+    {ITT_EFUNC,   "TORCH",                 "AFRTK",                  BK_StartBindingKey, bk_arti_torch},
+    {ITT_EMPTY,   NULL,                    NULL,                     NULL,               0},
+    {ITT_EMPTY,   NULL,                    NULL,                     NULL,               0},
+    {ITT_SETMENU, "NEXT PAGE...",          "CKTLE.OFZ CNHFYBWF>>>",  &Bindings6Menu,     0},                     // Cледующая страница...
+    {ITT_SETMENU, "PREV PAGE...",          "GHTLSLEOFZ CNHFYBWF>>>", &Bindings4Menu,     0},                     // Предыдущая страница...
+    {ITT_EMPTY,   NULL,                    NULL,                     NULL,               0}
+};
+
+static Menu_t Bindings5Menu = {
+    35, 35,
+    25,
+    "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
+    16, Bindings5Items, false,
+    M_RD_Draw_Bindings,
+    &BindingsPageDescriptor,
+    &ControlsMenu,
+    0
+};
+
+// -----------------------------------------------------------------------------
+// Key bindings (6)
+// -----------------------------------------------------------------------------
+
+static MenuItem_t Bindings6Items[] = {
+    {ITT_TITLE,   "LOOK",                "J,PJH",                  NULL,               0},              // Обзор
+    {ITT_EFUNC,   "LOOK UP",             "CVJNHTNM DDTH[",         BK_StartBindingKey, bk_look_up},            // Смотреть вверх
+    {ITT_EFUNC,   "LOOK DOWN",           "CVJNHTNM DYBP",          BK_StartBindingKey, bk_look_down},          // Смотреть вниз
+    {ITT_EFUNC,   "CENTER LOOK",         "CVJNHTNM GHZVJ",         BK_StartBindingKey, bk_look_center},        // Смотреть прямо
+    {ITT_TITLE,   "MULTIPLAYER",         "CTNTDFZ BUHF",           NULL,               0},                     // Сетевая игра
+    {ITT_EFUNC,   "MULTIPLAYER SPY",     "DBL LHEUJUJ BUHJRF",     BK_StartBindingKey, bk_spy},                // Вид другого игрока
+    {ITT_EFUNC,   "SEND MESSAGE",        "JNGHFDBNM CJJ,OTYBT",    BK_StartBindingKey, bk_multi_msg},          // Отправить сообщение
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 1", "CJJ,OTYBT BUHJRE 1",     BK_StartBindingKey, bk_multi_msg_player_0}, // Сообщение игроку 1
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 2", "CJJ,OTYBT BUHJRE 2",     BK_StartBindingKey, bk_multi_msg_player_1}, // Сообщение игроку 2
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 3", "CJJ,OTYBT BUHJRE 3",     BK_StartBindingKey, bk_multi_msg_player_2}, // Сообщение игроку 3
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 4", "CJJ,OTYBT BUHJRE 4",     BK_StartBindingKey, bk_multi_msg_player_3}, // Сообщение игроку 4
+    {ITT_EMPTY,   NULL,                  NULL,                     NULL,               0},
+    {ITT_EMPTY,   NULL,                  NULL,                     NULL,               0},
+    {ITT_SETMENU, "FIRST PAGE...",       "GTHDFZ CNHFYBWF>>>",     &Bindings1Menu,     0},                     // Первая страница...
+    {ITT_SETMENU, "PREV PAGE...",        "GHTLSLEOFZ CNHFYBWF>>>", &Bindings5Menu,     0},                     // Предыдущая страница...
+    {ITT_EMPTY,   NULL,                  NULL,                     NULL,               0}
+};
+
+static Menu_t Bindings6Menu = {
+    35, 35,
+    25,
+    "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
+    16, Bindings6Items, false,
+    M_RD_Draw_Bindings,
+    &BindingsPageDescriptor,
+    &ControlsMenu,
+    1
+};
+
+// -----------------------------------------------------------------------------
+// Gamepad
+// -----------------------------------------------------------------------------
+
+static MenuItem_t GamepadItems[] = {
+    {ITT_SWITCH, "ENABLE GAMEPAD:",    "BCGJKMPJDFNM UTQVGFL:",    M_RD_UseGamepad,        0}, // Сетевая игра
+    {ITT_TITLE,  "MOVEMENT AXIS",      "JCM LDB;TYBZ",             NULL,                   0},
+    {ITT_LRFUNC, "PHYSICAL AXIS:",     "ABPBXTCRFZ JCM:",          M_RD_BindAxis_Move,     CONTROLLER_AXIS_MOVE},
+    {ITT_SWITCH, "INVERT AXIS:",       "BYDTHNBHJDFNM JCM:",       M_RD_InvertAxis_Move,   CONTROLLER_AXIS_MOVE},
+    {ITT_EMPTY,  NULL,                 NULL,                      NULL,                    0},
+    {ITT_TITLE,  "STRAFE AXIS",        "JCM LDB;TYBZ ,JRJV",       NULL,                   0},
+    {ITT_LRFUNC, "PHYSICAL AXIS:",     "ABPBXTCRFZ JCM:",          M_RD_BindAxis_Strafe,   CONTROLLER_AXIS_STRAFE},
+    {ITT_SWITCH, "INVERT AXIS:",       "BYDTHNBHJDFNM JCM:",       M_RD_InvertAxis_Strafe, CONTROLLER_AXIS_STRAFE},
+    {ITT_EMPTY,  NULL,                 NULL,                      NULL,                    0},
+    {ITT_TITLE,  "TURN AXIS",          "JCM GJDJHJNF",             NULL,                   0},
+    {ITT_LRFUNC, "PHYSICAL AXIS:",     "ABPBXTCRFZ JCM:",          M_RD_BindAxis_Turn,     CONTROLLER_AXIS_TURN},
+    {ITT_SWITCH, "INVERT AXIS:",       "BYDTHNBHJDFNM JCM:",       M_RD_InvertAxis_Turn,   CONTROLLER_AXIS_TURN},
+    {ITT_EMPTY,  NULL,                 NULL,                      NULL,                    0},
+    {ITT_TITLE,  "VERTICAL LOOK AXIS", "JCM DTHNBRFKMYJUJ J,PJHF", NULL,                   0},
+    {ITT_LRFUNC, "PHYSICAL AXIS:",     "ABPBXTCRFZ JCM:",          M_RD_BindAxis_VLook,    CONTROLLER_AXIS_VLOOK},
+    {ITT_SWITCH, "INVERT AXIS:",       "BYDTHNBHJDFNM JCM:",       M_RD_InvertAxis_VLook,  CONTROLLER_AXIS_VLOOK}
+};
+
+static Menu_t GamepadMenu = {
+    36, 36,
+    32,
+    "GAMEPAD SETTINGS", "YFCNHJQRB UTQVGFLF", false, //Настройки геймпада
+    16, GamepadItems, false,
+    DrawGamepadMenu,
+    NULL,
+    &ControlsMenu,
+    0
 };
 
 // -----------------------------------------------------------------------------
@@ -831,7 +1102,7 @@ static MenuItem_t Level3Items[] = {
     {ITT_TITLE,  "ARTIFACTS",              "FHNTAFRNS",            NULL,                 0}, // АРТЕФАКТЫ
     {ITT_LRFUNC, "QUARTZ FLASK:",          "RDFHWTDSQ AKFRJY:",    M_RD_SelectiveArti_0, 0},
     {ITT_LRFUNC, "MYSTIC URN:",            "VBCNBXTCRFZ EHYF:",    M_RD_SelectiveArti_1, 0},
-    {ITT_LRFUNC, "TIMEBOMB:",              "XFCJDFZ ,JV,F:",       M_RD_SelectiveArti_2, 0},
+    {ITT_LRFUNC, "TIME BOMB:",             "XFCJDFZ ,JV,F:",       M_RD_SelectiveArti_2, 0},
     {ITT_LRFUNC, "TOME OF POWER:",         "NJV VJUEOTCNDF:",      M_RD_SelectiveArti_3, 0},
     {ITT_LRFUNC, "RING OF INVINCIBILITY:", "RJKMWJ YTEZPDBVJCNB:", M_RD_SelectiveArti_4, 0},
     {ITT_LRFUNC, "MORPH OVUM:",            "ZQWJ GHTDHFOTYBQ:",    M_RD_SelectiveArti_5, 0},
@@ -2357,34 +2628,34 @@ static void DrawControlsMenu(void)
     if (english_language)
     {
         // Always run
-        RD_M_DrawTextSmallENG(joybspeed >= 20 ? "ON" : "OFF", 118 + wide_delta, 42, CR_NONE);
+        RD_M_DrawTextSmallENG(alwaysRun ? "ON" : "OFF", 118 + wide_delta, 62, CR_NONE);
 
         // Mouse look
-        RD_M_DrawTextSmallENG(mlook ? "ON" : "OFF", 118 + wide_delta, 122, CR_NONE);
+        RD_M_DrawTextSmallENG(mlook ? "ON" : "OFF", 118 + wide_delta, 142, CR_NONE);
 
         // Invert Y axis
         RD_M_DrawTextSmallENG(mouse_y_invert ? "ON" : "OFF",
-                              133 + wide_delta, 132, !mlook ? CR_WHITE2GRAY_HERETIC : CR_NONE);
+                              133 + wide_delta, 152, !mlook ? CR_WHITE2GRAY_HERETIC : CR_NONE);
 
         // Novert
         RD_M_DrawTextSmallENG(!novert ? "ON" : "OFF",
-                              168 + wide_delta, 142, mlook ? CR_WHITE2GRAY_HERETIC : CR_NONE);
+                              168 + wide_delta, 162, mlook ? CR_WHITE2GRAY_HERETIC : CR_NONE);
     }
     else
     {
         // Режим постоянного бега
-        RD_M_DrawTextSmallRUS(joybspeed >= 20 ? "DRK" : "DSRK", 209 + wide_delta, 42, CR_NONE);
+        RD_M_DrawTextSmallRUS(alwaysRun ? "DRK" : "DSRK", 209 + wide_delta, 62, CR_NONE);
 
         // Обзор мышью
-        RD_M_DrawTextSmallRUS(mlook ? "DRK" : "DSRK", 132 + wide_delta, 122, CR_NONE);
+        RD_M_DrawTextSmallRUS(mlook ? "DRK" : "DSRK", 132 + wide_delta, 142, CR_NONE);
 
         // Вертикальная инверсия
         RD_M_DrawTextSmallRUS(mouse_y_invert ? "DRK" : "DSRK",
-                              199 + wide_delta, 132, !mlook ? CR_WHITE2GRAY_HERETIC : CR_NONE);
+                              199 + wide_delta, 152, !mlook ? CR_WHITE2GRAY_HERETIC : CR_NONE);
 
         // Вертикальное перемещение
         RD_M_DrawTextSmallRUS(!novert ? "DRK" : "DSRK",
-                              227 + wide_delta, 142, mlook ? CR_WHITE2GRAY_HERETIC : CR_NONE);
+                              227 + wide_delta, 162, mlook ? CR_WHITE2GRAY_HERETIC : CR_NONE);
     }
 
     //
@@ -2392,34 +2663,24 @@ static void DrawControlsMenu(void)
     //
 
     // Mouse sensivity
-    RD_Menu_DrawSliderSmall(&ControlsMenu, 72, 12, mouseSensitivity);
+    RD_Menu_DrawSliderSmall(&ControlsMenu, 92, 12, mouseSensitivity);
     M_snprintf(num, 4, "%d", mouseSensitivity);
-    RD_M_DrawTextSmallENG(num, 152 + wide_delta, 73, CR_WHITE2GRAY_HERETIC);
-
-    // Acceleration
-    RD_Menu_DrawSliderSmall(&ControlsMenu, 92, 12, mouse_acceleration * 4 - 4);
-    M_snprintf(num, 4, "%f", mouse_acceleration);
     RD_M_DrawTextSmallENG(num, 152 + wide_delta, 93, CR_WHITE2GRAY_HERETIC);
 
-    // Threshold
-    RD_Menu_DrawSliderSmall(&ControlsMenu, 112, 12, mouse_threshold / 2);
-    M_snprintf(num, 4, "%d", mouse_threshold);
+    // Acceleration
+    RD_Menu_DrawSliderSmall(&ControlsMenu, 112, 12, mouse_acceleration * 4 - 4);
+    M_snprintf(num, 4, "%f", mouse_acceleration);
     RD_M_DrawTextSmallENG(num, 152 + wide_delta, 113, CR_WHITE2GRAY_HERETIC);
+
+    // Threshold
+    RD_Menu_DrawSliderSmall(&ControlsMenu, 132, 12, mouse_threshold / 2);
+    M_snprintf(num, 4, "%d", mouse_threshold);
+    RD_M_DrawTextSmallENG(num, 152 + wide_delta, 133, CR_WHITE2GRAY_HERETIC);
 }
 
 static void M_RD_AlwaysRun()
 {
-    static int joybspeed_old = 2;
-
-    if (joybspeed >= 20)
-    {
-        joybspeed = joybspeed_old;
-    }
-    else
-    {
-        joybspeed_old = joybspeed;
-        joybspeed = 29;
-    }
+    alwaysRun ^= 1;
 }
 
 static void M_RD_Sensitivity(Direction_t direction)
@@ -2453,6 +2714,160 @@ static void M_RD_InvertY()
 static void M_RD_Novert()
 {
     novert ^= 1;
+}
+
+// -----------------------------------------------------------------------------
+// Key bindings
+// -----------------------------------------------------------------------------
+void M_RD_Draw_Bindings()
+{
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    if (english_language)
+    {
+        RD_M_DrawTextSmallENG("ENTER TO CHANGE, DEL TO CLEAR", 55 + wide_delta, 176, CR_WHITE2GREEN_HERETIC);
+        RD_M_DrawTextSmallENG("PGUP/PGDN TO TURN PAGES", 75 + wide_delta, 185, CR_WHITE2GREEN_HERETIC);
+    }
+    else
+    {
+        RD_M_DrawTextSmallENG("ENTER =", 44 + wide_delta, 176, CR_WHITE2GREEN_HERETIC);
+        RD_M_DrawTextSmallRUS("= YFPYFXBNM<", 88 + wide_delta, 176, CR_WHITE2GREEN_HERETIC);
+        RD_M_DrawTextSmallENG("DEL =", 176 + wide_delta, 176, CR_WHITE2GREEN_HERETIC);
+        RD_M_DrawTextSmallRUS("JXBCNBNM", 213 + wide_delta, 176, CR_WHITE2GREEN_HERETIC);
+
+        RD_M_DrawTextSmallENG("PGUP/PGDN =", 55 + wide_delta, 185, CR_WHITE2GREEN_HERETIC);
+        RD_M_DrawTextSmallRUS("KBCNFNM CNHFYBWS", 139 + wide_delta, 185, CR_WHITE2GREEN_HERETIC);
+    }
+
+    RD_Menu_Draw_Bindings(english_language ? 195 : 210);
+}
+
+// -----------------------------------------------------------------------------
+// DrawGamepadMenu
+// -----------------------------------------------------------------------------
+
+static char* GetAxisName(int axis)
+{
+    switch (axis)
+    {
+        case -1:
+            return "NONE";
+        case 0:
+            return "LEFT X";
+        case 1:
+            return "LEFT Y";
+        case 2:
+            return "RIGHT X";
+        case 3:
+            return "RIGHT Y";
+        default:
+            return "?";
+    }
+}
+
+void DrawGamepadMenu()
+{
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    if (english_language)
+    {
+        RD_M_DrawTextSmallENG(useController ? "ON" : "OFF", 153 + wide_delta, 32,
+                              useController ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+
+        RD_M_DrawTextSmallENG(invertAxis[CONTROLLER_AXIS_MOVE] ? "ON" : "OFF", 120 + wide_delta, 62,
+                              invertAxis[CONTROLLER_AXIS_MOVE] ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+
+        RD_M_DrawTextSmallENG(invertAxis[CONTROLLER_AXIS_STRAFE] ? "ON" : "OFF", 120 + wide_delta, 102,
+                              invertAxis[CONTROLLER_AXIS_STRAFE] ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+
+        RD_M_DrawTextSmallENG(invertAxis[CONTROLLER_AXIS_TURN] ? "ON" : "OFF", 120 + wide_delta, 142,
+                              invertAxis[CONTROLLER_AXIS_TURN] ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+
+        RD_M_DrawTextSmallENG(invertAxis[CONTROLLER_AXIS_VLOOK] ? "ON" : "OFF", 120 + wide_delta, 182,
+                              invertAxis[CONTROLLER_AXIS_VLOOK] ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+
+        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_MOVE]), 135 + wide_delta, 52, CR_NONE);
+
+        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_STRAFE]), 135 + wide_delta, 92, CR_NONE);
+
+        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_TURN]), 135 + wide_delta, 132, CR_NONE);
+
+        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_VLOOK]), 135 + wide_delta, 172, CR_NONE);
+    }
+    else
+    {
+        RD_M_DrawTextSmallRUS(useController ? "DRK" : "DSRK", 193 + wide_delta, 32,
+                              useController ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+
+        RD_M_DrawTextSmallRUS(invertAxis[CONTROLLER_AXIS_MOVE] ? "DRK" : "DSRK", 170 + wide_delta, 62,
+                              invertAxis[CONTROLLER_AXIS_MOVE] ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+
+        RD_M_DrawTextSmallRUS(invertAxis[CONTROLLER_AXIS_STRAFE] ? "DRK" : "DSRK", 170 + wide_delta, 102,
+                              invertAxis[CONTROLLER_AXIS_STRAFE] ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+
+        RD_M_DrawTextSmallRUS(invertAxis[CONTROLLER_AXIS_TURN] ? "DRK" : "DSRK", 170 + wide_delta, 142,
+                              invertAxis[CONTROLLER_AXIS_TURN] ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+
+        RD_M_DrawTextSmallRUS(invertAxis[CONTROLLER_AXIS_VLOOK] ? "DRK" : "DSRK", 170 + wide_delta, 182,
+                              invertAxis[CONTROLLER_AXIS_VLOOK] ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+
+        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_MOVE]), 150 + wide_delta, 52, CR_NONE);
+
+        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_STRAFE]), 150 + wide_delta, 92, CR_NONE);
+
+        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_TURN]), 150 + wide_delta, 132, CR_NONE);
+
+        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_VLOOK]), 150 + wide_delta, 172, CR_NONE);
+    }
+}
+
+static void M_RD_UseGamepad()
+{
+    useController ^= 1;
+    I_ShutdownController();
+    I_InitController();
+}
+
+static void M_RD_BindAxis_Move(Direction_t direction)
+{
+    RD_Menu_SpinInt(&bindAxis[CONTROLLER_AXIS_MOVE], CONTROLLER_AXIS_NONE, CONTROLLER_AXIS_VLOOK, direction);
+}
+
+static void M_RD_InvertAxis_Move()
+{
+    invertAxis[CONTROLLER_AXIS_MOVE] ^= 1;
+}
+
+static void M_RD_BindAxis_Turn(Direction_t direction)
+{
+    RD_Menu_SpinInt(&bindAxis[CONTROLLER_AXIS_TURN], CONTROLLER_AXIS_NONE, CONTROLLER_AXIS_VLOOK, direction);
+}
+
+static void M_RD_InvertAxis_Turn()
+{
+    invertAxis[CONTROLLER_AXIS_TURN] ^= 1;
+}
+
+static void M_RD_BindAxis_Strafe(Direction_t direction)
+{
+    RD_Menu_SpinInt(&bindAxis[CONTROLLER_AXIS_STRAFE], CONTROLLER_AXIS_NONE, CONTROLLER_AXIS_VLOOK, direction);
+}
+
+static void M_RD_InvertAxis_Strafe()
+{
+    invertAxis[CONTROLLER_AXIS_STRAFE] ^= 1;
+}
+
+static void M_RD_BindAxis_VLook(Direction_t direction)
+{
+    RD_Menu_SpinInt(&bindAxis[CONTROLLER_AXIS_VLOOK], CONTROLLER_AXIS_NONE, CONTROLLER_AXIS_VLOOK, direction);
+}
+
+static void M_RD_InvertAxis_VLook()
+{
+    invertAxis[CONTROLLER_AXIS_VLOOK] ^= 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -3484,7 +3899,6 @@ void M_RD_DoResetSettings(void)
     mute_inactive_window = 0;
 
     // Controls
-    joybspeed           = 29;
     mouseSensitivity    = 5;
     mlook               = 0;
     players[consoleplayer].centering = true;
@@ -3775,8 +4189,6 @@ static void SCInfo(int option)
 boolean MN_Responder(event_t * event)
 {
     int charTyped;
-    int key;
-    int mousewait = 0;
     MenuItem_t *item;
     extern void D_StartTitle(void);
     extern void G_CheckDemoStatus(void);
@@ -3787,10 +4199,7 @@ boolean MN_Responder(event_t * event)
 
     if (testcontrols)
     {
-        if (event->type == ev_quit
-         || (event->type == ev_keydown
-          && (event->data1 == key_menu_activate
-           || event->data1 == key_menu_quit)))
+        if (event->type == ev_quit || BK_isKeyDown(event, bk_menu_activate) || BK_isKeyDown(event, bk_quit))
         {
             // [JN] Widescreen: remember choosen widescreen variable before quit.
             aspect_ratio = aspect_ratio_temp;
@@ -3824,73 +4233,18 @@ boolean MN_Responder(event_t * event)
         return true;
     }
 
-    // [JN] Initialize events.
-    charTyped = 0;
-    key = -1;
-
-    // Allow the menu to be activated from a joystick button if a button
-    // is bound for joybmenu.
-    if (event->type == ev_joystick)
-    {
-        if (joybmenu >= 0 && (event->data1 & (1 << joybmenu)) != 0)
-        {
-            RD_Menu_ActivateMenu();
-            return true;
-        }
-    }
-    // [JN] Support for mouse controls.
-    else
-    {
-        if (event->type == ev_mouse && mousewait < I_GetTime())
-        {
-            // [JN] Catch all incoming data1 mouse events. Makes middle mouse button
-            // working for message interruption and for binding ability.
-            if (event->data1)
-            {
-                key = event->data1;
-                mousewait = I_GetTime() + 5;
-            }
-
-            // [JN] Do not read mouse events while typing and "typeofask" events.
-            if (!FileMenuKeySteal)
-            {
-                if (event->data1&1)
-                {
-                    key = key_menu_forward;
-                    mousewait = I_GetTime() + 15;
-                }
-                if (event->data1&2)
-                {
-                    key = key_menu_back;
-                    mousewait = I_GetTime() + 15;
-                }
-            }
-            // [crispy] scroll menus with mouse wheel
-            if (mousebprevweapon >= 0 && event->data1 & (1 << mousebprevweapon))
-            {
-                key = key_menu_down;
-                mousewait = I_GetTime() + 1;
-            }
-            else
-            if (mousebnextweapon >= 0 && event->data1 & (1 << mousebnextweapon))
-            {
-                key = key_menu_up;
-                mousewait = I_GetTime() + 1;
-            }
-        }
-        else
-        {
-            if (event->type == ev_keydown)
-            {
-                key = event->data1;
-                charTyped = event->data2;
-            }
-        }
-    }
-
-    if (key == -1)
+    // Only care about keypresses beyond this point.
+    if (event->type != ev_keydown &&
+        event->type != ev_mouse_keydown &&
+        event->type != ev_controller_keydown)
     {
         return false;
+    }
+
+    if(isBinding)
+    {
+        BK_BindKey(event);
+        return true;
     }
 
     if (InfoType)
@@ -3903,7 +4257,7 @@ boolean MN_Responder(event_t * event)
         {
             InfoType = (InfoType + 1) % 4;
         }
-        if (key == KEY_ESCAPE)
+        if (BK_isKeyDown(event, bk_menu_activate))
         {
             InfoType = 0;
         }
@@ -3917,8 +4271,7 @@ boolean MN_Responder(event_t * event)
         return (true);          //make the info screen eat the keypress
     }
 
-    if ((ravpic && key == KEY_F1) ||
-        (key != 0 && key == key_menu_screenshot))
+    if ((ravpic && event->data1 == KEY_F1) || BK_isKeyDown(event, bk_screenshot))
     {
         G_ScreenShot();
         return (true);
@@ -3926,7 +4279,7 @@ boolean MN_Responder(event_t * event)
 
     if (askforquit)
     {
-        if (key == key_menu_confirm)
+        if (BK_isKeyDown(event, bk_confirm))
         {
             switch (typeofask)
             {
@@ -3975,7 +4328,7 @@ boolean MN_Responder(event_t * event)
 
             return true;
         }
-        else if (key == key_menu_abort || key == KEY_ESCAPE)
+        else if (BK_isKeyDown(event, bk_abort))
         {
             players[consoleplayer].messageTics = 1;  //set the msg to be cleared
             askforquit = false;
@@ -3992,7 +4345,7 @@ boolean MN_Responder(event_t * event)
 
     if (!menuactive && !chatmodeon)
     {
-        if (key == key_menu_decscreen)
+        if (BK_isKeyDown(event, bk_screen_dec))
         {
             if (automapactive)
             {               // Don't screen size in automap
@@ -4004,7 +4357,7 @@ boolean MN_Responder(event_t * event)
             UpdateState |= I_FULLSCRN;
             return (true);
         }
-        else if (key == key_menu_incscreen)
+        else if (BK_isKeyDown(event, bk_screen_inc))
         {
             if (automapactive)
             {               // Don't screen size in automap
@@ -4016,13 +4369,13 @@ boolean MN_Responder(event_t * event)
             UpdateState |= I_FULLSCRN;
             return (true);
         }
-        else if (key == key_menu_help)           // F1
+        else if (BK_isKeyDown(event, bk_menu_help))           // F1
         {
             SCInfo(0);      // start up info screens
             menuactive = true;
             return (true);
         }
-        else if (key == key_menu_save)           // F2 (save game)
+        else if (BK_isKeyDown(event, bk_menu_save))           // F2 (save game)
         {
             if (gamestate == GS_LEVEL && !demoplayback)
             {
@@ -4039,7 +4392,7 @@ boolean MN_Responder(event_t * event)
             }
             return true;
         }
-        else if (key == key_menu_load)           // F3 (load game)
+        else if (BK_isKeyDown(event, bk_menu_load))           // F3 (load game)
         {
             if (SCNetCheck(2))
             {
@@ -4056,7 +4409,7 @@ boolean MN_Responder(event_t * event)
             }
             return true;
         }
-        else if (key == key_menu_volume)         // F4 (volume)
+        else if (BK_isKeyDown(event, bk_menu_volume))         // F4 (volume)
         {
             menuactive = true;
             FileMenuKeySteal = false;
@@ -4072,14 +4425,14 @@ boolean MN_Responder(event_t * event)
             slottextloaded = false; //reload the slot text, when needed
             return true;
         }
-        else if (key == key_menu_detail)          // F5 (detail)
+        else if (BK_isKeyDown(event, bk_detail))          // F5 (detail)
         {
             // [JN] Restored variable detail mode.
-            M_RD_Detail(0);
+            M_RD_Detail();
             S_StartSound(NULL, sfx_chat);
             return true;
         }
-        else if (key == key_menu_qsave)           // F6 (quicksave)
+        else if (BK_isKeyDown(event, bk_qsave))           // F6 (quicksave)
         {
             if (gamestate == GS_LEVEL && !demoplayback)
             {
@@ -4111,7 +4464,7 @@ boolean MN_Responder(event_t * event)
             }
             return true;
         }
-        else if (key == key_menu_endgame)         // F7 (end game)
+        else if (BK_isKeyDown(event, bk_endgame))         // F7 (end game)
         {
             if (gamestate == GS_LEVEL && !demoplayback)
             {
@@ -4120,12 +4473,12 @@ boolean MN_Responder(event_t * event)
             }
             return true;
         }
-        else if (key == key_menu_messages)        // F8 (toggle messages)
+        else if (BK_isKeyDown(event, bk_messages))        // F8 (toggle messages)
         {
             M_RD_Messages(0);
             return true;
         }
-        else if (key == key_menu_qload)           // F9 (quickload)
+        else if (BK_isKeyDown(event, bk_qload))           // F9 (quickload)
         {
             if (!quickload || quickload == -1)
             {
@@ -4154,14 +4507,14 @@ boolean MN_Responder(event_t * event)
             }
             return true;
         }
-        else if (key == key_menu_quit)            // F10 (quit)
+        else if (BK_isKeyDown(event, bk_quit))            // F10 (quit)
         {
             // [JN] Allow to invoke quit responce in any game states.
             SCQuitGame(0);
             S_StartSound(NULL, sfx_chat);
             return true;
         }
-        else if (key == key_menu_gamma)           // F11 (gamma correction)
+        else if (BK_isKeyDown(event, bk_gamma))           // F11 (gamma correction)
         {
             usegamma++;
             if (usegamma > 17)
@@ -4181,12 +4534,12 @@ boolean MN_Responder(event_t * event)
         }
         // [crispy] those two can be considered as shortcuts for the ENGAGE cheat
         // and should be treated as such, i.e. add "if (!netgame)"
-        else if (!netgame && key != 0 && key == key_menu_reloadlevel)
+        else if (!netgame && BK_isKeyDown(event, bk_reloadlevel))
         {
             if (G_ReloadLevel())
             return true;
         }
-        else if (!netgame && key != 0 && key == key_menu_nextlevel)
+        else if (!netgame && BK_isKeyDown(event, bk_nextlevel))
         {
             if (G_GotoNextLevel())
             return true;
@@ -4195,18 +4548,35 @@ boolean MN_Responder(event_t * event)
 
     if (!menuactive)
     {
-        if (key == key_menu_activate || gamestate == GS_DEMOSCREEN || demoplayback)
+        if (BK_isKeyDown(event, bk_menu_activate) || gamestate == GS_DEMOSCREEN || demoplayback)
         {
             RD_Menu_ActivateMenu();
             return (true);
         }
         return (false);
     }
+
+    if (event->type == ev_keydown && event->data1 == KEY_DEL)
+    {
+        //[Dasperal] Key bindings menus
+        if(CurrentMenu == &Bindings1Menu ||
+           CurrentMenu == &Bindings2Menu ||
+           CurrentMenu == &Bindings3Menu ||
+           CurrentMenu == &Bindings4Menu ||
+           CurrentMenu == &Bindings5Menu ||
+           CurrentMenu == &Bindings6Menu)
+        {
+            BK_ClearBinds(CurrentMenu->items[CurrentItPos].option);
+            RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
+            return true;
+        }
+    }
+
     if (!FileMenuKeySteal)
     {
-        return RD_Menu_Responder(key, charTyped);
+        return RD_Menu_Responder(event);
     }
-    else
+    else if(event->type == ev_keydown)
     {
         // Editing file names
         // When typing a savegame name, we use the fully shifted and
@@ -4214,7 +4584,7 @@ boolean MN_Responder(event_t * event)
         charTyped = event->data3;
 
         textBuffer = &SlotText[currentSlot][slotptr];
-        if (key == KEY_BACKSPACE)
+        if (BK_isKeyDown(event, bk_menu_back))
         {
             if (slotptr)
             {
@@ -4225,7 +4595,7 @@ boolean MN_Responder(event_t * event)
             }
             return (true);
         }
-        if (key == KEY_ESCAPE)
+        if (BK_isKeyDown(event, bk_menu_activate))
         {
             memset(SlotText[currentSlot], 0, SLOTTEXTLEN + 2);
             M_StringCopy(SlotText[currentSlot], oldSlotText,
@@ -4234,7 +4604,7 @@ boolean MN_Responder(event_t * event)
             RD_Menu_DeactivateMenu();
             return (true);
         }
-        if (key == KEY_ENTER)
+        if (BK_isKeyDown(event, bk_menu_select))
         {
             SlotText[currentSlot][slotptr] = 0; // clear the cursor
             item = (MenuItem_t*) &CurrentMenu->items[CurrentItPos];
@@ -4287,6 +4657,7 @@ boolean MN_Responder(event_t * event)
         }
         return (true);
     }
+    return false;
 }
 
 //---------------------------------------------------------------------------

@@ -24,20 +24,21 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <errno.h>
 #include <assert.h>
 
 #include "SDL_filesystem.h"
 
 #include "config.h"
 #include "doomtype.h"
-#include "doomkeys.h"
 #include "doomfeatures.h"
 #include "i_system.h"
 #include "m_argv.h"
 #include "m_misc.h"
-#include "z_zone.h"
 #include "jn.h"
+
+#ifndef ___RD_TARGET_SETUP___
+    #include "rd_keybinds.h"
+#endif
 
 //
 // DEFAULTS
@@ -59,7 +60,6 @@ typedef enum
     DEFAULT_INT_HEX,
     DEFAULT_STRING,
     DEFAULT_FLOAT,
-    DEFAULT_KEY,
 } default_type_t;
 
 typedef struct
@@ -103,8 +103,6 @@ typedef struct
 #define CONFIG_VARIABLE_GENERIC(name, type) \
     { #name, {NULL}, type, 0, 0, false }
 
-#define CONFIG_VARIABLE_KEY(name) \
-    CONFIG_VARIABLE_GENERIC(name, DEFAULT_KEY)
 #define CONFIG_VARIABLE_INT(name) \
     CONFIG_VARIABLE_GENERIC(name, DEFAULT_INT)
 #define CONFIG_VARIABLE_INT_HEX(name) \
@@ -204,264 +202,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(voice_volume),
 
     //!
-    // @game doom
-    //
-    // If non-zero, messages are displayed on the heads-up display
-    // in the game ("picked up a clip", etc).  If zero, these messages
-    // are not displayed.
-    //
-
-    
-
-    //!
-    // Keyboard key to turn right.
-    //
-
-    CONFIG_VARIABLE_KEY(key_right),
-
-    //!
-    // Keyboard key to turn left.
-    //
-
-    CONFIG_VARIABLE_KEY(key_left),
-
-    //!
-    // Keyboard key to move forward.
-    //
-
-    CONFIG_VARIABLE_KEY(key_up),
-
-    //!
-    // Keyboard key to move backward.
-    //
-
-    CONFIG_VARIABLE_KEY(key_down),
-
-    //!
-    // Keyboard key to strafe left.
-    //
-
-    CONFIG_VARIABLE_KEY(key_strafeleft),
-
-    //!
-    // Keyboard key to strafe right.
-    //
-
-    CONFIG_VARIABLE_KEY(key_straferight),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to use health.
-    //
-
-    CONFIG_VARIABLE_KEY(key_useHealth),
-
-    //!
-    // @game hexen
-    //
-    // Keyboard key to jump.
-    //
-
-    CONFIG_VARIABLE_KEY(key_jump),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to fly upward.
-    //
-
-    CONFIG_VARIABLE_KEY(key_flyup),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to fly downwards.
-    //
-
-    CONFIG_VARIABLE_KEY(key_flydown),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to center flying.
-    //
-
-    CONFIG_VARIABLE_KEY(key_flycenter),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to look up.
-    //
-
-    CONFIG_VARIABLE_KEY(key_lookup),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to look down.
-    //
-
-    CONFIG_VARIABLE_KEY(key_lookdown),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to center the view.
-    //
-
-    CONFIG_VARIABLE_KEY(key_lookcenter),
-
-    /*
-    //!
-    // @game strife
-    //
-    // Keyboard key to query inventory.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invquery),
-    */
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to display mission objective.
-    //
-
-    CONFIG_VARIABLE_KEY(key_mission),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to display inventory popup.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invPop),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to display keys popup.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invKey),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to jump to start of inventory.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invHome),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to jump to end of inventory.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invEnd),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to scroll left in the inventory.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invleft),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to scroll right in the inventory.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invright),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to scroll left in the inventory.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invLeft),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to scroll right in the inventory.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invRight),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to use the current item in the inventory.
-    //
-
-    CONFIG_VARIABLE_KEY(key_useartifact),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to use inventory item.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invUse),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to drop an inventory item.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invDrop),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to look up.
-    //
-
-    CONFIG_VARIABLE_KEY(key_lookUp),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to look down.
-    //
-
-    CONFIG_VARIABLE_KEY(key_lookDown),
-
-    //!
-    // Keyboard key to fire the currently selected weapon.
-    //
-
-    CONFIG_VARIABLE_KEY(key_fire),
-
-    //!
-    // Keyboard key to "use" an object, eg. a door or switch.
-    //
-
-    CONFIG_VARIABLE_KEY(key_use),
-
-    //!
-    // Keyboard key to turn on strafing.  When held down, pressing the
-    // key to turn left or right causes the player to strafe left or
-    // right instead.
-    //
-
-    CONFIG_VARIABLE_KEY(key_strafe),
-
-    //!
-    // Keyboard key to make the player run.
-    //
-
-    CONFIG_VARIABLE_KEY(key_speed),
-
-    //!
     // If non-zero, mouse input is enabled.  If zero, mouse input is
     // disabled.
     //
@@ -469,64 +209,26 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(use_mouse),
 
     //!
-    // Mouse button to fire the currently selected weapon.
-    //
-
-    CONFIG_VARIABLE_INT(mouseb_fire),
-
-    //!
-    // Mouse button to turn on strafing.  When held down, the player
-    // will strafe left and right instead of turning left and right.
-    //
-
-    CONFIG_VARIABLE_INT(mouseb_strafe),
-
-    //!
-    // Mouse button to move forward.
-    //
-
-    CONFIG_VARIABLE_INT(mouseb_forward),
-
-    //!
-    // @game hexen strife
-    //
-    // Mouse button to jump.
-    //
-
-    CONFIG_VARIABLE_INT(mouseb_jump),
-
-    //!
     // If non-zero, joystick input is enabled.
     //
 
-    CONFIG_VARIABLE_INT(use_joystick),
+    CONFIG_VARIABLE_INT(use_controller),
 
-    //!
-    // Joystick virtual button that fires the current weapon.
-    //
+    CONFIG_VARIABLE_INT(controller_invert_move),
 
-    CONFIG_VARIABLE_INT(joyb_fire),
+    CONFIG_VARIABLE_INT(controller_invert_strafe),
 
-    //!
-    // Joystick virtual button that makes the player strafe while
-    // held down.
-    //
+    CONFIG_VARIABLE_INT(controller_invert_turn),
 
-    CONFIG_VARIABLE_INT(joyb_strafe),
+    CONFIG_VARIABLE_INT(controller_invert_vlook),
 
-    //!
-    // Joystick virtual button to "use" an object, eg. a door or switch.
-    //
+    CONFIG_VARIABLE_INT(controller_bind_move),
 
-    CONFIG_VARIABLE_INT(joyb_use),
+    CONFIG_VARIABLE_INT(controller_bind_strafe),
 
-    //!
-    // @game hexen strife
-    //
-    // Joystick virtual button that makes the player jump.
-    //
+    CONFIG_VARIABLE_INT(controller_bind_turn),
 
-    CONFIG_VARIABLE_INT(joyb_jump),
+    CONFIG_VARIABLE_INT(controller_bind_vlook),
 
     //!
     // @game strife
@@ -866,214 +568,6 @@ static default_t extra_defaults_list[] =
 
 #endif
 
-    //!
-    // SDL GUID string indicating the joystick to use. An empty string
-    // indicates that no joystick is configured.
-    //
-
-    CONFIG_VARIABLE_STRING(joystick_guid),
-
-    //!
-    // Index of SDL joystick to use; this is only used in the case where
-    // multiple identical joystick devices are connected which have the
-    // same GUID, to distinguish between devices.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_index),
-
-    //!
-    // Joystick axis to use to for horizontal (X) movement.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_x_axis),
-
-    //!
-    // If non-zero, movement on the horizontal joystick axis is inverted.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_x_invert),
-
-    //!
-    // Joystick axis to use to for vertical (Y) movement.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_y_axis),
-
-    //!
-    // If non-zero, movement on the vertical joystick axis is inverted.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_y_invert),
-
-    //!
-    // Joystick axis to use to for strafing movement.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_strafe_axis),
-
-    //!
-    // If non-zero, movement on the joystick axis used for strafing
-    // is inverted.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_strafe_invert),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #0.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button0),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #1.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button1),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #2.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button2),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #3.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button3),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #4.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button4),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #5.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button5),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #6.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button6),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #7.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button7),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #8.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button8),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #9.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button9),
-
-    //!
-    // The physical joystick button that corresponds to joystick
-    // virtual button #10.
-    //
-
-    CONFIG_VARIABLE_INT(joystick_physical_button10),
-
-    //!
-    // Joystick virtual button to make the player strafe left.
-    //
-
-    CONFIG_VARIABLE_INT(joyb_strafeleft),
-
-    //!
-    // Joystick virtual button to make the player strafe right.
-    //
-
-    CONFIG_VARIABLE_INT(joyb_straferight),
-
-    //!
-    // Joystick virtual button to activate the menu.
-    //
-
-    CONFIG_VARIABLE_INT(joyb_menu_activate),
-
-    //!
-    // Joystick virtual button to toggle the automap.
-    //
-
-    CONFIG_VARIABLE_INT(joyb_toggle_automap),
-
-    //!
-    // Joystick virtual button that cycles to the previous weapon.
-    //
-
-    CONFIG_VARIABLE_INT(joyb_prevweapon),
-
-    //!
-    // Joystick virtual button that cycles to the next weapon.
-    //
-
-    CONFIG_VARIABLE_INT(joyb_nextweapon),
-
-    //!
-    // Mouse button to strafe left.
-    //
-
-    CONFIG_VARIABLE_INT(mouseb_strafeleft),
-
-    //!
-    // Mouse button to strafe right.
-    //
-
-    CONFIG_VARIABLE_INT(mouseb_straferight),
-
-    //!
-    // Mouse button to "use" an object, eg. a door or switch.
-    //
-
-    CONFIG_VARIABLE_INT(mouseb_use),
-
-    //!
-    // Mouse button to move backwards.
-    //
-
-    CONFIG_VARIABLE_INT(mouseb_backward),
-
-    //!
-    // Mouse button to cycle to the previous weapon.
-    //
-
-    CONFIG_VARIABLE_INT(mouseb_prevweapon),
-
-    //!
-    // Mouse button to cycle to the next weapon.
-    //
-
-    CONFIG_VARIABLE_INT(mouseb_nextweapon),
-
-    //!
-    // If non-zero, double-clicking a mouse button acts like pressing
-    // the "use" key to use an object in-game, eg. a door or switch.
-    //
-
-    CONFIG_VARIABLE_INT(dclick_use),
-
 #ifdef FEATURE_SOUND
 
     //!
@@ -1132,506 +626,6 @@ static default_t extra_defaults_list[] =
 #endif
 
     //!
-    // Key to pause or unpause the game.
-    //
-
-    CONFIG_VARIABLE_KEY(key_pause),
-
-    //!
-    // Key that activates the menu when pressed.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_activate),
-
-    //!
-    // Key that moves the cursor up on the menu.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_up),
-
-    //!
-    // Key that moves the cursor down on the menu.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_down),
-
-    //!
-    // Key that moves the currently selected slider on the menu left.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_left),
-
-    //!
-    // Key that moves the currently selected slider on the menu right.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_right),
-
-    //!
-    // Key to go back to the previous menu.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_back),
-
-    //!
-    // Key to activate the currently selected menu item.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_forward),
-
-    //!
-    // Key to answer 'yes' to a question in the menu.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_confirm),
-
-    //!
-    // Key to answer 'no' to a question in the menu.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_abort),
-
-    //!
-    // Keyboard shortcut to bring up the help screen.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_help),
-
-    //!
-    // Keyboard shortcut to bring up the save game menu.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_save),
-
-    //!
-    // Keyboard shortcut to bring up the load game menu.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_load),
-
-    //!
-    // Keyboard shortcut to bring up the sound volume menu.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_volume),
-
-    //!
-    // Keyboard shortcut to toggle the detail level.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_detail),
-
-    //!
-    // Keyboard shortcut to quicksave the current game.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_qsave),
-
-    //!
-    // Keyboard shortcut to end the game.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_endgame),
-
-    //!
-    // Keyboard shortcut to toggle heads-up messages.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_messages),
-
-    //!
-    // Keyboard shortcut to load the last quicksave.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_qload),
-
-    //!
-    // Keyboard shortcut to quit the game.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_quit),
-
-    //!
-    // Keyboard shortcut to toggle the gamma correction level.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_gamma),
-
-    //!
-    // Keyboard shortcut to switch view in multiplayer.
-    //
-
-    CONFIG_VARIABLE_KEY(key_spy),
-
-    //!
-    // Keyboard shortcut to go to next level.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_nextlevel),
-
-    //!
-    // Keyboard shortcut to restart current level or demo.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_reloadlevel),
-
-    //!
-    // Keyboard shortcut to increase the screen size.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_incscreen),
-
-    //!
-    // Keyboard shortcut to decrease the screen size.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_decscreen),
-
-    //!
-    // Keyboard shortcut to save a screenshot.
-    //
-
-    CONFIG_VARIABLE_KEY(key_menu_screenshot),
-
-    //!
-    // Key to toggle the map view.
-    //
-
-    CONFIG_VARIABLE_KEY(key_map_toggle),
-
-    //!
-    // Key to pan north when in the map view.
-    //
-
-    CONFIG_VARIABLE_KEY(key_map_north),
-
-    //!
-    // Key to pan south when in the map view.
-    //
-
-    CONFIG_VARIABLE_KEY(key_map_south),
-
-    //!
-    // Key to pan east when in the map view.
-    //
-
-    CONFIG_VARIABLE_KEY(key_map_east),
-
-    //!
-    // Key to pan west when in the map view.
-    //
-
-    CONFIG_VARIABLE_KEY(key_map_west),
-
-    //!
-    // Key to zoom in when in the map view.
-    //
-
-    CONFIG_VARIABLE_KEY(key_map_zoomin),
-
-    //!
-    // Key to zoom out when in the map view.
-    //
-
-    CONFIG_VARIABLE_KEY(key_map_zoomout),
-
-    //!
-    // Key to zoom out the maximum amount when in the map view.
-    //
-
-    CONFIG_VARIABLE_KEY(key_map_maxzoom),
-
-    //!
-    // Key to toggle follow mode when in the map view.
-    //
-
-    CONFIG_VARIABLE_KEY(key_map_follow),
-
-    //!
-    // Key to toggle the grid display when in the map view.
-    //
-
-    CONFIG_VARIABLE_KEY(key_map_grid),
-
-    //!
-    // Key to set a mark when in the map view.
-    //
-
-    CONFIG_VARIABLE_KEY(key_map_mark),
-
-    //!
-    // Key to clear all marks when in the map view.
-    //
-
-    CONFIG_VARIABLE_KEY(key_map_clearmark),
-
-    //!
-    // Key to toogle the overlay mode when in the map view.
-    //
-
-    CONFIG_VARIABLE_KEY(key_map_overlay),
-
-    //!
-    // Key to toogle the rotate mode when in the map view.
-    //
-
-    CONFIG_VARIABLE_KEY(key_map_rotate),
-
-    //!
-    // Key to select weapon 1.
-    //
-
-    CONFIG_VARIABLE_KEY(key_weapon1),
-
-    //!
-    // Key to select weapon 2.
-    //
-
-    CONFIG_VARIABLE_KEY(key_weapon2),
-
-    //!
-    // Key to select weapon 3.
-    //
-
-    CONFIG_VARIABLE_KEY(key_weapon3),
-
-    //!
-    // Key to select weapon 4.
-    //
-
-    CONFIG_VARIABLE_KEY(key_weapon4),
-
-    //!
-    // Key to select weapon 5.
-    //
-
-    CONFIG_VARIABLE_KEY(key_weapon5),
-
-    //!
-    // Key to select weapon 6.
-    //
-
-    CONFIG_VARIABLE_KEY(key_weapon6),
-
-    //!
-    // Key to select weapon 7.
-    //
-
-    CONFIG_VARIABLE_KEY(key_weapon7),
-
-    //!
-    // Key to select weapon 8.
-    //
-
-    CONFIG_VARIABLE_KEY(key_weapon8),
-
-    //!
-    // Key to cycle to the previous weapon.
-    //
-
-    CONFIG_VARIABLE_KEY(key_prevweapon),
-
-    //!
-    // Key to cycle to the next weapon.
-    //
-
-    CONFIG_VARIABLE_KEY(key_nextweapon),
-
-    //!
-    // @game heretic
-    //
-    // [JN] Bindable keys for artifacts.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_quartz),
-    CONFIG_VARIABLE_KEY(key_arti_urn),
-    CONFIG_VARIABLE_KEY(key_arti_bomb),
-    CONFIG_VARIABLE_KEY(key_arti_tome),
-    CONFIG_VARIABLE_KEY(key_arti_ring),
-    CONFIG_VARIABLE_KEY(key_arti_morphegg),
-    CONFIG_VARIABLE_KEY(key_arti_chaosdevice),
-    CONFIG_VARIABLE_KEY(key_arti_shadowsphere),
-    CONFIG_VARIABLE_KEY(key_arti_wings),
-    CONFIG_VARIABLE_KEY(key_arti_torch),
-
-    //!
-    // @game hexen
-    //
-    // Key to use one of each artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_all),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "quartz flask" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_health),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "flechette" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_poisonbag),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "disc of repulsion" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_blastradius),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "chaos device" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_teleport),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "banishment device" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_teleportother),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "porkalator" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_egg),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "icon of the defender" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_invulnerability),
-    
-    //!
-    // @game hexen
-    //
-    // [JN] Now we can bind all the Artifacts.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_superhealth),
-    CONFIG_VARIABLE_KEY(key_arti_boostarmor),
-    CONFIG_VARIABLE_KEY(key_arti_boostmana),
-    CONFIG_VARIABLE_KEY(key_arti_summon),
-    CONFIG_VARIABLE_KEY(key_arti_fly),
-    CONFIG_VARIABLE_KEY(key_arti_speed),
-    CONFIG_VARIABLE_KEY(key_arti_torch),
-    CONFIG_VARIABLE_KEY(key_arti_healingradius),
-
-    //!
-    // Key to re-display last message.
-    //
-
-    CONFIG_VARIABLE_KEY(key_message_refresh),
-
-    //!
-    // Key to quit the game when recording a demo.
-    //
-
-    CONFIG_VARIABLE_KEY(key_demo_quit),
-
-    //!
-    // Key to send a message during multiplayer games.
-    //
-
-    CONFIG_VARIABLE_KEY(key_multi_msg),
-
-    //!
-    // Key to send a message to player 1 during multiplayer games.
-    //
-
-    CONFIG_VARIABLE_KEY(key_multi_msgplayer1),
-
-    //!
-    // Key to send a message to player 2 during multiplayer games.
-    //
-
-    CONFIG_VARIABLE_KEY(key_multi_msgplayer2),
-
-    //!
-    // Key to send a message to player 3 during multiplayer games.
-    //
-
-    CONFIG_VARIABLE_KEY(key_multi_msgplayer3),
-
-    //!
-    // Key to send a message to player 4 during multiplayer games.
-    //
-
-    CONFIG_VARIABLE_KEY(key_multi_msgplayer4),
-
-    //!
-    // @game hexen strife
-    //
-    // Key to send a message to player 5 during multiplayer games.
-    //
-
-    CONFIG_VARIABLE_KEY(key_multi_msgplayer5),
-
-    //!
-    // @game hexen strife
-    //
-    // Key to send a message to player 6 during multiplayer games.
-    //
-
-    CONFIG_VARIABLE_KEY(key_multi_msgplayer6),
-
-    //!
-    // @game hexen strife
-    //
-    // Key to send a message to player 7 during multiplayer games.
-    //
-
-    CONFIG_VARIABLE_KEY(key_multi_msgplayer7),
-
-    //!
-    // @game hexen strife
-    //
-    // Key to send a message to player 8 during multiplayer games.
-    //
-
-    CONFIG_VARIABLE_KEY(key_multi_msgplayer8),
-
-    //!
-    // [JN] Toggle always run.
-    //
-
-    CONFIG_VARIABLE_KEY(key_toggleautorun),
-
-    //!
-    // [JN] Toggle crosshair.
-    //
-
-    CONFIG_VARIABLE_KEY(key_togglecrosshair),
-
-    //!
-    // [JN] Toggle mouselook.
-    //
-
-    CONFIG_VARIABLE_KEY(key_togglemlook),
-
-    //!
-    // [JN] Toggle level flipping.
-    //
-
-    CONFIG_VARIABLE_KEY(key_togglefliplvls),
-
-    //!
     // [JN] Russian Doom menu
     //
 
@@ -1688,7 +682,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(mute_inactive_window),
 
     // Controls
-    CONFIG_VARIABLE_INT(joyb_speed),
+    CONFIG_VARIABLE_INT(always_run),
     CONFIG_VARIABLE_INT(mlook),
     CONFIG_VARIABLE_INT(mouse_sensitivity),
     CONFIG_VARIABLE_INT(novert),
@@ -1787,41 +781,10 @@ static default_t *SearchCollection(default_collection_t *collection, char *name)
     return NULL;
 }
 
-// Mapping from DOS keyboard scan code to internal key code (as defined
-// in doomkey.h). I think I (fraggle) reused this from somewhere else
-// but I can't find where. Anyway, notes:
-//  * KEY_PAUSE is wrong - it's in the KEY_NUMLOCK spot. This shouldn't
-//    matter in terms of Vanilla compatibility because neither of
-//    those were valid for key bindings.
-//  * There is no proper scan code for PrintScreen (on DOS machines it
-//    sends an interrupt). So I added a fake scan code of 126 for it.
-//    The presence of this is important so we can bind PrintScreen as
-//    a screenshot key.
-static const int scantokey[128] =
-{
-    0  ,    27,     '1',    '2',    '3',    '4',    '5',    '6',
-    '7',    '8',    '9',    '0',    '-',    '=',    KEY_BACKSPACE, 9,
-    'q',    'w',    'e',    'r',    't',    'y',    'u',    'i',
-    'o',    'p',    '[',    ']',    13,		KEY_RCTRL, 'a',    's',
-    'd',    'f',    'g',    'h',    'j',    'k',    'l',    ';',
-    '\'',   '`',    KEY_RSHIFT,'\\',   'z',    'x',    'c',    'v',
-    'b',    'n',    'm',    ',',    '.',    '/',    KEY_RSHIFT,KEYP_MULTIPLY,
-    KEY_RALT,  ' ',  KEY_CAPSLOCK,KEY_F1,  KEY_F2,   KEY_F3,   KEY_F4,   KEY_F5,
-    KEY_F6,   KEY_F7,   KEY_F8,   KEY_F9,   KEY_F10,  /*KEY_NUMLOCK?*/KEY_PAUSE,KEY_SCRLCK,KEY_HOME,
-    KEY_UPARROW,KEY_PGUP,KEY_MINUS,KEY_LEFTARROW,KEYP_5,KEY_RIGHTARROW,KEYP_PLUS,KEY_END,
-    KEY_DOWNARROW,KEY_PGDN,KEY_INS,KEY_DEL,0,   0,      0,      KEY_F11,
-    KEY_F12,  0,      0,      0,      0,      0,      0,      0,
-    0,      0,      0,      0,      0,      0,      0,      0,
-    0,      0,      0,      0,      0,      0,      0,      0,
-    0,      0,      0,      0,      0,      0,      0,      0,
-    0,      0,      0,      0,      0,      0,      KEY_PRTSCR, 0
-};
-
-
 static void SaveDefaultCollection(default_collection_t *collection)
 {
     default_t *defaults;
-    int i, v;
+    int i;
     FILE *f;
 	
     f = fopen (collection->filename, "w");
@@ -1852,58 +815,12 @@ static void SaveDefaultCollection(default_collection_t *collection)
 
         switch (defaults[i].type) 
         {
-            case DEFAULT_KEY:
-
-                // use the untranslated version if we can, to reduce
-                // the possibility of screwing up the user's config
-                // file
-                
-                v = *defaults[i].location.i;
-
-                if (v == KEY_RSHIFT)
-                {
-                    // Special case: for shift, force scan code for
-                    // right shift, as this is what Vanilla uses.
-                    // This overrides the change check below, to fix
-                    // configuration files made by old versions that
-                    // mistakenly used the scan code for left shift.
-
-                    v = 54;
-                }
-                else if (defaults[i].untranslated
-                      && v == defaults[i].original_translated)
-                {
-                    // Has not been changed since the last time we
-                    // read the config file.
-
-                    v = defaults[i].untranslated;
-                }
-                else
-                {
-                    // search for a reverse mapping back to a scancode
-                    // in the scantokey table
-
-                    int s;
-
-                    for (s=0; s<128; ++s)
-                    {
-                        if (scantokey[s] == v)
-                        {
-                            v = s;
-                            break;
-                        }
-                    }
-                }
-
-	        fprintf(f, "%i", v);
-                break;
-
             case DEFAULT_INT:
-	        fprintf(f, "%i", *defaults[i].location.i);
+	            fprintf(f, "%i", *defaults[i].location.i);
                 break;
 
             case DEFAULT_INT_HEX:
-	        fprintf(f, "0x%x", *defaults[i].location.i);
+	            fprintf(f, "0x%x", *defaults[i].location.i);
                 break;
 
             case DEFAULT_FLOAT:
@@ -1911,12 +828,17 @@ static void SaveDefaultCollection(default_collection_t *collection)
                 break;
 
             case DEFAULT_STRING:
-	        fprintf(f,"\"%s\"", *defaults[i].location.s);
+	            fprintf(f,"\"%s\"", *defaults[i].location.s);
                 break;
         }
 
         fprintf(f, "\n");
     }
+
+    // [Dasperal] Key binds section
+#ifndef ___RD_TARGET_SETUP___
+    BK_SaveBindings(f);
+#endif
 
     fclose (f);
 }
@@ -1937,8 +859,6 @@ static int ParseIntParameter(char *strparm)
 
 static void SetVariable(default_t *def, char *value)
 {
-    int intparm;
-
     // parameter found
 
     switch (def->type)
@@ -1950,26 +870,6 @@ static void SetVariable(default_t *def, char *value)
         case DEFAULT_INT:
         case DEFAULT_INT_HEX:
             *def->location.i = ParseIntParameter(value);
-            break;
-
-        case DEFAULT_KEY:
-
-            // translate scancodes read from config
-            // file (save the old value in untranslated)
-
-            intparm = ParseIntParameter(value);
-            def->untranslated = intparm;
-            if (intparm >= 0 && intparm < 128)
-            {
-                intparm = scantokey[intparm];
-            }
-            else
-            {
-                intparm = 0;
-            }
-
-            def->original_translated = intparm;
-            *def->location.i = intparm;
             break;
 
         case DEFAULT_FLOAT:
@@ -2004,6 +904,15 @@ static void LoadDefaultCollection(default_collection_t *collection)
 
             continue;
         }
+
+        // [Dasperal] Key binds section
+#ifndef ___RD_TARGET_SETUP___
+        if (strcmp("Keybinds", defname) == 0 && strcmp("Start", strparm) == 0)
+        {
+            BK_LoadBindings(f);
+            continue;
+        }
+#endif
 
         // Find the setting in the list
 
@@ -2146,6 +1055,10 @@ void M_LoadDefaults (void)
 
     LoadDefaultCollection(&doom_defaults);
     LoadDefaultCollection(&extra_defaults);
+#ifndef ___RD_TARGET_SETUP___
+    if(!isBindsLoaded)
+        BK_ApplyDefaultBindings();
+#endif
 }
 
 // Get a configuration file variable by its name
@@ -2186,8 +1099,7 @@ void M_BindIntVariable(char *name, int *location)
 
     variable = GetDefaultForName(name);
     assert(variable->type == DEFAULT_INT
-        || variable->type == DEFAULT_INT_HEX
-        || variable->type == DEFAULT_KEY);
+        || variable->type == DEFAULT_INT_HEX);
 
     variable->location.i = location;
     variable->bound = true;

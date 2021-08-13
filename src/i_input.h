@@ -23,8 +23,19 @@
 #define __I_INPUT__
 
 #include "doomtype.h"
-
-#define MAX_MOUSE_BUTTONS 8
+enum
+{
+    MOUSE_LEFT = 0,
+    MOUSE_RIGHT,
+    MOUSE_MIDDLE,
+    MOUSE_4,
+    MOUSE_5,
+    MOUSE_SCROLL_UP,
+    MOUSE_SCROLL_DOWN,
+    MOUSE_SCROLL_RIGHT,
+    MOUSE_SCROLL_LEFT,
+    MAX_MOUSE_BUTTONS
+};
 
 extern float mouse_acceleration;
 extern int mouse_threshold;
