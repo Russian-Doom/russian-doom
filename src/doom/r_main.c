@@ -502,7 +502,6 @@ static void R_InitLightTables (void)
 {
     int i, j;
     int level;
-    int startmap; 	
     int scale;
 
     // [JN] Define, which diminished lighting to use
@@ -513,7 +512,7 @@ static void R_InitLightTables (void)
     //  for each level / distance combination.
     for (i=0 ; i< LIGHTLEVELS ; i++)
     {
-        startmap = ((LIGHTLEVELS-1-i)*2)*NUMCOLORMAPS/LIGHTLEVELS;
+        const int firstmap = ((LIGHTLEVELS-1-i)*2)*NUMCOLORMAPS/LIGHTLEVELS;
 
         // [JN] Note: no smooth diminished lighting in -vanilla mode
         for (j=0 ; j < maxlightz ; j++)
@@ -521,7 +520,7 @@ static void R_InitLightTables (void)
             scale = FixedDiv ((320 / 2*FRACUNIT), ((j+1)<<lightzshift));
 
             scale >>= LIGHTSCALESHIFT;
-            level = startmap - scale/DISTMAP;
+            level = firstmap - scale/DISTMAP;
 
             if (level < 0)
             level = 0;
@@ -608,7 +607,7 @@ void R_SetViewSize (int blocks, int detail)
 void R_ExecuteSetViewSize (void)
 {
     int     i, j;
-    int     level, startmap; 	
+    int     level;
     fixed_t cosadj;
     fixed_t dy;
 
@@ -745,10 +744,11 @@ void R_ExecuteSetViewSize (void)
     //  for each level / scale combination.
     for (i = 0 ; i < LIGHTLEVELS ; i++)
     {
-        startmap = ((LIGHTLEVELS-1-i)*2)*NUMCOLORMAPS/LIGHTLEVELS;
+        const int firstmap = ((LIGHTLEVELS-1-i)*2)*NUMCOLORMAPS/LIGHTLEVELS;
+
         for (j = 0 ; j < MAXLIGHTSCALE ; j++)
         {
-            level = startmap - j * screenwidth/(viewwidth<<detailshift)/DISTMAP;
+            level = firstmap - j * screenwidth/(viewwidth<<detailshift)/DISTMAP;
 
             if (level < 0)
             {
@@ -848,7 +848,6 @@ subsector_t *R_PointInSubsector (fixed_t x, fixed_t y)
 
 void R_SetupFrame (player_t *player)
 {		
-    int i;
     int tempCentery;
     int pitch;
 
@@ -947,7 +946,7 @@ void R_SetupFrame (player_t *player)
 
         walllights = scalelightfixed;
 
-        for (i = 0 ; i < MAXLIGHTSCALE ; i++)
+        for (int i = 0 ; i < MAXLIGHTSCALE ; i++)
         {
             scalelightfixed[i] = fixedcolormap;
         }
