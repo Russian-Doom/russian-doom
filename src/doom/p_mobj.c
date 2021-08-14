@@ -947,8 +947,6 @@ void P_SpawnPlayer (mapthing_t* mthing)
 
     mobj_t*		mobj;
 
-    int			i;
-
     if (mthing->type == 0)
     {
         return;
@@ -996,7 +994,7 @@ void P_SpawnPlayer (mapthing_t* mthing)
     
     // give all cards in death match mode
     if (deathmatch)
-	for (i=0 ; i<NUMCARDS ; i++)
+	for (int i = 0 ; i < NUMCARDS ; i++)
 	    p->cards[i] = true;
 			
     if (mthing->type-1 == consoleplayer)

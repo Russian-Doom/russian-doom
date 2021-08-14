@@ -325,7 +325,6 @@ boolean P_GivePower (player_t *player, int power)
 //
 void P_TouchSpecialThing (mobj_t *special, mobj_t *toucher)
 {
-    int        i;
     int        sound = sfx_itemup;
     player_t  *player = toucher->player;
     fixed_t    delta = special->z - toucher->z;
@@ -671,9 +670,11 @@ void P_TouchSpecialThing (mobj_t *special, mobj_t *toucher)
 
         case SPR_BPAK:
         {
+            int i;
+
             if (!player->backpack)
             {
-                for (i=0 ; i<NUMAMMO ; i++)
+                for (i = 0 ; i < NUMAMMO ; i++)
                 player->maxammo[i] *= 2;
                 player->backpack = true;
             }

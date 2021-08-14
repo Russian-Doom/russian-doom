@@ -110,10 +110,9 @@ static boolean P_CrossSubsector (int num, los_t *los)
     {
         line_t *line = seg->linedef;
         divline_t divl;
-        fixed_t opentop, openbottom;
+        fixed_t frac;
         const sector_t *front, *back;
         const vertex_t *v1,*v2;
-        fixed_t frac;
 
         // allready checked other side?
         if (line->validcount == validcount)

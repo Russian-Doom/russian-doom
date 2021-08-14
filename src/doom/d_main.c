@@ -351,16 +351,16 @@ void D_ProcessEvents (void)
 
 static void DrawTimeAndFPS (void)
 {
-    time_t t = time(NULL);
-    struct tm *tm = localtime(&t);
-    char   s[64], fps[9999];
-    int    f = real_fps;
-    const  boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
-
     if (!vanillaparm)
     {
+        const boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
+
         if (local_time)
         {
+            char   s[64];
+            time_t t = time(NULL);
+            struct tm *tm = localtime(&t);
+
             strftime(s, sizeof(s), 
                      local_time == 1 ? "%I:%M %p" :    // 12-hour (HH:MM designation)
                      local_time == 2 ? "%I:%M:%S %p" : // 12-hour (HH:MM:SS designation)
@@ -377,6 +377,9 @@ static void DrawTimeAndFPS (void)
 
         if (show_fps)
         {
+            char fps[9999];
+            int  f = real_fps;
+
             sprintf (fps, "%d", f);
             RD_M_DrawTextC("FPS:", 278 + (wide_4_3 ? wide_delta : wide_delta*2), 20);
             RD_M_DrawTextC(fps, 298 + (wide_4_3 ? wide_delta : wide_delta*2), 20);   // [JN] fps digits
@@ -2943,8 +2946,6 @@ void D_DoomMain (void)
             "dphoof","bfgga0","heada1","cybra1","spida1d1"
         };
 
-        int i;
-
         if (gamemode == shareware || gamemode == pressbeta)
             I_Error(DEH_String(english_language ?
                                "\nYou cannot -file with the shareware version. Register!" :
@@ -2953,7 +2954,7 @@ void D_DoomMain (void)
         // Check for fake IWAD with right name,
         // but w/o all the lumps of the registered version. 
         if (gamemode == registered)
-            for (i = 0;i < 23; i++)
+            for (int i = 0 ; i < 23 ; i++)
             if (W_CheckNumForName(name[i])<0)
                 I_Error(DEH_String(english_language ?
                                    "\nThis is not the registered version." :

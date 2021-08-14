@@ -309,8 +309,6 @@ void R_DrawFuzzColumn (void)
 { 
     int      count;
     byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-    fixed_t  fracstep = dc_iscale;   // Looks familiar.
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep;
     boolean  cutoff = false;
 
     // Adjust borders. Low... 
@@ -355,7 +353,6 @@ void R_DrawFuzzColumn (void)
         fuzzpos = 0;
 
         dest += screenwidth;
-        frac += fracstep; 
     } while (count--); 
 
     // [crispy] if the line at the bottom had to be cut off,
@@ -376,8 +373,6 @@ void R_DrawFuzzColumnLow (void)
     byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
     byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
     byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-    fixed_t  fracstep = dc_iscale; 
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep;  
     boolean  cutoff = false;
 
     // Adjust borders. Low... 
@@ -426,7 +421,6 @@ void R_DrawFuzzColumnLow (void)
 
         dest += screenwidth << hires;
         dest2 += screenwidth << hires;
-        frac += fracstep; 
     } while (count--); 
 
     // [crispy] if the line at the bottom had to be cut off,
@@ -452,8 +446,6 @@ void R_DrawFuzzColumnBW (void)
 { 
     int      count; 
     byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-    fixed_t  fracstep = dc_iscale; 
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep; 
     boolean  cutoff = false;
     const boolean greenfuzz = infragreen_visor 
                             &&  players[consoleplayer].powers[pw_infrared]
@@ -491,7 +483,6 @@ void R_DrawFuzzColumnBW (void)
         fuzzpos = 0;
 
         dest += screenwidth;
-        frac += fracstep; 
     } while (count--); 
 
     if (cutoff)
@@ -509,8 +500,6 @@ void R_DrawFuzzColumnLowBW (void)
     byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
     byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
     byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-    fixed_t  fracstep = dc_iscale; 
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep; 	 
     boolean  cutoff = false;
     const boolean greenfuzz = infragreen_visor 
                             && players[consoleplayer].powers[pw_infrared]
@@ -562,7 +551,6 @@ void R_DrawFuzzColumnLowBW (void)
 
         dest += screenwidth << hires;
         dest2 += screenwidth << hires;
-        frac += fracstep; 
     } while (count--); 
 
     if (cutoff)
@@ -588,8 +576,6 @@ void R_DrawFuzzColumnImproved (void)
 { 
     int      count; 
     byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]]; 
-    fixed_t  fracstep = dc_iscale; 
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep; 
     boolean  cutoff = false;
 
     if (!dc_yl) 
@@ -623,7 +609,6 @@ void R_DrawFuzzColumnImproved (void)
         fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
 
         dest += screenwidth;
-        frac += fracstep; 
     } while (count--); 
 
     if (cutoff)
@@ -640,8 +625,6 @@ void R_DrawFuzzColumnLowImproved (void)
     byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
     byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
     byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-    fixed_t  fracstep = dc_iscale; 
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep;  
     boolean  cutoff = false;
 
     if (!dc_yl) 
@@ -685,7 +668,6 @@ void R_DrawFuzzColumnLowImproved (void)
 
         dest += screenwidth << hires;
         dest2 += screenwidth << hires;
-        frac += fracstep; 
     } while (count--); 
 
     if (cutoff)
@@ -709,8 +691,6 @@ void R_DrawFuzzColumnImprovedBW (void)
 { 
     int     count; 
     byte*   dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-    fixed_t fracstep = dc_iscale;
-    fixed_t frac = dc_texturemid + (dc_yl-centery)*fracstep;
     boolean cutoff = false;
     const boolean greenfuzz = infragreen_visor 
                             && players[consoleplayer].powers[pw_infrared]
@@ -747,7 +727,6 @@ void R_DrawFuzzColumnImprovedBW (void)
         fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
 
         dest += screenwidth;
-        frac += fracstep; 
     } while (count--); 
 
     if (cutoff)
@@ -765,8 +744,6 @@ void R_DrawFuzzColumnLowImprovedBW (void)
     byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
     byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
     byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-    fixed_t  fracstep = dc_iscale; 
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep;  
     boolean  cutoff = false;
     const boolean greenfuzz = infragreen_visor 
                             && players[consoleplayer].powers[pw_infrared]
@@ -817,7 +794,6 @@ void R_DrawFuzzColumnLowImprovedBW (void)
 
         dest += screenwidth << hires;
         dest2 += screenwidth << hires;
-        frac += fracstep; 
     } while (count--); 
 
     if (cutoff)

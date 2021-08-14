@@ -1456,14 +1456,13 @@ void ST_doPaletteStuff(void)
     int     palette;
     byte*   pal;
     int     cnt;
-    int     bzc;
 
     cnt = plyr->damagecount;
 
     if (plyr->powers[pw_strength])
     {
         // slowly fade the berzerk out
-        bzc = 12 - (plyr->powers[pw_strength]>>6);
+        const int bzc = 12 - (plyr->powers[pw_strength]>>6);
 
         if (bzc > cnt)
         cnt = bzc;

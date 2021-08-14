@@ -5927,7 +5927,6 @@ void M_EndGameResponse(boolean confirmed)
 
 void M_EndGame(int choice)
 {
-    choice = 0;
     if (!usergame)
     {
         S_StartSound(NULL,sfx_oof);

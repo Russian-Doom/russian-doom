@@ -223,8 +223,6 @@ void P_LineOpening (line_t *linedef)
 
 void P_UnsetThingPosition (mobj_t *thing)
 {
-    int blockx, blocky;
-
     if (!(thing->flags & MF_NOSECTOR))
     {
         // inert things don't need to be in blockmap?
@@ -259,11 +257,11 @@ void P_UnsetThingPosition (mobj_t *thing)
         }
         else
         {
-            blockx = (thing->x - bmaporgx)>>MAPBLOCKSHIFT;
-            blocky = (thing->y - bmaporgy)>>MAPBLOCKSHIFT;
+            int blockx = (thing->x - bmaporgx) >> MAPBLOCKSHIFT;
+            int blocky = (thing->y - bmaporgy) >> MAPBLOCKSHIFT;
 
-            if (blockx>=0 && blockx < bmapwidth 
-            && blocky>=0 && blocky <bmapheight)
+            if (blockx >= 0 && blockx < bmapwidth 
+            &&  blocky >= 0 && blocky < bmapheight)
             {
                 blocklinks[blocky*bmapwidth+blockx] = thing->bnext;
             }
@@ -283,10 +281,6 @@ P_SetThingPosition (mobj_t* thing)
 {
     subsector_t*	ss;
     sector_t*		sec;
-    int			blockx;
-    int			blocky;
-    mobj_t**		link;
-
     
     // link into subsector
     ss = R_PointInSubsector (thing->x,thing->y);
@@ -311,15 +305,15 @@ P_SetThingPosition (mobj_t* thing)
     if ( ! (thing->flags & MF_NOBLOCKMAP) )
     {
 	// inert things don't need to be in blockmap		
-	blockx = (thing->x - bmaporgx)>>MAPBLOCKSHIFT;
-	blocky = (thing->y - bmaporgy)>>MAPBLOCKSHIFT;
+	int blockx = (thing->x - bmaporgx) >> MAPBLOCKSHIFT;
+	int blocky = (thing->y - bmaporgy) >> MAPBLOCKSHIFT;
 
 	if (blockx>=0
 	    && blockx < bmapwidth
 	    && blocky>=0
 	    && blocky < bmapheight)
 	{
-	    link = &blocklinks[blocky*bmapwidth+blockx];
+	    mobj_t **link = &blocklinks[blocky*bmapwidth+blockx];
 	    thing->bprev = NULL;
 	    thing->bnext = *link;
 	    if (*link)

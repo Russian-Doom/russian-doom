@@ -85,7 +85,7 @@ void STlib_drawNum (st_number_t *n, boolean refresh)
     int num = *n->num;
     int w = SHORT(n->p[0]->width);
     int h = SHORT(n->p[0]->height);
-    int x = n->x;
+    int x;
     int neg;
 
     // [JN] CPhipps - compact some code, use num instead of *n->num

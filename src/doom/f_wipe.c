@@ -54,15 +54,11 @@ static int  *y;
 
 void wipe_shittyColMajorXform (short *array, int width, int height)
 {
-    int     x;
-    int     y;
-    short  *dest;
+    short *dest = (short*) Z_Malloc(width * height * sizeof(*dest), PU_STATIC, 0);
 
-    dest = (short*) Z_Malloc(width * height * sizeof(*dest), PU_STATIC, 0);
-
-    for(y=0;y<height;y++)
-        for(x=0;x<width;x++)
-            dest[x*height+y] = array[y*width+x];
+    for(int yy = 0 ; yy < height ; yy++)
+        for(int xx = 0 ; xx < width ; xx++)
+            dest[xx*height+yy] = array[yy*width+xx];
 
     memcpy(array, dest, width*height*sizeof(*dest));
 
