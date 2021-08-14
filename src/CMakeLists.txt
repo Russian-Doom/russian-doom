@@ -1,5 +1,6 @@
 # [Dasperal] Disable "strife" from the compilation
-foreach(SUBDIR doom heretic hexen setup)
+# [Dasperal] Disable "setup" from compilation
+foreach(SUBDIR doom heretic hexen)
     add_subdirectory("${SUBDIR}")
 endforeach()
 
@@ -117,30 +118,31 @@ if(PNG_FOUND)
 endif()
 
 # SetupCommon libraty
-add_library(SetupCommon STATIC EXCLUDE_FROM_ALL
-    deh_str.c           deh_str.h
-    d_mode.c            d_mode.h
-    d_iwad.c            d_iwad.h
-                        icon.h
-    i_timer.c           i_timer.h
-    m_config.c          m_config.h
-    net_io.c            net_io.h
-    net_packet.c        net_packet.h
-    net_sdl.c           net_sdl.h
-    net_query.c         net_query.h
-    net_structrw.c      net_structrw.h
-    z_native.c          z_zone.h
-)
-
-target_compile_definitions("SetupCommon"
-    PRIVATE "___RD_TARGET_SETUP___"
-)
-
-target_link_libraries(SetupCommon PUBLIC
-    Common
-    SDL2::net
-    textscreen
-)
+# [Dasperal] Disable "setup" from compilation
+# add_library(SetupCommon STATIC EXCLUDE_FROM_ALL
+#     deh_str.c           deh_str.h
+#     d_mode.c            d_mode.h
+#     d_iwad.c            d_iwad.h
+#                         icon.h
+#     i_timer.c           i_timer.h
+#     m_config.c          m_config.h
+#     net_io.c            net_io.h
+#     net_packet.c        net_packet.h
+#     net_sdl.c           net_sdl.h
+#     net_query.c         net_query.h
+#     net_structrw.c      net_structrw.h
+#     z_native.c          z_zone.h
+# )
+#
+# target_compile_definitions("SetupCommon"
+#     PRIVATE "___RD_TARGET_SETUP___"
+# )
+#
+# target_link_libraries(SetupCommon PUBLIC
+#     Common
+#     SDL2::net
+#     textscreen
+# )
 
 # Create executables
 # [Dasperal] Disable "strife" from the compilation
@@ -150,15 +152,17 @@ foreach(TARGET doom heretic hexen)
         "${PROJECT_SOURCE_DIR}/data/${TARGET}_icon.c"
     )
 
-    add_executable("${PROGRAM_PREFIX}${TARGET}-setup" WIN32
-        i_main.c
-        "${PROJECT_SOURCE_DIR}/data/setup_icon.c"
-    )
+    # [Dasperal] Disable "setup" from compilation
+    # add_executable("${PROGRAM_PREFIX}${TARGET}-setup" WIN32
+    #     i_main.c
+    #     "${PROJECT_SOURCE_DIR}/data/setup_icon.c"
+    # )
 
     # Add resources for windows
     if(WIN32)
         target_sources("${PROGRAM_PREFIX}${TARGET}" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/${TARGET}/resource.rc")
-        target_sources("${PROGRAM_PREFIX}${TARGET}-setup" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/setup/${TARGET}-resource.rc")
+        # [Dasperal] Disable "setup" from compilation
+        # target_sources("${PROGRAM_PREFIX}${TARGET}-setup" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/setup/${TARGET}-resource.rc")
     endif()
 
     # Dehacked sources
@@ -177,19 +181,21 @@ foreach(TARGET doom heretic hexen)
         Game
     )
 
-    target_link_libraries("${PROGRAM_PREFIX}${TARGET}-setup" PUBLIC
-        setup
-        SetupCommon
-    )
+    # [Dasperal] Disable "setup" from compilation
+    # target_link_libraries("${PROGRAM_PREFIX}${TARGET}-setup" PUBLIC
+    #     setup
+    #     SetupCommon
+    # )
 
     # Link flags
     set_target_properties("${PROGRAM_PREFIX}${TARGET}" PROPERTIES
         LINK_FLAGS_RELEASE -s
     )
 
-    set_target_properties("${PROGRAM_PREFIX}${TARGET}-setup" PROPERTIES
-        LINK_FLAGS_RELEASE -s
-    )
+    # [Dasperal] Disable "setup" from compilation
+    # set_target_properties("${PROGRAM_PREFIX}${TARGET}-setup" PROPERTIES
+    #     LINK_FLAGS_RELEASE -s
+    # )
 endforeach()
 
 # MSVC link flags
@@ -199,9 +205,10 @@ if(MSVC)
         set_target_properties("${PROGRAM_PREFIX}${TARGET}" PROPERTIES
             LINK_FLAGS "/MANIFEST:NO"
         )
-        set_target_properties("${PROGRAM_PREFIX}${TARGET}-setup" PROPERTIES
-            LINK_FLAGS "/MANIFEST:NO"
-        )
+        # [Dasperal] Disable "setup" from compilation
+        # set_target_properties("${PROGRAM_PREFIX}${TARGET}-setup" PROPERTIES
+        #     LINK_FLAGS "/MANIFEST:NO"
+        # )
     endforeach()
 endif()
 
@@ -260,14 +267,16 @@ if(WIN32)
     # [Dasperal] Disable "strife" from the compilation
     foreach(TARGET doom heretic hexen)
         add_dependencies("${PROGRAM_PREFIX}${TARGET}" win-libs)
-        add_dependencies("${PROGRAM_PREFIX}${TARGET}-setup" win-libs)
+        # [Dasperal] Disable "setup" from compilation
+        # add_dependencies("${PROGRAM_PREFIX}${TARGET}-setup" win-libs)
     endforeach()
 endif()
 
 # Install rules
 # strife is not production ready
 foreach(TARGET doom heretic hexen)
-    install(TARGETS "${PROGRAM_PREFIX}${TARGET}" "${PROGRAM_PREFIX}${TARGET}-setup"
+    # [Dasperal] Disable "${PROGRAM_PREFIX}${TARGET}-setup" from install
+    install(TARGETS "${PROGRAM_PREFIX}${TARGET}"
             DESTINATION $<IF:$<BOOL:${WIN32}>,.,bin>
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
     )
