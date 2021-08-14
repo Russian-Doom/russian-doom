@@ -1,15 +1,16 @@
-# [Dasperal] Disable "strife" from the compilation
-SUBDIRS = doom heretic hexen setup
+# [Dasperal] Disable "setup" and "strife" from the compilation
+# [JN] Disable "setup" from the compilation entirely
+SUBDIRS = doom heretic hexen
 
 execgamesdir = ${bindir}
 
 # [Dasperal] Disable "strife" from the compilation
 execgames_PROGRAMS = @PROGRAM_PREFIX@doom          \
                      @PROGRAM_PREFIX@heretic       \
-                     @PROGRAM_PREFIX@hexen         \
-                     @PROGRAM_PREFIX@doom-setup    \
-                     @PROGRAM_PREFIX@heretic-setup \
-                     @PROGRAM_PREFIX@hexen-setup
+                     @PROGRAM_PREFIX@hexen         
+#                    @PROGRAM_PREFIX@doom-setup    \
+#                    @PROGRAM_PREFIX@heretic-setup \
+#                    @PROGRAM_PREFIX@hexen-setup
 #                    @PROGRAM_PREFIX@strife
 #                    @PROGRAM_PREFIX@strife-setup
 
@@ -158,51 +159,51 @@ endif
 
 # Source files needed for russian-setup:
 
-SETUP_FILES=                               \
-deh_str.c            deh_str.h             \
-d_mode.c             d_mode.h              \
-d_iwad.c             d_iwad.h              \
-                     icon.h                \
-i_timer.c            i_timer.h             \
-m_config.c           m_config.h            \
-net_io.c             net_io.h              \
-net_packet.c         net_packet.h          \
-net_sdl.c            net_sdl.h             \
-net_query.c          net_query.h           \
-net_structrw.c       net_structrw.h        \
-z_native.c           z_zone.h
+# SETUP_FILES=                               \
+# deh_str.c            deh_str.h             \
+# d_mode.c             d_mode.h              \
+# d_iwad.c             d_iwad.h              \
+#                      icon.h                \
+# i_timer.c            i_timer.h             \
+# m_config.c           m_config.h            \
+# net_io.c             net_io.h              \
+# net_packet.c         net_packet.h          \
+# net_sdl.c            net_sdl.h             \
+# net_query.c          net_query.h           \
+# net_structrw.c       net_structrw.h        \
+# z_native.c           z_zone.h
 
-SETUP_LIBS=                                         \
-setup/libsetup.a                                    \
-$(top_builddir)/textscreen/libtextscreen.a          \
-@LDFLAGS@ @SDL_LIBS@ @SDLMIXER_LIBS@ @SDLNET_LIBS@
+# SETUP_LIBS=                                         \
+# setup/libsetup.a                                    \
+# $(top_builddir)/textscreen/libtextscreen.a          \
+# @LDFLAGS@ @SDL_LIBS@ @SDLMIXER_LIBS@ @SDLNET_LIBS@
 
-if HAVE_WINDRES
-@PROGRAM_PREFIX@doom_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c setup/doom-resource.rc
-else
-@PROGRAM_PREFIX@doom_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c
-endif
+# if HAVE_WINDRES
+# @PROGRAM_PREFIX@doom_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c setup/doom-resource.rc
+# else
+# @PROGRAM_PREFIX@doom_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c
+# endif
 
-@PROGRAM_PREFIX@doom_setup_CFLAGS = -D___RD_TARGET_SETUP___
-@PROGRAM_PREFIX@doom_setup_LDADD = $(SETUP_LIBS)
+# @PROGRAM_PREFIX@doom_setup_CFLAGS = -D___RD_TARGET_SETUP___
+# @PROGRAM_PREFIX@doom_setup_LDADD = $(SETUP_LIBS)
 
-if HAVE_WINDRES
-@PROGRAM_PREFIX@heretic_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c setup/heretic-resource.rc
-else
-@PROGRAM_PREFIX@heretic_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c
-endif
+# if HAVE_WINDRES
+# @PROGRAM_PREFIX@heretic_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c setup/heretic-resource.rc
+# else
+# @PROGRAM_PREFIX@heretic_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c
+# endif
 
-@PROGRAM_PREFIX@heretic_setup_CFLAGS = -D___RD_TARGET_SETUP___
-@PROGRAM_PREFIX@heretic_setup_LDADD = $(SETUP_LIBS)
+# @PROGRAM_PREFIX@heretic_setup_CFLAGS = -D___RD_TARGET_SETUP___
+# @PROGRAM_PREFIX@heretic_setup_LDADD = $(SETUP_LIBS)
 
-if HAVE_WINDRES
-@PROGRAM_PREFIX@hexen_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c setup/hexen-resource.rc
-else
-@PROGRAM_PREFIX@hexen_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c
-endif
+# if HAVE_WINDRES
+# @PROGRAM_PREFIX@hexen_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c setup/hexen-resource.rc
+# else
+# @PROGRAM_PREFIX@hexen_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c
+# endif
 
-@PROGRAM_PREFIX@hexen_setup_CFLAGS = -D___RD_TARGET_SETUP___
-@PROGRAM_PREFIX@hexen_setup_LDADD = $(SETUP_LIBS)
+# @PROGRAM_PREFIX@hexen_setup_CFLAGS = -D___RD_TARGET_SETUP___
+# @PROGRAM_PREFIX@hexen_setup_LDADD = $(SETUP_LIBS)
 
 # [Dasperal] Disable "strife" from the compilation
 # if HAVE_WINDRES
