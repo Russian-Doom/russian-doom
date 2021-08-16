@@ -136,17 +136,17 @@ static void R_RecalcLineFlags (line_t *linedef)
 
     // First decide if the line is closed, normal, or invisible */
     if (!(linedef->flags & ML_TWOSIDED)
-    || backsector->ceilingheight <= frontsector->floorheight
-    || backsector->floorheight >= frontsector->ceilingheight
+    || backsector->interpceilingheight <= frontsector->interpfloorheight
+    || backsector->interpfloorheight >= frontsector->interpceilingheight
     ||
     // if door is closed because back is shut:
-    (backsector->ceilingheight <= backsector->floorheight
+    (backsector->interpceilingheight <= backsector->interpfloorheight
  
     // preserve a kind of transparent door/lift special effect:
-    && (backsector->ceilingheight >= frontsector->ceilingheight
+    && (backsector->interpceilingheight >= frontsector->interpceilingheight
     || curline->sidedef->toptexture)
 
-    && (backsector->floorheight <= frontsector->floorheight
+    && (backsector->interpfloorheight <= frontsector->interpfloorheight
     || curline->sidedef->bottomtexture)
 
     // properly render skies (consider door "open" if both ceilings are sky):
@@ -162,8 +162,8 @@ static void R_RecalcLineFlags (line_t *linedef)
         // identical light levels on both sides,
         // and no middle texture.
         // CPhipps - recode for speed, not certain if this is portable though
-        if (backsector->ceilingheight != frontsector->ceilingheight
-        || backsector->floorheight != frontsector->floorheight
+        if (backsector->interpceilingheight != frontsector->interpceilingheight
+        || backsector->interpfloorheight != frontsector->interpfloorheight
         || curline->sidedef->midtexture
         || memcmp(&backsector->floor_xoffs, &frontsector->floor_xoffs,
         sizeof(frontsector->floor_xoffs) + sizeof(frontsector->floor_yoffs) +
@@ -190,14 +190,14 @@ static void R_RecalcLineFlags (line_t *linedef)
         int c;
 
         // Does top texture need tiling
-        if ((c = frontsector->ceilingheight - backsector->ceilingheight) > 0
+        if ((c = frontsector->interpceilingheight - backsector->interpceilingheight) > 0
         && (textureheight[texturetranslation[curline->sidedef->toptexture]] > c))
         {
             linedef->r_flags |= RF_TOP_TILE;
         }
 
         // Does bottom texture need tiling
-        if ((c = frontsector->floorheight - backsector->floorheight) > 0
+        if ((c = frontsector->interpfloorheight - backsector->interpfloorheight) > 0
         && (textureheight[texturetranslation[curline->sidedef->bottomtexture]] > c))
         {
             linedef->r_flags |= RF_BOT_TILE;
@@ -208,7 +208,7 @@ static void R_RecalcLineFlags (line_t *linedef)
         int c;
 
         // Does middle texture need tiling
-        if ((c = frontsector->ceilingheight - frontsector->floorheight) > 0
+        if ((c = frontsector->interpceilingheight - frontsector->interpfloorheight) > 0
         && (textureheight[texturetranslation[curline->sidedef->midtexture]] > c))
         {
             linedef->r_flags |= RF_MID_TILE;
