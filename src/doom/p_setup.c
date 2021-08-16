@@ -518,6 +518,12 @@ void P_LoadSectors (int lump)
 	ss->special = SHORT(ms->special);
 	ss->tag = SHORT(ms->tag);
 	ss->thinglist = NULL;
+	// [JN] Improved column clipping.
+	ss->floor_xoffs = 0;
+	ss->floor_yoffs = 0;
+	ss->ceiling_xoffs = 0;
+	ss->ceiling_yoffs = 0;
+
         if (!detailLevel)
         {
            // [crispy] WiggleFix: [kb] for R_FixWiggle()

@@ -805,6 +805,8 @@ void R_Init (void)
             screenblocks = 14;
     }
 
+    R_InitClipSegs ();
+    printf (".");
     R_InitData ();
     printf (".");
     // viewwidth / viewheight / detailLevel are set by the defaults

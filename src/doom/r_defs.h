@@ -109,6 +109,12 @@ typedef	struct
 {
     fixed_t	floorheight;
     fixed_t	ceilingheight;
+
+    // [JN] Improved column clipping.
+    fixed_t floor_xoffs,   floor_yoffs;
+    fixed_t ceiling_xoffs, ceiling_yoffs;
+    int     floorlightsec, ceilinglightsec;
+
     short	floorpic;
     short	ceilingpic;
     short	lightlevel;
@@ -243,6 +249,16 @@ typedef struct line_s
 
     // thinker_t for reversable actions
     void*	specialdata;		
+
+    // [JN] Improved column clipping.
+    int r_validcount;   // cph: if == gametic, r_flags already done
+    enum {              // cph:
+    RF_TOP_TILE  = 1,   // Upper texture needs tiling
+    RF_MID_TILE  = 2,   // Mid texture needs tiling
+    RF_BOT_TILE  = 4,   // Lower texture needs tiling
+    RF_IGNORE    = 8,   // Renderer can skip this line
+    RF_CLOSED    = 16,  // Line blocks view
+    } r_flags;
 
     // [crispy] calculate sound origin of line to be its midpoint
     degenmobj_t	soundorg;

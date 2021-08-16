@@ -33,6 +33,10 @@ extern drawseg_t *ds_p;
 extern drawseg_t *drawsegs;
 extern unsigned   maxdrawsegs;
 
+// [JN] Improved column clipping.
+extern byte *solidcol;
+void R_InitClipSegs (void);
+
 // false if the back side is the same plane
 extern boolean    markfloor;		
 extern boolean    markceiling;
