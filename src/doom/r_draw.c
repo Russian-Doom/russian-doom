@@ -112,7 +112,7 @@ extern int Crispy_Random(void);
 
 void R_DrawColumn (void) 
 { 
-    int      count;
+    int      count = dc_yh - dc_yl + 1;
     // heightmask is the Tutti-Frutti fix -- killough
     int      heightmask = dc_texheight-1;
     // Framebuffer destination address.
@@ -120,10 +120,7 @@ void R_DrawColumn (void)
     // Use columnofs LUT for subwindows?
     byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
     // Determine scaling, which is the only mapping to be done.
-    fixed_t  fracstep = dc_iscale;
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep;
-
-    count = dc_yh - dc_yl + 1;
+    fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (count <= 0)    // Zero length, column does not exceed a pixel.
     return;
@@ -159,7 +156,7 @@ void R_DrawColumn (void)
             //  using a lighting/special effects LUT.
             *dest = dc_colormap[dc_source[frac>>FRACBITS]];
             dest += screenwidth;
-            if ((frac += fracstep) >= heightmask)
+            if ((frac += dc_iscale) >= heightmask)
             frac -= heightmask;
         }
         while (--count);
@@ -170,10 +167,10 @@ void R_DrawColumn (void)
         {
             *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
             dest += screenwidth;
-            frac += fracstep;
+            frac += dc_iscale;
             *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
             dest += screenwidth;
-            frac += fracstep;
+            frac += dc_iscale;
         }
         if (count & 1)
         *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
@@ -183,7 +180,7 @@ void R_DrawColumn (void)
 
 void R_DrawColumnLow (void) 
 { 
-    int      count; 
+    int      count = dc_yh - dc_yl; 
     // Blocky mode, need to multiply by 2.
     int      x = dc_x << 1;
     int      heightmask = dc_texheight - 1;
@@ -191,10 +188,7 @@ void R_DrawColumnLow (void)
     byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
     byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
     byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-    fixed_t  fracstep = dc_iscale; 
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep;
-
-    count = dc_yh - dc_yl; 
+    fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     // Zero length.
     if (count < 0) 
@@ -235,7 +229,7 @@ void R_DrawColumnLow (void)
                 dest4 += screenwidth << hires;
             }
 
-            if ((frac += fracstep) >= heightmask)
+            if ((frac += dc_iscale) >= heightmask)
             frac -= heightmask;
         } while (count--);
     }
@@ -255,7 +249,7 @@ void R_DrawColumnLow (void)
                 dest4 += screenwidth << hires;
             }
 
-            frac += fracstep; 
+            frac += dc_iscale; 
 
         } while (count--);
     }
