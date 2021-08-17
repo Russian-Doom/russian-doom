@@ -195,7 +195,8 @@ typedef struct
     sector_t *frontsector;
     sector_t *backsector;       // NULL for one sided lines
 
-    fixed_t length; // [crispy] fix long wall wobble
+    uint32_t length;   // [crispy] fix long wall wobble
+    angle_t  r_angle;  // [crispy] re-calculated angle used for rendering
 } seg_t;
 
 typedef struct
