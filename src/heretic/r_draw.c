@@ -161,17 +161,40 @@ void R_DrawSkyColumn(void)
     if (count <= 0)
     return;
 
-    heightmask++;
-    heightmask <<= FRACBITS;
-
-    do
+    if (skytextureheight & heightmask)   // not a power of 2 -- killough
     {
-       *dest = dc_colormap[dc_source[frac>>FRACBITS]];
-        dest += screenwidth;
-        if ((frac += skyiscale) >= heightmask)
-            frac -= heightmask;
+        heightmask++;
+        heightmask <<= FRACBITS;
+
+        if (frac < 0)
+        while ((frac += heightmask) < 0);
+        else
+        while (frac >= heightmask)
+        frac -= heightmask;
+
+        do
+        {
+           *dest = dc_colormap[dc_source[frac>>FRACBITS]];
+            dest += screenwidth;
+            if ((frac += skyiscale) >= heightmask)
+                frac -= heightmask;
+        }
+        while (--count);
     }
-    while (--count);
+    else   // texture height is a power of 2 -- killough
+    {
+        while ((count-=2)>=0)
+        {
+            *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
+            dest += screenwidth;
+            frac += dc_iscale;
+            *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
+            dest += screenwidth;
+            frac += dc_iscale;
+        }
+        if (count & 1)
+        *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
+    }
 }
 
 /*
@@ -199,6 +222,12 @@ void R_DrawSkyColumnLow(void)
 
     heightmask++;
     heightmask <<= FRACBITS;
+
+    if (frac < 0)
+    while ((frac += heightmask) < 0);
+    else
+    while (frac >= heightmask)
+    frac -= heightmask;
 
     do
     {
