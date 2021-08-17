@@ -432,15 +432,20 @@ static void P_LoadSegs_DeePBSP (int lump)
 void P_SegLengths (void)
 {
     int i;
-    seg_t *li;
-    fixed_t dx, dy;
 
     for (i = 0; i < numsegs; i++)
     {
-	li = &segs[i];
-	dx = li->v2->px - li->v1->px;
-	dy = li->v2->py - li->v1->py;
-	li->length = (fixed_t)sqrt((double)dx*dx + (double)dy*dy);
+        seg_t *const li = &segs[i];
+        int64_t dx, dy;
+
+        dx = li->v2->px - li->v1->px;
+        dy = li->v2->py - li->v1->py;
+        li->length = (uint32_t)(sqrt((double)dx*dx + (double)dy*dy)/2);
+
+        // [crispy] re-calculate angle used for rendering
+        viewx = li->v1->px;
+        viewy = li->v1->py;
+        li->r_angle = R_PointToAngleCrispy(li->v2->px, li->v2->py);
     }
 }
 

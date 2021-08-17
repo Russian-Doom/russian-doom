@@ -29,6 +29,7 @@
 #include "g_game.h"
 #include "r_segs.h"
 #include "r_bmaps.h"
+#include "crispy.h"
 #include "jn.h"
 
 
@@ -561,7 +562,8 @@ void R_StoreWallRange (int start, int stop)
 {
     fixed_t     vtop;
     int         lightnum;
-    int64_t     dx, dy, dx1, dy1; // [crispy] fix long wall wobble
+    int64_t     dx, dy, dx1, dy1, dist; // [crispy] fix long wall wobble
+    const uint32_t	len = curline->length;
 
     // [crispy] remove MAXDRAWSEGS Vanilla limit
     if (ds_p == drawsegs+maxdrawsegs)
@@ -590,16 +592,18 @@ void R_StoreWallRange (int start, int stop)
     return;
 
     // calculate rw_distance for scale calculation
-    rw_normalangle = curline->angle + ANG90;
+    rw_normalangle = curline->r_angle + ANG90;
 
     // [crispy] fix long wall wobble
     // thank you very much Linguica, e6y and kb1
     // http://www.doomworld.com/vb/post/1340718
-    dx = curline->v2->px - curline->v1->px;
-    dy = curline->v2->py - curline->v1->py;
-    dx1 = viewx - curline->v1->px;
-    dy1 = viewy - curline->v1->py;
-    rw_distance = (fixed_t)((dy * dx1 - dx * dy1) / curline->length);
+    // shift right to avoid possibility of int64 overflow in rw_distance calculation
+    dx = ((int64_t)curline->v2->px - curline->v1->px) >> 1;
+    dy = ((int64_t)curline->v2->py - curline->v1->py) >> 1;
+    dx1 = ((int64_t)viewx - curline->v1->px) >> 1;
+    dy1 = ((int64_t)viewy - curline->v1->py) >> 1;
+    dist = ((dy * dx1 - dx * dy1) / len) << 1;
+    rw_distance = (fixed_t)BETWEEN(INT_MIN, INT_MAX, dist);
 
     ds_p->x1 = rw_x = start;
     ds_p->x2 = stop;
@@ -813,8 +817,7 @@ void R_StoreWallRange (int start, int stop)
     if (segtextured)
     {
     // [crispy] fix long wall wobble
-    rw_offset = (fixed_t)((dx*dx1 + dy*dy1) / curline->length);
-
+    rw_offset = (fixed_t)(((dx*dx1 + dy*dy1) / len) << 1);
     rw_offset += sidedef->textureoffset + curline->offset;
     rw_centerangle = ANG90 + viewangle - rw_normalangle;
 
