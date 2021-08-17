@@ -69,17 +69,6 @@ void R_ClearDrawSegs (void)
     ds_p = drawsegs;
 }
 
-// We must expand MAXSEGS to the theoretical limit of the number of solidsegs
-// that can be generated in a scene by the DOOM engine. This was determined by
-// Lee Killough during BOOM development to be a function of the screensize.
-// The simplest thing we can do, other than fix this bug, is to let the game
-// render overage and then bomb out by detecting the overflow after the 
-// fact. -haleyjd
-//#define MAXSEGS 32
-
-#define MAXSEGS (WIDESCREENWIDTH / 2 + 1)
-
-
 // -----------------------------------------------------------------------------
 // CPhipps - 
 // R_ClipWallSegment
