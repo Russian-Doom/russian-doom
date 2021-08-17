@@ -323,6 +323,8 @@ void R_RenderMaskedSegRange (drawseg_t *ds, int x1, int x2)
 ================================================================================
 */
 
+static int didsolidcol; /* True if at least one column was marked solid */
+
 void R_RenderSegLoop(void)
 {
     angle_t   angle;
@@ -506,6 +508,14 @@ void R_RenderSegLoop(void)
                 floorclip[rw_x] = yh + 1;
             }
 
+            // [JN] cph - if we completely blocked further sight through this column,
+            // add this info to the solid columns array for r_bsp.c
+            if ((markceiling || markfloor) && (floorclip[rw_x] <= ceilingclip[rw_x] + 1)) 
+            {
+                solidcol[rw_x] = 1; 
+                didsolidcol = 1;
+            }
+
             if (maskedtexture)
             {
                 // save texturecol for backdrawing of masked mid texture
@@ -574,19 +584,12 @@ void R_StoreWallRange (int start, int stop)
     int64_t  dx, dy, dx1, dy1; // [crispy] fix long wall wobble
 
     // [crispy] remove MAXDRAWSEGS Vanilla limit
-    if (ds_p == &drawsegs[numdrawsegs])
+    if (ds_p == drawsegs+maxdrawsegs)
     {
-        int numdrawsegs_old = numdrawsegs;
-
-        if (numdrawsegs_old == MAXDRAWSEGS)
-            printf(english_language ?
-                   "R_StoreWallRange: Hit MAXDRAWSEGS (%d) Vanilla limit.\n" :
-                   "R_StoreWallRange: достигнут лимит MAXDRAWSEGS (%d).\n",
-                   MAXDRAWSEGS);
-
-        numdrawsegs = numdrawsegs ? 2 * numdrawsegs : MAXDRAWSEGS;
-        drawsegs = I_Realloc(drawsegs, numdrawsegs * sizeof(*drawsegs));
-        ds_p = drawsegs + numdrawsegs_old;
+        unsigned newmax = maxdrawsegs ? maxdrawsegs*2 : 128; // killough
+        drawsegs = I_Realloc(drawsegs,newmax*sizeof(*drawsegs));
+        ds_p = drawsegs+maxdrawsegs;
+        maxdrawsegs = newmax;
     }
 
 #ifdef RANGECHECK
@@ -682,6 +685,25 @@ void R_StoreWallRange (int start, int stop)
         ds_p->sprtopclip = ds_p->sprbottomclip = NULL;
         ds_p->silhouette = 0;
 
+        // [JN] cph - closed 2S line e.g. door
+        if (linedef->r_flags & RF_CLOSED)
+        {
+            // cph - killough's (outdated) comment follows - this deals with both 
+            // "automap fixes", his and mine
+            // killough 1/17/98: this test is required if the fix
+            // for the automap bug (r_bsp.c) is used, or else some
+            // sprites will be displayed behind closed doors. That
+            // fix prevents lines behind closed doors with dropoffs
+            // from being displayed on the automap.
+
+            ds_p->silhouette = SIL_BOTH;
+            ds_p->sprbottomclip = negonearray;
+            ds_p->bsilheight = INT_MAX;
+            ds_p->sprtopclip = screenheightarray;
+            ds_p->tsilheight = INT_MIN;
+        }
+        else 
+        { /* not solid - old code */
         if (frontsector->interpfloorheight > backsector->interpfloorheight)
         {
             ds_p->silhouette = SIL_BOTTOM;
@@ -717,29 +739,6 @@ void R_StoreWallRange (int start, int stop)
             ds_p->tsilheight = INT_MIN;
             ds_p->silhouette |= SIL_TOP;
         }
-
-        // [JN] killough 1/17/98: this test is required if the fix
-        // for the automap bug (r_bsp.c) is used, or else some
-        // sprites will be displayed behind closed doors. That
-        // fix prevents lines behind closed doors with dropoffs
-        // from being displayed on the automap.
-        //
-        // killough 4/7/98: make doorclosed external variable
-        {
-            extern int doorclosed;  // killough 1/17/98, 2/8/98, 4/7/98
-
-            if (doorclosed || backsector->interpceilingheight <= frontsector->interpfloorheight)
-            {
-                ds_p->sprbottomclip = negonearray;
-                ds_p->bsilheight = INT_MAX;
-                ds_p->silhouette |= SIL_BOTTOM;
-            }
-            if (doorclosed || backsector->interpfloorheight >= frontsector->interpceilingheight)
-            {   // killough 1/17/98, 2/8/98
-                ds_p->sprtopclip = screenheightarray;
-                ds_p->tsilheight = INT_MIN;
-                ds_p->silhouette |= SIL_TOP;
-            }
         }
 
         worldhigh = backsector->interpceilingheight - viewz;
@@ -1019,12 +1018,47 @@ void R_StoreWallRange (int start, int stop)
 
     // render it
     if (markceiling)
-    ceilingplane = R_CheckPlane(ceilingplane, rw_x, rw_stopx - 1);
+    {
+        if (ceilingplane)  // [JN] killough 4/11/98: add NULL ptr checks
+        {
+            ceilingplane = R_CheckPlane (ceilingplane, rw_x, rw_stopx-1);
+        }
+        else
+        {
+            markceiling = 0;
+        }
+    }
 
     if (markfloor)
-    floorplane = R_CheckPlane(floorplane, rw_x, rw_stopx - 1);
+    {
+        if (floorplane)  // [JN] killough 4/11/98: add NULL ptr checks
+        {
+            floorplane = R_CheckPlane (floorplane, rw_x, rw_stopx-1);
+        }
+        else
+        {
+            markfloor = 0;
+        }
+    }
 
+    didsolidcol = 0;
     R_RenderSegLoop();
+
+    // [JN] cph - if a column was made solid by this wall, 
+    // we _must_ save full clipping info.
+    if (backsector && didsolidcol)
+    {
+        if (!(ds_p->silhouette & SIL_BOTTOM))
+        {
+            ds_p->silhouette |= SIL_BOTTOM;
+            ds_p->bsilheight = backsector->floorheight;
+        }
+        if (!(ds_p->silhouette & SIL_TOP))
+        {
+            ds_p->silhouette |= SIL_TOP;
+            ds_p->tsilheight = backsector->ceilingheight;
+        }
+    }
 
     // save sprite clipping info
     if (((ds_p->silhouette & SIL_TOP) || maskedtexture) && !ds_p->sprtopclip)

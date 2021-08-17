@@ -96,6 +96,10 @@ struct line_s;
 typedef struct
 {
     fixed_t floorheight, ceilingheight;
+    // [JN] Improved column clipping.
+    fixed_t floor_xoffs, floor_yoffs;
+    fixed_t ceiling_xoffs, ceiling_yoffs;
+    int   floorlightsec, ceilinglightsec;
     short floorpic, ceilingpic;
     short lightlevel;
     short special, tag;
@@ -160,6 +164,15 @@ typedef struct line_s
     sector_t *frontsector, *backsector;
     int validcount;             // if == validcount, already checked
     void *specialdata;          // thinker_t for reversable actions
+    // [JN] Improved column clipping.
+    int r_validcount;   // cph: if == gametic, r_flags already done
+    enum {              // cph:
+    RF_TOP_TILE  = 1,   // Upper texture needs tiling
+    RF_MID_TILE  = 2,   // Mid texture needs tiling
+    RF_BOT_TILE  = 4,   // Lower texture needs tiling
+    RF_IGNORE    = 8,   // Renderer can skip this line
+    RF_CLOSED    = 16,  // Line blocks view
+    } r_flags;
     // [crispy] calculate sound origin of line to be its midpoint
     degenmobj_t	soundorg;
 } line_t;
@@ -425,9 +438,15 @@ extern boolean skymap;
 
 extern drawseg_t *drawsegs; 
 extern drawseg_t *ds_p;
-extern int numdrawsegs;
+
+// [JN] killough: New code which removes 2s linedef limit
+extern unsigned   maxdrawsegs;
 
 extern lighttable_t **hscalelight, **vscalelight, **dscalelight;
+
+// [JN] Improved column clipping.
+extern byte *solidcol;
+void R_InitClipSegs (void);
 
 typedef void (*drawfunc_t) (int start, int stop);
 void R_ClearClipSegs(void);
@@ -435,6 +454,8 @@ void R_ClearClipSegs(void);
 void R_ClearDrawSegs(void);
 void R_InitSkyMap(void);
 void R_RenderBSPNode(int bspnum);
+
+void R_StoreWallRange (int start, int stop);
 
 //
 // R_segs.c

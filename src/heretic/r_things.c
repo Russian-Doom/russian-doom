@@ -1767,9 +1767,9 @@ void R_DrawMasked (void)
 
     if (num_vissprite > 0)
     {
-        if (drawsegs_xrange_size < numdrawsegs)
+        if (drawsegs_xrange_size < maxdrawsegs)
         {
-            drawsegs_xrange_size = 2 * numdrawsegs;
+            drawsegs_xrange_size = 2 * maxdrawsegs;
 
             for(i = 0; i < DS_RANGES_COUNT; i++)
             {
