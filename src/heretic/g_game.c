@@ -186,7 +186,7 @@ int mousex, mousey;             // mouse values are used once
 int joyxmove, joyymove;         // joystick values are repeated
 int joystrafemove;
 int joyylook;
-int alwaysRun;              // is always run enabled
+int alwaysRun = 1;              // is always run enabled
 
 int savegameslot;
 char savedescription[32];
