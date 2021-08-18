@@ -28,7 +28,6 @@
 #include "am_map.h"
 #include "p_local.h"
 #include "s_sound.h"
-#include "p_inter.h"
 #include "crispy.h"
 #include "jn.h"
 

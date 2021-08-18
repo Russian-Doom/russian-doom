@@ -39,7 +39,6 @@
 #include "st_lib.h"
 #include "r_local.h"
 #include "p_local.h"
-#include "p_inter.h"
 #include "am_map.h"
 #include "m_cheat.h"
 #include "m_menu.h"
