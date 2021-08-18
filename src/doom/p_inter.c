@@ -32,6 +32,7 @@
 #include "crispy.h"
 #include "jn.h"
 
+
 #define BONUSADD	6
 
 
@@ -41,33 +42,35 @@ int	maxammo[NUMAMMO] = {200, 50, 300, 50};
 int	clipammo[NUMAMMO] = {10, 4, 20, 1};
 
 
-//
+// =============================================================================
 // GET STUFF
-//
+// =============================================================================
 
-//
+// -----------------------------------------------------------------------------
 // P_GiveAmmo
-// Num is the number of clip loads,
-// not the individual count (0= 1/2 clip).
-// Returns false if the ammo can't be picked up at all
-//
+// Num is the number of clip loads, not the individual count (0= 1/2 clip).
+// Returns false if the ammo can't be picked up at all.
+// -----------------------------------------------------------------------------
 boolean P_GiveAmmo (player_t *player, ammotype_t ammo, int num)
 {
     int oldammo;
 
     if (ammo == am_noammo)
-	return false;
+    {
+        return false;
+    }
 
     if (ammo > NUMAMMO)
     {
         I_Error (english_language ?
                  "P_GiveAmmo: bad type %i" :
-                 "P_GiveAmmo: некорректный тип %i",
-                 ammo);
+                 "P_GiveAmmo: некорректный тип %i", ammo);
     }
 
     if (player->ammo[ammo] == player->maxammo[ammo])
-    return false;
+    {
+        return false;
+    }
 
     if (num)
     {
@@ -93,14 +96,13 @@ boolean P_GiveAmmo (player_t *player, ammotype_t ammo, int num)
         player->ammo[ammo] = player->maxammo[ammo];
     }
 
-    // If non zero ammo, 
-    // don't change up weapons,
-    // player was lower on purpose.
+    // If non zero ammo, don't change up weapons, player was lower on purpose.
     if (oldammo)
-    return true;	
-    
-    // We were down to zero,
-    // so select a new weapon.
+    {
+        return true;
+    }
+
+    // We were down to zero, so select a new weapon.
     // Preferences are not user selectable.
     switch (ammo)
     {
@@ -155,11 +157,11 @@ boolean P_GiveAmmo (player_t *player, ammotype_t ammo, int num)
     return true;
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // P_GiveWeapon
 // The weapon name may have a MF_DROPPED flag ored in.
-//
+// -----------------------------------------------------------------------------
+
 boolean P_GiveWeapon (player_t *player, weapontype_t weapon, boolean dropped)
 {
     boolean	gaveammo;
@@ -169,17 +171,21 @@ boolean P_GiveWeapon (player_t *player, weapontype_t weapon, boolean dropped)
     {
         // leave placed weapons forever on net games
         if (player->weaponowned[weapon])
-        return false;
+        {
+            return false;
+        }
 
         player->bonuscount += BONUSADD;
         player->weaponowned[weapon] = true;
 
-	    P_GiveAmmo (player, weaponinfo[weapon].ammo, deathmatch ? 5 : 2);
+        P_GiveAmmo (player, weaponinfo[weapon].ammo, deathmatch ? 5 : 2);
 
         player->pendingweapon = weapon;
 
         if (player == &players[consoleplayer])
-        S_StartSound (NULL, sfx_wpnup);
+        {
+            S_StartSound (NULL, sfx_wpnup);
+        }
 
         return false;
     }
@@ -209,15 +215,17 @@ boolean P_GiveWeapon (player_t *player, weapontype_t weapon, boolean dropped)
     return (gaveweapon || gaveammo);
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // P_GiveBody
 // Returns false if the body isn't needed at all
-//
+// -----------------------------------------------------------------------------
+
 boolean P_GiveBody (player_t *player, int num)
 {
     if (player->health >= MAXHEALTH)
-    return false;
+    {
+        return false;
+    }
 
     player->health += num;
 
@@ -225,17 +233,17 @@ boolean P_GiveBody (player_t *player, int num)
     {
         player->health = MAXHEALTH;
     }
+
     player->mo->health = player->health;
 
     return true;
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // P_GiveArmor
-// Returns false if the armor is worse
-// than the current armor.
-//
+// Returns false if the armor is worse than the current armor.
+// -----------------------------------------------------------------------------
+
 boolean P_GiveArmor (player_t *player, int armortype)
 {
     int hits;
@@ -243,7 +251,9 @@ boolean P_GiveArmor (player_t *player, int armortype)
     hits = armortype * 100;
 
     if (player->armorpoints >= hits)
-    return false;   // don't pick up
+    {
+        return false;  // don't pick up
+    }
 
     player->armortype = armortype;
     player->armorpoints = hits;
@@ -251,14 +261,16 @@ boolean P_GiveArmor (player_t *player, int armortype)
     return true;
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // P_GiveCard
-//
+// -----------------------------------------------------------------------------
+
 void P_GiveCard (player_t *player, card_t card)
 {
     if (player->cards[card])
-    return;
+    {
+        return;
+    }
 
     if (vanillaparm)
     {
@@ -274,10 +286,10 @@ void P_GiveCard (player_t *player, card_t card)
     player->cards[card] = 1;
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // P_GivePower
-//
+// -----------------------------------------------------------------------------
+
 boolean P_GivePower (player_t *player, int power)
 {
     if (power == pw_invulnerability)
@@ -313,16 +325,19 @@ boolean P_GivePower (player_t *player, int power)
     }
 
     if (player->powers[power])
-    return false;	// already got it
+    {
+        return false;  // already got it
+    }
 
     player->powers[power] = 1;
+
     return true;
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // P_TouchSpecialThing
-//
+// -----------------------------------------------------------------------------
+
 void P_TouchSpecialThing (mobj_t *special, mobj_t *toucher)
 {
     int        sound = sfx_itemup;
@@ -335,10 +350,11 @@ void P_TouchSpecialThing (mobj_t *special, mobj_t *toucher)
         return;
     }
 
-    // Dead thing touching.
-    // Can happen with a sliding player corpse.
+    // Dead thing touching. Can happen with a sliding player corpse.
     if (toucher->health <= 0)
-    return;
+    {
+        return;
+    }
 
     // Identify by sprite.
     switch (special->sprite)
@@ -414,7 +430,7 @@ void P_TouchSpecialThing (mobj_t *special, mobj_t *toucher)
             player->message = DEH_String(gotsceptre);
         }
         break;
-	
+
         case SPR_BON4:  // [JN] Unholy bible
         {
             artifactcount++;
@@ -463,7 +479,7 @@ void P_TouchSpecialThing (mobj_t *special, mobj_t *toucher)
             break;
         }
         return;
-	
+
         case SPR_YKEY:
         {
             player->message = DEH_String(gotyelwcard);
@@ -472,7 +488,7 @@ void P_TouchSpecialThing (mobj_t *special, mobj_t *toucher)
             break;
         }
         return;
-	
+
         case SPR_RKEY:
         {
             player->message = DEH_String(gotredcard);
@@ -517,7 +533,7 @@ void P_TouchSpecialThing (mobj_t *special, mobj_t *toucher)
             player->message = DEH_String(gotstim);
         }
         break;
-	
+
         case SPR_MEDI:
         {
             if (player->health >= MAXHEALTH)
@@ -527,7 +543,7 @@ void P_TouchSpecialThing (mobj_t *special, mobj_t *toucher)
             P_GiveBody (player, 25);
         }
         break;
-	
+
         // power ups
         case SPR_PINV:
         {
@@ -605,7 +621,7 @@ void P_TouchSpecialThing (mobj_t *special, mobj_t *toucher)
             player->message = DEH_String(gotclip);
         }
         break;
-	
+
         case SPR_AMMO:
         {
             if (!P_GiveAmmo (player, am_clip,5))
@@ -779,10 +795,10 @@ void P_TouchSpecialThing (mobj_t *special, mobj_t *toucher)
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // KillMobj
-//
+// -----------------------------------------------------------------------------
+
 void P_KillMobj (mobj_t *source, mobj_t *target)
 {
     mobjtype_t  item;
@@ -890,7 +906,7 @@ void P_KillMobj (mobj_t *source, mobj_t *target)
         case MT_CHAINGUY:
         item = MT_CHAINGUN;
         break;
-	
+
         default:
         return;
     }
@@ -912,34 +928,35 @@ void P_KillMobj (mobj_t *source, mobj_t *target)
     mo->flags |= MF_DROPPED;	// special versions of items
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // P_DamageMobj
-// Damages both enemies and players
-// "inflictor" is the thing that caused the damage
-//  creature or missile, can be NULL (slime, etc)
-// "source" is the thing to target after taking damage
-//  creature or NULL
+// Damages both enemies and players "inflictor" is the thing that caused the
+// damage creature or missile, can be NULL (slime, etc) "source" is the thing
+// to target after taking damage creature or NULL.
 // Source and inflictor are the same for melee attacks.
-// Source can be NULL for slime, barrel explosions
-// and other environmental stuff.
-//
+// Source can be NULL for slime, barrel explosions and other environmental stuff.
+// -----------------------------------------------------------------------------
+
 void P_DamageMobj (mobj_t *target, mobj_t *inflictor, mobj_t *source, int damage)
 {
     player_t  *player;
     fixed_t    thrust;
 
-    if ( !(target->flags & MF_SHOOTABLE) )
-    return;	// shouldn't happen...
+    if (!(target->flags & MF_SHOOTABLE))
+    {
+        return;  // shouldn't happen...
+    }
 
     if (target->health <= 0)
-    return;
+    {
+        return;
+    }
 
     if ( target->flags & MF_SKULLFLY )
     {
         target->momx = target->momy = target->momz = 0;
     }
-	
+
     player = target->player;
     
     if (player && gameskill == sk_baby)
@@ -951,13 +968,13 @@ void P_DamageMobj (mobj_t *target, mobj_t *inflictor, mobj_t *source, int damage
     // inflict thrust and push the victim out of reach,
     // thus kick away unless using the chainsaw.
     if (inflictor && !(target->flags & MF_NOCLIP) && (!source
-	|| !source->player || source->player->readyweapon != wp_chainsaw))
+    || !source->player || source->player->readyweapon != wp_chainsaw))
     {
         unsigned ang = R_PointToAngle2 (inflictor->x,
                                         inflictor->y,
                                         target->x,
                                         target->y);
-		
+
         thrust = damage*(FRACUNIT>>3)*100/target->info->mass;
 
         // make fall forwards sometimes
@@ -998,9 +1015,13 @@ void P_DamageMobj (mobj_t *target, mobj_t *inflictor, mobj_t *source, int damage
             int saved;
 
             if (player->armortype == 1)
-            saved = damage/3;
+            {
+                saved = damage/3;
+            }
             else
-            saved = damage/2;
+            {
+                saved = damage/2;
+            }
 
             if (player->armorpoints <= saved)
             {
@@ -1107,7 +1128,7 @@ void P_DamageMobj (mobj_t *target, mobj_t *inflictor, mobj_t *source, int damage
         if (target->state == &states[target->info->spawnstate]
         && target->info->seestate != S_NULL)
         {
-	    P_SetMobjState (target, target->info->seestate);
+            P_SetMobjState (target, target->info->seestate);
         }
     }
 }

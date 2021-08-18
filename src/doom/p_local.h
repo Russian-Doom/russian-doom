@@ -292,6 +292,8 @@ extern int st_keyorskull[3];
 extern int		maxammo[NUMAMMO];
 extern int		clipammo[NUMAMMO];
 
+boolean P_GivePower (player_t *player, int power);
+
 void
 P_TouchSpecialThing
 ( mobj_t*	special,

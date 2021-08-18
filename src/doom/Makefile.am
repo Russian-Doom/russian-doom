@@ -26,7 +26,7 @@ p_doors.c                       \
 p_enemy.c                       \
 p_fix.c            p_fix.h      \
 p_floor.c                       \
-p_inter.c          p_inter.h    \
+p_inter.c                       \
 p_lights.c                      \
                    p_local.h    \
 p_map.c                         \
