@@ -311,9 +311,6 @@ int startmap;
 int startloadgame;
 
 
-// Store demo, do not accept any inputs
-boolean storedemo;
-
 // If true, the main game loop has started.
 boolean main_loop_started = false;
 
@@ -329,9 +326,6 @@ char mapdir[1024];   // directory of development maps
 void D_ProcessEvents (void)
 {
     event_t* ev;
-
-    if (storedemo) // IF STORE DEMO, DO NOT ACCEPT INPUT
-    return;
 
     while ((ev = D_PopEvent()) != NULL)
     {
@@ -3159,13 +3153,6 @@ void D_DoomMain (void)
 
     // [JN] Predifine automap color scheme.
     AM_initColors();
-
-    // If Doom II without a MAP01 lump, this is a store demo.
-    // Moved this here so that MAP01 isn't constantly looked up
-    // in the main loop.
-
-    if (gamemode == commercial && W_CheckNumForName("map01") < 0)
-        storedemo = true;
 
     //!
     // @arg <x>
