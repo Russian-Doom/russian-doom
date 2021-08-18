@@ -18,98 +18,84 @@
 //
 
 
-
 #ifndef __R_DRAW__
 #define __R_DRAW__
 
 
-
-
-extern lighttable_t*	dc_colormap;
-extern int		dc_x;
-extern int		dc_yl;
-extern int		dc_yh;
-extern fixed_t		dc_iscale;
-extern fixed_t		dc_texturemid;
-extern int      dc_texheight;
-
-// first pixel in a column
-extern byte*		dc_source;		
-
+//
+// R_DrawColumn.
+//
 
 // The span blitting interface.
-// Hook in assembler or system specific BLT
-//  here.
-void 	R_DrawColumn (void);
-void 	R_DrawColumnLow (void);
+// Hook in assembler or system specific BLT here.
+void R_DrawColumn (void);
+void R_DrawColumnLow (void);
 
+extern lighttable_t *dc_colormap; 
+extern int           dc_x, dc_yl, dc_yh; 
+extern fixed_t       dc_iscale;
+extern fixed_t       dc_texturemid;
+extern int           dc_texheight;
+extern byte *dc_source;
+
+//
 // The Spectre/Invisibility effect.
-void 	R_DrawFuzzColumn (void);
-void 	R_DrawFuzzColumnBW (void);
-void 	R_DrawFuzzColumnImproved (void);
-void 	R_DrawFuzzColumnImprovedBW (void);
-void 	R_DrawFuzzColumnLow (void);
-void 	R_DrawFuzzColumnLowBW (void);
-void 	R_DrawFuzzColumnLowImproved (void);
-void 	R_DrawFuzzColumnLowImprovedBW (void);
-void 	R_DrawFuzzColumnTranslucent (void);
-void 	R_DrawFuzzColumnTranslucentLow (void);
+//
+
+void R_DrawFuzzColumn (void);
+void R_DrawFuzzColumnBW (void);
+void R_DrawFuzzColumnImproved (void);
+void R_DrawFuzzColumnImprovedBW (void);
+void R_DrawFuzzColumnLow (void);
+void R_DrawFuzzColumnLowBW (void);
+void R_DrawFuzzColumnLowImproved (void);
+void R_DrawFuzzColumnLowImprovedBW (void);
+void R_DrawFuzzColumnTranslucent (void);
+void R_DrawFuzzColumnTranslucentLow (void);
 
 // [crispy] draw fuzz effect independent of rendering frame rate
-void 	R_SetFuzzPosTic (void);
-void 	R_SetFuzzPosDraw (void);
+void R_SetFuzzPosTic (void);
+void R_SetFuzzPosDraw (void);
 
-// Draw with color translation tables,
-//  for player sprite rendering,
+//
+// Translated columns.
+//
+
+// Draw with color translation tables, for player sprite rendering,
 //  Green/Red/Blue/Indigo shirts.
-void	R_DrawTranslatedColumn (void);
-void	R_DrawTranslatedColumnLow (void);
-void    R_DrawTLColumn (void);
-void    R_DrawTLColumnLow (void);
+void R_DrawTranslatedColumn (void);
+void R_DrawTranslatedColumnLow (void);
+void R_DrawTLColumn (void);
+void R_DrawTLColumnLow (void);
 
-void
-R_VideoErase
-( unsigned	ofs,
-  int		count );
+extern byte *translationtables;
+extern byte *dc_translation;
 
-extern int		ds_y;
-extern int		ds_x1;
-extern int		ds_x2;
+//
+// Spans.
+//
 
-extern lighttable_t*	ds_colormap;
-
-extern fixed_t		ds_xfrac;
-extern fixed_t		ds_yfrac;
-extern fixed_t		ds_xstep;
-extern fixed_t		ds_ystep;
-
-// start of a 64*64 tile image
-extern byte*		ds_source;		
-
-extern byte*		translationtables;
-extern byte*		dc_translation;
-
-
-// Span blitting for rows, floor/ceiling.
-// No Sepctre effect needed.
-void 	R_DrawSpan (void);
-
+// Span blitting for rows, floor/ceiling.  No Sepctre effect needed.
+void R_DrawSpan (void);
 // Low resolution mode, 160x200?
-void 	R_DrawSpanLow (void);
+void R_DrawSpanLow (void);
 
+extern int     ds_y, ds_x1, ds_x2;
+extern fixed_t ds_xfrac, ds_yfrac;
+extern fixed_t ds_xstep, ds_ystep;
+extern byte         *ds_source;
+extern lighttable_t *ds_colormap;
 
-void
-R_InitBuffer
-( int		width,
-  int		height );
+//
+// Video buffering stuff.
+//
 
-
+void R_InitBuffer (int width, int height);
 // Rendering function.
 void R_FillBackScreen (void);
-
+// Copy a screen buffer.
+void R_VideoErase (unsigned ofs, int count);
 // If the view size is not full screen, draws a border around it.
 void R_DrawViewBorder (void);
-
-
 
 #endif
