@@ -4333,6 +4333,7 @@ void M_RD_Draw_Level_1(void)
         // Health
         M_snprintf(num, 4, "%d", selective_health);
         RD_M_DrawTextSmallENG(num, 226 + wide_delta, 61,
+                              sbar_colored == 0 ? CR_NONE :
                               selective_health > 100 ? CR_BLUE2 :
                               selective_health >= 67 ? CR_GREEN :
                               selective_health >= 34 ? CR_YELLOW :
@@ -4341,6 +4342,7 @@ void M_RD_Draw_Level_1(void)
         // Armor
         M_snprintf(num, 4, "%d", selective_armor);
         RD_M_DrawTextSmallENG(num, 226 + wide_delta, 71,
+                              sbar_colored == 0 ? CR_NONE :
                               selective_armor == 0 ? CR_RED :
                               selective_armortype == 1 ? CR_GREEN :
                                                         CR_BLUE2);
@@ -4348,6 +4350,7 @@ void M_RD_Draw_Level_1(void)
         // Armor type
         M_snprintf(num, 4, "%d", selective_armortype);
         RD_M_DrawTextSmallENG(num, 226 + wide_delta, 81,
+                              sbar_colored == 0 ? CR_NONE :
                               selective_armortype == 1 ? CR_GREEN : CR_BLUE2);
 
         // Chainsaw
