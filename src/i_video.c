@@ -1464,7 +1464,7 @@ void I_InitGraphics(void)
     if (env != NULL)
     {
         char winenv[30];
-        int winid;
+        unsigned int winid;
 
         sscanf(env, "0x%x", &winid);
         M_snprintf(winenv, sizeof(winenv), "SDL_WINDOWID=%i", winid);
