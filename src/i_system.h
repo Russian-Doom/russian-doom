@@ -28,9 +28,6 @@
 
 typedef void (*atexit_func_t)(void);
 
-// Called by DoomMain.
-void I_Init (void);
-
 // Called by startup code
 // to get the ammount of memory to malloc
 // for the zone management.
@@ -71,18 +68,6 @@ void I_AtExit(atexit_func_t func, boolean run_if_error);
 // Add all system-specific config file variable bindings.
 
 void I_BindVariables(void);
-
-// Print startup banner copyright message.
-
-void I_PrintStartupBanner(char *gamedescription);
-
-// Print a centered text banner displaying the given string.
-
-void I_PrintBanner(char *text);
-
-// Print a dividing line for startup banners.
-
-void I_PrintDivider(void);
 
 #endif
 
