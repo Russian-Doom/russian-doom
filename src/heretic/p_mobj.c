@@ -996,7 +996,6 @@ mobj_t* P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boole
     ||  mobj->type == MT_LAVASMOKE      // Lava smoke
     ||  mobj->type == MT_SLUDGESPLASH   // Sludge splash base
     ||  mobj->type == MT_SLUDGECHUNK    // Sludge small chunk
-    ||  mobj->type == MT_SLUDGECHUNK    // Sludge small chunk
     ||  mobj->type == MT_IMPCHUNK1      // Gargoyle chunk 1
     ||  mobj->type == MT_IMPCHUNK2)     // Gargoyle chunk 2
     {

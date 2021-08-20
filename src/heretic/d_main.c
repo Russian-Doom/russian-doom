@@ -391,16 +391,16 @@ void DrawMessage(void)
 
 void DrawTimeAndFPS(void)
 {
-    time_t t = time(NULL);
-    struct tm *tm = localtime(&t);
-    char   s[64], fps[9999];
-    int    f = real_fps;
-    const  boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
+    const boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
 
     if (!vanillaparm)
     {
         if (local_time)
         {
+            char   s[64];
+            time_t t = time(NULL);
+            struct tm *tm = localtime(&t);
+
             strftime(s, sizeof(s), 
                      local_time == 1 ? "%I:%M %p" :    // 12-hour (HH:MM designation)
                      local_time == 2 ? "%I:%M:%S %p" : // 12-hour (HH:MM:SS designation)
@@ -417,6 +417,9 @@ void DrawTimeAndFPS(void)
 
         if (show_fps)
         {
+            char fps[9999];
+            int  f = real_fps;
+            
             sprintf (fps, "%d", f);
             RD_M_DrawTextC("FPS:", 279 + (wide_4_3 ? wide_delta : wide_delta * 2), 23);
             RD_M_DrawTextC(fps, 297 + (wide_4_3 ? wide_delta : wide_delta * 2), 23);   // [JN] fps digits

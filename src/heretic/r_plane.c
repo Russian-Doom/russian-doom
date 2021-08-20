@@ -210,7 +210,7 @@ void R_ClearPlanes (void)
         ceilingclip[i] = -1;
     }
 
-    for (int i = 0; i < MAXVISPLANES; i++)
+    for (i = 0; i < MAXVISPLANES; i++)
         for (*freehead = visplanes[i], visplanes[i] = NULL; *freehead; )
             freehead = &(*freehead)->next;
 

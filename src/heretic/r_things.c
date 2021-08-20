@@ -27,13 +27,6 @@
 #include "crispy.h"
 #include "jn.h"
 
-typedef struct
-{
-    int x1, x2;
-    int column;
-    int topclip;
-    int bottomclip;
-} maskdraw_t;
 
 typedef struct drawseg_xrange_item_s
 {

@@ -1205,7 +1205,7 @@ void DrawCommonBar(void)
             dp_translation = sbar_colored_gem == 1 ? cr[CR_RED2GREEN_HERETIC] : cr[CR_RED2MIDGREEN_HERETIC];
             else if (CPlayer->mo->health >= 34)
             dp_translation = sbar_colored_gem == 1 ? cr[CR_RED2YELLOW_HERETIC] : cr[CR_RED2GOLD_HERETIC];
-            else if (CPlayer->mo->health <= 34)
+            else
             dp_translation = sbar_colored_gem == 2 ? cr[CR_RED2DARKRED_HERETIC] : NULL;
 		}
         V_DrawPatch(17 + healthPos + wide_delta, chainY, PatchLIFEGEM);
@@ -1526,7 +1526,7 @@ void DrawFullScreenStuff(void)
         DrBNumber(CPlayer->mo->health, 5, 176);
     }
     // [JN] Negative and zero health: can't drop below -99, drawing, colorizing
-    else if (CPlayer->mo->health <= 0)
+    else
     {
         if (sbar_colored && !vanillaparm)
         dp_translation = cr[CR_GREEN2RED_HERETIC];
