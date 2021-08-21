@@ -111,16 +111,11 @@ lighttable_t *ds_colormap;
 
 void R_DrawColumn (void) 
 { 
-    int      count = dc_yh - dc_yl + 1;
-    // heightmask is the Tutti-Frutti fix -- killough
-    int      heightmask = dc_texheight-1;
-    // Framebuffer destination address.
-    // Use ylookup LUT to avoid multiply with ScreenWidth.
-    // Use columnofs LUT for subwindows?
+    int      count = dc_yh - dc_yl;
     byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-    // Determine scaling, which is the only mapping to be done.
     fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
-
+    int      heightmask = dc_texheight-1;
+    
     if (count <= 0)  // Zero length, column does not exceed a pixel.
     {
         return;
@@ -144,10 +139,10 @@ void R_DrawColumn (void)
         heightmask <<= FRACBITS;
 
         if (frac < 0)
-        while ((frac += heightmask) < 0);
+            while ((frac += heightmask) < 0);
         else
-        while (frac >= heightmask)
-        frac -= heightmask;
+            while (frac >= heightmask)
+                   frac -= heightmask;
 
         do
         {
@@ -156,38 +151,35 @@ void R_DrawColumn (void)
             *dest = dc_colormap[dc_source[frac>>FRACBITS]];
             dest += screenwidth;
             if ((frac += dc_iscale) >= heightmask)
-            frac -= heightmask;
-        }
-        while (--count);
+            {
+                frac -= heightmask;
+            }
+        } while (count--);
     }
-    else    // texture height is a power of 2 -- killough
+    else  // texture height is a power of 2 -- killough
     {
-        while ((count-=2)>=0)
+        do 
         {
+            // Re-map color indices from wall texture column
+            //  using a lighting/special effects LUT.
             *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
-            dest += screenwidth;
+            dest += screenwidth; 
             frac += dc_iscale;
-            *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
-            dest += screenwidth;
-            frac += dc_iscale;
-        }
-        if (count & 1)
-        *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
+        } while (count--); 
     }
 }
 
 
 void R_DrawColumnLow (void) 
 { 
+    int      x = dc_x << 1;  // Blocky mode, need to multiply by 2.
     int      count = dc_yh - dc_yl; 
-    // Blocky mode, need to multiply by 2.
-    int      x = dc_x << 1;
-    int      heightmask = dc_texheight - 1;
     byte    *dest = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
     byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
     byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
     byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
     fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
+    int      heightmask = dc_texheight - 1;
 
     // Zero length.
     if (count < 0)
@@ -211,44 +203,36 @@ void R_DrawColumnLow (void)
         heightmask <<= FRACBITS;
 
         if (frac < 0)
-        while ((frac += heightmask) < 0);
+            while ((frac += heightmask) < 0);
         else
-        while (frac >= heightmask)
-        frac -= heightmask;
+            while (frac >= heightmask)
+                   frac -= heightmask;
 
         do
         {
-            *dest2 = *dest = dc_colormap[dc_source[frac>>FRACBITS]];
+            *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_source[frac>>FRACBITS]];
 
-            dest += screenwidth << hires;
+            dest  += screenwidth << hires;
             dest2 += screenwidth << hires;
-
-            if (hires)
-            {
-                *dest4 = *dest3 = dc_colormap[dc_source[frac>>FRACBITS]];
-                dest3 += screenwidth << hires;
-                dest4 += screenwidth << hires;
-            }
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
 
             if ((frac += dc_iscale) >= heightmask)
-            frac -= heightmask;
+            {
+                frac -= heightmask;
+            }
         } while (count--);
     }
     else // texture height is a power of 2 -- killough
     {
         do 
         {
-            // Hack. Does not work corretly.
-            *dest2 = *dest = dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]];
-            dest += screenwidth << hires;
-            dest2 += screenwidth << hires;
+            *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]];
 
-            if (hires)
-            {
-                *dest4 = *dest3 = dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]];
-                dest3 += screenwidth << hires;
-                dest4 += screenwidth << hires;
-            }
+            dest  += screenwidth << hires;
+            dest2 += screenwidth << hires;
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
 
             frac += dc_iscale; 
 
@@ -797,11 +781,12 @@ void R_DrawFuzzColumnTranslucent (void)
     int      count = dc_yh - dc_yl + 1;
     int      heightmask = dc_texheight-1;
     byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-    fixed_t  fracstep = dc_iscale;
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep;
+    fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (count < 0)
-    return;
+    {
+        return;
+    }
 
 #ifdef RANGECHECK
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -819,33 +804,28 @@ void R_DrawFuzzColumnTranslucent (void)
         heightmask <<= FRACBITS;
 
         if (frac < 0)
-        while ((frac += heightmask) < 0);
+            while ((frac += heightmask) < 0);
         else
-        while (frac >= heightmask)
-        frac -= heightmask;
+            while (frac >= heightmask)
+                   frac -= heightmask;
 
         do
         {
             *dest = fuzzmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
             dest += screenwidth;
-            if ((frac += fracstep) >= heightmask)
+            if ((frac += dc_iscale) >= heightmask)
             frac -= heightmask;
         }
-        while (--count);
+        while (count--);
     }
     else    // texture height is a power of 2 -- killough
     {
-        while ((count-=2)>=0)
+        do
         {
             *dest = fuzzmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
             dest += screenwidth;
-            frac += fracstep;
-            *dest = fuzzmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
-            dest += screenwidth;
-            frac += fracstep;
-        }
-        if (count & 1)
-        *dest = fuzzmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
+            frac += dc_iscale;
+        } while (count--);
     }
 }
 
@@ -858,8 +838,7 @@ void R_DrawFuzzColumnTranslucentLow (void)
     byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
     byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
     byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-    fixed_t  fracstep = dc_iscale;
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep;
+    fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     count = dc_yh - dc_yl;
 
@@ -891,19 +870,18 @@ void R_DrawFuzzColumnTranslucentLow (void)
         {
             *dest = fuzzmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
             *dest2 = fuzzmap[(*dest2<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-            dest += screenwidth << hires;
+            *dest3 = fuzzmap[(*dest3<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest4 = fuzzmap[(*dest4<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+
+            dest  += screenwidth << hires;
             dest2 += screenwidth << hires;
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
 
-            if (hires)
+            if ((frac += dc_iscale) >= heightmask)
             {
-                *dest3 = fuzzmap[(*dest3<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-                *dest4 = fuzzmap[(*dest4<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-                dest3 += screenwidth << hires;
-                dest4 += screenwidth << hires;
+                frac -= heightmask;
             }
-
-            if ((frac += fracstep) >= heightmask)
-            frac -= heightmask;
         } while (count--);
     }
     else // texture height is a power of 2 -- killough
@@ -912,18 +890,15 @@ void R_DrawFuzzColumnTranslucentLow (void)
         {
             *dest = fuzzmap[(*dest<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
             *dest2 = fuzzmap[(*dest2<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
-            dest += screenwidth << hires;
+            *dest3 = fuzzmap[(*dest3<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest4 = fuzzmap[(*dest4<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+
+            dest  += screenwidth << hires;
             dest2 += screenwidth << hires;
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
 
-            if (hires)
-            {
-                *dest3 = fuzzmap[(*dest3<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
-                *dest4 = fuzzmap[(*dest4<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
-                dest3 += screenwidth << hires;
-                dest4 += screenwidth << hires;
-            }
-
-            frac += fracstep; 
+            frac += dc_iscale; 
 
         } while (count--);
     }
@@ -1059,21 +1034,16 @@ void R_DrawTLColumn (void)
             if ((frac += dc_iscale) >= heightmask)
             frac -= heightmask;
         }
-        while (--count);
+        while (count--);
     }
     else    // texture height is a power of 2 -- killough
     {
-        while ((count-=2)>=0)
+        do
         {
             *dest = tintmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
             dest += screenwidth;
             frac += dc_iscale;
-            *dest = tintmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
-            dest += screenwidth;
-            frac += dc_iscale;
-        }
-        if (count & 1)
-        *dest = tintmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
+        } while (count--);
     }
 }
 
