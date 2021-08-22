@@ -38,9 +38,6 @@ sector_t  *frontsector;
 sector_t  *backsector;
 drawseg_t *ds_p;
 
-// [JN] killough 4/7/98: indicates doors closed wrt automap bugfix:
-int doorclosed;
-
 // [JN] killough: New code which removes 2s linedef limit
 drawseg_t *drawsegs;
 unsigned   maxdrawsegs;
