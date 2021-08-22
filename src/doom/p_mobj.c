@@ -258,9 +258,16 @@ void P_XYMovement (mobj_t* mo)
         // a missile explosion in the code below.
         //
         // Thanks to Jeff Doggett for simplifying!
+        //
+        // Additionally, wallrunning bug is fixed (mo->player condition):
+        // https://doomwiki.org/wiki/Wallrunning
+        //
+        // Thanks AXDOOMER and Brad Harding!
 
-        if ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) 
-        || (singleplayer && !vanillaparm && (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)))
+        if (singleplayer && !vanillaparm ? 
+            mo->player ? ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) && (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)) 
+                       : ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) || (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2))
+                       :  (xmove > MAXMOVE/2 || ymove > MAXMOVE/2))
         {
             ptryx = mo->x + xmove/2;
             ptryy = mo->y + ymove/2;
