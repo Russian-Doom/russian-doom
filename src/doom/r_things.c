@@ -42,10 +42,6 @@
 #define BASEYCENTER (ORIGHEIGHT/2)
 
 
-extern boolean chainsaw_attack_swing;
-
-
-
 //
 // Sprite rotation 0 is facing the viewer,
 //  rotation 1 is one angle turn CLOCKWISE around the axis.
@@ -909,14 +905,7 @@ static inline void R_ApplyWeaponBob (fixed_t *sx, boolean bobx, fixed_t *sy, boo
 
         if (bobx)
         {
-            if (chainsaw_attack_swing) // [JN] Own amplitude for Chainsaw attack
-            {
-                *sx += FixedMul(viewplayer->bob, finecosine[angle] / 16);
-            }
-            else
-            {
-                *sx += FixedMul(viewplayer->bob, finecosine[angle]);
-            }
+            *sx += FixedMul(viewplayer->bob, finecosine[angle]);
         }
     }
 
@@ -926,14 +915,7 @@ static inline void R_ApplyWeaponBob (fixed_t *sx, boolean bobx, fixed_t *sy, boo
 
         if (boby)
         {
-            if (chainsaw_attack_swing) // [JN] Own amplitude for Chainsaw attack
-            {
-                *sy += FixedMul(viewplayer->bob, finesine[angle*16 & (FINEANGLES / 2 - 1)] / 12);
-            }
-            else
-            {
-                *sy += FixedMul(viewplayer->bob, finesine[angle & (FINEANGLES / 2 - 1)]);
-            }
+            *sy += FixedMul(viewplayer->bob, finesine[angle & (FINEANGLES / 2 - 1)]);
         }
     }
 }
