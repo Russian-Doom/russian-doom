@@ -801,8 +801,8 @@ void R_Init (void)
         // [JN] Wide screen: don't allow unsupported view modes at startup
         if (screenblocks < 9)
             screenblocks = 9;
-        if (screenblocks > 14)
-            screenblocks = 14;
+        if (screenblocks > 17)
+            screenblocks = 17;
     }
 
     R_InitClipSegs ();

@@ -2019,11 +2019,11 @@ void M_RD_Draw_Display(void)
     if (aspect_ratio >= 2)
     {
         // [JN] Wide screen: only 6 sizes are available
-        RD_Menu_DrawSliderSmall(&DisplayMenu, 44, 6, screenblocks - 9);
+        RD_Menu_DrawSliderSmall(&DisplayMenu, 44, 9, screenblocks - 9);
 
         // Numerical representation of slider position
         M_snprintf(num, 4, "%3d", screenblocks);
-        RD_M_DrawTextSmallENG(num, 96 + wide_delta, 45, CR_NONE);
+        RD_M_DrawTextSmallENG(num, 121 + wide_delta, 45, CR_NONE);
     }
     else
     {
@@ -2048,7 +2048,7 @@ void M_RD_Change_ScreenSize(Direction_t direction)
 {
     extern void EnableLoadingDisk();
 
-    RD_Menu_SlideInt(&screenblocks, 0, 14, direction);
+    RD_Menu_SlideInt(&screenblocks, 0, 17, direction);
 
     if (aspect_ratio >= 2)
     {
@@ -2056,8 +2056,8 @@ void M_RD_Change_ScreenSize(Direction_t direction)
         // screenblocks - config file variable
         if (screenblocks < 9)
             screenblocks = 9;
-        if (screenblocks > 14)
-            screenblocks = 14;
+        if (screenblocks > 17)
+            screenblocks = 17;
 
         // Reinitialize fps and time widget's horizontal offset
         if (gamestate == GS_LEVEL)
@@ -2072,6 +2072,8 @@ void M_RD_Change_ScreenSize(Direction_t direction)
         // Screen size can't go below 3.
         if (screenblocks < 3)
             screenblocks = 3;
+        if (screenblocks > 14)
+            screenblocks = 14;
     }
 
     R_SetViewSize (screenblocks, detailLevel);

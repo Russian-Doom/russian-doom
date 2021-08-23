@@ -294,32 +294,32 @@ static patch_t* armsbg_rus;
 static patch_t* arms[6][2]; 
 
 // ready-weapon widget
-static st_number_t      w_ready;
+static st_number_t      w_ready, w_ready_wide;
 
  // in deathmatch only, summary of frags stats
-static st_number_t      w_frags;
+static st_number_t      w_frags, w_frags_wide;
 
 // [JN] Jaguar: current map widget
-static st_number_t w_currentmap;
+static st_number_t w_currentmap, w_currentmap_wide;
 
 // [JN] Press Beta: artifacts widget
-static st_number_t      w_artifacts;
+static st_number_t      w_artifacts, w_artifacts_wide;
 
 // [JN] Press Beta: widget for player's lifes
 static st_number_t      w_lifes;
 
 // health widget
-static st_percent_t     w_health;
+static st_percent_t     w_health, w_health_wide;
 
 // [JN] Negative player health
 static boolean          st_neghealth; 
-static st_percent_t     w_health_neg;
+static st_percent_t     w_health_neg, w_health_neg_wide;
 
 // arms background
-static st_binicon_t     w_armsbg; 
+static st_binicon_t     w_armsbg, w_armsbg_wide;
 
 // weapon ownership widgets
-static st_multicon_t    w_arms[6];
+static st_multicon_t    w_arms[6], w_arms_wide[6];
 
 // [Doom Retro] & [crispy] show SSG availability in the Shotgun slot of the arms widget
 static int st_shotguns;
@@ -328,16 +328,16 @@ static int st_shotguns;
 static st_multicon_t    w_faces; 
 
 // keycard widgets
-static st_multicon_t    w_keyboxes[3];
+static st_multicon_t    w_keyboxes[3], w_keyboxes_wide[3];
 
 // armor widget
-static st_percent_t     w_armor;
+static st_percent_t     w_armor, w_armor_wide;
 
 // ammo widgets
-static st_number_t      w_ammo[4];
+static st_number_t      w_ammo[4], w_ammo_wide[4];
 
 // max ammo widgets
-static st_number_t      w_maxammo[4]; 
+static st_number_t      w_maxammo[4], w_maxammo_wide[4]; 
 
 
 
@@ -1344,9 +1344,15 @@ void ST_updateWidgets(void)
     //  if (w_ready.data != plyr->readyweapon)
     //  {
     if (weaponinfo[plyr->readyweapon].ammo == am_noammo)
+    {
         w_ready.num = &largeammo;
+        w_ready_wide.num = &largeammo;
+    }
     else
+    {
         w_ready.num = &plyr->ammo[weaponinfo[plyr->readyweapon].ammo];
+        w_ready_wide.num = &plyr->ammo[weaponinfo[plyr->readyweapon].ammo];
+    }
     //{
     // static int tic=0;
     // static int dir=-1;
@@ -1357,6 +1363,7 @@ void ST_updateWidgets(void)
     // tic++;
     // }
     w_ready.data = plyr->readyweapon;
+    w_ready_wide.data = plyr->readyweapon;
 
     // if (*w_ready.on)
     //  STlib_updateNum(&w_ready, true);
@@ -1394,6 +1401,7 @@ void ST_updateWidgets(void)
             if (!plyr->tryopen[i])
             {
                 w_keyboxes[i].oldinum = -1;
+                w_keyboxes_wide[i].oldinum = -1;
             }
         }
     }
@@ -1650,11 +1658,14 @@ static byte* ST_WidgetColor(int i)
 
 // -----------------------------------------------------------------------------
 // ST_drawWidgets
+// [JN] Slightly reformated to draw widgets from left to right, to support
+// extra types and wider version of status bar.
 // -----------------------------------------------------------------------------
 
-void ST_drawWidgets(boolean refresh)
+void ST_drawWidgets (boolean refresh)
 {
-    int     i;
+    int   i;
+    const boolean wider_stbar = aspect_ratio >= 2 && screenblocks >= 14 && (!automapactive || automap_overlay);
 
     // [JN] Jaguar: use own widgets drawing function
     if (gamemission == jaguar)
@@ -1667,16 +1678,60 @@ void ST_drawWidgets(boolean refresh)
     st_fragson = deathmatch && st_statusbaron;  // used by w_frags widget
     st_artifactson = !deathmatch && st_statusbaron;  // [JN] used by w_artifacts widget
     st_neghealth = negative_health && plyr->health <= 0 && !vanillaparm;
+    // [Doom Retro] & [crispy] show SSG availability in the Shotgun slot of the arms widget
+    st_shotguns = plyr->weaponowned[wp_shotgun] | plyr->weaponowned[wp_supershotgun];
 
+    // [JN] Labels ("ammo", "health", "arms", "armor", total ammo).
+    if (screenblocks == 11 || screenblocks == 12 || screenblocks == 14 || screenblocks == 15)
+    {
+        if (!automapactive || automap_overlay) // [JN] Don't draw signs in automap
+        {
+            // [JN] Don't draw ammo for fist and chainsaw
+            if (weaponinfo[plyr->readyweapon].ammo != am_noammo)
+            {
+                V_DrawPatch(2 + (wider_stbar ? 0 : wide_delta), 191, W_CacheLumpName
+                           (DEH_String(english_language ? "STCHAMMO" : "RDCHAMMO"), PU_CACHE));
+            }
+
+            if (deathmatch)
+            {
+                // [JN] Frags
+                V_DrawPatch(108 + (wider_stbar ? 0: wide_delta), 191, W_CacheLumpName
+                           (DEH_String(english_language ? "STCHFRGS" : "RDCHFRGS"), PU_CACHE));
+            }
+            else
+            {
+                // [JN] Arms
+                V_DrawPatch(108 + (wider_stbar ? 0 : wide_delta), 191, W_CacheLumpName
+                           (DEH_String(english_language ? "STCHARMS" : "RDCHARMS"), PU_CACHE));
+            }
+
+            // [JN] Health
+            V_DrawPatch(52 + (wider_stbar ? 0 : wide_delta), 173, W_CacheLumpName
+                       (DEH_String(english_language ? "STCHHLTH" : "RDCHHLTH"), PU_CACHE));
+                       
+            // [JN] Armor, ammo
+            V_DrawPatch(52 + (wider_stbar ? wide_delta*2 : wide_delta), 173, W_CacheLumpName
+                       (DEH_String(english_language ? "STCHARAM" : "RDCHARAM"), PU_CACHE));
+        }
+    }
+
+    // [JN] Yellow slashes
+    if (screenblocks > 10 && screenblocks < 17 && (!automapactive || automap_overlay))
+    {
+        V_DrawPatch(292 + (wider_stbar ? wide_delta*2 : wide_delta), 173,
+                    W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
+    }
+
+    // Ammo amount for current weapon
     dp_translation = ST_WidgetColor(hudcolor_ammo);
-    STlib_updateNum(&w_ready, refresh);
+    STlib_updateNum(wider_stbar ? &w_ready_wide : &w_ready, refresh);
     dp_translation = NULL;
 
-    // [crispy] draw "special widgets" in the Crispy HUD
-    if ((screenblocks >= 11 && screenblocks <= 13)
+    // [crispy] draw berserk pack instead of no ammo if appropriate
+    if ((screenblocks >= 11 && screenblocks <= 16)
     && (!automapactive || automap_overlay))
     {
-        // [crispy] draw berserk pack instead of no ammo if appropriate
         if (plyr->readyweapon == wp_fist && plyr->powers[pw_strength])
         {
             static int lump = -1;
@@ -1695,21 +1750,49 @@ void ST_drawWidgets(boolean refresh)
             patch = W_CacheLumpNum(lump, PU_CACHE);
 
             // [crispy] (23,179) is the center of the Ammo widget
-            V_DrawPatch((23 - SHORT(patch->width)/2 + SHORT(patch->leftoffset)) + wide_delta,
+            V_DrawPatch((23 - SHORT(patch->width)/2 + SHORT(patch->leftoffset)) + (wider_stbar ? 0 : wide_delta),
                          179 - SHORT(patch->height)/2 + SHORT(patch->topoffset),
                          patch);
         }
     }
 
-    for (i=0;i<4;i++)
+    // Health, negative health.
+    dp_translation = ST_WidgetColor(hudcolor_health);
+    if (wider_stbar)
     {
-        STlib_updateNum(&w_ammo[i], refresh);
-        STlib_updateNum(&w_maxammo[i], refresh);
+        STlib_updatePercent(st_neghealth ? &w_health_neg_wide : &w_health_wide, refresh || screenblocks <= 16);
+    }
+    else
+    {
+        STlib_updatePercent(st_neghealth ? &w_health_neg : &w_health, refresh || screenblocks <= 16);
+    }
+    dp_translation = NULL;
+
+    // ARMS background. Do not update in Press Beta, ARTF is used there.
+    if ((screenblocks < 11 || (automapactive && !automap_overlay)) && gamemode != pressbeta)
+    {
+        STlib_updateBinIcon(&w_armsbg, refresh);
     }
 
-    // [JN] Signed Crispy HUD: no STBAR backbround, with player's face/background
-    // Account player's color in network game, use only gray color in single player.
-    if (screenblocks == 11 && (!automapactive || automap_overlay))
+    // ARMS digits. Do not update in Press Beta, ARTF is used there.
+    if (gamemode != pressbeta)
+    {
+        for (i = 0 ; i < 6 ; i++)
+        {
+            STlib_updateMultIcon(wider_stbar ? &w_arms_wide[i] : &w_arms[i],
+                                 refresh || (screenblocks >= 11 &&  screenblocks <= 16));
+        }
+    }
+
+    // Frags
+    if (deathmatch)
+    {
+        STlib_updateNum(wider_stbar ? &w_frags_wide : &w_frags, 
+                        refresh || (screenblocks >= 11 && screenblocks <= 16));
+    }
+
+    // [JN] Player face background
+    if ((screenblocks == 11 || screenblocks == 14) && (!automapactive || automap_overlay))
     {
         // [JN] TODO - using different PU_CACHE backgrounds for netgame.
         /*
@@ -1724,80 +1807,40 @@ void ST_drawWidgets(boolean refresh)
                         W_CacheLumpName(DEH_String("STPB1"), PU_CACHE));
         }
     }
-    
-    // [JN] Signed Crispy HUD: no STBAR backbround, without player's face/background
-    if (screenblocks == 11 || screenblocks == 12)
+
+    // Player faces
+    if ((screenblocks < 12 || screenblocks == 14) || (automapactive && !automap_overlay))
     {
-        if (!automapactive || automap_overlay) // [JN] Don't draw signs in automap
-        {
-            // [JN] Don't draw ammo for fist and chainsaw
-            if (weaponinfo[plyr->readyweapon].ammo != am_noammo)
-            {
-                V_DrawPatch(2 + wide_delta, 191, W_CacheLumpName
-                           (DEH_String(english_language ? "STCHAMMO" : "RDCHAMMO"), PU_CACHE));
-            }
-
-
-            if (deathmatch)
-            {
-                // [JN] Frags
-                V_DrawPatch(108 + wide_delta, 191, W_CacheLumpName
-                           (DEH_String(english_language ? "STCHFRGS" : "RDCHFRGS"), PU_CACHE));
-            }
-            else
-            {
-                // [JN] Arms
-                V_DrawPatch(108 + wide_delta, 191, W_CacheLumpName
-                           (DEH_String(english_language ? "STCHARMS" : "RDCHARMS"), PU_CACHE));
-            }
-
-            // [JN] Health, armor, ammo
-            V_DrawPatch(52 + wide_delta, 173, W_CacheLumpName
-                       (DEH_String(english_language ? "STCHNAMS" : "RDCHNAMS"), PU_CACHE));
-        }
-
-        V_DrawPatch(292 + wide_delta, 173, W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
+        STlib_updateMultIcon(&w_faces, refresh || screenblocks == 11 || screenblocks == 14);
     }
 
-    // [JN] Traditional Crispy HUD
-    if (screenblocks == 13)
-    V_DrawPatch(292 + wide_delta, 173, W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
-
-    dp_translation = ST_WidgetColor(hudcolor_health);
-    // [JN] Negative player halth
-    STlib_updatePercent(st_neghealth ? &w_health_neg : &w_health,
-                        refresh || screenblocks <= 13);
-
+    // Armor
     dp_translation = ST_WidgetColor(hudcolor_armor);
-    STlib_updatePercent(&w_armor, refresh || screenblocks <= 13);
+    if (wider_stbar)
+    {
+        STlib_updatePercent(&w_armor_wide, refresh || screenblocks <= 16);
+    }
+    else
+    {
+        STlib_updatePercent(&w_armor, refresh || screenblocks <= 13);
+    }
     dp_translation = NULL;
 
-    // [JN] Don't update/draw ARMS background in Press Beta
-    if ((screenblocks < 11 || (automapactive && !automap_overlay)) && gamemode != pressbeta)
-    STlib_updateBinIcon(&w_armsbg, refresh);
-
-    // [Doom Retro] & [crispy] show SSG availability in the Shotgun slot of the arms widget
-    st_shotguns = plyr->weaponowned[wp_shotgun] | plyr->weaponowned[wp_supershotgun];
-
-    // [JN] Don't update/draw ARMS section in Press Beta
-    if (gamemode != pressbeta)
+    // Key boxes.
+    for (i = 0 ; i < 3 ; i++)
     {
-    for (i=0;i<6;i++)
-    STlib_updateMultIcon(&w_arms[i], refresh || (screenblocks >= 11 
-                                             &&  screenblocks <= 13));
+        STlib_updateMultIcon(wider_stbar ? &w_keyboxes_wide[i] : &w_keyboxes[i],
+                             refresh || (screenblocks >= 11 &&  screenblocks <= 16));
     }
 
-    if (screenblocks < 12 || (automapactive && !automap_overlay))
-    STlib_updateMultIcon(&w_faces, refresh || screenblocks == 11);
+    // Ammo totals: current ammo / max ammo
+    for (i = 0 ; i < 4 ; i++)
+    {
+        STlib_updateNum(wider_stbar ? &w_ammo_wide[i] : &w_ammo[i], refresh);
+        STlib_updateNum(wider_stbar ? &w_maxammo_wide[i] : &w_maxammo[i], refresh);
+    }
 
-    for (i=0;i<3;i++)
-    STlib_updateMultIcon(&w_keyboxes[i], refresh || (screenblocks >= 11 
-                                                 &&  screenblocks <= 13));
-
-    STlib_updateNum(&w_frags, refresh || (screenblocks >= 11 
-                                      &&  screenblocks <= 13));
-    
-    // [JN] Press Beta: some special routine. I need to draw Artifacts widet
+    // Press Beta: some special routine. I need to draw Artifacts widet
     // while not in automap and Arms widget while in automap. Plus, background 
     // must be redrawn immediately. Also see AM_Stop at am_map.c.
     if (gamemode == pressbeta)
@@ -1806,25 +1849,28 @@ void ST_drawWidgets(boolean refresh)
         {
             // [JN] Draw Artifacts widet
             dp_translation = ST_WidgetColor(hudcolor_artifacts);
-            STlib_updateNum(&w_artifacts, refresh || (screenblocks >= 11 
-                                                  &&  screenblocks <= 13));
+            STlib_updateNum(wider_stbar ? &w_artifacts_wide : &w_artifacts, 
+                            refresh || (screenblocks >= 11 &&  screenblocks <= 16));
             dp_translation = NULL;
         }
         else
         {
             // [JN] Draw Arms widet. Background (w_armsbg) and numbers (w_arms)
-            STlib_updateBinIcon(&w_armsbg, refresh || (screenblocks >= 11
-                                                   && screenblocks <= 13));
+            STlib_updateBinIcon(wider_stbar ? &w_armsbg_wide : &w_armsbg,
+                                refresh || (screenblocks >= 11 && screenblocks <= 16));
 
             for (i=0;i<6;i++)
-            STlib_updateMultIcon(&w_arms[i], refresh || (screenblocks >= 11 
-                                                     &&  screenblocks <= 13));
+            {
+            STlib_updateMultIcon(wider_stbar ? &w_arms_wide[i] : &w_arms[i],
+                                 refresh || (screenblocks >= 11 &&  screenblocks <= 16));
+            }
         }
 
-        // [JN] Draw player's life widget only in traditional HUD, 
-        // Crispy HUD with player's face and automap
-        if (screenblocks <= 11 || automapactive)
-        STlib_updateNum(&w_lifes, refresh);
+        // [JN] Amount of player lives.
+        if (screenblocks <= 11 || screenblocks == 14 || (automapactive && !automap_overlay))
+        {
+            STlib_updateNum(&w_lifes, refresh);
+        }
     }
 }
 
@@ -2135,187 +2181,142 @@ void ST_createWidgets(void)
     int i;
 
     // ready weapon ammo
-    STlib_initNum(&w_ready,
-        ST_AMMOX + wide_delta,
-        ST_AMMOY,
-        tallnum,
-        &plyr->ammo[weaponinfo[plyr->readyweapon].ammo],
-        &st_statusbaron,
-        ST_AMMOWIDTH );
+    STlib_initNum(&w_ready, ST_AMMOX + wide_delta, ST_AMMOY,
+                  tallnum, &plyr->ammo[weaponinfo[plyr->readyweapon].ammo],
+                  &st_statusbaron, ST_AMMOWIDTH);
+
+    STlib_initNum(&w_ready_wide, ST_AMMOX, ST_AMMOY,
+                  tallnum, &plyr->ammo[weaponinfo[plyr->readyweapon].ammo],
+                  &st_statusbaron, ST_AMMOWIDTH );
 
     // the last weapon type
     w_ready.data = plyr->readyweapon; 
+    w_ready_wide.data = plyr->readyweapon; 
 
     // health percentage
-    STlib_initPercent(&w_health,
-        ST_HEALTHX + wide_delta,
-        ST_HEALTHY,
-        tallnum,
-        &plyr->health,
-        &st_statusbaron,
-        tallpercent);
+    STlib_initPercent(&w_health, ST_HEALTHX + wide_delta, ST_HEALTHY,
+                      tallnum, &plyr->health, &st_statusbaron, tallpercent);
+
+    STlib_initPercent(&w_health_wide, ST_HEALTHX, ST_HEALTHY,
+                      tallnum, &plyr->health, &st_statusbaron, tallpercent);
 
     // [JN] Negative player health
-    STlib_initPercent(&w_health_neg,
-        ST_HEALTHX + wide_delta,
-        ST_HEALTHY,
-        tallnum,
-        &plyr->health_neg,
-        &st_statusbaron,
-        tallpercent);
+    STlib_initPercent(&w_health_neg, ST_HEALTHX + wide_delta, ST_HEALTHY,
+                      tallnum, &plyr->health_neg, &st_statusbaron, tallpercent);
+
+    STlib_initPercent(&w_health_neg_wide, ST_HEALTHX, ST_HEALTHY,
+                      tallnum, &plyr->health_neg, &st_statusbaron, tallpercent);
 
     // arms background
-    STlib_initBinIcon(&w_armsbg,
-        ST_ARMSBGX + wide_delta,
-        ST_ARMSBGY,
-        english_language ? armsbg : armsbg_rus,
-        &st_notdeathmatch,
-        &st_statusbaron);
+    STlib_initBinIcon(&w_armsbg, ST_ARMSBGX + wide_delta, ST_ARMSBGY,
+                      english_language ? armsbg : armsbg_rus,
+                      &st_notdeathmatch, &st_statusbaron);
+
+    STlib_initBinIcon(&w_armsbg_wide, ST_ARMSBGX, ST_ARMSBGY,
+                      english_language ? armsbg : armsbg_rus,
+                      &st_notdeathmatch, &st_statusbaron);
 
     // weapons owned
-    for(i=0;i<6;i++)
+    for(i = 0 ; i < 6 ; i++)
     {
-        STlib_initMultIcon(&w_arms[i],
-            ST_ARMSX + wide_delta + (i%3)*ST_ARMSXSPACE,
-            ST_ARMSY+(i/3)*ST_ARMSYSPACE,
-            arms[i],
-            &plyr->weaponowned[i+1],
-            &st_armson);
+        STlib_initMultIcon(&w_arms[i], ST_ARMSX + wide_delta + (i%3)*ST_ARMSXSPACE, 
+                           ST_ARMSY+(i/3)*ST_ARMSYSPACE, arms[i],
+                           &plyr->weaponowned[i+1], &st_armson);
+
+        STlib_initMultIcon(&w_arms_wide[i], ST_ARMSX + (i%3)*ST_ARMSXSPACE, 
+                           ST_ARMSY+(i/3)*ST_ARMSYSPACE, arms[i],
+                           &plyr->weaponowned[i+1], &st_armson);
     }
 
     // [Doom Retro] & [crispy] show SSG availability in the Shotgun slot of the arms widget
     w_arms[1].inum = &st_shotguns;
+    w_arms_wide[1].inum = &st_shotguns;
 
     // frags sum
-    STlib_initNum(&w_frags,
-        ST_FRAGSX + wide_delta,
-        ST_FRAGSY,
-        tallnum,
-        &st_fragscount,
-        &st_fragson,
-        ST_FRAGSWIDTH);
+    STlib_initNum(&w_frags, ST_FRAGSX + wide_delta, ST_FRAGSY,
+                  tallnum, &st_fragscount, &st_fragson, ST_FRAGSWIDTH);
+    STlib_initNum(&w_frags_wide, ST_FRAGSX, ST_FRAGSY,
+                  tallnum, &st_fragscount, &st_fragson, ST_FRAGSWIDTH);
 
     // [JN] Press Beta artifacts sum
-    STlib_initNum(&w_artifacts,
-        ST_FRAGSX + wide_delta + 1,
-        ST_FRAGSY,
-        tallnum,
-        &st_artifactscount,
-        &st_artifactson,
-        ST_FRAGSWIDTH);
+    STlib_initNum(&w_artifacts, ST_FRAGSX + wide_delta + 1, ST_FRAGSY,
+                  tallnum, &st_artifactscount, &st_artifactson, ST_FRAGSWIDTH);
+    STlib_initNum(&w_artifacts_wide, ST_FRAGSX, ST_FRAGSY,
+                  tallnum, &st_artifactscount, &st_artifactson, ST_FRAGSWIDTH);
+
 
     // [JN] Press Beta: player's lifes sum
-    STlib_initNum(&w_lifes,
-        ST_LIFESX + wide_delta,
-        ST_LIFESY,
-        shortnum,
-        &lifecount,
-        &st_statusbaron,
-        ST_LIFESWIDTH);
+    STlib_initNum(&w_lifes, ST_LIFESX + wide_delta, ST_LIFESY,
+                  shortnum, &lifecount, &st_statusbaron, ST_LIFESWIDTH);
 
     // faces
-    STlib_initMultIcon(&w_faces,
-        ST_FACESX + wide_delta,
-        ST_FACESY,
-        faces,
-        &st_faceindex,
-        &st_statusbaron);
+    STlib_initMultIcon(&w_faces, ST_FACESX + wide_delta, ST_FACESY,
+                       faces, &st_faceindex, &st_statusbaron);
 
     // armor percentage - should be colored later
-    STlib_initPercent(&w_armor,
-        ST_ARMORX + wide_delta,
-        ST_ARMORY,
-        tallnum,
-        &plyr->armorpoints,
-        &st_statusbaron, tallpercent);
+    STlib_initPercent(&w_armor, ST_ARMORX + wide_delta, ST_ARMORY,
+                      tallnum, &plyr->armorpoints, &st_statusbaron, tallpercent);
+
+    STlib_initPercent(&w_armor_wide, ST_ARMORX + wide_delta*2, ST_ARMORY,
+                      tallnum, &plyr->armorpoints, &st_statusbaron, tallpercent);
 
     // keyboxes 0-2
-    STlib_initMultIcon(&w_keyboxes[0],
-        ST_KEY0X + wide_delta,
-        ST_KEY0Y,
-        keys,
-        &keyboxes[0],
-        &st_statusbaron);
+    STlib_initMultIcon(&w_keyboxes[0], ST_KEY0X + wide_delta, ST_KEY0Y,
+                       keys, &keyboxes[0], &st_statusbaron);
+    STlib_initMultIcon(&w_keyboxes_wide[0], ST_KEY0X + wide_delta*2, ST_KEY0Y,
+                       keys, &keyboxes[0], &st_statusbaron);
 
-    STlib_initMultIcon(&w_keyboxes[1],
-        ST_KEY1X + wide_delta,
-        ST_KEY1Y,
-        keys,
-        &keyboxes[1],
-        &st_statusbaron);
+    STlib_initMultIcon(&w_keyboxes[1], ST_KEY1X + wide_delta, ST_KEY1Y,
+                       keys, &keyboxes[1], &st_statusbaron);
+    STlib_initMultIcon(&w_keyboxes_wide[1], ST_KEY1X + wide_delta*2, ST_KEY1Y,
+                       keys, &keyboxes[1], &st_statusbaron);
 
-    STlib_initMultIcon(&w_keyboxes[2],
-        ST_KEY2X + wide_delta,
-        ST_KEY2Y,
-        keys,
-        &keyboxes[2],
-        &st_statusbaron);
+    STlib_initMultIcon(&w_keyboxes[2], ST_KEY2X + wide_delta, ST_KEY2Y,
+                       keys, &keyboxes[2], &st_statusbaron);
+    STlib_initMultIcon(&w_keyboxes_wide[2], ST_KEY2X + wide_delta*2, ST_KEY2Y,
+                       keys, &keyboxes[2], &st_statusbaron);
 
     // ammo count (all four kinds)
-    STlib_initNum(&w_ammo[0],
-        ST_AMMO0X + wide_delta,
-        ST_AMMO0Y,
-        shortnum,
-        &plyr->ammo[0],
-        &st_statusbaron,
-        ST_AMMO0WIDTH);
+    STlib_initNum(&w_ammo[0], ST_AMMO0X + wide_delta, ST_AMMO0Y,
+                  shortnum, &plyr->ammo[0], &st_statusbaron, ST_AMMO0WIDTH);
+    STlib_initNum(&w_ammo_wide[0], ST_AMMO0X + wide_delta*2, ST_AMMO0Y,
+                  shortnum, &plyr->ammo[0], &st_statusbaron, ST_AMMO0WIDTH);
 
-    STlib_initNum(&w_ammo[1],
-        ST_AMMO1X + wide_delta,
-        ST_AMMO1Y,
-        shortnum,
-        &plyr->ammo[1],
-        &st_statusbaron,
-        ST_AMMO1WIDTH);
+    STlib_initNum(&w_ammo[1], ST_AMMO1X + wide_delta, ST_AMMO1Y,
+                  shortnum, &plyr->ammo[1], &st_statusbaron, ST_AMMO1WIDTH);
+    STlib_initNum(&w_ammo_wide[1], ST_AMMO1X + wide_delta*2, ST_AMMO1Y,
+                  shortnum, &plyr->ammo[1], &st_statusbaron, ST_AMMO1WIDTH);
 
-    STlib_initNum(&w_ammo[2],
-        ST_AMMO2X + wide_delta,
-        ST_AMMO2Y,
-        shortnum,
-        &plyr->ammo[2],
-        &st_statusbaron,
-        ST_AMMO2WIDTH);
+    STlib_initNum(&w_ammo[2], ST_AMMO2X + wide_delta, ST_AMMO2Y,
+                  shortnum, &plyr->ammo[2], &st_statusbaron, ST_AMMO2WIDTH);
+    STlib_initNum(&w_ammo_wide[2], ST_AMMO2X + wide_delta*2, ST_AMMO2Y,
+                  shortnum, &plyr->ammo[2], &st_statusbaron, ST_AMMO2WIDTH);
 
-    STlib_initNum(&w_ammo[3],
-        ST_AMMO3X + wide_delta,
-        ST_AMMO3Y,
-        shortnum,
-        &plyr->ammo[3],
-        &st_statusbaron,
-        ST_AMMO3WIDTH);
+    STlib_initNum(&w_ammo[3], ST_AMMO3X + wide_delta, ST_AMMO3Y,
+                  shortnum, &plyr->ammo[3], &st_statusbaron, ST_AMMO3WIDTH);
+    STlib_initNum(&w_ammo_wide[3], ST_AMMO3X + wide_delta*2, ST_AMMO3Y,
+                  shortnum, &plyr->ammo[3], &st_statusbaron, ST_AMMO3WIDTH);
 
     // max ammo count (all four kinds)
-    STlib_initNum(&w_maxammo[0],
-        ST_MAXAMMO0X + wide_delta,
-        ST_MAXAMMO0Y,
-        shortnum,
-        &plyr->maxammo[0],
-        &st_statusbaron,
-        ST_MAXAMMO0WIDTH);
+    STlib_initNum(&w_maxammo[0], ST_MAXAMMO0X + wide_delta, ST_MAXAMMO0Y,
+                  shortnum, &plyr->maxammo[0], &st_statusbaron, ST_MAXAMMO0WIDTH);
+    STlib_initNum(&w_maxammo_wide[0], ST_MAXAMMO0X + wide_delta*2, ST_MAXAMMO0Y,
+                  shortnum, &plyr->maxammo[0], &st_statusbaron, ST_MAXAMMO0WIDTH);
 
-    STlib_initNum(&w_maxammo[1],
-        ST_MAXAMMO1X + wide_delta,
-        ST_MAXAMMO1Y,
-        shortnum,
-        &plyr->maxammo[1],
-        &st_statusbaron,
-        ST_MAXAMMO1WIDTH);
+    STlib_initNum(&w_maxammo[1], ST_MAXAMMO1X + wide_delta, ST_MAXAMMO1Y,
+                  shortnum, &plyr->maxammo[1], &st_statusbaron, ST_MAXAMMO1WIDTH);
+    STlib_initNum(&w_maxammo_wide[1], ST_MAXAMMO1X + wide_delta*2, ST_MAXAMMO1Y,
+                  shortnum, &plyr->maxammo[1], &st_statusbaron, ST_MAXAMMO1WIDTH);
 
-    STlib_initNum(&w_maxammo[2],
-        ST_MAXAMMO2X + wide_delta,
-        ST_MAXAMMO2Y,
-        shortnum,
-        &plyr->maxammo[2],
-        &st_statusbaron,
-        ST_MAXAMMO2WIDTH);
+    STlib_initNum(&w_maxammo[2], ST_MAXAMMO2X + wide_delta, ST_MAXAMMO2Y,
+                  shortnum, &plyr->maxammo[2], &st_statusbaron, ST_MAXAMMO2WIDTH);
+    STlib_initNum(&w_maxammo_wide[2], ST_MAXAMMO2X + wide_delta*2, ST_MAXAMMO2Y,
+                  shortnum, &plyr->maxammo[2], &st_statusbaron, ST_MAXAMMO2WIDTH);
 
-    STlib_initNum(&w_maxammo[3],
-        ST_MAXAMMO3X + wide_delta,
-        ST_MAXAMMO3Y,
-        shortnum,
-        &plyr->maxammo[3],
-        &st_statusbaron,
-        ST_MAXAMMO3WIDTH);
+    STlib_initNum(&w_maxammo[3], ST_MAXAMMO3X + wide_delta, ST_MAXAMMO3Y,
+                  shortnum, &plyr->maxammo[3], &st_statusbaron, ST_MAXAMMO3WIDTH);
+    STlib_initNum(&w_maxammo_wide[3], ST_MAXAMMO3X + wide_delta*2, ST_MAXAMMO3Y,
+                  shortnum, &plyr->maxammo[3], &st_statusbaron, ST_MAXAMMO3WIDTH);
 }
 
 static boolean	st_stopped = true;
@@ -2383,22 +2384,44 @@ void ST_Init (void)
 
 // -----------------------------------------------------------------------------
 // [JN] ST_drawWidgetsJaguar
-// Widget drawing routines for Jaguar
+// Widget drawing routines for Jaguar, from left to right.
 // -----------------------------------------------------------------------------
 
 void ST_drawWidgetsJaguar (boolean refresh)
 {
     int i;
-    st_armson = st_statusbaron; // used by w_arms[] widgets
+    const boolean wider_stbar = aspect_ratio >= 2 && screenblocks >= 14 && (!automapactive || automap_overlay);
+    st_armson = st_statusbaron;
     st_neghealth = negative_health && plyr->health <= 0 && !vanillaparm;
 
-    STlib_updateNum(&w_ready, refresh);
-
-    // [crispy] draw "special widgets" in the Crispy HUD
-    if ((screenblocks == 11 || screenblocks == 12 || screenblocks == 13) 
+    // Labels ("AMMO", "HEALTH", "ARMOR", "ARMS", "AREA").
+    // Don't draw signs in automap.
+    if ((screenblocks == 11 || screenblocks == 12 || screenblocks == 14 || screenblocks == 15)
     && (!automapactive || automap_overlay))
     {
-        // [crispy] draw berserk pack instead of no ammo if appropriate
+        // Don't draw ammo for fist and chainsaw
+        if (plyr->readyweapon != wp_fist && plyr->readyweapon != wp_chainsaw)
+        {
+            V_DrawPatch((wider_stbar ? 0 : wide_delta), 0, W_CacheLumpName
+                    (DEH_String(english_language ? "STCHAMMO" : "RDCHAMMO"), PU_CACHE));
+        }
+
+        // Ammo
+        V_DrawPatch((wider_stbar ? 0 : wide_delta), 0, W_CacheLumpName
+                   (DEH_String(english_language ? "STCHHLTH" : "RDCHHLTH"), PU_CACHE));
+
+        // Armor, Arms, Area
+        V_DrawPatch((wider_stbar ? wide_delta*2 : wide_delta), 0, W_CacheLumpName
+                   (DEH_String(english_language ? "STCHARAM" : "RDCHARAM"), PU_CACHE));
+    }
+
+    // Current weapon ammo
+    STlib_updateNum(wider_stbar ? &w_ready_wide : &w_ready, refresh);
+
+    // [crispy] draw berserk pack instead of no ammo if appropriate
+    if ((screenblocks >= 11 && screenblocks <= 16)
+    && (!automapactive || automap_overlay))
+    {
         if (plyr->readyweapon == wp_fist && plyr->powers[pw_strength])
         {
             static int lump;
@@ -2408,64 +2431,56 @@ void ST_drawWidgetsJaguar (boolean refresh)
             patch = W_CacheLumpNum(lump, PU_CACHE);
 
             // [crispy] (23,179) is the center of the Ammo widget
-            V_DrawPatch(wide_delta + 
-                        23 - SHORT(patch->width)/2 + SHORT(patch->leftoffset),
-                        179 - SHORT(patch->height)/2 + SHORT(patch->topoffset),
-                        patch);
+            V_DrawPatch((23 - SHORT(patch->width)/2 + SHORT(patch->leftoffset))+ (wider_stbar ? 0 : wide_delta),
+                         179 - SHORT(patch->height)/2 + SHORT(patch->topoffset),
+                         patch);
         }
     }
 
-    // Signed Crispy HUD: no STBAR backbround, without player's 
-    // face/background. Also don't draw signs in automap.
-    if ((screenblocks == 11 || screenblocks == 12) 
-    && (!automapactive || automap_overlay))
+    // Health
+    if (wider_stbar)
     {
-        // Don't draw ammo for fist and chainsaw
-        if (plyr->readyweapon != wp_fist && plyr->readyweapon != wp_chainsaw)
-        {
-            V_DrawPatch(wide_delta, 0, W_CacheLumpName
-                       (DEH_String(english_language ? "STCHAMMO" : "RDCHAMMO"), PU_CACHE));
-        }
-
-        //  Health, armor, ammo
-        V_DrawPatch(wide_delta, 0, W_CacheLumpName
-                   (DEH_String(english_language ? "STCHNAMS" : "RDCHNAMS"), PU_CACHE));
+        STlib_updatePercent(st_neghealth ? &w_health_neg_wide : &w_health_wide,
+                            refresh || screenblocks <= 16);
+    }
+    else
+    {
+        STlib_updatePercent(st_neghealth ? &w_health_neg : &w_health,
+                            refresh || screenblocks <= 16);
     }
 
-    // Health and Armor widgets ------------------------------------------------
-    STlib_updatePercent(st_neghealth ? &w_health_neg : &w_health, refresh
-                                           || screenblocks == 11
-                                           || screenblocks == 12
-                                           || screenblocks == 13);
+    // Keys
+    for (i = 0 ; i < 3 ; i++)
+    {
+        STlib_updateMultIcon(wider_stbar ? &w_keyboxes_wide[i] : &w_keyboxes[i],
+                             refresh || (screenblocks >= 11 &&  screenblocks <= 16));
+    }
 
-    STlib_updatePercent(&w_armor, refresh  || screenblocks == 11
-                                           || screenblocks == 12
-                                           || screenblocks == 13);
-
-    // Signed Crispy HUD: no STBAR backbround, with player's face/background
-    if (screenblocks == 11 && (!automapactive || automap_overlay))
+    // Player face background
+    if ((screenblocks == 11 || screenblocks == 14) && (!automapactive || automap_overlay))
     {
         V_DrawPatch(0 + wide_delta, 0, W_CacheLumpName(DEH_String("STPBG"), PU_CACHE));
     }
 
-    // ARMS widget -------------------------------------------------------------
-    for (i=0;i<6;i++)
-    STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11
-                                             || screenblocks == 12
-                                             || screenblocks == 13);
+    // Player faces
+    if ((screenblocks < 12 || screenblocks == 14) || (automapactive && !automap_overlay))
+    {
+        STlib_updateMultIcon(&w_faces, refresh || screenblocks == 11 || screenblocks == 14);
+    }
 
-    // Faces widet (don't draw in Traditional Crispy HUD / full screen) --------
-    if (screenblocks < 12 || (automapactive && !automap_overlay))
-    STlib_updateMultIcon(&w_faces, refresh || screenblocks == 11);
+    // Armor
+    STlib_updatePercent(wider_stbar ? &w_armor_wide : &w_armor,
+                        refresh || screenblocks <= 16);
 
-    // Key boxes widget --------------------------------------------------------
-    for (i=0;i<3;i++)
-    STlib_updateMultIcon(&w_keyboxes[i], refresh || screenblocks == 11
-                                                 || screenblocks == 12
-                                                 || screenblocks == 13);
+    // ARMS
+    for (i = 0 ; i < 6 ; i++)
+    {
+        STlib_updateMultIcon(wider_stbar ? &w_arms_wide[i] : &w_arms[i],
+                             refresh || (screenblocks >= 11 &&  screenblocks <= 16));
+    }
 
-    // Current map widget ------------------------------------------------------
-    STlib_updateNum(&w_currentmap, refresh);
+    // Current map
+    STlib_updateNum(wider_stbar ? &w_currentmap_wide : &w_currentmap, refresh);
 }
 
 
@@ -2478,94 +2493,72 @@ void ST_createWidgetsJaguar(void)
 {
     int i;
 
-    // ready weapon ammo
-    STlib_initNum(&w_ready,
-        51 + wide_delta,
-        174,
-        tallnum,
-        &plyr->ammo[weaponinfo[plyr->readyweapon].ammo],
-        &st_statusbaron,
-        3);
-
     // the last weapon type
     w_ready.data = plyr->readyweapon; 
 
-    // health percentage
-    STlib_initPercent(&w_health,
-        104 + wide_delta,
-        174,
-        tallnum,
-        &plyr->health,
-        &st_statusbaron,
-        tallpercent);
+    // Ammo
+    STlib_initNum(&w_ready, 51 + wide_delta, 174, tallnum, 
+                  &plyr->ammo[weaponinfo[plyr->readyweapon].ammo], &st_statusbaron, 3);
 
-     // [JN] Negative player health
-    STlib_initPercent(&w_health_neg,
-        104 + wide_delta,
-        174,
-        tallnum,
-        &plyr->health_neg,
-        &st_statusbaron,
-        tallpercent);
+    STlib_initNum(&w_ready_wide, 51, 174, tallnum, 
+                  &plyr->ammo[weaponinfo[plyr->readyweapon].ammo], &st_statusbaron, 3);
 
-    // weapons owned
-    for(i=0;i<6;i++)
-    {
-        STlib_initMultIcon(&w_arms[i],
-            wide_delta + 249+(i%3)*12,
-            175+(i/3)*10,
-            arms[i],
-            &plyr->weaponowned[i+1],
-            &st_armson);
-    }
+    // Health
+    STlib_initPercent(&w_health, 104 + wide_delta, 174, tallnum,
+                      &plyr->health, &st_statusbaron, tallpercent);
+    STlib_initPercent(&w_health_wide, 104, 174, tallnum,
+                      &plyr->health, &st_statusbaron, tallpercent);
 
-    // faces
-    STlib_initMultIcon(&w_faces,
-        143 + wide_delta,
-        166,
-        faces,
-        &st_faceindex,
-        &st_statusbaron);
-
-    // armor percentage - should be colored later
-    STlib_initPercent(&w_armor,
-        225 + wide_delta,
-        174,
-        tallnum,
-        &plyr->armorpoints,
-        &st_statusbaron, tallpercent);
+    // Negative health
+    STlib_initPercent(&w_health_neg, 104 + wide_delta, 174, tallnum,
+                      &plyr->health_neg, &st_statusbaron, tallpercent);
+    STlib_initPercent(&w_health_neg_wide, 104, 174, tallnum,
+                      &plyr->health_neg, &st_statusbaron, tallpercent);
 
     // keyboxes 0-2
     // Blue
-    STlib_initMultIcon(&w_keyboxes[0],
-        124 + wide_delta,
-        175,
-        keys,
-        &keyboxes[0],
-        &st_statusbaron);
+    STlib_initMultIcon(&w_keyboxes[0], 124 + wide_delta, 175, keys,
+                       &keyboxes[0], &st_statusbaron);
+    STlib_initMultIcon(&w_keyboxes_wide[0], 124, 175, keys,
+                       &keyboxes[0], &st_statusbaron);
 
     // Yellow
-    STlib_initMultIcon(&w_keyboxes[1],
-        124 + wide_delta,
-        187,
-        keys,
-        &keyboxes[1],
-        &st_statusbaron);
+    STlib_initMultIcon(&w_keyboxes[1], 124 + wide_delta, 187, keys,
+                       &keyboxes[1], &st_statusbaron);
+    STlib_initMultIcon(&w_keyboxes_wide[1], 124, 187, keys,
+                       &keyboxes[1], &st_statusbaron);
 
     // Red
-    STlib_initMultIcon(&w_keyboxes[2],
-        124 + wide_delta,
-        163,
-        keys,
-        &keyboxes[2],
-        &st_statusbaron);
+    STlib_initMultIcon(&w_keyboxes[2], 124 + wide_delta, 163, keys,
+                       &keyboxes[2], &st_statusbaron);
+    STlib_initMultIcon(&w_keyboxes_wide[2], 124, 163, keys,
+                       &keyboxes[2], &st_statusbaron);
 
-    // сurrent map
-    STlib_initNum(&w_currentmap,
-		  wide_delta + (gamemap >= 10 ? 317 : 309),
-		  174,
-		  tallnum,
-		  &gamemap,
-		  &st_statusbaron,
-		  gamemap >= 10 ? 2 : 1);
+    // Faces
+    STlib_initMultIcon(&w_faces, 143 + wide_delta, 166, faces,
+                       &st_faceindex, &st_statusbaron);
+
+    // Armor
+    STlib_initPercent(&w_armor, 225 + wide_delta, 174, tallnum,
+                      &plyr->armorpoints, &st_statusbaron, tallpercent);
+
+    STlib_initPercent(&w_armor_wide, 225 + wide_delta*2, 174, tallnum,
+                      &plyr->armorpoints, &st_statusbaron, tallpercent);
+
+    // Weapons owned
+    for(i = 0 ; i < 6 ; i++)
+    {
+        STlib_initMultIcon(&w_arms[i], wide_delta + 249+(i%3)*12, 175+(i/3)*10,
+                           arms[i], &plyr->weaponowned[i+1], &st_armson);
+
+        STlib_initMultIcon(&w_arms_wide[i], wide_delta*2 + 249+(i%3)*12, 175+(i/3)*10,
+                           arms[i], &plyr->weaponowned[i+1], &st_armson);
+    }
+
+    // Area
+    STlib_initNum(&w_currentmap, wide_delta + (gamemap >= 10 ? 317 : 309), 174,
+                  tallnum, &gamemap, &st_statusbaron, gamemap >= 10 ? 2 : 1);
+
+    STlib_initNum(&w_currentmap_wide, wide_delta*2 + (gamemap >= 10 ? 317 : 309), 174,
+                  tallnum, &gamemap, &st_statusbaron, gamemap >= 10 ? 2 : 1);
 }
