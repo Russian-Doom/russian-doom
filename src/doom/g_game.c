@@ -704,6 +704,9 @@ void G_DoLoadLevel (void)
         skytexture = R_TextureNumForName(skytexturename);
     }
 
+    // [crispy] sky texture scales
+    R_InitSkyMap();
+
     levelstarttic = gametic;    // for time calculation
     
     if (wipegamestate == GS_LEVEL) 

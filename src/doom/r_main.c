@@ -539,18 +539,22 @@ static void R_InitLightTables (void)
 
 // -----------------------------------------------------------------------------
 // R_InitSkyMap
-// Called at program startup.
+// Called at program startup and while mouse look toggling.
 // -----------------------------------------------------------------------------
 
-static void R_InitSkyMap (void)
+void R_InitSkyMap (void)
 {
-    if (scaled_sky)
+    if (skytexture == -1)
     {
-        skytexturemid = ORIGHEIGHT/2*FRACUNIT;
+        return;
+    }
+    if (mlook)
+    {
+        skytexturemid = -28*FRACUNIT * (textureheight[skytexture] >> FRACBITS) / SKYSTRETCH_HEIGHT;
     }
     else
     {
-        skytexturemid = ORIGHEIGHT+199 * FRACUNIT;
+        skytexturemid = ORIGHEIGHT/2*FRACUNIT;
     }
 }
 

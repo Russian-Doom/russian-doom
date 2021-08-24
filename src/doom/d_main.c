@@ -297,7 +297,6 @@ boolean nomonsters;  // checkparm of -nomonsters
 boolean respawnparm; // checkparm of -respawn
 boolean fastparm;    // checkparm of -fast
 
-boolean scaled_sky = false; // [JN] Boolean for sky scaling
 boolean old_godface; // [JN] Boolean for extra faces while in GOD mode
 boolean pfub2_replaced = false; // [JN] Check if we have a replaced PFUB2 gfx
 boolean realframe, skippsprinterp; // [JN] Interpolation for weapon bobbing
@@ -1971,56 +1970,6 @@ void D_SetGameDescription(void)
     // [JN] Define and load translated strings
     RD_DefineLanguageStrings();
 
-    // [JN] Sky scaling determination. Sky itself can be loaded as new
-    // patches, composed in TEXTURE1 lump, or as patches with standard names.
-    if (W_CheckMultipleLumps("TEXTURE1") > 1    // Have new textures
-    || W_CheckMultipleLumps("SKY1") > 1         // Doom 1 patches
-    || W_CheckMultipleLumps("SKY2") > 1
-    || W_CheckMultipleLumps("SKY3") > 1
-    || W_CheckMultipleLumps("SKY4") > 1
-    || W_CheckMultipleLumps("RSKY1") > 1        // Doom 2 patches
-    || W_CheckMultipleLumps("RSKY2") > 1
-    || W_CheckMultipleLumps("RSKY3") > 1
-    || is_freedoom)                             // Freedoom is also not supported
-    {
-        scaled_sky = true;
-    }
-    // [JN] ...So, we are free to use taller skies? Load them.
-    // Note: "scaled_sky" variable is still needed for sky rendering.
-    else
-    {
-        scaled_sky = false;
-
-        // Doom 1
-        if (gamemode == shareware || gamemode == registered || gamemode == retail)
-        {
-            internalWadName = RD_M_FindInternalResource("doom-skies-doom1.wad");
-            W_MergeFile(internalWadName);
-            free(internalWadName);
-        }
-        // Doom 2
-        else if (gamemission == doom2 || gamemission == pack_nerve)
-        {
-            internalWadName = RD_M_FindInternalResource("doom-skies-doom2.wad");
-            W_MergeFile(internalWadName);
-            free(internalWadName);
-        }
-        // TNT - Evilution
-        else if (gamemission == pack_tnt)
-        {
-            internalWadName = RD_M_FindInternalResource("doom-skies-tnt.wad");
-            W_MergeFile(internalWadName);
-            free(internalWadName);
-        }
-        // Plutonia
-        else if (gamemission == pack_plut)
-        {
-            internalWadName = RD_M_FindInternalResource("doom-skies-plutonia.wad");
-            W_MergeFile(internalWadName);
-            free(internalWadName);
-        }
-    }
-
     // [JN] Check if we have exactly two TITLEPICs loaded in Russian version
     // of Doom registered. If two, we are free to use wide version: TITLEPIR,
     // since there is a TITLEPIC for ultimate game mode already. More clear:
@@ -2082,10 +2031,6 @@ void D_SetGameDescription(void)
     // [JN] Finally, some compatibility mess
     if (gamemode == pressbeta || gamemission == jaguar)
     {
-        // Press Beta and Atari Jaguar have own taller skies, 
-        // so it's okay to have an unscaled skies.
-        scaled_sky = false;
-
         // Press Beta and Atari Jaguar are supposed to have
         // extra GOD faces, as well as exploding ones.
         old_godface = false;

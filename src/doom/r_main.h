@@ -103,9 +103,11 @@ extern int extralight;
 
 #define SKYFLATNAME "F_SKY1"    // Store the number for name.
 #define ANGLETOSKYSHIFT 22      // The sky map is 256*128*4 maps.
+#define SKYSTRETCH_HEIGHT 228   // [crispy] stretch sky
 
 extern int skyflatnum, skytexture, skytexturemid;
-extern boolean scaled_sky;
+
+void R_InitSkyMap (void);
 
 
 // [AM] Fractional part of the current tic, in the half-open
