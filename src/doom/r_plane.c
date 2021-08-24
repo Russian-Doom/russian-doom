@@ -361,7 +361,7 @@ void R_DrawPlanes (void)
             dc_iscale = pspriteiscale>>(detailshift && !hires);
             
             // [JN] Scale sky texture if appropriate.
-            if (mlook)
+            if (mlook && scaled_sky)
             {
                 dc_iscale = dc_iscale / 2;
             }

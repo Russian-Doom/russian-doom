@@ -3078,9 +3078,6 @@ void M_RD_Change_MouseLook()
 
     if (!mlook)
         players[consoleplayer].centering = true;
-
-    // [crispy] sky texture scales
-    R_InitSkyMap();
 }
 
 void M_RD_Change_InvertY()
