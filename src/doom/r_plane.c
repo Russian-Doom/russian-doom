@@ -54,13 +54,14 @@ visplane_t *floorplane, *ceilingplane;
 // Empirically verified to be fairly uniform:
 
 #define visplane_hash(picnum, lightlevel, height) \
-    ((unsigned int)((picnum) * 3 + (lightlevel) + (height) * 7) & (MAXVISPLANES - 1))
+    ((unsigned)((picnum) * 3 + (lightlevel) + (height) * 7) & (MAXVISPLANES - 1))
 
 // [JN] killough 8/1/98: set static number of openings to be large enough
 // (a static limit is okay in this case and avoids difficulties in r_segs.c)
 
-#define MAXOPENINGS (WIDESCREENWIDTH * SCREENHEIGHT)
-int openings[MAXOPENINGS], *lastopening; // [crispy] 32-bit integer math
+//#define MAXOPENINGS (WIDESCREENWIDTH * SCREENHEIGHT)
+size_t maxopenings;
+int *openings, *lastopening; // [crispy] 32-bit integer math
 
 //
 // Clip values are the solid pixel bounding the range.
@@ -68,15 +69,18 @@ int openings[MAXOPENINGS], *lastopening; // [crispy] 32-bit integer math
 //  ceilingclip starts out -1
 //
 
-int floorclip[WIDESCREENWIDTH];   // [crispy] 32-bit integer math
-int ceilingclip[WIDESCREENWIDTH]; // [crispy] 32-bit integer math
+// [JN] e6y: resolution limitation is removed
+int *floorclip = NULL;    // dropoff overflow
+int *ceilingclip = NULL;  // dropoff overflow
 
 //
 // spanstart holds the start of a plane span
 // initialized to 0 at start
 //
 
-static int spanstart[SCREENHEIGHT];
+// [JN] e6y: resolution limitation is removed
+static int *spanstart = NULL;  // killough 2/8/98
+
 
 //
 // texture mapping
@@ -89,10 +93,60 @@ static fixed_t cacheddistance[SCREENHEIGHT];
 static fixed_t cachedxstep[SCREENHEIGHT];
 static fixed_t cachedystep[SCREENHEIGHT];
 
-fixed_t *yslope;
+// [JN] e6y: resolution limitation is removed
+fixed_t *yslope = NULL;
+fixed_t *distscale = NULL;
 fixed_t  yslopes[LOOKDIRS][SCREENHEIGHT];
-fixed_t  distscale[WIDESCREENWIDTH];
 
+
+// -----------------------------------------------------------------------------
+// R_InitPlanesRes
+// -----------------------------------------------------------------------------
+
+void R_InitPlanesRes (void)
+{
+    if (floorclip)
+    {
+        free(floorclip);
+    }
+    if (ceilingclip)
+    {
+        free(ceilingclip);
+    }
+    if (spanstart)
+    {
+        free(spanstart);
+    }
+    if (yslope)
+    {
+        free(yslope);
+    }
+    if (distscale)
+    {
+        free(distscale);
+    }
+
+    floorclip = calloc(1, screenwidth * sizeof(*floorclip));
+    ceilingclip = calloc(1, screenwidth * sizeof(*ceilingclip));
+    spanstart = calloc(1, screenwidth * sizeof(*spanstart));
+    yslope = calloc(1, screenwidth * sizeof(*yslope));
+    distscale = calloc(1, screenwidth * sizeof(*distscale));
+}
+
+// -----------------------------------------------------------------------------
+// R_InitPlanesRes
+// -----------------------------------------------------------------------------
+
+void R_InitVisplanesRes (void)
+{
+    freetail = NULL;
+    freehead = &freetail;
+
+    for (int i = 0; i < MAXVISPLANES; i++)
+    {
+        visplanes[i] = 0;
+    }
+}
 
 // -----------------------------------------------------------------------------
 // R_MapPlane
@@ -247,10 +301,13 @@ visplane_t *R_FindPlane (fixed_t height, int picnum, int lightlevel)
     check->height = height;
     check->picnum = picnum;
     check->lightlevel = lightlevel;
-    check->minx = WIDESCREENWIDTH;
+    check->minx = screenwidth;
     check->maxx = -1;
 
-    memset(check->top, UINT_MAX, sizeof(check->top));
+    for (int i = 0; i != screenwidth; i++)
+    {
+        check->top[i] = SHRT_MAX;
+    }
 
     return check;
 }
@@ -269,7 +326,10 @@ visplane_t *R_DupPlane(const visplane_t *pl, int start, int stop)
     new_pl->minx = start;
     new_pl->maxx = stop;
 
-    memset(new_pl->top, UINT_MAX, sizeof(new_pl->top));
+    for (int i = 0; i != screenwidth; i++)
+    {
+        new_pl->top[i] = SHRT_MAX;
+    }
 
     return new_pl;
 }
@@ -300,7 +360,7 @@ visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop)
         unionh = pl->maxx, intrh  = stop;
     }
 
-    for (x=intrl ; x <= intrh && pl->top[x] == UINT_MAX; x++); // [crispy] hires / 32-bit integer math
+    for (x=intrl ; x <= intrh && pl->top[x] == SHRT_MAX; x++); // [crispy] hires / 32-bit integer math
     // [crispy] fix HOM if ceilingplane and floorplane are the same visplane (e.g. both are skies)
     if (!(pl == floorplane && markceiling && floorplane == ceilingplane) && x > intrh)
     {
@@ -387,7 +447,7 @@ void R_DrawPlanes (void)
 
             for (x=pl->minx ; x <= pl->maxx ; x++)
             {
-                if ((dc_yl = pl->top[x]) != UINT_MAX && dc_yl <= (dc_yh = pl->bottom[x])) // [crispy] 32-bit integer math
+                if ((dc_yl = pl->top[x]) != SHRT_MAX && dc_yl <= (dc_yh = pl->bottom[x])) // [crispy] 32-bit integer math
                 {
                     // [crispy] Optionally draw skies horizontally linear.
                     int angle = ((viewangle + (linear_sky && !vanillaparm ? linearskyangle[x] : 

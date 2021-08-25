@@ -23,8 +23,8 @@
 
 
 // Constant arrays used for psprite clipping and initializing clipping.
-extern int negonearray[WIDESCREENWIDTH];
-extern int screenheightarray[WIDESCREENWIDTH];
+extern int *negonearray;       // [JN] killough 2/8/98: // dropoff overflow
+extern int *screenheightarray; //      change to MAX_*  // dropoff overflow
 
 // vars for R_DrawMaskedColumn
 extern int     *mfloorclip;
@@ -36,6 +36,7 @@ extern fixed_t  pspritescale;
 extern fixed_t  pspriteiscale;
 
 
+void R_InitSpritesRes (void);
 void R_DrawMaskedColumn (column_t *column);
 void R_SortVisSprites (void);
 void R_AddSprites (sector_t *sec);

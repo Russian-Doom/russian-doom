@@ -28,13 +28,15 @@
 // Visplane related.
 extern int* lastopening; // [crispy] 32-bit integer math
 
-extern int floorclip[WIDESCREENWIDTH];   // [crispy] 32-bit integer math
-extern int ceilingclip[WIDESCREENWIDTH]; // [crispy] 32-bit integer math
+// [JN] e6y: resolution limitation is removed
+extern int *floorclip, *ceilingclip; // dropoff overflow
 
-extern fixed_t *yslope;
+extern fixed_t *yslope, *distscale;
 extern fixed_t  yslopes[LOOKDIRS][SCREENHEIGHT];
-extern fixed_t  distscale[WIDESCREENWIDTH];
 
+
+void R_InitPlanesRes (void);
+void R_InitVisplanesRes (void);
 void R_ClearPlanes (void);
 void R_DrawPlanes (void);
 

@@ -69,8 +69,6 @@ extern int scaledviewheight;
 // [crispy] lookup table for horizontal screen coordinates
 extern int flipwidth[WIDESCREENWIDTH];
 
-extern angle_t linearskyangle[WIDESCREENWIDTH+1];
-
 extern int firstflat;
 
 // for global animation
@@ -127,8 +125,9 @@ extern player_t* viewplayer;
 extern angle_t clipangle;
 
 extern int     viewangletox[FINEANGLES/2];
-extern angle_t xtoviewangle[WIDESCREENWIDTH+1];
-//extern fixed_t		finetangent[FINEANGLES/2];
+// [JN] e6y: resolution limitation is removed
+extern angle_t *xtoviewangle;  // killough 2/8/98
+extern angle_t *linearskyangle;
 
 extern fixed_t rw_distance;
 extern angle_t rw_normalangle;
