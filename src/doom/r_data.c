@@ -285,7 +285,7 @@ static void R_GenerateComposite (int texnum)
     // Composite the columns together.
     for (i = 0, patch = texture->patches; i < texture->patchcount ; i++, patch++)
     {
-        realpatch = W_CacheLumpNum (patch->patch, PU_CACHE);
+        realpatch = W_CacheLumpNum (patch->patch, PU_STATIC);
         x1 = patch->originx;
         x2 = x1 + SHORT(realpatch->width);
 
@@ -427,7 +427,7 @@ static void R_GenerateLookup (int texnum)
 
     for (i=0, patch = texture->patches ; i < texture->patchcount ; i++, patch++)
     {
-        realpatch = W_CacheLumpNum (patch->patch, PU_CACHE);
+        realpatch = W_CacheLumpNum (patch->patch, PU_STATIC);
         x1 = patch->originx;
         x2 = x1 + SHORT(realpatch->width);
 
@@ -473,7 +473,7 @@ static void R_GenerateLookup (int texnum)
         for (i = texture->patchcount, patch = texture->patches ; --i >= 0 ; )
         {
             int pat = patch->patch;
-            const patch_t *realpatch = W_CacheLumpNum(pat, PU_CACHE);
+            const patch_t *realpatch = W_CacheLumpNum(pat, PU_STATIC);
             int x, x1 = patch++->originx, x2 = x1 + SHORT(realpatch->width);
             const int *cofs = realpatch->columnofs - x1;
 
@@ -1358,7 +1358,7 @@ void R_PrecacheLevel (void)
 
     for (i = numflats ; --i >= 0 ; )
         if (hitlist[i])
-            W_CacheLumpNum(firstflat + i, PU_CACHE);
+            W_CacheLumpNum(firstflat + i, PU_STATIC);
 
     // Precache textures.
 
@@ -1388,7 +1388,7 @@ void R_PrecacheLevel (void)
             R_GenerateComposite(i);
 
             while (--j >= 0)
-            W_CacheLumpNum(texture->patches[j].patch, PU_CACHE);
+            W_CacheLumpNum(texture->patches[j].patch, PU_STATIC);
         }
 
     // Precache sprites.
