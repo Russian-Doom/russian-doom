@@ -18,21 +18,13 @@
 //
 
 
-
-// HEADER FILES ------------------------------------------------------------
-
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "deh_main.h"
-#include "doomdef.h"
 #include "i_swap.h"
 #include "i_system.h"
 #include "z_zone.h"
 #include "w_wad.h"
 #include "r_local.h"
 #include "doomstat.h"
-#include "g_game.h"
 #include "v_trans.h"
 #include "crispy.h"
 #include "jn.h"
@@ -43,63 +35,47 @@
 
 
 //
-// Sprite rotation 0 is facing the viewer,
-//  rotation 1 is one angle turn CLOCKWISE around the axis.
-// This is not the same as the angle,
-//  which increases counter clockwise (protractor).
+// Sprite rotation 0 is facing the viewer, rotation 1 is one angle turn 
+// CLOCKWISE around the axis. This is not the same as the angle, which
+// increases counter clockwise (protractor). 
 // There was a lot of stuff grabbed wrong, so I changed it...
 //
 fixed_t pspritescale, pspriteiscale;
 
-lighttable_t **spritelights;
+static lighttable_t **spritelights;
 
 // [JN] Brightmaps
-lighttable_t **fullbrights_notgray;
-lighttable_t **fullbrights_notgrayorbrown;
-lighttable_t **fullbrights_redonly;
-lighttable_t **fullbrights_greenonly1;
-lighttable_t **fullbrights_greenonly2;
-lighttable_t **fullbrights_greenonly3;
-lighttable_t **fullbrights_orangeyellow;
-lighttable_t **fullbrights_dimmeditems;
-lighttable_t **fullbrights_explosivebarrel;
-lighttable_t **fullbrights_alllights;
-lighttable_t **fullbrights_candles;
-lighttable_t **fullbrights_pileofskulls;
+static lighttable_t **fullbrights_notgray;
+static lighttable_t **fullbrights_redonly;
+static lighttable_t **fullbrights_greenonly1;
+static lighttable_t **fullbrights_dimmeditems;
+static lighttable_t **fullbrights_explosivebarrel;
+static lighttable_t **fullbrights_alllights;
+static lighttable_t **fullbrights_candles;
+static lighttable_t **fullbrights_pileofskulls;
 
-// constant arrays used for psprite clipping and initializing clipping
+// psprite clipping and initializing clipping
 int *negonearray;           // [JN] killough 2/8/98: // dropoff overflow
 int *screenheightarray;     //      change to MAX_*  // dropoff overflow
 static int *clipbot = NULL; // [JN] killough 2/8/98: // dropoff overflow
 static int *cliptop = NULL; //      change to MAX_*  // dropoff overflow
 
-
-//
-// INITIALIZATION FUNCTIONS
-//
-
 // variables used to look up and range check thing_t sprites patches
-int            numsprites;
-int            maxframe;
-char          *spritename;
-spritedef_t   *sprites;
-spriteframe_t  sprtemp[29];
+int          numsprites;
+int          maxframe;
+char        *spritename;
+spritedef_t *sprites;
+static spriteframe_t sprtemp[29];
 
+// initialization functions
+int *mfloorclip, *mceilingclip;
 
-//
-// GAME FUNCTIONS
-//
+fixed_t spryscale;
+int64_t sprtopscreen; // [crispy] WiggleFix
 
 static size_t num_vissprite, num_vissprite_alloc, num_vissprite_ptrs; // killough
 static vissprite_t *vissprites, **vissprite_ptrs;                     // killough
-int	            newvissprite;
 
-int *mfloorclip, *mceilingclip;
-
-fixed_t         spryscale;
-int64_t         sprtopscreen; // [crispy] WiggleFix
-
-vissprite_t     vsprsortedhead;
 
 typedef struct drawseg_xrange_item_s
 {
