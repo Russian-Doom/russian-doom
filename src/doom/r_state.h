@@ -129,10 +129,6 @@ extern int     viewangletox[FINEANGLES/2];
 extern angle_t *xtoviewangle;  // killough 2/8/98
 extern angle_t *linearskyangle;
 
-extern fixed_t rw_distance;
-extern angle_t rw_normalangle;
-
-
 // angle to line origin
 extern int rw_angle1;
 

@@ -361,8 +361,7 @@ visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop)
     }
 
     for (x=intrl ; x <= intrh && pl->top[x] == SHRT_MAX; x++); // [crispy] hires / 32-bit integer math
-    // [crispy] fix HOM if ceilingplane and floorplane are the same visplane (e.g. both are skies)
-    if (!(pl == floorplane && markceiling && floorplane == ceilingplane) && x > intrh)
+    if (x > intrh)
     {
         // Can use existing plane; extend range
         pl->minx = unionl, pl->maxx = unionh;
