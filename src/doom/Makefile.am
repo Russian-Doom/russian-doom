@@ -50,7 +50,7 @@ r_draw.c           r_draw.h     \
                    r_local.h    \
 r_main.c           r_main.h     \
 r_plane.c          r_plane.h    \
-r_segs.c           r_segs.h     \
+r_segs.c                        \
                    r_state.h    \
 r_swirl.c          r_swirl.h    \
 r_things.c         r_things.h   \

@@ -155,5 +155,7 @@ void R_RenderPlayerView (player_t *player);
 void R_SetViewSize (int blocks, int detail);
 void R_ExecuteSetViewSize (void);
 
+void R_RenderMaskedSegRange (drawseg_t* ds, int x1, int x2);
+
 #endif
 
