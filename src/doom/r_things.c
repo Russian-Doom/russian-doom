@@ -402,16 +402,19 @@ void R_ClearSprites (void)
 // R_NewVisSprite
 // -----------------------------------------------------------------------------
 
-static vissprite_t overflowsprite;
+// static vissprite_t overflowsprite;
+// static int max;
 
 vissprite_t* R_NewVisSprite (void)
 {
     if (num_vissprite >= num_vissprite_alloc)   // [JN] killough
     {
-        static int max;
+        
         size_t num_vissprite_alloc_prev = num_vissprite_alloc;
 
+        /*
         // [crispy] cap MAXVISSPRITES limit at 4096
+        // [JN] TODO - consider make optional?
         if (!max && num_vissprite_alloc == 4096)
         {
             max++;
@@ -420,6 +423,7 @@ vissprite_t* R_NewVisSprite (void)
         {
             return &overflowsprite;
         }
+        */
 
         num_vissprite_alloc = num_vissprite_alloc ? num_vissprite_alloc*2 : 128;
         vissprites = I_Realloc(vissprites,num_vissprite_alloc*sizeof(*vissprites));
