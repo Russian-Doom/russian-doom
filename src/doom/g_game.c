@@ -35,7 +35,6 @@
 #include "i_system.h"
 #include "i_timer.h"
 #include "i_input.h"
-#include "p_setup.h"
 #include "p_saveg.h"
 #include "d_main.h"
 #include "wi_stuff.h"

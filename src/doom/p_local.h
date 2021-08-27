@@ -279,6 +279,12 @@ extern fixed_t		bmaporgx;
 extern fixed_t		bmaporgy;	// origin of block map
 extern mobj_t**		blocklinks;	// for thing chains
 
+// NOT called by W_Ticker. Fixme.
+void P_SetupLevel (int episode, int map, int playermask, skill_t skill);
+
+// Called by startup code.
+void P_Init (void);
+
 
 // [crispy] blinking key or skull in the status bar
 #define KEYBLINKMASK 0x8
