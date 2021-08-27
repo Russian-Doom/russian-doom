@@ -25,10 +25,10 @@
 #include "jn.h"
 
 
-fixed_t   sightzstart;            // eye z of looker
-fixed_t   topslope, bottomslope;  // slopes to top and bottom of target
-fixed_t   t2x, t2y;
-divline_t strace;                 // from t1 to t2
+static fixed_t   sightzstart;            // eye z of looker
+static fixed_t   topslope, bottomslope;  // slopes to top and bottom of target
+static fixed_t   t2x, t2y;
+static divline_t strace;                 // from t1 to t2
 
 static int sightcounts[2];
 
