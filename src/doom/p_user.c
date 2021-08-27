@@ -34,14 +34,15 @@
 #define MAXBOB  0x100000        // 16 pixels of bob
 #define ANG5    (ANG90/18)
 
-boolean onground;
+static boolean onground;
 
 
-//
+// -----------------------------------------------------------------------------
 // P_Thrust
 // Moves the given origin along a given angle.
-//
-void P_Thrust (player_t *player, angle_t angle, fixed_t move)
+// -----------------------------------------------------------------------------
+
+static void P_Thrust (player_t *player, angle_t angle, fixed_t move)
 {
     angle >>= ANGLETOFINESHIFT;
 
@@ -49,11 +50,11 @@ void P_Thrust (player_t *player, angle_t angle, fixed_t move)
     player->mo->momy += FixedMul(move, finesine[angle]);
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // P_CalcHeight
 // Calculate the walking / running height adjustment
-//
+// -----------------------------------------------------------------------------
+
 void P_CalcHeight (player_t *player, boolean safe)
 {
     int      angle;
@@ -165,11 +166,11 @@ void P_CalcHeight (player_t *player, boolean safe)
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // P_MovePlayer
-//
-void P_MovePlayer (player_t *player)
+// -----------------------------------------------------------------------------
+
+static void P_MovePlayer (player_t *player)
 {
     ticcmd_t  *cmd = &player->cmd;
     int        look = cmd->lookfly & 15;;
@@ -231,13 +232,13 @@ void P_MovePlayer (player_t *player)
     }
 }	
 
-
-//
+// -----------------------------------------------------------------------------
 // P_DeathThink
 // Fall on your face when dying.
 // Decrease POV height to floor height.
-//
-void P_DeathThink (player_t *player)
+// -----------------------------------------------------------------------------
+
+static void P_DeathThink (player_t *player)
 {
     angle_t angle;
     angle_t delta;
@@ -331,17 +332,16 @@ void P_DeathThink (player_t *player)
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // P_PlayerThink
-//
+// -----------------------------------------------------------------------------
+
 void P_PlayerThink (player_t *player)
 {
     ticcmd_t     *cmd;
     weapontype_t  newweapon;
 
-    // [AM] Assume we can interpolate at the beginning
-    //      of the tic.
+    // [AM] Assume we can interpolate at the beginning of the tic.
     player->mo->interp = true;
 
     // [AM] Store starting position for player interpolation.
