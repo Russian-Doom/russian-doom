@@ -113,8 +113,8 @@ void R_DrawColumn (void)
 { 
     int      count = dc_yh - dc_yl;
     int      heightmask = dc_texheight-1;
-    byte    *dest;
-    fixed_t  frac, fracstep;
+    byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     // Zero length, column does not exceed a pixel.
     if (count < 0)
@@ -131,10 +131,6 @@ void R_DrawColumn (void)
                  dc_yl, dc_yh, dc_x);
     }
 #endif
-
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-    fracstep = dc_iscale;
-    frac = dc_texturemid + (dc_yl-centery)*fracstep;
 
     // Inner loop that does the actual texture mapping, e.g. a DDA-lile scaling.
     // This is as fast as it gets.
@@ -155,7 +151,7 @@ void R_DrawColumn (void)
             //  using a lighting/special effects LUT.
             *dest = dc_colormap[dc_source[frac>>FRACBITS]];
             dest += screenwidth;
-            if ((frac += fracstep) >= heightmask)
+            if ((frac += dc_iscale) >= heightmask)
             {
                 frac -= heightmask;
             }
@@ -169,7 +165,7 @@ void R_DrawColumn (void)
             //  using a lighting/special effects LUT.
             *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
             dest += screenwidth; 
-            frac += fracstep;
+            frac += dc_iscale;
         } while (count--); 
     }
 }

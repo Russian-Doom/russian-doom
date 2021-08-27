@@ -31,6 +31,7 @@
 #include "r_local.h"
 #include "g_game.h"
 #include "z_zone.h"
+#include "v_video.h"
 #include "crispy.h"
 #include "jn.h"
 
@@ -407,7 +408,7 @@ angle_t R_InterpolateAngle (angle_t oangle, angle_t nangle, fixed_t scale)
 // R_InitTextureMapping
 // -----------------------------------------------------------------------------
 
-void R_InitTextureMapping (void)
+static void R_InitTextureMapping (void)
 {
     int     i, x, t;
     fixed_t focallength;
@@ -858,7 +859,7 @@ subsector_t *R_PointInSubsector (fixed_t x, fixed_t y)
 // R_SetupFrame
 // -----------------------------------------------------------------------------
 
-void R_SetupFrame (player_t *player)
+static void R_SetupFrame (player_t *player)
 {		
     int tempCentery;
     int pitch;
@@ -975,11 +976,8 @@ void R_SetupFrame (player_t *player)
 // R_RenderView
 // -----------------------------------------------------------------------------
 
-void R_RenderPlayerView (player_t* player)
-{	
-    extern void V_DrawFilledBox (int x, int y, int w, int h, int c);
-    extern void R_InterpolateTextureOffsets (void);
-
+void R_RenderPlayerView (player_t *player)
+{
     R_SetupFrame (player);
 
     // Clear buffers.

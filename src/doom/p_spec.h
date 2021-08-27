@@ -45,6 +45,8 @@ void    P_SpawnSpecials (void);
 
 // every tic
 void    P_UpdateSpecials (void);
+void    R_InterpolateTextureOffsets (void);
+
 
 // when needed
 boolean

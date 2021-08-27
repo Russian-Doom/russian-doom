@@ -20,11 +20,10 @@
 // [crispy] adapted from smmu/r_ripple.c, by Simon Howard
 
 #include "doomstat.h"
-#include <tables.h>
-
-#include <i_system.h>
-#include <w_wad.h>
-#include <z_zone.h>
+#include "tables.h"
+#include "i_system.h"
+#include "w_wad.h"
+#include "z_zone.h"
 
 // swirl factors determine the number of waves per flat width
 
@@ -46,7 +45,7 @@ extern int firstflat;
 #define AMP2 2
 #define SPEED 40
 
-void R_InitDistortedFlats()
+void R_InitDistortedFlats (void)
 {
 	if (!offsets)
 	{

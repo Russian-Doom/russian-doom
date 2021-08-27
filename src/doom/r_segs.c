@@ -137,7 +137,7 @@ static const struct
 //
 // -----------------------------------------------------------------------------
 
-void R_FixWiggle (sector_t *sector)
+static void R_FixWiggle (sector_t *sector)
 {
     static int lastheight = 0;
     int height = (sector->interpceilingheight - sector->interpfloorheight) >> FRACBITS;

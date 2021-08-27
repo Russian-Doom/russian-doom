@@ -1268,7 +1268,6 @@ void P_UpdateSpecials (void)
 
 void R_InterpolateTextureOffsets (void)
 {
-    int     i;
     fixed_t frac;
 
     if (uncapped_fps && !vanillaparm
@@ -1281,7 +1280,7 @@ void R_InterpolateTextureOffsets (void)
         frac = FRACUNIT;
     }
 
-    for (i = 0; i < numlinespecials; i++)
+    for (int i = 0; i < numlinespecials; i++)
     {
         const line_t *line = linespeciallist[i];
         side_t *const side = &sides[line->sidenum[0]];
