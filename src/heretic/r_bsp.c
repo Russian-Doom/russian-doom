@@ -19,9 +19,7 @@
 
 #include <stdlib.h>
 #include "doomdef.h"
-#include "i_system.h"
 #include "m_bbox.h"
-#include "i_system.h"
 #include "r_local.h"
 #include "jn.h"
 
@@ -280,7 +278,7 @@ void R_MaybeInterpolateSector (sector_t *sector)
 ================================================================================
 */
 
-void R_AddLine(seg_t * line)
+void R_AddLine(seg_t *line)
 {
     int x1, x2;
     angle_t angle1, angle2, span, tspan;
@@ -472,12 +470,13 @@ static boolean R_CheckBBox (fixed_t *bspcoord)
 =
 = R_Subsector
 =
-= Draw one or more segments
+== Determine floor/ceiling planes. Add sprites of things in sector.
+== Draw one or more line segments.
 =
 ================================================================================
 */
 
-void R_Subsector(int num)
+static void R_Subsector (int num)
 {
     int           count;
     seg_t        *line;
