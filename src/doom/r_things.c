@@ -1531,6 +1531,7 @@ void R_DrawMasked (void)
 
     // draw all vissprites back to front
 
+    rendered_vissprites = num_vissprite;
     for (i = num_vissprite ; --i>=0 ; )
     {
         vissprite_t* spr = vissprite_ptrs[i];

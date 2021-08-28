@@ -97,7 +97,7 @@ void T_VerticalDoor (vldoor_t *door)
         // DOWN
         res = T_MovePlane(door->sector, 
 			              door->speed,
-			              door->sector->floorheight,false, 1,
+			              door->sector->floorheight, false, 1,
                           door->direction);
         if (res == pastdest)
         {

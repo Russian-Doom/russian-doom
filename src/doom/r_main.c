@@ -40,6 +40,9 @@
 #define FIELDOFVIEW 2048	
 
 
+// [JN] Used for perfomance counter.
+int rendered_segs, rendered_visplanes, rendered_vissprites;
+
 int           detailshift;      // 0 = high, 1 = low
 int           viewangleoffset;
 int           validcount = 1;   // increment every time a check is made
@@ -970,6 +973,17 @@ static void R_SetupFrame (player_t *player)
     }
 
     validcount++;
+}
+
+// -----------------------------------------------------------------------------
+// R_ClearStats
+// -----------------------------------------------------------------------------
+
+void R_ClearStats (void)
+{
+    rendered_segs = 0;
+    rendered_visplanes = 0;
+    rendered_vissprites = 0;
 }
 
 // -----------------------------------------------------------------------------

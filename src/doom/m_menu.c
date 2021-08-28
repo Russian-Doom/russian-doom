@@ -143,7 +143,7 @@ void M_RD_Draw_Rendering(void);
 void M_RD_Change_Widescreen(Direction_t direction);
 void M_RD_Change_VSync();
 void M_RD_Change_Uncapped();
-void M_RD_Change_FPScounter();
+void M_RD_Change_PerfCounter();
 void M_RD_Change_DiskIcon();
 void M_RD_Change_Smoothing();
 void M_RD_Change_Wiping(Direction_t direction);
@@ -907,7 +907,7 @@ static MenuItem_t RenderingItems[] = {
     {ITT_LRFUNC, "Display aspect ratio:",     "Cjjnyjitybt cnjhjy \'rhfyf:",     M_RD_Change_Widescreen,    0},
     {ITT_SWITCH, "Vertical synchronization:", "Dthnbrfkmyfz cby[hjybpfwbz:",     M_RD_Change_VSync,         0},
     {ITT_SWITCH, "Frame rate:",               "Rflhjdfz xfcnjnf:",               M_RD_Change_Uncapped,      0},
-    {ITT_SWITCH, "Show FPS counter:",         "Cxtnxbr rflhjdjq xfcnjns:",       M_RD_Change_FPScounter,    0},
+    {ITT_LRFUNC, "Performance counter:",      "Cxtnxbr ghjbpdjlbntkmyjcnb:",     M_RD_Change_PerfCounter,   0},
     {ITT_SWITCH, "Pixel scaling:",            "Gbrctkmyjt cukf;bdfybt:",         M_RD_Change_Smoothing,     0},
     {ITT_SWITCH, "Porch palette changing:",   "Bpvtytybt gfkbnhs rhftd 'rhfyf:", M_RD_Change_PorchFlashing, 0},
     {ITT_SWITCH, "Video renderer:",           "J,hf,jnrf dbltj:",                M_RD_Change_Renderer,      0},
@@ -1781,8 +1781,10 @@ void M_RD_Draw_Rendering(void)
         // Frame rate
         RD_M_DrawTextSmallENG(uncapped_fps ? "uncapped" : "35 fps", 120 + wide_delta, 55, CR_NONE);
 
-        // Show FPS counter
-        RD_M_DrawTextSmallENG(show_fps ? "on" : "off", 162 + wide_delta, 65, CR_NONE);
+        // Performance counter
+        RD_M_DrawTextSmallENG(show_fps == 1 ? "FPS only" :
+                              show_fps == 2 ? "Full" : "off", 
+                              192 + wide_delta, 65, CR_NONE);
 
         // Pixel scaling
         if (force_software_renderer == 1)
@@ -1851,8 +1853,12 @@ void M_RD_Draw_Rendering(void)
             RD_M_DrawTextSmallENG("35 fps", 167 + wide_delta, 55, CR_NONE);
         }
 
-        // Счетчик кадровой частоты
-        RD_M_DrawTextSmallRUS(show_fps ? "drk" : "dsrk", 227 + wide_delta, 65, CR_NONE);
+        // Счетчик производительности
+        RD_M_DrawTextSmallRUS(show_fps == 1 ? "" : // Print as US string below
+                              show_fps == 2 ? "gjkysq" : "dsrk",
+                              246 + wide_delta, 65, CR_NONE);
+        // Print "FPS" separately, RU sting doesn't fit in 4:3 aspect ratio :(
+        if (show_fps == 1) RD_M_DrawTextSmallENG("fps", 246 + wide_delta, 65, CR_NONE);
 
         // Пиксельное сглаживание
         if (force_software_renderer == 1)
@@ -1913,9 +1919,10 @@ void M_RD_Change_Uncapped()
     uncapped_fps ^= 1;
 }
 
-void M_RD_Change_FPScounter()
+void M_RD_Change_PerfCounter(Direction_t direction)
 {
-    show_fps ^= 1;
+    // show_fps ^= 1;
+    RD_Menu_SpinInt(&show_fps, 0, 2, direction);
 }
 
 void M_RD_Change_DiskIcon()

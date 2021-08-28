@@ -55,6 +55,9 @@ extern int maxlightz, lightzshift;
 // There a 0-31, i.e. 32 LUT in the COLORMAP lump.
 #define NUMCOLORMAPS 32
 
+// [JN] Used for perfomance counter.
+extern void R_ClearStats (void);
+extern int rendered_segs, rendered_visplanes, rendered_vissprites;
 
 //
 // POV related.
