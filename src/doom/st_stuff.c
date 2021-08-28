@@ -223,9 +223,6 @@ static boolean st_firsttime;
 // [JN] lump number for PALFIX (1) and PLAYPAL (2)
 static int lu_palette1, lu_palette2;
 
-// used for timing
-static unsigned int	st_clock;
-
 // used for making messages go away
 static int st_msgcounter=0;
 
@@ -1447,7 +1444,6 @@ void ST_updateWidgets(void)
 
 void ST_Ticker (void)
 {
-    st_clock++;
     // [JN] Use real random number generator
     // instead of M_Random LUT for faces stide.
     st_randomnumber = vanillaparm ? M_Random() : rand();
@@ -2114,7 +2110,6 @@ void ST_initData(void)
     st_firsttime = true;
     plyr = &players[consoleplayer];
 
-    st_clock = 0;
     st_chatstate = StartChatState;
     st_gamestate = FirstPersonState;
 
