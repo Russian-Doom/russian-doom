@@ -20,63 +20,44 @@
 //
 
 
-
-#include <stdio.h>
-
 #include "i_swap.h" // [crispy] SHORT()
-#include "i_system.h"
-#include "i_video.h"
 #include "z_zone.h"
 #include "m_misc.h"
 #include "m_random.h"
 #include "w_wad.h"
 #include "deh_main.h"
 #include "deh_misc.h"
-#include "doomdef.h"
-#include "doomkeys.h"
 #include "g_game.h"
 #include "st_stuff.h"
 #include "st_lib.h"
-#include "r_local.h"
 #include "p_local.h"
 #include "am_map.h"
-#include "m_cheat.h"
 #include "m_menu.h"
 #include "s_sound.h"
 #include "v_video.h"
 #include "doomstat.h"
 #include "rd_lang.h"
-#include "sounds.h"
 #include "v_trans.h"
 #include "v_diskicon.h"
 #include "jn.h"
 
 
-extern boolean sgl_loaded;
-
-// [JN] Jaguar: prototypes
-void ST_drawWidgetsJaguar (boolean refresh);
-void ST_createWidgetsJaguar (void);
-
-//
+// -----------------------------------------------------------------------------
 // STATUS BAR DATA
-//
+// -----------------------------------------------------------------------------
 
-
-// Palette indices.
-// For damage/bonus red-/gold-shifts
+// Palette indices. For damage/bonus red-/gold-shifts
 #define STARTREDPALS        1
 #define STARTBONUSPALS      9
 #define NUMREDPALS          8
 #define NUMBONUSPALS        4
 // Radiation suit, green shift.
 #define RADIATIONPAL        13
-// [JN] Atari Jaguar: cyan invulnerability palette
+// [JN] Jaguar Doom: cyan invulnerability palette
 #define INVULNERABILITYPAL  14
 
 // Location of status bar
 #define ST_X                0
-
 #define ST_FX               143
 #define ST_FY               169
 
@@ -86,16 +67,13 @@ void ST_createWidgetsJaguar (void);
 #define ST_NUMTURNFACES     2
 #define ST_NUMSPECIALFACES  3
 
-#define ST_FACESTRIDE \
-       (ST_NUMSTRAIGHTFACES+ST_NUMTURNFACES+ST_NUMSPECIALFACES)
-
+#define ST_FACESTRIDE (ST_NUMSTRAIGHTFACES+ST_NUMTURNFACES+ST_NUMSPECIALFACES)
 #define ST_NUMEXTRAFACES    2
 
 // [JN] Additional faces:
 // - Jaguar Doom: +6 (exploded face)
 // - PSX Doom: +1 (squished face)
-#define ST_NUMFACES \
-       (ST_FACESTRIDE*ST_NUMPAINFACES+ST_NUMEXTRAFACES+7)
+#define ST_NUMFACES (ST_FACESTRIDE*ST_NUMPAINFACES+ST_NUMEXTRAFACES+7)
 
 #define ST_TURNOFFSET       (ST_NUMSTRAIGHTFACES)
 #define ST_OUCHOFFSET       (ST_TURNOFFSET + ST_NUMTURNFACES)
@@ -124,14 +102,10 @@ void ST_createWidgetsJaguar (void);
 
 #define ST_MUCHPAIN         20
 
-
-// Location and size of statistics,
-//  justified according to widget type.
+// Location and size of statistics, justified according to widget type.
 // Problem is, within which space? STbar? Screen?
-// Note: this could be read in by a lump.
-//       Problem is, is the stuff rendered
-//       into a buffer,
-//       or into the frame buffer?
+// Note: this could be read in by a lump. Problem is, is the stuff rendered
+// into a buffer, or into the frame buffer?
 
 // AMMO number pos.
 #define ST_AMMOWIDTH        3	
@@ -211,159 +185,104 @@ void ST_createWidgetsJaguar (void);
 #define ST_MSGWIDTH         52
 
 
+extern boolean sgl_loaded;
+extern boolean old_godface;  // [JN] If false, we can use an extra GOD faces.
+
+void ST_Stop (void);
+
+// [JN] Jaguar Doom: prototypes
+void ST_drawWidgetsJaguar (boolean refresh);
+void ST_createWidgetsJaguar (void);
+
+
+enum
+{
+    hudcolor_ammo,
+    hudcolor_health,
+    hudcolor_frags,
+    hudcolor_armor,
+    hudcolor_artifacts
+} hudcolor_t;
+
+typedef void (*load_callback_t)(char *lumpname, patch_t **variable);
+
+
 // graphics are drawn to a backing screen and blitted to the real screen
 byte *st_backing_screen;
-	    
-// main player in game
-static player_t* plyr; 
 
-// ST_Start() has just been called
-static boolean st_firsttime;
+static char msg[ST_MSGWIDTH];
 
-// [JN] lump number for PALFIX (1) and PLAYPAL (2)
-static int lu_palette1, lu_palette2;
+static player_t *plyr;          // main player in game
 
-// used for making messages go away
-static int st_msgcounter=0;
+int        st_palette = 0;
+static int lu_palette1, lu_palette2;  // [JN] lump number for PALFIX (1) and PLAYPAL (2)
+static int st_msgcounter = 0;         // used for making messages go away
 
-// used when in chat 
-static st_chatstateenum_t   st_chatstate;
+static st_chatstateenum_t st_chatstate; // used when in chat
 
-// whether in automap or first-person
-static st_stateenum_t   st_gamestate;
+static st_stateenum_t st_gamestate;     // whether in automap or first-person
 
-// whether left-side main status bar is active
-static boolean st_statusbaron;
+static boolean st_firsttime;  // ST_Start() has just been called
+static boolean st_statusbaron;    // whether left-side main status bar is active
+static boolean st_chat;           // whether status bar chat is active
+static boolean st_oldchat;        // value of st_chat before message popped up
+static boolean st_cursoron;       // whether chat window has the cursor on
+static boolean st_notdeathmatch;  // !deathmatch
+static boolean st_armson;         // !deathmatch && st_statusbaron
+static boolean st_fragson;        // !deathmatch
+static boolean st_artifactson;    // [JN] only in Press Beta
+static boolean st_stopped = true;
 
-// whether status bar chat is active
-static boolean st_chat;
+static patch_t *sbar, *sbar_rus;  // main bar left
+static patch_t *tallnum[10];      // 0-9, tall numbers
+static patch_t *tallpercent;      // tall % sign
+static patch_t *shortnum[10];     // 0-9, short, yellow (,different!) numbers
 
-// value of st_chat before message popped up
-static boolean st_oldchat;
-
-// whether chat window has the cursor on
-static boolean st_cursoron;
-
-// !deathmatch
-static boolean st_notdeathmatch; 
-
-// !deathmatch && st_statusbaron
-static boolean st_armson;
-
-// !deathmatch
-static boolean st_fragson; 
-
-// [JN] only in Press Beta
-static boolean st_artifactson;
-
-// main bar left
-static patch_t* sbar;
-static patch_t* sbar_rus;
-
-// 0-9, tall numbers
-static patch_t* tallnum[10];
-
-// tall % sign
-static patch_t* tallpercent;
-
-// 0-9, short, yellow (,different!) numbers
-static patch_t* shortnum[10];
-
-// 3 key-cards, 3 skulls
 // jff 2/24/98 extend number of patches by three skull/card combos
-static patch_t* keys[NUMCARDS+3]; 
+static patch_t *keys[NUMCARDS+3];  // 3 key-cards, 3 skulls 
 
-// face status patches
-// [JN] Массив удвоен, необходимо для бессмертия.
-// Thanks Brad Harding for help!
-static patch_t* faces[ST_NUMFACES * 2];
-// [JN] If false, we can use an extra GOD faces.
-extern boolean old_godface;
+// [JN] Doubled array for extra god mode faces, thanks Brad Harding for help!
+static patch_t *faces[ST_NUMFACES * 2];  // face status patches
+static patch_t *faceback;                // face background   
+static patch_t *armsbg, *armsbg_rus;     // main bar right
+static patch_t *arms[6][2];              // weapon ownership patches
 
-// face background
-static patch_t* faceback;
+static st_number_t w_ready, w_ready_wide;  // ready-weapon widget
+static st_number_t w_frags, w_frags_wide;  // in deathmatch only, summary of frags stats
 
- // main bar right
-static patch_t* armsbg;
-static patch_t* armsbg_rus;
+static st_number_t w_currentmap, w_currentmap_wide;  // [JN] Jaguar: current map widget
+static st_number_t w_artifacts, w_artifacts_wide;    // [JN] Press Beta: artifacts widget
+static st_number_t w_lifes;  // [JN] Press Beta: widget for player's lifes
 
-// weapon ownership patches
-static patch_t* arms[6][2]; 
+static st_percent_t w_health, w_health_wide;  // health widget
 
-// ready-weapon widget
-static st_number_t      w_ready, w_ready_wide;
+static boolean      st_neghealth;           // [JN] Negative player health
+static st_percent_t w_health_neg, w_health_neg_wide;
+static st_percent_t w_armor, w_armor_wide;  // armor widget
 
- // in deathmatch only, summary of frags stats
-static st_number_t      w_frags, w_frags_wide;
-
-// [JN] Jaguar: current map widget
-static st_number_t w_currentmap, w_currentmap_wide;
-
-// [JN] Press Beta: artifacts widget
-static st_number_t      w_artifacts, w_artifacts_wide;
-
-// [JN] Press Beta: widget for player's lifes
-static st_number_t      w_lifes;
-
-// health widget
-static st_percent_t     w_health, w_health_wide;
-
-// [JN] Negative player health
-static boolean          st_neghealth; 
-static st_percent_t     w_health_neg, w_health_neg_wide;
-
-// arms background
-static st_binicon_t     w_armsbg, w_armsbg_wide;
-
-// weapon ownership widgets
-static st_multicon_t    w_arms[6], w_arms_wide[6];
+static st_binicon_t     w_armsbg, w_armsbg_wide;    // arms background
 
 // [Doom Retro] & [crispy] show SSG availability in the Shotgun slot of the arms widget
 static int st_shotguns;
 
-// face status widget
-static st_multicon_t    w_faces; 
+static st_multicon_t w_faces;                            // face status widget
+static st_multicon_t w_arms[6], w_arms_wide[6];  // weapon ownership widgets
+static st_multicon_t w_keyboxes[3], w_keyboxes_wide[3];  // keycard widgets
 
-// keycard widgets
-static st_multicon_t    w_keyboxes[3], w_keyboxes_wide[3];
+static st_number_t w_ammo[4], w_ammo_wide[4];        // ammo widgets
+static st_number_t w_maxammo[4], w_maxammo_wide[4];  // max ammo widgets
 
-// armor widget
-static st_percent_t     w_armor, w_armor_wide;
+static int st_fragscount;      // number of frags so far in deathmatch
+static int st_artifactscount;  // [JN] Press Beta: number of picked up artifacts
+static int st_oldhealth = -1;  // used to use appopriately pained face
+static boolean oldweaponsowned[NUMWEAPONS];  // used for evil grin
 
-// ammo widgets
-static st_number_t      w_ammo[4], w_ammo_wide[4];
+static int st_randomnumber;   // a random number per tick
+static int st_facecount = 0;  // count until face changes
+static int st_faceindex = 0;  // current face index, used by w_faces
+static int keyboxes[3];       // holds key-type for each key box on bar
 
-// max ammo widgets
-static st_number_t      w_maxammo[4], w_maxammo_wide[4]; 
-
-
-
-// number of frags so far in deathmatch
-static int st_fragscount;
-
-// [JN] Press Beta: number of picked up artifacts
-static int st_artifactscount;
-
-// used to use appopriately pained face
-static int st_oldhealth = -1;
-
-// used for evil grin
-static boolean oldweaponsowned[NUMWEAPONS]; 
-
-// count until face changes
-static int st_facecount = 0;
-
-// current face index, used by w_faces
-static int st_faceindex = 0;
-
-// holds key-type for each key box on bar
-static int keyboxes[3]; 
-
-// [crispy] blinking key or skull in the status bar
-int st_keyorskull[3];
-
-// a random number per tick
-static int st_randomnumber;  
+int st_keyorskull[3];  // [crispy] blinking key or skull in the status bar
 
 // [JN] Different status height between common Doom and Jaguar Doom.
 static int st_height;
@@ -413,17 +332,17 @@ cheatseq_t cheat_god_beta    = CHEAT("tst", 0); // iddqd
 cheatseq_t cheat_ammo_beta   = CHEAT("amo", 0); // idkfa
 cheatseq_t cheat_noclip_beta = CHEAT("nc", 0);  // idclip
 
-static char msg[ST_MSGWIDTH];
 
-//
+// -----------------------------------------------------------------------------
 // STATUS BAR CODE
-//
-void ST_Stop(void);
+// -----------------------------------------------------------------------------
 
-void ST_refreshBackground(void)
+void ST_refreshBackground (void)
 {
     if (screenblocks >= 11 && (!automapactive || automap_overlay))
-    return;    
+    {
+        return;
+    }
 
     if (st_statusbaron)
     {
@@ -440,7 +359,8 @@ void ST_refreshBackground(void)
                 int x, y;
                 byte *src;
                 byte *dest;
-                char *name = (gamemode == commercial) ? DEH_String("GRNROCK") : DEH_String("FLOOR7_2");
+                char *name = (gamemode == commercial) ? DEH_String("GRNROCK") : 
+                                                        DEH_String("FLOOR7_2");
                 const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
         
                 src = W_CacheLumpName(name, PU_CACHE);
@@ -488,22 +408,27 @@ void ST_refreshBackground(void)
 
         // [crispy] back up arms widget background
         if (!deathmatch && gamemode != pressbeta)
-        V_DrawPatch(ST_ARMSBGX + wide_delta, 0, english_language ? armsbg : armsbg_rus);
+        {
+            V_DrawPatch(ST_ARMSBGX + wide_delta, 0, english_language ? armsbg : armsbg_rus);
+        }
 
         if (netgame)
-        V_DrawPatch(ST_FX + wide_delta, 0, faceback);
+        {
+            V_DrawPatch(ST_FX + wide_delta, 0, faceback);
+        }
 
         V_RestoreBuffer();
 
-        V_CopyRect(ST_X, 0, st_backing_screen, 
-                   origwidth, st_height, ST_X, st_y);
+        V_CopyRect(ST_X, 0, st_backing_screen, origwidth, st_height, ST_X, st_y);
     }
 }
 
-
+// -----------------------------------------------------------------------------
+// ST_cheat_massacre
 // [crispy] adapted from boom202s/M_CHEAT.C:467-498
+// -----------------------------------------------------------------------------
 
-static int ST_cheat_massacre()
+static int ST_cheat_massacre (void)
 {
     int killcount = 0;
     thinker_t *th;
@@ -538,17 +463,19 @@ static int ST_cheat_massacre()
     return killcount;
 } 
 
+// -----------------------------------------------------------------------------
+// ST_Responder
+// Respond to keyboard input events, intercept cheats.
+// -----------------------------------------------------------------------------
 
-// Respond to keyboard input events,
-//  intercept cheats.
-boolean ST_Responder (event_t* ev)
+boolean ST_Responder (event_t *ev)
 {
     int i;
 
     // Filter automap on/off.
     if (ev->type == ev_keyup && ((ev->data1 & 0xffff0000) == AM_MSGHEADER))
     {
-        switch(ev->data1)
+        switch (ev->data1)
         {
             case AM_MSGENTERED:
                 st_gamestate = AutomapState;
@@ -556,7 +483,6 @@ boolean ST_Responder (event_t* ev)
             break;
 
             case AM_MSGEXITED:
-                // fprintf(stderr, "AM exited\n");
                 st_gamestate = FirstPersonState;
             break;
         }
@@ -565,7 +491,7 @@ boolean ST_Responder (event_t* ev)
     // if a user keypress...
     else if (ev->type == ev_keydown)
     {
-        if (!netgame && (gameskill != sk_nightmare /* && gameskill != sk_ultranm */) && gamemode != pressbeta)
+        if (!netgame && (gameskill != sk_nightmare) && gamemode != pressbeta)
         {
             // 'dqd' cheat for toggleable god mode
             if (cht_CheckCheat(&cheat_god, ev->data2))
@@ -575,7 +501,7 @@ boolean ST_Responder (event_t* ev)
                 if (plyr->playerstate == PST_DEAD)
                 {
                     signed int an;
-                    extern void P_SpawnPlayer (mapthing_t* mthing);
+                    extern void P_SpawnPlayer (mapthing_t *mthing);
 
                     mt.x = plyr->mo->x >> FRACBITS;
                     mt.y = plyr->mo->y >> FRACBITS;
@@ -585,7 +511,9 @@ boolean ST_Responder (event_t* ev)
  
                     // [crispy] spawn a teleport fog
                     an = plyr->mo->angle >> ANGLETOFINESHIFT;
-                    P_SpawnMobj(plyr->mo->x+20*finecosine[an], plyr->mo->y+20*finesine[an], plyr->mo->z, MT_TFOG);
+                    P_SpawnMobj(plyr->mo->x+20*finecosine[an],
+                                plyr->mo->y+20*finesine[an],
+                                plyr->mo->z, MT_TFOG);
                     S_StartSound(plyr->mo, sfx_telept);
                 }
 
@@ -593,17 +521,21 @@ boolean ST_Responder (event_t* ev)
 
                 if (plyr->cheats & CF_GODMODE)
                 {
-                    // [JN] Jaguar: no healing!
+                    // [JN] Jaguar Doom: no healing!
                     if (gamemission != jaguar)
                     {
                         if (plyr->mo)
-                        plyr->mo->health = 100;
+                        {
+                            plyr->mo->health = 100;
+                        }
                         plyr->health = deh_god_mode_health;
                     }
                     plyr->message_system = DEH_String(ststr_dqdon);
                 }
-                else 
-                plyr->message_system = DEH_String(ststr_dqdoff);
+                else
+                {
+                    plyr->message_system = DEH_String(ststr_dqdoff);
+                }
             }
 
             // 'fa' cheat for killer fucking arsenal
@@ -629,19 +561,25 @@ boolean ST_Responder (event_t* ev)
                 // [JN] Check if player have a backpack...
                 if (!plyr->backpack && !vanillaparm)
                 {
-                    for (i=0 ; i<NUMAMMO ; i++)
-                    plyr->maxammo[i] *= 2;
+                    for (i = 0 ; i < NUMAMMO ; i++)
+                    {
+                        plyr->maxammo[i] *= 2;
+                    }
                     plyr->backpack = true;
                 }
 
                 // [JN] ...and only then we replenish ammunition.
-                for (i=0;i<NUMAMMO;i++)
+                for (i = 0; i < NUMAMMO ; i++)
                 {
                     // [JN] Jaguar: happy 500 ammo for everything!
                     if (gamemission == jaguar)
-                    plyr->ammo[i] = plyr->maxammo[i] = 500;
+                    {
+                        plyr->ammo[i] = plyr->maxammo[i] = 500;
+                    }
                     else
-                    plyr->ammo[i] = plyr->maxammo[i];
+                    {
+                        plyr->ammo[i] = plyr->maxammo[i];
+                    }
                 }
 
                 plyr->message_system = DEH_String(ststr_faadded);
@@ -670,13 +608,15 @@ boolean ST_Responder (event_t* ev)
                 // [JN] Check if player have a backpack.
                 if (!plyr->backpack && !vanillaparm)
                 {
-                    for (i=0 ; i<NUMAMMO ; i++)
-                    plyr->maxammo[i] *= 2;
+                    for (i = 0 ; i < NUMAMMO ; i++)
+                    {
+                        plyr->maxammo[i] *= 2;
+                    }
                     plyr->backpack = true;
                 }
 
                 // [JN] ...and only then we replenish ammunition.
-                for (i=0;i<NUMAMMO;i++)
+                for (i = 0 ; i < NUMAMMO ; i++)
                 {
                     // [JN] Jaguar: happy 500 ammo for everything!
                     if (gamemission == jaguar)
@@ -685,8 +625,10 @@ boolean ST_Responder (event_t* ev)
                     plyr->ammo[i] = plyr->maxammo[i];
                 }
 
-                for (i=0;i<NUMCARDS;i++)
+                for (i = 0 ; i < NUMCARDS ; i++)
+                {
                     plyr->cards[i] = true;
+                }
 
                 plyr->message_system = DEH_String(ststr_kfaadded);
             }
@@ -694,8 +636,10 @@ boolean ST_Responder (event_t* ev)
             // [JN] 'ka' чит для выдачи ключей
             else if (cht_CheckCheat(&cheat_keys, ev->data2))
             {
-                for (i=0;i<NUMCARDS;i++)
+                for (i = 0; i < NUMCARDS ; i++)
+                {
                     plyr->cards[i] = true;
+                }
 
                 plyr->message_system = DEH_String(ststr_kaadded);
             }
@@ -712,8 +656,8 @@ boolean ST_Responder (event_t* ev)
             // 'mus' cheat for changing music
             else if (cht_CheckCheat(&cheat_mus, ev->data2))
             {
-                char    buf[3];
-                int     musnum;
+                char buf[3];
+                int  musnum;
 
                 plyr->message_system = DEH_String(ststr_mus);
                 cht_GetParam(&cheat_mus, buf);
@@ -781,19 +725,25 @@ boolean ST_Responder (event_t* ev)
                 plyr->cheats ^= CF_NOCLIP;
 
                 if (plyr->cheats & CF_NOCLIP)
+                {
                     plyr->message_system = DEH_String(ststr_ncon);
+                }
                 else
+                {
                     plyr->message_system = DEH_String(ststr_ncoff);
+                }
             }
 
             // 'behold?' power-up cheats
-            for (i=0;i<6;i++)
+            for (i = 0 ; i < 6 ; i++)
             {
                 if (cht_CheckCheat(&cheat_powerup[i], ev->data2))
                 {
                     // [JN] Atari Jaguar: no invisibility sphere and light visor
                     if (gamemission == jaguar && (i == pw_invisibility || i == pw_infrared))
-                    return false;
+                    {
+                        return false;
+                    }
 
                     if (!plyr->powers[i])
                     {
@@ -950,13 +900,17 @@ boolean ST_Responder (event_t* ev)
                 if (plyr->cheats & CF_GODMODE)
                 {
                     if (plyr->mo)
-                    plyr->mo->health = 100;
+                    {
+                        plyr->mo->health = 100;
+                    }
 
                     plyr->health = deh_god_mode_health;
                     plyr->message_system = DEH_String(ststr_dqdon);
                 }
-                else 
-                plyr->message_system = DEH_String(ststr_dqdoff);
+                else
+                {
+                    plyr->message_system = DEH_String(ststr_dqdoff);
+                }
             }
 
             // 'AMO' cheat for key full ammo
@@ -965,14 +919,18 @@ boolean ST_Responder (event_t* ev)
                 plyr->armorpoints = deh_idkfa_armor;
                 plyr->armortype = deh_idkfa_armor_class;
 
-                for (i=0;i<NUMWEAPONS;i++)
+                for (i = 0 ; i < NUMWEAPONS ; i++)
+                {
                     plyr->weaponowned[i] = true;
-
-                for (i=0;i<NUMAMMO;i++)
+                }
+                for (i = 0 ; i < NUMAMMO ; i++)
+                {
                     plyr->ammo[i] = plyr->maxammo[i];
-
-                for (i=0;i<NUMCARDS;i++)
+                }
+                for (i = 0 ; i < NUMCARDS ; i++)
+                {
                     plyr->cards[i] = true;
+                }
 
                 plyr->message_system = DEH_String(ststr_kfaadded);
             }
@@ -983,9 +941,13 @@ boolean ST_Responder (event_t* ev)
                 plyr->cheats ^= CF_NOCLIP;
 
                 if (plyr->cheats & CF_NOCLIP)
+                {
                     plyr->message_system = DEH_String(ststr_ncon);
+                }
                 else
+                {
                     plyr->message_system = DEH_String(ststr_ncoff);
+                }
             }
         }
     }
@@ -993,8 +955,11 @@ boolean ST_Responder (event_t* ev)
     return false;
 }
 
+// -----------------------------------------------------------------------------
+// ST_calcPainOffset
+// -----------------------------------------------------------------------------
 
-int ST_calcPainOffset(void)
+static int ST_calcPainOffset (void)
 {
     int         health;
     static int  lastcalc;
@@ -1011,16 +976,18 @@ int ST_calcPainOffset(void)
     return lastcalc;
 }
 
-
-//
-// This is a not-very-pretty routine which handles
-//  the face states and their timing.
-// the precedence of expressions is:
+// -----------------------------------------------------------------------------
+// ST_updateFaceWidget
+// This is a not-very-pretty routine which handles the face states and 
+// their timing. The precedence of expressions is:
 //  dead > evil grin > turned head > straight ahead
 //
 // [crispy] fix status bar face hysteresis
+// -----------------------------------------------------------------------------
+
 static int faceindex;
-void ST_updateFaceWidget(void)
+
+static void ST_updateFaceWidget (void)
 {
     int         i;
     static int  lastattackdown = -1;
@@ -1053,20 +1020,34 @@ void ST_updateFaceWidget(void)
 
             // [JN] Sync with actual player state:
             if (plyr->mo->state == &states[S_PLAY_XDIE1])
+            {
                 faceindex = ST_EXPLFACE0;
+            }
             if (plyr->mo->state == &states[S_PLAY_XDIE2])
+            {
                 faceindex = ST_EXPLFACE1;
+            }
             if (plyr->mo->state == &states[S_PLAY_XDIE3])
+            {
                 faceindex = ST_EXPLFACE2;
+            }
             if (plyr->mo->state == &states[S_PLAY_XDIE4])
+            {
                 faceindex = ST_EXPLFACE3;
+            }
             if (plyr->mo->state == &states[S_PLAY_XDIE5])
+            {
                 faceindex = ST_EXPLFACE4;
+            }
             if (plyr->mo->state >= &states[S_PLAY_XDIE6])
+            {
                 faceindex = ST_EXPLFACE5;
+            }
 
             if (plyr->mo->state == &states[S_GIBS])
+            {
                 faceindex = ST_CRSHFACE0;
+            }
         }
     }
 
@@ -1331,15 +1312,15 @@ void ST_updateFaceWidget(void)
     }
 }
 
+// -----------------------------------------------------------------------------
+// ST_updateWidgets
+// -----------------------------------------------------------------------------
 
-void ST_updateWidgets(void)
+static void ST_updateWidgets (void)
 {
     static int largeammo = 1994; // means "n/a"
     int        i;
 
-    // must redirect the pointer if the ready weapon has changed.
-    //  if (w_ready.data != plyr->readyweapon)
-    //  {
     if (weaponinfo[plyr->readyweapon].ammo == am_noammo)
     {
         w_ready.num = &largeammo;
@@ -1350,34 +1331,23 @@ void ST_updateWidgets(void)
         w_ready.num = &plyr->ammo[weaponinfo[plyr->readyweapon].ammo];
         w_ready_wide.num = &plyr->ammo[weaponinfo[plyr->readyweapon].ammo];
     }
-    //{
-    // static int tic=0;
-    // static int dir=-1;
-    // if (!(tic&15))
-    //   plyr->ammo[weaponinfo[plyr->readyweapon].ammo]+=dir;
-    // if (plyr->ammo[weaponinfo[plyr->readyweapon].ammo] == -100)
-    //   dir = 1;
-    // tic++;
-    // }
+
+
     w_ready.data = plyr->readyweapon;
     w_ready_wide.data = plyr->readyweapon;
 
-    // if (*w_ready.on)
-    //  STlib_updateNum(&w_ready, true);
-    // refresh weapon change
-    //  }
-
     // update keycard multiple widgets
-    for (i=0;i<3;i++)
+    for (i = 0 ; i < 3 ; i++)
     {
         keyboxes[i] = plyr->cards[i] ? i : -1;
 
         //jff 2/24/98 select double key
         // [JN] Press Beta have a bug with missing skull keys on HUD.
         // To emulate this, following condition must be commented out:
-
         if (plyr->cards[i+3])
-        keyboxes[i] = (keyboxes[i]==-1) ? i+3 : i+6;
+        {
+            keyboxes[i] = (keyboxes[i]==-1) ? i+3 : i+6;
+        }
 
         // [crispy] blinking key or skull in the status bar
         // [JN] blink in any HUD size, except full screen (no HUD) and vanilla
@@ -1416,17 +1386,23 @@ void ST_updateWidgets(void)
     st_fragson = deathmatch && st_statusbaron; 
     st_fragscount = 0;
 
-    for (i=0 ; i<MAXPLAYERS ; i++)
+    for (i = 0 ; i < MAXPLAYERS ; i++)
     {
         if (i != consoleplayer)
+        {
             st_fragscount += plyr->frags[i];
+        }
         else
+        {
             st_fragscount -= plyr->frags[i];
+        }
     }
 
     // [JN] Jaguar: current map
     if (gamemission == jaguar)
-    w_currentmap.data = gamemap;
+    {
+        w_currentmap.data = gamemap;
+    }
 
     // [JN] Press Beta: artifacts counter routines
     if (gamemode == pressbeta)
@@ -1438,9 +1414,14 @@ void ST_updateWidgets(void)
 
     // get rid of chat window if up because of message
     if (!--st_msgcounter)
-    st_chat = st_oldchat;
+    {
+        st_chat = st_oldchat;
+    }
 }
 
+// -----------------------------------------------------------------------------
+// ST_Ticker
+// -----------------------------------------------------------------------------
 
 void ST_Ticker (void)
 {
@@ -1451,14 +1432,15 @@ void ST_Ticker (void)
     st_oldhealth = plyr->health;
 }
 
-int st_palette = 0;
+// -----------------------------------------------------------------------------
+// ST_doPaletteStuff
+// -----------------------------------------------------------------------------
 
-
-void ST_doPaletteStuff(void)
+void ST_doPaletteStuff (void)
 {
-    int     palette;
-    byte*   pal;
-    int     cnt;
+    int   cnt;
+    int   palette;
+    byte *pal;
 
     cnt = plyr->damagecount;
 
@@ -1511,8 +1493,8 @@ void ST_doPaletteStuff(void)
     
     // [JN] Use CYAN invulnerability palette in Atari Jaguar,
     // unbreakable by other palettes
-    if (gamemission == jaguar &&
-    (plyr->powers[pw_invulnerability] > 4*32 || (plyr->powers[pw_invulnerability]&8)))
+    if (gamemission == jaguar
+    && (plyr->powers[pw_invulnerability] > 4*32 || (plyr->powers[pw_invulnerability]&8)))
     {
         palette = INVULNERABILITYPAL;
     }
@@ -1531,28 +1513,23 @@ void ST_doPaletteStuff(void)
     {
         st_palette = palette;
         pal = (byte *) W_CacheLumpNum ((usegamma <= 8 ? 
-                                        lu_palette1 : 
-                                        lu_palette2), 
+                                        lu_palette1 : lu_palette2), 
                                         PU_CACHE) + palette * 768;
         I_SetPalette (pal);
     }
 }
 
-
-enum
-{
-    hudcolor_ammo,
-    hudcolor_health,
-    hudcolor_frags,
-    hudcolor_armor,
-    hudcolor_artifacts
-} hudcolor_t;
-
+// -----------------------------------------------------------------------------
+// ST_WidgetColor
 // [crispy] return ammo/health/armor widget color
-static byte* ST_WidgetColor(int i)
+// -----------------------------------------------------------------------------
+
+static byte *ST_WidgetColor (int i)
 {
     if (!sbar_colored || vanillaparm)
+    {
         return NULL;
+    }
 
     switch (i)
     {
@@ -1585,8 +1562,7 @@ static byte* ST_WidgetColor(int i)
             // [crispy] Invulnerability powerup and God Mode cheat turn Health values gray
             // [JN] I'm using different health values, represented by crosshair,
             // and thus a little bit different logic.
-            if (plyr->cheats & CF_GODMODE ||
-                plyr->powers[pw_invulnerability])
+            if (plyr->cheats & CF_GODMODE || plyr->powers[pw_invulnerability])
                 return cr[CR_WHITE];
             else if (health > 100)
                 return sbar_color_high_set;
@@ -1614,8 +1590,7 @@ static byte* ST_WidgetColor(int i)
         case hudcolor_armor:
         {
 	    // [crispy] Invulnerability powerup and God Mode cheat turn Armor values gray
-	    if (plyr->cheats & CF_GODMODE ||
-                plyr->powers[pw_invulnerability])
+	    if (plyr->cheats & CF_GODMODE || plyr->powers[pw_invulnerability])
                 return cr[CR_WHITE];
 	    // [crispy] color by armor type
 	    else if (plyr->armortype >= 2)
@@ -1670,8 +1645,8 @@ void ST_drawWidgets (boolean refresh)
         return;
     }
 
-    st_armson = st_statusbaron && !deathmatch;  // used by w_arms[] widgets
-    st_fragson = deathmatch && st_statusbaron;  // used by w_frags widget
+    st_armson = st_statusbaron && !deathmatch;       // used by w_arms[] widgets
+    st_fragson = deathmatch && st_statusbaron;       // used by w_frags widget
     st_artifactson = !deathmatch && st_statusbaron;  // [JN] used by w_artifacts widget
     st_neghealth = negative_health && plyr->health <= 0 && !vanillaparm;
     // [Doom Retro] & [crispy] show SSG availability in the Shotgun slot of the arms widget
@@ -1870,8 +1845,11 @@ void ST_drawWidgets (boolean refresh)
     }
 }
 
+// -----------------------------------------------------------------------------
+// ST_doRefresh
+// -----------------------------------------------------------------------------
 
-void ST_doRefresh(void)
+void ST_doRefresh (void)
 {
     st_firsttime = false;
 
@@ -1882,13 +1860,19 @@ void ST_doRefresh(void)
     ST_drawWidgets(true);
 }
 
+// -----------------------------------------------------------------------------
+// ST_diffDraw
+// -----------------------------------------------------------------------------
 
-void ST_diffDraw(void)
+static void ST_diffDraw (void)
 {
     // update all widgets
     ST_drawWidgets(false);
 }
 
+// -----------------------------------------------------------------------------
+// ST_Drawer
+// -----------------------------------------------------------------------------
 
 void ST_Drawer (boolean fullscreen, boolean refresh)
 {
@@ -1908,26 +1892,26 @@ void ST_Drawer (boolean fullscreen, boolean refresh)
         disk_drawn = false;
     }
     // Otherwise, update as little as possible
-    else 
+    else
+    {
         ST_diffDraw();
+    }
 }
 
-typedef void (*load_callback_t)(char *lumpname, patch_t **variable);
-
-
+// -----------------------------------------------------------------------------
+// ST_loadUnloadGraphics
 // Iterates through all graphics to be loaded or unloaded, along with
 // the variable they use, invoking the specified callback function.
+// -----------------------------------------------------------------------------
 
-static void ST_loadUnloadGraphics(load_callback_t callback)
+static void ST_loadUnloadGraphics (load_callback_t callback)
 {
-    int     i;
-    int     j;
-    int     facenum;
-
-    char    namebuf[9];
+    int   i, j;
+    int   facenum;
+    char  namebuf[9];
 
     // Load the numbers, tall and short
-    for (i=0;i<10;i++)
+    for (i = 0 ; i < 10 ; i++)
     {
         DEH_snprintf(namebuf, 9, "STTNUM%d", i);
         callback(namebuf, &tallnum[i]);
@@ -1942,7 +1926,7 @@ static void ST_loadUnloadGraphics(load_callback_t callback)
     callback(DEH_String("STTPRCNT"), &tallpercent);
 
     // key cards
-    for (i=0;i<NUMCARDS+3;i++)  //jff 2/23/98 show both keys too
+    for (i = 0 ; i < NUMCARDS+3 ; i++)  //jff 2/23/98 show both keys too
     {
         DEH_snprintf(namebuf, 9, "STKEYS%d", i);
         callback(namebuf, &keys[i]);
@@ -1953,7 +1937,7 @@ static void ST_loadUnloadGraphics(load_callback_t callback)
     callback(DEH_String("RDARMS"), &armsbg_rus);
 
     // arms ownership widgets
-    for (i=0; i<6; i++)
+    for (i = 0; i < 6; i++)
     {
         DEH_snprintf(namebuf, 9, "STGNUM%d", i+2);
 
@@ -1974,9 +1958,9 @@ static void ST_loadUnloadGraphics(load_callback_t callback)
 
     // face states
     facenum = 0;
-    for (i=0; i<ST_NUMPAINFACES; i++)
+    for (i = 0; i < ST_NUMPAINFACES; i++)
     {
-        for (j=0; j<ST_NUMSTRAIGHTFACES; j++)
+        for (j = 0; j < ST_NUMSTRAIGHTFACES; j++)
         {
             DEH_snprintf(namebuf, 9, "STFST%d%d", i, j);
             callback(namebuf, &faces[facenum]);
@@ -2062,20 +2046,29 @@ static void ST_loadUnloadGraphics(load_callback_t callback)
     }
 }
 
+// -----------------------------------------------------------------------------
+// ST_loadCallback
+// -----------------------------------------------------------------------------
 
-static void ST_loadCallback(char *lumpname, patch_t **variable)
+static void ST_loadCallback (char *lumpname, patch_t **variable)
 {
     *variable = W_CacheLumpName(lumpname, PU_STATIC);
 }
 
+// -----------------------------------------------------------------------------
+// ST_loadGraphics
+// -----------------------------------------------------------------------------
 
-void ST_loadGraphics(void)
+static void ST_loadGraphics (void)
 {
     ST_loadUnloadGraphics(ST_loadCallback);
 }
 
+// -----------------------------------------------------------------------------
+// ST_loadData
+// -----------------------------------------------------------------------------
 
-void ST_loadData(void)
+static void ST_loadData (void)
 {
     lu_palette1 = W_GetNumForName (DEH_String("PALFIX"));
     lu_palette2 = W_GetNumForName (DEH_String("PLAYPAL"));
@@ -2083,27 +2076,11 @@ void ST_loadData(void)
     ST_loadGraphics();
 }
 
+// -----------------------------------------------------------------------------
+// ST_initData
+// -----------------------------------------------------------------------------
 
-static void ST_unloadCallback(char *lumpname, patch_t **variable)
-{
-    W_ReleaseLumpName(lumpname);
-    *variable = NULL;
-}
-
-
-void ST_unloadGraphics(void)
-{
-    ST_loadUnloadGraphics(ST_unloadCallback);
-}
-
-
-void ST_unloadData(void)
-{
-    ST_unloadGraphics();
-}
-
-
-void ST_initData(void)
+static void ST_initData (void)
 {
     int	    i;
 
@@ -2127,17 +2104,24 @@ void ST_initData(void)
 
     st_oldhealth = -1;
 
-    for (i=0;i<NUMWEAPONS;i++)
-    oldweaponsowned[i] = plyr->weaponowned[i];
+    for (i = 0 ; i < NUMWEAPONS ; i++)
+    {
+        oldweaponsowned[i] = plyr->weaponowned[i];
+    }
 
-    for (i=0;i<3;i++)
-    keyboxes[i] = -1;
+    for (i = 0 ; i < 3 ; i++)
+    {
+        keyboxes[i] = -1;
+    }
 
     STlib_init();
 }
 
-
+// -----------------------------------------------------------------------------
+// ST_DrawDemoTimer
 // [crispy] Demo Timer widget
+// -----------------------------------------------------------------------------
+
 void ST_DrawDemoTimer (const int time)
 {
     extern patch_t *hu_font_gray[32]; // [JN] Use small gray STCFG font.
@@ -2170,8 +2154,11 @@ void ST_DrawDemoTimer (const int time)
 
 }
 
+// -----------------------------------------------------------------------------
+// ST_createWidgets
+// -----------------------------------------------------------------------------
 
-void ST_createWidgets(void)
+void ST_createWidgets (void)
 {
     int i;
 
@@ -2314,29 +2301,41 @@ void ST_createWidgets(void)
                   shortnum, &plyr->maxammo[3], &st_statusbaron, ST_MAXAMMO3WIDTH);
 }
 
-static boolean	st_stopped = true;
-
+// -----------------------------------------------------------------------------
+// ST_Start
+// -----------------------------------------------------------------------------
 
 void ST_Start (void)
 {
     if (!st_stopped)
-    ST_Stop();
+    {
+        ST_Stop();
+    }
 
     ST_initData();
 
     if (gamemission == jaguar)
-    ST_createWidgetsJaguar();
+    {
+        ST_createWidgetsJaguar();
+    }
     else
-    ST_createWidgets();
+    {
+        ST_createWidgets();
+    }
 
     st_stopped = false;
 }
 
+// -----------------------------------------------------------------------------
+// ST_Stop
+// -----------------------------------------------------------------------------
 
 void ST_Stop (void)
 {
     if (st_stopped)
-    return;
+    {
+        return;
+    }
 
     I_SetPalette (W_CacheLumpNum ((usegamma <= 8 ? 
                                    lu_palette1 : 
@@ -2346,6 +2345,9 @@ void ST_Stop (void)
     st_stopped = true;
 }
 
+// -----------------------------------------------------------------------------
+// ST_Init
+// -----------------------------------------------------------------------------
 
 void ST_Init (void)
 {
@@ -2484,7 +2486,7 @@ void ST_drawWidgetsJaguar (boolean refresh)
 // Widget creating routines for Jaguar
 // -----------------------------------------------------------------------------
 
-void ST_createWidgetsJaguar(void)
+void ST_createWidgetsJaguar (void)
 {
     int i;
 
