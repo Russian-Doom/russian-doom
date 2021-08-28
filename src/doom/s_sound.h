@@ -18,24 +18,20 @@
 //
 
 
-
 #ifndef __S_SOUND__
 #define __S_SOUND__
 
 #include "p_mobj.h"
 #include "sounds.h"
 
-//
-// Initializes sound stuff, including volume
-// Sets channels, SFX and music volume,
-//  allocates channel buffer, sets S_sfx lookup.
-//
 
-void S_Init(int sfxVolume, int musicVolume);
+// Initializes sound stuff, including volume
+// Sets channels, SFX and music volume, 
+//  allocates channel buffer, sets S_sfx lookup.
+void S_Init (int sfxVolume, int musicVolume);
 
 
 // Shut down sound 
-
 void S_Shutdown(void);
 
 // [JN] SFX device changing routine
@@ -47,26 +43,19 @@ void S_ChannelsRealloc(void);
 // [JN] Stereo separation defining
 void S_UpdateStereoSeparation(void);
 
-//
 // Per level startup code.
 // Kills playing sounds at start of level,
 //  determines music if any, changes music.
-//
-
 void S_Start(void);
 
-//
 // Start sound for thing at <origin>
 //  using <sound_id> from sounds.h
-//
-
 void S_StartSound(void *origin_p, int sfx_id);
 void S_StartSoundOnce(void *origin, int sound_id);
 void S_StartSoundNoBreak(int sfx_id);
 
 // Stop sound for thing at <origin>
 void S_StopSound(mobj_t *origin);
-
 
 // Start music using <music_id> from sounds.h
 void S_StartMusic(int m_id);
@@ -85,10 +74,7 @@ void S_StopMusic(void);
 void S_PauseSound(void);
 void S_ResumeSound(void);
 
-
-//
 // Updates music & sounds
-//
 void S_UpdateSounds(mobj_t *listener);
 
 void S_SetMusicVolume(int volume);
@@ -100,4 +86,3 @@ void S_MuteSound(void);
 void S_UnMuteSound(void);
 
 #endif
-
