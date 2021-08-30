@@ -37,6 +37,7 @@
 #include "v_video.h"
 #include "doomstat.h"
 #include "rd_lang.h"
+#include "rd_text.h"
 #include "v_trans.h"
 #include "v_diskicon.h"
 #include "jn.h"
@@ -2124,34 +2125,14 @@ static void ST_initData (void)
 
 void ST_DrawDemoTimer (const int time)
 {
-    extern patch_t *hu_font_gray[32]; // [JN] Use small gray STCFG font.
-	char buffer[16];
-	const int mins = time / (60 * TICRATE);
-	const float secs = (float)(time % (60 * TICRATE)) / TICRATE;
-	const int w = hu_font_gray[0]->width;
-	int n, x;
+    const boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
+    const int mins = time / (60 * TICRATE);
+    const float secs = (float)(time % (60 * TICRATE)) / TICRATE;
+    char n[16];
 
-	n = M_snprintf(buffer, sizeof(buffer), "%02i:%05.02f", mins, secs);
+    sprintf(n, "%02i:%05.02f", mins, secs);
 
-	x = (viewwindowx >> hires) + (scaledviewwidth >> hires);
-
-	while (n-- > 0)
-	{
-		const int c = buffer[n] - '0';
-
-		x -= w;
-
-		if (c >= 0 && c <= 10)
-		{
-            // [JN] Shift characters by +15 to use numbers instead of symbols.
-			V_DrawShadowedPatchDoom(x, (viewwindowy >> hires) + 1, hu_font_gray[c+15]);
-		}
-	}
-
-    // [JN] Draw colon between seconds and miliseconds separately.
-    V_DrawShadowedPatchDoom(x + 20, (viewwindowy >> hires) + 1, 
-                            W_CacheLumpName(DEH_String("STCFG058"), PU_CACHE));
-
+    RD_M_DrawTextC(n, 278 + (wide_4_3 ? wide_delta : wide_delta*2), (viewwindowy >> hires) + 1);
 }
 
 // -----------------------------------------------------------------------------
