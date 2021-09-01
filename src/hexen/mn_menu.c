@@ -600,7 +600,7 @@ static const PageDescriptor_t BindingsPageDescriptor = {
 
 static MenuItem_t Bindings1Items[] = {
     {ITT_TITLE,   "MOVEMENT",      "LDB;TYBT",               NULL,               0},
-    {ITT_EFUNC,   "MOVE FORWARD",  "LDB;TYBT DGTHEL",        BK_StartBindingKey, bk_forward},      // Движение вперед
+    {ITT_EFUNC,   "MOVE FORWARD",  "LDB;TYBT DGTHTL",        BK_StartBindingKey, bk_forward},      // Движение вперед
     {ITT_EFUNC,   "MOVE BACKWARD", "LDB;TYBT YFPFL",         BK_StartBindingKey, bk_backward},     // Движение назад
     {ITT_EFUNC,   "TURN Left",     "GJDJHJN YFKTDJ",         BK_StartBindingKey, bk_turn_left},    // Поворот налево
     {ITT_EFUNC,   "TURN Right",    "GJDJHJN YFGHFDJ",        BK_StartBindingKey, bk_turn_right},   // Поворот направо
