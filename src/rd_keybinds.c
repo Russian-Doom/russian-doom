@@ -555,6 +555,8 @@ void BK_ApplyDefaultBindings()
 
     AddBind(bk_use, keyboard, 'e');
 
+    AddBind(bk_fire, keyboard, KEY_LCTRL);
+
     AddBind(bk_weapon_1,    keyboard, '1');
     AddBind(bk_weapon_2,    keyboard, '2');
     AddBind(bk_weapon_3,    keyboard, '3');
