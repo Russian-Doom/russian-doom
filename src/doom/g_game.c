@@ -1533,18 +1533,35 @@ void G_DoCompleted (void)
     else if ( gamemode == commercial)
     {
         if (secretexit)
-        switch(gamemap)
         {
-            case 15: wminfo.next = 30; break;
-            case 31: wminfo.next = 31; break;
+            if (gamemap == 2 && havemap33)
+            {
+                wminfo.next = 32;
+            }
+            else
+            {
+                switch(gamemap)
+                {
+                    case 15: wminfo.next = 30; break;
+                    case 31: wminfo.next = 31; break;
+                }
+            }
         }
-
-    else
-        switch(gamemap)
+        else
         {
-            case 31:
-            case 32: wminfo.next = 15; break;
-            default: wminfo.next = gamemap;
+            if (gamemap == 33 && havemap33)
+            {
+                wminfo.next = 2;
+            }
+            else
+            {
+                switch(gamemap)
+                {
+                    case 31:
+                    case 32: wminfo.next = 15; break;
+                    default: wminfo.next = gamemap;
+                }
+            }
         }
     }
 

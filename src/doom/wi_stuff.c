@@ -2050,7 +2050,7 @@ void WI_loadData(void)
 {
     if (gamemode == commercial)
     {
-        NUMCMAPS = 32;
+        NUMCMAPS = havemap33 ? 33 : 32;
         lnames = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMCMAPS, PU_STATIC, NULL);
         lnames_d2_rus = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMCMAPS, PU_STATIC, NULL);
         lnames_plut_rus = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMCMAPS, PU_STATIC, NULL);

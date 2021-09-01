@@ -290,6 +290,8 @@ boolean sgl_loaded;
 boolean sgl_compat_loaded;
 // [JN] Loaded Master-Level PWAD
 boolean mlvls_loaded;
+// [JN] MAP33 "Betray" available?
+boolean havemap33;
 
 // [JN] Devparm now global and available for all three games (see i_main.c)
 // boolean devparm;     // started game with -devparm
@@ -2839,19 +2841,14 @@ void D_DoomMain (void)
         "BFG Edition: Применение дополнительной совместимости.\n");
 
         // BFG Edition changes the names of the secret levels to
-        // censor the Wolfenstein references. It also has an extra
-        // secret level (MAP33). In Vanilla Doom (meaning the DOS
-        // version), MAP33 overflows into the Plutonia level names
-        // array, so HUSTR_33 is actually PHUSTR_1.
+        // censor the Wolfenstein references.
 
         DEH_AddStringReplacement(HUSTR_31, "level 31: idkfa");
         DEH_AddStringReplacement(HUSTR_32, "level 32: keen");
-        DEH_AddStringReplacement(PHUSTR_1, "level 33: betray");
 
         // [JN] Replace Russian names as well.
         DEH_AddStringReplacement(HUSTR_31_RUS, "ehjdtym 31: blraf");         // уровень 31: идкфа
         DEH_AddStringReplacement(HUSTR_32_RUS, "ehjdtym 32: rby");           // уровень 32: кин
-        DEH_AddStringReplacement(PHUSTR_1_RUS, "ehjdtym 33: ghtlfntkmcndj"); // уровень 33: предательство
 
         // The BFG edition doesn't have the "low detail" menu option (fair
         // enough). But bizarrely, it reuses the M_GDHIGH patch as a label
@@ -2990,6 +2987,18 @@ void D_DoomMain (void)
     I_InitTimer();
     I_InitController();
     I_InitSound(true);
+
+    // [crispy] check for presence of MAP33
+    havemap33 = (gamemode == commercial) &&
+                (W_CheckNumForName("map33") != -1) &&
+                (W_CheckNumForName("cwilv32") != -1);
+
+    // [crispy] change level name for MAP33
+    if (havemap33)
+    {
+        DEH_AddStringReplacement(PHUSTR_1, "level 33: betray");
+        DEH_AddStringReplacement(PHUSTR_1_RUS, "ehjdtym 33: ghtlfntkmcndj"); // уровень 33: предательство
+    }
 
 #ifdef FEATURE_MULTIPLAYER
     printf (english_language ?
