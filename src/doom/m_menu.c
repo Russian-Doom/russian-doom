@@ -6420,7 +6420,7 @@ boolean M_Responder (event_t* ev)
     {
         if (messageNeedsInput)
         {
-            if (ev->data1 != ' ' && !BK_isKeyDown(ev, bk_confirm) && !BK_isKeyDown(ev, bk_abort))
+            if (!BK_isKeyDown(ev, bk_confirm) && !BK_isKeyDown(ev, bk_abort))
             {
                 return false;
             }
