@@ -6438,13 +6438,7 @@ boolean M_Responder (event_t* ev)
         // [JN] Do not close Episode menu after closing "purchase entire trilogy" message in Shareware.
         &&  (CurrentMenu != EpisodeMenu && gamemode == shareware)
         // [JN] Do not close Options menu after pressing "N" in End Game.
-        &&  CurrentMenu != OptionsMenu
-        // [JN] Do not close bindings menu after binding key / mouse button.
-        &&  CurrentMenu != &Bindings1Menu
-        &&  CurrentMenu != &Bindings2Menu
-        &&  CurrentMenu != &Bindings3Menu
-        &&  CurrentMenu != &Bindings4Menu
-        &&  CurrentMenu != &Bindings5Menu)
+        &&  CurrentMenu != OptionsMenu)
         {
             menuactive = false;
         }
