@@ -570,8 +570,5 @@ void R_RenderBSPNode (int bspnum)
         bspnum = bsp->children[side^1];
     }
 
-    if (!automapactive || automap_overlay)
-    {
-        R_Subsector(bspnum == -1 ? 0 : bspnum & ~NF_SUBSECTOR);
-    }
+    R_Subsector(bspnum == -1 ? 0 : bspnum & ~NF_SUBSECTOR);
 }
