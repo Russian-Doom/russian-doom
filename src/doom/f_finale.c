@@ -18,11 +18,7 @@
 //
 
 
-#include <stdio.h>
-#include <ctype.h>
-
 #include "deh_main.h"
-#include "i_system.h"
 #include "i_swap.h"
 #include "z_zone.h"
 #include "v_video.h"
@@ -32,7 +28,6 @@
 #include "rd_lang.h"
 #include "sounds.h"
 #include "doomstat.h"
-#include "r_state.h"
 #include "r_main.h"
 #include "hu_stuff.h"
 #include "crispy.h"
@@ -55,7 +50,7 @@ typedef enum
 // Stage of animation:
 finalestage_t finalestage;
 
-unsigned int finalecount;
+static unsigned int finalecount;
 
 // [JN] Was final wipe done?
 boolean finale_wipe_done = false;
@@ -137,28 +132,27 @@ static textscreen_t textscreens_rus[] =
 };
 
 
-char*   finaletext;
-char*   finaleflat;
+static char *finaletext;
+static char *finaleflat;
 
-void    F_StartCast (void);
-void    F_CastTicker (void);
-void    F_CastDrawer (void);
-boolean F_CastResponder (event_t *ev);
+void F_StartCast (void);
+void F_CastDrawer (void);
+static void    F_CastTicker (void);
+static boolean F_CastResponder (event_t *ev);
 
 // [JN] Jaguar Doom prototypes
-void F_TextWriteJaguar (void);
-void F_CastTickerJaguar (void);
-void F_CastPrintJaguar (char *text);
+static void F_TextWriteJaguar (void);
+static void F_CastTickerJaguar (void);
+static void F_CastPrintJaguar (char *text);
 void F_CastDrawerJaguar (void);
 
 
-//
+// -----------------------------------------------------------------------------
 // F_StartFinale
-//
+// -----------------------------------------------------------------------------
+
 void F_StartFinale (void)
 {
-    size_t i;
-
     gameaction = ga_nothing;
     gamestate = GS_FINALE;
     viewactive = false;
@@ -175,7 +169,7 @@ void F_StartFinale (void)
 
     // Find the right screen and set the text and background
 
-    for (i = 0; i < arrlen(textscreens) ; ++i)
+    for (size_t i = 0; i < arrlen(textscreens) ; ++i)
     {
         textscreen_t *screen = english_language ? 
                                &textscreens[i] :
@@ -206,6 +200,9 @@ void F_StartFinale (void)
     finalecount = 0;
 }
 
+// -----------------------------------------------------------------------------
+// F_Responder
+// -----------------------------------------------------------------------------
 
 boolean F_Responder (event_t *event)
 {
@@ -217,10 +214,10 @@ boolean F_Responder (event_t *event)
     return false;
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // F_Ticker
-//
+// -----------------------------------------------------------------------------
+
 void F_Ticker (void)
 {
     size_t i;
@@ -424,15 +421,14 @@ void F_Ticker (void)
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // F_TextWrite
-//
-void F_TextWrite (void)
+// -----------------------------------------------------------------------------
+
+static void F_TextWrite (void)
 {
     int    w;
-    int    cx;
-    int    cy;
+    int    cx, cy;
     char  *ch;
     signed int count;
 
@@ -518,19 +514,17 @@ void F_TextWrite (void)
 }
 
 
-//
+// =============================================================================
 // Final DOOM 2 animation
-// Casting by id Software.
-//   in order of appearance
-//
+// Casting by id Software. In order of appearance.
+// =============================================================================
 typedef struct
 {
-    char        *name;
+    char       *name;
     mobjtype_t  type;
 } castinfo_t;
 
-
-castinfo_t	castorder[] = {
+static castinfo_t castorder[] = {
     {CC_ZOMBIE,  MT_POSSESSED},
     {CC_SHOTGUN, MT_SHOTGUY},
     {CC_HEAVY,   MT_CHAINGUY},
@@ -552,7 +546,7 @@ castinfo_t	castorder[] = {
     {NULL,0}
 };
 
-castinfo_t	castorder_rus[] = {
+static castinfo_t castorder_rus[] = {
     {CC_ZOMBIE_RUS,  MT_POSSESSED},
     {CC_SHOTGUN_RUS, MT_SHOTGUY},
     {CC_HEAVY_RUS,   MT_CHAINGUY},
@@ -575,7 +569,7 @@ castinfo_t	castorder_rus[] = {
 };
 
 // [JN] Jaguar: own casting order
-castinfo_t	castorder_jaguar[] = {
+static castinfo_t castorder_jaguar[] = {
     {CC_ZOMBIE,  MT_POSSESSED},
     {CC_SHOTGUN, MT_SHOTGUY},
     {CC_IMP,     MT_TROOP},
@@ -587,7 +581,7 @@ castinfo_t	castorder_jaguar[] = {
     {NULL,0}
 };
 
-castinfo_t	castorder_jaguar_russian[] = {
+static castinfo_t castorder_jaguar_russian[] = {
     {CC_ZOMBIE_RUS,  MT_POSSESSED},
     {CC_SHOTGUN_RUS, MT_SHOTGUY},
     {CC_IMP_RUS,     MT_TROOP},
@@ -599,19 +593,16 @@ castinfo_t	castorder_jaguar_russian[] = {
     {NULL,0}
 };
 
-
-int         castnum;
-int         casttics;
-state_t*    caststate;
-boolean     castdeath;
-int         castframes;
-int         castonmelee;
-boolean     castattacking;
+static int      castnum, casttics;
+static int      castframes, castonmelee;
+static state_t *caststate;
+static boolean  castdeath, castattacking;
 
 
-//
+// -----------------------------------------------------------------------------
 // F_StartCast
-//
+// -----------------------------------------------------------------------------
+
 void F_StartCast (void)
 {
     wipegamestate = -1; // force a screen wipe
@@ -619,9 +610,13 @@ void F_StartCast (void)
 
     // [JN] Jaguar Doom: own casting order.
     if (gamemission == jaguar)
-    caststate = &states[mobjinfo[castorder_jaguar[castnum].type].seestate];
+    {
+        caststate = &states[mobjinfo[castorder_jaguar[castnum].type].seestate];
+    }
     else
-    caststate = &states[mobjinfo[castorder[castnum].type].seestate];
+    {
+        caststate = &states[mobjinfo[castorder[castnum].type].seestate];
+    }
 
     casttics = caststate->tics;
     castdeath = false;
@@ -636,11 +631,11 @@ void F_StartCast (void)
                    mus_evil), true);
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // F_CastTicker
-//
-void F_CastTicker (void)
+// -----------------------------------------------------------------------------
+
+static void F_CastTicker (void)
 {
     int st;
     int sfx;
@@ -759,12 +754,11 @@ void F_CastTicker (void)
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // F_CastResponder
-//
+// -----------------------------------------------------------------------------
 
-boolean F_CastResponder (event_t *ev)
+static boolean F_CastResponder (event_t *ev)
 {
     if (ev->type != ev_keydown)
     {
@@ -782,9 +776,13 @@ boolean F_CastResponder (event_t *ev)
 
     // [JN] Jaguar Doom: own casting order. 
     if (gamemission == jaguar)
-    caststate = &states[mobjinfo[castorder_jaguar[castnum].type].deathstate];
+    {
+        caststate = &states[mobjinfo[castorder_jaguar[castnum].type].deathstate];
+    }
     else
-    caststate = &states[mobjinfo[castorder[castnum].type].deathstate];
+    {
+        caststate = &states[mobjinfo[castorder[castnum].type].deathstate];
+    }
 
     casttics = caststate->tics;
     castframes = 0;
@@ -804,8 +802,11 @@ boolean F_CastResponder (event_t *ev)
     return true;
 }
 
+// -----------------------------------------------------------------------------
+// F_CastPrint
+// -----------------------------------------------------------------------------
 
-void F_CastPrint (char *text)
+static void F_CastPrint (char *text)
 {
     int    c;
     int    cx;
@@ -873,10 +874,9 @@ void F_CastPrint (char *text)
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // F_CastDrawer
-//
+// -----------------------------------------------------------------------------
 
 void F_CastDrawer (void)
 {
@@ -905,16 +905,20 @@ void F_CastDrawer (void)
     patch = W_CacheLumpNum (lump+firstspritelump, PU_CACHE);
 
     if (flip)
-    V_DrawPatchFlipped(origwidth/2, 170, patch);
+    {
+        V_DrawPatchFlipped(origwidth/2, 170, patch);
+    }
     else
-    V_DrawPatch(origwidth/2, 170, patch);
+    {
+        V_DrawPatch(origwidth/2, 170, patch);
+    }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // F_DrawPatchCol
-//
-void F_DrawPatchCol (int x, patch_t *patch, int col)
+// -----------------------------------------------------------------------------
+
+static void F_DrawPatchCol (int x, patch_t *patch, int col)
 {
     int        count, f;
     byte      *source;
@@ -949,18 +953,18 @@ void F_DrawPatchCol (int x, patch_t *patch, int col)
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // F_BunnyScroll
-//
-void F_BunnyScroll (void)
+// -----------------------------------------------------------------------------
+
+static void F_BunnyScroll (void)
 {
     signed int          scrolled;
     int                 x;
     int                 initialShift1;
     int                 initialShift2;
-    patch_t*            p1;
-    patch_t*            p2;
+    patch_t            *p1;
+    patch_t            *p2;
     char                name[10];
     unsigned int        stage;
     static unsigned int laststage;
@@ -1064,8 +1068,11 @@ void F_BunnyScroll (void)
         W_CacheLumpName (name,PU_CACHE));
 }
 
+// -----------------------------------------------------------------------------
+// F_ArtScreenDrawer
+// -----------------------------------------------------------------------------
 
-static void F_ArtScreenDrawer(void)
+static void F_ArtScreenDrawer (void)
 {
     if (gameepisode == 3)
     {
@@ -1123,10 +1130,10 @@ static void F_ArtScreenDrawer(void)
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // F_Drawer
-//
+// -----------------------------------------------------------------------------
+
 void F_Drawer (void)
 {
     switch (finalestage)
@@ -1157,10 +1164,11 @@ void F_Drawer (void)
 //
 // =============================================================================
 
-//
-// [JN] F_TextWriteJaguar
-//
-void F_TextWriteJaguar (void)
+// -----------------------------------------------------------------------------
+// F_TextWriteJaguar
+// -----------------------------------------------------------------------------
+
+static void F_TextWriteJaguar (void)
 {
     int         w, cx, cy;
     signed int  count;
@@ -1217,11 +1225,11 @@ void F_TextWriteJaguar (void)
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // [JN] F_CastTickerJaguar
-//
-void F_CastTickerJaguar (void)
+// -----------------------------------------------------------------------------
+
+static void F_CastTickerJaguar (void)
 {
     int st;
     int sfx;
@@ -1311,11 +1319,11 @@ void F_CastTickerJaguar (void)
     casttics = 15;
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // [JN] F_CastPrintJaguar
-//
-void F_CastPrintJaguar (char *text)
+// -----------------------------------------------------------------------------
+
+static void F_CastPrintJaguar (char *text)
 {
     int	     c, cx, w, width;
     char    *ch;
@@ -1379,10 +1387,10 @@ void F_CastPrintJaguar (char *text)
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // [JN] F_CastDrawerJaguar
-//
+// -----------------------------------------------------------------------------
+
 void F_CastDrawerJaguar (void)
 {
     spritedef_t     *sprdef;

@@ -21,7 +21,6 @@
 #ifndef __F_FINALE__
 #define __F_FINALE__
 
-#include "doomtype.h"
 #include "d_event.h"
 
 
@@ -39,4 +38,3 @@ void F_StartFinale (void);
 extern boolean finale_wipe_done;
 
 #endif
-
