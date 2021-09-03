@@ -1030,7 +1030,7 @@ void G_Ticker (void)
 
     if (oldgamestate == GS_INTERMISSION && gamestate != GS_INTERMISSION)
     {
-        WI_End();
+        WI_unloadData();
     }
 
     oldgamestate = gamestate;
