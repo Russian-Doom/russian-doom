@@ -65,76 +65,6 @@ static void wipe_shittyColMajorXform (short *array, int width, int height)
 }
 
 // -----------------------------------------------------------------------------
-// wipe_initColorXForm
-// -----------------------------------------------------------------------------
-
-static int wipe_initColorXForm (int width, int height, int ticks)
-{
-    memcpy(wipe_scr, wipe_scr_start, width * height * sizeof(*wipe_scr));
-    return 0;
-}
-
-// -----------------------------------------------------------------------------
-// wipe_doColorXForm
-// -----------------------------------------------------------------------------
-
-static int wipe_doColorXForm (int width, int height, int ticks)
-{
-    int      newval;
-    byte    *w;
-    byte    *e;
-    boolean  changed;    
-
-    changed = false;
-    w = wipe_scr;
-    e = wipe_scr_end;
-
-    while (w != wipe_scr+width*height)
-    {
-        if (*w != *e)
-        {
-            if (*w > *e)
-            {
-                newval = *w - ticks;
-
-                if (newval < *e)
-                *w = *e;
-                else
-                *w = newval;
-
-                changed = true;
-            }
-            else if (*w < *e)
-            {
-                newval = *w + ticks;
-
-                if (newval > *e)
-                *w = *e;
-
-                else
-                *w = newval;
-
-                changed = true;
-            }
-        }
-
-        w++;
-        e++;
-    }
-
-    return !changed;
-}
-
-// -----------------------------------------------------------------------------
-// wipe_exitColorXForm
-// -----------------------------------------------------------------------------
-
-static int wipe_exitColorXForm (int width, int height, int ticks)
-{
-    return 0;
-}
-
-// -----------------------------------------------------------------------------
 // wipe_initMelt
 // -----------------------------------------------------------------------------
 
@@ -293,15 +223,9 @@ int wipe_EndScreen (int x, int y, int width, int height)
 // wipe_ScreenWipe
 // -----------------------------------------------------------------------------
 
-int wipe_ScreenWipe (int wipeno, int x, int y, int width, int height, int ticks)
+int wipe_ScreenWipe (int x, int y, int width, int height, int ticks)
 {
     int rc;
-
-    static int (*wipes[])(int, int, int) =
-    {
-        wipe_initColorXForm, wipe_doColorXForm, wipe_exitColorXForm,
-        wipe_initMelt, wipe_doMelt, wipe_exitMelt
-    };
 
     ticks <<= hires;
 
@@ -310,18 +234,18 @@ int wipe_ScreenWipe (int wipeno, int x, int y, int width, int height, int ticks)
     {
         go = 1;
         wipe_scr = I_VideoBuffer;
-        (*wipes[wipeno*3])(width, height, ticks);
+        (*wipe_initMelt)(width, height, ticks);
     }
 
     // do a piece of wipe-in
     V_MarkRect(0, 0, width, height);
-    rc = (*wipes[wipeno*3+1])(width, height, ticks);
+    rc = (*wipe_doMelt)(width, height, ticks);
 
     // final stuff
     if (rc)
     {
         go = 0;
-        (*wipes[wipeno*3+2])(width, height, ticks);
+        (*wipe_exitMelt)(width, height, ticks);
     }
 
     // [JN] Draw "Loading" picture
