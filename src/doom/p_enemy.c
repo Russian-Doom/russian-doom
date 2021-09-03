@@ -20,27 +20,13 @@
 //
 
 
-
-#include <stdio.h>
 #include <stdlib.h>
-
 #include "m_random.h"
 #include "i_system.h"
-
-#include "doomdef.h"
 #include "p_local.h"
-
 #include "s_sound.h"
-
 #include "g_game.h"
-
-// State.
 #include "doomstat.h"
-#include "r_state.h"
-
-// Data.
-#include "sounds.h"
-
 #include "jn.h"
 
 
@@ -60,568 +46,593 @@ typedef enum
 } dirtype_t;
 
 
-//
 // P_NewChaseDir related LUT.
-//
-dirtype_t opposite[] =
+static dirtype_t opposite[] =
 {
   DI_WEST, DI_SOUTHWEST, DI_SOUTH, DI_SOUTHEAST,
   DI_EAST, DI_NORTHEAST, DI_NORTH, DI_NORTHWEST, DI_NODIR
 };
 
-dirtype_t diags[] =
+static dirtype_t diags[] =
 {
     DI_NORTHWEST, DI_NORTHEAST, DI_SOUTHWEST, DI_SOUTHEAST
 };
 
+static mobj_t *soundtarget;
 
-
-
+static fixed_t xspeed[8] = {FRACUNIT,47000,0,-47000,-FRACUNIT,-47000,0,47000};
+static fixed_t yspeed[8] = {0,47000,FRACUNIT,47000,0,-47000,-FRACUNIT,-47000};
 
 void A_Fall (mobj_t *actor);
 
 
-//
+// =============================================================================
 // ENEMY THINKING
-// Enemies are allways spawned
-// with targetplayer = -1, threshold = 0
-// Most monsters are spawned unaware of all players,
-// but some can be made preaware
-//
+// Enemies are allways spawned // with targetplayer = -1, threshold = 0
+// Most monsters are spawned unaware of all players, but some can be 
+// made preaware.
+// =============================================================================
 
-
-//
+// -----------------------------------------------------------------------------
 // Called by P_NoiseAlert.
-// Recursively traverse adjacent sectors,
-// sound blocking lines cut off traversal.
-//
+// Recursively traverse adjacent sectors, sound blocking lines cut off traversal.
+// -----------------------------------------------------------------------------
 
-mobj_t*		soundtarget;
-
-void
-P_RecursiveSound
-( sector_t*	sec,
-  int		soundblocks )
+static void P_RecursiveSound (sector_t *sec, int soundblocks)
 {
-    int		i;
-    sector_t*	other;
-	
+    sector_t *other;
+
     // wake up all monsters in this sector
     if (sec->validcount == validcount
-	&& sec->soundtraversed <= soundblocks+1)
+    && sec->soundtraversed <= soundblocks+1)
     {
-	return;		// already flooded
+        return;  // already flooded
     }
-    
+
     sec->validcount = validcount;
     sec->soundtraversed = soundblocks+1;
     sec->soundtarget = soundtarget;
-	
-    for (i=0 ;i<sec->linecount ; i++)
-    {
-	line_t* check = sec->lines[i];
-	if (! (check->flags & ML_TWOSIDED) )
-	    continue;
-	
-	P_LineOpening (check);
 
-	if (openrange <= 0)
-	    continue;	// closed door
-	
-	if ( sides[ check->sidenum[0] ].sector == sec)
-	    other = sides[ check->sidenum[1] ] .sector;
-	else
-	    other = sides[ check->sidenum[0] ].sector;
-	
-	if (check->flags & ML_SOUNDBLOCK)
-	{
-	    if (!soundblocks)
-		P_RecursiveSound (other, 1);
-	}
-	else
-	    P_RecursiveSound (other, soundblocks);
+    for (int i=0 ;i<sec->linecount ; i++)
+    {
+        line_t* check = sec->lines[i];
+
+        if (!(check->flags & ML_TWOSIDED))
+        {
+            continue;
+        }
+
+        P_LineOpening (check);
+
+        if (openrange <= 0)
+        {
+            continue;  // closed door
+        }
+
+        if (sides[check->sidenum[0]].sector == sec)
+        {
+            other = sides[check->sidenum[1]] .sector;
+        }
+        else
+        {
+            other = sides[check->sidenum[0]].sector;
+        }
+
+        if (check->flags & ML_SOUNDBLOCK)
+        {
+            if (!soundblocks)
+            {
+                P_RecursiveSound (other, 1);
+            }
+        }
+        else
+        {
+            P_RecursiveSound (other, soundblocks);
+        }
     }
 }
 
-
-
-//
+// -----------------------------------------------------------------------------
 // P_NoiseAlert
-// If a monster yells at a player,
-// it will alert other monsters to the player.
-//
-void
-P_NoiseAlert
-( mobj_t*	target,
-  mobj_t*	emmiter )
+// If a monster yells at a player, it will alert other monsters to the player.
+// -----------------------------------------------------------------------------
+
+void P_NoiseAlert (mobj_t *target, mobj_t *emmiter)
 {
     soundtarget = target;
     validcount++;
     P_RecursiveSound (emmiter->subsector->sector, 0);
 }
 
-
-
-
-//
+// -----------------------------------------------------------------------------
 // P_CheckMeleeRange
-//
-boolean P_CheckMeleeRange (mobj_t*	actor)
-{
-    mobj_t*	pl;
-    fixed_t	dist;
-	
-    if (!actor->target)
-	return false;
-		
-    pl = actor->target;
-    dist = P_AproxDistance (pl->x-actor->x, pl->y-actor->y);
+// -----------------------------------------------------------------------------
 
+boolean P_CheckMeleeRange (mobj_t *actor)
+{
+    mobj_t*	pl = actor->target;
+    fixed_t	dist = P_AproxDistance (pl->x-actor->x, pl->y-actor->y);
+
+    if (!actor->target)
+    {
+        return false;
+    }
     if (dist >= MELEERANGE-20*FRACUNIT+pl->info->radius)
-	return false;
-	
-    if (! P_CheckSight (actor, actor->target) )
-	return false;
-							
+    {
+        return false;
+    }
+    if (!P_CheckSight (actor, actor->target))
+    {
+        return false;
+    }
+
     // [crispy] height check for melee attacks (from Hexen)
     if (singleplayer && !vanillaparm && over_under && pl->player)
     {
-	// [crispy] Target is higher than the attacker
-	if (pl->z > actor->z + actor->height)
-	{
-	    return false;
-	}
-	// [crispy] Attacker is higher
-	else if (actor->z > pl->z + pl->height)
-	{
-	    return false;
-	}
+        // [crispy] Target is higher than the attacker
+        if (pl->z > actor->z + actor->height)
+        {
+            return false;
+        }
+        // [crispy] Attacker is higher
+        else if (actor->z > pl->z + pl->height)
+        {
+            return false;
+        }
     }
 
     return true;		
 }
 
-//
+// -----------------------------------------------------------------------------
 // P_CheckMissileRange
-//
-boolean P_CheckMissileRange (mobj_t* actor)
+// -----------------------------------------------------------------------------
+
+static boolean P_CheckMissileRange (mobj_t *actor)
 {
-    fixed_t	dist;
-	
-    if (! P_CheckSight (actor, actor->target) )
-	return false;
-	
-    if ( actor->flags & MF_JUSTHIT )
+    fixed_t dist = P_AproxDistance (actor->x-actor->target->x,
+                                    actor->y-actor->target->y) - 64*FRACUNIT;
+
+    if (!P_CheckSight(actor, actor->target))
     {
-	// the target just hit the enemy,
-	// so fight back!
-	actor->flags &= ~MF_JUSTHIT;
-	return true;
+        return false;
     }
-	
+
+    if (actor->flags & MF_JUSTHIT)
+    {
+        // the target just hit the enemy,
+        // so fight back!
+        actor->flags &= ~MF_JUSTHIT;
+        return true;
+    }
+
     if (actor->reactiontime)
-	return false;	// do not attack yet
-		
-    // OPTIMIZE: get this from a global checksight
-    dist = P_AproxDistance ( actor->x-actor->target->x,
-			     actor->y-actor->target->y) - 64*FRACUNIT;
-    
+    {
+        return false;  // do not attack yet
+    }
+
     if (!actor->info->meleestate)
-	dist -= 128*FRACUNIT;	// no melee attack, so fire more
+    {
+        dist -= 128*FRACUNIT;  // no melee attack, so fire more
+    }
 
     dist >>= FRACBITS;
 
     if (actor->type == MT_VILE)
     {
         if (dist > 14*64)
-        return false;   // too far away            
+        {
+            return false;  // too far away            
+        }
     }
-	
 
     if (actor->type == MT_UNDEAD)
     {
-	if (dist < 196)	
-	    return false;	// close for fist attack
-	dist >>= 1;
+        if (dist < 196)
+        {
+            return false;  // close for fist attack
+        }
+        dist >>= 1;
     }
-	
 
     if (actor->type == MT_CYBORG
-	|| actor->type == MT_SPIDER
-	|| actor->type == MT_SKULL)
+    || actor->type == MT_SPIDER
+    || actor->type == MT_SKULL)
     {
-	dist >>= 1;
+        dist >>= 1;
     }
-    
+
     if (dist > 200)
-	dist = 200;
-		
+    {
+        dist = 200;
+    }
+
     if (actor->type == MT_CYBORG && dist > 160)
-	dist = 160;
-		
+    {
+        dist = 160;
+    }
+
     if (P_Random () < dist)
-	return false;
-		
+    {
+        return false;
+    }
+
     return true;
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // P_Move
-// Move in the current direction,
-// returns false if the move is blocked.
-//
-fixed_t	xspeed[8] = {FRACUNIT,47000,0,-47000,-FRACUNIT,-47000,0,47000};
-fixed_t yspeed[8] = {0,47000,FRACUNIT,47000,0,-47000,-FRACUNIT,-47000};
+// Move in the current direction, // returns false if the move is blocked.
+// -----------------------------------------------------------------------------
 
-boolean P_Move (mobj_t*	actor)
+static boolean P_Move (mobj_t*	actor)
 {
-    fixed_t	tryx;
-    fixed_t	tryy;
-    
-    // warning: 'catch', 'throw', and 'try'
-    // are all C++ reserved words
-    boolean	try_ok;
-    boolean	good;
-		
+    // warning: 'catch', 'throw', and 'try' are all C++ reserved words
+    fixed_t tryx, tryy;
+    boolean try_ok, good;
+
     if (actor->movedir == DI_NODIR)
-	return false;
+    {
+        return false;
+    }
 		
     if ((unsigned)actor->movedir >= 8)
-	I_Error (english_language ?
-             "Weird actor->movedir!" :
-             "Некорректный actor->movedir!");
-		
+    {
+	I_Error (english_language ? "Weird actor->movedir!" :
+                                "Некорректный actor->movedir!");
+    }
+
     tryx = actor->x + actor->info->speed*xspeed[actor->movedir];
     tryy = actor->y + actor->info->speed*yspeed[actor->movedir];
-
     try_ok = P_TryMove (actor, tryx, tryy);
 
     if (!try_ok)
     {
-	// open any specials
-	if (actor->flags & MF_FLOAT && floatok)
-	{
-	    // must adjust height
-	    if (actor->z < tmfloorz)
-		actor->z += FLOATSPEED;
-	    else
-		actor->z -= FLOATSPEED;
+        // open any specials
+        if (actor->flags & MF_FLOAT && floatok)
+        {
+            // must adjust height
+            if (actor->z < tmfloorz)
+            {
+                actor->z += FLOATSPEED;
+            }
+            else
+            {
+                actor->z -= FLOATSPEED;
+            }
 
-	    actor->flags |= MF_INFLOAT;
-	    return true;
-	}
-		
-	if (!numspechit)
-	    return false;
-			
-	actor->movedir = DI_NODIR;
-	good = false;
+            actor->flags |= MF_INFLOAT;
+            return true;
+        }
 
-    // [JN] Исправление бага с "застревающими" монстрами в дверных проемах.
-    // https://doomwiki.org/wiki/Monsters_stuck_in_doortracks,_walls_or_hanging_off_lifts
-    // Вызывает рассинхронизацию внутренних демозаписей, поэтому строго для одиночной игры.
-    // Адаптировано из Doom Retro (src/p_enemy.c), спасибо Брэду Хардингу!
+        if (!numspechit)
+        {
+            return false;
+        }
 
-    // if the special is not a door that can be opened, return false
-    //
-    // killough 8/9/98: this is what caused monsters to get stuck in
-    // doortracks, because it thought that the monster freed itself
-    // by opening a door, even if it was moving towards the doortrack,
-    // and not the door itself.
-    //
-    // killough 9/9/98: If a line blocking the monster is activated,
-    // return true 90% of the time. If a line blocking the monster is
-    // not activated, but some other line is, return false 90% of the
-    // time. A bit of randomness is needed to ensure it's free from
-    // lockups, but for most cases, it returns the correct result.
-    //
-    // Do NOT simply return false 1/4th of the time (causes monsters to
-    // back out when they shouldn't, and creates secondary stickiness).
-    if (singleplayer && !vanillaparm)
-    {
-        line_t *blockline = spechit[numspechit];
+        actor->movedir = DI_NODIR;
+        good = false;
 
-        for (good = false; numspechit--;)
-            if (P_UseSpecialLine(actor, spechit[numspechit], 0))
-                good |= spechit[numspechit] == blockline ? 1 : 2;
+        // [JN] Fix monsters being stuck on doortracks.
+        // https://doomwiki.org/wiki/Monsters_stuck_in_doortracks,_walls_or_hanging_off_lifts
+        // Adaptaken from Doom Retro, thanks Brad Harding!
+        //
+        // if the special is not a door that can be opened, return false
+        //
+        // killough 8/9/98: this is what caused monsters to get stuck in
+        // doortracks, because it thought that the monster freed itself
+        // by opening a door, even if it was moving towards the doortrack,
+        // and not the door itself.
+        //
+        // killough 9/9/98: If a line blocking the monster is activated,
+        // return true 90% of the time. If a line blocking the monster is
+        // not activated, but some other line is, return false 90% of the
+        // time. A bit of randomness is needed to ensure it's free from
+        // lockups, but for most cases, it returns the correct result.
+        //
+        // Do NOT simply return false 1/4th of the time (causes monsters to
+        // back out when they shouldn't, and creates secondary stickiness).
+        if (singleplayer && !vanillaparm)
+        {
+            line_t *blockline = spechit[numspechit];
 
-        return (good && ((M_Random() >= 230) ^ (good & 1)));
-    }
+            for (good = false; numspechit--;)
+                if (P_UseSpecialLine(actor, spechit[numspechit], 0))
+                    good |= spechit[numspechit] == blockline ? 1 : 2;
+
+            return (good && ((M_Random() >= 230) ^ (good & 1)));
+        }
     
-	while (numspechit--)
-	{
-	    line_t *ld = spechit[numspechit];
-	    // if the special is not a door
-	    // that can be opened,
-	    // return false
-	    if (P_UseSpecialLine (actor, ld,0))
-		good = true;
-	}
-	return good;
+        while (numspechit--)
+        {
+            line_t *ld = spechit[numspechit];
+            // if the special is not a door
+            // that can be opened,
+            // return false
+            if (P_UseSpecialLine (actor, ld,0))
+            {
+                good = true;
+            }
+        }
+        return good;
     }
     else
     {
-	actor->flags &= ~MF_INFLOAT;
+        actor->flags &= ~MF_INFLOAT;
     }
-	
-	
-    if (! (actor->flags & MF_FLOAT) )	
-	actor->z = actor->floorz;
+
+    if (!(actor->flags & MF_FLOAT))
+    {
+        actor->z = actor->floorz;
+    }
+
     return true; 
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // TryWalk
-// Attempts to move actor on
-// in its current (ob->moveangle) direction.
-// If blocked by either a wall or an actor
-// returns FALSE
-// If move is either clear or blocked only by a door,
-// returns TRUE and sets...
-// If a door is in the way,
-// an OpenDoor call is made to start it opening.
-//
-boolean P_TryWalk (mobj_t* actor)
+// Attempts to move actor on in its current (ob->moveangle) direction.
+// If blocked by either a wall or an actor returns FALSE.
+// If move is either clear or blocked only by a door, returns TRUE and sets...
+// If a door is in the way, an OpenDoor call is made to start it opening.
+// -----------------------------------------------------------------------------
+
+static boolean P_TryWalk (mobj_t *actor)
 {	
     if (!P_Move (actor))
     {
-	return false;
+        return false;
     }
 
     actor->movecount = P_Random()&15;
     return true;
 }
 
+// -----------------------------------------------------------------------------
+// P_NewChaseDir
+// -----------------------------------------------------------------------------
 
-
-
-void P_NewChaseDir (mobj_t*	actor)
+static void P_NewChaseDir (mobj_t *actor)
 {
-    fixed_t	deltax;
-    fixed_t	deltay;
+    int        tdir;
+    fixed_t    deltax, deltay;
+    dirtype_t  d[3];
+    dirtype_t  olddir, turnaround;
     
-    dirtype_t	d[3];
-    
-    int		tdir;
-    dirtype_t	olddir;
-    
-    dirtype_t	turnaround;
-
     if (!actor->target)
-	I_Error (english_language ?
-             "P_NewChaseDir: called with no target" :
-             "P_NewChaseDir: вызов без определения цели");
-		
+    {
+        I_Error (english_language ? "P_NewChaseDir: called with no target" :
+                                    "P_NewChaseDir: вызов без определения цели");
+    }
+
     olddir = actor->movedir;
     turnaround=opposite[olddir];
-
     deltax = actor->target->x - actor->x;
     deltay = actor->target->y - actor->y;
 
     if (deltax>10*FRACUNIT)
-	d[1]= DI_EAST;
+    {
+        d[1]= DI_EAST;
+    }
     else if (deltax<-10*FRACUNIT)
-	d[1]= DI_WEST;
+    {
+        d[1]= DI_WEST;
+    }
     else
-	d[1]=DI_NODIR;
+    {
+        d[1]=DI_NODIR;
+    }
 
     if (deltay<-10*FRACUNIT)
-	d[2]= DI_SOUTH;
+    {
+        d[2]= DI_SOUTH;
+    }
     else if (deltay>10*FRACUNIT)
-	d[2]= DI_NORTH;
+    {
+        d[2]= DI_NORTH;
+    }
     else
-	d[2]=DI_NODIR;
+    {
+        d[2]=DI_NODIR;
+    }
 
     // try direct route
-    if (d[1] != DI_NODIR
-	&& d[2] != DI_NODIR)
+    if (d[1] != DI_NODIR && d[2] != DI_NODIR)
     {
-	actor->movedir = diags[((deltay<0)<<1)+(deltax>0)];
-	if (actor->movedir != (int) turnaround && P_TryWalk(actor))
-	    return;
+        actor->movedir = diags[((deltay<0)<<1)+(deltax>0)];
+
+        if (actor->movedir != (int) turnaround && P_TryWalk(actor))
+        {
+            return;
+        }
     }
 
     // try other directions
-    if (P_Random() > 200
-	||  abs(deltay)>abs(deltax))
+    if (P_Random() > 200 || abs(deltay)>abs(deltax))
     {
-	tdir=d[1];
-	d[1]=d[2];
-	d[2]=tdir;
+        tdir=d[1];
+        d[1]=d[2];
+        d[2]=tdir;
     }
 
     if (d[1]==turnaround)
-	d[1]=DI_NODIR;
+    {
+        d[1]=DI_NODIR;
+    }
     if (d[2]==turnaround)
-	d[2]=DI_NODIR;
+    {
+        d[2]=DI_NODIR;
+    }
 	
     if (d[1]!=DI_NODIR)
     {
-	actor->movedir = d[1];
-	if (P_TryWalk(actor))
-	{
-	    // either moved forward or attacked
-	    return;
-	}
+        actor->movedir = d[1];
+
+        if (P_TryWalk(actor))
+        {
+            // either moved forward or attacked
+            return;
+        }
     }
 
     if (d[2]!=DI_NODIR)
     {
-	actor->movedir =d[2];
+        actor->movedir =d[2];
 
-	if (P_TryWalk(actor))
-	    return;
+        if (P_TryWalk(actor))
+        {
+            return;
+        }
     }
 
-    // there is no direct path to the player,
-    // so pick another direction.
+    // there is no direct path to the player, so pick another direction.
     if (olddir!=DI_NODIR)
     {
-	actor->movedir =olddir;
+        actor->movedir =olddir;
 
-	if (P_TryWalk(actor))
-	    return;
+        if (P_TryWalk(actor))
+        {
+            return;
+        }
     }
 
     // randomly determine direction of search
     if (P_Random()&1) 	
     {
-	for ( tdir=DI_EAST;
-	      tdir<=DI_SOUTHEAST;
-	      tdir++ )
-	{
-	    if (tdir != (int) turnaround)
-	    {
-		actor->movedir =tdir;
-		
-		if ( P_TryWalk(actor) )
-		    return;
-	    }
-	}
+        for (tdir = DI_EAST ; tdir <= DI_SOUTHEAST ; tdir++)
+        {
+            if (tdir != (int) turnaround)
+            {
+                actor->movedir =tdir;
+
+                if (P_TryWalk(actor))
+                {
+                    return;
+                }
+            }
+        }
     }
     else
     {
-	for ( tdir=DI_SOUTHEAST;
-	      tdir != (DI_EAST-1);
-	      tdir-- )
-	{
-	    if (tdir != (int) turnaround)
-	    {
-		actor->movedir = tdir;
-		
-		if ( P_TryWalk(actor) )
-		    return;
-	    }
-	}
+        for (tdir = DI_SOUTHEAST ; tdir != (DI_EAST-1) ; tdir--)
+        {
+            if (tdir != (int) turnaround)
+            {
+                actor->movedir = tdir;
+
+                if (P_TryWalk(actor))
+                {
+                    return;
+                }
+            }
+        }
     }
 
     if (turnaround !=  DI_NODIR)
     {
-	actor->movedir =turnaround;
-	if ( P_TryWalk(actor) )
-	    return;
+        actor->movedir =turnaround;
+
+        if (P_TryWalk(actor))
+        {
+            return;
+        }
     }
 
-    actor->movedir = DI_NODIR;	// can not move
+    actor->movedir = DI_NODIR;  // can not move
 }
 
-
-
-//
+// -----------------------------------------------------------------------------
 // P_LookForPlayers
 // If allaround is false, only look 180 degrees in front.
 // Returns true if a player is targeted.
-//
-boolean
-P_LookForPlayers
-( mobj_t*	actor,
-  boolean	allaround )
+// -----------------------------------------------------------------------------
+
+static boolean P_LookForPlayers (mobj_t *actor, boolean	allaround)
 {
-    int		c;
-    int		stop;
-    player_t*	player;
-    angle_t	an;
-    fixed_t	dist;
+    int       c, stop;
+    angle_t   an;
+    fixed_t   dist;
+    player_t *player;
 
     c = 0;
     stop = (actor->lastlook-1)&3;
-	
-    for ( ; ; actor->lastlook = (actor->lastlook+1)&3 )
+
+    for ( ; ; actor->lastlook = (actor->lastlook+1)&3)
     {
-	if (!playeringame[actor->lastlook])
-	    continue;
-			
-	if (c++ == 2
-	    || actor->lastlook == stop)
-	{
-	    // done looking
-	    return false;	
-	}
-	
-	player = &players[actor->lastlook];
+        if (!playeringame[actor->lastlook])
+        {
+            continue;
+        }
 
-	if (player->health <= 0)
-	    continue;		// dead
+        if (c++ == 2 || actor->lastlook == stop)
+        {
+            return false;  // done looking
+        }
 
-	if (!P_CheckSight (actor, player->mo))
-	    continue;		// out of sight
-			
-	if (!allaround)
-	{
-	    an = R_PointToAngle2 (actor->x,
-				  actor->y, 
-				  player->mo->x,
-				  player->mo->y)
-		- actor->angle;
-	    
-	    if (an > ANG90 && an < ANG270)
-	    {
-		dist = P_AproxDistance (player->mo->x - actor->x,
-					player->mo->y - actor->y);
-		// if real close, react anyway
-		if (dist > MELEERANGE)
-		    continue;	// behind back
-	    }
-	}
-		
-	actor->target = player->mo;
-	return true;
+        player = &players[actor->lastlook];
+
+        if (player->health <= 0)
+        {
+            continue;  // dead
+        }
+
+        if (!P_CheckSight (actor, player->mo))
+        {
+            continue;  // out of sight
+        }
+
+        if (!allaround)
+        {
+            an = R_PointToAngle2 (actor->x, actor->y, 
+                                  player->mo->x, player->mo->y) - actor->angle;
+
+            if (an > ANG90 && an < ANG270)
+            {
+                dist = P_AproxDistance (player->mo->x - actor->x, 
+                                        player->mo->y - actor->y);
+                // if real close, react anyway
+                if (dist > MELEERANGE)
+                {
+                    continue;  // behind back
+                }
+            }
+        }
+
+        actor->target = player->mo;
+        return true;
     }
 
     return false;
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // A_KeenDie
-// DOOM II special, map 32.
-// Uses special tag 666.
-//
-void A_KeenDie (mobj_t* mo)
+// DOOM II special, map 32. Uses special tag 666.
+// -----------------------------------------------------------------------------
+
+void A_KeenDie (mobj_t *mo)
 {
-    thinker_t*	th;
-    mobj_t*	mo2;
-    line_t	junk;
+    line_t     junk;
+    mobj_t    *mo2;
+    thinker_t *th;
 
     A_Fall (mo);
-    
-    // scan the remaining thinkers
-    // to see if all Keens are dead
+
+    // scan the remaining thinkers to see if all Keens are dead
     for (th = thinkercap.next ; th != &thinkercap ; th=th->next)
     {
-	if (th->function.acp1 != (actionf_p1)P_MobjThinker)
-	    continue;
+        if (th->function.acp1 != (actionf_p1)P_MobjThinker)
+        {
+            continue;
+        }
 
-	mo2 = (mobj_t *)th;
-	if (mo2 != mo
-	    && mo2->type == mo->type
-	    && mo2->health > 0)
-	{
-	    // other Keen not dead
-	    return;		
-	}
+        mo2 = (mobj_t *)th;
+
+        if (mo2 != mo && mo2->type == mo->type && mo2->health > 0)
+        {
+            // other Keen not dead
+            return;		
+        }
     }
 
     junk.tag = 666;
@@ -629,71 +640,74 @@ void A_KeenDie (mobj_t* mo)
 }
 
 
-//
+// =============================================================================
 // ACTION ROUTINES
-//
+// =============================================================================
 
-//
+// -----------------------------------------------------------------------------
 // A_Look
 // Stay in state until a player is sighted.
-//
-void A_Look (mobj_t* actor)
+// -----------------------------------------------------------------------------
+
+void A_Look (mobj_t *actor)
 {
-    mobj_t*	targ;
-	
+    mobj_t *targ = actor->subsector->sector->soundtarget;
+
     actor->threshold = 0;	// any shot will wake up
-    targ = actor->subsector->sector->soundtarget;
 
-    if (targ
-	&& (targ->flags & MF_SHOOTABLE) )
+    if (targ && (targ->flags & MF_SHOOTABLE))
     {
-	actor->target = targ;
+        actor->target = targ;
 
-	if ( actor->flags & MF_AMBUSH )
-	{
-	    if (P_CheckSight (actor, actor->target))
-		goto seeyou;
-	}
-	else
-	    goto seeyou;
+        if (actor->flags & MF_AMBUSH)
+        {
+            if (P_CheckSight (actor, actor->target))
+            goto seeyou;
+        }
+        else
+        {
+            goto seeyou;
+        }
     }
 	
-	
-    if (!P_LookForPlayers (actor, false) )
-	return;
+    if (!P_LookForPlayers (actor, false))
+    {
+        return;
+    }
 		
     // go into chase state
-  seeyou:
+    seeyou:
     if (actor->info->seesound)
     {
-	int		sound;
-		
-	switch (actor->info->seesound)
-	{
-	  case sfx_posit1:
-	  case sfx_posit2:
-	  case sfx_posit3:
-	    sound = sfx_posit1+P_Random()%3;
-	    break;
+        int sound;
 
-	  case sfx_bgsit1:
-	  case sfx_bgsit2:
-	    sound = sfx_bgsit1+P_Random()%2;
-	    break;
+        switch (actor->info->seesound)
+        {
+            case sfx_posit1:
+            case sfx_posit2:
+            case sfx_posit3:
+            sound = sfx_posit1+P_Random()%3;
+            break;
 
-	  default:
-	    sound = actor->info->seesound;
-	    break;
-	}
+            case sfx_bgsit1:
+            case sfx_bgsit2:
+            sound = sfx_bgsit1+P_Random()%2;
+            break;
 
-	if (actor->type==MT_SPIDER
-	    || actor->type == MT_CYBORG)
-	{
-	    // full volume
-	    S_StartSound (NULL, sound);
-	}
-	else
-	    S_StartSound (actor, sound);
+            default:
+            sound = actor->info->seesound;
+            break;
+        }
+
+        if (actor->type==MT_SPIDER || actor->type == MT_CYBORG)
+        {
+            // full volume
+            S_StartSound (NULL, sound);
+        }
+        else
+        {
+            S_StartSound (actor, sound);
+        }
     }
 
     // [JN] Original id Software's idea: 
@@ -703,36 +717,37 @@ void A_Look (mobj_t* actor)
     {
         P_NoiseAlert (actor->target, actor);
     }
-    
+
     P_SetMobjState (actor, actor->info->seestate);
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // A_Chase
-// Actor has a melee attack,
-// so it tries to close as fast as possible
-//
-void A_Chase (mobj_t*	actor)
+// Actor has a melee attack, so it tries to close as fast as possible.
+// -----------------------------------------------------------------------------
+
+void A_Chase (mobj_t *actor)
 {
-    int		delta;
+    int delta;
 
     if (actor->reactiontime)
-	actor->reactiontime--;
-				
+    {
+        actor->reactiontime--;
+    }
 
     // modify target threshold
     if  (actor->threshold)
     {
-	if (!actor->target
-	    || actor->target->health <= 0)
-	{
-	    actor->threshold = 0;
-	}
-	else
-	    actor->threshold--;
+        if (!actor->target || actor->target->health <= 0)
+        {
+            actor->threshold = 0;
+        }
+        else
+        {
+            actor->threshold--;
+        }
     }
-    
+
     // [JN] Ultra Nightmare speed multipliers.
     // Adapted from Heretic, thanks Raven Software!
     if (gameskill == sk_ultranm 
@@ -751,114 +766,125 @@ void A_Chase (mobj_t*	actor)
     // turn towards movement direction if not there yet
     if (actor->movedir < 8)
     {
-	actor->angle &= (7<<29);
-	delta = actor->angle - (actor->movedir << 29);
-	
-	if (delta > 0)
-	    actor->angle -= ANG90/2;
-	else if (delta < 0)
-	    actor->angle += ANG90/2;
+        actor->angle &= (7<<29);
+        delta = actor->angle - (actor->movedir << 29);
+
+        if (delta > 0)
+        {
+            actor->angle -= ANG90/2;
+        }
+        else if (delta < 0)
+        {
+            actor->angle += ANG90/2;
+        }
     }
 
-    if (!actor->target
-	|| !(actor->target->flags&MF_SHOOTABLE))
+    if (!actor->target || !(actor->target->flags&MF_SHOOTABLE))
     {
-	// look for a new target
-	if (P_LookForPlayers(actor,true))
-	    return; 	// got a new target
+        // look for a new target
+        if (P_LookForPlayers(actor,true))
+        {
+            return;  // got a new target
+        }
 	
-	P_SetMobjState (actor, actor->info->spawnstate);
-	return;
+        P_SetMobjState (actor, actor->info->spawnstate);
+        return;
     }
-    
+
     // do not attack twice in a row
     if (actor->flags & MF_JUSTATTACKED)
     {
-	actor->flags &= ~MF_JUSTATTACKED;
-	if (gameskill != sk_nightmare && gameskill != sk_ultranm && !fastparm)
-	    P_NewChaseDir (actor);
-	return;
-    }
-    
-    // check for melee attack
-    if (actor->info->meleestate
-	&& P_CheckMeleeRange (actor))
-    {
-	if (actor->info->attacksound)
-	    S_StartSound (actor, actor->info->attacksound);
+        actor->flags &= ~MF_JUSTATTACKED;
+        if (gameskill != sk_nightmare && gameskill != sk_ultranm && !fastparm)
+        {
+            P_NewChaseDir (actor);
+        }
 
-	P_SetMobjState (actor, actor->info->meleestate);
-	return;
+        return;
     }
-    
+
+    // check for melee attack
+    if (actor->info->meleestate && P_CheckMeleeRange (actor))
+    {
+        if (actor->info->attacksound)
+        {
+            S_StartSound (actor, actor->info->attacksound);
+        }
+
+        P_SetMobjState (actor, actor->info->meleestate);
+
+        return;
+    }
+
     // check for missile attack
     if (actor->info->missilestate)
     {
-	if (gameskill < sk_nightmare
-	    && !fastparm && actor->movecount)
-	{
-	    goto nomissile;
-	}
-	
-	if (!P_CheckMissileRange (actor))
-	    goto nomissile;
-	
-	P_SetMobjState (actor, actor->info->missilestate);
-	actor->flags |= MF_JUSTATTACKED;
-	return;
+        if (gameskill < sk_nightmare && !fastparm && actor->movecount)
+        {
+            goto nomissile;
+        }
+
+        if (!P_CheckMissileRange (actor))
+        {
+            goto nomissile;
+        }
+
+        P_SetMobjState (actor, actor->info->missilestate);
+        actor->flags |= MF_JUSTATTACKED;
+
+        return;
     }
 
     // ?
-  nomissile:
+    nomissile:
     // possibly choose another target
-    if (netgame
-	&& !actor->threshold
-	&& !P_CheckSight (actor, actor->target) )
+    if (netgame && !actor->threshold && !P_CheckSight (actor, actor->target))
     {
-	if (P_LookForPlayers(actor,true))
-	    return;	// got a new target
+        if (P_LookForPlayers(actor,true))
+        {
+            return;  // got a new target
+        }
     }
-    
+
     // chase towards player
-    if (--actor->movecount<0
-	|| !P_Move (actor))
+    if (--actor->movecount < 0 || !P_Move (actor))
     {
-	P_NewChaseDir (actor);
+        P_NewChaseDir (actor);
     }
-    
+
     // make active sound
-    if (actor->info->activesound
-	&& P_Random () < 3)
+    if (actor->info->activesound && P_Random () < 3)
     {
-	S_StartSound (actor, actor->info->activesound);
+        S_StartSound (actor, actor->info->activesound);
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // A_FaceTarget
-//
-void A_FaceTarget (mobj_t* actor)
-{	
+// -----------------------------------------------------------------------------
+
+void A_FaceTarget (mobj_t *actor)
+{
     if (!actor->target)
-	return;
-    
+    {
+        return;
+    }
+
     actor->flags &= ~MF_AMBUSH;
-	
-    actor->angle = R_PointToAngle2 (actor->x,
-				    actor->y,
-				    actor->target->x,
-				    actor->target->y);
-    
+    actor->angle = R_PointToAngle2 (actor->x, actor->y, 
+                                    actor->target->x, actor->target->y);
+
     if (actor->target->flags & MF_SHADOW)
-	actor->angle += P_SubRandom() << 21;
+    {
+        actor->angle += P_SubRandom() << 21;
+    }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // A_PosAttack
-//
-void A_PosAttack (mobj_t* actor)
+// -----------------------------------------------------------------------------
+
+void A_PosAttack (mobj_t * actor)
 {
     int		angle;
     int		damage;
@@ -1974,43 +2000,6 @@ void A_BabyMetal (mobj_t* mo)
 {
     S_StartSound (mo, sfx_bspwlk);
     A_Chase (mo);
-}
-
-void
-A_OpenShotgun2
-( mobj_t*	mobj,
-  player_t*	player,
-  pspdef_t*	psp )
-{
-    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
-    S_StartSound (player->mo, sfx_dbopn);
-}
-
-void
-A_LoadShotgun2
-( mobj_t*	mobj,
-  player_t*	player,
-  pspdef_t*	psp )
-{
-    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
-    S_StartSound (player->mo, sfx_dbload);
-}
-
-void
-A_ReFire
-( mobj_t*	mobj,
-  player_t*	player,
-  pspdef_t*	psp );
-
-void
-A_CloseShotgun2
-( mobj_t*	mobj,
-  player_t*	player,
-  pspdef_t*	psp )
-{
-    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
-    S_StartSound (player->mo, sfx_dbcls);
-    A_ReFire(NULL,player,psp); // [crispy] let pspr action pointers get called from mobj states
 }
 
 
