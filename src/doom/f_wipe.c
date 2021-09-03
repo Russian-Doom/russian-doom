@@ -19,14 +19,12 @@
 
 
 #include <stdlib.h>     // [JN] rand()
-#include <string.h>
-
 #include "z_zone.h"
 #include "i_video.h"
 #include "v_video.h"
 #include "m_random.h"
-#include "doomtype.h"
 #include "f_wipe.h"
+#include "deh_str.h"
 #include "d_mode.h"     // [JN] Jaguar Doom: gamemission
 #include "w_wad.h"      // [JN] Jaguar Doom: W_CacheLumpName
 #include "doomstat.h"   // [JN] Jaguar Doom: screenblocks
@@ -35,12 +33,9 @@
 #include "jn.h"         // [JN] Jaguar Doom: english_language
 
 
-extern char *DEH_String(char *s);
-
-
-//
+// =============================================================================
 // SCREEN WIPE PACKAGE
-//
+// =============================================================================
 
 // when zero, stop the wipe
 static boolean go = 0;
@@ -52,7 +47,11 @@ static byte *wipe_scr;
 static int  *y;
 
 
-void wipe_shittyColMajorXform (short *array, int width, int height)
+// -----------------------------------------------------------------------------
+// wipe_shittyColMajorXform
+// -----------------------------------------------------------------------------
+
+static void wipe_shittyColMajorXform (short *array, int width, int height)
 {
     short *dest = (short*) Z_Malloc(width * height * sizeof(*dest), PU_STATIC, 0);
 
@@ -65,15 +64,21 @@ void wipe_shittyColMajorXform (short *array, int width, int height)
     Z_Free(dest);
 }
 
+// -----------------------------------------------------------------------------
+// wipe_initColorXForm
+// -----------------------------------------------------------------------------
 
-int wipe_initColorXForm (int width, int height, int ticks)
+static int wipe_initColorXForm (int width, int height, int ticks)
 {
     memcpy(wipe_scr, wipe_scr_start, width * height * sizeof(*wipe_scr));
     return 0;
 }
 
+// -----------------------------------------------------------------------------
+// wipe_doColorXForm
+// -----------------------------------------------------------------------------
 
-int wipe_doColorXForm (int width, int height, int ticks)
+static int wipe_doColorXForm (int width, int height, int ticks)
 {
     int      newval;
     byte    *w;
@@ -120,13 +125,20 @@ int wipe_doColorXForm (int width, int height, int ticks)
     return !changed;
 }
 
-int wipe_exitColorXForm (int width, int height, int ticks)
+// -----------------------------------------------------------------------------
+// wipe_exitColorXForm
+// -----------------------------------------------------------------------------
+
+static int wipe_exitColorXForm (int width, int height, int ticks)
 {
     return 0;
 }
 
+// -----------------------------------------------------------------------------
+// wipe_initMelt
+// -----------------------------------------------------------------------------
 
-int wipe_initMelt (int width, int height, int ticks)
+static int wipe_initMelt (int width, int height, int ticks)
 {
     int i;
 
@@ -157,8 +169,11 @@ int wipe_initMelt (int width, int height, int ticks)
     return 0;
 }
 
+// -----------------------------------------------------------------------------
+// wipe_doMelt
+// -----------------------------------------------------------------------------
 
-int wipe_doMelt (int width, int height, int ticks)
+static int wipe_doMelt (int width, int height, int ticks)
 {
     int     i;
     int     j;
@@ -229,8 +244,11 @@ int wipe_doMelt (int width, int height, int ticks)
     return done;
 }
 
+// -----------------------------------------------------------------------------
+// wipe_exitMelt
+// -----------------------------------------------------------------------------
 
-int wipe_exitMelt (int width, int height, int ticks)
+static int wipe_exitMelt (int width, int height, int ticks)
 {
     Z_Free(y);
     Z_Free(wipe_scr_start);
@@ -246,6 +264,9 @@ int wipe_exitMelt (int width, int height, int ticks)
     return 0;
 }
 
+// -----------------------------------------------------------------------------
+// wipe_StartScreen
+// -----------------------------------------------------------------------------
 
 int wipe_StartScreen (int x, int y, int width, int height)
 {
@@ -255,6 +276,9 @@ int wipe_StartScreen (int x, int y, int width, int height)
     return 0;
 }
 
+// -----------------------------------------------------------------------------
+// wipe_EndScreen
+// -----------------------------------------------------------------------------
 
 int wipe_EndScreen (int x, int y, int width, int height)
 {
@@ -265,6 +289,9 @@ int wipe_EndScreen (int x, int y, int width, int height)
     return 0;
 }
 
+// -----------------------------------------------------------------------------
+// wipe_ScreenWipe
+// -----------------------------------------------------------------------------
 
 int wipe_ScreenWipe (int wipeno, int x, int y, int width, int height, int ticks)
 {
@@ -307,4 +334,3 @@ int wipe_ScreenWipe (int wipeno, int x, int y, int width, int height, int ticks)
     
     return !go;
 }
-
