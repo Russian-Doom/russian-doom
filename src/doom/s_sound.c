@@ -28,7 +28,6 @@
 #include "p_local.h"
 #include "w_wad.h"
 #include "z_zone.h"
-#include "crispy.h"
 #include "jn.h"
 
 // When to clip out sounds. Does not fit the large outdoor areas.

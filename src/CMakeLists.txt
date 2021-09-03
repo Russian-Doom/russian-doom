@@ -6,7 +6,6 @@ endforeach()
 
 # Common library
 add_library(Common STATIC EXCLUDE_FROM_ALL
-                         crispy.h
                          jn.h
     i_system.c           i_system.h
     m_argv.c             m_argv.h

@@ -28,7 +28,6 @@
 #include "s_sound.h"
 #include "doomstat.h"
 #include "f_finale.h"
-#include "crispy.h"
 #include "jn.h"
 
 

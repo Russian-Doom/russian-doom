@@ -22,7 +22,6 @@
 #include "doomstat.h"
 #include "r_local.h"
 #include "r_bmaps.h"
-#include "crispy.h"
 #include "jn.h"
 
 

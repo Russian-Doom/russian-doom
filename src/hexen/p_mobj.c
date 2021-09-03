@@ -25,7 +25,6 @@
 #include "p_local.h"
 #include "s_sound.h"
 #include "sounds.h"
-#include "crispy.h"
 
 // MACROS ------------------------------------------------------------------
 

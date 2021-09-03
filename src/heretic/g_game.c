@@ -32,7 +32,6 @@
 #include "rd_keybinds.h"
 #include "s_sound.h"
 #include "v_video.h"
-#include "crispy.h"
 #include "jn.h"
 
 // Functions

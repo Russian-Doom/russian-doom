@@ -51,7 +51,6 @@
 #include "rd_keybinds.h"
 #include "rd_lang.h"
 #include "rd_menu.h"
-#include "crispy.h"
 #include "jn.h"
 
 #define LINEHEIGHT      16

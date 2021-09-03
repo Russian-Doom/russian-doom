@@ -36,7 +36,6 @@
 #include "s_sound.h"
 #include "rd_lang.h"
 #include "r_swirl.h"
-#include "crispy.h"
 #include "jn.h"
 
 

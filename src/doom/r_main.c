@@ -32,7 +32,6 @@
 #include "g_game.h"
 #include "z_zone.h"
 #include "v_video.h"
-#include "crispy.h"
 #include "jn.h"
 
 

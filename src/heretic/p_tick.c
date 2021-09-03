@@ -22,7 +22,7 @@
 #include "i_system.h"
 #include "p_local.h"
 #include "v_video.h"
-#include "crispy.h"
+#include "jn.h"
 
 int leveltime;
 int TimerGame;

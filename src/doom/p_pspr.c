@@ -37,7 +37,6 @@
 
 #include "p_pspr.h"
 
-#include "crispy.h"
 #include "jn.h"
 
 #define LOWERSPEED		FRACUNIT*6

@@ -50,7 +50,6 @@
 #include "sounds.h"
 #include "r_data.h"
 #include "g_game.h"
-#include "crispy.h"
 #include "jn.h"
 
 #define MAXPLMOVE       (forwardmove[1]) 

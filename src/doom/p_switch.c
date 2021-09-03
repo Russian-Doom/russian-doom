@@ -26,7 +26,6 @@
 #include "g_game.h"
 #include "s_sound.h"
 #include "doomstat.h"
-#include "crispy.h"
 #include "jn.h"
 
 

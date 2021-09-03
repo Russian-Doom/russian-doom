@@ -26,7 +26,6 @@
 #include "p_local.h"
 #include "s_sound.h"
 #include "rd_lang.h"
-#include "crispy.h"
 #include "jn.h"
 
 #define BONUSADD 6

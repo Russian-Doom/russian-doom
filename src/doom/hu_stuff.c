@@ -43,7 +43,6 @@
 #include "rd_lang.h"
 #include "sounds.h"
 
-#include "crispy.h"
 #include "jn.h"
 
 

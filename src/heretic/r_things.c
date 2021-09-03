@@ -24,7 +24,6 @@
 #include "i_system.h"
 #include "r_local.h"
 #include "v_trans.h"
-#include "crispy.h"
 #include "jn.h"
 
 

@@ -31,7 +31,6 @@
 #include "s_sound.h"
 #include "doomstat.h"
 #include "p_fix.h"
-#include "crispy.h"
 #include "jn.h"
 
 // [crispy] support maps with compressed ZDBSP nodes

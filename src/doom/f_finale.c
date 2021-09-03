@@ -30,7 +30,6 @@
 #include "doomstat.h"
 #include "r_main.h"
 #include "hu_stuff.h"
-#include "crispy.h"
 #include "jn.h"
 
 

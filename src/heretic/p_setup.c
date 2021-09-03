@@ -30,7 +30,6 @@
 #include "p_fix.h"
 #include "p_local.h"
 #include "s_sound.h"
-#include "crispy.h"
 #include "jn.h"
 
 // [crispy] support maps with compressed ZDBSP nodes

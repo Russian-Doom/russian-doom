@@ -21,7 +21,6 @@
 #include "doomdef.h"
 #include "m_bbox.h"
 #include "p_local.h"
-#include "crispy.h"
 #include "jn.h"
 
 

@@ -22,7 +22,6 @@ AM_CFLAGS = -I$(top_srcdir)/textscreen            \
 # Common source files used by absolutely everything:
 
 COMMON_SOURCE_FILES=\
-                     crispy.h              \
                      jn.h                  \
 i_system.c           i_system.h            \
 m_argv.c             m_argv.h              \

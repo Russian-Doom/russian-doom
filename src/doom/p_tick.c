@@ -22,7 +22,7 @@
 #include "z_zone.h"
 #include "p_local.h"
 #include "doomstat.h"
-#include "crispy.h"
+#include "jn.h"
 
 
 int	leveltime;

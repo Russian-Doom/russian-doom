@@ -32,7 +32,6 @@
 #include "st_stuff.h"
 #include "wi_stuff.h"
 #include "rd_text.h"
-#include "crispy.h"
 #include "jn.h"
 
 // [JN] Jaguar: prototypes

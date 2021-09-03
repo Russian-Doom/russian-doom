@@ -40,7 +40,6 @@
 #include "rd_keybinds.h"
 #include "rd_menu.h"
 #include "rd_rushexen.h"
-#include "crispy.h"
 #include "jn.h"
 
 // MACROS ------------------------------------------------------------------

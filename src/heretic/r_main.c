@@ -26,7 +26,6 @@
 #include "p_local.h"
 #include "tables.h"
 #include "i_timer.h"
-#include "crispy.h"
 #include "jn.h"
 
 int viewangleoffset;

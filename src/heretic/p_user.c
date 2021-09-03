@@ -25,7 +25,6 @@
 #include "m_random.h"
 #include "p_local.h"
 #include "s_sound.h"
-#include "crispy.h" // BETWEEN
 #include "jn.h"
 
 void P_PlayerNextArtifact(player_t * player);

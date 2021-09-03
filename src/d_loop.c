@@ -44,7 +44,6 @@
 #include "net_sdl.h"
 #include "net_loop.h"
 
-#include "crispy.h"
 #include "jn.h"
 
 

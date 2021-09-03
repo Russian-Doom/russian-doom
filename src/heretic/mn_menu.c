@@ -43,7 +43,6 @@
 #include "s_sound.h"
 #include "v_trans.h"
 #include "v_video.h"
-#include "crispy.h"
 #include "jn.h"
 
 // Macros

@@ -24,7 +24,6 @@
 #include "p_local.h"
 #include "sounds.h"
 #include "r_state.h"
-#include "crispy.h"
 #include "jn.h"
 
 

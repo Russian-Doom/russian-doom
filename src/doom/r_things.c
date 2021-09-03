@@ -26,7 +26,6 @@
 #include "r_local.h"
 #include "doomstat.h"
 #include "v_trans.h"
-#include "crispy.h"
 #include "jn.h"
 
 

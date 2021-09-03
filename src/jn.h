@@ -1,5 +1,6 @@
 //
-// Copyright(C) 2018-2019 Julian Nechaevsky
+// Copyright(C) 2014 Fabian Greffrath
+// Copyright(C) 2018-2021 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -18,6 +19,31 @@
 
 #ifndef __JN_H__
 #define __JN_H__
+
+#include "doomtype.h"
+
+
+#ifndef MIN
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#endif
+#ifndef MAX
+#define MAX(a,b) (((a)>(b))?(a):(b))
+#endif
+#ifndef BETWEEN
+#define BETWEEN(l,u,x) (((l)>(x))?(l):((x)>(u))?(u):(x))
+#endif
+
+#define singleplayer (!demorecording && !demoplayback && !netgame)
+
+void *crispy_realloc (void *ptr, size_t size);
+
+enum
+{
+	REINIT_FRAMEBUFFERS = 1,
+	REINIT_RENDERER = 2,
+	REINIT_TEXTURES = 4,
+	REINIT_ASPECTRATIO = 8,
+};
 
 
 // -----------------------------------------------------------------------------
