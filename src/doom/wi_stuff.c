@@ -1822,14 +1822,19 @@ static void WI_checkForAccelerate (void)
         if (playeringame[i])
         {
             // [JN] Don't allow to skip by pressing "pause" button.
-            if (player->cmd.buttons == (BT_SPECIAL | BTS_PAUSE))
+            if (player->cmd.buttons == (BT_SPECIAL | BTS_PAUSE) && singleplayer)
             {
                 continue;
             }
 
-            // [JN] Don't allow to skip intermission stats while active menu
-            if (player->cmd.buttons & BT_ATTACK && !menuactive)
+            if (player->cmd.buttons & BT_ATTACK)
             {
+                // [JN] Don't allow to skip intermission stats while active menu
+                if (singleplayer && menuactive)
+                {
+                    continue;
+                }
+
                 if (!player->attackdown)
                 {
                     acceleratestage = 1;
@@ -1841,9 +1846,14 @@ static void WI_checkForAccelerate (void)
                 player->attackdown = false;
             }
 
-            // [JN] Don't allow to skip intermission stats while active menu
-            if (player->cmd.buttons & BT_USE && !menuactive)
+            if (player->cmd.buttons & BT_USE)
             {
+                // [JN] Don't allow to skip intermission stats while active menu
+                if (singleplayer && menuactive)
+                {
+                    continue;
+                }
+
                 if (!player->usedown)
                 {
                     acceleratestage = 1;
