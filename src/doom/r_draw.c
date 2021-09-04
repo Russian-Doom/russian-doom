@@ -113,8 +113,8 @@ void R_DrawColumn (void)
 { 
     int      count = dc_yh - dc_yl;
     int      heightmask = dc_texheight-1;
-    byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
+    byte    *dest;
+    fixed_t  frac;
 
     // Zero length, column does not exceed a pixel.
     if (count < 0)
@@ -131,6 +131,9 @@ void R_DrawColumn (void)
                  dc_yl, dc_yh, dc_x);
     }
 #endif
+
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     // Inner loop that does the actual texture mapping, e.g. a DDA-lile scaling.
     // This is as fast as it gets.
@@ -175,11 +178,8 @@ void R_DrawColumnLow (void)
 { 
     int      x = dc_x << 1;  // Blocky mode, need to multiply by 2.
     int      count = dc_yh - dc_yl; 
-    byte    *dest = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
+    byte    *dest, *dest2, *dest3, *dest4;
+    fixed_t  frac;
     int      heightmask = dc_texheight - 1;
 
     // Zero length.
@@ -197,6 +197,13 @@ void R_DrawColumnLow (void)
                  dc_yl, dc_yh, dc_x);
     }
 #endif 
+
+    dest = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (dc_texheight & heightmask) // not a power of 2 -- killough
     {
@@ -266,7 +273,7 @@ void R_SetFuzzPosDraw (void)
 void R_DrawFuzzColumn (void) 
 { 
     int      count;
-    byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    byte    *dest;
     boolean  cutoff = false;
 
     // Adjust borders. Low... 
@@ -298,6 +305,8 @@ void R_DrawFuzzColumn (void)
                  "R_DrawFuzzColumn: %i к %i у %i", dc_yl, dc_yh, dc_x);
     }
 #endif
+
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
 
     // Looks like an attempt at dithering, 
     //  using the colormap #6 (of 0-31, a bit
@@ -333,10 +342,7 @@ void R_DrawFuzzColumnLow (void)
 { 
     int      count; 
     int      x = dc_x << 1;  // low detail mode, need to multiply by 2
-    byte    *dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    byte    *dest, *dest2, *dest3, *dest4;
     boolean  cutoff = false;
 
     // Adjust borders. Low... 
@@ -365,6 +371,11 @@ void R_DrawFuzzColumnLow (void)
                  dc_yl, dc_yh, dc_x);
     }
 #endif
+
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
 
     do 
     {
@@ -399,7 +410,7 @@ void R_DrawFuzzColumnLow (void)
 void R_DrawFuzzColumnBW (void) 
 { 
     int      count; 
-    byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    byte    *dest;
     boolean  cutoff = false;
     const boolean greenfuzz = infragreen_visor 
                             &&  players[consoleplayer].powers[pw_infrared]
@@ -428,6 +439,8 @@ void R_DrawFuzzColumnBW (void)
     }
 #endif
 
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+
     do 
     {
         *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256
@@ -450,10 +463,7 @@ void R_DrawFuzzColumnLowBW (void)
 { 
     int      count; 
     int      x = dc_x << 1;
-    byte    *dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    byte    *dest, *dest2, *dest3, *dest4;
     boolean  cutoff = false;
     const boolean greenfuzz = infragreen_visor 
                             && players[consoleplayer].powers[pw_infrared]
@@ -482,6 +492,11 @@ void R_DrawFuzzColumnLowBW (void)
                  dc_yl, dc_yh, dc_x);
     }
 #endif
+
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
 
     do 
     {
@@ -517,7 +532,7 @@ void R_DrawFuzzColumnLowBW (void)
 void R_DrawFuzzColumnImproved (void)
 { 
     int      count; 
-    byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]]; 
+    byte    *dest; 
     boolean  cutoff = false;
 
     if (!dc_yl) 
@@ -543,6 +558,8 @@ void R_DrawFuzzColumnImproved (void)
     }
 #endif
 
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]]; 
+
     do 
     {
         *dest = colormaps[6*256+dest[screenwidth*fuzzoffset[fuzzpos]]]; 
@@ -563,10 +580,7 @@ void R_DrawFuzzColumnLowImproved (void)
 { 
     int      count; 
     int      x = dc_x << 1;
-    byte    *dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    byte    *dest, *dest2, *dest3, *dest4;
     boolean  cutoff = false;
 
     if (!dc_yl) 
@@ -592,6 +606,11 @@ void R_DrawFuzzColumnLowImproved (void)
                  dc_yl, dc_yh, dc_x);
     }
 #endif
+
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
 
     do 
     {
@@ -621,7 +640,7 @@ void R_DrawFuzzColumnLowImproved (void)
 void R_DrawFuzzColumnImprovedBW (void)
 { 
     int     count; 
-    byte*   dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    byte   *dest;
     boolean cutoff = false;
     const boolean greenfuzz = infragreen_visor 
                             && players[consoleplayer].powers[pw_infrared]
@@ -650,6 +669,8 @@ void R_DrawFuzzColumnImprovedBW (void)
     }
 #endif
 
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+
     do 
     {
         *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256+dest[screenwidth*fuzzoffset[fuzzpos]]]; 
@@ -671,10 +692,7 @@ void R_DrawFuzzColumnLowImprovedBW (void)
 { 
     int      count; 
     int      x = dc_x << 1;
-    byte    *dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    byte    *dest, *dest2, *dest3, *dest4;
     boolean  cutoff = false;
     const boolean greenfuzz = infragreen_visor 
                             && players[consoleplayer].powers[pw_infrared]
@@ -703,6 +721,11 @@ void R_DrawFuzzColumnLowImprovedBW (void)
                  dc_yl, dc_yh, dc_x);
     }
 #endif
+
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
 
     do 
     {
@@ -739,8 +762,8 @@ void R_DrawFuzzColumnTranslucent (void)
 {
     int      count = dc_yh - dc_yl;
     int      heightmask = dc_texheight-1;
-    byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
+    byte    *dest;
+    fixed_t  frac;
 
     if (count < 0)
     {
@@ -756,6 +779,9 @@ void R_DrawFuzzColumnTranslucent (void)
                  dc_yl, dc_yh, dc_x);
     }
 #endif
+
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (dc_texheight & heightmask)   // not a power of 2 -- killough
     {
@@ -793,11 +819,8 @@ void R_DrawFuzzColumnTranslucentLow (void)
     int      count = dc_yh - dc_yl;
     int      heightmask = dc_texheight - 1;
     int      x = dc_x << 1;
-    byte    *dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
+    byte    *dest, *dest2, *dest3, *dest4;
+    fixed_t  frac;
 
     if (count < 0)
     return;
@@ -811,6 +834,12 @@ void R_DrawFuzzColumnTranslucentLow (void)
                  dc_yl, dc_yh, x);
     }
 #endif
+
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (dc_texheight & heightmask) // not a power of 2 -- killough
     {
@@ -873,8 +902,8 @@ void R_DrawFuzzColumnTranslucentLow (void)
 void R_DrawTranslatedColumn (void) 
 { 
     int      count = dc_yh - dc_yl; 
-    byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale; 
+    byte    *dest;
+    fixed_t  frac;
 
     if (count < 0)
     {
@@ -890,6 +919,9 @@ void R_DrawTranslatedColumn (void)
                  dc_yl, dc_yh, dc_x);
     }    
 #endif 
+
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale; 
 
     // Here we do an additional index re-mapping.
     do 
@@ -912,11 +944,8 @@ void R_DrawTranslatedColumnLow (void)
 {
     int     x = dc_x << 1;  // low detail, need to scale by 2
     int     count = dc_yh - dc_yl; 
-    byte*   dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    byte*   dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    byte*   dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    byte*   dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-    fixed_t frac  = dc_texturemid + (dc_yl-centery)*dc_iscale; 
+    byte   *dest, *dest2, *dest3, *dest4;
+    fixed_t frac;
 
     if (count < 0)
     {
@@ -932,6 +961,12 @@ void R_DrawTranslatedColumnLow (void)
                  dc_yl, dc_yh, x);
     }
 #endif 
+
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    frac  = dc_texturemid + (dc_yl-centery)*dc_iscale; 
 
     // Here we do an additional index re-mapping.
     do 
@@ -955,8 +990,8 @@ void R_DrawTLColumn (void)
 {
     int      count = dc_yh - dc_yl;
     int      heightmask = dc_texheight-1;
-    byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
+    byte    *dest;
+    fixed_t  frac;
 
     if (count < 0)
     {
@@ -972,6 +1007,9 @@ void R_DrawTLColumn (void)
                  dc_yl, dc_yh, dc_x);
     }
 #endif
+
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (dc_texheight & heightmask)   // not a power of 2 -- killough
     {
@@ -1014,11 +1052,8 @@ void R_DrawTLColumnLow (void)
     int     x = dc_x << 1;
     int     count = dc_yh - dc_yl;
     int     heightmask = dc_texheight - 1;
-    byte*   dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    byte*   dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    byte*   dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    byte*   dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-    fixed_t frac  = dc_texturemid + (dc_yl-centery)*dc_iscale;
+    byte   *dest, *dest2, *dest3, *dest4;
+    fixed_t frac;
 
     if (count < 0)
     {
@@ -1035,7 +1070,13 @@ void R_DrawTLColumnLow (void)
     }
 #endif
 
-     if (dc_texheight & heightmask) // not a power of 2 -- killough
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    frac  = dc_texturemid + (dc_yl-centery)*dc_iscale;
+
+    if (dc_texheight & heightmask) // not a power of 2 -- killough
     {
         heightmask++;
         heightmask <<= FRACBITS;
