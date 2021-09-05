@@ -97,6 +97,7 @@ void A_Fall (mobj_t *actor);
 
 static void P_RecursiveSound (sector_t *sec, int soundblocks)
 {
+    line_t   *check;
     sector_t *other;
 
     // wake up all monsters in this sector
@@ -112,7 +113,7 @@ static void P_RecursiveSound (sector_t *sec, int soundblocks)
 
     for (int i=0 ;i<sec->linecount ; i++)
     {
-        line_t* check = sec->lines[i];
+        check = sec->lines[i];
 
         if (!(check->flags & ML_TWOSIDED))
         {
@@ -167,13 +168,17 @@ void P_NoiseAlert (mobj_t *target, mobj_t *emmiter)
 
 boolean P_CheckMeleeRange (mobj_t *actor)
 {
-    mobj_t*	pl = actor->target;
-    fixed_t	dist = P_AproxDistance (pl->x-actor->x, pl->y-actor->y);
+    mobj_t  *pl;
+    fixed_t  dist;
 
     if (!actor->target)
     {
         return false;
     }
+
+    pl = actor->target;
+    dist = P_AproxDistance (pl->x-actor->x, pl->y-actor->y);
+
     if (dist >= MELEERANGE-20*FRACUNIT+pl->info->radius)
     {
         return false;
@@ -207,8 +212,7 @@ boolean P_CheckMeleeRange (mobj_t *actor)
 
 static boolean P_CheckMissileRange (mobj_t *actor)
 {
-    fixed_t dist = P_AproxDistance (actor->x-actor->target->x,
-                                    actor->y-actor->target->y) - 64*FRACUNIT;
+    fixed_t dist;
 
     if (!P_CheckSight(actor, actor->target))
     {
@@ -227,6 +231,10 @@ static boolean P_CheckMissileRange (mobj_t *actor)
     {
         return false;  // do not attack yet
     }
+
+    // OPTIMIZE: get this from a global checksight
+    dist = P_AproxDistance (actor->x-actor->target->x, 
+                            actor->y-actor->target->y) - 64*FRACUNIT;
 
     if (!actor->info->meleestate)
     {
@@ -668,9 +676,10 @@ void A_KeenDie (mobj_t *mo)
 
 void A_Look (mobj_t *actor)
 {
-    mobj_t *targ = actor->subsector->sector->soundtarget;
+    mobj_t *targ;
 
     actor->threshold = 0;	// any shot will wake up
+    targ = actor->subsector->sector->soundtarget;
 
     if (targ && (targ->flags & MF_SHOOTABLE))
     {
@@ -1384,21 +1393,23 @@ static boolean PIT_VileCheck (mobj_t *thing)
 
 void A_VileChase (mobj_t *actor)
 {
+    int         xl, xh;
+    int         yl, yh;
+    int         bx, by;
     mobj_t     *temp;
     mobjinfo_t *info;
 
     if (actor->movedir != DI_NODIR)
     {
-        int xl = (viletryx - bmaporgx - MAXRADIUS*2)>>MAPBLOCKSHIFT;
-        int xh = (viletryx - bmaporgx + MAXRADIUS*2)>>MAPBLOCKSHIFT;
-        int yl = (viletryy - bmaporgy - MAXRADIUS*2)>>MAPBLOCKSHIFT;
-        int yh = (viletryy - bmaporgy + MAXRADIUS*2)>>MAPBLOCKSHIFT;
-        int bx, by;
-
         // check for corpses to raise
         viletryx = actor->x + actor->info->speed*xspeed[actor->movedir];
         viletryy = actor->y + actor->info->speed*yspeed[actor->movedir];
 
+        xl = (viletryx - bmaporgx - MAXRADIUS*2)>>MAPBLOCKSHIFT;
+        xh = (viletryx - bmaporgx + MAXRADIUS*2)>>MAPBLOCKSHIFT;
+        yl = (viletryy - bmaporgy - MAXRADIUS*2)>>MAPBLOCKSHIFT;
+        yh = (viletryy - bmaporgy + MAXRADIUS*2)>>MAPBLOCKSHIFT;
+	
         vileobj = actor;
 
         for (bx = xl ; bx <= xh ; bx++)

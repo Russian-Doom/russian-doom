@@ -26,6 +26,7 @@
 
 vertexfix_t vertexfix[] =
 {
+/*
    // mission, episode, map, vertex,  oldx,  oldy,  newx,  newy
 
     { doom,          1,   3,    771,  -328, -1920,  -320, -1920 },
@@ -50,13 +51,13 @@ vertexfix_t vertexfix[] =
 
    // mission, episode, map, vertex,  oldx,  oldy,  newx,  newy
 
-    { doom2,         1,   1,    288,   320,  1416,   320,  1408 },
+    //{ doom2,         1,   1,    288,   320,  1416,   320,  1408 },
 
-    { doom2,         1,   2,    273,   736,  1216,   736,  1208 },
+    //{ doom2,         1,   2,    273,   736,  1216,   736,  1208 },
 
     { doom2,         1,  30,     50,  4224,   -64,  4224,    64 },
     { doom2,         1,  30,     51,  4224,  -256,  4224,    64 },
-
+*/
     { -1,            0,   0,      0,     0,     0,     0,     0 }
 };
 
@@ -1588,8 +1589,8 @@ linefix_t linefix[] =
     { doom2,            1,   5,     920,    0, "",         "",            "",                  8,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,   5,     946,    0, "",         "",            "",                 -8,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
-    { doom2,            1,   6,      24,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                  0,                                    DEFAULT },
-    { doom2,            1,   6,      25,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                  0,                                    DEFAULT },
+//  { doom2,            1,   6,      24,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                  0,                                    DEFAULT },
+//  { doom2,            1,   6,      25,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                  0,                                    DEFAULT },
     { doom2,            1,   6,     332,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,   6,     339,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,   6,     340,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -1748,7 +1749,7 @@ linefix_t linefix[] =
     { doom2,            1,  10,     678,    0, "",         "",            "",                -11,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  10,     679,    0, "",         "",            "",                -48,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  10,     782,    0, "",         "",            "",                103,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { doom2,            1,  10,     786,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                  1,                                    DEFAULT },
+//  { doom2,            1,  10,     786,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                  1,                                    DEFAULT },
     { doom2,            1,  10,     821,    0, "",         "",            "",                192,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  10,     822,    0, "",         "",            "",               -128,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  10,     823,    0, "",         "",            "",               -192,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -2492,7 +2493,7 @@ linefix_t linefix[] =
     { doom2,            1,  18,     378,    0, "",         "",            "",            DEFAULT,        64, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  18,     385,    0, "",         "",            "",            DEFAULT,       -16, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  18,     386,    0, "",         "",            "",                 64,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { doom2,            1,  18,     387,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                 36,                                    DEFAULT },
+//  { doom2,            1,  18,     387,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                 36,                                    DEFAULT },
     { doom2,            1,  18,     451,    0, "",         "DOORSTOP",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  18,     459,    0, "",         "DOORSTOP",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  18,     481,    0, "",         "",            "",                  0,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -2632,7 +2633,7 @@ linefix_t linefix[] =
     { doom2,            1,  20,     530,    0, "",         "",            "",                 -1,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  20,     531,    0, "",         "",            "",                  8,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  20,     556,    0, "",         "",            "",                -16,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { doom2,            1,  20,     557,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                 37,                                    DEFAULT },
+//  { doom2,            1,  20,     557,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                 37,                                    DEFAULT },
     { doom2,            1,  20,     567,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  20,     570,    0, "",         "",            "",                 -8,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  20,     590,    0, "",         "",            "",                  8,       -33, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -2881,12 +2882,12 @@ linefix_t linefix[] =
     { doom2,            1,  27,     548,    0, "",         "",            "",                 24,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  27,     578,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
     { doom2,            1,  27,     579,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
-    { doom2,            1,  27,     580,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                 31,                                    DEFAULT },
-    { doom2,            1,  27,     581,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                 31,                                    DEFAULT },
+//  { doom2,            1,  27,     580,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                 31,                                    DEFAULT },
+//  { doom2,            1,  27,     581,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                 31,                                    DEFAULT },
     { doom2,            1,  27,     582,    1, "ZIMMER3",  "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  27,     797,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
     { doom2,            1,  27,     810,    1, "",         "",            "WOODVERT",    DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { doom2,            1,  27,     814,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                 28,                                    DEFAULT },
+//  { doom2,            1,  27,     814,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                 28,                                    DEFAULT },
 
     { doom2,            1,  28,      38,    1, "",         "",            "ZIMMER8",     DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  28,      39,    1, "",         "",            "ZIMMER8",     DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -3632,7 +3633,7 @@ sectorfix_t sectorfix[] =
 
     { doom,             3,   1,     30, "",       "",         DEFAULT,     56,            DEFAULT,                            DEFAULT, DEFAULT },
 
-    { doom,             3,   2,     25, "",       "",         DEFAULT,     DEFAULT,       DEFAULT,                                  4,       0 },
+//  { doom,             3,   2,     25, "",       "",         DEFAULT,     DEFAULT,       DEFAULT,                                  4,       0 },
     { doom,             3,   2,     40, "",       "FLAT19",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             3,   2,     54, "",       "",         DEFAULT,     256,           DEFAULT,                            DEFAULT, DEFAULT },
 
@@ -3737,7 +3738,7 @@ sectorfix_t sectorfix[] =
     { doom2,            1,   5,    145, "SWATER1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,   5,    146, "SWATER1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,   5,    147, "SWATER1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { doom2,            1,   5,    153, "",        "",        DEFAULT,     DEFAULT,       DEFAULT,                                  9,       0 },
+//  { doom2,            1,   5,    153, "",        "",        DEFAULT,     DEFAULT,       DEFAULT,                                  9,       0 },
 
     { doom2,            1,   4,     39, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,   4,     40, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
@@ -4411,7 +4412,7 @@ sectorfix_t sectorfix[] =
 thingfix_t thingfix[] =
 {
    // mission,    episode, map, thing, type,                      oldx,    oldy,    newx,    newy,   angle, options
-
+/*
     { doom,             1,   6,    16, 3002,                       800,    -704,     800,    -688, DEFAULT, DEFAULT                            },
     { doom,             1,   6,   403,   58,                     -2016,    2096,   -2016,    2080, DEFAULT, DEFAULT                            },
 
@@ -4558,7 +4559,7 @@ thingfix_t thingfix[] =
     { pack_plut,        1,  30,   252,  2023,                    -1632,    2464,   -1632,    2464, DEFAULT, MTF_NETGAME                        },
     { pack_plut,        1,  30,   253,  2023,                     -288,    2400,    -288,    2400, DEFAULT, MTF_NETGAME                        },
     { pack_plut,        1,  30,   254,  2023,                    -1248,    3104,   -1248,    3104, DEFAULT, MTF_NETGAME                        },
-
+*/
     {        -1,        0,   0,     0,     0,                  DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT                            }
 };
 
