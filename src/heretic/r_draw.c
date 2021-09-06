@@ -72,9 +72,9 @@ lighttable_t *ds_colormap;
 void R_DrawColumn (void)
 {
     int      count = dc_yh - dc_yl;
-    byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
     int      heightmask = dc_texheight-1;
+    byte    *dest;
+    fixed_t  frac;
 
     // Zero length, column does not exceed a pixel.
     if (count < 0)
@@ -90,6 +90,8 @@ void R_DrawColumn (void)
                  dc_yl, dc_yh, dc_x);
 #endif
 
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     // Inner loop that does the actual texture mapping,
     //  e.g. a DDA-lile scaling. This is as fast as it gets.
@@ -143,11 +145,8 @@ void R_DrawColumnLow (void)
     int      x = dc_x << 1; // Blocky mode, need to multiply by 2.
     int      count = dc_yh - dc_yl;
     int      heightmask = dc_texheight - 1;
-    byte    *dest = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
+    byte    *dest, *dest2, *dest3, *dest4;
+    fixed_t  frac;
 
     if (count < 0)
     {
@@ -161,6 +160,12 @@ void R_DrawColumnLow (void)
                 "R_DrawColumnLow: %i к %i в %i",
                 dc_yl, dc_yh, dc_x);
 #endif
+
+    dest = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (dc_texheight & heightmask)  // not a power of 2 -- killough
     {
@@ -216,13 +221,18 @@ void R_DrawColumnLow (void)
 
 void R_DrawSkyColumn(void)
 {
-    int   count = dc_yh - dc_yl;
-    int   frac  = skytexturemid + (dc_yl - centery) * skyiscale;
-    int   heightmask = skytextureheight-1; 
-    byte *dest  = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    int      count = dc_yh - dc_yl;
+    int      heightmask = skytextureheight-1; 
+    byte    *dest;
+    fixed_t  frac;
 
     if (count < 0)
-    return;
+    {
+        return;
+    }
+
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    frac = skytexturemid + (dc_yl - centery) * skyiscale;
 
     if (skytextureheight & heightmask)  // not a power of 2 -- killough
     {
@@ -269,17 +279,22 @@ void R_DrawSkyColumn(void)
 
 void R_DrawSkyColumnLow(void)
 {
-    int   x = dc_x << 1;  // Blocky mode, need to multiply by 2.
-    int   count = dc_yh - dc_yl;
-    int   frac  = skytexturemid + (dc_yl - centery) * skyiscale_low;
-    int   heightmask = skytextureheight-1; 
-    byte *dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    byte *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    byte *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    byte *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    int      x = dc_x << 1;  // Blocky mode, need to multiply by 2.
+    int      count = dc_yh - dc_yl;
+    int      heightmask = skytextureheight-1;
+    byte    *dest, *dest2, *dest3, *dest4;
+    fixed_t  frac;
 
     if (count < 0)
-    return;
+    {
+        return;
+    }
+
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    frac  = skytexturemid + (dc_yl - centery) * skyiscale_low;
 
     if (skytextureheight & heightmask) // not a power of 2 -- killough
     {
@@ -337,11 +352,13 @@ void R_DrawTLColumn (void)
 {
     int      count = dc_yh - dc_yl;
     int      heightmask = dc_texheight-1;
-    byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
+    byte    *dest;
+    fixed_t  frac;
 
     if (count < 0)
-    return;
+    {
+        return;
+    }
 
 #ifdef RANGECHECK
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -352,6 +369,9 @@ void R_DrawTLColumn (void)
                  dc_yl, dc_yh, dc_x);
     }
 #endif
+
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (dc_texheight & heightmask)  // not a power of 2 -- killough
     {
@@ -401,11 +421,8 @@ void R_DrawTLColumnLow (void)
     int     count = dc_yh - dc_yl;
     int     x = dc_x << 1; // Blocky mode, need to multiply by 2.
     int     heightmask = dc_texheight - 1;
-    byte*   dest = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    byte*   dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    byte*   dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    byte*   dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-    fixed_t frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
+    byte   *dest, *dest2, *dest3, *dest4;
+    fixed_t frac;
 
     if (count < 0)
     return;
@@ -419,6 +436,12 @@ void R_DrawTLColumnLow (void)
                  dc_yl, dc_yh, x);
     }
 #endif
+
+    dest = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (dc_texheight & heightmask)  // not a power of 2 -- killough
     {
@@ -483,11 +506,13 @@ void R_DrawExtraTLColumn(void)
 {
     int      count = dc_yh - dc_yl;
     int      heightmask = dc_texheight-1;
-    byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
+    byte    *dest;
+    fixed_t  frac;
 
     if (count < 0)
-    return;
+    {
+        return;
+    }
 
 #ifdef RANGECHECK
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -498,6 +523,9 @@ void R_DrawExtraTLColumn(void)
                  dc_yl, dc_yh, dc_x);
     }
 #endif
+
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (dc_texheight & heightmask)  // not a power of 2 -- killough
     {
@@ -546,11 +574,8 @@ void R_DrawExtraTLColumnLow (void)
     int      x = dc_x << 1; // Blocky mode, need to multiply by 2.
     int      count = dc_yh - dc_yl;
     int      heightmask = dc_texheight - 1;
-    byte    *dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
+    byte    *dest, *dest2, *dest3, *dest4;
+    fixed_t  frac;
 
     if (count < 0)
     return;
@@ -564,6 +589,12 @@ void R_DrawExtraTLColumnLow (void)
                  dc_yl, dc_yh, x);
     }
 #endif
+
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (dc_texheight & heightmask) // not a power of 2 -- killough
     {
@@ -625,11 +656,13 @@ void R_DrawExtraTLColumnLow (void)
 void R_DrawTranslatedColumn (void)
 {
     int      count = dc_yh - dc_yl;
-    byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale; 
+    byte    *dest;
+    fixed_t  frac;
 
     if (count < 0)
-    return;
+    {
+        return;
+    }
 
 #ifdef RANGECHECK
     if ((unsigned) dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -638,6 +671,9 @@ void R_DrawTranslatedColumn (void)
                 "R_DrawColumn: %i к %i в %i",
                 dc_yl, dc_yh, dc_x);
 #endif
+
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale; 
 
     do
     {
@@ -661,14 +697,13 @@ void R_DrawTranslatedColumnLow (void)
 { 
     int      x = dc_x << 1;  // low detail, need to scale by 2
     int      count = dc_yh - dc_yl; 
-    byte    *dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale; 
+    byte    *dest, *dest2, *dest3, *dest4;
+    fixed_t  frac; 
 
-    if (count < 0) 
-    return; 
+    if (count < 0)
+    {
+        return;
+    }
 
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -679,6 +714,12 @@ void R_DrawTranslatedColumnLow (void)
                  dc_yl, dc_yh, x);
     }
 #endif 
+
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale; 
 
     do 
     {
@@ -696,11 +737,13 @@ void R_DrawTranslatedColumnLow (void)
 void R_DrawTranslatedTLColumn(void)
 {
     int      count = dc_yh - dc_yl;
-    byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-    fixed_t  frac = dc_texturemid + (dc_yl - centery) * dc_iscale;
+    byte    *dest;
+    fixed_t  frac;
 
     if (count < 0)
+    {
         return;
+    }
 
 #ifdef RANGECHECK
     if ((unsigned) dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -709,6 +752,9 @@ void R_DrawTranslatedTLColumn(void)
                 "R_DrawColumn: %i к %i в %i",
                 dc_yl, dc_yh, dc_x);
 #endif
+
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    frac = dc_texturemid + (dc_yl - centery) * dc_iscale;
 
     do
     {
@@ -734,14 +780,13 @@ void R_DrawTranslatedTLColumnLow(void)
     int      x = dc_x << 1; // Blocky mode, need to multiply by 2.
     int      count = dc_yh - dc_yl;
     int      heightmask = dc_texheight - 1;
-    byte    *dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-    fixed_t  frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
+    byte    *dest, *dest2, *dest3, *dest4;
+    fixed_t  frac;
 
     if (count < 0)
-    return;
+    {
+        return;
+    }
 
 #ifdef RANGECHECK
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -752,6 +797,12 @@ void R_DrawTranslatedTLColumnLow(void)
                  dc_yl, dc_yh, x);
     }
 #endif
+
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (dc_texheight & heightmask)  // not a power of 2 -- killough
     {
