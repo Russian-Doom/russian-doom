@@ -17,7 +17,6 @@
 // R_planes.c
 
 
-
 #include <stdlib.h>
 #include "doomdef.h"
 #include "deh_str.h"
@@ -28,7 +27,64 @@
 #include "jn.h"
 
 
-planefunction_t floorfunc, ceilingfunc;
+/*
+================================================================================
+=
+= MAXVISPLANES is no longer a limit on the number of visplanes,
+= but a limit on the number of hash slots; larger numbers mean
+= better performance usually but after a point they are wasted,
+= and memory and time overheads creep in.
+=
+= Lee Killough
+=
+================================================================================
+*/
+
+#define MAXVISPLANES	128                  // must be a power of 2
+
+static visplane_t  *visplanes[MAXVISPLANES]; // [JN] killough
+static visplane_t  *freetail;                // [JN] killough
+static visplane_t **freehead = &freetail;    // [JN] killough
+visplane_t         *floorplane, *ceilingplane;
+
+// [JN] killough -- hash function for visplanes
+// Empirically verified to be fairly uniform:
+
+#define visplane_hash(picnum, lightlevel, height) \
+    ((unsigned int)((picnum) * 3 + (lightlevel) + (height) * 7) & (MAXVISPLANES - 1))
+
+// [JN] killough 8/1/98: set static number of openings to be large enough
+// (a static limit is okay in this case and avoids difficulties in r_segs.c)
+
+size_t  maxopenings;
+int     *openings, *lastopening;  // [crispy] 32-bit integer math    
+    
+// clip values are the solid pixel bounding the range
+// floorclip starts out SCREENHEIGHT
+// ceilingclip starts out -1
+//
+// [JN] e6y: resolution limitation is removed
+
+int *floorclip = NULL;    // dropoff overflow
+int *ceilingclip = NULL;  // dropoff overflow
+
+// spanstart holds the start of a plane span
+// initialized to 0 at start
+//
+// [JN] e6y: resolution limitation is removed
+
+static int *spanstart = NULL;  // killough 2/8/98
+
+//
+// texture mapping
+//
+
+static lighttable_t **planezlight;
+static fixed_t planeheight;
+static fixed_t cachedheight[SCREENHEIGHT];
+static fixed_t cacheddistance[SCREENHEIGHT];
+static fixed_t cachedxstep[SCREENHEIGHT];
+static fixed_t cachedystep[SCREENHEIGHT];
 
 //
 // sky mapping
@@ -40,57 +96,10 @@ fixed_t skyiscale;
 fixed_t skyiscale_low;
 fixed_t skytextureheight;
 
-//
-// opening
-//
-static visplane_t  *visplanes[MAXVISPLANES]; // [JN] killough
-static visplane_t  *freetail;                // [JN] killough
-static visplane_t **freehead = &freetail;    // [JN] killough
-visplane_t         *floorplane, *ceilingplane;
-
-// [JN] killough 8/1/98: set static number of openings to be large enough
-// (a static limit is okay in this case and avoids difficulties in r_segs.c)
-
-size_t  maxopenings;
-int     *openings, *lastopening;  // [crispy] 32-bit integer math
-
-// killough -- hash function for visplanes
-// Empirically verified to be fairly uniform:
-
-#define visplane_hash(picnum, lightlevel, height) \
-    ((unsigned int)((picnum) * 3 + (lightlevel) + (height) * 7) & (MAXVISPLANES - 1))
-
-//
-// clip values are the solid pixel bounding the range
-// floorclip starts out SCREENHEIGHT
-// ceilingclip starts out -1
-//
-// [JN] e6y: resolution limitation is removed
-int *floorclip = NULL;    // dropoff overflow
-int *ceilingclip = NULL;  // dropoff overflow
-
-//
-// spanstart holds the start of a plane span
-// initialized to 0 at start
-//
-// [JN] e6y: resolution limitation is removed
-static int *spanstart = NULL;  // killough 2/8/98
-
-//
-// texture mapping
-//
-lighttable_t **planezlight;
-fixed_t planeheight;
-
 // [JN] e6y: resolution limitation is removed
 fixed_t *yslope = NULL;
 fixed_t *distscale = NULL;
 fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
-
-fixed_t cachedheight[SCREENHEIGHT];
-fixed_t cacheddistance[SCREENHEIGHT];
-fixed_t cachedxstep[SCREENHEIGHT];
-fixed_t cachedystep[SCREENHEIGHT];
 
 
 /*
@@ -368,7 +377,10 @@ visplane_t *R_DupPlane (const visplane_t *pl, int start, int stop)
     new_pl->minx = start;
     new_pl->maxx = stop;
 
-    memset(new_pl->top, USHRT_MAX, sizeof(new_pl->top));
+    for (int i = 0; i != screenwidth; i++)
+    {
+        new_pl->top[i] = SHRT_MAX;
+    }
 
     return new_pl;
 }
@@ -383,46 +395,38 @@ visplane_t *R_DupPlane (const visplane_t *pl, int start, int stop)
 
 visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop)
 {
-    int intrl, intrh;
-    int unionl, unionh;
-    int x;
+    int intrl, intrh, unionl, unionh, x;
 
     if (start < pl->minx)
     {
-        intrl = pl->minx;
-        unionl = start;
+        intrl = pl->minx, unionl = start;
     }
     else
     {
-        unionl = pl->minx;
-        intrl = start;
+        unionl = pl->minx, intrl = start;
     }
 
-    if (stop > pl->maxx)
+    if (stop  > pl->maxx)
     {
-        intrh = pl->maxx;
-        unionh = stop;
+        intrh = pl->maxx, unionh = stop;
     }
     else
     {
-        unionh = pl->maxx;
-        intrh = stop;
+        unionh = pl->maxx, intrh  = stop;
     }
 
-    for (x=intrl ; x <= intrh && pl->top[x] == 0xffffffffu; x++); // [crispy] hires / 32-bit integer math
-    // [crispy] fix HOM if ceilingplane and floorplane are the same visplane (e.g. both are skies)
-    if (!(pl == floorplane && markceiling && floorplane == ceilingplane) && x > intrh)
+    for (x=intrl ; x <= intrh && pl->top[x] == SHRT_MAX; x++); // [crispy] hires / 32-bit integer math
+    if (x > intrh)
     {
         // Can use existing plane; extend range
         pl->minx = unionl, pl->maxx = unionh;
+        return pl;
     }
     else
     {
         // Cannot use existing plane; create a new one
-        return R_DupPlane(pl,start,stop);
+        return R_DupPlane(pl, start, stop);
     }
-
-    return pl;
 }
 
 /*
@@ -433,32 +437,25 @@ visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop)
 ================================================================================
 */
 
-void R_MakeSpans(int x, 
- unsigned int t1, // [crispy] 32-bit integer math
- unsigned int b1, // [crispy] 32-bit integer math
- unsigned int t2, // [crispy] 32-bit integer math
- unsigned int b2) // [crispy] 32-bit integer math
+static void
+R_MakeSpans (int x, unsigned int t1, unsigned int b1, // [crispy] 32-bit integer math
+                    unsigned int t2, unsigned int b2) // [crispy] 32-bit integer math
 {
-    while (t1 < t2 && t1 <= b1)
+    for ( ; t1 < t2 && t1 <= b1 ; t1++)
     {
-        R_MapPlane(t1, spanstart[t1], x - 1);
-        t1++;
+        R_MapPlane(t1, spanstart[t1], x-1);
     }
-    while (b1 > b2 && b1 >= t1)
+    for ( ; b1 > b2 && b1 >= t1 ; b1--)
     {
-        R_MapPlane(b1, spanstart[b1], x - 1);
-        b1--;
+        R_MapPlane(b1, spanstart[b1], x-1);
     }
-
     while (t2 < t1 && t2 <= b2)
     {
-        spanstart[t2] = x;
-        t2++;
+        spanstart[t2++] = x;
     }
     while (b2 > b1 && b2 >= t2)
     {
-        spanstart[b2] = x;
-        b2--;
+        spanstart[b2--] = x;
     }
 }
 
@@ -611,14 +608,21 @@ void R_DrawPlanes (void)
             light = ((pl->lightlevel + level_brightness) >> LIGHTSEGSHIFT) + extralight;
 
             if (light >= LIGHTLEVELS)
+            {
                 light = LIGHTLEVELS - 1;
+            }
             if (light < 0)
+            {
                 light = 0;
+            }
+
+            stop = pl->maxx + 1;
             planezlight = zlight[light];
+            pl->top[pl->minx-1] = pl->top[stop] = UINT_MAX; // [crispy] 32-bit integer math
 
             // [JN] Apply brightmaps to floor/ceiling...
             if (brightmaps && !vanillaparm
-            &&(pl->picnum == bmapflatnum1    // FLOOR21
+            &&(pl->picnum == bmapflatnum1   // FLOOR21
             || pl->picnum == bmapflatnum2   // FLOOR22
             || pl->picnum == bmapflatnum3   // FLOOR23
             || pl->picnum == bmapflatnum4   // FLOOR24
@@ -627,16 +631,9 @@ void R_DrawPlanes (void)
                 planezlight = fullbright_blueonly_floor[light];
             }
 
-            pl->top[pl->maxx+1] = 0xffffffffu; // [crispy] hires / 32-bit integer math
-            pl->top[pl->minx-1] = 0xffffffffu; // [crispy] hires / 32-bit integer math
-
-            stop = pl->maxx + 1;
-            for (x=pl->minx ; x<= stop ; x++)
+            for (x = pl->minx ; x <= stop ; x++)
             {
-                R_MakeSpans(x,pl->top[x-1],
-                pl->bottom[x-1],
-                pl->top[x],
-                pl->bottom[x]);
+                R_MakeSpans(x,pl->top[x-1], pl->bottom[x-1], pl->top[x], pl->bottom[x]);
             }
 
             // [crispy] add support for SMMU swirling flats

@@ -278,7 +278,7 @@ void R_MaybeInterpolateSector (sector_t *sector)
 ================================================================================
 */
 
-void R_AddLine(seg_t *line)
+static void R_AddLine(seg_t *line)
 {
     int x1, x2;
     angle_t angle1, angle2, span, tspan;
@@ -478,9 +478,9 @@ static boolean R_CheckBBox (fixed_t *bspcoord)
 
 static void R_Subsector (int num)
 {
-    int           count;
-    seg_t        *line;
-    subsector_t  *sub;
+    subsector_t *sub = &subsectors[num];
+    seg_t       *line = &segs[sub->firstline];
+    int          count = sub->numlines;
 
 #ifdef RANGECHECK
     if (num>=numsubsectors)
@@ -491,47 +491,38 @@ static void R_Subsector (int num)
 		 numsubsectors);
 #endif
 
-    sub = &subsectors[num];
     frontsector = sub->sector;
 
     // [AM] Interpolate sector movement.  Usually only needed
     //      when you're standing inside the sector.
     R_MaybeInterpolateSector(frontsector);
 
-    if (frontsector->interpfloorheight < viewz)
-    {
-        floorplane = R_FindPlane (frontsector->interpfloorheight,
-                                  frontsector->floorpic,
-                                  frontsector->lightlevel,
-                                  frontsector->special);
-    }
-    else
-    {
-        floorplane = NULL;
-    }
+    floorplane = frontsector->interpfloorheight < viewz ?
+                 R_FindPlane (frontsector->interpfloorheight,
+                              frontsector->floorpic,
+                              frontsector->lightlevel,
+                              frontsector->special) : NULL;
 
-    if (frontsector->interpceilingheight > viewz
-	||  frontsector->ceilingpic == skyflatnum)
-    {
-	    ceilingplane = R_FindPlane (frontsector->interpceilingheight,
-                                    frontsector->ceilingpic,
-                                    frontsector->lightlevel,
-                                    frontsector->special);
-    }
-    else
-    {
-        ceilingplane = NULL;
-    }
+    ceilingplane = frontsector->interpceilingheight > viewz ||
+                   frontsector->ceilingpic == skyflatnum ?
+                   R_FindPlane (frontsector->interpceilingheight,
+                                frontsector->ceilingpic,
+                                frontsector->lightlevel,
+                                frontsector->special) : NULL;
 
-    R_AddSprites (frontsector);	
-
-    count = sub->numlines;
-    line = &segs[sub->firstline];
+    // BSP is traversed by subsector.
+    // A sector might have been split into several 
+    //  subsectors during BSP building.
+    // Thus we check whether its already added.
+    if (sub->sector->validcount != validcount && (!automapactive || automap_overlay))
+    {
+        sub->sector->validcount = validcount;
+        R_AddSprites (frontsector);
+    }
 
     while (count--)
     {
-        R_AddLine (line);
-        line++;
+        R_AddLine (line++);
     }
 }
 

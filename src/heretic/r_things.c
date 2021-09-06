@@ -27,6 +27,48 @@
 #include "jn.h"
 
 
+// Sprite rotation 0 is facing the viewer, rotation 1 is one angle turn CLOCKWISE
+// around the axis. This is not the same as the angle, which increases counter
+// clockwise (protractor).  There was a lot of stuff grabbed wrong, so I changed it...
+fixed_t pspritescale, pspriteiscale;
+
+// [JN] Light tables and brightmaps.
+static lighttable_t **spritelights;
+static lighttable_t **fullbrights_greenonly;
+static lighttable_t **fullbrights_redonly;
+static lighttable_t **fullbrights_blueonly;
+static lighttable_t **fullbrights_purpleonly;
+static lighttable_t **fullbrights_notbronze;
+static lighttable_t **fullbrights_flame;
+static lighttable_t **fullbrights_greenonly_dim;
+static lighttable_t **fullbrights_redonly_dim;
+static lighttable_t **fullbrights_blueonly_dim;
+static lighttable_t **fullbrights_yellowonly_dim;
+static lighttable_t **fullbrights_ethereal;
+
+// Constant arrays used for psprite clipping and initializing clipping.
+int *negonearray;           // [JN] killough 2/8/98: // dropoff overflow
+int *screenheightarray;     //      change to MAX_*  // dropoff overflow
+static int *clipbot = NULL; // [JN] killough 2/8/98: // dropoff overflow
+static int *cliptop = NULL; //      change to MAX_*  // dropoff overflow
+
+// variables used to look up and range check thing_t sprites patches
+int            numsprites;
+int            maxframe;
+char          *spritename;
+spritedef_t   *sprites;
+spriteframe_t  sprtemp[26];
+
+// Initialization functions.
+int *mfloorclip, *mceilingclip;  // [crispy] 32-bit integer math
+
+fixed_t spryscale;
+int64_t sprtopscreen, sprbotscreen;  // [crispy] WiggleFix
+
+static size_t num_vissprite, num_vissprite_alloc, num_vissprite_ptrs; // [JN] killough
+static vissprite_t *vissprites, **vissprite_ptrs;                     // [JN] killough
+
+
 typedef struct drawseg_xrange_item_s
 {
     short x1, x2;
@@ -39,60 +81,12 @@ typedef struct drawsegs_xrange_s
     int count;
 } drawsegs_xrange_t;
 
-/*
-================================================================================
-
-						INITIALIZATION FUNCTIONS
-
-================================================================================
-*/
-
-// variables used to look up and range check thing_t sprites patches
-spritedef_t *sprites;
-int numsprites;
-
-spriteframe_t sprtemp[26];
-int maxframe;
-char *spritename;
-
-// constant arrays used for psprite clipping and initializing clipping
-int *negonearray;           // [JN] killough 2/8/98: // dropoff overflow
-int *screenheightarray;     //      change to MAX_*  // dropoff overflow
-static int *clipbot = NULL; // [JN] killough 2/8/98: // dropoff overflow
-static int *cliptop = NULL; //      change to MAX_*  // dropoff overflow
-
-static size_t num_vissprite, num_vissprite_alloc, num_vissprite_ptrs; // [JN] killough
-static vissprite_t *vissprites, **vissprite_ptrs;                     // [JN] killough
-
-int *mfloorclip, *mceilingclip;   // [crispy] 32-bit integer math
-fixed_t spryscale;
-int64_t sprtopscreen, sprbotscreen;
-
-// Sprite rotation 0 is facing the viewer, rotation 1 is one angle turn CLOCKWISE
-// around the axis. This is not the same as the angle, which increases counter
-// clockwise (protractor).  There was a lot of stuff grabbed wrong, so I changed it...
-fixed_t pspritescale, pspriteiscale;
-
 #define DS_RANGES_COUNT 3
 static drawsegs_xrange_t drawsegs_xranges[DS_RANGES_COUNT];
 
 static drawseg_xrange_item_t *drawsegs_xrange;
 static unsigned int drawsegs_xrange_size = 0;
 static int drawsegs_xrange_count = 0;
-
-// [JN] Light tables and brightmaps.
-lighttable_t **spritelights;
-lighttable_t **fullbrights_greenonly;
-lighttable_t **fullbrights_redonly;
-lighttable_t **fullbrights_blueonly;
-lighttable_t **fullbrights_purpleonly;
-lighttable_t **fullbrights_notbronze;
-lighttable_t **fullbrights_flame;
-lighttable_t **fullbrights_greenonly_dim;
-lighttable_t **fullbrights_redonly_dim;
-lighttable_t **fullbrights_blueonly_dim;
-lighttable_t **fullbrights_yellowonly_dim;
-lighttable_t **fullbrights_ethereal;
 
 
 /*
@@ -145,35 +139,43 @@ void R_InitSpritesRes (void)
 =================
 */
 
-void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation,
-                         boolean flipped)
+void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation, boolean flipped)
 {
     int r;
 
     if (frame >= 26 || rotation > 8)
+    {
         I_Error(english_language ?
                 "R_InstallSpriteLump: bad frame characters in lump %i" :
                 "R_InstallSpriteLump: некорректные символы фрейма в блоке %i",
                 lump);
+    }
 
     if ((int) frame > maxframe)
+    {
         maxframe = frame;
+    }
 
     if (rotation == 0)
     {
-// the lump should be used for all rotations
+        // the lump should be used for all rotations
         if (sprtemp[frame].rotate == false)
+        {
             I_Error (english_language ?
                     "R_InitSprites: sprite %s frame %c has multip rot=0 lump" :
                     "R_InitSprites: фрейм %c спрайта %s имеет многократный блок rot=0",
                     spritename, 'A' + frame);
+        }
         if (sprtemp[frame].rotate == true)
+        {
             I_Error (english_language ?
                 "R_InitSprites: sprite %s frame %c has rotations and a rot=0 lump" :
                 "R_InitSprites: фрейм %c спрайта %s имеет фреймы поворота и блок rot=0",
                  spritename, 'A' + frame);
+        }
 
         sprtemp[frame].rotate = false;
+
         for (r = 0; r < 8; r++)
         {
             sprtemp[frame].lump[r] = lump - firstspritelump;
@@ -182,41 +184,45 @@ void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation,
         return;
     }
 
-// the lump is only used for one rotation
+    // the lump is only used for one rotation
     if (sprtemp[frame].rotate == false)
+    {
         I_Error (english_language ?
                  "R_InitSprites: sprite %s frame %c has rotations and a rot=0 lump" :
                  "R_InitSprites: фрейм спрайта %c спрайта %s имеет фреймы поворота и блок rot=0",
                  spritename, 'A' + frame);
+    }
 
     sprtemp[frame].rotate = true;
+    rotation--;  // make 0 based
 
-    rotation--;                 // make 0 based
     if (sprtemp[frame].lump[rotation] != -1)
+    {
         I_Error (english_language ?
                  "R_InitSprites: sprite %s : %c : %c has two lumps mapped to it" :
                  "R_InitSprites: спрайу %s : %c : %c назначено несколько одинаковых блоков",            
                  spritename, 'A' + frame, '1' + rotation);
+    }
 
     sprtemp[frame].lump[rotation] = lump - firstspritelump;
     sprtemp[frame].flip[rotation] = (byte) flipped;
 }
 
 /*
-=================
+================================================================================
 =
 = R_InitSpriteDefs
 =
 = Pass a null terminated list of sprite names (4 chars exactly) to be used
 = Builds the sprite rotation matrixes to account for horizontally flipped
 = sprites.  Will report an error if the lumps are inconsistant
-=Only called at startup
+= Only called at startup.
 =
 = Sprite lump names are 4 characters for the actor, a letter for the frame,
 = and a number for the rotation, A sprite that is flippable will have an
 = additional letter/number appended.  The rotation character can be 0 to
-= signify no rotations
-=================
+= signify no rotations.
+================================================================================
 */
 
 void R_InitSpriteDefs(char **namelist)
@@ -225,23 +231,27 @@ void R_InitSpriteDefs(char **namelist)
     int i, l, frame, rotation;
     int start, end;
 
-// count the number of sprite names
+    // count the number of sprite names
     check = namelist;
     while (*check != NULL)
+    {
         check++;
+    }
+
     numsprites = check - namelist;
 
     if (!numsprites)
+    {
         return;
+    }
 
     sprites = Z_Malloc(numsprites * sizeof(*sprites), PU_STATIC, NULL);
 
     start = firstspritelump - 1;
     end = lastspritelump + 1;
 
-// scan all the lump names for each of the names, noting the highest
-// frame letter
-// Just compare 4 characters as ints
+    // Scan all the lump names for each of the names, noting the highest
+    // frame letter. Just compare 4 characters as ints.
     for (i = 0; i < numsprites; i++)
     {
         spritename = DEH_String(namelist[i]);
@@ -271,10 +281,11 @@ void R_InitSpriteDefs(char **namelist)
         //
         if (maxframe == -1)
         {
-            //continue;
             sprites[i].numframes = 0;
             if (gamemode == shareware)
+            {
                 continue;
+            }
             I_Error(english_language ?
                     "R_InitSprites: no lumps found for sprite %s" :
                     "R_InitSprites: не найдены блоки в спрайте %s",
@@ -282,6 +293,7 @@ void R_InitSpriteDefs(char **namelist)
         }
 
         maxframe++;
+
         for (frame = 0; frame < maxframe; frame++)
         {
             switch ((int) sprtemp[frame].rotate)
@@ -308,10 +320,8 @@ void R_InitSpriteDefs(char **namelist)
         // allocate space for the frames present and copy sprtemp to it
         //
         sprites[i].numframes = maxframe;
-        sprites[i].spriteframes =
-            Z_Malloc(maxframe * sizeof(spriteframe_t), PU_STATIC, NULL);
-        memcpy(sprites[i].spriteframes, sprtemp,
-               maxframe * sizeof(spriteframe_t));
+        sprites[i].spriteframes = Z_Malloc(maxframe * sizeof(spriteframe_t), PU_STATIC, NULL);
+        memcpy(sprites[i].spriteframes, sprtemp, maxframe * sizeof(spriteframe_t));
     }
 
 }
@@ -418,11 +428,17 @@ void R_DrawMaskedColumn (column_t *column, signed int baseclip)
         dc_yh = (int)((bottomscreen-1)>>FRACBITS);       // [crispy] WiggleFix
 		
         if (dc_yh >= mfloorclip[dc_x])
+        {
             dc_yh = mfloorclip[dc_x]-1;
+        }
         if (dc_yl <= mceilingclip[dc_x])
+        {
             dc_yl = mceilingclip[dc_x]+1;
+        }
         if (dc_yh >= baseclip && baseclip != -1)
+        {
             dc_yh = baseclip;
+        }
 
         // [JN] killough 3/2/98, 3/27/98: Failsafe against overflow/crash:
         if (dc_yl <= dc_yh && dc_yh < viewheight)
@@ -454,26 +470,22 @@ void R_DrawMaskedColumn (column_t *column, signed int baseclip)
 void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
 {
     column_t *column;
-    int texturecolumn;
-    fixed_t frac;
-    patch_t *patch;
-    fixed_t baseclip;
-
+    int       texturecolumn;
+    fixed_t   frac;
+    patch_t  *patch;
+    fixed_t   baseclip;
 
     patch = W_CacheLumpNum(vis->patch + firstspritelump, PU_CACHE);
 
     dc_colormap = vis->colormap;
-
-//      if(!dc_colormap)
-//              colfunc = tlcolfunc;  // NULL colormap = shadow draw
 
     if (vis->mobjflags & MF_SHADOW)
     {
         if (vis->mobjflags & MF_TRANSLATION)
         {
             colfunc = transtlcolfunc;
-            dc_translation = translationtables - 256 +
-                ((vis->mobjflags & MF_TRANSLATION) >> (MF_TRANSSHIFT - 8));
+            dc_translation = translationtables - 256
+                           + ((vis->mobjflags & MF_TRANSLATION) >> (MF_TRANSSHIFT - 8));
         }
         else
         {                       // Draw using shadow column function
@@ -489,8 +501,8 @@ void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
     {
         // Draw using translated column function
         colfunc = transcolfunc;
-        dc_translation = translationtables - 256 +
-            ((vis->mobjflags & MF_TRANSLATION) >> (MF_TRANSSHIFT - 8));
+        dc_translation = translationtables - 256
+                       + ((vis->mobjflags & MF_TRANSLATION) >> (MF_TRANSSHIFT - 8));
     }
     else if (vis->translation)
     {
@@ -505,20 +517,17 @@ void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
 
     sprtopscreen = centeryfrac - FixedMul(dc_texturemid, spryscale);
 
-// check to see if weapon is a vissprite
+    // check to see if weapon is a vissprite
     if (vis->psprite)
     {
-        dc_texturemid += FixedMul(((centery - viewheight / 2) << FRACBITS),
-                                  pspriteiscale);
+        dc_texturemid += FixedMul(((centery - viewheight / 2) << FRACBITS), pspriteiscale);
         sprtopscreen += (viewheight / 2 - centery) << FRACBITS;
     }
 
     if (vis->footclip && !vis->psprite)
     {
-        sprbotscreen = sprtopscreen + FixedMul(SHORT(patch->height) << FRACBITS,
-                                               spryscale);
-        baseclip = (sprbotscreen - FixedMul(vis->footclip << FRACBITS,
-                                            spryscale)) >> FRACBITS;
+        sprbotscreen = sprtopscreen + FixedMul(SHORT(patch->height) << FRACBITS, spryscale);
+        baseclip = (sprbotscreen - FixedMul(vis->footclip << FRACBITS, spryscale)) >> FRACBITS;
     }
     else
     {
@@ -530,12 +539,13 @@ void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
         texturecolumn = frac >> FRACBITS;
 #ifdef RANGECHECK
         if (texturecolumn < 0 || texturecolumn >= SHORT(patch->width))
+        {
             I_Error(english_language ?
                     "R_DrawSpriteRange: bad texturecolumn" :
                     "R_DrawSpriteRange: некорректныая информация texturecolumn");
+        }
 #endif
-        column = (column_t *) ((byte *) patch +
-                               LONG(patch->columnofs[texturecolumn]));
+        column = (column_t *) ((byte *) patch + LONG(patch->columnofs[texturecolumn]));
         R_DrawMaskedColumn(column, baseclip);
     }
 
@@ -610,7 +620,9 @@ void R_ProjectSprite (mobj_t *thing)
 
     // Thing is behind view plane.
     if (tz < MINZ)
-    return;                 
+    {
+        return;                 
+    }
 
     xscale = FixedDiv(projection, tz);
 
@@ -620,7 +632,9 @@ void R_ProjectSprite (mobj_t *thing)
 
     // Too far off the side.
     if (abs(tx) > (tz << 2))
-    return;
+    {
+        return;
+    }
 
     // Decide which patch to use for sprite reletive to player.
 #ifdef RANGECHECK
@@ -687,27 +701,29 @@ void R_ProjectSprite (mobj_t *thing)
     tx -= flip ? spritewidth[lump] - spriteoffset[lump] : spriteoffset[lump];
     x1 = (centerxfrac + FixedMul(tx, xscale)) >> FRACBITS;
 
-    // Off the right side.
-    if (x1 > viewwidth)
-    return;
-
     tx += spritewidth[lump];
     x2 = ((centerxfrac + FixedMul(tx, xscale)) >> FRACBITS) - 1;
 
-    // Off the left side.
-    if (x2 < 0)
-    return;
-
-    // [JN] killough 4/9/98: clip things which are out of view due to height
     gzt = interpz + spritetopoffset[lump];
 
+    // Off the side.
+    if (x1 > viewwidth || x2 < 0)
+    {
+        return;
+    }
+
+    // [JN] killough 4/9/98: clip things which are out of view due to height
     if (interpz > viewz + FixedDiv(viewheight << FRACBITS, xscale)
     ||  gzt     < (int64_t)viewz - FixedDiv((viewheight << (FRACBITS + 1))-viewheight, xscale))
-    return;
+    {
+        return;
+    }
 
     // [JN] Quickly reject sprites with bad x ranges.
     if (x1 >= x2)
-    return;
+    {
+        return;
+    }
 
     // store information in a vissprite
     vis = R_NewVisSprite();
@@ -917,14 +933,16 @@ void R_ProjectSprite (mobj_t *thing)
     }
 
     // [JN] Colored blood
-    if (colored_blood && !vanillaparm
-    &&  thing->type == MT_BLOODSPLATTER && thing->target)
+    if (colored_blood && !vanillaparm &&  thing->type == MT_BLOODSPLATTER && thing->target)
     {
         if (thing->target->type == MT_WIZARD)
-        vis->translation = cr[CR_RED2MAGENTA_HERETIC];
-
+        {
+            vis->translation = cr[CR_RED2MAGENTA_HERETIC];
+        }
         else if (thing->target->type == MT_HEAD)
-        vis->translation = cr[CR_RED2GRAY_HERETIC];
+        {
+            vis->translation = cr[CR_RED2GRAY_HERETIC];
+        }
     }
 }
 
@@ -941,14 +959,10 @@ void R_ProjectSprite (mobj_t *thing)
 void R_AddSprites (sector_t *sec)
 {
     mobj_t *thing;
-    int lightnum;
-
-    if (sec->validcount == validcount)
-        return;                 // already added
-
-    sec->validcount = validcount;
+    int     lightnum;
 
     lightnum = ((sec->lightlevel + level_brightness) >> LIGHTSEGSHIFT) + extralight;
+
     if (lightnum < 0)
     {
         spritelights = scalelight[0];
@@ -1002,7 +1016,9 @@ void R_AddSprites (sector_t *sec)
     }
 
     for (thing = sec->thinglist; thing; thing = thing->snext)
+    {
         R_ProjectSprite(thing);
+    }
 }
 
 /*
@@ -1139,7 +1155,7 @@ static inline void R_ApplyChickenBob (fixed_t *sx, boolean bobx, fixed_t *sy, bo
 ================================================================================
 */
 
-int PSpriteSY[NUMWEAPONS] = {
+static int PSpriteSY[NUMWEAPONS] = {
     0,                          // staff
     5 * FRACUNIT,               // goldwand
     15 * FRACUNIT,              // crossbow
@@ -1641,7 +1657,9 @@ void R_DrawSprite (vissprite_t *spr)
     fixed_t scale, lowscale;
 
     for (x = spr->x1 ; x<=spr->x2 ; x++)
-    clipbot[x] = cliptop[x] = -2;
+    {
+        clipbot[x] = cliptop[x] = -2;
+    }
 
     // Scan drawsegs from end to start for obscuring segs.
     // The first drawseg that has a greater scale is the clip seg.
@@ -1650,7 +1668,6 @@ void R_DrawSprite (vissprite_t *spr)
     if (drawsegs_xrange_size)
     {
         const drawseg_xrange_item_t *last = &drawsegs_xrange[drawsegs_xrange_count - 1];
-
         drawseg_xrange_item_t *curr = &drawsegs_xrange[-1];
 
         while (++curr <= last)
@@ -1763,11 +1780,14 @@ void R_DrawSprite (vissprite_t *spr)
     // check for unclipped columns
     for (x = spr->x1 ; x<=spr->x2 ; x++)
     {
-        if (clipbot[x] == -2)		
+        if (clipbot[x] == -2)
+        {
             clipbot[x] = viewheight;
-
+        }
         if (cliptop[x] == -2)
+        {
             cliptop[x] = -1;
+        }
     }
 
     mfloorclip = clipbot;
@@ -1793,7 +1813,7 @@ void R_DrawMasked (void)
 
     // [JN] e6y
     // Makes sense for scenes with huge amount of drawsegs.
-    for(i = 0 ; i < DS_RANGES_COUNT ; i++)
+    for (i = 0 ; i < DS_RANGES_COUNT ; i++)
     {
         drawsegs_xranges[i].count = 0;
     }

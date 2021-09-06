@@ -217,10 +217,6 @@ typedef struct
 
 typedef byte lighttable_t;      // this could be wider for >8 bit display
 
-#define	MAXVISPLANES	128
-// [JN] MAXOPENINGS увеличено в 4 раза
-#define	MAXOPENINGS		WIDESCREENWIDTH*64*4
-
 typedef struct visplane_s
 {
     struct visplane_s *next; // [JN] Next visplane in hash chain -- killough
@@ -340,8 +336,6 @@ extern int viewangletox[FINEANGLES / 2];
 extern angle_t *xtoviewangle;
 extern angle_t *linearskyangle;
 
-extern fixed_t rw_distance;
-extern angle_t rw_normalangle;
 
 //
 // R_main.c
@@ -415,7 +409,6 @@ angle_t R_PointToAngle(fixed_t x, fixed_t y);
 angle_t R_PointToAngleCrispy(fixed_t x, fixed_t y);
 angle_t R_PointToAngle2(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2);
 fixed_t R_PointToDist(fixed_t x, fixed_t y);
-fixed_t R_ScaleFromGlobalAngle(angle_t visangle);
 subsector_t *R_PointInSubsector(fixed_t x, fixed_t y);
 // [AM] Interpolate between two angles.
 angle_t R_InterpolateAngle(angle_t oangle, angle_t nangle, fixed_t scale);
@@ -429,10 +422,6 @@ extern side_t *sidedef;
 extern line_t *linedef;
 extern sector_t *frontsector, *backsector;
 
-extern int rw_x;
-extern int rw_stopx;
-
-extern boolean segtextured;
 extern boolean markfloor;       // false if the back side is the same plane
 extern boolean markceiling;
 extern boolean skymap;
@@ -487,15 +476,11 @@ void R_InitVisplanesRes(void);
 void R_InitPlanes(void);
 void R_ClearPlanes(void);
 void R_MapPlane(int y, int x1, int x2);
-void R_MakeSpans(int x, 
- unsigned int t1,  // [crispy] 32-bit integer math
- unsigned int b1,  // [crispy] 32-bit integer math
- unsigned int t2,  // [crispy] 32-bit integer math
- unsigned int b2); // [crispy] 32-bit integer math
 void R_DrawPlanes(void);
 
 visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel, int special);
 visplane_t *R_CheckPlane(visplane_t * pl, int start, int stop);
+visplane_t *R_DupPlane (const visplane_t *pl, int start, int stop);
 
 
 //
