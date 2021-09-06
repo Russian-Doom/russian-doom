@@ -39,7 +39,7 @@
 #define FIELDOFVIEW 2048	
 
 
-// [JN] Used for perfomance counter.
+// [JN] Used by perfomance counter.
 int rendered_segs, rendered_visplanes, rendered_vissprites;
 
 int           detailshift;      // 0 = high, 1 = low

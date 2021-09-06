@@ -616,7 +616,7 @@ void D_Display (void)
     // [JN] Draw local time and FPS widgets on top of everything, excluding wipes.
     DrawTimeAndFPS();
 
-    // [JN] A performance counters were drawn, reset them.
+    // [JN] Performance counters were drawn, reset them.
     R_ClearStats();
 
     NetUpdate ();   // send out any new accumulation

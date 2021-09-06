@@ -417,12 +417,27 @@ void DrawTimeAndFPS(void)
 
         if (show_fps)
         {
-            char fps[9999];
-            int  f = real_fps;
+            char digit[9999];
             
-            sprintf (fps, "%d", f);
+            sprintf (digit, "%d", real_fps);
             RD_M_DrawTextC("FPS:", 279 + (wide_4_3 ? wide_delta : wide_delta * 2), 23);
-            RD_M_DrawTextC(fps, 297 + (wide_4_3 ? wide_delta : wide_delta * 2), 23);   // [JN] fps digits
+            RD_M_DrawTextC(digit, 297 + (wide_4_3 ? wide_delta : wide_delta * 2), 23);   // [JN] fps digits
+
+            // [JN] Draw extra counters, only while playing in game level.
+            if (show_fps == 2 && gamestate == GS_LEVEL)
+            {
+                sprintf (digit, "%9d", rendered_segs);
+                RD_M_DrawTextC("SEGS", 297 + (wide_4_3 ? wide_delta : wide_delta*2), 32);
+                RD_M_DrawTextC(digit, 277 + (wide_4_3 ? wide_delta : wide_delta*2), 39);
+
+                sprintf (digit, "%9d", rendered_visplanes);
+                RD_M_DrawTextC("VISPLANES", 277 + (wide_4_3 ? wide_delta : wide_delta*2), 49);
+                RD_M_DrawTextC(digit, 277 + (wide_4_3 ? wide_delta : wide_delta*2), 56);
+
+                sprintf (digit, "%9d", rendered_vissprites);
+                RD_M_DrawTextC("SPRITES", 285 + (wide_4_3 ? wide_delta : wide_delta*2), 66);
+                RD_M_DrawTextC(digit, 277 + (wide_4_3 ? wide_delta : wide_delta*2), 73);
+            }
         }
     }
 }
@@ -526,6 +541,9 @@ void D_Display(void)
 
     // [JN] Draw local time and FPS widgets on top of everything.
     DrawTimeAndFPS();
+
+    // [JN] Performance counters were drawn, reset them.
+    R_ClearStats();
 
     // Send out any new accumulation
     NetUpdate();

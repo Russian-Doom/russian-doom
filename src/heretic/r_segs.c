@@ -339,7 +339,7 @@ static void R_RenderSegLoop(void)
     int         mid;
     fixed_t     texturecolumn = 0; // [JN] Purely to shut up the compiler.
 
-    // rendered_segs++;
+    rendered_segs++;
 
     for ( ; rw_x < rw_stopx ; rw_x++)
     {

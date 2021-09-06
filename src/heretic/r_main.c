@@ -28,6 +28,10 @@
 #include "i_timer.h"
 #include "jn.h"
 
+
+// [JN] Used by perfomance counter.
+int rendered_segs, rendered_visplanes, rendered_vissprites;
+
 int viewangleoffset;
 
 // haleyjd: removed WATCOMC
@@ -912,6 +916,21 @@ void R_SetupFrame (player_t *player)
         BorderTopRefresh = false;
         UpdateState |= I_MESSAGES;
     }
+}
+
+/*
+================================================================================
+=
+= R_ClearStats
+=
+================================================================================
+*/
+
+void R_ClearStats (void)
+{
+    rendered_segs = 0;
+    rendered_visplanes = 0;
+    rendered_vissprites = 0;
 }
 
 /*

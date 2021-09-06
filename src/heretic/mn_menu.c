@@ -77,7 +77,7 @@ static void DrawRenderingMenu(void);
 static void M_RD_Change_Widescreen(Direction_t direction);
 static void M_RD_Change_VSync();
 static void M_RD_Uncapped();
-static void M_RD_FPScounter();
+static void M_RD_PerfCounter(Direction_t direction);
 static void M_RD_Smoothing();
 static void M_RD_PorchFlashing();
 static void M_RD_Renderer();
@@ -471,7 +471,7 @@ static MenuItem_t RenderingItems[] = {
     {ITT_LRFUNC, "DISPLAY ASPECT RATIO:",     "CJJNYJITYBT CNJHJY \'RHFYF:",     M_RD_Change_Widescreen, 0}, // СООТНОШЕНИЕ СТОРОН ЭКРАНА
     {ITT_SWITCH, "VERTICAL SYNCHRONIZATION:", "DTHNBRFKMYFZ CBY[HJYBPFWBZ:",     M_RD_Change_VSync,      0}, // ВЕРТИКАЛЬНАЯ СИНХРОНИЗАЦИЯ
     {ITT_SWITCH, "FRAME RATE:",               "RFLHJDFZ XFCNJNF:",               M_RD_Uncapped,          0}, // КАДРОВАЯ ЧАСТОТА
-    {ITT_SWITCH, "FPS COUNTER:",              "CXTNXBR RFLHJDJQ XFCNJNS:",       M_RD_FPScounter,        0}, // СЧЕТЧИК КАДРОВОЙ ЧАСТОТЫ
+    {ITT_LRFUNC, "PERFORMANCE COUNTER:",      "CXTNXBR GHJBPDJLBNTKMYJCNB:",     M_RD_PerfCounter,       0}, // СЧЕТЧИК ПРОИЗВОДИТЕЛЬНОСТИ
     {ITT_SWITCH, "PIXEL SCALING:",            "GBRCTKMYJT CUKF;BDFYBT:",         M_RD_Smoothing,         0}, // ПИКСЕЛЬНОЕ СГЛАЖИВАНИЕ
     {ITT_SWITCH, "PORCH PALETTE CHANGING:",   "BPVTYTYBT GFKBNHS RHFTD 'RHFYF:", M_RD_PorchFlashing,     0}, // ИЗМЕНЕНИЕ ПАЛИТРЫ КРАЕВ ЭКРАНА
     {ITT_SWITCH, "VIDEO RENDERER:",           "J,HF,JNRF DBLTJ:",                M_RD_Renderer,          0}, // ОБРАБОТКА ВИДЕО
@@ -1659,8 +1659,10 @@ static void DrawRenderingMenu(void)
         // Uncapped FPS
         RD_M_DrawTextSmallENG(uncapped_fps ? "UNCAPPED" : "35 FPS", 120 + wide_delta, 62, CR_NONE);
 
-        // FPS counter
-        RD_M_DrawTextSmallENG(show_fps ? "ON" : "OFF", 129 + wide_delta, 72, CR_NONE);
+        // Performance counter
+        RD_M_DrawTextSmallENG(show_fps == 1 ? "FPS only" :
+                              show_fps == 2 ? "FULL" : "OFF", 
+                              192 + wide_delta, 72, CR_NONE);
 
         // Pixel scaling
         if (force_software_renderer)
@@ -1715,8 +1717,12 @@ static void DrawRenderingMenu(void)
         else
             RD_M_DrawTextSmallENG("35 FPS", 165 + wide_delta, 62, CR_NONE);
 
-        // Счетчик кадровой частоты
-        RD_M_DrawTextSmallRUS(show_fps ? "DRK" : "DSRK", 223 + wide_delta, 72, CR_NONE);
+        // Счетчик производительности
+        RD_M_DrawTextSmallRUS(show_fps == 1 ? "" : // Print as US string below
+                              show_fps == 2 ? "gjkysq" : "dsrk",
+                              236 + wide_delta, 72, CR_NONE);
+        // Print "FPS" separately, RU sting doesn't fit in 4:3 aspect ratio :(
+        if (show_fps == 1) RD_M_DrawTextSmallENG("fps", 236 + wide_delta, 72, CR_NONE);
 
         // Пиксельное сглаживание
         if (force_software_renderer)
@@ -1769,9 +1775,9 @@ static void M_RD_Uncapped()
     uncapped_fps ^= 1;
 }
 
-static void M_RD_FPScounter()
+static void M_RD_PerfCounter(Direction_t direction)
 {
-    show_fps ^= 1;
+    RD_Menu_SpinInt(&show_fps, 0, 2, direction);
 }
 
 static void M_RD_Smoothing()
