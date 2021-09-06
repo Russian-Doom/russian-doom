@@ -56,8 +56,10 @@ int maxframe;
 char *spritename;
 
 // constant arrays used for psprite clipping and initializing clipping
-int negonearray[WIDESCREENWIDTH];       // [crispy] 32-bit integer math
-int screenheightarray[WIDESCREENWIDTH]; // [crispy] 32-bit integer math
+int *negonearray;           // [JN] killough 2/8/98: // dropoff overflow
+int *screenheightarray;     //      change to MAX_*  // dropoff overflow
+static int *clipbot = NULL; // [JN] killough 2/8/98: // dropoff overflow
+static int *cliptop = NULL; //      change to MAX_*  // dropoff overflow
 
 static size_t num_vissprite, num_vissprite_alloc, num_vissprite_ptrs; // [JN] killough
 static vissprite_t *vissprites, **vissprite_ptrs;                     // [JN] killough
@@ -92,6 +94,47 @@ lighttable_t **fullbrights_blueonly_dim;
 lighttable_t **fullbrights_yellowonly_dim;
 lighttable_t **fullbrights_ethereal;
 
+
+/*
+================================================================================
+=
+= R_InitSpritesRes
+=
+================================================================================
+*/
+
+void R_InitSpritesRes (void)
+{
+    if (xtoviewangle)
+    {
+        free(xtoviewangle);
+    }
+    if (linearskyangle)
+    {
+        free(linearskyangle);
+    }
+    if (negonearray)
+    {
+        free(negonearray);
+    }
+    if (screenheightarray)
+    {
+        free(screenheightarray);
+    }
+
+    xtoviewangle = calloc(1, (screenwidth + 1) * sizeof(*xtoviewangle));
+    linearskyangle = calloc(1, (screenwidth + 1) * sizeof(*linearskyangle));
+    negonearray = calloc(1, screenwidth * sizeof(*negonearray));
+    screenheightarray = calloc(1, screenwidth * sizeof(*screenheightarray));
+
+    if (clipbot)
+    {
+        free(clipbot);
+    }
+
+    clipbot = calloc(1, 2 * screenwidth * sizeof(*clipbot));
+    cliptop = clipbot + screenwidth;
+}
 
 /*
 =================
@@ -1594,8 +1637,6 @@ void R_SortVisSprites (void)
 void R_DrawSprite (vissprite_t *spr)
 {
     drawseg_t *ds;
-    int clipbot[WIDESCREENWIDTH]; // [crispy] 32-bit integer math
-    int cliptop[WIDESCREENWIDTH]; // [crispy] 32-bit integer math
     int x, r1, r2;
     fixed_t scale, lowscale;
 

@@ -48,8 +48,11 @@ static visplane_t  *freetail;                // [JN] killough
 static visplane_t **freehead = &freetail;    // [JN] killough
 visplane_t         *floorplane, *ceilingplane;
 
-int  openings[MAXOPENINGS]; // [crispy] 32-bit integer math
-int* lastopening;           // [crispy] 32-bit integer math
+// [JN] killough 8/1/98: set static number of openings to be large enough
+// (a static limit is okay in this case and avoids difficulties in r_segs.c)
+
+size_t  maxopenings;
+int     *openings, *lastopening;  // [crispy] 32-bit integer math
 
 // killough -- hash function for visplanes
 // Empirically verified to be fairly uniform:
@@ -62,15 +65,16 @@ int* lastopening;           // [crispy] 32-bit integer math
 // floorclip starts out SCREENHEIGHT
 // ceilingclip starts out -1
 //
-int  floorclip[WIDESCREENWIDTH];   // [crispy] 32-bit integer math
-int  ceilingclip[WIDESCREENWIDTH]; // [crispy] 32-bit integer math
+// [JN] e6y: resolution limitation is removed
+int *floorclip = NULL;    // dropoff overflow
+int *ceilingclip = NULL;  // dropoff overflow
 
 //
 // spanstart holds the start of a plane span
 // initialized to 0 at start
 //
-int spanstart[SCREENHEIGHT];
-int spanstop[SCREENHEIGHT];
+// [JN] e6y: resolution limitation is removed
+static int *spanstart = NULL;  // killough 2/8/98
 
 //
 // texture mapping
@@ -78,16 +82,73 @@ int spanstop[SCREENHEIGHT];
 lighttable_t **planezlight;
 fixed_t planeheight;
 
-fixed_t* yslope;
+// [JN] e6y: resolution limitation is removed
+fixed_t *yslope = NULL;
+fixed_t *distscale = NULL;
 fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
-fixed_t distscale[WIDESCREENWIDTH];
-fixed_t basexscale, baseyscale;
 
 fixed_t cachedheight[SCREENHEIGHT];
 fixed_t cacheddistance[SCREENHEIGHT];
 fixed_t cachedxstep[SCREENHEIGHT];
 fixed_t cachedystep[SCREENHEIGHT];
 
+
+/*
+================================================================================
+=
+= R_InitPlanesRes
+=
+================================================================================
+*/
+
+void R_InitPlanesRes (void)
+{
+    if (floorclip)
+    {
+        free(floorclip);
+    }
+    if (ceilingclip)
+    {
+        free(ceilingclip);
+    }
+    if (spanstart)
+    {
+        free(spanstart);
+    }
+    if (yslope)
+    {
+        free(yslope);
+    }
+    if (distscale)
+    {
+        free(distscale);
+    }
+
+    floorclip = calloc(1, screenwidth * sizeof(*floorclip));
+    ceilingclip = calloc(1, screenwidth * sizeof(*ceilingclip));
+    spanstart = calloc(1, screenwidth * sizeof(*spanstart));
+    yslope = calloc(1, screenwidth * sizeof(*yslope));
+    distscale = calloc(1, screenwidth * sizeof(*distscale));
+}
+
+/*
+================================================================================
+=
+= R_InitVisplanesRes
+=
+================================================================================
+*/
+
+void R_InitVisplanesRes (void)
+{
+    freetail = NULL;
+    freehead = &freetail;
+
+    for (int i = 0; i < MAXVISPLANES; i++)
+    {
+        visplanes[i] = 0;
+    }
+}
 
 /*
 ================================================================================
@@ -119,8 +180,6 @@ void R_InitSkyMap (void)
 = 
 = planeheight
 = ds_source
-= basexscale
-= baseyscale
 = viewx
 = viewy
 = 
@@ -201,7 +260,6 @@ void R_MapPlane (int y, int x1, int x2)
 void R_ClearPlanes (void)
 {
     int i;
-    const angle_t angle = (viewangle - ANG90) >> ANGLETOFINESHIFT; // left to right mapping
 
     // opening / clipping determination
     for (i = 0; i < viewwidth; i++)
@@ -218,10 +276,6 @@ void R_ClearPlanes (void)
 
     // texture calculation
     memset(cachedheight, 0, sizeof(cachedheight));
-
-    // scale will be unit scale at SCREENWIDTH/2 distance
-    basexscale = FixedDiv(finecosine[angle], centerxfrac);
-    baseyscale = -FixedDiv(finesine[angle], centerxfrac);
 }
 
 /*

@@ -337,8 +337,8 @@ extern player_t *viewplayer;
 extern angle_t clipangle;
 
 extern int viewangletox[FINEANGLES / 2];
-extern angle_t xtoviewangle[WIDESCREENWIDTH + 1];
-extern angle_t linearskyangle[WIDESCREENWIDTH + 1];
+extern angle_t *xtoviewangle;
+extern angle_t *linearskyangle;
 
 extern fixed_t rw_distance;
 extern angle_t rw_normalangle;
@@ -476,14 +476,14 @@ extern int skyflatnum;
 
 extern int*  lastopening; // [crispy] 32-bit integer math
   
+// [JN] e6y: resolution limitation is removed
+extern int *floorclip, *ceilingclip; // dropoff overflow
 
-extern int floorclip[WIDESCREENWIDTH];   // [crispy] 32-bit integer math
-extern int ceilingclip[WIDESCREENWIDTH]; // [crispy] 32-bit integer math
-
-extern fixed_t* yslope;
+extern fixed_t *yslope, *distscale;
 extern fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
-extern fixed_t distscale[WIDESCREENWIDTH];
 
+void R_InitPlanesRes(void);
+void R_InitVisplanesRes(void);
 void R_InitPlanes(void);
 void R_ClearPlanes(void);
 void R_MapPlane(int y, int x1, int x2);
@@ -532,8 +532,8 @@ void R_PrecacheLevel(void);
 //
 
 // constant arrays used for psprite clipping and initializing clipping
-extern int negonearray[WIDESCREENWIDTH];       // [crispy] 32-bit integer math
-extern int screenheightarray[WIDESCREENWIDTH]; // [crispy] 32-bit integer math
+extern int *negonearray;       // [JN] killough 2/8/98: // dropoff overflow
+extern int *screenheightarray; //      change to MAX_*  // dropoff overflow
 
 // vars for R_DrawMaskedColumn
 extern int*  mfloorclip;   // [crispy] 32-bit integer math
@@ -544,12 +544,9 @@ extern int64_t sprbotscreen;
 
 extern fixed_t pspritescale, pspriteiscale;
 
-
+void R_InitSpritesRes (void);
 void R_DrawMaskedColumn(column_t * column, signed int baseclip);
-
-
 void R_SortVisSprites(void);
-
 void R_AddSprites(sector_t * sec);
 void R_AddPSprites(void);
 void R_DrawSprites(void);
