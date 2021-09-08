@@ -236,18 +236,20 @@ static void M_RD_SelectiveArti_7(Direction_t direction);
 static void M_RD_SelectiveArti_8(Direction_t direction);
 static void M_RD_SelectiveArti_9(Direction_t direction);
 
-// Vanilla Options menu
-static void DrawOptionsMenu_Vanilla(void);
-static void DrawOptions2Menu_Vanilla(void);
+// Reset Settings
+static void DrawResetSettingsMenu(void);
+static void M_RD_BackToDefaults_Recommended();
+static void M_RD_BackToDefaults_Original();
+
+// Change language
+static void M_RD_ChangeLanguage(Direction_t direction);
 
 // End game
 static void M_RD_EndGame(int option);
 
-// Reset settings
-static void M_RD_ResetSettings(int option);
-
-// Change language
-static void M_RD_ChangeLanguage(Direction_t direction);
+// Vanilla Options menu
+static void DrawOptionsMenu_Vanilla(void);
+static void DrawOptions2Menu_Vanilla(void);
 
 // Public Data
 int InfoType;
@@ -362,6 +364,7 @@ static Menu_t LevelSelectMenu1;
 static Menu_t LevelSelectMenu2;
 static Menu_t LevelSelectMenu3;
 static const Menu_t* LevelSelectMenuPages[] = {&LevelSelectMenu1, &LevelSelectMenu2, &LevelSelectMenu3};
+static Menu_t ResetSettings;
 static Menu_t VanillaOptions2Menu;
 static Menu_t FilesMenu;
 static Menu_t LoadMenu;
@@ -447,7 +450,7 @@ static MenuItem_t RDOptionsItems[] = {
     {ITT_SETMENU, "CONTROLS",          "EGHFDKTYBT",     &ControlsMenu,       0}, // УПРАВЛЕНИЕ
     {ITT_SETMENU, "GAMEPLAY",          "UTQVGKTQ",       &Gameplay1Menu,      0}, // ГЕЙМПЛЕЙ
     {ITT_SETMENU, "LEVEL SELECT",      "DS,JH EHJDYZ",   &LevelSelectMenu1,   0}, // ВЫБОР УРОВНЯ
-    {ITT_EFUNC,   "RESET SETTINGS",    "C,HJC YFCNHJTR", M_RD_ResetSettings,  0}, // СБРОС НАСТРОЕК
+    {ITT_SETMENU, "RESET SETTINGS",    "C,HJC YFCNHJTR", &ResetSettings,      0}, // СБРОС НАСТРОЕК
     {ITT_LRFUNC,  "LANGUAGE: ENGLISH", "ZPSR: HECCRBQ",  M_RD_ChangeLanguage, 0}  // ЯЗЫК: РУССКИЙ
 };
 
@@ -1126,6 +1129,26 @@ static Menu_t LevelSelectMenu3 = {
     &LevelSelectPageDescriptor,
     &RDOptionsMenu,
     1
+};
+
+// -----------------------------------------------------------------------------
+// Reset settings
+// -----------------------------------------------------------------------------
+
+static MenuItem_t ResetSettingstems[] = {
+    {ITT_EFUNC,  "RECOMMENDED", "HTRJVTYLJDFYYSQ", M_RD_BackToDefaults_Recommended, 0}, // РЕКОМЕНДОВАННЫЙ
+    {ITT_EFUNC,  "ORIGINAL",    "JHBUBYFKMYSQ",    M_RD_BackToDefaults_Original,    0}, // ОРИГИНАЛЬНЫЙ
+};
+
+static Menu_t ResetSettings = {
+    115, 100,
+    95,
+    "", "", false,
+    2, ResetSettingstems, false,
+    DrawResetSettingsMenu,
+    NULL,
+    &RDOptionsMenu,
+    0
 };
 
 // -----------------------------------------------------------------------------
@@ -3783,6 +3806,56 @@ static void M_RD_SelectiveArti_9(Direction_t direction)
     RD_Menu_SlideInt(&selective_arti_9, 0, 16, direction);
 }
 
+// -----------------------------------------------------------------------------
+// DrawLevelSelect1Menu
+// -----------------------------------------------------------------------------
+
+static void DrawResetSettingsMenu(void)
+{
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    if (english_language)
+    {
+        RD_M_DrawTextBigENG("SETTINGS RESET", 96, 42);
+
+        RD_M_DrawTextSmallENG("GRAPHICAL, AUDIBLE AND GAMEPLAY SETTINGS", 19 + wide_delta, 65, CR_NONE);
+        RD_M_DrawTextSmallENG("WILL BE RESET TO THEIR DEFAULT VALUES.", 31 + wide_delta, 75, CR_NONE);
+        RD_M_DrawTextSmallENG("WHICH LEVEL OF VALUES TO USE?", 58 + wide_delta, 85, CR_NONE);
+
+        // Explanations
+        RD_M_DrawTextSmallENG("SETTINGS WILL BE RESET TO", 75 + wide_delta, 145, CR_WHITE2GREEN_HERETIC);
+        if (CurrentItPos == 0)
+        {
+            RD_M_DrawTextSmallENG("DEFAULT PORT'S VALUES", 84 + wide_delta, 155, CR_WHITE2GREEN_HERETIC);
+        }
+        else
+        {
+            RD_M_DrawTextSmallENG("ORIGINAL HERETIC VALUES", 80 + wide_delta, 155, CR_WHITE2GREEN_HERETIC);
+        }
+    }
+    else
+    {
+        RD_M_DrawTextBigRUS("C,HJC YFCNHJTR", 82, 42);  // СБРОС НАСТРОЕК
+
+        RD_M_DrawTextSmallRUS("YFCNHJQRB UHFABRB< PDERF B UTQVGKTZ", 34 + wide_delta, 65, CR_NONE);      // Настройки графики, звука и геймплея
+        RD_M_DrawTextSmallRUS(",ELEN C,HJITYS YF CNFYLFHNYST PYFXTYBZ>", 16 + wide_delta, 75, CR_NONE);  // Будут сброшены на стандартные значения.
+        RD_M_DrawTextSmallRUS("DS,THBNT EHJDTYM PYFXTYBQ:", 66 + wide_delta, 85, CR_NONE);               // Выберите уровень значений:
+
+        // Пояснения
+        RD_M_DrawTextSmallRUS(",ELEN BCGJKMPJDFYS PYFXTYBZ", 60 + wide_delta, 145, CR_WHITE2GREEN_HERETIC);  // Будут использованы значения
+        if (CurrentItPos == 0)
+        {
+            RD_M_DrawTextSmallRUS("HTRJVTYLETVST GJHNJV", 82 + wide_delta, 155, CR_WHITE2GREEN_HERETIC);  // рекомендуемые портом
+        }
+        else
+        {
+            RD_M_DrawTextSmallRUS("JHBUBYFKMYJUJ", 83 + wide_delta, 155, CR_WHITE2GREEN_HERETIC);
+            RD_M_DrawTextSmallENG("HERETIC", 185 + wide_delta, 155, CR_WHITE2GREEN_HERETIC);
+        }
+    }
+}
+
 //---------------------------------------------------------------------------
 // [JN] Vanilla Options menu 1 and 2
 //---------------------------------------------------------------------------
@@ -3839,19 +3912,7 @@ static void M_RD_EndGame(int option)
 // M_RD_ResetSettings
 //---------------------------------------------------------------------------
 
-static void M_RD_ResetSettings(int option)
-{
-    menuactive = false;
-    askforquit = true;
-    typeofask = 5;              // Reset settings to their defaults
-
-    if (!netgame && !demoplayback)
-    {
-        paused = true;
-    }
-}
-
-void M_RD_DoResetSettings(void)
+static void M_RD_BackToDefaults_Recommended(void)
 {
     // Rendering
     vsync                   = 1;
@@ -3867,18 +3928,19 @@ void M_RD_DoResetSettings(void)
     screenblocks        = 10;
     usegamma            = 4;
     level_brightness    = 0;
-    local_time          = 0;
-    show_messages       = 1;
-    messages_alignment  = 0;
-    messages_timeout    = 4;
-    message_fade        = 1;
-    draw_shadowed_text  = 1;
+    detailLevel         = 0;
 
     // Messages
+    show_messages        = 1;
+    messages_alignment   = 0;
+    messages_timeout     = 4;
+    message_fade         = 1;
+    draw_shadowed_text   = 1;
+    local_time           = 0;
     message_pickup_color = 0;
-    message_secret_color = 15;
+    message_secret_color = 13;
     message_system_color = 0;
-    message_chat_color = 5;
+    message_chat_color   = 5;
 
     // Automap
     automap_overlay    = 0;
@@ -3887,16 +3949,25 @@ void M_RD_DoResetSettings(void)
     automap_grid       = 0;
     automap_grid_size  = 128;    
     automap_stats      = 1;
-    automap_level_time = 1;
+    automap_level_time = 0;
     automap_total_time = 0;
     automap_coords     = 0;
 
     // Audio
     snd_MaxVolume   = 8;
-    S_SetMaxVolume(false);      // don't recalc the sound curve, yet
-    soundchanged = true;        // we'll set it when we leave the menu
+    snd_MaxVolume_tmp = snd_MaxVolume; // [JN] Sync temp volume variable,
+    S_SetMaxVolume(true);              // and recalc the sound curve now.
+    soundchanged = true;
+
+    snd_musicdevice = 3;
+    snd_dmxoption   = "-opl3";
     snd_MusicVolume = 8;
-    S_SetMusicVolume();
+    S_StopSong();                       // [JN] Shut down current music,
+    I_ShutdownSound();                  // shut down music system,
+    I_InitSound(true);                  // start music system,
+    S_SetMusicVolume();                 // reinitialize music volume,
+    S_StartSong(mus_song, true, true);  // restart current music.
+
     snd_Channels    = 32;
     S_ChannelsRealloc();
     snd_monomode    = 0;
@@ -3904,38 +3975,156 @@ void M_RD_DoResetSettings(void)
     mute_inactive_window = 0;
 
     // Controls
-    mouseSensitivity    = 5;
-    mlook               = 0;
-    players[consoleplayer].centering = true;
-    novert              = 1;    
+    mouseSensitivity   = 5;
+    mlook              = 0; players[consoleplayer].centering = true;
+    mouse_acceleration = 2.0F;
+    mouse_threshold    = 10;
+    novert             = 1;    
 
     // Gameplay (1)
     brightmaps           = 1;
     fake_contrast        = 0;
     translucency         = 1;
-    sbar_colored         = 0;
-    sbar_colored_gem     = 0;
     colored_blood        = 1;
     swirling_liquids     = 1;
     invul_sky            = 1;
-    linear_sky            = 1;
+    linear_sky           = 1;
     torque               = 1;
     weapon_bobbing       = 1;
     randomly_flipcorpses = 1;
-    ammo_widget          = 0;
-    ammo_widget_colored  = 1;
+    floating_powerups    = 1;
 
     // Gameplay (2)
-    z_axis_sfx           = 0;
+    sbar_colored         = 0;
+    sbar_colored_gem     = 0;
+    negative_health      = 0;
+    ammo_widget          = 0;
+    ammo_widget_colored  = 0;
+    crosshair_draw       = 0;
+    crosshair_type       = 1;
+    crosshair_scale      = 0;
+
+    // Gameplay (3)
+    z_axis_sfx           = 1;
     noise_alert_sfx      = 0;
     secret_notification  = 1;
     show_all_artifacts   = 0;
     show_artifacts_timer = 0;
+    fix_map_errors       = 1;
+    flip_levels          = 0;
+    no_internal_demos    = 0;
+    pistol_start         = 0;
+
+    // Do a full graphics reinitialization
+    I_InitGraphics();
+    R_SetViewSize(screenblocks, detailLevel);
+
+    BorderNeedRefresh = true;
+
+    P_SetMessage(&players[consoleplayer], txt_settings_reset, msg_system, false);
+    S_StartSound(NULL, sfx_dorcls);
+    menuactive = true;
+}
+
+static void M_RD_BackToDefaults_Original(void)
+{
+    // Rendering
+    vsync                   = 1;
+    aspect_ratio_correct    = 1;
+    uncapped_fps            = 0;
+    show_fps                = 0;
+    smoothing               = 0;
+    vga_porch_flash         = 0;
+    force_software_renderer = 0;
+    png_screenshots         = 1;
+
+    // Display
+    screenblocks        = 10;
+    usegamma            = 9;
+    level_brightness    = 0;
+    detailLevel         = 1;
+
+    // Messages
+    show_messages        = 1;
+    messages_alignment   = 0;
+    messages_timeout     = 4;
+    message_fade         = 0;
+    draw_shadowed_text   = 0;
+    local_time           = 0;
+    message_pickup_color = 0;
+    message_secret_color = 0;
+    message_system_color = 0;
+    message_chat_color   = 0;
+
+    // Automap
+    automap_overlay    = 0;
+    automap_rotate     = 0;
+    automap_follow     = 1;
+    automap_grid       = 0;
+    automap_grid_size  = 128;    
+    automap_stats      = 0;
+    automap_level_time = 0;
+    automap_total_time = 0;
+    automap_coords     = 0;
+
+    // Audio
+    snd_MaxVolume   = 8;
+    snd_MaxVolume_tmp = snd_MaxVolume; // [JN] Sync temp volume variable,
+    S_SetMaxVolume(true);              // and recalc the sound curve now.
+    soundchanged = true;
+
+    snd_musicdevice = 3;
+    snd_dmxoption   = "-opl3";
+    snd_MusicVolume = 8;
+    S_StopSong();                       // [JN] Shut down current music,
+    I_ShutdownSound();                  // shut down music system,
+    I_InitSound(true);                  // start music system,
+    S_SetMusicVolume();                 // reinitialize music volume,
+    S_StartSong(mus_song, true, true);  // restart current music.
+
+    snd_Channels    = 8;
+    S_ChannelsRealloc();
+    snd_monomode    = 0;
+    snd_pitchshift  = 1;
+    mute_inactive_window = 0;
+
+    // Controls
+    mouseSensitivity   = 5;
+    mlook              = 0; players[consoleplayer].centering = true;
+    mouse_acceleration = 2.0F;
+    mouse_threshold    = 10;
+    novert             = 1;    
+
+    // Gameplay (1)
+    brightmaps           = 0;
+    fake_contrast        = 1;
+    translucency         = 0;
+    colored_blood        = 0;
+    swirling_liquids     = 0;
+    invul_sky            = 0;
+    linear_sky           = 0;
+    torque               = 0;
+    weapon_bobbing       = 0;
+    randomly_flipcorpses = 0;
+    floating_powerups    = 1;
+
+    // Gameplay (2)
+    sbar_colored         = 0;
+    sbar_colored_gem     = 0;
     negative_health      = 0;
+    ammo_widget          = 0;
+    ammo_widget_colored  = 0;
     crosshair_draw       = 0;
     crosshair_type       = 1;
     crosshair_scale      = 0;
-    fix_map_errors       = 1;
+
+    // Gameplay (3)
+    z_axis_sfx           = 0;
+    noise_alert_sfx      = 0;
+    secret_notification  = 0;
+    show_all_artifacts   = 0;
+    show_artifacts_timer = 0;
+    fix_map_errors       = 0;
     flip_levels          = 0;
     no_internal_demos    = 0;
     pistol_start         = 0;
@@ -4318,10 +4507,6 @@ boolean MN_Responder(event_t * event)
                     P_SetMessage(&players[consoleplayer], txt_quickloading, msg_system, false);
                     SCLoadGame(quickload - 1);
                     BorderNeedRefresh = true;
-                    break;
-
-                case 5:
-                    M_RD_DoResetSettings();
                     break;
 
                 default:
