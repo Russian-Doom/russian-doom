@@ -27,44 +27,45 @@
 int leveltime;
 int TimerGame;
 
+
 /*
-===============================================================================
+================================================================================
 
 								THINKERS
 
-All thinkers should be allocated by Z_Malloc so they can be operated on uniformly.  The actual
-structures will vary in size, but the first element must be thinker_t.
+All thinkers should be allocated by Z_Malloc so they can be operated on uniformly.
+The actual structures will vary in size, but the first element must be thinker_t.
 
-===============================================================================
+================================================================================
 */
 
-thinker_t thinkercap;           // both the head and tail of the thinker list
+thinker_t thinkercap;  // both the head and tail of the thinker list
 
 /*
-===============
+================================================================================
 =
 = P_InitThinkers
 =
-===============
+================================================================================
 */
 
-void P_InitThinkers(void)
+void P_InitThinkers (void)
 {
     thinkercap.prev = thinkercap.next = &thinkercap;
 }
 
 
 /*
-===============
+================================================================================
 =
 = P_AddThinker
 =
 = Adds a new thinker at the end of the list
 =
-===============
+================================================================================
 */
 
-void P_AddThinker(thinker_t * thinker)
+void P_AddThinker(thinker_t *thinker)
 {
     thinkercap.prev->next = thinker;
     thinker->next = &thinkercap;
@@ -73,45 +74,30 @@ void P_AddThinker(thinker_t * thinker)
 }
 
 /*
-===============
+================================================================================
 =
 = P_RemoveThinker
 =
 = Deallocation is lazy -- it will not actually be freed until its
 = thinking turn comes up
 =
-===============
+================================================================================
 */
 
-void P_RemoveThinker(thinker_t * thinker)
+void P_RemoveThinker(thinker_t *thinker)
 {
     thinker->function = (think_t) - 1;
 }
 
 /*
-===============
-=
-= P_AllocateThinker
-=
-= Allocates memory and adds a new thinker at the end of the list
-=
-===============
-*/
-
-void P_AllocateThinker(thinker_t * thinker)
-{
-}
-
-
-/*
-===============
+================================================================================
 =
 = P_RunThinkers
 =
-===============
+================================================================================
 */
 
-void P_RunThinkers(void)
+static void P_RunThinkers (void)
 {
     thinker_t *currentthinker, *nextthinker;
 
@@ -165,27 +151,29 @@ void P_RunThinkers(void)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// PROC P_Ticker
-//
-//----------------------------------------------------------------------------
+/*
+================================================================================
+=
+= P_Ticker
+=
+================================================================================
+*/
 
-void P_Ticker(void)
+void P_Ticker (void)
 {
-    int i;
-
     if (paused)
     {
         return;
     }
-    for (i = 0; i < MAXPLAYERS; i++)
+
+    for (int i = 0; i < MAXPLAYERS; i++)
     {
         if (playeringame[i])
         {
             P_PlayerThink(&players[i]);
         }
     }
+
     if (TimerGame)
     {
         if (!--TimerGame)
@@ -193,6 +181,7 @@ void P_Ticker(void)
             G_ExitLevel();
         }
     }
+
     P_RunThinkers();
     P_UpdateSpecials();
     P_AmbientSound();
