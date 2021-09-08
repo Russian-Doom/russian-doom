@@ -4895,20 +4895,19 @@ void M_RD_Draw_Reset(void)
         M_WriteTextSmallCentered_ENG(85, "Which level of values to use?");
 
         // Explanations
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmallCentered_ENG(145, "Settings will be reset to");
         if (CurrentItPos == 0)
         {
-            dp_translation = cr[CR_DARKRED];
-            M_WriteTextSmallCentered_ENG(145, "Settings will be reset to");
+
             M_WriteTextSmallCentered_ENG(155, "default port's values");
-            dp_translation = NULL;
+
         }
         else
         {
-            dp_translation = cr[CR_DARKRED];
-            M_WriteTextSmallCentered_ENG(145, "Settings will be reset to");
             M_WriteTextSmallCentered_ENG(155, "original Doom values");
-            dp_translation = NULL;
         }
+        dp_translation = NULL;
     }
     else
     {
@@ -4917,21 +4916,18 @@ void M_RD_Draw_Reset(void)
         M_WriteTextSmallCentered_RUS(85, "Ds,thbnt ehjdtym pyfxtybq:");              // Выберите уровень значений:
 
         // Пояснения
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmallCentered_RUS(145, ",elen bcgjkmpjdfys pyfxtybz");  // Будут использованы значения
         if (CurrentItPos == 0)
         {
-            dp_translation = cr[CR_DARKRED];
-            M_WriteTextSmallCentered_RUS(145, ",elen bcgjkmpjdfys pyfxtybz");       // Будут использованы значения
-            M_WriteTextSmallCentered_RUS(155, "htrjvtyletvst gjhnjv");              // рекомендуемые портом
-            dp_translation = NULL;
+            M_WriteTextSmallCentered_RUS(155, "htrjvtyletvst gjhnjv");  // рекомендуемые портом
         }
         else
         {
-            dp_translation = cr[CR_DARKRED];
-            M_WriteTextSmallCentered_RUS(145, ",elen bcgjkmpjdfys pyfxtybz");       // Будут использованы значения
-            dp_translation = NULL;
-            RD_M_DrawTextSmallRUS("jhbubyfkmyjuj", 85 + wide_delta, 155, CR_DARKRED); // оригинального Doom
+            RD_M_DrawTextSmallRUS("jhbubyfkmyjuj", 85 + wide_delta, 155, CR_DARKRED);  // оригинального Doom
             RD_M_DrawTextSmallENG("Doom", 193 + wide_delta, 155, CR_DARKRED);
         }
+        dp_translation = NULL;
     }
 }
 
