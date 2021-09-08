@@ -507,8 +507,7 @@ static void R_Subsector (int num)
                    frontsector->ceilingpic == skyflatnum ?
                    R_FindPlane (frontsector->interpceilingheight,
                                 frontsector->ceilingpic,
-                                frontsector->lightlevel,
-                                frontsector->special) : NULL;
+                                frontsector->lightlevel, 0) : NULL;
 
     // BSP is traversed by subsector.
     // A sector might have been split into several 
