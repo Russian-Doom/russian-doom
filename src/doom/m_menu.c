@@ -4899,9 +4899,7 @@ void M_RD_Draw_Reset(void)
         M_WriteTextSmallCentered_ENG(145, "Settings will be reset to");
         if (CurrentItPos == 0)
         {
-
             M_WriteTextSmallCentered_ENG(155, "default port's values");
-
         }
         else
         {
