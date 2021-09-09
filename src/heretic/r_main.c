@@ -17,15 +17,10 @@
 // R_main.c
 
 
-
-#include <stdlib.h>
 #include <math.h>
 #include "doomdef.h"
-#include "m_bbox.h"
 #include "r_local.h"
 #include "p_local.h"
-#include "tables.h"
-#include "i_timer.h"
 #include "jn.h"
 
 
@@ -33,23 +28,18 @@
 int rendered_segs, rendered_visplanes, rendered_vissprites;
 
 int viewangleoffset;
-
-// haleyjd: removed WATCOMC
-
 int validcount = 1;             // increment every time a check is made
 
 lighttable_t *fixedcolormap;
-extern lighttable_t **walllights;
 
 int centerx, centery;
 fixed_t centerxfrac, centeryfrac;
 fixed_t projection;
 
-int linecount, loopcount;
-
 fixed_t viewx, viewy, viewz;
-angle_t viewangle;
 fixed_t viewcos, viewsin;
+angle_t viewangle;
+
 player_t *viewplayer;
 
 int detailshift;                // 0 = high, 1 = low

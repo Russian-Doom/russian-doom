@@ -352,7 +352,7 @@ extern int   columnofs[WIDESCREENWIDTH];
 
 extern int validcount;
 
-extern int linecount, loopcount;
+extern lighttable_t **walllights;
 extern lighttable_t *scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t *scalelightfixed[MAXLIGHTSCALE];
 extern lighttable_t *zlight[LIGHTLEVELS][MAXLIGHTZ];
