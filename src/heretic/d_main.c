@@ -368,10 +368,10 @@ void DrawMessage(void)
         }
         else
         {
-            RD_M_DrawTextSmallRUS(player->message,
+            RD_M_DrawTextSmallRUSFade(player->message,
                                   messages_alignment == 0 ? 160 - RD_M_TextSmallRUSWidth(player->message) / 2 + wide_delta :  // по центру
                                   messages_alignment == 1 ? 4 + wide_4_3 :           // по краю экрана
-                                                            wide_delta, 1, CR_NONE); // по краю статус-бара
+                                                            wide_delta, 1, NULL); // по краю статус-бара
         }
     }
 

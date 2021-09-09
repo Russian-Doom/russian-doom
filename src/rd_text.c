@@ -399,7 +399,16 @@ void RD_M_DrawTextSmallRUSFade(char *text, int x, int y, byte *table)
             c = toupper(c);
             // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
             p = W_CacheLumpNum(smallRusFont + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
-            V_DrawFadePatch(cx, cy, p, table);
+            if (table)
+            {
+                V_DrawFadePatch(cx, cy, p, table);
+            }
+            else
+            {
+                // [JN] Draw as opaque if NULL table given.
+                drawShadowedPatch(cx, cy, p);
+            }
+            
             cx += SHORT(p->width) - (RD_GameType == gt_Doom ? 0 : 1);
         }
     }
