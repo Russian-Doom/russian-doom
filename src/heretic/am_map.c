@@ -17,12 +17,8 @@
 // AM_map.c
 
 
-
-#include <stdio.h>
-
 #include "doomdef.h"
 #include "deh_str.h"
-#include "i_video.h"
 #include "p_local.h"
 #include "rd_keybinds.h"
 #include "am_map.h"
@@ -30,13 +26,13 @@
 #include "v_video.h"
 #include "jn.h"
 
+
+boolean automapactive = false;
 vertex_t KeyPoints[NUMKEYS];
 
 static int cheating = 0;
+static int leveljuststarted = 1;  // kluge until AM_LevelInit() is called
 
-static int leveljuststarted = 1;        // kluge until AM_LevelInit() is called
-
-boolean automapactive = false;
 static int finit_height = SCREENHEIGHT - (42 << hires);
 static int f_x, f_y;            // location of window on screen
 static int f_w, f_h;            // size of window on screen
@@ -77,6 +73,8 @@ static char cheat_amap[] = { 'r', 'a', 'v', 'm', 'a', 'p' };
 
 static byte cheatcount = 0;
 
+static boolean stopped = true;
+
 extern boolean viewactive;
 
 #define NUMALIAS 11              // Number of antialiased lines.
@@ -110,23 +108,23 @@ static byte antialias_overlay[NUMALIAS][8] = {
     {  0,   0,   1,   1,   2,   2,   3,   4}    // BLACK
 };
 
-static patch_t *maplump;        // [JN] Pointer to the GFX patch for the automap background.
-static short mapystart = 0;     // y-value for the start of the map bitmap...used in the paralax stuff.
-static short mapxstart = 0;     //x-value for the bitmap.
+static patch_t *maplump;     // [JN] Pointer to the GFX patch for the automap background.
+static short mapystart = 0;  // y-value for the start of the map bitmap...used in the paralax stuff.
+static short mapxstart = 0;  // x-value for the bitmap.
 
 // [crispy] automap rotate mode ...
 // ... needs these early on
-void AM_rotate (int64_t *x, int64_t *y, angle_t a);
+static void AM_rotate (int64_t *x, int64_t *y, angle_t a);
 static void AM_rotatePoint (mpoint_t *pt);
 static mpoint_t mapcenter;
 static angle_t mapangle;
 
 // Functions
+static void DrawWuLine(int X0, int Y0, int X1, int Y1, byte * BaseColor,
+                       int NumLevels, unsigned short IntensityBits);
 
-void DrawWuLine(int X0, int Y0, int X1, int Y1, byte * BaseColor,
-                int NumLevels, unsigned short IntensityBits);
 
-void AM_activateNewScale(void)
+static void AM_activateNewScale(void)
 {
     m_x += m_w / 2;
     m_y += m_h / 2;
@@ -138,7 +136,7 @@ void AM_activateNewScale(void)
     m_y2 = m_y + m_h;
 }
 
-void AM_saveScaleAndLoc(void)
+static void AM_saveScaleAndLoc(void)
 {
     old_m_x = m_x;
     old_m_y = m_y;
@@ -146,7 +144,7 @@ void AM_saveScaleAndLoc(void)
     old_m_h = m_h;
 }
 
-void AM_restoreScaleAndLoc(void)
+static void AM_restoreScaleAndLoc(void)
 {
 
     m_w = old_m_w;
@@ -169,7 +167,7 @@ void AM_restoreScaleAndLoc(void)
     scale_ftom = FixedDiv(FRACUNIT, scale_mtof);
 }
 
-void AM_findMinMaxBoundaries(void)
+static void AM_findMinMaxBoundaries(void)
 {
     int i;
     fixed_t a, b;
@@ -199,10 +197,9 @@ void AM_findMinMaxBoundaries(void)
 
     min_scale_mtof = a < b ? a/2 : b/2;
     max_scale_mtof = FixedDiv(f_h << FRACBITS, 2 * PLAYERRADIUS);
-
 }
 
-void AM_changeWindowLoc(void)
+static void AM_changeWindowLoc(void)
 {
     int64_t incx, incy;
 
@@ -262,7 +259,7 @@ void AM_changeWindowLoc(void)
     m_y2 = m_y + m_h;
 }
 
-void AM_initVariables(void)
+static void AM_initVariables(void)
 {
     int pnum;
     thinker_t *think;
@@ -339,7 +336,7 @@ void AM_initVariables(void)
     }
 }
 
-void AM_loadPics(void)
+static void AM_loadPics(void)
 {
     // [JN] Parallax problem: AUTOPAGE changed to unreplacable MAPEPAGE.
     maplump = W_CacheLumpName(DEH_String("MAPEPAGE"), PU_STATIC);
@@ -348,7 +345,7 @@ void AM_loadPics(void)
 // should be called at the start of every level
 // right now, i figure it out myself
 
-void AM_LevelInit(void)
+static void AM_LevelInit(void)
 {
     fixed_t a, b;
     leveljuststarted = 0;
@@ -370,8 +367,6 @@ void AM_LevelInit(void)
         scale_mtof = min_scale_mtof;
     scale_ftom = FixedDiv(FRACUNIT, scale_mtof);
 }
-
-static boolean stopped = true;
 
 void AM_Stop(void)
 {
@@ -405,7 +400,7 @@ void AM_Start(void)
 
 // set the window scale to the maximum size
 
-void AM_minOutWindowScale(void)
+static void AM_minOutWindowScale(void)
 {
     scale_mtof = min_scale_mtof;
     scale_ftom = FixedDiv(FRACUNIT, scale_mtof);
@@ -414,14 +409,14 @@ void AM_minOutWindowScale(void)
 
 // set the window scale to the minimum size
 
-void AM_maxOutWindowScale(void)
+static void AM_maxOutWindowScale(void)
 {
     scale_mtof = max_scale_mtof;
     scale_ftom = FixedDiv(FRACUNIT, scale_mtof);
     AM_activateNewScale();
 }
 
-boolean AM_Responder(event_t * ev)
+boolean AM_Responder(event_t *ev)
 {
     int rc;
     static int bigstate = 0;
@@ -587,7 +582,7 @@ boolean AM_Responder(event_t * ev)
     return rc;
 }
 
-void AM_changeWindowScale(void)
+static void AM_changeWindowScale(void)
 {
 
     // Change the scaling multipliers
@@ -608,7 +603,7 @@ void AM_changeWindowScale(void)
     }
 }
 
-void AM_doFollowPlayer(void)
+static void AM_doFollowPlayer(void)
 {
     if (f_oldloc.x != plr->mo->x || f_oldloc.y != plr->mo->y)
     {
@@ -628,9 +623,10 @@ void AM_doFollowPlayer(void)
 
 void AM_Ticker(void)
 {
-
     if (!automapactive)
+    {
         return;
+    }
 
     if (automap_follow)
     {
@@ -661,7 +657,7 @@ void AM_Ticker(void)
     }
 }
 
-void AM_clearFB(int color)
+static void AM_clearFB(int color)
 {
     int dmapx;
     int dmapy;
@@ -712,7 +708,7 @@ void AM_clearFB(int color)
 // faster reject and precalculated slopes.  If I need the speed, will
 // hash algorithm to the common cases.
 
-boolean AM_clipMline(mline_t * ml, fline_t * fl)
+static boolean AM_clipMline(mline_t * ml, fline_t * fl)
 {
     enum
     { LEFT = 1, RIGHT = 2, BOTTOM = 4, TOP = 8 };
@@ -818,9 +814,8 @@ boolean AM_clipMline(mline_t * ml, fline_t * fl)
 
 // Classic Bresenham w/ whatever optimizations I need for speed
 
-void AM_drawFline(fline_t * fl, int color)
+static void AM_drawFline(fline_t * fl, int color)
 {
-
     register int x, y, dx, dy, sx, sy, ax, ay, d;
     static int fuck = 0;
 
@@ -948,7 +943,7 @@ void AM_drawFline(fline_t * fl, int color)
  * IntensityBits = log base 2 of NumLevels; the # of bits used to describe
  *          the intensity of the drawing color. 2**IntensityBits==NumLevels
  */
-void PUTDOT(short xx, short yy, byte * cc, byte * cm)
+static void PUTDOT(short xx, short yy, byte * cc, byte * cm)
 {
     static int oldyy;
     static int oldyyshifted;
@@ -996,8 +991,8 @@ void PUTDOT(short xx, short yy, byte * cc, byte * cm)
     fb[oldyyshifted + flipwidth[xx]] = *(cc);
 }
 
-void DrawWuLine(int X0, int Y0, int X1, int Y1, byte * BaseColor,
-                int NumLevels, unsigned short IntensityBits)
+static void DrawWuLine(int X0, int Y0, int X1, int Y1, byte * BaseColor,
+                       int NumLevels, unsigned short IntensityBits)
 {
     unsigned short IntensityShift, ErrorAdj, ErrorAcc;
     unsigned short ErrorAccTemp, Weighting, WeightingComplementMask;
@@ -1131,7 +1126,7 @@ void DrawWuLine(int X0, int Y0, int X1, int Y1, byte * BaseColor,
     PUTDOT(X1, Y1, &BaseColor[0], NULL);
 }
 
-void AM_drawMline(mline_t * ml, int color)
+static void AM_drawMline(mline_t * ml, int color)
 {
     static fline_t fl;
 
@@ -1140,7 +1135,7 @@ void AM_drawMline(mline_t * ml, int color)
 
 }
 
-void AM_drawGrid(int color)
+static void AM_drawGrid(int color)
 {
     int64_t x, y;
     int64_t start, end;
@@ -1219,7 +1214,7 @@ void AM_drawGrid(int color)
     }
 }
 
-void AM_drawWalls(void)
+static void AM_drawWalls(void)
 {
     int i;
     static mline_t l;
@@ -1301,7 +1296,7 @@ void AM_drawWalls(void)
 
 }
 
-void AM_rotate (int64_t* x, int64_t* y, angle_t a)
+static void AM_rotate (int64_t* x, int64_t* y, angle_t a)
 {
     int64_t tmpx;
 
@@ -1332,8 +1327,8 @@ static void AM_rotatePoint (mpoint_t *pt)
     pt->x = tmpx;
 }
 
-void AM_drawLineCharacter(mline_t * lineguy, int lineguylines, fixed_t scale,
-                          angle_t angle, int color, fixed_t x, fixed_t y)
+static void AM_drawLineCharacter(mline_t * lineguy, int lineguylines, fixed_t scale,
+                                 angle_t angle, int color, fixed_t x, fixed_t y)
 {
     int i;
     mline_t l;
@@ -1374,9 +1369,8 @@ void AM_drawLineCharacter(mline_t * lineguy, int lineguylines, fixed_t scale,
 
 }
 
-void AM_drawPlayers(void)
+static void AM_drawPlayers(void)
 {
-
     int i;
     player_t *p;
     static int their_colors[] = { GREENKEY, YELLOWKEY, BLOODRED, BLUEKEY };
@@ -1437,7 +1431,7 @@ void AM_drawPlayers(void)
     }
 }
 
-void AM_drawThings(int colors, int colorrange)
+static void AM_drawThings(int colors, int colorrange)
 {
     int i;
     mobj_t *t;
@@ -1470,7 +1464,7 @@ void AM_drawThings(int colors, int colorrange)
     }
 }
 
-void AM_drawkeys(void)
+static void AM_drawkeys(void)
 {
     mpoint_t pt0;
     mpoint_t pt1;
@@ -1503,11 +1497,6 @@ void AM_drawkeys(void)
         AM_drawLineCharacter(keysquare, NUMKEYSQUARELINES, 0, 0, BLUEKEY,
                              pt2.x, pt2.y);
     }
-}
-
-void AM_drawCrosshair(int color)
-{
-    fb[(f_w * (f_h + 1)) / 2] = color;  // single point for now
 }
 
 void AM_Drawer(void)
