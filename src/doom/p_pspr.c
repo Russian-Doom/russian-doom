@@ -43,8 +43,10 @@ static fixed_t bulletslope;
 
 static void P_SetPsprite (player_t *player, int position, statenum_t stnum)
 {
-    pspdef_t *psp = &player->psprites[position];
+    pspdef_t *psp;
     state_t  *state;
+
+    psp = &player->psprites[position];
 
     do
     {
@@ -92,7 +94,7 @@ static void P_SetPsprite (player_t *player, int position, statenum_t stnum)
 
 static void P_BringUpWeapon (player_t *player)
 {
-    const statenum_t newstate = weaponinfo[player->pendingweapon].upstate;
+    statenum_t newstate;
 
     if (player->pendingweapon == wp_nochange)
     {
@@ -104,6 +106,7 @@ static void P_BringUpWeapon (player_t *player)
         S_StartSound (player->mo, sfx_sawup);
     }
 
+    newstate = weaponinfo[player->pendingweapon].upstate;
     player->pendingweapon = wp_nochange;
     player->psprites[ps_weapon].sy = WEAPONBOTTOM;
 
@@ -206,7 +209,7 @@ static boolean P_CheckAmmo (player_t *player)
 
 static void P_FireWeapon (player_t *player)
 {
-    const statenum_t newstate = weaponinfo[player->readyweapon].atkstate;
+    statenum_t newstate;
 
     if (!P_CheckAmmo (player))
     {
@@ -214,6 +217,7 @@ static void P_FireWeapon (player_t *player)
     }
 
     P_SetMobjState (player->mo, S_PLAY_ATK1);
+    newstate = weaponinfo[player->readyweapon].atkstate;
     P_SetPsprite (player, ps_weapon, newstate);
     P_NoiseAlert (player->mo, player->mo);
 }
@@ -237,7 +241,7 @@ void P_DropWeapon (player_t *player)
 void A_WeaponReady (mobj_t *mobj, player_t *player, pspdef_t *psp)
 {		
     int angle;
-    const statenum_t newstate = weaponinfo[player->readyweapon].downstate;
+    statenum_t newstate;
 
     if (!player)
     {
@@ -263,6 +267,7 @@ void A_WeaponReady (mobj_t *mobj, player_t *player, pspdef_t *psp)
     {
         // change weapon
         //  (pending weapon should allready be validated)
+        newstate = weaponinfo[player->readyweapon].downstate;
         P_SetPsprite (player, ps_weapon, newstate);
         return;	
     }
@@ -385,7 +390,7 @@ void A_Lower (mobj_t *mobj, player_t *player, pspdef_t *psp)
 void A_Raise (mobj_t *mobj, player_t *player, pspdef_t *psp)
 {
     int angle;
-    const statenum_t newstate = weaponinfo[player->readyweapon].readystate;
+    statenum_t newstate;
 
     // [JN] Define bobbing angles
     angle = (128*leveltime)&FINEMASK;
@@ -415,6 +420,7 @@ void A_Raise (mobj_t *mobj, player_t *player, pspdef_t *psp)
     psp->sy = WEAPONTOP;
 
     // The weapon has been raised all the way, so change to the ready state.
+    newstate = weaponinfo[player->readyweapon].readystate;
     P_SetPsprite (player, ps_weapon, newstate);
 }
 
