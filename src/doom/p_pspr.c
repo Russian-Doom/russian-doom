@@ -121,8 +121,10 @@ static void P_BringUpWeapon (player_t *player)
 
 static boolean P_CheckAmmo (player_t *player)
 {
-    int count;
-    const ammotype_t ammo = weaponinfo[player->readyweapon].ammo;
+    int        count;
+    ammotype_t ammo;
+
+    ammo = weaponinfo[player->readyweapon].ammo;
 
     // Minimal amount for one shot varies.
     if (player->readyweapon == wp_bfg)
