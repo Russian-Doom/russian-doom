@@ -338,8 +338,8 @@ boolean P_GivePower (player_t *player, int power)
 
 void P_TouchSpecialThing (mobj_t *special, mobj_t *toucher)
 {
-    int        sound = sfx_itemup;
-    player_t  *player = toucher->player;
+    int        sound;
+    player_t  *player;
     fixed_t    delta = special->z - toucher->z;
 
     if (delta > toucher->height || delta < -8 * FRACUNIT)
@@ -353,6 +353,9 @@ void P_TouchSpecialThing (mobj_t *special, mobj_t *toucher)
     {
         return;
     }
+
+    sound = sfx_itemup;
+    player = toucher->player;
 
     // Identify by sprite.
     switch (special->sprite)

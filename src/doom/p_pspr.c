@@ -1009,7 +1009,9 @@ void P_SetupPsprites (player_t *player)
 
 void P_MovePsprites (player_t * player) 
 {
-    pspdef_t *psp = &player->psprites[0];
+    pspdef_t *psp;
+
+    psp = &player->psprites[0];
 
     for (int i = 0 ; i < NUMPSPRITES ; i++, psp++)
     {

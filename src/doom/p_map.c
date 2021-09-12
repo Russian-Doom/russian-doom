@@ -288,7 +288,7 @@ boolean PIT_CheckLine (line_t* ld)
 //
 boolean PIT_CheckThing (mobj_t* thing)
 {
-    fixed_t		blockdist = thing->radius + tmthing->radius;
+    fixed_t		blockdist;
     fixed_t		newdist = P_AproxDistance(thing->x - tmx, thing->y - tmy);
     fixed_t		olddist = P_AproxDistance(thing->x - tmthing->x, thing->y - tmthing->y);
     boolean		solid;
@@ -297,7 +297,9 @@ boolean PIT_CheckThing (mobj_t* thing)
 		
     if (!(thing->flags & (MF_SOLID|MF_SPECIAL|MF_SHOOTABLE) ))
 	return true;
-    
+
+    blockdist = thing->radius + tmthing->radius;
+
     if ( abs(thing->x - tmx) >= blockdist
 	 || abs(thing->y - tmy) >= blockdist )
     {

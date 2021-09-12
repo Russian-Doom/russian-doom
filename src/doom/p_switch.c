@@ -225,9 +225,9 @@ void P_StartButton (line_t *line, bwhere_e w, int texture, int time)
 
 void P_ChangeSwitchTexture (line_t *line, int useAgain)
 {
-    int     texTop = sides[line->sidenum[0]].toptexture;
-    int     texMid = sides[line->sidenum[0]].midtexture;
-    int     texBot = sides[line->sidenum[0]].bottomtexture;
+    int     texTop;
+    int     texMid;
+    int     texBot;
     int     sound = sfx_swtchn;
     int     i;
     boolean playsound = false;
@@ -253,6 +253,10 @@ void P_ChangeSwitchTexture (line_t *line, int useAgain)
     {
         line->special = 0;
     }
+
+    texTop = sides[line->sidenum[0]].toptexture;
+    texMid = sides[line->sidenum[0]].midtexture;
+    texBot = sides[line->sidenum[0]].bottomtexture;
 
     // Fix vanilla bug of non-working switch animations in some instances.
     // Code by Fabian Greffrath (previously by Brad Harding),

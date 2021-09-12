@@ -171,9 +171,10 @@ void P_CalcHeight (player_t *player, boolean safe)
 
 static void P_MovePlayer (player_t *player)
 {
-    ticcmd_t  *cmd = &player->cmd;
-    int        look = cmd->lookfly & 15;;
+    ticcmd_t  *cmd;
+    int        look;
 
+    cmd = &player->cmd;
     player->mo->angle += (cmd->angleturn << FRACBITS);
 
     // Do not let the player control movement if not onground.
@@ -195,6 +196,7 @@ static void P_MovePlayer (player_t *player)
     }
 
     // [JN] Mouselook
+    look = cmd->lookfly & 15;
     if (look > 7)
     {
         look -= 16;
