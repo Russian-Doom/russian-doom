@@ -249,9 +249,8 @@ cheatseq_t cheat_amap_beta = CHEAT("eek", 0);  // [JN] Press Beta cheat code
 static boolean stopped = true;
 
 
-
 // [JN] Automap line antialiasing:
-static byte antialias[42][8] = {
+static const byte antialias[42][8] = {
     // Doom colors:
     {176, 177, 178, 179, 180, 181, 182, 183},   //  0.  WALLCOLORS
     { 64,  65,  66,  67,  68,  69,  70,  71},   //  1.  FDWALLCOLORS
@@ -303,7 +302,7 @@ static byte antialias[42][8] = {
     {104, 105, 106, 107, 108, 109, 110, 111},   // 41. GRIDCOLORS: Automap grid
 };
 
-static void DrawWuLine(int X0, int Y0, int X1, int Y1, byte * BaseColor,
+static void DrawWuLine(int X0, int Y0, int X1, int Y1, const byte * BaseColor,
                        int NumLevels, unsigned short IntensityBits);
 
 // [crispy] automap rotate mode ...
@@ -1387,12 +1386,12 @@ static void AM_drawFline (fline_t *fl, int color, int automap_color_set)
 //          the intensity of the drawing color. 2**IntensityBits==NumLevels
 // -----------------------------------------------------------------------------
 
-static void PUTDOT (short xx, short yy, byte *cc, byte *cm)
+static void PUTDOT (short xx, short yy, const byte *cc, const byte *cm)
 {
     static int oldyy;
     static int oldyyshifted;
     static int finit_height; // [JN] For different height between games.
-    byte *oldcc = cc;
+    const byte *oldcc = cc;
 
     if (gamemission == jaguar)
     finit_height = SCREENHEIGHT - (ST_HEIGHT_JAG << hires);
@@ -1437,7 +1436,7 @@ static void PUTDOT (short xx, short yy, byte *cc, byte *cm)
 // DrawWuLine
 // -----------------------------------------------------------------------------
 
-static void DrawWuLine(int X0, int Y0, int X1, int Y1, byte *BaseColor,
+static void DrawWuLine(int X0, int Y0, int X1, int Y1, const byte *BaseColor,
                        int NumLevels, unsigned short IntensityBits)
 {
     unsigned short IntensityShift, ErrorAdj, ErrorAcc;
