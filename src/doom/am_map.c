@@ -137,7 +137,7 @@ typedef struct
 // -----------------------------------------------------------------------------
 
 #define R ((8*PLAYERRADIUS)/7)
-mline_t player_arrow[] = {
+static const mline_t player_arrow[] = {
     { { -R+R/8,   0 }, {  R,      0   } }, // -----
     { {  R,       0 }, {  R-R/2,  R/4 } }, // ----->
     { {  R,       0 }, {  R-R/2, -R/4 } },
@@ -149,7 +149,7 @@ mline_t player_arrow[] = {
 #undef R
 
 #define R ((8*PLAYERRADIUS)/7)
-mline_t cheat_player_arrow[] = {
+static const mline_t cheat_player_arrow[] = {
     { { -R+R/8,     0        }, {  R,           0 } }, // -----
     { {  R,         0        }, {  R-R/2,     R/6 } }, // ----->
     { {  R,         0        }, {  R-R/2,    -R/6 } },
@@ -170,7 +170,7 @@ mline_t cheat_player_arrow[] = {
 #undef R
 
 #define R (FRACUNIT)
-mline_t thintriangle_guy[] = {
+static const mline_t thintriangle_guy[] = {
     { { (fixed_t)(-.5*R), (fixed_t)(-.7*R) }, { (fixed_t)(R    ), (fixed_t)(0    ) } },
     { { (fixed_t)(R    ), (fixed_t)(0    ) }, { (fixed_t)(-.5*R), (fixed_t)(.7*R ) } },
     { { (fixed_t)(-.5*R), (fixed_t)(.7*R ) }, { (fixed_t)(-.5*R), (fixed_t)(-.7*R) } }
@@ -2178,7 +2178,7 @@ static void AM_rotatePoint (mpoint_t *pt)
 // Draws a vector graphic according to numerous parameters.
 // -----------------------------------------------------------------------------
 
-static void AM_drawLineCharacter (mline_t *lineguy, int lineguylines, fixed_t scale, 
+static void AM_drawLineCharacter (const mline_t *lineguy, int lineguylines, fixed_t scale, 
                                   angle_t angle, int color, fixed_t x, fixed_t y)
 {
     int     i;
