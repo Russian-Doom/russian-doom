@@ -543,7 +543,6 @@ void BK_ApplyDefaultBindings()
     AddBind(bk_speed,          keyboard, KEY_RSHIFT);
     AddBind(bk_strafe,         keyboard, KEY_LALT);
     AddBind(bk_strafe,         keyboard, KEY_RALT);
-    AddBind(bk_jump,           keyboard, ' ');
     AddBind(bk_toggle_autorun, keyboard, KEY_CAPSLOCK);
 
     if(RD_GameType == gt_Heretic || RD_GameType == gt_Hexen)
@@ -554,6 +553,14 @@ void BK_ApplyDefaultBindings()
     }
 
     AddBind(bk_use, keyboard, 'e');
+    if(RD_GameType == gt_Doom || RD_GameType == gt_Heretic)
+    {
+        AddBind(bk_use,     keyboard, ' ');
+    }
+    else
+    {
+        AddBind(bk_jump,    keyboard, ' ');
+    }
 
     AddBind(bk_fire, keyboard, KEY_LCTRL);
 
