@@ -549,14 +549,6 @@ static void AM_initVariables(void)
     m_x = plr->mo->x - m_w/2;
     m_y = plr->mo->y - m_h/2;
 
-    // [JN] Predefine rotation variables for AM_rotatePoint.
-    mapcenter.x = m_x + m_w / 2;
-    mapcenter.y = m_y + m_h / 2;
-    if (!(!automap_follow && automap_overlay))
-    {
-        mapangle = ANG90 - plr->mo->angle;
-    }
-
     AM_changeWindowLoc();
 
     // for saving & restoring
@@ -979,19 +971,6 @@ void AM_Ticker (void)
     if (m_paninc.x || m_paninc.y)
     {
         AM_changeWindowLoc();
-    }
-
-    // [crispy] required for AM_rotatePoint()
-    if (automap_rotate)
-    {
-        mapcenter.x = m_x + m_w / 2;
-        mapcenter.y = m_y + m_h / 2;
-        // [crispy] keep the map static in overlay mode 
-        // if not following the player
-        if (!(!automap_follow && automap_overlay))
-        {
-            mapangle = ANG90 - plr->mo->angle;
-        }
     }
 }
 
@@ -2157,7 +2136,7 @@ static void AM_rotate (int64_t *x, int64_t *y, angle_t a)
 static void AM_rotatePoint (mpoint_t *pt)
 {
     int64_t tmpx;
-    const angle_t actualangle = ANG90 - viewangle;
+    const angle_t actualangle = (!(!automap_follow && automap_overlay)) ? ANG90 - viewangle : mapangle;
 
     pt->x -= mapcenter.x;
     pt->y -= mapcenter.y;
@@ -2430,6 +2409,19 @@ void AM_Drawer (void)
     if (!automapactive)
     {
         return;
+    }
+
+    // [crispy] required for AM_rotatePoint()
+    if (automap_rotate)
+    {
+        mapcenter.x = m_x + m_w / 2;
+        mapcenter.y = m_y + m_h / 2;
+        // [crispy] keep the map static in overlay mode
+        // if not following the player
+        if (!(!automap_follow && automap_overlay))
+        {
+            mapangle = ANG90 - plr->mo->angle;
+        }
     }
 
     if (!automap_overlay)
