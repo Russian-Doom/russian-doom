@@ -508,15 +508,12 @@ void BK_AddBindingsToSystemKeys()
     AddBind(bk_menu_load,   keyboard, KEY_F3);
     AddBind(bk_menu_volume, keyboard, KEY_F4);
     AddBind(bk_detail,      keyboard, KEY_F5);
-    AddBind(bk_qsave,       keyboard, KEY_F6);
     AddBind(bk_endgame,     keyboard, KEY_F7);
     AddBind(bk_messages,    keyboard, KEY_F8);
-    AddBind(bk_qload,       keyboard, KEY_F9);
     AddBind(bk_quit,        keyboard, KEY_F10);
     AddBind(bk_gamma,       keyboard, KEY_F11);
     AddBind(bk_screen_inc,  keyboard, KEY_EQUALS);
     AddBind(bk_screen_dec,  keyboard, KEY_MINUS);
-    AddBind(bk_screenshot,  keyboard, KEY_PRTSCR);
     AddBind(bk_pause,       keyboard, KEY_PAUSE);
 
     // Mouse
@@ -624,6 +621,9 @@ void BK_ApplyDefaultBindings()
         AddBind(bk_map_clearmark, keyboard, 'c');
     }
 
+    AddBind(bk_qsave,            keyboard, KEY_F6);
+    AddBind(bk_qload,            keyboard, KEY_F9);
+    AddBind(bk_screenshot,       keyboard, KEY_PRTSCR);
     AddBind(bk_finish_demo,      keyboard, 'q');
     AddBind(bk_toggle_crosshair, keyboard, 'x');
 
