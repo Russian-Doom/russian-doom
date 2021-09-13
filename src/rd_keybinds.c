@@ -503,6 +503,22 @@ void BK_AddBindingsToSystemKeys()
     AddBind(bk_abort,   keyboard, 'n');
     AddBind(bk_abort,   keyboard, KEY_ESCAPE);
 
+    AddBind(bk_menu_help,   keyboard, KEY_F1);
+    AddBind(bk_menu_save,   keyboard, KEY_F2);
+    AddBind(bk_menu_load,   keyboard, KEY_F3);
+    AddBind(bk_menu_volume, keyboard, KEY_F4);
+    AddBind(bk_detail,      keyboard, KEY_F5);
+    AddBind(bk_qsave,       keyboard, KEY_F6);
+    AddBind(bk_endgame,     keyboard, KEY_F7);
+    AddBind(bk_messages,    keyboard, KEY_F8);
+    AddBind(bk_qload,       keyboard, KEY_F9);
+    AddBind(bk_quit,        keyboard, KEY_F10);
+    AddBind(bk_gamma,       keyboard, KEY_F11);
+    AddBind(bk_screen_inc,  keyboard, KEY_EQUALS);
+    AddBind(bk_screen_dec,  keyboard, KEY_MINUS);
+    AddBind(bk_screenshot,  keyboard, KEY_PRTSCR);
+    AddBind(bk_pause,       keyboard, KEY_PAUSE);
+
     // Mouse
     AddBind(bk_left,  mouse, MOUSE_SCROLL_LEFT);
     AddBind(bk_right, mouse, MOUSE_SCROLL_RIGHT);
@@ -608,9 +624,6 @@ void BK_ApplyDefaultBindings()
         AddBind(bk_map_clearmark, keyboard, 'c');
     }
 
-    AddBind(bk_qsave,            keyboard, KEY_F6);
-    AddBind(bk_qload,            keyboard, KEY_F9);
-    AddBind(bk_screenshot,       keyboard, KEY_PRTSCR);
     AddBind(bk_finish_demo,      keyboard, 'q');
     AddBind(bk_toggle_crosshair, keyboard, 'x');
 
@@ -642,19 +655,6 @@ void BK_ApplyDefaultBindings()
         AddBind(bk_multi_msg_player_6, keyboard, 'h');
         AddBind(bk_multi_msg_player_7, keyboard, 'p');
     }
-
-    AddBind(bk_menu_help,   keyboard, KEY_F1);
-    AddBind(bk_menu_save,   keyboard, KEY_F2);
-    AddBind(bk_menu_load,   keyboard, KEY_F3);
-    AddBind(bk_menu_volume, keyboard, KEY_F4);
-    AddBind(bk_detail,      keyboard, KEY_F5);
-    AddBind(bk_endgame,     keyboard, KEY_F7);
-    AddBind(bk_messages,    keyboard, KEY_F8);
-    AddBind(bk_quit,        keyboard, KEY_F10);
-    AddBind(bk_gamma,       keyboard, KEY_F11);
-    AddBind(bk_screen_inc,  keyboard, KEY_EQUALS);
-    AddBind(bk_screen_dec,  keyboard, KEY_MINUS);
-    AddBind(bk_pause,       keyboard, KEY_PAUSE);
 
     // Mouse
     AddBind(bk_fire,        mouse, MOUSE_LEFT);

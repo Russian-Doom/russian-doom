@@ -126,21 +126,6 @@ typedef enum
     bk_multi_msg_player_6,
     bk_multi_msg_player_7,
 
-    //F Keys
-    bk_menu_help,
-    bk_menu_save,
-    bk_menu_load,
-    bk_menu_volume,
-    bk_detail,
-    bk_endgame,
-    bk_messages,
-    bk_quit,
-    bk_gamma,
-    bk_screen_inc,
-    bk_screen_dec,
-
-    bk_pause,
-
     //System keys
     bk__serializable, // [Dasperal] Bindings after this line are not saved to config file
     bk_left,
@@ -156,6 +141,21 @@ typedef enum
 
     bk_confirm,
     bk_abort,
+
+    //F Keys
+    bk_menu_help,
+    bk_menu_save,
+    bk_menu_load,
+    bk_menu_volume,
+    bk_detail,
+    bk_endgame,
+    bk_messages,
+    bk_quit,
+    bk_gamma,
+    bk_screen_inc,
+    bk_screen_dec,
+
+    bk_pause,
 
     bk__size, //size of bound_key_t
     bk__null
