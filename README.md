@@ -25,7 +25,6 @@ Source code available on [GitHub](https://github.com/JNechaevsky/russian-doom/tr
 
 #### Other
 
-History of changes for [Windows](https://jnechaevsky.github.io/projects/rusdoom/files/changelog_eng.html) and [DOS](https://jnechaevsky.github.io/projects/rusdoom/files/changelog_dos_rus.html) versions.<br />
 PNG font atlases: [russian-doom-fonts-png.zip](https://jnechaevsky.github.io/projects/rusdoom/files/russian-doom-fonts-png.zip)<br /><br />
 
 ### About
