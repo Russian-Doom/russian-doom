@@ -85,7 +85,6 @@ skill_t startskill;
 int startepisode;
 int startmap;
 int UpdateState;
-static boolean using_graphical_startup;
 static boolean main_loop_started = false;
 boolean autostart;
 
@@ -122,7 +121,6 @@ static char *autoloadretailpwad[10]     = { "", "", "", "" };
 
 // Rendering
 int show_endoom = 0;
-int graphical_startup = 0;
 int flashing_hom = 0;
 
 // Display
@@ -879,221 +877,6 @@ boolean D_AddFile(char *file)
     return handle != NULL;
 }
 
-//==========================================================
-//
-//  Startup Thermo code
-//
-//==========================================================
-#define MSG_Y       9
-#define THERM_X     14
-#define THERM_Y     14
-
-int thermMax;
-int thermCurrent;
-char smsg[80];                  // status bar line
-
-//
-//  Heretic startup screen shit
-//
-
-static int startup_line = STARTUP_WINDOW_Y;
-
-void hprintf(char *string)
-{
-    if (using_graphical_startup)
-    {
-        TXT_BGColor(TXT_COLOR_CYAN, 0);
-        TXT_FGColor(TXT_COLOR_BRIGHT_WHITE);
-
-        TXT_GotoXY(STARTUP_WINDOW_X, startup_line);
-        ++startup_line;
-        TXT_Puts(string);
-
-        TXT_UpdateScreen();
-    }
-
-    // haleyjd: shouldn't be WATCOMC-only
-    if (debugmode)
-        puts(string);
-}
-
-void drawstatus(void)
-{
-    int i;
-
-    TXT_GotoXY(1, 24);
-    TXT_BGColor(TXT_COLOR_BLUE, 0);
-    TXT_FGColor(TXT_COLOR_BRIGHT_WHITE);
-
-    for (i=0; smsg[i] != '\0'; ++i) 
-    {
-        TXT_PutChar(smsg[i]);
-    }
-}
-
-void status(char *string)
-{
-    if (using_graphical_startup)
-    {
-        M_StringConcat(smsg, string, sizeof(smsg));
-        drawstatus();
-    }
-}
-
-void DrawThermo(void)
-{
-    static int last_progress = -1;
-    int progress;
-    int i;
-
-    if (!using_graphical_startup)
-    {
-        return;
-    }
-
-#if 0
-    progress = (98 * thermCurrent) / thermMax;
-    screen = (char *) 0xb8000 + (THERM_Y * 160 + THERM_X * 2);
-    for (i = 0; i < progress / 2; i++)
-    {
-        switch (i)
-        {
-            case 4:
-            case 9:
-            case 14:
-            case 19:
-            case 29:
-            case 34:
-            case 39:
-            case 44:
-                *screen++ = 0xb3;
-                *screen++ = (THERMCOLOR << 4) + 15;
-                break;
-            case 24:
-                *screen++ = 0xba;
-                *screen++ = (THERMCOLOR << 4) + 15;
-                break;
-            default:
-                *screen++ = 0xdb;
-                *screen++ = 0x40 + THERMCOLOR;
-                break;
-        }
-    }
-    if (progress & 1)
-    {
-        *screen++ = 0xdd;
-        *screen++ = 0x40 + THERMCOLOR;
-    }
-#else
-
-    // No progress? Don't update the screen.
-
-    progress = (50 * thermCurrent) / thermMax + 2;
-
-    if (last_progress == progress)
-    {
-        return;
-    }
-
-    last_progress = progress;
-
-    TXT_GotoXY(THERM_X, THERM_Y);
-
-    TXT_FGColor(TXT_COLOR_BRIGHT_GREEN);
-    TXT_BGColor(TXT_COLOR_GREEN, 0);
-
-    for (i = 0; i < progress; i++)
-    {
-        TXT_PutChar(0xdb);
-    }
-
-    TXT_UpdateScreen();
-#endif
-}
-
-void initStartup(void)
-{
-    byte *textScreen;
-    byte *loading;
-
-    if (!graphical_startup || debugmode || testcontrols)
-    {
-        using_graphical_startup = false;
-        return;
-    }
-
-    if (!TXT_Init(0, 0)) 
-    {
-        using_graphical_startup = false;
-        return;
-    }
-
-    I_InitWindowTitle();
-    I_InitWindowIcon();
-
-    // Blit main screen
-    textScreen = TXT_GetScreenData();
-    loading = W_CacheLumpName(DEH_String("LOADING"), PU_CACHE);
-    memcpy(textScreen, loading, 4000);
-
-    // Print version string
-
-    TXT_BGColor(TXT_COLOR_RED, 0);
-    TXT_FGColor(TXT_COLOR_YELLOW);
-    TXT_GotoXY(46, 2);
-    TXT_Puts(HERETIC_VERSION_TEXT);
-
-    TXT_UpdateScreen();
-
-    using_graphical_startup = true;
-}
-
-static void finishStartup(void)
-{
-    if (using_graphical_startup)
-    {
-        TXT_Shutdown();
-    }
-}
-
-char tmsg[300];
-void tprintf(char *msg, int initflag)
-{
-    // haleyjd FIXME: convert to textscreen code?
-#ifdef __WATCOMC__
-    char temp[80];
-    int start;
-    int add;
-    int i;
-
-    if (initflag)
-        tmsg[0] = 0;
-    M_StringConcat(tmsg, msg, sizeof(tmsg));
-    blitStartup();
-    DrawThermo();
-    _setbkcolor(4);
-    _settextcolor(15);
-    for (add = start = i = 0; i <= strlen(tmsg); i++)
-        if ((tmsg[i] == '\n') || (!tmsg[i]))
-        {
-            memset(temp, 0, 80);
-            M_StringCopy(temp, tmsg + start, sizeof(temp));
-            if (i - start < sizeof(temp))
-            {
-                temp[i - start] = '\0';
-            }
-            _settextposition(MSG_Y + add, 40 - strlen(temp) / 2);
-            _outtext(temp);
-            start = i + 1;
-            add++;
-        }
-    _settextposition(25, 1);
-    drawstatus();
-#else
-    printf("%s", msg);
-#endif
-}
-
 // haleyjd: moved up, removed WATCOMC code
 void CleanExit(void)
 {
@@ -1101,31 +884,6 @@ void CleanExit(void)
     "Exited from HERETIC.\n" :
     "Выполнен выход из HERETIC.\n");
     exit(1);
-}
-
-void CheckAbortStartup(void)
-{
-    // haleyjd: removed WATCOMC
-    // haleyjd FIXME: this should actually work in text mode too, but how to
-    // get input before SDL video init?
-    if(using_graphical_startup)
-    {
-        if(TXT_GetChar() == 27)
-            CleanExit();
-    }
-}
-
-void IncThermo(void)
-{
-    thermCurrent++;
-    DrawThermo();
-    CheckAbortStartup();
-}
-
-void InitThermo(int max)
-{
-    thermMax = max;
-    thermCurrent = 0;
 }
 
 //
@@ -1168,7 +926,6 @@ void D_BindVariables(void)
     // Rendering
     M_BindIntVariable("uncapped_fps",           &uncapped_fps);
     M_BindIntVariable("show_endoom",            &show_endoom);
-    M_BindIntVariable("graphical_startup",      &graphical_startup);
     M_BindIntVariable("flashing_hom",           &flashing_hom);
 
     // Display
@@ -1711,7 +1468,7 @@ void D_DoomMain(void)
     I_InitSound(false);
 
 #ifdef FEATURE_MULTIPLAYER
-    tprintf(english_language ?
+    DEH_printf(english_language ?
             "NET_Init: Init network subsystem.\n" :
             "NET_Init: Инициализация сетевой подсистемы.\n", 1);
     NET_Init ();
@@ -1719,25 +1476,6 @@ void D_DoomMain(void)
 
     D_ConnectNetGame();
 
-    // haleyjd: removed WATCOMC
-    initStartup();
-
-    //
-    //  Build status bar line!
-    //
-    smsg[0] = 0;
-    if (deathmatch)
-        status(DEH_String(english_language ?
-                          "DeathMatch..." :
-                          "Дефматч..."));
-    if (nomonsters)
-        status(DEH_String(english_language ?
-                          "No Monsters..." :
-                          "Без монстров..."));
-    if (respawnparm)
-        status(DEH_String(english_language ? 
-                          "Respawning..." :
-                          "Монстры воскрешаются..."));
     if (autostart)
     {
         char temp[64];
@@ -1745,59 +1483,51 @@ void D_DoomMain(void)
                      "Warp to Episode %d, Map %d, Skill %d " :
                      "Перемещение в эпизод %d, уровень %d, сложность %d ",
                      startepisode, startmap, startskill + 1);
-        status(temp);
     }
     wadprintf();                // print the added wadfiles
 
-    tprintf(DEH_String(english_language ?
-                       "MN_Init: Init menu system.\n" :
-                       "MN_Init: Инициализация игрового меню.\n"), 1);
+    DEH_printf(english_language ?
+               "MN_Init: Init menu system.\n" :
+               "MN_Init: Инициализация игрового меню.\n");
     MN_Init();
 
     CT_Init();
 
-    tprintf(DEH_String(english_language ?
-                       "R_Init: Init Heretic refresh daemon." :
-                       "R_Init: Инициализация процесса запуска Heretic."), 1);
-    hprintf(DEH_String("Loading graphics"));
+    DEH_printf(english_language ?
+               "R_Init: Init Heretic refresh daemon." :
+               "R_Init: Инициализация процесса запуска Heretic.");
     R_Init();
-    tprintf("\n", 0);
+    DEH_printf("\n");
 
-    tprintf(DEH_String(english_language ?
-                       "P_Init: Init Playloop state.\n" :
-                       "P_Init: Инициализация игрового окружения.\n"), 1);
-    hprintf(DEH_String("Init game engine."));
+    DEH_printf(english_language ?
+               "P_Init: Init Playloop state.\n" :
+               "P_Init: Инициализация игрового окружения.\n");
     P_Init();
-    IncThermo();
 
-    tprintf(DEH_String(english_language ? 
-                       "I_Init: Setting up machine state.\n" :
-                       "I_Init: Инициализация состояния компьютера.\n"), 1);
+    DEH_printf(english_language ? 
+               "I_Init: Setting up machine state.\n" :
+               "I_Init: Инициализация состояния компьютера.\n");
     I_CheckIsScreensaver();
     I_InitController();
-    IncThermo();
 
-    tprintf(DEH_String(english_language ?
-                       "S_Init: Setting up sound.\n" :
-                       "S_Init: Активация звуковой системы.\n"), 1);
+    DEH_printf(english_language ?
+               "S_Init: Setting up sound.\n" :
+               "S_Init: Активация звуковой системы.\n");
     S_Init();
     //IO_StartupTimer();
     S_Start();
 
-    tprintf(DEH_String(english_language ?
-                       "D_CheckNetGame: Checking network game status.\n" :
-                       "D_CheckNetGame: Проверка статуса сетевой игры.\n"), 1);
-    hprintf(DEH_String("Checking network game status."));
+    DEH_printf(english_language ?
+               "D_CheckNetGame: Checking network game status.\n" :
+               "D_CheckNetGame: Проверка статуса сетевой игры.\n");
     D_CheckNetGame();
-    IncThermo();
 
     // haleyjd: removed WATCOMC
 
-    tprintf(DEH_String(english_language ?
-                       "SB_Init: Loading patches.\n" :
-                       "SB_Init: Загрузка патчей.\n"), 1);
+    DEH_printf(english_language ?
+               "SB_Init: Loading patches.\n" :
+               "SB_Init: Загрузка патчей.\n");
     SB_Init();
-    IncThermo();
 
 //
 // start the apropriate game based on parms
@@ -1875,8 +1605,6 @@ void D_DoomMain(void)
             D_StartTitle();
         }
     }
-
-    finishStartup();
 
     // [JN] Show the game we are playing
     DEH_printf(english_language ? "Starting game: " : "Запуск игры: ");

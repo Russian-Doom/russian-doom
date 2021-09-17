@@ -917,12 +917,6 @@ void R_InitSpriteLumps(void)
 
     for (i = 0; i < numspritelumps; i++)
     {
-#ifdef __NEXT__
-        if (!(i & 63))
-            printf(".");
-#else
-        IncThermo();
-#endif
         patch = W_CacheLumpNum(firstspritelump + i, PU_CACHE);
         spritewidth[i] = SHORT(patch->width) << FRACBITS;
         spriteoffset[i] = SHORT(patch->leftoffset) << FRACBITS;
@@ -1116,12 +1110,10 @@ void R_InitData(void)
     // [JN] Moved R_InitFlats to the top, needed for 
     // R_GenerateComposite ivoking while level loading.
     R_InitFlats();
-    IncThermo();
     printf (".");
     R_InitTextures();
     printf (".");
     R_InitSpriteLumps();
-    IncThermo();
     printf (".");
     R_InitColormaps();
     // [JN] Generate extra translucency table.
