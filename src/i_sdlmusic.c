@@ -46,7 +46,7 @@
 #include "w_wad.h"
 #include "z_zone.h"
 
-#define MAXMIDLENGTH (96 * 1024)
+#include "jn.h"
 
 static boolean music_initialized = false;
 
@@ -77,10 +77,20 @@ static boolean WriteWrapperTimidityConfig(char *write_path)
         return false;
     }
 
+    if(strchr(timidity_cfg_path, ' '))
+    {
+        printf(english_language ?
+               "\tError: The path contains spaces, which are not allowed. Failed to replace with a symbolic link\n" :
+               "\tОшибка: Путь содержит пробелы, что недопустимо. Не удалось заменить символьной ссылкой\n");
+    }
+
     fstream = fopen(write_path, "w");
 
     if (fstream == NULL)
     {
+        printf(english_language ?
+               "Error: Could not write Timidity config\n" :
+               "Ошибка: Не удалось записать конфигурацию Timidity\n");
         return false;
     }
 

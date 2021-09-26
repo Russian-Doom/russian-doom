@@ -233,10 +233,20 @@ static boolean WriteTimidityConfig(char *path, gus_config_t *config, char* gus_p
     FILE *fstream;
     unsigned int i;
 
+    if(strchr(gus_patches_path, ' '))
+    {
+        printf(english_language ?
+               "\tError: The path contains spaces, which are not allowed. Failed to replace with a symbolic link\n" :
+               "\tОшибка: Путь содержит пробелы, что недопустимо. Не удалось заменить символьной ссылкой\n");
+    }
+
     fstream = fopen(path, "w");
 
     if (fstream == NULL)
     {
+        printf(english_language ?
+               "\tError: Could not write Timidity config\n" :
+               "\tОшибка: Не удалось записать конфигурацию Timidity\n");
         return false;
     }
 
