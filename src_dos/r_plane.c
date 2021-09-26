@@ -56,12 +56,11 @@ visplane_t *floorplane, *ceilingplane;
 #define visplane_hash(picnum, lightlevel, height) \
     ((unsigned)((picnum) * 3 + (lightlevel) + (height) * 7) & (MAXVISPLANES - 1))
     
-//
-// opening
-//
+// [JN] killough 8/1/98: set static number of openings to be large enough
+// (a static limit is okay in this case and avoids difficulties in r_segs.c)
 
-int  openings[MAXOPENINGS];  // [crispy] 32-bit integer math
-int *lastopening;            // [crispy] 32-bit integer math
+size_t maxopenings;
+int *openings, *lastopening; // [crispy] 32-bit integer math
 
 //
 // Clip values are the solid pixel bounding the range.

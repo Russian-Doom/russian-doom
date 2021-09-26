@@ -722,9 +722,6 @@ void R_SetupFrame (player_t *player)
         }
 
         walllights = scalelightfixed;
-        walllights_top = scalelightfixed;
-        walllights_middle = scalelightfixed;
-        walllights_bottom = scalelightfixed;
 
         for (i=0 ; i<MAXLIGHTSCALE ; i++)
         scalelightfixed[i] = fixedcolormap;
