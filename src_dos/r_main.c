@@ -629,6 +629,8 @@ void R_ExecuteSetViewSize (void)
 void R_Init (void)
 {
     R_InitClipSegs();
+    R_InitPlanesRes ();
+    R_InitVisplanesRes ();
     
     R_InitData ();
     // [JN] Double dots because of removed R_InitPointToAngle and R_InitTables

@@ -67,46 +67,100 @@ int *openings, *lastopening; // [crispy] 32-bit integer math
 //  floorclip starts out SCREENHEIGHT
 //  ceilingclip starts out -1
 //
-int floorclip[SCREENWIDTH];     // [crispy] 32-bit integer math
-int ceilingclip[SCREENWIDTH];   // [crispy] 32-bit integer math
+
+// [JN] e6y: resolution limitation is removed
+int *floorclip = NULL;    // dropoff overflow
+int *ceilingclip = NULL;  // dropoff overflow
 
 //
 // spanstart holds the start of a plane span
 // initialized to 0 at start
 //
-int spanstart[SCREENHEIGHT];
-int spanstop[SCREENHEIGHT];
+
+// [JN] e6y: resolution limitation is removed
+static int *spanstart = NULL;  // killough 2/8/98
 
 //
 // texture mapping
 //
-lighttable_t  **planezlight;
-fixed_t         planeheight;
-fixed_t        *yslope;
-fixed_t         yslopes[LOOKDIRS][SCREENHEIGHT];
-fixed_t         distscale[SCREENWIDTH];
-fixed_t         basexscale;
-fixed_t         baseyscale;
-fixed_t         cachedheight[SCREENHEIGHT];
-fixed_t         cacheddistance[SCREENHEIGHT];
-fixed_t         cachedxstep[SCREENHEIGHT];
-fixed_t         cachedystep[SCREENHEIGHT];
+
+static lighttable_t **planezlight;
+static fixed_t planeheight;
+static fixed_t cachedheight[SCREENHEIGHT];
+static fixed_t cacheddistance[SCREENHEIGHT];
+static fixed_t cachedxstep[SCREENHEIGHT];
+static fixed_t cachedystep[SCREENHEIGHT];
+
+// [JN] e6y: resolution limitation is removed
+fixed_t *yslope = NULL;
+fixed_t *distscale = NULL;
+fixed_t  yslopes[LOOKDIRS][SCREENHEIGHT];
 
 
-//
+// -----------------------------------------------------------------------------
+// R_InitPlanesRes
+// -----------------------------------------------------------------------------
+
+void R_InitPlanesRes (void)
+{
+    if (floorclip)
+    {
+        free(floorclip);
+    }
+    if (ceilingclip)
+    {
+        free(ceilingclip);
+    }
+    if (spanstart)
+    {
+        free(spanstart);
+    }
+    if (yslope)
+    {
+        free(yslope);
+    }
+    if (distscale)
+    {
+        free(distscale);
+    }
+
+    floorclip = calloc(1, SCREENWIDTH * sizeof(*floorclip));
+    ceilingclip = calloc(1, SCREENWIDTH * sizeof(*ceilingclip));
+    spanstart = calloc(1, SCREENWIDTH * sizeof(*spanstart));
+    yslope = calloc(1, SCREENWIDTH * sizeof(*yslope));
+    distscale = calloc(1, SCREENWIDTH * sizeof(*distscale));
+}
+
+// -----------------------------------------------------------------------------
+// R_InitPlanesRes
+// -----------------------------------------------------------------------------
+
+void R_InitVisplanesRes (void)
+{
+    int i;
+
+    freetail = NULL;
+    freehead = &freetail;
+
+    for (i = 0; i < MAXVISPLANES; i++)
+    {
+        visplanes[i] = 0;
+    }
+}
+
+// -----------------------------------------------------------------------------
 // R_MapPlane
 //
 // Uses global vars:
-//  planeheight
-//  ds_source
-//  basexscale
-//  baseyscale
-//  viewx
-//  viewy
+//  - planeheight
+//  - ds_source
+//  - viewx
+//  - viewy
 //
 // BASIC PRIMITIVE
-//
-void R_MapPlane (int y, int x1, int x2)
+// -----------------------------------------------------------------------------
+
+static void R_MapPlane (int y, int x1, int x2)
 {
     int         dx, dy;
     unsigned    index;
@@ -225,9 +279,10 @@ static visplane_t *new_visplane (unsigned int hash)
     return check;
 }
 
-//
+// -----------------------------------------------------------------------------
 // R_FindPlane
-//
+// -----------------------------------------------------------------------------
+
 visplane_t *R_FindPlane (fixed_t height, int picnum, int lightlevel)
 {
     int i;
@@ -326,38 +381,29 @@ visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop)
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // R_MakeSpans
-//
-void 
-R_MakeSpans
-( int		x,
-  unsigned int		t1, // [crispy] 32-bit integer math
-  unsigned int		b1, // [crispy] 32-bit integer math
-  unsigned int		t2, // [crispy] 32-bit integer math
-  unsigned int		b2 ) // [crispy] 32-bit integer math
-{
-    while (t1 < t2 && t1<=b1)
-    {
-        R_MapPlane (t1,spanstart[t1],x-1);
-        t1++;
-    }
-    while (b1 > b2 && b1>=t1)
-    {
-        R_MapPlane (b1,spanstart[b1],x-1);
-        b1--;
-    }
+// -----------------------------------------------------------------------------
 
-    while (t2 < t1 && t2<=b2)
+static void
+R_MakeSpans (int x, unsigned int t1, unsigned int b1, // [crispy] 32-bit integer math
+                    unsigned int t2, unsigned int b2) // [crispy] 32-bit integer math
+{
+    for ( ; t1 < t2 && t1 <= b1 ; t1++)
     {
-        spanstart[t2] = x;
-        t2++;
+        R_MapPlane(t1, spanstart[t1], x-1);
     }
-    while (b2 > b1 && b2>=t2)
+    for ( ; b1 > b2 && b1 >= t1 ; b1--)
     {
-        spanstart[b2] = x;
-        b2--;
+        R_MapPlane(b1, spanstart[b1], x-1);
+    }
+    while (t2 < t1 && t2 <= b2)
+    {
+        spanstart[t2++] = x;
+    }
+    while (b2 > b1 && b2 >= t2)
+    {
+        spanstart[b2--] = x;
     }
 }
 
