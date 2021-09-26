@@ -781,18 +781,6 @@ void R_AddSprites (sector_t *sec)
     int      lightnum;
     mobj_t  *thing;
 
-    // BSP is traversed by subsector.
-    // A sector might have been split into several
-    //  subsectors during BSP building.
-    // Thus we check whether its already added.
-    if (sec->validcount == validcount)
-    {
-        return;
-    }
-
-    // Well, now it will be done.
-    sec->validcount = validcount;
-
     lightnum = ((sec->lightlevel + level_brightness)
                >> LIGHTSEGSHIFT) + extralight;
 

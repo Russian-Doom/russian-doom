@@ -319,6 +319,9 @@ void R_RenderMaskedSegRange (drawseg_t *ds, int x1, int x2)
 //
 // [JN] Note: SPARKLEFIX has been taken from Doom Retro.
 // Many thanks to Brad Harding for his research and fixing this bug!
+
+static int didsolidcol; /* True if at least one column was marked solid */
+
 void R_RenderSegLoop (void)
 {
     int         yl;
@@ -522,6 +525,14 @@ void R_RenderSegLoop (void)
                 }
             }
 
+            // [JN] cph - if we completely blocked further sight through this column,
+            // add this info to the solid columns array for r_bsp.c
+            if ((markceiling || markfloor) && (floorclip[rw_x] <= ceilingclip[rw_x] + 1)) 
+            {
+                solidcol[rw_x] = 1; 
+                didsolidcol = 1;
+            }
+
             if (maskedtexture)
             {
             // save texturecol for backdrawing of masked mid texture
@@ -695,81 +706,51 @@ void R_StoreWallRange (int start, int stop)
     }
     else
     {
-        // [crispy] fix sprites being visible behind closed doors
-        // adapted from mbfsrc/R_BSP.C:234-257
-        const boolean doorclosed =
-        // if door is closed because back is shut:
-        backsector->ceilingheight <= backsector->floorheight
-        // preserve a kind of transparent door/lift special effect:
-        && (backsector->ceilingheight >= frontsector->ceilingheight ||
-            curline->sidedef->toptexture)
-        && (backsector->floorheight <= frontsector->floorheight ||
-            curline->sidedef->bottomtexture)
-        // properly render skies (consider door "open" if both ceilings are sky):
-        && (backsector->ceilingpic != skyflatnum ||
-        frontsector->ceilingpic != skyflatnum);
-
         // two sided line
         ds_p->sprtopclip = ds_p->sprbottomclip = NULL;
         ds_p->silhouette = 0;
 
-        if (frontsector->floorheight > backsector->floorheight)
+        // [JN] cph - closed 2S line e.g. door
+        if (linedef->r_flags & RF_CLOSED)
         {
-            ds_p->silhouette = SIL_BOTTOM;
-            ds_p->bsilheight = frontsector->floorheight;
-        }
-        else if (backsector->floorheight > viewz)
-        {
-            ds_p->silhouette = SIL_BOTTOM;
-            ds_p->bsilheight = MAXINT;
-        }
-	
-        if (frontsector->ceilingheight < backsector->ceilingheight)
-        {
-            ds_p->silhouette |= SIL_TOP;
-            ds_p->tsilheight = frontsector->ceilingheight;
-        }
-        else if (backsector->ceilingheight < viewz)
-        {
-            ds_p->silhouette |= SIL_TOP;
-            ds_p->tsilheight = MININT;
-        }
+            // cph - killough's (outdated) comment follows - this deals with both 
+            // "automap fixes", his and mine
+            // killough 1/17/98: this test is required if the fix
+            // for the automap bug (r_bsp.c) is used, or else some
+            // sprites will be displayed behind closed doors. That
+            // fix prevents lines behind closed doors with dropoffs
+            // from being displayed on the automap.
 
-        if (backsector->ceilingheight <= frontsector->floorheight || doorclosed)
-        {
+            ds_p->silhouette = SIL_BOTH;
             ds_p->sprbottomclip = negonearray;
-            ds_p->bsilheight = MAXINT;
-            ds_p->silhouette |= SIL_BOTTOM;
-        }
-	
-        if (backsector->floorheight >= frontsector->ceilingheight || doorclosed)
-        {
+            ds_p->bsilheight = INT_MAX;
             ds_p->sprtopclip = screenheightarray;
-            ds_p->tsilheight = MININT;
-            ds_p->silhouette |= SIL_TOP;
+            ds_p->tsilheight = INT_MIN;
         }
-
-        // [JN] killough 1/17/98: this test is required if the fix
-        // for the automap bug (r_bsp.c) is used, or else some
-        // sprites will be displayed behind closed doors. That
-        // fix prevents lines behind closed doors with dropoffs
-        // from being displayed on the automap.
-        //
-        // killough 4/7/98: make doorclosed external variable
+        else 
         {
-            extern int doorclosed;  // killough 1/17/98, 2/8/98, 4/7/98
-
-            if (doorclosed || backsector->ceilingheight <= frontsector->floorheight)
+            // [JN] Not solid - old code.
+            if (frontsector->floorheight > backsector->floorheight)
             {
-                ds_p->sprbottomclip = negonearray;
-                ds_p->bsilheight = INT_MAX;
-                ds_p->silhouette |= SIL_BOTTOM;
+                ds_p->silhouette = SIL_BOTTOM;
+                ds_p->bsilheight = frontsector->floorheight;
             }
-            if (doorclosed || backsector->floorheight >= frontsector->ceilingheight)
-            {   // killough 1/17/98, 2/8/98
-                ds_p->sprtopclip = screenheightarray;
-                ds_p->tsilheight = INT_MIN;
+            else if (backsector->floorheight > viewz)
+            {
+                ds_p->silhouette = SIL_BOTTOM;
+                ds_p->bsilheight = INT_MAX;
+            }
+
+            if (frontsector->ceilingheight < backsector->ceilingheight)
+            {
                 ds_p->silhouette |= SIL_TOP;
+                ds_p->tsilheight = frontsector->ceilingheight;
+            }
+            else if (backsector->ceilingheight < viewz)
+            {
+                ds_p->silhouette |= SIL_TOP;
+                ds_p->tsilheight = INT_MIN;
+    
             }
         }
 
@@ -777,15 +758,14 @@ void R_StoreWallRange (int start, int stop)
         worldlow = backsector->floorheight - viewz;
 
         // hack to allow height changes in outdoor areas
-        if (frontsector->ceilingpic == skyflatnum 
-        && backsector->ceilingpic == skyflatnum)
+        if (frontsector->ceilingpic == skyflatnum && backsector->ceilingpic == skyflatnum)
         {
             worldtop = worldhigh;
         }
 
-        if (worldlow != worldbottom
-        ||  backsector->floorpic != frontsector->floorpic
-        ||  backsector->lightlevel != frontsector->lightlevel)
+        if (worldlow != worldbottom 
+            || backsector->floorpic != frontsector->floorpic
+            || backsector->lightlevel != frontsector->lightlevel)
         {
             markfloor = true;
         }
@@ -796,8 +776,8 @@ void R_StoreWallRange (int start, int stop)
         }
 
         if (worldhigh != worldtop 
-        ||  backsector->ceilingpic != frontsector->ceilingpic
-        ||  backsector->lightlevel != frontsector->lightlevel)
+            || backsector->ceilingpic != frontsector->ceilingpic
+            || backsector->lightlevel != frontsector->lightlevel)
         {
             markceiling = true;
         }
@@ -818,7 +798,6 @@ void R_StoreWallRange (int start, int stop)
         {
             // top texture
             toptexture = texturetranslation[sidedef->toptexture];
-
             if (linedef->flags & ML_DONTPEGTOP)
             {
                 // top of texture at top
@@ -827,28 +806,24 @@ void R_StoreWallRange (int start, int stop)
             else
             {
                 vtop = backsector->ceilingheight + textureheight[sidedef->toptexture];
-        
+
                 // bottom of texture
                 rw_toptexturemid = vtop - viewz;	
             }
         }
-
         if (worldlow > worldbottom)
         {
             // bottom texture
             bottomtexture = texturetranslation[sidedef->bottomtexture];
-        
+
             if (linedef->flags & ML_DONTPEGBOTTOM )
             {
                 // bottom of texture at bottom
                 // top of texture at top
                 rw_bottomtexturemid = worldtop;
             }
-            else
-            {
-                // top of texture at top
-                rw_bottomtexturemid = worldlow;
-            }
+            else    // top of texture at top
+            rw_bottomtexturemid = worldlow;
         }
 
         rw_toptexturemid += sidedef->rowoffset;
@@ -1602,16 +1577,58 @@ void R_StoreWallRange (int start, int stop)
     // render it
     if (markceiling)
     {
-        ceilingplane = R_CheckPlane (ceilingplane, rw_x, rw_stopx-1);
+        if (ceilingplane)  // [JN] killough 4/11/98: add NULL ptr checks
+        {
+            ceilingplane = R_CheckPlane (ceilingplane, rw_x, rw_stopx-1);
+        }
+        else
+        {
+            markceiling = 0;
+        }
     }
 
-    if (markfloor)
+    if (markfloor) 
     {
-        floorplane = R_CheckPlane (floorplane, rw_x, rw_stopx-1);
+        if (floorplane)  // [JN] killough 4/11/98: add NULL ptr checks
+        // [JN] cph 2003/04/18  - ceilingplane and floorplane might be the same
+        // visplane (e.g. if both skies); R_CheckPlane doesn't know about
+        // modifications to the plane that might happen in parallel with the check
+        // being made, so we have to override it and split them anyway if that is
+        // a possibility, otherwise the floor marking would overwrite the ceiling
+        // marking, resulting in HOM.
+        if (markceiling && ceilingplane == floorplane)
+        {
+            floorplane = R_DupPlane (floorplane, rw_x, rw_stopx-1);
+        }
+        else
+        {
+            floorplane = R_CheckPlane (floorplane, rw_x, rw_stopx-1);
+        }
+        else
+        {
+            markfloor = 0;
+        }
     }
 
+    didsolidcol = 0;
     R_RenderSegLoop ();
-    
+
+    // [JN] cph - if a column was made solid by this wall, 
+    // we _must_ save full clipping info.
+    if (backsector && didsolidcol)
+    {
+        if (!(ds_p->silhouette & SIL_BOTTOM))
+        {
+            ds_p->silhouette |= SIL_BOTTOM;
+            ds_p->bsilheight = backsector->floorheight;
+        }
+        if (!(ds_p->silhouette & SIL_TOP))
+        {
+            ds_p->silhouette |= SIL_TOP;
+            ds_p->tsilheight = backsector->ceilingheight;
+        }
+    }
+
     // save sprite clipping info
     if (((ds_p->silhouette & SIL_TOP) || maskedtexture) && !ds_p->sprtopclip)
     {

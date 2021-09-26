@@ -36,6 +36,57 @@
 #include "tables.h"
 
 
+// to get a global angle from cartesian coordinates, the coordinates are
+// flipped until they are in the first octant of the coordinate system, then
+// the y (<=x) is scaled and divided by x to get a tangent (slope) value
+// which is looked up in the tantoangle[] table.  The +1 size is to handle
+// the case when x==y without additional checking.
+
+int SlopeDiv (unsigned int num, unsigned int den)
+{
+    long long ans;
+    
+    if (den < 512)
+    {
+        return SLOPERANGE;
+    }
+    else
+    {
+        ans = ((long long) num << 3) / (den >> 8);
+
+        if (ans <= SLOPERANGE)
+        {
+            return (int) ans;
+        }
+        else
+        {
+            return SLOPERANGE;
+        }
+    }
+}
+
+// [crispy] catch SlopeDiv overflows, only used in rendering
+int SlopeDivCrispy(unsigned int num, unsigned int den)
+{
+    if (den < 512)
+    {
+	return SLOPERANGE;
+    }
+    else
+    {
+	unsigned long long ans = ((unsigned long long) num << 3) / (den >> 8);
+
+	if (ans <= SLOPERANGE)
+	{
+	    return (int) ans;
+	}
+	else
+	{
+	    return SLOPERANGE;
+	}
+    }
+}
+
 int finetangent[4096] =
 {
     -170910304,-56965752,-34178904,-24413316,-18988036,-15535599,-13145455,-11392683,

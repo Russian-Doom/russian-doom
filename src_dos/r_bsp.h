@@ -35,6 +35,9 @@ extern drawseg_t   *ds_p;
 extern drawseg_t *drawsegs;
 extern unsigned   maxdrawsegs;
 
+// [JN] Improved column clipping.
+extern byte *solidcol;
+void R_InitClipSegs (void);
 
 typedef void (*drawfunc_t) (int start, int stop);
 
