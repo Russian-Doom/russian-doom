@@ -107,7 +107,8 @@ int         viewangletox[FINEANGLES/2];
 // The xtoviewangleangle[] table maps a screen pixel
 // to the lowest viewangle that maps back to x ranges
 // from clipangle to -clipangle.
-angle_t     xtoviewangle[SCREENWIDTH+1];
+// [JN] e6y: resolution limitation is removed
+angle_t *xtoviewangle;  // killough 2/8/98
 
 
 lighttable_t   *scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
@@ -630,6 +631,7 @@ void R_Init (void)
 {
     R_InitClipSegs();
     R_InitPlanesRes ();
+    R_InitSpritesRes ();
     R_InitVisplanesRes ();
     
     R_InitData ();

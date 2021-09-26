@@ -38,18 +38,43 @@
 #define R_SpriteNameHash(s) ((unsigned)((s)[0]-((s)[1]*3-(s)[3]*2-(s)[2])*2))
 
 
-// constant arrays used for psprite clipping and initializing clipping
-int negonearray[SCREENWIDTH];       // [crispy] 32-bit integer math
-int screenheightarray[SCREENWIDTH]; // [crispy] 32-bit integer math
+//
+// Sprite rotation 0 is facing the viewer, rotation 1 is one angle turn 
+// CLOCKWISE around the axis. This is not the same as the angle, which
+// increases counter clockwise (protractor). 
+// There was a lot of stuff grabbed wrong, so I changed it...
+//
+fixed_t pspritescale, pspriteiscale;
+
+static lighttable_t **spritelights;
+
+// [JN] Brightmaps
+static lighttable_t **fullbrights_redonly;
+static lighttable_t **fullbrights_dimmeditems;
+static lighttable_t **fullbrights_explosivebarrel;
+static lighttable_t **fullbrights_alllights;
+static lighttable_t **fullbrights_candles;
+static lighttable_t **fullbrights_pileofskulls;
+
+// psprite clipping and initializing clipping
+int *negonearray;           // [JN] killough 2/8/98: // dropoff overflow
+int *screenheightarray;     //      change to MAX_*  // dropoff overflow
+static int *clipbot = NULL; // [JN] killough 2/8/98: // dropoff overflow
+static int *cliptop = NULL; //      change to MAX_*  // dropoff overflow
 
 // variables used to look up and range check thing_t sprites patches
-int               numsprites;
-int               maxframe;
-char             *spritename;
-spritedef_t      *sprites;
-spriteframe_t     sprtemp[29];
+int          numsprites;
+int          maxframe;
+char        *spritename;
+spritedef_t *sprites;
+static spriteframe_t sprtemp[29];
 
-// Game functions
+// initialization functions
+int *mfloorclip, *mceilingclip;  // [crispy] 32-bit integer math
+
+fixed_t spryscale;
+int64_t sprtopscreen; // [crispy] WiggleFix
+
 static size_t num_vissprite, num_vissprite_alloc, num_vissprite_ptrs; // killough
 static vissprite_t *vissprites, **vissprite_ptrs;                     // killough
 
@@ -72,49 +97,53 @@ static drawseg_xrange_item_t *drawsegs_xrange;
 static unsigned int drawsegs_xrange_size = 0;
 static int drawsegs_xrange_count = 0;
 
-
-
-// Sprite rotation 0 is facing the viewer,
-//  rotation 1 is one angle turn CLOCKWISE around the axis.
-// This is not the same as the angle,
-//  which increases counter clockwise (protractor).
-// There was a lot of stuff grabbed wrong, so I changed it...
-int              *mfloorclip;   // [crispy] 32-bit integer math
-int              *mceilingclip; // [crispy] 32-bit integer math
-int64_t           sprtopscreen; // [crispy] WiggleFix
-fixed_t           spryscale;
-fixed_t           pspritescale;
-fixed_t           pspriteiscale;
-
-
-lighttable_t    **spritelights;
-
-// [JN] Brightmaps
-lighttable_t    **fullbrights_notgray;
-lighttable_t    **fullbrights_notgrayorbrown;
-lighttable_t    **fullbrights_redonly;
-lighttable_t    **fullbrights_greenonly1;
-lighttable_t    **fullbrights_greenonly2;
-lighttable_t    **fullbrights_greenonly3;
-lighttable_t    **fullbrights_orangeyellow;
-lighttable_t    **fullbrights_dimmeditems;
-lighttable_t    **fullbrights_explosivebarrel;
-lighttable_t    **fullbrights_alllights;
-lighttable_t    **fullbrights_candles;
-lighttable_t    **fullbrights_pileofskulls;
-
-
-
-
 extern boolean chainsaw_attack_swing;
 
 
-//
+// -----------------------------------------------------------------------------
+// R_InitSpritesRes
+// -----------------------------------------------------------------------------
+
+void R_InitSpritesRes(void)
+{
+    if (xtoviewangle)
+    {
+        free(xtoviewangle);
+    }
+    // if (linearskyangle)
+    // {
+    //     free(linearskyangle);
+    // }
+    if (negonearray)
+    {
+        free(negonearray);
+    }
+    if (screenheightarray)
+    {
+        free(screenheightarray);
+    }
+
+    xtoviewangle = calloc(1, (SCREENWIDTH + 1) * sizeof(*xtoviewangle));
+    // linearskyangle = calloc(1, (SCREENWIDTH + 1) * sizeof(*linearskyangle));
+    negonearray = calloc(1, SCREENWIDTH * sizeof(*negonearray));
+    screenheightarray = calloc(1, SCREENWIDTH * sizeof(*screenheightarray));
+
+    if (clipbot)
+    {
+        free(clipbot);
+    }
+
+    clipbot = calloc(1, 2 * SCREENWIDTH * sizeof(*clipbot));
+    cliptop = clipbot + SCREENWIDTH;
+}
+
+// -----------------------------------------------------------------------------
 // R_InstallSpriteLump
 // Local function for R_InitSprites.
 //
 // [JN] Modified for proper sprite loading, code is taken from MBF.
-//
+// -----------------------------------------------------------------------------
+
 void R_InstallSpriteLump (int lump, unsigned frame, unsigned rotation, boolean flipped)
 {
     if (frame >= 29 || rotation > 8)
@@ -154,27 +183,20 @@ void R_InstallSpriteLump (int lump, unsigned frame, unsigned rotation, boolean f
 }
 
 
-//
+// -----------------------------------------------------------------------------
 // R_InitSpriteDefs
-// Pass a null terminated list of sprite names
-//  (4 chars exactly) to be used.
-// Builds the sprite rotation matrixes to account
-//  for horizontally flipped sprites.
-// Will report an error if the lumps are inconsistant. 
+// Pass a null terminated list of sprite names (4 chars exactly) to be used.
+// Builds the sprite rotation matrixes to account for horizontally 
+// flipped sprites. Will report an error if the lumps are inconsistant. 
 // Only called at startup.
 //
-// Sprite lump names are 4 characters for the actor,
-//  a letter for the frame, and a number for the rotation.
-// A sprite that is flippable will have an additional
-//  letter/number appended.
+// Sprite lump names are 4 characters for the actor, a letter for the frame,
+// and a number for the rotation. A sprite that is flippable will have an 
+// additional letter/number appended.
 // The rotation character can be 0 to signify no rotations.
 //
-// 1/25/98, 1/31/98 killough : Rewritten for performance
-//
-// Empirically verified to have excellent hash
-// properties across standard Doom sprites:
-
-
+// [JN] 1/25/98, 1/31/98 killough : Rewritten for performance
+// -----------------------------------------------------------------------------
 
 void R_InitSpriteDefs (char **namelist) 
 {
@@ -300,7 +322,7 @@ void R_InitSprites (char **namelist)
 {
     int i;
 
-    for (i=0 ; i<SCREENWIDTH ; i++)
+    for (i = 0 ; i<SCREENWIDTH ; i++)
     {
         negonearray[i] = -1;
     }
@@ -340,43 +362,57 @@ vissprite_t *R_NewVisSprite (void)
     return vissprites + num_vissprite++;
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // R_DrawMaskedColumn
 // Used for sprites and masked mid textures.
-// Masked means: partly transparent, i.e. stored
-//  in posts/runs of opaque pixels.
-//
-void R_DrawMaskedColumn (column_t* column)
+// Masked means: partly transparent, i.e. stored in posts/runs of opaque pixels.
+// -----------------------------------------------------------------------------
+
+void R_DrawMaskedColumn (column_t *column)
 {
-    int64_t	topscreen;      // [crispy] WiggleFix
-    int64_t	bottomscreen;   // [crispy] WiggleFix
+    int64_t	topscreen, bottomscreen;  // [crispy] WiggleFix
     fixed_t	basetexturemid;
+    int     top = -1;
 
     basetexturemid = dc_texturemid;
-    dc_texheight = 0;
+    dc_texheight = 0;  // [crispy] Tutti-Frutti fix
 
-    for ( ; column->topdelta != 0xff ; ) 
+    while (column->topdelta != 0xff)
     {
-        // calculate unclipped screen coordinates
-        //  for post
-        topscreen = sprtopscreen + spryscale*column->topdelta;
+        // [crispy] support for DeePsea tall patches
+        if (column->topdelta <= top)
+        {
+            top += column->topdelta;
+        }
+        else
+        {
+            top = column->topdelta;
+        }
+
+        // calculate unclipped screen coordinates for post
+        topscreen = sprtopscreen + spryscale*top;
         bottomscreen = topscreen + spryscale*column->length;
 
         dc_yl = (int)((topscreen+FRACUNIT-1)>>FRACBITS); // [crispy] WiggleFix
         dc_yh = (int)((bottomscreen-1)>>FRACBITS); // [crispy] WiggleFix
 
         if (dc_yh >= mfloorclip[dc_x])
+        {
             dc_yh = mfloorclip[dc_x]-1;
+        }
         if (dc_yl <= mceilingclip[dc_x])
+        {
             dc_yl = mceilingclip[dc_x]+1;
+        }
 
-        if (dc_yl <= dc_yh)
+        // [JN] killough 3/2/98, 3/27/98: Failsafe against overflow/crash:
+        if (dc_yl <= dc_yh && dc_yh < viewheight)
         {
             dc_source = (byte *)column + 3;
-            dc_texturemid = basetexturemid - (column->topdelta<<FRACBITS);
-
-            // Drawn by either R_DrawColumn or (SHADOW) R_DrawFuzzColumn.
+            dc_texturemid = basetexturemid - (top<<FRACBITS);
+    
+            // Drawn by either R_DrawColumn
+            //  or (SHADOW) R_DrawFuzzColumn.
             colfunc ();	
         }
 
@@ -386,11 +422,11 @@ void R_DrawMaskedColumn (column_t* column)
     dc_texturemid = basetexturemid;
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // R_DrawVisSprite
 //  mfloorclip and mceilingclip should also be set.
-//
+// -----------------------------------------------------------------------------
+
 void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
 {
     int        texturecolumn;
@@ -430,23 +466,14 @@ void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
     spryscale = vis->scale;
     sprtopscreen = centeryfrac - FixedMul(dc_texturemid,spryscale);
 
-    for (dc_x=vis->x1 ; dc_x<=vis->x2 ; dc_x++, frac += vis->xiscale)
+    for (dc_x = vis->x1 ; dc_x <= vis->x2 ; dc_x++, frac += vis->xiscale)
     {
-        static boolean error = 0;
         texturecolumn = frac>>FRACBITS;
 #ifdef RANGECHECK
         if (texturecolumn < 0 || texturecolumn >= SHORT(patch->width))
-        {
-            // [crispy] make non-fatal
-            if (!error)
-            {
-            fprintf (stderr, english_language ?
-                    "R_DrawSpriteRange: bad texturecolumn" :
-                    "R_DrawSpriteRange: Некорректная информация texturecolumn\n");
-            error++;
-            }
-            continue;
-        }
+        I_Error (english_language ?
+                 "R_DrawVisSprite: bad texturecolumn" :
+                 "R_DrawVisSprite: некорректныая информация texturecolumn");
 #endif
         column = (column_t *) ((byte *)patch + LONG(patch->columnofs[texturecolumn]));
         R_DrawMaskedColumn (column);
@@ -455,12 +482,11 @@ void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
     colfunc = basecolfunc;
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // R_ProjectSprite
-// Generates a vissprite for a thing
-//  if it might be visible.
-//
+// Generates a vissprite for a thing if it might be visible.
+// -----------------------------------------------------------------------------
+
 void R_ProjectSprite (mobj_t *thing)
 {
     int             index;
@@ -547,16 +573,19 @@ void R_ProjectSprite (mobj_t *thing)
     }
 
     // [crispy] flip death sprites and corpses randomly
-    if ((thing->flags & MF_CORPSE
-    &&   thing->type != MT_CYBORG
-    &&   thing->type != MT_BARREL
-    &&   thing->type != MT_BOSSBRAIN)
-    ||   thing->info->spawnstate == S_PLAY_DIE7
-    ||   thing->info->spawnstate == S_PLAY_XDIE9)
+    if (randomly_flipcorpses && !vanilla)
     {
-        if ((thing->health & 1) && randomly_flipcorpses && !vanilla)
+        if ((thing->flags & MF_CORPSE
+        && thing->type != MT_CYBORG
+        && thing->type != MT_BARREL
+        && thing->type != MT_BOSSBRAIN)
+        || thing->info->spawnstate == S_PLAY_DIE7
+        || thing->info->spawnstate == S_PLAY_XDIE9)
         {
-            flip = true;
+           if (thing->health & 1)
+           {
+               flip = true;
+           }
         }
     }
 
@@ -753,7 +782,7 @@ void R_ProjectSprite (mobj_t *thing)
 
     // [crispy] colored blood 
     if (colored_blood && !vanilla 
-    && (thing->type == MT_BLOOD || thing->sprite == SPR_POL5) && thing->target)
+    && (thing->type == MT_BLOOD || thing->state - states == S_GIBS) && thing->target)
     {
         // [crispy] Cacodemons bleed blue blood
         if (thing->target->type == MT_HEAD)
@@ -771,11 +800,11 @@ void R_ProjectSprite (mobj_t *thing)
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // R_AddSprites
 // During BSP traversal, this adds sprites by sector.
-//
+// -----------------------------------------------------------------------------
+
 void R_AddSprites (sector_t *sec)
 {
     int      lightnum;
@@ -828,8 +857,11 @@ void R_AddSprites (sector_t *sec)
     }
 }
 
-
+// -----------------------------------------------------------------------------
+// R_ApplyWeaponBob
 // [crispy] apply bobbing (or centering) to the player's weapon sprite
+// -----------------------------------------------------------------------------
+
 static inline void R_ApplyWeaponBob (fixed_t *sx, boolean bobx, fixed_t *sy, boolean boby)
 {
 	const angle_t angle = (128 * leveltime) & FINEMASK;
@@ -855,7 +887,11 @@ static inline void R_ApplyWeaponBob (fixed_t *sx, boolean bobx, fixed_t *sy, boo
 	}
 }
 
+// -----------------------------------------------------------------------------
+// R_ApplyRaiseLowerBob
 // [JN] Smooth bobbing for raise and lowering weapons
+// -----------------------------------------------------------------------------
+
 static inline void R_ApplyRaiseLowerBob (fixed_t *sx, boolean bobx)
 {
 	const angle_t angle = (128 * leveltime) & FINEMASK;
@@ -871,7 +907,11 @@ static inline void R_ApplyRaiseLowerBob (fixed_t *sx, boolean bobx)
 	}
 }
 
+// -----------------------------------------------------------------------------
+// R_ApplyWeaponFiringBob
 // [crispy] & [JN] Halfed amplitude and special SAW'ing amplitude
+// -----------------------------------------------------------------------------
+
 static inline void R_ApplyWeaponFiringBob (fixed_t *sx, boolean bobx, fixed_t *sy, boolean boby)
 {
 	const angle_t angle = (128 * leveltime) & FINEMASK;
@@ -905,9 +945,10 @@ static inline void R_ApplyWeaponFiringBob (fixed_t *sx, boolean bobx, fixed_t *s
 	}
 }
 
-//
+// -----------------------------------------------------------------------------
 // R_DrawPSprite
-//
+// -----------------------------------------------------------------------------
+
 void R_DrawPSprite (pspdef_t *psp)
 {
     int             lump;
@@ -1223,8 +1264,6 @@ void R_SortVisSprites (void)
 
 void R_DrawSprite (vissprite_t *spr)
 {
-    int         clipbot[SCREENWIDTH]; // [crispy] 32-bit integer math
-    int         cliptop[SCREENWIDTH]; // [crispy] 32-bit integer math
     int         x;
     int         r1;
     int         r2;

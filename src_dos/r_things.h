@@ -27,8 +27,8 @@
 
 
 // Constant arrays used for psprite clipping and initializing clipping.
-extern int      negonearray[SCREENWIDTH];       // [crispy] 32-bit integer math
-extern int      screenheightarray[SCREENWIDTH]; // [crispy] 32-bit integer math
+extern int *negonearray;       // [JN] killough 2/8/98: // dropoff overflow
+extern int *screenheightarray; //      change to MAX_*  // dropoff overflow
 
 // vars for R_DrawMaskedColumn
 extern int          *mfloorclip;    // [crispy] 32-bit integer math

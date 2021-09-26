@@ -118,7 +118,7 @@ extern player_t    *viewplayer;
 extern angle_t      clipangle;
 
 extern int          viewangletox[FINEANGLES/2];
-extern angle_t      xtoviewangle[SCREENWIDTH+1];
+extern angle_t     *xtoviewangle;
 
 // angle to line origin
 extern int          rw_angle1;
