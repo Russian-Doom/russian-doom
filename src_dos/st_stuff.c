@@ -1551,10 +1551,10 @@ void ST_drawWidgets (boolean refresh)
 
     dp_translation = ST_WidgetColor(hudcolor_health);
     STlib_updatePercent(st_neghealth ? &w_health_neg : &w_health,
-                        refresh || (screenblocks > 10 && screenblocks < 14));
+                        refresh || screenblocks < 14);
 
     dp_translation = ST_WidgetColor(hudcolor_armor);
-    STlib_updatePercent(&w_armor, refresh || (screenblocks > 10 && screenblocks < 14));
+    STlib_updatePercent(&w_armor, refresh || screenblocks < 14);
     dp_translation = NULL;
 
     if (screenblocks < 11 || automapactive)
