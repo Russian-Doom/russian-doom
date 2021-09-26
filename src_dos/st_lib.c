@@ -193,10 +193,13 @@ STlib_updatePercent
 {
     STlib_updateNum(&per->n, refresh); // [crispy] moved here
 
-    if (colored_hud && !vanilla)
+    if (colored_hud == 1 && !vanilla)
+    {
         dp_translation = cr[CR_GRAY];
+    }
 
-    if (refresh && *per->n.on)
+    // [JN] CPhipps - make %'s only be updated if number changed
+    if (*per->n.on && (refresh || (per->n.oldnum != *per->n.num)))
     {
         if (screenblocks < 11 || automapactive)
         V_DrawPatch(per->n.x, per->n.y, FG, per->p);
