@@ -120,6 +120,7 @@ static boolean  message_on;         // [JN] Item pickup
 static boolean  message_on_secret;  // [JN] Revealed secret
 static boolean  message_on_system;  // [JN] System messages
 static boolean  message_on_chat;    // [JN] Netgame chat
+boolean         message_secret_keepvisible;  // [JN] Keep revealed secret message visible.
 boolean         message_dontfuckwithme;
 static boolean  message_nottobefuckedwith;
 
@@ -612,6 +613,7 @@ void HU_Start(void)
     message_on_system = false;
     message_dontfuckwithme = false;
     message_nottobefuckedwith = false;
+    message_secret_keepvisible = false;
     chat_on = false;
 
     // create the message widget
@@ -917,13 +919,22 @@ void HU_Ticker(void)
         message_on_system = false;
         message_on_chat = false;
         message_nottobefuckedwith = false;
+        message_secret_keepvisible = false;
+    }
+
+    // [JN] Zero-out item pickup messages while 
+    // revealed secret message is visible.
+    if (message_secret_keepvisible)
+    {
+        plr->message = 0;
     }
 
     if (showMessages || message_dontfuckwithme)
     {
         // display message if necessary
         // [JN] Item pickup
-        if ((plr->message && !message_nottobefuckedwith) || (plr->message && message_dontfuckwithme))
+        if (((plr->message && !message_nottobefuckedwith) || (plr->message && message_dontfuckwithme)) 
+        && !message_secret_keepvisible)
         {
             HUlib_addMessageToSText(&w_message, 0, plr->message);
             message_nottobefuckedwith = 0;

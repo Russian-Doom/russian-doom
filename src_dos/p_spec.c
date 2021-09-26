@@ -77,6 +77,8 @@ boolean         levelTimer;
 short		numlinespecials;
 line_t*		linespeciallist[MAXLINEANIMS];
 
+extern boolean message_secret_keepvisible;
+
 // extern short   numlinespecials;
 // extern line_t  *linespeciallist[MAXLINEANIMS];
 
@@ -1026,7 +1028,8 @@ void P_PlayerInSpecialSector (player_t *player)
         if (secret_notification && !vanilla)
         {
             player->message_secret = secretfound;
-
+            // [JN] Keep revealed secret message visible.
+            message_secret_keepvisible = true;
             // [JN] Don't break revealed's secret sound by any others
             if (player == &players[consoleplayer])
             {
