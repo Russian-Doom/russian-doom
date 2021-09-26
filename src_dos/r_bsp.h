@@ -30,7 +30,10 @@ extern line_t      *linedef;
 extern sector_t    *frontsector;
 extern sector_t    *backsector;
 extern drawseg_t   *ds_p;
-extern drawseg_t    drawsegs[MAXDRAWSEGS];
+
+// [JN] killough: New code which removes 2s linedef limit
+extern drawseg_t *drawsegs;
+extern unsigned   maxdrawsegs;
 
 
 typedef void (*drawfunc_t) (int start, int stop);

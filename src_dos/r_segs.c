@@ -587,10 +587,13 @@ void R_StoreWallRange (int start, int stop)
     angle_t     offsetangle;
     fixed_t     vtop;
 
-    // don't overflow and crash
-    if (ds_p == &drawsegs[MAXDRAWSEGS])
+    // [crispy] remove MAXDRAWSEGS Vanilla limit
+    if (ds_p == drawsegs+maxdrawsegs)
     {
-        return;
+        unsigned newmax = maxdrawsegs ? maxdrawsegs*2 : 128; // killough
+        drawsegs = realloc(drawsegs,newmax*sizeof(*drawsegs));
+        ds_p = drawsegs+maxdrawsegs;
+        maxdrawsegs = newmax;
     }
 		
 #ifdef RANGECHECK
