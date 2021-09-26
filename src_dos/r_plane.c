@@ -21,6 +21,7 @@
 //
 
 #include <stdlib.h>
+#include <limits.h>
 
 #include "i_system.h"
 #include "z_zone.h"
@@ -33,23 +34,34 @@
 #include "jn.h"
 
 
+// -----------------------------------------------------------------------------
+// MAXVISPLANES is no longer a limit on the number of visplanes,
+// but a limit on the number of hash slots; larger numbers mean
+// better performance usually but after a point they are wasted,
+// and memory and time overheads creep in.
+//
+// Lee Killough
+// -----------------------------------------------------------------------------
 
+#define MAXVISPLANES	128                  // must be a power of 2
 
-int  openings[MAXOPENINGS];  // [crispy] 32-bit integer math
-int *lastopening;            // [crispy] 32-bit integer math
+static visplane_t *visplanes[MAXVISPLANES];  // [JN] killough
+static visplane_t *freetail;                 // [JN] killough
+static visplane_t **freehead = &freetail;    // [JN] killough
+visplane_t *floorplane, *ceilingplane;
 
-planefunction_t     floorfunc;
-planefunction_t     ceilingfunc;
+// [JN] killough -- hash function for visplanes
+// Empirically verified to be fairly uniform:
 
+#define visplane_hash(picnum, lightlevel, height) \
+    ((unsigned)((picnum) * 3 + (lightlevel) + (height) * 7) & (MAXVISPLANES - 1))
+    
 //
 // opening
 //
 
-// Here comes the obnoxious "visplane".
-visplane_t   visplanes[MAXVISPLANES];
-visplane_t  *lastvisplane;
-visplane_t  *floorplane;
-visplane_t  *ceilingplane;
+int  openings[MAXOPENINGS];  // [crispy] 32-bit integer math
+int *lastopening;            // [crispy] 32-bit integer math
 
 //
 // Clip values are the solid pixel bounding the range.
@@ -114,11 +126,10 @@ void R_MapPlane (int y, int x1, int x2)
     // adapted from prboom-plus/src/r_plane.c:191-239, translated to fixed-point math
 
     // [crispy] avoid division by zero if (y == centery)
-    if (y == centery)
-    return;
-
     if (!(dy = abs(centery - y)))
-    return;
+    {
+        return;
+    }
 
     if (planeheight != cachedheight[y])
     {
@@ -165,74 +176,79 @@ void R_MapPlane (int y, int x1, int x2)
     spanfunc ();	
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // R_ClearPlanes
 // At begining of frame.
-//
+// -----------------------------------------------------------------------------
+
 void R_ClearPlanes (void)
 {
-    int      i;
-    angle_t  angle;
+    int i;
 
     // opening / clipping determination
-    for (i=0 ; i<viewwidth ; i++)
+    for (i = 0 ; i < viewwidth ; i++)
     {
         floorclip[i] = viewheight;
         ceilingclip[i] = -1;
     }
 
-    lastvisplane = visplanes;
+    for (i = 0; i < MAXVISPLANES; i++)  // [JN] new code -- killough
+        for (*freehead = visplanes[i], visplanes[i] = NULL ; *freehead ; )
+            freehead = &(*freehead)->next;
+
     lastopening = openings;
 
     // texture calculation
     memset (cachedheight, 0, sizeof(cachedheight));
-
-    // left to right mapping
-    angle = (viewangle-ANG90)>>ANGLETOFINESHIFT;
-
-    // scale will be unit scale at SCREENWIDTH/2 distance
-    basexscale = FixedDiv (finecosine[angle],centerxfrac);
-    baseyscale = -FixedDiv (finesine[angle],centerxfrac);
 }
 
+// -----------------------------------------------------------------------------
+// [crispy] remove MAXVISPLANES Vanilla limit
+// New function, by Lee Killough
+// -----------------------------------------------------------------------------
+
+static visplane_t *new_visplane (unsigned int hash)
+{
+    visplane_t *check = freetail;
+
+    if (!check)
+    {
+        check = calloc(1, sizeof(*check));
+    }
+    else if (!(freetail = freetail->next))
+    {
+        freehead = &freetail;
+    }
+
+    check->next = visplanes[hash];
+    visplanes[hash] = check;
+
+    return check;
+}
 
 //
 // R_FindPlane
 //
 visplane_t *R_FindPlane (fixed_t height, int picnum, int lightlevel)
 {
-    visplane_t *check;
+    int i;
+    unsigned int  hash;
+    visplane_t   *check;
 
     if (picnum == skyflatnum)
     {
-        height = 0;     // all skys map together
+        height = 0; // all skys map together
         lightlevel = 0;
     }
 
-    for (check=visplanes ; check<lastvisplane ; check++)
-    {
-        if (height == check->height
-        &&  picnum == check->picnum
-        &&  lightlevel == check->lightlevel)
-        {
-            break;
-        }
-    }
+    // New visplane algorithm uses hash table -- killough
+    hash = visplane_hash(picnum, lightlevel, height);
+    
+    for (check = visplanes[hash]; check; check = check->next)
+        if (height == check->height && picnum == check->picnum && lightlevel == check->lightlevel)
+            return check;
 
-    if (check < lastvisplane)
-    {
-        return check;
-    }
-
-    if (lastvisplane - visplanes == MAXVISPLANES)
-    {
-        I_Error (english_language ?
-                 "R_FindPlane: no more visplanes" :
-                 "R_FindPlane: превышен лимит visplanes");
-    }
-
-    lastvisplane++;
+    check = new_visplane(hash);
 
     check->height = height;
     check->picnum = picnum;
@@ -240,78 +256,75 @@ visplane_t *R_FindPlane (fixed_t height, int picnum, int lightlevel)
     check->minx = SCREENWIDTH;
     check->maxx = -1;
 
-    memset (check->top,0xff,sizeof(check->top));
+    for (i = 0; i != SCREENWIDTH; i++)
+    {
+        check->top[i] = SHRT_MAX;
+    }
 
     return check;
 }
 
+// -----------------------------------------------------------------------------
+// R_DupPlane
+// -----------------------------------------------------------------------------
 
-//
+visplane_t *R_DupPlane(const visplane_t *pl, int start, int stop)
+{
+    int i;
+    visplane_t  *new_pl = new_visplane(visplane_hash(pl->picnum, pl->lightlevel, pl->height));
+
+    new_pl->height = pl->height;
+    new_pl->picnum = pl->picnum;
+    new_pl->lightlevel = pl->lightlevel;
+    new_pl->minx = start;
+    new_pl->maxx = stop;
+
+    for (i = 0; i != SCREENWIDTH; i++)
+    {
+        new_pl->top[i] = SHRT_MAX;
+    }
+
+    return new_pl;
+}
+
+// -----------------------------------------------------------------------------
 // R_CheckPlane
-//
+// -----------------------------------------------------------------------------
+
 visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop)
 {
-    int intrl;
-    int intrh;
-    int unionl;
-    int unionh;
-    int x;
+    int intrl, intrh, unionl, unionh, x;
 
     if (start < pl->minx)
     {
-        intrl = pl->minx;
-        unionl = start;
+        intrl = pl->minx, unionl = start;
     }
     else
     {
-        unionl = pl->minx;
-        intrl = start;
+        unionl = pl->minx, intrl = start;
     }
-	
-    if (stop > pl->maxx)
+
+    if (stop  > pl->maxx)
     {
-        intrh = pl->maxx;
-        unionh = stop;
+        intrh = pl->maxx, unionh = stop;
     }
     else
     {
-        unionh = pl->maxx;
-        intrh = stop;
+        unionh = pl->maxx, intrh  = stop;
     }
 
-    for (x=intrl ; x<= intrh ; x++)
-        if (pl->top[x] != 0xffffffffu) // [crispy] hires / 32-bit integer math
-            break;
-
+    for (x=intrl ; x <= intrh && pl->top[x] == SHRT_MAX; x++); // [crispy] hires / 32-bit integer math
     if (x > intrh)
     {
-        pl->minx = unionl;
-        pl->maxx = unionh;
-
-        // use the same one
-        return pl;		
+        // Can use existing plane; extend range
+        pl->minx = unionl, pl->maxx = unionh;
+        return pl;
     }
-
-    // make a new visplane
-    lastvisplane->height = pl->height;
-    lastvisplane->picnum = pl->picnum;
-    lastvisplane->lightlevel = pl->lightlevel;
-
-    // [Doom Vanille] fix: prevent the stack from being trashed
-    if (lastvisplane - visplanes == MAXVISPLANES)
+    else
     {
-        I_Error (english_language ?
-                 "R_CheckPlane: no more visplanes" :
-                 "R_CheckPlane: превышен лимит visplanes");
+        // Cannot use existing plane; create a new one
+        return R_DupPlane(pl, start, stop);
     }
-
-    pl = lastvisplane++;
-    pl->minx = start;
-    pl->maxx = stop;
-
-    memset (pl->top,0xff,sizeof(pl->top));
-
-    return pl;
 }
 
 
@@ -413,51 +426,23 @@ static char *R_DistortedFlat (int flatnum)
     return distortedflat;
 }
 
-//
+// -----------------------------------------------------------------------------
 // R_DrawPlanes
 // At the end of each frame.
-//
+// -----------------------------------------------------------------------------
+
 void R_DrawPlanes (void)
 {
     int          light;
-    int          x;
+    int          i, x;
     int          stop;
     int          angle;
     visplane_t  *pl;
 
-#ifdef RANGECHECK
-    if (ds_p - drawsegs > MAXDRAWSEGS)
+    for (i = 0 ; i < MAXVISPLANES ; i++)
     {
-        I_Error (english_language ?
-                 "R_DrawPlanes: drawsegs overflow (%i)" :
-                 "R_DrawPlanes: ошибка переполнения drawsegs (%i)",
-                 ds_p - drawsegs);
-    }
-
-    if (lastvisplane - visplanes > MAXVISPLANES)
+    for (pl = visplanes[i] ; pl ; pl = pl->next)
     {
-        I_Error (english_language ?
-                 "R_DrawPlanes: visplane overflow (%i)" :
-                 "R_DrawPlanes: ошибка переполнения visplane (%i)",
-                 lastvisplane - visplanes);
-    }
-
-    if (lastopening - openings > MAXOPENINGS)
-    {
-        I_Error (english_language ?
-                 "R_DrawPlanes: opening overflow (%i)" :
-                 "R_DrawPlanes: ошибка переполнения opening (%i)",
-                 lastopening - openings);
-    }
-#endif
-
-    for (pl = visplanes ; pl < lastvisplane ; pl++)
-    {
-        if (pl->minx > pl->maxx)
-        {
-            continue;
-        }
-	
         // sky flat
         if (pl->picnum == skyflatnum)
         {
@@ -533,8 +518,8 @@ void R_DrawPlanes (void)
             planezlight = fullbright_notgrayorbrown_floor[light];
         }
 
-        pl->top[pl->maxx+1] = 0xffffffffu; // [crispy] hires / 32-bit integer math
-        pl->top[pl->minx-1] = 0xffffffffu; // [crispy] hires / 32-bit integer math
+        pl->top[pl->maxx+1] = SHRT_MAX; // [crispy] hires / 32-bit integer math
+        pl->top[pl->minx-1] = SHRT_MAX; // [crispy] hires / 32-bit integer math
 
         stop = pl->maxx + 1;
 
@@ -551,5 +536,6 @@ void R_DrawPlanes (void)
         {
             Z_ChangeTag (ds_source, PU_CACHE);
         }
+    }
     }
 }

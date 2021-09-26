@@ -466,8 +466,9 @@ typedef struct
 //
 // Now what is a visplane, anyway?
 // 
-typedef struct
+typedef struct visplane_s
 {
+  struct visplane_s *next; // [JN] Next visplane in hash chain -- killough
   fixed_t		height;
   int			picnum;
   int			lightlevel;
