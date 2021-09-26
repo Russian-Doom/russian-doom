@@ -30,11 +30,6 @@
 extern int      negonearray[SCREENWIDTH];       // [crispy] 32-bit integer math
 extern int      screenheightarray[SCREENWIDTH]; // [crispy] 32-bit integer math
 
-// Game functions
-extern vissprite_t   vissprites[MAXVISSPRITES];
-extern vissprite_t  *vissprite_p;
-extern vissprite_t   vsprsortedhead;
-
 // vars for R_DrawMaskedColumn
 extern int          *mfloorclip;    // [crispy] 32-bit integer math
 extern int          *mceilingclip;  // [crispy] 32-bit integer math
