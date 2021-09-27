@@ -6404,11 +6404,10 @@ void M_Drawer (void)
     else
     {
         // [JN] Blinking ">" symbol
-        if (whichSkull == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + SKULLXOFF + 24, currentMenu->y 
-                            + itemOn*LINEHEIGHT_SML, ">");
-        dp_translation = NULL;
+        V_DrawShadowDirect(x+1 + SKULLXOFF + 24, currentMenu->y+1 + itemOn*LINEHEIGHT_SML, 0,
+                           W_CacheLumpName("RD_CURB", PU_CACHE)); // Shadow is always same
+        V_DrawPatchDirect(x + SKULLXOFF + 24, currentMenu->y + itemOn*LINEHEIGHT_SML, 0,
+                           W_CacheLumpName(whichSkull == 0 ? "RD_CURB" : "RD_CURD", PU_CACHE));
     }
 }
 
