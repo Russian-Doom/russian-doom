@@ -256,10 +256,10 @@ static int resize_delay = 70; // [JN] Redused from 500 to 70
 
 int usegamma = 4;
 
-float color_saturtion = 1;
-float r_color_factor = 1.0;
-float g_color_factor = 1.0;
-float b_color_factor = 1.0;
+float color_saturtion = 1.0f;
+float r_color_factor  = 1.0f;
+float g_color_factor  = 1.0f;
+float b_color_factor  = 1.0f;
 
 void *I_GetSDLWindow(void)
 {

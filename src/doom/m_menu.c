@@ -5055,6 +5055,12 @@ void M_RD_BackToDefaults_Recommended(int choice)
     menu_shading          = 0;
     detailLevel           = 0;
 
+    // Color
+    color_saturtion = 1.0f;
+    r_color_factor  = 1.0f;
+    g_color_factor  = 1.0f;
+    b_color_factor  = 1.0f;
+
     // Messages
     showMessages          = 1;
     messages_alignment    = 0;
@@ -5189,6 +5195,9 @@ void M_RD_BackToDefaults_Recommended(int choice)
         ST_drawWidgets(true);
     }
 
+    // Update status bar / border background.
+    inhelpscreens = true;
+
     // Reset Automap color scheme
     AM_initColors();
 
@@ -5221,6 +5230,12 @@ void M_RD_BackToDefaults_Original(int choice)
     level_brightness      = 0;
     menu_shading          = 0;
     detailLevel           = 1;
+
+    // Color
+    color_saturtion = 1.0f;
+    r_color_factor  = 1.0f;
+    g_color_factor  = 1.0f;
+    b_color_factor  = 1.0f;
 
     // Messages
     showMessages          = 1;
@@ -5355,6 +5370,9 @@ void M_RD_BackToDefaults_Original(int choice)
         ST_refreshBackground();
         ST_drawWidgets(true);
     }
+
+    // Update status bar / border background.
+    inhelpscreens = true;
 
     // Reset Automap color scheme
     AM_initColors();
