@@ -256,7 +256,7 @@ static int resize_delay = 70; // [JN] Redused from 500 to 70
 
 int usegamma = 4;
 
-float color_saturtion = 1.0f;
+float color_saturation = 1.0f;
 float r_color_factor  = 1.0f;
 float g_color_factor  = 1.0f;
 float b_color_factor  = 1.0f;
@@ -947,7 +947,7 @@ void I_SetPalette (byte *doompalette)
 
     // [JN] Safe-guard conditions to fix incorrect values:
     if (usegamma < 0)  usegamma = 0;              ; if (usegamma > 17) usegamma = 17;
-    if (color_saturtion < 0) color_saturtion = 0; ; if (color_saturtion > 1) color_saturtion = 1;
+    if (color_saturation < 0) color_saturation = 0; ; if (color_saturation > 1) color_saturation = 1;
     if (r_color_factor  < 0) r_color_factor  = 0; ; if (r_color_factor  > 1) r_color_factor  = 1;
     if (g_color_factor  < 0) g_color_factor  = 0; ; if (g_color_factor  > 1) g_color_factor  = 1;
     if (b_color_factor  < 0) b_color_factor  = 0; ; if (b_color_factor  > 1) b_color_factor  = 1;
@@ -965,9 +965,9 @@ void I_SetPalette (byte *doompalette)
         byte    b = gamma[*doompalette++] & ~3;
         double  p = sqrt(r * r * 0.299 + g * g * 0.587 + b * b * 0.114);
 
-        palette[i].r = (byte)(p + (r - p) * color_saturtion) * r_color_factor;
-        palette[i].g = (byte)(p + (g - p) * color_saturtion) * g_color_factor;
-        palette[i].b = (byte)(p + (b - p) * color_saturtion) * b_color_factor;
+        palette[i].r = (byte)(p + (r - p) * color_saturation) * r_color_factor;
+        palette[i].g = (byte)(p + (g - p) * color_saturation) * g_color_factor;
+        palette[i].b = (byte)(p + (b - p) * color_saturation) * b_color_factor;
     }
 
     palette_to_set = true;

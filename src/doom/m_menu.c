@@ -162,7 +162,7 @@ void M_RD_Change_LocalTime(Direction_t direction);
 
 // Colors
 void M_RD_Draw_Colors(void);
-void M_RD_Change_Saturtion();
+void M_RD_Change_Saturation();
 void M_RD_Change_RED_Color();
 void M_RD_Change_GREEN_Color();
 void M_RD_Change_BLUE_Color();
@@ -973,7 +973,7 @@ static Menu_t DisplayMenu = {
 
 static MenuItem_t ColorItems[] = {
     {ITT_TITLE,  "General",          "jcyjdyjt",      NULL,                    0}, // Основное
-    {ITT_LRFUNC, "Saturtion",        "yfcsotyyjcnm",  M_RD_Change_Saturtion,   0}, // Насыщенность
+    {ITT_LRFUNC, "Saturation",       "yfcsotyyjcnm",  M_RD_Change_Saturation,  0}, // Насыщенность
     {ITT_EMPTY,   NULL,              NULL,            NULL,                    0},
     {ITT_TITLE,  "Color brightness", "zhrjcnm",       NULL,                    0}, // Яркость
     {ITT_LRFUNC, "", /* RED   */     "",              M_RD_Change_RED_Color,   0},
@@ -2187,10 +2187,10 @@ void M_RD_Draw_Colors(void)
         RD_M_DrawTextSmallRUS("cbybq", 95 + wide_delta, 105, CR_BLUE2);  // Синий
     }
 
-    // Saturtion slider
-    RD_Menu_DrawSliderSmall(&ColorMenu, 44, 10, color_saturtion * 10);
+    // Saturation slider
+    RD_Menu_DrawSliderSmall(&ColorMenu, 44, 10, color_saturation * 10);
     // Do a float to int conversion for slider value.
-    i = color_saturtion * 100;
+    i = color_saturation * 100;
     // Numerical representation of slider position.
     M_snprintf(num, 5, "%d", i);
     // Consolidate numerical value and % sign.
@@ -2217,10 +2217,9 @@ void M_RD_Draw_Colors(void)
 
 }
 
-void M_RD_Change_Saturtion(Direction_t direction)
+void M_RD_Change_Saturation(Direction_t direction)
 {
-    // RD_Menu_SpinInt(&color_saturtion, 0, 100, direction);
-    RD_Menu_SlideFloat_Step(&color_saturtion, 0.01F, 1.0F, 0.01F, direction);
+    RD_Menu_SlideFloat_Step(&color_saturation, 0.01F, 1.0F, 0.01F, direction);
 
     I_SetPalette ((byte *)W_CacheLumpName(DEH_String(usegamma <= 8 ?
                   "PALFIX" : "PLAYPAL"), PU_CACHE) + st_palette * 768);
@@ -5056,7 +5055,7 @@ void M_RD_BackToDefaults_Recommended(int choice)
     detailLevel           = 0;
 
     // Color
-    color_saturtion = 1.0f;
+    color_saturation = 1.0f;
     r_color_factor  = 1.0f;
     g_color_factor  = 1.0f;
     b_color_factor  = 1.0f;
@@ -5232,7 +5231,7 @@ void M_RD_BackToDefaults_Original(int choice)
     detailLevel           = 1;
 
     // Color
-    color_saturtion = 1.0f;
+    color_saturation = 1.0f;
     r_color_factor  = 1.0f;
     g_color_factor  = 1.0f;
     b_color_factor  = 1.0f;

@@ -712,7 +712,7 @@ void D_BindVariables(void)
     M_BindIntVariable("level_brightness",       &level_brightness);
     M_BindIntVariable("menu_shading",           &menu_shading);
     M_BindIntVariable("detaillevel",            &detailLevel);
-    M_BindFloatVariable("color_saturtion",      &color_saturtion);
+    M_BindFloatVariable("color_saturation",     &color_saturation);
     M_BindFloatVariable("r_color_factor",       &r_color_factor);
     M_BindFloatVariable("g_color_factor",       &g_color_factor);
     M_BindFloatVariable("b_color_factor",       &b_color_factor);

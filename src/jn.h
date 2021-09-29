@@ -85,7 +85,7 @@ extern int screenblocks, screenSize;
 extern int level_brightness;
 extern int menu_shading;
 
-extern float color_saturtion;
+extern float color_saturation;
 extern float r_color_factor;
 extern float g_color_factor;
 extern float b_color_factor;

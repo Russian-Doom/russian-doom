@@ -649,7 +649,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(detaillevel),
     CONFIG_VARIABLE_INT(hud_detaillevel),
     
-    CONFIG_VARIABLE_FLOAT(color_saturtion),
+    CONFIG_VARIABLE_FLOAT(color_saturation),
     CONFIG_VARIABLE_FLOAT(r_color_factor),
     CONFIG_VARIABLE_FLOAT(g_color_factor),
     CONFIG_VARIABLE_FLOAT(b_color_factor),
