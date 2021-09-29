@@ -123,7 +123,6 @@ int screenblocks = 10, screenSize;
 int level_brightness = 0;
 int menu_shading = 0;
 int detailLevel = 0;        // Blocky mode, has default, 0 = high, 1 = normal
-int hud_detaillevel = 0;    // [JN] Also blocky mode, 0 = high, 1 = normal
 
 // Display: Messages
 int showMessages = 1;
@@ -713,7 +712,10 @@ void D_BindVariables(void)
     M_BindIntVariable("level_brightness",       &level_brightness);
     M_BindIntVariable("menu_shading",           &menu_shading);
     M_BindIntVariable("detaillevel",            &detailLevel);
-    M_BindIntVariable("hud_detaillevel",        &hud_detaillevel);
+    M_BindFloatVariable("color_saturtion",      &color_saturtion);
+    M_BindFloatVariable("r_color_factor",       &r_color_factor);
+    M_BindFloatVariable("g_color_factor",       &g_color_factor);
+    M_BindFloatVariable("b_color_factor",       &b_color_factor);
 
     // Messages
     M_BindIntVariable("show_messages",          &showMessages);

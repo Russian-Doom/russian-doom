@@ -158,8 +158,14 @@ void M_RD_Change_Gamma(Direction_t direction);
 void M_RD_Change_LevelBrightness(Direction_t direction);
 void M_RD_Change_MenuShading(Direction_t direction);
 void M_RD_Change_Detail();
-void M_RD_Change_HUD_Detail();
 void M_RD_Change_LocalTime(Direction_t direction);
+
+// Colors
+void M_RD_Draw_Colors(void);
+void M_RD_Change_Saturtion();
+void M_RD_Change_RED_Color();
+void M_RD_Change_GREEN_Color();
+void M_RD_Change_BLUE_Color();
 
 // Messages
 void M_RD_Draw_MessagesSettings(void);
@@ -687,6 +693,7 @@ static Menu_t NewGameMenu;
 static Menu_t RDOptionsMenu;
 static Menu_t RenderingMenu;
 static Menu_t DisplayMenu;
+static Menu_t ColorMenu;
 static Menu_t MessagesMenu;
 static Menu_t AutomapMenu;
 static Menu_t SoundMenu;
@@ -943,7 +950,7 @@ static MenuItem_t DisplayItems[] = {
     {ITT_LRFUNC,  "menu shading",           "pfntvytybt ajyf vty.",    M_RD_Change_MenuShading,     0},
     {ITT_EMPTY,   NULL,                     NULL,                      NULL,                        0},
     {ITT_SWITCH,  "graphics detail:",       "ltnfkbpfwbz uhfabrb:",    M_RD_Change_Detail,          0},
-    {ITT_SWITCH,  "hud background detail:", "ltnfkbpfwbz ajyf",        M_RD_Change_HUD_Detail,      0},
+    {ITT_SETMENU, "color tuning",           "yfcnhjqrf wdtnf",         &ColorMenu,                  0},
     {ITT_TITLE,   "Interface",              "bynthatqc",               NULL,                        0}, // Интерфейс
     {ITT_SETMENU, "messages and texts",     "cjj,otybz b ntrcns",      &MessagesMenu,               0},
     {ITT_SETMENU, "automap and statistics", "rfhnf b cnfnbcnbrf",      &AutomapMenu,                0}
@@ -957,6 +964,33 @@ static Menu_t DisplayMenu = {
     M_RD_Draw_Display,
     NULL,
     &RDOptionsMenu,
+    1
+};
+
+// -----------------------------------------------------------------------------
+// Color settings
+// -----------------------------------------------------------------------------
+
+static MenuItem_t ColorItems[] = {
+    {ITT_TITLE,  "General",          "jcyjdyjt",      NULL,                    0}, // Основное
+    {ITT_LRFUNC, "Saturtion",        "yfcsotyyjcnm",  M_RD_Change_Saturtion,   0}, // Насыщенность
+    {ITT_EMPTY,   NULL,              NULL,            NULL,                    0},
+    {ITT_TITLE,  "Color brightness", "zhrjcnm",       NULL,                    0}, // Яркость
+    {ITT_LRFUNC, "", /* RED   */     "",              M_RD_Change_RED_Color,   0},
+    {ITT_EMPTY,   NULL,              NULL,            NULL,                    0},
+    {ITT_LRFUNC, "", /* GREEN */     "",              M_RD_Change_GREEN_Color, 0},
+    {ITT_EMPTY,   NULL,              NULL,            NULL,                    0},
+    {ITT_LRFUNC, "", /* BLUE  */     "",              M_RD_Change_BLUE_Color,  0}
+};
+
+static Menu_t ColorMenu = {
+    95, 95,
+    25,
+    "COLOR TUNING", "YFCNHJQRF WDTNF", false, // НАСТРОЙКА ЦВЕТА
+    9, ColorItems, false,
+    M_RD_Draw_Colors,
+    NULL,
+    &DisplayMenu,
     1
 };
 
@@ -2002,18 +2036,11 @@ void M_RD_Draw_Display(void)
     {
         // Graphics detail
         RD_M_DrawTextSmallENG(detailLevel ? "low" : "high", 150 + wide_delta, 115, CR_NONE);
-
-        // HUD background detail
-        RD_M_DrawTextSmallENG(hud_detaillevel ? "low" : "high", 199 + wide_delta, 125, CR_NONE);
     }
     else
     {
         // Детализация графики
         RD_M_DrawTextSmallRUS(detailLevel ? "ybprfz" : "dscjrfz", 195 + wide_delta, 115, CR_NONE);
-
-        // Детализация фона HUD
-        RD_M_DrawTextSmallENG("HUD: b", 167 + wide_delta, 125, CR_NONE);
-        RD_M_DrawTextSmallRUS(hud_detaillevel ? "ybprfz" : "dscjrfz", 199 + wide_delta, 125, CR_NONE);
 
         //
         // Интерфейс
@@ -2121,16 +2148,6 @@ void M_RD_Change_Detail()
     else
         players[consoleplayer].message_system = DEH_String(english_language ?
                                             DETAILLO : DETAILLO_RUS);
-}
-
-void M_RD_Change_HUD_Detail()
-{
-    extern boolean setsizeneeded;
-
-    hud_detaillevel ^= 1;
-
-    // [JN] Update screen border.
-    setsizeneeded = true;
 
     // [JN] Refresh status bar.
     inhelpscreens = true;
@@ -2145,6 +2162,92 @@ void M_RD_Change_LocalTime(Direction_t direction)
     {
         HU_Start();
     }
+}
+
+// -----------------------------------------------------------------------------
+// Color settings
+// -----------------------------------------------------------------------------
+
+void M_RD_Draw_Colors(void)
+{
+    int  i;
+    char num[8];
+    char *num_and_percent;
+
+    if (english_language)
+    {
+        RD_M_DrawTextSmallENG("RED", 95 + wide_delta, 65, CR_NONE);
+        RD_M_DrawTextSmallENG("GREEN", 95 + wide_delta, 85, CR_GREEN);
+        RD_M_DrawTextSmallENG("BLUE", 95 + wide_delta, 105, CR_BLUE2);
+    }
+    else
+    {
+        RD_M_DrawTextSmallRUS("rhfcysq", 95 + wide_delta, 65, CR_NONE);  // Красный
+        RD_M_DrawTextSmallRUS("ptktysq", 95 + wide_delta, 85, CR_GREEN); // Зелёный
+        RD_M_DrawTextSmallRUS("cbybq", 95 + wide_delta, 105, CR_BLUE2);  // Синий
+    }
+
+    // Saturtion slider
+    RD_Menu_DrawSliderSmall(&ColorMenu, 44, 10, color_saturtion * 10);
+    // Do a float to int conversion for slider value.
+    i = color_saturtion * 100;
+    // Numerical representation of slider position.
+    M_snprintf(num, 5, "%d", i);
+    // Consolidate numerical value and % sign.
+    num_and_percent = M_StringJoin(num, "%", NULL);
+    RD_M_DrawTextSmallENG(num_and_percent, 193 + wide_delta, 45, CR_NONE);
+    
+    // RED intensity slider
+    RD_Menu_DrawSliderSmall(&ColorMenu, 74, 10, r_color_factor * 10);
+    // Numerical representation of slider position
+    M_snprintf(num, 5, "%3f", r_color_factor);
+    RD_M_DrawTextSmallENG(num, 193 + wide_delta, 75, CR_NONE);
+
+    // GREEN intensity slider
+    RD_Menu_DrawSliderSmall(&ColorMenu, 94, 10, g_color_factor * 10);
+    // Numerical representation of slider position
+    M_snprintf(num, 5, "%3f", g_color_factor);
+    RD_M_DrawTextSmallENG(num, 193 + wide_delta, 95, CR_GREEN);
+
+    // BLUE intensity slider
+    RD_Menu_DrawSliderSmall(&ColorMenu, 114, 10, b_color_factor * 10);
+    // Numerical representation of slider position
+    M_snprintf(num, 5, "%3f", b_color_factor);
+    RD_M_DrawTextSmallENG(num, 193 + wide_delta, 115, CR_BLUE2);
+
+}
+
+void M_RD_Change_Saturtion(Direction_t direction)
+{
+    // RD_Menu_SpinInt(&color_saturtion, 0, 100, direction);
+    RD_Menu_SlideFloat_Step(&color_saturtion, 0.01F, 1.0F, 0.01F, direction);
+
+    I_SetPalette ((byte *)W_CacheLumpName(DEH_String(usegamma <= 8 ?
+                  "PALFIX" : "PLAYPAL"), PU_CACHE) + st_palette * 768);
+}
+
+void M_RD_Change_RED_Color(Direction_t direction)
+{
+    RD_Menu_SlideFloat_Step(&r_color_factor, 0.01F, 1.0F, 0.01F, direction);
+
+    I_SetPalette ((byte *)W_CacheLumpName(DEH_String(usegamma <= 8 ?
+                  "PALFIX" : "PLAYPAL"), PU_CACHE) + st_palette * 768);
+}
+
+void M_RD_Change_GREEN_Color(Direction_t direction)
+{
+    RD_Menu_SlideFloat_Step(&g_color_factor, 0.01F, 1.0F, 0.01F, direction);
+
+    I_SetPalette ((byte *)W_CacheLumpName(DEH_String(usegamma <= 8 ?
+                  "PALFIX" : "PLAYPAL"), PU_CACHE) + st_palette * 768);
+}
+
+void M_RD_Change_BLUE_Color(Direction_t direction)
+{
+    RD_Menu_SlideFloat_Step(&b_color_factor, 0.01F, 1.0F, 0.01F, direction);
+
+    I_SetPalette ((byte *)W_CacheLumpName(DEH_String(usegamma <= 8 ?
+                  "PALFIX" : "PLAYPAL"), PU_CACHE) + st_palette * 768);
 }
 
 // -----------------------------------------------------------------------------
@@ -3123,7 +3226,7 @@ void M_RD_Draw_Bindings()
 {
     // [JN] Erase the entire screen to a tiled background.
     inhelpscreens = true;
-    V_FillFlat ("FLOOR4_8");
+    V_FillFlat ("FLOOR4_8", detailshift);
 
     if (english_language)
     {
@@ -3177,7 +3280,7 @@ void DrawGamepadMenu()
 {
     // [JN] Erase the entire screen to a tiled background.
     inhelpscreens = true;
-    V_FillFlat ("FLOOR4_8");
+    V_FillFlat ("FLOOR4_8", detailshift);
 
     if (english_language)
     {
@@ -4301,7 +4404,7 @@ void M_RD_Draw_Level_1(void)
 
     // [JN] Erase the entire screen to a tiled background.
     inhelpscreens = true;
-    V_FillFlat ("FLOOR4_8");
+    V_FillFlat ("FLOOR4_8", detailshift);
 
     if (english_language)
     {
@@ -4540,7 +4643,7 @@ void M_RD_Draw_Level_2(void)
 
     // [JN] Erase the entire screen to a tiled background.
     inhelpscreens = true;
-    V_FillFlat ("FLOOR4_8");
+    V_FillFlat ("FLOOR4_8", detailshift);
 
     if (english_language)
     {
@@ -4951,7 +5054,6 @@ void M_RD_BackToDefaults_Recommended(int choice)
     level_brightness      = 0;
     menu_shading          = 0;
     detailLevel           = 0;
-    hud_detaillevel       = 0;
 
     // Messages
     showMessages          = 1;
@@ -5119,7 +5221,6 @@ void M_RD_BackToDefaults_Original(int choice)
     level_brightness      = 0;
     menu_shading          = 0;
     detailLevel           = 1;
-    hud_detaillevel       = 1;
 
     // Messages
     showMessages          = 1;

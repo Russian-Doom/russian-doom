@@ -256,6 +256,11 @@ static int resize_delay = 70; // [JN] Redused from 500 to 70
 
 int usegamma = 4;
 
+float color_saturtion = 1;
+float r_color_factor = 1.0;
+float g_color_factor = 1.0;
+float b_color_factor = 1.0;
+
 void *I_GetSDLWindow(void)
 {
     return screen;
@@ -940,18 +945,29 @@ void I_SetPalette (byte *doompalette)
 {
     int i;
 
-    // [JN] Check for incorrect gamma levels while startup
-    if (usegamma < 0 || usegamma > 17)
-    usegamma = 0;
+    // [JN] Safe-guard conditions to fix incorrect values:
+    if (usegamma < 0)  usegamma = 0;              ; if (usegamma > 17) usegamma = 17;
+    if (color_saturtion < 0) color_saturtion = 0; ; if (color_saturtion > 1) color_saturtion = 1;
+    if (r_color_factor  < 0) r_color_factor  = 0; ; if (r_color_factor  > 1) r_color_factor  = 1;
+    if (g_color_factor  < 0) g_color_factor  = 0; ; if (g_color_factor  > 1) g_color_factor  = 1;
+    if (b_color_factor  < 0) b_color_factor  = 0; ; if (b_color_factor  > 1) b_color_factor  = 1;
 
     for (i=0; i<256; ++i)
     {
+        // [JN] Extended palette values generation routine.
+        // Based on implementation from DOOM Retro.
+        byte    *gamma = gammatable[usegamma];
+
         // Zero out the bottom two bits of each channel - the PC VGA
         // controller only supports 6 bits of accuracy.
+        byte    r = gamma[*doompalette++] & ~3;
+        byte    g = gamma[*doompalette++] & ~3;
+        byte    b = gamma[*doompalette++] & ~3;
+        double  p = sqrt(r * r * 0.299 + g * g * 0.587 + b * b * 0.114);
 
-        palette[i].r = gammatable[usegamma][*doompalette++] & ~3;
-        palette[i].g = gammatable[usegamma][*doompalette++] & ~3;
-        palette[i].b = gammatable[usegamma][*doompalette++] & ~3;
+        palette[i].r = (byte)(p + (r - p) * color_saturtion) * r_color_factor;
+        palette[i].g = (byte)(p + (g - p) * color_saturtion) * g_color_factor;
+        palette[i].b = (byte)(p + (b - p) * color_saturtion) * b_color_factor;
     }
 
     palette_to_set = true;

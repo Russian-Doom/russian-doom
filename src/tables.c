@@ -2152,7 +2152,7 @@ const angle_t tantoangle[2049] =
 
 // Now where did these came from?
 // [JN] Added intermediate gamma levels, for both improved and standard palettes.
-const byte gammatable[18][256] =
+byte gammatable[18][256] =
 {
     {   /* Improved gamma correction OFF */
         0,   2,   3,   4,   5,   6,   7,   8,   9,   10,  11,  12,  13,  14,  15,  16,

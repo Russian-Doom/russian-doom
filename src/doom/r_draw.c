@@ -1337,14 +1337,13 @@ void R_FillBackScreen (void)
     // [JN] Variable HUD detail level.
     {
         const int sbarheight = gamemission == jaguar ? SBARHEIGHT_JAG : SBARHEIGHT;
-        const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
 
         for (y = 0; y < SCREENHEIGHT - sbarheight; y++)
         {
             for (x = 0; x < screenwidth; x++)
             {
-                *dest++ = src[(((y >> shift_allowed) & 63) << 6) 
-                             + ((x >> shift_allowed) & 63)];
+                *dest++ = src[(((y >> detailshift) & 63) << 6) 
+                             + ((x >> detailshift) & 63)];
             }
         }
     }
