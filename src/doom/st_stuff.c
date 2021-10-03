@@ -216,7 +216,7 @@ static char msg[ST_MSGWIDTH];
 static player_t *plyr;          // main player in game
 
 int        st_palette = 0;
-static int lu_palette1, lu_palette2;  // [JN] lump number for PALFIX (1) and PLAYPAL (2)
+static int lu_palette;                // lump number for PLAYPAL
 static int st_msgcounter = 0;         // used for making messages go away
 
 static st_chatstateenum_t st_chatstate; // used when in chat
@@ -1512,9 +1512,7 @@ void ST_doPaletteStuff (void)
     if (palette != st_palette)
     {
         st_palette = palette;
-        pal = (byte *) W_CacheLumpNum ((usegamma <= 8 ? 
-                                        lu_palette1 : lu_palette2), 
-                                        PU_CACHE) + palette * 768;
+        pal = (byte *) W_CacheLumpNum ((lu_palette), PU_CACHE) + palette * 768;
         I_SetPalette (pal);
     }
 }
@@ -2070,8 +2068,7 @@ static void ST_loadGraphics (void)
 
 static void ST_loadData (void)
 {
-    lu_palette1 = W_GetNumForName (DEH_String("PALFIX"));
-    lu_palette2 = W_GetNumForName (DEH_String("PLAYPAL"));
+    lu_palette = W_GetNumForName (DEH_String("PLAYPAL"));
 
     ST_loadGraphics();
 }
@@ -2317,10 +2314,7 @@ void ST_Stop (void)
         return;
     }
 
-    I_SetPalette (W_CacheLumpNum ((usegamma <= 8 ? 
-                                   lu_palette1 : 
-                                   lu_palette2), 
-                                   PU_CACHE));
+    I_SetPalette (W_CacheLumpNum ((lu_palette), PU_CACHE));
 
     st_stopped = true;
 }

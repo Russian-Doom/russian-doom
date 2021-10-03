@@ -2116,11 +2116,7 @@ void M_RD_Change_Gamma(Direction_t direction)
 {
     RD_Menu_SlideInt(&usegamma, 0, 17, direction);
 
-    I_SetPalette ((byte *)W_CacheLumpName(DEH_String(usegamma <= 8 ?
-                                                     "PALFIX" :
-                                                     "PLAYPAL"),
-                                                     PU_CACHE) + 
-                                                     st_palette * 768);
+    I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
     players[consoleplayer].message_system = DEH_String(english_language ? 
                                                        gammamsg[usegamma] :
                                                        gammamsg_rus[usegamma]);
@@ -2221,32 +2217,28 @@ void M_RD_Change_Saturation(Direction_t direction)
 {
     RD_Menu_SlideFloat_Step(&color_saturation, 0.01F, 1.0F, 0.01F, direction);
 
-    I_SetPalette ((byte *)W_CacheLumpName(DEH_String(usegamma <= 8 ?
-                  "PALFIX" : "PLAYPAL"), PU_CACHE) + st_palette * 768);
+    I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
 }
 
 void M_RD_Change_RED_Color(Direction_t direction)
 {
     RD_Menu_SlideFloat_Step(&r_color_factor, 0.01F, 1.0F, 0.01F, direction);
 
-    I_SetPalette ((byte *)W_CacheLumpName(DEH_String(usegamma <= 8 ?
-                  "PALFIX" : "PLAYPAL"), PU_CACHE) + st_palette * 768);
+    I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
 }
 
 void M_RD_Change_GREEN_Color(Direction_t direction)
 {
     RD_Menu_SlideFloat_Step(&g_color_factor, 0.01F, 1.0F, 0.01F, direction);
 
-    I_SetPalette ((byte *)W_CacheLumpName(DEH_String(usegamma <= 8 ?
-                  "PALFIX" : "PLAYPAL"), PU_CACHE) + st_palette * 768);
+    I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
 }
 
 void M_RD_Change_BLUE_Color(Direction_t direction)
 {
     RD_Menu_SlideFloat_Step(&b_color_factor, 0.01F, 1.0F, 0.01F, direction);
 
-    I_SetPalette ((byte *)W_CacheLumpName(DEH_String(usegamma <= 8 ?
-                  "PALFIX" : "PLAYPAL"), PU_CACHE) + st_palette * 768);
+    I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
 }
 
 // -----------------------------------------------------------------------------
@@ -6683,9 +6675,7 @@ boolean M_Responder (event_t* ev)
         if (usegamma > 17)
             usegamma = 0;
 
-        I_SetPalette ((byte *)W_CacheLumpName(DEH_String(usegamma <= 8 ?
-                                              "PALFIX" : "PLAYPAL"), PU_CACHE) +
-                                              st_palette * 768);
+        I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
 
         players[consoleplayer].message_system = DEH_String(english_language ? 
                                                            gammamsg[usegamma] : 

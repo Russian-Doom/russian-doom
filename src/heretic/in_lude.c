@@ -156,10 +156,7 @@ static yahpt_t YAHspot[3][9] = {
 
 void IN_Start(void)
 {
-    I_SetPalette(W_CacheLumpName(DEH_String(usegamma <= 8 ?
-                                            "PALFIX" :
-                                            "PLAYPAL"),
-                                            PU_CACHE));
+    I_SetPalette(W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE));
     IN_LoadPics();
     IN_InitStats();
     intermission = true;

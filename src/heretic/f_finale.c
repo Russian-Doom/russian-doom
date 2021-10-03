@@ -461,9 +461,7 @@ void F_DrawUnderwater(void)
             {
                 underwawa = true;
                 V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
-                lumpname = DEH_String(usegamma <= 8 ?
-                                      "E2PALFIX" :
-                                      "E2PAL");
+                lumpname = DEH_String("E2PAL");
                 palette = W_CacheLumpName(lumpname, PU_STATIC);
                 I_SetPalette(palette);
                 W_ReleaseLumpName(lumpname);
@@ -480,9 +478,7 @@ void F_DrawUnderwater(void)
         case 2:
             if (underwawa)
             {
-                lumpname = DEH_String(usegamma <= 8 ?
-                                      "PALFIX" :
-                                      "PLAYPAL");
+                lumpname = DEH_String("PLAYPAL");
                 palette = W_CacheLumpName(lumpname, PU_STATIC);
                 I_SetPalette(palette);
                 W_ReleaseLumpName(lumpname);

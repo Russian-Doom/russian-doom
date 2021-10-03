@@ -1919,10 +1919,7 @@ static void M_RD_Gamma(Direction_t direction)
 
     RD_Menu_SlideInt(&usegamma, 0, 17, direction);
 
-    I_SetPalette((byte *) W_CacheLumpName(usegamma <= 8 ?
-                                          "PALFIX" :
-                                          "PLAYPAL",
-                                          PU_CACHE));
+    I_SetPalette((byte *) W_CacheLumpName("PLAYPAL", PU_CACHE));
 
     P_SetMessage(&players[consoleplayer], english_language ? 
                                           GammaText[usegamma] :
@@ -4489,10 +4486,7 @@ boolean MN_Responder(event_t * event)
                     //set the msg to be cleared
                     players[consoleplayer].message = NULL;
                     paused = false;
-                    I_SetPalette(W_CacheLumpName (usegamma <= 8 ?
-                                                  "PALFIX" :
-                                                  "PLAYPAL",
-                                                  PU_CACHE));
+                    I_SetPalette(W_CacheLumpName ("PLAYPAL", PU_CACHE));
                     D_StartTitle();     // go to intro/demo mode.
                     break;
 
@@ -4711,10 +4705,7 @@ boolean MN_Responder(event_t * event)
             {
                 usegamma = 0;
             }
-            I_SetPalette((byte *) W_CacheLumpName(usegamma <= 8 ?
-                                                  "PALFIX" :
-                                                  "PLAYPAL",
-                                                  PU_CACHE));
+            I_SetPalette((byte *) W_CacheLumpName("PLAYPAL", PU_CACHE));
 
             P_SetMessage(&players[consoleplayer], english_language ?
                                                   GammaText[usegamma] :
@@ -4917,7 +4908,7 @@ void MN_DrawInfo(void)
         V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
     }
 
-    I_SetPalette(W_CacheLumpName(usegamma <= 8 ? "PALFIX" : "PLAYPAL", PU_CACHE));
+    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
 
     // [JN] Some complex mess to avoid using numerical identification of screens.
     // Note: older Shareware version using paletted screens instead of RAWs.

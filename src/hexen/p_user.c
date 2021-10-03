@@ -421,10 +421,7 @@ void P_DeathThink(player_t * player)
     {
         if (player == &players[consoleplayer])
         {
-            I_SetPalette((byte *) W_CacheLumpName(usegamma <= 8 ?
-                                                  "PALFIX" :
-                                                  "PLAYPAL",
-                                                  PU_CACHE));
+            I_SetPalette((byte *) W_CacheLumpName("PLAYPAL", PU_CACHE));
             inv_ptr = 0;
             curpos = 0;
             newtorch = 0;

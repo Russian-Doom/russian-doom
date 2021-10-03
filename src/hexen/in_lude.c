@@ -103,10 +103,7 @@ extern void AM_Stop(void);
 void IN_Start(void)
 {
     int i;
-    I_SetPalette(W_CacheLumpName(usegamma <= 8 ?
-                                 "PALFIX" :
-                                 "PLAYPAL",
-                                 PU_CACHE));
+    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
     InitStats();
     LoadPics();
     intermission = true;

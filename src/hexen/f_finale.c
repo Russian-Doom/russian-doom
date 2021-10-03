@@ -271,25 +271,17 @@ static void InitializeFade(boolean fadeIn)
         for (i = 0; i < 768; i++)
         {
             Palette[i] = 0;
-            PaletteDelta[i] = FixedDiv((*((byte *) W_CacheLumpName(usegamma <= 8 ?
-                                                                   "PALFIX" :
-                                                                   "PLAYPAL",
+            PaletteDelta[i] = FixedDiv((*((byte *) W_CacheLumpName("PLAYPAL", 
                                                                    PU_CACHE) + i)) << FRACBITS, 
                                                                    70 * FRACUNIT);
-            I_SetPalette(W_CacheLumpName(usegamma <= 8 ?
-                                        "PALFIX" :
-                                        "PLAYPAL",
-                                        PU_CACHE));
+            I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
         }
     }
     else
     {
         for (i = 0; i < 768; i++)
         {
-            RealPalette[i] = *((byte *) W_CacheLumpName(usegamma <= 8 ?
-                                                        "PALFIX" :
-                                                        "PLAYPAL",
-                                                        PU_CACHE) + i);
+            RealPalette[i] = *((byte *) W_CacheLumpName("PLAYPAL", PU_CACHE) + i);
             Palette[i] = RealPalette[i] << FRACBITS;
             PaletteDelta[i] = FixedDiv(Palette[i], -70 * FRACUNIT);
         }

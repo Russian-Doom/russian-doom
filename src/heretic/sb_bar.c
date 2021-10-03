@@ -94,8 +94,7 @@ static int DisplayTicker = 0;
 static int HealthMarker;
 static int ChainWiggle;
 static player_t *CPlayer;
-// [JN] lumps for PALFIX (1) and PLAYPAL (2)
-int playpalette1, playpalette2;
+static int playpalette;
 
 patch_t *PatchLTFACE;
 patch_t *PatchRTFACE;
@@ -248,8 +247,7 @@ void SB_Init(void)
     {
         PatchSmNumbers[i] = W_CacheLumpNum(startLump + i, PU_STATIC);
     }
-    playpalette1 = W_GetNumForName(DEH_String("PALFIX"));
-    playpalette2 = W_GetNumForName(DEH_String("PLAYPAL"));
+    playpalette = W_GetNumForName(DEH_String("PLAYPAL"));
     spinbooklump = W_GetNumForName(DEH_String("SPINBK0"));
     spinflylump = W_GetNumForName(DEH_String("SPFLY0"));
 }
@@ -1155,10 +1153,7 @@ void SB_PaletteFlash(void)
     if (palette != sb_palette)
     {
         sb_palette = palette;
-        pal = (byte *) W_CacheLumpNum(usegamma <= 8 ?
-                                      playpalette1 :
-                                      playpalette2,
-                                      PU_CACHE) + palette * 768;
+        pal = (byte *) W_CacheLumpNum(playpalette, PU_CACHE) + palette * 768;
         I_SetPalette(pal);
     }
 }

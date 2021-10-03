@@ -251,8 +251,25 @@ static boolean need_resize = false;
 static unsigned int last_resize_time;
 static int resize_delay = 70; // [JN] Redused from 500 to 70
 
+// [JN] Multiplying factors of gamma-correction levels.
+
+static const float gammalevels[18] =
+{
+    // Darker
+    0.50f, 0.55f, 0.60f, 0.65f, 0.70f, 0.75f, 0.80f, 0.85f, 0.90f,
+
+    // No gamma correction
+    1.0f,
+
+    // Lighter
+    1.125f, 1.25f, 1.375f, 1.5f, 1.625f, 1.75f, 1.875f, 2.0f,
+};
+
+
 // Gamma correction level to use
 // [JN] Set default gamma to improved level 2.0.
+
+static byte gammatable[18][256];
 
 int usegamma = 4;
 
@@ -937,6 +954,22 @@ void I_ReadScreen (byte* scr)
     memcpy(scr, I_VideoBuffer, screenwidth*SCREENHEIGHT*sizeof(*scr));
 }
 
+// -----------------------------------------------------------------------------
+// I_InitGammaTables
+// [JN] Initialize and generate gamma-correction levels.
+// Based on implementation from DOOM Retro.
+// -----------------------------------------------------------------------------
+
+static void I_InitGammaTables (void)
+{
+    for (int i = 0; i < 18; i++)
+    {
+        for (int j = 0; j < 256; j++)
+        {
+            gammatable[i][j] = (byte)(pow(j / 255.0, 1.0 / gammalevels[i]) * 255.0 + 0.5);
+        }
+    }
+}
 
 //
 // I_SetPalette
@@ -1466,8 +1499,7 @@ static void SetVideoMode(void)
 void I_InitGraphics(void)
 {
     SDL_Event dummy;
-    byte *doompal1;
-    byte *doompal2;
+    byte *doompal;
     char *env;
 
     // Pass through the XSCREENSAVER_WINDOW environment variable to 
@@ -1519,11 +1551,14 @@ void I_InitGraphics(void)
 
     SDL_FillRect(screenbuffer, NULL, 0);
 
+    // [JN] Initialize and generate gamma-correction levels.
+
+    I_InitGammaTables();
+
     // Set the palette
 
-    doompal1 = W_CacheLumpName(DEH_String("PALFIX"), PU_CACHE);
-    doompal2 = W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE);
-    I_SetPalette(usegamma <= 8 ? doompal1 : doompal2);
+    doompal = W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE);
+    I_SetPalette(doompal);
 
     SDL_SetPaletteColors(screenbuffer->format->palette, palette, 0, 256);
 

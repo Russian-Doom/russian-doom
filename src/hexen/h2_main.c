@@ -1089,10 +1089,7 @@ static void DrawAndBlit(void)
     // [JN] Set correct palette. Allow finale stages choose palettes.
     if (gamestate != GS_LEVEL && gamestate != GS_FINALE)
     {
-        I_SetPalette(W_CacheLumpName(usegamma <= 8 ?
-                                    "PALFIX" :
-                                    "PLAYPAL",
-                                    PU_CACHE));
+        I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
     }
 
     // Change the view size if needed
