@@ -2311,11 +2311,7 @@ void M_RD_Change_Gamma(int choice)
         }
         break;
     }
-    I_SetPalette ((byte *)W_CacheLumpName(usegamma <= 8 ?
-                                          "PALFIX" :
-                                          "PLAYPAL",
-                                          PU_CACHE) + 
-                                          st_palette * 768);
+    I_SetPalette ((byte *)W_CacheLumpName("PLAYPAL", PU_CACHE) + st_palette * 768);
     players[consoleplayer].message_system = english_language ?
                                             gammamsg[usegamma] :
                                             gammamsg_rus[usegamma];
@@ -4621,11 +4617,7 @@ void M_RD_BackToDefaultsResponse (int ch)
     R_SetViewSize (screenblocks, detailLevel); 
 
     // Set palette
-    I_SetPalette ((byte *)W_CacheLumpName(usegamma <= 8 ?
-                                          "PALFIX" :
-                                          "PLAYPAL",
-                                          PU_CACHE) + 
-                                          st_palette * 768);
+    I_SetPalette ((byte *)W_CacheLumpName("PLAYPAL", PU_CACHE) + st_palette * 768);
 
     // Update background of classic HUD and player face 
     if (gamestate == GS_LEVEL)
@@ -5992,8 +5984,7 @@ boolean M_Responder (event_t *ev)
         players[consoleplayer].message_system = english_language ?
                                                 gammamsg[usegamma] :
                                                 gammamsg_rus[usegamma];
-        pal = (byte *) W_CacheLumpName (usegamma <= 8 ?  "PALFIX" : "PLAYPAL",
-                                        PU_CACHE) + st_palette * 768;
+        pal = (byte *) W_CacheLumpName ("PLAYPAL", PU_CACHE) + st_palette * 768;
         I_SetPalette (pal);
         return true;
     }

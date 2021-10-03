@@ -37,8 +37,6 @@ extern int  dirtybox[4];
 extern byte *screens[5];
 extern byte *dp_translation;
 
-extern const byte gammatable[18][256];
-
 
 // Allocates buffer screens, call before R_Init.
 void V_Init (void);

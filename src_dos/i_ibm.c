@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <graph.h>
+#include <math.h>
 #include "d_main.h"
 #include "doomstat.h"
 #include "doomdef.h"
@@ -185,6 +186,22 @@ byte        *destscreen;
 byte        *destview;
 byte        *I_AllocLow(int length);
 
+// [JN] Multiplying factors of gamma-correction levels.
+
+static const float gammalevels[18] =
+{
+    // Darker
+    0.50f, 0.55f, 0.60f, 0.65f, 0.70f, 0.75f, 0.80f, 0.85f, 0.90f,
+
+    // No gamma correction
+    1.0f,
+
+    // Lighter
+    1.125f, 1.25f, 1.375f, 1.5f, 1.625f, 1.75f, 1.875f, 2.0f,
+};
+
+static byte gammatable[18][256];
+
 boolean     grmode;
 boolean     mousepresent;
 boolean     novideo;            // if true, stay in text mode for debugging
@@ -324,6 +341,26 @@ void I_WaitVBL (int vbls)
                 break;
             }
         } while (1);
+    }
+}
+
+
+// -----------------------------------------------------------------------------
+// I_InitGammaTables
+// [JN] Initialize and generate gamma-correction levels.
+// Based on implementation from DOOM Retro.
+// -----------------------------------------------------------------------------
+
+static void I_InitGammaTables (void)
+{
+    int i, j;
+
+    for (i = 0; i < 18; i++)
+    {
+        for (j = 0; j < 256; j++)
+        {
+            gammatable[i][j] = (byte)(pow(j / 255.0, 1.0 / gammalevels[i]) * 255.0 + 0.5);
+        }
     }
 }
 
@@ -585,8 +622,9 @@ void I_InitGraphics (void)
     outp(CRTC_INDEX + 1, inp(CRTC_INDEX + 1) | 0x40);
     outp(GC_INDEX, GC_READMAP);
 
-    I_SetPalette(W_CacheLumpName(usegamma <= 8 ? 
-                                 "PALFIX" : "PLAYPAL", PU_CACHE));
+    I_InitGammaTables();
+
+    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
     I_InitDiskFlash();
 }
 

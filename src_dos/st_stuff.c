@@ -249,7 +249,7 @@
 int st_palette = 0;
 int st_keyorskull[3];   // [crispy] blinking key or skull in the status bar
 
-static int  lu_palette1, lu_palette2;   // [JN] lump numbers for both palettes
+static int  lu_palette;                 // lump number for PLAYPAL
 static int  veryfirsttime = 1;          // used to execute ST_Init() only once
 static int  st_msgcounter = 0;          // used for making messages go away
 // [Doom Retro] & [crispy] show SSG availability in the Shotgun slot of the arms widget
@@ -1289,9 +1289,7 @@ void ST_doPaletteStuff (void)
     if (palette != st_palette)
     {
         st_palette = palette;
-        pal = (byte *) W_CacheLumpNum (usegamma <= 8 ?
-                                       lu_palette1 : lu_palette2,
-                                       PU_CACHE)+palette*768;
+        pal = (byte *) W_CacheLumpNum (lu_palette, PU_CACHE) + palette * 768;
         I_SetPalette (pal);
     }
 }
@@ -1751,8 +1749,7 @@ void ST_loadGraphics (void)
 
 void ST_loadData (void)
 {
-    lu_palette1 = W_GetNumForName ("PALFIX");
-    lu_palette2 = W_GetNumForName ("PLAYPAL");
+    lu_palette = W_GetNumForName ("PLAYPAL");
     ST_loadGraphics();
 }
 
@@ -2029,8 +2026,7 @@ void ST_Stop (void)
         return;
     }
 
-    I_SetPalette (W_CacheLumpNum (usegamma <= 8 ? 
-                                  lu_palette1 : lu_palette2, PU_CACHE));
+    I_SetPalette (W_CacheLumpNum (lu_palette, PU_CACHE));
 
     st_stopped = true;
 }
