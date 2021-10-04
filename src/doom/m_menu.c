@@ -162,7 +162,9 @@ void M_RD_Change_LocalTime(Direction_t direction);
 
 // Colors
 void M_RD_Draw_Colors(void);
+void M_RD_Change_Brightness();
 void M_RD_Change_Saturation();
+void M_RD_Change_ShowPalette();
 void M_RD_Change_RED_Color();
 void M_RD_Change_GREEN_Color();
 void M_RD_Change_BLUE_Color();
@@ -943,14 +945,12 @@ static MenuItem_t DisplayItems[] = {
     {ITT_TITLE,   "Screen",                 "\'rhfy",                  NULL,                        0}, // Экран
     {ITT_LRFUNC,  "screen size",            "hfpvth buhjdjuj \'rhfyf", M_RD_Change_ScreenSize,      0},
     {ITT_EMPTY,   NULL,                     NULL,                      NULL,                        0},
-    {ITT_LRFUNC,  "gamma-correction",       "ehjdtym ufvvf-rjhhtrwbb", M_RD_Change_Gamma,           0},
-    {ITT_EMPTY,   NULL,                     NULL,                      NULL,                        0},
     {ITT_LRFUNC,  "level brightness",       "ehjdtym jcdtotyyjcnb",    M_RD_Change_LevelBrightness, 0},
     {ITT_EMPTY,   NULL,                     NULL,                      NULL,                        0},
     {ITT_LRFUNC,  "menu shading",           "pfntvytybt ajyf vty.",    M_RD_Change_MenuShading,     0},
     {ITT_EMPTY,   NULL,                     NULL,                      NULL,                        0},
     {ITT_SWITCH,  "graphics detail:",       "ltnfkbpfwbz uhfabrb:",    M_RD_Change_Detail,          0},
-    {ITT_SETMENU, "color tuning",           "yfcnhjqrf wdtnf",         &ColorMenu,                  0},
+    {ITT_SETMENU, "color options",           "yfcnhjqrb wdtnf",        &ColorMenu,                  0},
     {ITT_TITLE,   "Interface",              "bynthatqc",               NULL,                        0}, // Интерфейс
     {ITT_SETMENU, "messages and texts",     "cjj,otybz b ntrcns",      &MessagesMenu,               0},
     {ITT_SETMENU, "automap and statistics", "rfhnf b cnfnbcnbrf",      &AutomapMenu,                0}
@@ -960,7 +960,7 @@ static Menu_t DisplayMenu = {
     35, 35,
     25,
     "DISPLAY OPTIONS", "YFCNHJQRB \"RHFYF", false, // НАСТРОЙКИ ЭКРАНА
-    14, DisplayItems, false,
+    12, DisplayItems, false,
     M_RD_Draw_Display,
     NULL,
     &RDOptionsMenu,
@@ -972,26 +972,25 @@ static Menu_t DisplayMenu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t ColorItems[] = {
-    {ITT_TITLE,  "General",          "jcyjdyjt",      NULL,                    0}, // Основное
-    {ITT_LRFUNC, "Saturation",       "yfcsotyyjcnm",  M_RD_Change_Saturation,  0}, // Насыщенность
-    {ITT_EMPTY,   NULL,              NULL,            NULL,                    0},
-    {ITT_TITLE,  "Color brightness", "zhrjcnm",       NULL,                    0}, // Яркость
-    {ITT_LRFUNC, "", /* RED   */     "",              M_RD_Change_RED_Color,   0},
-    {ITT_EMPTY,   NULL,              NULL,            NULL,                    0},
-    {ITT_LRFUNC, "", /* GREEN */     "",              M_RD_Change_GREEN_Color, 0},
-    {ITT_EMPTY,   NULL,              NULL,            NULL,                    0},
-    {ITT_LRFUNC, "", /* BLUE  */     "",              M_RD_Change_BLUE_Color,  0}
+    {ITT_LRFUNC, "",  "", M_RD_Change_Brightness,  0}, // Brightness | Яркость
+    {ITT_LRFUNC, "",  "", M_RD_Change_Gamma,       0}, // Gamma | Гамма
+    {ITT_LRFUNC, "",  "", M_RD_Change_Saturation,  0}, // Saturation | Насыщенность
+    {ITT_SWITCH, "",  "", M_RD_Change_ShowPalette, 0}, // Show palette | Отобразить палитру
+    {ITT_TITLE,  "",  "", NULL,                    0}, // Color intensity | Цветовая интенсивность
+    {ITT_LRFUNC, "",  "", M_RD_Change_RED_Color,   0},
+    {ITT_LRFUNC, "",  "", M_RD_Change_GREEN_Color, 0},
+    {ITT_LRFUNC, "",  "", M_RD_Change_BLUE_Color,  0}
 };
 
 static Menu_t ColorMenu = {
-    95, 95,
+    160, 160,
     25,
-    "COLOR TUNING", "YFCNHJQRF WDTNF", false, // НАСТРОЙКА ЦВЕТА
-    9, ColorItems, false,
+    "COLOR OPTIONS", "YFCNHJQRF WDTNF", false,  // НАСТРОЙКИ ЦВЕТА
+    8, ColorItems, false,
     M_RD_Draw_Colors,
     NULL,
     &DisplayMenu,
-    1
+    0
 };
 
 // -----------------------------------------------------------------------------
@@ -2035,17 +2034,12 @@ void M_RD_Draw_Display(void)
     if (english_language)
     {
         // Graphics detail
-        RD_M_DrawTextSmallENG(detailLevel ? "low" : "high", 150 + wide_delta, 115, CR_NONE);
+        RD_M_DrawTextSmallENG(detailLevel ? "low" : "high", 150 + wide_delta, 95, CR_NONE);
     }
     else
     {
         // Детализация графики
-        RD_M_DrawTextSmallRUS(detailLevel ? "ybprfz" : "dscjrfz", 195 + wide_delta, 115, CR_NONE);
-
-        //
-        // Интерфейс
-        //
-        RD_M_DrawTextSmallRUS("bynthatqc", 35 + wide_delta, 135, CR_YELLOW);
+        RD_M_DrawTextSmallRUS(detailLevel ? "ybprfz" : "dscjrfz", 195 + wide_delta, 95, CR_NONE);
     }
 
     // Screen size slider
@@ -2067,14 +2061,11 @@ void M_RD_Draw_Display(void)
         RD_M_DrawTextSmallENG(num, 145 + wide_delta, 45, CR_NONE);
     }
 
-    // Gamma-correction slider
-    RD_Menu_DrawSliderSmall(&DisplayMenu, 64, 18, usegamma);
+    // Level brightness slider
+    RD_Menu_DrawSliderSmall(&DisplayMenu, 64, 5, level_brightness / 16);
 
     // Level brightness slider
-    RD_Menu_DrawSliderSmall(&DisplayMenu, 84, 5, level_brightness / 16);
-
-    // Level brightness slider
-    RD_Menu_DrawSliderSmall(&DisplayMenu, 104, 7, menu_shading / 4);
+    RD_Menu_DrawSliderSmall(&DisplayMenu, 84, 7, menu_shading / 4);
 }
 
 void M_RD_Change_ScreenSize(Direction_t direction)
@@ -2117,9 +2108,6 @@ void M_RD_Change_Gamma(Direction_t direction)
     RD_Menu_SlideInt(&usegamma, 0, 17, direction);
 
     I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
-    players[consoleplayer].message_system = DEH_String(english_language ? 
-                                                       gammamsg[usegamma] :
-                                                       gammamsg_rus[usegamma]);
 }
 
 void M_RD_Change_LevelBrightness(Direction_t direction)
@@ -2169,48 +2157,88 @@ void M_RD_Draw_Colors(void)
     int  i;
     char num[8];
     char *num_and_percent;
+    // [JN] Hack to allow proper placement for gamma slider.
+    int gamma_slider = usegamma == 0 ? 0 :
+                       usegamma == 17 ? 2 : 1;
 
     if (english_language)
     {
-        RD_M_DrawTextSmallENG("RED", 95 + wide_delta, 65, CR_NONE);
-        RD_M_DrawTextSmallENG("GREEN", 95 + wide_delta, 85, CR_GREEN);
-        RD_M_DrawTextSmallENG("BLUE", 95 + wide_delta, 105, CR_BLUE2);
+        RD_M_DrawTextSmallENG("Brightness", 73 + wide_delta, 25, CR_NONE);
+        RD_M_DrawTextSmallENG("Gamma", 105 + wide_delta, 35, CR_NONE);
+        RD_M_DrawTextSmallENG("Saturation", 72 + wide_delta, 45, CR_NONE);
+        RD_M_DrawTextSmallENG("Show palette", 55 + wide_delta, 55, CR_NONE);
+        RD_M_DrawTextSmallENG(show_palette ? "ON" : "OFF", 162 + wide_delta, 55, CR_NONE);
+
+        dp_translation = cr[CR_YELLOW];
+        M_WriteTextSmallCentered_ENG(65, "Color intensity");
+        dp_translation = NULL;
+
+        RD_M_DrawTextSmallENG("RED", 123 + wide_delta, 75, CR_NONE);
+        RD_M_DrawTextSmallENG("GREEN", 107 + wide_delta, 85, CR_GREEN);
+        RD_M_DrawTextSmallENG("BLUE", 115 + wide_delta, 95, CR_BLUE2);
     }
     else
     {
-        RD_M_DrawTextSmallRUS("rhfcysq", 95 + wide_delta, 65, CR_NONE);  // Красный
-        RD_M_DrawTextSmallRUS("ptktysq", 95 + wide_delta, 85, CR_GREEN); // Зелёный
-        RD_M_DrawTextSmallRUS("cbybq", 95 + wide_delta, 105, CR_BLUE2);  // Синий
+        RD_M_DrawTextSmallRUS("zhrjcnm", 91 + wide_delta, 25, CR_NONE);       // Яркость
+        RD_M_DrawTextSmallRUS("ufvvf", 105 + wide_delta, 35, CR_NONE);        // Гамма
+        RD_M_DrawTextSmallRUS("yfcsotyyjcnm", 46 + wide_delta, 45, CR_NONE);  // Насыщенность
+        RD_M_DrawTextSmallRUS("wdtnjdfz gfkbnhf", 22 + wide_delta, 55, CR_NONE);  // Цветовая палитра
+        RD_M_DrawTextSmallRUS(show_palette ? "DRK" : "DSRK", 162 + wide_delta, 55, CR_NONE);
+
+        dp_translation = cr[CR_YELLOW];
+        M_WriteTextSmallCentered_RUS(65, "byntycbdyjcnm wdtnf");  // Интенсивность цвета
+        dp_translation = NULL;
+
+        RD_M_DrawTextSmallRUS("rhfcysq", 89 + wide_delta, 75, CR_NONE);  // Красный
+        RD_M_DrawTextSmallRUS("ptktysq", 89 + wide_delta, 85, CR_GREEN); // Зелёный
+        RD_M_DrawTextSmallRUS("cbybq", 107 + wide_delta, 95, CR_BLUE2);  // Синий
     }
+
+    // Brightness slider
+    RD_Menu_DrawSliderSmall(&ColorMenu, 24, 10, brightness * 10);
+    i = brightness * 100;                            // Do a float to int conversion for slider value.
+    M_snprintf(num, 5, "%d", i);                     // Numerical representation of slider position.
+    num_and_percent = M_StringJoin(num, "%", NULL);  // Consolidate numerical value and % sign.
+    RD_M_DrawTextSmallENG(num_and_percent, 258 + wide_delta, 25, CR_NONE);
+
+    // Gamma-correction slider
+    RD_Menu_DrawSliderSmall(&ColorMenu, 34, 10, usegamma / 2 + gamma_slider);
+    M_snprintf(num, 6, "%s", gammalevel_names[usegamma]);  // Numerical representation of slider position
+    RD_M_DrawTextSmallENG(num, 258 + wide_delta, 35, CR_NONE);
 
     // Saturation slider
     RD_Menu_DrawSliderSmall(&ColorMenu, 44, 10, color_saturation * 10);
-    // Do a float to int conversion for slider value.
-    i = color_saturation * 100;
-    // Numerical representation of slider position.
-    M_snprintf(num, 5, "%d", i);
-    // Consolidate numerical value and % sign.
-    num_and_percent = M_StringJoin(num, "%", NULL);
-    RD_M_DrawTextSmallENG(num_and_percent, 193 + wide_delta, 45, CR_NONE);
-    
+    i = color_saturation * 100;                      // Do a float to int conversion for slider value.
+    M_snprintf(num, 5, "%d", i);                     // Numerical representation of slider position.
+    num_and_percent = M_StringJoin(num, "%", NULL);  // Consolidate numerical value and % sign.
+    RD_M_DrawTextSmallENG(num_and_percent, 258 + wide_delta, 45, CR_NONE);
+
     // RED intensity slider
     RD_Menu_DrawSliderSmall(&ColorMenu, 74, 10, r_color_factor * 10);
-    // Numerical representation of slider position
-    M_snprintf(num, 5, "%3f", r_color_factor);
-    RD_M_DrawTextSmallENG(num, 193 + wide_delta, 75, CR_NONE);
+    M_snprintf(num, 5, "%3f", r_color_factor);  // Numerical representation of slider position
+    RD_M_DrawTextSmallENG(num, 258 + wide_delta, 75, CR_NONE);
 
     // GREEN intensity slider
-    RD_Menu_DrawSliderSmall(&ColorMenu, 94, 10, g_color_factor * 10);
-    // Numerical representation of slider position
-    M_snprintf(num, 5, "%3f", g_color_factor);
-    RD_M_DrawTextSmallENG(num, 193 + wide_delta, 95, CR_GREEN);
+    RD_Menu_DrawSliderSmall(&ColorMenu, 84, 10, g_color_factor * 10);
+    M_snprintf(num, 5, "%3f", g_color_factor);  // Numerical representation of slider position
+    RD_M_DrawTextSmallENG(num, 258 + wide_delta, 85, CR_GREEN);
 
     // BLUE intensity slider
-    RD_Menu_DrawSliderSmall(&ColorMenu, 114, 10, b_color_factor * 10);
-    // Numerical representation of slider position
-    M_snprintf(num, 5, "%3f", b_color_factor);
-    RD_M_DrawTextSmallENG(num, 193 + wide_delta, 115, CR_BLUE2);
+    RD_Menu_DrawSliderSmall(&ColorMenu, 94, 10, b_color_factor * 10);
+    M_snprintf(num, 5, "%3f", b_color_factor);  // Numerical representation of slider position
+    RD_M_DrawTextSmallENG(num, 258 + wide_delta, 95, CR_BLUE2);
 
+    if (show_palette)
+    {
+        V_DrawPatchUnscaled(320 + wide_delta*2, 200, W_CacheLumpName(DEH_String("M_COLORS"), PU_CACHE), NULL);
+    }
+}
+
+void M_RD_Change_Brightness(Direction_t direction)
+{
+    RD_Menu_SlideFloat_Step(&brightness, 0.01F, 1.0F, 0.01F, direction);
+
+    I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
 }
 
 void M_RD_Change_Saturation(Direction_t direction)
@@ -2218,6 +2246,11 @@ void M_RD_Change_Saturation(Direction_t direction)
     RD_Menu_SlideFloat_Step(&color_saturation, 0.01F, 1.0F, 0.01F, direction);
 
     I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
+}
+
+void M_RD_Change_ShowPalette()
+{
+    show_palette ^= 1;
 }
 
 void M_RD_Change_RED_Color(Direction_t direction)
@@ -5041,16 +5074,18 @@ void M_RD_BackToDefaults_Recommended(int choice)
 
     // Display
     screenblocks          = 10;
-    usegamma              = 4;
     level_brightness      = 0;
     menu_shading          = 0;
     detailLevel           = 0;
 
-    // Color
+    // Color options
+    brightness       = 1.0f;
+    usegamma         = 9;
     color_saturation = 1.0f;
-    r_color_factor  = 1.0f;
-    g_color_factor  = 1.0f;
-    b_color_factor  = 1.0f;
+    show_palette     = 1;
+    r_color_factor   = 1.0f;
+    g_color_factor   = 1.0f;
+    b_color_factor   = 1.0f;
 
     // Messages
     showMessages          = 1;
@@ -5217,16 +5252,18 @@ void M_RD_BackToDefaults_Original(int choice)
 
     // Display
     screenblocks          = 10;
-    usegamma              = 9;
     level_brightness      = 0;
     menu_shading          = 0;
     detailLevel           = 1;
 
-    // Color
+    // Color options
+    brightness       = 1.0f;
+    usegamma         = 9;
     color_saturation = 1.0f;
-    r_color_factor  = 1.0f;
-    g_color_factor  = 1.0f;
-    b_color_factor  = 1.0f;
+    show_palette     = 1;
+    r_color_factor   = 1.0f;
+    g_color_factor   = 1.0f;
+    b_color_factor   = 1.0f;
 
     // Messages
     showMessages          = 1;
@@ -6671,15 +6708,19 @@ boolean M_Responder (event_t* ev)
     // [JN] Allow gamma toggling even while active menu.
     else if (BK_isKeyDown(ev, bk_gamma))
     {
+        static char *gamma_level;
+
         usegamma++;
         if (usegamma > 17)
             usegamma = 0;
 
         I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
 
-        players[consoleplayer].message_system = DEH_String(english_language ? 
-                                                           gammamsg[usegamma] : 
-                                                           gammamsg_rus[usegamma]);
+        gamma_level = M_StringJoin(gammamsg, english_language ?
+                                   gammalevel_names[usegamma] :
+                                   gammalevel_names_rus[usegamma], NULL);
+        players[consoleplayer].message_system = DEH_String(gamma_level);
+        free(gamma_level);
         return true;
     }
 

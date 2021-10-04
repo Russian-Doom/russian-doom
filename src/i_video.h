@@ -119,6 +119,8 @@ extern boolean screenvisible;
 
 extern int vanilla_keyboard_mapping;
 extern boolean screensaver_mode;
+extern const char *gammalevel_names[];
+extern const char *gammalevel_names_rus[];
 extern int usegamma;
 extern byte *I_VideoBuffer;
 

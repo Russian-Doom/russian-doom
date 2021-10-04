@@ -251,7 +251,22 @@ static boolean need_resize = false;
 static unsigned int last_resize_time;
 static int resize_delay = 70; // [JN] Redused from 500 to 70
 
-// [JN] Multiplying factors of gamma-correction levels.
+//
+// [JN] Brightness, gamma, saturtion and color intensity.
+//
+
+float brightness = 1.0f;
+
+int  usegamma = 4;  // default gamma level is 0.70
+byte gammatable[18][256];
+
+float color_saturation = 1.0f;
+
+int show_palette = 1;
+
+float r_color_factor  = 1.0f;
+float g_color_factor  = 1.0f;
+float b_color_factor  = 1.0f;
 
 static const float gammalevels[18] =
 {
@@ -265,18 +280,32 @@ static const float gammalevels[18] =
     1.125f, 1.25f, 1.375f, 1.5f, 1.625f, 1.75f, 1.875f, 2.0f,
 };
 
+// [JN] Text representation of values above.
 
-// Gamma correction level to use
-// [JN] Set default gamma to improved level 2.0.
+const char *gammalevel_names[] =
+{
+    // Darker
+    "0.50", "0.55", "0.60", "0.65", "0.70", "0.75", "0.80", "0.85", "0.90",
 
-static byte gammatable[18][256];
+    // No gamma correction
+    "1.00",
 
-int usegamma = 4;
+    // Lighter
+    "1.125", "1.25", "1.375", "1.5", "1.625", "1.75", "1.875", "2.00",
+};
 
-float color_saturation = 1.0f;
-float r_color_factor  = 1.0f;
-float g_color_factor  = 1.0f;
-float b_color_factor  = 1.0f;
+const char *gammalevel_names_rus[] =
+{
+    // Darker
+    "0>50", "0>55", "0>60", "0>65", "0>70", "0>75", "0>80", "0>85", "0>90",
+
+    // No gamma correction
+    "1>00",
+
+    // Lighter
+    "1>125", "1>25", "1>375", "1>5", "1>625", "1>75", "1>875", "2>00",
+};
+
 
 void *I_GetSDLWindow(void)
 {
@@ -979,11 +1008,21 @@ void I_SetPalette (byte *doompalette)
     int i;
 
     // [JN] Safe-guard conditions to fix incorrect values:
-    if (usegamma < 0)  usegamma = 0;              ; if (usegamma > 17) usegamma = 17;
-    if (color_saturation < 0) color_saturation = 0; ; if (color_saturation > 1) color_saturation = 1;
-    if (r_color_factor  < 0) r_color_factor  = 0; ; if (r_color_factor  > 1) r_color_factor  = 1;
-    if (g_color_factor  < 0) g_color_factor  = 0; ; if (g_color_factor  > 1) g_color_factor  = 1;
-    if (b_color_factor  < 0) b_color_factor  = 0; ; if (b_color_factor  > 1) b_color_factor  = 1;
+    if (brightness < 0) brightness = 0;
+    if (brightness > 1) brightness = 1;
+    
+    if (usegamma < 0) usegamma = 0;
+    if (usegamma > 17) usegamma = 17;
+    
+    if (color_saturation < 0) color_saturation = 0;
+    if (color_saturation > 1) color_saturation = 1;
+    
+    if (r_color_factor < 0) r_color_factor = 0;
+    if (r_color_factor > 1) r_color_factor = 1;
+    if (g_color_factor < 0) g_color_factor = 0;
+    if (g_color_factor > 1) g_color_factor = 1;
+    if (b_color_factor < 0) b_color_factor = 0;
+    if (b_color_factor > 1) b_color_factor = 1;
 
     for (i=0; i<256; ++i)
     {
@@ -998,9 +1037,9 @@ void I_SetPalette (byte *doompalette)
         byte    b = gamma[*doompalette++] & ~3;
         double  p = sqrt(r * r * 0.299 + g * g * 0.587 + b * b * 0.114);
 
-        palette[i].r = (byte)(p + (r - p) * color_saturation) * r_color_factor;
-        palette[i].g = (byte)(p + (g - p) * color_saturation) * g_color_factor;
-        palette[i].b = (byte)(p + (b - p) * color_saturation) * b_color_factor;
+        palette[i].r = (byte)((p + (r - p) * color_saturation) * r_color_factor ) * brightness;
+        palette[i].g = (byte)((p + (g - p) * color_saturation) * g_color_factor ) * brightness;
+        palette[i].b = (byte)((p + (b - p) * color_saturation) * b_color_factor ) * brightness;
     }
 
     palette_to_set = true;
@@ -1803,7 +1842,15 @@ void I_BindVideoVariables(void)
     M_BindStringVariable("video_driver",           &video_driver);
     M_BindIntVariable("window_position_x",         &window_position_x);
     M_BindIntVariable("window_position_y",         &window_position_y);
-    M_BindIntVariable("usegamma",                  &usegamma);
     M_BindIntVariable("png_screenshots",           &png_screenshots);
+
+    // Color options
+    M_BindFloatVariable("brightness",              &brightness);
+    M_BindIntVariable("usegamma",                  &usegamma);
+    M_BindFloatVariable("color_saturation",        &color_saturation);
+    M_BindIntVariable("show_palette",              &show_palette);
+    M_BindFloatVariable("r_color_factor",          &r_color_factor);
+    M_BindFloatVariable("g_color_factor",          &g_color_factor);
+    M_BindFloatVariable("b_color_factor",          &b_color_factor);
 }
 

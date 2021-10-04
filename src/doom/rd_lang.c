@@ -51,50 +51,7 @@ char* ggloaded;
 //
 
 // Gamma-correction
-char gammamsg[18][41] =
-{
-    GAMMA_IMPROVED_OFF,
-    GAMMA_IMPROVED_05,
-    GAMMA_IMPROVED_1,
-    GAMMA_IMPROVED_15,
-    GAMMA_IMPROVED_2,
-    GAMMA_IMPROVED_25,
-    GAMMA_IMPROVED_3,
-    GAMMA_IMPROVED_35,
-    GAMMA_IMPROVED_4,
-    GAMMA_ORIGINAL_OFF,
-    GAMMA_ORIGINAL_05,
-    GAMMA_ORIGINAL_1,
-    GAMMA_ORIGINAL_15,
-    GAMMA_ORIGINAL_2,
-    GAMMA_ORIGINAL_25,
-    GAMMA_ORIGINAL_3,
-    GAMMA_ORIGINAL_35,
-    GAMMA_ORIGINAL_4
-};
-
-// Gamma-correction (Russian)
-char gammamsg_rus[18][41] =
-{
-    GAMMA_IMPROVED_OFF_RUS,
-    GAMMA_IMPROVED_05_RUS,
-    GAMMA_IMPROVED_1_RUS,
-    GAMMA_IMPROVED_15_RUS,
-    GAMMA_IMPROVED_2_RUS,
-    GAMMA_IMPROVED_25_RUS,
-    GAMMA_IMPROVED_3_RUS,
-    GAMMA_IMPROVED_35_RUS,
-    GAMMA_IMPROVED_4_RUS,
-    GAMMA_ORIGINAL_OFF_RUS,
-    GAMMA_ORIGINAL_05_RUS,
-    GAMMA_ORIGINAL_1_RUS,
-    GAMMA_ORIGINAL_15_RUS,
-    GAMMA_ORIGINAL_2_RUS,
-    GAMMA_ORIGINAL_25_RUS,
-    GAMMA_ORIGINAL_3_RUS,
-    GAMMA_ORIGINAL_35_RUS,
-    GAMMA_ORIGINAL_4_RUS
-};
+char* gammamsg;
 
 // Quit DOOM I messages
 char *doom1_endmsg[] =
@@ -314,6 +271,7 @@ void RD_DefineLanguageStrings (void)
         // M_Menu.C
         //
 
+        gammamsg = GAMMA_LEVEL;
         ststr_alwrun_on = STSTR_ALWRUNON;
         ststr_alwrun_off= STSTR_ALWRUNOFF;
         ststr_crosshair_on = STSTR_CROSSHAIR_ON;
@@ -453,6 +411,7 @@ void RD_DefineLanguageStrings (void)
         // M_Menu.C
         //
 
+        gammamsg = GAMMA_LEVEL_RUS;
         ststr_alwrun_on = STSTR_ALWRUNON_RUS;
         ststr_alwrun_off= STSTR_ALWRUNOFF_RUS;
         ststr_crosshair_on = STSTR_CROSSHAIR_ON_RUS;

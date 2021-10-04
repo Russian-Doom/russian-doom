@@ -643,13 +643,16 @@ static default_t extra_defaults_list[] =
 
     // Display
     CONFIG_VARIABLE_INT(screenblocks),
-    CONFIG_VARIABLE_INT(usegamma),
     CONFIG_VARIABLE_INT(level_brightness),
     CONFIG_VARIABLE_INT(menu_shading),
     CONFIG_VARIABLE_INT(detaillevel),
     CONFIG_VARIABLE_INT(hud_detaillevel),
-    
+
+    // Color options
+    CONFIG_VARIABLE_FLOAT(brightness),
+    CONFIG_VARIABLE_INT(usegamma),
     CONFIG_VARIABLE_FLOAT(color_saturation),
+    CONFIG_VARIABLE_INT(show_palette),
     CONFIG_VARIABLE_FLOAT(r_color_factor),
     CONFIG_VARIABLE_FLOAT(g_color_factor),
     CONFIG_VARIABLE_FLOAT(b_color_factor),
