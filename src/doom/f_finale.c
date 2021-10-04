@@ -432,7 +432,7 @@ static void F_TextWrite (void)
     signed int count;
 
     // [JN] Erase the entire screen to a tiled background.
-    V_FillFlat (finaleflat, detailshift);
+    V_FillFlat (finaleflat);
 
     V_MarkRect (0, 0, screenwidth, SCREENHEIGHT);
 

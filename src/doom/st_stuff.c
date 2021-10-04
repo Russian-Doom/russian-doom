@@ -362,6 +362,7 @@ void ST_refreshBackground (void)
                 byte *dest;
                 char *name = (gamemode == commercial) ? DEH_String("GRNROCK") : 
                                                         DEH_String("FLOOR7_2");
+                const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
 
                 src = W_CacheLumpName(name, PU_CACHE);
                 dest = st_backing_screen;
@@ -371,8 +372,8 @@ void ST_refreshBackground (void)
                 {
                     for (x = 0; x < screenwidth; x++)
                     {
-                        *dest++ = src[((( y >> detailshift) & 63) << 6) 
-                                     + (( x >> detailshift) & 63)];
+                        *dest++ = src[((( y >> shift_allowed) & 63) << 6) 
+                                     + (( x >> shift_allowed) & 63)];
                     }
                 }
         
@@ -383,7 +384,7 @@ void ST_refreshBackground (void)
         
                     for (x = 0; x < screenwidth; x += 8)
                     {
-                        if (detailshift)
+                        if (hud_detaillevel)
                         {
                             V_DrawPatch(x, 0, patch);
                         }

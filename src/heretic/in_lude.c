@@ -547,7 +547,7 @@ void IN_Drawer(void)
     {
         case 0:                // draw stats
             // [JN] Use unified function.
-            V_FillFlat("FLOOR16", detailshift);
+            V_FillFlat("FLOOR16");
             switch (gametype)
             {
                 case SINGLE:

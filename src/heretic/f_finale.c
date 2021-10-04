@@ -26,7 +26,6 @@
 #include "i_video.h"
 #include "s_sound.h"
 #include "v_video.h"
-#include "r_local.h"
 #include "jn.h"
 
 
@@ -233,7 +232,7 @@ void F_TextWrite(void)
 // erase the entire screen to a tiled background
 //
     // [JN] Use unified function.
-    V_FillFlat(finaleflat, detailshift);
+    V_FillFlat(finaleflat);
 //
 // draw some of the text onto the screen
 //

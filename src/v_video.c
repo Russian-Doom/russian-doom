@@ -1277,9 +1277,10 @@ void V_DrawPatchFinale(int x, int y, patch_t *patch)
 // Fills background with given flat, with support for high/low detail mode.
 // -----------------------------------------------------------------------------
 
-void V_FillFlat (char *lump, boolean detailshift)
+void V_FillFlat (char *lump)
 {
     int x, y;
+    const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
     byte *src = W_CacheLumpName (DEH_String(lump), PU_CACHE);
     byte *dest = I_VideoBuffer;
 
@@ -1287,8 +1288,8 @@ void V_FillFlat (char *lump, boolean detailshift)
     {
         for (x = 0; x < screenwidth; x++)
         {
-            *dest++ = src[(((y >> detailshift) & 63) << 6) 
-                         + ((x >> detailshift) & 63)];
+            *dest++ = src[(((y >> shift_allowed) & 63) << 6) 
+                         + ((x >> shift_allowed) & 63)];
         }
     }
 }

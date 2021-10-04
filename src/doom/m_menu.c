@@ -158,6 +158,7 @@ void M_RD_Change_Gamma(Direction_t direction);
 void M_RD_Change_LevelBrightness(Direction_t direction);
 void M_RD_Change_MenuShading(Direction_t direction);
 void M_RD_Change_Detail();
+void M_RD_Change_HUD_Detail();
 void M_RD_Change_LocalTime(Direction_t direction);
 
 // Colors
@@ -950,6 +951,7 @@ static MenuItem_t DisplayItems[] = {
     {ITT_LRFUNC,  "menu shading",           "pfntvytybt ajyf vty.",    M_RD_Change_MenuShading,     0},
     {ITT_EMPTY,   NULL,                     NULL,                      NULL,                        0},
     {ITT_SWITCH,  "graphics detail:",       "ltnfkbpfwbz uhfabrb:",    M_RD_Change_Detail,          0},
+    {ITT_SWITCH,  "hud background detail:", "ltnfkbpfwbz ajyf",        M_RD_Change_HUD_Detail,      0},
     {ITT_SETMENU, "color options",           "yfcnhjqrb wdtnf",        &ColorMenu,                  0},
     {ITT_TITLE,   "Interface",              "bynthatqc",               NULL,                        0}, // Интерфейс
     {ITT_SETMENU, "messages and texts",     "cjj,otybz b ntrcns",      &MessagesMenu,               0},
@@ -960,7 +962,7 @@ static Menu_t DisplayMenu = {
     35, 35,
     25,
     "DISPLAY OPTIONS", "YFCNHJQRB \"RHFYF", false, // НАСТРОЙКИ ЭКРАНА
-    12, DisplayItems, false,
+    13, DisplayItems, false,
     M_RD_Draw_Display,
     NULL,
     &RDOptionsMenu,
@@ -2035,11 +2037,18 @@ void M_RD_Draw_Display(void)
     {
         // Graphics detail
         RD_M_DrawTextSmallENG(detailLevel ? "low" : "high", 150 + wide_delta, 95, CR_NONE);
+
+        // HUD background detail
+        RD_M_DrawTextSmallENG(hud_detaillevel ? "low" : "high", 199 + wide_delta, 105, CR_NONE);
     }
     else
     {
         // Детализация графики
         RD_M_DrawTextSmallRUS(detailLevel ? "ybprfz" : "dscjrfz", 195 + wide_delta, 95, CR_NONE);
+
+        // Детализация фона HUD
+        RD_M_DrawTextSmallENG("HUD: b", 167 + wide_delta, 105, CR_NONE);
+        RD_M_DrawTextSmallRUS(hud_detaillevel ? "ybprfz" : "dscjrfz", 199 + wide_delta, 105, CR_NONE);
     }
 
     // Screen size slider
@@ -2132,6 +2141,16 @@ void M_RD_Change_Detail()
     else
         players[consoleplayer].message_system = DEH_String(english_language ?
                                             DETAILLO : DETAILLO_RUS);
+}
+
+void M_RD_Change_HUD_Detail()
+{
+    extern boolean setsizeneeded;
+
+    hud_detaillevel ^= 1;
+
+    // [JN] Update screen border.
+    setsizeneeded = true;
 
     // [JN] Refresh status bar.
     inhelpscreens = true;
@@ -3250,7 +3269,7 @@ void M_RD_Draw_Bindings()
 {
     // [JN] Erase the entire screen to a tiled background.
     inhelpscreens = true;
-    V_FillFlat ("FLOOR4_8", detailshift);
+    V_FillFlat ("FLOOR4_8");
 
     if (english_language)
     {
@@ -3304,7 +3323,7 @@ void DrawGamepadMenu()
 {
     // [JN] Erase the entire screen to a tiled background.
     inhelpscreens = true;
-    V_FillFlat ("FLOOR4_8", detailshift);
+    V_FillFlat ("FLOOR4_8");
 
     if (english_language)
     {
@@ -4428,7 +4447,7 @@ void M_RD_Draw_Level_1(void)
 
     // [JN] Erase the entire screen to a tiled background.
     inhelpscreens = true;
-    V_FillFlat ("FLOOR4_8", detailshift);
+    V_FillFlat ("FLOOR4_8");
 
     if (english_language)
     {
@@ -4667,7 +4686,7 @@ void M_RD_Draw_Level_2(void)
 
     // [JN] Erase the entire screen to a tiled background.
     inhelpscreens = true;
-    V_FillFlat ("FLOOR4_8", detailshift);
+    V_FillFlat ("FLOOR4_8");
 
     if (english_language)
     {
@@ -5077,6 +5096,7 @@ void M_RD_BackToDefaults_Recommended(int choice)
     level_brightness      = 0;
     menu_shading          = 0;
     detailLevel           = 0;
+    hud_detaillevel       = 0;
 
     // Color options
     brightness       = 1.0f;
@@ -5255,6 +5275,7 @@ void M_RD_BackToDefaults_Original(int choice)
     level_brightness      = 0;
     menu_shading          = 0;
     detailLevel           = 1;
+    hud_detaillevel       = 1;
 
     // Color options
     brightness       = 1.0f;
