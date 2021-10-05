@@ -70,13 +70,18 @@ Compiling on Linux is rather simple.
 First, make sure you have all the necessary dependencies for compilation.
 On Ubuntu Linux they can be installed by the following command:
 ```
-sudo apt-get install gcc cmake make automake libsdl2-dev libsdl2-net-dev
+sudo apt-get install gcc cmake make automake libsdl2-dev libsdl2-net-dev \
 libsdl2-mixer-dev libpng-dev libsamplerate-dev
 ```
 On Fedora Linux they can be installed by the following command:
 ```
-sudo dnf install gcc cmake make automake SDL2-devel SDL2_mixer-devel
+sudo dnf install gcc cmake make automake SDL2-devel SDL2_mixer-devel \
 SDL2_net-devel libpng-devel libsamplerate-devel
+```
+On Manjaro Linux they can be installed by the following command:
+```
+sudo pacman -S base-devel cmake sdl2 sdl2_net sdl2_mixer \
+libpng libsamplerate
 ```
 
 ##### Step 2: Compiling Russian Doom
