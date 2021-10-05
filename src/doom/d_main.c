@@ -3161,7 +3161,7 @@ void D_DoomMain (void)
     DEH_printf(english_language ?
                "S_Init: Setting up sound.\n" :
                "S_Init: Активация звуковой системы.\n");
-    S_Init (sfxVolume * 8, musicVolume * 8);
+    S_Init (sfxVolume * 8, musicVolume);
 
     DEH_printf(english_language ?
                "D_CheckNetGame: Checking network game status.\n" :

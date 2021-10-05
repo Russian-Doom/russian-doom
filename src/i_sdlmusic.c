@@ -269,12 +269,12 @@ static void UpdateMusicVolume(void)
     Mix_VolumeMusic(vol);
 }
 
-// Set music volume (0 - 127)
+// Set music volume (0 - 15)
 
 static void I_SDL_SetMusicVolume(int volume)
 {
     // Internal state variable.
-    current_music_volume = volume;
+    current_music_volume = volume * 8;
 
     UpdateMusicVolume();
 }
