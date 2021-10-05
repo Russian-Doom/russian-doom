@@ -1766,7 +1766,7 @@ void D_DoomMain (void)
     // haleyjd 20110924: moved S_Init up to here
     if(devparm) // [STRIFE]
         DEH_printf("S_Init: Setting up sound.\n");
-    S_Init (sfxVolume * 8, musicVolume * 8, voiceVolume * 8); // [STRIFE]: voice
+    S_Init (sfxVolume * 8, musicVolume, voiceVolume * 8); // [STRIFE]: voice
     D_IntroTick(); // [STRIFE]
 
     // Check for -file in shareware

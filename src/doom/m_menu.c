@@ -2869,7 +2869,7 @@ void M_RD_Change_MusicVol(Direction_t direction)
 {
     RD_Menu_SlideInt(&musicVolume, 0, 15, direction);
 
-    S_SetMusicVolume(musicVolume * 8);
+    S_SetMusicVolume(musicVolume);
 }
 
 void M_RD_Change_SfxChannels(Direction_t direction)
@@ -3103,7 +3103,7 @@ void M_RD_Change_MusicDevice(Direction_t direction)
     I_InitSound(true);
 
     // Reinitialize music volume
-    S_SetMusicVolume(musicVolume * 8);
+    S_SetMusicVolume(musicVolume);
 
     // Restart current music
     S_ChangeMusic(music_num_rd, true);
@@ -3137,7 +3137,7 @@ void M_RD_Change_Sampling(Direction_t direction)
     I_InitSound(true);
 
     // Reinitialize music volume
-    S_SetMusicVolume(musicVolume * 8);
+    S_SetMusicVolume(musicVolume);
 
     // Restart current music
     S_ChangeMusic(music_num_rd, true);
@@ -5148,7 +5148,7 @@ void M_RD_BackToDefaults_Recommended(int choice)
     sfxVolume            = 8;
         S_SetSfxVolume(sfxVolume * 8);
     musicVolume          = 8;
-        S_SetMusicVolume(musicVolume * 8);
+        S_SetMusicVolume(musicVolume);
     snd_channels         = 32;
         S_ChannelsRealloc();
     snd_monomode         = 0;
@@ -5327,7 +5327,7 @@ void M_RD_BackToDefaults_Original(int choice)
     sfxVolume            = 8;
         S_SetSfxVolume(sfxVolume * 8);
     musicVolume          = 8;
-        S_SetMusicVolume(musicVolume * 8);
+        S_SetMusicVolume(musicVolume);
     snd_channels         = 8;
         S_ChannelsRealloc();
     snd_monomode         = 0;

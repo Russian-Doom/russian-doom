@@ -827,7 +827,7 @@ void S_Init(void)
         snd_Channels_RD = snd_Channels;
     }
 
-    I_SetMusicVolume(snd_MusicVolume * 8);
+    I_SetMusicVolume(snd_MusicVolume);
 
     snd_MaxVolume_tmp = snd_MaxVolume; // [JN] Sync temp volume variable.
 
@@ -997,7 +997,7 @@ void S_SetMusicVolume(void)
     }
     else
     {
-        I_SetMusicVolume(snd_MusicVolume * 8);
+        I_SetMusicVolume(snd_MusicVolume);
     }
     if (snd_MusicVolume == 0)
     {
@@ -1055,7 +1055,7 @@ void S_MuteSound(void)
 
 void S_UnMuteSound(void)
 {
-    I_SetMusicVolume(snd_MusicVolume * 8);
+    I_SetMusicVolume(snd_MusicVolume);
 
     snd_MaxVolume = snd_MaxVolume_tmp;
 

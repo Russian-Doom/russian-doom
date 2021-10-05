@@ -1261,7 +1261,7 @@ void M_MusicVol(int choice)
         break;
     }
 
-    S_SetMusicVolume(musicVolume * 8);
+    S_SetMusicVolume(musicVolume);
 }
 
 

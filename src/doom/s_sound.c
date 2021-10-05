@@ -815,7 +815,7 @@ void S_UpdateSounds(mobj_t *listener)
 
 void S_SetMusicVolume (int volume)
 {
-    if (volume < 0 || volume > 127)
+    if (volume < 0 || volume > 15)
     {
         I_Error(english_language ?
                 "Attempt to set music volume at %d" :
@@ -982,7 +982,7 @@ void S_MuteSound (void)
 
 void S_UnMuteSound (void)
 {
-    S_SetMusicVolume(musicVolume * 8);
+    S_SetMusicVolume(musicVolume);
     S_SetSfxVolume(sfxVolume * 8);
 
     volume_needs_update = false;

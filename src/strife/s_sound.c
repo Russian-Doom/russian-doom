@@ -721,7 +721,7 @@ void S_UpdateSounds(mobj_t *listener)
 
 void S_SetMusicVolume(int volume)
 {
-    if (volume < 0 || volume > 127)
+    if (volume < 0 || volume > 15)
     {
         I_Error("Attempt to set music volume at %d",
                 volume);

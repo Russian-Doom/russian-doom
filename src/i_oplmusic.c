@@ -633,11 +633,13 @@ static void InitVoices(void)
 static void SetChannelVolume(opl_channel_data_t *channel, unsigned int volume,
                              boolean clip_start);
 
-// Set music volume (0 - 127)
+// Set music volume (0 - 15)
 
 static void I_OPL_SetMusicVolume(int volume)
 {
     unsigned int i;
+
+    volume *= 8;
 
     if (current_music_volume == volume)
     {
