@@ -17,6 +17,7 @@
 // R_main.c
 
 
+#include <stdlib.h>
 #include <math.h>
 #include "doomdef.h"
 #include "r_local.h"
