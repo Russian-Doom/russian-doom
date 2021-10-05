@@ -639,7 +639,8 @@ static void I_OPL_SetMusicVolume(int volume)
 {
     unsigned int i;
 
-    volume *= 8;
+    if(volume != 0)
+        volume = 52 + volume * 5; // volume must be <= 127! Otherwise, it will result in Array Index Out of Bounds
 
     if (current_music_volume == volume)
     {
