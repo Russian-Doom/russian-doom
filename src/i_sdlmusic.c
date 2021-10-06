@@ -274,16 +274,19 @@ static void UpdateMusicVolume(void)
 static void I_SDL_SetMusicVolume(int volume)
 {
     // Internal state variable.
+#ifdef _WIN32
     if (snd_musicdevice != SNDDEVICE_GUS)
         current_music_volume = volume * 8;
     else
     {
+#endif
         if(volume == 0)
             current_music_volume = 0;
         else
             current_music_volume = 2 + volume * 2;
+#ifdef _WIN32
     }
-
+#endif
     UpdateMusicVolume();
 }
 
