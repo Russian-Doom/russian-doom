@@ -29,6 +29,9 @@ endif()
 
 # Any settings that should apply to all targets in this directory and all
 # subdirectories should go here.  Use judiciously.
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
 if(MSVC)
     add_definitions("/D_CRT_SECURE_NO_WARNINGS" "/D_CRT_SECURE_NO_DEPRECATE"
                     "/D_CRT_NONSTDC_NO_DEPRECATE")
