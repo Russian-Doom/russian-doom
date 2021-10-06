@@ -6741,7 +6741,12 @@ boolean M_Responder (event_t* ev)
                                    gammalevel_names[usegamma] :
                                    gammalevel_names_rus[usegamma], NULL);
         players[consoleplayer].message_system = DEH_String(gamma_level);
-        free(gamma_level);
+
+        if (players[consoleplayer].message_system != gamma_level)
+        {
+            free(gamma_level);
+        }
+
         return true;
     }
 
