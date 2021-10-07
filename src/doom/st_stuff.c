@@ -527,7 +527,7 @@ boolean ST_Responder (event_t *ev)
                     {
                         if (plyr->mo)
                         {
-                            plyr->mo->health = 100;
+                            plyr->mo->health = deh_god_mode_health;
                         }
                         plyr->health = deh_god_mode_health;
                     }
