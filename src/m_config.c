@@ -601,6 +601,12 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_FLOAT(libsamplerate_scale),
 
     //!
+    // Full path to a soundfont file to use with FluidSynth MIDI playback.
+    //
+
+    CONFIG_VARIABLE_STRING(fluidsynth_sf_path),
+
+    //!
     // Full path to a Timidity configuration file to use for MIDI
     // playback. The file will be evaluated from the directory where
     // it is evaluated, so there is no need to add "dir" commands
