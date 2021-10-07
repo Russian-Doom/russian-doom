@@ -21,6 +21,7 @@
 
 #include "config.h"
 
+#include <assert.h>
 #include <stdio.h>
 
 #include "SDL.h"
@@ -105,7 +106,13 @@ int main(int argc, char **argv)
     // save arguments
 
     myargc = argc;
-    myargv = argv;
+    myargv = malloc(argc * sizeof(char *));
+    assert(myargv != NULL);
+
+    for (int i = 0; i < argc; i++)
+    {
+        myargv[i] = M_StringDuplicate(argv[i]);
+    }
 
     M_SetExeDir();
 

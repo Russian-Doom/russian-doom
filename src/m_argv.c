@@ -140,6 +140,7 @@ static void LoadResponseFile(int argv_index, const char *filename)
     for (i=0; i<argv_index; ++i)
     {
         newargv[i] = myargv[i];
+        myargv[i] = NULL;
         ++newargc;
     }
 
@@ -166,10 +167,11 @@ static void LoadResponseFile(int argv_index, const char *filename)
 
         if (infile[k] == '\"')
         {
+            char *argstart;
             // Skip the first character(")
             ++k;
 
-            newargv[newargc++] = &infile[k];
+            argstart = &infile[k];
 
             // Read all characters between quotes
 
@@ -190,12 +192,14 @@ static void LoadResponseFile(int argv_index, const char *filename)
 
             infile[k] = '\0';
             ++k;
+            newargv[newargc++] = M_StringDuplicate(argstart);
         }
         else
         {
+            char *argstart;
             // Read in the next argument until a space is reached
 
-            newargv[newargc++] = &infile[k];
+            argstart = &infile[k];
 
             while(k < size && !isspace(infile[k]))
             {
@@ -207,6 +211,7 @@ static void LoadResponseFile(int argv_index, const char *filename)
             infile[k] = '\0';
 
             ++k;
+            newargv[newargc++] = M_StringDuplicate(argstart);
         }
     }
 
@@ -218,6 +223,17 @@ static void LoadResponseFile(int argv_index, const char *filename)
         ++newargc;
     }
 
+    // Free any old strings in myargv which were not moved to newargv
+    for (i = 0; i < myargc; ++i)
+    {
+        if (myargv[i] != NULL)
+        {
+            free(myargv[i]);
+            myargv[i] = NULL;
+        }
+    }
+
+    free(myargv);
     myargv = newargv;
     myargc = newargc;
 
@@ -269,7 +285,8 @@ void M_FindResponseFile(void)
         // the loop we'll ignore it. Since some parameters stop reading when
         // an argument beginning with a '-' is encountered, we keep something
         // that starts with a '-'.
-        myargv[i] = "-_";
+        free(myargv[i]);
+        myargv[i] = M_StringDuplicate("-_");
         LoadResponseFile(i + 1, myargv[i + 1]);
     }
 }
