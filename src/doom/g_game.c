@@ -1352,7 +1352,7 @@ void G_ScreenShot (void)
 
 
 // DOOM Par Times
-int pars[4][10] = 
+static const int pars[4][10] =
 { 
     {0}, 
     {0, 30, 75, 120,  90, 165, 180, 180, 30, 165},  // Episode 1
@@ -1361,7 +1361,7 @@ int pars[4][10] =
 }; 
 
 // DOOM II Par Times
-int cpars[32] =
+static const int cpars[32] =
 {
      30,  90, 120, 120,  90, 150, 120, 120, 270,  90,   //  1-10
     210, 150, 150, 150, 210, 150, 420, 150, 210, 150,   // 11-20
@@ -1370,19 +1370,19 @@ int cpars[32] =
 };
 
 // [crispy] Episode 4 par times from the BFG Edition
-static int e4pars[10] =
+static const int e4pars[10] =
 {
     0, 165, 255, 135, 150, 180, 390, 135, 360, 180
 };
 
 // [JN] Sigil par times
-static int e5pars[10] =
+static const int e5pars[10] =
 {
     0, 90, 150, 360, 420, 780, 420, 780, 300, 660
 };
 
 // [JN] Press Beta Par Times
-int bpars[4][10] = 
+static const int bpars[4][10] =
 { 
     {0}, 
     {0, 75},  // Уровень 1: Атомная электростанция
@@ -1391,7 +1391,7 @@ int bpars[4][10] =
 }; 
 
 // [crispy] No Rest For The Living par times from the BFG Edition
-static int npars[9] =
+static const int npars[9] =
 {
     75, 105, 120, 105, 210, 105, 165, 105, 135
 };

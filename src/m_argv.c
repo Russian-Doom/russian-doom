@@ -75,21 +75,18 @@ int M_CheckParm(char *check)
 
 #define MAXARGVS        100
 
-static void LoadResponseFile(int argv_index)
+static void LoadResponseFile(int argv_index, const char *filename)
 {
     FILE *handle;
     int size;
     char *infile;
     char *file;
-    char *response_filename;
     char **newargv;
     int newargc;
     int i, k;
 
-    response_filename = myargv[argv_index] + 1;
-
     // Read the response file into memory
-    handle = fopen(response_filename, "rb");
+    handle = fopen(filename, "rb");
 
     if (handle == NULL)
     {
@@ -102,7 +99,7 @@ static void LoadResponseFile(int argv_index)
     printf(english_language ?
            "Found response file %s!\n" :
            "Ответный файл %s обнаружен!\n",
-           response_filename);
+           filename);
 
     size = M_FileLength(handle);
 
@@ -124,7 +121,7 @@ static void LoadResponseFile(int argv_index)
             I_Error(english_language ?
                     "Failed to read full contents of '%s'" :
                     "Невозможно прочитать содержимое \"%s\"",
-                    response_filename);
+                    filename);
         }
 
         i += k;
@@ -143,6 +140,7 @@ static void LoadResponseFile(int argv_index)
     for (i=0; i<argv_index; ++i)
     {
         newargv[i] = myargv[i];
+        myargv[i] = NULL;
         ++newargc;
     }
 
@@ -169,10 +167,11 @@ static void LoadResponseFile(int argv_index)
 
         if (infile[k] == '\"')
         {
+            char *argstart;
             // Skip the first character(")
             ++k;
 
-            newargv[newargc++] = &infile[k];
+            argstart = &infile[k];
 
             // Read all characters between quotes
 
@@ -183,20 +182,24 @@ static void LoadResponseFile(int argv_index)
 
             if (k >= size || infile[k] == '\n')
             {
-                I_Error("Кавычки не закрыты в ответном файле \"%s\"",
-                        response_filename);
+                I_Error(english_language ?
+                        "Quotes are not closed in the response file \"%s\"" :
+                        "Кавычки не закрыты в ответном файле \"%s\"",
+                        filename);
             }
 
             // Cut off the string at the closing quote
 
             infile[k] = '\0';
             ++k;
+            newargv[newargc++] = M_StringDuplicate(argstart);
         }
         else
         {
+            char *argstart;
             // Read in the next argument until a space is reached
 
-            newargv[newargc++] = &infile[k];
+            argstart = &infile[k];
 
             while(k < size && !isspace(infile[k]))
             {
@@ -208,6 +211,7 @@ static void LoadResponseFile(int argv_index)
             infile[k] = '\0';
 
             ++k;
+            newargv[newargc++] = M_StringDuplicate(argstart);
         }
     }
 
@@ -219,6 +223,17 @@ static void LoadResponseFile(int argv_index)
         ++newargc;
     }
 
+    // Free any old strings in myargv which were not moved to newargv
+    for (i = 0; i < myargc; ++i)
+    {
+        if (myargv[i] != NULL)
+        {
+            free(myargv[i]);
+            myargv[i] = NULL;
+        }
+    }
+
+    free(myargv);
     myargv = newargv;
     myargc = newargc;
 
@@ -241,14 +256,38 @@ static void LoadResponseFile(int argv_index)
 
 void M_FindResponseFile(void)
 {
-    int             i;
+    int i;
 
     for (i = 1; i < myargc; i++)
     {
         if (myargv[i][0] == '@')
         {
-            LoadResponseFile(i);
+            LoadResponseFile(i, myargv[i] + 1);
         }
+    }
+
+    for (;;)
+    {
+        //!
+        // @arg filename
+        //
+        // Load extra command line arguments from the given response file.
+        // Arguments read from the file will be inserted into the command
+        // line replacing this argument. A response file can also be loaded
+        // using the abbreviated syntax '@filename.rsp'.
+        //
+        i = M_CheckParmWithArgs("-response", 1);
+        if (i <= 0)
+        {
+            break;
+        }
+        // Replace the -response argument so that the next time through
+        // the loop we'll ignore it. Since some parameters stop reading when
+        // an argument beginning with a '-' is encountered, we keep something
+        // that starts with a '-'.
+        free(myargv[i]);
+        myargv[i] = M_StringDuplicate("-_");
+        LoadResponseFile(i + 1, myargv[i + 1]);
     }
 }
 

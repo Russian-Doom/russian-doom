@@ -58,6 +58,7 @@ static boolean sdl_was_initialized = false;
 static boolean musicpaused = false;
 static int current_music_volume;
 
+char *fluidsynth_sf_path = "";
 char *timidity_cfg_path = "";
 
 static char *temp_timidity_cfg = NULL;
@@ -77,11 +78,16 @@ static boolean WriteWrapperTimidityConfig(char *write_path)
         return false;
     }
 
+    printf(english_language ?
+           "I_SDLMusic: Using Timidity config from:\n \t%s\n" :
+           "I_SDLMusic: Используется Timidity конфиг из файла:\n \t%s\n",
+           timidity_cfg_path);
+
     if(strchr(timidity_cfg_path, ' '))
     {
         printf(english_language ?
-               "\tError: The path contains spaces, which are not allowed. Failed to replace with a symbolic link\n" :
-               "\tОшибка: Путь содержит пробелы, что недопустимо. Не удалось заменить символьной ссылкой\n");
+               "\tError: The path contains spaces, which are not allowed\n" :
+               "\tОшибка: Путь содержит пробелы, что недопустимо\n");
     }
 
     fstream = fopen(write_path, "w");
@@ -103,6 +109,10 @@ static boolean WriteWrapperTimidityConfig(char *write_path)
 
     return true;
 }
+
+// putenv requires a non-const string whose lifetime is the whole program
+// so can't use a string directly, have to do this silliness
+static char sdl_mixer_disable_fluidsynth[] = "SDL_MIXER_DISABLE_FLUIDSYNTH=1";
 
 void I_InitTimidityConfig(void)
 {
@@ -133,7 +143,7 @@ void I_InitTimidityConfig(void)
         // timidity_cfg_path or GUS mode), then disable Fluidsynth, because
         // SDL_mixer considers Fluidsynth a higher priority than Timidity and
         // therefore can end up circumventing Timidity entirely.
-        putenv("SDL_MIXER_DISABLE_FLUIDSYNTH=1");
+        putenv(sdl_mixer_disable_fluidsynth);
     }
     else
     {
@@ -224,6 +234,26 @@ static boolean I_SDL_InitMusic(void)
     // file can be removed.
 
     RemoveTimidityConfig();
+
+    // When using FluidSynth, proceed to set the soundfont path via
+    // Mix_SetSoundFonts if necessary.
+
+    if (snd_musicdevice != SNDDEVICE_GUS && strlen(fluidsynth_sf_path) > 0 && strlen(timidity_cfg_path) == 0)
+    {
+        printf(english_language ?
+               "I_SDLMusic: Using FluidSynth soundfont from:\n \t%s\n" :
+               "I_SDLMusic: Используется FluidSynth soundfont из файла:\n \t%s\n",
+               fluidsynth_sf_path);
+
+        Mix_SetSoundFonts(fluidsynth_sf_path);
+    }
+
+    if(snd_musicdevice != SNDDEVICE_GUS && strlen(fluidsynth_sf_path) == 0 && strlen(timidity_cfg_path) == 0)
+    {
+        printf(english_language ?
+               "I_SDLMusic: Using SDL-defined MIDI backend\n" :
+               "I_SDLMusic: Используется определённый SDL бэкэнд MIDI\n");
+    }
 
     // If snd_musiccmd is set, we need to call Mix_SetMusicCMD to
     // configure an external music playback program.

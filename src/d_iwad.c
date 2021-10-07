@@ -195,6 +195,30 @@ static registry_value_t root_path_keys[] =
 	SOFTWARE_KEY "\\GOG.com\\Games\\1432899949",
 	"PATH",
     },
+
+    // Heretic
+
+    {
+        HKEY_LOCAL_MACHINE,
+        SOFTWARE_KEY "\\GOG.com\\Games\\1290366318",
+        "PATH",
+    },
+
+    // Hexen
+
+    {
+        HKEY_LOCAL_MACHINE,
+        SOFTWARE_KEY "\\GOG.com\\Games\\1247951670",
+        "PATH",
+    },
+
+    // Hexen: Deathkings of a Dark Citadel
+
+    {
+        HKEY_LOCAL_MACHINE,
+        SOFTWARE_KEY "\\GOG.com\\Games\\1983497091",
+        "PATH",
+    },
 };
 
 // Subdirectories of the above install path, where IWADs are installed.
@@ -529,14 +553,15 @@ static GameMission_t IdentifyIWADByName(char *name, int mask)
 // Add IWAD directories parsed from splitting a path string containing
 // paths separated by PATH_SEPARATOR. 'suffix' is a string to concatenate
 // to the end of the paths before adding them.
-static void AddIWADPath(char *path, char *suffix)
+static void AddIWADPath(const char *path, char *suffix)
 {
-    char *left, *p;
+    const char *left;
+    char *p, *path_copy;
 
-    path = M_StringDuplicate(path);
+    path_copy = M_StringDuplicate(path);
 
     // Split into individual dirs within the list.
-    left = path;
+    left = path_copy;
 
     for (;;)
     {
@@ -558,7 +583,7 @@ static void AddIWADPath(char *path, char *suffix)
 
     AddIWADDir(M_StringJoin(left, suffix, NULL));
 
-    free(path);
+    free(path_copy);
 }
 
 #ifndef _WIN32
@@ -569,7 +594,8 @@ static void AddIWADPath(char *path, char *suffix)
 // <http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html>
 static void AddXdgDirs(void)
 {
-    char *env;
+    const char *env;
+    char *tmp_env;
 
     // Quote:
     // > $XDG_DATA_HOME defines the base directory relative to which
@@ -577,6 +603,7 @@ static void AddXdgDirs(void)
     // > is either not set or empty, a default equal to
     // > $HOME/.local/share should be used.
     env = getenv("XDG_DATA_HOME");
+    tmp_env = NULL;
 
     if (env == NULL)
     {
@@ -586,14 +613,15 @@ static void AddXdgDirs(void)
             homedir = "/";
         }
 
-        env = M_StringJoin(homedir, "/.local/share", NULL);
+        tmp_env = M_StringJoin(homedir, "/.local/share", NULL);
+        env = tmp_env;
     }
 
     // We support $XDG_DATA_HOME/games/doom (which will usually be
     // ~/.local/share/games/doom) as a user-writeable extension to
     // the usual /usr/share/games/doom location.
     AddIWADDir(M_StringJoin(env, "/games/doom", NULL));
-    free(env);
+    free(tmp_env);
 
     // Quote:
     // > $XDG_DATA_DIRS defines the preference-ordered set of base
@@ -624,7 +652,8 @@ static void AddXdgDirs(void)
 // about everyone.
 static void AddSteamDirs(void)
 {
-    char *homedir, *steampath;
+    const char *homedir;
+    char *steampath;
 
     homedir = getenv("HOME");
     if (homedir == NULL)

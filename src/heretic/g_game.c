@@ -106,7 +106,7 @@ int totalkills, totalitems, totalsecret;        // for intermission
 int totalleveltimes;            // [crispy] CPhipps - total time for all completed levels
 int totaltimes;
 
-char demoname[32];
+char *demoname;
 boolean demorecording;
 boolean longtics;               // specify high resolution turning in demos
 boolean lowres_turn;
@@ -1991,6 +1991,7 @@ void G_WriteDemoTiccmd(ticcmd_t * cmd)
 void G_RecordDemo(skill_t skill, int numplayers, int episode, int map,
                   char *name)
 {
+    size_t demoname_size;
     int i;
     int maxsize;
 
@@ -2017,8 +2018,9 @@ void G_RecordDemo(skill_t skill, int numplayers, int episode, int map,
 
     G_InitNew(skill, episode, map, 0);
     usergame = false;
-    M_StringCopy(demoname, name, sizeof(demoname));
-    M_StringConcat(demoname, ".lmp", sizeof(demoname));
+    demoname_size = strlen(name) + 5;
+    demoname = Z_Malloc(demoname_size, PU_STATIC, NULL);
+    M_snprintf(demoname, demoname_size, "%s.lmp", name);
     maxsize = 0x20000;
 
     //!

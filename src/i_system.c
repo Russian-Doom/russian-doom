@@ -311,8 +311,8 @@ void *I_Realloc(void *ptr, size_t size)
     if (size != 0 && new_ptr == NULL)
     {
         I_Error (english_language ?
-                 "I_Realloc: failed on reallocation of %" PRIuPTR " bytes" :
-                 "I_Realloc: ошибка переобнаружения %i байт",
+                 "I_Realloc: failed on reallocation of %zu bytes" :
+                 "I_Realloc: ошибка переобнаружения %zu байт",
                  size);
     }
 
