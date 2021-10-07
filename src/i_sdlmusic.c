@@ -78,6 +78,11 @@ static boolean WriteWrapperTimidityConfig(char *write_path)
         return false;
     }
 
+    printf(english_language ?
+           "I_SDLMusic: Using Timidity config from:\n \t%s\n" :
+           "I_SDLMusic: Используется Timidity конфиг из файла:\n \t%s\n",
+           timidity_cfg_path);
+
     if(strchr(timidity_cfg_path, ' '))
     {
         printf(english_language ?
@@ -231,7 +236,19 @@ static boolean I_SDL_InitMusic(void)
 
     if (snd_musicdevice != SNDDEVICE_GUS && strlen(fluidsynth_sf_path) > 0 && strlen(timidity_cfg_path) == 0)
     {
+        printf(english_language ?
+               "I_SDLMusic: Using FluidSynth soundfont from:\n \t%s\n" :
+               "I_SDLMusic: Используется FluidSynth soundfont из файла:\n \t%s\n",
+               fluidsynth_sf_path);
+
         Mix_SetSoundFonts(fluidsynth_sf_path);
+    }
+
+    if(snd_musicdevice != SNDDEVICE_GUS && strlen(fluidsynth_sf_path) == 0 && strlen(timidity_cfg_path) == 0)
+    {
+        printf(english_language ?
+               "I_SDLMusic: Using SDL-defined MIDI backend\n" :
+               "I_SDLMusic: Используется определённый SDL бэкэнд MIDI\n");
     }
 
     // If snd_musiccmd is set, we need to call Mix_SetMusicCMD to
