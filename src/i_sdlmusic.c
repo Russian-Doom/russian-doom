@@ -86,8 +86,8 @@ static boolean WriteWrapperTimidityConfig(char *write_path)
     if(strchr(timidity_cfg_path, ' '))
     {
         printf(english_language ?
-               "\tError: The path contains spaces, which are not allowed. Failed to replace with a symbolic link\n" :
-               "\tОшибка: Путь содержит пробелы, что недопустимо. Не удалось заменить символьной ссылкой\n");
+               "\tError: The path contains spaces, which are not allowed\n" :
+               "\tОшибка: Путь содержит пробелы, что недопустимо\n");
     }
 
     fstream = fopen(write_path, "w");

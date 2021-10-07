@@ -236,8 +236,8 @@ static boolean WriteTimidityConfig(char *path, gus_config_t *config, char* gus_p
     if(strchr(gus_patches_path, ' '))
     {
         printf(english_language ?
-               "\tError: The path contains spaces, which are not allowed. Failed to replace with a symbolic link\n" :
-               "\tОшибка: Путь содержит пробелы, что недопустимо. Не удалось заменить символьной ссылкой\n");
+               "\tError: The path contains spaces, which are not allowed\n" :
+               "\tОшибка: Путь содержит пробелы, что недопустимо\n");
     }
 
     fstream = fopen(path, "w");
