@@ -278,7 +278,7 @@ void M_RD_Change_Torque();
 void M_RD_Change_Bobbing();
 void M_RD_Change_SSGBlast();
 void M_RD_Change_FlipCorpses();
-void M_RD_Change_FloatPowerups();
+void M_RD_Change_FloatPowerups(Direction_t direction);
 void M_RD_Change_TossDrop();
 void M_RD_Change_CrosshairDraw();
 void M_RD_Change_CrosshairType(Direction_t direction);
@@ -1458,7 +1458,7 @@ static MenuItem_t Gameplay4Items[] = {
     {ITT_SWITCH,  "Weapon bobbing while firing:",        "Ekexityyjt gjrfxbdfybt jhe;bz:",  M_RD_Change_Bobbing,        0}, // Улучшенное покачивание оружия
     {ITT_SWITCH,  "Lethal pellet of a point-blank SSG:", "ldecndjkrf hfphsdftn dhfujd:",    M_RD_Change_SSGBlast,       0}, // Двустволка разрывает врагов
     {ITT_SWITCH,  "Randomly mirrored corpses:",          "pthrfkbhjdfybt nhegjd:",          M_RD_Change_FlipCorpses,    0}, // Зеркалирование трупов
-    {ITT_SWITCH,  "Floating powerups:",                  "Ktdbnbhe.obt caths-fhntafrns:",   M_RD_Change_FloatPowerups,  0}, // Левитирующие сферы-артефакты
+    {ITT_LRFUNC,  "Floating powerups amplitude:",        "gjrfxbdfybt cath-fhntafrnjd:",    M_RD_Change_FloatPowerups,  0}, // Покачивание сфер-артефактов
     {ITT_SWITCH,  "Items are tossed when dropped:",      "Gjl,hfcsdfnm dsgfdibt ghtlvtns:", M_RD_Change_TossDrop,       0}, // Подбрасывать выпавшие предметы
     {ITT_TITLE,   "Crosshair",                           "Ghbwtk",                          NULL,                       0}, // Прицел
     {ITT_SWITCH,  "Draw crosshair:",                     "Jnj,hf;fnm ghbwtk:",              M_RD_Change_CrosshairDraw,  0}, // Отображать прицел
@@ -3887,8 +3887,10 @@ void M_RD_Draw_Gameplay_4(void)
                               randomly_flipcorpses ? CR_GREEN : CR_DARKRED);
 
         // Floating powerups
-        RD_M_DrawTextSmallENG(floating_powerups ? RD_ON : RD_OFF, 171 + wide_delta, 85,
-                              floating_powerups ? CR_GREEN : CR_DARKRED);
+        RD_M_DrawTextSmallENG(floating_powerups == 1 ? "LOW" : 
+                              floating_powerups == 2 ? "MIDDLE" : 
+                              floating_powerups == 3 ? "HIGH" : "OFF",
+                              244 + wide_delta, 85, floating_powerups ? CR_GREEN : CR_DARKRED);
 
         // Items are tossed when dropped
         RD_M_DrawTextSmallENG(toss_drop ? RD_ON : RD_OFF, 254 + wide_delta, 95,
@@ -3937,9 +3939,11 @@ void M_RD_Draw_Gameplay_4(void)
         RD_M_DrawTextSmallRUS(randomly_flipcorpses ? RD_ON_RUS : RD_OFF_RUS, 207 + wide_delta, 75,
                               randomly_flipcorpses ? CR_GREEN : CR_DARKRED);
 
-        // Левитирующие сферы-артефакты
-        RD_M_DrawTextSmallRUS(floating_powerups ? RD_ON_RUS : RD_OFF_RUS, 275 + wide_delta, 85,
-                              floating_powerups ? CR_GREEN : CR_DARKRED);
+        // Амплитуда левитации артефактов
+        RD_M_DrawTextSmallRUS(floating_powerups == 1 ? "CKF,JT"  :          // Слабое
+                              floating_powerups == 2 ? "CHTLYTT" :          // Среднее
+                              floating_powerups == 3 ? "CBKMYJT" : "DSRK",  // Сильное | Выкл
+                              256 + wide_delta, 85, floating_powerups ? CR_GREEN : CR_DARKRED);
 
         // Подбрасывать выпавшие предметы
         RD_M_DrawTextSmallRUS(toss_drop ? RD_ON_RUS : RD_OFF_RUS, 285 + wide_delta, 95,
@@ -4344,9 +4348,9 @@ void M_RD_Change_FlipCorpses()
     randomly_flipcorpses ^= 1;
 }
 
-void M_RD_Change_FloatPowerups()
+void M_RD_Change_FloatPowerups(Direction_t direction)
 {
-    floating_powerups ^= 1;
+    RD_Menu_SpinInt(&floating_powerups, 0, 3, direction);
 }
 
 void M_RD_Change_TossDrop()

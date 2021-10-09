@@ -1701,7 +1701,7 @@ menuitem_t RD_Gameplay_Menu_3[]=
     {2, "Weapon bobbing while firing:",        M_RD_Change_Bobbing,         'w'},
     {2, "Lethal pellet of a point-blank SSG:", M_RD_Change_SSGBlast,        'l'},
     {2, "Randomly mirrored corpses:",          M_RD_Change_FlipCorpses,     'r'},
-    {2, "Floating powerups:",                  M_RD_Change_FloatPowerups,   'f'},
+    {2, "Floating powerups amplitude:",        M_RD_Change_FloatPowerups,   'f'},
     {-1,"",0,'\0'},
     {2, "Draw crosshair:",                     M_RD_Change_CrosshairDraw,   'd'},
     {2, "Health indication:",                  M_RD_Change_CrosshairHealth, 'h'},
@@ -1814,7 +1814,7 @@ menuitem_t RD_Gameplay_Menu_3_Rus[]=
     {2, "Ekexityyjt gjrfxbdfybt jhe;bz:", M_RD_Change_Bobbing,         'e'}, // Улучшенное покачивание оружия
     {2, "ldecndjkrf hfphsdftn dhfujd:",   M_RD_Change_SSGBlast,        'l'}, // Двустволка разрывает врагов
     {2, "pthrfkbhjdfybt nhegjd:",         M_RD_Change_FlipCorpses,     'p'}, // Зеркалирование трупов
-    {2, "Ktdbnbhe.obt caths-fhntafrns:",  M_RD_Change_FloatPowerups,   'k'}, // Левитирующие сферы-артефакты
+    {2, "gjrfxbdfybt cath-fhntafrnjd:",   M_RD_Change_FloatPowerups,   'k'}, // Покачивание сфер-артефактов
     {-1,"",0,'\0'},
     {2, "Jnj,hf;fnm ghbwtk:",             M_RD_Change_CrosshairDraw,   'j'}, // Отображать прицел
     {2, "Bylbrfwbz pljhjdmz:",            M_RD_Change_CrosshairHealth, 'b'}, // Индикация здоровья
@@ -4169,7 +4169,9 @@ void M_RD_Draw_Gameplay_3(void)
 
         // Floating powerups
         dp_translation = floating_powerups ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(171, 95, floating_powerups ? "on" : "off");
+        M_WriteTextSmall_ENG(244, 95, floating_powerups == 1 ? "LOW" : 
+                                      floating_powerups == 2 ? "MIDDLE" : 
+                                      floating_powerups == 3 ? "HIGH" : "OFF");
         dp_translation = NULL;
 
         //
@@ -4234,9 +4236,11 @@ void M_RD_Draw_Gameplay_3(void)
         M_WriteTextSmall_RUS(207, 85, randomly_flipcorpses ? "drk" : "dsrk");
         dp_translation = NULL;
 
-        // Левитирующие сферы-артефакты
+        // Амплитуда левитации артефактов
         dp_translation = floating_powerups ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(275, 95, floating_powerups ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(256, 95, floating_powerups == 1 ? "CKF,JT"  :           // Слабое
+                                      floating_powerups == 2 ? "CHTLYTT" :           // Среднее
+                                      floating_powerups == 3 ? "CBKMYJT" : "DSRK");  // Сильное | Выкл
         dp_translation = NULL;
 
         //
@@ -4488,7 +4492,20 @@ void M_RD_Change_FlipCorpses (int choice)
 
 void M_RD_Change_FloatPowerups (int choice)
 {
-    floating_powerups ^= 1;
+    switch(choice)
+    {
+        case 0: 
+        floating_powerups--;
+        if (floating_powerups < 0) 
+            floating_powerups = 3;
+        break;
+    
+        case 1:
+        floating_powerups++;
+        if (floating_powerups > 3)
+            floating_powerups = 0;
+        break;
+    }
 }
 
 void M_RD_Change_CrosshairDraw (int choice)
