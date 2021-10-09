@@ -19,12 +19,18 @@
 //  Main program, simply calls D_DoomMain high level loop.
 //
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include "doomdef.h"
 #include "m_misc.h"
 #include "d_main.h"
 
 int main (int argc, char** argv) 
 { 
+    // [JN] Use current time as seed for random generator.
+    srand(time(0));
+
     myargc = argc; 
     myargv = argv; 
 
