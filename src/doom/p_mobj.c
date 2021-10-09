@@ -19,6 +19,7 @@
 
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "i_system.h"
 #include "z_zone.h"
 #include "m_random.h"
@@ -794,7 +795,19 @@ static mobj_t *P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z,
     mobj->radius = info->radius;
     mobj->height = info->height;
     mobj->flags = info->flags;
-    mobj->health = info->spawnhealth;
+    // [JN] Randomize spawn health for floating powerups,
+    // so they will spawn at random height.
+    if (mobj->type == MT_MEGA    // Megasphere
+    ||  mobj->type == MT_MISC12  // Supercharge
+    ||  mobj->type == MT_INV     // Invulnerability
+    ||  mobj->type == MT_INS)    // Partial invisibility
+    {
+        mobj->health = info->spawnhealth + rand() % 255;
+    }
+    else
+    {
+        mobj->health = info->spawnhealth;
+    }
 
     if (gameskill != sk_nightmare && gameskill != sk_ultranm)
     {
