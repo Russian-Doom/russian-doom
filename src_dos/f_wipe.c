@@ -19,10 +19,10 @@
 //
 
 
+#include <stdlib.h>
 #include "z_zone.h"
 #include "i_system.h"
 #include "v_video.h"
-#include "m_misc.h"
 #include "doomdef.h"
 #include "f_wipe.h"
 #include "r_main.h"
@@ -133,10 +133,12 @@ int wipe_initMelt (int width, int height, int ticks)
     // setup initial column positions
     // (y<0 => not ready to scroll yet)
     y = (int *) Z_Malloc(width*sizeof(int), PU_STATIC, 0);
-    y[0] = -(M_Random()%16);
+    // [JN] Use real random number generator instead of M_Random.
+    y[0] = -(rand()%16);
     for (i=1;i<width;i++)
     {
-        r = (M_Random()%3) - 1;
+        // [JN] Use real random number generator instead of M_Random.
+        r = (rand()%3) - 1;
         y[i] = y[i-1] + r;
         if (y[i] > 0) y[i] = 0;
         else if (y[i] == -16) y[i] = -15;

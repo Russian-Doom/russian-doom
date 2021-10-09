@@ -23,7 +23,6 @@
 #include "i_swap.h" // [crispy] SHORT()
 #include "z_zone.h"
 #include "m_misc.h"
-#include "m_random.h"
 #include "w_wad.h"
 #include "deh_main.h"
 #include "deh_misc.h"

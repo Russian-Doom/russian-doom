@@ -22,10 +22,9 @@
 
 
 #include <stdio.h>
-
+#include <stdlib.h>
 #include "i_system.h"
 #include "z_zone.h"
-#include "m_misc.h"
 #include "w_wad.h"
 #include "doomdef.h"
 #include "g_game.h"
@@ -260,8 +259,6 @@ static int	st_facecount = 0;           // count until face changes
 static int	st_faceindex = 0;           // current face index, used by w_faces
 static int	keyboxes[3];                // holds key-type for each key box on bar
 static int	st_randomnumber;            // a random number per tick
-
-static unsigned int	st_clock;       // used for timing
 
 static boolean  st_firsttime;       // ST_Start() has just been called
 static boolean  st_statusbaron;     // whether left-side main status bar is active
@@ -1226,8 +1223,7 @@ void ST_updateWidgets (void)
 
 void ST_Ticker (void)
 {
-    st_clock++;
-    st_randomnumber = M_Random();
+    st_randomnumber = rand();
     ST_updateWidgets();
     st_oldhealth = plyr->health;
 }
@@ -1810,7 +1806,6 @@ void ST_initData (void)
     st_firsttime = true;
     plyr = &players[consoleplayer];
 
-    st_clock = 0;
     st_chatstate = StartChatState;
     st_gamestate = FirstPersonState;
 
