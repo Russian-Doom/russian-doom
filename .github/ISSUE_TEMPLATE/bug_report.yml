@@ -1,0 +1,108 @@
+name: Bug Report
+description: File a Bug report
+title: '[BUG] '
+labels: bug
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Please fill out forms as cleanly as possible.
+        #### Make sure that you have
+        * properly edited & filled in the title of this bug report
+  - type: input
+    id: version
+    attributes:
+      label: Russian Doom version
+      description: |
+        What version are you using? If you are building Russian doom from source, specify revision.
+        Make sure to update to latest [release](https://github.com/JNechaevsky/russian-doom/releases) version and test again before continuing.
+      placeholder: "Russian Doom 5.0 | Russian Heretic 5.0 | Russian Hexen 4.2"
+    validations:
+      required: true
+  - type: dropdown
+    id: OS
+    attributes:
+      label: What Operating System are you using?
+      multiple: false
+      options:
+        - Windows 11
+        - Windows 10
+        - Windows 8
+        - Windows 7
+        - Windows Vista
+        - Windows XP
+        - Linux x86
+        - Linux x86_64
+        - Linux ARM (Raspberry Pi)
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: other
+    attributes:
+      label: If Other OS, please describe
+      description: Other details
+      placeholder: "Debian, Ubuntu, Arch, etc."
+    validations:
+      required: false
+  - type: input
+    id: hardware
+    attributes:
+      label: Relevant hardware info
+      description: Hardware
+      placeholder: "CPU, GPU, device brand/model: e.g. Intel, AMD, Nvidia, etc"
+    validations:
+      required: false
+  - type: checkboxes
+    id: checked
+    attributes:
+      label: Have you checked that no other similar issue already exists?
+      description: Searched issues before creating report?
+      options:
+        - label: I have searched and not found similar issues.
+          required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: A clear and concise description of what the bug is.
+      description: Describe what happens, what software were you running? _Include screenshot if possible_
+      placeholder: "How & When does this occur?"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce the behaviour.
+      description: How can we reproduce this?
+      placeholder: "Explain how to reproduce"
+      value: |
+        Explain how to reproduce
+        1. 
+        2.
+        3.
+    validations:
+      required: false
+  - type: textarea
+    id: config_file
+    attributes:
+      label: Your configuration
+      description: |
+        Share the config file you've been using to run the program. (`russian-doom.ini`, `russian-heretic.ini`, `russian-hexen.ini`) 
+        Please avoid pasting the full config, _use attachments or links_ in a [Gist](https://gist.github.com/)
+#     render: ini # syntax highlighting [Dasperal] Config files are not actual ini files yet
+    validations:
+      required: false
+  - type: textarea
+    id: log
+    attributes:
+      label: Provide a Log
+      description: |
+        You can get a log by running Russian Doom from a command line like this `russian-doom [options] > Log.txt`.
+        Please avoid pasting the full log, _use attachments or links_ in a [Gist](https://gist.github.com/)
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: |
+        * Make sure you have properly filled in the title of this bug report
