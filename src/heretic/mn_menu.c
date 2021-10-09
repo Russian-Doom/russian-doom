@@ -1293,48 +1293,6 @@ static Menu_t SaveMenu = {
 
 // -----------------------------------------------------------------------------
 
-static char *GammaText[] = {
-    TXT_GAMMA_IMPROVED_OFF,
-    TXT_GAMMA_IMPROVED_05,
-    TXT_GAMMA_IMPROVED_1,
-    TXT_GAMMA_IMPROVED_15,
-    TXT_GAMMA_IMPROVED_2,
-    TXT_GAMMA_IMPROVED_25,
-    TXT_GAMMA_IMPROVED_3,
-    TXT_GAMMA_IMPROVED_35,
-    TXT_GAMMA_IMPROVED_4,
-    TXT_GAMMA_ORIGINAL_OFF,
-    TXT_GAMMA_ORIGINAL_05,
-    TXT_GAMMA_ORIGINAL_1,
-    TXT_GAMMA_ORIGINAL_15,
-    TXT_GAMMA_ORIGINAL_2,
-    TXT_GAMMA_ORIGINAL_25,
-    TXT_GAMMA_ORIGINAL_3,
-    TXT_GAMMA_ORIGINAL_35,
-    TXT_GAMMA_ORIGINAL_4
-};
-
-static char *GammaText_Rus[] = {
-    TXT_GAMMA_IMPROVED_OFF_RUS,
-    TXT_GAMMA_IMPROVED_05_RUS,
-    TXT_GAMMA_IMPROVED_1_RUS,
-    TXT_GAMMA_IMPROVED_15_RUS,
-    TXT_GAMMA_IMPROVED_2_RUS,
-    TXT_GAMMA_IMPROVED_25_RUS,
-    TXT_GAMMA_IMPROVED_3_RUS,
-    TXT_GAMMA_IMPROVED_35_RUS,
-    TXT_GAMMA_IMPROVED_4_RUS,
-    TXT_GAMMA_ORIGINAL_OFF_RUS,
-    TXT_GAMMA_ORIGINAL_05_RUS,
-    TXT_GAMMA_ORIGINAL_1_RUS,
-    TXT_GAMMA_ORIGINAL_15_RUS,
-    TXT_GAMMA_ORIGINAL_2_RUS,
-    TXT_GAMMA_ORIGINAL_25_RUS,
-    TXT_GAMMA_ORIGINAL_3_RUS,
-    TXT_GAMMA_ORIGINAL_35_RUS,
-    TXT_GAMMA_ORIGINAL_4_RUS
-};
-
 // [crispy] reload current level / go to next level
 // adapted from prboom-plus/src/e6y.c:369-449
 static int G_ReloadLevel(void)
@@ -4892,6 +4850,8 @@ boolean MN_Responder(event_t * event)
         }
         else if (BK_isKeyDown(event, bk_gamma))           // F11 (gamma correction)
         {
+            static char *gamma_level;
+
             usegamma++;
             if (usegamma > 17)
             {
@@ -4899,10 +4859,12 @@ boolean MN_Responder(event_t * event)
             }
             I_SetPalette((byte *) W_CacheLumpName("PLAYPAL", PU_CACHE));
 
-            P_SetMessage(&players[consoleplayer], english_language ?
-                                                  GammaText[usegamma] :
-                                                  GammaText_Rus[usegamma],
-                                                  msg_system, false);
+            gamma_level = M_StringJoin(txt_gammamsg, english_language ?
+                                       gammalevel_names[usegamma] :
+                                       gammalevel_names_rus[usegamma], NULL);
+
+            P_SetMessage(&players[consoleplayer], gamma_level, msg_system, false);
+
             return true;
         }
         // [crispy] those two can be considered as shortcuts for the ENGAGE cheat

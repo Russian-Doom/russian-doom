@@ -238,24 +238,7 @@ char* amstr_markedspot;
 char* amstr_markscleared;
 
 // MN_menu.c
-char* txt_gamma_improved_off;
-char* txt_gamma_improved_05;
-char* txt_gamma_improved_1;
-char* txt_gamma_improved_15;
-char* txt_gamma_improved_2;
-char* txt_gamma_improved_25;
-char* txt_gamma_improved_3;
-char* txt_gamma_improved_35;
-char* txt_gamma_improved_4;
-char* txt_gamma_original_off;
-char* txt_gamma_original_05;
-char* txt_gamma_original_1;
-char* txt_gamma_original_15;
-char* txt_gamma_original_2;
-char* txt_gamma_original_25;
-char* txt_gamma_original_3;
-char* txt_gamma_original_35;
-char* txt_gamma_original_4;
+char* txt_gammamsg;
 char* txt_detail_high;
 char* txt_detail_low;
 char* txt_messages_on;
@@ -388,24 +371,7 @@ void RD_DefineLanguageStrings (void)
         amstr_markscleared     = AMSTR_MARKSCLEARED;
 
         // MN_menu.c
-        txt_gamma_improved_off = TXT_GAMMA_IMPROVED_OFF;
-        txt_gamma_improved_05  = TXT_GAMMA_IMPROVED_05;
-        txt_gamma_improved_1   = TXT_GAMMA_IMPROVED_1;
-        txt_gamma_improved_15  = TXT_GAMMA_IMPROVED_15;
-        txt_gamma_improved_2   = TXT_GAMMA_IMPROVED_2;
-        txt_gamma_improved_25  = TXT_GAMMA_IMPROVED_25;
-        txt_gamma_improved_3   = TXT_GAMMA_IMPROVED_3;
-        txt_gamma_improved_35  = TXT_GAMMA_IMPROVED_35;
-        txt_gamma_improved_4   = TXT_GAMMA_IMPROVED_4;
-        txt_gamma_original_off = TXT_GAMMA_ORIGINAL_OFF;
-        txt_gamma_original_05  = TXT_GAMMA_ORIGINAL_05;
-        txt_gamma_original_1   = TXT_GAMMA_ORIGINAL_1;
-        txt_gamma_original_15  = TXT_GAMMA_ORIGINAL_15;
-        txt_gamma_original_2   = TXT_GAMMA_ORIGINAL_2;
-        txt_gamma_original_25  = TXT_GAMMA_ORIGINAL_25;
-        txt_gamma_original_3   = TXT_GAMMA_ORIGINAL_3;
-        txt_gamma_original_35  = TXT_GAMMA_ORIGINAL_35;
-        txt_gamma_original_4   = TXT_GAMMA_ORIGINAL_4;
+        txt_gammamsg           = TXT_GAMMA_LEVEL;
         txt_detail_high        = TXT_GAMMA_DETAIL_HIGH;
         txt_detail_low         = TXT_GAMMA_DETAIL_LOW;
         txt_messages_on        = TXT_MESSAGES_ON;
@@ -532,24 +498,7 @@ void RD_DefineLanguageStrings (void)
         amstr_markscleared     = AMSTR_MARKSCLEARED_RUS;
 
         // MN_menu.c
-        txt_gamma_improved_off = TXT_GAMMA_IMPROVED_OFF_RUS;
-        txt_gamma_improved_05  = TXT_GAMMA_IMPROVED_05_RUS;
-        txt_gamma_improved_1   = TXT_GAMMA_IMPROVED_1_RUS;
-        txt_gamma_improved_15  = TXT_GAMMA_IMPROVED_15_RUS;
-        txt_gamma_improved_2   = TXT_GAMMA_IMPROVED_2_RUS;
-        txt_gamma_improved_25  = TXT_GAMMA_IMPROVED_25_RUS;
-        txt_gamma_improved_3   = TXT_GAMMA_IMPROVED_3_RUS;
-        txt_gamma_improved_35  = TXT_GAMMA_IMPROVED_35_RUS;
-        txt_gamma_improved_4   = TXT_GAMMA_IMPROVED_4_RUS;
-        txt_gamma_original_off = TXT_GAMMA_ORIGINAL_OFF_RUS;
-        txt_gamma_original_05  = TXT_GAMMA_ORIGINAL_05_RUS;
-        txt_gamma_original_1   = TXT_GAMMA_ORIGINAL_1_RUS;
-        txt_gamma_original_15  = TXT_GAMMA_ORIGINAL_15_RUS;
-        txt_gamma_original_2   = TXT_GAMMA_ORIGINAL_2_RUS;
-        txt_gamma_original_25  = TXT_GAMMA_ORIGINAL_25_RUS;
-        txt_gamma_original_3   = TXT_GAMMA_ORIGINAL_3_RUS;
-        txt_gamma_original_35  = TXT_GAMMA_ORIGINAL_35_RUS;
-        txt_gamma_original_4   = TXT_GAMMA_ORIGINAL_4_RUS;
+        txt_gammamsg           = TXT_GAMMA_LEVEL_RUS;
         txt_detail_high        = TXT_GAMMA_DETAIL_HIGH_RUS;
         txt_detail_low         = TXT_GAMMA_DETAIL_LOW_RUS;
         txt_messages_on        = TXT_MESSAGES_ON_RUS;

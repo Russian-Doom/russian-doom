@@ -136,24 +136,7 @@ extern char* amstr_markedspot;
 extern char* amstr_markscleared;
 
 // MN_menu.c
-extern char* txt_gamma_improved_off;
-extern char* txt_gamma_improved_05;
-extern char* txt_gamma_improved_1;
-extern char* txt_gamma_improved_15;
-extern char* txt_gamma_improved_2;
-extern char* txt_gamma_improved_25;
-extern char* txt_gamma_improved_3;
-extern char* txt_gamma_improved_35;
-extern char* txt_gamma_improved_4;
-extern char* txt_gamma_original_off;
-extern char* txt_gamma_original_05;
-extern char* txt_gamma_original_1;
-extern char* txt_gamma_original_15;
-extern char* txt_gamma_original_2;
-extern char* txt_gamma_original_25;
-extern char* txt_gamma_original_3;
-extern char* txt_gamma_original_35;
-extern char* txt_gamma_original_4;
+extern char* txt_gammamsg;
 extern char* txt_detail_high;
 extern char* txt_detail_low;
 extern char* txt_messages_on;
@@ -283,24 +266,7 @@ extern char* txt_mlook_off;
 #define AMSTR_MARKSCLEARED      "All Marks Cleared"
 
 // MN_menu.c
-#define TXT_GAMMA_IMPROVED_OFF  "IMPROVED GAMMA CORRECTION OFF"
-#define TXT_GAMMA_IMPROVED_05   "IMPROVED GAMMA CORRECTION LEVEL 0.5"
-#define TXT_GAMMA_IMPROVED_1    "IMPROVED GAMMA CORRECTION LEVEL 1.0"
-#define TXT_GAMMA_IMPROVED_15   "IMPROVED GAMMA CORRECTION LEVEL 1.5"
-#define TXT_GAMMA_IMPROVED_2    "IMPROVED GAMMA CORRECTION LEVEL 2.0"
-#define TXT_GAMMA_IMPROVED_25   "IMPROVED GAMMA CORRECTION LEVEL 2.5"
-#define TXT_GAMMA_IMPROVED_3    "IMPROVED GAMMA CORRECTION LEVEL 3.0"
-#define TXT_GAMMA_IMPROVED_35   "IMPROVED GAMMA CORRECTION LEVEL 3.5"
-#define TXT_GAMMA_IMPROVED_4    "IMPROVED GAMMA CORRECTION LEVEL 4.0"
-#define TXT_GAMMA_ORIGINAL_OFF  "STANDARD GAMMA CORRECTION OFF"
-#define TXT_GAMMA_ORIGINAL_05   "STANDARD GAMMA CORRECTION LEVEL 0.5"
-#define TXT_GAMMA_ORIGINAL_1    "STANDARD GAMMA CORRECTION LEVEL 1.0"
-#define TXT_GAMMA_ORIGINAL_15   "STANDARD GAMMA CORRECTION LEVEL 1.5"
-#define TXT_GAMMA_ORIGINAL_2    "STANDARD GAMMA CORRECTION LEVEL 2.0"
-#define TXT_GAMMA_ORIGINAL_25   "STANDARD GAMMA CORRECTION LEVEL 2.5"
-#define TXT_GAMMA_ORIGINAL_3    "STANDARD GAMMA CORRECTION LEVEL 3.0"
-#define TXT_GAMMA_ORIGINAL_35   "STANDARD GAMMA CORRECTION LEVEL 3.5"
-#define TXT_GAMMA_ORIGINAL_4    "STANDARD GAMMA CORRECTION LEVEL 4.0"
+#define TXT_GAMMA_LEVEL         "GAMMA CORRECTION LEVEL "
 #define TXT_GAMMA_DETAIL_HIGH   "HIGH DETAIL"
 #define TXT_GAMMA_DETAIL_LOW    "LOW DETAIL"
 #define TXT_MESSAGES_ON         "MESSAGES ON"
@@ -529,24 +495,7 @@ extern char* txt_mlook_off;
 #define AMSTR_MARKSCLEARED_RUS  "JNVTNRB JXBOTYS"               // ОТМЕТКИ ОЧИЩЕНЫ
 
 // MN_menu.c
-#define TXT_GAMMA_IMPROVED_OFF_RUS  "EKEXITYYFZ UFVVF-RJHHTRWBZ JNRK.XTYF"     // Улучшенная гамма-коррекция отключена
-#define TXT_GAMMA_IMPROVED_05_RUS   "EHJDTYM EKEXITYYJQ UFVVF-RJHHTRWBB 0>5"   // Уровень улучшенной гамма-коррекции: 0.5
-#define TXT_GAMMA_IMPROVED_1_RUS    "EHJDTYM EKEXITYYJQ UFVVF-RJHHTRWBB 1>0"   // Уровень улучшенной гамма-коррекции: 1.0
-#define TXT_GAMMA_IMPROVED_15_RUS   "EHJDTYM EKEXITYYJQ UFVVF-RJHHTRWBB 1>5"   // Уровень улучшенной гамма-коррекции: 1.5
-#define TXT_GAMMA_IMPROVED_2_RUS    "EHJDTYM EKEXITYYJQ UFVVF-RJHHTRWBB 2>0"   // Уровень улучшенной гамма-коррекции: 2.0
-#define TXT_GAMMA_IMPROVED_25_RUS   "EHJDTYM EKEXITYYJQ UFVVF-RJHHTRWBB 2>5"   // Уровень улучшенной гамма-коррекции: 2.5
-#define TXT_GAMMA_IMPROVED_3_RUS    "EHJDTYM EKEXITYYJQ UFVVF-RJHHTRWBB 3>0"   // Уровень улучшенной гамма-коррекции: 3.0
-#define TXT_GAMMA_IMPROVED_35_RUS   "EHJDTYM EKEXITYYJQ UFVVF-RJHHTRWBB 3>5"   // Уровень улучшенной гамма-коррекции: 3.5
-#define TXT_GAMMA_IMPROVED_4_RUS    "EHJDTYM EKEXITYYJQ UFVVF-RJHHTRWBB 4>0"   // Уровень улучшенной гамма-коррекции: 4.0
-#define TXT_GAMMA_ORIGINAL_OFF_RUS  "CNFYLFHNYFZ UFVVF-RJHHTRWBZ JNRK.XTYF"    // Стандартная гамма-коррекция отключена
-#define TXT_GAMMA_ORIGINAL_05_RUS   "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 0>5"  // Уровень стандартной гамма-коррекции: 0.5
-#define TXT_GAMMA_ORIGINAL_1_RUS    "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 1>0"  // Уровень стандартной гамма-коррекции: 1.0
-#define TXT_GAMMA_ORIGINAL_15_RUS   "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 1>5"  // Уровень стандартной гамма-коррекции: 1.5
-#define TXT_GAMMA_ORIGINAL_2_RUS    "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 2>0"  // Уровень стандартной гамма-коррекции: 2.0
-#define TXT_GAMMA_ORIGINAL_25_RUS   "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 2>5"  // Уровень стандартной гамма-коррекции: 2.5
-#define TXT_GAMMA_ORIGINAL_3_RUS    "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 3>0"  // Уровень стандартной гамма-коррекции: 3.0
-#define TXT_GAMMA_ORIGINAL_35_RUS   "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 3>5"  // Уровень стандартной гамма-коррекции: 3.5
-#define TXT_GAMMA_ORIGINAL_4_RUS    "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 4>0"  // Уровень стандартной гамма-коррекции: 4.0
+#define TXT_GAMMA_LEVEL_RUS         "EHJDTYM UFVVF-RJHHTRWBB "  // Уровень гамма-коррекции
 #define TXT_GAMMA_DETAIL_HIGH_RUS   "DSCJRFZ LTNFKBPFWBZ"   // ВЫСОКАЯ ДЕТАЛИЗАЦИЯ
 #define TXT_GAMMA_DETAIL_LOW_RUS    "YBPRFZ LTNFKBPFWBZ"    // НИЗКАЯ ДЕТАЛИЗАЦИЯ
 #define TXT_MESSAGES_ON_RUS         "CJJ,OTYBZ DRK.XTYS"    // СООБЩЕНИЯ ВКЛЮЧЕНЫ
