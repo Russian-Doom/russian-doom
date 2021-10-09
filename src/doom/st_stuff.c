@@ -1428,7 +1428,7 @@ void ST_Ticker (void)
 {
     // [JN] Use real random number generator
     // instead of M_Random LUT for faces stide.
-    st_randomnumber = vanillaparm ? M_Random() : rand();
+    st_randomnumber = rand();
     ST_updateWidgets();
     st_oldhealth = plyr->health;
 }

@@ -22,7 +22,6 @@
 #include "z_zone.h"
 #include "i_video.h"
 #include "v_video.h"
-#include "m_random.h"
 #include "f_wipe.h"
 #include "deh_str.h"
 #include "d_mode.h"     // [JN] Jaguar Doom: gamemission
@@ -84,13 +83,13 @@ static int wipe_initMelt (int width, int height, int ticks)
     // (y<0 => not ready to scroll yet)
     y = (int *) Z_Malloc(width*sizeof(int), PU_STATIC, 0);
     // [JN] Use real random number generator instead of M_Random.
-    y[0] = -(vanillaparm ? M_Random()%16 : rand()%16);
+    y[0] = -(rand()%16);
     for (i=1;i<width;i++)
     {
         static int r;
 
         // [JN] Use real random number generator instead of M_Random.
-        r = (vanillaparm ? M_Random()%3 : rand()%3) - 1;
+        r = (rand()%3) - 1;
         y[i] = y[i-1] + r;
         if (y[i] > 0) y[i] = 0;
         else if (y[i] == -16) y[i] = -15;
