@@ -2725,7 +2725,7 @@ void D_DoomMain (void)
                    "турбо ускорение: %i%%\n",
                    scale);
         forwardmove[0] = forwardmove[0]*scale/100;
-        forwardmove[1] = forwardmove[1]*scale/100;
+        forwardmove[1] = MIN(forwardmove[1]*scale/100, 127);
         sidemove[0] = sidemove[0]*scale/100;
         sidemove[1] = sidemove[1]*scale/100;
     }
