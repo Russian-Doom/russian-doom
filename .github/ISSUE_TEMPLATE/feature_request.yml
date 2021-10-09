@@ -1,0 +1,47 @@
+name: Feature Request
+description: Suggest an idea (a new feature or other improvement) for this project
+title: '[Feature] '
+labels: enhancement
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Please fill out forms as cleanly as possible.
+        #### Make sure that you have
+        * properly edited & filled in the title of this feature request
+  - type: textarea
+    id: related
+    attributes:
+      label: Is your feature request related to a problem? Please describe.
+      description: Related
+      placeholder: "Ex. I'm always frustrated when"
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Describe the solution you'd like
+      placeholder: "Ex. How can we make it better?"
+    validations:
+      required: false
+  - type: textarea
+    id: alternative
+    attributes:
+      label: Describe alternatives you've considered
+      description: A clear and concise description of any alternative solutions or features you've considered.
+      placeholder: "Similar idea or software"
+    validations:
+      required: false
+  - type: textarea
+    id: additional
+    attributes:
+      label: Add any other context or screenshots about the feature request here.
+      description: Screenshots or Links?
+      placeholder: "Ex. Screenshot or Link"
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: |
+        * Make sure you have properly filled in the title of this feature request
