@@ -163,12 +163,12 @@ void M_RD_Change_LocalTime(Direction_t direction);
 
 // Colors
 void M_RD_Draw_Colors(void);
-void M_RD_Change_Brightness();
-void M_RD_Change_Saturation();
+void M_RD_Change_Brightness(Direction_t direction);
+void M_RD_Change_Saturation(Direction_t direction);
 void M_RD_Change_ShowPalette();
-void M_RD_Change_RED_Color();
-void M_RD_Change_GREEN_Color();
-void M_RD_Change_BLUE_Color();
+void M_RD_Change_RED_Color(Direction_t direction);
+void M_RD_Change_GREEN_Color(Direction_t direction);
+void M_RD_Change_BLUE_Color(Direction_t direction);
 
 // Messages
 void M_RD_Draw_MessagesSettings(void);
@@ -2249,7 +2249,7 @@ void M_RD_Draw_Colors(void)
 
     if (show_palette)
     {
-        V_DrawPatchUnscaled(320 + wide_delta*2, 200, W_CacheLumpName(DEH_String("M_COLORS"), PU_CACHE), NULL);
+        V_DrawPatchUnscaled(wide_delta*2, 200, W_CacheLumpName(DEH_String("M_COLORS"), PU_CACHE), NULL);
     }
 }
 
@@ -5100,7 +5100,7 @@ void M_RD_BackToDefaults_Recommended(int choice)
 
     // Color options
     brightness       = 1.0f;
-    usegamma         = 9;
+    usegamma         = 4;
     color_saturation = 1.0f;
     show_palette     = 1;
     r_color_factor   = 1.0f;
