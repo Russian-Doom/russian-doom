@@ -125,7 +125,7 @@ To install Russian Doom use the following command:
 cmake --install build
 ```
 
-If you are using Autotools, you have to install Russian Doom manually. Copy built executables from `build/src/`
+If you are using Autotools, you have to install Russian Doom manually. Copy built executables from `src/`
 to `/usr/local/bin/` directory. Copy content of `src/base/` folder to `/usr/local/share/russian-doom/` directory.
 
 ### Building a DOS version of Russian Doom
