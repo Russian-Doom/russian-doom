@@ -17,19 +17,17 @@
 #
 
 import sys
-import os
-import re
 
 try:
-        import Image
+    import Image
 except ImportError:
-        try:
-                from PIL import Image
-        except ImportError:
-                print("WARNING: Could not update %s.  "
-                      "Please install the Python Imaging library or Pillow."
-                      % sys.argv[2])
-                sys.exit(0)
+    try:
+        from PIL import Image
+    except ImportError:
+        print("WARNING: Could not update %s.  "
+              "Please install the Python Imaging library or Pillow."
+              % sys.argv[2])
+        sys.exit(0)
 
 
 def convert_image(filename, output_filename):
@@ -40,15 +38,11 @@ def convert_image(filename, output_filename):
 
     size = im.size
 
-    struct_name = os.path.basename(output_filename)
-    struct_name = re.sub(re.compile("\\..*$"), "", struct_name)
-    struct_name = re.sub(re.compile("\W"), "_", struct_name)
-
-    outfile.write("int %s_w = %i;\n" % (struct_name, size[0]))
-    outfile.write("int %s_h = %i;\n" % (struct_name, size[1]))
+    outfile.write("int icon_w = %i;\n" % (size[0]))
+    outfile.write("int icon_h = %i;\n" % (size[1]))
 
     outfile.write("\n")
-    outfile.write("const unsigned int %s_data[] = {\n" % (struct_name))
+    outfile.write("const unsigned int icon_data[] = {\n")
 
     elements_on_line = 0
 
@@ -68,5 +62,5 @@ def convert_image(filename, output_filename):
     outfile.write("\n")
     outfile.write("};\n")
 
-convert_image(sys.argv[1], sys.argv[2])
 
+convert_image(sys.argv[1], sys.argv[2])
