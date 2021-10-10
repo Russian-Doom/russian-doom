@@ -4,6 +4,6 @@ AUX_DIST_GEN =                          \
 
 MAINTAINERCLEANFILES =  $(AUX_DIST_GEN)
 
-SUBDIRS=textscreen midiproc opl pcsound data src
+SUBDIRS=textscreen midiproc opl pcsound src
 
 DIST_SUBDIRS=$(SUBDIRS)

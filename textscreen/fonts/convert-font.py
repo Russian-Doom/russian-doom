@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 #
 # Copyright(C) 2016 Simon Howard
 #
@@ -17,8 +17,6 @@
 #
 
 import sys
-import os
-import re
 
 GRID_COLUMNS = 16
 GRID_ROWS = 16
@@ -67,6 +65,7 @@ def generate_font_data(filename):
 
     return (char_w, char_h), font_data
 
+
 def convert_image(font_prefix, filename, output_filename):
     """Convert the given image to a text output file.
 
@@ -100,5 +99,5 @@ def convert_image(font_prefix, filename, output_filename):
                           dimensions[0], dimensions[1]))
         outfile.write("};\n")
 
-convert_image(sys.argv[1], sys.argv[2], sys.argv[3])
 
+convert_image(sys.argv[1], sys.argv[2], sys.argv[3])

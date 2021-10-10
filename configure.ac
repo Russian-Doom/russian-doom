@@ -19,7 +19,6 @@ orig_CFLAGS="$CFLAGS"
 
 AC_PROG_CC
 AC_PROG_RANLIB
-AC_CHECK_PROG(HAVE_PYTHON, python, true, false)
 
 OPT_LEVEL=2
 
@@ -100,7 +99,6 @@ esac
 AC_CHECK_TOOL(STRIP, strip, )
 
 AM_CONDITIONAL(HAVE_WINDRES, test "$WINDRES" != "")
-AM_CONDITIONAL(HAVE_PYTHON, $HAVE_PYTHON)
 
 dnl Automake v1.8.0 is required, please upgrade!
 
@@ -153,7 +151,6 @@ Makefile
 midiproc/Makefile
 opl/Makefile
 pcsound/Makefile
-data/Makefile
 src/Makefile
 src/doom/Makefile
 src/heretic/Makefile
@@ -170,6 +167,5 @@ src/setup/strife-resource.rc
 src/setup/Makefile
 src/setup/setup-manifest.xml
 textscreen/Makefile
-textscreen/fonts/Makefile
 ])
 

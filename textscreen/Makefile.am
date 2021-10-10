@@ -3,8 +3,6 @@ AM_CFLAGS = -I$(top_srcdir)/src
 
 CTAGS_ARGS=-I TXT_UNCAST_ARG+
 
-SUBDIRS = fonts
-
 noinst_LIBRARIES=libtextscreen.a
 
 libtextscreen_a_SOURCES =                                 \
