@@ -58,6 +58,14 @@ To install Russian Doom to `<install directory>` use the following command:
 ```
 cmake --install build --prefix <install directory>
 ```
+If you want to install only one or several components, you can use the following commands.
+The `common` component must be installed to the same `<install directory>` as other components.
+```
+cmake --install build --prefix <install directory> --component common
+cmake --install build --prefix <install directory> --component doom
+cmake --install build --prefix <install directory> --component heretic
+cmake --install build --prefix <install directory> --component hexen
+```
 If you are using Autotools, you have to install Russian Doom manually. Copy built executables and `base` folder from `src\`
 directory to `<install directory>` along with DLL libraries from `win_libs\<arch>\`.
 
@@ -124,7 +132,14 @@ To install Russian Doom use the following command:
 ```
 cmake --install build
 ```
-
+If you want to install only one or several components, you can use the following commands.
+The `common` component should be installed in order for GUS emulation to work.
+```
+cmake --install build --component common
+cmake --install build --component doom
+cmake --install build --component heretic
+cmake --install build --component hexen
+```
 If you are using Autotools, you have to install Russian Doom manually. Copy built executables from `src/`
 to `/usr/local/bin/` directory. Copy content of `src/base/` folder to `/usr/local/share/russian-doom/` directory.
 
