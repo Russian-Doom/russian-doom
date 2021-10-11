@@ -18,9 +18,8 @@
 //	Game completion, final screen animation.
 //
 
+
 #include <ctype.h>
-
-
 #include "i_system.h"
 #include "z_zone.h"
 #include "v_video.h"
@@ -29,101 +28,100 @@
 #include "sounds.h"
 #include "doomstat.h"
 #include "r_state.h"
+#include "hu_stuff.h"
 #include "rd_lang.h"
 #include "jn.h"
 
-// ?
-//#include "doomstat.h"
-//#include "r_local.h"
-//#include "f_finale.h"
-
-// Stage of animation:
-//  0 = text, 1 = art screen, 2 = character cast
-int finalestage;
-
-int finalecount;
 
 #define TEXTSPEED   3
 #define TEXTWAIT    250
 
+
+// Stage of animation:
+//  0 = text, 1 = art screen, 2 = character cast
+int finalestage, finalecount;
+
+// [JN] Was final wipe done?
+boolean finale_wipe_done = false;
+
 // [JN] English texts
-char*   e1text = E1TEXT;
-char*   e2text = E2TEXT;
-char*   e3text = E3TEXT;
-char*   e4text = E4TEXT;
-char*   e5text = E5TEXT; // [crispy] Sigil
+static char *e1text = E1TEXT;
+static char *e2text = E2TEXT;
+static char *e3text = E3TEXT;
+static char *e4text = E4TEXT;
+static char *e5text = E5TEXT; // [crispy] Sigil
 
-char*   c1text = C1TEXT;
-char*   c2text = C2TEXT;
-char*   c3text = C3TEXT;
-char*   c4text = C4TEXT;
-char*   c5text = C5TEXT;
-char*   c6text = C6TEXT;
+static char *c1text = C1TEXT;
+static char *c2text = C2TEXT;
+static char *c3text = C3TEXT;
+static char *c4text = C4TEXT;
+static char *c5text = C5TEXT;
+static char *c6text = C6TEXT;
 
-char*   p1text = P1TEXT;
-char*   p2text = P2TEXT;
-char*   p3text = P3TEXT;
-char*   p4text = P4TEXT;
-char*   p5text = P5TEXT;
-char*   p6text = P6TEXT;
+static char *p1text = P1TEXT;
+static char *p2text = P2TEXT;
+static char *p3text = P3TEXT;
+static char *p4text = P4TEXT;
+static char *p5text = P5TEXT;
+static char *p6text = P6TEXT;
 
-char*   t1text = T1TEXT;
-char*   t2text = T2TEXT;
-char*   t3text = T3TEXT;
-char*   t4text = T4TEXT;
-char*   t5text = T5TEXT;
-char*   t6text = T6TEXT;
+static char *t1text = T1TEXT;
+static char *t2text = T2TEXT;
+static char *t3text = T3TEXT;
+static char *t4text = T4TEXT;
+static char *t5text = T5TEXT;
+static char *t6text = T6TEXT;
 
 // [JN] Russian texts
-char*   e1text_rus = E1TEXT_RUS;
-char*   e2text_rus = E2TEXT_RUS;
-char*   e3text_rus = E3TEXT_RUS;
-char*   e4text_rus = E4TEXT_RUS;
-char*   e5text_rus = E5TEXT_RUS; // [JN] Sigil
+static char *e1text_rus = E1TEXT_RUS;
+static char *e2text_rus = E2TEXT_RUS;
+static char *e3text_rus = E3TEXT_RUS;
+static char *e4text_rus = E4TEXT_RUS;
+static char *e5text_rus = E5TEXT_RUS; // [JN] Sigil
 
-char*   c1text_rus = C1TEXT_RUS;
-char*   c2text_rus = C2TEXT_RUS;
-char*   c3text_rus = C3TEXT_RUS;
-char*   c4text_rus = C4TEXT_RUS;
-char*   c5text_rus = C5TEXT_RUS;
-char*   c6text_rus = C6TEXT_RUS;
+static char *c1text_rus = C1TEXT_RUS;
+static char *c2text_rus = C2TEXT_RUS;
+static char *c3text_rus = C3TEXT_RUS;
+static char *c4text_rus = C4TEXT_RUS;
+static char *c5text_rus = C5TEXT_RUS;
+static char *c6text_rus = C6TEXT_RUS;
 
-char*   p1text_rus = P1TEXT_RUS;
-char*   p2text_rus = P2TEXT_RUS;
-char*   p3text_rus = P3TEXT_RUS;
-char*   p4text_rus = P4TEXT_RUS;
-char*   p5text_rus = P5TEXT_RUS;
-char*   p6text_rus = P6TEXT_RUS;
+static char *p1text_rus = P1TEXT_RUS;
+static char *p2text_rus = P2TEXT_RUS;
+static char *p3text_rus = P3TEXT_RUS;
+static char *p4text_rus = P4TEXT_RUS;
+static char *p5text_rus = P5TEXT_RUS;
+static char *p6text_rus = P6TEXT_RUS;
 
-char*   t1text_rus = T1TEXT_RUS;
-char*   t2text_rus = T2TEXT_RUS;
-char*   t3text_rus = T3TEXT_RUS;
-char*   t4text_rus = T4TEXT_RUS;
-char*   t5text_rus = T5TEXT_RUS;
-char*   t6text_rus = T6TEXT_RUS;
+static char *t1text_rus = T1TEXT_RUS;
+static char *t2text_rus = T2TEXT_RUS;
+static char *t3text_rus = T3TEXT_RUS;
+static char *t4text_rus = T4TEXT_RUS;
+static char *t5text_rus = T5TEXT_RUS;
+static char *t6text_rus = T6TEXT_RUS;
 
-char*   finaletext;
-char*   finaleflat;
+static char *finaletext;
+static char *finaleflat;
 
 void    F_StartCast (void);
-void    F_CastTicker (void);
-boolean F_CastResponder (event_t *ev);
 void    F_CastDrawer (void);
+static void    F_CastTicker (void);
+static boolean F_CastResponder (event_t *ev);
 
 
-//
+// -----------------------------------------------------------------------------
 // F_StartFinale
-//
+// -----------------------------------------------------------------------------
 void F_StartFinale (void)
 {
-    int     finalemusic;
+    int finalemusic;
 
     gameaction = ga_nothing;
     gamestate = GS_FINALE;
     viewactive = false;
     automapactive = false;
 
-    if(commercial)
+    if (commercial)
     {
         if (plutonia)
         {
@@ -288,93 +286,203 @@ void F_StartFinale (void)
     finalecount = 0;
 }
 
+// -----------------------------------------------------------------------------
+// F_Responder
+// -----------------------------------------------------------------------------
 
 boolean F_Responder (event_t *event)
 {
     if (finalestage == 2)
-    return F_CastResponder (event);
+    {
+        return F_CastResponder (event);
+    }
 
     return false;
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // F_Ticker
-//
+// -----------------------------------------------------------------------------
+
 void F_Ticker (void)
 {
-    int	    i;
+    int i;
 
-    // [JN] Make PAUSE working properly on text screen
-    if (paused)
+    //
+    // [JN] If we are in single player mode, allow double skipping for 
+    // intermission text. First skip printing all intermission text,
+    // second is advancing to the next state.
+    //
+    if (singleplayer)
     {
-        return;
-    }
-
-    // check for skipping
-    if ((commercial) && (finalecount > 50))
-    {
-        // go on to the next level
-        for (i=0 ; i<MAXPLAYERS ; i++)
+        // [JN] Make PAUSE working properly on text screen.
+        if (paused)
         {
-            // [JN] Pressing PAUSE should not skip text screen
-            if (players[i].cmd.buttons && !(players->cmd.buttons & BTS_PAUSE))
+            return;
+        }
+
+        // [JN] Check for skipping. Allow double-press skiping, 
+        // but don't skip immediately.
+        if (finalecount > 10)
+        {
+            // go on to the next level
+            for (i = 0 ; i < MAXPLAYERS ; i++)
             {
-                break;
+                // [JN] Don't allow to skip bunny screen,
+                // and don't allow to skip by pressing "pause" button.
+                if ((gameepisode == 3 && finalestage == 1)
+                || players[i].cmd.buttons == (BT_SPECIAL | BTS_PAUSE))
+                continue;
+
+                // [JN] Double-skip by pressing "attack" button.
+                if (players[i].cmd.buttons & BT_ATTACK && !menuactive)
+                {
+                    if (!players[i].attackdown)
+                    {
+                        if (finalecount >= 5003)
+                        break;
+    
+                        finalecount += 5000;
+                        players[i].attackdown = true;
+                    }
+                    players[i].attackdown = true;
+                }
+                else
+                {
+                    players[i].attackdown = false;
+                }
+    
+                // [JN] Double-skip by pressing "use" button.
+                if (players[i].cmd.buttons & BT_USE && !menuactive)
+                {
+                    if (!players[i].usedown)
+                    {
+                        if (finalecount >= 5003)
+                        break;
+    
+                        finalecount += 5000;
+                        players[i].usedown = true;
+                    }
+                    players[i].usedown = true;
+    
+                }
+                else
+                {
+                    players[i].usedown = false;
+                }
+            }
+    
+            if (i < MAXPLAYERS)
+            {
+                if (!commercial)
+                {
+                    
+                    finalestage = 1;
+    
+                    // [JN] Play wipe animation only once.
+                    if (!finale_wipe_done)
+                    {
+                        wipegamestate = -1; // force a wipe
+                        finale_wipe_done = true;
+                    }
+            
+                    if (gameepisode == 3)
+                    {
+                        finalecount = 0;
+                        S_StartMusic (mus_bunny);
+                    }
+                
+                    return;
+                }
+                else if (gamemap == 30)
+                {
+                    F_StartCast ();
+                }
+                else
+                {
+                    gameaction = ga_worlddone;
+                }
+            }
+        }
+    
+        // advance animation
+        finalecount++;
+    
+        if (finalestage == 2)
+        {
+            F_CastTicker ();
+            return;
+        }
+    }
+    //
+    // [JN] Standard Doom routine, safe for network game and demos.
+    //
+    else
+    {
+        // check for skipping
+        if (commercial && finalecount > 50)
+        {
+            // go on to the next level
+            for (i = 0 ; i < MAXPLAYERS ; i++)
+            {
+                if (players[i].cmd.buttons)
+                {
+                    break;
+                }
+            }
+
+            if (i < MAXPLAYERS)
+            {	
+                if (gamemap == 30)
+                {
+                    F_StartCast ();
+                }
+                else
+                {
+                    gameaction = ga_worlddone;
+                }
             }
         }
 
-        if (i < MAXPLAYERS)
-        {	
-            if (gamemap == 30)
-            F_StartCast ();
-            else
-            gameaction = ga_worlddone;
+        // advance animation
+        finalecount++;
+
+        if (finalestage == 2)
+        {
+            F_CastTicker ();
+            return;
         }
-    }
 
-    // advance animation
-    finalecount++;
+        if (commercial)
+        {
+            return;
+        }
+		
+        if (!finalestage && finalecount>strlen (finaletext)*TEXTSPEED + TEXTWAIT)
+        {
+            finalecount = 0;
+            finalestage = 1;
+            wipegamestate = -1;  // force a wipe
 
-    if (finalestage == 2)
-    {
-        F_CastTicker ();
-        return;
-    }
-
-    if (commercial)
-    return;
-
-    if (!finalestage && finalecount>strlen (finaletext)*TEXTSPEED + TEXTWAIT)
-    {
-        finalecount = 0;
-        finalestage = 1;
-        wipegamestate = -1;		// force a wipe
-
-        if (gameepisode == 3)
-        S_StartMusic (mus_bunny);
+            if (gameepisode == 3)
+            {
+                S_StartMusic (mus_bunny);
+            }
+        }
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // F_TextWrite
-//
-#include "hu_stuff.h"
-extern patch_t *hu_font[HU_FONTSIZE];
-extern patch_t *hu_font_small_rus[HU_FONTSIZE];
+// -----------------------------------------------------------------------------
 
-void F_TextWrite (void)
+static void F_TextWrite (void)
 {
-    byte*   src;
-    byte*   dest;
-
-    int     x,y,w;
-    int     count;
-    char*   ch;
-    int     c;
-    int     cx;
-    int     cy;
+    byte *src, *dest;
+    int   x, y;
+    signed int count;
+    int    c, cx, cy, w;
+    char  *ch;
 
     // erase the entire screen to a tiled background
     src = W_CacheLumpName ( finaleflat , PU_CACHE);
@@ -387,16 +495,6 @@ void F_TextWrite (void)
             memcpy (dest, src+((y&63)<<6), 64);
             dest += 64;
         }
-
-        // [JN] Watcom C - Unreachable code. No need to keep it, since
-        // screen width never changes. Thanks AXDOOMER for explanation.
-        /*
-        if (SCREENWIDTH&63)
-        {
-            memcpy (dest, src+((y&63)<<6), SCREENWIDTH&63);
-            dest += (SCREENWIDTH&63);
-        }
-        */
     }
 
     V_MarkRect (0, 0, SCREENWIDTH, SCREENHEIGHT);
@@ -405,10 +503,14 @@ void F_TextWrite (void)
     if ((commercial && !plutonia && !tnt) && !vanilla)
     {
         if (gamemap == 15)  // Leaving MAP15, entering MAP31
-        V_DrawPatch (0,0,0,W_CacheLumpName("WLFBACK1",PU_CACHE));
+        {
+            V_DrawPatch(0, 0, 0, W_CacheLumpName("WLFBACK1", PU_CACHE));
+        }
 
         if (gamemap == 31)  // Leaving MAP31, entering MAP32
-        V_DrawPatch (0,0,0,W_CacheLumpName("WLFBACK2",PU_CACHE));
+        {
+            V_DrawPatch(0, 0, 0, W_CacheLumpName("WLFBACK2", PU_CACHE));
+        }
     }
 
     // draw some of the text onto the screen
@@ -417,14 +519,20 @@ void F_TextWrite (void)
     ch = finaletext;
 
     count = (finalecount - 10)/TEXTSPEED;
+
     if (count < 0)
-    count = 0;
+    {
+        count = 0;
+    }
 
     for ( ; count ; count-- )
     {
         c = *ch++;
+
         if (!c)
-        break;
+        {
+            break;
+        }
 
         if (c == '\n')
         {
@@ -444,7 +552,9 @@ void F_TextWrite (void)
                    hu_font[c]->width : hu_font_small_rus[c]->width);
 
         if (cx+w > SCREENWIDTH)
-        break;
+        {
+            break;
+        }
 
         V_DrawShadowedPatch(cx, cy, 0, english_language ?
                                        hu_font[c] : hu_font_small_rus[c]);
@@ -461,11 +571,11 @@ void F_TextWrite (void)
 //
 typedef struct
 {
-    char        *name;
+    char       *name;
     mobjtype_t  type;
 } castinfo_t;
 
-castinfo_t	castorder[] = {
+static castinfo_t castorder[] = {
     {CC_ZOMBIE,  MT_POSSESSED},
     {CC_SHOTGUN, MT_SHOTGUY},
     {CC_HEAVY,   MT_CHAINGUY},
@@ -486,7 +596,7 @@ castinfo_t	castorder[] = {
     {NULL,0}
 };
 
-castinfo_t	castorder_rus[] = {
+static castinfo_t castorder_rus[] = {
     {CC_ZOMBIE_RUS,  MT_POSSESSED},
     {CC_SHOTGUN_RUS, MT_SHOTGUY},
     {CC_HEAVY_RUS,   MT_CHAINGUY},
@@ -507,18 +617,15 @@ castinfo_t	castorder_rus[] = {
     {NULL,0}
 };
 
-int         castnum;
-int         casttics;
-state_t*    caststate;
-boolean		castdeath;
-int         castframes;
-int         castonmelee;
-boolean     castattacking;
+static int      castnum, casttics;
+static int      castframes, castonmelee;
+static state_t *caststate;
+static boolean	castdeath, castattacking;
 
-
-//
+// -----------------------------------------------------------------------------
 // F_StartCast
-//
+// -----------------------------------------------------------------------------
+
 extern gamestate_t wipegamestate;
 
 void F_StartCast (void)
@@ -535,17 +642,19 @@ void F_StartCast (void)
     S_ChangeMusic(mus_evil, true);
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // F_CastTicker
-//
-void F_CastTicker (void)
+// -----------------------------------------------------------------------------
+
+static void F_CastTicker (void)
 {
-    int    st;
-    int    sfx;
+    int st;
+    int sfx;
 	
     if (--casttics > 0)
-    return; // not time to change state yet
+    {
+        return; // not time to change state yet
+    }
 
     if (caststate->tics == -1 || caststate->nextstate == S_NULL)
     {
@@ -554,28 +663,40 @@ void F_CastTicker (void)
         castdeath = false;
 
         if (castorder[castnum].name == NULL)
-        castnum = 0;
+        {
+            castnum = 0;
+        }
 
         if (mobjinfo[castorder[castnum].type].seesound)
-	    S_StartSound (NULL, mobjinfo[castorder[castnum].type].seesound);
+        {
+            S_StartSound (NULL, mobjinfo[castorder[castnum].type].seesound);
+        }
 
         caststate = &states[mobjinfo[castorder[castnum].type].seestate];
         castframes = 0;
     }
     else
     {
-        // just advance to next state in animation
-        if (caststate == &states[S_PLAY_ATK1])
-        goto stopattack;	// Oh, gross hack!
-
-        st = caststate->nextstate;
+        // [crispy] fix Doomguy in casting sequence
+        if (!castdeath && caststate == &states[S_PLAY_ATK1])
+        {
+            st = S_PLAY_ATK2;
+        }
+        else if (!castdeath && caststate == &states[S_PLAY_ATK2])
+        {
+            goto stopattack;	// Oh, gross hack!
+        }
+        else
+        {
+            st = caststate->nextstate;
+        }
         caststate = &states[st];
         castframes++;
 
         // sound hacks....
         switch (st)
         {
-            case S_PLAY_ATK1:   sfx = sfx_dshtgn; break;
+            case S_PLAY_ATK2:	sfx = sfx_dshtgn; break; // [crispy] fix Doomguy in casting sequence
             case S_POSS_ATK2:   sfx = sfx_pistol; break;
             case S_SPOS_ATK2:   sfx = sfx_shotgn; break;
             case S_VILE_ATK2:   sfx = sfx_vilatk; break;
@@ -588,7 +709,7 @@ void F_CastTicker (void)
             case S_CPOS_ATK2:
             case S_CPOS_ATK3:
             case S_CPOS_ATK4:   sfx = sfx_shotgn; break;
-            case S_TROO_ATK3:   sfx = sfx_claw; break;
+            case S_TROO_ATK3:   sfx = sfx_claw;   break;
             case S_SARG_ATK2:   sfx = sfx_sgtatk; break;
             case S_BOSS_ATK2:
             case S_BOS2_ATK2:
@@ -605,7 +726,9 @@ void F_CastTicker (void)
         }
 
         if (sfx)
-        S_StartSound (NULL, sfx);
+        {
+            S_StartSound (NULL, sfx);
+        }
     }
 
     if (castframes == 12)
@@ -616,6 +739,7 @@ void F_CastTicker (void)
         caststate=&states[mobjinfo[castorder[castnum].type].meleestate];
         else
         caststate=&states[mobjinfo[castorder[castnum].type].missilestate];
+
         castonmelee ^= 1;
 
         if (caststate == &states[S_NULL])
@@ -644,18 +768,21 @@ void F_CastTicker (void)
     casttics = 15;
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // F_CastResponder
-//
+// -----------------------------------------------------------------------------
 
-boolean F_CastResponder (event_t* ev)
+static boolean F_CastResponder (event_t *ev)
 {
     if (ev->type != ev_keydown)
-    return false;
+    {
+        return false;
+    }
 
     if (castdeath)
-	return true; // already in dying frames
+    {
+        return true;  // already in dying frames
+    }
 
     // go into death frame
     castdeath = true;
@@ -665,12 +792,18 @@ boolean F_CastResponder (event_t* ev)
     castattacking = false;
 
     if (mobjinfo[castorder[castnum].type].deathsound)
-    S_StartSound (NULL, mobjinfo[castorder[castnum].type].deathsound);
+    {
+        S_StartSound (NULL, mobjinfo[castorder[castnum].type].deathsound);
+    }
 
     return true;
 }
 
-void F_CastPrint (char* text)
+// -----------------------------------------------------------------------------
+// F_CastPrint
+// -----------------------------------------------------------------------------
+
+static void F_CastPrint (char *text)
 {
     char*   ch;
     int     c;
@@ -733,24 +866,24 @@ void F_CastPrint (char* text)
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // F_CastDrawer
-//
+// -----------------------------------------------------------------------------
+
 void V_DrawPatchFlipped (int x, int y, int scrn, patch_t *patch);
 
 void F_CastDrawer (void)
 {
-    spritedef_t*    sprdef;
-    spriteframe_t*  sprframe;
     int             lump;
     boolean         flip;
-    patch_t*        patch;
+    patch_t        *patch;
+    spritedef_t    *sprdef;
+    spriteframe_t  *sprframe;
 
     // erase the entire screen to a background
     // [JN] Plutonia using translated final screen.
-    V_DrawPatch (0,0,0, W_CacheLumpName (!english_language && plutonia ?
-                                         "BOSSBACP" : "BOSSBACK", PU_CACHE));
+    V_DrawPatch (0, 0, 0, W_CacheLumpName (!english_language && plutonia ?
+                                           "BOSSBACP" : "BOSSBACK", PU_CACHE));
 
     F_CastPrint (english_language ? 
                  castorder[castnum].name : castorder_rus[castnum].name);
@@ -763,23 +896,26 @@ void F_CastDrawer (void)
 
     patch = W_CacheLumpNum (lump+firstspritelump, PU_CACHE);
     if (flip)
-    V_DrawPatchFlipped (160,170,0,patch);
+    {
+        V_DrawPatchFlipped (160, 170, 0, patch);
+    }
     else
-    V_DrawPatch (160,170,0,patch);
+    {
+        V_DrawPatch (160, 170, 0, patch);
+    }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // F_DrawPatchCol
-//
-void
-F_DrawPatchCol (int x, patch_t* patch, int col)
+// -----------------------------------------------------------------------------
+
+static void F_DrawPatchCol (int x, patch_t *patch, int col)
 {
-    column_t*   column;
-    byte*       source;
-    byte*       dest;
-    byte*       desttop;
-    int     count;
+    int       count;
+    byte     *source;
+    byte     *dest;
+    byte     *desttop;
+    column_t *column;
 
     column = (column_t *)((byte *)patch + LONG(patch->columnofs[col]));
     desttop = screens[0]+x;
@@ -797,15 +933,15 @@ F_DrawPatchCol (int x, patch_t* patch, int col)
             dest += SCREENWIDTH;
         }
 
-    column = (column_t *)(  (byte *)column + column->length + 4 );
+        column = (column_t *)(  (byte *)column + column->length + 4 );
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // F_BunnyScroll
-//
-void F_BunnyScroll (void)
+// -----------------------------------------------------------------------------
+
+static void F_BunnyScroll (void)
 {
     int         scrolled;
     int         x;
@@ -866,10 +1002,10 @@ void F_BunnyScroll (void)
                          W_CacheLumpName (name,PU_CACHE));
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // F_Drawer
-//
+// -----------------------------------------------------------------------------
+
 void F_Drawer (void)
 {
     if (finalestage == 2)
@@ -879,7 +1015,9 @@ void F_Drawer (void)
     }
 
     if (!finalestage)
-    F_TextWrite ();
+    {
+        F_TextWrite();
+    }
     else
     {
         switch (gameepisode)

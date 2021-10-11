@@ -30,6 +30,7 @@
 #include "hu_stuff.h"
 #include "s_sound.h"
 #include "doomstat.h"
+#include "f_finale.h"
 #include "jn.h"
 
 
@@ -981,6 +982,7 @@ void P_SpawnPlayer (mapthing_t* mthing)
     p->fixedcolormap = 0;
     p->viewheight = VIEWHEIGHT;
     p->lookdir = 0;
+    finale_wipe_done = false;
 
     // setup gun psprite
     P_SetupPsprites (p);
