@@ -44,10 +44,7 @@ int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05,
     bmaptexture76, bmaptexture77, bmaptexture78, bmaptexture79, bmaptexture80,
     bmaptexture81, bmaptexture82, bmaptexture83, bmaptexture84, bmaptexture85,
     bmaptexture86, bmaptexture87, bmaptexture88, bmaptexture89, bmaptexture90,
-    bmaptexture91, bmaptexture93;
-
-// Terminator:
-int bmap_terminator;
+    bmaptexture91, bmaptexture92, bmaptexture93, bmaptexture94;
 
 //
 // [JN] Lookup and init all the textures for brightmapping.
@@ -126,6 +123,24 @@ void R_InitBrightmaps(void)
         // Red only 1
         bmaptexture89 = R_TextureNumForName("TEKWALL2");
         bmaptexture90 = R_TextureNumForName("TEKWALL5");
+
+        // SW2STON2 is a special case.
+        // It's presented in both Doom 1 and Doom 2,
+        // but uses "redonly" in Doom 1 and "greenonly2" in Doom 2.
+        // See below for `else` condition and different bmap name.
+        bmaptexture24 = R_TextureNumForName("SW2STON2");
+    }
+    else
+    {
+        bmaptexture94 = R_TextureNumForName("SW2STON2");
+    }
+
+    // -------------------------------------------------------
+    //  Sigil
+    // -------------------------------------------------------
+    if (sigil)
+    {
+        bmaptexture92 = R_TextureNumForName("SIGIL");
     }
 
     // -------------------------------------------------------
@@ -209,7 +224,6 @@ void R_InitBrightmaps(void)
         bmaptexture83 = R_TextureNumForName("LITEYEL3");
         bmaptexture84 = R_TextureNumForName("YELMETAL");
     }
-
     // -------------------------------------------------------
     //  Plutonia only
     // -------------------------------------------------------
@@ -223,9 +237,6 @@ void R_InitBrightmaps(void)
     //  All games
     // -------------------------------------------------------
     {
-        // In both games - Doom 1: red only, Doom 2: green only
-        bmaptexture24 = R_TextureNumForName("SW2STON2");
-
         // Red only
         bmaptexture03 = R_TextureNumForName("SW1BRCOM");
         bmaptexture04 = R_TextureNumForName("SW1DIRT");
@@ -260,15 +271,4 @@ void R_InitBrightmaps(void)
         bmaptexture77 = R_TextureNumForName("SW2BRNGN");
         bmaptexture80 = R_TextureNumForName("SW2METAL");
     }
-
-    // -------------------------------------------------------
-    //  Brightmap terminator
-    // -------------------------------------------------------
-    {
-        // We need to declare a "terminator" - standard game texture,
-        // presented in all Doom series and using standard light formula.
-        // Otherwise, non-defined textures will use latest brightmap.
-        bmap_terminator = R_TextureNumForName("BIGDOOR2");
-    }
 }
-
