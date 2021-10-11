@@ -24,7 +24,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <math.h>
-
 #include "doomdef.h"
 #include "doomstat.h"
 #include "d_net.h"
@@ -38,7 +37,69 @@
 
 // Fineangles in the SCREENWIDTH wide window.
 #define FIELDOFVIEW 2048	
-#define DISTMAP     2
+
+
+int           detailshift;     // 0 = high, 1 = low
+int           viewangleoffset;
+int           validcount = 1;  // increment every time a check is made
+int           centerx, centery;
+fixed_t       centerxfrac, centeryfrac;
+fixed_t       projection;
+fixed_t       viewx, viewy, viewz;
+angle_t       viewangle;
+fixed_t       viewcos, viewsin;
+player_t     *viewplayer;
+lighttable_t *fixedcolormap;
+
+int     setblocks, setdetail;
+boolean setsizeneeded;
+
+int extralight;              // bumped light from gun blasts
+int maxlightz, lightzshift;  // [JN] Smooth and vanilla diminished lighting
+
+//
+// precalculated math tables
+//
+angle_t clipangle;
+
+// The viewangletox[viewangle + FINEANGLES/4] lookup
+// maps the visible view angles to screen X coordinates,
+// flattening the arc to a flat projection plane.
+// There will be many angles mapped to the same X. 
+int viewangletox[FINEANGLES/2];
+
+// The xtoviewangleangle[] table maps a screen pixel
+// to the lowest viewangle that maps back to x ranges
+// from clipangle to -clipangle.
+// [JN] e6y: resolution limitation is removed
+angle_t *xtoviewangle;  // killough 2/8/98
+
+lighttable_t *scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *scalelightfixed[MAXLIGHTSCALE];
+lighttable_t *zlight[LIGHTLEVELS][MAXLIGHTZ];
+
+// [JN] Floor brightmaps
+lighttable_t *fullbright_notgrayorbrown_floor[LIGHTLEVELS][MAXLIGHTZ];
+
+// [JN] Wall and thing brightmaps
+lighttable_t *fullbright_redonly[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_notgray[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_notgrayorbrown[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_greenonly1[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_greenonly2[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_greenonly3[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_orangeyellow[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_dimmeditems[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_brighttan[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_redonly1[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_explosivebarrel[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_alllights[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_candles[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_pileofskulls[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_redonly2[LIGHTLEVELS][MAXLIGHTSCALE];
+
+// sky mapping
+int skyflatnum, skytexture, skytexturemid;
 
 void (*colfunc) (void);
 void (*basecolfunc) (void);
@@ -48,110 +109,15 @@ void (*tlcolfunc) (void);
 void (*spanfunc) (void);
 
 
-int         viewangleoffset;
-
-// increment every time a check is made
-int         validcount = 1;		
-
-// [JN] Screen size and detail (0 = high, 1 = low)
-int         detailshift;
-int         setblocks;
-int         setdetail;
-boolean     setsizeneeded;
-
-int         centerx;
-int         centery;
-
-// [JN] Define, which diminished lighting we well use
-int         maxlightz;
-int         lightzshift;
-
-fixed_t     centerxfrac;
-fixed_t     centeryfrac;
-fixed_t     projection;
-
-// just for profiling purposes
-int         framecount;	
-
-int         sscount;
-int         linecount;
-int         loopcount;
-
-// bumped light from gun blasts
-int         extralight;
-
-fixed_t     viewx;
-fixed_t     viewy;
-fixed_t     viewz;
-
-angle_t     viewangle;
-
-fixed_t     viewcos;
-fixed_t     viewsin;
-fixed_t    *finecosine = &finesine[FINEANGLES/4];
-
-player_t        *viewplayer;
-lighttable_t    *fixedcolormap;
-
-
-//
-// precalculated math tables
-//
-angle_t     clipangle;
-
-// The viewangletox[viewangle + FINEANGLES/4] lookup
-// maps the visible view angles to screen X coordinates,
-// flattening the arc to a flat projection plane.
-// There will be many angles mapped to the same X. 
-int         viewangletox[FINEANGLES/2];
-
-// The xtoviewangleangle[] table maps a screen pixel
-// to the lowest viewangle that maps back to x ranges
-// from clipangle to -clipangle.
-// [JN] e6y: resolution limitation is removed
-angle_t *xtoviewangle;  // killough 2/8/98
-
-
-lighttable_t   *scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t   *scalelightfixed[MAXLIGHTSCALE];
-lighttable_t   *zlight[LIGHTLEVELS][MAXLIGHTZ];
-
-// [JN] Floor brightmaps
-lighttable_t   *fullbright_notgrayorbrown_floor[LIGHTLEVELS][MAXLIGHTZ];
-
-// [JN] Wall and thing brightmaps
-lighttable_t   *fullbright_redonly[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t   *fullbright_notgray[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t   *fullbright_notgrayorbrown[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t   *fullbright_greenonly1[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t   *fullbright_greenonly2[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t   *fullbright_greenonly3[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t   *fullbright_orangeyellow[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t   *fullbright_dimmeditems[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t   *fullbright_brighttan[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t   *fullbright_redonly1[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t   *fullbright_explosivebarrel[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t   *fullbright_alllights[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t   *fullbright_candles[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t   *fullbright_pileofskulls[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t   *fullbright_redonly2[LIGHTLEVELS][MAXLIGHTSCALE];
-
-//
-// sky mapping
-//
-int         skyflatnum;
-int         skytexture;
-int         skytexturemid;
-
-
-//
+// -----------------------------------------------------------------------------
 // R_PointOnSide
 // Traverse BSP (sub) tree,
 //  check point against partition plane.
 // Returns side 0 (front) or 1 (back).
 //
-// killough 5/2/98: reformatted
-//
+// [JN] killough 5/2/98: reformatted
+// -----------------------------------------------------------------------------
+
 int R_PointOnSide (fixed_t x, fixed_t y, node_t *node)
 {
     if (!node->dx)
@@ -174,8 +140,11 @@ int R_PointOnSide (fixed_t x, fixed_t y, node_t *node)
     return FixedMul(y, node->dx>>FRACBITS) >= FixedMul(node->dy>>FRACBITS, x);
 }
 
+// -----------------------------------------------------------------------------
+// R_PointOnSegSide
+// [JN] killough 5/2/98: reformatted
+// -----------------------------------------------------------------------------
 
-// killough 5/2/98: reformatted
 int R_PointOnSegSide (fixed_t x, fixed_t y, seg_t *line)
 {
     fixed_t lx = line->v1->x;
@@ -184,17 +153,23 @@ int R_PointOnSegSide (fixed_t x, fixed_t y, seg_t *line)
     fixed_t ldy = line->v2->y - ly;
 
     if (!ldx)
-    return x <= lx ? ldy > 0 : ldy < 0;
+    {
+        return x <= lx ? ldy > 0 : ldy < 0;
+    }
 
     if (!ldy)
-    return y <= ly ? ldx < 0 : ldx > 0;
+    {
+        return y <= ly ? ldx < 0 : ldx > 0;
+    }
 
     x -= lx;
     y -= ly;
 
     // Try to quickly decide by looking at sign bits.
     if ((ldy ^ ldx ^ x ^ y) < 0)
-    return (ldy ^ x) < 0;          // (left is negative)
+    {
+        return (ldy ^ x) < 0;  // (left is negative)
+    }
 
     return FixedMul(y, ldx>>FRACBITS) >= FixedMul(ldy>>FRACBITS, x);
 }
@@ -342,28 +317,49 @@ angle_t R_PointToAngle2 (fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2)
     return R_PointToAngleSlope (x2, y2, SlopeDiv);
 }
 
-// killough 5/2/98: simplified
+// -----------------------------------------------------------------------------
+// R_PointToDist
+// -----------------------------------------------------------------------------
+
 fixed_t R_PointToDist (fixed_t x, fixed_t y)
 {
-    fixed_t dx = abs(x - viewx);
-    fixed_t dy = abs(y - viewy);
+    int     angle;
+    fixed_t dx, dy;
+    fixed_t temp, dist, frac;
 
-    if (dy > dx)
+    dx = abs(x - viewx);
+    dy = abs(y - viewy);
+
+    if (dy>dx)
     {
-        fixed_t t = dx;
+        temp = dx;
         dx = dy;
-        dy = t;
+        dy = temp;
     }
 
-    return dx ? FixedDiv(dx, finesine[(tantoangle[FixedDiv(dy,dx) >> DBITS]
-                        + ANG90) >> ANGLETOFINESHIFT]) : 0;
+    // Fix crashes in udm1.wad
+
+    if (dx != 0)
+    {
+        frac = FixedDiv(dy, dx);
+    }
+    else
+    {
+        frac = 0;
+    }
+
+    angle = (tantoangle[frac>>DBITS]+ANG90) >> ANGLETOFINESHIFT;
+
+    // use as cosine
+    dist = FixedDiv (dx, finesine[angle] );	
+
+    return dist;
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // R_InitTextureMapping
-//
-// killough 5/2/98: reformatted
+// -----------------------------------------------------------------------------
+
 static void R_InitTextureMapping (void)
 {
     int      i, x;
@@ -378,7 +374,7 @@ static void R_InitTextureMapping (void)
 
     focallength = FixedDiv(centerxfrac, finetangent[FINEANGLES/4+FIELDOFVIEW/2]);
 
-    for (i=0 ; i<FINEANGLES/2 ; i++)
+    for (i = 0 ; i < FINEANGLES/2 ; i++)
     {
         int t;
 
@@ -412,36 +408,46 @@ static void R_InitTextureMapping (void)
     //  xtoviewangle will give the smallest view angle
     //  that maps to x.
 
-    for (x=0 ; x <= viewwidth ; x++)
+    for (x = 0 ; x <= viewwidth ; x++)
     {
-        for (i=0; viewangletox[i] > x; i++)
-        ;
+        i = 0;
+
+        while (viewangletox[i]>x)
+        {
+            i++;
+        }
+
         xtoviewangle[x] = (i<<ANGLETOFINESHIFT)-ANG90;
     }
 
     // Take out the fencepost cases from viewangletox.
-    for (i=0; i<FINEANGLES/2; i++)
+    for (i = 0; i < FINEANGLES/2; i++)
+    {
         if (viewangletox[i] == -1)
+        {
             viewangletox[i] = 0;
+        }
         else if (viewangletox[i] == viewwidth+1)
+        {
             viewangletox[i] = viewwidth;
+        }
+    }
 
     clipangle = xtoviewangle[0];
 }
 
-
-
-//
+// -----------------------------------------------------------------------------
 // R_InitLightTables
 // Only inits the zlight table,
 //  because the scalelight table changes with view size.
-//
-void R_InitLightTables (void)
+// -----------------------------------------------------------------------------
+
+#define DISTMAP 2
+
+static void R_InitLightTables (void)
 {
-    int i;
-    int j;
+    int i, j;
     int level;
-    int startmap; 	
     int scale;
 
     // [JN] Define, which diminished lighting to use
@@ -450,22 +456,26 @@ void R_InitLightTables (void)
 
     // Calculate the light levels to use
     //  for each level / distance combination.
-    for (i=0 ; i< LIGHTLEVELS ; i++)
+    for (i = 0 ; i < LIGHTLEVELS ; i++)
     {
-        startmap = ((LIGHTLEVELS-1-i)*2)*NUMCOLORMAPS/LIGHTLEVELS;
+        const int startmap = ((LIGHTLEVELS-1-i)*2)*NUMCOLORMAPS/LIGHTLEVELS;
 
         // [JN] No smoother diminished lighting in -vanilla mode
-        for (j=0 ; j < maxlightz ; j++)
+        for (j = 0 ; j < maxlightz ; j++)
         {
             scale = FixedDiv ((SCREENWIDTH/2*FRACUNIT), ((j+1)<<lightzshift));
             scale >>= LIGHTSCALESHIFT;
             level = startmap - scale/DISTMAP;
 
             if (level < 0)
-            level = 0;
+            {
+                level = 0;
+            }
 
             if (level >= NUMCOLORMAPS)
-            level = NUMCOLORMAPS-1;
+            {
+                level = NUMCOLORMAPS-1;
+            }
 
             zlight[i][j] = colormaps + level*256;
 
@@ -475,12 +485,12 @@ void R_InitLightTables (void)
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // R_InitSkyMap
-// Called whenever the view size changes.
-//
-void R_InitSkyMap (void)
+// Called at program startup.
+// -----------------------------------------------------------------------------
+
+static void R_InitSkyMap (void)
 {
     skyflatnum = R_FlatNumForName(SKYFLATNAME);
     skytexturemid = 100*FRACUNIT;
@@ -519,12 +529,12 @@ static void R_InitTranslationTables (void)
     }
 }
 
-//
+// -----------------------------------------------------------------------------
 // R_SetViewSize
-// Do not really change anything here,
-//  because it might be in the middle of a refresh.
-// The change will take effect next refresh.
-//
+// Do not really change anything here, because it might be in the 
+// middle of a refresh. The change will take effect next refresh.
+// -----------------------------------------------------------------------------
+
 void R_SetViewSize (int blocks, int detail)
 {
     setsizeneeded = true;
@@ -532,16 +542,14 @@ void R_SetViewSize (int blocks, int detail)
     setdetail = detail;
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // R_ExecuteSetViewSize
-//
+// -----------------------------------------------------------------------------
+
 void R_ExecuteSetViewSize (void)
 {
-    int     i;
-    int     j;
+    int     i, j;
     int     level;
-    int     startmap;
     fixed_t cosadj;
     fixed_t dy;
 
@@ -593,11 +601,13 @@ void R_ExecuteSetViewSize (void)
     pspriteiscale = FRACUNIT*SCREENWIDTH/viewwidth;
 
     // thing clipping
-    for (i=0 ; i<viewwidth ; i++)
-    screenheightarray[i] = viewheight;
+    for (i = 0 ; i < viewwidth ; i++)
+    {
+        screenheightarray[i] = viewheight;
+    }
 
     // planes
-    for (i=0 ; i<viewheight ; i++)
+    for (i = 0 ; i < viewheight ; i++)
     {
         const fixed_t num = (viewwidth<<detailshift)/2*FRACUNIT;
 
@@ -610,29 +620,33 @@ void R_ExecuteSetViewSize (void)
             yslopes[j][i] = FixedDiv (num, dy);
         }
     }
+
     yslope = yslopes[LOOKDIRMIN];
 
-    for (i=0 ; i<viewwidth ; i++)
+    for (i = 0 ; i < viewwidth ; i++)
     {
-        cosadj = abs(finecosine[xtoviewangle[i]>>ANGLETOFINESHIFT]);
-        distscale[i] = FixedDiv (FRACUNIT,cosadj);
+        cosadj = abs(finecosine[xtoviewangle[i] >> ANGLETOFINESHIFT]);
+        distscale[i] = FixedDiv(FRACUNIT, cosadj);
     }
 
     // Calculate the light levels to use
     //  for each level / scale combination.
-    for (i=0 ; i< LIGHTLEVELS ; i++)
+    for (i = 0 ; i < LIGHTLEVELS ; i++)
     {
-        startmap = ((LIGHTLEVELS-1-i)*2)*NUMCOLORMAPS/LIGHTLEVELS;
+        const int startmap = ((LIGHTLEVELS-1-i)*2)*NUMCOLORMAPS/LIGHTLEVELS;
 
-        for (j=0 ; j<MAXLIGHTSCALE ; j++)
+        for (j = 0 ; j < MAXLIGHTSCALE ; j++)
         {
             level = startmap - j*SCREENWIDTH/(viewwidth<<detailshift)/DISTMAP;
 
             if (level < 0)
-            level = 0;
-
+            {
+                level = 0;
+            }
             if (level >= NUMCOLORMAPS)
-            level = NUMCOLORMAPS-1;
+            {
+                level = NUMCOLORMAPS-1;
+            }
 
             scalelight[i][j] = colormaps + level*256;
 
@@ -656,10 +670,10 @@ void R_ExecuteSetViewSize (void)
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // R_Init
-//
+// -----------------------------------------------------------------------------
+
 void R_Init (void)
 {
     R_InitClipSegs();
@@ -684,31 +698,37 @@ void R_Init (void)
     {
         R_InitBrightmaps ();
     }
-
-    framecount = 0;
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // R_PointInSubsector
 //
-// killough 5/2/98: reformatted, cleaned up
-//
+// [JN] killough 5/2/98: reformatted, cleaned up
+// -----------------------------------------------------------------------------
+
 subsector_t *R_PointInSubsector(fixed_t x, fixed_t y)
 {
     int nodenum = numnodes-1;
 
+    // special case for trivial maps (single subsector, no nodes)
+    if (numnodes == 0)
+    {
+        return subsectors;
+    }
+
     while (!(nodenum & NF_SUBSECTOR))
-    nodenum = nodes[nodenum].children[R_PointOnSide(x, y, nodes+nodenum)];
+    {
+        nodenum = nodes[nodenum].children[R_PointOnSide(x, y, nodes+nodenum)];
+    }
 
     return &subsectors[nodenum & ~NF_SUBSECTOR];
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // R_SetupFrame
-//
-void R_SetupFrame (player_t *player)
+// -----------------------------------------------------------------------------
+
+static void R_SetupFrame (player_t *player)
 {		
     int i;
     int tempCentery;
@@ -716,15 +736,15 @@ void R_SetupFrame (player_t *player)
     viewplayer = player;
     viewx = player->mo->x;
     viewy = player->mo->y;
+    viewz = player->viewz;
     viewangle = player->mo->angle + viewangleoffset;
     extralight = player->extralight;
-
-    viewz = player->viewz;
 
     // [JN] Mouse look: rendering routines, HIGH and LOW detail modes friendly.
     tempCentery = viewheight / 2 + (player->lookdir / MLOOKUNIT)
                 * (screenblocks < 11 ? screenblocks : 11) / 10;
 
+    // [JN] TODO - upgrade to main version
     if (centery != tempCentery)
     {
         centery = tempCentery;
@@ -739,8 +759,6 @@ void R_SetupFrame (player_t *player)
 
     viewsin = finesine[viewangle>>ANGLETOFINESHIFT];
     viewcos = finecosine[viewangle>>ANGLETOFINESHIFT];
-
-    sscount = 0;
 
     if (player->fixedcolormap)
     {
@@ -760,32 +778,27 @@ void R_SetupFrame (player_t *player)
 
         walllights = scalelightfixed;
 
-        for (i=0 ; i<MAXLIGHTSCALE ; i++)
-        scalelightfixed[i] = fixedcolormap;
+        for (i = 0 ; i < MAXLIGHTSCALE ; i++)
+        {
+            scalelightfixed[i] = fixedcolormap;
+        }
     }
     else
     {
         fixedcolormap = 0;
     }
 
-    framecount++;
     validcount++;
     destview = destscreen + (viewwindowy*SCREENWIDTH/4) + (viewwindowx >> 2);
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // R_RenderView
-//
+// -----------------------------------------------------------------------------
+
 void R_RenderPlayerView (player_t *player)
 {	
     R_SetupFrame (player);
-
-    // [JN] Don't render game screen while in help screens.
-    if (inhelpscreens)
-    {
-        return;
-    }
 
     // Clear buffers.
     R_ClearClipSegs();
@@ -826,4 +839,3 @@ void R_RenderPlayerView (player_t *player)
     // Check for new console commands.
     NetUpdate ();				
 }
-
