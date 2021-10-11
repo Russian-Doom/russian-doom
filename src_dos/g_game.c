@@ -163,6 +163,7 @@ int noflats;
 int show_fps;
 int show_diskicon;
 int screen_wiping;
+int screenshot_pcx;
 
 // Display
 int level_brightness;

@@ -335,6 +335,7 @@ void M_RD_Change_NoFlats(int choice);
 void M_RD_Change_FPScounter(int choice);
 void M_RD_Change_DiskIcon(int choice);
 void M_RD_Change_Wiping(int choice);
+void M_RD_Change_Screenshots(int choice);
 
 // Display
 void M_RD_Choose_Display(int choice);
@@ -1073,7 +1074,7 @@ enum
     rd_rendering_empty1,
     rd_rendering_diskicon,
     rd_rendering_wiping,
-    
+    rd_rendering_screenshots,
     rd_rendering_end
 } rd_rendering_e;
 
@@ -1088,6 +1089,7 @@ menuitem_t RD_Rendering_Menu[]=
     {-1,"",0,'\0'},
     {2, "Show disk icon:",             M_RD_Change_DiskIcon,   's'},
     {2, "Screen wiping effect:",       M_RD_Change_Wiping,     's'},
+    {2, "Screenshot format:",          M_RD_Change_Screenshots,'s'},
     {-1,"",0,'\0'}
 };
 
@@ -1097,7 +1099,7 @@ menu_t  RD_Rendering_Def =
     &RD_Options_Def,
     RD_Rendering_Menu,
     M_RD_Draw_Rendering,
-    35,45,
+    35,35,
     0
 };
 
@@ -1112,6 +1114,7 @@ menuitem_t RD_Rendering_Menu_Rus[]=
     {-1,"",0,'\0'},
     {2, "Jnj,hf;fnm pyfxjr lbcrtns:", M_RD_Change_DiskIcon,   'j'}, // Отображать значок дискеты
     {2, "\'aatrn cvtys \'rhfyjd:",    M_RD_Change_Wiping,    '\''}, // Эффект смены экранов
+    {2, "Ajhvfn crhbyijnjd:",         M_RD_Change_Screenshots,'a'}, // Формат скриншотов
     {-1,"",0,'\0'}
 };
 
@@ -1121,7 +1124,7 @@ menu_t  RD_Rendering_Def_Rus =
     &RD_Options_Def_Rus,
     RD_Rendering_Menu_Rus,
     M_RD_Draw_Rendering,
-    35,45,
+    35,35,
     0
 };
 
@@ -2089,62 +2092,68 @@ void M_RD_Draw_Rendering(void)
 {
     if (english_language)
     {
-        M_WriteTextBigCentered_ENG(12, "RENDERING OPTIONS");
+        M_WriteTextBigCentered_ENG(5, "RENDERING OPTIONS");
 
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35, 35, "Rendering");
+        M_WriteTextSmall_ENG(35, 25, "Rendering");
         dp_translation = NULL;
 
         // Floor and ceiling textures
-        M_WriteTextSmall_ENG(231, 45, noflats ? "off" : "on");
+        M_WriteTextSmall_ENG(231, 35, noflats ? "off" : "on");
 
         // Show FPS counter
-        M_WriteTextSmall_ENG(162, 55, show_fps ? "on" : "off");
+        M_WriteTextSmall_ENG(162, 45, show_fps ? "on" : "off");
 
         //
         // Extra
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35, 65, "Extra");
+        M_WriteTextSmall_ENG(35, 55, "Extra");
         dp_translation = NULL;
 
         // Show disk icon
-        M_WriteTextSmall_ENG(138, 75, show_diskicon ? "on" : "off");
+        M_WriteTextSmall_ENG(138, 65, show_diskicon ? "on" : "off");
 
         // Screen wiping effect
-        M_WriteTextSmall_ENG(187, 85, screen_wiping == 1 ? "standard" :
+        M_WriteTextSmall_ENG(187, 75, screen_wiping == 1 ? "standard" :
                                       screen_wiping == 2 ? "loading" :
                                                            "off");
+
+        // Screenshot format
+        M_WriteTextSmall_ENG(174, 85, screenshot_pcx ? "PCX" : "BMP");
     }
     else
     {
         // НАСТРОЙКИ ВИДЕО
-        M_WriteTextBigCentered_RUS(12, "YFCNHJQRB DBLTJ");
+        M_WriteTextBigCentered_RUS(5, "YFCNHJQRB DBLTJ");
 
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35, 35, "htylthbyu"); // Рендеринг
+        M_WriteTextSmall_RUS(35, 25, "htylthbyu"); // Рендеринг
         dp_translation = NULL;
 
         // Текстуры пола и потолка
-        M_WriteTextSmall_RUS(217, 45, noflats ? "dsrk" : "drk");
+        M_WriteTextSmall_RUS(217, 35, noflats ? "dsrk" : "drk");
 
         // Счетчик кадровой частоты
-        M_WriteTextSmall_RUS(227, 55, show_fps ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(227, 45, show_fps ? "drk" : "dsrk");
 
         //
         // Дополнительно
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35, 65, "ljgjkybntkmyj");
+        M_WriteTextSmall_RUS(35, 55, "ljgjkybntkmyj");
         dp_translation = NULL;
 
         // Отображать значок дискеты
-        M_WriteTextSmall_RUS(241, 75, show_diskicon ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(241, 65, show_diskicon ? "drk" : "dsrk");
 
         // Эффект смены экранов
-        M_WriteTextSmall_RUS(202, 85, screen_wiping == 1 ? "cnfylfhnysq" :
+        M_WriteTextSmall_RUS(202, 75, screen_wiping == 1 ? "cnfylfhnysq" :
                                       screen_wiping == 2 ? "pfuheprf" :
                                                            "dsrk");
+
+        // Формат скриншотов
+        M_WriteTextSmall_ENG(180, 85, screenshot_pcx ? "PCX" : "BMP");
     }
 }
 
@@ -2186,6 +2195,11 @@ void M_RD_Change_Wiping (int choice)
             break;
         }
     }
+}
+
+void M_RD_Change_Screenshots(int choice)
+{
+    screenshot_pcx ^= 1;
 }
 
 // -----------------------------------------------------------------------------

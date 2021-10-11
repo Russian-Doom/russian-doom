@@ -394,6 +394,7 @@ default_t	defaults[] =
     {"show_fps",                &show_fps,              0},
     {"show_diskicon",           &show_diskicon,         1},
     {"screen_wiping",           &screen_wiping,         1},
+    {"screenshot_pcx",          &screenshot_pcx,        0},
 
     // Display
     {"screenblocks",            &screenblocks,         10},
@@ -659,9 +660,9 @@ void M_LoadDefaults (void)
 }
 
 
-//
+// =============================================================================
 // SCREEN SHOTS
-//
+// =============================================================================
 
 typedef struct
 {
@@ -690,10 +691,12 @@ typedef struct
 } pcx_t;
 
 
-//
+// -----------------------------------------------------------------------------
 // WritePCXfile
-//
-void WritePCXfile (char *filename, byte *data, int width, int height, byte *palette)
+// -----------------------------------------------------------------------------
+
+static void WritePCXfile (char *filename, byte *data,
+                          int width, int height, byte *palette)
 {
     int     i;
     int     length;
@@ -746,49 +749,185 @@ void WritePCXfile (char *filename, byte *data, int width, int height, byte *pale
     Z_Free (pcx);
 }
 
+// -----------------------------------------------------------------------------
+// [JN] Support for BMP screenshots. Adapted from MBF.
+// jff 3/30/98 types and data structures for BMP output of screenshots
+//
+// killough 5/2/98:
+// Changed type names to avoid conflicts with endianess functions
+// -----------------------------------------------------------------------------
 
-//
+#define BI_RGB 0L
+
+typedef unsigned short uint_t;
+typedef unsigned long dword_t;
+typedef long     long_t;
+typedef unsigned char ubyte_t;
+
+typedef struct
+{
+    uint_t  bfType;
+    dword_t bfSize;
+    uint_t  bfReserved1;
+    uint_t  bfReserved2;
+    dword_t bfOffBits;
+} bmp_t;
+
+typedef struct
+{
+    dword_t biSize;
+    long_t  biWidth;
+    long_t  biHeight;
+    uint_t  biPlanes;
+    uint_t  biBitCount;
+    dword_t biCompression;
+    dword_t biSizeImage;
+    long_t  biXPelsPerMeter;
+    long_t  biYPelsPerMeter;
+    dword_t biClrUsed;
+    dword_t biClrImportant;
+} bmpinfo_t;
+
+// jff 3/30/98 binary file write with error detection
+// killough 10/98: changed into macro to return failure instead of aborting
+
+#define SafeWrite(data,size,number,st) do {   \
+    if (fwrite(data,size,number,st) < (number)) \
+   return fclose(st), I_EndRead(), false; } while(0)
+
+// -----------------------------------------------------------------------------
+// WriteBMPfile
+// jff 3/30/98 Add capability to write a .BMP file (256 color uncompressed)
+// -----------------------------------------------------------------------------
+
+static boolean WriteBMPfile(char *filename, byte *data, 
+                            int width, int height, byte *palette)
+{
+    int i, wid;
+    bmp_t bmfh;
+    bmpinfo_t bmih;
+    int fhsiz, ihsiz;
+    FILE *st;
+    char zero = 0;
+    ubyte_t c;
+    extern byte gammatable[18][256];
+
+    I_BeginRead();  // killough 10/98
+
+    fhsiz = sizeof(bmfh);
+    ihsiz = sizeof(bmih);
+    wid = 4*((width+3)/4);
+    //jff 4/22/98 add endian macros
+    bmfh.bfType = SHORT(19778);
+    bmfh.bfSize = LONG(fhsiz+ihsiz+256L*4+width*height);
+    bmfh.bfReserved1 = SHORT(0);
+    bmfh.bfReserved2 = SHORT(0);
+    bmfh.bfOffBits = LONG(fhsiz+ihsiz+256L*4);
+
+    bmih.biSize = LONG(ihsiz);
+    bmih.biWidth = LONG(width);
+    bmih.biHeight = LONG(height);
+    bmih.biPlanes = SHORT(1);
+    bmih.biBitCount = SHORT(8);
+    bmih.biCompression = LONG(BI_RGB);
+    bmih.biSizeImage = LONG(wid*height);
+    bmih.biXPelsPerMeter = LONG(0);
+    bmih.biYPelsPerMeter = LONG(0);
+    bmih.biClrUsed = LONG(256);
+    bmih.biClrImportant = LONG(256);
+
+    st = fopen(filename,"wb");
+
+    if (st!=NULL)
+    {
+        // write the header
+        SafeWrite(&bmfh.bfType,sizeof(bmfh.bfType),1,st);
+        SafeWrite(&bmfh.bfSize,sizeof(bmfh.bfSize),1,st);
+        SafeWrite(&bmfh.bfReserved1,sizeof(bmfh.bfReserved1),1,st);
+        SafeWrite(&bmfh.bfReserved2,sizeof(bmfh.bfReserved2),1,st);
+        SafeWrite(&bmfh.bfOffBits,sizeof(bmfh.bfOffBits),1,st);
+
+        SafeWrite(&bmih.biSize,sizeof(bmih.biSize),1,st);
+        SafeWrite(&bmih.biWidth,sizeof(bmih.biWidth),1,st);
+        SafeWrite(&bmih.biHeight,sizeof(bmih.biHeight),1,st);
+        SafeWrite(&bmih.biPlanes,sizeof(bmih.biPlanes),1,st);
+        SafeWrite(&bmih.biBitCount,sizeof(bmih.biBitCount),1,st);
+        SafeWrite(&bmih.biCompression,sizeof(bmih.biCompression),1,st);
+        SafeWrite(&bmih.biSizeImage,sizeof(bmih.biSizeImage),1,st);
+        SafeWrite(&bmih.biXPelsPerMeter,sizeof(bmih.biXPelsPerMeter),1,st);
+        SafeWrite(&bmih.biYPelsPerMeter,sizeof(bmih.biYPelsPerMeter),1,st);
+        SafeWrite(&bmih.biClrUsed,sizeof(bmih.biClrUsed),1,st);
+        SafeWrite(&bmih.biClrImportant,sizeof(bmih.biClrImportant),1,st);
+
+        // write the palette, in blue-green-red order, gamma corrected
+        for (i = 0 ; i < 768 ; i += 3)
+        {
+            c = gammatable[usegamma][palette[i+2]];
+            SafeWrite(&c,sizeof(char),1,st);
+            c = gammatable[usegamma][palette[i+1]];
+            SafeWrite(&c,sizeof(char),1,st);
+            c = gammatable[usegamma][palette[i+0]];
+            SafeWrite(&c,sizeof(char),1,st);
+            SafeWrite(&zero,sizeof(char),1,st);
+        }
+
+        for (i = 0 ; i < height ; i++)
+        {
+            SafeWrite(data+(height-1-i)*width,sizeof(byte),wid,st);
+        }
+
+        fclose(st);
+    }
+    
+    return I_EndRead(), true;  // killough 10/98
+}
+
+// -----------------------------------------------------------------------------
 // M_ScreenShot
-//
+// [JN] Modified by Lee Killough so that any number of shots can be taken,
+// the code is faster, and no annoying "screenshot" message appears.
+// -----------------------------------------------------------------------------
+
 void M_ScreenShot (void)
 {
-    int    i;
-    byte  *linear;
-    char   lbmname[12];
-
-    // munge planar buffer to linear
-    linear = screens[2];
-    I_ReadScreen (linear);
-
-    // find a file name to save it to
-    strcpy(lbmname,"DOOM00.pcx");
-
-    for (i=0 ; i<=99 ; i++)
+    if (!access(".", 2))
     {
-        lbmname[4] = i/10 + '0';
-        lbmname[5] = i%10 + '0';
-        if (access(lbmname,0) == -1)
+        static int shot;
+        char lbmname[PATH_MAX+1];
+        int tries = 10000;
+
+        do
         {
-            break;	// file doesn't exist
+            sprintf(lbmname,  //jff 3/30/98 pcx or bmp?
+                    screenshot_pcx ? "doom%02d.pcx" : "doom%02d.bmp", shot++);
+        } while (!access(lbmname, 0) && --tries);
+
+        if (tries)
+        {
+            // killough 4/18/98: make palette stay around
+            // (PU_CACHE could cause crash)
+
+            byte *pal = W_CacheLumpName ("PLAYPAL", PU_STATIC);
+            byte *linear = screens[2];
+
+            I_ReadScreen(linear);
+
+            // save the pcx file
+            // jff 3/30/98 write pcx or bmp depending on mode
+            if (screenshot_pcx)
+            {
+                WritePCXfile(lbmname, linear, SCREENWIDTH, SCREENHEIGHT, pal);
+            }
+            else
+            {
+                WriteBMPfile(lbmname, linear, SCREENWIDTH, SCREENHEIGHT, pal);
+            }
+                
+            // killough 4/18/98: now you can mark it PU_CACHE
+            Z_ChangeTag(pal, PU_CACHE);
         }
     }
-
-    // [JN] Do not crash if limit is reached.
-    // Instead, play "oof" sound and print warning.
-    if (i==100)
-    {
-        S_StartSound(NULL, sfx_oof);
-        players[consoleplayer].message_system = english_language ?
-                               "unable to write a screenshot" :
-                               "ytdjpvj;yj cj[hfybnm crhbyijn";
-        return;
-    }
-
-    // save the pcx file
-    WritePCXfile (lbmname, linear, SCREENWIDTH, SCREENHEIGHT,
-                  W_CacheLumpName ("PLAYPAL", PU_CACHE));
 
     // [JN] Play sound instead of "screenshot" message.
     S_StartSound(NULL, sfx_itemup);
 }
-
