@@ -365,7 +365,7 @@ void D_Display (void)
         } while (!tics);
 
         wipestart = I_GetTime();
-        done = wipe_ScreenWipe(wipe_Melt, 0, 0, SCREENWIDTH, SCREENHEIGHT, tics);
+        done = wipe_ScreenWipe(0, 0, SCREENWIDTH, SCREENHEIGHT, tics);
         I_UpdateNoBlit();
         M_Drawer();       // menu is drawn even on top of wipes
         I_FinishUpdate(); // page flip or blit buffer
