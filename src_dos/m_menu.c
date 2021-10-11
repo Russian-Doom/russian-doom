@@ -2672,16 +2672,18 @@ void M_RD_Draw_AutomapSettings(void)
         M_WriteTextBigCentered_ENG(12, "AUTOMAP SETTINGS");
 
         // Automap colors (English only names, different placement)
-        if (automap_color == 0)
-        M_WriteTextSmall_ENG (170, 35, "doom");
-        else if (automap_color == 1)
+        if (automap_color == 1)
         M_WriteTextSmall_ENG (170, 35, "boom");
         else if (automap_color == 2)
         M_WriteTextSmall_ENG (170, 35, "jaguar");
         else if (automap_color == 3)
         M_WriteTextSmall_ENG (170, 35, "raven");
-        else
+        else if (automap_color == 4)
         M_WriteTextSmall_ENG (170, 35, "strife");
+        else if (automap_color == 5)
+        M_WriteTextSmall_ENG (170, 35, "unity");
+        else
+        M_WriteTextSmall_ENG (170, 35, "doom");
 
         // Line antialiasing
         M_WriteTextSmall_ENG(193, 45, automap_antialias ? "on" : "off");
@@ -2709,16 +2711,18 @@ void M_RD_Draw_AutomapSettings(void)
         M_WriteTextBigCentered_RUS(12, "YFCNHJQRB RFHNS"); // çÄëíêéâäà äÄêíõ
 
         // Automap colors (English only names, different placement)
-        if (automap_color == 0)
-        M_WriteTextSmall_ENG (191, 35, "doom");
-        else if (automap_color == 1)
+        if (automap_color == 1)
         M_WriteTextSmall_ENG (191, 35, "boom");
         else if (automap_color == 2)
         M_WriteTextSmall_ENG (191, 35, "jaguar");
         else if (automap_color == 3)
         M_WriteTextSmall_ENG (191, 35, "raven");
-        else
+        else if (automap_color == 4)
         M_WriteTextSmall_ENG (191, 35, "strife");
+        else if (automap_color == 5)
+        M_WriteTextSmall_ENG (191, 35, "unity");
+        else
+        M_WriteTextSmall_ENG (191, 35, "doom");
 
         // ë£´†¶®¢†≠®• ´®≠®©
         M_WriteTextSmall_RUS(214, 45, automap_antialias ? "drk" : "dsrk");
@@ -2749,12 +2753,12 @@ void M_RD_Change_AutomapColor(int choice)
         case 0: 
         automap_color--;
         if (automap_color < 0) 
-            automap_color = 4;
+            automap_color = 5;
         break;
     
         case 1:
         automap_color++;
-        if (automap_color > 4)
+        if (automap_color > 5)
             automap_color = 0;
         break;
     }
