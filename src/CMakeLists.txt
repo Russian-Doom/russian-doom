@@ -278,21 +278,26 @@ foreach(TARGET doom heretic hexen)
     install(TARGETS "${PROGRAM_PREFIX}${TARGET}"
             DESTINATION $<IF:$<BOOL:${WIN32}>,.,bin>
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
+            COMPONENT "${TARGET}"
     )
     install(FILES ${${TARGET}_DEST_WADS}
             DESTINATION $<IF:$<BOOL:${WIN32}>,base,share/${PACKAGE_TARNAME}>
+            COMPONENT "${TARGET}"
     )
 endforeach()
 install(FILES ${GUS_PATCHES_DEST_FILES}
         DESTINATION $<IF:$<BOOL:${WIN32}>,base,share/${PACKAGE_TARNAME}>/gus_patches
+        COMPONENT "common"
 )
 if(WIN32)
     install(TARGETS "${PROGRAM_PREFIX}midiproc"
             DESTINATION .
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
+            COMPONENT "common"
     )
     install(FILES ${WIN_LIBS}
             DESTINATION .
+            COMPONENT "common"
     )
 endif()
 
