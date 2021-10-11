@@ -476,6 +476,7 @@ default_t	defaults[] =
     {"colored_blood",           &colored_blood,         1},
     {"swirling_liquids",        &swirling_liquids,      1},
     {"invul_sky",               &invul_sky,             1},
+    {"linear_sky",              &linear_sky,            1},
     {"flip_weapons",            &flip_weapons,          0},
 
     // Gameplay: Audible

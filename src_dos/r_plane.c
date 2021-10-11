@@ -522,9 +522,10 @@ void R_DrawPlanes (void)
                 dc_yl = pl->top[x];
                 dc_yh = pl->bottom[x];
 
-                if ((unsigned) dc_yl <= dc_yh) // [crispy] 32-bit integer math
+                if ((dc_yl = pl->top[x]) != SHRT_MAX && dc_yl <= (dc_yh = pl->bottom[x])) // [crispy] 32-bit integer math
                 {
-                    angle = (viewangle + xtoviewangle[x])>>ANGLETOSKYSHIFT;
+                    angle = (viewangle + (linear_sky && !vanilla ? 
+                                          linearskyangle[x] : xtoviewangle[x])) >> ANGLETOSKYSHIFT;
                     dc_x = x;
                     dc_source = R_GetColumn(skytexture, angle, false);
                     colfunc ();

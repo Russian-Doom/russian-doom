@@ -74,6 +74,10 @@ int viewangletox[FINEANGLES/2];
 // [JN] e6y: resolution limitation is removed
 angle_t *xtoviewangle;  // killough 2/8/98
 
+// [crispy] calculate the linear sky angle component here
+// [JN] resolution limitation is removed
+angle_t *linearskyangle;
+
 lighttable_t *scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t *scalelightfixed[MAXLIGHTSCALE];
 lighttable_t *zlight[LIGHTLEVELS][MAXLIGHTZ];
@@ -418,6 +422,10 @@ static void R_InitTextureMapping (void)
         }
 
         xtoviewangle[x] = (i<<ANGLETOFINESHIFT)-ANG90;
+        // [crispy] calculate sky angle for drawing horizontally linear skies.
+        // Taken from GZDoom and refactored for integer math.
+        linearskyangle[x] = ((viewwidth / 2 - x) * ((SCREENWIDTH<<6) / viewwidth)) 
+                                                 * (ANG90 / (SCREENWIDTH<<6));
     }
 
     // Take out the fencepost cases from viewangletox.

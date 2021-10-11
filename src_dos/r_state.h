@@ -119,6 +119,7 @@ extern angle_t      clipangle;
 
 extern int          viewangletox[FINEANGLES/2];
 extern angle_t     *xtoviewangle;
+extern angle_t     *linearskyangle;
 
 // angle to line origin
 extern int          rw_angle1;

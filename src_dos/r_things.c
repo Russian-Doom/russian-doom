@@ -110,10 +110,10 @@ void R_InitSpritesRes(void)
     {
         free(xtoviewangle);
     }
-    // if (linearskyangle)
-    // {
-    //     free(linearskyangle);
-    // }
+    if (linearskyangle)
+    {
+        free(linearskyangle);
+    }
     if (negonearray)
     {
         free(negonearray);
@@ -124,7 +124,7 @@ void R_InitSpritesRes(void)
     }
 
     xtoviewangle = calloc(1, (SCREENWIDTH + 1) * sizeof(*xtoviewangle));
-    // linearskyangle = calloc(1, (SCREENWIDTH + 1) * sizeof(*linearskyangle));
+    linearskyangle = calloc(1, (SCREENWIDTH + 1) * sizeof(*linearskyangle));
     negonearray = calloc(1, SCREENWIDTH * sizeof(*negonearray));
     screenheightarray = calloc(1, SCREENWIDTH * sizeof(*screenheightarray));
 

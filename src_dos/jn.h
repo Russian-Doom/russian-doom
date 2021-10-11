@@ -110,6 +110,7 @@ extern int colored_hud;
 extern int colored_blood;
 extern int swirling_liquids;
 extern int invul_sky;
+extern int linear_sky;
 extern int flip_weapons;
 extern int draw_shadowed_text;
 
