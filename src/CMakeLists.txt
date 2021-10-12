@@ -213,17 +213,7 @@ endif()
 
 # Copying gus patches
 file(GLOB GUS_PATCHES_SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/base/gus_patches/*")
-
-foreach(SRC_FILE_PATH ${GUS_PATCHES_SRC_FILES})
-    get_filename_component(DEST_FILE_NAME "${SRC_FILE_PATH}" NAME)
-    add_custom_command(OUTPUT "base/gus_patches/${DEST_FILE_NAME}"
-            MAIN_DEPENDENCY "${SRC_FILE_PATH}"
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${SRC_FILE_PATH}"
-            "base/gus_patches/${DEST_FILE_NAME}"
-            COMMENT "Copying ${CMAKE_CURRENT_BINARY_DIR}/base/gus_patches/${DEST_FILE_NAME}")
-    list(APPEND GUS_PATCHES_DEST_FILES "${CMAKE_CURRENT_BINARY_DIR}/base/gus_patches/${DEST_FILE_NAME}")
-endforeach()
-add_custom_target(gus-patches DEPENDS ${GUS_PATCHES_DEST_FILES})
+add_copy_target(NAME gus-patches SOURCE ${GUS_PATCHES_SRC_FILES} DESTINATION "base/gus_patches")
 
 # [Dasperal] Disable "strife" from the compilation
 foreach(TARGET doom heretic hexen)
@@ -233,35 +223,15 @@ endforeach()
 # Copying game support wads
 # [Dasperal] Disable "strife" from the compilation
 foreach(TARGET doom heretic hexen)
-
     file(GLOB WADS "${CMAKE_CURRENT_SOURCE_DIR}/base/${TARGET}-*.wad")
-    foreach(SRC_FILE_PATH ${WADS})
-        get_filename_component(DEST_FILE_NAME "${SRC_FILE_PATH}" NAME)
-        add_custom_command(OUTPUT "base/${DEST_FILE_NAME}"
-                MAIN_DEPENDENCY "${SRC_FILE_PATH}"
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different "${SRC_FILE_PATH}"
-                "base/${DEST_FILE_NAME}"
-                COMMENT "Copying ${CMAKE_CURRENT_BINARY_DIR}/base/${DEST_FILE_NAME}")
-        list(APPEND "${TARGET}_DEST_WADS" "${CMAKE_CURRENT_BINARY_DIR}/base/${DEST_FILE_NAME}")
-    endforeach()
-    add_custom_target("${TARGET}-wads" DEPENDS ${${TARGET}_DEST_WADS})
+    add_copy_target(NAME "${TARGET}-wads" SOURCE ${WADS} DESTINATION "base")
     add_dependencies("${PROGRAM_PREFIX}${TARGET}" "${TARGET}-wads")
 endforeach()
 
 # Windows DLLs
 if(WIN32)
     file(GLOB WIN_LIBS "${PROJECT_SOURCE_DIR}/win_libs/${ARCH}/*.dll")
-
-    foreach(SRC_FILE_PATH ${WIN_LIBS})
-        get_filename_component(DEST_FILE_NAME "${SRC_FILE_PATH}" NAME)
-        add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${DEST_FILE_NAME}"
-                MAIN_DEPENDENCY "${SRC_FILE_PATH}"
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different "${SRC_FILE_PATH}"
-                "${CMAKE_CURRENT_BINARY_DIR}/${DEST_FILE_NAME}"
-                COMMENT "Copying ${CMAKE_CURRENT_BINARY_DIR}/${DEST_FILE_NAME}")
-        list(APPEND WIN_LIBS_DEST_FILES "${CMAKE_CURRENT_BINARY_DIR}/${DEST_FILE_NAME}")
-    endforeach()
-    add_custom_target(win-libs DEPENDS ${WIN_LIBS_DEST_FILES})
+    add_copy_target(NAME win-libs SOURCE ${WIN_LIBS} DESTINATION ".")
 
     # [Dasperal] Disable "strife" from the compilation
     foreach(TARGET doom heretic hexen)
@@ -280,12 +250,12 @@ foreach(TARGET doom heretic hexen)
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
             COMPONENT "${TARGET}"
     )
-    install(FILES ${${TARGET}_DEST_WADS}
+    install(FILES $<TARGET_PROPERTY:${TARGET}-wads,OUT_FILES>
             DESTINATION $<IF:$<BOOL:${WIN32}>,base,share/${PACKAGE_TARNAME}>
             COMPONENT "${TARGET}"
     )
 endforeach()
-install(FILES ${GUS_PATCHES_DEST_FILES}
+install(FILES $<TARGET_PROPERTY:gus-patches,OUT_FILES>
         DESTINATION $<IF:$<BOOL:${WIN32}>,base,share/${PACKAGE_TARNAME}>/gus_patches
         COMPONENT "common"
 )
@@ -295,7 +265,7 @@ if(WIN32)
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
             COMPONENT "common"
     )
-    install(FILES ${WIN_LIBS}
+    install(FILES $<TARGET_PROPERTY:win-libs,OUT_FILES>
             DESTINATION .
             COMPONENT "common"
     )

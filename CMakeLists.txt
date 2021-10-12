@@ -100,6 +100,8 @@ configure_file(src/strife/resource.rc.in src/strife/resource.rc)
 # configure_file(src/setup/strife-resource.rc.in src/setup/strife-resource.rc)
 # configure_file(src/setup/setup-manifest.xml.in src/setup/setup-manifest.xml)
 
+include(RDUtils)
+
 foreach(SUBDIR textscreen midiproc opl pcsound src)
     add_subdirectory("${SUBDIR}")
 endforeach()
