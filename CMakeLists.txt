@@ -2,10 +2,20 @@ cmake_minimum_required(VERSION 3.15)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
+# Versions
 project("Russian Doom" VERSION 5.1 LANGUAGES C NONE)
 set(BUILD_HERETIC_VERSION "5.1")
 set(BUILD_HEXEN_VERSION "5.0")
 set(BUILD_STRIFE_VERSION "0.0")
+
+# Compile modules
+Option(COMPILE_DOOM "Compile Doom module" ON)
+Option(COMPILE_HERETIC "Compile Heretic module" ON)
+Option(COMPILE_HEXEN "Compile Hexen module" ON)
+# [Dasperal] Disable Strife by default. It won't compile until `JNechaevsky/russian-doom/pull/268` is implemented for Strife
+Option(COMPILE_STRIFE "Compile Strife module" OFF)
+# [Dasperal] Disable Setup by default. Usage of Setup resets many of the settings available in the game menu, so we don't distribute it
+Option(COMPILE_SETUP "Compile Setup module" OFF)
 
 # Autotools variables
 set(top_srcdir ${CMAKE_CURRENT_SOURCE_DIR})
@@ -74,11 +84,6 @@ check_include_file("dev/isa/spkrio.h" HAVE_DEV_ISA_SPKRIO_H)
 check_include_file("dev/speaker/speaker.h" HAVE_DEV_SPEAKER_SPEAKER_H)
 check_include_file("linux/kd.h" HAVE_LINUX_KD_H)
 
-string(REPLACE "." ", " WINDOWS_RC_DOOM_VERSION ${BUILD_DOOM_VERSION})
-string(REPLACE "." ", " WINDOWS_RC_HERETIC_VERSION ${BUILD_HERETIC_VERSION})
-string(REPLACE "." ", " WINDOWS_RC_HEXEN_VERSION ${BUILD_HEXEN_VERSION})
-string(REPLACE "." ", " WINDOWS_RC_STRIFE_VERSION ${BUILD_STRIFE_VERSION})
-
 string(REPLACE " Doom" "" PACKAGE_PREFIX "${PROJECT_NAME}")
 string(REPLACE "doom" "" PROGRAM_PREFIX "${PACKAGE_TARNAME}")
 
@@ -88,17 +93,42 @@ endif()
 
 configure_file(cmake/config.h.cin config.h)
 
-configure_file(src/doom/resource.rc.in src/doom/resource.rc)
-configure_file(src/heretic/resource.rc.in src/heretic/resource.rc)
-configure_file(src/hexen/resource.rc.in src/hexen/resource.rc)
-configure_file(src/strife/resource.rc.in src/strife/resource.rc)
+if(COMPILE_DOOM)
+    string(REPLACE "." ", " WINDOWS_RC_DOOM_VERSION ${BUILD_DOOM_VERSION})
+    configure_file(src/doom/resource.rc.in src/doom/resource.rc)
+    list(APPEND COMPILE_MODULES "doom")
+endif()
+if(COMPILE_HERETIC)
+    string(REPLACE "." ", " WINDOWS_RC_HERETIC_VERSION ${BUILD_HERETIC_VERSION})
+    configure_file(src/heretic/resource.rc.in src/heretic/resource.rc)
+    list(APPEND COMPILE_MODULES "heretic")
+endif()
+if(COMPILE_HEXEN)
+    string(REPLACE "." ", " WINDOWS_RC_HEXEN_VERSION ${BUILD_HEXEN_VERSION})
+    configure_file(src/hexen/resource.rc.in src/hexen/resource.rc)
+    list(APPEND COMPILE_MODULES "hexen")
+endif()
+if(COMPILE_STRIFE)
+    string(REPLACE "." ", " WINDOWS_RC_STRIFE_VERSION ${BUILD_STRIFE_VERSION})
+    configure_file(src/strife/resource.rc.in src/strife/resource.rc)
+    list(APPEND COMPILE_MODULES "strife")
+endif()
 
-# [Dasperal] Disable "setup" from compilation
-# configure_file(src/setup/doom-resource.rc.in src/setup/doom-resource.rc)
-# configure_file(src/setup/heretic-resource.rc.in src/setup/heretic-resource.rc)
-# configure_file(src/setup/hexen-resource.rc.in src/setup/hexen-resource.rc)
-# configure_file(src/setup/strife-resource.rc.in src/setup/strife-resource.rc)
-# configure_file(src/setup/setup-manifest.xml.in src/setup/setup-manifest.xml)
+if(COMPILE_SETUP)
+    if(COMPILE_DOOM)
+        configure_file(src/setup/doom-resource.rc.in src/setup/doom-resource.rc)
+    endif()
+    if(COMPILE_HERETIC)
+        configure_file(src/setup/heretic-resource.rc.in src/setup/heretic-resource.rc)
+    endif()
+    if(COMPILE_HEXEN)
+        configure_file(src/setup/hexen-resource.rc.in src/setup/hexen-resource.rc)
+    endif()
+    if(COMPILE_STRIFE)
+        configure_file(src/setup/strife-resource.rc.in src/setup/strife-resource.rc)
+    endif()
+    configure_file(src/setup/setup-manifest.xml.in src/setup/setup-manifest.xml)
+endif()
 
 include(RDUtils)
 
