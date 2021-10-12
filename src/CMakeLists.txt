@@ -1,6 +1,4 @@
-# [Dasperal] Disable "strife" from the compilation
-# [Dasperal] Disable "setup" from compilation
-foreach(SUBDIR doom heretic hexen)
+foreach(SUBDIR doom heretic hexen strife setup)
     add_subdirectory("${SUBDIR}")
 endforeach()
 
@@ -117,56 +115,58 @@ if(PNG_FOUND)
 endif()
 
 # SetupCommon libraty
-# [Dasperal] Disable "setup" from compilation
-# add_library(SetupCommon STATIC EXCLUDE_FROM_ALL
-#     deh_str.c           deh_str.h
-#     d_mode.c            d_mode.h
-#     d_iwad.c            d_iwad.h
-#                         icon.h
-#     i_timer.c           i_timer.h
-#     m_config.c          m_config.h
-#     net_io.c            net_io.h
-#     net_packet.c        net_packet.h
-#     net_sdl.c           net_sdl.h
-#     net_query.c         net_query.h
-#     net_structrw.c      net_structrw.h
-#     z_native.c          z_zone.h
-# )
-#
-# target_compile_definitions("SetupCommon"
-#     PRIVATE "___RD_TARGET_SETUP___"
-# )
-#
-# target_link_libraries(SetupCommon PUBLIC
-#     Common
-#     SDL2::net
-#     textscreen
-# )
-
-# Create executables
-# [Dasperal] Disable "strife" from the compilation
-foreach(TARGET doom heretic hexen)
-    add_executable("${PROGRAM_PREFIX}${TARGET}" WIN32
-        i_main.c
-        "${PROJECT_SOURCE_DIR}/data/${TARGET}_icon.c"
+if(COMPILE_SETUP)
+    add_library(SetupCommon STATIC EXCLUDE_FROM_ALL
+        deh_str.c           deh_str.h
+        d_mode.c            d_mode.h
+        d_iwad.c            d_iwad.h
+                            icon.h
+        i_timer.c           i_timer.h
+        m_config.c          m_config.h
+        net_io.c            net_io.h
+        net_packet.c        net_packet.h
+        net_sdl.c           net_sdl.h
+        net_query.c         net_query.h
+        net_structrw.c      net_structrw.h
+        z_native.c          z_zone.h
     )
 
-    # [Dasperal] Disable "setup" from compilation
-    # add_executable("${PROGRAM_PREFIX}${TARGET}-setup" WIN32
-    #     i_main.c
-    #     "${PROJECT_SOURCE_DIR}/data/setup_icon.c"
-    # )
+    target_compile_definitions("SetupCommon"
+        PRIVATE "___RD_TARGET_SETUP___"
+    )
+
+    target_link_libraries(SetupCommon PUBLIC
+        Common
+        SDL2::net
+        textscreen
+    )
+endif()
+
+# Create executables
+foreach(MODULE ${COMPILE_MODULES})
+    add_executable("${PROGRAM_PREFIX}${MODULE}" WIN32
+        i_main.c
+        "${PROJECT_SOURCE_DIR}/data/${MODULE}_icon.c"
+    )
+
+    if(COMPILE_SETUP)
+        add_executable("${PROGRAM_PREFIX}${MODULE}-setup" WIN32
+            i_main.c
+            "${PROJECT_SOURCE_DIR}/data/setup_icon.c"
+        )
+    endif()
 
     # Add resources for windows
     if(WIN32)
-        target_sources("${PROGRAM_PREFIX}${TARGET}" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/${TARGET}/resource.rc")
-        # [Dasperal] Disable "setup" from compilation
-        # target_sources("${PROGRAM_PREFIX}${TARGET}-setup" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/setup/${TARGET}-resource.rc")
+        target_sources("${PROGRAM_PREFIX}${MODULE}" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/${MODULE}/resource.rc")
+        if(COMPILE_SETUP)
+            target_sources("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/setup/${MODULE}-resource.rc")
+        endif()
     endif()
 
     # Dehacked sources
-    if(NOT "${TARGET}" STREQUAL "hexen")
-        target_sources("${PROGRAM_PREFIX}${TARGET}" PUBLIC
+    if(NOT "${MODULE}" STREQUAL "hexen")
+        target_sources("${PROGRAM_PREFIX}${MODULE}" PUBLIC
                                 deh_defs.h
             deh_io.c            deh_io.h
             deh_main.c          deh_main.h
@@ -175,39 +175,41 @@ foreach(TARGET doom heretic hexen)
         )
     endif()
 
-    target_link_libraries("${PROGRAM_PREFIX}${TARGET}" PUBLIC
-        ${TARGET}
+    target_link_libraries("${PROGRAM_PREFIX}${MODULE}" PUBLIC
+        ${MODULE}
         Game
     )
 
-    # [Dasperal] Disable "setup" from compilation
-    # target_link_libraries("${PROGRAM_PREFIX}${TARGET}-setup" PUBLIC
-    #     setup
-    #     SetupCommon
-    # )
+    if(COMPILE_SETUP)
+        target_link_libraries("${PROGRAM_PREFIX}${MODULE}-setup" PUBLIC
+            setup
+            SetupCommon
+        )
+    endif()
 
     # Link flags
-    set_target_properties("${PROGRAM_PREFIX}${TARGET}" PROPERTIES
+    set_target_properties("${PROGRAM_PREFIX}${MODULE}" PROPERTIES
         LINK_FLAGS_RELEASE -s
     )
 
-    # [Dasperal] Disable "setup" from compilation
-    # set_target_properties("${PROGRAM_PREFIX}${TARGET}-setup" PROPERTIES
-    #     LINK_FLAGS_RELEASE -s
-    # )
+    if(COMPILE_SETUP)
+        set_target_properties("${PROGRAM_PREFIX}${MODULE}-setup" PROPERTIES
+            LINK_FLAGS_RELEASE -s
+        )
+    endif()
 endforeach()
 
 # MSVC link flags
 if(MSVC)
-    # [Dasperal] Disable "strife" from the compilation
-    foreach(TARGET doom heretic hexen)
-        set_target_properties("${PROGRAM_PREFIX}${TARGET}" PROPERTIES
+    foreach(MODULE ${COMPILE_MODULES})
+        set_target_properties("${PROGRAM_PREFIX}${MODULE}" PROPERTIES
             LINK_FLAGS "/MANIFEST:NO"
         )
-        # [Dasperal] Disable "setup" from compilation
-        # set_target_properties("${PROGRAM_PREFIX}${TARGET}-setup" PROPERTIES
-        #     LINK_FLAGS "/MANIFEST:NO"
-        # )
+        if(COMPILE_SETUP)
+            set_target_properties("${PROGRAM_PREFIX}${MODULE}-setup" PROPERTIES
+                LINK_FLAGS "/MANIFEST:NO"
+            )
+        endif()
     endforeach()
 endif()
 
@@ -215,17 +217,15 @@ endif()
 file(GLOB GUS_PATCHES_SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/base/gus_patches/*")
 add_copy_target(NAME gus-patches SOURCE ${GUS_PATCHES_SRC_FILES} DESTINATION "base/gus_patches")
 
-# [Dasperal] Disable "strife" from the compilation
-foreach(TARGET doom heretic hexen)
-    add_dependencies("${PROGRAM_PREFIX}${TARGET}" gus-patches)
+foreach(MODULE ${COMPILE_MODULES})
+    add_dependencies("${PROGRAM_PREFIX}${MODULE}" gus-patches)
 endforeach()
 
 # Copying game support wads
-# [Dasperal] Disable "strife" from the compilation
-foreach(TARGET doom heretic hexen)
-    file(GLOB WADS "${CMAKE_CURRENT_SOURCE_DIR}/base/${TARGET}-*.wad")
-    add_copy_target(NAME "${TARGET}-wads" SOURCE ${WADS} DESTINATION "base")
-    add_dependencies("${PROGRAM_PREFIX}${TARGET}" "${TARGET}-wads")
+foreach(MODULE ${COMPILE_MODULES})
+    file(GLOB WADS "${CMAKE_CURRENT_SOURCE_DIR}/base/${MODULE}-*.wad")
+    add_copy_target(NAME "${MODULE}-wads" SOURCE ${WADS} DESTINATION "base")
+    add_dependencies("${PROGRAM_PREFIX}${MODULE}" "${MODULE}-wads")
 endforeach()
 
 # Windows DLLs
@@ -233,26 +233,30 @@ if(WIN32)
     file(GLOB WIN_LIBS "${PROJECT_SOURCE_DIR}/win_libs/${ARCH}/*.dll")
     add_copy_target(NAME win-libs SOURCE ${WIN_LIBS} DESTINATION ".")
 
-    # [Dasperal] Disable "strife" from the compilation
-    foreach(TARGET doom heretic hexen)
-        add_dependencies("${PROGRAM_PREFIX}${TARGET}" win-libs)
-        # [Dasperal] Disable "setup" from compilation
-        # add_dependencies("${PROGRAM_PREFIX}${TARGET}-setup" win-libs)
+    foreach(MODULE ${COMPILE_MODULES})
+        add_dependencies("${PROGRAM_PREFIX}${MODULE}" win-libs)
+        if(COMPILE_SETUP)
+            add_dependencies("${PROGRAM_PREFIX}${MODULE}-setup" win-libs)
+        endif()
     endforeach()
 endif()
 
 # Install rules
-# strife is not production ready
-foreach(TARGET doom heretic hexen)
-    # [Dasperal] Disable "${PROGRAM_PREFIX}${TARGET}-setup" from install
-    install(TARGETS "${PROGRAM_PREFIX}${TARGET}"
+list(REMOVE_ITEM COMPILE_MODULES "strife") # strife is not production ready
+
+foreach(MODULE ${COMPILE_MODULES})
+    set(INSTALL_TARGETS "${PROGRAM_PREFIX}${MODULE}")
+    if(COMPILE_SETUP)
+        list(APPEND INSTALL_TARGETS "${PROGRAM_PREFIX}${MODULE}-setup")
+    endif()
+    install(TARGETS ${INSTALL_TARGETS}
             DESTINATION $<IF:$<BOOL:${WIN32}>,.,bin>
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
-            COMPONENT "${TARGET}"
+            COMPONENT "${MODULE}"
     )
-    install(FILES $<TARGET_PROPERTY:${TARGET}-wads,OUT_FILES>
+    install(FILES $<TARGET_PROPERTY:${MODULE}-wads,OUT_FILES>
             DESTINATION $<IF:$<BOOL:${WIN32}>,base,share/${PACKAGE_TARNAME}>
-            COMPONENT "${TARGET}"
+            COMPONENT "${MODULE}"
     )
 endforeach()
 install(FILES $<TARGET_PROPERTY:gus-patches,OUT_FILES>

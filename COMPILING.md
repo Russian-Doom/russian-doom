@@ -29,6 +29,10 @@ To configure the project use the following command:
 ```
 cmake -G"MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -S . -B build
 ```
+You can enable and disable the compilation of modules by changing cmake options:
+`COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE`, `COMPILE_SETUP`
+to `ON` or `OFF`.
+
 To build the project use the following command:
 ```
 cmake --build build
@@ -105,6 +109,10 @@ To configure the project use the following command:
 ```
 cmake -DCMAKE_BUILD_TYPE=Release -DDEV_ENV=OFF -S . -B build
 ```
+You can enable and disable the compilation of modules by changing cmake options:
+`COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE`, `COMPILE_SETUP`
+to `ON` or `OFF`.
+
 If you want to use dev builds without installing, set DEV_ENV option to `ON` and
 point `<current directory>` to `build/src/`.
 
