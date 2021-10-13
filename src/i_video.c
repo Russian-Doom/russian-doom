@@ -1298,6 +1298,18 @@ static void SetSDLVideoDriver(void)
     }
 }
 
+// -----------------------------------------------------------------------------
+// SetSDLRenderDriver
+// [JN] Set render driver. Use "opengles2" as most faster screen scaler and
+// "software" in case of using software only rendering.
+// -----------------------------------------------------------------------------
+
+static void SetSDLRenderDriver (void)
+{
+    SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, force_software_renderer ?
+                            "software" : "opengles2", SDL_HINT_OVERRIDE);
+}
+
 // Check the display bounds of the display referred to by 'video_display' and
 // set x and y to a location that places the window in the center of that
 // display.
@@ -1560,6 +1572,9 @@ void I_InitGraphics(void)
 
     SetSDLVideoDriver();
 
+    // [JN] Set apropriate render diver.
+    SetSDLRenderDriver();
+
     if (SDL_Init(SDL_INIT_VIDEO) < 0) 
     {
         I_Error(english_language ?
@@ -1698,6 +1713,9 @@ void I_ReInitGraphics (int reinit)
 		SDL_DestroyRenderer(renderer);
 		renderer = SDL_CreateRenderer(screen, -1, flags);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
+        // [JN] Re-set appropriate video driver.
+        SetSDLRenderDriver();
 
 		// [crispy] the texture gets destroyed in SDL_DestroyRenderer(), force its re-creation
 		texture_upscaled = NULL;
