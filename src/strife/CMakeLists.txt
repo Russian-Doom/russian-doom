@@ -68,15 +68,11 @@ if(COMPILE_STRIFE)
             wi_stuff.c      wi_stuff.h
     )
 
-    target_include_directories(strife PRIVATE
-        "${PROJECT_SOURCE_DIR}/src"
-        "${PROJECT_BINARY_DIR}"
-    )
-
-    target_link_libraries(strife
+    target_link_libraries(strife PRIVATE
         textscreen
         SDL2::SDL2
         SDL2::mixer
         SDL2::net
+        Game
     )
 endif()

@@ -58,13 +58,10 @@ if(COMPILE_HEXEN)
                                     xddefs.h
     )
 
-    target_include_directories(hexen PRIVATE
-        "${PROJECT_SOURCE_DIR}/src"
-        "${PROJECT_BINARY_DIR}"
-    )
-    target_link_libraries(hexen
+    target_link_libraries(hexen PRIVATE
         SDL2::SDL2
         SDL2::mixer
         SDL2::net
+        Game
     )
 endif()

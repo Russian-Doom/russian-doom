@@ -94,10 +94,6 @@ add_library(Game STATIC EXCLUDE_FROM_ALL
     z_zone.c            z_zone.h
 )
 
-target_include_directories(Game PUBLIC
-    "${CMAKE_CURRENT_SOURCE_DIR}"
-)
-
 target_link_libraries(Game PUBLIC
     Common
     SDL2::mixer
@@ -131,7 +127,7 @@ if(COMPILE_SETUP)
         z_native.c          z_zone.h
     )
 
-    target_compile_definitions("SetupCommon"
+    target_compile_definitions(SetupCommon
         PRIVATE "___RD_TARGET_SETUP___"
     )
 
@@ -197,21 +193,19 @@ foreach(MODULE ${COMPILE_MODULES})
             LINK_FLAGS_RELEASE -s
         )
     endif()
-endforeach()
 
-# MSVC link flags
-if(MSVC)
-    foreach(MODULE ${COMPILE_MODULES})
+    # MSVC link flags
+    if(MSVC)
         set_target_properties("${PROGRAM_PREFIX}${MODULE}" PROPERTIES
             LINK_FLAGS "/MANIFEST:NO"
-        )
+            )
         if(COMPILE_SETUP)
             set_target_properties("${PROGRAM_PREFIX}${MODULE}-setup" PROPERTIES
                 LINK_FLAGS "/MANIFEST:NO"
-            )
+                )
         endif()
-    endforeach()
-endif()
+    endif()
+endforeach()
 
 # Copying gus patches
 file(GLOB GUS_PATCHES_SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/base/gus_patches/*")
@@ -272,6 +266,11 @@ if(WIN32)
     install(FILES $<TARGET_PROPERTY:win-libs,OUT_FILES>
             DESTINATION .
             COMPONENT "common"
+    )
+    install(FILES "${PROJECT_SOURCE_DIR}/LICENSE.txt"
+        RENAME "GPL.txt"
+        DESTINATION .
+        COMPONENT "common"
     )
 endif()
 

@@ -6,14 +6,14 @@ if(WIN32)
     )
     target_include_directories("${PROGRAM_PREFIX}midiproc" PRIVATE
         "${PROJECT_BINARY_DIR}"
-        "${PROJECT_SOURCE_DIR}/src"
+        "${PROJECT_SOURCE_DIR}/src"     # [Dasperal] FIXME: This should be removed but I dont know how to do it properly
     )
     if(PC_SDL2_FOUND AND NOT (SDL2_MAIN_LIBRARY STREQUAL "SDL2_MAIN_LIBRARY-NOTFOUND"))
-        target_link_libraries("${PROGRAM_PREFIX}midiproc"
+        target_link_libraries("${PROGRAM_PREFIX}midiproc" PRIVATE
             SDL2::SDL2main
         )
     endif()
-    target_link_libraries("${PROGRAM_PREFIX}midiproc"
+    target_link_libraries("${PROGRAM_PREFIX}midiproc" PRIVATE
         SDL2::mixer
     )
     add_custom_command(TARGET "${PROGRAM_PREFIX}midiproc" POST_BUILD
