@@ -14,6 +14,6 @@ target_include_directories(opl
     INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}"
     PRIVATE "${PROJECT_BINARY_DIR}"
 )
-target_link_libraries(opl
+target_link_libraries(opl PRIVATE
     SDL2::mixer
 )

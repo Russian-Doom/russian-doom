@@ -10,14 +10,11 @@ if(COMPILE_SETUP)
                 execute.c           execute.h
     )
 
-    target_include_directories(setup PRIVATE
-        "${PROJECT_SOURCE_DIR}/src"
-        "${PROJECT_BINARY_DIR}"
-    )
-    target_link_libraries(setup
+    target_link_libraries(setup PRIVATE
         textscreen
         SDL2::SDL2
         SDL2::mixer
+        SetupCommon
     )
 
     # [Dasperal] Disable clang warnings for windows-1251 strings

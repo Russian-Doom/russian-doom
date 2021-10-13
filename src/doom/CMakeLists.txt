@@ -72,13 +72,10 @@ if(COMPILE_DOOM)
                 wi_stuff.c      wi_stuff.h
     )
 
-    target_include_directories(doom PRIVATE
-        "${PROJECT_SOURCE_DIR}/src"
-        "${PROJECT_BINARY_DIR}"
-    )
-    target_link_libraries(doom
+    target_link_libraries(doom PRIVATE
         SDL2::SDL2
         SDL2::mixer
         SDL2::net
+        Game
     )
 endif()

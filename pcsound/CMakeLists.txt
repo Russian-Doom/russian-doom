@@ -8,8 +8,8 @@ add_library(pcsound STATIC EXCLUDE_FROM_ALL
 )
 target_include_directories(pcsound
     INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}"
-    PUBLIC "${PROJECT_BINARY_DIR}"
+    PRIVATE "${PROJECT_BINARY_DIR}"
 )
-target_link_libraries(pcsound
+target_link_libraries(pcsound PRIVATE
     SDL2::mixer
 )

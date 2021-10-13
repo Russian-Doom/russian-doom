@@ -58,14 +58,11 @@ if(COMPILE_HERETIC)
                 s_sound.c           s_sound.h
     )
 
-    target_include_directories(heretic PRIVATE
-        "${PROJECT_SOURCE_DIR}/src"
-        "${PROJECT_BINARY_DIR}"
-    )
-    target_link_libraries(heretic
+    target_link_libraries(heretic PRIVATE
         textscreen
         SDL2::SDL2
         SDL2::mixer
         SDL2::net
+        Game
     )
 endif()
