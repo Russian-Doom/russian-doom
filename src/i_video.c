@@ -1030,11 +1030,9 @@ void I_SetPalette (byte *doompalette)
         // Based on implementation from DOOM Retro.
         byte    *gamma = gammatable[usegamma];
 
-        // Zero out the bottom two bits of each channel - the PC VGA
-        // controller only supports 6 bits of accuracy.
-        byte    r = gamma[*doompalette++] & ~3;
-        byte    g = gamma[*doompalette++] & ~3;
-        byte    b = gamma[*doompalette++] & ~3;
+        byte    r = gamma[*doompalette++];
+        byte    g = gamma[*doompalette++];
+        byte    b = gamma[*doompalette++];
         double  p = sqrt(r * r * 0.299 + g * g * 0.587 + b * b * 0.114);
 
         palette[i].r = (byte)((p + (r - p) * color_saturation) * r_color_factor ) * brightness;
