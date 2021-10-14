@@ -32,16 +32,25 @@ body:
         - Windows 7
         - Windows Vista
         - Windows XP
-        - Linux x86
-        - Linux x86_64
-        - Linux ARM (Raspberry Pi)
+        - Linux
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: Build_variant
+    attributes:
+      label: What Build variant of Russian Doom are you using?
+      multiple: false
+      options:
+        - x86 (x32, win32)
+        - x64 (amd64, x86_64, win64)
         - Other
     validations:
       required: true
   - type: input
     id: other
     attributes:
-      label: If Other OS, please describe
+      label: If Other OS or Build variant, please describe
       description: Other details
       placeholder: "Debian, Ubuntu, Arch, etc."
     validations:
