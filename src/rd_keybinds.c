@@ -458,6 +458,25 @@ static void AddBind(bound_key_t boundKey, device_t device, int key)
 
 void BK_BindKey(event_t* event)
 {
+    // [Dasperal] Prohibit binding of some keyboard keys and gamepad menu key
+    if((event->type == ev_keydown
+    && (event->data1 == KEY_F1
+    || event->data1 == KEY_F2
+    || event->data1 == KEY_F3
+    || event->data1 == KEY_F4
+    || event->data1 == KEY_F5
+    || event->data1 == KEY_F7
+    || event->data1 == KEY_F8
+    || event->data1 == KEY_F10
+    || event->data1 == KEY_F11
+    || event->data1 == KEY_EQUALS
+    || event->data1 == KEY_MINUS
+    || event->data1 == KEY_PAUSE))
+    || (event->type == ev_controller_keydown && event->data1 == CONTROLLER_START))
+    {
+        return;
+    }
+
     isBinding = false;
 
     if(!BK_isKeyDown(event, bk_menu_activate))
