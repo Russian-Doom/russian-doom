@@ -405,7 +405,10 @@ boolean P_UseSpecialLine (mobj_t *thing, line_t *line, int side)
         case 47:    // Floor Raise to Next Higher Floor (changes texture)
         case 48:    // Scroll Texture Left
         case 85:    // Scroll Texture Right (BOOM)
-        S_StartSound(NULL,sfx_oof);
+        if (S_OofSoundAudible(line, thing))
+        {
+            S_StartSound(NULL,sfx_oof);
+        }
         break;
 
         // SWITCHES

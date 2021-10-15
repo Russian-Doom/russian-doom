@@ -211,7 +211,10 @@ int EV_DoLockedDoor (line_t *line, vldoor_e type, mobj_t *thing)
             p->message_system = DEH_String(pd_blueo);
             // [crispy] blinking key or skull in the status bar
             p->tryopen[it_bluecard] = KEYBLINKTICS;
-            S_StartSound(NULL,sfx_oof);
+            if (S_OofSoundAudible(line, thing))
+            {
+                S_StartSound(NULL,sfx_oof);
+            }
             return 0;
         }
         break;
@@ -224,7 +227,10 @@ int EV_DoLockedDoor (line_t *line, vldoor_e type, mobj_t *thing)
             p->message_system = DEH_String(pd_redo);
             // [crispy] blinking key or skull in the status bar
             p->tryopen[it_redcard] = KEYBLINKTICS;
-            S_StartSound(NULL,sfx_oof);
+            if (S_OofSoundAudible(line, thing))
+            {
+                S_StartSound(NULL,sfx_oof);
+            }
             return 0;
         }
         break;
@@ -237,7 +243,10 @@ int EV_DoLockedDoor (line_t *line, vldoor_e type, mobj_t *thing)
             p->message_system = DEH_String(pd_yellowo);
             // [crispy] blinking key or skull in the status bar
             p->tryopen[it_yellowcard] = KEYBLINKTICS;
-            S_StartSound(NULL,sfx_oof);
+            if (S_OofSoundAudible(line, thing))
+            {
+                S_StartSound(NULL,sfx_oof);
+            }
             return 0;
         }
         break;	
@@ -369,7 +378,10 @@ void EV_VerticalDoor (line_t *line, mobj_t *thing)
             player->message_system = DEH_String(pd_bluek);
             // [crispy] blinking key or skull in the status bar
             player->tryopen[it_bluecard] = KEYBLINKTICS;
-            S_StartSound(NULL,sfx_oof);
+            if (S_OofSoundAudible(line, thing))
+            {
+                S_StartSound(NULL,sfx_oof);
+            }
             return;
         }
         break;
@@ -386,7 +398,10 @@ void EV_VerticalDoor (line_t *line, mobj_t *thing)
             player->message_system = DEH_String(pd_yellowk);
             // [crispy] blinking key or skull in the status bar
             player->tryopen[it_yellowcard] = KEYBLINKTICS;
-            S_StartSound(NULL,sfx_oof);
+            if (S_OofSoundAudible(line, thing))
+            {
+                S_StartSound(NULL,sfx_oof);
+            }
             return;
         }
         break;
@@ -403,7 +418,10 @@ void EV_VerticalDoor (line_t *line, mobj_t *thing)
             player->message_system = DEH_String(pd_redk);
             // [crispy] blinking key or skull in the status bar
             player->tryopen[it_redcard] = KEYBLINKTICS;
-            S_StartSound(NULL,sfx_oof);
+            if (S_OofSoundAudible(line, thing))
+            {
+                S_StartSound(NULL,sfx_oof);
+            }
             return;
         }
         break;
