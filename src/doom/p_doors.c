@@ -188,22 +188,6 @@ void T_VerticalDoor (vldoor_t *door)
 }
 
 // -----------------------------------------------------------------------------
-// EV_PlayOofSound
-// [JN] Check if it is possible to play an "oof" sound,
-// i.e. if key-locked door is really visible and touchable.
-// -----------------------------------------------------------------------------
-
-static boolean EV_PlayOofSound (line_t *line, mobj_t *thing)
-{
-    return ((P_LineOpening(line), 
-            openrange <= 0 ||
-            openbottom > thing->player->mo->z + 24*FRACUNIT ||
-            opentop < thing->player->mo->z
-                    + thing->player->mo->height) ||
-                    vanillaparm);                              
-}
-
-// -----------------------------------------------------------------------------
 // EV_DoLockedDoor
 // Move a locked door up/down
 // -----------------------------------------------------------------------------
@@ -227,10 +211,7 @@ int EV_DoLockedDoor (line_t *line, vldoor_e type, mobj_t *thing)
             p->message_system = DEH_String(pd_blueo);
             // [crispy] blinking key or skull in the status bar
             p->tryopen[it_bluecard] = KEYBLINKTICS;
-            if (EV_PlayOofSound(line, thing))
-            {
-                S_StartSound(NULL,sfx_oof);
-            }
+            S_StartSound(NULL,sfx_oof);
             return 0;
         }
         break;
@@ -243,10 +224,7 @@ int EV_DoLockedDoor (line_t *line, vldoor_e type, mobj_t *thing)
             p->message_system = DEH_String(pd_redo);
             // [crispy] blinking key or skull in the status bar
             p->tryopen[it_redcard] = KEYBLINKTICS;
-            if (EV_PlayOofSound(line, thing))
-            {
-                S_StartSound(NULL,sfx_oof);
-            }
+            S_StartSound(NULL,sfx_oof);
             return 0;
         }
         break;
@@ -259,10 +237,7 @@ int EV_DoLockedDoor (line_t *line, vldoor_e type, mobj_t *thing)
             p->message_system = DEH_String(pd_yellowo);
             // [crispy] blinking key or skull in the status bar
             p->tryopen[it_yellowcard] = KEYBLINKTICS;
-            if (EV_PlayOofSound(line, thing))
-            {
-                S_StartSound(NULL,sfx_oof);
-            }
+            S_StartSound(NULL,sfx_oof);
             return 0;
         }
         break;	
@@ -394,10 +369,7 @@ void EV_VerticalDoor (line_t *line, mobj_t *thing)
             player->message_system = DEH_String(pd_bluek);
             // [crispy] blinking key or skull in the status bar
             player->tryopen[it_bluecard] = KEYBLINKTICS;
-            if (EV_PlayOofSound(line, thing))
-            {
-                S_StartSound(NULL,sfx_oof);
-            }
+            S_StartSound(NULL,sfx_oof);
             return;
         }
         break;
@@ -414,10 +386,7 @@ void EV_VerticalDoor (line_t *line, mobj_t *thing)
             player->message_system = DEH_String(pd_yellowk);
             // [crispy] blinking key or skull in the status bar
             player->tryopen[it_yellowcard] = KEYBLINKTICS;
-            if (EV_PlayOofSound(line, thing))
-            {
-                S_StartSound(NULL,sfx_oof);
-            }
+            S_StartSound(NULL,sfx_oof);
             return;
         }
         break;
@@ -434,10 +403,7 @@ void EV_VerticalDoor (line_t *line, mobj_t *thing)
             player->message_system = DEH_String(pd_redk);
             // [crispy] blinking key or skull in the status bar
             player->tryopen[it_redcard] = KEYBLINKTICS;
-            if (EV_PlayOofSound(line, thing))
-            {
-                S_StartSound(NULL,sfx_oof);
-            }
+            S_StartSound(NULL,sfx_oof);
             return;
         }
         break;
