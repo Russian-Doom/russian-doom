@@ -503,7 +503,7 @@ void G_BuildTiccmd (ticcmd_t* cmd)
     if (!demoplayback && players[consoleplayer].playerstate == PST_LIVE 
     &&  !paused && !menuactive)
     {
-        if (mlook || novert)
+        if (mlook)
         {
             players[consoleplayer].lookdir += mouse_y_invert ? -mousey : mousey;
         }

@@ -507,7 +507,7 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     // [JN] Mouselook: handling
     if (!demoplayback && players[consoleplayer].playerstate == PST_LIVE && !paused && !menuactive)
     {
-        if (mlook || novert)
+        if (mlook)
         {
             cmd->lookdir += mouse_y_invert ? -mousey : mousey;
         }
@@ -528,13 +528,6 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
         if (look < 0)
         {
             look += 16;
-        }
-
-        // [JN] Properly reset looking forward if mouse look 
-        // was disabled too fast or game FPS was too small.
-        if (gamestate == GS_LEVEL && !mlook && look != TOCENTER)
-        {
-            look = TOCENTER;
         }
 
         cmd->lookfly = look;
