@@ -987,18 +987,3 @@ void S_UnMuteSound (void)
 
     volume_needs_update = false;
 }
-
-// -----------------------------------------------------------------------------
-// EV_PlayOofSound
-// [JN] Check if it is possible to play an "oof" sound,
-// i.e. if usable wall segment is really visible and touchable.
-// -----------------------------------------------------------------------------
-
-boolean S_OofSoundAudible (line_t *line, mobj_t *thing)
-{
-    return (P_LineOpening(line),
-            openrange <= 0 ||
-            openbottom > thing->player->mo->z + 24*FRACUNIT ||
-            opentop < thing->player->mo->z
-                    + thing->player->mo->height);
-}

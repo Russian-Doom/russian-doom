@@ -86,6 +86,4 @@ extern int music_num_rd;
 void S_MuteSound(void);
 void S_UnMuteSound(void);
 
-boolean S_OofSoundAudible (line_t *line, mobj_t *thing);
-
 #endif
