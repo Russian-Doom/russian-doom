@@ -1497,18 +1497,26 @@ void WI_updateStats (void)
     }
     else if (sp_state == 6)
     {
-        cnt_secret[0] += 2;
-
-        if (!(bcnt&3))
+        // [JN] If no secrets on the map, skip counting immediately.
+        if (!totalsecret && singleplayer && !vanilla)
         {
-            S_StartSound(0, sfx_pistol);
+            sp_state += 2;
         }
-
-        if (cnt_secret[0] >= (plrs[me].ssecret * 100) / wbs->maxsecret)
+        else
         {
-            cnt_secret[0] = (plrs[me].ssecret * 100) / wbs->maxsecret;
-            S_StartSound(0, sfx_barexp);
-            sp_state++;
+            cnt_secret[0] += 2;
+
+            if (!(bcnt&3))
+            {
+                S_StartSound(0, sfx_pistol);
+            }
+
+            if (cnt_secret[0] >= (plrs[me].ssecret * 100) / wbs->maxsecret)
+            {
+                cnt_secret[0] = (plrs[me].ssecret * 100) / wbs->maxsecret;
+                S_StartSound(0, sfx_barexp);
+                sp_state++;
+            }
         }
     }
     else if (sp_state == 8)
