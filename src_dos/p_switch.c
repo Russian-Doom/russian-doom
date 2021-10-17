@@ -337,7 +337,10 @@ boolean P_UseSpecialLine (mobj_t *thing, line_t *line, int side)
         case 46:    // Open Door Impact
         case 47:    // Floor Raise to Next Higher Floor (changes texture)
         case 48:    // Scroll Texture Left
-        S_StartSound(NULL,sfx_oof);
+        if (PTR_NoWayAudible(line))
+        {
+            S_StartSound(NULL,sfx_oof);
+        }
         break;
 
         // SWITCHES

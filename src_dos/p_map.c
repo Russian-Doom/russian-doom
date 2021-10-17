@@ -1446,6 +1446,23 @@ static boolean PTR_NoWayTraverse(intercept_t *in)
            opentop < usething->z+usething->height));  // Too low it blocks
 }
 
+// -----------------------------------------------------------------------------
+// PTR_NoWayAudible
+// [JN] Check if it is possible to play an "oof" sound,
+// i.e. if usable wall segment is really visible and touchable.
+// -----------------------------------------------------------------------------
+
+boolean PTR_NoWayAudible (line_t *line)
+{
+    mobj_t *mo = viewplayer->mo;
+
+    P_LineOpening(line);
+
+    return (openrange <= 0 ||
+            openbottom > mo->z + 24*FRACUNIT ||
+            opentop < mo->z + mo->height);
+}
+
 
 //
 // P_UseLines

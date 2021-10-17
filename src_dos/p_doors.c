@@ -207,7 +207,10 @@ int EV_DoLockedDoor (line_t *line, vldoor_e type, mobj_t *thing)
         if (!p->cards[it_bluecard] && !p->cards[it_blueskull])
         {
             p->message_system = pd_blueo;
-            S_StartSound(NULL,sfx_oof);
+            if (PTR_NoWayAudible(line))
+            {
+                S_StartSound(NULL,sfx_oof);
+            }
             // [crispy] blinking key or skull in the status bar
             p->tryopen[it_bluecard] = KEYBLINKTICS;
             return 0;
@@ -219,7 +222,10 @@ int EV_DoLockedDoor (line_t *line, vldoor_e type, mobj_t *thing)
         if (!p->cards[it_redcard] && !p->cards[it_redskull])
         {
             p->message_system = pd_redo;
-            S_StartSound(NULL,sfx_oof);
+            if (PTR_NoWayAudible(line))
+            {
+                S_StartSound(NULL,sfx_oof);
+            }
             // [crispy] blinking key or skull in the status bar
             p->tryopen[it_redcard] = KEYBLINKTICS;
             return 0;
@@ -231,7 +237,10 @@ int EV_DoLockedDoor (line_t *line, vldoor_e type, mobj_t *thing)
         if (!p->cards[it_yellowcard] && !p->cards[it_yellowskull])
         {
             p->message_system = pd_yellowo;
-            S_StartSound(NULL,sfx_oof);
+            if (PTR_NoWayAudible(line))
+            {
+                S_StartSound(NULL,sfx_oof);
+            }
             // [crispy] blinking key or skull in the status bar
             p->tryopen[it_yellowcard] = KEYBLINKTICS;
             return 0;
@@ -352,7 +361,10 @@ void EV_VerticalDoor (line_t *line, mobj_t *thing)
         if (!player->cards[it_bluecard] && !player->cards[it_blueskull])
         {
             player->message_system = pd_bluek;
-            S_StartSound(NULL,sfx_oof);
+            if (PTR_NoWayAudible(line))
+            {
+                S_StartSound(NULL,sfx_oof);
+            }
             // [crispy] blinking key or skull in the status bar
             player->tryopen[it_bluecard] = KEYBLINKTICS;
             return;
@@ -369,7 +381,10 @@ void EV_VerticalDoor (line_t *line, mobj_t *thing)
         if (!player->cards[it_yellowcard] && !player->cards[it_yellowskull])
         {
             player->message_system = pd_yellowk;
-            S_StartSound(NULL,sfx_oof);
+            if (PTR_NoWayAudible(line))
+            {
+                S_StartSound(NULL,sfx_oof);
+            }
             // [crispy] blinking key or skull in the status bar
             player->tryopen[it_yellowcard] = KEYBLINKTICS;
             return;
@@ -386,7 +401,10 @@ void EV_VerticalDoor (line_t *line, mobj_t *thing)
         if (!player->cards[it_redcard] && !player->cards[it_redskull])
         {
             player->message_system = pd_redk;
-            S_StartSound(NULL,sfx_oof);
+            if (PTR_NoWayAudible(line))
+            {
+                S_StartSound(NULL,sfx_oof);
+            }
             // [crispy] blinking key or skull in the status bar
             player->tryopen[it_redcard] = KEYBLINKTICS;
             return;
