@@ -1191,16 +1191,8 @@ void P_UpdateSpecials (void)
 
         switch (line->special)
         {
-            case 48:
-            // EFFECT FIRSTCOL SCROLL +
-            // [crispy] smooth texture scrolling
-            sides[line->sidenum[0]].oldtextureoffset =
-            sides[line->sidenum[0]].textureoffset;
-            sides[line->sidenum[0]].textureoffset += FRACUNIT;
-            break;
-
-            case 85:
-            // [JN] (Boom) Scroll Texture Right
+            case 48:  // EFFECT FIRSTCOL SCROLL +
+            case 85:  // [JN] (Boom) Scroll Texture Right
             // [crispy] smooth texture scrolling
             sides[line->sidenum[0]].oldtextureoffset =
             sides[line->sidenum[0]].textureoffset;
