@@ -1120,6 +1120,10 @@ void P_UpdateSpecials (void)
             // EFFECT FIRSTCOL SCROLL +
             sides[line->sidenum[0]].textureoffset += FRACUNIT;
             break;
+        case 85:
+            // [JN] (Boom) Scroll Texture Right
+            sides[line->sidenum[0]].textureoffset -= FRACUNIT;
+            break;
         }
     }
     
@@ -1359,6 +1363,7 @@ void P_SpawnSpecials (void)
         switch(lines[i].special)
         {
             case 48:
+            case 85:
             if (numlinespecials >= MAXLINEANIMS)
             {
                 I_Error(english_language ?
