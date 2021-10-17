@@ -402,7 +402,7 @@ int main(int argc, char *argv[])
                    TEXT("MIDI music, and is intended to be launched by ")
                    // [Dasperal] Just use Russian Doom because russian-midiproc executable is common for all games
                    TEXT(PACKAGE_PREFIX) TEXT(" Doom") TEXT("."),
-                   TEXT(PACKAGE_PREFIX) TEXT(" Doom"), MB_OK | MB_ICONASTERISK);
+                   TEXT(PACKAGE_PREFIX) TEXT(" Doom"), MB_OK | MB_ICONASTERISK | MB_SERVICE_NOTIFICATION);
 
         return EXIT_FAILURE;
     }
