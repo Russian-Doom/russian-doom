@@ -635,6 +635,7 @@ static MenuItem_t Bindings2Items[] = {
     {ITT_TITLE,   "ACTION",          "LTQCNDBT",               NULL,               0},
     {ITT_EFUNC,   "FIRE/ATTACK",     "FNFRF/CNHTKM,F",         BK_StartBindingKey, bk_fire},        // Атака/стрельба
     {ITT_EFUNC,   "USE",             "BCGJKMPJDFNM",           BK_StartBindingKey, bk_use},         // Использовать
+    {ITT_EFUNC,   "JUMP",            "GHS;JR",                 BK_StartBindingKey, bk_jump},        //Прыжок
     {ITT_TITLE,   "WEAPONS",         "JHE;BT",                 NULL,               0},       // Оружие
     {ITT_EFUNC,   "WEAPON 1",        "JHE;BT 1",               BK_StartBindingKey, bk_weapon_1},    // Оружие 1
     {ITT_EFUNC,   "WEAPON 2",        "JHE;BT 2",               BK_StartBindingKey, bk_weapon_2},    // Оружие 2
@@ -642,7 +643,6 @@ static MenuItem_t Bindings2Items[] = {
     {ITT_EFUNC,   "WEAPON 4",        "JHE;BT 4",               BK_StartBindingKey, bk_weapon_4},    // Оружие 4
     {ITT_EFUNC,   "PREVIOUS WEAPON", "GHTLSLEOTT JHE;BT",      BK_StartBindingKey, bk_weapon_prev}, // Предыдущее оружие
     {ITT_EFUNC,   "NEXT WEAPON",     "CKTLE.OTT JHE;BT",       BK_StartBindingKey, bk_weapon_next}, // Следующее оружие
-    {ITT_EMPTY,   NULL,              NULL,                     NULL,               0},
     {ITT_EMPTY,   NULL,              NULL,                     NULL,               0},
     {ITT_EMPTY,   NULL,              NULL,                     NULL,               0},
     {ITT_SETMENU, "NEXT PAGE...",    "CKTLE.OFZ CNHFYBWF>>>",  &Bindings3Menu,     0},              // Cледующая страница...
