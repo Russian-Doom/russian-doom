@@ -69,8 +69,8 @@ jobs:
         build-system:
           - name: "Cmake"
             dependency: cmake
-            config-command-dev: cmake -DCMAKE_BUILD_TYPE=Release -DDEV_ENV=ON -S . -B build
-            config-command-rel: cmake -DCMAKE_BUILD_TYPE=Release -DDEV_ENV=OFF -S . -B build
+            config-command-dev: cmake -DCMAKE_BUILD_TYPE=Release -BUILD_PORTABLE=ON -S . -B build
+            config-command-rel: cmake -DCMAKE_BUILD_TYPE=Release -BUILD_PORTABLE=OFF -S . -B build
             build-command: cmake --build build --parallel 2
           - name: "Autotools"
             dependency: automake

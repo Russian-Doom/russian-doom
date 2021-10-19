@@ -21,4 +21,4 @@
 #cmakedefine HAVE_IOPERM
 #cmakedefine HAVE_MMAP
 
-#cmakedefine DEV_ENV
+#cmakedefine BUILD_PORTABLE

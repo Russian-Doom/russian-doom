@@ -735,37 +735,22 @@ void M_NormalizeSlashes(char *str)
 //
 char* RD_M_FindInternalResource(char* resourceName)
 {
-    char* retVal = NULL;
-#ifdef _WIN32
+    char* retVal;
+#if defined(_WIN32) || defined(BUILD_PORTABLE)
     retVal = M_StringJoin(exedir, "base", DIR_SEPARATOR_S, resourceName, NULL);
+#elif defined(__APPLE__)
+    retVal = // TODO set canonical path for internal resources on MacOS
+#else // Linux
+    retVal = M_StringJoin("/usr/local/share", DIR_SEPARATOR_S, PACKAGE_TARNAME, DIR_SEPARATOR_S, resourceName, NULL);
+#endif
     if(!M_FileExists(retVal))
     {
-#else
-    #ifdef DEV_ENV
-    retVal = M_StringJoin("base", DIR_SEPARATOR_S, resourceName, NULL);
-    if(!M_FileExists(retVal))
-    {
+        I_Error(english_language ?
+                "Internal resource \"%s\" not found!" :
+                "Внутренний ресурс \"%s\" не найден!",
+                retVal);
         free(retVal);
-    #endif
-    #ifdef __APPLE__
-        retVal = // TODO set canonical path for internal resources on MacOS
-        if(!M_FileExists(retVal))
-        {
-    #else // Linux
-        retVal = M_StringJoin("/usr/local/share", DIR_SEPARATOR_S, PACKAGE_TARNAME, DIR_SEPARATOR_S, resourceName, NULL);
-        if(!M_FileExists(retVal))
-        {
-    #endif
-#endif
-            I_Error(english_language ?
-                    "Internal resource \"%s\" not found!" :
-                    "Внутренний ресурс \"%s\" не найден!",
-                    retVal);
-            free(retVal);
-            return NULL;
-#if !defined(_WIN32) && defined(DEV_ENV)
-        }
-#endif
+        return NULL;
     }
     return retVal;
 }

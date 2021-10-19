@@ -31,6 +31,9 @@
 #define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
+#else
+#include <sys/stat.h>
+#include <unistd.h>
 #endif
 
 #include "doomtype.h"
@@ -84,9 +87,35 @@ void M_SetExeDir(void)
 
     exedir = M_StringDuplicate(dirname);
 #else
-    char *dirname;
+    static const char *proc_exe_link = "/proc/self/exe";
+    char *dirname, *exename;
+    struct stat linkStat;
 
-    dirname = M_DirName(myargv[0]);
+    if(lstat(proc_exe_link, &linkStat) != -1)
+    {
+        size_t buffSize = linkStat.st_size;
+        if(buffSize == 0)
+            buffSize = 1024;
+        exename = malloc(buffSize);
+        if (readlink(proc_exe_link, exename, buffSize) != -1)
+        {
+            dirname = M_DirName(exename);
+        }
+        else
+        {
+            printf("I_MAIN: Error: Unable to get path to executable from\n \t%s\n", proc_exe_link);
+            printf("I_MAIN: Trying to get path to executable from arg0\n \t%s\n", myargv[0]);
+            dirname = M_DirName(myargv[0]);
+        }
+        free(exename);
+    }
+    else
+    {
+        printf("I_MAIN: Error: Unable to get path to executable from\n \t%s\n", proc_exe_link);
+        printf("I_MAIN: Trying to get path to executable from arg0\n \t%s\n", myargv[0]);
+        dirname = M_DirName(myargv[0]);
+    }
+
     exedir = M_StringJoin(dirname, DIR_SEPARATOR_S, NULL);
     free(dirname);
 #endif
