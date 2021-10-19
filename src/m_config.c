@@ -1215,7 +1215,7 @@ static char *GetDefaultConfigDir(void)
 {
     char *result;
     char* tempResult;
-#ifdef _WIN32
+#if defined(_WIN32) || defined(BUILD_PORTABLE)
     result = M_StringDuplicate(exedir);
     // [Dasperal] Try to check whether writing to exedir is possible by creating a savegames directory
     tempResult = M_StringJoin(result, "savegames", NULL);
@@ -1231,7 +1231,6 @@ static char *GetDefaultConfigDir(void)
     }
     free(tempResult);
 #else
-    #ifndef DEV_ENV
     tempResult = SDL_GetPrefPath("", PACKAGE_TARNAME); // This might be ~/.local/share/russian-doom
     if (tempResult != NULL)
     {
@@ -1240,9 +1239,6 @@ static char *GetDefaultConfigDir(void)
     }
     else
         result = M_StringDuplicate("");
-    #else
-    result = M_StringDuplicate("");
-    #endif
 #endif
     return result;
 }

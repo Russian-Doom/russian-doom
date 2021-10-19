@@ -107,14 +107,14 @@ Autotools is the primary way but CMake is recommended.
 
 To configure the project use the following command:
 ```
-cmake -DCMAKE_BUILD_TYPE=Release -DDEV_ENV=OFF -S . -B build
+cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
 ```
 You can enable and disable the compilation of modules by changing cmake options:
 `COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE`, `COMPILE_SETUP`
 to `ON` or `OFF`.
 
-If you want to use dev builds without installing, set DEV_ENV option to `ON` and
-point `<current directory>` to `build/src/`.
+If you want to use a portable version like on Windows, set the `BUILD_PORTABLE` cmake option to `ON`.
+Portable version searches and stores internal resources, config files, and savegames in install directory among executables.
 
 To build the project use the following command:
 ```
@@ -140,6 +140,9 @@ To install Russian Doom use the following command:
 ```
 cmake --install build
 ```
+For the portable version, you probably want to use `--prefix <install directory>` key to set install directory.
+Note that config files and savegames will be stored in that directory.
+
 If you want to install only one or several components, you can use the following commands.
 The `common` component should be installed in order for GUS emulation to work.
 ```
