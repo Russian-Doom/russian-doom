@@ -77,12 +77,6 @@ void I_AtExit(atexit_func_t func, boolean run_on_error)
     exit_funcs = entry;
 }
 
-// Tactile feedback function, probably used for the Logitech Cyberman
-
-void I_Tactile(int on, int off, int total)
-{
-}
-
 // Zone memory auto-allocation function that allocates the zone size
 // by trying progressively smaller zone sizes until one is found that
 // works.

@@ -1870,7 +1870,6 @@ void P_DamageMobj
     player_t *player;
     mobj_t *master;
     fixed_t thrust;
-    int temp;
     int i;
 
     if (!(target->flags & MF_SHOOTABLE))
@@ -2109,10 +2108,8 @@ void P_DamageMobj
         {
             player->damagecount = 100;  // teleport stomp does 10k points...
         }
-        temp = damage < 100 ? damage : 100;
         if (player == &players[consoleplayer])
         {
-            I_Tactile(40, 10, 40 + temp * 2);
             SB_PaletteFlash(false);
         }
     }
