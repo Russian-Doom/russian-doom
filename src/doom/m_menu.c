@@ -5122,6 +5122,11 @@ void M_RD_BackToDefaults_Recommended(int choice)
     message_secret_color  = 7;
     message_system_color  = 0;
     message_chat_color    = 2;
+    // Reinit message colors.
+    M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);
+    M_RD_Define_Msg_Color(msg_secret, message_secret_color);
+    M_RD_Define_Msg_Color(msg_system, message_system_color);
+    M_RD_Define_Msg_Color(msg_chat, message_chat_color);
 
     // Automap
     automap_color     = 0;
@@ -5301,6 +5306,11 @@ void M_RD_BackToDefaults_Original(int choice)
     message_secret_color  = 0;
     message_system_color  = 0;
     message_chat_color    = 0;
+    // Reinit message colors.
+    M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);
+    M_RD_Define_Msg_Color(msg_secret, message_secret_color);
+    M_RD_Define_Msg_Color(msg_system, message_system_color);
+    M_RD_Define_Msg_Color(msg_chat, message_chat_color);
 
     // Automap
     automap_color     = 0;
