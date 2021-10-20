@@ -31,6 +31,11 @@
 #define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
+#elif defined(__APPLE__)
+#include <mach-o/dyld.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <sys/syslimits.h>
 #else
 #include <sys/stat.h>
 #include <unistd.h>
@@ -86,7 +91,45 @@ void M_SetExeDir(void)
     *(fp + 1) = '\0';
 
     exedir = M_StringDuplicate(dirname);
-#else
+#elif defined(__APPLE__) //TODO [Dasperal] test this
+    uint32_t buffSize = PATH_MAX+1;
+    char *exenameRaw, *exename, *dirname;
+    int result;
+
+    exenameRaw = malloc(buffSize);
+    result = _NSGetExecutablePath(exenameRaw, &buffSize);
+    if(result == -1) // if needs larger buffer - retry
+    {
+        free(exenameRaw);
+        exenameRaw =  malloc(buffSize);
+        result = _NSGetExecutablePath(exenameRaw, &buffSize);
+    }
+
+    if(result == 0)
+    {
+        exename = malloc(buffSize); // [Dasperal] Use a buffer of the same size and hope that this is enough
+        if(realpath(exenameRaw, exename) != NULL)
+        {
+            dirname = M_DirName(exename);
+        }
+        else
+        {
+            printf("I_MAIN: Error: Unable to resolve path to executable. Errored path:\n \t%s\n", exename);
+            printf("I_MAIN: Trying to get path to executable from arg0\n \t%s\n", myargv[0]);
+            dirname = M_DirName(myargv[0]);
+        }
+        free(exename);
+    }
+    else
+    {
+        printf("I_MAIN: Error: Unable to get path to executable from _NSGetExecutablePath\n");
+        printf("I_MAIN: Trying to get path to executable from arg0\n \t%s\n", myargv[0]);
+        dirname = M_DirName(myargv[0]);
+    }
+    free(exenameRaw);
+    exedir = M_StringJoin(dirname, DIR_SEPARATOR_S, NULL);
+    free(dirname);
+#else // Linux
     static const char *proc_exe_link = "/proc/self/exe";
     char *dirname, *exename;
     struct stat linkStat;
