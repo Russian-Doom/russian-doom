@@ -409,12 +409,54 @@ void BK_StartBindingKey(bound_key_t key)
     keyToBind = key;
 }
 
+// -----------------------------------------------------------------------------
+// RemoveKeyFromBinds
+// Removes given key of device from all bound_keys
+// -----------------------------------------------------------------------------
+void RemoveKeyFromBinds(device_t device, int key)
+{
+    bind_descriptor_t *prevDescriptor, *tmp;
+
+    for(int i = bk_forward; i < bk__serializable; ++i)
+    {
+        if(bind_descriptor[i] == NULL)
+            continue;
+
+        if(bind_descriptor[i]->device == device && bind_descriptor[i]->key == key)
+        {
+            tmp = bind_descriptor[i];
+            bind_descriptor[i] = bind_descriptor[i]->next;
+            free(tmp);
+            continue;
+        }
+
+        prevDescriptor = bind_descriptor[i];
+        tmp = prevDescriptor->next;
+        while(tmp)
+        {
+            if(tmp->device == device && tmp->key == key)
+            {
+                prevDescriptor->next = tmp->next;
+                free(tmp);
+                break; // from while loop
+            }
+            else
+            {
+                prevDescriptor = tmp;
+                tmp = prevDescriptor->next;
+            }
+        }
+    }
+}
+
 static void AddBind(bound_key_t boundKey, device_t device, int key)
 {
     bind_descriptor_t* bind = bind_descriptor[boundKey];
 
     if(bind == NULL)
     {
+        if(bindClearEnabled)
+            RemoveKeyFromBinds(device, key);
         bind = malloc(sizeof(bind_descriptor));
         bind->next = NULL;
         bind->device = device;
@@ -447,6 +489,8 @@ static void AddBind(bound_key_t boundKey, device_t device, int key)
         }
 
         // Add new bind
+        if(bindClearEnabled)
+            RemoveKeyFromBinds(device, key);
         bind = malloc(sizeof(bind_descriptor));
         bind->next = NULL;
         bind->device = device;
@@ -458,6 +502,25 @@ static void AddBind(bound_key_t boundKey, device_t device, int key)
 
 void BK_BindKey(event_t* event)
 {
+    // [Dasperal] Prohibit binding of some keyboard keys and gamepad menu key
+    if((event->type == ev_keydown
+    && (event->data1 == KEY_F1
+    || event->data1 == KEY_F2
+    || event->data1 == KEY_F3
+    || event->data1 == KEY_F4
+    || event->data1 == KEY_F5
+    || event->data1 == KEY_F7
+    || event->data1 == KEY_F8
+    || event->data1 == KEY_F10
+    || event->data1 == KEY_F11
+    || event->data1 == KEY_EQUALS
+    || event->data1 == KEY_MINUS
+    || event->data1 == KEY_PAUSE))
+    || (event->type == ev_controller_keydown && event->data1 == CONTROLLER_START))
+    {
+        return;
+    }
+
     isBinding = false;
 
     if(!BK_isKeyDown(event, bk_menu_activate))
@@ -486,6 +549,8 @@ void BK_ClearBinds(bound_key_t key)
 
 void BK_AddBindingsToSystemKeys()
 {
+    bindClearEnabled = false;
+
     // Keyboard
     AddBind(bk_left,  keyboard, KEY_LEFTARROW);
     AddBind(bk_right, keyboard, KEY_RIGHTARROW);
@@ -541,10 +606,14 @@ void BK_AddBindingsToSystemKeys()
 
     AddBind(bk_confirm, controller, CONTROLLER_A);
     AddBind(bk_abort,   controller, CONTROLLER_B);
+
+    bindClearEnabled = true;
 };
 
 void BK_ApplyDefaultBindings()
 {
+    bindClearEnabled = false;
+
     // Keyboard
     AddBind(bk_forward,        keyboard, 'w');
     AddBind(bk_backward,       keyboard, 's');
@@ -665,6 +734,8 @@ void BK_ApplyDefaultBindings()
 
     // Controller
     AddBind(bk_look_center, controller, CONTROLLER_RIGHT_STICK);
+
+    bindClearEnabled = true;
 }
 
 void BK_LoadBindings(void* file)
