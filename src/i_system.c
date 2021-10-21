@@ -201,12 +201,7 @@ void I_Quit (void)
         entry = entry->next;
     }
 
-    // [JN] Windows only: do not call clean up of all initialized 
-    // subsystems, as they should be freed earlier. Fixes potentional
-    // black screen after exit on Windows 11.
-#ifndef _WIN32
     SDL_Quit();
-#endif
 
     exit(0);
 }
