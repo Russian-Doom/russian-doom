@@ -83,14 +83,25 @@ void M_SetExeDir(void)
 
     memset(dirname, 0, sizeof(dirname));
     dirname_len = GetModuleFileName(NULL, dirname, MAX_PATH);
-    fp = &dirname[dirname_len];
-    while (dirname <= fp && *fp != DIR_SEPARATOR)
+    if(dirname_len > 0)
     {
-        fp--;
-    }
-    *(fp + 1) = '\0';
+        fp = &dirname[dirname_len];
+        while (dirname <= fp && *fp != DIR_SEPARATOR)
+        {
+            fp--;
+        }
+        *(fp + 1) = '\0';
 
-    exedir = M_StringDuplicate(dirname);
+        exedir = M_StringDuplicate(dirname);
+    }
+    else
+    {
+        printf("I_MAIN: Error: Unable to get path to executable from GetModuleFileName");
+        printf("I_MAIN: Trying to get path to executable from arg0\n \t%s\n", myargv[0]);
+        fp = M_DirName(myargv[0]);
+        exedir = M_StringJoin(fp, DIR_SEPARATOR_S, NULL);
+        free(fp);
+    }
 #elif defined(__APPLE__) //TODO [Dasperal] test this
     uint32_t buffSize = PATH_MAX+1;
     char *exenameRaw, *exename, *dirname;
