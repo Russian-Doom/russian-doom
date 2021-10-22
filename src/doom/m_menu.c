@@ -53,42 +53,43 @@
 #include "rd_menu.h"
 #include "jn.h"
 
+
 #define LINEHEIGHT      16
+
 
 void (*messageRoutine)(boolean);
 
 boolean inhelpscreens;
-int InfoType = 0;
+static int InfoType = 0;
+
 extern int alwaysRun;
-
-// [JN] Save strings and messages 
-int     quickSaveSlot;      // -1 = no quicksave slot picked!
-int     messageToPrint;     // 1 = message to be printed
-char   *messageString;      // ...and here is the message string!
-static boolean slottextloaded;
-boolean saveStatus[8];
-char    savegamestrings[10][SAVESTRINGSIZE];
-char    saveOldString[SAVESTRINGSIZE];  // old save description before edit
-char	endstring[160];
-boolean messageNeedsInput;  // timed message = no input from user
-boolean QuickSaveTitle;     // [JN] Extra title "БЫСТРОЕ СОХРАНЕНИЕ"
-
-// message x & y
-int     messageLastMenuActive;
-
-// we are going to be entering a savegame string
-int     saveStringEnter;              
-int     saveSlot;           // which slot to save in
-int     saveCharIndex;      // which char we're editing
-
-
 extern boolean sendpause;
 
-short   skullAnimCounter;   // skull animation counter
-short   whichSkull;         // which skull to draw
+// [JN] Save strings and messages 
+static int     quickSaveSlot;      // -1 = no quicksave slot picked!
+static int     messageToPrint;     // 1 = message to be printed
+static char   *messageString;      // ...and here is the message string!
+static boolean slottextloaded;
+static boolean saveStatus[8];
+static char    savegamestrings[10][SAVESTRINGSIZE];
+static char    saveOldString[SAVESTRINGSIZE];  // old save description before edit
+static char	   endstring[160];
+static boolean messageNeedsInput;  // timed message = no input from user
+static boolean QuickSaveTitle;     // [JN] Extra title "БЫСТРОЕ СОХРАНЕНИЕ"
+
+// message x & y
+static int messageLastMenuActive;
+
+// we are going to be entering a savegame string
+static int  saveStringEnter;              
+static int  saveSlot;           // which slot to save in
+static int  saveCharIndex;      // which char we're editing
+
+static short skullAnimCounter;   // skull animation counter
+static short whichSkull;         // which skull to draw
 
 // graphic name of skulls
-char   *skullName[2] = {"M_SKULL1", "M_SKULL2"};
+static char *skullName[2] = {"M_SKULL1", "M_SKULL2"};
 
 // -----------------------------------------------------------------------------
 // [JN] Custom RD menu: font writing prototypes
@@ -103,130 +104,130 @@ void M_WriteTextSmallCentered_RUS(int y, char *string);
 // PROTOTYPES
 //
 
-void M_NewGame(int choice);
-void M_Episode(int choice);
-void M_ChooseSkill(int choice);
-void M_LoadGame(int choice);
-void M_SaveGame(int choice);
-void M_EndGame(int choice);
-void M_ReadThis(int choice);
-void M_ReadThis2(int choice);
-void M_QuitDOOM(int choice);
+static void M_NewGame();
+static void M_Episode(int choice);
+static void M_ChooseSkill(int choice);
+static void M_LoadGame();
+static void M_SaveGame();
+static void M_EndGame();
+static void M_ReadThis();
+static void M_ReadThis2();
+static void M_QuitDOOM();
 
-void M_FinishReadThis(int choice);
-void M_LoadSelect(int choice);
-void M_SaveSelect(int choice);
-void M_ReadSaveStrings(void);
-void M_QuickSave(void);
-void M_QuickLoad(void);
+static void M_FinishReadThis();
+static void M_LoadSelect(int choice);
+static void M_SaveSelect(int choice);
+static void M_ReadSaveStrings();
+static void M_QuickSave();
+static void M_QuickLoad();
 
-void M_DrawMainMenu(void);
-void M_DrawReadThis1(void);
-void M_DrawReadThis2(void);
-void M_DrawNewGame(void);
-void M_DrawEpisode(void);
-void M_DrawLoad(void);
-void M_DrawSave(void);
+static void M_DrawMainMenu();
+static void M_DrawReadThis1();
+static void M_DrawReadThis2();
+static void M_DrawNewGame();
+static void M_DrawEpisode();
+static void M_DrawLoad();
+static void M_DrawSave();
 
-void M_DrawSaveLoadBorder(int x,int y);
+static void M_DrawSaveLoadBorder(int x,int y);
 int  M_StringWidth(char *string);
-int  M_StringHeight(char *string);
-void M_StartMessage(char *string,void *routine,boolean input);
+static int  M_StringHeight(char *string);
+static void M_StartMessage(char *string,void *routine,boolean input);
 
 // -----------------------------------------------------------------------------
 // [JN] Custom RD menu prototypes
 // -----------------------------------------------------------------------------
 
 // Rendering
-void M_RD_Draw_Rendering(void);
-void M_RD_Change_Widescreen(Direction_t direction);
-void M_RD_Change_VSync();
-void M_RD_Change_Uncapped();
-void M_RD_Change_PerfCounter();
-void M_RD_Change_DiskIcon();
-void M_RD_Change_Smoothing();
-void M_RD_Change_Wiping(Direction_t direction);
-void M_RD_Change_Screenshots();
-void M_RD_Change_ENDOOM();
-void M_RD_Change_Renderer();
-void M_RD_Change_PorchFlashing();
+static void M_RD_Draw_Rendering();
+static void M_RD_Change_Widescreen(Direction_t direction);
+static void M_RD_Change_VSync();
+static void M_RD_Change_Uncapped();
+static void M_RD_Change_PerfCounter();
+static void M_RD_Change_DiskIcon();
+static void M_RD_Change_Smoothing();
+static void M_RD_Change_Wiping(Direction_t direction);
+static void M_RD_Change_Screenshots();
+static void M_RD_Change_ENDOOM();
+static void M_RD_Change_Renderer();
+static void M_RD_Change_PorchFlashing();
 
 // Display
-void M_RD_Draw_Display(void);
-void M_RD_Change_ScreenSize(Direction_t direction);
-void M_RD_Change_Gamma(Direction_t direction);
-void M_RD_Change_LevelBrightness(Direction_t direction);
-void M_RD_Change_MenuShading(Direction_t direction);
-void M_RD_Change_Detail();
-void M_RD_Change_HUD_Detail();
-void M_RD_Change_LocalTime(Direction_t direction);
+static void M_RD_Draw_Display();
+static void M_RD_Change_ScreenSize(Direction_t direction);
+static void M_RD_Change_Gamma(Direction_t direction);
+static void M_RD_Change_LevelBrightness(Direction_t direction);
+static void M_RD_Change_MenuShading(Direction_t direction);
+static void M_RD_Change_Detail();
+static void M_RD_Change_HUD_Detail();
+static void M_RD_Change_LocalTime(Direction_t direction);
 
 // Colors
-void M_RD_Draw_Colors(void);
-void M_RD_Change_Brightness(Direction_t direction);
-void M_RD_Change_Saturation(Direction_t direction);
-void M_RD_Change_ShowPalette();
-void M_RD_Change_RED_Color(Direction_t direction);
-void M_RD_Change_GREEN_Color(Direction_t direction);
-void M_RD_Change_BLUE_Color(Direction_t direction);
+static void M_RD_Draw_Colors();
+static void M_RD_Change_Brightness(Direction_t direction);
+static void M_RD_Change_Saturation(Direction_t direction);
+static void M_RD_Change_ShowPalette();
+static void M_RD_Change_RED_Color(Direction_t direction);
+static void M_RD_Change_GREEN_Color(Direction_t direction);
+static void M_RD_Change_BLUE_Color(Direction_t direction);
 
 // Messages
-void M_RD_Draw_MessagesSettings(void);
-void M_RD_Change_Messages();
-void M_RD_Change_Msg_Alignment(Direction_t direction);
-void M_RD_Change_Msg_TimeOut(Direction_t direction);
-void M_RD_Change_Msg_Fade();
-void M_RD_Change_ShadowedText();
-void M_RD_Change_Msg_Pickup_Color(Direction_t direction);
-void M_RD_Change_Msg_Secret_Color(Direction_t direction);
-void M_RD_Change_Msg_System_Color(Direction_t direction);
-void M_RD_Change_Msg_Chat_Color(Direction_t direction);
+static void M_RD_Draw_MessagesSettings();
+static void M_RD_Change_Messages();
+static void M_RD_Change_Msg_Alignment(Direction_t direction);
+static void M_RD_Change_Msg_TimeOut(Direction_t direction);
+static void M_RD_Change_Msg_Fade();
+static void M_RD_Change_ShadowedText();
+static void M_RD_Change_Msg_Pickup_Color(Direction_t direction);
+static void M_RD_Change_Msg_Secret_Color(Direction_t direction);
+static void M_RD_Change_Msg_System_Color(Direction_t direction);
+static void M_RD_Change_Msg_Chat_Color(Direction_t direction);
 
 // Automap
-void M_RD_Draw_AutomapSettings(void);
-void M_RD_Change_AutomapColor(Direction_t direction);
-void M_RD_Change_AutomapAntialias();
-void M_RD_Change_AutomapOverlay();
-void M_RD_Change_AutomapRotate();
-void M_RD_Change_AutomapFollow();
-void M_RD_Change_AutomapGrid();
-void M_RD_Change_AutomapGridSize(Direction_t direction);
-void M_RD_Change_AutomapStats(Direction_t direction);
-void M_RD_Change_AutomapLevelTime(Direction_t direction);
-void M_RD_Change_AutomapTotalTime(Direction_t direction);
-void M_RD_Change_AutomapCoords(Direction_t direction);
-void M_RD_Change_HUDWidgetColors(Direction_t direction);
+static void M_RD_Draw_AutomapSettings();
+static void M_RD_Change_AutomapColor(Direction_t direction);
+static void M_RD_Change_AutomapAntialias();
+static void M_RD_Change_AutomapOverlay();
+static void M_RD_Change_AutomapRotate();
+static void M_RD_Change_AutomapFollow();
+static void M_RD_Change_AutomapGrid();
+static void M_RD_Change_AutomapGridSize(Direction_t direction);
+static void M_RD_Change_AutomapStats(Direction_t direction);
+static void M_RD_Change_AutomapLevelTime(Direction_t direction);
+static void M_RD_Change_AutomapTotalTime(Direction_t direction);
+static void M_RD_Change_AutomapCoords(Direction_t direction);
+static void M_RD_Change_HUDWidgetColors(Direction_t direction);
 
 // Sound
-void M_RD_Draw_Audio(void);
-void M_RD_Change_SfxVol(Direction_t direction);
-void M_RD_Change_MusicVol(Direction_t direction);
-void M_RD_Change_SfxChannels(Direction_t direction);
+static void M_RD_Draw_Audio();
+static void M_RD_Change_SfxVol(Direction_t direction);
+static void M_RD_Change_MusicVol(Direction_t direction);
+static void M_RD_Change_SfxChannels(Direction_t direction);
 
 // Sound system
-void M_RD_Draw_Audio_System(void);
-void M_RD_Change_SoundDevice(Direction_t direction);
-void M_RD_Change_MusicDevice(Direction_t direction);
-void M_RD_Change_Sampling(Direction_t direction);
-void M_RD_Change_SndMode();
-void M_RD_Change_PitchShifting();
-void M_RD_Change_MuteInactive();
+static void M_RD_Draw_Audio_System();
+static void M_RD_Change_SoundDevice(Direction_t direction);
+static void M_RD_Change_MusicDevice(Direction_t direction);
+static void M_RD_Change_Sampling(Direction_t direction);
+static void M_RD_Change_SndMode();
+static void M_RD_Change_PitchShifting();
+static void M_RD_Change_MuteInactive();
 
 // Controls
-void M_RD_Draw_Controls(void);
-void M_RD_Change_MouseLook();
-void M_RD_Change_InvertY();
-void M_RD_Change_Novert();
-void M_RD_Change_AlwaysRun();
-void M_RD_Change_Sensitivity(Direction_t direction);
-void M_RD_Change_Acceleration(Direction_t direction);
-void M_RD_Change_Threshold(Direction_t direction);
+static void M_RD_Draw_Controls();
+static void M_RD_Change_MouseLook();
+static void M_RD_Change_InvertY();
+static void M_RD_Change_Novert();
+static void M_RD_Change_AlwaysRun();
+static void M_RD_Change_Sensitivity(Direction_t direction);
+static void M_RD_Change_Acceleration(Direction_t direction);
+static void M_RD_Change_Threshold(Direction_t direction);
 
 // Key bindings (1)
-void M_RD_Draw_Bindings();
+static void M_RD_Draw_Bindings();
 
 // Gamepad
-void DrawGamepadMenu();
+static void DrawGamepadMenu();
 static void M_RD_UseGamepad();
 static void M_RD_BindAxis_Move(Direction_t direction);
 static void M_RD_InvertAxis_Move();
@@ -238,114 +239,114 @@ static void M_RD_BindAxis_VLook(Direction_t direction);
 static void M_RD_InvertAxis_VLook();
 
 // Gameplay
-void M_RD_Draw_Gameplay_1(void);
-void M_RD_Draw_Gameplay_2(void);
-void M_RD_Draw_Gameplay_3(void);
-void M_RD_Draw_Gameplay_4(void);
-void M_RD_Draw_Gameplay_5(void);
+static void M_RD_Draw_Gameplay_1();
+static void M_RD_Draw_Gameplay_2();
+static void M_RD_Draw_Gameplay_3();
+static void M_RD_Draw_Gameplay_4();
+static void M_RD_Draw_Gameplay_5();
 
-void M_RD_Change_Brightmaps();
-void M_RD_Change_FakeContrast();
-void M_RD_Change_Translucency();
-void M_RD_Change_ImprovedFuzz(Direction_t direction);
-void M_RD_Change_ColoredBlood();
-void M_RD_Change_SwirlingLiquids();
-void M_RD_Change_InvulSky();
-void M_RD_Change_LinearSky();
-void M_RD_Change_FlipWeapons();
+static void M_RD_Change_Brightmaps();
+static void M_RD_Change_FakeContrast();
+static void M_RD_Change_Translucency();
+static void M_RD_Change_ImprovedFuzz(Direction_t direction);
+static void M_RD_Change_ColoredBlood();
+static void M_RD_Change_SwirlingLiquids();
+static void M_RD_Change_InvulSky();
+static void M_RD_Change_LinearSky();
+static void M_RD_Change_FlipWeapons();
 
-void M_RD_Change_ExtraPlayerFaces();
-void M_RD_Change_NegativeHealth();
-void M_RD_Change_SBarColored(Direction_t direction);
-void M_RD_Change_SBarHighValue(Direction_t direction);
-void M_RD_Change_SBarNormalValue(Direction_t direction);
-void M_RD_Change_SBarLowValue(Direction_t direction);
-void M_RD_Change_SBarCriticalValue(Direction_t direction);
-void M_RD_Change_SBarArmorType1(Direction_t direction);
-void M_RD_Change_SBarArmorType2(Direction_t direction);
-void M_RD_Change_SBarArmorType0(Direction_t direction);
+static void M_RD_Change_ExtraPlayerFaces();
+static void M_RD_Change_NegativeHealth();
+static void M_RD_Change_SBarColored(Direction_t direction);
+static void M_RD_Change_SBarHighValue(Direction_t direction);
+static void M_RD_Change_SBarNormalValue(Direction_t direction);
+static void M_RD_Change_SBarLowValue(Direction_t direction);
+static void M_RD_Change_SBarCriticalValue(Direction_t direction);
+static void M_RD_Change_SBarArmorType1(Direction_t direction);
+static void M_RD_Change_SBarArmorType2(Direction_t direction);
+static void M_RD_Change_SBarArmorType0(Direction_t direction);
 
-void M_RD_Change_ZAxisSfx();
-void M_RD_Change_ExitSfx();
-void M_RD_Change_CrushingSfx();
-void M_RD_Change_BlazingSfx();
-void M_RD_Change_AlertSfx();
-void M_RD_Change_SecretNotify();
-void M_RD_Change_InfraGreenVisor();
+static void M_RD_Change_ZAxisSfx();
+static void M_RD_Change_ExitSfx();
+static void M_RD_Change_CrushingSfx();
+static void M_RD_Change_BlazingSfx();
+static void M_RD_Change_AlertSfx();
+static void M_RD_Change_SecretNotify();
+static void M_RD_Change_InfraGreenVisor();
 
-void M_RD_Change_WalkOverUnder();
-void M_RD_Change_Torque();
-void M_RD_Change_Bobbing();
-void M_RD_Change_SSGBlast();
-void M_RD_Change_FlipCorpses();
-void M_RD_Change_FloatPowerups(Direction_t direction);
-void M_RD_Change_TossDrop();
-void M_RD_Change_CrosshairDraw();
-void M_RD_Change_CrosshairType(Direction_t direction);
-void M_RD_Change_CrosshairScale();
+static void M_RD_Change_WalkOverUnder();
+static void M_RD_Change_Torque();
+static void M_RD_Change_Bobbing();
+static void M_RD_Change_SSGBlast();
+static void M_RD_Change_FlipCorpses();
+static void M_RD_Change_FloatPowerups(Direction_t direction);
+static void M_RD_Change_TossDrop();
+static void M_RD_Change_CrosshairDraw();
+static void M_RD_Change_CrosshairType(Direction_t direction);
+static void M_RD_Change_CrosshairScale();
 
-void M_RD_Change_FixMapErrors();
-void M_RD_Change_FlipLevels();
-void M_RD_Change_LostSoulsQty();
-void M_RD_Change_LostSoulsAgr();
-void M_RD_Change_PistolStart();
-void M_RD_Change_DemoTimer(Direction_t direction);
-void M_RD_Change_DemoTimerDir();
-void M_RD_Change_DemoBar();
-void M_RD_Change_NoInternalDemos();
+static void M_RD_Change_FixMapErrors();
+static void M_RD_Change_FlipLevels();
+static void M_RD_Change_LostSoulsQty();
+static void M_RD_Change_LostSoulsAgr();
+static void M_RD_Change_PistolStart();
+static void M_RD_Change_DemoTimer(Direction_t direction);
+static void M_RD_Change_DemoTimerDir();
+static void M_RD_Change_DemoBar();
+static void M_RD_Change_NoInternalDemos();
 
 // Level select
-void M_LevelSelect(int choice);
+static void M_LevelSelect(int choice);
 
-void M_RD_Draw_Level_1(void);
-void M_RD_Draw_Level_2(void);
+static void M_RD_Draw_Level_1();
+static void M_RD_Draw_Level_2();
 
-void M_RD_Change_Selective_Skill(Direction_t direction);
-void M_RD_Change_Selective_Episode(Direction_t direction);
-void M_RD_Change_Selective_Map(Direction_t direction);
-void M_RD_Change_Selective_Health(Direction_t direction);
-void M_RD_Change_Selective_Armor(Direction_t direction);
-void M_RD_Change_Selective_ArmorType();
+static void M_RD_Change_Selective_Skill(Direction_t direction);
+static void M_RD_Change_Selective_Episode(Direction_t direction);
+static void M_RD_Change_Selective_Map(Direction_t direction);
+static void M_RD_Change_Selective_Health(Direction_t direction);
+static void M_RD_Change_Selective_Armor(Direction_t direction);
+static void M_RD_Change_Selective_ArmorType();
 
-void M_RD_Change_Selective_WP_Chainsaw();
-void M_RD_Change_Selective_WP_Shotgun();
-void M_RD_Change_Selective_WP_SSgun();
-void M_RD_Change_Selective_WP_Chaingun();
-void M_RD_Change_Selective_WP_RLauncher();
-void M_RD_Change_Selective_WP_Plasmagun();
-void M_RD_Change_Selective_WP_BFG9000();
+static void M_RD_Change_Selective_WP_Chainsaw();
+static void M_RD_Change_Selective_WP_Shotgun();
+static void M_RD_Change_Selective_WP_SSgun();
+static void M_RD_Change_Selective_WP_Chaingun();
+static void M_RD_Change_Selective_WP_RLauncher();
+static void M_RD_Change_Selective_WP_Plasmagun();
+static void M_RD_Change_Selective_WP_BFG9000();
 
-void M_RD_Change_Selective_Backpack(Direction_t direction);
+static void M_RD_Change_Selective_Backpack(Direction_t direction);
 
-void M_RD_Change_Selective_Ammo_0(Direction_t direction);
-void M_RD_Change_Selective_Ammo_1(Direction_t direction);
-void M_RD_Change_Selective_Ammo_2(Direction_t direction);
-void M_RD_Change_Selective_Ammo_3(Direction_t direction);
+static void M_RD_Change_Selective_Ammo_0(Direction_t direction);
+static void M_RD_Change_Selective_Ammo_1(Direction_t direction);
+static void M_RD_Change_Selective_Ammo_2(Direction_t direction);
+static void M_RD_Change_Selective_Ammo_3(Direction_t direction);
 
-void M_RD_Change_Selective_Key_0();
-void M_RD_Change_Selective_Key_1();
-void M_RD_Change_Selective_Key_2();
-void M_RD_Change_Selective_Key_3();
-void M_RD_Change_Selective_Key_4();
-void M_RD_Change_Selective_Key_5();
+static void M_RD_Change_Selective_Key_0();
+static void M_RD_Change_Selective_Key_1();
+static void M_RD_Change_Selective_Key_2();
+static void M_RD_Change_Selective_Key_3();
+static void M_RD_Change_Selective_Key_4();
+static void M_RD_Change_Selective_Key_5();
 
-void M_RD_Change_Selective_Fast();
-void M_RD_Change_Selective_Respawn();
+static void M_RD_Change_Selective_Fast();
+static void M_RD_Change_Selective_Respawn();
 
 // Reset settings
-void M_RD_Draw_Reset(void);
-void M_RD_BackToDefaults_Recommended(int choice);
-void M_RD_BackToDefaults_Original(int choice);
+static void M_RD_Draw_Reset(void);
+static void M_RD_BackToDefaults_Recommended();
+static void M_RD_BackToDefaults_Original();
 
 // Language hot-swapping
-void M_RD_ChangeLanguage(int choice);
+static void M_RD_ChangeLanguage();
 
 // -----------------------------------------------------------------------------
 // [JN] Vanilla menu prototypes
 // -----------------------------------------------------------------------------
 
-void M_Vanilla_DrawOptions(void);
-void M_Vanilla_DrawSound(void);
+static void M_Vanilla_DrawOptions(void);
+static void M_Vanilla_DrawSound(void);
 
 // -----------------------------------------------------------------------------
 // HU_WriteTextBigCentered
@@ -5526,7 +5527,7 @@ void M_RD_ChangeLanguage(int choice)
 //  read the strings from the savegame files
 //
 
-void M_ReadSaveStrings(void)
+void M_ReadSaveStrings()
 {
     FILE    *handle;
     int     i;
@@ -5556,7 +5557,7 @@ void M_ReadSaveStrings(void)
 // M_LoadGame & Cie.
 //
 static int LoadDef_x = 72, LoadDef_y = 28;  // [JN] from Crispy Doom
-void M_DrawLoad(void)
+void M_DrawLoad()
 {
     int i;
     int x;
@@ -5625,7 +5626,7 @@ void M_LoadSelect(int choice)
 //
 // Selected from DOOM menu
 //
-void M_LoadGame (int choice)
+void M_LoadGame ()
 {
     if (netgame)
     {
@@ -5646,7 +5647,7 @@ void M_LoadGame (int choice)
 //  M_SaveGame & Cie.
 //
 static int SaveDef_x = 72, SaveDef_y = 28;  // [JN] from Crispy Doom
-void M_DrawSave(void)
+void M_DrawSave()
 {
     int i;
     int x;
@@ -5716,7 +5717,7 @@ void M_SaveSelect(int choice)
 //
 // Selected from DOOM menu
 //
-void M_SaveGame (int choice)
+void M_SaveGame ()
 {
     if (!usergame)
     {
@@ -5833,7 +5834,7 @@ void M_QuickLoad(void)
 // Read This Menus
 // Had a "quick hack to fix romero bug"
 //
-void M_DrawReadThis1(void)
+void M_DrawReadThis1()
 {
     char *lumpname = "CREDIT";
     int skullx = 330, skully = 175;
@@ -5936,7 +5937,7 @@ void M_DrawReadThis1(void)
 //
 // Read This Menus - optional second page.
 //
-void M_DrawReadThis2(void)
+void M_DrawReadThis2()
 {
     inhelpscreens = true;
 
@@ -5975,7 +5976,7 @@ void M_DrawMainMenu(void)
 //
 // M_NewGame
 //
-void M_DrawNewGame(void)
+void M_DrawNewGame()
 {
     inhelpscreens = true;
 
@@ -5993,7 +5994,7 @@ void M_DrawNewGame(void)
     }
 }
 
-void M_NewGame(int choice)
+void M_NewGame()
 {
     if (netgame && !demoplayback)
     {
@@ -6017,7 +6018,7 @@ void M_NewGame(int choice)
 //
 int epi;
 
-void M_DrawEpisode(void)
+void M_DrawEpisode()
 {
     inhelpscreens = true;
 
@@ -6135,12 +6136,12 @@ void M_EndGame(int choice)
 //
 // M_ReadThis2
 //
-void M_ReadThis(int choice)
+void M_ReadThis()
 {
     InfoType = 1;
 }
 
-void M_ReadThis2(int choice)
+void M_ReadThis2()
 {
     // Doom 1.9 had two menus when playing Doom 1
     // All others had only one
@@ -6156,11 +6157,11 @@ void M_ReadThis2(int choice)
     else
     {
         // Close the menu
-        M_FinishReadThis(0);
+        M_FinishReadThis();
     }
 }
 
-void M_FinishReadThis(int choice)
+void M_FinishReadThis()
 {
     InfoType = 0;
     RD_Menu_SetMenu(MainMenu);
@@ -6235,7 +6236,7 @@ static char *M_SelectEndMessage(void)
 }
 
 
-void M_QuitDOOM(int choice)
+void M_QuitDOOM()
 {
     DEH_snprintf(endstring, sizeof(endstring),
                 (english_language ? ("%s\n\n" DOSY) : ("%s\n\n" DOSY_RUS)),
