@@ -28,11 +28,9 @@ set(BUILD_DOOM_VERSION "${PROJECT_VERSION}")
 
 # Check architecture
 if(WIN32)
-    if("${CMAKE_C_COMPILER}" MATCHES "^(.*mingw64.*)|(.*clang64.*)" OR
-    (DEFINED MSVC AND "${CMAKE_GENERATOR_PLATFORM}" STREQUAL "x64"))
+    if("${CMAKE_C_COMPILER}" MATCHES "^(.*mingw64.*)|(.*clang64.*)")
         set(ARCH x64)
-    elseif("${CMAKE_C_COMPILER}" MATCHES "^(.*mingw32.*)|(.*clang32.*)" OR
-    (DEFINED MSVC AND "${CMAKE_GENERATOR_PLATFORM}" STREQUAL "Win32"))
+    elseif("${CMAKE_C_COMPILER}" MATCHES "^(.*mingw32.*)|(.*clang32.*)")
         set(ARCH x86)
     endif()
 endif()
@@ -42,16 +40,9 @@ endif()
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-if(MSVC)
-    add_definitions("/D_CRT_SECURE_NO_WARNINGS" "/D_CRT_SECURE_NO_DEPRECATE"
-                    "/D_CRT_NONSTDC_NO_DEPRECATE")
-    add_compile_options("/wd4068")
-    # MSVC already has /O2 in Release flags
-else()
-    add_compile_options("-Wall" "-Wdeclaration-after-statement"
-                        "-Wredundant-decls" "-Wno-unknown-pragmas" "-Wno-unused-result")
-    string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
-endif()
+add_compile_options("-Wall" "-Wdeclaration-after-statement"
+                    "-Wredundant-decls" "-Wno-unknown-pragmas" "-Wno-unused-result")
+string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
 
 find_package(SDL2 2.0.1 REQUIRED)
 find_package(SDL2_mixer 2.0.0 REQUIRED)

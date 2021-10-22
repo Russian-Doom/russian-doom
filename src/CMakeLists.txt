@@ -193,18 +193,6 @@ foreach(MODULE ${COMPILE_MODULES})
             LINK_FLAGS_RELEASE -s
         )
     endif()
-
-    # MSVC link flags
-    if(MSVC)
-        set_target_properties("${PROGRAM_PREFIX}${MODULE}" PROPERTIES
-            LINK_FLAGS "/MANIFEST:NO"
-            )
-        if(COMPILE_SETUP)
-            set_target_properties("${PROGRAM_PREFIX}${MODULE}-setup" PROPERTIES
-                LINK_FLAGS "/MANIFEST:NO"
-                )
-        endif()
-    endif()
 endforeach()
 
 # Copying gus patches
