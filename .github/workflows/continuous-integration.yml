@@ -3,105 +3,93 @@ name: Continuous Integration
 on: [push, pull_request]
 
 jobs:
-  Windows:
-    name: Windows | ${{ matrix.env.name }} | ${{ matrix.build-system.name }}
-    runs-on: windows-latest
+  Cmake:
+    name: ${{ matrix.config.os_name }} | ${{ matrix.config.build_type }}
+    runs-on: ${{ matrix.config.os }}
     strategy:
       fail-fast: false
       matrix:
-        env:
-          - name: "x86"
-            msystem: MINGW32
-            arch: i686
-          - name: "x64"
-            msystem: MINGW64
-            arch: x86_64
-        build-system:
-          - name: "Cmake"
-            dependency: cmake
-            build-command: cmake --build build --parallel 2
-          - name: "Autotools"
-            dependency: gcc # Placeholder
-            build-command: make -j 2
+        config:
+        - {
+            os_name: "Windows",
+            os: "windows-latest",
+            shell: "msys2 {0}",
+            cmake_generator: "MinGW Makefiles",
+            build_type: "x86",
+            msystem: "MINGW32",
+            arch: "i686"
+        }
+        - {
+            os_name: "Windows",
+            os: "windows-latest",
+            shell: "msys2 {0}",
+            cmake_generator: "MinGW Makefiles",
+            build_type: "x64",
+            msystem: "MINGW64",
+            arch: "x86_64"
+        }
+        - {
+            os_name: "Linux",
+            os: "ubuntu-latest",
+            shell: "bash",
+            cmake_generator: "Unix Makefiles",
+            build_type: "x64"
+        }
+    defaults:
+      run:
+        shell: ${{ matrix.config.shell }}
     steps:
       - name: Setup MSYS
+        if: ${{ matrix.config.os_name == 'Windows' }}
         uses: msys2/setup-msys2@v2
         with:
-          msystem: ${{ matrix.env.msystem }}
+          msystem: ${{ matrix.config.msystem }}
           update: true
           install: >-
-            base-devel
-            msys2-devel
-            mingw-w64-${{ matrix.env.arch }}-toolchain
-            mingw-w64-${{ matrix.env.arch }}-${{ matrix.build-system.dependency }}
-            mingw-w64-${{ matrix.env.arch }}-SDL2
-            mingw-w64-${{ matrix.env.arch }}-SDL2_net
-            mingw-w64-${{ matrix.env.arch }}-SDL2_mixer
-            mingw-w64-${{ matrix.env.arch }}-libsamplerate
-            mingw-w64-${{ matrix.env.arch }}-libpng
+            mingw-w64-${{ matrix.config.arch }}-toolchain
+            mingw-w64-${{ matrix.config.arch }}-cmake
+            mingw-w64-${{ matrix.config.arch }}-SDL2
+            mingw-w64-${{ matrix.config.arch }}-SDL2_net
+            mingw-w64-${{ matrix.config.arch }}-SDL2_mixer
+            mingw-w64-${{ matrix.config.arch }}-libsamplerate
+            mingw-w64-${{ matrix.config.arch }}-libpng
+
+      - name: Install Dependencies
+        if: ${{ matrix.config.os_name == 'Linux' }}
+        run: |
+          sudo apt-get update --fix-missing
+          sudo apt-get install --fix-missing gcc make cmake libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libpng-dev libsamplerate-dev
 
       - uses: actions/checkout@v2
 
-      - name: Configure CMake
-        if: ${{ matrix.build-system.name == 'Cmake' }}
-        shell: msys2 {0}
+      - name: Configure
         run: |
-          cmake -G"MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -S . -B build
-
-      - name: Configure Autotools
-        if: ${{ matrix.build-system.name == 'Autotools' }}
-        shell: msys2 {0}
-        run: |
-          ./autogen.sh --host=${{ matrix.env.arch }}-w64-mingw64
+          cmake -G"${{ matrix.config.cmake_generator }}" -DCMAKE_BUILD_TYPE=Release -S . -B build
 
       - name: Build
-        shell: msys2 {0}
         run: |
           export MAKEFLAGS=--keep-going
-          ${{ matrix.build-system.build-command }}
+          cmake --build build --parallel 2
 
-  Linux:
-    name: Linux | ${{ matrix.build-system.name }} | ${{ matrix.env }}
+  Autotools:
+    name: Autotools | Linux | x64
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        build-system:
-          - name: "Cmake"
-            dependency: cmake
-            config-command-dev: cmake -DCMAKE_BUILD_TYPE=Release -BUILD_PORTABLE=ON -S . -B build
-            config-command-rel: cmake -DCMAKE_BUILD_TYPE=Release -BUILD_PORTABLE=OFF -S . -B build
-            build-command: cmake --build build --parallel 2
-          - name: "Autotools"
-            dependency: automake
-            config-command-dev: ./autogen.sh
-            config-command-rel: ./autogen.sh
-            build-command: make -j 2
-        env: [DEV_ENV, REL_ENV]
-        exclude:
-          - build-system:
-              name: "Autotools"
-            env: DEV_ENV
     steps:
       - name: Install Dependencies
         shell: bash
         run: |
           sudo apt-get update --fix-missing
-          sudo apt-get install --fix-missing gcc make libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libpng-dev libsamplerate-dev ${{ matrix.build-system.dependency }}
+          sudo apt-get install --fix-missing gcc make automake libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libpng-dev libsamplerate-dev
 
       - uses: actions/checkout@v2
 
       - name: Configure
         shell: bash
         run: |
-          if [[ "${{ matrix.env }}" == 'DEV_ENV' ]]; then
-            ${{ matrix.build-system.config-command-dev }}
-          else
-            ${{ matrix.build-system.config-command-rel }}
-          fi
+          ./autogen.sh
 
       - name: Build
         shell: bash
         run: |
           export MAKEFLAGS=--keep-going
-          ${{ matrix.build-system.build-command }}
+          make -j 2
