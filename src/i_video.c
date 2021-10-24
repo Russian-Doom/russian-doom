@@ -71,7 +71,7 @@ static char *window_title = "";
 // in turn is finally rendered to screen using "linear" scaling.
 
 static SDL_Surface *screenbuffer = NULL;
-static SDL_Surface *rgbabuffer = NULL;
+static SDL_Surface *argbbuffer = NULL;
 static SDL_Texture *texture = NULL;
 static SDL_Texture *texture_upscaled = NULL;
 
@@ -916,24 +916,24 @@ void I_FinishUpdate (void)
 
     if (aspect_ratio == 0 || aspect_ratio == 1)
     {
-        SDL_LowerBlit(screenbuffer, &blit_rect, rgbabuffer, &blit_rect);
+        SDL_LowerBlit(screenbuffer, &blit_rect, argbbuffer, &blit_rect);
     }
     else if (aspect_ratio == 2)
     {
-        SDL_LowerBlit(screenbuffer, &w_blit_rect_16_9, rgbabuffer, &w_blit_rect_16_9);
+        SDL_LowerBlit(screenbuffer, &w_blit_rect_16_9, argbbuffer, &w_blit_rect_16_9);
     }
     else if (aspect_ratio == 3)
     {
-        SDL_LowerBlit(screenbuffer, &w_blit_rect_16_10, rgbabuffer, &w_blit_rect_16_10);
+        SDL_LowerBlit(screenbuffer, &w_blit_rect_16_10, argbbuffer, &w_blit_rect_16_10);
     }
     else if (aspect_ratio == 4)
     {
-        SDL_LowerBlit(screenbuffer, &w_blit_rect_21_9, rgbabuffer, &w_blit_rect_21_9);
+        SDL_LowerBlit(screenbuffer, &w_blit_rect_21_9, argbbuffer, &w_blit_rect_21_9);
     }
 
     // Update the intermediate texture with the contents of the RGBA buffer.
 
-    SDL_UpdateTexture(texture, NULL, rgbabuffer->pixels, rgbabuffer->pitch);
+    SDL_UpdateTexture(texture, NULL, argbbuffer->pixels, argbbuffer->pitch);
 
     // Make sure the pillarboxes are kept clear each frame.
 
@@ -1462,9 +1462,29 @@ static void SetVideoMode(void)
     if (renderer != NULL)
     {
         SDL_DestroyRenderer(renderer);
+        // all associated textures get destroyed
+        texture = NULL;
+        texture_upscaled = NULL;
     }
 
     renderer = SDL_CreateRenderer(screen, -1, renderer_flags);
+
+    // If we could not find a matching render driver,
+    // try again without hardware acceleration.
+
+    if (renderer == NULL && !force_software_renderer)
+    {
+        renderer_flags |= SDL_RENDERER_SOFTWARE;
+        renderer_flags &= ~SDL_RENDERER_PRESENTVSYNC;
+
+        renderer = SDL_CreateRenderer(screen, -1, renderer_flags);
+
+        // If this helped, save the setting for later.
+        if (renderer != NULL)
+        {
+            force_software_renderer = 1;
+        }
+    }
 
     if (renderer == NULL)
     {
@@ -1487,9 +1507,7 @@ static void SetVideoMode(void)
                              
     // Force integer scales for resolution-independent rendering.
     
-    #if SDL_VERSION_ATLEAST(2, 0, 5)
-        SDL_RenderSetIntegerScale(renderer, integer_scaling);
-    #endif
+    SDL_RenderSetIntegerScale(renderer, integer_scaling);
 
     // Blank out the full screen area in case there is any junk in
     // the borders that won't otherwise be overwritten.
@@ -1499,6 +1517,12 @@ static void SetVideoMode(void)
     SDL_RenderPresent(renderer);
 
     // Create the 8-bit paletted and the 32-bit RGBA screenbuffer surfaces.
+
+    if (screenbuffer != NULL)
+    {
+        SDL_FreeSurface(screenbuffer);
+        screenbuffer = NULL;
+    }
 
     if (screenbuffer == NULL)
     {
@@ -1510,14 +1534,21 @@ static void SetVideoMode(void)
 
     // Format of rgbabuffer must match the screen pixel format because we
     // import the surface data into the texture.
-    if (rgbabuffer == NULL)
+
+    if (argbbuffer != NULL)
+    {
+        SDL_FreeSurface(argbbuffer);
+        argbbuffer = NULL;
+    }
+
+    if (argbbuffer == NULL)
     {
         SDL_PixelFormatEnumToMasks(pixel_format, &bpp,
                                    &rmask, &gmask, &bmask, &amask);
-        rgbabuffer = SDL_CreateRGBSurface(0,
+        argbbuffer = SDL_CreateRGBSurface(0,
                                           screenwidth, SCREENHEIGHT, bpp,
                                           rmask, gmask, bmask, amask);
-        SDL_FillRect(rgbabuffer, NULL, 0);
+        SDL_FillRect(argbbuffer, NULL, 0);
     }
 
     if (texture != NULL)
@@ -1656,33 +1687,17 @@ void I_ReInitGraphics (int reinit)
 		unsigned int rmask, gmask, bmask, amask;
 		int unused_bpp;
 
-        // [JN] Uhh... Needed?
-        /*
-		if (hires)
-		{
-			SCREENWIDTH = MAXWIDTH;
-			SCREENHEIGHT = MAXHEIGHT;
-			SCREENHEIGHT_4_3 = MAXHEIGHT_4_3;
-		}
-		else
-		{
-			SCREENWIDTH = ORIGWIDTH;
-			SCREENHEIGHT = ORIGHEIGHT;
-			SCREENHEIGHT_4_3 = ORIGHEIGHT_4_3;
-		}
-        */
-
 		// [crispy] re-initialize resolution-agnostic patch drawing
 		V_Init();
 
-		SDL_FreeSurface(rgbabuffer);
+		SDL_FreeSurface(argbbuffer);
 		SDL_PixelFormatEnumToMasks(pixel_format, &unused_bpp,
 		                           &rmask, &gmask, &bmask, &amask);
-		rgbabuffer = SDL_CreateRGBSurface(0,
+		argbbuffer = SDL_CreateRGBSurface(0,
 		                                  screenwidth, SCREENHEIGHT, 32,
 		                                  rmask, gmask, bmask, amask);
 
-		I_VideoBuffer = rgbabuffer->pixels;
+		I_VideoBuffer = argbbuffer->pixels;
 
 		V_RestoreBuffer();
 
