@@ -1264,7 +1264,7 @@ void HU_Drawer(void)
             P_AimLineAttack(plr->mo, plr->mo->angle, missilerange);
 
             if (linetarget)
-            dp_translation = cr[CR_GRAY];
+            dp_translation = cr[CR_YELLOW];
         }
         else if (crosshair_type == 3)
         {
@@ -1275,7 +1275,7 @@ void HU_Drawer(void)
             P_AimLineAttack(plr->mo, plr->mo->angle, missilerange);
 
             if (linetarget)
-            dp_translation = cr[CR_GRAY];
+            dp_translation = cr[CR_WHITE];
         }
 
         if (crosshair_scale)
