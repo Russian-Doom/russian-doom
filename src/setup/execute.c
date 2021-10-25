@@ -358,7 +358,6 @@ static void TestCallback(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(data))
 {
     execute_context_t *exec;
     char *main_cfg;
-    char *extra_cfg;
     txt_window_t *testwindow;
 
     if (english_language)
@@ -379,16 +378,14 @@ static void TestCallback(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(data))
     // Save temporary configuration files with the current configuration
 
     main_cfg = TempFile("tmp.cfg");
-    extra_cfg = TempFile("extratmp.cfg");
 
-    M_SaveDefaultsAlternate(main_cfg, extra_cfg);
+    M_SaveDefaultAlternate(main_cfg);
 
     // Run with the -testcontrols parameter
 
     exec = NewExecuteContext();
     AddCmdLineParameter(exec, "-testcontrols");
     AddCmdLineParameter(exec, "-config \"%s\"", main_cfg);
-    AddCmdLineParameter(exec, "-extraconfig \"%s\"", extra_cfg);
     ExecuteDoom(exec);
 
     TXT_CloseWindow(testwindow);
@@ -396,9 +393,7 @@ static void TestCallback(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(data))
     // Delete the temporary config files
 
     remove(main_cfg);
-    remove(extra_cfg);
     free(main_cfg);
-    free(extra_cfg);
 }
 
 txt_window_action_t *TestConfigAction(void)

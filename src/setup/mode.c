@@ -277,7 +277,7 @@ static void SetMission(mission_config_t *config)
     gamemission = config->mission;
     SetExecutable(config);
     game_title = config->label;
-    M_SetConfigFilenames(/*config->config_file, */config->extra_config_file);
+    M_SetConfigFilename(config->extra_config_file);
 }
 
 static mission_config_t *GetMissionForName(char *name)

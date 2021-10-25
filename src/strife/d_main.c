@@ -1610,7 +1610,7 @@ void D_DoomMain (void)
     // Load configuration files before initialising other subsystems.
     // haleyjd 08/22/2010: [STRIFE] - use strife.cfg
     // DEH_printf("M_LoadDefaults: Load system defaults.\n"); [STRIFE] removed
-    M_SetConfigFilenames(/*"strife.cfg", */PROGRAM_PREFIX "strife.cfg");
+    M_SetConfigFilename(PROGRAM_PREFIX "strife.cfg");
     D_BindVariables();
     M_LoadDefaults();
 

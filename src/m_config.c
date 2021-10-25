@@ -44,15 +44,13 @@
 // DEFAULTS
 //
 
-// Location where all configuration data is stored - 
-// default.ini, savegames, etc.
+// Location where all configuration data is stored
 
 char *configdir;
 
 // Default filenames for configuration files.
 
-// static char *default_main_config;
-static char *default_extra_config;
+static char *config_file_name;
 
 typedef enum 
 {
@@ -114,26 +112,7 @@ typedef struct
 
 //! @begin_config_file default
 
-// [JN] Все стандартное управление перенесено в
-// extra_defaults_list, что бы создать единый
-// конфигурационный файл для каждой игры.
-/*
-static default_t	doom_defaults_list[] =
-{
-    
-};
-*/
-
-static default_collection_t doom_defaults =
-{
-    // doom_defaults_list,
-    // arrlen(doom_defaults_list),
-    NULL,
-};
-
-//! @begin_config_file extended
-
-static default_t extra_defaults_list[] =
+static default_t defaults_list[] =
 {
     //!
     // [JN] Support for switching to the English language.
@@ -775,10 +754,10 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(no_internal_demos),
 };
 
-static default_collection_t extra_defaults =
+static default_collection_t default_collection =
 {
-    extra_defaults_list,
-    arrlen(extra_defaults_list),
+    defaults_list,
+    arrlen(defaults_list),
     NULL,
 };
 
@@ -903,7 +882,7 @@ static void LoadDefaultCollection(default_collection_t *collection)
     char defname[80];
     char strparm[100];
 
-    // read the file in, overriding any set defaults
+    // read the file in, overriding any set default_collection
     f = fopen(collection->filename, "r");
 
     if (f == NULL)
@@ -968,10 +947,9 @@ static void LoadDefaultCollection(default_collection_t *collection)
 
 // Set the default filenames to use for configuration files.
 
-void M_SetConfigFilenames(/*char *main_config, */char *extra_config)
+void M_SetConfigFilename(char *name)
 {
-    // default_main_config = main_config;
-    default_extra_config = extra_config;
+    config_file_name = name;
 }
 
 //
@@ -980,33 +958,28 @@ void M_SetConfigFilenames(/*char *main_config, */char *extra_config)
 
 void M_SaveDefaults (void)
 {
-    SaveDefaultCollection(&doom_defaults);
-    SaveDefaultCollection(&extra_defaults);
+    SaveDefaultCollection(&default_collection);
 }
 
 //
-// Save defaults to alternate filenames
+// Save default_collection to alternate filenames
 //
 
-void M_SaveDefaultsAlternate(char *main, char *extra)
+void M_SaveDefaultAlternate(char *main)
 {
     char *orig_main;
-    char *orig_extra;
 
     // Temporarily change the filenames
 
-    orig_main = doom_defaults.filename;
-    orig_extra = extra_defaults.filename;
+    orig_main = default_collection.filename;
 
-    doom_defaults.filename = main;
-    extra_defaults.filename = extra;
+    default_collection.filename = main;
 
     M_SaveDefaults();
 
     // Restore normal filenames
 
-    doom_defaults.filename = orig_main;
-    extra_defaults.filename = orig_extra;
+    default_collection.filename = orig_main;
 }
 
 //
@@ -1029,50 +1002,25 @@ void M_LoadDefaults (void)
 
     i = M_CheckParmWithArgs("-config", 1);
 
-    if (i)
+    if(i)
     {
-	doom_defaults.filename = myargv[i+1];
-	printf (english_language ?
-            "	default file: %s\n" :
-            "   файл конфигурации: %s\n",
-            doom_defaults.filename);
+        default_collection.filename = myargv[i + 1];
+	    printf(english_language ?
+               "\tdefault file: %s\n" :
+               "\tфайл конфигурации: %s\n",
+               default_collection.filename);
     }
     else
     {
-        doom_defaults.filename
-            = M_StringJoin(configdir, default_extra_config, NULL);
+        default_collection.filename = M_StringJoin(configdir, config_file_name, NULL);
     }
 
     printf(english_language ?
            "saving config in %s\n" :
            "Сохранение файла конфигурации:\n \t%s\n",
-           doom_defaults.filename);
+           default_collection.filename);
 
-    //!
-    // @arg <file>
-    //
-    // Load additional configuration from the specified file, instead of
-    // the default.
-    //
-
-    i = M_CheckParmWithArgs("-extraconfig", 1);
-
-    if (i)
-    {
-        extra_defaults.filename = myargv[i+1];
-        printf(english_language ?
-               "        extra configuration file: %s\n" :
-               "        дополнительный файл конфигурации: %s\n", 
-               extra_defaults.filename);
-    }
-    else
-    {
-        extra_defaults.filename
-            = M_StringJoin(configdir, default_extra_config, NULL);
-    }
-
-    LoadDefaultCollection(&doom_defaults);
-    LoadDefaultCollection(&extra_defaults);
+    LoadDefaultCollection(&default_collection);
 #ifndef ___RD_TARGET_SETUP___
     if(!isBindsLoaded)
         BK_ApplyDefaultBindings();
@@ -1085,14 +1033,7 @@ static default_t *GetDefaultForName(char *name)
 {
     default_t *result;
 
-    // Try the main list and the extras
-
-    result = SearchCollection(&doom_defaults, name);
-
-    if (result == NULL)
-    {
-        result = SearchCollection(&extra_defaults, name);
-    }
+    result = SearchCollection(&default_collection, name);
 
     // Not found? Internal error.
 

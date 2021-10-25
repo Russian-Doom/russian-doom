@@ -2734,7 +2734,7 @@ void D_DoomMain (void)
     DEH_printf(english_language ?
                "M_LoadDefaults: Load system defaults.\n" :
                "M_LoadDefaults: Загрузка системных стандартов.\n");
-    M_SetConfigFilenames(PROGRAM_PREFIX "doom.ini");
+    M_SetConfigFilename(PROGRAM_PREFIX "doom.ini");
     D_BindVariables();
     M_LoadDefaults();
 
