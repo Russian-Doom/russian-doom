@@ -149,7 +149,6 @@ static void M_RD_Change_Smoothing();
 static void M_RD_Change_Wiping(Direction_t direction);
 static void M_RD_Change_Screenshots();
 static void M_RD_Change_ENDOOM();
-static void M_RD_Change_Renderer();
 static void M_RD_Change_PorchFlashing();
 
 // Display
@@ -920,7 +919,6 @@ static MenuItem_t RenderingItems[] = {
     {ITT_LRFUNC, "Performance counter:",      "Cxtnxbr ghjbpdjlbntkmyjcnb:",     M_RD_Change_PerfCounter,   0},
     {ITT_SWITCH, "Pixel scaling:",            "Gbrctkmyjt cukf;bdfybt:",         M_RD_Change_Smoothing,     0},
     {ITT_SWITCH, "Porch palette changing:",   "Bpvtytybt gfkbnhs rhftd 'rhfyf:", M_RD_Change_PorchFlashing, 0},
-    {ITT_SWITCH, "Video renderer:",           "J,hf,jnrf dbltj:",                M_RD_Change_Renderer,      0},
     {ITT_TITLE,  "Extra",                     "ljgjkybntkmyj",                   NULL,                      0}, // Дополнительно
     {ITT_SWITCH, "Show disk icon:",           "Jnj,hf;fnm pyfxjr lbcrtns:",      M_RD_Change_DiskIcon,      0},
     {ITT_LRFUNC, "Screen wiping effect:",     "\'aatrn cvtys \'rhfyjd:",         M_RD_Change_Wiping,        0},
@@ -932,7 +930,7 @@ static Menu_t RenderingMenu = {
     35, 35,
     25,
     "RENDERING OPTIONS", "YFCNHJQRB DBLTJ", false, // НАСТРОЙКИ ВИДЕО
-    13, RenderingItems, false,
+    12, RenderingItems, false,
     M_RD_Draw_Rendering,
     NULL,
     &RDOptionsMenu,
@@ -1834,22 +1832,19 @@ void M_RD_Draw_Rendering(void)
         // Porch palette changing
         RD_M_DrawTextSmallENG(vga_porch_flash ? "on" : "off", 207 + wide_delta, 85, CR_NONE);
 
-        // Video renderer
-        RD_M_DrawTextSmallENG(force_software_renderer ? "software (cpu)" : "hardware (gpu)", 146 + wide_delta, 95, CR_NONE);
-
         // Show disk icon
-        RD_M_DrawTextSmallENG(show_diskicon ? "on" : "off", 138 + wide_delta, 115, CR_NONE);
+        RD_M_DrawTextSmallENG(show_diskicon ? "on" : "off", 138 + wide_delta, 105, CR_NONE);
 
         // Screen wiping effect
         RD_M_DrawTextSmallENG(screen_wiping == 1 ? "standard" :
                               screen_wiping == 2 ? "loading" :
-                              "off", 187 + wide_delta, 125, CR_NONE);
+                              "off", 187 + wide_delta, 115, CR_NONE);
 
         // Screenshot format
-        RD_M_DrawTextSmallENG(png_screenshots ? "png" : "pcx", 174 + wide_delta, 135, CR_NONE);
+        RD_M_DrawTextSmallENG(png_screenshots ? "png" : "pcx", 174 + wide_delta, 125, CR_NONE);
 
         // Show ENDOOM screen
-        RD_M_DrawTextSmallENG(show_endoom ? "on" : "off", 179 + wide_delta, 145, CR_NONE);
+        RD_M_DrawTextSmallENG(show_endoom ? "on" : "off", 179 + wide_delta, 135, CR_NONE);
     }
     else
     {
@@ -1908,25 +1903,20 @@ void M_RD_Draw_Rendering(void)
         // Изменение палитры краёв экрана
         RD_M_DrawTextSmallRUS(vga_porch_flash ? "drk" : "dsrk", 274 + wide_delta, 85, CR_NONE);
 
-        // Обработка видео
-        RD_M_DrawTextSmallRUS(force_software_renderer ? "ghjuhfvvyfz" : "fggfhfnyfz", 160 + wide_delta, 95, CR_NONE);
-        RD_M_DrawTextSmallENG(force_software_renderer ? "(cpu)" : "(gpu)",
-                              (force_software_renderer ? 254 : 244) + wide_delta, 95, CR_NONE);
-
         // Отображать значок дискеты
-        RD_M_DrawTextSmallRUS(show_diskicon ? "drk" : "dsrk", 241 + wide_delta, 115, CR_NONE);
+        RD_M_DrawTextSmallRUS(show_diskicon ? "drk" : "dsrk", 241 + wide_delta, 105, CR_NONE);
 
         // Эффект смены экранов
         RD_M_DrawTextSmallRUS(screen_wiping == 1 ? "cnfylfhnysq" :
                               screen_wiping == 2 ? "pfuheprf" :
-                              "dsrk", 202 + wide_delta, 125, CR_NONE);
+                              "dsrk", 202 + wide_delta, 115, CR_NONE);
 
         // Формат скриншотов
-        RD_M_DrawTextSmallENG(png_screenshots ? "png" : "pcx", 180 + wide_delta, 135, CR_NONE);
+        RD_M_DrawTextSmallENG(png_screenshots ? "png" : "pcx", 180 + wide_delta, 125, CR_NONE);
 
         // Показывать экран ENDOOM
-        RD_M_DrawTextSmallENG("ENDOOM:", 165 + wide_delta, 145, CR_NONE);
-        RD_M_DrawTextSmallRUS(show_endoom ? "drk" : "dsrk", 222 + wide_delta, 145, CR_NONE);
+        RD_M_DrawTextSmallENG("ENDOOM:", 165 + wide_delta, 135, CR_NONE);
+        RD_M_DrawTextSmallRUS(show_endoom ? "drk" : "dsrk", 222 + wide_delta, 135, CR_NONE);
     }
 }
 
@@ -1997,21 +1987,6 @@ void M_RD_Change_Screenshots()
 void M_RD_Change_ENDOOM()
 {
     show_endoom ^= 1;
-}
-
-void M_RD_Change_Renderer()
-{
-    force_software_renderer ^= 1;
-
-    // Do a full graphics reinitialization
-    I_InitGraphics();
-
-    // Update background of classic HUD and player face 
-    if (gamestate == GS_LEVEL)
-    {
-        ST_refreshBackground();
-        ST_drawWidgets(true);
-    }
 }
 
 void M_RD_Change_PorchFlashing()
@@ -5091,7 +5066,6 @@ void M_RD_BackToDefaults_Recommended(int choice)
     show_fps                = 0;
     smoothing               = 0;
     vga_porch_flash         = 0;
-    force_software_renderer = 0;
     show_diskicon           = 1;
     screen_wiping           = 1;
     png_screenshots         = 1;
@@ -5235,8 +5209,11 @@ void M_RD_BackToDefaults_Recommended(int choice)
     demobar           = 0;
     no_internal_demos = 0;
 
-    // Do a full graphics reinitialization
-    I_InitGraphics();
+    // Reinitialize graphics
+    I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
+
+    // Reset palette.
+    I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
 
     // Update screen size and fuzz effect
     R_SetViewSize (screenblocks, detailLevel);
@@ -5275,7 +5252,6 @@ void M_RD_BackToDefaults_Original(int choice)
     show_fps                = 0;
     smoothing               = 0;
     vga_porch_flash         = 0;
-    force_software_renderer = 0;
     show_diskicon           = 1;
     screen_wiping           = 1;
     png_screenshots         = 1;
@@ -5419,8 +5395,11 @@ void M_RD_BackToDefaults_Original(int choice)
     demobar           = 0;
     no_internal_demos = 0;
 
-    // Do a full graphics reinitialization
-    I_InitGraphics();
+    // Reinitialize graphics
+    I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
+
+    // Reset palette.
+    I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
 
     // Update screen size and fuzz effect
     R_SetViewSize (screenblocks, detailLevel);

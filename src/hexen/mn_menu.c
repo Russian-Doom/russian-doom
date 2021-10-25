@@ -85,7 +85,6 @@ static void M_RD_Uncapped();
 static void M_RD_FPScounter();
 static void M_RD_Smoothing();
 static void M_RD_PorchFlashing();
-static void M_RD_Renderer();
 static void M_RD_Screenshots();
 
 // Display
@@ -435,7 +434,6 @@ static MenuItem_t RenderingItems[] = {
     {ITT_SWITCH, "FPS COUNTER:",              "CXTNXBR RFLHJDJQ XFCNJNS:",       M_RD_FPScounter,        0}, // СЧЕТЧИК КАДРОВОЙ ЧАСТОТЫ
     {ITT_SWITCH, "PIXEL SCALING:",            "GBRCTKMYJT CUKF;BDFYBT:",         M_RD_Smoothing,         0}, // ПИКСЕЛЬНОЕ СГЛАЖИВАНИЕ
     {ITT_SWITCH, "PORCH PALETTE CHANGING:",   "BPVTYTYBT GFKBNHS RHFTD 'RHFYF:", M_RD_PorchFlashing,     0}, // ИЗМЕНЕНИЕ ПАЛИТРЫ КРАЕВ ЭКРАНА
-    {ITT_SWITCH, "VIDEO RENDERER:",           "J,HF,JNRF DBLTJ:",                M_RD_Renderer,          0}, // ОБРАБОТКА ВИДЕО
     {ITT_TITLE,  "EXTRA",                     "LJGJKYBNTKMYJ",                   NULL,                   0}, // ДОПОЛНИТЕЛЬНО
     {ITT_SWITCH, "SCREENSHOT FORMAT:",        "AJHVFN CRHBYIJNJD:",              M_RD_Screenshots,       0}  // ФОРМАТ СКРИНШОТОВ
 };
@@ -444,7 +442,7 @@ static Menu_t RenderingMenu = {
     36, 36,
     32,
     "RENDERING OPTIONS", "YFCNHJQRB DBLTJ", false, // НАСТРОЙКИ ВИДЕО
-    10, RenderingItems, false,
+    9, RenderingItems, false,
     DrawRenderingMenu,
     NULL,
     &RDOptionsMenu,
@@ -1747,10 +1745,6 @@ static void DrawRenderingMenu(void)
 
         // Porch palette changing
         RD_M_DrawTextSmallENG(vga_porch_flash ? "ON" : "OFF", 205 + wide_delta, 92, CR_NONE);
-
-        // Video renderer
-        RD_M_DrawTextSmallENG(force_software_renderer ? "SOFTWARE (CPU)" : "HARDWARE (GPU)",
-                              149 + wide_delta, 102, CR_NONE);
     }
     else
     {
@@ -1798,14 +1792,10 @@ static void DrawRenderingMenu(void)
 
         // Изменение палитры краев экрана
         RD_M_DrawTextSmallRUS(vga_porch_flash ? "DRK" : "DSRK", 265 + wide_delta, 92, CR_NONE);
-
-        // Обработка видео
-        RD_M_DrawTextSmallRUS(force_software_renderer ? "GHJUHFVVYFZ" : "FGGFHFNYFZ",
-                              159 + wide_delta, 102, CR_NONE);
     }
 
     // Screenshot format / Формат скриншотов (same english values)
-    RD_M_DrawTextSmallENG(png_screenshots ? "PNG" : "PCX", 175 + wide_delta, 122, CR_NONE);
+    RD_M_DrawTextSmallENG(png_screenshots ? "PNG" : "PCX", 175 + wide_delta, 112, CR_NONE);
 }
 
 static void M_RD_Change_Widescreen(Direction_t direction)
@@ -1858,17 +1848,6 @@ static void M_RD_PorchFlashing()
 
     // Update black borders
     I_DrawBlackBorders();
-}
-
-static void M_RD_Renderer()
-{
-    force_software_renderer ^= 1;
-
-    // Do a full graphics reinitialization
-    I_InitGraphics();
-
-    // Update status bar
-    SB_state = -1;
 }
 
 static void M_RD_Screenshots()
@@ -1960,7 +1939,7 @@ static void M_RD_Gamma(Direction_t direction)
 {
     RD_Menu_SlideInt(&usegamma, 0, 17, direction);
 
-    I_SetPalette((byte *) W_CacheLumpName("PLAYPAL", PU_CACHE));
+    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
 
     P_SetMessage(&players[consoleplayer], english_language ?
                                           GammaText[usegamma] :
@@ -3615,11 +3594,10 @@ void M_RD_DoResetSettings(void)
     uncapped_fps            = 1;
     smoothing               = 0;
     vga_porch_flash         = 0;
-    force_software_renderer = 0;
 
     // Display
     screenblocks    = 10;
-    usegamma        = 0;
+    usegamma        = 4;
     messageson      = 1;
     level_brightness = 0;
     local_time      = 0;
@@ -3649,8 +3627,12 @@ void M_RD_DoResetSettings(void)
     crosshair_scale     = 0;
     no_internal_demos   = 0;
 
-    // Do a full graphics reinitialization
-    I_InitGraphics();
+    // Reinitialize graphics
+    I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
+
+    // Reset palette.
+    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+
     R_SetViewSize(screenblocks, detailLevel);
 
     // Update status bar

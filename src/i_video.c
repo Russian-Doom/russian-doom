@@ -1864,7 +1864,6 @@ void I_BindVideoVariables(void)
     M_BindIntVariable("resize_delay",              &resize_delay);
     M_BindIntVariable("fullscreen_width",          &fullscreen_width);
     M_BindIntVariable("fullscreen_height",         &fullscreen_height);
-    M_BindIntVariable("force_software_renderer",   &force_software_renderer);
     M_BindIntVariable("window_title_short",        &window_title_short);
     M_BindIntVariable("window_width",              &window_width);
     M_BindIntVariable("window_height",             &window_height);

@@ -80,7 +80,6 @@ static void M_RD_Uncapped();
 static void M_RD_PerfCounter(Direction_t direction);
 static void M_RD_Smoothing();
 static void M_RD_PorchFlashing();
-static void M_RD_Renderer();
 static void M_RD_Screenshots();
 static void M_RD_EndText();
 
@@ -487,7 +486,6 @@ static MenuItem_t RenderingItems[] = {
     {ITT_LRFUNC, "PERFORMANCE COUNTER:",      "CXTNXBR GHJBPDJLBNTKMYJCNB:",     M_RD_PerfCounter,       0}, // СЧЕТЧИК ПРОИЗВОДИТЕЛЬНОСТИ
     {ITT_SWITCH, "PIXEL SCALING:",            "GBRCTKMYJT CUKF;BDFYBT:",         M_RD_Smoothing,         0}, // ПИКСЕЛЬНОЕ СГЛАЖИВАНИЕ
     {ITT_SWITCH, "PORCH PALETTE CHANGING:",   "BPVTYTYBT GFKBNHS RHFTD 'RHFYF:", M_RD_PorchFlashing,     0}, // ИЗМЕНЕНИЕ ПАЛИТРЫ КРАЕВ ЭКРАНА
-    {ITT_SWITCH, "VIDEO RENDERER:",           "J,HF,JNRF DBLTJ:",                M_RD_Renderer,          0}, // ОБРАБОТКА ВИДЕО
     {ITT_TITLE,  "EXTRA",                     "LJGJKYBNTKMYJ",                   NULL,                   0}, // ДОПОЛНИТЕЛЬНО
     {ITT_SWITCH, "SCREENSHOT FORMAT:",        "AJHVFN CRHBYIJNJD:",              M_RD_Screenshots,       0}, // ФОРМАТ СКРИНШОТОВ
     {ITT_SWITCH, "SHOW ENDTEXT SCREEN:",      "GJRFPSDFNM \'RHFY",               M_RD_EndText,           0}  // ПОКАЗЫВАТЬ ЭКРАН ENDTEXT
@@ -497,7 +495,7 @@ static Menu_t RenderingMenu = {
     36, 36,
     32,
     "RENDERING OPTIONS", "YFCNHJQRB DBLTJ", false, // НАСТРОЙКИ ВИДЕО
-    11, RenderingItems, false,
+    10, RenderingItems, false,
     DrawRenderingMenu,
     NULL,
     &RDOptionsMenu,
@@ -1695,12 +1693,9 @@ static void DrawRenderingMenu(void)
         // Porch palette changing
         RD_M_DrawTextSmallENG(vga_porch_flash ? "ON" : "OFF", 205 + wide_delta, 92, CR_NONE);
 
-        // Video renderer
-        RD_M_DrawTextSmallENG(force_software_renderer ? "SOFTWARE (CPU)" : "HARDWARE (GPU)",
-                              149 + wide_delta, 102, CR_NONE);
 
         // Show ENDTEXT screen
-        RD_M_DrawTextSmallENG(show_endoom ? "ON" : "OFF", 188 + wide_delta, 132, CR_NONE);
+        RD_M_DrawTextSmallENG(show_endoom ? "ON" : "OFF", 188 + wide_delta, 122, CR_NONE);
     }
     else
     {
@@ -1755,17 +1750,13 @@ static void DrawRenderingMenu(void)
         // Изменение палитры краев экрана
         RD_M_DrawTextSmallRUS(vga_porch_flash ? "DRK" : "DSRK", 265 + wide_delta, 92, CR_NONE);
 
-        // Обработка видео
-        RD_M_DrawTextSmallRUS(force_software_renderer ? "GHJUHFVVYFZ" : "FGGFHFNYFZ",
-                              159 + wide_delta, 102, CR_NONE);
-
         // Показывать экран ENDTEXT
-        RD_M_DrawTextSmallENG("ENDTEXT:", 160 + wide_delta, 132, CR_NONE);
-        RD_M_DrawTextSmallRUS(show_endoom ? "DRK" : "DSRK", 222 + wide_delta, 132, CR_NONE);
+        RD_M_DrawTextSmallENG("ENDTEXT:", 160 + wide_delta, 122, CR_NONE);
+        RD_M_DrawTextSmallRUS(show_endoom ? "DRK" : "DSRK", 222 + wide_delta, 122, CR_NONE);
     }
 
     // Screenshot format / Формат скриншотов (same english values)
-    RD_M_DrawTextSmallENG(png_screenshots ? "PNG" : "PCX", 175 + wide_delta, 122, CR_NONE);
+    RD_M_DrawTextSmallENG(png_screenshots ? "PNG" : "PCX", 175 + wide_delta, 112, CR_NONE);
 
 }
 
@@ -1816,14 +1807,6 @@ static void M_RD_PorchFlashing()
 
     // Update black borders
     I_DrawBlackBorders();
-}
-
-static void M_RD_Renderer()
-{
-    force_software_renderer ^= 1;
-
-    // Do a full graphics reinitialization
-    I_InitGraphics();
 }
 
 static void M_RD_Screenshots()
@@ -2021,7 +2004,7 @@ void M_RD_Brightness(Direction_t direction)
 
     RD_Menu_SlideFloat_Step(&brightness, 0.01F, 1.0F, 0.01F, direction);
 
-    I_SetPalette(W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE));
+    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
 }
 
 static void M_RD_Gamma(Direction_t direction)
@@ -2031,7 +2014,7 @@ static void M_RD_Gamma(Direction_t direction)
 
     RD_Menu_SlideInt(&usegamma, 0, 17, direction);
 
-    I_SetPalette((byte *) W_CacheLumpName("PLAYPAL", PU_CACHE));
+    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
 }
 
 void M_RD_Saturation(Direction_t direction)
@@ -2041,7 +2024,7 @@ void M_RD_Saturation(Direction_t direction)
 
     RD_Menu_SlideFloat_Step(&color_saturation, 0.01F, 1.0F, 0.01F, direction);
 
-    I_SetPalette(W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE));
+    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
 }
 
 void M_RD_ShowPalette()
@@ -2056,7 +2039,7 @@ void M_RD_RED_Color(Direction_t direction)
 
     RD_Menu_SlideFloat_Step(&r_color_factor, 0.01F, 1.0F, 0.01F, direction);
 
-    I_SetPalette(W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE));
+    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
 }
 
 void M_RD_GREEN_Color(Direction_t direction)
@@ -2066,7 +2049,7 @@ void M_RD_GREEN_Color(Direction_t direction)
 
     RD_Menu_SlideFloat_Step(&g_color_factor, 0.01F, 1.0F, 0.01F, direction);
 
-    I_SetPalette(W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE));
+    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
 }
 
 void M_RD_BLUE_Color(Direction_t direction)
@@ -2076,7 +2059,7 @@ void M_RD_BLUE_Color(Direction_t direction)
 
     RD_Menu_SlideFloat_Step(&b_color_factor, 0.01F, 1.0F, 0.01F, direction);
 
-    I_SetPalette(W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE));
+    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
 }
 
 // -----------------------------------------------------------------------------
@@ -3948,7 +3931,7 @@ static void DrawResetSettingsMenu(void)
 
     if (english_language)
     {
-        RD_M_DrawTextBigENG("SETTINGS RESET", 96, 42);
+        RD_M_DrawTextBigENG("SETTINGS RESET", 96 + wide_delta, 42);
 
         RD_M_DrawTextSmallENG("GRAPHICAL, AUDIBLE AND GAMEPLAY SETTINGS", 19 + wide_delta, 65, CR_NONE);
         RD_M_DrawTextSmallENG("WILL BE RESET TO THEIR DEFAULT VALUES.", 31 + wide_delta, 75, CR_NONE);
@@ -3967,7 +3950,7 @@ static void DrawResetSettingsMenu(void)
     }
     else
     {
-        RD_M_DrawTextBigRUS("C,HJC YFCNHJTR", 82, 42);  // СБРОС НАСТРОЕК
+        RD_M_DrawTextBigRUS("C,HJC YFCNHJTR", 82 + wide_delta, 42);  // СБРОС НАСТРОЕК
 
         RD_M_DrawTextSmallRUS("YFCNHJQRB UHFABRB< PDERF B UTQVGKTZ", 34 + wide_delta, 65, CR_NONE);      // Настройки графики, звука и геймплея
         RD_M_DrawTextSmallRUS(",ELEN C,HJITYS YF CNFYLFHNYST PYFXTYBZ>", 16 + wide_delta, 75, CR_NONE);  // Будут сброшены на стандартные значения.
@@ -4052,7 +4035,6 @@ static void M_RD_BackToDefaults_Recommended(void)
     show_fps                = 0;
     smoothing               = 0;
     vga_porch_flash         = 0;
-    force_software_renderer = 0;
     png_screenshots         = 1;
 
     // Display
@@ -4159,8 +4141,12 @@ static void M_RD_BackToDefaults_Recommended(void)
     no_internal_demos    = 0;
     pistol_start         = 0;
 
-    // Do a full graphics reinitialization
-    I_InitGraphics();
+    // Reinitialize graphics
+    I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
+
+    // Reset palette.
+    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+    
     R_SetViewSize(screenblocks, detailLevel);
 
     BorderNeedRefresh = true;
@@ -4179,7 +4165,6 @@ static void M_RD_BackToDefaults_Original(void)
     show_fps                = 0;
     smoothing               = 0;
     vga_porch_flash         = 0;
-    force_software_renderer = 0;
     png_screenshots         = 1;
 
     // Display
@@ -4286,8 +4271,12 @@ static void M_RD_BackToDefaults_Original(void)
     no_internal_demos    = 0;
     pistol_start         = 0;
 
-    // Do a full graphics reinitialization
-    I_InitGraphics();
+    // Reinitialize graphics
+    I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
+
+    // Reset palette.
+    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+
     R_SetViewSize(screenblocks, detailLevel);
 
     BorderNeedRefresh = true;
@@ -4867,7 +4856,7 @@ boolean MN_Responder(event_t * event)
             {
                 usegamma = 0;
             }
-            I_SetPalette((byte *) W_CacheLumpName("PLAYPAL", PU_CACHE));
+            I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
 
             gamma_level = M_StringJoin(txt_gammamsg, english_language ?
                                        gammalevel_names[usegamma] :
