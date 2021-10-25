@@ -579,7 +579,7 @@ void D_DoomMain(void)
         M_SetConfigDir(NULL);
     }
 
-    M_SetConfigFilenames(/*"hexen.ini", */PROGRAM_PREFIX "hexen.ini");
+    M_SetConfigFilename(PROGRAM_PREFIX "hexen.ini");
     M_LoadDefaults();
 
     // Initialize subsystems

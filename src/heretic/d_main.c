@@ -1233,7 +1233,7 @@ void D_DoomMain(void)
                "M_LoadDefaults: Load system defaults.\n" :
                "M_LoadDefaults: Загрузка системных стандартов.\n");
     D_BindVariables();
-    M_SetConfigFilenames(PROGRAM_PREFIX "heretic.ini");
+    M_SetConfigFilename(PROGRAM_PREFIX "heretic.ini");
     M_LoadDefaults();
 
     //
