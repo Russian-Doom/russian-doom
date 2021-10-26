@@ -491,30 +491,6 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(show_endoom),
 
     //!
-    // @game doom strife
-    //
-    // If non-zero, the Vanilla savegame limit is enforced; if the
-    // savegame exceeds 180224 bytes in size, the game will exit with
-    // an error.  If this has a value of zero, there is no limit to
-    // the size of savegames.
-    //
-
-    // [JN] Лимит отключен за неактуальностью.
-    // CONFIG_VARIABLE_INT(vanilla_savegame_limit),
-
-    //!
-    // @game doom strife
-    //
-    // If non-zero, the Vanilla demo size limit is enforced; the game
-    // exits with an error when a demo exceeds the demo size limit
-    // (128KiB by default).  If this has a value of zero, there is no
-    // limit to the size of demos.
-    // 
-
-    // [JN] Лимит отключен за неактуальностью.
-    // CONFIG_VARIABLE_INT(vanilla_demo_limit),
-
-    //!
     // If non-zero, the game behaves like Vanilla Doom, always assuming
     // an American keyboard mapping.  If this has a value of zero, the
     // native keyboard mapping of the keyboard is used.
@@ -548,24 +524,6 @@ static default_t defaults_list[] =
 #endif
 
 #ifdef FEATURE_SOUND
-
-    //!
-    // Controls whether libsamplerate support is used for performing
-    // sample rate conversions of sound effects.  Support for this
-    // must be compiled into the program.
-    //
-    // If zero, libsamplerate support is disabled.  If non-zero,
-    // libsamplerate is enabled. Increasing values roughly correspond
-    // to higher quality conversion; the higher the quality, the
-    // slower the conversion process.  Linear conversion = 1;
-    // Zero order hold = 2; Fast Sinc filter = 3; Medium quality
-    // Sinc filter = 4; High quality Sinc filter = 5.
-    //
-
-    // [JN] Disable "use_libsamplerate" config variable,
-    // always preffering a best sound quality.
-
-    // CONFIG_VARIABLE_INT(use_libsamplerate),
 
     //!
     // Scaling factor used by libsamplerate. This is used when converting
@@ -621,7 +579,6 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(show_fps),
     CONFIG_VARIABLE_INT(smoothing),
     CONFIG_VARIABLE_INT(max_fps),
-    CONFIG_VARIABLE_INT(force_software_renderer),
     CONFIG_VARIABLE_INT(show_diskicon),
     CONFIG_VARIABLE_INT(screen_wiping),
     CONFIG_VARIABLE_INT(png_screenshots),
@@ -644,7 +601,7 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_FLOAT(b_color_factor),
     
     CONFIG_VARIABLE_INT(local_time),
-    CONFIG_VARIABLE_INT(show_messages), CONFIG_VARIABLE_INT(messageson),
+    CONFIG_VARIABLE_INT(show_messages),
     CONFIG_VARIABLE_INT(messages_alignment),
     CONFIG_VARIABLE_INT(messages_timeout),
     CONFIG_VARIABLE_INT(message_fade),
