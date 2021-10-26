@@ -119,7 +119,6 @@ static int aspect_ratio_correct = 1;
 static int smoothing = 0;
 static int vga_porch_flash = 0;
 static int integer_scaling = 0;
-static int force_software_renderer = 0;
 static int fullscreen = 1;
 static int aspect_ratio = 2;
 static int fullscreen_width = 0, fullscreen_height = 0;
@@ -230,7 +229,7 @@ static void GenerateSizesTable(TXT_UNCAST_ARG(widget),
 
     TXT_AddWidget(sizes_table, TXT_NewSeparator(english_language ? 
                                                 "Window size" :
-                                                "ђазмер окна"));
+                                                "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ"));
 
     have_size = false;
 
@@ -262,7 +261,7 @@ static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
 
     window = TXT_NewWindow(english_language ?
                            "Advanced display options" :
-                           "Џрочие настройки");
+                           "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
@@ -273,24 +272,24 @@ static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
         ar_checkbox =
         TXT_NewCheckBox(english_language ?
                         "Draw window border" :
-                        "Ћтображать рамку окна",
+                        "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
                         &window_border),
         
         TXT_If(gamemission == heretic || gamemission == hexen,
         TXT_NewCheckBox(english_language ?
                         "Graphical startup" :
-                        "ѓрафическая загрузка",
+                        "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
                         &graphical_startup)),
 
         TXT_If(gamemission == doom || gamemission == heretic,
         TXT_NewCheckBox(english_language ?
                         "Show ENDOOM screen on exit" :
-                        "Џоказывать экран ENDOOM при выходе",
+                        "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ ENDOOM пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ",
                         &show_endoom)),
 
 /*
 #if SDL_VERSION_ATLEAST(2, 0, 5)
-        TXT_NewCheckBox("–елочисленное масштабирование окна", &integer_scaling),
+        TXT_NewCheckBox("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", &integer_scaling),
 #endif
 */
 
@@ -320,7 +319,7 @@ void ConfigDisplay(void)
 
     window = TXT_NewWindow(english_language ?
                            "Display Configuration" :
-                           "Ќастройки экрана");
+                           "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
 
     if (english_language)
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
@@ -333,12 +332,12 @@ void ConfigDisplay(void)
 
     TXT_NewSeparator(english_language ?
                      "Rendering" :
-                     "ђендеринг"),
+                     "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"),
 
         TXT_NewHorizBox(TXT_NewStrut(4, 0),
                         TXT_NewLabel(english_language ?
                         "Display aspect ratio: ":
-                        "‘оотношение сторон экрана: "),
+                        "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: "),
                         cc_dropdown = TXT_NewDropdownList(&aspect_ratio,
                                                           aspect_ratios, 5),
                         NULL),
@@ -347,55 +346,51 @@ void ConfigDisplay(void)
 
         TXT_NewCheckBox(english_language ?
                         "Vertical sync" :
-                        "‚ертикальная синхронизация",
+                        "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
                         &vsync),
         TXT_NewCheckBox(english_language ?
                         "Uncapped framerate" :
-                        "‘нять ограничение с кадровой частоты",
+                        "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
                         &uncapped_fps),
         TXT_If(gamemission == doom,
                 TXT_NewCheckBox(english_language ?
                         "Show fps counter" :
-                        "‘четчик кадровой частоты",
+                        "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
                         &show_fps)),
         TXT_NewCheckBox(english_language ?
                         "Smooth pixel scaling" :
-                        "Џиксельное сглаживание",
+                        "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
                         &smoothing),
-        TXT_NewCheckBox(english_language ?
-                        "Software rendering" :
-                        "Џрограммный рендеринг (режим Software)",
-                        &force_software_renderer),
 
   TXT_NewSeparator(english_language ?
                    "Extra" :
-                   "„ополнительно"),
+                   "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"),
 
       TXT_If(gamemission == doom,
               TXT_NewCheckBox(english_language ?
                       "Show Disk icon" :
-                      "Ћтображать значок дискеты",
+                      "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
                       &show_diskicon)),
       TXT_If(gamemission == heretic || gamemission == hexen || gamemission == strife,
           TXT_NewCheckBox(english_language ?
                           "Graphical startup" :
-                          "ѓрафическая загрузка",
+                          "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
                           &graphical_startup)),
 
 #ifdef HAVE_LIBPNG
         TXT_NewCheckBox(english_language ?
                         "Save screenshots in PNG format" :
-                        "‘охранять скриншоты в формате PNG",
+                        "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ PNG",
                         &png_screenshots),
 #endif
 
     TXT_NewSeparator(english_language ?
                      "Video" :
-                     "‚идео"),
+                     "пїЅпїЅпїЅпїЅпїЅ"),
             
         TXT_NewCheckBox(english_language ?
                         "Full screen" :
-                        "Џолноэкранный режим",
+                        "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ",
                         &fullscreen),
         TXT_NewConditional(&fullscreen, 0,
             sizes_table = TXT_NewTable(3)),
@@ -425,7 +420,7 @@ void ConfigDisplay(void)
 
     advanced_button = TXT_NewWindowAction('a', english_language ?
                                                "Advanced" :
-                                               "Џрочее");
+                                               "пїЅпїЅпїЅпїЅпїЅпїЅ");
 
     TXT_SetWindowAction(window, TXT_HORIZ_CENTER, advanced_button);
     TXT_SignalConnect(advanced_button, "pressed",
@@ -450,7 +445,6 @@ void BindDisplayVariables(void)
     M_BindIntVariable("uncapped_fps",              &uncapped_fps);    
     M_BindIntVariable("show_fps",                  &show_fps);
     M_BindIntVariable("smoothing",                 &smoothing);
-    M_BindIntVariable("force_software_renderer",   &force_software_renderer);
     M_BindIntVariable("show_diskicon",             &show_diskicon);
     M_BindIntVariable("screen_wiping",             &screen_wiping);
     M_BindIntVariable("png_screenshots",           &png_screenshots);
