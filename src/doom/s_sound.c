@@ -124,7 +124,9 @@ void S_Init (int sfxVolume, int musicVolume)
     // Allocating the internal channels for mixing
     // (the maximum numer of sounds rendered
     // simultaneously) within zone memory.
-    channels = I_Realloc(NULL, snd_channels*sizeof(channel_t));
+    // [JN] Always allocate maximum available channels (64).
+    // Actual qty of used channels will be defined by "snd_channels" variable.
+    channels = I_Realloc(NULL, 64*sizeof(channel_t));
 
     // Free all channels for use
     for (i = 0 ; i < snd_channels ; i++)
@@ -196,8 +198,6 @@ void S_ChannelsRealloc (void)
     {
         snd_channels = 64;
     }
-
-    channels = I_Realloc(channels, snd_channels * sizeof(channel_t));
 
     for (i = 0 ; i < snd_channels ; i++)
     {
