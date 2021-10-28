@@ -74,6 +74,11 @@ int		numspechit;
 
 mobj_t *BlockingMobj;
 
+// [JN] Special boolean for PTR_SlideTraverse.
+// Will be set as "false" for preventing playing "oof" sound
+// by pressing "use" key on blocking two sided lines.
+static boolean ptr_play_oof;
+
 
 //
 // TELEPORT MOVE
@@ -949,6 +954,19 @@ boolean PTR_SlideTraverse (intercept_t* in)
 		
     li = in->d.line;
     
+    // [JN] Treat two sided linedefs as single sided for smooth sliding.
+    if (li->flags & ML_BLOCKING && li->flags & ML_TWOSIDED
+    && singleplayer && !vanillaparm)
+    {
+        // [JN] Don't allow play "oof" by pressing "use".
+        ptr_play_oof = false;
+
+        goto isblocking;
+    }
+
+    // [JN] Allow play "oof" by pressing "use".
+    ptr_play_oof = true;
+
     if ( ! (li->flags & ML_TWOSIDED) )
     {
 	if (P_PointOnLineSide (slidemo->x, slidemo->y, li))
@@ -1559,7 +1577,7 @@ void P_UseLines (player_t*	player)
     // [JN] Do not break firing sounds by using walls, do not play in "vanilla".
 
     if (P_PathTraverse(x1, y1, x2, y2, PT_ADDLINES, PTR_UseTraverse))
-        if (!P_PathTraverse(x1, y1, x2, y2, PT_ADDLINES, PTR_NoWayTraverse) && !vanillaparm)
+        if (!P_PathTraverse(x1, y1, x2, y2, PT_ADDLINES, PTR_NoWayTraverse) && !vanillaparm && ptr_play_oof)
             S_StartSound (singleplayer ? NULL : usething, sfx_noway);
 }
 
