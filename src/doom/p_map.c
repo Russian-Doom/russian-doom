@@ -1577,8 +1577,13 @@ void P_UseLines (player_t*	player)
     // [JN] Do not break firing sounds by using walls, do not play in "vanilla".
 
     if (P_PathTraverse(x1, y1, x2, y2, PT_ADDLINES, PTR_UseTraverse))
-        if (!P_PathTraverse(x1, y1, x2, y2, PT_ADDLINES, PTR_NoWayTraverse) && !vanillaparm && ptr_play_oof)
+    {
+        if (!P_PathTraverse(x1, y1, x2, y2, PT_ADDLINES, PTR_NoWayTraverse) 
+        && improved_collision && ptr_play_oof && !vanillaparm)
+        {
             S_StartSound (singleplayer ? NULL : usething, sfx_noway);
+        }
+    }
 }
 
 
