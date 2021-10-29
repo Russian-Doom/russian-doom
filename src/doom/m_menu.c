@@ -252,6 +252,7 @@ static void M_RD_Change_ColoredBlood();
 static void M_RD_Change_SwirlingLiquids();
 static void M_RD_Change_InvulSky();
 static void M_RD_Change_LinearSky();
+static void M_RD_Change_FlipCorpses();
 static void M_RD_Change_FlipWeapons();
 
 static void M_RD_Change_ExtraPlayerFaces();
@@ -273,11 +274,11 @@ static void M_RD_Change_AlertSfx();
 static void M_RD_Change_SecretNotify();
 static void M_RD_Change_InfraGreenVisor();
 
+static void M_RD_Change_ImprovedCollision();
 static void M_RD_Change_WalkOverUnder();
 static void M_RD_Change_Torque();
 static void M_RD_Change_Bobbing();
 static void M_RD_Change_SSGBlast();
-static void M_RD_Change_FlipCorpses();
 static void M_RD_Change_FloatPowerups(Direction_t direction);
 static void M_RD_Change_TossDrop();
 static void M_RD_Change_CrosshairDraw();
@@ -1376,6 +1377,7 @@ static MenuItem_t Gameplay1Items[] = {
     {ITT_SWITCH,  "Swirling liquids:",            "ekexityyfz fybvfwbz ;blrjcntq:", M_RD_Change_SwirlingLiquids, 0}, // Улучшенная анимация жидкостей
     {ITT_SWITCH,  "Invulnerability affects sky:", "ytezpdbvjcnm jrhfibdftn yt,j:",  M_RD_Change_InvulSky,        0}, // Неуязвимость окрашивает небо
     {ITT_SWITCH,  "Sky drawing mode:",            "ht;bv jnhbcjdrb yt,f:",          M_RD_Change_LinearSky,       0}, // Режим отрисовки неба
+    {ITT_SWITCH,  "Randomly mirrored corpses:",   "pthrfkbhjdfybt nhegjd:",         M_RD_Change_FlipCorpses,     0}, // Зеркалирование трупов
     {ITT_SWITCH,  "Flip weapons:",                "pthrfkmyjt jnhf;tybt jhe;bz:",   M_RD_Change_FlipWeapons,     0}, // Зеркальное отражение оружия
     {ITT_EMPTY,   NULL,                           NULL,                             NULL,                        0},
     {ITT_EMPTY,   NULL,                           NULL,                             NULL,                        0},
@@ -1387,7 +1389,7 @@ static Menu_t Gameplay1Menu = {
     35, 35,
     25,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
-    15, Gameplay1Items, false,
+    16, Gameplay1Items, false,
     M_RD_Draw_Gameplay_1,
     &GameplayPageDescriptor,
     &RDOptionsMenu,
@@ -1451,12 +1453,12 @@ static Menu_t Gameplay3Menu = {
 };
 
 static MenuItem_t Gameplay4Items[] = {
-    {ITT_TITLE,   "Physical",                                  "Abpbrf",                              NULL,                       0}, // Физика
+    {ITT_TITLE,   "Physical",                            "Abpbrf",                          NULL,                       0}, // Физика
+    {ITT_SWITCH,  "Collision physics:",                  "abpbrf cnjkryjdtybq:",            M_RD_Change_ImprovedCollision, 0}, // Физика столкновений
     {ITT_SWITCH,  "Walk over and under monsters:",       "Gthtvtotybt gjl*yfl vjycnhfvb:",  M_RD_Change_WalkOverUnder,  0}, // Перемещение над/под монстрами
     {ITT_SWITCH,  "Corpses sliding from the ledges:",    "Nhegs cgjkpf.n c djpdsitybq:",    M_RD_Change_Torque,         0}, // Трупы сползают с возвышений
     {ITT_SWITCH,  "Weapon bobbing while firing:",        "Ekexityyjt gjrfxbdfybt jhe;bz:",  M_RD_Change_Bobbing,        0}, // Улучшенное покачивание оружия
     {ITT_SWITCH,  "Lethal pellet of a point-blank SSG:", "ldecndjkrf hfphsdftn dhfujd:",    M_RD_Change_SSGBlast,       0}, // Двустволка разрывает врагов
-    {ITT_SWITCH,  "Randomly mirrored corpses:",          "pthrfkbhjdfybt nhegjd:",          M_RD_Change_FlipCorpses,    0}, // Зеркалирование трупов
     {ITT_LRFUNC,  "Floating powerups amplitude:",        "gjrfxbdfybt cath-fhntafrnjd:",    M_RD_Change_FloatPowerups,  0}, // Покачивание сфер-артефактов
     {ITT_SWITCH,  "Items are tossed when dropped:",      "Gjl,hfcsdfnm dsgfdibt ghtlvtns:", M_RD_Change_TossDrop,       0}, // Подбрасывать выпавшие предметы
     {ITT_TITLE,   "Crosshair",                           "Ghbwtk",                          NULL,                       0}, // Прицел
@@ -3452,8 +3454,12 @@ void M_RD_Draw_Gameplay_1(void)
         RD_M_DrawTextSmallENG(linear_sky ? "linear" : "original", 160 + wide_delta, 105,
                              linear_sky ? CR_GREEN : CR_DARKRED);
 
+        // Randomly mirrored corpses
+        RD_M_DrawTextSmallENG(randomly_flipcorpses ? RD_ON : RD_OFF, 231 + wide_delta, 115,
+                              randomly_flipcorpses ? CR_GREEN : CR_DARKRED);
+
         // Flip weapons
-        RD_M_DrawTextSmallENG(flip_weapons ? RD_ON : RD_OFF, 131 + wide_delta, 115,
+        RD_M_DrawTextSmallENG(flip_weapons ? RD_ON : RD_OFF, 131 + wide_delta, 125,
                              flip_weapons ? CR_GREEN : CR_DARKRED);
 
         //
@@ -3500,8 +3506,12 @@ void M_RD_Draw_Gameplay_1(void)
         RD_M_DrawTextSmallRUS(linear_sky ? "kbytqysq" : "jhbubyfkmysq", 200 + wide_delta, 105,
                               linear_sky ? CR_GREEN : CR_DARKRED);
 
+        // Зеркалирование трупов
+        RD_M_DrawTextSmallRUS(randomly_flipcorpses ? RD_ON_RUS : RD_OFF_RUS, 207 + wide_delta, 115,
+                              randomly_flipcorpses ? CR_GREEN : CR_DARKRED);
+
         // Зеркальное отражение оружия
-        RD_M_DrawTextSmallRUS(flip_weapons ? RD_ON_RUS : RD_OFF_RUS, 259 + wide_delta, 115,
+        RD_M_DrawTextSmallRUS(flip_weapons ? RD_ON_RUS : RD_OFF_RUS, 259 + wide_delta, 125,
                               flip_weapons ? CR_GREEN : CR_DARKRED);
 
         //
@@ -3842,25 +3852,25 @@ void M_RD_Draw_Gameplay_4(void)
 
     if (english_language)
     {
+        // Collision physics
+        RD_M_DrawTextSmallENG(improved_collision ? "IMPROVED" : "ORIGINAL", 160 + wide_delta, 35,
+                              improved_collision ? CR_GREEN : CR_DARKRED);
+
         // Walk over and under monsters
-        RD_M_DrawTextSmallENG(over_under ? RD_ON : RD_OFF, 250 + wide_delta, 35,
+        RD_M_DrawTextSmallENG(over_under ? RD_ON : RD_OFF, 250 + wide_delta, 45,
                               over_under ? CR_GREEN : CR_DARKRED);
 
         // Corpses sliding from the ledges
-        RD_M_DrawTextSmallENG(torque ? RD_ON : RD_OFF, 264 + wide_delta, 45,
+        RD_M_DrawTextSmallENG(torque ? RD_ON : RD_OFF, 264 + wide_delta, 55,
                               torque ? CR_GREEN : CR_DARKRED);
 
         // Weapon bobbing while firing
-        RD_M_DrawTextSmallENG(weapon_bobbing ? RD_ON : RD_OFF, 233 + wide_delta, 55,
+        RD_M_DrawTextSmallENG(weapon_bobbing ? RD_ON : RD_OFF, 233 + wide_delta, 65,
                               weapon_bobbing ? CR_GREEN : CR_DARKRED);
 
         // Lethal pellet of a point-blank SSG
-        RD_M_DrawTextSmallENG(ssg_blast_enemies ? RD_ON : RD_OFF, 287 + wide_delta, 65,
+        RD_M_DrawTextSmallENG(ssg_blast_enemies ? RD_ON : RD_OFF, 287 + wide_delta, 75,
                               ssg_blast_enemies ? CR_GREEN : CR_DARKRED);
-
-        // Randomly mirrored corpses
-        RD_M_DrawTextSmallENG(randomly_flipcorpses ? RD_ON : RD_OFF, 231 + wide_delta, 75,
-                              randomly_flipcorpses ? CR_GREEN : CR_DARKRED);
 
         // Floating powerups
         RD_M_DrawTextSmallENG(floating_powerups == 1 ? "LOW" : 
@@ -3895,25 +3905,25 @@ void M_RD_Draw_Gameplay_4(void)
     }
     else
     {
+        // Физика столкновений
+        RD_M_DrawTextSmallRUS(improved_collision ? "EKEXITYYFZ" : "JHBUBYFKMYFZ", 193 + wide_delta, 35,
+                              improved_collision ? CR_GREEN : CR_DARKRED);
+
         // Перемещение под/над монстрами
-        RD_M_DrawTextSmallRUS(over_under ? RD_ON_RUS : RD_OFF_RUS, 274 + wide_delta, 35,
+        RD_M_DrawTextSmallRUS(over_under ? RD_ON_RUS : RD_OFF_RUS, 274 + wide_delta, 45,
                               over_under ? CR_GREEN : CR_DARKRED);
 
         // Трупы сползают с возвышений
-        RD_M_DrawTextSmallRUS(torque ? RD_ON_RUS : RD_OFF_RUS, 256 + wide_delta, 45,
+        RD_M_DrawTextSmallRUS(torque ? RD_ON_RUS : RD_OFF_RUS, 256 + wide_delta, 55,
                               torque ? CR_GREEN : CR_DARKRED);
 
         // Улучшенное покачивание оружия
-        RD_M_DrawTextSmallRUS(weapon_bobbing ? RD_ON_RUS : RD_OFF_RUS, 271 + wide_delta, 55,
+        RD_M_DrawTextSmallRUS(weapon_bobbing ? RD_ON_RUS : RD_OFF_RUS, 271 + wide_delta, 65,
                               weapon_bobbing ? CR_GREEN : CR_DARKRED);
 
         // Двустволка разрывает врагов
-        RD_M_DrawTextSmallRUS(ssg_blast_enemies ? RD_ON_RUS : RD_OFF_RUS, 254 + wide_delta, 65,
+        RD_M_DrawTextSmallRUS(ssg_blast_enemies ? RD_ON_RUS : RD_OFF_RUS, 254 + wide_delta, 75,
                               ssg_blast_enemies ? CR_GREEN : CR_DARKRED);
-
-        // Зеркалирование трупов
-        RD_M_DrawTextSmallRUS(randomly_flipcorpses ? RD_ON_RUS : RD_OFF_RUS, 207 + wide_delta, 75,
-                              randomly_flipcorpses ? CR_GREEN : CR_DARKRED);
 
         // Амплитуда левитации артефактов
         RD_M_DrawTextSmallRUS(floating_powerups == 1 ? "CKF,JT"  :          // Слабое
@@ -4096,6 +4106,11 @@ void M_RD_Change_InvulSky()
 void M_RD_Change_LinearSky()
 {
     linear_sky ^= 1;
+}
+
+void M_RD_Change_FlipCorpses()
+{
+    randomly_flipcorpses ^= 1;
 }
 
 void M_RD_Change_FlipWeapons()
@@ -4299,6 +4314,11 @@ void M_RD_Change_InfraGreenVisor()
     }
 }
 
+void M_RD_Change_ImprovedCollision()
+{
+    improved_collision ^= 1;
+}
+
 void M_RD_Change_WalkOverUnder()
 {
     over_under ^= 1;
@@ -4317,11 +4337,6 @@ void M_RD_Change_Bobbing()
 void M_RD_Change_SSGBlast()
 {
     ssg_blast_enemies ^= 1;
-}
-
-void M_RD_Change_FlipCorpses()
-{
-    randomly_flipcorpses ^= 1;
 }
 
 void M_RD_Change_FloatPowerups(Direction_t direction)
@@ -5155,6 +5170,7 @@ void M_RD_BackToDefaults_Recommended(int choice)
     swirling_liquids = 1;
     invul_sky        = 1;
     linear_sky       = 1;
+    randomly_flipcorpses = 1;
     flip_weapons     = 0;
 
     // Gameplay: Status Bar
@@ -5181,11 +5197,11 @@ void M_RD_BackToDefaults_Recommended(int choice)
     infragreen_visor    = 0;
 
     // Gameplay: Physical
+    improved_collision   = 1;
     over_under           = 0;
     torque               = 1;
     weapon_bobbing       = 1;
     ssg_blast_enemies    = 1;
-    randomly_flipcorpses = 1;
     floating_powerups    = 1;
     toss_drop            = 1;
 
@@ -5341,6 +5357,7 @@ void M_RD_BackToDefaults_Original(int choice)
     swirling_liquids = 0;
     invul_sky        = 0;
     linear_sky       = 0;
+    randomly_flipcorpses = 0;
     flip_weapons     = 0;
 
     // Gameplay: Status Bar
@@ -5367,11 +5384,11 @@ void M_RD_BackToDefaults_Original(int choice)
     infragreen_visor    = 0;
 
     // Gameplay: Physical
+    improved_collision   = 0;
     over_under           = 0;
     torque               = 0;
     weapon_bobbing       = 0;
     ssg_blast_enemies    = 0;
-    randomly_flipcorpses = 0;
     floating_powerups    = 0;
     toss_drop            = 0;
 

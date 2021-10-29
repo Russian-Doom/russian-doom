@@ -204,6 +204,7 @@ int colored_blood = 1;
 int swirling_liquids = 1;
 int invul_sky = 1;
 int linear_sky = 1;
+int randomly_flipcorpses = 1;
 int flip_weapons = 0;
 
 // Gameplay: Status Bar
@@ -231,11 +232,11 @@ int secret_notification = 1;
 int infragreen_visor = 0;
 
 // Gameplay: Physical
+int improved_collision = 1;
 int over_under = 0;
 int torque = 1;
 int weapon_bobbing = 1;
 int ssg_blast_enemies = 1;
-int randomly_flipcorpses = 1;
 int floating_powerups = 1;
 int toss_drop = 1;
 
@@ -758,6 +759,7 @@ void D_BindVariables(void)
     M_BindIntVariable("swirling_liquids",       &swirling_liquids);
     M_BindIntVariable("invul_sky",              &invul_sky);
     M_BindIntVariable("linear_sky",             &linear_sky);
+    M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);
     M_BindIntVariable("flip_weapons",           &flip_weapons);
 
     // Gameplay: Status bar
@@ -785,11 +787,11 @@ void D_BindVariables(void)
     M_BindIntVariable("infragreen_visor",       &infragreen_visor);
 
     // Gameplay: Physical
+    M_BindIntVariable("improved_collision",     &improved_collision);
     M_BindIntVariable("over_under",             &over_under);
     M_BindIntVariable("torque",                 &torque);
     M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);
     M_BindIntVariable("ssg_blast_enemies",      &ssg_blast_enemies);
-    M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);
     M_BindIntVariable("floating_powerups",      &floating_powerups);
     M_BindIntVariable("toss_drop",              &toss_drop);
 

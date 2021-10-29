@@ -305,7 +305,7 @@ void P_XYMovement (mobj_t* mo)
         //
         // Thanks AXDOOMER and Brad Harding!
 
-        if (singleplayer && !vanillaparm ? 
+        if (improved_collision && singleplayer && !vanillaparm ? 
             mo->player ? ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) && (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)) 
                        : ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) || (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2))
                        :  (xmove > MAXMOVE/2 || ymove > MAXMOVE/2))
@@ -329,7 +329,7 @@ void P_XYMovement (mobj_t* mo)
             {	// try to slide along it
                 if (BlockingMobj == NULL          // [JN] Mobj is not blocking.
                 ||  BlockingMobj->health <= 0     // [JN] Allow to slightly bump into falling corpse.
-                || !singleplayer || vanillaparm)  // [JN] Keep demo compatibility.
+                || !improved_collision || !singleplayer || vanillaparm)  // [JN] Keep demo compatibility.
                 {   
                     // [JN] Slide movement.
                     P_SlideMove(mo);
@@ -733,7 +733,7 @@ void P_MobjThinker (mobj_t *mobj)
     }
 
     if ((mobj->z != mobj->floorz) || mobj->momz
-    || (BlockingMobj && singleplayer && !vanillaparm))
+    || (BlockingMobj && improved_collision && singleplayer && !vanillaparm))
     {
         P_ZMovement (mobj);
 

@@ -409,7 +409,7 @@ boolean P_BlockThingsIterator (int x, int y, boolean (*func)(mobj_t*))
     // [JN] Blockmap bug fix - add other mobjs from surrounding blocks that overlap this one.
     // The fix is written by Terry Hearst, thank you very much!
     // Fixes: http://doom2.net/doom2/research/things.html
-    if (singleplayer && !vanillaparm)
+    if (improved_collision && singleplayer && !vanillaparm)
     {
         // Unwrapped for least number of bounding box checks
         // (-1, -1)
