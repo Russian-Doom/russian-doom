@@ -63,8 +63,11 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Configure
+        id: configure
         run: |
-          cmake -G"${{ matrix.config.cmake_generator }}" -DCMAKE_BUILD_TYPE=Release -S . -B build
+          sha_short=$(echo ${{ github.sha }} | cut -c1-7)
+          cmake -G"${{ matrix.config.cmake_generator }}" -DBUILD_VERSION_OVERWRITE="$sha_short" -DCMAKE_BUILD_TYPE=Release -S . -B build
+          echo "::set-output name=sha_short::$sha_short"
 
       - name: Build
         run: |
@@ -73,16 +76,14 @@ jobs:
 
       - name: Install
         if: ${{ github.repository == 'JNechaevsky/russian-doom' && github.event_name == 'push' && github.ref == 'refs/heads/master' && matrix.config.os_name == 'Windows' }}
-        id: install
         run: |
           cmake --install build --prefix "./build/install"
-          echo "::set-output name=sha_short::$(echo ${{ github.sha }} | cut -c1-7)"
 
       - name: Package
         if: ${{ github.repository == 'JNechaevsky/russian-doom' && github.event_name == 'push' && github.ref == 'refs/heads/master' && matrix.config.os_name == 'Windows' }}
         uses: actions/upload-artifact@v2
         with:
-          name: russian-doom-${{ steps.install.outputs.sha_short }}-windows-${{ matrix.config.build_type }}
+          name: russian-doom-${{ steps.configure.outputs.sha_short }}-windows-${{ matrix.config.build_type }}
           path: ./build/install/
 
   Autotools:
