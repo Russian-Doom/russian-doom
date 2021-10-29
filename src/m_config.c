@@ -712,6 +712,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(swirling_liquids),
     CONFIG_VARIABLE_INT(invul_sky),
     CONFIG_VARIABLE_INT(linear_sky),
+    CONFIG_VARIABLE_INT(randomly_flipcorpses),
     CONFIG_VARIABLE_INT(flip_weapons),
 
     // Gameplay: Status Bar
@@ -744,11 +745,11 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(show_artifacts_timer),
 
     // Gameplay: Physical
+    CONFIG_VARIABLE_INT(improved_collision),
     CONFIG_VARIABLE_INT(over_under),
     CONFIG_VARIABLE_INT(torque),
     CONFIG_VARIABLE_INT(weapon_bobbing),
     CONFIG_VARIABLE_INT(ssg_blast_enemies),
-    CONFIG_VARIABLE_INT(randomly_flipcorpses),
     CONFIG_VARIABLE_INT(floating_powerups),
     CONFIG_VARIABLE_INT(toss_drop),
 

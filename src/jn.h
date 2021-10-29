@@ -256,6 +256,7 @@ extern int colored_blood;
 extern int swirling_liquids;
 extern int invul_sky;
 extern int linear_sky;
+extern int randomly_flipcorpses;
 extern int flip_weapons;
 
 // Gameplay: Status Bar
@@ -288,11 +289,11 @@ extern int show_all_artifacts;
 extern int show_artifacts_timer;
 
 // Gameplay: Physical
+extern int improved_collision;
 extern int over_under;
 extern int torque;
 extern int weapon_bobbing;
 extern int ssg_blast_enemies;
-extern int randomly_flipcorpses;
 extern int floating_powerups;
 extern int toss_drop;
 
