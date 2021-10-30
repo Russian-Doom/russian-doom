@@ -6511,7 +6511,7 @@ boolean M_Responder (event_t* ev)
         // in devparm mode by pressing "close" button on window.
         if (devparm)
         {
-            M_QuitDOOM(0);
+            M_QuitDOOM();
         }
 
         // First click on close button = bring up quit confirm message.
@@ -6523,7 +6523,7 @@ boolean M_Responder (event_t* ev)
         else
         {
             S_StartSound(NULL,sfx_swtchn);
-            M_QuitDOOM(0);
+            M_QuitDOOM();
         }
 
         return true;
@@ -6679,13 +6679,13 @@ boolean M_Responder (event_t* ev)
         {
             QuickSaveTitle = false;
             RD_Menu_ActivateMenu();
-            M_SaveGame(0);
+            M_SaveGame();
             return true;
         }
         else if (BK_isKeyDown(ev, bk_menu_load))     // Load
         {
             RD_Menu_ActivateMenu();
-            M_LoadGame(0);
+            M_LoadGame();
             return true;
         }
         else if (BK_isKeyDown(ev, bk_menu_volume))   // Sound Volume
@@ -6716,7 +6716,7 @@ boolean M_Responder (event_t* ev)
         else if (BK_isKeyDown(ev, bk_quit))     // Quit DOOM
         {
             S_StartSound(NULL,sfx_swtchn);
-            M_QuitDOOM(0);
+            M_QuitDOOM();
             return true;
         }
 
@@ -6840,17 +6840,17 @@ boolean M_Responder (event_t* ev)
         {
             RD_Menu_StartSound(MENU_SOUND_CLICK);
             if(InfoType == 1)
-                M_ReadThis2(0);
+                M_ReadThis2();
             else
-                M_FinishReadThis(0);
+                M_FinishReadThis();
         }
         else
         {
             RD_Menu_StartSound(MENU_SOUND_BACK);
             if(gamemode == retail || InfoType == 1)
-                M_FinishReadThis(0);
+                M_FinishReadThis();
             else
-                M_ReadThis(0);
+                M_ReadThis();
         }
         return true;
     }
