@@ -164,9 +164,6 @@ void S_RD_Change_SoundDevice (void)
 {
     int i;
 
-    // Regenerate cache of digital sounds
-    I_PrecacheSounds(S_sfx, NUMSFX);
-
     // Free all channels for use
     for (i = 0 ; i < snd_channels ; i++)
     {

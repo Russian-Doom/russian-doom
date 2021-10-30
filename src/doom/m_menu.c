@@ -3004,14 +3004,26 @@ void M_RD_Change_SoundDevice(Direction_t direction)
             break;
     }
 
-    // Reinitialize SFX module
-    InitSfxModule(snd_sfxdevice);
+    // Shut down current music
+    S_StopMusic();
 
-    // Call sfx device changing routine
+    // Free all sound channels/usefulness
     S_RD_Change_SoundDevice();
+
+    // Shut down sound/music system
+    I_ShutdownSound();
+
+    // Start sound/music system
+    I_InitSound(true);
 
     // Reinitialize sound volume
     S_SetSfxVolume(sfxVolume * 8);
+
+    // Reinitialize music volume
+    S_SetMusicVolume(musicVolume);
+
+    // Restart current music
+    S_ChangeMusic(music_num_rd, true);
 
     RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
 }
