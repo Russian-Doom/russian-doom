@@ -659,7 +659,6 @@ static void R_InitTextures (void)
 {
     int			   i, j, k;
     int			   temp1, temp2, temp3;
-    int			   totalwidth;
     int			   nummappatches;
     int			   offset;
     int			   maxoff = 0;
@@ -844,8 +843,6 @@ static void R_InitTextures (void)
     texturewidth = Z_Malloc (numtextures * sizeof(*texturewidth), PU_STATIC, 0);
     textureheight = Z_Malloc (numtextures * sizeof(*textureheight), PU_STATIC, 0);
 
-    totalwidth = 0;
-
     //	Really complex printing shit...
     temp1 = W_GetNumForName (DEH_String("S_START"));  // P_???????
     temp2 = W_GetNumForName (DEH_String("S_END")) - 1;
@@ -943,8 +940,6 @@ static void R_InitTextures (void)
         textureheight[i] = texture->height<<FRACBITS;
         // [crispy] texture width for wrapping column getter function
         texturewidth[i] = texture->width;
-
-        totalwidth += texture->width;
     }
 
     Z_Free(patchlookup);
