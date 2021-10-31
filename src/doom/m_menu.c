@@ -1380,7 +1380,6 @@ static MenuItem_t Gameplay1Items[] = {
     {ITT_SWITCH,  "Randomly mirrored corpses:",   "pthrfkbhjdfybt nhegjd:",         M_RD_Change_FlipCorpses,     0}, // Зеркалирование трупов
     {ITT_SWITCH,  "Flip weapons:",                "pthrfkmyjt jnhf;tybt jhe;bz:",   M_RD_Change_FlipWeapons,     0}, // Зеркальное отражение оружия
     {ITT_EMPTY,   NULL,                           NULL,                             NULL,                        0},
-    {ITT_EMPTY,   NULL,                           NULL,                             NULL,                        0},
     {ITT_SETMENU, NULL, /* Next Page > */         NULL,                             &Gameplay2Menu,              0}, // Далее >
     {ITT_SETMENU, NULL, /* < Last Page */         NULL,                             &Gameplay5Menu,              0}  // < Назад
 };
@@ -1389,7 +1388,7 @@ static Menu_t Gameplay1Menu = {
     35, 35,
     25,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
-    16, Gameplay1Items, false,
+    14, Gameplay1Items, false,
     M_RD_Draw_Gameplay_1,
     &GameplayPageDescriptor,
     &RDOptionsMenu,
