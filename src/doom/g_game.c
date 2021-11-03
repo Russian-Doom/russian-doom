@@ -1798,8 +1798,11 @@ void G_DoLoadGame (void)
 
     fclose(save_stream);
     
-    // [JN] Дополнительный фидбек о загрузке игры (Игра загружена.)
-    players[consoleplayer].message_system = DEH_String(ggloaded);
+    // [JN] Additional message after game load.
+    if (!vanillaparm)
+    {
+        players[consoleplayer].message_system = DEH_String(ggloaded);
+    }
     
     // draw the pattern into the back screen
     R_FillBackScreen ();   
