@@ -318,10 +318,12 @@ void P_InitPicAnims(void)
         lastanim->numpics = lastanim->picnum - lastanim->basepic + 1;
         if (lastanim->numpics < 2)
         {
-            I_Error(english_language ?
+            // [crispy] make non-fatal, skip invalid animation sequences
+            fprintf(stderr, english_language ?
                     "P_InitPicAnims: bad cycle from %s to %s" :
                     "P_InitPicAnims: некорректный цикл от %s к %s",
                     startname, endname);
+            continue;
         }
         lastanim->speed = animdefs[i].speed;
         lastanim++;
