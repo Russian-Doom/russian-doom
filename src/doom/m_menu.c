@@ -273,6 +273,7 @@ static void M_RD_Change_BlazingSfx();
 static void M_RD_Change_AlertSfx();
 static void M_RD_Change_SecretNotify();
 static void M_RD_Change_InfraGreenVisor();
+static void M_RD_Change_HorizontalAiming();
 
 static void M_RD_Change_ImprovedCollision();
 static void M_RD_Change_WalkOverUnder();
@@ -1433,7 +1434,7 @@ static MenuItem_t Gameplay3Items[] = {
     {ITT_TITLE,   "Tactical",                        "Nfrnbrf",                       NULL,                        0}, // Тактика
     {ITT_SWITCH,  "Notify of revealed secrets:",     "Cjj,ofnm j yfqltyyjv nfqybrt:", M_RD_Change_SecretNotify,    0}, // Сообщать о найденном тайнике
     {ITT_SWITCH,  "Infragreen light amp. visor:",    "Byahfptktysq dbpjh jcdtotybz:", M_RD_Change_InfraGreenVisor, 0}, // Инфразеленый визор освещения
-    {ITT_EMPTY,   NULL,                              NULL,                            NULL,                        0},
+    {ITT_LRFUNC,  "Horizontal autoaiming:",          "fdnjghbwtkbdfybt:",             M_RD_Change_HorizontalAiming, 0}, // Автоприцеливание
     {ITT_EMPTY,   NULL,                              NULL,                            NULL,                        0},
     {ITT_EMPTY,   NULL,                              NULL,                            NULL,                        0},
     {ITT_SETMENU, NULL, /* Next page >   */          NULL,                            &Gameplay4Menu,              0}, // Далее >
@@ -3810,6 +3811,16 @@ void M_RD_Draw_Gameplay_3(void)
         RD_M_DrawTextSmallENG(infragreen_visor ? RD_ON : RD_OFF,230 + wide_delta, 105,
                               infragreen_visor ? CR_GREEN : CR_DARKRED);
 
+        // Horizontal autoaiming
+        RD_M_DrawTextSmallENG(horizontal_autoaim == 0 ? "hitscans only" : 
+                              horizontal_autoaim == 1 ? "projectiles only" :
+                              horizontal_autoaim == 2 ? "off" : 
+                                                        "on", 195 + wide_delta, 115,
+                              horizontal_autoaim == 0 ? CR_DARKGREEN :
+                              horizontal_autoaim == 1 ? CR_DARKGREEN :
+                              horizontal_autoaim == 2 ? CR_DARKRED : 
+                                                        CR_GREEN);
+
         //
         // Footer
         //
@@ -3845,6 +3856,16 @@ void M_RD_Draw_Gameplay_3(void)
         // Инфразеленый визор освещения
         RD_M_DrawTextSmallRUS(infragreen_visor ? RD_ON_RUS : RD_OFF_RUS, 266 + wide_delta, 105,
                               infragreen_visor ? CR_GREEN : CR_DARKRED);
+
+        // Horizontal autoaiming
+        RD_M_DrawTextSmallRUS(horizontal_autoaim == 0 ? "njkmrj [bncrfys" :  // только хитсканы
+                              horizontal_autoaim == 1 ? "njkmrj cyfhzls" :   // только снаряды
+                              horizontal_autoaim == 2 ? "dsrk" : 
+                                                        "drk", 172 + wide_delta, 115,
+                              horizontal_autoaim == 0 ? CR_DARKGREEN :
+                              horizontal_autoaim == 1 ? CR_DARKGREEN :
+                              horizontal_autoaim == 2 ? CR_DARKRED : 
+                                                        CR_GREEN);
 
         // Footer
         RD_M_DrawTextSmallRUS(RD_NEXT_RUS, 35 + wide_delta, 145, CR_WHITE);
@@ -4323,6 +4344,11 @@ void M_RD_Change_InfraGreenVisor()
             players[consoleplayer].fixedcolormap = 1;
         }
     }
+}
+
+void M_RD_Change_HorizontalAiming(Direction_t direction)
+{
+    RD_Menu_SpinInt(&horizontal_autoaim, 0, 3, direction);
 }
 
 void M_RD_Change_ImprovedCollision()
@@ -5206,6 +5232,7 @@ void M_RD_BackToDefaults_Recommended(int choice)
     secret_notification = 1;
     negative_health     = 0;
     infragreen_visor    = 0;
+    horizontal_autoaim  = 3;
 
     // Gameplay: Physical
     improved_collision   = 1;
@@ -5393,6 +5420,7 @@ void M_RD_BackToDefaults_Original(int choice)
     secret_notification = 0;
     negative_health     = 0;
     infragreen_visor    = 0;
+    horizontal_autoaim  = 3;
 
     // Gameplay: Physical
     improved_collision   = 0;

@@ -285,6 +285,7 @@ extern int correct_endlevel_sfx;
 // Gameplay: Tactical
 extern int secret_notification;
 extern int infragreen_visor;
+extern int horizontal_autoaim;
 extern int show_all_artifacts;
 extern int show_artifacts_timer;
 

@@ -1471,19 +1471,24 @@ void P_SpawnPlayerMissile (mobj_t *source, mobjtype_t type)
 
     if (!linetarget)
     {
-        an += 1 << 26;
-        slope = P_AimLineAttack (source, an, 16*64*FRACUNIT);
-
-        if (!linetarget)
+        // [JN] Optional horizontal aiming.
+        if ((horizontal_autoaim == 1 || horizontal_autoaim == 3)
+        || !singleplayer || vanillaparm)
         {
-            an -= 2<<26;
+            an += 1 << 26;
             slope = P_AimLineAttack (source, an, 16*64*FRACUNIT);
-        }
 
-        if (!linetarget)
-        {
-            an = source->angle;
-            slope = 0;
+            if (!linetarget)
+            {
+                an -= 2<<26;
+                slope = P_AimLineAttack (source, an, 16*64*FRACUNIT);
+            }
+
+            if (!linetarget)
+            {
+                an = source->angle;
+                slope = 0;
+            }
         }
 
         // [JN] Mouselook: also count vertical angles
