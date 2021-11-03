@@ -3597,7 +3597,7 @@ void M_RD_DoResetSettings(void)
 
     // Display
     screenblocks    = 10;
-    usegamma        = 4;
+    usegamma        = 7;
     messageson      = 1;
     level_brightness = 0;
     local_time      = 0;

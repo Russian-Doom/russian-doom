@@ -257,7 +257,7 @@ static int resize_delay = 70; // [JN] Redused from 500 to 70
 
 float brightness = 1.0f;
 
-int  usegamma = 4;  // default gamma level is 0.70
+int  usegamma = 7;  // default gamma level is 0.85
 byte gammatable[18][256];
 
 float color_saturation = 1.0f;

@@ -5131,7 +5131,7 @@ void M_RD_BackToDefaults_Recommended(int choice)
 
     // Color options
     brightness       = 1.0f;
-    usegamma         = 4;
+    usegamma         = 7;
     color_saturation = 1.0f;
     show_palette     = 1;
     r_color_factor   = 1.0f;
