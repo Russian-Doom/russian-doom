@@ -387,6 +387,24 @@ void I_ShutdownGraphics(void)
     {
         SetShowCursor(true);
 
+#ifdef _WIN32
+        // [JN] Windows 11: fix random black screen after quit in fullscreen mode:
+        if (fullscreen)
+        {
+            static int w, h;
+
+            // Get screen width and height.
+            SDL_GetRendererOutputSize(renderer, &w, &h);
+
+            // Consider window as minimized so video subsystem
+            // can handle it properly without black screen on quit.
+            SDL_MinimizeWindow(screen);
+
+            // Place mouse cursor to the center of the screen.
+            SDL_WarpMouseGlobal(w / 2, h / 2);
+        }
+#endif
+
         SDL_QuitSubSystem(SDL_INIT_VIDEO);
 
         initialized = false;
