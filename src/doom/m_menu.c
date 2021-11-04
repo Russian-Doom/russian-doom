@@ -146,6 +146,7 @@ static void M_RD_Change_Uncapped();
 static void M_RD_Change_PerfCounter();
 static void M_RD_Change_DiskIcon();
 static void M_RD_Change_Smoothing();
+static void M_RD_Change_MaxFPS(Direction_t direction);
 static void M_RD_Change_Wiping(Direction_t direction);
 static void M_RD_Change_Screenshots();
 static void M_RD_Change_ENDOOM();
@@ -917,7 +918,7 @@ static MenuItem_t RenderingItems[] = {
     {ITT_TITLE,  "Rendering",                 "htylthbyu",                       NULL,                      0}, // Рендеринг
     {ITT_LRFUNC, "Display aspect ratio:",     "Cjjnyjitybt cnjhjy \'rhfyf:",     M_RD_Change_Widescreen,    0},
     {ITT_SWITCH, "Vertical synchronization:", "Dthnbrfkmyfz cby[hjybpfwbz:",     M_RD_Change_VSync,         0},
-    {ITT_SWITCH, "Frame rate:",               "Rflhjdfz xfcnjnf:",               M_RD_Change_Uncapped,      0},
+    {ITT_LRFUNC, "FPS limit:",                "juhfybxtybt",                     M_RD_Change_MaxFPS,        0},
     {ITT_LRFUNC, "Performance counter:",      "Cxtnxbr ghjbpdjlbntkmyjcnb:",     M_RD_Change_PerfCounter,   0},
     {ITT_SWITCH, "Pixel scaling:",            "Gbrctkmyjt cukf;bdfybt:",         M_RD_Change_Smoothing,     0},
     {ITT_SWITCH, "Porch palette changing:",   "Bpvtytybt gfkbnhs rhftd 'rhfyf:", M_RD_Change_PorchFlashing, 0},
@@ -937,6 +938,12 @@ static Menu_t RenderingMenu = {
     NULL,
     &RDOptionsMenu,
     1
+};
+
+// [JN] Dummy. Used for max FPS slider positioning.
+static Menu_t MaxFpsSlider = {
+    101, 155, 25, NULL, NULL, false, 8,
+    RenderingItems, false, NULL, NULL, &DisplayMenu, 0
 };
 
 // -----------------------------------------------------------------------------
@@ -1784,6 +1791,8 @@ void M_Vanilla_DrawSound(void)
 
 void M_RD_Draw_Rendering(void)
 {
+    static char num[4];
+
     // [JN] Jaguar Doom: clear remainings of bottom strings from the status bar.
     if (gamemission == jaguar)
         inhelpscreens = true;
@@ -1813,8 +1822,14 @@ void M_RD_Draw_Rendering(void)
             RD_M_DrawTextSmallENG(vsync ? "on" : "off", 216 + wide_delta, 45, CR_NONE);
         }
 
-        // Frame rate
-        RD_M_DrawTextSmallENG(uncapped_fps ? "uncapped" : "35 fps", 120 + wide_delta, 55, CR_NONE);
+        // FPS limit
+        RD_Menu_DrawSliderSmall(&MaxFpsSlider, 54, 11, (max_fps-40) / 20);
+        // Numerical representation of slider position
+        M_snprintf(num, 4, "%d", max_fps);
+        RD_M_DrawTextSmallENG(num, 207 + wide_delta, 55, 
+                              max_fps < 60 ? CR_DARKRED :
+                              max_fps < 100 ? CR_NONE :
+                              max_fps < 260 ? CR_GREEN : CR_ORANGE);
 
         // Performance counter
         RD_M_DrawTextSmallENG(show_fps == 1 ? "FPS only" :
@@ -1875,15 +1890,15 @@ void M_RD_Draw_Rendering(void)
             RD_M_DrawTextSmallRUS(vsync ? "drk" : "dsrk", 249 + wide_delta, 45, CR_NONE);
         }
 
-        // Кадровая частота
-        if (uncapped_fps)
-        {
-            RD_M_DrawTextSmallRUS(",tp juhfybxtybz", 167 + wide_delta, 55, CR_NONE);
-        }
-        else
-        {
-            RD_M_DrawTextSmallENG("35 fps", 167 + wide_delta, 55, CR_NONE);
-        }
+        // Ограничение FPS
+        RD_M_DrawTextSmallENG("FPS:", 126 + wide_delta, 55, CR_NONE);
+        RD_Menu_DrawSliderSmall(&MaxFpsSlider, 54, 11, (max_fps-40) / 20);
+        // Numerical representation of slider position
+        M_snprintf(num, 4, "%d", max_fps);
+        RD_M_DrawTextSmallENG(num, 261 + wide_delta, 55, 
+                              max_fps < 60 ? CR_DARKRED :
+                              max_fps < 100 ? CR_NONE :
+                              max_fps < 260 ? CR_GREEN : CR_ORANGE);
 
         // Счетчик производительности
         RD_M_DrawTextSmallRUS(show_fps == 1 ? "" : // Print as US string below
@@ -1941,14 +1956,22 @@ void M_RD_Change_VSync()
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
 }
 
-void M_RD_Change_Uncapped()
+void M_RD_Change_MaxFPS(Direction_t direction)
 {
-    uncapped_fps ^= 1;
+    RD_Menu_SlideInt(&max_fps, 35, 999, direction);
+
+    if (max_fps == 35)
+    {
+        uncapped_fps = 0;
+    }
+    else
+    {
+        uncapped_fps = 1;
+    }
 }
 
 void M_RD_Change_PerfCounter(Direction_t direction)
 {
-    // show_fps ^= 1;
     RD_Menu_SpinInt(&show_fps, 0, 2, direction);
 }
 
@@ -5114,7 +5137,7 @@ void M_RD_BackToDefaults_Recommended(int choice)
     // Rendering
     vsync                   = 1;
     aspect_ratio_correct    = 1;
-    uncapped_fps            = 1;
+    max_fps                 = 200; uncapped_fps = 1;
     show_fps                = 0;
     smoothing               = 0;
     vga_porch_flash         = 0;
@@ -5302,7 +5325,7 @@ void M_RD_BackToDefaults_Original(int choice)
     // Rendering
     vsync                   = 1;
     aspect_ratio_correct    = 1;
-    uncapped_fps            = 0;
+    max_fps                 = 35; uncapped_fps = 0;
     show_fps                = 0;
     smoothing               = 0;
     vga_porch_flash         = 0;

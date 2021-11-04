@@ -641,6 +641,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(uncapped_fps),
     CONFIG_VARIABLE_INT(show_fps),
     CONFIG_VARIABLE_INT(smoothing),
+    CONFIG_VARIABLE_INT(max_fps),
     CONFIG_VARIABLE_INT(force_software_renderer),
     CONFIG_VARIABLE_INT(show_diskicon),
     CONFIG_VARIABLE_INT(screen_wiping),

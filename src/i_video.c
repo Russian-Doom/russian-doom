@@ -868,6 +868,22 @@ void I_FinishUpdate (void)
         return;
 #endif
 
+    // [crispy] variable rendering framerate
+    // [JN] Modified to have a variable FPS cap.
+    if (uncapped_fps && !singletics)
+    {
+        static int halftics_old;
+        int halftics;
+        extern int GetAdjustedTimeN (const int N);
+
+        while ((halftics = GetAdjustedTimeN(max_fps)) == halftics_old)
+        {
+            SDL_Delay(1);
+        }
+
+        halftics_old = halftics;
+    }
+
     // draws little dots on the bottom of the screen
 
     if (display_fps_dots)
@@ -1876,6 +1892,7 @@ void I_BindVideoVariables(void)
     M_BindIntVariable("show_fps",                  &show_fps);
     M_BindIntVariable("aspect_ratio_correct",      &aspect_ratio_correct);
     M_BindIntVariable("smoothing",                 &smoothing);
+    M_BindIntVariable("max_fps",                   &max_fps);
     M_BindIntVariable("vga_porch_flash",           &vga_porch_flash);
     M_BindIntVariable("integer_scaling",           &integer_scaling);
     M_BindIntVariable("startup_delay",             &startup_delay);

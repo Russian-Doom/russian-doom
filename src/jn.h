@@ -68,6 +68,7 @@ extern int vsync;
 // extern int aspect_ratio_correct;
 extern int uncapped_fps;
 extern int show_fps, real_fps;
+extern int max_fps;
 // extern int smoothing;
 // extern int force_software_renderer;
 extern int show_diskicon;

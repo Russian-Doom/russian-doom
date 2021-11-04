@@ -48,6 +48,7 @@
 
 
 int uncapped_fps = 1;
+int max_fps = 200;
 
 // The complete set of data for a particular tic.
 
@@ -130,8 +131,9 @@ static int player_class;
 
 
 // 35 fps clock adjusted by offsetms milliseconds
+// [crispy] variable rendering framerate
 
-static int GetAdjustedTime(void)
+int GetAdjustedTimeN(const int N)
 {
     int time_ms;
 
@@ -145,7 +147,12 @@ static int GetAdjustedTime(void)
         time_ms += (offsetms / FRACUNIT);
     }
 
-    return (time_ms * TICRATE) / 1000;
+    return (time_ms * N) / 1000;
+}
+
+static int GetAdjustedTime(void)
+{
+    return GetAdjustedTimeN(TICRATE);
 }
 
 static boolean BuildNewTic(void)
