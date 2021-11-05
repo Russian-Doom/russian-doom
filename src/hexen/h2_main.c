@@ -551,10 +551,6 @@ void D_DoomMain(void)
     startmap = 1;
     gamemode = commercial;
 
-    // Call I_ShutdownGraphics on quit
-
-    I_AtExit(I_ShutdownGraphics, true);
-
     // Load defaults before initing other systems
     ST_Message(english_language ?
                "M_LoadDefaults: Load system defaults.\n" :
