@@ -78,27 +78,6 @@ static SDL_Texture *texture_upscaled = NULL;
 static SDL_Rect blit_rect = {
     0,
     0,
-    SCREENWIDTH,
-    SCREENHEIGHT
-};
-
-static SDL_Rect w_blit_rect_16_9 = {
-    0,
-    0,
-    426 << hires,
-    SCREENHEIGHT
-};
-
-static SDL_Rect w_blit_rect_16_10 = {
-    0,
-    0,
-    384 << hires,
-    SCREENHEIGHT
-};
-
-static SDL_Rect w_blit_rect_21_9 = {
-    0,
-    0,
     WIDESCREENWIDTH,
     SCREENHEIGHT
 };
@@ -948,22 +927,7 @@ void I_FinishUpdate (void)
     // Blit from the paletted 8-bit screen buffer to the intermediate
     // 32-bit RGBA buffer that we can load into the texture.
 
-    if (aspect_ratio == 0 || aspect_ratio == 1)
-    {
-        SDL_LowerBlit(screenbuffer, &blit_rect, argbbuffer, &blit_rect);
-    }
-    else if (aspect_ratio == 2)
-    {
-        SDL_LowerBlit(screenbuffer, &w_blit_rect_16_9, argbbuffer, &w_blit_rect_16_9);
-    }
-    else if (aspect_ratio == 3)
-    {
-        SDL_LowerBlit(screenbuffer, &w_blit_rect_16_10, argbbuffer, &w_blit_rect_16_10);
-    }
-    else if (aspect_ratio == 4)
-    {
-        SDL_LowerBlit(screenbuffer, &w_blit_rect_21_9, argbbuffer, &w_blit_rect_21_9);
-    }
+    SDL_LowerBlit(screenbuffer, &blit_rect, argbbuffer, &blit_rect);
 
     // Update the intermediate texture with the contents of the RGBA buffer.
 
