@@ -582,7 +582,7 @@ static void WI_drawOnLnode (int n, patch_t *c[])
         right = left + SHORT(c[i]->width);
         bottom = top + SHORT(c[i]->height);
 
-        if (left >= 0 && right < origwidth && top >= 0 && bottom < ORIGHEIGHT)
+        if (left >= 0 && right < ORIGWIDTH && top >= 0 && bottom < ORIGHEIGHT)
         {
             fits = true;
         }
