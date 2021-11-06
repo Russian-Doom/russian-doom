@@ -142,29 +142,27 @@ static void M_StartMessage(char *string,void *routine,boolean input);
 static void M_RD_Draw_Rendering();
 static void M_RD_Change_Widescreen(Direction_t direction);
 static void M_RD_Change_VSync();
-static void M_RD_Change_Uncapped();
-static void M_RD_Change_PerfCounter();
-static void M_RD_Change_DiskIcon();
-static void M_RD_Change_Smoothing();
 static void M_RD_Change_MaxFPS(Direction_t direction);
+static void M_RD_Change_PerfCounter();
+static void M_RD_Change_Smoothing();
+static void M_RD_Change_PorchFlashing();
+static void M_RD_Change_DiskIcon();
 static void M_RD_Change_Wiping(Direction_t direction);
 static void M_RD_Change_Screenshots();
 static void M_RD_Change_ENDOOM();
-static void M_RD_Change_PorchFlashing();
 
 // Display
 static void M_RD_Draw_Display();
 static void M_RD_Change_ScreenSize(Direction_t direction);
-static void M_RD_Change_Gamma(Direction_t direction);
 static void M_RD_Change_LevelBrightness(Direction_t direction);
 static void M_RD_Change_MenuShading(Direction_t direction);
 static void M_RD_Change_Detail();
 static void M_RD_Change_HUD_Detail();
-static void M_RD_Change_LocalTime(Direction_t direction);
 
 // Colors
 static void M_RD_Draw_Colors();
 static void M_RD_Change_Brightness(Direction_t direction);
+static void M_RD_Change_Gamma(Direction_t direction);
 static void M_RD_Change_Saturation(Direction_t direction);
 static void M_RD_Change_ShowPalette();
 static void M_RD_Change_RED_Color(Direction_t direction);
@@ -178,6 +176,7 @@ static void M_RD_Change_Msg_Alignment(Direction_t direction);
 static void M_RD_Change_Msg_TimeOut(Direction_t direction);
 static void M_RD_Change_Msg_Fade();
 static void M_RD_Change_ShadowedText();
+static void M_RD_Change_LocalTime(Direction_t direction);
 static void M_RD_Change_Msg_Pickup_Color(Direction_t direction);
 static void M_RD_Change_Msg_Secret_Color(Direction_t direction);
 static void M_RD_Change_Msg_System_Color(Direction_t direction);
@@ -272,6 +271,7 @@ static void M_RD_Change_ExitSfx();
 static void M_RD_Change_CrushingSfx();
 static void M_RD_Change_BlazingSfx();
 static void M_RD_Change_AlertSfx();
+
 static void M_RD_Change_SecretNotify();
 static void M_RD_Change_InfraGreenVisor();
 static void M_RD_Change_HorizontalAiming();
@@ -1789,7 +1789,7 @@ void M_Vanilla_DrawSound(void)
 // Rendering
 // -----------------------------------------------------------------------------
 
-void M_RD_Draw_Rendering(void)
+static void M_RD_Draw_Rendering(void)
 {
     static char num[4];
 
@@ -1939,18 +1939,20 @@ void M_RD_Draw_Rendering(void)
     }
 }
 
-void M_RD_Change_Widescreen(Direction_t direction)
+static void M_RD_Change_Widescreen(Direction_t direction)
 {
     // [JN] Widescreen: changing only temp variable here.
     // Initially it is set in M_Init and stored into config file in M_QuitResponse.
     RD_Menu_SpinInt(&aspect_ratio_temp, 0, 4, direction);
 }
 
-void M_RD_Change_VSync()
+static void M_RD_Change_VSync()
 {
     // [JN] Disable "vsync" toggling in software renderer
     if (force_software_renderer == 1)
+    {
         return;
+    }
 
     vsync ^= 1;
 
@@ -1958,7 +1960,7 @@ void M_RD_Change_VSync()
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
 }
 
-void M_RD_Change_MaxFPS(Direction_t direction)
+static void M_RD_Change_MaxFPS(Direction_t direction)
 {
     RD_Menu_SlideInt(&max_fps, 35, 999, direction);
 
@@ -1972,17 +1974,12 @@ void M_RD_Change_MaxFPS(Direction_t direction)
     }
 }
 
-void M_RD_Change_PerfCounter(Direction_t direction)
+static void M_RD_Change_PerfCounter(Direction_t direction)
 {
     RD_Menu_SpinInt(&show_fps, 0, 2, direction);
 }
 
-void M_RD_Change_DiskIcon()
-{
-    show_diskicon ^= 1;
-}
-
-void M_RD_Change_Smoothing()
+static void M_RD_Change_Smoothing()
 {
     // [JN] Disable "vsync" toggling in sofrware renderer
     if (force_software_renderer == 1)
@@ -2001,22 +1998,7 @@ void M_RD_Change_Smoothing()
     }
 }
 
-void M_RD_Change_Wiping(Direction_t direction)
-{
-    RD_Menu_SpinInt(&screen_wiping, 0, 2, direction);
-}
-
-void M_RD_Change_Screenshots()
-{
-    png_screenshots ^= 1;
-}
-
-void M_RD_Change_ENDOOM()
-{
-    show_endoom ^= 1;
-}
-
-void M_RD_Change_PorchFlashing()
+static void M_RD_Change_PorchFlashing()
 {
     vga_porch_flash ^= 1;
 
@@ -2024,11 +2006,32 @@ void M_RD_Change_PorchFlashing()
     I_DrawBlackBorders();
 }
 
+static void M_RD_Change_DiskIcon()
+{
+    show_diskicon ^= 1;
+}
+
+static void M_RD_Change_Wiping(Direction_t direction)
+{
+    RD_Menu_SpinInt(&screen_wiping, 0, 2, direction);
+}
+
+static void M_RD_Change_Screenshots()
+{
+    png_screenshots ^= 1;
+}
+
+static void M_RD_Change_ENDOOM()
+{
+    show_endoom ^= 1;
+}
+
+
 // -----------------------------------------------------------------------------
 // Display settings
 // -----------------------------------------------------------------------------
 
-void M_RD_Draw_Display(void)
+static void M_RD_Draw_Display(void)
 {
     static char num[4];
 
@@ -2080,7 +2083,7 @@ void M_RD_Draw_Display(void)
     RD_Menu_DrawSliderSmall(&DisplayMenu, 84, 7, menu_shading / 4);
 }
 
-void M_RD_Change_ScreenSize(Direction_t direction)
+static void M_RD_Change_ScreenSize(Direction_t direction)
 {
     extern void EnableLoadingDisk();
 
@@ -2115,38 +2118,35 @@ void M_RD_Change_ScreenSize(Direction_t direction)
     R_SetViewSize (screenblocks, detailLevel);
 }
 
-void M_RD_Change_Gamma(Direction_t direction)
-{
-    RD_Menu_SlideInt(&usegamma, 0, 17, direction);
-
-    I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
-}
-
-void M_RD_Change_LevelBrightness(Direction_t direction)
+static void M_RD_Change_LevelBrightness(Direction_t direction)
 {
     RD_Menu_SlideInt_Step(&level_brightness, 0, 64, 16, direction);
 }
 
-void M_RD_Change_MenuShading(Direction_t direction)
+static void M_RD_Change_MenuShading(Direction_t direction)
 {
     RD_Menu_SlideInt_Step(&menu_shading, 0, 24, 4, direction);
 }
 
-void M_RD_Change_Detail()
+static void M_RD_Change_Detail()
 {
     detailLevel ^= 1;
 
     R_SetViewSize (screenblocks, detailLevel);
 
     if (!detailLevel)
+    {
         players[consoleplayer].message_system = DEH_String(english_language ?
                                             DETAILHI : DETAILHI_RUS);
+    }
     else
+    {
         players[consoleplayer].message_system = DEH_String(english_language ?
                                             DETAILLO : DETAILLO_RUS);
+    }
 }
 
-void M_RD_Change_HUD_Detail()
+static void M_RD_Change_HUD_Detail()
 {
     extern boolean setsizeneeded;
 
@@ -2159,22 +2159,12 @@ void M_RD_Change_HUD_Detail()
     inhelpscreens = true;
 }
 
-void M_RD_Change_LocalTime(Direction_t direction)
-{
-    RD_Menu_SpinInt(&local_time, 0, 4, direction);
-
-    // Reinitialize time widget's horizontal offset
-    if (gamestate == GS_LEVEL)
-    {
-        HU_Start();
-    }
-}
 
 // -----------------------------------------------------------------------------
 // Color settings
 // -----------------------------------------------------------------------------
 
-void M_RD_Draw_Colors(void)
+static void M_RD_Draw_Colors(void)
 {
     int  i;
     char num[8];
@@ -2256,51 +2246,60 @@ void M_RD_Draw_Colors(void)
     }
 }
 
-void M_RD_Change_Brightness(Direction_t direction)
+static void M_RD_Change_Brightness(Direction_t direction)
 {
     RD_Menu_SlideFloat_Step(&brightness, 0.01F, 1.0F, 0.01F, direction);
 
     I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
 }
 
-void M_RD_Change_Saturation(Direction_t direction)
+static void M_RD_Change_Gamma(Direction_t direction)
+{
+    RD_Menu_SlideInt(&usegamma, 0, 17, direction);
+
+    I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
+}
+
+
+static void M_RD_Change_Saturation(Direction_t direction)
 {
     RD_Menu_SlideFloat_Step(&color_saturation, 0.01F, 1.0F, 0.01F, direction);
 
     I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
 }
 
-void M_RD_Change_ShowPalette()
+static void M_RD_Change_ShowPalette()
 {
     show_palette ^= 1;
 }
 
-void M_RD_Change_RED_Color(Direction_t direction)
+static void M_RD_Change_RED_Color(Direction_t direction)
 {
     RD_Menu_SlideFloat_Step(&r_color_factor, 0.01F, 1.0F, 0.01F, direction);
 
     I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
 }
 
-void M_RD_Change_GREEN_Color(Direction_t direction)
+static void M_RD_Change_GREEN_Color(Direction_t direction)
 {
     RD_Menu_SlideFloat_Step(&g_color_factor, 0.01F, 1.0F, 0.01F, direction);
 
     I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
 }
 
-void M_RD_Change_BLUE_Color(Direction_t direction)
+static void M_RD_Change_BLUE_Color(Direction_t direction)
 {
     RD_Menu_SlideFloat_Step(&b_color_factor, 0.01F, 1.0F, 0.01F, direction);
 
     I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
 }
 
+
 // -----------------------------------------------------------------------------
 // Messages settings
 // -----------------------------------------------------------------------------
 
-void M_RD_Draw_MessagesSettings(void)
+static void M_RD_Draw_MessagesSettings(void)
 {
     if (english_language)
     {
@@ -2467,38 +2466,53 @@ void M_RD_Draw_MessagesSettings(void)
     RD_Menu_DrawSliderSmall(&MessagesMenu, 64, 10, messages_timeout - 1);
 }
 
-void M_RD_Change_Messages()
+static void M_RD_Change_Messages()
 {
     showMessages ^= 1;
 
     if (!showMessages)
+    {
         players[consoleplayer].message_system = DEH_String(english_language ?
                                             MSGOFF : MSGOFF_RUS);
+    }
     else
+    {
         players[consoleplayer].message_system = DEH_String(english_language ?
                                             MSGON : MSGON_RUS);
+    }
 
     message_dontfuckwithme = true;
 }
 
-void M_RD_Change_Msg_Alignment(Direction_t direction)
+static void M_RD_Change_Msg_Alignment(Direction_t direction)
 {
     RD_Menu_SpinInt(&messages_alignment, 0, 2, direction);
 }
 
-void M_RD_Change_Msg_TimeOut(Direction_t direction)
+static void M_RD_Change_Msg_TimeOut(Direction_t direction)
 {
     RD_Menu_SlideInt(&messages_timeout, 1, 10, direction);
 }
 
-void M_RD_Change_Msg_Fade()
+static void M_RD_Change_Msg_Fade()
 {
     message_fade ^= 1;
 }
 
-void M_RD_Change_ShadowedText()
+static void M_RD_Change_ShadowedText()
 {
     draw_shadowed_text ^= 1;
+}
+
+static void M_RD_Change_LocalTime(Direction_t direction)
+{
+    RD_Menu_SpinInt(&local_time, 0, 4, direction);
+
+    // Reinitialize time widget's horizontal offset
+    if (gamestate == GS_LEVEL)
+    {
+        HU_Start();
+    }
 }
 
 void M_RD_Define_Msg_Color(MessageType_t messageType, int color)
@@ -2553,7 +2567,7 @@ void M_RD_Define_Msg_Color(MessageType_t messageType, int color)
     }
 }
 
-void M_RD_Change_Msg_Pickup_Color(Direction_t direction)
+static void M_RD_Change_Msg_Pickup_Color(Direction_t direction)
 {
     // [JN] Disable colored messages toggling in Jaguar
     if (gamemission == jaguar)
@@ -2565,7 +2579,7 @@ void M_RD_Change_Msg_Pickup_Color(Direction_t direction)
     M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);
 }
 
-void M_RD_Change_Msg_Secret_Color(Direction_t direction)
+static void M_RD_Change_Msg_Secret_Color(Direction_t direction)
 {
     // [JN] Disable colored messages toggling in Jaguar
     if (gamemission == jaguar)
@@ -2577,7 +2591,7 @@ void M_RD_Change_Msg_Secret_Color(Direction_t direction)
     M_RD_Define_Msg_Color(msg_secret, message_secret_color);
 }
 
-void M_RD_Change_Msg_System_Color(Direction_t direction)
+static void M_RD_Change_Msg_System_Color(Direction_t direction)
 {
     // [JN] Disable colored messages toggling in Jaguar
     if (gamemission == jaguar)
@@ -2589,7 +2603,7 @@ void M_RD_Change_Msg_System_Color(Direction_t direction)
     M_RD_Define_Msg_Color(msg_system, message_system_color);
 }
 
-void M_RD_Change_Msg_Chat_Color(Direction_t direction)
+static void M_RD_Change_Msg_Chat_Color(Direction_t direction)
 {
     // [JN] Disable colored messages toggling in Jaguar
     if (gamemission == jaguar)
@@ -2601,11 +2615,12 @@ void M_RD_Change_Msg_Chat_Color(Direction_t direction)
     M_RD_Define_Msg_Color(msg_chat, message_chat_color);
 }
 
+
 // -----------------------------------------------------------------------------
 // Automap settings
 // -----------------------------------------------------------------------------
 
-void M_RD_Draw_AutomapSettings(void)
+static void M_RD_Draw_AutomapSettings(void)
 {
     static char num[4];
 
@@ -2758,7 +2773,7 @@ void M_RD_Draw_AutomapSettings(void)
     }
 }
 
-void M_RD_Change_AutomapColor(Direction_t direction)
+static void M_RD_Change_AutomapColor(Direction_t direction)
 {
     // [JN] Disable automap colors changing in Jaguar
     if (gamemission == jaguar)
@@ -2770,12 +2785,12 @@ void M_RD_Change_AutomapColor(Direction_t direction)
     AM_initColors();
 }
 
-void M_RD_Change_AutomapAntialias()
+static void M_RD_Change_AutomapAntialias()
 {
     automap_antialias ^= 1;
 }
 
-void M_RD_Change_AutomapOverlay()
+static void M_RD_Change_AutomapOverlay()
 {
     automap_overlay ^= 1;
 
@@ -2786,47 +2801,47 @@ void M_RD_Change_AutomapOverlay()
     }
 }
 
-void M_RD_Change_AutomapRotate()
+static void M_RD_Change_AutomapRotate()
 {
     automap_rotate ^= 1;
 }
 
-void M_RD_Change_AutomapFollow()
+static void M_RD_Change_AutomapFollow()
 {
     automap_follow ^= 1;
 }
 
-void M_RD_Change_AutomapGrid()
+static void M_RD_Change_AutomapGrid()
 {
     automap_grid ^= 1;
 }
 
-void M_RD_Change_AutomapGridSize(Direction_t direction)
+static void M_RD_Change_AutomapGridSize(Direction_t direction)
 {
     RD_Menu_ShiftSlideInt(&automap_grid_size, 32, 512, direction);
 }
 
-void M_RD_Change_AutomapStats(Direction_t direction)
+static void M_RD_Change_AutomapStats(Direction_t direction)
 {
     RD_Menu_SpinInt(&automap_stats, 0, 2, direction);
 }
 
-void M_RD_Change_AutomapLevelTime(Direction_t direction)
+static void M_RD_Change_AutomapLevelTime(Direction_t direction)
 {
     RD_Menu_SpinInt(&automap_level_time, 0, 2, direction);
 }
 
-void M_RD_Change_AutomapTotalTime(Direction_t direction)
+static void M_RD_Change_AutomapTotalTime(Direction_t direction)
 {
     RD_Menu_SpinInt(&automap_total_time, 0, 2, direction);
 }
 
-void M_RD_Change_AutomapCoords(Direction_t direction)
+static void M_RD_Change_AutomapCoords(Direction_t direction)
 {
     RD_Menu_SpinInt(&automap_coords, 0, 2, direction);
 }
 
-void M_RD_Change_HUDWidgetColors(Direction_t direction)
+static void M_RD_Change_HUDWidgetColors(Direction_t direction)
 {
     RD_Menu_SpinInt(&hud_widget_colors, 0, 2, direction);
 
@@ -2834,11 +2849,12 @@ void M_RD_Change_HUDWidgetColors(Direction_t direction)
     HU_Init_Widgets();
 }
 
+
 // -----------------------------------------------------------------------------
 // Sound
 // -----------------------------------------------------------------------------
 
-void M_RD_Draw_Audio(void)
+static void M_RD_Draw_Audio(void)
 {
     static char num[4];
 
@@ -2861,21 +2877,21 @@ void M_RD_Draw_Audio(void)
     RD_M_DrawTextSmallENG(num,  177 + wide_delta, 95, CR_NONE);
 }
 
-void M_RD_Change_SfxVol(Direction_t direction)
+static void M_RD_Change_SfxVol(Direction_t direction)
 {
     RD_Menu_SlideInt(&sfxVolume, 0, 15, direction);
 
     S_SetSfxVolume(sfxVolume * 8);
 }
 
-void M_RD_Change_MusicVol(Direction_t direction)
+static void M_RD_Change_MusicVol(Direction_t direction)
 {
     RD_Menu_SlideInt(&musicVolume, 0, 15, direction);
 
     S_SetMusicVolume(musicVolume);
 }
 
-void M_RD_Change_SfxChannels(Direction_t direction)
+static void M_RD_Change_SfxChannels(Direction_t direction)
 {
     RD_Menu_SlideInt_Step(&snd_channels, 4, 64, 4, direction);
 
@@ -2883,11 +2899,12 @@ void M_RD_Change_SfxChannels(Direction_t direction)
     S_ChannelsRealloc();
 }
 
+
 // -----------------------------------------------------------------------------
 // Sound system
 // -----------------------------------------------------------------------------
 
-void M_RD_Draw_Audio_System(void)
+static void M_RD_Draw_Audio_System(void)
 {
     static char snd_frequency[16];
 
@@ -3006,7 +3023,7 @@ void M_RD_Draw_Audio_System(void)
     }
 }
 
-void M_RD_Change_SoundDevice(Direction_t direction)
+static void M_RD_Change_SoundDevice(Direction_t direction)
 {
     switch(direction)
     {
@@ -3053,7 +3070,7 @@ void M_RD_Change_SoundDevice(Direction_t direction)
     RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
 }
 
-void M_RD_Change_MusicDevice(Direction_t direction)
+static void M_RD_Change_MusicDevice(Direction_t direction)
 {
     switch(direction)
     {
@@ -3126,7 +3143,7 @@ void M_RD_Change_MusicDevice(Direction_t direction)
     RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
 }
 
-void M_RD_Change_Sampling(Direction_t direction)
+static void M_RD_Change_Sampling(Direction_t direction)
 {
     RD_Menu_ShiftSpinInt(&snd_samplerate, 11025, 44100, direction);
 
@@ -3158,7 +3175,7 @@ void M_RD_Change_Sampling(Direction_t direction)
     S_ChangeMusic(music_num_rd, true);
 }
 
-void M_RD_Change_SndMode()
+static void M_RD_Change_SndMode()
 {
     snd_monomode ^= 1;
 
@@ -3166,21 +3183,22 @@ void M_RD_Change_SndMode()
     S_UpdateStereoSeparation();
 }
 
-void M_RD_Change_PitchShifting()
+static void M_RD_Change_PitchShifting()
 {
     snd_pitchshift ^= 1;
 }
 
-void M_RD_Change_MuteInactive()
+static void M_RD_Change_MuteInactive()
 {
     mute_inactive_window ^= 1;
 }
+
 
 // -----------------------------------------------------------------------------
 // Keyboard and Mouse
 // -----------------------------------------------------------------------------
 
-void M_RD_Draw_Controls(void)
+static void M_RD_Draw_Controls(void)
 {
     static char num[4];
 
@@ -3239,48 +3257,52 @@ void M_RD_Draw_Controls(void)
         RD_M_DrawTextSmallENG(num, 189 + wide_delta, 125, CR_NONE);
 }
 
-void M_RD_Change_MouseLook()
+static void M_RD_Change_MouseLook()
 {
     mlook ^= 1;
 
     if (!mlook)
+    {
         players[consoleplayer].centering = true;
+    }
 }
 
-void M_RD_Change_InvertY()
+static void M_RD_Change_InvertY()
 {
     mouse_y_invert ^= 1;
 }
 
-void M_RD_Change_Novert()
+static void M_RD_Change_Novert()
 {
     novert ^= 1;
 }
 
-void M_RD_Change_AlwaysRun()
+static void M_RD_Change_AlwaysRun()
 {
     alwaysRun ^= 1;
 }
 
-void M_RD_Change_Sensitivity(Direction_t direction)
+static void M_RD_Change_Sensitivity(Direction_t direction)
 {
     RD_Menu_SlideInt(&mouseSensitivity, 0, 255, direction); // [crispy] extended range
 }
 
-void M_RD_Change_Acceleration(Direction_t direction)
+static void M_RD_Change_Acceleration(Direction_t direction)
 {
     RD_Menu_SlideFloat_Step(&mouse_acceleration, 1.1F, 5.0F, 0.1F, direction);
 }
 
-void M_RD_Change_Threshold(Direction_t direction)
+static void M_RD_Change_Threshold(Direction_t direction)
 {
     RD_Menu_SlideInt(&mouse_threshold, 0, 32, direction);
 }
 
+
 // -----------------------------------------------------------------------------
 // Key bindings
 // -----------------------------------------------------------------------------
-void M_RD_Draw_Bindings()
+
+static void M_RD_Draw_Bindings()
 {
     // [JN] Erase the entire screen to a tiled background.
     inhelpscreens = true;
@@ -3334,7 +3356,7 @@ static char* GetAxisName(int axis)
     }
 }
 
-void DrawGamepadMenu()
+static void DrawGamepadMenu()
 {
     // [JN] Erase the entire screen to a tiled background.
     inhelpscreens = true;
@@ -3443,7 +3465,7 @@ static void M_RD_InvertAxis_VLook()
 // Gameplay features
 // -----------------------------------------------------------------------------
 
-void M_RD_Draw_Gameplay_1(void)
+static void M_RD_Draw_Gameplay_1(void)
 {   
     // Jaguar: hide game background, don't draw lines over the HUD
     if (gamemission == jaguar)
@@ -3559,7 +3581,7 @@ void M_RD_Draw_Gameplay_1(void)
     }
 }
 
-void M_RD_Draw_Gameplay_2(void)
+static void M_RD_Draw_Gameplay_2(void)
 {
     // Jaguar: hide game background, don't draw lines over the HUD
     if (gamemission == jaguar)
@@ -3797,7 +3819,7 @@ void M_RD_Draw_Gameplay_2(void)
     }
 }
 
-void M_RD_Draw_Gameplay_3(void)
+static void M_RD_Draw_Gameplay_3(void)
 {   
     // Jaguar: hide game background, don't draw lines over the HUD
     if (gamemission == jaguar)
@@ -3898,7 +3920,7 @@ void M_RD_Draw_Gameplay_3(void)
     }
 }
 
-void M_RD_Draw_Gameplay_4(void)
+static void M_RD_Draw_Gameplay_4(void)
 {   
     // Jaguar: hide game background, don't draw lines over the HUD
     if (gamemission == jaguar)
@@ -4015,7 +4037,7 @@ void M_RD_Draw_Gameplay_4(void)
     }
 }
 
-void M_RD_Draw_Gameplay_5(void)
+static void M_RD_Draw_Gameplay_5(void)
 {   
     // Jaguar: hide game background, don't draw lines over the HUD
     if (gamemission == jaguar)
@@ -4122,22 +4144,22 @@ void M_RD_Draw_Gameplay_5(void)
     }
 }
 
-void M_RD_Change_Brightmaps()
+static void M_RD_Change_Brightmaps()
 {
     brightmaps ^= 1;
 }
 
-void M_RD_Change_FakeContrast()
+static void M_RD_Change_FakeContrast()
 {
     fake_contrast ^= 1;
 }
 
-void M_RD_Change_Translucency()
+static void M_RD_Change_Translucency()
 {
     translucency ^= 1;
 }
 
-void M_RD_Change_ImprovedFuzz(Direction_t direction)
+static void M_RD_Change_ImprovedFuzz(Direction_t direction)
 {
     RD_Menu_SpinInt(&improved_fuzz, 0, 4, direction);
 
@@ -4145,32 +4167,32 @@ void M_RD_Change_ImprovedFuzz(Direction_t direction)
     R_ExecuteSetViewSize();
 }
 
-void M_RD_Change_ColoredBlood()
+static void M_RD_Change_ColoredBlood()
 {
     colored_blood ^= 1;
 }
 
-void M_RD_Change_SwirlingLiquids()
+static void M_RD_Change_SwirlingLiquids()
 {
     swirling_liquids ^= 1;
 }
 
-void M_RD_Change_InvulSky()
+static void M_RD_Change_InvulSky()
 {
     invul_sky ^= 1;
 }
 
-void M_RD_Change_LinearSky()
+static void M_RD_Change_LinearSky()
 {
     linear_sky ^= 1;
 }
 
-void M_RD_Change_FlipCorpses()
+static void M_RD_Change_FlipCorpses()
 {
     randomly_flipcorpses ^= 1;
 }
 
-void M_RD_Change_FlipWeapons()
+static void M_RD_Change_FlipWeapons()
 {
     flip_weapons ^= 1;
 
@@ -4182,17 +4204,17 @@ void M_RD_Change_FlipWeapons()
 // Gameplay: Status Bar
 //
 
-void M_RD_Change_ExtraPlayerFaces()
+static void M_RD_Change_ExtraPlayerFaces()
 {
     extra_player_faces ^= 1;
 }
 
-void M_RD_Change_NegativeHealth()
+static void M_RD_Change_NegativeHealth()
 {
     negative_health ^= 1;
 }
 
-void M_RD_Change_SBarColored(Direction_t direction)
+static void M_RD_Change_SBarColored(Direction_t direction)
 {
     RD_Menu_SpinInt(&sbar_colored, 0, 2, direction);
     
@@ -4237,7 +4259,7 @@ void M_RD_Define_SBarColorValue(byte** sbar_color_set, int color)
     }
 }
 
-void M_RD_Change_SBarHighValue(Direction_t direction)
+static void M_RD_Change_SBarHighValue(Direction_t direction)
 {
     // [JN] Disallow changing if not appropriate.
     if (sbar_colored == 0 || gamemission == jaguar)
@@ -4249,7 +4271,7 @@ void M_RD_Change_SBarHighValue(Direction_t direction)
     M_RD_Define_SBarColorValue(&sbar_color_high_set, sbar_color_high);
 }
 
-void M_RD_Change_SBarNormalValue(Direction_t direction)
+static void M_RD_Change_SBarNormalValue(Direction_t direction)
 {
     // [JN] Disallow changing if not appropriate.
     if (sbar_colored == 0 || gamemission == jaguar)
@@ -4261,7 +4283,7 @@ void M_RD_Change_SBarNormalValue(Direction_t direction)
     M_RD_Define_SBarColorValue(&sbar_color_normal_set, sbar_color_normal);
 }
 
-void M_RD_Change_SBarLowValue(Direction_t direction)
+static void M_RD_Change_SBarLowValue(Direction_t direction)
 {
     // [JN] Disallow changing if not appropriate.
     if (sbar_colored == 0 || gamemission == jaguar)
@@ -4273,7 +4295,7 @@ void M_RD_Change_SBarLowValue(Direction_t direction)
     M_RD_Define_SBarColorValue(&sbar_color_low_set, sbar_color_low);
 }
 
-void M_RD_Change_SBarCriticalValue(Direction_t direction)
+static void M_RD_Change_SBarCriticalValue(Direction_t direction)
 {
     // [JN] Disallow changing if not appropriate.
     if (sbar_colored == 0 || gamemission == jaguar)
@@ -4285,7 +4307,7 @@ void M_RD_Change_SBarCriticalValue(Direction_t direction)
     M_RD_Define_SBarColorValue(&sbar_color_critical_set, sbar_color_critical);
 }
 
-void M_RD_Change_SBarArmorType1(Direction_t direction)
+static void M_RD_Change_SBarArmorType1(Direction_t direction)
 {
     // [JN] Disallow changing if not appropriate.
     if (sbar_colored == 0 || gamemission == jaguar)
@@ -4297,7 +4319,7 @@ void M_RD_Change_SBarArmorType1(Direction_t direction)
     M_RD_Define_SBarColorValue(&sbar_color_armor_1_set, sbar_color_armor_1);
 }
 
-void M_RD_Change_SBarArmorType2(Direction_t direction)
+static void M_RD_Change_SBarArmorType2(Direction_t direction)
 {
     // [JN] Disallow changing if not appropriate.
     if (sbar_colored == 0 || gamemission == jaguar)
@@ -4309,7 +4331,7 @@ void M_RD_Change_SBarArmorType2(Direction_t direction)
     M_RD_Define_SBarColorValue(&sbar_color_armor_2_set, sbar_color_armor_2);
 }
 
-void M_RD_Change_SBarArmorType0(Direction_t direction)
+static void M_RD_Change_SBarArmorType0(Direction_t direction)
 {
     // [JN] Disallow changing if not appropriate.
     if (sbar_colored == 0 || gamemission == jaguar)
@@ -4321,37 +4343,45 @@ void M_RD_Change_SBarArmorType0(Direction_t direction)
     M_RD_Define_SBarColorValue(&sbar_color_armor_0_set, sbar_color_armor_0);
 }
 
-void M_RD_Change_ZAxisSfx()
+//
+// Gameplay: Audible
+//
+
+static void M_RD_Change_ZAxisSfx()
 {
     z_axis_sfx ^= 1;
 }
 
-void M_RD_Change_ExitSfx()
+static void M_RD_Change_ExitSfx()
 {
     play_exit_sfx ^= 1;
 }
 
-void M_RD_Change_CrushingSfx()
+static void M_RD_Change_CrushingSfx()
 {
     crushed_corpses_sfx ^= 1;
 }
 
-void M_RD_Change_BlazingSfx()
+static void M_RD_Change_BlazingSfx()
 {
     blazing_door_fix_sfx ^= 1;
 }
 
-void M_RD_Change_AlertSfx()
+static void M_RD_Change_AlertSfx()
 {
      noise_alert_sfx ^= 1;
 }
 
-void M_RD_Change_SecretNotify()
+//
+// Gameplay: Tactical
+//
+
+static void M_RD_Change_SecretNotify()
 {
     secret_notification ^= 1;
 }
 
-void M_RD_Change_InfraGreenVisor()
+static void M_RD_Change_InfraGreenVisor()
 {
     infragreen_visor ^= 1;
 
@@ -4371,67 +4401,75 @@ void M_RD_Change_InfraGreenVisor()
     }
 }
 
-void M_RD_Change_HorizontalAiming(Direction_t direction)
+static void M_RD_Change_HorizontalAiming(Direction_t direction)
 {
     RD_Menu_SpinInt(&horizontal_autoaim, 0, 3, direction);
 }
 
-void M_RD_Change_ImprovedCollision()
+//
+// Gameplay: Physical
+//
+
+static void M_RD_Change_ImprovedCollision()
 {
     improved_collision ^= 1;
 }
 
-void M_RD_Change_WalkOverUnder()
+static void M_RD_Change_WalkOverUnder()
 {
     over_under ^= 1;
 }
 
-void M_RD_Change_Torque()
+static void M_RD_Change_Torque()
 {
     torque ^= 1;
 }
 
-void M_RD_Change_Bobbing()
+static void M_RD_Change_Bobbing()
 {
     weapon_bobbing ^= 1;
 }
 
-void M_RD_Change_SSGBlast()
+static void M_RD_Change_SSGBlast()
 {
     ssg_blast_enemies ^= 1;
 }
 
-void M_RD_Change_FloatPowerups(Direction_t direction)
+static void M_RD_Change_FloatPowerups(Direction_t direction)
 {
     RD_Menu_SpinInt(&floating_powerups, 0, 3, direction);
 }
 
-void M_RD_Change_TossDrop()
+static void M_RD_Change_TossDrop()
 {
     toss_drop ^= 1;
 }
 
-void M_RD_Change_CrosshairDraw()
+static void M_RD_Change_CrosshairDraw()
 {
     crosshair_draw ^= 1;
 }
 
-void M_RD_Change_CrosshairType(Direction_t direction)
+static void M_RD_Change_CrosshairType(Direction_t direction)
 {
     RD_Menu_SpinInt(&crosshair_type, 0, 3, direction);
 }
 
-void M_RD_Change_CrosshairScale()
+static void M_RD_Change_CrosshairScale()
 {
     crosshair_scale ^= 1;
 }
 
-void M_RD_Change_FixMapErrors()
+//
+// Gameplay: Physical
+//
+
+static void M_RD_Change_FixMapErrors()
 {
     fix_map_errors ^= 1;
 }
 
-void M_RD_Change_FlipLevels()
+static void M_RD_Change_FlipLevels()
 {
     flip_levels ^= 1;
 
@@ -4442,32 +4480,32 @@ void M_RD_Change_FlipLevels()
     S_UpdateStereoSeparation();
 }
 
-void M_RD_Change_LostSoulsQty()
+static void M_RD_Change_LostSoulsQty()
 {
     unlimited_lost_souls ^= 1;
 }
 
-void M_RD_Change_LostSoulsAgr()
+static void M_RD_Change_LostSoulsAgr()
 {
     agressive_lost_souls ^= 1;
 }
 
-void M_RD_Change_PistolStart()
+static void M_RD_Change_PistolStart()
 {
     pistol_start ^= 1;
 }
 
-void M_RD_Change_DemoTimer(Direction_t direction)
+static void M_RD_Change_DemoTimer(Direction_t direction)
 {
     RD_Menu_SpinInt(&demotimer, 0, 3, direction);
 }
 
-void M_RD_Change_DemoTimerDir()
+static void M_RD_Change_DemoTimerDir()
 {
     demotimerdir ^= 1;
 }
 
-void M_RD_Change_DemoBar()
+static void M_RD_Change_DemoBar()
 {
     demobar ^= 1;
 
@@ -4478,7 +4516,7 @@ void M_RD_Change_DemoBar()
     }
 }
 
-void M_RD_Change_NoInternalDemos()
+static void M_RD_Change_NoInternalDemos()
 {
     no_internal_demos ^= 1;
 }
@@ -4487,7 +4525,7 @@ void M_RD_Change_NoInternalDemos()
 // Level select
 // -----------------------------------------------------------------------------
 
-void M_LevelSelect(int choice)
+static void M_LevelSelect(int choice)
 {
     if (netgame && !demoplayback)
     {
@@ -4498,7 +4536,7 @@ void M_LevelSelect(int choice)
     RD_Menu_SetMenu(&LevelSelect1Menu);
 }
 
-void M_RD_Draw_Level_1(void)
+static void M_RD_Draw_Level_1(void)
 {
     static char num[4];
 
@@ -4737,7 +4775,7 @@ void M_RD_Draw_Level_1(void)
     }
 }
 
-void M_RD_Draw_Level_2(void)
+static void M_RD_Draw_Level_2(void)
 {
     static char num[4];
 
@@ -4900,12 +4938,12 @@ void M_RD_Draw_Level_2(void)
     }
 }
 
-void M_RD_Change_Selective_Skill(Direction_t direction)
+static void M_RD_Change_Selective_Skill(Direction_t direction)
 {
     RD_Menu_SlideInt(&selective_skill, 0, 5, direction);
 }
 
-void M_RD_Change_Selective_Episode(Direction_t direction)
+static void M_RD_Change_Selective_Episode(Direction_t direction)
 {
     int epiWas;
 
@@ -4928,7 +4966,7 @@ void M_RD_Change_Selective_Episode(Direction_t direction)
     }
 }
 
-void M_RD_Change_Selective_Map(Direction_t direction)
+static void M_RD_Change_Selective_Map(Direction_t direction)
 {
     // [JN] There are three episoder with one map for each in Press Beta.
     if (gamemode == pressbeta)
@@ -4939,17 +4977,17 @@ void M_RD_Change_Selective_Map(Direction_t direction)
                     gamemission == jaguar ? 25 : 32), direction);
 }
 
-void M_RD_Change_Selective_Health(Direction_t direction)
+static void M_RD_Change_Selective_Health(Direction_t direction)
 {
     RD_Menu_SlideInt(&selective_health, 1, 200, direction);
 }
 
-void M_RD_Change_Selective_Armor(Direction_t direction)
+static void M_RD_Change_Selective_Armor(Direction_t direction)
 {
     RD_Menu_SlideInt(&selective_armor, 0, 200, direction);
 }
 
-void M_RD_Change_Selective_ArmorType()
+static void M_RD_Change_Selective_ArmorType()
 {
     selective_armortype++;
     
@@ -4957,17 +4995,17 @@ void M_RD_Change_Selective_ArmorType()
         selective_armortype = 1;
 }
 
-void M_RD_Change_Selective_WP_Chainsaw()
+static void M_RD_Change_Selective_WP_Chainsaw()
 {
     selective_wp_chainsaw ^= 1;
 }
 
-void M_RD_Change_Selective_WP_Shotgun()
+static void M_RD_Change_Selective_WP_Shotgun()
 {
     selective_wp_shotgun ^= 1;
 }
 
-void M_RD_Change_Selective_WP_SSgun()
+static void M_RD_Change_Selective_WP_SSgun()
 {
     // Not available in Doom 1 and Jaguar
     if (logical_gamemission == doom || gamemission == jaguar)
@@ -4976,17 +5014,17 @@ void M_RD_Change_Selective_WP_SSgun()
     selective_wp_supershotgun ^= 1;
 }
 
-void M_RD_Change_Selective_WP_Chaingun()
+static void M_RD_Change_Selective_WP_Chaingun()
 {
     selective_wp_chaingun ^= 1;
 }
 
-void M_RD_Change_Selective_WP_RLauncher()
+static void M_RD_Change_Selective_WP_RLauncher()
 {
     selective_wp_missile ^= 1;
 }
 
-void M_RD_Change_Selective_WP_Plasmagun()
+static void M_RD_Change_Selective_WP_Plasmagun()
 {
     // Not available in shareware
     if (gamemode == shareware)
@@ -4995,7 +5033,7 @@ void M_RD_Change_Selective_WP_Plasmagun()
     selective_wp_plasma ^= 1;
 }
 
-void M_RD_Change_Selective_WP_BFG9000()
+static void M_RD_Change_Selective_WP_BFG9000()
 {
     // Not available in shareware
     if (gamemode == shareware)
@@ -5004,7 +5042,7 @@ void M_RD_Change_Selective_WP_BFG9000()
     selective_wp_bfg ^= 1;
 }
 
-void M_RD_Change_Selective_Backpack(Direction_t direction)
+static void M_RD_Change_Selective_Backpack(Direction_t direction)
 {
     selective_backpack ^= 1;
 
@@ -5021,71 +5059,72 @@ void M_RD_Change_Selective_Backpack(Direction_t direction)
     }
 }
 
-void M_RD_Change_Selective_Ammo_0(Direction_t direction)
+static void M_RD_Change_Selective_Ammo_0(Direction_t direction)
 {
     RD_Menu_SlideInt(&selective_ammo_0, 0, selective_backpack ? 400 : 200, direction);
 }
 
-void M_RD_Change_Selective_Ammo_1(Direction_t direction)
+static void M_RD_Change_Selective_Ammo_1(Direction_t direction)
 {
     RD_Menu_SlideInt(&selective_ammo_1, 0, selective_backpack ? 100 : 50, direction);
 }
 
-void M_RD_Change_Selective_Ammo_2(Direction_t direction)
+static void M_RD_Change_Selective_Ammo_2(Direction_t direction)
 {
     RD_Menu_SlideInt(&selective_ammo_2, 0, selective_backpack ? 600 : 300, direction);
 }
 
-void M_RD_Change_Selective_Ammo_3(Direction_t direction)
+static void M_RD_Change_Selective_Ammo_3(Direction_t direction)
 {
     RD_Menu_SlideInt(&selective_ammo_3, 0, selective_backpack ? 100 : 50, direction);
 }
 
-void M_RD_Change_Selective_Key_0()
+static void M_RD_Change_Selective_Key_0()
 {
     selective_key_0 ^= 1;
 }
 
-void M_RD_Change_Selective_Key_1()
+static void M_RD_Change_Selective_Key_1()
 {
     selective_key_1 ^= 1;
 }
 
-void M_RD_Change_Selective_Key_2()
+static void M_RD_Change_Selective_Key_2()
 {
     selective_key_2 ^= 1;
 }
 
-void M_RD_Change_Selective_Key_3()
+static void M_RD_Change_Selective_Key_3()
 {
     selective_key_3 ^= 1;
 }
 
-void M_RD_Change_Selective_Key_4()
+static void M_RD_Change_Selective_Key_4()
 {
     selective_key_4 ^= 1;
 }
 
-void M_RD_Change_Selective_Key_5()
+static void M_RD_Change_Selective_Key_5()
 {
     selective_key_5 ^= 1;
 }
 
-void M_RD_Change_Selective_Fast()
+static void M_RD_Change_Selective_Fast()
 {
     selective_fast ^= 1;
 }
 
-void M_RD_Change_Selective_Respawn()
+static void M_RD_Change_Selective_Respawn()
 {
     selective_respawn ^= 1;
 }
+
 
 // -----------------------------------------------------------------------------
 // Back to Defaults
 // -----------------------------------------------------------------------------
 
-void M_RD_Draw_Reset(void)
+static void M_RD_Draw_Reset(void)
 {   
     // [JN] Jaguar Doom: clear remainings of bottom strings from the status bar.
     if (gamemission == jaguar)
@@ -5132,7 +5171,7 @@ void M_RD_Draw_Reset(void)
     }
 }
 
-void M_RD_BackToDefaults_Recommended(int choice)
+static void M_RD_BackToDefaults_Recommended(int choice)
 {
     static char resetmsg[24];
 
@@ -5320,7 +5359,7 @@ void M_RD_BackToDefaults_Recommended(int choice)
     players[consoleplayer].message_system = resetmsg;
 }
 
-void M_RD_BackToDefaults_Original(int choice)
+static void M_RD_BackToDefaults_Original(int choice)
 {
     static char resetmsg[24];
 
@@ -5513,7 +5552,7 @@ void M_RD_BackToDefaults_Original(int choice)
 // Language hot-swapping
 // -----------------------------------------------------------------------------
 
-void M_RD_ChangeLanguage(int choice)
+static void M_RD_ChangeLanguage(int choice)
 {
     extern void ST_createWidgetsJaguar(void);
     extern void F_CastDrawer(void);
@@ -5587,7 +5626,7 @@ void M_RD_ChangeLanguage(int choice)
 //  read the strings from the savegame files
 //
 
-void M_ReadSaveStrings()
+static void M_ReadSaveStrings()
 {
     FILE    *handle;
     int     i;
@@ -5617,7 +5656,7 @@ void M_ReadSaveStrings()
 // M_LoadGame & Cie.
 //
 static int LoadDef_x = 72, LoadDef_y = 28;  // [JN] from Crispy Doom
-void M_DrawLoad()
+static void M_DrawLoad()
 {
     int i;
     int x;
@@ -5653,7 +5692,7 @@ void M_DrawLoad()
 //
 // Draw border for the savegame description
 //
-void M_DrawSaveLoadBorder(int x,int y)
+static void M_DrawSaveLoadBorder(int x,int y)
 {
     int i;
 
@@ -5672,7 +5711,7 @@ void M_DrawSaveLoadBorder(int x,int y)
 //
 // User wants to load this game
 //
-void M_LoadSelect(int choice)
+static void M_LoadSelect(int choice)
 {
     char    name[256];
 
@@ -5686,7 +5725,7 @@ void M_LoadSelect(int choice)
 //
 // Selected from DOOM menu
 //
-void M_LoadGame ()
+static void M_LoadGame ()
 {
     if (netgame)
     {
@@ -5707,7 +5746,7 @@ void M_LoadGame ()
 //  M_SaveGame & Cie.
 //
 static int SaveDef_x = 72, SaveDef_y = 28;  // [JN] from Crispy Doom
-void M_DrawSave()
+static void M_DrawSave()
 {
     int i;
     int x;
@@ -5745,7 +5784,7 @@ void M_DrawSave()
 //
 // M_Responder calls this when user is finished
 //
-void M_DoSave(int slot)
+static void M_DoSave(int slot)
 {
     G_SaveGame (slot,savegamestrings[slot]);
     saveStatus[slot] = true;
@@ -5760,7 +5799,7 @@ void M_DoSave(int slot)
 //
 // User wants to save. Start string input for M_Responder
 //
-void M_SaveSelect(int choice)
+static void M_SaveSelect(int choice)
 {
     // we are going to be intercepting all chars
     saveStringEnter = 1;
@@ -5777,7 +5816,7 @@ void M_SaveSelect(int choice)
 //
 // Selected from DOOM menu
 //
-void M_SaveGame ()
+static void M_SaveGame ()
 {
     if (!usergame)
     {
@@ -5799,9 +5838,9 @@ void M_SaveGame ()
 //
 // M_QuickSave
 //
-char tempstring[80];
+static char tempstring[80];
 
-void M_QuickSaveResponse(boolean confirmed)
+static void M_QuickSaveResponse(boolean confirmed)
 {
     if (confirmed)
     {
@@ -5810,7 +5849,7 @@ void M_QuickSaveResponse(boolean confirmed)
     }
 }
 
-void M_QuickSave(void)
+static void M_QuickSave(void)
 {
     if (!usergame)
     {
@@ -5848,7 +5887,7 @@ void M_QuickSave(void)
 //
 // M_QuickLoad
 //
-void M_QuickLoadResponse(boolean confirmed)
+static void M_QuickLoadResponse(boolean confirmed)
 {
     if (confirmed)
     {
@@ -5857,8 +5896,7 @@ void M_QuickLoadResponse(boolean confirmed)
     }
 }
 
-
-void M_QuickLoad(void)
+static void M_QuickLoad(void)
 {
     if (netgame)
     {
@@ -5894,7 +5932,7 @@ void M_QuickLoad(void)
 // Read This Menus
 // Had a "quick hack to fix romero bug"
 //
-void M_DrawReadThis1()
+static void M_DrawReadThis1()
 {
     char *lumpname = "CREDIT";
     int skullx = 330, skully = 175;
@@ -5997,7 +6035,7 @@ void M_DrawReadThis1()
 //
 // Read This Menus - optional second page.
 //
-void M_DrawReadThis2()
+static void M_DrawReadThis2()
 {
     inhelpscreens = true;
 
@@ -6012,7 +6050,7 @@ void M_DrawReadThis2()
 //
 // M_DrawMainMenu
 //
-void M_DrawMainMenu(void)
+static void M_DrawMainMenu(void)
 {
     inhelpscreens = true;
 
@@ -6036,7 +6074,7 @@ void M_DrawMainMenu(void)
 //
 // M_NewGame
 //
-void M_DrawNewGame()
+static void M_DrawNewGame()
 {
     inhelpscreens = true;
 
@@ -6054,7 +6092,7 @@ void M_DrawNewGame()
     }
 }
 
-void M_NewGame()
+static void M_NewGame()
 {
     if (netgame && !demoplayback)
     {
@@ -6076,9 +6114,9 @@ void M_NewGame()
 //
 // M_Episode
 //
-int epi;
+static int epi;
 
-void M_DrawEpisode()
+static void M_DrawEpisode()
 {
     inhelpscreens = true;
 
@@ -6096,7 +6134,7 @@ void M_DrawEpisode()
     }
 }
 
-void M_VerifyNightmare(boolean confirmed)
+static void M_VerifyNightmare(boolean confirmed)
 {
     if (!confirmed)
         return;
@@ -6105,7 +6143,7 @@ void M_VerifyNightmare(boolean confirmed)
     RD_Menu_DeactivateMenu();
 }
 
-void M_VerifyUltraNightmare(boolean confirmed)
+static void M_VerifyUltraNightmare(boolean confirmed)
 {
     if (!confirmed)
         return;
@@ -6114,7 +6152,7 @@ void M_VerifyUltraNightmare(boolean confirmed)
     RD_Menu_DeactivateMenu();
 }
 
-void M_ChooseSkill(int choice)
+static void M_ChooseSkill(int choice)
 {
     if (choice == 4)
     {
@@ -6135,7 +6173,7 @@ void M_ChooseSkill(int choice)
     RD_Menu_DeactivateMenu();
 }
 
-void M_Episode(int choice)
+static void M_Episode(int choice)
 {
     if ((gamemode == shareware) && choice)
     {
@@ -6163,7 +6201,7 @@ void M_Episode(int choice)
 //
 // M_EndGame
 //
-void M_EndGameResponse(boolean confirmed)
+static void M_EndGameResponse(boolean confirmed)
 {
     if (!confirmed)
         return;
@@ -6173,7 +6211,7 @@ void M_EndGameResponse(boolean confirmed)
     D_StartTitle ();
 }
 
-void M_EndGame(int choice)
+static void M_EndGame(int choice)
 {
     if (!usergame)
     {
@@ -6196,12 +6234,12 @@ void M_EndGame(int choice)
 //
 // M_ReadThis2
 //
-void M_ReadThis()
+static void M_ReadThis()
 {
     InfoType = 1;
 }
 
-void M_ReadThis2()
+static void M_ReadThis2()
 {
     // Doom 1.9 had two menus when playing Doom 1
     // All others had only one
@@ -6221,7 +6259,7 @@ void M_ReadThis2()
     }
 }
 
-void M_FinishReadThis()
+static void M_FinishReadThis()
 {
     InfoType = 0;
     RD_Menu_SetMenu(MainMenu);
@@ -6231,7 +6269,7 @@ void M_FinishReadThis()
 //
 // M_QuitDOOM
 //
-int quitsounds[8] =
+static int quitsounds[8] =
 {
     sfx_pldeth,
     sfx_dmpain,
@@ -6243,7 +6281,7 @@ int quitsounds[8] =
     sfx_sgtatk
 };
 
-int quitsounds2[8] =
+static int quitsounds2[8] =
 {
     sfx_vilact,
     sfx_getpow,
@@ -6256,7 +6294,7 @@ int quitsounds2[8] =
 };
 
 
-void M_QuitResponse(boolean confirmed)
+static void M_QuitResponse(boolean confirmed)
 {
     if (!confirmed)
         return;
@@ -6296,7 +6334,7 @@ static char *M_SelectEndMessage(void)
 }
 
 
-void M_QuitDOOM()
+static void M_QuitDOOM()
 {
     DEH_snprintf(endstring, sizeof(endstring),
                 (english_language ? ("%s\n\n" DOSY) : ("%s\n\n" DOSY_RUS)),
@@ -6309,7 +6347,7 @@ void M_QuitDOOM()
 // Menu Functions
 //
 
-void
+static void
 M_StartMessage
 ( char*     string,
   void*     routine,
@@ -6357,7 +6395,7 @@ int M_StringWidth(char* string)
 //
 // Find string height from hu_font chars
 //
-int M_StringHeight(char* string)
+static int M_StringHeight(char* string)
 {
     size_t  i;
     int     h;
