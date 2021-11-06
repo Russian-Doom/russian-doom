@@ -224,7 +224,7 @@ static void DoQuit(void *widget, void *dosave)
 {
     if (dosave != NULL)
     {
-        M_SaveDefaults();
+        M_SaveConfig();
     }
 
     TXT_Shutdown();
@@ -277,7 +277,7 @@ static void LaunchDoom(void *unused1, void *unused2)
 
     // Save configuration first
 
-    M_SaveDefaults();
+    M_SaveConfig();
 
     // Shut down textscreen GUI
 
@@ -412,7 +412,7 @@ static void InitConfig(void)
     SetChatMacroDefaults();
     SetPlayerNameDefault();
 
-    M_LoadDefaults();
+    M_LoadConfig();
 }
 
 //

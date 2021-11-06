@@ -1612,7 +1612,7 @@ void D_DoomMain (void)
     // DEH_printf("M_LoadDefaults: Load system defaults.\n"); [STRIFE] removed
     M_SetConfigFilename(PROGRAM_PREFIX "strife.cfg");
     D_BindVariables();
-    M_LoadDefaults();
+    M_LoadConfig();
 
     // [JN] Define and load translated strings
     RD_DefineLanguageStrings();
@@ -1623,7 +1623,7 @@ void D_DoomMain (void)
     }
 
     // Save configuration at exit.
-    I_AtExit(M_SaveDefaults, false);
+    I_AtExit(M_SaveConfig, false);
 
     // Find the main IWAD file and load it.
     iwadfile = D_FindIWAD(IWAD_MASK_STRIFE, &gamemission);

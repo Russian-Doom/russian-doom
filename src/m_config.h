@@ -24,8 +24,8 @@
 
 #include "doomtype.h"
 
-void M_LoadDefaults(void);
-void M_SaveDefaults(void);
+void M_LoadConfig(void);
+void M_SaveConfig(void);
 void M_SaveDefaultAlternate(char *main);
 void M_SetConfigDir(char *dir);
 void M_BindIntVariable(char *name, int *variable);

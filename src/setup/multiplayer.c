@@ -390,8 +390,8 @@ static void StartGame(int multiplayer)
     AddWADs(exec);
 
     TXT_Shutdown();
- 
-    M_SaveDefaults();
+
+    M_SaveConfig();
     PassThroughArguments(exec);
 
     ExecuteDoom(exec);
@@ -1055,8 +1055,8 @@ static void DoJoinGame(void *unused1, void *unused2)
     AddWADs(exec);
 
     TXT_Shutdown();
-    
-    M_SaveDefaults();
+
+    M_SaveConfig();
 
     PassThroughArguments(exec);
 

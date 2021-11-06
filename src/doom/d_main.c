@@ -2736,7 +2736,7 @@ void D_DoomMain (void)
                "M_LoadDefaults: Загрузка системных стандартов.\n");
     M_SetConfigFilename(PROGRAM_PREFIX "doom.ini");
     D_BindVariables();
-    M_LoadDefaults();
+    M_LoadConfig();
 
     // init subsystems
     DEH_printf(english_language ?
@@ -2745,7 +2745,7 @@ void D_DoomMain (void)
     V_Init ();
 
     // Save configuration at exit.
-    I_AtExit(M_SaveDefaults, false);
+    I_AtExit(M_SaveConfig, false);
 
     // Find main IWAD file and load it.
     iwadfile = D_FindIWAD(IWAD_MASK_DOOM, &gamemission);
