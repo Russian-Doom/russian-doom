@@ -1829,7 +1829,8 @@ void M_RD_Draw_Rendering(void)
         RD_M_DrawTextSmallENG(num, 207 + wide_delta, 55, 
                               max_fps < 60 ? CR_DARKRED :
                               max_fps < 100 ? CR_NONE :
-                              max_fps < 260 ? CR_GREEN : CR_ORANGE);
+                              max_fps < 260 ? CR_GREEN : 
+                              max_fps < 999 ? CR_ORANGE : CR_PINK);
 
         // Performance counter
         RD_M_DrawTextSmallENG(show_fps == 1 ? "FPS only" :
@@ -1898,7 +1899,8 @@ void M_RD_Draw_Rendering(void)
         RD_M_DrawTextSmallENG(num, 261 + wide_delta, 55, 
                               max_fps < 60 ? CR_DARKRED :
                               max_fps < 100 ? CR_NONE :
-                              max_fps < 260 ? CR_GREEN : CR_ORANGE);
+                              max_fps < 260 ? CR_GREEN : 
+                              max_fps < 999 ? CR_ORANGE : CR_PINK);
 
         // Счетчик производительности
         RD_M_DrawTextSmallRUS(show_fps == 1 ? "" : // Print as US string below

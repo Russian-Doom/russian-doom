@@ -1656,6 +1656,16 @@ void I_InitGraphics(void)
     // [JN] Set apropriate render diver.
     SetSDLRenderDriver();
 
+    // [JN] Set correct capped/uncapped mode at startup.
+    if (max_fps == 35)
+    {
+        uncapped_fps = 0;
+    }
+    else
+    {
+        uncapped_fps = 1;
+    }
+
     if (SDL_Init(SDL_INIT_VIDEO) < 0) 
     {
         I_Error(english_language ?
