@@ -15,6 +15,7 @@
 #ifndef RD_KEYBINDS_H
 #define RD_KEYBINDS_H
 
+#include <stdio.h>
 #include "doomtype.h"
 #include "d_event.h"
 
@@ -189,6 +190,10 @@ void BK_ApplyDefaultBindings();
 
 void BK_LoadBindings(void* file);
 
-void BK_SaveBindings(void* file);
+boolean KeybindsHandler_Handles(char* sectionName);
+
+void KeybindsHandler_HandleLine(char* keyName, char *value, size_t valueSize);
+
+void KeybindsHandler_Save(FILE* file);
 
 #endif //RD_KEYBINDS_H

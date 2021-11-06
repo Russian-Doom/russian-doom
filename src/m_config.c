@@ -40,19 +40,42 @@
     #include "rd_keybinds.h"
 #endif
 
+typedef struct
+{
+    /**
+     * Returns true if section with a given name is handled by this handler
+     */
+    boolean (*handles) (char* sectionName);
+    /**
+     * Called for every line in the handled section
+     */
+    void (*handleLine) (char* keyName, char *value, size_t valueSize);
+    /**
+     * Saves all data of the handled section to the config file
+     */
+    void (*save) (FILE *file);
+} sectionHandler_t;
+
+typedef struct section_s
+{
+    struct section_s* next;
+    char* name;
+    sectionHandler_t* handler;
+} section_t;
+
+// Location where all configuration data is stored
+char *configdir, *configPath;
+
+static section_t* sections;
+
+// Default filenames for configuration files.
+static char *config_file_name;
+
 //
 // DEFAULTS
 //
 
-// Location where all configuration data is stored
-
-char *configdir;
-
-// Default filenames for configuration files.
-
-static char *config_file_name;
-
-typedef enum 
+typedef enum
 {
     DEFAULT_INT,
     DEFAULT_INT_HEX,
@@ -95,7 +118,6 @@ typedef struct
 {
     default_t *defaults;
     int numdefaults;
-    char *filename;
 } default_collection_t;
 
 #define CONFIG_VARIABLE_GENERIC(name, type) \
@@ -714,9 +736,30 @@ static default_t defaults_list[] =
 static default_collection_t default_collection =
 {
     defaults_list,
-    arrlen(defaults_list),
-    NULL,
+    arrlen(defaults_list)
 };
+
+static void DefaultHandler_Save(FILE* file);
+static void DefaultHandler_HandleLine(char* keyName, char *value, size_t valueSize);
+static boolean DefaultHandler_Handles(char* sectionName)
+{
+    return strcmp("General", sectionName) == 0;
+}
+
+static sectionHandler_t defaultHandler = {
+    DefaultHandler_Handles,
+    DefaultHandler_HandleLine,
+    DefaultHandler_Save
+};
+
+static sectionHandler_t keybindsHandler = {
+    KeybindsHandler_Handles,
+    KeybindsHandler_HandleLine,
+    KeybindsHandler_Save
+};
+
+static sectionHandler_t* handlers[] = {&defaultHandler, &keybindsHandler};
+static int handlersSize = 2;
 
 // Search a collection for a variable
 
@@ -735,66 +778,72 @@ static default_t *SearchCollection(default_collection_t *collection, char *name)
     return NULL;
 }
 
-static void SaveDefaultCollection(default_collection_t *collection)
+static void DefaultHandler_Save(FILE* file)
 {
     default_t *defaults;
     int i;
-    FILE *f;
-	
-    f = fopen (collection->filename, "w");
-    if (!f)
-	return; // can't write the file, but don't complain
 
-    defaults = collection->defaults;
-		
-    for (i=0 ; i<collection->numdefaults ; i++)
+    defaults = default_collection.defaults;
+
+    for (i=0 ; i < default_collection.numdefaults ; i++)
     {
-        int chars_written;
-
         // Ignore unbound variables
-
         if (!defaults[i].bound)
         {
             continue;
         }
 
-        // Print the name and line up all values at 30 characters
-
-        chars_written = fprintf(f, "%s ", defaults[i].name);
-
-        for (; chars_written < 30; ++chars_written)
-            fprintf(f, " ");
-
-        // Print the value
-
+        // Print the name and the value
         switch (defaults[i].type) 
         {
             case DEFAULT_INT:
-	            fprintf(f, "%i", *defaults[i].location.i);
+	            fprintf(file, "%s = %i\n", defaults[i].name, *defaults[i].location.i);
                 break;
 
             case DEFAULT_INT_HEX:
-	            fprintf(f, "0x%x", *defaults[i].location.i);
+	            fprintf(file, "%s = 0x%x\n", defaults[i].name, *defaults[i].location.i);
                 break;
 
             case DEFAULT_FLOAT:
-                fprintf(f, "%f", *defaults[i].location.f);
+                fprintf(file, "%s = %f\n", defaults[i].name, *defaults[i].location.f);
                 break;
 
             case DEFAULT_STRING:
-	            fprintf(f,"\"%s\"", *defaults[i].location.s);
+	            fprintf(file, "%s = \"%s\"\n", defaults[i].name, *defaults[i].location.s);
                 break;
         }
+    }
+    fprintf(file, "\n");
+}
 
-        fprintf(f, "\n");
+static void SetVariable(default_t *def, char *value);
+
+static void DefaultHandler_HandleLine(char* keyName, char *value, size_t valueSize)
+{
+    default_t *def;
+
+    def = SearchCollection(&default_collection, keyName);
+    if(def == NULL || !def->bound)
+    {
+        // Unknown variable?  Unbound variables are also treated as unknown.
+        return;
     }
 
-    // [Dasperal] Key binds section
-#ifndef ___RD_TARGET_SETUP___
-    BK_SaveBindings(f);
-#endif
+    // Strip off trailing non-printable characters
+    while(strlen(value) > 0 && !isprint(value[strlen(value)-1]))
+    {
+        value[strlen(value)-1] = '\0';
+    }
 
-    fclose (f);
+    // Surrounded by quotes? If so, remove them.
+    if(strlen(value) >= 2
+    && value[0] == '"' && value[strlen(value) - 1] == '"')
+    {
+        value[strlen(value) - 1] = '\0';
+        memmove(value, value + 1, valueSize - 1);
+    }
+
+    SetVariable(def, value);
 }
 
 // Parses integer values in the configuration file
@@ -832,65 +881,49 @@ static void SetVariable(default_t *def, char *value)
     }
 }
 
-static void LoadDefaultCollection(default_collection_t *collection)
+static void LoadDefaultCollection(FILE *file)
 {
-    FILE *f;
     default_t *def;
     char defname[80];
     char strparm[100];
 
-    // read the file in, overriding any set default_collection
-    f = fopen(collection->filename, "r");
-
-    if (f == NULL)
+    while(!feof(file))
     {
-        // File not opened, but don't complain. 
-        // It's probably just the first time they ran the game.
-
-        return;
-    }
-
-    while (!feof(f))
-    {
-        if (fscanf(f, "%79s %99[^\n]\n", defname, strparm) != 2)
+        if(fscanf(file, "%79s %99[^\n]\n", defname, strparm) != 2)
         {
             // This line doesn't match
-
             continue;
         }
 
         // [Dasperal] Key binds section
 #ifndef ___RD_TARGET_SETUP___
-        if (strcmp("Keybinds", defname) == 0 && strcmp("Start", strparm) == 0)
+        if(strcmp("Keybinds", defname) == 0 && strcmp("Start", strparm) == 0)
         {
-            BK_LoadBindings(f);
+            BK_LoadBindings(file);
             continue;
         }
 #endif
 
         // Find the setting in the list
+        def = SearchCollection(&default_collection, defname);
 
-        def = SearchCollection(collection, defname);
-
-        if (def == NULL || !def->bound)
+        if(def == NULL || !def->bound)
         {
             // Unknown variable?  Unbound variables are also treated
             // as unknown.
-
             continue;
         }
 
         // Strip off trailing non-printable characters (\r characters
         // from DOS text files)
-
-        while (strlen(strparm) > 0 && !isprint(strparm[strlen(strparm)-1]))
+        while(strlen(strparm) > 0 && !isprint(strparm[strlen(strparm)-1]))
         {
             strparm[strlen(strparm)-1] = '\0';
         }
 
         // Surrounded by quotes? If so, remove them.
-        if (strlen(strparm) >= 2
-         && strparm[0] == '"' && strparm[strlen(strparm) - 1] == '"')
+        if(strlen(strparm) >= 2
+        && strparm[0] == '"' && strparm[strlen(strparm) - 1] == '"')
         {
             strparm[strlen(strparm) - 1] = '\0';
             memmove(strparm, strparm + 1, sizeof(strparm) - 1);
@@ -898,8 +931,6 @@ static void LoadDefaultCollection(default_collection_t *collection)
 
         SetVariable(def, strparm);
     }
-
-    fclose (f);
 }
 
 // Set the default filenames to use for configuration files.
@@ -910,12 +941,26 @@ void M_SetConfigFilename(char *name)
 }
 
 //
-// M_SaveDefaults
+// M_SaveConfig
 //
 
-void M_SaveDefaults (void)
+void M_SaveConfig (void)
 {
-    SaveDefaultCollection(&default_collection);
+    FILE *f;
+    section_t* section;
+
+    f = fopen(configPath, "w");
+    if(!f)
+        return; // can't write the file, but don't complain
+    section = sections;
+    while(section)
+    {
+        fprintf(f, "[%s]\n", section->name);
+        section->handler->save(f);
+        section = section->next;
+    }
+
+    fclose(f);
 }
 
 //
@@ -928,59 +973,143 @@ void M_SaveDefaultAlternate(char *main)
 
     // Temporarily change the filenames
 
-    orig_main = default_collection.filename;
+    orig_main = configPath;
 
-    default_collection.filename = main;
+    configPath = main;
 
-    M_SaveDefaults();
+    M_SaveConfig();
 
     // Restore normal filenames
 
-    default_collection.filename = orig_main;
+    configPath = orig_main;
+}
+
+static void appendSection(const char* sectionName, sectionHandler_t* handler)
+{
+    if(sections == NULL)
+    {
+        sections = malloc(sizeof(section_t));
+        sections->next = NULL;
+        sections->name = M_StringDuplicate(sectionName);
+        sections->handler = handler;
+    }
+    else
+    {
+        section_t *temp = sections;
+        while(temp->next != NULL)
+        {
+            temp = temp->next;
+        }
+        temp->next = malloc(sizeof(section_t));
+        temp->next->next = NULL;
+        temp->next->name = M_StringDuplicate(sectionName);
+        temp->next->handler = handler;
+    }
+}
+
+static void LoadSections(FILE *file)
+{
+    int i;
+    char sectionName[100];
+    char keyName[100];
+    char value[300];
+
+    while(!feof(file))
+    {
+        if(fscanf(file, "[%99[^]]]%*1[\n]", sectionName) == 1)
+        {
+            for(i = 0; i < handlersSize; ++i)
+            {
+                if(handlers[i]->handles(sectionName))
+                {
+                    printf(english_language ?
+                           "\tM_Config: Loading section \"%s\"\n" :
+                           "\tM_Config: Загрузка секции \"%s\"\n", sectionName);
+                    while(!feof(file))
+                    {
+                        if(fscanf(file, "%99[^\n =] = %299[^\n]%*1[\n]", keyName, value) != 2)
+                        {
+                            // Section end (empty line) of error
+                            break;
+                        }
+
+                        handlers[i]->handleLine(keyName, value, 300);
+                    }
+                    appendSection(sectionName, handlers[i]);
+                    break;
+                }
+            }
+            fscanf(file, "%*[^[]");
+        }
+        else
+        {
+            printf("\tM_Config: Error: Failed to load config\n");
+            break;
+        }
+    }
 }
 
 //
-// M_LoadDefaults
+// M_LoadConfig
 //
-
-void M_LoadDefaults (void)
+void M_LoadConfig(void)
 {
-    int i;
+    int i, c;
+    FILE* file;
  
     // check for a custom default file
 
     //!
     // @arg <file>
-    // @vanilla
     //
-    // Load main configuration from the specified file, instead of the
-    // default.
+    // Load configuration from the specified file, instead of the default
     //
-
     i = M_CheckParmWithArgs("-config", 1);
 
     if(i)
     {
-        default_collection.filename = myargv[i + 1];
-	    printf(english_language ?
-               "\tdefault file: %s\n" :
-               "\tфайл конфигурации: %s\n",
-               default_collection.filename);
+        configPath = myargv[i + 1];
     }
     else
     {
-        default_collection.filename = M_StringJoin(configdir, config_file_name, NULL);
+        configPath = M_StringJoin(configdir, config_file_name, NULL);
     }
 
     printf(english_language ?
-           "saving config in %s\n" :
-           "Сохранение файла конфигурации:\n \t%s\n",
-           default_collection.filename);
+           "Loading config form %s\n" :
+           "Загрузка файла конфигурации:\n \t%s\n",
+           configPath);
 
-    LoadDefaultCollection(&default_collection);
+    file = fopen(configPath, "r");
+    if(file == NULL)
+    {
+        // File not opened, but don't complain.
+        // It's probably just the first time they ran the game.
+        return;
+    }
+
+    c = fgetc(file);
+    fseek(file, -1, SEEK_CUR);
+    if(c != '[')
+    {
+        LoadDefaultCollection(file);
+        appendSection("General", &defaultHandler);
+        if(isBindsLoaded)
+            appendSection("Keybinds", &keybindsHandler);
+    }
+    else
+    {
+        LoadSections(file);
+    }
+
+    fclose(file);
+
 #ifndef ___RD_TARGET_SETUP___
     if(!isBindsLoaded)
+    {
         BK_ApplyDefaultBindings();
+        appendSection("Keybinds", &keybindsHandler);
+    }
 #endif
 }
 

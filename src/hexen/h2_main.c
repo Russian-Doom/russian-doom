@@ -580,7 +580,7 @@ void D_DoomMain(void)
     }
 
     M_SetConfigFilename(PROGRAM_PREFIX "hexen.ini");
-    M_LoadDefaults();
+    M_LoadConfig();
 
     // Initialize subsystems
 
@@ -589,7 +589,7 @@ void D_DoomMain(void)
                "V_Init: Инициализация видео.\n");
     V_Init();
 
-    I_AtExit(M_SaveDefaults, false);
+    I_AtExit(M_SaveConfig, false);
 
     // Set the directory where hub savegames are saved.
     SavePath = M_GetSaveGameDir();

@@ -1234,7 +1234,7 @@ void D_DoomMain(void)
                "M_LoadDefaults: Загрузка системных стандартов.\n");
     D_BindVariables();
     M_SetConfigFilename(PROGRAM_PREFIX "heretic.ini");
-    M_LoadDefaults();
+    M_LoadConfig();
 
     //
     // init subsystems
@@ -1244,7 +1244,7 @@ void D_DoomMain(void)
                "V_Init: Инициализация видео.\n");
     V_Init();
 
-    I_AtExit(M_SaveDefaults, false);
+    I_AtExit(M_SaveConfig, false);
 
     DEH_printf(english_language ?
                "Z_Init: Init zone memory allocation daemon.\n" :
