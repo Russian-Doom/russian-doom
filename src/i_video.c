@@ -395,15 +395,6 @@ void I_ShutdownGraphics(void)
 }
 
 
-
-//
-// I_StartFrame
-//
-// void I_StartFrame (void)
-// {
-//     // er?
-// }
-
 // Adjust window_width / window_height variables to be an an aspect
 // ratio consistent with the aspect_ratio_correct variable.
 static void AdjustWindowSize(void)
@@ -615,15 +606,6 @@ void I_StartTic (void)
 
     I_UpdateController();
 }
-
-
-//
-// I_UpdateNoBlit
-//
-// void I_UpdateNoBlit (void)
-// {
-//     // what is this?
-// }
 
 static void UpdateGrab(void)
 {
@@ -1365,17 +1347,6 @@ static void SetSDLVideoDriver(void)
     }
 }
 
-// -----------------------------------------------------------------------------
-// SetSDLRenderDriver
-// [JN] Set render driver. Use "opengles2" as most faster screen scaler and
-// "software" in case of using software only rendering.
-// -----------------------------------------------------------------------------
-
-static void SetSDLRenderDriver (void)
-{
-    SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, force_software_renderer ?
-                            "software" : "opengles2", SDL_HINT_OVERRIDE);
-}
 
 // Check the display bounds of the display referred to by 'video_display' and
 // set x and y to a location that places the window in the center of that
@@ -1653,9 +1624,6 @@ void I_InitGraphics(void)
 
     SetSDLVideoDriver();
 
-    // [JN] Set apropriate render diver.
-    SetSDLRenderDriver();
-
     // [JN] Set correct capped/uncapped mode at startup.
     if (max_fps == 35)
     {
@@ -1796,9 +1764,6 @@ void I_ReInitGraphics (int reinit)
 		SDL_DestroyRenderer(renderer);
 		renderer = SDL_CreateRenderer(screen, -1, flags);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-
-        // [JN] Re-set appropriate video driver.
-        SetSDLRenderDriver();
 
 		// [crispy] the texture gets destroyed in SDL_DestroyRenderer(), force its re-creation
 		texture_upscaled = NULL;
