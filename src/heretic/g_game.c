@@ -468,14 +468,8 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
             }
         }
     }
-    if (BK_isKeyPressed(bk_arti_tome) && !cmd->arti
-        && !players[consoleplayer].powers[pw_weaponlevel2])
-    {
-        BK_ReleaseKey(bk_arti_tome);
-        cmd->arti = arti_tomeofpower;
-    }
     // [JN] Keys for Artifacts
-    else if (BK_isKeyPressed(bk_arti_quartz) && !cmd->arti
+    if (BK_isKeyPressed(bk_arti_quartz) && !cmd->arti
              && (players[consoleplayer].mo->health < MAXHEALTH))
     {
         BK_ReleaseKey(bk_arti_quartz);
