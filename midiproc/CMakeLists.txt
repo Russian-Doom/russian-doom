@@ -10,7 +10,6 @@ if(WIN32)
     )
     set_target_properties(${PROGRAM_PREFIX}midiproc PROPERTIES
         ADDITIONAL_CLEAN_FILES "${PROJECT_BINARY_DIR}/src/$<TARGET_FILE_NAME:${PROGRAM_PREFIX}midiproc>"
-        LINK_FLAGS_RELEASE -s
         C_STANDARD "${RD_C_STANDARD}"
         C_STANDARD_REQUIRED ON
     )
@@ -24,6 +23,7 @@ if(WIN32)
     )
     add_custom_command(TARGET "${PROGRAM_PREFIX}midiproc" POST_BUILD
         MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}midiproc>"
+        COMMAND $<$<CONFIG:RELEASE>:${CMAKE_STRIP}> $<$<CONFIG:RELEASE>:"$<TARGET_FILE:${PROGRAM_PREFIX}midiproc>">
         COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:${PROGRAM_PREFIX}midiproc>"
         "${PROJECT_BINARY_DIR}/src/$<TARGET_FILE_NAME:${PROGRAM_PREFIX}midiproc>"
     )
