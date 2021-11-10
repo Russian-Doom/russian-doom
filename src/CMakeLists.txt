@@ -222,13 +222,14 @@ foreach(MODULE ${COMPILE_MODULES})
     add_dependencies("${PROGRAM_PREFIX}${MODULE}" "${MODULE}-wads")
 endforeach()
 
-# Windows DLLs
+# Windows DLLs and midiproc
 if(WIN32)
     file(GLOB WIN_LIBS "${PROJECT_SOURCE_DIR}/win_libs/${ARCH}/*.dll")
     add_copy_target(NAME win-libs SOURCE ${WIN_LIBS} DESTINATION ".")
 
     foreach(MODULE ${COMPILE_MODULES})
         add_dependencies("${PROGRAM_PREFIX}${MODULE}" win-libs)
+        add_dependencies("${PROGRAM_PREFIX}${MODULE}" "${PROGRAM_PREFIX}midiproc")
         if(COMPILE_SETUP)
             add_dependencies("${PROGRAM_PREFIX}${MODULE}-setup" win-libs)
         endif()

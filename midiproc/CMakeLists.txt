@@ -1,5 +1,5 @@
 if(WIN32)
-    add_executable("${PROGRAM_PREFIX}midiproc" WIN32
+    add_executable("${PROGRAM_PREFIX}midiproc" WIN32 EXCLUDE_FROM_ALL
             buffer.c    buffer.h
             main.c
                         proto.h
