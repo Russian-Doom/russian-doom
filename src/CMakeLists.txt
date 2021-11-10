@@ -193,16 +193,23 @@ foreach(MODULE ${COMPILE_MODULES})
 
     # Link flags
     set_target_properties("${PROGRAM_PREFIX}${MODULE}" PROPERTIES
-        LINK_FLAGS_RELEASE -s
         C_STANDARD "${RD_C_STANDARD}"
         C_STANDARD_REQUIRED ON
     )
 
+    add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}" POST_BUILD
+        MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}>"
+        COMMAND $<$<CONFIG:RELEASE>:${CMAKE_STRIP}> $<$<CONFIG:RELEASE>:"$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}>">
+    )
+
     if(COMPILE_SETUP)
         set_target_properties("${PROGRAM_PREFIX}${MODULE}-setup" PROPERTIES
-            LINK_FLAGS_RELEASE -s
             C_STANDARD "${RD_C_STANDARD}"
             C_STANDARD_REQUIRED ON
+        )
+        add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}-setup" POST_BUILD
+            MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-setup>"
+            COMMAND $<$<CONFIG:RELEASE>:${CMAKE_STRIP}> $<$<CONFIG:RELEASE>:"$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-setup>">
         )
     endif()
 endforeach()
