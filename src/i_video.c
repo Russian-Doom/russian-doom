@@ -130,6 +130,15 @@ int window_title_short = true;
 int window_width = SCREENWIDTH;
 int window_height = SCREENHEIGHT_4_3;
 
+typedef enum
+{
+    cs_WIDTH_AND_HEIGHT = 0,
+    cs_WIDTH,
+    cs_HEIGHT
+} changedSize_t;
+
+static changedSize_t changedWindowSize = cs_WIDTH_AND_HEIGHT;
+
 // Fullscreen mode, 0x0 for SDL_WINDOW_FULLSCREEN_DESKTOP.
 
 int fullscreen_width = 0, fullscreen_height = 0;
@@ -401,17 +410,28 @@ static void AdjustWindowSize(void)
 {
     if (aspect_ratio_correct || integer_scaling)
     {
-        if (window_width * actualheight <= window_height * screenwidth)
+        switch(changedWindowSize)
         {
-            // We round up window_height if the ratio is not exact; this leaves
-            // the result stable.
-            window_height = (window_width * actualheight + screenwidth - 1) / screenwidth;
-        }
-        else
-        {
-            window_width = window_height * screenwidth / actualheight;
+            case cs_WIDTH:
+                window_height = (window_width * actualheight + screenwidth - 1) / screenwidth;
+                break;
+            case cs_HEIGHT:
+                window_width = window_height * screenwidth / actualheight;
+                break;
+            default:
+                if(window_width * actualheight <= window_height * screenwidth)
+                {
+                    // We round up window_height if the ratio is not exact; this leaves
+                    // the result stable.
+                    window_height = (window_width * actualheight + screenwidth - 1) / screenwidth;
+                }
+                else
+                {
+                    window_width = window_height * screenwidth / actualheight;
+                }
         }
     }
+    changedWindowSize = cs_WIDTH_AND_HEIGHT;
 }
 
 static void HandleWindowEvent(SDL_WindowEvent *event)
@@ -432,6 +452,12 @@ static void HandleWindowEvent(SDL_WindowEvent *event)
 
         case SDL_WINDOWEVENT_RESIZED:
             need_resize = true;
+            if(window_width == event->data1 && window_height != event->data2)
+                changedWindowSize = cs_HEIGHT;
+            else if(window_width != event->data1 && window_height == event->data2)
+                changedWindowSize = cs_WIDTH;
+            else
+                changedWindowSize = cs_WIDTH_AND_HEIGHT;
             last_resize_time = SDL_GetTicks();
             break;
 
