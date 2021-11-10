@@ -8,6 +8,12 @@ if(WIN32)
         "${PROJECT_BINARY_DIR}"
         "${PROJECT_SOURCE_DIR}/src"     # [Dasperal] FIXME: This should be removed but I dont know how to do it properly
     )
+    set_target_properties(${PROGRAM_PREFIX}midiproc PROPERTIES
+        ADDITIONAL_CLEAN_FILES "${PROJECT_BINARY_DIR}/src/$<TARGET_FILE_NAME:${PROGRAM_PREFIX}midiproc>"
+        LINK_FLAGS_RELEASE -s
+        C_STANDARD "${RD_C_STANDARD}"
+        C_STANDARD_REQUIRED ON
+    )
     if(PC_SDL2_FOUND AND NOT (SDL2_MAIN_LIBRARY STREQUAL "SDL2_MAIN_LIBRARY-NOTFOUND"))
         target_link_libraries("${PROGRAM_PREFIX}midiproc" PRIVATE
             SDL2::SDL2main
@@ -20,9 +26,5 @@ if(WIN32)
         MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}midiproc>"
         COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:${PROGRAM_PREFIX}midiproc>"
         "${PROJECT_BINARY_DIR}/src/$<TARGET_FILE_NAME:${PROGRAM_PREFIX}midiproc>"
-    )
-    set_target_properties(${PROGRAM_PREFIX}midiproc PROPERTIES
-        ADDITIONAL_CLEAN_FILES "${PROJECT_BINARY_DIR}/src/$<TARGET_FILE_NAME:${PROGRAM_PREFIX}midiproc>"
-        LINK_FLAGS_RELEASE -s
     )
 endif()

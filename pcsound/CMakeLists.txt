@@ -10,6 +10,10 @@ target_include_directories(pcsound
     INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}"
     PRIVATE "${PROJECT_BINARY_DIR}"
 )
+set_target_properties(pcsound PROPERTIES
+    C_STANDARD "${RD_C_STANDARD}"
+    C_STANDARD_REQUIRED ON
+)
 target_link_libraries(pcsound PRIVATE
     SDL2::mixer
 )

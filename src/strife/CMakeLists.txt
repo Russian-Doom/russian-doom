@@ -67,7 +67,10 @@ if(COMPILE_STRIFE)
             st_stuff.c      st_stuff.h
             wi_stuff.c      wi_stuff.h
     )
-
+    set_target_properties(strife PROPERTIES
+        C_STANDARD "${RD_C_STANDARD}"
+        C_STANDARD_REQUIRED ON
+    )
     target_link_libraries(strife PRIVATE
         textscreen
         SDL2::SDL2
