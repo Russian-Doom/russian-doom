@@ -57,7 +57,10 @@ if(COMPILE_HEXEN)
                                     textdefs.h
                                     xddefs.h
     )
-
+    set_target_properties(hexen PROPERTIES
+        C_STANDARD "${RD_C_STANDARD}"
+        C_STANDARD_REQUIRED ON
+    )
     target_link_libraries(hexen PRIVATE
         SDL2::SDL2
         SDL2::mixer

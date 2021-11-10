@@ -27,6 +27,10 @@ target_include_directories(textscreen
     INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}"
     PRIVATE "${PROJECT_SOURCE_DIR}/src"     # [Dasperal] FIXME: This should be removed but I dont know how to do it properly
 )
+set_target_properties(textscreen PROPERTIES
+    C_STANDARD "${RD_C_STANDARD}"
+    C_STANDARD_REQUIRED ON
+)
 target_link_libraries(textscreen PRIVATE
     m
     SDL2::SDL2

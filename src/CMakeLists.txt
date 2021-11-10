@@ -9,10 +9,13 @@ add_library(Common STATIC EXCLUDE_FROM_ALL
     m_argv.c             m_argv.h
     m_misc.c             m_misc.h
 )
-
 target_include_directories(Common PUBLIC
     "${PROJECT_BINARY_DIR}"
     "${CMAKE_CURRENT_SOURCE_DIR}"
+)
+set_target_properties(Common PROPERTIES
+    C_STANDARD "${RD_C_STANDARD}"
+    C_STANDARD_REQUIRED ON
 )
 
 if(PC_SDL2_FOUND AND NOT (SDL2_MAIN_LIBRARY STREQUAL "SDL2_MAIN_LIBRARY-NOTFOUND"))
@@ -93,7 +96,10 @@ add_library(Game STATIC EXCLUDE_FROM_ALL
     w_merge.c           w_merge.h
     z_zone.c            z_zone.h
 )
-
+set_target_properties(Game PROPERTIES
+    C_STANDARD "${RD_C_STANDARD}"
+    C_STANDARD_REQUIRED ON
+)
 target_link_libraries(Game PUBLIC
     Common
     SDL2::mixer
@@ -126,11 +132,13 @@ if(COMPILE_SETUP)
         net_structrw.c      net_structrw.h
         z_native.c          z_zone.h
     )
-
+    set_target_properties(SetupCommon PROPERTIES
+        C_STANDARD "${RD_C_STANDARD}"
+        C_STANDARD_REQUIRED ON
+    )
     target_compile_definitions(SetupCommon
         PRIVATE "___RD_TARGET_SETUP___"
     )
-
     target_link_libraries(SetupCommon PUBLIC
         Common
         SDL2::net
@@ -186,11 +194,15 @@ foreach(MODULE ${COMPILE_MODULES})
     # Link flags
     set_target_properties("${PROGRAM_PREFIX}${MODULE}" PROPERTIES
         LINK_FLAGS_RELEASE -s
+        C_STANDARD "${RD_C_STANDARD}"
+        C_STANDARD_REQUIRED ON
     )
 
     if(COMPILE_SETUP)
         set_target_properties("${PROGRAM_PREFIX}${MODULE}-setup" PROPERTIES
             LINK_FLAGS_RELEASE -s
+            C_STANDARD "${RD_C_STANDARD}"
+            C_STANDARD_REQUIRED ON
         )
     endif()
 endforeach()

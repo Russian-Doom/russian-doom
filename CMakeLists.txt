@@ -37,8 +37,7 @@ endif()
 
 # Any settings that should apply to all targets in this directory and all
 # subdirectories should go here.  Use judiciously.
-set(CMAKE_C_STANDARD 99)
-set(CMAKE_C_STANDARD_REQUIRED ON)
+set(RD_C_STANDARD 99)
 
 add_compile_options("-Wall" "-Wdeclaration-after-statement"
                     "-Wredundant-decls" "-Wno-unknown-pragmas" "-Wno-unused-result")

@@ -9,7 +9,10 @@ if(COMPILE_SETUP)
                 sound.c             sound.h
                 execute.c           execute.h
     )
-
+    set_target_properties(setup PROPERTIES
+        C_STANDARD "${RD_C_STANDARD}"
+        C_STANDARD_REQUIRED ON
+    )
     target_link_libraries(setup PRIVATE
         textscreen
         SDL2::SDL2

@@ -71,7 +71,10 @@ if(COMPILE_DOOM)
                 st_stuff.c      st_stuff.h
                 wi_stuff.c      wi_stuff.h
     )
-
+    set_target_properties(doom PROPERTIES
+        C_STANDARD "${RD_C_STANDARD}"
+        C_STANDARD_REQUIRED ON
+    )
     target_link_libraries(doom PRIVATE
         SDL2::SDL2
         SDL2::mixer
