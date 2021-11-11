@@ -1243,9 +1243,9 @@ void KeybindsHandler_HandleLine(char* keyName, char *value, size_t valueSize)
         }
 
         AddBind(bind, device, key);
+        isBindsLoaded = true; // At least one bind have been loaded successfully
     }
     bindClearEnabled = true;
-    isBindsLoaded = true; // Fixme [Dasperal] set isBindsLoaded after whole section is read
 }
 
 void KeybindsHandler_Save(FILE* file)
