@@ -995,6 +995,8 @@ void M_SaveDefaultAlternate(char *main)
 
 static void appendSection(const char* sectionName, sectionHandler_t* handler)
 {
+    section_t* temp;
+
     if(sections == NULL)
     {
         sections = malloc(sizeof(section_t));
@@ -1004,9 +1006,14 @@ static void appendSection(const char* sectionName, sectionHandler_t* handler)
     }
     else
     {
-        section_t *temp = sections;
+        if(strcmp(sections->name, sectionName) == 0)
+            return;
+
+        temp = sections;
         while(temp->next != NULL)
         {
+            if(strcmp(temp->next->name, sectionName) == 0)
+                return;
             temp = temp->next;
         }
         temp->next = malloc(sizeof(section_t));
@@ -1094,6 +1101,11 @@ void M_LoadConfig(void)
     {
         // File not opened, but don't complain.
         // It's probably just the first time they ran the game.
+        appendSection("General", &defaultHandler);
+#ifndef ___RD_TARGET_SETUP___
+        BK_ApplyDefaultBindings();
+        appendSection("Keybinds", &keybindsHandler);
+#endif
         return;
     }
 
