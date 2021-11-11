@@ -751,15 +751,24 @@ static sectionHandler_t defaultHandler = {
     DefaultHandler_HandleLine,
     DefaultHandler_Save
 };
-
+#ifndef ___RD_TARGET_SETUP___
 static sectionHandler_t keybindsHandler = {
     KeybindsHandler_Handles,
     KeybindsHandler_HandleLine,
     KeybindsHandler_Save
 };
-
-static sectionHandler_t* handlers[] = {&defaultHandler, &keybindsHandler};
+#endif
+static sectionHandler_t* handlers[] = {
+    &defaultHandler,
+#ifndef ___RD_TARGET_SETUP___
+    &keybindsHandler
+#endif
+};
+#ifndef ___RD_TARGET_SETUP___
 static int handlersSize = 2;
+#else
+static int handlersSize = 1;
+#endif
 
 // Search a collection for a variable
 
@@ -1094,8 +1103,10 @@ void M_LoadConfig(void)
     {
         LoadDefaultCollection(file);
         appendSection("General", &defaultHandler);
+#ifndef ___RD_TARGET_SETUP___
         if(isBindsLoaded)
             appendSection("Keybinds", &keybindsHandler);
+#endif
     }
     else
     {
