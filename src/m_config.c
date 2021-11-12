@@ -33,28 +33,14 @@
 #include "doomfeatures.h"
 #include "i_system.h"
 #include "m_argv.h"
+#include "m_config.h"
 #include "m_misc.h"
 #include "jn.h"
 
 #ifndef ___RD_TARGET_SETUP___
     #include "rd_keybinds.h"
+    #include "i_controller.h"
 #endif
-
-typedef struct
-{
-    /**
-     * Returns true if section with a given name is handled by this handler
-     */
-    boolean (*handles) (char* sectionName);
-    /**
-     * Called for every line in the handled section
-     */
-    void (*handleLine) (char* keyName, char *value, size_t valueSize);
-    /**
-     * Saves all data of the handled section to the config file
-     */
-    void (*save) (FILE *file);
-} sectionHandler_t;
 
 typedef struct section_s
 {
@@ -214,22 +200,6 @@ static default_t defaults_list[] =
     //
 
     CONFIG_VARIABLE_INT(use_controller),
-
-    CONFIG_VARIABLE_INT(controller_invert_move),
-
-    CONFIG_VARIABLE_INT(controller_invert_strafe),
-
-    CONFIG_VARIABLE_INT(controller_invert_turn),
-
-    CONFIG_VARIABLE_INT(controller_invert_vlook),
-
-    CONFIG_VARIABLE_INT(controller_bind_move),
-
-    CONFIG_VARIABLE_INT(controller_bind_strafe),
-
-    CONFIG_VARIABLE_INT(controller_bind_turn),
-
-    CONFIG_VARIABLE_INT(controller_bind_vlook),
 
     //!
     // @game strife
@@ -739,7 +709,7 @@ static default_collection_t default_collection =
     arrlen(defaults_list)
 };
 
-static void DefaultHandler_Save(FILE* file);
+static void DefaultHandler_Save(FILE* file, char* sectionName);
 static void DefaultHandler_HandleLine(char* keyName, char *value, size_t valueSize);
 static boolean DefaultHandler_Handles(char* sectionName)
 {
@@ -749,23 +719,33 @@ static boolean DefaultHandler_Handles(char* sectionName)
 static sectionHandler_t defaultHandler = {
     DefaultHandler_Handles,
     DefaultHandler_HandleLine,
-    DefaultHandler_Save
+    DefaultHandler_Save,
+    NULL
 };
 #ifndef ___RD_TARGET_SETUP___
 static sectionHandler_t keybindsHandler = {
     KeybindsHandler_Handles,
     KeybindsHandler_HandleLine,
-    KeybindsHandler_Save
+    KeybindsHandler_Save,
+    NULL
+};
+
+sectionHandler_t controllerHandler = {
+    ControllerHandler_Handles,
+    ControllerHandler_HandleLine,
+    ControllerHandler_Save,
+    ControllerHandler_onFinishHandling
 };
 #endif
 static sectionHandler_t* handlers[] = {
     &defaultHandler,
 #ifndef ___RD_TARGET_SETUP___
-    &keybindsHandler
+    &keybindsHandler,
+    &controllerHandler
 #endif
 };
 #ifndef ___RD_TARGET_SETUP___
-static int handlersSize = 2;
+static int handlersSize = 3;
 #else
 static int handlersSize = 1;
 #endif
@@ -787,7 +767,7 @@ static default_t *SearchCollection(default_collection_t *collection, char *name)
     return NULL;
 }
 
-static void DefaultHandler_Save(FILE* file)
+static void DefaultHandler_Save(FILE* file, char* sectionName)
 {
     default_t *defaults;
     int i;
@@ -822,7 +802,6 @@ static void DefaultHandler_Save(FILE* file)
                 break;
         }
     }
-    fprintf(file, "\n");
 }
 
 static void SetVariable(default_t *def, char *value);
@@ -965,7 +944,8 @@ void M_SaveConfig (void)
     while(section)
     {
         fprintf(f, "[%s]\n", section->name);
-        section->handler->save(f);
+        section->handler->save(f, section->name);
+        fprintf(f, "\n");
         section = section->next;
     }
 
@@ -993,7 +973,7 @@ void M_SaveDefaultAlternate(char *main)
     configPath = orig_main;
 }
 
-static void appendSection(const char* sectionName, sectionHandler_t* handler)
+void M_AppendConfigSection(const char* sectionName, sectionHandler_t* handler)
 {
     section_t* temp;
 
@@ -1051,7 +1031,9 @@ static void LoadSections(FILE *file)
 
                         handlers[i]->handleLine(keyName, value, 300);
                     }
-                    appendSection(sectionName, handlers[i]);
+                    if(handlers[i]->onFinishHandling)
+                        handlers[i]->onFinishHandling();
+                    M_AppendConfigSection(sectionName, handlers[i]);
                     break;
                 }
             }
@@ -1101,10 +1083,10 @@ void M_LoadConfig(void)
     {
         // File not opened, but don't complain.
         // It's probably just the first time they ran the game.
-        appendSection("General", &defaultHandler);
+        M_AppendConfigSection("General", &defaultHandler);
 #ifndef ___RD_TARGET_SETUP___
         BK_ApplyDefaultBindings();
-        appendSection("Keybinds", &keybindsHandler);
+        M_AppendConfigSection("Keybinds", &keybindsHandler);
 #endif
         return;
     }
@@ -1114,10 +1096,10 @@ void M_LoadConfig(void)
     if(c != '[')
     {
         LoadDefaultCollection(file);
-        appendSection("General", &defaultHandler);
+        M_AppendConfigSection("General", &defaultHandler);
 #ifndef ___RD_TARGET_SETUP___
         if(isBindsLoaded)
-            appendSection("Keybinds", &keybindsHandler);
+            M_AppendConfigSection("Keybinds", &keybindsHandler);
 #endif
     }
     else
@@ -1131,7 +1113,7 @@ void M_LoadConfig(void)
     if(!isBindsLoaded)
     {
         BK_ApplyDefaultBindings();
-        appendSection("Keybinds", &keybindsHandler);
+        M_AppendConfigSection("Keybinds", &keybindsHandler);
     }
 #endif
 }

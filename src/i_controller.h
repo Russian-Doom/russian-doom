@@ -21,6 +21,8 @@
 #ifndef __I_JOYSTICK__
 #define __I_JOYSTICK__
 
+#include <SDL_gamecontroller.h>
+
 // DOOM Controller definition
 enum
 {
@@ -51,23 +53,35 @@ enum
 
 typedef enum
 {
-    CONTROLLER_AXIS_NONE = -1,
-    CONTROLLER_AXIS_MOVE = 0,
+    CONTROLLER_AXIS_NONE = 0,
+    CONTROLLER_AXIS_MOVE,
     CONTROLLER_AXIS_STRAFE,
     CONTROLLER_AXIS_TURN,
-    CONTROLLER_AXIS_VLOOK,
-    CONTROLLER_AXIS_MAX
+    CONTROLLER_AXIS_VLOOK
 } controller_axis_t;
 
+typedef struct controller_s
+{
+    struct controller_s* next;
+    char guid[33];
+    SDL_GameController* SDL_controller;
+    int invertAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT];
+    int bindAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT];
+} controller_t;
+
 extern int useController;
-extern int invertAxis[CONTROLLER_AXIS_MAX];
-extern int bindAxis[CONTROLLER_AXIS_MAX];
+extern controller_t* knownControllers;
+extern controller_t* currentController;
 
 void I_InitController(void);
 void I_ShutdownController(void);
 void I_UpdateController(void);
 
 void I_BindControllerVariables(void);
+boolean ControllerHandler_Handles(char* sectionName);
+void ControllerHandler_HandleLine(char* keyName, char *value, size_t valueSize);
+void ControllerHandler_Save(FILE* file, char* sectionName);
+void ControllerHandler_onFinishHandling();
 
 #endif /* #ifndef __I_JOYSTICK__ */
 

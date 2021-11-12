@@ -1248,7 +1248,7 @@ void KeybindsHandler_HandleLine(char* keyName, char *value, size_t valueSize)
     bindClearEnabled = true;
 }
 
-void KeybindsHandler_Save(FILE* file)
+void KeybindsHandler_Save(FILE* file, char* sectionName)
 {
     int i;
     bind_descriptor_t* bind;
@@ -1289,5 +1289,4 @@ void KeybindsHandler_Save(FILE* file)
             fprintf(file, "\n");
         }
     }
-    fprintf(file, "\n");
 }

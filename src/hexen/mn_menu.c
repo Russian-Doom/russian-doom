@@ -142,14 +142,14 @@ void M_RD_Draw_Bindings();
 // Gamepad
 void DrawGamepadMenu();
 static void M_RD_UseGamepad();
-static void M_RD_BindAxis_Move(Direction_t direction);
-static void M_RD_InvertAxis_Move();
-static void M_RD_BindAxis_Strafe(Direction_t direction);
-static void M_RD_InvertAxis_Strafe();
-static void M_RD_BindAxis_Turn(Direction_t direction);
-static void M_RD_InvertAxis_Turn();
-static void M_RD_BindAxis_VLook(Direction_t direction);
-static void M_RD_InvertAxis_VLook();
+static void M_RD_BindAxis_LY(Direction_t direction);
+static void M_RD_InvertAxis_LY();
+static void M_RD_BindAxis_LX(Direction_t direction);
+static void M_RD_InvertAxis_LX();
+static void M_RD_BindAxis_RY(Direction_t direction);
+static void M_RD_InvertAxis_RY();
+static void M_RD_BindAxis_RX(Direction_t direction);
+static void M_RD_InvertAxis_RX();
 
 // Gameplay
 static void DrawGameplayMenu(void);
@@ -874,22 +874,22 @@ static Menu_t Bindings7Menu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t GamepadItems[] = {
-    {ITT_SWITCH, "ENABLE GAMEPAD:",    "BCGJKMPJDFNM UTQVGFL:",    M_RD_UseGamepad,        0}, // Сетевая игра
-    {ITT_TITLE,  "MOVEMENT AXIS",      "JCM LDB;TYBZ",             NULL,                   0},
-    {ITT_LRFUNC, "PHYSICAL AXIS:",     "ABPBXTCRFZ JCM:",          M_RD_BindAxis_Move,     CONTROLLER_AXIS_MOVE},
-    {ITT_SWITCH, "INVERT AXIS:",       "BYDTHNBHJDFNM JCM:",       M_RD_InvertAxis_Move,   CONTROLLER_AXIS_MOVE},
-    {ITT_EMPTY,  NULL,                 NULL,                      NULL,                    0},
-    {ITT_TITLE,  "STRAFE AXIS",        "JCM LDB;TYBZ ,JRJV",       NULL,                   0},
-    {ITT_LRFUNC, "PHYSICAL AXIS:",     "ABPBXTCRFZ JCM:",          M_RD_BindAxis_Strafe,   CONTROLLER_AXIS_STRAFE},
-    {ITT_SWITCH, "INVERT AXIS:",       "BYDTHNBHJDFNM JCM:",       M_RD_InvertAxis_Strafe, CONTROLLER_AXIS_STRAFE},
-    {ITT_EMPTY,  NULL,                 NULL,                      NULL,                    0},
-    {ITT_TITLE,  "TURN AXIS",          "JCM GJDJHJNF",             NULL,                   0},
-    {ITT_LRFUNC, "PHYSICAL AXIS:",     "ABPBXTCRFZ JCM:",          M_RD_BindAxis_Turn,     CONTROLLER_AXIS_TURN},
-    {ITT_SWITCH, "INVERT AXIS:",       "BYDTHNBHJDFNM JCM:",       M_RD_InvertAxis_Turn,   CONTROLLER_AXIS_TURN},
-    {ITT_EMPTY,  NULL,                 NULL,                      NULL,                    0},
-    {ITT_TITLE,  "VERTICAL LOOK AXIS", "JCM DTHNBRFKMYJUJ J,PJHF", NULL,                   0},
-    {ITT_LRFUNC, "PHYSICAL AXIS:",     "ABPBXTCRFZ JCM:",          M_RD_BindAxis_VLook,    CONTROLLER_AXIS_VLOOK},
-    {ITT_SWITCH, "INVERT AXIS:",       "BYDTHNBHJDFNM JCM:",       M_RD_InvertAxis_VLook,  CONTROLLER_AXIS_VLOOK}
+    {ITT_SWITCH, "ENABLE GAMEPAD:", "BCGJKMPJDFNM UTQVGFL:",     M_RD_UseGamepad,    0}, // ИСПОЛЬЗОВАТЬ ГЕЙМПАД
+    {ITT_TITLE,  "LEFT X AXIS",     "KTDFZ UJHBPJYNFKMYFZ JCM",  NULL,               0},
+    {ITT_LRFUNC, "PURPOSE:",        "YFPYFXTYBT:",               M_RD_BindAxis_LX,   CONTROLLER_AXIS_MOVE},
+    {ITT_SWITCH, "INVERT AXIS:",    "BYDTHNBHJDFNM JCM:",        M_RD_InvertAxis_LX, CONTROLLER_AXIS_MOVE},
+    {ITT_EMPTY,  NULL,              NULL,                        NULL,               0},
+    {ITT_TITLE,  "LEFT Y AXIS",     "KTDFZ DTHNBRFKMYFZ JCM",    NULL,               0},
+    {ITT_LRFUNC, "PURPOSE:",        "YFPYFXTYBT:",               M_RD_BindAxis_LY,   CONTROLLER_AXIS_STRAFE},
+    {ITT_SWITCH, "INVERT AXIS:",    "BYDTHNBHJDFNM JCM:",        M_RD_InvertAxis_LY, CONTROLLER_AXIS_STRAFE},
+    {ITT_EMPTY,  NULL,              NULL,                        NULL,               0},
+    {ITT_TITLE,  "RIGHT X AXIS",    "GHFDFZ UJHBPJYNFKMYFZ JCM", NULL,               0},
+    {ITT_LRFUNC, "PURPOSE:",        "YFPYFXTYBT:",               M_RD_BindAxis_RX,   CONTROLLER_AXIS_TURN},
+    {ITT_SWITCH, "INVERT AXIS:",    "BYDTHNBHJDFNM JCM:",        M_RD_InvertAxis_RX, CONTROLLER_AXIS_TURN},
+    {ITT_EMPTY,  NULL,              NULL,                        NULL,               0},
+    {ITT_TITLE,  "RIGHT Y AXIS",    "GHFDFZ DTHNBRFKMYFZ JCM",   NULL,               0},
+    {ITT_LRFUNC, "PURPOSE:",        "YFPYFXTYBT:",               M_RD_BindAxis_RY,   CONTROLLER_AXIS_VLOOK},
+    {ITT_SWITCH, "INVERT AXIS:",    "BYDTHNBHJDFNM JCM:",        M_RD_InvertAxis_RY, CONTROLLER_AXIS_VLOOK}
 };
 
 static Menu_t GamepadMenu = {
@@ -2650,20 +2650,39 @@ void M_RD_Draw_Bindings()
 // DrawGamepadMenu
 // -----------------------------------------------------------------------------
 
-static char* GetAxisName(int axis)
+static char* GetAxisNameENG(int axis)
 {
     switch (axis)
     {
-        case -1:
+        case CONTROLLER_AXIS_NONE:
             return "NONE";
-        case 0:
-            return "LEFT X";
-        case 1:
-            return "LEFT Y";
-        case 2:
-            return "RIGHT X";
-        case 3:
-            return "RIGHT Y";
+        case CONTROLLER_AXIS_MOVE:
+            return "MOVE";
+        case CONTROLLER_AXIS_STRAFE:
+            return "STRAFE";
+        case CONTROLLER_AXIS_TURN:
+            return "TURN";
+        case CONTROLLER_AXIS_VLOOK:
+            return "VERTICAL LOOK";
+        default:
+            return "?";
+    }
+}
+
+static char* GetAxisNameRUS(int axis)
+{
+    switch (axis)
+    {
+        case CONTROLLER_AXIS_NONE:
+            return "YTN"; // НЕТ
+        case CONTROLLER_AXIS_MOVE:
+            return "LDB;TYBT"; // ДВИЖЕНИЕ
+        case CONTROLLER_AXIS_STRAFE:
+            return "LDB;TYBT ,JRJV"; // ДВИЖЕНИЕ БОКОМ
+        case CONTROLLER_AXIS_TURN:
+            return "GJDJHJN"; // ПОВОРОТ
+        case CONTROLLER_AXIS_VLOOK:
+            return "DTHNBRFKMYSQ J,PJH"; // ВЕРТИКАЛЬНЫЙ ОБЗОР
         default:
             return "?";
     }
@@ -2679,98 +2698,144 @@ void DrawGamepadMenu()
         RD_M_DrawTextSmallENG(useController ? "ON" : "OFF", 153 + wide_delta, 32,
                               useController ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
-        RD_M_DrawTextSmallENG(invertAxis[CONTROLLER_AXIS_MOVE] ? "ON" : "OFF", 120 + wide_delta, 62,
-                              invertAxis[CONTROLLER_AXIS_MOVE] ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+        RD_M_DrawTextSmallENG(currentController ? (currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTX] ? "ON" : "OFF") : "N/A",
+                              120 + wide_delta, 62,
+                              currentController && currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTX] ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
-        RD_M_DrawTextSmallENG(invertAxis[CONTROLLER_AXIS_STRAFE] ? "ON" : "OFF", 120 + wide_delta, 102,
-                              invertAxis[CONTROLLER_AXIS_STRAFE] ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+        RD_M_DrawTextSmallENG(currentController ? (currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTY] ? "ON" : "OFF") : "N/A",
+                              120 + wide_delta, 102,
+                              currentController && currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTY] ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
-        RD_M_DrawTextSmallENG(invertAxis[CONTROLLER_AXIS_TURN] ? "ON" : "OFF", 120 + wide_delta, 142,
-                              invertAxis[CONTROLLER_AXIS_TURN] ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+        RD_M_DrawTextSmallENG(currentController ? (currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTX] ? "ON" : "OFF") : "N/A",
+                              120 + wide_delta, 142,
+                              currentController && currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTX] ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
-        RD_M_DrawTextSmallENG(invertAxis[CONTROLLER_AXIS_VLOOK] ? "ON" : "OFF", 120 + wide_delta, 182,
-                              invertAxis[CONTROLLER_AXIS_VLOOK] ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+        RD_M_DrawTextSmallENG(currentController ? (currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTY] ? "ON" : "OFF") : "N/A",
+                              120 + wide_delta, 182,
+                              currentController && currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTY] ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
-        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_MOVE]), 135 + wide_delta, 52, CR_NONE);
+        RD_M_DrawTextSmallENG(currentController ? (GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_LEFTX])) : "N/A",
+                              100 + wide_delta, 52, currentController ? CR_NONE : CR_GRAY2RED_HEXEN);
 
-        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_STRAFE]), 135 + wide_delta, 92, CR_NONE);
+        RD_M_DrawTextSmallENG(currentController ? (GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_LEFTY])) : "N/A",
+                              100 + wide_delta, 92, currentController ? CR_NONE : CR_GRAY2RED_HEXEN);
 
-        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_TURN]), 135 + wide_delta, 132, CR_NONE);
+        RD_M_DrawTextSmallENG(currentController ? (GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_RIGHTX])) : "N/A",
+                              100 + wide_delta, 132, currentController ? CR_NONE : CR_GRAY2RED_HEXEN);
 
-        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_VLOOK]), 135 + wide_delta, 172, CR_NONE);
+        RD_M_DrawTextSmallENG(currentController ? (GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_RIGHTY])) : "N/A",
+                              100 + wide_delta, 172, currentController ? CR_NONE : CR_GRAY2RED_HEXEN);
     }
     else
     {
-        RD_M_DrawTextSmallRUS(useController ? "DRK" : "DSRK", 193 + wide_delta, 32,
+        RD_M_DrawTextSmallRUS(useController ? "DRK" : "DSRK", 203 + wide_delta, 32,
                               useController ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
-        RD_M_DrawTextSmallRUS(invertAxis[CONTROLLER_AXIS_MOVE] ? "DRK" : "DSRK", 170 + wide_delta, 62,
-                              invertAxis[CONTROLLER_AXIS_MOVE] ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+        RD_M_DrawTextSmallRUS(currentController ? (currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTX] ? "DRK" : "DSRK") : "Y/F",
+                              175 + wide_delta, 62,
+                              currentController && currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTX] ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
-        RD_M_DrawTextSmallRUS(invertAxis[CONTROLLER_AXIS_STRAFE] ? "DRK" : "DSRK", 170 + wide_delta, 102,
-                              invertAxis[CONTROLLER_AXIS_STRAFE] ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+        RD_M_DrawTextSmallRUS(currentController ? (currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTY] ? "DRK" : "DSRK") : "Y/F",
+                              175 + wide_delta, 102,
+                              currentController && currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTY] ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
-        RD_M_DrawTextSmallRUS(invertAxis[CONTROLLER_AXIS_TURN] ? "DRK" : "DSRK", 170 + wide_delta, 142,
-                              invertAxis[CONTROLLER_AXIS_TURN] ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+        RD_M_DrawTextSmallRUS(currentController ? (currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTX] ? "DRK" : "DSRK") : "Y/F",
+                              175 + wide_delta, 142,
+                              currentController && currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTX] ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
-        RD_M_DrawTextSmallRUS(invertAxis[CONTROLLER_AXIS_VLOOK] ? "DRK" : "DSRK", 170 + wide_delta, 182,
-                              invertAxis[CONTROLLER_AXIS_VLOOK] ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+        RD_M_DrawTextSmallRUS(currentController ? (currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTY] ? "DRK" : "DSRK") : "Y/F",
+                              175 + wide_delta, 182,
+                              currentController && currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTY] ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
-        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_MOVE]), 150 + wide_delta, 52, CR_NONE);
+        RD_M_DrawTextSmallRUS(currentController ? (GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_LEFTX])) : "Y/F",
+                              125 + wide_delta, 52, currentController ? CR_NONE : CR_GRAY2RED_HEXEN);
 
-        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_STRAFE]), 150 + wide_delta, 92, CR_NONE);
+        RD_M_DrawTextSmallRUS(currentController ? (GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_LEFTY])) : "Y/F",
+                              125 + wide_delta, 92, currentController ? CR_NONE : CR_GRAY2RED_HEXEN);
 
-        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_TURN]), 150 + wide_delta, 132, CR_NONE);
+        RD_M_DrawTextSmallRUS(currentController ? (GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_RIGHTX])) : "Y/F",
+                              125 + wide_delta, 132, currentController ? CR_NONE : CR_GRAY2RED_HEXEN);
 
-        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_VLOOK]), 150 + wide_delta, 172, CR_NONE);
+        RD_M_DrawTextSmallRUS(currentController ? (GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_RIGHTY])) : "Y/F",
+                              125 + wide_delta, 172, currentController ? CR_NONE : CR_GRAY2RED_HEXEN);
     }
 }
 
 static void M_RD_UseGamepad()
 {
     useController ^= 1;
-    I_ShutdownController();
-    I_InitController();
+    if(useController)
+        I_InitController();
+    else
+        I_ShutdownController();
 }
 
-static void M_RD_BindAxis_Move(Direction_t direction)
+static void M_RD_BindAxis_LY(Direction_t direction)
 {
-    RD_Menu_SpinInt(&bindAxis[CONTROLLER_AXIS_MOVE], CONTROLLER_AXIS_NONE, CONTROLLER_AXIS_VLOOK, direction);
+    if(currentController)
+    {
+        RD_Menu_SpinInt(&currentController->bindAxis[SDL_CONTROLLER_AXIS_LEFTY],
+                        CONTROLLER_AXIS_NONE, CONTROLLER_AXIS_VLOOK, direction);
+    }
 }
 
-static void M_RD_InvertAxis_Move()
+static void M_RD_InvertAxis_LY()
 {
-    invertAxis[CONTROLLER_AXIS_MOVE] ^= 1;
+    if(currentController)
+    {
+        currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTY] ^= 1;
+    }
 }
 
-static void M_RD_BindAxis_Turn(Direction_t direction)
+static void M_RD_BindAxis_LX(Direction_t direction)
 {
-    RD_Menu_SpinInt(&bindAxis[CONTROLLER_AXIS_TURN], CONTROLLER_AXIS_NONE, CONTROLLER_AXIS_VLOOK, direction);
+    if(currentController)
+    {
+        RD_Menu_SpinInt(&currentController->bindAxis[SDL_CONTROLLER_AXIS_LEFTX],
+                        CONTROLLER_AXIS_NONE, CONTROLLER_AXIS_VLOOK, direction);
+    }
 }
 
-static void M_RD_InvertAxis_Turn()
+static void M_RD_InvertAxis_LX()
 {
-    invertAxis[CONTROLLER_AXIS_TURN] ^= 1;
+    if(currentController)
+    {
+        currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTX] ^= 1;
+    }
 }
 
-static void M_RD_BindAxis_Strafe(Direction_t direction)
+static void M_RD_BindAxis_RY(Direction_t direction)
 {
-    RD_Menu_SpinInt(&bindAxis[CONTROLLER_AXIS_STRAFE], CONTROLLER_AXIS_NONE, CONTROLLER_AXIS_VLOOK, direction);
+    if(currentController)
+    {
+        RD_Menu_SpinInt(&currentController->bindAxis[SDL_CONTROLLER_AXIS_RIGHTY],
+                        CONTROLLER_AXIS_NONE, CONTROLLER_AXIS_VLOOK, direction);
+    }
 }
 
-static void M_RD_InvertAxis_Strafe()
+static void M_RD_InvertAxis_RY()
 {
-    invertAxis[CONTROLLER_AXIS_STRAFE] ^= 1;
+    if(currentController)
+    {
+        currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTY] ^= 1;
+    }
 }
 
-static void M_RD_BindAxis_VLook(Direction_t direction)
+static void M_RD_BindAxis_RX(Direction_t direction)
 {
-    RD_Menu_SpinInt(&bindAxis[CONTROLLER_AXIS_VLOOK], CONTROLLER_AXIS_NONE, CONTROLLER_AXIS_VLOOK, direction);
+    if(currentController)
+    {
+        RD_Menu_SpinInt(&currentController->bindAxis[SDL_CONTROLLER_AXIS_RIGHTX],
+                        CONTROLLER_AXIS_NONE, CONTROLLER_AXIS_VLOOK, direction);
+    }
 }
 
-static void M_RD_InvertAxis_VLook()
+static void M_RD_InvertAxis_RX()
 {
-    invertAxis[CONTROLLER_AXIS_VLOOK] ^= 1;
+    if(currentController)
+    {
+        currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTX] ^= 1;
+    }
 }
 
 // -----------------------------------------------------------------------------
