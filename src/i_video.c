@@ -399,6 +399,15 @@ void I_ShutdownGraphics(void)
 
         SDL_QuitSubSystem(SDL_INIT_VIDEO);
 
+#ifdef _WIN32
+		if (fullscreen)
+		{
+			// [JN] Restore window so error/informative messages 
+			// may appear as non-minimized.
+			SDL_RestoreWindow(screen);
+		}
+#endif
+
         initialized = false;
     }
 }
