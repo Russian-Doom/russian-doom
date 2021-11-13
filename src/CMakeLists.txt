@@ -269,11 +269,6 @@ install(FILES $<TARGET_PROPERTY:gus-patches,OUT_FILES>
         COMPONENT "common"
 )
 if(WIN32)
-    install(TARGETS "${PROGRAM_PREFIX}midiproc"
-            DESTINATION .
-            PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
-            COMPONENT "common"
-    )
     install(FILES $<TARGET_PROPERTY:win-libs,OUT_FILES>
             DESTINATION .
             COMPONENT "common"
@@ -286,7 +281,6 @@ if(WIN32)
 endif()
 
 # Source groups
-source_group("Midiproc" REGULAR_EXPRESSION "^${PROJECT_SOURCE_DIR}/midiproc/.+")
 source_group("Opl" REGULAR_EXPRESSION "^${PROJECT_SOURCE_DIR}/opl/.+")
 source_group("Pcsound" REGULAR_EXPRESSION "^${PROJECT_SOURCE_DIR}/pcsound/.+")
 source_group("Textscreen" REGULAR_EXPRESSION "^${PROJECT_SOURCE_DIR}/textscreen/.+")
