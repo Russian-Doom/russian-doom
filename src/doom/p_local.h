@@ -168,6 +168,7 @@ extern intercept_t*	intercept_p;
 typedef boolean (*traverser_t) (intercept_t *in);
 
 fixed_t P_AproxDistance (fixed_t dx, fixed_t dy);
+fixed_t P_ApproxDistanceZ(fixed_t dx, fixed_t dy, fixed_t dz);
 int 	P_PointOnLineSide (fixed_t x, fixed_t y, const line_t *line);
 int 	P_PointOnDivlineSide (fixed_t x, fixed_t y, const divline_t *line);
 void 	P_MakeDivline (line_t* li, divline_t* dl);

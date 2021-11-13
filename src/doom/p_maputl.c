@@ -23,6 +23,7 @@
 
 
 #include <stdlib.h>
+#include <math.h>
 #include "m_bbox.h"
 #include "doomdef.h"
 #include "doomstat.h"
@@ -45,6 +46,26 @@ fixed_t P_AproxDistance (fixed_t dx, fixed_t dy)
         return dx+dy-(dx>>1);
     }
     return dx+dy-(dy>>1);
+}
+
+// -----------------------------------------------------------------------------
+// P_ApproxDistanceZ
+// [JN] Gives an estimation of distance using three axises.
+// Adapted from EDGE, converted to fixed point math.
+// -----------------------------------------------------------------------------
+
+fixed_t P_ApproxDistanceZ(fixed_t dx, fixed_t dy, fixed_t dz)
+{
+	fixed_t dxy;
+
+	dx = fabs(dx);
+	dy = fabs(dy);
+	dz = fabs(dz);
+
+	dxy = (dy > dx) ? dy + dx/2 : dx + dy/2;
+
+	return (dz > dxy) ? dz + dxy/2 : dxy + dz/2;
+
 }
 
 // -----------------------------------------------------------------------------

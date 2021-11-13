@@ -463,7 +463,8 @@ static int S_AdjustSoundParams(mobj_t *listener, mobj_t *source,
           abs(listener->z - source->z);
 
     // From _GG1_ p.428. Appox. eucledian distance fast.
-    approx_dist = adx + ady + adz - ((adx < ady ? adx : ady)>>1);
+    // [JN] Use better precision for distance calculation.
+    approx_dist = P_ApproxDistanceZ(adx, ady, adz);
 
     // [crispy] proper sound clipping in Doom 2 MAP08 and The Ultimate Doom E4M8
     if ((gamemap != 8 || (!vanillaparm && (gamemode == commercial
