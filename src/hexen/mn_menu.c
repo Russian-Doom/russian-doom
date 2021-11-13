@@ -31,6 +31,7 @@
 #include "i_input.h"
 #include "i_system.h"
 #include "i_swap.h"
+#include "i_timer.h" // [JN] I_GetTime()
 #include "i_video.h"
 #include "m_misc.h"
 #include "p_local.h"
@@ -90,11 +91,20 @@ static void M_RD_Screenshots();
 // Display
 static void DrawDisplayMenu(void);
 static void M_RD_ScreenSize(Direction_t direction);
-static void M_RD_Gamma(Direction_t direction);
 static void M_RD_LevelBrightness(Direction_t direction);
 static void M_RD_LocalTime(Direction_t direction);
 static void M_RD_Messages(Direction_t direction);
 static void M_RD_ShadowedText();
+
+// Color
+static void DrawColorMenu(void);
+static void M_RD_Brightness(Direction_t direction);
+static void M_RD_Gamma(Direction_t direction);
+static void M_RD_Saturation(Direction_t direction);
+static void M_RD_ShowPalette();
+static void M_RD_RED_Color(Direction_t direction);
+static void M_RD_GREEN_Color(Direction_t direction);
+static void M_RD_BLUE_Color(Direction_t direction);
 
 // Automap
 static void DrawAutomapMenu(void);
@@ -255,6 +265,10 @@ static int MauloBaseLump;
 static int MenuPClass;
 static boolean soundchanged;
 
+// [JN] Used as a timer for hiding menu background
+// while changing screen size, gamma and level brightness.
+static int menubgwait;
+
 boolean askforquit;
 static int typeofask;
 static boolean FileMenuKeySteal;
@@ -273,6 +287,7 @@ static Menu_t ClassMenu;
 static Menu_t RDOptionsMenu;
 static Menu_t RenderingMenu;
 static Menu_t DisplayMenu;
+static Menu_t ColorMenu;
 static Menu_t AutomapMenu;
 static Menu_t SoundMenu;
 static Menu_t SoundSysMenu;
@@ -463,10 +478,9 @@ static MenuItem_t DisplayItems[] = {
     {ITT_TITLE,  "SCREEN",              "\'RHFY",                   NULL,                 0}, // ЭКРАН
     {ITT_LRFUNC, "SCREEN SIZE",         "HFPVTH BUHJDJUJ \'RHFYF",  M_RD_ScreenSize,      0}, // РАЗМЕР ИГРОВОГО ЭКРАНА
     {ITT_EMPTY,  NULL,                  NULL,                       NULL,                 0},
-    {ITT_LRFUNC, "GAMMA-CORRECTION",    "EHJDTYM UFVVF-RJHHTRWBB",  M_RD_Gamma,           0}, // УРОВЕНЬ ГАММА-КОРРЕКЦИИ
-    {ITT_EMPTY,  NULL,                  NULL,                       NULL,                 0},
     {ITT_LRFUNC, "LEVEL BRIGHTNESS",    "EHJDTYM JCDTOTYYJCNB",     M_RD_LevelBrightness, 0}, // УРОВЕНЬ ОСВЕЩЕННОСТИ
     {ITT_EMPTY,  NULL,                  NULL,                       NULL,                 0},
+	{ITT_SETMENU, "COLOR OPTIONS...",          "YFCNHJQRB WDTNF>>>",      &ColorMenu,           0}, // НАСТРОЙКИ ЦВЕТА...
     {ITT_TITLE,  "INTERFACE",           "BYNTHATQC",                NULL,                 0}, // ИНТЕРФЕЙС
     {ITT_LRFUNC, "LOCAL TIME:",         "CBCNTVYJT DHTVZ:",         M_RD_LocalTime,       0}, // СИСТЕМНОЕ ВРЕМЯ
     {ITT_LRFUNC, "MESSAGES:",           "JNJ,HF;TYBT CJJ,OTYBQ:",   M_RD_Messages,        0}, // ОТОБРАЖЕНИЕ СООБЩЕНИЙ
@@ -478,11 +492,37 @@ static Menu_t DisplayMenu = {
     36, 36,
     32,
     "DISPLAY OPTIONS", "YFCNHJQRB \'RHFYF", false, // НАСТРОЙКИ ЭКРАНА
-    12, DisplayItems, false,
+    11, DisplayItems, false,
     DrawDisplayMenu,
     NULL,
     &RDOptionsMenu,
     1
+};
+
+// -----------------------------------------------------------------------------
+// Color options
+// -----------------------------------------------------------------------------
+
+static MenuItem_t ColorItems[] = {
+    {ITT_LRFUNC, "",  "", M_RD_Brightness,  0}, // Brightness | Яркость
+    {ITT_LRFUNC, "",  "", M_RD_Gamma,       0}, // Gamma | Гамма
+    {ITT_LRFUNC, "",  "", M_RD_Saturation,  0}, // Saturation | Насыщенность
+    {ITT_SWITCH, "",  "", M_RD_ShowPalette, 0}, // Show palette | Отобразить палитру
+    {ITT_TITLE,  "",  "", NULL,             0}, // Color intensity | Цветовая интенсивность
+    {ITT_LRFUNC, "",  "", M_RD_RED_Color,   0},
+    {ITT_LRFUNC, "",  "", M_RD_GREEN_Color, 0},
+    {ITT_LRFUNC, "",  "", M_RD_BLUE_Color,  0}
+};
+
+static Menu_t ColorMenu = {
+    164, 164,
+    25,
+    "COLOR OPTIONS", "YFCNHJQRF WDTNF", false,  // НАСТРОЙКИ ЦВЕТА
+    8, ColorItems, false,
+    DrawColorMenu,
+    NULL,
+    &DisplayMenu,
+    0
 };
 
 // -----------------------------------------------------------------------------
@@ -1236,45 +1276,45 @@ static Menu_t SaveMenu = {
 };
 
 static char *GammaText[] = {
-    TXT_GAMMA_IMPROVED_OFF,
-    TXT_GAMMA_IMPROVED_05,
-    TXT_GAMMA_IMPROVED_1,
-    TXT_GAMMA_IMPROVED_15,
-    TXT_GAMMA_IMPROVED_2,
-    TXT_GAMMA_IMPROVED_25,
-    TXT_GAMMA_IMPROVED_3,
-    TXT_GAMMA_IMPROVED_35,
-    TXT_GAMMA_IMPROVED_4,
-    TXT_GAMMA_ORIGINAL_OFF,
-    TXT_GAMMA_ORIGINAL_05,
-    TXT_GAMMA_ORIGINAL_1,
-    TXT_GAMMA_ORIGINAL_15,
-    TXT_GAMMA_ORIGINAL_2,
-    TXT_GAMMA_ORIGINAL_25,
-    TXT_GAMMA_ORIGINAL_3,
-    TXT_GAMMA_ORIGINAL_35,
-    TXT_GAMMA_ORIGINAL_4
+	TXT_GAMMA_0_50,
+	TXT_GAMMA_0_55,
+	TXT_GAMMA_0_60,
+	TXT_GAMMA_0_65,
+	TXT_GAMMA_0_70,
+	TXT_GAMMA_0_75,
+	TXT_GAMMA_0_80,
+	TXT_GAMMA_0_85,
+	TXT_GAMMA_0_90,
+	TXT_GAMMA_1_0,
+	TXT_GAMMA_1_125,
+	TXT_GAMMA_1_25,
+	TXT_GAMMA_1_375,
+	TXT_GAMMA_1_5,
+	TXT_GAMMA_1_625,
+	TXT_GAMMA_1_75,
+	TXT_GAMMA_1_875,
+	TXT_GAMMA_2_0
 };
 
 static char *GammaText_Rus[] = {
-    TXT_GAMMA_IMPROVED_OFF_RUS,
-    TXT_GAMMA_IMPROVED_05_RUS,
-    TXT_GAMMA_IMPROVED_1_RUS,
-    TXT_GAMMA_IMPROVED_15_RUS,
-    TXT_GAMMA_IMPROVED_2_RUS,
-    TXT_GAMMA_IMPROVED_25_RUS,
-    TXT_GAMMA_IMPROVED_3_RUS,
-    TXT_GAMMA_IMPROVED_35_RUS,
-    TXT_GAMMA_IMPROVED_4_RUS,
-    TXT_GAMMA_ORIGINAL_OFF_RUS,
-    TXT_GAMMA_ORIGINAL_05_RUS,
-    TXT_GAMMA_ORIGINAL_1_RUS,
-    TXT_GAMMA_ORIGINAL_15_RUS,
-    TXT_GAMMA_ORIGINAL_2_RUS,
-    TXT_GAMMA_ORIGINAL_25_RUS,
-    TXT_GAMMA_ORIGINAL_3_RUS,
-    TXT_GAMMA_ORIGINAL_35_RUS,
-    TXT_GAMMA_ORIGINAL_4_RUS
+	TXT_GAMMA_RUS_0_50,
+	TXT_GAMMA_RUS_0_55,
+	TXT_GAMMA_RUS_0_60,
+	TXT_GAMMA_RUS_0_65,
+	TXT_GAMMA_RUS_0_70,
+	TXT_GAMMA_RUS_0_75,
+	TXT_GAMMA_RUS_0_80,
+	TXT_GAMMA_RUS_0_85,
+	TXT_GAMMA_RUS_0_90,
+	TXT_GAMMA_RUS_1_0,
+	TXT_GAMMA_RUS_1_125,
+	TXT_GAMMA_RUS_1_25,
+	TXT_GAMMA_RUS_1_375,
+	TXT_GAMMA_RUS_1_5,
+	TXT_GAMMA_RUS_1_625,
+	TXT_GAMMA_RUS_1_75,
+	TXT_GAMMA_RUS_1_875,
+	TXT_GAMMA_RUS_2_0
 };
 
 // CODE --------------------------------------------------------------------
@@ -1892,8 +1932,12 @@ static void DrawDisplayMenu(void)
 {
     static char num[4];
 
-    // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    // Draw menu background. Hide it for a moment while changing 
+    // screen size, gamma and level brightness in GS_LEVEL game state.
+    if (gamestate != GS_LEVEL || (gamestate == GS_LEVEL && menubgwait < I_GetTime()))
+	{
+		V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+	}
 
     if (english_language)
     {
@@ -1902,13 +1946,13 @@ static void DrawDisplayMenu(void)
                    local_time == 2 ? "12-HOUR (HH:MM:SS)" :
                    local_time == 3 ? "24-HOUR (HH:MM)" :
                    local_time == 4 ? "24-HOUR (HH:MM:SS)" : "OFF",
-                   110 + wide_delta, 112, CR_NONE);
+                   110 + wide_delta, 102, CR_NONE);
 
         // Messages
-        RD_M_DrawTextSmallENG((messageson ? "ON" : "OFF"), 108 + wide_delta, 122, CR_NONE);
+        RD_M_DrawTextSmallENG((messageson ? "ON" : "OFF"), 108 + wide_delta, 112, CR_NONE);
 
         // Text casts shadows
-        RD_M_DrawTextSmallENG((draw_shadowed_text ? "ON" : "OFF"), 179 + wide_delta, 132, CR_NONE);
+        RD_M_DrawTextSmallENG((draw_shadowed_text ? "ON" : "OFF"), 179 + wide_delta, 122, CR_NONE);
     }
     else
     {
@@ -1917,13 +1961,13 @@ static void DrawDisplayMenu(void)
                           local_time == 2 ? "12-XFCJDJT (XX:VV:CC)" :
                           local_time == 3 ? "24-XFCJDJT (XX:VV)" :
                           local_time == 4 ? "24-XFCJDJT (XX:VV:CC)" : "DSRK",
-                          157 + wide_delta, 112, CR_NONE);
+                          157 + wide_delta, 102, CR_NONE);
 
         // Отображение сообщений
-        RD_M_DrawTextSmallRUS((messageson ? "DRK" : "DSRK"), 208 + wide_delta, 122, CR_NONE);
+        RD_M_DrawTextSmallRUS((messageson ? "DRK" : "DSRK"), 208 + wide_delta, 112, CR_NONE);
 
         // Тексты отбрасывают тень
-        RD_M_DrawTextSmallRUS((draw_shadowed_text ? "DRK" : "DSRK"), 220 + wide_delta, 132, CR_NONE);
+        RD_M_DrawTextSmallRUS((draw_shadowed_text ? "DRK" : "DSRK"), 220 + wide_delta, 122, CR_NONE);
     }
 
     // Screen size
@@ -1940,15 +1984,15 @@ static void DrawDisplayMenu(void)
         RD_M_DrawTextSmallENG(num, 135 + wide_delta, 52, CR_GRAY2GDARKGRAY_HEXEN);
     }
 
-    // Gamma-correction
-    RD_Menu_DrawSliderSmall(&DisplayMenu, 72, 18, usegamma);
-
     // Level brightness
-    RD_Menu_DrawSliderSmall(&DisplayMenu, 92, 5, level_brightness / 16);
+    RD_Menu_DrawSliderSmall(&DisplayMenu, 72, 5, level_brightness / 16);
 }
 
 static void M_RD_ScreenSize(Direction_t direction)
 {
+    // [JN] Hide menu background for a moment.
+    menubgwait = I_GetTime() + 25;
+
     RD_Menu_SlideInt(&screenblocks, 3, 12, direction);
 
     if (aspect_ratio >= 2)
@@ -1964,16 +2008,69 @@ static void M_RD_ScreenSize(Direction_t direction)
     R_SetViewSize(screenblocks, detailLevel);
 }
 
+void M_RD_Brightness(Direction_t direction)
+{
+    // [JN] Hide menu background for a moment.
+    menubgwait = I_GetTime() + 100;
+
+    RD_Menu_SlideFloat_Step(&brightness, 0.01F, 1.0F, 0.01F, direction);
+
+    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+}
+
 static void M_RD_Gamma(Direction_t direction)
 {
+    // [JN] Hide menu background for a moment.
+    menubgwait = I_GetTime() + 100;
+
     RD_Menu_SlideInt(&usegamma, 0, 17, direction);
 
     I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+}
 
-    P_SetMessage(&players[consoleplayer], english_language ?
-                                          GammaText[usegamma] :
-                                          GammaText_Rus[usegamma],
-                                          false);
+void M_RD_Saturation(Direction_t direction)
+{
+    // [JN] Hide menu background for a moment.
+    menubgwait = I_GetTime() + 100;
+
+    RD_Menu_SlideFloat_Step(&color_saturation, 0.01F, 1.0F, 0.01F, direction);
+
+    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+}
+
+void M_RD_ShowPalette()
+{
+    show_palette ^= 1;
+}
+
+void M_RD_RED_Color(Direction_t direction)
+{
+    // [JN] Hide menu background for a moment.
+    menubgwait = I_GetTime() + 100;
+
+    RD_Menu_SlideFloat_Step(&r_color_factor, 0.01F, 1.0F, 0.01F, direction);
+
+    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+}
+
+void M_RD_GREEN_Color(Direction_t direction)
+{
+    // [JN] Hide menu background for a moment.
+    menubgwait = I_GetTime() + 100;
+
+    RD_Menu_SlideFloat_Step(&g_color_factor, 0.01F, 1.0F, 0.01F, direction);
+
+    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+}
+
+void M_RD_BLUE_Color(Direction_t direction)
+{
+    // [JN] Hide menu background for a moment.
+    menubgwait = I_GetTime() + 100;
+
+    RD_Menu_SlideFloat_Step(&b_color_factor, 0.01F, 1.0F, 0.01F, direction);
+
+    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
 }
 
 static void M_RD_Messages(Direction_t direction)
@@ -1996,8 +2093,102 @@ static void M_RD_Messages(Direction_t direction)
     S_StartSound(NULL, SFX_CHAT);
 }
 
+// -----------------------------------------------------------------------------
+// DrawColorMenu
+// -----------------------------------------------------------------------------
+
+static void DrawColorMenu(void)
+{
+    int  i;
+    char num[8];
+    char *num_and_percent;
+    // [JN] Hack to allow proper placement for gamma slider.
+    int gamma_slider = usegamma == 0 ? 0 :
+                       usegamma == 17 ? 2 : 1;
+
+    // Draw menu background. Hide it for a moment while changing 
+    // screen size, gamma and level brightness in GS_LEVEL game state.
+    if (gamestate != GS_LEVEL || (gamestate == GS_LEVEL && menubgwait < I_GetTime()))
+	{
+        V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+	}
+
+    if (english_language)
+    {
+        RD_M_DrawTextSmallENG("Brightness", 70 + wide_delta, 25, CR_NONE);
+        RD_M_DrawTextSmallENG("Gamma", 105 + wide_delta, 35, CR_NONE);
+        RD_M_DrawTextSmallENG("Saturation", 71 + wide_delta, 45, CR_NONE);
+        RD_M_DrawTextSmallENG("Show palette", 57 + wide_delta, 55, CR_NONE);
+        RD_M_DrawTextSmallENG(show_palette ? "ON" : "OFF", 165 + wide_delta, 55, CR_NONE);
+
+        RD_M_DrawTextSmallENG("COLOR INTENSITY",
+                              107 + wide_delta, 65, CR_GRAY2DARKGOLD_HEXEN);
+
+        RD_M_DrawTextSmallENG("RED", 121 + wide_delta, 75, CR_NONE);
+        RD_M_DrawTextSmallENG("GREEN", 105 + wide_delta, 85, CR_GREEN);
+        RD_M_DrawTextSmallENG("BLUE", 116 + wide_delta, 95, CR_BLUE2);
+    }
+    else
+    {
+        RD_M_DrawTextSmallRUS("zhrjcnm", 93 + wide_delta, 25, CR_NONE);       // Яркость
+        RD_M_DrawTextSmallRUS("ufvvf", 106 + wide_delta, 35, CR_NONE);        // Гамма
+        RD_M_DrawTextSmallRUS("yfcsotyyjcnm", 50 + wide_delta, 45, CR_NONE);  // Насыщенность
+        RD_M_DrawTextSmallRUS("wdtnjdfz gfkbnhf", 25 + wide_delta, 55, CR_NONE);  // Цветовая палитра
+        RD_M_DrawTextSmallRUS(show_palette ? "DRK" : "DSRK", 165 + wide_delta, 55, CR_NONE);
+
+        RD_M_DrawTextSmallRUS("byntycbdyjcnm wdtnf",  // Интенсивность цвета
+                              89 + wide_delta, 65, CR_GRAY2DARKGOLD_HEXEN);
+
+        RD_M_DrawTextSmallRUS("rhfcysq", 90 + wide_delta, 75, CR_NONE);  // Красный
+        RD_M_DrawTextSmallRUS("ptktysq", 90 + wide_delta, 85, CR_GREEN); // Зелёный
+        RD_M_DrawTextSmallRUS("cbybq", 109 + wide_delta, 95, CR_BLUE2);  // Синий
+    }
+
+    // Brightness slider
+    RD_Menu_DrawSliderSmall(&ColorMenu, 25, 10, brightness * 10);
+    i = brightness * 100;                            // Do a float to int conversion for slider value.
+    M_snprintf(num, 5, "%d", i);                     // Numerical representation of slider position.
+    num_and_percent = M_StringJoin(num, "%", NULL);  // Consolidate numerical value and % sign.
+    RD_M_DrawTextSmallENG(num_and_percent, 264 + wide_delta, 26, CR_NONE);
+
+    // Gamma-correction slider
+    RD_Menu_DrawSliderSmall(&ColorMenu, 35, 10, usegamma / 2 + gamma_slider);
+    M_snprintf(num, 6, "%s", gammalevel_names[usegamma]);  // Numerical representation of slider position
+    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 36, CR_NONE);
+
+    // Saturation slider
+    RD_Menu_DrawSliderSmall(&ColorMenu, 45, 10, color_saturation * 10);
+    i = color_saturation * 100;                      // Do a float to int conversion for slider value.
+    M_snprintf(num, 5, "%d", i);                     // Numerical representation of slider position.
+    num_and_percent = M_StringJoin(num, "%", NULL);  // Consolidate numerical value and % sign.
+    RD_M_DrawTextSmallENG(num_and_percent, 264 + wide_delta, 46, CR_NONE);
+
+    // RED intensity slider
+    RD_Menu_DrawSliderSmall(&ColorMenu, 75, 10, r_color_factor * 10);
+    M_snprintf(num, 5, "%3f", r_color_factor);  // Numerical representation of slider position
+    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 76, CR_NONE);
+
+    // GREEN intensity slider
+    RD_Menu_DrawSliderSmall(&ColorMenu, 85, 10, g_color_factor * 10);
+    M_snprintf(num, 5, "%3f", g_color_factor);  // Numerical representation of slider position
+    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 86, CR_GREEN);
+
+    // BLUE intensity slider
+    RD_Menu_DrawSliderSmall(&ColorMenu, 95, 10, b_color_factor * 10);
+    M_snprintf(num, 5, "%3f", b_color_factor);  // Numerical representation of slider position
+    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 96, CR_BLUE2);
+
+    if (show_palette)
+    {
+        V_DrawPatchUnscaled(wide_delta*2, 200, W_CacheLumpName(("M_COLORS"), PU_CACHE), NULL);
+    }
+}
+
 static void M_RD_LevelBrightness(Direction_t direction)
 {
+    // [JN] Hide menu background for a moment.
+    menubgwait = I_GetTime() + 25;
+
     RD_Menu_SlideInt_Step(&level_brightness, 0, 64, 16, direction);
 }
 
@@ -3630,6 +3821,15 @@ void M_RD_DoResetSettings(void)
     messageson      = 1;
     level_brightness = 0;
     local_time      = 0;
+
+    // Color options
+    brightness       = 1.0f;
+    usegamma         = 7;
+    color_saturation = 1.0f;
+    show_palette     = 1;
+    r_color_factor   = 1.0f;
+    g_color_factor   = 1.0f;
+    b_color_factor   = 1.0f;
 
     // Audio
     snd_MaxVolume   = 8;
