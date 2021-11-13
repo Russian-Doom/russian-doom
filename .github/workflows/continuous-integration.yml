@@ -44,9 +44,11 @@ jobs:
         uses: msys2/setup-msys2@v2
         with:
           msystem: ${{ matrix.config.msystem }}
-          update: true
+          update: false
           install: >-
-            mingw-w64-${{ matrix.config.arch }}-toolchain
+            mingw-w64-${{ matrix.config.arch }}-pkgconf
+            mingw-w64-${{ matrix.config.arch }}-gcc
+            mingw-w64-${{ matrix.config.arch }}-make
             mingw-w64-${{ matrix.config.arch }}-cmake
             mingw-w64-${{ matrix.config.arch }}-SDL2
             mingw-w64-${{ matrix.config.arch }}-SDL2_net
