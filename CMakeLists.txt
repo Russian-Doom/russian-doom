@@ -136,6 +136,6 @@ configure_file(cmake/config.h.cin config.h)
 
 include(RDUtils)
 
-foreach(SUBDIR textscreen midiproc opl pcsound src)
+foreach(SUBDIR textscreen opl pcsound src)
     add_subdirectory("${SUBDIR}")
 endforeach()

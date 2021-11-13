@@ -75,6 +75,13 @@ AS_IF([test "x$with_libpng" != xno], [
 # Use the specific library CFLAGS/LIBS variables instead of setting them here.
 CFLAGS="$CFLAGS $SDL_CFLAGS ${SAMPLERATE_CFLAGS:-} ${PNG_CFLAGS:-}"
 LDFLAGS="$LDFLAGS $SDL_LIBS ${SAMPLERATE_LIBS:-} ${PNG_LIBS:-}"
+case "$host" in
+  *-*-mingw* | *-*-cygwin* | *-*-msvc* )
+    LDFLAGS="$LDFLAGS -lwinmm"
+    ;;
+  *)
+esac
+
 AC_CHECK_LIB(m, log)
 
 AC_CHECK_HEADERS([linux/kd.h dev/isa/spkrio.h dev/speaker/speaker.h])
@@ -148,7 +155,6 @@ AC_DEFUN([AC_DATAROOTDIR_CHECKED])
 
 AC_OUTPUT([
 Makefile
-midiproc/Makefile
 opl/Makefile
 pcsound/Makefile
 src/Makefile

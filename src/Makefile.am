@@ -48,7 +48,6 @@ i_controller.c       i_controller.h        \
 i_endoom.c           i_endoom.h            \
 i_input.c            i_input.h             \
                      i_swap.h              \
-i_midipipe.c         i_midipipe.h          \
 i_pcsound.c                                \
 i_sdlsound.c                               \
 i_sdlmusic.c                               \
@@ -57,6 +56,7 @@ i_sound.c            i_sound.h             \
 i_timer.c            i_timer.h             \
 i_video.c            i_video.h             \
 i_videohr.c          i_videohr.h           \
+i_winmusic.c         i_winmusic.h          \
 midifile.c           midifile.h            \
 mus2mid.c            mus2mid.h             \
 m_bbox.c             m_bbox.h              \

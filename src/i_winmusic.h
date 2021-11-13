@@ -1,5 +1,5 @@
 //
-// Copyright(C) 2017 Alex Mayfield
+// Copyright(C) 2021 Roman Fomin
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -12,22 +12,23 @@
 // GNU General Public License for more details.
 //
 // DESCRIPTION:
-//     Headers for all types of midipipe messages.
-//
+//      Windows native MIDI
 
-#ifndef __PROTO__
-#define __PROTO__
+#ifdef _WIN32
 
-typedef enum {
-    MIDIPIPE_PACKET_TYPE_REGISTER_SONG,
-    MIDIPIPE_PACKET_TYPE__DEPRECATED_1,
-    MIDIPIPE_PACKET_TYPE_SET_VOLUME,
-    MIDIPIPE_PACKET_TYPE_PLAY_SONG,
-    MIDIPIPE_PACKET_TYPE_STOP_SONG,
-    MIDIPIPE_PACKET_TYPE_SHUTDOWN,
-    MIDIPIPE_PACKET_TYPE_UNREGISTER_SONG,
-    MIDIPIPE_PACKET_TYPE_ACK,
-} net_midipipe_packet_type_t;
+#ifndef __I_WINMUSIC__
+#define __I_WINMUSIC__
+
+#include "doomtype.h"
+
+boolean I_WIN_InitMusic(void);
+void I_WIN_PlaySong(boolean looping);
+void I_WIN_StopSong(void);
+void I_WIN_SetMusicVolume(int volume);
+boolean I_WIN_RegisterSong(char* filename);
+void I_WIN_UnRegisterSong(void);
+void I_WIN_ShutdownMusic(void);
 
 #endif
 
+#endif

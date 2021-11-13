@@ -48,7 +48,6 @@ add_library(Game STATIC EXCLUDE_FROM_ALL
     i_endoom.c          i_endoom.h
     i_input.c           i_input.h
                         i_swap.h
-    i_midipipe.c        i_midipipe.h
     i_pcsound.c
     i_sdlsound.c
     i_sdlmusic.c
@@ -57,6 +56,7 @@ add_library(Game STATIC EXCLUDE_FROM_ALL
     i_timer.c           i_timer.h
     i_video.c           i_video.h
     i_videohr.c         i_videohr.h
+	i_winmusic.c        i_winmusic.h
     midifile.c          midifile.h
     mus2mid.c           mus2mid.h
     m_bbox.c            m_bbox.h
@@ -115,6 +115,10 @@ endif()
 if(PNG_FOUND)
     target_link_libraries(Game PUBLIC PNG::PNG)
 endif()
+if(WIN32)
+	list(APPEND EXTRA_LIBS winmm)
+endif()
+
 
 # SetupCommon libraty
 if(COMPILE_SETUP)
@@ -229,14 +233,13 @@ foreach(MODULE ${COMPILE_MODULES})
     add_dependencies("${PROGRAM_PREFIX}${MODULE}" "${MODULE}-wads")
 endforeach()
 
-# Windows DLLs and midiproc
+# Windows DLLs
 if(WIN32)
     file(GLOB WIN_LIBS "${PROJECT_SOURCE_DIR}/win_libs/${ARCH}/*.dll")
     add_copy_target(NAME win-libs SOURCE ${WIN_LIBS} DESTINATION ".")
 
     foreach(MODULE ${COMPILE_MODULES})
         add_dependencies("${PROGRAM_PREFIX}${MODULE}" win-libs)
-        add_dependencies("${PROGRAM_PREFIX}${MODULE}" "${PROGRAM_PREFIX}midiproc")
         if(COMPILE_SETUP)
             add_dependencies("${PROGRAM_PREFIX}${MODULE}-setup" win-libs)
         endif()
