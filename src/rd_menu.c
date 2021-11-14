@@ -280,7 +280,7 @@ inline void RD_Menu_ShiftSlideInt(int* var, int minValue, int maxValue, Directio
 }
 
 /** [Dasperal] y = menu->y + 2 + (item * ITEM_HEIGHT) */
-void RD_Menu_DrawSlider(Menu_t * menu, int y, int width, int value)
+void RD_Menu_DrawSlider(Menu_t* menu, int y, int width, int value)
 {
     int x;
     int x2;
@@ -304,13 +304,17 @@ void RD_Menu_DrawSlider(Menu_t * menu, int y, int width, int value)
 }
 
 /** [JN] Draw small slider*/
-void RD_Menu_DrawSliderSmall(Menu_t * menu, int y, int width, int value)
+void RD_Menu_DrawSliderSmall(Menu_t* menu, int y, int width, int value)
 {
-    int x;
+    RD_Menu_DrawSliderSmallInline(english_language ? menu->x_eng : menu->x_rus, y, width, value);
+}
+
+void RD_Menu_DrawSliderSmallInline(int x, int y, int width, int value)
+{
     int x2;
     int count;
 
-    x = (english_language ? menu->x_eng : menu->x_rus) + (RD_GameType == gt_Doom ? 8 : 24);
+    x += (RD_GameType == gt_Doom ? 8 : 24);
 
     drawShadowedPatch(x - (RD_GameType == gt_Doom ? 8 : 32) + wide_delta, y, W_CacheLumpNum(smallSlider_left_patch, PU_CACHE));
     for (x2 = x, count = width; count--; x2 += 8)
