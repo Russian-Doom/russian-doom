@@ -951,19 +951,19 @@ static Menu_t MaxFpsSlider = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t DisplayItems[] = {
-    {ITT_TITLE,   "Screen",                 "\'rhfy",                  NULL,                        0}, // Экран
-    {ITT_LRFUNC,  "screen size",            "hfpvth buhjdjuj \'rhfyf", M_RD_Change_ScreenSize,      0},
-    {ITT_EMPTY,   NULL,                     NULL,                      NULL,                        0},
-    {ITT_LRFUNC,  "level brightness",       "ehjdtym jcdtotyyjcnb",    M_RD_Change_LevelBrightness, 0},
-    {ITT_EMPTY,   NULL,                     NULL,                      NULL,                        0},
-    {ITT_LRFUNC,  "menu shading",           "pfntvytybt ajyf vty.",    M_RD_Change_MenuShading,     0},
-    {ITT_EMPTY,   NULL,                     NULL,                      NULL,                        0},
-    {ITT_SWITCH,  "graphics detail:",       "ltnfkbpfwbz uhfabrb:",    M_RD_Change_Detail,          0},
-    {ITT_SWITCH,  "hud background detail:", "ltnfkbpfwbz ajyf",        M_RD_Change_HUD_Detail,      0},
-    {ITT_SETMENU, "color options",           "yfcnhjqrb wdtnf",        &ColorMenu,                  0},
-    {ITT_TITLE,   "Interface",              "bynthatqc",               NULL,                        0}, // Интерфейс
-    {ITT_SETMENU, "messages and texts",     "cjj,otybz b ntrcns",      &MessagesMenu,               0},
-    {ITT_SETMENU, "automap and statistics", "rfhnf b cnfnbcnbrf",      &AutomapMenu,                0}
+    {ITT_TITLE,   "Screen",                    "\'rhfy",                  NULL,                        0}, // Экран
+    {ITT_LRFUNC,  "screen size",               "hfpvth buhjdjuj \'rhfyf", M_RD_Change_ScreenSize,      0},
+    {ITT_EMPTY,   NULL,                        NULL,                      NULL,                        0},
+    {ITT_LRFUNC,  "level brightness",          "ehjdtym jcdtotyyjcnb",    M_RD_Change_LevelBrightness, 0},
+    {ITT_EMPTY,   NULL,                        NULL,                      NULL,                        0},
+    {ITT_LRFUNC,  "menu shading",              "pfntvytybt ajyf vty.",    M_RD_Change_MenuShading,     0},
+    {ITT_EMPTY,   NULL,                        NULL,                      NULL,                        0},
+    {ITT_SWITCH,  "graphics detail:",          "ltnfkbpfwbz uhfabrb:",    M_RD_Change_Detail,          0},
+    {ITT_SWITCH,  "hud background detail:",    "ltnfkbpfwbz ajyf",        M_RD_Change_HUD_Detail,      0},
+    {ITT_SETMENU, "color options...",           "yfcnhjqrb wdtnf>>>",     &ColorMenu,                  0},
+    {ITT_TITLE,   "Interface",                 "bynthatqc",               NULL,                        0}, // Интерфейс
+    {ITT_SETMENU, "messages and texts...",     "cjj,otybz b ntrcns>>>",   &MessagesMenu,               0},
+    {ITT_SETMENU, "automap and statistics...", "rfhnf b cnfnbcnbrf>>>",   &AutomapMenu,                0}
 };
 
 static Menu_t DisplayMenu = {
@@ -1072,16 +1072,16 @@ static Menu_t AutomapMenu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t SoundItems[] = {
-    {ITT_TITLE,   "volume",                "uhjvrjcnm",                  NULL,                    0}, // Громкость
-    {ITT_LRFUNC,  "sfx volume",            "pder",                       M_RD_Change_SfxVol,      0}, // Звук
-    {ITT_EMPTY,   NULL,                    NULL,                         NULL,                    0},
-    {ITT_LRFUNC,  "music volume",          "vepsrf",                     M_RD_Change_MusicVol,    0}, // Музыка
-    {ITT_EMPTY,   NULL,                    NULL,                         NULL,                    0},
-    {ITT_TITLE,   "channels",              "djcghjbpdtltybt",            NULL,                    0}, // Воспроизведение
-    {ITT_LRFUNC,  "sound channels",        "Pderjdst rfyfks",            M_RD_Change_SfxChannels, 0}, // Звуковые каналы
-    {ITT_EMPTY,   NULL,                    NULL,                         NULL,                    0},
-    {ITT_TITLE,   "advanced",              "ljgjkybntkmyj",              NULL,                    0}, // Дополнительно
-    {ITT_SETMENU, "sound system settings", "yfcnhjqrb pderjdjq cbcntvs", &SoundSysMenu,           0}  // Настройки звуковой системы...
+    {ITT_TITLE,   "volume",                   "uhjvrjcnm",                     NULL,                    0}, // Громкость
+    {ITT_LRFUNC,  "sfx volume",               "pder",                          M_RD_Change_SfxVol,      0}, // Звук
+    {ITT_EMPTY,   NULL,                       NULL,                            NULL,                    0},
+    {ITT_LRFUNC,  "music volume",             "vepsrf",                        M_RD_Change_MusicVol,    0}, // Музыка
+    {ITT_EMPTY,   NULL,                       NULL,                            NULL,                    0},
+    {ITT_TITLE,   "channels",                 "djcghjbpdtltybt",               NULL,                    0}, // Воспроизведение
+    {ITT_LRFUNC,  "sound channels",           "Pderjdst rfyfks",               M_RD_Change_SfxChannels, 0}, // Звуковые каналы
+    {ITT_EMPTY,   NULL,                       NULL,                            NULL,                    0},
+    {ITT_TITLE,   "advanced",                 "ljgjkybntkmyj",                 NULL,                    0}, // Дополнительно
+    {ITT_SETMENU, "sound system settings...", "yfcnhjqrb pderjdjq cbcntvs>>>", &SoundSysMenu,           0}  // Настройки звуковой системы...
 };
 
 static Menu_t SoundMenu = {
@@ -1128,8 +1128,8 @@ static Menu_t SoundSysMenu = {
 
 static MenuItem_t ControlsItems[] = {
     {ITT_TITLE,   "Controls",               "eghfdktybt",                NULL,                       0}, // Управление
-    {ITT_SETMENU, "Customize Controls",     "yfcnhjqrb eghfdktybz",      &Bindings1Menu,             0}, // Настройки управления
-    {ITT_SETMENU, "Gamepad Settings",       "yfcnhjqrb utqvgflf",        &GamepadMenu,               0}, // Настройки геймпада
+    {ITT_SETMENU, "Customize Controls...",  "yfcnhjqrb eghfdktybz>>>",   &Bindings1Menu,             0}, // Настройки управления...
+    {ITT_SETMENU, "Gamepad Settings...",    "yfcnhjqrb utqvgflf>>>",     &GamepadMenu,               0}, // Настройки геймпада...
     {ITT_SWITCH,  "Always run:",            "Ht;bv gjcnjzyyjuj ,tuf:",   M_RD_Change_AlwaysRun,      0}, // Режим постоянного бега
     {ITT_TITLE,   "mouse",                  "vsim",                      NULL,                       0}, // Мышь
     {ITT_LRFUNC,  "sensivity",              "crjhjcnm",                  M_RD_Change_Sensitivity,    0}, // Скорость
@@ -4655,7 +4655,7 @@ static void M_RD_Draw_Level_1(void)
         }
 
         // Next page
-        RD_M_DrawTextSmallENG("NEXT PAGE", 75 + wide_delta, 181, CR_WHITE);
+        RD_M_DrawTextSmallENG("NEXT PAGE >", 75 + wide_delta, 181, CR_WHITE);
 
         // Start game
         RD_M_DrawTextSmallENG("START GAME", 75 + wide_delta, 191, CR_WHITE);
@@ -4768,7 +4768,7 @@ static void M_RD_Draw_Level_1(void)
         }
 
         // Следующая страница
-        RD_M_DrawTextSmallRUS("cktle.ofz cnhfybwf", 72 + wide_delta, 181, CR_WHITE);
+        RD_M_DrawTextSmallRUS("cktle.ofz cnhfybwf \\", 72 + wide_delta, 181, CR_WHITE);
 
         // Начать игру
         RD_M_DrawTextSmallRUS("yfxfnm buhe", 72 + wide_delta, 191, CR_WHITE);
@@ -4854,7 +4854,7 @@ static void M_RD_Draw_Level_2(void)
                                selective_respawn ? CR_GREEN : CR_DARKRED);
 
         // Previous page
-        RD_M_DrawTextSmallENG("PREVIOUS PAGE", 75 + wide_delta, 181, CR_WHITE);
+        RD_M_DrawTextSmallENG("< PREVIOUS PAGE", 75 + wide_delta, 181, CR_WHITE);
 
         // Start game
         RD_M_DrawTextSmallENG("START GAME", 75 + wide_delta, 191, CR_WHITE);
@@ -4931,7 +4931,7 @@ static void M_RD_Draw_Level_2(void)
                               selective_respawn ? CR_GREEN : CR_DARKRED);
 
         // Предыдущая страница
-        RD_M_DrawTextSmallRUS("ghtlsleofz cnhfybwf", 72 + wide_delta, 181, CR_WHITE);
+        RD_M_DrawTextSmallRUS("/ ghtlsleofz cnhfybwf", 72 + wide_delta, 181, CR_WHITE);
 
         // Начать игру
         RD_M_DrawTextSmallRUS("yfxfnm buhe", 72 + wide_delta, 191, CR_WHITE);
