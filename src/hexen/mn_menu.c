@@ -480,12 +480,12 @@ static MenuItem_t DisplayItems[] = {
     {ITT_EMPTY,  NULL,                  NULL,                       NULL,                 0},
     {ITT_LRFUNC, "LEVEL BRIGHTNESS",    "EHJDTYM JCDTOTYYJCNB",     M_RD_LevelBrightness, 0}, // УРОВЕНЬ ОСВЕЩЕННОСТИ
     {ITT_EMPTY,  NULL,                  NULL,                       NULL,                 0},
-	{ITT_SETMENU, "COLOR OPTIONS...",          "YFCNHJQRB WDTNF>>>",      &ColorMenu,           0}, // НАСТРОЙКИ ЦВЕТА...
+	{ITT_SETMENU, "COLOR OPTIONS...",   "YFCNHJQRB WDTNF>>>",       &ColorMenu,           0}, // НАСТРОЙКИ ЦВЕТА...
     {ITT_TITLE,  "INTERFACE",           "BYNTHATQC",                NULL,                 0}, // ИНТЕРФЕЙС
     {ITT_LRFUNC, "LOCAL TIME:",         "CBCNTVYJT DHTVZ:",         M_RD_LocalTime,       0}, // СИСТЕМНОЕ ВРЕМЯ
     {ITT_LRFUNC, "MESSAGES:",           "JNJ,HF;TYBT CJJ,OTYBQ:",   M_RD_Messages,        0}, // ОТОБРАЖЕНИЕ СООБЩЕНИЙ
     {ITT_SWITCH, "TEXT CASTS SHADOWS:", "NTRCNS JN,HFCSDF.N NTYM:", M_RD_ShadowedText,    0}, // ТЕКСТЫ ОТБРАСЫВАЮТ ТЕНЬ
-    {ITT_SETMENU,"AUTOMAP SETTINGS...", "YFCNHJQRB RFHNS>>>",       &AutomapMenu,         0}  // НАСТРОЙКИ КАРТЫ
+    {ITT_SETMENU,"AUTOMAP SETTINGS...", "YFCNHJQRB RFHNS>>>",       &AutomapMenu,         0}  // НАСТРОЙКИ КАРТЫ...
 };
 
 static Menu_t DisplayMenu = {
@@ -561,7 +561,7 @@ static MenuItem_t SoundItems[] = {
     {ITT_LRFUNC, "SFX CHANNELS",             "PDERJDST RFYFKS",               M_RD_SfxChannels, 0}, // ЗВУКОВЫЕ КАНАЛЫ
     {ITT_EMPTY,  NULL,                       NULL,                            NULL,             0},
     {ITT_TITLE,  "ADVANCED",                 "LJGJKYBNTKMYJ",                 NULL,             0}, // ДОПОЛНИТЕЛЬНО
-    {ITT_SETMENU,"SOUND SYSTEM SETTINGS...", "YFCNHJQRB PDERJDJQ CBCNTVS>>>", &SoundSysMenu,    0}  // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ
+    {ITT_SETMENU,"SOUND SYSTEM SETTINGS...", "YFCNHJQRB PDERJDJQ CBCNTVS>>>", &SoundSysMenu,    0}  // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ...
 };
 
 static Menu_t SoundMenu = {
@@ -607,16 +607,16 @@ static Menu_t SoundSysMenu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t ControlsItems[] = {
-    {ITT_TITLE,   "CONTROLS",           "EGHFDKTYBT",                NULL,             0}, // УПРАВЛЕНИЕ
-    {ITT_SETMENU, "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ",      &Bindings1Menu,   0}, // Настройки управления
-    {ITT_SETMENU, "GAMEPAD SETTINGS",   "YFCNHJQRB UTQVGFLF",        &GamepadMenu,     0}, // Настройки геймпада
-    {ITT_SWITCH,  "ALWAYS RUN:",        "HT;BV GJCNJZYYJUJ ,TUF:",   M_RD_AlwaysRun,   0}, // РЕЖИМ ПОСТОЯННОГО БЕГА
-    {ITT_TITLE,   "MOUSE",              "VSIM",                      NULL,             0}, // МЫШЬ
-    {ITT_LRFUNC,  "MOUSE SENSIVITY",    "CRJHJCNM VSIB",             M_RD_Sensitivity, 0}, // СКОРОСТЬ МЫШИ
-    {ITT_EMPTY,   NULL,                 NULL,                        NULL,             0},
-    {ITT_SWITCH,  "MOUSE LOOK:",        "J,PJH VSIM.:",              M_RD_MouseLook,   0}, // ОБЗОР МЫШЬЮ
-    {ITT_SWITCH,  "INVERT Y AXIS:",     "DTHNBRFKMYFZ BYDTHCBZ:",    M_RD_InvertY,     0}, // ВЕРТИКАЛЬНАЯ ИНВЕРСИЯ
-    {ITT_SWITCH,  "VERTICAL MOVEMENT:", "DTHNBRFKMYJT GTHTVTOTYBT:", M_RD_Novert,      0}  // ВЕРТИКАЛЬНОЕ ПЕРЕМЕЩЕНИЕ
+    {ITT_TITLE,   "CONTROLS",              "EGHFDKTYBT",                NULL,             0}, // УПРАВЛЕНИЕ
+    {ITT_SETMENU, "CUSTOMIZE CONTROLS...", "YFCNHJQRB EGHFDKTYBZ>>>",   &Bindings1Menu,   0}, // Настройки управления...
+    {ITT_SETMENU, "GAMEPAD SETTINGS...",   "YFCNHJQRB UTQVGFLF>>>",     &GamepadMenu,     0}, // Настройки геймпада...
+    {ITT_SWITCH,  "ALWAYS RUN:",           "HT;BV GJCNJZYYJUJ ,TUF:",   M_RD_AlwaysRun,   0}, // РЕЖИМ ПОСТОЯННОГО БЕГА
+    {ITT_TITLE,   "MOUSE",                 "VSIM",                      NULL,             0}, // МЫШЬ
+    {ITT_LRFUNC,  "MOUSE SENSIVITY",       "CRJHJCNM VSIB",             M_RD_Sensitivity, 0}, // СКОРОСТЬ МЫШИ
+    {ITT_EMPTY,   NULL,                    NULL,                        NULL,             0},
+    {ITT_SWITCH,  "MOUSE LOOK:",           "J,PJH VSIM.:",              M_RD_MouseLook,   0}, // ОБЗОР МЫШЬЮ
+    {ITT_SWITCH,  "INVERT Y AXIS:",        "DTHNBRFKMYFZ BYDTHCBZ:",    M_RD_InvertY,     0}, // ВЕРТИКАЛЬНАЯ ИНВЕРСИЯ
+    {ITT_SWITCH,  "VERTICAL MOVEMENT:",    "DTHNBRFKMYJT GTHTVTOTYBT:", M_RD_Novert,      0}  // ВЕРТИКАЛЬНОЕ ПЕРЕМЕЩЕНИЕ
 };
 
 static Menu_t ControlsMenu = {
@@ -642,22 +642,22 @@ static const PageDescriptor_t BindingsPageDescriptor = {
 
 
 static MenuItem_t Bindings1Items[] = {
-    {ITT_TITLE,   "MOVEMENT",      "LDB;TYBT",               NULL,               0},
-    {ITT_EFUNC,   "MOVE FORWARD",  "LDB;TYBT DGTHTL",        BK_StartBindingKey, bk_forward},      // Движение вперед
-    {ITT_EFUNC,   "MOVE BACKWARD", "LDB;TYBT YFPFL",         BK_StartBindingKey, bk_backward},     // Движение назад
-    {ITT_EFUNC,   "TURN Left",     "GJDJHJN YFKTDJ",         BK_StartBindingKey, bk_turn_left},    // Поворот налево
-    {ITT_EFUNC,   "TURN Right",    "GJDJHJN YFGHFDJ",        BK_StartBindingKey, bk_turn_right},   // Поворот направо
-    {ITT_EFUNC,   "STRAFE LEFT",   ",JRJV DKTDJ",            BK_StartBindingKey, bk_strafe_left},  // Боком влево
-    {ITT_EFUNC,   "STRAFE RIGHT",  ",JRJV DGHFDJ",           BK_StartBindingKey, bk_strafe_right}, // Боком вправо
-    {ITT_EFUNC,   "SPEED ON",      ",TU",                    BK_StartBindingKey, bk_speed},        // Бег
-    {ITT_EFUNC,   "STRAFE ON",     "LDB;TYBT ,JRJV",         BK_StartBindingKey, bk_strafe},       // Движение боком
-    {ITT_EFUNC,   "FLY UP",        "KTNTNM DDTH[",           BK_StartBindingKey, bk_fly_up},       // Лететь вверх
-    {ITT_EFUNC,   "FLY DOWN",      "KTNTNM DYBP",            BK_StartBindingKey, bk_fly_down},     // Лететь вних
-    {ITT_EFUNC,   "STOP FLYING",   "JCNFYJDBNM GJKTN",       BK_StartBindingKey, bk_fly_stop},     // Остановить полёт
-    {ITT_EMPTY,   NULL,            NULL,                     NULL,               0},
-    {ITT_SETMENU, "NEXT PAGE...",  "CKTLE.OFZ CNHFYBWF>>>",  &Bindings2Menu,     0},               // Cледующая страница...
-    {ITT_SETMENU, "LAST PAGE...",  "GJCKTLYZZ CNHFYBWF>>>",  &Bindings7Menu,     0},               // Последняя страница...
-    {ITT_EMPTY,   NULL,            NULL,                     NULL,               0}
+    {ITT_TITLE,   "MOVEMENT",      "LDB;TYBT",             NULL,               0},
+    {ITT_EFUNC,   "MOVE FORWARD",  "LDB;TYBT DGTHTL",      BK_StartBindingKey, bk_forward},      // Движение вперед
+    {ITT_EFUNC,   "MOVE BACKWARD", "LDB;TYBT YFPFL",       BK_StartBindingKey, bk_backward},     // Движение назад
+    {ITT_EFUNC,   "TURN Left",     "GJDJHJN YFKTDJ",       BK_StartBindingKey, bk_turn_left},    // Поворот налево
+    {ITT_EFUNC,   "TURN Right",    "GJDJHJN YFGHFDJ",      BK_StartBindingKey, bk_turn_right},   // Поворот направо
+    {ITT_EFUNC,   "STRAFE LEFT",   ",JRJV DKTDJ",          BK_StartBindingKey, bk_strafe_left},  // Боком влево
+    {ITT_EFUNC,   "STRAFE RIGHT",  ",JRJV DGHFDJ",         BK_StartBindingKey, bk_strafe_right}, // Боком вправо
+    {ITT_EFUNC,   "SPEED ON",      ",TU",                  BK_StartBindingKey, bk_speed},        // Бег
+    {ITT_EFUNC,   "STRAFE ON",     "LDB;TYBT ,JRJV",       BK_StartBindingKey, bk_strafe},       // Движение боком
+    {ITT_EFUNC,   "FLY UP",        "KTNTNM DDTH[",         BK_StartBindingKey, bk_fly_up},       // Лететь вверх
+    {ITT_EFUNC,   "FLY DOWN",      "KTNTNM DYBP",          BK_StartBindingKey, bk_fly_down},     // Лететь вних
+    {ITT_EFUNC,   "STOP FLYING",   "JCNFYJDBNM GJKTN",     BK_StartBindingKey, bk_fly_stop},     // Остановить полёт
+    {ITT_EMPTY,   NULL,            NULL,                   NULL,               0},
+    {ITT_SETMENU, "NEXT PAGE >",   "CKTLE.OFZ CNHFYBWF `", &Bindings2Menu,     0},               // Cледующая страница >
+    {ITT_SETMENU, "< LAST PAGE",   "^ GJCKTLYZZ CNHFYBWF", &Bindings7Menu,     0},               // < Последняя страница
+    {ITT_EMPTY,   NULL,            NULL,                   NULL,               0}
 };
 
 static Menu_t Bindings1Menu = {
@@ -676,22 +676,22 @@ static Menu_t Bindings1Menu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Bindings2Items[] = {
-    {ITT_TITLE,   "ACTION",          "LTQCNDBT",               NULL,               0},
-    {ITT_EFUNC,   "FIRE/ATTACK",     "FNFRF/CNHTKM,F",         BK_StartBindingKey, bk_fire},        // Атака/стрельба
-    {ITT_EFUNC,   "USE",             "BCGJKMPJDFNM",           BK_StartBindingKey, bk_use},         // Использовать
-    {ITT_EFUNC,   "JUMP",            "GHS;JR",                 BK_StartBindingKey, bk_jump},        //Прыжок
-    {ITT_TITLE,   "WEAPONS",         "JHE;BT",                 NULL,               0},       // Оружие
-    {ITT_EFUNC,   "WEAPON 1",        "JHE;BT 1",               BK_StartBindingKey, bk_weapon_1},    // Оружие 1
-    {ITT_EFUNC,   "WEAPON 2",        "JHE;BT 2",               BK_StartBindingKey, bk_weapon_2},    // Оружие 2
-    {ITT_EFUNC,   "WEAPON 3",        "JHE;BT 3",               BK_StartBindingKey, bk_weapon_3},    // Оружие 3
-    {ITT_EFUNC,   "WEAPON 4",        "JHE;BT 4",               BK_StartBindingKey, bk_weapon_4},    // Оружие 4
-    {ITT_EFUNC,   "PREVIOUS WEAPON", "GHTLSLEOTT JHE;BT",      BK_StartBindingKey, bk_weapon_prev}, // Предыдущее оружие
-    {ITT_EFUNC,   "NEXT WEAPON",     "CKTLE.OTT JHE;BT",       BK_StartBindingKey, bk_weapon_next}, // Следующее оружие
-    {ITT_EMPTY,   NULL,              NULL,                     NULL,               0},
-    {ITT_EMPTY,   NULL,              NULL,                     NULL,               0},
-    {ITT_SETMENU, "NEXT PAGE...",    "CKTLE.OFZ CNHFYBWF>>>",  &Bindings3Menu,     0},              // Cледующая страница...
-    {ITT_SETMENU, "PREV PAGE...",    "GHTLSLEOFZ CNHFYBWF>>>", &Bindings1Menu,     0},              // Предыдущая страница...
-    {ITT_EMPTY,   NULL,              NULL,                     NULL,               0}
+    {ITT_TITLE,   "ACTION",          "LTQCNDBT",              NULL,               0},
+    {ITT_EFUNC,   "FIRE/ATTACK",     "FNFRF/CNHTKM,F",        BK_StartBindingKey, bk_fire},        // Атака/стрельба
+    {ITT_EFUNC,   "USE",             "BCGJKMPJDFNM",          BK_StartBindingKey, bk_use},         // Использовать
+    {ITT_EFUNC,   "JUMP",            "GHS;JR",                BK_StartBindingKey, bk_jump},        //Прыжок
+    {ITT_TITLE,   "WEAPONS",         "JHE;BT",                NULL,               0},       // Оружие
+    {ITT_EFUNC,   "WEAPON 1",        "JHE;BT 1",              BK_StartBindingKey, bk_weapon_1},    // Оружие 1
+    {ITT_EFUNC,   "WEAPON 2",        "JHE;BT 2",              BK_StartBindingKey, bk_weapon_2},    // Оружие 2
+    {ITT_EFUNC,   "WEAPON 3",        "JHE;BT 3",              BK_StartBindingKey, bk_weapon_3},    // Оружие 3
+    {ITT_EFUNC,   "WEAPON 4",        "JHE;BT 4",              BK_StartBindingKey, bk_weapon_4},    // Оружие 4
+    {ITT_EFUNC,   "PREVIOUS WEAPON", "GHTLSLEOTT JHE;BT",     BK_StartBindingKey, bk_weapon_prev}, // Предыдущее оружие
+    {ITT_EFUNC,   "NEXT WEAPON",     "CKTLE.OTT JHE;BT",      BK_StartBindingKey, bk_weapon_next}, // Следующее оружие
+    {ITT_EMPTY,   NULL,              NULL,                    NULL,               0},
+    {ITT_EMPTY,   NULL,              NULL,                    NULL,               0},
+    {ITT_SETMENU, "NEXT PAGE >",     "CKTLE.OFZ CNHFYBWF `",  &Bindings3Menu,     0},              // Cледующая страница >
+    {ITT_SETMENU, "< PREV PAGE",     "^ GHTLSLEOFZ CNHFYBWF", &Bindings1Menu,     0},              // < Предыдущая страница
+    {ITT_EMPTY,   NULL,              NULL,                    NULL,               0}
 };
 
 static Menu_t Bindings2Menu = {
@@ -710,22 +710,22 @@ static Menu_t Bindings2Menu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Bindings3Items[] = {
-    {ITT_TITLE,   "SHORTCUT KEYS",         ",SCNHSQ LJCNEG",         NULL,               0},
-    {ITT_EFUNC,   "QUICK SAVE",            ",SCNHJT CJ[HFYTYBT",     BK_StartBindingKey, bk_qsave},            // Быстрое сохранение
-    {ITT_EFUNC,   "QUICK LOAD",            ",SCNHFZ PFUHEPRF",       BK_StartBindingKey, bk_qload},            // Быстрая загрузка
-    {ITT_EFUNC,   "RESTART LEVEL/DEMO",    "GTHTPFGECR EHJDYZ",      BK_StartBindingKey, bk_reloadlevel},      // Перезапуск уровня
-    {ITT_EFUNC,   "SAVE A SCREENSHOT",     "CRHBYIJN",               BK_StartBindingKey, bk_screenshot},       // Скриншот
-    {ITT_EFUNC,   "FINISH DEMO RECORDING", "PFRJYXBNM PFGBCM LTVJ",  BK_StartBindingKey, bk_finish_demo},      // Закончить запись демо
-    {ITT_TITLE,   "TOGGLEABLES",           "GTHTRK.XTYBT",           NULL,               0},
-    {ITT_EFUNC,   "MOUSE LOOK",            "J,PJH VSIM.",            BK_StartBindingKey, bk_toggle_mlook},     // Обзор мышью
-    {ITT_EFUNC,   "ALWAYS RUN",            "GJCNJZYYSQ ,TU",         BK_StartBindingKey, bk_toggle_autorun},   // Постоянный бег
-    {ITT_EFUNC,   "CROSSHAIR",             "GHBWTK",                 BK_StartBindingKey, bk_toggle_crosshair}, // Прицел
-    {ITT_EFUNC,   "LEVEL FLIPPING",        "PTHRFKBHJDFYBT EHJDYZ",  BK_StartBindingKey, bk_toggle_fliplvls},  // Зеркалирование уровня
-    {ITT_EMPTY,   NULL,                    NULL,                     NULL,               0},
-    {ITT_EMPTY,   NULL,                    NULL,                     NULL,               0},
-    {ITT_SETMENU, "NEXT PAGE...",          "CKTLE.OFZ CNHFYBWF>>>",  &Bindings4Menu,     0},                   // Cледующая страница...
-    {ITT_SETMENU, "PREV PAGE...",          "GHTLSLEOFZ CNHFYBWF>>>", &Bindings2Menu,     0},                   // Предыдущая страница...
-    {ITT_EMPTY,   NULL,                    NULL,                     NULL,               0}
+    {ITT_TITLE,   "SHORTCUT KEYS",         ",SCNHSQ LJCNEG",        NULL,               0},
+    {ITT_EFUNC,   "QUICK SAVE",            ",SCNHJT CJ[HFYTYBT",    BK_StartBindingKey, bk_qsave},            // Быстрое сохранение
+    {ITT_EFUNC,   "QUICK LOAD",            ",SCNHFZ PFUHEPRF",      BK_StartBindingKey, bk_qload},            // Быстрая загрузка
+    {ITT_EFUNC,   "RESTART LEVEL/DEMO",    "GTHTPFGECR EHJDYZ",     BK_StartBindingKey, bk_reloadlevel},      // Перезапуск уровня
+    {ITT_EFUNC,   "SAVE A SCREENSHOT",     "CRHBYIJN",              BK_StartBindingKey, bk_screenshot},       // Скриншот
+    {ITT_EFUNC,   "FINISH DEMO RECORDING", "PFRJYXBNM PFGBCM LTVJ", BK_StartBindingKey, bk_finish_demo},      // Закончить запись демо
+    {ITT_TITLE,   "TOGGLEABLES",           "GTHTRK.XTYBT",          NULL,               0},
+    {ITT_EFUNC,   "MOUSE LOOK",            "J,PJH VSIM.",           BK_StartBindingKey, bk_toggle_mlook},     // Обзор мышью
+    {ITT_EFUNC,   "ALWAYS RUN",            "GJCNJZYYSQ ,TU",        BK_StartBindingKey, bk_toggle_autorun},   // Постоянный бег
+    {ITT_EFUNC,   "CROSSHAIR",             "GHBWTK",                BK_StartBindingKey, bk_toggle_crosshair}, // Прицел
+    {ITT_EFUNC,   "LEVEL FLIPPING",        "PTHRFKBHJDFYBT EHJDYZ", BK_StartBindingKey, bk_toggle_fliplvls},  // Зеркалирование уровня
+    {ITT_EMPTY,   NULL,                    NULL,                    NULL,               0},
+    {ITT_EMPTY,   NULL,                    NULL,                    NULL,               0},
+    {ITT_SETMENU, "NEXT PAGE >",           "CKTLE.OFZ CNHFYBWF `",  &Bindings4Menu,     0},                   // Cледующая страница >
+    {ITT_SETMENU, "< PREV PAGE",           "^ GHTLSLEOFZ CNHFYBWF", &Bindings2Menu,     0},                   // < Предыдущая страница
+    {ITT_EMPTY,   NULL,                    NULL,                    NULL,               0}
 };
 
 static Menu_t Bindings3Menu = {
@@ -745,21 +745,21 @@ static Menu_t Bindings3Menu = {
 
 static MenuItem_t Bindings4Items[] = {
     {ITT_TITLE,   "AUTOMAP",          "RFHNF",                 NULL,                0},
-    {ITT_EFUNC,   "TOGGLE AUTOMAP",   "JNRHSNM RFHNE",          BK_StartBindingKey, bk_map_toggle},    // Открыть карту
-    {ITT_EFUNC,   "ZOOM IN",          "GHB,KBPBNM",             BK_StartBindingKey, bk_map_zoom_in},   // Приблизить
-    {ITT_EFUNC,   "ZOOM OUT",         "JNLFKBNM",               BK_StartBindingKey, bk_map_zoom_out},  // Отдалить
-    {ITT_EFUNC,   "MAXIMUM ZOOM OUT", "GJKYSQ VFCINF,",         BK_StartBindingKey, bk_map_zoom_max},  // Полный масштаб
-    {ITT_EFUNC,   "FOLLOW MODE",      "HT;BV CKTLJDFYBZ",       BK_StartBindingKey, bk_map_follow},    // Режим следования
-    {ITT_EFUNC,   "OVERLAY MODE",     "HT;BV YFKJ;TYBZ",        BK_StartBindingKey, bk_map_overlay},   // Режим наложения
-    {ITT_EFUNC,   "ROTATE MODE",      "HT;BV DHFOTYBZ",         BK_StartBindingKey, bk_map_rotate},    // Режим вращения
-    {ITT_EFUNC,   "TOGGLE GRID",      "CTNRF",                  BK_StartBindingKey, bk_map_grid},      // Сетка
-    {ITT_EMPTY,   NULL,               NULL,                     NULL,               0},
-    {ITT_EMPTY,   NULL,               NULL,                     NULL,               0},
-    {ITT_EMPTY,   NULL,               NULL,                     NULL,               0},
-    {ITT_EMPTY,   NULL,               NULL,                     NULL,               0},
-    {ITT_SETMENU, "NEXT PAGE...",     "CKTLE.OFZ CNHFYBWF>>>",  &Bindings5Menu,     0},                // Cледующая страница...
-    {ITT_SETMENU, "PREV PAGE...",     "GHTLSLEOFZ CNHFYBWF>>>", &Bindings3Menu,     0},                // Предыдущая страница...
-    {ITT_EMPTY,   NULL,               NULL,                     NULL,               0}
+    {ITT_EFUNC,   "TOGGLE AUTOMAP",   "JNRHSNM RFHNE",         BK_StartBindingKey, bk_map_toggle},    // Открыть карту
+    {ITT_EFUNC,   "ZOOM IN",          "GHB,KBPBNM",            BK_StartBindingKey, bk_map_zoom_in},   // Приблизить
+    {ITT_EFUNC,   "ZOOM OUT",         "JNLFKBNM",              BK_StartBindingKey, bk_map_zoom_out},  // Отдалить
+    {ITT_EFUNC,   "MAXIMUM ZOOM OUT", "GJKYSQ VFCINF,",        BK_StartBindingKey, bk_map_zoom_max},  // Полный масштаб
+    {ITT_EFUNC,   "FOLLOW MODE",      "HT;BV CKTLJDFYBZ",      BK_StartBindingKey, bk_map_follow},    // Режим следования
+    {ITT_EFUNC,   "OVERLAY MODE",     "HT;BV YFKJ;TYBZ",       BK_StartBindingKey, bk_map_overlay},   // Режим наложения
+    {ITT_EFUNC,   "ROTATE MODE",      "HT;BV DHFOTYBZ",        BK_StartBindingKey, bk_map_rotate},    // Режим вращения
+    {ITT_EFUNC,   "TOGGLE GRID",      "CTNRF",                 BK_StartBindingKey, bk_map_grid},      // Сетка
+    {ITT_EMPTY,   NULL,               NULL,                    NULL,               0},
+    {ITT_EMPTY,   NULL,               NULL,                    NULL,               0},
+    {ITT_EMPTY,   NULL,               NULL,                    NULL,               0},
+    {ITT_EMPTY,   NULL,               NULL,                    NULL,               0},
+    {ITT_SETMENU, "NEXT PAGE >",      "CKTLE.OFZ CNHFYBWF `",  &Bindings5Menu,     0},                // Cледующая страница >
+    {ITT_SETMENU, "< PREV PAGE",      "^ GHTLSLEOFZ CNHFYBWF", &Bindings3Menu,     0},                // < Предыдущая страница
+    {ITT_EMPTY,   NULL,               NULL,                    NULL,               0}
 };
 
 static Menu_t Bindings4Menu = {
@@ -791,8 +791,8 @@ static MenuItem_t Bindings5Items[] = {
     {ITT_EFUNC,   "PORKALATOR",           "CDBYJVJHATH",               BK_StartBindingKey, bk_arti_egg},
     {ITT_EFUNC,   "CHAOS DEVICE",         "'V,KTVF [FJCF",             BK_StartBindingKey, bk_arti_chaosdevice},
     {ITT_EMPTY,   NULL,                   NULL,                        NULL,               0},
-    {ITT_SETMENU, "NEXT PAGE...",         "CKTLE.OFZ CNHFYBWF>>>",     &Bindings6Menu,     0},                     // Cледующая страница...
-    {ITT_SETMENU, "PREV PAGE...",         "GHTLSLEOFZ CNHFYBWF>>>",    &Bindings4Menu,     0},                     // Предыдущая страница...
+    {ITT_SETMENU, "NEXT PAGE >",          "CKTLE.OFZ CNHFYBWF `",      &Bindings6Menu,     0},                     // Cледующая страница >
+    {ITT_SETMENU, "< PREV PAGE",          "^ GHTLSLEOFZ CNHFYBWF",     &Bindings4Menu,     0},                     // < Предыдущая страница
     {ITT_EMPTY,   NULL,                   NULL,                        NULL,               0}
 };
 
@@ -825,8 +825,8 @@ static MenuItem_t Bindings6Items[] = {
     {ITT_EFUNC,   "LOOK DOWN",           "CVJNHTNM DYBP",             BK_StartBindingKey, bk_look_down},          // Смотреть вниз
     {ITT_EFUNC,   "CENTER LOOK",         "CVJNHTNM GHZVJ",            BK_StartBindingKey, bk_look_center},        // Смотреть прямо
     {ITT_EMPTY,   NULL,                  NULL,                        NULL,               0},
-    {ITT_SETMENU, "NEXT PAGE...",        "CKTLE.OFZ CNHFYBWF>>>",     &Bindings7Menu,     0},                     // Cледующая страница...
-    {ITT_SETMENU, "PREV PAGE...",        "GHTLSLEOFZ CNHFYBWF>>>",    &Bindings5Menu,     0},                     // Предыдущая страница...
+    {ITT_SETMENU, "NEXT PAGE >",         "CKTLE.OFZ CNHFYBWF `",      &Bindings7Menu,     0},                     // Cледующая страница >
+    {ITT_SETMENU, "< PREV PAGE",         "^ GHTLSLEOFZ CNHFYBWF",     &Bindings5Menu,     0},                     // < Предыдущая страница
     {ITT_EMPTY,   NULL,                  NULL,                        NULL,               0}
 };
 
@@ -846,22 +846,22 @@ static Menu_t Bindings6Menu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Bindings7Items[] = {
-    {ITT_TITLE,   "MULTIPLAYER",         "CTNTDFZ BUHF",           NULL,               0},                     // Сетевая игра
-    {ITT_EFUNC,   "MULTIPLAYER SPY",     "DBL LHEUJUJ BUHJRF",     BK_StartBindingKey, bk_spy},                // Вид другого игрока
-    {ITT_EFUNC,   "SEND MESSAGE",        "JNGHFDBNM CJJ,OTYBT",    BK_StartBindingKey, bk_multi_msg},          // Отправить сообщение
-    {ITT_EFUNC,   "MESSAGE TO PLAYER 1", "CJJ,OTYBT BUHJRE 1",     BK_StartBindingKey, bk_multi_msg_player_0}, // Сообщение игроку 1
-    {ITT_EFUNC,   "MESSAGE TO PLAYER 2", "CJJ,OTYBT BUHJRE 2",     BK_StartBindingKey, bk_multi_msg_player_1}, // Сообщение игроку 2
-    {ITT_EFUNC,   "MESSAGE TO PLAYER 3", "CJJ,OTYBT BUHJRE 3",     BK_StartBindingKey, bk_multi_msg_player_2}, // Сообщение игроку 3
-    {ITT_EFUNC,   "MESSAGE TO PLAYER 4", "CJJ,OTYBT BUHJRE 4",     BK_StartBindingKey, bk_multi_msg_player_3}, // Сообщение игроку 4
-    {ITT_EFUNC,   "MESSAGE TO PLAYER 5", "CJJ,OTYBT BUHJRE 5",     BK_StartBindingKey, bk_multi_msg_player_4}, // Сообщение игроку 5
-    {ITT_EFUNC,   "MESSAGE TO PLAYER 6", "CJJ,OTYBT BUHJRE 6",     BK_StartBindingKey, bk_multi_msg_player_5}, // Сообщение игроку 6
-    {ITT_EFUNC,   "MESSAGE TO PLAYER 7", "CJJ,OTYBT BUHJRE 7",     BK_StartBindingKey, bk_multi_msg_player_6}, // Сообщение игроку 7
-    {ITT_EFUNC,   "MESSAGE TO PLAYER 8", "CJJ,OTYBT BUHJRE 8",     BK_StartBindingKey, bk_multi_msg_player_7}, // Сообщение игроку 8
-    {ITT_EMPTY,   NULL,                  NULL,                     NULL,               0},
-    {ITT_EMPTY,   NULL,                  NULL,                     NULL,               0},
-    {ITT_SETMENU, "FIRST PAGE...",       "GTHDFZ CNHFYBWF>>>",     &Bindings1Menu,     0},                     // Первая страница...
-    {ITT_SETMENU, "PREV PAGE...",        "GHTLSLEOFZ CNHFYBWF>>>", &Bindings6Menu,     0},                     // Предыдущая страница...
-    {ITT_EMPTY,   NULL,                  NULL,                     NULL,               0}
+    {ITT_TITLE,   "MULTIPLAYER",         "CTNTDFZ BUHF",          NULL,               0},                     // Сетевая игра
+    {ITT_EFUNC,   "MULTIPLAYER SPY",     "DBL LHEUJUJ BUHJRF",    BK_StartBindingKey, bk_spy},                // Вид другого игрока
+    {ITT_EFUNC,   "SEND MESSAGE",        "JNGHFDBNM CJJ,OTYBT",   BK_StartBindingKey, bk_multi_msg},          // Отправить сообщение
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 1", "CJJ,OTYBT BUHJRE 1",    BK_StartBindingKey, bk_multi_msg_player_0}, // Сообщение игроку 1
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 2", "CJJ,OTYBT BUHJRE 2",    BK_StartBindingKey, bk_multi_msg_player_1}, // Сообщение игроку 2
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 3", "CJJ,OTYBT BUHJRE 3",    BK_StartBindingKey, bk_multi_msg_player_2}, // Сообщение игроку 3
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 4", "CJJ,OTYBT BUHJRE 4",    BK_StartBindingKey, bk_multi_msg_player_3}, // Сообщение игроку 4
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 5", "CJJ,OTYBT BUHJRE 5",    BK_StartBindingKey, bk_multi_msg_player_4}, // Сообщение игроку 5
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 6", "CJJ,OTYBT BUHJRE 6",    BK_StartBindingKey, bk_multi_msg_player_5}, // Сообщение игроку 6
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 7", "CJJ,OTYBT BUHJRE 7",    BK_StartBindingKey, bk_multi_msg_player_6}, // Сообщение игроку 7
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 8", "CJJ,OTYBT BUHJRE 8",    BK_StartBindingKey, bk_multi_msg_player_7}, // Сообщение игроку 8
+    {ITT_EMPTY,   NULL,                  NULL,                    NULL,               0},
+    {ITT_EMPTY,   NULL,                  NULL,                    NULL,               0},
+    {ITT_SETMENU, "FIRST PAGE >",        "GTHDFZ CNHFYBWF `",     &Bindings1Menu,     0},                     // Первая страница >
+    {ITT_SETMENU, "< PREV PAGE",         "^ GHTLSLEOFZ CNHFYBWF", &Bindings6Menu,     0},                     // < Предыдущая страница
+    {ITT_EMPTY,   NULL,                  NULL,                    NULL,               0}
 };
 
 static Menu_t Bindings7Menu = {
@@ -963,7 +963,7 @@ static MenuItem_t Level1Items[] = {
     {ITT_EMPTY,   NULL,                 NULL,                    NULL,                  0},
     {ITT_EMPTY,   NULL,                 NULL,                    NULL,                  0},
     {ITT_EMPTY,   NULL,                 NULL,                    NULL,                  0},
-    {ITT_SETMENU, "NEXT PAGE...",       "CKTLE.OFZ CNHFYBWF>>>", &LevelSelectMenu2_F,   0}, // СЛЕДУЮЩАЯ СТРАНИЦА...
+    {ITT_SETMENU, "NEXT PAGE >",        "CKTLE.OFZ CNHFYBWF `", &LevelSelectMenu2_F,   0}, // СЛЕДУЮЩАЯ СТРАНИЦА >
     {ITT_LRFUNC,  "START GAME",         "YFXFNM BUHE",           G_DoSelectiveGame,     0}  // НАЧАТЬ ИГРУ
 };
 
@@ -998,7 +998,7 @@ static MenuItem_t Level2Items_F[] = {
     {ITT_LRFUNC,  "MYSTIC URN:",            "VBCNBXTCRFZ EHYF:",          M_RD_SelectiveArti_1, 0}, // МИСТИЧЕСКАЯ УРНА
     {ITT_LRFUNC,  "FLECHETTE:",             "PTKMT:",                     M_RD_SelectiveArti_2, 0}, // ЗЕЛЬЕ
     {ITT_EMPTY,   NULL,                     NULL,                         NULL,                 0},
-    {ITT_SETMENU, "NEXT PAGE...",           "CKTLE.OFZ CNHFYBWF>>>",      &LevelSelectMenu3,    0}, // СЛЕДУЮЩАЯ СТРАНИЦА...
+    {ITT_SETMENU, "NEXT PAGE >",            "CKTLE.OFZ CNHFYBWF `",      &LevelSelectMenu3,    0}, // СЛЕДУЮЩАЯ СТРАНИЦА >
     {ITT_LRFUNC,  "START GAME",             "YFXFNM BUHE",                G_DoSelectiveGame,    0}  // НАЧАТЬ ИГРУ
 };
 
@@ -1029,7 +1029,7 @@ static MenuItem_t Level2Items_C[] = {
     {ITT_LRFUNC,  "MYSTIC URN:",           "VBCNBXTCRFZ EHYF:",       M_RD_SelectiveArti_1, 0}, // МИСТИЧЕСКАЯ УРНА
     {ITT_LRFUNC,  "FLECHETTE:",            "PTKMT:",                  M_RD_SelectiveArti_2, 0}, // ЗЕЛЬЕ
     {ITT_EMPTY,   NULL,                    NULL,                      NULL,                 0},
-    {ITT_SETMENU, "NEXT PAGE...",          "CKTLE.OFZ CNHFYBWF>>>",   &LevelSelectMenu3,    0}, // СЛЕДУЮЩАЯ СТРАНИЦА...
+    {ITT_SETMENU, "NEXT PAGE >",           "CKTLE.OFZ CNHFYBWF `",   &LevelSelectMenu3,    0}, // СЛЕДУЮЩАЯ СТРАНИЦА >
     {ITT_LRFUNC,  "START GAME",            "YFXFNM BUHE",             G_DoSelectiveGame,    0}  // НАЧАТЬ ИГРУ
 };
 
@@ -1060,7 +1060,7 @@ static MenuItem_t Level2Items_M[] = {
     {ITT_LRFUNC,  "MYSTIC URN:",             "VBCNBXTCRFZ EHYF:",           M_RD_SelectiveArti_1, 0}, // МИСТИЧЕСКАЯ УРНА
     {ITT_LRFUNC,  "FLECHETTE:",              "PTKMT:",                      M_RD_SelectiveArti_2, 0}, // ЗЕЛЬЕ
     {ITT_EMPTY,   NULL,                      NULL,                          NULL,                 0},
-    {ITT_SETMENU, "NEXT PAGE...",            "CKTLE.OFZ CNHFYBWF>>>",       &LevelSelectMenu3,    0}, // СЛЕДУЮЩАЯ СТРАНИЦА...
+    {ITT_SETMENU, "NEXT PAGE >",             "CKTLE.OFZ CNHFYBWF `",       &LevelSelectMenu3,    0}, // СЛЕДУЮЩАЯ СТРАНИЦА >
     {ITT_LRFUNC,  "START GAME",              "YFXFNM BUHE",                 G_DoSelectiveGame,    0}  // НАЧАТЬ ИГРУ
 };
 
@@ -1095,7 +1095,7 @@ static MenuItem_t Level3Items[] = {
     {ITT_TITLE,    "KEYS",                  "RK.XB",                      NULL,                  0}, // КЛЮЧИ
     {ITT_SWITCH,   "EMERALD KEY:",          "BPEVHELYSQ RK.X:",           M_RD_SelectiveKey_0,   0}, // ИЗУМРУДНЫЙ КЛЮЧ
     {ITT_EMPTY,    NULL,                    NULL,                         NULL,                  0},
-    {ITT_SETMENU,  "NEXT PAGE...",          "CKTLE.OFZ CNHFYBWF>>>",      &LevelSelectMenu4,     0}, // СЛЕДУЮЩАЯ СТРАНИЦА...
+    {ITT_SETMENU,  "NEXT PAGE >",           "CKTLE.OFZ CNHFYBWF `",      &LevelSelectMenu4,     0}, // СЛЕДУЮЩАЯ СТРАНИЦА >
     {ITT_LRFUNC,   "START GAME",            "YFXFNM BUHE",                G_DoSelectiveGame,     0}  // НАЧАТЬ ИГРУ
 };
 
@@ -1130,7 +1130,7 @@ static MenuItem_t Level4Items[] = {
     {ITT_LRFUNC,  "HEART OF D'SPARIL:",  "CTHLWT L&CGFHBKF:",       M_RD_SelectivePuzzle_1,  0}, // СЕРДЦЕ Д'СПАРИЛА
     {ITT_LRFUNC,  "RUBY PLANET:",        "HE,BYJDFZ GKFYTNF:",      M_RD_SelectivePuzzle_2,  0}, // РУБИНОВАЯ ПЛАНЕТА
     {ITT_EMPTY,   NULL,                  NULL,                      NULL,                    0},
-    {ITT_SETMENU, "LAST PAGE...",        "GJCKTLYZZ CNHFYBWF>>>",   &LevelSelectMenu5,       0}, // ПОСЛЕДНЯЯ СТРАНИЦА...
+    {ITT_SETMENU, "LAST PAGE >",         "GJCKTLYZZ CNHFYBWF `",   &LevelSelectMenu5,       0}, // ПОСЛЕДНЯЯ СТРАНИЦА >
     {ITT_LRFUNC,  "START GAME",          "YFXFNM BUHE",             G_DoSelectiveGame,       0}  // НАЧАТЬ ИГРУ
 };
 
@@ -1165,7 +1165,7 @@ static MenuItem_t Level5Items[] = {
     {ITT_LRFUNC,  "HOlY RELIC:",         "CDZNFZ HTKBRDBZ:",        M_RD_SelectivePuzzle_15, 0}, // СВЯТАЯ РЕЛИКВИЯ
     {ITT_LRFUNC,  "SIGIL OF THE MAGUS:", "CBVDJK VFUF:",            M_RD_SelectivePuzzle_16, 0}, // СИМВОЛ МАГА
     {ITT_EMPTY,   NULL,                  NULL,                      NULL,                    0},
-    {ITT_SETMENU, "FIRST PAGE...",       "GTHDFZ CNHFYBWF>>>",      &LevelSelectMenu1,       0}, // ПЕРВАЯ СТРАНИЦА...
+    {ITT_SETMENU, "FIRST PAGE >",        "GTHDFZ CNHFYBWF `",      &LevelSelectMenu1,       0}, // ПЕРВАЯ СТРАНИЦА >
     {ITT_LRFUNC,  "START GAME",          "YFXFNM BUHE",             G_DoSelectiveGame,       0}  // НАЧАТЬ ИГРУ
 };
 
