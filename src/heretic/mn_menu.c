@@ -502,12 +502,6 @@ static Menu_t RenderingMenu = {
     1
 };
 
-// [JN] Dummy. Used for max FPS slider positioning.
-static Menu_t MaxFpsSlider = {
-    100, 154, 25, NULL, NULL, false, 8,
-    RenderingItems, false, NULL, NULL, &DisplayMenu, 0
-};
-
 // -----------------------------------------------------------------------------
 // Display settings
 // -----------------------------------------------------------------------------
@@ -1681,7 +1675,7 @@ static void DrawRenderingMenu(void)
         }
 
         // FPS limit
-        RD_Menu_DrawSliderSmall(&MaxFpsSlider, 62, 11, (max_fps-40) / 20);
+        RD_Menu_DrawSliderSmallInline(100, 62, 11, (max_fps-40) / 20);
         // Numerical representation of slider position
         M_snprintf(num, 4, "%d", max_fps);
         RD_M_DrawTextSmallENG(num, 208 + wide_delta, 63, 
@@ -1741,7 +1735,7 @@ static void DrawRenderingMenu(void)
 
         // Ограничение FPS
         RD_M_DrawTextSmallENG("FPS:", 123 + wide_delta, 62, CR_NONE);
-        RD_Menu_DrawSliderSmall(&MaxFpsSlider, 62, 11, (max_fps-40) / 20);
+        RD_Menu_DrawSliderSmallInline(154, 62, 11, (max_fps-40) / 20);
         // Numerical representation of slider position
         M_snprintf(num, 4, "%d", max_fps);
         RD_M_DrawTextSmallENG(num, 262 + wide_delta, 63, 

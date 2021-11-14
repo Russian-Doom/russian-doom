@@ -193,8 +193,16 @@ extern void RD_Menu_ShiftSlideInt(int* var, int minValue, int maxValue, Directio
 
 /** [Dasperal] y = menu->y + 2 + (item * ITEM_HEIGHT) */
 void RD_Menu_DrawSlider(Menu_t * menu, int y, int width, int value);
-/** [JN] Draw small slider*/
+/**
+ * [JN] Draw small slider
+ * Slider's X is determent by menu's X
+ */
 void RD_Menu_DrawSliderSmall(Menu_t * menu, int y, int width, int value);
+/**
+ * Draw small slider
+ * Slider's X is determent by X argument
+ */
+void RD_Menu_DrawSliderSmallInline(int x, int y, int width, int value);
 
 void RD_Menu_Draw_Bindings(int x);
 
