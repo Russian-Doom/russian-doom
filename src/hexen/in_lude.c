@@ -81,7 +81,7 @@ static patch_t *FontBNegative;
 static patch_t *FontBSlash;
 static patch_t *FontBPercent;
 static int FontABaseLump;
-static int FontDBaseLump; // [JN] Small Russian font
+static int FontFBaseLump; // [JN] Small Russian font
 static int FontBLump;
 static int FontBLumpBase;
 
@@ -307,7 +307,7 @@ static void LoadPics(void)
         FontBLump = W_GetNumForName("FONTB_S") + 1;
         FontBNegative = W_CacheLumpName("FONTB13", PU_STATIC);
         FontABaseLump = W_GetNumForName("FONTA_S") + 1;
-        FontDBaseLump = W_GetNumForName("FONTD_S") + 1;
+        FontFBaseLump = W_GetNumForName("FONTF_S") + 1;
 
         FontBSlash = W_CacheLumpName("FONTB15", PU_STATIC);
         FontBPercent = W_CacheLumpName("FONTB05", PU_STATIC);
@@ -673,7 +673,7 @@ static void DrawHubText(void)
             cx += 5;
             continue;
         }
-        w = W_CacheLumpNum((english_language ? FontABaseLump : FontDBaseLump)
+        w = W_CacheLumpNum((english_language ? FontABaseLump : FontFBaseLump)
                                              + c - 33, PU_CACHE);
         if (cx + SHORT(w->width) > screenwidth)
         {

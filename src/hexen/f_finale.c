@@ -62,7 +62,7 @@ static int FinaleCount;
 static int FinaleEndCount;
 static int FinaleLumpNum;
 static int FontABaseLump;
-static int FontDBaseLump; // [JN] Small Russian font
+static int FontFBaseLump; // [JN] Small Russian font
 static char *FinaleText;
 
 static fixed_t *Palette;
@@ -91,7 +91,7 @@ void F_StartFinale(void)
     FinaleEndCount = 70;
     FinaleLumpNum = W_GetNumForName("FINALE1");
     FontABaseLump = W_GetNumForName("FONTA_S") + 1;
-    FontDBaseLump = W_GetNumForName("FONTD_S") + 1;
+    FontFBaseLump = W_GetNumForName("FONTF_S") + 1;
     InitializeFade(1);
 
 //      S_ChangeMusic(mus_victor, true);
@@ -240,7 +240,7 @@ static void TextWrite(void)
             cx += 5;
             continue;
         }
-        w = W_CacheLumpNum((english_language ? FontABaseLump : FontDBaseLump)
+        w = W_CacheLumpNum((english_language ? FontABaseLump : FontFBaseLump)
                                              + c - 33, PU_CACHE);
         if (cx + SHORT(w->width) > screenwidth)
         {
