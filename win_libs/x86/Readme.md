@@ -5,8 +5,8 @@
 | libmodplug-1.dll    | 1c0ae563c7b3a0404bf69cbf5b960652 | Bundled with SDL2_mixer 2.0.4 |
 | libmpg123-0.dll     | a24db14f68919c1acd41cd61d796a27e | Bundled with SDL2_mixer 2.0.4 |
 | libogg-0.dll        | 47ecbe810165f34eb2d900326bc1944a | Bundled with SDL2_mixer 2.0.4 |
-| libpng16-16.dll     | 2a5a38ca06bc43b77576b164ea105b4a |              ???              |
-| libsamplerate-0.dll | cc88bd311b0985a1b2a7e3b239f9cd17 |              ???              |
+| libpng16-16.dll     | 41a546b325ddfb0f37b84b550d215aef |        MSYS2 1.6.37-6         |
+| libsamplerate-0.dll | 27965bdd3242f1e7f7da667593baeee5 |         MSYS2 0.1.9-1         |
 | libvorbis-0.dll     | 638a1c86c660613cfd30bae95d2b2054 | Bundled with SDL2_mixer 2.0.4 |
 | libvorbisfile-3.dll | ea20e1550ad37aa978897989bebe3098 | Bundled with SDL2_mixer 2.0.4 |
 | SDL2.dll            | 3f25925f454362a61705694be43b62c9 |            2.0.14             |
