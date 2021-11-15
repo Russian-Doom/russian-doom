@@ -1213,6 +1213,14 @@ boolean PTR_SlideTraverse(intercept_t * in)
                 "PTR_SlideTraverse: не является линией?");
 
     li = in->d.line;
+
+    // [JN] Treat two sided linedefs as single sided for smooth sliding.
+    if (li->flags & ML_BLOCKING && li->flags & ML_TWOSIDED
+    && /*improved_collision && */ singleplayer && !vanillaparm)
+    {
+        goto isblocking;
+    }
+
     if (!(li->flags & ML_TWOSIDED))
     {
         if (P_PointOnLineSide(slidemo->x, slidemo->y, li))
