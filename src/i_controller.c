@@ -27,12 +27,14 @@
 #include "i_controller.h"
 #include "i_system.h"
 #include "m_config.h"
+#include "m_fixed.h"
 #include "jn.h"
 
 // When an axis is within the dead zone, it is set to zero.
 // This is 5% of the full range:
 
-#define DEAD_ZONE (32768 / 3)
+#define DEAD_ZONE 328
+#define BASE_SENSITIVITY_BITS 3
 
 static char* axesNames[] = {
     "LX",
@@ -47,12 +49,16 @@ static boolean nameToA_init = false;
 typedef enum
 {
     AO_INVERT,
-    AO_BIND
+    AO_BIND,
+    AO_DEADZONE,
+    AO_SENSITIVITY
 } axisOption_t;
 
 static char* axesOptionsNames[] = {
     "Invert",
-    "Binding"
+    "Binding",
+    "DeadZone",
+    "Sensitivity"
 };
 
 static int nameToAO[arrlen(axesOptionsNames)];
@@ -181,6 +187,16 @@ static controller_t* registerNewController(char* guid, SDL_GameController* sdlCo
     controller->bindAxis[SDL_CONTROLLER_AXIS_LEFTY] = CONTROLLER_AXIS_MOVE;
     controller->bindAxis[SDL_CONTROLLER_AXIS_RIGHTX] = CONTROLLER_AXIS_TURN;
     controller->bindAxis[SDL_CONTROLLER_AXIS_RIGHTY] = CONTROLLER_AXIS_VLOOK;
+
+    controller->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTX] = 16;
+    controller->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTY] = 16;
+    controller->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTX] = 16;
+    controller->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTY] = 16;
+
+    controller->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTX] = 8;
+    controller->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTY] = 8;
+    controller->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTX] = 8;
+    controller->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTY] = 6;
 
     sprintf(sectionName, "Controller_%s", guid);
     M_AppendConfigSection(sectionName, &controllerHandler);
@@ -355,7 +371,8 @@ void I_HandleControllerEvent(SDL_Event *sdlevent)
 
 static int GetAxisState(controller_axis_t axis)
 {
-    int value = 0, axisValue;
+    fixed_t value = 0;
+    int axisValue;
 
     for(SDL_GameControllerAxis sdlAxis = SDL_CONTROLLER_AXIS_LEFTX; sdlAxis < SDL_CONTROLLER_AXIS_TRIGGERLEFT; sdlAxis++)
     {
@@ -363,7 +380,7 @@ static int GetAxisState(controller_axis_t axis)
         {
             axisValue = SDL_GameControllerGetAxis(currentController->SDL_controller, sdlAxis);
 
-            if(axisValue < DEAD_ZONE && axisValue > -DEAD_ZONE)
+            if(axisValue < currentController->axisDeadZone[sdlAxis] * DEAD_ZONE && axisValue > -currentController->axisDeadZone[sdlAxis] * DEAD_ZONE)
             {
                 axisValue = 0;
             }
@@ -371,10 +388,19 @@ static int GetAxisState(controller_axis_t axis)
             if(currentController->invertAxis[sdlAxis])
                 axisValue = -axisValue;
 
-            value += axisValue;
+            if(axisValue > 32766)
+                axisValue = 32766;
+            if(axisValue < -32766)
+                axisValue = -32766;
+
+            value += FixedMul(FixedDiv(axisValue << FRACBITS, 32766 << FRACBITS), currentController->axisSensitivity[sdlAxis] << (FRACBITS - BASE_SENSITIVITY_BITS));
         }
     }
 
+    if(value > FRACUNIT)
+        value = FRACUNIT;
+    if(value < -FRACUNIT)
+        value = -FRACUNIT;
     return value;
 }
 
@@ -466,6 +492,12 @@ void ControllerHandler_HandleLine(char* keyName, char *value, size_t valueSize)
             currentController->bindAxis[axis] = *bsearchResult;
             break;
         }
+        case AO_DEADZONE:
+            currentController->axisDeadZone[axis] = strtol(value, NULL, 0);
+            break;
+        case AO_SENSITIVITY:
+            currentController->axisSensitivity[axis] = strtol(value, NULL, 0);
+            break;
         default:
             return;
     }
@@ -486,6 +518,12 @@ void ControllerHandler_Save(FILE* file, char* sectionName)
                 fprintf(file, "%s_%s = %d\n",
                         axesNames[i], axesOptionsNames[AO_INVERT],
                         temp->invertAxis[i]);
+                fprintf(file, "%s_%s = %d\n",
+                        axesNames[i], axesOptionsNames[AO_DEADZONE],
+                        temp->axisDeadZone[i]);
+                fprintf(file, "%s_%s = %d\n",
+                        axesNames[i], axesOptionsNames[AO_SENSITIVITY],
+                        temp->axisSensitivity[i]);
             }
         }
         temp = temp->next;

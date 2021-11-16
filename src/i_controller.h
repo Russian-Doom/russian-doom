@@ -67,6 +67,8 @@ typedef struct controller_s
     SDL_GameController* SDL_controller;
     int invertAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT];
     int bindAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT];
+    int axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERLEFT];
+    int axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERLEFT];
 } controller_t;
 
 extern int useController;

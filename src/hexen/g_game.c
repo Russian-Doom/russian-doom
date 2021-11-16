@@ -147,9 +147,9 @@ int lookheld;
 
 int mousex, mousey;             // mouse values are used once
 
-int joyxmove, joyymove;         // joystick values are repeated
+int joyturn, joymove;         // joystick values are repeated
 int joystrafemove;
-int joyylook;
+int joyvlook;
 int alwaysRun = 1;              // is always run enabled
 
 int savegameslot;
@@ -222,13 +222,9 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     
     forward = side = look = arti = flyheight = 0;
 
-//
-// use two stage accelerative turning on the keyboard and joystick
-//
-    if (joyxmove < 0
-    ||  joyxmove > 0
-    ||  BK_isKeyPressed(bk_turn_right)
-    ||  BK_isKeyPressed(bk_turn_left))
+    // use two stage accelerative turning on the keyboard
+    if(BK_isKeyPressed(bk_turn_right)
+    || BK_isKeyPressed(bk_turn_left))
     {
         turnheld += ticdup;
     }
@@ -339,13 +335,9 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         {
             side -= sidemove[pClass][speed];
         }
-        if (joyxmove > 0)
+        if (joyturn != 0)
         {
-            side += sidemove[pClass][speed];
-        }
-        if (joyxmove < 0)
-        {
-            side -= sidemove[pClass][speed];
+            side += joyturn;
         }
         if(mousex != 0)
         {
@@ -358,10 +350,8 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
             cmd->angleturn -= angleturn[tspeed];
         if (BK_isKeyPressed(bk_turn_left))
             cmd->angleturn += angleturn[tspeed];
-        if (joyxmove > 0)
-            cmd->angleturn -= angleturn[tspeed];
-        if (joyxmove < 0)
-            cmd->angleturn += angleturn[tspeed];
+        if(joyturn != 0)
+            cmd->angleturn -= joyturn;
         if(mousex != 0)
             cmd->angleturn -= mousex*0x8;
     }
@@ -374,31 +364,29 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     {
         forward -= forwardmove[pClass][speed];
     }
-    if (joyymove < 0)
+    if (joymove != 0)
     {
-        forward += forwardmove[pClass][speed];
+        forward += joymove;
     }
-    if (joyymove > 0)
-    {
-        forward -= forwardmove[pClass][speed];
-    }
-    if (BK_isKeyPressed(bk_strafe_right)
-     || joystrafemove > 0)
+    if (BK_isKeyPressed(bk_strafe_right))
     {
         side += sidemove[pClass][speed];
     }
-    if (BK_isKeyPressed(bk_strafe_left)
-     || joystrafemove < 0)
+    if (BK_isKeyPressed(bk_strafe_left))
     {
         side -= sidemove[pClass][speed];
     }
+    if (joystrafemove != 0)
+    {
+        side += joystrafemove;
+    }
 
     // Look up/down/center keys
-    if (BK_isKeyPressed(bk_look_up) || joyylook > 0)
+    if (BK_isKeyPressed(bk_look_up))
     {
         look = lspeed;
     }
-    if (BK_isKeyPressed(bk_look_down) || joyylook < 0)
+    if (BK_isKeyPressed(bk_look_down))
     {
         look = -lspeed;
     }
@@ -621,10 +609,12 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         if (mlook || novert)
         {
             cmd->lookdir += mouse_y_invert ? -mousey : mousey;
+            cmd->lookdir += joyvlook;
         }
         else if (!novert)
         {
             forward += mousey;
+            forward += joyvlook;
         }
 
        if (players[consoleplayer].lookdir > LOOKDIRMAX * MLOOKUNIT)
@@ -795,7 +785,7 @@ void G_DoLoadLevel(void)
 // clear cmd building stuff
 //
     BK_ReleaseAllKeys();
-    joyxmove = joyymove = joystrafemove = 0;
+    joyvlook = joyturn = joymove = joystrafemove = 0;
     mousex = mousey = 0;
     sendpause = sendsave = paused = false;
 
@@ -952,10 +942,10 @@ boolean G_Responder(event_t * ev)
             return true;      // eat events
 
         case ev_controller_move:
-            joyymove = ev->data1;
+            joymove = ev->data1;
             joystrafemove = ev->data2;
-            joyxmove = ev->data3;
-            joyylook = ev->data4;
+            joyturn = ev->data3;
+            joyvlook = ev->data4;
             return (true);      // eat events
 
         default:
