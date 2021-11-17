@@ -251,6 +251,8 @@ void D_PageDrawer(void);
 void D_AdvanceDemo(void);
 boolean F_Responder(event_t * ev);
 
+boolean hasDelayEvents = false;
+
 //---------------------------------------------------------------------------
 //
 // PROC D_ProcessEvents
@@ -263,8 +265,29 @@ void D_ProcessEvents(void)
 {
     event_t *ev;
 
-    while ((ev = D_PopEvent()) != NULL)
+    while((ev = D_PopEvent()) != NULL)
     {
+        if(ev->type == ev_delay)
+        {
+            hasDelayEvents = false;
+            break;
+        }
+        if(ev->delayed)
+        {
+            ev->delayed = false;
+            if(!hasDelayEvents)
+            {
+                event_t delayEvent;
+                delayEvent.type = ev_delay;
+                delayEvent.delayed = false;
+                delayEvent.data1 = delayEvent.data2 = delayEvent.data3 = delayEvent.data4 = 0;
+                D_PostEvent(&delayEvent);
+                hasDelayEvents = true;
+            }
+            D_PostEvent(ev);
+            continue;
+        }
+
         if (F_Responder(ev))
         {
             continue;

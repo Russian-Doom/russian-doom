@@ -605,6 +605,8 @@ void I_GetEvent(void)
                 {
                     event_t event;
                     event.type = ev_quit;
+                    event.delayed = false;
+                    event.data1 = event.data2 = event.data3 = event.data4 = 0;
                     D_PostEvent(&event);
                 }
                 break;

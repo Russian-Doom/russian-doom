@@ -104,6 +104,13 @@ typedef enum
     ev_controller_keyup,
 
     /**
+     * This event marks the end of events that should be processed on this game tic.
+     * Any other events after this should be processed on the next game tic.
+     * This event can't be delayed.
+     */
+    ev_delay,
+
+    /**
      * Quit event. Triggered when the user clicks the "close" button
      * to terminate the application.
      */
@@ -114,7 +121,10 @@ typedef enum
 typedef struct
 {
     evtype_t type;
-
+    /**
+     * Delayed events processed on next game tic
+     */
+    boolean delayed;
     // Event-specific data; see the descriptions given above.
     int data1, data2, data3, data4;
 } event_t;
@@ -175,7 +185,7 @@ typedef enum
 } buttoncode2_t;
 
 
-
+extern boolean hasDelayEvents;
 
 // Called by IO functions when input is detected.
 void D_PostEvent (event_t *ev);

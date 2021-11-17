@@ -180,14 +180,15 @@ char *nickname = NULL;
 void D_ConnectNetGame(void);
 void D_CheckNetGame(void);
 
+boolean hasDelayEvents = false;
 
 //
 // D_ProcessEvents
 // Send all the events of the given timestamp down the responder chain
 //
-void D_ProcessEvents (void)
+void D_ProcessEvents(void)
 {
-    event_t*    ev;
+    event_t* ev;
 
     // haleyjd 08/22/2010: [STRIFE] there is no such thing as a "store demo" 
     // version of Strife
@@ -196,11 +197,31 @@ void D_ProcessEvents (void)
     //if (storedemo)
     //    return;
 
-    while ((ev = D_PopEvent()) != NULL)
+    while((ev = D_PopEvent()) != NULL)
     {
-        if (M_Responder (ev))
-            continue;               // menu ate the event
-        G_Responder (ev);
+        if(ev->type == ev_delay)
+        {
+            hasDelayEvents = false;
+            break;
+        }
+        if(ev->delayed)
+        {
+            ev->delayed = false;
+            if(!hasDelayEvents)
+            {
+                event_t delayEvent;
+                delayEvent.type = ev_delay;
+                delayEvent.delayed = false;
+                delayEvent.data1 = delayEvent.data2 = delayEvent.data3 = delayEvent.data4 = 0;
+                D_PostEvent(&delayEvent);
+                hasDelayEvents = true;
+            }
+            D_PostEvent(ev);
+            continue;
+        }
+
+        if(!M_Responder(ev))
+            G_Responder(ev);
     }
 }
 
