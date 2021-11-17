@@ -82,7 +82,7 @@ void OnDeactivateMenu(void);
 static void DrawRenderingMenu(void);
 static void M_RD_Change_Widescreen(Direction_t direction);
 static void M_RD_Change_VSync();
-static void M_RD_MaxFPS();
+static void M_RD_MaxFPS(Direction_t direction);
 static void M_RD_FPScounter();
 static void M_RD_Smoothing();
 static void M_RD_PorchFlashing();
