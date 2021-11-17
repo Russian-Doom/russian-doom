@@ -1041,6 +1041,8 @@ void H2_GameLoop(void)
     }
 }
 
+boolean hasDelayEvents = false;
+
 //==========================================================================
 //
 // H2_ProcessEvents
@@ -1053,20 +1055,34 @@ void H2_ProcessEvents(void)
 {
     event_t *ev;
 
-    for (;;)
+    while((ev = D_PopEvent()) != NULL)
     {
-        ev = D_PopEvent();
-
-        if (ev == NULL)
+        if(ev->type == ev_delay)
         {
+            hasDelayEvents = false;
             break;
         }
+        if(ev->delayed)
+        {
+            ev->delayed = false;
+            if(!hasDelayEvents)
+            {
+                event_t delayEvent;
+                delayEvent.type = ev_delay;
+                delayEvent.delayed = false;
+                delayEvent.data1 = delayEvent.data2 = delayEvent.data3 = delayEvent.data4 = 0;
+                D_PostEvent(&delayEvent);
+                hasDelayEvents = true;
+            }
+            D_PostEvent(ev);
+            continue;
+        }
 
-        if (F_Responder(ev))
+        if(F_Responder(ev))
         {
             continue;
         }
-        if (MN_Responder(ev))
+        if(MN_Responder(ev))
         {
             continue;
         }

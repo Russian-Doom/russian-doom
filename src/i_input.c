@@ -297,6 +297,7 @@ void I_HandleKeyboardEvent(SDL_Event *sdlevent)
     // has terminated is undefined behaviour
     event_t event;
 
+    event.delayed = false;
     switch (sdlevent->type)
     {
         case SDL_KEYDOWN:
@@ -304,6 +305,7 @@ void I_HandleKeyboardEvent(SDL_Event *sdlevent)
             event.data1 = TranslateKey(&sdlevent->key.keysym);
             event.data2 = GetLocalizedKey(&sdlevent->key.keysym);
             event.data3 = GetTypedChar(&sdlevent->key.keysym);
+            event.data4 = 0;
 
             if (event.data1 != 0)
             {
@@ -321,8 +323,7 @@ void I_HandleKeyboardEvent(SDL_Event *sdlevent)
             // key releases it should do so based on data1
             // (key ID), not the printable char.
 
-            event.data2 = 0;
-            event.data3 = 0;
+            event.data2 = event.data3 = event.data4 = 0;
 
             if (event.data1 != 0)
             {
@@ -399,9 +400,11 @@ static void UpdateMouseButtonState(SDL_MouseButtonEvent *buttonEvent)
     }
 
     // Post an event
+    event.delayed = false;
     event.data1 = button;
     event.data2 = buttonEvent->x;
     event.data3 = buttonEvent->y;
+    event.data4 = 0;
     D_PostEvent(&event);
 }
 
@@ -419,14 +422,16 @@ static void MapMouseWheelToButtons(SDL_MouseWheelEvent *wheel)
 
         // post a button down event
         down.type = ev_mouse_keydown;
+        down.delayed = false;
         down.data1 = button;
-        down.data2 = down.data3 = 0;
+        down.data2 = down.data3 = down.data4 = 0;
         D_PostEvent(&down);
 
         // post a button up event
         up.type = ev_mouse_keyup;
+        up.delayed = true;
         up.data1 = button;
-        up.data2 = up.data3 = 0;
+        up.data2 = up.data3 = up.data4 = 0;
         D_PostEvent(&up);
     }
 
@@ -436,14 +441,16 @@ static void MapMouseWheelToButtons(SDL_MouseWheelEvent *wheel)
 
         // post a button down event
         down.type = ev_mouse_keydown;
+        down.delayed = false;
         down.data1 = button;
-        down.data2 = down.data3 = 0;
+        down.data2 = down.data3 = down.data4 = 0;
         D_PostEvent(&down);
 
         // post a button up event
         up.type = ev_mouse_keyup;
+        up.delayed = true;
         up.data1 = button;
-        up.data2 = up.data3 = 0;
+        up.data2 = up.data3 = up.data4 = 0;
         D_PostEvent(&up);
     }
 }
@@ -494,6 +501,7 @@ void I_ReadMouse(void)
     if (x != 0 || y != 0) 
     {
         ev.type = ev_mouse_move;
+        ev.delayed = false;
         ev.data1 = mouse_button_state;
         ev.data2 = AccelerateMouse(x);
 
@@ -507,6 +515,7 @@ void I_ReadMouse(void)
             ev.data3 = 0;
         }
 
+        ev.data4 = 0;
         D_PostEvent(&ev);
     }
 }

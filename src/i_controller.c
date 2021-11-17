@@ -117,8 +117,9 @@ static void UpdateControllerButtonState(SDL_ControllerButtonEvent* buttonEvent)
     }
 
     // Post an event
+    event.delayed = false;
     event.data1 = buttonEvent->button;
-    event.data2 = event.data3 = 0;
+    event.data2 = event.data3 = event.data4 = 0;
     D_PostEvent(&event);
 }
 
@@ -168,7 +169,8 @@ static void UpdateControllerAxisState(SDL_ControllerAxisEvent* axisEvent)
         return;
     }
 
-    event.data2 = event.data3 = 0;
+    event.delayed = false;
+    event.data2 = event.data3 = event.data4 = 0;
     D_PostEvent(&event);
 }
 
@@ -207,6 +209,7 @@ void I_UpdateController(void)
         event_t ev;
 
         ev.type = ev_controller_move;
+        ev.delayed = false;
         ev.data1 = GetAxisState(CONTROLLER_AXIS_MOVE);
         ev.data2 = GetAxisState(CONTROLLER_AXIS_STRAFE);
         ev.data3 = GetAxisState(CONTROLLER_AXIS_TURN);
