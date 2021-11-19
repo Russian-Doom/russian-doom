@@ -257,26 +257,21 @@ foreach(MODULE ${COMPILE_MODULES})
     install(TARGETS ${INSTALL_TARGETS}
             DESTINATION $<IF:$<BOOL:${WIN32}>,.,bin>
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
-            COMPONENT "${MODULE}"
     )
     install(FILES $<TARGET_PROPERTY:${MODULE}-wads,OUT_FILES>
             DESTINATION $<IF:$<BOOL:${WIN32}>,base,share/${PACKAGE_TARNAME}>
-            COMPONENT "${MODULE}"
     )
 endforeach()
 install(FILES $<TARGET_PROPERTY:gus-patches,OUT_FILES>
         DESTINATION $<IF:$<BOOL:${WIN32}>,base,share/${PACKAGE_TARNAME}>/gus_patches
-        COMPONENT "common"
 )
 if(WIN32)
     install(FILES $<TARGET_PROPERTY:win-libs,OUT_FILES>
             DESTINATION .
-            COMPONENT "common"
     )
     install(FILES "${PROJECT_SOURCE_DIR}/LICENSE.txt"
         RENAME "GPL.txt"
         DESTINATION .
-        COMPONENT "common"
     )
 endif()
 
