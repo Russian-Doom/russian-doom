@@ -4083,7 +4083,7 @@ static void SCSaveGame(int option)
         {
             ptr++;
         }
-        *ptr = '[';
+        *ptr = ASCII_CURSOR;
         *(ptr + 1) = 0;
         SlotStatus[option]++;
         currentSlot = option;
@@ -4636,6 +4636,7 @@ boolean MN_Responder(event_t * event)
                 return (true);
             }
             // [JN] Extended support of Russian alphabet input, including special symbols.
+            // Commented out characters aren't working properly because of using FONTA.
             if (isdigit(charTyped) 
             || charTyped == ' '
             || charTyped == '!'
@@ -4645,16 +4646,16 @@ boolean MN_Responder(event_t * event)
             || charTyped == '+'
             || charTyped == '='
             || charTyped == '/'
-            || charTyped == '\\'
+            // || charTyped == '\\'
             || charTyped == '*'
             || charTyped == '?'
-            || charTyped == '_'
-            || charTyped == '<'
-            || charTyped == '>'
+            // || charTyped == '_'
+            // || charTyped == '<'
+            // || charTyped == '>'
             || charTyped == ':'
             || charTyped == '"'
-            || charTyped == ']'   // ъ
-            || charTyped == '['   // х
+            // || charTyped == ']'   // ъ
+            // || charTyped == '['   // х
             || charTyped == ';'   // ж
             || charTyped == '\''  // э
             || charTyped == ','   // б
