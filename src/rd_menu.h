@@ -79,13 +79,13 @@ typedef enum
 
 typedef struct
 {
-    const ItemType_t type;
+    ItemType_t type;
     const char* const text_eng;
     const char* const text_rus;
     /** Actual type and meaning of this field is determent by 'type' field. @see ItemType_t */
     void* pointer;
     /** Actual meaning of this field is determent by 'type' field. @see ItemType_t */
-    const int option;
+    int option;
 } MenuItem_t;
 
 typedef struct

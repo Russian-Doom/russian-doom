@@ -65,6 +65,7 @@ typedef struct controller_s
     struct controller_s* next;
     char guid[33];
     SDL_GameController* SDL_controller;
+    char* name;
     int invertAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT];
     int bindAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT];
     int axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERLEFT];
@@ -72,7 +73,8 @@ typedef struct controller_s
 } controller_t;
 
 extern int useController;
-extern controller_t* knownControllers;
+#define ACTIVE_CONTROLLERS_SIZE 10
+extern controller_t* activeControllers[ACTIVE_CONTROLLERS_SIZE];
 extern controller_t* currentController;
 
 void I_InitController(void);

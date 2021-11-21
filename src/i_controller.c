@@ -27,6 +27,7 @@
 #include "i_controller.h"
 #include "i_system.h"
 #include "m_config.h"
+#include "m_misc.h"
 #include "m_fixed.h"
 #include "jn.h"
 
@@ -75,7 +76,8 @@ static char* axisBindsNames[] = {
 static int nameToAB[arrlen(axisBindsNames)];
 static boolean nameToAB_init = false;
 
-controller_t* knownControllers;
+static controller_t* knownControllers;
+controller_t* activeControllers[ACTIVE_CONTROLLERS_SIZE];
 controller_t* currentController;
 
 static boolean LTriggerState = false, RTriggerState = false;
@@ -163,7 +165,15 @@ void I_ShutdownController(void)
         }
         temp = temp->next;
     }
-    currentController = NULL;
+    for (int i = 0; i < ACTIVE_CONTROLLERS_SIZE; ++i)
+    {
+        if(activeControllers[i] != NULL)
+        {
+            free(activeControllers[i]->name);
+            activeControllers[i]->name = NULL;
+            activeControllers[i] = NULL;
+        }
+    }
     SDL_QuitSubSystem(SDL_INIT_GAMECONTROLLER);
 }
 
@@ -177,6 +187,10 @@ static controller_t* registerNewController(char* guid, SDL_GameController* sdlCo
     controller->next = NULL;
     memcpy(controller->guid, guid, 33);
     controller->SDL_controller = sdlController;
+    if(sdlController)
+        controller->name = M_StringDuplicate(SDL_GameControllerName(sdlController));
+    else
+        controller->name = NULL;
 
     controller->invertAxis[SDL_CONTROLLER_AXIS_LEFTX] = 0;
     controller->invertAxis[SDL_CONTROLLER_AXIS_LEFTY] = 1;
@@ -204,13 +218,74 @@ static controller_t* registerNewController(char* guid, SDL_GameController* sdlCo
     return controller;
 }
 
+static void ActivateController(SDL_GameController *controller)
+{
+    char guid[33];
+    controller_t* temp;
+    controller_t* activeController;
+
+    SDL_JoystickGetGUIDString(SDL_JoystickGetGUID(
+            SDL_GameControllerGetJoystick(controller)),
+                      guid, 33);
+    if(knownControllers == NULL)
+    {
+        activeController = knownControllers = registerNewController(guid, controller);
+    }
+    else
+    {
+        temp = knownControllers;
+        while(temp)
+        {
+            if(strcmp(temp->guid, guid) == 0)
+            {
+                if(temp->SDL_controller == NULL)
+                {
+                    temp->SDL_controller = controller;
+                    temp->name = M_StringDuplicate(SDL_GameControllerName(controller));
+                    activeController = temp;
+                    break;
+                }
+                else
+                {
+                    printf("I_InitController: Found controllers with the same GUID \"%s\"\n\t%d: \"%s\"\n\t%d: \"%s\"\n"
+                           "\tIf you experience problems with the simultaneous use of those controllers, report it as a bug\n",
+                           guid, SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(controller)),
+                           SDL_GameControllerName(controller),
+                           SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(temp->SDL_controller)),
+                           SDL_GameControllerName(temp->SDL_controller));
+                    SDL_GameControllerClose(controller);
+                    return;
+                }
+            }
+
+            if(temp->next)
+            {
+                temp = temp->next;
+            }
+            else
+            {
+                activeController = temp->next = registerNewController(guid, controller);
+                break;
+            }
+        }
+    }
+
+    printf("I_InitController: Active controller \"%s\"\n", SDL_GameControllerName(controller));
+    for (int i = 0; i < ACTIVE_CONTROLLERS_SIZE; ++i)
+    {
+        if(activeControllers[i] == NULL)
+        {
+            activeControllers[i] = activeController;
+            break;
+        }
+    }
+}
+
 void I_InitController(void)
 {
     int i;
     boolean foundController = false;
     SDL_GameController* controller;
-    char guid[33];
-    controller_t* temp;
 
     if (!useController)
     {
@@ -231,39 +306,8 @@ void I_InitController(void)
             if(!controller)
                 continue;
 
-            SDL_JoystickGetGUIDString(SDL_JoystickGetGUID(
-                    SDL_GameControllerGetJoystick(controller)),
-                guid, 33);
-            if(knownControllers == NULL)
-            {
-                currentController = knownControllers = registerNewController(guid, controller);
-            }
-            else
-            {
-                temp = knownControllers;
-                while(temp)
-                {
-                    if(strcmp(temp->guid, guid) == 0)
-                    {
-                        temp->SDL_controller = controller;
-                        currentController = temp;
-                        break;
-                    }
-
-                    if(temp->next)
-                    {
-                        temp = temp->next;
-                    }
-                    else
-                    {
-                        currentController = temp->next = registerNewController(guid, controller);
-                        break;
-                    }
-                }
-            }
-
+            ActivateController(controller);
             foundController = true;
-            break;
         }
     }
 
@@ -273,7 +317,6 @@ void I_InitController(void)
                "I_InitController: Failed to open controller\n" :
                "I_InitController: ошибка активизации контроллера\n");
         SDL_QuitSubSystem(SDL_INIT_GAMECONTROLLER);
-        currentController = NULL;
         return;
     }
 
@@ -281,11 +324,8 @@ void I_InitController(void)
 
     // Initialized okay!
 
-    printf("I_InitController: %s\n", SDL_GameControllerName(currentController->SDL_controller));
-
     I_AtExit(I_ShutdownController, true);
 }
-
 
 static void UpdateControllerButtonState(SDL_ControllerButtonEvent* buttonEvent)
 {
@@ -373,28 +413,39 @@ static int GetAxisState(controller_axis_t axis)
 {
     fixed_t value = 0;
     int axisValue;
+    controller_t* temp = knownControllers;
 
-    for(SDL_GameControllerAxis sdlAxis = SDL_CONTROLLER_AXIS_LEFTX; sdlAxis < SDL_CONTROLLER_AXIS_TRIGGERLEFT; sdlAxis++)
+    while(temp)
     {
-        if(currentController->bindAxis[sdlAxis] == axis)
+        if(temp->SDL_controller != NULL)
         {
-            axisValue = SDL_GameControllerGetAxis(currentController->SDL_controller, sdlAxis);
-
-            if(axisValue < currentController->axisDeadZone[sdlAxis] * DEAD_ZONE && axisValue > -currentController->axisDeadZone[sdlAxis] * DEAD_ZONE)
+            for(SDL_GameControllerAxis sdlAxis = SDL_CONTROLLER_AXIS_LEFTX;
+                sdlAxis < SDL_CONTROLLER_AXIS_TRIGGERLEFT; sdlAxis++)
             {
-                axisValue = 0;
+                if(temp->bindAxis[sdlAxis] == axis)
+                {
+                    axisValue = SDL_GameControllerGetAxis(temp->SDL_controller, sdlAxis);
+
+                    if(axisValue < temp->axisDeadZone[sdlAxis] * DEAD_ZONE &&
+                       axisValue > -temp->axisDeadZone[sdlAxis] * DEAD_ZONE)
+                    {
+                        axisValue = 0;
+                    }
+
+                    if(temp->invertAxis[sdlAxis])
+                        axisValue = -axisValue;
+
+                    if(axisValue > 32766)
+                        axisValue = 32766;
+                    if(axisValue < -32766)
+                        axisValue = -32766;
+
+                    value += FixedMul(FixedDiv(axisValue << FRACBITS, 32766 << FRACBITS),
+                                      temp->axisSensitivity[sdlAxis] << (FRACBITS - BASE_SENSITIVITY_BITS));
+                }
             }
-
-            if(currentController->invertAxis[sdlAxis])
-                axisValue = -axisValue;
-
-            if(axisValue > 32766)
-                axisValue = 32766;
-            if(axisValue < -32766)
-                axisValue = -32766;
-
-            value += FixedMul(FixedDiv(axisValue << FRACBITS, 32766 << FRACBITS), currentController->axisSensitivity[sdlAxis] << (FRACBITS - BASE_SENSITIVITY_BITS));
         }
+        temp = temp->next;
     }
 
     if(value > FRACUNIT)
@@ -406,7 +457,7 @@ static int GetAxisState(controller_axis_t axis)
 
 void I_UpdateController(void)
 {
-    if (currentController != NULL && currentController->SDL_controller != NULL)
+    if(activeControllers[0] != NULL)
     {
         event_t ev;
 
