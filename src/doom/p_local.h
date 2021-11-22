@@ -196,8 +196,8 @@ boolean
 P_PathTraverse
 ( fixed_t	x1,
   fixed_t	y1,
-  fixed_t	x2,
-  fixed_t	y2,
+  int64_t	x2,
+  int64_t	y2,
   int		flags,
   boolean	(*trav) (intercept_t *));
 
@@ -256,7 +256,7 @@ void
 P_LineAttack
 ( mobj_t*	t1,
   angle_t	angle,
-  fixed_t	distance,
+  int64_t	distance,
   fixed_t	slope,
   int		damage );
 

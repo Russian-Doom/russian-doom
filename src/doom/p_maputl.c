@@ -703,7 +703,7 @@ boolean P_TraverseIntercepts (traverser_t func, fixed_t maxfrac)
 // [JN] killough 5/3/98: reformatted, cleaned up
 // -----------------------------------------------------------------------------
 
-boolean P_PathTraverse (fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2,
+boolean P_PathTraverse (fixed_t x1, fixed_t y1, int64_t x2, int64_t y2,
                         int flags, boolean (*trav) (intercept_t *))
 {
     fixed_t xt1, yt1;

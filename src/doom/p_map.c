@@ -1172,7 +1172,7 @@ static mobj_t *shootthing;
 static fixed_t shootz;	
 
 static int la_damage;
-fixed_t    attackrange;
+int64_t    attackrange;
 fixed_t    aimslope;
 
 // slopes to top and bottom of target
@@ -1192,7 +1192,7 @@ static boolean PTR_AimTraverse (intercept_t *in)
     fixed_t  slope;
     fixed_t  thingtopslope;
     fixed_t  thingbottomslope;
-    fixed_t  dist;
+    int64_t  dist;
 
     if (in->isaline)
     {
@@ -1468,6 +1468,13 @@ static boolean PTR_ShootTraverse (intercept_t* in)
     y = trace.y + FixedMul (trace.dy, frac);
     z = shootz + FixedMul (aimslope, FixedMul(frac, attackrange));
 
+    // [JN] Don't damage mobjs and don't spawn blood splats
+    // upon shooting them from extended range.
+    if (dist > MISSILERANGE)
+    {
+        return false;
+    }
+
     // Spawn bullet puffs or blod spots,
     // depending on target type.
     if (in->d.thing->flags & MF_NOBLOOD)
@@ -1529,9 +1536,17 @@ fixed_t P_AimLineAttack (mobj_t *t1, angle_t angle, fixed_t distance)
 // If damage == 0, it is just a test trace that will leave linetarget set.
 // -----------------------------------------------------------------------------
 
-void P_LineAttack (mobj_t *t1, angle_t angle, fixed_t distance, fixed_t slope, int damage)
+void P_LineAttack (mobj_t *t1, angle_t angle, int64_t distance, fixed_t slope, int damage)
 {
-    fixed_t	x2, y2;
+    int64_t	x2, y2;
+
+    // [JN] Extend range so puffs may appear in long distances of hitscan attacks.
+    // No damage will be dealed if range is greater than original MISSILERANGE,
+    // (see PTR_ShootTraverse).
+    if (distance >= MISSILERANGE && singleplayer && !vanillaparm)
+    {
+        distance = LONG_MAX;
+    }
 
     angle >>= ANGLETOFINESHIFT;
     shootthing = t1;
