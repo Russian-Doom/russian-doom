@@ -33,6 +33,14 @@ You can enable and disable the compilation of modules by changing cmake options:
 `COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE`, `COMPILE_SETUP`
 to `ON` or `OFF`.
 
+If used SDL_Mixer runtime library has [this patch](https://github.com/libsdl-org/SDL_mixer/pull/337) applied,
+you can set cmake option `BUILD_HAS_SDL_MIXER_PATCH` to `ON`.
+This will add the ability to use GUS Emulation if the install path contains spaces
+and the ability to use Timidity for MIDI music if the value of config variable `timidity_cfg_path` contains spaces.
+
+__NOTE:__ If cmake option `BUILD_HAS_SDL_MIXER_PATCH` set to `ON` and used SDL_Mixer runtime library __doesn't have__ patch applied,
+GUS Emulation and Timidity __won't work at all__.
+
 To build the project use the following command:
 ```
 cmake --build build
@@ -105,6 +113,14 @@ cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
 You can enable and disable the compilation of modules by changing cmake options:
 `COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE`, `COMPILE_SETUP`
 to `ON` or `OFF`.
+
+If used SDL_Mixer runtime library has [this patch](https://github.com/libsdl-org/SDL_mixer/pull/337) applied,
+you can set cmake option `BUILD_HAS_SDL_MIXER_PATCH` to `ON`.
+This will add the ability to use GUS Emulation if the install path contains spaces
+and the ability to use Timidity for MIDI music if the value of config variable `timidity_cfg_path` contains spaces.
+
+__NOTE:__ If cmake option `BUILD_HAS_SDL_MIXER_PATCH` set to `ON` and used SDL_Mixer runtime library __doesn't have__ patch applied,
+GUS Emulation and Timidity __won't work at all__.
 
 If you want to use a portable version like on Windows, set the `BUILD_PORTABLE` cmake option to `ON`.
 Portable version searches and stores internal resources, config files, and savegames in install directory among executables.
