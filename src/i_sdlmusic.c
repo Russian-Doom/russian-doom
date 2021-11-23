@@ -104,10 +104,18 @@ static boolean WriteWrapperTimidityConfig(char *write_path)
     }
 
     path = M_DirName(timidity_cfg_path);
+#ifdef RD_BUILD_HAS_SDL_MIXER_PATCH
+    fprintf(fstream, "dir \"%s\"\n", path);
+#else
     fprintf(fstream, "dir %s\n", path);
+#endif
     free(path);
 
+#ifdef RD_BUILD_HAS_SDL_MIXER_PATCH
+    fprintf(fstream, "source \"%s\"\n", timidity_cfg_path);
+#else
     fprintf(fstream, "source %s\n", timidity_cfg_path);
+#endif
     fclose(fstream);
 
     return true;

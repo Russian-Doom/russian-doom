@@ -96,6 +96,11 @@ add_library(Game STATIC EXCLUDE_FROM_ALL
     w_merge.c           w_merge.h
     z_zone.c            z_zone.h
 )
+if(BUILD_HAS_SDL_MIXER_PATCH)
+    target_compile_definitions(Game
+        PRIVATE "RD_BUILD_HAS_SDL_MIXER_PATCH"
+    )
+endif()
 set_target_properties(Game PROPERTIES
     C_STANDARD "${RD_C_STANDARD}"
     C_STANDARD_REQUIRED ON
