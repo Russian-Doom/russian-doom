@@ -739,7 +739,7 @@ char* RD_M_FindInternalResource(char* resourceName)
 #if defined(_WIN32) || defined(BUILD_PORTABLE)
     retVal = M_StringJoin(exedir, "base", DIR_SEPARATOR_S, resourceName, NULL);
 #elif defined(__APPLE__)
-    retVal = // TODO set canonical path for internal resources on MacOS
+        // retVal = TODO set canonical path for internal resources on MacOS
 #else // Linux
     retVal = M_StringJoin("/usr/local/share", DIR_SEPARATOR_S, PACKAGE_TARNAME, DIR_SEPARATOR_S, resourceName, NULL);
 #endif
