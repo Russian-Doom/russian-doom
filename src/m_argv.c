@@ -309,4 +309,7 @@ char *M_GetExecutableName(void)
     }
 }
 
-char *exedir = NULL;
+char* exedir = NULL;
+#ifdef __APPLE__
+char* packageResourcesDir = NULL;
+#endif

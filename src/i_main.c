@@ -198,6 +198,9 @@ int main(int argc, char **argv)
     }
 
     M_SetExeDir();
+#ifdef __APPLE__
+    packageResourcesDir = SDL_GetBasePath();
+#endif
 
     M_FindResponseFile();
 
