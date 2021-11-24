@@ -31,7 +31,10 @@ extern  int	myargc;
 extern  char**	myargv;
 
 // [Dasperal] exedir from chocolate
-extern char *exedir;
+extern char* exedir;
+#ifdef __APPLE__
+extern char* packageResourcesDir;
+#endif
 
 // Returns the position of the given parameter
 // in the arg list (0 if not found).
