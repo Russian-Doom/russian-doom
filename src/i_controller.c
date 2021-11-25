@@ -41,7 +41,9 @@ static char* axesNames[] = {
     "LX",
     "LY",
     "RX",
-    "RY"
+    "RY",
+    "LT",
+    "RT"
 };
 
 static int nameToA[arrlen(axesNames)];
@@ -66,7 +68,7 @@ static int nameToAO[arrlen(axesOptionsNames)];
 static boolean nameToAO_init = false;
 
 static char* axisBindsNames[] = {
-    "NONE",
+    "NONE", // BUTTON
     "MOVE",
     "STRAFE",
     "TURN",
@@ -80,7 +82,14 @@ static controller_t* knownControllers;
 controller_t* activeControllers[ACTIVE_CONTROLLERS_SIZE];
 controller_t* currentController;
 
-static boolean LTriggerState = false, RTriggerState = false;
+static boolean axisButtonsPositive[SDL_CONTROLLER_AXIS_MAX] = {
+    CONTROLLER_LSX_POSITIVE, CONTROLLER_LSY_POSITIVE, CONTROLLER_RSX_POSITIVE,
+    CONTROLLER_RSY_POSITIVE, CONTROLLER_LEFT_TRIGGER, CONTROLLER_RIGHT_TRIGGER
+};
+static boolean axisButtonsNegative[SDL_CONTROLLER_AXIS_MAX] = {
+    CONTROLLER_LSX_NEGATIVE, CONTROLLER_LSY_NEGATIVE, CONTROLLER_RSX_NEGATIVE,
+    CONTROLLER_RSY_NEGATIVE, CONTROLLER_LEFT_TRIGGER_NEGATIVE, CONTROLLER_RIGHT_TRIGGER_NEGATIVE
+};
 
 // Configuration variables:
 int useController = 1;
@@ -162,17 +171,15 @@ void I_ShutdownController(void)
         {
             SDL_GameControllerClose(temp->SDL_controller);
             temp->SDL_controller = NULL;
+            temp->index = -1;
+            free(temp->name);
+            temp->name = NULL;
         }
         temp = temp->next;
     }
     for (int i = 0; i < ACTIVE_CONTROLLERS_SIZE; ++i)
     {
-        if(activeControllers[i] != NULL)
-        {
-            free(activeControllers[i]->name);
-            activeControllers[i]->name = NULL;
-            activeControllers[i] = NULL;
-        }
+        activeControllers[i] = NULL;
     }
     SDL_QuitSubSystem(SDL_INIT_GAMECONTROLLER);
 }
@@ -188,29 +195,43 @@ static controller_t* registerNewController(char* guid, SDL_GameController* sdlCo
     memcpy(controller->guid, guid, 33);
     controller->SDL_controller = sdlController;
     if(sdlController)
+    {
         controller->name = M_StringDuplicate(SDL_GameControllerName(sdlController));
+        controller->index = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(sdlController));
+    }
     else
+    {
         controller->name = NULL;
+        controller->index = -1;
+    }
 
     controller->invertAxis[SDL_CONTROLLER_AXIS_LEFTX] = 0;
     controller->invertAxis[SDL_CONTROLLER_AXIS_LEFTY] = 1;
     controller->invertAxis[SDL_CONTROLLER_AXIS_RIGHTX] = 0;
     controller->invertAxis[SDL_CONTROLLER_AXIS_RIGHTY] = 1;
+    controller->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT] = 0;
+    controller->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] = 0;
 
     controller->bindAxis[SDL_CONTROLLER_AXIS_LEFTX] = CONTROLLER_AXIS_STRAFE;
     controller->bindAxis[SDL_CONTROLLER_AXIS_LEFTY] = CONTROLLER_AXIS_MOVE;
     controller->bindAxis[SDL_CONTROLLER_AXIS_RIGHTX] = CONTROLLER_AXIS_TURN;
     controller->bindAxis[SDL_CONTROLLER_AXIS_RIGHTY] = CONTROLLER_AXIS_VLOOK;
+    controller->bindAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT] = CONTROLLER_AXIS_BUTTON;
+    controller->bindAxis[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] = CONTROLLER_AXIS_BUTTON;
 
     controller->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTX] = 16;
     controller->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTY] = 16;
     controller->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTX] = 16;
     controller->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTY] = 16;
+    controller->axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERLEFT] = 1;
+    controller->axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] = 1;
 
     controller->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTX] = 8;
     controller->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTY] = 8;
     controller->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTX] = 8;
     controller->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTY] = 6;
+    controller->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERLEFT] = 8;
+    controller->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] = 8;
 
     sprintf(sectionName, "Controller_%s", guid);
     M_AppendConfigSection(sectionName, &controllerHandler);
@@ -242,9 +263,9 @@ static void ActivateController(SDL_GameController *controller)
                 {
                     temp->SDL_controller = controller;
                     temp->name = M_StringDuplicate(SDL_GameControllerName(controller));
-                    activeController = temp;
-                    break;
-                }
+                    temp->index = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(controller));
+                activeController = temp;
+                break;}
                 else
                 {
                     printf("I_InitController: Found controllers with the same GUID \"%s\"\n\t%d: \"%s\"\n\t%d: \"%s\"\n"
@@ -353,52 +374,64 @@ static void UpdateControllerButtonState(SDL_ControllerButtonEvent* buttonEvent)
 static void UpdateControllerAxisState(SDL_ControllerAxisEvent* axisEvent)
 {
     event_t event;
+    int axisValue;
+    controller_t* controller = knownControllers;
 
-    if(axisEvent->axis == SDL_CONTROLLER_AXIS_TRIGGERLEFT)
+    while(controller)
     {
-        if((LTriggerState == true && axisEvent->value > 0)
-        || (LTriggerState == false && axisEvent->value == 0))
-            return;
-
-        if(LTriggerState == false && axisEvent->value > 0)
-        {
-            event.type = ev_controller_keydown;
-            LTriggerState = true;
+        if(controller->index == axisEvent->which)
+        {;
+            break;
         }
-        else
-        {
-            event.type = ev_controller_keyup;
-            LTriggerState = false;
-        }
-
-        event.data1 = CONTROLLER_LEFT_TRIGGER;
+        controller = controller->next;
     }
-    else if(axisEvent->axis == SDL_CONTROLLER_AXIS_TRIGGERRIGHT)
-    {
-        if((RTriggerState == true && axisEvent->value > 0)
-        || (RTriggerState == false && axisEvent->value == 0))
-            return;
 
-        if(RTriggerState == false && axisEvent->value > 0)
-        {
-            event.type = ev_controller_keydown;
-            RTriggerState = true;
-        }
-        else
-        {
-            event.type = ev_controller_keyup;
-            RTriggerState = false;
-        }
-        event.data1 = CONTROLLER_RIGHT_TRIGGER;
-    }
-    else
-    {
+    if(!controller)
         return;
+
+    if(controller->bindAxis[axisEvent->axis] != CONTROLLER_AXIS_BUTTON)
+        return;
+
+    axisValue = axisEvent->value;
+    if(axisValue < controller->axisDeadZone[axisEvent->axis] * DEAD_ZONE
+    && axisValue > -controller->axisDeadZone[axisEvent->axis] * DEAD_ZONE)
+    {
+        axisValue = 0;
     }
+
+    if(controller->invertAxis[axisEvent->axis])
+        axisValue = -axisValue;
 
     event.delayed = false;
     event.data2 = event.data3 = event.data4 = 0;
-    D_PostEvent(&event);
+    if(controller->axisButtonsPositiveState[axisEvent->axis] == false && axisValue > 0)
+    {
+        event.type = ev_controller_keydown;
+        event.data1 = axisButtonsPositive[axisEvent->axis];
+        D_PostEvent(&event);
+        controller->axisButtonsPositiveState[axisEvent->axis] = true;
+    }
+    if(controller->axisButtonsPositiveState[axisEvent->axis] == true && axisValue <= 0)
+    {
+        event.type = ev_controller_keyup;
+        event.data1 = axisButtonsPositive[axisEvent->axis];
+        D_PostEvent(&event);
+        controller->axisButtonsPositiveState[axisEvent->axis] = false;
+    }
+    if(controller->axisButtonsNegativeState[axisEvent->axis] == false && axisValue < 0)
+    {
+        event.type = ev_controller_keydown;
+        event.data1 = axisButtonsNegative[axisEvent->axis];
+        D_PostEvent(&event);
+        controller->axisButtonsNegativeState[axisEvent->axis] = true;
+    }
+    if(controller->axisButtonsNegativeState[axisEvent->axis] == true && axisValue >= 0)
+    {
+        event.type = ev_controller_keyup;
+        event.data1 = axisButtonsNegative[axisEvent->axis];
+        D_PostEvent(&event);
+        controller->axisButtonsNegativeState[axisEvent->axis] = false;
+    }
 }
 
 void I_HandleControllerEvent(SDL_Event *sdlevent)
@@ -420,7 +453,7 @@ static int GetAxisState(controller_axis_t axis)
         if(temp->SDL_controller != NULL)
         {
             for(SDL_GameControllerAxis sdlAxis = SDL_CONTROLLER_AXIS_LEFTX;
-                sdlAxis < SDL_CONTROLLER_AXIS_TRIGGERLEFT; sdlAxis++)
+                sdlAxis < SDL_CONTROLLER_AXIS_MAX; sdlAxis++)
             {
                 if(temp->bindAxis[sdlAxis] == axis)
                 {
@@ -561,7 +594,7 @@ void ControllerHandler_Save(FILE* file, char* sectionName)
     {
         if(strcmp(temp->guid, sectionName + 11) == 0)
         {
-            for(SDL_GameControllerAxis i = SDL_CONTROLLER_AXIS_LEFTX; i < SDL_CONTROLLER_AXIS_TRIGGERLEFT; ++i)
+            for(SDL_GameControllerAxis i = SDL_CONTROLLER_AXIS_LEFTX; i < SDL_CONTROLLER_AXIS_MAX; ++i)
             {
                 fprintf(file, "%s_%s = %s\n",
                         axesNames[i], axesOptionsNames[AO_BIND],
