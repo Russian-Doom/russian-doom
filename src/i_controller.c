@@ -37,6 +37,7 @@
 #define DEAD_ZONE 328
 #define BASE_SENSITIVITY_BITS 3
 
+// [Dasperal] This array must be in sync with SDL_GameControllerAxis enum!
 static char* axesNames[] = {
     "LX",
     "LY",
@@ -57,6 +58,7 @@ typedef enum
     AO_SENSITIVITY
 } axisOption_t;
 
+// [Dasperal] This array must be in sync with axisOption_t enum!
 static char* axesOptionsNames[] = {
     "Invert",
     "Binding",
@@ -67,6 +69,7 @@ static char* axesOptionsNames[] = {
 static int nameToAO[arrlen(axesOptionsNames)];
 static boolean nameToAO_init = false;
 
+// [Dasperal] This array must be in sync with controller_axis_t enum!
 static char* axisBindsNames[] = {
     "NONE", // BUTTON
     "MOVE",
@@ -82,10 +85,12 @@ static controller_t* knownControllers;
 controller_t* activeControllers[ACTIVE_CONTROLLERS_SIZE];
 controller_t* currentController;
 
+// [Dasperal] This array must be in sync with SDL_GameControllerAxis enum!
 static boolean axisButtonsPositive[SDL_CONTROLLER_AXIS_MAX] = {
     CONTROLLER_LSX_POSITIVE, CONTROLLER_LSY_POSITIVE, CONTROLLER_RSX_POSITIVE,
     CONTROLLER_RSY_POSITIVE, CONTROLLER_LEFT_TRIGGER, CONTROLLER_RIGHT_TRIGGER
 };
+// [Dasperal] This array must be in sync with SDL_GameControllerAxis enum!
 static boolean axisButtonsNegative[SDL_CONTROLLER_AXIS_MAX] = {
     CONTROLLER_LSX_NEGATIVE, CONTROLLER_LSY_NEGATIVE, CONTROLLER_RSX_NEGATIVE,
     CONTROLLER_RSY_NEGATIVE, CONTROLLER_LEFT_TRIGGER_NEGATIVE, CONTROLLER_RIGHT_TRIGGER_NEGATIVE

@@ -49,6 +49,7 @@ bind_descriptor_t* bind_descriptor[bk__size];
 boolean keyState[bk__size];
 boolean bindClearEnabled = true;
 
+// [Dasperal] This array must be in sync with bound_key_t enum!
 static const char* bkToName[] = {
     NULL,
     "Forward",
@@ -135,8 +136,8 @@ static const char* bkToName[] = {
 static int nameToBk[arrlen(bkToName) - 1];
 static boolean nameToBk_init = false;
 
-// Index is SDL_SCANCODE
-// [Dasperal] Strings in this array must not be changed only added, or it will break existing configs
+// [Dasperal] This array must be in sync with SDL_Scancode enum!
+// Strings in this array must not be changed only added, or it will break existing configs
 static const char* kKToName[] = {
     "", "", "", "", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",    // 0   - 20
     "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "ENTER", // 21  - 41
