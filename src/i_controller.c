@@ -37,6 +37,8 @@
 #define DEAD_ZONE 328
 #define BASE_SENSITIVITY_BITS 3
 
+static boolean isControllerInitialized = false;
+
 // [Dasperal] This array must be in sync with SDL_GameControllerAxis enum!
 static char* axesNames[] = {
     "LX",
@@ -169,24 +171,29 @@ void I_ShutdownController(void)
 {
     controller_t *temp;
 
-    temp = knownControllers;
-    while(temp)
+    if(isControllerInitialized)
     {
-        if(temp->SDL_controller != NULL)
+        temp = knownControllers;
+        while(temp)
         {
-            SDL_GameControllerClose(temp->SDL_controller);
-            temp->SDL_controller = NULL;
-            temp->index = -1;
-            free(temp->name);
-            temp->name = NULL;
+            if(temp->SDL_controller != NULL)
+            {
+                SDL_GameControllerClose(temp->SDL_controller);
+                temp->SDL_controller = NULL;
+                temp->index = -1;
+                free(temp->name);
+                temp->name = NULL;
+            }
+            temp = temp->next;
         }
-        temp = temp->next;
+        for(int i = 0; i < ACTIVE_CONTROLLERS_SIZE; ++i)
+        {
+            activeControllers[i] = NULL;
+        }
+        SDL_GameControllerEventState(SDL_IGNORE);
+        SDL_QuitSubSystem(SDL_INIT_GAMECONTROLLER);
+        isControllerInitialized = false;
     }
-    for (int i = 0; i < ACTIVE_CONTROLLERS_SIZE; ++i)
-    {
-        activeControllers[i] = NULL;
-    }
-    SDL_QuitSubSystem(SDL_INIT_GAMECONTROLLER);
 }
 
 static controller_t* registerNewController(char* guid, SDL_GameController* sdlController)
@@ -307,7 +314,7 @@ static void ActivateController(SDL_GameController *controller)
     }
 }
 
-void I_InitController(void)
+void I_InitControllerModule(void)
 {
     int i;
     boolean foundController = false;
@@ -349,7 +356,12 @@ void I_InitController(void)
     SDL_GameControllerEventState(SDL_ENABLE);
 
     // Initialized okay!
+    isControllerInitialized = true;
+}
 
+void I_InitController(void)
+{
+    I_InitControllerModule();
     I_AtExit(I_ShutdownController, true);
 }
 
