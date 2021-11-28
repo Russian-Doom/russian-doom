@@ -1545,7 +1545,7 @@ void P_LineAttack (mobj_t *t1, angle_t angle, int64_t distance, fixed_t slope, i
     // (see PTR_ShootTraverse).
     if (distance >= MISSILERANGE && singleplayer && !vanillaparm)
     {
-        distance = LONG_MAX;
+        distance = INT_MAX;
     }
 
     angle >>= ANGLETOFINESHIFT;
