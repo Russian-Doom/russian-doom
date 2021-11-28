@@ -91,6 +91,7 @@ extern int useController;
 extern controller_t* activeControllers[ACTIVE_CONTROLLERS_SIZE];
 extern controller_t* currentController;
 
+void I_InitControllerModule(void);
 void I_InitController(void);
 void I_ShutdownController(void);
 void I_UpdateController(void);

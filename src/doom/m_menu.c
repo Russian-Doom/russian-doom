@@ -3556,7 +3556,7 @@ static void M_RD_UseGamepad()
 {
     useController ^= 1;
     if(useController)
-        I_InitController();
+        I_InitControllerModule();
     else
         I_ShutdownController();
     OpenControllerSelectMenu();
