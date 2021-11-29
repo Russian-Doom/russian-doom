@@ -54,8 +54,9 @@ static boolean music_initialized = false;
 // responsibility to shut it down
 
 static boolean sdl_was_initialized = false;
-
+#ifdef _WIN32
 static boolean win_midi_stream_opened = false;
+#endif
 static boolean win_midi_song_registered = false;
 
 static boolean musicpaused = false;
