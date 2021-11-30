@@ -321,7 +321,7 @@ static void I_SDL_SetMusicVolume(int volume)
     // Internal state variable.
 #ifdef _WIN32
     if (snd_musicdevice != SNDDEVICE_GUS && strlen(timidity_cfg_path) == 0)
-        current_music_volume = volume * 8;
+        current_music_volume = 40 + volume * 5;
     else
     {
 #endif
