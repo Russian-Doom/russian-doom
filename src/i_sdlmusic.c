@@ -281,7 +281,7 @@ static boolean I_SDL_InitMusic(void)
 
 #if defined(_WIN32)
     // [JN] Don't enable it for GUS, since it handles its own volume just fine.
-    if (snd_musicdevice != SNDDEVICE_GUS)
+    if (snd_musicdevice != SNDDEVICE_GUS && strlen(timidity_cfg_path) == 0)
     {
         win_midi_stream_opened = I_WIN_InitMusic();
     }
@@ -320,7 +320,7 @@ static void I_SDL_SetMusicVolume(int volume)
 {
     // Internal state variable.
 #ifdef _WIN32
-    if (snd_musicdevice != SNDDEVICE_GUS)
+    if (snd_musicdevice != SNDDEVICE_GUS && strlen(timidity_cfg_path) == 0)
         current_music_volume = volume * 8;
     else
     {
