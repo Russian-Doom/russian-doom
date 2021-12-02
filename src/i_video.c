@@ -58,7 +58,6 @@
 
 static SDL_Window *screen;
 static SDL_Renderer *renderer;
-static SDL_GLContext glcontext;
 
 // Window title
 
@@ -1438,7 +1437,6 @@ static void SetVideoMode(void)
     if (!force_software_renderer)
     {
         window_flags |= SDL_WINDOW_OPENGL;
-        glcontext = SDL_GL_CreateContext(screen);
     }
 
     if (fullscreen)
