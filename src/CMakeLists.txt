@@ -260,20 +260,22 @@ foreach(MODULE ${COMPILE_MODULES})
         list(APPEND INSTALL_TARGETS "${PROGRAM_PREFIX}${MODULE}-setup")
     endif()
     install(TARGETS ${INSTALL_TARGETS}
-            DESTINATION $<IF:$<BOOL:${WIN32}>,.,bin>
+            DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${BUILD_PORTABLE}>>,.,bin>
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
     )
     install(FILES $<TARGET_PROPERTY:${MODULE}-wads,OUT_FILES>
-            DESTINATION $<IF:$<BOOL:${WIN32}>,base,share/${PACKAGE_TARNAME}>
+            DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${BUILD_PORTABLE}>>,base,share/${PACKAGE_TARNAME}>
     )
 endforeach()
 install(FILES $<TARGET_PROPERTY:gus-patches,OUT_FILES>
-        DESTINATION $<IF:$<BOOL:${WIN32}>,base,share/${PACKAGE_TARNAME}>/gus_patches
+        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${BUILD_PORTABLE}>>,base,share/${PACKAGE_TARNAME}>/gus_patches
 )
 if(WIN32)
     install(FILES $<TARGET_PROPERTY:win-libs,OUT_FILES>
             DESTINATION .
     )
+endif()
+if(WIN32 OR BUILD_PORTABLE)
     install(FILES "${PROJECT_SOURCE_DIR}/LICENSE.txt"
         RENAME "GPL.txt"
         DESTINATION .
