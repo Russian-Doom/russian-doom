@@ -1382,19 +1382,6 @@ static void SetSDLVideoDriver(void)
     }
 }
 
-// -----------------------------------------------------------------------------
-// SetSDLRenderer
-// [JN] Set SDL renderer. Use "opengl" as most compatible, and
-// "software" in case of using software only rendering.
-// -----------------------------------------------------------------------------
-
-static void SetSDLRenderer (void)
-{
-    SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER,
-                            force_software_renderer ? "software" : "opengl",
-                            SDL_HINT_OVERRIDE);
-}
-
 // Check the display bounds of the display referred to by 'video_display' and
 // set x and y to a location that places the window in the center of that
 // display.
@@ -1433,7 +1420,8 @@ static void SetVideoMode(void)
     // retina displays, especially when using small window sizes.
     window_flags |= SDL_WINDOW_ALLOW_HIGHDPI;
 
-    // [JN] Indicate that window using OpenGL context.
+    // [JN] Windows 11 idiocy. Indicate that window using OpenGL mode (while it's
+    // a Direct3D in fact), so SDL texture will not be freezed upon vsync toggling.
     if (!force_software_renderer)
     {
         window_flags |= SDL_WINDOW_OPENGL;
@@ -1677,9 +1665,6 @@ void I_InitGraphics(void)
 
     SetSDLVideoDriver();
 
-    // [JN] Set apropriate renderer.
-    SetSDLRenderer();
-
     // [JN] Set an event watcher for window resize to allow
     // update window contents on fly.
     SDL_AddEventWatch(HandleWindowResize, screen);
@@ -1806,7 +1791,6 @@ void I_ReInitGraphics (int reinit)
 	// [crispy] re-create renderer
 	if (reinit & REINIT_RENDERER)
 	{
-        /*
 		SDL_RendererInfo info = {0};
 		int flags;
 
@@ -1824,19 +1808,6 @@ void I_ReInitGraphics (int reinit)
 
 		SDL_DestroyRenderer(renderer);
 		renderer = SDL_CreateRenderer(screen, -1, flags);
-        */
-
-		// [JN] OpenGL does not requre SDL renderer to be destroyed 
-		// for vsync toggling. Just use an internal function.
-
-		if (vsync && !force_software_renderer)
-		{
-		    SDL_GL_SetSwapInterval(1);
-		}
-		else
-		{
-		    SDL_GL_SetSwapInterval(0);
-		}
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
