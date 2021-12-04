@@ -967,6 +967,7 @@ void I_FinishUpdate (void)
     }
 
 	// [crispy] [AM] Real FPS counter
+    if (show_fps)
 	{
 		static int lastmili;
 		static int fpscount;
@@ -1420,12 +1421,14 @@ static void SetVideoMode(void)
     // retina displays, especially when using small window sizes.
     window_flags |= SDL_WINDOW_ALLOW_HIGHDPI;
 
+#ifdef _WIN32
     // [JN] Windows 11 idiocy. Indicate that window using OpenGL mode (while it's
     // a Direct3D in fact), so SDL texture will not be freezed upon vsync toggling.
     if (!force_software_renderer)
     {
         window_flags |= SDL_WINDOW_OPENGL;
     }
+#endif
 
     if (fullscreen)
     {
