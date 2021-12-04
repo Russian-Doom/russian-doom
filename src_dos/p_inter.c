@@ -403,6 +403,12 @@ P_TouchSpecialThing
 	player->health = 200;
 	player->mo->health = player->health;
 	P_GiveArmor (player,2);
+	// [JN] Force to upgrade armor type to blue, to fix keeping
+	// green armor while player have 200% armor points (from DOOM Retro).
+	if (singleplayer && !vanilla)
+	{
+	    player->armortype = 2;
+	}
 	player->message = gotmsphere;
 	sound = sfx_getpow;
 	break;

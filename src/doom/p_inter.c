@@ -465,6 +465,12 @@ void P_TouchSpecialThing (mobj_t *special, mobj_t *toucher)
             // We always give armor type 2 for the megasphere; dehacked only 
             // affects the MegaArmor.
             P_GiveArmor (player, 2);
+            // [JN] Force to upgrade armor type to blue, to fix keeping
+            // green armor while player have 200% armor points (from DOOM Retro).
+            if (singleplayer && !vanillaparm)
+            {
+                player->armortype = 2;
+            }
             player->message = DEH_String(gotmsphere);
             sound = sfx_getpow;
         }
