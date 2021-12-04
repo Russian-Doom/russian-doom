@@ -51,7 +51,6 @@ boolean bindClearEnabled = true;
 
 // [Dasperal] This array must be in sync with bound_key_t enum!
 static const char* bkToName[] = {
-    NULL,
     "Forward",
     "Backward",
     "Turn_left",
@@ -133,7 +132,7 @@ static const char* bkToName[] = {
     "Multi_msg_player_7"
 };
 
-static int nameToBk[arrlen(bkToName) - 1];
+static int nameToBk[arrlen(bkToName)];
 static boolean nameToBk_init = false;
 
 // [Dasperal] This array must be in sync with SDL_Scancode enum!
@@ -687,7 +686,7 @@ void RD_Menu_Draw_Bindings(int x)
 
     for (int i = 0; i < CurrentMenu->itemCount; ++i)
     {
-        if (CurrentMenu->items[i].option != 0)
+        if (CurrentMenu->items[i].pointer == BK_StartBindingKey)
         {
             boolean bindingThis = isBinding && i == CurrentItPos;
 
@@ -1031,61 +1030,6 @@ void BK_ApplyDefaultBindings()
     bindClearEnabled = true;
 }
 
-void BK_LoadBindings(void* file)
-{
-    int bind;
-    char strparm[100];
-    char* ptr;
-
-    bindClearEnabled = false;
-    while(!feof(file))
-    {
-        if(fscanf(file, "%3d %99[^\n]\n", &bind, strparm) != 2)
-        {
-            // end of key binds section
-            break;
-        }
-
-        if(bind >= bk__serializable)
-            continue;
-
-        ptr = strparm;
-        while(*ptr != '\0')
-        {
-            char deviceChar;
-            int key;
-            int charsToSkip;
-            device_t device;
-
-            if(sscanf(ptr, "%c_%3d%n", &deviceChar, &key, &charsToSkip) != 2)
-            {
-                ptr += charsToSkip + 1;
-                continue;
-            }
-            ptr += charsToSkip + 1;
-
-            switch(deviceChar)
-            {
-                case 'k':
-                    device = keyboard;
-                    break;
-                case 'm':
-                    device = mouse;
-                    break;
-                case 'c':
-                    device = controller;
-                    break;
-                default:
-                    device = -1;
-            }
-
-            AddBind(bind, device, key);
-        }
-    }
-    bindClearEnabled = true;
-    isBindsLoaded = true;
-}
-
 static int nameToBk_Comparator(const void *sample, const void *member)
 {
     return strcmp(sample, bkToName[*((int*) member)]);
@@ -1132,7 +1076,7 @@ static void prepareIndex()
     {
         for(int i = 0; i < arrlen(nameToBk); ++i)
         {
-            nameToBk[i] = i + 1;
+            nameToBk[i] = i;
         }
         qsort(nameToBk, arrlen(nameToBk),
               sizeof(int), nameToBk_SortComparator);
@@ -1190,7 +1134,7 @@ void KeybindsHandler_HandleLine(char* keyName, char *value, size_t valueSize)
     bound_key_t bind;
 
     bsearchResult = bsearch(keyName,
-                            nameToBk, arrlen(bkToName) - 1, // bk_forward = 1
+                            nameToBk, arrlen(bkToName),
                             sizeof(int), nameToBk_Comparator);
     if(bsearchResult == NULL)
         return;
