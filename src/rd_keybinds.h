@@ -23,7 +23,7 @@
 typedef enum
 {
     //Movement
-    bk_forward = 1,
+    bk_forward = 0,
     bk_backward,
     bk_turn_left,
     bk_turn_right,
@@ -188,8 +188,6 @@ void BK_ClearBinds(bound_key_t key);
 void BK_AddBindingsToSystemKeys();
 
 void BK_ApplyDefaultBindings();
-
-void BK_LoadBindings(void* file);
 
 boolean KeybindsHandler_Handles(char* sectionName);
 

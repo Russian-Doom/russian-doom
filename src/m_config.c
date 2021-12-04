@@ -908,58 +908,6 @@ static void SetVariable(default_t *def, char *value)
     }
 }
 
-static void LoadDefaultCollection(FILE *file)
-{
-    default_t *def;
-    char defname[80];
-    char strparm[100];
-
-    while(!feof(file))
-    {
-        if(fscanf(file, "%79s %99[^\n]\n", defname, strparm) != 2)
-        {
-            // This line doesn't match
-            continue;
-        }
-
-        // [Dasperal] Key binds section
-#ifndef ___RD_TARGET_SETUP___
-        if(strcmp("Keybinds", defname) == 0 && strcmp("Start", strparm) == 0)
-        {
-            BK_LoadBindings(file);
-            continue;
-        }
-#endif
-
-        // Find the setting in the list
-        def = SearchCollection(&default_collection, defname);
-
-        if(def == NULL || !def->bound)
-        {
-            // Unknown variable?  Unbound variables are also treated
-            // as unknown.
-            continue;
-        }
-
-        // Strip off trailing non-printable characters (\r characters
-        // from DOS text files)
-        while(strlen(strparm) > 0 && !isprint(strparm[strlen(strparm)-1]))
-        {
-            strparm[strlen(strparm)-1] = '\0';
-        }
-
-        // Surrounded by quotes? If so, remove them.
-        if(strlen(strparm) >= 2
-        && strparm[0] == '"' && strparm[strlen(strparm) - 1] == '"')
-        {
-            strparm[strlen(strparm) - 1] = '\0';
-            memmove(strparm, strparm + 1, sizeof(strparm) - 1);
-        }
-
-        SetVariable(def, strparm);
-    }
-}
-
 // Set the default filenames to use for configuration files.
 
 void M_SetConfigFilename(char *name)
@@ -1091,7 +1039,7 @@ static void LoadSections(FILE *file)
 //
 void M_LoadConfig(void)
 {
-    int i, c;
+    int i;
     FILE* file;
  
     // check for a custom default file
@@ -1130,21 +1078,7 @@ void M_LoadConfig(void)
         return;
     }
 
-    c = fgetc(file);
-    fseek(file, -1, SEEK_CUR);
-    if(c != '[')
-    {
-        LoadDefaultCollection(file);
-        M_AppendConfigSection("General", &defaultHandler);
-#ifndef ___RD_TARGET_SETUP___
-        if(isBindsLoaded)
-            M_AppendConfigSection("Keybinds", &keybindsHandler);
-#endif
-    }
-    else
-    {
-        LoadSections(file);
-    }
+    LoadSections(file);
 
     fclose(file);
 
