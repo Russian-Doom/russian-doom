@@ -3141,32 +3141,23 @@ static void M_RD_Change_Sampling(Direction_t direction)
 {
     RD_Menu_ShiftSpinInt(&snd_samplerate, 11025, 44100, direction);
 
-    // Shut down sound system
-    I_ShutdownSound();
-
-    // Reinitialize SFX module
-    InitSfxModule(snd_sfxdevice);
-
-    // Call sfx device changing routine
-    S_RD_Change_SoundDevice();
-
-    // Reinitialize sound volume
-    S_SetSfxVolume(sfxVolume * 8);
-
     // Shut down current music
     S_StopMusic();
 
-    // Shut down music system
-    S_Shutdown();
-    
-    // Start music system
-    I_InitSound(true);
+    // Free all sound channels/usefulness
+    S_RD_Change_SoundDevice();
 
-    // Reinitialize music volume
-    S_SetMusicVolume(musicVolume);
+    // Shut down sound/music system
+    I_ShutdownSound();
+
+    // Start sound/music system
+	I_InitSound(true);
+	S_Init (sfxVolume * 8, musicVolume);
 
     // Restart current music
     S_ChangeMusic(music_num_rd, true);
+
+    RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
 }
 
 static void M_RD_Change_SndMode()
