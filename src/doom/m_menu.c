@@ -39,7 +39,6 @@
 #include "r_local.h"
 #include "hu_stuff.h"
 #include "g_game.h"
-#include "m_argv.h"
 #include "p_saveg.h"
 #include "s_sound.h"
 #include "doomstat.h"
@@ -231,16 +230,42 @@ static void M_RD_Change_Threshold(Direction_t direction);
 static void M_RD_Draw_Bindings();
 
 // Gamepad
-static void DrawGamepadMenu();
+static void OpenControllerSelectMenu();
+
+static void DrawGamepadSelectMenu();
+
 static void M_RD_UseGamepad();
-static void M_RD_BindAxis_Move(Direction_t direction);
-static void M_RD_InvertAxis_Move();
-static void M_RD_BindAxis_Strafe(Direction_t direction);
-static void M_RD_InvertAxis_Strafe();
-static void M_RD_BindAxis_Turn(Direction_t direction);
-static void M_RD_InvertAxis_Turn();
-static void M_RD_BindAxis_VLook(Direction_t direction);
-static void M_RD_InvertAxis_VLook();
+
+static void OpenControllerOptionsMenu(int controller);
+
+static void DrawGamepadMenu_1();
+static void DrawGamepadMenu_2();
+
+static void M_RD_BindAxis_LY(Direction_t direction);
+static void M_RD_SensitivityAxis_LY(Direction_t direction);
+static void M_RD_InvertAxis_LY();
+static void M_RD_DeadZoneAxis_LY(Direction_t direction);
+static void M_RD_BindAxis_LX(Direction_t direction);
+static void M_RD_SensitivityAxis_LX(Direction_t direction);
+static void M_RD_InvertAxis_LX();
+static void M_RD_DeadZoneAxis_LX(Direction_t direction);
+static void M_RD_BindAxis_LT(Direction_t direction);
+static void M_RD_SensitivityAxis_LT(Direction_t direction);
+static void M_RD_InvertAxis_LT();
+static void M_RD_DeadZoneAxis_LT(Direction_t direction);
+
+static void M_RD_BindAxis_RY(Direction_t direction);
+static void M_RD_SensitivityAxis_RY(Direction_t direction);
+static void M_RD_InvertAxis_RY();
+static void M_RD_DeadZoneAxis_RY(Direction_t direction);
+static void M_RD_BindAxis_RX(Direction_t direction);
+static void M_RD_SensitivityAxis_RX(Direction_t direction);
+static void M_RD_InvertAxis_RX();
+static void M_RD_DeadZoneAxis_RX(Direction_t direction);
+static void M_RD_BindAxis_RT(Direction_t direction);
+static void M_RD_SensitivityAxis_RT(Direction_t direction);
+static void M_RD_InvertAxis_RT();
+static void M_RD_DeadZoneAxis_RT(Direction_t direction);
 
 // Gameplay
 static void M_RD_Draw_Gameplay_1();
@@ -715,8 +740,10 @@ static Menu_t Bindings2Menu;
 static Menu_t Bindings3Menu;
 static Menu_t Bindings4Menu;
 static Menu_t Bindings5Menu;
-static Menu_t GamepadMenu;
 static const Menu_t* BindingsMenuPages[] = {&Bindings1Menu, &Bindings2Menu, &Bindings3Menu, &Bindings4Menu, &Bindings5Menu};
+static Menu_t Gamepad1Menu;
+static Menu_t Gamepad2Menu;
+static const Menu_t* GamepadMenuPages[] = {&Gamepad1Menu, &Gamepad2Menu};
 static Menu_t Gameplay1Menu;
 static Menu_t Gameplay2Menu;
 static Menu_t Gameplay3Menu;
@@ -1129,7 +1156,7 @@ static Menu_t SoundSysMenu = {
 static MenuItem_t ControlsItems[] = {
     {ITT_TITLE,   "Controls",               "eghfdktybt",                NULL,                       0}, // Управление
     {ITT_SETMENU, "Customize Controls...",  "yfcnhjqrb eghfdktybz>>>",   &Bindings1Menu,             0}, // Настройки управления...
-    {ITT_SETMENU, "Gamepad Settings...",    "yfcnhjqrb utqvgflf>>>",     &GamepadMenu,               0}, // Настройки геймпада...
+    {ITT_EFUNC,   "Gamepad Settings...",    "yfcnhjqrb utqvgflf>>>",     OpenControllerSelectMenu,   0}, // Настройки геймпада...
     {ITT_SWITCH,  "Always run:",            "Ht;bv gjcnjzyyjuj ,tuf:",   M_RD_Change_AlwaysRun,      0}, // Режим постоянного бега
     {ITT_TITLE,   "mouse",                  "vsim",                      NULL,                       0}, // Мышь
     {ITT_LRFUNC,  "sensivity",              "crjhjcnm",                  M_RD_Change_Sensitivity,    0}, // Скорость
@@ -1335,33 +1362,96 @@ static Menu_t Bindings5Menu = {
 // Gamepad
 // -----------------------------------------------------------------------------
 
-static MenuItem_t GamepadItems[] = {
-    {ITT_SWITCH, "ENABLE GAMEPAD:",    "BCGJKMPJDFNM UTQVGFL:",    M_RD_UseGamepad,        0}, // Сетевая игра
-    {ITT_TITLE,  "MOVEMENT AXIS",      "JCM LDB;TYBZ",             NULL,                   0},
-    {ITT_LRFUNC, "PHYSICAL AXIS:",     "ABPBXTCRFZ JCM:",          M_RD_BindAxis_Move,     CONTROLLER_AXIS_MOVE},
-    {ITT_SWITCH, "INVERT AXIS:",       "BYDTHNBHJDFNM JCM:",       M_RD_InvertAxis_Move,   CONTROLLER_AXIS_MOVE},
-    {ITT_EMPTY,  NULL,                 NULL,                      NULL,                    0},
-    {ITT_TITLE,  "STRAFE AXIS",        "JCM LDB;TYBZ ,JRJV",       NULL,                   0},
-    {ITT_LRFUNC, "PHYSICAL AXIS:",     "ABPBXTCRFZ JCM:",          M_RD_BindAxis_Strafe,   CONTROLLER_AXIS_STRAFE},
-    {ITT_SWITCH, "INVERT AXIS:",       "BYDTHNBHJDFNM JCM:",       M_RD_InvertAxis_Strafe, CONTROLLER_AXIS_STRAFE},
-    {ITT_EMPTY,  NULL,                 NULL,                      NULL,                    0},
-    {ITT_TITLE,  "TURN AXIS",          "JCM GJDJHJNF",             NULL,                   0},
-    {ITT_LRFUNC, "PHYSICAL AXIS:",     "ABPBXTCRFZ JCM:",          M_RD_BindAxis_Turn,     CONTROLLER_AXIS_TURN},
-    {ITT_SWITCH, "INVERT AXIS:",       "BYDTHNBHJDFNM JCM:",       M_RD_InvertAxis_Turn,   CONTROLLER_AXIS_TURN},
-    {ITT_EMPTY,  NULL,                 NULL,                      NULL,                    0},
-    {ITT_TITLE,  "VERTICAL LOOK AXIS", "JCM DTHNBRFKMYJUJ J,PJHF", NULL,                   0},
-    {ITT_LRFUNC, "PHYSICAL AXIS:",     "ABPBXTCRFZ JCM:",          M_RD_BindAxis_VLook,    CONTROLLER_AXIS_VLOOK},
-    {ITT_SWITCH, "INVERT AXIS:",       "BYDTHNBHJDFNM JCM:",       M_RD_InvertAxis_VLook,  CONTROLLER_AXIS_VLOOK}
+static MenuItem_t GamepadSelectItems[] = {
+    {ITT_SWITCH, "ENABLE GAMEPAD:",     "BCGJKMPJDFNM UTQVGFL:", M_RD_UseGamepad,            0}, // ИСПОЛЬЗОВАТЬ ГЕЙМПАД
+    {ITT_EMPTY,  NULL,                  NULL,                    NULL,                       0},
+    {ITT_TITLE,  "ACTIVE CONTROLLERS:", "FRNBDYST UTQVGFLS:",    NULL,                       0}, // АКТИАНЫЕ ГЕЙМПАДЫ
+    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
+    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
+    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
+    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
+    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
+    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
+    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
+    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
+    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
+    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1}
 };
 
-static Menu_t GamepadMenu = {
-    36, 36,
+static Menu_t GamepadSelectMenu = {
+    76, 66,
     32,
-    "GAMEPAD SETTINGS", "YFCNHJQRB UTQVGFLF", false, //Настройки геймпада
-    16, GamepadItems, false,
-    DrawGamepadMenu,
+    "GAMEPAD SETTINGS", "YFCNHJQRB UTQVGFLF", false, // Настройки геймпада
+    13, GamepadSelectItems, false,
+    DrawGamepadSelectMenu,
     NULL,
     &ControlsMenu,
+    0
+};
+
+static const PageDescriptor_t GamepadPageDescriptor = {
+    2, GamepadMenuPages,
+    252, 182,
+    CR_WHITE
+};
+
+static MenuItem_t Gamepad1Items[] = {
+    {ITT_LRFUNC,  "LEFT X AXIS:",  "KTDFZ [ JCM:",       M_RD_BindAxis_LX,        0},
+    {ITT_LRFUNC,  "SENSITIVITY:",  "XEDCNDBNTKMYJCNM:",  M_RD_SensitivityAxis_LX, 0},
+    {ITT_SWITCH,  "INVERT AXIS:",  "BYDTHNBHJDFNM JCM:", M_RD_InvertAxis_LX,      0},
+    {ITT_LRFUNC,  "DEAD ZONE:",    "VTHNDFZ PJYF:",      M_RD_DeadZoneAxis_LX,    0},
+    {ITT_EMPTY,   NULL,            NULL,                 NULL,                    0},
+    {ITT_LRFUNC,  "LEFT Y AXIS:",  "KTDFZ E JCM:",       M_RD_BindAxis_LY,        0},
+    {ITT_LRFUNC,  "SENSITIVITY:",  "XEDCNDBNTKMYJCNM:",  M_RD_SensitivityAxis_LY, 0},
+    {ITT_SWITCH,  "INVERT AXIS:",  "BYDTHNBHJDFNM JCM:", M_RD_InvertAxis_LY,      0},
+    {ITT_LRFUNC,  "DEAD ZONE:",    "VTHNDFZ PJYF:",      M_RD_DeadZoneAxis_LY,    0},
+    {ITT_EMPTY,   NULL,            NULL,                 NULL,                    0},
+    {ITT_LRFUNC,  "LEFT TRIGGER:", "KTDSQ NHBUUTH:",     M_RD_BindAxis_LT,        0},
+    {ITT_LRFUNC,  "SENSITIVITY:",  "XEDCNDBNTKMYJCNM:",  M_RD_SensitivityAxis_LT, 0},
+    {ITT_SWITCH,  "INVERT AXIS:",  "BYDTHNBHJDFNM JCM:", M_RD_InvertAxis_LT,      0},
+    {ITT_LRFUNC,  "DEAD ZONE:",    "VTHNDFZ PJYF:",      M_RD_DeadZoneAxis_LT,    0},
+    {ITT_EMPTY,   NULL,            NULL,                 NULL,                    0},
+    {ITT_SETMENU, NULL,            NULL,                 &Gamepad2Menu,           0}
+};
+
+static Menu_t Gamepad1Menu = {
+    36, 11,
+    32,
+    "GAMEPAD SETTINGS", "YFCNHJQRB UTQVGFLF", false, // Настройки геймпада
+    16, Gamepad1Items, false,
+    DrawGamepadMenu_1,
+    &GamepadPageDescriptor,
+    &GamepadSelectMenu,
+    0
+};
+
+static MenuItem_t Gamepad2Items[] = {
+    {ITT_LRFUNC,  "RIGHT X AXIS:",  "GHFDFZ [ JCM:",      M_RD_BindAxis_RX,        0},
+    {ITT_LRFUNC,  "SENSITIVITY:",   "XEDCNDBNTKMYJCNM:",  M_RD_SensitivityAxis_RX, 0},
+    {ITT_SWITCH,  "INVERT AXIS:",   "BYDTHNBHJDFNM JCM:", M_RD_InvertAxis_RX,      0},
+    {ITT_LRFUNC,  "DEAD ZONE:",     "VTHNDFZ PJYF:",      M_RD_DeadZoneAxis_RX,    0},
+    {ITT_EMPTY,   NULL,             NULL,                 NULL,                    0},
+    {ITT_LRFUNC,  "RIGHT Y AXIS:",  "GHFDFZ E JCM:",      M_RD_BindAxis_RY,        0},
+    {ITT_LRFUNC,  "SENSITIVITY:",   "XEDCNDBNTKMYJCNM:",  M_RD_SensitivityAxis_RY, 0},
+    {ITT_SWITCH,  "INVERT AXIS:",   "BYDTHNBHJDFNM JCM:", M_RD_InvertAxis_RY,      0},
+    {ITT_LRFUNC,  "DEAD ZONE:",     "VTHNDFZ PJYF:",      M_RD_DeadZoneAxis_RY,    0},
+    {ITT_EMPTY,   NULL,             NULL,                 NULL,                    0},
+    {ITT_LRFUNC,  "RIGHT TRIGGER:", "GHFDSQ NHBUUTH:",    M_RD_BindAxis_RT,        0},
+    {ITT_LRFUNC,  "SENSITIVITY:",   "XEDCNDBNTKMYJCNM:",  M_RD_SensitivityAxis_RT, 0},
+    {ITT_SWITCH,  "INVERT AXIS:",   "BYDTHNBHJDFNM JCM:", M_RD_InvertAxis_RT,      0},
+    {ITT_LRFUNC,  "DEAD ZONE:",     "VTHNDFZ PJYF:",      M_RD_DeadZoneAxis_RT,    0},
+    {ITT_EMPTY,   NULL,             NULL,                 NULL,                    0},
+    {ITT_SETMENU, NULL,             NULL,                 &Gamepad1Menu,           0}
+};
+
+static Menu_t Gamepad2Menu = {
+    36, 11,
+    32,
+    "GAMEPAD SETTINGS", "YFCNHJQRB UTQVGFLF", false, // Настройки геймпада
+    16, Gamepad2Items, false,
+    DrawGamepadMenu_2,
+    &GamepadPageDescriptor,
+    &GamepadSelectMenu,
     0
 };
 
@@ -3412,128 +3502,538 @@ static void M_RD_Draw_Bindings()
 // DrawGamepadMenu
 // -----------------------------------------------------------------------------
 
-static char* GetAxisName(int axis)
+static void OpenControllerSelectMenu()
 {
-    switch (axis)
+    for(int i = 3; i < 13; ++i)
     {
-        case -1:
-            return "NONE";
-        case 0:
-            return "LEFT X";
-        case 1:
-            return "LEFT Y";
-        case 2:
-            return "RIGHT X";
-        case 3:
-            return "RIGHT Y";
-        default:
-            return "?";
+        if(activeControllers[i - 3] != NULL)
+        {
+            GamepadSelectItems[i].type = ITT_EFUNC;
+            GamepadSelectItems[i].option = i - 3;
+        }
+        else
+        {
+            GamepadSelectItems[i].type = ITT_EMPTY;
+            GamepadSelectItems[i].option = -1;
+        }
     }
+
+    currentController = NULL;
+    RD_Menu_SetMenu(&GamepadSelectMenu);
 }
 
-static void DrawGamepadMenu()
+static void DrawGamepadSelectMenu()
 {
+    static char name[30];
+
     // [JN] Erase the entire screen to a tiled background.
     inhelpscreens = true;
     V_FillFlat ("FLOOR4_8");
 
-    if (english_language)
+    if(english_language)
     {
-        RD_M_DrawTextSmallENG(useController ? "ON" : "OFF", 153 + wide_delta, 32,
+        RD_M_DrawTextSmallENG(useController ? "ON" : "OFF", 193 + wide_delta, 32,
                               useController ? CR_GREEN : CR_DARKRED);
-
-        RD_M_DrawTextSmallENG(invertAxis[CONTROLLER_AXIS_MOVE] ? "ON" : "OFF", 120 + wide_delta, 62,
-                              invertAxis[CONTROLLER_AXIS_MOVE] ? CR_GREEN : CR_DARKRED);
-
-        RD_M_DrawTextSmallENG(invertAxis[CONTROLLER_AXIS_STRAFE] ? "ON" : "OFF", 120 + wide_delta, 102,
-                              invertAxis[CONTROLLER_AXIS_STRAFE] ? CR_GREEN : CR_DARKRED);
-
-        RD_M_DrawTextSmallENG(invertAxis[CONTROLLER_AXIS_TURN] ? "ON" : "OFF", 120 + wide_delta, 142,
-                              invertAxis[CONTROLLER_AXIS_TURN] ? CR_GREEN : CR_DARKRED);
-
-        RD_M_DrawTextSmallENG(invertAxis[CONTROLLER_AXIS_VLOOK] ? "ON" : "OFF", 120 + wide_delta, 182,
-                              invertAxis[CONTROLLER_AXIS_VLOOK] ? CR_GREEN : CR_DARKRED);
-
-        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_MOVE]), 135 + wide_delta, 52, CR_NONE);
-
-        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_STRAFE]), 135 + wide_delta, 92, CR_NONE);
-
-        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_TURN]), 135 + wide_delta, 132, CR_NONE);
-
-        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_VLOOK]), 135 + wide_delta, 172, CR_NONE);
     }
     else
     {
-        RD_M_DrawTextSmallRUS(useController ? "DRK" : "DSRK", 203 + wide_delta, 32,
+        RD_M_DrawTextSmallRUS(useController ? "DRK" : "DSRK", 233 + wide_delta, 32,
                               useController ? CR_GREEN : CR_DARKRED);
+    }
 
-        RD_M_DrawTextSmallRUS(invertAxis[CONTROLLER_AXIS_MOVE] ? "DRK" : "DSRK", 175 + wide_delta, 62,
-                              invertAxis[CONTROLLER_AXIS_MOVE] ? CR_GREEN : CR_DARKRED);
-
-        RD_M_DrawTextSmallRUS(invertAxis[CONTROLLER_AXIS_STRAFE] ? "DRK" : "DSRK", 175 + wide_delta, 102,
-                              invertAxis[CONTROLLER_AXIS_STRAFE] ? CR_GREEN : CR_DARKRED);
-
-        RD_M_DrawTextSmallRUS(invertAxis[CONTROLLER_AXIS_TURN] ? "DRK" : "DSRK", 175 + wide_delta, 142,
-                              invertAxis[CONTROLLER_AXIS_TURN] ? CR_GREEN : CR_DARKRED);
-
-        RD_M_DrawTextSmallRUS(invertAxis[CONTROLLER_AXIS_VLOOK] ? "DRK" : "DSRK", 175 + wide_delta, 182,
-                              invertAxis[CONTROLLER_AXIS_VLOOK] ? CR_GREEN : CR_DARKRED);
-
-        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_MOVE]), 153 + wide_delta, 52, CR_NONE);
-
-        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_STRAFE]), 153 + wide_delta, 92, CR_NONE);
-
-        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_TURN]), 153 + wide_delta, 132, CR_NONE);
-
-        RD_M_DrawTextSmallENG(GetAxisName(bindAxis[CONTROLLER_AXIS_VLOOK]), 153 + wide_delta, 172, CR_NONE);
+    for(int i = 3; i < 13; ++i)
+    {
+        if(GamepadSelectItems[i].option != -1)
+        {
+            M_snprintf(name, 29, "%s...", activeControllers[GamepadSelectItems[i].option]->name);
+            RD_M_DrawTextSmallENG(name, (english_language ? GamepadSelectMenu.x_eng : GamepadSelectMenu.x_rus) + wide_delta,
+                                  GamepadSelectMenu.y + 10 * i, CR_WHITE);
+        }
     }
 }
 
 static void M_RD_UseGamepad()
 {
     useController ^= 1;
-    I_ShutdownController();
-    I_InitController();
+    if(useController)
+        I_InitController();
+    else
+        I_ShutdownController();
+    OpenControllerSelectMenu();
 }
 
-static void M_RD_BindAxis_Move(Direction_t direction)
+static void OpenControllerOptionsMenu(int controller)
 {
-    RD_Menu_SpinInt(&bindAxis[CONTROLLER_AXIS_MOVE], CONTROLLER_AXIS_NONE, CONTROLLER_AXIS_VLOOK, direction);
+    currentController = activeControllers[controller];
+    RD_Menu_SetMenu(&Gamepad1Menu);
 }
 
-static void M_RD_InvertAxis_Move()
+static char* GetAxisNameENG(int axis)
 {
-    invertAxis[CONTROLLER_AXIS_MOVE] ^= 1;
+    switch (axis)
+    {
+        case CONTROLLER_AXIS_BUTTON:
+            return "BUTTON";
+        case CONTROLLER_AXIS_MOVE:
+            return "MOVE";
+        case CONTROLLER_AXIS_STRAFE:
+            return "STRAFE";
+        case CONTROLLER_AXIS_TURN:
+            return "TURN";
+        case CONTROLLER_AXIS_VLOOK:
+            return "VERTICAL LOOK";
+        default:
+            return "?";
+    }
 }
 
-static void M_RD_BindAxis_Turn(Direction_t direction)
+static char* GetAxisNameRUS(int axis)
 {
-    RD_Menu_SpinInt(&bindAxis[CONTROLLER_AXIS_TURN], CONTROLLER_AXIS_NONE, CONTROLLER_AXIS_VLOOK, direction);
+    switch (axis)
+    {
+        case CONTROLLER_AXIS_BUTTON:
+            return "RYJGRF"; // КНОПКА
+        case CONTROLLER_AXIS_MOVE:
+            return "LDB;TYBT"; // ДВИЖЕНИЕ
+        case CONTROLLER_AXIS_STRAFE:
+            return "LDB;TYBT ,JRJV"; // ДВИЖЕНИЕ БОКОМ
+        case CONTROLLER_AXIS_TURN:
+            return "GJDJHJN"; // ПОВОРОТ
+        case CONTROLLER_AXIS_VLOOK:
+            return "DTHNBRFKMYSQ J,PJH"; // ВЕРТИКАЛЬНЫЙ ОБЗОР
+        default:
+            return "?";
+    }
 }
 
-static void M_RD_InvertAxis_Turn()
+static void DrawGamepadMenu_1()
 {
-    invertAxis[CONTROLLER_AXIS_TURN] ^= 1;
+    static char num[5];
+
+    // [JN] Erase the entire screen to a tiled background.
+    inhelpscreens = true;
+    V_FillFlat ("FLOOR4_8");
+
+    RD_M_DrawTextSmallENG(currentController->name,
+                          160 - RD_M_TextSmallENGWidth(currentController->name) / 2 + wide_delta,
+                          20, CR_WHITE);
+
+    if(english_language)
+    {
+        RD_M_DrawTextSmallENG(GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_LEFTX]),
+                              120 + wide_delta, 32, CR_YELLOW);
+
+        RD_Menu_DrawSliderSmallInline(115, 41, 16,
+                                currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTX] - 1);
+        if(currentController)
+            M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTX]);
+        RD_M_DrawTextSmallENG(num, 260 + wide_delta, 42, CR_NONE);
+
+        RD_M_DrawTextSmallENG(currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTX] ? "ON" : "OFF",
+                              120 + wide_delta, 52,
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTX] ? CR_GREEN : CR_DARKRED);
+
+        RD_Menu_DrawSliderSmallInline(110, 61, 10,
+                                currentController->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTX] / 10);
+        if(currentController)
+            M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTX]);
+        RD_M_DrawTextSmallENG(num, 207 + wide_delta, 62, CR_NONE);
+
+
+        RD_M_DrawTextSmallENG(GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_LEFTY]),
+                              120 + wide_delta, 82, CR_YELLOW);
+
+        RD_Menu_DrawSliderSmallInline(115, 91, 16,
+                                currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTY] - 1);
+        if(currentController)
+            M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTY]);
+        RD_M_DrawTextSmallENG(num, 260 + wide_delta, 92, CR_NONE);
+
+        RD_M_DrawTextSmallENG(currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTY] ? "ON" : "OFF",
+                              120 + wide_delta, 102,
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTY] ? CR_GREEN : CR_DARKRED);
+
+        RD_Menu_DrawSliderSmallInline(110, 111, 10,
+                                currentController->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTY] / 10);
+        if(currentController)
+            M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTY]);
+        RD_M_DrawTextSmallENG(num, 207 + wide_delta, 112, CR_NONE);
+
+
+        RD_M_DrawTextSmallENG(GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT]),
+                              130 + wide_delta, 132, CR_YELLOW);
+
+        RD_Menu_DrawSliderSmallInline(115, 141, 16,
+                                      currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERLEFT] - 1);
+        if(currentController)
+            M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERLEFT]);
+        RD_M_DrawTextSmallENG(num, 260 + wide_delta, 142, CR_NONE);
+
+        RD_M_DrawTextSmallENG(currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT] ? "ON" : "OFF",
+                              120 + wide_delta, 152,
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT] ? CR_GREEN : CR_DARKRED);
+
+        RD_Menu_DrawSliderSmallInline(110, 161, 10,
+                                      currentController->axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERLEFT] / 10);
+        if(currentController)
+            M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERLEFT]);
+        RD_M_DrawTextSmallENG(num, 207 + wide_delta, 162, CR_NONE);
+
+        //
+        // Footer
+        //
+        RD_M_DrawTextSmallENG("next page >", 35 + wide_delta, 182, CR_WHITE);
+    }
+    else
+    {
+        RD_M_DrawTextSmallRUS(GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_LEFTX]),
+                              100 + wide_delta, 32, CR_YELLOW);
+
+        RD_Menu_DrawSliderSmallInline(145, 41, 16,
+                                currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTX] - 1);
+        if(currentController)
+            M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTX]);
+        RD_M_DrawTextSmallRUS(num, 290 + wide_delta, 42, CR_NONE);
+
+        RD_M_DrawTextSmallRUS(currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTX] ? "DRK" : "DSRK",
+                              150 + wide_delta, 52,
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTX] ? CR_GREEN : CR_DARKRED);
+
+        RD_Menu_DrawSliderSmallInline(110, 61, 10,
+                                currentController->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTX] / 10);
+        if(currentController)
+            M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTX]);
+        RD_M_DrawTextSmallRUS(num, 207 + wide_delta, 62, CR_NONE);
+
+
+        RD_M_DrawTextSmallRUS(GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_LEFTY]),
+                              100 + wide_delta, 82, CR_YELLOW);
+
+        RD_Menu_DrawSliderSmallInline(145, 91, 16,
+                                currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTY] - 1);
+        if(currentController)
+            M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTY]);
+        RD_M_DrawTextSmallRUS(num, 290 + wide_delta, 92, CR_NONE);
+
+        RD_M_DrawTextSmallRUS(currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTY] ? "DRK" : "DSRK",
+                              150 + wide_delta, 102,
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTY] ? CR_GREEN : CR_DARKRED);
+
+        RD_Menu_DrawSliderSmallInline(110, 111, 10,
+                                currentController->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTY] / 10);
+        if(currentController)
+            M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTY]);
+        RD_M_DrawTextSmallRUS(num, 207 + wide_delta, 112, CR_NONE);
+
+
+        RD_M_DrawTextSmallRUS(GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT]),
+                              123 + wide_delta, 132, CR_YELLOW);
+
+        RD_Menu_DrawSliderSmallInline(145, 141, 16,
+                                      currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERLEFT] - 1);
+        if(currentController)
+            M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERLEFT]);
+        RD_M_DrawTextSmallRUS(num, 290 + wide_delta, 142, CR_NONE);
+
+        RD_M_DrawTextSmallRUS(currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT] ? "DRK" : "DSRK",
+                              150 + wide_delta, 152,
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT] ? CR_GREEN : CR_DARKRED);
+
+        RD_Menu_DrawSliderSmallInline(110, 161, 10,
+                                      currentController->axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERLEFT] / 10);
+        if(currentController)
+            M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERLEFT]);
+        RD_M_DrawTextSmallRUS(num, 207 + wide_delta, 162, CR_NONE);
+
+        //
+        // Footer
+        //
+        RD_M_DrawTextSmallRUS(RD_NEXT_RUS, 10 + wide_delta, 182, CR_WHITE);
+    }
 }
 
-static void M_RD_BindAxis_Strafe(Direction_t direction)
+static void M_RD_BindAxis_LY(Direction_t direction)
 {
-    RD_Menu_SpinInt(&bindAxis[CONTROLLER_AXIS_STRAFE], CONTROLLER_AXIS_NONE, CONTROLLER_AXIS_VLOOK, direction);
+    RD_Menu_SpinInt(&currentController->bindAxis[SDL_CONTROLLER_AXIS_LEFTY],
+                    CONTROLLER_AXIS_BUTTON, CONTROLLER_AXIS_VLOOK, direction);
 }
 
-static void M_RD_InvertAxis_Strafe()
+static void M_RD_SensitivityAxis_LY(Direction_t direction)
 {
-    invertAxis[CONTROLLER_AXIS_STRAFE] ^= 1;
+    RD_Menu_SlideInt(&currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTY],
+                     1, 16, direction);
 }
 
-static void M_RD_BindAxis_VLook(Direction_t direction)
+static void M_RD_InvertAxis_LY()
 {
-    RD_Menu_SpinInt(&bindAxis[CONTROLLER_AXIS_VLOOK], CONTROLLER_AXIS_NONE, CONTROLLER_AXIS_VLOOK, direction);
+    currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTY] ^= 1;
 }
 
-static void M_RD_InvertAxis_VLook()
+static void M_RD_DeadZoneAxis_LY(Direction_t direction)
 {
-    invertAxis[CONTROLLER_AXIS_VLOOK] ^= 1;
+    RD_Menu_SlideInt(&currentController->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTY],
+                     0, 100, direction);
+}
+
+static void M_RD_BindAxis_LX(Direction_t direction)
+{
+    RD_Menu_SpinInt(&currentController->bindAxis[SDL_CONTROLLER_AXIS_LEFTX],
+                    CONTROLLER_AXIS_BUTTON, CONTROLLER_AXIS_VLOOK, direction);
+}
+
+static void M_RD_SensitivityAxis_LX(Direction_t direction)
+{
+    RD_Menu_SlideInt(&currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTX],
+                    1, 16, direction);
+}
+
+static void M_RD_InvertAxis_LX()
+{
+    currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTX] ^= 1;
+}
+
+static void M_RD_DeadZoneAxis_LX(Direction_t direction)
+{
+    RD_Menu_SlideInt(&currentController->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTX],
+                     0, 100, direction);
+}
+
+static void M_RD_BindAxis_LT(Direction_t direction)
+{
+    RD_Menu_SpinInt(&currentController->bindAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT],
+                    CONTROLLER_AXIS_BUTTON, CONTROLLER_AXIS_VLOOK, direction);
+}
+
+static void M_RD_SensitivityAxis_LT(Direction_t direction)
+{
+    RD_Menu_SlideInt(&currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERLEFT],
+                     1, 16, direction);
+}
+
+static void M_RD_InvertAxis_LT()
+{
+    currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT] ^= 1;
+}
+
+static void M_RD_DeadZoneAxis_LT(Direction_t direction)
+{
+    RD_Menu_SlideInt(&currentController->axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERLEFT],
+                     0, 100, direction);
+}
+
+static void DrawGamepadMenu_2()
+{
+    static char num[5];
+
+    // [JN] Erase the entire screen to a tiled background.
+    inhelpscreens = true;
+    V_FillFlat("FLOOR4_8");
+
+    RD_M_DrawTextSmallENG(currentController->name,
+                          160 - RD_M_TextSmallENGWidth(currentController->name) / 2 + wide_delta,
+                          20, CR_WHITE);
+
+    if(english_language)
+    {
+        RD_M_DrawTextSmallENG(GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_RIGHTX]),
+                              125 + wide_delta, 32, CR_YELLOW);
+
+        RD_Menu_DrawSliderSmallInline(115, 41, 16,
+                                currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTX] - 1);
+        if(currentController)
+            M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTX]);
+        RD_M_DrawTextSmallENG(num, 260 + wide_delta, 42, CR_NONE);
+
+        RD_M_DrawTextSmallENG(currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTX] ? "ON" : "OFF",
+                              120 + wide_delta, 52,
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTX] ? CR_GREEN : CR_DARKRED);
+
+        RD_Menu_DrawSliderSmallInline(110, 61, 10,
+                                currentController->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTX] / 10);
+        if(currentController)
+            M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTX]);
+        RD_M_DrawTextSmallENG(num, 207 + wide_delta, 62, CR_NONE);
+
+
+        RD_M_DrawTextSmallENG(GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_RIGHTY]),
+                              125 + wide_delta, 82, CR_YELLOW);
+
+        RD_Menu_DrawSliderSmallInline(115, 91, 16,
+                                currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTY] - 1);
+        if(currentController)
+            M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTY]);
+        RD_M_DrawTextSmallENG(num, 260 + wide_delta, 92, CR_NONE);
+
+        RD_M_DrawTextSmallENG(currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTY] ? "ON" : "OFF",
+                              120 + wide_delta, 102,
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTY] ? CR_GREEN : CR_DARKRED);
+
+        RD_Menu_DrawSliderSmallInline(110, 111, 10,
+                                currentController->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTY] / 10);
+        if(currentController)
+            M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTY]);
+        RD_M_DrawTextSmallENG(num, 207 + wide_delta, 112, CR_NONE);
+
+
+        RD_M_DrawTextSmallENG(GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_TRIGGERRIGHT]),
+                              135 + wide_delta, 132, CR_YELLOW);
+
+        RD_Menu_DrawSliderSmallInline(115, 141, 16,
+                                      currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] - 1);
+        if(currentController)
+            M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERRIGHT]);
+        RD_M_DrawTextSmallENG(num, 260 + wide_delta, 142, CR_NONE);
+
+        RD_M_DrawTextSmallENG(currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] ? "ON" : "OFF",
+                              120 + wide_delta, 152,
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] ? CR_GREEN : CR_DARKRED);
+
+        RD_Menu_DrawSliderSmallInline(110, 161, 10,
+                                      currentController->axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] / 10);
+        if(currentController)
+            M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERRIGHT]);
+        RD_M_DrawTextSmallENG(num, 207 + wide_delta, 162, CR_NONE);
+
+        //
+        // Footer
+        //
+        RD_M_DrawTextSmallENG("< prev page", 35 + wide_delta, 182, CR_WHITE);
+    }
+    else
+    {
+        RD_M_DrawTextSmallRUS(GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_RIGHTX]),
+                              110 + wide_delta, 32, CR_YELLOW);
+
+        RD_Menu_DrawSliderSmallInline(145, 41, 16,
+                                currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTX] - 1);
+        if(currentController)
+            M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTX]);
+        RD_M_DrawTextSmallRUS(num, 290 + wide_delta, 42, CR_NONE);
+
+        RD_M_DrawTextSmallRUS(currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTX] ? "DRK" : "DSRK",
+                              150 + wide_delta, 52,
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTX] ? CR_GREEN : CR_DARKRED);
+
+        RD_Menu_DrawSliderSmallInline(110, 61, 10,
+                                currentController->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTX] / 10);
+        if(currentController)
+            M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTX]);
+        RD_M_DrawTextSmallRUS(num, 207 + wide_delta, 62, CR_NONE);
+
+
+        RD_M_DrawTextSmallRUS(GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_RIGHTY]),
+                              110 + wide_delta, 82, CR_YELLOW);
+
+        RD_Menu_DrawSliderSmallInline(145, 91, 16,
+                                currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTY] - 1);
+        if(currentController)
+            M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTY]);
+        RD_M_DrawTextSmallRUS(num, 290 + wide_delta, 92, CR_NONE);
+
+        RD_M_DrawTextSmallRUS(currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTY] ? "DRK" : "DSRK",
+                              150 + wide_delta, 102,
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTY] ? CR_GREEN : CR_DARKRED);
+
+        RD_Menu_DrawSliderSmallInline(110, 111, 10,
+                                currentController->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTY] / 10);
+        if(currentController)
+            M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTY]);
+        RD_M_DrawTextSmallRUS(num, 207 + wide_delta, 112, CR_NONE);
+
+
+        RD_M_DrawTextSmallRUS(GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_TRIGGERRIGHT]),
+                              130 + wide_delta, 132, CR_YELLOW);
+
+        RD_Menu_DrawSliderSmallInline(145, 141, 16,
+                                      currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] - 1);
+        if(currentController)
+            M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERRIGHT]);
+        RD_M_DrawTextSmallRUS(num, 290 + wide_delta, 142, CR_NONE);
+
+        RD_M_DrawTextSmallRUS(currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] ? "DRK" : "DSRK",
+                              150 + wide_delta, 152,
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] ? CR_GREEN : CR_DARKRED);
+
+        RD_Menu_DrawSliderSmallInline(110, 161, 10,
+                                      currentController->axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] / 10);
+        if(currentController)
+            M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERRIGHT]);
+        RD_M_DrawTextSmallRUS(num, 207 + wide_delta, 162, CR_NONE);
+
+        //
+        // Footer
+        //
+        RD_M_DrawTextSmallRUS(RD_PREV_RUS, 10 + wide_delta, 182, CR_WHITE);
+    }
+}
+
+static void M_RD_BindAxis_RY(Direction_t direction)
+{
+    RD_Menu_SpinInt(&currentController->bindAxis[SDL_CONTROLLER_AXIS_RIGHTY],
+                    CONTROLLER_AXIS_BUTTON, CONTROLLER_AXIS_VLOOK, direction);
+}
+
+static void M_RD_SensitivityAxis_RY(Direction_t direction)
+{
+    RD_Menu_SlideInt(&currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTY],
+                    1, 16, direction);
+}
+
+static void M_RD_InvertAxis_RY()
+{
+    currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTY] ^= 1;
+}
+
+static void M_RD_DeadZoneAxis_RY(Direction_t direction)
+{
+    RD_Menu_SlideInt(&currentController->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTY],
+                     0, 100, direction);
+}
+
+static void M_RD_BindAxis_RX(Direction_t direction)
+{
+    RD_Menu_SpinInt(&currentController->bindAxis[SDL_CONTROLLER_AXIS_RIGHTX],
+                    CONTROLLER_AXIS_BUTTON, CONTROLLER_AXIS_VLOOK, direction);
+}
+
+static void M_RD_SensitivityAxis_RX(Direction_t direction)
+{
+    RD_Menu_SlideInt(&currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTX],
+                    1, 16, direction);
+}
+
+static void M_RD_InvertAxis_RX()
+{
+    currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTX] ^= 1;
+}
+
+static void M_RD_DeadZoneAxis_RX(Direction_t direction)
+{
+    RD_Menu_SlideInt(&currentController->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTX],
+                     0, 100, direction);
+}
+
+static void M_RD_BindAxis_RT(Direction_t direction)
+{
+    RD_Menu_SpinInt(&currentController->bindAxis[SDL_CONTROLLER_AXIS_TRIGGERRIGHT],
+                    CONTROLLER_AXIS_BUTTON, CONTROLLER_AXIS_VLOOK, direction);
+}
+
+static void M_RD_SensitivityAxis_RT(Direction_t direction)
+{
+    RD_Menu_SlideInt(&currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERRIGHT],
+                     1, 16, direction);
+}
+
+static void M_RD_InvertAxis_RT()
+{
+    currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] ^= 1;
+}
+
+static void M_RD_DeadZoneAxis_RT(Direction_t direction)
+{
+    RD_Menu_SlideInt(&currentController->axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERRIGHT],
+                     0, 100, direction);
 }
 
 // -----------------------------------------------------------------------------

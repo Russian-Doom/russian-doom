@@ -21,6 +21,8 @@
 #ifndef __I_JOYSTICK__
 #define __I_JOYSTICK__
 
+#include <SDL_gamecontroller.h>
+
 // DOOM Controller definition
 enum
 {
@@ -46,28 +48,58 @@ enum
     CONTROLLER_PADDLE4,
     CONTROLLER_TOUCHPAD,
     CONTROLLER_LEFT_TRIGGER, // SDL_CONTROLLER_BUTTON_MAX
-    CONTROLLER_RIGHT_TRIGGER
+    CONTROLLER_RIGHT_TRIGGER,
+    CONTROLLER_LEFT_TRIGGER_NEGATIVE,
+    CONTROLLER_RIGHT_TRIGGER_NEGATIVE,
+    CONTROLLER_LSX_POSITIVE,
+    CONTROLLER_LSX_NEGATIVE,
+    CONTROLLER_LSY_POSITIVE,
+    CONTROLLER_LSY_NEGATIVE,
+    CONTROLLER_RSX_POSITIVE,
+    CONTROLLER_RSX_NEGATIVE,
+    CONTROLLER_RSY_POSITIVE,
+    CONTROLLER_RSY_NEGATIVE
 };
 
 typedef enum
 {
-    CONTROLLER_AXIS_NONE = -1,
-    CONTROLLER_AXIS_MOVE = 0,
+    CONTROLLER_AXIS_BUTTON = 0,
+    CONTROLLER_AXIS_MOVE,
     CONTROLLER_AXIS_STRAFE,
     CONTROLLER_AXIS_TURN,
-    CONTROLLER_AXIS_VLOOK,
-    CONTROLLER_AXIS_MAX
+    CONTROLLER_AXIS_VLOOK
 } controller_axis_t;
 
+typedef struct controller_s
+{
+    struct controller_s* next;
+    char guid[33];
+    SDL_GameController* SDL_controller;
+    char* name;
+    SDL_JoystickID index;
+    int invertAxis[SDL_CONTROLLER_AXIS_MAX];
+    int bindAxis[SDL_CONTROLLER_AXIS_MAX];
+    int axisDeadZone[SDL_CONTROLLER_AXIS_MAX];
+    int axisSensitivity[SDL_CONTROLLER_AXIS_MAX];
+
+    boolean axisButtonsPositiveState[SDL_CONTROLLER_AXIS_MAX];
+    boolean axisButtonsNegativeState[SDL_CONTROLLER_AXIS_MAX];
+} controller_t;
+
 extern int useController;
-extern int invertAxis[CONTROLLER_AXIS_MAX];
-extern int bindAxis[CONTROLLER_AXIS_MAX];
+#define ACTIVE_CONTROLLERS_SIZE 10
+extern controller_t* activeControllers[ACTIVE_CONTROLLERS_SIZE];
+extern controller_t* currentController;
 
 void I_InitController(void);
 void I_ShutdownController(void);
 void I_UpdateController(void);
 
 void I_BindControllerVariables(void);
+boolean ControllerHandler_Handles(char* sectionName);
+void ControllerHandler_HandleLine(char* keyName, char *value, size_t valueSize);
+void ControllerHandler_Save(FILE* file, char* sectionName);
+void ControllerHandler_onFinishHandling();
 
 #endif /* #ifndef __I_JOYSTICK__ */
 

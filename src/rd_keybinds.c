@@ -49,6 +49,7 @@ bind_descriptor_t* bind_descriptor[bk__size];
 boolean keyState[bk__size];
 boolean bindClearEnabled = true;
 
+// [Dasperal] This array must be in sync with bound_key_t enum!
 static const char* bkToName[] = {
     NULL,
     "Forward",
@@ -135,8 +136,8 @@ static const char* bkToName[] = {
 static int nameToBk[arrlen(bkToName) - 1];
 static boolean nameToBk_init = false;
 
-// Index is SDL_SCANCODE
-// [Dasperal] Strings in this array must not be changed only added, or it will break existing configs
+// [Dasperal] This array must be in sync with SDL_Scancode enum!
+// Strings in this array must not be changed only added, or it will break existing configs
 static const char* kKToName[] = {
     "", "", "", "", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",    // 0   - 20
     "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "ENTER", // 21  - 41
@@ -170,7 +171,9 @@ static boolean nameToMK_init = false;
 static const char* cKToName[] = {
     "A", "B", "X", "Y", "BACK", "GUIDE", "START", "LEFT_STICK", "RIGHT_STICK", "LEFT_SHOULDER",            // 0  - 9
     "RIGHT_SHOULDER", "DPAD_UP", "DPAD_DOWN", "DPAD_LEFT", "DPAD_RIGHT", "MISC_1", "PADDLE_1", "PADDLE_2", // 10 - 17
-    "PADDLE_3", "PADDLE_4", "TOUCHPAD", "LEFT_TRIGGER", "RIGHT_TRIGGER"                                    // 18 - 22
+    "PADDLE_3", "PADDLE_4", "TOUCHPAD", "LEFT_TRIGGER", "RIGHT_TRIGGER", "LEFT_TRIGGER_NEG",               // 18 - 23
+    "RIGHT_TRIGGER_NEG", "LSX_POS", "LSX_NEG", "LSY_POS", "LSY_NEG", "RSX_POS", "RSX_NEG", "RSY_POS",      // 24 - 31
+    "RSY_NEG"                                                                                              // 32
 };
 
 static int nameToCK[arrlen(cKToName)];
@@ -581,30 +584,40 @@ static char* getControllerKeyName(int i)
 {
     switch (i)
     {
-        case CONTROLLER_A:              return "PAD_A";
-        case CONTROLLER_B:              return "PAD_B";
-        case CONTROLLER_X:              return "PAD_X";
-        case CONTROLLER_Y:              return "PAD_Y";
-        case CONTROLLER_BACK:           return "PAD_BACK";
-        case CONTROLLER_GUIDE:          return "PAD_GUIDE";
-        case CONTROLLER_START:          return "PAD_START";
-        case CONTROLLER_LEFT_STICK:     return "PAD_L3";
-        case CONTROLLER_RIGHT_STICK:    return "PAD_R3";
-        case CONTROLLER_LEFT_SHOULDER:  return "PAD_L1";
-        case CONTROLLER_RIGHT_SHOULDER: return "PAD_R1";
-        case CONTROLLER_DPAD_UP:        return "DPAD_UP";
-        case CONTROLLER_DPAD_DOWN:      return "DPAD_DOWN";
-        case CONTROLLER_DPAD_LEFT:      return "DPAD_LEFT";
-        case CONTROLLER_DPAD_RIGHT:     return "DPAD_RIGHT";
-        case CONTROLLER_MISC1:          return "PAD_MISC";
-        case CONTROLLER_PADDLE1:        return "PADDLE 1";
-        case CONTROLLER_PADDLE2:        return "PADDLE 2";
-        case CONTROLLER_PADDLE3:        return "PADDLE 3";
-        case CONTROLLER_PADDLE4:        return "PADDLE 4";
-        case CONTROLLER_TOUCHPAD:       return "PAD_TOUCH";
-        case CONTROLLER_LEFT_TRIGGER:   return "PAD_L2";
-        case CONTROLLER_RIGHT_TRIGGER:  return "PAD_R2";
-        default:                        return "?"; // [JN] Unknown key
+        case CONTROLLER_A:                      return "PAD_A";
+        case CONTROLLER_B:                      return "PAD_B";
+        case CONTROLLER_X:                      return "PAD_X";
+        case CONTROLLER_Y:                      return "PAD_Y";
+        case CONTROLLER_BACK:                   return "PAD_BACK";
+        case CONTROLLER_GUIDE:                  return "PAD_GUIDE";
+        case CONTROLLER_START:                  return "PAD_START";
+        case CONTROLLER_LEFT_STICK:             return "PAD_L3";
+        case CONTROLLER_RIGHT_STICK:            return "PAD_R3";
+        case CONTROLLER_LEFT_SHOULDER:          return "PAD_L1";
+        case CONTROLLER_RIGHT_SHOULDER:         return "PAD_R1";
+        case CONTROLLER_DPAD_UP:                return "DPAD_UP";
+        case CONTROLLER_DPAD_DOWN:              return "DPAD_DOWN";
+        case CONTROLLER_DPAD_LEFT:              return "DPAD_LEFT";
+        case CONTROLLER_DPAD_RIGHT:             return "DPAD_RIGHT";
+        case CONTROLLER_MISC1:                  return "PAD_MISC";
+        case CONTROLLER_PADDLE1:                return "PADDLE 1";
+        case CONTROLLER_PADDLE2:                return "PADDLE 2";
+        case CONTROLLER_PADDLE3:                return "PADDLE 3";
+        case CONTROLLER_PADDLE4:                return "PADDLE 4";
+        case CONTROLLER_TOUCHPAD:               return "PAD_TOUCH";
+        case CONTROLLER_LEFT_TRIGGER:           return "PAD_L2";
+        case CONTROLLER_RIGHT_TRIGGER:          return "PAD_R2";
+        case CONTROLLER_LEFT_TRIGGER_NEGATIVE:  return "PAD_L2_NEG";
+        case CONTROLLER_RIGHT_TRIGGER_NEGATIVE: return "PAD_R2_NEG";
+        case CONTROLLER_LSX_POSITIVE:           return "LSX_POS";
+        case CONTROLLER_LSX_NEGATIVE:           return "LSX_NEG";
+        case CONTROLLER_LSY_POSITIVE:           return "LSY_POS";
+        case CONTROLLER_LSY_NEGATIVE:           return "LSY_NEG";
+        case CONTROLLER_RSX_POSITIVE:           return "RSX_POS";
+        case CONTROLLER_RSX_NEGATIVE:           return "RSX_NEG";
+        case CONTROLLER_RSY_POSITIVE:           return "RSY_POS";
+        case CONTROLLER_RSY_NEGATIVE:           return "RSY_NEG";
+        default:                                return "?"; // [JN] Unknown key
     }
 }
 
@@ -1248,7 +1261,7 @@ void KeybindsHandler_HandleLine(char* keyName, char *value, size_t valueSize)
     bindClearEnabled = true;
 }
 
-void KeybindsHandler_Save(FILE* file)
+void KeybindsHandler_Save(FILE* file, char* sectionName)
 {
     int i;
     bind_descriptor_t* bind;
@@ -1289,5 +1302,4 @@ void KeybindsHandler_Save(FILE* file)
             fprintf(file, "\n");
         }
     }
-    fprintf(file, "\n");
 }

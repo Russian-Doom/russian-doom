@@ -278,6 +278,31 @@ void RD_M_DrawTextSmallENG(char *text, int x, int y, Translation_CR_t translatio
     }
 }
 
+/** [JN] Returns the pixel width of a string using unreplaceable small English font*/
+int RD_M_TextSmallENGWidth(char *text)
+{
+    char c;
+    int width;
+    patch_t *p;
+
+    width = 0;
+    while ((c = *text++) != 0)
+    {
+        if (c < 33)
+        {
+            width += (RD_GameType == gt_Doom ? 4 : 5);
+        }
+        else
+        {
+            c = toupper(c);
+            // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
+            p = W_CacheLumpNum(smallEngFont + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
+            width += SHORT(p->width) - (RD_GameType == gt_Doom ? 0 : 1);
+        }
+    }
+    return (width);
+}
+
 /** [JN] Draw text string with unreplaceable big English font*/
 void RD_M_DrawTextBigENG(char *text, int x, int y)
 {

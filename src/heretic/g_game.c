@@ -182,9 +182,9 @@ int mousex, mousey;             // mouse values are used once
 
 #define MAX_JOY_BUTTONS 20
 
-int joyxmove, joyymove;         // joystick values are repeated
+int joyturn, joymove;         // joystick values are repeated
 int joystrafemove;
-int joyylook;
+int joyvlook;
 int alwaysRun = 1;              // is always run enabled
 
 int savegameslot;
@@ -285,13 +285,9 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     
     forward = side = look = arti = flyheight = 0;
 
-//
-// use two stage accelerative turning on the keyboard and joystick
-//
-    if (joyxmove < 0
-    ||  joyxmove > 0
-    ||  BK_isKeyPressed(bk_turn_right)
-    ||  BK_isKeyPressed(bk_turn_left))
+    // use two stage accelerative turning on the keyboard
+    if(BK_isKeyPressed(bk_turn_right)
+    || BK_isKeyPressed(bk_turn_left))
     {
         turnheld += ticdup;
     }
@@ -373,10 +369,8 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
             side += sidemove[speed];
         if (BK_isKeyPressed(bk_turn_left))
             side -= sidemove[speed];
-        if (joyxmove > 0)
-            side += sidemove[speed];
-        if (joyxmove < 0)
-            side -= sidemove[speed];
+        if (joyturn != 0)
+            side += joyturn;
         if(mousex != 0)
             side += mousex*2;
     }
@@ -386,10 +380,8 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
             cmd->angleturn -= angleturn[tspeed];
         if (BK_isKeyPressed(bk_turn_left))
             cmd->angleturn += angleturn[tspeed];
-        if (joyxmove > 0)
-            cmd->angleturn -= angleturn[tspeed];
-        if (joyxmove < 0)
-            cmd->angleturn += angleturn[tspeed];
+        if (joyturn != 0)
+            cmd->angleturn -= joyturn;
         if(mousex != 0)
             cmd->angleturn -= mousex*0x8;
     }
@@ -398,21 +390,21 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         forward += forwardmove[speed];
     if (BK_isKeyPressed(bk_backward))
         forward -= forwardmove[speed];
-    if (joyymove < 0)
-        forward += forwardmove[speed];
-    if (joyymove > 0)
-        forward -= forwardmove[speed];
-    if (BK_isKeyPressed(bk_strafe_right) || joystrafemove > 0)
+    if(joymove != 0)
+        forward += joymove;
+    if (BK_isKeyPressed(bk_strafe_right))
         side += sidemove[speed];
-    if (BK_isKeyPressed(bk_strafe_left) || joystrafemove < 0)
+    if (BK_isKeyPressed(bk_strafe_left))
         side -= sidemove[speed];
+    if(joystrafemove != 0)
+        side += joystrafemove;
 
     // Look up/down/center keys
-    if (BK_isKeyPressed(bk_look_up) || joyylook > 0)
+    if (BK_isKeyPressed(bk_look_up))
     {
         look = lspeed;
     }
-    if (BK_isKeyPressed(bk_look_down) || joyylook < 0)
+    if (BK_isKeyPressed(bk_look_down))
     {
         look = -lspeed;
     }
@@ -582,10 +574,12 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         if (mlook || novert)
         {
             cmd->lookdir += mouse_y_invert ? -mousey : mousey;
+            cmd->lookdir += joyvlook;
         }
         else if (!novert)
         {
             forward += mousey;
+            forward += joyvlook;
         }
         
          if (players[consoleplayer].lookdir > LOOKDIRMAX * MLOOKUNIT)
@@ -615,7 +609,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         BK_ReleaseKey(bk_toggle_mlook);
     }
 
-    mousex = mousey = 0;
+    mousex = mousey = joyturn = joyvlook = 0;
 
     // [JN] "false" must be set as initial and returning condition.
     max_bobbing = false; 
@@ -753,7 +747,7 @@ void G_DoLoadLevel(void)
 //
 
     BK_ReleaseAllKeys();
-    joyxmove = joyymove = joystrafemove = 0;
+    joyvlook = joyturn = joymove = joystrafemove = 0;
     mousex = mousey = 0;
     sendpause = sendsave = paused = false;
 
@@ -906,12 +900,12 @@ boolean G_Responder(event_t * ev)
             mousey = ev->data3 * (mouseSensitivity + 5) / 10;
             return true;      // eat events
 
-      case ev_controller_move:
-          joyymove = ev->data1;
-          joystrafemove = ev->data2;
-          joyxmove = ev->data3;
-          joyylook = ev->data4;
-          return (true);      // eat events
+        case ev_controller_move:
+            joymove = ev->data1;
+            joystrafemove = ev->data2;
+            joyturn = ev->data3;
+            joyvlook = ev->data4;
+            return (true);      // eat events
 
         default:
             break;
