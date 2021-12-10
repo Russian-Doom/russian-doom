@@ -86,14 +86,14 @@ static boolean WriteWrapperTimidityConfig(char *write_path)
            "I_SDLMusic: Using Timidity config from:\n \t%s\n" :
            "I_SDLMusic: Используется Timidity конфиг из файла:\n \t%s\n",
            timidity_cfg_path);
-
+#ifndef RD_BUILD_HAS_SDL_MIXER_PATCH
     if(strchr(timidity_cfg_path, ' '))
     {
         printf(english_language ?
                "\tError: The path contains spaces, which are not allowed\n" :
                "\tОшибка: Путь содержит пробелы, что недопустимо\n");
     }
-
+#endif
     fstream = fopen(write_path, "w");
 
     if (fstream == NULL)
