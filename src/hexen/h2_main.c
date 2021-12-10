@@ -582,6 +582,10 @@ void D_DoomMain(void)
     M_SetConfigFilename(PROGRAM_PREFIX "hexen.ini");
     M_LoadConfig();
 
+    // Call I_ShutdownGraphics on quit
+
+    I_AtExit(I_ShutdownGraphics, true);
+
     // Initialize subsystems
 
     ST_Message(english_language ?

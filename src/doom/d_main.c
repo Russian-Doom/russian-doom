@@ -2564,6 +2564,10 @@ void D_DoomMain (void)
     DEH_printf("\n");
 #endif
 
+    // Call I_ShutdownGraphics on quit
+
+    I_AtExit(I_ShutdownGraphics, true);
+
     I_AtExit(D_Endoom, false);
 
     if (devparm)
