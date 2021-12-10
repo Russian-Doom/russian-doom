@@ -232,14 +232,14 @@ static boolean WriteTimidityConfig(char *path, gus_config_t *config, char* gus_p
 {
     FILE *fstream;
     unsigned int i;
-
+#ifndef RD_BUILD_HAS_SDL_MIXER_PATCH
     if(strchr(gus_patches_path, ' '))
     {
         printf(english_language ?
                "\tError: The path contains spaces, which are not allowed\n" :
                "\tОшибка: Путь содержит пробелы, что недопустимо\n");
     }
-
+#endif
     fstream = fopen(path, "w");
 
     if (fstream == NULL)
