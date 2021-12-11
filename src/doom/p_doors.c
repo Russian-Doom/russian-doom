@@ -177,6 +177,8 @@ void T_VerticalDoor (vldoor_t *door)
                 case vld_open:
                 door->sector->specialdata = NULL;
                 P_RemoveThinker (&door->thinker);  // unlink and free
+                // [JN] Don't play an opening sound if a door is aleady opened.
+                S_StopDoorSound(&door->sector->soundorg);
                 break;
 
                 default:

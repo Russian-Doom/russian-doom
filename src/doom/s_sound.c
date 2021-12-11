@@ -383,6 +383,23 @@ void S_StopSound (mobj_t *origin)
 }
 
 // -----------------------------------------------------------------------------
+// S_StopDoorSound
+// [Dasperal] & [JN] Prevents opening sound for a door which is already opened.
+// -----------------------------------------------------------------------------
+
+void S_StopDoorSound (degenmobj_t *origin)
+{
+    for (int cnum=0 ; cnum<snd_channels ; cnum++)
+    {
+        if (channels[cnum].sfxinfo && channels[cnum].origin == ((mobj_t*) origin))
+        {
+            S_StopChannel(cnum);
+            break;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
 // S_GetChannel
 // If none available, return -1.  Otherwise channel #.
 // -----------------------------------------------------------------------------
