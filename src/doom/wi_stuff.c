@@ -708,6 +708,13 @@ static void WI_drawAnimatedBack (void)
         return;
     }
 
+    // [JN] Pre-draw Tower of Babel patch to prevent animation blinking.
+    if (wbs->epsd == 1 && gamemap != 8)
+    {
+        a = &anims[1][gamemap-1];
+        V_DrawPatch((a->loc.x) + wide_delta, a->loc.y, a->p[0]);
+    }
+
     for (int i = 0 ; i < NUMANIMS[wbs->epsd] ; i++)
     {
         a = &anims[wbs->epsd][i];
