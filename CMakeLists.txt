@@ -17,8 +17,8 @@ Option(COMPILE_STRIFE "Compile Strife module" OFF)
 # [Dasperal] Disable Setup by default. Usage of Setup resets many of the settings available in the game menu, so we don't distribute it
 Option(COMPILE_SETUP "Compile Setup module" OFF)
 
-# [Dasperal] This should be ON only if used SDL_Mixer runtime library has https://github.com/libsdl-org/SDL_mixer/pull/337 patch applied
-Option(BUILD_HAS_SDL_MIXER_PATCH "Use features available in patched SDL_Mixer runtime library (see COMPILING.MD)" OFF)
+# [Dasperal] This should be ON only if used SDL_Mixer runtime library is new enough and has https://github.com/libsdl-org/SDL_mixer/commit/1c0092787398097360f7da745c7644fd32697f3b patch
+Option(BUILD_HAS_SDL_MIXER_PATCH "Use features available in new enough SDL_mixer runtime library (see COMPILING.MD)" OFF)
 
 # Autotools variables
 set(top_srcdir ${CMAKE_CURRENT_SOURCE_DIR})
