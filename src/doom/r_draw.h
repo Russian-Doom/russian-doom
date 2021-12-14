@@ -31,12 +31,13 @@
 void R_DrawColumn (void);
 void R_DrawColumnLow (void);
 
-extern lighttable_t *dc_colormap; 
+
 extern int           dc_x, dc_yl, dc_yh; 
+extern int           dc_texheight;
 extern fixed_t       dc_iscale;
 extern fixed_t       dc_texturemid;
-extern int           dc_texheight;
-extern byte *dc_source;
+extern lighttable_t *dc_colormap; 
+extern byte         *dc_source;
 
 //
 // The Spectre/Invisibility effect.
@@ -80,9 +81,9 @@ void R_DrawSpan (void);
 // Low resolution mode, 160x200?
 void R_DrawSpanLow (void);
 
-extern int     ds_y, ds_x1, ds_x2;
-extern fixed_t ds_xfrac, ds_yfrac;
-extern fixed_t ds_xstep, ds_ystep;
+extern int           ds_y, ds_x1, ds_x2;
+extern fixed_t       ds_xfrac, ds_yfrac;
+extern fixed_t       ds_xstep, ds_ystep;
 extern byte         *ds_source;
 extern lighttable_t *ds_colormap;
 

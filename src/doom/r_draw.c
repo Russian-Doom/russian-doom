@@ -43,18 +43,13 @@
 // The other refresh files only know about ccordinates, not the architecture
 // of the frame buffer. Conveniently, the frame buffer is a linear one,
 // and we need only the base address, and the total size == width*height*depth/8.
-byte *viewimage; 
 int   viewwidth, scaledviewwidth;
 int   viewheight, scaledviewheight;
 int   viewwindowx, viewwindowy; 
 
-byte *ylookup[SCREENHEIGHT]; 
-int   columnofs[WIDESCREENWIDTH]; 
+static byte *ylookup[SCREENHEIGHT]; 
+static int   columnofs[WIDESCREENWIDTH]; 
 
-// Color tables for different players, translate a limited part to another
-// (color ramps used for suit colors).
-byte translations[3][256];	
- 
 // Backing buffer containing the bezel drawn around the screen and 
 // surrounding background.
 static byte *background_buffer = NULL;
