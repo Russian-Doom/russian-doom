@@ -538,8 +538,6 @@ static MenuItem_t DisplayItems[] = {
     {ITT_TITLE,   "SCREEN",                    "\'RHFY",                  NULL,                 0}, // ЭКРАН
     {ITT_LRFUNC,  "SCREEN SIZE",               "HFPVTH BUHJDJUJ \'RHFYF", M_RD_ScreenSize,      0}, // РАЗМЕР ИГРОВОГО ЭКРАНА
     {ITT_EMPTY,   NULL,                        NULL,                      NULL,                 0},
-    {ITT_LRFUNC,  "GAMMA-CORRECTION",          "EHJDTYM UFVVF-RJHHTRWBB", M_RD_Gamma,           0}, // УРОВЕНЬ ГАММА-КОРРЕКЦИИ
-    {ITT_EMPTY,   NULL,                        NULL,                      NULL,                 0},
     {ITT_LRFUNC,  "LEVEL BRIGHTNESS",          "EHJDTYM JCDTOTYYJCNB",    M_RD_LevelBrightness, 0}, // УРОВЕНЬ ОСВЕЩЕННОСТИ
     {ITT_EMPTY,   NULL,                        NULL,                      NULL,                 0},
     {ITT_SWITCH,  "GRAPHICS DETAIL:",          "LTNFKBPFWBZ UHFABRB:",    M_RD_Detail,          0}, // ДЕТАЛИЗАЦИЯ ГРАФИКИ
@@ -553,7 +551,7 @@ static Menu_t DisplayMenu = {
     36, 36,
     32,
     "DISPLAY OPTIONS", "YFCNHJQRB \'RHFYF", false, // НАСТРОЙКИ ЭКРАНА
-    12, DisplayItems, false,
+    10, DisplayItems, false,
     DrawDisplayMenu,
     NULL,
     &RDOptionsMenu,
@@ -1949,12 +1947,12 @@ static void DrawDisplayMenu(void)
     if (english_language)
     {
         // Graphics detail
-        RD_M_DrawTextSmallENG(detailLevel ? "LOW" : "HIGH", 149 + wide_delta, 102, CR_NONE);
+        RD_M_DrawTextSmallENG(detailLevel ? "LOW" : "HIGH", 149 + wide_delta, 82, CR_NONE);
     }
     else
     {
         // Детализация графики
-        RD_M_DrawTextSmallRUS(detailLevel ? "YBPRFZ" : "DSCJRFZ", 188 + wide_delta, 102, CR_NONE);
+        RD_M_DrawTextSmallRUS(detailLevel ? "YBPRFZ" : "DSCJRFZ", 188 + wide_delta, 82, CR_NONE);
     }
 
     //
@@ -1977,11 +1975,8 @@ static void DrawDisplayMenu(void)
         dp_translation = NULL;
     }
 
-    // Gamma-correction
-    RD_Menu_DrawSliderSmall(&DisplayMenu, 72, 18, usegamma);
-
     // Level brightness
-    RD_Menu_DrawSliderSmall(&DisplayMenu, 92, 5, level_brightness / 16);
+    RD_Menu_DrawSliderSmall(&DisplayMenu, 72, 5, level_brightness / 16);
 }
 
 static void M_RD_ScreenSize(Direction_t direction)
