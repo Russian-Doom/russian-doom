@@ -2058,9 +2058,9 @@ static void DrawColorMenu(void)
         RD_M_DrawTextSmallENG("COLOR INTENSITY",
                               107 + wide_delta, 65, CR_WHITE2DARKGOLD_HERETIC);
 
-        RD_M_DrawTextSmallENG("RED", 121 + wide_delta, 75, CR_NONE);
-        RD_M_DrawTextSmallENG("GREEN", 105 + wide_delta, 85, CR_GREEN);
-        RD_M_DrawTextSmallENG("BLUE", 116 + wide_delta, 95, CR_BLUE2);
+        RD_M_DrawTextSmallENG("RED", 121 + wide_delta, 75, CR_WHITE2RED_HERETIC);
+        RD_M_DrawTextSmallENG("GREEN", 105 + wide_delta, 85, CR_WHITE2GREEN_HERETIC);
+        RD_M_DrawTextSmallENG("BLUE", 116 + wide_delta, 95, CR_WHITE2BLUE_HERETIC);
     }
     else
     {
@@ -2073,9 +2073,9 @@ static void DrawColorMenu(void)
         RD_M_DrawTextSmallRUS("byntycbdyjcnm wdtnf",  // Интенсивность цвета
                               89 + wide_delta, 65, CR_WHITE2DARKGOLD_HERETIC);
 
-        RD_M_DrawTextSmallRUS("rhfcysq", 90 + wide_delta, 75, CR_NONE);  // Красный
-        RD_M_DrawTextSmallRUS("ptktysq", 90 + wide_delta, 85, CR_GREEN); // Зелёный
-        RD_M_DrawTextSmallRUS("cbybq", 109 + wide_delta, 95, CR_BLUE2);  // Синий
+        RD_M_DrawTextSmallRUS("rhfcysq", 90 + wide_delta, 75, CR_WHITE2RED_HERETIC);    // Красный
+        RD_M_DrawTextSmallRUS("ptktysq", 90 + wide_delta, 85, CR_WHITE2GREEN_HERETIC);  // Зелёный
+        RD_M_DrawTextSmallRUS("cbybq", 109 + wide_delta, 95, CR_WHITE2BLUE_HERETIC);    // Синий
     }
 
     // Brightness slider
@@ -2100,17 +2100,17 @@ static void DrawColorMenu(void)
     // RED intensity slider
     RD_Menu_DrawSliderSmall(&ColorMenu, 75, 10, r_color_factor * 10);
     M_snprintf(num, 5, "%3f", r_color_factor);  // Numerical representation of slider position
-    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 76, CR_NONE);
+    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 76, CR_WHITE2RED_HERETIC);
 
     // GREEN intensity slider
     RD_Menu_DrawSliderSmall(&ColorMenu, 85, 10, g_color_factor * 10);
     M_snprintf(num, 5, "%3f", g_color_factor);  // Numerical representation of slider position
-    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 86, CR_GREEN);
+    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 86, CR_WHITE2GREEN_HERETIC);
 
     // BLUE intensity slider
     RD_Menu_DrawSliderSmall(&ColorMenu, 95, 10, b_color_factor * 10);
     M_snprintf(num, 5, "%3f", b_color_factor);  // Numerical representation of slider position
-    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 96, CR_BLUE2);
+    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 96, CR_WHITE2BLUE_HERETIC);
 
     if (show_palette)
     {
