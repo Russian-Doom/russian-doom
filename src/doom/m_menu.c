@@ -1704,14 +1704,14 @@ static Menu_t ResetMenu = {
 // =============================================================================
 
 static MenuItem_t LoadItems[] = {
-    {ITT_EFUNC, NULL, NULL, M_LoadSelect, 0},
-    {ITT_EFUNC, NULL, NULL, M_LoadSelect, 1},
-    {ITT_EFUNC, NULL, NULL, M_LoadSelect, 2},
-    {ITT_EFUNC, NULL, NULL, M_LoadSelect, 3},
-    {ITT_EFUNC, NULL, NULL, M_LoadSelect, 4},
-    {ITT_EFUNC, NULL, NULL, M_LoadSelect, 5},
-    {ITT_EFUNC, NULL, NULL, M_LoadSelect, 6},
-    {ITT_EFUNC, NULL, NULL, M_LoadSelect, 7}
+    {ITT_EFUNC, "1", "1", M_LoadSelect, 0},
+    {ITT_EFUNC, "2", "2", M_LoadSelect, 1},
+    {ITT_EFUNC, "3", "3", M_LoadSelect, 2},
+    {ITT_EFUNC, "4", "4", M_LoadSelect, 3},
+    {ITT_EFUNC, "5", "5", M_LoadSelect, 4},
+    {ITT_EFUNC, "6", "6", M_LoadSelect, 5},
+    {ITT_EFUNC, "7", "7", M_LoadSelect, 6},
+    {ITT_EFUNC, "8", "8", M_LoadSelect, 7}
 };
 
 static Menu_t LoadMenu = {
@@ -1730,14 +1730,14 @@ static Menu_t LoadMenu = {
 // =============================================================================
 
 static MenuItem_t SaveItems[] = {
-    {ITT_EFUNC, NULL, NULL, M_SaveSelect,  0},
-    {ITT_EFUNC, NULL, NULL, M_SaveSelect,  1},
-    {ITT_EFUNC, NULL, NULL, M_SaveSelect,  2},
-    {ITT_EFUNC, NULL, NULL, M_SaveSelect,  3},
-    {ITT_EFUNC, NULL, NULL, M_SaveSelect,  4},
-    {ITT_EFUNC, NULL, NULL, M_SaveSelect,  5},
-    {ITT_EFUNC, NULL, NULL, M_SaveSelect,  6},
-    {ITT_EFUNC, NULL, NULL, M_SaveSelect,  7}
+    {ITT_EFUNC, "1", "1", M_SaveSelect, 0},
+    {ITT_EFUNC, "2", "2", M_SaveSelect, 1},
+    {ITT_EFUNC, "3", "3", M_SaveSelect, 2},
+    {ITT_EFUNC, "4", "4", M_SaveSelect, 3},
+    {ITT_EFUNC, "5", "5", M_SaveSelect, 4},
+    {ITT_EFUNC, "6", "6", M_SaveSelect, 5},
+    {ITT_EFUNC, "7", "7", M_SaveSelect, 6},
+    {ITT_EFUNC, "8", "8", M_SaveSelect, 7}
 };
 
 static Menu_t SaveMenu = {
