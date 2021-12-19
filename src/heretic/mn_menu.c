@@ -2722,6 +2722,13 @@ static void DrawSoundSystemMenu(void)
 
         // Mute inactive window
         RD_M_DrawTextSmallENG(mute_inactive_window ? "ON" : "OFF", 184 + wide_delta, 122, CR_NONE);
+
+        // Informative message:
+        if (CurrentItPos == 4)
+        {
+            RD_M_DrawTextSmallENG("CHANGING WILL REQUIRE RESTART OF THE PROGRAM",
+                                  3 + wide_delta, 132, CR_WHITE2GREEN_HERETIC);
+        }
     }
     else
     {
@@ -2789,6 +2796,13 @@ static void DrawSoundSystemMenu(void)
 
         // Звук в неактивном окне
         RD_M_DrawTextSmallRUS(mute_inactive_window ? "DSRK" : "DRK", 201 + wide_delta, 122, CR_NONE);
+
+        // Informative message: ИЗМЕНЕНИЕ ПОТРЕБУЕТ ПЕРЕЗАПУСК ПРОГРАММЫ
+        if (CurrentItPos == 4)
+        {
+            RD_M_DrawTextSmallRUS("BPVTYTYBT GJNHT,ETN GTHTPFGECR GHJUHFVVS",
+                                  11 + wide_delta, 132, CR_WHITE2GREEN_HERETIC);
+        }
     }
 
     // [JN] Speaker test routine.
