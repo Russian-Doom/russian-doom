@@ -174,13 +174,11 @@ void S_StartSound(void *_origin, int sound_id)
     absy = abs(origin->y - listener->y);
     // [JN] Z-axis sfx distance
     absz = !z_axis_sfx || vanillaparm ? 0 : abs(origin->z - listener->z);
-    dist = absx + absy + absz - (absx > absy ? absy >> 1 : absx >> 1);
+    dist = P_ApproxDistanceZ(absx, absy, absz);
     dist >>= FRACBITS;
-//  dist = P_AproxDistance(origin->x-viewx, origin->y-viewy)>>FRACBITS;
 
     if (dist >= MAX_SND_DIST)
     {
-//      dist = MAX_SND_DIST - 1;
         return;                 //sound is beyond the hearing range...
     }
     if (dist < 0)
