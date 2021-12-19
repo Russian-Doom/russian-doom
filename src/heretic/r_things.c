@@ -1203,7 +1203,7 @@ void R_DrawPSprite (pspdef_t *psp)
     sprframe = &sprdef->spriteframes[psp->state->frame & FF_FRAMEMASK];
 
     lump = sprframe->lump[0];
-    flip = (boolean)sprframe->flip[0] ^ flip_levels;
+    flip = (boolean)sprframe->flip[0] ^ flip_levels ^ flip_weapons;
 
     // [JN] Applying weapon bobbing for ready states, halfed for firing states 
     // and x-only for raise/lower states. "Plus" means activated Tome of Power.

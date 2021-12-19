@@ -204,6 +204,7 @@ static void M_RD_ColoredBlood();
 static void M_RD_SwirlingLiquids();
 static void M_RD_InvulSky();
 static void M_RD_LinearSky();
+static void M_RD_FlipWeapons();
 
 // Gameplay (page 2)
 static void DrawGameplay2Menu(void);
@@ -1069,7 +1070,7 @@ static MenuItem_t Gameplay1Items[] = {
     {ITT_SWITCH,  "SWIRLING LIQUIDS:",            "EKEXITYYFZ FYBVFWBZ ;BLRJCNTQ:", M_RD_SwirlingLiquids, 0}, // УЛУЧШЕННАЯ АНИМАЦИЯ ЖИДКОСТЕЙ
     {ITT_SWITCH,  "INVULNERABILITY AFFECTS SKY:", "YTEZPDBVJCNM JRHFIBDFTN YT,J:",  M_RD_InvulSky,        0}, // НЕУЯЗВИМОСТЬ ОКРАШИВАЕТ НЕБО
     {ITT_SWITCH,  "SKY DRAWING MODE:",            "HT;BV JNHBCJDRB YT,F:",          M_RD_LinearSky,       0}, // РЕЖИМ ОТРИСОВКИ НЕБА
-    {ITT_EMPTY,   NULL,                           NULL,                             NULL,                 0},
+    {ITT_SWITCH,  "FLIP WEAPONS:",                "PTHRFKMYJT JNHF;TYBT JHE;BZ:",   M_RD_FlipWeapons,     0}, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ ОРУЖИЯ
     {ITT_EMPTY,   NULL,                           NULL,                             NULL,                 0},
     {ITT_EMPTY,   NULL,                           NULL,                             NULL,                 0},
     {ITT_EMPTY,   NULL,                           NULL,                             NULL,                 0},
@@ -3695,6 +3696,10 @@ static void DrawGameplay1Menu(void)
         // Sky drawing mode
         RD_M_DrawTextSmallENG(linear_sky ? "LINEAR" : "ORIGINAL", 162 + wide_delta, 96,
                               linear_sky ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+
+        // Flip weapons
+        RD_M_DrawTextSmallENG(flip_weapons ? "ON" : "OFF", 130 + wide_delta, 106,
+                              flip_weapons ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
     }
     else
     {
@@ -3729,6 +3734,10 @@ static void DrawGameplay1Menu(void)
         // Режим отрисовки неба
         RD_M_DrawTextSmallRUS(linear_sky ? "KBYTQYSQ" : "JHBUBYFKMYSQ", 195 + wide_delta, 96,
                               linear_sky ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+
+        // Зеркальное отражение оружия
+        RD_M_DrawTextSmallRUS(flip_weapons ? "DRK" : "DSRK", 250 + wide_delta, 106,
+                              flip_weapons ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
     }
 }
 
@@ -3765,6 +3774,11 @@ static void M_RD_InvulSky()
 static void M_RD_LinearSky()
 {
     linear_sky ^= 1;
+}
+
+static void M_RD_FlipWeapons()
+{
+    flip_weapons ^= 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -4854,6 +4868,7 @@ static void M_RD_BackToDefaults_Recommended(void)
     swirling_liquids     = 1;
     invul_sky            = 1;
     linear_sky           = 1;
+    flip_weapons         = 0;
 
     // Gameplay (2)
     sbar_colored         = 0;
@@ -4987,6 +5002,7 @@ static void M_RD_BackToDefaults_Original(void)
     swirling_liquids     = 0;
     invul_sky            = 0;
     linear_sky           = 0;
+    flip_weapons         = 0;
 
     // Gameplay (2)
     sbar_colored         = 0;
