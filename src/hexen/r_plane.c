@@ -458,8 +458,9 @@ void R_DrawPlanes(void)
                         {
                             return;
                         }
-                        angle = (viewangle + xtoviewangle[x])
-                            >> ANGLETOSKYSHIFT;
+                        // [crispy] Optionally draw skies horizontally linear.
+                        angle = ((viewangle + (linear_sky && !vanillaparm ?
+                                  linearskyangle[x] : xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
                         source = R_GetColumn(skyTexture, angle + offset);
                         source2 = R_GetColumn(skyTexture2, angle + offset2);
                         dest = ylookup[dc_yl] + columnofs[flipwidth[x]];
@@ -508,8 +509,9 @@ void R_DrawPlanes(void)
                         {
                             return;
                         }
-                        angle = (viewangle + xtoviewangle[x])
-                            >> ANGLETOSKYSHIFT;
+                        // [crispy] Optionally draw skies horizontally linear.
+                        angle = ((viewangle + (linear_sky && !vanillaparm ?
+                                  linearskyangle[x] : xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
                         source = R_GetColumn(skyTexture, angle + offset);
                         dest = ylookup[dc_yl] + columnofs[flipwidth[x]];
                         frac = SKYTEXTUREMIDSHIFTED * FRACUNIT + (dc_yl - centery) * fracstep;

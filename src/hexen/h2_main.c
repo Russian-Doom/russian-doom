@@ -154,6 +154,7 @@ int brightmaps = 1;
 int fake_contrast = 0;
 int flip_levels = 0;
 int draw_shadowed_text = 1;
+int linear_sky = 1;
 
 // Gameplay: Crosshair
 int crosshair_draw = 0;
@@ -280,6 +281,7 @@ void D_BindVariables(void)
     M_BindIntVariable("brightmaps",             &brightmaps);
     M_BindIntVariable("fake_contrast",          &fake_contrast);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
+    M_BindIntVariable("linear_sky",             &linear_sky);
 
     // Геймплей
     M_BindIntVariable("flip_levels",            &flip_levels);

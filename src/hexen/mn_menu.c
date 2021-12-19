@@ -181,6 +181,7 @@ static void M_RD_DeadZoneAxis_RT(Direction_t direction);
 static void DrawGameplayMenu(void);
 static void M_RD_Brightmaps();
 static void M_RD_FakeContrast();
+static void M_RD_LinearSky();
 static void M_RD_CrossHairDraw();
 static void M_RD_CrossHairType();
 static void M_RD_CrossHairScale();
@@ -1002,6 +1003,7 @@ static MenuItem_t GameplayItems[] = {
     {ITT_TITLE,  "VISUAL",               "UHFABRF",                       NULL,                 0}, // ГРАФИКА
     {ITT_SWITCH, "BRIGHTMAPS:",          ",HFQNVFGGBYU:",                 M_RD_Brightmaps,      0}, // БРАЙТМАППИНГ
     {ITT_SWITCH, "FAKE CONTRAST:",       "BVBNFWBZ RJYNHFCNYJCNB:",       M_RD_FakeContrast,    0}, // ИМИТАЦИЯ КОНТРАСТНОСТИ
+    {ITT_SWITCH, "SKY DRAWING MODE:",    "HT;BV JNHBCJDRB YT,F:",         M_RD_LinearSky,       0}, // РЕЖИМ ОТРИСОВКИ НЕБА
     {ITT_TITLE,  "CROSSHAIR",            "GHBWTK",                        NULL,                 0}, // ПРИЦЕЛ
     {ITT_SWITCH, "DRAW CROSSHAIR:",      "JNJ,HF;FNM GHBWTK:",            M_RD_CrossHairDraw,   0}, // ОТОБРАЖАТЬ ПРИЦЕЛ
     {ITT_SWITCH, "INDICATION:",          "BYLBRFWBZ:",                    M_RD_CrossHairType,   0}, // ИНДИКАЦИЯ
@@ -1015,7 +1017,7 @@ static Menu_t GameplayMenu = {
     36, 36,
     32,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
-    10, GameplayItems, false,
+    11, GameplayItems, false,
     DrawGameplayMenu,
     NULL,
     &RDOptionsMenu,
@@ -3263,24 +3265,28 @@ static void DrawGameplayMenu(void)
         RD_M_DrawTextSmallENG(fake_contrast ? "ON" : "OFF", 143 + wide_delta, 52,
                               fake_contrast ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
+        // Sky drawing mode
+        RD_M_DrawTextSmallENG(linear_sky ? "LINEAR" : "ORIGINAL", 162 + wide_delta, 62,
+                              linear_sky ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+
         // Draw crosshair
-        RD_M_DrawTextSmallENG(crosshair_draw ? "ON" : "OFF", 150 + wide_delta, 72,
+        RD_M_DrawTextSmallENG(crosshair_draw ? "ON" : "OFF", 150 + wide_delta, 82,
                               crosshair_draw ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Indication
-        RD_M_DrawTextSmallENG(crosshair_type == 1 ? "HEALTH" : "STATIC",  111 + wide_delta, 82,
+        RD_M_DrawTextSmallENG(crosshair_type == 1 ? "HEALTH" : "STATIC",  111 + wide_delta, 92,
                               crosshair_type ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Increased size
-        RD_M_DrawTextSmallENG(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 92,
+        RD_M_DrawTextSmallENG(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 102,
                               crosshair_scale ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Flip game levels
-        RD_M_DrawTextSmallENG(flip_levels ? "ON" : "OFF", 153 + wide_delta, 112,
+        RD_M_DrawTextSmallENG(flip_levels ? "ON" : "OFF", 153 + wide_delta, 122,
                               flip_levels ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Play internal demos
-        RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON", 179 + wide_delta, 122,
+        RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON", 179 + wide_delta, 132,
                               no_internal_demos ? CR_GRAY2RED_HEXEN : CR_GRAY2GREEN_HEXEN);
     }
     else
@@ -3293,25 +3299,29 @@ static void DrawGameplayMenu(void)
         RD_M_DrawTextSmallRUS(fake_contrast ? "DRK" : "DSRK", 205 + wide_delta, 52,
                               fake_contrast ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
+        // Режим отрисовки неба
+        RD_M_DrawTextSmallRUS(linear_sky ? "KBYTQYSQ" : "JHBUBYFKMYSQ", 195 + wide_delta, 62,
+                              linear_sky ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+
         // Отображать прицел
-        RD_M_DrawTextSmallRUS(crosshair_draw ? "DRK" : "DSRK", 175 + wide_delta, 72,
+        RD_M_DrawTextSmallRUS(crosshair_draw ? "DRK" : "DSRK", 175 + wide_delta, 82,
                               crosshair_draw ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Индикация
         RD_M_DrawTextSmallRUS(crosshair_type == 1 ? "PLJHJDMT" : // ЗДОРОВЬЕ
-                                                         "CNFNBXYFZ", // СТАТИЧНАЯ
-                              111 + wide_delta, 82, crosshair_type ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+                                                    "CNFNBXYFZ", // СТАТИЧНАЯ
+                              111 + wide_delta, 92, crosshair_type ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Увеличенный размер
-        RD_M_DrawTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 92,
+        RD_M_DrawTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 102,
                               crosshair_scale ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Зеркальное отражение уровней
-        RD_M_DrawTextSmallRUS(flip_levels ? "DRK" : "DSRK", 255 + wide_delta, 112,
+        RD_M_DrawTextSmallRUS(flip_levels ? "DRK" : "DSRK", 255 + wide_delta, 122,
                               flip_levels ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Проигрывать демозаписи
-        RD_M_DrawTextSmallRUS(no_internal_demos ? "DRK" : "DSRK", 211 + wide_delta, 122,
+        RD_M_DrawTextSmallRUS(no_internal_demos ? "DRK" : "DSRK", 211 + wide_delta, 132,
                               no_internal_demos ? CR_GRAY2RED_HEXEN : CR_GRAY2GREEN_HEXEN);
     }
 }
@@ -3324,6 +3334,11 @@ static void M_RD_Brightmaps()
 static void M_RD_FakeContrast()
 {
     fake_contrast ^= 1;
+}
+
+static void M_RD_LinearSky()
+{
+    linear_sky ^= 1;
 }
 
 static void M_RD_ShadowedText()
@@ -4315,6 +4330,7 @@ void M_RD_DoResetSettings(void)
     // Gameplay
     brightmaps          = 1;
     fake_contrast       = 0;
+    linear_sky          = 1;
     draw_shadowed_text  = 1;
     crosshair_draw      = 0;
     crosshair_type      = 1;
