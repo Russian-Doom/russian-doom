@@ -155,6 +155,7 @@ int fake_contrast = 0;
 int flip_levels = 0;
 int draw_shadowed_text = 1;
 int linear_sky = 1;
+int randomly_flipcorpses = 1;
 int flip_weapons = 0;
 
 // Gameplay: Physical
@@ -286,6 +287,7 @@ void D_BindVariables(void)
     M_BindIntVariable("fake_contrast",          &fake_contrast);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
     M_BindIntVariable("linear_sky",             &linear_sky);
+    M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);
     M_BindIntVariable("flip_weapons",           &flip_weapons);
 
     // Gameplay: Physical

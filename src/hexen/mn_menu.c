@@ -182,6 +182,7 @@ static void DrawGameplay1Menu(void);
 static void M_RD_Brightmaps();
 static void M_RD_FakeContrast();
 static void M_RD_LinearSky();
+static void M_RD_FlipCorpses();
 static void M_RD_FlipWeapons();
 
 // Gameplay (page 2)
@@ -1018,8 +1019,8 @@ static MenuItem_t Gameplay1Items[] = {
     {ITT_SWITCH, "BRIGHTMAPS:",          ",HFQNVFGGBYU:",                 M_RD_Brightmaps,      0}, // БРАЙТМАППИНГ
     {ITT_SWITCH, "FAKE CONTRAST:",       "BVBNFWBZ RJYNHFCNYJCNB:",       M_RD_FakeContrast,    0}, // ИМИТАЦИЯ КОНТРАСТНОСТИ
     {ITT_SWITCH, "SKY DRAWING MODE:",    "HT;BV JNHBCJDRB YT,F:",         M_RD_LinearSky,       0}, // РЕЖИМ ОТРИСОВКИ НЕБА
-    {ITT_SWITCH,  "FLIP WEAPONS:",       "PTHRFKMYJT JNHF;TYBT JHE;BZ:",  M_RD_FlipWeapons,     0}, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ ОРУЖИЯ
-    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_SWITCH, "RANDOMLY MIRRORED CORPSES:", "PTHRFKMYJT JNHF;TYBT NHEGJD:", M_RD_FlipCorpses,0}, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ ТРУПОВ
+    {ITT_SWITCH, "FLIP WEAPONS:",        "PTHRFKMYJT JNHF;TYBT JHE;BZ:",  M_RD_FlipWeapons,     0}, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ ОРУЖИЯ
     {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
     {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
     {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
@@ -3324,8 +3325,12 @@ static void DrawGameplay1Menu(void)
         RD_M_DrawTextSmallENG(linear_sky ? "LINEAR" : "ORIGINAL", 162 + wide_delta, 62,
                               linear_sky ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
+        // Randomly flipped corpses
+        RD_M_DrawTextSmallENG(randomly_flipcorpses ? "ON" : "OFF", 232 + wide_delta, 72,
+                              randomly_flipcorpses ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+
         // Flip weapons
-        RD_M_DrawTextSmallENG(flip_weapons ? "ON" : "OFF", 130 + wide_delta, 72,
+        RD_M_DrawTextSmallENG(flip_weapons ? "ON" : "OFF", 130 + wide_delta, 82,
                               flip_weapons ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
     }
     else
@@ -3346,8 +3351,12 @@ static void DrawGameplay1Menu(void)
         RD_M_DrawTextSmallRUS(linear_sky ? "KBYTQYSQ" : "JHBUBYFKMYSQ", 195 + wide_delta, 62,
                               linear_sky ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
+        // Зеркальное отражение трупов
+        RD_M_DrawTextSmallRUS(randomly_flipcorpses ? "DRK" : "DSRK", 247 + wide_delta, 72,
+                              randomly_flipcorpses ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+
         // Зеркальное отражение оружия
-        RD_M_DrawTextSmallRUS(flip_weapons ? "DRK" : "DSRK", 250 + wide_delta, 72,
+        RD_M_DrawTextSmallRUS(flip_weapons ? "DRK" : "DSRK", 250 + wide_delta, 82,
                               flip_weapons ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
     }
 }
@@ -3365,6 +3374,11 @@ static void M_RD_FakeContrast()
 static void M_RD_LinearSky()
 {
     linear_sky ^= 1;
+}
+
+static void M_RD_FlipCorpses()
+{
+    randomly_flipcorpses ^= 1;
 }
 
 static void M_RD_FlipWeapons()

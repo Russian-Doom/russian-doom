@@ -607,6 +607,20 @@ void R_ProjectSprite(mobj_t * thing)
         flip = (boolean) sprframe->flip[0];
     }
 
+    // [crispy] flip death sprites and corpses randomly
+    if (randomly_flipcorpses && !vanillaparm)
+    {
+        // [JN] TODO - investigate which corpses can't be flipped,
+        // as well as which map objects can be additionally flipped.
+        if (thing->flags & MF_CORPSE)
+        {
+            if (thing->health & 1)
+            {
+                flip = true;
+            }
+        }
+    }
+
     // Calculate edges of the shape.
     tx -= spriteoffset[lump];
     x1 = (centerxfrac + FixedMul(tx, xscale)) >> FRACBITS;

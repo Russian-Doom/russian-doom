@@ -1630,7 +1630,12 @@ void P_KillMobj(mobj_t * source, mobj_t * target)
         }
     }
     target->tics -= P_Random() & 3;
-//      I_StartSound(&actor->r, actor->info->deathsound);
+
+    // [crispy] randomize corpse health
+    if (singleplayer)
+    {
+        target->health -= target->tics & 1;
+    }
 }
 
 //---------------------------------------------------------------------------
