@@ -177,11 +177,16 @@ static void M_RD_SensitivityAxis_RT(Direction_t direction);
 static void M_RD_InvertAxis_RT();
 static void M_RD_DeadZoneAxis_RT(Direction_t direction);
 
-// Gameplay
-static void DrawGameplayMenu(void);
+// Gameplay (page 1)
+static void DrawGameplay1Menu(void);
 static void M_RD_Brightmaps();
 static void M_RD_FakeContrast();
 static void M_RD_LinearSky();
+static void M_RD_FlipWeapons();
+
+// Gameplay (page 2)
+static void DrawGameplay2Menu(void);
+
 static void M_RD_CrossHairDraw();
 static void M_RD_CrossHairType();
 static void M_RD_CrossHairScale();
@@ -331,7 +336,9 @@ static const Menu_t* BindingsMenuPages[] = {&Bindings1Menu, &Bindings2Menu, &Bin
 static Menu_t Gamepad1Menu;
 static Menu_t Gamepad2Menu;
 static const Menu_t* GamepadMenuPages[] = {&Gamepad1Menu, &Gamepad2Menu};
-static Menu_t GameplayMenu;
+static Menu_t Gameplay1Menu;
+static Menu_t Gameplay2Menu;
+static const Menu_t* GameplayMenuPages[] = {&Gameplay1Menu, &Gameplay2Menu};
 static Menu_t LevelSelectMenu1;
 static Menu_t LevelSelectMenu2_F;
 static Menu_t LevelSelectMenu2_C;
@@ -450,7 +457,7 @@ static MenuItem_t RDOptionsItems[] = {
     {ITT_SETMENU, "DISPLAY",           "\'RHFY",         &DisplayMenu,        0}, // ЭКРАН
     {ITT_SETMENU, "SOUND",             "FELBJ",          &SoundMenu,          0}, // АУДИО
     {ITT_SETMENU, "CONTROLS",          "EGHFDKTYBT",     &ControlsMenu,       0}, // УПРАВЛЕНИЕ
-    {ITT_SETMENU, "GAMEPLAY",          "UTQVGKTQ",       &GameplayMenu,       0}, // ГЕЙМПЛЕЙ
+    {ITT_SETMENU, "GAMEPLAY",          "UTQVGKTQ",       &Gameplay1Menu,       0}, // ГЕЙМПЛЕЙ
     {ITT_SETMENU, "LEVEL SELECT",      "DS,JH EHJDYZ",   &LevelSelectMenu1,   0}, // ВЫБОР УРОВНЯ
     {ITT_EFUNC,   "RESET SETTINGS",    "C,HJC YFCNHJTR", M_RD_ResetSettings,  0}, // СБРОС НАСТРОЕК
     {ITT_EFUNC,   "LANGUAGE: ENGLISH", "ZPSR: HECCRBQ",  M_RD_ChangeLanguage, 0}  // ЯЗЫК: РУССКИЙ
@@ -997,10 +1004,49 @@ static Menu_t Gamepad2Menu = {
 };
 
 // -----------------------------------------------------------------------------
-// Gameplay features
+// Gameplay features (1)
 // -----------------------------------------------------------------------------
 
-static MenuItem_t GameplayItems[] = {
+static const PageDescriptor_t GameplayPageDescriptor = {
+    2, GameplayMenuPages,
+    254, 172,
+    CR_GRAY2GDARKGRAY_HEXEN
+};
+
+static MenuItem_t Gameplay1Items[] = {
+    {ITT_TITLE,  "VISUAL",               "UHFABRF",                       NULL,                 0}, // ГРАФИКА
+    {ITT_SWITCH, "BRIGHTMAPS:",          ",HFQNVFGGBYU:",                 M_RD_Brightmaps,      0}, // БРАЙТМАППИНГ
+    {ITT_SWITCH, "FAKE CONTRAST:",       "BVBNFWBZ RJYNHFCNYJCNB:",       M_RD_FakeContrast,    0}, // ИМИТАЦИЯ КОНТРАСТНОСТИ
+    {ITT_SWITCH, "SKY DRAWING MODE:",    "HT;BV JNHBCJDRB YT,F:",         M_RD_LinearSky,       0}, // РЕЖИМ ОТРИСОВКИ НЕБА
+    {ITT_SWITCH,  "FLIP WEAPONS:",       "PTHRFKMYJT JNHF;TYBT JHE;BZ:",  M_RD_FlipWeapons,     0}, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ ОРУЖИЯ
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_SETMENU, "NEXT PAGE >",         "CKTLE.OFZ CNHFYBWF `",          &Gameplay2Menu,       0}  // СЛЕДУЮЩАЯ СТРАНИЦА >
+};
+
+static Menu_t Gameplay1Menu = {
+    36, 36,
+    32,
+    "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
+    15, Gameplay1Items, false,
+    DrawGameplay1Menu,
+    &GameplayPageDescriptor,
+    &RDOptionsMenu,
+    1
+};
+
+// -----------------------------------------------------------------------------
+// Gameplay features (2)
+// -----------------------------------------------------------------------------
+
+static MenuItem_t Gameplay2Items[] = {
     {ITT_TITLE,  "VISUAL",               "UHFABRF",                       NULL,                 0}, // ГРАФИКА
     {ITT_SWITCH, "BRIGHTMAPS:",          ",HFQNVFGGBYU:",                 M_RD_Brightmaps,      0}, // БРАЙТМАППИНГ
     {ITT_SWITCH, "FAKE CONTRAST:",       "BVBNFWBZ RJYNHFCNYJCNB:",       M_RD_FakeContrast,    0}, // ИМИТАЦИЯ КОНТРАСТНОСТИ
@@ -1013,16 +1059,18 @@ static MenuItem_t GameplayItems[] = {
     {ITT_SWITCH, "COLLISION PHYSICS:",   "ABPBRF CNJKRYJDTYBQ:",          M_RD_Collision,       0}, // ФИЗИКА СТОЛКНОВЕНИЙ
     {ITT_TITLE,  "GAMEPLAY",             "UTQVGKTQ",                      NULL,                 0}, // ГЕЙМПЛЕЙ
     {ITT_SWITCH, "FLIP GAME LEVELS:",    "PTHRFKMYJT JNHF;TYBT EHJDYTQ:", M_RD_FlipLevels,      0}, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
-    {ITT_SWITCH, "PLAY INTERNAL DEMOS:", "GHJBUHSDFNM LTVJPFGBCB:",       M_RD_NoDemos,         0}  // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
+    {ITT_SWITCH, "PLAY INTERNAL DEMOS:", "GHJBUHSDFNM LTVJPFGBCB:",       M_RD_NoDemos,         0}, // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_SETMENU, "< PREV PAGE",           "^ GHTLSLEOFZ CNHFYBWF",       &Gameplay1Menu,       0}  // < ПРЕДЫДУЩАЯ СТРАНИЦА
 };
 
-static Menu_t GameplayMenu = {
+static Menu_t Gameplay2Menu = {
     36, 36,
     32,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
-    13, GameplayItems, false,
-    DrawGameplayMenu,
-    NULL,
+    15, Gameplay2Items, false,
+    DrawGameplay2Menu,
+    &GameplayPageDescriptor,
     &RDOptionsMenu,
     1
 };
@@ -3250,10 +3298,123 @@ static void M_RD_DeadZoneAxis_RT(Direction_t direction)
 }
 
 // -----------------------------------------------------------------------------
-// DrawGameplayMenu
+// DrawGameplay1Menu
 // -----------------------------------------------------------------------------
 
-static void DrawGameplayMenu(void)
+static void DrawGameplay1Menu(void)
+{
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    if (english_language)
+    {
+        //
+        // GRAPHICAL
+        //
+
+        // Brightmaps
+        RD_M_DrawTextSmallENG(brightmaps ? "ON" : "OFF", 119 + wide_delta, 42,
+                              brightmaps ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+
+        // Fake contrast
+        RD_M_DrawTextSmallENG(fake_contrast ? "ON" : "OFF", 143 + wide_delta, 52,
+                              fake_contrast ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+
+        // Sky drawing mode
+        RD_M_DrawTextSmallENG(linear_sky ? "LINEAR" : "ORIGINAL", 162 + wide_delta, 62,
+                              linear_sky ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+
+        // Flip weapons
+        RD_M_DrawTextSmallENG(flip_weapons ? "ON" : "OFF", 130 + wide_delta, 72,
+                              flip_weapons ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+    }
+    else
+    {
+        //
+        // ГРАФИКА
+        //
+
+        // Брайтмаппинг
+        RD_M_DrawTextSmallRUS(brightmaps ? "DRK" : "DSRK", 133 + wide_delta, 42,
+                              brightmaps ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+
+        // Имитация контрастности
+        RD_M_DrawTextSmallRUS(fake_contrast ? "DRK" : "DSRK", 205 + wide_delta, 52,
+                              fake_contrast ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+
+        // Режим отрисовки неба
+        RD_M_DrawTextSmallRUS(linear_sky ? "KBYTQYSQ" : "JHBUBYFKMYSQ", 195 + wide_delta, 62,
+                              linear_sky ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+
+        // Зеркальное отражение оружия
+        RD_M_DrawTextSmallRUS(flip_weapons ? "DRK" : "DSRK", 250 + wide_delta, 72,
+                              flip_weapons ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+    }
+}
+
+static void M_RD_Brightmaps()
+{
+    brightmaps ^= 1;
+}
+
+static void M_RD_FakeContrast()
+{
+    fake_contrast ^= 1;
+}
+
+static void M_RD_LinearSky()
+{
+    linear_sky ^= 1;
+}
+
+static void M_RD_FlipWeapons()
+{
+    flip_weapons ^= 1;
+}
+
+static void M_RD_ShadowedText()
+{
+    draw_shadowed_text ^= 1;
+}
+
+static void M_RD_CrossHairDraw()
+{
+    crosshair_draw ^= 1;
+}
+
+static void M_RD_CrossHairType()
+{
+    crosshair_type ^= 1;
+}
+
+static void M_RD_CrossHairScale()
+{
+    crosshair_scale ^= 1;
+}
+
+static void M_RD_Collision()
+{
+    improved_collision ^= 1;
+}
+
+static void M_RD_FlipLevels()
+{
+    flip_levels ^= 1;
+
+    // [JN] Redraw game screen
+    R_ExecuteSetViewSize();
+}
+
+static void M_RD_NoDemos()
+{
+    no_internal_demos ^= 1;
+}
+
+// -----------------------------------------------------------------------------
+// DrawGameplay2Menu
+// -----------------------------------------------------------------------------
+
+static void DrawGameplay2Menu(void)
 {
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
@@ -3367,59 +3528,6 @@ static void DrawGameplayMenu(void)
         RD_M_DrawTextSmallRUS(no_internal_demos ? "DRK" : "DSRK", 211 + wide_delta, 152,
                               no_internal_demos ? CR_GRAY2RED_HEXEN : CR_GRAY2GREEN_HEXEN);
     }
-}
-
-static void M_RD_Brightmaps()
-{
-    brightmaps ^= 1;
-}
-
-static void M_RD_FakeContrast()
-{
-    fake_contrast ^= 1;
-}
-
-static void M_RD_LinearSky()
-{
-    linear_sky ^= 1;
-}
-
-static void M_RD_ShadowedText()
-{
-    draw_shadowed_text ^= 1;
-}
-
-static void M_RD_CrossHairDraw()
-{
-    crosshair_draw ^= 1;
-}
-
-static void M_RD_CrossHairType()
-{
-    crosshair_type ^= 1;
-}
-
-static void M_RD_CrossHairScale()
-{
-    crosshair_scale ^= 1;
-}
-
-static void M_RD_Collision()
-{
-    improved_collision ^= 1;
-}
-
-static void M_RD_FlipLevels()
-{
-    flip_levels ^= 1;
-
-    // [JN] Redraw game screen
-    R_ExecuteSetViewSize();
-}
-
-static void M_RD_NoDemos()
-{
-    no_internal_demos ^= 1;
 }
 
 //---------------------------------------------------------------------------
@@ -4379,6 +4487,7 @@ void M_RD_DoResetSettings(void)
     brightmaps          = 1;
     fake_contrast       = 0;
     linear_sky          = 1;
+    flip_weapons        = 0;
     draw_shadowed_text  = 1;
     crosshair_draw      = 0;
     crosshair_type      = 1;
