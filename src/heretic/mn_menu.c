@@ -204,6 +204,7 @@ static void M_RD_ColoredBlood();
 static void M_RD_SwirlingLiquids();
 static void M_RD_InvulSky();
 static void M_RD_LinearSky();
+static void M_RD_FlipCorpses();
 static void M_RD_FlipWeapons();
 
 // Gameplay (page 2)
@@ -227,7 +228,6 @@ static void M_RD_ShowArtiTimer(Direction_t direction);
 static void M_RD_Collision();
 static void M_RD_Torque();
 static void M_RD_Bobbing();
-static void M_RD_FlipCorpses();
 static void M_RD_FloatAmplitude(Direction_t direction);
 
 // Gameplay (page 4)
@@ -1057,7 +1057,7 @@ static Menu_t Gamepad2Menu = {
 
 static const PageDescriptor_t GameplayPageDescriptor = {
     4, GameplayMenuPages,
-    254, 176,
+    254, 166,
     CR_WHITE2GRAY_HERETIC
 };
 
@@ -1070,9 +1070,8 @@ static MenuItem_t Gameplay1Items[] = {
     {ITT_SWITCH,  "SWIRLING LIQUIDS:",            "EKEXITYYFZ FYBVFWBZ ;BLRJCNTQ:", M_RD_SwirlingLiquids, 0}, // УЛУЧШЕННАЯ АНИМАЦИЯ ЖИДКОСТЕЙ
     {ITT_SWITCH,  "INVULNERABILITY AFFECTS SKY:", "YTEZPDBVJCNM JRHFIBDFTN YT,J:",  M_RD_InvulSky,        0}, // НЕУЯЗВИМОСТЬ ОКРАШИВАЕТ НЕБО
     {ITT_SWITCH,  "SKY DRAWING MODE:",            "HT;BV JNHBCJDRB YT,F:",          M_RD_LinearSky,       0}, // РЕЖИМ ОТРИСОВКИ НЕБА
+    {ITT_SWITCH,  "RANDOMLY MIRRORED CORPSES:",   "PTHRFKMYJT JNHF;TYBT NHEGJD:",   M_RD_FlipCorpses,     0}, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ ТРУПОВ
     {ITT_SWITCH,  "FLIP WEAPONS:",                "PTHRFKMYJT JNHF;TYBT JHE;BZ:",   M_RD_FlipWeapons,     0}, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ ОРУЖИЯ
-    {ITT_EMPTY,   NULL,                           NULL,                             NULL,                 0},
-    {ITT_EMPTY,   NULL,                           NULL,                             NULL,                 0},
     {ITT_EMPTY,   NULL,                           NULL,                             NULL,                 0},
     {ITT_EMPTY,   NULL,                           NULL,                             NULL,                 0},
     {ITT_EMPTY,   NULL,                           NULL,                             NULL,                 0},
@@ -1084,7 +1083,7 @@ static Menu_t Gameplay1Menu = {
     36, 36,
     26,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
-    16, Gameplay1Items, false,
+    15, Gameplay1Items, false,
     DrawGameplay1Menu,
     &GameplayPageDescriptor,
     &RDOptionsMenu,
@@ -1109,7 +1108,6 @@ static MenuItem_t Gameplay2Items[] = {
     {ITT_SWITCH,  "INCREASED SIZE:",       "EDTKBXTYYSQ HFPVTH:",         M_RD_CrossHairScale,     0}, // УВЕЛИЧЕННЫЙ РАЗМЕР
     {ITT_EMPTY,   NULL,                    NULL,                          NULL,                    0},
     {ITT_EMPTY,   NULL,                    NULL,                          NULL,                    0},
-    {ITT_EMPTY,   NULL,                    NULL,                          NULL,                    0},
     {ITT_SETMENU, "NEXT PAGE >",           "CKTLE.OFZ CNHFYBWF `",        &Gameplay3Menu,          0}, // СЛЕДУЮЩАЯ СТРАНИЦА >
     {ITT_SETMENU, "< PREV PAGE",           "^ GHTLSLEOFZ CNHFYBWF",       &Gameplay1Menu,          0}  // < ПРЕДЫДУЩАЯ СТРАНИЦА
 };
@@ -1118,7 +1116,7 @@ static Menu_t Gameplay2Menu = {
     36, 36,
     26,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
-    16, Gameplay2Items, false,
+    15, Gameplay2Items, false,
     DrawGameplay2Menu,
     &GameplayPageDescriptor,
     &RDOptionsMenu,
@@ -1141,7 +1139,6 @@ static MenuItem_t Gameplay3Items[] = {
     {ITT_SWITCH,  "COLLISION PHYSICS:",              "ABPBRF CNJKRYJDTYBQ:",           M_RD_Collision,      0}, // ФИЗИКА СТОЛКНОВЕНИЙ
     {ITT_SWITCH,  "CORPSES SLIDING FROM LEDGES:",    "NHEGS CGJKPF.N C DJPDSITYBQ:",   M_RD_Torque,         0}, // ТРУПЫ СПОЛЗАЮТ С ВОЗВЫШЕНИЙ
     {ITT_SWITCH,  "WEAPON BOBBING WHILE FIRING:",    "EKEXITYYJT GJRFXBDFYBT JHE;BZ:", M_RD_Bobbing,        0}, // УЛУЧШЕННОЕ ПОКАЧИВАНИЕ ОРУЖИЯ
-    {ITT_SWITCH,  "RANDOMLY MIRRORED CORPSES:",      "PTHRFKBHJDFYBT NHEGJD:",         M_RD_FlipCorpses,    0}, // ЗЕКРАЛИРОВАНИЕ ТРУПОВ
     {ITT_LRFUNC,  "FLOATING ITEMS AMPLITUDE:" ,      "KTDBNFWBZ GHTLVTNJD:",           M_RD_FloatAmplitude, 0}, // АМПЛИТУДА ЛЕВИТАЦИИ ПРЕДМЕТОВ
     {ITT_EMPTY,   NULL,                              NULL,                             NULL,                0},
     {ITT_SETMENU, "NEXT PAGE >",                     "GJCKTLYZZ CNHFYBWF `",           &Gameplay4Menu,      0}, // СЛЕДУЮЩАЯ СТРАНИЦА >
@@ -1152,7 +1149,7 @@ static Menu_t Gameplay3Menu = {
     36, 36,
     26,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
-    16, Gameplay3Items, false,
+    15, Gameplay3Items, false,
     DrawGameplay3Menu,
     &GameplayPageDescriptor,
     &RDOptionsMenu,
@@ -1177,7 +1174,6 @@ static MenuItem_t Gameplay4Items[] = {
     {ITT_EMPTY,   NULL,                          NULL,                              NULL,              0},
     {ITT_EMPTY,   NULL,                          NULL,                              NULL,              0},
     {ITT_EMPTY,   NULL,                          NULL,                              NULL,              0},
-    {ITT_EMPTY,   NULL,                          NULL,                              NULL,              0},
     {ITT_SETMENU, "FIRST PAGE >",                "GTHDFZ CNHFYBWF `",               &Gameplay1Menu,    0}, // ПЕРВАЯ СТРАНИЦА >
     {ITT_SETMENU, "< PREV PAGE",                 "^ GHTLSLEOFZ CNHFYBWF",           &Gameplay3Menu,    0}  // < ПРЕДЫДУЩАЯ СТРАНИЦА
 };
@@ -1186,7 +1182,7 @@ static Menu_t Gameplay4Menu = {
     36, 36,
     26,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
-    16, Gameplay4Items, false,
+    15, Gameplay4Items, false,
     DrawGameplay4Menu,
     &GameplayPageDescriptor,
     &RDOptionsMenu,
@@ -3697,8 +3693,12 @@ static void DrawGameplay1Menu(void)
         RD_M_DrawTextSmallENG(linear_sky ? "LINEAR" : "ORIGINAL", 162 + wide_delta, 96,
                               linear_sky ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
 
+        // Randomly flipped corpses
+        RD_M_DrawTextSmallENG(randomly_flipcorpses ? "ON" : "OFF", 232 + wide_delta, 106,
+                              randomly_flipcorpses ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+
         // Flip weapons
-        RD_M_DrawTextSmallENG(flip_weapons ? "ON" : "OFF", 130 + wide_delta, 106,
+        RD_M_DrawTextSmallENG(flip_weapons ? "ON" : "OFF", 130 + wide_delta, 116,
                               flip_weapons ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
     }
     else
@@ -3735,8 +3735,12 @@ static void DrawGameplay1Menu(void)
         RD_M_DrawTextSmallRUS(linear_sky ? "KBYTQYSQ" : "JHBUBYFKMYSQ", 195 + wide_delta, 96,
                               linear_sky ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
 
+        // Зеркальное отражение трупов
+        RD_M_DrawTextSmallRUS(randomly_flipcorpses ? "DRK" : "DSRK", 247 + wide_delta, 106,
+                              randomly_flipcorpses ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+
         // Зеркальное отражение оружия
-        RD_M_DrawTextSmallRUS(flip_weapons ? "DRK" : "DSRK", 250 + wide_delta, 106,
+        RD_M_DrawTextSmallRUS(flip_weapons ? "DRK" : "DSRK", 250 + wide_delta, 116,
                               flip_weapons ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
     }
 }
@@ -3774,6 +3778,11 @@ static void M_RD_InvulSky()
 static void M_RD_LinearSky()
 {
     linear_sky ^= 1;
+}
+
+static void M_RD_FlipCorpses()
+{
+    randomly_flipcorpses ^= 1;
 }
 
 static void M_RD_FlipWeapons()
@@ -4001,14 +4010,10 @@ static void DrawGameplay3Menu(void)
         RD_M_DrawTextSmallENG(weapon_bobbing ? "ON" : "OFF", 233 + wide_delta, 126,
                               weapon_bobbing ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
 
-        // Randomly flipped corpses
-        RD_M_DrawTextSmallENG(randomly_flipcorpses ? "ON" : "OFF", 232 + wide_delta, 136,
-                              randomly_flipcorpses ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
-
         // Floating items amplitude
         RD_M_DrawTextSmallENG(floating_powerups == 1 ? "STANDARD" :
                               floating_powerups == 2 ? "HALFED" : "OFF",
-                              209 + wide_delta, 146,
+                              209 + wide_delta, 136,
                               floating_powerups ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
     }
     else
@@ -4064,14 +4069,10 @@ static void DrawGameplay3Menu(void)
         RD_M_DrawTextSmallRUS(weapon_bobbing ? "DRK" : "DSRK", 260 + wide_delta, 126,
                               weapon_bobbing ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
 
-        // Зеркалирование трупов
-        RD_M_DrawTextSmallRUS(randomly_flipcorpses ? "DRK" : "DSRK", 201 + wide_delta, 136,
-                              randomly_flipcorpses ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
-
         // Амплитуда левитации предметов
         RD_M_DrawTextSmallRUS(floating_powerups == 1 ? "CNFYLFHNYFZ" :
                               floating_powerups == 2 ? "EVTHTYYFZ" : "DSRK",
-                              188 + wide_delta, 146,
+                              188 + wide_delta, 136,
                               floating_powerups ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
     }
 }
@@ -4114,11 +4115,6 @@ static void M_RD_Torque()
 static void M_RD_Bobbing()
 {
     weapon_bobbing ^= 1;
-}
-
-static void M_RD_FlipCorpses()
-{
-    randomly_flipcorpses ^= 1;
 }
 
 static void M_RD_FloatAmplitude(Direction_t direction)
@@ -4868,6 +4864,7 @@ static void M_RD_BackToDefaults_Recommended(void)
     swirling_liquids     = 1;
     invul_sky            = 1;
     linear_sky           = 1;
+    randomly_flipcorpses = 1;
     flip_weapons         = 0;
 
     // Gameplay (2)
@@ -4889,7 +4886,6 @@ static void M_RD_BackToDefaults_Recommended(void)
     improved_collision   = 1;
     torque               = 1;
     weapon_bobbing       = 1;
-    randomly_flipcorpses = 1;
     floating_powerups    = 1;
 
     // Gameplay (4)
@@ -5002,6 +4998,7 @@ static void M_RD_BackToDefaults_Original(void)
     swirling_liquids     = 0;
     invul_sky            = 0;
     linear_sky           = 0;
+    randomly_flipcorpses = 0;
     flip_weapons         = 0;
 
     // Gameplay (2)
@@ -5023,7 +5020,6 @@ static void M_RD_BackToDefaults_Original(void)
     improved_collision   = 0;
     torque               = 0;
     weapon_bobbing       = 0;
-    randomly_flipcorpses = 0;
     floating_powerups    = 1;
 
     // Gameplay (4)

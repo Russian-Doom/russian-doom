@@ -1475,7 +1475,7 @@ static MenuItem_t Gameplay1Items[] = {
     {ITT_SWITCH,  "Swirling liquids:",            "ekexityyfz fybvfwbz ;blrjcntq:", M_RD_Change_SwirlingLiquids, 0}, // Улучшенная анимация жидкостей
     {ITT_SWITCH,  "Invulnerability affects sky:", "ytezpdbvjcnm jrhfibdftn yt,j:",  M_RD_Change_InvulSky,        0}, // Неуязвимость окрашивает небо
     {ITT_SWITCH,  "Sky drawing mode:",            "ht;bv jnhbcjdrb yt,f:",          M_RD_Change_LinearSky,       0}, // Режим отрисовки неба
-    {ITT_SWITCH,  "Randomly mirrored corpses:",   "pthrfkbhjdfybt nhegjd:",         M_RD_Change_FlipCorpses,     0}, // Зеркалирование трупов
+    {ITT_SWITCH,  "Randomly mirrored corpses:",   "pthrfkmyjt jnhf;tybt nhegjd:",   M_RD_Change_FlipCorpses,     0}, // Зеркалирование трупов
     {ITT_SWITCH,  "Flip weapons:",                "pthrfkmyjt jnhf;tybt jhe;bz:",   M_RD_Change_FlipWeapons,     0}, // Зеркальное отражение оружия
     {ITT_EMPTY,   NULL,                           NULL,                             NULL,                        0},
     {ITT_SETMENU, NULL, /* Next Page > */         NULL,                             &Gameplay2Menu,              0}, // Далее >
@@ -4140,8 +4140,8 @@ static void M_RD_Draw_Gameplay_1(void)
         RD_M_DrawTextSmallRUS(linear_sky ? "kbytqysq" : "jhbubyfkmysq", 200 + wide_delta, 105,
                               linear_sky ? CR_GREEN : CR_DARKRED);
 
-        // Зеркалирование трупов
-        RD_M_DrawTextSmallRUS(randomly_flipcorpses ? RD_ON_RUS : RD_OFF_RUS, 207 + wide_delta, 115,
+        // Зеркальное отражение трупов
+        RD_M_DrawTextSmallRUS(randomly_flipcorpses ? RD_ON_RUS : RD_OFF_RUS, 255 + wide_delta, 115,
                               randomly_flipcorpses ? CR_GREEN : CR_DARKRED);
 
         // Зеркальное отражение оружия
