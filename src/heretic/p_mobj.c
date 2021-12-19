@@ -916,7 +916,7 @@ void P_MobjThinker(mobj_t * mobj)
         if (/*mobj->z > mobj->dropoffz      // Only objects contacting dropoff
         &&*/ !(mobj->flags & MF_NOGRAVITY)  // Only objects which fall
         && mobj->flags & MF_CORPSE          // [JN] And only for corpses
-        && mobj->gearticks > 0)             // [JN] And only if torque tics are available
+        && mobj->geartics > 0)              // [JN] And only if torque tics are available
         P_ApplyTorque(mobj);                // Apply torque
         else
         mobj->intflags &= ~MIF_FALLING, mobj->gear = 0;  // Reset torque

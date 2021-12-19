@@ -172,7 +172,7 @@ typedef struct mobj_s
     // teleporting
     int threshold;              // if >0, the target will be chased
     short gear;                 // killough 11/98: used in torque simulation
-    int gearticks;              // [JN] Duration of torque sumulation.
+    int geartics;               // [JN] Duration of torque sumulation.
     // no matter what (even if shot)
     struct player_s *player;    // only valid if type == MT_PLAYER
     int lastlook;               // player number last looked for
