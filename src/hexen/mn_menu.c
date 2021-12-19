@@ -185,6 +185,7 @@ static void M_RD_LinearSky();
 static void M_RD_CrossHairDraw();
 static void M_RD_CrossHairType();
 static void M_RD_CrossHairScale();
+static void M_RD_Collision();
 static void M_RD_FlipLevels();
 static void M_RD_NoDemos();
 
@@ -1008,6 +1009,8 @@ static MenuItem_t GameplayItems[] = {
     {ITT_SWITCH, "DRAW CROSSHAIR:",      "JNJ,HF;FNM GHBWTK:",            M_RD_CrossHairDraw,   0}, // ОТОБРАЖАТЬ ПРИЦЕЛ
     {ITT_SWITCH, "INDICATION:",          "BYLBRFWBZ:",                    M_RD_CrossHairType,   0}, // ИНДИКАЦИЯ
     {ITT_SWITCH, "INCREASED SIZE:",      "EDTKBXTYYSQ HFPVTH:",           M_RD_CrossHairScale,  0}, // УВЕЛИЧЕННЫЙ РАЗМЕР
+    {ITT_TITLE,  "CROSSHAIR",            "GHBWTK",                        NULL,                 0}, // ПРИЦЕЛ
+    {ITT_SWITCH, "COLLISION PHYSICS:",   "ABPBRF CNJKRYJDTYBQ:",          M_RD_Collision,       0}, // ФИЗИКА СТОЛКНОВЕНИЙ
     {ITT_TITLE,  "GAMEPLAY",             "UTQVGKTQ",                      NULL,                 0}, // ГЕЙМПЛЕЙ
     {ITT_SWITCH, "FLIP GAME LEVELS:",    "PTHRFKMYJT JNHF;TYBT EHJDYTQ:", M_RD_FlipLevels,      0}, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
     {ITT_SWITCH, "PLAY INTERNAL DEMOS:", "GHJBUHSDFNM LTVJPFGBCB:",       M_RD_NoDemos,         0}  // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
@@ -1017,7 +1020,7 @@ static Menu_t GameplayMenu = {
     36, 36,
     32,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
-    11, GameplayItems, false,
+    13, GameplayItems, false,
     DrawGameplayMenu,
     NULL,
     &RDOptionsMenu,
@@ -3257,6 +3260,10 @@ static void DrawGameplayMenu(void)
 
     if (english_language)
     {
+        //
+        // GRAPHICAL
+        //
+
         // Brightmaps
         RD_M_DrawTextSmallENG(brightmaps ? "ON" : "OFF", 119 + wide_delta, 42,
                               brightmaps ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
@@ -3268,6 +3275,10 @@ static void DrawGameplayMenu(void)
         // Sky drawing mode
         RD_M_DrawTextSmallENG(linear_sky ? "LINEAR" : "ORIGINAL", 162 + wide_delta, 62,
                               linear_sky ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+
+        //
+        // CROSSHAIR
+        //
 
         // Draw crosshair
         RD_M_DrawTextSmallENG(crosshair_draw ? "ON" : "OFF", 150 + wide_delta, 82,
@@ -3281,16 +3292,32 @@ static void DrawGameplayMenu(void)
         RD_M_DrawTextSmallENG(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 102,
                               crosshair_scale ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
+        //
+        // PHYSICAL
+        //
+       
+        // Collision physics
+        RD_M_DrawTextSmallENG(improved_collision ? "IMPROVED" : "ORIGINAL", 159 + wide_delta, 122,
+                              improved_collision ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+
+        //
+        // GAMEPLAY
+        //
+
         // Flip game levels
-        RD_M_DrawTextSmallENG(flip_levels ? "ON" : "OFF", 153 + wide_delta, 122,
+        RD_M_DrawTextSmallENG(flip_levels ? "ON" : "OFF", 153 + wide_delta, 142,
                               flip_levels ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Play internal demos
-        RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON", 179 + wide_delta, 132,
+        RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON", 179 + wide_delta, 152,
                               no_internal_demos ? CR_GRAY2RED_HEXEN : CR_GRAY2GREEN_HEXEN);
     }
     else
     {
+        //
+        // ГРАФИКА
+        //
+
         // Брайтмаппинг
         RD_M_DrawTextSmallRUS(brightmaps ? "DRK" : "DSRK", 133 + wide_delta, 42,
                               brightmaps ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
@@ -3302,6 +3329,10 @@ static void DrawGameplayMenu(void)
         // Режим отрисовки неба
         RD_M_DrawTextSmallRUS(linear_sky ? "KBYTQYSQ" : "JHBUBYFKMYSQ", 195 + wide_delta, 62,
                               linear_sky ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+
+        //
+        // ПРИЦЕЛ
+        //
 
         // Отображать прицел
         RD_M_DrawTextSmallRUS(crosshair_draw ? "DRK" : "DSRK", 175 + wide_delta, 82,
@@ -3316,12 +3347,24 @@ static void DrawGameplayMenu(void)
         RD_M_DrawTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 102,
                               crosshair_scale ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
+        //
+        // ФИЗИКА
+        //
+
+        // Физика столкновений
+        RD_M_DrawTextSmallRUS(improved_collision ? "EKEXITYYFZ" : "JHBUBYFKMYFZ", 186 + wide_delta, 122,
+                              improved_collision ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+
+        //
+        // ГЕЙМПЛЕЙ
+        //
+
         // Зеркальное отражение уровней
-        RD_M_DrawTextSmallRUS(flip_levels ? "DRK" : "DSRK", 255 + wide_delta, 122,
+        RD_M_DrawTextSmallRUS(flip_levels ? "DRK" : "DSRK", 255 + wide_delta, 142,
                               flip_levels ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Проигрывать демозаписи
-        RD_M_DrawTextSmallRUS(no_internal_demos ? "DRK" : "DSRK", 211 + wide_delta, 132,
+        RD_M_DrawTextSmallRUS(no_internal_demos ? "DRK" : "DSRK", 211 + wide_delta, 152,
                               no_internal_demos ? CR_GRAY2RED_HEXEN : CR_GRAY2GREEN_HEXEN);
     }
 }
@@ -3359,6 +3402,11 @@ static void M_RD_CrossHairType()
 static void M_RD_CrossHairScale()
 {
     crosshair_scale ^= 1;
+}
+
+static void M_RD_Collision()
+{
+    improved_collision ^= 1;
 }
 
 static void M_RD_FlipLevels()

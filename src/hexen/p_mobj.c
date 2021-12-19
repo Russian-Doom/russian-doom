@@ -48,7 +48,6 @@ static void PlayerLandedOnThing(mobj_t * mo, mobj_t * onmobj);
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
 
 extern mobj_t LavaInflictor;
-extern boolean demorecording;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
@@ -446,8 +445,18 @@ void P_XYMovement(mobj_t * mo)
         // [JN] Fix projectiles may sometimes pass though walls, altrough
         // it is rarely happening in Hexen. This fix is written by Lee Killough,
         // and it's same to: https://doomwiki.org/wiki/Mancubus_fireball_clipping
-        if ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) 
-        || (singleplayer && !vanillaparm && (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)))
+        //
+        // Thanks to Jeff Doggett for simplifying!
+        //
+        // Additionally, wallrunning bug is fixed (mo->player condition):
+        // https://doomwiki.org/wiki/Wallrunning
+        //
+        // Thanks AXDOOMER and Brad Harding!
+        
+        if (improved_collision && singleplayer && !vanillaparm ? 
+            mo->player ? ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) && (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)) 
+                       : ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) || (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2))
+                       :  (xmove > MAXMOVE/2 || ymove > MAXMOVE/2))
         {
             ptryx = mo->x + xmove / 2;
             ptryy = mo->y + ymove / 2;

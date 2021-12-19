@@ -156,6 +156,9 @@ int flip_levels = 0;
 int draw_shadowed_text = 1;
 int linear_sky = 1;
 
+// Gameplay: Physical
+int improved_collision = 1;
+
 // Gameplay: Crosshair
 int crosshair_draw = 0;
 int crosshair_type = 1;
@@ -276,18 +279,21 @@ void D_BindVariables(void)
 
     // [JN] Дополнительные параметры игры
 
-    // Графика
+    // Gameplay: Graphical
     M_BindIntVariable("uncapped_fps",           &uncapped_fps);
     M_BindIntVariable("brightmaps",             &brightmaps);
     M_BindIntVariable("fake_contrast",          &fake_contrast);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
     M_BindIntVariable("linear_sky",             &linear_sky);
 
-    // Геймплей
+    // Gameplay: Physical
+    M_BindIntVariable("improved_collision",     &improved_collision);
+
+    // Gameplay: Gameplay
     M_BindIntVariable("flip_levels",            &flip_levels);
     M_BindIntVariable("no_internal_demos",      &no_internal_demos);
 
-    // Прицел
+    // Gameplay: Crosshair
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);
     M_BindIntVariable("crosshair_type",         &crosshair_type);
     M_BindIntVariable("crosshair_scale",        &crosshair_scale);
