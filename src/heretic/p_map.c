@@ -1218,7 +1218,7 @@ boolean PTR_SlideTraverse(intercept_t * in)
 
     // [JN] Treat two sided linedefs as single sided for smooth sliding.
     if (li->flags & ML_BLOCKING && li->flags & ML_TWOSIDED
-    && /*improved_collision && */ singleplayer && !vanillaparm)
+    && improved_collision && singleplayer && !vanillaparm)
     {
         goto isblocking;
     }

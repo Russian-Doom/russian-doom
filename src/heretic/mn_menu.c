@@ -3976,8 +3976,8 @@ static void DrawGameplay3Menu(void)
         //
        
         // Collision physics
-        // RD_M_DrawTextSmallENG(improved_collision ? "ON" : "OFF", 159 + wide_delta, 106,
-        //                       improved_collision ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+        RD_M_DrawTextSmallENG(improved_collision ? "IMPROVED" : "ORIGINAL", 159 + wide_delta, 106,
+                              improved_collision ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
        
         // Corpses sliding from the ledges
         RD_M_DrawTextSmallENG(torque ? "ON" : "OFF", 238 + wide_delta, 116,
@@ -4039,8 +4039,8 @@ static void DrawGameplay3Menu(void)
         //
 
         // Физика столкновений
-        // RD_M_DrawTextSmallRUS(torque ? "DRK" : "DSRK", 186 + wide_delta, 106,
-        //                       torque ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+        RD_M_DrawTextSmallRUS(improved_collision ? "EKEXITYYFZ" : "JHBUBYFKMYFZ", 186 + wide_delta, 106,
+                              improved_collision ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
 
         // Трупы сползают с возвышений
         RD_M_DrawTextSmallRUS(torque ? "DRK" : "DSRK", 248 + wide_delta, 116,
@@ -4089,7 +4089,7 @@ static void M_RD_ShowArtiTimer(Direction_t direction)
 
 static void M_RD_Collision()
 {
-    // improved_collision ^= 1;
+    improved_collision ^= 1;
 }
 
 static void M_RD_Torque()
@@ -4854,10 +4854,6 @@ static void M_RD_BackToDefaults_Recommended(void)
     swirling_liquids     = 1;
     invul_sky            = 1;
     linear_sky           = 1;
-    torque               = 1;
-    weapon_bobbing       = 1;
-    randomly_flipcorpses = 1;
-    floating_powerups    = 1;
 
     // Gameplay (2)
     sbar_colored         = 0;
@@ -4875,6 +4871,13 @@ static void M_RD_BackToDefaults_Recommended(void)
     secret_notification  = 1;
     show_all_artifacts   = 0;
     show_artifacts_timer = 0;
+    improved_collision   = 1;
+    torque               = 1;
+    weapon_bobbing       = 1;
+    randomly_flipcorpses = 1;
+    floating_powerups    = 1;
+
+    // Gameplay (4)
     fix_map_errors       = 1;
     flip_levels          = 0;
     no_internal_demos    = 0;
@@ -4984,10 +4987,6 @@ static void M_RD_BackToDefaults_Original(void)
     swirling_liquids     = 0;
     invul_sky            = 0;
     linear_sky           = 0;
-    torque               = 0;
-    weapon_bobbing       = 0;
-    randomly_flipcorpses = 0;
-    floating_powerups    = 1;
 
     // Gameplay (2)
     sbar_colored         = 0;
@@ -5005,6 +5004,13 @@ static void M_RD_BackToDefaults_Original(void)
     secret_notification  = 0;
     show_all_artifacts   = 0;
     show_artifacts_timer = 0;
+    improved_collision   = 0;
+    torque               = 0;
+    weapon_bobbing       = 0;
+    randomly_flipcorpses = 0;
+    floating_powerups    = 1;
+
+    // Gameplay (4)
     fix_map_errors       = 0;
     flip_levels          = 0;
     no_internal_demos    = 0;

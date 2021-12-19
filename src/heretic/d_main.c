@@ -178,6 +178,7 @@ int ammo_widget = 0;
 int ammo_widget_colored = 1;
 
 // Gameplay: Physical
+int improved_collision = 1;
 int torque = 1;
 int weapon_bobbing = 1;
 int randomly_flipcorpses = 1;
@@ -1003,6 +1004,7 @@ void D_BindVariables(void)
     M_BindIntVariable("ammo_widget_colored",    &ammo_widget_colored);
 
     // Gameplay: Physical
+    M_BindIntVariable("improved_collision",     &improved_collision);
     M_BindIntVariable("torque",                 &torque);
     M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);
     M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);
