@@ -18,7 +18,6 @@
 
 #include "h2def.h"
 #include "r_bmaps.h"
-// #include "jn.h"
 
 
 // Walls:
@@ -28,17 +27,18 @@ int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05,
     bmaptexture16, bmaptexture17, bmaptexture18, bmaptexture19, bmaptexture20,
     bmaptexture21, bmaptexture22, bmaptexture23;
 
-// Terminator:
-int bmap_terminator;
 
+/*
+================================================================================
+=
+= R_InitBrightmappedTextures
+=
+= [JN] Lookup and init all the textures for brightmapping.
+=
+================================================================================
+*/
 
-// ===========================================================
-// =                                                         =
-// = [JN] Lookup and init all the textures for brightmapping =
-// =                                                         =
-// ===========================================================
-
-void R_InitBrightmappedTextures(void)
+void R_InitBrightmappedTextures (void)
 {
     // -------------------------------------------------------
     //  Textures
@@ -78,10 +78,5 @@ void R_InitBrightmappedTextures(void)
     // brightmap_yellowred
     bmaptexture09 = R_TextureNumForName("SPAWN09");
     bmaptexture10 = R_TextureNumForName("SPAWN10");
-    
-    // We need to declare a "terminator" - standard game texture,
-    // presented in all Hexen series and using standard light formula.
-    // Otherwise, non-defined textures will use latest brightmap.
-    bmap_terminator = R_TextureNumForName(("FOREST01"));    
 }
 

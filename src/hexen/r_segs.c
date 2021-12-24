@@ -20,19 +20,8 @@
 #include "h2def.h"
 #include "i_system.h"
 #include "r_local.h"
+#include "r_bmaps.h"
 
-// [JN] Brightmaps
-int brightmap_greenonly;
-int brightmap_redonly;
-int brightmap_blueonly;
-int brightmap_flame;
-int brightmap_yellowred;
-extern int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05;
-extern int bmaptexture06, bmaptexture07, bmaptexture08, bmaptexture09, bmaptexture10;
-extern int bmaptexture11, bmaptexture12, bmaptexture13, bmaptexture14, bmaptexture15;
-extern int bmaptexture16, bmaptexture17, bmaptexture18, bmaptexture19, bmaptexture20;
-extern int bmaptexture21, bmaptexture22, bmaptexture23;
-extern int bmap_terminator;
 
 // OPTIMIZE: closed two sided lines as single sided
 
@@ -861,89 +850,120 @@ void R_StoreWallRange(int start, int stop)
                 // [JN] Apply brightmaps to walls...
                 if (brightmaps && !vanillaparm)
                 {
-                    // -------------------------------------------------------
-                    //  Greem only
-                    // -------------------------------------------------------
-
-                    if (midtexture == bmaptexture01)
-                    walllights_middle = fullbright_greenonly[lightnum];
-
-                    if (toptexture == bmaptexture01)
-                    walllights_top = fullbright_greenonly[lightnum];
-
-                    if (bottomtexture == bmaptexture01)
-                    walllights = fullbright_greenonly[lightnum];    
-
-                    // -------------------------------------------------------
-                    //  Red only
-                    // -------------------------------------------------------
-
-                    if (midtexture == bmaptexture02 || midtexture == bmaptexture11 || midtexture == bmaptexture12 || midtexture == bmaptexture13 || midtexture == bmaptexture14 || midtexture == bmaptexture15 || midtexture == bmaptexture16 || midtexture == bmaptexture17 || midtexture == bmaptexture18 || midtexture == bmaptexture19 || midtexture == bmaptexture20 || midtexture == bmaptexture21 || midtexture == bmaptexture22)
-                    walllights_middle = fullbright_redonly[lightnum];
-
-                    if (toptexture == bmaptexture02 || toptexture == bmaptexture11 || toptexture == bmaptexture12 || toptexture == bmaptexture13 || toptexture == bmaptexture14 || toptexture == bmaptexture15 || toptexture == bmaptexture16 || toptexture == bmaptexture17 || toptexture == bmaptexture18 || toptexture == bmaptexture19 || toptexture == bmaptexture20 || toptexture == bmaptexture21 || toptexture == bmaptexture22)
-                    walllights_top = fullbright_redonly[lightnum];
-                    
-                    if (bottomtexture == bmaptexture02 || bottomtexture == bmaptexture11 || bottomtexture == bmaptexture12 || bottomtexture == bmaptexture13 || bottomtexture == bmaptexture14 || bottomtexture == bmaptexture15 || bottomtexture == bmaptexture16 || bottomtexture == bmaptexture17 || bottomtexture == bmaptexture18 || bottomtexture == bmaptexture19 || bottomtexture == bmaptexture20 || bottomtexture == bmaptexture21 || bottomtexture == bmaptexture22)
-                    walllights_bottom = fullbright_redonly[lightnum];    
-
-                    // -------------------------------------------------------
-                    //  Blue only
-                    // -------------------------------------------------------
-
-                    if (midtexture == bmaptexture03 || midtexture == bmaptexture04)
-                    walllights_middle = fullbright_blueonly[lightnum];
-
-                    if (toptexture == bmaptexture03 || toptexture == bmaptexture04)
-                    walllights_top = fullbright_blueonly[lightnum];
-
-                    if (bottomtexture == bmaptexture03 || bottomtexture == bmaptexture04)
-                    walllights_bottom = fullbright_blueonly[lightnum];    
-
-                    // -------------------------------------------------------
-                    //  Flame
-                    // -------------------------------------------------------
-
-                    if (midtexture == bmaptexture05 || midtexture == bmaptexture06 || midtexture == bmaptexture08)
-                    walllights_middle = fullbright_flame[lightnum];
-
-                    if (toptexture == bmaptexture05 || toptexture == bmaptexture06 || toptexture == bmaptexture08)
-                    walllights_top = fullbright_flame[lightnum];
-
-                    if (bottomtexture == bmaptexture05 || bottomtexture == bmaptexture06 || bottomtexture == bmaptexture08)
-                    walllights_bottom = fullbright_flame[lightnum];
-
-                    if (gamemode != shareware)
+                    //
+                    // [JN] Middle segment
+                    //
+                    if (midtexture)
                     {
-                        if (midtexture == bmaptexture07)
-                        walllights_middle = fullbright_flame[lightnum];
-
-                        if (toptexture == bmaptexture07)
-                        walllights_top = fullbright_flame[lightnum];
-
-                        if (bottomtexture == bmaptexture07)
-                        walllights_bottom = fullbright_flame[lightnum];
+                        // Greem only
+                        if (midtexture == bmaptexture01)
+                        {
+                            walllights_middle = fullbright_greenonly[lightnum];
+                        }
+                        // Red only
+                        if (midtexture == bmaptexture02 || midtexture == bmaptexture11
+                        ||  midtexture == bmaptexture12 || midtexture == bmaptexture13
+                        ||  midtexture == bmaptexture14 || midtexture == bmaptexture15
+                        ||  midtexture == bmaptexture16 || midtexture == bmaptexture17
+                        ||  midtexture == bmaptexture18 || midtexture == bmaptexture19
+                        ||  midtexture == bmaptexture20 || midtexture == bmaptexture21
+                        ||  midtexture == bmaptexture22)
+                        {
+                            walllights_middle = fullbright_redonly[lightnum];
+                        }
+                        // Blue only
+                        if (midtexture == bmaptexture03 || midtexture == bmaptexture04)
+                        {
+                            walllights_middle = fullbright_blueonly[lightnum];
+                        }
+                        // Flame
+                        if (midtexture == bmaptexture05 || midtexture == bmaptexture06
+                        ||  midtexture == bmaptexture07 || midtexture == bmaptexture08)
+                        {
+                            walllights_middle = fullbright_flame[lightnum];
+                        }
+                        // Yellow and red
+                        if (midtexture == bmaptexture09 || midtexture == bmaptexture10)
+                        {
+                            walllights_middle = fullbright_yellowred[lightnum];
+                        }
                     }
-
-                    // -------------------------------------------------------
-                    //  Yellow and red
-                    // -------------------------------------------------------
-
-                    if (midtexture == bmaptexture09 || midtexture == bmaptexture10)
-                    walllights_middle = fullbright_yellowred[lightnum];
-
-                    if (toptexture == bmaptexture09 || toptexture == bmaptexture10)
-                    walllights_top = fullbright_yellowred[lightnum];
-
-                    if (bottomtexture == bmaptexture09 || bottomtexture == bmaptexture10)
-                    walllights_bottom = fullbright_yellowred[lightnum];
-
-                    // -------------------------------------------------------
-                    //  Brightmap terminator
-                    // -------------------------------------------------------
-
-                    if (midtexture == bmap_terminator || toptexture == bmap_terminator || bottomtexture == bmap_terminator)
-                    walllights = scalelight[lightnum];
+                    //
+                    // [JN] Top segment
+                    //
+                    if (toptexture)
+                    {
+                        // Greem only
+                        if (toptexture == bmaptexture01)
+                        {
+                            walllights_top = fullbright_greenonly[lightnum];
+                        }
+                        // Red only
+                        if (toptexture == bmaptexture02 || toptexture == bmaptexture11
+                        ||  toptexture == bmaptexture12 || toptexture == bmaptexture13
+                        ||  toptexture == bmaptexture14 || toptexture == bmaptexture15
+                        ||  toptexture == bmaptexture16 || toptexture == bmaptexture17
+                        ||  toptexture == bmaptexture18 || toptexture == bmaptexture19
+                        ||  toptexture == bmaptexture20 || toptexture == bmaptexture21
+                        ||  toptexture == bmaptexture22)
+                        {
+                            walllights_top = fullbright_redonly[lightnum];
+                        }
+                        // Blue only
+                        if (toptexture == bmaptexture03 || toptexture == bmaptexture04)
+                        {
+                            walllights_top = fullbright_blueonly[lightnum];
+                        }
+                        // Flame
+                        if (toptexture == bmaptexture05 || toptexture == bmaptexture06
+                        ||  toptexture == bmaptexture07 || toptexture == bmaptexture08)
+                        {
+                            walllights_top = fullbright_flame[lightnum];
+                        }
+                        // Yellow and red
+                        if (toptexture == bmaptexture09 || toptexture == bmaptexture10)
+                        {
+                            walllights_top = fullbright_yellowred[lightnum];
+                        }
+                    }
+                    //
+                    // [JN] Bottom segment
+                    //
+                    if (bottomtexture)
+                    {
+                        // Greem only
+                        if (bottomtexture == bmaptexture01)
+                        {
+                            walllights = fullbright_greenonly[lightnum];
+                        }
+                        // Red only
+                        if (bottomtexture == bmaptexture02 || bottomtexture == bmaptexture11
+                        ||  bottomtexture == bmaptexture12 || bottomtexture == bmaptexture13
+                        ||  bottomtexture == bmaptexture14 || bottomtexture == bmaptexture15
+                        ||  bottomtexture == bmaptexture16 || bottomtexture == bmaptexture17
+                        ||  bottomtexture == bmaptexture18 || bottomtexture == bmaptexture19
+                        ||  bottomtexture == bmaptexture20 || bottomtexture == bmaptexture21
+                        ||  bottomtexture == bmaptexture22)
+                        {
+                            walllights_bottom = fullbright_redonly[lightnum];    
+                        }
+                        // Blue only
+                        if (bottomtexture == bmaptexture03 || bottomtexture == bmaptexture04)
+                        {
+                            walllights_bottom = fullbright_blueonly[lightnum];  
+                        }
+                        // Flame
+                        if (bottomtexture == bmaptexture05 || bottomtexture == bmaptexture06
+                        ||  bottomtexture == bmaptexture07 || bottomtexture == bmaptexture08)
+                        {
+                            walllights_bottom = fullbright_flame[lightnum];
+                        }
+                        //  Yellow and red
+                        if (bottomtexture == bmaptexture09 || bottomtexture == bmaptexture10)
+                        {
+                            walllights_bottom = fullbright_yellowred[lightnum];
+                        }
+                    }
                 }
             }
         }
