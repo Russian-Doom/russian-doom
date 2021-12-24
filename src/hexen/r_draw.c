@@ -18,7 +18,6 @@
 
 #include "h2def.h"
 #include "i_system.h"
-#include "i_video.h"
 #include "r_local.h"
 #include "v_video.h"
 
@@ -579,26 +578,26 @@ void R_InitBuffer (int width, int height)
 	}
 }
 
-
 /*
-==================
+================================================================================
 =
 = R_DrawViewBorder
 =
-= Draws the border around the view for different size windows
-==================
+= Draws the border around the view for different size windows.
+=
+================================================================================
 */
 
-void R_DrawViewBorder(void)
+void R_DrawViewBorder (void)
 {
-    byte *src, *dest;
     int x, y;
+    const byte *src = W_CacheLumpName("F_022", PU_CACHE);
+    byte *dest = I_VideoBuffer;
 
     if (scaledviewwidth == screenwidth)
+    {
         return;
-
-    src = W_CacheLumpName("F_022", PU_CACHE);
-    dest = I_VideoBuffer;
+    }
 
     for (y = 0; y < SCREENHEIGHT - SBARHEIGHT; y++)
     {
@@ -613,58 +612,52 @@ void R_DrawViewBorder(void)
             dest += (screenwidth & 63);
         }
     }
+
     for (x = (viewwindowx >> hires); x < (viewwindowx >> hires) + (viewwidth >> hires); x += 16)
     {
-        V_DrawPatch(x, (viewwindowy >> hires) - 4, W_CacheLumpName("bordt", PU_CACHE));
-        V_DrawPatch(x, (viewwindowy >> hires) + (viewheight >> hires), W_CacheLumpName("bordb",
-                                                                 PU_CACHE));
+        V_DrawPatch(x, (viewwindowy >> hires) - 4,
+                    W_CacheLumpName("bordt", PU_CACHE));
+        V_DrawPatch(x, (viewwindowy >> hires) + (viewheight >> hires),
+                    W_CacheLumpName("bordb", PU_CACHE));
     }
     for (y = (viewwindowy >> hires); y < (viewwindowy >> hires) + (viewheight >> hires); y += 16)
     {
-        V_DrawPatch((viewwindowx >> hires) - 4, y, W_CacheLumpName("bordl", PU_CACHE));
-        V_DrawPatch((viewwindowx >> hires) + (viewwidth >> hires), y, W_CacheLumpName("bordr",
-                                                                PU_CACHE));
+        V_DrawPatch((viewwindowx >> hires) - 4, y,
+                     W_CacheLumpName("bordl", PU_CACHE));
+        V_DrawPatch((viewwindowx >> hires) + (viewwidth >> hires), y,
+                     W_CacheLumpName("bordr", PU_CACHE));
     }
-    V_DrawPatch((viewwindowx >> hires) - 4, (viewwindowy >> hires) - 4, W_CacheLumpName("bordtl",
-                                                                  PU_CACHE));
-    V_DrawPatch((viewwindowx >> hires) + (viewwidth >> hires), (viewwindowy >> hires) - 4,
-                W_CacheLumpName("bordtr", PU_CACHE));
-    V_DrawPatch((viewwindowx >> hires) + (viewwidth >> hires), (viewwindowy >> hires) + (viewheight >> hires),
-                W_CacheLumpName("bordbr", PU_CACHE));
-    V_DrawPatch((viewwindowx >> hires) - 4, (viewwindowy >> hires) + (viewheight >> hires),
-                W_CacheLumpName("bordbl", PU_CACHE));
+    V_DrawPatch((viewwindowx >> hires) - 4,
+                (viewwindowy >> hires) - 4, W_CacheLumpName("bordtl", PU_CACHE));
+    V_DrawPatch((viewwindowx >> hires) + (viewwidth >> hires),
+                (viewwindowy >> hires) - 4, W_CacheLumpName("bordtr", PU_CACHE));
+
+    V_DrawPatch((viewwindowx >> hires) + (viewwidth >> hires),
+                (viewwindowy >> hires) + (viewheight >> hires), W_CacheLumpName("bordbr", PU_CACHE));
+    V_DrawPatch((viewwindowx >> hires) - 4,
+                (viewwindowy >> hires) + (viewheight >> hires), W_CacheLumpName("bordbl", PU_CACHE));
 }
 
 /*
-==================
+================================================================================
 =
 = R_DrawTopBorder
 =
-= Draws the top border around the view for different size windows
-==================
+= Draws the top border around the view for different size windows.
+=
+================================================================================
 */
 
-
-
-void R_DrawTopBorder(void)
+void R_DrawTopBorder (void)
 {
-    byte *src, *dest;
     int x, y;
+    const byte *src = W_CacheLumpName("F_022", PU_CACHE);
+    byte *dest = I_VideoBuffer;
 
     if (scaledviewwidth == screenwidth)
+    {
         return;
-
-/*	if(gamemode == shareware)
-	{
-		src = W_CacheLumpName ("FLOOR04", PU_CACHE);
-	}
-	else
-	{
-		src = W_CacheLumpName ("FLAT513", PU_CACHE);
-	}
-*/
-    src = W_CacheLumpName("F_022", PU_CACHE);
-    dest = I_VideoBuffer;
+    }
 
     for (y = 0; y < (34 << hires); y++)
     {
@@ -683,21 +676,22 @@ void R_DrawTopBorder(void)
     {
         for (x = (viewwindowx >> hires); x < (viewwindowx >> hires) + (viewwidth >> hires); x += 16)
         {
-            V_DrawPatch(x, (viewwindowy >> hires) - 4,
-                        W_CacheLumpName("bordt", PU_CACHE));
+            V_DrawPatch(x, (viewwindowy >> hires) - 4, W_CacheLumpName("bordt", PU_CACHE));
         }
-        V_DrawPatch((viewwindowx >> hires) - 4, (viewwindowy >> hires), W_CacheLumpName("bordl",
-                                                                  PU_CACHE));
-        V_DrawPatch((viewwindowx >> hires) + (viewwidth >> hires), (viewwindowy >> hires),
-                    W_CacheLumpName("bordr", PU_CACHE));
-        V_DrawPatch((viewwindowx >> hires) - 4, (viewwindowy >> hires) + 16,
-                    W_CacheLumpName("bordl", PU_CACHE));
-        V_DrawPatch((viewwindowx >> hires) + (viewwidth >> hires), (viewwindowy >> hires) + 16,
-                    W_CacheLumpName("bordr", PU_CACHE));
 
-        V_DrawPatch((viewwindowx >> hires) - 4, (viewwindowy >> hires) - 4,
-                    W_CacheLumpName("bordtl", PU_CACHE));
-        V_DrawPatch((viewwindowx >> hires) + (viewwidth >> hires), (viewwindowy >> hires) - 4,
-                    W_CacheLumpName("bordtr", PU_CACHE));
+        V_DrawPatch((viewwindowx >> hires) - 4,
+                    (viewwindowy >> hires), W_CacheLumpName("bordl", PU_CACHE));
+        V_DrawPatch((viewwindowx >> hires) + (viewwidth >> hires),
+                    (viewwindowy >> hires), W_CacheLumpName("bordr", PU_CACHE));
+
+        V_DrawPatch((viewwindowx >> hires) - 4,
+                    (viewwindowy >> hires) + 16, W_CacheLumpName("bordl", PU_CACHE));
+        V_DrawPatch((viewwindowx >> hires) + (viewwidth >> hires),
+                    (viewwindowy >> hires) + 16, W_CacheLumpName("bordr", PU_CACHE));
+
+        V_DrawPatch((viewwindowx >> hires) - 4,
+                    (viewwindowy >> hires) - 4, W_CacheLumpName("bordtl", PU_CACHE));
+        V_DrawPatch((viewwindowx >> hires) + (viewwidth >> hires),
+                    (viewwindowy >> hires) - 4, W_CacheLumpName("bordtr", PU_CACHE));
     }
 }

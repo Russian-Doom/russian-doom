@@ -322,7 +322,7 @@ void R_RenderMaskedSegRange(drawseg_t * ds, int x1, int x2)
             //
             col = (column_t *) ((byte *)
                                 R_GetColumn(texnum,
-                                            maskedtexturecol[dc_x]) - 3);
+                                            maskedtexturecol[dc_x], false) - 3);
 
             R_DrawMaskedColumn(col, -1);
             maskedtexturecol[dc_x] = INT_MAX; // [crispy] 32-bit integer math
@@ -428,7 +428,7 @@ void R_RenderSegLoop(void)
             dc_yl = yl;
             dc_yh = yh;
             dc_texturemid = rw_midtexturemid;
-            dc_source = R_GetColumn(midtexture, texturecolumn);
+            dc_source = R_GetColumn(midtexture, texturecolumn, true);
             dc_texheight = textureheight[midtexture]>>FRACBITS;
 
             // [JN] Account fixed colormap
@@ -454,7 +454,7 @@ void R_RenderSegLoop(void)
                     dc_yl = yl;
                     dc_yh = mid;
                     dc_texturemid = rw_toptexturemid + (dc_yl - centery + 1) * SPARKLEFIX; // [JN] Sparkle fix
-                    dc_source = R_GetColumn(toptexture, texturecolumn);
+                    dc_source = R_GetColumn(toptexture, texturecolumn, true);
                     dc_texheight = textureheight[toptexture]>>FRACBITS;
 
                     // [JN] Account fixed colormap
@@ -486,7 +486,7 @@ void R_RenderSegLoop(void)
                     dc_yl = mid;
                     dc_yh = yh;
                     dc_texturemid = rw_bottomtexturemid + (dc_yl - centery + 1) * SPARKLEFIX; // [JN] Sparkle fix
-                    dc_source = R_GetColumn(bottomtexture, texturecolumn);
+                    dc_source = R_GetColumn(bottomtexture, texturecolumn, true);
                     dc_texheight = textureheight[bottomtexture]>>FRACBITS;
 
                     // [JN] Account fixed colormap

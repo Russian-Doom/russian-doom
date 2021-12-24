@@ -539,7 +539,7 @@ extern int *texturetranslation; // for global animation
 extern int firstspritelump, lastspritelump, numspritelumps;
 extern boolean LevelUseFullBright;
 
-byte *R_GetColumn(int tex, int col);
+byte *R_GetColumn(int tex, int col, boolean opaque);
 void R_InitData(void);
 void R_PrecacheLevel(void);
 
