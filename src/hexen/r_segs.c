@@ -555,18 +555,12 @@ void R_StoreWallRange(int start, int stop)
     int lightnum;
 
     // [crispy] remove MAXDRAWSEGS Vanilla limit
-    if (ds_p == &drawsegs[numdrawsegs])
+    if (ds_p == drawsegs+maxdrawsegs)
     {
-        int numdrawsegs_old = numdrawsegs;
-   
-        if (numdrawsegs_old == MAXDRAWSEGS)
-        printf(english_language ?
-               "R_StoreWallRange: Hit MAXDRAWSEGS (%d) Vanilla limit.\n" :
-               "R_StoreWallRange: превышен лимит MAXDRAWSEGS (%d).\n", MAXDRAWSEGS);
-   
-        numdrawsegs = numdrawsegs ? 2 * numdrawsegs : MAXDRAWSEGS;
-        drawsegs = I_Realloc(drawsegs, numdrawsegs * sizeof(*drawsegs));
-        ds_p = drawsegs + numdrawsegs_old;
+        unsigned newmax = maxdrawsegs ? maxdrawsegs*2 : 128; // killough
+        drawsegs = I_Realloc(drawsegs,newmax*sizeof(*drawsegs));
+        ds_p = drawsegs+maxdrawsegs;
+        maxdrawsegs = newmax;
     }
 
 #ifdef RANGECHECK

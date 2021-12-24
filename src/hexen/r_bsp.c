@@ -28,10 +28,11 @@ seg_t *curline;
 side_t *sidedef;
 line_t *linedef;
 sector_t *frontsector, *backsector;
-
-drawseg_t *drawsegs = NULL;
 drawseg_t *ds_p;
-int        numdrawsegs = 0;
+
+// [JN] killough: New code which removes 2s linedef limit
+drawseg_t *drawsegs;
+unsigned   maxdrawsegs;
 
 void R_StoreWallRange(int start, int stop);
 
