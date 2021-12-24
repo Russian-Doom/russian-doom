@@ -1007,9 +1007,39 @@ void R_StoreWallRange(int start, int stop)
 // render it
 //
     if (markceiling)
-        ceilingplane = R_CheckPlane(ceilingplane, rw_x, rw_stopx - 1);
-    if (markfloor)
-        floorplane = R_CheckPlane(floorplane, rw_x, rw_stopx - 1);
+    {
+        if (ceilingplane)  // [JN] killough 4/11/98: add NULL ptr checks
+        {
+            ceilingplane = R_CheckPlane (ceilingplane, rw_x, rw_stopx-1);
+        }
+        else
+        {
+            markceiling = 0;
+        }
+    }
+
+    if (markfloor) 
+    {
+        if (floorplane)  // [JN] killough 4/11/98: add NULL ptr checks
+        // [JN] cph 2003/04/18  - ceilingplane and floorplane might be the same
+        // visplane (e.g. if both skies); R_CheckPlane doesn't know about
+        // modifications to the plane that might happen in parallel with the check
+        // being made, so we have to override it and split them anyway if that is
+        // a possibility, otherwise the floor marking would overwrite the ceiling
+        // marking, resulting in HOM.
+        if (markceiling && ceilingplane == floorplane)
+        {
+            floorplane = R_DupPlane (floorplane, rw_x, rw_stopx-1);
+        }
+        else
+        {
+            floorplane = R_CheckPlane (floorplane, rw_x, rw_stopx-1);
+        }
+        else
+        {
+            markfloor = 0;
+        }
+    }
 
     R_RenderSegLoop();
 
