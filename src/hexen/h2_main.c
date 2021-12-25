@@ -160,6 +160,7 @@ int flip_weapons = 0;
 
 // Gameplay: Physical
 int improved_collision = 1;
+int torque = 1;
 
 // Gameplay: Crosshair
 int crosshair_draw = 0;
@@ -292,6 +293,7 @@ void D_BindVariables(void)
 
     // Gameplay: Physical
     M_BindIntVariable("improved_collision",     &improved_collision);
+    M_BindIntVariable("torque",                 &torque);
 
     // Gameplay: Gameplay
     M_BindIntVariable("flip_levels",            &flip_levels);

@@ -192,6 +192,7 @@ static void M_RD_CrossHairDraw();
 static void M_RD_CrossHairType();
 static void M_RD_CrossHairScale();
 static void M_RD_Collision();
+static void M_RD_Torque();
 static void M_RD_FlipLevels();
 static void M_RD_NoDemos();
 
@@ -1048,19 +1049,19 @@ static Menu_t Gameplay1Menu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Gameplay2Items[] = {
-    {ITT_TITLE,  "VISUAL",               "UHFABRF",                       NULL,                 0}, // ГРАФИКА
-    {ITT_SWITCH, "BRIGHTMAPS:",          ",HFQNVFGGBYU:",                 M_RD_Brightmaps,      0}, // БРАЙТМАППИНГ
-    {ITT_SWITCH, "FAKE CONTRAST:",       "BVBNFWBZ RJYNHFCNYJCNB:",       M_RD_FakeContrast,    0}, // ИМИТАЦИЯ КОНТРАСТНОСТИ
-    {ITT_SWITCH, "SKY DRAWING MODE:",    "HT;BV JNHBCJDRB YT,F:",         M_RD_LinearSky,       0}, // РЕЖИМ ОТРИСОВКИ НЕБА
+    {ITT_TITLE,  "PHYSICAL",                     "ABPBRF",                       NULL,           0}, // ФИЗИКА
+    {ITT_SWITCH, "COLLISION PHYSICS:",           "ABPBRF CNJKRYJDTYBQ:",         M_RD_Collision, 0}, // ФИЗИКА СТОЛКНОВЕНИЙ
+    {ITT_SWITCH, "CORPSES SLIDING FROM LEDGES:", "NHEGS CGJKPF.N C DJPDSITYBQ:", M_RD_Torque,    0}, // ТРУПЫ СПОЛЗАЮТ С ВОЗВЫШЕНИЙ
     {ITT_TITLE,  "CROSSHAIR",            "GHBWTK",                        NULL,                 0}, // ПРИЦЕЛ
     {ITT_SWITCH, "DRAW CROSSHAIR:",      "JNJ,HF;FNM GHBWTK:",            M_RD_CrossHairDraw,   0}, // ОТОБРАЖАТЬ ПРИЦЕЛ
     {ITT_SWITCH, "INDICATION:",          "BYLBRFWBZ:",                    M_RD_CrossHairType,   0}, // ИНДИКАЦИЯ
     {ITT_SWITCH, "INCREASED SIZE:",      "EDTKBXTYYSQ HFPVTH:",           M_RD_CrossHairScale,  0}, // УВЕЛИЧЕННЫЙ РАЗМЕР
-    {ITT_TITLE,  "CROSSHAIR",            "GHBWTK",                        NULL,                 0}, // ПРИЦЕЛ
-    {ITT_SWITCH, "COLLISION PHYSICS:",   "ABPBRF CNJKRYJDTYBQ:",          M_RD_Collision,       0}, // ФИЗИКА СТОЛКНОВЕНИЙ
     {ITT_TITLE,  "GAMEPLAY",             "UTQVGKTQ",                      NULL,                 0}, // ГЕЙМПЛЕЙ
     {ITT_SWITCH, "FLIP GAME LEVELS:",    "PTHRFKMYJT JNHF;TYBT EHJDYTQ:", M_RD_FlipLevels,      0}, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
     {ITT_SWITCH, "PLAY INTERNAL DEMOS:", "GHJBUHSDFNM LTVJPFGBCB:",       M_RD_NoDemos,         0}, // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
     {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
     {ITT_SETMENU, "< PREV PAGE",           "^ GHTLSLEOFZ CNHFYBWF",       &Gameplay1Menu,       0}  // < ПРЕДЫДУЩАЯ СТРАНИЦА
 };
@@ -3411,6 +3412,11 @@ static void M_RD_Collision()
     improved_collision ^= 1;
 }
 
+static void M_RD_Torque()
+{
+    torque ^= 1;
+}
+
 static void M_RD_FlipLevels()
 {
     flip_levels ^= 1;
@@ -3436,110 +3442,88 @@ static void DrawGameplay2Menu(void)
     if (english_language)
     {
         //
-        // GRAPHICAL
+        // PHYSICAL
         //
+       
+        // Collision physics
+        RD_M_DrawTextSmallENG(improved_collision ? "IMPROVED" : "ORIGINAL", 159 + wide_delta, 42,
+                              improved_collision ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
-        // Brightmaps
-        RD_M_DrawTextSmallENG(brightmaps ? "ON" : "OFF", 119 + wide_delta, 42,
-                              brightmaps ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
-
-        // Fake contrast
-        RD_M_DrawTextSmallENG(fake_contrast ? "ON" : "OFF", 143 + wide_delta, 52,
-                              fake_contrast ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
-
-        // Sky drawing mode
-        RD_M_DrawTextSmallENG(linear_sky ? "LINEAR" : "ORIGINAL", 162 + wide_delta, 62,
-                              linear_sky ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+        // Corpses sliding from the ledges
+        RD_M_DrawTextSmallENG(torque ? "ON" : "OFF", 238 + wide_delta, 52,
+                              torque ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         //
         // CROSSHAIR
         //
 
         // Draw crosshair
-        RD_M_DrawTextSmallENG(crosshair_draw ? "ON" : "OFF", 150 + wide_delta, 82,
+        RD_M_DrawTextSmallENG(crosshair_draw ? "ON" : "OFF", 150 + wide_delta, 72,
                               crosshair_draw ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Indication
-        RD_M_DrawTextSmallENG(crosshair_type == 1 ? "HEALTH" : "STATIC",  111 + wide_delta, 92,
+        RD_M_DrawTextSmallENG(crosshair_type == 1 ? "HEALTH" : "STATIC",  111 + wide_delta, 82,
                               crosshair_type ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Increased size
-        RD_M_DrawTextSmallENG(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 102,
+        RD_M_DrawTextSmallENG(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 92,
                               crosshair_scale ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
-
-        //
-        // PHYSICAL
-        //
-       
-        // Collision physics
-        RD_M_DrawTextSmallENG(improved_collision ? "IMPROVED" : "ORIGINAL", 159 + wide_delta, 122,
-                              improved_collision ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         //
         // GAMEPLAY
         //
 
         // Flip game levels
-        RD_M_DrawTextSmallENG(flip_levels ? "ON" : "OFF", 153 + wide_delta, 142,
+        RD_M_DrawTextSmallENG(flip_levels ? "ON" : "OFF", 153 + wide_delta, 112,
                               flip_levels ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Play internal demos
-        RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON", 179 + wide_delta, 152,
+        RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON", 179 + wide_delta, 122,
                               no_internal_demos ? CR_GRAY2RED_HEXEN : CR_GRAY2GREEN_HEXEN);
     }
     else
     {
         //
-        // ГРАФИКА
+        // ФИЗИКА
         //
 
-        // Брайтмаппинг
-        RD_M_DrawTextSmallRUS(brightmaps ? "DRK" : "DSRK", 133 + wide_delta, 42,
-                              brightmaps ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+        // Физика столкновений
+        RD_M_DrawTextSmallRUS(improved_collision ? "EKEXITYYFZ" : "JHBUBYFKMYFZ", 186 + wide_delta, 42,
+                              improved_collision ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
-        // Имитация контрастности
-        RD_M_DrawTextSmallRUS(fake_contrast ? "DRK" : "DSRK", 205 + wide_delta, 52,
-                              fake_contrast ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
-
-        // Режим отрисовки неба
-        RD_M_DrawTextSmallRUS(linear_sky ? "KBYTQYSQ" : "JHBUBYFKMYSQ", 195 + wide_delta, 62,
-                              linear_sky ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
-
+        // Трупы сползают с возвышений
+        RD_M_DrawTextSmallRUS(torque ? "DRK" : "DSRK", 248 + wide_delta, 52,
+                              torque ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+                              
         //
         // ПРИЦЕЛ
         //
 
         // Отображать прицел
-        RD_M_DrawTextSmallRUS(crosshair_draw ? "DRK" : "DSRK", 175 + wide_delta, 82,
+        RD_M_DrawTextSmallRUS(crosshair_draw ? "DRK" : "DSRK", 175 + wide_delta, 72,
                               crosshair_draw ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Индикация
         RD_M_DrawTextSmallRUS(crosshair_type == 1 ? "PLJHJDMT" : // ЗДОРОВЬЕ
                                                     "CNFNBXYFZ", // СТАТИЧНАЯ
-                              111 + wide_delta, 92, crosshair_type ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+                              111 + wide_delta, 82, crosshair_type ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Увеличенный размер
-        RD_M_DrawTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 102,
+        RD_M_DrawTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 92,
                               crosshair_scale ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
-        //
-        // ФИЗИКА
-        //
 
-        // Физика столкновений
-        RD_M_DrawTextSmallRUS(improved_collision ? "EKEXITYYFZ" : "JHBUBYFKMYFZ", 186 + wide_delta, 122,
-                              improved_collision ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         //
         // ГЕЙМПЛЕЙ
         //
 
         // Зеркальное отражение уровней
-        RD_M_DrawTextSmallRUS(flip_levels ? "DRK" : "DSRK", 255 + wide_delta, 142,
+        RD_M_DrawTextSmallRUS(flip_levels ? "DRK" : "DSRK", 255 + wide_delta, 112,
                               flip_levels ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Проигрывать демозаписи
-        RD_M_DrawTextSmallRUS(no_internal_demos ? "DRK" : "DSRK", 211 + wide_delta, 152,
+        RD_M_DrawTextSmallRUS(no_internal_demos ? "DRK" : "DSRK", 211 + wide_delta, 122,
                               no_internal_demos ? CR_GRAY2RED_HEXEN : CR_GRAY2GREEN_HEXEN);
     }
 }
