@@ -671,23 +671,25 @@ void R_ProjectSprite (mobj_t *thing)
     // [crispy] flip death sprites and corpses randomly
     if (randomly_flipcorpses && !vanillaparm)
     {
+        // Not to be flipped
         if ((thing->flags & MF_CORPSE && thing->type != MT_MINOTAUR
-        && thing->type != MT_SORCERER1 && thing->type != MT_SORCERER2)
-        || thing->info->spawnstate == S_MOSS1             // Moss 1
-        || thing->info->spawnstate == S_MOSS2             // Moss 2
-        || thing->info->spawnstate == S_HANGINGCORPSE     // Hanging Corpse (51)
-        || thing->info->spawnstate == S_SKULLHANG70_1     // Hanging Skull 1 (17)
-        || thing->info->spawnstate == S_SKULLHANG60_1     // Hanging Skull 2 (24)
-        || thing->info->spawnstate == S_SKULLHANG45_1     // Hanging Skull 3 (25)
-        || thing->info->spawnstate == S_SKULLHANG35_1     // Hanging Skull 4 (26)
-        || thing->info->spawnstate == S_SPLASHBASE1       // Water splash base
-        || thing->info->spawnstate == S_SPLASH1           // Water small splash
-        || thing->info->spawnstate == S_LAVASPLASH1       // Lava splash base
-        || thing->info->spawnstate == S_LAVASMOKE1        // Lava smoke
-        || thing->info->spawnstate == S_SLUDGESPLASH1     // Sludge splash base
-        || thing->info->spawnstate == S_SLUDGECHUNK1      // Sludge small chunk
-        || thing->info->spawnstate == S_IMP_CHUNKA1       // Gargoyle chunk 1
-        || thing->info->spawnstate == S_IMP_CHUNKB1)      // Gargoyle chunk 2
+        &&   thing->type != MT_SORCERER1 && thing->type != MT_SORCERER2)
+        // Scenery objects
+        || thing->type == MT_MISC8        // Moss 1 [48]
+        || thing->type == MT_MISC9        // Moss 2 [49]
+        || thing->type == MT_MISC11       // Hanging Corpse [51]
+        || thing->type == MT_SKULLHANG70  // Hanging Skull 1 [17]
+        || thing->type == MT_SKULLHANG60  // Hanging Skull 2 [24]
+        || thing->type == MT_SKULLHANG45  // Hanging Skull 3 [25]
+        || thing->type == MT_SKULLHANG35  // Hanging Skull 4 [26]
+        || thing->type == MT_SPLASHBASE   // Water splash base [-1]
+        || thing->type == MT_SPLASH       // Water small splash [-1]
+        || thing->type == MT_LAVASPLASH   // Lava splash base [-1]
+        || thing->type == MT_LAVASMOKE    // Lava smoke [-1]
+        || thing->type == MT_SLUDGESPLASH // Sludge splash base [-1]
+        || thing->type == MT_SLUDGECHUNK  // Sludge small chunk [-1]
+        || thing->type == MT_IMPCHUNK1    // Gargoyle chunk 1 [-1]
+        || thing->type == MT_IMPCHUNK2)   // Gargoyle chunk 2 [-1]
         {
             if (thing->health & 1)
             {

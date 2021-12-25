@@ -1416,16 +1416,16 @@ void P_SpawnMapThing(mapthing_t * mthing)
         mobj->flags |= MF_AMBUSH;
     }
 
-    // [from-crispy] Set some random health so these objects can be flipped
+    // [JN] Set random health so these objects can be flipped.
     if (randomly_flipcorpses && !vanillaparm)
     {
-        if (mobj->info->spawnstate == S_MOSS1            // Moss 1
-        || mobj->info->spawnstate == S_MOSS2             // Moss 2
-        || mobj->info->spawnstate == S_HANGINGCORPSE     // Hanging Corpse (51)
-        || mobj->info->spawnstate == S_SKULLHANG70_1     // Hanging Skull 1 (17)
-        || mobj->info->spawnstate == S_SKULLHANG60_1     // Hanging Skull 2 (24)
-        || mobj->info->spawnstate == S_SKULLHANG45_1     // Hanging Skull 3 (25)
-        || mobj->info->spawnstate == S_SKULLHANG35_1)    // Hanging Skull 4 (26)
+        if (mobj->type == MT_MISC8         // Moss 1 [48]
+        ||  mobj->type == MT_MISC9         // Moss 2 [49]
+        ||  mobj->type == MT_MISC11        // Hanging Corpse [51]
+        ||  mobj->type == MT_SKULLHANG70   // Hanging Skull 1 [17]
+        ||  mobj->type == MT_SKULLHANG60   // Hanging Skull 2 [24]
+        ||  mobj->type == MT_SKULLHANG45   // Hanging Skull 3 [25]
+        ||  mobj->type == MT_SKULLHANG35)  // Hanging Skull 4 [26]
         {
             mobj->health -= M_Random() & 1;
         }
