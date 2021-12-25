@@ -278,6 +278,15 @@ void A_CorpseExplode(mobj_t * actor)
     for (i = (P_Random() & 3) + 3; i; i--)
     {
         mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_CORPSEBIT);
+
+        // [JN] Make bones falling from ledges.
+        if (singleplayer && !vanillaparm)
+        {
+            // Set corpse flag for torque applying.
+            mo->flags |= MF_CORPSE;
+            // Set torque duration.
+            mo->geartics = 15 * TICRATE;
+        }
         P_SetMobjState(mo, mo->info->spawnstate + (P_Random() % 3));
         if (mo)
         {
@@ -288,6 +297,16 @@ void A_CorpseExplode(mobj_t * actor)
     }
     // Spawn a skull
     mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_CORPSEBIT);
+
+    // [JN] Make skull falling from ledges.
+    if (singleplayer && !vanillaparm)
+    {
+        // Set corpse flag for torque applying.
+        mo->flags |= MF_CORPSE;
+        // Set torque duration.
+        mo->geartics = 15 * TICRATE;
+    }
+
     P_SetMobjState(mo, S_CORPSEBIT_4);
     if (mo)
     {

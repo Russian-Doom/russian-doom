@@ -724,7 +724,17 @@ void R_ProjectSprite(mobj_t * thing)
         || thing->type == MT_TABLE_SHIT2       // Small Silver Stein [8501]
         || thing->type == MT_MISC1             // Tiny Rock (mossy) [8501]
         // Breakable objects
-        || thing->type == MT_POTTERYBIT1)       // Pot shards
+        || thing->type == MT_POTTERYBIT1       // Pot shards
+        || thing->type == MT_SGSHARD1          // Stained glass shards
+        || thing->type == MT_SGSHARD2
+        || thing->type == MT_SGSHARD3
+        || thing->type == MT_SGSHARD4
+        || thing->type == MT_SGSHARD5
+        || thing->type == MT_SGSHARD6
+        || thing->type == MT_SGSHARD7
+        || thing->type == MT_SGSHARD8
+        || thing->type == MT_SGSHARD9
+        || thing->type == MT_SGSHARD0)
         {
             if (thing->health & 1)
             {

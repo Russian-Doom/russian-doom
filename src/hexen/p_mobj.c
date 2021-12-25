@@ -22,6 +22,7 @@
 #include "h2def.h"
 #include "m_random.h"
 #include "i_system.h"
+#include "i_timer.h"
 #include "p_local.h"
 #include "s_sound.h"
 #include "sounds.h"
@@ -228,13 +229,29 @@ void P_FloorBounceMissile(mobj_t * mo)
             mo->momz = FixedMul(mo->momz, -0.3 * FRACUNIT);
             if (abs(mo->momz) < (FRACUNIT / 2))
             {
-                // [JN] Do not remove glass shards...
-                // P_SetMobjState(mo, S_NULL);
-                // [JN] ...initialize their X/Y/Z momentum to let them lay calmly.
-                mo->momx = 0;
-                mo->momy = 0;
-                mo->momz = 0;
-                return;
+                // [JN] Apply various enhancements for stained glass shards:
+                if (singleplayer && !vanillaparm)
+                {
+                    // Make infinite duration.
+                    mo->tics = -1;        
+                    // Randomize health for random flipping.
+                    mo->health -= M_Random() & 1;
+                    // Set corpse flag for torque applying.
+                    mo->flags |= MF_CORPSE;
+                    // Set torque duration.
+                    mo->geartics = 15 * TICRATE;
+                    // Initialize X/Y/Z momentum to let them lay calmly.
+                    mo->momx = 0;
+                    mo->momy = 0;
+                    mo->momz = 0;
+                    // All done!
+                    return;
+                }
+                else
+                {
+                    P_SetMobjState(mo, S_NULL);
+                    return;
+                }
             }
             break;
         default:

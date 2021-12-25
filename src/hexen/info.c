@@ -635,51 +635,41 @@ state_t states[NUMSTATES] = {
     {SPR_SGSA, 1, 4, NULL, S_SGSHARD1_3, 0, 0}, // S_SGSHARD1_2
     {SPR_SGSA, 2, 4, NULL, S_SGSHARD1_4, 0, 0}, // S_SGSHARD1_3
     {SPR_SGSA, 3, 4, NULL, S_SGSHARD1_5, 0, 0}, // S_SGSHARD1_4
-    // [JN] Glass shard: do not go to NULL frame, stay forever
-    {SPR_SGSA, 4, -1, NULL, S_SGSHARD1_1, 0, 0}, // S_SGSHARD1_5
+    {SPR_SGSA, 4, 4, NULL, S_SGSHARD1_1, 0, 0}, // S_SGSHARD1_5
     {SPR_SGSA, 4, 30, NULL, S_NULL, 0, 0},      // S_SGSHARD1_D
     {SPR_SGSA, 5, 4, NULL, S_SGSHARD2_2, 0, 0}, // S_SGSHARD2_1
     {SPR_SGSA, 6, 4, NULL, S_SGSHARD2_3, 0, 0}, // S_SGSHARD2_2
     {SPR_SGSA, 7, 4, NULL, S_SGSHARD2_4, 0, 0}, // S_SGSHARD2_3
     {SPR_SGSA, 8, 4, NULL, S_SGSHARD2_5, 0, 0}, // S_SGSHARD2_4
-    // [JN] Glass shard: do not go to NULL frame, stay forever
-    {SPR_SGSA, 9, -1, NULL, S_SGSHARD2_1, 0, 0}, // S_SGSHARD2_5
+    {SPR_SGSA, 9, 4, NULL, S_SGSHARD2_1, 0, 0}, // S_SGSHARD2_5
     {SPR_SGSA, 9, 30, NULL, S_NULL, 0, 0},      // S_SGSHARD2_D
     {SPR_SGSA, 10, 4, NULL, S_SGSHARD3_2, 0, 0},        // S_SGSHARD3_1
     {SPR_SGSA, 11, 4, NULL, S_SGSHARD3_3, 0, 0},        // S_SGSHARD3_2
     {SPR_SGSA, 12, 4, NULL, S_SGSHARD3_4, 0, 0},        // S_SGSHARD3_3
     {SPR_SGSA, 13, 4, NULL, S_SGSHARD3_5, 0, 0},        // S_SGSHARD3_4
-    // [JN] Glass shard: do not go to NULL frame, stay forever
-    {SPR_SGSA, 14, -1, NULL, S_SGSHARD3_1, 0, 0},        // S_SGSHARD3_5
+    {SPR_SGSA, 14, 4, NULL, S_SGSHARD3_1, 0, 0},        // S_SGSHARD3_5
     {SPR_SGSA, 14, 30, NULL, S_NULL, 0, 0},     // S_SGSHARD3_D
     {SPR_SGSA, 15, 4, NULL, S_SGSHARD4_2, 0, 0},        // S_SGSHARD4_1
     {SPR_SGSA, 16, 4, NULL, S_SGSHARD4_3, 0, 0},        // S_SGSHARD4_2
     {SPR_SGSA, 17, 4, NULL, S_SGSHARD4_4, 0, 0},        // S_SGSHARD4_3
     {SPR_SGSA, 18, 4, NULL, S_SGSHARD4_5, 0, 0},        // S_SGSHARD4_4
-    // [JN] Glass shard: do not go to NULL frame, stay forever
-    {SPR_SGSA, 19, -1, NULL, S_SGSHARD4_1, 0, 0},        // S_SGSHARD4_5
+    {SPR_SGSA, 19, 4, NULL, S_SGSHARD4_1, 0, 0},        // S_SGSHARD4_5
     {SPR_SGSA, 19, 30, NULL, S_NULL, 0, 0},     // S_SGSHARD4_D
     {SPR_SGSA, 20, 4, NULL, S_SGSHARD5_2, 0, 0},        // S_SGSHARD5_1
     {SPR_SGSA, 21, 4, NULL, S_SGSHARD5_3, 0, 0},        // S_SGSHARD5_2
     {SPR_SGSA, 22, 4, NULL, S_SGSHARD5_4, 0, 0},        // S_SGSHARD5_3
     {SPR_SGSA, 23, 4, NULL, S_SGSHARD5_5, 0, 0},        // S_SGSHARD5_4
-    // [JN] Glass shard: do not go to NULL frame, stay forever
-    {SPR_SGSA, 24, -1, NULL, S_SGSHARD5_1, 0, 0},        // S_SGSHARD5_5
+    {SPR_SGSA, 24, 4, NULL, S_SGSHARD5_1, 0, 0},        // S_SGSHARD5_5
     {SPR_SGSA, 24, 30, NULL, S_NULL, 0, 0},     // S_SGSHARD5_D
-    // [JN] Glass shard: do not go to NULL frame, stay forever
-    {SPR_SGSB, 0, -1, NULL, S_SGSHARD6_1, 0, 0}, // S_SGSHARD6_1
+    {SPR_SGSB, 0, 4, NULL, S_SGSHARD6_1, 0, 0}, // S_SGSHARD6_1
     {SPR_SGSB, 0, 30, NULL, S_NULL, 0, 0},      // S_SGSHARD6_D
-    // [JN] Glass shard: do not go to NULL frame, stay forever
-    {SPR_SGSB, 1, -1, NULL, S_SGSHARD7_1, 0, 0}, // S_SGSHARD7_1
+    {SPR_SGSB, 1, 4, NULL, S_SGSHARD7_1, 0, 0}, // S_SGSHARD7_1
     {SPR_SGSB, 1, 30, NULL, S_NULL, 0, 0},      // S_SGSHARD7_D
-    // [JN] Glass shard: do not go to NULL frame, stay forever
-    {SPR_SGSB, 2, -1, NULL, S_SGSHARD8_1, 0, 0}, // S_SGSHARD8_1
+    {SPR_SGSB, 2, 4, NULL, S_SGSHARD8_1, 0, 0}, // S_SGSHARD8_1
     {SPR_SGSB, 2, 30, NULL, S_NULL, 0, 0},      // S_SGSHARD8_D
-    // [JN] Glass shard: do not go to NULL frame, stay forever
-    {SPR_SGSB, 3, -1, NULL, S_SGSHARD9_1, 0, 0}, // S_SGSHARD9_1
+    {SPR_SGSB, 3, 4, NULL, S_SGSHARD9_1, 0, 0}, // S_SGSHARD9_1
     {SPR_SGSB, 3, 30, NULL, S_NULL, 0, 0},      // S_SGSHARD9_D
-    // [JN] Glass shard: do not go to NULL frame, stay forever
-    {SPR_SGSB, 4, -1, NULL, S_SGSHARD0_1, 0, 0}, // S_SGSHARD0_1
+    {SPR_SGSB, 4, 4, NULL, S_SGSHARD0_1, 0, 0}, // S_SGSHARD0_1
     {SPR_SGSB, 4, 30, NULL, S_NULL, 0, 0},      // S_SGSHARD0_D
     {SPR_PORK, 0, 5, NULL, S_ARTI_EGGC2, 0, 0}, // S_ARTI_EGGC1
     {SPR_PORK, 1, 5, NULL, S_ARTI_EGGC3, 0, 0}, // S_ARTI_EGGC2
