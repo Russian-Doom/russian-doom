@@ -722,7 +722,9 @@ void R_ProjectSprite(mobj_t * thing)
         || thing->type == MT_MISC22            // Small Mushroom 5 [47]
         || thing->type == MT_MISC2             // Small Rock (mossy) [7]
         || thing->type == MT_TABLE_SHIT2       // Small Silver Stein [8501]
-        || thing->type == MT_MISC1)            // Tiny Rock (mossy) [8501]
+        || thing->type == MT_MISC1             // Tiny Rock (mossy) [8501]
+        // Breakable objects
+        || thing->type == MT_POTTERYBIT1)       // Pot shards
         {
             if (thing->health & 1)
             {

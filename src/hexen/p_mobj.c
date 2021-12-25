@@ -1278,6 +1278,22 @@ mobj_t *P_SpawnMobj(fixed_t x, fixed_t y, fixed_t z, mobjtype_t type)
     }
     mobj->lastlook = P_Random() % maxplayers;
 
+    // [JN] Apply various enhancements:
+    if (singleplayer && !vanillaparm)
+    {
+        // [JN] Remove MF_NOBLOCKMAP flag from following objects
+        // so they can properly connect to the moving sectors and 
+        // don't stuck in the midair.
+        if (mobj->type == MT_SPLASHBASE     // Water splash base
+        ||  mobj->type == MT_SPLASH         // Water small splash
+        ||  mobj->type == MT_LAVASPLASH     // Lava splash base
+        ||  mobj->type == MT_SLUDGESPLASH   // Sludge splash base
+        ||  mobj->type == MT_SLUDGECHUNK)   // Sludge small chunk
+        {
+            mobj->flags &= ~MF_NOBLOCKMAP;
+        }
+    }
+
     // Set the state, but do not use P_SetMobjState, because action
     // routines can't be called yet.  If the spawnstate has an action
     // routine, it will not be called.

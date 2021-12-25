@@ -20,6 +20,7 @@
 // HEADER FILES ------------------------------------------------------------
 
 #include "h2def.h"
+#include "i_timer.h"
 #include "m_random.h"
 #include "p_local.h"
 #include "s_sound.h"
@@ -185,7 +186,18 @@ void A_PotteryExplode(mobj_t * actor)
 void A_PotteryChooseBit(mobj_t * actor)
 {
     P_SetMobjState(actor, actor->info->deathstate + (P_Random() % 5) + 1);
-    actor->tics = 256 + (P_Random() << 1);
+    // [JN] Apply various enhancements for pottery shards:
+    if (singleplayer && !vanillaparm)
+    {
+        actor->tics = -1;                 // Make it infinite duration.
+        actor->health -= M_Random() & 1;  // Randomize it's health for flipping.
+        actor->flags |= MF_CORPSE;        // Set corpse flag for torque applying.
+        actor->geartics = 15 * TICRATE;   // Set torque duration.
+    }
+    else
+    {
+        actor->tics = 256 + (P_Random() << 1);
+    }
 }
 
 //============================================================================
