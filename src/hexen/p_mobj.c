@@ -73,6 +73,26 @@ fixed_t FloatBobOffsets[64] = {
     -200637, -152193, -102284, -51389
 };
 
+// [JN] Halfed values from table above.
+static fixed_t FloatBobOffsetsHalfed[64] = {
+          0,   25694,   51141,   76096,
+     100318,  123573,  145639,  166302,
+     185363,  202640,  217964,  231190,
+     242189,  250856,  257106,  260881,
+     262143,  260881,  257106,  250856,
+     242189,  231190,  217964,  202640,
+     185363,  166302,  145639,  123573,
+     100318,   76096,   51141,   25694,
+         -1,  -25695,  -51142,  -76096,
+    -100318, -123574, -145639, -166302,
+    -185364, -202640, -217965, -231190,
+    -242190, -250856, -257107, -260882,
+    -262144, -260882, -257107, -250856,
+    -242189, -231190, -217965, -202640,
+    -185364, -166302, -145639, -123574,
+    -100318,  -76096,  -51142,  -25694
+};
+
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 
 static int TIDList[MAX_TID_COUNT + 1];  // +1 for termination marker
@@ -1127,8 +1147,9 @@ void P_MobjThinker(mobj_t * mobj)
     }
     if (mobj->flags2 & MF2_FLOATBOB)
     {                           // Floating item bobbing motion (special1 is height)
-        mobj->z = mobj->floorz +
-            mobj->special1.i + FloatBobOffsets[(mobj->health++) & 63];
+                                // [JN] Variable floating amplitude.
+        mobj->z = mobj->floorz + (floating_powerups == 1 ? FloatBobOffsets[(mobj->health++) & 63] :
+                                  floating_powerups == 2 ? FloatBobOffsetsHalfed[(mobj->health++) & 63] : 0);
     }
     else if ((mobj->z != mobj->floorz) || mobj->momz || BlockingMobj)
     {                           // Handle Z momentum and gravity
