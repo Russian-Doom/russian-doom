@@ -82,17 +82,21 @@ void S_StartSong(int song, boolean loop, boolean replay)
 
     // [JN] Don't replay an old song, but
     // allow replay if music system is changed.
-    if (song == mus_song && !replay)
-    {
-        return;
-    }
+    //
+    // Commented out because of music device hot-swapping disabled.
+    // if (song == mus_song && !replay)
+    // {
+    //     return;
+    // }
 
     if (rs != NULL)
     {
         I_StopSong();
         // [JN] No-op. Do not unregister song now, otherwise 
         // changed music system will be able to handle it.
-        // I_UnRegisterSong(rs);
+        //
+        // Uncommented out because of music device hot-swapping disabled.
+        I_UnRegisterSong(rs);
     }
 
     if (song < mus_e1m1 || song > NUMMUSIC)
