@@ -2724,7 +2724,7 @@ static void DrawSoundSystemMenu(void)
         RD_M_DrawTextSmallENG(mute_inactive_window ? "ON" : "OFF", 184 + wide_delta, 122, CR_NONE);
 
         // Informative message:
-        if (CurrentItPos == 4)
+        if (CurrentItPos == 1 || CurrentItPos == 2 || CurrentItPos == 4)
         {
             RD_M_DrawTextSmallENG("CHANGING WILL REQUIRE RESTART OF THE PROGRAM",
                                   3 + wide_delta, 132, CR_WHITE2GREEN_HERETIC);
@@ -2798,7 +2798,7 @@ static void DrawSoundSystemMenu(void)
         RD_M_DrawTextSmallRUS(mute_inactive_window ? "DSRK" : "DRK", 201 + wide_delta, 122, CR_NONE);
 
         // Informative message: ИЗМЕНЕНИЕ ПОТРЕБУЕТ ПЕРЕЗАПУСК ПРОГРАММЫ
-        if (CurrentItPos == 4)
+        if (CurrentItPos == 1 || CurrentItPos == 2 || CurrentItPos == 4)
         {
             RD_M_DrawTextSmallRUS("BPVTYTYBT GJNHT,ETN GTHTPFGECR GHJUHFVVS",
                                   11 + wide_delta, 132, CR_WHITE2GREEN_HERETIC);
@@ -2914,14 +2914,16 @@ static void M_RD_SoundDevice()
     else if (snd_sfxdevice == 3)
         snd_sfxdevice = 0;
 
+    // [JN] Not safe for hot-swapping.
+    //
     // Reinitialize SFX module
-    InitSfxModule(snd_sfxdevice);
-
+    // InitSfxModule(snd_sfxdevice);
+    // 
     // Call sfx device changing routine
-    S_RD_Change_SoundDevice();
-
+    // S_RD_Change_SoundDevice();
+    // 
     // Reinitialize sound volume, recalculate sound curve
-    S_SetMaxVolume(true);
+    // S_SetMaxVolume(true);
 }
 
 static void M_RD_MusicDevice(Direction_t direction)
@@ -2979,20 +2981,22 @@ static void M_RD_MusicDevice(Direction_t direction)
             break;
     }
 
+    // [JN] Not safe for hot-swapping.
+    //
     // Shut down current music
-    S_StopSong();
-
+    // S_StopSong();
+    //
     // Shut down music system
-    I_ShutdownSound();
-    
+    // I_ShutdownSound();
+    //
     // Start music system
-    I_InitSound(true);
-
+    // I_InitSound(true);
+    //
     // Reinitialize music volume
-    S_SetMusicVolume();
-
+    // S_SetMusicVolume();
+    //
     // Restart current music
-    S_StartSong(mus_song, true, true);
+    // S_StartSong(mus_song, true, true);
 
     RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
 }
