@@ -1,10 +1,10 @@
 ![](https://jnechaevsky.github.io/projects/rusdoom/files/russian_doom_git.png)
 
-#### Russian Doom 5.0 (released: September 16, 2021)
+#### Russian Doom 5.1 (released: December 26, 2021)
 
-Windows (32-bit): [russian-doom-5.0-win32.zip](https://github.com/JNechaevsky/russian-doom/releases/download/5.0/russian-doom-5.0-win32.zip)<br />
-Windows (64-bit): [russian-doom-5.0-win64.zip](https://github.com/JNechaevsky/russian-doom/releases/download/5.0/russian-doom-5.0-win64.zip)<br />
-Source code available in [zip](https://github.com/JNechaevsky/russian-doom/archive/refs/tags/5.0.zip) and [tar.gz](https://github.com/JNechaevsky/russian-doom/archive/refs/tags/5.0.tar.gz) formats<br />
+Windows (32-bit): [russian-doom-5.1-win32.zip](https://github.com/JNechaevsky/russian-doom/releases/download/5.1/russian-doom-5.1-win32.zip)<br />
+Windows (64-bit): [russian-doom-5.1-win64.zip](https://github.com/JNechaevsky/russian-doom/releases/download/5.1/russian-doom-5.1-win64.zip)<br />
+Source code available in [zip](https://github.com/JNechaevsky/russian-doom/archive/refs/tags/5.1.zip) and [tar.gz](https://github.com/JNechaevsky/russian-doom/archive/refs/tags/5.1.tar.gz) formats<br />
 
 #### Russian Heretic 5.0 (released: September 16, 2021)
 

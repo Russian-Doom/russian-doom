@@ -17,7 +17,7 @@ body:
       description: |
         What version are you using? If you are building Russian doom from source, specify revision.
         Make sure to update to latest [release](https://github.com/JNechaevsky/russian-doom/releases) version and test again before continuing.
-      placeholder: "Russian Doom 5.0 | Russian Heretic 5.0 | Russian Hexen 4.2"
+      placeholder: "Russian Doom 5.1 | Russian Heretic 5.0 | Russian Hexen 4.2"
     validations:
       required: true
   - type: dropdown
