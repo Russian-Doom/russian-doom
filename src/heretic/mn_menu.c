@@ -1801,7 +1801,7 @@ static void DrawRenderingMenu(void)
         if (aspect_ratio_temp != aspect_ratio)
         {
             RD_M_DrawTextSmallENG("THE PROGRAM MUST BE RESTARTED",
-                                  51 + wide_delta, 148, CR_WHITE2GREEN_HERETIC);
+                                  51 + wide_delta, 142, CR_WHITE2GREEN_HERETIC);
         }
 
         // Vertical sync
@@ -1845,6 +1845,13 @@ static void DrawRenderingMenu(void)
 
         // Show ENDTEXT screen
         RD_M_DrawTextSmallENG(show_endoom ? "ON" : "OFF", 188 + wide_delta, 122, CR_NONE);
+
+        // Tip for faster sliding
+        if (CurrentItPos == 3)
+        {
+            RD_M_DrawTextSmallENG("HOLD RUN BUTTON FOR FASTER SLIDING",
+                                  51 + wide_delta, 162, CR_WHITE2DARKGREEN_HERETIC);
+        }
     }
     else
     {
@@ -1907,6 +1914,16 @@ static void DrawRenderingMenu(void)
         // Показывать экран ENDTEXT
         RD_M_DrawTextSmallENG("ENDTEXT:", 160 + wide_delta, 122, CR_NONE);
         RD_M_DrawTextSmallRUS(show_endoom ? "DRK" : "DSRK", 222 + wide_delta, 122, CR_NONE);
+
+        // Для ускоренного пролистывания
+        // удерживайте кнопку бега
+        if (CurrentItPos == 3)
+        {
+            RD_M_DrawTextSmallRUS("LKZ ECRJHTYYJUJ GHJKBCNSDFYBZ",
+                                  51 + wide_delta, 162, CR_WHITE2DARKGREEN_HERETIC);
+            RD_M_DrawTextSmallRUS("ELTH;BDFQNT RYJGRE ,TUF",
+                                  51 + wide_delta, 172, CR_WHITE2DARKGREEN_HERETIC);
+        }
     }
 
     // Screenshot format / Формат скриншотов (same english values)
@@ -1935,8 +1952,28 @@ static void M_RD_Change_VSync()
 
 static void M_RD_MaxFPS(Direction_t direction)
 {
-    RD_Menu_SlideInt(&max_fps, 35, 999, direction);
+    // [JN] Speed up slider movement while holding "run" key.
+    switch (direction)
+    {
+        case LEFT_DIR:
+            BK_isKeyPressed(bk_speed) ? max_fps -= 10 : max_fps--;
+        break;
+        case RIGHT_DIR:
+            BK_isKeyPressed(bk_speed) ? max_fps += 10 : max_fps++;
+        break;
+    }
 
+    // Prevent overflows / incorrect values.
+    if (max_fps < 35)
+    {
+        max_fps = 35;
+    }
+    if (max_fps > 999)
+    {
+        max_fps = 999;
+    }
+
+    // Toggle internal variable for frame interpolation.
     if (max_fps == 35)
     {
         uncapped_fps = 0;
