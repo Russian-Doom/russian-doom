@@ -71,6 +71,9 @@ static musicinfo_t *mus_playing = NULL;
 // [JN] External music number, used for music system hot-swapping.
 int music_num_rd;
 
+// [JN] jff 3/17/98 to keep track of last IDMUS specified music num
+int idmusnum;
+
 // -----------------------------------------------------------------------------
 // Initializes sound stuff, including volume
 // Sets channels, SFX and music volume, 
@@ -80,6 +83,8 @@ int music_num_rd;
 void S_Init (int sfxVolume, int musicVolume)
 {
     int i;
+
+    idmusnum = -1; // [JN] jff 3/17/98 insure idmus number is blank
 
     if (gameversion == exe_doom_1_666)
     {
@@ -294,9 +299,12 @@ void S_Start (void)
         mus_paused = 0;
     }
 
-    // [JN] Добавена нумерация музыки для No Rest for the Living
-    // Спасибо Фабиану Греффрату!
-    if (gamemode == commercial)
+    // [JN] Added support No Rest for the Living, thanks Fabian Greffrath!
+    if (idmusnum != -1)
+    {
+        mnum = idmusnum; //jff 3/17/98 reload IDMUS music if not -1
+    }
+    else if (gamemode == commercial)
     {
         const int nmus[] =
         {

@@ -1714,6 +1714,7 @@ void G_WorldDone (void)
 
 void G_DoWorldDone (void) 
 {        
+    idmusnum = -1;  // [JN] jff 3/17/98 allow new level's music to be loaded
     gamestate = GS_LEVEL; 
     gamemap = wminfo.next+1; 
     G_DoLoadLevel (); 
@@ -1910,6 +1911,7 @@ G_DeferedInitNew
 
 void G_DoNewGame (void) 
 {
+    idmusnum = -1;  // [JN] e6y: allow new level's music to be loaded
     demoplayback = false; 
     netdemo = false;
     netgame = false;

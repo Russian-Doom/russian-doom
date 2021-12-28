@@ -34,6 +34,7 @@
 #include "g_game.h"
 #include "m_misc.h"
 #include "r_state.h"
+#include "s_sound.h"
 
 #include "jn.h"
 
@@ -1450,6 +1451,7 @@ void P_WriteSaveGameHeader(char *description)
     saveg_write8(gameepisode);
     saveg_write8(gamemap);
     saveg_write8(flag667);
+    saveg_write8(idmusnum);
 
     for (i=0 ; i<MAXPLAYERS ; i++) 
         saveg_write8(playeringame[i]);
@@ -1488,6 +1490,7 @@ boolean P_ReadSaveGameHeader(void)
     gameepisode = saveg_read8();
     gamemap = saveg_read8();
     flag667 = saveg_read8();
+    idmusnum = saveg_read8();
 
     for (i=0 ; i<MAXPLAYERS ; i++) 
 	playeringame[i] = saveg_read8();

@@ -86,6 +86,8 @@ void S_SetMusicVolume(int volume);
 void S_SetSfxVolume(int volume);
 
 extern int music_num_rd;
+// [JN] jff 3/17/98 holds last IDMUS number, or -1
+extern int idmusnum;
 
 void S_MuteSound(void);
 void S_UnMuteSound(void);

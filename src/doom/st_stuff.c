@@ -681,6 +681,8 @@ boolean ST_Responder (event_t *ev)
                     else
                     {
                         S_ChangeMusic(musnum, 1);
+                        // [JN] jff 3/17/98 remember idmus number for restore
+                        idmusnum = musnum;
                         // [crispy] eat key press, i.e. don't change weapon upon music change
                         return true;
                     }
@@ -698,6 +700,8 @@ boolean ST_Responder (event_t *ev)
                     else
                     {
                         S_ChangeMusic(musnum, 1);
+                        // [JN] jff 3/17/98 remember idmus number for restore
+                        idmusnum = musnum;
                         // [crispy] eat key press, i.e. don't change weapon upon music change
                         return true;
                     }
