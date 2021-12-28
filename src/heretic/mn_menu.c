@@ -1957,14 +1957,14 @@ static void M_RD_MaxFPS(Direction_t direction)
     {
         case LEFT_DIR:
             max_fps -= BK_isKeyPressed(bk_speed) ? 10 : 1;
-            if (max_fps > 35)
+            if (max_fps >= 35)
             {
                 S_StartSound (NULL, sfx_keyup);
             }
         break;
         case RIGHT_DIR:
             max_fps += BK_isKeyPressed(bk_speed) ? 10 : 1;
-            if (max_fps < 999)
+            if (max_fps <= 999)
             {
                 S_StartSound (NULL, sfx_keyup);
             }

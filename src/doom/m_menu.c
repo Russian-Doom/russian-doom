@@ -1894,11 +1894,12 @@ static void M_RD_Draw_Rendering(void)
                               aspect_ratio_temp == 2 ? "16:9" :
                               aspect_ratio_temp == 3 ? "16:10" :
                               aspect_ratio_temp == 4 ? "21:9" : "4:3", 185 + wide_delta, 35, CR_NONE);
+
         // Informative message
-        if (aspect_ratio_temp != aspect_ratio)
+        if (aspect_ratio_temp != aspect_ratio && CurrentItPos != 3)
         {
             dp_translation = cr[CR_WHITE];
-            M_WriteTextSmallCentered_ENG(156, "Program must be restarted");
+            M_WriteTextSmallCentered_ENG(150, "PROGRAM MUST BE RESTARTED");
             dp_translation = NULL;
         }
 
@@ -1953,6 +1954,14 @@ static void M_RD_Draw_Rendering(void)
 
         // Show ENDOOM screen
         RD_M_DrawTextSmallENG(show_endoom ? "on" : "off", 179 + wide_delta, 135, CR_NONE);
+
+        // Tip for faster sliding
+        if (CurrentItPos == 3)
+        {
+            dp_translation = cr[CR_DARKRED];
+            M_WriteTextSmallCentered_ENG(150, "HOLD RUN BUTTON FOR FASTER SLIDING");
+            dp_translation = NULL;
+        }
     }
     else
     {
@@ -1964,10 +1973,10 @@ static void M_RD_Draw_Rendering(void)
                               "4:3", 238 + wide_delta, 35, CR_NONE);
 
         // Informative message: Необходим перезапуск программы
-        if (aspect_ratio_temp != aspect_ratio)
+        if (aspect_ratio_temp != aspect_ratio && CurrentItPos != 3)
         {
             dp_translation = cr[CR_WHITE];
-            M_WriteTextSmallCentered_RUS(156, "ytj,[jlbv gthtpfgecr ghjuhfvvs");
+            M_WriteTextSmallCentered_RUS(150, "ytj,[jlbv gthtpfgecr ghjuhfvvs");
             dp_translation = NULL;
         }
 
@@ -2026,6 +2035,16 @@ static void M_RD_Draw_Rendering(void)
         // Показывать экран ENDOOM
         RD_M_DrawTextSmallENG("ENDOOM:", 165 + wide_delta, 135, CR_NONE);
         RD_M_DrawTextSmallRUS(show_endoom ? "drk" : "dsrk", 222 + wide_delta, 135, CR_NONE);
+
+        // Для ускоренного пролистывания
+        // удерживайте кнопку бега
+        if (CurrentItPos == 3)
+        {
+            dp_translation = cr[CR_DARKRED];
+            M_WriteTextSmallCentered_RUS(150, "LKZ ECRJHTYYJUJ GHJKBCNSDFYBZ");
+            M_WriteTextSmallCentered_RUS(159, "ELTH;BDFQNT RYJGRE ,TUF");
+            dp_translation = NULL;
+        }
     }
 }
 
@@ -2052,8 +2071,35 @@ static void M_RD_Change_VSync()
 
 static void M_RD_Change_MaxFPS(Direction_t direction)
 {
-    RD_Menu_SlideInt(&max_fps, 35, 999, direction);
+    switch (direction)
+    {
+        case LEFT_DIR:
+            max_fps -= BK_isKeyPressed(bk_speed) ? 10 : 1;
+            if (max_fps >= 35)
+            {
+                S_StartSound (NULL, sfx_stnmov);
+            }
+        break;
+        case RIGHT_DIR:
+            max_fps += BK_isKeyPressed(bk_speed) ? 10 : 1;
+            if (max_fps <= 999)
+            {
+                S_StartSound (NULL, sfx_stnmov);
+            }
+        break;
+    }
 
+    // Prevent overflows / incorrect values.
+    if (max_fps < 35)
+    {
+        max_fps = 35;
+    }
+    if (max_fps > 999)
+    {
+        max_fps = 999;
+    }
+
+    // Toggle internal variable for frame interpolation.
     if (max_fps == 35)
     {
         uncapped_fps = 0;

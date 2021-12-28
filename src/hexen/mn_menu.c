@@ -1940,6 +1940,13 @@ static void DrawRenderingMenu(void)
 
         // Porch palette changing
         RD_M_DrawTextSmallENG(vga_porch_flash ? "ON" : "OFF", 205 + wide_delta, 92, CR_NONE);
+
+        // Tip for faster sliding
+        if (CurrentItPos == 3)
+        {
+            RD_M_DrawTextSmallENG("HOLD RUN BUTTON FOR FASTER SLIDING",
+                                  39 + wide_delta, 162, CR_GRAY2GDARKGRAY_HEXEN);
+        }
     }
     else
     {
@@ -1992,6 +1999,16 @@ static void DrawRenderingMenu(void)
 
         // Изменение палитры краев экрана
         RD_M_DrawTextSmallRUS(vga_porch_flash ? "DRK" : "DSRK", 265 + wide_delta, 92, CR_NONE);
+
+        // Для ускоренного пролистывания
+        // удерживайте кнопку бега
+        if (CurrentItPos == 3)
+        {
+            RD_M_DrawTextSmallRUS("LKZ ECRJHTYYJUJ GHJKBCNSDFYBZ",
+                                  51 + wide_delta, 162, CR_GRAY2GDARKGRAY_HEXEN);
+            RD_M_DrawTextSmallRUS("ELTH;BDFQNT RYJGRE ,TUF",
+                                  73 + wide_delta, 172, CR_GRAY2GDARKGRAY_HEXEN);
+        }
     }
 
     // Screenshot format / Формат скриншотов (same english values)
@@ -2019,8 +2036,36 @@ static void M_RD_Change_VSync()
 
 static void M_RD_MaxFPS(Direction_t direction)
 {
-    RD_Menu_SlideInt(&max_fps, 35, 999, direction);
+    // [JN] Speed up slider movement while holding "run" key.
+    switch (direction)
+    {
+        case LEFT_DIR:
+            max_fps -= BK_isKeyPressed(bk_speed) ? 10 : 1;
+            if (max_fps >= 35)
+            {
+                S_StartSound (NULL, SFX_PICKUP_KEY);
+            }
+        break;
+        case RIGHT_DIR:
+            max_fps += BK_isKeyPressed(bk_speed) ? 10 : 1;
+            if (max_fps <= 999)
+            {
+                S_StartSound (NULL, SFX_PICKUP_KEY);
+            }
+        break;
+    }
 
+    // Prevent overflows / incorrect values.
+    if (max_fps < 35)
+    {
+        max_fps = 35;
+    }
+    if (max_fps > 999)
+    {
+        max_fps = 999;
+    }
+
+    // Toggle internal variable for frame interpolation.
     if (max_fps == 35)
     {
         uncapped_fps = 0;
