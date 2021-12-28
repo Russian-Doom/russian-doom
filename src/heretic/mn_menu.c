@@ -1850,7 +1850,7 @@ static void DrawRenderingMenu(void)
         if (CurrentItPos == 3)
         {
             RD_M_DrawTextSmallENG("HOLD RUN BUTTON FOR FASTER SLIDING",
-                                  51 + wide_delta, 162, CR_WHITE2DARKGREEN_HERETIC);
+                                  39 + wide_delta, 162, CR_WHITE2DARKGREEN_HERETIC);
         }
     }
     else
@@ -1922,7 +1922,7 @@ static void DrawRenderingMenu(void)
             RD_M_DrawTextSmallRUS("LKZ ECRJHTYYJUJ GHJKBCNSDFYBZ",
                                   51 + wide_delta, 162, CR_WHITE2DARKGREEN_HERETIC);
             RD_M_DrawTextSmallRUS("ELTH;BDFQNT RYJGRE ,TUF",
-                                  51 + wide_delta, 172, CR_WHITE2DARKGREEN_HERETIC);
+                                  73 + wide_delta, 172, CR_WHITE2DARKGREEN_HERETIC);
         }
     }
 
@@ -1956,10 +1956,18 @@ static void M_RD_MaxFPS(Direction_t direction)
     switch (direction)
     {
         case LEFT_DIR:
-            BK_isKeyPressed(bk_speed) ? max_fps -= 10 : max_fps--;
+            max_fps -= BK_isKeyPressed(bk_speed) ? 10 : 1;
+            if (max_fps > 35)
+            {
+                S_StartSound (NULL, sfx_keyup);
+            }
         break;
         case RIGHT_DIR:
-            BK_isKeyPressed(bk_speed) ? max_fps += 10 : max_fps++;
+            max_fps += BK_isKeyPressed(bk_speed) ? 10 : 1;
+            if (max_fps < 999)
+            {
+                S_StartSound (NULL, sfx_keyup);
+            }
         break;
     }
 
