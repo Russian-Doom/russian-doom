@@ -1492,6 +1492,12 @@ boolean P_ReadSaveGameHeader(void)
     flag667 = saveg_read8();
     idmusnum = saveg_read8();
 
+    // [JN] jff 3/18/98 account for unsigned byte
+    if (idmusnum == 255)
+    {
+        idmusnum = -1;
+    }
+
     for (i=0 ; i<MAXPLAYERS ; i++) 
 	playeringame[i] = saveg_read8();
 
