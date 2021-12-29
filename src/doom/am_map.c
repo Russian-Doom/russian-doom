@@ -607,7 +607,7 @@ static void AM_unloadPics (void)
 // AM_clearMarks
 // -----------------------------------------------------------------------------
 
-static void AM_clearMarks (void)
+void AM_clearMarks (void)
 {
     markpointnum = 0;
 }

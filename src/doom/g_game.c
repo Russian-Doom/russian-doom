@@ -1720,6 +1720,7 @@ void G_DoWorldDone (void)
     G_DoLoadLevel (); 
     gameaction = ga_nothing; 
     viewactive = true; 
+    AM_clearMarks();  // [JN] jff 4/12/98 clear any marks on the automap
 } 
 
 
@@ -1770,6 +1771,13 @@ void G_DoLoadGame (void)
     P_UnArchiveWorld (); 
     P_UnArchiveThinkers (); 
     P_UnArchiveSpecials (); 
+    // [JN] Pre-initialize Automap variables and marks so they can appear.
+    // TODO - this *IS* wrong.
+    {
+        AM_Start();
+        AM_Stop();
+    }
+    P_UnArchiveAutomap ();
     P_RestoreTargets ();
  
     if (!P_ReadSaveGameEOF())
@@ -1844,6 +1852,7 @@ void G_DoSaveGame (void)
     P_ArchiveWorld ();
     P_ArchiveThinkers ();
     P_ArchiveSpecials ();
+    P_ArchiveAutomap ();
 
     P_WriteSaveGameEOF();
 
@@ -2239,6 +2248,9 @@ G_InitNew
     totalleveltimes = 0;
     defdemotics = 0;
     viewactive = true;
+
+    // [JN] jff 4/16/98 force marks on automap cleared every new level start
+    AM_clearMarks();
 
     artifactcount = 0;  // [JN] Press Beta: initialy 0 artifacts
     lifecount = 3;      // [JN] Press Beta: give player 3 lifes

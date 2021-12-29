@@ -58,6 +58,9 @@ void AM_Stop (void);
 // Called at game startup or when scheme is changed.
 void AM_initColors (void);
 
+// [JN] Make global, since mark preserved in saved games.
+void AM_clearMarks (void);
+
 extern cheatseq_t cheat_amap;
 
 

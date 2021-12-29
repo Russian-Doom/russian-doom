@@ -21,7 +21,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "am_map.h"
 #include "rd_lang.h"
 #include "deh_main.h"
 #include "i_system.h"
@@ -149,6 +149,34 @@ static void saveg_write32(int value)
     saveg_write8((value >> 8) & 0xff);
     saveg_write8((value >> 16) & 0xff);
     saveg_write8((value >> 24) & 0xff);
+}
+
+int64_t saveg_read64(void)
+{
+    int64_t result;
+
+    result = saveg_read8();
+    result |= saveg_read8() << 8;
+    result |= saveg_read8() << 16;
+    result |= saveg_read8() << 24;
+    result |= (int64_t)(saveg_read8()) << 32;
+    result |= (int64_t)(saveg_read8()) << 40;
+    result |= (int64_t)(saveg_read8()) << 48;
+    result |= (int64_t)(saveg_read8()) << 56;
+
+    return result;
+}
+
+void saveg_write64(int64_t value)
+{
+    saveg_write8(value & 0xff);
+    saveg_write8((value >> 8) & 0xff);
+    saveg_write8((value >> 16) & 0xff);
+    saveg_write8((value >> 24) & 0xff);
+    saveg_write8((value >> 32) & 0xff);
+    saveg_write8((value >> 40) & 0xff);
+    saveg_write8((value >> 48) & 0xff);
+    saveg_write8((value >> 56) & 0xff);
 }
 
 // Pad to 4-byte boundaries
@@ -2126,3 +2154,48 @@ void P_UnArchiveSpecials (void)
 
 }
 
+// -----------------------------------------------------------------------------
+// P_ArchiveAutomap
+// -----------------------------------------------------------------------------
+
+void P_ArchiveAutomap (void)
+{
+    saveg_write32(markpointnum);
+
+    if (markpointnum)
+    {
+        int i;
+
+        for (i = 0; i < markpointnum; ++i)
+        {
+            saveg_write64(markpoints[i].x);
+            saveg_write64(markpoints[i].y);
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// P_UnArchiveAutomap
+// -----------------------------------------------------------------------------
+
+void P_UnArchiveAutomap (void)
+{
+    markpointnum = saveg_read32();
+
+    if (markpointnum)
+    {
+        int i;
+
+        while (markpointnum >= markpointnum_max)
+        {
+            markpoints = realloc(markpoints, sizeof *markpoints *
+           (markpointnum_max = markpointnum_max ? markpointnum_max*2 : 16));
+        }
+
+        for (i = 0; i < markpointnum; ++i)
+        {
+            markpoints[i].x = saveg_read64();
+            markpoints[i].y = saveg_read64();
+        }
+    }
+}
