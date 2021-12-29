@@ -31,6 +31,14 @@
 #define AM_MSGEXITED    (AM_MSGHEADER | ('x'<<8))
 
 
+typedef struct
+{
+    int64_t x,y;
+} mpoint_t;
+
+extern mpoint_t *markpoints;
+extern int markpointnum, markpointnum_max;
+
 // Called by main loop.
 boolean AM_Responder (event_t* ev);
 
@@ -43,6 +51,7 @@ void AM_Drawer (void);
 
 // Called to force the automap to quit
 // if the level is completed while it is up.
+void AM_Start (void);
 void AM_Stop (void);
 
 // [JN] Automap color scheme init.

@@ -18,6 +18,8 @@
 // DESCRIPTION:  the automap code
 //
 
+
+#include <stdlib.h>
 #include "deh_main.h"
 #include "z_zone.h"
 #include "doomdef.h"
@@ -115,11 +117,6 @@ typedef struct
 {
     fpoint_t a, b;
 } fline_t;
-
-typedef struct
-{
-    int64_t x,y;
-} mpoint_t;
 
 typedef struct
 {
@@ -239,8 +236,12 @@ static fixed_t scale_ftom;
 static player_t *plr;
 
 static patch_t *marknums[10]; // numbers used for marking by the automap
-static mpoint_t markpoints[AM_NUMMARKPOINTS]; // where the points are
-static int markpointnum = 0; // next point to be assigned
+
+// [JN] killough 2/22/98: Remove limit on automap marks,
+// and make variables external for use in savegames.
+mpoint_t *markpoints = NULL;     // where the points are
+int       markpointnum = 0;      // next point to be assigned (also number of points now)
+int       markpointnum_max = 0;  // killough 2/22/98
 
 
 cheatseq_t cheat_amap = CHEAT("iddt", 0);
@@ -381,6 +382,14 @@ static void AM_restoreScaleAndLoc (void)
 
 static void AM_addMark (void)
 {
+    // [JN] killough 2/22/98: remove limit on automap marks
+    if (markpointnum >= markpointnum_max)
+    {
+        markpoints = realloc(markpoints,
+                            (markpointnum_max = markpointnum_max ? 
+                             markpointnum_max*2 : 16) * sizeof(*markpoints));
+    }
+
     // [crispy] keep the map static in overlay mode if not following the player
     if (!(!automap_follow && automap_overlay))
     {
@@ -392,7 +401,7 @@ static void AM_addMark (void)
         markpoints[markpointnum].x = plr->mo->x;
         markpoints[markpointnum].y = plr->mo->y;
     }
-    markpointnum = (markpointnum + 1) % AM_NUMMARKPOINTS;
+    markpointnum++;
 }
 
 // -----------------------------------------------------------------------------
@@ -600,12 +609,6 @@ static void AM_unloadPics (void)
 
 static void AM_clearMarks (void)
 {
-    int i;
-
-    for (i = 0 ; i < AM_NUMMARKPOINTS ; i++)
-    {
-        markpoints[i].x = -1; // means empty
-    }
     markpointnum = 0;
 }
 
@@ -2344,13 +2347,18 @@ static void AM_drawThings (int colors, int colorrange)
 
 static void AM_drawMarks (void)
 {
-    int       i, fx, fy;
+    int       i;
     mpoint_t  pt;
 
-    for (i = 0 ; i < AM_NUMMARKPOINTS ; i++)
+    // [JN] killough 2/22/98: remove automap mark limit
+    for (i = 0 ; i < markpointnum ; i++)
     {
         if (markpoints[i].x != -1)
         {
+            int       fx, fy;
+            int       j = i;
+            const int w = 5 << hires;
+
             // [crispy] center marks around player
             pt.x = markpoints[i].x;
             pt.y = markpoints[i].y;
@@ -2360,15 +2368,29 @@ static void AM_drawMarks (void)
                 AM_rotatePoint(&pt);
             }
 
-            // [JN] Use custom, precise versions of automap marks.
             fx = flipwidth[CXMTOF(pt.x)];
             fy = CYMTOF(pt.y);
 
-            if (fx >= f_x + 5 && fx <= (f_w) - 5
-            &&  fy >= f_y + 6 && fy <= (f_h) - 6)
+            do
             {
-                V_DrawPatchUnscaled(fx, fy, marknums[i], NULL);
-            }
+                int d = j % 10;
+
+                if (d == 1)  // killough 2/22/98: less spacing for '1'
+                {
+                    fx += 1 << hires;
+                }
+
+                if (fx >= f_x + 5 && fx <= (f_w) - 5
+                &&  fy >= f_y + 6 && fy <= (f_h) - 6)
+                {
+                    // [JN] Use custom, precise versions of automap marks.
+                    V_DrawPatchUnscaled(fx, fy, marknums[d], NULL);
+                }
+
+                fx -= w - (1<<hires);  // killough 2/22/98: 1 space backwards
+
+                j /= 10;
+            } while (j > 0);
         }
     }
 }
