@@ -180,6 +180,9 @@ static int cheating = 0;
 // [JN] Choosen color scheme, used in AM_initColors() and AM_drawFline().
 static int automap_color_set;
 
+// [JN] Choosen mark color.
+static Translation_CR_t automap_mark_color_set;
+
 boolean automapactive = false;
 
 // location of window on screen
@@ -512,6 +515,45 @@ void AM_initColors (void)
     automap_color_set = gamemission == jaguar ? 2 :
                                   vanillaparm ? 0 : 
                                  automap_color;
+}
+
+// -----------------------------------------------------------------------------
+// AM_initMarksColor
+// -----------------------------------------------------------------------------
+
+void AM_initMarksColor (int color)
+{
+    Translation_CR_t *colorVar = &automap_mark_color_set;
+    
+    // [JN] Strictly original gray color in vanilla or Jaguar Doom.
+    if (vanillaparm || gamemission == jaguar)
+    {
+        *colorVar = CR_GRAY;
+    }
+    else
+    {
+        switch (color)
+        {
+            case 1:   *colorVar = CR_DARKRED;    break;
+            case 2:   *colorVar = CR_GREEN;      break;
+            case 3:   *colorVar = CR_DARKGREEN;  break;
+            case 4:   *colorVar = CR_OLIVE;      break;
+            case 5:   *colorVar = CR_BLUE2;      break;
+            case 6:   *colorVar = CR_DARKBLUE;   break;
+            case 7:   *colorVar = CR_YELLOW;     break;
+            case 8:   *colorVar = CR_ORANGE;     break;
+            case 9:   *colorVar = CR_WHITE;      break;
+            case 10:  *colorVar = CR_GRAY;       break;
+            case 11:  *colorVar = CR_DARKGRAY;   break;
+            case 12:  *colorVar = CR_TAN;        break;
+            case 13:  *colorVar = CR_BROWN;      break;
+            case 14:  *colorVar = CR_ALMOND;     break;
+            case 15:  *colorVar = CR_KHAKI;      break;
+            case 16:  *colorVar = CR_PINK;       break;
+            case 17:  *colorVar = CR_BURGUNDY;   break;
+            default:  *colorVar = CR_NONE;       break;
+        }
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1644,9 +1686,9 @@ static void AM_drawGrid (int color)
         start -= m_h / 2;
     }
 
-    if ((start-bmaporgx)%(automap_grid_size<<FRACBITS))
+    if ((start-bmaporgx)%(MAPBLOCKUNITS<<FRACBITS))
     {
-        start -= ((start-bmaporgx)%(automap_grid_size<<FRACBITS));
+        start -= ((start-bmaporgx)%(MAPBLOCKUNITS<<FRACBITS));
     }
 
     end = m_x + m_w;
@@ -1657,7 +1699,7 @@ static void AM_drawGrid (int color)
     }
 
     // draw vertical gridlines
-    for (x = start ; x < end ; x += (automap_grid_size<<FRACBITS))
+    for (x = start ; x < end ; x += (MAPBLOCKUNITS<<FRACBITS))
     {
         ml.a.x = x;
         ml.b.x = x;
@@ -1681,9 +1723,9 @@ static void AM_drawGrid (int color)
         start -= m_w / 2;
     }
 
-    if ((start-bmaporgy)%(automap_grid_size<<FRACBITS))
+    if ((start-bmaporgy)%(MAPBLOCKUNITS<<FRACBITS))
     {
-        start -= ((start-bmaporgy)%(automap_grid_size<<FRACBITS));
+        start -= ((start-bmaporgy)%(MAPBLOCKUNITS<<FRACBITS));
     }
 
     end = m_y + m_h;
@@ -1694,7 +1736,7 @@ static void AM_drawGrid (int color)
     }
 
     // draw horizontal gridlines
-    for (y = start ; y < end ; y += (automap_grid_size<<FRACBITS))
+    for (y = start ; y < end ; y += (MAPBLOCKUNITS<<FRACBITS))
     {
         ml.a.y = y;
         ml.b.y = y;
@@ -2419,8 +2461,10 @@ static void AM_drawMarks (void)
                 if (fx >= f_x + 5 && fx <= (f_w) - 5
                 &&  fy >= f_y + 6 && fy <= (f_h) - 6)
                 {
-                    // [JN] Use custom, precise versions of automap marks.
+                    // [JN] Use custom, precise patch versions and do coloring.
+                    dp_translation = cr[automap_mark_color_set];
                     V_DrawPatchUnscaled(fx, fy, marknums[d], NULL);
+                    dp_translation = NULL;
                 }
 
                 fx -= w - (1<<hires);  // killough 2/22/98: 1 space backwards

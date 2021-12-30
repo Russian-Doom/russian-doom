@@ -184,12 +184,12 @@ static void M_RD_Change_Msg_Chat_Color(Direction_t direction);
 // Automap
 static void M_RD_Draw_AutomapSettings();
 static void M_RD_Change_AutomapColor(Direction_t direction);
+static void M_RD_Change_AutomapMarkColor(Direction_t direction);
 static void M_RD_Change_AutomapAntialias();
 static void M_RD_Change_AutomapOverlay();
 static void M_RD_Change_AutomapRotate();
 static void M_RD_Change_AutomapFollow();
 static void M_RD_Change_AutomapGrid();
-static void M_RD_Change_AutomapGridSize(Direction_t direction);
 static void M_RD_Change_AutomapStats(Direction_t direction);
 static void M_RD_Change_AutomapLevelTime(Direction_t direction);
 static void M_RD_Change_AutomapTotalTime(Direction_t direction);
@@ -1073,7 +1073,7 @@ static MenuItem_t AutomapItems[] = {
     {ITT_SWITCH, "rotate mode:",       "ht;bv dhfotybz:",    M_RD_Change_AutomapRotate,    0}, // Режим вращения:
     {ITT_SWITCH, "follow mode:",       "ht;bv cktljdfybz:",  M_RD_Change_AutomapFollow,    0}, // Режим следования:
     {ITT_SWITCH, "grid:",              "ctnrf:",             M_RD_Change_AutomapGrid,      0}, // Сетка:
-    {ITT_LRFUNC, "grid size:",         "hfpvth ctnrb:",      M_RD_Change_AutomapGridSize,  0}, // Размер сетки:
+    {ITT_LRFUNC, "mark color:",        "wdtn jnvtnjr:",      M_RD_Change_AutomapMarkColor, 0}, // Цвет отметок:
     {ITT_TITLE,  "Statistics",         "Cnfnbcnbrf",         NULL,                         0}, // Статистика
     {ITT_LRFUNC, "level stats:",       "cnfnbcnbrf ehjdyz:", M_RD_Change_AutomapStats,     0}, // Статистика уровня:
     {ITT_LRFUNC, "level time:",        "dhtvz ehjdyz:",      M_RD_Change_AutomapLevelTime, 0}, // Время уровня:
@@ -2758,10 +2758,6 @@ static void M_RD_Change_Msg_Chat_Color(Direction_t direction)
 
 static void M_RD_Draw_AutomapSettings(void)
 {
-    static char num[4];
-
-    M_snprintf(num, 4, "%d", automap_grid_size);
-
     if (english_language)
     {
         // Automap colors (English only names, different placement)
@@ -2800,12 +2796,22 @@ static void M_RD_Draw_AutomapSettings(void)
         RD_M_DrawTextSmallENG(automap_grid ? "on" : "off", 106 + wide_delta, 85,
                              automap_grid ? CR_GREEN : CR_DARKRED);
 
-        // Grid size
-        RD_M_DrawTextSmallENG(num, 136 + wide_delta, 95,
-                              automap_grid_size == 128 ? CR_DARKRED : CR_GREEN);
+        // Mark color
+        if (gamemission == jaguar)
+        {
+            RD_M_DrawTextSmallENG("n/a", 155 + wide_delta, 95, CR_NONE);
+        }
+        else
+        {
+            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(automap_mark_color), 155 + wide_delta, 95,
+                                  M_RD_ColorTranslation(automap_mark_color));
+        }
+
+        //
+        // Statistics
+        //
 
         // Level stats
-
         RD_M_DrawTextSmallENG(automap_stats == 1 ? "in automap" :
                               automap_stats == 2 ? "always" : "off",
                               159 + wide_delta, 115,
@@ -2873,9 +2879,20 @@ static void M_RD_Draw_AutomapSettings(void)
         RD_M_DrawTextSmallRUS(automap_grid ? "drk" : "dsrk", 118 + wide_delta, 85,
                               automap_grid ? CR_GREEN : CR_DARKRED);
 
-        // Размер сетки
-        RD_M_DrawTextSmallENG(num, 171 + wide_delta, 95,
-                             automap_grid_size == 128 ? CR_DARKRED : CR_GREEN);
+        // Цвет отметок
+        if (gamemission == jaguar)
+        {
+            RD_M_DrawTextSmallRUS("y*l", 172 + wide_delta, 95, CR_NONE); // н/д
+        }
+        else
+        {
+            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(automap_mark_color), 172 + wide_delta, 95,
+                                  M_RD_ColorTranslation(automap_mark_color));
+        }
+
+        //
+        // Статистика
+        //
 
         // Статистика уровня
         RD_M_DrawTextSmallRUS(automap_stats == 1 ? "yf rfhnt" :
@@ -2921,6 +2938,18 @@ static void M_RD_Change_AutomapColor(Direction_t direction)
     AM_initColors();
 }
 
+static void M_RD_Change_AutomapMarkColor(Direction_t direction)
+{
+    // [JN] Disable mark color changing in Jaguar
+    if (gamemission == jaguar)
+        return;
+
+    RD_Menu_SpinInt(&automap_mark_color, 0, 17, direction);
+
+    // [JN] Reinitialize automap mark color.
+    AM_initMarksColor(automap_mark_color);
+}
+
 static void M_RD_Change_AutomapAntialias()
 {
     automap_antialias ^= 1;
@@ -2950,11 +2979,6 @@ static void M_RD_Change_AutomapFollow()
 static void M_RD_Change_AutomapGrid()
 {
     automap_grid ^= 1;
-}
-
-static void M_RD_Change_AutomapGridSize(Direction_t direction)
-{
-    RD_Menu_ShiftSlideInt(&automap_grid_size, 32, 512, direction);
 }
 
 static void M_RD_Change_AutomapStats(Direction_t direction)
@@ -5842,6 +5866,7 @@ static void M_RD_BackToDefaults_Recommended(int choice)
 
     // Automap
     automap_color     = 0;
+    automap_mark_color = 10;
     automap_antialias = 1;
     automap_stats     = 1;
     automap_level_time = 1;
@@ -5851,7 +5876,6 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     automap_rotate    = 0;
     automap_follow    = 1;
     automap_grid      = 0;
-    automap_grid_size = 128;
     hud_widget_colors = 0;
 
     // Audio
@@ -6030,6 +6054,7 @@ static void M_RD_BackToDefaults_Original(int choice)
 
     // Automap
     automap_color     = 0;
+    automap_mark_color = 10;
     automap_antialias = 0;
     automap_stats     = 0;
     automap_level_time = 0;
@@ -6039,7 +6064,6 @@ static void M_RD_BackToDefaults_Original(int choice)
     automap_rotate    = 0;
     automap_follow    = 1;
     automap_grid      = 0;
-    automap_grid_size = 128;
     hud_widget_colors = 0;
 
     // Audio

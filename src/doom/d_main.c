@@ -139,6 +139,7 @@ int message_chat_color = 2;
 
 // Display: Automap
 int automap_color = 0;
+int automap_mark_color = 10;
 int automap_antialias = 1;
 int automap_stats = 1;
 int automap_level_time = 1;
@@ -148,7 +149,6 @@ int automap_follow  = 1;
 int automap_overlay = 0;
 int automap_rotate  = 0;
 int automap_grid    = 0;
-int automap_grid_size = 128;
 int hud_widget_colors = 0;
 
 // Sound
@@ -748,6 +748,7 @@ void D_BindVariables(void)
 
     // Automap
     M_BindIntVariable("automap_color",          &automap_color);
+    M_BindIntVariable("automap_mark_color",     &automap_mark_color);
     M_BindIntVariable("automap_antialias",      &automap_antialias);
     M_BindIntVariable("automap_stats",          &automap_stats);
     M_BindIntVariable("automap_level_time",     &automap_level_time);
@@ -757,7 +758,6 @@ void D_BindVariables(void)
     M_BindIntVariable("automap_rotate",         &automap_rotate);
     M_BindIntVariable("automap_follow",         &automap_follow);
     M_BindIntVariable("automap_grid",           &automap_grid);
-    M_BindIntVariable("automap_grid_size",      &automap_grid_size);
     M_BindIntVariable("hud_widget_colors",      &hud_widget_colors);
 
     // Sound
@@ -3207,8 +3207,9 @@ void D_DoomMain (void)
                "ST_Init: Инициализация строки состояния.\n");
     ST_Init ();
 
-    // [JN] Predifine automap color scheme.
+    // [JN] Predifine automap color scheme and mark color.
     AM_initColors();
+    AM_initMarksColor(automap_mark_color);
 
     //!
     // @arg <x>

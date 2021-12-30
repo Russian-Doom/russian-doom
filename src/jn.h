@@ -112,6 +112,7 @@ extern int message_chat_color;
 // -----------------------------------------------------------------------------
 
 extern int automap_color;
+extern int automap_mark_color;
 extern int automap_antialias;
 extern int automap_stats;
 extern int automap_level_time;
