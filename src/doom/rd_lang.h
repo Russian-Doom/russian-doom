@@ -44,7 +44,9 @@ extern char* amstr_followon;
 extern char* amstr_followoff;
 extern char* amstr_gridon;
 extern char* amstr_gridoff;
-extern char* amstr_markedspot;
+extern char* amstr_mark;
+extern char* amstr_added;
+extern char* amstr_cleared;
 extern char* amstr_markscleared;
 extern char* amstr_overlayon;
 extern char* amstr_overlayoff;
@@ -55,7 +57,9 @@ extern char* amstr_rotateoff;
 #define AMSTR_FOLLOWOFF     "Follow Mode OFF"
 #define AMSTR_GRIDON        "Grid ON"
 #define AMSTR_GRIDOFF       "Grid OFF"
-#define AMSTR_MARKEDSPOT    "Marked Spot"
+#define AMSTR_MARK          "Mark"
+#define AMSTR_ADDED         "Added"
+#define AMSTR_CLEARED       "Cleared"
 #define AMSTR_MARKSCLEARED  "All Marks Cleared"
 #define AMSTR_OVERLAYON     "Overlay Mode ON"
 #define AMSTR_OVERLAYOFF    "Overlay Mode OFF"
@@ -1039,8 +1043,10 @@ extern char* ststr_massacre;
 #define AMSTR_FOLLOWOFF_RUS     "ht;bv cktljdfybz dsrk.xty" // Режим следования выключен
 #define AMSTR_GRIDON_RUS        "ctnrf drk.xtyf"            // Сетка включена
 #define AMSTR_GRIDOFF_RUS       "ctnrf jnrk.xtyf"           // Сетка выключена
-#define AMSTR_MARKEDSPOT_RUS    "jnvtnrf"                   // Отметка
-#define AMSTR_MARKSCLEARED_RUS  "jnvtnrb jxbotys"           // Отметки очищены
+#define AMSTR_MARK_RUS          "jnvtnrf"                   // Отметка
+#define AMSTR_ADDED_RUS         "lj,fdktyf"                 // Добавлена
+#define AMSTR_CLEARED_RUS       "elfktyf"                   // Удалена
+#define AMSTR_MARKSCLEARED_RUS  "dct jnvtnrb elfktys"       // Все отметки удалены
 #define AMSTR_OVERLAYON_RUS     "ht;bv yfkj;tybz drk.xty"   // Режим наложения включен
 #define AMSTR_OVERLAYOFF_RUS    "ht;bv yfkj;tybz dsrk.xty"  // Режим наложения выключен
 #define AMSTR_ROTATEON_RUS      "ht;bv dhfotybz drk.xty"    // Режим вращения включен

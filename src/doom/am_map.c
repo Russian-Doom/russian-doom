@@ -614,10 +614,7 @@ void AM_clearMarks (void)
 
 static void AM_clearOneMark (void)
 {
-    if (markpointnum >= 0)
-    {
-        markpointnum--;
-    }
+    markpointnum--;
 }
 
 // -----------------------------------------------------------------------------
@@ -732,7 +729,7 @@ boolean AM_Responder (event_t *ev)
 {
     int rc;
     static int bigstate=0;
-    static char buffer[20];
+    static char buffer[32];
     boolean speed_toggler = BK_isKeyPressed(bk_speed);
 
     // [JN] If run button is hold, pan/zoom Automap faster.    
@@ -856,15 +853,31 @@ boolean AM_Responder (event_t *ev)
         }
         else if (BK_isKeyDown(ev, bk_map_mark))
         {
-            M_snprintf(buffer, sizeof(buffer), "%s %d",
-                    DEH_String(amstr_markedspot), markpointnum);
+            // [JN] "Mark № added" / "Отметка № добавлена".
+            M_snprintf(buffer, sizeof(buffer), "%s %d %s",
+                       DEH_String(amstr_mark), markpointnum, DEH_String(amstr_added));
             plr->message_system = buffer;
             AM_addMark();
         }
+        else if (BK_isKeyPressed(bk_speed) && BK_isKeyDown(ev, bk_map_clearmark))
+        {
+            // [JN] Clear all mark by holding "run" button and pressing "clear mark".
+            if (markpointnum > 0)
+            {
+                plr->message_system = DEH_String(amstr_markscleared);
+                AM_clearMarks();
+            }
+        }
         else if (BK_isKeyDown(ev, bk_map_clearmark))
         {
-            AM_clearMarks();
-            plr->message_system = DEH_String(amstr_markscleared);
+            if (markpointnum > 0)
+            {
+                // [JN] "Mark № cleared" / "Отметка № удалена".
+                M_snprintf(buffer, sizeof(buffer), "%s %d %s",
+                        DEH_String(amstr_mark), markpointnum-1, DEH_String(amstr_cleared));
+                plr->message_system = buffer;
+                AM_clearOneMark();
+            }
         }
         else if (BK_isKeyDown(ev, bk_map_overlay))
         {
