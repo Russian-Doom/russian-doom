@@ -81,23 +81,23 @@
 #define YELLOW_JAGUAR    163
 #define MAGENTA_JAGUAR   254
 
-// drawing stuff
-#define AM_NUMMARKPOINTS 10
-
 // scale on entry
 #define INITSCALEMTOF (.2*FRACUNIT)
 
 // [JN] How much the automap moves window per tic in frame-buffer coordinates.
-// Moves 280 (8) pixels in 1 second, increased from 140 (4) pixels.
-#define F_PANINC 8
+static int F_PANINC;
+static const int F_PANINC_SLOW = 8;   // 280 map units in 1 second.
+static const int F_PANINC_FAST = 16;  // 560 map units in 1 second.
 
 // [JN] How much zoom-in per tic goes to 2x in 1 second.
-// Increased from 1.02*FRACUNIT.
-#define M_ZOOMIN ((int) (1.04*FRACUNIT))
+static int M_ZOOMIN;
+static const int M_ZOOMIN_SLOW = ((int) (1.04*FRACUNIT));
+static const int M_ZOOMIN_FAST = ((int) (1.08*FRACUNIT));
 
-// [JN] How much zoom-out per tic pulls out to 0.5x in 1 second
-// Increased from 1.02*FRACUNIT.
-#define M_ZOOMOUT ((int) (FRACUNIT/1.04))
+// [JN] How much zoom-out per tic pulls out to 0.5x in 1 second.
+static int M_ZOOMOUT;
+static const int M_ZOOMOUT_SLOW = ((int) (FRACUNIT/1.04));
+static const int M_ZOOMOUT_FAST = ((int) (FRACUNIT/1.08));
 
 // translates between frame-buffer and map distances
 #define FTOM(x) (((int64_t)((x)<<16) * scale_ftom) >> FRACBITS)
@@ -612,6 +612,14 @@ void AM_clearMarks (void)
     markpointnum = 0;
 }
 
+static void AM_clearOneMark (void)
+{
+    if (markpointnum >= 0)
+    {
+        markpointnum--;
+    }
+}
+
 // -----------------------------------------------------------------------------
 // AM_LevelInit
 // Should be called at the start of every level.
@@ -725,6 +733,21 @@ boolean AM_Responder (event_t *ev)
     int rc;
     static int bigstate=0;
     static char buffer[20];
+    boolean speed_toggler = BK_isKeyPressed(bk_speed);
+
+    // [JN] If run button is hold, pan/zoom Automap faster.    
+    if (speed_toggler)
+    {
+        F_PANINC = F_PANINC_FAST;
+        M_ZOOMIN = M_ZOOMIN_FAST;
+        M_ZOOMOUT = M_ZOOMOUT_FAST;
+    }
+    else
+    {
+        F_PANINC = F_PANINC_SLOW;
+        M_ZOOMIN = M_ZOOMIN_SLOW;
+        M_ZOOMOUT = M_ZOOMOUT_SLOW;
+    }
 
     rc = false;
 
