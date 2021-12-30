@@ -88,15 +88,16 @@ char* RD_Project_String = PACKAGE_PREFIX " Doom " BUILD_DOOM_VERSION;
 GameType_t RD_GameType = gt_Doom;
 
 // -----------------------------------------------------------------------------
-// [JN] Support for fallback to the English language.
+// [JN] Support for English language.
 // Windows OS only: do not set game language on first launch, 
 // try to determine it automatically in D_DoomMain.
+// On other OSes just use English by default.
 // -----------------------------------------------------------------------------
 
 #ifdef _WIN32
 int english_language = -1;
 #else
-int english_language = 0;
+int english_language = 1;
 #endif
 
 // -----------------------------------------------------------------------------

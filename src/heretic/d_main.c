@@ -92,13 +92,17 @@ boolean advancedemo;
 
 FILE *debugfile;
 
-// [JN] Support for fallback to the English language.
+// -----------------------------------------------------------------------------
+// [JN] Support for English language.
 // Windows OS only: do not set game language on first launch, 
 // try to determine it automatically in D_DoomMain.
+// On other OSes just use English by default.
+// -----------------------------------------------------------------------------
+
 #ifdef _WIN32
 int english_language = -1;
 #else
-int english_language = 0;
+int english_language = 1;
 #endif
 
 /*
