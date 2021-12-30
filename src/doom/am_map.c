@@ -2446,16 +2446,17 @@ static void AM_drawMarks (void)
                 AM_rotatePoint(&pt);
             }
 
-            fx = flipwidth[CXMTOF(pt.x)];
+            fx = CXMTOF(pt.x);
             fy = CYMTOF(pt.y);
 
             do
             {
                 int d = j % 10;
 
-                if (d == 1)  // killough 2/22/98: less spacing for '1'
+                // killough 2/22/98: less spacing for '1'
+                if (d == 1)
                 {
-                    fx += 1 << hires;
+                    fx += (flip_levels ? -1 : 1) << hires;
                 }
 
                 if (fx >= f_x + 5 && fx <= (f_w) - 5
@@ -2463,11 +2464,12 @@ static void AM_drawMarks (void)
                 {
                     // [JN] Use custom, precise patch versions and do coloring.
                     dp_translation = cr[automap_mark_color_set];
-                    V_DrawPatchUnscaled(fx, fy, marknums[d], NULL);
+                    V_DrawPatchUnscaled(flip_levels ? - fx : fx, fy, marknums[d], NULL);
                     dp_translation = NULL;
                 }
 
-                fx -= w - (1<<hires);  // killough 2/22/98: 1 space backwards
+                // killough 2/22/98: 1 space backwards
+                fx -= w - ((flip_levels ? 9 : 1) << hires);
 
                 j /= 10;
             } while (j > 0);
