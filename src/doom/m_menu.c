@@ -1305,7 +1305,7 @@ static MenuItem_t Bindings4Items[] = {
     {ITT_EFUNC,   "Rotate mode",      "ht;bv dhfotybz",    BK_StartBindingKey,  bk_map_rotate},    // Режим вращения
     {ITT_EFUNC,   "Toggle grid",      "ctnrf",             BK_StartBindingKey,  bk_map_grid},      // Сетка
     {ITT_EFUNC,   "Mark location",    "gjcnfdbnm jnvtnre", BK_StartBindingKey,  bk_map_mark},      // Поставить отметку
-    {ITT_EFUNC,   "Clear all marks",  "e,hfnm jnvtnrb",    BK_StartBindingKey,  bk_map_clearmark}, // Убрать отметки
+    {ITT_EFUNC,   "Clear last mark",  "elfkbnm jnvtnre",   BK_StartBindingKey,  bk_map_clearmark}, // Удалить отметку
     {ITT_EMPTY,   NULL,               NULL,                NULL,           0},
     {ITT_EMPTY,   NULL,               NULL,                NULL,           0},
     {ITT_SETMENU, NULL,               NULL,                &Bindings5Menu, 0},                // Далее >
