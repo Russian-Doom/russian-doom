@@ -654,11 +654,6 @@ void AM_clearMarks (void)
     markpointnum = 0;
 }
 
-static void AM_clearOneMark (void)
-{
-    markpointnum--;
-}
-
 // -----------------------------------------------------------------------------
 // AM_LevelInit
 // Should be called at the start of every level.
@@ -915,10 +910,11 @@ boolean AM_Responder (event_t *ev)
             if (markpointnum > 0)
             {
                 // [JN] "Mark № cleared" / "Отметка № удалена".
+                markpointnum--;
                 M_snprintf(buffer, sizeof(buffer), "%s %d %s",
-                        DEH_String(amstr_mark), markpointnum-1, DEH_String(amstr_cleared));
+                        DEH_String(amstr_mark), markpointnum, DEH_String(amstr_cleared));
                 plr->message_system = buffer;
-                AM_clearOneMark();
+                
             }
         }
         else if (BK_isKeyDown(ev, bk_map_overlay))
@@ -2423,6 +2419,11 @@ static void AM_drawThings (int colors, int colorrange)
 // Draw the marked locations on the automap.
 // -----------------------------------------------------------------------------
 
+static const int mark_w = 5 << hires;
+static const int mark_flip_1 =  1 << hires;
+static const int mark_flip_2 = -1 << hires;
+static const int mark_flip_3 =  9 << hires;
+
 static void AM_drawMarks (void)
 {
     int       i;
@@ -2433,9 +2434,8 @@ static void AM_drawMarks (void)
     {
         if (markpoints[i].x != -1)
         {
-            int       fx, fy;
-            int       j = i;
-            const int w = 5 << hires;
+            int fx, fy;
+            int j = i;
 
             // [crispy] center marks around player
             pt.x = markpoints[i].x;
@@ -2456,11 +2456,11 @@ static void AM_drawMarks (void)
                 // killough 2/22/98: less spacing for '1'
                 if (d == 1)
                 {
-                    fx += (flip_levels ? -1 : 1) << hires;
+                    fx += (flip_levels ? mark_flip_2 : mark_flip_1); // -1 : 1
                 }
 
-                if (fx >= f_x + 5 && fx <= (f_w) - 5
-                &&  fy >= f_y + 6 && fy <= (f_h) - 6)
+                if (fx >= f_x + 5 && fx <= f_w - 5
+                &&  fy >= f_y + 6 && fy <= f_h - 6)
                 {
                     // [JN] Use custom, precise patch versions and do coloring.
                     dp_translation = cr[automap_mark_color_set];
@@ -2469,7 +2469,7 @@ static void AM_drawMarks (void)
                 }
 
                 // killough 2/22/98: 1 space backwards
-                fx -= w - ((flip_levels ? 9 : 1) << hires);
+                fx -= mark_w - (flip_levels ? mark_flip_3 : mark_flip_1); // 9 : 1
 
                 j /= 10;
             } while (j > 0);

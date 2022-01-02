@@ -3211,6 +3211,7 @@ void D_DoomMain (void)
     // [JN] Predifine automap color scheme and mark color.
     AM_initColors();
     AM_initMarksColor(automap_mark_color);
+    AM_initMarksFlipX();
 
     //!
     // @arg <x>

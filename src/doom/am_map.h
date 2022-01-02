@@ -61,6 +61,7 @@ void AM_initColors (void);
 // [JN] Automap mark color scheme init.
 // Called at game startup or when color is changed.
 void AM_initMarksColor (int color);
+void AM_initMarksFlipX (void);
 
 // [JN] Make global, since mark preserved in saved games.
 void AM_clearMarks (void);
