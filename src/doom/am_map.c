@@ -85,19 +85,19 @@
 #define INITSCALEMTOF (.2*FRACUNIT)
 
 // [JN] How much the automap moves window per tic in frame-buffer coordinates.
-static int F_PANINC;
-static const int F_PANINC_SLOW = 8;   // 280 map units in 1 second.
-static const int F_PANINC_FAST = 16;  // 560 map units in 1 second.
+static int f_paninc;
+static const int f_paninc_slow = 8;   // 280 map units in 1 second.
+static const int f_paninc_fast = 16;  // 560 map units in 1 second.
 
 // [JN] How much zoom-in per tic goes to 2x in 1 second.
-static int M_ZOOMIN;
-static const int M_ZOOMIN_SLOW = ((int) (1.04*FRACUNIT));
-static const int M_ZOOMIN_FAST = ((int) (1.08*FRACUNIT));
+static int m_zoomin;
+static const int m_zoomin_slow = ((int) (1.04*FRACUNIT));
+static const int m_zoomin_fast = ((int) (1.08*FRACUNIT));
 
 // [JN] How much zoom-out per tic pulls out to 0.5x in 1 second.
-static int M_ZOOMOUT;
-static const int M_ZOOMOUT_SLOW = ((int) (FRACUNIT/1.04));
-static const int M_ZOOMOUT_FAST = ((int) (FRACUNIT/1.08));
+static int m_zoomout;
+static const int m_zoomout_slow = ((int) (FRACUNIT/1.04));
+static const int m_zoomout_fast = ((int) (FRACUNIT/1.08));
 
 // translates between frame-buffer and map distances
 #define FTOM(x) (((int64_t)((x)<<16) * scale_ftom) >> FRACBITS)
@@ -777,15 +777,15 @@ boolean AM_Responder (event_t *ev)
     // [JN] If run button is hold, pan/zoom Automap faster.    
     if (speed_toggler)
     {
-        F_PANINC = F_PANINC_FAST;
-        M_ZOOMIN = M_ZOOMIN_FAST;
-        M_ZOOMOUT = M_ZOOMOUT_FAST;
+        f_paninc = f_paninc_fast;
+        m_zoomin = m_zoomin_fast;
+        m_zoomout = m_zoomout_fast;
     }
     else
     {
-        F_PANINC = F_PANINC_SLOW;
-        M_ZOOMIN = M_ZOOMIN_SLOW;
-        M_ZOOMOUT = M_ZOOMOUT_SLOW;
+        f_paninc = f_paninc_slow;
+        m_zoomin = m_zoomin_slow;
+        m_zoomout = m_zoomout_slow;
     }
 
     rc = false;
@@ -809,7 +809,7 @@ boolean AM_Responder (event_t *ev)
             // if not following the player
             if (!automap_follow && !automap_overlay)
             {
-                m_paninc.x = flip_levels ? -FTOM(F_PANINC): FTOM(F_PANINC);
+                m_paninc.x = flip_levels ? -FTOM(f_paninc): FTOM(f_paninc);
             }
             else
             {
@@ -820,7 +820,7 @@ boolean AM_Responder (event_t *ev)
         {
             if (!automap_follow && !automap_overlay)
             {
-                m_paninc.x = flip_levels ? FTOM(F_PANINC): -FTOM(F_PANINC);
+                m_paninc.x = flip_levels ? FTOM(f_paninc): -FTOM(f_paninc);
             }
             else
             {
@@ -831,7 +831,7 @@ boolean AM_Responder (event_t *ev)
         {
             if (!automap_follow && !automap_overlay)
             {
-                m_paninc.y = FTOM(F_PANINC);
+                m_paninc.y = FTOM(f_paninc);
             }
             else
             {
@@ -842,7 +842,7 @@ boolean AM_Responder (event_t *ev)
         {
             if (!automap_follow && !automap_overlay)
             {
-                m_paninc.y = -FTOM(F_PANINC);
+                m_paninc.y = -FTOM(f_paninc);
             }
             else
             {
@@ -851,13 +851,13 @@ boolean AM_Responder (event_t *ev)
         }
         else if (BK_isKeyDown(ev, bk_map_zoom_out))  // zoom out
         {
-            mtof_zoommul = M_ZOOMOUT;
-            ftom_zoommul = M_ZOOMIN;
+            mtof_zoommul = m_zoomout;
+            ftom_zoommul = m_zoomin;
         }
         else if (BK_isKeyDown(ev, bk_map_zoom_in))   // zoom in
         {
-            mtof_zoommul = M_ZOOMIN;
-            ftom_zoommul = M_ZOOMOUT;
+            mtof_zoommul = m_zoomin;
+            ftom_zoommul = m_zoomout;
         }
         else if (BK_isKeyDown(ev, bk_map_toggle))
         {
