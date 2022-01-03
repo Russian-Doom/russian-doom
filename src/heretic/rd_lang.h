@@ -108,6 +108,10 @@ extern char* txt_cheatchickenoff;
 extern char* txt_cheatmassacre;
 extern char* txt_cheatiddqd;
 extern char* txt_cheatidkfa;
+extern char* txt_cheatmus;
+extern char* txt_cheatmus_e;
+extern char* txt_cheatmus_m;
+extern char* txt_cheatnomus;
 
 // P_doors.c
 extern char* txt_needbluekey;
@@ -242,6 +246,10 @@ extern char* txt_mlook_off;
 #define TXT_CHEATMASSACRE       "MASSACRE"
 #define TXT_CHEATIDDQD          "TRYING TO CHEAT, EH?  NOW YOU DIE!"
 #define TXT_CHEATIDKFA          "CHEATER - YOU DON'T DESERVE WEAPONS"
+#define TXT_CHEATMUS            "MUSIC CHANGED TO"
+#define TXT_CHEATMUS_E          "E"
+#define TXT_CHEATMUS_M          "M"
+#define TXT_CHEATNOMUS          "IMPOSSIBLE SELECTION"
 
 // P_doors.c
 #define TXT_NEEDBLUEKEY         "YOU NEED A BLUE KEY TO OPEN THIS DOOR"
@@ -474,6 +482,10 @@ extern char* txt_mlook_off;
 #define TXT_CHEATMASSACRE_RUS       "DCT VJYCNHS EYBXNJ;TYS"                // ВСЕ МОНСТРЫ УНИЧТОЖЕНЫ
 #define TXT_CHEATIDDQD_RUS          "GSNFTIMCZ C[BNHBNM? NFR EVHB ;T!"      // ПЫТАЕШЬСЯ СХИТРИТЬ? ТАК УМРИ ЖЕ!
 #define TXT_CHEATIDKFA_RUS          ";EKBR< NS YT LJCNJBY CDJTUJ JHE;BZ"    // ЖУЛИК, ТЫ НЕ ДОСТОИН СВОЕГО ОРУЖИЯ
+#define TXT_CHEATMUS_RUS            "VEPSRF BPVTYTYF YF"                    // МУЗЫКА ИЗМЕНЕНА НА
+#define TXT_CHEATMUS_E_RUS          "T"                                     // E
+#define TXT_CHEATMUS_M_RUS          "V"                                     // M
+#define TXT_CHEATNOMUS_RUS          "YTRJHHTRNYSQ DS,JH"                    // НЕКОРРЕКТНЫЙ ВЫБОР
 
 // P_doors.c
 #define TXT_NEEDBLUEKEY_RUS     "LKZ JNRHSNBZ YE;TY CBYBQ RK.X"     // ДЛЯ ОТКРЫТИЯ НУЖЕН СИНИЙ КЛЮЧ

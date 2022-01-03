@@ -70,6 +70,7 @@ static void CheatChickenFunc(player_t * player, Cheat_t * cheat);
 static void CheatMassacreFunc(player_t * player, Cheat_t * cheat);
 static void CheatIDKFAFunc(player_t * player, Cheat_t * cheat);
 static void CheatIDDQDFunc(player_t * player, Cheat_t * cheat);
+static void CheatRAVMUSFunc(player_t * player, Cheat_t * cheat);
 
 // [JN] Ammo widget prototypes.
 static void DrSmallAmmoNumber (int val, int x, int y, boolean opaque);
@@ -166,6 +167,10 @@ cheatseq_t CheatMassacreSeq = CHEAT("massacre", 0);
 cheatseq_t CheatIDKFASeq = CHEAT("idkfa", 0);
 cheatseq_t CheatIDDQDSeq = CHEAT("iddqd", 0);
 
+// [JN] Music changing.
+cheatseq_t CheatRAVMUSSeq = CHEAT("ravmus", 2);
+cheatseq_t CheatIDMUSSeq = CHEAT("idmus", 2);
+
 static Cheat_t Cheats[] = {
     {CheatGodFunc,       &CheatGodSeq},
     {CheatNoClipFunc,    &CheatNoClipSeq},
@@ -183,6 +188,8 @@ static Cheat_t Cheats[] = {
     {CheatMassacreFunc,  &CheatMassacreSeq},
     {CheatIDKFAFunc,     &CheatIDKFASeq},
     {CheatIDDQDFunc,     &CheatIDDQDSeq},
+    {CheatRAVMUSFunc,    &CheatRAVMUSSeq},
+    {CheatRAVMUSFunc,    &CheatIDMUSSeq},
     {NULL,               NULL} 
 };
 
@@ -2081,6 +2088,49 @@ static void CheatIDDQDFunc(player_t * player, Cheat_t * cheat)
     NIGHTMARE_NETGAME_CHECK;
     P_DamageMobj(player->mo, NULL, player->mo, 10000);
     P_SetMessage(player, DEH_String(txt_cheatiddqd), msg_system, true);
+}
+
+/*
+================================================================================
+=
+= CheatRAVMUSFunc
+=
+= [JN] Allow music changing. Working as both RAVMUSxx and IDMUSxx.
+=
+================================================================================
+*/
+
+static char msg[32];
+
+static void CheatRAVMUSFunc (player_t *player, Cheat_t *cheat)
+{
+    char args[2];
+    int  musnum;
+
+    cht_GetParam(cheat->seq, args);
+    musnum = mus_e1m1 + (args[0]-'1')*9 + (args[1]-'1');
+
+    // [JN] Prevent crash with RAVMUS0x or RAVMUSx0 and don't
+    // allow to play unexisting music depending on game version:
+    // Retail:     E1M1 ... E6M3
+    // Registered: E1M1 ... E3M9
+    // Shareware:  E1M1 ... E1M9
+    if ((((args[0]-'1')*9 + args[1]-'1') >
+    (gamemode == retail ? 47 : gamemode == registered ? 26 : 8)    
+    || args[0] < '1' || args[1] < '1'))
+    {
+        P_SetMessage(player, DEH_String(txt_cheatnomus), msg_system, true);
+    }
+    else
+    {
+        S_StartSong(musnum, true, false);
+
+        // [JN] Consolidated string: 
+        // Music changed to "ExMx" | Музыка изменена на `ExMx`
+        M_snprintf(msg, sizeof(msg), "%s \"%s%c%s%c\"",
+                   txt_cheatmus, txt_cheatmus_e, args[0], txt_cheatmus_m, args[1]);
+        P_SetMessage(player, msg, msg_system, true);
+    }
 }
 
 /*

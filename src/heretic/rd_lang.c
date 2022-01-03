@@ -99,6 +99,10 @@ char* txt_cheatchickenoff;
 char* txt_cheatmassacre;
 char* txt_cheatiddqd;
 char* txt_cheatidkfa;
+char* txt_cheatmus;
+char* txt_cheatmus_e;
+char* txt_cheatmus_m;
+char* txt_cheatnomus;
 
 // P_doors.c
 char* txt_needbluekey;
@@ -348,6 +352,10 @@ void RD_DefineLanguageStrings (void)
         txt_cheatmassacre      = TXT_CHEATMASSACRE;
         txt_cheatiddqd         = TXT_CHEATIDDQD;
         txt_cheatidkfa         = TXT_CHEATIDKFA;
+        txt_cheatmus           = TXT_CHEATMUS;
+        txt_cheatmus_e         = TXT_CHEATMUS_E;
+        txt_cheatmus_m         = TXT_CHEATMUS_M;
+        txt_cheatnomus         = TXT_CHEATNOMUS;
 
         // P_doors.c
         txt_needbluekey        = TXT_NEEDBLUEKEY;
@@ -477,6 +485,10 @@ void RD_DefineLanguageStrings (void)
         txt_cheatmassacre      = TXT_CHEATMASSACRE_RUS;
         txt_cheatiddqd         = TXT_CHEATIDDQD_RUS;
         txt_cheatidkfa         = TXT_CHEATIDKFA_RUS;
+        txt_cheatmus           = TXT_CHEATMUS_RUS;
+        txt_cheatmus_e         = TXT_CHEATMUS_E_RUS;
+        txt_cheatmus_m         = TXT_CHEATMUS_M_RUS;
+        txt_cheatnomus         = TXT_CHEATNOMUS_RUS;
 
         // P_doors.c
         txt_needbluekey        = TXT_NEEDBLUEKEY_RUS;
