@@ -26,6 +26,8 @@ extern int snd_MaxVolume_tmp;
 extern int snd_MusicVolume;
 
 extern int mus_song;
+// [JN] jff 3/17/98 holds last IDMUS number, or -1
+extern int idmusnum;
 
 extern int snd_Channels;
 extern int snd_Channels_RD;

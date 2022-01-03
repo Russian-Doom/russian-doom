@@ -52,7 +52,7 @@ int mus_song = -1;
 int mus_lumpnum;
 void *mus_sndptr;
 byte *soundCurve;
-
+int idmusnum;  // [JN] jff 3/17/98 to keep track of last IDMUS specified music num
 int snd_MaxVolume_tmp;  // [JN] Temp volume variable used for hot-muting.
 
 
@@ -63,7 +63,15 @@ void S_Start(void)
 {
     int i;
 
-    S_StartSong((gameepisode - 1) * 9 + gamemap - 1, true, false);
+    // [JN] If music was choosen by cheat code, play it.
+    if (idmusnum != -1)
+    {
+        S_StartSong(idmusnum, true, false);
+    }
+    else
+    {
+        S_StartSong((gameepisode - 1) * 9 + gamemap - 1, true, false);
+    }
 
     //stop all sounds
     for (i = 0; i < snd_Channels_RD; i++)
@@ -652,6 +660,8 @@ void S_UpdateSounds(mobj_t * listener)
 
 void S_Init(void)
 {
+    idmusnum = -1; // [JN] jff 3/17/98 insure idmus number is blank
+
     I_SetOPLDriverVer(opl_doom2_1_666);
     soundCurve = Z_Malloc(MAX_SND_DIST, PU_STATIC, NULL);
 

@@ -1491,6 +1491,7 @@ void G_WorldDone(void)
 
 void G_DoWorldDone(void)
 {
+    idmusnum = -1;  // [JN] jff 3/17/98 allow new level's music to be loaded
     gamestate = GS_LEVEL;
     G_DoLoadLevel();
     gameaction = ga_nothing;
@@ -1553,6 +1554,13 @@ void G_DoLoadGame(void)
     gameskill = SV_ReadByte();
     gameepisode = SV_ReadByte();
     gamemap = SV_ReadByte();
+    // [JN] Read choosen by RAVMUS/IDMUS music from saved game.
+    idmusnum = SV_ReadByte();
+    // [JN] jff 3/18/98 account for unsigned byte
+    if (idmusnum == 255)
+    {
+        idmusnum = -1;
+    }
     for (i = 0; i < MAXPLAYERS; i++)
     {
         playeringame[i] = SV_ReadByte();
@@ -1619,6 +1627,7 @@ void G_DeferedInitNew(skill_t skill, int episode, int map)
 
 void G_DoNewGame(void)
 {
+    idmusnum = -1;  // [JN] e6y: allow new level's music to be loaded
     G_InitNew(d_skill, d_episode, d_map, 0);
     gameaction = ga_nothing;
 }
@@ -2270,6 +2279,8 @@ void G_DoSaveGame(void)
     SV_WriteByte(gameskill);
     SV_WriteByte(gameepisode);
     SV_WriteByte(gamemap);
+    // [JN] Write choosen by RAVMUS/IDMUS music into saved game.
+    SV_WriteByte(idmusnum);
     for (i = 0; i < MAXPLAYERS; i++)
     {
         SV_WriteByte(playeringame[i]);

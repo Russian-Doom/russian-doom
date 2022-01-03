@@ -2124,6 +2124,9 @@ static void CheatRAVMUSFunc (player_t *player, Cheat_t *cheat)
     else
     {
         S_StartSong(musnum, true, false);
+        
+        // [JN] jff 3/17/98 remember idmus number for restore
+        idmusnum = musnum;
 
         // [JN] Consolidated string: 
         // Music changed to "ExMx" | Музыка изменена на `ExMx`
