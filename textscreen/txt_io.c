@@ -1,5 +1,6 @@
 //
 // Copyright(C) 2005-2014 Simon Howard
+// Copyright(C) 2016-2022 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -14,8 +15,6 @@
 //
 // Text mode I/O functions, similar to C stdio
 //
-
-// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 #include <stdlib.h>

@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2021 Julian Nechaevsky
+// Copyright(C) 2016-2022 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -385,7 +385,7 @@ boolean P_UseSpecialLine (mobj_t *thing, line_t *line, int side)
         EV_VerticalDoor (line, thing);
 
         // [JN] Allow to finish E4M8 with -nomonsters.
-        // Taken from Doom Retro.
+        // Taken from DOOM Retro.
         if (nomonsters)
         {
             if (gamemode == retail && gameepisode == 4 && gamemap == 8)
@@ -482,7 +482,7 @@ boolean P_UseSpecialLine (mobj_t *thing, line_t *line, int side)
         }
 
         // [JN] Allow to finish E1M8 and MAP07 with -nomonsters.
-        // Taken from Doom Retro.
+        // Taken from DOOM Retro.
         if (nomonsters && ((gamemode != commercial && gameepisode == 1 && gamemap == 8) 
         || (gamemode == commercial && gamemap == 7)))
         {
@@ -633,7 +633,7 @@ boolean P_UseSpecialLine (mobj_t *thing, line_t *line, int side)
         }
 
         // [JN] Allow to finish E4M6 with -nomonsters.
-        // Taken from Doom Retro.
+        // Taken from DOOM Retro.
         if (nomonsters)
         {
             if (gamemode == retail && gameepisode == 4 && gamemap == 6)

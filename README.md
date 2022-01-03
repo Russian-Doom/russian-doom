@@ -35,4 +35,4 @@ DOS version is based on [PCDoom](https://github.com/nukeykt/PCDoom-v2) by Alexey
 
 The project, along with all its translation materials and source code, are available under the terms and conditions of [GNU General Public License version 2](https://github.com/JNechaevsky/russian-doom/blob/master/LICENSE.txt).
 
-Copyright &copy; 2016&ndash;2021 [Julian Nechaevsky](https://jnechaevsky.github.io/author.html)
+Copyright &copy; 2016&ndash;2022 [Julian Nechaevsky](https://jnechaevsky.github.io/author.html)

@@ -2,7 +2,7 @@
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
 // Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
-// Copyright (C) 2017-2021 Julian Nechaevsky
+// Copyright (C) 2017-2022 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@
 
 
 // [JN] Raise sector tag 667 floor raising only once, even if Arachnotrons 
-// were resurrected and killed again. Adaptaken from Doom Retro, fixes bug:
+// were resurrected and killed again. Adaptaken from DOOM Retro, fixes bug:
 // https://doomwiki.org/wiki/Tag_667#Bugs
 boolean flag667;
 
@@ -334,7 +334,7 @@ boolean P_Move (mobj_t*	actor)
     // [JN] Fixed bug of monsters get stuck in doortracks and walls.
     // https://doomwiki.org/wiki/Monsters_stuck_in_doortracks,_walls_or_hanging_off_lifts
     // Highly unsafe for internal demos, single player only.
-    // Adapted from Doom Retro (src/p_enemy.c), thanks Brad Harding!
+    // Adapted from DOOM Retro (src/p_enemy.c), thanks Brad Harding!
 
     // if the special is not a door that can be opened, return false
     //
@@ -1605,7 +1605,7 @@ A_PainShootSkull
     // [JN] Do not allow Lost Souls to be spawned behind single sided lines.
     // Strictly for single player, unsafe for internal demos.
     // This code (as well as PIT_CrossLine and floor/ceiling checking) 
-    // has beed taken from Doom Retro, thanks to Brad Harding!
+    // has beed taken from DOOM Retro, thanks to Brad Harding!
 
     // Check whether the Lost Soul is being fired through a 1-sided
     // wall or an impassible line, or a "monsters can't cross" line.

@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2021 Julian Nechaevsky
+// Copyright(C) 2016-2022 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -454,7 +454,7 @@ boolean PIT_CheckThing(mobj_t * thing)
     }
 
     // [JN] Check if things are stuck and allow them to move further apart.
-    // Taken from Doom Retro, slightly adopted for Heretic.
+    // Taken from DOOM Retro, slightly adopted for Heretic.
     if (singleplayer && !vanillaparm && !thing->player 
     && (thing->flags & MF_SHOOTABLE && thing->type != MT_POD))
     {

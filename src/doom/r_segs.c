@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2021 Julian Nechaevsky
+// Copyright(C) 2016-2022 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -307,7 +307,7 @@ void R_RenderMaskedSegRange (drawseg_t *ds, int x1, int x2)
 //
 // CALLED: CORE LOOPING ROUTINE.
 //
-// [JN] Note: SPARKLEFIX has been taken from Doom Retro.
+// [JN] Note: SPARKLEFIX has been taken from DOOM Retro.
 // Many thanks to Brad Harding for his research and fixing this bug!
 // -----------------------------------------------------------------------------
 

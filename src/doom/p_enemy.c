@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2021 Julian Nechaevsky
+// Copyright(C) 2016-2022 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -340,7 +340,7 @@ static boolean P_Move (mobj_t*	actor)
 
         // [JN] Fix monsters being stuck on doortracks.
         // https://doomwiki.org/wiki/Monsters_stuck_in_doortracks,_walls_or_hanging_off_lifts
-        // Adaptaken from Doom Retro, thanks Brad Harding!
+        // Adaptaken from DOOM Retro, thanks Brad Harding!
         //
         // if the special is not a door that can be opened, return false
         //
@@ -1764,7 +1764,7 @@ void A_PainShootSkull (mobj_t *actor, angle_t angle)
     y = actor->y + FixedMul (prestep, finesine[an]);
     z = actor->z + 8*FRACUNIT;
 
-    // [Doom Retro] Check whether the Lost Soul is being fired through a 1-sided
+    // [DOOM Retro] Check whether the Lost Soul is being fired through a 1-sided
     // wall or an impassible line, or a "monsters can't cross" line.
     // If it is, then we don't allow the spawn.
     if (singleplayer)
@@ -1779,7 +1779,7 @@ void A_PainShootSkull (mobj_t *actor, angle_t angle)
 
     // Check for movements.
     if (!P_TryMove (newmobj, newmobj->x, newmobj->y)
-    // [Doom Retro] Check to see if the new Lost Soul's z value is above the
+    // [DOOM Retro] Check to see if the new Lost Soul's z value is above the
     // ceiling of its new sector, or below the floor. If so, kill it.
     || ((newmobj->z > newmobj->subsector->sector->ceilingheight - newmobj->height
     || newmobj->z < newmobj->subsector->sector->floorheight) && singleplayer))

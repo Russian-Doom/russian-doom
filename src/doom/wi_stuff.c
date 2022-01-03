@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2021 Julian Nechaevsky
+// Copyright(C) 2016-2022 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -1731,7 +1731,7 @@ static void WI_drawStats (void)
     WI_drawPercent(origwidth - SP_STATSX, SP_STATSY+lh, cnt_items[0]);
 
     // [JN] Show secrets counter if only map have a secrets.
-    // Adaptaken from Doom Retro, thanks Brad Harding!
+    // Adaptaken from DOOM Retro, thanks Brad Harding!
     if (totalsecret || vanillaparm)
     {
         V_DrawShadowedPatchDoom(SP_STATSX+wide_delta, SP_STATSY+2*lh,

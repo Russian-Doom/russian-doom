@@ -15,7 +15,7 @@
 // DESCRIPTION:
 //	Verious level-specific fixes.
 //
-//  Note: The idea and the code has been taken from Doom Retro.
+//  Note: The idea and the code has been taken from DOOM Retro.
 //  Many thanks to Brad Harding for approval of using his work! 
 //
 

@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2021 Julian Nechaevsky
+// Copyright(C) 2016-2022 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -1977,7 +1977,7 @@ void P_SetupLevel (int episode, int map, int playermask, skill_t skill)
     lumpnum = W_GetNumForName (lumpname);
 
     // [JN] Checking for multiple map lump names for allowing map fixes to work.
-    // Adaptaken from Doom Retro, thanks Brad Harding!
+    // Adaptaken from DOOM Retro, thanks Brad Harding!
     //  Fixes also should not work for: network game, shareware, IWAD versions below 1.9,
     //  vanilla game mode, Press Beta, Atari Jaguar, Freedoom and FreeDM.
     canmodify = (((W_CheckMultipleLumps(lumpname) == 1 || gamemission == pack_nerve)

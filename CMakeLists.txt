@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.15...3.22)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 # Versions
-project("Russian Doom" VERSION 5.1 LANGUAGES C NONE)
+project("Russian Doom" VERSION 5.2 LANGUAGES C NONE)
 set(BUILD_HERETIC_VERSION "5.1")
 set(BUILD_HEXEN_VERSION "5.0")
 set(BUILD_STRIFE_VERSION "0.0")
@@ -26,7 +26,7 @@ set(top_builddir ${CMAKE_CURRENT_BINARY_DIR})
 
 # AC_INIT variables
 set(PACKAGE_TARNAME "russian-doom")
-set(PACKAGE_COPYRIGHT "Copyright \\xA9 2016-2021 Julian Nechaevsky. Licensed under GNU General Public License, version 2")
+set(PACKAGE_COPYRIGHT "Copyright \\xA9 2016-2022 Julian Nechaevsky. Licensed under GNU General Public License, version 2")
 set(BUILD_DOOM_VERSION "${PROJECT_VERSION}")
 
 # Check architecture

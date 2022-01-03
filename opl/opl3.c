@@ -1,6 +1,6 @@
 //
 // Copyright (C) 2013-2018 Alexey Khokholov (Nuke.YKT)
-// Copyright(C) 2016-2021 Julian Nechaevsky
+// Copyright(C) 2016-2022 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License

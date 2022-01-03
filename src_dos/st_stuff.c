@@ -2,7 +2,7 @@
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
 // Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
-// Copyright (C) 2017-2021 Julian Nechaevsky
+// Copyright (C) 2017-2022 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -251,7 +251,7 @@ int st_keyorskull[3];   // [crispy] blinking key or skull in the status bar
 static int  lu_palette;                 // lump number for PLAYPAL
 static int  veryfirsttime = 1;          // used to execute ST_Init() only once
 static int  st_msgcounter = 0;          // used for making messages go away
-// [Doom Retro] & [crispy] show SSG availability in the Shotgun slot of the arms widget
+// [DOOM Retro] & [crispy] show SSG availability in the Shotgun slot of the arms widget
 static int st_shotguns;
 static int	st_fragscount;              // number of frags so far in deathmatch
 static int	st_oldhealth = -1;          // used to use appopriately pained face
@@ -925,7 +925,7 @@ void ST_updateFaceWidget (void)
         {
             // [JN] Correct "Ouch face" formula (part 1)
             // Thanks Brad Harding!
-            // Taken from Doom Retro (src/st_stuff.c)
+            // Taken from DOOM Retro (src/st_stuff.c)
             if (!vanilla)
             {
                 // [BH] fix ouch-face when damage > 20
@@ -1026,7 +1026,7 @@ void ST_updateFaceWidget (void)
 
     // [JN] Correct "Ouch face" formula (part 2)
     // Thanks Brad Harding!
-    // Taken from Doom Retro (src/st_stuff.c)
+    // Taken from DOOM Retro (src/st_stuff.c)
     if (priority < 7)
     {
         // getting hurt because of your own damn stupidity
@@ -1556,7 +1556,7 @@ void ST_drawWidgets (boolean refresh)
         STlib_updateBinIcon(&w_armsbg, refresh);
     }
 
-    // [Doom Retro] & [crispy] show SSG availability in the Shotgun slot of the arms widget
+    // [DOOM Retro] & [crispy] show SSG availability in the Shotgun slot of the arms widget
     st_shotguns = plyr->weaponowned[wp_shotgun] | plyr->weaponowned[wp_supershotgun];
 
     for (i=0 ; i < 6 ; i++)
@@ -1884,7 +1884,7 @@ void ST_createWidgets (void)
                            &st_armson);
     }
 
-    // [Doom Retro] & [crispy] show SSG availability in the Shotgun slot of the arms widget
+    // [DOOM Retro] & [crispy] show SSG availability in the Shotgun slot of the arms widget
     w_arms[1].inum = &st_shotguns;
 
     // frags sum
