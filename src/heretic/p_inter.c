@@ -17,7 +17,7 @@
 // P_inter.c
 
 
-
+#include "am_map.h"
 #include "doomdef.h"
 #include "deh_str.h"
 #include "i_system.h"

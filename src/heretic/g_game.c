@@ -21,6 +21,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include "am_map.h"
 #include "doomdef.h"
 #include "deh_str.h"
 #include "i_timer.h"
@@ -1494,6 +1495,7 @@ void G_DoWorldDone(void)
     G_DoLoadLevel();
     gameaction = ga_nothing;
     viewactive = true;
+    AM_clearMarks();  // [JN] jff 4/12/98 clear any marks on the automap
 }
 
 //---------------------------------------------------------------------------
@@ -1575,6 +1577,13 @@ void G_DoLoadGame(void)
     P_UnArchiveWorld();
     P_UnArchiveThinkers();
     P_UnArchiveSpecials();
+    // [JN] Pre-initialize Automap variables and marks so they can appear.
+    // TODO - this *IS* wrong.
+    {
+        AM_Start();
+        AM_Stop();
+    }
+    P_UnArchiveAutomap ();
     P_RestoreTargets();
 
     if (SV_ReadByte() != SAVE_GAME_TERMINATOR)
@@ -1819,6 +1828,8 @@ void G_InitNew(skill_t skill, int episode, int map, int fast_monsters)
     // [JN] Reset automap scale. Fixes:
     // https://doomwiki.org/wiki/Automap_scale_preserved_after_warps_in_Heretic_and_Hexen
     automapactive = false; 
+    // [JN] jff 4/16/98 force marks on automap cleared every new level start
+    AM_clearMarks();
     viewactive = true;
     gameepisode = episode;
     gamemap = map;
@@ -2274,6 +2285,7 @@ void G_DoSaveGame(void)
     P_ArchiveWorld();
     P_ArchiveThinkers();
     P_ArchiveSpecials();
+    P_ArchiveAutomap ();
     SV_Close(filename);
 
     gameaction = ga_nothing;

@@ -983,7 +983,7 @@ void BK_ApplyDefaultBindings()
     AddBind(bk_map_rotate,   keyboard, 'r');
     AddBind(bk_map_grid,     keyboard, 'g');
 
-    if(RD_GameType == gt_Doom)
+    if(RD_GameType == gt_Doom || RD_GameType == gt_Heretic)
     {
         AddBind(bk_map_mark,      keyboard, 'm');
         AddBind(bk_map_clearmark, keyboard, 'c');

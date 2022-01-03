@@ -17,6 +17,7 @@
 // AM_map.c
 
 
+#include <stdlib.h>
 #include "doomdef.h"
 #include "deh_str.h"
 #include "p_local.h"
@@ -24,6 +25,7 @@
 #include "am_map.h"
 #include "am_data.h"
 #include "v_video.h"
+#include "m_misc.h"
 #include "jn.h"
 
 
@@ -76,6 +78,31 @@ static byte cheatcount = 0;
 static boolean stopped = true;
 
 extern boolean viewactive;
+
+// [JN] How much the automap moves window per tic in frame-buffer coordinates.
+static int f_paninc;
+static const int f_paninc_slow = 8;   // 280 map units in 1 second.
+static const int f_paninc_fast = 16;  // 560 map units in 1 second.
+
+// [JN] How much zoom-in per tic goes to 2x in 1 second.
+static int m_zoomin;
+static const int m_zoomin_slow = ((int) (1.04*FRACUNIT));
+static const int m_zoomin_fast = ((int) (1.08*FRACUNIT));
+
+// [JN] How much zoom-out per tic pulls out to 0.5x in 1 second.
+static int m_zoomout;
+static const int m_zoomout_slow = ((int) (FRACUNIT/1.04));
+static const int m_zoomout_fast = ((int) (FRACUNIT/1.08));
+
+// [JN] Choosen mark color.
+static Translation_CR_t automap_mark_color_set;
+static patch_t *marknums[10]; // numbers used for marking by the automap
+
+// [JN] killough 2/22/98: Remove limit on automap marks,
+// and make variables external for use in savegames.
+mpoint_t *markpoints = NULL;     // where the points are
+int       markpointnum = 0;      // next point to be assigned (also number of points now)
+int       markpointnum_max = 0;  // killough 2/22/98
 
 #define NUMALIAS 11              // Number of antialiased lines.
 
@@ -259,6 +286,75 @@ static void AM_changeWindowLoc(void)
     m_y2 = m_y + m_h;
 }
 
+// -----------------------------------------------------------------------------
+// AM_initMarksColor
+// -----------------------------------------------------------------------------
+
+void AM_initMarksColor (int color)
+{
+    Translation_CR_t *colorVar = &automap_mark_color_set;
+
+    switch (color)
+    {
+        case 1:   *colorVar = CR_WHITE2GRAY_HERETIC;       break;
+        case 2:   *colorVar = CR_WHITE2DARKGRAY_HERETIC;   break;
+        case 3:   *colorVar = CR_WHITE2RED_HERETIC;        break;
+        case 4:   *colorVar = CR_WHITE2DARKRED_HERETIC;    break;
+        case 5:   *colorVar = CR_WHITE2GREEN_HERETIC;      break;
+        case 6:   *colorVar = CR_WHITE2DARKGREEN_HERETIC;  break;
+        case 7:   *colorVar = CR_WHITE2OLIVE_HERETIC;      break;
+        case 8:   *colorVar = CR_WHITE2BLUE_HERETIC;       break;
+        case 9:   *colorVar = CR_WHITE2DARKBLUE_HERETIC;   break;
+        case 10:  *colorVar = CR_WHITE2PURPLE_HERETIC;     break;
+        case 11:  *colorVar = CR_WHITE2NIAGARA_HERETIC;    break;
+        case 12:  *colorVar = CR_WHITE2AZURE_HERETIC;      break;
+        case 13:  *colorVar = CR_WHITE2YELLOW_HERETIC;     break;
+        case 14:  *colorVar = CR_WHITE2GOLD_HERETIC;       break;
+        case 15:  *colorVar = CR_WHITE2DARKGOLD_HERETIC;   break;
+        case 16:  *colorVar = CR_WHITE2TAN_HERETIC;        break;
+        case 17:  *colorVar = CR_WHITE2BROWN_HERETIC;      break;
+        default:  *colorVar = CR_WHITE2DARKGREEN_HERETIC;  break;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// AM_addMark
+// Adds a marker at the current location.
+// -----------------------------------------------------------------------------
+
+static void AM_addMark (void)
+{
+    // [JN] killough 2/22/98: remove limit on automap marks
+    if (markpointnum >= markpointnum_max)
+    {
+        markpoints = realloc(markpoints,
+                            (markpointnum_max = markpointnum_max ? 
+                             markpointnum_max*2 : 16) * sizeof(*markpoints));
+    }
+
+    // [crispy] keep the map static in overlay mode if not following the player
+    if (!(!automap_follow && automap_overlay))
+    {
+        markpoints[markpointnum].x = m_x + m_w/2;
+        markpoints[markpointnum].y = m_y + m_h/2;
+    }
+    else
+    {
+        markpoints[markpointnum].x = plr->mo->x;
+        markpoints[markpointnum].y = plr->mo->y;
+    }
+    markpointnum++;
+}
+
+// -----------------------------------------------------------------------------
+// AM_clearMarks
+// -----------------------------------------------------------------------------
+
+void AM_clearMarks (void)
+{
+    markpointnum = 0;
+}
+
 static void AM_initVariables(void)
 {
     int pnum;
@@ -330,8 +426,18 @@ static void AM_initVariables(void)
 
 static void AM_loadPics(void)
 {
+    int  i;
+    char namebuf[9];
+
     // [JN] Parallax problem: AUTOPAGE changed to unreplacable MAPEPAGE.
     maplump = W_CacheLumpName(DEH_String("MAPEPAGE"), PU_STATIC);
+
+    for (i = 0 ; i < 10 ; i++)
+    {
+        // [JN] Use custom, precise versions of automap marks.
+        DEH_snprintf(namebuf, 9, "MARKNUM%d", i);
+        marknums[i] = W_CacheLumpName(namebuf, PU_STATIC);
+    }
 }
 
 // should be called at the start of every level
@@ -412,6 +518,22 @@ boolean AM_Responder(event_t *ev)
 {
     int rc;
     static int bigstate = 0;
+    static char buffer[32];
+    boolean speed_toggler = BK_isKeyPressed(bk_speed);
+
+    // [JN] If run button is hold, pan/zoom Automap faster.    
+    if (speed_toggler)
+    {
+        f_paninc = f_paninc_fast;
+        m_zoomin = m_zoomin_fast;
+        m_zoomout = m_zoomout_fast;
+    }
+    else
+    {
+        f_paninc = f_paninc_slow;
+        m_zoomin = m_zoomin_slow;
+        m_zoomout = m_zoomout_slow;
+    }
 
     rc = false;
 
@@ -435,7 +557,7 @@ boolean AM_Responder(event_t *ev)
             // if not following the player
             if (!automap_follow && !automap_overlay)
             {
-                m_paninc.x = flip_levels ? -FTOM(F_PANINC) : FTOM(F_PANINC);
+                m_paninc.x = flip_levels ? -FTOM(f_paninc) : FTOM(f_paninc);
             }
             else
             {
@@ -446,7 +568,7 @@ boolean AM_Responder(event_t *ev)
         {
             if (!automap_follow && !automap_overlay)
             {
-                m_paninc.x = flip_levels ? FTOM(F_PANINC) : -FTOM(F_PANINC);
+                m_paninc.x = flip_levels ? FTOM(f_paninc) : -FTOM(f_paninc);
             }
             else
             {
@@ -457,7 +579,7 @@ boolean AM_Responder(event_t *ev)
         {
             if (!automap_follow && !automap_overlay)
             {
-                m_paninc.y = FTOM(F_PANINC);
+                m_paninc.y = FTOM(f_paninc);
             }
             else
                 rc = false;
@@ -466,7 +588,7 @@ boolean AM_Responder(event_t *ev)
         {
             if (!automap_follow && !automap_overlay)
             {
-                m_paninc.y = -FTOM(F_PANINC);
+                m_paninc.y = -FTOM(f_paninc);
             }
             else
             {
@@ -475,13 +597,13 @@ boolean AM_Responder(event_t *ev)
         }
         else if (BK_isKeyDown(ev, bk_map_zoom_out))         // zoom out
         {
-            mtof_zoommul = M_ZOOMOUT;
-            ftom_zoommul = M_ZOOMIN;
+            mtof_zoommul = m_zoomout;
+            ftom_zoommul = m_zoomin;
         }
         else if (BK_isKeyDown(ev, bk_map_zoom_in))          // zoom in
         {
-            mtof_zoommul = M_ZOOMIN;
-            ftom_zoommul = M_ZOOMOUT;
+            mtof_zoommul = m_zoomin;
+            ftom_zoommul = m_zoomout;
         }
         else if (BK_isKeyDown(ev, bk_map_toggle))          // toggle map (tab)
         {
@@ -524,6 +646,34 @@ boolean AM_Responder(event_t *ev)
             automap_grid = !automap_grid;
             P_SetMessage(plr, automap_grid ?
                               amstr_gridon : amstr_gridoff, msg_uncolored, true);
+        }
+        else if (BK_isKeyDown(ev, bk_map_mark))
+        {
+            // [JN] "Mark № added" / "Отметка № добавлена".
+            M_snprintf(buffer, sizeof(buffer), "%s %d %s",
+                       amstr_mark, markpointnum, amstr_added);
+            P_SetMessage(plr, buffer, msg_uncolored, false);
+            AM_addMark();
+        }
+        else if (BK_isKeyPressed(bk_speed) && BK_isKeyDown(ev, bk_map_clearmark))
+        {
+            // [JN] Clear all mark by holding "run" button and pressing "clear mark".
+            if (markpointnum > 0)
+            {
+                P_SetMessage(plr, amstr_markscleared, msg_uncolored, false);
+                AM_clearMarks();
+            }
+        }
+        else if (BK_isKeyDown(ev, bk_map_clearmark))
+        {
+            if (markpointnum > 0)
+            {
+                // [JN] "Mark № cleared" / "Отметка № удалена".
+                markpointnum--;
+                M_snprintf(buffer, sizeof(buffer), "%s %d %s",
+                           amstr_mark, markpointnum, amstr_cleared);
+                P_SetMessage(plr, buffer, msg_uncolored, false);
+            }
         }
         else
         {
@@ -1446,6 +1596,69 @@ static void AM_drawThings(int colors, int colorrange)
     }
 }
 
+// -----------------------------------------------------------------------------
+// AM_drawThings
+// Draw the marked locations on the automap.
+// -----------------------------------------------------------------------------
+
+static const int mark_w = 5 << hires;
+static const int mark_flip_1 =  1 << hires;
+static const int mark_flip_2 = -1 << hires;
+static const int mark_flip_3 =  9 << hires;
+
+static void AM_drawMarks (void)
+{
+    int       i;
+    mpoint_t  pt;
+
+    // [JN] killough 2/22/98: remove automap mark limit
+    for (i = 0 ; i < markpointnum ; i++)
+    {
+        if (markpoints[i].x != -1)
+        {
+            int fx, fy;
+            int j = i;
+
+            // [crispy] center marks around player
+            pt.x = markpoints[i].x;
+            pt.y = markpoints[i].y;
+
+            if (automap_rotate)
+            {
+                AM_rotatePoint(&pt);
+            }
+
+            fx = CXMTOF(pt.x);
+            fy = CYMTOF(pt.y);
+
+            do
+            {
+                int d = j % 10;
+
+                // killough 2/22/98: less spacing for '1'
+                if (d == 1)
+                {
+                    fx += (flip_levels ? mark_flip_2 : mark_flip_1); // -1 : 1
+                }
+
+                if (fx >= f_x + 5 && fx <= f_w - 5
+                &&  fy >= f_y + 6 && fy <= f_h - 6)
+                {
+                    // [JN] Use custom, precise patch versions and do coloring.
+                    dp_translation = cr[automap_mark_color_set];
+                    V_DrawPatchUnscaled(flip_levels ? - fx : fx, fy, marknums[d], NULL);
+                    dp_translation = NULL;
+                }
+
+                // killough 2/22/98: 1 space backwards
+                fx -= mark_w - (flip_levels ? mark_flip_3 : mark_flip_1); // 9 : 1
+
+                j /= 10;
+            } while (j > 0);
+        }
+    }
+}
+
 static void AM_drawkeys(void)
 {
     mpoint_t pt0;
@@ -1525,7 +1738,7 @@ void AM_Drawer(void)
     {
         AM_drawThings(THINGCOLORS, THINGRANGE);
     }
-
+    AM_drawMarks();
     if (gameskill == sk_baby)
     {
         AM_drawkeys();

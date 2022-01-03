@@ -132,7 +132,9 @@ extern char* amstr_overlayon;
 extern char* amstr_overlayoff;
 extern char* amstr_rotateon;
 extern char* amstr_rotateoff;
-extern char* amstr_markedspot;
+extern char* amstr_mark;
+extern char* amstr_added;
+extern char* amstr_cleared;
 extern char* amstr_markscleared;
 
 // MN_menu.c
@@ -263,6 +265,9 @@ extern char* txt_mlook_off;
 #define AMSTR_ROTATEON          "ROTATE MODE ON"
 #define AMSTR_ROTATEOFF         "ROTATE MODE OFF"
 #define AMSTR_MARKEDSPOT        "Marked Spot"
+#define AMSTR_MARK              "Mark"
+#define AMSTR_ADDED             "Added"
+#define AMSTR_CLEARED           "Cleared"
 #define AMSTR_MARKSCLEARED      "All Marks Cleared"
 
 // MN_menu.c
@@ -491,8 +496,10 @@ extern char* txt_mlook_off;
 #define AMSTR_OVERLAYOFF_RUS    "HT;BV YFKJ;TYBZ DSRK.XTY"      // РЕЖИМ НАЛОЖЕНИЯ ВЫКЛЮЧЕН
 #define AMSTR_ROTATEON_RUS      "HT;BV DHFOTYBZ DRK.XTY"        // РЕЖИМ ВРАЩЕНИЯ ВКЛЮЧЕН
 #define AMSTR_ROTATEOFF_RUS     "HT;BV DHFOTYBZ DSRK.XTY"       // РЕЖИМ ВРАЩЕНИЯ ВЫКЛЮЧЕН
-#define AMSTR_MARKEDSPOT_RUS    "JNVTNRF"                       // ОТМЕТКА
-#define AMSTR_MARKSCLEARED_RUS  "JNVTNRB JXBOTYS"               // ОТМЕТКИ ОЧИЩЕНЫ
+#define AMSTR_MARK_RUS          "JNVTNRF"                       // ОТМЕТКА
+#define AMSTR_ADDED_RUS         "LJ,FDKTYF"                     // ДОБАВЛЕНА
+#define AMSTR_CLEARED_RUS       "ELFKTYF"                       // УДАЛЕНА
+#define AMSTR_MARKSCLEARED_RUS  "DCT JNVTNRB ELFKTYS"           // ВСЕ ОТМЕТКИ УДАЛЕНЫ
 
 // MN_menu.c
 #define TXT_GAMMA_LEVEL_RUS         "EHJDTYM UFVVF-RJHHTRWBB "  // Уровень гамма-коррекции

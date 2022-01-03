@@ -35,7 +35,7 @@
 #include "txt_io.h"
 
 #include "net_client.h"
-
+#include "am_map.h"
 #include "config.h"
 #include "ct_chat.h"
 #include "doomdef.h"
@@ -151,6 +151,7 @@ int automap_rotate = 0;
 int automap_follow = 1;
 int automap_grid = 0;
 int automap_grid_size = 128;
+int automap_mark_color = 6;
 int automap_stats = 1;
 int automap_level_time = 1;
 int automap_total_time = 0;
@@ -977,6 +978,7 @@ void D_BindVariables(void)
     M_BindIntVariable("automap_follow",         &automap_follow);
     M_BindIntVariable("automap_grid",           &automap_grid);
     M_BindIntVariable("automap_grid_size",      &automap_grid_size);
+    M_BindIntVariable("automap_mark_color",     &automap_mark_color);
     M_BindIntVariable("automap_stats",          &automap_stats);
     M_BindIntVariable("automap_level_time",     &automap_level_time);
     M_BindIntVariable("automap_total_time",     &automap_total_time);
@@ -1556,6 +1558,9 @@ void D_DoomMain(void)
                "SB_Init: Loading patches.\n" :
                "SB_Init: Загрузка патчей.\n");
     SB_Init();
+
+    // [JN] Predifine automap marks color.
+    AM_initMarksColor(automap_mark_color);
 
 //
 // start the apropriate game based on parms

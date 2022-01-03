@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#include "am_map.h"
 #include "deh_str.h"
 #include "doomdef.h"
 #include "doomkeys.h"
@@ -119,6 +120,7 @@ static void M_RD_AutoMapRotate();
 static void M_RD_AutoMapFollow();
 static void M_RD_AutoMapGrid();
 static void M_RD_AutoMapGridSize(Direction_t direction);
+static void M_RD_AutomapMarkColor(Direction_t direction);
 static void M_RD_AutoMapStats(Direction_t direction);
 static void M_RD_AutoMapLevTime(Direction_t direction);
 static void M_RD_AutoMapTotTime(Direction_t direction);
@@ -638,6 +640,7 @@ static MenuItem_t AutomapItems[] = {
     {ITT_SWITCH, "FOLLOW MODE:",   "HT;BV CKTLJDFYBZ:",  M_RD_AutoMapFollow,   0}, // РЕЖИМ СЛЕДОВАНИЯ
     {ITT_SWITCH, "GRID:",          "CTNRF:",             M_RD_AutoMapGrid,     0}, // СЕТКА
     {ITT_LRFUNC, "GRID SIZE:",     "HFPVTH CTNRB:",      M_RD_AutoMapGridSize, 0}, // РАЗМЕР СЕТКИ
+    {ITT_LRFUNC, "MARK COLOR:",    "WDTN JNVTNJR:",      M_RD_AutomapMarkColor,0}, // ЦВЕТ ОТМЕТОК
     {ITT_TITLE,  "STATISTICS",     "CNFNBCNBRF",         NULL,                 0}, // СТАТИСТИКА
     {ITT_LRFUNC, "LEVEL STATS:",   "CNFNBCNBRF EHJDYZ:", M_RD_AutoMapStats,    0}, // СТАТИСТИКА УРОВНЯ
     {ITT_LRFUNC, "LEVEL TIME:",    "DHTVZ EHJDYZ:",      M_RD_AutoMapLevTime,  0}, // ВРЕМЯ УРОВНЯ
@@ -649,7 +652,7 @@ static Menu_t AutomapMenu = {
     78, 61,
     32,
     "AUTOMAP AND STATISTICS", "RFHNF B CNFNBCNBRF", false, // КАРТА И СТАТИСТИКА
-    11, AutomapItems, false,
+    12, AutomapItems, false,
     DrawAutomapMenu,
     NULL,
     &DisplayMenu,
@@ -2540,25 +2543,29 @@ static void DrawAutomapMenu(void)
         // Grid size
         RD_M_DrawTextSmallENG(num, 147 + wide_delta, 82, CR_NONE);
 
+        // Mark color
+        RD_M_DrawTextSmallENG(M_RD_ColorName(automap_mark_color), 160 + wide_delta, 92,
+                              M_RD_ColorTranslation(automap_mark_color));
+
         // Level stats
         RD_M_DrawTextSmallENG(automap_stats == 1 ? "IN AUTOMAP" :
                               automap_stats == 2 ? "ALWAYS" : "OFF",
-                              163 + wide_delta, 102, CR_NONE);
+                              163 + wide_delta, 112, CR_NONE);
 
         // Level time
         RD_M_DrawTextSmallENG(automap_level_time == 1 ? "IN AUTOMAP" :
                               automap_level_time == 2 ? "ALWAYS" : "OFF",
-                              152 + wide_delta, 112, CR_NONE);
+                              152 + wide_delta, 122, CR_NONE);
 
         // Total time
         RD_M_DrawTextSmallENG(automap_total_time == 1 ? "IN AUTOMAP" :
                               automap_total_time == 2 ? "ALWAYS" : "OFF",
-                              153 + wide_delta, 122, CR_NONE);
+                              153 + wide_delta, 132, CR_NONE);
 
         // Player coords
         RD_M_DrawTextSmallENG(automap_coords == 1 ? "IN AUTOMAP" :
                               automap_coords == 2 ? "ALWAYS" : "OFF",
-                              184 + wide_delta, 132, CR_NONE);
+                              184 + wide_delta, 142, CR_NONE);
     }
     else
     {
@@ -2577,25 +2584,30 @@ static void DrawAutomapMenu(void)
         // Размер сетки
         RD_M_DrawTextSmallRUS(num, 158 + wide_delta, 82, CR_NONE);
 
+        // Цвет отметок
+        RD_M_DrawTextSmallRUS(M_RD_ColorName(automap_mark_color), 158 + wide_delta, 92,
+                              M_RD_ColorTranslation(automap_mark_color));
+
+
         // Статистика уровня
         RD_M_DrawTextSmallRUS(automap_stats == 1 ? "YF RFHNT" :
                               automap_stats == 2 ? "DCTULF" : "DSRK",
-                              193 + wide_delta, 102, CR_NONE);
+                              193 + wide_delta, 112, CR_NONE);
 
         // Время уровня
         RD_M_DrawTextSmallRUS(automap_level_time == 1 ? "YF RFHNT" :
                               automap_level_time == 2 ? "DCTULF" : "DSRK",
-                              158 + wide_delta, 112, CR_NONE);
+                              158 + wide_delta, 122, CR_NONE);
 
         // Общее время
         RD_M_DrawTextSmallRUS(automap_total_time == 1 ? "YF RFHNT" :
                               automap_total_time == 2 ? "DCTULF" : "DSRK",
-                              161 + wide_delta, 122, CR_NONE);
+                              161 + wide_delta, 132, CR_NONE);
 
         // Координаты игрока
         RD_M_DrawTextSmallRUS(automap_coords == 1 ? "YF RFHNT" :
                               automap_coords == 2 ? "DCTULF" : "DSRK",
-                              198 + wide_delta, 132, CR_NONE);
+                              198 + wide_delta, 142, CR_NONE);
     }
 }
 
@@ -2622,6 +2634,14 @@ static void M_RD_AutoMapGrid()
 static void M_RD_AutoMapGridSize(Direction_t direction)
 {
     RD_Menu_ShiftSlideInt(&automap_grid_size, 32, 512, direction);
+}
+
+static void M_RD_AutomapMarkColor(Direction_t direction)
+{
+    RD_Menu_SpinInt(&automap_mark_color, 0, 17, direction);
+
+    // [JN] Reinitialize automap mark color.
+    AM_initMarksColor(automap_mark_color);
 }
 
 static void M_RD_AutoMapStats(Direction_t direction)
@@ -4886,6 +4906,7 @@ static void M_RD_BackToDefaults_Recommended(void)
     automap_follow     = 1;
     automap_grid       = 0;
     automap_grid_size  = 128;    
+    automap_mark_color = 6;
     automap_stats      = 1;
     automap_level_time = 0;
     automap_total_time = 0;
@@ -5020,6 +5041,7 @@ static void M_RD_BackToDefaults_Original(void)
     automap_follow     = 1;
     automap_grid       = 0;
     automap_grid_size  = 128;    
+    automap_mark_color = 6;
     automap_stats      = 0;
     automap_level_time = 0;
     automap_total_time = 0;

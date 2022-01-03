@@ -236,6 +236,9 @@ char* amstr_rotateon;
 char* amstr_rotateoff;
 char* amstr_markedspot;
 char* amstr_markscleared;
+char* amstr_mark;
+char* amstr_added;
+char* amstr_cleared;
 
 // MN_menu.c
 char* txt_gammamsg;
@@ -367,7 +370,9 @@ void RD_DefineLanguageStrings (void)
         amstr_overlayoff       = AMSTR_OVERLAYOFF;
         amstr_rotateon         = AMSTR_ROTATEON;
         amstr_rotateoff        = AMSTR_ROTATEOFF;
-        amstr_markedspot       = AMSTR_MARKEDSPOT;
+        amstr_mark             = AMSTR_MARK;
+        amstr_added            = AMSTR_ADDED;
+        amstr_cleared          = AMSTR_CLEARED;
         amstr_markscleared     = AMSTR_MARKSCLEARED;
 
         // MN_menu.c
@@ -494,7 +499,9 @@ void RD_DefineLanguageStrings (void)
         amstr_overlayoff       = AMSTR_OVERLAYOFF_RUS;
         amstr_rotateon         = AMSTR_ROTATEON_RUS;
         amstr_rotateoff        = AMSTR_ROTATEOFF_RUS;
-        amstr_markedspot       = AMSTR_MARKEDSPOT_RUS;
+        amstr_mark             = AMSTR_MARK_RUS;
+        amstr_added            = AMSTR_ADDED_RUS;
+        amstr_cleared          = AMSTR_CLEARED_RUS;
         amstr_markscleared     = AMSTR_MARKSCLEARED_RUS;
 
         // MN_menu.c

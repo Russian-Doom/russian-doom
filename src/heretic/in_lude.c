@@ -25,6 +25,7 @@
 ========================
 */
 
+#include "am_map.h"
 #include "doomdef.h"
 #include "deh_str.h"
 #include "p_local.h"

@@ -20,6 +20,10 @@
 #ifndef __AMMAP_H__
 #define __AMMAP_H__
 
+
+#include <stdint.h>
+#include "m_fixed.h"
+
 // For use if I do walls with outsides/insides
 #define REDS		12*8
 #define REDRANGE	1       //16
@@ -61,26 +65,11 @@
 #define GRIDRANGE	0
 #define XHAIRCOLORS	GRAYS
 
-// drawing stuff
-#define	FB		0
-
-#define AM_NUMMARKPOINTS 10
-
 #define AM_MSGHEADER (('a'<<24)+('m'<<16))
 #define AM_MSGENTERED (AM_MSGHEADER | ('e'<<8))
 #define AM_MSGEXITED (AM_MSGHEADER | ('x'<<8))
 
 #define INITSCALEMTOF (.2*FRACUNIT)     // scale on entry
-
-// [JN] How much the automap moves window per tic in frame-buffer coordinates.
-// Moves 280 (8) pixels in 1 second, increased from 140 (4) pixels.
-#define F_PANINC 8
-// [JN] How much zoom-in per tic goes to 2x in 1 second.
-// Increased from 1.02*FRACUNIT.
-#define M_ZOOMIN ((int) (1.04*FRACUNIT))
-// [JN] How much zoom-out per tic pulls out to 0.5x in 1 second
-// Increased from 1.02*FRACUNIT.
-#define M_ZOOMOUT ((int) (FRACUNIT/1.04))
 
 // translates between frame-buffer and map distances
 // [crispy] fix int overflow that causes map and grid lines to disappear
@@ -118,6 +107,13 @@ typedef struct
     fixed_t slp, islp;
 } islope_t;
 
-// extern int f_x, f_y, f_w, f_h;
+
+// [JN] Now global, since marks preserved in saved games.
+extern mpoint_t *markpoints;
+extern int       markpointnum, markpointnum_max;
+void AM_Start (void);
+void AM_Stop (void);
+void AM_clearMarks (void);
+void AM_initMarksColor (int color);
 
 #endif

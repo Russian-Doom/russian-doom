@@ -763,6 +763,8 @@ void P_ArchiveThinkers(void);
 void P_UnArchiveThinkers(void);
 void P_ArchiveSpecials(void);
 void P_UnArchiveSpecials(void);
+void P_ArchiveAutomap (void);
+void P_UnArchiveAutomap (void);
 uint32_t P_ThinkerToIndex (thinker_t* thinker);
 thinker_t* P_IndexToThinker (uint32_t index);
 void P_RestoreTargets (void);
@@ -819,7 +821,6 @@ int M_DrawText(int x, int y, boolean direct, char *string);
 //----------------------
 
 extern boolean automapactive;
-void AM_Stop ();
 
 //----------------------
 // Interlude (IN_lude.c)
