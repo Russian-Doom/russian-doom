@@ -293,6 +293,9 @@ static void M_RD_ChangeLanguage(Direction_t direction);
 // End game
 static void M_RD_EndGame(int option);
 
+// [JN] Delete savegame
+extern char *P_SaveGameFile (int slot);
+
 // Vanilla Options menu
 static void DrawOptionsMenu_Vanilla(void);
 static void DrawOptions2Menu_Vanilla(void);
@@ -1593,6 +1596,7 @@ char *QuitEndMsg[] = {
     "DO YOU WANT TO QUICKSAVE THE GAME NAMED",
     "DO YOU WANT TO QUICKLOAD THE GAME NAMED",
     "RESET SETTINGS TO THEIR DEFAULTS?",
+    "ARE YOU SURE YOU WANT TO DELETE SAVED GAME:",
 };
 
 char *QuitEndMsg_Rus[] = {
@@ -1600,7 +1604,8 @@ char *QuitEndMsg_Rus[] = {
     "DS LTQCNDBNTKMYJ ;TKFTNT PFRJYXBNM BUHE?",   // ВЫ ДЕЙСТВИТЕЛЬНО ЖЕЛАЕТЕ ЗАКОНЧИТЬ ИГРУ?
     "DSGJKYBNM ,SCNHJT CJ[HFYTYBT BUHS:",         // ВЫПОЛНИТЬ БЫСТРОЕ СОХРАНЕНИЕ ИГРЫ:
     "DSGJKYBNM ,SCNHE. PFUHEPRE BUHS:",           // ВЫПОЛНИТЬ БЫСТРУЮ ЗАГРУЗКУ ИГРЫ:
-    "C,HJCBNM YFCNHJQRB YF CNFYLFHNYST PYFXTYBZ?" // СБРОСИТЬ НАСТРОЙКИ НА СТАНДАРТНЫЕ ЗНАЧЕНИЯ?
+    "C,HJCBNM YFCNHJQRB YF CNFYLFHNYST PYFXTYBZ?",// СБРОСИТЬ НАСТРОЙКИ НА СТАНДАРТНЫЕ ЗНАЧЕНИЯ?
+    "ELFKBNM CJ[HFYTYYE. BUHE:",                  // УДАЛИТЬ СОХРАНЕННУЮ ИГРУ:
 };
 
 void MN_Drawer(void)
@@ -1639,6 +1644,13 @@ void MN_Drawer(void)
                                                         RD_M_TextAWidth(SlotText[quickload - 1]) / 2 + wide_delta, 90);
                 RD_M_DrawTextA(DEH_String("?"), 160 +
                                                 RD_M_TextAWidth(SlotText[quickload - 1]) / 2 + wide_delta, 90);
+            }
+            if (typeofask == 6)
+            {
+                RD_M_DrawTextA(SlotText[CurrentItPos],
+                               160 - RD_M_TextAWidth(SlotText[CurrentItPos]) / 2 + wide_delta, 90);
+                RD_M_DrawTextA(DEH_String("?"),
+                               160 + RD_M_TextAWidth(SlotText[CurrentItPos]) / 2 + wide_delta, 90);
             }
             UpdateState |= I_FULLSCRN;
         }
@@ -5495,6 +5507,14 @@ boolean MN_Responder(event_t * event)
                     BorderNeedRefresh = true;
                     break;
 
+                case 6:
+                    static char name[256];
+                    M_StringCopy(name, P_SaveGameFile(CurrentItPos), sizeof(name));
+                    remove(name);
+                    menuactive = true;
+                    RD_Menu_SetMenu(CurrentMenu == &SaveMenu ? &SaveMenu : &LoadMenu);
+                    slottextloaded = false;
+                    break;
                 default:
                     break;
             }
@@ -5735,6 +5755,23 @@ boolean MN_Responder(event_t * event)
 
     if (event->type == ev_keydown && event->data1 == KEY_DEL)
     {
+        // [JN] Save/load menu
+        if (CurrentMenu == &LoadMenu
+        ||  CurrentMenu == &SaveMenu)
+        {
+            if (SlotStatus[CurrentItPos] && !FileMenuKeySteal)
+            {
+                menuactive = false;
+                askforquit = true;
+                typeofask = 6;
+                return true;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         //[Dasperal] Key bindings menus
         if(CurrentMenu == &Bindings1Menu ||
            CurrentMenu == &Bindings2Menu ||
