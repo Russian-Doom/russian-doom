@@ -5506,13 +5506,24 @@ boolean MN_Responder(event_t * event)
                     BorderNeedRefresh = true;
                     break;
 
+                // [JN] Delete saved game:
                 case 6:
+                {
+                    // Find name of saved game file.
                     name = SV_Filename(CurrentItPos);
                     remove(name);
+                    free(name);
+                    // Truncate text of saved game slot.
+                    memset(SlotText[CurrentItPos], 0, SLOTTEXTLEN + 2);
+                    // Return to the Save/Load menu.
                     menuactive = true;
-                    RD_Menu_SetMenu(CurrentMenu == &SaveMenu ? &SaveMenu : &LoadMenu);
+                    // Indicate that slot text needs to be updated.
                     slottextloaded = false;
+                    // Redraw Save/Load items.
+                    DrawSaveLoadMenu();
                     break;
+                }
+
                 default:
                     break;
             }
