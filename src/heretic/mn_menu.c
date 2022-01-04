@@ -293,9 +293,6 @@ static void M_RD_ChangeLanguage(Direction_t direction);
 // End game
 static void M_RD_EndGame(int option);
 
-// [JN] Delete savegame
-extern char *P_SaveGameFile (int slot);
-
 // Vanilla Options menu
 static void DrawOptionsMenu_Vanilla(void);
 static void DrawOptions2Menu_Vanilla(void);
@@ -5476,7 +5473,7 @@ boolean MN_Responder(event_t * event)
     {
         if (BK_isKeyDown(event, bk_confirm))
         {
-            static char name[256];
+            static char *name;
 
             switch (typeofask)
             {
@@ -5510,7 +5507,7 @@ boolean MN_Responder(event_t * event)
                     break;
 
                 case 6:
-                    M_StringCopy(name, P_SaveGameFile(CurrentItPos), sizeof(name));
+                    name = SV_Filename(CurrentItPos);
                     remove(name);
                     menuactive = true;
                     RD_Menu_SetMenu(CurrentMenu == &SaveMenu ? &SaveMenu : &LoadMenu);

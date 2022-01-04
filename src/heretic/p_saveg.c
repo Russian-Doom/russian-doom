@@ -176,36 +176,6 @@ static void *SV_ReadPtr(void)
     return (void *) (intptr_t) SV_ReadLong();
 }
 
-/*
-================================================================================
-=
-= P_SaveGameFile
-=
-= Get the filename of the save game file to use for the specified slot.
-= [JN] From Doom code, used for save game deleting.
-=
-================================================================================
-*/
-
-char *P_SaveGameFile (int slot)
-{
-    static char *filename = NULL;
-    static size_t filename_size = 0;
-    char basename[32];
-    extern void DEH_snprintf(char *buffer, size_t len, char *fmt, ...);
-
-    if (filename == NULL)
-    {
-        filename_size = strlen(savegamedir) + 32;
-        filename = malloc(filename_size);
-    }
-
-    DEH_snprintf(basename, 32, SAVEGAMENAME "%d.sav", slot);
-    M_snprintf(filename, filename_size, "%s%s", savegamedir, basename);
-
-    return filename;
-}
-
 //
 // ticcmd_t
 //
