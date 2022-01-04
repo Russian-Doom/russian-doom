@@ -5476,6 +5476,8 @@ boolean MN_Responder(event_t * event)
     {
         if (BK_isKeyDown(event, bk_confirm))
         {
+            static char name[256];
+
             switch (typeofask)
             {
                 case 1:
@@ -5508,7 +5510,6 @@ boolean MN_Responder(event_t * event)
                     break;
 
                 case 6:
-                    static char name[256];
                     M_StringCopy(name, P_SaveGameFile(CurrentItPos), sizeof(name));
                     remove(name);
                     menuactive = true;
