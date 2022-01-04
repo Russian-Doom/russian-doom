@@ -131,7 +131,7 @@ AC_DEFINE_UNQUOTED(PROGRAM_PREFIX, "$PROGRAM_PREFIX",
 AC_DEFINE_UNQUOTED(PACKAGE_PREFIX, "$PACKAGE_PREFIX",
                    Change this when you create your awesome forked version)
 
-AM_CONFIG_HEADER(config.h:config.hin)
+AC_CONFIG_HEADERS(config.h:config.hin)
 
 AC_SUBST(BUILD_HERETIC_VERSION)
 AC_SUBST(BUILD_HEXEN_VERSION)
@@ -153,7 +153,7 @@ AC_SUBST(PACKAGE_COPYRIGHT)
 dnl Shut up the datarootdir warnings.
 AC_DEFUN([AC_DATAROOTDIR_CHECKED])
 
-AC_OUTPUT([
+AC_CONFIG_FILES([
 Makefile
 opl/Makefile
 pcsound/Makefile
@@ -174,4 +174,4 @@ src/setup/Makefile
 src/setup/setup-manifest.xml
 textscreen/Makefile
 ])
-
+AC_OUTPUT
