@@ -217,8 +217,9 @@ void R_RenderMaskedSegRange(drawseg_t * ds, int x1, int x2)
     {
         walllights = scalelight[lightnum];
         
-        // [JN] Apply brightmap to Korax speech animation...
-        if (brightmaps && !vanillaparm)
+        // [JN] Apply brightmap to Korax speech animation,
+        // but do not apply brightmaps in foggy maps.
+        if (brightmaps && !vanillaparm && LevelUseFullBright)
         {
             if (curline->sidedef->midtexture == bmaptexture11
             || curline->sidedef->midtexture == bmaptexture12
