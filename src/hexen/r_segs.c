@@ -842,8 +842,9 @@ void R_StoreWallRange(int start, int stop)
                 walllights_middle = scalelight[lightnum];
                 walllights_bottom = scalelight[lightnum];
 
-                // [JN] Apply brightmaps to walls...
-                if (brightmaps && !vanillaparm)
+                // [JN] Apply brightmaps to walls,
+                // but do not apply brightmaps in foggy maps.
+                if (brightmaps && !vanillaparm && LevelUseFullBright)
                 {
                     //
                     // [JN] Middle segment

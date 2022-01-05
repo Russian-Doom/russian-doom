@@ -849,9 +849,9 @@ void R_ProjectSprite(mobj_t * thing)
 
         vis->colormap = spritelights[index];
 
-        // [JN] Applying brightmaps to sprites...
-
-        if (brightmaps && !vanillaparm && LevelUseFullBright == true)
+        // [JN] Applying brightmaps to sprites,
+        // but don't apply in foggy maps.
+        if (brightmaps && !vanillaparm && LevelUseFullBright)
         {
             // - Red only -
 
@@ -941,7 +941,7 @@ void R_ProjectSprite(mobj_t * thing)
         
         // [JN] Fallback. If we are not using brightmaps, apply full brightness
         // to the objects, that no longer lighten up in info.c.
-        if ((!brightmaps || vanillaparm) && LevelUseFullBright == true)
+        if ((!brightmaps || vanillaparm) && LevelUseFullBright)
         {
             if (thing->type == MT_ARTITORCH
             ||  thing->type == MT_SPEEDBOOTS
