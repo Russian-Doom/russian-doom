@@ -141,6 +141,7 @@ int english_language = 1;
 
 // Display
 int level_brightness = 0;
+int detailLevel = 0;        // [JN] Blocky mode, 0 = high, 1 = normal
 int hud_detaillevel = 0;    // [JN] Blocky mode, 0 = high, 1 = normal
 int local_time = 0; 
 
@@ -277,6 +278,7 @@ void D_BindVariables(void)
     M_BindIntVariable("always_run",             &alwaysRun);
     M_BindIntVariable("mlook",                  &mlook);
     M_BindIntVariable("level_brightness",       &level_brightness);
+    M_BindIntVariable("detaillevel",            &detailLevel);
     M_BindIntVariable("local_time",             &local_time);
 
     // Automap

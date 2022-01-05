@@ -92,6 +92,7 @@ static void M_RD_Screenshots();
 static void DrawDisplayMenu(void);
 static void M_RD_ScreenSize(Direction_t direction);
 static void M_RD_LevelBrightness(Direction_t direction);
+static void M_RD_Detail();
 static void M_RD_LocalTime(Direction_t direction);
 static void M_RD_Messages(Direction_t direction);
 static void M_RD_ShadowedText();
@@ -513,7 +514,8 @@ static MenuItem_t DisplayItems[] = {
     {ITT_EMPTY,  NULL,                  NULL,                       NULL,                 0},
     {ITT_LRFUNC, "LEVEL BRIGHTNESS",    "EHJDTYM JCDTOTYYJCNB",     M_RD_LevelBrightness, 0}, // УРОВЕНЬ ОСВЕЩЕННОСТИ
     {ITT_EMPTY,  NULL,                  NULL,                       NULL,                 0},
-	{ITT_SETMENU, "COLOR OPTIONS...",   "YFCNHJQRB WDTNF>>>",       &ColorMenu,           0}, // НАСТРОЙКИ ЦВЕТА...
+    {ITT_SWITCH, "GRAPHICS DETAIL:",    "LTNFKBPFWBZ UHFABRB:",     M_RD_Detail,          0}, // ДЕТАЛИЗАЦИЯ ГРАФИКИ
+    {ITT_SETMENU, "COLOR OPTIONS...",   "YFCNHJQRB WDTNF>>>",       &ColorMenu,           0}, // НАСТРОЙКИ ЦВЕТА...
     {ITT_TITLE,  "INTERFACE",           "BYNTHATQC",                NULL,                 0}, // ИНТЕРФЕЙС
     {ITT_LRFUNC, "LOCAL TIME:",         "CBCNTVYJT DHTVZ:",         M_RD_LocalTime,       0}, // СИСТЕМНОЕ ВРЕМЯ
     {ITT_LRFUNC, "MESSAGES:",           "JNJ,HF;TYBT CJJ,OTYBQ:",   M_RD_Messages,        0}, // ОТОБРАЖЕНИЕ СООБЩЕНИЙ
@@ -2126,33 +2128,39 @@ static void DrawDisplayMenu(void)
 
     if (english_language)
     {
+        // Graphics detail
+        RD_M_DrawTextSmallENG(detailLevel ? "LOW" : "HIGH", 149 + wide_delta, 82, CR_NONE);
+
         // Local time
         RD_M_DrawTextSmallENG(local_time == 1 ? "12-HOUR (HH:MM)" :
                    local_time == 2 ? "12-HOUR (HH:MM:SS)" :
                    local_time == 3 ? "24-HOUR (HH:MM)" :
                    local_time == 4 ? "24-HOUR (HH:MM:SS)" : "OFF",
-                   110 + wide_delta, 102, CR_NONE);
+                   110 + wide_delta, 112, CR_NONE);
 
         // Messages
-        RD_M_DrawTextSmallENG((messageson ? "ON" : "OFF"), 108 + wide_delta, 112, CR_NONE);
+        RD_M_DrawTextSmallENG((messageson ? "ON" : "OFF"), 108 + wide_delta, 122, CR_NONE);
 
         // Text casts shadows
-        RD_M_DrawTextSmallENG((draw_shadowed_text ? "ON" : "OFF"), 179 + wide_delta, 122, CR_NONE);
+        RD_M_DrawTextSmallENG((draw_shadowed_text ? "ON" : "OFF"), 179 + wide_delta, 132, CR_NONE);
     }
     else
     {
+        // Детализация графики
+        RD_M_DrawTextSmallRUS(detailLevel ? "YBPRFZ" : "DSCJRFZ", 188 + wide_delta, 82, CR_NONE);
+
         // Системное время
         RD_M_DrawTextSmallRUS(local_time == 1 ? "12-XFCJDJT (XX:VV)" :
                           local_time == 2 ? "12-XFCJDJT (XX:VV:CC)" :
                           local_time == 3 ? "24-XFCJDJT (XX:VV)" :
                           local_time == 4 ? "24-XFCJDJT (XX:VV:CC)" : "DSRK",
-                          157 + wide_delta, 102, CR_NONE);
+                          157 + wide_delta, 112, CR_NONE);
 
         // Отображение сообщений
-        RD_M_DrawTextSmallRUS((messageson ? "DRK" : "DSRK"), 208 + wide_delta, 112, CR_NONE);
+        RD_M_DrawTextSmallRUS((messageson ? "DRK" : "DSRK"), 208 + wide_delta, 122, CR_NONE);
 
         // Тексты отбрасывают тень
-        RD_M_DrawTextSmallRUS((draw_shadowed_text ? "DRK" : "DSRK"), 220 + wide_delta, 122, CR_NONE);
+        RD_M_DrawTextSmallRUS((draw_shadowed_text ? "DRK" : "DSRK"), 220 + wide_delta, 132, CR_NONE);
     }
 
     // Screen size
@@ -2380,6 +2388,13 @@ static void M_RD_LevelBrightness(Direction_t direction)
     menubgwait = I_GetTime() + 25;
 
     RD_Menu_SlideInt_Step(&level_brightness, 0, 64, 16, direction);
+}
+
+static void M_RD_Detail()
+{
+    detailLevel ^= 1;
+
+    R_SetViewSize (screenblocks, detailLevel);
 }
 
 static void M_RD_LocalTime(Direction_t direction)

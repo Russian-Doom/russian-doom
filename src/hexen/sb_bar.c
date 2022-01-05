@@ -815,7 +815,8 @@ void SB_Drawer(void)
 
 // -----------------------------------------------------------------------------
 
-    if (viewheight == SCREENHEIGHT && (!automapactive || automap_overlay))
+    if ((screenblocks >= 11 && !automapactive) 
+    ||  (screenblocks >= 11 && automapactive && automap_overlay))
     {
         if (screenblocks == 11) // [JN] Draw only in 11 screen size, 12 is clean full screen
         DrawFullScreenStuff();

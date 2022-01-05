@@ -25,7 +25,7 @@
 // All drawing to the view buffer is accomplished in this file.  The other refresh
 // files only know about ccordinates, not the architecture of the frame buffer.
 int   viewwidth, scaledviewwidth;
-int   viewheight;
+int   viewheight, scaledviewheight;
 int   viewwindowx, viewwindowy;
 
 byte *ylookup[SCREENHEIGHT];
@@ -152,48 +152,51 @@ void R_DrawColumn (void)
 
 void R_DrawColumnLow (void)
 {
+    int      x = dc_x << 1; // Blocky mode, need to multiply by 2.
     int      count = dc_yh - dc_yl;
-    int      heightmask = dc_texheight-1;
-    byte    *dest;
+    int      heightmask = dc_texheight - 1;
+    byte    *dest, *dest2, *dest3, *dest4;
     fixed_t  frac;
 
-    // Zero length, column does not exceed a pixel.
     if (count < 0)
     {
         return;
     }
 
 #ifdef RANGECHECK
-    if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
-        I_Error (english_language ?
-                 "R_DrawColumn: %i to %i at %i" :
-                 "R_DrawColumn: %i к %i в %i",
-                 dc_yl, dc_yh, dc_x);
+    if ((unsigned) dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+        I_Error(english_language ?
+                "R_DrawColumnLow: %i to %i at %i" :
+                "R_DrawColumnLow: %i к %i в %i",
+                dc_yl, dc_yh, dc_x);
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    dest = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
     frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
-    // Inner loop that does the actual texture mapping,
-    //  e.g. a DDA-lile scaling. This is as fast as it gets.
-    if (dc_texheight & heightmask)   // not a power of 2 -- killough
+    if (dc_texheight & heightmask)  // not a power of 2 -- killough
     {
         heightmask++;
         heightmask <<= FRACBITS;
-    
+
         if (frac < 0)
             while ((frac += heightmask) < 0);
         else
             while (frac >= heightmask)
                    frac -= heightmask;
-    
+
         do
         {
-            // Re-map color indices from wall texture column
-            //  using a lighting/special effects LUT.
-            // heightmask is the Tutti-Frutti fix -- killough
-            *dest = dc_colormap[dc_source[frac>>FRACBITS]];
-            dest += screenwidth;
+            *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_source[frac>>FRACBITS]];
+
+            dest += screenwidth << hires;
+            dest2 += screenwidth << hires;
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
+
             if ((frac += dc_iscale) >= heightmask)
             {
                 frac -= heightmask;
@@ -202,12 +205,17 @@ void R_DrawColumnLow (void)
     }
     else  // texture height is a power of 2 -- killough
     {
-        do
+        do 
         {
-            *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
-            dest += screenwidth;
-            frac += dc_iscale;
-        } while (count--); 
+            *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]];
+            dest += screenwidth << hires;
+            dest2 += screenwidth << hires;
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
+
+            frac += dc_iscale; 
+
+        } while (count--);
     }
 }
 
@@ -275,6 +283,93 @@ void R_DrawTLColumn (void)
             *dest = tinttable[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
             dest += screenwidth;
             frac += dc_iscale;
+        } while (count--);
+    }
+}
+
+
+/*
+================================================================================
+=
+= R_DrawColumnLow
+=
+= [JN] Draw translucent column, low-resolution version.
+=
+================================================================================
+*/
+
+void R_DrawTLColumnLow (void)
+{
+    int     count = dc_yh - dc_yl;
+    int     x = dc_x << 1; // Blocky mode, need to multiply by 2.
+    int     heightmask = dc_texheight - 1;
+    byte   *dest, *dest2, *dest3, *dest4;
+    fixed_t frac;
+
+    if (count < 0)
+    return;
+
+#ifdef RANGECHECK
+    if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ?
+                 "R_DrawTLColumnLow: %i to %i at %i" :
+                 "R_DrawTLColumnLow: %i к %i у %i",
+                 dc_yl, dc_yh, x);
+    }
+#endif
+
+    dest = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
+
+    if (dc_texheight & heightmask)  // not a power of 2 -- killough
+    {
+        heightmask++;
+        heightmask <<= FRACBITS;
+
+        if (frac < 0)
+            while ((frac += heightmask) < 0);
+        else
+            while (frac >= heightmask)
+                   frac -= heightmask;
+
+        do
+        {
+            *dest = tinttable[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest2 = tinttable[(*dest2<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest3 = tinttable[(*dest3<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest4 = tinttable[(*dest4<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+
+            dest += screenwidth << hires;
+            dest2 += screenwidth << hires;
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
+
+            if ((frac += dc_iscale) >= heightmask)
+            {
+                frac -= heightmask;
+            }
+        } while (count--);
+    }
+    else  // texture height is a power of 2 -- killough
+    {
+        do 
+        {
+            *dest = tinttable[(*dest<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest2 = tinttable[(*dest2<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest3 = tinttable[(*dest3<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest4 = tinttable[(*dest4<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+
+            dest += screenwidth << hires;
+            dest2 += screenwidth << hires;
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
+
+            frac += dc_iscale; 
+
         } while (count--);
     }
 }
@@ -361,6 +456,58 @@ void R_DrawTranslatedColumn (void)
     } while (count--);
 }
 
+
+/*
+================================================================================
+=
+= R_DrawTranslatedColumnLow
+=
+= [JN] Draw translated column, low-resolution version.
+=
+================================================================================
+*/
+
+void R_DrawTranslatedColumnLow (void) 
+{ 
+    int      x = dc_x << 1;  // low detail, need to scale by 2
+    int      count = dc_yh - dc_yl; 
+    byte    *dest, *dest2, *dest3, *dest4;
+    fixed_t  frac; 
+
+    if (count < 0)
+    {
+        return;
+    }
+
+#ifdef RANGECHECK 
+    if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ?
+                 "R_DrawTranslatedColumnLow: %i to %i at %i" :
+                 "R_DrawTranslatedColumnLow: %i к %i у %i",
+                 dc_yl, dc_yh, x);
+    }
+#endif 
+
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale; 
+
+    do 
+    {
+        *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]];
+
+        dest += screenwidth << hires;
+        dest2 += screenwidth << hires;
+        dest3 += screenwidth << hires;
+        dest4 += screenwidth << hires;
+
+        frac += dc_iscale; 
+    } while (count--); 
+}
+
 //============================================================================
 //
 // R_DrawTranslatedTLColumn
@@ -400,6 +547,95 @@ void R_DrawTranslatedTLColumn(void)
         frac += fracstep;
     }
     while (count--);
+}
+
+
+/*
+================================================================================
+=
+= R_DrawTranslatedTLColumnLow
+=
+= [JN] Draw translucent, translated column, low-resolution version.
+=
+================================================================================
+*/
+
+void R_DrawTranslatedTLColumnLow(void)
+{
+    int      x = dc_x << 1; // Blocky mode, need to multiply by 2.
+    int      count = dc_yh - dc_yl;
+    int      heightmask = dc_texheight - 1;
+    byte    *dest, *dest2, *dest3, *dest4;
+    fixed_t  frac;
+
+    if (count < 0)
+    {
+        return;
+    }
+
+#ifdef RANGECHECK
+    if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ?
+                 "R_DrawTranslatedTLColumnLow: %i to %i at %i" :
+                 "R_DrawTranslatedTLColumnLow: %i к %i у %i",
+                 dc_yl, dc_yh, x);
+    }
+#endif
+
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
+
+    if (dc_texheight & heightmask)  // not a power of 2 -- killough
+    {
+        heightmask++;
+        heightmask <<= FRACBITS;
+
+        if (frac < 0)
+            while ((frac += heightmask) < 0);
+        else
+            while (frac >= heightmask)
+                   frac -= heightmask;
+
+        do
+        {
+            *dest = tinttable[(*dest<<8)+dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]]];
+            *dest2 = tinttable[(*dest2<<8)+dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]]];
+            *dest3 = tinttable[(*dest3<<8)+dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]]];
+            *dest4 = tinttable[(*dest4<<8)+dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]]];
+
+            dest += screenwidth << hires;
+            dest2 += screenwidth << hires;
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
+
+            if ((frac += dc_iscale) >= heightmask)
+            {
+                frac -= heightmask;
+            }
+        } while (count--);
+    }
+    else  // texture height is a power of 2 -- killough
+    {
+        do 
+        {
+            *dest = tinttable[(*dest<<8)+dc_colormap[dc_translation[dc_source[(frac>>FRACBITS)&heightmask]]]];
+            *dest2 = tinttable[(*dest2<<8)+dc_colormap[dc_translation[dc_source[(frac>>FRACBITS)&heightmask]]]];
+            *dest3 = tinttable[(*dest3<<8)+dc_colormap[dc_translation[dc_source[(frac>>FRACBITS)&heightmask]]]];
+            *dest4 = tinttable[(*dest4<<8)+dc_colormap[dc_translation[dc_source[(frac>>FRACBITS)&heightmask]]]];
+
+            dest += screenwidth << hires;
+            dest2 += screenwidth << hires;
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
+
+            frac += dc_iscale; 
+
+        } while (count--);
+    }
 }
 
 /*

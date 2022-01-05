@@ -375,7 +375,7 @@ extern angle_t rw_normalangle;
 // R_main.c
 //
 extern int viewwidth, viewheight, viewwindowx, viewwindowy;
-extern int scaledviewwidth;
+extern int scaledviewwidth, scaledviewheight;
 extern int centerx, centery;
 extern int flyheight;
 extern fixed_t centerxfrac;
@@ -417,6 +417,7 @@ extern int detailshift;         // 0 = high, 1 = low
 extern void (*colfunc) (void);
 extern void (*basecolfunc) (void);
 extern void (*tlcolfunc) (void);
+extern void (*transtlcolfunc) (void);
 extern void (*spanfunc) (void);
 extern void R_ExecuteSetViewSize();
 
@@ -593,10 +594,11 @@ void R_DrawColumnLow(void);
 void R_DrawTLColumn(void);
 void R_DrawTLColumnLow(void);
 void R_DrawTranslatedColumn(void);
-void R_DrawTranslatedTLColumn(void);
 void R_DrawTranslatedColumnLow(void);
+void R_DrawTranslatedTLColumn(void);
+void R_DrawTranslatedTLColumnLow(void);
 void R_DrawAltTLColumn(void);
-//void  R_DrawTranslatedAltTLColumn(void);
+
 
 extern int ds_y;
 extern int ds_x1;

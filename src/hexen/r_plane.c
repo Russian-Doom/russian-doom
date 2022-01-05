@@ -421,6 +421,7 @@ void R_DrawPlanes(void)
     byte *source;
     byte *source2;
     byte *dest;
+    byte *dest1, *dest2, *dest3, *dest4;
     int count;
     int offset;
     int skyTexture;
@@ -428,7 +429,7 @@ void R_DrawPlanes(void)
     int skyTexture2;
     int scrollOffset;
     int frac;
-    int fracstep = FRACUNIT >> hires;
+    int fracstep = FRACUNIT >> !detailshift;
 
     extern byte *ylookup[SCREENHEIGHT];
     extern int columnofs[WIDESCREENWIDTH];
@@ -445,8 +446,7 @@ void R_DrawPlanes(void)
                 skyTexture = texturetranslation[Sky1Texture];
                 offset2 = Sky2ColumnOffset >> 16;
                 skyTexture2 = texturetranslation[Sky2Texture];
-                // [JN] Tutti-Frutti: how it should be applied?
-                // dc_texheight = textureheight[skytexture]>>FRACBITS;
+
                 for (x = pl->minx; x <= pl->maxx; x++)
                 {
                     dc_yl = pl->top[x];
@@ -463,23 +463,56 @@ void R_DrawPlanes(void)
                                   linearskyangle[x] : xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
                         source = R_GetColumn(skyTexture, angle + offset, false);
                         source2 = R_GetColumn(skyTexture2, angle + offset2, false);
-                        dest = ylookup[dc_yl] + columnofs[flipwidth[x]];
                         frac = SKYTEXTUREMIDSHIFTED * FRACUNIT + (dc_yl - centery) * fracstep;
-                        do
+
+                        // [JN] Double sky drawing - LOW detail
+                        if (detailshift)
                         {
-                            if (source[frac >> FRACBITS])
+                            dest1 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[(x << hires)]];
+                            dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[(x << hires) + 1]];
+                            dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[(x << hires)]];
+                            dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[(x << hires) + 1]];
+                            
+                            do
                             {
-                                *dest = source[frac >> FRACBITS];
+                                if (source[frac >> FRACBITS])
+                                {
+                                    *dest4 = *dest3 = *dest2 = *dest1 = source[frac >> FRACBITS];
+                                }
+                                else
+                                {
+                                    *dest4 = *dest3 = *dest2 = *dest1 = source2[frac >> FRACBITS];
+                                }
+
+                                dest1 += screenwidth << hires;
+                                dest2 += screenwidth << hires;
+                                dest3 += screenwidth << hires;
+                                dest4 += screenwidth << hires;
                                 frac += fracstep;
-                            }
-                            else
-                            {
-                                *dest = source2[frac >> FRACBITS];
-                                frac += fracstep;
-                            }
-                            dest += screenwidth;
+                                
+                            } while (count--);
                         }
-                        while (count--);
+                        // [JN] Double sky drawing - HIGH detail
+                        else
+                        {
+                            dest = ylookup[dc_yl] + columnofs[flipwidth[x]];
+
+                            do
+                            {
+                                if (source[frac >> FRACBITS])
+                                {
+                                    *dest = source[frac >> FRACBITS];
+                                }
+                                else
+                                {
+                                    *dest = source2[frac >> FRACBITS];
+                                }
+
+                                dest += screenwidth;
+                                frac += fracstep;
+
+                            } while (count--);
+                        }
                     }
                 }
                 continue;       // Next visplane
@@ -496,8 +529,7 @@ void R_DrawPlanes(void)
                     offset = Sky1ColumnOffset >> 16;
                     skyTexture = texturetranslation[Sky1Texture];
                 }
-                // [JN] Tutti-Frutti: how it should be applied?
-                // dc_texheight = textureheight[skytexture]>>FRACBITS;
+
                 for (x = pl->minx; x <= pl->maxx; x++)
                 {
                     dc_yl = pl->top[x];
@@ -513,15 +545,38 @@ void R_DrawPlanes(void)
                         angle = ((viewangle + (linear_sky && !vanillaparm ?
                                   linearskyangle[x] : xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
                         source = R_GetColumn(skyTexture, angle + offset, false);
-                        dest = ylookup[dc_yl] + columnofs[flipwidth[x]];
                         frac = SKYTEXTUREMIDSHIFTED * FRACUNIT + (dc_yl - centery) * fracstep;
-                        do
+
+                        // [JN] Single sky drawing - LOW detail
+                        if (detailshift)
                         {
-                            *dest = source[frac >> FRACBITS];
-                            dest += screenwidth;
-                            frac += fracstep;
+                            dest1 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[(x << hires)]];
+                            dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[(x << hires) + 1]];
+                            dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[(x << hires)]];
+                            dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[(x << hires) + 1]];
+
+                            do
+                            {
+                                *dest4 = *dest3 = *dest2 = *dest1 = source[frac >> FRACBITS];
+                                dest1 += screenwidth << hires;
+                                dest2 += screenwidth << hires;
+                                dest3 += screenwidth << hires;
+                                dest4 += screenwidth << hires;
+                                frac += fracstep;
+                            } while (count--);
                         }
-                        while (count--);
+                        // [JN] Single sky drawing - HIGH detail
+                        else
+                        {
+                            dest = ylookup[dc_yl] + columnofs[flipwidth[x]];
+
+                            do
+                            {
+                                *dest = source[frac >> FRACBITS];
+                                dest += screenwidth;
+                                frac += fracstep;
+                            } while (count--);
+                        }
                     }
                 }
                 continue;       // Next visplane
