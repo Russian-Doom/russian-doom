@@ -116,7 +116,7 @@ will have new column_ts generated.
 ================================================================================
 */
 
-void R_DrawColumnInCache (column_t *patch, byte *cache, int originy, int cacheheight, byte *marks)
+static void R_DrawColumnInCache (column_t *patch, byte *cache, int originy, int cacheheight, byte *marks)
 {
     int    count;
     int    position;
@@ -165,7 +165,6 @@ void R_DrawColumnInCache (column_t *patch, byte *cache, int originy, int cachehe
     }
 }
 
-
 /*
 ================================================================================
 =
@@ -179,7 +178,7 @@ void R_DrawColumnInCache (column_t *patch, byte *cache, int originy, int cachehe
 ================================================================================
 */
 
-void R_GenerateComposite (int texnum)
+static void R_GenerateComposite (int texnum)
 {
     byte *block = Z_Malloc(texturecompositesize[texnum], PU_STATIC, 
                           (void **) &texturecomposite[texnum]);
@@ -268,7 +267,6 @@ void R_GenerateComposite (int texnum)
 
     Z_ChangeTag(block, PU_CACHE);
 }
-
 
 /*
 ================================================================================
@@ -445,7 +443,6 @@ static void R_GenerateLookup (int texnum)
     free(count);                    // killough 4/9/98
 }
 
-
 /*
 ================================================================================
 =
@@ -475,7 +472,6 @@ byte *R_GetColumn (int tex, int col, boolean opaque)
 
     return texturecomposite[tex] + ofs;
 }
-
 
 /*
 ================================================================================
@@ -525,7 +521,6 @@ static void GenerateTextureHashTable (void)
     }
 }
 
-
 /*
 ================================================================================
 =
@@ -538,7 +533,7 @@ static void GenerateTextureHashTable (void)
 ================================================================================
 */
 
-void R_InitTextures (void)
+static void R_InitTextures (void)
 {
     maptexture_t *mtexture;
     texture_t    *texture;
@@ -842,7 +837,6 @@ void R_InitTextures (void)
     GenerateTextureHashTable();
 }
 
-
 /*
 ================================================================================
 =
@@ -851,7 +845,7 @@ void R_InitTextures (void)
 ================================================================================
 */
 
-void R_InitFlats(void)
+static void R_InitFlats(void)
 {
     int i;
 
@@ -868,7 +862,6 @@ void R_InitFlats(void)
     }
 }
 
-
 /*
 ================================================================================
 =
@@ -880,7 +873,7 @@ void R_InitFlats(void)
 ================================================================================
 */
 
-void R_InitSpriteLumps (void)
+static void R_InitSpriteLumps (void)
 {
     int i;
     patch_t *patch;
@@ -905,7 +898,6 @@ void R_InitSpriteLumps (void)
     }
 }
 
-
 /*
 ================================================================================
 =
@@ -914,76 +906,32 @@ void R_InitSpriteLumps (void)
 ================================================================================
 */
 
-void R_InitColormaps (void)
+static void R_InitColormaps (void)
 {
-    int lump, length;
-
     // Load in the light tables 256 byte align tables.
-    lump = W_GetNumForName("COLORMAP");
-    length = W_LumpLength(lump);
-    colormaps = Z_Malloc(length, PU_STATIC, 0);
-    W_ReadLump(lump, colormaps);
+    colormaps = W_CacheLumpNum(W_GetNumForName("COLORMAP"), PU_STATIC);
 }
-
 
 /*
 ================================================================================
 =
 = R_InitBrightmaps
 =
-= [JN] TODO - upgrade brightmapping code.
+= [JN] Load in the brightmaps.
 =
 ================================================================================
 */
 
-void R_InitBrightmaps(void)
+static void R_InitBrightmaps(void)
 {
-    int lump2, lump3, lump4, lump5, lump6, lump7, lump8;
-    int length2, length3, length4, length5, length6, length7, length8;
-
-    // Green only
-    lump2 = W_GetNumForName("BRTMAP1");
-    length2 = W_LumpLength(lump2);
-    brightmaps_greenonly = Z_Malloc(length2, PU_STATIC, 0);
-    W_ReadLump(lump2, brightmaps_greenonly);
-    
-    // Red only
-    lump3 = W_GetNumForName("BRTMAP2");
-    length3 = W_LumpLength(lump3);
-    brightmaps_redonly = Z_Malloc(length3, PU_STATIC, 0);
-    W_ReadLump(lump3, brightmaps_redonly);
-    
-    // Blue only
-    lump4 = W_GetNumForName("BRTMAP3");
-    length4 = W_LumpLength(lump4);
-    brightmaps_blueonly = Z_Malloc(length4, PU_STATIC, 0);
-    W_ReadLump(lump4, brightmaps_blueonly);
-    
-    // Purple only
-    lump5 = W_GetNumForName("BRTMAP4");
-    length5 = W_LumpLength(lump5);
-    brightmaps_purpleonly = Z_Malloc(length5, PU_STATIC, 0);
-    W_ReadLump(lump5, brightmaps_purpleonly);
-    
-    // Flame
-    lump6 = W_GetNumForName("BRTMAP5");
-    length6 = W_LumpLength(lump6);
-    brightmaps_flame = Z_Malloc(length6, PU_STATIC, 0);
-    W_ReadLump(lump6, brightmaps_flame);
-    
-    // Flame 2 (yellow + red)
-    lump7 = W_GetNumForName("BRTMAP6");
-    length7 = W_LumpLength(lump7);
-    brightmaps_yellowred = Z_Malloc(length7, PU_STATIC, 0);
-    W_ReadLump(lump7, brightmaps_yellowred);
-    
-    // Flame Bull (special for lit Minotaur statue)
-    lump8 = W_GetNumForName("BRTMAP7");
-    length8 = W_LumpLength(lump8);
-    brightmaps_firebull = Z_Malloc(length8, PU_STATIC, 0);
-    W_ReadLump(lump8, brightmaps_firebull);    
+    brightmaps_greenonly = W_CacheLumpNum(W_GetNumForName("BRTMAP1"), PU_STATIC);
+    brightmaps_redonly = W_CacheLumpNum(W_GetNumForName("BRTMAP2"), PU_STATIC);
+    brightmaps_blueonly = W_CacheLumpNum(W_GetNumForName("BRTMAP3"), PU_STATIC);
+    brightmaps_purpleonly = W_CacheLumpNum(W_GetNumForName("BRTMAP4"), PU_STATIC);
+    brightmaps_flame = W_CacheLumpNum(W_GetNumForName("BRTMAP5"), PU_STATIC);
+    brightmaps_yellowred = W_CacheLumpNum(W_GetNumForName("BRTMAP6"), PU_STATIC);
+    brightmaps_firebull = W_CacheLumpNum(W_GetNumForName("BRTMAP7"), PU_STATIC);
 }
-
 
 /*
 ================================================================================
@@ -1010,7 +958,6 @@ void R_InitData (void)
         R_InitBrightmappedTextures ();
     }
 }
-
 
 /*
 ================================================================================
@@ -1043,7 +990,6 @@ int R_FlatNumForName (char *name)
     return i - firstflat;
 }
 
-
 /*
 ================================================================================
 =
@@ -1056,12 +1002,14 @@ int R_FlatNumForName (char *name)
 
 int R_CheckTextureNumForName (char *name)
 {
-    texture_t *texture;
     int        key = W_LumpNameHash(name) % numtextures;
+    texture_t *texture;
 
     // "NoTexture" marker.
     if (name[0] == '-')
-    return 0;
+    {
+        return 0;
+    }
 
     texture=textures_hashtable[key]; 
 
@@ -1076,7 +1024,6 @@ int R_CheckTextureNumForName (char *name)
     }
     return -1;
 }
-
 
 /*
 ================================================================================
@@ -1102,7 +1049,6 @@ int R_TextureNumForName(char *name)
     return i;
 }
 
-
 /*
 ================================================================================
 =
@@ -1122,7 +1068,9 @@ void R_PrecacheLevel (void)
     byte *hitlist;
 
     if (demoplayback)
-    return;
+    {
+        return;
+    }
 
     {
         size_t size = numflats > numsprites  ? numflats : numsprites;

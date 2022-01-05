@@ -45,38 +45,38 @@ void R_InitBrightmappedTextures (void)
     // -------------------------------------------------------
 
     // brightmap_greenonly
-    bmaptexture01 = R_TextureNumForName("SW_1_MD");
+    bmaptexture01 = R_CheckTextureNumForName("SW_1_MD");
     
     // brightmap_redonly
-    bmaptexture02 = R_TextureNumForName("SW_2_DN");
+    bmaptexture02 = R_CheckTextureNumForName("SW_2_DN");
     
     // brightmap_blueonly
-    bmaptexture03 = R_TextureNumForName("SW_1_DN");
-    bmaptexture04 = R_TextureNumForName("SW_2_MD");
+    bmaptexture03 = R_CheckTextureNumForName("SW_1_DN");
+    bmaptexture04 = R_CheckTextureNumForName("SW_2_MD");
     
     // brightmap_flame
-    bmaptexture05 = R_TextureNumForName("SPAWN03");
-    bmaptexture06 = R_TextureNumForName("SPAWN12");
-    bmaptexture08 = R_TextureNumForName("SW52_ON");
-    bmaptexture11 = R_TextureNumForName("X_FAC01"); // Korax
-    bmaptexture12 = R_TextureNumForName("X_FAC02"); // Korax
-    bmaptexture13 = R_TextureNumForName("X_FAC03"); // Korax
-    bmaptexture14 = R_TextureNumForName("X_FAC04"); // Korax
-    bmaptexture15 = R_TextureNumForName("X_FAC05"); // Korax
-    bmaptexture16 = R_TextureNumForName("X_FAC06"); // Korax
-    bmaptexture17 = R_TextureNumForName("X_FAC07"); // Korax
-    bmaptexture18 = R_TextureNumForName("X_FAC08"); // Korax
-    bmaptexture19 = R_TextureNumForName("X_FAC09"); // Korax
-    bmaptexture20 = R_TextureNumForName("X_FAC10"); // Korax
-    bmaptexture21 = R_TextureNumForName("X_FAC11"); // Korax
-    bmaptexture22 = R_TextureNumForName("X_FAC12"); // Korax
-    bmaptexture23 = R_TextureNumForName("TPORTX");  // Gate's frame
+    bmaptexture05 = R_CheckTextureNumForName("SPAWN03");
+    bmaptexture06 = R_CheckTextureNumForName("SPAWN12");
+    bmaptexture08 = R_CheckTextureNumForName("SW52_ON");
+    bmaptexture11 = R_CheckTextureNumForName("X_FAC01"); // Korax
+    bmaptexture12 = R_CheckTextureNumForName("X_FAC02"); // Korax
+    bmaptexture13 = R_CheckTextureNumForName("X_FAC03"); // Korax
+    bmaptexture14 = R_CheckTextureNumForName("X_FAC04"); // Korax
+    bmaptexture15 = R_CheckTextureNumForName("X_FAC05"); // Korax
+    bmaptexture16 = R_CheckTextureNumForName("X_FAC06"); // Korax
+    bmaptexture17 = R_CheckTextureNumForName("X_FAC07"); // Korax
+    bmaptexture18 = R_CheckTextureNumForName("X_FAC08"); // Korax
+    bmaptexture19 = R_CheckTextureNumForName("X_FAC09"); // Korax
+    bmaptexture20 = R_CheckTextureNumForName("X_FAC10"); // Korax
+    bmaptexture21 = R_CheckTextureNumForName("X_FAC11"); // Korax
+    bmaptexture22 = R_CheckTextureNumForName("X_FAC12"); // Korax
+    bmaptexture23 = R_CheckTextureNumForName("TPORTX");  // Gate's frame
 
     if (gamemode != shareware)
-    bmaptexture07 = R_TextureNumForName("SW51_ON");
+    bmaptexture07 = R_CheckTextureNumForName("SW51_ON");
     
     // brightmap_yellowred
-    bmaptexture09 = R_TextureNumForName("SPAWN09");
-    bmaptexture10 = R_TextureNumForName("SPAWN10");
+    bmaptexture09 = R_CheckTextureNumForName("SPAWN09");
+    bmaptexture10 = R_CheckTextureNumForName("SPAWN10");
 }
 
