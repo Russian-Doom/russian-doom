@@ -1327,6 +1327,7 @@ void H2_PageTicker(void)
 static void PageDrawer(void)
 {
     boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
+    const patch_t *page = W_CacheLumpName(pagename, PU_CACHE);
 
     if (aspect_ratio >= 2)
     {
@@ -1334,7 +1335,16 @@ static void PageDrawer(void)
         V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
     }
 
-    V_DrawRawScreen(W_CacheLumpName(pagename, PU_CACHE));
+    // [JN] For checking of modified fullscreen graphics.
+    if (page->width == 560)
+    {
+        V_DrawPatchFullScreen(W_CacheLumpName(pagename, PU_CACHE), false);
+    }
+    else
+    {
+        V_DrawRawScreen(W_CacheLumpName(pagename, PU_CACHE));
+    }
+
     if (demosequence == 1)
     {
         V_DrawShadowedPatchRaven(4 + (wide_4_3 ? wide_delta : 0), 160, 
@@ -1379,11 +1389,11 @@ void H2_DoAdvanceDemo(void)
             gamestate = GS_DEMOSCREEN;
             if (english_language)
             {
-                pagename = "TITLE";
+                pagename = isDK ? "TITLEDK" : "TITLE";
             }
             else
             {
-                pagename = isDK ? "TITLEDK" : "TITLE";
+                pagename = isDK ? "TITLEDKR" : "TITLE";
             }
             if (!title_mus_played)
             S_StartSongName("hexen", false);
@@ -1395,11 +1405,11 @@ void H2_DoAdvanceDemo(void)
             gamestate = GS_DEMOSCREEN;
             if (english_language)
             {
-                pagename = "TITLE";
+                pagename = isDK ? "TITLEDK" : "TITLE";
             }
             else
             {
-                pagename = isDK ? "TITLEDK" : "TITLE";
+                pagename = isDK ? "TITLEDKR" : "TITLE";
             }
             break;
         case 2:
@@ -1413,7 +1423,7 @@ void H2_DoAdvanceDemo(void)
             gamestate = GS_DEMOSCREEN;
             if (english_language)
             {
-                pagename = "CREDIT";
+                pagename = isDK ? "CREDITDK" : "CREDIT";
             }
             else
             {
@@ -1431,7 +1441,7 @@ void H2_DoAdvanceDemo(void)
             gamestate = GS_DEMOSCREEN;
             if (english_language)
             {
-                pagename = "CREDIT";
+                pagename = isDK ? "CREDITDK" : "CREDIT";
             }
             else
             {

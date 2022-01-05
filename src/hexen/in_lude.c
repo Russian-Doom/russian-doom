@@ -449,6 +449,8 @@ static void CheckForSkip(void)
 
 void IN_Drawer(void)
 {
+    const patch_t *interpic_gfx = W_CacheLumpName("INTERPIC", PU_CACHE);
+
     if (!intermission)
     {
         return;
@@ -465,7 +467,16 @@ void IN_Drawer(void)
     }
 
     UpdateState |= I_FULLSCRN;
-    V_CopyScaledBuffer(I_VideoBuffer, (byte *) patchINTERPIC, ORIGWIDTH * ORIGHEIGHT);
+
+    // [JN] For checking of modified fullscreen graphics.
+    if (interpic_gfx->width == 560)
+    {
+        V_DrawPatchFullScreen(W_CacheLumpName("INTERPIC", PU_CACHE), false);
+    }
+    else
+    {
+        V_CopyScaledBuffer(I_VideoBuffer, (byte *) patchINTERPIC, ORIGWIDTH * ORIGHEIGHT);
+    }
 
     if (gametype == SINGLE)
     {
