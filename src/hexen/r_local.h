@@ -417,6 +417,7 @@ extern int detailshift;         // 0 = high, 1 = low
 extern void (*colfunc) (void);
 extern void (*basecolfunc) (void);
 extern void (*tlcolfunc) (void);
+extern void (*transcolfunc) (void);
 extern void (*transtlcolfunc) (void);
 extern void (*spanfunc) (void);
 extern void R_ExecuteSetViewSize();
