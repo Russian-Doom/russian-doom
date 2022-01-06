@@ -484,21 +484,16 @@ extern int skyflatnum;
 
 extern int*  lastopening; // [crispy] 32-bit integer math
 
-extern int floorclip[WIDESCREENWIDTH];   // [crispy] 32-bit integer math
-extern int ceilingclip[WIDESCREENWIDTH]; // [crispy] 32-bit integer math
+// [JN] e6y: resolution limitation is removed
+extern int *floorclip, *ceilingclip; // dropoff overflow
 
-extern fixed_t* yslope;
+extern fixed_t *yslope, *distscale;
 extern fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
-extern fixed_t distscale[WIDESCREENWIDTH];
 
-void R_InitPlanes(void);
+void R_InitPlanesRes(void);
+void R_InitVisplanesRes(void);
 void R_ClearPlanes(void);
 void R_MapPlane(int y, int x1, int x2);
-void R_MakeSpans(int x, 
-                 unsigned int t1,  // [crispy] 32-bit integer math
-                 unsigned int b1,  // [crispy] 32-bit integer math
-                 unsigned int t2,  // [crispy] 32-bit integer math
-                 unsigned int b2); // [crispy] 32-bit integer math
 void R_DrawPlanes(void);
 
 visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel, int special);

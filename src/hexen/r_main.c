@@ -39,8 +39,6 @@ int centerx, centery;
 fixed_t centerxfrac, centeryfrac;
 fixed_t projection;
 
-int framecount;                 // just for profiling purposes
-
 int sscount, linecount, loopcount;
 
 fixed_t viewx, viewy, viewz;
@@ -832,17 +830,19 @@ void R_Init(void)
             screenblocks = 12;
     }
 
+    R_InitPlanesRes ();
+    printf (".");
+    R_InitVisplanesRes ();
+    printf (".");
+
     R_InitData();
     R_InitPointToAngle();
     R_InitTables();
     // viewwidth / viewheight / detailLevel are set by the defaults
     R_SetViewSize(screenblocks, detailLevel);
-    R_InitPlanes();
     R_InitLightTables();
     R_InitSkyMap();
     R_InitTranslationTables();
-
-    framecount = 0;
 }
 
 /*
@@ -977,7 +977,6 @@ void R_SetupFrame(player_t * player)
     {
         fixedcolormap = 0;
     }
-    framecount++;
     validcount++;
     if (BorderNeedRefresh)
     {

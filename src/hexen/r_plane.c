@@ -27,18 +27,29 @@ int Sky2Texture;
 fixed_t Sky1ColumnOffset;
 fixed_t Sky2ColumnOffset;
 int skyflatnum;
-int skytexturemid;
-fixed_t skyiscale;
-boolean DoubleSky;
+static int skytexturemid;
+static boolean DoubleSky;
 extern fixed_t Sky1ScrollDelta;
 extern fixed_t Sky2ScrollDelta;
+#define SKYTEXTUREMIDSHIFTED 200
 
-// Opening
-static visplane_t *visplanes[MAXVISPLANES]; // [JN] killough
-static visplane_t *freetail;                // [JN] killough
-static visplane_t **freehead = &freetail;   // [JN] killough
-visplane_t *floorplane, *ceilingplane;
-planefunction_t floorfunc, ceilingfunc;
+/*
+================================================================================
+=
+= MAXVISPLANES is no longer a limit on the number of visplanes,
+= but a limit on the number of hash slots; larger numbers mean
+= better performance usually but after a point they are wasted,
+= and memory and time overheads creep in.
+=
+= Lee Killough
+=
+================================================================================
+*/
+
+static visplane_t  *visplanes[MAXVISPLANES];   // [JN] killough
+static visplane_t  *freetail;                  // [JN] killough
+static visplane_t **freehead = &freetail;      // [JN] killough
+visplane_t         *floorplane, *ceilingplane;
 
 // [JN] killough -- hash function for visplanes
 // Empirically verified to be fairly uniform:
@@ -46,41 +57,107 @@ planefunction_t floorfunc, ceilingfunc;
 #define visplane_hash(picnum, lightlevel, height) \
     ((unsigned int)((picnum) * 3 + (lightlevel) + (height) * 7) & (MAXVISPLANES - 1))
 
-int  openings[MAXOPENINGS]; // [crispy] 32-bit integer math
-int* lastopening;           // [crispy] 32-bit integer math
+// [JN] killough 8/1/98: set static number of openings to be large enough
+// (a static limit is okay in this case and avoids difficulties in r_segs.c)
+
+size_t  maxopenings;
+int    *openings, *lastopening;  // [crispy] 32-bit integer math   
 
 // Clip values are the solid pixel bounding the range.
-// floorclip start out SCREENHEIGHT
-// ceilingclip starts out -1
-int  floorclip[WIDESCREENWIDTH];   // [crispy] 32-bit integer math
-int  ceilingclip[WIDESCREENWIDTH]; // [crispy] 32-bit integer math
+// floorclip start out SCREENHEIGHT, ceilingclip starts out -1
+// [JN] e6y: resolution limitation is removed
 
-// spanstart holds the start of a plane span, initialized to 0
-int spanstart[SCREENHEIGHT];
-int spanstop[SCREENHEIGHT];
+int *floorclip = NULL;    // dropoff overflow
+int *ceilingclip = NULL;  // dropoff overflow
+
+// Spanstart holds the start of a plane span, initialized to 0.
+// [JN] e6y: resolution limitation is removed
+
+static int *spanstart = NULL;  // killough 2/8/98
 
 // Texture mapping
-lighttable_t **planezlight;
-fixed_t planeheight;
-fixed_t *yslope;
+
+static lighttable_t **planezlight;
+static fixed_t planeheight;
+static fixed_t cachedheight[SCREENHEIGHT];
+static fixed_t cacheddistance[SCREENHEIGHT];
+static fixed_t cachedxstep[SCREENHEIGHT];
+static fixed_t cachedystep[SCREENHEIGHT];
+
+// [JN] e6y: resolution limitation is removed
+fixed_t *yslope = NULL;
+fixed_t *distscale = NULL;
 fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
-fixed_t distscale[WIDESCREENWIDTH];
-fixed_t basexscale, baseyscale;
-fixed_t cachedheight[SCREENHEIGHT];
-fixed_t cacheddistance[SCREENHEIGHT];
-fixed_t cachedxstep[SCREENHEIGHT];
-fixed_t cachedystep[SCREENHEIGHT];
 
 
-//==========================================================================
-//
-// R_InitSky
-//
-// Called at level load.
-//
-//==========================================================================
+/*
+================================================================================
+=
+= R_InitPlanesRes
+=
+================================================================================
+*/
 
-void R_InitSky(int map)
+void R_InitPlanesRes (void)
+{
+    if (floorclip)
+    {
+        free(floorclip);
+    }
+    if (ceilingclip)
+    {
+        free(ceilingclip);
+    }
+    if (spanstart)
+    {
+        free(spanstart);
+    }
+    if (yslope)
+    {
+        free(yslope);
+    }
+    if (distscale)
+    {
+        free(distscale);
+    }
+
+    floorclip = calloc(1, screenwidth * sizeof(*floorclip));
+    ceilingclip = calloc(1, screenwidth * sizeof(*ceilingclip));
+    spanstart = calloc(1, screenwidth * sizeof(*spanstart));
+    yslope = calloc(1, screenwidth * sizeof(*yslope));
+    distscale = calloc(1, screenwidth * sizeof(*distscale));
+}
+
+/*
+================================================================================
+=
+= R_InitVisplanesRes
+=
+================================================================================
+*/
+
+void R_InitVisplanesRes (void)
+{
+    freetail = NULL;
+    freehead = &freetail;
+
+    for (int i = 0; i < MAXVISPLANES; i++)
+    {
+        visplanes[i] = 0;
+    }
+}
+
+/*
+================================================================================
+=
+= R_InitSky
+=
+= Called at level load.
+=
+================================================================================
+*/
+
+void R_InitSky (int map)
 {
     Sky1Texture = P_GetMapSky1Texture(map);
     Sky2Texture = P_GetMapSky2Texture(map);
@@ -91,43 +168,33 @@ void R_InitSky(int map)
     DoubleSky = P_GetMapDoubleSky(map);
 }
 
-//==========================================================================
-//
-// R_InitSkyMap
-//
-// Called whenever the view size changes.
-//
-//==========================================================================
+/*
+================================================================================
+=
+= R_InitSkyMap
+=
+= [JN] Called at game startup.
+=
+================================================================================
+*/
 
-void R_InitSkyMap(void)
+void R_InitSkyMap (void)
 {
     skyflatnum = R_FlatNumForName("F_SKY");
     skytexturemid = 200 * FRACUNIT;
-    skyiscale = FRACUNIT;
 }
 
-//==========================================================================
-//
-// R_InitPlanes
-//
-// Called at game startup.
-//
-//==========================================================================
-
-void R_InitPlanes(void)
-{
-}
-
-//==========================================================================
+/*
+================================================================================
 //
 // R_MapPlane
 //
-// Globals used: planeheight, ds_source, basexscale, baseyscale,
-// viewx, viewy.
+// Globals used: planeheight, ds_source, viewx, viewy.
 //
-//==========================================================================
+================================================================================
+*/
 
-void R_MapPlane(int y, int x1, int x2)
+void R_MapPlane (int y, int x1, int x2)
 {
     fixed_t   distance;
     unsigned  index;
@@ -188,21 +255,23 @@ void R_MapPlane(int y, int x1, int x2)
     ds_x1 = x1;
     ds_x2 = x2;
 
-    spanfunc();                 // High or low detail
+    // High or low detail
+    spanfunc();
 }
 
-//==========================================================================
-//
-// R_ClearPlanes
-//
-// Called at the beginning of each frame.
-//
-//==========================================================================
+/*
+================================================================================
+=
+= R_ClearPlanes
+=
+= At begining of frame.
+=
+================================================================================
+*/
 
-void R_ClearPlanes(void)
+void R_ClearPlanes (void)
 {
     int i;
-    const angle_t angle = (viewangle - ANG90) >> ANGLETOFINESHIFT; // left to right mapping
 
     // opening / clipping determination
     for (i = 0; i < viewwidth; i++)
@@ -211,7 +280,7 @@ void R_ClearPlanes(void)
         ceilingclip[i] = -1;
     }
 
-    for (int i = 0; i < MAXVISPLANES; i++)
+    for (i = 0; i < MAXVISPLANES; i++)
         for (*freehead = visplanes[i], visplanes[i] = NULL; *freehead; )
             freehead = &(*freehead)->next;
 
@@ -219,10 +288,6 @@ void R_ClearPlanes(void)
 
     // texture calculation
     memset(cachedheight, 0, sizeof(cachedheight));
-
-    // scale will be unit scale at SCREENWIDTH/2 distance
-    basexscale = FixedDiv(finecosine[angle], centerxfrac);
-    baseyscale = -FixedDiv(finesine[angle], centerxfrac);
 }
 
 /*
@@ -253,11 +318,13 @@ static visplane_t *new_visplane(unsigned int hash)
     return check;
 }
 
-//==========================================================================
-//
-// R_FindPlane
-//
-//==========================================================================
+/*
+================================================================================
+=
+= R_FindPlane
+=
+================================================================================
+*/
 
 visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel, int special)
 {
@@ -313,16 +380,18 @@ visplane_t *R_DupPlane (const visplane_t *pl, int start, int stop)
     new_pl->minx = start;
     new_pl->maxx = stop;
 
-    memset(new_pl->top, USHRT_MAX, sizeof(new_pl->top));
+    memset(new_pl->top, SHRT_MAX, sizeof(new_pl->top));
 
     return new_pl;
 }
 
-//==========================================================================
-//
-// R_CheckPlane
-//
-//==========================================================================
+/*
+================================================================================
+=
+= R_CheckPlane
+=
+================================================================================
+*/
 
 visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop)
 {
@@ -352,7 +421,7 @@ visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop)
         intrh = stop;
     }
 
-    for (x=intrl ; x <= intrh && pl->top[x] == 0xffffffffu; x++); // [crispy] hires / 32-bit integer math
+    for (x=intrl ; x <= intrh && pl->top[x] == SHRT_MAX; x++); // [crispy] hires / 32-bit integer math
     if (x > intrh)
     {
         // Can use existing plane; extend range
@@ -368,68 +437,55 @@ visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop)
     return pl;
 }
 
-//==========================================================================
-//
-// R_MakeSpans
-//
-//==========================================================================
+/*
+================================================================================
+=
+= R_MakeSpans
+=
+================================================================================
+*/
 
-void R_MakeSpans(int x, 
- unsigned int t1, // [crispy] 32-bit integer math
- unsigned int b1, // [crispy] 32-bit integer math
- unsigned int t2, // [crispy] 32-bit integer math
- unsigned int b2) // [crispy] 32-bit integer math
+static void R_MakeSpans (int x, unsigned int t1, unsigned int b1, // [crispy] 32-bit integer math
+                                unsigned int t2, unsigned int b2) // [crispy] 32-bit integer math
 {
-    while (t1 < t2 && t1 <= b1)
+    for ( ; t1 < t2 && t1 <= b1 ; t1++)
     {
-        R_MapPlane(t1, spanstart[t1], x - 1);
-        t1++;
+        R_MapPlane(t1, spanstart[t1], x-1);
     }
-    while (b1 > b2 && b1 >= t1)
+    for ( ; b1 > b2 && b1 >= t1 ; b1--)
     {
-        R_MapPlane(b1, spanstart[b1], x - 1);
-        b1--;
+        R_MapPlane(b1, spanstart[b1], x-1);
     }
     while (t2 < t1 && t2 <= b2)
     {
-        spanstart[t2] = x;
-        t2++;
+        spanstart[t2++] = x;
     }
     while (b2 > b1 && b2 >= t2)
     {
-        spanstart[b2] = x;
-        b2--;
+        spanstart[b2--] = x;
     }
 }
 
-//==========================================================================
-//
-// R_DrawPlanes
-//
-//==========================================================================
-
-#define SKYTEXTUREMIDSHIFTED 200
+/*
+================================================================================
+=
+= R_DrawPlanes
+=
+= At the end of each frame.
+=
+================================================================================
+*/
 
 void R_DrawPlanes(void)
 {
     visplane_t *pl;
-    int i;
-    int light;
-    int x, stop;
-    int angle;
-    byte *tempSource;
-    byte *source;
-    byte *source2;
-    byte *dest;
-    byte *dest1, *dest2, *dest3, *dest4;
-    int count;
-    int offset;
-    int skyTexture;
-    int offset2;
-    int skyTexture2;
-    int scrollOffset;
-    int frac;
-    int fracstep = FRACUNIT >> !detailshift;
+    int         i, x, stop;
+    int         light, angle;
+    int         offset, skyTexture, offset2, skyTexture2;
+    int         scrollOffset;
+    int         count, frac, fracstep = FRACUNIT >> !detailshift;
+    byte       *source, *source2, *tempSource;
+    byte       *dest, *dest1, *dest2, *dest3, *dest4;
 
     extern byte *ylookup[SCREENHEIGHT];
     extern int columnofs[WIDESCREENWIDTH];
@@ -438,10 +494,14 @@ void R_DrawPlanes(void)
     for (pl = visplanes[i] ; pl ; pl = pl->next)
     if (pl->minx <= pl->maxx)
     {
+        //
+        // Sky flat
+        //
         if (pl->picnum == skyflatnum)
-        {                       // Sky flat
+        {
+            // Render 2 layers, sky 1 in front
             if (DoubleSky)
-            {                   // Render 2 layers, sky 1 in front
+            {
                 offset = Sky1ColumnOffset >> 16;
                 skyTexture = texturetranslation[Sky1Texture];
                 offset2 = Sky2ColumnOffset >> 16;
@@ -515,17 +575,23 @@ void R_DrawPlanes(void)
                         }
                     }
                 }
-                continue;       // Next visplane
+                // Next visplane
+                continue;
             }
+            //
+            // Render single layer sky
+            //
             else
-            {                   // Render single layer
+            {
                 if (pl->special == 200)
-                {               // Use sky 2
+                {
+                    // Use sky 2
                     offset = Sky2ColumnOffset >> 16;
                     skyTexture = texturetranslation[Sky2Texture];
                 }
                 else
-                {               // Use sky 1
+                {
+                    // Use sky 1
                     offset = Sky1ColumnOffset >> 16;
                     skyTexture = texturetranslation[Sky1Texture];
                 }
@@ -579,92 +645,108 @@ void R_DrawPlanes(void)
                         }
                     }
                 }
-                continue;       // Next visplane
+                // Next visplane
+                continue;
             }
         }
+        //
         // Regular flat
-        tempSource = W_CacheLumpNum(firstflat +
-                                    flattranslation[pl->picnum], PU_STATIC);
-        scrollOffset = leveltime >> 1 & 63;
-        switch (pl->special)
-        {                       // Handle scrolling flats
-            case 201:
-            case 202:
-            case 203:          // Scroll_North_xxx
-                ds_source = tempSource + ((scrollOffset
-                                           << (pl->special - 201) & 63) << 6);
+        //
+        else
+        {
+            tempSource = W_CacheLumpNum(firstflat + flattranslation[pl->picnum], PU_STATIC);
+            scrollOffset = leveltime >> 1 & 63;
+
+            // Handle scrolling flats
+            switch (pl->special)
+            {
+                // Scroll_North_xxx
+                case 201:
+                case 202:
+                case 203:
+                ds_source = tempSource + ((scrollOffset << (pl->special - 201) & 63) << 6);
                 break;
-            case 204:
-            case 205:
-            case 206:          // Scroll_East_xxx
-                ds_source = tempSource + ((63 - scrollOffset)
-                                          << (pl->special - 204) & 63);
+
+                // Scroll_East_xxx
+                case 204:
+                case 205:
+                case 206:
+                ds_source = tempSource + ((63 - scrollOffset) << (pl->special - 204) & 63);
                 break;
-            case 207:
-            case 208:
-            case 209:          // Scroll_South_xxx
-                ds_source = tempSource + (((63 - scrollOffset)
-                                           << (pl->special - 207) & 63) << 6);
+
+                // Scroll_South_xxx
+                case 207:
+                case 208:
+                case 209:
+                ds_source = tempSource + (((63 - scrollOffset) << (pl->special - 207) & 63) << 6);
                 break;
-            case 210:
-            case 211:
-            case 212:          // Scroll_West_xxx
-                ds_source = tempSource + (scrollOffset
-                                          << (pl->special - 210) & 63);
+
+                // Scroll_West_xxx
+                case 210:
+                case 211:
+                case 212:          
+                ds_source = tempSource + (scrollOffset << (pl->special - 210) & 63);
                 break;
-            case 213:
-            case 214:
-            case 215:          // Scroll_NorthWest_xxx
-                ds_source = tempSource + (scrollOffset
-                                          << (pl->special - 213) & 63) +
-                    ((scrollOffset << (pl->special - 213) & 63) << 6);
+
+                // Scroll_NorthWest_xxx
+                case 213:
+                case 214:
+                case 215:
+                ds_source = tempSource + (scrollOffset << (pl->special - 213) & 63)
+                                       + ((scrollOffset << (pl->special - 213) & 63) << 6);
                 break;
-            case 216:
-            case 217:
-            case 218:          // Scroll_NorthEast_xxx
-                ds_source = tempSource + ((63 - scrollOffset)
-                                          << (pl->special - 216) & 63) +
-                    ((scrollOffset << (pl->special - 216) & 63) << 6);
+
+                // Scroll_NorthEast_xxx
+                case 216:
+                case 217:
+                case 218:
+                ds_source = tempSource + ((63 - scrollOffset) << (pl->special - 216) & 63)
+                                       + ((scrollOffset << (pl->special - 216) & 63) << 6);
                 break;
-            case 219:
-            case 220:
-            case 221:          // Scroll_SouthEast_xxx
-                ds_source = tempSource + ((63 - scrollOffset)
-                                          << (pl->special - 219) & 63) +
-                    (((63 - scrollOffset) << (pl->special - 219) & 63) << 6);
+
+                // Scroll_SouthEast_xxx
+                case 219:
+                case 220:
+                case 221:
+                ds_source = tempSource + ((63 - scrollOffset) << (pl->special - 219) & 63)
+                                       + (((63 - scrollOffset) << (pl->special - 219) & 63) << 6);
                 break;
-            case 222:
-            case 223:
-            case 224:          // Scroll_SouthWest_xxx
-                ds_source = tempSource + (scrollOffset
-                                          << (pl->special - 222) & 63) +
-                    (((63 - scrollOffset) << (pl->special - 222) & 63) << 6);
+
+                // Scroll_SouthWest_xxx
+                case 222:
+                case 223:
+                case 224:          
+                ds_source = tempSource + (scrollOffset << (pl->special - 222) & 63)
+                                       + (((63 - scrollOffset) << (pl->special - 222) & 63) << 6);
                 break;
-            default:
+
+                default:
                 ds_source = tempSource;
                 break;
-        }
-        planeheight = abs(pl->height - viewz);
-        light = ((pl->lightlevel + level_brightness) >> LIGHTSEGSHIFT) + extralight;
-        if (light >= LIGHTLEVELS)
-        {
-            light = LIGHTLEVELS - 1;
-        }
-        if (light < 0)
-        {
-            light = 0;
-        }
-        planezlight = zlight[light];
+            }
 
-        pl->top[pl->maxx+1] = 0xffffffffu; // [crispy] hires / 32-bit integer math
-        pl->top[pl->minx-1] = 0xffffffffu; // [crispy] hires / 32-bit integer math
+            planeheight = abs(pl->height - viewz);
+            light = ((pl->lightlevel + level_brightness) >> LIGHTSEGSHIFT) + extralight;
 
-        stop = pl->maxx + 1;
-        for (x = pl->minx; x <= stop; x++)
-        {
-            R_MakeSpans(x, pl->top[x - 1], pl->bottom[x - 1],
-                        pl->top[x], pl->bottom[x]);
+            if (light >= LIGHTLEVELS)
+            {
+                light = LIGHTLEVELS - 1;
+            }
+            if (light < 0)
+            {
+                light = 0;
+            }
+
+            stop = pl->maxx + 1;
+            planezlight = zlight[light];
+            pl->top[pl->minx-1] = pl->top[stop] = UINT_MAX; // [crispy] 32-bit integer math
+            
+            for (x = pl->minx ; x <= stop ; x++)
+            {
+                R_MakeSpans(x,pl->top[x-1], pl->bottom[x-1], pl->top[x], pl->bottom[x]);
+            }
+
+            W_ReleaseLumpNum(firstflat + flattranslation[pl->picnum]);
         }
-        W_ReleaseLumpNum(firstflat + flattranslation[pl->picnum]);
     }
 }
