@@ -104,6 +104,14 @@ typedef enum
     CR_RED2BLACK_HERETIC,
     // Heretic (all-to-gray)
     CR_MONOCHROME_HERETIC,
+    // Hexen (big font and health gem)
+    CR_RED2DARKRED_HEXEN,
+    CR_RED2GREEN_HEXEN,
+    CR_RED2DARKGREEN_HEXEN,
+    CR_RED2YELLOW_HEXEN,
+    CR_RED2GOLD_HEXEN,
+    CR_RED2GRAY_HEXEN,
+    CR_RED2DARKGRAY_HEXEN,
     // Hexen (small font)
     CR_GRAY2GDARKGRAY_HEXEN,    // Menu digits and inactive items
     CR_GRAY2DARKGOLD_HEXEN,     // Gameplay features headers
