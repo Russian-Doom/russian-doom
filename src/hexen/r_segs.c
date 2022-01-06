@@ -118,7 +118,7 @@ static const struct
 {
     int clamp;
     int heightbits;
-} scale_values[8] = {
+} scale_values[9] = {
     {2048 * FRACUNIT, 12},
     {1024 * FRACUNIT, 12},
     {1024 * FRACUNIT, 11},
@@ -126,7 +126,8 @@ static const struct
     { 512 * FRACUNIT, 10},
     { 256 * FRACUNIT, 10},
     { 256 * FRACUNIT,  9},
-    { 128 * FRACUNIT,  9}
+    { 128 * FRACUNIT,  9},
+    {  64 * FRACUNIT,  9}
 };
 
 void R_FixWiggle (sector_t *sector)
@@ -333,9 +334,6 @@ void R_RenderMaskedSegRange(drawseg_t * ds, int x1, int x2)
 = CALLED: CORE LOOPING ROUTINE
 ================
 */
-
-#define HEIGHTBITS      12
-#define HEIGHTUNIT      (1<<HEIGHTBITS)
 
 // [JN] Note: SPARKLEFIX has been taken from Doom Retro.
 // Many thanks to Brad Harding for his research and fixing this bug!
