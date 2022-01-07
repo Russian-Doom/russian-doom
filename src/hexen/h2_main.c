@@ -168,6 +168,9 @@ int improved_collision = 1;
 int torque = 1;
 int floating_powerups = 1;
 
+// Gameplay: Status Bar
+int sbar_colored_gem = 0;
+
 // Gameplay: Crosshair
 int crosshair_draw = 0;
 int crosshair_type = 1;
@@ -302,6 +305,9 @@ void D_BindVariables(void)
     M_BindIntVariable("improved_collision",     &improved_collision);
     M_BindIntVariable("torque",                 &torque);
     M_BindIntVariable("floating_powerups",      &floating_powerups);
+
+    // Gameplay: Status Bar
+    M_BindIntVariable("sbar_colored_gem",       &sbar_colored_gem);
 
     // Gameplay: Gameplay
     M_BindIntVariable("flip_levels",            &flip_levels);

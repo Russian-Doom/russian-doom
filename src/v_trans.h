@@ -113,10 +113,11 @@ typedef enum
     CR_RED2GRAY_HEXEN,
     CR_RED2DARKGRAY_HEXEN,
     // Hexen (small font)
-    CR_GRAY2GDARKGRAY_HEXEN,    // Menu digits and inactive items
-    CR_GRAY2DARKGOLD_HEXEN,     // Gameplay features headers
-    CR_GRAY2GREEN_HEXEN,        // Gameplay features "ON"
-    CR_GRAY2RED_HEXEN,          // Gameplay features "OFF"
+    CR_GRAY2GDARKGRAY_HEXEN,
+    CR_GRAY2DARKGOLD_HEXEN,
+    CR_GRAY2GREEN_HEXEN,
+    CR_GRAY2DARKGREEN_HEXEN,
+    CR_GRAY2RED_HEXEN,
     CR_GREEN2GRAY_HEXEN,
     CR_GREEN2RED_HEXEN,
     // Strife
