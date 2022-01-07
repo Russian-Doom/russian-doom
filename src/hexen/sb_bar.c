@@ -1180,7 +1180,18 @@ void DrawMainBar(void)
             V_DrawPatch(41 + wide_delta, 178, PatchARMCLEAR);
             if (temp >= 25)
             {
+                // [JN] Draw ammount of health, colorize if necessary.
+                if (sbar_colored && !vanillaparm)
+                {
+                    if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
+                    dp_translation = cr[CR_YELLOW2GRAY_HEXEN];
+                    else if (CPlayer->mo->health >= 67)
+                    dp_translation = cr[CR_YELLOW2GREEN_HEXEN];
+                    else
+                    dp_translation = NULL;
+                }
                 DrINumber(temp, 40 + wide_delta, 176);
+                dp_translation = NULL;
             }
             else
             {
@@ -1194,7 +1205,16 @@ void DrawMainBar(void)
     if (oldmana1 != temp)
     {
         V_DrawPatch(77 + wide_delta, 178, PatchMANACLEAR);
+
+        // [JN] Draw BLUE mana points, colorize if necessary.
+        if (sbar_colored && !vanillaparm)
+        {
+            dp_translation = CPlayer->mana[0] >= MAX_MANA / 2 ? cr[CR_YELLOW2GREEN_HEXEN] :
+                             CPlayer->mana[0] >= MAX_MANA / 4 ? NULL : cr[CR_YELLOW2RED_HEXEN];
+        }
         DrSmallNumber(temp, 79 + wide_delta, 181);
+        dp_translation = NULL;
+
         manaVialPatch1 = (patch_t *) 1; // force a vial update
         if (temp == 0)
         {                       // Draw Dim Mana icon
@@ -1211,7 +1231,16 @@ void DrawMainBar(void)
     if (oldmana2 != temp)
     {
         V_DrawPatch(109 + wide_delta, 178, PatchMANACLEAR);
+
+        // [JN] Draw GREEN mana points, colorize if necessary.
+        if (sbar_colored && !vanillaparm)
+        {
+            dp_translation = CPlayer->mana[1] >= MAX_MANA / 2 ? cr[CR_YELLOW2GREEN_HEXEN] :
+                             CPlayer->mana[1] >= MAX_MANA / 4 ? NULL : cr[CR_YELLOW2RED_HEXEN];
+        }
         DrSmallNumber(temp, 111 + wide_delta, 181);
+        dp_translation = NULL;
+
         manaVialPatch1 = (patch_t *) 1; // force a vial update
         if (temp == 0)
         {                       // Draw Dim Mana icon
@@ -1304,7 +1333,39 @@ void DrawMainBar(void)
     {
         oldarmor = temp;
         V_DrawPatch(255 + wide_delta, 178, PatchARMCLEAR);
+
+        // [JN] Draw ammount of armor, colorize if necessary.
+        // Well... Hexen armor system is a bit mind blowing,
+        // so let's just use some hard coded values here.
+        if (sbar_colored && !vanillaparm)
+        {
+            if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
+            {
+                dp_translation = cr[CR_YELLOW2GRAY_HEXEN];
+            }
+            else if ((FixedDiv(temp, 5 * FRACUNIT) >> FRACBITS)
+            >=  (CPlayer->class == 0 ? 8 :  // Fighted
+                 CPlayer->class == 1 ? 7 :  // Cleric
+                                       6))  // Mage
+            {
+                dp_translation = cr[CR_YELLOW2GREEN_HEXEN];
+            }
+            else 
+            if ((FixedDiv(temp, 5 * FRACUNIT) >> FRACBITS)
+            >   (CPlayer->class == 0 ? 3 :  // Fighted
+                 CPlayer->class == 1 ? 2 :  // Cleric
+                                       1))  // Mage
+            {
+                dp_translation = NULL;
+            }
+            else
+            {
+                dp_translation = cr[CR_YELLOW2RED_HEXEN];
+            }
+        }
         DrINumber(FixedDiv(temp, 5 * FRACUNIT) >> FRACBITS, 250 + wide_delta, 176);
+        dp_translation = NULL;
+
         UpdateState |= I_STATBAR;
     }
     // Weapon Pieces
@@ -1487,8 +1548,20 @@ void DrawFullScreenStuff(void)
     // [JN] Health
     if (CPlayer->mo->health > 0)
     {
-        // [JN] Draw ammount of health
+        // [JN] Draw ammount of health, colorize if necessary.
+        if (sbar_colored && !vanillaparm)
+        {
+            if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
+            dp_translation = cr[CR_RED2GRAY_HEXEN];
+            else if (CPlayer->mo->health >= 67)
+            dp_translation = cr[CR_RED2GREEN_HEXEN];
+            else if (CPlayer->mo->health >= 25)
+            dp_translation = cr[CR_RED2YELLOW_HEXEN];
+            else
+            dp_translation = NULL;
+        }
         DrBNumber(CPlayer->mo->health, 5, 176);
+        dp_translation = NULL;
     }
     else
     {
@@ -1523,9 +1596,24 @@ void DrawFullScreenStuff(void)
             V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 184, W_CacheLumpName("MANABRT2", PU_CACHE));
         }        
 
-        // [JN] Draw mana points. Do not draw negative values.
-        DrINumber(mana_blue >= 0 ? mana_blue : 0, 273 + (wide_delta * 2), 170); 
+        // [JN] Draw mana points, colorize if necessary. Do not draw negative values.
+        if (sbar_colored && !vanillaparm)
+        {
+            dp_translation = mana_blue >= MAX_MANA / 2 ? cr[CR_YELLOW2GREEN_HEXEN] :
+                             mana_blue >= MAX_MANA / 4 ? NULL : 
+                                                         cr[CR_YELLOW2RED_HEXEN];
+        }
+        DrINumber(mana_blue >= 0 ? mana_blue : 0, 273 + (wide_delta * 2), 170);
+        dp_translation = NULL;
+
+        if (sbar_colored && !vanillaparm)
+        {
+            dp_translation = mana_green >= MAX_MANA / 2 ? cr[CR_YELLOW2GREEN_HEXEN] :
+                             mana_green >= MAX_MANA / 4 ? NULL : 
+                                                          cr[CR_YELLOW2RED_HEXEN];
+        }
         DrINumber(mana_green >= 0 ? mana_green : 0, 273 + (wide_delta * 2), 184); 
+        dp_translation = NULL;
     }
 
     if (deathmatch)
@@ -1571,8 +1659,40 @@ void DrawFullScreenStuff(void)
             }
         }
 
-        // [JN] Draw ammount of armor
+        // [JN] Draw ammount of armor, colorize if necessary.
+        // Well... Hexen armor system is a bit mind blowing,
+        // so let's just use some hard coded values here.
+        if (sbar_colored && !vanillaparm)
+        {
+            if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
+            {
+                dp_translation = cr[CR_RED2GRAY_HEXEN];
+            }
+            else if ((FixedDiv(armor, 5 * FRACUNIT) >> FRACBITS)
+            >=  (CPlayer->class == 0 ? 8 :  // Fighted
+                 CPlayer->class == 1 ? 7 :  // Cleric
+                                       6))  // Mage
+            {
+                dp_translation = cr[CR_RED2GREEN_HEXEN];
+            }
+            else 
+            if ((FixedDiv(armor, 5 * FRACUNIT) >> FRACBITS)
+            >   (CPlayer->class == 0 ? 3 :  // Fighted
+                 CPlayer->class == 1 ? 2 :  // Cleric
+                                       1))  // Mage
+            {
+                dp_translation = cr[CR_RED2YELLOW_HEXEN];
+            }
+            else
+            {
+                dp_translation = NULL;
+            }
+        }
+        
         DrBNumber(FixedDiv(armor, 5 * FRACUNIT) >> FRACBITS, 46, 176);
+        dp_translation = NULL;
+
+
         // [JN] Draw generic armor icon
         V_DrawShadowedPatch(87, 178, W_CacheLumpName("ARM5A0", PU_CACHE));
     }

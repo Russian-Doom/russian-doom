@@ -169,6 +169,7 @@ int torque = 1;
 int floating_powerups = 1;
 
 // Gameplay: Status Bar
+int sbar_colored = 0;
 int sbar_colored_gem = 0;
 
 // Gameplay: Crosshair
@@ -307,6 +308,7 @@ void D_BindVariables(void)
     M_BindIntVariable("floating_powerups",      &floating_powerups);
 
     // Gameplay: Status Bar
+    M_BindIntVariable("sbar_colored",           &sbar_colored);
     M_BindIntVariable("sbar_colored_gem",       &sbar_colored_gem);
 
     // Gameplay: Gameplay
