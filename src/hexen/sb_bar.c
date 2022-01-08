@@ -498,7 +498,43 @@ static void DrRedINumber(signed int val, int x, int y)
     oldval = val;
     if (val < 0)
     {
-        val = 0;
+        if (val < -9)
+        {
+            // [JN] Negative health: -10 and below routine
+            if (negative_health && !vanillaparm)
+            {
+                // [JN] Can't draw -100 and below
+                if (val <= -99)
+                val = -99;
+
+                val = -val % 100;
+                if (val < 9 || oldval < 99)
+                {
+                    patch = PatchINumbers[val / 10];
+
+                    dp_translation = cr[CR_YELLOW2RED_HEXEN];
+                    V_DrawPatch(x + 9, y, patch);
+                    dp_translation = NULL;
+                }
+                val = val % 10;
+                patch = PatchINumbers[val];
+
+                dp_translation = cr[CR_YELLOW2RED_HEXEN];
+                V_DrawPatch(x + 18, y, patch);
+                V_DrawPatch(x + 1, y, PatchNEGATIVE);
+                dp_translation = NULL;
+            }
+        }
+        else
+        {
+            val = -val;
+
+            dp_translation = cr[CR_YELLOW2RED_HEXEN];
+            V_DrawPatch(x + 18, y, PatchINumbers[val]);
+            V_DrawPatch(x + 9, y, PatchNEGATIVE);
+            dp_translation = NULL;
+        }
+        return;
     }
     if (val > 99)
     {
@@ -1396,11 +1432,17 @@ void DrawMainBar(void)
         {
             temp = 0;
         }
+        // [JN] Negative health: use actual value
+        else if (negative_health && !vanillaparm)
+        {
+            temp = CPlayer->mo->health;
+        }
         else if (temp > 100)
         {
             temp = 100;
         }
-        if (oldlife != temp)
+        // [JN] Always update health value, needed for colored Status Bar.
+        // if (oldlife != temp)
         {
             oldlife = temp;
             V_DrawPatch(41 + wide_delta, 178, PatchARMCLEAR);
@@ -1735,6 +1777,19 @@ void DrawFullScreenStuff(void)
         dp_translation = SBar_FullScreenColor(sbarcolor_health);
         DrBNumber(CPlayer->mo->health, 5, 176);
         dp_translation = NULL;
+    }
+    // [JN] Negative health: can't drop below -99, drawing, colorizing
+    else if (negative_health && !vanillaparm)
+    {
+        if (CPlayer->mo->health < 0)
+        {
+            if (CPlayer->mo->health <= -99)
+            {
+                CPlayer->mo->health = -99;
+            }
+
+            DrBNumber(CPlayer->mo->health, 5, 176);
+        }
     }
     else
     {

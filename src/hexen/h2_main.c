@@ -171,6 +171,7 @@ int floating_powerups = 1;
 // Gameplay: Status Bar
 int sbar_colored = 0;
 int sbar_colored_gem = 0;
+int negative_health = 0;
 
 // Gameplay: Crosshair
 int crosshair_draw = 0;
@@ -310,6 +311,7 @@ void D_BindVariables(void)
     // Gameplay: Status Bar
     M_BindIntVariable("sbar_colored",           &sbar_colored);
     M_BindIntVariable("sbar_colored_gem",       &sbar_colored_gem);
+    M_BindIntVariable("negative_health",        &negative_health);
 
     // Gameplay: Gameplay
     M_BindIntVariable("flip_levels",            &flip_levels);

@@ -193,6 +193,7 @@ static void M_RD_FloatAmplitude(Direction_t direction);
 static void DrawGameplay2Menu(void);
 static void M_RD_ColoredSBar();
 static void M_RD_ColoredGem(Direction_t direction);
+static void M_RD_NegativeHealth();
 static void M_RD_CrossHairDraw();
 static void M_RD_CrossHairType();
 static void M_RD_CrossHairScale();
@@ -1056,6 +1057,7 @@ static MenuItem_t Gameplay2Items[] = {
     {ITT_TITLE,  "STATUS BAR",           "CNFNEC-,FH",                    NULL,                 0}, // СТАТУС-БАР
     {ITT_SWITCH, "COLORED STATUS BAR:",  "HFPYJWDTNYST \'KTVTYNS:",       M_RD_ColoredSBar,     0}, // РАЗНОЦВЕТНЫЕ ЭЛЕМЕНТЫ
     {ITT_LRFUNC, "COLORED HEALTH GEM:",  "JRHFIBDFYBT RFVYZ PLJHJDMZ:",   M_RD_ColoredGem,      0}, // ОКРАШИВАНИЕ КАМНЯ ЗДОРОВЬЯ
+    {ITT_SWITCH, "SHOW NEGATIVE HEALTH:","JNHBWFNTKMYJT PLJHJDMT:",       M_RD_NegativeHealth,  0}, // ОТРИЦАТЕЛЬНОЕ ЗДОРОВЬЕ
     {ITT_TITLE,  "CROSSHAIR",            "GHBWTK",                        NULL,                 0}, // ПРИЦЕЛ
     {ITT_SWITCH, "DRAW CROSSHAIR:",      "JNJ,HF;FNM GHBWTK:",            M_RD_CrossHairDraw,   0}, // ОТОБРАЖАТЬ ПРИЦЕЛ
     {ITT_SWITCH, "INDICATION:",          "BYLBRFWBZ:",                    M_RD_CrossHairType,   0}, // ИНДИКАЦИЯ
@@ -1063,7 +1065,6 @@ static MenuItem_t Gameplay2Items[] = {
     {ITT_TITLE,  "GAMEPLAY",             "UTQVGKTQ",                      NULL,                 0}, // ГЕЙМПЛЕЙ
     {ITT_SWITCH, "FLIP GAME LEVELS:",    "PTHRFKMYJT JNHF;TYBT EHJDYTQ:", M_RD_FlipLevels,      0}, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
     {ITT_SWITCH, "PLAY INTERNAL DEMOS:", "GHJBUHSDFNM LTVJPFGBCB:",       M_RD_NoDemos,         0}, // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
-    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
     {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
     {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
     {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
@@ -3532,20 +3533,24 @@ static void DrawGameplay2Menu(void)
                               sbar_colored_gem == 2 ? CR_GRAY2DARKGREEN_HEXEN :
                               CR_GRAY2RED_HEXEN);
 
+        // Negative health
+        RD_M_DrawTextSmallENG(negative_health ? "ON" : "OFF", 190 + wide_delta, 62,
+                              negative_health ? CR_GRAY2GREEN_HEXEN : CR_GRAY2DARKGREEN_HEXEN);
+
         //
         // CROSSHAIR
         //
 
         // Draw crosshair
-        RD_M_DrawTextSmallENG(crosshair_draw ? "ON" : "OFF", 150 + wide_delta, 72,
+        RD_M_DrawTextSmallENG(crosshair_draw ? "ON" : "OFF", 150 + wide_delta, 82,
                               crosshair_draw ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Indication
-        RD_M_DrawTextSmallENG(crosshair_type == 1 ? "HEALTH" : "STATIC",  111 + wide_delta, 82,
+        RD_M_DrawTextSmallENG(crosshair_type == 1 ? "HEALTH" : "STATIC",  111 + wide_delta, 92,
                               crosshair_type ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Increased size
-        RD_M_DrawTextSmallENG(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 92,
+        RD_M_DrawTextSmallENG(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 102,
                               crosshair_scale ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         //
@@ -3553,11 +3558,11 @@ static void DrawGameplay2Menu(void)
         //
 
         // Flip game levels
-        RD_M_DrawTextSmallENG(flip_levels ? "ON" : "OFF", 153 + wide_delta, 112,
+        RD_M_DrawTextSmallENG(flip_levels ? "ON" : "OFF", 153 + wide_delta, 122,
                               flip_levels ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Play internal demos
-        RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON", 179 + wide_delta, 122,
+        RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON", 179 + wide_delta, 132,
                               no_internal_demos ? CR_GRAY2RED_HEXEN : CR_GRAY2GREEN_HEXEN);
     }
     else
@@ -3577,35 +3582,37 @@ static void DrawGameplay2Menu(void)
                               sbar_colored_gem == 2 ? CR_GRAY2DARKGREEN_HEXEN :
                               CR_GRAY2RED_HEXEN);
 
+        // Отрицательное здоровье
+        RD_M_DrawTextSmallRUS(negative_health ? "DRK" : "DSRK", 211 + wide_delta, 62,
+                          negative_health ? CR_GRAY2GREEN_HEXEN : CR_GRAY2DARKGREEN_HEXEN);
+
         //
         // ПРИЦЕЛ
         //
 
         // Отображать прицел
-        RD_M_DrawTextSmallRUS(crosshair_draw ? "DRK" : "DSRK", 175 + wide_delta, 72,
+        RD_M_DrawTextSmallRUS(crosshair_draw ? "DRK" : "DSRK", 175 + wide_delta, 82,
                               crosshair_draw ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Индикация
         RD_M_DrawTextSmallRUS(crosshair_type == 1 ? "PLJHJDMT" : // ЗДОРОВЬЕ
                                                     "CNFNBXYFZ", // СТАТИЧНАЯ
-                              111 + wide_delta, 82, crosshair_type ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+                              111 + wide_delta, 92, crosshair_type ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Увеличенный размер
-        RD_M_DrawTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 92,
+        RD_M_DrawTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 102,
                               crosshair_scale ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
-
-
 
         //
         // ГЕЙМПЛЕЙ
         //
 
         // Зеркальное отражение уровней
-        RD_M_DrawTextSmallRUS(flip_levels ? "DRK" : "DSRK", 255 + wide_delta, 112,
+        RD_M_DrawTextSmallRUS(flip_levels ? "DRK" : "DSRK", 255 + wide_delta, 122,
                               flip_levels ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Проигрывать демозаписи
-        RD_M_DrawTextSmallRUS(no_internal_demos ? "DRK" : "DSRK", 211 + wide_delta, 122,
+        RD_M_DrawTextSmallRUS(no_internal_demos ? "DRK" : "DSRK", 211 + wide_delta, 132,
                               no_internal_demos ? CR_GRAY2RED_HEXEN : CR_GRAY2GREEN_HEXEN);
     }
 }
@@ -3618,6 +3625,11 @@ static void M_RD_ColoredSBar()
 static void M_RD_ColoredGem(Direction_t direction)
 {
     RD_Menu_SpinInt(&sbar_colored_gem, 0, 2, direction);
+}
+
+static void M_RD_NegativeHealth()
+{
+    negative_health ^= 1;
 }
 
 static void M_RD_CrossHairDraw()
@@ -4610,6 +4622,7 @@ void M_RD_DoResetSettings(void)
     draw_shadowed_text  = 1;
     sbar_colored        = 0;
     sbar_colored_gem    = 0;
+    negative_health     = 0;
     crosshair_draw      = 0;
     crosshair_type      = 1;
     crosshair_scale     = 0;
