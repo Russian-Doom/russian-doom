@@ -483,6 +483,7 @@ void R_DrawPlanes(void)
     int         light, angle;
     int         offset, skyTexture, offset2, skyTexture2;
     int         scrollOffset;
+    int         heightmask;
     int         count, frac, fracstep = FRACUNIT >> !detailshift;
     byte       *source, *source2, *tempSource;
     byte       *dest, *dest1, *dest2, *dest3, *dest4;
@@ -524,6 +525,7 @@ void R_DrawPlanes(void)
                         source = R_GetColumn(skyTexture, angle + offset, false);
                         source2 = R_GetColumn(skyTexture2, angle + offset2, false);
                         frac = SKYTEXTUREMIDSHIFTED * FRACUNIT + (dc_yl - centery) * fracstep;
+                        heightmask = SKYTEXTUREMIDSHIFTED-1;
 
                         // [JN] Double sky drawing - LOW detail
                         if (detailshift)
@@ -532,46 +534,120 @@ void R_DrawPlanes(void)
                             dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[(x << hires) + 1]];
                             dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[(x << hires)]];
                             dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[(x << hires) + 1]];
-                            
-                            do
-                            {
-                                if (source[frac >> FRACBITS])
-                                {
-                                    *dest4 = *dest3 = *dest2 = *dest1 = source[frac >> FRACBITS];
-                                }
-                                else
-                                {
-                                    *dest4 = *dest3 = *dest2 = *dest1 = source2[frac >> FRACBITS];
-                                }
 
+                            // not a power of 2 -- killough
+                            if (SKYTEXTUREMIDSHIFTED & heightmask)
+                            {
+                                heightmask++;
+                                heightmask <<= FRACBITS;
+                            
+                                if (frac < 0)
+                                    while ((frac += heightmask) < 0);
+                                else
+                                    while (frac >= heightmask)
+                                        frac -= heightmask;
+                            
+                                do
+                                {
+                                    if (source[frac >> FRACBITS])
+                                    {
+                                        *dest4 = *dest3 = *dest2 = *dest1 = source[frac >> FRACBITS];
+                                    }
+                                    else
+                                    {
+                                        *dest4 = *dest3 = *dest2 = *dest1 = source2[frac >> FRACBITS];
+                                    }
+
+                                    dest1 += screenwidth << hires;
+                                    dest2 += screenwidth << hires;
+                                    dest3 += screenwidth << hires;
+                                    dest4 += screenwidth << hires;
+                                    frac += fracstep/2; // [JN] Blocky mode, multiple vertically by 2.
+
+                                    if ((frac += (FRACUNIT >> hires)) >= heightmask)
+                                    {
+                                        frac -= heightmask;
+                                    }
+                                }
+                                while (count--);
+                            }
+                            // texture height is a power of 2 -- killough
+                            else
+                            {
+                                do
+                                {
+                                    if (source[(frac >> FRACBITS) & heightmask])
+                                    {
+                                        *dest4 = *dest3 = *dest2 = *dest1 = source[(frac >> FRACBITS) & heightmask];
+                                    }
+                                    else
+                                    {
+                                        *dest4 = *dest3 = *dest2 = *dest1 = source2[(frac >> FRACBITS) & heightmask];
+                                    }
+    
                                 dest1 += screenwidth << hires;
                                 dest2 += screenwidth << hires;
                                 dest3 += screenwidth << hires;
                                 dest4 += screenwidth << hires;
                                 frac += fracstep;
-                                
-                            } while (count--);
+    
+                                } while (count--);
+                            }
                         }
                         // [JN] Double sky drawing - HIGH detail
                         else
                         {
                             dest = ylookup[dc_yl] + columnofs[flipwidth[x]];
 
-                            do
+                            // not a power of 2 -- killough
+                            if (SKYTEXTUREMIDSHIFTED & heightmask)
                             {
-                                if (source[frac >> FRACBITS])
-                                {
-                                    *dest = source[frac >> FRACBITS];
-                                }
+                                heightmask++;
+                                heightmask <<= FRACBITS;
+                            
+                                if (frac < 0)
+                                    while ((frac += heightmask) < 0);
                                 else
+                                    while (frac >= heightmask)
+                                        frac -= heightmask;
+                            
+                                do
                                 {
-                                    *dest = source2[frac >> FRACBITS];
+                                    if (source[frac >> FRACBITS])
+                                    {
+                                        *dest = source[frac >> FRACBITS];
+                                    }
+                                    else
+                                    {
+                                        *dest = source2[frac >> FRACBITS];
+                                    }
+                                    dest += screenwidth;
+                                    if ((frac += fracstep) >= heightmask)
+                                    {
+                                        frac -= heightmask;
+                                    }
                                 }
-
-                                dest += screenwidth;
-                                frac += fracstep;
-
-                            } while (count--);
+                                while (count--);
+                            }
+                            // texture height is a power of 2 -- killough
+                            else
+                            {
+                                do
+                                {
+                                    if (source[(frac >> FRACBITS) & heightmask])
+                                    {
+                                        *dest = source[(frac >> FRACBITS) & heightmask];
+                                    }
+                                    else
+                                    {
+                                        *dest = source2[(frac >> FRACBITS) & heightmask];
+                                    }
+    
+                                    dest += screenwidth;
+                                    frac += fracstep;
+    
+                                } while (count--);
+                            }
                         }
                     }
                 }
@@ -612,6 +688,7 @@ void R_DrawPlanes(void)
                                   linearskyangle[x] : xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
                         source = R_GetColumn(skyTexture, angle + offset, false);
                         frac = SKYTEXTUREMIDSHIFTED * FRACUNIT + (dc_yl - centery) * fracstep;
+                        heightmask = SKYTEXTUREMIDSHIFTED-1;
 
                         // [JN] Single sky drawing - LOW detail
                         if (detailshift)
@@ -621,27 +698,89 @@ void R_DrawPlanes(void)
                             dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[(x << hires)]];
                             dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[(x << hires) + 1]];
 
-                            do
+                            // not a power of 2 -- killough
+                            if (SKYTEXTUREMIDSHIFTED & heightmask)
                             {
-                                *dest4 = *dest3 = *dest2 = *dest1 = source[frac >> FRACBITS];
-                                dest1 += screenwidth << hires;
-                                dest2 += screenwidth << hires;
-                                dest3 += screenwidth << hires;
-                                dest4 += screenwidth << hires;
-                                frac += fracstep;
-                            } while (count--);
+                                heightmask++;
+                                heightmask <<= FRACBITS;
+                            
+                                if (frac < 0)
+                                    while ((frac += heightmask) < 0);
+                                else
+                                    while (frac >= heightmask)
+                                        frac -= heightmask;
+                            
+                                do
+                                {
+                                    *dest4 = *dest3 = *dest2 = *dest1 = source[frac >> FRACBITS];
+
+                                    dest1 += screenwidth << hires;
+                                    dest2 += screenwidth << hires;
+                                    dest3 += screenwidth << hires;
+                                    dest4 += screenwidth << hires;
+                                    frac += fracstep/2; // [JN] Blocky mode, multiple vertically by 2.
+
+                                    if ((frac += (FRACUNIT >> hires)) >= heightmask)
+                                    {
+                                        frac -= heightmask;
+                                    }
+                                }
+                                while (count--);
+                            }
+                            // texture height is a power of 2 -- killough
+                            else
+                            {
+                                do
+                                {
+                                    *dest4 = *dest3 = *dest2 = *dest1 = source2[(frac >> FRACBITS) & heightmask];
+                                        dest1 += screenwidth << hires;
+                                    dest2 += screenwidth << hires;
+                                    dest3 += screenwidth << hires;
+                                    dest4 += screenwidth << hires;
+                                    frac += fracstep;
+    
+                                } while (count--);
+                            }
                         }
                         // [JN] Single sky drawing - HIGH detail
                         else
                         {
                             dest = ylookup[dc_yl] + columnofs[flipwidth[x]];
 
-                            do
+                            // not a power of 2 -- killough
+                            if (SKYTEXTUREMIDSHIFTED & heightmask)
                             {
-                                *dest = source[frac >> FRACBITS];
-                                dest += screenwidth;
-                                frac += fracstep;
-                            } while (count--);
+                                heightmask++;
+                                heightmask <<= FRACBITS;
+                            
+                                if (frac < 0)
+                                    while ((frac += heightmask) < 0);
+                                else
+                                    while (frac >= heightmask)
+                                        frac -= heightmask;
+                            
+                                do
+                                {
+                                   *dest = source[frac >> FRACBITS];
+                                    dest += screenwidth;
+
+                                    if ((frac += fracstep) >= heightmask)
+                                    {
+                                        frac -= heightmask;
+                                    }
+                                }
+                                while (count--);
+                            }
+                            // texture height is a power of 2 -- killough
+                            else
+                            {
+                                do 
+                                {
+                                     *dest = source[(frac >> FRACBITS) & heightmask];
+                                    dest += screenwidth;
+                                    frac += fracstep;
+                                } while (count--);
+                            }
                         }
                     }
                 }
