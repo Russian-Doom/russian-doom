@@ -2712,8 +2712,8 @@ static void M_RD_SfxVolume(Direction_t direction)
 
     snd_MaxVolume_tmp = snd_MaxVolume; // [JN] Sync temp volume variable.
 
-    S_SetMaxVolume(false);      // don't recalc the sound curve, yet
-    soundchanged = true;        // we'll set it when we leave the menu
+    S_SetMaxVolume(true);      // [JN] Recalc the sound curve.
+    soundchanged = true;
 }
 
 static void M_RD_MusVolume(Direction_t direction)
@@ -4927,7 +4927,10 @@ static void M_RD_BackToDefaults_Recommended(void)
     snd_MaxVolume_tmp = snd_MaxVolume; // [JN] Sync temp volume variable,
     S_SetMaxVolume(true);              // and recalc the sound curve now.
     soundchanged = true;
+    snd_MusicVolume = 8;
+    S_SetMusicVolume();
 
+    /* [JN] Hot-swapping disabled.
     snd_musicdevice = 3;
     snd_dmxoption   = "-opl3";
     snd_MusicVolume = 8;
@@ -4936,6 +4939,7 @@ static void M_RD_BackToDefaults_Recommended(void)
     I_InitSound(true);                  // start music system,
     S_SetMusicVolume();                 // reinitialize music volume,
     S_StartSong(mus_song, true, true);  // restart current music.
+    */
 
     snd_Channels    = 32;
     S_ChannelsRealloc();
@@ -5062,7 +5066,10 @@ static void M_RD_BackToDefaults_Original(void)
     snd_MaxVolume_tmp = snd_MaxVolume; // [JN] Sync temp volume variable,
     S_SetMaxVolume(true);              // and recalc the sound curve now.
     soundchanged = true;
+    snd_MusicVolume = 8;
+    S_SetMusicVolume();
 
+    /* [JN] Hot-swapping disabled.
     snd_musicdevice = 3;
     snd_dmxoption   = "-opl3";
     snd_MusicVolume = 8;
@@ -5071,6 +5078,7 @@ static void M_RD_BackToDefaults_Original(void)
     I_InitSound(true);                  // start music system,
     S_SetMusicVolume();                 // reinitialize music volume,
     S_StartSong(mus_song, true, true);  // restart current music.
+    */
 
     snd_Channels    = 8;
     S_ChannelsRealloc();
