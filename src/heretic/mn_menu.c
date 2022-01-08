@@ -5527,6 +5527,7 @@ boolean MN_Responder(event_t * event)
                     menuactive = true;
                     // Indicate that slot text needs to be updated.
                     slottextloaded = false;
+                    S_StartSound(NULL, sfx_dorcls);
                     // Redraw Save/Load items.
                     DrawSaveLoadMenu();
                     break;
@@ -5781,6 +5782,7 @@ boolean MN_Responder(event_t * event)
                 menuactive = false;
                 askforquit = true;
                 typeofask = 6;
+                S_StartSound(NULL, sfx_chat);
                 return true;
             }
             else
