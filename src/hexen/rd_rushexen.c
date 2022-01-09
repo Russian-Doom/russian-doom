@@ -19,7 +19,7 @@
 #include "rd_rushexen.h"
 #include "w_wad.h"
 
-#define US "YTJ;BLFYYFZ CNHJRF! 'NJ <FU!" // НЕОжИДАННАЯ СТРОКА! эТО БАГ!
+#define US "YTJ;BLFYYFZ CNHJRF! 'NJ ,FU!" // НЕОжИДАННАЯ СТРОКА! эТО БАГ!
 
 #define RECORD(a, c, v) {a, (int32_t) SDL_SwapLE32(c), (int32_t) SDL_SwapLE32(v)}
 #define CMD_NOP 0 // 0 args
@@ -632,7 +632,7 @@ const char* Hexen_DK_Map_54_StringTable[] = {
     "GHTUHFLF GJLYBVTNCZ>>>", // ПРЕГРАДА ПОДНИМЕТСЯЮЮЮ
     ">>>D RKJFRT", // ЮЮЮВ КЛОАКЕ
     US,
-    US,
+    "GENM YFPFL JNRHSN", // ПУТЬ НАЗАД ОТКРЫТ
     US,
     US,
     US
