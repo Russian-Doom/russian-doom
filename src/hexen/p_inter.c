@@ -89,7 +89,7 @@ void P_SetMessage(player_t * player, char *message, boolean ultmsg)
 
     M_StringCopy(player->message, message, sizeof(player->message));
 //    strupr(player->message);
-    player->messageTics = MESSAGETICS;
+    player->messageTics = messages_timeout * TICRATE;
     player->yellowMessage = false;
     player->engOnlyMessage = false;
     if (ultmsg)

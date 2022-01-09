@@ -108,6 +108,7 @@ static void M_RD_BLUE_Color(Direction_t direction);
 static void DrawMessagesMenu(void);
 static void M_RD_Messages(Direction_t direction);
 static void M_RD_MessagesAlignment(Direction_t direction);
+static void M_RD_MessagesTimeout(Direction_t direction);
 static void M_RD_MessagesFade();
 static void M_RD_ShadowedText();
 static void M_RD_LocalTime(Direction_t direction);
@@ -574,6 +575,8 @@ static MenuItem_t MessagesItems[] = {
     {ITT_TITLE,  "GENERAL",             "JCYJDYJT",                 NULL,                         0}, // ОСНОВНОЕ
     {ITT_SWITCH, "MESSAGES:",           "JNJ,HF;TYBT CJJ,OTYBQ:",   M_RD_Messages,                0}, // ОТОБРАЖЕНИЕ СООБЩЕНИЙ
     {ITT_LRFUNC, "ALIGNMENT:",          "DSHFDYBDFYBT:",            M_RD_MessagesAlignment,       0}, // ВЫРАВНИВАНИЕ
+    {ITT_LRFUNC, "MESSAGE TIMEOUT",     "NFQVFEN JNJ,HF;TYBZ",      M_RD_MessagesTimeout,         0}, // ТАЙМАУТ ОТОБРАЖЕНИЯ
+    {ITT_EMPTY,   NULL,                  NULL,                      NULL,                         0},
     {ITT_SWITCH, "FADING EFFECT:",      "GKFDYJT BCXTPYJDTYBT:",    M_RD_MessagesFade,            0}, // ПЛАВНОЕ ИСЧЕЗНОВЕНИЕ
     {ITT_SWITCH, "TEXT CASTS SHADOWS:", "NTRCNS JN,HFCSDF.N NTYM:", M_RD_ShadowedText,            0}, // ТЕКСТЫ ОТБРАСЫВАЮТ ТЕНЬ
     {ITT_TITLE,  "MISC",                "HFPYJT",                   NULL,                         0}, // РАЗНОЕ
@@ -584,7 +587,7 @@ static Menu_t MessagesMenu = {
     36, 36,
     32,
     "MESSAGES AND TEXTS", "CJJ,OTYBZ B NTRCNS", false, // СООБЩЕНИЯ И ТЕКСТЫ
-    7, MessagesItems, false,
+    9, MessagesItems, false,
     DrawMessagesMenu,
     NULL,
     &DisplayMenu,
@@ -2438,12 +2441,25 @@ static void DrawMessagesMenu(void)
                                                         "CENTERED", 108 + wide_delta, 52,
                               messages_alignment ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
 
+        // Messages timeout (text)
+        RD_M_DrawTextSmallENG(messages_timeout == 1 ? "1 SECOND" :
+                              messages_timeout == 2 ? "2 SECONDS" :
+                              messages_timeout == 3 ? "3 SECONDS" :
+                              messages_timeout == 4 ? "4 SECONDS" :
+                              messages_timeout == 5 ? "5 SECONDS" :
+                              messages_timeout == 6 ? "6 SECONDS" :
+                              messages_timeout == 7 ? "7 SECONDS" :
+                              messages_timeout == 8 ? "8 SECONDS" :
+                              messages_timeout == 9 ? "9 SECONDS" :
+                                                      "10 SECONDS", 
+                              136 + wide_delta, 72, CR_GRAY2GDARKGRAY_HEXEN);
+
         // Fading effect 
-        RD_M_DrawTextSmallENG(message_fade ? "ON" : "OFF", 140 + wide_delta, 62, 
+        RD_M_DrawTextSmallENG(message_fade ? "ON" : "OFF", 140 + wide_delta, 82,
                               message_fade ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
 
         // Text casts shadows
-        RD_M_DrawTextSmallENG(draw_shadowed_text ? "ON" : "OFF", 179 + wide_delta, 72,
+        RD_M_DrawTextSmallENG(draw_shadowed_text ? "ON" : "OFF", 179 + wide_delta, 92,
                               draw_shadowed_text ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
 
         // Local time
@@ -2451,7 +2467,7 @@ static void DrawMessagesMenu(void)
                               local_time == 2 ? "12-HOUR (HH:MM:SS)" :
                               local_time == 3 ? "24-HOUR (HH:MM)" :
                               local_time == 4 ? "24-HOUR (HH:MM:SS)" : "OFF",
-                              110 + wide_delta, 92, 
+                              110 + wide_delta, 112,
                               local_time ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
 
 
@@ -2468,12 +2484,25 @@ static void DrawMessagesMenu(void)
                                                         "GJ WTYNHE", 138 + wide_delta, 52,
                               messages_alignment ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
 
+        // Таймаут отображения (текст)
+        RD_M_DrawTextSmallRUS(messages_timeout == 1 ? "1 CTREYLF" :
+                              messages_timeout == 2 ? "2 CTREYLS" :
+                              messages_timeout == 3 ? "3 CTREYLS" :
+                              messages_timeout == 4 ? "4 CTREYLS" :
+                              messages_timeout == 5 ? "5 CTREYL" :
+                              messages_timeout == 6 ? "6 CTREYL" :
+                              messages_timeout == 7 ? "7 CTREYL" :
+                              messages_timeout == 8 ? "8 CTREYL" :
+                              messages_timeout == 9 ? "9 CTREYL" :
+                                                      "10 CTREYL",
+                              136 + wide_delta, 72, CR_GRAY2GDARKGRAY_HEXEN);
+
         // Плавное исчезновение
-        RD_M_DrawTextSmallRUS(message_fade ? "DRK" : "DSRK", 193 + wide_delta, 62,
+        RD_M_DrawTextSmallRUS(message_fade ? "DRK" : "DSRK", 193 + wide_delta, 82,
                               message_fade ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
 
         // Тексты отбрасывают тень
-        RD_M_DrawTextSmallRUS(draw_shadowed_text ? "DRK" : "DSRK", 220 + wide_delta, 72,
+        RD_M_DrawTextSmallRUS(draw_shadowed_text ? "DRK" : "DSRK", 220 + wide_delta, 92,
                               draw_shadowed_text ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
 
         // Системное время
@@ -2481,9 +2510,12 @@ static void DrawMessagesMenu(void)
                               local_time == 2 ? "12-XFCJDJT (XX:VV:CC)" :
                               local_time == 3 ? "24-XFCJDJT (XX:VV)" :
                               local_time == 4 ? "24-XFCJDJT (XX:VV:CC)" : "DSRK",
-                              157 + wide_delta, 92, 
+                              157 + wide_delta, 112,
                               local_time ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
     }
+
+    // Messages timeout (slider)
+    RD_Menu_DrawSliderSmall(&MessagesMenu, 72, 10, messages_timeout - 1);
 }
 
 static void M_RD_Messages(Direction_t direction)
@@ -2512,6 +2544,11 @@ static void M_RD_Messages(Direction_t direction)
 static void M_RD_MessagesAlignment(Direction_t direction)
 {
     RD_Menu_SpinInt(&messages_alignment, 0, 2, direction);
+}
+
+static void M_RD_MessagesTimeout(Direction_t direction)
+{
+    RD_Menu_SlideInt(&messages_timeout, 1, 10, direction);
 }
 
 static void M_RD_MessagesFade()
@@ -4722,6 +4759,8 @@ void M_RD_DoResetSettings(void)
 
     // Messages and Texts
     show_messages      = 1;
+    messages_alignment = 0;
+    messages_timeout   = 4;
     message_fade       = 1;
     draw_shadowed_text = 1;
     local_time         = 0;
