@@ -146,6 +146,7 @@ int hud_detaillevel = 0;    // [JN] Blocky mode, 0 = high, 1 = normal
 
 // Messages and texts
 int show_messages = 1;
+int messages_alignment = 0;
 int message_fade = 1;
 int draw_shadowed_text = 1;
 int local_time = 0;
@@ -290,6 +291,7 @@ void D_BindVariables(void)
 
     // Messages and texts
     M_BindIntVariable("show_messages",          &show_messages);
+    M_BindIntVariable("messages_alignment",     &messages_alignment);
     M_BindIntVariable("message_fade",           &message_fade);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
     M_BindIntVariable("local_time",             &local_time);
@@ -1230,6 +1232,7 @@ static void DrawAndBlit(void)
 static void DrawMessage(void)
 {
     player_t *player;
+    int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
 
     player = &players[consoleplayer];
 
@@ -1250,46 +1253,52 @@ static void DrawMessage(void)
         {
             if (player->messageTics < 10 && message_fade && !vanillaparm)
             {
-            MN_DrTextAYellowFade(player->message, 
-                                 160 - RD_M_TextAWidth(player->message) /
-                                 2 + wide_delta, 1, player->messageTics >= 9 ? transtable90 :
-                                                    player->messageTics >= 8 ? transtable80 :
-                                                    player->messageTics >= 7 ? transtable70 :
-                                                    player->messageTics >= 6 ? transtable60 :
-                                                    player->messageTics >= 5 ? transtable50 :
-                                                    player->messageTics >= 4 ? transtable40 :
-                                                    player->messageTics >= 3 ? transtable30 :
-                                                    player->messageTics >= 2 ? transtable20 :
-                                                                               transtable10);
+                MN_DrTextAYellowFade(player->message, 
+                                     messages_alignment == 0 ? 160 - RD_M_TextAWidth(player->message) / 2 + wide_delta :  // centered
+                                     messages_alignment == 1 ? 4 + wide_4_3 :      // left edge of the screen
+                                                                   wide_delta, 1,  // left edge of the status bar
+                                     player->messageTics >= 9 ? transtable90 :
+                                     player->messageTics >= 8 ? transtable80 :
+                                     player->messageTics >= 7 ? transtable70 :
+                                     player->messageTics >= 6 ? transtable60 :
+                                     player->messageTics >= 5 ? transtable50 :
+                                     player->messageTics >= 4 ? transtable40 :
+                                     player->messageTics >= 3 ? transtable30 :
+                                     player->messageTics >= 2 ? transtable20 :
+                                                                transtable10);
             }
             else
             {
-            MN_DrTextAYellow(player->message,
-                             160 - RD_M_TextAWidth(player->message) / 2
-                            + wide_delta, 1);
+                MN_DrTextAYellow(player->message,
+                                 messages_alignment == 0 ? 160 - RD_M_TextAWidth(player->message) / 2 + wide_delta :  // centered
+                                 messages_alignment == 1 ? 4 + wide_4_3 :       // left edge of the screen
+                                                               wide_delta, 1);  // left edge of the status bar
             }
         }
         else
         {
             if (player->messageTics < 10 && message_fade && !vanillaparm)
             {
-            MN_DrTextSmallYellowRUSFade(player->message, 
-                                        160 - RD_M_TextSmallRUSWidth(player->message) /
-                                        2 + wide_delta, 1, player->messageTics >= 9 ? transtable90 :
-                                                           player->messageTics >= 8 ? transtable80 :
-                                                           player->messageTics >= 7 ? transtable70 :
-                                                           player->messageTics >= 6 ? transtable60 :
-                                                           player->messageTics >= 5 ? transtable50 :
-                                                           player->messageTics >= 4 ? transtable40 :
-                                                           player->messageTics >= 3 ? transtable30 :
-                                                           player->messageTics >= 2 ? transtable20 :
-                                                                                      transtable10);
+                MN_DrTextSmallYellowRUSFade(player->message, 
+                                            messages_alignment == 0 ? 160 - RD_M_TextSmallRUSWidth(player->message) / 2 + wide_delta :  // centered
+                                            messages_alignment == 1 ? 4 + wide_4_3 :      // left edge of the screen
+                                                                          wide_delta, 1,  // left edge of the status bar
+                                            player->messageTics >= 9 ? transtable90 :
+                                            player->messageTics >= 8 ? transtable80 :
+                                            player->messageTics >= 7 ? transtable70 :
+                                            player->messageTics >= 6 ? transtable60 :
+                                            player->messageTics >= 5 ? transtable50 :
+                                            player->messageTics >= 4 ? transtable40 :
+                                            player->messageTics >= 3 ? transtable30 :
+                                            player->messageTics >= 2 ? transtable20 :
+                                                                       transtable10);
             }
             else
             {
-            MN_DrTextSmallYellowRUS(player->message,
-                                    160 - RD_M_TextSmallRUSWidth(player->message) / 2
-                                    + wide_delta, 1);
+                MN_DrTextSmallYellowRUS(player->message,
+                                        messages_alignment == 0 ? 160 - RD_M_TextAWidth(player->message) / 2 + wide_delta :  // centered
+                                        messages_alignment == 1 ? 4 + wide_4_3 :       // left edge of the screen
+                                                                      wide_delta, 1);  // left edge of the status bar
             }
         }
     }
@@ -1299,46 +1308,49 @@ static void DrawMessage(void)
         {
             if (player->messageTics < 10 && message_fade && !vanillaparm)
             {
-            RD_M_DrawTextAFade(player->message, 
-                                 160 - RD_M_TextAWidth(player->message) /
-                                 2 + wide_delta, 1, player->messageTics >= 9 ? transtable90 :
-                                                    player->messageTics >= 8 ? transtable80 :
-                                                    player->messageTics >= 7 ? transtable70 :
-                                                    player->messageTics >= 6 ? transtable60 :
-                                                    player->messageTics >= 5 ? transtable50 :
-                                                    player->messageTics >= 4 ? transtable40 :
-                                                    player->messageTics >= 3 ? transtable30 :
-                                                    player->messageTics >= 2 ? transtable20 :
-                                                                               transtable10);
+                RD_M_DrawTextAFade(player->message, 
+                                   messages_alignment == 0 ? 160 - RD_M_TextAWidth(player->message) / 2 + wide_delta :  // centered
+                                   messages_alignment == 1 ? 4 + wide_4_3 :      // left edge of the screen
+                                                                 wide_delta, 1,  // left edge of the status bar
+                                   player->messageTics >= 9 ? transtable90 :
+                                   player->messageTics >= 8 ? transtable80 :
+                                   player->messageTics >= 7 ? transtable70 :
+                                   player->messageTics >= 6 ? transtable60 :
+                                   player->messageTics >= 5 ? transtable50 :
+                                   player->messageTics >= 4 ? transtable40 :
+                                   player->messageTics >= 3 ? transtable30 :
+                                   player->messageTics >= 2 ? transtable20 :
+                                                              transtable10);
             }
             else
             {
-            RD_M_DrawTextA(player->message,
-                       160 - RD_M_TextAWidth(player->message) / 2
-                       + wide_delta, 1);
+                RD_M_DrawTextA(player->message,
+                               messages_alignment == 0 ? 160 - RD_M_TextAWidth(player->message) / 2 + wide_delta :  // centered
+                               messages_alignment == 1 ? 4 + wide_4_3 :       // left edge of the screen
+                                                             wide_delta, 1);  // left edge of the status bar
             }
         }
         else
         {
             if (player->messageTics < 10 && message_fade && !vanillaparm)
             {
-            RD_M_DrawTextSmallRUSFade(player->message, 
-                                 160 - RD_M_TextSmallRUSWidth(player->message) /
-                                 2 + wide_delta, 1, player->messageTics >= 9 ? transtable90 :
-                                                    player->messageTics >= 8 ? transtable80 :
-                                                    player->messageTics >= 7 ? transtable70 :
-                                                    player->messageTics >= 6 ? transtable60 :
-                                                    player->messageTics >= 5 ? transtable50 :
-                                                    player->messageTics >= 4 ? transtable40 :
-                                                    player->messageTics >= 3 ? transtable30 :
-                                                    player->messageTics >= 2 ? transtable20 :
-                                                                               transtable10);
+                RD_M_DrawTextSmallRUSFade(player->message, 
+                                     160 - RD_M_TextSmallRUSWidth(player->message) /
+                                     2 + wide_delta, 1, player->messageTics >= 9 ? transtable90 :
+                                                        player->messageTics >= 8 ? transtable80 :
+                                                        player->messageTics >= 7 ? transtable70 :
+                                                        player->messageTics >= 6 ? transtable60 :
+                                                        player->messageTics >= 5 ? transtable50 :
+                                                        player->messageTics >= 4 ? transtable40 :
+                                                        player->messageTics >= 3 ? transtable30 :
+                                                        player->messageTics >= 2 ? transtable20 :
+                                                                                   transtable10);
             }
             else
             {
-            RD_M_DrawTextSmallRUS(player->message,
-                              160 - RD_M_TextSmallRUSWidth(player->message) / 2
-                              + wide_delta, 1, CR_NONE);
+                RD_M_DrawTextSmallRUS(player->message,
+                                  160 - RD_M_TextSmallRUSWidth(player->message) / 2
+                                  + wide_delta, 1, CR_NONE);
             }
         }
     }

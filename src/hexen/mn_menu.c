@@ -107,6 +107,7 @@ static void M_RD_BLUE_Color(Direction_t direction);
 // Messages and Texts
 static void DrawMessagesMenu(void);
 static void M_RD_Messages(Direction_t direction);
+static void M_RD_MessagesAlignment(Direction_t direction);
 static void M_RD_MessagesFade();
 static void M_RD_ShadowedText();
 static void M_RD_LocalTime(Direction_t direction);
@@ -572,6 +573,7 @@ static Menu_t ColorMenu = {
 static MenuItem_t MessagesItems[] = {
     {ITT_TITLE,  "GENERAL",             "JCYJDYJT",                 NULL,                         0}, // ОСНОВНОЕ
     {ITT_SWITCH, "MESSAGES:",           "JNJ,HF;TYBT CJJ,OTYBQ:",   M_RD_Messages,                0}, // ОТОБРАЖЕНИЕ СООБЩЕНИЙ
+    {ITT_LRFUNC, "ALIGNMENT:",          "DSHFDYBDFYBT:",            M_RD_MessagesAlignment,       0}, // ВЫРАВНИВАНИЕ
     {ITT_SWITCH, "FADING EFFECT:",      "GKFDYJT BCXTPYJDTYBT:",    M_RD_MessagesFade,            0}, // ПЛАВНОЕ ИСЧЕЗНОВЕНИЕ
     {ITT_SWITCH, "TEXT CASTS SHADOWS:", "NTRCNS JN,HFCSDF.N NTYM:", M_RD_ShadowedText,            0}, // ТЕКСТЫ ОТБРАСЫВАЮТ ТЕНЬ
     {ITT_TITLE,  "MISC",                "HFPYJT",                   NULL,                         0}, // РАЗНОЕ
@@ -2204,13 +2206,6 @@ static void DrawDisplayMenu(void)
     {
         // Детализация графики
         RD_M_DrawTextSmallRUS(detailLevel ? "YBPRFZ" : "DSCJRFZ", 188 + wide_delta, 82, CR_NONE);
-
-        // Системное время
-        RD_M_DrawTextSmallRUS(local_time == 1 ? "12-XFCJDJT (XX:VV)" :
-                          local_time == 2 ? "12-XFCJDJT (XX:VV:CC)" :
-                          local_time == 3 ? "24-XFCJDJT (XX:VV)" :
-                          local_time == 4 ? "24-XFCJDJT (XX:VV:CC)" : "DSRK",
-                          157 + wide_delta, 112, CR_NONE);
     }
 
     // Screen size
@@ -2437,21 +2432,27 @@ static void DrawMessagesMenu(void)
         RD_M_DrawTextSmallENG(show_messages ? "ON" : "OFF", 108 + wide_delta, 42,
                               show_messages ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
 
+        // Messages alignment
+        RD_M_DrawTextSmallENG(messages_alignment == 1 ? "LEFT EDGE OF THE SCREEN" :
+                              messages_alignment == 2 ? "LEFT EDGE OF THE STATUS BAR" :
+                                                        "CENTERED", 108 + wide_delta, 52,
+                              messages_alignment ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
+
         // Fading effect 
-        RD_M_DrawTextSmallENG(message_fade ? "ON" : "OFF", 140 + wide_delta, 52, 
+        RD_M_DrawTextSmallENG(message_fade ? "ON" : "OFF", 140 + wide_delta, 62, 
                               message_fade ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
 
         // Text casts shadows
-        RD_M_DrawTextSmallENG(draw_shadowed_text ? "ON" : "OFF", 179 + wide_delta, 62,
-                              draw_shadowed_text ? CR_NONE : CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallENG(draw_shadowed_text ? "ON" : "OFF", 179 + wide_delta, 72,
+                              draw_shadowed_text ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
 
         // Local time
         RD_M_DrawTextSmallENG(local_time == 1 ? "12-HOUR (HH:MM)" :
                               local_time == 2 ? "12-HOUR (HH:MM:SS)" :
                               local_time == 3 ? "24-HOUR (HH:MM)" :
                               local_time == 4 ? "24-HOUR (HH:MM:SS)" : "OFF",
-                              110 + wide_delta, 82, 
-                              local_time ? CR_NONE : CR_WHITE2GRAY_HERETIC);
+                              110 + wide_delta, 92, 
+                              local_time ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
 
 
     }
@@ -2461,12 +2462,18 @@ static void DrawMessagesMenu(void)
         RD_M_DrawTextSmallRUS(show_messages ? "DRK" : "DSRK", 208 + wide_delta, 42,
                               show_messages ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
 
+        // Выравнивание сообщений
+        RD_M_DrawTextSmallRUS(messages_alignment == 1 ? "GJ RHF. \'RHFYF" :
+                              messages_alignment == 2 ? "GJ RHF. CNFNEC-,FHF" :
+                                                        "GJ WTYNHE", 138 + wide_delta, 52,
+                              messages_alignment ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
+
         // Плавное исчезновение
-        RD_M_DrawTextSmallRUS(message_fade ? "DRK" : "DSRK", 193 + wide_delta, 52,
+        RD_M_DrawTextSmallRUS(message_fade ? "DRK" : "DSRK", 193 + wide_delta, 62,
                               message_fade ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
 
         // Тексты отбрасывают тень
-        RD_M_DrawTextSmallRUS(draw_shadowed_text ? "DRK" : "DSRK", 220 + wide_delta, 62,
+        RD_M_DrawTextSmallRUS(draw_shadowed_text ? "DRK" : "DSRK", 220 + wide_delta, 72,
                               draw_shadowed_text ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
 
         // Системное время
@@ -2474,8 +2481,8 @@ static void DrawMessagesMenu(void)
                               local_time == 2 ? "12-XFCJDJT (XX:VV:CC)" :
                               local_time == 3 ? "24-XFCJDJT (XX:VV)" :
                               local_time == 4 ? "24-XFCJDJT (XX:VV:CC)" : "DSRK",
-                              157 + wide_delta, 82, 
-                              local_time ? CR_NONE : CR_WHITE2GRAY_HERETIC);
+                              157 + wide_delta, 92, 
+                              local_time ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
     }
 }
 
@@ -2500,6 +2507,11 @@ static void M_RD_Messages(Direction_t direction)
     {
         S_StartSound(NULL, SFX_CHAT);
     }
+}
+
+static void M_RD_MessagesAlignment(Direction_t direction)
+{
+    RD_Menu_SpinInt(&messages_alignment, 0, 2, direction);
 }
 
 static void M_RD_MessagesFade()
