@@ -93,9 +93,6 @@ static void DrawDisplayMenu(void);
 static void M_RD_ScreenSize(Direction_t direction);
 static void M_RD_LevelBrightness(Direction_t direction);
 static void M_RD_Detail();
-static void M_RD_LocalTime(Direction_t direction);
-static void M_RD_Messages(Direction_t direction);
-static void M_RD_ShadowedText();
 
 // Color
 static void DrawColorMenu(void);
@@ -106,6 +103,13 @@ static void M_RD_ShowPalette();
 static void M_RD_RED_Color(Direction_t direction);
 static void M_RD_GREEN_Color(Direction_t direction);
 static void M_RD_BLUE_Color(Direction_t direction);
+
+// Messages and Texts
+static void DrawMessagesMenu(void);
+static void M_RD_Messages(Direction_t direction);
+static void M_RD_MessagesFade();
+static void M_RD_ShadowedText();
+static void M_RD_LocalTime(Direction_t direction);
 
 // Automap
 static void DrawAutomapMenu(void);
@@ -290,7 +294,6 @@ extern boolean alwaysRun;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 int InfoType;
-int messageson = true;
 boolean mn_SuicideConsole;
 
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
@@ -327,6 +330,7 @@ static Menu_t RDOptionsMenu;
 static Menu_t RenderingMenu;
 static Menu_t DisplayMenu;
 static Menu_t ColorMenu;
+static Menu_t MessagesMenu;
 static Menu_t AutomapMenu;
 static Menu_t SoundMenu;
 static Menu_t SoundSysMenu;
@@ -520,9 +524,7 @@ static MenuItem_t DisplayItems[] = {
     {ITT_SWITCH, "GRAPHICS DETAIL:",    "LTNFKBPFWBZ UHFABRB:",     M_RD_Detail,          0}, // ДЕТАЛИЗАЦИЯ ГРАФИКИ
     {ITT_SETMENU, "COLOR OPTIONS...",   "YFCNHJQRB WDTNF>>>",       &ColorMenu,           0}, // НАСТРОЙКИ ЦВЕТА...
     {ITT_TITLE,  "INTERFACE",           "BYNTHATQC",                NULL,                 0}, // ИНТЕРФЕЙС
-    {ITT_LRFUNC, "LOCAL TIME:",         "CBCNTVYJT DHTVZ:",         M_RD_LocalTime,       0}, // СИСТЕМНОЕ ВРЕМЯ
-    {ITT_LRFUNC, "MESSAGES:",           "JNJ,HF;TYBT CJJ,OTYBQ:",   M_RD_Messages,        0}, // ОТОБРАЖЕНИЕ СООБЩЕНИЙ
-    {ITT_SWITCH, "TEXT CASTS SHADOWS:", "NTRCNS JN,HFCSDF.N NTYM:", M_RD_ShadowedText,    0}, // ТЕКСТЫ ОТБРАСЫВАЮТ ТЕНЬ
+    {ITT_SETMENU, "MESSAGES AND TEXTS...", "CJJ,OTYBZ B NTRCNS>>>", &MessagesMenu,        0}, // СООБЩЕНИЯ И ТЕКСТЫ...
     {ITT_SETMENU,"AUTOMAP SETTINGS...", "YFCNHJQRB RFHNS>>>",       &AutomapMenu,         0}  // НАСТРОЙКИ КАРТЫ...
 };
 
@@ -530,7 +532,7 @@ static Menu_t DisplayMenu = {
     36, 36,
     32,
     "DISPLAY OPTIONS", "YFCNHJQRB \'RHFYF", false, // НАСТРОЙКИ ЭКРАНА
-    11, DisplayItems, false,
+    10, DisplayItems, false,
     DrawDisplayMenu,
     NULL,
     &RDOptionsMenu,
@@ -561,6 +563,30 @@ static Menu_t ColorMenu = {
     NULL,
     &DisplayMenu,
     0
+};
+
+// -----------------------------------------------------------------------------
+// Messages settings
+// -----------------------------------------------------------------------------
+
+static MenuItem_t MessagesItems[] = {
+    {ITT_TITLE,  "GENERAL",             "JCYJDYJT",                 NULL,                         0}, // ОСНОВНОЕ
+    {ITT_SWITCH, "MESSAGES:",           "JNJ,HF;TYBT CJJ,OTYBQ:",   M_RD_Messages,                0}, // ОТОБРАЖЕНИЕ СООБЩЕНИЙ
+    {ITT_SWITCH, "FADING EFFECT:",      "GKFDYJT BCXTPYJDTYBT:",    M_RD_MessagesFade,            0}, // ПЛАВНОЕ ИСЧЕЗНОВЕНИЕ
+    {ITT_SWITCH, "TEXT CASTS SHADOWS:", "NTRCNS JN,HFCSDF.N NTYM:", M_RD_ShadowedText,            0}, // ТЕКСТЫ ОТБРАСЫВАЮТ ТЕНЬ
+    {ITT_TITLE,  "MISC",                "HFPYJT",                   NULL,                         0}, // РАЗНОЕ
+    {ITT_LRFUNC, "LOCAL TIME:",         "CBCNTVYJT DHTVZ:",         M_RD_LocalTime,               0}  // СИСТЕМНОЕ ВРЕМЯ
+};
+
+static Menu_t MessagesMenu = {
+    36, 36,
+    32,
+    "MESSAGES AND TEXTS", "CJJ,OTYBZ B NTRCNS", false, // СООБЩЕНИЯ И ТЕКСТЫ
+    7, MessagesItems, false,
+    DrawMessagesMenu,
+    NULL,
+    &DisplayMenu,
+    1
 };
 
 // -----------------------------------------------------------------------------
@@ -1533,7 +1559,7 @@ void MN_Init(void)
 
 //==========================================================================
 //
-// MN_DrTextAYellow
+// MN_DrTextAYellow and MN_DrTextAYellowFade
 //
 //==========================================================================
 
@@ -1552,6 +1578,26 @@ void MN_DrTextAYellow(char *text, int x, int y)
         {
             p = W_CacheLumpNum(FontAYellowBaseLump + c - 33, PU_CACHE);
             V_DrawShadowedPatchRaven(x, y, p);
+            x += SHORT(p->width) - 1;
+        }
+    }
+}
+
+void MN_DrTextAYellowFade(char *text, int x, int y, byte *table)
+{
+    char c;
+    patch_t *p;
+
+    while ((c = *text++) != 0)
+    {
+        if (c < 33)
+        {
+            x += 5;
+        }
+        else
+        {
+            p = W_CacheLumpNum(FontAYellowBaseLump + c - 33, PU_CACHE);
+            V_DrawFadePatch(x, y, p, table);
             x += SHORT(p->width) - 1;
         }
     }
@@ -1580,6 +1626,26 @@ void MN_DrTextSmallYellowRUS(char *text, int x, int y)
         {
             p = W_CacheLumpNum(FontFYellowBaseLump + c - 33, PU_CACHE);
             V_DrawShadowedPatchRaven(x, y, p);
+            x += SHORT(p->width) - 1;
+        }
+    }
+}
+
+void MN_DrTextSmallYellowRUSFade(char *text, int x, int y, byte *table)
+{
+    char c;
+    patch_t *p;
+
+    while ((c = *text++) != 0)
+    {
+        if (c < 33)
+        {
+            x += 5;
+        }
+        else
+        {
+            p = W_CacheLumpNum(FontFYellowBaseLump + c - 33, PU_CACHE);
+            V_DrawFadePatch(x, y, p, table);
             x += SHORT(p->width) - 1;
         }
     }
@@ -2133,19 +2199,6 @@ static void DrawDisplayMenu(void)
     {
         // Graphics detail
         RD_M_DrawTextSmallENG(detailLevel ? "LOW" : "HIGH", 149 + wide_delta, 82, CR_NONE);
-
-        // Local time
-        RD_M_DrawTextSmallENG(local_time == 1 ? "12-HOUR (HH:MM)" :
-                   local_time == 2 ? "12-HOUR (HH:MM:SS)" :
-                   local_time == 3 ? "24-HOUR (HH:MM)" :
-                   local_time == 4 ? "24-HOUR (HH:MM:SS)" : "OFF",
-                   110 + wide_delta, 112, CR_NONE);
-
-        // Messages
-        RD_M_DrawTextSmallENG((messageson ? "ON" : "OFF"), 108 + wide_delta, 122, CR_NONE);
-
-        // Text casts shadows
-        RD_M_DrawTextSmallENG((draw_shadowed_text ? "ON" : "OFF"), 179 + wide_delta, 132, CR_NONE);
     }
     else
     {
@@ -2158,12 +2211,6 @@ static void DrawDisplayMenu(void)
                           local_time == 3 ? "24-XFCJDJT (XX:VV)" :
                           local_time == 4 ? "24-XFCJDJT (XX:VV:CC)" : "DSRK",
                           157 + wide_delta, 112, CR_NONE);
-
-        // Отображение сообщений
-        RD_M_DrawTextSmallRUS((messageson ? "DRK" : "DSRK"), 208 + wide_delta, 122, CR_NONE);
-
-        // Тексты отбрасывают тень
-        RD_M_DrawTextSmallRUS((draw_shadowed_text ? "DRK" : "DSRK"), 220 + wide_delta, 132, CR_NONE);
     }
 
     // Screen size
@@ -2267,31 +2314,6 @@ void M_RD_BLUE_Color(Direction_t direction)
     RD_Menu_SlideFloat_Step(&b_color_factor, 0.01F, 1.0F, 0.01F, direction);
 
     I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
-}
-
-static void M_RD_Messages(Direction_t direction)
-{
-    messageson ^= 1;
-    if (messageson)
-    {
-        P_SetMessage(&players[consoleplayer], english_language ?
-                     "MESSAGES ON" :
-                     "CJJ,OTYBZ DRK.XTYS", // СООБЩЕНИЯ ВКЛЮЧЕНЫ
-                     true);
-    }
-    else
-    {
-        P_SetMessage(&players[consoleplayer], english_language ?
-                     "MESSAGES OFF" :
-                     "CJJ,OTYBZ DSRK.XTYS", // СООБЩЕНИЯ ВЫКЛЮЧЕНЫ
-                     true);
-    }
-    S_StartSound(NULL, SFX_CHAT);
-}
-
-static void M_RD_ShadowedText()
-{
-    draw_shadowed_text ^= 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -2398,6 +2420,96 @@ static void M_RD_Detail()
     detailLevel ^= 1;
 
     R_SetViewSize (screenblocks, detailLevel);
+}
+
+// -----------------------------------------------------------------------------
+// DrawMessagesMenu
+// -----------------------------------------------------------------------------
+
+static void DrawMessagesMenu(void)
+{
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    if (english_language)
+    {
+        // Messages
+        RD_M_DrawTextSmallENG(show_messages ? "ON" : "OFF", 108 + wide_delta, 42,
+                              show_messages ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
+
+        // Fading effect 
+        RD_M_DrawTextSmallENG(message_fade ? "ON" : "OFF", 140 + wide_delta, 52, 
+                              message_fade ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
+
+        // Text casts shadows
+        RD_M_DrawTextSmallENG(draw_shadowed_text ? "ON" : "OFF", 179 + wide_delta, 62,
+                              draw_shadowed_text ? CR_NONE : CR_WHITE2GRAY_HERETIC);
+
+        // Local time
+        RD_M_DrawTextSmallENG(local_time == 1 ? "12-HOUR (HH:MM)" :
+                              local_time == 2 ? "12-HOUR (HH:MM:SS)" :
+                              local_time == 3 ? "24-HOUR (HH:MM)" :
+                              local_time == 4 ? "24-HOUR (HH:MM:SS)" : "OFF",
+                              110 + wide_delta, 82, 
+                              local_time ? CR_NONE : CR_WHITE2GRAY_HERETIC);
+
+
+    }
+    else
+    {
+        // Отображение сообщений
+        RD_M_DrawTextSmallRUS(show_messages ? "DRK" : "DSRK", 208 + wide_delta, 42,
+                              show_messages ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
+
+        // Плавное исчезновение
+        RD_M_DrawTextSmallRUS(message_fade ? "DRK" : "DSRK", 193 + wide_delta, 52,
+                              message_fade ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
+
+        // Тексты отбрасывают тень
+        RD_M_DrawTextSmallRUS(draw_shadowed_text ? "DRK" : "DSRK", 220 + wide_delta, 62,
+                              draw_shadowed_text ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
+
+        // Системное время
+        RD_M_DrawTextSmallRUS(local_time == 1 ? "12-XFCJDJT (XX:VV)" :
+                              local_time == 2 ? "12-XFCJDJT (XX:VV:CC)" :
+                              local_time == 3 ? "24-XFCJDJT (XX:VV)" :
+                              local_time == 4 ? "24-XFCJDJT (XX:VV:CC)" : "DSRK",
+                              157 + wide_delta, 82, 
+                              local_time ? CR_NONE : CR_WHITE2GRAY_HERETIC);
+    }
+}
+
+static void M_RD_Messages(Direction_t direction)
+{
+    show_messages ^= 1;
+    if (show_messages)
+    {
+        P_SetMessage(&players[consoleplayer], english_language ?
+                     "MESSAGES ON" :
+                     "CJJ,OTYBZ DRK.XTYS", // СООБЩЕНИЯ ВКЛЮЧЕНЫ
+                     true);
+    }
+    else
+    {
+        P_SetMessage(&players[consoleplayer], english_language ?
+                     "MESSAGES OFF" :
+                     "CJJ,OTYBZ DSRK.XTYS", // СООБЩЕНИЯ ВЫКЛЮЧЕНЫ
+                     true);
+    }
+    if (vanillaparm)
+    {
+        S_StartSound(NULL, SFX_CHAT);
+    }
+}
+
+static void M_RD_MessagesFade()
+{
+    message_fade ^= 1;
+}
+
+static void M_RD_ShadowedText()
+{
+    draw_shadowed_text ^= 1;
 }
 
 static void M_RD_LocalTime(Direction_t direction)
@@ -4534,11 +4646,11 @@ static void DrawOptionsMenu_Vanilla(void)
 {
     if (english_language)
     {
-        RD_M_DrawTextB(messageson ? "ON" : "OFF", 196 + wide_delta, 50);
+        RD_M_DrawTextB(show_messages ? "ON" : "OFF", 196 + wide_delta, 50);
     }
     else
     {
-        RD_M_DrawTextBigRUS(messageson ? "DRK>" : "DSRK>", 223 + wide_delta, 50);	// ВКЛ. / ВЫКЛ.
+        RD_M_DrawTextBigRUS(show_messages ? "DRK>" : "DSRK>", 223 + wide_delta, 50);	// ВКЛ. / ВЫКЛ.
     }
 
     RD_Menu_DrawSlider(&VanillaOptionsMenu, 92, 10, mouseSensitivity);
@@ -4585,9 +4697,7 @@ void M_RD_DoResetSettings(void)
     // Display
     screenblocks    = 10;
     usegamma        = 7;
-    messageson      = 1;
     level_brightness = 0;
-    local_time      = 0;
 
     // Color options
     brightness       = 1.0f;
@@ -4597,6 +4707,12 @@ void M_RD_DoResetSettings(void)
     r_color_factor   = 1.0f;
     g_color_factor   = 1.0f;
     b_color_factor   = 1.0f;
+
+    // Messages and Texts
+    show_messages      = 1;
+    message_fade       = 1;
+    draw_shadowed_text = 1;
+    local_time         = 0;
 
     // Audio
     snd_MaxVolume   = 8;
@@ -4619,7 +4735,6 @@ void M_RD_DoResetSettings(void)
     fake_contrast       = 0;
     linear_sky          = 1;
     flip_weapons        = 0;
-    draw_shadowed_text  = 1;
     sbar_colored        = 0;
     sbar_colored_gem    = 0;
     negative_health     = 0;

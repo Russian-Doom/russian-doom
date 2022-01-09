@@ -143,7 +143,12 @@ int english_language = 1;
 int level_brightness = 0;
 int detailLevel = 0;        // [JN] Blocky mode, 0 = high, 1 = normal
 int hud_detaillevel = 0;    // [JN] Blocky mode, 0 = high, 1 = normal
-int local_time = 0; 
+
+// Messages and texts
+int show_messages = 1;
+int message_fade = 1;
+int draw_shadowed_text = 1;
+int local_time = 0;
 
 // Automap
 int automap_follow = 1;
@@ -158,7 +163,6 @@ int snd_monomode = 0;
 int brightmaps = 1;
 int fake_contrast = 0;
 int flip_levels = 0;
-int draw_shadowed_text = 1;
 int linear_sky = 1;
 int randomly_flipcorpses = 1;
 int flip_weapons = 0;
@@ -277,13 +281,17 @@ void D_BindVariables(void)
     M_BindIntVariable("sfx_volume",             &snd_MaxVolume);
     M_BindIntVariable("music_volume",           &snd_MusicVolume);
     M_BindIntVariable("snd_monomode",           &snd_monomode);
-    M_BindIntVariable("show_messages",             &messageson);
     M_BindIntVariable("screenblocks",           &screenblocks);
     M_BindIntVariable("snd_channels",           &snd_Channels);
     M_BindIntVariable("always_run",             &alwaysRun);
     M_BindIntVariable("mlook",                  &mlook);
     M_BindIntVariable("level_brightness",       &level_brightness);
     M_BindIntVariable("detaillevel",            &detailLevel);
+
+    // Messages and texts
+    M_BindIntVariable("show_messages",          &show_messages);
+    M_BindIntVariable("message_fade",           &message_fade);
+    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
     M_BindIntVariable("local_time",             &local_time);
 
     // Automap
@@ -292,13 +300,10 @@ void D_BindVariables(void)
     M_BindIntVariable("automap_rotate",         &automap_rotate);
     M_BindIntVariable("automap_grid",           &automap_grid);
 
-    // [JN] Дополнительные параметры игры
-
     // Gameplay: Graphical
     M_BindIntVariable("uncapped_fps",           &uncapped_fps);
     M_BindIntVariable("brightmaps",             &brightmaps);
     M_BindIntVariable("fake_contrast",          &fake_contrast);
-    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
     M_BindIntVariable("linear_sky",             &linear_sky);
     M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);
     M_BindIntVariable("flip_weapons",           &flip_weapons);
@@ -1243,30 +1248,98 @@ static void DrawMessage(void)
     {
         if (english_language || player->engOnlyMessage)
         {
+            if (player->messageTics < 10 && message_fade && !vanillaparm)
+            {
+            MN_DrTextAYellowFade(player->message, 
+                                 160 - RD_M_TextAWidth(player->message) /
+                                 2 + wide_delta, 1, player->messageTics >= 9 ? transtable90 :
+                                                    player->messageTics >= 8 ? transtable80 :
+                                                    player->messageTics >= 7 ? transtable70 :
+                                                    player->messageTics >= 6 ? transtable60 :
+                                                    player->messageTics >= 5 ? transtable50 :
+                                                    player->messageTics >= 4 ? transtable40 :
+                                                    player->messageTics >= 3 ? transtable30 :
+                                                    player->messageTics >= 2 ? transtable20 :
+                                                                               transtable10);
+            }
+            else
+            {
             MN_DrTextAYellow(player->message,
                              160 - RD_M_TextAWidth(player->message) / 2
                             + wide_delta, 1);
+            }
         }
         else
         {
+            if (player->messageTics < 10 && message_fade && !vanillaparm)
+            {
+            MN_DrTextSmallYellowRUSFade(player->message, 
+                                        160 - RD_M_TextSmallRUSWidth(player->message) /
+                                        2 + wide_delta, 1, player->messageTics >= 9 ? transtable90 :
+                                                           player->messageTics >= 8 ? transtable80 :
+                                                           player->messageTics >= 7 ? transtable70 :
+                                                           player->messageTics >= 6 ? transtable60 :
+                                                           player->messageTics >= 5 ? transtable50 :
+                                                           player->messageTics >= 4 ? transtable40 :
+                                                           player->messageTics >= 3 ? transtable30 :
+                                                           player->messageTics >= 2 ? transtable20 :
+                                                                                      transtable10);
+            }
+            else
+            {
             MN_DrTextSmallYellowRUS(player->message,
                                     160 - RD_M_TextSmallRUSWidth(player->message) / 2
                                     + wide_delta, 1);
+            }
         }
     }
     else
     {
         if (english_language || player->engOnlyMessage)
         {
+            if (player->messageTics < 10 && message_fade && !vanillaparm)
+            {
+            RD_M_DrawTextAFade(player->message, 
+                                 160 - RD_M_TextAWidth(player->message) /
+                                 2 + wide_delta, 1, player->messageTics >= 9 ? transtable90 :
+                                                    player->messageTics >= 8 ? transtable80 :
+                                                    player->messageTics >= 7 ? transtable70 :
+                                                    player->messageTics >= 6 ? transtable60 :
+                                                    player->messageTics >= 5 ? transtable50 :
+                                                    player->messageTics >= 4 ? transtable40 :
+                                                    player->messageTics >= 3 ? transtable30 :
+                                                    player->messageTics >= 2 ? transtable20 :
+                                                                               transtable10);
+            }
+            else
+            {
             RD_M_DrawTextA(player->message,
                        160 - RD_M_TextAWidth(player->message) / 2
                        + wide_delta, 1);
+            }
         }
         else
         {
+            if (player->messageTics < 10 && message_fade && !vanillaparm)
+            {
+            RD_M_DrawTextSmallRUSFade(player->message, 
+                                 160 - RD_M_TextSmallRUSWidth(player->message) /
+                                 2 + wide_delta, 1, player->messageTics >= 9 ? transtable90 :
+                                                    player->messageTics >= 8 ? transtable80 :
+                                                    player->messageTics >= 7 ? transtable70 :
+                                                    player->messageTics >= 6 ? transtable60 :
+                                                    player->messageTics >= 5 ? transtable50 :
+                                                    player->messageTics >= 4 ? transtable40 :
+                                                    player->messageTics >= 3 ? transtable30 :
+                                                    player->messageTics >= 2 ? transtable20 :
+                                                                               transtable10);
+            }
+            else
+            {
             RD_M_DrawTextSmallRUS(player->message,
                               160 - RD_M_TextSmallRUSWidth(player->message) / 2
                               + wide_delta, 1, CR_NONE);
+            }
         }
     }
 }

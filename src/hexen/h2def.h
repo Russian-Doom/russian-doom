@@ -717,6 +717,8 @@ extern int startepisode;
 extern int startmap;
 extern boolean autostart;
 
+extern int show_messages;
+
 extern boolean testcontrols;
 extern int testcontrols_mousespeed;
 
@@ -1096,7 +1098,9 @@ boolean MN_Responder(event_t * event);
 void MN_Ticker(void);
 void MN_Drawer(void);
 void MN_DrTextAYellow(char *text, int x, int y);
+void MN_DrTextAYellowFade(char *text, int x, int y, byte *table);
 void MN_DrTextSmallYellowRUS(char *text, int x, int y);
+void MN_DrTextSmallYellowRUSFade(char *text, int x, int y, byte *table);
 
 extern int messageson;
 
