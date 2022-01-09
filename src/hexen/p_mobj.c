@@ -1833,8 +1833,9 @@ void P_SpawnMapThing(mapthing_t * mthing)
         ||  mobj->type == MT_MISC42            // Hanging Corpse [71]
         ||  mobj->type == MT_MISC30            // Hanging Moss 1 [58]
         ||  mobj->type == MT_MISC31            // Hanging Moss 2 [59]
-        ||  mobj->type == MT_ZCHAINEND_HEART   // Hook with Heart [8073]
-        ||  mobj->type == MT_ZCHAINEND_SKULL   // Hook with Skull [8077]
+// [JN] Not safe for flipping:
+//      ||  mobj->type == MT_ZCHAINEND_HEART   // Hook with Heart [8073]
+//      ||  mobj->type == MT_ZCHAINEND_SKULL   // Hook with Skull [8077]
         ||  mobj->type == MT_MISC33            // Impaled Corpse [61]
         ||  mobj->type == MT_TABLE_SHIT1       // Large Brown Stein [8500]
         ||  mobj->type == MT_ZPOISONSHROOM     // Large Mushroom (explodes) [8104]

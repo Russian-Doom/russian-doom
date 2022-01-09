@@ -697,8 +697,9 @@ void R_ProjectSprite(mobj_t * thing)
         || thing->type == MT_MISC42            // Hanging Corpse [71]
         || thing->type == MT_MISC30            // Hanging Moss 1 [58]
         || thing->type == MT_MISC31            // Hanging Moss 2 [59]
-        || thing->type == MT_ZCHAINEND_HEART   // Hook with Heart [8073]
-        || thing->type == MT_ZCHAINEND_SKULL   // Hook with Skull [8077]
+// [JN] Not safe for flipping:
+//      || thing->type == MT_ZCHAINEND_HEART   // Hook with Heart [8073]
+//      || thing->type == MT_ZCHAINEND_SKULL   // Hook with Skull [8077]
         || thing->type == MT_MISC33            // Impaled Corpse [61]
         || thing->type == MT_TABLE_SHIT1       // Large Brown Stein [8500]
         || thing->type == MT_ZPOISONSHROOM     // Large Mushroom (explodes) [8104]
