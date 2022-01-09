@@ -60,10 +60,11 @@ int viewangletox[FINEANGLES / 2];
 
 // The xtoviewangleangle[] table maps a screen pixel to the lowest viewangle
 // that maps back to x ranges from clipangle to -clipangle
-angle_t xtoviewangle[WIDESCREENWIDTH + 1];
+// [JN] e6y: resolution limitation is removed
+angle_t *xtoviewangle;  // killough 2/8/98
 
 // [crispy] calculate the linear sky angle component here
-angle_t linearskyangle[WIDESCREENWIDTH + 1];
+angle_t *linearskyangle;
 
 lighttable_t *scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t *scalelightfixed[MAXLIGHTSCALE];
@@ -830,10 +831,9 @@ void R_Init(void)
             screenblocks = 12;
     }
 
+    R_InitSpritesRes ();
     R_InitPlanesRes ();
-    printf (".");
     R_InitVisplanesRes ();
-    printf (".");
 
     R_InitData();
     R_InitPointToAngle();

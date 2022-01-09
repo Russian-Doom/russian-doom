@@ -98,7 +98,51 @@ boolean LevelUseFullBright;
 
 
 
+/*
+================================================================================
+=
+= R_InitSpritesRes
+=
+================================================================================
+*/
 
+void R_InitSpritesRes (void)
+{
+    if (xtoviewangle)
+    {
+        free(xtoviewangle);
+    }
+    if (linearskyangle)
+    {
+        free(linearskyangle);
+    }
+    /*
+    if (negonearray)
+    {
+        free(negonearray);
+    }
+    if (screenheightarray)
+    {
+        free(screenheightarray);
+    }
+    */
+
+    xtoviewangle = calloc(1, (screenwidth + 1) * sizeof(*xtoviewangle));
+    linearskyangle = calloc(1, (screenwidth + 1) * sizeof(*linearskyangle));
+    
+    /*
+    negonearray = calloc(1, screenwidth * sizeof(*negonearray));
+    screenheightarray = calloc(1, screenwidth * sizeof(*screenheightarray));
+
+    if (clipbot)
+    {
+        free(clipbot);
+    }
+
+    clipbot = calloc(1, 2 * screenwidth * sizeof(*clipbot));
+    cliptop = clipbot + screenwidth;
+    */
+}
 
 /*
 =================

@@ -365,8 +365,8 @@ extern player_t *viewplayer;
 extern angle_t clipangle;
 
 extern int viewangletox[FINEANGLES / 2];
-extern angle_t xtoviewangle[WIDESCREENWIDTH + 1];
-extern angle_t linearskyangle[WIDESCREENWIDTH + 1];
+extern angle_t *xtoviewangle;
+extern angle_t *linearskyangle;
 
 extern fixed_t rw_distance;
 extern angle_t rw_normalangle;
@@ -472,6 +472,7 @@ extern int rw_angle1;           // angle to line origin
 extern int TransTextureStart;
 extern int TransTextureEnd;
 
+void R_InitSpritesRes ();
 void R_RenderMaskedSegRange(drawseg_t * ds, int x1, int x2);
 
 //
