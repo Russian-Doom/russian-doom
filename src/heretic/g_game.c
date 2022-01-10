@@ -1585,12 +1585,6 @@ void G_DoLoadGame(void)
     P_UnArchiveWorld();
     P_UnArchiveThinkers();
     P_UnArchiveSpecials();
-    // [JN] Pre-initialize Automap variables and marks so they can appear.
-    // TODO - this *IS* wrong.
-    {
-        AM_Start();
-        AM_Stop();
-    }
     P_UnArchiveAutomap ();
     P_RestoreTargets();
 

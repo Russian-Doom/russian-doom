@@ -668,7 +668,6 @@ static void AM_LevelInit (void)
     f_w = screenwidth;
     f_h = SCREENHEIGHT - ((gamemission == jaguar ? ST_HEIGHT_JAG : ST_HEIGHT) << hires);
 
-    AM_clearMarks();
     AM_findMinMaxBoundaries();
 
     // [crispy] initialize zoomlevel on all maps so that a 4096 units
