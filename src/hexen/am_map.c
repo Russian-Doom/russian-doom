@@ -1547,53 +1547,25 @@ static void AM_DrawDeathmatchStats(void)
 
 static void DrawWorldTimer(void)
 {
-    int days;
     int hours;
     int minutes;
     int seconds;
-    int worldTimer;
-    char timeBuffer[15];
-    // char dayBuffer[20];
+    int worldTimer = players[consoleplayer].worldTimer;
+    char timeBuffer[32];
     char skill[15];
     boolean wide_4_3 = aspect_ratio >= 2 && screenblocks == 9;
 
-    worldTimer = players[consoleplayer].worldTimer;
-
     worldTimer /= 35;
-    days = worldTimer / 86400;
-    worldTimer -= days * 86400;
     hours = worldTimer / 3600;
     worldTimer -= hours * 3600;
     minutes = worldTimer / 60;
     worldTimer -= minutes * 60;
     seconds = worldTimer;
 
+    // [JN] Compose time to: HHHHH:MM:SS format
     M_snprintf(timeBuffer, sizeof(timeBuffer),
-               "%.2d : %.2d : %.2d", hours, minutes, seconds);
-    RD_M_DrawTextA(timeBuffer, 237 + (wide_4_3 ? wide_delta : wide_delta*2), 8); // [JN] Небольшая корректировка позиции
-
-    // [JN] No good place for days indication, there is also a local time widget.
-    /*
-    if (days)
-    {
-        if (days == 1)
-        {
-            M_snprintf(dayBuffer, sizeof(dayBuffer), "%.2d LTYM", days);	// "%.2d DAY"
-        }
-        else
-        {
-            M_snprintf(dayBuffer, sizeof(dayBuffer), "%.2d LYTQ", days); // "%.2d DAYS"
-        }
-        MN_DrTextA(dayBuffer, 240 + (wide_delta * 2), 20);
-        if (days >= 5)
-        {
-            MN_DrTextA(english_language ?
-            "YOU FREAK!!!" :
-            "DS CGZNBKB!", // [JN] ВЫ СПЯТИЛИ! Давайте без хамства, а?
-            230 + (wide_delta * 2), 35);
-        }
-    }
-    */
+               "%5d : %.2d : %.2d", hours, minutes, seconds);
+    RD_M_DrawTextA(timeBuffer, 224 + (wide_4_3 ? wide_delta : wide_delta*2), 8);
 
     // [JN] Draw skill level
     if (english_language)
