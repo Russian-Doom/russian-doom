@@ -1802,26 +1802,26 @@ void DrawFullScreenStuff(void)
         // [JN] First weapon?
         if (CPlayer->readyweapon == WP_FIRST)
         {
-            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 170, W_CacheLumpName("MANADIM1", PU_CACHE));
-            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 184, W_CacheLumpName("MANADIM2", PU_CACHE));
+            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 170, W_CacheLumpName("MANADIM1", PU_STATIC));
+            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 184, W_CacheLumpName("MANADIM2", PU_STATIC));
         }
         // [JN] Second weapon?
         else if (CPlayer->readyweapon == WP_SECOND)
         {
-            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 170, W_CacheLumpName("MANABRT1", PU_CACHE));
-            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 184, W_CacheLumpName("MANADIM2", PU_CACHE));
+            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 170, W_CacheLumpName("MANABRT1", PU_STATIC));
+            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 184, W_CacheLumpName("MANADIM2", PU_STATIC));
         }
         // [JN] Trird weapon?
         else if (CPlayer->readyweapon == WP_THIRD)
         {
-            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 170, W_CacheLumpName("MANADIM1", PU_CACHE));
-            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 184, W_CacheLumpName("MANABRT2", PU_CACHE));
+            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 170, W_CacheLumpName("MANADIM1", PU_STATIC));
+            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 184, W_CacheLumpName("MANABRT2", PU_STATIC));
         }
         // [JN] Fourth weapon?
         else
         {
-            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 170, W_CacheLumpName("MANABRT1", PU_CACHE));
-            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 184, W_CacheLumpName("MANABRT2", PU_CACHE));
+            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 170, W_CacheLumpName("MANABRT1", PU_STATIC));
+            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 184, W_CacheLumpName("MANABRT2", PU_STATIC));
         }        
 
         // [JN] Draw mana points, colorize if necessary. Do not draw negative values.
