@@ -129,6 +129,8 @@ fixed_t sidemove[NUMCLASSES][2] = {
 };
 
 fixed_t angleturn[3] = { 640, 1280, 320 };      // + slow turn
+// [JN] If true, activate maximum weapon bobbing
+boolean max_bobbing;
 
 static bound_key_t weapon_keys[] =
 {
@@ -657,21 +659,28 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
 
     mousex = mousey = 0;
 
+    // [JN] "false" must be set as initial and returning condition.
+    max_bobbing = false; 
+
     if (forward > MaxPlayerMove[pClass])
     {
         forward = MaxPlayerMove[pClass];
+        max_bobbing = true;
     }
     else if (forward < -MaxPlayerMove[pClass])
     {
         forward = -MaxPlayerMove[pClass];
+        max_bobbing = false;
     }
     if (side > MaxPlayerMove[pClass])
     {
         side = MaxPlayerMove[pClass];
+        max_bobbing = true;
     }
     else if (side < -MaxPlayerMove[pClass])
     {
         side = -MaxPlayerMove[pClass];
+        max_bobbing = false;   
     }
     if (players[consoleplayer].powers[pw_speed]
         && !players[consoleplayer].morphTics)
