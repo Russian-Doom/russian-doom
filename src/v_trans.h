@@ -118,6 +118,7 @@ typedef enum
     CR_GRAY2GREEN_HEXEN,
     CR_GRAY2DARKGREEN_HEXEN,
     CR_GRAY2RED_HEXEN,
+    CR_GRAY2BLUE_HEXEN,
     CR_GREEN2GRAY_HEXEN, // remove me
     CR_GREEN2RED_HEXEN,  // remove me
     // Hexen (status bar font)

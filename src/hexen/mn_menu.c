@@ -2345,9 +2345,9 @@ static void DrawColorMenu(void)
         RD_M_DrawTextSmallENG("COLOR INTENSITY",
                               107 + wide_delta, 65, CR_GRAY2DARKGOLD_HEXEN);
 
-        RD_M_DrawTextSmallENG("RED", 121 + wide_delta, 75, CR_NONE);
-        RD_M_DrawTextSmallENG("GREEN", 105 + wide_delta, 85, CR_GREEN);
-        RD_M_DrawTextSmallENG("BLUE", 116 + wide_delta, 95, CR_BLUE2);
+        RD_M_DrawTextSmallENG("RED", 121 + wide_delta, 75, CR_GRAY2RED_HEXEN);
+        RD_M_DrawTextSmallENG("GREEN", 105 + wide_delta, 85, CR_GRAY2GREEN_HEXEN);
+        RD_M_DrawTextSmallENG("BLUE", 116 + wide_delta, 95, CR_GRAY2BLUE_HEXEN);
     }
     else
     {
@@ -2360,9 +2360,9 @@ static void DrawColorMenu(void)
         RD_M_DrawTextSmallRUS("byntycbdyjcnm wdtnf",  // Интенсивность цвета
                               89 + wide_delta, 65, CR_GRAY2DARKGOLD_HEXEN);
 
-        RD_M_DrawTextSmallRUS("rhfcysq", 90 + wide_delta, 75, CR_NONE);  // Красный
-        RD_M_DrawTextSmallRUS("ptktysq", 90 + wide_delta, 85, CR_GREEN); // Зелёный
-        RD_M_DrawTextSmallRUS("cbybq", 109 + wide_delta, 95, CR_BLUE2);  // Синий
+        RD_M_DrawTextSmallRUS("rhfcysq", 90 + wide_delta, 75, CR_GRAY2RED_HEXEN);   // Красный
+        RD_M_DrawTextSmallRUS("ptktysq", 90 + wide_delta, 85, CR_GRAY2GREEN_HEXEN); // Зелёный
+        RD_M_DrawTextSmallRUS("cbybq", 109 + wide_delta, 95, CR_GRAY2BLUE_HEXEN);   // Синий
     }
 
     // Brightness slider
@@ -2387,17 +2387,17 @@ static void DrawColorMenu(void)
     // RED intensity slider
     RD_Menu_DrawSliderSmall(&ColorMenu, 75, 10, r_color_factor * 10);
     M_snprintf(num, 5, "%3f", r_color_factor);  // Numerical representation of slider position
-    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 76, CR_NONE);
+    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 76, CR_GRAY2RED_HEXEN);
 
     // GREEN intensity slider
     RD_Menu_DrawSliderSmall(&ColorMenu, 85, 10, g_color_factor * 10);
     M_snprintf(num, 5, "%3f", g_color_factor);  // Numerical representation of slider position
-    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 86, CR_GREEN);
+    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 86, CR_GRAY2GREEN_HEXEN);
 
     // BLUE intensity slider
     RD_Menu_DrawSliderSmall(&ColorMenu, 95, 10, b_color_factor * 10);
     M_snprintf(num, 5, "%3f", b_color_factor);  // Numerical representation of slider position
-    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 96, CR_BLUE2);
+    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 96, CR_GRAY2BLUE_HEXEN);
 
     if (show_palette)
     {
@@ -2432,14 +2432,12 @@ static void DrawMessagesMenu(void)
     if (english_language)
     {
         // Messages
-        RD_M_DrawTextSmallENG(show_messages ? "ON" : "OFF", 108 + wide_delta, 42,
-                              show_messages ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
+        RD_M_DrawTextSmallENG(show_messages ? "ON" : "OFF", 108 + wide_delta, 42, CR_NONE);
 
         // Messages alignment
         RD_M_DrawTextSmallENG(messages_alignment == 1 ? "LEFT EDGE OF THE SCREEN" :
                               messages_alignment == 2 ? "LEFT EDGE OF THE STATUS BAR" :
-                                                        "CENTERED", 108 + wide_delta, 52,
-                              messages_alignment ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
+                                                        "CENTERED", 108 + wide_delta, 52, CR_NONE);
 
         // Messages timeout (text)
         RD_M_DrawTextSmallENG(messages_timeout == 1 ? "1 SECOND" :
@@ -2455,34 +2453,27 @@ static void DrawMessagesMenu(void)
                               136 + wide_delta, 72, CR_GRAY2GDARKGRAY_HEXEN);
 
         // Fading effect 
-        RD_M_DrawTextSmallENG(message_fade ? "ON" : "OFF", 140 + wide_delta, 82,
-                              message_fade ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
+        RD_M_DrawTextSmallENG(message_fade ? "ON" : "OFF", 140 + wide_delta, 82, CR_NONE);
 
         // Text casts shadows
-        RD_M_DrawTextSmallENG(draw_shadowed_text ? "ON" : "OFF", 179 + wide_delta, 92,
-                              draw_shadowed_text ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
+        RD_M_DrawTextSmallENG(draw_shadowed_text ? "ON" : "OFF", 179 + wide_delta, 92, CR_NONE);
 
         // Local time
         RD_M_DrawTextSmallENG(local_time == 1 ? "12-HOUR (HH:MM)" :
                               local_time == 2 ? "12-HOUR (HH:MM:SS)" :
                               local_time == 3 ? "24-HOUR (HH:MM)" :
                               local_time == 4 ? "24-HOUR (HH:MM:SS)" : "OFF",
-                              110 + wide_delta, 112,
-                              local_time ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
-
-
+                              110 + wide_delta, 112, CR_NONE);
     }
     else
     {
         // Отображение сообщений
-        RD_M_DrawTextSmallRUS(show_messages ? "DRK" : "DSRK", 208 + wide_delta, 42,
-                              show_messages ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
+        RD_M_DrawTextSmallRUS(show_messages ? "DRK" : "DSRK", 208 + wide_delta, 42, CR_NONE);
 
         // Выравнивание сообщений
         RD_M_DrawTextSmallRUS(messages_alignment == 1 ? "GJ RHF. \'RHFYF" :
                               messages_alignment == 2 ? "GJ RHF. CNFNEC-,FHF" :
-                                                        "GJ WTYNHE", 138 + wide_delta, 52,
-                              messages_alignment ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
+                                                        "GJ WTYNHE", 138 + wide_delta, 52, CR_NONE);
 
         // Таймаут отображения (текст)
         RD_M_DrawTextSmallRUS(messages_timeout == 1 ? "1 CTREYLF" :
@@ -2498,20 +2489,17 @@ static void DrawMessagesMenu(void)
                               136 + wide_delta, 72, CR_GRAY2GDARKGRAY_HEXEN);
 
         // Плавное исчезновение
-        RD_M_DrawTextSmallRUS(message_fade ? "DRK" : "DSRK", 193 + wide_delta, 82,
-                              message_fade ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
+        RD_M_DrawTextSmallRUS(message_fade ? "DRK" : "DSRK", 193 + wide_delta, 82, CR_NONE);
 
         // Тексты отбрасывают тень
-        RD_M_DrawTextSmallRUS(draw_shadowed_text ? "DRK" : "DSRK", 220 + wide_delta, 92,
-                              draw_shadowed_text ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
+        RD_M_DrawTextSmallRUS(draw_shadowed_text ? "DRK" : "DSRK", 220 + wide_delta, 92, CR_NONE);
 
         // Системное время
         RD_M_DrawTextSmallRUS(local_time == 1 ? "12-XFCJDJT (XX:VV)" :
                               local_time == 2 ? "12-XFCJDJT (XX:VV:CC)" :
                               local_time == 3 ? "24-XFCJDJT (XX:VV)" :
                               local_time == 4 ? "24-XFCJDJT (XX:VV:CC)" : "DSRK",
-                              157 + wide_delta, 112,
-                              local_time ? CR_NONE : CR_GRAY2GDARKGRAY_HEXEN);
+                              157 + wide_delta, 112, CR_NONE);
     }
 
     // Messages timeout (slider)
