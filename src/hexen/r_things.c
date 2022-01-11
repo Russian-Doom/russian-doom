@@ -1080,6 +1080,41 @@ void R_AddSprites(sector_t *sec)
 /*
 ================================================================================
 =
+= R_ApplyWeaponBob
+=
+= [crispy] apply bobbing (or centering) to the player's weapon sprite
+=
+================================================================================
+*/
+
+static inline void R_ApplyWeaponBob (fixed_t *sx, boolean bobx, fixed_t *sy, boolean boby)
+{
+    const angle_t angle = (128 * leveltime) & FINEMASK;
+
+    if (sx)
+    {
+        *sx = FRACUNIT;
+
+        if (bobx)
+        {
+            *sx += FixedMul(viewplayer->bob, finecosine[angle]);
+        }
+    }
+
+    if (sy)
+    {
+        *sy = 32 * FRACUNIT; // [crispy] WEAPONTOP
+
+        if (boby)
+        {
+            *sy += FixedMul(viewplayer->bob, finesine[angle & (FINEANGLES / 2 - 1)]);
+        }
+    }
+}
+
+/*
+================================================================================
+=
 = R_DrawPSprite
 =
 ================================================================================
@@ -1104,6 +1139,7 @@ void R_DrawPSprite(pspdef_t * psp)
     vissprite_t *vis, avis;
 
     int tempangle;
+    const int state = viewplayer->psprites[ps_weapon].state - states;
 
 //
 // decide which patch to use
@@ -1127,6 +1163,24 @@ void R_DrawPSprite(pspdef_t * psp)
 
     lump = sprframe->lump[0];
     flip = (boolean)sprframe->flip[0] ^ flip_levels ^ flip_weapons;
+
+    // [JN] Smoothern Serpent Staff ready state bobbing.
+    if (singleplayer && !vanillaparm)
+    {
+        if (state == S_CSTAFFREADY1  ||  state == S_CSTAFFREADY2
+        ||  state == S_CSTAFFREADY3  ||  state == S_CSTAFFREADY4
+        ||  state == S_CSTAFFREADY5  ||  state == S_CSTAFFREADY6
+        ||  state == S_CSTAFFREADY7  ||  state == S_CSTAFFREADY8
+        ||  state == S_CSTAFFREADY9  ||  state == S_CSTAFFBLINK1
+        ||  state == S_CSTAFFBLINK2  ||  state == S_CSTAFFBLINK3
+        ||  state == S_CSTAFFBLINK4  ||  state == S_CSTAFFBLINK5
+        ||  state == S_CSTAFFBLINK6  ||  state == S_CSTAFFBLINK7
+        ||  state == S_CSTAFFBLINK8  ||  state == S_CSTAFFBLINK9
+        ||  state == S_CSTAFFBLINK10 ||  state == S_CSTAFFBLINK11)
+        {
+            R_ApplyWeaponBob(&psp->sx, true, &psp->sy, true);
+        }
+    }
 
 //
 // calculate edges of the shape
