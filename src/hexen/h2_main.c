@@ -121,6 +121,7 @@ int maxplayers = MAXPLAYERS;
 int demosequence;
 
 boolean title_mus_played = false;
+boolean realframe; // [JN] Interpolation for weapon bobbing
 
 boolean hasUnknownPWads = false;
 boolean isHexenDemo = false;
@@ -1143,10 +1144,19 @@ void H2_ProcessEvents(void)
 
 static void DrawAndBlit(void)
 {
+    static int saved_gametic = -1;
+    
     // [JN] Set correct palette. Allow finale stages choose palettes.
     if (gamestate != GS_LEVEL && gamestate != GS_FINALE)
     {
         I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+    }
+
+    realframe = (!uncapped_fps || gametic > saved_gametic);
+
+    if (realframe)
+    {
+        saved_gametic = gametic;
     }
 
     // Change the view size if needed
