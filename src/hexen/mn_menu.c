@@ -45,7 +45,7 @@
 
 // MACROS ------------------------------------------------------------------
 #define ITEM_HEIGHT 20
-#define SLOTTEXTLEN	16
+#define SLOTTEXTLEN	22
 #define ASCII_CURSOR '['
 
 // EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
