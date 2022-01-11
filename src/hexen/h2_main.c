@@ -121,7 +121,7 @@ int maxplayers = MAXPLAYERS;
 int demosequence;
 
 boolean title_mus_played = false;
-boolean realframe; // [JN] Interpolation for weapon bobbing
+boolean realframe, skippsprinterp;  // [JN] Interpolation for weapon bobbing
 
 boolean hasUnknownPWads = false;
 boolean isHexenDemo = false;

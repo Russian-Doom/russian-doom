@@ -1276,10 +1276,8 @@ void R_DrawPSprite(pspdef_t * psp)
     }
 
     // [JN] e6y: interpolation for weapon bobbing
-    if (uncapped_fps)
+    if (uncapped_fps && !vanillaparm)
     {
-        extern boolean realframe;
-
         typedef struct interpolate_s
         {
             int x1;
@@ -1291,7 +1289,7 @@ void R_DrawPSprite(pspdef_t * psp)
 
         static psp_interpolate_t psp_inter;
 
-        if (realframe)
+        if (realframe && !skippsprinterp)
         {
             psp_inter.x1 = psp_inter.x1_prev;
             psp_inter.texturemid = psp_inter.texturemid_prev;
@@ -1300,7 +1298,7 @@ void R_DrawPSprite(pspdef_t * psp)
         psp_inter.x1_prev = vis->x1;
         psp_inter.texturemid_prev = vis->texturemid;
 
-        if (lump == psp_inter.lump)
+        if (lump == psp_inter.lump && !skippsprinterp)
         {
             int deltax = vis->x2 - vis->x1;
 
@@ -1314,6 +1312,7 @@ void R_DrawPSprite(pspdef_t * psp)
             psp_inter.x1 = vis->x1;
             psp_inter.texturemid = vis->texturemid;
             psp_inter.lump = lump;
+            skippsprinterp = false;
         }
     }
 

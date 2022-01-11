@@ -722,6 +722,9 @@ extern int show_messages;
 extern boolean testcontrols;
 extern int testcontrols_mousespeed;
 
+// [JN] Interpolation for weapon bobbing
+extern boolean realframe;
+extern boolean skippsprinterp;
 
 /*
 ===============================================================================
