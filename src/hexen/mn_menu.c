@@ -1140,7 +1140,7 @@ static MenuItem_t Level1Items[] = {
     {ITT_EMPTY,   NULL,                 NULL,                    NULL,                  0},
     {ITT_EMPTY,   NULL,                 NULL,                    NULL,                  0},
     {ITT_SETMENU, "NEXT PAGE >",        "CKTLE.OFZ CNHFYBWF `", &LevelSelectMenu2_F,   0}, // СЛЕДУЮЩАЯ СТРАНИЦА >
-    {ITT_LRFUNC,  "START GAME",         "YFXFNM BUHE",           G_DoSelectiveGame,     0}  // НАЧАТЬ ИГРУ
+    {ITT_EFUNC,   "START GAME",         "YFXFNM BUHE",           G_DoSelectiveGame,     0}  // НАЧАТЬ ИГРУ
 };
 
 static Menu_t LevelSelectMenu1 = {
@@ -1175,7 +1175,7 @@ static MenuItem_t Level2Items_F[] = {
     {ITT_LRFUNC,  "FLECHETTE:",             "PTKMT:",                     M_RD_SelectiveArti_2, 0}, // ЗЕЛЬЕ
     {ITT_EMPTY,   NULL,                     NULL,                         NULL,                 0},
     {ITT_SETMENU, "NEXT PAGE >",            "CKTLE.OFZ CNHFYBWF `",      &LevelSelectMenu3,    0}, // СЛЕДУЮЩАЯ СТРАНИЦА >
-    {ITT_LRFUNC,  "START GAME",             "YFXFNM BUHE",                G_DoSelectiveGame,    0}  // НАЧАТЬ ИГРУ
+    {ITT_EFUNC,   "START GAME",             "YFXFNM BUHE",                G_DoSelectiveGame,    0}  // НАЧАТЬ ИГРУ
 };
 
 static Menu_t LevelSelectMenu2_F = {
@@ -1206,7 +1206,7 @@ static MenuItem_t Level2Items_C[] = {
     {ITT_LRFUNC,  "FLECHETTE:",            "PTKMT:",                  M_RD_SelectiveArti_2, 0}, // ЗЕЛЬЕ
     {ITT_EMPTY,   NULL,                    NULL,                      NULL,                 0},
     {ITT_SETMENU, "NEXT PAGE >",           "CKTLE.OFZ CNHFYBWF `",   &LevelSelectMenu3,    0}, // СЛЕДУЮЩАЯ СТРАНИЦА >
-    {ITT_LRFUNC,  "START GAME",            "YFXFNM BUHE",             G_DoSelectiveGame,    0}  // НАЧАТЬ ИГРУ
+    {ITT_EFUNC,   "START GAME",            "YFXFNM BUHE",             G_DoSelectiveGame,    0}  // НАЧАТЬ ИГРУ
 };
 
 static Menu_t LevelSelectMenu2_C = {
@@ -1237,7 +1237,7 @@ static MenuItem_t Level2Items_M[] = {
     {ITT_LRFUNC,  "FLECHETTE:",              "PTKMT:",                      M_RD_SelectiveArti_2, 0}, // ЗЕЛЬЕ
     {ITT_EMPTY,   NULL,                      NULL,                          NULL,                 0},
     {ITT_SETMENU, "NEXT PAGE >",             "CKTLE.OFZ CNHFYBWF `",       &LevelSelectMenu3,    0}, // СЛЕДУЮЩАЯ СТРАНИЦА >
-    {ITT_LRFUNC,  "START GAME",              "YFXFNM BUHE",                 G_DoSelectiveGame,    0}  // НАЧАТЬ ИГРУ
+    {ITT_EFUNC,   "START GAME",              "YFXFNM BUHE",                 G_DoSelectiveGame,    0}  // НАЧАТЬ ИГРУ
 };
 
 static Menu_t LevelSelectMenu2_M = {
@@ -1272,7 +1272,7 @@ static MenuItem_t Level3Items[] = {
     {ITT_SWITCH,   "EMERALD KEY:",          "BPEVHELYSQ RK.X:",           M_RD_SelectiveKey_0,   0}, // ИЗУМРУДНЫЙ КЛЮЧ
     {ITT_EMPTY,    NULL,                    NULL,                         NULL,                  0},
     {ITT_SETMENU,  "NEXT PAGE >",           "CKTLE.OFZ CNHFYBWF `",      &LevelSelectMenu4,     0}, // СЛЕДУЮЩАЯ СТРАНИЦА >
-    {ITT_LRFUNC,   "START GAME",            "YFXFNM BUHE",                G_DoSelectiveGame,     0}  // НАЧАТЬ ИГРУ
+    {ITT_EFUNC,    "START GAME",            "YFXFNM BUHE",                G_DoSelectiveGame,     0}  // НАЧАТЬ ИГРУ
 };
 
 static Menu_t LevelSelectMenu3 = {
@@ -1307,7 +1307,7 @@ static MenuItem_t Level4Items[] = {
     {ITT_LRFUNC,  "RUBY PLANET:",        "HE,BYJDFZ GKFYTNF:",      M_RD_SelectivePuzzle_2,  0}, // РУБИНОВАЯ ПЛАНЕТА
     {ITT_EMPTY,   NULL,                  NULL,                      NULL,                    0},
     {ITT_SETMENU, "LAST PAGE >",         "GJCKTLYZZ CNHFYBWF `",   &LevelSelectMenu5,       0}, // ПОСЛЕДНЯЯ СТРАНИЦА >
-    {ITT_LRFUNC,  "START GAME",          "YFXFNM BUHE",             G_DoSelectiveGame,       0}  // НАЧАТЬ ИГРУ
+    {ITT_EFUNC,   "START GAME",          "YFXFNM BUHE",             G_DoSelectiveGame,       0}  // НАЧАТЬ ИГРУ
 };
 
 static Menu_t LevelSelectMenu4 = {
@@ -1342,7 +1342,7 @@ static MenuItem_t Level5Items[] = {
     {ITT_LRFUNC,  "SIGIL OF THE MAGUS:", "CBVDJK VFUF:",            M_RD_SelectivePuzzle_16, 0}, // СИМВОЛ МАГА
     {ITT_EMPTY,   NULL,                  NULL,                      NULL,                    0},
     {ITT_SETMENU, "FIRST PAGE >",        "GTHDFZ CNHFYBWF `",      &LevelSelectMenu1,       0}, // ПЕРВАЯ СТРАНИЦА >
-    {ITT_LRFUNC,  "START GAME",          "YFXFNM BUHE",             G_DoSelectiveGame,       0}  // НАЧАТЬ ИГРУ
+    {ITT_EFUNC,   "START GAME",          "YFXFNM BUHE",             G_DoSelectiveGame,       0}  // НАЧАТЬ ИГРУ
 };
 
 static Menu_t LevelSelectMenu5 = {

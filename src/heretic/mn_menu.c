@@ -1220,7 +1220,7 @@ static MenuItem_t Level1Items[] = {
     {ITT_SWITCH,  "FIREMACE:",          "JUYTYYFZ ,EKFDF:",     M_RD_SelectiveFireMace,   0}, // ОГНЕННАЯ БУЛАВА
     {ITT_EMPTY,   NULL,                 NULL,                   NULL,                     0},
     {ITT_SETMENU, "NEXT PAGE >",        "CKTLE.OFZ CNHFYBWF `", &LevelSelectMenu2,        0}, // СЛЕДУЮЩАЯ СТРАНИЦА >
-    {ITT_LRFUNC,  "START GAME",         "YFXFNM BUHE",          G_DoSelectiveGame,        0}  // НАЧАТЬ ИГРУ
+    {ITT_EFUNC,   "START GAME",         "YFXFNM BUHE",          G_DoSelectiveGame,        0}  // НАЧАТЬ ИГРУ
 };
 
 static Menu_t LevelSelectMenu1 = {
@@ -1255,7 +1255,7 @@ static MenuItem_t Level2Items[] = {
     {ITT_SWITCH,  "RESPAWNING:",      "DJCRHTIF.OBTCZ:",      M_RD_SelectiveRespawn, 0},
     {ITT_EMPTY,   NULL,               NULL,                   NULL,                  0},
     {ITT_SETMENU, "LAST PAGE >",      "GJCKTLYZZ CNHFYBWF `", &LevelSelectMenu3,     0},
-    {ITT_LRFUNC,  "START GAME",       "YFXFNM BUHE",          G_DoSelectiveGame,     0}
+    {ITT_EFUNC,   "START GAME",       "YFXFNM BUHE",          G_DoSelectiveGame,     0}
 };
 
 static Menu_t LevelSelectMenu2 = {
@@ -1290,7 +1290,7 @@ static MenuItem_t Level3Items[] = {
     {ITT_EMPTY,  NULL,                     NULL,                   NULL,                 0},
     {ITT_EMPTY,  NULL,                     NULL,                   NULL,                 0},
     {ITT_SETMENU,"FIRST PAGE >",           "GTHDFZ CNHFYBWF `",    &LevelSelectMenu1,    0},
-    {ITT_LRFUNC, "START GAME",             "YFXFNM BUHE",          G_DoSelectiveGame,    0}
+    {ITT_EFUNC,  "START GAME",             "YFXFNM BUHE",          G_DoSelectiveGame,    0}
 };
 
 static Menu_t LevelSelectMenu3 = {
