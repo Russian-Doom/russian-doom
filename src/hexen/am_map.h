@@ -76,17 +76,6 @@
 
 #define INITSCALEMTOF (.2 * FRACUNIT)     // scale on entry
 
-// [JN] How much the automap moves window per tic in frame-buffer coordinates.
-// Moves 280 (8) pixels in 1 second, increased from 140 (4) pixels.
-#define F_PANINC 8
-
-// [JN] How much zoom-in per tic goes to 2x in 1 second.
-// Increased from 1.02*FRACUNIT.
-#define M_ZOOMIN ((int) (1.04 * FRACUNIT))
-// [JN] How much zoom-out per tic pulls out to 0.5x in 1 second
-// Increased from 1.02*FRACUNIT.
-#define M_ZOOMOUT ((int) (FRACUNIT / 1.04))
-
 // translates between frame-buffer and map distances
 #define FTOM(x) (((int64_t)((x)<<16) * scale_ftom) >> FRACBITS)
 #define MTOF(x) ((((int64_t)(x) * scale_mtof) >> FRACBITS)>>16)
