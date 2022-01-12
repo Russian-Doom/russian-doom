@@ -781,7 +781,14 @@ void R_ProjectSprite(mobj_t * thing)
         || thing->type == MT_SGSHARD7
         || thing->type == MT_SGSHARD8
         || thing->type == MT_SGSHARD9
-        || thing->type == MT_SGSHARD0)
+        || thing->type == MT_SGSHARD0
+        // Spashes
+        || thing->type == MT_SPLASHBASE        // Water splash base [-1]
+        || thing->type == MT_SPLASH            // Water small splash [-1]
+        || thing->type == MT_LAVASPLASH        // Lava splash base [-1]
+        || thing->type == MT_LAVASMOKE         // Lava smoke [-1]
+        || thing->type == MT_SLUDGESPLASH      // Sludge splash base [-1]
+        || thing->type == MT_SLUDGECHUNK)      // Sludge small chunk [-1]
         {
             if (thing->health & 1)
             {
