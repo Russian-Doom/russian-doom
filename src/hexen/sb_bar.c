@@ -153,6 +153,21 @@ static patch_t *PatchINVLFGEM1;
 static patch_t *PatchINVLFGEM2;
 static patch_t *PatchINVRTGEM1;
 static patch_t *PatchINVRTGEM2;
+// [JN] Health vial, representing player's health.
+static patch_t *PatchSbarVial00;
+static patch_t *PatchSbarVial01;
+static patch_t *PatchSbarVial02;
+static patch_t *PatchSbarVial03;
+static patch_t *PatchSbarVial04;
+static patch_t *PatchSbarVial05;
+static patch_t *PatchSbarVial06;
+static patch_t *PatchSbarVial07;
+static patch_t *PatchSbarVial08;
+static patch_t *PatchSbarVial09;
+static patch_t *PatchSbarVial10;
+static patch_t *PatchSbarVial11;
+// [JN] Generic armor icon.
+static patch_t *PatchSbarArmorIcon;
 
 // Toggle god mode
 cheatseq_t CheatGodSeq = CHEAT("satan", 0);
@@ -293,6 +308,21 @@ void SB_Init(void)
     PatchINVLFGEM2 = W_CacheLumpName("invgeml2", PU_STATIC);
     PatchINVRTGEM1 = W_CacheLumpName("invgemr1", PU_STATIC);
     PatchINVRTGEM2 = W_CacheLumpName("invgemr2", PU_STATIC);
+    // [JN] Health vial, representing player's health.
+    PatchSbarVial00 = W_CacheLumpName("HUDPNT00", PU_STATIC);
+    PatchSbarVial01 = W_CacheLumpName("HUDPNT01", PU_STATIC);
+    PatchSbarVial02 = W_CacheLumpName("HUDPNT02", PU_STATIC);
+    PatchSbarVial03 = W_CacheLumpName("HUDPNT03", PU_STATIC);
+    PatchSbarVial04 = W_CacheLumpName("HUDPNT04", PU_STATIC);
+    PatchSbarVial05 = W_CacheLumpName("HUDPNT05", PU_STATIC);
+    PatchSbarVial06 = W_CacheLumpName("HUDPNT06", PU_STATIC);
+    PatchSbarVial07 = W_CacheLumpName("HUDPNT07", PU_STATIC);
+    PatchSbarVial08 = W_CacheLumpName("HUDPNT08", PU_STATIC);
+    PatchSbarVial09 = W_CacheLumpName("HUDPNT09", PU_STATIC);
+    PatchSbarVial10 = W_CacheLumpName("HUDPNT10", PU_STATIC);
+    PatchSbarVial11 = W_CacheLumpName("HUDPNT11", PU_STATIC);
+    // [JN] Generic armor icon.
+    PatchSbarArmorIcon = W_CacheLumpName("ARM5A0", PU_STATIC);
 
 //      PatchCHAINBACK = W_CacheLumpName("CHAINBACK", PU_STATIC);
     startLump = W_GetNumForName("IN0");
@@ -1802,26 +1832,26 @@ void DrawFullScreenStuff(void)
         // [JN] First weapon?
         if (CPlayer->readyweapon == WP_FIRST)
         {
-            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 170, W_CacheLumpName("MANADIM1", PU_STATIC));
-            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 184, W_CacheLumpName("MANADIM2", PU_STATIC));
+            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 170, PatchMANADIM1);
+            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 184, PatchMANADIM2);
         }
         // [JN] Second weapon?
         else if (CPlayer->readyweapon == WP_SECOND)
         {
-            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 170, W_CacheLumpName("MANABRT1", PU_STATIC));
-            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 184, W_CacheLumpName("MANADIM2", PU_STATIC));
+            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 170, PatchMANABRIGHT1);
+            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 184, PatchMANADIM2);
         }
         // [JN] Trird weapon?
         else if (CPlayer->readyweapon == WP_THIRD)
         {
-            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 170, W_CacheLumpName("MANADIM1", PU_STATIC));
-            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 184, W_CacheLumpName("MANABRT2", PU_STATIC));
+            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 170, PatchMANADIM1);
+            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 184, PatchMANABRIGHT2);
         }
         // [JN] Fourth weapon?
         else
         {
-            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 170, W_CacheLumpName("MANABRT1", PU_STATIC));
-            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 184, W_CacheLumpName("MANABRT2", PU_STATIC));
+            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 170, PatchMANABRIGHT1);
+            V_DrawShadowedPatchRaven(301 + (wide_delta * 2), 184, PatchMANABRIGHT2);
         }        
 
         // [JN] Draw mana points, colorize if necessary. Do not draw negative values.
@@ -1852,19 +1882,19 @@ void DrawFullScreenStuff(void)
     if (!inventory)
     {
         // [JN] Draw health vial, representing player's health
-        V_DrawShadowedPatch(46, 177, W_CacheLumpName(
-                            CPlayer->mo->health >= 100 ? "HUDPNT00" :
-                            CPlayer->mo->health >=  90 ? "HUDPNT01" :
-                            CPlayer->mo->health >=  80 ? "HUDPNT02" :
-                            CPlayer->mo->health >=  70 ? "HUDPNT03" :
-                            CPlayer->mo->health >=  60 ? "HUDPNT04" :
-                            CPlayer->mo->health >=  50 ? "HUDPNT05" :
-                            CPlayer->mo->health >=  40 ? "HUDPNT06" :
-                            CPlayer->mo->health >=  30 ? "HUDPNT07" :
-                            CPlayer->mo->health >=  20 ? "HUDPNT08" :
-                            CPlayer->mo->health >=  10 ? "HUDPNT09" :
-                            CPlayer->mo->health >=   1 ? "HUDPNT10" :
-                                                         "HUDPNT11", PU_CACHE));
+        V_DrawShadowedPatch(46, 177, 
+                            CPlayer->mo->health >= 100 ? PatchSbarVial00 :
+                            CPlayer->mo->health >=  90 ? PatchSbarVial01 :
+                            CPlayer->mo->health >=  80 ? PatchSbarVial02 :
+                            CPlayer->mo->health >=  70 ? PatchSbarVial03 :
+                            CPlayer->mo->health >=  60 ? PatchSbarVial04 :
+                            CPlayer->mo->health >=  50 ? PatchSbarVial05 :
+                            CPlayer->mo->health >=  40 ? PatchSbarVial06 :
+                            CPlayer->mo->health >=  30 ? PatchSbarVial07 :
+                            CPlayer->mo->health >=  20 ? PatchSbarVial08 :
+                            CPlayer->mo->health >=  10 ? PatchSbarVial09 :
+                            CPlayer->mo->health >=   1 ? PatchSbarVial10 :
+                                                         PatchSbarVial11);
 
         if (CPlayer->readyArtifact > 0)
         {
@@ -1886,7 +1916,7 @@ void DrawFullScreenStuff(void)
 
 
         // [JN] Draw generic armor icon
-        V_DrawShadowedPatch(87, 178, W_CacheLumpName("ARM5A0", PU_CACHE));
+        V_DrawShadowedPatch(87, 178, PatchSbarArmorIcon);
     }
     else
     {
