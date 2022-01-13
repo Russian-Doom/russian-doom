@@ -858,7 +858,7 @@ void R_AddSprites (sector_t *sec)
     mobj_t *thing;
     int     lightnum;
 
-    lightnum = ((sec->lightlevel+level_brightness) >> LIGHTSEGSHIFT)+extralight;
+    lightnum = (sec->lightlevel >> LIGHTSEGSHIFT)+extralight;
 
     if (lightnum < 0)		
     {
@@ -1177,8 +1177,7 @@ void R_DrawPlayerSprites (void)
     pspdef_t   *psp;    
 
     // get light level
-    lightnum = ((viewplayer->mo->subsector->sector->lightlevel
-             + level_brightness) >> LIGHTSEGSHIFT) + extralight;
+    lightnum = (viewplayer->mo->subsector->sector->lightlevel >> LIGHTSEGSHIFT) + extralight;
 
     if (lightnum < 0)		
     {

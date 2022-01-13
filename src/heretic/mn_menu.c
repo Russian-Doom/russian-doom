@@ -2085,7 +2085,12 @@ static void DrawDisplayMenu(void)
     }
 
     // Level brightness
-    RD_Menu_DrawSliderSmall(&DisplayMenu, 72, 5, level_brightness / 16);
+    RD_Menu_DrawSliderSmall(&DisplayMenu, 72, 9, extra_level_brightness);
+    // Numerical representation of slider position
+    M_snprintf(num, 4, "%d", extra_level_brightness);
+    dp_translation = cr[CR_WHITE2GRAY_HERETIC];
+    RD_M_DrawTextA(num, 128 + wide_delta, 73);
+    dp_translation = NULL;
 }
 
 static void M_RD_ScreenSize(Direction_t direction)
@@ -2113,7 +2118,7 @@ static void M_RD_LevelBrightness(Direction_t direction)
     // [JN] Hide menu background for a moment.
     menubgwait = I_GetTime() + 25;
 
-    RD_Menu_SlideInt_Step(&level_brightness, 0, 64, 16, direction);
+    RD_Menu_SlideInt(&extra_level_brightness, 0, 8, direction);
 }
 
 static void M_RD_Detail()
@@ -4881,7 +4886,7 @@ static void M_RD_BackToDefaults_Recommended(void)
 
     // Display
     screenblocks        = 10;
-    level_brightness    = 0;
+    extra_level_brightness = 0;
     detailLevel         = 0;
 
     // Color options
@@ -5020,7 +5025,7 @@ static void M_RD_BackToDefaults_Original(void)
 
     // Display
     screenblocks        = 10;
-    level_brightness    = 0;
+    extra_level_brightness = 0;
     detailLevel         = 1;
 
     // Color options

@@ -2213,7 +2213,10 @@ static void M_RD_Draw_Display(void)
     }
 
     // Level brightness slider
-    RD_Menu_DrawSliderSmall(&DisplayMenu, 64, 5, level_brightness / 16);
+    RD_Menu_DrawSliderSmall(&DisplayMenu, 64, 9, extra_level_brightness);
+    // Numerical representation of slider position
+    M_snprintf(num, 4, "%d", extra_level_brightness);
+    RD_M_DrawTextSmallENG(num, 125 + wide_delta, 65, CR_NONE);
 
     // Level brightness slider
     RD_Menu_DrawSliderSmall(&DisplayMenu, 84, 7, menu_shading / 4);
@@ -2256,7 +2259,7 @@ static void M_RD_Change_ScreenSize(Direction_t direction)
 
 static void M_RD_Change_LevelBrightness(Direction_t direction)
 {
-    RD_Menu_SlideInt_Step(&level_brightness, 0, 64, 16, direction);
+    RD_Menu_SlideInt(&extra_level_brightness, 0, 8, direction);
 }
 
 static void M_RD_Change_MenuShading(Direction_t direction)
@@ -5833,7 +5836,7 @@ static void M_RD_BackToDefaults_Recommended(int choice)
 
     // Display
     screenblocks          = 10;
-    level_brightness      = 0;
+    extra_level_brightness = 0;
     menu_shading          = 0;
     detailLevel           = 0;
     hud_detaillevel       = 0;
@@ -6021,7 +6024,7 @@ static void M_RD_BackToDefaults_Original(int choice)
 
     // Display
     screenblocks          = 10;
-    level_brightness      = 0;
+    extra_level_brightness = 0;
     menu_shading          = 0;
     detailLevel           = 1;
     hud_detaillevel       = 1;

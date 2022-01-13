@@ -189,7 +189,7 @@ void R_RenderMaskedSegRange(drawseg_t * ds, int x1, int x2)
     backsector = curline->backsector;
     texnum = texturetranslation[curline->sidedef->midtexture];
 
-    lightnum = ((frontsector->lightlevel + level_brightness) >> LIGHTSEGSHIFT) + extralight;
+    lightnum = (frontsector->lightlevel >> LIGHTSEGSHIFT) + extralight;
     
     // [JN] Fake contrast: ressurected, make optional
     // but also do not use it in foggy maps 
@@ -833,7 +833,7 @@ void R_StoreWallRange(int start, int stop)
         // OPTIMIZE: get rid of LIGHTSEGSHIFT globally
         if (!fixedcolormap)
         {
-            lightnum = ((frontsector->lightlevel + level_brightness) >> LIGHTSEGSHIFT) + extralight;
+            lightnum = (frontsector->lightlevel >> LIGHTSEGSHIFT) + extralight;
             
             // [JN] Fake contrast: ressurected, make optional
             // but also do not use it in foggy maps 

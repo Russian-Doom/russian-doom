@@ -2216,17 +2216,22 @@ static void DrawDisplayMenu(void)
     {
         RD_Menu_DrawSliderSmall(&DisplayMenu, 52, 4, screenblocks - 9);
         M_snprintf(num, 4, "%3d", screenblocks);
-        RD_M_DrawTextSmallENG(num, 85 + wide_delta, 52, CR_GRAY2GDARKGRAY_HEXEN);
+        RD_M_DrawTextSmallENG(num, 83 + wide_delta, 53, CR_GRAY2GDARKGRAY_HEXEN);
     }
     else
     {
         RD_Menu_DrawSliderSmall(&DisplayMenu, 52, 10, screenblocks - 3);
         M_snprintf(num, 4, "%3d", screenblocks);
-        RD_M_DrawTextSmallENG(num, 135 + wide_delta, 52, CR_GRAY2GDARKGRAY_HEXEN);
+        RD_M_DrawTextSmallENG(num, 131 + wide_delta, 53, CR_GRAY2GDARKGRAY_HEXEN);
     }
 
     // Level brightness
-    RD_Menu_DrawSliderSmall(&DisplayMenu, 72, 5, level_brightness / 16);
+    RD_Menu_DrawSliderSmall(&DisplayMenu, 72, 9, extra_level_brightness);
+    // Numerical representation of slider position
+    M_snprintf(num, 4, "%d", extra_level_brightness);
+    dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
+    RD_M_DrawTextA(num, 128 + wide_delta, 73);
+    dp_translation = NULL;
 }
 
 static void M_RD_ScreenSize(Direction_t direction)
@@ -2410,7 +2415,7 @@ static void M_RD_LevelBrightness(Direction_t direction)
     // [JN] Hide menu background for a moment.
     menubgwait = I_GetTime() + 25;
 
-    RD_Menu_SlideInt_Step(&level_brightness, 0, 64, 16, direction);
+    RD_Menu_SlideInt(&extra_level_brightness, 0, 8, direction);
 }
 
 static void M_RD_Detail()
@@ -4734,7 +4739,7 @@ void M_RD_DoResetSettings(void)
     // Display
     screenblocks    = 10;
     usegamma        = 7;
-    level_brightness = 0;
+    extra_level_brightness = 0;
 
     // Color options
     brightness       = 1.0f;

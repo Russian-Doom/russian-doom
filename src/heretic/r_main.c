@@ -839,6 +839,7 @@ void R_SetupFrame (player_t *player)
     }
 
     extralight = player->extralight;
+    extralight += extra_level_brightness; // [JN] Level Brightness feature.
 
     if (pitch > LOOKDIRMAX)
     {

@@ -83,7 +83,7 @@ extern int flashing_hom;
 // -----------------------------------------------------------------------------
 
 extern int screenblocks, screenSize;
-extern int level_brightness;
+extern int extra_level_brightness;
 extern int menu_shading;
 
 extern float brightness;
