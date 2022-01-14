@@ -1312,6 +1312,23 @@ mobj_t *P_SpawnMobj(fixed_t x, fixed_t y, fixed_t z, mobjtype_t type)
             mobj->tics -= M_Random() & 3;
             mobj->health -= mobj->tics & 1;
         }
+        
+        // [JN] Remove MF_NOBLOCKMAP and MF_NOGRAVITY from stained glass shards
+        // so they can fall down under own weigh after floor lowering.
+        if (mobj->type == MT_SGSHARD1
+        ||  mobj->type == MT_SGSHARD2
+        ||  mobj->type == MT_SGSHARD3
+        ||  mobj->type == MT_SGSHARD4
+        ||  mobj->type == MT_SGSHARD5
+        ||  mobj->type == MT_SGSHARD6
+        ||  mobj->type == MT_SGSHARD7
+        ||  mobj->type == MT_SGSHARD8
+        ||  mobj->type == MT_SGSHARD9
+        ||  mobj->type == MT_SGSHARD0)
+        {
+            mobj->flags &= ~MF_NOBLOCKMAP;
+            mobj->flags &= ~MF_NOGRAVITY;
+        }
     }
 
     // Set the state, but do not use P_SetMobjState, because action
