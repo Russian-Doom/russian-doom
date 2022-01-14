@@ -1313,8 +1313,10 @@ mobj_t *P_SpawnMobj(fixed_t x, fixed_t y, fixed_t z, mobjtype_t type)
             mobj->health -= mobj->tics & 1;
         }
         
-        // [JN] Remove MF_NOBLOCKMAP and MF_NOGRAVITY from stained glass shards
+        // [JN] Remove MF_NOBLOCKMAP and MF_NOGRAVITY from following objects 
         // so they can fall down under own weigh after floor lowering.
+        //
+        // Stained glass shards:
         if (mobj->type == MT_SGSHARD1
         ||  mobj->type == MT_SGSHARD2
         ||  mobj->type == MT_SGSHARD3
@@ -1324,7 +1326,9 @@ mobj_t *P_SpawnMobj(fixed_t x, fixed_t y, fixed_t z, mobjtype_t type)
         ||  mobj->type == MT_SGSHARD7
         ||  mobj->type == MT_SGSHARD8
         ||  mobj->type == MT_SGSHARD9
-        ||  mobj->type == MT_SGSHARD0)
+        ||  mobj->type == MT_SGSHARD0
+        // Wendigo ice shards:
+        ||  mobj->type == MT_ICECHUNK)
         {
             mobj->flags &= ~MF_NOBLOCKMAP;
             mobj->flags &= ~MF_NOGRAVITY;
