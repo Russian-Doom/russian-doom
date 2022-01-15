@@ -95,6 +95,9 @@ extern int AutoArmorSave[NUMCLASSES];
 
 // PUBLIC DATA DECLARATIONS ------------------------------------------------
 
+// graphics are drawn to a backing screen and blitted to the real screen
+byte *st_backing_screen;
+
 boolean DebugSound;             // Debug flag for displaying sound info
 boolean inventory;
 int curpos;
@@ -282,6 +285,10 @@ void SB_Init(void)
 {
     int i;
     int startLump;
+
+    st_backing_screen = (byte *)Z_Malloc((screenwidth << hires) 
+                                       * (39 << hires)
+                                       * sizeof(*st_backing_screen), PU_STATIC, 0);
 
     PatchH2BAR = W_CacheLumpName("H2BAR", PU_STATIC);
     PatchH2BAR_RUS = W_CacheLumpName("RD_H2BAR", PU_STATIC);
@@ -834,13 +841,6 @@ static int oldkeys = -1;
 
 void SB_Drawer(void)
 {
-    // [JN] Draw extended skulls and stone border
-    if ((aspect_ratio >= 2 && screenblocks == 10)
-    ||  (aspect_ratio >= 2 && automapactive && !automap_overlay))
-    {
-        V_DrawPatch(wide_delta, 123, W_CacheLumpName("WDBAR", PU_CACHE));
-    }
-
     // Sound info debug stuff
     if (DebugSound == true)
     {
@@ -890,6 +890,53 @@ void SB_Drawer(void)
     }
     else
     {
+        // [JN] Draw side screen borders in wide screen mode.
+        if (aspect_ratio >= 2)
+        {
+            V_UseBuffer(st_backing_screen);
+            
+            // [crispy] this is our own local copy of R_FillBackScreen() to
+            // fill the entire background of st_backing_screen with the bezel pattern,
+            // so it appears to the left and right of the status bar in widescreen mode
+            if ((screenwidth >> hires) != ORIGWIDTH)
+            {
+                int x, y;
+                byte *src;
+                byte *dest;
+                char *name = "F_022";
+                const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
+        
+                src = W_CacheLumpName(name, PU_CACHE);
+                dest = st_backing_screen;
+        
+                // [JN] Variable HUD detail level.
+                for (y = SCREENHEIGHT-SBARHEIGHT; y < SCREENHEIGHT; y++)
+                {
+                    for (x = 0; x < screenwidth; x++)
+                    {
+                        *dest++ = src[((( y >> shift_allowed) & 63) << 6) 
+                                     + (( x >> shift_allowed) & 63)];
+                    }
+                }
+        
+                // [JN] Draw bezel bottom edge.
+                if (scaledviewwidth == screenwidth)
+                {
+                    patch_t *patch = W_CacheLumpName("bordb", PU_CACHE);
+                
+                    for (x = 0; x < screenwidth; x += 16)
+                    {
+                        // V_DrawPatch(x, 0, patch);
+                        V_DrawPatchUnscaled(x, 0, patch, NULL);
+                    }
+                }
+            }
+
+            V_RestoreBuffer();
+
+            V_CopyRect(0, 0, st_backing_screen, origwidth, 39, 0, 161); // 162!
+        }
+
         if (SB_state == -1)
         {
             V_DrawPatch(0 + wide_delta, 134, 
