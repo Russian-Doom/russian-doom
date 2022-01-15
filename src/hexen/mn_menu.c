@@ -398,7 +398,7 @@ static MenuItem_t ClassItems[] = {
 };
 
 static Menu_t ClassMenu = {
-    66, 66,
+    56, 50,
     66,
     NULL, NULL, true,
     3, ClassItems, true,
@@ -418,8 +418,8 @@ static MenuItem_t SkillItems_F[] = {
 };
 
 static Menu_t SkillMenu_F = {
-    120, 120,
-    44,
+    115, 99,
+    30,
     "CHOOSE SKILL LEVEL:", "EHJDTYM CKJ;YJCNB:", true, // УРОВЕНЬ СЛОЖНОСТИ:
     6, SkillItems_F, true,
     DrawSkillMenu,
@@ -438,8 +438,8 @@ static MenuItem_t SkillItems_C[] = {
 };
 
 static Menu_t SkillMenu_C = {
-    116, 116,
-    44,
+    118, 102,
+    30,
     "CHOOSE SKILL LEVEL:", "EHJDTYM CKJ;YJCNB:", true, // УРОВЕНЬ СЛОЖНОСТИ:
     6, SkillItems_C, true,
     DrawSkillMenu,
@@ -458,8 +458,8 @@ static MenuItem_t SkillItems_M[] = {
 };
 
 static Menu_t SkillMenu_M = {
-    112, 112,
-    44,
+    87, 69,
+    30,
     "CHOOSE SKILL LEVEL:", "EHJDTYM CKJ;YJCNB:", true, // УРОВЕНЬ СЛОЖНОСТИ:
     6, SkillItems_M, true,
     DrawSkillMenu,
@@ -1836,7 +1836,7 @@ static void DrawClassMenu(void)
 
     if (english_language)
     {
-        RD_M_DrawTextB("CHOOSE CLASS:", 34 + wide_delta, 24);
+        RD_M_DrawTextB("CHOOSE CLASS:", 27 + wide_delta, 24);
     }
     else
     {
