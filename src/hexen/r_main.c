@@ -46,6 +46,9 @@ angle_t viewangle;
 fixed_t viewcos, viewsin;
 player_t *viewplayer;
 
+// [JN] Used by perfomance counter.
+int rendered_segs, rendered_visplanes, rendered_vissprites;
+
 int detailshift;                // 0 = high, 1 = low
 
 //
@@ -1009,6 +1012,21 @@ void R_SetupFrame(player_t * player)
         frame++;
     }
 #endif
+}
+
+/*
+================================================================================
+=
+= R_ClearStats
+=
+================================================================================
+*/
+
+void R_ClearStats (void)
+{
+    rendered_segs = 0;
+    rendered_visplanes = 0;
+    rendered_vissprites = 0;
 }
 
 /*

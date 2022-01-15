@@ -492,7 +492,7 @@ void R_DrawPlanes(void)
     extern int columnofs[WIDESCREENWIDTH];
 
     for (i = 0 ; i < MAXVISPLANES ; i++)
-    for (pl = visplanes[i] ; pl ; pl = pl->next)
+    for (pl = visplanes[i] ; pl ; pl = pl->next, rendered_visplanes++)
     if (pl->minx <= pl->maxx)
     {
         //

@@ -83,7 +83,7 @@ static void DrawRenderingMenu(void);
 static void M_RD_Change_Widescreen(Direction_t direction);
 static void M_RD_Change_VSync();
 static void M_RD_MaxFPS(Direction_t direction);
-static void M_RD_FPScounter();
+static void M_RD_PerfCounter(Direction_t direction);
 static void M_RD_Smoothing();
 static void M_RD_PorchFlashing();
 static void M_RD_Screenshots();
@@ -503,7 +503,7 @@ static MenuItem_t RenderingItems[] = {
     {ITT_LRFUNC, "DISPLAY ASPECT RATIO:",     "CJJNYJITYBT CNJHJY \'RHFYF:",     M_RD_Change_Widescreen, 0}, // СООТНОШЕНИЕ СТОРОН ЭКРАНА
     {ITT_SWITCH, "VERTICAL SYNCHRONIZATION:", "DTHNBRFKMYFZ CBY[HJYBPFWBZ:",     M_RD_Change_VSync,      0}, // ВЕРТИКАЛЬНАЯ СИНХРОНИЗАЦИЯ
     {ITT_LRFUNC, "FPS LIMIT:",                "JUHFYBXTYBT",                     M_RD_MaxFPS,            0}, // ОГРАНИЧЕНИЕ FPS
-    {ITT_SWITCH, "FPS COUNTER:",              "CXTNXBR RFLHJDJQ XFCNJNS:",       M_RD_FPScounter,        0}, // СЧЕТЧИК КАДРОВОЙ ЧАСТОТЫ
+    {ITT_LRFUNC, "PERFORMANCE COUNTER:",      "CXTNXBR GHJBPDJLBNTKMYJCNB:",     M_RD_PerfCounter,       0}, // СЧЕТЧИК ПРОИЗВОДИТЕЛЬНОСТИ
     {ITT_SWITCH, "PIXEL SCALING:",            "GBRCTKMYJT CUKF;BDFYBT:",         M_RD_Smoothing,         0}, // ПИКСЕЛЬНОЕ СГЛАЖИВАНИЕ
     {ITT_SWITCH, "PORCH PALETTE CHANGING:",   "BPVTYTYBT GFKBNHS RHFTD 'RHFYF:", M_RD_PorchFlashing,     0}, // ИЗМЕНЕНИЕ ПАЛИТРЫ КРАЕВ ЭКРАНА
     {ITT_TITLE,  "EXTRA",                     "LJGJKYBNTKMYJ",                   NULL,                   0}, // ДОПОЛНИТЕЛЬНО
@@ -1433,7 +1433,7 @@ static MenuItem_t FilesItems[] = {
 };
 
 static Menu_t FilesMenu = {
-    110, 110,
+    110, 79,
     60,
     NULL, NULL, true,
     2, FilesItems, true,
@@ -2036,8 +2036,10 @@ static void DrawRenderingMenu(void)
                               max_fps < 260 ? CR_GRAY2GREEN_HEXEN : 
 							  max_fps < 999 ? CR_GRAY2DARKGOLD_HEXEN : CR_GRAY2RED_HEXEN);
 
-        // FPS counter
-        RD_M_DrawTextSmallENG(show_fps ? "ON" : "OFF", 129 + wide_delta, 72, CR_NONE);
+        // Performance counter
+        RD_M_DrawTextSmallENG(show_fps == 1 ? "FPS only" :
+                              show_fps == 2 ? "FULL" : "OFF", 
+                              192 + wide_delta, 72, CR_NONE);
 
         // Pixel scaling
         if (force_software_renderer)
@@ -2095,8 +2097,12 @@ static void DrawRenderingMenu(void)
                               max_fps < 260 ? CR_GRAY2GREEN_HEXEN : 
 							  max_fps < 999 ? CR_GRAY2DARKGOLD_HEXEN : CR_GRAY2RED_HEXEN);
 
-        // Счетчик кадровой частоты
-        RD_M_DrawTextSmallRUS(show_fps ? "DRK" : "DSRK", 223 + wide_delta, 72, CR_NONE);
+        // Счетчик производительности
+        RD_M_DrawTextSmallRUS(show_fps == 1 ? "" : // Print as US string below
+                              show_fps == 2 ? "gjkysq" : "dsrk",
+                              236 + wide_delta, 72, CR_NONE);
+        // Print "FPS" separately, RU sting doesn't fit in 4:3 aspect ratio :(
+        if (show_fps == 1) RD_M_DrawTextSmallENG("fps", 236 + wide_delta, 72, CR_NONE);
 
         // Пиксельное сглаживание
         if (force_software_renderer)
@@ -2187,9 +2193,9 @@ static void M_RD_MaxFPS(Direction_t direction)
     }
 }
 
-static void M_RD_FPScounter()
+static void M_RD_PerfCounter(Direction_t direction)
 {
-    show_fps ^= 1;
+    RD_Menu_SpinInt(&show_fps, 0, 2, direction);
 }
 
 static void M_RD_Smoothing()
