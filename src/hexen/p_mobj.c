@@ -1313,6 +1313,25 @@ mobj_t *P_SpawnMobj(fixed_t x, fixed_t y, fixed_t z, mobjtype_t type)
             mobj->health -= mobj->tics & 1;
         }
         
+        // [JN] Randomize health of following objects
+        // so they can be flipped randomly:
+        //
+        // Affrit: scales (splotches?)
+        if (mobj->type == MT_FIREDEMON_SPLOTCH1
+        ||  mobj->type == MT_FIREDEMON_SPLOTCH2
+        // Ettin: dropped mace
+        ||  mobj->type == MT_ETTIN_MACE
+        // Centaur: dropped shield and sword
+        ||  mobj->type == MT_CENTAUR_SHIELD
+        ||  mobj->type == MT_CENTAUR_SWORD
+        // Wendigo: ice shards
+        ||  mobj->type == MT_ICECHUNK
+        // Poisoned cloud of Cleric's flechette or mushroom
+        ||  mobj->type == MT_POISONCLOUD)
+        {
+            mobj->health -= M_Random() & 1;
+        }
+
         // [JN] Remove MF_NOBLOCKMAP and MF_NOGRAVITY from following objects 
         // so they can fall down under own weigh after floor lowering.
         //

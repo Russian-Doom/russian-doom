@@ -782,13 +782,26 @@ void R_ProjectSprite(mobj_t * thing)
         || thing->type == MT_SGSHARD8
         || thing->type == MT_SGSHARD9
         || thing->type == MT_SGSHARD0
-        // Spashes
+        // Splashes
         || thing->type == MT_SPLASHBASE        // Water splash base [-1]
         || thing->type == MT_SPLASH            // Water small splash [-1]
         || thing->type == MT_LAVASPLASH        // Lava splash base [-1]
         || thing->type == MT_LAVASMOKE         // Lava smoke [-1]
         || thing->type == MT_SLUDGESPLASH      // Sludge splash base [-1]
-        || thing->type == MT_SLUDGECHUNK)      // Sludge small chunk [-1]
+        || thing->type == MT_SLUDGECHUNK       // Sludge small chunk [-1]
+        // Affrit: scales (splotches?)
+        || thing->type == MT_FIREDEMON_SPLOTCH1
+        || thing->type == MT_FIREDEMON_SPLOTCH2
+        // Ettin: dropped mace
+        || thing->type == MT_ETTIN_MACE
+        // Centaur: dropped shield and sword
+        || thing->type == MT_CENTAUR_SHIELD
+        || thing->type == MT_CENTAUR_SWORD
+        // Wendigo: ice shards
+        || thing->type == MT_ICECHUNK
+        // Poisoned cloud of Cleric's flechette or mushroom
+        || thing->type == MT_POISONCLOUD
+        )
         {
             if (thing->health & 1)
             {
