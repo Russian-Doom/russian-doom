@@ -313,6 +313,11 @@ static boolean soundchanged;
 // while changing screen size, gamma and level brightness.
 static int menubgwait;
 
+// [JN] Used as a flag for drawing Sound / Sound System menu background:
+// - if menu was invoked by F4, don't draw background.
+// - if menu was invoked from Options menu, draw background.
+static boolean sfxbgdraw;
+
 boolean askforquit;
 static int typeofask;
 static boolean FileMenuKeySteal;
@@ -1951,6 +1956,9 @@ static void DrawFileSlots()
 
 static void DrawOptionsMenu(void)
 {
+    // Sound / Sound System menu background will be drawn.
+    sfxbgdraw = true;
+
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 }
@@ -2627,6 +2635,7 @@ static void DrawSoundMenu(void)
     static char num[4];
 
     // Draw menu background.
+    if (sfxbgdraw)
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
     // SFX Volume
@@ -2673,6 +2682,7 @@ static void M_RD_SfxChannels(Direction_t direction)
 static void DrawSoundSystemMenu(void)
 {
     // Draw menu background.
+    if (sfxbgdraw)
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
     if (english_language)
@@ -2734,7 +2744,7 @@ static void DrawSoundSystemMenu(void)
         RD_M_DrawTextSmallENG(mute_inactive_window ? "ON" : "OFF", 184 + wide_delta, 112, CR_NONE);
 
         // Informative message:
-        if (CurrentItPos == 4)
+        if (CurrentItPos == 1 || CurrentItPos == 2 || CurrentItPos == 4)
         {
             RD_M_DrawTextSmallENG("CHANGING WILL REQUIRE RESTART OF THE PROGRAM", 3 + wide_delta, 132, CR_GRAY2RED_HEXEN);
         }
@@ -2807,7 +2817,7 @@ static void DrawSoundSystemMenu(void)
         RD_M_DrawTextSmallRUS(mute_inactive_window ? "DSRK" : "DRK", 201 + wide_delta, 112, CR_NONE);
 
         // Informative message: ИЗМЕНЕНИЕ ПОТРЕБУЕТ ПЕРЕЗАПУСК ПРОГРАММЫ
-        if (CurrentItPos == 0 || CurrentItPos == 1 || CurrentItPos == 3)
+        if (CurrentItPos == 1 || CurrentItPos == 2 || CurrentItPos == 4)
         {
             RD_M_DrawTextSmallRUS("BPVTYTYBT GJNHT,ETN GTHTPFGECR GHJUHFVVS",
                                   11 + wide_delta, 132, CR_GRAY2RED_HEXEN);
@@ -2822,15 +2832,16 @@ static void M_RD_SoundDevice()
         else if (snd_sfxdevice == 3)
             snd_sfxdevice = 0;
 
+    // [JN] Not safe for hot-swapping.
     // Reinitialize SFX module
-    InitSfxModule(snd_sfxdevice);
-
+    // InitSfxModule(snd_sfxdevice);
+    // 
     // Call sfx device changing routine
-    S_RD_Change_SoundDevice();
-
+    // S_RD_Change_SoundDevice();
+    // 
     // Reinitialize sound volume, recalculate sound curve
-    snd_MaxVolume_tmp = snd_MaxVolume;
-    soundchanged = true;
+    // snd_MaxVolume_tmp = snd_MaxVolume;
+    // soundchanged = true;
 }
 
 static void M_RD_MusicDevice(Direction_t direction)
@@ -5336,6 +5347,7 @@ boolean MN_Responder(event_t * event)
             menuactive = true;
             FileMenuKeySteal = false;
             MenuTime = 0;
+            sfxbgdraw = false; // [JN] Don't draw menu background.
             RD_Menu_SetMenu(vanillaparm ? &VanillaOptions2Menu : &SoundMenu);
             if (!netgame && !demoplayback)
             {
