@@ -285,7 +285,9 @@ static void M_RD_SelectivePuzzle_16(Direction_t direction);
 static void SCEndGame(int option);
 
 // Reset settings
-static void M_RD_ResetSettings(int option);
+static void DrawResetSettingsMenu(void);
+static void M_RD_BackToDefaults_Recommended();
+static void M_RD_BackToDefaults_Original();
 
 // Change language
 static void M_RD_ChangeLanguage(int option);
@@ -364,6 +366,7 @@ static Menu_t LevelSelectMenu3;
 static Menu_t LevelSelectMenu4;
 static Menu_t LevelSelectMenu5;
 static const Menu_t* LevelSelectMenuPages[] = {&LevelSelectMenu1, &LevelSelectMenu2_F, &LevelSelectMenu3, &LevelSelectMenu4, &LevelSelectMenu5};
+static Menu_t ResetSettings;
 static Menu_t VanillaOptions2Menu;
 static Menu_t FilesMenu;
 static Menu_t LoadMenu;
@@ -476,7 +479,7 @@ static MenuItem_t RDOptionsItems[] = {
     {ITT_SETMENU, "CONTROLS",          "EGHFDKTYBT",     &ControlsMenu,       0}, // УПРАВЛЕНИЕ
     {ITT_SETMENU, "GAMEPLAY",          "UTQVGKTQ",       &Gameplay1Menu,       0}, // ГЕЙМПЛЕЙ
     {ITT_SETMENU, "LEVEL SELECT",      "DS,JH EHJDYZ",   &LevelSelectMenu1,   0}, // ВЫБОР УРОВНЯ
-    {ITT_EFUNC,   "RESET SETTINGS",    "C,HJC YFCNHJTR", M_RD_ResetSettings,  0}, // СБРОС НАСТРОЕК
+    {ITT_SETMENU, "RESET SETTINGS",    "C,HJC YFCNHJTR", &ResetSettings,      0}, // СБРОС НАСТРОЕК
     {ITT_EFUNC,   "LANGUAGE: ENGLISH", "ZPSR: HECCRBQ",  M_RD_ChangeLanguage, 0}  // ЯЗЫК: РУССКИЙ
 };
 
@@ -1360,6 +1363,30 @@ static Menu_t LevelSelectMenu5 = {
     &RDOptionsMenu,
     0
 };
+
+// -----------------------------------------------------------------------------
+// Reset settings
+// -----------------------------------------------------------------------------
+
+static MenuItem_t ResetSettingstems[] = {
+    {ITT_EFUNC,  "RECOMMENDED", "HTRJVTYLJDFYYSQ", M_RD_BackToDefaults_Recommended, 0}, // РЕКОМЕНДОВАННЫЙ
+    {ITT_EFUNC,  "ORIGINAL",    "JHBUBYFKMYSQ",    M_RD_BackToDefaults_Original,    0}, // ОРИГИНАЛЬНЫЙ
+};
+
+static Menu_t ResetSettings = {
+    115, 100,
+    95,
+    "", "", false,
+    2, ResetSettingstems, false,
+    DrawResetSettingsMenu,
+    NULL,
+    &RDOptionsMenu,
+    0
+};
+
+// -----------------------------------------------------------------------------
+// Vanilla options menu
+// -----------------------------------------------------------------------------
 
 static MenuItem_t VanillaOptionsItems[] = {
     {ITT_EFUNC,   "END GAME",          "PFRJYXBNM BUHE",   SCEndGame,             0}, // ЗАКОНЧИТЬ ИГРУ
@@ -4691,6 +4718,56 @@ static void M_RD_SelectivePuzzle_16(Direction_t direction)
     RD_Menu_SlideInt(&selective_puzzle_16, 0, 25, direction);
 }
 
+// -----------------------------------------------------------------------------
+// DrawResetSettingsMenu
+// -----------------------------------------------------------------------------
+
+static void DrawResetSettingsMenu(void)
+{
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    if (english_language)
+    {
+        RD_M_DrawTextBigENG("SETTINGS RESET", 96 + wide_delta, 42);
+
+        RD_M_DrawTextSmallENG("GRAPHICAL, AUDIBLE AND GAMEPLAY SETTINGS", 19 + wide_delta, 65, CR_NONE);
+        RD_M_DrawTextSmallENG("WILL BE RESET TO THEIR DEFAULT VALUES.", 31 + wide_delta, 75, CR_NONE);
+        RD_M_DrawTextSmallENG("WHICH LEVEL OF VALUES TO USE?", 58 + wide_delta, 85, CR_NONE);
+
+        // Explanations
+        RD_M_DrawTextSmallENG("SETTINGS WILL BE RESET TO", 75 + wide_delta, 145, CR_GRAY2RED_HEXEN);
+        if (CurrentItPos == 0)
+        {
+            RD_M_DrawTextSmallENG("DEFAULT PORT'S VALUES", 85 + wide_delta, 155, CR_GRAY2RED_HEXEN);
+        }
+        else
+        {
+            RD_M_DrawTextSmallENG("ORIGINAL HEXEN VALUES", 86 + wide_delta, 155, CR_GRAY2RED_HEXEN);
+        }
+    }
+    else
+    {
+        RD_M_DrawTextBigRUS("C,HJC YFCNHJTR", 82 + wide_delta, 42);  // СБРОС НАСТРОЕК
+
+        RD_M_DrawTextSmallRUS("YFCNHJQRB UHFABRB< PDERF B UTQVGKTZ", 34 + wide_delta, 65, CR_NONE);      // Настройки графики, звука и геймплея
+        RD_M_DrawTextSmallRUS(",ELEN C,HJITYS YF CNFYLFHNYST PYFXTYBZ>", 16 + wide_delta, 75, CR_NONE);  // Будут сброшены на стандартные значения.
+        RD_M_DrawTextSmallRUS("DS,THBNT EHJDTYM PYFXTYBQ:", 66 + wide_delta, 85, CR_NONE);               // Выберите уровень значений:
+
+        // Пояснения
+        RD_M_DrawTextSmallRUS(",ELEN BCGJKMPJDFYS PYFXTYBZ", 60 + wide_delta, 145, CR_GRAY2RED_HEXEN);  // Будут использованы значения
+        if (CurrentItPos == 0)
+        {
+            RD_M_DrawTextSmallRUS("HTRJVTYLETVST GJHNJV", 82 + wide_delta, 155, CR_GRAY2RED_HEXEN);  // рекомендуемые портом
+        }
+        else
+        {
+            RD_M_DrawTextSmallRUS("JHBUBYFKMYJUJ", 83 + wide_delta, 155, CR_GRAY2RED_HEXEN);
+            RD_M_DrawTextSmallENG("HEXEN", 185 + wide_delta, 155, CR_GRAY2RED_HEXEN);
+        }
+    }
+}
+
 //---------------------------------------------------------------------------
 // DrawOptionsMenu_Vanilla
 //---------------------------------------------------------------------------
@@ -4724,33 +4801,24 @@ static void DrawOptions2Menu_Vanilla(void)
 }
 
 //---------------------------------------------------------------------------
-// M_RD_ResetSettings
+// M_RD_BackToDefaults_Recommended
 //---------------------------------------------------------------------------
 
-static void M_RD_ResetSettings(int option)
+void M_RD_BackToDefaults_Recommended (void)
 {
-    menuactive = false;
-    askforquit = true;
-    typeofask = 6;              // Reset settings to their defaults
-    if (!netgame && !demoplayback)
-    {
-        paused = true;
-    }
-}
-
-void M_RD_DoResetSettings(void)
-{
-    
     // Rendering
+    vsync                   = 1;
     aspect_ratio_correct    = 1;
     max_fps                 = 200; uncapped_fps = 1;
+    show_fps                = 0;
     smoothing               = 0;
     vga_porch_flash         = 0;
+    png_screenshots         = 1;
 
     // Display
-    screenblocks    = 10;
-    usegamma        = 7;
+    screenblocks           = 10;
     extra_level_brightness = 0;
+    detailLevel            = 0;
 
     // Color options
     brightness       = 1.0f;
@@ -4769,9 +4837,16 @@ void M_RD_DoResetSettings(void)
     draw_shadowed_text = 1;
     local_time         = 0;
 
+    // Automap
+    automap_overlay    = 0;
+    automap_rotate     = 0;
+    automap_follow     = 1;
+    automap_grid       = 0;
+
     // Audio
     snd_MaxVolume   = 8;
-    soundchanged = true;        // we'll set it when we leave the menu
+    snd_MaxVolume_tmp = snd_MaxVolume; // [JN] Sync temp volume variable,
+    soundchanged = true;               // and recalc sound curve.
     snd_MusicVolume = 8;
     S_SetMusicVolume();
     snd_Channels    = 32;
@@ -4781,22 +4856,33 @@ void M_RD_DoResetSettings(void)
     mute_inactive_window = 0;
 
     // Controls
-    mlook               = 0;
-    players[consoleplayer].centering = true;
-    mouseSensitivity    = 5;
+    mouseSensitivity   = 5;
+    mlook              = 0; players[consoleplayer].centering = true;
+    mouse_acceleration = 2.0F;
+    mouse_threshold    = 10;
+    novert             = 1;    
 
-    // Gameplay
-    brightmaps          = 1;
-    fake_contrast       = 0;
-    linear_sky          = 1;
-    flip_weapons        = 0;
-    sbar_colored        = 0;
-    sbar_colored_gem    = 0;
-    negative_health     = 0;
-    crosshair_draw      = 0;
-    crosshair_type      = 1;
-    crosshair_scale     = 0;
-    no_internal_demos   = 0;
+    // Gameplay (1)
+    brightmaps           = 1;
+    fake_contrast        = 0;
+    linear_sky           = 1;
+    randomly_flipcorpses = 1;
+    flip_weapons         = 0;
+    // Gameplay (2)
+    improved_collision   = 1;
+    torque               = 1;
+    floating_powerups    = 1;
+    // Gameplay (3)
+    sbar_colored         = 0;
+    sbar_colored_gem     = 0;
+    negative_health      = 0;
+    // Gameplay (4)
+    crosshair_draw       = 0;
+    crosshair_type       = 1;
+    crosshair_scale      = 0;
+    // Gameplay (5)
+    flip_levels          = 0;
+    no_internal_demos    = 0;
 
     // Reinitialize graphics
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
@@ -4819,6 +4905,106 @@ void M_RD_DoResetSettings(void)
     menuactive = true;
 }
 
+static void M_RD_BackToDefaults_Original(void)
+{
+    // Rendering
+    vsync                   = 1;
+    aspect_ratio_correct    = 1;
+    max_fps                 = 35; uncapped_fps = 1;
+    show_fps                = 0;
+    smoothing               = 0;
+    vga_porch_flash         = 0;
+    png_screenshots         = 1;
+
+    // Display
+    screenblocks           = 10;
+    extra_level_brightness = 0;
+    detailLevel            = 1;
+
+    // Color options
+    brightness       = 1.0f;
+    usegamma         = 9;
+    color_saturation = 1.0f;
+    show_palette     = 1;
+    r_color_factor   = 1.0f;
+    g_color_factor   = 1.0f;
+    b_color_factor   = 1.0f;
+
+    // Messages and Texts
+    show_messages      = 1;
+    messages_alignment = 0;
+    messages_timeout   = 4;
+    message_fade       = 0;
+    draw_shadowed_text = 0;
+    local_time         = 0;
+
+    // Automap
+    automap_overlay    = 0;
+    automap_rotate     = 0;
+    automap_follow     = 1;
+    automap_grid       = 0;
+
+    // Audio
+    snd_MaxVolume   = 8;
+    snd_MaxVolume_tmp = snd_MaxVolume; // [JN] Sync temp volume variable,
+    soundchanged = true;               // and recalc sound curve.
+    snd_MusicVolume = 8;
+    S_SetMusicVolume();
+    snd_Channels    = 8;
+    S_ChannelsRealloc();
+    snd_monomode    = 0;
+    snd_pitchshift  = 1;
+    mute_inactive_window = 0;
+
+    // Controls
+    mouseSensitivity   = 5;
+    mlook              = 0; players[consoleplayer].centering = true;
+    mouse_acceleration = 2.0F;
+    mouse_threshold    = 10;
+    novert             = 1;    
+
+    // Gameplay (1)
+    brightmaps           = 0;
+    fake_contrast        = 0;
+    linear_sky           = 0;
+    randomly_flipcorpses = 0;
+    flip_weapons         = 0;
+    // Gameplay (2)
+    improved_collision   = 0;
+    torque               = 0;
+    floating_powerups    = 1;
+    // Gameplay (3)
+    sbar_colored         = 0;
+    sbar_colored_gem     = 0;
+    negative_health      = 0;
+    // Gameplay (4)
+    crosshair_draw       = 0;
+    crosshair_type       = 1;
+    crosshair_scale      = 0;
+    // Gameplay (5)
+    flip_levels          = 0;
+    no_internal_demos    = 0;
+
+    // Reinitialize graphics
+    I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
+
+    // Reset palette.
+    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+
+    R_SetViewSize(screenblocks, detailLevel);
+
+    // Update status bar
+    SB_state = -1;
+    BorderNeedRefresh = true;
+
+    P_SetMessage(&players[consoleplayer], 
+                  english_language ?
+                  "SETTINGS RESET" :
+                  "YFCNHJQRB C,HJITYS", // НАСТРОЙКИ СБРОШЕНЫ
+                  false);
+    S_StartSound(NULL, SFX_DOOR_LIGHT_CLOSE);
+    menuactive = true;
+}
 
 //---------------------------------------------------------------------------
 // M_RD_ChangeLanguage
@@ -5249,9 +5435,6 @@ boolean MN_Responder(event_t * event)
                 case 5:
                     BorderNeedRefresh = true;
                     mn_SuicideConsole = true;
-                    break;
-                case 6:
-                    M_RD_DoResetSettings();
                     break;
                 default:
                     break;
