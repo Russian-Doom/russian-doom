@@ -290,6 +290,7 @@ void D_BindVariables(void)
     M_BindIntVariable("mlook",                  &mlook);
     M_BindIntVariable("extra_level_brightness", &extra_level_brightness);
     M_BindIntVariable("detaillevel",            &detailLevel);
+    M_BindIntVariable("hud_detaillevel",        &hud_detaillevel);
 
     // Messages and texts
     M_BindIntVariable("show_messages",          &show_messages);

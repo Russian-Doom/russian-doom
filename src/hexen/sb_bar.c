@@ -926,8 +926,14 @@ void SB_Drawer(void)
                 
                     for (x = 0; x < screenwidth; x += 16)
                     {
-                        // V_DrawPatch(x, 0, patch);
-                        V_DrawPatchUnscaled(x, 0, patch, NULL);
+                        if (hud_detaillevel)
+                        {
+                            V_DrawPatch(x, 0, patch);
+                        }
+                        else
+                        {
+                            V_DrawPatchUnscaled(x, 0, patch, NULL);
+                        }
                     }
                 }
             }

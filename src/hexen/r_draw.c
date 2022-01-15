@@ -827,25 +827,22 @@ void R_InitBuffer (int width, int height)
 void R_DrawViewBorder (void)
 {
     int x, y;
-    const byte *src = W_CacheLumpName("F_022", PU_CACHE);
     byte *dest = I_VideoBuffer;
+    const byte *src = W_CacheLumpName("F_022", PU_CACHE);
+    const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
 
     if (scaledviewwidth == screenwidth)
     {
         return;
     }
 
+    // [JN] Simplified, same to V_FillFlat now.
     for (y = 0; y < SCREENHEIGHT - SBARHEIGHT; y++)
     {
-        for (x = 0; x < screenwidth / 64; x++)
+        for (x = 0; x < screenwidth; x++)
         {
-            memcpy(dest, src + ((y & 63) << 6), 64);
-            dest += 64;
-        }
-        if (screenwidth & 63)
-        {
-            memcpy(dest, src + ((y & 63) << 6), screenwidth & 63);
-            dest += (screenwidth & 63);
+            *dest++ = src[(((y >> shift_allowed) & 63) << 6) 
+                         + ((x >> shift_allowed) & 63)];
         }
     }
 

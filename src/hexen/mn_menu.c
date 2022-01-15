@@ -93,6 +93,7 @@ static void DrawDisplayMenu(void);
 static void M_RD_ScreenSize(Direction_t direction);
 static void M_RD_LevelBrightness(Direction_t direction);
 static void M_RD_Detail();
+static void M_RD_SBar_Detail();
 
 // Color
 static void DrawColorMenu(void);
@@ -532,6 +533,7 @@ static MenuItem_t DisplayItems[] = {
     {ITT_LRFUNC, "LEVEL BRIGHTNESS",    "EHJDTYM JCDTOTYYJCNB",     M_RD_LevelBrightness, 0}, // УРОВЕНЬ ОСВЕЩЕННОСТИ
     {ITT_EMPTY,  NULL,                  NULL,                       NULL,                 0},
     {ITT_SWITCH, "GRAPHICS DETAIL:",    "LTNFKBPFWBZ UHFABRB:",     M_RD_Detail,          0}, // ДЕТАЛИЗАЦИЯ ГРАФИКИ
+    {ITT_SWITCH, "HUD BACKGROUND DETAIL: ", "LTNFKBPFWBZ AJYF",     M_RD_SBar_Detail,     0}, // ДЕТАЛИЗАЦИЯ ФОНА (HUD:)
     {ITT_SETMENU, "COLOR OPTIONS...",   "YFCNHJQRB WDTNF>>>",       &ColorMenu,           0}, // НАСТРОЙКИ ЦВЕТА...
     {ITT_TITLE,  "INTERFACE",           "BYNTHATQC",                NULL,                 0}, // ИНТЕРФЕЙС
     {ITT_SETMENU, "MESSAGES AND TEXTS...", "CJJ,OTYBZ B NTRCNS>>>", &MessagesMenu,        0}, // СООБЩЕНИЯ И ТЕКСТЫ...
@@ -542,7 +544,7 @@ static Menu_t DisplayMenu = {
     36, 36,
     32,
     "DISPLAY OPTIONS", "YFCNHJQRB \'RHFYF", false, // НАСТРОЙКИ ЭКРАНА
-    10, DisplayItems, false,
+    11, DisplayItems, false,
     DrawDisplayMenu,
     NULL,
     &RDOptionsMenu,
@@ -2245,11 +2247,18 @@ static void DrawDisplayMenu(void)
     {
         // Graphics detail
         RD_M_DrawTextSmallENG(detailLevel ? "LOW" : "HIGH", 149 + wide_delta, 82, CR_NONE);
+
+        // HUD background detail
+        RD_M_DrawTextSmallENG(hud_detaillevel ? "LOW" : "HIGH", 198 + wide_delta, 92, CR_NONE);
     }
     else
     {
         // Детализация графики
         RD_M_DrawTextSmallRUS(detailLevel ? "YBPRFZ" : "DSCJRFZ", 188 + wide_delta, 82, CR_NONE);
+
+        // Status Bar detail
+        RD_M_DrawTextSmallENG("HUD: c", 164 + wide_delta, 92, CR_NONE);
+        RD_M_DrawTextSmallRUS(hud_detaillevel ? "YBPRFZ" : "DSCJRFZ", 196 + wide_delta, 92, CR_NONE);
     }
 
     // Screen size
@@ -2464,6 +2473,14 @@ static void M_RD_Detail()
     detailLevel ^= 1;
 
     R_SetViewSize (screenblocks, detailLevel);
+}
+
+static void M_RD_SBar_Detail()
+{
+    hud_detaillevel ^= 1;
+
+    // [JN] Update screen border.
+    setsizeneeded = true;
 }
 
 // -----------------------------------------------------------------------------
@@ -3733,7 +3750,7 @@ static void DrawGameplay2Menu(void)
 
         // Negative health
         RD_M_DrawTextSmallENG(negative_health ? "ON" : "OFF", 190 + wide_delta, 62,
-                              negative_health ? CR_GRAY2GREEN_HEXEN : CR_GRAY2DARKGREEN_HEXEN);
+                              negative_health ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         //
         // CROSSHAIR
@@ -3782,7 +3799,7 @@ static void DrawGameplay2Menu(void)
 
         // Отрицательное здоровье
         RD_M_DrawTextSmallRUS(negative_health ? "DRK" : "DSRK", 211 + wide_delta, 62,
-                          negative_health ? CR_GRAY2GREEN_HEXEN : CR_GRAY2DARKGREEN_HEXEN);
+                              negative_health ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         //
         // ПРИЦЕЛ
@@ -4825,6 +4842,7 @@ void M_RD_BackToDefaults_Recommended (void)
     screenblocks           = 10;
     extra_level_brightness = 0;
     detailLevel            = 0;
+    hud_detaillevel        = 0;
 
     // Color options
     brightness       = 1.0f;
@@ -4926,6 +4944,7 @@ static void M_RD_BackToDefaults_Original(void)
     screenblocks           = 10;
     extra_level_brightness = 0;
     detailLevel            = 1;
+    hud_detaillevel        = 1;
 
     // Color options
     brightness       = 1.0f;
