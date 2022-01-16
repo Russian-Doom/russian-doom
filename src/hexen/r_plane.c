@@ -380,7 +380,10 @@ visplane_t *R_DupPlane (const visplane_t *pl, int start, int stop)
     new_pl->minx = start;
     new_pl->maxx = stop;
 
-    memset(new_pl->top, SHRT_MAX, sizeof(new_pl->top));
+    for (int i = 0; i != screenwidth; i++)
+    {
+        new_pl->top[i] = SHRT_MAX;
+    }
 
     return new_pl;
 }
