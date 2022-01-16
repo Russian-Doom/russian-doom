@@ -140,6 +140,16 @@ int english_language = -1;
 int english_language = 1;
 #endif
 
+/*
+================================================================================
+=
+= [JN] PWAD autoloading. Initially all 4 values are empty.
+=
+================================================================================
+*/
+
+static char *autoloadglobalpwad[10] = { "", "", "", "" };
+
 // Display
 int extra_level_brightness = 0;
 int detailLevel = 0;        // [JN] Blocky mode, 0 = high, 1 = normal
@@ -278,8 +288,18 @@ void D_BindVariables(void)
     NET_BindVariables();
 #endif
 
-    M_BindIntVariable("graphical_startup",      &graphical_startup);
     M_BindIntVariable("english_language",       &english_language);
+
+    // [JN] PWAD autoloading. Note that we are using variables 1..4, not 0...3.
+    for (i = 1 ; i < 5 ; ++i)
+    {
+        static char pwad[32];
+
+        M_snprintf(pwad, sizeof(pwad), "autoload_global_pwad%i", i);
+        M_BindStringVariable(pwad, &autoloadglobalpwad[i]);
+    }
+
+    M_BindIntVariable("graphical_startup",      &graphical_startup);
     M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
     M_BindIntVariable("sfx_volume",             &snd_MaxVolume);
     M_BindIntVariable("music_volume",           &snd_MusicVolume);
@@ -499,6 +519,29 @@ void D_SetGameDescription(void)
     else
     {
         gamedescription = "Hexen";
+    }
+
+    // [JN] PWAD autoloading routine. Scan through all 4 
+    // available variables, and don't load an empty ones. 
+    // Note: you cannot use autoload with the Shareware, buy a full version!
+    if (gamemode != shareware)
+    {
+        int i;
+
+        for (i = 1 ; i < 5 ; ++i)
+        {
+            // [JN] If autoloads have not been set, initialize with defaults.
+            if (autoloadglobalpwad[i] == NULL)
+                autoloadglobalpwad[i] = "";
+
+            if (strcmp(autoloadglobalpwad[i], ""))
+            {
+                W_MergeFile(autoloadglobalpwad[i]);
+                printf(english_language ? 
+                      " autoloading: %s\n" : " автозагрузка: %s\n",
+                        autoloadglobalpwad[i]);
+            }
+        }
     }
 
     // [JN] Параметр "-file" перенесен из w_main.c
