@@ -370,8 +370,7 @@ visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel, int special)
 
 visplane_t *R_DupPlane (const visplane_t *pl, int start, int stop)
 {
-    unsigned int  hash = visplane_hash(pl->picnum, pl->lightlevel, pl->height);
-    visplane_t   *new_pl = new_visplane(hash);
+    visplane_t *new_pl = new_visplane(visplane_hash(pl->picnum, pl->lightlevel, pl->height));
 
     new_pl->height = pl->height;
     new_pl->picnum = pl->picnum;
