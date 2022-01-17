@@ -1799,8 +1799,9 @@ void P_SpawnMapThing(mapthing_t * mthing)
     if (randomly_flipcorpses && !vanillaparm)
     {
         // Obstacles
-        if (mobj->type == MT_ZBARREL           // Barrel [8100]
-        ||  mobj->type == MT_MISC70            // Big Rock (brown) [97]
+        if (mobj->type == MT_MISC70            // Big Rock (brown) [97]
+// [JN] Not looking good:
+//      ||  mobj->type == MT_ZBARREL           // Barrel [8100]
         ||  mobj->type == MT_MISC72            // Big Rock (gray) [99]
         ||  mobj->type == MT_MISC7             // Dead Tree [24]
         ||  mobj->type == MT_MISC32            // Dead Tree (mossy) [60]

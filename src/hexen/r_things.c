@@ -663,7 +663,8 @@ void R_ProjectSprite(mobj_t * thing)
         &&   thing->type != MT_CLERIC_BOSS     // Traductus [10101]
         &&   thing->type != MT_FIGHTER_BOSS)   // Zedek [10100]
         // Obstacles
-        || thing->type == MT_ZBARREL           // Barrel [8100]
+// [JN] Not looking good:
+//      || thing->type == MT_ZBARREL           // Barrel [8100]
         || thing->type == MT_MISC70            // Big Rock (brown) [97]
         || thing->type == MT_MISC72            // Big Rock (gray) [99]
         || thing->type == MT_MISC7             // Dead Tree [24]
