@@ -119,6 +119,7 @@ extern int automap_level_time;
 extern int automap_total_time;
 extern int automap_coords;
 extern int automap_overlay;
+extern int automap_overlay_bg;
 extern int automap_rotate;
 extern int automap_follow;
 extern int automap_grid;

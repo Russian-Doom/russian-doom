@@ -189,8 +189,6 @@ static void M_RD_Change_AutomapAntialias();
 static void M_RD_Change_AutomapRotate();
 static void M_RD_Change_AutomapOverlay();
 static void M_RD_Change_AutomapOverlayBG(Direction_t direction);
-// static void M_RD_Change_AutomapFollow();
-// static void M_RD_Change_AutomapGrid();
 static void M_RD_Change_AutomapStats(Direction_t direction);
 static void M_RD_Change_AutomapLevelTime(Direction_t direction);
 static void M_RD_Change_AutomapTotalTime(Direction_t direction);
@@ -2924,7 +2922,7 @@ static void M_RD_Draw_AutomapSettings(void)
                               hud_widget_colors ? CR_GREEN : CR_DARKRED);
     }
 
-    // Message timeout slider
+    // Automap background opacity slider
     RD_Menu_DrawSliderSmall(&AutomapMenu, 84, 8, automap_overlay_bg / 3);
     // Numerical representation of slider position
     M_snprintf(num, 4, "%d", automap_overlay_bg);

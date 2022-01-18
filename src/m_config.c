@@ -612,6 +612,7 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(automap_total_time),
     CONFIG_VARIABLE_INT(automap_coords),
     CONFIG_VARIABLE_INT(automap_overlay),
+    CONFIG_VARIABLE_INT(automap_overlay_bg),
     CONFIG_VARIABLE_INT(automap_rotate),
     CONFIG_VARIABLE_INT(automap_follow),
     CONFIG_VARIABLE_INT(automap_grid),
