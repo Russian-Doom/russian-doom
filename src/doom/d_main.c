@@ -148,9 +148,14 @@ int automap_total_time = 0;
 int automap_coords = 0;
 int automap_follow  = 1;
 int automap_overlay = 0;
+int automap_overlay_bg = 0;
 int automap_rotate  = 0;
 int automap_grid    = 0;
 int hud_widget_colors = 0;
+
+// [JN] Variable status bar height, used for 
+// background opacity in automap overlay mode.
+extern int st_height;
 
 // Sound
 int sfxVolume = 8;          // Maximum volume of a sound effect (internal: 0-15)
@@ -526,6 +531,18 @@ void D_Display (void)
     {
         R_RenderPlayerView (&players[displayplayer]);
 
+        // [JN] Background opacity in automap overlay mode.
+        if (automapactive && automap_overlay)
+        {
+            const int screenheight = screenblocks > 10 ?
+                                     SCREENHEIGHT : SCREENHEIGHT - (st_height << hires);
+
+            for (y = 0 ; y < screenwidth * screenheight ; y++)
+            {
+                I_VideoBuffer[y] = colormaps[automap_overlay_bg * 256 + I_VideoBuffer[y]];
+            }
+        }
+
         if (aspect_ratio >= 2)
         {
             if (screenblocks > 10 && screenblocks < 17)
@@ -756,6 +773,7 @@ void D_BindVariables(void)
     M_BindIntVariable("automap_total_time",     &automap_total_time);
     M_BindIntVariable("automap_coords",         &automap_coords);
     M_BindIntVariable("automap_overlay",        &automap_overlay);
+    M_BindIntVariable("automap_overlay_bg",     &automap_overlay_bg);
     M_BindIntVariable("automap_rotate",         &automap_rotate);
     M_BindIntVariable("automap_follow",         &automap_follow);
     M_BindIntVariable("automap_grid",           &automap_grid);

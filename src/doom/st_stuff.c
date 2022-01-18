@@ -285,7 +285,7 @@ static int keyboxes[3];       // holds key-type for each key box on bar
 int st_keyorskull[3];  // [crispy] blinking key or skull in the status bar
 
 // [JN] Different status height between common Doom and Jaguar Doom.
-static int st_height;
+int st_height;
 static int st_y;
 
 // [JN] status bar widget colors.
