@@ -151,6 +151,7 @@ int automap_overlay = 0;
 int automap_overlay_bg = 0;
 int automap_rotate  = 0;
 int automap_grid    = 0;
+int automap_grid_size = 128;
 int hud_widget_colors = 0;
 
 // [JN] Variable status bar height, used for 
@@ -777,6 +778,7 @@ void D_BindVariables(void)
     M_BindIntVariable("automap_rotate",         &automap_rotate);
     M_BindIntVariable("automap_follow",         &automap_follow);
     M_BindIntVariable("automap_grid",           &automap_grid);
+    M_BindIntVariable("automap_grid_size",      &automap_grid_size);
     M_BindIntVariable("hud_widget_colors",      &hud_widget_colors);
 
     // Sound
