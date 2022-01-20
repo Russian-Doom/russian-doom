@@ -538,6 +538,9 @@ void D_Display (void)
             {
                 I_VideoBuffer[y] = colormaps[automap_overlay_bg * 256 + I_VideoBuffer[y]];
             }
+
+            // Erase darkened screen borders imideatelly to prevent blinking. 
+            R_DrawViewBorder ();
         }
 
         if (aspect_ratio >= 2)
