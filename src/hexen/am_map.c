@@ -33,7 +33,6 @@ boolean automapactive = false;
 static int finit_height = SCREENHEIGHT - SBARHEIGHT;
 static int f_x, f_y;            // location of window on screen
 static int f_w, f_h;            // size of window on screen
-static byte *fb;                // pseudo-frame buffer
 
 static mpoint_t m_paninc;       // how far the window pans each tic (map coords)
 static fixed_t mtof_zoommul;    // how far the window zooms in each tic (map coords)
@@ -278,7 +277,6 @@ static void AM_initVariables(void)
     thinker_t *think;
 
     automapactive = true;
-    fb = I_VideoBuffer;
 
     f_oldloc.x = INT_MAX;
 
@@ -869,7 +867,7 @@ static void AM_drawFline(fline_t * fl, int color)
                     return;
                 }
 
-#define DOT(xx,yy,cc) fb[(yy)*f_w+(flipwidth[xx])]=(cc)    //the MACRO!
+#define DOT(xx,yy,cc) I_VideoBuffer[(yy)*f_w+(flipwidth[xx])]=(cc)    //the MACRO!
 
                 dx = fl->b.x - fl->a.x;
                 ax = 2 * (dx < 0 ? -dx : dx);
@@ -966,7 +964,7 @@ static void PUTDOT(short xx, short yy, byte * cc, byte * cm)
         oldyy = yy;
         oldyyshifted = yy * (origwidth << hires);
     }
-    fb[oldyyshifted + flipwidth[xx]] = *(cc);
+    I_VideoBuffer[oldyyshifted + flipwidth[xx]] = *(cc);
 }
 
 static void DrawWuLine(int X0, int Y0, int X1, int Y1, byte * BaseColor,

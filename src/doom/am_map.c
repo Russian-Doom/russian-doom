@@ -73,7 +73,7 @@
 #define XHAIRCOLORS      GRAYS
 
 // The MACRO!
-#define DOT(xx,yy,cc) fb[(yy)*f_w+(flipwidth[xx])]=(cc)
+#define DOT(xx,yy,cc) I_VideoBuffer[(yy)*f_w+(flipwidth[xx])]=(cc)
 
 // [JN] Jaguar Doom automap colors
 #define RED_JAGUAR       32
@@ -192,9 +192,6 @@ static int f_y;
 // size of window on screen
 static int f_w;
 static int f_h;
-
-// pseudo-frame buffer
-static byte *fb;
 
 static mpoint_t m_paninc;     // how far the window pans each tic (map coords)
 static fixed_t  mtof_zoommul; // how far the window zooms in each tic (map coords)
@@ -566,7 +563,6 @@ static void AM_initVariables(void)
     static event_t st_notify = { ev_keyup, false, AM_MSGENTERED, 0, 0, 0 };
 
     automapactive = true;
-    fb = I_VideoBuffer;
 
     f_oldloc.x = INT_MAX;
 
@@ -1056,7 +1052,7 @@ void AM_Ticker (void)
 
 static void AM_clearFB (int color)
 {
-    memset(fb, color, f_w*f_h*sizeof(*fb));
+    memset(I_VideoBuffer, color, f_w*f_h*sizeof(*I_VideoBuffer));
 }
 
 // -----------------------------------------------------------------------------
@@ -1502,7 +1498,7 @@ static void PUTDOT (short xx, short yy, const byte *cc, const byte *cm)
         oldyy = yy;
         oldyyshifted = yy * (origwidth << hires);
     }
-    fb[oldyyshifted + flipwidth[xx]] = *(cc);
+    I_VideoBuffer[oldyyshifted + flipwidth[xx]] = *(cc);
 }
 
 // -----------------------------------------------------------------------------
@@ -2482,7 +2478,7 @@ static void AM_drawCrosshair (int color)
 {
     if (vanillaparm)
     {
-        fb[(f_w*(f_h+1))/2] = color; // single point for now
+        I_VideoBuffer[(f_w*(f_h+1))/2] = color; // single point for now
     }
     else
     {
