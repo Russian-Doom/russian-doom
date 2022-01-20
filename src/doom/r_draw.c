@@ -29,6 +29,7 @@
 #include "v_trans.h"
 #include "doomstat.h"
 #include "m_random.h"
+#include "st_stuff.h"
 #include "jn.h"
 
 
@@ -1418,8 +1419,7 @@ void R_DrawViewBorder (void)
         return;
     }
 
-    top = ((SCREENHEIGHT-(gamemission == jaguar ? 
-            SBARHEIGHT_JAG : SBARHEIGHT)) - scaledviewheight)/2; 
+    top = ((SCREENHEIGHT-(st_height << hires)) - scaledviewheight)/2; 
     side = (screenwidth-scaledviewwidth)/2; 
 
     // copy top and one line of left side 
@@ -1440,6 +1440,5 @@ void R_DrawViewBorder (void)
     } 
 
     // ? 
-    V_MarkRect (0, 0, screenwidth, SCREENHEIGHT - (gamemission == jaguar ?
-                                                   SBARHEIGHT_JAG : SBARHEIGHT)); 
+    V_MarkRect (0, 0, screenwidth, SCREENHEIGHT - (st_height << hires));
 }

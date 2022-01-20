@@ -30,12 +30,15 @@
 
 // Size of statusbar.
 // Now sensitive for scaling.
-#define ST_HEIGHT	        32
-#define ST_Y		        (ORIGHEIGHT - ST_HEIGHT)
+#define ST_HEIGHT       32
+#define ST_Y            (ORIGHEIGHT - ST_HEIGHT)
 
 // [JN] Jaguar status bar is 40 px tall
 #define ST_HEIGHT_JAG   40
 #define ST_Y_JAG        (ORIGHEIGHT - ST_HEIGHT_JAG)
+
+// [JN] Variable status bar height between common Doom and Jaguar Doom.
+extern int st_height;
 
 // [crispy] Demo Timer widget
 extern void ST_DrawDemoTimer (const int time);

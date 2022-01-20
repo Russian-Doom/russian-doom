@@ -154,10 +154,6 @@ int automap_grid    = 0;
 int automap_grid_size = 128;
 int hud_widget_colors = 0;
 
-// [JN] Variable status bar height, used for 
-// background opacity in automap overlay mode.
-extern int st_height;
-
 // Sound
 int sfxVolume = 8;          // Maximum volume of a sound effect (internal: 0-15)
 int musicVolume = 8;        // Maximum volume of music.

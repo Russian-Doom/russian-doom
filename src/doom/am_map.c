@@ -666,7 +666,7 @@ static void AM_LevelInit (void)
 
     f_x = f_y = 0;
     f_w = screenwidth;
-    f_h = SCREENHEIGHT - ((gamemission == jaguar ? ST_HEIGHT_JAG : ST_HEIGHT) << hires);
+    f_h = SCREENHEIGHT - (st_height << hires);
 
     AM_findMinMaxBoundaries();
 
@@ -1469,10 +1469,7 @@ static void PUTDOT (short xx, short yy, const byte *cc, const byte *cm)
     static int finit_height; // [JN] For different height between games.
     const byte *oldcc = cc;
 
-    if (gamemission == jaguar)
-    finit_height = SCREENHEIGHT - (ST_HEIGHT_JAG << hires);
-    else
-    finit_height = SCREENHEIGHT - (ST_HEIGHT << hires);
+    finit_height = SCREENHEIGHT - (st_height << hires);
 
     if (xx < 32)
         cc += 7 - (xx >> 2);
