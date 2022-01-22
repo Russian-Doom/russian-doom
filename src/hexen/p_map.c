@@ -1387,15 +1387,10 @@ boolean P_ThingHeightClip(mobj_t * thing)
         // [JN] Update player's view when on moving platform.
         // Idea by Brad Harding, code by Fabian Greffrath.
         // Thanks again, colleagues! (03.06.2018)
-        if (thing->player && thing->subsector->sector == movingsector)
+        if (singleplayer && !vanillaparm && thing->player
+        && thing->subsector->sector == movingsector)
         {
-            player_t *const player = thing->player;
-            player->viewz = player->mo->z + player->viewheight;
-
-            if (player->viewz > player->mo->ceilingz - 4*FRACUNIT)
-            {
-                player->viewz = player->mo->ceilingz - 4*FRACUNIT;
-            }
+            P_CalcHeight (thing->player, true);
         }
     }
     else

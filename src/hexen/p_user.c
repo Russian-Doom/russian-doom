@@ -107,7 +107,7 @@ void P_Thrust(player_t * player, angle_t angle, fixed_t move)
 ==================
 */
 
-void P_CalcHeight(player_t * player)
+void P_CalcHeight(player_t * player, boolean safe)
 {
     int angle;
     fixed_t bob;
@@ -118,25 +118,27 @@ void P_CalcHeight(player_t * player)
 // if not on ground)
 // OPTIMIZE: tablify angle
 
-    player->bob = FixedMul(player->mo->momx, player->mo->momx) +
-        FixedMul(player->mo->momy, player->mo->momy);
+    if (!safe)
+    {
+        player->bob =
+        FixedMul (player->mo->momx, player->mo->momx) +
+        FixedMul (player->mo->momy, player->mo->momy);
 
-    // [JN] Reduce bobbing amplitude while not in full
-    // speed movement. Affects both camera and weapon bobbing.
-    if (singleplayer && !max_bobbing && !vanillaparm)
-    {
-        player->bob >>= 3;
-    }
-    else
-    {
-        player->bob >>= 2;
-    }
+        // [JN] Reduce bobbing amplitude while not in full
+        // speed movement. Affects both camera and weapon bobbing.
+        if (singleplayer && !max_bobbing && !vanillaparm)
+        {
+            player->bob >>= 3;
+        }
+        else
+        {
+            player->bob >>= 2;
+        }
 
-    if (player->bob > MAXBOB)
-        player->bob = MAXBOB;
-    if (player->mo->flags2 & MF2_FLY && !onground)
-    {
-        player->bob = FRACUNIT / 2;
+        if (player->bob>MAXBOB)
+        {
+            player->bob = MAXBOB;
+        }
     }
 
     if ((player->cheats & CF_NOMOMENTUM))
@@ -387,7 +389,7 @@ void P_DeathThink(player_t * player)
             player->lookdir = 0;
         }
     }
-    P_CalcHeight(player);
+    P_CalcHeight(player, false);
 
     if (player->attacker && player->attacker != player->mo)
     {                           // Watch killer
@@ -727,7 +729,7 @@ void P_PlayerThink(player_t * player)
             }
         }
     }
-    P_CalcHeight(player);
+    P_CalcHeight(player, false);
     if (player->mo->subsector->sector->special)
     {
         P_PlayerInSpecialSector(player);
