@@ -1022,46 +1022,6 @@ mobj_t* P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boole
     }
     mobj->lastlook = safe ? 0 : P_Random () % MAXPLAYERS;
 
-    // [JN] Apply various enhancements:
-    if (singleplayer && !vanillaparm)
-    {
-        // [JN] Remove MF_NOBLOCKMAP flag from following objects
-        // so they can properly connect to the moving sectors and 
-        // don't stuck in the midair.
-        if (mobj->type == MT_SPLASHBASE     // Water splash base
-        ||  mobj->type == MT_SPLASH         // Water small splash
-        ||  mobj->type == MT_LAVASPLASH     // Lava splash base
-        ||  mobj->type == MT_SLUDGESPLASH   // Sludge splash base
-        ||  mobj->type == MT_SLUDGECHUNK)   // Sludge small chunk
-        {
-            mobj->flags &= ~MF_NOBLOCKMAP;
-        }
-
-        // [JN] Always apply small floor clipping to Imps, so they can
-        // be properly clipped in water while blocking by other mobjs.
-        if (mobj->type == MT_IMP || mobj->type == MT_IMPLEADER)
-        {
-            mobj->flags2 |= MF2_FOOTCLIP2;
-        }
-
-        // [JN] Reduce radius of Imp chunks so they will not hang part way on ledges.
-        // Empirically verified to be small enough to prevent hanging and to 
-        // don't spawn part way inside walls. Original radius: 20 * FRACUNIT.
-        // Apply torque (MF_CORPSE) and small floor clipping (MF2_FOOTCLIP2), too.
-        if (mobj->type == MT_IMPCHUNK1 || mobj->type == MT_IMPCHUNK2)
-        {
-            mobj->radius = 5 * FRACUNIT;
-            mobj->flags |= MF_CORPSE;
-            mobj->flags2 |= MF2_FOOTCLIP2;
-        }
-
-        // [JN] Apply small Z momentum for Weredragon's ball smoke.
-        if (mobj->type == MT_PUFFY)
-        {
-            mobj->momz = 0.35 * FRACUNIT;
-        }
-    }
-
     // Set the state, but do not use P_SetMobjState, because action
     // routines can't be called yet.  If the spawnstate has an action
     // routine, it will not be called.
@@ -1110,6 +1070,46 @@ mobj_t* P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boole
     else
     {
         mobj->flags2 &= ~MF2_FEETARECLIPPED;
+    }
+
+    // [JN] Apply various enhancements:
+    if (singleplayer && !vanillaparm)
+    {
+        // [JN] Remove MF_NOBLOCKMAP flag from following objects
+        // so they can properly connect to the moving sectors and 
+        // don't stuck in the midair.
+        if (mobj->type == MT_SPLASHBASE     // Water splash base
+        ||  mobj->type == MT_SPLASH         // Water small splash
+        ||  mobj->type == MT_LAVASPLASH     // Lava splash base
+        ||  mobj->type == MT_SLUDGESPLASH   // Sludge splash base
+        ||  mobj->type == MT_SLUDGECHUNK)   // Sludge small chunk
+        {
+            mobj->flags &= ~MF_NOBLOCKMAP;
+        }
+
+        // [JN] Always apply small floor clipping to Imps, so they can
+        // be properly clipped in water while blocking by other mobjs.
+        if (mobj->type == MT_IMP || mobj->type == MT_IMPLEADER)
+        {
+            mobj->flags2 |= MF2_FOOTCLIP2;
+        }
+
+        // [JN] Reduce radius of Imp chunks so they will not hang part way on ledges.
+        // Empirically verified to be small enough to prevent hanging and to 
+        // don't spawn part way inside walls. Original radius: 20 * FRACUNIT.
+        // Apply torque (MF_CORPSE) and small floor clipping (MF2_FOOTCLIP2), too.
+        if (mobj->type == MT_IMPCHUNK1 || mobj->type == MT_IMPCHUNK2)
+        {
+            mobj->radius = 5 * FRACUNIT;
+            mobj->flags |= MF_CORPSE;
+            mobj->flags2 |= MF2_FOOTCLIP2;
+        }
+
+        // [JN] Apply small Z momentum for Weredragon's ball smoke.
+        if (mobj->type == MT_PUFFY)
+        {
+            mobj->momz = 0.35 * FRACUNIT;
+        }
     }
 
     // [AM] Do not interpolate on spawn.

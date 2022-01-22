@@ -1306,6 +1306,60 @@ mobj_t *P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boole
     }
     mobj->lastlook = safe ? 0 : P_Random () % MAXPLAYERS;
 
+    // Set the state, but do not use P_SetMobjState, because action
+    // routines can't be called yet.  If the spawnstate has an action
+    // routine, it will not be called.
+    st = &states[info->spawnstate];
+    mobj->state = st;
+    mobj->tics = st->tics;
+    mobj->sprite = st->sprite;
+    mobj->frame = st->frame;
+
+    // Set subsector and/or block links.
+    P_SetThingPosition(mobj);
+    mobj->floorz = mobj->subsector->sector->floorheight;
+    mobj->ceilingz = mobj->subsector->sector->ceilingheight;
+    if (z == ONFLOORZ)
+    {
+        mobj->z = mobj->floorz;
+    }
+    else if (z == ONCEILINGZ)
+    {
+        mobj->z = mobj->ceilingz - mobj->info->height;
+    }
+    else if (z == FLOATRANDZ)
+    {
+        space = ((mobj->ceilingz) - (mobj->info->height)) - mobj->floorz;
+        if (space > 48 * FRACUNIT)
+        {
+            space -= 40 * FRACUNIT;
+            mobj->z =
+                ((space * P_Random()) >> 8) + mobj->floorz + 40 * FRACUNIT;
+        }
+        else
+        {
+            mobj->z = mobj->floorz;
+        }
+    }
+    else if (mobj->flags2 & MF2_FLOATBOB)
+    {
+        mobj->z = mobj->floorz + z;     // artifact z passed in as height
+    }
+    else
+    {
+        mobj->z = z;
+    }
+    if (mobj->flags2 & MF2_FLOORCLIP
+        && P_GetThingFloorType(mobj) >= FLOOR_LIQUID
+        && mobj->z == mobj->subsector->sector->floorheight)
+    {
+        mobj->floorclip = 10 * FRACUNIT;
+    }
+    else
+    {
+        mobj->floorclip = 0;
+    }
+
     // [JN] Apply various enhancements:
     if (singleplayer && !vanillaparm)
     {
@@ -1363,60 +1417,6 @@ mobj_t *P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boole
             mobj->flags &= ~MF_NOBLOCKMAP;
             mobj->flags &= ~MF_NOGRAVITY;
         }
-    }
-
-    // Set the state, but do not use P_SetMobjState, because action
-    // routines can't be called yet.  If the spawnstate has an action
-    // routine, it will not be called.
-    st = &states[info->spawnstate];
-    mobj->state = st;
-    mobj->tics = st->tics;
-    mobj->sprite = st->sprite;
-    mobj->frame = st->frame;
-
-    // Set subsector and/or block links.
-    P_SetThingPosition(mobj);
-    mobj->floorz = mobj->subsector->sector->floorheight;
-    mobj->ceilingz = mobj->subsector->sector->ceilingheight;
-    if (z == ONFLOORZ)
-    {
-        mobj->z = mobj->floorz;
-    }
-    else if (z == ONCEILINGZ)
-    {
-        mobj->z = mobj->ceilingz - mobj->info->height;
-    }
-    else if (z == FLOATRANDZ)
-    {
-        space = ((mobj->ceilingz) - (mobj->info->height)) - mobj->floorz;
-        if (space > 48 * FRACUNIT)
-        {
-            space -= 40 * FRACUNIT;
-            mobj->z =
-                ((space * P_Random()) >> 8) + mobj->floorz + 40 * FRACUNIT;
-        }
-        else
-        {
-            mobj->z = mobj->floorz;
-        }
-    }
-    else if (mobj->flags2 & MF2_FLOATBOB)
-    {
-        mobj->z = mobj->floorz + z;     // artifact z passed in as height
-    }
-    else
-    {
-        mobj->z = z;
-    }
-    if (mobj->flags2 & MF2_FLOORCLIP
-        && P_GetThingFloorType(mobj) >= FLOOR_LIQUID
-        && mobj->z == mobj->subsector->sector->floorheight)
-    {
-        mobj->floorclip = 10 * FRACUNIT;
-    }
-    else
-    {
-        mobj->floorclip = 0;
     }
 
     // [AM] Do not interpolate on spawn.
