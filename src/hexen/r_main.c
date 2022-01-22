@@ -1050,8 +1050,12 @@ void R_RenderPlayerView(player_t * player)
         return;
     }
 
-    // [JN] Fill level's "out of bounds" with black color
-    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, viewheight, 0);
+    // [JN] Fill level's "out of bounds" with black color, 
+    // if it's using standard, non-foggy colormap. 
+    if (LevelUseFullBright)
+    {
+        V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, viewheight, 0);
+    }
 
     R_ClearPlanes();
     R_ClearSprites();
