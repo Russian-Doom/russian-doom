@@ -262,20 +262,9 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         alwaysRun ^= 1;
 
         // [JN] Added audible feedback
-        if (english_language)
-        {
-            P_SetMessage(&players[consoleplayer], 
-                         alwaysRun ?
-                         TXT_ALWAYSRUN_ON : TXT_ALWAYSRUN_OFF,
-                         false);
-        }
-        else
-        {
-            P_SetMessage(&players[consoleplayer],
-                         alwaysRun ?
-                         TXT_ALWAYSRUN_ON_RUS : TXT_ALWAYSRUN_OFF_RUS,
-                         false);
-        }
+        P_SetMessage(&players[consoleplayer], alwaysRun ?
+                     txt_alwaysrun_on : txt_alwaysrun_off, false);
+
         S_StartSound(NULL, SFX_CHAT);
 
         BK_ReleaseKey(bk_toggle_autorun);
@@ -297,18 +286,9 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
             crosshair_draw = false;
         }
 
-        if (english_language)
-        {
-            P_SetMessage(&players[consoleplayer], crosshair_draw ?
-                         TXT_CROSSHAIR_ON : TXT_CROSSHAIR_OFF,
-                         false);
-        }
-        else
-        {
-            P_SetMessage(&players[consoleplayer], crosshair_draw ?
-                         TXT_CROSSHAIR_ON_RUS : TXT_CROSSHAIR_OFF_RUS,
-                         false);
-        }
+        P_SetMessage(&players[consoleplayer], crosshair_draw ?
+                     txt_crosshair_on : txt_crosshair_off, false);
+
         S_StartSound(NULL, SFX_CHAT);
 
         BK_ReleaseKey(bk_toggle_crosshair);
@@ -638,20 +618,9 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
             look = TOCENTER;
         }
 
-        if (english_language)
-        {
-            P_SetMessage(&players[consoleplayer],
-                         (mlook == true ? 
-                         TXT_MLOOK_ON : TXT_MLOOK_OFF),
-                         false);
-        }
-        else
-        {
-            P_SetMessage(&players[consoleplayer],
-                         (mlook == true ? 
-                         TXT_MLOOK_ON_RUS : TXT_MLOOK_OFF_RUS),
-                         false);
-        }
+        P_SetMessage(&players[consoleplayer], mlook ? 
+                     txt_mlook_on : txt_mlook_off, false);
+
         S_StartSound(NULL, SFX_CHAT);
 
         BK_ReleaseKey(bk_toggle_mlook);
@@ -800,10 +769,7 @@ void G_DoLoadLevel(void)
 
     if (testcontrols)
     {
-        P_SetMessage(&players[consoleplayer], english_language ?
-                                              "PRESS ESCAPE TO QUIT." :
-                                              "HT;BV GHJDTHRB EGHFDKTYBZ", // РЕЖИМ ПРОВЕРКИ УПРАВЛЕНИЯ
-                                              false);
+        P_SetMessage(&players[consoleplayer], txt_testcontrols, false);
     }
 }
 
@@ -1018,7 +984,6 @@ void G_Ticker(void)
             case ga_screenshot: // [JN] Extended name from "HEXEN%02i.%s"
                 V_ScreenShot("screenshot-hexen-%02i.%s");
                 S_StartSound(NULL, SFX_CHAT);   // [JN] Audio feedback
-                // P_SetMessage(&players[consoleplayer], "CYBVJR 'RHFYF", false);	// СНИМОК ЭКРАНА | SCREEN SHOT
                 gameaction = ga_nothing;
                 break;
             case ga_leavemap:
@@ -1559,10 +1524,7 @@ void G_Completed(int map, int position)
 {
     if (gamemode == shareware && map > 4)
     {
-        P_SetMessage(&players[consoleplayer], english_language ?
-                     "ACCESS DENIED -- DEMO" :
-                     "LTVJDTHCBZ> GHJ[JL DJCGHTOTY>", // ДЕМОВЕРСИЯ. ПРОХОД ВОСПРЕЩЕН.
-                     true);
+        P_SetMessage(&players[consoleplayer], txt_access_denied, true);
         S_StartSound(NULL, SFX_CHAT);
         return;
     }
@@ -1744,10 +1706,7 @@ void G_DoSaveGame(void)
     SV_SaveGame(savegameslot, savedescription);
     gameaction = ga_nothing;
     savedescription[0] = 0;
-    P_SetMessage(&players[consoleplayer], english_language ?
-                                          TXT_GAMESAVED :
-                                          TXT_GAMESAVED_RUS,
-                                          true);
+    P_SetMessage(&players[consoleplayer], txt_gamesaved, true);
 }
 
 //==========================================================================

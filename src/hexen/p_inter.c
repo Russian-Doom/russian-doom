@@ -1048,50 +1048,35 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, english_language ?
-                                 TXT_ITEMHEALTH :
-                                 TXT_ITEMHEALTH_RUS,
-                                 false);
+            P_SetMessage(player, txt_itemhealth, false);
             break;
         case SPR_ARM1:
             if (!P_GiveArmor(player, ARMOR_ARMOR, -1))
             {
                 return;
             }
-            P_SetMessage(player, english_language ?
-                                 TXT_ARMOR1 :
-                                 TXT_ARMOR1_RUS,
-                                 false);
+            P_SetMessage(player, txt_armor1, false);
             break;
         case SPR_ARM2:
             if (!P_GiveArmor(player, ARMOR_SHIELD, -1))
             {
                 return;
             }
-            P_SetMessage(player, english_language ?
-                                 TXT_ARMOR2 :
-                                 TXT_ARMOR2_RUS,
-                                 false);
+            P_SetMessage(player, txt_armor2, false);
             break;
         case SPR_ARM3:
             if (!P_GiveArmor(player, ARMOR_HELMET, -1))
             {
                 return;
             }
-            P_SetMessage(player, english_language ?
-                                 TXT_ARMOR3 :
-                                 TXT_ARMOR3_RUS,
-                                 false);
+            P_SetMessage(player, txt_armor3, false);
             break;
         case SPR_ARM4:
             if (!P_GiveArmor(player, ARMOR_AMULET, -1))
             {
                 return;
             }
-            P_SetMessage(player, english_language ?
-                                 TXT_ARMOR4 :
-                                 TXT_ARMOR4_RUS,
-                                 false);
+            P_SetMessage(player, txt_armor4, false);
             break;
 
             // Keys
@@ -1243,20 +1228,14 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, english_language ?
-                                 TXT_MANA_1 :
-                                 TXT_MANA_1_RUS,
-                                 false);
+            P_SetMessage(player, txt_mana_1, false);
             break;
         case SPR_MAN2:
             if (!P_GiveMana(player, MANA_2, 15))
             {
                 return;
             }
-            P_SetMessage(player, english_language ?
-                                 TXT_MANA_2 :
-                                 TXT_MANA_2_RUS,
-                                 false);
+            P_SetMessage(player, txt_mana_2, false);
             break;
         case SPR_MAN3:         // Double Mana Dodecahedron
             if (!P_GiveMana(player, MANA_1, 20))
@@ -1270,52 +1249,37 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 P_GiveMana(player, MANA_2, 20);
             }
-            P_SetMessage(player, english_language ?
-                                 TXT_MANA_BOTH :
-                                 TXT_MANA_BOTH_RUS,
-                                 false);
+            P_SetMessage(player, txt_mana_both, false);
             break;
 
             // 2nd and 3rd Mage Weapons
         case SPR_WMCS:         // Frost Shards
             TryPickupWeapon(player, PCLASS_MAGE, WP_SECOND,
-                            special, english_language ?
-                                     TXT_WEAPON_M2 :
-                                     TXT_WEAPON_M2_RUS);
+                            special, txt_weapon_m2);
             return;
         case SPR_WMLG:         // Arc of Death
             TryPickupWeapon(player, PCLASS_MAGE, WP_THIRD,
-                            special, english_language ?
-                                     TXT_WEAPON_M3 :
-                                     TXT_WEAPON_M3_RUS);
+                            special, txt_weapon_m3);
             return;
 
             // 2nd and 3rd Fighter Weapons
         case SPR_WFAX:         // Timon's Axe
             TryPickupWeapon(player, PCLASS_FIGHTER, WP_SECOND,
-                            special, english_language ?
-                                     TXT_WEAPON_F2 :
-                                     TXT_WEAPON_F2_RUS);
+                            special, txt_weapon_f2);
             return;
         case SPR_WFHM:         // Hammer of Retribution
             TryPickupWeapon(player, PCLASS_FIGHTER, WP_THIRD,
-                            special, english_language ?
-                                     TXT_WEAPON_F3 :
-                                     TXT_WEAPON_F3_RUS);
+                            special, txt_weapon_f3);
             return;
 
             // 2nd and 3rd Cleric Weapons
         case SPR_WCSS:         // Serpent Staff
             TryPickupWeapon(player, PCLASS_CLERIC, WP_SECOND,
-                            special, english_language ?
-                                     TXT_WEAPON_C2 :
-                                     TXT_WEAPON_C2_RUS);
+                            special, txt_weapon_c2);
             return;
         case SPR_WCFM:         // Firestorm
             TryPickupWeapon(player, PCLASS_CLERIC, WP_THIRD,
-                            special, english_language ?
-                            TXT_WEAPON_C3 :
-                            TXT_WEAPON_C3_RUS);
+                            special, txt_weapon_c3);
             return;
 
             // Fourth Weapon Pieces

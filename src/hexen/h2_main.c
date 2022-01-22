@@ -862,6 +862,9 @@ void D_DoomMain(void)
     ST_Message("\".");
     ST_Message("\n");
 
+    // [JN] Define and load translated strings.
+    RD_DefineLanguageStrings();
+
     H2_GameLoop();              // Never returns
 }
 

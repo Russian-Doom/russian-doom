@@ -24,6 +24,7 @@
 #include "am_map.h"
 #include "am_data.h"
 #include "v_video.h"
+#include "rd_lang.h"
 
 int cheating = 0;
 static int leveljuststarted = 1;    // kluge until AM_LevelInit() is called
@@ -514,34 +515,22 @@ boolean AM_Responder(event_t * ev)
         {
             automap_follow = !automap_follow;
             f_oldloc.x = INT_MAX;
-            
-            if (english_language)
-            {
-                P_SetMessage(plr,
-                            automap_follow ? AMSTR_FOLLOWON : AMSTR_FOLLOWOFF,
-                            true);
-            }
-            else
-            {
-                P_SetMessage(plr,
-                            automap_follow ? AMSTR_FOLLOWON_RUS : AMSTR_FOLLOWOFF_RUS,
-                            true);
-            }
+            P_SetMessage(plr, automap_follow ? amstr_followon : amstr_followoff, false);
         }
         else if (BK_isKeyDown(ev, bk_map_overlay))
         {
             automap_overlay = !automap_overlay;
-            //P_SetMessage(plr, automap_overlay ? amstr_overlayon : amstr_overlayoff, true);
+            P_SetMessage(plr, automap_overlay ? amstr_overlayon : amstr_overlayoff, false);
         }
         else if (BK_isKeyDown(ev, bk_map_rotate))
         {
             automap_rotate = !automap_rotate;
-            //P_SetMessage(plr, automap_overlay ? amstr_overlayon : amstr_overlayoff, true);
+            P_SetMessage(plr, automap_rotate ? amstr_rotateon : amstr_rotateoff, false);
         }
         else if (BK_isKeyDown(ev, bk_map_grid))
         {
             automap_grid = !automap_grid;
-            //P_SetMessage(plr, automap_overlay ? amstr_overlayon : amstr_overlayoff, true);
+            P_SetMessage(plr, automap_grid ? amstr_gridon : amstr_gridoff, false);
         }
         else
         {

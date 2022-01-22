@@ -49,6 +49,7 @@ r_main.c                              \
 r_plane.c                             \
 r_segs.c                              \
 r_things.c                            \
+rd_lang.c           rd_lang.h         \
 rd_rushexen.c       rd_rushexen.h     \
 s_sound.c           s_sound.h         \
 sb_bar.c                              \
@@ -57,7 +58,6 @@ sn_sonix.c                            \
 sounds.c            sounds.h          \
 st_start.c          st_start.h        \
 sv_save.c                             \
-                    textdefs.h        \
                     xddefs.h
 
 libhexen_a_SOURCES=$(SOURCE_FILES)

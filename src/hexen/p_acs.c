@@ -494,10 +494,7 @@ boolean P_StartACS(int number, int map, byte * args, mobj_t * activator,
     if (infoIndex == -1)
     {                           // Script not found
         //I_Error("P_StartACS: Unknown script number %d", number);
-        M_snprintf(ErrorMsg, sizeof(ErrorMsg), english_language ?
-                   "P_STARTACS ERROR: UNKNOWN SCRIPT %d" :
-                   "JIB,RF DSGJKYTYBZ CRHBGNF %d", // ОШИБКА ВЫПОЛНЕНИЯ СКРИПТА: %d
-                   number); 
+        M_snprintf(ErrorMsg, sizeof(ErrorMsg), "%s %d", txt_unknown_script, number); 
         P_SetMessage(&players[consoleplayer], ErrorMsg, true);
     }
     statePtr = &ACSInfo[infoIndex].state;
@@ -596,13 +593,8 @@ boolean P_StartLockedACS(line_t * line, byte * args, mobj_t * mo, int side)
     {
         if (!(mo->player->keys & (1 << (lock - 1))))
         {
-            M_snprintf(LockedBuffer, sizeof(LockedBuffer),
-                       english_language ?
-                       "YOU NEED THE %s\n" :
-                       "LKZ JNRHSNBZ YE;TY %s\n", // ДЛЯ ОТКРЫТИЯ НУЖЕН %s\n
-                       english_language ?
-                       TextKeyMessages[lock - 1] :
-                       TextKeyMessages_Rus[lock - 1]);
+            M_snprintf(LockedBuffer, sizeof(LockedBuffer), "%s %s", txt_you_need_the, 
+                       english_language ? TextKeyMessages[lock - 1] : TextKeyMessages_Rus[lock - 1]);
             P_SetMessage(mo->player, LockedBuffer, true);
             S_StartSound(mo, SFX_DOOR_LOCKED);
             return false;

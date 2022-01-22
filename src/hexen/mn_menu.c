@@ -1485,48 +1485,6 @@ static Menu_t SaveMenu = {
     0
 };
 
-static char *GammaText[] = {
-	TXT_GAMMA_0_50,
-	TXT_GAMMA_0_55,
-	TXT_GAMMA_0_60,
-	TXT_GAMMA_0_65,
-	TXT_GAMMA_0_70,
-	TXT_GAMMA_0_75,
-	TXT_GAMMA_0_80,
-	TXT_GAMMA_0_85,
-	TXT_GAMMA_0_90,
-	TXT_GAMMA_1_0,
-	TXT_GAMMA_1_125,
-	TXT_GAMMA_1_25,
-	TXT_GAMMA_1_375,
-	TXT_GAMMA_1_5,
-	TXT_GAMMA_1_625,
-	TXT_GAMMA_1_75,
-	TXT_GAMMA_1_875,
-	TXT_GAMMA_2_0
-};
-
-static char *GammaText_Rus[] = {
-	TXT_GAMMA_RUS_0_50,
-	TXT_GAMMA_RUS_0_55,
-	TXT_GAMMA_RUS_0_60,
-	TXT_GAMMA_RUS_0_65,
-	TXT_GAMMA_RUS_0_70,
-	TXT_GAMMA_RUS_0_75,
-	TXT_GAMMA_RUS_0_80,
-	TXT_GAMMA_RUS_0_85,
-	TXT_GAMMA_RUS_0_90,
-	TXT_GAMMA_RUS_1_0,
-	TXT_GAMMA_RUS_1_125,
-	TXT_GAMMA_RUS_1_25,
-	TXT_GAMMA_RUS_1_375,
-	TXT_GAMMA_RUS_1_5,
-	TXT_GAMMA_RUS_1_625,
-	TXT_GAMMA_RUS_1_75,
-	TXT_GAMMA_RUS_1_875,
-	TXT_GAMMA_RUS_2_0
-};
-
 // CODE --------------------------------------------------------------------
 
 //---------------------------------------------------------------------------
@@ -2572,20 +2530,10 @@ static void DrawMessagesMenu(void)
 static void M_RD_Messages(Direction_t direction)
 {
     show_messages ^= 1;
-    if (show_messages)
-    {
-        P_SetMessage(&players[consoleplayer], english_language ?
-                     "MESSAGES ON" :
-                     "CJJ,OTYBZ DRK.XTYS", // СООБЩЕНИЯ ВКЛЮЧЕНЫ
-                     true);
-    }
-    else
-    {
-        P_SetMessage(&players[consoleplayer], english_language ?
-                     "MESSAGES OFF" :
-                     "CJJ,OTYBZ DSRK.XTYS", // СООБЩЕНИЯ ВЫКЛЮЧЕНЫ
-                     true);
-    }
+
+    P_SetMessage(&players[consoleplayer], show_messages ?
+                 txt_messages_on : txt_messages_off, true);
+
     if (vanillaparm)
     {
         S_StartSound(NULL, SFX_CHAT);
@@ -4920,11 +4868,7 @@ void M_RD_BackToDefaults_Recommended (void)
     SB_state = -1;
     BorderNeedRefresh = true;
 
-    P_SetMessage(&players[consoleplayer], 
-                  english_language ?
-                  "SETTINGS RESET" :
-                  "YFCNHJQRB C,HJITYS", // НАСТРОЙКИ СБРОШЕНЫ
-                  false);
+    P_SetMessage(&players[consoleplayer], txt_settings_reset, false);
     S_StartSound(NULL, SFX_DOOR_LIGHT_CLOSE);
     menuactive = true;
 }
@@ -5022,11 +4966,7 @@ static void M_RD_BackToDefaults_Original(void)
     SB_state = -1;
     BorderNeedRefresh = true;
 
-    P_SetMessage(&players[consoleplayer], 
-                  english_language ?
-                  "SETTINGS RESET" :
-                  "YFCNHJQRB C,HJITYS", // НАСТРОЙКИ СБРОШЕНЫ
-                  false);
+    P_SetMessage(&players[consoleplayer], txt_settings_reset, false);
     S_StartSound(NULL, SFX_DOOR_LIGHT_CLOSE);
     menuactive = true;
 }
@@ -5045,6 +4985,9 @@ static void M_RD_ChangeLanguage(int option)
     // Clear HUD messages
     players[consoleplayer].message[0] = 0;
     players[consoleplayer].yellowMessage = 0;
+
+    // Update language strings
+    RD_DefineLanguageStrings();
 
     // Update window title
     if (isDK)
@@ -5158,22 +5101,13 @@ boolean SCNetCheck(int option)
     switch (option)
     {
         case 1:                // new game
-            P_SetMessage(&players[consoleplayer], english_language ?
-                         "YOU CAN'T START A NEW GAME IN NETPLAY!" :
-                         "YTDJPVJ;YJ YFXFNM YJDE. BUHE D CTNTDJQ BUHT!", // НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
-                         true);
+            P_SetMessage(&players[consoleplayer], txt_cant_start_in_netgame, true);
             break;
         case 2:                // load game
-            P_SetMessage(&players[consoleplayer], english_language ?
-                         "YOU CAN'T LOAD A GAME IN NETPLAY!" :
-                         "YTDJPVJ;YJ PFUHEPBNMCZ D CTNTDJQ BUHT!", // НЕВОЗМОЖНО ЗАГРУЗИТЬСЯ В СЕТЕВОЙ ИГРЕ!
-                         true);
+            P_SetMessage(&players[consoleplayer], txt_cant_load_in_netgame, true);
             break;
         case 3:                // end game
-            P_SetMessage(&players[consoleplayer], english_language ?
-                         "YOU CAN'T END A GAME IN NETPLAY!" :
-                         "YTDJPVJ;YJ PFRJYXBNM CTNTDE. BUHE!", // НЕВОЗМОЖНО ЗАКОНЧИТЬ СЕТЕВУЮ ИГРУ!
-                         true);
+            P_SetMessage(&players[consoleplayer], txt_cant_end_in_netgame, true);
         default:
             break;
     }
@@ -5268,10 +5202,7 @@ static void SCClass(int option)
 {
     if (netgame)
     {
-        P_SetMessage(&players[consoleplayer], english_language ?
-                     "YOU CAN'T START A NEW GAME FROM WITHIN A NETGAME!" :        
-                     "YTDJPVJ;YJ YFXFNM YJDE. BUHE D CTNTDJQ BUHT!", // НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
-                     true);
+        P_SetMessage(&players[consoleplayer], txt_cant_start_in_netgame, true);
         return;
     }
     MenuPClass = option;
@@ -5441,19 +5372,13 @@ boolean MN_Responder(event_t * event)
                     H2_StartTitle();    // go to intro/demo mode.
                     return false;
                 case 3:
-                    P_SetMessage(&players[consoleplayer], english_language ?
-                                 "QUICKSAVING...." :
-                                 ",SCNHJT CJ[HFYTYBT>>>", // БЫСТРОЕ СОХРАНЕНИЕ...
-                                 false);
+                    P_SetMessage(&players[consoleplayer], txt_quicksaving, false);
                     FileMenuKeySteal = true;
                     SCSaveGame(quicksave - 1);
                     BorderNeedRefresh = true;
                     break;
                 case 4:
-                    P_SetMessage(&players[consoleplayer], english_language ?
-                                 "QUICKLOADING...." :
-                                 ",SCNHFZ PFUHEPRF>>>", // БЫСТРАЯ ЗАГРУЗКА...
-                                 false);
+                    P_SetMessage(&players[consoleplayer], txt_quickloading, false);
                     SCLoadGame(quickload - 1);
                     BorderNeedRefresh = true;
                     break;
@@ -5589,10 +5514,7 @@ boolean MN_Responder(event_t * event)
                     S_StartSound(NULL, SFX_DOOR_LIGHT_CLOSE);
                     slottextloaded = false; //reload the slot text
                     quicksave = -1;
-                    P_SetMessage(&players[consoleplayer], english_language ?
-                                 "CHOOSE A QUICKSAVE SLOT" :
-                                 "DS,THBNT CKJN ,SCNHJUJ CJ[HFYTYBZ", // ВЫБЕРИТЕ СЛОТ БЫСТРОГО СОХРАНЕНИЯ
-                                 true);
+                    P_SetMessage(&players[consoleplayer], txt_quicksaveslot, true);
                 }
                 else
                 {
@@ -5641,10 +5563,7 @@ boolean MN_Responder(event_t * event)
                     S_StartSound(NULL, SFX_DOOR_LIGHT_CLOSE);
                     slottextloaded = false; // reload the slot text
                     quickload = -1;
-                    P_SetMessage(&players[consoleplayer], english_language ?
-                                 "CHOOSE A QUICKLOAD SLOT" :
-                                 "DS,THBNT CKJN ,SCNHJQ PFUHEPRB", // ВЫБЕРИТЕ СЛОТ БЫСТРОЙ ЗАГРУЗКИ
-                                 true);
+                    P_SetMessage(&players[consoleplayer], txt_quickloadslot, true);
                 }
                 else
                 {
@@ -5670,16 +5589,20 @@ boolean MN_Responder(event_t * event)
         }
         else if (BK_isKeyDown(event, bk_gamma))          // F11 (gamma correction)
         {
+            static char *gamma_level;
+
             usegamma++;
             if (usegamma > 17)
             {
                 usegamma = 0;
             }
             SB_PaletteFlash(true);  // force change
-            P_SetMessage(&players[consoleplayer], english_language ?
-                         GammaText[usegamma] :
-                         GammaText_Rus[usegamma],
-                         false);
+
+            gamma_level = M_StringJoin(txt_gammamsg, english_language ?
+                                       gammalevel_names[usegamma] :
+                                       gammalevel_names_rus[usegamma], NULL);
+
+            P_SetMessage(&players[consoleplayer], gamma_level, false);
             return true;
         }
         else if (BK_isKeyDown(event, bk_reloadlevel))                 // F12 (???)
@@ -5701,10 +5624,7 @@ boolean MN_Responder(event_t * event)
                 nomonsters = true;
             }
             G_DeferedInitNew(gameskill, gameepisode, gamemap);
-            P_SetMessage(&players[consoleplayer], english_language ?
-                                                  TXT_CHEATWARP : 
-                                                  TXT_CHEATWARP_RUS,
-                                                  false);
+            P_SetMessage(&players[consoleplayer], txt_cheatwarp, false);
             return true;
         }
     }
