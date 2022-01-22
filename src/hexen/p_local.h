@@ -108,6 +108,7 @@ extern int PStateRun[NUMCLASSES];
 extern int PStateAttack[NUMCLASSES];
 extern int PStateAttackEnd[NUMCLASSES];
 
+void P_CalcHeight(player_t * player, boolean safe);
 void P_PlayerThink(player_t * player);
 void P_Thrust(player_t * player, angle_t angle, fixed_t move);
 void P_PlayerRemoveArtifact(player_t * player, int slot);
