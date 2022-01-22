@@ -174,6 +174,10 @@ mobj_t *P_FindMobjFromTID(int tid, int *searchPosition);
 mobj_t *P_SpawnKoraxMissile(fixed_t x, fixed_t y, fixed_t z,
                             mobj_t * source, mobj_t * dest, mobjtype_t type);
 
+// [crispy]
+void    P_SpawnPuffSafe (fixed_t x, fixed_t y, fixed_t z, boolean safe);
+mobj_t *P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boolean safe);
+
 // ***** P_ENEMY *****
 
 void P_NoiseAlert(mobj_t * target, mobj_t * emmiter);

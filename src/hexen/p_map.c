@@ -1929,9 +1929,16 @@ boolean PTR_ShootTraverse(intercept_t * in)
             if (z > li->frontsector->ceilingheight)
                 return false;   // don't shoot the sky!
             if (li->backsector && li->backsector->ceilingpic == skyflatnum)
+            // [crispy] fix bullet puffs not appearing in outdoor areas
+            if (li->backsector->ceilingheight < z)
                 return false;   // it's a sky hack wall
         }
 
+        // [crispy]
+        if (li->frontsector->ceilingpic == skyflatnum &&
+        li->backsector && li->backsector->ceilingpic == skyflatnum)
+        P_SpawnPuffSafe (x, y, z, true);
+        else
         P_SpawnPuff(x, y, z);
         return false;           // don't go any farther
     }
