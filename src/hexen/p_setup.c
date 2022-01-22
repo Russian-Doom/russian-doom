@@ -186,6 +186,7 @@ void P_LoadVertexes(int lump)
     {
         li->x = SHORT(ml->x) << FRACBITS;
         li->y = SHORT(ml->y) << FRACBITS;
+        li->moved = false;
     }
 
     W_ReleaseLumpNum(lump);
@@ -878,6 +879,9 @@ void P_GroupLines(void)
 = but pseudovertexes which are dummies that are *only* used in rendering,
 = i.e. r_bsp.c:R_AddLine()
 =
+= [JN] We have to use real vertexes here, polyobjects aren't working properly
+= with pseudovertexes...
+=
 ================================================================================
 */
 
@@ -910,14 +914,46 @@ static void P_RemoveSlimeTrails (void)
                         int64_t s = dx2 + dy2;
                         int x0 = v->x, y0 = v->y, x1 = l->v1->x, y1 = l->v1->y;
                 
-                        // [crispy] MBF actually overrides v->x and v->y here
-                        v->px = (fixed_t)((dx2 * x0 + dy2 * x1 + dxy * (y0 - y1)) / s);
-                        v->py = (fixed_t)((dy2 * y0 + dx2 * y1 + dxy * (x0 - x1)) / s);
+                        // [JN] As stated above, we are operating with real vertexes:
+                        v->x = (fixed_t)((dx2 * x0 + dy2 * x1 + dxy * (y0 - y1)) / s);
+                        v->y = (fixed_t)((dy2 * y0 + dx2 * y1 + dxy * (x0 - x1)) / s);
                     }
                 }
                 // [crispy] if v doesn't point to the second vertex of the seg already, point it there
             } while ((v != segs[i].v2) && (v = segs[i].v2));
         }
+    }
+}
+
+/*
+================================================================================
+=
+= P_SegLengths
+=
+= [crispy] fix long wall wobble
+=
+= [JN] Again, we have to use real vertexes here.
+=
+================================================================================
+*/
+
+static void P_SegLengths (void)
+{
+    int i;
+
+    for (i = 0; i < numsegs; i++)
+    {
+        seg_t *const li = &segs[i];
+        int64_t dx, dy;
+
+        dx = li->v2->x - li->v1->x;
+        dy = li->v2->y - li->v1->y;
+        li->length = (uint32_t)(sqrt((double)dx*dx + (double)dy*dy)/2);
+
+        // [JN] As stated above, we are operating with real vertexes:
+        viewx = li->v1->x;
+        viewy = li->v1->y;
+        li->angle = R_PointToAngleCrispy(li->v2->x, li->v2->y);
     }
 }
 
@@ -987,6 +1023,8 @@ void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
     P_GroupLines();
     // [crispy] remove slime trails
     P_RemoveSlimeTrails();
+    // [crispy] fix long wall wobble
+    P_SegLengths();
     bodyqueslot = 0;
     po_NumPolyobjs = 0;
     deathmatch_p = deathmatchstarts;
