@@ -1306,6 +1306,71 @@ mobj_t *P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boole
     }
     mobj->lastlook = safe ? 0 : P_Random () % MAXPLAYERS;
 
+    // [JN] Apply various enhancements:
+    if (singleplayer && !vanillaparm)
+    {
+        // [JN] Remove MF_NOBLOCKMAP flag from following objects
+        // so they can properly connect to the moving sectors and 
+        // don't stuck in the midair.
+        if (mobj->type == MT_SPLASHBASE     // Water splash base
+        ||  mobj->type == MT_SPLASH         // Water small splash
+        ||  mobj->type == MT_LAVASPLASH     // Lava splash base
+        ||  mobj->type == MT_LAVASMOKE      // Lava smoke
+        ||  mobj->type == MT_SLUDGESPLASH   // Sludge splash base
+        ||  mobj->type == MT_SLUDGECHUNK)   // Sludge small chunk
+        {
+            // TODO - not safe for blockmap linking!
+            // mobj->flags &= ~MF_NOBLOCKMAP;
+            mobj->tics -= M_Random() & 3;
+            mobj->health -= mobj->tics & 1;
+        }
+        
+        // [JN] Randomize health of following objects
+        // so they can be flipped randomly:
+        //
+        // Affrit: scales (splotches?)
+        if (mobj->type == MT_FIREDEMON_SPLOTCH1
+        ||  mobj->type == MT_FIREDEMON_SPLOTCH2
+        // Ettin: dropped mace
+        ||  mobj->type == MT_ETTIN_MACE
+        // Centaur: dropped shield and sword
+        ||  mobj->type == MT_CENTAUR_SHIELD
+        ||  mobj->type == MT_CENTAUR_SWORD
+        // Wendigo: ice shards
+        ||  mobj->type == MT_ICECHUNK
+        // Poisoned cloud of Cleric's flechette or mushroom
+        ||  mobj->type == MT_POISONCLOUD)
+        {
+            mobj->health -= M_Random() & 1;
+        }
+
+        // [JN] Remove MF_NOBLOCKMAP and MF_NOGRAVITY from following objects 
+        // so they can fall down under own weigh after floor lowering.
+        //
+        // TODO - not safe for blockmap linking! May cause an infinite loop
+        // while breaking stained glass on Constable's Gate in Death Kings.
+        //
+        // Stained glass shards:
+        /*
+        if (mobj->type == MT_SGSHARD1
+        ||  mobj->type == MT_SGSHARD2
+        ||  mobj->type == MT_SGSHARD3
+        ||  mobj->type == MT_SGSHARD4
+        ||  mobj->type == MT_SGSHARD5
+        ||  mobj->type == MT_SGSHARD6
+        ||  mobj->type == MT_SGSHARD7
+        ||  mobj->type == MT_SGSHARD8
+        ||  mobj->type == MT_SGSHARD9
+        ||  mobj->type == MT_SGSHARD0
+        // Wendigo ice shards:
+        ||  mobj->type == MT_ICECHUNK)
+        {
+            mobj->flags &= ~MF_NOBLOCKMAP;
+            mobj->flags &= ~MF_NOGRAVITY;
+        }
+        */
+    }
+
     // Set the state, but do not use P_SetMobjState, because action
     // routines can't be called yet.  If the spawnstate has an action
     // routine, it will not be called.
@@ -1358,65 +1423,6 @@ mobj_t *P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boole
     else
     {
         mobj->floorclip = 0;
-    }
-
-    // [JN] Apply various enhancements:
-    if (singleplayer && !vanillaparm)
-    {
-        // [JN] Remove MF_NOBLOCKMAP flag from following objects
-        // so they can properly connect to the moving sectors and 
-        // don't stuck in the midair.
-        if (mobj->type == MT_SPLASHBASE     // Water splash base
-        ||  mobj->type == MT_SPLASH         // Water small splash
-        ||  mobj->type == MT_LAVASPLASH     // Lava splash base
-        ||  mobj->type == MT_LAVASMOKE      // Lava smoke
-        ||  mobj->type == MT_SLUDGESPLASH   // Sludge splash base
-        ||  mobj->type == MT_SLUDGECHUNK)   // Sludge small chunk
-        {
-            mobj->flags &= ~MF_NOBLOCKMAP;
-            mobj->tics -= M_Random() & 3;
-            mobj->health -= mobj->tics & 1;
-        }
-        
-        // [JN] Randomize health of following objects
-        // so they can be flipped randomly:
-        //
-        // Affrit: scales (splotches?)
-        if (mobj->type == MT_FIREDEMON_SPLOTCH1
-        ||  mobj->type == MT_FIREDEMON_SPLOTCH2
-        // Ettin: dropped mace
-        ||  mobj->type == MT_ETTIN_MACE
-        // Centaur: dropped shield and sword
-        ||  mobj->type == MT_CENTAUR_SHIELD
-        ||  mobj->type == MT_CENTAUR_SWORD
-        // Wendigo: ice shards
-        ||  mobj->type == MT_ICECHUNK
-        // Poisoned cloud of Cleric's flechette or mushroom
-        ||  mobj->type == MT_POISONCLOUD)
-        {
-            mobj->health -= M_Random() & 1;
-        }
-
-        // [JN] Remove MF_NOBLOCKMAP and MF_NOGRAVITY from following objects 
-        // so they can fall down under own weigh after floor lowering.
-        //
-        // Stained glass shards:
-        if (mobj->type == MT_SGSHARD1
-        ||  mobj->type == MT_SGSHARD2
-        ||  mobj->type == MT_SGSHARD3
-        ||  mobj->type == MT_SGSHARD4
-        ||  mobj->type == MT_SGSHARD5
-        ||  mobj->type == MT_SGSHARD6
-        ||  mobj->type == MT_SGSHARD7
-        ||  mobj->type == MT_SGSHARD8
-        ||  mobj->type == MT_SGSHARD9
-        ||  mobj->type == MT_SGSHARD0
-        // Wendigo ice shards:
-        ||  mobj->type == MT_ICECHUNK)
-        {
-            mobj->flags &= ~MF_NOBLOCKMAP;
-            mobj->flags &= ~MF_NOGRAVITY;
-        }
     }
 
     // [AM] Do not interpolate on spawn.
