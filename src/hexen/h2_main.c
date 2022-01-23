@@ -795,6 +795,9 @@ void D_DoomMain(void)
 
     ST_Done();
 
+    // [JN] Define and load translated strings.
+    RD_DefineLanguageStrings();
+
     if (autostart)
     {
         ST_Message(english_language ?
@@ -861,9 +864,6 @@ void D_DoomMain(void)
     ST_Message(gamedescription);
     ST_Message("\".");
     ST_Message("\n");
-
-    // [JN] Define and load translated strings.
-    RD_DefineLanguageStrings();
 
     H2_GameLoop();              // Never returns
 }
