@@ -922,99 +922,60 @@ void R_ProjectSprite(mobj_t * thing)
         if (brightmaps && !vanillaparm && LevelUseFullBright)
         {
             // - Red only -
-
-            // Banishment Device
-            if (thing->type == MT_TELEPORTOTHER) 
-            vis->colormap = fullbrights_redonly[index];
-
-            // Chaos Device
-            if (thing->type == MT_ARTITELEPORT)
-            vis->colormap = fullbrights_redonly[index];
-
-            // Reaver (attack states only)
-            if ((thing->type == MT_WRAITH || thing->type == MT_WRAITHB)
+            if (thing->type == MT_TELEPORTOTHER     // Banishment Device
+            ||  thing->type == MT_ARTITELEPORT      // Chaos Device
+            ||((thing->type == MT_WRAITH            // Reivers (attack states only)
+            ||  thing->type == MT_WRAITHB)
             && (thing->state - states == S_WRAITH_ATK1_1
             ||  thing->state - states == S_WRAITH_ATK1_2
             ||  thing->state - states == S_WRAITH_ATK1_3
             ||  thing->state - states == S_WRAITH_ATK2_1
             ||  thing->state - states == S_WRAITH_ATK2_2
             ||  thing->state - states == S_WRAITH_ATK2_3))
-            vis->colormap = fullbrights_redonly[index];
-
-            // Korax
-            if (thing->type == MT_KORAX)
-            vis->colormap = fullbrights_redonly[index];
-
-            // Flame Mask
-            if (thing->type == MT_ARTIPUZZSKULL2)
-            vis->colormap = fullbrights_redonly[index];            
+            ||  thing->type == MT_KORAX             // Korax
+            ||  thing->type == MT_ARTIPUZZSKULL2)   // Flame Mask
+            {
+                vis->colormap = fullbrights_redonly[index];
+            }
 
             // - Blue only -
-
-            // Crater of Might
-            if (thing->type == MT_SPEEDBOOTS)
-            vis->colormap = fullbrights_blueonly[index];
-
-            // Blue candle (lit)
-            if (thing->type == MT_ZBLUE_CANDLE)
-            vis->colormap = fullbrights_blueonly[index];
-
-            // Wendigo
-            if (thing->type == MT_ICEGUY)
-            vis->colormap = fullbrights_blueonly[index];
-
-            // Mystic Ambit Incant
-            if (thing->type == MT_HEALRADIUS)
-            vis->colormap = fullbrights_blueonly[index];
+            if (thing->type == MT_SPEEDBOOTS        // Boots of Speed
+            || thing->type == MT_ZBLUE_CANDLE       // Blue candle (lit)
+            || thing->type == MT_ICEGUY             // Wendigo
+            || thing->type == MT_HEALRADIUS)        // Mystic Ambit Incant
+            {
+                vis->colormap = fullbrights_blueonly[index];
+            }
 
             // - Purple only -
-
-            // Crater of Might
-            if (thing->type == MT_BOOSTMANA)
-            vis->colormap = fullbrights_purpleonly[index];
-
-            // Dragonskin Bracers
-            if (thing->type == MT_BOOSTARMOR)
-            vis->colormap = fullbrights_purpleonly[index];
-
-            // Icon of the Defender
-            if (thing->type == MT_ARTIINVULNERABILITY)
-            vis->colormap = fullbrights_purpleonly[index];
+            if (thing->type == MT_BOOSTMANA             // Crater of Might
+            ||  thing->type == MT_BOOSTARMOR            // Dragonskin Bracers
+            ||  thing->type == MT_ARTIINVULNERABILITY)  // Icon of the Defender
+            {
+                vis->colormap = fullbrights_purpleonly[index];
+            }
 
             // - Flame -
-
-            // Torch (Artifact)
-            if (thing->type == MT_ARTITORCH)
-            vis->colormap = fullbrights_flame[index];
-
-            // 3 candles (lit)
-            if (thing->type == MT_BRASSTORCH)
-            vis->colormap = fullbrights_flame[index];
-
-            // Skull with Flame
-            if (thing->type == MT_FIRETHING)
-            vis->colormap = fullbrights_flame[index];
-
-            // Twined Torch
-            if (thing->type == MT_ZTWINEDTORCH || thing->type == MT_ZTWINEDTORCH_UNLIT)
-            vis->colormap = fullbrights_flame[index];
-
-            // Wall torch
-            if (thing->type == MT_ZWALLTORCH || thing->type == MT_ZWALLTORCH_UNLIT)
-            vis->colormap = fullbrights_flame[index];
-
-            // Chandelier
-            if (thing->type == MT_MISC5 || thing->type == MT_MISC6)
-            vis->colormap = fullbrights_flame[index];
-
-            // Cauldron
-            if (thing->type == MT_ZCAULDRON)
-            vis->colormap = fullbrights_flame[index];
+            if (thing->type == MT_ARTITORCH         // Torch (Artifact)
+            ||  thing->type == MT_BRASSTORCH        // 3 candles (lit)
+            ||  thing->type == MT_FIRETHING         // Skull with Flame
+            ||  thing->type == MT_ZTWINEDTORCH      // Twined Torch
+            ||  thing->type == MT_ZTWINEDTORCH_UNLIT
+            ||  thing->type == MT_ZWALLTORCH        // Wall torch
+            ||  thing->type == MT_ZWALLTORCH_UNLIT
+            ||  thing->type == MT_MISC5             // Chandeliers
+            ||  thing->type == MT_MISC6
+            ||  thing->type == MT_ZCAULDRON)        // Cauldron
+            {
+                vis->colormap = fullbrights_flame[index];
+            }
         
             // - Fire Bull -
-            
-            if (thing->type == MT_ZFIREBULL || thing->type == MT_ZFIREBULL_UNLIT)
-            vis->colormap = fullbrights_firebull[index];
+            if (thing->type == MT_ZFIREBULL
+            ||  thing->type == MT_ZFIREBULL_UNLIT)
+            {
+                vis->colormap = fullbrights_firebull[index];
+            }
         }
         
         // [JN] Fallback. If we are not using brightmaps, apply full brightness
