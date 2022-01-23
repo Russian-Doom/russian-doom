@@ -93,6 +93,7 @@ lighttable_t **fullbrights_purpleonly;
 lighttable_t **fullbrights_flame;
 lighttable_t **fullbrights_yellowred;
 lighttable_t **fullbrights_firebull;
+lighttable_t **fullbrights_mana;
 
 boolean LevelUseFullBright;
 
@@ -976,6 +977,14 @@ void R_ProjectSprite(mobj_t * thing)
             {
                 vis->colormap = fullbrights_firebull[index];
             }
+
+            // - Mana -
+            if (thing->type == MT_MANA1
+            ||  thing->type == MT_MANA2
+            ||  thing->type == MT_MANA3)
+            {
+                vis->colormap = fullbrights_mana[index];
+            }
         }
         
         // [JN] Fallback. If we are not using brightmaps, apply full brightness
@@ -993,7 +1002,10 @@ void R_ProjectSprite(mobj_t * thing)
             ||  thing->type == MT_FIRETHING
             ||  thing->type == MT_BRASSTORCH
             ||  thing->type == MT_ZBLUE_CANDLE
-            ||  thing->type == MT_ZCAULDRON)
+            ||  thing->type == MT_ZCAULDRON
+            ||  thing->type == MT_MANA1
+            ||  thing->type == MT_MANA2
+            ||  thing->type == MT_MANA3)
             vis->colormap = colormaps;
         }
     }
@@ -1035,6 +1047,7 @@ void R_AddSprites(sector_t *sec)
         fullbrights_flame = fullbright_flame[0];
         fullbrights_yellowred = fullbright_yellowred[0];
         fullbrights_firebull = fullbright_firebull[0];
+        fullbrights_mana = fullbright_mana[0];
     }
     else if (lightnum >= LIGHTLEVELS)
     {
@@ -1048,6 +1061,7 @@ void R_AddSprites(sector_t *sec)
         fullbrights_flame = fullbright_flame[LIGHTLEVELS - 1];
         fullbrights_yellowred = fullbright_yellowred[LIGHTLEVELS - 1];
         fullbrights_firebull = fullbright_firebull[LIGHTLEVELS - 1];
+        fullbrights_mana = fullbright_mana[LIGHTLEVELS - 1];
     }
     else
     {
@@ -1061,6 +1075,7 @@ void R_AddSprites(sector_t *sec)
         fullbrights_flame = fullbright_flame[lightnum];
         fullbrights_yellowred = fullbright_yellowred[lightnum];
         fullbrights_firebull = fullbright_firebull[lightnum];
+        fullbrights_mana = fullbright_mana[lightnum];
     }
 
     for (thing = sec->thinglist; thing; thing = thing->snext)

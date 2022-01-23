@@ -2617,47 +2617,50 @@ state_t states[NUMSTATES] = {
     {SPR_ARM2, 0, -1, NULL, S_NULL, 0, 0},      // S_ARMOR_2
     {SPR_ARM3, 0, -1, NULL, S_NULL, 0, 0},      // S_ARMOR_3
     {SPR_ARM4, 0, -1, NULL, S_NULL, 0, 0},      // S_ARMOR_4
-    {SPR_MAN1, 32768, 4, NULL, S_MANA1_2, 0, 0},        // S_MANA1_1
-    {SPR_MAN1, 32769, 4, NULL, S_MANA1_3, 0, 0},        // S_MANA1_2
-    {SPR_MAN1, 32770, 4, NULL, S_MANA1_4, 0, 0},        // S_MANA1_3
-    {SPR_MAN1, 32771, 4, NULL, S_MANA1_5, 0, 0},        // S_MANA1_4
-    {SPR_MAN1, 32772, 4, NULL, S_MANA1_6, 0, 0},        // S_MANA1_5
-    {SPR_MAN1, 32773, 4, NULL, S_MANA1_7, 0, 0},        // S_MANA1_6
-    {SPR_MAN1, 32774, 4, NULL, S_MANA1_8, 0, 0},        // S_MANA1_7
-    {SPR_MAN1, 32775, 4, NULL, S_MANA1_9, 0, 0},        // S_MANA1_8
-    {SPR_MAN1, 32776, 4, NULL, S_MANA1_1, 0, 0},        // S_MANA1_9
-    {SPR_MAN2, 32768, 4, NULL, S_MANA2_2, 0, 0},        // S_MANA2_1
-    {SPR_MAN2, 32769, 4, NULL, S_MANA2_3, 0, 0},        // S_MANA2_2
-    {SPR_MAN2, 32770, 4, NULL, S_MANA2_4, 0, 0},        // S_MANA2_3
-    {SPR_MAN2, 32771, 4, NULL, S_MANA2_5, 0, 0},        // S_MANA2_4
-    {SPR_MAN2, 32772, 4, NULL, S_MANA2_6, 0, 0},        // S_MANA2_5
-    {SPR_MAN2, 32773, 4, NULL, S_MANA2_7, 0, 0},        // S_MANA2_6
-    {SPR_MAN2, 32774, 4, NULL, S_MANA2_8, 0, 0},        // S_MANA2_7
-    {SPR_MAN2, 32775, 4, NULL, S_MANA2_9, 0, 0},        // S_MANA2_8
-    {SPR_MAN2, 32776, 4, NULL, S_MANA2_10, 0, 0},       // S_MANA2_9
-    {SPR_MAN2, 32777, 4, NULL, S_MANA2_11, 0, 0},       // S_MANA2_10
-    {SPR_MAN2, 32778, 4, NULL, S_MANA2_12, 0, 0},       // S_MANA2_11
-    {SPR_MAN2, 32779, 4, NULL, S_MANA2_13, 0, 0},       // S_MANA2_12
-    {SPR_MAN2, 32780, 4, NULL, S_MANA2_14, 0, 0},       // S_MANA2_13
-    {SPR_MAN2, 32781, 4, NULL, S_MANA2_15, 0, 0},       // S_MANA2_14
-    {SPR_MAN2, 32782, 4, NULL, S_MANA2_16, 0, 0},       // S_MANA2_15
-    {SPR_MAN2, 32783, 4, NULL, S_MANA2_1, 0, 0},        // S_MANA2_16
-    {SPR_MAN3, 32768, 4, NULL, S_MANA3_2, 0, 0},        // S_MANA3_1
-    {SPR_MAN3, 32769, 4, NULL, S_MANA3_3, 0, 0},        // S_MANA3_2
-    {SPR_MAN3, 32770, 4, NULL, S_MANA3_4, 0, 0},        // S_MANA3_3
-    {SPR_MAN3, 32771, 4, NULL, S_MANA3_5, 0, 0},        // S_MANA3_4
-    {SPR_MAN3, 32772, 4, NULL, S_MANA3_6, 0, 0},        // S_MANA3_5
-    {SPR_MAN3, 32773, 4, NULL, S_MANA3_7, 0, 0},        // S_MANA3_6
-    {SPR_MAN3, 32774, 4, NULL, S_MANA3_8, 0, 0},        // S_MANA3_7
-    {SPR_MAN3, 32775, 4, NULL, S_MANA3_9, 0, 0},        // S_MANA3_8
-    {SPR_MAN3, 32776, 4, NULL, S_MANA3_10, 0, 0},       // S_MANA3_9
-    {SPR_MAN3, 32777, 4, NULL, S_MANA3_11, 0, 0},       // S_MANA3_10
-    {SPR_MAN3, 32778, 4, NULL, S_MANA3_12, 0, 0},       // S_MANA3_11
-    {SPR_MAN3, 32779, 4, NULL, S_MANA3_13, 0, 0},       // S_MANA3_12
-    {SPR_MAN3, 32780, 4, NULL, S_MANA3_14, 0, 0},       // S_MANA3_13
-    {SPR_MAN3, 32781, 4, NULL, S_MANA3_15, 0, 0},       // S_MANA3_14
-    {SPR_MAN3, 32782, 4, NULL, S_MANA3_16, 0, 0},       // S_MANA3_15
-    {SPR_MAN3, 32783, 4, NULL, S_MANA3_1, 0, 0},        // S_MANA3_16
+    // [JN] Do not apply full brightness to Blue Mana, use brightmap instead.
+    {SPR_MAN1, 0, 4, NULL, S_MANA1_2, 0, 0},        // S_MANA1_1
+    {SPR_MAN1, 1, 4, NULL, S_MANA1_3, 0, 0},        // S_MANA1_2
+    {SPR_MAN1, 2, 4, NULL, S_MANA1_4, 0, 0},        // S_MANA1_3
+    {SPR_MAN1, 3, 4, NULL, S_MANA1_5, 0, 0},        // S_MANA1_4
+    {SPR_MAN1, 4, 4, NULL, S_MANA1_6, 0, 0},        // S_MANA1_5
+    {SPR_MAN1, 5, 4, NULL, S_MANA1_7, 0, 0},        // S_MANA1_6
+    {SPR_MAN1, 6, 4, NULL, S_MANA1_8, 0, 0},        // S_MANA1_7
+    {SPR_MAN1, 7, 4, NULL, S_MANA1_9, 0, 0},        // S_MANA1_8
+    {SPR_MAN1, 8, 4, NULL, S_MANA1_1, 0, 0},        // S_MANA1_9
+    // [JN] Do not apply full brightness to Green Mana, use brightmap instead.
+    {SPR_MAN2, 0, 4, NULL, S_MANA2_2, 0, 0},        // S_MANA2_1
+    {SPR_MAN2, 1, 4, NULL, S_MANA2_3, 0, 0},        // S_MANA2_2
+    {SPR_MAN2, 2, 4, NULL, S_MANA2_4, 0, 0},        // S_MANA2_3
+    {SPR_MAN2, 3, 4, NULL, S_MANA2_5, 0, 0},        // S_MANA2_4
+    {SPR_MAN2, 4, 4, NULL, S_MANA2_6, 0, 0},        // S_MANA2_5
+    {SPR_MAN2, 5, 4, NULL, S_MANA2_7, 0, 0},        // S_MANA2_6
+    {SPR_MAN2, 6, 4, NULL, S_MANA2_8, 0, 0},        // S_MANA2_7
+    {SPR_MAN2, 7, 4, NULL, S_MANA2_9, 0, 0},        // S_MANA2_8
+    {SPR_MAN2, 8, 4, NULL, S_MANA2_10, 0, 0},       // S_MANA2_9
+    {SPR_MAN2, 9, 4, NULL, S_MANA2_11, 0, 0},       // S_MANA2_10
+    {SPR_MAN2, 10, 4, NULL, S_MANA2_12, 0, 0},       // S_MANA2_11
+    {SPR_MAN2, 11, 4, NULL, S_MANA2_13, 0, 0},       // S_MANA2_12
+    {SPR_MAN2, 12, 4, NULL, S_MANA2_14, 0, 0},       // S_MANA2_13
+    {SPR_MAN2, 13, 4, NULL, S_MANA2_15, 0, 0},       // S_MANA2_14
+    {SPR_MAN2, 14, 4, NULL, S_MANA2_16, 0, 0},       // S_MANA2_15
+    {SPR_MAN2, 15, 4, NULL, S_MANA2_1, 0, 0},        // S_MANA2_16
+    // [JN] Do not apply full brightness to Combined Mana, use brightmap instead.
+    {SPR_MAN3, 0, 4, NULL, S_MANA3_2, 0, 0},        // S_MANA3_1
+    {SPR_MAN3, 1, 4, NULL, S_MANA3_3, 0, 0},        // S_MANA3_2
+    {SPR_MAN3, 2, 4, NULL, S_MANA3_4, 0, 0},        // S_MANA3_3
+    {SPR_MAN3, 3, 4, NULL, S_MANA3_5, 0, 0},        // S_MANA3_4
+    {SPR_MAN3, 4, 4, NULL, S_MANA3_6, 0, 0},        // S_MANA3_5
+    {SPR_MAN3, 5, 4, NULL, S_MANA3_7, 0, 0},        // S_MANA3_6
+    {SPR_MAN3, 6, 4, NULL, S_MANA3_8, 0, 0},        // S_MANA3_7
+    {SPR_MAN3, 7, 4, NULL, S_MANA3_9, 0, 0},        // S_MANA3_8
+    {SPR_MAN3, 8, 4, NULL, S_MANA3_10, 0, 0},       // S_MANA3_9
+    {SPR_MAN3, 9, 4, NULL, S_MANA3_11, 0, 0},       // S_MANA3_10
+    {SPR_MAN3, 10, 4, NULL, S_MANA3_12, 0, 0},       // S_MANA3_11
+    {SPR_MAN3, 11, 4, NULL, S_MANA3_13, 0, 0},       // S_MANA3_12
+    {SPR_MAN3, 12, 4, NULL, S_MANA3_14, 0, 0},       // S_MANA3_13
+    {SPR_MAN3, 13, 4, NULL, S_MANA3_15, 0, 0},       // S_MANA3_14
+    {SPR_MAN3, 14, 4, NULL, S_MANA3_16, 0, 0},       // S_MANA3_15
+    {SPR_MAN3, 15, 4, NULL, S_MANA3_1, 0, 0},        // S_MANA3_16
     {SPR_KEY1, 0, -1, NULL, S_NULL, 0, 0},      // S_KEY1
     {SPR_KEY2, 0, -1, NULL, S_NULL, 0, 0},      // S_KEY2
     {SPR_KEY3, 0, -1, NULL, S_NULL, 0, 0},      // S_KEY3

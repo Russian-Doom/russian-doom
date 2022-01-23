@@ -392,6 +392,7 @@ extern lighttable_t *fullbright_purpleonly[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t *fullbright_flame[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t *fullbright_yellowred[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t *fullbright_firebull[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t *fullbright_mana[LIGHTLEVELS][MAXLIGHTSCALE];
 // [JN] ...erm?!
 extern lighttable_t *brightmaps_greenonly;
 extern lighttable_t *brightmaps_redonly;
@@ -400,6 +401,7 @@ extern lighttable_t *brightmaps_purpleonly;
 extern lighttable_t *brightmaps_flame;
 extern lighttable_t *brightmaps_yellowred;
 extern lighttable_t *brightmaps_firebull;
+extern lighttable_t *brightmaps_mana;
 
 
 extern int extralight;
