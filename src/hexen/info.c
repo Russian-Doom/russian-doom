@@ -2942,7 +2942,8 @@ state_t states[NUMSTATES] = {
     {SPR_SORC, 32790, 5, NULL, S_SORC_DIEG, 0, 0},      // S_SORC_DIEF
     {SPR_SORC, 32791, 5, NULL, S_SORC_DIEH, 0, 0},      // S_SORC_DIEG
     {SPR_SORC, 32792, 5, NULL, S_SORC_DIEI, 0, 0},      // S_SORC_DIEH
-    {SPR_SORC, 32793, -1, NULL, S_NULL, 0, 0},  // S_SORC_DIEI
+    // [JN] Do not apply full brightness to last death frame.
+    {SPR_SORC, 25, -1, NULL, S_NULL, 0, 0},  // S_SORC_DIEI
     {SPR_SBMP, 0, 2, A_SorcBallOrbit, S_SORCBALL1_2, 0, 0},     // S_SORCBALL1_1
     {SPR_SBMP, 1, 2, A_SorcBallOrbit, S_SORCBALL1_3, 0, 0},     // S_SORCBALL1_2
     {SPR_SBMP, 2, 2, A_SorcBallOrbit, S_SORCBALL1_4, 0, 0},     // S_SORCBALL1_3
