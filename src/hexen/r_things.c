@@ -931,23 +931,14 @@ void R_ProjectSprite(mobj_t * thing)
             if (thing->type == MT_ARTITELEPORT)
             vis->colormap = fullbrights_redonly[index];
 
-            // Reaver (attack and death states only)
+            // Reaver (attack states only)
             if ((thing->type == MT_WRAITH || thing->type == MT_WRAITHB)
             && (thing->state - states == S_WRAITH_ATK1_1
             ||  thing->state - states == S_WRAITH_ATK1_2
             ||  thing->state - states == S_WRAITH_ATK1_3
             ||  thing->state - states == S_WRAITH_ATK2_1
             ||  thing->state - states == S_WRAITH_ATK2_2
-            ||  thing->state - states == S_WRAITH_ATK2_3
-            ||  thing->state - states == S_WRAITH_DEATH1_1
-            ||  thing->state - states == S_WRAITH_DEATH1_2
-            ||  thing->state - states == S_WRAITH_DEATH1_3
-            ||  thing->state - states == S_WRAITH_DEATH1_4
-            ||  thing->state - states == S_WRAITH_DEATH1_5
-            ||  thing->state - states == S_WRAITH_DEATH1_6
-            ||  thing->state - states == S_WRAITH_DEATH1_7
-            ||  thing->state - states == S_WRAITH_DEATH1_8
-            ||  thing->state - states == S_WRAITH_DEATH1_9))
+            ||  thing->state - states == S_WRAITH_ATK2_3))
             vis->colormap = fullbrights_redonly[index];
 
             // Korax
