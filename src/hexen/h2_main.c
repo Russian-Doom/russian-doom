@@ -175,6 +175,7 @@ int snd_monomode = 0;
 // Gameplay: Graphical
 int brightmaps = 1;
 int fake_contrast = 0;
+int translucency = 1;
 int flip_levels = 0;
 int linear_sky = 1;
 int randomly_flipcorpses = 1;
@@ -330,6 +331,7 @@ void D_BindVariables(void)
     M_BindIntVariable("uncapped_fps",           &uncapped_fps);
     M_BindIntVariable("brightmaps",             &brightmaps);
     M_BindIntVariable("fake_contrast",          &fake_contrast);
+    M_BindIntVariable("translucency",           &translucency);
     M_BindIntVariable("linear_sky",             &linear_sky);
     M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);
     M_BindIntVariable("flip_weapons",           &flip_weapons);

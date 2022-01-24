@@ -490,6 +490,11 @@ void R_DrawVisSprite(vissprite_t * vis, int x1, int x2)
             colfunc = R_DrawAltTLColumn;
         }
     }
+    else if (vis->mobjflags & MF_EXTRATRANS && translucency && !vanillaparm)
+    {
+        // [JN] Draw using extra translucent column function.
+        colfunc = extratlcolfunc;
+    }
     else if (vis->mobjflags & MF_TRANSLATION)
     {
         // Draw using translated column function

@@ -421,6 +421,159 @@ void R_DrawAltTLColumn(void)
 /*
 ================================================================================
 =
+= R_DrawExtraTLColumn
+=
+= [JN] Draw extra translucent column. With Tutti-Frutti fix by Lee Killough.
+=
+================================================================================
+*/
+
+void R_DrawExtraTLColumn(void)
+{
+    int      count = dc_yh - dc_yl;
+    int      heightmask = dc_texheight-1;
+    byte    *dest;
+    fixed_t  frac;
+
+    if (count < 0)
+    {
+        return;
+    }
+
+#ifdef RANGECHECK
+    if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ?
+                 "R_DrawTLColumn: %i to %i at %i" :
+                 "R_DrawTLColumn: %i к %i у %i",
+                 dc_yl, dc_yh, dc_x);
+    }
+#endif
+
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
+
+    if (dc_texheight & heightmask)  // not a power of 2 -- killough
+    {
+        heightmask++;
+        heightmask <<= FRACBITS;
+
+        if (frac < 0)
+            while ((frac += heightmask) < 0);
+        else
+            while (frac >= heightmask)
+                   frac -= heightmask;
+
+        do
+        {
+            *dest = extratinttable[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            dest += screenwidth;
+            if ((frac += dc_iscale) >= heightmask)
+            {
+                frac -= heightmask;
+            }
+        } while (count--);
+    }
+    else  // texture height is a power of 2 -- killough
+    {
+        do
+        {
+            *dest = extratinttable[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
+            dest += screenwidth;
+            frac += dc_iscale;
+        } while (count--);
+    }
+}
+
+/*
+================================================================================
+=
+= R_DrawExtraTLColumn
+=
+= [JN] Draw extra translucent column, low-resolution version. 
+=
+================================================================================
+*/
+
+void R_DrawExtraTLColumnLow (void)
+{
+    int      x = dc_x << 1; // Blocky mode, need to multiply by 2.
+    int      count = dc_yh - dc_yl;
+    int      heightmask = dc_texheight - 1;
+    byte    *dest, *dest2, *dest3, *dest4;
+    fixed_t  frac;
+
+    if (count < 0)
+    return;
+
+#ifdef RANGECHECK
+    if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ?
+                 "R_DrawExtraTLColumnLow: %i to %i at %i" :
+                 "R_DrawTLColumnLow: %i к %i у %i",
+                 dc_yl, dc_yh, x);
+    }
+#endif
+
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
+
+    if (dc_texheight & heightmask) // not a power of 2 -- killough
+    {
+        heightmask++;
+        heightmask <<= FRACBITS;
+
+        if (frac < 0)
+            while ((frac += heightmask) < 0);
+        else
+            while (frac >= heightmask)
+                   frac -= heightmask;
+
+        do
+        {
+            *dest = extratinttable[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest2 = extratinttable[(*dest2<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest3 = extratinttable[(*dest3<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest4 = extratinttable[(*dest4<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+
+            dest += screenwidth << hires;
+            dest2 += screenwidth << hires;
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
+
+            if ((frac += dc_iscale) >= heightmask)
+            {
+                frac -= heightmask;
+            }
+        } while (count--);
+    }
+    else // texture height is a power of 2 -- killough
+    {
+        do 
+        {
+            *dest = extratinttable[(*dest<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest2 = extratinttable[(*dest2<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest3 = extratinttable[(*dest3<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest4 = extratinttable[(*dest4<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+
+            dest += screenwidth << hires;
+            dest2 += screenwidth << hires;
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
+
+            frac += dc_iscale; 
+
+        } while (count--);
+    }
+}
+
+/*
+================================================================================
+=
 = R_DrawTranslatedColumn
 =
 ================================================================================

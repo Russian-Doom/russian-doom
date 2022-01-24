@@ -300,6 +300,7 @@ typedef struct
 #define	MF_TRANSLATION	0x1c000000      // use a translation table (>>MF_TRANSHIFT)
 #define	MF_TRANSSHIFT	26      // table for player colormaps
 
+#define MF_EXTRATRANS	0x4000000 // [JN] Extra translucency
 
 // --- mobj.flags2 ---
 
