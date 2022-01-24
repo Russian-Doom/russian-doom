@@ -204,50 +204,42 @@ void P_MakeDivline(line_t * li, divline_t * dl)
 
 
 /*
-===============
+================================================================================
 =
 = P_InterceptVector
 =
-= Returns the fractional intercept point along the first divline
-=
+= Returns the fractional intercept point along the first divline.
 = This is only called by the addthings and addlines traversers
-===============
+=
+= [JN] killough 5/3/98: reformatted, cleaned up
+=
+================================================================================
 */
 
-fixed_t P_InterceptVector(divline_t * v2, divline_t * v1)
+fixed_t P_InterceptVector (divline_t *v2, divline_t *v1)
 {
-#if 1
-    fixed_t frac, num, den;
+    if (singleplayer)
+    {
+        // [JN] cph - no precision/overflow problems
+        int64_t den = (int64_t)v1->dy * v2->dx - (int64_t)v1->dx * v2->dy;
+        den >>= 16;
+        
+        if (!den)
+        {
+            return 0;
+        }
 
-    den = FixedMul(v1->dy >> 8, v2->dx) - FixedMul(v1->dx >> 8, v2->dy);
-    if (den == 0)
-        return 0;
-//              I_Error ("P_InterceptVector: parallel");
-    num = FixedMul((v1->x - v2->x) >> 8, v1->dy) +
-        FixedMul((v2->y - v1->y) >> 8, v1->dx);
-    frac = FixedDiv(num, den);
+        return (fixed_t)(((int64_t)(v1->x - v2->x) * v1->dy
+                        - (int64_t)(v1->y - v2->y) * v1->dx) / den);
+    }
+    else
+    {
+        // [JN] Original demo-safe code.
+        fixed_t den = FixedMul(v1->dy >> 8, v2->dx) - FixedMul(v1->dx >> 8, v2->dy);
 
-    return frac;
-#else
-    float frac, num, den, v1x, v1y, v1dx, v1dy, v2x, v2y, v2dx, v2dy;
-
-    v1x = (float) v1->x / FRACUNIT;
-    v1y = (float) v1->y / FRACUNIT;
-    v1dx = (float) v1->dx / FRACUNIT;
-    v1dy = (float) v1->dy / FRACUNIT;
-    v2x = (float) v2->x / FRACUNIT;
-    v2y = (float) v2->y / FRACUNIT;
-    v2dx = (float) v2->dx / FRACUNIT;
-    v2dy = (float) v2->dy / FRACUNIT;
-
-    den = v1dy * v2dx - v1dx * v2dy;
-    if (den == 0)
-        return 0;               // parallel
-    num = (v1x - v2x) * v1dy + (v2y - v1y) * v1dx;
-    frac = num / den;
-
-    return frac * FRACUNIT;
-#endif
+        return den ? FixedDiv((FixedMul((v1->x-v2->x) >> 8, v1->dy)
+                   + FixedMul((v2->y-v1->y) >> 8, v1->dx)), den) : 0;
+    }
 }
 
 /*
