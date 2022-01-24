@@ -30,10 +30,6 @@
 #endif
 
 #include "doomfeatures.h"
-
-#include "txt_main.h"
-#include "txt_io.h"
-
 #include "net_client.h"
 #include "am_map.h"
 #include "config.h"
@@ -59,9 +55,6 @@
 #include "v_video.h"
 #include "w_merge.h"
 #include "jn.h"
-
-#define STARTUP_WINDOW_X 17
-#define STARTUP_WINDOW_Y 7
 
 // -----------------------------------------------------------------------------
 // [Dasperal] d_name.h var definition
@@ -1559,6 +1552,9 @@ void D_DoomMain(void)
                "SB_Init: Загрузка патчей.\n");
     SB_Init();
 
+    // [JN] Define and load translated strings
+    RD_DefineLanguageStrings();
+
     // [JN] Predifine automap marks color.
     AM_initMarksColor(automap_mark_color);
 
@@ -1645,9 +1641,6 @@ void D_DoomMain(void)
     DEH_printf(gamedescription);
     DEH_printf("\".");
     DEH_printf("\n");
-
-    // [JN] Define and load translated strings
-    RD_DefineLanguageStrings();
 
     D_DoomLoop();               // Never returns
 }
