@@ -842,6 +842,7 @@ void R_Init(void)
             screenblocks = 12;
     }
 
+    R_InitClipSegs ();
     R_InitSpritesRes ();
     R_InitPlanesRes ();
     R_InitVisplanesRes ();

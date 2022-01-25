@@ -1031,14 +1031,6 @@ void R_AddSprites(sector_t *sec)
     mobj_t *thing;
     int lightnum;
 
-    if (sec->validcount == validcount)
-    {
-        // Already added.
-        return;
-    }
-
-    sec->validcount = validcount;
-
     lightnum = (sec->lightlevel >> LIGHTSEGSHIFT) + extralight;
     if (lightnum < 0)
     {
