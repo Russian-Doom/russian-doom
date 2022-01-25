@@ -29,6 +29,8 @@
 #include "opl.h"
 #include "opl_internal.h"
 
+extern int english_language;
+
 //#define OPL_DEBUG_TRACE
 
 #if (defined(__i386__) || defined(__x86_64__)) && defined(HAVE_IOPERM)
@@ -93,7 +95,9 @@ static opl_init_result_t InitDriver(opl_driver_t *_driver,
     result2 = OPL_Detect();
     if (result1 == OPL_INIT_NONE || result2 == OPL_INIT_NONE)
     {
-        printf("OPL_Init: Поддержка OPL не обнаружена в драйвере '%s'.\n", _driver->name);
+        printf(english_language ?
+               "OPL_Init: No OPL detected using '%s' driver.\n" :
+               "OPL_Init: Поддержка OPL не обнаружена в драйвере '%s'.\n", _driver->name);
         _driver->shutdown_func();
         driver = NULL;
         return OPL_INIT_NONE;
@@ -101,7 +105,9 @@ static opl_init_result_t InitDriver(opl_driver_t *_driver,
 
     init_stage_reg_writes = 0;
 
-    printf("OPL_Init: Используется драйвер '%s'.\n", driver->name);
+    printf(english_language ?
+           "OPL_Init: Using driver '%s'.\n" :
+           "OPL_Init: Используется драйвер '%s'.\n", driver->name);
 
     return result2;
 }
@@ -122,7 +128,9 @@ static opl_init_result_t AutoSelectDriver(unsigned int port_base)
         }
     }
     
-    printf("OPL_Init: Невозможно определить корректный драйвер.\n");
+    printf(english_language ?
+           "OPL_Init: Failed to find a working driver.\n" :
+           "OPL_Init: Невозможно определить корректный драйвер.\n");
 
     return OPL_INIT_NONE;
 }
@@ -153,14 +161,17 @@ opl_init_result_t OPL_Init(unsigned int port_base)
                 }
                 else
                 {
-                    printf("OPL_Init: Ошибка инициализации "
-                           "драйвера: '%s'.\n", driver_name);
+                    printf(english_language ?
+                           "OPL_Init: Failed to initialize driver: '%s'.\n" :
+                           "OPL_Init: Ошибка инициализации драйвера: '%s'.\n", driver_name);
                     return OPL_INIT_NONE;
                 }
             }
         }
 
-        printf("OPL_Init: неизвестный драйвер: '%s'.\n", driver_name);
+        printf(english_language ?
+               "OPL_Init: unknown driver: '%s'.\n" :
+               "OPL_Init: неизвестный драйвер: '%s'.\n", driver_name);
 
         return OPL_INIT_NONE;
     }
