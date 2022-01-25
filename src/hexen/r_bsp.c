@@ -502,8 +502,7 @@ void R_Subsector(int num)
                    frontsector->ceilingpic == skyflatnum ?
                    R_FindPlane (frontsector->interpceilingheight,
                                 frontsector->ceilingpic,
-                                frontsector->lightlevel,
-                                frontsector->special) : NULL;
+                                frontsector->lightlevel, 0) : NULL;
 
     // Render the polyobj in the subsector first
     if (sub->poly)
