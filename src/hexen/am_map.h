@@ -109,5 +109,9 @@ typedef struct
     fixed_t slp, islp;
 } islope_t;
 
+// [JN] Now global, since marks preserved in saved games.
+extern mpoint_t *markpoints;
+extern int       markpointnum, markpointnum_max;
+void AM_clearMarks (void);
 
 #endif

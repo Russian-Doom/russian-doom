@@ -24,6 +24,7 @@
 #include "m_misc.h"
 #include "i_swap.h"
 #include "p_local.h"
+#include "am_map.h"
 
 // MACROS ------------------------------------------------------------------
 
@@ -110,6 +111,8 @@ static void ArchiveSounds(void);
 static void UnarchiveSounds(void);
 static void ArchiveMisc(void);
 static void UnarchiveMisc(void);
+static void ArchiveAutomap(void);
+static void UnarchiveAutomap(void);
 static void SetMobjArchiveNums(void);
 static void RemoveAllThinkers(void);
 static int GetMobjNum(mobj_t * mobj);
@@ -129,11 +132,13 @@ static void SV_Read(void *buffer, int size);
 static byte SV_ReadByte(void);
 static uint16_t SV_ReadWord(void);
 static uint32_t SV_ReadLong(void);
+static int64_t SV_ReadLongLong(void);
 static void *SV_ReadPtr(void);
 static void SV_Write(void *buffer, int size);
 static void SV_WriteByte(byte val);
 static void SV_WriteWord(unsigned short val);
 static void SV_WriteLong(unsigned int val);
+static void SV_WriteLongLong(int64_t val);
 static void SV_WritePtr(void *ptr);
 
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
@@ -2009,6 +2014,7 @@ void SV_SaveMap(boolean savePlayers)
     ArchiveScripts();
     ArchiveSounds();
     ArchiveMisc();
+    ArchiveAutomap();
 
     // Place a termination marker
     SV_WriteLong(ASEG_END);
@@ -2384,6 +2390,7 @@ void SV_LoadMap(void)
     UnarchiveScripts();
     UnarchiveSounds();
     UnarchiveMisc();
+    UnarchiveAutomap();
 
     AssertSegment(ASEG_END);
 
@@ -3016,6 +3023,56 @@ static void UnarchiveMisc(void)
     }
 }
 
+/*
+================================================================================
+=
+= ArchiveAutomap
+=
+================================================================================
+*/
+
+static void ArchiveAutomap (void)
+{
+    SV_WriteLong(markpointnum);
+
+    if (markpointnum)
+    {
+        int i;
+
+        for (i = 0; i < markpointnum; ++i)
+        {
+            SV_WriteLongLong(markpoints[i].x);
+            SV_WriteLongLong(markpoints[i].y);
+        }
+    }
+}
+
+/*
+================================================================================
+=
+= UnarchiveAutomap
+=
+================================================================================
+*/
+
+static void UnarchiveAutomap (void)
+{
+    int i;
+
+    markpointnum = SV_ReadLong();
+    markpointnum_max = markpointnum;
+
+    markpoints = realloc(markpoints, sizeof(*markpoints) * markpointnum_max);
+    if(markpointnum_max == 0)
+        markpoints = NULL;
+
+    for(i = 0; i < markpointnum; ++i)
+    {
+        markpoints[i].x = SV_ReadLongLong();
+        markpoints[i].y = SV_ReadLongLong();
+    }
+} 
+
 //==========================================================================
 //
 // RemoveAllThinkers
@@ -3448,6 +3505,13 @@ static uint32_t SV_ReadLong(void)
     return LONG(result);
 }
 
+static int64_t SV_ReadLongLong(void)
+{
+    int64_t result;
+    SV_Read(&result, sizeof(int64_t));
+    return (int64_t)(result);
+}
+
 static void *SV_ReadPtr(void)
 {
     return (void *) (intptr_t) SV_ReadLong();
@@ -3479,6 +3543,12 @@ static void SV_WriteLong(unsigned int val)
 {
     val = LONG(val);
     fwrite(&val, sizeof(int), 1, SavingFP);
+}
+
+static void SV_WriteLongLong(int64_t val)
+{
+    val = (int64_t)(val);
+    SV_Write(&val, sizeof(int64_t));
 }
 
 static void SV_WritePtr(void *val)

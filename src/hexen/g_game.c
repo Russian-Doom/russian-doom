@@ -28,6 +28,7 @@
 #include "p_local.h"
 #include "rd_keybinds.h"
 #include "v_video.h"
+#include "am_map.h"
 
 #define AM_STARTKEY	9
 
@@ -1625,6 +1626,7 @@ void G_DoWorldDone(void)
     G_DoLoadLevel();
     gameaction = ga_nothing;
     viewactive = true;
+    AM_clearMarks();  // [JN] jff 4/12/98 clear any marks on the automap
 }
 
 //==========================================================================
@@ -1966,6 +1968,8 @@ void G_InitNew(skill_t skill, int episode, int map)
     // [JN] Reset automap scale. Fixes:
     // https://doomwiki.org/wiki/Automap_scale_preserved_after_warps_in_Heretic_and_Hexen
     automapactive = false; 
+    // [JN] jff 4/16/98 force marks on automap cleared every new level start
+    AM_clearMarks();
     viewactive = true;
     gameepisode = episode;
     gamemap = map;

@@ -34,6 +34,10 @@ extern char *amstr_overlayon;
 extern char *amstr_overlayoff;
 extern char *amstr_rotateon;
 extern char *amstr_rotateoff;
+extern char *amstr_mark;
+extern char *amstr_added;
+extern char *amstr_cleared;
+extern char *amstr_markscleared;
 
 //
 // CT_chat.c
@@ -156,6 +160,10 @@ extern char *txt_running_script;
 #define AMSTR_OVERLAYOFF            "OVERLAY MODE OFF"
 #define AMSTR_ROTATEON              "ROTATE MODE ON"
 #define AMSTR_ROTATEOFF             "ROTATE MODE OFF"
+#define AMSTR_MARK                  "MARK"
+#define AMSTR_ADDED                 "ADDED"
+#define AMSTR_CLEARED               "CLEARED"
+#define AMSTR_MARKSCLEARED          "ALL MARKS CLEARED"
 
 //
 // CT_chat.c
@@ -338,6 +346,10 @@ extern char *txt_running_script;
 #define AMSTR_OVERLAYOFF_RUS    "HT;BV YFKJ;TYBZ DSRK.XTY"  // РЕЖИМ НАЛОЖЕНИЯ ВЫКЛЮЧЕН
 #define AMSTR_ROTATEON_RUS      "HT;BV DHFOTYBZ DRK.XTY"    // РЕЖИМ ВРАЩЕНИЯ ВКЛЮЧЕН
 #define AMSTR_ROTATEOFF_RUS     "HT;BV DHFOTYBZ DSRK.XTY"   // РЕЖИМ ВРАЩЕНИЯ ВЫКЛЮЧЕН
+#define AMSTR_MARK_RUS          "JNVTNRF"                   // ОТМЕТКА
+#define AMSTR_ADDED_RUS         "LJ,FDKTYF"                 // ДОБАВЛЕНА
+#define AMSTR_CLEARED_RUS       "ELFKTYF"                   // УДАЛЕНА
+#define AMSTR_MARKSCLEARED_RUS  "DCT JNVTNRB ELFKTYS"       // ВСЕ ОТМЕТКИ УДАЛЕНЫ
 
 //
 // CT_chat.c
