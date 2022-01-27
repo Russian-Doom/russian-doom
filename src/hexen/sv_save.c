@@ -3062,7 +3062,7 @@ static void UnarchiveAutomap (void)
     markpointnum = SV_ReadLong();
     markpointnum_max = markpointnum;
 
-    markpoints = realloc(markpoints, sizeof(*markpoints) * markpointnum_max);
+    markpoints = I_Realloc(markpoints, sizeof(*markpoints) * markpointnum_max);
     if(markpointnum_max == 0)
         markpoints = NULL;
 

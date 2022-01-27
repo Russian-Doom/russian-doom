@@ -18,6 +18,7 @@
 
 
 #include <stdlib.h>
+#include "i_system.h"
 #include "doomdef.h"
 #include "deh_str.h"
 #include "p_local.h"
@@ -326,9 +327,9 @@ static void AM_addMark (void)
     // [JN] killough 2/22/98: remove limit on automap marks
     if (markpointnum >= markpointnum_max)
     {
-        markpoints = realloc(markpoints,
-                            (markpointnum_max = markpointnum_max ? 
-                             markpointnum_max*2 : 16) * sizeof(*markpoints));
+        markpoints = I_Realloc(markpoints,
+                              (markpointnum_max = markpointnum_max ? 
+                               markpointnum_max*2 : 16) * sizeof(*markpoints));
     }
 
     // [crispy] keep the map static in overlay mode if not following the player
@@ -1503,7 +1504,7 @@ static void AM_drawPlayers(void)
 {
     int i;
     player_t *p;
-    static int their_colors[] = { GREENKEY, YELLOWKEY, BLOODRED, BLUEKEY };
+    const int their_colors[] = { GREENKEY, YELLOWKEY, BLOODRED, BLUEKEY };
     int their_color = -1;
     int color;
     mpoint_t pt;

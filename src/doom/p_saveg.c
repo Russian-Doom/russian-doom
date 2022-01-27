@@ -21,6 +21,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "i_system.h"
 #include "am_map.h"
 #include "rd_lang.h"
 #include "deh_main.h"
@@ -2185,7 +2186,7 @@ void P_UnArchiveAutomap (void)
     markpointnum = saveg_read32();
     markpointnum_max = markpointnum;
 
-    markpoints = realloc(markpoints, sizeof(*markpoints) * markpointnum_max);
+    markpoints = I_Realloc(markpoints, sizeof(*markpoints) * markpointnum_max);
     if(markpointnum_max == 0)
         markpoints = NULL;
 

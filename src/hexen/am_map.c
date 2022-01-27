@@ -15,6 +15,8 @@
 // GNU General Public License for more details.
 //
 
+
+#include "i_system.h"
 #include "h2def.h"
 #include "i_video.h"
 #include "i_swap.h"
@@ -291,9 +293,9 @@ static void AM_addMark (void)
     // [JN] killough 2/22/98: remove limit on automap marks
     if (markpointnum >= markpointnum_max)
     {
-        markpoints = realloc(markpoints,
-                            (markpointnum_max = markpointnum_max ? 
-                             markpointnum_max*2 : 16) * sizeof(*markpoints));
+        markpoints = I_Realloc(markpoints,
+                              (markpointnum_max = markpointnum_max ? 
+                               markpointnum_max*2 : 16) * sizeof(*markpoints));
     }
 
     // [crispy] keep the map static in overlay mode if not following the player
@@ -1423,7 +1425,7 @@ static void AM_drawPlayers(void)
     player_t *p;
     mpoint_t pt;
 
-    static int their_colors[] = {
+    const int their_colors[] = {
         AM_PLR1_COLOR,
         AM_PLR2_COLOR,
         AM_PLR3_COLOR,
