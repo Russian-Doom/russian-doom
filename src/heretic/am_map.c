@@ -1600,9 +1600,8 @@ static void AM_drawThings(int colors, int colorrange)
 // -----------------------------------------------------------------------------
 
 static const int mark_w = 5 << hires;
-static const int mark_flip_1 =  1 << hires;
-static const int mark_flip_2 = -1 << hires;
-static const int mark_flip_3 =  9 << hires;
+static const int mark_flip_1 = 1 << hires;
+static const int mark_flip_2 = 9 << hires;
 
 static void AM_drawMarks (void)
 {
@@ -1636,7 +1635,7 @@ static void AM_drawMarks (void)
                 // killough 2/22/98: less spacing for '1'
                 if (d == 1)
                 {
-                    fx += (flip_levels ? mark_flip_2 : mark_flip_1); // -1 : 1
+                    fx += (flip_levels ? -mark_flip_1 : mark_flip_1); // -1 : 1
                 }
 
                 if (fx >= f_x + 5 && fx <= f_w - 5
@@ -1649,7 +1648,7 @@ static void AM_drawMarks (void)
                 }
 
                 // killough 2/22/98: 1 space backwards
-                fx -= mark_w - (flip_levels ? mark_flip_3 : mark_flip_1); // 9 : 1
+                fx -= mark_w - (flip_levels ? mark_flip_2 : mark_flip_1); // 9 : 1
 
                 j /= 10;
             } while (j > 0);
