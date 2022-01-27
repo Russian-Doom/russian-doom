@@ -833,8 +833,8 @@ static MenuItem_t Bindings4Items[] = {
     {ITT_EFUNC,   "OVERLAY MODE",     "HT;BV YFKJ;TYBZ",       BK_StartBindingKey, bk_map_overlay},   // Режим наложения
     {ITT_EFUNC,   "ROTATE MODE",      "HT;BV DHFOTYBZ",        BK_StartBindingKey, bk_map_rotate},    // Режим вращения
     {ITT_EFUNC,   "TOGGLE GRID",      "CTNRF",                 BK_StartBindingKey, bk_map_grid},      // Сетка
-    {ITT_EMPTY,   NULL,               NULL,                    NULL,               0},
-    {ITT_EMPTY,   NULL,               NULL,                    NULL,               0},
+    {ITT_EFUNC,   "ADD MARK",         "GJCNFDBNM JNVTNRE",     BK_StartBindingKey, bk_map_mark},      // Поставить отметку
+    {ITT_EFUNC,   "CLEAR MARK",       "ELFKBNM JNVTNRE",       BK_StartBindingKey, bk_map_clearmark}, // Удалить отметку
     {ITT_EMPTY,   NULL,               NULL,                    NULL,               0},
     {ITT_EMPTY,   NULL,               NULL,                    NULL,               0},
     {ITT_SETMENU, "NEXT PAGE >",      "CKTLE.OFZ CNHFYBWF `",  &Bindings5Menu,     0},                // Cледующая страница >
