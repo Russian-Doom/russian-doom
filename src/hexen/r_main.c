@@ -39,8 +39,6 @@ int centerx, centery;
 fixed_t centerxfrac, centeryfrac;
 fixed_t projection;
 
-int sscount, linecount, loopcount;
-
 fixed_t viewx, viewy, viewz;
 angle_t viewangle;
 fixed_t viewcos, viewsin;
@@ -975,7 +973,6 @@ void R_SetupFrame(player_t * player)
     }
     viewsin = finesine[viewangle>>ANGLETOFINESHIFT];
     viewcos = finecosine[viewangle>>ANGLETOFINESHIFT];
-    sscount = 0;
     if (player->fixedcolormap)
     {
         fixedcolormap = colormaps + player->fixedcolormap
