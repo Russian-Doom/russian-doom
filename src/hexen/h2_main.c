@@ -324,6 +324,7 @@ void D_BindVariables(void)
 
     // Automap
     M_BindIntVariable("automap_rotate",         &automap_rotate);
+    M_BindIntVariable("automap_overlay",        &automap_overlay);
     M_BindIntVariable("automap_overlay_bg",     &automap_overlay_bg);
     M_BindIntVariable("automap_follow",         &automap_follow);
     M_BindIntVariable("automap_grid",           &automap_grid);

@@ -1605,6 +1605,10 @@ void AM_Drawer(void)
     {
         AM_clearFB(BACKGROUND);
     }
+    else
+    {
+        BorderNeedRefresh = true;
+    }
     if (automap_grid)
     {
         AM_drawGrid(GRIDCOLORS);
