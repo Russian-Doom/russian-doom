@@ -115,8 +115,9 @@ static void M_RD_Change_Msg_Chat_Color(Direction_t direction);
 
 // Automap
 static void DrawAutomapMenu(void);
-static void M_RD_AutoMapOverlay();
 static void M_RD_AutoMapRotate();
+static void M_RD_AutoMapOverlay();
+static void M_RD_AutoMapOverlayBG(Direction_t direction);
 static void M_RD_AutoMapFollow();
 static void M_RD_AutoMapGrid();
 static void M_RD_AutoMapGridSize(Direction_t direction);
@@ -635,8 +636,10 @@ static Menu_t MessagesMenu = {
 
 static MenuItem_t AutomapItems[] = {
     {ITT_TITLE,  "AUTOMAP",        "RFHNF",              NULL,                 0}, // КАРТА
-    {ITT_SWITCH, "OVERLAY MODE:",  "HT;BV YFKJ;TYBZ:",   M_RD_AutoMapOverlay,  0}, // РЕЖИМ НАЛОЖЕНИЯ
     {ITT_SWITCH, "ROTATE MODE:",   "HT;BV DHFOTYBZ:",    M_RD_AutoMapRotate,   0}, // РЕЖИМ ВРАЩЕНИЯ
+    {ITT_SWITCH, "OVERLAY MODE:",  "HT;BV YFKJ;TYBZ:",   M_RD_AutoMapOverlay,  0}, // РЕЖИМ НАЛОЖЕНИЯ
+    {ITT_LRFUNC, "OVERLAY BACKGROUND OPACITY",  "GHJPHFXYJCNM AJYF GHB YFKJ;TYBB",   M_RD_AutoMapOverlayBG,  0}, // ПРОЗРАЧНОСТЬ ФОНА ПРИ НАЛОЖЕНИИ
+    {ITT_EMPTY,   NULL,                  NULL,                      NULL,                         0},
     {ITT_SWITCH, "FOLLOW MODE:",   "HT;BV CKTLJDFYBZ:",  M_RD_AutoMapFollow,   0}, // РЕЖИМ СЛЕДОВАНИЯ
     {ITT_SWITCH, "GRID:",          "CTNRF:",             M_RD_AutoMapGrid,     0}, // СЕТКА
     {ITT_LRFUNC, "GRID SIZE:",     "HFPVTH CTNRB:",      M_RD_AutoMapGridSize, 0}, // РАЗМЕР СЕТКИ
@@ -649,10 +652,10 @@ static MenuItem_t AutomapItems[] = {
 };
 
 static Menu_t AutomapMenu = {
-    78, 61,
+    36, 36,
     32,
     "AUTOMAP AND STATISTICS", "RFHNF B CNFNBCNBRF", false, // КАРТА И СТАТИСТИКА
-    12, AutomapItems, false,
+    14, AutomapItems, false,
     DrawAutomapMenu,
     NULL,
     &DisplayMenu,
@@ -2543,92 +2546,103 @@ static void DrawAutomapMenu(void)
 
     if (english_language)
     {
-        // Overlay mode
-        RD_M_DrawTextSmallENG(automap_overlay ? "ON" : "OFF", 176 + wide_delta, 42, CR_NONE);
-
         // Rotate mode
-        RD_M_DrawTextSmallENG(automap_rotate ? "ON" : "OFF", 169 + wide_delta, 52, CR_NONE);
+        RD_M_DrawTextSmallENG(automap_rotate ? "ON" : "OFF", 127 + wide_delta, 42, CR_NONE);
+
+        // Overlay mode
+        RD_M_DrawTextSmallENG(automap_overlay ? "ON" : "OFF", 134 + wide_delta, 52, CR_NONE);
 
         // Follow mode
-        RD_M_DrawTextSmallENG(automap_follow ? "ON" : "OFF", 165 + wide_delta, 62, CR_NONE);
+        RD_M_DrawTextSmallENG(automap_follow ? "ON" : "OFF", 123 + wide_delta, 82, CR_NONE);
 
         // Grid
-        RD_M_DrawTextSmallENG(automap_grid ? "ON" : "OFF", 114 + wide_delta, 72, CR_NONE);
+        RD_M_DrawTextSmallENG(automap_grid ? "ON" : "OFF", 72 + wide_delta, 92, CR_NONE);
 
         // Grid size
-        RD_M_DrawTextSmallENG(num, 147 + wide_delta, 82, CR_NONE);
+        RD_M_DrawTextSmallENG(num, 105 + wide_delta, 102, CR_NONE);
 
         // Mark color
-        RD_M_DrawTextSmallENG(M_RD_ColorName(automap_mark_color), 160 + wide_delta, 92,
+        RD_M_DrawTextSmallENG(M_RD_ColorName(automap_mark_color), 118 + wide_delta, 112,
                               M_RD_ColorTranslation(automap_mark_color));
 
         // Level stats
         RD_M_DrawTextSmallENG(automap_stats == 1 ? "IN AUTOMAP" :
                               automap_stats == 2 ? "ALWAYS" : "OFF",
-                              163 + wide_delta, 112, CR_NONE);
+                              121 + wide_delta, 132, CR_NONE);
 
         // Level time
         RD_M_DrawTextSmallENG(automap_level_time == 1 ? "IN AUTOMAP" :
                               automap_level_time == 2 ? "ALWAYS" : "OFF",
-                              152 + wide_delta, 122, CR_NONE);
+                              110 + wide_delta, 142, CR_NONE);
 
         // Total time
         RD_M_DrawTextSmallENG(automap_total_time == 1 ? "IN AUTOMAP" :
                               automap_total_time == 2 ? "ALWAYS" : "OFF",
-                              153 + wide_delta, 132, CR_NONE);
+                              111 + wide_delta, 152, CR_NONE);
 
         // Player coords
         RD_M_DrawTextSmallENG(automap_coords == 1 ? "IN AUTOMAP" :
                               automap_coords == 2 ? "ALWAYS" : "OFF",
-                              184 + wide_delta, 142, CR_NONE);
+                              142 + wide_delta, 162, CR_NONE);
     }
     else
     {
-        // Режим наложения
-        RD_M_DrawTextSmallRUS(automap_overlay ? "DRK" : "DSRK", 187 + wide_delta, 42, CR_NONE);
-
         // Режим вращения
-        RD_M_DrawTextSmallRUS(automap_rotate ? "DRK" : "DSRK", 179 + wide_delta, 52, CR_NONE);
+        RD_M_DrawTextSmallRUS(automap_rotate ? "DRK" : "DSRK", 154 + wide_delta, 42, CR_NONE);
+
+        // Режим наложения
+        RD_M_DrawTextSmallRUS(automap_overlay ? "DRK" : "DSRK", 162 + wide_delta, 52, CR_NONE);
 
         // Режим следования
-        RD_M_DrawTextSmallRUS(automap_follow ? "DRK" : "DSRK", 194 + wide_delta, 62, CR_NONE);
+        RD_M_DrawTextSmallRUS(automap_follow ? "DRK" : "DSRK", 169 + wide_delta, 82, CR_NONE);
 
         // Сетка
-        RD_M_DrawTextSmallRUS(automap_grid ? "DRK" : "DSRK", 107 + wide_delta, 72, CR_NONE);
+        RD_M_DrawTextSmallRUS(automap_grid ? "DRK" : "DSRK", 82 + wide_delta, 92, CR_NONE);
 
         // Размер сетки
-        RD_M_DrawTextSmallRUS(num, 158 + wide_delta, 82, CR_NONE);
+        RD_M_DrawTextSmallRUS(num, 133 + wide_delta, 102, CR_NONE);
 
         // Цвет отметок
-        RD_M_DrawTextSmallRUS(M_RD_ColorName(automap_mark_color), 158 + wide_delta, 92,
+        RD_M_DrawTextSmallRUS(M_RD_ColorName(automap_mark_color), 133 + wide_delta, 112,
                               M_RD_ColorTranslation(automap_mark_color));
 
 
         // Статистика уровня
         RD_M_DrawTextSmallRUS(automap_stats == 1 ? "YF RFHNT" :
                               automap_stats == 2 ? "DCTULF" : "DSRK",
-                              193 + wide_delta, 112, CR_NONE);
+                              168 + wide_delta, 132, CR_NONE);
 
         // Время уровня
         RD_M_DrawTextSmallRUS(automap_level_time == 1 ? "YF RFHNT" :
                               automap_level_time == 2 ? "DCTULF" : "DSRK",
-                              158 + wide_delta, 122, CR_NONE);
+                              133 + wide_delta, 142, CR_NONE);
 
         // Общее время
         RD_M_DrawTextSmallRUS(automap_total_time == 1 ? "YF RFHNT" :
                               automap_total_time == 2 ? "DCTULF" : "DSRK",
-                              161 + wide_delta, 132, CR_NONE);
+                              136 + wide_delta, 152, CR_NONE);
 
         // Координаты игрока
         RD_M_DrawTextSmallRUS(automap_coords == 1 ? "YF RFHNT" :
                               automap_coords == 2 ? "DCTULF" : "DSRK",
-                              198 + wide_delta, 142, CR_NONE);
+                              173 + wide_delta, 162, CR_NONE);
     }
+
+    // Overlay background opacity
+    RD_Menu_DrawSliderSmall(&AutomapMenu, 72, 9, automap_overlay_bg / 3);
+    // Numerical representation of slider position
+    M_snprintf(num, 5, "%d", automap_overlay_bg);
+    RD_M_DrawTextSmallENG(num, 128 + wide_delta, 73, CR_WHITE2GRAY_HERETIC);
 }
 
 static void M_RD_AutoMapOverlay()
 {
     automap_overlay ^= 1;
+}
+
+static void M_RD_AutoMapOverlayBG(Direction_t direction)
+{
+    RD_Menu_SlideInt(&automap_overlay_bg, 0, 24, direction);
 }
 
 static void M_RD_AutoMapRotate()
@@ -4916,8 +4930,9 @@ static void M_RD_BackToDefaults_Recommended(void)
     M_RD_Define_Msg_Color(msg_chat, message_chat_color);
 
     // Automap
-    automap_overlay    = 0;
     automap_rotate     = 0;
+    automap_overlay    = 0;
+    automap_overlay_bg = 0;
     automap_follow     = 1;
     automap_grid       = 0;
     automap_grid_size  = 128;    
@@ -5055,8 +5070,9 @@ static void M_RD_BackToDefaults_Original(void)
     M_RD_Define_Msg_Color(msg_chat, message_chat_color);
 
     // Automap
-    automap_overlay    = 0;
     automap_rotate     = 0;
+    automap_overlay    = 0;
+    automap_overlay_bg = 0;
     automap_follow     = 1;
     automap_grid       = 0;
     automap_grid_size  = 128;    

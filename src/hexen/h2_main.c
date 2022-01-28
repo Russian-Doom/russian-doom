@@ -164,9 +164,10 @@ int draw_shadowed_text = 1;
 int local_time = 0;
 
 // Automap
-int automap_follow = 1;
-int automap_overlay = 0;
 int automap_rotate = 0;
+int automap_overlay = 0;
+int automap_overlay_bg = 0;
+int automap_follow = 1;
 int automap_grid = 0;
 
 // Sound
@@ -322,9 +323,9 @@ void D_BindVariables(void)
     M_BindIntVariable("local_time",             &local_time);
 
     // Automap
-    M_BindIntVariable("automap_follow",         &automap_follow);
-    M_BindIntVariable("automap_overlay",        &automap_overlay);
     M_BindIntVariable("automap_rotate",         &automap_rotate);
+    M_BindIntVariable("automap_overlay_bg",     &automap_overlay_bg);
+    M_BindIntVariable("automap_follow",         &automap_follow);
     M_BindIntVariable("automap_grid",           &automap_grid);
 
     // Gameplay: Graphical
@@ -1226,6 +1227,19 @@ static void DrawAndBlit(void)
             {
                 // [crispy] update automap while playing
                 R_RenderPlayerView(&players[displayplayer]);
+
+                // [JN] Background opacity in automap overlay mode.
+                if (automap_overlay)
+                {
+                    const int screenheight = screenblocks > 10 ?
+                                             SCREENHEIGHT : SCREENHEIGHT - SBARHEIGHT;
+
+                    for (int y = 0 ; y < screenwidth * screenheight ; y++)
+                    {
+                        I_VideoBuffer[y] = colormaps[automap_overlay_bg * 256 + I_VideoBuffer[y]];
+                    }
+                }
+
                 AM_Drawer();
             }
             else

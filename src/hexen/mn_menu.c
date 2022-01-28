@@ -116,8 +116,9 @@ static void M_RD_LocalTime(Direction_t direction);
 
 // Automap
 static void DrawAutomapMenu(void);
-static void M_RD_AutoMapOverlay();
 static void M_RD_AutoMapRotate();
+static void M_RD_AutoMapOverlay();
+static void M_RD_AutoMapOverlayBG(Direction_t direction);
 static void M_RD_AutoMapFollow();
 static void M_RD_AutoMapGrid();
 
@@ -610,17 +611,19 @@ static Menu_t MessagesMenu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t AutomapItems[] = {
-    {ITT_SWITCH, "OVERLAY MODE:", "HT;BV YFKJ;TYBZ:",  M_RD_AutoMapOverlay, 0}, // РЕЖИМ НАЛОЖЕНИЯ
     {ITT_SWITCH, "ROTATE MODE:",  "HT;BV DHFOTYBZ:",   M_RD_AutoMapRotate,  0}, // РЕЖИМ ВРАЩЕНИЯ
+    {ITT_SWITCH, "OVERLAY MODE:", "HT;BV YFKJ;TYBZ:",  M_RD_AutoMapOverlay, 0}, // РЕЖИМ НАЛОЖЕНИЯ
+    {ITT_LRFUNC, "OVERLAY BACKGROUND OPACITY",  "GHJPHFXYJCNM AJYF GHB YFKJ;TYBB",   M_RD_AutoMapOverlayBG,  0}, // ПРОЗРАЧНОСТЬ ФОНА ПРИ НАЛОЖЕНИИ
+    {ITT_EMPTY,  NULL,            NULL,                NULL,                0},
     {ITT_SWITCH, "FOLLOW MODE:",  "HT;BV CKTLJDFYBZ:", M_RD_AutoMapFollow,  0}, // РЕЖИМ СЛЕДОВАНИЯ
     {ITT_SWITCH, "GRID:",         "CTNRF:",            M_RD_AutoMapGrid,    0}  // СЕТКА
 };
 
 static Menu_t AutomapMenu = {
-    102, 82,
+    36, 36,
     32,
     "AUTOMAP SETTINGS", "YFCNHJQRB RFHNS", false, // НАСТРОЙКИ КАРТЫ
-    4, AutomapItems, false,
+    6, AutomapItems, false,
     DrawAutomapMenu,
     NULL,
     &DisplayMenu,
@@ -2572,42 +2575,55 @@ static void M_RD_LocalTime(Direction_t direction)
 
 static void DrawAutomapMenu(void)
 {
+    char num[4];
+
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
     if (english_language)
     {
-        // Overlay mode
-        RD_M_DrawTextSmallENG(automap_overlay ? "ON" : "OFF", 200 + wide_delta, 32, CR_NONE);
-
         // Rotate mode
-        RD_M_DrawTextSmallENG(automap_rotate ? "ON" : "OFF", 193 + wide_delta, 42, CR_NONE);
+        RD_M_DrawTextSmallENG(automap_rotate ? "ON" : "OFF", 127 + wide_delta, 32, CR_NONE);
+
+        // Overlay mode
+        RD_M_DrawTextSmallENG(automap_overlay ? "ON" : "OFF", 134 + wide_delta, 42, CR_NONE);
 
         // Follow mode
-        RD_M_DrawTextSmallENG(automap_follow ? "ON" : "OFF", 189 + wide_delta, 52, CR_NONE);
+        RD_M_DrawTextSmallENG(automap_follow ? "ON" : "OFF", 123 + wide_delta, 72, CR_NONE);
 
         // Grid
-        RD_M_DrawTextSmallENG(automap_grid ? "ON" : "OFF", 138 + wide_delta, 62, CR_NONE);
+        RD_M_DrawTextSmallENG(automap_grid ? "ON" : "OFF", 72 + wide_delta, 82, CR_NONE);
     }
     else
     {
-        // Режим наложения
-        RD_M_DrawTextSmallRUS(automap_overlay ? "DRK" : "DSRK", 208 + wide_delta, 32, CR_NONE);
-
         // Режим вращения
-        RD_M_DrawTextSmallRUS(automap_rotate ? "DRK" : "DSRK", 200 + wide_delta, 42, CR_NONE);
+        RD_M_DrawTextSmallRUS(automap_rotate ? "DRK" : "DSRK", 154 + wide_delta, 32, CR_NONE);
+
+        // Режим наложения
+        RD_M_DrawTextSmallRUS(automap_overlay ? "DRK" : "DSRK", 162 + wide_delta, 42, CR_NONE);
 
         // Режим следования
-        RD_M_DrawTextSmallRUS(automap_follow ? "DRK" : "DSRK", 215 + wide_delta, 52, CR_NONE);
+        RD_M_DrawTextSmallRUS(automap_follow ? "DRK" : "DSRK", 169 + wide_delta, 72, CR_NONE);
 
         // Сетка
-        RD_M_DrawTextSmallRUS(automap_grid ? "DRK" : "DSRK", 128 + wide_delta, 62, CR_NONE);
+        RD_M_DrawTextSmallRUS(automap_grid ? "DRK" : "DSRK", 82 + wide_delta, 82, CR_NONE);
     }
+
+    // Overlay background opacity
+    RD_Menu_DrawSliderSmall(&AutomapMenu, 62, 9, automap_overlay_bg / 3);
+    // Numerical representation of slider position
+    M_snprintf(num, 5, "%d", automap_overlay_bg);
+    RD_M_DrawTextSmallENG(num, 128 + wide_delta, 63, CR_WHITE2GRAY_HERETIC);
 }
 
 static void M_RD_AutoMapOverlay()
 {
     automap_overlay ^= 1;
+}
+
+static void M_RD_AutoMapOverlayBG(Direction_t direction)
+{
+    RD_Menu_SlideInt(&automap_overlay_bg, 0, 24, direction);
 }
 
 static void M_RD_AutoMapRotate()
@@ -4824,8 +4840,9 @@ void M_RD_BackToDefaults_Recommended (void)
     local_time         = 0;
 
     // Automap
-    automap_overlay    = 0;
     automap_rotate     = 0;
+    automap_overlay    = 0;
+    automap_overlay_bg = 0;
     automap_follow     = 1;
     automap_grid       = 0;
 
@@ -4922,8 +4939,9 @@ static void M_RD_BackToDefaults_Original(void)
     local_time         = 0;
 
     // Automap
-    automap_overlay    = 0;
     automap_rotate     = 0;
+    automap_overlay    = 0;
+    automap_overlay_bg = 0;
     automap_follow     = 1;
     automap_grid       = 0;
 
