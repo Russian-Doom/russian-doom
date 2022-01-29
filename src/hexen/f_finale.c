@@ -27,6 +27,7 @@
 #include <ctype.h>
 #include "v_video.h"
 #include "i_swap.h"
+#include "m_misc.h"
 #include "rd_rushexen.h"
 
 // MACROS ------------------------------------------------------------------
@@ -170,6 +171,69 @@ void F_Ticker(void)
     }
 }
 
+/*
+================================================================================
+=
+= ShowFinaleTime
+=
+= [JN] Show total game time on last CHESS screen.
+=
+================================================================================
+*/
+
+static void ShowFinaleTime (void)
+{
+    int  hours, minutes, seconds;
+    int  worldTimer = players[consoleplayer].worldTimer;
+    char FinaleTime[32];
+
+    worldTimer /= 35;
+    hours = worldTimer / 3600;
+    worldTimer -= hours * 3600;
+    minutes = worldTimer / 60;
+    worldTimer -= minutes * 60;
+    seconds = worldTimer;
+
+    if (english_language)
+    {
+        // Construct total time string for printing.
+        M_snprintf(FinaleTime, sizeof(FinaleTime), 
+                   "TOTAL TIME:  %1d : %.2d : %.2d", hours, minutes, seconds);
+
+        // Draw centered string with fade in effect, colorize to dark gray.
+        dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
+        RD_M_DrawTextAFade (FinaleTime, 160 - (RD_M_TextAWidth(FinaleTime) / 2) + wide_delta, 179, 
+                            FinaleCount < 403 ? transtable10 :
+                            FinaleCount < 406 ? transtable20 :
+                            FinaleCount < 409 ? transtable30 :
+                            FinaleCount < 412 ? transtable40 :
+                            FinaleCount < 415 ? transtable50 :
+                            FinaleCount < 418 ? transtable70 :
+                            FinaleCount < 421 ? transtable80 :
+                                                transtable90);
+        dp_translation = NULL;
+    }
+    else
+    {
+        // Construct total time string for printing.
+        M_snprintf(FinaleTime, sizeof(FinaleTime), 
+                   "J,OTT DHTVZ:  %1d : %.2d : %.2d", hours, minutes, seconds);
+
+        // Draw centered string with fade in effect, colorize to dark gray.
+        dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
+        RD_M_DrawTextSmallRUSFade (FinaleTime, 160 - (RD_M_TextSmallRUSWidth(FinaleTime) / 2) + wide_delta, 179, 
+                            FinaleCount < 403 ? transtable10 :
+                            FinaleCount < 406 ? transtable20 :
+                            FinaleCount < 409 ? transtable30 :
+                            FinaleCount < 412 ? transtable40 :
+                            FinaleCount < 415 ? transtable50 :
+                            FinaleCount < 418 ? transtable70 :
+                            FinaleCount < 421 ? transtable80 :
+                                                transtable90);
+        dp_translation = NULL;
+    }
+}
+
 //===========================================================================
 //
 // TextWrite
@@ -213,6 +277,12 @@ static void TextWrite(void)
             V_DrawPatch(60 + wide_delta, 0, W_CacheLumpNum(W_GetNumForName("chessc")
                                                            + PlayerClass[consoleplayer] -
                                                            1, PU_CACHE));
+        }
+
+        // [JN] Show total game time on last CHESS screen.
+        if (FinaleCount >= 400 && !vanillaparm)
+        {
+            ShowFinaleTime();
         }
     }
     // Draw the actual text
