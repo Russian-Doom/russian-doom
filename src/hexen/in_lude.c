@@ -54,6 +54,7 @@ static void Stop(void);
 static void LoadPics(void);
 static void UnloadPics(void);
 static void CheckForSkip(void);
+static void CheckForSkipSingle(void);
 static void InitStats(void);
 static void DrDeathTally(void);
 static void DrNumber(int val, int x, int y, int wrapThresh);
@@ -364,7 +365,18 @@ void IN_Ticker(void)
         return;
     }
     skipintermission = false;
-    CheckForSkip();
+
+    // [JN] Allow double press text skipping if we are in single player.
+    if (singleplayer)
+    {
+        CheckForSkipSingle();
+    }
+    else
+    {
+        CheckForSkip();
+    }
+
+
     intertime++;
     if (skipintermission || (gametype == SINGLE && !HubCount))
     {
@@ -416,11 +428,6 @@ static void CheckForSkip(void)
             {
                 player->usedown = false;
             }
-            // [JN] Pressing PAUSE should not skip intermission screen
-            if (player->cmd.buttons & BTS_PAUSE)
-            {
-                skipintermission = 0;
-            }
         }
     }
     if (deathmatch && intertime < 140)
@@ -438,6 +445,69 @@ static void CheckForSkip(void)
             skipintermission = 1;
             triedToSkip = false;
         }
+    }
+}
+
+/*
+================================================================================
+=
+= CheckForSkipSingle
+=
+= [JN] Allow double skipping by pressing ATTACK / USE keys:
+= 1) First press printing all interlude text.
+= 2) Second press advaced to next stage.
+=      
+================================================================================
+*/
+
+static void CheckForSkipSingle (void)
+{
+    // [JN] Don't allow to skip by pressing "pause" button.
+    if (players[consoleplayer].cmd.buttons == (BT_SPECIAL | BTS_PAUSE))
+    {
+        return;
+    }
+
+    // [JN] Double-skip by pressing "attack" button.
+    if (players[consoleplayer].cmd.buttons & BT_ATTACK)
+    {
+        if (!players[consoleplayer].attackdown)
+        {
+            if (intertime >= 5003)
+            {
+                skipintermission = 1;
+                return;
+            }
+
+            intertime += 5000;
+            players[consoleplayer].attackdown = true;
+        }
+        players[consoleplayer].attackdown = true;
+    }
+    else
+    {
+        players[consoleplayer].attackdown = false;
+    }
+
+    // [JN] Double-skip by pressing "use" button.
+    if (players[consoleplayer].cmd.buttons & BT_USE)
+    {
+        if (!players[consoleplayer].usedown)
+        {
+            if (intertime >= 5003)
+            {
+                skipintermission = 1;
+                return;
+            }
+
+            intertime += 5000;
+            players[consoleplayer].usedown = true;
+        }
+        players[consoleplayer].usedown = true;
+    }
+    else
+    {
+        players[consoleplayer].usedown = false;
     }
 }
 
