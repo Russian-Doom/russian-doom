@@ -503,7 +503,8 @@ extern int firstflat;
 extern int numflats;
 
 // [crispy] lookup table for horizontal screen coordinates
-extern int flipwidth[WIDESCREENWIDTH];
+extern int *flipscreenwidth;
+extern int *flipviewwidth;
 
 extern int *flattranslation;    // for global animation
 extern int *texturetranslation; // for global animation

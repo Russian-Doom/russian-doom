@@ -74,7 +74,7 @@
 #define XHAIRCOLORS      GRAYS
 
 // The MACRO!
-#define DOT(xx,yy,cc) I_VideoBuffer[(yy)*f_w+(flipwidth[xx])]=(cc)
+#define DOT(xx,yy,cc) I_VideoBuffer[(yy)*f_w+(flipscreenwidth[xx])]=(cc)
 
 // [JN] Jaguar Doom automap colors
 #define RED_JAGUAR       32
@@ -1499,7 +1499,7 @@ static void PUTDOT (short xx, short yy, const byte *cc, const byte *cm)
         oldyy = yy;
         oldyyshifted = yy * (origwidth << hires);
     }
-    I_VideoBuffer[oldyyshifted + flipwidth[xx]] = *(cc);
+    I_VideoBuffer[oldyyshifted + flipscreenwidth[xx]] = *(cc);
 }
 
 // -----------------------------------------------------------------------------

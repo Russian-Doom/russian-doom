@@ -532,10 +532,10 @@ void R_DrawPlanes(void)
                         // [JN] Double sky drawing - LOW detail
                         if (detailshift)
                         {
-                            dest1 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[(x << hires)]];
-                            dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[(x << hires) + 1]];
-                            dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[(x << hires)]];
-                            dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[(x << hires) + 1]];
+                            dest1 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[(x << hires)]];
+                            dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[(x << hires) + 1]];
+                            dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[(x << hires)]];
+                            dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[(x << hires) + 1]];
 
                             // not a power of 2 -- killough
                             if (SKYTEXTUREMIDSHIFTED & heightmask)
@@ -599,7 +599,7 @@ void R_DrawPlanes(void)
                         // [JN] Double sky drawing - HIGH detail
                         else
                         {
-                            dest = ylookup[dc_yl] + columnofs[flipwidth[x]];
+                            dest = ylookup[dc_yl] + columnofs[flipviewwidth[x]];
 
                             // not a power of 2 -- killough
                             if (SKYTEXTUREMIDSHIFTED & heightmask)
@@ -695,10 +695,10 @@ void R_DrawPlanes(void)
                         // [JN] Single sky drawing - LOW detail
                         if (detailshift)
                         {
-                            dest1 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[(x << hires)]];
-                            dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[(x << hires) + 1]];
-                            dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[(x << hires)]];
-                            dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[(x << hires) + 1]];
+                            dest1 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[(x << hires)]];
+                            dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[(x << hires) + 1]];
+                            dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[(x << hires)]];
+                            dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[(x << hires) + 1]];
 
                             // not a power of 2 -- killough
                             if (SKYTEXTUREMIDSHIFTED & heightmask)
@@ -747,7 +747,7 @@ void R_DrawPlanes(void)
                         // [JN] Single sky drawing - HIGH detail
                         else
                         {
-                            dest = ylookup[dc_yl] + columnofs[flipwidth[x]];
+                            dest = ylookup[dc_yl] + columnofs[flipviewwidth[x]];
 
                             // not a power of 2 -- killough
                             if (SKYTEXTUREMIDSHIFTED & heightmask)

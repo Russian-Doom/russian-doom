@@ -30,6 +30,10 @@
 #include "jn.h"
 
 
+//the MACRO!
+#define DOT(xx,yy,cc) I_VideoBuffer[(yy)*f_w+(flipscreenwidth[xx])]=(cc)
+
+
 boolean automapactive = false;
 vertex_t KeyPoints[NUMKEYS];
 
@@ -1013,8 +1017,6 @@ static void AM_drawFline(fline_t * fl, int color)
                     return;
                 }
 
-#define DOT(xx,yy,cc) I_VideoBuffer[(yy)*f_w+(flipwidth[xx])]=(cc)    //the MACRO!
-
                 dx = fl->b.x - fl->a.x;
                 ax = 2 * (dx < 0 ? -dx : dx);
                 sx = dx < 0 ? -1 : 1;
@@ -1118,7 +1120,7 @@ static void PUTDOT(short xx, short yy, byte * cc, byte * cm)
         oldyy = yy;
         oldyyshifted = yy * (origwidth << hires);
     }
-    I_VideoBuffer[oldyyshifted + flipwidth[xx]] = *(cc);
+    I_VideoBuffer[oldyyshifted + flipscreenwidth[xx]] = *(cc);
 }
 
 static void DrawWuLine(int X0, int Y0, int X1, int Y1, byte * BaseColor,

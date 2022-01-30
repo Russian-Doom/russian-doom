@@ -455,7 +455,7 @@ static void CheckForSkip(void)
 =
 = [JN] Allow double skipping by pressing ATTACK / USE keys:
 = 1) First press printing all interlude text.
-= 2) Second press advaced to next stage.
+= 2) Second press advances to next stage.
 =      
 ================================================================================
 */

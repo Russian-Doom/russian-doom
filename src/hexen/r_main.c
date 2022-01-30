@@ -49,6 +49,14 @@ int rendered_segs, rendered_visplanes, rendered_vissprites;
 
 int detailshift;                // 0 = high, 1 = low
 
+boolean setsizeneeded;
+int setblocks, setdetail;
+
+// [crispy] lookup table for horizontal screen coordinates
+// [JN] Resolution limitation is removed.
+int *flipscreenwidth;
+int *flipviewwidth;
+
 //
 // precalculated math tables
 //
@@ -632,12 +640,6 @@ void R_InitLightTables(void)
 ==============
 */
 
-boolean setsizeneeded;
-int setblocks, setdetail;
-
-// [crispy] lookup table for horizontal screen coordinates
-int		flipwidth[WIDESCREENWIDTH];
-
 void R_SetViewSize(int blocks, int detail)
 {
     setsizeneeded = true;
@@ -804,10 +806,12 @@ void R_ExecuteSetViewSize(void)
     }
 
     // [crispy] lookup table for horizontal screen coordinates
-    for (i = 0, j = scaledviewwidth - 1; i < scaledviewwidth; i++, j--)
+    for (i = 0, j = screenwidth - 1; i < screenwidth; i++, j--)
     {
-        flipwidth[i] = flip_levels ? j : i;
+        flipscreenwidth[i] = flip_levels ? j : i;
     }
+
+    flipviewwidth = flipscreenwidth + (flip_levels ? (screenwidth - scaledviewwidth) : 0);
 
     // [JN] Skip weapon bobbing interpolation for next frame.
     skippsprinterp = true;

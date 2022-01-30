@@ -57,7 +57,9 @@ lighttable_t *fixedcolormap;
 int     setblocks, setdetail;
 boolean setsizeneeded;
 // [crispy] lookup table for horizontal screen coordinates
-int flipwidth[WIDESCREENWIDTH];
+// [JN] Resolution limitation is removed.
+int *flipscreenwidth;
+int *flipviewwidth;
 
 int extralight;              // bumped light from gun blasts
 int lightzshift, maxlightz;  // [JN] Smooth and vanilla diminished lighting
@@ -786,10 +788,12 @@ void R_ExecuteSetViewSize (void)
     }
 
     // [crispy] lookup table for horizontal screen coordinates
-    for (i = 0, j = scaledviewwidth - 1; i < scaledviewwidth; i++, j--)
+    for (i = 0, j = screenwidth - 1; i < screenwidth; i++, j--)
     {
-        flipwidth[i] = flip_levels ? j : i;
+        flipscreenwidth[i] = flip_levels ? j : i;
     }
+
+    flipviewwidth = flipscreenwidth + (flip_levels ? (screenwidth - scaledviewwidth) : 0);
 
     // [JN] Skip weapon bobbing interpolation for next frame.
     skippsprinterp = true;

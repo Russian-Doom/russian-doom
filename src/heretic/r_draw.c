@@ -90,7 +90,7 @@ void R_DrawColumn (void)
                  dc_yl, dc_yh, dc_x);
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
     frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     // Inner loop that does the actual texture mapping,
@@ -161,10 +161,10 @@ void R_DrawColumnLow (void)
                 dc_yl, dc_yh, dc_x);
 #endif
 
-    dest = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    dest = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
     frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (dc_texheight & heightmask)  // not a power of 2 -- killough
@@ -231,7 +231,7 @@ void R_DrawSkyColumn(void)
         return;
     }
 
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
     frac = skytexturemid + (dc_yl - centery) * skyiscale;
 
     if (skytextureheight & heightmask)  // not a power of 2 -- killough
@@ -290,10 +290,10 @@ void R_DrawSkyColumnLow(void)
         return;
     }
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
     frac  = skytexturemid + (dc_yl - centery) * skyiscale_low;
 
     if (skytextureheight & heightmask) // not a power of 2 -- killough
@@ -370,7 +370,7 @@ void R_DrawTLColumn (void)
     }
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
     frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (dc_texheight & heightmask)  // not a power of 2 -- killough
@@ -437,10 +437,10 @@ void R_DrawTLColumnLow (void)
     }
 #endif
 
-    dest = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    dest = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
     frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (dc_texheight & heightmask)  // not a power of 2 -- killough
@@ -524,7 +524,7 @@ void R_DrawExtraTLColumn(void)
     }
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
     frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (dc_texheight & heightmask)  // not a power of 2 -- killough
@@ -590,10 +590,10 @@ void R_DrawExtraTLColumnLow (void)
     }
 #endif
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
     frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (dc_texheight & heightmask) // not a power of 2 -- killough
@@ -672,7 +672,7 @@ void R_DrawTranslatedColumn (void)
                 dc_yl, dc_yh, dc_x);
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
     frac = dc_texturemid + (dc_yl-centery)*dc_iscale; 
 
     do
@@ -715,10 +715,10 @@ void R_DrawTranslatedColumnLow (void)
     }
 #endif 
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
     frac = dc_texturemid + (dc_yl-centery)*dc_iscale; 
 
     do 
@@ -753,7 +753,7 @@ void R_DrawTranslatedTLColumn(void)
                 dc_yl, dc_yh, dc_x);
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
     frac = dc_texturemid + (dc_yl - centery) * dc_iscale;
 
     do
@@ -798,10 +798,10 @@ void R_DrawTranslatedTLColumnLow(void)
     }
 #endif
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
     frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (dc_texheight & heightmask)  // not a power of 2 -- killough
@@ -937,7 +937,7 @@ void R_DrawSpan(void)
 
         // Lookup pixel from flat texture tile,
         //  re-index using light/colormap.
-        dest = ylookup[ds_y] + columnofs[flipwidth[ds_x1++]];
+        dest = ylookup[ds_y] + columnofs[flipviewwidth[ds_x1++]];
         *dest = ds_colormap[ds_source[spot]];
 
         ds_xfrac += ds_xstep;
@@ -985,13 +985,13 @@ void R_DrawSpanLow(void)
         spot = xtemp | ytemp;
 
         // Lowres/blocky mode does it twice, while scale is adjusted appropriately.
-        dest = ylookup[(ds_y << hires)] + columnofs[flipwidth[ds_x1]];
+        dest = ylookup[(ds_y << hires)] + columnofs[flipviewwidth[ds_x1]];
         *dest = ds_colormap[ds_source[spot]];
-        dest2 = ylookup[(ds_y << hires) + 1] + columnofs[flipwidth[ds_x1++]];
+        dest2 = ylookup[(ds_y << hires) + 1] + columnofs[flipviewwidth[ds_x1++]];
         *dest2 = ds_colormap[ds_source[spot]];
-        dest = ylookup[(ds_y << hires)] + columnofs[flipwidth[ds_x1]];
+        dest = ylookup[(ds_y << hires)] + columnofs[flipviewwidth[ds_x1]];
         *dest = ds_colormap[ds_source[spot]];
-        dest2 = ylookup[(ds_y << hires) + 1] + columnofs[flipwidth[ds_x1++]];
+        dest2 = ylookup[(ds_y << hires) + 1] + columnofs[flipviewwidth[ds_x1++]];
         *dest2 = ds_colormap[ds_source[spot]];
 
         // position += step;

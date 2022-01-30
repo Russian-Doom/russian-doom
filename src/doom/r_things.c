@@ -102,6 +102,10 @@ static int drawsegs_xrange_count = 0;
 
 void R_InitSpritesRes(void)
 {
+    if (flipscreenwidth)
+    {
+        free(flipscreenwidth);
+    }
     if (xtoviewangle)
     {
         free(xtoviewangle);
@@ -119,6 +123,7 @@ void R_InitSpritesRes(void)
         free(screenheightarray);
     }
 
+    flipscreenwidth = calloc(1, (screenwidth + 1) * sizeof(*flipscreenwidth));
     xtoviewangle = calloc(1, (screenwidth + 1) * sizeof(*xtoviewangle));
     linearskyangle = calloc(1, (screenwidth + 1) * sizeof(*linearskyangle));
     negonearray = calloc(1, screenwidth * sizeof(*negonearray));

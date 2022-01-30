@@ -128,7 +128,7 @@ void R_DrawColumn (void)
     }
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
     frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     // Inner loop that does the actual texture mapping, e.g. a DDA-lile scaling.
@@ -194,10 +194,10 @@ void R_DrawColumnLow (void)
     }
 #endif 
 
-    dest = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    dest = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
 
     frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
@@ -302,7 +302,7 @@ void R_DrawFuzzColumn (void)
     }
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
 
     // Looks like an attempt at dithering, 
     //  using the colormap #6 (of 0-31, a bit
@@ -368,10 +368,10 @@ void R_DrawFuzzColumnLow (void)
     }
 #endif
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
 
     do 
     {
@@ -435,7 +435,7 @@ void R_DrawFuzzColumnBW (void)
     }
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
 
     do 
     {
@@ -489,10 +489,10 @@ void R_DrawFuzzColumnLowBW (void)
     }
 #endif
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
 
     do 
     {
@@ -554,7 +554,7 @@ void R_DrawFuzzColumnImproved (void)
     }
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]]; 
+    dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]]; 
 
     do 
     {
@@ -603,10 +603,10 @@ void R_DrawFuzzColumnLowImproved (void)
     }
 #endif
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
 
     do 
     {
@@ -665,7 +665,7 @@ void R_DrawFuzzColumnImprovedBW (void)
     }
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
 
     do 
     {
@@ -718,10 +718,10 @@ void R_DrawFuzzColumnLowImprovedBW (void)
     }
 #endif
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
 
     do 
     {
@@ -776,7 +776,7 @@ void R_DrawFuzzColumnTranslucent (void)
     }
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
     frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (dc_texheight & heightmask)   // not a power of 2 -- killough
@@ -831,10 +831,10 @@ void R_DrawFuzzColumnTranslucentLow (void)
     }
 #endif
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
     frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (dc_texheight & heightmask) // not a power of 2 -- killough
@@ -916,7 +916,7 @@ void R_DrawTranslatedColumn (void)
     }    
 #endif 
 
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
     frac = dc_texturemid + (dc_yl-centery)*dc_iscale; 
 
     // Here we do an additional index re-mapping.
@@ -958,10 +958,10 @@ void R_DrawTranslatedColumnLow (void)
     }
 #endif 
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
     frac  = dc_texturemid + (dc_yl-centery)*dc_iscale; 
 
     // Here we do an additional index re-mapping.
@@ -1004,7 +1004,7 @@ void R_DrawTLColumn (void)
     }
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
     frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (dc_texheight & heightmask)   // not a power of 2 -- killough
@@ -1066,10 +1066,10 @@ void R_DrawTLColumnLow (void)
     }
 #endif
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
     frac  = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
     if (dc_texheight & heightmask) // not a power of 2 -- killough
@@ -1163,7 +1163,7 @@ void R_DrawSpan (void)
 
         // Lookup pixel from flat texture tile,
         //  re-index using light/colormap.
-        dest = ylookup[ds_y] + columnofs[flipwidth[ds_x1++]];
+        dest = ylookup[ds_y] + columnofs[flipviewwidth[ds_x1++]];
         *dest = ds_colormap[ds_source[spot]];
 
         ds_xfrac += ds_xstep;
@@ -1206,13 +1206,13 @@ void R_DrawSpanLow (void)
         spot = xtemp | ytemp;
 
         // Lowres/blocky mode does it twice, while scale is adjusted appropriately.
-        dest = ylookup[(ds_y << hires)] + columnofs[flipwidth[ds_x1]];
+        dest = ylookup[(ds_y << hires)] + columnofs[flipviewwidth[ds_x1]];
         *dest = ds_colormap[ds_source[spot]];
-        dest2 = ylookup[(ds_y << hires) + 1] + columnofs[flipwidth[ds_x1++]];
+        dest2 = ylookup[(ds_y << hires) + 1] + columnofs[flipviewwidth[ds_x1++]];
         *dest2 = ds_colormap[ds_source[spot]];
-        dest = ylookup[(ds_y << hires)] + columnofs[flipwidth[ds_x1]];
+        dest = ylookup[(ds_y << hires)] + columnofs[flipviewwidth[ds_x1]];
         *dest = ds_colormap[ds_source[spot]];
-        dest2 = ylookup[(ds_y << hires) + 1] + columnofs[flipwidth[ds_x1++]];
+        dest2 = ylookup[(ds_y << hires) + 1] + columnofs[flipviewwidth[ds_x1++]];
         *dest2 = ds_colormap[ds_source[spot]];
 
         // position += step;
