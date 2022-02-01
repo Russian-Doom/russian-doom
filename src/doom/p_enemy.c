@@ -1434,6 +1434,15 @@ void A_VileChase (mobj_t *actor)
                     P_SetMobjState (corpsehit,info->raisestate);
                     corpsehit->height <<= 2;
                     corpsehit->flags = info->flags;
+
+                    // [JN] Count ressurected monster with extra,
+                    // not common kills counter.
+                    if (singleplayer && !vanillaparm)
+                    {
+                        corpsehit->flags &= ~MF_COUNTKILL;
+                        corpsehit->flags |= MF_COUNTEXTRAKILL;
+                    }
+
                     corpsehit->health = info->spawnhealth;
                     corpsehit->target = NULL;
 

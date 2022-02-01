@@ -990,7 +990,6 @@ void HU_Drawer(void)
     static char str[32], *s;
     int time = leveltime / TICRATE;
     int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
-    int extrakills = players[consoleplayer].killcount - totalkills;
 
     HUlib_drawSText(&w_message, msg_pickup);
     HUlib_drawSText(&w_message_secret, msg_secret);
@@ -1020,16 +1019,32 @@ void HU_Drawer(void)
         }
         HUlib_drawTextLine(&w_kills_title, false, hud_stats);
 
-        // Counter
-        if (players[consoleplayer].killcount <= totalkills)
+        // Counter. Print extra kills as "+N" in common kills if there are some.
+        if (english_language)
         {
-            sprintf(str, english_language ? "%d/%d" : "%d*%d",
-                    players[consoleplayer].killcount, totalkills);
+            if (players[consoleplayer].extrakillcount)
+            {
+                sprintf(str, "%d+%d/%d", players[consoleplayer].killcount, 
+                                         players[consoleplayer].extrakillcount,
+                                         totalkills);
+            }
+            else
+            {
+                sprintf(str, "%d/%d", players[consoleplayer].killcount, totalkills);
+            }
         }
         else
         {
-            sprintf(str, english_language ? "%d/%d+%d" : "%d*%d+%d",
-                    players[consoleplayer].killcount, totalkills, extrakills);
+            if (players[consoleplayer].extrakillcount)
+            {
+                sprintf(str, "%d+%d*%d", players[consoleplayer].killcount,
+                                         players[consoleplayer].extrakillcount,
+                                         totalkills);
+            }
+            else
+            {
+                sprintf(str, "%d*%d", players[consoleplayer].killcount, totalkills);
+            }
         }
         HUlib_clearTextLine(&w_kills);
         s = str;

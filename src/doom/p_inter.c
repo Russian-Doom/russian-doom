@@ -829,17 +829,30 @@ void P_KillMobj (mobj_t *source, mobj_t *target)
         {
             source->player->killcount++;
         }
+        if (target->flags & MF_COUNTEXTRAKILL)
+        {
+            // [JN] Ressurected monsters counter.
+            source->player->extrakillcount++;
+        }
 
         if (target->player)
         {
             source->player->frags[target->player-players]++;
         }
     }
-    else if (!netgame && (target->flags & MF_COUNTKILL))
+    else if (!netgame)
     {
-        // count all monster deaths,
-        // even those caused by other monsters
-        players[0].killcount++;
+        if (target->flags & MF_COUNTKILL)
+        {
+            // count all monster deaths,
+            // even those caused by other monsters
+            players[0].killcount++;
+        }
+        if (target->flags & MF_COUNTEXTRAKILL)
+        {
+            // [JN] Ressurected monsters counter.
+            players[0].extrakillcount++;
+        }
     }
 
     if (target->player)

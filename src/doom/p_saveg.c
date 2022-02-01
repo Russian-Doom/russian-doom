@@ -770,6 +770,9 @@ static void saveg_read_player_t(player_t *str)
     // int killcount;
     str->killcount = saveg_read32();
 
+    // [JN] int extrakillcount;
+    str->extrakillcount = saveg_read32();
+
     // int itemcount;
     str->itemcount = saveg_read32();
 
@@ -909,6 +912,9 @@ static void saveg_write_player_t(player_t *str)
 
     // int killcount;
     saveg_write32(str->killcount);
+
+    // [JN] int extrakillcount;
+    saveg_write32(str->extrakillcount);
 
     // int itemcount;
     saveg_write32(str->itemcount);

@@ -693,6 +693,13 @@ void P_NightmareRespawn (mobj_t *mobj)
         mo->flags |= MF_AMBUSH;
     }
 
+    // [JN] Count respawned monster with extra, not common kills counter.
+    if (singleplayer && !vanillaparm)
+    {
+        mo->flags &= ~MF_COUNTKILL;
+        mo->flags |= MF_COUNTEXTRAKILL;
+    }
+
     mo->reactiontime = 18;
 
     // remove the old monster,

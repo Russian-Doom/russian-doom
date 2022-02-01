@@ -115,6 +115,7 @@ typedef struct player_s
 
      // For intermission stats.
     int killcount;
+    int extrakillcount;  // [JN] Resurrected monsters counter.
     int itemcount;
     int secretcount;
 
@@ -169,6 +170,7 @@ typedef struct
 
     // Player stats, kills, collected items etc.
     int skills;
+    int sextrakills;  // [JN] Resurrected monsters counter.
     int sitems;
     int ssecret;
     int stime; 

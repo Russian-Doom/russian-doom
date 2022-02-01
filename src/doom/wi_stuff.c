@@ -1597,7 +1597,17 @@ static void WI_updateStats (void)
     if (acceleratestage && sp_state != 10)
     {
         acceleratestage = 0;
-        cnt_kills[0] = (plrs[me].skills * 100) / wbs->maxkills;
+
+        // [JN] Show only real kills, not extra (resurrected or respawned).
+        if (singleplayer && !vanillaparm)
+        {
+            cnt_kills[0] = (plrs[me].skills * 100) / wbs->maxkills;
+        }
+        else
+        {
+            cnt_kills[0] = ((plrs[me].skills * 100)
+                         +  (plrs[me].sextrakills * 100)) / wbs->maxkills;
+        }
         cnt_items[0] = (plrs[me].sitems * 100) / wbs->maxitems;
         cnt_secret[0] = (plrs[me].ssecret * 100) / wbs->maxsecret;
         cnt_time = plrs[me].stime / TICRATE;
@@ -1615,7 +1625,16 @@ static void WI_updateStats (void)
 
         if (cnt_kills[0] >= (plrs[me].skills * 100) / wbs->maxkills)
         {
-            cnt_kills[0] = (plrs[me].skills * 100) / wbs->maxkills;
+            // [JN] Show only real kills, not extra (resurrected or respawned).
+            if (singleplayer && !vanillaparm)
+            {
+                cnt_kills[0] = (plrs[me].skills * 100) / wbs->maxkills;
+            }
+            else
+            {
+                cnt_kills[0] = ((plrs[me].skills * 100)
+                             +  (plrs[me].sextrakills * 100)) / wbs->maxkills;
+            }
             S_StartSound(0, sfx_barexp);
             sp_state++;
         }

@@ -181,8 +181,11 @@ typedef enum
     // Hmm ???.
     MF_TRANSSHIFT   = 26,
 
-    // Translucent sprite
-    MF_TRANSLUCENT  = 0x80000000
+    // [crispy] Translucent sprite
+    MF_TRANSLUCENT  = 0x80000000,
+
+    // [JN] Resurrected monster is counted by extra counter.
+    MF_COUNTEXTRAKILL = 0x160000000
 
 } mobjflag_t;
 
