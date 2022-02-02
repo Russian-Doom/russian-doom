@@ -469,8 +469,9 @@ static void saveg_read_player_t(player_t *str)
     // int refire;
     str->refire = SV_ReadLong();
 
-    // int killcount, itemcount, secretcount;
+    // int killcount, extrakillcount, itemcount, secretcount;
     str->killcount = SV_ReadLong();
+    str->extrakillcount = SV_ReadLong();
     str->itemcount = SV_ReadLong();
     str->secretcount = SV_ReadLong();
 
@@ -638,8 +639,9 @@ static void saveg_write_player_t(player_t *str)
     // int refire;
     SV_WriteLong(str->refire);
 
-    // int killcount, itemcount, secretcount;
+    // int killcount, extrakillcount, itemcount, secretcount;
     SV_WriteLong(str->killcount);
+    SV_WriteLong(str->extrakillcount);
     SV_WriteLong(str->itemcount);
     SV_WriteLong(str->secretcount);
 

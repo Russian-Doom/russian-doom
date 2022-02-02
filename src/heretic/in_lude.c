@@ -771,7 +771,18 @@ void IN_DrawSingleStats(void)
         sounds++;
     }
 
-    IN_DrawNumber(players[consoleplayer].killcount, 200 + wide_delta, classic_stats ? 65 : 44, 3);
+    // [JN] Show only real kills, not extra (resurrected or respawned).
+    if (singleplayer && !vanillaparm)
+    {
+        IN_DrawNumber(players[consoleplayer].killcount, 200 + wide_delta,
+                      classic_stats ? 65 : 44, 3);
+    }
+    else
+    {
+        IN_DrawNumber(players[consoleplayer].killcount + 
+                      players[consoleplayer].extrakillcount, 200 + wide_delta,
+                      classic_stats ? 65 : 44, 3);
+    }
     V_DrawShadowedPatch(237 + wide_delta, classic_stats ? 65 : 44, FontBSlash);
     IN_DrawNumber(totalkills, 248 + wide_delta, classic_stats ? 65 : 44, 3);
 

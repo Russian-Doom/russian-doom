@@ -835,6 +835,11 @@ void P_KillMobj(mobj_t * source, mobj_t * target)
         {                       // Count for intermission
             source->player->killcount++;
         }
+        if (target->flags & MF_COUNTEXTRAKILL)
+        {
+            // [JN] Ressurected monsters counter.
+            source->player->extrakillcount++;
+        }
         if (target->player)
         {                       // Frag stuff
             if (target == source)
@@ -855,9 +860,18 @@ void P_KillMobj(mobj_t * source, mobj_t * target)
             }
         }
     }
-    else if (!netgame && (target->flags & MF_COUNTKILL))
-    {                           // Count all monster deaths
-        players[0].killcount++;
+    else if (!netgame)
+    {
+        if (target->flags & MF_COUNTKILL)
+        {
+            // Count all monster deaths
+            players[0].killcount++;
+        }
+        if (target->flags & MF_COUNTEXTRAKILL)
+        {
+            // [JN] Ressurected monsters counter.
+            players[0].extrakillcount++;
+        }
     }
     if (target->player)
     {

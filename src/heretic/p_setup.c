@@ -1993,6 +1993,7 @@ void P_SetupLevel (int episode, int map, int playermask, skill_t skill)
     for (i = 0; i < MAXPLAYERS; i++)
     {
         players[i].killcount = 
+        players[i].extrakillcount =
         players[i].secretcount =
         players[i].itemcount = 0;
     }

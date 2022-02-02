@@ -655,14 +655,34 @@ void SB_Drawer(void)
         // [JN] Level stats
         if ((automapactive && automap_stats == 1) || automap_stats == 2)
         {
-            M_snprintf(text, sizeof(text), english_language ? "KILLS: %d/ %d" : "DHFUB: %d/ %d",
-                       players[consoleplayer].killcount, totalkills);
             if (english_language)
             {
+                if (players[consoleplayer].extrakillcount)
+                {
+                    M_snprintf(text, sizeof(text), "KILLS: %d + %d/ %d",
+                               players[consoleplayer].killcount,
+                               players[consoleplayer].extrakillcount, totalkills);
+                }
+                else
+                {
+                    M_snprintf(text, sizeof(text), "KILLS: %d/ %d",
+                               players[consoleplayer].killcount, totalkills);
+                }
                 RD_M_DrawTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 38);
             }
             else
             {
+                if (players[consoleplayer].extrakillcount)
+                {
+                    M_snprintf(text, sizeof(text), "DHFUB: %d + %d/ %d",
+                               players[consoleplayer].killcount,
+                               players[consoleplayer].extrakillcount, totalkills);
+                }
+                else
+                {
+                    M_snprintf(text, sizeof(text), "DHFUB: %d/ %d",
+                               players[consoleplayer].killcount, totalkills);
+                }
                 RD_M_DrawTextSmallRUS(text, 4 + (wide_4_3 ? wide_delta : 0), 38, CR_NONE);
             }
             M_snprintf(text, sizeof(text), english_language ? "ITEMS: %d/ %d" : "GHTLVTNS: %d/ %d",

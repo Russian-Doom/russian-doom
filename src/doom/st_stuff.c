@@ -441,7 +441,8 @@ static int ST_cheat_massacre (void)
         {
             mobj_t *mo = (mobj_t *)th;
 
-            if (mo->flags & MF_COUNTKILL || mo->type == MT_SKULL)
+            if (mo->flags & MF_COUNTKILL || mo->flags & MF_COUNTEXTRAKILL
+            ||  mo->type == MT_SKULL)
             {
                 if (mo->health > 0)
                 {

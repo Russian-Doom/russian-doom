@@ -253,6 +253,9 @@ typedef struct
 
 #define MF_EXTRATRANS   0x4000000 // [JN] Extra translucency
 
+// [JN] Resurrected monster is counted by extra counter.
+#define MF_COUNTEXTRAKILL 0x8000000
+
 // --- mobj.flags2 ---
 
 #define MF2_LOGRAV		0x00000001  // alternate gravity setting
@@ -478,6 +481,7 @@ typedef struct player_s
     int refire;                 // refired shots are less accurate
 
     int killcount, itemcount, secretcount;      // for intermission
+    int extrakillcount;         // [JN] Resurrected monsters counter.
     char *message;              // hint messages
     int messageTics;            // counter for showing messages
     int yellowkeyTics;          // [JN] Counter for missing yellow key
