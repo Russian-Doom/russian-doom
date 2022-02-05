@@ -1857,28 +1857,16 @@ static void CheatGodFunc(player_t * player, Cheat_t * cheat)
 {
     NIGHTMARE_NETGAME_CHECK;
     player->cheats ^= CF_GODMODE;
-    if (player->cheats & CF_GODMODE)
-    {
-        P_SetMessage(player, DEH_String(txt_cheatgodon), msg_system, false);
-    }
-    else
-    {
-        P_SetMessage(player, DEH_String(txt_cheatgodoff), msg_system, false);
-    }
+    P_SetMessage(player, DEH_String(player->cheats & CF_GODMODE ?
+                 txt_cheatgodon : txt_cheatgodoff), msg_system, false);
 }
 
 static void CheatNoClipFunc(player_t * player, Cheat_t * cheat)
 {
     NIGHTMARE_NETGAME_CHECK;
     player->cheats ^= CF_NOCLIP;
-    if (player->cheats & CF_NOCLIP)
-    {
-        P_SetMessage(player, DEH_String(txt_cheatnoclipon), msg_system, false);
-    }
-    else
-    {
-        P_SetMessage(player, DEH_String(txt_cheatnoclipoff), msg_system, false);
-    }
+    P_SetMessage(player, DEH_String(player->cheats & CF_NOCLIP ?
+                 txt_cheatnoclipon : txt_cheatnoclipoff), msg_system, false);
 }
 
 static void CheatWeaponsFunc(player_t * player, Cheat_t * cheat)
@@ -1957,28 +1945,15 @@ static void CheatSoundFunc(player_t * player, Cheat_t * cheat)
 {
     NETGAME_CHECK;
     DebugSound = !DebugSound;
-    if (DebugSound)
-    {
-        P_SetMessage(player, DEH_String(txt_cheatsoundon), msg_system, false);
-    }
-    else
-    {
-        P_SetMessage(player, DEH_String(txt_cheatsoundoff), msg_system, false);
-    }
+    P_SetMessage(player, DEH_String(DebugSound ?
+                 txt_cheatsoundon : txt_cheatsoundoff), msg_system, false);
 }
 
 static void CheatTickerFunc(player_t * player, Cheat_t * cheat)
 {
     DisplayTicker = !DisplayTicker;
-    if (DisplayTicker)
-    {
-        P_SetMessage(player, DEH_String(txt_cheattickeron), msg_system, false);
-    }
-    else
-    {
-        P_SetMessage(player, DEH_String(txt_cheattickeroff), msg_system, false);
-    }
-
+    P_SetMessage(player, DEH_String(DisplayTicker ?
+                 txt_cheattickeron : txt_cheattickeroff), msg_system, false);
     I_DisplayFPSDots(DisplayTicker);
 }
 
