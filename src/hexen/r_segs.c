@@ -133,7 +133,7 @@ static const struct
 void R_FixWiggle (sector_t *sector)
 {
     static int	lastheight = 0;
-    int		height = (sector->ceilingheight - sector->floorheight) >> FRACBITS;
+    int height = (sector->interpceilingheight - sector->interpfloorheight) >> FRACBITS;
 
     // disallow negative heights. using 1 forces cache initialization
     if (height < 1)
