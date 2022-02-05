@@ -785,7 +785,7 @@ void SB_Drawer(void)
             P_AimLineAttack(CPlayer->mo, CPlayer->mo->angle, missilerange);
 
             if (linetarget)
-            dp_translation = cr[CR_GREEN2GRAY_HERETIC];
+            dp_translation = cr[CR_GREEN2BLUE_HERETIC];
         }
         else if (crosshair_type == 3)
         {
@@ -796,7 +796,7 @@ void SB_Drawer(void)
             P_AimLineAttack(CPlayer->mo, CPlayer->mo->angle, missilerange);
 
             if (linetarget)
-            dp_translation = cr[CR_GREEN2GRAY_HERETIC];
+            dp_translation = cr[CR_GREEN2BLUE_HERETIC];
         }
 
         if (crosshair_scale)
