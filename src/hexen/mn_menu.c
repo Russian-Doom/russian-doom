@@ -136,6 +136,11 @@ static void M_RD_Sampling(Direction_t direction);
 static void M_RD_SndMode();
 static void M_RD_PitchShifting();
 static void M_RD_MuteInactive();
+static void M_RD_SpeakerTest();
+// Used for speaker test:
+static boolean speaker_test_left = false;
+static boolean speaker_test_right = false;
+static int speaker_test_timeout;
 
 // Controls
 static void DrawControlsMenu(void);
@@ -298,6 +303,7 @@ static void M_RD_ChangeLanguage(int option);
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
 extern int MapCount;
 extern boolean alwaysRun;
+extern sfxinfo_t S_sfx[];
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 int InfoType;
@@ -669,6 +675,7 @@ static MenuItem_t SoundSysItems[] = {
     {ITT_TITLE,  "QUALITY",               "RFXTCNDJ PDEXFYBZ",          NULL,               0}, // КАЧЕСТВО ЗВУЧАНИЯ
     {ITT_LRFUNC, "SAMPLING FREQUENCY:",   "XFCNJNF LBCRHTNBPFWBB:",     M_RD_Sampling,      0}, // ЧАСТОТА ДИСКРЕТИЗАЦИИ:
     {ITT_TITLE,  "MISCELLANEOUS",         "HFPYJT",                     NULL,               0}, // РАЗНОЕ
+    {ITT_LRFUNC, "SPEAKER TEST",          "NTCN PDERJDS[ RFYFKJD",      M_RD_SpeakerTest,   0}, // ТЕСТ ЗВУКОВЫХ КАНАЛОВ
     {ITT_SWITCH, "SOUND EFFECTS MODE:",   "HT;BV PDERJDS[ \'AATRNJD:",  M_RD_SndMode,       0}, // РЕЖИМ ЗВУКОВЫХ ЭФФЕКТОВ
     {ITT_SWITCH, "PITCH-SHIFTED SOUNDS:", "GHJBPDJKMYSQ GBNX-IBANBYU:", M_RD_PitchShifting, 0}, // ПРОИЗВОЛЬНЫЙ ПИТЧ-ШИФТИНГ
     {ITT_SWITCH, "MUTE INACTIVE WINDOW:", "PDER D YTFRNBDYJV JRYT:",    M_RD_MuteInactive,  0}, // ЗВУК В НЕАКТИВНОМ ОКНЕ
@@ -678,7 +685,7 @@ static Menu_t SoundSysMenu = {
     36, 36,
     32,
     "SOUND SYSTEM SETTINGS", "YFCNHJQRB PDERJDJQ CBCNTVS", false, // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ
-    9, SoundSysItems, false,
+    10, SoundSysItems, false,
     DrawSoundSystemMenu,
     NULL,
     &SoundMenu,
@@ -1665,6 +1672,12 @@ void MN_Ticker(void)
         return;
     }
     MenuTime++;
+
+    // [JN] Decrease speaker test timer if it's active, don't go negative.
+    if (speaker_test_timeout)
+    {
+        speaker_test_timeout--;
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -2750,13 +2763,13 @@ static void DrawSoundSystemMenu(void)
         }
 
         // SFX Mode
-        RD_M_DrawTextSmallENG(snd_monomode ? "MONO" : "STEREO", 181 + wide_delta, 92, CR_NONE);
+        RD_M_DrawTextSmallENG(snd_monomode ? "MONO" : "STEREO", 181 + wide_delta, 102, CR_NONE);
 
         // Pitch-Shifted sounds
-        RD_M_DrawTextSmallENG(snd_pitchshift ? "ON" : "OFF", 189 + wide_delta, 102, CR_NONE);
+        RD_M_DrawTextSmallENG(snd_pitchshift ? "ON" : "OFF", 189 + wide_delta, 112, CR_NONE);
 
         // Mute inactive window
-        RD_M_DrawTextSmallENG(mute_inactive_window ? "ON" : "OFF", 184 + wide_delta, 112, CR_NONE);
+        RD_M_DrawTextSmallENG(mute_inactive_window ? "ON" : "OFF", 184 + wide_delta, 122, CR_NONE);
 
         // Informative message:
         if (CurrentItPos == 1 || CurrentItPos == 2 || CurrentItPos == 4)
@@ -2823,13 +2836,13 @@ static void DrawSoundSystemMenu(void)
         }
 
         // Режим звуковых эффектов
-        RD_M_DrawTextSmallRUS(snd_monomode ? "VJYJ" : "CNTHTJ", 226 + wide_delta, 92, CR_NONE);
+        RD_M_DrawTextSmallRUS(snd_monomode ? "VJYJ" : "CNTHTJ", 226 + wide_delta, 102, CR_NONE);
 
         // Произвольный питч-шифтинг
-        RD_M_DrawTextSmallRUS(snd_pitchshift ? "DRK" : "DSRK", 230 + wide_delta, 102, CR_NONE);
+        RD_M_DrawTextSmallRUS(snd_pitchshift ? "DRK" : "DSRK", 230 + wide_delta, 112, CR_NONE);
 
         // Звук в неактивном окне
-        RD_M_DrawTextSmallRUS(mute_inactive_window ? "DSRK" : "DRK", 201 + wide_delta, 112, CR_NONE);
+        RD_M_DrawTextSmallRUS(mute_inactive_window ? "DSRK" : "DRK", 201 + wide_delta, 122, CR_NONE);
 
         // Informative message: ИЗМЕНЕНИЕ ПОТРЕБУЕТ ПЕРЕЗАПУСК ПРОГРАММЫ
         if (CurrentItPos == 1 || CurrentItPos == 2 || CurrentItPos == 4)
@@ -2837,6 +2850,108 @@ static void DrawSoundSystemMenu(void)
             RD_M_DrawTextSmallRUS("BPVTYTYBT GJNHT,ETN GTHTPFGECR GHJUHFVVS",
                                   11 + wide_delta, 132, CR_GRAY2RED_HEXEN);
         }
+    }
+
+
+    // [JN] Speaker test routine.
+    if (speaker_test_timeout)
+    {
+        dp_translation = cr[CR_WHITE];
+
+        if (snd_sfxdevice == 0 || snd_sfxdevice == 1)
+        {
+            if (speaker_test_timeout >= 15)
+            {
+                if (english_language)
+                {
+                    RD_M_DrawTextSmallENG("enable digital effects first!",
+                                        61 + wide_delta, 142, CR_GRAY2RED_HEXEN);
+                }
+                else
+                {
+                    // ВКЛЮЧИТЕ ЦИФРОВЫЕ ЭФФЕКТЫ!
+                    RD_M_DrawTextSmallRUS("drk.xbnt wbahjdst \'aatrns!",
+                                        57 + wide_delta, 142, CR_GRAY2RED_HEXEN);
+                }
+            }
+            speaker_test_left = false;
+            speaker_test_right = false;
+        }
+        else if (snd_monomode)
+        {
+            if (speaker_test_timeout <= 30)
+            {
+                if (english_language)
+                {
+                    RD_M_DrawTextSmallENG("< mono mode >", 116 + wide_delta, 
+                                          142, CR_GRAY2GREEN_HEXEN);
+                }
+                else
+                {
+                    // < МОНО РЕЖИМ >
+                    RD_M_DrawTextSmallRUS("^ vjyj ht;bv `", 111 + wide_delta,
+                                          142, CR_GRAY2GREEN_HEXEN);
+                }
+            }
+
+            if (speaker_test_left && speaker_test_right)
+            {
+                I_StartSound(&S_sfx[SFX_PICKUP_KEY], snd_Channels_RD-1,
+                             snd_MaxVolume * 8, 128, 127); 
+                speaker_test_timeout = 30;
+            }
+
+            speaker_test_left = false;
+            speaker_test_right = false;
+        }
+        else
+        {
+            if (speaker_test_timeout > 30)
+            {
+                if (english_language)
+                {
+                    RD_M_DrawTextSmallENG("< left channel", 112 + wide_delta,
+                                          142, CR_GRAY2GREEN_HEXEN);
+                }
+                else
+                {
+                    // < ЛЕВЫЙ КАНАЛ
+                    RD_M_DrawTextSmallRUS("^ ktdsq rfyfk", 113 + wide_delta,
+                                          142, CR_GRAY2GREEN_HEXEN);
+                }
+
+                if (speaker_test_left)
+                {
+                    I_StartSound(&S_sfx[SFX_PICKUP_KEY], snd_Channels_RD-1, 
+                                 snd_MaxVolume * 8, -96 * FRACUNIT, 127); 
+                }
+
+                speaker_test_left = false;
+            }
+            else if (speaker_test_timeout <= 30)
+            {
+                if (english_language)
+                {
+                    RD_M_DrawTextSmallENG("right channel >", 108 + wide_delta,
+                                          142, CR_GRAY2GREEN_HEXEN);
+                }
+                else
+                {
+                    // ПРАВЫЙ КАНАЛ >
+                    RD_M_DrawTextSmallRUS("ghfdsq rfyfk `", 109 + wide_delta, 
+                                          142, CR_GRAY2GREEN_HEXEN);
+                }
+
+                if (speaker_test_right)
+                {
+                    I_StartSound(&S_sfx[SFX_PICKUP_KEY], snd_Channels_RD-1,
+                                 snd_MaxVolume * 8, 96 * FRACUNIT, 127);
+                }
+
+                speaker_test_right = false;
+            }
+        }
+        dp_translation = NULL;
     }
 }
 
@@ -2934,6 +3049,17 @@ static void M_RD_PitchShifting()
 static void M_RD_MuteInactive()
 {
     mute_inactive_window ^= 1;
+}
+
+static void M_RD_SpeakerTest()
+{
+    // [JN] We only sets necessary booleans and timer here.
+    // Actual testing routine will be done in M_RD_Draw_Audio_System,
+    // since it's a timer based events, and we need to keep game tics
+    // running while testing is active.
+    speaker_test_left = true;
+    speaker_test_right = true;
+    speaker_test_timeout = 60;
 }
 
 // -----------------------------------------------------------------------------
