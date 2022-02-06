@@ -312,9 +312,9 @@ boolean askforquit;
 static int typeofask;
 static boolean FileMenuKeySteal;
 static boolean slottextloaded;
-static char SlotText[6][SLOTTEXTLEN + 2];
+static char SlotText[7][SLOTTEXTLEN + 2];
 static char oldSlotText[SLOTTEXTLEN + 2];
-static int SlotStatus[6];
+static int SlotStatus[7];
 static int slotptr;
 static int currentSlot;
 static int quicksave;
@@ -1396,14 +1396,15 @@ static MenuItem_t LoadItems[] = {
     {ITT_EFUNC, NULL, NULL, SCLoadGame, 2},
     {ITT_EFUNC, NULL, NULL, SCLoadGame, 3},
     {ITT_EFUNC, NULL, NULL, SCLoadGame, 4},
-    {ITT_EFUNC, NULL, NULL, SCLoadGame, 5}
+    {ITT_EFUNC, NULL, NULL, SCLoadGame, 5},
+    {ITT_EFUNC, NULL, NULL, SCLoadGame, 6}
 };
 
 static Menu_t LoadMenu = {
     70, 70,
-    30,
-    "LOAD GAME", "PFUHEPBNM BUHE", true, // ЗАГРУЗИТЬ ИГРУ
-    6, LoadItems, true,
+    17,
+    NULL, NULL, true,
+    7, LoadItems, true,
     DrawSaveLoadMenu,
     NULL,
     &FilesMenu,
@@ -1416,14 +1417,15 @@ static MenuItem_t SaveItems[] = {
     {ITT_EFUNC, NULL, NULL, SCSaveGame, 2},
     {ITT_EFUNC, NULL, NULL, SCSaveGame, 3},
     {ITT_EFUNC, NULL, NULL, SCSaveGame, 4},
-    {ITT_EFUNC, NULL, NULL, SCSaveGame, 5}
+    {ITT_EFUNC, NULL, NULL, SCSaveGame, 5},
+    {ITT_EFUNC, NULL, NULL, SCSaveGame, 6}
 };
 
 static Menu_t SaveMenu = {
     70, 70,
-    30,
-    "SAVE GAME", "CJ[HFYBNM BUHE", true, // СОХРАНИТЬ ИГРУ
-    6, SaveItems, true,
+    17,
+    NULL, NULL, true,
+    7, SaveItems, true,
     DrawSaveLoadMenu,
     NULL,
     &FilesMenu,
@@ -1719,6 +1721,17 @@ static void DrawSaveLoadMenu(void)
         MN_LoadSlotText();
     }
     DrawFileSlots();
+
+    if (english_language)
+    {
+        RD_M_DrawTextBigENG(CurrentMenu == &LoadMenu ? "LOAD GAME" : "SAVE GAME", 160 - RD_M_TextBigENGWidth
+                           (CurrentMenu == &LoadMenu ? "LOAD GAME" : "SAVE GAME") / 2 + wide_delta, 1);
+    }
+    else
+    {
+        RD_M_DrawTextBigRUS(CurrentMenu == &LoadMenu ? "PFUHEPBNM BUHE" : "CJ[HFYBNM BUHE", 160 - RD_M_TextBigRUSWidth
+                           (CurrentMenu == &LoadMenu ? "PFUHEPBNM BUHE" : "CJ[HFYBNM BUHE") / 2 + wide_delta, 1);
+    }
 }
 
 //===========================================================================
@@ -1766,8 +1779,8 @@ static void DrawFileSlots()
     int y;
 
     x = 70; // [Dasperal] SaveMenu and LoadMenu have the same x and the same y
-    y = 30; // so inline them here to eliminate the Menu_t* argument
-    for (i = 0; i < 6; i++)
+    y = 18; // so inline them here to eliminate the Menu_t* argument
+    for (i = 0; i < 7; i++)
     {
         V_DrawShadowedPatchRaven(x + wide_delta, y,
                                  W_CacheLumpName(DEH_String("M_FSLOT"), PU_CACHE));
