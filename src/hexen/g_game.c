@@ -1678,6 +1678,7 @@ void G_DoLoadGame(void)
         SV_UpdateRebornSlot();
     }
     SB_SetClassData();
+    P_SetMessage(&players[consoleplayer], txt_gameloaded, false);
 }
 
 //==========================================================================
@@ -1708,7 +1709,7 @@ void G_DoSaveGame(void)
     SV_SaveGame(savegameslot, savedescription);
     gameaction = ga_nothing;
     savedescription[0] = 0;
-    P_SetMessage(&players[consoleplayer], txt_gamesaved, true);
+    P_SetMessage(&players[consoleplayer], txt_gamesaved, false);
 }
 
 //==========================================================================

@@ -32,7 +32,7 @@
 #define MOBJ_NULL -1
 #define MOBJ_XX_PLAYER -2
 #define MAX_MAPS 99
-#define BASE_SLOT 6
+#define BASE_SLOT 7
 #define REBORN_SLOT 7
 #define REBORN_DESCRIPTION "TEMP GAME"
 #define MAX_THINKER_SIZE 256
@@ -1935,7 +1935,7 @@ void SV_SaveGame(int slot, char *description)
     unsigned int i;
 
     // Open the output file
-    M_snprintf(fileName, sizeof(fileName), "%shexen-save-6.sav", SavePath);
+    M_snprintf(fileName, sizeof(fileName), "%shexen-save-7.sav", SavePath);
     SV_OpenWrite(fileName);
 
     // Write game save description
@@ -1995,7 +1995,7 @@ void SV_SaveMap(boolean savePlayers)
     SavingPlayers = savePlayers;
 
     // Open the output file
-    M_snprintf(fileName, sizeof(fileName), "%shexen-save-6%02d.sav", SavePath, gamemap);
+    M_snprintf(fileName, sizeof(fileName), "%shexen-save-7%02d.sav", SavePath, gamemap);
     SV_OpenWrite(fileName);
 
     // Place a header marker
@@ -2045,7 +2045,7 @@ void SV_LoadGame(int slot)
     }
 
     // Create the name
-    M_snprintf(fileName, sizeof(fileName), "%shexen-save-6.sav", SavePath);
+    M_snprintf(fileName, sizeof(fileName), "%shexen-save-7.sav", SavePath);
 
     // Load the file
     SV_OpenRead(fileName);
@@ -2202,7 +2202,7 @@ void SV_MapTeleport(int map, int position)
     TargetPlayerAddrs = NULL;
 
     gamemap = map;
-    M_snprintf(fileName, sizeof(fileName), "%shexen-save-6%02d.sav", SavePath, gamemap);
+    M_snprintf(fileName, sizeof(fileName), "%shexen-save-7%02d.sav", SavePath, gamemap);
     if (!deathmatch && ExistingFile(fileName))
     {                           // Unarchive map
         SV_LoadMap();
@@ -2373,7 +2373,7 @@ void SV_LoadMap(void)
     RemoveAllThinkers();
 
     // Create the name
-    M_snprintf(fileName, sizeof(fileName), "%shexen-save-6%02d.sav", SavePath, gamemap);
+    M_snprintf(fileName, sizeof(fileName), "%shexen-save-7%02d.sav", SavePath, gamemap);
 
     // Load the file
     SV_OpenRead(fileName);

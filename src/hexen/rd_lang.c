@@ -52,6 +52,7 @@ char* txt_noplayers;
 //
 
 char* txt_gamesaved;
+char* txt_gameloaded;
 char* txt_alwaysrun_on;
 char* txt_alwaysrun_off;
 char* txt_crosshair_on;
@@ -72,10 +73,6 @@ char* txt_settings_reset;
 char* txt_cant_start_in_netgame;
 char* txt_cant_load_in_netgame;
 char* txt_cant_end_in_netgame;
-char* txt_quicksaving;
-char* txt_quickloading;
-char* txt_quicksaveslot;
-char* txt_quickloadslot;
 
 //
 // P_acs.c
@@ -182,6 +179,7 @@ void RD_DefineLanguageStrings (void)
         //
 
         txt_gamesaved     = TXT_GAMESAVED;
+        txt_gameloaded    = TXT_GAMELOADED;
         txt_alwaysrun_on  = TXT_ALWAYSRUN_ON;
         txt_alwaysrun_off = TXT_ALWAYSRUN_OFF;
         txt_crosshair_on  = TXT_CROSSHAIR_ON;
@@ -202,10 +200,6 @@ void RD_DefineLanguageStrings (void)
         txt_cant_start_in_netgame = TXT_CANT_START_IN_NETGAME;
         txt_cant_load_in_netgame  = TXT_CANT_LOAD_IN_NETGAME;
         txt_cant_end_in_netgame   = TXT_CANT_END_IN_NETGAME;
-        txt_quicksaving           = TXT_QUICKSAVING;
-        txt_quickloading          = TXT_QUICKLOADING;
-        txt_quicksaveslot         = TXT_QUICKSAVESLOT;
-        txt_quickloadslot         = TXT_QUICKLOADSLOT;
 
         //
         // P_acs.c
@@ -306,6 +300,7 @@ void RD_DefineLanguageStrings (void)
         //
 
         txt_gamesaved     = TXT_GAMESAVED_RUS;
+        txt_gameloaded    = TXT_GAMELOADED_RUS;
         txt_alwaysrun_on  = TXT_ALWAYSRUN_ON_RUS;
         txt_alwaysrun_off = TXT_ALWAYSRUN_OFF_RUS;
         txt_crosshair_on  = TXT_CROSSHAIR_ON_RUS;
@@ -326,10 +321,6 @@ void RD_DefineLanguageStrings (void)
         txt_cant_start_in_netgame = TXT_CANT_START_IN_NETGAME_RUS;
         txt_cant_load_in_netgame  = TXT_CANT_LOAD_IN_NETGAME_RUS;
         txt_cant_end_in_netgame   = TXT_CANT_END_IN_NETGAME_RUS;
-        txt_quicksaving           = TXT_QUICKSAVING_RUS;
-        txt_quickloading          = TXT_QUICKLOADING_RUS;
-        txt_quicksaveslot         = TXT_QUICKSAVESLOT_RUS;
-        txt_quickloadslot         = TXT_QUICKLOADSLOT_RUS;
 
         //
         // P_acs.c

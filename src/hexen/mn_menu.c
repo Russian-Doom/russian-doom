@@ -324,6 +324,10 @@ static boolean soundchanged;
 // while changing screen size, gamma and level brightness.
 static int menubgwait;
 
+// [JN] If true, print custom title "QUICK SAVING / LOADING" in files menu.
+static boolean QuickSaveTitle;
+static boolean QuickLoadTitle;
+
 // [JN] Used as a flag for drawing Sound / Sound System menu background:
 // - if menu was invoked by F4, don't draw background.
 // - if menu was invoked from Options menu, draw background.
@@ -333,9 +337,9 @@ boolean askforquit;
 static int typeofask;
 static boolean FileMenuKeySteal;
 static boolean slottextloaded;
-static char SlotText[6][SLOTTEXTLEN + 2];
+static char SlotText[7][SLOTTEXTLEN + 2];
 static char oldSlotText[SLOTTEXTLEN + 2];
-static int SlotStatus[6];
+static int SlotStatus[7];
 static int slotptr;
 static int currentSlot;
 static int quicksave;
@@ -1462,14 +1466,15 @@ static MenuItem_t LoadItems[] = {
     {ITT_EFUNC, NULL, NULL, SCLoadGame, 2},
     {ITT_EFUNC, NULL, NULL, SCLoadGame, 3},
     {ITT_EFUNC, NULL, NULL, SCLoadGame, 4},
-    {ITT_EFUNC, NULL, NULL, SCLoadGame, 5}
+    {ITT_EFUNC, NULL, NULL, SCLoadGame, 5},
+    {ITT_EFUNC, NULL, NULL, SCLoadGame, 6}
 };
 
 static Menu_t LoadMenu = {
-    70, 70,
-    30,
-    "LOAD GAME", "PFUHEPBNM BUHE", true, // ЗАГРУЗИТЬ ИГРУ
-    6, LoadItems, true,
+    64, 64,
+    17,
+    NULL, NULL, true, // ЗАГРУЗИТЬ ИГРУ
+    7, LoadItems, true,
     DrawSaveLoadMenu,
     NULL,
     &FilesMenu,
@@ -1482,14 +1487,15 @@ static MenuItem_t SaveItems[] = {
     {ITT_EFUNC, NULL, NULL, SCSaveGame, 2},
     {ITT_EFUNC, NULL, NULL, SCSaveGame, 3},
     {ITT_EFUNC, NULL, NULL, SCSaveGame, 4},
-    {ITT_EFUNC, NULL, NULL, SCSaveGame, 5}
+    {ITT_EFUNC, NULL, NULL, SCSaveGame, 5},
+    {ITT_EFUNC, NULL, NULL, SCSaveGame, 6}
 };
 
 static Menu_t SaveMenu = {
-    70, 70,
-    30,
-    "SAVE GAME", "CJ[HFYBNM BUHE", true, // СОХРАНИТЬ ИГРУ
-    6, SaveItems, true,
+    64, 64,
+    17,
+    NULL, NULL, true,
+    7, SaveItems, true,
     DrawSaveLoadMenu,
     NULL,
     &FilesMenu,
@@ -1725,25 +1731,6 @@ void MN_Drawer(void)
                            + wide_delta, 80, CR_NONE);
             }
 
-            if (typeofask == 3)
-            {
-                RD_M_DrawTextA(SlotText[quicksave - 1], 160 -
-                           RD_M_TextAWidth(SlotText[quicksave - 1]) / 2
-                           + wide_delta, 90);
-                RD_M_DrawTextA("?", 160 +
-                           RD_M_TextAWidth(SlotText[quicksave - 1]) / 2
-                           + wide_delta, 90);
-            }
-            if (typeofask == 4)
-            {
-                RD_M_DrawTextA(SlotText[quickload - 1], 160 -
-                           RD_M_TextAWidth(SlotText[quickload - 1]) / 2
-                           + wide_delta, 90);
-                RD_M_DrawTextA("?", 160 +
-                           RD_M_TextAWidth(SlotText[quicksave - 1]) / 2
-                           + wide_delta, 90);
-            }
-
             UpdateState |= I_FULLSCRN;
         }
         return;
@@ -1854,6 +1841,8 @@ static void DrawSkillMenu(void)
 static void DrawFilesMenu(void)
 {
 // clear out the quicksave/quickload stuff
+    QuickSaveTitle = false;
+    QuickLoadTitle = false;
     quicksave = 0;
     quickload = 0;
     P_ClearMessage(&players[consoleplayer]);
@@ -1872,6 +1861,37 @@ static void DrawSaveLoadMenu(void)
         MN_LoadSlotText();
     }
     DrawFileSlots();
+
+    if (english_language)
+    {
+        if (CurrentMenu == &LoadMenu)
+        {
+            RD_M_DrawTextBigENG(QuickLoadTitle ? "QUICK LOAD" : "LOAD GAME", 
+                                160 - RD_M_TextBigENGWidth
+                               (QuickLoadTitle ? "QUICK LOAD" : "LOAD GAME") / 2 + wide_delta, 1);
+        }
+        else
+        {
+            RD_M_DrawTextBigENG(QuickSaveTitle ? "QUICK SAVE" : "SAVE GAME",
+                                160 - RD_M_TextBigENGWidth
+                               (QuickSaveTitle ? "QUICK SAVE" : "SAVE GAME") / 2 + wide_delta, 1);
+        }
+    }
+    else
+    {
+        if (CurrentMenu == &LoadMenu)
+        {
+            RD_M_DrawTextBigRUS(QuickLoadTitle ? ",SCNHFZ PFUHEPRF" : "PFUHEPBNM BUHE", 
+                                160 - RD_M_TextBigRUSWidth
+                               (QuickLoadTitle ? ",SCNHFZ PFUHEPRF" : "PFUHEPBNM BUHE") / 2 + wide_delta, 1);
+        }
+        else
+        {
+            RD_M_DrawTextBigRUS(QuickSaveTitle ? ",SCNHJT CJ[HFYTYBT" : "CJ[HFYBNM BUHE",
+                                160 - RD_M_TextBigRUSWidth
+                               (QuickSaveTitle ? ",SCNHJT CJ[HFYTYBT" : "CJ[HFYBNM BUHE") / 2 + wide_delta, 1);
+        }
+    }
 }
 
 static boolean ReadDescriptionForSlot(int slot, char *description)
@@ -1913,7 +1933,7 @@ void MN_LoadSlotText(void)
     char description[HXS_DESCRIPTION_LENGTH];
     int slot;
 
-    for (slot = 0; slot < 6; slot++)
+    for (slot = 0; slot < 7; slot++)
     {
         if (ReadDescriptionForSlot(slot, description))
         {
@@ -1941,9 +1961,9 @@ static void DrawFileSlots()
     int x;
     int y;
 
-    x = 70; // [Dasperal] SaveMenu and LoadMenu have the same x and the same y
-    y = 30; // so inline them here to eliminate the Menu_t* argument
-    for (i = 0; i < 6; i++)
+    x = 64; // [Dasperal] SaveMenu and LoadMenu have the same x and the same y
+    y = 18; // so inline them here to eliminate the Menu_t* argument
+    for (i = 0; i < 7; i++)
     {
         V_DrawShadowedPatchRaven(x + wide_delta, y, W_CacheLumpName("M_FSLOT", PU_CACHE));
         if (SlotStatus[i])
@@ -5529,17 +5549,6 @@ boolean MN_Responder(event_t * event)
                     I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
                     H2_StartTitle();    // go to intro/demo mode.
                     return false;
-                case 3:
-                    P_SetMessage(&players[consoleplayer], txt_quicksaving, false);
-                    FileMenuKeySteal = true;
-                    SCSaveGame(quicksave - 1);
-                    BorderNeedRefresh = true;
-                    break;
-                case 4:
-                    P_SetMessage(&players[consoleplayer], txt_quickloading, false);
-                    SCLoadGame(quickload - 1);
-                    BorderNeedRefresh = true;
-                    break;
                 case 5:
                     BorderNeedRefresh = true;
                     mn_SuicideConsole = true;
@@ -5603,6 +5612,7 @@ boolean MN_Responder(event_t * event)
         {
             if (gamestate == GS_LEVEL && !demoplayback)
             {
+                QuickSaveTitle = false;
                 menuactive = true;
                 FileMenuKeySteal = false;
                 MenuTime = 0;
@@ -5620,6 +5630,7 @@ boolean MN_Responder(event_t * event)
         {
             if (SCNetCheck(2))
             {
+                QuickLoadTitle = false;
                 menuactive = true;
                 FileMenuKeySteal = false;
                 MenuTime = 0;
@@ -5661,6 +5672,7 @@ boolean MN_Responder(event_t * event)
             {
                 if (!quicksave || quicksave == -1)
                 {
+                    QuickSaveTitle = true;
                     menuactive = true;
                     FileMenuKeySteal = false;
                     MenuTime = 0;
@@ -5672,17 +5684,14 @@ boolean MN_Responder(event_t * event)
                     S_StartSound(NULL, SFX_DOOR_LIGHT_CLOSE);
                     slottextloaded = false; //reload the slot text
                     quicksave = -1;
-                    P_SetMessage(&players[consoleplayer], txt_quicksaveslot, true);
                 }
                 else
                 {
-                    askforquit = true;
-                    typeofask = 3;
-                    if (!netgame && !demoplayback)
-                    {
-                        paused = true;
-                    }
-                    S_StartSound(NULL, SFX_CHAT);
+                    // [JN] Once quick save slot is chosen,
+                    // skip confirmation and save immediately.
+                    FileMenuKeySteal = true;
+                    SCSaveGame(quicksave - 1);
+                    BorderNeedRefresh = true;
                 }
             }
             return true;
@@ -5710,6 +5719,7 @@ boolean MN_Responder(event_t * event)
             {
                 if (!quickload || quickload == -1)
                 {
+                    QuickLoadTitle = true;
                     menuactive = true;
                     FileMenuKeySteal = false;
                     MenuTime = 0;
@@ -5721,17 +5731,13 @@ boolean MN_Responder(event_t * event)
                     S_StartSound(NULL, SFX_DOOR_LIGHT_CLOSE);
                     slottextloaded = false; // reload the slot text
                     quickload = -1;
-                    P_SetMessage(&players[consoleplayer], txt_quickloadslot, true);
                 }
                 else
                 {
-                    askforquit = true;
-                    if (!netgame && !demoplayback)
-                    {
-                        paused = true;
-                    }
-                    typeofask = 4;
-                    S_StartSound(NULL, SFX_CHAT);
+                // [JN] Once quick load slot is chosen,
+                // skip confirmation and load immediately.
+                SCLoadGame(quickload - 1);
+                BorderNeedRefresh = true;
                 }
             }
             return true;

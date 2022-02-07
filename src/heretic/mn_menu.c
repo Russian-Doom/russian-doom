@@ -5707,7 +5707,6 @@ boolean MN_Responder(event_t * event)
                     FileMenuKeySteal = true;
                     SCSaveGame(quicksave - 1);
                     BorderNeedRefresh = true;
-                    S_StartSound(NULL, sfx_chat);
                 }
             }
             return true;
@@ -5749,7 +5748,6 @@ boolean MN_Responder(event_t * event)
                 // skip confirmation and load immediately.
                 SCLoadGame(quickload - 1);
                 BorderNeedRefresh = true;
-                S_StartSound(NULL, sfx_chat);
             }
             return true;
         }

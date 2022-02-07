@@ -50,6 +50,7 @@ extern char *txt_noplayers;
 //
 
 extern char *txt_gamesaved;
+extern char* txt_gameloaded;
 extern char *txt_alwaysrun_on;
 extern char *txt_alwaysrun_off;
 extern char *txt_crosshair_on;
@@ -70,10 +71,6 @@ extern char *txt_settings_reset;
 extern char *txt_cant_start_in_netgame;
 extern char *txt_cant_load_in_netgame;
 extern char *txt_cant_end_in_netgame;
-extern char *txt_quicksaving;
-extern char *txt_quickloading;
-extern char *txt_quicksaveslot;
-extern char *txt_quickloadslot;
 
 //
 // P_acs.c
@@ -186,6 +183,7 @@ extern char *txt_running_script;
 //
 
 #define TXT_GAMESAVED               "GAME SAVED"
+#define TXT_GAMELOADED              "GAME LOADED"
 #define TXT_ALWAYSRUN_ON            "ALWAYS RUN ON"
 #define TXT_ALWAYSRUN_OFF           "ALWAYS RUN OFF"
 #define TXT_MLOOK_ON                "MOUSE LOOK ON"
@@ -206,10 +204,6 @@ extern char *txt_running_script;
 #define TXT_CANT_START_IN_NETGAME   "YOU CAN'T START A NEW GAME IN NETPLAY!"
 #define TXT_CANT_LOAD_IN_NETGAME    "YOU CAN'T LOAD A GAME IN NETPLAY!"
 #define TXT_CANT_END_IN_NETGAME     "YOU CAN'T END A GAME IN NETPLAY!"
-#define TXT_QUICKSAVING             "QUICKSAVING...."
-#define TXT_QUICKLOADING            "QUICKLOADING...."
-#define TXT_QUICKSAVESLOT           "CHOOSE A QUICKSAVE SLOT"
-#define TXT_QUICKLOADSLOT           "CHOOSE A QUICKLOAD SLOT"
 
 #define RD_ON                       "ON"
 #define RD_OFF                      "OFF"
@@ -362,6 +356,7 @@ extern char *txt_running_script;
 //
 
 #define TXT_GAMESAVED_RUS       "BUHF CJ[HFYTYF"                 // ИГРА СОХРАНЕНА
+#define TXT_GAMELOADED_RUS      "BUHF PFUHE;TYF"                 // ИГРА ЗАГРУЖЕНА
 #define TXT_ALWAYSRUN_ON_RUS    "GJCNJZYYSQ ,TU DRK.XTY"         // ПОСТОЯННЫЙ БЕГ ВКЛЮЧЕН
 #define TXT_ALWAYSRUN_OFF_RUS   "GJCNJZYYSQ ,TU DSRK.XTY"        // ПОСТОЯННЫЙ БЕГ ВЫКЛЮЧЕН
 #define TXT_MLOOK_ON_RUS        "J,PJH VSIM. DRK.XTY"            // ОБЗОР МЫШЬЮ ВКЛЮЧЕН
@@ -382,10 +377,6 @@ extern char *txt_running_script;
 #define TXT_CANT_START_IN_NETGAME_RUS   "YTDJPVJ;YJ YFXFNM YJDE. BUHE D CTNTDJQ BUHT!"  // НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
 #define TXT_CANT_LOAD_IN_NETGAME_RUS    "YTDJPVJ;YJ PFUHEPBNMCZ D CTNTDJQ BUHT!"        // НЕВОЗМОЖНО ЗАГРУЗИТЬСЯ В СЕТЕВОЙ ИГРЕ!
 #define TXT_CANT_END_IN_NETGAME_RUS     "YTDJPVJ;YJ PFRJYXBNM CTNTDE. BUHE!"            // НЕВОЗМОЖНО ЗАКОНЧИТЬ СЕТЕВУЮ ИГРУ!
-#define TXT_QUICKSAVING_RUS             ",SCNHJT CJ[HFYTYBT>>>"                         // БЫСТРОЕ СОХРАНЕНИЕ...
-#define TXT_QUICKLOADING_RUS            ",SCNHFZ PFUHEPRF>>>"                           // БЫСТРАЯ ЗАГРУЗКА...
-#define TXT_QUICKSAVESLOT_RUS           "DS,THBNT CKJN ,SCNHJUJ CJ[HFYTYBZ"             // ВЫБЕРИТЕ СЛОТ БЫСТРОГО СОХРАНЕНИЯ
-#define TXT_QUICKLOADSLOT_RUS           "DS,THBNT CKJN ,SCNHJQ PFUHEPRB"                // ВЫБЕРИТЕ СЛОТ БЫСТРОЙ ЗАГРУЗКИ
 
 #define RD_ON_RUS   "DRK"   // ВКЛ
 #define RD_OFF_RUS  "DSRK"  // ВЫКЛ
