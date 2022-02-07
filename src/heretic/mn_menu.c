@@ -1405,7 +1405,7 @@ static MenuItem_t LoadItems[] = {
 };
 
 static Menu_t LoadMenu = {
-    70, 70,
+    64, 64,
     17,
     NULL, NULL, true,
     7, LoadItems, true,
@@ -1426,7 +1426,7 @@ static MenuItem_t SaveItems[] = {
 };
 
 static Menu_t SaveMenu = {
-    70, 70,
+    64, 64,
     17,
     NULL, NULL, true,
     7, SaveItems, true,
@@ -1790,7 +1790,7 @@ static void DrawFileSlots()
     int x;
     int y;
 
-    x = 70; // [Dasperal] SaveMenu and LoadMenu have the same x and the same y
+    x = 64; // [Dasperal] SaveMenu and LoadMenu have the same x and the same y
     y = 18; // so inline them here to eliminate the Menu_t* argument
     for (i = 0; i < 7; i++)
     {
