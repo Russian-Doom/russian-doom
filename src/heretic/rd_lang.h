@@ -152,8 +152,6 @@ extern char* txt_settings_reset;
 extern char* txt_cant_start_in_netgame;
 extern char* txt_cant_load_in_netgame;
 extern char* txt_registered_only;
-extern char* txt_choose_qsave;
-extern char* txt_choose_qload;
 
 // Port-specific strings
 extern char* txt_alwaysrun_on;
@@ -288,8 +286,6 @@ extern char* txt_mlook_off;
 #define TXT_CANT_START_IN_NETGAME "YOU CAN'T START A NEW GAME IN NETPLAY!"
 #define TXT_CANT_LOAD_IN_NETGAME  "YOU CAN'T LOAD A GAME IN NETPLAY!"
 #define TXT_REGISTERED_ONLY     "ONLY AVAILABLE IN THE REGISTERED VERSION"
-#define TXT_CHOOSE_QSAVE        "CHOOSE A QUICKSAVE SLOT"
-#define TXT_CHOOSE_QLOAD        "CHOOSE A QUICKLOAD SLOT"
 
 // F_finale.c
 #define E1TEXT  "with the destruction of the iron\n"\
@@ -522,8 +518,6 @@ extern char* txt_mlook_off;
 #define TXT_CANT_START_IN_NETGAME_RUS  "YTDJPVJ;YJ YFXFNM YJDE. BUHE D CTNTDJQ BUHT!" // НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
 #define TXT_CANT_LOAD_IN_NETGAME_RUS   "YTDJPVJ;YJ PFUHEPBNMCZ D CTNTDJQ BUHT!"       // НЕВОЗМОЖНО ЗАГРУЗИТЬСЯ В СЕТЕВОЙ ИГРЕ!
 #define TXT_REGISTERED_ONLY_RUS     "'GBPJL YTLJCNEGTY D LTVJDTHCBB"    // ЭПИЗОД НЕДОСТУПЕН В ДЕМОВЕРСИИ
-#define TXT_CHOOSE_QSAVE_RUS        "DS,THBNT CKJN ,SCNHJUJ CJ[HFYTYBZ" // ВЫБЕРИТЕ СЛОТ БЫСТРОГО СОХРАНЕНИЯ
-#define TXT_CHOOSE_QLOAD_RUS        "DS,THBNT CKJN ,SCNHJQ PFUHEPRB"    // ВЫБЕРИТЕ СЛОТ БЫСТРОЙ ЗАГРУЗКИ
 
 // F_finale.c
 #define E1TEXT_RUS  "C EYBXNJ;TYBTV ;TKTPYS[ KBXTQ\n"\

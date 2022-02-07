@@ -375,6 +375,10 @@ static char *M_RD_ColorName (int color)
 // while changing screen size, gamma and level brightness.
 static int menubgwait;
 
+// [JN] If true, print custom title "QUICK SAVING / LOADING" in files menu.
+static boolean QuickSaveTitle;
+static boolean QuickLoadTitle;
+
 // [JN] Used as a flag for drawing Sound / Sound System menu background:
 // - if menu was invoked by F4, don't draw background.
 // - if menu was invoked from Options menu, draw background.
@@ -1688,6 +1692,8 @@ static void DrawMainMenu(void)
 static void DrawFilesMenu(void)
 {
 // clear out the quicksave/quickload stuff
+    QuickSaveTitle = false;
+    QuickLoadTitle = false;
     quicksave = 0;
     quickload = 0;
     players[consoleplayer].message = NULL;
@@ -1710,13 +1716,33 @@ static void DrawSaveLoadMenu(void)
 
     if (english_language)
     {
-        RD_M_DrawTextBigENG(CurrentMenu == &LoadMenu ? "LOAD GAME" : "SAVE GAME", 160 - RD_M_TextBigENGWidth
-                           (CurrentMenu == &LoadMenu ? "LOAD GAME" : "SAVE GAME") / 2 + wide_delta, 1);
+        if (CurrentMenu == &LoadMenu)
+        {
+            RD_M_DrawTextBigENG(QuickLoadTitle ? "QUICK LOAD" : "LOAD GAME", 
+                                160 - RD_M_TextBigENGWidth
+                               (QuickLoadTitle ? "QUICK LOAD" : "LOAD GAME") / 2 + wide_delta, 1);
+        }
+        else
+        {
+            RD_M_DrawTextBigENG(QuickSaveTitle ? "QUICK SAVE" : "SAVE GAME",
+                                160 - RD_M_TextBigENGWidth
+                               (QuickSaveTitle ? "QUICK SAVE" : "SAVE GAME") / 2 + wide_delta, 1);
+        }
     }
     else
     {
-        RD_M_DrawTextBigRUS(CurrentMenu == &LoadMenu ? "PFUHEPBNM BUHE" : "CJ[HFYBNM BUHE", 160 - RD_M_TextBigRUSWidth
-                           (CurrentMenu == &LoadMenu ? "PFUHEPBNM BUHE" : "CJ[HFYBNM BUHE") / 2 + wide_delta, 1);
+        if (CurrentMenu == &LoadMenu)
+        {
+            RD_M_DrawTextBigRUS(QuickLoadTitle ? ",SCNHFZ PFUHEPRF" : "PFUHEPBNM BUHE", 
+                                160 - RD_M_TextBigRUSWidth
+                               (QuickLoadTitle ? ",SCNHFZ PFUHEPRF" : "PFUHEPBNM BUHE") / 2 + wide_delta, 1);
+        }
+        else
+        {
+            RD_M_DrawTextBigRUS(QuickSaveTitle ? ",SCNHJT CJ[HFYTYBT" : "CJ[HFYBNM BUHE",
+                                160 - RD_M_TextBigRUSWidth
+                               (QuickSaveTitle ? ",SCNHJT CJ[HFYTYBT" : "CJ[HFYBNM BUHE") / 2 + wide_delta, 1);
+        }
     }
 }
 
@@ -1733,7 +1759,7 @@ void MN_LoadSlotText(void)
     int i;
     char *filename;
 
-    for (i = 0; i < 6; i++)
+    for (i = 0; i < 7; i++)
     {
         filename = SV_Filename(i);
         fp = fopen(filename, "rb+");
@@ -5600,6 +5626,7 @@ boolean MN_Responder(event_t * event)
         {
             if (gamestate == GS_LEVEL && !demoplayback)
             {
+                QuickSaveTitle = false;
                 menuactive = true;
                 FileMenuKeySteal = false;
                 MenuTime = 0;
@@ -5617,6 +5644,7 @@ boolean MN_Responder(event_t * event)
         {
             if (SCNetCheck(2))
             {
+                QuickLoadTitle = false;
                 menuactive = true;
                 FileMenuKeySteal = false;
                 MenuTime = 0;
@@ -5659,6 +5687,7 @@ boolean MN_Responder(event_t * event)
             {
                 if (!quicksave || quicksave == -1)
                 {
+                    QuickSaveTitle = true;
                     menuactive = true;
                     FileMenuKeySteal = false;
                     MenuTime = 0;
@@ -5670,7 +5699,6 @@ boolean MN_Responder(event_t * event)
                     S_StartSound(NULL, sfx_dorcls);
                     slottextloaded = false; //reload the slot text, when needed
                     quicksave = -1;
-                    P_SetMessage(&players[consoleplayer], txt_choose_qsave, msg_system, true);
                 }
                 else
                 {
@@ -5702,6 +5730,7 @@ boolean MN_Responder(event_t * event)
         {
             if (!quickload || quickload == -1)
             {
+                QuickLoadTitle = true;
                 menuactive = true;
                 FileMenuKeySteal = false;
                 MenuTime = 0;
@@ -5713,7 +5742,6 @@ boolean MN_Responder(event_t * event)
                 S_StartSound(NULL, sfx_dorcls);
                 slottextloaded = false;     //reload the slot text, when needed
                 quickload = -1;
-                P_SetMessage(&players[consoleplayer], txt_choose_qload, msg_system, true);
             }
             else
             {

@@ -255,8 +255,6 @@ char* txt_settings_reset;
 char* txt_cant_start_in_netgame;
 char* txt_cant_load_in_netgame;
 char* txt_registered_only;
-char* txt_choose_qsave;
-char* txt_choose_qload;
 
 // Port-specific strings
 char* txt_alwaysrun_on;
@@ -393,8 +391,6 @@ void RD_DefineLanguageStrings (void)
         txt_cant_start_in_netgame = TXT_CANT_START_IN_NETGAME;
         txt_cant_load_in_netgame  = TXT_CANT_LOAD_IN_NETGAME;
         txt_registered_only    = TXT_REGISTERED_ONLY;
-        txt_choose_qsave       = TXT_CHOOSE_QSAVE;
-        txt_choose_qload       = TXT_CHOOSE_QLOAD;
 
         // Port-specific strings
         txt_alwaysrun_on       = TXT_ALWAYSRUN_ON;
@@ -525,8 +521,6 @@ void RD_DefineLanguageStrings (void)
         txt_cant_start_in_netgame = TXT_CANT_START_IN_NETGAME_RUS;
         txt_cant_load_in_netgame  = TXT_CANT_LOAD_IN_NETGAME_RUS;
         txt_registered_only    = TXT_REGISTERED_ONLY_RUS;
-        txt_choose_qsave       = TXT_CHOOSE_QSAVE_RUS;
-        txt_choose_qload       = TXT_CHOOSE_QLOAD_RUS;
 
         // Port-specific strings
         txt_alwaysrun_on       = TXT_ALWAYSRUN_ON_RUS;
