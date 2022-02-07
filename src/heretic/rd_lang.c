@@ -114,6 +114,7 @@ char* txt_secret_found;
 
 // G_game.c
 char* txt_gamesaved;
+char* txt_gameloaded;
 char* txt_testcontrols;
 
 // AM_map.c
@@ -254,8 +255,6 @@ char* txt_settings_reset;
 char* txt_cant_start_in_netgame;
 char* txt_cant_load_in_netgame;
 char* txt_registered_only;
-char* txt_quicksaving;
-char* txt_quickloading;
 char* txt_choose_qsave;
 char* txt_choose_qload;
 
@@ -367,6 +366,7 @@ void RD_DefineLanguageStrings (void)
 
         // G_game.c
         txt_gamesaved          = TXT_GAMESAVED;
+        txt_gameloaded         = TXT_GAMELOADED;
         txt_testcontrols       = TXT_TESTCONTROLS;
 
         // AM_map.c
@@ -393,8 +393,6 @@ void RD_DefineLanguageStrings (void)
         txt_cant_start_in_netgame = TXT_CANT_START_IN_NETGAME;
         txt_cant_load_in_netgame  = TXT_CANT_LOAD_IN_NETGAME;
         txt_registered_only    = TXT_REGISTERED_ONLY;
-        txt_quicksaving        = TXT_QUICKSAVING;
-        txt_quickloading       = TXT_QUICKLOADING;
         txt_choose_qsave       = TXT_CHOOSE_QSAVE;
         txt_choose_qload       = TXT_CHOOSE_QLOAD;
 
@@ -500,6 +498,7 @@ void RD_DefineLanguageStrings (void)
 
         // G_game.c
         txt_gamesaved          = TXT_GAMESAVED_RUS;
+        txt_gameloaded         = TXT_GAMELOADED_RUS;
         txt_testcontrols       = TXT_TESTCONTROLS_RUS;
 
         // AM_map.c
@@ -526,8 +525,6 @@ void RD_DefineLanguageStrings (void)
         txt_cant_start_in_netgame = TXT_CANT_START_IN_NETGAME_RUS;
         txt_cant_load_in_netgame  = TXT_CANT_LOAD_IN_NETGAME_RUS;
         txt_registered_only    = TXT_REGISTERED_ONLY_RUS;
-        txt_quicksaving        = TXT_QUICKSAVING_RUS;
-        txt_quickloading       = TXT_QUICKLOADING_RUS;
         txt_choose_qsave       = TXT_CHOOSE_QSAVE_RUS;
         txt_choose_qload       = TXT_CHOOSE_QLOAD_RUS;
 

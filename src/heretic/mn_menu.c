@@ -1633,20 +1633,6 @@ void MN_Drawer(void)
                                                + wide_delta, 80, CR_NONE);
             }
 
-            if (typeofask == 3)
-            {
-                RD_M_DrawTextA(SlotText[quicksave - 1], 160 -
-                                                        RD_M_TextAWidth(SlotText[quicksave - 1]) / 2 + wide_delta, 90);
-                RD_M_DrawTextA(DEH_String("?"), 160 +
-                                                RD_M_TextAWidth(SlotText[quicksave - 1]) / 2 + wide_delta, 90);
-            }
-            if (typeofask == 4)
-            {
-                RD_M_DrawTextA(SlotText[quickload - 1], 160 -
-                                                        RD_M_TextAWidth(SlotText[quickload - 1]) / 2 + wide_delta, 90);
-                RD_M_DrawTextA(DEH_String("?"), 160 +
-                                                RD_M_TextAWidth(SlotText[quickload - 1]) / 2 + wide_delta, 90);
-            }
             if (typeofask == 6)
             {
                 RD_M_DrawTextA(SlotText[CurrentItPos],
@@ -5535,19 +5521,6 @@ boolean MN_Responder(event_t * event)
                     D_StartTitle();     // go to intro/demo mode.
                     break;
 
-                case 3:
-                    P_SetMessage(&players[consoleplayer], txt_quicksaving, msg_system, false);
-                    FileMenuKeySteal = true;
-                    SCSaveGame(quicksave - 1);
-                    BorderNeedRefresh = true;
-                    break;
-
-                case 4:
-                    P_SetMessage(&players[consoleplayer], txt_quickloading, msg_system, false);
-                    SCLoadGame(quickload - 1);
-                    BorderNeedRefresh = true;
-                    break;
-
                 // [JN] Delete saved game:
                 case 6:
                 {
@@ -5701,12 +5674,11 @@ boolean MN_Responder(event_t * event)
                 }
                 else
                 {
-                    askforquit = true;
-                    typeofask = 3;
-                    if (!netgame && !demoplayback)
-                    {
-                        paused = true;
-                    }
+                    // [JN] Once quick save slot is chosen,
+                    // skip confirmation and save immediately.
+                    FileMenuKeySteal = true;
+                    SCSaveGame(quicksave - 1);
+                    BorderNeedRefresh = true;
                     S_StartSound(NULL, sfx_chat);
                 }
             }
@@ -5745,12 +5717,10 @@ boolean MN_Responder(event_t * event)
             }
             else
             {
-                askforquit = true;
-                if (!netgame && !demoplayback)
-                {
-                    paused = true;
-                }
-                typeofask = 4;
+                // [JN] Once quick load slot is chosen,
+                // skip confirmation and load immediately.
+                SCLoadGame(quickload - 1);
+                BorderNeedRefresh = true;
                 S_StartSound(NULL, sfx_chat);
             }
             return true;

@@ -1597,6 +1597,8 @@ void G_DoLoadGame(void)
                 "Bad savegame" :
                 "Некорректный файл сохранения");
     }
+
+    P_SetMessage(&players[consoleplayer], DEH_String(txt_gameloaded), msg_system, false);
 }
 
 
@@ -2298,7 +2300,7 @@ void G_DoSaveGame(void)
 
     gameaction = ga_nothing;
     savedescription[0] = 0;
-    P_SetMessage(&players[consoleplayer], DEH_String(txt_gamesaved), msg_system, true);
+    P_SetMessage(&players[consoleplayer], DEH_String(txt_gamesaved), msg_system, false);
 
     free(filename);
 }
