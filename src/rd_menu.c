@@ -586,7 +586,7 @@ boolean RD_Menu_Responder(event_t* event)
     }
     else if (BK_isKeyDown(event, bk_menu_activate))     // Toggle menu
     {
-        RD_Menu_DeactivateMenu();
+        RD_Menu_DeactivateMenu(true);
         return true;
     }
     else if (BK_isKeyDown(event, bk_menu_back))         // Go back to previous menu
@@ -594,7 +594,7 @@ boolean RD_Menu_Responder(event_t* event)
         RD_Menu_StartSound(MENU_SOUND_BACK);
         if (CurrentMenu->prevMenu == NULL)
         {
-            RD_Menu_DeactivateMenu();
+            RD_Menu_DeactivateMenu(true);
         }
         else
         {
@@ -716,7 +716,7 @@ void RD_Menu_ActivateMenu(void)
         onActivateMenu();
 }
 
-void RD_Menu_DeactivateMenu(void)
+void RD_Menu_DeactivateMenu(boolean play_sound)
 {
     if (CurrentMenu != NULL)
     {
@@ -724,7 +724,10 @@ void RD_Menu_DeactivateMenu(void)
     }
     menuactive = false;
 
-    RD_Menu_StartSound(MENU_SOUND_DEACTIVATE);
+    if (play_sound)
+    {
+        RD_Menu_StartSound(MENU_SOUND_DEACTIVATE);
+    }
 
     if(onDeactivateMenu)
         onDeactivateMenu();

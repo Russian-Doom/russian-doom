@@ -1654,7 +1654,7 @@ void G_DoSelectiveGame(int option)
     automapactive = false;
 
     // Close "Level select" menu.
-    RD_Menu_DeactivateMenu ();
+    RD_Menu_DeactivateMenu (false);
     
     // Start a new game, activate fast monsters if appropriate.
     G_InitNew (selective_skill, selective_episode, selective_map, selective_fast);

@@ -1958,7 +1958,7 @@ void G_DoSelectiveGame (int choice)
     flag667 = false;
 
     // Close "Level select" menu
-    RD_Menu_DeactivateMenu();
+    RD_Menu_DeactivateMenu(false);
 
     G_InitNew (selective_skill,
                // Set appropriate episode

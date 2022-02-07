@@ -1765,7 +1765,7 @@ void G_DoSelectiveGame(int option)
     automapactive = false;
 
     // Close "Level select" menu
-    RD_Menu_DeactivateMenu ();
+    RD_Menu_DeactivateMenu (false);
 
     // Start a new game
     G_InitNew (selective_skill,selective_episode, P_TranslateMap(selective_map));

@@ -5312,7 +5312,7 @@ static void SCLoadGame(int option)
         return;
     }
     G_LoadGame(option);
-    RD_Menu_DeactivateMenu();
+    RD_Menu_DeactivateMenu(false);
     BorderNeedRefresh = true;
     if (quickload == -1)
     {
@@ -5360,7 +5360,7 @@ static void SCSaveGame(int option)
         G_SaveGame(option, SlotText[option]);
         FileMenuKeySteal = false;
         I_StopTextInput();
-        RD_Menu_DeactivateMenu();
+        RD_Menu_DeactivateMenu(true);
     }
     BorderNeedRefresh = true;
     if (quicksave == -1)
@@ -5417,7 +5417,7 @@ static void SCSkill(int option)
     G_DeferredNewGame(option);
     SB_SetClassData();
     SB_state = -1;
-    RD_Menu_DeactivateMenu();
+    RD_Menu_DeactivateMenu(true);
 }
 
 //---------------------------------------------------------------------------
@@ -5515,7 +5515,7 @@ boolean MN_Responder(event_t * event)
             {
                 paused = false;
             }
-            RD_Menu_DeactivateMenu();
+            RD_Menu_DeactivateMenu(true);
             SB_state = -1;      //refresh the statbar
             BorderNeedRefresh = true;
         }
@@ -5847,7 +5847,7 @@ boolean MN_Responder(event_t * event)
             M_StringCopy(SlotText[currentSlot], oldSlotText,
                          sizeof(SlotText[currentSlot]));
             SlotStatus[currentSlot]--;
-            RD_Menu_DeactivateMenu();
+            RD_Menu_DeactivateMenu(true);
             return (true);
         }
         if (BK_isKeyDown(event, bk_menu_select))

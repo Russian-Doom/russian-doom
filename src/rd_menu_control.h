@@ -20,6 +20,6 @@
 extern boolean menuactive;
 
 void RD_Menu_ActivateMenu(void);
-void RD_Menu_DeactivateMenu(void);
+void RD_Menu_DeactivateMenu(boolean play_sound);
 
 #endif //RD_MENU_CONTROL_H

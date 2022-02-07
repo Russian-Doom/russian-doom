@@ -6471,7 +6471,7 @@ static void M_LoadSelect(int choice)
     M_StringCopy(name, P_SaveGameFile(choice), sizeof(name));
 
     G_LoadGame (name);
-    RD_Menu_DeactivateMenu();
+    RD_Menu_DeactivateMenu(false);
 }
 
 
@@ -6541,7 +6541,7 @@ static void M_DoSave(int slot)
 {
     G_SaveGame (slot,savegamestrings[slot]);
     saveStatus[slot] = true;
-    RD_Menu_DeactivateMenu();
+    RD_Menu_DeactivateMenu(false);
 
     // PICK QUICKSAVE SLOT YET?
     if (quickSaveSlot == -2)
@@ -6598,7 +6598,6 @@ static void M_QuickSaveResponse(boolean confirmed)
     if (confirmed)
     {
         M_DoSave(quickSaveSlot);
-        S_StartSound(NULL,sfx_swtchx);
     }
 }
 
@@ -6893,7 +6892,7 @@ static void M_VerifyNightmare(boolean confirmed)
         return;
 
     G_DeferedInitNew(4,epi+1,1);
-    RD_Menu_DeactivateMenu();
+    RD_Menu_DeactivateMenu(true);
 }
 
 static void M_VerifyUltraNightmare(boolean confirmed)
@@ -6902,7 +6901,7 @@ static void M_VerifyUltraNightmare(boolean confirmed)
         return;
 
     G_DeferedInitNew(5,epi+1,1);
-    RD_Menu_DeactivateMenu();
+    RD_Menu_DeactivateMenu(true);
 }
 
 static void M_ChooseSkill(int choice)
@@ -6923,7 +6922,7 @@ static void M_ChooseSkill(int choice)
     }
 
     G_DeferedInitNew(choice,epi+1,1);
-    RD_Menu_DeactivateMenu();
+    RD_Menu_DeactivateMenu(true);
 }
 
 static void M_Episode(int choice)
@@ -6960,7 +6959,7 @@ static void M_EndGameResponse(boolean confirmed)
         return;
 
     CurrentMenu->lastOn = CurrentItPos;
-    RD_Menu_DeactivateMenu();
+    RD_Menu_DeactivateMenu(true);
     D_StartTitle ();
 }
 
@@ -7553,7 +7552,6 @@ boolean M_Responder (event_t* ev)
         }
         else if (BK_isKeyDown(ev, bk_qload))    // Quickload
         {
-            S_StartSound(NULL,sfx_swtchn);
             M_QuickLoad();
             return true;
         }
