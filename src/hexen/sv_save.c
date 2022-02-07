@@ -33,7 +33,7 @@
 #define MOBJ_XX_PLAYER -2
 #define MAX_MAPS 99
 #define BASE_SLOT 7
-#define REBORN_SLOT 7
+#define REBORN_SLOT 8
 #define REBORN_DESCRIPTION "TEMP GAME"
 #define MAX_THINKER_SIZE 256
 
