@@ -881,19 +881,24 @@ void P_ZMovement(mobj_t * mo)
                              && !mo->player->morphTics)
                     {
                         S_StartSound(mo, SFX_PLAYER_LAND);
-                        switch (mo->player->class)
+
+                        // [JN] Don't play "oof" sounds if player is dead.
+                        if (mo->health > 0)
                         {
-                            case PCLASS_FIGHTER:
-                                S_StartSound(mo, SFX_PLAYER_FIGHTER_GRUNT);
-                                break;
-                            case PCLASS_CLERIC:
-                                S_StartSound(mo, SFX_PLAYER_CLERIC_GRUNT);
-                                break;
-                            case PCLASS_MAGE:
-                                S_StartSound(mo, SFX_PLAYER_MAGE_GRUNT);
-                                break;
-                            default:
-                                break;
+                            switch (mo->player->class)
+                            {
+                                case PCLASS_FIGHTER:
+                                    S_StartSound(mo, SFX_PLAYER_FIGHTER_GRUNT);
+                                    break;
+                                case PCLASS_CLERIC:
+                                    S_StartSound(mo, SFX_PLAYER_CLERIC_GRUNT);
+                                    break;
+                                case PCLASS_MAGE:
+                                    S_StartSound(mo, SFX_PLAYER_MAGE_GRUNT);
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     }
                     else if ((P_GetThingFloorType(mo) < FLOOR_LIQUID) &&
