@@ -16,7 +16,6 @@
 //
 
 
-
 #ifndef __R_LOCAL__
 #define __R_LOCAL__
 
@@ -27,53 +26,46 @@
 #define LOOKDIRMAX  90
 #define LOOKDIRS    (LOOKDIRMIN+1+LOOKDIRMAX) // [crispy] lookdir range: -160..0..90
 
-#define ANGLETOSKYSHIFT         22      // sky map is 256*128*4 maps
-
-#define BASEYCENTER                     100
-
-#define PI                                      3.141592657
-
-#define CENTERY                         (SCREENHEIGHT/2)
-
-#define MINZ                    (FRACUNIT*4)
-
-#define FIELDOFVIEW             2048    // fineangles in the SCREENWIDTH wide window
+#define ANGLETOSKYSHIFT     22      // sky map is 256*128*4 maps
+#define BASEYCENTER         100
+#define MINZ                (FRACUNIT*4)
+#define FIELDOFVIEW         2048    // fineangles in the SCREENWIDTH wide window
 
 //
 // lighting constants
 //
-#define LIGHTLEVELS                     16
-#define LIGHTSEGSHIFT           4
-#define MAXLIGHTSCALE           48
-#define LIGHTSCALESHIFT         12
+#define LIGHTLEVELS         16
+#define LIGHTSEGSHIFT       4
+#define MAXLIGHTSCALE       48
+#define LIGHTSCALESHIFT     12
 // [crispy] & [JN] smoother diminished lighting
-#define MAXLIGHTZ                       1024
-#define LIGHTZSHIFT                     17
+#define MAXLIGHTZ           1024
+#define LIGHTZSHIFT         17
 // [JN] Vanilla values
-// #define MAXLIGHTZ                       128
-// #define LIGHTZSHIFT                     20
-#define NUMCOLORMAPS            32      // number of diminishing
-#define INVERSECOLORMAP         32
+// #define MAXLIGHTZ        128
+// #define LIGHTZSHIFT      20
+#define NUMCOLORMAPS        32      // number of diminishing
+
 
 // [BH] Compensate for rounding errors in DOOM's renderer by stretching wall
 //  columns by 1px. This eliminates the randomly-colored pixels ("sparkles")
 //  that appear at the bottom of some columns.
-#define SPARKLEFIX              64
+#define SPARKLEFIX          64
 
 // [AM] Fractional part of the current tic, in the half-open
 //      range of [0.0, 1.0).  Used for interpolation.
-extern fixed_t          fractionaltic;
+extern fixed_t  fractionaltic;
 
 
 /*
-==============================================================================
-
-					INTERNAL MAP TYPES
-
-==============================================================================
+================================================================================
+=
+=                            INTERNAL MAP TYPES
+=
+================================================================================
 */
 
-//================ used by play and refresh
+// Used by play and refresh
 
 typedef struct
 {
@@ -147,22 +139,6 @@ typedef enum
     ST_NEGATIVE
 } slopetype_t;
 
-/*
-typedef struct line_s
-{
-	vertex_t        *v1, *v2;
-	fixed_t         dx,dy;                          // v2 - v1 for side checking
-	short           flags;
-	short           special, tag;
-	short           sidenum[2];                     // sidenum[1] will be -1 if one sided
-	fixed_t         bbox[4];
-	slopetype_t     slopetype;                      // to aid move clipping
-	sector_t        *frontsector, *backsector;
-	int                     validcount;                     // if == validcount, already checked
-	void            *specialdata;           // thinker_t for reversable actions
-} line_t;
-*/
-
 typedef struct line_s
 {
     vertex_t *v1;
@@ -208,7 +184,7 @@ typedef struct
     fixed_t length;             // [crispy] fix long wall wobble
 } seg_t;
 
-// ===== Polyobj data =====
+// Polyobj data
 typedef struct
 {
     int numsegs;
@@ -243,25 +219,24 @@ typedef struct subsector_s
 
 typedef struct
 {
-    fixed_t x, y, dx, dy;       // partition line
-    fixed_t bbox[2][4];         // bounding box for each child
-    int children[2]; // if NF_SUBSECTOR its a subsector
+    fixed_t x, y, dx, dy;  // partition line
+    fixed_t bbox[2][4];    // bounding box for each child
+    int children[2];       // if NF_SUBSECTOR its a subsector
 } node_t;
 
 
 /*
-==============================================================================
-
-						OTHER TYPES
-
-==============================================================================
+================================================================================
+=
+=                                  OTHER TYPES
+=
+================================================================================
 */
 
 typedef byte lighttable_t;      // this could be wider for >8 bit display
 
 #define MAXVISPLANES    160
-// [JN] MAXOPENINGS увеличено в 4 раза
-#define MAXOPENINGS             WIDESCREENWIDTH*64*4
+
 
 typedef struct visplane_s
 {
@@ -341,10 +316,10 @@ typedef struct
     spriteframe_t *spriteframes;
 } spritedef_t;
 
-extern spritedef_t *sprites;
-extern int numsprites;
+//==============================================================================
 
-//=============================================================================
+extern int numsprites;
+extern spritedef_t *sprites;
 
 extern int numvertexes;
 extern vertex_t *vertexes;
@@ -368,11 +343,9 @@ extern int numsides;
 extern side_t *sides;
 
 
-
 extern fixed_t viewx, viewy, viewz;
 extern angle_t viewangle;
 extern player_t *viewplayer;
-
 
 extern angle_t clipangle;
 
@@ -382,6 +355,7 @@ extern angle_t *linearskyangle;
 
 extern fixed_t rw_distance;
 extern angle_t rw_normalangle;
+
 
 //
 // R_main.c
@@ -396,7 +370,6 @@ extern fixed_t projection;
 
 extern int validcount;
 
-extern int sscount, linecount, loopcount;
 extern lighttable_t *scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t *scalelightfixed[MAXLIGHTSCALE];
 extern lighttable_t *zlight[LIGHTLEVELS][MAXLIGHTZ];
@@ -466,13 +439,12 @@ extern int rw_stopx;
 extern boolean segtextured;
 extern boolean markfloor;       // false if the back side is the same plane
 extern boolean markceiling;
-extern boolean skymap;
 
 extern drawseg_t *drawsegs; 
 extern drawseg_t *ds_p;
 
 // [JN] killough: New code which removes 2s linedef limit
-extern unsigned   maxdrawsegs;
+extern unsigned maxdrawsegs;
 
 extern lighttable_t **hscalelight, **vscalelight, **dscalelight;
 
@@ -489,6 +461,7 @@ void R_RenderBSPNode(int bspnum);
 
 void R_StoreWallRange (int start, int stop);
 
+
 //
 // R_segs.c
 //
@@ -499,15 +472,12 @@ extern int TransTextureEnd;
 void R_InitSpritesRes ();
 void R_RenderMaskedSegRange(drawseg_t * ds, int x1, int x2);
 
+
 //
 // R_plane.c
 //
-typedef void (*planefunction_t) (int top, int bottom);
-extern planefunction_t floorfunc, ceilingfunc;
-
-extern int skyflatnum;
-
-extern int*  lastopening; // [crispy] 32-bit integer math
+extern int  skyflatnum;
+extern int *lastopening; // [crispy] 32-bit integer math
 
 // [JN] e6y: resolution limitation is removed
 extern int *floorclip, *ceilingclip; // dropoff overflow
@@ -524,20 +494,6 @@ void R_DrawPlanes(void);
 visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel, int special);
 visplane_t *R_CheckPlane(visplane_t * pl, int start, int stop);
 visplane_t *R_DupPlane (const visplane_t *pl, int start, int stop);
-
-
-//
-// R_debug.m
-//
-extern int drawbsp;
-
-void RD_OpenMapWindow(void);
-void RD_ClearMapWindow(void);
-void RD_DisplayLine(int x1, int y1, int x2, int y2, float gray);
-void RD_DrawNodeLine(node_t * node);
-void RD_DrawLineCheck(seg_t * line);
-void RD_DrawLine(seg_t * line);
-void RD_DrawBBox(fixed_t * bbox);
 
 
 //
@@ -582,12 +538,8 @@ extern int64_t sprtopscreen, sprbotscreen;
 
 extern fixed_t pspritescale, pspriteiscale;
 
-
 void R_DrawMaskedColumn(column_t * column, signed int baseclip);
-
-
 void R_SortVisSprites(void);
-
 void R_AddSprites(sector_t * sec);
 void R_AddPSprites(void);
 void R_DrawSprites(void);
@@ -596,11 +548,10 @@ void R_ClearSprites(void);
 void R_DrawMasked(void);
 void R_ClipVisSprite(vissprite_t * vis, int xl, int xh);
 
-//=============================================================================
+
 //
 // R_draw.c
 //
-//=============================================================================
 
 extern lighttable_t *dc_colormap;
 extern int dc_x;

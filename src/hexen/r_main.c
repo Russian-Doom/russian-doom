@@ -901,7 +901,6 @@ void R_SetupFrame(player_t * player)
     int intensity;
     int pitch;
 
-    //drawbsp = 1;
     viewplayer = player;
     // haleyjd: removed WATCOMC
     // haleyjd FIXME: viewangleoffset handling?
