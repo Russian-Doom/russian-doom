@@ -88,14 +88,11 @@ void S_StartSong(int song, boolean loop, boolean replay)
 {
     int mus_len;
 
-    // [JN] Don't replay an old song, but
-    // allow replay if music system is changed.
-    //
-    // Commented out because of music device hot-swapping disabled.
-    // if (song == mus_song && !replay)
-    // {
-    //     return;
-    // }
+    // Don't replay an old song.
+    if (song == mus_song)
+    {
+        return;
+    }
 
     if (rs != NULL)
     {
