@@ -169,14 +169,14 @@ typedef struct line_s
     vertex_t *v2;
     fixed_t dx;
     fixed_t dy;
-    short flags;
+    unsigned short flags;
     byte special;
     byte arg1;
     byte arg2;
     byte arg3;
     byte arg4;
     byte arg5;
-    short sidenum[2];
+    unsigned short sidenum[2];
     fixed_t bbox[4];
     slopetype_t slopetype;
     sector_t *frontsector;
@@ -236,8 +236,8 @@ typedef struct polyblock_s
 typedef struct subsector_s
 {
     sector_t *sector;
-    short numlines;
-    short firstline;
+    int numlines;
+    int firstline;
     polyobj_t *poly;
 } subsector_t;
 
@@ -245,7 +245,7 @@ typedef struct
 {
     fixed_t x, y, dx, dy;       // partition line
     fixed_t bbox[2][4];         // bounding box for each child
-    unsigned short children[2]; // if NF_SUBSECTOR its a subsector
+    int children[2]; // if NF_SUBSECTOR its a subsector
 } node_t;
 
 

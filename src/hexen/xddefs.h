@@ -64,16 +64,16 @@ typedef struct
 
 typedef struct
 {
-    short v1;
-    short v2;
-    short flags;
+    unsigned short v1;
+    unsigned short v2;
+    unsigned short flags;
     byte special;
     byte arg1;
     byte arg2;
     byte arg3;
     byte arg4;
     byte arg5;
-    short sidenum[2];           // sidenum[1] will be -1 if one sided
+    unsigned short sidenum[2];  // sidenum[1] will be -1 (NO_INDEX) if one sided
 } PACKEDATTR maplinedef_t;
 
 #define	ML_BLOCKING			0x0001
@@ -111,21 +111,23 @@ typedef struct
 
 typedef struct
 {
-    short numsegs;
-    short firstseg;             // segs are stored sequentially
+    unsigned short numsegs;
+    unsigned short firstseg;             // segs are stored sequentially
 } PACKEDATTR mapsubsector_t;
 
 typedef struct
 {
-    short v1;
-    short v2;
+    unsigned short v1;
+    unsigned short v2;
     short angle;
-    short linedef;
+    unsigned short linedef;
     short side;
     short offset;
 } PACKEDATTR mapseg_t;
 
-#define	NF_SUBSECTOR	0x8000
+#define NF_SUBSECTOR    0x80000000
+#define NO_INDEX        ((unsigned short)-1)  // [crispy] extended nodes
+
 typedef struct
 {
     short x, y, dx, dy;         // partition line
