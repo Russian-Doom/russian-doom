@@ -71,7 +71,7 @@ void R_DrawColumn (void)
     fixed_t  frac;
 
 	// Zero length, column does not exceed a pixel.
-    if (count <= 0)
+    if (count < 0)
 	{
 		return;
 	}
