@@ -353,9 +353,6 @@ extern int viewangletox[FINEANGLES / 2];
 extern angle_t *xtoviewangle;
 extern angle_t *linearskyangle;
 
-extern fixed_t rw_distance;
-extern angle_t rw_normalangle;
-
 
 //
 // R_main.c
@@ -410,13 +407,12 @@ extern void (*transtlcolfunc) (void);
 extern void (*spanfunc) (void);
 extern void R_ExecuteSetViewSize();
 
-int R_PointOnSide(fixed_t x, fixed_t y, node_t * node);
-int R_PointOnSegSide(fixed_t x, fixed_t y, seg_t * line);
+int R_PointOnSide(fixed_t x, fixed_t y, const node_t *node);
+int R_PointOnSegSide(fixed_t x, fixed_t y, const seg_t *line);
 angle_t R_PointToAngle(fixed_t x, fixed_t y);
 angle_t R_PointToAngleCrispy(fixed_t x, fixed_t y);
 angle_t R_PointToAngle2(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2);
 fixed_t R_PointToDist(fixed_t x, fixed_t y);
-fixed_t R_ScaleFromGlobalAngle(angle_t visangle);
 subsector_t *R_PointInSubsector(fixed_t x, fixed_t y);
 // [AM] Interpolate between two angles.
 angle_t R_InterpolateAngle(angle_t oangle, angle_t nangle, fixed_t scale);
@@ -436,7 +432,6 @@ extern sector_t *frontsector, *backsector;
 extern int rw_x;
 extern int rw_stopx;
 
-extern boolean segtextured;
 extern boolean markfloor;       // false if the back side is the same plane
 extern boolean markceiling;
 
@@ -527,8 +522,8 @@ void R_PrecacheLevel(void);
 //
 
 // constant arrays used for psprite clipping and initializing clipping
-extern int negonearray[WIDESCREENWIDTH];       // [crispy] 32-bit integer math
-extern int screenheightarray[WIDESCREENWIDTH]; // [crispy] 32-bit integer math
+extern int *negonearray;       // [JN] killough 2/8/98: // dropoff overflow
+extern int *screenheightarray; //      change to MAX_*  // dropoff overflow
 
 // vars for R_DrawMaskedColumn
 extern int*  mfloorclip;   // [crispy] 32-bit integer math

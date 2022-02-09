@@ -1073,8 +1073,8 @@ static void R_InitTransMaps (void)
 
 void R_InitData (void)
 {
-    R_InitTextures();
     R_InitFlats();
+    R_InitTextures();
     R_InitSpriteLumps();
     R_InitColormaps();
     // [JN] Generate extra translucency tables.

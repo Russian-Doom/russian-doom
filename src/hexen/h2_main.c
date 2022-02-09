@@ -151,6 +151,7 @@ int english_language = 1;
 static char *autoloadglobalpwad[10] = { "", "", "", "" };
 
 // Display
+int screenblocks = 10;
 int extra_level_brightness = 0;
 int detailLevel = 0;        // [JN] Blocky mode, 0 = high, 1 = normal
 int hud_detaillevel = 0;    // [JN] Blocky mode, 0 = high, 1 = normal
