@@ -78,10 +78,12 @@ void R_DrawColumn (void)
 
 #ifdef RANGECHECK
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
-        I_Error (english_language ?
-                 "R_DrawColumn: %i to %i at %i" :
-                 "R_DrawColumn: %i к %i в %i",
-                 dc_yl, dc_yh, dc_x);
+    {
+        // [JN] Some widescreen assets are notably wider and placed
+        // outside the screen farther than this condition is checking.
+        // Thus, instead of bombing out just dont draw such column.
+        return;
+    }
 #endif
 
     // Framebuffer destination address.
