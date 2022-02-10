@@ -84,6 +84,7 @@ lighttable_t *fullbright_flame[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t *fullbright_yellowred[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t *fullbright_firebull[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t *fullbright_mana[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_heresiarch[LIGHTLEVELS][MAXLIGHTSCALE];
 
 lighttable_t *fixedcolormap;
 extern lighttable_t **walllights;
@@ -724,6 +725,7 @@ void R_ExecuteSetViewSize (void)
             fullbright_yellowred[i][j] = brightmaps_yellowred + level * 256;
             fullbright_firebull[i][j] = brightmaps_firebull + level * 256;
             fullbright_mana[i][j] = brightmaps_mana + level * 256;
+            fullbright_heresiarch[i][j] = brightmaps_heresiarch + level * 256;
         }
     }
 

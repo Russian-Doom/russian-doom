@@ -85,6 +85,7 @@ lighttable_t *brightmaps_flame;
 lighttable_t *brightmaps_yellowred;
 lighttable_t *brightmaps_firebull;
 lighttable_t *brightmaps_mana;
+lighttable_t *brightmaps_heresiarch;
 
 
 /*
@@ -934,6 +935,7 @@ static void R_InitBrightmaps(void)
     brightmaps_yellowred = W_CacheLumpNum(W_GetNumForName("BRTMAP6"), PU_STATIC);
     brightmaps_firebull = W_CacheLumpNum(W_GetNumForName("BRTMAP7"), PU_STATIC);
     brightmaps_mana = W_CacheLumpNum(W_GetNumForName("BRTMAP8"), PU_STATIC);
+    brightmaps_heresiarch = W_CacheLumpNum(W_GetNumForName("BRTMAP9"), PU_STATIC);
 }
 
 /*

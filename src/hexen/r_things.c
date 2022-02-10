@@ -39,6 +39,7 @@ static lighttable_t **fullbrights_flame;
 static lighttable_t **fullbrights_yellowred;
 static lighttable_t **fullbrights_firebull;
 static lighttable_t **fullbrights_mana;
+static lighttable_t **fullbrights_heresiarch;
 
 // [JN] False is level is using custom (foggy) colormap.
 boolean LevelUseFullBright;
@@ -989,6 +990,20 @@ void R_ProjectSprite(mobj_t * thing)
             {
                 vis->colormap = fullbrights_mana[index];
             }
+
+            // - Heresiarch -
+            if (thing->type == MT_SORCBOSS
+            && (thing->state - states == S_SORC_ATK2_1   // Attack frames only
+            ||  thing->state - states == S_SORC_ATK2_2
+            ||  thing->state - states == S_SORC_ATK2_3
+            ||  thing->state - states == S_SORC_ATTACK1
+            ||  thing->state - states == S_SORC_ATTACK2
+            ||  thing->state - states == S_SORC_ATTACK3
+            ||  thing->state - states == S_SORC_ATTACK4
+            ||  thing->state - states == S_SORC_ATTACK5))
+            {
+                vis->colormap = fullbrights_heresiarch[index];
+            }
         }
         
         // [JN] Fallback. If we are not using brightmaps, apply full brightness
@@ -1009,7 +1024,17 @@ void R_ProjectSprite(mobj_t * thing)
             ||  thing->type == MT_ZCAULDRON
             ||  thing->type == MT_MANA1
             ||  thing->type == MT_MANA2
-            ||  thing->type == MT_MANA3)
+            ||  thing->type == MT_MANA3
+            || (thing->type == MT_SORCBOSS
+            && (thing->state - states == S_SORC_ATK2_1
+            ||  thing->state - states == S_SORC_ATK2_2
+            ||  thing->state - states == S_SORC_ATK2_3
+            ||  thing->state - states == S_SORC_ATTACK1
+            ||  thing->state - states == S_SORC_ATTACK2
+            ||  thing->state - states == S_SORC_ATTACK3
+            ||  thing->state - states == S_SORC_ATTACK4
+            ||  thing->state - states == S_SORC_ATTACK5
+            ||  thing->state - states == S_SORC_DIEI)))
             vis->colormap = colormaps;
         }
     }
@@ -1045,6 +1070,7 @@ void R_AddSprites (sector_t *sec)
         fullbrights_yellowred = fullbright_yellowred[0];
         fullbrights_firebull = fullbright_firebull[0];
         fullbrights_mana = fullbright_mana[0];
+        fullbrights_heresiarch = fullbright_heresiarch[0];
     }
     else if (lightnum >= LIGHTLEVELS)
     {
@@ -1059,6 +1085,7 @@ void R_AddSprites (sector_t *sec)
         fullbrights_yellowred = fullbright_yellowred[LIGHTLEVELS - 1];
         fullbrights_firebull = fullbright_firebull[LIGHTLEVELS - 1];
         fullbrights_mana = fullbright_mana[LIGHTLEVELS - 1];
+        fullbrights_heresiarch = fullbright_heresiarch[LIGHTLEVELS - 1];
     }
     else
     {
@@ -1073,6 +1100,7 @@ void R_AddSprites (sector_t *sec)
         fullbrights_yellowred = fullbright_yellowred[lightnum];
         fullbrights_firebull = fullbright_firebull[lightnum];
         fullbrights_mana = fullbright_mana[lightnum];
+        fullbrights_heresiarch = fullbright_heresiarch[lightnum];
     }
 
     // Handle all things in sector.

@@ -2919,14 +2919,15 @@ state_t states[NUMSTATES] = {
     {SPR_SORC, 3, 5, A_Chase, S_SORC_WALK1, 0, 0},      // S_SORC_WALK4
     {SPR_SORC, 6, 8, NULL, S_SORC_PAIN2, 0, 0}, // S_SORC_PAIN1
     {SPR_SORC, 6, 8, A_Pain, S_SORC_WALK1, 0, 0},       // S_SORC_PAIN2
-    {SPR_SORC, 32773, 6, A_FaceTarget, S_SORC_ATK2_2, 0, 0},    // S_SORC_ATK2_1
-    {SPR_SORC, 32773, 6, A_SpeedBalls, S_SORC_ATK2_3, 0, 0},    // S_SORC_ATK2_2
-    {SPR_SORC, 32773, 6, A_FaceTarget, S_SORC_ATK2_3, 0, 0},    // S_SORC_ATK2_3
-    {SPR_SORC, 32772, 6, NULL, S_SORC_ATTACK2, 0, 0},   // S_SORC_ATTACK1
-    {SPR_SORC, 32772, 6, A_SpawnFizzle, S_SORC_ATTACK3, 0, 0},  // S_SORC_ATTACK2
-    {SPR_SORC, 32772, 5, A_FaceTarget, S_SORC_ATTACK2, 0, 0},   // S_SORC_ATTACK3
-    {SPR_SORC, 32772, 2, NULL, S_SORC_ATTACK5, 0, 0},   // S_SORC_ATTACK4
-    {SPR_SORC, 32772, 2, A_SorcBossAttack, S_SORC_WALK1, 0, 0}, // S_SORC_ATTACK5
+    // [JN] Do not apply full brightness to attack frames, use brightmap instead.
+    {SPR_SORC, 5, 6, A_FaceTarget, S_SORC_ATK2_2, 0, 0},    // S_SORC_ATK2_1
+    {SPR_SORC, 5, 6, A_SpeedBalls, S_SORC_ATK2_3, 0, 0},    // S_SORC_ATK2_2
+    {SPR_SORC, 5, 6, A_FaceTarget, S_SORC_ATK2_3, 0, 0},    // S_SORC_ATK2_3
+    {SPR_SORC, 4, 6, NULL, S_SORC_ATTACK2, 0, 0},   // S_SORC_ATTACK1
+    {SPR_SORC, 4, 6, A_SpawnFizzle, S_SORC_ATTACK3, 0, 0},  // S_SORC_ATTACK2
+    {SPR_SORC, 4, 5, A_FaceTarget, S_SORC_ATTACK2, 0, 0},   // S_SORC_ATTACK3
+    {SPR_SORC, 4, 2, NULL, S_SORC_ATTACK5, 0, 0},   // S_SORC_ATTACK4
+    {SPR_SORC, 4, 2, A_SorcBossAttack, S_SORC_WALK1, 0, 0}, // S_SORC_ATTACK5
     {SPR_SORC, 32775, 5, NULL, S_SORC_DIE2, 0, 0},      // S_SORC_DIE1
     {SPR_SORC, 32776, 5, A_FaceTarget, S_SORC_DIE3, 0, 0},      // S_SORC_DIE2
     {SPR_SORC, 32777, 5, A_Scream, S_SORC_DIE4, 0, 0},  // S_SORC_DIE3
