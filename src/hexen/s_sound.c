@@ -76,6 +76,7 @@ static channel_t Channel[MAX_CHANNELS];
 static void *RegisteredSong;      //the current registered song.
 static boolean MusicPaused;
 static int Mus_Song = -1;
+static char *songLumpOld = "";  // [JN] Keep song name to don't replay it.
 static byte *Mus_SndPtr;
 static byte *SoundCurve;
 
@@ -259,6 +260,14 @@ void S_StartSongName(char *songLump, boolean loop)
     {
         return;
     }
+
+    // [JN] If this music is already playing, 
+    // don't start it over again.
+    if (songLump == songLumpOld)
+    {
+        return;
+    }
+
     if (cdmusic)
     {
         cdTrack = 0;
@@ -311,7 +320,8 @@ void S_StartSongName(char *songLump, boolean loop)
         RegisteredSong = I_RegisterSong(Mus_SndPtr, length);
         I_PlaySong(RegisteredSong, loop);
         W_ReleaseLumpNum(lumpnum);
-        Mus_Song = -1;
+        // [JN] Remember the name of current music.
+        songLumpOld = songLump;
     }
 }
 
