@@ -980,9 +980,12 @@ void R_ProjectSprite(mobj_t * thing)
             }
 
             // - Mana -
-            if (thing->type == MT_MANA1
-            ||  thing->type == MT_MANA2
-            ||  thing->type == MT_MANA3)
+            if (thing->type == MT_MANA1             // Blue
+            ||  thing->type == MT_MANA2             // Green
+            ||  thing->type == MT_MANA3             // Combined
+            ||  thing->type == MT_SORCBALL1         //
+            ||  thing->type == MT_SORCBALL2         // Heresiarch's mana cubes
+            ||  thing->type == MT_SORCBALL3)        //
             {
                 vis->colormap = fullbrights_mana[index];
             }
