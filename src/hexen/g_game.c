@@ -956,6 +956,12 @@ void G_Ticker(void)
     {
         switch (gameaction)
         {
+            // [JN] Note: saving/loading/ethereal travel 
+            // graphics disabled, left only for -vanilla mode.
+            //
+            // At the day of this change (2022-02-11) computers
+            // are fast enough, so these graphics are appeared
+            // only for few milliseconds, which is rather annoying.
             case ga_loadlevel:
                 G_DoLoadLevel();
                 break;
@@ -966,14 +972,20 @@ void G_Ticker(void)
                 G_DoNewGame();
                 break;
             case ga_loadgame:
-                Draw_LoadIcon();
+                if (vanillaparm)
+                {
+                    Draw_LoadIcon();
+                }
                 G_DoLoadGame();
                 // [JN] Reset looking direction if game is loaded without mouse look
                 if (!mlook)
                 players[consoleplayer].lookdir = 0;
                 break;
             case ga_savegame:
-                Draw_SaveIcon();
+                if (vanillaparm)
+                {
+                    Draw_SaveIcon();
+                }
                 G_DoSaveGame();
                 break;
             case ga_singlereborn:
@@ -988,7 +1000,10 @@ void G_Ticker(void)
                 gameaction = ga_nothing;
                 break;
             case ga_leavemap:
-                Draw_TeleportIcon();
+                if (vanillaparm)
+                {
+                    Draw_TeleportIcon();
+                }
                 G_DoTeleportNewMap();
                 break;
             case ga_completed:
