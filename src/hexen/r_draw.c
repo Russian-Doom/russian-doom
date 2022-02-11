@@ -79,9 +79,12 @@ void R_DrawColumn (void)
 #ifdef RANGECHECK
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        // [JN] Some widescreen assets are notably wider and placed
-        // outside the screen farther than this condition is checking.
-        // Thus, instead of bombing out just dont draw such column.
+        // [JN] Some widescreen assets (like CMCEB0) are notably
+        // wider and placed outside of screen bounds farther than
+        // this condition is checking, which may lead to unnecessary
+        // I_Error calling. If no action is taken, an overflow may
+        // happen as well as drawing column from opposite side of
+        // the screen. Thus, instead of I_Error just dont draw such column.
         return;
     }
 #endif
@@ -166,11 +169,16 @@ void R_DrawColumnLow (void)
     }
 
 #ifdef RANGECHECK
-    if ((unsigned) dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
-        I_Error(english_language ?
-                "R_DrawColumnLow: %i to %i at %i" :
-                "R_DrawColumnLow: %i к %i в %i",
-                dc_yl, dc_yh, dc_x);
+    if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        // [JN] Some widescreen assets (like CMCEB0) are notably
+        // wider and placed outside of screen bounds farther than
+        // this condition is checking, which may lead to unnecessary
+        // I_Error calling. If no action is taken, an overflow may
+        // happen as well as drawing column from opposite side of
+        // the screen. Thus, instead of I_Error just dont draw such column.
+        return;
+    }
 #endif
 
     dest = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
