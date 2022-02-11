@@ -2966,11 +2966,12 @@ state_t states[NUMSTATES] = {
     {SPR_SBMP, 15, 2, A_SorcBallOrbit, S_SORCBALL1_1, 0, 0},    // S_SORCBALL1_F
     {SPR_SBMP, 0, 5, A_SorcBallPop, S_SORCBALL1_D2, 0, 0},      // S_SORCBALL1_D1
     {SPR_SBMP, 1, 2, A_BounceCheck, S_SORCBALL1_D2, 0, 0},      // S_SORCBALL1_D2
-    {SPR_SBS4, 3, 5, A_Explode, S_SORCBALL1_D6, 0, 0},  // S_SORCBALL1_D5
-    {SPR_SBS4, 4, 5, NULL, S_SORCBALL1_D7, 0, 0},       // S_SORCBALL1_D6
-    {SPR_SBS4, 5, 6, NULL, S_SORCBALL1_D8, 0, 0},       // S_SORCBALL1_D7
-    {SPR_SBS4, 6, 6, NULL, S_SORCBALL1_D9, 0, 0},       // S_SORCBALL1_D8
-    {SPR_SBS4, 7, 6, NULL, S_NULL, 0, 0},       // S_SORCBALL1_D9
+    // [JN] Apply full bright to explosion frames.
+    {SPR_SBS4, 32771, 5, A_Explode, S_SORCBALL1_D6, 0, 0},  // S_SORCBALL1_D5
+    {SPR_SBS4, 32772, 5, NULL, S_SORCBALL1_D7, 0, 0},       // S_SORCBALL1_D6
+    {SPR_SBS4, 32773, 6, NULL, S_SORCBALL1_D8, 0, 0},       // S_SORCBALL1_D7
+    {SPR_SBS4, 32774, 6, NULL, S_SORCBALL1_D9, 0, 0},       // S_SORCBALL1_D8
+    {SPR_SBS4, 32775, 6, NULL, S_NULL, 0, 0},       // S_SORCBALL1_D9
     {SPR_SBMB, 0, 2, A_SorcBallOrbit, S_SORCBALL2_2, 0, 0},     // S_SORCBALL2_1
     {SPR_SBMB, 1, 2, A_SorcBallOrbit, S_SORCBALL2_3, 0, 0},     // S_SORCBALL2_2
     {SPR_SBMB, 2, 2, A_SorcBallOrbit, S_SORCBALL2_4, 0, 0},     // S_SORCBALL2_3
@@ -2989,11 +2990,12 @@ state_t states[NUMSTATES] = {
     {SPR_SBMB, 15, 2, A_SorcBallOrbit, S_SORCBALL2_1, 0, 0},    // S_SORCBALL2_F
     {SPR_SBMB, 0, 5, A_SorcBallPop, S_SORCBALL2_D2, 0, 0},      // S_SORCBALL2_D1
     {SPR_SBMB, 1, 2, A_BounceCheck, S_SORCBALL2_D2, 0, 0},      // S_SORCBALL2_D2
-    {SPR_SBS3, 3, 5, A_Explode, S_SORCBALL2_D6, 0, 0},  // S_SORCBALL2_D5
-    {SPR_SBS3, 4, 5, NULL, S_SORCBALL2_D7, 0, 0},       // S_SORCBALL2_D6
-    {SPR_SBS3, 5, 6, NULL, S_SORCBALL2_D8, 0, 0},       // S_SORCBALL2_D7
-    {SPR_SBS3, 6, 6, NULL, S_SORCBALL2_D9, 0, 0},       // S_SORCBALL2_D8
-    {SPR_SBS3, 7, 6, NULL, S_NULL, 0, 0},       // S_SORCBALL2_D9
+    // [JN] Apply full bright to explosion frames.
+    {SPR_SBS3, 32771, 5, A_Explode, S_SORCBALL2_D6, 0, 0},  // S_SORCBALL2_D5
+    {SPR_SBS3, 32772, 5, NULL, S_SORCBALL2_D7, 0, 0},       // S_SORCBALL2_D6
+    {SPR_SBS3, 32773, 6, NULL, S_SORCBALL2_D8, 0, 0},       // S_SORCBALL2_D7
+    {SPR_SBS3, 32774, 6, NULL, S_SORCBALL2_D9, 0, 0},       // S_SORCBALL2_D8
+    {SPR_SBS3, 32775, 6, NULL, S_NULL, 0, 0},       // S_SORCBALL2_D9
     {SPR_SBMG, 0, 2, A_SorcBallOrbit, S_SORCBALL3_2, 0, 0},     // S_SORCBALL3_1
     {SPR_SBMG, 1, 2, A_SorcBallOrbit, S_SORCBALL3_3, 0, 0},     // S_SORCBALL3_2
     {SPR_SBMG, 2, 2, A_SorcBallOrbit, S_SORCBALL3_4, 0, 0},     // S_SORCBALL3_3
@@ -3012,11 +3014,12 @@ state_t states[NUMSTATES] = {
     {SPR_SBMG, 15, 2, A_SorcBallOrbit, S_SORCBALL3_1, 0, 0},    // S_SORCBALL3_F
     {SPR_SBMG, 0, 5, A_SorcBallPop, S_SORCBALL3_D2, 0, 0},      // S_SORCBALL3_D1
     {SPR_SBMG, 1, 2, A_BounceCheck, S_SORCBALL3_D2, 0, 0},      // S_SORCBALL3_D2
-    {SPR_SBS3, 3, 5, A_Explode, S_SORCBALL3_D6, 0, 0},  // S_SORCBALL3_D5
-    {SPR_SBS3, 4, 5, NULL, S_SORCBALL3_D7, 0, 0},       // S_SORCBALL3_D6
-    {SPR_SBS3, 5, 6, NULL, S_SORCBALL3_D8, 0, 0},       // S_SORCBALL3_D7
-    {SPR_SBS3, 6, 6, NULL, S_SORCBALL3_D9, 0, 0},       // S_SORCBALL3_D8
-    {SPR_SBS3, 7, 6, NULL, S_NULL, 0, 0},       // S_SORCBALL3_D9
+    // [JN] Apply full bright to explosion frames.
+    {SPR_SBS3, 32771, 5, A_Explode, S_SORCBALL3_D6, 0, 0},  // S_SORCBALL3_D5
+    {SPR_SBS3, 32772, 5, NULL, S_SORCBALL3_D7, 0, 0},       // S_SORCBALL3_D6
+    {SPR_SBS3, 32773, 6, NULL, S_SORCBALL3_D8, 0, 0},       // S_SORCBALL3_D7
+    {SPR_SBS3, 32774, 6, NULL, S_SORCBALL3_D9, 0, 0},       // S_SORCBALL3_D8
+    {SPR_SBS3, 32775, 6, NULL, S_NULL, 0, 0},       // S_SORCBALL3_D9
     {SPR_SBS1, 32768, 2, NULL, S_SORCFX1_2, 0, 0},      // S_SORCFX1_1
     {SPR_SBS1, 32769, 3, A_SorcFX1Seek, S_SORCFX1_3, 0, 0},     // S_SORCFX1_2
     {SPR_SBS1, 32770, 3, A_SorcFX1Seek, S_SORCFX1_4, 0, 0},     // S_SORCFX1_3

@@ -290,6 +290,7 @@ typedef struct vissprite_s
     boolean psprite;            // true if psprite
     int class;                  // player class (used in translation)
     fixed_t floorclip;
+    byte *translation;          // [crispy] color translation table
 } vissprite_t;
 
 

@@ -22,6 +22,7 @@
 #include "i_system.h"
 #include "i_swap.h"
 #include "r_local.h"
+#include "v_trans.h"
 
 
 // Sprite rotation 0 is facing the viewer, rotation 1 is one angle turn CLOCKWISE
@@ -509,6 +510,12 @@ void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
         dc_translation = translationtables - 256 + vis->class * ((maxplayers - 1) * 256)
                        + ((vis->mobjflags & MF_TRANSLATION) >> (MF_TRANSSHIFT - 8));
     }
+    else if (vis->translation)
+    {
+        // [crispy] color-translated sprites
+        colfunc = R_DrawTranslatedColumn;
+        dc_translation = vis->translation;
+    }
 
     dc_iscale = abs(vis->xiscale) >> (detailshift && !hires);
     dc_texturemid = vis->texturemid;
@@ -848,6 +855,7 @@ void R_ProjectSprite(mobj_t * thing)
 
     // Store information in a vissprite.
     vis = R_NewVisSprite();
+    vis->translation = NULL;
     vis->mobjflags = thing->flags;
     vis->psprite = false;
     vis->scale = xscale << (detailshift && !hires);
@@ -1036,6 +1044,21 @@ void R_ProjectSprite(mobj_t * thing)
             ||  thing->state - states == S_SORC_ATTACK5
             ||  thing->state - states == S_SORC_DIEI)))
             vis->colormap = colormaps;
+        }
+    }
+
+    // [JN] Apply colorization.
+    if (!vanillaparm)
+    {
+        // Heresiarch's blue mana cube: colorize explosion to blue.
+        if (thing->type == MT_SORCBALL2
+        && (thing->state - states == S_SORCBALL2_D5
+        ||  thing->state - states == S_SORCBALL2_D6
+        ||  thing->state - states == S_SORCBALL2_D7
+        ||  thing->state - states == S_SORCBALL2_D8
+        ||  thing->state - states == S_SORCBALL2_D9))
+        {
+            vis->translation = cr[CR_GREEN2BLUE_HEXEN];
         }
     }
 }
@@ -1246,6 +1269,7 @@ void R_DrawPSprite(pspdef_t * psp)
 
     // Store information in a vissprite.
     vis = &avis;
+    vis->translation = NULL;
     vis->mobjflags = 0;
     vis->class = 0;
     vis->psprite = true;
