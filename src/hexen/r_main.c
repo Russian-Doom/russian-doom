@@ -974,7 +974,7 @@ void R_RenderPlayerView (player_t *player)
     }
 
     // [JN] Fill level's "out of bounds" with black color.
-    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, viewheight, 0);
+    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
 
     R_ClearPlanes();
     R_ClearSprites();
