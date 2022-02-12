@@ -40,6 +40,7 @@ static lighttable_t **fullbrights_flame;
 static lighttable_t **fullbrights_yellowred;
 static lighttable_t **fullbrights_firebull;
 static lighttable_t **fullbrights_mana;
+static lighttable_t **fullbrights_afrit;
 static lighttable_t **fullbrights_heresiarch;
 
 // [JN] False is level is using custom (foggy) colormap.
@@ -999,6 +1000,39 @@ void R_ProjectSprite(mobj_t * thing)
                 vis->colormap = fullbrights_mana[index];
             }
 
+            // - Afrit -
+            if (thing->type == MT_FIREDEMON
+            && (thing->state - states == S_FIRED_LOOK1
+            ||  thing->state - states == S_FIRED_LOOK1
+            ||  thing->state - states == S_FIRED_LOOK2
+            ||  thing->state - states == S_FIRED_LOOK3
+            ||  thing->state - states == S_FIRED_LOOK4
+            ||  thing->state - states == S_FIRED_LOOK5
+            ||  thing->state - states == S_FIRED_LOOK6
+            ||  thing->state - states == S_FIRED_LOOK7
+            ||  thing->state - states == S_FIRED_LOOK8
+            ||  thing->state - states == S_FIRED_LOOK9
+            ||  thing->state - states == S_FIRED_LOOK0
+            ||  thing->state - states == S_FIRED_LOOKA
+            ||  thing->state - states == S_FIRED_LOOKB
+            ||  thing->state - states == S_FIRED_WALK1
+            ||  thing->state - states == S_FIRED_WALK2
+            ||  thing->state - states == S_FIRED_WALK3
+            ||  thing->state - states == S_FIRED_ATTACK1
+            ||  thing->state - states == S_FIRED_ATTACK2
+            ||  thing->state - states == S_FIRED_ATTACK3
+            ||  thing->state - states == S_FIRED_ATTACK4
+            ||  thing->state - states == S_FIRED_DEATH1
+            ||  thing->state - states == S_FIRED_DEATH2
+            ||  thing->state - states == S_FIRED_DEATH3
+            ||  thing->state - states == S_FIRED_DEATH4
+            ||  thing->state - states == S_FIRED_XDEATH1
+            ||  thing->state - states == S_FIRED_XDEATH2
+            ||  thing->state - states == S_FIRED_XDEATH3))
+            {
+                vis->colormap = fullbrights_afrit[index];
+            }
+
             // - Heresiarch -
             if (thing->type == MT_SORCBOSS
             && (thing->state - states == S_SORC_ATK2_1   // Attack frames only
@@ -1033,6 +1067,34 @@ void R_ProjectSprite(mobj_t * thing)
             ||  thing->type == MT_MANA1
             ||  thing->type == MT_MANA2
             ||  thing->type == MT_MANA3
+            || (thing->type == MT_FIREDEMON
+            && (thing->state - states == S_FIRED_LOOK1
+            ||  thing->state - states == S_FIRED_LOOK1
+            ||  thing->state - states == S_FIRED_LOOK2
+            ||  thing->state - states == S_FIRED_LOOK3
+            ||  thing->state - states == S_FIRED_LOOK4
+            ||  thing->state - states == S_FIRED_LOOK5
+            ||  thing->state - states == S_FIRED_LOOK6
+            ||  thing->state - states == S_FIRED_LOOK7
+            ||  thing->state - states == S_FIRED_LOOK8
+            ||  thing->state - states == S_FIRED_LOOK9
+            ||  thing->state - states == S_FIRED_LOOK0
+            ||  thing->state - states == S_FIRED_LOOKA
+            ||  thing->state - states == S_FIRED_LOOKB
+            ||  thing->state - states == S_FIRED_WALK1
+            ||  thing->state - states == S_FIRED_WALK2
+            ||  thing->state - states == S_FIRED_WALK3
+            ||  thing->state - states == S_FIRED_ATTACK1
+            ||  thing->state - states == S_FIRED_ATTACK2
+            ||  thing->state - states == S_FIRED_ATTACK3
+            ||  thing->state - states == S_FIRED_ATTACK4
+            ||  thing->state - states == S_FIRED_DEATH1
+            ||  thing->state - states == S_FIRED_DEATH2
+            ||  thing->state - states == S_FIRED_DEATH3
+            ||  thing->state - states == S_FIRED_DEATH4
+            ||  thing->state - states == S_FIRED_XDEATH1
+            ||  thing->state - states == S_FIRED_XDEATH2
+            ||  thing->state - states == S_FIRED_XDEATH3))
             || (thing->type == MT_SORCBOSS
             && (thing->state - states == S_SORC_ATK2_1
             ||  thing->state - states == S_SORC_ATK2_2
@@ -1093,6 +1155,7 @@ void R_AddSprites (sector_t *sec)
         fullbrights_yellowred = fullbright_yellowred[0];
         fullbrights_firebull = fullbright_firebull[0];
         fullbrights_mana = fullbright_mana[0];
+        fullbrights_afrit = fullbright_afrit[0];
         fullbrights_heresiarch = fullbright_heresiarch[0];
     }
     else if (lightnum >= LIGHTLEVELS)
@@ -1108,6 +1171,7 @@ void R_AddSprites (sector_t *sec)
         fullbrights_yellowred = fullbright_yellowred[LIGHTLEVELS - 1];
         fullbrights_firebull = fullbright_firebull[LIGHTLEVELS - 1];
         fullbrights_mana = fullbright_mana[LIGHTLEVELS - 1];
+        fullbrights_afrit = fullbright_afrit[LIGHTLEVELS - 1];
         fullbrights_heresiarch = fullbright_heresiarch[LIGHTLEVELS - 1];
     }
     else
@@ -1123,6 +1187,7 @@ void R_AddSprites (sector_t *sec)
         fullbrights_yellowred = fullbright_yellowred[lightnum];
         fullbrights_firebull = fullbright_firebull[lightnum];
         fullbrights_mana = fullbright_mana[lightnum];
+        fullbrights_afrit = fullbright_afrit[lightnum];
         fullbrights_heresiarch = fullbright_heresiarch[lightnum];
     }
 
