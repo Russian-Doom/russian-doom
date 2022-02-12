@@ -90,6 +90,7 @@ typedef struct
 // EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
 
 void P_SpawnPlayer(mapthing_t * mthing);
+void P_RestoreSectorBrightness(void);
 
 // PUBLIC FUNCTION PROTOTYPES ----------------------------------------------
 
@@ -2385,6 +2386,8 @@ void SV_LoadMap(void)
 
     UnarchiveWorld();
     UnarchivePolyobjs();
+    // [JN] Restore sector brightness changed by lightning effect.
+    P_RestoreSectorBrightness();
     UnarchiveMobjs();
     UnarchiveThinkers();
     UnarchiveScripts();
