@@ -1698,7 +1698,7 @@ char *QuitEndMsg[] = {
     "DO YOU WANT TO QUICKSAVE THE GAME NAMED",
     "DO YOU WANT TO QUICKLOAD THE GAME NAMED",
     "ARE YOU SURE YOU WANT TO SUICIDE?",
-    "RESET SETTINGS TO THEIR DEFAULTS?",
+    "ARE YOU SURE YOU WANT TO DELETE SAVED GAME:",
     "" // [JN] Placeholder for language changing
 };
 
@@ -1708,7 +1708,7 @@ char *QuitEndMsg_Rus[] = {
     "DSGJKYBNM ,SCNHJT CJ[HFYTYBT BUHS:",		// ВЫПОЛНИТЬ БЫСТРОЕ СОХРАНЕНИЕ ИГРЫ:
     "DSGJKYBNM ,SCNHE. PFUHEPRE BUHS:",			// ВЫПОЛНИТЬ БЫСТРУЮ ЗАГРУЗКУ ИГРЫ:
     "DS LTQCNDBNTKMYJ [JNBNT CJDTHIBNM CEBWBL?",  // ВЫ ДЕЙСТВИТЕЛЬНО ХОТИТЕ СОВЕРШИТЬ СУИЦИД?
-    "C,HJCBNM YFCNHJQRB YF CNFYLFHNYST PYFXTYBZ?", // СБРОСИТЬ НАСТРОЙКИ НА СТАНДАРТНЫЕ ЗНАЧЕНИЯ?
+    "ELFKBNM CJ[HFYTYYE. BUHE:",				// УДАЛИТЬ СОХРАНЕННУЮ ИГРУ:
     "" // [JN] Placeholder for language changing
 };
 
@@ -1729,6 +1729,15 @@ void MN_Drawer(void)
                 RD_M_DrawTextSmallRUS(QuitEndMsg_Rus[typeofask - 1], 160 -
                            RD_M_TextSmallRUSWidth(QuitEndMsg_Rus[typeofask - 1]) / 2
                            + wide_delta, 80, CR_NONE);
+            }
+
+            // [JN] Print save game name in deletion request.
+            if (typeofask == 6)
+            {
+                RD_M_DrawTextA(SlotText[CurrentItPos],
+                               160 - RD_M_TextAWidth(SlotText[CurrentItPos]) / 2 + wide_delta, 90);
+                RD_M_DrawTextA("?",
+                               160 + RD_M_TextAWidth(SlotText[CurrentItPos]) / 2 + wide_delta, 90);
             }
 
             UpdateState |= I_FULLSCRN;
@@ -5533,6 +5542,8 @@ boolean MN_Responder(event_t * event)
     {
         if (BK_isKeyDown(event, bk_confirm))
         {
+            static char name[RD_MAX_PATH];
+
             switch (typeofask)
             {
                 case 1:
@@ -5552,6 +5563,33 @@ boolean MN_Responder(event_t * event)
                 case 5:
                     BorderNeedRefresh = true;
                     mn_SuicideConsole = true;
+                    break;
+                // [JN] Delete saved game:
+                case 6:
+                    // First, create the name of main slot.
+                    M_snprintf(name, sizeof(name), "%shexen-save-%d.sav",
+                               SavePath, CurrentItPos);
+                    // Delete it.
+                    remove(name);
+
+                    // Second, create the names of auxiliary map slots (100 means MAX_MAPS+1).
+                    for (int i = 0 ; i < 100 ; i++)
+                    {
+                        M_snprintf(name, sizeof(name), "%shexen-save-%d%02d.sav",
+                                   SavePath, CurrentItPos, i);
+                        // Delete them.
+                        remove(name);
+                    }
+
+                    // Truncate text of saved game slot.
+                    memset(SlotText[CurrentItPos], 0, SLOTTEXTLEN + 2);
+                    // Return to the Save/Load menu.
+                    menuactive = true;
+                    // Indicate that slot text needs to be updated.
+                    slottextloaded = false;
+                    S_StartSound(NULL, SFX_DOOR_LIGHT_CLOSE);
+                    // Redraw Save/Load items.
+                    DrawSaveLoadMenu();
                     break;
                 default:
                     break;
@@ -5805,6 +5843,24 @@ boolean MN_Responder(event_t * event)
 
     if (event->type == ev_keydown && event->data1 == KEY_DEL)
     {
+        // [JN] Save/load menu
+        if (CurrentMenu == &LoadMenu
+        ||  CurrentMenu == &SaveMenu)
+        {
+            if (SlotStatus[CurrentItPos] && !FileMenuKeySteal)
+            {
+                menuactive = false;
+                askforquit = true;
+                typeofask = 6;
+                S_StartSound(NULL, SFX_CHAT);
+                return true;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         //[Dasperal] Key bindings menus
         if(CurrentMenu == &Bindings1Menu ||
            CurrentMenu == &Bindings2Menu ||
