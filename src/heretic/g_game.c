@@ -600,6 +600,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         {
             mlook = false;
             look = TOCENTER;
+            players[consoleplayer].lookdir = 0;
         }
 
         P_SetMessage(&players[consoleplayer], (mlook == true ?

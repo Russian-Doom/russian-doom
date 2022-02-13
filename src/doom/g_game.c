@@ -474,6 +474,7 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
         {
             mlook = false;
             look = TOCENTER;
+            players[consoleplayer].lookdir = 0;
         }
 
         players[consoleplayer].message_system = mlook ? ststr_mlook_on : ststr_mlook_off;
