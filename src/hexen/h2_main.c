@@ -1471,7 +1471,7 @@ static void DrawTimeAndFPS(void)
                                local_time == 2 ? 267 :
                                local_time == 3 ? 291 :
                                local_time == 4 ? 279 : 0)
-                              + (wide_4_3 ? wide_delta : wide_delta * 2), 32);
+                              + (wide_4_3 ? wide_delta : wide_delta * 2), 38);
         }
 
         if (show_fps)
@@ -1479,23 +1479,23 @@ static void DrawTimeAndFPS(void)
             char digit[9999];
 
             sprintf (digit, "%d", real_fps);
-            RD_M_DrawTextC("FPS:", 279 + (wide_4_3 ? wide_delta : wide_delta * 2), 42);
-            RD_M_DrawTextC(digit, 297 + (wide_4_3 ? wide_delta : wide_delta * 2), 42);   // [JN] fps digits
+            RD_M_DrawTextC("FPS:", 279 + (wide_4_3 ? wide_delta : wide_delta * 2), 48);
+            RD_M_DrawTextC(digit, 297 + (wide_4_3 ? wide_delta : wide_delta * 2), 48);   // [JN] fps digits
 
             // [JN] Draw extra counters, only while playing in game level.
             if (show_fps == 2 && gamestate == GS_LEVEL)
             {
                 sprintf (digit, "%9d", rendered_segs);
-                RD_M_DrawTextC("SEGS", 297 + (wide_4_3 ? wide_delta : wide_delta*2), 52);
-                RD_M_DrawTextC(digit, 277 + (wide_4_3 ? wide_delta : wide_delta*2), 59);
+                RD_M_DrawTextC("SEGS", 297 + (wide_4_3 ? wide_delta : wide_delta*2), 58);
+                RD_M_DrawTextC(digit, 277 + (wide_4_3 ? wide_delta : wide_delta*2), 65);
 
                 sprintf (digit, "%9d", rendered_visplanes);
-                RD_M_DrawTextC("VISPLANES", 277 + (wide_4_3 ? wide_delta : wide_delta*2), 69);
-                RD_M_DrawTextC(digit, 277 + (wide_4_3 ? wide_delta : wide_delta*2), 76);
+                RD_M_DrawTextC("VISPLANES", 277 + (wide_4_3 ? wide_delta : wide_delta*2), 75);
+                RD_M_DrawTextC(digit, 277 + (wide_4_3 ? wide_delta : wide_delta*2), 82);
 
                 sprintf (digit, "%9d", rendered_vissprites);
-                RD_M_DrawTextC("SPRITES", 285 + (wide_4_3 ? wide_delta : wide_delta*2), 86);
-                RD_M_DrawTextC(digit, 277 + (wide_4_3 ? wide_delta : wide_delta*2), 93);
+                RD_M_DrawTextC("SPRITES", 285 + (wide_4_3 ? wide_delta : wide_delta*2), 92);
+                RD_M_DrawTextC(digit, 277 + (wide_4_3 ? wide_delta : wide_delta*2), 99);
             }
         }
     }

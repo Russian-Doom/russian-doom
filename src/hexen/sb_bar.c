@@ -1047,7 +1047,6 @@ void SB_Drawer(void)
         }
 
         // Minotaur Active
-        // TODO - draw slighly higher if local time widget is active?
         if (CPlayer->powers[pw_minotaur])
         {
             xval = CPlayer->powers[pw_minotaur] / TICRATE > 99 ? 0 :
