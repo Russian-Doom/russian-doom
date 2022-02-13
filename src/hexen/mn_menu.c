@@ -407,7 +407,7 @@ static Menu_t HMainMenu = {
 
 static MenuItem_t ClassItems[] = {
     {ITT_EFUNC, "FIGHTER", "DJBY",   SCClass, 0}, // ВОИН
-    {ITT_EFUNC, "CLERIC",  "RKTHBR", SCClass, 1}, // КЛЕРИК
+    {ITT_EFUNC, "CLERIC",  "RKBHBR", SCClass, 1}, // КЛИРИК
     {ITT_EFUNC, "MAGE",    "VFU",    SCClass, 2}  // МАГ
 };
 
@@ -4066,7 +4066,7 @@ static void DrawLevelSelect1Menu(void)
     {
         // КЛАСС
         RD_M_DrawTextSmallRUS(selective_class == 0 ? "DJBY" :
-                              selective_class == 1 ? "RKTHBR" :
+                              selective_class == 1 ? "RKBHBR" :
                               "VFU", 248 + wide_delta, 26, CR_NONE);
     }
 
