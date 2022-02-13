@@ -22,6 +22,7 @@
 #include <time.h>
 #include "h2def.h"
 #include "i_cdmus.h"
+#include "i_timer.h"    // [JN] TICRATE
 #include "i_video.h"
 #include "m_bbox.h"
 #include "m_cheat.h"
@@ -988,6 +989,86 @@ void SB_Drawer(void)
         {
             DrawInventoryBar();
             SB_state = 1;
+        }
+    }
+
+    // [JN] Draw artifact timer.
+    if (show_artifacts_timer && !vanillaparm)
+    {
+        int xval;
+        boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
+
+        // Speed Boots
+        if (CPlayer->powers[pw_speed])
+        {
+            xval = CPlayer->powers[pw_speed] / TICRATE > 99 ? 0 :
+                   CPlayer->powers[pw_speed] / TICRATE >  9 ? 2 : 4;
+
+            if (show_artifacts_timer == 2)
+            {
+                dp_translation = cr[CR_YELLOW2GRAY_HEXEN];
+            }
+            if (show_artifacts_timer == 3)
+            {
+                if (CPlayer->powers[pw_speed] < FLIGHTTICS / 4)
+                dp_translation = cr[CR_YELLOW2RED_HEXEN];
+                else if (CPlayer->powers[pw_speed] > FLIGHTTICS / 2)
+                dp_translation = cr[CR_YELLOW2GREEN_HEXEN];
+            }
+
+            DrSmallNumber(CPlayer->powers[pw_speed] / TICRATE,
+                         (53 - xval) + (wide_4_3 ? wide_delta : 0), 31);
+
+            dp_translation = NULL;
+        }
+
+        // Defensive power
+        if (CPlayer->powers[pw_invulnerability])
+        {
+            xval = CPlayer->powers[pw_invulnerability] / TICRATE > 99 ? 0 :
+                   CPlayer->powers[pw_invulnerability] / TICRATE >  9 ? 2 : 4;
+
+            if (show_artifacts_timer == 2)
+            {
+                dp_translation = cr[CR_YELLOW2GRAY_HEXEN];
+            }
+            if (show_artifacts_timer == 3)
+            {
+                if (CPlayer->powers[pw_invulnerability] < FLIGHTTICS / 4)
+                dp_translation = cr[CR_YELLOW2RED_HEXEN];
+                else if (CPlayer->powers[pw_invulnerability] > FLIGHTTICS / 2)
+                dp_translation = cr[CR_YELLOW2GREEN_HEXEN];
+            }
+
+            DrSmallNumber(CPlayer->powers[pw_invulnerability] / TICRATE,
+                         (254 - xval) + (wide_4_3 ? wide_delta : wide_delta*2), 31);
+
+            dp_translation = NULL;
+        }
+
+        // Minotaur Active
+        // TODO - draw slighly higher if local time widget is active?
+        if (CPlayer->powers[pw_minotaur])
+        {
+            xval = CPlayer->powers[pw_minotaur] / TICRATE > 99 ? 0 :
+                   CPlayer->powers[pw_minotaur] / TICRATE >  9 ? 2 : 4;
+
+            if (show_artifacts_timer == 2)
+            {
+                dp_translation = cr[CR_YELLOW2GRAY_HEXEN];
+            }
+            if (show_artifacts_timer == 3)
+            {
+                if (CPlayer->powers[pw_minotaur] < FLIGHTTICS / 4)
+                dp_translation = cr[CR_YELLOW2RED_HEXEN];
+                else if (CPlayer->powers[pw_minotaur] > FLIGHTTICS / 2)
+                dp_translation = cr[CR_YELLOW2GREEN_HEXEN];
+            }
+
+            DrSmallNumber(CPlayer->powers[pw_minotaur] / TICRATE,
+                         (294 - xval) + (wide_4_3 ? wide_delta : wide_delta*2), 31);
+
+            dp_translation = NULL;
         }
     }
 

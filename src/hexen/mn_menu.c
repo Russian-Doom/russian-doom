@@ -208,6 +208,7 @@ static void DrawGameplay2Menu(void);
 static void M_RD_ColoredSBar();
 static void M_RD_ColoredGem(Direction_t direction);
 static void M_RD_NegativeHealth();
+static void M_RD_ShowArtiTimer(Direction_t direction);
 static void M_RD_CrossHairDraw();
 static void M_RD_CrossHairType();
 static void M_RD_CrossHairScale();
@@ -1114,6 +1115,7 @@ static MenuItem_t Gameplay2Items[] = {
     {ITT_SWITCH, "COLORED STATUS BAR:",  "HFPYJWDTNYST \'KTVTYNS:",       M_RD_ColoredSBar,     0}, // РАЗНОЦВЕТНЫЕ ЭЛЕМЕНТЫ
     {ITT_LRFUNC, "COLORED HEALTH GEM:",  "JRHFIBDFYBT RFVYZ PLJHJDMZ:",   M_RD_ColoredGem,      0}, // ОКРАШИВАНИЕ КАМНЯ ЗДОРОВЬЯ
     {ITT_SWITCH, "SHOW NEGATIVE HEALTH:","JNHBWFNTKMYJT PLJHJDMT:",       M_RD_NegativeHealth,  0}, // ОТРИЦАТЕЛЬНОЕ ЗДОРОВЬЕ
+    {ITT_LRFUNC,  "ARTIFACTS TIMER:",    "NFQVTH FHNTAFRNJD:",            M_RD_ShowArtiTimer,   0}, // ТАЙМЕР АРТЕФАКТОВ
     {ITT_TITLE,  "CROSSHAIR",            "GHBWTK",                        NULL,                 0}, // ПРИЦЕЛ
     {ITT_SWITCH, "DRAW CROSSHAIR:",      "JNJ,HF;FNM GHBWTK:",            M_RD_CrossHairDraw,   0}, // ОТОБРАЖАТЬ ПРИЦЕЛ
     {ITT_SWITCH, "INDICATION:",          "BYLBRFWBZ:",                    M_RD_CrossHairType,   0}, // ИНДИКАЦИЯ
@@ -1121,7 +1123,6 @@ static MenuItem_t Gameplay2Items[] = {
     {ITT_TITLE,  "GAMEPLAY",             "UTQVGKTQ",                      NULL,                 0}, // ГЕЙМПЛЕЙ
     {ITT_SWITCH, "FLIP GAME LEVELS:",    "PTHRFKMYJT JNHF;TYBT EHJDYTQ:", M_RD_FlipLevels,      0}, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
     {ITT_SWITCH, "PLAY INTERNAL DEMOS:", "GHJBUHSDFNM LTVJPFGBCB:",       M_RD_NoDemos,         0}, // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
-    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
     {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
     {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
     {ITT_SETMENU, "< PREV PAGE",           "^ GHTLSLEOFZ CNHFYBWF",       &Gameplay1Menu,       0}  // < ПРЕДЫДУЩАЯ СТРАНИЦА
@@ -3885,20 +3886,30 @@ static void DrawGameplay2Menu(void)
         RD_M_DrawTextSmallENG(negative_health ? "ON" : "OFF", 190 + wide_delta, 62,
                               negative_health ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
+        // Artifacts timer
+        RD_M_DrawTextSmallENG(show_artifacts_timer == 1 ? "GOLD" :
+                              show_artifacts_timer == 2 ? "SILVER" :
+                              show_artifacts_timer == 3 ? "COLORED" : "OFF",
+                              150 + wide_delta, 72,
+                              show_artifacts_timer == 1 ? CR_GRAY2DARKGOLD_HEXEN :
+                              show_artifacts_timer == 2 ? CR_GRAY2GDARKGRAY_HEXEN :
+                              show_artifacts_timer == 3 ? CR_GRAY2GREEN_HEXEN :
+                              CR_GRAY2RED_HEXEN);
+
         //
         // CROSSHAIR
         //
 
         // Draw crosshair
-        RD_M_DrawTextSmallENG(crosshair_draw ? "ON" : "OFF", 150 + wide_delta, 82,
+        RD_M_DrawTextSmallENG(crosshair_draw ? "ON" : "OFF", 150 + wide_delta, 92,
                               crosshair_draw ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Indication
-        RD_M_DrawTextSmallENG(crosshair_type == 1 ? "HEALTH" : "STATIC",  111 + wide_delta, 92,
+        RD_M_DrawTextSmallENG(crosshair_type == 1 ? "HEALTH" : "STATIC",  111 + wide_delta, 102,
                               crosshair_type ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Increased size
-        RD_M_DrawTextSmallENG(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 102,
+        RD_M_DrawTextSmallENG(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 112,
                               crosshair_scale ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         //
@@ -3906,11 +3917,11 @@ static void DrawGameplay2Menu(void)
         //
 
         // Flip game levels
-        RD_M_DrawTextSmallENG(flip_levels ? "ON" : "OFF", 153 + wide_delta, 122,
+        RD_M_DrawTextSmallENG(flip_levels ? "ON" : "OFF", 153 + wide_delta, 132,
                               flip_levels ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Play internal demos
-        RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON", 179 + wide_delta, 132,
+        RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON", 179 + wide_delta, 142,
                               no_internal_demos ? CR_GRAY2RED_HEXEN : CR_GRAY2GREEN_HEXEN);
     }
     else
@@ -3934,21 +3945,31 @@ static void DrawGameplay2Menu(void)
         RD_M_DrawTextSmallRUS(negative_health ? "DRK" : "DSRK", 211 + wide_delta, 62,
                               negative_health ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
+        // Таймер артефаектов
+        RD_M_DrawTextSmallRUS(show_artifacts_timer == 1 ? "PJKJNJQ" :
+                              show_artifacts_timer == 2 ? "CTHT,HZYSQ" :
+                              show_artifacts_timer == 3 ? "HFPYJWDTNYSQ" : "DSRK",
+                              175 + wide_delta, 72,
+                              show_artifacts_timer == 1 ? CR_GRAY2DARKGOLD_HEXEN :
+                              show_artifacts_timer == 2 ? CR_GRAY2GDARKGRAY_HEXEN :
+                              show_artifacts_timer == 3 ? CR_GRAY2GREEN_HEXEN :
+                              CR_GRAY2RED_HEXEN);
+
         //
         // ПРИЦЕЛ
         //
 
         // Отображать прицел
-        RD_M_DrawTextSmallRUS(crosshair_draw ? "DRK" : "DSRK", 175 + wide_delta, 82,
+        RD_M_DrawTextSmallRUS(crosshair_draw ? "DRK" : "DSRK", 175 + wide_delta, 92,
                               crosshair_draw ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Индикация
         RD_M_DrawTextSmallRUS(crosshair_type == 1 ? "PLJHJDMT" : // ЗДОРОВЬЕ
                                                     "CNFNBXYFZ", // СТАТИЧНАЯ
-                              111 + wide_delta, 92, crosshair_type ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+                              111 + wide_delta, 102, crosshair_type ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Увеличенный размер
-        RD_M_DrawTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 102,
+        RD_M_DrawTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 112,
                               crosshair_scale ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         //
@@ -3956,11 +3977,11 @@ static void DrawGameplay2Menu(void)
         //
 
         // Зеркальное отражение уровней
-        RD_M_DrawTextSmallRUS(flip_levels ? "DRK" : "DSRK", 255 + wide_delta, 122,
+        RD_M_DrawTextSmallRUS(flip_levels ? "DRK" : "DSRK", 255 + wide_delta, 132,
                               flip_levels ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Проигрывать демозаписи
-        RD_M_DrawTextSmallRUS(no_internal_demos ? "DRK" : "DSRK", 211 + wide_delta, 132,
+        RD_M_DrawTextSmallRUS(no_internal_demos ? "DRK" : "DSRK", 211 + wide_delta, 142,
                               no_internal_demos ? CR_GRAY2RED_HEXEN : CR_GRAY2GREEN_HEXEN);
     }
 }
@@ -3978,6 +3999,11 @@ static void M_RD_ColoredGem(Direction_t direction)
 static void M_RD_NegativeHealth()
 {
     negative_health ^= 1;
+}
+
+static void M_RD_ShowArtiTimer(Direction_t direction)
+{
+    RD_Menu_SpinInt(&show_artifacts_timer, 0, 3, direction);
 }
 
 static void M_RD_CrossHairDraw()
@@ -5034,6 +5060,7 @@ void M_RD_BackToDefaults_Recommended (void)
     sbar_colored         = 0;
     sbar_colored_gem     = 0;
     negative_health      = 0;
+    show_artifacts_timer = 0;
     // Gameplay (4)
     crosshair_draw       = 0;
     crosshair_type       = 1;
@@ -5133,6 +5160,7 @@ static void M_RD_BackToDefaults_Original(void)
     sbar_colored         = 0;
     sbar_colored_gem     = 0;
     negative_health      = 0;
+    show_artifacts_timer = 0;
     // Gameplay (4)
     crosshair_draw       = 0;
     crosshair_type       = 1;
