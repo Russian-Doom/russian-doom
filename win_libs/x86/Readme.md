@@ -10,6 +10,32 @@
 | libvorbis-0.dll     | 638a1c86c660613cfd30bae95d2b2054 | Bundled with SDL2_mixer 2.0.4 |
 | libvorbisfile-3.dll | ea20e1550ad37aa978897989bebe3098 | Bundled with SDL2_mixer 2.0.4 |
 | SDL2.dll            | 9fd3ec6d8de3cff290e7a78177b17362 |            2.0.20             |
-| SDL2_mixer.dll      | d6642b15609a56fbb947b44760d1e5a9 |             2.0.4             |
+| SDL2_mixer.dll      | 1d5d1f3d18312a04dd9287e742fc8e50 |  Built from git <sup>1</sup>  |
 | SDL2_net.dll        | c1332b71a2f74e35fc6ae892f081272c |             2.0.1             |
 | zlib1.dll           | 8b2a6e8419a8a4e7d3fd023d97455fb9 |        MSYS2 1.2.11-9         |
+
+1. We require SDL_mixer binary of at least
+   [1c00927](https://github.com/libsdl-org/SDL_mixer/commit/1c0092787398097360f7da745c7644fd32697f3b) revision.
+   Built revision [6845d9f](https://github.com/libsdl-org/SDL_mixer/commit/6845d9f3cb3f35542f1ec7e74dba6b30bf968959)
+   in [MSYS2](https://www.msys2.org/) environment. Configured with next commands:
+   ``` bash
+   ./autogen.sh --host=i686-w64-mingw64
+   
+   ./configure \
+   --enable-music-wave \
+   --enable-music-mod \
+   --enable-music-mod-modplug \
+   --enable-music-mod-modplug-shared \
+   --enable-music-midi \
+   --enable-music-midi-timidity \
+   --enable-music-midi-native \
+   --enable-music-ogg \
+   --enable-music-ogg-shared \
+   --enable-music-flac \
+   --enable-music-flac-shared \
+   --enable-music-mp3 \
+   --enable-music-mp3-mpg123 \
+   --enable-music-mp3-mpg123-shared \
+   --disable-music-midi-fluidsynth \
+   --disable-music-opus
+   ```
