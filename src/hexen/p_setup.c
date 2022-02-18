@@ -32,6 +32,11 @@
 #include "p_local.h"
 #include "rd_rushexen.h"
 
+// [crispy] support maps with compressed ZDBSP nodes
+#ifdef HAVE_LIBZ
+#include <zlib.h>
+#endif
+
 // MACROS ------------------------------------------------------------------
 
 #define MAPINFO_SCRIPT_NAME "MAPINFO"
@@ -78,6 +83,15 @@ struct mapInfo_s
     int fadetable;
     char songLump[10];
 };
+
+typedef enum
+{
+    DOOMBSP = 0x000,
+    DEEPBSP = 0x001,
+    ZDBSPX  = 0x002,
+    ZDBSPZ  = 0x004,
+    HEXEN   = 0x100,
+} mapformat_t;
 
 // EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
 
@@ -169,6 +183,53 @@ static int cd_NonLevelTracks[6];        // Non-level specific song cd track numb
 /*
 ================================================================================
 =
+= GetOffset
+=
+= [crispy] recalculate seg offsets
+= adapted from prboom-plus/src/p_setup.c:474-482
+=
+================================================================================
+*/
+
+static fixed_t GetOffset (vertex_t *v1, vertex_t *v2)
+{
+    fixed_t dx, dy;
+    fixed_t r;
+
+    dx = (v1->x - v2->x)>>FRACBITS;
+    dy = (v1->y - v2->y)>>FRACBITS;
+    r = (fixed_t)(sqrt(dx*dx + dy*dy))<<FRACBITS;
+
+    return r;
+}
+
+/*
+================================================================================
+=
+= GetSectorAtNullAddress
+=
+================================================================================
+*/
+
+static sector_t *GetSectorAtNullAddress (void)
+{
+    static boolean null_sector_is_initialized = false;
+    static sector_t null_sector;
+
+    if (!null_sector_is_initialized)
+    {
+        memset(&null_sector, 0, sizeof(null_sector));
+        I_GetMemoryValue(0, &null_sector.floorheight, 4);
+        I_GetMemoryValue(4, &null_sector.ceilingheight, 4);
+        null_sector_is_initialized = true;
+    }
+
+    return &null_sector;
+}
+
+/*
+================================================================================
+=
 = P_LoadVertexes
 =
 ================================================================================
@@ -223,11 +284,120 @@ static void P_LoadSegs (const int lump)
         ldef = &lines[linedef];
         li->linedef = ldef;
         side = SHORT(ml->side);
+
+        // [JN] e6y: check for wrong indexes
+        if ((unsigned)ldef->sidenum[side] >= (unsigned)numsides)
+        {
+            I_Error(english_language ?
+                    "P_LoadSegs: linedef %d for seg %d references a non-existent sidedef %d" :
+                    "P_LoadSegs: линия %d для сегмента %d указывает на несуществующую сторону %d",
+                    linedef, i, (unsigned)ldef->sidenum[side]);
+        }
+
         li->sidedef = &sides[ldef->sidenum[side]];
         li->frontsector = sides[ldef->sidenum[side]].sector;
+        if (ldef-> flags & ML_TWOSIDED)
+        {
+            int sidenum = ldef->sidenum[side ^ 1];
+
+            // If the sidenum is out of range, this may be a "glass hack"
+            // impassible window.  Point at side #0 (this may not be
+            // the correct Vanilla behavior; however, it seems to work for
+            // OTTAWAU.WAD, which is the one place I've seen this trick
+            // used).
+
+            if (sidenum < 0 || sidenum >= numsides)
+            {
+                // [crispy] linedef has two-sided flag set, but no valid second sidedef;
+                // but since it has a midtexture, it is supposed to be rendered just
+                // like a regular one-sided linedef
+                if (li->sidedef->midtexture)
+                {
+                    li->backsector = 0;
+                    fprintf(stderr, english_language ?
+                            "P_LoadSegs: Linedef %d has two-sided flag set, but no second sidedef\n" :
+                            "P_LoadSegs: линия %d помечена как двусторонняя, но вторая сторона отсутствует\n", i);
+                }
+                else
+                {
+                    li->backsector = GetSectorAtNullAddress();
+                }
+            }
+            else
+            {
+                li->backsector = sides[sidenum].sector;
+            }
+        }
+        else
+        {
+            li->backsector = 0;
+        }
+    }
+
+    W_ReleaseLumpNum(lump);
+}
+
+/*
+================================================================================
+=
+= P_LoadSegs_DeePBSP
+=
+= [crispy] support maps with DeePBSP nodes
+= adapted from prboom-plus/src/p_setup.c:633-752
+=
+================================================================================
+*/
+
+static void P_LoadSegs_DeePBSP (int lump)
+{
+    int i;
+    mapseg_deepbsp_t *data;
+
+    numsegs = W_LumpLength(lump) / sizeof(mapseg_deepbsp_t);
+    segs = Z_Malloc(numsegs * sizeof(seg_t), PU_LEVEL, 0);
+    data = (mapseg_deepbsp_t *)W_CacheLumpNum(lump, PU_STATIC);
+
+    for (i = 0; i < numsegs; i++)
+    {
+        seg_t *li = segs + i;
+        mapseg_deepbsp_t *ml = data + i;
+        int side, linedef;
+        line_t *ldef;
+
+        li->v1 = &vertexes[ml->v1];
+        li->v2 = &vertexes[ml->v2];
+        li->angle = (SHORT(ml->angle))<<16;
+
+        linedef = (unsigned short)SHORT(ml->linedef);
+        ldef = &lines[linedef];
+        li->linedef = ldef;
+        side = SHORT(ml->side);
+        li->sidedef = &sides[ldef->sidenum[side]];
+        li->frontsector = sides[ldef->sidenum[side]].sector;
+        li->offset = GetOffset(li->v1, (ml->side ? ldef->v2 : ldef->v1));
+
         if (ldef->flags & ML_TWOSIDED)
         {
-            li->backsector = sides[ldef->sidenum[side ^ 1]].sector;
+            int sidenum = ldef->sidenum[side ^ 1];
+
+            if (sidenum < 0 || sidenum >= numsides)
+            {
+                if (li->sidedef->midtexture)
+                {
+                    li->backsector = 0;
+                    fprintf(stderr, english_language ?
+                            "P_LoadSegs: Linedef %d has two-sided flag set, but no second sidedef\n" :
+                            "P_LoadSegs: линия %d помечена как двусторонняя, но вторая сторона отсутствует\n", i);
+                }
+                else
+                {
+                    li->backsector = GetSectorAtNullAddress();
+                }
+            }
+            else
+            {
+                li->backsector = sides[sidenum].sector;
+            }
         }
         else
         {
@@ -258,6 +428,35 @@ static void P_LoadSubsectors (const int lump)
     {
         subsectors[i].numlines  = (unsigned short)SHORT(data[i].numsegs );
         subsectors[i].firstline = (unsigned short)SHORT(data[i].firstseg);
+    }
+
+    W_ReleaseLumpNum(lump);
+}
+
+/*
+================================================================================
+=
+= P_LoadSubsectors_DeePBSP
+=
+= [crispy] support maps with DeePBSP nodes
+= adapted from prboom-plus/src/p_setup.c:843-863
+=
+================================================================================
+*/
+
+static void P_LoadSubsectors_DeePBSP (int lump)
+{
+    int i;
+    mapsubsector_deepbsp_t *data;
+
+    numsubsectors = W_LumpLength(lump) / sizeof(mapsubsector_deepbsp_t);
+    subsectors = Z_Malloc(numsubsectors * sizeof(subsector_t), PU_LEVEL, 0);
+    data = (mapsubsector_deepbsp_t *)W_CacheLumpNum(lump, PU_STATIC);
+
+    for (i = 0; i < numsubsectors; i++)
+    {
+        subsectors[i].numlines = (int)data[i].numsegs;
+        subsectors[i].firstline = (int)data[i].firstseg;
     }
 
     W_ReleaseLumpNum(lump);
@@ -374,6 +573,345 @@ static void P_LoadNodes (const int lump)
 /*
 ================================================================================
 =
+= P_LoadNodes_DeePBSP
+=
+= [crispy] support maps with DeePBSP nodes
+= adapted from prboom-plus/src/p_setup.c:995-1038
+=
+================================================================================
+*/
+
+static void P_LoadNodes_DeePBSP (int lump)
+{
+    int         i;
+    const byte *data;
+
+    numnodes = (W_LumpLength (lump) - 8) / sizeof(mapnode_deepbsp_t);
+    nodes = Z_Malloc(numnodes * sizeof(node_t), PU_LEVEL, 0);
+    data = W_CacheLumpNum (lump, PU_STATIC);
+
+    // [crispy] warn about missing nodes
+    if (!data || !numnodes)
+    {
+        if (numsubsectors == 1)
+        {
+            fprintf(stderr, english_language ?
+                    "P_LoadNodes: No nodes in map, but only one subsector\n" :
+                    "P_LoadNodes: у уровня отсутствуют ноды, доступен только один подсектор\n");
+        }
+        else
+        {
+            I_Error(english_language ?
+                    "P_LoadNodes: No nodes in map!" :
+                    "P_LoadNodes: у уровня отсутсвуют ноды!");
+        }
+    }
+
+    // skip header
+    data += 8;
+
+    for (i = 0; i < numnodes; i++)
+    {
+        node_t *no = nodes + i;
+        mapnode_deepbsp_t *mn = (mapnode_deepbsp_t *) data + i;
+        int j;
+
+        no->x = SHORT(mn->x)<<FRACBITS;
+        no->y = SHORT(mn->y)<<FRACBITS;
+        no->dx = SHORT(mn->dx)<<FRACBITS;
+        no->dy = SHORT(mn->dy)<<FRACBITS;
+
+        for (j = 0; j < 2; j++)
+        {
+            int k;
+            no->children[j] = (unsigned int)(mn->children[j]);
+
+            for (k = 0; k < 4; k++)
+            no->bbox[j][k] = SHORT(mn->bbox[j][k])<<FRACBITS;
+        }
+    }
+
+    W_ReleaseLumpNum(lump);
+}
+
+/*
+================================================================================
+=
+= P_LoadNodes_ZDBSP
+=
+= [crispy] support maps with compressed or uncompressed ZDBSP nodes
+= adapted from prboom-plus/src/p_setup.c:1040-1331
+= heavily modified, condensed and simplyfied
+= - removed most paranoid checks, brought in line with Vanilla P_LoadNodes()
+= - removed const type punning pointers
+= - inlined P_LoadZSegs()
+= - added support for compressed ZDBSP nodes
+= - added support for flipped levels
+=
+================================================================================
+*/
+
+static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
+{
+    byte *data;
+    unsigned int i;
+#ifdef HAVE_LIBZ
+    byte *output;
+#endif
+
+    unsigned int orgVerts, newVerts;
+    unsigned int numSubs, currSeg;
+    unsigned int numSegs;
+    unsigned int numNodes;
+    vertex_t *newvertarray = NULL;
+
+    data = W_CacheLumpNum(lump, PU_LEVEL);
+
+    // 0. Uncompress nodes lump (or simply skip header)
+
+    if (compressed)
+    {
+#ifdef HAVE_LIBZ
+        const int len =  W_LumpLength(lump);
+        int outlen, err;
+        z_stream *zstream;
+
+        // first estimate for compression rate:
+        // output buffer size == 2.5 * input size
+        outlen = 2.5 * len;
+        output = Z_Malloc(outlen, PU_STATIC, 0);
+
+        // initialize stream state for decompression
+        zstream = malloc(sizeof(*zstream));
+        memset(zstream, 0, sizeof(*zstream));
+        zstream->next_in = data + 4;
+        zstream->avail_in = len - 4;
+        zstream->next_out = output;
+        zstream->avail_out = outlen;
+
+        if (inflateInit(zstream) != Z_OK)
+            I_Error(english_language ?
+                    "P_LoadNodes: Error during ZDBSP nodes decompression initialization!" :
+                    "P_LoadNodes: ошибка при инициализации распаковки нодов ZDBSP!");
+
+        // resize if output buffer runs full
+        while ((err = inflate(zstream, Z_SYNC_FLUSH)) == Z_OK)
+        {
+            int outlen_old = outlen;
+            outlen = 2 * outlen_old;
+            output = I_Realloc(output, outlen);
+            zstream->next_out = output + outlen_old;
+            zstream->avail_out = outlen - outlen_old;
+        }
+
+        if (err != Z_STREAM_END)
+            I_Error(english_language ?
+                    "P_LoadNodes: Error during ZDBSP nodes decompression!" :
+                    "P_LoadNodes: ошибка при распаковке нодов ZDBSP!");
+
+        fprintf(stderr, english_language ?
+                "P_LoadNodes: ZDBSP nodes compression ratio %.3f\n" :
+                "P_LoadNodes: степень сжатия нодов ZDBSP: %.3f\n",
+                (float)zstream->total_out/zstream->total_in);
+
+        data = output;
+        len = zstream->total_out;
+
+        if (inflateEnd(zstream) != Z_OK)
+            I_Error(english_language ?
+                    "P_LoadNodes: Error during ZDBSP nodes decompression shut-down!" :
+                    "P_LoadNodes: ошибка при завершении распаковки нодов ZDBSP!");
+
+        // release the original data lump
+        W_ReleaseLumpNum(lump);
+        free(zstream);
+#else
+        I_Error(english_language ?
+                "P_LoadNodes: Compressed ZDBSP nodes are not supported!" :
+                "P_LoadNodes: сжатые ноды формата ZDBSP не поддерживаются!");
+#endif
+    }
+    else
+    {
+        // skip header
+        data += 4;
+    }
+
+    // 1. Load new vertices added during node building
+
+    orgVerts = *((unsigned int*)data);
+    data += sizeof(orgVerts);
+
+    newVerts = *((unsigned int*)data);
+    data += sizeof(newVerts);
+
+    if (orgVerts + newVerts == (unsigned int)numvertexes)
+    {
+        newvertarray = vertexes;
+    }
+    else
+    {
+        newvertarray = Z_Malloc((orgVerts + newVerts) * sizeof(vertex_t), PU_LEVEL, 0);
+        memset(newvertarray, 0, (orgVerts + newVerts) * sizeof(vertex_t));
+        memcpy(newvertarray, vertexes, orgVerts * sizeof(vertex_t));
+    }
+
+    for (i = 0; i < newVerts; i++)
+    {
+        newvertarray[i + orgVerts].x = *((unsigned int*)data);
+        data += sizeof(newvertarray[0].x);
+
+        newvertarray[i + orgVerts].y = *((unsigned int*)data);
+        data += sizeof(newvertarray[0].y);
+    }
+
+    if (vertexes != newvertarray)
+    {
+        for (i = 0; i < (unsigned int)numlines; i++)
+        {
+            lines[i].v1 = lines[i].v1 - vertexes + newvertarray;
+            lines[i].v2 = lines[i].v2 - vertexes + newvertarray;
+        }
+
+        Z_Free(vertexes);
+        vertexes = newvertarray;
+        numvertexes = orgVerts + newVerts;
+    }
+
+    // 2. Load subsectors
+
+    numSubs = *((unsigned int*)data);
+    data += sizeof(numSubs);
+
+    if (numSubs < 1)
+	I_Error(english_language ?
+            "P_LoadNodes: No subsectors in map!" :
+            "P_LoadNodes: на уровне отсутствуют подсекторы!");
+
+    numsubsectors = numSubs;
+    subsectors = Z_Malloc(numsubsectors * sizeof(subsector_t), PU_LEVEL, 0);
+
+    for (i = currSeg = 0; i < numsubsectors; i++)
+    {
+        mapsubsector_zdbsp_t *mseg = (mapsubsector_zdbsp_t*) data + i;
+
+        subsectors[i].firstline = currSeg;
+        subsectors[i].numlines = mseg->numsegs;
+        currSeg += mseg->numsegs;
+    }
+
+    data += numsubsectors * sizeof(mapsubsector_zdbsp_t);
+
+    // 3. Load segs
+
+    numSegs = *((unsigned int*)data);
+    data += sizeof(numSegs);
+
+    // The number of stored segs should match the number of segs used by subsectors
+    if (numSegs != currSeg)
+    {
+        I_Error(english_language ?
+                "P_LoadNodes: Incorrect number of segs in ZDBSP nodes!" :
+                "P_LoadNodes: некорректное количество сегментов в нодах ZDBSP!");
+    }
+
+    numsegs = numSegs;
+    segs = Z_Malloc(numsegs * sizeof(seg_t), PU_LEVEL, 0);
+
+    for (i = 0; i < numsegs; i++)
+    {
+        line_t *ldef;
+        unsigned int linedef;
+        unsigned char side;
+        seg_t *li = segs + i;
+        mapseg_zdbsp_t *ml = (mapseg_zdbsp_t *) data + i;
+
+        li->v1 = &vertexes[ml->v1];
+        li->v2 = &vertexes[ml->v2];
+
+        linedef = (unsigned short)SHORT(ml->linedef);
+        ldef = &lines[linedef];
+        li->linedef = ldef;
+        side = ml->side;
+        li->sidedef = &sides[ldef->sidenum[side]];
+        li->frontsector = sides[ldef->sidenum[side]].sector;
+
+        // seg angle and offset are not included
+        li->angle = R_PointToAngle2(segs[i].v1->x, segs[i].v1->y, segs[i].v2->x, segs[i].v2->y);
+        li->offset = GetOffset(li->v1, (ml->side ? ldef->v2 : ldef->v1));
+
+        if (ldef->flags & ML_TWOSIDED)
+        {
+            int sidenum = ldef->sidenum[side ^ 1];
+
+            if (sidenum < 0 || sidenum >= numsides)
+            {
+                if (li->sidedef->midtexture)
+                {
+                    li->backsector = 0;
+                    fprintf(stderr, english_language ?
+                            "P_LoadSegs: Linedef %d has two-sided flag set, but no second sidedef\n" :
+                            "P_LoadSegs: линия %d помечена как двусторонняя, но вторая сторона отсутствует\n", i);
+                }
+                else
+                {
+                    li->backsector = GetSectorAtNullAddress();
+                }
+            }
+            else
+            {
+                li->backsector = sides[sidenum].sector;
+            }
+        }
+        else
+        {
+            li->backsector = 0;
+        }
+    }
+
+    data += numsegs * sizeof(mapseg_zdbsp_t);
+
+    // 4. Load nodes
+
+    numNodes = *((unsigned int*)data);
+    data += sizeof(numNodes);
+
+    numnodes = numNodes;
+    nodes = Z_Malloc(numnodes * sizeof(node_t), PU_LEVEL, 0);
+
+    for (i = 0; i < numnodes; i++)
+    {
+        int j, k;
+        node_t *no = nodes + i;
+        mapnode_zdbsp_t *mn = (mapnode_zdbsp_t *) data + i;
+
+        no->x = SHORT(mn->x)<<FRACBITS;
+        no->y = SHORT(mn->y)<<FRACBITS;
+        no->dx = SHORT(mn->dx)<<FRACBITS;
+        no->dy = SHORT(mn->dy)<<FRACBITS;
+
+        for (j = 0; j < 2; j++)
+        {
+            no->children[j] = (unsigned int)(mn->children[j]);
+
+            for (k = 0; k < 4; k++)
+            no->bbox[j][k] = SHORT(mn->bbox[j][k])<<FRACBITS;
+        }
+    }
+
+    W_ReleaseLumpNum(lump);
+
+#ifdef HAVE_LIBZ
+    if (compressed)
+    {
+        Z_Free(output);
+    }
+#endif
+}
+
+/*
+================================================================================
+=
 = P_LoadThings
 =
 ================================================================================
@@ -393,7 +931,7 @@ static void P_LoadThings (const int lump)
     for (i = 0 ; i < numthings ; i++)
     {
         mapthing_t *mt = (mapthing_t *) data + i;
-        
+
         spawnthing.tid = SHORT(mt->tid);
         spawnthing.x = SHORT(mt->x);
         spawnthing.y = SHORT(mt->y);
@@ -1024,6 +1562,70 @@ void P_RestoreSectorBrightness(void)
 
 //=============================================================================
 
+/*
+================================================================================
+=
+= P_CheckMapFormat
+=
+= [crispy] support maps with NODES in compressed or uncompressed ZDBSP
+= format or DeePBSP format and/or LINEDEFS and THINGS lumps in Hexen format
+=
+================================================================================
+*/
+
+static mapformat_t P_CheckMapFormat (int lumpnum)
+{
+    int b;
+    mapformat_t format = 0;
+    byte *nodes = NULL;
+
+    if ((b = lumpnum+ML_BLOCKMAP+1) < numlumps
+    &&  !strncasecmp(lumpinfo[b]->name, "BEHAVIOR", 8))
+    {
+        fprintf(stderr, english_language ?
+                "P_CheckMapFormat: Hexen format (" :
+                "P_CheckMapFormat: формат Hexen (");
+        format |= HEXEN;
+    }
+    else
+    {
+        fprintf(stderr, english_language ?
+                "P_CheckMapFormat: Doom format (" :
+                "P_CheckMapFormat: формат Doom (");
+    }
+
+    if (!((b = lumpnum+ML_NODES) < numlumps
+    && (nodes = W_CacheLumpNum(b, PU_CACHE))
+    &&  W_LumpLength(b) > 0))
+    {
+        fprintf(stderr, english_language ? "no nodes" : "ноды отсутствуют");
+    }
+    else if (!memcmp(nodes, "xNd4\0\0\0\0", 8))
+    {
+        fprintf(stderr, "DeePBSP");
+        format |= DEEPBSP;
+    }
+    else if (!memcmp(nodes, "XNOD", 4))
+    {
+        fprintf(stderr, "ZDBSP");
+        format |= ZDBSPX;
+    }
+    else if (!memcmp(nodes, "ZNOD", 4))
+    {
+        fprintf(stderr, english_language ? "compressed ZDBSP" : "сжатые ZDBSP");
+        format |= ZDBSPZ;
+    }
+    else
+    {
+        fprintf(stderr, "BSP");
+    }
+    fprintf(stderr, ")\n");
+
+    if (nodes)
+    W_ReleaseLumpNum(b);
+
+    return format;
+}
 
 /*
 ================================================================================
@@ -1100,7 +1702,7 @@ static void P_LoadImprovedTextureLumpsHX (int map)
             P_LoadLineDefs(lumpnum);
         }
         break;
-        
+
         default:
         {
             // Just load original SECTORS/SIDEDEFS/LINEDEFS lumps:
@@ -1154,7 +1756,7 @@ static void P_LoadImprovedTextureLumpsDK (int map)
             P_LoadLineDefs(lumpnum);
         }
         break;
-        
+
         default:
         {
             // Just load original SECTORS/SIDEDEFS/LINEDEFS lumps:
@@ -1180,6 +1782,7 @@ void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
     int lumpnum;
     const CMDInjectionRecord_t* injectionTable;
     mobj_t *mobj;
+    mapformat_t crispy_mapformat;
     boolean crispy_validblockmap;
     unsigned const int starttime = SDL_GetTicks();
     unsigned int endtime;
@@ -1208,6 +1811,7 @@ void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
     // Begin processing map lumps
     // Note: most of this ordering is important
     //
+    crispy_mapformat = P_CheckMapFormat(lumpnum); // [crispy] check and log map and nodes format
     crispy_validblockmap = P_LoadBlockMap (lumpnum+ML_BLOCKMAP); // [crispy] (re-)create BLOCKMAP if necessary
     P_LoadVertexes(lumpnum + ML_VERTEXES);
 
@@ -1234,9 +1838,23 @@ void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
         P_CreateBlockMap();
     }
 
-    P_LoadSubsectors(lumpnum + ML_SSECTORS);
-    P_LoadNodes(lumpnum + ML_NODES);
-    P_LoadSegs(lumpnum + ML_SEGS);
+    if (crispy_mapformat & (ZDBSPX | ZDBSPZ))
+    {
+        P_LoadNodes_ZDBSP (lumpnum+ML_NODES, crispy_mapformat & ZDBSPZ);
+    }
+    else if (crispy_mapformat & DEEPBSP)
+    {
+        P_LoadSubsectors_DeePBSP (lumpnum+ML_SSECTORS);
+        P_LoadNodes_DeePBSP (lumpnum+ML_NODES);
+        P_LoadSegs_DeePBSP (lumpnum+ML_SEGS);
+    }
+    else
+    {
+        P_LoadSubsectors (lumpnum+ML_SSECTORS);
+        P_LoadNodes (lumpnum+ML_NODES);
+        P_LoadSegs (lumpnum+ML_SEGS);
+    }
+
     rejectmatrix = W_CacheLumpNum(lumpnum + ML_REJECT, PU_LEVEL);
     P_GroupLines();
     // [crispy] remove slime trails
