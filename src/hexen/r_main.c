@@ -93,6 +93,7 @@ extern lighttable_t **walllights;
 void (*colfunc) (void);
 void (*basecolfunc) (void);
 void (*tlcolfunc) (void);
+void (*alttlcolfunc) (void);
 void (*extratlcolfunc) (void);
 void (*transcolfunc) (void);
 void (*transtlcolfunc) (void);
@@ -637,6 +638,7 @@ void R_ExecuteSetViewSize (void)
     {
         colfunc = basecolfunc = R_DrawColumn;
         tlcolfunc = R_DrawTLColumn;
+        alttlcolfunc = R_DrawAltTLColumn;
         extratlcolfunc = R_DrawExtraTLColumn;
         transcolfunc = R_DrawTranslatedColumn;
         transtlcolfunc = R_DrawTranslatedTLColumn;
@@ -646,6 +648,7 @@ void R_ExecuteSetViewSize (void)
     {
         colfunc = basecolfunc = R_DrawColumnLow;
         tlcolfunc = R_DrawTLColumnLow;
+        alttlcolfunc = R_DrawAltTLColumnLow;
         extratlcolfunc = R_DrawExtraTLColumnLow;
         transcolfunc = R_DrawTranslatedColumnLow;
         transtlcolfunc = R_DrawTranslatedTLColumnLow;

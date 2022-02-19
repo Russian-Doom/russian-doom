@@ -254,10 +254,7 @@ void R_DrawTLColumn (void)
 #ifdef RANGECHECK
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawTLColumn: %i to %i at %i" :
-                 "R_DrawTLColumn: %i к %i у %i",
-                 dc_yl, dc_yh, dc_x);
+        return;
     }
 #endif
 
@@ -322,10 +319,7 @@ void R_DrawTLColumnLow (void)
 #ifdef RANGECHECK
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawTLColumnLow: %i to %i at %i" :
-                 "R_DrawTLColumnLow: %i к %i у %i",
-                 dc_yl, dc_yh, x);
+        return;
     }
 #endif
 
@@ -384,48 +378,168 @@ void R_DrawTLColumnLow (void)
     }
 }
 
-//============================================================================
-//
-// R_DrawAltTLColumn
-//
-//============================================================================
+/*
+================================================================================
+=
+= R_DrawAltTLColumn
+=
+================================================================================
+*/
 
 void R_DrawAltTLColumn(void)
 {
-    int count;
-    byte *dest;
-    fixed_t frac, fracstep;
+    int      count = dc_yh - dc_yl;
+    int      heightmask = dc_texheight-1;
+    byte    *dest;
+    fixed_t  frac;
 
     if (!dc_yl)
+    {
         dc_yl = 1;
+    }
     if (dc_yh == viewheight - 1)
+    {
         dc_yh = viewheight - 2;
+    }
 
-    count = dc_yh - dc_yl;
     if (count < 0)
+    {
         return;
+    }
 
 #ifdef RANGECHECK
     if ((unsigned) dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
-        I_Error(english_language ?
-                "R_DrawAltTLColumn: %i to %i at %i" :
-                "R_DrawAltTLColumn: %i к %i в %i",
-                dc_yl, dc_yh, dc_x);
+    {
+        return;
+    }
 #endif
 
     dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
+    frac = dc_texturemid + (dc_yl - centery) * dc_iscale;
 
-    fracstep = dc_iscale;
-    frac = dc_texturemid + (dc_yl - centery) * fracstep;
-
-    do
+    if (dc_texheight & heightmask)  // not a power of 2 -- killough
     {
-        *dest = tinttable[((*dest) << 8)
-                          + dc_colormap[dc_source[(frac >> FRACBITS) & 127]]];
-        dest += screenwidth;
-        frac += fracstep;
+        heightmask++;
+        heightmask <<= FRACBITS;
+
+        if (frac < 0)
+            while ((frac += heightmask) < 0);
+        else
+            while (frac >= heightmask)
+                   frac -= heightmask;
+
+        do
+        {
+            *dest = tinttable[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            dest += screenwidth;
+            if ((frac += dc_iscale) >= heightmask)
+            {
+                frac -= heightmask;
+            }
+        }
+        while (count--);
     }
-    while (count--);
+    else  // texture height is a power of 2 -- killough
+    {
+        do
+        {
+            *dest = tinttable[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
+            dest += screenwidth;
+            frac += dc_iscale;
+        } while (count--);
+    }
+}
+
+/*
+================================================================================
+=
+= R_DrawAltTLColumnLow
+=
+================================================================================
+*/
+
+void R_DrawAltTLColumnLow(void)
+{
+    int      count = dc_yh - dc_yl;
+    int      x = dc_x << 1; // Blocky mode, need to multiply by 2.
+    int      heightmask = dc_texheight-1;
+    byte    *dest, *dest2, *dest3, *dest4;
+    fixed_t  frac;
+
+    if (!dc_yl)
+    {
+        dc_yl = 1;
+    }
+    if (dc_yh == viewheight - 1)
+    {
+        dc_yh = viewheight - 2;
+    }
+
+    if (count < 0)
+    {
+        return;
+    }
+
+#ifdef RANGECHECK
+    if ((unsigned) dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        return;
+    }
+#endif
+
+    dest = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
+    frac = dc_texturemid + (dc_yl - centery) * dc_iscale;
+
+    if (dc_texheight & heightmask)  // not a power of 2 -- killough
+    {
+        heightmask++;
+        heightmask <<= FRACBITS;
+
+        if (frac < 0)
+            while ((frac += heightmask) < 0);
+        else
+            while (frac >= heightmask)
+                   frac -= heightmask;
+
+        do
+        {
+            *dest = tinttable[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest2 = tinttable[(*dest2<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest3 = tinttable[(*dest3<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest4 = tinttable[(*dest4<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+
+            dest += screenwidth << hires;
+            dest2 += screenwidth << hires;
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
+
+            if ((frac += dc_iscale) >= heightmask)
+            {
+                frac -= heightmask;
+            }
+        }
+        while (count--);
+    }
+    else  // texture height is a power of 2 -- killough
+    {
+        do
+        {
+            *dest = tinttable[(*dest<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest2 = tinttable[(*dest2<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest3 = tinttable[(*dest3<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest4 = tinttable[(*dest4<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+
+            dest += screenwidth << hires;
+            dest2 += screenwidth << hires;
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
+
+            frac += dc_iscale; 
+        } while (count--);
+    }
 }
 
 /*
@@ -453,10 +567,7 @@ void R_DrawExtraTLColumn(void)
 #ifdef RANGECHECK
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawTLColumn: %i to %i at %i" :
-                 "R_DrawTLColumn: %i к %i у %i",
-                 dc_yl, dc_yh, dc_x);
+        return;
     }
 #endif
 
@@ -519,10 +630,7 @@ void R_DrawExtraTLColumnLow (void)
 #ifdef RANGECHECK
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawExtraTLColumnLow: %i to %i at %i" :
-                 "R_DrawTLColumnLow: %i к %i у %i",
-                 dc_yl, dc_yh, x);
+        return;
     }
 #endif
 
@@ -602,10 +710,9 @@ void R_DrawTranslatedColumn (void)
 
 #ifdef RANGECHECK
     if ((unsigned) dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
-        I_Error(english_language ?
-                "R_DrawColumn: %i to %i at %i" :
-                "R_DrawColumn: %i к %i в %i",
-                dc_yl, dc_yh, dc_x);
+    {
+        return;
+    }
 #endif
 
     dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
@@ -645,10 +752,7 @@ void R_DrawTranslatedColumnLow (void)
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawTranslatedColumnLow: %i to %i at %i" :
-                 "R_DrawTranslatedColumnLow: %i к %i у %i",
-                 dc_yl, dc_yh, x);
+        return;
     }
 #endif 
 
@@ -689,10 +793,9 @@ void R_DrawTranslatedTLColumn(void)
 
 #ifdef RANGECHECK
     if ((unsigned) dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
-        I_Error(english_language ?
-                "R_DrawColumn: %i to %i at %i" :
-                "R_DrawColumn: %i к %i в %i",
-                dc_yl, dc_yh, dc_x);
+    {
+        return;
+    }
 #endif
 
     dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
@@ -739,10 +842,7 @@ void R_DrawTranslatedTLColumnLow(void)
 #ifdef RANGECHECK
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawTranslatedTLColumnLow: %i to %i at %i" :
-                 "R_DrawTranslatedTLColumnLow: %i к %i у %i",
-                 dc_yl, dc_yh, x);
+        return;
     }
 #endif
 
