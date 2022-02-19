@@ -401,7 +401,7 @@ boolean P_GiveArtifact(player_t * player, artitype_t arti, mobj_t * mo)
 void P_SetDormantArtifact(mobj_t * arti)
 {
     arti->flags &= ~MF_SPECIAL;
-    arti->flags |= MF_EXTRATRANS; // [JN] Extra translucency
+    arti->flags |= MF_EXTRATRANS;  // [JN] Make pickup fog translucent.
     if (deathmatch && (arti->type != MT_ARTIINVULNERABILITY)
         && (arti->type != MT_ARTIINVISIBILITY))
     {
@@ -423,6 +423,7 @@ void P_SetDormantArtifact(mobj_t * arti)
 void A_RestoreArtifact(mobj_t * arti)
 {
     arti->flags |= MF_SPECIAL;
+    arti->flags &= ~MF_EXTRATRANS;  // [JN] Restore artifact opacity.
     P_SetMobjState(arti, arti->info->spawnstate);
     S_StartSound(arti, sfx_respawn);
 }
