@@ -2209,6 +2209,13 @@ void P_FallingDamage(player_t * player)
     int mom;
     int dist;
 
+    // [JN] No falling damage while cheated invulnerability.
+    if ((player->cheats & CF_GODMODE) && singleplayer)
+    {
+        S_StartSound(player->mo, SFX_PLAYER_LAND);
+        return;
+    }
+
     mom = abs(player->mo->momz);
     dist = FixedMul(mom, 16 * FRACUNIT / 23);
 
