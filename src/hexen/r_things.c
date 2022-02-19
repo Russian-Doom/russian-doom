@@ -1282,9 +1282,9 @@ void R_DrawPSprite(pspdef_t * psp)
     lump = sprframe->lump[0];
     flip = (boolean)sprframe->flip[0] ^ flip_levels ^ flip_weapons;
 
+    // [JN] Smoothern Serpent Staff ready state bobbing.
     if (singleplayer && !vanillaparm)
     {
-        // [JN] Smoothern Serpent Staff ready state bobbing.
         if (state == S_CSTAFFREADY1  ||  state == S_CSTAFFREADY2
         ||  state == S_CSTAFFREADY3  ||  state == S_CSTAFFREADY4
         ||  state == S_CSTAFFREADY5  ||  state == S_CSTAFFREADY6
@@ -1298,13 +1298,13 @@ void R_DrawPSprite(pspdef_t * psp)
         {
             R_ApplyWeaponBob(&psp->sx, true, &psp->sy, true);
         }
+    }
 
-        // [JN] Skip interpolation for firtst three frames of Cleric's mace.
-        // May cause a crash with widescreen assets in low detail, reason unknown.
-        if (state == S_CMACEATK_1  || state == S_CMACEATK_2 || state == S_CMACEATK_3)
-        {
-            skippsprinterp = true;
-        }
+    // [JN] Skip interpolation for firtst three frames of Cleric's mace.
+    // May cause a crash with widescreen assets in low detail, reason unknown.
+    if (state == S_CMACEATK_1  || state == S_CMACEATK_2 || state == S_CMACEATK_3)
+    {
+        skippsprinterp = true;
     }
 
     // Calculate edges of the shape.
