@@ -1109,29 +1109,29 @@ void R_DrawViewBorder (void)
         }
     }
 
-    for (x = (viewwindowx >> hires); x < (viewwindowx >> hires) + (viewwidth >> hires); x += 16)
+    for (x = (viewwindowx >> hires); x < (viewwindowx >> hires) + (scaledviewwidth >> hires); x += 16)
     {
         V_DrawPatch(x, (viewwindowy >> hires) - 4,
                     W_CacheLumpName("bordt", PU_CACHE));
-        V_DrawPatch(x, (viewwindowy >> hires) + (viewheight >> hires),
+        V_DrawPatch(x, (viewwindowy >> hires) + (scaledviewheight >> hires),
                     W_CacheLumpName("bordb", PU_CACHE));
     }
-    for (y = (viewwindowy >> hires); y < (viewwindowy >> hires) + (viewheight >> hires); y += 16)
+    for (y = (viewwindowy >> hires); y < (viewwindowy >> hires) + (scaledviewheight >> hires); y += 16)
     {
         V_DrawPatch((viewwindowx >> hires) - 4, y,
                      W_CacheLumpName("bordl", PU_CACHE));
-        V_DrawPatch((viewwindowx >> hires) + (viewwidth >> hires), y,
+        V_DrawPatch((viewwindowx >> hires) + (scaledviewwidth >> hires), y,
                      W_CacheLumpName("bordr", PU_CACHE));
     }
     V_DrawPatch((viewwindowx >> hires) - 4,
                 (viewwindowy >> hires) - 4, W_CacheLumpName("bordtl", PU_CACHE));
-    V_DrawPatch((viewwindowx >> hires) + (viewwidth >> hires),
+    V_DrawPatch((viewwindowx >> hires) + (scaledviewwidth >> hires),
                 (viewwindowy >> hires) - 4, W_CacheLumpName("bordtr", PU_CACHE));
 
-    V_DrawPatch((viewwindowx >> hires) + (viewwidth >> hires),
-                (viewwindowy >> hires) + (viewheight >> hires), W_CacheLumpName("bordbr", PU_CACHE));
+    V_DrawPatch((viewwindowx >> hires) + (scaledviewwidth >> hires),
+                (viewwindowy >> hires) + (scaledviewheight >> hires), W_CacheLumpName("bordbr", PU_CACHE));
     V_DrawPatch((viewwindowx >> hires) - 4,
-                (viewwindowy >> hires) + (viewheight >> hires), W_CacheLumpName("bordbl", PU_CACHE));
+                (viewwindowy >> hires) + (scaledviewheight >> hires), W_CacheLumpName("bordbl", PU_CACHE));
 }
 
 /*
