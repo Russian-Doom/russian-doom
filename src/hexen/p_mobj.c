@@ -232,6 +232,17 @@ void P_FloorBounceMissile(mobj_t * mo)
                 // [JN] Apply various enhancements for stained glass shards:
                 if (singleplayer && !vanillaparm)
                 {
+                    // Set shard's final state as lying state.
+                    if (mo->type == MT_SGSHARD1) P_SetMobjState(mo, rand() & 1 ? S_SGSHARD1_1 : S_SGSHARD1_3);
+                    if (mo->type == MT_SGSHARD2) P_SetMobjState(mo, rand() & 1 ? S_SGSHARD2_1 : S_SGSHARD2_D);
+                    if (mo->type == MT_SGSHARD3) P_SetMobjState(mo, rand() & 1 ? S_SGSHARD3_1 : S_SGSHARD3_D);
+                    if (mo->type == MT_SGSHARD4) P_SetMobjState(mo, rand() & 1 ? S_SGSHARD4_1 : S_SGSHARD4_D);
+                    if (mo->type == MT_SGSHARD5) P_SetMobjState(mo, rand() & 1 ? S_SGSHARD2_1 : S_SGSHARD2_D);
+                    if (mo->type == MT_SGSHARD6) P_SetMobjState(mo, rand() & 1 ? S_SGSHARD6_1 : S_SGSHARD6_D);
+                    if (mo->type == MT_SGSHARD7) P_SetMobjState(mo, S_SGSHARD7_D);
+                    if (mo->type == MT_SGSHARD8) P_SetMobjState(mo, S_SGSHARD8_D);
+                    if (mo->type == MT_SGSHARD9) P_SetMobjState(mo, S_SGSHARD9_D);
+                    if (mo->type == MT_SGSHARD0) P_SetMobjState(mo, S_SGSHARD0_D);
                     // Make infinite duration.
                     mo->tics = -1;        
                     // Randomize health for random flipping.
