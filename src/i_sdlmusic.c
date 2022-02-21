@@ -526,18 +526,16 @@ static void *I_SDL_RegisterSong(void *data, int len)
     if (!IsMus(data, len)) // [crispy] MUS_HEADER_MAGIC
     {
         M_WriteFile(filename, data, len);
-        // [JN] Indicate it's not a MIDI file and update volume:
+        // [JN] Indicate it's not a MIDI file.
         is_midi_file = false;
-        UpdateMusicVolume();
     }
     else
     {
 	// Assume a MUS file and try to convert
 
         ConvertMus(data, len, filename);
-        // [JN] Indicate it is a MIDI file and update volume:
+        // [JN] Indicate it is a MIDI file.
         is_midi_file = true;
-        UpdateMusicVolume();
     }
 
     // Load the MIDI. In an ideal world we'd be using Mix_LoadMUS_RW()

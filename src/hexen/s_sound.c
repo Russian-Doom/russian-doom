@@ -199,6 +199,8 @@ void S_StartSong(int song, boolean loop)
         length = W_LumpLength(lumpnum);
 
         RegisteredSong = I_RegisterSong(Mus_SndPtr, length);
+        // [JN] Set proper music volume.
+        I_SetMusicVolume(snd_MusicVolume);
         I_PlaySong(RegisteredSong, loop);
         Mus_Song = song;
 
@@ -318,6 +320,8 @@ void S_StartSongName(char *songLump, boolean loop)
         length = W_LumpLength(lumpnum);
 
         RegisteredSong = I_RegisterSong(Mus_SndPtr, length);
+        // [JN] Set proper music volume.
+        S_SetMusicVolume();
         I_PlaySong(RegisteredSong, loop);
         W_ReleaseLumpNum(lumpnum);
         // [JN] Remember the name of current music.

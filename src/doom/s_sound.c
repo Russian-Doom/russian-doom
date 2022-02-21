@@ -945,6 +945,8 @@ void S_ChangeMusic (int musicnum, int looping)
     music->handle = handle;
     I_PlaySong(handle, looping);
 
+    // [JN] Set proper music volume.
+    S_SetMusicVolume(musicVolume);
     mus_playing = music;
 }
 

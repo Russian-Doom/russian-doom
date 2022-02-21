@@ -120,6 +120,8 @@ void S_StartSong(int song, boolean loop, boolean replay)
     mus_sndptr = W_CacheLumpNum(mus_lumpnum, PU_MUSIC);
     mus_len = W_LumpLength(mus_lumpnum);
     rs = I_RegisterSong(mus_sndptr, mus_len);
+    // [JN] Set proper music volume.
+    S_SetMusicVolume();
     I_PlaySong(rs, loop);       //'true' denotes endless looping.
     mus_song = song;
 }
