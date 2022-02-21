@@ -1542,8 +1542,8 @@ void P_LineAttack (mobj_t *t1, angle_t angle, int64_t distance, fixed_t slope, i
 
     // [JN] Extend range so puffs may appear in long distances of hitscan attacks.
     // No damage will be dealed if range is greater than original MISSILERANGE,
-    // (see PTR_ShootTraverse).
-    if (distance >= MISSILERANGE && singleplayer && !vanillaparm)
+    // (see PTR_ShootTraverse). Only for player, not for monsters. 
+    if (t1->player && distance >= MISSILERANGE && singleplayer && !vanillaparm)
     {
         distance = INT_MAX;
     }
