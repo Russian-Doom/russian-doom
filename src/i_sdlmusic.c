@@ -67,6 +67,9 @@ char *timidity_cfg_path = "";
 
 static char *temp_timidity_cfg = NULL;
 
+// [JN] Temporal solution for proper volume control between MIDI/digital music.
+static boolean is_midi_file;
+
 // If the temp_timidity_cfg config variable is set, generate a "wrapper"
 // config file for Timidity to point to the actual config file. This
 // is needed to inject a "dir" command so that the patches are read
@@ -321,7 +324,9 @@ static void I_SDL_SetMusicVolume(int volume)
     // Internal state variable.
 #ifdef _WIN32
     if (snd_musicdevice != SNDDEVICE_GUS && strlen(timidity_cfg_path) == 0)
-        current_music_volume = 40 + volume * 5;
+    {
+        current_music_volume = (is_midi_file ? 40 : 2) + volume * 5;
+    }
     else
     {
 #endif
@@ -521,12 +526,18 @@ static void *I_SDL_RegisterSong(void *data, int len)
     if (!IsMus(data, len)) // [crispy] MUS_HEADER_MAGIC
     {
         M_WriteFile(filename, data, len);
+        // [JN] Indicate it's not a MIDI file and update volume:
+        is_midi_file = false;
+        UpdateMusicVolume();
     }
     else
     {
 	// Assume a MUS file and try to convert
 
         ConvertMus(data, len, filename);
+        // [JN] Indicate it is a MIDI file and update volume:
+        is_midi_file = true;
+        UpdateMusicVolume();
     }
 
     // Load the MIDI. In an ideal world we'd be using Mix_LoadMUS_RW()
