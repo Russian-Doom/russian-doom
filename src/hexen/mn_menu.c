@@ -5810,11 +5810,9 @@ boolean MN_Responder(event_t * event)
         }
         else if (BK_isKeyDown(event, bk_quit))           // F10 (quit)
         {
-            if (gamestate == GS_LEVEL || gamestate == GS_FINALE)
-            {
-                SCQuitGame(0);
-                S_StartSound(NULL, SFX_CHAT);
-            }
+            // [JN] Allow to invoke quit responce in any game states.
+            SCQuitGame(0);
+            S_StartSound(NULL, SFX_CHAT);
             return true;
         }
         else if (BK_isKeyDown(event, bk_gamma))          // F11 (gamma correction)
