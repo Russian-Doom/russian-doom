@@ -1545,7 +1545,9 @@ void A_VileTarget (mobj_t *actor)
     A_FaceTarget (actor);
 
     fog = P_SpawnMobj (actor->target->x,
-                       actor->target->x,
+                       // [JN] Fix fire spawned at wrong location.
+                       // https://doomwiki.org/wiki/Arch-Vile_fire_spawned_at_the_wrong_location
+                       singleplayer ? actor->target->y : actor->target->x,
                        actor->target->z, MT_FIRE);
 
     actor->tracer = fog;
