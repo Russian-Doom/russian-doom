@@ -5727,8 +5727,10 @@ boolean MN_Responder(event_t * event)
         }
         else if (BK_isKeyDown(event, bk_detail))         // F5 (suicide)
         {
-            // [JN] Allow to invoke only in game level state.
-            if (gamestate == GS_LEVEL && !demoplayback)
+            // [JN] Allow to invoke only in game level state,
+            // and only if player is alive.
+            if (gamestate == GS_LEVEL && !demoplayback
+            &&  players[consoleplayer].playerstate == PST_LIVE)
             {
                 menuactive = false;
                 askforquit = true;
