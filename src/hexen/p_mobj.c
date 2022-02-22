@@ -1137,8 +1137,17 @@ static void PlayerLandedOnThing(mobj_t * mo, mobj_t * onmobj)
     {
         S_StartSound(mo, SFX_PLAYER_LAND);
     }
-    // haleyjd: removed externdriver crap
-    mo->player->centering = true;
+
+    // [JN] Do not reset looking direction and apply small squatting.
+    if (singleplayer && !vanillaparm)
+    {
+        mo->player->viewheight -=  6 * FRACUNIT;
+    }
+    else
+    {
+        // haleyjd: removed externdriver crap
+        mo->player->centering = true;
+    }
 }
 
 //----------------------------------------------------------------------------
