@@ -5727,9 +5727,13 @@ boolean MN_Responder(event_t * event)
         }
         else if (BK_isKeyDown(event, bk_detail))         // F5 (suicide)
         {
-            menuactive = false;
-            askforquit = true;
-            typeofask = 5;  // suicide
+            // [JN] Allow to invoke only in game level state.
+            if (gamestate == GS_LEVEL && !demoplayback)
+            {
+                menuactive = false;
+                askforquit = true;
+                typeofask = 5;  // suicide
+            }
             return true;
         }
         else if (BK_isKeyDown(event, bk_qsave))          // F6 (quicksave)
