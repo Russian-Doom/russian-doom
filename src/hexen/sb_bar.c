@@ -1944,7 +1944,7 @@ void DrawFullScreenStuff(void)
     // [JN] Negative health: can't drop below -99, drawing, colorizing
     else if (negative_health && !vanillaparm)
     {
-        if (CPlayer->mo->health < 0)
+        if (CPlayer->mo->health <= 0)
         {
             if (CPlayer->mo->health <= -99)
             {
