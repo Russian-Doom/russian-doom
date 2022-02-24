@@ -76,33 +76,7 @@ void RD_CreateWindowsConsole (void)
 
 void M_SetExeDir(void)
 {
-#ifdef _WIN32
-    TCHAR dirname[MAX_PATH + 1];
-    DWORD dirname_len;
-    TCHAR *fp = NULL;
-
-    memset(dirname, 0, sizeof(dirname));
-    dirname_len = GetModuleFileName(NULL, dirname, MAX_PATH);
-    if(dirname_len > 0)
-    {
-        fp = &dirname[dirname_len];
-        while (dirname <= fp && *fp != DIR_SEPARATOR)
-        {
-            fp--;
-        }
-        *(fp + 1) = '\0';
-
-        exedir = M_StringDuplicate(dirname);
-    }
-    else
-    {
-        printf("I_MAIN: Error: Unable to get path to executable from GetModuleFileName");
-        printf("I_MAIN: Trying to get path to executable from arg0\n \t%s\n", myargv[0]);
-        fp = M_DirName(myargv[0]);
-        exedir = M_StringJoin(fp, DIR_SEPARATOR_S, NULL);
-        free(fp);
-    }
-#elif defined(__APPLE__) //TODO [Dasperal] test this
+#ifdef __APPLE__ //TODO [Dasperal] test this
     uint32_t buffSize = PATH_MAX+1;
     char *exenameRaw, *exename, *dirname;
     int result;
@@ -140,38 +114,17 @@ void M_SetExeDir(void)
     free(exenameRaw);
     exedir = M_StringJoin(dirname, DIR_SEPARATOR_S, NULL);
     free(dirname);
-#else // Linux
-    static const char *proc_exe_link = "/proc/self/exe";
-    char *dirname, *exename;
-    struct stat linkStat;
-
-    if(lstat(proc_exe_link, &linkStat) != -1)
+#else // Windows & Linux
+    exedir = SDL_GetBasePath();
+    if(!exedir)
     {
-        size_t buffSize = linkStat.st_size;
-        if(buffSize == 0)
-            buffSize = 1024;
-        exename = malloc(buffSize);
-        if (readlink(proc_exe_link, exename, buffSize) != -1)
-        {
-            dirname = M_DirName(exename);
-        }
-        else
-        {
-            printf("I_MAIN: Error: Unable to get path to executable from\n \t%s\n", proc_exe_link);
-            printf("I_MAIN: Trying to get path to executable from arg0\n \t%s\n", myargv[0]);
-            dirname = M_DirName(myargv[0]);
-        }
-        free(exename);
-    }
-    else
-    {
-        printf("I_MAIN: Error: Unable to get path to executable from\n \t%s\n", proc_exe_link);
+        char* temp;
+        printf("I_MAIN: Error: Unable to get path to executable from SDL_GetBasePath");
         printf("I_MAIN: Trying to get path to executable from arg0\n \t%s\n", myargv[0]);
-        dirname = M_DirName(myargv[0]);
+        temp = M_DirName(myargv[0]);
+        exedir = M_StringJoin(temp, DIR_SEPARATOR_S, NULL);
+        free(temp);
     }
-
-    exedir = M_StringJoin(dirname, DIR_SEPARATOR_S, NULL);
-    free(dirname);
 #endif
 }
 

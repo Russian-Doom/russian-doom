@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-
+#include "rd_io.h"
 #include "doomdef.h"
 #include "doomkeys.h"
 

@@ -35,6 +35,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "rd_io.h"
 #include "z_zone.h"
 #include "i_system.h"
 #include "d_player.h"

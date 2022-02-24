@@ -19,7 +19,7 @@
 
 
 
-#include <stdio.h>
+#include "rd_io.h"
 #include <stdlib.h>
 #include <string.h>
 

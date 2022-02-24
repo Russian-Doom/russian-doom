@@ -19,7 +19,7 @@
 
 
 
-#include <stdio.h>
+#include "rd_io.h"
 
 #include "m_misc.h"
 #include "w_file.h"

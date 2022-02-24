@@ -25,7 +25,8 @@ COMMON_SOURCE_FILES=\
                      jn.h                  \
 i_system.c           i_system.h            \
 m_argv.c             m_argv.h              \
-m_misc.c             m_misc.h
+m_misc.c             m_misc.h              \
+rd_io.c              rd_io.h
 
 # Source files used by the game binaries (russian-doom, etc.)
 

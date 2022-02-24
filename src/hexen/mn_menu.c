@@ -25,6 +25,7 @@
 // HEADER FILES ------------------------------------------------------------
 
 #include <ctype.h>
+#include "rd_io.h"
 #include "h2def.h"
 #include "doomkeys.h"
 #include "i_controller.h"

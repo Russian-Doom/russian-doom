@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#include "rd_io.h"
 #include "am_map.h"
 #include "deh_str.h"
 #include "doomdef.h"

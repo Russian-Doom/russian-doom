@@ -20,7 +20,7 @@
 
 
 
-#include <stdio.h>
+#include "rd_io.h"
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -73,7 +73,9 @@ void M_MakeDirectory(char *path)
 boolean M_FileExists(char *filename)
 {
 #ifdef _WIN32
-    return INVALID_FILE_ATTRIBUTES != GetFileAttributesA(filename);
+    wchar_t *wpath = NULL;
+    wpath = ConvertToUtf8(filename);
+    return INVALID_FILE_ATTRIBUTES != GetFileAttributesW(wpath);
 #else
     FILE *fstream;
 
