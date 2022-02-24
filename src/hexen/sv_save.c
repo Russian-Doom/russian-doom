@@ -123,7 +123,6 @@ static void RestoreSSThinker(ssthinker_t * sst);
 static void RestorePlatRaise(plat_t * plat);
 static void RestoreMoveCeiling(ceiling_t * ceiling);
 static void AssertSegment(gameArchiveSegment_t segType);
-static void ClearSaveSlot(int slot);
 static void CopySaveSlot(int sourceSlot, int destSlot);
 static void CopyFile(char *sourceName, char *destName);
 static boolean ExistingFile(char *name);
@@ -1978,7 +1977,7 @@ void SV_SaveGame(int slot, char *description)
     SV_SaveMap(true);           // true = save player info
 
     // Clear all save files at destination slot
-    ClearSaveSlot(slot);
+    SV_ClearSaveSlot(slot);
 
     // Copy base slot to destination slot
     CopySaveSlot(BASE_SLOT, slot);
@@ -2042,7 +2041,7 @@ void SV_LoadGame(int slot)
     // Copy all needed save files to the base slot
     if (slot != BASE_SLOT)
     {
-        ClearSaveSlot(BASE_SLOT);
+        SV_ClearSaveSlot(BASE_SLOT);
         CopySaveSlot(slot, BASE_SLOT);
     }
 
@@ -2137,7 +2136,7 @@ void SV_LoadGame(int slot)
 
 void SV_UpdateRebornSlot(void)
 {
-    ClearSaveSlot(REBORN_SLOT);
+    SV_ClearSaveSlot(REBORN_SLOT);
     CopySaveSlot(BASE_SLOT, REBORN_SLOT);
 }
 
@@ -2149,7 +2148,7 @@ void SV_UpdateRebornSlot(void)
 
 void SV_ClearRebornSlot(void)
 {
-    ClearSaveSlot(REBORN_SLOT);
+    SV_ClearSaveSlot(REBORN_SLOT);
 }
 
 //==========================================================================
@@ -2183,7 +2182,7 @@ void SV_MapTeleport(int map, int position)
         }
         else
         {                       // Entering new cluster - clear base slot
-            ClearSaveSlot(BASE_SLOT);
+            SV_ClearSaveSlot(BASE_SLOT);
         }
     }
 
@@ -2411,7 +2410,7 @@ void SV_LoadMap(void)
 
 void SV_InitBaseSlot(void)
 {
-    ClearSaveSlot(BASE_SLOT);
+    SV_ClearSaveSlot(BASE_SLOT);
 }
 
 //==========================================================================
@@ -3275,25 +3274,31 @@ static void AssertSegment(gameArchiveSegment_t segType)
 
 //==========================================================================
 //
-// ClearSaveSlot
+// SV_ClearSaveSlot
 //
 // Deletes all save game files associated with a slot number.
 //
 //==========================================================================
 
-static void ClearSaveSlot(int slot)
+void SV_ClearSaveSlot(int slot)
 {
     int i;
     char fileName[RD_MAX_PATH];
 
-    for (i = 0; i < MAX_MAPS; i++)
+    for (i = 0; i < MAX_MAPS + 1; i++)
     {
         M_snprintf(fileName, sizeof(fileName),
                    "%shexen-save-%d%02d.sav", SavePath, slot, i);
-        remove(fileName);
+        if(M_FileExists(fileName))
+        {
+            remove(fileName);
+        }
     }
     M_snprintf(fileName, sizeof(fileName), "%shexen-save-%d.sav", SavePath, slot);
-    remove(fileName);
+    if(M_FileExists(fileName))
+    {
+        remove(fileName);
+    }
 }
 
 //==========================================================================
