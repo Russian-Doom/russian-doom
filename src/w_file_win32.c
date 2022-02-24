@@ -23,7 +23,7 @@
 
 #ifdef _WIN32
 
-#include <stdio.h>
+#include "rd_io.h"
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -106,7 +106,7 @@ static wad_file_t *W_Win32_OpenFile(char *path)
 
     // Open the file:
 
-    MultiByteToWideChar(CP_OEMCP, 0,
+    MultiByteToWideChar(CP_UTF8, 0,
                         path, strlen(path) + 1,
                         wpath, sizeof(wpath));
 

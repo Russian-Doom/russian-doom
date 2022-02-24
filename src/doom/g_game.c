@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "rd_io.h"
 #include "doomdef.h"
 #include "doomstat.h"
 #include "deh_main.h"

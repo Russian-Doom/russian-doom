@@ -22,7 +22,7 @@
 
 
 
-#include <stdio.h>
+#include "rd_io.h"
 #include <string.h>
 #include <math.h>
 

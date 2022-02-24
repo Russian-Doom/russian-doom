@@ -20,6 +20,7 @@
 
 #include <stdlib.h>
 
+#include "rd_io.h"
 #include "am_map.h"
 #include "doomdef.h"
 #include "i_swap.h"

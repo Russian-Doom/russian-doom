@@ -18,7 +18,7 @@
 // Code for invoking Doom
 
 #include <stdarg.h>
-#include <stdio.h>
+#include "rd_io.h"
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -168,7 +168,7 @@ static unsigned int WaitForProcessExit(HANDLE subprocess)
 
 static void ConcatWCString(wchar_t *buf, const char *value)
 {
-    MultiByteToWideChar(CP_OEMCP, 0,
+    MultiByteToWideChar(CP_UTF8, 0,
                         value, strlen(value) + 1,
                         buf + wcslen(buf), strlen(value) + 1);
 }

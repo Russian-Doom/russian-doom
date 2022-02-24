@@ -19,8 +19,6 @@
 // Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
-#include <stdio.h>
-
 #include "deh_main.h"
 
 #include "z_zone.h"
