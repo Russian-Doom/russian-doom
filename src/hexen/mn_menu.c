@@ -5571,8 +5571,6 @@ boolean MN_Responder(event_t * event)
     {
         if (BK_isKeyDown(event, bk_confirm))
         {
-            static char name[RD_MAX_PATH];
-
             switch (typeofask)
             {
                 case 1:
@@ -5595,20 +5593,7 @@ boolean MN_Responder(event_t * event)
                     break;
                 // [JN] Delete saved game:
                 case 6:
-                    // First, create the name of main slot.
-                    M_snprintf(name, sizeof(name), "%shexen-save-%d.sav",
-                               SavePath, CurrentItPos);
-                    // Delete it.
-                    remove(name);
-
-                    // Second, create the names of auxiliary map slots (100 means MAX_MAPS+1).
-                    for (int i = 0 ; i < 100 ; i++)
-                    {
-                        M_snprintf(name, sizeof(name), "%shexen-save-%d%02d.sav",
-                                   SavePath, CurrentItPos, i);
-                        // Delete them.
-                        remove(name);
-                    }
+                    SV_ClearSaveSlot(CurrentItPos);
 
                     // Truncate text of saved game slot.
                     memset(SlotText[CurrentItPos], 0, SLOTTEXTLEN + 2);

@@ -856,6 +856,7 @@ void SV_SaveMap(boolean savePlayers);
 void SV_LoadGame(int slot);
 void SV_MapTeleport(int map, int position);
 void SV_LoadMap(void);
+void SV_ClearSaveSlot(int slot);
 void SV_InitBaseSlot(void);
 void SV_UpdateRebornSlot(void);
 void SV_ClearRebornSlot(void);
