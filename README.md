@@ -1,27 +1,27 @@
 ![](https://user-images.githubusercontent.com/21193394/155832238-a6c96ac3-b614-4517-9842-70808aaf13e3.png)
 
-#### Russian Doom 5.1 (released: December 26, 2021)
+#### International Doom 5.2 (released: February 26, 2022)
 
-Windows (32-bit): [russian-doom-5.1-win32.zip](https://github.com/JNechaevsky/russian-doom/releases/download/5.1/russian-doom-5.1-win32.zip)<br />
-Windows (64-bit): [russian-doom-5.1-win64.zip](https://github.com/JNechaevsky/russian-doom/releases/download/5.1/russian-doom-5.1-win64.zip)<br />
-Source code available in [zip](https://github.com/JNechaevsky/russian-doom/archive/refs/tags/5.1.zip) and [tar.gz](https://github.com/JNechaevsky/russian-doom/archive/refs/tags/5.1.tar.gz) formats<br />
+Windows (32-bit): [inter-doom-5.2-win32.zip](https://github.com/JNechaevsky/inter-doom/releases/download/5.2/inter-doom-5.2-win32.zip)<br />
+Windows (64-bit): [inter-doom-5.2-win64.zip](https://github.com/JNechaevsky/inter-doom/releases/download/5.2/inter-doom-5.2-win64.zip)<br />
+Source code available in [zip](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/5.2.zip) and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/5.2.tar.gz) formats<br />
 
-#### Russian Heretic 5.0 (released: September 16, 2021)
+#### International Heretic 5.1 (released: February 26, 2022)
 
-Windows (32-bit): [russian-heretic-5.0-win32.zip](https://github.com/JNechaevsky/russian-doom/releases/download/heretic-5.0/russian-heretic-5.0-win32.zip)<br />
-Windows (64-bit): [russian-heretic-5.0-win64.zip](https://github.com/JNechaevsky/russian-doom/releases/download/heretic-5.0/russian-heretic-5.0-win64.zip)<br />
-Source code available in [zip](https://github.com/JNechaevsky/russian-doom/archive/refs/tags/heretic-5.0.zip) and [tar.gz](https://github.com/JNechaevsky/russian-doom/archive/refs/tags/heretic-5.0.tar.gz) formats<br />
+Windows (32-bit): [inter-heretic-5.1-win32.zip](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-5.1/inter-heretic-5.1-win32.zip)<br />
+Windows (64-bit): [inter-heretic-5.1-win64.zip](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-5.1/inter-heretic-5.1-win64.zip)<br />
+Source code available in [zip](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/heretic-5.1.zip) and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/heretic-5.1.tar.gz) formats<br />
 
-#### Russian Hexen 4.2 (released: July 3, 2021)
+#### International Hexen 5.0 (released: February 26, 2022)
 
-Windows (32-bit): [russian-hexen-4.2-win32.zip](https://github.com/JNechaevsky/russian-doom/releases/download/hexen-4.2/russian-hexen-4.2-win32.zip)<br />
-Windows (64-bit): [russian-hexen-4.2-win64.zip](https://github.com/JNechaevsky/russian-doom/releases/download/hexen-4.2/russian-hexen-4.2-win64.zip)<br />
-Source code available in [zip](https://github.com/JNechaevsky/russian-doom/archive/refs/tags/hexen-4.2.zip) and [tar.gz](https://github.com/JNechaevsky/russian-doom/archive/refs/tags/hexen-4.2.tar.gz) formats<br />
+Windows (32-bit): [inter-hexen-5.0-win32.zip](https://github.com/JNechaevsky/inter-doom/releases/download/hexen-5.0/inter-hexen-5.0-win32.zip)<br />
+Windows (64-bit): [inter-hexen-5.0-win64.zip](https://github.com/JNechaevsky/inter-doom/releases/download/hexen-5.0/inter-hexen-5.0-win64.zip)<br />
+Source code available in [zip](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/hexen-5.0.zip) and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/hexen-5.0.tar.gz) formats<br />
 
 #### Russian Doom for DOS 1.8 (released: June 9, 2020)
 
-DOS: [russian-doom-dos-1.8.zip](https://github.com/JNechaevsky/russian-doom/releases/download/dos-1.8/russian-doom-dos-1.8.zip)<br />
-Source code available on [GitHub](https://github.com/JNechaevsky/russian-doom/tree/master/src_dos)
+DOS: [russian-doom-dos-1.8.zip](https://github.com/JNechaevsky/inter-doom/releases/download/dos-1.8/russian-doom-dos-1.8.zip)<br />
+Source code available on [GitHub](https://github.com/JNechaevsky/inter-doom/tree/master/src_dos)
 
 #### Other
 
@@ -29,7 +29,7 @@ PNG font atlases: [russian-doom-fonts-png.zip](https://jnechaevsky.github.io/pro
 
 ### About
 
-Russian Doom is based on [Chocolate Doom](https://www.chocolate-doom.org) by Simon Howard and [Crispy Doom](http://fabiangreffrath.github.io/crispy-doom) by Fabian Greffrath, with significant additions from [Doom Retro](http://doomretro.com) by Brad Harding, and is distributed with their approval.
+International Doom is based on [Chocolate Doom](https://www.chocolate-doom.org) by Simon Howard and [Crispy Doom](http://fabiangreffrath.github.io/crispy-doom) by Fabian Greffrath, with significant additions from [Doom Retro](http://doomretro.com) by Brad Harding, and is distributed with their approval.
 
 DOS version is based on [PCDoom](https://github.com/nukeykt/PCDoom-v2) by Alexey Khokholov and [Doom Vanille](https://github.com/AXDOOMER/doom-vanille) by Alexandre-Xavier Labonté-Lamoureux, with significant additions from [Crispy Doom](http://fabiangreffrath.github.io/crispy-doom) by Fabian Greffrath and [Doom Retro](http://doomretro.com) by Brad Harding, and is distributed with their approval. 
 
