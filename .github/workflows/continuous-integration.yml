@@ -77,12 +77,12 @@ jobs:
           cmake --build build --parallel 2
 
       - name: Install
-        if: ${{ github.repository == 'JNechaevsky/russian-doom' && github.event_name == 'push' && github.ref == 'refs/heads/master' && matrix.config.os_name == 'Windows' }}
+        if: ${{ github.repository == 'JNechaevsky/inter-doom' && github.event_name == 'push' && github.ref == 'refs/heads/master' && matrix.config.os_name == 'Windows' }}
         run: |
           cmake --install build --prefix "./build/install"
 
       - name: Package
-        if: ${{ github.repository == 'JNechaevsky/russian-doom' && github.event_name == 'push' && github.ref == 'refs/heads/master' && matrix.config.os_name == 'Windows' }}
+        if: ${{ github.repository == 'JNechaevsky/inter-doom' && github.event_name == 'push' && github.ref == 'refs/heads/master' && matrix.config.os_name == 'Windows' }}
         uses: actions/upload-artifact@v2
         with:
           name: russian-doom-${{ steps.configure.outputs.sha_short }}-windows-${{ matrix.config.build_type }}
