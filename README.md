@@ -1,4 +1,4 @@
-![](https://user-images.githubusercontent.com/21193394/155832238-a6c96ac3-b614-4517-9842-70808aaf13e3.png)
+![](https://jnechaevsky.github.io/inter-doom/files/inter-doom-git.png)
 
 #### International Doom 5.2 (released: February 26, 2022)
 
@@ -25,7 +25,7 @@ Source code available on [GitHub](https://github.com/JNechaevsky/inter-doom/tree
 
 #### Other
 
-PNG font atlases: [russian-doom-fonts-png.zip](https://jnechaevsky.github.io/projects/rusdoom/files/russian-doom-fonts-png.zip)<br /><br />
+PNG font atlases: [inter-doom-fonts-png.zip](https://jnechaevsky.github.io/inter-doom/files/inter-doom-fonts-png.zip)<br /><br />
 
 ### About
 
