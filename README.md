@@ -1,4 +1,4 @@
-![](https://jnechaevsky.github.io/projects/rusdoom/files/russian_doom_git.png)
+![](https://user-images.githubusercontent.com/21193394/155832238-a6c96ac3-b614-4517-9842-70808aaf13e3.png)
 
 #### Russian Doom 5.1 (released: December 26, 2021)
 

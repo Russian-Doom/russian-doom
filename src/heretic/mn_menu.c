@@ -16,15 +16,6 @@
 //
 
 
-
-//
-// Памятка по символам: docs_russian/charmap/raven_charmap.xlsx
-//
-
-
-// MN_menu.c
-
-
 #include <stdlib.h>
 #include <ctype.h>
 

@@ -901,7 +901,7 @@ void D_DoomLoop (void)
                    " \n"
                    " No Rest for the Living addon can be started with vanilla\n"
                    " IWAD by following command line parameter:\n"
-                   " russian-doom -file nerve.wad");
+                   " inter-doom -file nerve.wad");
         }
         else
         {
@@ -911,7 +911,7 @@ void D_DoomLoop (void)
                    " \n"
                    " Дополнение No Rest for the Living может работать и\n"
                    " с классическим IWAD, для запуска необходимо указать:\n"
-                   " russian-doom -file nerve.wad");
+                   " inter-doom -file nerve.wad");
         }
     }
 

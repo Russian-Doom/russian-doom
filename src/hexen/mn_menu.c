@@ -16,12 +16,6 @@
 //
 
 
-
-//
-// Памятка по символам: docs_russian/charmap/raven_charmap.xlsx
-//
-
-
 // HEADER FILES ------------------------------------------------------------
 
 #include <ctype.h>

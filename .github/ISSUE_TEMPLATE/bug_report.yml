@@ -13,11 +13,11 @@ body:
   - type: input
     id: version
     attributes:
-      label: Russian Doom version
+      label: International Doom version
       description: |
-        What version are you using? If you are building Russian doom from source, specify revision.
-        Make sure to update to latest [release](https://github.com/JNechaevsky/russian-doom/releases) version and test again before continuing.
-      placeholder: "Russian Doom 5.1 | Russian Heretic 5.0 | Russian Hexen 4.2"
+        What version are you using? If you are building International doom from source, specify revision.
+        Make sure to update to latest [release](https://github.com/JNechaevsky/inter-doom/releases) version and test again before continuing.
+      placeholder: "International Doom 5.2 | International Heretic 5.1 | International Hexen 5.0"
     validations:
       required: true
   - type: dropdown
@@ -39,7 +39,7 @@ body:
   - type: dropdown
     id: Build_variant
     attributes:
-      label: What Build variant of Russian Doom are you using?
+      label: What Build variant of International Doom are you using?
       multiple: false
       options:
         - x86 (x32, win32)
@@ -97,7 +97,7 @@ body:
     attributes:
       label: Your configuration
       description: |
-        Share the config file you've been using to run the program. (`russian-doom.ini`, `russian-heretic.ini`, `russian-hexen.ini`) 
+        Share the config file you've been using to run the program. (`inter-doom.ini`, `inter-heretic.ini`, `inter-hexen.ini`) 
         Please avoid pasting the full config, _use attachments or links_ in a [Gist](https://gist.github.com/)
 #     render: ini # syntax highlighting [Dasperal] Config files are not actual ini files yet
     validations:
@@ -107,7 +107,7 @@ body:
     attributes:
       label: Provide a Log
       description: |
-        You can get a log by running Russian Doom from a command line like this `russian-doom [options] > Log.txt`.
+        You can get a log by running International Doom from a command line like this `inter-doom [options] > Log.txt`.
         Please avoid pasting the full log, _use attachments or links_ in a [Gist](https://gist.github.com/)
     validations:
       required: false

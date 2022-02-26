@@ -1,5 +1,5 @@
-AC_INIT(Russian Doom, 5.2, julian.nechaevsky@outlook.com,
-        russian-doom)
+AC_INIT(International Doom, 5.2, julian.nechaevsky@outlook.com,
+        inter-doom)
 
 BUILD_HERETIC_VERSION="5.1"
 BUILD_HEXEN_VERSION="5.0"
@@ -121,8 +121,8 @@ WINDOWS_RC_STRIFE_VERSION=`echo $BUILD_STRIFE_VERSION | sed 's/\./, /g'`
 # if this is changed to "lemon-", the programs generated will be named
 # lemon-doom, lemon-heretic, etc.
 
-PROGRAM_PREFIX=russian-
-PACKAGE_PREFIX=Russian
+PROGRAM_PREFIX=inter-
+PACKAGE_PREFIX=International
 
 AC_SUBST(PROGRAM_PREFIX)
 AC_SUBST(PACKAGE_PREFIX)

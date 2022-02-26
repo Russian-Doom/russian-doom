@@ -13,7 +13,7 @@
 // GNU General Public License for more details.
 //
 // DESCRIPTION:
-//	Russian Doom specific variables.
+//	International Doom specific variables.
 //
 
 

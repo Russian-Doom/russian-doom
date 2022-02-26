@@ -28,7 +28,7 @@ m_argv.c             m_argv.h              \
 m_misc.c             m_misc.h              \
 rd_io.c              rd_io.h
 
-# Source files used by the game binaries (russian-doom, etc.)
+# Source files used by the game binaries (inter-doom, etc.)
 
 GAME_SOURCE_FILES=\
 aes_prng.c           aes_prng.h            \
@@ -157,7 +157,7 @@ endif
 
 # @PROGRAM_PREFIX@strife_LDADD = strife/libstrife.a $(EXTRA_LIBS)
 
-# Source files needed for russian-setup:
+# Source files needed for inter-setup:
 
 # SETUP_FILES=                               \
 # deh_str.c            deh_str.h             \

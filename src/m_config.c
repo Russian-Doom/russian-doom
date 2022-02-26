@@ -560,10 +560,6 @@ static default_t defaults_list[] =
 
 #endif
 
-    //!
-    // [JN] Russian Doom menu
-    //
-
     // Rendering
     CONFIG_VARIABLE_INT(vsync),
     CONFIG_VARIABLE_INT(aspect_ratio_correct),
@@ -1202,7 +1198,7 @@ static char *GetDefaultConfigDir(void)
     }
     free(tempResult);
 #else
-    tempResult = SDL_GetPrefPath("", PACKAGE_TARNAME); // This might be ~/.local/share/russian-doom
+    tempResult = SDL_GetPrefPath("", PACKAGE_TARNAME); // This might be ~/.local/share/inter-doom
     if (tempResult != NULL)
     {
         result = M_StringDuplicate(tempResult);

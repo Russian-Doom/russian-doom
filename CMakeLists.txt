@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.15...3.22)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 # Versions
-project("Russian Doom" VERSION 5.2 LANGUAGES C NONE)
+project("International Doom" VERSION 5.2 LANGUAGES C NONE)
 set(BUILD_HERETIC_VERSION "5.1")
 set(BUILD_HEXEN_VERSION "5.0")
 set(BUILD_STRIFE_VERSION "0.0")
@@ -12,7 +12,7 @@ set(BUILD_STRIFE_VERSION "0.0")
 Option(COMPILE_DOOM "Compile Doom module" ON)
 Option(COMPILE_HERETIC "Compile Heretic module" ON)
 Option(COMPILE_HEXEN "Compile Hexen module" ON)
-# [Dasperal] Disable Strife by default. It won't compile until `JNechaevsky/russian-doom/pull/268` is implemented for Strife
+# [Dasperal] Disable Strife by default. It won't compile until `JNechaevsky/inter-doom/pull/268` is implemented for Strife
 Option(COMPILE_STRIFE "Compile Strife module" OFF)
 # [Dasperal] Disable Setup by default. Usage of Setup resets many of the settings available in the game menu, so we don't distribute it
 Option(COMPILE_SETUP "Compile Setup module" OFF)
@@ -30,7 +30,7 @@ set(top_srcdir ${CMAKE_CURRENT_SOURCE_DIR})
 set(top_builddir ${CMAKE_CURRENT_BINARY_DIR})
 
 # AC_INIT variables
-set(PACKAGE_TARNAME "russian-doom")
+set(PACKAGE_TARNAME "inter-doom")
 set(PACKAGE_COPYRIGHT "Copyright \\xA9 2016-2022 Julian Nechaevsky. Licensed under GNU General Public License, version 2")
 set(BUILD_DOOM_VERSION "${PROJECT_VERSION}")
 
