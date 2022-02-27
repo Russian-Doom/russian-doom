@@ -118,6 +118,10 @@ mobj_t **blocklinks;            // for thing chains
 
 byte *rejectmatrix;             // for fast sight rejection
 
+// [JN] Check for multiple map lump names and see if map-specific fixes can be applied.
+// Adaptaken from DOOM Retro, thanks Brad Harding!
+boolean canmodify;
+
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 
 static mapInfo_t MapInfo[99];
@@ -1069,15 +1073,59 @@ void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
 
     M_snprintf(lumpname, sizeof(lumpname), "MAP%02d", map);
     lumpnum = W_GetNumForName(lumpname);
+
+    // [JN] Check if optinial map fixes can be applied.
+    canmodify = (W_CheckMultipleLumps(lumpname) == 1
+              && (!netgame && !vanillaparm && gamemode != shareware && singleplayer));
+
     //
     // Begin processing map lumps
     // Note: most of this ordering is important
     //
     crispy_validblockmap = P_LoadBlockMap (lumpnum+ML_BLOCKMAP); // [crispy] (re-)create BLOCKMAP if necessary
     P_LoadVertexes(lumpnum + ML_VERTEXES);
-    P_LoadSectors(lumpnum + ML_SECTORS);
-    P_LoadSideDefs(lumpnum + ML_SIDEDEFS);
-    P_LoadLineDefs(lumpnum + ML_LINEDEFS);
+
+    // [JN] Apply various map fixes.
+    // TODO - simplify, tablify lump names or use sprintf construction?
+    if (canmodify && fix_map_errors)
+    {
+        if (!isDK)
+        {
+            //
+            // Hexen: Beyond Heretic
+            //
+
+            // Sectors:
+            P_LoadSectors(gamemap == 1 ? W_GetNumForName("HXSCF01") :
+                          gamemap == 2 ? W_GetNumForName("HXSCF02") :
+                          lumpnum + ML_SECTORS);
+            // Sidedefs:
+            P_LoadSideDefs(gamemap == 1 ? W_GetNumForName("HXSDF01") :
+                           gamemap == 2 ? W_GetNumForName("HXSDF02") :
+                           lumpnum + ML_SIDEDEFS);
+            // Linedefs:
+            P_LoadLineDefs(gamemap == 1 ? W_GetNumForName("HXLDF01") :
+                           gamemap == 2 ? W_GetNumForName("HXLDF02") :
+                           lumpnum + ML_LINEDEFS);
+        }
+        else
+        {
+            //
+            // Hexen: Deathkings of the Dark Citadel
+            // (nothing for now, just load standard lumps)
+            //
+
+            P_LoadSectors(lumpnum + ML_SECTORS);
+            P_LoadSideDefs(lumpnum + ML_SIDEDEFS);
+            P_LoadLineDefs(lumpnum + ML_LINEDEFS);
+        }
+    }
+    else
+    {
+        P_LoadSectors(lumpnum + ML_SECTORS);
+        P_LoadSideDefs(lumpnum + ML_SIDEDEFS);
+        P_LoadLineDefs(lumpnum + ML_LINEDEFS);
+    }
 
     // [crispy] (re-)create BLOCKMAP if necessary
     if (!crispy_validblockmap)

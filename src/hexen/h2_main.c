@@ -178,7 +178,6 @@ int snd_monomode = 0;
 int brightmaps = 1;
 int fake_contrast = 0;
 int translucency = 1;
-int flip_levels = 0;
 int linear_sky = 1;
 int randomly_flipcorpses = 1;
 int flip_weapons = 0;
@@ -200,6 +199,8 @@ int crosshair_type = 1;
 int crosshair_scale = 0;
 
 // Gameplay: Gameplay
+int fix_map_errors = 1;
+int flip_levels = 0;
 int no_internal_demos = 0;
 
 int selective_class = 0;
@@ -352,6 +353,7 @@ void D_BindVariables(void)
     M_BindIntVariable("show_artifacts_timer",   &show_artifacts_timer);
 
     // Gameplay: Gameplay
+    M_BindIntVariable("fix_map_errors",         &fix_map_errors);
     M_BindIntVariable("flip_levels",            &flip_levels);
     M_BindIntVariable("no_internal_demos",      &no_internal_demos);
 
