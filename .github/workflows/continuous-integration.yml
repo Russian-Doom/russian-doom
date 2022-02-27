@@ -85,7 +85,7 @@ jobs:
         if: ${{ github.repository == 'JNechaevsky/inter-doom' && github.event_name == 'push' && github.ref == 'refs/heads/master' && matrix.config.os_name == 'Windows' }}
         uses: actions/upload-artifact@v2
         with:
-          name: russian-doom-${{ steps.configure.outputs.sha_short }}-windows-${{ matrix.config.build_type }}
+          name: inter-doom-${{ steps.configure.outputs.sha_short }}-windows-${{ matrix.config.build_type }}
           path: ./build/install/
 
   Autotools:
