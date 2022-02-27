@@ -84,6 +84,8 @@ void P_SpawnMapThing(mapthing_t * mthing);
 
 // PUBLIC FUNCTION PROTOTYPES ----------------------------------------------
 
+static void P_LoadMapFixes (int map);
+
 // PRIVATE FUNCTION PROTOTYPES ---------------------------------------------
 
 static int QualifyMap(int map);
@@ -1086,39 +1088,9 @@ void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
     P_LoadVertexes(lumpnum + ML_VERTEXES);
 
     // [JN] Apply various map fixes.
-    // TODO - simplify, tablify lump names or use sprintf construction?
     if (canmodify && fix_map_errors)
     {
-        if (!isDK)
-        {
-            //
-            // Hexen: Beyond Heretic
-            //
-
-            // Sectors:
-            P_LoadSectors(gamemap == 1 ? W_GetNumForName("HXSCF01") :
-                          gamemap == 2 ? W_GetNumForName("HXSCF02") :
-                          lumpnum + ML_SECTORS);
-            // Sidedefs:
-            P_LoadSideDefs(gamemap == 1 ? W_GetNumForName("HXSDF01") :
-                           gamemap == 2 ? W_GetNumForName("HXSDF02") :
-                           lumpnum + ML_SIDEDEFS);
-            // Linedefs:
-            P_LoadLineDefs(gamemap == 1 ? W_GetNumForName("HXLDF01") :
-                           gamemap == 2 ? W_GetNumForName("HXLDF02") :
-                           lumpnum + ML_LINEDEFS);
-        }
-        else
-        {
-            //
-            // Hexen: Deathkings of the Dark Citadel
-            // (nothing for now, just load standard lumps)
-            //
-
-            P_LoadSectors(lumpnum + ML_SECTORS);
-            P_LoadSideDefs(lumpnum + ML_SIDEDEFS);
-            P_LoadLineDefs(lumpnum + ML_LINEDEFS);
-        }
+        P_LoadMapFixes(gamemap);
     }
     else
     {
@@ -1702,3 +1674,62 @@ void My_Debug(void)
 	}
 }
 */
+
+/*
+================================================================================
+=
+= P_LoadMapFixes
+=
+= [JN] Load replaced lumps with various map fixes.
+=
+================================================================================
+*/
+
+static void P_LoadMapFixes (int map)
+{
+    int  lumpnum;
+    char lumpname[9];
+
+    M_snprintf(lumpname, sizeof(lumpname), "MAP%02d", map);
+    lumpnum = W_GetNumForName(lumpname);
+
+    if (!isDK)
+    {
+        //
+        // Hexen: Beyond Heretic
+        //
+
+        // Sectors:
+        P_LoadSectors(gamemap == 1 ? W_GetNumForName("HXSCF01") :
+                      gamemap == 2 ? W_GetNumForName("HXSCF02") :
+                      gamemap == 3 ? W_GetNumForName("HXSCF03") :
+                      gamemap == 4 ? W_GetNumForName("HXSCF04") :
+                      gamemap == 5 ? W_GetNumForName("HXSCF05") :
+                      lumpnum + ML_SECTORS);
+        // Sidedefs:
+        P_LoadSideDefs(gamemap == 1 ? W_GetNumForName("HXSDF01") :
+                       gamemap == 2 ? W_GetNumForName("HXSDF02") :
+                       gamemap == 3 ? W_GetNumForName("HXSDF03") :
+                       gamemap == 4 ? W_GetNumForName("HXSDF04") :
+                       gamemap == 5 ? W_GetNumForName("HXSDF05") :
+                       lumpnum + ML_SIDEDEFS);
+        // Linedefs:
+        P_LoadLineDefs(gamemap == 1 ? W_GetNumForName("HXLDF01") :
+                       gamemap == 2 ? W_GetNumForName("HXLDF02") :
+                       gamemap == 3 ? W_GetNumForName("HXLDF03") :
+                       gamemap == 4 ? W_GetNumForName("HXLDF04") :
+                       gamemap == 5 ? W_GetNumForName("HXLDF05") :
+                       lumpnum + ML_LINEDEFS);
+    }
+    else
+    {
+        //
+        // Hexen: Deathkings of the Dark Citadel
+        // (nothing for now, just load standard lumps)
+        //
+
+        P_LoadSectors(lumpnum + ML_SECTORS);
+        P_LoadSideDefs(lumpnum + ML_SIDEDEFS);
+        P_LoadLineDefs(lumpnum + ML_LINEDEFS);
+    }
+}
