@@ -499,10 +499,18 @@ void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
             colfunc = alttlcolfunc;
         }
     }
-    else if (vis->mobjflags & MF_EXTRATRANS && translucency && !vanillaparm)
+    else if (vis->mobjflags & MF_EXTRATRANS)
     {
-        // [JN] Draw using extra translucent column function.
-        colfunc = extratlcolfunc;
+        if (translucency && !vanillaparm)
+        {
+            // [JN] Draw using extra translucent column function.
+            colfunc = extratlcolfunc;
+        }
+        else
+        {
+            // [JN] Or else, draw as opaque column.
+            colfunc = basecolfunc;
+        }
     }
     else if (vis->mobjflags & MF_TRANSLATION)
     {
@@ -514,7 +522,7 @@ void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
     else if (vis->translation)
     {
         // [crispy] color-translated sprites
-        colfunc = R_DrawTranslatedColumn;
+        colfunc = transcolfunc;
         dc_translation = vis->translation;
     }
 
