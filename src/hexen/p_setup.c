@@ -1688,48 +1688,45 @@ void My_Debug(void)
 static void P_LoadMapFixes (int map)
 {
     int  lumpnum;
-    char lumpname[9];
+    char fix_lumpname[9];
+    char orig_lumpname[9];
 
-    M_snprintf(lumpname, sizeof(lumpname), "MAP%02d", map);
-    lumpnum = W_GetNumForName(lumpname);
-
-    if (!isDK)
+    switch (map)
     {
-        //
-        // Hexen: Beyond Heretic
-        //
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 8:
+        {
+            // Construct new SECTORS lump name and load it:
+            M_snprintf(fix_lumpname, sizeof(fix_lumpname), "HXSCF%02d", map);
+            lumpnum = W_GetNumForName(fix_lumpname);
+            P_LoadSectors(lumpnum);
 
-        // Sectors:
-        P_LoadSectors(gamemap == 1 ? W_GetNumForName("HXSCF01") :
-                      gamemap == 2 ? W_GetNumForName("HXSCF02") :
-                      gamemap == 3 ? W_GetNumForName("HXSCF03") :
-                      gamemap == 4 ? W_GetNumForName("HXSCF04") :
-                      gamemap == 5 ? W_GetNumForName("HXSCF05") :
-                      lumpnum + ML_SECTORS);
-        // Sidedefs:
-        P_LoadSideDefs(gamemap == 1 ? W_GetNumForName("HXSDF01") :
-                       gamemap == 2 ? W_GetNumForName("HXSDF02") :
-                       gamemap == 3 ? W_GetNumForName("HXSDF03") :
-                       gamemap == 4 ? W_GetNumForName("HXSDF04") :
-                       gamemap == 5 ? W_GetNumForName("HXSDF05") :
-                       lumpnum + ML_SIDEDEFS);
-        // Linedefs:
-        P_LoadLineDefs(gamemap == 1 ? W_GetNumForName("HXLDF01") :
-                       gamemap == 2 ? W_GetNumForName("HXLDF02") :
-                       gamemap == 3 ? W_GetNumForName("HXLDF03") :
-                       gamemap == 4 ? W_GetNumForName("HXLDF04") :
-                       gamemap == 5 ? W_GetNumForName("HXLDF05") :
-                       lumpnum + ML_LINEDEFS);
-    }
-    else
-    {
-        //
-        // Hexen: Deathkings of the Dark Citadel
-        // (nothing for now, just load standard lumps)
-        //
+            // Construct new SIDEDEFS lump name and load it:
+            M_snprintf(fix_lumpname, sizeof(fix_lumpname), "HXSDF%02d", map);
+            lumpnum = W_GetNumForName(fix_lumpname);
+            P_LoadSideDefs(lumpnum);
 
-        P_LoadSectors(lumpnum + ML_SECTORS);
-        P_LoadSideDefs(lumpnum + ML_SIDEDEFS);
-        P_LoadLineDefs(lumpnum + ML_LINEDEFS);
+            // Construct new LINEDEFS lump name and load it:
+            M_snprintf(fix_lumpname, sizeof(fix_lumpname), "HXLDF%02d", map);
+            lumpnum = W_GetNumForName(fix_lumpname);
+            P_LoadLineDefs(lumpnum);
+        }
+        break;
+        
+        default:
+        {
+            // Just load original SECTORS/SIDEDEFS/LINEDEFS lumps:
+            M_snprintf(orig_lumpname, sizeof(orig_lumpname), "MAP%02d", map);
+            lumpnum = W_GetNumForName(orig_lumpname);
+            P_LoadSectors(lumpnum + ML_SECTORS);
+            P_LoadSideDefs(lumpnum + ML_SIDEDEFS);
+            P_LoadLineDefs(lumpnum + ML_LINEDEFS);
+        }
+        break;
     }
 }
