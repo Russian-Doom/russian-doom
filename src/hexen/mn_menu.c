@@ -404,14 +404,15 @@ static Menu_t HMainMenu = {
 static MenuItem_t ClassItems[] = {
     {ITT_EFUNC, "FIGHTER", "DJBY",   SCClass, 0}, // ВОИН
     {ITT_EFUNC, "CLERIC",  "RKBHBR", SCClass, 1}, // КЛИРИК
-    {ITT_EFUNC, "MAGE",    "VFU",    SCClass, 2}  // МАГ
+    {ITT_EFUNC, "MAGE",    "VFU",    SCClass, 2}, // МАГ
+    {ITT_EFUNC, "RANDOM",  "CKEXFQYSQ", SCClass, 4}, // СЛУЧАЙНЫЙ
 };
 
 static Menu_t ClassMenu = {
-    56, 50,
-    66,
+    65, 43,
+    50,
     NULL, NULL, true,
-    3, ClassItems, true,
+    4, ClassItems, true,
     DrawClassMenu,
     NULL,
     &HMainMenu,
@@ -472,6 +473,26 @@ static Menu_t SkillMenu_M = {
     30,
     "CHOOSE SKILL LEVEL:", "EHJDTYM CKJ;YJCNB:", true, // УРОВЕНЬ СЛОЖНОСТИ:
     6, SkillItems_M, true,
+    DrawSkillMenu,
+    NULL,
+    &ClassMenu,
+    2
+};
+
+static MenuItem_t SkillItems_R[] = {
+    {ITT_EFUNC, "THOU NEEDETH A WET-NURSE",       "YZYTXRF YFLJ,YF VYT",    SCSkill, sk_baby},      // НЯНЕЧКА НАДОБНА МНЕ
+    {ITT_EFUNC, "YELLOWBELLIES-R-US",             "YT CNJKM VE;TCNDTYTY Z", SCSkill, sk_easy},      // НЕ СТОЛЬ МУЖЕСТВЕНЕН Я
+    {ITT_EFUNC, "BRINGEST THEM ONETH",            "GJLFQNT VYT B[",         SCSkill, sk_medium},    // ПОДАЙТЕ МНЕ ИХ
+    {ITT_EFUNC, "THOU ART A SMITE-MEISTER",       "BCREITY Z CHF;TYBZVB",   SCSkill, sk_hard},      // ИСКУШЕН Я СРАЖЕНИЯМИ
+    {ITT_EFUNC, "BLACK PLAGUE POSSESSES THEE",    "XEVF JDKFLTKF VYJQ",     SCSkill, sk_nightmare}, // ЧУМА ОВЛАДЕЛА МНОЙ
+    {ITT_EFUNC, "QUICKETH ART THEE, FOUL WRAITH", "RJIVFHJV BCGJKYTY Z",    SCSkill, sk_ultranm}    // КОШМАРОМ ИСПОЛНЕН Я // [JN] Thanks to Jon Dowland for this :)
+};
+
+static Menu_t SkillMenu_R = {
+    38, 38,
+    30,
+    "CHOOSE SKILL LEVEL:", "EHJDTYM CKJ;YJCNB:", true, // УРОВЕНЬ СЛОЖНОСТИ:
+    6, SkillItems_R, true,
     DrawSkillMenu,
     NULL,
     &ClassMenu,
@@ -1788,15 +1809,19 @@ static void DrawMainMenu(void)
 static void DrawClassMenu(void)
 {
     pclass_t class;
-    static char *boxLumpName[3] = {
+    static char *boxLumpName[5] = {
         "m_fbox",
         "m_cbox",
-        "m_mbox"
+        "m_mbox",
+        "TNT1A0",  // [JN] Unused (pig class)
+        "M_RBOX"   // [JN] Random class (ENG)
     };
-    static char *boxLumpName_Rus[3] = {
+    static char *boxLumpName_Rus[5] = {
         "rd_fbox",
         "rd_cbox",
-        "rd_mbox"
+        "rd_mbox",
+        "TNT1A0",  // [JN] Unused (pig class)
+        "RD_RBOX"  // [JN] Random class (RUS)
     };
     static char *walkLumpName[3] = {
         "m_fwalk1",
@@ -1819,9 +1844,13 @@ static void DrawClassMenu(void)
                                              boxLumpName[class] :
                                              boxLumpName_Rus[class], PU_CACHE));
 
-    V_DrawPatch(174 + 24 + wide_delta, 8 + 12,
-                W_CacheLumpNum(W_GetNumForName(walkLumpName[class])
-                               + ((MenuTime >> 3) & 3), PU_CACHE));
+    // [JN] Don't draw walking player for random class.
+    if (class < 3)
+    {
+        V_DrawPatch(174 + 24 + wide_delta, 8 + 12,
+                    W_CacheLumpNum(W_GetNumForName(walkLumpName[class])
+                                   + ((MenuTime >> 3) & 3), PU_CACHE));
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -5440,6 +5469,8 @@ static void SCClass(int option)
             break;
         case PCLASS_MAGE:
             RD_Menu_SetMenu(&SkillMenu_M);
+        case PCLASS_RANDOM:
+            RD_Menu_SetMenu(&SkillMenu_R);
         default:
             break;
     }
@@ -5459,7 +5490,15 @@ static void SCSkill(int option)
         demoextend = false;
     }
 
-    PlayerClass[consoleplayer] = MenuPClass;
+    if (MenuPClass < 3)
+    {
+        PlayerClass[consoleplayer] = MenuPClass;
+    }
+    else
+    {
+        // [JN] Let the random choose player class:
+        PlayerClass[consoleplayer] = rand() % 3;
+    }
     G_DeferredNewGame(option);
     SB_SetClassData();
     SB_state = -1;
