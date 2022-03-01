@@ -77,9 +77,10 @@ void RD_CreateWindowsConsole (void)
 
 void M_SetExeDir(void)
 {
+    char *dirname;
 #ifdef __APPLE__ //TODO [Dasperal] test this
     uint32_t buffSize = PATH_MAX+1;
-    char *exenameRaw, *exename, *dirname;
+    char *exenameRaw, *exename;
     int result;
 
     exenameRaw = malloc(buffSize);
@@ -116,15 +117,19 @@ void M_SetExeDir(void)
     exedir = M_StringJoin(dirname, DIR_SEPARATOR_S, NULL);
     free(dirname);
 #else // Windows & Linux
-    exedir = SDL_GetBasePath();
-    if(!exedir)
+    dirname = SDL_GetBasePath();
+    if(dirname)
     {
-        char* temp;
+        exedir = M_StringDuplicate(dirname);
+        SDL_free(dirname);
+    }
+    else
+    {
         printf("I_MAIN: Error: Unable to get path to executable from SDL_GetBasePath");
         printf("I_MAIN: Trying to get path to executable from arg0\n \t%s\n", myargv[0]);
-        temp = M_DirName(myargv[0]);
-        exedir = M_StringJoin(temp, DIR_SEPARATOR_S, NULL);
-        free(temp);
+        dirname = M_DirName(myargv[0]);
+        exedir = M_StringJoin(dirname, DIR_SEPARATOR_S, NULL);
+        free(dirname);
     }
 #endif
 }
