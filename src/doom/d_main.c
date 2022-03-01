@@ -2598,9 +2598,6 @@ void D_DoomMain (void)
                "Z_Init: Инициализация распределения памяти.\n");
     Z_Init ();
 
-    // [JN] Use current time as seed for random generator.
-    srand(time(0));
-
 #ifdef FEATURE_MULTIPLAYER
     //!
     // @category net

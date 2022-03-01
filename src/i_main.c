@@ -23,6 +23,7 @@
 
 #include <assert.h>
 #include <stdio.h>
+#include <time.h>   // [JN] srand(time(0))
 
 #include "SDL.h"
 
@@ -172,6 +173,9 @@ int main(int argc, char **argv)
     // All optional enhancements will be disabled 
     // without modifying configuration files.
     vanillaparm = M_ParmExists("-vanilla");
+
+    // [JN] Use current time as seed for random generator.
+    srand(time(0));
 
     // start doom
 
