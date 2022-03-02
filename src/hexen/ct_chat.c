@@ -19,6 +19,8 @@
 
 #include <string.h>
 #include <ctype.h>
+#include <SDL_scancode.h>
+
 #include "h2def.h"
 #include "i_input.h"
 #include "rd_keybinds.h"
@@ -172,12 +174,12 @@ boolean CT_Responder(event_t * ev)
     {
         return false;
     }
-    if (ev->data1 == KEY_RALT || ev->data1 == KEY_LALT)
+    if (ev->data1 == SDL_SCANCODE_RALT || ev->data1 == SDL_SCANCODE_LALT)
     {
         altdown = (ev->type == ev_keydown);
         return false;
     }
-    if (ev->data1 == KEY_RSHIFT || ev->data1 == KEY_LSHIFT)
+    if (ev->data1 == SDL_SCANCODE_RSHIFT || ev->data1 == SDL_SCANCODE_LSHIFT)
     {
         shiftdown = (ev->type == ev_keydown);
         return false;
@@ -236,13 +238,13 @@ boolean CT_Responder(event_t * ev)
     {
         if (altdown)
         {
-            if (ev->data1 >= '0' && ev->data1 <= '9')
+            if (ev->data1 >= SDL_SCANCODE_1 && ev->data1 <= SDL_SCANCODE_0)
             {
-                if (ev->data1 == '0')
+                if (ev->data1 == SDL_SCANCODE_0)
                 {               // macro 0 comes after macro 9
-                    ev->data1 = '9' + 1;
+                    ev->data1 = SDL_SCANCODE_Z;
                 }
-                macro = chat_macros[ev->data1 - '1'];
+                macro = chat_macros[ev->data1 - SDL_SCANCODE_Z];
                 CT_queueChatChar(KEY_ENTER);    //send old message
                 CT_queueChatChar(chat_dest[consoleplayer]);     // chose the dest.
                 while (*macro)

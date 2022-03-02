@@ -21,10 +21,10 @@
 
 #include <stdlib.h>
 #include <ctype.h>
+#include <SDL_scancode.h>
 
 #include "rd_io.h"
 #include "doomdef.h"
-#include "doomkeys.h"
 #include "d_main.h"
 #include "deh_main.h"
 #include "i_controller.h"
@@ -7513,20 +7513,7 @@ boolean M_Responder (event_t* ev)
         }
         else if(ev->type == ev_keydown)
         {
-            // This is complicated.
-            // Vanilla has a bug where the shift key is ignored when entering
-            // a savegame name. If vanilla_keyboard_mapping is on, we want
-            // to emulate this bug by using 'data1'. But if it's turned off,
-            // it implies the user doesn't care about Vanilla emulation: just
-            // use the correct 'data2'.
-            if (vanilla_keyboard_mapping)
-            {
-                ch = ev->data1;
-            }
-            else
-            {
-                ch = ev->data2;
-            }
+            ch = ev->data2;
 
             ch = toupper(ch);
 
@@ -7751,7 +7738,7 @@ boolean M_Responder (event_t* ev)
 
     // [crispy] delete a savegame
     // [JN] Also used for clearing keyboard bindings
-    if (ev->type == ev_keydown && ev->data1 == KEY_DEL)
+    if (ev->type == ev_keydown && ev->data1 == SDL_SCANCODE_DELETE)
     {
         // [JN] Save/load menu
         if (CurrentMenu == &LoadMenu

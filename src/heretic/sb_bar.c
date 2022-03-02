@@ -1763,7 +1763,7 @@ boolean SB_Responder(event_t * event)
 {
     if (event->type == ev_keydown)
     {
-        if (HandleCheats(event->data1))
+        if (HandleCheats(event->data2))
         {                       // Need to eat the key
             return (true);
         }

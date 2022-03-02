@@ -20,6 +20,7 @@
 
 #include <ctype.h>
 #include <time.h>
+#include <SDL_scancode.h>
 
 #include "doomdef.h"
 #include "doomkeys.h"
@@ -1206,11 +1207,11 @@ boolean HU_Responder(event_t *ev)
     for (i=0 ; i<MAXPLAYERS ; i++)
         numplayers += playeringame[i];
 
-    if (ev->data1 == KEY_RSHIFT || ev->data1 == KEY_LSHIFT)
+    if (ev->data1 == SDL_SCANCODE_RSHIFT || ev->data1 == SDL_SCANCODE_LSHIFT)
     {
         return false;
     }
-    else if (ev->data1 == KEY_RALT || ev->data1 == KEY_LALT)
+    else if (ev->data1 == SDL_SCANCODE_RALT || ev->data1 == SDL_SCANCODE_LALT)
     {
         altdown = ev->type == ev_keydown;
         return false;
@@ -1268,7 +1269,7 @@ boolean HU_Responder(event_t *ev)
         // send a macro
         if (altdown)
         {
-            c = ev->data1 - '0';
+            c = ev->data1 == SDL_SCANCODE_0 ? 0 : ev->data1 - SDL_SCANCODE_Z;
             if (c > 9)
                 return false;
             // fprintf(stderr, "got here\n");

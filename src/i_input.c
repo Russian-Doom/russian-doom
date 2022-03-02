@@ -305,7 +305,7 @@ void I_HandleKeyboardEvent(SDL_Event *sdlevent)
     {
         case SDL_KEYDOWN:
             event.type = ev_keydown;
-            event.data1 = TranslateKey(&sdlevent->key.keysym);
+            event.data1 = sdlevent->key.keysym.scancode;
             event.data2 = GetLocalizedKey(&sdlevent->key.keysym);
             event.data3 = GetTypedChar(&sdlevent->key.keysym);
             event.data4 = 0;
@@ -318,7 +318,7 @@ void I_HandleKeyboardEvent(SDL_Event *sdlevent)
 
         case SDL_KEYUP:
             event.type = ev_keyup;
-            event.data1 = TranslateKey(&sdlevent->key.keysym);
+            event.data1 = sdlevent->key.keysym.scancode;
 
             // data2/data3 are initialized to zero for ev_keyup.
             // For ev_keydown it's the shifted Unicode character

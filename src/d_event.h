@@ -32,26 +32,22 @@ typedef enum
 {
     /**
      * Key press events.
-     *     data1: Key code (from doomkeys.h) of the key that was
-     *            pressed. This is the key as it appears
-     *            on a US keyboard layout, and does not change with
-     *            layout.
+     *     data1: SDL scancode of the key that was
+     *            pressed.
+     *     data2: ASCII representation of the key that was pressed that
+     *            changes with the keyboard layout; eg. if 'Z' is
+     *            pressed on a German keyboard, data1='y',data2='z'.
+     *            Not affected by modifier keys.
+     *     data3: ASCII input, fully modified according to keyboard
+     *            layout and any modifier keys that are held down.
+     *            Only set if I_StartTextInput() has been called.
      */
     ev_keydown,
 
     /**
      * Key release events.
-     *    data1: Key code (from doomkeys.h) of the key that was
-     *           released. This is the key as it appears
-     *           on a US keyboard layout, and does not change with
-     *           layout.
-     *    data2: ASCII representation of the key that was pressed that
-     *           changes with the keyboard layout; eg. if 'Z' is
-     *           pressed on a German keyboard, data1='y',data2='z'.
-     *           Not affected by modifier keys.
-     *    data3: ASCII input, fully modified according to keyboard
-     *           layout and any modifier keys that are held down.
-     *           Only set if I_StartTextInput() has been called.
+     *    data1: SDL scancode of the key that was
+     *           released.
      */
     ev_keyup,
 
