@@ -24,7 +24,6 @@
 #include <string.h>
 
 #include "deh_str.h"
-#include "doomkeys.h"
 #include "d_iwad.h"
 #include "i_system.h"
 #include "m_argv.h"

@@ -19,9 +19,10 @@
 // HEADER FILES ------------------------------------------------------------
 
 #include <ctype.h>
+#include <SDL_scancode.h>
+
 #include "rd_io.h"
 #include "h2def.h"
-#include "doomkeys.h"
 #include "i_controller.h"
 #include "i_input.h"
 #include "i_system.h"
@@ -5991,7 +5992,7 @@ boolean MN_Responder(event_t * event)
         return (true);          //make the info screen eat the keypress
     }
 
-    if ((ravpic && event->data1 == KEY_F1) || BK_isKeyDown(event, bk_screenshot))
+    if ((ravpic && event->data1 == SDL_SCANCODE_F1) || BK_isKeyDown(event, bk_screenshot))
     {
         G_ScreenShot();
         return (true);
@@ -6291,7 +6292,7 @@ boolean MN_Responder(event_t * event)
         return (false);
     }
 
-    if (event->type == ev_keydown && event->data1 == KEY_DEL)
+    if (event->type == ev_keydown && event->data1 == SDL_SCANCODE_DELETE)
     {
         // [JN] Save/load menu
         if (CurrentMenu == &LoadMenu

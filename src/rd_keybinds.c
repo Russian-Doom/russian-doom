@@ -19,7 +19,6 @@
 
 #include "rd_keybinds.h"
 #include "d_name.h"
-#include "doomkeys.h"
 #include "i_controller.h"
 #include "i_input.h"
 #include "i_video.h"
@@ -178,164 +177,6 @@ static const char* cKToName[] = {
 static int nameToCK[arrlen(cKToName)];
 static boolean nameToCK_init = false;
 
-static SDL_Scancode legacyToScancode(int legacyKey)
-{
-    // [JN] Values are simple ASCII table:
-    // https://upload.wikimedia.org/wikipedia/commons/7/7b/Ascii_Table-nocolor.svg
-    switch(legacyKey)
-    {
-        case KEY_TAB:        return SDL_SCANCODE_TAB;
-        case KEY_ENTER:      return SDL_SCANCODE_RETURN;
-        case KEY_ESCAPE:     return SDL_SCANCODE_ESCAPE;
-        case ' ':            return SDL_SCANCODE_SPACE;
-        case '\'':           return SDL_SCANCODE_APOSTROPHE;
-        case '*':            return SDL_SCANCODE_8;
-        case '+':            return SDL_SCANCODE_EQUALS;
-        case ',':            return SDL_SCANCODE_COMMA;
-        case KEY_MINUS:      return SDL_SCANCODE_MINUS;
-        case '.':            return SDL_SCANCODE_PERIOD;
-        case '/':            return SDL_SCANCODE_SLASH;
-        case '0':            return SDL_SCANCODE_0;
-        case '1':            return SDL_SCANCODE_1;
-        case '2':            return SDL_SCANCODE_2;
-        case '3':            return SDL_SCANCODE_3;
-        case '4':            return SDL_SCANCODE_4;
-        case '5':            return SDL_SCANCODE_5;
-        case '6':            return SDL_SCANCODE_6;
-        case '7':            return SDL_SCANCODE_7;
-        case '8':            return SDL_SCANCODE_8;
-        case '9':            return SDL_SCANCODE_9;
-        case ';':            return SDL_SCANCODE_SEMICOLON;
-        case KEY_EQUALS:     return SDL_SCANCODE_EQUALS; // [JN] Indicated as "+" in help screens
-        case '[':            return SDL_SCANCODE_LEFTBRACKET;
-        case ']':            return SDL_SCANCODE_RIGHTBRACKET;
-        case '\\':           return SDL_SCANCODE_BACKSLASH;
-        case '`':            return SDL_SCANCODE_GRAVE;
-        case 'a':            return SDL_SCANCODE_A;
-        case 'b':            return SDL_SCANCODE_B;
-        case 'c':            return SDL_SCANCODE_C;
-        case 'd':            return SDL_SCANCODE_D;
-        case 'e':            return SDL_SCANCODE_E;
-        case 'f':            return SDL_SCANCODE_F;
-        case 'g':            return SDL_SCANCODE_G;
-        case 'h':            return SDL_SCANCODE_H;
-        case 'i':            return SDL_SCANCODE_I;
-        case 'j':            return SDL_SCANCODE_J;
-        case 'k':            return SDL_SCANCODE_K;
-        case 'l':            return SDL_SCANCODE_L;
-        case 'm':            return SDL_SCANCODE_M;
-        case 'n':            return SDL_SCANCODE_N;
-        case 'o':            return SDL_SCANCODE_O;
-        case 'p':            return SDL_SCANCODE_P;
-        case 'q':            return SDL_SCANCODE_Q;
-        case 'r':            return SDL_SCANCODE_R;
-        case 's':            return SDL_SCANCODE_S;
-        case 't':            return SDL_SCANCODE_T;
-        case 'u':            return SDL_SCANCODE_U;
-        case 'v':            return SDL_SCANCODE_V;
-        case 'w':            return SDL_SCANCODE_W;
-        case 'x':            return SDL_SCANCODE_X;
-        case 'y':            return SDL_SCANCODE_Y;
-        case 'z':            return SDL_SCANCODE_Z;
-        case KEY_BACKSPACE:  return SDL_SCANCODE_BACKSPACE;
-        case KEY_RCTRL:      return SDL_SCANCODE_RCTRL;
-        case KEYP_ENTER:     return SDL_SCANCODE_KP_ENTER;
-        case KEYP_EQUALS:    return SDL_SCANCODE_KP_EQUALS;
-        case KEYP_PERIOD:    return SDL_SCANCODE_KP_PERIOD;
-        case KEY_LSHIFT:     return SDL_SCANCODE_LSHIFT;
-        case KEY_LCTRL:      return SDL_SCANCODE_LCTRL;
-        case KEY_LALT:       return SDL_SCANCODE_LALT;
-        case KEY_LEFTARROW:  return SDL_SCANCODE_LEFT;
-        case KEY_UPARROW:    return SDL_SCANCODE_UP;
-        case KEY_RIGHTARROW: return SDL_SCANCODE_RIGHT;
-        case KEY_DOWNARROW:  return SDL_SCANCODE_DOWN;
-        case KEYP_MULTIPLY:  return SDL_SCANCODE_KP_MULTIPLY;
-        case KEYP_MINUS:     return SDL_SCANCODE_KP_MINUS;
-        case KEYP_PLUS:      return SDL_SCANCODE_KP_PLUS;
-        case KEYP_DIVIDE:    return SDL_SCANCODE_KP_DIVIDE;
-        case KEYP_9:         return SDL_SCANCODE_KP_9;
-        case KEYP_8:         return SDL_SCANCODE_KP_8;
-        case KEY_RSHIFT:     return SDL_SCANCODE_RSHIFT;
-        case KEYP_0:         return SDL_SCANCODE_KP_0;
-        case KEY_RALT:       return SDL_SCANCODE_RALT;
-        case KEYP_1:         return SDL_SCANCODE_KP_1;
-        case KEY_CAPSLOCK:   return SDL_SCANCODE_CAPSLOCK;
-        case KEY_F1:         return SDL_SCANCODE_F1;
-        case KEY_F2:         return SDL_SCANCODE_F2;
-        case KEY_F3:         return SDL_SCANCODE_F3;
-        case KEY_F4:         return SDL_SCANCODE_F4;
-        case KEY_F5:         return SDL_SCANCODE_F5;
-        case KEY_F6:         return SDL_SCANCODE_F6;
-        case KEY_F7:         return SDL_SCANCODE_F7;
-        case KEY_F8:         return SDL_SCANCODE_F8;
-        case KEY_F9:         return SDL_SCANCODE_F9;
-        case KEY_F10:        return SDL_SCANCODE_F10;
-        case KEY_NUMLOCK:    return SDL_SCANCODE_NUMLOCKCLEAR;
-        case KEY_SCRLCK:     return SDL_SCANCODE_SCROLLLOCK;
-        case KEY_HOME:       return SDL_SCANCODE_HOME;
-        case KEYP_2:         return SDL_SCANCODE_KP_2;
-        case KEY_PGUP:       return SDL_SCANCODE_PAGEUP;
-        case KEYP_3:         return SDL_SCANCODE_KP_3;
-        case KEYP_4:         return SDL_SCANCODE_KP_4;
-        case KEYP_5:         return SDL_SCANCODE_KP_5;
-        case KEYP_6:         return SDL_SCANCODE_KP_6;
-        case KEYP_7:         return SDL_SCANCODE_KP_7;
-        case KEY_END:        return SDL_SCANCODE_END;
-        case KEY_PGDN:       return SDL_SCANCODE_PAGEDOWN;
-        case KEY_INS:        return SDL_SCANCODE_INSERT;
-        case KEY_DEL:        return SDL_SCANCODE_DELETE;
-        case KEY_F11:        return SDL_SCANCODE_F11;
-        case KEY_F12:        return SDL_SCANCODE_F12;
-        case KEY_PRTSCR:     return SDL_SCANCODE_PRINTSCREEN;
-        case KEY_F13:        return SDL_SCANCODE_F13;
-        case KEY_F14:        return SDL_SCANCODE_F14;
-        case KEY_F15:        return SDL_SCANCODE_F15;
-        case KEY_F16:        return SDL_SCANCODE_F16;
-        case KEY_F17:        return SDL_SCANCODE_F17;
-        case KEY_F18:        return SDL_SCANCODE_F18;
-        case KEY_F19:        return SDL_SCANCODE_F19;
-        case KEY_F20:        return SDL_SCANCODE_F20;
-        case KEY_F21:        return SDL_SCANCODE_F21;
-        case KEY_F22:        return SDL_SCANCODE_F22;
-        case KEY_F23:        return SDL_SCANCODE_F23;
-        case KEY_F24:        return SDL_SCANCODE_F24;
-        case KEY_APP:        return SDL_SCANCODE_APPLICATION;
-        case KEY_PAUSE:      return SDL_SCANCODE_PAUSE;
-        default:             return SDL_SCANCODE_UNKNOWN; // [JN] Unknown key
-    }
-}
-
-// Translates the SDL key to a value of the type found in doomkeys.h
-static int scancodeToLegacy(SDL_Scancode scancode)
-{
-    static const int scancode_translate_table[] = SCANCODE_TO_KEYS_ARRAY;
-
-    switch (scancode)
-    {
-        case SDL_SCANCODE_LCTRL:
-            return KEY_LCTRL;
-        case SDL_SCANCODE_RCTRL:
-            return KEY_RCTRL;
-        case SDL_SCANCODE_LSHIFT:
-            return KEY_LSHIFT;
-        case SDL_SCANCODE_RSHIFT:
-            return KEY_RSHIFT;
-        case SDL_SCANCODE_LALT:
-            return KEY_LALT;
-        case SDL_SCANCODE_RALT:
-            return KEY_RALT;
-        default:
-            if (scancode >= 0 && scancode < arrlen(scancode_translate_table))
-            {
-                return scancode_translate_table[scancode];
-            }
-            else
-            {
-                return 0;
-            }
-    }
-}
-
 static device_t getEventDevice(event_t* event)
 {
     switch(event->type)
@@ -437,128 +278,21 @@ static boolean BK_KeyHasNoBinds(bound_key_t key)
 
 static const char* getKeyboardKeyName(int key)
 {
-    // [JN] Values are simple ASCII table:
-    // https://upload.wikimedia.org/wikipedia/commons/7/7b/Ascii_Table-nocolor.svg
     switch(key)
     {
-        case 0:              return "---";
-        case KEY_TAB:        return "TAB";
-        case KEY_ENTER:      return "ENTER";
-        case ' ':            return "SPACE";
-        case '\'':           return "'";
-        case '*':            return "*";
-        case '+':            return "+";
-        case ',':            return ",";
-        case KEY_MINUS:      return "-";
-        case '.':            return ".";
-        case '/':            return "/";
-        case '0':            return "0";
-        case '1':            return "1";
-        case '2':            return "2";
-        case '3':            return "3";
-        case '4':            return "4";
-        case '5':            return "5";
-        case '6':            return "6";
-        case '7':            return "7";
-        case '8':            return "8";
-        case '9':            return "9";
-        case ';':            return ";";
-        case KEY_EQUALS:     return "="; // [JN] Indicated as "+" in help screens
-        case '[':            return "[";
-        case ']':            return "]";
-        case '\\':           return "\\";
-        case '`':            return "TILDE";
-        case 'a':            return "A";
-        case 'b':            return "B";
-        case 'c':            return "C";
-        case 'd':            return "D";
-        case 'e':            return "E";
-        case 'f':            return "F";
-        case 'g':            return "G";
-        case 'h':            return "H";
-        case 'i':            return "I";
-        case 'j':            return "J";
-        case 'k':            return "K";
-        case 'l':            return "L";
-        case 'm':            return "M";
-        case 'n':            return "N";
-        case 'o':            return "O";
-        case 'p':            return "P";
-        case 'q':            return "Q";
-        case 'r':            return "R";
-        case 's':            return "S";
-        case 't':            return "T";
-        case 'u':            return "U";
-        case 'v':            return "V";
-        case 'w':            return "W";
-        case 'x':            return "X";
-        case 'y':            return "Y";
-        case 'z':            return "Z";
-        case KEY_BACKSPACE:  return "BCKSP";
-        case KEY_RCTRL:      return "RCTRL";
-        case KEYP_ENTER:     return "KP_ENTER";
-        case KEYP_EQUALS:    return "KP_=";
-        case KEYP_PERIOD:    return "KP_.";
-        case KEY_LSHIFT:     return "LSHIFT";
-        case KEY_LCTRL:      return "LCTRL";
-        case KEY_LALT:       return "LALT";
-        case KEY_LEFTARROW:  return "LEFT";
-        case KEY_UPARROW:    return "UP";
-        case KEY_RIGHTARROW: return "RIGHT";
-        case KEY_DOWNARROW:  return "DOWN";
-        case KEYP_MULTIPLY:  return "KP_*";
-        case KEYP_MINUS:     return "KP_-";
-        case KEYP_PLUS:      return "KP_+";
-        case KEYP_DIVIDE:    return "KP_/";
-        case KEYP_9:         return "KP_9";
-        case KEYP_8:         return "KP_8";
-        case KEY_RSHIFT:     return "RSHIFT";
-        case KEYP_0:         return "KP_0";
-        case KEY_RALT:       return "RALT";
-        case KEYP_1:         return "KP_1";
-        case KEY_CAPSLOCK:   return "CAPS LOCK";
-        case KEY_F1:         return "F1";
-        case KEY_F2:         return "F2";
-        case KEY_F3:         return "F3";
-        case KEY_F4:         return "F4";
-        case KEY_F5:         return "F5";
-        case KEY_F6:         return "F6";
-        case KEY_F7:         return "F7";
-        case KEY_F8:         return "F8";
-        case KEY_F9:         return "F9";
-        case KEY_F10:        return "F10";
-        case KEY_NUMLOCK:    return "NUM LOCK";
-        case KEY_SCRLCK:     return "SCROLL";
-        case KEY_HOME:       return "HOME";
-        case KEYP_2:         return "KP_2";
-        case KEY_PGUP:       return "PGEUP";
-        case KEYP_3:         return "KP_3";
-        case KEYP_4:         return "KP_4";
-        case KEYP_5:         return "KP_5";
-        case KEYP_6:         return "KP_6";
-        case KEYP_7:         return "KP_7";
-        case KEY_END:        return "END";
-        case KEY_PGDN:       return "PGDN";
-        case KEY_INS:        return "INS";
-        case KEY_DEL:        return "DEL";
-        case KEY_F11:        return "F11";
-        case KEY_F12:        return "F12";
-        case KEY_PRTSCR:     return "SYS RQ";
-        case KEY_F13:        return "F13";
-        case KEY_F14:        return "F14";
-        case KEY_F15:        return "F15";
-        case KEY_F16:        return "F16";
-        case KEY_F17:        return "F17";
-        case KEY_F18:        return "F18";
-        case KEY_F19:        return "F19";
-        case KEY_F20:        return "F20";
-        case KEY_F21:        return "F21";
-        case KEY_F22:        return "F22";
-        case KEY_F23:        return "F23";
-        case KEY_F24:        return "F24";
-        case KEY_APP:        return "APP";
-        case KEY_PAUSE:      return "PAUSE";
-        default:             return "?"; // [JN] Unknown key
+        case SDL_SCANCODE_GRAVE:        return "TILDE";
+        case SDL_SCANCODE_BACKSPACE:    return "BCKSP";
+        case SDL_SCANCODE_CAPSLOCK:     return "CAPS LOCK";
+        case SDL_SCANCODE_NUMLOCKCLEAR: return "NUM LOCK";
+        case SDL_SCANCODE_PAGEUP:       return "PGEUP";
+        case SDL_SCANCODE_PAGEDOWN:     return "PGDN";
+        case SDL_SCANCODE_PRINTSCREEN:  return "SYS RQ";
+        default:
+            if(key > arrlen(kKToName) || strcmp(kKToName[key], "") == 0)
+            {
+                return "?"; // [JN] Unknown key
+            }
+            return kKToName[key];
     }
 }
 
@@ -799,18 +533,18 @@ void BK_BindKey(event_t* event)
 {
     // [Dasperal] Prohibit binding of some keyboard keys and gamepad menu key
     if((event->type == ev_keydown
-    && (event->data1 == KEY_F1
-    || event->data1 == KEY_F2
-    || event->data1 == KEY_F3
-    || event->data1 == KEY_F4
-    || event->data1 == KEY_F5
-    || event->data1 == KEY_F7
-    || event->data1 == KEY_F8
-    || event->data1 == KEY_F10
-    || event->data1 == KEY_F11
-    || event->data1 == KEY_EQUALS
-    || event->data1 == KEY_MINUS
-    || event->data1 == KEY_PAUSE))
+    && (event->data1 == SDL_SCANCODE_F1
+    || event->data1 == SDL_SCANCODE_F2
+    || event->data1 == SDL_SCANCODE_F3
+    || event->data1 == SDL_SCANCODE_F4
+    || event->data1 == SDL_SCANCODE_F5
+    || event->data1 == SDL_SCANCODE_F7
+    || event->data1 == SDL_SCANCODE_F8
+    || event->data1 == SDL_SCANCODE_F10
+    || event->data1 == SDL_SCANCODE_F11
+    || event->data1 == SDL_SCANCODE_EQUALS
+    || event->data1 == SDL_SCANCODE_MINUS
+    || event->data1 == SDL_SCANCODE_PAUSE))
     || (event->type == ev_controller_keydown && event->data1 == CONTROLLER_START))
     {
         return;
@@ -847,34 +581,34 @@ void BK_AddBindingsToSystemKeys()
     bindClearEnabled = false;
 
     // Keyboard
-    AddBind(bk_left,  keyboard, KEY_LEFTARROW);
-    AddBind(bk_right, keyboard, KEY_RIGHTARROW);
-    AddBind(bk_up,    keyboard, KEY_UPARROW);
-    AddBind(bk_down,  keyboard, KEY_DOWNARROW);
+    AddBind(bk_left,  keyboard, SDL_SCANCODE_LEFT);
+    AddBind(bk_right, keyboard, SDL_SCANCODE_RIGHT);
+    AddBind(bk_up,    keyboard, SDL_SCANCODE_UP);
+    AddBind(bk_down,  keyboard, SDL_SCANCODE_DOWN);
 
-    AddBind(bk_menu_activate,  keyboard, KEY_ESCAPE);
-    AddBind(bk_menu_back,      keyboard, KEY_BACKSPACE);
-    AddBind(bk_menu_select,    keyboard, KEY_ENTER);
-    AddBind(bk_menu_select,    keyboard, KEYP_ENTER);
-    AddBind(bk_menu_page_next, keyboard, KEY_PGDN);
-    AddBind(bk_menu_page_prev, keyboard, KEY_PGUP);
+    AddBind(bk_menu_activate,  keyboard, SDL_SCANCODE_ESCAPE);
+    AddBind(bk_menu_back,      keyboard, SDL_SCANCODE_BACKSPACE);
+    AddBind(bk_menu_select,    keyboard, SDL_SCANCODE_RETURN);
+    AddBind(bk_menu_select,    keyboard, SDL_SCANCODE_KP_ENTER);
+    AddBind(bk_menu_page_next, keyboard, SDL_SCANCODE_PAGEDOWN);
+    AddBind(bk_menu_page_prev, keyboard, SDL_SCANCODE_PAGEUP);
 
-    AddBind(bk_confirm, keyboard, 'y');
-    AddBind(bk_abort,   keyboard, 'n');
-    AddBind(bk_abort,   keyboard, KEY_ESCAPE);
+    AddBind(bk_confirm, keyboard, SDL_SCANCODE_Y);
+    AddBind(bk_abort,   keyboard, SDL_SCANCODE_N);
+    AddBind(bk_abort,   keyboard, SDL_SCANCODE_ESCAPE);
 
-    AddBind(bk_menu_help,   keyboard, KEY_F1);
-    AddBind(bk_menu_save,   keyboard, KEY_F2);
-    AddBind(bk_menu_load,   keyboard, KEY_F3);
-    AddBind(bk_menu_volume, keyboard, KEY_F4);
-    AddBind(bk_detail,      keyboard, KEY_F5);
-    AddBind(bk_endgame,     keyboard, KEY_F7);
-    AddBind(bk_messages,    keyboard, KEY_F8);
-    AddBind(bk_quit,        keyboard, KEY_F10);
-    AddBind(bk_gamma,       keyboard, KEY_F11);
-    AddBind(bk_screen_inc,  keyboard, KEY_EQUALS);
-    AddBind(bk_screen_dec,  keyboard, KEY_MINUS);
-    AddBind(bk_pause,       keyboard, KEY_PAUSE);
+    AddBind(bk_menu_help,   keyboard, SDL_SCANCODE_F1);
+    AddBind(bk_menu_save,   keyboard, SDL_SCANCODE_F2);
+    AddBind(bk_menu_load,   keyboard, SDL_SCANCODE_F3);
+    AddBind(bk_menu_volume, keyboard, SDL_SCANCODE_F4);
+    AddBind(bk_detail,      keyboard, SDL_SCANCODE_F5);
+    AddBind(bk_endgame,     keyboard, SDL_SCANCODE_F7);
+    AddBind(bk_messages,    keyboard, SDL_SCANCODE_F8);
+    AddBind(bk_quit,        keyboard, SDL_SCANCODE_F10);
+    AddBind(bk_gamma,       keyboard, SDL_SCANCODE_F11);
+    AddBind(bk_screen_inc,  keyboard, SDL_SCANCODE_EQUALS);
+    AddBind(bk_screen_dec,  keyboard, SDL_SCANCODE_MINUS);
+    AddBind(bk_pause,       keyboard, SDL_SCANCODE_PAUSE);
 
     // Mouse
     AddBind(bk_left,  mouse, MOUSE_SCROLL_LEFT);
@@ -910,111 +644,111 @@ void BK_ApplyDefaultBindings()
     bindClearEnabled = false;
 
     // Keyboard
-    AddBind(bk_forward,        keyboard, 'w');
-    AddBind(bk_backward,       keyboard, 's');
-    AddBind(bk_turn_left,      keyboard, KEY_LEFTARROW);
-    AddBind(bk_turn_right,     keyboard, KEY_RIGHTARROW);
-    AddBind(bk_strafe_left,    keyboard, 'a');
-    AddBind(bk_strafe_right,   keyboard, 'd');
-    AddBind(bk_speed,          keyboard, KEY_LSHIFT);
-    AddBind(bk_speed,          keyboard, KEY_RSHIFT);
-    AddBind(bk_strafe,         keyboard, KEY_LALT);
-    AddBind(bk_strafe,         keyboard, KEY_RALT);
-    AddBind(bk_toggle_autorun, keyboard, KEY_CAPSLOCK);
+    AddBind(bk_forward,        keyboard, SDL_SCANCODE_W);
+    AddBind(bk_backward,       keyboard, SDL_SCANCODE_S);
+    AddBind(bk_turn_left,      keyboard, SDL_SCANCODE_LEFT);
+    AddBind(bk_turn_right,     keyboard, SDL_SCANCODE_RIGHT);
+    AddBind(bk_strafe_left,    keyboard, SDL_SCANCODE_A);
+    AddBind(bk_strafe_right,   keyboard, SDL_SCANCODE_D);
+    AddBind(bk_speed,          keyboard, SDL_SCANCODE_LSHIFT);
+    AddBind(bk_speed,          keyboard, SDL_SCANCODE_RSHIFT);
+    AddBind(bk_strafe,         keyboard, SDL_SCANCODE_LALT);
+    AddBind(bk_strafe,         keyboard, SDL_SCANCODE_RALT);
+    AddBind(bk_toggle_autorun, keyboard, SDL_SCANCODE_CAPSLOCK);
 
     if(RD_GameType == gt_Heretic || RD_GameType == gt_Hexen)
     {
-        AddBind(bk_fly_up,   keyboard, KEY_PGUP);
-        AddBind(bk_fly_down, keyboard, KEY_INS);
-        AddBind(bk_fly_stop, keyboard, KEY_HOME);
+        AddBind(bk_fly_up,   keyboard, SDL_SCANCODE_PAGEUP);
+        AddBind(bk_fly_down, keyboard, SDL_SCANCODE_INSERT);
+        AddBind(bk_fly_stop, keyboard, SDL_SCANCODE_HOME);
     }
 
-    AddBind(bk_use, keyboard, 'e');
+    AddBind(bk_use, keyboard, SDL_SCANCODE_E);
     if(RD_GameType == gt_Doom || RD_GameType == gt_Heretic)
     {
-        AddBind(bk_use,     keyboard, ' ');
+        AddBind(bk_use,     keyboard, SDL_SCANCODE_SPACE);
     }
     else
     {
-        AddBind(bk_jump,    keyboard, ' ');
+        AddBind(bk_jump,    keyboard, SDL_SCANCODE_SPACE);
     }
 
-    AddBind(bk_fire, keyboard, KEY_LCTRL);
+    AddBind(bk_fire, keyboard, SDL_SCANCODE_LCTRL);
 
-    AddBind(bk_weapon_1,    keyboard, '1');
-    AddBind(bk_weapon_2,    keyboard, '2');
-    AddBind(bk_weapon_3,    keyboard, '3');
-    AddBind(bk_weapon_4,    keyboard, '4');
+    AddBind(bk_weapon_1,    keyboard, SDL_SCANCODE_1);
+    AddBind(bk_weapon_2,    keyboard, SDL_SCANCODE_2);
+    AddBind(bk_weapon_3,    keyboard, SDL_SCANCODE_3);
+    AddBind(bk_weapon_4,    keyboard, SDL_SCANCODE_4);
 
     if(RD_GameType == gt_Doom || RD_GameType == gt_Heretic)
     {
-        AddBind(bk_weapon_5, keyboard, '5');
-        AddBind(bk_weapon_6, keyboard, '6');
-        AddBind(bk_weapon_7, keyboard, '7');
+        AddBind(bk_weapon_5, keyboard, SDL_SCANCODE_5);
+        AddBind(bk_weapon_6, keyboard, SDL_SCANCODE_6);
+        AddBind(bk_weapon_7, keyboard, SDL_SCANCODE_7);
     }
     if(RD_GameType == gt_Doom)
     {
-        AddBind(bk_weapon_8, keyboard, '8');
+        AddBind(bk_weapon_8, keyboard, SDL_SCANCODE_8);
     }
 
-    AddBind(bk_toggle_mlook, keyboard, '`');
+    AddBind(bk_toggle_mlook, keyboard, SDL_SCANCODE_GRAVE);
 
     if(RD_GameType == gt_Heretic || RD_GameType == gt_Hexen)
     {
-        AddBind(bk_look_up,     keyboard, KEY_PGDN);
-        AddBind(bk_look_down,   keyboard, KEY_DEL);
-        AddBind(bk_look_center, keyboard, KEY_END);
+        AddBind(bk_look_up,     keyboard, SDL_SCANCODE_PAGEDOWN);
+        AddBind(bk_look_down,   keyboard, SDL_SCANCODE_DELETE);
+        AddBind(bk_look_center, keyboard, SDL_SCANCODE_END);
 
-        AddBind(bk_inv_left,         keyboard, '[');
-        AddBind(bk_inv_right,        keyboard, ']');
-        AddBind(bk_inv_use_artifact, keyboard, KEY_ENTER);
+        AddBind(bk_inv_left,         keyboard, SDL_SCANCODE_LEFTBRACKET);
+        AddBind(bk_inv_right,        keyboard, SDL_SCANCODE_RIGHTBRACKET);
+        AddBind(bk_inv_use_artifact, keyboard, SDL_SCANCODE_RETURN);
     }
 
-    AddBind(bk_map_toggle,   keyboard, KEY_TAB);
-    AddBind(bk_map_zoom_in,  keyboard, '=');
-    AddBind(bk_map_zoom_out, keyboard, '-');
-    AddBind(bk_map_zoom_max, keyboard, '0');
-    AddBind(bk_map_follow,   keyboard, 'f');
-    AddBind(bk_map_overlay,  keyboard, 'o');
-    AddBind(bk_map_rotate,   keyboard, 'r');
-    AddBind(bk_map_grid,     keyboard, 'g');
+    AddBind(bk_map_toggle,   keyboard, SDL_SCANCODE_TAB);
+    AddBind(bk_map_zoom_in,  keyboard, SDL_SCANCODE_EQUALS);
+    AddBind(bk_map_zoom_out, keyboard, SDL_SCANCODE_MINUS);
+    AddBind(bk_map_zoom_max, keyboard, SDL_SCANCODE_0);
+    AddBind(bk_map_follow,   keyboard, SDL_SCANCODE_F);
+    AddBind(bk_map_overlay,  keyboard, SDL_SCANCODE_O);
+    AddBind(bk_map_rotate,   keyboard, SDL_SCANCODE_R);
+    AddBind(bk_map_grid,     keyboard, SDL_SCANCODE_G);
 
-    AddBind(bk_map_clearmark, keyboard, 'c');
-    AddBind(bk_map_mark,      keyboard, 'm');
+    AddBind(bk_map_clearmark, keyboard, SDL_SCANCODE_C);
+    AddBind(bk_map_mark,      keyboard, SDL_SCANCODE_M);
 
-    AddBind(bk_qsave,            keyboard, KEY_F6);
-    AddBind(bk_qload,            keyboard, KEY_F9);
-    AddBind(bk_screenshot,       keyboard, KEY_PRTSCR);
-    AddBind(bk_finish_demo,      keyboard, 'q');
-    AddBind(bk_toggle_crosshair, keyboard, 'x');
+    AddBind(bk_qsave,            keyboard, SDL_SCANCODE_F6);
+    AddBind(bk_qload,            keyboard, SDL_SCANCODE_F9);
+    AddBind(bk_screenshot,       keyboard, SDL_SCANCODE_PRINTSCREEN);
+    AddBind(bk_finish_demo,      keyboard, SDL_SCANCODE_Q);
+    AddBind(bk_toggle_crosshair, keyboard, SDL_SCANCODE_X);
 
-    AddBind(bk_spy,                keyboard, KEY_F12);
-    AddBind(bk_multi_msg,          keyboard, 't');
+    AddBind(bk_spy,                keyboard, SDL_SCANCODE_F12);
+    AddBind(bk_multi_msg,          keyboard, SDL_SCANCODE_T);
 
     if(RD_GameType == gt_Doom)
     {
-        AddBind(bk_multi_msg_player_0, keyboard, 'g');
-        AddBind(bk_multi_msg_player_1, keyboard, 'i');
-        AddBind(bk_multi_msg_player_2, keyboard, 'b');
-        AddBind(bk_multi_msg_player_3, keyboard, 'r');
+        AddBind(bk_multi_msg_player_0, keyboard, SDL_SCANCODE_G);
+        AddBind(bk_multi_msg_player_1, keyboard, SDL_SCANCODE_I);
+        AddBind(bk_multi_msg_player_2, keyboard, SDL_SCANCODE_B);
+        AddBind(bk_multi_msg_player_3, keyboard, SDL_SCANCODE_R);
     }
     if(RD_GameType == gt_Heretic)
     {
-        AddBind(bk_multi_msg_player_0, keyboard, 'g');
-        AddBind(bk_multi_msg_player_1, keyboard, 'y');
-        AddBind(bk_multi_msg_player_2, keyboard, 'r');
-        AddBind(bk_multi_msg_player_3, keyboard, 'b');
+        AddBind(bk_multi_msg_player_0, keyboard, SDL_SCANCODE_G);
+        AddBind(bk_multi_msg_player_1, keyboard, SDL_SCANCODE_Y);
+        AddBind(bk_multi_msg_player_2, keyboard, SDL_SCANCODE_R);
+        AddBind(bk_multi_msg_player_3, keyboard, SDL_SCANCODE_B);
     }
     if(RD_GameType == gt_Hexen)
     {
-        AddBind(bk_multi_msg_player_0, keyboard, 'b');
-        AddBind(bk_multi_msg_player_1, keyboard, 'r');
-        AddBind(bk_multi_msg_player_2, keyboard, 'y');
-        AddBind(bk_multi_msg_player_3, keyboard, 'g');
-        AddBind(bk_multi_msg_player_4, keyboard, 'j');
-        AddBind(bk_multi_msg_player_5, keyboard, 'w');
-        AddBind(bk_multi_msg_player_6, keyboard, 'h');
-        AddBind(bk_multi_msg_player_7, keyboard, 'p');
+        AddBind(bk_multi_msg_player_0, keyboard, SDL_SCANCODE_B);
+        AddBind(bk_multi_msg_player_1, keyboard, SDL_SCANCODE_R);
+        AddBind(bk_multi_msg_player_2, keyboard, SDL_SCANCODE_Y);
+        AddBind(bk_multi_msg_player_3, keyboard, SDL_SCANCODE_G);
+        AddBind(bk_multi_msg_player_4, keyboard, SDL_SCANCODE_J);
+        AddBind(bk_multi_msg_player_5, keyboard, SDL_SCANCODE_W);
+        AddBind(bk_multi_msg_player_6, keyboard, SDL_SCANCODE_H);
+        AddBind(bk_multi_msg_player_7, keyboard, SDL_SCANCODE_P);
     }
 
     // Mouse
@@ -1169,7 +903,7 @@ void KeybindsHandler_HandleLine(char* keyName, char *value, size_t valueSize)
                                         sizeof(int), nameToKK_Comparator);
                 if(bsearchResult == NULL)
                     continue;
-                key = scancodeToLegacy(*bsearchResult);
+                key = *bsearchResult;
                 break;
             case 'm':
                 device = mouse;
@@ -1218,7 +952,7 @@ void KeybindsHandler_Save(FILE* file, char* sectionName)
                 {
                     case keyboard:
                         deviceChar = 'k';
-                        keyString = kKToName[legacyToScancode(bind->key)];
+                        keyString = kKToName[bind->key];
                         break;
                     case mouse:
                         deviceChar = 'm';

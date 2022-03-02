@@ -17,7 +17,6 @@
 
 #include "deh_str.h"
 #include "d_name.h"
-#include "doomkeys.h"
 #include "i_video.h"
 #include "jn.h"
 #include "m_misc.h"
