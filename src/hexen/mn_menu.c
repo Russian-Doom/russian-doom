@@ -5469,8 +5469,10 @@ static void SCClass(int option)
             break;
         case PCLASS_MAGE:
             RD_Menu_SetMenu(&SkillMenu_M);
+            break;
         case PCLASS_RANDOM:
             RD_Menu_SetMenu(&SkillMenu_R);
+            break;
         default:
             break;
     }
