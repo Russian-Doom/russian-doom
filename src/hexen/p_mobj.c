@@ -1738,12 +1738,15 @@ void P_SpawnMapThing(mapthing_t * mthing)
         }
     }
 
+    // Can't find thing type
     if (i == NUMMOBJTYPES)
-    {                           // Can't find thing type
-        I_Error(english_language ?
-                "P_SpawnMapThing: Unknown type %i at (%i, %i)" :
-                "P_SpawnMapThing: неизвестный тип %i в (%i, %i)",
+    {
+        // [JN] Ignore unknown map things, don't bomb out.
+        printf(english_language ?
+                "P_SpawnMapThing: Unknown type %i at (%i, %i)\n" :
+                "P_SpawnMapThing: неизвестный тип %i в (%i, %i)\n",
                 mthing->type, mthing->x, mthing->y);
+        return;
     }
 
     // Don't spawn keys and players in deathmatch
