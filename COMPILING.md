@@ -1,6 +1,6 @@
-### Building Russian Doom on Windows
+### Building International Doom on Windows
 
-The primary way of building Russian Doom on Windows is using an MSYS environment.
+The primary way of building International Doom on Windows is using an MSYS environment.
 
 ##### Step 1: Setting up the environment
 
@@ -11,7 +11,7 @@ pacman -S base-devel msys2-devel \
        git
 ```
 
-#### Step 2: Compiling Russian Doom
+#### Step 2: Compiling International Doom
 
 Download source code archive of latest release version or from Git repository and unpack it.
 
@@ -56,17 +56,17 @@ make
 ```
 After successful compilation, the resulting binaries can be found in the `src\` folder.
 
-##### Step 3: Installing Russian Doom
+##### Step 3: Installing International Doom
 
-To install Russian Doom to `<install directory>` use the following command:
+To install International Doom to `<install directory>` use the following command:
 ```
 cmake --install build --prefix <install directory>
 ```
 
-If you are using Autotools, you have to install Russian Doom manually. Copy built executables and `base` folder from `src\`
+If you are using Autotools, you have to install International Doom manually. Copy built executables and `base` folder from `src\`
 directory to `<install directory>` along with DLL libraries from `win_libs\<arch>\`.
 
-### Building Russian Doom on Linux
+### Building International Doom on Linux
 
 Compiling on Linux is rather simple. 
 
@@ -89,7 +89,7 @@ sudo pacman -S base-devel cmake sdl2 sdl2_net sdl2_mixer \
 libpng libsamplerate
 ```
 
-##### Step 2: Compiling Russian Doom
+##### Step 2: Compiling International Doom
 
 Download source code archive of latest release version or from Git repository and unpack it.
 
@@ -135,23 +135,23 @@ make
 ```
 After successful compilation, the resulting binaries can be found in the `src/` directory.
 
-##### Step 3: Installing Russian Doom
+##### Step 3: Installing International Doom
 
-To install Russian Doom use the following command:
+To install International Doom use the following command:
 ```
 cmake --install build
 ```
 For the portable version, you probably want to use `--prefix <install directory>` key to set install directory.
 Note that config files and savegames will be stored in that directory.
 
-If you are using Autotools, you have to install Russian Doom manually. Copy built executables from `src/`
-to `/usr/local/bin/` directory. Copy content of `src/base/` folder to `/usr/local/share/russian-doom/` directory.
+If you are using Autotools, you have to install International Doom manually. Copy built executables from `src/`
+to `/usr/local/bin/` directory. Copy content of `src/base/` folder to `/usr/local/share/inter-doom/` directory.
 
-### Building a DOS version of Russian Doom
+### Building a DOS version of International Doom
 
 ##### Step 1: Getting Open Watcom C
 
-The primary IDE for building Russian Doom is Open Watcom C, which may be downloaded on it's [official site](http://www.openwatcom.org/download.php).
+The primary IDE for building International Doom is Open Watcom C, which may be downloaded on it's [official site](http://www.openwatcom.org/download.php).
 
 ##### Step 2: Compiling project
 
