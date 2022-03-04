@@ -1693,13 +1693,38 @@ static void P_LoadMapFixes (int map)
 
     switch (map)
     {
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-        case 6:
-        case 8:
+        // Original Hexen maps:
+        case  1:  // Winnowing Hall
+        case  2:  // Seven Portals
+        case  3:  // Guardian of Ice
+        case  4:  // Guardian of Fire
+        case  5:  // Guardian of Steel
+        case  6:  // Bright Crucible
+        case  8:  // Darkmere
+        case  9:  // Caves of Circe
+        case 10:  // Wastelands
+        case 11:  // Sacred Grove
+        case 12:  // Hypostyle
+        case 13:  // Shadow Wood
+        case 21:  // Forsaken Outpost
+        case 22:  // Castle of Grief
+        case 23:  // Gibbet
+        case 24:  // Effluvium
+        case 25:  // Dungeons
+        case 26:  // Desolate Garden
+        case 27:  // Heresiarch's Seminary
+        case 28:  // Dragon Chapel
+        case 30:  // Griffin Chapel
+        case 31:  // Deathwind Chapel
+        case 32:  // Orchard of Lamentations
+        case 33:  // Silent Refectory
+        case 34:  // Wolf Chapel
+        case 35:  // Necropolis
+        case 36:  // Zedek's Tomb
+        case 37:  // Menelkir's Tomb
+        case 38:  // Traductus' Tomb
+        case 39:  // Vivarium
+        case 40:  // Dark Crucible
         {
             // Construct new SECTORS lump name and load it:
             M_snprintf(fix_lumpname, sizeof(fix_lumpname), "HXSCF%02d", map);
