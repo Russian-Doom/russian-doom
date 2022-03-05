@@ -1582,6 +1582,22 @@ static void AM_drawMarks (void)
     }
 }
 
+/*
+================================================================================
+=
+= AM_drawCrosshair
+=
+= [JN] Draw crosshair which is representing the center of the map.
+=
+================================================================================
+*/
+
+static void AM_drawCrosshair (void)
+{
+    V_DrawPatchUnscaled(screenwidth/2, 163, 
+                        W_CacheLumpName("XHAIR_1S", PU_CACHE), NULL);
+}
+
 void AM_Drawer(void)
 {
     if (!automapactive)
@@ -1626,6 +1642,11 @@ void AM_Drawer(void)
         AM_drawThings(THINGCOLORS, THINGRANGE);
     }
     
+    if (!automap_follow && !vanillaparm)
+    {
+        AM_drawCrosshair();
+    }
+
     AM_drawMarks();
 
     if (english_language)

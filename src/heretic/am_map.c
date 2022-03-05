@@ -1694,6 +1694,24 @@ static void AM_drawkeys(void)
     }
 }
 
+/*
+================================================================================
+=
+= AM_drawCrosshair
+=
+= [JN] Draw crosshair which is representing the center of the map.
+=
+================================================================================
+*/
+
+static void AM_drawCrosshair (void)
+{
+    dp_translation = cr[CR_GREEN2GRAY_HERETIC];
+    V_DrawPatchUnscaled(screenwidth/2, 160, 
+                        W_CacheLumpName("XHAIR_1S", PU_CACHE), NULL);
+    dp_translation = NULL;
+}
+
 void AM_Drawer(void)
 {
     char *level_name;
@@ -1737,6 +1755,10 @@ void AM_Drawer(void)
     if (cheating == 2)
     {
         AM_drawThings(THINGCOLORS, THINGRANGE);
+    }
+    if (!automap_follow && !vanillaparm)
+    {
+        AM_drawCrosshair();
     }
     AM_drawMarks();
     if (gameskill == sk_baby)
