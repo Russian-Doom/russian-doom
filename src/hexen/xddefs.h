@@ -16,12 +16,11 @@
 //
 
 
-
-#ifndef __XDDEFS__
-#define __XDDEFS__
+#pragma once
 
 #include "doomtype.h"
 #include "v_patch.h"
+
 
 //--------------------------------------------------------------------------
 //
@@ -189,5 +188,3 @@ typedef struct
     short patchcount;
     mappatch_t patches[1];
 } PACKEDATTR maptexture_t;
-
-#endif // __XDDEFS__

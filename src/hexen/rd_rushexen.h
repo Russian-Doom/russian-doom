@@ -13,11 +13,10 @@
 //
 
 
+#pragma once
 
 #include "doomtype.h"
 
-#ifndef __RD_RUSHEXEN_H__
-#define __RD_RUSHEXEN_H__
 
 typedef struct
 {
@@ -44,5 +43,3 @@ const char** GetRusStringTable(int map);
 const CMDInjectionRecord_t* GetCMDInjectionTable(int map);
 
 boolean cantApplyACSInstrumentation(int map);
-
-#endif //__RD_RUSHEXEN_H__

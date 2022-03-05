@@ -19,9 +19,8 @@
 //
 
 
+#pragma once
 
-#ifndef HEXEN_CT_CHAT_H
-#define HEXEN_CT_CHAT_H
 
 #define CT_PLR_GREEN	1
 #define CT_PLR_YELLOW	2
@@ -36,6 +35,3 @@
 #define CT_KEY_ALL		't'
 
 extern char *chat_macros[10];
-
-#endif
-

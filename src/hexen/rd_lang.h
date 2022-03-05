@@ -16,8 +16,8 @@
 //
 
 
-#ifndef __RD_LANG__
-#define __RD_LANG__
+#pragma once
+
 
 extern void RD_DefineLanguageStrings ();
 
@@ -497,5 +497,3 @@ extern char *txt_running_script;
 #define TXT_INVALID_CLASS_RUS       "ERFPFY YTRJHHTRNYSQ RKFCC"               // УКАЗАН НЕКОРРЕКТНЫЙ КЛАСС
 #define TXT_WHICH_SCRIPT_RUS        "YJVTH DSGJKYZTVJUJ CRHBGNF (01-99)?"     // НОМЕР ВЫПОЛНЯЕМОГО СКРИПТА (01-99)?
 #define TXT_RUNNING_SCRIPT_RUS      "DSGJKYTYBT CRHBGNF"                      // ВЫПОЛНЕНИЕ СКРИПТА
-
-#endif

@@ -16,6 +16,8 @@
 //
 
 
+#pragma once
+
 
 extern int *TerrainTypes;
 

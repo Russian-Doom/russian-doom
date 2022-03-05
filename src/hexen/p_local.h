@@ -16,13 +16,11 @@
 //
 
 
+#pragma once
 
-#ifndef __P_LOCAL__
-#define __P_LOCAL__
-
-#ifndef __R_LOCAL__
 #include "r_local.h"
-#endif
+#include "p_spec.h"
+
 
 #define STARTREDPALS    1
 #define STARTBONUSPALS  9
@@ -383,7 +381,3 @@ boolean PO_MovePolyobj(int num, int x, int y);
 boolean PO_RotatePolyobj(int num, angle_t angle);
 void PO_Init(int lump);
 boolean PO_Busy(int polyobj);
-
-#include "p_spec.h"
-
-#endif // __P_LOCAL__

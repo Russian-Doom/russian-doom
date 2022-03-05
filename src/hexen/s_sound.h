@@ -16,9 +16,8 @@
 //
 
 
+#pragma once
 
-#ifndef __S_SOUND__
-#define __S_SOUND__
 
 /*
 typedef struct
@@ -101,5 +100,3 @@ void S_UnMuteSound(void);
 boolean S_GetSoundPlayingInfo(mobj_t * mobj, int sound_id);
 boolean S_StartCustomCDTrack(int tracknum);
 int S_GetCurrentCDTrack(void);
-
-#endif

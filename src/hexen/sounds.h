@@ -16,11 +16,10 @@
 //
 
 
-
-#ifndef __SOUNDSH__
-#define __SOUNDSH__
+#pragma once
 
 #include "i_sound.h"
+
 
 #define MAX_SND_DIST    2025
 #define MAX_CHANNELS    64
@@ -324,5 +323,3 @@ typedef enum
     SFX_KORAX_VOICE_9_RU,
     NUMSFX
 } sfxenum_t;
-
-#endif

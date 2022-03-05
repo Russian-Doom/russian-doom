@@ -16,9 +16,8 @@
 //
 
 
+#pragma once
 
-#ifndef __H2DEF__
-#define __H2DEF__
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -49,9 +48,9 @@
 
 #include "d_loop.h"
 #include "net_defs.h"
+#include "sounds.h"
 #include "rd_menu_control.h"
 #include "rd_text.h"
-
 #include "jn.h"
 
 
@@ -1109,7 +1108,3 @@ void MN_DrTextSmallYellowRUS(char *text, int x, int y);
 void MN_DrTextSmallYellowRUSFade(char *text, int x, int y, byte *table);
 
 extern int messageson;
-
-#include "sounds.h"
-
-#endif // __H2DEF__

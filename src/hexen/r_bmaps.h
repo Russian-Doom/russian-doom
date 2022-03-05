@@ -15,8 +15,8 @@
 //	Brightmap textures and flats lookup routine.
 //
 
-#ifndef __R_BMAPS__
-#define __R_BMAPS__
+
+#pragma once
 
 
 // Prototypes
@@ -27,6 +27,3 @@ extern int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptextu
            bmaptexture11, bmaptexture12, bmaptexture13, bmaptexture14, bmaptexture15,
            bmaptexture16, bmaptexture17, bmaptexture18, bmaptexture19, bmaptexture20,
            bmaptexture21, bmaptexture22, bmaptexture23;
-
-
-#endif // __R_BMAPS__

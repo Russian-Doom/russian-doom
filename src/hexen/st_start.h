@@ -16,9 +16,8 @@
 //
 
 
+#pragma once
 
-#ifndef STSTART_H
-#define STSTART_H
 
 // HEADER FILES ------------------------------------------------------------
 
@@ -38,5 +37,3 @@ extern void ST_NetDone(void);
 // PUBLIC DATA DECLARATIONS ------------------------------------------------
  
 extern int graphical_startup;
-
-#endif
