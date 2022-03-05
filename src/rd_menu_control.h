@@ -12,14 +12,13 @@
 // GNU General Public License for more details.
 //
 
-#ifndef RD_MENU_CONTROL_H
-#define RD_MENU_CONTROL_H
+
+#pragma once
 
 #include "doomtype.h"
+
 
 extern boolean menuactive;
 
 void RD_Menu_ActivateMenu(void);
 void RD_Menu_DeactivateMenu(boolean play_sound);
-
-#endif //RD_MENU_CONTROL_H

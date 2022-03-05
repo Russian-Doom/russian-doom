@@ -12,10 +12,11 @@
 // GNU General Public License for more details.
 //
 
-#ifndef RD_TEXT_H
-#define RD_TEXT_H
+
+#pragma once
 
 #include "v_trans.h"
+
 
 // [JN] Colored message type, used by P_SetMessage.
 typedef enum
@@ -79,5 +80,3 @@ int RD_M_TextSmallRUSWidth(char* text);
 void RD_M_DrawTextBigRUS(char* text, int x, int y);
 /** [JN] Returns the pixel width of a string using unreplaceable big Russian font*/
 int RD_M_TextBigRUSWidth(char* text);
-
-#endif //RD_TEXT_H

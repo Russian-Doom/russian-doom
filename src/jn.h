@@ -17,8 +17,7 @@
 //
 
 
-#ifndef __JN_H__
-#define __JN_H__
+#pragma once
 
 #include "doomtype.h"
 
@@ -327,6 +326,3 @@ extern int no_internal_demos;
 
 extern int artifactcount;   // Amount of artifacts
 extern int lifecount;       // Amount of lifes
-
-
-#endif

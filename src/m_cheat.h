@@ -18,9 +18,8 @@
 //
 
 
+#pragma once
 
-#ifndef __M_CHEAT__
-#define __M_CHEAT__
 
 //
 // CHEAT SEQUENCE PACKAGE
@@ -59,6 +58,3 @@ void
 cht_GetParam
 ( cheatseq_t*		cht,
   char*			buffer );
-
-
-#endif

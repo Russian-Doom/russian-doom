@@ -14,8 +14,8 @@
 //
 
 
-#ifndef TXT_INPUTBOX_H
-#define TXT_INPUTBOX_H
+#pragma once
+
 
 /**
  * @file txt_inputbox.h
@@ -71,7 +71,3 @@ txt_inputbox_t *TXT_NewInputBox(char **value, int size);
  */
 
 txt_inputbox_t *TXT_NewIntInputBox(int *value, int size);
-
-#endif /* #ifndef TXT_INPUTBOX_H */
-
-

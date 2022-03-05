@@ -17,9 +17,8 @@
 //
 
 
+#pragma once
 
-#ifndef PCSOUND_H
-#define PCSOUND_H
 
 typedef void (*pcsound_callback_func)(int *duration, int *frequency);
 
@@ -36,6 +35,3 @@ void PCSound_Shutdown(void);
 // This must be called before PCSound_Init.
 
 void PCSound_SetSampleRate(int rate);
-
-#endif /* #ifndef PCSOUND_H */
-

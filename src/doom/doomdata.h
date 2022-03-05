@@ -20,9 +20,7 @@
 //
 
 
-#ifndef __DOOMDATA__
-#define __DOOMDATA__
-
+#pragma once
 
 #include "doomtype.h"
 #include "doomdef.h"
@@ -287,6 +285,3 @@ typedef struct
     byte arg4;
     byte arg5;
 } PACKEDATTR mapthing_hexen_t;
-
-#endif			// __DOOMDATA__
-

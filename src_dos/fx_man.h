@@ -28,10 +28,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
    (c) Copyright 1994 James R. Dose.  All Rights Reserved.
 **********************************************************************/
 
-#ifndef __FX_MAN_H
-#define __FX_MAN_H
+
+#pragma once
 
 #include "sndcards.h"
+
 
 typedef struct
    {
@@ -131,5 +132,3 @@ int FX_StartDemandFeedPlayback( void ( *function )( char **ptr, unsigned long *l
        int priority, unsigned long callbackval );
 int  FX_StartRecording( int MixRate, void ( *function )( char *ptr, int length ) );
 void FX_StopRecord( void );
-
-#endif

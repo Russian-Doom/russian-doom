@@ -17,11 +17,10 @@
 //
 
 
-
-#ifndef DEH_DEFS_H
-#define DEH_DEFS_H
+#pragma once
 
 #include "sha1.h"
+
 
 typedef struct deh_context_s deh_context_t;
 typedef struct deh_section_s deh_section_t;
@@ -56,7 +55,3 @@ struct deh_section_s
 
     deh_sha1_hash_t sha1_hash;
 };
-
-#endif /* #ifndef DEH_DEFS_H */
-
-

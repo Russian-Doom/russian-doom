@@ -18,8 +18,7 @@
 //
 
 
-#ifndef __R_BSP__
-#define __R_BSP__
+#pragma once
 
 
 extern seg_t     *curline;
@@ -46,6 +45,3 @@ void R_ClearClipSegs (void);
 void R_ClearDrawSegs (void);
 void R_RenderBSPNode (int bspnum);
 void R_StoreWallRange (int start, int stop);
-
-
-#endif

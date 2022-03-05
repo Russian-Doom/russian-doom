@@ -18,12 +18,11 @@
 //    
 
 
-
-#ifndef __M_CONFIG__
-#define __M_CONFIG__
+#pragma once
 
 #include <stdio.h>
 #include "doomtype.h"
+
 
 typedef struct
 {
@@ -60,5 +59,3 @@ void M_SetConfigFilename(char *name);
 char *M_GetSaveGameDir();
 
 extern char *configdir;
-
-#endif

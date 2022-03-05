@@ -28,8 +28,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
    (c) Copyright 1994 James R. Dose.  All Rights Reserved.
 **********************************************************************/
 
-#ifndef __TASK_MAN_H
-#define __TASK_MAN_H
+
+#pragma once
+
 
 enum TASK_ERRORS
    {
@@ -64,5 +65,3 @@ void    TS_Dispatch( void );
 void    TS_SetTaskRate( task *Task, int rate );
 void    TS_UnlockMemory( void );
 int     TS_LockMemory( void );
-
-#endif

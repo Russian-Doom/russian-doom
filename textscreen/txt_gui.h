@@ -17,8 +17,8 @@
 //
 
 
-#ifndef TXT_GUI_H
-#define TXT_GUI_H
+#pragma once
+
 
 #define TXT_INACTIVE_WINDOW_BACKGROUND   TXT_COLOR_BLACK
 #define TXT_ACTIVE_WINDOW_BACKGROUND     TXT_COLOR_BLUE
@@ -37,6 +37,3 @@ void TXT_DrawVertScrollbar(int x, int y, int h, int cursor, int range);
 void TXT_InitClipArea(void);
 void TXT_PushClipArea(int x1, int x2, int y1, int y2);
 void TXT_PopClipArea(void);
-
-#endif /* #ifndef TXT_GUI_H */
-

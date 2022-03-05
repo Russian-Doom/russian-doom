@@ -28,8 +28,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
    (c) Copyright 1994 James R. Dose.  All Rights Reserved.
 **********************************************************************/
 
-#ifndef __DPMI_H
-#define __DPMI_H
+
+#pragma once
+
 
 #define _dpmi_lockregion DPMI_LockMemory
 #define _dpmi_unlockregion DPMI_UnlockMemory
@@ -99,5 +100,3 @@ int  DPMI_UnlockMemoryRegion( void *start, void *end );
    "sub    eax, eax",            \
    "DPMI_Exit:",                 \
    parm [ edx ] modify exact [ eax ];
-
-#endif

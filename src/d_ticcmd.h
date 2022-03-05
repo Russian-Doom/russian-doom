@@ -19,9 +19,7 @@
 //
 
 
-
-#ifndef __D_TICCMD__
-#define __D_TICCMD__
+#pragma once
 
 #include "doomtype.h"
 
@@ -54,7 +52,3 @@ typedef struct
     
     int lookdir;
 } ticcmd_t;
-
-
-
-#endif

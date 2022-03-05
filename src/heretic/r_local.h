@@ -17,9 +17,7 @@
 // R_local.h
 
 
-
-#ifndef __R_LOCAL__
-#define __R_LOCAL__
+#pragma once
 
 #include "i_video.h"
 #include "v_patch.h"
@@ -595,5 +593,3 @@ void R_DrawSpanLow(void);
 
 void R_InitBuffer(int width, int height);
 void R_InitTranslationTables(void);
-
-#endif // __R_LOCAL__

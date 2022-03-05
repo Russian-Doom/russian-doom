@@ -14,8 +14,8 @@
 //
 
 
-#ifndef TXT_STRUT_H
-#define TXT_STRUT_H
+#pragma once
+
 
 /**
  * @file txt_strut.h
@@ -50,7 +50,3 @@ struct txt_strut_s
  */
 
 txt_strut_t *TXT_NewStrut(int width, int height);
-
-#endif /* #ifndef TXT_STRUT_H */
-
-

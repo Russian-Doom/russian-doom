@@ -17,11 +17,10 @@
 //
 
 
-
-#ifndef OPL_INTERNAL_H
-#define OPL_INTERNAL_H
+#pragma once
 
 #include "opl.h"
+
 
 typedef int (*opl_init_func)(unsigned int port_base);
 typedef void (*opl_shutdown_func)(void);
@@ -55,6 +54,3 @@ typedef struct
 // Sample rate to use when doing software emulation.
 
 extern unsigned int opl_sample_rate;
-
-#endif /* #ifndef OPL_INTERNAL_H */
-

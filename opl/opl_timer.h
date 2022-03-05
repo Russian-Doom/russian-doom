@@ -17,11 +17,10 @@
 //
 
 
-
-#ifndef OPL_TIMER_H
-#define OPL_TIMER_H
+#pragma once
 
 #include "opl.h"
+
 
 int OPL_Timer_StartThread(void);
 void OPL_Timer_StopThread(void);
@@ -31,6 +30,3 @@ void OPL_Timer_Lock(void);
 void OPL_Timer_Unlock(void);
 void OPL_Timer_SetPaused(int paused);
 void OPL_Timer_AdjustCallbacks(float factor);
-
-#endif /* #ifndef OPL_TIMER_H */
-

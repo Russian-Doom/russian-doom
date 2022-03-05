@@ -19,8 +19,8 @@
 //	 separating modules.
 //
 
-#ifndef __DOOMTYPE__
-#define __DOOMTYPE__
+
+#pragma once
 
 
 #ifndef __BYTEBOOL__
@@ -47,6 +47,3 @@ typedef unsigned char byte;
 // Max negative 32-bit integer.
 #define MININT      ((int)0x80000000)	
 #define MINLONG     ((long)0x80000000)
-
-#endif
-

@@ -17,15 +17,13 @@
 //
 
 
-
-#ifndef NET_DEFS_H
-#define NET_DEFS_H 
+#pragma once
 
 #include <stdio.h>
-
 #include "doomtype.h"
 #include "d_ticcmd.h"
 #include "sha1.h"
+
 
 // Absolute maximum number of "nodes" in the game.  This is different to
 // NET_MAXPLAYERS, as there may be observers that are not participating
@@ -247,5 +245,3 @@ typedef struct
     sha1_digest_t deh_sha1sum;
     int is_freedoom;
 } net_waitdata_t;
-
-#endif /* #ifndef NET_DEFS_H */

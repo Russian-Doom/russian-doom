@@ -19,13 +19,12 @@
 //
 
 
-
-#ifndef DEH_MAPPING_H
-#define DEH_MAPPING_H
+#pragma once
 
 #include "doomtype.h"
 #include "deh_io.h"
 #include "sha1.h"
+
 
 #define DEH_BEGIN_MAPPING(mapping_name, structname)           \
     static structname deh_mapping_base;                       \
@@ -91,6 +90,3 @@ boolean DEH_SetStringMapping(deh_context_t *context, deh_mapping_t *mapping,
                              void *structptr, char *name, char *value);
 void DEH_StructSHA1Sum(sha1_context_t *context, deh_mapping_t *mapping,
                        void *structptr);
-
-#endif /* #ifndef DEH_MAPPING_H */
-

@@ -14,8 +14,8 @@
 // GNU General Public License for more details.
 //
 
-#ifndef _DMX_H_
-#define _DMX_H_
+
+#pragma once
 
 
 int  AL_DetectFM(void);
@@ -65,6 +65,3 @@ void AL_RegisterTimbreBank(unsigned char *timbres);
 #define AHW_MEDIA_VISION    64
 #define AHW_ENSONIQ         256
 #define AHW_CODEC           512
-
-#endif
-

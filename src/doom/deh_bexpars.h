@@ -16,10 +16,8 @@
 // Parses [PARS] sections in BEX files
 //
 
-#ifndef DEH_BEXPARS_H
-#define DEH_BEXPARS_H
+
+#pragma once
 
 extern int bex_pars[6][10];
 extern int bex_cpars[32];
-
-#endif /* #ifndef DEH_BEXPARS_H */

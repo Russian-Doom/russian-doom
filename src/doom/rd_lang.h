@@ -25,8 +25,7 @@
 // ^ = "
 
 
-#ifndef __RD_LANG__
-#define __RD_LANG__
+#pragma once
 
 
 extern void RD_DefineLanguageStrings ();
@@ -2227,23 +2226,3 @@ extern char* ststr_massacre;
 #define CC_SPIDER_RUS   "gfer-ghtldjlbntkm"     // Паук-предводитель
 #define CC_CYBER_RUS    "rb,thltvjy"            // Кибердемон
 #define CC_HERO_RUS     "yfi uthjq"             // Наш Герой
-
-// English
-#if defined (_WIN64)
-#define STSRT_ARCH      " - (x64)"
-#elif defined (_WIN32)
-#define STSRT_ARCH      " - (x86)"
-#else
-#define STSRT_ARCH      ""
-#endif
-
-// Русский
-#if defined (_WIN64)
-#define STSRT_ARCH_RUS      " - ([64)"      // x64
-#elif defined (_WIN32)
-#define STSRT_ARCH_RUS      " - ([86)"      // x86
-#else
-#define STSRT_ARCH_RUS      ""              // ?  
-#endif
-
-#endif

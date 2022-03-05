@@ -17,9 +17,8 @@
 // soundst.h
 
 
+#pragma once
 
-#ifndef __SOUNDSTH__
-#define __SOUNDSTH__
 
 extern int snd_MaxVolume;
 extern int snd_MaxVolume_tmp;
@@ -50,5 +49,3 @@ void S_SetMaxVolume(boolean fullprocess);
 void S_SetMusicVolume(void);
 void S_MuteSound(void);
 void S_UnMuteSound(void);
-
-#endif

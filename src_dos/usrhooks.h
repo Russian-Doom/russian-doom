@@ -30,8 +30,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
    prototypes in this header should not be modified.
 **********************************************************************/
 
-#ifndef __USRHOOKS_H
-#define __USRHOOKS_H
+
+#pragma once
+
 
 /*---------------------------------------------------------------------
    Error definitions
@@ -51,5 +52,3 @@ enum USRHOOKS_Errors
 
 int USRHOOKS_GetMem( void **ptr, unsigned long size );
 int USRHOOKS_FreeMem( void *ptr );
-
-#endif

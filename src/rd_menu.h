@@ -12,12 +12,13 @@
 // GNU General Public License for more details.
 //
 
-#ifndef RD_MENU_H
-#define RD_MENU_H
+
+#pragma once
 
 #include "d_event.h"
 #include "rd_text.h"
 #include "rd_menu_control.h"
+
 
 typedef enum
 {
@@ -214,5 +215,3 @@ void RD_Menu_SetMenu(const Menu_t* menu);
 
 extern boolean SCNetCheck(int option);
 extern void RD_Menu_StartSound(MenuSound_t sound);
-
-#endif //RD_MENU_H

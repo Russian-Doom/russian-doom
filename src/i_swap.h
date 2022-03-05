@@ -18,11 +18,10 @@
 //
 
 
-
-#ifndef __I_SWAP__
-#define __I_SWAP__
+#pragma once
 
 #include "SDL_endian.h"
+
 
 // Endianess handling.
 // WAD files are stored little endian.
@@ -40,6 +39,3 @@
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 #define SYS_BIG_ENDIAN
 #endif
-
-#endif
-

@@ -17,12 +17,10 @@
 // mus2mid.h - Ben Ryves 2006 - http://benryves.com - benryves@benryves.com
 // Use to convert a MUS file into a single track, type 0 MIDI file.
 
-#ifndef MUS2MID_H
-#define MUS2MID_H
+
+#pragma once
+
 
 #include "doomtype.h"
 
 boolean mus2mid(FILE *musinput, FILE *midioutput);
-
-#endif /* #ifndef MUS2MID_H */
-

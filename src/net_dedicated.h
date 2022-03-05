@@ -17,12 +17,6 @@
 // 
 
 
-
-#ifndef NET_DEDICATED_H
-#define NET_DEDICATED_H
+#pragma once
 
 void NET_DedicatedServer(void);
-
-#endif /* #ifndef NET_DEDICATED_H */
-
-

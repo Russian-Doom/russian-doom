@@ -18,8 +18,7 @@
 //
 
 
-#ifndef __R_STATE__
-#define __R_STATE__
+#pragma once
 
 // Need data structure definitions.
 #include "d_player.h"
@@ -117,6 +116,3 @@ extern int rw_angle1;
 
 extern visplane_t *floorplane;
 extern visplane_t *ceilingplane;
-
-
-#endif

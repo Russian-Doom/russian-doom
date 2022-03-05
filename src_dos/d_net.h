@@ -18,8 +18,8 @@
 //	Networking stuff.
 //
 
-#ifndef __D_NET__
-#define __D_NET__
+
+#pragma once
 
 #include "d_player.h"
 
@@ -123,7 +123,3 @@ void D_QuitNetGame(void);
 
 //? how many ticks to run?
 void TryRunTics(void);
-
-
-#endif
-

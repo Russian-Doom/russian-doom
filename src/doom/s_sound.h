@@ -18,8 +18,7 @@
 //
 
 
-#ifndef __S_SOUND__
-#define __S_SOUND__
+#pragma once
 
 #include "p_mobj.h"
 #include "r_defs.h"
@@ -91,5 +90,3 @@ extern int idmusnum;
 
 void S_MuteSound(void);
 void S_UnMuteSound(void);
-
-#endif

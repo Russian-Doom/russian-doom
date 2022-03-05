@@ -19,11 +19,10 @@
 //
 
 
-
-#ifndef __SOUNDS__
-#define __SOUNDS__
+#pragma once
 
 #include "i_sound.h"
+
 
 // the complete set of sound effects
 extern sfxinfo_t	S_sfx[];
@@ -256,5 +255,3 @@ typedef enum
     sfx_secret,
     NUMSFX
 } sfxenum_t;
-
-#endif

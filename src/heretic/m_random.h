@@ -16,9 +16,8 @@
 //
 
 
+#pragma once
 
-#ifndef HERETIC_M_RANDOM_H
-#define HERETIC_M_RANDOM_H
 
 // Most damage defined using HITDICE
 #define HITDICE(a) ((1+(P_Random()&7))*a)
@@ -35,6 +34,3 @@ extern int rndindex;
 
 // Defined version of P_Random() - P_Random()
 int P_SubRandom (void);
-
-#endif // HERETIC_M_RANDOM_H
-

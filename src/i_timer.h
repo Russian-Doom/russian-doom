@@ -18,9 +18,8 @@
 //
 
 
+#pragma once
 
-#ifndef __I_TIMER__
-#define __I_TIMER__
 
 #define TICRATE 35
 
@@ -39,6 +38,3 @@ void I_InitTimer(void);
 
 // Wait for vertical retrace or pause a bit.
 void I_WaitVBL(int count);
-
-#endif
-

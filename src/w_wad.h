@@ -18,12 +18,9 @@
 //
 
 
-
-#ifndef __W_WAD__
-#define __W_WAD__
+#pragma once
 
 #include <stdio.h>
-
 #include "doomtype.h"
 #include "w_file.h"
 
@@ -75,5 +72,3 @@ extern unsigned int W_LumpNameHash(const char *s);
 
 void W_ReleaseLumpNum(lumpindex_t lumpnum);
 void W_ReleaseLumpName(char *name);
-
-#endif

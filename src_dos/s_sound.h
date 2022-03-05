@@ -19,9 +19,7 @@
 //
 
 
-#ifndef __S_SOUND__
-#define __S_SOUND__
-
+#pragma once
 
 
 //
@@ -102,6 +100,3 @@ void S_UpdateSounds(void* listener_p);
 
 void S_SetMusicVolume(int volume);
 void S_SetSfxVolume(int volume);
-
-
-#endif

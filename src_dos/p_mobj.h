@@ -19,8 +19,7 @@
 //
 
 
-#ifndef __P_MOBJ__
-#define __P_MOBJ__
+#pragma once
 
 // Basics.
 #include "tables.h"
@@ -300,6 +299,3 @@ typedef struct mobj_s
     struct mobj_s *tracer;	
 
 } mobj_t;
-
-
-#endif

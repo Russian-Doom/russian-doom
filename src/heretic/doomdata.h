@@ -21,10 +21,10 @@
 // all external data is defined here
 // most of the data is loaded into different structures at run time
 
-#ifndef __DOOMDATA__
-#define __DOOMDATA__
+#pragma once
 
 #include "doomtype.h"
+
 
 /*
 ===============================================================================
@@ -286,8 +286,3 @@ typedef struct
 
 ===============================================================================
 */
-
-
-
-
-#endif // __DOOMDATA__

@@ -14,8 +14,8 @@
 //
 
 
-#ifndef TXT_CONDITIONAL_H
-#define TXT_CONDITIONAL_H
+#pragma once
+
 
 /**
  * @file txt_conditional.h
@@ -59,7 +59,3 @@ txt_conditional_t *TXT_NewConditional(int *var, int expected_value,
  */
 
 txt_widget_t *TXT_If(int condition, TXT_UNCAST_ARG(child));
-
-#endif /* #ifndef TXT_CONDITIONAL_H */
-
-

@@ -20,8 +20,7 @@
 //
 
 
-#ifndef __SOUNDS__
-#define __SOUNDS__
+#pragma once
 
 
 //
@@ -281,5 +280,3 @@ typedef enum
     sfx_swtchw,
     NUMSFX
 } sfxenum_t;
-
-#endif

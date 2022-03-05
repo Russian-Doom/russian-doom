@@ -20,8 +20,8 @@
 //	Does palette indicators as well (red pain/berserk, bright pickup)
 //
 
-#ifndef __STSTUFF_H__
-#define __STSTUFF_H__
+
+#pragma once
 
 #include "doomtype.h"
 #include "d_event.h"
@@ -73,6 +73,3 @@ typedef enum
 
 
 extern boolean ST_Responder(event_t* ev);
-
-
-#endif

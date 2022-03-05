@@ -18,9 +18,7 @@
 // 
 
 
-
-#ifndef __G_GAME__
-#define __G_GAME__
+#pragma once
 
 #include "doomdef.h"
 #include "d_event.h"
@@ -78,7 +76,3 @@ void G_ScreenShot (void);
 
 void G_DrawMouseSpeedBox(void);
 int G_VanillaVersionCode(void);
-
-
-#endif
-

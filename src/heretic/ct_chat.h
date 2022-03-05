@@ -19,9 +19,8 @@
 //
 
 
+#pragma once
 
-#ifndef HERETIC_CT_CHAT_H
-#define HERETIC_CT_CHAT_H
 
 #define CT_PLR_GREEN	1
 #define CT_PLR_YELLOW	2
@@ -36,6 +35,3 @@
 #define CT_KEY_ALL		't'
 
 extern char *chat_macros[10];
-
-#endif /* #ifndef HERETIC_CT_CHAT_H */
-

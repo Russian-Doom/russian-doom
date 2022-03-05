@@ -17,11 +17,10 @@
 //
 
 
-
-#ifndef OPL_OPL_H
-#define OPL_OPL_H
+#pragma once
 
 #include <inttypes.h>
+
 
 typedef void (*opl_callback_t)(void *data);
 
@@ -150,6 +149,3 @@ void OPL_Delay(uint64_t us);
 // Pause the OPL callbacks.
 
 void OPL_SetPaused(int paused);
-
-#endif
-

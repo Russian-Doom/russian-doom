@@ -17,13 +17,11 @@
 //
 
 
-
-#ifndef DEH_STR_H
-#define DEH_STR_H
+#pragma once
 
 #include <stdio.h>
-
 #include "doomfeatures.h"
+
 
 // Used to do dehacked text substitutions throughout the program
 
@@ -44,6 +42,3 @@ void DEH_AddStringReplacement(char *from_text, char *to_text);
 #define DEH_snprintf snprintf
 
 #endif
-
-#endif /* #ifndef DEH_STR_H */
-

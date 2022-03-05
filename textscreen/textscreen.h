@@ -14,8 +14,7 @@
 //
 
 
-#ifndef TEXTSCREEN_H
-#define TEXTSCREEN_H
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -45,6 +44,3 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* #ifndef TEXTSCREEN_H */
-

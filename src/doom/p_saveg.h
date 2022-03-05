@@ -18,11 +18,10 @@
 //
 
 
-
-#ifndef __P_SAVEG__
-#define __P_SAVEG__
+#pragma once
 
 #include <stdio.h>
+
 
 #define SAVEGAME_EOF 0x1d
 #define VERSIONSIZE 16
@@ -71,6 +70,3 @@ extern boolean savegame_error;
 
 // [from crispy]
 extern void M_ConfirmDeleteGame (void);
-
-
-#endif

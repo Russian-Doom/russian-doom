@@ -18,8 +18,8 @@
 //  Sprite animation.
 //
 
-#ifndef __P_PSPR__
-#define __P_PSPR__
+
+#pragma once
 
 #include "doomdef.h"
 #include "tables.h"
@@ -69,5 +69,3 @@ typedef struct
 } weaponinfo_t;
 
 extern  weaponinfo_t  weaponinfo[NUMWEAPONS];
-
-#endif

@@ -20,8 +20,8 @@
 //   key definitions, lots of other stuff.
 //
 
-#ifndef __DOOMDEF__
-#define __DOOMDEF__
+
+#pragma once
 
 #include <stdio.h>
 #include <string.h>
@@ -240,7 +240,3 @@ fixed_t FixedDiv2 (fixed_t a, fixed_t b);
 #ifndef BETWEEN
 #define BETWEEN(l,u,x) (((l)>(x))?(l):((x)>(u))?(u):(x))
 #endif
-
-
-#endif          // __DOOMDEF__
-

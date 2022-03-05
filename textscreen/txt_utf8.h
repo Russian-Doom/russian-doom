@@ -14,15 +14,12 @@
 //
 
 
-#ifndef TXT_UTF8_H
-#define TXT_UTF8_H
+#pragma once
 
 #include <stdarg.h>
+
 
 char *TXT_EncodeUTF8(char *p, unsigned int c);
 unsigned int TXT_DecodeUTF8(const char **ptr);
 unsigned int TXT_UTF8_Strlen(const char *s);
 char *TXT_UTF8_SkipChars(const char *s, unsigned int n);
-
-#endif /* #ifndef TXT_UTF8_H */
-

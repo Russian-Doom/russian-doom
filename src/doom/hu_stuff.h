@@ -17,9 +17,7 @@
 //
 
 
-
-#ifndef __HU_STUFF_H__
-#define __HU_STUFF_H__
+#pragma once
 
 #include "d_event.h"
 #include "v_patch.h"
@@ -80,7 +78,3 @@ extern byte *hud_level_color_set;
 extern byte *hud_values_color_set;
 
 extern char *chat_macros[10];
-
-
-#endif
-

@@ -39,8 +39,6 @@
 static int *offsets;
 static int *offset;
 
-extern int firstflat;
-
 #define AMP 2
 #define AMP2 2
 #define SPEED 40

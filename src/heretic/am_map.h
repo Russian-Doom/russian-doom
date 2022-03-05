@@ -16,13 +16,11 @@
 //
 
 
-
-#ifndef __AMMAP_H__
-#define __AMMAP_H__
-
+#pragma once
 
 #include <stdint.h>
 #include "m_fixed.h"
+
 
 // For use if I do walls with outsides/insides
 #define REDS		12*8
@@ -115,5 +113,3 @@ void AM_Start (void);
 void AM_Stop (void);
 void AM_clearMarks (void);
 void AM_initMarksColor (int color);
-
-#endif

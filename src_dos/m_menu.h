@@ -18,9 +18,8 @@
 //   Menu widget stuff, episode selection and such.
 //
 
-#ifndef __M_MENU__
-#define __M_MENU__
 
+#pragma once
 
 #include "d_event.h"
 
@@ -47,7 +46,3 @@ void M_Init (void);
 // Called by intro code to force menu up upon a keypress,
 // does nothing if menu is already up.
 void M_StartControlPanel (void);
-
-
-#endif    
-

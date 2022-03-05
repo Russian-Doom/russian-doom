@@ -18,11 +18,10 @@
 //    
 
 
-
-#ifndef __M_ARGV__
-#define __M_ARGV__
+#pragma once
 
 #include "doomtype.h"
+
 
 //
 // MISC
@@ -53,5 +52,3 @@ boolean M_ParmExists(char *check);
 // Get name of executable used to run this program:
 
 char *M_GetExecutableName(void);
-
-#endif

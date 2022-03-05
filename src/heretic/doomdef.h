@@ -18,8 +18,7 @@
 
 
 
-#ifndef __DOOMDEF__
-#define __DOOMDEF__
+#pragma once
 #include <stdio.h>
 #include <string.h>
 //haleyjd: removed WATCOMC
@@ -876,5 +875,3 @@ void MN_Ticker(void);
 void MN_Drawer(void);
 
 #include "sounds.h"
-
-#endif // __DOOMDEF__

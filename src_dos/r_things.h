@@ -18,11 +18,10 @@
 //	Rendering of moving objects, sprites.
 //
 
+
+#pragma once
+
 #include <stdint.h>
-
-#ifndef __R_THINGS__
-#define __R_THINGS__
-
 #include "limits.h"
 
 
@@ -49,6 +48,3 @@ void R_InitSprites (char** namelist);
 void R_ClearSprites (void);
 void R_DrawMasked (void);
 void R_ClipVisSprite (vissprite_t *vis, int xl, int xh);
-
-
-#endif

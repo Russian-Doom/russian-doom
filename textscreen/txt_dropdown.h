@@ -14,8 +14,8 @@
 //
 
 
-#ifndef TXT_DROPDOWN_H
-#define TXT_DROPDOWN_H
+#pragma once
+
 
 /**
  * @file txt_dropdown.h
@@ -65,7 +65,3 @@ struct txt_dropdown_list_s
 
 txt_dropdown_list_t *TXT_NewDropdownList(int *variable, 
                                          char **values, int num_values);
-
-#endif /* #ifndef TXT_DROPDOWN_H */
-
-

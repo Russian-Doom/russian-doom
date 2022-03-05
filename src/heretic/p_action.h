@@ -19,9 +19,8 @@
 //
 
 
+#pragma once
 
-#ifndef HERETIC_P_ACTION_H
-#define HERETIC_P_ACTION_H
 
 void A_FreeTargMobj();
 void A_RestoreSpecialThing1();
@@ -149,6 +148,3 @@ void A_MinotaurAtk3();
 void A_MinotaurCharge();
 void A_MntrFloorFire();
 void A_ESound();
-
-#endif /* #ifndef HERETIC_P_ACTION_H */
-

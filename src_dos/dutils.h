@@ -18,8 +18,9 @@
 //	Cheat code checking.
 //
 
-#ifndef __DUTILS__
-#define __DUTILS__
+
+#pragma once
+
 
 typedef struct lnode_s
 {
@@ -58,6 +59,3 @@ typedef struct
 int cht_CheckCheat (cheatseq_t* cht, char key);
 
 void cht_GetParam (cheatseq_t* cht, char* buffer);
-
-#endif
-

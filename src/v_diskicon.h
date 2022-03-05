@@ -18,9 +18,8 @@
 //
 
 
+#pragma once
 
-#ifndef __V_DISKICON__
-#define __V_DISKICON__
 
 // Dimensions of the flashing "loading" disk icon
 
@@ -33,5 +32,3 @@ extern void V_DrawDiskIcon(void);
 
 extern boolean disk_allowed;
 extern boolean disk_drawn;
-
-#endif

@@ -14,8 +14,8 @@
 //
 
 
-#ifndef TXT_BUTTON_H
-#define TXT_BUTTON_H
+#pragma once
+
 
 /**
  * @file txt_button.h
@@ -70,7 +70,3 @@ txt_button_t *TXT_NewButton2(char *label, TxtWidgetSignalFunc func,
  */
 
 void TXT_SetButtonLabel(txt_button_t *button, char *label);
-
-#endif /* #ifndef TXT_BUTTON_H */
-
-

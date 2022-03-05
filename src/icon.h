@@ -12,12 +12,11 @@
 // GNU General Public License for more details.
 //
 
-#ifndef ICON_H
-#define ICON_H
+
+#pragma once
+
 
 extern int icon_w;
 extern int icon_h;
 
 extern const unsigned int icon_data[];
-
-#endif // ICON_H

@@ -17,10 +17,10 @@
 //
 
 
-#ifndef TXT_IO_H
-#define TXT_IO_H
+#pragma once
 
 #include "txt_main.h"
+
 
 typedef struct
 {
@@ -37,6 +37,3 @@ void TXT_BGColor(int color, int blinking);
 void TXT_SaveColors(txt_saved_colors_t *save);
 void TXT_RestoreColors(txt_saved_colors_t *save);
 void TXT_ClearScreen(void);
-
-#endif /* #ifndef TXT_IO_H */
-

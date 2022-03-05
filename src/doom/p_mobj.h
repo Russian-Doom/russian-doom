@@ -18,9 +18,7 @@
 //
 
 
-#ifndef __P_MOBJ__
-#define __P_MOBJ__
-
+#pragma once
 
 #include "tables.h"
 #include "doomdata.h"
@@ -296,6 +294,3 @@ typedef struct mobj_s
     angle_t oldangle;
 
 } mobj_t;
-
-
-#endif

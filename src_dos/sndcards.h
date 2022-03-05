@@ -24,8 +24,9 @@ Prepared for public release: 03/21/2003 - Charlie Wiederhold, 3D Realms
 */
 //-------------------------------------------------------------------------
 
-#ifndef __SNDCARDS_H
-#define __SNDCARDS_H
+
+#pragma once
+
 
 #define ASS_VERSION_STRING "1.1"
 
@@ -47,5 +48,3 @@ typedef enum
    PC,
    NumSoundCards
    } soundcardnames;
-
-#endif

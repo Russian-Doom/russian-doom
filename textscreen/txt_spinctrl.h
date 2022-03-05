@@ -14,8 +14,8 @@
 //
 
 
-#ifndef TXT_SPINCONTROL_H
-#define TXT_SPINCONTROL_H
+#pragma once
+
 
 /**
  * @file txt_spinctrl.h
@@ -74,7 +74,3 @@ txt_spincontrol_t *TXT_NewSpinControl(int *value, int min, int max);
  */
 
 txt_spincontrol_t *TXT_NewFloatSpinControl(float *value, float min, float max);
-
-#endif /* #ifndef TXT_SPINCONTROL_H */
-
-

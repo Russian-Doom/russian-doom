@@ -19,9 +19,7 @@
 //
 
 
-#ifndef __DOOMDEF__
-#define __DOOMDEF__
-
+#pragma once
 
 #include <stdio.h>
 #include <string.h>
@@ -153,7 +151,3 @@ typedef enum
     INFRATICS   = (120 * TICRATE),
     IRONTICS    = (60 * TICRATE)
 } powerduration_t;
-
-
-#endif          // __DOOMDEF__
-

@@ -28,8 +28,9 @@
 // @ = n
 // ^ = "
 
-#ifndef __D_ENGLSH__
-#define __D_ENGLSH__
+
+#pragma once
+
 
 //
 //	Printed strings for translation
@@ -1169,6 +1170,3 @@ PRESSYN
 
 #define STSTR_CROSSHAIR_ON  "ghbwtk drk.xty"                        // Прицел включен
 #define STSTR_CROSSHAIR_OFF "ghbwtk dsrk.xty"                       // Прицел выключен
-
-
-#endif

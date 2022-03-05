@@ -18,10 +18,11 @@
 //	System specific interface stuff.
 //
 
-#ifndef __D_TICCMD__
-#define __D_TICCMD__
+
+#pragma once
 
 #include "doomtype.h"
+
 
 // The data sampled per tick (single player)
 // and transmitted to other peers (multiplayer).
@@ -37,6 +38,3 @@ typedef struct
     byte    buttons;
     byte    lookfly;     // [JN] Mouselook: up/down/centering
 } ticcmd_t;
-
-#endif
-

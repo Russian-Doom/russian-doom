@@ -22,10 +22,10 @@
 //
 
 
-#ifndef __Z_ZONE__
-#define __Z_ZONE__
+#pragma once
 
 #include <stdio.h>
+
 
 //
 // ZONE MEMORY
@@ -77,7 +77,3 @@ typedef struct memblock_s
 	  I_Error("Z_CT at "__FILE__":%i",__LINE__); \
 	  Z_ChangeTag2(p,t); \
 };
-
-
-#endif
-

@@ -25,8 +25,7 @@
 // ^ = "
 
 
-#ifndef __RD_LANG__
-#define __RD_LANG__
+#pragma once
 
 
 extern void RD_DefineLanguageStrings ();
@@ -745,23 +744,3 @@ extern char* txt_mlook_off;
 #define TXT_CROSSHAIR_OFF_RUS   "GHBWTK DSRK.XTY"           // ПРИЦЕЛ ВЫКЛЮЧЕН
 #define RD_ON_RUS               "DRK"                       // ВКЛ
 #define RD_OFF_RUS              "DSRK"                      // ВЫКЛ
-
-// English
-#if defined (_WIN64)
-#define TXT_ARCH      " - (X64)"
-#elif defined (_WIN32)
-#define TXT_ARCH      " - (X86)"
-#else
-#define TXT_ARCH      ""
-#endif
-
-// Русский
-#if defined (_WIN64)
-#define TXT_ARCH_RUS      " - ([64)"        // x64
-#elif defined (_WIN32)
-#define TXT_ARCH_RUS      " - ([86)"        // x86
-#else
-#define TXT_ARCH_RUS      ""                // ?  
-#endif
-
-#endif

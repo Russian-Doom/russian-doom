@@ -19,13 +19,9 @@
 //
 
 
+#pragma once
 
-#ifndef IOPERM_SYS_H
-#define IOPERM_SYS_H
 
 int IOperm_EnablePortRange(unsigned int from, unsigned int num, int turn_on);
 int IOperm_InstallDriver(void);
 int IOperm_UninstallDriver(void);
-
-#endif /* #ifndef IOPERM_SYS_H */
-

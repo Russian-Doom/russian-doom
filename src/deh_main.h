@@ -17,14 +17,13 @@
 //
 
 
-
-#ifndef DEH_MAIN_H
-#define DEH_MAIN_H
+#pragma once
 
 #include "doomtype.h"
 #include "doomfeatures.h"
 #include "deh_str.h"
 #include "sha1.h"
+
 
 // These are the limits that dehacked uses (from dheinit.h in the dehacked
 // source).  If these limits are exceeded, it does not generate an error, but
@@ -46,6 +45,3 @@ extern boolean deh_allow_extended_strings;
 extern boolean deh_allow_long_strings;
 extern boolean deh_allow_long_cheats;
 extern boolean deh_apply_cheats;
-
-#endif /* #ifndef DEH_MAIN_H */
-

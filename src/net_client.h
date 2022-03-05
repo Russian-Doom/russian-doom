@@ -16,14 +16,13 @@
 //
 
 
-
-#ifndef NET_CLIENT_H
-#define NET_CLIENT_H
+#pragma once
 
 #include "doomtype.h"
 #include "d_ticcmd.h"
 #include "sha1.h"
 #include "net_defs.h"
+
 
 boolean NET_CL_Connect(net_addr_t *addr, net_connect_data_t *data);
 void NET_CL_Disconnect(void);
@@ -51,5 +50,3 @@ extern sha1_digest_t net_local_deh_sha1sum;
 extern unsigned int net_local_is_freedoom;
 
 extern boolean drone;
-
-#endif /* #ifndef NET_CLIENT_H */

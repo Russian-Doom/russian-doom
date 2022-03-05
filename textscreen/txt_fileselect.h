@@ -17,8 +17,8 @@
 //
 
 
-#ifndef TXT_FILESELECT_H
-#define TXT_FILESELECT_H
+#pragma once
+
 
 /**
  * @file txt_fileselect.h
@@ -76,6 +76,3 @@ txt_fileselect_t *TXT_NewFileSelector(char **variable, int size,
  */
 
 extern char *TXT_DIRECTORY[];
-
-#endif /* #ifndef TXT_FILESELECT_H */
-

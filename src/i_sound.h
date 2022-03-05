@@ -18,9 +18,7 @@
 //
 
 
-
-#ifndef __I_SOUND__
-#define __I_SOUND__
+#pragma once
 
 #include "doomtype.h"
 
@@ -248,6 +246,3 @@ typedef enum {
 } opl_driver_ver_t;
 
 void I_SetOPLDriverVer(opl_driver_ver_t ver);
-
-#endif
-

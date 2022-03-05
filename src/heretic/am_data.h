@@ -17,9 +17,8 @@
 // AM_data.h : The vector graphics for the automap
 
 
+#pragma once
 
-#ifndef __AMDATA_H__
-#define __AMDATA_H__
 
 // a line drawing of the player pointing right, starting from the middle.
 
@@ -102,5 +101,3 @@ mline_t thintriangle_guy[] = {
   };
 #undef R
 #define NUMTHINTRIANGLEGUYLINES (sizeof(thintriangle_guy)/sizeof(mline_t))
-
-#endif

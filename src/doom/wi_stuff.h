@@ -18,8 +18,7 @@
 //
 
 
-#ifndef __WI_STUFF__
-#define __WI_STUFF__
+#pragma once
 
 
 // States for the intermission
@@ -42,5 +41,3 @@ void WI_Start(wbstartstruct_t *wbstartstruct);
 
 // Shut down the intermission screen
 void WI_unloadData(void);
-
-#endif

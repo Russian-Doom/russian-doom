@@ -18,14 +18,12 @@
 //    
 
 
-
-#ifndef __M_MISC__
-#define __M_MISC__
+#pragma once
 
 #include <stdio.h>
 #include <stdarg.h>
-
 #include "doomtype.h"
+
 
 boolean M_WriteFile(const char *name, void *source, int length);
 boolean M_WriteFileTimeout(const char *name, void *source, int length, int delay);
@@ -54,6 +52,3 @@ int M_snprintf(char *buf, size_t buf_len, const char *s, ...);
 char *M_OEMToUTF8(const char *ansi);
 void M_NormalizeSlashes(char *str);
 char* RD_M_FindInternalResource(char* resourceName);
-
-#endif
-

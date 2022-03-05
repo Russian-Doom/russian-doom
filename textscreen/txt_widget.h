@@ -14,8 +14,8 @@
 //
 
 
-#ifndef TXT_WIDGET_H
-#define TXT_WIDGET_H
+#pragma once
+
 
 /**
  * @file txt_widget.h
@@ -176,6 +176,3 @@ void TXT_SetWidgetBG(TXT_UNCAST_ARG(widget));
  */
 
 int TXT_ContainsWidget(TXT_UNCAST_ARG(haystack), TXT_UNCAST_ARG(needle));
-
-#endif /* #ifndef TXT_WIDGET_H */
-

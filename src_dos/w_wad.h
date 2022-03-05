@@ -19,8 +19,7 @@
 //
 
 
-#ifndef __W_WAD__
-#define __W_WAD__
+#pragma once
 
 
 //
@@ -81,6 +80,3 @@ extern  lumpinfo_t  *lumpinfo;
 void W_GenerateHashTable(void);
 
 extern unsigned int W_LumpNameHash(char *s);
-
-#endif
-

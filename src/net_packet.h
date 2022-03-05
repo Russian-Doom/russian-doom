@@ -17,11 +17,10 @@
 //
 
 
-
-#ifndef NET_PACKET_H
-#define NET_PACKET_H
+#pragma once
 
 #include "net_defs.h"
+
 
 net_packet_t *NET_NewPacket(int initial_size);
 net_packet_t *NET_PacketDup(net_packet_t *packet);
@@ -42,6 +41,3 @@ void NET_WriteInt16(net_packet_t *packet, unsigned int i);
 void NET_WriteInt32(net_packet_t *packet, unsigned int i);
 
 void NET_WriteString(net_packet_t *packet, char *string);
-
-#endif /* #ifndef NET_PACKET_H */
-

@@ -15,8 +15,8 @@
 //	Brightmap textures and flats lookup routine.
 //
 
-#ifndef __R_BMAPS__
-#define __R_BMAPS__
+
+#pragma once
 
 #include "r_data.h"
 
@@ -47,7 +47,3 @@ bmaptexture76, bmaptexture77, bmaptexture78, bmaptexture79, bmaptexture80,
 bmaptexture81, bmaptexture82, bmaptexture83, bmaptexture84, bmaptexture85,
 bmaptexture86, bmaptexture87, bmaptexture88, bmaptexture89, bmaptexture90,
 bmaptexture91, bmaptexture92, bmaptexture93, bmaptexture94;
-
-
-
-#endif // __R_BMAPS__

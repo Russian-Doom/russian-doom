@@ -19,10 +19,10 @@
 //
 
 
-#ifndef __R_BSP__
-#define __R_BSP__
+#pragma once
 
 #include "limits.h"
+
 
 extern seg_t       *curline;
 extern side_t      *sidedef;
@@ -46,6 +46,3 @@ typedef void (*drawfunc_t) (int start, int stop);
 void R_ClearClipSegs (void);
 void R_ClearDrawSegs (void);
 void R_RenderBSPNode (int bspnum);
-
-
-#endif

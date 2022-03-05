@@ -19,8 +19,7 @@
 //
 
 
-#ifndef __LIMITS__
-#define __LIMITS__
+#pragma once
 
 
 // [JN] Comment following definition to make a build with strict vanilla limits.
@@ -40,7 +39,4 @@
   #define MAXANIMS           32
   #define MAX_ADJOINING_SECTORS 20
   #define SAVEGAMESIZE       2 * 1024 * 1024 // 2 MB
-#endif
-
-
 #endif

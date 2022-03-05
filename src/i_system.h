@@ -18,9 +18,7 @@
 //
 
 
-
-#ifndef __I_SYSTEM__
-#define __I_SYSTEM__
+#pragma once
 
 #include "d_ticcmd.h"
 #include "d_event.h"
@@ -66,6 +64,3 @@ void I_AtExit(atexit_func_t func, boolean run_if_error);
 // Add all system-specific config file variable bindings.
 
 void I_BindVariables(void);
-
-#endif
-

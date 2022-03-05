@@ -19,8 +19,8 @@
 //
 
 
-#ifndef __R_SEGS__
-#define __R_SEGS__
+#pragma once
+
 
 // [BH] Compensate for rounding errors in DOOM's renderer by stretching wall
 //  columns by 1px. This eliminates the randomly-colored pixels ("sparkles")
@@ -29,7 +29,4 @@
 
 void R_RenderMaskedSegRange (drawseg_t *ds, int x1, int x2);
 
-
 extern lighttable_t  **walllights;
-
-#endif

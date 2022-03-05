@@ -18,9 +18,7 @@
 //
 
 
-
-#ifndef __D_MAIN__
-#define __D_MAIN__
+#pragma once
 
 #include "doomdef.h"
 
@@ -45,7 +43,3 @@ void D_StartTitle (void);
 
 extern gameaction_t gameaction;
 extern boolean sgl_loaded, sgl_compat_loaded, mlvls_loaded, havemap33;
-
-
-#endif
-

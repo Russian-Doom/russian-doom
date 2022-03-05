@@ -23,9 +23,7 @@
 //
 
 
-#ifndef __D_STATE__
-#define __D_STATE__
-
+#pragma once
 
 #include "doomdata.h"
 #include "d_loop.h"
@@ -246,7 +244,3 @@ extern int bodyqueslot;
 // Netgame stuff (buffers and pointers, i.e. indices).
 extern int rndindex;
 extern ticcmd_t *netcmds;
-
-
-#endif
-

@@ -14,8 +14,8 @@
 //
 
 
-#ifndef TXT_WINDOW_H
-#define TXT_WINDOW_H
+#pragma once
+
 
 /**
  * @file txt_window.h
@@ -219,6 +219,3 @@ void TXT_SetWindowHelpURL_RUS(txt_window_t *window, char *help_url_rus);
  */
 
 void TXT_OpenWindowHelpURL(txt_window_t *window);
-
-#endif /* #ifndef TXT_WINDOW_H */
-

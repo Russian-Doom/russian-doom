@@ -17,10 +17,7 @@
 //	[crispy] add support for SMMU swirling flats
 //
 
-#ifndef __R_SWIRL__
-#define __R_SWIRL__
+#pragma once
 
 void  R_InitDistortedFlats (void);
 char *R_DistortedFlat (int flatnum);
-
-#endif

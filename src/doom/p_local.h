@@ -18,13 +18,10 @@
 //
 
 
+#pragma once
 
-#ifndef __P_LOCAL__
-#define __P_LOCAL__
-
-#ifndef __R_LOCAL__
 #include "r_local.h"
-#endif
+
 
 #define TOCENTER        -8
 #define FLOATSPEED		(FRACUNIT*4)
@@ -319,6 +316,3 @@ P_DamageMobj
 // P_SPEC
 //
 #include "p_spec.h"
-
-
-#endif	// __P_LOCAL__

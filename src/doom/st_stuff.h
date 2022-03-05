@@ -20,13 +20,12 @@
 //
 
 
-
-#ifndef __STSTUFF_H__
-#define __STSTUFF_H__
+#pragma once
 
 #include "doomtype.h"
 #include "d_event.h"
 #include "m_cheat.h"
+
 
 // Size of statusbar.
 // Now sensitive for scaling.
@@ -112,6 +111,3 @@ extern byte *sbar_color_critical_set;
 extern byte *sbar_color_armor_1_set;
 extern byte *sbar_color_armor_2_set;
 extern byte *sbar_color_armor_0_set;
-
-
-#endif

@@ -17,11 +17,10 @@
 //
 
 
-
-#ifndef DEH_HTIC_H
-#define DEH_HTIC_H
+#pragma once
 
 #include "info.h"
+
 
 // HHE executable version.  Loading HHE patches is (unfortunately)
 // dependent on the version of the Heretic executable used to make them.
@@ -50,6 +49,3 @@ int DEH_MapHereticFrameNumber(int frame);
 void DEH_SuggestHereticVersion(deh_hhe_version_t version);
 
 extern deh_hhe_version_t deh_hhe_version;
-
-#endif /* #ifndef DEH_HTIC_H */
-

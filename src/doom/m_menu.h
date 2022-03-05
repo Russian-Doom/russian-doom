@@ -18,10 +18,7 @@
 //    
 
 
-
-#ifndef __M_MENU__
-#define __M_MENU__
-
+#pragma once
 
 #include "d_event.h"
 
@@ -51,5 +48,3 @@ void M_Init (void);
 
 // [JN] Called by ST_InitColors.
 void M_RD_Define_SBarColorValue(byte** sbar_color_set, int color);
-
-#endif    

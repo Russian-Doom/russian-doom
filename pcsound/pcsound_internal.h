@@ -17,11 +17,10 @@
 //
 
 
-
-#ifndef PCSOUND_INTERNAL_H
-#define PCSOUND_INTERNAL_H
+#pragma once
 
 #include "pcsound.h"
+
 
 #define PCSOUND_8253_FREQUENCY 1193280
 
@@ -37,6 +36,3 @@ struct pcsound_driver_s
 };
 
 extern int pcsound_sample_rate;
-
-#endif /* #ifndef PCSOUND_INTERNAL_H */
-

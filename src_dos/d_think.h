@@ -20,8 +20,8 @@
 //  suffers state changes of more or less violent nature.
 //
 
-#ifndef __D_THINK__
-#define __D_THINK__
+
+#pragma once
 
 
 //
@@ -57,6 +57,3 @@ typedef struct thinker_s
     struct  thinker_s* next;
     think_t function;
 } thinker_t;
-
-#endif
-

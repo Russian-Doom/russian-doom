@@ -14,8 +14,8 @@
 //
 
 
-#ifndef TXT_DESKTOP_H
-#define TXT_DESKTOP_H
+#pragma once
+
 
 /**
  * @file txt_desktop.h
@@ -105,6 +105,3 @@ int TXT_RaiseWindow(txt_window_t *window);
  */
 
 int TXT_LowerWindow(txt_window_t *window);
-
-#endif /* #ifndef TXT_DESKTOP_H */
-

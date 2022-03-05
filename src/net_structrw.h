@@ -14,14 +14,13 @@
 //
 
 
-
-#ifndef NET_STRUCTRW_H
-#define NET_STRUCTRW_H
+#pragma once
 
 #include "aes_prng.h"
 #include "sha1.h"
 #include "net_defs.h"
 #include "net_packet.h"
+
 
 void NET_WriteConnectData(net_packet_t *packet, net_connect_data_t *data);
 boolean NET_ReadConnectData(net_packet_t *packet, net_connect_data_t *data);
@@ -50,5 +49,3 @@ void NET_SafePuts(char *msg);
 
 boolean NET_ReadPRNGSeed(net_packet_t *packet, prng_seed_t seed);
 void NET_WritePRNGSeed(net_packet_t *packet, prng_seed_t seed);
-
-#endif /* #ifndef NET_STRUCTRW_H */

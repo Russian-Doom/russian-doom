@@ -17,11 +17,10 @@
 //
 
 
-
-#ifndef __I_JOYSTICK__
-#define __I_JOYSTICK__
+#pragma once
 
 #include <SDL_gamecontroller.h>
+
 
 // DOOM Controller definition
 enum
@@ -101,6 +100,3 @@ boolean ControllerHandler_Handles(char* sectionName);
 void ControllerHandler_HandleLine(char* keyName, char *value, size_t valueSize);
 void ControllerHandler_Save(FILE* file, char* sectionName);
 void ControllerHandler_onFinishHandling();
-
-#endif /* #ifndef __I_JOYSTICK__ */
-

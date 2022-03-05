@@ -20,8 +20,7 @@
 //
 
 
-#ifndef __I_SYSTEM__
-#define __I_SYSTEM__
+#pragma once
 
 #include "d_ticcmd.h"
 #include "d_event.h"
@@ -169,5 +168,3 @@ void I_EndRead(void);
 // Called by D_DoomMain.
 void I_InitNetwork(void);
 void I_NetCmd(void);
-
-#endif

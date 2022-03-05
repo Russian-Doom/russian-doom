@@ -12,8 +12,9 @@
 // GNU General Public License for more details.
 //
 
-#ifndef RD_D_NAME_H
-#define RD_D_NAME_H
+
+#pragma once
+
 
 typedef enum
 {
@@ -27,5 +28,3 @@ typedef enum
 extern char* RD_Project_Name;
 extern char* RD_Project_String;
 extern GameType_t RD_GameType;
-
-#endif //RD_D_NAME_H

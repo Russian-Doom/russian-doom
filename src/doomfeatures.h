@@ -18,9 +18,8 @@
 //
 
 
+#pragma once
 
-#ifndef DOOM_FEATURES_H
-#define DOOM_FEATURES_H
 
 // Enables wad merging (the '-merge' command line parameter)
 
@@ -37,7 +36,3 @@
 // Enables sound output
 
 #define FEATURE_SOUND 1
-
-#endif /* #ifndef DOOM_FEATURES_H */
-
-

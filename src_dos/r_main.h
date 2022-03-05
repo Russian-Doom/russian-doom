@@ -19,8 +19,7 @@
 //
 
 
-#ifndef __R_MAIN__
-#define __R_MAIN__
+#pragma once
 
 #include "d_player.h"
 #include "r_data.h"
@@ -144,5 +143,3 @@ void R_Init (void);
 void R_SetViewSize (int blocks, int detail);
 void R_ExecuteSetViewSize (void);
 void R_InitBrightmaps (void);
-
-#endif

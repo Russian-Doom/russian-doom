@@ -18,9 +18,7 @@
 //
 
 
-#ifndef __STLIB__
-#define __STLIB__
-
+#pragma once
 
 #include "r_defs.h"  // We are referring to patches.
 
@@ -103,6 +101,3 @@ void STlib_updateMultIcon (st_multicon_t *mi, boolean refresh);
 // Binary Icon widget routines
 void STlib_initBinIcon (st_binicon_t *b, int x, int y, patch_t *i, boolean *val, boolean *on);
 void STlib_updateBinIcon (st_binicon_t *bi, boolean refresh);
-
-
-#endif

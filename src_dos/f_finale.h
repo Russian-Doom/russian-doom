@@ -18,11 +18,12 @@
 //
 //
 
-#ifndef __F_FINALE__
-#define __F_FINALE__
+
+#pragma once
 
 #include "doomtype.h"
 #include "d_event.h"
+
 
 //
 // FINALE
@@ -40,6 +41,3 @@ void F_StartFinale (void);
 
 // [JN] Was final wipe done?
 extern boolean finale_wipe_done;
-
-#endif
-

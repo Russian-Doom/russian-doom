@@ -18,9 +18,7 @@
 //
 
 
-
-#ifndef __AMMAP_H__
-#define __AMMAP_H__
+#pragma once
 
 #include "d_event.h"
 #include "m_cheat.h"
@@ -66,7 +64,3 @@ void AM_initMarksColor (int color);
 void AM_clearMarks (void);
 
 extern cheatseq_t cheat_amap;
-
-
-#endif
-

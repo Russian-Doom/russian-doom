@@ -18,8 +18,8 @@
 //   Duh.
 //
 
-#ifndef __G_GAME__
-#define __G_GAME__
+
+#pragma once
 
 #include "doomdef.h"
 #include "d_event.h"
@@ -69,6 +69,3 @@ void G_Ticker (void);
 boolean G_Responder (event_t*	ev);
 
 void G_ScreenShot (void);
-
-
-#endif

@@ -24,10 +24,11 @@ Prepared for public release: 03/21/2003 - Charlie Wiederhold, 3D Realms
 */
 //-------------------------------------------------------------------------
 
-#ifndef __MUSIC_H
-#define __MUSIC_H
+
+#pragma once
 
 #include "sndcards.h"
+
 
 extern int MUSIC_ErrorCode;
 
@@ -84,5 +85,3 @@ int   MUSIC_FadeActive( void );
 void  MUSIC_StopFade( void );
 void  MUSIC_RerouteMidiChannel( int channel, int cdecl ( *function )( int event, int c1, int c2 ) );
 void  MUSIC_RegisterTimbreBank( unsigned char *timbres );
-
-#endif

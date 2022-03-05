@@ -14,8 +14,8 @@
 //
 
 
-#ifndef TXT_TABLE_H
-#define TXT_TABLE_H
+#pragma once
+
 
 /**
  * @file txt_table.h
@@ -229,7 +229,3 @@ void TXT_ClearTable(TXT_UNCAST_ARG(table));
  */
 
 int TXT_PageTable(TXT_UNCAST_ARG(table), int pagex, int pagey);
-
-#endif /* #ifndef TXT_TABLE_T */
-
-

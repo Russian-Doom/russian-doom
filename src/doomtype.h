@@ -19,11 +19,10 @@
 //    
 
 
-
-#ifndef __DOOMTYPE__
-#define __DOOMTYPE__
+#pragma once
 
 #include "config.h"
+
 
 #if defined(_MSC_VER) && !defined(__cplusplus)
 #define inline __inline
@@ -119,6 +118,3 @@ typedef uint8_t byte;
 #define RD_MAX_PATH 261
 
 #define arrlen(array) (sizeof(array) / sizeof(*array))
-
-#endif
-

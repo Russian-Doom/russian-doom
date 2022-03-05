@@ -18,9 +18,8 @@
 //
 
 
+#pragma once
 
-#ifndef V_PATCH_H
-#define V_PATCH_H
 
 // Patches.
 // A patch holds one or more columns.
@@ -47,6 +46,3 @@ typedef struct
 
 // column_t is a list of 0 or more post_t, (byte)-1 terminated
 typedef post_t	column_t;
-
-#endif 
-

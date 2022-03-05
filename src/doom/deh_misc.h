@@ -17,11 +17,10 @@
 //
 
 
-
-#ifndef DEH_MISC_H
-#define DEH_MISC_H
+#pragma once
 
 #include "doomfeatures.h"
+
 
 #define DEH_DEFAULT_INITIAL_HEALTH 100
 #define DEH_DEFAULT_INITIAL_BULLETS 50
@@ -81,6 +80,3 @@ extern int deh_species_infighting;
 #define deh_species_infighting  DEH_DEFAULT_SPECIES_INFIGHTING
 
 #endif
-
-#endif /* #ifndef DEH_MISC_H */
-

@@ -20,14 +20,13 @@
 //
 
 
-
-#ifndef __V_VIDEO__
-#define __V_VIDEO__
+#pragma once
 
 #include "doomtype.h"
 
 // Needed because we are refering to patches.
 #include "v_patch.h"
+
 
 //
 // VIDEO
@@ -130,6 +129,3 @@ void V_LoadTintTable(void);
 void V_LoadXlaTable(void);
 
 void V_DrawMouseSpeedBox(int speed);
-
-#endif
-

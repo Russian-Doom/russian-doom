@@ -18,9 +18,8 @@
 //
 
 
+#pragma once
 
-#ifndef __DOOMKEYS__
-#define __DOOMKEYS__
 
 //
 // DOOM keyboard definition.
@@ -171,5 +170,3 @@
     { ',', "," },   { '.', "." },   { '/', "/" },   { '\\', "\\" },  \
     { '\'', "\'" },                                                  \
 }
-
-#endif // __DOOMKEYS__

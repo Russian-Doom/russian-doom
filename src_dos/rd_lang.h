@@ -25,8 +25,7 @@
 // ^ = "
 
 
-#ifndef __RD_LANG__
-#define __RD_LANG__
+#pragma once
 
 
 extern void RD_DefineLanguageStrings ();
@@ -2027,6 +2026,3 @@ PRESSYN_RUS
 
 #define STSTR_VERSION       "VERSION 1.9 (YYYY-MM-DD)"
 #define STSTR_VERSION_RUS   "DTHCBZ 1>9 (UUUU-VV-LL)"
-
-
-#endif

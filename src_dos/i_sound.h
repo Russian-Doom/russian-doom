@@ -19,8 +19,9 @@
 //  System interface for sound.
 //
 
-#ifndef __I_SOUND__
-#define __I_SOUND__
+
+#pragma once
+
 
 #define SND_TICRATE     140     // tic rate for updating sound
 #define SND_MAXSONGS    40      // max number of songs in game
@@ -41,5 +42,3 @@ typedef enum
     snd_CODEC,
     NUM_SCARDS
 } cardenum_t;
-
-#endif

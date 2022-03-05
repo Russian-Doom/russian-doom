@@ -14,8 +14,8 @@
 //
 
 
-#ifndef TXT_CHECKBOX_H
-#define TXT_CHECKBOX_H
+#pragma once
+
 
 /**
  * @file txt_checkbox.h
@@ -72,7 +72,3 @@ txt_checkbox_t *TXT_NewCheckBox(char *label, int *variable);
  */
 
 txt_checkbox_t *TXT_NewInvertedCheckBox(char *label, int *variable);
-
-#endif /* #ifndef TXT_CHECKBOX_H */
-
-

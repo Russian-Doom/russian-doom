@@ -17,8 +17,8 @@
 // DESCRIPTION:
 //
 
-#ifndef __M_MISC__
-#define __M_MISC__
+
+#pragma once
 
 
 #include "doomdef.h"
@@ -92,6 +92,3 @@ M_DrawText
   int		y,
   boolean	direct,
   char*		string );
-
-
-#endif

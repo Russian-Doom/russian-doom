@@ -17,11 +17,11 @@
 // sounds.h
 
 
-
-#ifndef __SOUNDSH__
-#define __SOUNDSH__
+#pragma once
 
 #include "i_sound.h"
+#include "p_local.h"
+
 
 #define MAX_SND_DIST 	1600
 #define MAX_CHANNELS	64
@@ -291,5 +291,3 @@ typedef enum
 
 extern sfxinfo_t S_sfx[];
 extern musicinfo_t S_music[][2];
-
-#endif

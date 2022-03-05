@@ -18,8 +18,7 @@
 //
 
 
-#ifndef __P_PSPR__
-#define __P_PSPR__
+#pragma once
 
 // Basic data types. Needs fixed point, and BAM angles.
 #include "tables.h"
@@ -53,5 +52,3 @@ typedef struct
     fixed_t  sy;
 
 } pspdef_t;
-
-#endif

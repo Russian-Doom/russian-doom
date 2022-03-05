@@ -27,10 +27,11 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifndef __V_TRANS__
-#define __V_TRANS__
+
+#pragma once
 
 #include "doomtype.h"
+
 
 enum
 {
@@ -50,5 +51,3 @@ enum
 };
 
 extern byte  *cr[CRMAX];
-
-#endif // __V_TRANS__

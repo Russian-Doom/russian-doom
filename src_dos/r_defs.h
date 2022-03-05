@@ -18,12 +18,11 @@
 //      Refresh/rendering module, shared data struct definitions.
 //
 
+
+#pragma once
+
 #include <stdint.h>
 #include <limits.h>
-
-#ifndef __R_DEFS__
-#define __R_DEFS__
-
 
 // Screenwidth.
 #include "doomdef.h"
@@ -507,8 +506,3 @@ typedef struct visplane_s
   unsigned int		pad4; // [crispy] hires / 32-bit integer math
 
 } visplane_t;
-
-
-
-
-#endif

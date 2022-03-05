@@ -18,9 +18,7 @@
 //
 
 
-#ifndef __R_DEFS__
-#define __R_DEFS__
-
+#pragma once
 
 #include "p_mobj.h"
 #include "i_video.h"
@@ -438,5 +436,3 @@ typedef struct visplane_s
     unsigned int pad4;  // [crispy] hires / 32-bit integer math
 
 } visplane_t;
-
-#endif

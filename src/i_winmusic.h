@@ -16,8 +16,8 @@
 
 #ifdef _WIN32
 
-#ifndef __I_WINMUSIC__
-#define __I_WINMUSIC__
+#pragma once
+
 
 #include "doomtype.h"
 
@@ -30,7 +30,5 @@ void I_WIN_SetMusicVolume(int volume);
 boolean I_WIN_RegisterSong(char* filename);
 void I_WIN_UnRegisterSong(void);
 void I_WIN_ShutdownMusic(void);
-
-#endif
 
 #endif

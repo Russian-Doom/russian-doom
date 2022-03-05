@@ -20,9 +20,8 @@
 //
 
 
+#pragma once
 
-#ifndef W_MERGE_H
-#define W_MERGE_H
 
 #define W_NWT_MERGE_SPRITES   0x1
 #define W_NWT_MERGE_FLATS     0x2
@@ -42,6 +41,3 @@ void W_NWTDashMerge(char *filename);
 // Debug function that prints the WAD directory.
 
 void W_PrintDirectory(void);
-
-#endif /* #ifndef W_MERGE_H */
-

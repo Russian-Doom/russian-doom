@@ -18,11 +18,10 @@
 //
 
 
-
-#ifndef __I_VIDEO__
-#define __I_VIDEO__
+#pragma once
 
 #include "doomtype.h"
+
 
 // Screen width and height.
 
@@ -132,5 +131,3 @@ extern int smoothing;
 extern int vga_porch_flash;
 extern int integer_scaling;
 extern int force_software_renderer;
-
-#endif

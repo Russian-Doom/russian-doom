@@ -20,8 +20,9 @@
 //	This one is the original DOOM version, preserved.
 //
 
-#ifndef __INFO__
-#define __INFO__
+
+#pragma once
+
 
 // Needed for action function pointer handling.
 #include "d_think.h"
@@ -1330,5 +1331,3 @@ typedef struct
 } mobjinfo_t;
 
 extern mobjinfo_t mobjinfo[NUMMOBJTYPES];
-
-#endif

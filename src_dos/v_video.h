@@ -21,8 +21,7 @@
 //
 
 
-#ifndef __V_VIDEO__
-#define __V_VIDEO__
+#pragma once
 
 #include "doomtype.h"
 #include "doomdef.h"
@@ -107,6 +106,3 @@ V_MarkRect
   int		y,
   int		width,
   int		height );
-
-#endif
-

@@ -12,12 +12,13 @@
 // GNU General Public License for more details.
 //
 
-#ifndef RD_KEYBINDS_H
-#define RD_KEYBINDS_H
+
+#pragma once
 
 #include <stdio.h>
 #include "doomtype.h"
 #include "d_event.h"
+
 
 typedef enum
 {
@@ -195,5 +196,3 @@ boolean KeybindsHandler_Handles(char* sectionName);
 void KeybindsHandler_HandleLine(char* keyName, char *value, size_t valueSize);
 
 void KeybindsHandler_Save(FILE* file, char* sectionName);
-
-#endif //RD_KEYBINDS_H

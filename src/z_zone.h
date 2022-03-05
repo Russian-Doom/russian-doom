@@ -21,11 +21,10 @@
 //
 
 
-
-#ifndef __Z_ZONE__
-#define __Z_ZONE__
+#pragma once
 
 #include <stdio.h>
+
 
 //
 // ZONE MEMORY
@@ -69,6 +68,3 @@ unsigned int Z_ZoneSize(void);
 //
 #define Z_ChangeTag(p,t)                                       \
     Z_ChangeTag2((p), (t), __FILE__, __LINE__)
-
-
-#endif

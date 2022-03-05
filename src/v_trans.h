@@ -31,8 +31,7 @@
 //-----------------------------------------------------------------------------
 
 
-#ifndef __V_TRANS__
-#define __V_TRANS__
+#pragma once
 
 #include "doomtype.h"
 
@@ -142,5 +141,3 @@ extern byte  *shademap;
 extern byte  *fuzzmap;
 
 int V_GetPaletteIndex(byte *palette, int r, int g, int b);
-
-#endif // __V_TRANS__ 

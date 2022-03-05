@@ -20,10 +20,10 @@
 //      unicode paths for fopen() on Windows
 
 
-#ifndef RD_WIN_IO_H
-#define RD_WIN_IO_H
+#pragma once
 
 #include <stdio.h>
+
 
 #ifdef _WIN32
 #include <io.h>
@@ -58,5 +58,3 @@ int D_mkdir(const char *dirname);
 #undef  mkdir
 #define mkdir(d) D_mkdir(d)
 #endif
-
-#endif //RD_WIN_IO_H

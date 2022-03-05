@@ -19,11 +19,10 @@
 //
 
 
-
-#ifndef __D_MODE__
-#define __D_MODE__
+#pragma once
 
 #include "doomtype.h"
+
 
 // The "mission" controls what game we are playing.
 
@@ -124,6 +123,3 @@ boolean D_ValidEpisodeMap(GameMission_t mission, GameMode_t mode,
 int D_GetNumEpisodes(GameMission_t mission, GameMode_t mode);
 boolean D_IsEpisodeMap(GameMission_t mission);
 char *D_GameMissionString(GameMission_t mission);
-
-#endif /* #ifndef __D_MODE__ */
-

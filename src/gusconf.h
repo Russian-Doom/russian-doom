@@ -17,16 +17,12 @@
 //
 
 
-
-#ifndef __GUSCONF_H__
-#define __GUSCONF_H__
+#pragma once
 
 #include "doomtype.h"
+
 
 extern char *gus_patch_path;
 extern int gus_ram_kb;
 
 boolean GUS_WriteConfig(char *path);
-
-#endif /* #ifndef __GUSCONF_H__ */
-

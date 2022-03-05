@@ -20,8 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
    (c) Copyright 1994 James R. Dose.  All Rights Reserved.
 **********************************************************************/
 
-#ifndef __PCFX_H
-#define __PCFX_H
+
+#pragma once
+
 
 enum PCFX_Errors
    {
@@ -57,6 +58,3 @@ int   PCFX_Shutdown( void );
    #pragma aux PCFX_Shutdown frame;
 void  PCFX_UnlockMemory( void );
 int   PCFX_LockMemory( void );
-
-#endif
-

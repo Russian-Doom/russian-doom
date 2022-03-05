@@ -14,8 +14,8 @@
 //
 
 
-#ifndef TXT_SCROLLPANE_H
-#define TXT_SCROLLPANE_H
+#pragma once
+
 
 /**
  * @file txt_scrollpane.h
@@ -55,7 +55,3 @@ struct txt_scrollpane_s
  */
 
 txt_scrollpane_t *TXT_NewScrollPane(int w, int h, TXT_UNCAST_ARG(target));
-
-#endif /* #ifndef TXT_SCROLLPANE_H */
-
-

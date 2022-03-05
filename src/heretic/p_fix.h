@@ -36,8 +36,8 @@
 ========================================================================
 */
 
-#if !defined(__P_FIX_H__)
-#define __P_FIX_H__
+#pragma once
+
 
 #define DEFAULT 0x7FFF
 #define REMOVE  0
@@ -105,5 +105,3 @@ typedef struct
 } thingfix_t;
 
 extern thingfix_t   thingfix[];
-
-#endif

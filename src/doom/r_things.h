@@ -18,8 +18,7 @@
 //
 
 
-#ifndef __R_THINGS__
-#define __R_THINGS__
+#pragma once
 
 
 // Constant arrays used for psprite clipping and initializing clipping.
@@ -46,6 +45,3 @@ void R_InitSprites (char** namelist);
 void R_ClearSprites (void);
 void R_DrawMasked (void);
 void R_ClipVisSprite (vissprite_t *vis, int xl, int xh);
-
-
-#endif

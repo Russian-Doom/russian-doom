@@ -19,14 +19,10 @@
 // Use to convert a MUS file into a single track, type 0 MIDI file.
 
 
-
-#ifndef MUS2MID_H
-#define MUS2MID_H
+#pragma once
 
 #include "doomtype.h"
 #include "memio.h"
 
+
 boolean mus2mid(MEMFILE *musinput, MEMFILE *midioutput);
-
-#endif /* #ifndef MUS2MID_H */
-
