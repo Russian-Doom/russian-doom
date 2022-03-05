@@ -63,9 +63,9 @@ fixed_t P_ApproxDistanceZ(fixed_t dx, fixed_t dy, fixed_t dz)
 	dy = abs(dy);
 	dz = abs(dz);
 
-	dxy = (dy > dx) ? dy + FixedDiv(dx, 2) : dx + FixedDiv(dy, 2);
+	dxy = (dy > dx) ? dy + dx/2 : dx + dy/2;
 
-	return (dz > dxy) ? dz + FixedDiv(dxy, 2) : dxy + FixedDiv(dz, 2);
+	return (dz > dxy) ? dz + dxy/2 : dxy + dz/2;
 }
 
 /*
