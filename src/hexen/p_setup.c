@@ -1725,6 +1725,8 @@ static void P_LoadMapFixes (int map)
         case 38:  // Traductus' Tomb
         case 39:  // Vivarium
         case 40:  // Dark Crucible
+        // Death Kings of the Dark Citadel maps:
+        case 41:  // Ruined Village
         {
             // Construct new SECTORS lump name and load it:
             M_snprintf(fix_lumpname, sizeof(fix_lumpname), "HXSCF%02d", map);
