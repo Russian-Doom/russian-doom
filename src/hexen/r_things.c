@@ -824,6 +824,9 @@ void R_ProjectSprite(mobj_t * thing)
         || thing->type == MT_ICECHUNK
         // Poisoned cloud of Cleric's flechette or mushroom
         || thing->type == MT_POISONCLOUD
+        // Falling leafs
+        || thing->type == MT_LEAF1
+        || thing->type == MT_LEAF2
         )
         {
             if (thing->health & 1)

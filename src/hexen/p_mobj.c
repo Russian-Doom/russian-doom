@@ -1364,7 +1364,11 @@ mobj_t *P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boole
         // Wendigo: ice shards
         ||  mobj->type == MT_ICECHUNK
         // Poisoned cloud of Cleric's flechette or mushroom
-        ||  mobj->type == MT_POISONCLOUD)
+        ||  mobj->type == MT_POISONCLOUD
+        // Falling leafs
+        ||  mobj->type == MT_LEAF1
+        ||  mobj->type == MT_LEAF2
+        )
         {
             mobj->health -= M_Random() & 1;
         }
