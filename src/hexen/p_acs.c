@@ -495,7 +495,7 @@ boolean P_StartACS(int number, int map, byte * args, mobj_t * activator,
     {                           // Script not found
         //I_Error("P_StartACS: Unknown script number %d", number);
         M_snprintf(ErrorMsg, sizeof(ErrorMsg), "%s %d", txt_unknown_script, number); 
-        P_SetMessage(&players[consoleplayer], ErrorMsg, true);
+        P_SetMessage(&players[consoleplayer], ErrorMsg, msg_system, true);
     }
     statePtr = &ACSInfo[infoIndex].state;
     if (*statePtr == ASTE_SUSPENDED)
@@ -595,7 +595,7 @@ boolean P_StartLockedACS(line_t * line, byte * args, mobj_t * mo, int side)
         {
             M_snprintf(LockedBuffer, sizeof(LockedBuffer), "%s %s", txt_you_need_the, 
                        english_language ? TextKeyMessages[lock - 1] : TextKeyMessages_Rus[lock - 1]);
-            P_SetMessage(mo->player, LockedBuffer, true);
+            P_SetMessage(mo->player, LockedBuffer, msg_quest, true);
             S_StartSound(mo, SFX_DOOR_LOCKED);
             return false;
         }
@@ -1757,7 +1757,7 @@ static int CmdEndPrint(void)
     {
         player = &players[consoleplayer];
     }
-    P_SetMessage(player, PrintBuffer, true);
+    P_SetMessage(player, PrintBuffer, msg_quest, true);
     if(!rusACStrings)
         player->engOnlyMessage = true;
     return SCRIPT_CONTINUE;
@@ -1871,7 +1871,7 @@ static int InternalCmdPrintAlwaysWithTableDelayDirect(void)
     {
         player = &players[consoleplayer];
     }
-    P_SetMessage(player, PrintBuffer, true);
+    P_SetMessage(player, PrintBuffer, msg_quest, true);
     if(!rusACStrings)
         player->engOnlyMessage = true;
     i = delayTable[LONG(*PCodePtr)][english_language ? 0 : 1];
@@ -1903,7 +1903,7 @@ static int InternalCmdPrintRussianDirect(void)
         {
             player = &players[consoleplayer];
         }
-        P_SetMessage(player, PrintBuffer, true);
+        P_SetMessage(player, PrintBuffer, msg_quest, true);
     }
     ++PCodePtr;
     return SCRIPT_CONTINUE;

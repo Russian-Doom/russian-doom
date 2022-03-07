@@ -108,6 +108,10 @@ static void M_RD_MessagesTimeout(Direction_t direction);
 static void M_RD_MessagesFade();
 static void M_RD_ShadowedText();
 static void M_RD_LocalTime(Direction_t direction);
+static void M_RD_Change_Msg_Pickup_Color(Direction_t direction);
+static void M_RD_Change_Msg_Quest_Color(Direction_t direction);
+static void M_RD_Change_Msg_System_Color(Direction_t direction);
+static void M_RD_Change_Msg_Chat_Color(Direction_t direction);
 
 // Automap
 static void DrawAutomapMenu(void);
@@ -316,6 +320,55 @@ static int FontFYellowBaseLump; // small yellow
 static int MauloBaseLump;
 static int MenuPClass;
 static boolean soundchanged;
+
+static Translation_CR_t M_RD_ColorTranslation (int color)
+{
+    switch (color)
+    {
+        case 1:   return CR_GRAY2GDARKGRAY_HEXEN;
+        case 2:   return CR_GRAY2GDARKERGRAY_HEXEN;
+        case 3:   return CR_GRAY2RED_HEXEN;
+        case 4:   return CR_GRAY2DARKRED_HEXEN;
+        case 5:   return CR_GRAY2GREEN_HEXEN;
+        case 6:   return CR_GRAY2DARKGREEN_HEXEN;
+        case 7:   return CR_GRAY2OLIVE_HEXEN;
+        case 8:   return CR_GRAY2BLUE_HEXEN;
+        case 9:   return CR_GRAY2DARKBLUE_HEXEN;
+        case 10:  return CR_GRAY2PURPLE_HEXEN;
+        case 11:  return CR_GRAY2NIAGARA_HEXEN;
+        case 12:  return CR_GRAY2AZURE_HEXEN;
+        case 13:  return CR_GRAY2YELLOW_HEXEN;
+        case 14:  return CR_GRAY2DARKGOLD_HEXEN;
+        case 15:  return CR_GRAY2TAN_HEXEN;
+        case 16:  return CR_GRAY2BROWN_HEXEN;
+
+        default:  return CR_NONE;
+    }
+}
+
+static char *M_RD_ColorName (int color)
+{
+    switch (color)
+    {
+        case 1:   return english_language ? "GRAY"       : "CTHSQ";         // СЕРЫЙ
+        case 2:   return english_language ? "DARK GRAY"  : "NTVYJ-CTHSQ";   // ТЁМНО-СЕРЫЙ
+        case 3:   return english_language ? "RED"        : "RHFCYSQ";       // КРАСНЫЙ
+        case 4:   return english_language ? "DARK RED"   : "NTVYJ-RHFCYSQ"; // ТЁМНО-КРАСНЫЙ
+        case 5:   return english_language ? "GREEN"      : "PTKTYSQ";       // ЗЕЛЕНЫЙ
+        case 6:   return english_language ? "DARK GREEN" : "NTVYJ-PTKTYSQ"; // ТЕМНО-ЗЕЛЕНЫЙ
+        case 7:   return english_language ? "OLIVE"      : "JKBDRJDSQ";     // ОЛИВКОВЫЙ
+        case 8:   return english_language ? "BLUE"       : "CBYBQ";         // СИНИЙ
+        case 9:   return english_language ? "DARK BLUE"  : "NTVYJ-CBYBQ";   // ТЕМНО-СИНИЙ
+        case 10:  return english_language ? "PURPLE"     : "ABJKTNJDSQ";    // ФИОЛЕТОВЫЙ
+        case 11:  return english_language ? "NIAGARA"    : "YBFUFHF";       // НИАГАРА
+        case 12:  return english_language ? "AZURE"      : "KFPEHYSQ";      // ЛАЗУРНЫЙ
+        case 13:  return english_language ? "YELLOW"     : ";TKNSQ";        // ЖЕЛТЫЙ
+        case 14:  return english_language ? "GOLD"       : "PJKJNJQ";       // ЗОЛОТОЙ
+        case 15:  return english_language ? "TAN"        : ",T;TDSQ";       // БЕЖЕВЫЙ
+        case 16:  return english_language ? "BROWN"      : "RJHBXYTDSQ";    // КОРИЧНЕВЫЙ
+        default:  return english_language ? "WHITE"      : ",TKSQ";         // БЕЛЫЙ
+    }
+}
 
 // [JN] Used as a timer for hiding menu background
 // while changing screen size, gamma and level brightness.
@@ -620,14 +673,19 @@ static MenuItem_t MessagesItems[] = {
     {ITT_SWITCH, "FADING EFFECT:",      "GKFDYJT BCXTPYJDTYBT:",    M_RD_MessagesFade,            0}, // ПЛАВНОЕ ИСЧЕЗНОВЕНИЕ
     {ITT_SWITCH, "TEXT CASTS SHADOWS:", "NTRCNS JN,HFCSDF.N NTYM:", M_RD_ShadowedText,            0}, // ТЕКСТЫ ОТБРАСЫВАЮТ ТЕНЬ
     {ITT_TITLE,  "MISC",                "HFPYJT",                   NULL,                         0}, // РАЗНОЕ
-    {ITT_LRFUNC, "LOCAL TIME:",         "CBCNTVYJT DHTVZ:",         M_RD_LocalTime,               0}  // СИСТЕМНОЕ ВРЕМЯ
+    {ITT_LRFUNC, "LOCAL TIME:",         "CBCNTVYJT DHTVZ:",         M_RD_LocalTime,               0}, // СИСТЕМНОЕ ВРЕМЯ
+    {ITT_TITLE,  "COLORS",              "WDTNF",                    NULL,                         0}, // ЦВЕТА
+    {ITT_LRFUNC, "ITEM PICKUP:",        "GJKEXTYBT GHTLVTNJD:",     M_RD_Change_Msg_Pickup_Color, 0}, // ПОЛУЧЕНИЕ ПРЕДМЕТОВ
+    {ITT_LRFUNC, "QUEST MESSAGE:",      "RDTCNJDST CJJ,OTYBZ:",     M_RD_Change_Msg_Quest_Color, 0}, // ОБНАРУЖЕНИЕ ТАЙНИКОВ
+    {ITT_LRFUNC, "SYSTEM MESSAGE:",     "CBCNTVYST CJJ,OTYBZ:",     M_RD_Change_Msg_System_Color, 0}, // СИСТЕМНЫЕ СООБЩЕНИЯ
+    {ITT_LRFUNC, "NETGAME CHAT:",       "XFN CTNTDJQ BUHS:",        M_RD_Change_Msg_Chat_Color,   0}  // ЧАТ СЕТЕВОЙ ИГРЫ
 };
 
 static Menu_t MessagesMenu = {
     36, 36,
     32,
     "MESSAGES AND TEXTS", "CJJ,OTYBZ B NTRCNS", false, // СООБЩЕНИЯ И ТЕКСТЫ
-    9, MessagesItems, false,
+    14, MessagesItems, false,
     DrawMessagesMenu,
     NULL,
     &DisplayMenu,
@@ -1587,6 +1645,12 @@ void MN_Init(void)
 
     // [JN] Widescreen: set temp variable for rendering menu.
     aspect_ratio_temp = aspect_ratio;
+
+    // [JN] Init message colors.
+    M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);
+    M_RD_Define_Msg_Color(msg_quest, message_quest_color);
+    M_RD_Define_Msg_Color(msg_system, message_system_color);
+    M_RD_Define_Msg_Color(msg_chat, message_chat_color);
 }
 
 //==========================================================================
@@ -2557,6 +2621,22 @@ static void DrawMessagesMenu(void)
                               local_time == 3 ? "24-HOUR (HH:MM)" :
                               local_time == 4 ? "24-HOUR (HH:MM:SS)" : "OFF",
                               110 + wide_delta, 112, CR_NONE);
+
+        // Item pickup
+        RD_M_DrawTextSmallENG(M_RD_ColorName(message_pickup_color), 120 + wide_delta, 132,
+                              M_RD_ColorTranslation(message_pickup_color));
+
+        // Quest message
+        RD_M_DrawTextSmallENG(M_RD_ColorName(message_quest_color), 144 + wide_delta, 142,
+                              M_RD_ColorTranslation(message_quest_color));
+
+        // System message
+        RD_M_DrawTextSmallENG(M_RD_ColorName(message_system_color), 152 + wide_delta, 152,
+                              M_RD_ColorTranslation(message_system_color));
+
+        // Netgame chat
+        RD_M_DrawTextSmallENG(M_RD_ColorName(message_chat_color), 135 + wide_delta, 162,
+                              M_RD_ColorTranslation(message_chat_color));
     }
     else
     {
@@ -2593,6 +2673,22 @@ static void DrawMessagesMenu(void)
                               local_time == 3 ? "24-XFCJDJT (XX:VV)" :
                               local_time == 4 ? "24-XFCJDJT (XX:VV:CC)" : "DSRK",
                               157 + wide_delta, 112, CR_NONE);
+
+        // Получение предметов
+        RD_M_DrawTextSmallRUS(M_RD_ColorName(message_pickup_color), 187 + wide_delta, 132,
+                              M_RD_ColorTranslation(message_pickup_color));
+
+        // Квестовое сообщение
+        RD_M_DrawTextSmallRUS(M_RD_ColorName(message_quest_color), 192 + wide_delta, 142,
+                              M_RD_ColorTranslation(message_quest_color));
+
+        // Системные сообщения
+        RD_M_DrawTextSmallRUS(M_RD_ColorName(message_system_color), 191 + wide_delta, 152,
+                              M_RD_ColorTranslation(message_system_color));
+
+        // Чат сетевой игры
+        RD_M_DrawTextSmallRUS(M_RD_ColorName(message_chat_color), 162 + wide_delta, 162,
+                              M_RD_ColorTranslation(message_chat_color));
     }
 
     // Messages timeout (slider)
@@ -2604,7 +2700,7 @@ static void M_RD_Messages(Direction_t direction)
     show_messages ^= 1;
 
     P_SetMessage(&players[consoleplayer], show_messages ?
-                 txt_messages_on : txt_messages_off, true);
+                 txt_messages_on : txt_messages_off, msg_system, true);
 
     if (vanillaparm)
     {
@@ -2635,6 +2731,89 @@ static void M_RD_ShadowedText()
 static void M_RD_LocalTime(Direction_t direction)
 {
     RD_Menu_SpinInt(&local_time, 0, 4, direction);
+}
+
+void M_RD_Define_Msg_Color (MessageType_t messageType, int color)
+{
+    Translation_CR_t * colorVar;
+    switch (messageType)
+    {
+        case msg_pickup: // Item pickup.
+            colorVar = &messages_pickup_color_set;
+            break;
+        case msg_quest: // Revealed secret
+            colorVar = &messages_quest_color_set;
+            break;
+        case msg_system: // System message
+            colorVar = &messages_system_color_set;
+            break;
+        case msg_chat: // Netgame chat
+            colorVar = &messages_chat_color_set;
+            break;
+        default:
+            return;
+    }
+
+    // [JN] No coloring in vanilla.
+    if (vanillaparm)
+    {
+        *colorVar = CR_NONE;
+    }
+    else
+    {
+        switch (color)
+        {
+            case 1:   *colorVar = CR_GRAY2GDARKGRAY_HEXEN;    break;
+            case 2:   *colorVar = CR_GRAY2GDARKERGRAY_HEXEN;  break;
+            case 3:   *colorVar = CR_GRAY2RED_HEXEN;          break;
+            case 4:   *colorVar = CR_GRAY2DARKRED_HEXEN;      break;
+            case 5:   *colorVar = CR_GRAY2GREEN_HEXEN;        break;
+            case 6:   *colorVar = CR_GRAY2DARKGREEN_HEXEN;    break;
+            case 7:   *colorVar = CR_GRAY2OLIVE_HEXEN;        break;
+            case 8:   *colorVar = CR_GRAY2BLUE_HEXEN;         break;            
+            case 9:   *colorVar = CR_GRAY2DARKBLUE_HEXEN;     break;
+            case 10:  *colorVar = CR_GRAY2PURPLE_HEXEN;       break;
+            case 11:  *colorVar = CR_GRAY2NIAGARA_HEXEN;      break;
+            case 12:  *colorVar = CR_GRAY2AZURE_HEXEN;        break;
+            case 13:  *colorVar = CR_GRAY2YELLOW_HEXEN;       break;
+            case 14:  *colorVar = CR_GRAY2DARKGOLD_HEXEN;     break;
+            case 15:  *colorVar = CR_GRAY2TAN_HEXEN;          break;
+            case 16:  *colorVar = CR_GRAY2BROWN_HEXEN;        break;
+            default:  *colorVar = CR_NONE;                    break;
+        }
+    }
+}
+
+void M_RD_Change_Msg_Pickup_Color(Direction_t direction)
+{
+    RD_Menu_SpinInt(&message_pickup_color, 0, 16, direction);
+
+    // [JN] Redefine pickup message color.
+    M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);
+}
+
+void M_RD_Change_Msg_Quest_Color(Direction_t direction)
+{
+    RD_Menu_SpinInt(&message_quest_color, 0, 16, direction);
+
+    // [JN] Redefine quest message color.
+    M_RD_Define_Msg_Color(msg_quest, message_quest_color);
+}
+
+void M_RD_Change_Msg_System_Color(Direction_t direction)
+{
+    RD_Menu_SpinInt(&message_system_color, 0, 16, direction);
+
+    // [JN] Redefine revealed secret message color.
+    M_RD_Define_Msg_Color(msg_system, message_system_color);
+}
+
+void M_RD_Change_Msg_Chat_Color(Direction_t direction)
+{
+    RD_Menu_SpinInt(&message_chat_color, 0, 16, direction);
+
+    // [JN] Redefine netgame chat message color.
+    M_RD_Define_Msg_Color(msg_chat, message_chat_color);
 }
 
 // -----------------------------------------------------------------------------
@@ -5057,6 +5236,10 @@ void M_RD_BackToDefaults_Recommended (void)
     message_fade       = 1;
     draw_shadowed_text = 1;
     local_time         = 0;
+    message_pickup_color = 0;
+    message_quest_color  = 0;
+    message_system_color = 0;
+    message_chat_color   = 5;
 
     // Automap
     automap_rotate     = 0;
@@ -5119,7 +5302,7 @@ void M_RD_BackToDefaults_Recommended (void)
     SB_state = -1;
     BorderNeedRefresh = true;
 
-    P_SetMessage(&players[consoleplayer], txt_settings_reset, false);
+    P_SetMessage(&players[consoleplayer], txt_settings_reset, msg_system, false);
     S_StartSound(NULL, SFX_DOOR_LIGHT_CLOSE);
     menuactive = true;
 }
@@ -5157,6 +5340,10 @@ static void M_RD_BackToDefaults_Original(void)
     message_fade       = 0;
     draw_shadowed_text = 0;
     local_time         = 0;
+    message_pickup_color = 0;
+    message_quest_color  = 0;
+    message_system_color = 0;
+    message_chat_color   = 5;
 
     // Automap
     automap_rotate     = 0;
@@ -5219,7 +5406,7 @@ static void M_RD_BackToDefaults_Original(void)
     SB_state = -1;
     BorderNeedRefresh = true;
 
-    P_SetMessage(&players[consoleplayer], txt_settings_reset, false);
+    P_SetMessage(&players[consoleplayer], txt_settings_reset, msg_system, false);
     S_StartSound(NULL, SFX_DOOR_LIGHT_CLOSE);
     menuactive = true;
 }
@@ -5354,13 +5541,13 @@ boolean SCNetCheck(int option)
     switch (option)
     {
         case 1:                // new game
-            P_SetMessage(&players[consoleplayer], txt_cant_start_in_netgame, true);
+            P_SetMessage(&players[consoleplayer], txt_cant_start_in_netgame, msg_system, true);
             break;
         case 2:                // load game
-            P_SetMessage(&players[consoleplayer], txt_cant_load_in_netgame, true);
+            P_SetMessage(&players[consoleplayer], txt_cant_load_in_netgame, msg_system, true);
             break;
         case 3:                // end game
-            P_SetMessage(&players[consoleplayer], txt_cant_end_in_netgame, true);
+            P_SetMessage(&players[consoleplayer], txt_cant_end_in_netgame, msg_system, true);
         default:
             break;
     }
@@ -5455,7 +5642,7 @@ static void SCClass(int option)
 {
     if (netgame)
     {
-        P_SetMessage(&players[consoleplayer], txt_cant_start_in_netgame, true);
+        P_SetMessage(&players[consoleplayer], txt_cant_start_in_netgame, msg_system, true);
         return;
     }
     MenuPClass = option;
@@ -5871,14 +6058,14 @@ boolean MN_Responder(event_t * event)
                                        gammalevel_names[usegamma] :
                                        gammalevel_names_rus[usegamma], NULL);
 
-            P_SetMessage(&players[consoleplayer], gamma_level, false);
+            P_SetMessage(&players[consoleplayer], gamma_level, msg_system, false);
             return true;
         }
         else if (BK_isKeyDown(event, bk_reloadlevel))                 // F12 (???)
         {
             // F12 - reload current map (devmaps mode)
             // [JN] Allow only in devparm mode, see this comment:
-            // https://github.com/JNechaevsky/russian-doom/issues/210#issuecomment-702321075
+            // https://github.com/JNechaevsky/inter-doom/issues/210#issuecomment-702321075
 
             if (netgame || !devparm)
             {
@@ -5893,7 +6080,7 @@ boolean MN_Responder(event_t * event)
                 nomonsters = true;
             }
             G_DeferedInitNew(gameskill, gameepisode, gamemap);
-            P_SetMessage(&players[consoleplayer], txt_cheatwarp, false);
+            P_SetMessage(&players[consoleplayer], txt_cheatwarp, msg_system, false);
             return true;
         }
     }

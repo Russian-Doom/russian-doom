@@ -336,14 +336,14 @@ void CT_Ticker(void)
                     && *chat_msg[i])
                 {
                     P_SetMessage(&players[consoleplayer], plr_lastmsg[i],
-                                 true);
+                                 msg_chat, true);
                     S_StartSound(NULL, SFX_CHAT);
                 }
                 else if (i == consoleplayer && (*chat_msg[i]))
                 {
                     if (numplayers <= 1)
                     {
-                        P_SetMessage(&players[consoleplayer], txt_noplayers, true);
+                        P_SetMessage(&players[consoleplayer], txt_noplayers, msg_system, true);
                         S_StartSound(NULL, SFX_CHAT);
                     }
                 }

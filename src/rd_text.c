@@ -25,6 +25,7 @@ Translation_CR_t messages_pickup_color_set;
 Translation_CR_t messages_secret_color_set;
 Translation_CR_t messages_system_color_set;
 Translation_CR_t messages_chat_color_set;
+Translation_CR_t messages_quest_color_set;
 
 void (*drawShadowedPatch)(int x, int y, patch_t *patch);
 

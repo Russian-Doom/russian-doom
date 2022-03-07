@@ -584,29 +584,29 @@ boolean AM_Responder(event_t * ev)
         {
             automap_follow = !automap_follow;
             f_oldloc.x = INT_MAX;
-            P_SetMessage(plr, automap_follow ? amstr_followon : amstr_followoff, false);
+            P_SetMessage(plr, automap_follow ? amstr_followon : amstr_followoff, msg_system, false);
         }
         else if (BK_isKeyDown(ev, bk_map_overlay))
         {
             automap_overlay = !automap_overlay;
-            P_SetMessage(plr, automap_overlay ? amstr_overlayon : amstr_overlayoff, false);
+            P_SetMessage(plr, automap_overlay ? amstr_overlayon : amstr_overlayoff, msg_system, false);
         }
         else if (BK_isKeyDown(ev, bk_map_rotate))
         {
             automap_rotate = !automap_rotate;
-            P_SetMessage(plr, automap_rotate ? amstr_rotateon : amstr_rotateoff, false);
+            P_SetMessage(plr, automap_rotate ? amstr_rotateon : amstr_rotateoff, msg_system, false);
         }
         else if (BK_isKeyDown(ev, bk_map_grid))
         {
             automap_grid = !automap_grid;
-            P_SetMessage(plr, automap_grid ? amstr_gridon : amstr_gridoff, false);
+            P_SetMessage(plr, automap_grid ? amstr_gridon : amstr_gridoff, msg_system, false);
         }
         else if (BK_isKeyDown(ev, bk_map_mark))
         {
             // [JN] "Mark № added" / "Отметка № добавлена".
             M_snprintf(buffer, sizeof(buffer), "%s %d %s",
                        amstr_mark, markpointnum, amstr_added);
-            P_SetMessage(plr, buffer, false);
+            P_SetMessage(plr, buffer, msg_system, false);
             AM_addMark();
         }
         else if (BK_isKeyPressed(bk_speed) && BK_isKeyDown(ev, bk_map_clearmark))
@@ -614,7 +614,7 @@ boolean AM_Responder(event_t * ev)
             // [JN] Clear all mark by holding "run" button and pressing "clear mark".
             if (markpointnum > 0)
             {
-                P_SetMessage(plr, amstr_markscleared, false);
+                P_SetMessage(plr, amstr_markscleared, msg_system, false);
                 AM_clearMarks();
             }
         }
@@ -626,7 +626,7 @@ boolean AM_Responder(event_t * ev)
                 markpointnum--;
                 M_snprintf(buffer, sizeof(buffer), "%s %d %s",
                            amstr_mark, markpointnum, amstr_cleared);
-                P_SetMessage(plr, buffer, false);
+                P_SetMessage(plr, buffer, msg_system, false);
             }
         }
         else

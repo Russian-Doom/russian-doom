@@ -264,7 +264,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
 
         // [JN] Added audible feedback
         P_SetMessage(&players[consoleplayer], alwaysRun ?
-                     txt_alwaysrun_on : txt_alwaysrun_off, false);
+                     txt_alwaysrun_on : txt_alwaysrun_off, msg_system, false);
 
         S_StartSound(NULL, SFX_CHAT);
 
@@ -288,7 +288,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         }
 
         P_SetMessage(&players[consoleplayer], crosshair_draw ?
-                     txt_crosshair_on : txt_crosshair_off, false);
+                     txt_crosshair_on : txt_crosshair_off, msg_system, false);
 
         S_StartSound(NULL, SFX_CHAT);
 
@@ -629,7 +629,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         }
 
         P_SetMessage(&players[consoleplayer], mlook ? 
-                     txt_mlook_on : txt_mlook_off, false);
+                     txt_mlook_on : txt_mlook_off, msg_system, false);
 
         S_StartSound(NULL, SFX_CHAT);
 
@@ -779,7 +779,7 @@ void G_DoLoadLevel(void)
 
     if (testcontrols)
     {
-        P_SetMessage(&players[consoleplayer], txt_testcontrols, false);
+        P_SetMessage(&players[consoleplayer], txt_testcontrols, msg_system, false);
     }
 }
 
@@ -1549,7 +1549,7 @@ void G_Completed(int map, int position)
 {
     if (gamemode == shareware && map > 4)
     {
-        P_SetMessage(&players[consoleplayer], txt_access_denied, true);
+        P_SetMessage(&players[consoleplayer], txt_access_denied, msg_quest, true);
         S_StartSound(NULL, SFX_CHAT);
         return;
     }
@@ -1702,7 +1702,7 @@ void G_DoLoadGame(void)
         SV_UpdateRebornSlot();
     }
     SB_SetClassData();
-    P_SetMessage(&players[consoleplayer], txt_gameloaded, false);
+    P_SetMessage(&players[consoleplayer], txt_gameloaded, msg_system, false);
 }
 
 //==========================================================================
@@ -1733,7 +1733,7 @@ void G_DoSaveGame(void)
     SV_SaveGame(savegameslot, savedescription);
     gameaction = ga_nothing;
     savedescription[0] = 0;
-    P_SetMessage(&players[consoleplayer], txt_gamesaved, false);
+    P_SetMessage(&players[consoleplayer], txt_gamesaved, msg_system, false);
 }
 
 //==========================================================================

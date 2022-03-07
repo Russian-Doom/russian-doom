@@ -104,6 +104,7 @@ extern int message_pickup_color;
 extern int message_secret_color;
 extern int message_system_color;
 extern int message_chat_color;
+extern int message_quest_color;
 
 
 // -----------------------------------------------------------------------------

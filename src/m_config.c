@@ -597,6 +597,7 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(message_secret_color),
     CONFIG_VARIABLE_INT(message_system_color),
     CONFIG_VARIABLE_INT(message_chat_color),
+    CONFIG_VARIABLE_INT(message_quest_color),
     CONFIG_VARIABLE_INT(draw_shadowed_text),
 
     // Automap specific variables

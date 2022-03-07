@@ -49,6 +49,7 @@
 #include "m_config.h"
 #include "net_client.h"
 #include "p_local.h"
+#include "v_trans.h"
 #include "v_video.h"
 #include "w_main.h"
 #include "w_merge.h"
@@ -163,6 +164,10 @@ int messages_timeout = 4;
 int message_fade = 1;
 int draw_shadowed_text = 1;
 int local_time = 0;
+int message_pickup_color = 0;
+int message_quest_color = 0;
+int message_system_color = 0;
+int message_chat_color = 5;
 
 // Automap
 int automap_rotate = 0;
@@ -324,6 +329,10 @@ void D_BindVariables(void)
     M_BindIntVariable("message_fade",           &message_fade);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
     M_BindIntVariable("local_time",             &local_time);
+    M_BindIntVariable("message_pickup_color",   &message_pickup_color);
+    M_BindIntVariable("message_quest_color",    &message_quest_color);
+    M_BindIntVariable("message_system_color",   &message_system_color);
+    M_BindIntVariable("message_chat_color",     &message_chat_color);
 
     // Automap
     M_BindIntVariable("automap_rotate",         &automap_rotate);
@@ -1388,6 +1397,35 @@ static void DrawMessage(void)
     }
     else
     {
+        // [JN] Colorize depending on given color type.
+        // TODO: make color variable.
+        switch (player->messageType)
+        {
+            case msg_pickup: // Item pickup.
+            dp_translation = messages_pickup_color_set == CR_NONE ?
+                             NULL : cr[messages_pickup_color_set];
+            break;
+        
+            case msg_quest: // quest message
+            dp_translation = messages_quest_color_set == CR_NONE ?
+                             NULL : cr[messages_quest_color_set];
+            break;
+        
+            case msg_system: // System message
+            dp_translation = messages_system_color_set == CR_NONE ?
+                             NULL : cr[messages_system_color_set];
+            break;
+        
+            case msg_chat: // Netgame chat
+            dp_translation = messages_chat_color_set == CR_NONE ?
+                             NULL : cr[messages_chat_color_set];
+            break;
+        
+            case msg_uncolored: // Not supposed to be colored.
+            default:
+            break;
+        }
+
         if (english_language || player->engOnlyMessage)
         {
             if (player->messageTics < 10 && message_fade && !vanillaparm)
@@ -1418,25 +1456,36 @@ static void DrawMessage(void)
         {
             if (player->messageTics < 10 && message_fade && !vanillaparm)
             {
-                RD_M_DrawTextSmallRUSFade(player->message, 
-                                     160 - RD_M_TextSmallRUSWidth(player->message) /
-                                     2 + wide_delta, 1, player->messageTics >= 9 ? transtable90 :
-                                                        player->messageTics >= 8 ? transtable80 :
-                                                        player->messageTics >= 7 ? transtable70 :
-                                                        player->messageTics >= 6 ? transtable60 :
-                                                        player->messageTics >= 5 ? transtable50 :
-                                                        player->messageTics >= 4 ? transtable40 :
-                                                        player->messageTics >= 3 ? transtable30 :
-                                                        player->messageTics >= 2 ? transtable20 :
-                                                                                   transtable10);
+            RD_M_DrawTextSmallRUSFade(player->message,
+                                      messages_alignment == 0 ? 160 - RD_M_TextSmallRUSWidth(player->message) / 2 + wide_delta :  // по центру
+                                      messages_alignment == 1 ? 4 + wide_4_3 :      // по краю экрана
+                                                                    wide_delta, 1,  // по краю статус-бара
+                                      player->messageTics >= 9 ? transtable90 :
+                                      player->messageTics >= 8 ? transtable80 :
+                                      player->messageTics >= 7 ? transtable70 :
+                                      player->messageTics >= 6 ? transtable60 :
+                                      player->messageTics >= 5 ? transtable50 :
+                                      player->messageTics >= 4 ? transtable40 :
+                                      player->messageTics >= 3 ? transtable30 :
+                                      player->messageTics >= 2 ? transtable20 :
+                                                                 transtable10);
             }
             else
             {
+/*
                 RD_M_DrawTextSmallRUS(player->message,
                                   160 - RD_M_TextSmallRUSWidth(player->message) / 2
                                   + wide_delta, 1, CR_NONE);
+*/
+            RD_M_DrawTextSmallRUSFade(player->message,
+                                  messages_alignment == 0 ? 160 - RD_M_TextSmallRUSWidth(player->message) / 2 + wide_delta :  // по центру
+                                  messages_alignment == 1 ? 4 + wide_4_3 :           // по краю экрана
+                                                            wide_delta, 1, NULL); // по краю статус-бара
             }
         }
+
+        // [JN] Clear color translation.
+        dp_translation = NULL;
     }
 }
 

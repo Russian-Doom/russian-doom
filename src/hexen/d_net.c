@@ -65,7 +65,7 @@ static void PlayerQuitGame(player_t *player)
     else
     exitmsg[6] += player_num;
 
-    P_SetMessage(&players[consoleplayer], exitmsg, true);
+    P_SetMessage(&players[consoleplayer], exitmsg, msg_system, true);
     S_StartSound(NULL, SFX_CHAT);
 
     playeringame[player_num] = false;

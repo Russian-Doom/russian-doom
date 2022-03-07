@@ -430,7 +430,7 @@ static boolean CheckedLockedDoor(mobj_t * mo, byte lock)
                    english_language ?
                    TextKeyMessages[lock - 1] :
                    TextKeyMessages_Rus[lock - 1]);
-        P_SetMessage(mo->player, LockedBuffer, true);
+        P_SetMessage(mo->player, LockedBuffer, msg_quest, true);
         S_StartSound(mo, SFX_DOOR_LOCKED);
         return false;
     }

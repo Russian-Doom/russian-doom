@@ -585,6 +585,8 @@ typedef struct player_s
     int killcount, itemcount, secretcount;      // for intermission
     char message[80];           // hint messages
     int messageTics;            // counter for showing messages
+    // [JN] Colored message type
+    MessageType_t messageType;
     short ultimateMessage;
     short yellowMessage;
     boolean engOnlyMessage;

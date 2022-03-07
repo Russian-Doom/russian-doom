@@ -29,7 +29,8 @@ typedef enum
     hud_stats,      // 5: HUD stats (KIS, time)
     hud_coords,     // 6: HUD coords (x/y/z/ang)
     hud_level,      // 7: HUD level name
-    hud_values      // 8: HUD values
+    hud_values,     // 8: HUD values
+    msg_quest       // 9: Quest message (Hexen)
     
 } MessageType_t;
 
@@ -37,6 +38,7 @@ extern Translation_CR_t messages_pickup_color_set;
 extern Translation_CR_t messages_secret_color_set;
 extern Translation_CR_t messages_system_color_set;
 extern Translation_CR_t messages_chat_color_set;
+extern Translation_CR_t messages_quest_color_set;
 
 extern void M_RD_Define_Msg_Color(MessageType_t messageType, int color);
 
