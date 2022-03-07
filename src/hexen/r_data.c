@@ -945,7 +945,7 @@ static void R_InitBrightmaps(void)
 =
 = R_InitTransMaps
 =
-= [JN] Generates extra translucency tables for some objects and fading texts.
+= [JN] Generates extra translucency tables.
 =
 ================================================================================
 */
