@@ -230,6 +230,7 @@ static void DrawGameplay4Menu(void);
 static void M_RD_FixMapErrors();
 static void M_RD_FlipLevels();
 static void M_RD_NoDemos();
+static void M_RD_Breathing();
 static void M_RD_WandStart();
 
 // Level Select (page 1)
@@ -1168,8 +1169,8 @@ static MenuItem_t Gameplay4Items[] = {
     {ITT_SWITCH,  "FIX ERRORS ON VANILLA MAPS:", "ECNHFYZNM JIB,RB JHBU> EHJDYTQ:", M_RD_FixMapErrors, 0}, // УСТРАНЯТЬ ОШИБКИ ОРИГИНАЛЬНЫХ УРОВНЕЙ
     {ITT_SWITCH,  "FLIP GAME LEVELS:",           "PTHRFKMYJT JNHF;TYBT EHJDYTQ:",   M_RD_FlipLevels,   0}, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
     {ITT_SWITCH,  "PLAY INTERNAL DEMOS:",        "GHJBUHSDFNM LTVJPFGBCB:",         M_RD_NoDemos,      0}, // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
+    {ITT_SWITCH,  "IMITATE PLAYER'S BREATHING:", "BVBNFWBZ LS[FYBZ BUHJRF:",        M_RD_Breathing,    0}, // ИМИТАЦИЯ ДЫХАНИЯ ИГРОКА
     {ITT_SWITCH,  "WAND START GAME MODE:",       NULL, /* [JN] Joint EN/RU string*/ M_RD_WandStart,    0}, // РЕЖИМ ИГРЫ "WAND START"
-    {ITT_EMPTY,   NULL,                          NULL,                              NULL,              0},
     {ITT_EMPTY,   NULL,                          NULL,                              NULL,              0},
     {ITT_EMPTY,   NULL,                          NULL,                              NULL,              0},
     {ITT_EMPTY,   NULL,                          NULL,                              NULL,              0},
@@ -4280,9 +4281,14 @@ static void DrawGameplay4Menu(void)
                               179 + wide_delta, 56,
                               no_internal_demos ? CR_WHITE2RED_HERETIC : CR_WHITE2GREEN_HERETIC);
 
+        // Imitate player's breathing
+        RD_M_DrawTextSmallENG(breathing ? "ON" : "OFF",
+                              224 + wide_delta, 66,
+                              breathing ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+
         // Wand start
         RD_M_DrawTextSmallENG(pistol_start ? "ON" : "OFF",
-                              193 + wide_delta, 66,
+                              193 + wide_delta, 76,
                               pistol_start ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
     }
     else
@@ -4305,11 +4311,16 @@ static void DrawGameplay4Menu(void)
                               211 + wide_delta, 56,
                               no_internal_demos ? CR_WHITE2RED_HERETIC : CR_WHITE2GREEN_HERETIC);
 
+        // Имитация дыхания игрока
+        RD_M_DrawTextSmallRUS(breathing ? "DRK": "DSRK",
+                              214 + wide_delta, 66,
+                              breathing ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+
         // Режим игры "Wand start"
-        RD_M_DrawTextSmallRUS("HT;BV BUHS", 36 + wide_delta, 66, CR_NONE);
-        RD_M_DrawTextSmallENG("\"WAND START\":", 120 + wide_delta, 66, CR_NONE);
+        RD_M_DrawTextSmallRUS("HT;BV BUHS", 36 + wide_delta, 76, CR_NONE);
+        RD_M_DrawTextSmallENG("\"WAND START\":", 120 + wide_delta, 76, CR_NONE);
         RD_M_DrawTextSmallRUS(pistol_start ? "DRK" : "DSRK",
-                              217 + wide_delta, 66,
+                              217 + wide_delta, 76,
                               pistol_start ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
         
     }
@@ -4332,6 +4343,11 @@ static void M_RD_FlipLevels()
 static void M_RD_NoDemos()
 {
     no_internal_demos ^= 1;
+}
+
+static void M_RD_Breathing()
+{
+    breathing ^= 1;
 }
 
 static void M_RD_WandStart()
@@ -5027,6 +5043,7 @@ static void M_RD_BackToDefaults_Recommended(void)
     fix_map_errors       = 1;
     flip_levels          = 0;
     no_internal_demos    = 0;
+    breathing            = 0;
     pistol_start         = 0;
 
     // Reinitialize graphics
@@ -5167,6 +5184,7 @@ static void M_RD_BackToDefaults_Original(void)
     fix_map_errors       = 0;
     flip_levels          = 0;
     no_internal_demos    = 0;
+    breathing            = 0;
     pistol_start         = 0;
 
     // Reinitialize graphics
