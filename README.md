@@ -1,16 +1,16 @@
 ![](https://jnechaevsky.github.io/inter-doom/files/inter-doom-git.png)
 
-#### International Doom 5.2 (released: February 26, 2022)
+#### International Doom 5.2.1 (released: March 8, 2022)
 
-Windows (32-bit): [inter-doom-5.2-win32.zip](https://github.com/JNechaevsky/inter-doom/releases/download/5.2/inter-doom-5.2-win32.zip)<br />
-Windows (64-bit): [inter-doom-5.2-win64.zip](https://github.com/JNechaevsky/inter-doom/releases/download/5.2/inter-doom-5.2-win64.zip)<br />
-Source code available in [zip](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/5.2.zip) and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/5.2.tar.gz) formats<br />
+Windows (32-bit): [inter-doom-5.2.1-win32.zip](https://github.com/JNechaevsky/inter-doom/releases/download/5.2.1/inter-doom-5.2.1-win32.zip)<br />
+Windows (64-bit): [inter-doom-5.2.1-win64.zip](https://github.com/JNechaevsky/inter-doom/releases/download/5.2.1/inter-doom-5.2.1-win64.zip)<br />
+Source code available in [zip](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/5.2.1.zip) and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/5.2.1.tar.gz) formats<br />
 
-#### International Heretic 5.1 (released: February 26, 2022)
+#### International Heretic 5.1.1 (released: March 8, 2022)
 
-Windows (32-bit): [inter-heretic-5.1-win32.zip](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-5.1/inter-heretic-5.1-win32.zip)<br />
-Windows (64-bit): [inter-heretic-5.1-win64.zip](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-5.1/inter-heretic-5.1-win64.zip)<br />
-Source code available in [zip](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/heretic-5.1.zip) and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/heretic-5.1.tar.gz) formats<br />
+Windows (32-bit): [inter-heretic-5.1.1-win32.zip](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-5.1.1/inter-heretic-5.1.1-win32.zip)<br />
+Windows (64-bit): [inter-heretic-5.1.1-win64.zip](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-5.1.1/inter-heretic-5.1.1-win64.zip)<br />
+Source code available in [zip](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/heretic-5.1.1.zip) and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/heretic-5.1.1.tar.gz) formats<br />
 
 #### International Hexen 5.0 (released: February 26, 2022)
 
