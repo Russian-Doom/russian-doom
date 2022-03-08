@@ -253,6 +253,7 @@ int crosshair_scale = 0;
 int fix_map_errors = 1;
 int unlimited_lost_souls = 1;
 int agressive_lost_souls = 0;
+int breathing = 0;
 int pistol_start = 0;
 int fast_quickload = 1;
 int flip_levels = 0;
@@ -847,6 +848,7 @@ void D_BindVariables(void)
     M_BindIntVariable("flip_levels",            &flip_levels);
     M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);
     M_BindIntVariable("agressive_lost_souls",   &agressive_lost_souls);
+    M_BindIntVariable("breathing",              &breathing);
     M_BindIntVariable("pistol_start",           &pistol_start);
     M_BindIntVariable("fast_quickload",         &fast_quickload);
     M_BindIntVariable("demotimer",              &demotimer);

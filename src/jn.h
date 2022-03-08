@@ -311,6 +311,7 @@ extern int fix_map_errors;
 extern int flip_levels;
 extern int unlimited_lost_souls;
 extern int agressive_lost_souls;
+extern int breathing;
 extern int pistol_start;
 extern int fast_quickload;
 

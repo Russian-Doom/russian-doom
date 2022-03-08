@@ -692,6 +692,7 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(flip_levels),
     CONFIG_VARIABLE_INT(unlimited_lost_souls),
     CONFIG_VARIABLE_INT(agressive_lost_souls),
+    CONFIG_VARIABLE_INT(breathing),
     CONFIG_VARIABLE_INT(pistol_start),
     CONFIG_VARIABLE_INT(fast_quickload),
 

@@ -113,6 +113,12 @@ void P_CalcHeight (player_t *player, boolean safe)
         {
             player->viewheight += player->deltaviewheight;
 
+            // [JN] Imitate player's breathing.
+            if (breathing && !vanillaparm)
+            {
+                player->viewheight += finesine[(FINEANGLES / 160 * gametic) & FINEMASK] / 48;
+            }
+
             if (player->viewheight > VIEWHEIGHT)
             {
                 player->viewheight = VIEWHEIGHT;
