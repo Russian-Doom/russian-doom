@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.15...3.22)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 # Versions
-project("International Doom" VERSION 5.2 LANGUAGES C NONE)
-set(BUILD_HERETIC_VERSION "5.1")
+project("International Doom" VERSION 5.2.1 LANGUAGES C NONE)
+set(BUILD_HERETIC_VERSION "5.1.1")
 set(BUILD_HEXEN_VERSION "5.0")
 set(BUILD_STRIFE_VERSION "0.0")
 

@@ -1,7 +1,7 @@
-AC_INIT(International Doom, 5.2, julian.nechaevsky@outlook.com,
+AC_INIT(International Doom, 5.2.1, julian.nechaevsky@outlook.com,
         inter-doom)
 
-BUILD_HERETIC_VERSION="5.1"
+BUILD_HERETIC_VERSION="5.1.1"
 BUILD_HEXEN_VERSION="5.0"
 BUILD_STRIFE_VERSION="0.0"
 PACKAGE_COPYRIGHT="Copyright \\xA9 2016-2022 Julian Nechaevsky. Licensed under GNU General Public License, version 2"
