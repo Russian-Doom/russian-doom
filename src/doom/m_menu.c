@@ -1635,7 +1635,6 @@ static MenuItem_t Gameplay5Items[] = {
     {ITT_SWITCH,  "timer direction:",                    "dhtvz nfqvthf:",                  M_RD_Change_DemoTimerDir,    0}, // Время таймера
     {ITT_SWITCH,  "Show progress bar:",                  "irfkf ghjuhtccf:",                M_RD_Change_DemoBar,         0}, // Шкала прогресса
     {ITT_SWITCH,  "Play internal demos:",                "Ghjbuhsdfnm ltvjpfgbcb:",         M_RD_Change_NoInternalDemos, 0}, // Проигрывать демозаписи
-    {ITT_EMPTY,   NULL,                                  NULL,                              NULL,                        0},
     {ITT_SETMENU, NULL, /* First page > */               NULL,                              &Gameplay1Menu,              0}, // Далее >
     {ITT_SETMENU, NULL, /* < Prev page > */              NULL,                              &Gameplay4Menu,              0}  // < Назад
 };
