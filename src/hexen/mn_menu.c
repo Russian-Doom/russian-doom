@@ -211,6 +211,9 @@ static void M_RD_ShowArtiTimer(Direction_t direction);
 static void M_RD_CrossHairDraw();
 static void M_RD_CrossHairType();
 static void M_RD_CrossHairScale();
+
+// Gameplay (page 3)
+static void DrawGameplay3Menu(void);
 static void M_RD_FixMapErrors();
 static void M_RD_FlipLevels();
 static void M_RD_NoDemos();
@@ -420,7 +423,8 @@ static Menu_t Gamepad2Menu;
 static const Menu_t* GamepadMenuPages[] = {&Gamepad1Menu, &Gamepad2Menu};
 static Menu_t Gameplay1Menu;
 static Menu_t Gameplay2Menu;
-static const Menu_t* GameplayMenuPages[] = {&Gameplay1Menu, &Gameplay2Menu};
+static Menu_t Gameplay3Menu;
+static const Menu_t* GameplayMenuPages[] = {&Gameplay1Menu, &Gameplay2Menu, &Gameplay3Menu};
 static Menu_t LevelSelectMenu1;
 static Menu_t LevelSelectMenu2_F;
 static Menu_t LevelSelectMenu2_C;
@@ -1147,7 +1151,7 @@ static Menu_t Gamepad2Menu = {
 // -----------------------------------------------------------------------------
 
 static const PageDescriptor_t GameplayPageDescriptor = {
-    2, GameplayMenuPages,
+    3, GameplayMenuPages,
     254, 172,
     CR_GRAY2GDARKGRAY_HEXEN
 };
@@ -1166,8 +1170,8 @@ static MenuItem_t Gameplay1Items[] = {
     {ITT_LRFUNC, "FLOATING ITEMS AMPLITUDE:" ,   "KTDBNFWBZ GHTLVTNJD:",         M_RD_FloatAmplitude, 0}, // АМПЛИТУДА ЛЕВИТАЦИИ ПРЕДМЕТОВ
     {ITT_EMPTY,   NULL,                          NULL,                           NULL,                0},
     {ITT_EMPTY,   NULL,                          NULL,                           NULL,                0},
-    {ITT_EMPTY,   NULL,                          NULL,                           NULL,                0},
-    {ITT_SETMENU, "NEXT PAGE >",                 "CKTLE.OFZ CNHFYBWF `",         &Gameplay2Menu,      0}  // СЛЕДУЮЩАЯ СТРАНИЦА >
+    {ITT_SETMENU, "NEXT PAGE >",                 "CKTLE.OFZ CNHFYBWF `",         &Gameplay2Menu,      0}, // СЛЕДУЮЩАЯ СТРАНИЦА >
+    {ITT_SETMENU, "< LAST PAGE",                 "^ GJCKTLYZZ CNHFYBWF",         &Gameplay3Menu,      0}  // < ПОСЛЕДНЯЯ СТРАНИЦА
 };
 
 static Menu_t Gameplay1Menu = {
@@ -1195,12 +1199,12 @@ static MenuItem_t Gameplay2Items[] = {
     {ITT_SWITCH, "DRAW CROSSHAIR:",      "JNJ,HF;FNM GHBWTK:",            M_RD_CrossHairDraw,   0}, // ОТОБРАЖАТЬ ПРИЦЕЛ
     {ITT_SWITCH, "INDICATION:",          "BYLBRFWBZ:",                    M_RD_CrossHairType,   0}, // ИНДИКАЦИЯ
     {ITT_SWITCH, "INCREASED SIZE:",      "EDTKBXTYYSQ HFPVTH:",           M_RD_CrossHairScale,  0}, // УВЕЛИЧЕННЫЙ РАЗМЕР
-    {ITT_TITLE,  "GAMEPLAY",             "UTQVGKTQ",                      NULL,                 0}, // ГЕЙМПЛЕЙ
-    {ITT_SWITCH, "FIX ERRORS ON VANILLA MAPS:", "ECNHFYZNM JIB,RB JHBU> EHJDYTQ:", M_RD_FixMapErrors, 0}, // УСТРАНЯТЬ ОШИБКИ ОРИГИНАЛЬНЫХ УРОВНЕЙ
-    {ITT_SWITCH, "FLIP GAME LEVELS:",    "PTHRFKMYJT JNHF;TYBT EHJDYTQ:", M_RD_FlipLevels,      0}, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
-    {ITT_SWITCH, "PLAY INTERNAL DEMOS:", "GHJBUHSDFNM LTVJPFGBCB:",       M_RD_NoDemos,         0}, // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
     {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
-    {ITT_SETMENU, "< PREV PAGE",           "^ GHTLSLEOFZ CNHFYBWF",       &Gameplay1Menu,       0}  // < ПРЕДЫДУЩАЯ СТРАНИЦА
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_SETMENU, "LAST PAGE >",         "GJCKTLYZZ CNHFYBWF `",          &Gameplay3Menu,       0}, // ПОСЛЕДНЯЯ СТРАНИЦА >
+    {ITT_SETMENU, "< FIRST PAGE",        "^ GTHDFZ CNHFYBWF",             &Gameplay1Menu,       0}  // < ПЕРВАЯ СТРАНИЦА
 };
 
 static Menu_t Gameplay2Menu = {
@@ -1209,6 +1213,39 @@ static Menu_t Gameplay2Menu = {
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     15, Gameplay2Items, false,
     DrawGameplay2Menu,
+    &GameplayPageDescriptor,
+    &RDOptionsMenu,
+    1
+};
+
+// -----------------------------------------------------------------------------
+// Gameplay features (3)
+// -----------------------------------------------------------------------------
+
+static MenuItem_t Gameplay3Items[] = {
+    {ITT_TITLE,  "GAMEPLAY",             "UTQVGKTQ",                      NULL,                 0}, // ГЕЙМПЛЕЙ
+    {ITT_SWITCH, "FIX ERRORS ON VANILLA MAPS:", "ECNHFYZNM JIB,RB JHBU> EHJDYTQ:", M_RD_FixMapErrors, 0}, // УСТРАНЯТЬ ОШИБКИ ОРИГ. УРОВНЕЙ
+    {ITT_SWITCH, "FLIP GAME LEVELS:",    "PTHRFKMYJT JNHF;TYBT EHJDYTQ:", M_RD_FlipLevels,      0}, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
+    {ITT_SWITCH, "PLAY INTERNAL DEMOS:", "GHJBUHSDFNM LTVJPFGBCB:",       M_RD_NoDemos,         0}, // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_SETMENU, "FIRST PAGE >",        "GTHDFZ CNHFYBWF `",             &Gameplay1Menu,       0}, // ПЕРВАЯ СТРАНИЦА >
+    {ITT_SETMENU, "< PREV PAGE",         "^ GHTLSLEOFZ CNHFYBWF",         &Gameplay2Menu,       0}  // < ПРЕДЫДУЩАЯ СТРАНИЦА
+};
+
+static Menu_t Gameplay3Menu = {
+    36, 36,
+    32,
+    "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
+    15, Gameplay3Items, false,
+    DrawGameplay3Menu,
     &GameplayPageDescriptor,
     &RDOptionsMenu,
     1
@@ -4115,22 +4152,6 @@ static void DrawGameplay2Menu(void)
         // Increased size
         RD_M_DrawTextSmallENG(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 112,
                               crosshair_scale ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
-
-        //
-        // GAMEPLAY
-        //
-
-        // Fix errors of vanilla maps
-        RD_M_DrawTextSmallENG(fix_map_errors ? "ON" : "OFF", 226 + wide_delta, 132,
-                              fix_map_errors ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
-
-        // Flip game levels
-        RD_M_DrawTextSmallENG(flip_levels ? "ON" : "OFF", 153 + wide_delta, 142,
-                              flip_levels ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
-
-        // Play internal demos
-        RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON", 179 + wide_delta, 152,
-                              no_internal_demos ? CR_GRAY2RED_HEXEN : CR_GRAY2GREEN_HEXEN);
     }
     else
     {
@@ -4179,22 +4200,6 @@ static void DrawGameplay2Menu(void)
         // Увеличенный размер
         RD_M_DrawTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 112,
                               crosshair_scale ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
-
-        //
-        // ГЕЙМПЛЕЙ
-        //
-
-        // Устранять ошибки оригинальных уровней
-        RD_M_DrawTextSmallRUS(fix_map_errors ? "DRK" : "DSRK", 257 + wide_delta, 132,
-                              fix_map_errors ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
-
-        // Зеркальное отражение уровней
-        RD_M_DrawTextSmallRUS(flip_levels ? "DRK" : "DSRK", 255 + wide_delta, 142,
-                              flip_levels ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
-
-        // Проигрывать демозаписи
-        RD_M_DrawTextSmallRUS(no_internal_demos ? "DRK" : "DSRK", 211 + wide_delta, 152,
-                              no_internal_demos ? CR_GRAY2RED_HEXEN : CR_GRAY2GREEN_HEXEN);
     }
 }
 
@@ -4231,6 +4236,54 @@ static void M_RD_CrossHairType()
 static void M_RD_CrossHairScale()
 {
     crosshair_scale ^= 1;
+}
+
+
+// -----------------------------------------------------------------------------
+// DrawGameplay2Menu
+// -----------------------------------------------------------------------------
+
+static void DrawGameplay3Menu(void)
+{
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    if (english_language)
+    {
+        //
+        // GAMEPLAY
+        //
+
+        // Fix errors of vanilla maps
+        RD_M_DrawTextSmallENG(fix_map_errors ? "ON" : "OFF", 226 + wide_delta, 42,
+                              fix_map_errors ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+
+        // Flip game levels
+        RD_M_DrawTextSmallENG(flip_levels ? "ON" : "OFF", 153 + wide_delta, 52,
+                              flip_levels ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+
+        // Play internal demos
+        RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON", 179 + wide_delta, 62,
+                              no_internal_demos ? CR_GRAY2RED_HEXEN : CR_GRAY2GREEN_HEXEN);
+    }
+    else
+    {
+        //
+        // ГЕЙМПЛЕЙ
+        //
+
+        // Устранять ошибки оригинальных уровней
+        RD_M_DrawTextSmallRUS(fix_map_errors ? "DRK" : "DSRK", 257 + wide_delta, 42,
+                              fix_map_errors ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+
+        // Зеркальное отражение уровней
+        RD_M_DrawTextSmallRUS(flip_levels ? "DRK" : "DSRK", 255 + wide_delta, 52,
+                              flip_levels ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+
+        // Проигрывать демозаписи
+        RD_M_DrawTextSmallRUS(no_internal_demos ? "DRK" : "DSRK", 211 + wide_delta, 62,
+                              no_internal_demos ? CR_GRAY2RED_HEXEN : CR_GRAY2GREEN_HEXEN);
+    }
 }
 
 static void M_RD_FixMapErrors()
