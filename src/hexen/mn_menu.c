@@ -217,6 +217,7 @@ static void DrawGameplay3Menu(void);
 static void M_RD_FixMapErrors();
 static void M_RD_FlipLevels();
 static void M_RD_NoDemos();
+static void M_RD_Breathing();
 
 // Level Select (1)
 static void DrawLevelSelect1Menu(void);
@@ -1227,7 +1228,7 @@ static MenuItem_t Gameplay3Items[] = {
     {ITT_SWITCH, "FIX ERRORS ON VANILLA MAPS:", "ECNHFYZNM JIB,RB JHBU> EHJDYTQ:", M_RD_FixMapErrors, 0}, // УСТРАНЯТЬ ОШИБКИ ОРИГ. УРОВНЕЙ
     {ITT_SWITCH, "FLIP GAME LEVELS:",    "PTHRFKMYJT JNHF;TYBT EHJDYTQ:", M_RD_FlipLevels,      0}, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
     {ITT_SWITCH, "PLAY INTERNAL DEMOS:", "GHJBUHSDFNM LTVJPFGBCB:",       M_RD_NoDemos,         0}, // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
-    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_SWITCH,  "IMITATE PLAYER'S BREATHING:", "BVBNFWBZ LS[FYBZ BUHJRF:", M_RD_Breathing,    0}, // ИМИТАЦИЯ ДЫХАНИЯ ИГРОКА
     {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
     {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
     {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
@@ -4265,6 +4266,10 @@ static void DrawGameplay3Menu(void)
         // Play internal demos
         RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON", 179 + wide_delta, 62,
                               no_internal_demos ? CR_GRAY2RED_HEXEN : CR_GRAY2GREEN_HEXEN);
+
+        // Imitate player's breathing
+        RD_M_DrawTextSmallENG(breathing ? "ON" : "OFF", 224 + wide_delta, 72,
+                              breathing ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
     }
     else
     {
@@ -4283,6 +4288,10 @@ static void DrawGameplay3Menu(void)
         // Проигрывать демозаписи
         RD_M_DrawTextSmallRUS(no_internal_demos ? "DRK" : "DSRK", 211 + wide_delta, 62,
                               no_internal_demos ? CR_GRAY2RED_HEXEN : CR_GRAY2GREEN_HEXEN);
+
+        // Имитация дыхания игрока
+        RD_M_DrawTextSmallRUS(breathing ? "DRK": "DSRK", 214 + wide_delta, 72,
+                              breathing ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
     }
 }
 
@@ -4302,6 +4311,11 @@ static void M_RD_FlipLevels()
 static void M_RD_NoDemos()
 {
     no_internal_demos ^= 1;
+}
+
+static void M_RD_Breathing()
+{
+    breathing ^= 1;
 }
 
 
@@ -5342,6 +5356,7 @@ void M_RD_BackToDefaults_Recommended (void)
     // Gameplay (5)
     flip_levels          = 0;
     no_internal_demos    = 0;
+    breathing            = 0;
 
     // Reinitialize graphics
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
@@ -5446,6 +5461,7 @@ static void M_RD_BackToDefaults_Original(void)
     // Gameplay (5)
     flip_levels          = 0;
     no_internal_demos    = 0;
+    breathing            = 0;
 
     // Reinitialize graphics
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);

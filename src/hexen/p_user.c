@@ -159,6 +159,11 @@ void P_CalcHeight(player_t * player, boolean safe)
     if (player->playerstate == PST_LIVE)
     {
         player->viewheight += player->deltaviewheight;
+        // [JN] Imitate player's breathing, but not in flying state.
+        if (breathing && !vanillaparm && !(player->mo->flags2 & MF2_FLY))
+        {
+            player->viewheight += finesine[(FINEANGLES / 160 * gametic) & FINEMASK] / 48;
+        }
         if (player->viewheight > VIEWHEIGHT)
         {
             player->viewheight = VIEWHEIGHT;
