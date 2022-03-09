@@ -1363,6 +1363,13 @@ mobj_t *P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boole
         ||  mobj->type == MT_CENTAUR_SWORD
         // Wendigo: ice shards
         ||  mobj->type == MT_ICECHUNK
+        // Reiver (buried): dirt
+        ||  mobj->type == MT_DIRT1
+        ||  mobj->type == MT_DIRT2
+        ||  mobj->type == MT_DIRT3
+        ||  mobj->type == MT_DIRT4
+        ||  mobj->type == MT_DIRT5
+        ||  mobj->type == MT_DIRT6
         // Poisoned cloud of Cleric's flechette or mushroom
         ||  mobj->type == MT_POISONCLOUD
         // Falling leafs

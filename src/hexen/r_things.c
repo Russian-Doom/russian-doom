@@ -824,6 +824,13 @@ void R_ProjectSprite(mobj_t * thing)
         || thing->type == MT_ICECHUNK
         // Poisoned cloud of Cleric's flechette or mushroom
         || thing->type == MT_POISONCLOUD
+        // Reiver (buried): dirt
+        || thing->type == MT_DIRT1
+        || thing->type == MT_DIRT2
+        || thing->type == MT_DIRT3
+        || thing->type == MT_DIRT4
+        || thing->type == MT_DIRT5
+        || thing->type == MT_DIRT6
         // Falling leafs
         || thing->type == MT_LEAF1
         || thing->type == MT_LEAF2
