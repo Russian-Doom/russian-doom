@@ -1068,7 +1068,8 @@ state_t states[NUMSTATES] = {
     {SPR_TLGL, 0, 2, NULL, S_FREE_BRIDGE2, 0, 0},       // S_FREE_BRIDGE1
     {SPR_TLGL, 0, 300, NULL, S_NULL, 0, 0},     // S_FREE_BRIDGE2
     {SPR_TLGL, 0, 2, NULL, S_BBALL2, 0, 0},     // S_BBALL1
-    {SPR_TLGL, 0, 5, A_BridgeOrbit, S_BBALL2, 0, 0},    // S_BBALL2
+    // [JN] Smoothen bridge orbit (was 5).
+    {SPR_TLGL, 0, 1, A_BridgeOrbit, S_BBALL2, 0, 0},    // S_BBALL2
     // [JN] Do not apply full brightness to the Wall Torch, use brightmap instead
     {SPR_WLTR, 0, 5, NULL, S_ZWALLTORCH2, 0, 0},    // S_ZWALLTORCH1
     {SPR_WLTR, 1, 5, NULL, S_ZWALLTORCH3, 0, 0},    // S_ZWALLTORCH2

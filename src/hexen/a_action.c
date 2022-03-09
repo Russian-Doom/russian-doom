@@ -459,10 +459,11 @@ void A_BridgeOrbit(mobj_t * actor)
     {
         P_SetMobjState(actor, S_NULL);
     }
-    actor->args[0] += 3;
+    actor->args[0] += 1;  // [JN] Smoothen bridge orbit (was 3).
     actor->x = actor->target->x + orbitTableX[actor->args[0]];
     actor->y = actor->target->y + orbitTableY[actor->args[0]];
-    actor->z = actor->target->z;
+    actor->z = actor->target->z  // [JN] Apply small floating.
+             + finesine[(FINEANGLES / 160 * gametic) & FINEMASK] * 2;
 }
 
 
