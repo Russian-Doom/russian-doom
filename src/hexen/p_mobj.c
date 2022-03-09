@@ -1373,6 +1373,12 @@ mobj_t *P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boole
             mobj->health -= M_Random() & 1;
         }
 
+        // [JN] Allow falling leafs to fly over ledges.
+        if (mobj->type == MT_LEAF1 || mobj->type == MT_LEAF2)
+        {
+            mobj->flags |= MF_DROPOFF;
+        }
+
         // [JN] Remove MF_NOBLOCKMAP and MF_NOGRAVITY from following objects 
         // so they can fall down under own weigh after floor lowering.
         //
@@ -2255,6 +2261,7 @@ int P_HitFloor(mobj_t * thing)
 {
     mobj_t *mo;
     int smallsplash = false;
+    boolean nosplash = false;  // [JN] Liquid surface w/o splash effect.
 
     if (thing->floorz != thing->subsector->sector->floorheight)
     {                           // don't splash if landing on the edge above water/lava/etc....
@@ -2266,6 +2273,15 @@ int P_HitFloor(mobj_t * thing)
     {
         case MT_LEAF1:
         case MT_LEAF2:
+        {
+            // [JN] Don't make a splash for falling leaves, 
+            // but still consider surface as non solid.
+            if (singleplayer)
+            {
+                nosplash = true;
+                break;
+            }
+        }
 //              case MT_BLOOD:                  // I set these to low mass -- pm
 //              case MT_BLOODSPLATTER:
         case MT_SPLASH:
@@ -2282,6 +2298,8 @@ int P_HitFloor(mobj_t * thing)
     switch (P_GetThingFloorType(thing))
     {
         case FLOOR_WATER:
+            if (!nosplash)
+            {
             if (smallsplash)
             {
                 mo = P_SpawnMobj(thing->x, thing->y, ONFLOORZ, MT_SPLASHBASE);
@@ -2301,8 +2319,11 @@ int P_HitFloor(mobj_t * thing)
                     P_NoiseAlert(thing, thing);
                 S_StartSound(mo, SFX_WATER_SPLASH);
             }
+            }
             return (FLOOR_WATER);
         case FLOOR_LAVA:
+            if (!nosplash)
+            {
             if (smallsplash)
             {
                 mo = P_SpawnMobj(thing->x, thing->y, ONFLOORZ, MT_LAVASPLASH);
@@ -2322,8 +2343,11 @@ int P_HitFloor(mobj_t * thing)
             {
                 P_DamageMobj(thing, &LavaInflictor, NULL, 5);
             }
+            }
             return (FLOOR_LAVA);
         case FLOOR_SLUDGE:
+            if (!nosplash)
+            {
             if (smallsplash)
             {
                 mo = P_SpawnMobj(thing->x, thing->y, ONFLOORZ,
@@ -2345,6 +2369,7 @@ int P_HitFloor(mobj_t * thing)
                     P_NoiseAlert(thing, thing);
             }
             S_StartSound(mo, SFX_SLUDGE_GLOOP);
+            }
             return (FLOOR_SLUDGE);
     }
     return (FLOOR_SOLID);

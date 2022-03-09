@@ -372,6 +372,13 @@ void A_LeafThrust(mobj_t * actor)
 
 void A_LeafCheck(mobj_t * actor)
 {
+    // [JN] Remove leaf if it's landed in some sort of liquid.
+    if ((actor->z <= actor->floorz) && (P_HitFloor(actor) != FLOOR_SOLID))
+    {
+        P_RemoveMobj(actor);
+        return;
+    }
+
     actor->special1.i++;
     if (actor->special1.i >= 20)
     {
