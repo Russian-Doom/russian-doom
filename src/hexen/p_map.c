@@ -480,6 +480,14 @@ boolean PIT_CheckThing(mobj_t * thing)
     {
         return true;
     }
+    
+    // [JN] Don't clip falling leafs against non-shootable objects
+    // (especially trees on which they are spawned).
+    if ((tmthing->type == MT_LEAF1 || tmthing->type == MT_LEAF2)
+    && !(thing->flags & MF_SHOOTABLE) && singleplayer)
+    {
+        return (true);
+    }
 
     // Check for missile
     if (tmthing->flags & MF_MISSILE)
