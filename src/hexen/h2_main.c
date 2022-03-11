@@ -200,6 +200,7 @@ int show_artifacts_timer = 0;
 
 // Gameplay: Crosshair
 int crosshair_draw = 0;
+int crosshair_shape = 0;
 int crosshair_type = 1;
 int crosshair_scale = 0;
 
@@ -370,6 +371,7 @@ void D_BindVariables(void)
 
     // Gameplay: Crosshair
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);
+    M_BindIntVariable("crosshair_shape",        &crosshair_shape);
     M_BindIntVariable("crosshair_type",         &crosshair_type);
     M_BindIntVariable("crosshair_scale",        &crosshair_scale);
 
@@ -814,6 +816,9 @@ void D_DoomMain(void)
     SB_Init();
 
     ST_Done();
+
+    // [JN] Define crosshair GFX patch.
+    Crosshair_DefinePatch();
 
     // [JN] Define and load translated strings.
     RD_DefineLanguageStrings();

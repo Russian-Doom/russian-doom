@@ -1096,6 +1096,11 @@ void Draw_TeleportIcon(void);
 void Draw_SaveIcon(void);
 void Draw_LoadIcon(void);
 
+extern patch_t *PatchCrosshair;
+extern patch_t *Crosshair_DefinePatch (void);
+extern void Crosshair_Colorize (void);
+extern void Crosshair_Draw (void);
+
 //-----------------
 // MENU (MN_menu.c)
 //-----------------

@@ -211,6 +211,7 @@ static void M_RD_ColoredGem(Direction_t direction);
 static void M_RD_NegativeHealth();
 static void M_RD_ShowArtiTimer(Direction_t direction);
 static void M_RD_CrossHairDraw();
+static void M_RD_CrossHairShape(Direction_t direction);
 static void M_RD_CrossHairType();
 static void M_RD_CrossHairScale();
 
@@ -1204,9 +1205,9 @@ static MenuItem_t Gameplay2Items[] = {
     {ITT_LRFUNC,  "ARTIFACTS TIMER:",    "NFQVTH FHNTAFRNJD:",            M_RD_ShowArtiTimer,   0}, // ТАЙМЕР АРТЕФАКТОВ
     {ITT_TITLE,  "CROSSHAIR",            "GHBWTK",                        NULL,                 0}, // ПРИЦЕЛ
     {ITT_SWITCH, "DRAW CROSSHAIR:",      "JNJ,HF;FNM GHBWTK:",            M_RD_CrossHairDraw,   0}, // ОТОБРАЖАТЬ ПРИЦЕЛ
+    {ITT_LRFUNC, "SHAPE:",               "AJHVF:",                        M_RD_CrossHairShape,  0}, // ФОРМА
     {ITT_SWITCH, "INDICATION:",          "BYLBRFWBZ:",                    M_RD_CrossHairType,   0}, // ИНДИКАЦИЯ
     {ITT_SWITCH, "INCREASED SIZE:",      "EDTKBXTYYSQ HFPVTH:",           M_RD_CrossHairScale,  0}, // УВЕЛИЧЕННЫЙ РАЗМЕР
-    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
     {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
     {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
     {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
@@ -4176,12 +4177,21 @@ static void DrawGameplay2Menu(void)
         RD_M_DrawTextSmallENG(crosshair_draw ? "ON" : "OFF", 150 + wide_delta, 92,
                               crosshair_draw ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
+        // Shape
+        RD_M_DrawTextSmallENG(crosshair_shape == 1 ? "CROSS/2" :
+                              crosshair_shape == 2 ? "X" :
+                              crosshair_shape == 3 ? "CIRCLE" :
+                              crosshair_shape == 4 ? "ANGLE" :
+                              crosshair_shape == 5 ? "TRIANGLE" :
+                              crosshair_shape == 6 ? "DOT" : "CROSS",
+                              84 + wide_delta, 102, CR_GRAY2GREEN_HEXEN);
+
         // Indication
-        RD_M_DrawTextSmallENG(crosshair_type == 1 ? "HEALTH" : "STATIC",  111 + wide_delta, 102,
+        RD_M_DrawTextSmallENG(crosshair_type == 1 ? "HEALTH" : "STATIC",  111 + wide_delta, 112,
                               crosshair_type ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Increased size
-        RD_M_DrawTextSmallENG(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 112,
+        RD_M_DrawTextSmallENG(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 122,
                               crosshair_scale ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
     }
     else
@@ -4223,15 +4233,41 @@ static void DrawGameplay2Menu(void)
         RD_M_DrawTextSmallRUS(crosshair_draw ? "DRK" : "DSRK", 175 + wide_delta, 92,
                               crosshair_draw ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
+        // Форма
+        RD_M_DrawTextSmallRUS(crosshair_shape == 1 ? "RHTCN/2" :      // КРЕСТ/2
+                              crosshair_shape == 2 ? "[" :            // X
+                              crosshair_shape == 3 ? "RHEU" :         // КРУГ
+                              crosshair_shape == 4 ? "EUJK" :         // УГОЛ
+                              crosshair_shape == 5 ? "NHTEUJKMYBR" :  // ТРЕУГОЛЬНИК
+                              crosshair_shape == 6 ? "NJXRF" :        // ТОЧКА
+                                                     "RHTCN",         // КРЕСТ
+                              87 + wide_delta, 102, CR_GRAY2GREEN_HEXEN);
+
         // Индикация
         RD_M_DrawTextSmallRUS(crosshair_type == 1 ? "PLJHJDMT" : // ЗДОРОВЬЕ
                                                     "CNFNBXYFZ", // СТАТИЧНАЯ
-                              111 + wide_delta, 102, crosshair_type ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+                              111 + wide_delta, 112, crosshair_type ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Увеличенный размер
-        RD_M_DrawTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 112,
+        RD_M_DrawTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 122,
                               crosshair_scale ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
     }
+
+    // Draw crosshair background.
+    V_DrawPatch(235 + wide_delta, 98, W_CacheLumpName("XHAIRBOX", PU_CACHE));
+    // Colorize crosshair depending on it's type.
+    Crosshair_Colorize();
+    // Draw crosshair preview.
+    if (crosshair_scale)
+    {
+        V_DrawPatch(250 + wide_delta, 113, PatchCrosshair);
+    }
+    else
+    {
+        V_DrawPatchUnscaled(500 + wide_delta*2, 226, PatchCrosshair, NULL);
+    }
+    // Clear colorization.
+    dp_translation = NULL;
 }
 
 static void M_RD_ColoredSBar()
@@ -4257,6 +4293,12 @@ static void M_RD_ShowArtiTimer(Direction_t direction)
 static void M_RD_CrossHairDraw()
 {
     crosshair_draw ^= 1;
+}
+
+static void M_RD_CrossHairShape(Direction_t direction)
+{
+    RD_Menu_SpinInt(&crosshair_shape, 0, 6, direction);
+    Crosshair_DefinePatch();
 }
 
 static void M_RD_CrossHairType()
@@ -5381,6 +5423,7 @@ void M_RD_BackToDefaults_Recommended (void)
     show_artifacts_timer = 0;
     // Gameplay (4)
     crosshair_draw       = 0;
+    crosshair_shape      = 0;
     crosshair_type       = 1;
     crosshair_scale      = 0;
     // Gameplay (5)
@@ -5486,6 +5529,7 @@ static void M_RD_BackToDefaults_Original(void)
     show_artifacts_timer = 0;
     // Gameplay (4)
     crosshair_draw       = 0;
+    crosshair_shape      = 0;
     crosshair_type       = 1;
     crosshair_scale      = 0;
     // Gameplay (5)

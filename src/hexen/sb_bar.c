@@ -853,31 +853,7 @@ void SB_Drawer(void)
     // [JN] Draw crosshair
     if (crosshair_draw && !automapactive && !vanillaparm)
     {
-        if (crosshair_type == 0)
-        {
-            dp_translation = cr[CR_GRAY2RED_HEXEN];
-        }
-        else
-        {
-            dp_translation = CPlayer->health >= 67 ? cr[CR_GRAY2GREEN_HEXEN] :
-                             CPlayer->health >= 34 ? cr[CR_GRAY2DARKGOLD_HEXEN] :
-                                                     cr[CR_GRAY2RED_HEXEN];
-        }
-
-        if (crosshair_scale)
-        {
-            V_DrawPatch(origwidth/2,
-                ((screenblocks <= 10) ? (ORIGHEIGHT-38)/2 : (ORIGHEIGHT+4)/2),
-                W_CacheLumpName("XHAIR_1S", PU_CACHE));
-        }
-        else
-        {
-            V_DrawPatchUnscaled(screenwidth/2,
-                ((screenblocks <= 10) ? (SCREENHEIGHT-76)/2 : (SCREENHEIGHT+8)/2),
-                W_CacheLumpName("XHAIR_1U", PU_CACHE), NULL);
-        }
-
-        dp_translation = NULL;
+        Crosshair_Draw();
     }
 
 // -----------------------------------------------------------------------------
@@ -2594,6 +2570,59 @@ static void CheatRevealFunc(player_t * player, Cheat_t * cheat)
 {
     cheating = (cheating + 1) % 3;
 }
+
+/*
+================================================================================
+=
+= [JN] Crosshair routines. Defining, drawing, coloring.
+=
+================================================================================
+*/
+
+patch_t *PatchCrosshair;
+
+patch_t *Crosshair_DefinePatch (void)
+{
+    return PatchCrosshair =
+        W_CacheLumpName(crosshair_shape == 1 ? "XHAIR_2" :
+                        crosshair_shape == 2 ? "XHAIR_3" :
+                        crosshair_shape == 3 ? "XHAIR_4" :
+                        crosshair_shape == 4 ? "XHAIR_5" :
+                        crosshair_shape == 5 ? "XHAIR_6" :
+                        crosshair_shape == 6 ? "XHAIR_7" :
+                                               "XHAIR_1", PU_CACHE);
+}
+
+void Crosshair_Colorize (void)
+{
+    if (crosshair_type == 0)
+    {
+        dp_translation = cr[CR_GRAY2RED_HEXEN];
+    }
+    else
+    {
+        dp_translation = CPlayer->health >= 67 ? cr[CR_GRAY2GREEN_HEXEN] :
+                         CPlayer->health >= 34 ? cr[CR_GRAY2DARKGOLD_HEXEN] :
+                                                 cr[CR_GRAY2RED_HEXEN];
+    }
+}
+
+void Crosshair_Draw (void)
+{
+    Crosshair_Colorize();
+
+    if (crosshair_scale)
+    {
+        V_DrawPatch(origwidth/2, screenblocks <= 10 ? 81 : 102, PatchCrosshair);
+    }
+    else
+    {
+        V_DrawPatchUnscaled(screenwidth/2, screenblocks <= 10 ? 162 : 204, PatchCrosshair, NULL);
+    }
+
+    dp_translation = NULL;
+}
+
 
 // [JN] Disabled. I need "`" key for using without SFX_PLATFORM_STOP sound.
 
