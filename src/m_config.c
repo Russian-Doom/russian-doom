@@ -684,6 +684,7 @@ static default_t defaults_list[] =
 
     // Gameplay: Crosshair
     CONFIG_VARIABLE_INT(crosshair_draw),
+    CONFIG_VARIABLE_INT(crosshair_shape),
     CONFIG_VARIABLE_INT(crosshair_type),
     CONFIG_VARIABLE_INT(crosshair_scale),
 
