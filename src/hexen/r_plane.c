@@ -33,6 +33,12 @@ extern fixed_t Sky1ScrollDelta;
 extern fixed_t Sky2ScrollDelta;
 #define SKYTEXTUREMIDSHIFTED 200
 
+// [JN] Smooth sky scrolling.
+fixed_t Sky1SmoothScrollFactor;
+fixed_t Sky2SmoothScrollFactor;
+fixed_t Sky1SmoothScrollDelta;
+fixed_t Sky2SmoothScrollDelta;
+
 /*
 ================================================================================
 =
@@ -166,6 +172,10 @@ void R_InitSky (int map)
     Sky1ColumnOffset = 0;
     Sky2ColumnOffset = 0;
     DoubleSky = P_GetMapDoubleSky(map);
+
+    // [JN] Make smooth scroll factor equal to MAPINFO data, with division by 4.
+    Sky1SmoothScrollFactor = P_GetMapSky1ScrollDelta(map) / 1024;
+    Sky2SmoothScrollFactor = P_GetMapSky2ScrollDelta(map) / 1024;
 }
 
 /*
@@ -482,13 +492,14 @@ void R_DrawPlanes(void)
 {
     visplane_t *pl;
     int         i, x, stop;
-    int         light, angle;
+    int         light, angle, angle2;
     int         offset, skyTexture, offset2, skyTexture2;
     int         scrollOffset;
     int         heightmask;
     int         count, frac, fracstep = FRACUNIT >> !detailshift;
     byte       *source, *source2, *tempSource;
     byte       *dest, *dest1, *dest2, *dest3, *dest4;
+    boolean     smooth_sky = uncapped_fps && !vanillaparm;
 
     extern byte *ylookup[SCREENHEIGHT];
     extern int columnofs[WIDESCREENWIDTH];
@@ -522,10 +533,14 @@ void R_DrawPlanes(void)
                             return;
                         }
                         // [crispy] Optionally draw skies horizontally linear.
-                        angle = ((viewangle + (linear_sky && !vanillaparm ?
-                                  linearskyangle[x] : xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
-                        source = R_GetColumn(skyTexture, angle + offset, false);
-                        source2 = R_GetColumn(skyTexture2, angle + offset2, false);
+                        angle = ((viewangle + (smooth_sky ? Sky1SmoothScrollDelta : 0)
+                              + (linear_sky && !vanillaparm ? linearskyangle[x] : xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
+
+                        angle2 = ((viewangle + (smooth_sky ? Sky2SmoothScrollDelta : 0)
+                               + (linear_sky && !vanillaparm ? linearskyangle[x] : xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
+
+                        source = R_GetColumn(skyTexture, angle + (smooth_sky ? 0 : offset), false);
+                        source2 = R_GetColumn(skyTexture2, angle2 + (smooth_sky ? 0 : offset2), false);
                         frac = SKYTEXTUREMIDSHIFTED * FRACUNIT + (dc_yl - centery) * fracstep;
                         heightmask = SKYTEXTUREMIDSHIFTED-1;
 
@@ -686,9 +701,9 @@ void R_DrawPlanes(void)
                             return;
                         }
                         // [crispy] Optionally draw skies horizontally linear.
-                        angle = ((viewangle + (linear_sky && !vanillaparm ?
-                                  linearskyangle[x] : xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
-                        source = R_GetColumn(skyTexture, angle + offset, false);
+                        angle = ((viewangle + (smooth_sky ? Sky1SmoothScrollDelta : 0)
+                              + (linear_sky && !vanillaparm ? linearskyangle[x] : xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
+                        source = R_GetColumn(skyTexture, angle + (smooth_sky ? 0 : offset), false);
                         frac = SKYTEXTUREMIDSHIFTED * FRACUNIT + (dc_yl - centery) * fracstep;
                         heightmask = SKYTEXTUREMIDSHIFTED-1;
 
