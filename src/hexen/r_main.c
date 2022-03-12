@@ -987,6 +987,12 @@ void R_RenderPlayerView (player_t *player)
     // Check for new console commands.
     NetUpdate();
 
+    // [JN] Smooth texture scrolling.
+    if (!paused && uncapped_fps && !vanillaparm)
+    {
+        R_SmoothTextureScrolling();      
+    }
+
     // Make displayed player invisible locally
     if (localQuakeHappening[displayplayer] && gamestate == GS_LEVEL)
     {

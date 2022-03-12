@@ -575,6 +575,9 @@ void P_LoadSideDefs(int lump)
         sd->bottomtexture = R_TextureNumForName(msd->bottomtexture);
         sd->midtexture = R_TextureNumForName(msd->midtexture);
         sd->sector = &sectors[SHORT(msd->sector)];
+        // [JN] Smooth texture scrolling.
+        sd->oldtextureoffset = sd->textureoffset;
+        sd->oldrowoffset = sd->rowoffset;
     }
     W_ReleaseLumpNum(lump);
 }

@@ -131,6 +131,8 @@ typedef struct
     fixed_t rowoffset;          // add this to the calculated texture top
     short toptexture, bottomtexture, midtexture;
     sector_t *sector;
+    fixed_t oldtextureoffset;   // [JN] Smooth texture scrolling.
+    fixed_t oldrowoffset;       // [JN] Smooth texture scrolling.
 } side_t;
 
 typedef enum
@@ -424,6 +426,8 @@ fixed_t R_PointToDist(fixed_t x, fixed_t y);
 subsector_t *R_PointInSubsector(fixed_t x, fixed_t y);
 // [AM] Interpolate between two angles.
 angle_t R_InterpolateAngle(angle_t oangle, angle_t nangle, fixed_t scale);
+// [JN] Smooth texture scrolling.
+extern void R_SmoothTextureScrolling (void);
 
 // [JN] Used by perfomance counter.
 extern void R_ClearStats (void);

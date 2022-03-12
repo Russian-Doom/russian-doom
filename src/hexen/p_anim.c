@@ -149,15 +149,23 @@ void P_AnimateSurfaces(void)
         switch (line->special)
         {
             case 100:          // Scroll_Texture_Left
+                sides[line->sidenum[0]].oldtextureoffset =
+                sides[line->sidenum[0]].textureoffset;
                 sides[line->sidenum[0]].textureoffset += line->arg1 << 10;
                 break;
             case 101:          // Scroll_Texture_Right
+                sides[line->sidenum[0]].oldtextureoffset =
+                sides[line->sidenum[0]].textureoffset;
                 sides[line->sidenum[0]].textureoffset -= line->arg1 << 10;
                 break;
             case 102:          // Scroll_Texture_Up
+                sides[line->sidenum[0]].oldrowoffset =
+                sides[line->sidenum[0]].rowoffset;
                 sides[line->sidenum[0]].rowoffset += line->arg1 << 10;
                 break;
             case 103:          // Scroll_Texture_Down
+                sides[line->sidenum[0]].oldrowoffset =
+                sides[line->sidenum[0]].rowoffset;
                 sides[line->sidenum[0]].rowoffset -= line->arg1 << 10;
                 break;
         }
@@ -180,6 +188,43 @@ void P_AnimateSurfaces(void)
         else
         {
             NextLightningFlash--;
+        }
+    }
+}
+
+/*
+================================================================================
+=
+= R_SmoothTextureScrolling
+=
+= [JN] Makes wall texture scrolling smoother. Based on implementation
+= from Crispy Doom, added support for scrolling speed arguments.
+=
+================================================================================
+*/
+
+void R_SmoothTextureScrolling()
+{
+    for (int i = 0; i < numlinespecials; i++)
+    {
+        const line_t *line = linespeciallist[i];
+        side_t *const side = &sides[line->sidenum[0]];
+        const fixed_t frac = fractionaltic / 56 * line->arg1;
+
+        switch (line->special)
+        {
+            case 100:          // Scroll_Texture_Right
+                side->textureoffset = side->oldtextureoffset + frac;
+                break;
+            case 101:          // Scroll_Texture_Right
+                side->textureoffset = side->oldtextureoffset - frac;
+                break;
+            case 102:          // Scroll_Texture_Up
+                side->rowoffset = side->oldrowoffset + frac;
+                break;
+            case 103:          // Scroll_Texture_Down
+                side->rowoffset = side->oldrowoffset - frac;
+                break;
         }
     }
 }
