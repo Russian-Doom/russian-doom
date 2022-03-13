@@ -48,6 +48,7 @@ r_draw.c                              \
 r_main.c                              \
 r_plane.c                             \
 r_segs.c                              \
+r_swirl.c           r_swirl.h         \
 r_things.c                            \
 rd_lang.c           rd_lang.h         \
 rd_rushexen.c       rd_rushexen.h     \

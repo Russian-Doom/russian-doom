@@ -23,6 +23,7 @@
 #include "m_random.h"
 #include "i_system.h"
 #include "p_local.h"
+#include "r_swirl.h"
 #include "s_sound.h"
 
 // MACROS ------------------------------------------------------------------
@@ -134,8 +135,18 @@ void P_AnimateSurfaces(void)
             }
             if (ad->type == ANIM_FLAT)
             {
-                flattranslation[ad->index] =
-                    FrameDefs[ad->currentFrameDef].index;
+                // [JN] Add support for SMMU swirling flats.
+                if (swirling_liquids && !vanillaparm
+                && (ad->index == R_FlatNumForName("x_001")
+                ||  ad->index == R_FlatNumForName("X_005")
+                ||  ad->index == R_FlatNumForName("x_009")))
+                {
+                    flattranslation[ad->index] = -1;
+                }
+                else
+                {
+                    flattranslation[ad->index] = FrameDefs[ad->currentFrameDef].index;
+                }
             }
             else
             {                   // Texture
@@ -547,4 +558,10 @@ void P_InitFTAnims(void)
         }
     }
     SC_Close();
+
+    // [JN] Don't init in "-vanilla", since there is no swirling flats.
+    if (!vanillaparm)
+    {
+        R_InitDistortedFlats();
+    }
 }

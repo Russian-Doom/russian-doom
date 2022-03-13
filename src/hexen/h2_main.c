@@ -183,6 +183,7 @@ int snd_monomode = 0;
 int brightmaps = 1;
 int fake_contrast = 0;
 int translucency = 1;
+int swirling_liquids = 1;
 int linear_sky = 1;
 int randomly_flipcorpses = 1;
 int flip_weapons = 0;
@@ -348,6 +349,7 @@ void D_BindVariables(void)
     M_BindIntVariable("brightmaps",             &brightmaps);
     M_BindIntVariable("fake_contrast",          &fake_contrast);
     M_BindIntVariable("translucency",           &translucency);
+    M_BindIntVariable("swirling_liquids",       &swirling_liquids);
     M_BindIntVariable("linear_sky",             &linear_sky);
     M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);
     M_BindIntVariable("flip_weapons",           &flip_weapons);

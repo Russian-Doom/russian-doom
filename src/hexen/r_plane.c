@@ -19,6 +19,7 @@
 #include "h2def.h"
 #include "i_system.h"
 #include "r_local.h"
+#include "r_swirl.h"
 
 
 // Sky mapping
@@ -822,7 +823,10 @@ void R_DrawPlanes(void)
         //
         else
         {
-            tempSource = W_CacheLumpNum(firstflat + flattranslation[pl->picnum], PU_STATIC);
+            // [crispy] add support for SMMU swirling flats
+            tempSource = (flattranslation[pl->picnum] == -1) ?
+                          R_DistortedFlat(pl->picnum) :
+                          W_CacheLumpNum(firstflat + flattranslation[pl->picnum], PU_STATIC);
             scrollOffset = leveltime >> 1 & 63;
 
             // Handle scrolling flats
@@ -1089,7 +1093,11 @@ void R_DrawPlanes(void)
                 R_MakeSpans(x,pl->top[x-1], pl->bottom[x-1], pl->top[x], pl->bottom[x]);
             }
 
-            W_ReleaseLumpNum(firstflat + flattranslation[pl->picnum]);
+            // [crispy] add support for SMMU swirling flats
+            if (flattranslation[pl->picnum] != -1)
+            {
+                W_ReleaseLumpNum(firstflat + flattranslation[pl->picnum]);
+            }
         }
     }
 }

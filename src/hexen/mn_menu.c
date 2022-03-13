@@ -197,6 +197,7 @@ static void DrawGameplay1Menu(void);
 static void M_RD_Brightmaps();
 static void M_RD_FakeContrast();
 static void M_RD_ExtraTrans();
+static void M_RD_SwirlingLiquids();
 static void M_RD_LinearSky();
 static void M_RD_FlipCorpses();
 static void M_RD_FlipWeapons();
@@ -1169,6 +1170,7 @@ static MenuItem_t Gameplay1Items[] = {
     {ITT_SWITCH, "BRIGHTMAPS:",                  ",HFQNVFGGBYU:",                M_RD_Brightmaps,     0}, // БРАЙТМАППИНГ
     {ITT_SWITCH, "FAKE CONTRAST:",               "BVBNFWBZ RJYNHFCNYJCNB:",      M_RD_FakeContrast,   0}, // ИМИТАЦИЯ КОНТРАСТНОСТИ
     {ITT_SWITCH, "EXTRA TRANSLUCENCY:",          "LJGJKYBNTKMYFZ GHJPHFXYJCNM:", M_RD_ExtraTrans,     0}, // ДОПОЛНИТЕЛЬНАЯ ПРОЗРАЧНОСТЬ
+    {ITT_SWITCH, "SWIRLING LIQUIDS:",            "EKEXITYYFZ FYBVFWBZ ;BLRJCNTQ:", M_RD_SwirlingLiquids, 0}, // УЛУЧШЕННАЯ АНИМАЦИЯ ЖИДКОСТЕЙ
     {ITT_SWITCH, "SKY DRAWING MODE:",            "HT;BV JNHBCJDRB YT,F:",        M_RD_LinearSky,      0}, // РЕЖИМ ОТРИСОВКИ НЕБА
     {ITT_SWITCH, "RANDOMLY MIRRORED CORPSES:",   "PTHRFKMYJT JNHF;TYBT NHEGJD:", M_RD_FlipCorpses,    0}, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ ТРУПОВ
     {ITT_SWITCH, "FLIP WEAPONS:",                "PTHRFKMYJT JNHF;TYBT JHE;BZ:", M_RD_FlipWeapons,    0}, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ ОРУЖИЯ
@@ -1176,7 +1178,6 @@ static MenuItem_t Gameplay1Items[] = {
     {ITT_SWITCH, "COLLISION PHYSICS:",           "ABPBRF CNJKRYJDTYBQ:",         M_RD_Collision,      0}, // ФИЗИКА СТОЛКНОВЕНИЙ
     {ITT_SWITCH, "CORPSES SLIDING FROM LEDGES:", "NHEGS CGJKPF.N C DJPDSITYBQ:", M_RD_Torque,         0}, // ТРУПЫ СПОЛЗАЮТ С ВОЗВЫШЕНИЙ
     {ITT_LRFUNC, "FLOATING ITEMS AMPLITUDE:" ,   "KTDBNFWBZ GHTLVTNJD:",         M_RD_FloatAmplitude, 0}, // АМПЛИТУДА ЛЕВИТАЦИИ ПРЕДМЕТОВ
-    {ITT_EMPTY,   NULL,                          NULL,                           NULL,                0},
     {ITT_EMPTY,   NULL,                          NULL,                           NULL,                0},
     {ITT_SETMENU, "NEXT PAGE >",                 "CKTLE.OFZ CNHFYBWF `",         &Gameplay2Menu,      0}, // СЛЕДУЮЩАЯ СТРАНИЦА >
     {ITT_SETMENU, "< LAST PAGE",                 "^ GJCKTLYZZ CNHFYBWF",         &Gameplay3Menu,      0}  // < ПОСЛЕДНЯЯ СТРАНИЦА
@@ -4003,16 +4004,20 @@ static void DrawGameplay1Menu(void)
         RD_M_DrawTextSmallENG(translucency ? "ON" : "OFF", 180 + wide_delta, 62,
                               translucency ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
+        // Swirling liquids
+        RD_M_DrawTextSmallENG(swirling_liquids ? "ON" : "OFF", 147 + wide_delta, 72,
+                              swirling_liquids ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+
         // Sky drawing mode
-        RD_M_DrawTextSmallENG(linear_sky ? "LINEAR" : "ORIGINAL", 162 + wide_delta, 72,
+        RD_M_DrawTextSmallENG(linear_sky ? "LINEAR" : "ORIGINAL", 162 + wide_delta, 82,
                               linear_sky ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Randomly flipped corpses
-        RD_M_DrawTextSmallENG(randomly_flipcorpses ? "ON" : "OFF", 232 + wide_delta, 82,
+        RD_M_DrawTextSmallENG(randomly_flipcorpses ? "ON" : "OFF", 232 + wide_delta, 92,
                               randomly_flipcorpses ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Flip weapons
-        RD_M_DrawTextSmallENG(flip_weapons ? "ON" : "OFF", 130 + wide_delta, 92,
+        RD_M_DrawTextSmallENG(flip_weapons ? "ON" : "OFF", 130 + wide_delta, 102,
                               flip_weapons ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         //
@@ -4020,17 +4025,17 @@ static void DrawGameplay1Menu(void)
         //
        
         // Collision physics
-        RD_M_DrawTextSmallENG(improved_collision ? "IMPROVED" : "ORIGINAL", 159 + wide_delta, 112,
+        RD_M_DrawTextSmallENG(improved_collision ? "IMPROVED" : "ORIGINAL", 159 + wide_delta, 122,
                               improved_collision ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Corpses sliding from the ledges
-        RD_M_DrawTextSmallENG(torque ? "ON" : "OFF", 238 + wide_delta, 122,
+        RD_M_DrawTextSmallENG(torque ? "ON" : "OFF", 238 + wide_delta, 132,
                               torque ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Floating items amplitude
         RD_M_DrawTextSmallENG(floating_powerups == 1 ? "STANDARD" :
                               floating_powerups == 2 ? "HALFED" : "OFF",
-                              209 + wide_delta, 132,
+                              209 + wide_delta, 142,
                               floating_powerups ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
     }
     else
@@ -4051,16 +4056,20 @@ static void DrawGameplay1Menu(void)
         RD_M_DrawTextSmallRUS(translucency ? "DRK" : "DSRK", 245 + wide_delta, 62,
                               translucency ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
+        // Улучшенная анимация жидкостей
+        RD_M_DrawTextSmallRUS(swirling_liquids ? "DRK" : "DSRK", 261 + wide_delta, 72,
+                              swirling_liquids ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
+
         // Режим отрисовки неба
-        RD_M_DrawTextSmallRUS(linear_sky ? "KBYTQYSQ" : "JHBUBYFKMYSQ", 195 + wide_delta, 72,
+        RD_M_DrawTextSmallRUS(linear_sky ? "KBYTQYSQ" : "JHBUBYFKMYSQ", 195 + wide_delta, 82,
                               linear_sky ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Зеркальное отражение трупов
-        RD_M_DrawTextSmallRUS(randomly_flipcorpses ? "DRK" : "DSRK", 247 + wide_delta, 82,
+        RD_M_DrawTextSmallRUS(randomly_flipcorpses ? "DRK" : "DSRK", 247 + wide_delta, 92,
                               randomly_flipcorpses ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Зеркальное отражение оружия
-        RD_M_DrawTextSmallRUS(flip_weapons ? "DRK" : "DSRK", 250 + wide_delta, 92,
+        RD_M_DrawTextSmallRUS(flip_weapons ? "DRK" : "DSRK", 250 + wide_delta, 102,
                               flip_weapons ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         //
@@ -4068,17 +4077,17 @@ static void DrawGameplay1Menu(void)
         //
 
         // Физика столкновений
-        RD_M_DrawTextSmallRUS(improved_collision ? "EKEXITYYFZ" : "JHBUBYFKMYFZ", 186 + wide_delta, 112,
+        RD_M_DrawTextSmallRUS(improved_collision ? "EKEXITYYFZ" : "JHBUBYFKMYFZ", 186 + wide_delta, 122,
                               improved_collision ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Трупы сползают с возвышений
-        RD_M_DrawTextSmallRUS(torque ? "DRK" : "DSRK", 248 + wide_delta, 122,
+        RD_M_DrawTextSmallRUS(torque ? "DRK" : "DSRK", 248 + wide_delta, 132,
                               torque ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Амплитуда левитации предметов
         RD_M_DrawTextSmallRUS(floating_powerups == 1 ? "CNFYLFHNYFZ" :
                               floating_powerups == 2 ? "EVTHTYYFZ" : "DSRK",
-                              188 + wide_delta, 132,
+                              188 + wide_delta, 142,
                               floating_powerups ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
     }
 }
@@ -4096,6 +4105,11 @@ static void M_RD_FakeContrast()
 static void M_RD_ExtraTrans()
 {
     translucency ^= 1;
+}
+
+static void M_RD_SwirlingLiquids()
+{
+    swirling_liquids ^= 1;
 }
 
 static void M_RD_LinearSky()
@@ -5409,6 +5423,8 @@ void M_RD_BackToDefaults_Recommended (void)
     // Gameplay (1)
     brightmaps           = 1;
     fake_contrast        = 0;
+    translucency         = 1;
+    swirling_liquids     = 1;
     linear_sky           = 1;
     randomly_flipcorpses = 1;
     flip_weapons         = 0;
@@ -5515,6 +5531,8 @@ static void M_RD_BackToDefaults_Original(void)
     // Gameplay (1)
     brightmaps           = 0;
     fake_contrast        = 0;
+    translucency         = 0;
+    swirling_liquids     = 0;
     linear_sky           = 0;
     randomly_flipcorpses = 0;
     flip_weapons         = 0;
