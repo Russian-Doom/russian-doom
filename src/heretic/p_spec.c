@@ -240,6 +240,10 @@ struct
 
 mobj_t LavaInflictor;
 
+// [JN] Smooth plane scrolling.
+extern fixed_t FlatScrollFactor_X;
+extern fixed_t FlatScrollFactor_Y;
+
 //----------------------------------------------------------------------------
 //
 // PROC P_InitLava
@@ -1061,6 +1065,10 @@ void P_UpdateSpecials(void)
                 flattranslation[i] = pic;
             }
         }
+        // [JN] Update smoothed plane textures offsets.
+        // We need a constant value (FRACUNIT/4) to prevent factor from jittering.
+        FlatScrollFactor_X += (FRACUNIT/4) + fractionaltic;
+        FlatScrollFactor_Y += (FRACUNIT/4) + fractionaltic;
     }
     // Update scrolling texture offsets
     for (i = 0; i < numlinespecials; i++)

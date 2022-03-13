@@ -101,6 +101,18 @@ fixed_t *yslope = NULL;
 fixed_t *distscale = NULL;
 fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
 
+// [JN] Smooth plane scrolling.
+fixed_t FlatScrollFactor_X;
+fixed_t FlatScrollFactor_Y;
+static fixed_t FlatScrollDelta_X;
+static fixed_t FlatScrollDelta_Y;
+
+#define FLAT_SCROLL_SLOWEST  0.1;
+#define FLAT_SCROLL_SLOW     0.2;
+#define FLAT_SCROLL_MEDIUM   0.4;
+#define FLAT_SCROLL_FAST     0.6;
+#define FLAT_SCROLL_FASTEST  1.1;
+
 
 /*
 ================================================================================
@@ -234,8 +246,9 @@ void R_MapPlane (int y, int x1, int x2)
 
     dx = x1 - centerx;
 
-    ds_xfrac = viewx + FixedMul(viewcos, distance) + dx * ds_xstep;
-    ds_yfrac = -viewy - FixedMul(viewsin, distance) + dx * ds_ystep;
+    // [JN] Add deltas for smooth plane scrolling.
+    ds_xfrac =  viewx + FlatScrollDelta_X + FixedMul(viewcos, distance) + dx * ds_xstep;
+    ds_yfrac = -viewy + FlatScrollDelta_Y - FixedMul(viewsin, distance) + dx * ds_ystep;
     
     if (fixedcolormap)
     {
@@ -541,7 +554,131 @@ void R_DrawPlanes (void)
                           R_DistortedFlat(pl->picnum) :
                           W_CacheLumpNum(lumpnum, PU_STATIC);
 
+            // [JN] Handle smooth scrolling differently of capped/uncapped modes
+            // for preventing redundant if/else conditions.
+            if (uncapped_fps && !vanillaparm)
+            {
+                switch (pl->special)
+                {
+                    // Scroll_EastLavaDamage
+                    case 4:
+                        FlatScrollDelta_X = -FlatScrollFactor_X;
+                        FlatScrollDelta_Y = 0;
+                        FlatScrollDelta_X *= FLAT_SCROLL_FASTEST;
+                    break;
+                    // Scroll_East
+                    case 20: case 21: case 22: case 23: case 24:
+                        FlatScrollDelta_X = -FlatScrollFactor_X;
+                        FlatScrollDelta_Y = 0;
+                        if (pl->special == 20)  
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_SLOWEST;
+                        }
+                        if (pl->special == 21)  
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_SLOW;
+                        }
+                        if (pl->special == 22)
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_MEDIUM;
+                        }
+                        if (pl->special == 23)
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_FAST;
+                        }
+                        if (pl->special == 24)
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_FASTEST;
+                        }
+                    break;
 
+                    // Scroll_North
+                    case 25: case 26: case 27: case 28: case 29:
+                        FlatScrollDelta_X = 0;
+                        FlatScrollDelta_Y = FlatScrollFactor_Y;
+                        if (pl->special == 25)  
+                        {
+                            FlatScrollDelta_Y *= FLAT_SCROLL_SLOWEST;
+                        }
+                        if (pl->special == 26)  
+                        {
+                            FlatScrollDelta_Y *= FLAT_SCROLL_SLOW;
+                        }
+                        if (pl->special == 27)
+                        {
+                            FlatScrollDelta_Y *= FLAT_SCROLL_MEDIUM;
+                        }
+                        if (pl->special == 28)
+                        {
+                            FlatScrollDelta_Y *= FLAT_SCROLL_FAST;
+                        }
+                        if (pl->special == 29)
+                        {
+                            FlatScrollDelta_Y *= FLAT_SCROLL_FASTEST;
+                        }
+                    break;
+
+                    // Scroll_South
+                    case 30: case 31: case 32: case 33: case 34:
+                        FlatScrollDelta_X = 0;
+                        FlatScrollDelta_Y = -FlatScrollFactor_Y;
+                        if (pl->special == 30)  
+                        {
+                            FlatScrollDelta_Y *= FLAT_SCROLL_SLOWEST;
+                        }
+                        if (pl->special == 31)  
+                        {
+                            FlatScrollDelta_Y *= FLAT_SCROLL_SLOW;
+                        }
+                        if (pl->special == 32)
+                        {
+                            FlatScrollDelta_Y *= FLAT_SCROLL_MEDIUM;
+                        }
+                        if (pl->special == 33)
+                        {
+                            FlatScrollDelta_Y *= FLAT_SCROLL_FAST;
+                        }
+                        if (pl->special == 34)
+                        {
+                            FlatScrollDelta_Y *= FLAT_SCROLL_FASTEST;
+                        }
+                    break;
+
+                    // Scroll_West
+                    case 35: case 36: case 37: case 38: case 39:
+                        FlatScrollDelta_X = FlatScrollFactor_X;
+                        FlatScrollDelta_Y = 0;
+                        if (pl->special == 35)  
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_SLOWEST;
+                        }
+                        if (pl->special == 36)  
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_SLOW;
+                        }
+                        if (pl->special == 37)  
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_MEDIUM;
+                        }
+                        if (pl->special == 38)
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_FAST;
+                        }
+                        if (pl->special == 39)
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_FASTEST;
+                        }
+                    break;
+
+                    default:
+                        FlatScrollDelta_X = 0;
+                        FlatScrollDelta_Y = 0;
+                    break;
+                }
+                ds_source = tempSource;
+            }
+            else
+            {
             switch (pl->special)
             {
                 case 25:
@@ -602,6 +739,7 @@ void R_DrawPlanes (void)
                 default:
                     ds_source = tempSource;
                 break;
+            }
             }
 
             planeheight = abs(pl->height - viewz);
