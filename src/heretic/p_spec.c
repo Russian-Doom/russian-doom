@@ -190,12 +190,6 @@ animdef_t animdefs[] = {
     {true, "WATRWAL3", "WATRWAL1", 4},  // Texture: Waterfall
     // [JN] Custom smooth lava flat
     {false, "SMLAVA40", "SMLAVA1",  1},
-    // [JN] Custom flats for scrolling in any direction
-    {false, "WATSCRN3", "WATSCRN1", 8}, // River - North ( ↑ )
-    {false, "WATSCRE3", "WATSCRE1", 8}, // River - East  ( → )
-    {false, "WATSCRS3", "WATSCRS1", 8}, // River - South ( ↓ )
-    {false, "WATSCRW3", "WATSCRW1", 8}, // River - West  ( ← )
-    {false, "WATSCRX3", "WATSCRX1", 8}, // Scrollable still water
     {-1,    "",         "",         0},
 };
 

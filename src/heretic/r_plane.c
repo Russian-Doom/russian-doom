@@ -712,30 +712,6 @@ void R_DrawPlanes (void)
                 case 4:            // Scroll_EastLavaDamage
                     ds_source = tempSource + (((63 - scrollOffset) << 3) & 63);
                 break;
-                //
-                // [JN] Custom sector effects for scrolling in any direction:
-                //
-                case 250: case 260: case 270: case 280:  // Scroll_North
-                    ds_source = tempSource + ((scrollOffset << ((pl->special/10) - 25) & 63) << 6);
-                break;
-                case 200: case 210: case 220: case 230:  // Scroll_East
-                    ds_source = tempSource + ((63 - scrollOffset) << ((pl->special/10) - 20) & 63);
-                break;
-                case 300: case 310: case 320: case 330:  // Scroll_South
-                    ds_source = tempSource + (((63 - scrollOffset) << ((pl->special/10) - 30) & 63) << 6);
-                break;
-                case 350: case 360: case 370: case 380:  // Scroll_West
-                    ds_source = tempSource + (scrollOffset << ((pl->special/10) - 35) & 63);
-                break;
-                //
-                // [JN] Extra cases to fix reverse scrolling bug for fastest scrollers.
-                // Use speed from "fast", not from "fastest" types.
-                //
-                case 290:  ds_source = tempSource + ((scrollOffset << 3 & 63) << 6);         break;  // Scroll_North
-                case 240:  ds_source = tempSource + ((63 - scrollOffset) << 3 & 63);         break;  // Scroll_East
-                case 340:  ds_source = tempSource + (((63 - scrollOffset) << 3 & 63) << 6);  break;  // Scroll_South
-                case 390:  ds_source = tempSource + (scrollOffset << 3 & 63);                break;  // Scroll_West
-
                 default:
                     ds_source = tempSource;
                 break;
