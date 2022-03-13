@@ -39,6 +39,17 @@ fixed_t Sky2SmoothScrollFactor;
 fixed_t Sky1SmoothScrollDelta;
 fixed_t Sky2SmoothScrollDelta;
 
+// [JN] Smooth plane scrolling.
+fixed_t FlatScrollFactor_X;
+fixed_t FlatScrollFactor_Y;
+static fixed_t FlatScrollDelta_X;
+static fixed_t FlatScrollDelta_Y;
+
+#define FLAT_SCROLL_SLOW  0.5;
+#define FLAT_SCROLL_MEDI  1.5;
+#define FLAT_SCROLL_FAST  3;
+
+
 /*
 ================================================================================
 =
@@ -244,8 +255,9 @@ void R_MapPlane (int y, int x1, int x2)
 
     dx = x1 - centerx;
 
-    ds_xfrac = viewx + FixedMul(viewcos, distance) + dx * ds_xstep;
-    ds_yfrac = -viewy - FixedMul(viewsin, distance) + dx * ds_ystep;
+    // [JN] Add deltas for smooth plane scrolling.
+    ds_xfrac =  viewx + FlatScrollDelta_X + FixedMul(viewcos, distance) + dx * ds_xstep;
+    ds_yfrac = -viewy + FlatScrollDelta_Y - FixedMul(viewsin, distance) + dx * ds_ystep;
 
     if (fixedcolormap)
     {
@@ -814,71 +826,246 @@ void R_DrawPlanes(void)
             scrollOffset = leveltime >> 1 & 63;
 
             // Handle scrolling flats
-            switch (pl->special)
+            // [JN] Handle smooth scrolling differently of capped/uncapped modes
+            // for preventing redundant if/else conditions.
+            if (uncapped_fps && !vanillaparm)
             {
-                // Scroll_North_xxx
-                case 201:
-                case 202:
-                case 203:
-                ds_source = tempSource + ((scrollOffset << (pl->special - 201) & 63) << 6);
-                break;
+                switch (pl->special)
+                {
+                    // Scroll_North_xxx
+                    case 201: case 202: case 203:
+                        FlatScrollDelta_X = 0;
+                        FlatScrollDelta_Y = FlatScrollFactor_Y;
+                        if (pl->special == 201)  
+                        {
+                            FlatScrollDelta_Y *= FLAT_SCROLL_SLOW;
+                        }
+                        if (pl->special == 202)
+                        {
+                            FlatScrollDelta_Y *= FLAT_SCROLL_MEDI;
+                        }
+                        if (pl->special == 203)
+                        {
+                            FlatScrollDelta_Y *= FLAT_SCROLL_FAST;
+                        }
+                    break;
 
-                // Scroll_East_xxx
-                case 204:
-                case 205:
-                case 206:
-                ds_source = tempSource + ((63 - scrollOffset) << (pl->special - 204) & 63);
-                break;
+                    // Scroll_East_xxx
+                    case 204: case 205: case 206:
+                        FlatScrollDelta_X = -FlatScrollFactor_X;
+                        FlatScrollDelta_Y = 0;
+                        if (pl->special == 204)  
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_SLOW;
+                        }
+                        if (pl->special == 205)
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_MEDI;
+                        }
+                        if (pl->special == 206)
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_FAST;
+                        }
+                    break;
 
-                // Scroll_South_xxx
-                case 207:
-                case 208:
-                case 209:
-                ds_source = tempSource + (((63 - scrollOffset) << (pl->special - 207) & 63) << 6);
-                break;
+                    // Scroll_South_xxx
+                    case 207: case 208: case 209:
+                        FlatScrollDelta_X = 0;
+                        FlatScrollDelta_Y = -FlatScrollFactor_Y;
+                        if (pl->special == 207)  
+                        {
+                            FlatScrollDelta_Y *= FLAT_SCROLL_SLOW;
+                        }
+                        if (pl->special == 208)
+                        {
+                            FlatScrollDelta_Y *= FLAT_SCROLL_MEDI;
+                        }
+                        if (pl->special == 209)
+                        {
+                            FlatScrollDelta_Y *= FLAT_SCROLL_FAST;
+                        }
+                    break;
 
-                // Scroll_West_xxx
-                case 210:
-                case 211:
-                case 212:          
-                ds_source = tempSource + (scrollOffset << (pl->special - 210) & 63);
-                break;
+                    // Scroll_West_xxx
+                    case 210: case 211: case 212:
+                        FlatScrollDelta_X = FlatScrollFactor_X;
+                        FlatScrollDelta_Y = 0;
+                        if (pl->special == 210)  
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_SLOW;
+                        }
+                        if (pl->special == 211)
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_MEDI;
+                        }
+                        if (pl->special == 212)
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_FAST;
+                        }
+                    break;
 
-                // Scroll_NorthWest_xxx
-                case 213:
-                case 214:
-                case 215:
-                ds_source = tempSource + (scrollOffset << (pl->special - 213) & 63)
-                                       + ((scrollOffset << (pl->special - 213) & 63) << 6);
-                break;
+                    // Scroll_NorthWest_xxx
+                    case 213: case 214: case 215:
+                        FlatScrollDelta_X = FlatScrollFactor_X;
+                        FlatScrollDelta_Y = FlatScrollFactor_Y;
+                        if (pl->special == 213)  
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_SLOW;
+                            FlatScrollDelta_Y *= FLAT_SCROLL_SLOW;
+                        }
+                        if (pl->special == 214)
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_MEDI;
+                            FlatScrollDelta_Y *= FLAT_SCROLL_MEDI;
+                        }
+                        if (pl->special == 215)
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_FAST;
+                            FlatScrollDelta_Y *= FLAT_SCROLL_FAST;
+                        }
+                    break;
 
-                // Scroll_NorthEast_xxx
-                case 216:
-                case 217:
-                case 218:
-                ds_source = tempSource + ((63 - scrollOffset) << (pl->special - 216) & 63)
-                                       + ((scrollOffset << (pl->special - 216) & 63) << 6);
-                break;
+                    // Scroll_NorthEast_xxx
+                    case 216: case 217: case 218:
+                        FlatScrollDelta_X = -FlatScrollFactor_X;
+                        FlatScrollDelta_Y = FlatScrollFactor_Y;
 
-                // Scroll_SouthEast_xxx
-                case 219:
-                case 220:
-                case 221:
-                ds_source = tempSource + ((63 - scrollOffset) << (pl->special - 219) & 63)
-                                       + (((63 - scrollOffset) << (pl->special - 219) & 63) << 6);
-                break;
+                        if (pl->special == 216)  
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_SLOW;
+                            FlatScrollDelta_Y *= FLAT_SCROLL_SLOW;
+                        }
+                        if (pl->special == 217)
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_MEDI;
+                            FlatScrollDelta_Y *= FLAT_SCROLL_MEDI;
+                        }
+                        if (pl->special == 218)
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_FAST;
+                            FlatScrollDelta_Y *= FLAT_SCROLL_FAST;
+                        }
+                    break;
 
-                // Scroll_SouthWest_xxx
-                case 222:
-                case 223:
-                case 224:          
-                ds_source = tempSource + (scrollOffset << (pl->special - 222) & 63)
-                                       + (((63 - scrollOffset) << (pl->special - 222) & 63) << 6);
-                break;
+                    // Scroll_SouthEast_xxx
+                    case 219: case 220: case 221:
+                        FlatScrollDelta_X = -FlatScrollFactor_X;
+                        FlatScrollDelta_Y = -FlatScrollFactor_Y;
+                        if (pl->special == 219)  
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_SLOW;
+                            FlatScrollDelta_Y *= FLAT_SCROLL_SLOW;
+                        }
+                        if (pl->special == 220)
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_MEDI;
+                            FlatScrollDelta_Y *= FLAT_SCROLL_MEDI;
+                        }
+                        if (pl->special == 221)
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_FAST;
+                            FlatScrollDelta_Y *= FLAT_SCROLL_FAST;
+                        }
+                    break;
 
-                default:
+                    // Scroll_SouthWest_xxx
+                    case 222: case 223: case 224:
+                        FlatScrollDelta_X = FlatScrollFactor_X;
+                        FlatScrollDelta_Y = -FlatScrollFactor_Y;
+                        if (pl->special == 222)  
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_SLOW;
+                            FlatScrollDelta_Y *= FLAT_SCROLL_SLOW;
+                        }
+                        if (pl->special == 223)
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_MEDI;
+                            FlatScrollDelta_Y *= FLAT_SCROLL_MEDI;
+                        }
+                        if (pl->special == 224)
+                        {
+                            FlatScrollDelta_X *= FLAT_SCROLL_FAST;
+                            FlatScrollDelta_Y *= FLAT_SCROLL_FAST;
+                        }
+                    break;
+
+                    default:
+                        FlatScrollDelta_X = 0;
+                        FlatScrollDelta_Y = 0;
+                    break;
+                }
                 ds_source = tempSource;
-                break;
+            }
+            else  // [JN] Original scrolling code.
+            {
+                switch (pl->special)
+                {
+                    // Scroll_North_xxx
+                    case 201:
+                    case 202:
+                    case 203:
+                    ds_source = tempSource + ((scrollOffset << (pl->special - 201) & 63) << 6);
+                    break;
+
+                    // Scroll_East_xxx
+                    case 204:
+                    case 205:
+                    case 206:
+                        ds_source = tempSource + ((63 - scrollOffset) << (pl->special - 204) & 63);
+                    break;
+
+                    // Scroll_South_xxx
+                    case 207:
+                    case 208:
+                    case 209:
+                        ds_source = tempSource + (((63 - scrollOffset) << (pl->special - 207) & 63) << 6);
+                    break;
+
+                    // Scroll_West_xxx
+                    case 210:
+                    case 211:
+                    case 212:          
+                        ds_source = tempSource + (scrollOffset << (pl->special - 210) & 63);
+                    break;
+
+                    // Scroll_NorthWest_xxx
+                    case 213:
+                    case 214:
+                    case 215:
+                        ds_source = tempSource + (scrollOffset << (pl->special - 213) & 63)
+                                               + ((scrollOffset << (pl->special - 213) & 63) << 6);
+                    break;
+
+                    // Scroll_NorthEast_xxx
+                    case 216:
+                    case 217:
+                    case 218:
+                        ds_source = tempSource + ((63 - scrollOffset) << (pl->special - 216) & 63)
+                                               + ((scrollOffset << (pl->special - 216) & 63) << 6);
+                    break;
+
+                    // Scroll_SouthEast_xxx
+                    case 219:
+                    case 220:
+                    case 221:
+                        ds_source = tempSource + ((63 - scrollOffset) << (pl->special - 219) & 63)
+                                               + (((63 - scrollOffset) << (pl->special - 219) & 63) << 6);
+                    break;
+
+                    // Scroll_SouthWest_xxx
+                    case 222:
+                    case 223:
+                    case 224:          
+                        ds_source = tempSource + (scrollOffset << (pl->special - 222) & 63)
+                                               + (((63 - scrollOffset) << (pl->special - 222) & 63) << 6);
+                    break;
+
+                    default:
+                        FlatScrollDelta_X = 0;
+                        FlatScrollDelta_Y = 0;
+                        ds_source = tempSource;
+                    break;
+                }
             }
 
             planeheight = abs(pl->height - viewz);

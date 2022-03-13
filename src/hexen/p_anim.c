@@ -78,6 +78,9 @@ extern fixed_t Sky1SmoothScrollFactor;
 extern fixed_t Sky2SmoothScrollFactor;
 extern fixed_t Sky1SmoothScrollDelta;
 extern fixed_t Sky2SmoothScrollDelta;
+// [JN] Smooth plane scrolling.
+extern fixed_t FlatScrollFactor_X;
+extern fixed_t FlatScrollFactor_Y;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
@@ -178,6 +181,11 @@ void P_AnimateSurfaces(void)
     // [JN] Update smoothed sky column offsets.
     Sky1SmoothScrollDelta += Sky1ScrollDelta > 0 ? (FRACUNIT*Sky1SmoothScrollFactor) + 16 : 0;
     Sky2SmoothScrollDelta += Sky2ScrollDelta > 0 ? (FRACUNIT*Sky2SmoothScrollFactor) + 16 : 0;
+
+    // [JN] Update smoothed plane textures offsets.
+    // We need a constant value (FRACUNIT/2) to prevent factor from jittering.
+    FlatScrollFactor_X += (FRACUNIT/2) + fractionaltic;
+    FlatScrollFactor_Y += (FRACUNIT/2) + fractionaltic;
 
     if (LevelHasLightning)
     {
