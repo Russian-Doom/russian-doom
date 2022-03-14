@@ -30,7 +30,6 @@
 
 #define ANIM_SCRIPT_NAME "ANIMDEFS"
 #define MAX_ANIM_DEFS 20
-#define MAX_FRAME_DEFS 96
 #define ANIM_FLAT 0
 #define ANIM_TEXTURE 1
 #define SCI_FLAT "flat"
@@ -91,7 +90,8 @@ fixed_t Sky2ScrollDelta;
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 
 static animDef_t AnimDefs[MAX_ANIM_DEFS];
-static frameDef_t FrameDefs[MAX_FRAME_DEFS];
+static frameDef_t *FrameDefs = NULL;  // [JN] Remove MAX_FRAME_DEFS limit.
+static int FrameDefsMax = 0;
 static int AnimDefCount;
 static boolean LevelHasLightning;
 static int NextLightningFlash;
@@ -494,11 +494,11 @@ void P_InitFTAnims(void)
             {
                 if (SC_Compare(SCI_PIC))
                 {
-                    if (fd == MAX_FRAME_DEFS)
+                    // [JN] Remove MAX_FRAME_DEFS limit.
+                    if (fd == FrameDefsMax)
                     {
-                        I_Error(english_language ?
-                                "P_InitFTAnims: too many FrameDefs." :
-                                "P_InitFTAnims: превышен лимит FrameDefs.");
+                        FrameDefs = I_Realloc(FrameDefs, (FrameDefsMax = FrameDefsMax ?
+                                              FrameDefsMax * 2 : 96) * sizeof(*FrameDefs));
                     }
                     SC_MustGetNumber();
                     if (ignore == false)
