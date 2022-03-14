@@ -137,19 +137,30 @@ static boolean nameToBk_init = false;
 // [Dasperal] This array must be in sync with SDL_Scancode enum!
 // Strings in this array must not be changed only added, or it will break existing configs
 static const char* kKToName[] = {
-    "", "", "", "", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",    // 0   - 20
-    "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "ENTER", // 21  - 41
-    "ESCAPE", "BACKSPACE", "TAB", "SPACE", "-", "=", "[", "]", "\\", "", ";", "\'", "`", ",", ".", "/",     // 42  - 56
-    "CAPSLOCK", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "SYS_RQ",        // 57  - 70
-    "SCROLL_LOCK", "PAUSE", "INSERT", "HOME", "PAGE_UP", "DELETE", "END", "PAGE_DN", "RIGHT", "LEFT",       // 71  - 82
-    "DOWN", "UP", "NUM_LOCK", "KP_/", "KP_*", "KP_-", "KP_+", "KP_ENTER", "KP_1", "KP_2", "KP_3", "KP_4",   // 83  - 92
-    "KP_5", "KP_6", "KP_7", "KP_8", "KP_9", "KP_0", "KP_,", "", "APP", "", "KP_=", "F13", "F14", "F15",     // 93  - 106
-    "F16", "F17", "F18", "F19", "F20", "F21", "F22", "F23", "F24", "", "", "", "", "", "", "", "", "", "",  // 107 - 125
-    "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", // 126 - 151
-    "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", // 152 - 177
-    "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", // 178 - 203
-    "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "LCTRL", "LSHIFT",      // 204 - 225
-    "LALT", "", "RCTRL", "RSHIFT", "RALT", ""                                                               // 226 - 231
+    "?", "?", "?", "?", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", // 0   - 20
+    "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "ENTER",  // 21  - 40
+    "ESCAPE", "BACKSPACE", "TAB", "SPACE", "-", "=", "[", "]", "\\", "NON_US_#", ";", "\'", "`", ",", ".",   // 41  - 55
+    "/", "CAPSLOCK", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "SYS_RQ",    // 56  - 70
+    "SCROLL_LOCK", "PAUSE", "INSERT", "HOME", "PAGE_UP", "DELETE", "END", "PAGE_DN", "RIGHT", "LEFT",        // 71  - 80
+    "DOWN", "UP", "NUM_LOCK", "KP_/", "KP_*", "KP_-", "KP_+", "KP_ENTER", "KP_1", "KP_2", "KP_3", "KP_4",    // 81  - 92
+    "KP_5", "KP_6", "KP_7", "KP_8", "KP_9", "KP_0", "KP_.", "NON_US_\\", "APP", "POWER", "KP_=", "F13",      // 93  - 104
+    "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21", "F22", "F23", "F24", "EXECUTE", "HELP", "MENU",  // 105 - 118
+    "SELECT", "STOP", "AGAIN", "UNDO", "CUT", "COPY", "PASTE", "FIND", "MUTE", "VOLUME_UP", "VOLUME_DOWN",   // 119 - 129
+    "?", "?", "?", "KP_,", "KP_=400", "INTER_1", "INTER_2", "INTER_3", "INTER_4", "INTER_5", "INTER_6",      // 130 - 140
+    "INTER_7", "INTER_8", "INTER_9", "LANG_1", "LANG_2", "LANG_3", "LANG_4", "LANG_5", "LANG_6", "LANG_7",   // 141 - 150
+    "LANG_8", "LANG_9", "ALT_ERASE", "SYS_REQ", "CANCEL", "CLEAR", "PRIOR", "RETURN2", "SEPARATOR", "OUT",   // 151 - 160
+    "OPER", "CLEAR_AGAIN", "CRSEL", "EXSEL", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "KP_00", // 161 - 176
+    "KP_000", "THOUSANDS_SEPARATOR", "DECIMAL_SEPARATOR", "CURRENCY_UNIT", "CURRENCY_SUBUNIT", "KP_(",       // 177 - 182
+    "KP_)", "KP_[", "KP_]", "KP_TAB", "KP_BACKSPACE", "KP_A", "KP_B", "KP_C", "KP_D", "KP_E", "KP_F",        // 183 - 193
+    "KP_XOR", "KP_POWER", "KP_%", "KP_<", "KP_>", "KP_&", "KP_&&", "KP_|", "KP_||", "KP_:", "KP_#",          // 194 - 204
+    "KP_SPACE", "KP_@", "KP_!", "KP_MS", "KP_MR", "KP_MC", "KP_M+", "KP_M-", "KP_M*", "KP_M/", "KP_+-",      // 205 - 215
+    "KP_CLEAR", "KP_CLEAR_ENTRY", "KP_BIN", "KP_OCT", "KP_DEC", "KP_HEX", "?", "?", "LCTRL", "LSHIFT",       // 216 - 225
+    "LALT", "LGUI", "RCTRL", "RSHIFT", "RALT", "RGUI", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?",// 226 - 242
+    "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "MODE", "AUDIO_NEXT",              // 243 - 258
+    "AUDIO_PREV", "AUDIO_STOP", "AUDIO_PLAY", "AUDIO_MUTE", "MEDIA", "WWW", "MAIL", "CALCULATOR", "COMPUTER",// 259 - 267
+    "AC_SEARCH", "AC_HOME", "AC_BACK", "AC_FORWARD", "AC_STOP", "AC_REFRESH", "AC_BOOKMARKS",                // 268 - 274
+    "BRIGHTNESS_DOWN", "BRIGHTNESS_UP", "DISPLAY_SWITCH", "ILLUM_TOGGLE", "ILLUM_DOWN", "ILLUM_UP", "EJECT", // 275 - 281
+    "SLEEP", "APP1", "APP2", "AUDIO_REWIND", "AUDIO_FASTFORWARD"                                             // 282 - 286
 };
 
 static int nameToKK[arrlen(kKToName)];
@@ -280,15 +291,30 @@ static const char* getKeyboardKeyName(int key)
 {
     switch(key)
     {
-        case SDL_SCANCODE_GRAVE:        return "TILDE";
-        case SDL_SCANCODE_BACKSPACE:    return "BCKSP";
-        case SDL_SCANCODE_CAPSLOCK:     return "CAPS LOCK";
-        case SDL_SCANCODE_NUMLOCKCLEAR: return "NUM LOCK";
-        case SDL_SCANCODE_PAGEUP:       return "PGEUP";
-        case SDL_SCANCODE_PAGEDOWN:     return "PGDN";
-        case SDL_SCANCODE_PRINTSCREEN:  return "SYS RQ";
+        case SDL_SCANCODE_BACKSPACE:          return "BCKSP";
+        case SDL_SCANCODE_NONUSHASH:          return "NON US #";
+        case SDL_SCANCODE_GRAVE:              return "TILDE";
+        case SDL_SCANCODE_CAPSLOCK:           return "CAPS LOCK";
+        case SDL_SCANCODE_PRINTSCREEN:        return "SYS RQ";
+        case SDL_SCANCODE_SCROLLLOCK:         return "SCROLL LOCK";
+        case SDL_SCANCODE_PAGEDOWN:           return "PGDN";
+        case SDL_SCANCODE_PAGEUP:             return "PGEUP";
+        case SDL_SCANCODE_NUMLOCKCLEAR:       return "NUM LOCK";
+        case SDL_SCANCODE_NONUSBACKSLASH:     return "NON US \\";
+        case SDL_SCANCODE_VOLUMEUP:           return "VOLUME UP";
+        case SDL_SCANCODE_VOLUMEDOWN:         return "VOLUME DOWN";
+        case SDL_SCANCODE_ALTERASE:           return "ALT ERASE";
+        case SDL_SCANCODE_SYSREQ:             return "SYS REQ";
+        case SDL_SCANCODE_THOUSANDSSEPARATOR: return "THOUSAND SEP";
+        case SDL_SCANCODE_DECIMALSEPARATOR:   return "DECIMAL SEP";
+        case SDL_SCANCODE_CURRENCYUNIT:       return "CURRENCY UNIT";
+        case SDL_SCANCODE_CURRENCYSUBUNIT:    return "CURRENCY SUBUNIT";
+        case SDL_SCANCODE_KP_BACKSPACE:       return "KP_BACKSP";
+        case SDL_SCANCODE_BRIGHTNESSDOWN:     return "BRIGHTNESS DOWN";
+        case SDL_SCANCODE_BRIGHTNESSUP:       return "BRIGHTNESS UP";
+        case SDL_SCANCODE_DISPLAYSWITCH:      return "DISPLAY SWITCH";
         default:
-            if(key > arrlen(kKToName) || strcmp(kKToName[key], "") == 0)
+            if(key > arrlen(kKToName))
             {
                 return "?"; // [JN] Unknown key
             }
@@ -531,6 +557,16 @@ static void AddBind(bound_key_t boundKey, device_t device, int key)
 
 void BK_BindKey(event_t* event)
 {
+    if(event->type == ev_keydown
+    && *(kKToName[event->data1]) == '?')
+    {
+        printf(english_language ?
+               "BK_BindKey: Attempt to bind unsupported scancode: %d" :
+               "BK_BindKey: Попытка привязать неподдерживаемый сканкод: %d",
+               event->data1);
+        return;
+    }
+
     // [Dasperal] Prohibit binding of some keyboard keys and gamepad menu key
     if((event->type == ev_keydown
     && (event->data1 == SDL_SCANCODE_F1
@@ -901,7 +937,7 @@ void KeybindsHandler_HandleLine(char* keyName, char *value, size_t valueSize)
                 bsearchResult = bsearch(keyString,
                                         nameToKK, arrlen(kKToName),
                                         sizeof(int), nameToKK_Comparator);
-                if(bsearchResult == NULL)
+                if(bsearchResult == NULL || *(kKToName[*bsearchResult]) == '?')
                     continue;
                 key = *bsearchResult;
                 break;
