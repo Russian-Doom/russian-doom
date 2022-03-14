@@ -1059,11 +1059,12 @@ void P_UpdateSpecials(void)
                 flattranslation[i] = pic;
             }
         }
-        // [JN] Update smoothed plane textures offsets.
-        // We need a constant value (FRACUNIT/4) to prevent factor from jittering.
-        FlatScrollFactor_X += (FRACUNIT/4) + fractionaltic;
-        FlatScrollFactor_Y += (FRACUNIT/4) + fractionaltic;
     }
+
+    // [JN] Update smoothed plane textures offsets.
+    FlatScrollFactor_X += FRACUNIT;
+    FlatScrollFactor_Y += FRACUNIT;
+
     // Update scrolling texture offsets
     for (i = 0; i < numlinespecials; i++)
     {
