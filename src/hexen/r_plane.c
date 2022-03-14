@@ -46,9 +46,9 @@ fixed_t FlatScrollFactor_Y;
 static fixed_t FlatScrollDelta_X;
 static fixed_t FlatScrollDelta_Y;
 
-#define FLAT_SCROLL_SLOW  0.5;
-#define FLAT_SCROLL_MEDI  1.5;
-#define FLAT_SCROLL_FAST  3;
+#define FLAT_SCROLL_SLOW  0.9;
+#define FLAT_SCROLL_MEDI  1.6;
+#define FLAT_SCROLL_FAST  3.2;
 
 
 /*
