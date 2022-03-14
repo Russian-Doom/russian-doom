@@ -17,7 +17,7 @@
 // P_Spec.c
 
 
-
+#include <stdlib.h> // [crispy] free()
 #include "doomdef.h"
 #include "deh_str.h"
 #include "i_system.h"
@@ -47,7 +47,9 @@ typedef enum
 
 // Data
 
-int *LevelAmbientSfx[MAX_AMBIENT_SFX];
+// [crispy] remove the ambient sound limit
+static int **LevelAmbientSfx = NULL;
+static int AmbSfxMax = 0;
 int *AmbSfxPtr;
 int AmbSfxCount;
 int AmbSfxTics;
@@ -1321,12 +1323,24 @@ void P_SpawnSpecials(void)
 //
 //----------------------------------------------------------------------------
 
+// [crispy] fix ambient sounds stop playing
+static int (*Amb_Random)(void);
+
 void P_InitAmbientSound(void)
 {
     AmbSfxCount = 0;
     AmbSfxVolume = 0;
     AmbSfxTics = 10 * TICRATE;
     AmbSfxPtr = AmbSndSeqInit;
+    // [crispy] remove the ambient sound limit
+    AmbSfxMax = 0;
+    if (LevelAmbientSfx)
+    {
+        free(LevelAmbientSfx);
+        LevelAmbientSfx = NULL;
+    }
+    // [crispy] fix ambient sounds stop playing
+    Amb_Random = P_Random;
 }
 
 //----------------------------------------------------------------------------
@@ -1339,11 +1353,11 @@ void P_InitAmbientSound(void)
 
 void P_AddAmbientSfx(int sequence)
 {
-    if (AmbSfxCount == MAX_AMBIENT_SFX)
+    // [crispy] remove the ambient sound limit
+    if (AmbSfxCount >= AmbSfxMax)
     {
-        I_Error(english_language ?
-                "Too many ambient sound sequences" :
-                "Превышено количество звуков окружения");
+        AmbSfxMax = AmbSfxMax ? AmbSfxMax * 2 : MAX_AMBIENT_SFX;
+        LevelAmbientSfx = I_Realloc(LevelAmbientSfx, sizeof(*LevelAmbientSfx) * AmbSfxMax);
     }
     LevelAmbientSfx[AmbSfxCount++] = AmbientSfx[sequence];
 }
@@ -1377,7 +1391,7 @@ void P_AmbientSound(void)
         switch (cmd)
         {
             case afxcmd_play:
-                AmbSfxVolume = P_Random() >> 2;
+                AmbSfxVolume = Amb_Random() >> 2;
                 S_StartSoundAtVolume(NULL, *AmbSfxPtr++, AmbSfxVolume);
                 break;
             case afxcmd_playabsvol:
@@ -1403,20 +1417,19 @@ void P_AmbientSound(void)
                 done = true;
                 break;
             case afxcmd_delayrand:
-                AmbSfxTics = P_Random() & (*AmbSfxPtr++);
-                // [JN] Fix vanilla bug:
+                AmbSfxTics = Amb_Random() & (*AmbSfxPtr++);
+                // [crispy] fix ambient sounds stop playing
                 // https://doomwiki.org/wiki/Heretic_ambient_sounds_stop_playing
-                // Increase AmbSfxTics by one once it gets zero by P_Random,
-                // so sounds can be playable again.
                 if (AmbSfxTics == 0)
                 {
                     AmbSfxTics++;
+                    Amb_Random = M_Random;
                 }
                 done = true;
                 break;
             case afxcmd_end:
-                AmbSfxTics = 6 * TICRATE + P_Random();
-                AmbSfxPtr = LevelAmbientSfx[P_Random() % AmbSfxCount];
+                AmbSfxTics = 6 * TICRATE + Amb_Random();
+                AmbSfxPtr = LevelAmbientSfx[Amb_Random() % AmbSfxCount];
                 done = true;
                 break;
             default:
