@@ -97,6 +97,8 @@ static boolean LevelHasLightning;
 static int NextLightningFlash;
 static int LightningFlash;
 static int *LightningLightLevels;
+// [JN] Swirling surfaces (same to flat names):
+static int x_001, x_005, x_009;
 
 // CODE --------------------------------------------------------------------
 
@@ -137,9 +139,9 @@ void P_AnimateSurfaces(void)
             {
                 // [JN] Add support for SMMU swirling flats.
                 if (swirling_liquids && !vanillaparm
-                && (ad->index == R_FlatNumForName("x_001")
-                ||  ad->index == R_FlatNumForName("X_005")
-                ||  ad->index == R_FlatNumForName("x_009")))
+                && (ad->index == x_001
+                ||  ad->index == x_005
+                ||  ad->index == x_009))
                 {
                     flattranslation[ad->index] = -1;
                 }
@@ -194,9 +196,8 @@ void P_AnimateSurfaces(void)
     Sky2SmoothScrollDelta += Sky2ScrollDelta > 0 ? (FRACUNIT*Sky2SmoothScrollFactor) + 16 : 0;
 
     // [JN] Update smoothed plane textures offsets.
-    // We need a constant value (FRACUNIT/2) to prevent factor from jittering.
-    FlatScrollFactor_X += (FRACUNIT/2) + fractionaltic;
-    FlatScrollFactor_Y += (FRACUNIT/2) + fractionaltic;
+    FlatScrollFactor_X += FRACUNIT;
+    FlatScrollFactor_Y += FRACUNIT;
 
     if (LevelHasLightning)
     {
@@ -563,5 +564,9 @@ void P_InitFTAnims(void)
     if (!vanillaparm)
     {
         R_InitDistortedFlats();
+
+        x_001 = R_FlatNumForName("x_001");
+        x_005 = R_FlatNumForName("x_005");
+        x_009 = R_FlatNumForName("x_009");
     }
 }
