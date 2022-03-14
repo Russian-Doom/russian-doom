@@ -821,6 +821,7 @@ static void R_SetupFrame (player_t *player)
 {
     int tempCentery;
     int pitch;
+    static int x_quake, y_quake, quaketime; // [crispy]
 
     viewplayer = player;
 
@@ -835,25 +836,10 @@ static void R_SetupFrame (player_t *player)
         // Don't interpolate during a paused state
         !paused && (!menuactive || demoplayback || netgame))
     {
-        // Interpolate player camera from their old position to their current one.
-        // [JN] Also for earthquake effect.
-        if (localQuakeHappening[displayplayer] && !paused)
-        {
-            int intensity = localQuakeHappening[displayplayer];
-        
-            viewx = player->mo->oldx + FixedMul(player->mo->x - player->mo->oldx, fractionaltic);
-            viewx += ((M_Random() % (intensity << 2)) - (intensity << 1)) << FRACBITS;
-            viewy = player->mo->oldy + FixedMul(player->mo->y - player->mo->oldy, fractionaltic);
-            viewy += ((M_Random() % (intensity << 2)) - (intensity << 1)) << FRACBITS;
-        }
-        else
-        {
-            viewx = player->mo->oldx + FixedMul(player->mo->x - player->mo->oldx, fractionaltic);
-            viewy = player->mo->oldy + FixedMul(player->mo->y - player->mo->oldy, fractionaltic);
-        }
+        viewx = player->mo->oldx + FixedMul(player->mo->x - player->mo->oldx, fractionaltic);
+        viewy = player->mo->oldy + FixedMul(player->mo->y - player->mo->oldy, fractionaltic);
         viewz = player->oldviewz + FixedMul(player->viewz - player->oldviewz, fractionaltic);
         viewangle = R_InterpolateAngle(player->mo->oldangle, player->mo->angle, fractionaltic) + viewangleoffset;
-
         pitch = (player->oldlookdir + (player->lookdir - player->oldlookdir) * FIXED2DOUBLE(fractionaltic)) / MLOOKUNIT;
     }
     else
@@ -862,9 +848,34 @@ static void R_SetupFrame (player_t *player)
         viewy = player->mo->y;
         viewz = player->viewz;
         viewangle = player->mo->angle + viewangleoffset;
-
-        // [crispy] pitch is actual lookdir /*and weapon pitch*/
         pitch = player->lookdir / MLOOKUNIT;
+    }
+
+    if (localQuakeHappening[displayplayer] && !paused)
+    {
+        // [crispy] only get new quake values once every gametic
+        if (leveltime > quaketime)
+        {
+            int intensity = localQuakeHappening[displayplayer];
+            x_quake = ((M_Random() % (intensity << 2)) - (intensity << 1)) << FRACBITS;
+            y_quake = ((M_Random() % (intensity << 2)) - (intensity << 1)) << FRACBITS;
+            quaketime = leveltime;
+        }
+
+        if (uncapped_fps)
+        {
+            viewx += FixedMul(x_quake, fractionaltic);
+            viewy += FixedMul(y_quake, fractionaltic);
+        }
+        else
+        {
+            viewx += x_quake;
+            viewy += y_quake;
+        }
+    }
+    else if (!localQuakeHappening[displayplayer])
+    {
+        quaketime = 0;
     }
 
     extralight = player->extralight;
