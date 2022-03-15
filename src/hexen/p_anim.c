@@ -29,7 +29,6 @@
 // MACROS ------------------------------------------------------------------
 
 #define ANIM_SCRIPT_NAME "ANIMDEFS"
-#define MAX_ANIM_DEFS 1024  // [JN] Increase limit from 20 to 1024.
 #define ANIM_FLAT 0
 #define ANIM_TEXTURE 1
 #define SCI_FLAT "flat"
@@ -89,7 +88,8 @@ fixed_t Sky2ScrollDelta;
 
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 
-static animDef_t AnimDefs[MAX_ANIM_DEFS];
+static animDef_t *AnimDefs = NULL;    // [JN] Remove MAX_ANIM_DEFS limit.
+static int AnimDefsMax = 0;
 static frameDef_t *FrameDefs = NULL;  // [JN] Remove MAX_FRAME_DEFS limit.
 static int FrameDefsMax = 0;
 static int AnimDefCount;
@@ -434,21 +434,22 @@ void P_InitFTAnims(void)
     int base;
     int mod;
     int fd;
-    animDef_t *ad;
+    animDef_t *ad = AnimDefs;
+    ptrdiff_t old = ad - AnimDefs;
     boolean ignore;
     boolean done;
 
     fd = 0;
-    ad = AnimDefs;
     AnimDefCount = 0;
     SC_Open(ANIM_SCRIPT_NAME);
     while (SC_GetString())
     {
-        if (AnimDefCount == MAX_ANIM_DEFS)
+        // [JN] Remove MAX_ANIM_DEFS limit.
+        if (AnimDefCount == AnimDefsMax)
         {
-            I_Error(english_language ?
-                    "P_InitFTAnims: too many AnimDefs." :
-                    "P_InitFTAnims: превышен лимит AnimDefs.");
+            AnimDefs = I_Realloc(AnimDefs, (AnimDefsMax = AnimDefsMax ?
+                                 AnimDefsMax * 2 : 20) * sizeof(*AnimDefs));
+            ad = AnimDefs + old;
         }
         if (SC_Compare(SCI_FLAT))
         {
