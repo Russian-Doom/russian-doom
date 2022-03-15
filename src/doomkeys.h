@@ -45,18 +45,6 @@
 #define KEY_F10		(0x80+0x44)
 #define KEY_F11		(0x80+0x57)
 #define KEY_F12		(0x80+0x58)
-#define KEY_F13     (0x80+0x5a)
-#define KEY_F14     (0x80+0x5b)
-#define KEY_F15     (0x80+0x5c)
-#define KEY_F16     (0x80+0x5d)
-#define KEY_F17     (0x80+0x5e)
-#define KEY_F18     (0x80+0x5f)
-#define KEY_F19     (0x80+0x61)
-#define KEY_F20     (0x80+0x62)
-#define KEY_F21     (0x80+0x63)
-#define KEY_F22     (0x80+0x64)
-#define KEY_F23     (0x80+0x65)
-#define KEY_F24     (0x80+0x66)
 
 #define KEY_BACKSPACE	0x7f
 #define KEY_PAUSE	(0x80+0x7f)
@@ -72,8 +60,6 @@
 #define KEY_LCTRL	(0x80+0x2a)
 #define KEY_LALT	(0x80+0x2b)
 
-#define KEY_APP (0x80+0x67)
-
 // new keys:
 
 #define KEY_CAPSLOCK    (0x80+0x3a)
@@ -88,24 +74,7 @@
 #define KEY_INS         (0x80+0x52)
 #define KEY_DEL         (0x80+0x53)
 
-#define KEYP_0          (0x80+0x37)
-#define KEYP_1          (0x80+0x39)
-#define KEYP_2          (0x80+0x48)
-#define KEYP_3          (0x80+0x4a)
-#define KEYP_4          (0x80+0x4b)
 #define KEYP_5          (0x80+0x4c)
-#define KEYP_6          (0x80+0x4d)
-#define KEYP_7          (0x80+0x4e)
-#define KEYP_8          (0x80+0x35)
-#define KEYP_9          (0x80+0x34)
-
-#define KEYP_DIVIDE     (0x80+0x33)
-#define KEYP_PLUS       (0x80+0x32)
-#define KEYP_MINUS      (0x80+0x31)
-#define KEYP_MULTIPLY   (0x80+0x30)
-#define KEYP_PERIOD     (0x80+0x28)
-#define KEYP_EQUALS     (0x80+0x27)
-#define KEYP_ENTER      (0x80+0x26)
 
 #define SCANCODE_TO_KEYS_ARRAY {                                            \
     0,   0,   0,   0,   'a',                                  /* 0-9 */     \
@@ -118,20 +87,38 @@
     '6', '7', '8', '9', '0',                                                \
     KEY_ENTER, KEY_ESCAPE, KEY_BACKSPACE, KEY_TAB, ' ',       /* 40-49 */   \
     KEY_MINUS, KEY_EQUALS, '[', ']', '\\',                                  \
-    0,   ';', '\'', '`', ',',                                 /* 50-59 */   \
+    0, ';', '\'', '`', ',',                                   /* 50-59 */   \
     '.', '/', KEY_CAPSLOCK, KEY_F1, KEY_F2,                                 \
     KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7,                   /* 60-69 */   \
     KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12,                              \
     KEY_PRTSCR, KEY_SCRLCK, KEY_PAUSE, KEY_INS, KEY_HOME,     /* 70-79 */   \
     KEY_PGUP, KEY_DEL, KEY_END, KEY_PGDN, KEY_RIGHTARROW,                   \
     KEY_LEFTARROW, KEY_DOWNARROW, KEY_UPARROW,                /* 80-89 */   \
-    KEY_NUMLOCK, KEYP_DIVIDE,                                               \
-    KEYP_MULTIPLY, KEYP_MINUS, KEYP_PLUS, KEYP_ENTER, KEYP_1,               \
-    KEYP_2, KEYP_3, KEYP_4, KEYP_5, KEYP_6,                   /* 90-99 */   \
-    KEYP_7, KEYP_8, KEYP_9, KEYP_0, KEYP_PERIOD,                            \
-    0, KEY_APP, 0, KEYP_EQUALS, KEY_F13, KEY_F14, KEY_F15,    /* 100-109 */ \
-    KEY_F16, KEY_F17, KEY_F18,                                              \
-    KEY_F19, KEY_F20, KEY_F21, KEY_F22, KEY_F23, KEY_F24,     /* 110-115 */ \
+    0, '/', '*', KEY_MINUS, '+', KEY_ENTER, '1',                            \
+    '2', '3', '4', '5', '6',                                  /* 90-99 */   \
+    '7', '8', '9', '0', '.',                                                \
+    0, 0, 0,  KEY_EQUALS, 0,                                  /* 100-109 */ \
+    0, 0, 0, 0, 0,                                                          \
+    0, 0, 0, 0, 0,                                            /* 110-119 */ \
+    0, 0, 0, 0, 0,                                                          \
+    0, 0, 0, 0, 0,                                            /* 120-129 */ \
+    0, 0, 0, 0, 0,                                                          \
+    0, 0, 0, ',', 0,                                          /* 130-139 */ \
+    0, 0, 0, 0, 0,                                                          \
+    0, 0, 0, 0, 0,                                            /* 140-149 */ \
+    0, 0, 0, 0, 0,                                                          \
+    0, 0, 0, 0, 0,                                            /* 150-159 */ \
+    0, 0, 0, 0, 0,                                                          \
+    0, 0, 0, 0, 0,                                            /* 160-169 */ \
+    0, 0, 0, 0, 0,                                                          \
+    0, 0, 0, 0, 0,                                            /* 170-179 */ \
+    0, 0, 0, 0, 0,                                                          \
+    0, 0, '(', ')', '[',                                      /* 180-189 */ \
+    ']', KEY_TAB, KEY_BACKSPACE, 'A', 'B',                                  \
+    'C', 'D', 'E', 'F', 0,                                    /* 190-199 */ \
+    0, '%', '<', '>', '&',                                                  \
+    0, '|', 0, ':', '#',                                      /* 200-207 */ \
+    ' ', '@', '!'                                                           \
 }
 
 // Default names for keys, to use in English or as fallback.

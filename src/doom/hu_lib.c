@@ -371,7 +371,7 @@ boolean HUlib_keyInIText (hu_itext_t* it, unsigned char ch)
     {
         HUlib_delCharFromIText(it);
     }
-    else if (ch != KEY_ENTER && ch != KEYP_ENTER)
+    else if (ch != KEY_ENTER)
     {
         return false; // did not eat key
     }
