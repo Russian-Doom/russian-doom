@@ -29,7 +29,7 @@
 // MACROS ------------------------------------------------------------------
 
 #define ANIM_SCRIPT_NAME "ANIMDEFS"
-#define MAX_ANIM_DEFS 20
+#define MAX_ANIM_DEFS 1024  // [JN] Increase limit from 20 to 1024.
 #define ANIM_FLAT 0
 #define ANIM_TEXTURE 1
 #define SCI_FLAT "flat"
