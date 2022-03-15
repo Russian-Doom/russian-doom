@@ -19,6 +19,7 @@
 
 // HEADER FILES ------------------------------------------------------------
 
+#include <stddef.h>
 #include "h2def.h"
 #include "m_random.h"
 #include "i_system.h"
