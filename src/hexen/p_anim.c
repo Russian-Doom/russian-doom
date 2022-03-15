@@ -436,7 +436,7 @@ void P_InitFTAnims(void)
     int mod;
     int fd;
     animDef_t *ad = AnimDefs;
-    ptrdiff_t old = ad - AnimDefs;
+    ptrdiff_t old;
     boolean ignore;
     boolean done;
 
@@ -448,6 +448,7 @@ void P_InitFTAnims(void)
         // [JN] Remove MAX_ANIM_DEFS limit.
         if (AnimDefCount == AnimDefsMax)
         {
+            old = ad - AnimDefs;
             AnimDefs = I_Realloc(AnimDefs, (AnimDefsMax = AnimDefsMax ?
                                  AnimDefsMax * 2 : 20) * sizeof(*AnimDefs));
             ad = AnimDefs + old;
