@@ -1303,7 +1303,7 @@ boolean HU_Responder(event_t *ev)
                 // M_snprintf(buf, sizeof(buf), "KEY: %d => %d", ev->data1, c);
                 //        plr->message = buf;
             }
-            if (c == KEY_ENTER || c == KEYP_ENTER)
+            if (c == KEY_ENTER)
             {
                 StopChatInput();
                 if (w_chat.l.len)
