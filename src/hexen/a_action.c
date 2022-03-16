@@ -35,6 +35,10 @@
 
 // PRIVATE FUNCTION PROTOTYPES ---------------------------------------------
 
+static int A_LeafFlowAngle (int s);
+static int A_LeafFlowThrust (int t);
+static void A_LeafFlowMove (mobj_t *actor, angle_t angle, fixed_t move);
+
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
 extern fixed_t FloatBobOffsets[64];
 
@@ -372,11 +376,42 @@ void A_LeafThrust(mobj_t * actor)
 
 void A_LeafCheck(mobj_t * actor)
 {
-    // [JN] Remove leaf if it's landed in some sort of liquid.
-    if ((actor->z <= actor->floorz) && (P_HitFloor(actor) != FLOOR_SOLID))
+    // [JN] Leaf is landed into some sort of liquid:
+    if (singleplayer)
     {
-        P_RemoveMobj(actor);
-        return;
+        if (actor->z <= actor->floorz)
+        {
+            // Lava. No apropriate GFX effect, so just remove leaf.
+            if (P_HitFloor(actor) == FLOOR_LAVA)
+            {
+                P_RemoveMobj(actor);
+            }
+
+            // Water or sludge. Apply flowing and sinking.
+            if (P_HitFloor(actor) == FLOOR_WATER
+            ||  P_HitFloor(actor) == FLOOR_SLUDGE)
+            {
+                const int sector = actor->subsector->sector->special;
+
+                // Sink leaf by FRACUNIT / 4 factor.
+                actor->floorclip += 16384;
+
+                // Once leaf is 8 map pixels below liquid surface, remove it.
+                if (actor->floorclip >= FRACUNIT*8)
+                {
+                    P_RemoveMobj(actor);
+                    return;
+                }
+
+                // Keep flowing.
+                A_LeafFlowMove(actor, A_LeafFlowAngle(sector),
+                                      A_LeafFlowThrust(sector));
+
+                // Disallow flying out from liquids!
+                // Leaf is wet and heavy now, it's the law of physics. :)
+                return;
+            }
+        }
     }
 
     actor->special1.i++;
@@ -399,6 +434,51 @@ void A_LeafCheck(mobj_t * actor)
     P_ThrustMobj(actor, actor->target->angle,
                  (P_Random() << 9) + 2 * FRACUNIT);
     actor->flags |= MF_MISSILE;
+}
+
+/*
+================================================================================
+=
+= [JN] Utility functions for falling leafs:
+=
+= A_LeafFlowAngle - angle depending on sector's scrolling special.
+= A_LeafFlowThrust - thrust factor depending on sector's scrolling special.
+= A_LeafFlowMove - pushes leaf in liquid sector.
+=
+================================================================================
+*/
+
+static int A_LeafFlowAngle (int s)
+{
+    // Sector special:
+    return s == 201 || s == 202 || s == 203 ? 1073741824 :  // NORTH (ANG90)
+           s == 207 || s == 208 || s == 209 ? 3221225472 :  // SOUTH (ANG270)
+           s == 210 || s == 211 || s == 212 ? 2147483648 :  // WEST (ANG180)
+           s == 213 || s == 214 || s == 215 ? 1610612736 :  // NORTH-WEST (ANG135)
+           s == 216 || s == 217 || s == 218 ? 536870912  :  // NORTH-EAST (ANG45)
+           s == 219 || s == 220 || s == 212 ? 3758096384 :  // SOUTH-EAST (ANG315)
+           s == 222 || s == 223 || s == 224 ? 2684354560 :  // SOUTH-WEST (ANG225) 
+                                                       0 ;  // EAST (ANG0)
+}
+
+static int A_LeafFlowThrust (int t)
+{
+    // Thrust:
+    return t == 201 || t == 204 || t == 207 || t == 210 || // SLOW
+           t == 213 || t == 216 || t == 219 || t == 222  ? FRACUNIT / 2 :   
+           t == 202 || t == 205 || t == 208 || t == 211 || // MEDIUM
+           t == 214 || t == 217 || t == 220 || t == 223  ? FRACUNIT * 1.5 :
+           t == 203 || t == 206 || t == 209 || t == 212 || // FAST
+           t == 215 || t == 218 || t == 221 || t == 224  ? FRACUNIT * 3 : 0;
+}
+
+static void A_LeafFlowMove (mobj_t *actor, angle_t angle, fixed_t move)
+{
+    angle >>= ANGLETOFINESHIFT;
+    angle += (90 - rand() % 180) << 4;
+
+    actor->momx += FixedMul(move, finecosine[angle]);
+    actor->momy += FixedMul(move, finesine[angle]);
 }
 
 /*
