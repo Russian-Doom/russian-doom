@@ -239,6 +239,8 @@ mobj_t LavaInflictor;
 // [JN] Smooth plane scrolling.
 extern fixed_t FlatScrollFactor_X;
 extern fixed_t FlatScrollFactor_Y;
+// [JN] How far scrolling factor can go before reset.
+static const fixed_t FlatScrollLimit = FRACUNIT * 128;
 
 //----------------------------------------------------------------------------
 //
@@ -1066,6 +1068,16 @@ void P_UpdateSpecials(void)
     // [JN] Update smoothed plane textures offsets.
     FlatScrollFactor_X += FRACUNIT;
     FlatScrollFactor_Y += FRACUNIT;
+    // [JN] Once factor value reaches it's limit, reset it to zero.
+    if (FlatScrollFactor_X >= FlatScrollLimit)
+    {
+        FlatScrollFactor_X = 0;
+    }
+    if (FlatScrollFactor_Y >= FlatScrollLimit)
+    {
+        FlatScrollFactor_Y = 0;
+    }
+
 
     // Update scrolling texture offsets
     for (i = 0; i < numlinespecials; i++)

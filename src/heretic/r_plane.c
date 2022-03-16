@@ -108,10 +108,9 @@ static fixed_t FlatScrollDelta_X;
 static fixed_t FlatScrollDelta_Y;
 
 #define FLAT_SCROLL_SLOWEST  0.5;
-#define FLAT_SCROLL_SLOW     1.05;
-#define FLAT_SCROLL_MEDIUM   2.05;
-#define FLAT_SCROLL_FAST     4.10;
-#define FLAT_SCROLL_FASTEST  6.15;
+#define FLAT_SCROLL_MEDIUM   2;
+#define FLAT_SCROLL_FAST     4;
+#define FLAT_SCROLL_FASTEST  6;
 
 
 /*
@@ -570,10 +569,6 @@ void R_DrawPlanes (void)
                     {
                         FlatScrollDelta_X *= FLAT_SCROLL_SLOWEST;
                     }
-                    if (pl->special == 21)  
-                    {
-                        FlatScrollDelta_X *= FLAT_SCROLL_SLOW;
-                    }
                     if (pl->special == 22)
                     {
                         FlatScrollDelta_X *= FLAT_SCROLL_MEDIUM;
@@ -595,10 +590,6 @@ void R_DrawPlanes (void)
                     if (pl->special == 25)  
                     {
                         FlatScrollDelta_Y *= FLAT_SCROLL_SLOWEST;
-                    }
-                    if (pl->special == 26)  
-                    {
-                        FlatScrollDelta_Y *= FLAT_SCROLL_SLOW;
                     }
                     if (pl->special == 27)
                     {
@@ -622,10 +613,6 @@ void R_DrawPlanes (void)
                     {
                         FlatScrollDelta_Y *= FLAT_SCROLL_SLOWEST;
                     }
-                    if (pl->special == 31)  
-                    {
-                        FlatScrollDelta_Y *= FLAT_SCROLL_SLOW;
-                    }
                     if (pl->special == 32)
                     {
                         FlatScrollDelta_Y *= FLAT_SCROLL_MEDIUM;
@@ -647,10 +634,6 @@ void R_DrawPlanes (void)
                     if (pl->special == 35)  
                     {
                         FlatScrollDelta_X *= FLAT_SCROLL_SLOWEST;
-                    }
-                    if (pl->special == 36)  
-                    {
-                        FlatScrollDelta_X *= FLAT_SCROLL_SLOW;
                     }
                     if (pl->special == 37)  
                     {
