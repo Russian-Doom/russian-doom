@@ -98,6 +98,8 @@ static boolean LevelHasLightning;
 static int NextLightningFlash;
 static int LightningFlash;
 static int *LightningLightLevels;
+// [JN] How far scrolling factor can go before reset.
+static const fixed_t FlatScrollLimit = FRACUNIT * 128;
 // [JN] Swirling surfaces (same to flat names):
 static int x_001, x_005, x_009;
 
@@ -199,6 +201,16 @@ void P_AnimateSurfaces(void)
     // [JN] Update smoothed plane textures offsets.
     FlatScrollFactor_X += FRACUNIT;
     FlatScrollFactor_Y += FRACUNIT;
+
+    // [JN] Once factor value reaches it's limit, reset it to zero.
+    if (FlatScrollFactor_X >= FlatScrollLimit)
+    {
+        FlatScrollFactor_X = 0;
+    }
+    if (FlatScrollFactor_Y >= FlatScrollLimit)
+    {
+        FlatScrollFactor_Y = 0;
+    }
 
     if (LevelHasLightning)
     {

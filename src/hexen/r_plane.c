@@ -47,8 +47,7 @@ static fixed_t FlatScrollDelta_X;
 static fixed_t FlatScrollDelta_Y;
 
 #define FLAT_SCROLL_SLOW  0.5;
-#define FLAT_SCROLL_MEDI  1.05;
-#define FLAT_SCROLL_FAST  2.05;
+#define FLAT_SCROLL_FAST  2.0;
 
 
 /*
@@ -838,10 +837,6 @@ void R_DrawPlanes(void)
                     {
                         FlatScrollDelta_Y *= FLAT_SCROLL_SLOW;
                     }
-                    if (pl->special == 202)
-                    {
-                        FlatScrollDelta_Y *= FLAT_SCROLL_MEDI;
-                    }
                     if (pl->special == 203)
                     {
                         FlatScrollDelta_Y *= FLAT_SCROLL_FAST;
@@ -855,10 +850,6 @@ void R_DrawPlanes(void)
                     if (pl->special == 204)  
                     {
                         FlatScrollDelta_X *= FLAT_SCROLL_SLOW;
-                    }
-                    if (pl->special == 205)
-                    {
-                        FlatScrollDelta_X *= FLAT_SCROLL_MEDI;
                     }
                     if (pl->special == 206)
                     {
@@ -874,10 +865,6 @@ void R_DrawPlanes(void)
                     {
                         FlatScrollDelta_Y *= FLAT_SCROLL_SLOW;
                     }
-                    if (pl->special == 208)
-                    {
-                        FlatScrollDelta_Y *= FLAT_SCROLL_MEDI;
-                    }
                     if (pl->special == 209)
                     {
                         FlatScrollDelta_Y *= FLAT_SCROLL_FAST;
@@ -891,10 +878,6 @@ void R_DrawPlanes(void)
                     if (pl->special == 210)  
                     {
                         FlatScrollDelta_X *= FLAT_SCROLL_SLOW;
-                    }
-                    if (pl->special == 211)
-                    {
-                        FlatScrollDelta_X *= FLAT_SCROLL_MEDI;
                     }
                     if (pl->special == 212)
                     {
@@ -910,11 +893,6 @@ void R_DrawPlanes(void)
                     {
                         FlatScrollDelta_X *= FLAT_SCROLL_SLOW;
                         FlatScrollDelta_Y *= FLAT_SCROLL_SLOW;
-                    }
-                    if (pl->special == 214)
-                    {
-                        FlatScrollDelta_X *= FLAT_SCROLL_MEDI;
-                        FlatScrollDelta_Y *= FLAT_SCROLL_MEDI;
                     }
                     if (pl->special == 215)
                     {
@@ -933,11 +911,6 @@ void R_DrawPlanes(void)
                         FlatScrollDelta_X *= FLAT_SCROLL_SLOW;
                         FlatScrollDelta_Y *= FLAT_SCROLL_SLOW;
                     }
-                    if (pl->special == 217)
-                    {
-                        FlatScrollDelta_X *= FLAT_SCROLL_MEDI;
-                        FlatScrollDelta_Y *= FLAT_SCROLL_MEDI;
-                    }
                     if (pl->special == 218)
                     {
                         FlatScrollDelta_X *= FLAT_SCROLL_FAST;
@@ -954,11 +927,6 @@ void R_DrawPlanes(void)
                         FlatScrollDelta_X *= FLAT_SCROLL_SLOW;
                         FlatScrollDelta_Y *= FLAT_SCROLL_SLOW;
                     }
-                    if (pl->special == 220)
-                    {
-                        FlatScrollDelta_X *= FLAT_SCROLL_MEDI;
-                        FlatScrollDelta_Y *= FLAT_SCROLL_MEDI;
-                    }
                     if (pl->special == 221)
                     {
                         FlatScrollDelta_X *= FLAT_SCROLL_FAST;
@@ -974,11 +942,6 @@ void R_DrawPlanes(void)
                     {
                         FlatScrollDelta_X *= FLAT_SCROLL_SLOW;
                         FlatScrollDelta_Y *= FLAT_SCROLL_SLOW;
-                    }
-                    if (pl->special == 223)
-                    {
-                        FlatScrollDelta_X *= FLAT_SCROLL_MEDI;
-                        FlatScrollDelta_Y *= FLAT_SCROLL_MEDI;
                     }
                     if (pl->special == 224)
                     {
