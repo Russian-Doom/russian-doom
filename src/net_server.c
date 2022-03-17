@@ -1613,7 +1613,7 @@ void NET_SV_CheckDeadlock(net_client_t *client)
 
         for (i=0; i<BACKUPTICS; ++i)
         {
-            if (!recvwindow[client->player_number][i].active)
+            if (!recvwindow[i][client->player_number].active)
             {
                 //printf("Possible deadlock: Sending resend request\n");
 
