@@ -214,6 +214,8 @@ inline void RD_Menu_SlideFloat_Step(float* var, float minValue, float maxValue, 
             {
                 (*var) -= step;
                 RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
+                if(*var < minValue)
+                    *var = minValue;
             }
             break;
         case RIGHT_DIR:
@@ -221,6 +223,8 @@ inline void RD_Menu_SlideFloat_Step(float* var, float minValue, float maxValue, 
             {
                 (*var) += step;
                 RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
+                if(*var > maxValue)
+                    *var = maxValue;
             }
         default:
             break;
