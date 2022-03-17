@@ -322,21 +322,21 @@ static void UpdateMusicVolume(void)
 static void I_SDL_SetMusicVolume(int volume)
 {
     // Internal state variable.
-#ifdef _WIN32
-    if (snd_musicdevice != SNDDEVICE_GUS && strlen(timidity_cfg_path) == 0)
+    if(volume == 0)
     {
-        current_music_volume = (is_midi_file ? 40 : 2) + volume * 5;
+        current_music_volume = 0;
     }
     else
     {
-#endif
-        if(volume == 0)
-            current_music_volume = 0;
-        else
-            current_music_volume = 2 + volume * 2;
 #ifdef _WIN32
-    }
+        if(snd_musicdevice != SNDDEVICE_GUS && strlen(timidity_cfg_path) == 0)
+        {
+            current_music_volume = (is_midi_file ? 40 : 2) + volume * 5;
+        }
+        else
 #endif
+            current_music_volume = 2 + volume * 2;
+    }
     UpdateMusicVolume();
 }
 
