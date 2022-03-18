@@ -84,8 +84,6 @@ void P_SpawnMapThing(mapthing_t * mthing);
 
 // PUBLIC FUNCTION PROTOTYPES ----------------------------------------------
 
-static void P_LoadMapFixes (int map);
-
 // PRIVATE FUNCTION PROTOTYPES ---------------------------------------------
 
 static int QualifyMap(int map);
@@ -1039,6 +1037,127 @@ void P_RestoreSectorBrightness(void)
 
 
 /*
+================================================================================
+=
+= [JN] Utility functions for loading SECTORS, SIDEDEFS and LINEDEFS lumps.
+=
+================================================================================
+*/
+
+static void P_LoadStandardTextureLumps (void)
+{
+    int  lumpnum;
+    char orig_lumpname[9];
+
+    M_snprintf(orig_lumpname, sizeof(orig_lumpname), "MAP%02d", gamemap);
+    lumpnum = W_GetNumForName(orig_lumpname);
+    P_LoadSectors(lumpnum + ML_SECTORS);
+    P_LoadSideDefs(lumpnum + ML_SIDEDEFS);
+    P_LoadLineDefs(lumpnum + ML_LINEDEFS);
+}
+
+static void P_LoadImprovedTextureLumpsHX (int map)
+{
+    int  lumpnum;
+    char fix_lumpname[9];
+
+    switch (map)
+    {
+        case  1:  // Winnowing Hall
+        case  2:  // Seven Portals
+        case  3:  // Guardian of Ice
+        case  4:  // Guardian of Fire
+        case  5:  // Guardian of Steel
+        case  6:  // Bright Crucible
+        case  8:  // Darkmere
+        case  9:  // Caves of Circe
+        case 10:  // Wastelands
+        case 11:  // Sacred Grove
+        case 12:  // Hypostyle
+        case 13:  // Shadow Wood
+        case 21:  // Forsaken Outpost
+        case 22:  // Castle of Grief
+        case 23:  // Gibbet
+        case 24:  // Effluvium
+        case 25:  // Dungeons
+        case 26:  // Desolate Garden
+        case 27:  // Heresiarch's Seminary
+        case 28:  // Dragon Chapel
+        case 30:  // Griffin Chapel
+        case 31:  // Deathwind Chapel
+        case 32:  // Orchard of Lamentations
+        case 33:  // Silent Refectory
+        case 34:  // Wolf Chapel
+        case 35:  // Necropolis
+        case 36:  // Zedek's Tomb
+        case 37:  // Menelkir's Tomb
+        case 38:  // Traductus' Tomb
+        case 39:  // Vivarium
+        case 40:  // Dark Crucible
+        {
+            // Construct new SECTORS lump name and load it:
+            M_snprintf(fix_lumpname, sizeof(fix_lumpname), "HXSCF%02d", map);
+            lumpnum = W_GetNumForName(fix_lumpname);
+            P_LoadSectors(lumpnum);
+
+            // Construct new SIDEDEFS lump name and load it:
+            M_snprintf(fix_lumpname, sizeof(fix_lumpname), "HXSDF%02d", map);
+            lumpnum = W_GetNumForName(fix_lumpname);
+            P_LoadSideDefs(lumpnum);
+
+            // Construct new LINEDEFS lump name and load it:
+            M_snprintf(fix_lumpname, sizeof(fix_lumpname), "HXLDF%02d", map);
+            lumpnum = W_GetNumForName(fix_lumpname);
+            P_LoadLineDefs(lumpnum);
+        }
+        break;
+        
+        default:
+        {
+            // Just load original SECTORS/SIDEDEFS/LINEDEFS lumps:
+            P_LoadStandardTextureLumps();
+        }
+        break;
+    }
+}
+
+static void P_LoadImprovedTextureLumpsDK (int map)
+{
+    int  lumpnum;
+    char fix_lumpname[9];
+
+    switch (map)
+    {
+        case 41:  // Ruined Village
+        case 42:  // Blight
+        {
+            // Construct new SECTORS lump name and load it:
+            M_snprintf(fix_lumpname, sizeof(fix_lumpname), "DKSCF%02d", map);
+            lumpnum = W_GetNumForName(fix_lumpname);
+            P_LoadSectors(lumpnum);
+
+            // Construct new SIDEDEFS lump name and load it:
+            M_snprintf(fix_lumpname, sizeof(fix_lumpname), "DKSDF%02d", map);
+            lumpnum = W_GetNumForName(fix_lumpname);
+            P_LoadSideDefs(lumpnum);
+
+            // Construct new LINEDEFS lump name and load it:
+            M_snprintf(fix_lumpname, sizeof(fix_lumpname), "DKLDF%02d", map);
+            lumpnum = W_GetNumForName(fix_lumpname);
+            P_LoadLineDefs(lumpnum);
+        }
+        break;
+        
+        default:
+        {
+            // Just load original SECTORS/SIDEDEFS/LINEDEFS lumps:
+            P_LoadStandardTextureLumps();
+        }
+        break;
+    }
+}
+
+/*
 =================
 =
 = P_SetupLevel
@@ -1093,13 +1212,18 @@ void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
     // [JN] Apply various map fixes.
     if (canmodify && fix_map_errors)
     {
-        P_LoadMapFixes(gamemap);
+        if (!isDK)
+        {
+            P_LoadImprovedTextureLumpsHX(gamemap);
+        }
+        else
+        {
+            P_LoadImprovedTextureLumpsDK(gamemap);
+        }
     }
     else
     {
-        P_LoadSectors(lumpnum + ML_SECTORS);
-        P_LoadSideDefs(lumpnum + ML_SIDEDEFS);
-        P_LoadLineDefs(lumpnum + ML_LINEDEFS);
+        P_LoadStandardTextureLumps();
     }
 
     // [crispy] (re-)create BLOCKMAP if necessary
@@ -1677,86 +1801,3 @@ void My_Debug(void)
 	}
 }
 */
-
-/*
-================================================================================
-=
-= P_LoadMapFixes
-=
-= [JN] Load replaced lumps with various map fixes.
-=
-================================================================================
-*/
-
-static void P_LoadMapFixes (int map)
-{
-    int  lumpnum;
-    char fix_lumpname[9];
-    char orig_lumpname[9];
-
-    switch (map)
-    {
-        // Original Hexen maps:
-        case  1:  // Winnowing Hall
-        case  2:  // Seven Portals
-        case  3:  // Guardian of Ice
-        case  4:  // Guardian of Fire
-        case  5:  // Guardian of Steel
-        case  6:  // Bright Crucible
-        case  8:  // Darkmere
-        case  9:  // Caves of Circe
-        case 10:  // Wastelands
-        case 11:  // Sacred Grove
-        case 12:  // Hypostyle
-        case 13:  // Shadow Wood
-        case 21:  // Forsaken Outpost
-        case 22:  // Castle of Grief
-        case 23:  // Gibbet
-        case 24:  // Effluvium
-        case 25:  // Dungeons
-        case 26:  // Desolate Garden
-        case 27:  // Heresiarch's Seminary
-        case 28:  // Dragon Chapel
-        case 30:  // Griffin Chapel
-        case 31:  // Deathwind Chapel
-        case 32:  // Orchard of Lamentations
-        case 33:  // Silent Refectory
-        case 34:  // Wolf Chapel
-        case 35:  // Necropolis
-        case 36:  // Zedek's Tomb
-        case 37:  // Menelkir's Tomb
-        case 38:  // Traductus' Tomb
-        case 39:  // Vivarium
-        case 40:  // Dark Crucible
-        // Death Kings of the Dark Citadel maps:
-        case 41:  // Ruined Village
-        {
-            // Construct new SECTORS lump name and load it:
-            M_snprintf(fix_lumpname, sizeof(fix_lumpname), "HXSCF%02d", map);
-            lumpnum = W_GetNumForName(fix_lumpname);
-            P_LoadSectors(lumpnum);
-
-            // Construct new SIDEDEFS lump name and load it:
-            M_snprintf(fix_lumpname, sizeof(fix_lumpname), "HXSDF%02d", map);
-            lumpnum = W_GetNumForName(fix_lumpname);
-            P_LoadSideDefs(lumpnum);
-
-            // Construct new LINEDEFS lump name and load it:
-            M_snprintf(fix_lumpname, sizeof(fix_lumpname), "HXLDF%02d", map);
-            lumpnum = W_GetNumForName(fix_lumpname);
-            P_LoadLineDefs(lumpnum);
-        }
-        break;
-        
-        default:
-        {
-            // Just load original SECTORS/SIDEDEFS/LINEDEFS lumps:
-            M_snprintf(orig_lumpname, sizeof(orig_lumpname), "MAP%02d", map);
-            lumpnum = W_GetNumForName(orig_lumpname);
-            P_LoadSectors(lumpnum + ML_SECTORS);
-            P_LoadSideDefs(lumpnum + ML_SIDEDEFS);
-            P_LoadLineDefs(lumpnum + ML_LINEDEFS);
-        }
-        break;
-    }
-}
