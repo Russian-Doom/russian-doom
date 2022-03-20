@@ -1130,6 +1130,24 @@ static void P_LoadImprovedTextureLumpsDK (int map)
     {
         case 41:  // Ruined Village
         case 42:  // Blight
+        case 43:  // Sump
+        case 44:  // Catacomb
+        case 45:  // Badlands
+        case 46:  // Brackenwood
+        case 47:  // Pyre
+        case 48:  // Constable's Gate
+        case 49:  // Treasury
+        case 50:  // Market Place
+        case 51:  // Locus Requiescat
+        case 52:  // Ordeal
+        case 53:  // Armory
+    //  case 54:  // Nave (no fixes needed)
+        case 55:  // Chantry
+        case 56:  // Abattoir
+        case 57:  // Dark Watch
+        case 58:  // Cloaca
+        case 59:  // Ice Hold
+        case 60:  // Dark Citadel
         {
             // Construct new SECTORS lump name and load it:
             M_snprintf(fix_lumpname, sizeof(fix_lumpname), "DKSCF%02d", map);
