@@ -37,7 +37,6 @@
 
 static int A_LeafFlowAngle (int s);
 static int A_LeafFlowThrust (int t);
-static void A_LeafFlowMove (mobj_t *actor, angle_t angle, fixed_t move);
 
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
 extern fixed_t FloatBobOffsets[64];
@@ -404,8 +403,8 @@ void A_LeafCheck(mobj_t * actor)
                 }
 
                 // Keep flowing.
-                A_LeafFlowMove(actor, A_LeafFlowAngle(sector),
-                                      A_LeafFlowThrust(sector));
+                P_ThrustMobj(actor, A_LeafFlowAngle(sector),
+                                    A_LeafFlowThrust(sector));
 
                 // Disallow flying out from liquids!
                 // Leaf is wet and heavy now, it's the law of physics. :)
@@ -443,7 +442,6 @@ void A_LeafCheck(mobj_t * actor)
 =
 = A_LeafFlowAngle - angle depending on sector's scrolling special.
 = A_LeafFlowThrust - thrust factor depending on sector's scrolling special.
-= A_LeafFlowMove - pushes leaf in liquid sector.
 =
 ================================================================================
 */
@@ -470,15 +468,6 @@ static int A_LeafFlowThrust (int t)
            t == 214 || t == 217 || t == 220 || t == 223  ? FRACUNIT * 1.5 :
            t == 203 || t == 206 || t == 209 || t == 212 || // FAST
            t == 215 || t == 218 || t == 221 || t == 224  ? FRACUNIT * 3 : 0;
-}
-
-static void A_LeafFlowMove (mobj_t *actor, angle_t angle, fixed_t move)
-{
-    angle >>= ANGLETOFINESHIFT;
-    angle += (90 - rand() % 180) << 4;
-
-    actor->momx += FixedMul(move, finecosine[angle]);
-    actor->momy += FixedMul(move, finesine[angle]);
 }
 
 /*
