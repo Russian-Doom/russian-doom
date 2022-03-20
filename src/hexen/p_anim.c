@@ -98,7 +98,9 @@ static boolean LevelHasLightning;
 static int NextLightningFlash;
 static int LightningFlash;
 static int *LightningLightLevels;
-// [JN] How far scrolling factor can go before reset.
+// [JN] How far sky scrolling delta can go before reset.
+static const fixed_t SkyScrollLimit = INT_MAX/2;
+// [JN] How far flat scrolling factor can go before reset.
 static const fixed_t FlatScrollLimit = FRACUNIT * 128;
 // [JN] Swirling surfaces (same to flat names):
 static int x_001, x_005, x_009;
@@ -197,6 +199,16 @@ void P_AnimateSurfaces(void)
     // [JN] Update smoothed sky column offsets.
     Sky1SmoothScrollDelta += Sky1ScrollDelta > 0 ? (FRACUNIT*Sky1SmoothScrollFactor) + 16 : 0;
     Sky2SmoothScrollDelta += Sky2ScrollDelta > 0 ? (FRACUNIT*Sky2SmoothScrollFactor) + 16 : 0;
+
+    // [JN] Once delta value reaches it's limit, reset it to zero.
+    if (Sky1SmoothScrollDelta >= SkyScrollLimit)
+    {
+        Sky1SmoothScrollDelta = 0;
+    }
+    if (Sky2SmoothScrollDelta >= SkyScrollLimit)
+    {
+        Sky2SmoothScrollDelta = 0;
+    }
 
     // [JN] Update smoothed plane textures offsets.
     FlatScrollFactor_X += FRACUNIT;
