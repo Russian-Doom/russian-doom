@@ -6204,24 +6204,6 @@ boolean MN_Responder(event_t * event)
             S_StartSound(NULL, SFX_CHAT);
             return true;
         }
-        else if (BK_isKeyDown(event, bk_gamma))          // F11 (gamma correction)
-        {
-            static char *gamma_level;
-
-            usegamma++;
-            if (usegamma > 17)
-            {
-                usegamma = 0;
-            }
-            SB_PaletteFlash(true);  // force change
-
-            gamma_level = M_StringJoin(txt_gammamsg, english_language ?
-                                       gammalevel_names[usegamma] :
-                                       gammalevel_names_rus[usegamma], NULL);
-
-            P_SetMessage(&players[consoleplayer], gamma_level, msg_system, false);
-            return true;
-        }
         else if (BK_isKeyDown(event, bk_reloadlevel))                 // F12 (???)
         {
             // F12 - reload current map (devmaps mode)
@@ -6244,6 +6226,26 @@ boolean MN_Responder(event_t * event)
             P_SetMessage(&players[consoleplayer], txt_cheatwarp, msg_system, false);
             return true;
         }
+    }
+
+    // [JN] Allow to change gamma even while menu is active.
+    if (BK_isKeyDown(event, bk_gamma))          // F11 (gamma correction)
+    {
+        static char *gamma_level;
+
+        usegamma++;
+        if (usegamma > 17)
+        {
+            usegamma = 0;
+        }
+        SB_PaletteFlash(true);  // force change
+
+        gamma_level = M_StringJoin(txt_gammamsg, english_language ?
+                                   gammalevel_names[usegamma] :
+                                   gammalevel_names_rus[usegamma], NULL);
+
+        P_SetMessage(&players[consoleplayer], gamma_level, msg_system, false);
+        return true;
     }
 
     if (!menuactive)
