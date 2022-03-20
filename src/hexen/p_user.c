@@ -658,8 +658,11 @@ void P_PlayerThink(player_t * player)
     }
 // messageTics is above the rest of the counters so that messages will 
 //              go away, even in death.
-    player->messageTics--;      // Can go negative
-    if (!player->messageTics || player->messageTics == -1)
+    if (player->messageTics > 0)
+    {
+        player->messageTics--;  // [JN] Can't go negative.
+    }
+    if (player->messageTics <= 0)
     {                           // Refresh the screen when a message goes away
         player->ultimateMessage = false;        // clear out any chat messages.
         player->yellowMessage = false;

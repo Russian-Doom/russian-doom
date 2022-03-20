@@ -1340,9 +1340,9 @@ static void DrawMessage(void)
 
     // [JN] Activate message counter in non-level or paused states.
     // Make messages go away in menu, finale and help screens.
-    if (gamestate != GS_LEVEL || paused)
+    if ((gamestate != GS_LEVEL || paused) && player->messageTics > 0)
     {
-        player->messageTics--;  // Can go negative
+        player->messageTics--;  // [JN] Can't go negative.
     }
 
     if (player->messageTics <= 0)
