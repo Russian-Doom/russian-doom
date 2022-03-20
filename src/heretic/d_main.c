@@ -629,6 +629,10 @@ void D_DoomLoop(void)
         // Will run at least one tic
         TryRunTics();
 
+        // Update display, next frame, with current state.
+        if (screenvisible)
+        D_Display();
+
         // [JN] Mute and restore sound and music volume.
         if (mute_inactive_window && volume_needs_update)
         {
@@ -644,10 +648,6 @@ void D_DoomLoop(void)
 
         // Move positional sounds
         S_UpdateSounds(players[consoleplayer].mo);
-
-        // Update display, next frame, with current state.
-        if (screenvisible)
-        D_Display();
     }
 }
 

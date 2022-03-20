@@ -1139,6 +1139,10 @@ void H2_GameLoop(void)
         // Will run at least one tic
         TryRunTics();
 
+        // Update display, next frame, with current state.
+        if (screenvisible)
+        DrawAndBlit();
+
         // [JN] Mute and restore sound and music volume.
         if (mute_inactive_window && volume_needs_update)
         {
@@ -1154,10 +1158,6 @@ void H2_GameLoop(void)
 
         // Move positional sounds
         S_UpdateSounds(players[displayplayer].mo);
-
-        // Update display, next frame, with current state.
-        if (screenvisible)
-        DrawAndBlit();
     }
 }
 
