@@ -532,7 +532,7 @@ void A_BridgeOrbit(mobj_t * actor)
     actor->x = actor->target->x + orbitTableX[actor->args[0]];
     actor->y = actor->target->y + orbitTableY[actor->args[0]];
     actor->z = actor->target->z  // [JN] Apply small floating.
-             + finesine[(FINEANGLES / 160 * gametic) & FINEMASK] * 2;
+             + finesine[(FINEANGLES / 160 * leveltime) & FINEMASK] * 3;
 }
 
 
