@@ -342,13 +342,11 @@ static Translation_CR_t M_RD_ColorTranslation (int color)
         case 7:   return CR_GRAY2OLIVE_HEXEN;
         case 8:   return CR_GRAY2BLUE_HEXEN;
         case 9:   return CR_GRAY2DARKBLUE_HEXEN;
-        case 10:  return CR_GRAY2PURPLE_HEXEN;
-        case 11:  return CR_GRAY2NIAGARA_HEXEN;
-        case 12:  return CR_GRAY2AZURE_HEXEN;
-        case 13:  return CR_GRAY2YELLOW_HEXEN;
-        case 14:  return CR_GRAY2DARKGOLD_HEXEN;
-        case 15:  return CR_GRAY2TAN_HEXEN;
-        case 16:  return CR_GRAY2BROWN_HEXEN;
+        case 10:  return CR_GRAY2NIAGARA_HEXEN;
+        case 11:  return CR_GRAY2YELLOW_HEXEN;
+        case 12:  return CR_GRAY2DARKGOLD_HEXEN;
+        case 13:  return CR_GRAY2TAN_HEXEN;
+        case 14:  return CR_GRAY2BROWN_HEXEN;
 
         default:  return CR_NONE;
     }
@@ -367,13 +365,11 @@ static char *M_RD_ColorName (int color)
         case 7:   return english_language ? "OLIVE"      : "JKBDRJDSQ";     // ОЛИВКОВЫЙ
         case 8:   return english_language ? "BLUE"       : "CBYBQ";         // СИНИЙ
         case 9:   return english_language ? "DARK BLUE"  : "NTVYJ-CBYBQ";   // ТЕМНО-СИНИЙ
-        case 10:  return english_language ? "PURPLE"     : "ABJKTNJDSQ";    // ФИОЛЕТОВЫЙ
-        case 11:  return english_language ? "NIAGARA"    : "YBFUFHF";       // НИАГАРА
-        case 12:  return english_language ? "AZURE"      : "KFPEHYSQ";      // ЛАЗУРНЫЙ
-        case 13:  return english_language ? "YELLOW"     : ";TKNSQ";        // ЖЕЛТЫЙ
-        case 14:  return english_language ? "GOLD"       : "PJKJNJQ";       // ЗОЛОТОЙ
-        case 15:  return english_language ? "TAN"        : ",T;TDSQ";       // БЕЖЕВЫЙ
-        case 16:  return english_language ? "BROWN"      : "RJHBXYTDSQ";    // КОРИЧНЕВЫЙ
+        case 10:  return english_language ? "NIAGARA"    : "YBFUFHF";       // НИАГАРА
+        case 11:  return english_language ? "YELLOW"     : ";TKNSQ";        // ЖЕЛТЫЙ
+        case 12:  return english_language ? "GOLD"       : "PJKJNJQ";       // ЗОЛОТОЙ
+        case 13:  return english_language ? "TAN"        : ",T;TDSQ";       // БЕЖЕВЫЙ
+        case 14:  return english_language ? "BROWN"      : "RJHBXYTDSQ";    // КОРИЧНЕВЫЙ
         default:  return english_language ? "WHITE"      : ",TKSQ";         // БЕЛЫЙ
     }
 }
@@ -2818,13 +2814,11 @@ void M_RD_Define_Msg_Color (MessageType_t messageType, int color)
             case 7:   *colorVar = CR_GRAY2OLIVE_HEXEN;        break;
             case 8:   *colorVar = CR_GRAY2BLUE_HEXEN;         break;            
             case 9:   *colorVar = CR_GRAY2DARKBLUE_HEXEN;     break;
-            case 10:  *colorVar = CR_GRAY2PURPLE_HEXEN;       break;
-            case 11:  *colorVar = CR_GRAY2NIAGARA_HEXEN;      break;
-            case 12:  *colorVar = CR_GRAY2AZURE_HEXEN;        break;
-            case 13:  *colorVar = CR_GRAY2YELLOW_HEXEN;       break;
-            case 14:  *colorVar = CR_GRAY2DARKGOLD_HEXEN;     break;
-            case 15:  *colorVar = CR_GRAY2TAN_HEXEN;          break;
-            case 16:  *colorVar = CR_GRAY2BROWN_HEXEN;        break;
+            case 10:  *colorVar = CR_GRAY2NIAGARA_HEXEN;      break;
+            case 11:  *colorVar = CR_GRAY2YELLOW_HEXEN;       break;
+            case 12:  *colorVar = CR_GRAY2DARKGOLD_HEXEN;     break;
+            case 13:  *colorVar = CR_GRAY2TAN_HEXEN;          break;
+            case 14:  *colorVar = CR_GRAY2BROWN_HEXEN;        break;
             default:  *colorVar = CR_NONE;                    break;
         }
     }
@@ -2832,7 +2826,7 @@ void M_RD_Define_Msg_Color (MessageType_t messageType, int color)
 
 void M_RD_Change_Msg_Pickup_Color(Direction_t direction)
 {
-    RD_Menu_SpinInt(&message_pickup_color, 0, 16, direction);
+    RD_Menu_SpinInt(&message_pickup_color, 0, 14, direction);
 
     // [JN] Redefine pickup message color.
     M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);
@@ -2840,7 +2834,7 @@ void M_RD_Change_Msg_Pickup_Color(Direction_t direction)
 
 void M_RD_Change_Msg_Quest_Color(Direction_t direction)
 {
-    RD_Menu_SpinInt(&message_quest_color, 0, 16, direction);
+    RD_Menu_SpinInt(&message_quest_color, 0, 14, direction);
 
     // [JN] Redefine quest message color.
     M_RD_Define_Msg_Color(msg_quest, message_quest_color);
@@ -2848,7 +2842,7 @@ void M_RD_Change_Msg_Quest_Color(Direction_t direction)
 
 void M_RD_Change_Msg_System_Color(Direction_t direction)
 {
-    RD_Menu_SpinInt(&message_system_color, 0, 16, direction);
+    RD_Menu_SpinInt(&message_system_color, 0, 14, direction);
 
     // [JN] Redefine revealed secret message color.
     M_RD_Define_Msg_Color(msg_system, message_system_color);
@@ -2856,7 +2850,7 @@ void M_RD_Change_Msg_System_Color(Direction_t direction)
 
 void M_RD_Change_Msg_Chat_Color(Direction_t direction)
 {
-    RD_Menu_SpinInt(&message_chat_color, 0, 16, direction);
+    RD_Menu_SpinInt(&message_chat_color, 0, 14, direction);
 
     // [JN] Redefine netgame chat message color.
     M_RD_Define_Msg_Color(msg_chat, message_chat_color);
