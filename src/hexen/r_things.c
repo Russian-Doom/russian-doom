@@ -586,7 +586,7 @@ void R_ProjectSprite(mobj_t * thing)
     vissprite_t   *vis;
     spritedef_t   *sprdef;
     spriteframe_t *sprframe;
-    fixed_t        interpx, interpy, interpz, interpangle;
+    fixed_t        interpx, interpy, interpz, interpangle, interpfloorclip;
 
     // [AM] Interpolate between current and last position,
     //      if prudent.
@@ -601,6 +601,7 @@ void R_ProjectSprite(mobj_t * thing)
         interpy = thing->oldy + FixedMul(thing->y - thing->oldy, fractionaltic);
         interpz = thing->oldz + FixedMul(thing->z - thing->oldz, fractionaltic);
         interpangle = R_InterpolateAngle(thing->oldangle, thing->angle, fractionaltic);
+        interpfloorclip = thing->oldfloorclip + FixedMul(thing->floorclip - thing->oldfloorclip, fractionaltic);
     }
     else
     {
@@ -608,6 +609,7 @@ void R_ProjectSprite(mobj_t * thing)
         interpy = thing->y;
         interpz = thing->z;
         interpangle = thing->angle;
+        interpfloorclip = thing->floorclip;
     }
 
     if (thing->flags2 & MF2_DONTDRAW)
@@ -901,7 +903,7 @@ void R_ProjectSprite(mobj_t * thing)
     }
 
     // Foot clipping.
-    vis->floorclip = thing->floorclip;
+    vis->floorclip = interpfloorclip;
     vis->texturemid = gzt - viewz - vis->floorclip;
     vis->x1 = x1 < 0 ? 0 : x1;
     vis->x2 = x2 >= viewwidth ? viewwidth - 1 : x2;

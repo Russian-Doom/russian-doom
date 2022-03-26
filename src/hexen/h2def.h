@@ -236,6 +236,7 @@ typedef struct mobj_s
     fixed_t oldy;
     fixed_t oldz;
     angle_t oldangle;
+    fixed_t oldfloorclip;  // [JN] Interpolate floor clipping.
 } mobj_t;
 
 // [JN] killough 11/98:

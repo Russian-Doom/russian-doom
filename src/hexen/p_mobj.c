@@ -1177,6 +1177,7 @@ void P_MobjThinker(mobj_t * mobj)
         mobj->oldy = mobj->y;
         mobj->oldz = mobj->z;
         mobj->oldangle = mobj->angle;
+        mobj->oldfloorclip = mobj->floorclip;
     }
 
     // Handle X and Y momentums
@@ -1475,6 +1476,7 @@ mobj_t *P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boole
     mobj->oldy = mobj->y;
     mobj->oldz = mobj->z;
     mobj->oldangle = mobj->angle;
+    mobj->oldfloorclip = mobj->floorclip;    
 
     mobj->thinker.function = P_MobjThinker;
     P_AddThinker(&mobj->thinker);
