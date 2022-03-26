@@ -6,7 +6,7 @@
 | libmpg123-0.dll     | a24db14f68919c1acd41cd61d796a27e | Bundled with SDL2_mixer 2.0.4 |
 | libogg-0.dll        | 47ecbe810165f34eb2d900326bc1944a | Bundled with SDL2_mixer 2.0.4 |
 | libpng16-16.dll     | 41a546b325ddfb0f37b84b550d215aef |        MSYS2 1.6.37-6         |
-| libsamplerate-0.dll | 27965bdd3242f1e7f7da667593baeee5 |         MSYS2 0.1.9-1         |
+| libsamplerate-0.dll | 638fa48d66cbe46c5db7f9a9ebf18a78 |    Official release 0.2.2     |
 | libvorbis-0.dll     | 638a1c86c660613cfd30bae95d2b2054 | Bundled with SDL2_mixer 2.0.4 |
 | libvorbisfile-3.dll | ea20e1550ad37aa978897989bebe3098 | Bundled with SDL2_mixer 2.0.4 |
 | SDL2.dll            | 9fd3ec6d8de3cff290e7a78177b17362 |            2.0.20             |
