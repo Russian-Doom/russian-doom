@@ -3370,6 +3370,7 @@ void A_WraithRaiseInit(mobj_t * actor)
     actor->flags2 &= ~MF2_NONSHOOTABLE;
     actor->flags |= MF_SHOOTABLE | MF_SOLID;
     actor->floorclip = actor->info->height;
+    actor->interp = false;  // [JN] Don't interpolate in this state.
 }
 
 void A_WraithRaise(mobj_t * actor)
