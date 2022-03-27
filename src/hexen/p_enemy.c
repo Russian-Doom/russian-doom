@@ -3138,147 +3138,51 @@ void A_DemonAttack2(mobj_t * actor)
     }
 }
 
-//
-// A_DemonDeath
-//
+/*
+================================================================================
+=
+= A_DemonChunk, A_DemonDeath, A_Demon2Death
+=
+= [JN] Simplified and made much shorter.
+=
+================================================================================
+*/
 
-void A_DemonDeath(mobj_t * actor)
+static void A_DemonChunk (mobj_t *actor, mobj_t *mo, angle_t angle)
 {
-    mobj_t *mo;
-    angle_t angle;
+    mo->momz = 8 * FRACUNIT;
+    mo->momx = FixedMul((P_Random() << 10) + FRACUNIT,
+                         finecosine[angle >> ANGLETOFINESHIFT]);
+    mo->momy = FixedMul((P_Random() << 10) + FRACUNIT,
+                         finesine[angle >> ANGLETOFINESHIFT]);
+    mo->target = actor;
+}
 
-    mo = P_SpawnMobj(actor->x, actor->y, actor->z + 45 * FRACUNIT,
-                     MT_DEMONCHUNK1);
-    if (mo)
+void A_DemonDeath(mobj_t *actor)
+{
+    for (int i = MT_DEMONCHUNK1 ; i <= MT_DEMONCHUNK5 ; i++)
     {
-        angle = actor->angle + ANG90;
-        mo->momz = 8 * FRACUNIT;
-        mo->momx = FixedMul((P_Random() << 10) + FRACUNIT,
-                            finecosine[angle >> ANGLETOFINESHIFT]);
-        mo->momy = FixedMul((P_Random() << 10) + FRACUNIT,
-                            finesine[angle >> ANGLETOFINESHIFT]);
-        mo->target = actor;
-    }
-    mo = P_SpawnMobj(actor->x, actor->y, actor->z + 45 * FRACUNIT,
-                     MT_DEMONCHUNK2);
-    if (mo)
-    {
-        angle = actor->angle - ANG90;
-        mo->momz = 8 * FRACUNIT;
-        mo->momx = FixedMul((P_Random() << 10) + FRACUNIT,
-                            finecosine[angle >> ANGLETOFINESHIFT]);
-        mo->momy = FixedMul((P_Random() << 10) + FRACUNIT,
-                            finesine[angle >> ANGLETOFINESHIFT]);
-        mo->target = actor;
-    }
-    mo = P_SpawnMobj(actor->x, actor->y, actor->z + 45 * FRACUNIT,
-                     MT_DEMONCHUNK3);
-    if (mo)
-    {
-        angle = actor->angle - ANG90;
-        mo->momz = 8 * FRACUNIT;
-        mo->momx = FixedMul((P_Random() << 10) + FRACUNIT,
-                            finecosine[angle >> ANGLETOFINESHIFT]);
-        mo->momy = FixedMul((P_Random() << 10) + FRACUNIT,
-                            finesine[angle >> ANGLETOFINESHIFT]);
-        mo->target = actor;
-    }
-    mo = P_SpawnMobj(actor->x, actor->y, actor->z + 45 * FRACUNIT,
-                     MT_DEMONCHUNK4);
-    if (mo)
-    {
-        angle = actor->angle - ANG90;
-        mo->momz = 8 * FRACUNIT;
-        mo->momx = FixedMul((P_Random() << 10) + FRACUNIT,
-                            finecosine[angle >> ANGLETOFINESHIFT]);
-        mo->momy = FixedMul((P_Random() << 10) + FRACUNIT,
-                            finesine[angle >> ANGLETOFINESHIFT]);
-        mo->target = actor;
-    }
-    mo = P_SpawnMobj(actor->x, actor->y, actor->z + 45 * FRACUNIT,
-                     MT_DEMONCHUNK5);
-    if (mo)
-    {
-        angle = actor->angle - ANG90;
-        mo->momz = 8 * FRACUNIT;
-        mo->momx = FixedMul((P_Random() << 10) + FRACUNIT,
-                            finecosine[angle >> ANGLETOFINESHIFT]);
-        mo->momy = FixedMul((P_Random() << 10) + FRACUNIT,
-                            finesine[angle >> ANGLETOFINESHIFT]);
-        mo->target = actor;
+        mobj_t *mo = P_SpawnMobj(actor->x, actor->y, actor->z + 45 * FRACUNIT, i);
+
+        if (mo)
+        {
+            A_DemonChunk(actor, mo, i == MT_DEMONCHUNK1 ?
+                         actor->angle + ANG90 : actor->angle - ANG90);
+        }
     }
 }
 
-//===========================================================================
-//
-// A_Demon2Death
-//
-//===========================================================================
-
-void A_Demon2Death(mobj_t * actor)
+void A_Demon2Death(mobj_t *actor)
 {
-    mobj_t *mo;
-    angle_t angle;
+    for (int i = MT_DEMON2CHUNK1 ; i <= MT_DEMON2CHUNK5 ; i++)
+    {
+        mobj_t *mo = P_SpawnMobj(actor->x, actor->y, actor->z + 45 * FRACUNIT, i);
 
-    mo = P_SpawnMobj(actor->x, actor->y, actor->z + 45 * FRACUNIT,
-                     MT_DEMON2CHUNK1);
-    if (mo)
-    {
-        angle = actor->angle + ANG90;
-        mo->momz = 8 * FRACUNIT;
-        mo->momx = FixedMul((P_Random() << 10) + FRACUNIT,
-                            finecosine[angle >> ANGLETOFINESHIFT]);
-        mo->momy = FixedMul((P_Random() << 10) + FRACUNIT,
-                            finesine[angle >> ANGLETOFINESHIFT]);
-        mo->target = actor;
-    }
-    mo = P_SpawnMobj(actor->x, actor->y, actor->z + 45 * FRACUNIT,
-                     MT_DEMON2CHUNK2);
-    if (mo)
-    {
-        angle = actor->angle - ANG90;
-        mo->momz = 8 * FRACUNIT;
-        mo->momx = FixedMul((P_Random() << 10) + FRACUNIT,
-                            finecosine[angle >> ANGLETOFINESHIFT]);
-        mo->momy = FixedMul((P_Random() << 10) + FRACUNIT,
-                            finesine[angle >> ANGLETOFINESHIFT]);
-        mo->target = actor;
-    }
-    mo = P_SpawnMobj(actor->x, actor->y, actor->z + 45 * FRACUNIT,
-                     MT_DEMON2CHUNK3);
-    if (mo)
-    {
-        angle = actor->angle - ANG90;
-        mo->momz = 8 * FRACUNIT;
-        mo->momx = FixedMul((P_Random() << 10) + FRACUNIT,
-                            finecosine[angle >> ANGLETOFINESHIFT]);
-        mo->momy = FixedMul((P_Random() << 10) + FRACUNIT,
-                            finesine[angle >> ANGLETOFINESHIFT]);
-        mo->target = actor;
-    }
-    mo = P_SpawnMobj(actor->x, actor->y, actor->z + 45 * FRACUNIT,
-                     MT_DEMON2CHUNK4);
-    if (mo)
-    {
-        angle = actor->angle - ANG90;
-        mo->momz = 8 * FRACUNIT;
-        mo->momx = FixedMul((P_Random() << 10) + FRACUNIT,
-                            finecosine[angle >> ANGLETOFINESHIFT]);
-        mo->momy = FixedMul((P_Random() << 10) + FRACUNIT,
-                            finesine[angle >> ANGLETOFINESHIFT]);
-        mo->target = actor;
-    }
-    mo = P_SpawnMobj(actor->x, actor->y, actor->z + 45 * FRACUNIT,
-                     MT_DEMON2CHUNK5);
-    if (mo)
-    {
-        angle = actor->angle - ANG90;
-        mo->momz = 8 * FRACUNIT;
-        mo->momx = FixedMul((P_Random() << 10) + FRACUNIT,
-                            finecosine[angle >> ANGLETOFINESHIFT]);
-        mo->momy = FixedMul((P_Random() << 10) + FRACUNIT,
-                            finesine[angle >> ANGLETOFINESHIFT]);
-        mo->target = actor;
+        if (mo)
+        {
+            A_DemonChunk(actor, mo, i == MT_DEMON2CHUNK1 ?
+                         actor->angle + ANG90 : actor->angle - ANG90);
+        }
     }
 }
 
