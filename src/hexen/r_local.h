@@ -204,6 +204,8 @@ typedef struct
     int seqType;
     fixed_t size;               // polyobj size (area of POLY_AREAUNIT == size of FRACUNIT)
     void *specialdata;          // pointer a thinker, if the poly is moving
+    fixed_t rx, ry;             // [crispy] for poly movement interpolation
+    boolean moving;             // [crispy] for poly movement interpolation
 } polyobj_t;
 
 typedef struct polyblock_s
@@ -426,6 +428,8 @@ fixed_t R_PointToDist(fixed_t x, fixed_t y);
 subsector_t *R_PointInSubsector(fixed_t x, fixed_t y);
 // [AM] Interpolate between two angles.
 angle_t R_InterpolateAngle(angle_t oangle, angle_t nangle, fixed_t scale);
+// [JN] Interpolate polyobjects.
+extern void PO_InterpolatePolyObjects(void);
 // [JN] Smooth texture scrolling.
 extern void R_SmoothTextureScrolling (void);
 

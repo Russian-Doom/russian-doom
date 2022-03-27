@@ -995,6 +995,9 @@ void R_RenderPlayerView (player_t *player)
     R_ClearPlanes();
     R_ClearSprites();
 
+    // [crispy] Interpolate polyobjects here
+    PO_InterpolatePolyObjects();
+
     // Check for new console commands.
     NetUpdate();
 
