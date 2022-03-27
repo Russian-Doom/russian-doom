@@ -306,6 +306,7 @@ extern int crosshair_draw;
 extern int crosshair_shape;
 extern int crosshair_type;
 extern int crosshair_scale;
+extern int crosshair_opacity;
 
 // Gameplay: Gameplay
 extern int fix_map_errors;

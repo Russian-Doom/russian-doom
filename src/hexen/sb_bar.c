@@ -2579,11 +2579,11 @@ static void CheatRevealFunc(player_t * player, Cheat_t * cheat)
 ================================================================================
 */
 
-patch_t *PatchCrosshair;
+patch_t *CrosshairPatch;
 
 patch_t *Crosshair_DefinePatch (void)
 {
-    return PatchCrosshair =
+    return CrosshairPatch =
         W_CacheLumpName(crosshair_shape == 1 ? "XHAIR_2" :
                         crosshair_shape == 2 ? "XHAIR_3" :
                         crosshair_shape == 3 ? "XHAIR_4" :
@@ -2591,6 +2591,21 @@ patch_t *Crosshair_DefinePatch (void)
                         crosshair_shape == 5 ? "XHAIR_6" :
                         crosshair_shape == 6 ? "XHAIR_7" :
                                                "XHAIR_1", PU_CACHE);
+}
+
+byte *CrosshairOpacity;
+
+void Crosshair_DefineOpacity (void)
+{
+    CrosshairOpacity = crosshair_opacity == 0 ? transtable20 :
+                       crosshair_opacity == 1 ? transtable30 :
+                       crosshair_opacity == 2 ? transtable40 :
+                       crosshair_opacity == 3 ? transtable50 :
+                       crosshair_opacity == 4 ? transtable60 :
+                       crosshair_opacity == 5 ? transtable70 :
+                       crosshair_opacity == 6 ? transtable80 :
+                       crosshair_opacity == 7 ? transtable90 :
+                                                NULL;
 }
 
 void Crosshair_Colorize (void)
@@ -2613,11 +2628,13 @@ void Crosshair_Draw (void)
 
     if (crosshair_scale)
     {
-        V_DrawPatch(origwidth/2, screenblocks <= 10 ? 81 : 102, PatchCrosshair, NULL);
+        V_DrawPatch(origwidth/2, screenblocks <= 10 ? 81 : 102,
+                    CrosshairPatch, CrosshairOpacity);
     }
     else
     {
-        V_DrawPatchUnscaled(screenwidth/2, screenblocks <= 10 ? 162 : 204, PatchCrosshair, NULL);
+        V_DrawPatchUnscaled(screenwidth/2, screenblocks <= 10 ? 162 : 204,
+                            CrosshairPatch, CrosshairOpacity);
     }
 
     dp_translation = NULL;

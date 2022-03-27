@@ -204,6 +204,7 @@ int crosshair_draw = 0;
 int crosshair_shape = 0;
 int crosshair_type = 1;
 int crosshair_scale = 0;
+int crosshair_opacity = 8;
 
 // Gameplay: Gameplay
 int fix_map_errors = 1;
@@ -376,6 +377,7 @@ void D_BindVariables(void)
     M_BindIntVariable("crosshair_shape",        &crosshair_shape);
     M_BindIntVariable("crosshair_type",         &crosshair_type);
     M_BindIntVariable("crosshair_scale",        &crosshair_scale);
+    M_BindIntVariable("crosshair_opacity",      &crosshair_opacity);
 
     // Multiplayer chat macros
     for (i=0; i<10; ++i)
@@ -819,8 +821,9 @@ void D_DoomMain(void)
 
     ST_Done();
 
-    // [JN] Define crosshair GFX patch.
+    // [JN] Define crosshair GFX patch and opacity.
     Crosshair_DefinePatch();
+    Crosshair_DefineOpacity();
 
     // [JN] Define and load translated strings.
     RD_DefineLanguageStrings();

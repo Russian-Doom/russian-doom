@@ -215,6 +215,7 @@ static void M_RD_CrossHairDraw();
 static void M_RD_CrossHairShape(Direction_t direction);
 static void M_RD_CrossHairType();
 static void M_RD_CrossHairScale();
+static void M_RD_CrossHairOpacity();
 
 // Gameplay (page 3)
 static void DrawGameplay3Menu(void);
@@ -1205,7 +1206,7 @@ static MenuItem_t Gameplay2Items[] = {
     {ITT_LRFUNC, "SHAPE:",               "AJHVF:",                        M_RD_CrossHairShape,  0}, // ФОРМА
     {ITT_SWITCH, "INDICATION:",          "BYLBRFWBZ:",                    M_RD_CrossHairType,   0}, // ИНДИКАЦИЯ
     {ITT_SWITCH, "INCREASED SIZE:",      "EDTKBXTYYSQ HFPVTH:",           M_RD_CrossHairScale,  0}, // УВЕЛИЧЕННЫЙ РАЗМЕР
-    {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
+    {ITT_LRFUNC, "OPACITY",              "YTGHJPHFXYJCNM",                M_RD_CrossHairOpacity,0}, // НЕПРОЗРАЧНОСТЬ
     {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
     {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
     {ITT_SETMENU, "LAST PAGE >",         "GJCKTLYZZ CNHFYBWF `",          &Gameplay3Menu,       0}, // ПОСЛЕДНЯЯ СТРАНИЦА >
@@ -4262,20 +4263,33 @@ static void DrawGameplay2Menu(void)
     }
 
     // Draw crosshair background.
-    V_DrawPatch(235 + wide_delta, 98, W_CacheLumpName("XHAIRBOX", PU_CACHE), NULL);
+    V_DrawPatch(235 + wide_delta, 109, W_CacheLumpName("XHAIRBOX", PU_CACHE), NULL);
     // Colorize crosshair depending on it's type.
     Crosshair_Colorize();
     // Draw crosshair preview.
     if (crosshair_scale)
     {
-        V_DrawPatch(250 + wide_delta, 113, PatchCrosshair, NULL);
+        V_DrawPatch(250 + wide_delta, 124, CrosshairPatch, CrosshairOpacity);
     }
     else
     {
-        V_DrawPatchUnscaled(500 + wide_delta*2, 226, PatchCrosshair, NULL);
+        V_DrawPatchUnscaled(500 + wide_delta*2, 248, CrosshairPatch, CrosshairOpacity);
     }
     // Clear colorization.
     dp_translation = NULL;
+
+    // Opacity slider
+    RD_Menu_DrawSliderSmall(&Gameplay2Menu, 142, 9, crosshair_opacity);
+    RD_M_DrawTextSmallENG(crosshair_opacity == 0 ? "20%" :
+                          crosshair_opacity == 1 ? "30%" :
+                          crosshair_opacity == 2 ? "40%" :
+                          crosshair_opacity == 3 ? "50%" :
+                          crosshair_opacity == 4 ? "60%" :
+                          crosshair_opacity == 5 ? "70%" :
+                          crosshair_opacity == 6 ? "80%" :
+                          crosshair_opacity == 7 ? "90%" : "100%",
+                          128 + wide_delta, 143, CR_GRAY2GDARKGRAY_HEXEN);
+
 }
 
 static void M_RD_ColoredSBar()
@@ -4317,6 +4331,12 @@ static void M_RD_CrossHairType()
 static void M_RD_CrossHairScale()
 {
     crosshair_scale ^= 1;
+}
+
+static void M_RD_CrossHairOpacity(Direction_t direction)
+{
+    RD_Menu_SlideInt(&crosshair_opacity, 0, 8, direction);
+    Crosshair_DefineOpacity();
 }
 
 
@@ -5436,6 +5456,7 @@ void M_RD_BackToDefaults_Recommended (void)
     crosshair_shape      = 0;
     crosshair_type       = 1;
     crosshair_scale      = 0;
+    crosshair_opacity    = 8;
     // Gameplay (5)
     flip_levels          = 0;
     no_internal_demos    = 0;
@@ -5544,6 +5565,7 @@ static void M_RD_BackToDefaults_Original(void)
     crosshair_shape      = 0;
     crosshair_type       = 1;
     crosshair_scale      = 0;
+    crosshair_opacity    = 8;
     // Gameplay (5)
     flip_levels          = 0;
     no_internal_demos    = 0;
