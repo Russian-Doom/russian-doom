@@ -168,7 +168,7 @@ void V_SetPatchClipCallback(vpatchclipfunc_t func)
 // Masks a column based masked pic to the screen. 
 //
 
-void V_DrawPatch(int x, int y, patch_t *patch)
+void V_DrawPatch(int x, int y, patch_t *patch, byte *table)
 { 
     int count;
     int col;
@@ -266,13 +266,21 @@ void V_DrawPatch(int x, int y, patch_t *patch)
                 if (dp_translation)
                 sourcetrans = &dp_translation[*source++];
 
-                if (hires)
+                // [JN] If given table is a NULL, draw opaque patch.
+                if (table != NULL)
+                {
+                    *dest = table[((*dest) << 8) + *sourcetrans];
+                     dest += screenwidth;
+                    *dest = table[((*dest) << 8) + *sourcetrans++];
+                     dest += screenwidth;
+                }
+                else
                 {
                     *dest = *sourcetrans;
-                    dest += screenwidth;
+                     dest += screenwidth;
+                    *dest = *sourcetrans++;
+                     dest += screenwidth;
                 }
-                *dest = *sourcetrans++;
-                dest += screenwidth;
             }
             }
             column = (column_t *)((byte *)column + column->length + 4);
@@ -300,7 +308,7 @@ void V_DrawPatchFullScreen(patch_t *patch, boolean flipped)
     }
     else
     {
-        V_DrawPatch(x, 0, patch);
+        V_DrawPatch(x, 0, patch, NULL);
     }
 }
 

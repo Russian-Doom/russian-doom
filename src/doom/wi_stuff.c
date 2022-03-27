@@ -478,7 +478,7 @@ static void WI_drawLF (void)
 
         patch_t tmp = { origwidth, ORIGHEIGHT, 1, 1, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
-        V_DrawPatch(0, y, &tmp);
+        V_DrawPatch(0, y, &tmp, NULL);
     }
 }
 
@@ -712,7 +712,7 @@ static void WI_drawAnimatedBack (void)
     if (wbs->epsd == 1 && gamemap != 8)
     {
         a = &anims[1][gamemap-1];
-        V_DrawPatch((a->loc.x) + wide_delta, a->loc.y, a->p[0]);
+        V_DrawPatch((a->loc.x) + wide_delta, a->loc.y, a->p[0], NULL);
     }
 
     for (int i = 0 ; i < NUMANIMS[wbs->epsd] ; i++)
@@ -720,14 +720,14 @@ static void WI_drawAnimatedBack (void)
         a = &anims[wbs->epsd][i];
 
         if (a->ctr >= 0)
-        V_DrawPatch((a->loc.x) + wide_delta, a->loc.y, a->p[a->ctr]);
+        V_DrawPatch((a->loc.x) + wide_delta, a->loc.y, a->p[a->ctr], NULL);
     }
 
     // [crispy] show Fortress of Mystery if it has been completed
     if (wbs->epsd == 1 && wbs->didsecret)
     {
         a = &anims[1][7];
-        V_DrawPatch((a->loc.x) + wide_delta, a->loc.y, a->p[2]);
+        V_DrawPatch((a->loc.x) + wide_delta, a->loc.y, a->p[2], NULL);
     }
 }
 
@@ -1228,13 +1228,13 @@ static void WI_drawDeathmatchStats (void)
         // [JN] Портрет игровка в режиме Дефматч
         if (playeringame[i])
         {
-            V_DrawPatch((x-SHORT(p[i]->width)/2)+wide_delta, DM_MATRIXY - WI_SPACINGY, p[i]);
-            V_DrawPatch((DM_MATRIXX-SHORT(p[i]->width)/2)+wide_delta, y, p[i]);
+            V_DrawPatch((x-SHORT(p[i]->width)/2)+wide_delta, DM_MATRIXY - WI_SPACINGY, p[i], NULL);
+            V_DrawPatch((DM_MATRIXX-SHORT(p[i]->width)/2)+wide_delta, y, p[i], NULL);
 
             if (i == me)
             {
-                V_DrawPatch((x-SHORT(p[i]->width)/2)+wide_delta, DM_MATRIXY - WI_SPACINGY, bstar);
-                V_DrawPatch((DM_MATRIXX-SHORT(p[i]->width)/2)+wide_delta, y, star);
+                V_DrawPatch((x-SHORT(p[i]->width)/2)+wide_delta, DM_MATRIXY - WI_SPACINGY, bstar, NULL);
+                V_DrawPatch((DM_MATRIXX-SHORT(p[i]->width)/2)+wide_delta, y, star, NULL);
             }
         }
         else
@@ -1547,10 +1547,10 @@ static void WI_drawNetgameStats (void)
         x = NG_STATSX;
 
         // [JN] Портрет игрока в режиме совместного прохождения
-        V_DrawPatch((x-SHORT(p[i]->width))+wide_delta, y, p[i]);
+        V_DrawPatch((x-SHORT(p[i]->width))+wide_delta, y, p[i], NULL);
 
         if (i == me)
-        V_DrawPatch((x-SHORT(p[i]->width))+wide_delta, y, star);
+        V_DrawPatch((x-SHORT(p[i]->width))+wide_delta, y, star, NULL);
 
         x += NG_SPACINGX + wide_delta*2;
         WI_drawPercent(x-pwidth, y+10, cnt_kills[i]);	x += NG_SPACINGX;

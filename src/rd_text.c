@@ -237,7 +237,7 @@ void RD_M_DrawTextC(char *text, int x, int y)
             c = toupper(c);
             // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
             p = W_CacheLumpNum(fontC + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
-            V_DrawPatch(x, y, p);
+            V_DrawPatch(x, y, p, NULL);
             x += SHORT(p->width);
         }
     }

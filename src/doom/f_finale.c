@@ -909,7 +909,7 @@ void F_CastDrawer (void)
     }
     else
     {
-        V_DrawPatch(origwidth/2, 170, patch);
+        V_DrawPatch(origwidth/2, 170, patch, NULL);
     }
 }
 

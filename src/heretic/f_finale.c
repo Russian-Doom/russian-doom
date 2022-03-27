@@ -389,8 +389,8 @@ void F_DemonScroll(void)
         }
         if (yval < 200)
         {
-            V_DrawPatch(x, -((patch_t*) p2)->height + yval, (patch_t*) p2);
-            V_DrawPatch(x, yval, (patch_t*) p1);
+            V_DrawPatch(x, -((patch_t*) p2)->height + yval, (patch_t*) p2, NULL);
+            V_DrawPatch(x, yval, (patch_t*) p1, NULL);
             if (!paused)
             {
                 yval++;

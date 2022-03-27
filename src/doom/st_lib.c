@@ -127,21 +127,21 @@ void STlib_drawNum (st_number_t *n, boolean refresh)
     // in the special case of 0, you draw 0
     if (!num)
     {
-        V_DrawPatch(x - w, n->y, n->p[0]);
+        V_DrawPatch(x - w, n->y, n->p[0], NULL);
     }
 
     // draw the new number
     while (num && numdigits--)
     {
         x -= w;
-        V_DrawPatch(x, n->y, n->p[num%10]);
+        V_DrawPatch(x, n->y, n->p[num%10], NULL);
         num /= 10;
     }
 
     // draw a minus sign if necessary
     if (neg)
     {
-        V_DrawPatch(x - 8, n->y, sttminus);
+        V_DrawPatch(x - 8, n->y, sttminus, NULL);
     }
 }
 
@@ -199,7 +199,7 @@ void STlib_updatePercent (st_percent_t *per, int refresh)
     // [JN] CPhipps - make %'s only be updated if number changed
     if (*per->n.on && (refresh || (per->n.oldnum != *per->n.num)))
     {
-        V_DrawPatch(per->n.x, per->n.y, per->p);
+        V_DrawPatch(per->n.x, per->n.y, per->p, NULL);
     }
 
     dp_translation = NULL;
@@ -265,7 +265,7 @@ void STlib_updateMultIcon (st_multicon_t *mi, boolean refresh)
 
         if (*mi->inum != -1)  // [JN] killough 2/16/98: redraw only if != -1
         {
-            V_DrawPatch(mi->x, mi->y, mi->p[*mi->inum]);
+            V_DrawPatch(mi->x, mi->y, mi->p[*mi->inum], NULL);
         }
 
         mi->oldinum = *mi->inum;
@@ -326,7 +326,7 @@ void STlib_updateBinIcon (st_binicon_t *bi, boolean refresh)
 
         if (*bi->val)
         {
-            V_DrawPatch(bi->x, bi->y, bi->p);
+            V_DrawPatch(bi->x, bi->y, bi->p, NULL);
         }
         else if (screenblocks < 11 || (automapactive && !automap_overlay))
         {

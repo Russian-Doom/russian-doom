@@ -492,32 +492,32 @@ static void DrINumber(signed int val, int x, int y)
         if (val > 9)
         {
             patch = PatchINumbers[val / 10];
-            V_DrawPatch(x + 8, y, patch);
-            V_DrawPatch(x, y, PatchNEGATIVE);
+            V_DrawPatch(x + 8, y, patch, NULL);
+            V_DrawPatch(x, y, PatchNEGATIVE, NULL);
         }
         else
         {
-            V_DrawPatch(x + 8, y, PatchNEGATIVE);
+            V_DrawPatch(x + 8, y, PatchNEGATIVE, NULL);
         }
         val = val % 10;
         patch = PatchINumbers[val];
-        V_DrawPatch(x + 16, y, patch);
+        V_DrawPatch(x + 16, y, patch, NULL);
         return;
     }
     if (val > 99)
     {
         patch = PatchINumbers[val / 100];
-        V_DrawPatch(x, y, patch);
+        V_DrawPatch(x, y, patch, NULL);
     }
     val = val % 100;
     if (val > 9 || oldval > 99)
     {
         patch = PatchINumbers[val / 10];
-        V_DrawPatch(x + 8, y, patch);
+        V_DrawPatch(x + 8, y, patch, NULL);
     }
     val = val % 10;
     patch = PatchINumbers[val];
-    V_DrawPatch(x + 16, y, patch);
+    V_DrawPatch(x + 16, y, patch, NULL);
 }
 
 //==========================================================================
@@ -551,15 +551,15 @@ static void DrRedINumber(signed int val, int x, int y)
                     patch = PatchINumbers[val / 10];
 
                     dp_translation = cr[CR_YELLOW2RED_HEXEN];
-                    V_DrawPatch(x + 9, y, patch);
+                    V_DrawPatch(x + 9, y, patch, NULL);
                     dp_translation = NULL;
                 }
                 val = val % 10;
                 patch = PatchINumbers[val];
 
                 dp_translation = cr[CR_YELLOW2RED_HEXEN];
-                V_DrawPatch(x + 18, y, patch);
-                V_DrawPatch(x + 1, y, PatchNEGATIVE);
+                V_DrawPatch(x + 18, y, patch, NULL);
+                V_DrawPatch(x + 1, y, PatchNEGATIVE, NULL);
                 dp_translation = NULL;
             }
         }
@@ -568,8 +568,8 @@ static void DrRedINumber(signed int val, int x, int y)
             val = -val;
 
             dp_translation = cr[CR_YELLOW2RED_HEXEN];
-            V_DrawPatch(x + 18, y, PatchINumbers[val]);
-            V_DrawPatch(x + 9, y, PatchNEGATIVE);
+            V_DrawPatch(x + 18, y, PatchINumbers[val], NULL);
+            V_DrawPatch(x + 9, y, PatchNEGATIVE, NULL);
             dp_translation = NULL;
         }
         return;
@@ -578,18 +578,18 @@ static void DrRedINumber(signed int val, int x, int y)
     {
         patch =
             W_CacheLumpNum(W_GetNumForName("inred0") + val / 100, PU_CACHE);
-        V_DrawPatch(x, y, patch);
+        V_DrawPatch(x, y, patch, NULL);
     }
     val = val % 100;
     if (val > 9 || oldval > 99)
     {
         patch =
             W_CacheLumpNum(W_GetNumForName("inred0") + val / 10, PU_CACHE);
-        V_DrawPatch(x + 8, y, patch);
+        V_DrawPatch(x + 8, y, patch, NULL);
     }
     val = val % 10;
     patch = W_CacheLumpNum(W_GetNumForName("inred0") + val, PU_CACHE);
-    V_DrawPatch(x + 16, y, patch);
+    V_DrawPatch(x + 16, y, patch, NULL);
 }
 
 //==========================================================================
@@ -664,18 +664,18 @@ static void DrSmallNumber(int val, int x, int y)
     if (val > 99)
     {
         patch = PatchSmNumbers[val / 100];
-        V_DrawPatch(x, y, patch);
+        V_DrawPatch(x, y, patch, NULL);
         patch = PatchSmNumbers[(val % 100) / 10];
-        V_DrawPatch(x + 4, y, patch);
+        V_DrawPatch(x + 4, y, patch, NULL);
     }
     else if (val > 9)
     {
         patch = PatchSmNumbers[val / 10];
-        V_DrawPatch(x + 4, y, patch);
+        V_DrawPatch(x + 4, y, patch, NULL);
     }
     val %= 10;
     patch = PatchSmNumbers[val];
-    V_DrawPatch(x + 8, y, patch);
+    V_DrawPatch(x + 8, y, patch, NULL);
 }
 
 /*
@@ -905,7 +905,7 @@ void SB_Drawer(void)
                     {
                         if (hud_detaillevel)
                         {
-                            V_DrawPatch(x, 0, patch);
+                            V_DrawPatch(x, 0, patch, NULL);
                         }
                         else
                         {
@@ -923,7 +923,7 @@ void SB_Drawer(void)
         if (SB_state == -1)
         {
             V_DrawPatch(0 + wide_delta, 134, 
-                        english_language ? PatchH2BAR : PatchH2BAR_RUS);
+                        english_language ? PatchH2BAR : PatchH2BAR_RUS, NULL);
             oldhealth = -1;
         }
         DrawCommonBar();
@@ -935,11 +935,11 @@ void SB_Drawer(void)
                 if (!automapactive)
                 {
                     V_DrawPatch(38 + wide_delta, 162,
-                                english_language ? PatchSTATBAR : PatchSTATBAR_RUS);
+                                english_language ? PatchSTATBAR : PatchSTATBAR_RUS, NULL);
                 }
                 else
                 {
-                    V_DrawPatch(38 + wide_delta, 162, PatchKEYBAR);
+                    V_DrawPatch(38 + wide_delta, 162, PatchKEYBAR, NULL);
                 }
                 oldarti = 0;
                 oldmana1 = -1;
@@ -1075,12 +1075,12 @@ static void DrawAnimatedIcons(void)
                 if (hitCenterFrame && (frame != 15 && frame != 0))
                 {
                     V_DrawPatch(20 + (wide_4_3 ? wide_delta : 0), 19, W_CacheLumpNum(SpinFlylump + 15,
-                                                       PU_CACHE));
+                                                       PU_CACHE), NULL);
                 }
                 else
                 {
                     V_DrawPatch(20 + (wide_4_3 ? wide_delta : 0), 19, W_CacheLumpNum(SpinFlylump + frame,
-                                                       PU_CACHE));
+                                                       PU_CACHE), NULL);
                     hitCenterFrame = false;
                 }
             }
@@ -1089,13 +1089,13 @@ static void DrawAnimatedIcons(void)
                 if (!hitCenterFrame && (frame != 15 && frame != 0))
                 {
                     V_DrawPatch(20 + (wide_4_3 ? wide_delta : 0), 19, W_CacheLumpNum(SpinFlylump + frame,
-                                                       PU_CACHE));
+                                                       PU_CACHE), NULL);
                     hitCenterFrame = false;
                 }
                 else
                 {
                     V_DrawPatch(20 + (wide_4_3 ? wide_delta : 0), 19, W_CacheLumpNum(SpinFlylump + 15,
-                                                       PU_CACHE));
+                                                       PU_CACHE), NULL);
                     hitCenterFrame = true;
                 }
             }
@@ -1112,7 +1112,7 @@ static void DrawAnimatedIcons(void)
         {
             frame = (leveltime / 3) & 15;
             V_DrawPatch(60 + (wide_4_3 ? wide_delta : 0), 19, W_CacheLumpNum(SpinSpeedLump + frame,
-                                               PU_CACHE));
+                                               PU_CACHE), NULL);
         }
         BorderTopRefresh = true;
         UpdateState |= I_MESSAGES;
@@ -1126,7 +1126,7 @@ static void DrawAnimatedIcons(void)
         {
             frame = (leveltime / 3) & 15;
             V_DrawPatch(260 + (wide_4_3 ? wide_delta : wide_delta*2), 19, W_CacheLumpNum(SpinDefenseLump + frame,
-                                                PU_CACHE));
+                                                PU_CACHE), NULL);
         }
         BorderTopRefresh = true;
         UpdateState |= I_MESSAGES;
@@ -1140,7 +1140,7 @@ static void DrawAnimatedIcons(void)
         {
             frame = (leveltime / 3) & 15;
             V_DrawPatch(300 + (wide_4_3 ? wide_delta : wide_delta*2), 19, W_CacheLumpNum(SpinMinotaurLump + frame,
-                                                PU_CACHE));
+                                                PU_CACHE), NULL);
         }
         BorderTopRefresh = true;
         UpdateState |= I_MESSAGES;
@@ -1460,7 +1460,7 @@ void DrawCommonBar(void)
 {
     int healthPos;
 
-    V_DrawPatch(0 + wide_delta, 134, PatchH2TOP);
+    V_DrawPatch(0 + wide_delta, 134, PatchH2TOP, NULL);
 
     if (oldhealth != HealthMarker)
     {
@@ -1474,7 +1474,7 @@ void DrawCommonBar(void)
         {
             healthPos = 100;
         }
-        V_DrawPatch(28 + (((healthPos * 196) / 100) % 9) + wide_delta, 193, PatchCHAIN);
+        V_DrawPatch(28 + (((healthPos * 196) / 100) % 9) + wide_delta, 193, PatchCHAIN, NULL);
 
         // [JN] Colorize health gem:
         if (sbar_colored_gem && !vanillaparm && !netgame)
@@ -1490,11 +1490,11 @@ void DrawCommonBar(void)
             else
             dp_translation = sbar_colored_gem == 2 ? cr[CR_RED2DARKRED_HEXEN] : NULL;
         }
-        V_DrawPatch(7 + ((healthPos * 11) / 5) + wide_delta, 193, PatchLIFEGEM);
+        V_DrawPatch(7 + ((healthPos * 11) / 5) + wide_delta, 193, PatchLIFEGEM, NULL);
         dp_translation = NULL;
 
-        V_DrawPatch(0 + wide_delta, 193, PatchLFEDGE);
-        V_DrawPatch(277 + wide_delta, 193, PatchRTEDGE);
+        V_DrawPatch(0 + wide_delta, 193, PatchLFEDGE, NULL);
+        V_DrawPatch(277 + wide_delta, 193, PatchRTEDGE, NULL);
 //              ShadeChain();
         UpdateState |= I_STATBAR;
     }
@@ -1521,9 +1521,9 @@ void DrawMainBar(void)
     // Ready artifact
     if (ArtifactFlash)
     {
-        V_DrawPatch(144 + wide_delta, 160, PatchARTICLEAR);
+        V_DrawPatch(144 + wide_delta, 160, PatchARTICLEAR, NULL);
         V_DrawPatch(148 + wide_delta, 164, W_CacheLumpNum(W_GetNumForName("useartia")
-                                             + ArtifactFlash - 1, PU_CACHE));
+                                             + ArtifactFlash - 1, PU_CACHE), NULL);
         ArtifactFlash--;
         oldarti = -1;           // so that the correct artifact fills in after the flash
         UpdateState |= I_STATBAR;
@@ -1531,12 +1531,12 @@ void DrawMainBar(void)
     else if (oldarti != CPlayer->readyArtifact
              || oldartiCount != CPlayer->inventory[inv_ptr].count)
     {
-        V_DrawPatch(144 + wide_delta, 160, PatchARTICLEAR);
+        V_DrawPatch(144 + wide_delta, 160, PatchARTICLEAR, NULL);
         if (CPlayer->readyArtifact > 0)
         {
             V_DrawPatch(143 + wide_delta, 163,
                         W_CacheLumpName(patcharti[CPlayer->readyArtifact],
-                                        PU_CACHE));
+                                        PU_CACHE), NULL);
             if (CPlayer->inventory[inv_ptr].count > 1)
             {
                 DrSmallNumber(CPlayer->inventory[inv_ptr].count, 162 + wide_delta, 184);
@@ -1558,7 +1558,7 @@ void DrawMainBar(void)
         if (temp != oldfrags)
         {
             V_DrawPatch(38 + wide_delta, 162,
-                        english_language ? PatchKILLS : PatchKILLS_RUS);
+                        english_language ? PatchKILLS : PatchKILLS_RUS, NULL);
             DrINumber(temp, 40 + wide_delta, 176);
             oldfrags = temp;
             UpdateState |= I_STATBAR;
@@ -1584,7 +1584,7 @@ void DrawMainBar(void)
         // if (oldlife != temp)
         {
             oldlife = temp;
-            V_DrawPatch(41 + wide_delta, 178, PatchARMCLEAR);
+            V_DrawPatch(41 + wide_delta, 178, PatchARMCLEAR, NULL);
             if (temp >= 25)
             {
                 // [JN] Draw ammount of health, colorize if necessary.
@@ -1603,7 +1603,7 @@ void DrawMainBar(void)
     temp = CPlayer->mana[0];
     if (oldmana1 != temp)
     {
-        V_DrawPatch(77 + wide_delta, 178, PatchMANACLEAR);
+        V_DrawPatch(77 + wide_delta, 178, PatchMANACLEAR, NULL);
 
         // [JN] Draw BLUE mana points, colorize if necessary.
         dp_translation = SBar_MainColor(sbarcolor_mana_blue);
@@ -1625,7 +1625,7 @@ void DrawMainBar(void)
     temp = CPlayer->mana[1];
     if (oldmana2 != temp)
     {
-        V_DrawPatch(109 + wide_delta, 178, PatchMANACLEAR);
+        V_DrawPatch(109 + wide_delta, 178, PatchMANACLEAR, NULL);
 
         // [JN] Draw GREEN mana points, colorize if necessary.
         dp_translation = SBar_MainColor(sbarcolor_mana_green);
@@ -1687,9 +1687,9 @@ void DrawMainBar(void)
                 manaPatch2 = PatchMANABRIGHT2;
             }
         }
-        V_DrawPatch(77 + wide_delta, 164, manaPatch1);
-        V_DrawPatch(110 + wide_delta, 164, manaPatch2);
-        V_DrawPatch(94 + wide_delta, 164, manaVialPatch1);
+        V_DrawPatch(77 + wide_delta, 164, manaPatch1, NULL);
+        V_DrawPatch(110 + wide_delta, 164, manaPatch2, NULL);
+        V_DrawPatch(94 + wide_delta, 164, manaVialPatch1, NULL);
         for (i = 165; i < 187 - (22 * CPlayer->mana[0]) / MAX_MANA; i++)
         {
          for (j = 0; j <= hires; j++)
@@ -1700,7 +1700,7 @@ void DrawMainBar(void)
             I_VideoBuffer[((i << hires) + j) * screenwidth + (((97 + wide_delta) << hires) + k)] = 0;
           }
         }
-        V_DrawPatch(102 + wide_delta, 164, manaVialPatch2);
+        V_DrawPatch(102 + wide_delta, 164, manaVialPatch2, NULL);
         for (i = 165; i < 187 - (22 * CPlayer->mana[1]) / MAX_MANA; i++)
         {
          for (j = 0; j <= hires; j++)
@@ -1723,7 +1723,7 @@ void DrawMainBar(void)
     if (oldarmor != temp)
     {
         oldarmor = temp;
-        V_DrawPatch(255 + wide_delta, 178, PatchARMCLEAR);
+        V_DrawPatch(255 + wide_delta, 178, PatchARMCLEAR, NULL);
 
         // [JN] Draw ammount of armor, colorize if necessary.
         // Well... Hexen armor system is a bit mind blowing,
@@ -1756,7 +1756,7 @@ void DrawInventoryBar(void)
 
     x = inv_ptr - curpos;
     UpdateState |= I_STATBAR;
-    V_DrawPatch(38 + wide_delta, 162, PatchINVBAR);
+    V_DrawPatch(38 + wide_delta, 162, PatchINVBAR, NULL);
     for (i = 0; i < 7; i++)
     {
         //V_DrawPatch(50+i*31, 160, W_CacheLumpName("ARTIBOX", PU_CACHE));
@@ -1766,7 +1766,7 @@ void DrawInventoryBar(void)
             V_DrawPatch(50 + i * 31 + wide_delta, 163,
                         W_CacheLumpName(patcharti
                                         [CPlayer->inventory[x + i].type],
-                                        PU_CACHE));
+                                        PU_CACHE), NULL);
             if (CPlayer->inventory[x + i].count > 1)
             {
                 DrSmallNumber(CPlayer->inventory[x + i].count, 68 + i * 31 + wide_delta,
@@ -1774,16 +1774,16 @@ void DrawInventoryBar(void)
             }
         }
     }
-    V_DrawPatch(50 + curpos * 31 + wide_delta, 163, PatchSELECTBOX);
+    V_DrawPatch(50 + curpos * 31 + wide_delta, 163, PatchSELECTBOX, NULL);
     if (x != 0)
     {
         V_DrawPatch(42 + wide_delta, 163, !(leveltime & 4) ? PatchINVLFGEM1 :
-                    PatchINVLFGEM2);
+                    PatchINVLFGEM2, NULL);
     }
     if (CPlayer->inventorySlotNum - x > 7)
     {
         V_DrawPatch(269 + wide_delta, 163, !(leveltime & 4) ? PatchINVRTGEM1 :
-                    PatchINVRTGEM2);
+                    PatchINVRTGEM2, NULL);
     }
 }
 
@@ -1808,7 +1808,7 @@ void DrawKeyBar(void)
             {
                 V_DrawPatch(xPosition + wide_delta, 164,
                             W_CacheLumpNum(W_GetNumForName("keyslot1") + i,
-                                           PU_CACHE));
+                                           PU_CACHE), NULL);
                 xPosition += 20;
             }
         }
@@ -1847,7 +1847,7 @@ void DrawKeyBar(void)
             {
                 V_DrawPatch(150 + 31 * i + wide_delta, 164,
                             W_CacheLumpNum(W_GetNumForName("armslot1") + i,
-                                           PU_CACHE));
+                                           PU_CACHE), NULL);
             }
         }
         // oldarmor = temp;
@@ -1872,21 +1872,21 @@ static void DrawWeaponPieces(void)
 {
     if (CPlayer->pieces == 7)
     {
-        V_DrawPatch(190 + wide_delta, 162, PatchWEAPONFULL);
+        V_DrawPatch(190 + wide_delta, 162, PatchWEAPONFULL, NULL);
         return;
     }
-    V_DrawPatch(190 + wide_delta, 162, PatchWEAPONSLOT);
+    V_DrawPatch(190 + wide_delta, 162, PatchWEAPONSLOT, NULL);
     if (CPlayer->pieces & WPIECE1)
     {
-        V_DrawPatch(PieceX[PlayerClass[consoleplayer]][0] + wide_delta, 162, PatchPIECE1);
+        V_DrawPatch(PieceX[PlayerClass[consoleplayer]][0] + wide_delta, 162, PatchPIECE1, NULL);
     }
     if (CPlayer->pieces & WPIECE2)
     {
-        V_DrawPatch(PieceX[PlayerClass[consoleplayer]][1] + wide_delta, 162, PatchPIECE2);
+        V_DrawPatch(PieceX[PlayerClass[consoleplayer]][1] + wide_delta, 162, PatchPIECE2, NULL);
     }
     if (CPlayer->pieces & WPIECE3)
     {
-        V_DrawPatch(PieceX[PlayerClass[consoleplayer]][2] + wide_delta, 162, PatchPIECE3);
+        V_DrawPatch(PieceX[PlayerClass[consoleplayer]][2] + wide_delta, 162, PatchPIECE3, NULL);
     }
 }
 
@@ -2040,7 +2040,7 @@ void DrawFullScreenStuff(void)
                 V_DrawPatch(49 + i * 31 + wide_delta, 167,
                             W_CacheLumpName(patcharti
                                             [CPlayer->inventory[x + i].type],
-                                            PU_CACHE));
+                                            PU_CACHE), NULL);
                 if (CPlayer->inventory[x + i].count > 1)
                 {
                     DrSmallNumber(CPlayer->inventory[x + i].count,
@@ -2048,16 +2048,16 @@ void DrawFullScreenStuff(void)
                 }
             }
         }
-        V_DrawPatch(50 + curpos * 31 + wide_delta, 167, PatchSELECTBOX);
+        V_DrawPatch(50 + curpos * 31 + wide_delta, 167, PatchSELECTBOX, NULL);
         if (x != 0)
         {
             V_DrawPatch(40 + wide_delta, 167, !(leveltime & 4) ? PatchINVLFGEM1 :
-                        PatchINVLFGEM2);
+                        PatchINVLFGEM2, NULL);
         }
         if (CPlayer->inventorySlotNum - x > 7)
         {
             V_DrawPatch(268 + wide_delta, 167, !(leveltime & 4) ?
-                        PatchINVRTGEM1 : PatchINVRTGEM2);
+                        PatchINVRTGEM1 : PatchINVRTGEM2, NULL);
         }
     }
 }
@@ -2613,7 +2613,7 @@ void Crosshair_Draw (void)
 
     if (crosshair_scale)
     {
-        V_DrawPatch(origwidth/2, screenblocks <= 10 ? 81 : 102, PatchCrosshair);
+        V_DrawPatch(origwidth/2, screenblocks <= 10 ? 81 : 102, PatchCrosshair, NULL);
     }
     else
     {

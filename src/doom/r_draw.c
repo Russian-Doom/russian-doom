@@ -1352,36 +1352,36 @@ void R_FillBackScreen (void)
     patch = W_CacheLumpName(DEH_String("brdr_t"),PU_CACHE);
 
     for (x=0 ; x<(scaledviewwidth >> hires) ; x+=8)
-    V_DrawPatch((viewwindowx >> hires)+x, (viewwindowy >> hires)-8, patch);
+    V_DrawPatch((viewwindowx >> hires)+x, (viewwindowy >> hires)-8, patch, NULL);
     patch = W_CacheLumpName(DEH_String("brdr_b"),PU_CACHE);
 
     for (x=0 ; x<(scaledviewwidth >> hires) ; x+=8)
-    V_DrawPatch((viewwindowx >> hires)+x, (viewwindowy >> hires)+(scaledviewheight >> hires), patch);
+    V_DrawPatch((viewwindowx >> hires)+x, (viewwindowy >> hires)+(scaledviewheight >> hires), patch, NULL);
     patch = W_CacheLumpName(DEH_String("brdr_l"),PU_CACHE);
 
     for (y=0 ; y<(scaledviewheight >> hires) ; y+=8)
-    V_DrawPatch((viewwindowx >> hires)-8, (viewwindowy >> hires)+y, patch);
+    V_DrawPatch((viewwindowx >> hires)-8, (viewwindowy >> hires)+y, patch, NULL);
     patch = W_CacheLumpName(DEH_String("brdr_r"),PU_CACHE);
 
     for (y=0 ; y<(scaledviewheight >> hires); y+=8)
-    V_DrawPatch((viewwindowx >> hires)+(scaledviewwidth >> hires), (viewwindowy >> hires)+y, patch);
+    V_DrawPatch((viewwindowx >> hires)+(scaledviewwidth >> hires), (viewwindowy >> hires)+y, patch, NULL);
 
     // Draw beveled edge. 
     V_DrawPatch((viewwindowx >> hires)-8,
                 (viewwindowy >> hires)-8,
-                W_CacheLumpName(DEH_String("brdr_tl"),PU_CACHE));
+                W_CacheLumpName(DEH_String("brdr_tl"),PU_CACHE), NULL);
 
     V_DrawPatch((viewwindowx >> hires)+(scaledviewwidth >> hires),
                 (viewwindowy >> hires)-8,
-                W_CacheLumpName(DEH_String("brdr_tr"),PU_CACHE));
+                W_CacheLumpName(DEH_String("brdr_tr"),PU_CACHE), NULL);
 
     V_DrawPatch((viewwindowx >> hires)-8,
                 (viewwindowy >> hires)+(scaledviewheight >> hires),
-                W_CacheLumpName(DEH_String("brdr_bl"),PU_CACHE));
+                W_CacheLumpName(DEH_String("brdr_bl"),PU_CACHE), NULL);
 
     V_DrawPatch((viewwindowx >> hires)+(scaledviewwidth >> hires),
                 (viewwindowy >> hires)+(scaledviewheight >> hires),
-                W_CacheLumpName(DEH_String("brdr_br"),PU_CACHE));
+                W_CacheLumpName(DEH_String("brdr_br"),PU_CACHE), NULL);
 
     V_RestoreBuffer();
 }

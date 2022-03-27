@@ -594,16 +594,16 @@ static void DrDeathTally(void)
     if (english_language)
     {
         V_DrawPatch(TALLY_TOP_X, TALLY_TOP_Y,
-                    W_CacheLumpName("tallytop", PU_CACHE));
+                    W_CacheLumpName("tallytop", PU_CACHE), NULL);
         V_DrawPatch(TALLY_LEFT_X, TALLY_LEFT_Y,
-                    W_CacheLumpName("tallylft", PU_CACHE));
+                    W_CacheLumpName("tallylft", PU_CACHE), NULL);
     }
     else
     {
         V_DrawPatch(TALLY_TOP_X, TALLY_TOP_Y,
-                    W_CacheLumpName("RD_TLTOP", PU_CACHE));
+                    W_CacheLumpName("RD_TLTOP", PU_CACHE), NULL);
         V_DrawPatch(TALLY_LEFT_X, TALLY_LEFT_Y,
-                    W_CacheLumpName("RD_TLLFT", PU_CACHE));
+                    W_CacheLumpName("RD_TLLFT", PU_CACHE), NULL);
     }
 
     if (intertime < TALLY_EFFECT_TICKS)

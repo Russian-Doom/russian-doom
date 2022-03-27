@@ -69,7 +69,7 @@ void V_DrawDiskIcon(void)
     if (recent_bytes_read > diskicon_threshold && disk_drawn == false)
     {
         V_DrawPatch(loading_disk_xoffs, loading_disk_yoffs, 
-                    W_CacheLumpName(disk_lump_name, PU_CACHE));
+                    W_CacheLumpName(disk_lump_name, PU_CACHE), NULL);
         disk_drawn = true;
     }
 

@@ -1069,25 +1069,25 @@ void R_DrawViewBorder(void)
     for (x = (viewwindowx >> hires); x < ((viewwindowx >> hires) + (scaledviewwidth >> hires)); x += 16)
     {
         V_DrawPatch(x, (viewwindowy >> hires) - 4,
-                    W_CacheLumpName(DEH_String("bordt"), PU_CACHE));
+                    W_CacheLumpName(DEH_String("bordt"), PU_CACHE), NULL);
         V_DrawPatch(x, (viewwindowy >> hires) + (scaledviewheight >> hires),
-                    W_CacheLumpName(DEH_String("bordb"), PU_CACHE));
+                    W_CacheLumpName(DEH_String("bordb"), PU_CACHE), NULL);
     }
     for (y = (viewwindowy >> hires); y < ((viewwindowy >> hires) + (scaledviewheight >> hires)); y += 16)
     {
         V_DrawPatch((viewwindowx >> hires) - 4, y,
-                    W_CacheLumpName(DEH_String("bordl"), PU_CACHE));
+                    W_CacheLumpName(DEH_String("bordl"), PU_CACHE), NULL);
         V_DrawPatch((viewwindowx >> hires) + (scaledviewwidth >> hires), y,
-                    W_CacheLumpName(DEH_String("bordr"), PU_CACHE));
+                    W_CacheLumpName(DEH_String("bordr"), PU_CACHE), NULL);
     }
     V_DrawPatch((viewwindowx >> hires) - 4, (viewwindowy >> hires) - 4,
-                W_CacheLumpName(DEH_String("bordtl"), PU_CACHE));
+                W_CacheLumpName(DEH_String("bordtl"), PU_CACHE), NULL);
     V_DrawPatch((viewwindowx >> hires) + (scaledviewwidth >> hires), (viewwindowy >> hires) - 4,
-                W_CacheLumpName(DEH_String("bordtr"), PU_CACHE));
+                W_CacheLumpName(DEH_String("bordtr"), PU_CACHE), NULL);
     V_DrawPatch((viewwindowx >> hires) + (scaledviewwidth >> hires), (viewwindowy >> hires) + (scaledviewheight >> hires),
-                W_CacheLumpName(DEH_String("bordbr"), PU_CACHE));
+                W_CacheLumpName(DEH_String("bordbr"), PU_CACHE), NULL);
     V_DrawPatch((viewwindowx >> hires) - 4, (viewwindowy >> hires) + (scaledviewheight >> hires),
-                W_CacheLumpName(DEH_String("bordbl"), PU_CACHE));
+                W_CacheLumpName(DEH_String("bordbl"), PU_CACHE), NULL);
 }
 
 /*
@@ -1137,20 +1137,20 @@ void R_DrawTopBorder(void)
         for (x = (viewwindowx >> hires); x < ((viewwindowx >> hires) + (viewwidth >> hires)); x += 16)
         {
             V_DrawPatch(x, (viewwindowy >> hires) - 4,
-                        W_CacheLumpName(DEH_String("bordt"), PU_CACHE));
+                        W_CacheLumpName(DEH_String("bordt"), PU_CACHE), NULL);
         }
         V_DrawPatch((viewwindowx >> hires) - 4, (viewwindowy >> hires),
-                    W_CacheLumpName(DEH_String("bordl"), PU_CACHE));
+                    W_CacheLumpName(DEH_String("bordl"), PU_CACHE), NULL);
         V_DrawPatch((viewwindowx >> hires) + (viewwidth >> hires), (viewwindowy >> hires),
-                    W_CacheLumpName(DEH_String("bordr"), PU_CACHE));
+                    W_CacheLumpName(DEH_String("bordr"), PU_CACHE), NULL);
         V_DrawPatch((viewwindowx >> hires) - 4, (viewwindowy >> hires) + 16,
-                    W_CacheLumpName(DEH_String("bordl"), PU_CACHE));
+                    W_CacheLumpName(DEH_String("bordl"), PU_CACHE), NULL);
         V_DrawPatch((viewwindowx >> hires) + (viewwidth >> hires), (viewwindowy >> hires) + 16,
-                    W_CacheLumpName(DEH_String("bordr"), PU_CACHE));
+                    W_CacheLumpName(DEH_String("bordr"), PU_CACHE), NULL);
 
         V_DrawPatch((viewwindowx >> hires) - 4, (viewwindowy >> hires) - 4,
-                    W_CacheLumpName(DEH_String("bordtl"), PU_CACHE));
+                    W_CacheLumpName(DEH_String("bordtl"), PU_CACHE), NULL);
         V_DrawPatch((viewwindowx >> hires) + (viewwidth >> hires), (viewwindowy >> hires) - 4,
-                    W_CacheLumpName(DEH_String("bordtr"), PU_CACHE));
+                    W_CacheLumpName(DEH_String("bordtr"), PU_CACHE), NULL);
     }
 }

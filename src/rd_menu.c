@@ -291,20 +291,20 @@ void RD_Menu_DrawSlider(Menu_t* menu, int y, int width, int value)
     int count;
 
     x = (english_language ? menu->x_eng : menu->x_rus) + (RD_GameType == gt_Doom ? 8 : 24);
-    V_DrawPatch(x - (RD_GameType == gt_Doom ? 8 : 32) + wide_delta, y, W_CacheLumpNum(bigSlider_left_patch, PU_CACHE));
+    V_DrawPatch(x - (RD_GameType == gt_Doom ? 8 : 32) + wide_delta, y, W_CacheLumpNum(bigSlider_left_patch, PU_CACHE), NULL);
     for (x2 = x, count = width; count--; x2 += 8)
     {
         V_DrawPatch(x2 + wide_delta, y,
                     W_CacheLumpNum(bigSlider_middle2_patch == -1 || (count & 1) ?
                                    bigSlider_middle1_patch :
-                                   bigSlider_middle2_patch, PU_CACHE));
+                                   bigSlider_middle2_patch, PU_CACHE), NULL);
     }
-    V_DrawPatch(x2 + wide_delta, y, W_CacheLumpNum(bigSlider_right_patch, PU_CACHE));
+    V_DrawPatch(x2 + wide_delta, y, W_CacheLumpNum(bigSlider_right_patch, PU_CACHE), NULL);
 
     if (value > width - 1)
         value = width - 1;
 
-    V_DrawPatch(x + (RD_GameType == gt_Doom ? 0 : 4) + value * 8 + wide_delta, y + (RD_GameType == gt_Doom ? 0 : 7), W_CacheLumpNum(bigSlider_gem_patch, PU_CACHE));
+    V_DrawPatch(x + (RD_GameType == gt_Doom ? 0 : 4) + value * 8 + wide_delta, y + (RD_GameType == gt_Doom ? 0 : 7), W_CacheLumpNum(bigSlider_gem_patch, PU_CACHE), NULL);
 }
 
 /** [JN] Draw small slider*/
@@ -342,7 +342,7 @@ void RD_Menu_DrawSliderSmallInline(int x, int y, int width, int value)
     else
         dp_translation = gem_normal_translation == CR_NONE ? NULL : cr[gem_normal_translation];
 
-    V_DrawPatch(x + value * 8 + wide_delta, y + (RD_GameType == gt_Doom ? 0 : 7), W_CacheLumpNum(smallSlider_gem_patch, PU_CACHE));
+    V_DrawPatch(x + value * 8 + wide_delta, y + (RD_GameType == gt_Doom ? 0 : 7), W_CacheLumpNum(smallSlider_gem_patch, PU_CACHE), NULL);
     dp_translation = NULL;
 }
 

@@ -385,7 +385,7 @@ void ST_refreshBackground (void)
                     {
                         if (hud_detaillevel)
                         {
-                            V_DrawPatch(x, 0, patch);
+                            V_DrawPatch(x, 0, patch, NULL);
                         }
                         else
                         {
@@ -399,22 +399,22 @@ void ST_refreshBackground (void)
         // [JN] Always draw status bar on the center of the screen.
         if (english_language)
         {
-            V_DrawPatch(ST_X + (ORIGWIDTH - SHORT(sbar->width)) / 2 + wide_delta, 0, sbar);
+            V_DrawPatch(ST_X + (ORIGWIDTH - SHORT(sbar->width)) / 2 + wide_delta, 0, sbar, NULL);
         }
         else
         {
-            V_DrawPatch(ST_X + (ORIGWIDTH - SHORT(sbar_rus->width)) / 2 + wide_delta, 0, sbar_rus);
+            V_DrawPatch(ST_X + (ORIGWIDTH - SHORT(sbar_rus->width)) / 2 + wide_delta, 0, sbar_rus, NULL);
         }
 
         // [crispy] back up arms widget background
         if (!deathmatch && gamemode != pressbeta)
         {
-            V_DrawPatch(ST_ARMSBGX + wide_delta, 0, english_language ? armsbg : armsbg_rus);
+            V_DrawPatch(ST_ARMSBGX + wide_delta, 0, english_language ? armsbg : armsbg_rus, NULL);
         }
 
         if (netgame)
         {
-            V_DrawPatch(ST_FX + wide_delta, 0, faceback);
+            V_DrawPatch(ST_FX + wide_delta, 0, faceback, NULL);
         }
 
         V_RestoreBuffer();
@@ -1664,29 +1664,29 @@ void ST_drawWidgets (boolean refresh)
             if (weaponinfo[plyr->readyweapon].ammo != am_noammo)
             {
                 V_DrawPatch(2 + (wider_stbar ? 0 : wide_delta), 191, W_CacheLumpName
-                           (DEH_String(english_language ? "STCHAMMO" : "RDCHAMMO"), PU_CACHE));
+                           (DEH_String(english_language ? "STCHAMMO" : "RDCHAMMO"), PU_CACHE), NULL);
             }
 
             if (deathmatch)
             {
                 // [JN] Frags
                 V_DrawPatch(108 + (wider_stbar ? 0: wide_delta), 191, W_CacheLumpName
-                           (DEH_String(english_language ? "STCHFRGS" : "RDCHFRGS"), PU_CACHE));
+                           (DEH_String(english_language ? "STCHFRGS" : "RDCHFRGS"), PU_CACHE), NULL);
             }
             else
             {
                 // [JN] Arms
                 V_DrawPatch(108 + (wider_stbar ? 0 : wide_delta), 191, W_CacheLumpName
-                           (DEH_String(english_language ? "STCHARMS" : "RDCHARMS"), PU_CACHE));
+                           (DEH_String(english_language ? "STCHARMS" : "RDCHARMS"), PU_CACHE), NULL);
             }
 
             // [JN] Health
             V_DrawPatch(52 + (wider_stbar ? 0 : wide_delta), 173, W_CacheLumpName
-                       (DEH_String(english_language ? "STCHHLTH" : "RDCHHLTH"), PU_CACHE));
+                       (DEH_String(english_language ? "STCHHLTH" : "RDCHHLTH"), PU_CACHE), NULL);
                        
             // [JN] Armor, ammo
             V_DrawPatch(52 + (wider_stbar ? wide_delta*2 : wide_delta), 173, W_CacheLumpName
-                       (DEH_String(english_language ? "STCHARAM" : "RDCHARAM"), PU_CACHE));
+                       (DEH_String(english_language ? "STCHARAM" : "RDCHARAM"), PU_CACHE), NULL);
         }
     }
 
@@ -1694,7 +1694,7 @@ void ST_drawWidgets (boolean refresh)
     if (screenblocks > 10 && screenblocks < 17 && (!automapactive || automap_overlay))
     {
         V_DrawPatch(292 + (wider_stbar ? wide_delta*2 : wide_delta), 173,
-                    W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
+                    W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE), NULL);
     }
 
     // Ammo amount for current weapon
@@ -1726,7 +1726,7 @@ void ST_drawWidgets (boolean refresh)
             // [crispy] (23,179) is the center of the Ammo widget
             V_DrawPatch((23 - SHORT(patch->width)/2 + SHORT(patch->leftoffset)) + (wider_stbar ? 0 : wide_delta),
                          179 - SHORT(patch->height)/2 + SHORT(patch->topoffset),
-                         patch);
+                         patch, NULL);
         }
     }
 
@@ -1778,7 +1778,7 @@ void ST_drawWidgets (boolean refresh)
         */
         {
             V_DrawPatch(ST_FX + wide_delta, ST_FY, 
-                        W_CacheLumpName(DEH_String("STPB1"), PU_CACHE));
+                        W_CacheLumpName(DEH_String("STPB1"), PU_CACHE), NULL);
         }
     }
 
@@ -2379,16 +2379,16 @@ void ST_drawWidgetsJaguar (boolean refresh)
         if (plyr->readyweapon != wp_fist && plyr->readyweapon != wp_chainsaw)
         {
             V_DrawPatch((wider_stbar ? 0 : wide_delta), 0, W_CacheLumpName
-                    (DEH_String(english_language ? "STCHAMMO" : "RDCHAMMO"), PU_CACHE));
+                    (DEH_String(english_language ? "STCHAMMO" : "RDCHAMMO"), PU_CACHE), NULL);
         }
 
         // Ammo
         V_DrawPatch((wider_stbar ? 0 : wide_delta), 0, W_CacheLumpName
-                   (DEH_String(english_language ? "STCHHLTH" : "RDCHHLTH"), PU_CACHE));
+                   (DEH_String(english_language ? "STCHHLTH" : "RDCHHLTH"), PU_CACHE), NULL);
 
         // Armor, Arms, Area
         V_DrawPatch((wider_stbar ? wide_delta*2 : wide_delta), 0, W_CacheLumpName
-                   (DEH_String(english_language ? "STCHARAM" : "RDCHARAM"), PU_CACHE));
+                   (DEH_String(english_language ? "STCHARAM" : "RDCHARAM"), PU_CACHE), NULL);
     }
 
     // Current weapon ammo
@@ -2409,7 +2409,7 @@ void ST_drawWidgetsJaguar (boolean refresh)
             // [crispy] (23,179) is the center of the Ammo widget
             V_DrawPatch((23 - SHORT(patch->width)/2 + SHORT(patch->leftoffset))+ (wider_stbar ? 0 : wide_delta),
                          179 - SHORT(patch->height)/2 + SHORT(patch->topoffset),
-                         patch);
+                         patch, NULL);
         }
     }
 
@@ -2435,7 +2435,7 @@ void ST_drawWidgetsJaguar (boolean refresh)
     // Player face background
     if ((screenblocks == 11 || screenblocks == 14) && (!automapactive || automap_overlay))
     {
-        V_DrawPatch(0 + wide_delta, 0, W_CacheLumpName(DEH_String("STPBG"), PU_CACHE));
+        V_DrawPatch(0 + wide_delta, 0, W_CacheLumpName(DEH_String("STPBG"), PU_CACHE), NULL);
     }
 
     // Player faces

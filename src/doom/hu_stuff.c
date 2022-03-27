@@ -1297,7 +1297,7 @@ void HU_Drawer(void)
         {
             V_DrawPatch(origwidth/2, ((screenblocks <= 10) ?
                 (ORIGHEIGHT-ST_HEIGHT+2)/2 : (ORIGHEIGHT+2)/2),
-                    W_CacheLumpName(DEH_String("XHAIR_1S"), PU_CACHE));
+                    W_CacheLumpName(DEH_String("XHAIR_1S"), PU_CACHE), NULL);
         }
         else
         {

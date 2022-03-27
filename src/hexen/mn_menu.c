@@ -1955,7 +1955,7 @@ static void DrawClassMenu(void)
     {
         V_DrawPatch(174 + 24 + wide_delta, 8 + 12,
                     W_CacheLumpNum(W_GetNumForName(walkLumpName[class])
-                                   + ((MenuTime >> 3) & 3), PU_CACHE));
+                                   + ((MenuTime >> 3) & 3), PU_CACHE), NULL);
     }
 }
 
@@ -4262,13 +4262,13 @@ static void DrawGameplay2Menu(void)
     }
 
     // Draw crosshair background.
-    V_DrawPatch(235 + wide_delta, 98, W_CacheLumpName("XHAIRBOX", PU_CACHE));
+    V_DrawPatch(235 + wide_delta, 98, W_CacheLumpName("XHAIRBOX", PU_CACHE), NULL);
     // Colorize crosshair depending on it's type.
     Crosshair_Colorize();
     // Draw crosshair preview.
     if (crosshair_scale)
     {
-        V_DrawPatch(250 + wide_delta, 113, PatchCrosshair);
+        V_DrawPatch(250 + wide_delta, 113, PatchCrosshair, NULL);
     }
     else
     {

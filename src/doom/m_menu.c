@@ -1853,17 +1853,17 @@ void M_Vanilla_DrawOptions(void)
     {
     // - "OPTIONS" title -------------------------------------------------------
     V_DrawPatch(108 + wide_delta, 15, 
-                W_CacheLumpName(DEH_String("M_OPTTTL"), PU_CACHE));
+                W_CacheLumpName(DEH_String("M_OPTTTL"), PU_CACHE), NULL);
 
     // - Messages --------------------------------------------------------------
     V_DrawPatch(179 + wide_delta, 53, 
                 W_CacheLumpName(DEH_String(showMessages == 1 ?
-                                           "M_MSGON" : "M_MSGOFF"), PU_CACHE));
+                                           "M_MSGON" : "M_MSGOFF"), PU_CACHE), NULL);
 
     // - Graphic Detail --------------------------------------------------------
     V_DrawPatch(235 + wide_delta, 69, 
                 W_CacheLumpName(DEH_String(detailLevel == 1 ?
-                                           "M_GDLOW" : "M_GDHIGH"), PU_CACHE));
+                                           "M_GDLOW" : "M_GDHIGH"), PU_CACHE), NULL);
     }
     else
     {
@@ -1872,11 +1872,11 @@ void M_Vanilla_DrawOptions(void)
 
     V_DrawPatch(180 + wide_delta, 53,
                 W_CacheLumpName(DEH_String(showMessages == 1 ?
-                "RD_MSGON" : "RD_MSGOF"), PU_CACHE));
+                "RD_MSGON" : "RD_MSGOF"), PU_CACHE), NULL);
 
     V_DrawPatch(235 + wide_delta, 69,
                 W_CacheLumpName(DEH_String(detailLevel == 1 ?
-                "RD_GDL" : "RD_GDH"), PU_CACHE));
+                "RD_GDL" : "RD_GDH"), PU_CACHE), NULL);
 
     }
 
@@ -1901,7 +1901,7 @@ void M_Vanilla_DrawSound(void)
     {
     // - "Sound volume" title --------------------------------------------------
     V_DrawPatch (60 + wide_delta, 38, 
-                 W_CacheLumpName(DEH_String("M_SVOL"), PU_CACHE));
+                 W_CacheLumpName(DEH_String("M_SVOL"), PU_CACHE), NULL);
     }
     else
     {
@@ -6827,7 +6827,7 @@ static void M_DrawMainMenu(void)
     {
         // [JN] Always draw original "M_DOOM" in English language
         V_DrawPatch(94+wide_delta, 2, 
-                    W_CacheLumpName(DEH_String("M_DOOM"), PU_CACHE));
+                    W_CacheLumpName(DEH_String("M_DOOM"), PU_CACHE), NULL);
     }
     else
     {
@@ -6835,7 +6835,7 @@ static void M_DrawMainMenu(void)
         V_DrawPatch(94+wide_delta, 2, W_CacheLumpName
                     (logical_gamemission == pack_plut ? "RD_MPLUT" :
                       logical_gamemission == pack_tnt ? "RD_MTNT" :
-                                                        "M_DOOM", PU_CACHE));
+                                                        "M_DOOM", PU_CACHE), NULL);
     }
 }
 
