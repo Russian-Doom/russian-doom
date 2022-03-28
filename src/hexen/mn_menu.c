@@ -1206,7 +1206,7 @@ static MenuItem_t Gameplay2Items[] = {
     {ITT_LRFUNC, "SHAPE:",               "AJHVF:",                        M_RD_CrossHairShape,  0}, // ФОРМА
     {ITT_SWITCH, "INDICATION:",          "BYLBRFWBZ:",                    M_RD_CrossHairType,   0}, // ИНДИКАЦИЯ
     {ITT_SWITCH, "INCREASED SIZE:",      "EDTKBXTYYSQ HFPVTH:",           M_RD_CrossHairScale,  0}, // УВЕЛИЧЕННЫЙ РАЗМЕР
-    {ITT_LRFUNC, "OPACITY",              "YTGHJPHFXYJCNM",                M_RD_CrossHairOpacity,0}, // НЕПРОЗРАЧНОСТЬ
+    {ITT_LRFUNC, "OPACITY:",             "YTGHJPHFXYJCNM:",               M_RD_CrossHairOpacity,0}, // НЕПРОЗРАЧНОСТЬ
     {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
     {ITT_EMPTY,   NULL,                  NULL,                            NULL,                 0},
     {ITT_SETMENU, "LAST PAGE >",         "GJCKTLYZZ CNHFYBWF `",          &Gameplay3Menu,       0}, // ПОСЛЕДНЯЯ СТРАНИЦА >
@@ -4263,23 +4263,22 @@ static void DrawGameplay2Menu(void)
     }
 
     // Draw crosshair background.
-    V_DrawPatch(235 + wide_delta, 109, W_CacheLumpName("XHAIRBOX", PU_CACHE), NULL);
+    V_DrawPatch(235 + wide_delta, 103, W_CacheLumpName("XHAIRBOX", PU_CACHE), NULL);
     // Colorize crosshair depending on it's type.
     Crosshair_Colorize();
     // Draw crosshair preview.
     if (crosshair_scale)
     {
-        V_DrawPatch(250 + wide_delta, 124, CrosshairPatch, CrosshairOpacity);
+        V_DrawPatch(250 + wide_delta, 118, CrosshairPatch, CrosshairOpacity);
     }
     else
     {
-        V_DrawPatchUnscaled(500 + wide_delta*2, 248, CrosshairPatch, CrosshairOpacity);
+        V_DrawPatchUnscaled(500 + wide_delta*2, 236, CrosshairPatch, CrosshairOpacity);
     }
     // Clear colorization.
     dp_translation = NULL;
 
-    // Opacity slider
-    RD_Menu_DrawSliderSmall(&Gameplay2Menu, 142, 9, crosshair_opacity);
+    // Opacity | Непрозрачность
     RD_M_DrawTextSmallENG(crosshair_opacity == 0 ? "20%" :
                           crosshair_opacity == 1 ? "30%" :
                           crosshair_opacity == 2 ? "40%" :
@@ -4288,8 +4287,8 @@ static void DrawGameplay2Menu(void)
                           crosshair_opacity == 5 ? "70%" :
                           crosshair_opacity == 6 ? "80%" :
                           crosshair_opacity == 7 ? "90%" : "100%",
-                          128 + wide_delta, 143, CR_GRAY2GDARKGRAY_HEXEN);
-
+                          (english_language ? 95 : 149) + wide_delta,
+                          132, CR_GRAY2GDARKGRAY_HEXEN);
 }
 
 static void M_RD_ColoredSBar()
