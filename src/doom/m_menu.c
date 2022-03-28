@@ -758,7 +758,8 @@ static Menu_t Bindings2Menu;
 static Menu_t Bindings3Menu;
 static Menu_t Bindings4Menu;
 static Menu_t Bindings5Menu;
-static const Menu_t* BindingsMenuPages[] = {&Bindings1Menu, &Bindings2Menu, &Bindings3Menu, &Bindings4Menu, &Bindings5Menu};
+static Menu_t Bindings6Menu;
+static const Menu_t* BindingsMenuPages[] = {&Bindings1Menu, &Bindings2Menu, &Bindings3Menu, &Bindings4Menu, &Bindings5Menu, &Bindings6Menu};
 static Menu_t Gamepad1Menu;
 static Menu_t Gamepad2Menu;
 static const Menu_t* GamepadMenuPages[] = {&Gamepad1Menu, &Gamepad2Menu};
@@ -1240,28 +1241,28 @@ static Menu_t ControlsMenu = {
 // -----------------------------------------------------------------------------
 
 static const PageDescriptor_t BindingsPageDescriptor = {
-    5, BindingsMenuPages,
+    6, BindingsMenuPages,
     252, 165,
     CR_WHITE
 };
 
 static MenuItem_t Bindings1Items[] = {
-    {ITT_TITLE,   "Movement",      "ldb;tybt",        NULL,           0},
-    {ITT_EFUNC,   "Move Forward",  "ldb;tybt dgthtl", BK_StartBindingKey,  bk_forward},      // Движение вперед
-    {ITT_EFUNC,   "Move Backward", "ldb;tybt yfpfl",  BK_StartBindingKey,  bk_backward},     // Движение назад
-    {ITT_EFUNC,   "Turn Left",     "gjdjhjn yfktdj",  BK_StartBindingKey,  bk_turn_left},    // Поворот налево
-    {ITT_EFUNC,   "Turn Right",    "gjdjhjn yfghfdj", BK_StartBindingKey,  bk_turn_right},   // Поворот направо
-    {ITT_EFUNC,   "Strafe Left",   ",jrjv dktdj",     BK_StartBindingKey,  bk_strafe_left},  // Боком влево
-    {ITT_EFUNC,   "Strafe Right",  ",jrjv dghfdj",    BK_StartBindingKey,  bk_strafe_right}, // Боком вправо
-    {ITT_EFUNC,   "Speed On",      ",tu",             BK_StartBindingKey,  bk_speed},        // Бег
-    {ITT_EFUNC,   "Strafe On",     "ldb;tybt ,jrjv",  BK_StartBindingKey,  bk_strafe},       // Движение боком
-    {ITT_TITLE,   "Action",        "ltqcndbt",        NULL,           0},
-    {ITT_EFUNC,   "Fire/Attack",   "fnfrf*cnhtkm,f",  BK_StartBindingKey,  bk_fire},         // Атака/стрельба
-    {ITT_EFUNC,   "Use",           "bcgjkmpjdfnm",    BK_StartBindingKey,  bk_use},          // Использовать
-    {ITT_EMPTY,   NULL,            NULL,              NULL,           0},
-    {ITT_SETMENU, NULL,            NULL,              &Bindings2Menu, 0},               // Далее >
-    {ITT_SETMENU, NULL,            NULL,              &Bindings5Menu, 0},               // < Назад
-    {ITT_EMPTY,   NULL,            NULL,              NULL,           0}
+    {ITT_TITLE,   "Movement",      "ldb;tybt",        NULL,               0},
+    {ITT_EFUNC,   "Move Forward",  "ldb;tybt dgthtl", BK_StartBindingKey, bk_forward},      // Движение вперед
+    {ITT_EFUNC,   "Move Backward", "ldb;tybt yfpfl",  BK_StartBindingKey, bk_backward},     // Движение назад
+    {ITT_EFUNC,   "Turn Left",     "gjdjhjn yfktdj",  BK_StartBindingKey, bk_turn_left},    // Поворот налево
+    {ITT_EFUNC,   "Turn Right",    "gjdjhjn yfghfdj", BK_StartBindingKey, bk_turn_right},   // Поворот направо
+    {ITT_EFUNC,   "Strafe Left",   ",jrjv dktdj",     BK_StartBindingKey, bk_strafe_left},  // Боком влево
+    {ITT_EFUNC,   "Strafe Right",  ",jrjv dghfdj",    BK_StartBindingKey, bk_strafe_right}, // Боком вправо
+    {ITT_EFUNC,   "Speed On",      ",tu",             BK_StartBindingKey, bk_speed},        // Бег
+    {ITT_EFUNC,   "Strafe On",     "ldb;tybt ,jrjv",  BK_StartBindingKey, bk_strafe},       // Движение боком
+    {ITT_TITLE,   "Action",        "ltqcndbt",        NULL,               0},
+    {ITT_EFUNC,   "Fire/Attack",   "fnfrf*cnhtkm,f",  BK_StartBindingKey, bk_fire},         // Атака/стрельба
+    {ITT_EFUNC,   "Use",           "bcgjkmpjdfnm",    BK_StartBindingKey, bk_use},          // Использовать
+    {ITT_EMPTY,   NULL,            NULL,              NULL,               0},
+    {ITT_SETMENU, NULL,            NULL,              &Bindings2Menu,     0},               // Далее >
+    {ITT_SETMENU, NULL,            NULL,              &Bindings6Menu,     0},               // < Назад
+    {ITT_EMPTY,   NULL,            NULL,              NULL,               0}
 };
 
 static Menu_t Bindings1Menu = {
@@ -1280,22 +1281,22 @@ static Menu_t Bindings1Menu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Bindings2Items[] = {
-    {ITT_TITLE,   "Weapons",         "jhe;bt",            NULL,           0},
-    {ITT_EFUNC,   "Weapon 1",        "jhe;bt 1",          BK_StartBindingKey,  bk_weapon_1},    // Оружие 1
-    {ITT_EFUNC,   "Weapon 2",        "jhe;bt 2",          BK_StartBindingKey,  bk_weapon_2},    // Оружие 2
-    {ITT_EFUNC,   "Weapon 3",        "jhe;bt 3",          BK_StartBindingKey,  bk_weapon_3},    // Оружие 3
-    {ITT_EFUNC,   "Weapon 4",        "jhe;bt 4",          BK_StartBindingKey,  bk_weapon_4},    // Оружие 4
-    {ITT_EFUNC,   "Weapon 5",        "jhe;bt 5",          BK_StartBindingKey,  bk_weapon_5},    // Оружие 5
-    {ITT_EFUNC,   "Weapon 6",        "jhe;bt 6",          BK_StartBindingKey,  bk_weapon_6},    // Оружие 6
-    {ITT_EFUNC,   "Weapon 7",        "jhe;bt 7",          BK_StartBindingKey,  bk_weapon_7},    // Оружие 7
-    {ITT_EFUNC,   "Weapon 8",        "jhe;bt 8",          BK_StartBindingKey,  bk_weapon_8},    // Оружие 8
-    {ITT_EFUNC,   "Previous weapon", "ghtlsleott jhe;bt", BK_StartBindingKey,  bk_weapon_prev}, // Предыдущее оружие
-    {ITT_EFUNC,   "Next weapon",     "cktle.ott jhe;bt",  BK_StartBindingKey,  bk_weapon_next}, // Следующее оружие
-    {ITT_EMPTY,   NULL,              NULL,                NULL,           0},
-    {ITT_EMPTY,   NULL,              NULL,                NULL,           0},
-    {ITT_SETMENU, NULL,              NULL,                &Bindings3Menu, 0},               // Далее >
-    {ITT_SETMENU, NULL,              NULL,                &Bindings1Menu, 0},               // < Назад
-    {ITT_EMPTY,   NULL,              NULL,                NULL,           0}
+    {ITT_TITLE,   "Weapons",         "jhe;bt",            NULL,               0},
+    {ITT_EFUNC,   "Weapon 1",        "jhe;bt 1",          BK_StartBindingKey, bk_weapon_1},    // Оружие 1
+    {ITT_EFUNC,   "Weapon 2",        "jhe;bt 2",          BK_StartBindingKey, bk_weapon_2},    // Оружие 2
+    {ITT_EFUNC,   "Weapon 3",        "jhe;bt 3",          BK_StartBindingKey, bk_weapon_3},    // Оружие 3
+    {ITT_EFUNC,   "Weapon 4",        "jhe;bt 4",          BK_StartBindingKey, bk_weapon_4},    // Оружие 4
+    {ITT_EFUNC,   "Weapon 5",        "jhe;bt 5",          BK_StartBindingKey, bk_weapon_5},    // Оружие 5
+    {ITT_EFUNC,   "Weapon 6",        "jhe;bt 6",          BK_StartBindingKey, bk_weapon_6},    // Оружие 6
+    {ITT_EFUNC,   "Weapon 7",        "jhe;bt 7",          BK_StartBindingKey, bk_weapon_7},    // Оружие 7
+    {ITT_EFUNC,   "Weapon 8",        "jhe;bt 8",          BK_StartBindingKey, bk_weapon_8},    // Оружие 8
+    {ITT_EFUNC,   "Previous weapon", "ghtlsleott jhe;bt", BK_StartBindingKey, bk_weapon_prev}, // Предыдущее оружие
+    {ITT_EFUNC,   "Next weapon",     "cktle.ott jhe;bt",  BK_StartBindingKey, bk_weapon_next}, // Следующее оружие
+    {ITT_EMPTY,   NULL,              NULL,                NULL,               0},
+    {ITT_EMPTY,   NULL,              NULL,                NULL,               0},
+    {ITT_SETMENU, NULL,              NULL,                &Bindings3Menu,     0},               // Далее >
+    {ITT_SETMENU, NULL,              NULL,                &Bindings1Menu,     0},               // < Назад
+    {ITT_EMPTY,   NULL,              NULL,                NULL,               0}
 };
 
 static Menu_t Bindings2Menu = {
@@ -1313,24 +1314,23 @@ static Menu_t Bindings2Menu = {
 // Key bindings (3)
 // -----------------------------------------------------------------------------
 
-
 static MenuItem_t Bindings3Items[] = {
-    {ITT_TITLE,   "Shortcut keys",         ",scnhsq ljcneg",        NULL,               0},
-    {ITT_EFUNC,   "Quick save",            ",scnhjt cj[hfytybt",    BK_StartBindingKey, bk_qsave},            // Быстрое сохранение
-    {ITT_EFUNC,   "Quick load",            ",scnhfz pfuheprf",      BK_StartBindingKey, bk_qload},            // Быстрая загрузка
-    {ITT_EFUNC,   "Go to next level",      "cktle.obq ehjdtym",     BK_StartBindingKey, bk_nextlevel},        // Следующий уровень
-    {ITT_EFUNC,   "Restart level/demo",    "gthtpfgecr ehjdyz",     BK_StartBindingKey, bk_reloadlevel},      // Перезапуск уровня
-    {ITT_EFUNC,   "Save a screenshot",     "crhbyijn",              BK_StartBindingKey, bk_screenshot},       // Скриншот
-    {ITT_EFUNC,   "Finish demo recording", "pfrjyxbnm pfgbcm ltvj", BK_StartBindingKey, bk_finish_demo},      // Закончить запись демо
-    {ITT_TITLE,   "Toggleables",           "gthtrk.xtybt",          NULL,               0},
-    {ITT_EFUNC,   "Mouse look",            "j,pjh vsim.",           BK_StartBindingKey, bk_toggle_mlook},     // Обзор мышью
-    {ITT_EFUNC,   "Always run",            "gjcnjzyysq ,tu",        BK_StartBindingKey, bk_toggle_autorun},   // Постоянный бег
-    {ITT_EFUNC,   "Crosshair",             "ghbwtk",                BK_StartBindingKey, bk_toggle_crosshair}, // Прицел
-    {ITT_EFUNC,   "Level flipping",        "pthrfkbhjdfybt ehjdyz", BK_StartBindingKey, bk_toggle_fliplvls},  // Зеркалирование уровня
-    {ITT_EMPTY,   NULL,                    NULL,                    NULL,           0},
-    {ITT_SETMENU, NULL,                    NULL,                    &Bindings4Menu, 0},                       // Далее >
-    {ITT_SETMENU, NULL,                    NULL,                    &Bindings2Menu, 0},                       // < Назад
-    {ITT_EMPTY,   NULL,                    NULL,                    NULL,           0}
+    {ITT_TITLE,   "Shortcut keys",      ",scnhsq ljcneg",      NULL,               0},
+    {ITT_EFUNC,   "Open help",          "'rhfy gjvjob",        BK_StartBindingKey, bk_menu_help},   // Экран помощи
+    {ITT_EFUNC,   "Open save menu",     "cj[hfytybt buhs",     BK_StartBindingKey, bk_menu_save},   // Сохранение игры
+    {ITT_EFUNC,   "Open load menu",     "pfuheprf buhs",       BK_StartBindingKey, bk_menu_load},   // Загрузка игры
+    {ITT_EFUNC,   "Open volume menu",   "yfcnhjqrb uhjvrjcnb", BK_StartBindingKey, bk_menu_volume}, // Настройки громкости
+    {ITT_EFUNC,   "Quick save",         ",scnhjt cj[hfytybt",  BK_StartBindingKey, bk_qsave},       // Быстрое сохранение
+    {ITT_EFUNC,   "End game",           "pfrjyxbnm buhe",      BK_StartBindingKey, bk_end_game},    // Закончить игру
+    {ITT_EFUNC,   "Quick load",         ",scnhfz pfuheprf",    BK_StartBindingKey, bk_qload},       // Быстрая загрузка
+    {ITT_EFUNC,   "Quit game",          "da[jl",               BK_StartBindingKey, bk_quit},        // Выход
+    {ITT_EFUNC,   "Change gamma level", "ehjdtym ufvvs",       BK_StartBindingKey, bk_gamma},       // Уровень гаммы
+    {ITT_EFUNC,   "Go to next level",   "cktle.obq ehjdtym",   BK_StartBindingKey, bk_nextlevel},   // Следующий уровень
+    {ITT_EFUNC,   "Restart level/demo", "gthtpfgecr ehjdyz",   BK_StartBindingKey, bk_reloadlevel}, // Перезапуск уровня
+    {ITT_EMPTY,   NULL,                 NULL,                  NULL,               0},
+    {ITT_SETMENU, NULL,                 NULL,                  &Bindings4Menu,     0},              // Далее >
+    {ITT_SETMENU, NULL,                 NULL,                  &Bindings2Menu,     0},              // < Назад
+    {ITT_EMPTY,   NULL,                 NULL,                  NULL,               0}
 };
 
 static Menu_t Bindings3Menu = {
@@ -1349,22 +1349,22 @@ static Menu_t Bindings3Menu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Bindings4Items[] = {
-    {ITT_TITLE,   "Automap",          "rfhnf",             NULL,           0},
-    {ITT_EFUNC,   "Toggle automap",   "jnrhsnm rfhne",     BK_StartBindingKey,  bk_map_toggle},    // Открыть карту
-    {ITT_EFUNC,   "Zoom in",          "ghb,kbpbnm",        BK_StartBindingKey,  bk_map_zoom_in},   // Приблизить
-    {ITT_EFUNC,   "Zoom out",         "jnlfkbnm",          BK_StartBindingKey,  bk_map_zoom_out},  // Отдалить
-    {ITT_EFUNC,   "Maximum zoom out", "gjkysq vfcinf,",    BK_StartBindingKey,  bk_map_zoom_max},  // Полный масштаб
-    {ITT_EFUNC,   "Follow mode",      "ht;bv cktljdfybz",  BK_StartBindingKey,  bk_map_follow},    // Режим следования
-    {ITT_EFUNC,   "Overlay mode",     "ht;bv yfkj;tybz",   BK_StartBindingKey,  bk_map_overlay},   // Режим наложения
-    {ITT_EFUNC,   "Rotate mode",      "ht;bv dhfotybz",    BK_StartBindingKey,  bk_map_rotate},    // Режим вращения
-    {ITT_EFUNC,   "Toggle grid",      "ctnrf",             BK_StartBindingKey,  bk_map_grid},      // Сетка
-    {ITT_EFUNC,   "Mark location",    "gjcnfdbnm jnvtnre", BK_StartBindingKey,  bk_map_mark},      // Поставить отметку
-    {ITT_EFUNC,   "Clear last mark",  "elfkbnm jnvtnre",   BK_StartBindingKey,  bk_map_clearmark}, // Удалить отметку
-    {ITT_EMPTY,   NULL,               NULL,                NULL,           0},
-    {ITT_EMPTY,   NULL,               NULL,                NULL,           0},
-    {ITT_SETMENU, NULL,               NULL,                &Bindings5Menu, 0},                // Далее >
-    {ITT_SETMENU, NULL,               NULL,                &Bindings3Menu, 0},                // < Назад
-    {ITT_EMPTY,   NULL,               NULL,                NULL,           0}
+    {ITT_EFUNC,   "Increase screen size",  "edtk> hfpvth 'rhfyf",   BK_StartBindingKey, bk_screen_inc},       // Увел. размер экрана
+    {ITT_EFUNC,   "Decrease screen size",  "evtym> hfpvth 'rhfyf",  BK_StartBindingKey, bk_screen_dec},       // Умень. размер экрана
+    {ITT_EFUNC,   "Save a screenshot",     "crhbyijn",              BK_StartBindingKey, bk_screenshot},       // Скриншот
+    {ITT_EFUNC,   "Pause",                 "gfepf",                 BK_StartBindingKey, bk_pause},            // Пауза
+    {ITT_EFUNC,   "Finish demo recording", "pfrjyxbnm pfgbcm ltvj", BK_StartBindingKey, bk_finish_demo},      // Закончить запись демо
+    {ITT_TITLE,   "Toggleables",           "gthtrk.xtybt",          NULL,               0},
+    {ITT_EFUNC,   "Mouse look",            "j,pjh vsim.",           BK_StartBindingKey, bk_toggle_mlook},     // Обзор мышью
+    {ITT_EFUNC,   "Always run",            "gjcnjzyysq ,tu",        BK_StartBindingKey, bk_toggle_autorun},   // Постоянный бег
+    {ITT_EFUNC,   "Crosshair",             "ghbwtk",                BK_StartBindingKey, bk_toggle_crosshair}, // Прицел
+    {ITT_EFUNC,   "Messages",              "cjj,otybz",             BK_StartBindingKey, bk_messages},         // Сообщения
+    {ITT_EFUNC,   "Detail level",          "ltnfkbpfwbz uhfabrb",   BK_StartBindingKey, bk_detail},           // Детализация графики
+    {ITT_EFUNC,   "Level flipping",        "pthrfkbhjdfybt ehjdyz", BK_StartBindingKey, bk_toggle_fliplvls},  // Зеркалирование уровня
+    {ITT_EMPTY,   NULL,                    NULL,                    NULL,               0},
+    {ITT_SETMENU, NULL,                    NULL,                    &Bindings5Menu,     0},                   // Далее >
+    {ITT_SETMENU, NULL,                    NULL,                    &Bindings3Menu,     0},                   // < Назад
+    {ITT_EMPTY,   NULL,                    NULL,                    NULL,               0}
 };
 
 static Menu_t Bindings4Menu = {
@@ -1375,7 +1375,7 @@ static Menu_t Bindings4Menu = {
     M_RD_Draw_Bindings,
     &BindingsPageDescriptor,
     &ControlsMenu,
-    1
+    0
 };
 
 // -----------------------------------------------------------------------------
@@ -1383,6 +1383,40 @@ static Menu_t Bindings4Menu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Bindings5Items[] = {
+    {ITT_TITLE,   "Automap",          "rfhnf",             NULL,               0},
+    {ITT_EFUNC,   "Toggle automap",   "jnrhsnm rfhne",     BK_StartBindingKey, bk_map_toggle},    // Открыть карту
+    {ITT_EFUNC,   "Zoom in",          "ghb,kbpbnm",        BK_StartBindingKey, bk_map_zoom_in},   // Приблизить
+    {ITT_EFUNC,   "Zoom out",         "jnlfkbnm",          BK_StartBindingKey, bk_map_zoom_out},  // Отдалить
+    {ITT_EFUNC,   "Maximum zoom out", "gjkysq vfcinf,",    BK_StartBindingKey, bk_map_zoom_max},  // Полный масштаб
+    {ITT_EFUNC,   "Follow mode",      "ht;bv cktljdfybz",  BK_StartBindingKey, bk_map_follow},    // Режим следования
+    {ITT_EFUNC,   "Overlay mode",     "ht;bv yfkj;tybz",   BK_StartBindingKey, bk_map_overlay},   // Режим наложения
+    {ITT_EFUNC,   "Rotate mode",      "ht;bv dhfotybz",    BK_StartBindingKey, bk_map_rotate},    // Режим вращения
+    {ITT_EFUNC,   "Toggle grid",      "ctnrf",             BK_StartBindingKey, bk_map_grid},      // Сетка
+    {ITT_EFUNC,   "Mark location",    "gjcnfdbnm jnvtnre", BK_StartBindingKey, bk_map_mark},      // Поставить отметку
+    {ITT_EFUNC,   "Clear last mark",  "elfkbnm jnvtnre",   BK_StartBindingKey, bk_map_clearmark}, // Удалить отметку
+    {ITT_EMPTY,   NULL,               NULL,                NULL,               0},
+    {ITT_EMPTY,   NULL,               NULL,                NULL,               0},
+    {ITT_SETMENU, NULL,               NULL,                &Bindings6Menu,     0},                // Далее >
+    {ITT_SETMENU, NULL,               NULL,                &Bindings4Menu,     0},                // < Назад
+    {ITT_EMPTY,   NULL,               NULL,                NULL,               0}
+};
+
+static Menu_t Bindings5Menu = {
+    35, 35,
+    25,
+    "Customize controls", "Yfcnhjqrb eghfdktybz", false, // Настройки управления
+    16, Bindings5Items, false,
+    M_RD_Draw_Bindings,
+    &BindingsPageDescriptor,
+    &ControlsMenu,
+    1
+};
+
+// -----------------------------------------------------------------------------
+// Key bindings (6)
+// -----------------------------------------------------------------------------
+
+static MenuItem_t Bindings6Items[] = {
     {ITT_TITLE,   "Multiplayer",         "Ctntdfz buhf",        NULL,               0},                     // Сетевая игра
     {ITT_EFUNC,   "Multiplayer spy",     "Dbl lheujuj buhjrf",  BK_StartBindingKey, bk_spy},                // Вид другого игрока
     {ITT_EFUNC,   "Send message",        "Jnghfdbnm cjj,otybt", BK_StartBindingKey, bk_multi_msg},          // Отправить сообщение
@@ -1397,15 +1431,15 @@ static MenuItem_t Bindings5Items[] = {
     {ITT_EMPTY,   NULL,                  NULL,                  NULL,               0},
     {ITT_EMPTY,   NULL,                  NULL,                  NULL,               0},
     {ITT_SETMENU, NULL,                  NULL,                  &Bindings1Menu,     0},                     // Далее >
-    {ITT_SETMENU, NULL,                  NULL,                  &Bindings4Menu,     0},                     // < Назад
+    {ITT_SETMENU, NULL,                  NULL,                  &Bindings5Menu,     0},                     // < Назад
     {ITT_EMPTY,   NULL,                  NULL,                  NULL,               0}
 };
 
-static Menu_t Bindings5Menu = {
+static Menu_t Bindings6Menu = {
     35, 35,
     25,
     "Customize controls", "Yfcnhjqrb eghfdktybz", false, // Настройки управления
-    16, Bindings5Items, false,
+    16, Bindings6Items, false,
     M_RD_Draw_Bindings,
     &BindingsPageDescriptor,
     &ControlsMenu,
@@ -3667,7 +3701,7 @@ static void M_RD_Draw_Bindings()
 
     if (english_language)
     {
-        RD_M_DrawTextSmallENG(CurrentMenu == &Bindings5Menu ? "first page >" : "next page >", 35 + wide_delta, 155, CR_WHITE);
+        RD_M_DrawTextSmallENG(CurrentMenu == &Bindings6Menu ? "first page >" : "next page >", 35 + wide_delta, 155, CR_WHITE);
         RD_M_DrawTextSmallENG(CurrentMenu == &Bindings1Menu ? "< last page" : "< prev page", 35 + wide_delta, 165, CR_WHITE);
 
         RD_M_DrawTextSmallENG("enter to change, del to clear", 55 + wide_delta, 180, CR_DARKRED);
@@ -7637,7 +7671,7 @@ boolean M_Responder (event_t* ev)
             M_QuickSave();
             return true;
         }
-        else if (BK_isKeyDown(ev, bk_endgame))  // End game
+        else if (BK_isKeyDown(ev, bk_end_game))  // End game
         {
             S_StartSound(NULL,sfx_swtchn);
             M_EndGame(0);
