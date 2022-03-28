@@ -106,14 +106,28 @@ typedef enum
     bk_map_mark,
     bk_map_clearmark,
 
-    //Shortcuts and toggles
+    //Shortcuts
+    bk_menu_help,
+    bk_menu_save,
+    bk_menu_load,
+    bk_menu_volume,
     bk_qsave,
+    bk_end_game,
     bk_qload,
+    bk_quit,
+    bk_gamma,
     bk_nextlevel,
     bk_reloadlevel,
+    bk_screen_inc,
+    bk_screen_dec,
     bk_screenshot,
+    bk_pause,
     bk_finish_demo,
+
+    //Toggles
     bk_toggle_crosshair,
+    bk_messages,
+    bk_detail,
     bk_toggle_fliplvls,
 
     //Multiplayer
@@ -143,21 +157,6 @@ typedef enum
 
     bk_confirm,
     bk_abort,
-
-    //F Keys
-    bk_menu_help,
-    bk_menu_save,
-    bk_menu_load,
-    bk_menu_volume,
-    bk_detail,
-    bk_endgame,
-    bk_messages,
-    bk_quit,
-    bk_gamma,
-    bk_screen_inc,
-    bk_screen_dec,
-
-    bk_pause,
 
     bk__size, //size of bound_key_t
     bk__null

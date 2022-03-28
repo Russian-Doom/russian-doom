@@ -111,13 +111,25 @@ static const char* bkToName[] = {
     "Map_grid",
     "Map_mark",
     "Map_clearmark",
+    "Help",
+    "Msave",
+    "Mload",
+    "Mvolume",
     "Qsave",
+    "End_game",
     "Qload",
+    "Quit",
+    "Gamma",
     "Nextlevel",
     "Reloadlevel",
+    "Screen_inc",
+    "Screen_dec",
     "Screenshot",
+    "Pause",
     "Finish_demo",
     "Toggle_crosshair",
+    "Messages",
+    "Detail",
     "Toggle_fliplvls",
     "Spy",
     "Multi_msg",
@@ -567,21 +579,8 @@ void BK_BindKey(event_t* event)
         return;
     }
 
-    // [Dasperal] Prohibit binding of some keyboard keys and gamepad menu key
-    if((event->type == ev_keydown
-    && (event->data1 == SDL_SCANCODE_F1
-    || event->data1 == SDL_SCANCODE_F2
-    || event->data1 == SDL_SCANCODE_F3
-    || event->data1 == SDL_SCANCODE_F4
-    || event->data1 == SDL_SCANCODE_F5
-    || event->data1 == SDL_SCANCODE_F7
-    || event->data1 == SDL_SCANCODE_F8
-    || event->data1 == SDL_SCANCODE_F10
-    || event->data1 == SDL_SCANCODE_F11
-    || event->data1 == SDL_SCANCODE_EQUALS
-    || event->data1 == SDL_SCANCODE_MINUS
-    || event->data1 == SDL_SCANCODE_PAUSE))
-    || (event->type == ev_controller_keydown && event->data1 == CONTROLLER_START))
+    // [Dasperal] Prohibit binding gamepad menu key
+    if(event->type == ev_controller_keydown && event->data1 == CONTROLLER_START)
     {
         return;
     }
@@ -632,19 +631,6 @@ void BK_AddBindingsToSystemKeys()
     AddBind(bk_confirm, keyboard, SDL_SCANCODE_Y);
     AddBind(bk_abort,   keyboard, SDL_SCANCODE_N);
     AddBind(bk_abort,   keyboard, SDL_SCANCODE_ESCAPE);
-
-    AddBind(bk_menu_help,   keyboard, SDL_SCANCODE_F1);
-    AddBind(bk_menu_save,   keyboard, SDL_SCANCODE_F2);
-    AddBind(bk_menu_load,   keyboard, SDL_SCANCODE_F3);
-    AddBind(bk_menu_volume, keyboard, SDL_SCANCODE_F4);
-    AddBind(bk_detail,      keyboard, SDL_SCANCODE_F5);
-    AddBind(bk_endgame,     keyboard, SDL_SCANCODE_F7);
-    AddBind(bk_messages,    keyboard, SDL_SCANCODE_F8);
-    AddBind(bk_quit,        keyboard, SDL_SCANCODE_F10);
-    AddBind(bk_gamma,       keyboard, SDL_SCANCODE_F11);
-    AddBind(bk_screen_inc,  keyboard, SDL_SCANCODE_EQUALS);
-    AddBind(bk_screen_dec,  keyboard, SDL_SCANCODE_MINUS);
-    AddBind(bk_pause,       keyboard, SDL_SCANCODE_PAUSE);
 
     // Mouse
     AddBind(bk_left,  mouse, MOUSE_SCROLL_LEFT);
@@ -752,9 +738,21 @@ void BK_ApplyDefaultBindings()
     AddBind(bk_map_clearmark, keyboard, SDL_SCANCODE_C);
     AddBind(bk_map_mark,      keyboard, SDL_SCANCODE_M);
 
+    AddBind(bk_menu_help,        keyboard, SDL_SCANCODE_F1);
+    AddBind(bk_menu_save,        keyboard, SDL_SCANCODE_F2);
+    AddBind(bk_menu_load,        keyboard, SDL_SCANCODE_F3);
+    AddBind(bk_menu_volume,      keyboard, SDL_SCANCODE_F4);
+    AddBind(bk_detail,           keyboard, SDL_SCANCODE_F5);
     AddBind(bk_qsave,            keyboard, SDL_SCANCODE_F6);
+    AddBind(bk_end_game,         keyboard, SDL_SCANCODE_F7);
+    AddBind(bk_messages,         keyboard, SDL_SCANCODE_F8);
     AddBind(bk_qload,            keyboard, SDL_SCANCODE_F9);
+    AddBind(bk_quit,             keyboard, SDL_SCANCODE_F10);
+    AddBind(bk_gamma,            keyboard, SDL_SCANCODE_F11);
+    AddBind(bk_screen_inc,       keyboard, SDL_SCANCODE_EQUALS);
+    AddBind(bk_screen_dec,       keyboard, SDL_SCANCODE_MINUS);
     AddBind(bk_screenshot,       keyboard, SDL_SCANCODE_PRINTSCREEN);
+    AddBind(bk_pause,            keyboard, SDL_SCANCODE_PAUSE);
     AddBind(bk_finish_demo,      keyboard, SDL_SCANCODE_Q);
     AddBind(bk_toggle_crosshair, keyboard, SDL_SCANCODE_X);
 
