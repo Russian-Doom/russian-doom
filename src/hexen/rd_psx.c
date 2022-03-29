@@ -32,6 +32,10 @@ extern int pagetic;
 extern char *pagename;
 extern boolean advancedemo;
 
+// PRIVATE DATA DEFINITIONS ----------------------------------------------------
+
+static boolean button_pressed = false;
+
 // CODE ------------------------------------------------------------------------
 
 
@@ -49,6 +53,13 @@ void PageDrawerPSX (void)
 {
     // Fill background with black color.
     V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
+
+    // Consider any button was pressed so don't show 
+    // informative "PRESS ANY BUTTON" message anymore.
+    if (menuactive)
+    {
+        button_pressed = true;
+    }
 
     // Cycle through LEGAL/GT/RAVEN pages with fade to black effect.
     if (demosequence < 4)
@@ -81,6 +92,22 @@ void PageDrawerPSX (void)
     {
         // Draw title graphics normally.
         V_DrawPatchFullScreen(W_CacheLumpName(pagename, PU_CACHE), false);
+
+        // Show informative message.
+        if (!menuactive && gametic & 32 && !button_pressed)
+        {
+            if (english_language)
+            {
+                RD_M_DrawTextBigENG("PRESS ANY BUTTON", 160 - RD_M_TextBigENGWidth
+                                   ("PRESS ANY BUTTON") / 2 + wide_delta, 165);
+            }
+            else
+            {
+                // НАЖМИТЕ ЛЮБУЮ КЛАВИШУ
+                RD_M_DrawTextBigRUS("YF;VBNT K.,E. RKFDBIE", 160 - RD_M_TextBigRUSWidth
+                                   ("YF;VBNT K.,E. RKFDBIE") / 2 + wide_delta, 165);
+            }
+        }
     }
 
     UpdateState |= I_FULLSCRN;
