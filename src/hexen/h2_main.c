@@ -55,6 +55,7 @@
 #include "w_merge.h"
 #include "rd_keybinds.h"
 #include "rd_rushexen.h"
+#include "rd_psx.h"
 
 // EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
 
@@ -127,6 +128,10 @@ boolean realframe, skippsprinterp;  // [JN] Interpolation for weapon bobbing
 boolean hasUnknownPWads = false;
 boolean isHexenDemo = false;
 boolean isDK = false;
+boolean isPSX = false;
+
+int pagetic;
+char *pagename;
 
 // -----------------------------------------------------------------------------
 // [JN] Support for English language.
@@ -282,8 +287,6 @@ int selective_puzzle_16 = 0; // SIGIL OF THE MAGUS
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 
 static int WarpMap;
-static int pagetic;
-static char *pagename;
 
 // CODE --------------------------------------------------------------------
 
@@ -568,6 +571,13 @@ void D_SetGameDescription(void)
                         autoloadglobalpwad[i]);
             }
         }
+    }
+
+    if (M_CheckParm("-psx"))
+    {
+        hasUnknownPWads = true;
+        isPSX = true;
+        W_MergeFile(RD_M_FindInternalResource("hexen-psx.wad"));
     }
 
     // [JN] Параметр "-file" перенесен из w_main.c
@@ -1284,7 +1294,7 @@ static void DrawAndBlit(void)
             F_Drawer();
             break;
         case GS_DEMOSCREEN:
-            PageDrawer();
+            isPSX ? PageDrawerPSX() : PageDrawer();
             break;
     }
 

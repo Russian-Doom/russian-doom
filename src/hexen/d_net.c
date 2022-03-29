@@ -42,9 +42,11 @@
 ticcmd_t *netcmds;
 
 extern void H2_DoAdvanceDemo(void);
+extern void H2_DoAdvanceDemoPSX(void);
 extern void H2_ProcessEvents(void);
 extern void G_BuildTiccmd(ticcmd_t *cmd, int maketic);
 extern boolean G_CheckDemoStatus(void);
+extern boolean isPSX;
 
 // Called when a player leaves the game
 
@@ -99,7 +101,9 @@ static void RunTic(ticcmd_t *cmds, boolean *ingame)
     // run a tic.
 
     if (advancedemo)
-        H2_DoAdvanceDemo ();
+    {
+        isPSX ? H2_DoAdvanceDemoPSX () : H2_DoAdvanceDemo ();
+    }
 
     G_Ticker ();
 }

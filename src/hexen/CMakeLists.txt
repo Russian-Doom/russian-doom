@@ -48,6 +48,7 @@ if(COMPILE_HEXEN)
                 r_swirl.c           r_swirl.h
                 r_things.c
                 rd_lang.c           rd_lang.h
+                rd_psx.c            rd_psx.h
                 rd_rushexen.c       rd_rushexen.h
                 s_sound.c           s_sound.h
                 sb_bar.c
