@@ -66,7 +66,7 @@ void PageDrawerPSX (void)
     {
         if (pagetic <= 170 && pagetic >= 5)
         {
-            V_DrawPatch(0, 0, W_CacheLumpName(pagename, PU_CACHE),
+            V_DrawPatch(wide_delta, 0, W_CacheLumpName(pagename, PU_CACHE),
                         pagetic >= 168 ? transtable10 :
                         pagetic >= 166 ? transtable20 :
                         pagetic >= 164 ? transtable30 :
