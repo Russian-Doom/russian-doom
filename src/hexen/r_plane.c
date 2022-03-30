@@ -20,6 +20,7 @@
 #include "i_system.h"
 #include "r_local.h"
 #include "r_swirl.h"
+#include "v_video.h"
 
 
 // Sky mapping
@@ -496,6 +497,10 @@ static void R_MakeSpans (int x, unsigned int t1, unsigned int b1, // [crispy] 32
 = R_DrawPlanes
 =
 = At the end of each frame.
+= [JN] Emulate PSX double sky drawing with translucent foreground texture.
+= TODO - PSX MAPINFO lump should be changed to:
+=        SKY1: Foreground/translucent.
+=        SKY2: Background/opaque.
 =
 ================================================================================
 */
@@ -514,6 +519,7 @@ void R_DrawPlanes(void)
 
     extern byte *ylookup[SCREENHEIGHT];
     extern int columnofs[WIDESCREENWIDTH];
+    extern boolean isPSX;
 
     for (i = 0 ; i < MAXVISPLANES ; i++)
     for (pl = visplanes[i] ; pl ; pl = pl->next, rendered_visplanes++)
@@ -580,6 +586,10 @@ void R_DrawPlanes(void)
                                     if (source[frac >> FRACBITS])
                                     {
                                         *dest4 = *dest3 = *dest2 = *dest1 = source[frac >> FRACBITS];
+                                        if (isPSX)
+                                        {
+                                            *dest4 = *dest3 = *dest2 = *dest1 = transtable70[(*dest1<<8)+source2[frac>>FRACBITS]];
+                                        }
                                     }
                                     else
                                     {
@@ -607,6 +617,10 @@ void R_DrawPlanes(void)
                                     if (source[(frac >> FRACBITS) & heightmask])
                                     {
                                         *dest4 = *dest3 = *dest2 = *dest1 = source[(frac >> FRACBITS) & heightmask];
+                                        if (isPSX)
+                                        {
+                                            *dest4 = *dest3 = *dest2 = *dest1 = transtable70[(*dest1<<8)+(source2[frac>>FRACBITS] & heightmask)];
+                                        }
                                     }
                                     else
                                     {
@@ -644,6 +658,10 @@ void R_DrawPlanes(void)
                                     if (source[frac >> FRACBITS])
                                     {
                                         *dest = source[frac >> FRACBITS];
+                                        if (isPSX)
+                                        {
+                                            *dest = transtable70[(*dest<<8)+source2[frac>>FRACBITS]];
+                                        }
                                     }
                                     else
                                     {
@@ -665,6 +683,10 @@ void R_DrawPlanes(void)
                                     if (source[(frac >> FRACBITS) & heightmask])
                                     {
                                         *dest = source[(frac >> FRACBITS) & heightmask];
+                                        if (isPSX)
+                                        {
+                                            *dest = transtable70[(*dest<<8)+(source2[frac>>FRACBITS] & heightmask)];
+                                        }
                                     }
                                     else
                                     {
