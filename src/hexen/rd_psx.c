@@ -42,14 +42,14 @@ static boolean button_pressed = false;
 /*
 ================================================================================
 =
-= PageDrawerPSX
+= PSX_PageDrawer
 =
 = [JN] Own routine for demo sequence pages drawing.
 =
 ================================================================================
 */
 
-void PageDrawerPSX (void)
+void PSX_PageDrawer (void)
 {
     // Fill background with black color.
     V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
@@ -116,14 +116,14 @@ void PageDrawerPSX (void)
 /*
 ================================================================================
 =
-= H2_DoAdvanceDemoPSX
+= PSX_DoAdvanceDemo
 =
 = [JN] Own routine for demo sequence pages cycling.
 =
 ================================================================================
 */
 
-void H2_DoAdvanceDemoPSX (void)
+void PSX_DoAdvanceDemo (void)
 {
     S_ResumeSound();    // [JN] Fix vanilla Hexen bug: resume music playing
     players[consoleplayer].playerstate = PST_LIVE;      // don't reborn

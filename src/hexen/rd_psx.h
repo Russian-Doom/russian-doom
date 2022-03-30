@@ -17,5 +17,5 @@
 
 #pragma once
 
-extern void PageDrawerPSX (void);
-extern void H2_DoAdvanceDemoPSX (void);
+extern void PSX_PageDrawer (void);
+extern void PSX_DoAdvanceDemo (void);

@@ -74,6 +74,8 @@ void H2_DoAdvanceDemo(void);
 void H2_AdvanceDemo(void);
 void H2_StartTitle(void);
 void H2_PageTicker(void);
+void (*pagedrawerfunc) (void);
+void (*advancedemofunc) (void);
 
 // PRIVATE FUNCTION PROTOTYPES ---------------------------------------------
 
@@ -520,6 +522,31 @@ void D_IdentifyVersion(void)
     }
 }
 
+/*
+================================================================================
+=
+= PSX_DefineFunctions
+=
+= [JN] PSX version have own specific functions, so instead of
+= hitting 'isPSX' boolean constantly, predefine them at startup.
+=
+================================================================================
+*/
+
+static void PSX_DefineFunctions (void)
+{
+    if (isPSX)
+    {
+        pagedrawerfunc = PSX_PageDrawer;
+        advancedemofunc = PSX_DoAdvanceDemo;
+    }
+    else
+    {
+        pagedrawerfunc = PageDrawer;
+        advancedemofunc = H2_DoAdvanceDemo;
+    }
+}
+
 // Set the gamedescription string.
 
 void D_SetGameDescription(void)
@@ -754,6 +781,9 @@ void D_DoomMain(void)
     AdjustForMacIWAD();
 
     HandleArgs();
+
+    // [JN] Use own functions for PSX version.
+    PSX_DefineFunctions();
 
     ST_Message(english_language ?
                "MN_Init: Init menu system.\n" :
@@ -1294,7 +1324,7 @@ static void DrawAndBlit(void)
             F_Drawer();
             break;
         case GS_DEMOSCREEN:
-            isPSX ? PageDrawerPSX() : PageDrawer();
+            pagedrawerfunc();
             break;
     }
 

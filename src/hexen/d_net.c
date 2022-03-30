@@ -41,8 +41,7 @@
 
 ticcmd_t *netcmds;
 
-extern void H2_DoAdvanceDemo(void);
-extern void H2_DoAdvanceDemoPSX(void);
+extern void (*advancedemofunc) (void);
 extern void H2_ProcessEvents(void);
 extern void G_BuildTiccmd(ticcmd_t *cmd, int maketic);
 extern boolean G_CheckDemoStatus(void);
@@ -102,7 +101,7 @@ static void RunTic(ticcmd_t *cmds, boolean *ingame)
 
     if (advancedemo)
     {
-        isPSX ? H2_DoAdvanceDemoPSX () : H2_DoAdvanceDemo ();
+        advancedemofunc();
     }
 
     G_Ticker ();
