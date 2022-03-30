@@ -31,6 +31,7 @@ extern int demosequence;
 extern int pagetic;
 extern char *pagename;
 extern boolean advancedemo;
+extern boolean askforquit;
 
 // PRIVATE DATA DEFINITIONS ----------------------------------------------------
 
@@ -56,7 +57,7 @@ void PSX_PageDrawer (void)
 
     // Consider any button was pressed so don't show 
     // informative "PRESS ANY BUTTON" message anymore.
-    if (menuactive)
+    if (menuactive || askforquit)
     {
         button_pressed = true;
     }
