@@ -107,6 +107,10 @@ fixed_t *yslope = NULL;
 fixed_t *distscale = NULL;
 fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
 
+// EXTERNAL DATA DECLARATIONS --------------------------------------------------
+
+extern boolean isPSX;
+
 
 /*
 ================================================================================
@@ -519,7 +523,6 @@ void R_DrawPlanes(void)
 
     extern byte *ylookup[SCREENHEIGHT];
     extern int columnofs[WIDESCREENWIDTH];
-    extern boolean isPSX;
 
     for (i = 0 ; i < MAXVISPLANES ; i++)
     for (pl = visplanes[i] ; pl ; pl = pl->next, rendered_visplanes++)

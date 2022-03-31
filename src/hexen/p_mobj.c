@@ -49,6 +49,7 @@ static void PlayerLandedOnThing(mobj_t * mo, mobj_t * onmobj);
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
 
 extern mobj_t LavaInflictor;
+extern boolean isPSX;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
@@ -1686,6 +1687,15 @@ void P_SpawnMapThing(mapthing_t * mthing)
                            mthing->y << FRACBITS)->sector->seqType =
             mthing->type - 1400;
         return;
+    }
+
+    // [JN] PSX: replace Green Serpents with Brown Serpents.
+    if (isPSX)
+    {
+        if (mthing->type == 31)
+        {
+            mthing->type = 8080;
+        }
     }
 
     // Check current game type with spawn flags
