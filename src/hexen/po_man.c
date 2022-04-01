@@ -718,6 +718,41 @@ static void UpdateSegBBox(seg_t * seg)
 
 //==========================================================================
 //
+// RotatePolyVertices
+// [crispy]
+//
+//==========================================================================
+
+
+// [crispy]
+static void RotatePolyVertices(polyobj_t *po, angle_t angle)
+{
+    int count;
+    seg_t **segList;
+    vertex_t *originalPts;
+    vertex_t *prevPts;
+    int an;
+
+    an = (po->angle - po->rtheta + angle) >> ANGLETOFINESHIFT;
+    segList = po->segs;
+    originalPts = po->originalPts;
+    prevPts = po->prevPts;
+
+    for (count = po->numsegs; count; count--, segList++, originalPts++,
+         prevPts++)
+    {
+        prevPts->x = (*segList)->v1->x;
+        prevPts->y = (*segList)->v1->y;
+        (*segList)->v1->x = originalPts->x;
+        (*segList)->v1->y = originalPts->y;
+        RotatePt(an, &(*segList)->v1->x, &(*segList)->v1->y, po->startSpot.x,
+                 po->startSpot.y);
+        (*segList)->angle += angle;
+    }
+}
+
+//==========================================================================
+//
 // TranslatePolyVertices
 // [crispy]
 //
@@ -853,6 +888,7 @@ void PO_InterpolatePolyObjects(void)
     int i;
     static fixed_t old_fractics = 0;
     fixed_t dfractics = 0, dx = 0, dy = 0;
+    angle_t interpangle;
 
     if (paused)
     {
@@ -912,6 +948,20 @@ void PO_InterpolatePolyObjects(void)
             po->rx -= dx;
             po->ry -= dy;
         }
+
+        if (po->rtheta && uncapped_fps)
+        {
+            interpangle = R_InterpolateAngle(0, po->dtheta, dfractics);
+
+            if (((po->rtheta - interpangle) < ANG180 && po->dtheta > ANG180) ||
+                    ((po->rtheta - interpangle) > ANG180 && po->dtheta < ANG180))
+            {
+                interpangle = po->rtheta;
+            }
+
+            RotatePolyVertices(po, interpangle);
+            po->rtheta -= interpangle;
+        }
     }
 }
 
@@ -949,9 +999,7 @@ boolean PO_RotatePolyobj(int num, angle_t angle)
 {
     int count;
     seg_t **segList;
-    vertex_t *originalPts;
     vertex_t *prevPts;
-    int an;
     polyobj_t *po;
     boolean blocked;
 
@@ -962,24 +1010,13 @@ boolean PO_RotatePolyobj(int num, angle_t angle)
                 "PO_RotatePolyobj: некорректный номер полиобъекта (%d).\n",
                 num);
     }
-    an = (po->angle + angle) >> ANGLETOFINESHIFT;
 
     UnLinkPolyobj(po);
 
-    segList = po->segs;
-    originalPts = po->originalPts;
-    prevPts = po->prevPts;
+    RotatePolyVertices(po, po->rtheta); // [crispy]
+    po->rtheta = po->dtheta = 0; // [crispy]
+    RotatePolyVertices(po, angle); // [crispy] prevPts get set here.
 
-    for (count = po->numsegs; count; count--, segList++, originalPts++,
-         prevPts++)
-    {
-        prevPts->x = (*segList)->v1->x;
-        prevPts->y = (*segList)->v1->y;
-        (*segList)->v1->x = originalPts->x;
-        (*segList)->v1->y = originalPts->y;
-        RotatePt(an, &(*segList)->v1->x, &(*segList)->v1->y, po->startSpot.x,
-                 po->startSpot.y);
-    }
     segList = po->segs;
     blocked = false;
     validcount++;
@@ -994,7 +1031,6 @@ boolean PO_RotatePolyobj(int num, angle_t angle)
             UpdateSegBBox(*segList);
             (*segList)->linedef->validcount = validcount;
         }
-        (*segList)->angle += angle;
     }
     if (blocked)
     {
@@ -1021,6 +1057,22 @@ boolean PO_RotatePolyobj(int num, angle_t angle)
     }
     po->angle += angle;
     LinkPolyobj(po);
+
+    // [crispy] Move points back after calculating bounding boxes. We'll handle
+    // the actual movement in PO_InterpolatePolyObjects().
+    if (uncapped_fps)
+    {
+        segList = po->segs;
+        prevPts = po->prevPts;
+        for (count = po->numsegs; count; count--, segList++, prevPts++)
+        {
+            (*segList)->v1->x = prevPts->x;
+            (*segList)->v1->y = prevPts->y;
+            (*segList)->angle -= angle;
+        }
+        po->rtheta = po->dtheta = angle;
+    }
+
     return true;
 }
 
@@ -1354,6 +1406,7 @@ static void SpawnPolyobj(int index, int tag, boolean crush)
             polyobjs[index].seqType = segs[i].linedef->arg3;
             polyobjs[index].rx = 0; // [crispy]
             polyobjs[index].ry = 0; // [crispy]
+            polyobjs[index].rtheta = 0; // [crispy]
             if (polyobjs[index].seqType < 0
                 || polyobjs[index].seqType >= SEQTYPE_NUMSEQ)
             {
@@ -1431,6 +1484,7 @@ static void SpawnPolyobj(int index, int tag, boolean crush)
             polyobjs[index].tag = tag;
             polyobjs[index].rx = 0; // [crispy]
             polyobjs[index].ry = 0; // [crispy]
+            polyobjs[index].rtheta = 0; // [crispy]
             polyobjs[index].segs = Z_Malloc(polyobjs[index].numsegs
                                             * sizeof(seg_t *), PU_LEVEL, 0);
             for (i = 0; i < polyobjs[index].numsegs; i++)
