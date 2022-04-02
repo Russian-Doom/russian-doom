@@ -1060,7 +1060,7 @@ void I_FinishUpdate (void)
     // [AM] Figure out how far into the current tic we're in as a fixed_t.
     if (uncapped_fps)
     {
-        fractionaltic = I_GetTimeMS() * TICRATE % 1000 * FRACUNIT / 1000;
+        fractionaltic = I_GetFracRealTime();
     }
 }
 

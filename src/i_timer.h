@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include "m_fixed.h" // [crispy]
+
 
 #define TICRATE 35
 
@@ -38,3 +40,6 @@ void I_InitTimer(void);
 
 // Wait for vertical retrace or pause a bit.
 void I_WaitVBL(int count);
+
+// [crispy]
+fixed_t I_GetFracRealTime(void);
