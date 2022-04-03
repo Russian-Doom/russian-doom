@@ -5468,6 +5468,9 @@ void M_RD_BackToDefaults_Recommended (void)
     crosshair_type       = 1;
     crosshair_scale      = 0;
     crosshair_opacity    = 8;
+    Crosshair_DefinePatch();
+    Crosshair_DefineOpacity();
+    Crosshair_DefineDrawingFunc();
     // Gameplay (5)
     flip_levels          = 0;
     no_internal_demos    = 0;
@@ -5577,6 +5580,9 @@ static void M_RD_BackToDefaults_Original(void)
     crosshair_type       = 1;
     crosshair_scale      = 0;
     crosshair_opacity    = 8;
+    Crosshair_DefinePatch();
+    Crosshair_DefineOpacity();
+    Crosshair_DefineDrawingFunc();
     // Gameplay (5)
     flip_levels          = 0;
     no_internal_demos    = 0;

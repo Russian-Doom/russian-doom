@@ -772,47 +772,7 @@ void SB_Drawer(void)
     // [JN] Draw crosshair
     if (crosshair_draw && !automapactive && !vanillaparm)
     {
-        static int missilerange = 32*64*FRACUNIT; // [JN] MISSILERANGE
-
-        if (crosshair_type == 1)
-        {
-            dp_translation = CPlayer->health >= 67 ? NULL :
-                             CPlayer->health >= 34 ? cr[CR_GREEN2GOLD_HERETIC] :
-                                                     cr[CR_GREEN2RED_HERETIC];
-        }
-        else if (crosshair_type == 2)
-        {
-            P_AimLineAttack(CPlayer->mo, CPlayer->mo->angle, missilerange);
-
-            if (linetarget)
-            dp_translation = cr[CR_GREEN2BLUE_HERETIC];
-        }
-        else if (crosshair_type == 3)
-        {
-            dp_translation = CPlayer->health >= 67 ? NULL :
-                             CPlayer->health >= 34 ? cr[CR_GREEN2GOLD_HERETIC] :
-                                                     cr[CR_GREEN2RED_HERETIC];
-
-            P_AimLineAttack(CPlayer->mo, CPlayer->mo->angle, missilerange);
-
-            if (linetarget)
-            dp_translation = cr[CR_GREEN2BLUE_HERETIC];
-        }
-
-        if (crosshair_scale)
-        {
-            V_DrawPatch(origwidth/2,
-                ((screenblocks <= 10) ? (ORIGHEIGHT-38)/2 : (ORIGHEIGHT+4)/2),
-                W_CacheLumpName(DEH_String("XHAIR_1S"), PU_CACHE), NULL);
-        }
-        else
-        {
-            V_DrawPatchUnscaled(screenwidth/2,
-                ((screenblocks <= 10) ? (SCREENHEIGHT-76)/2 : (SCREENHEIGHT+8)/2),
-                W_CacheLumpName(DEH_String("XHAIR_1U"), PU_CACHE), NULL);
-        }
-
-        dp_translation = NULL;
+        Crosshair_Draw();
     }
 
     if ((screenblocks >= 11 && !automapactive) 
@@ -2129,6 +2089,174 @@ static void CheatRAVMUSFunc (player_t *player, Cheat_t *cheat)
                    txt_cheatmus, txt_cheatmus_e, args[0], txt_cheatmus_m, args[1]);
         P_SetMessage(player, msg, msg_system, true);
     }
+}
+
+/*
+================================================================================
+=
+= [JN] Crosshair routines. Defining, drawing, coloring.
+=
+================================================================================
+*/
+
+patch_t      *CrosshairPatch;
+byte         *CrosshairOpacity;
+static void (*Crosshair_Draw_Func) (void);
+
+// -----------------------------------------------------------------------------
+// Crosshair_DefinePatch: which GFX patch will be used.
+// -----------------------------------------------------------------------------
+
+patch_t *Crosshair_DefinePatch (void)
+{
+    return CrosshairPatch =
+        W_CacheLumpName(crosshair_shape == 1 ? "XHAIR_2" :
+                        crosshair_shape == 2 ? "XHAIR_3" :
+                        crosshair_shape == 3 ? "XHAIR_4" :
+                        crosshair_shape == 4 ? "XHAIR_5" :
+                        crosshair_shape == 5 ? "XHAIR_6" :
+                        crosshair_shape == 6 ? "XHAIR_7" :
+                                               "XHAIR_1", PU_CACHE);
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_DefineOpacity: what amount of transparency will be used.
+// -----------------------------------------------------------------------------
+
+void Crosshair_DefineOpacity (void)
+{
+    CrosshairOpacity = crosshair_opacity == 0 ? transtable20 :
+                       crosshair_opacity == 1 ? transtable30 :
+                       crosshair_opacity == 2 ? transtable40 :
+                       crosshair_opacity == 3 ? transtable50 :
+                       crosshair_opacity == 4 ? transtable60 :
+                       crosshair_opacity == 5 ? transtable70 :
+                       crosshair_opacity == 6 ? transtable80 :
+                       crosshair_opacity == 7 ? transtable90 :
+                                                NULL;
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_Colorize_inMenu: coloring routine for menu. Cycling through colors.
+// -----------------------------------------------------------------------------
+
+void Crosshair_Colorize_inMenu (void)
+{
+    if (crosshair_type == 1)
+    {
+        if (CrosshairShowcaseTimeout > 105)
+        {
+            CrosshairShowcaseTimeout = 105;
+        }
+
+        dp_translation = CrosshairShowcaseTimeout >= 70 ? cr[CR_WHITE2RED_HERETIC]  :
+                         CrosshairShowcaseTimeout >= 35 ? cr[CR_WHITE2GOLD_HERETIC] :
+                                                          cr[CR_WHITE2GREEN_HERETIC];
+    }
+    else if (crosshair_type == 2)
+    {
+        if (CrosshairShowcaseTimeout > 70)
+        {
+            CrosshairShowcaseTimeout = 70;
+        }
+
+        dp_translation = CrosshairShowcaseTimeout >= 35 ? cr[CR_WHITE2RED_HERETIC] :
+                                                          cr[CR_WHITE2AZURE_HERETIC];
+    }
+    else if (crosshair_type == 3)
+    {
+        dp_translation = CrosshairShowcaseTimeout >= 105 ? cr[CR_WHITE2RED_HERETIC]   :
+                         CrosshairShowcaseTimeout >=  70 ? cr[CR_WHITE2GOLD_HERETIC]  :
+                         CrosshairShowcaseTimeout >=  35 ? cr[CR_WHITE2GREEN_HERETIC] :
+                                                           cr[CR_WHITE2AZURE_HERETIC];
+    }
+    else
+    {
+        dp_translation = cr[CR_WHITE2RED_HERETIC];
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_Colorize_inGame: ingame coloring routine, actual colors/values.
+// -----------------------------------------------------------------------------
+
+static void Crosshair_Colorize_inGame (void)
+{
+    if (crosshair_type == 1)
+    {
+        dp_translation = CPlayer->health >= 67 ? cr[CR_WHITE2GREEN_HERETIC] :
+                         CPlayer->health >= 34 ? cr[CR_WHITE2GOLD_HERETIC]  :
+                                                 cr[CR_WHITE2RED_HERETIC];
+    }
+    else if (crosshair_type == 2)
+    {
+        dp_translation = cr[CR_WHITE2RED_HERETIC];
+
+        P_AimLineAttack(CPlayer->mo, CPlayer->mo->angle, MISSILERANGE);
+
+        if (linetarget)
+        {
+            dp_translation = cr[CR_WHITE2AZURE_HERETIC];
+        }
+    }
+    else if (crosshair_type == 3)
+    {
+        dp_translation = CPlayer->health >= 67 ? cr[CR_WHITE2GREEN_HERETIC] :
+                         CPlayer->health >= 34 ? cr[CR_WHITE2GOLD_HERETIC]  :
+                                                 cr[CR_WHITE2RED_HERETIC];
+
+        P_AimLineAttack(CPlayer->mo, CPlayer->mo->angle, MISSILERANGE);
+
+        if (linetarget)
+        {
+            dp_translation = cr[CR_WHITE2AZURE_HERETIC];
+        }
+    }
+    else
+    {
+        dp_translation = cr[CR_WHITE2RED_HERETIC];
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_Draw_Scaled: drawing func for scaled (big) crosshair.
+// -----------------------------------------------------------------------------
+
+static void Crosshair_Draw_Scaled (void)
+{
+    V_DrawPatch(origwidth/2, screenblocks <= 10 ? 81 : 102,
+                CrosshairPatch, CrosshairOpacity);
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_Draw_Unscaled: drawing func for unscaled (small) crosshair.
+// -----------------------------------------------------------------------------
+
+static void Crosshair_Draw_Unscaled (void)
+{
+    V_DrawPatchUnscaled(screenwidth/2, screenblocks <= 10 ? 162 : 204,
+                        CrosshairPatch, CrosshairOpacity);
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_DefineDrawingFunc: predefinition of drawing func for later use.
+// -----------------------------------------------------------------------------
+
+void Crosshair_DefineDrawingFunc (void)
+{
+    Crosshair_Draw_Func = crosshair_scale ? Crosshair_Draw_Scaled :
+                                            Crosshair_Draw_Unscaled;
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_Draw: actual coloring and drawing.
+// -----------------------------------------------------------------------------
+
+void Crosshair_Draw (void)
+{
+    Crosshair_Colorize_inGame();
+    Crosshair_Draw_Func();
+    dp_translation = NULL;
 }
 
 /*

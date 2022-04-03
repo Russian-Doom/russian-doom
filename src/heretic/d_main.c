@@ -196,8 +196,10 @@ int negative_health = 0;
 
 // Gameplay: Crosshair
 int crosshair_draw = 0;
-int crosshair_type = 1;
+int crosshair_shape = 0;
+int crosshair_opacity = 8;
 int crosshair_scale = 0;
+int crosshair_type = 1;
 
 // Gameplay: Gameplay
 int fix_map_errors = 1;
@@ -1039,8 +1041,10 @@ void D_BindVariables(void)
 
     // Gameplay: Crosshair
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);
-    M_BindIntVariable("crosshair_type",         &crosshair_type);
-    M_BindIntVariable("crosshair_scale",        &crosshair_scale);    
+    M_BindIntVariable("crosshair_shape",        &crosshair_shape);
+    M_BindIntVariable("crosshair_opacity",      &crosshair_opacity);
+    M_BindIntVariable("crosshair_scale",        &crosshair_scale);
+    M_BindIntVariable("crosshair_type",         &crosshair_type); 
 
     // Gameplay: Gameplay
     M_BindIntVariable("fix_map_errors",         &fix_map_errors);
@@ -1568,6 +1572,11 @@ void D_DoomMain(void)
                "SB_Init: Loading patches.\n" :
                "SB_Init: Загрузка патчей.\n");
     SB_Init();
+
+    // [JN] Predefine crosshair GFX patch, opacity and drawing function.
+    Crosshair_DefinePatch();
+    Crosshair_DefineOpacity();
+    Crosshair_DefineDrawingFunc();
 
     // [JN] Define and load translated strings
     RD_DefineLanguageStrings();

@@ -210,8 +210,11 @@ static void M_RD_NegativeHealth();
 static void M_RD_AmmoWidgetDraw(Direction_t direction);
 static void M_RD_AmmoWidgetColoring();
 static void M_RD_CrossHairDraw();
-static void M_RD_CrossHairType(Direction_t direction);
+static void M_RD_CrossHairShape(Direction_t direction);
+static void M_RD_CrossHairOpacity(Direction_t direction);
 static void M_RD_CrossHairScale();
+static void M_RD_CrossHairType(Direction_t direction);
+int CrosshairShowcaseTimeout;
 
 // Gameplay (page 3)
 static void DrawGameplay3Menu(void);
@@ -1061,7 +1064,7 @@ static Menu_t Gamepad2Menu = {
 
 static const PageDescriptor_t GameplayPageDescriptor = {
     4, GameplayMenuPages,
-    254, 166,
+    254, 176,
     CR_WHITE2GRAY_HERETIC
 };
 
@@ -1079,6 +1082,7 @@ static MenuItem_t Gameplay1Items[] = {
     {ITT_EMPTY,   NULL,                           NULL,                             NULL,                 0},
     {ITT_EMPTY,   NULL,                           NULL,                             NULL,                 0},
     {ITT_EMPTY,   NULL,                           NULL,                             NULL,                 0},
+    {ITT_EMPTY,   NULL,                           NULL,                             NULL,                 0},
     {ITT_SETMENU, "NEXT PAGE >",                  "CKTLE.OFZ CNHFYBWF `",           &Gameplay2Menu,       0}, // СЛЕДУЮЩАЯ СТРАНИЦА >
     {ITT_SETMENU, "< LAST PAGE",                  "^ GJCKTLYZZ CNHFYBWF",           &Gameplay4Menu,       0}  // < ПОСЛЕДНЯЯ СТРАНИЦА
 };
@@ -1087,7 +1091,7 @@ static Menu_t Gameplay1Menu = {
     36, 36,
     26,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
-    15, Gameplay1Items, false,
+    16, Gameplay1Items, false,
     DrawGameplay1Menu,
     &GameplayPageDescriptor,
     &RDOptionsMenu,
@@ -1108,10 +1112,11 @@ static MenuItem_t Gameplay2Items[] = {
     {ITT_SWITCH,  "COLORING:",             "WDTNJDFZ BYLBRFWBZ:",         M_RD_AmmoWidgetColoring, 0}, // ЦВЕТОВАЯ ИНДИКАЦИЯ
     {ITT_TITLE,   "CROSSHAIR",             "GHBWTK",                      NULL,                    0}, // ПРИЦЕЛ
     {ITT_SWITCH,  "DRAW CROSSHAIR:",       "JNJ,HF;FNM GHBWTK:",          M_RD_CrossHairDraw,      0}, // ОТОБРАЖАТЬ ПРИЦЕЛ
-    {ITT_LRFUNC,  "INDICATION:",           "BYLBRFWBZ:",                  M_RD_CrossHairType,      0}, // ИНДИКАЦИЯ
+    {ITT_LRFUNC,  "SHAPE:",                "AJHVF:",                      M_RD_CrossHairShape,     0}, // ФОРМА
+    {ITT_LRFUNC,  "OPACITY:",              "YTGHJPHFXYJCNM:",             M_RD_CrossHairOpacity,   0}, // НЕПРОЗРАЧНОСТЬ
     {ITT_SWITCH,  "INCREASED SIZE:",       "EDTKBXTYYSQ HFPVTH:",         M_RD_CrossHairScale,     0}, // УВЕЛИЧЕННЫЙ РАЗМЕР
-    {ITT_EMPTY,   NULL,                    NULL,                          NULL,                    0},
-    {ITT_EMPTY,   NULL,                    NULL,                          NULL,                    0},
+    {ITT_LRFUNC,  "INDICATION:",           "BYLBRFWBZ:",                  M_RD_CrossHairType,      0}, // ИНДИКАЦИЯ
+    {ITT_EMPTY,   NULL,                           NULL,                             NULL,                 0},
     {ITT_SETMENU, "NEXT PAGE >",           "CKTLE.OFZ CNHFYBWF `",        &Gameplay3Menu,          0}, // СЛЕДУЮЩАЯ СТРАНИЦА >
     {ITT_SETMENU, "< PREV PAGE",           "^ GHTLSLEOFZ CNHFYBWF",       &Gameplay1Menu,          0}  // < ПРЕДЫДУЩАЯ СТРАНИЦА
 };
@@ -1120,7 +1125,7 @@ static Menu_t Gameplay2Menu = {
     36, 36,
     26,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
-    15, Gameplay2Items, false,
+    16, Gameplay2Items, false,
     DrawGameplay2Menu,
     &GameplayPageDescriptor,
     &RDOptionsMenu,
@@ -1145,6 +1150,7 @@ static MenuItem_t Gameplay3Items[] = {
     {ITT_SWITCH,  "WEAPON BOBBING WHILE FIRING:",    "EKEXITYYJT GJRFXBDFYBT JHE;BZ:", M_RD_Bobbing,        0}, // УЛУЧШЕННОЕ ПОКАЧИВАНИЕ ОРУЖИЯ
     {ITT_LRFUNC,  "FLOATING ITEMS AMPLITUDE:" ,      "KTDBNFWBZ GHTLVTNJD:",           M_RD_FloatAmplitude, 0}, // АМПЛИТУДА ЛЕВИТАЦИИ ПРЕДМЕТОВ
     {ITT_EMPTY,   NULL,                              NULL,                             NULL,                0},
+    {ITT_EMPTY,   NULL,                              NULL,                             NULL,                0},
     {ITT_SETMENU, "NEXT PAGE >",                     "GJCKTLYZZ CNHFYBWF `",           &Gameplay4Menu,      0}, // СЛЕДУЮЩАЯ СТРАНИЦА >
     {ITT_SETMENU, "< PREV PAGE",                     "^ GHTLSLEOFZ CNHFYBWF",          &Gameplay2Menu,      0}  // < ПРЕДЫДУЩАЯ СТРАНИЦА
 };
@@ -1153,7 +1159,7 @@ static Menu_t Gameplay3Menu = {
     36, 36,
     26,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
-    15, Gameplay3Items, false,
+    16, Gameplay3Items, false,
     DrawGameplay3Menu,
     &GameplayPageDescriptor,
     &RDOptionsMenu,
@@ -1178,6 +1184,7 @@ static MenuItem_t Gameplay4Items[] = {
     {ITT_EMPTY,   NULL,                          NULL,                              NULL,              0},
     {ITT_EMPTY,   NULL,                          NULL,                              NULL,              0},
     {ITT_EMPTY,   NULL,                          NULL,                              NULL,              0},
+    {ITT_EMPTY,   NULL,                           NULL,                             NULL,                 0},
     {ITT_SETMENU, "FIRST PAGE >",                "GTHDFZ CNHFYBWF `",               &Gameplay1Menu,    0}, // ПЕРВАЯ СТРАНИЦА >
     {ITT_SETMENU, "< PREV PAGE",                 "^ GHTLSLEOFZ CNHFYBWF",           &Gameplay3Menu,    0}  // < ПРЕДЫДУЩАЯ СТРАНИЦА
 };
@@ -1186,7 +1193,7 @@ static Menu_t Gameplay4Menu = {
     36, 36,
     26,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
-    15, Gameplay4Items, false,
+    16, Gameplay4Items, false,
     DrawGameplay4Menu,
     &GameplayPageDescriptor,
     &RDOptionsMenu,
@@ -1580,6 +1587,16 @@ void MN_Ticker(void)
     if (speaker_test_timeout)
     {
         speaker_test_timeout--;
+    }
+
+    // [JN] Decrease crosshair color showcase timer, reset when it reaches zero.
+    if (CrosshairShowcaseTimeout > 0)
+    {
+        CrosshairShowcaseTimeout--;
+    }
+    else
+    {
+        CrosshairShowcaseTimeout = 140; // Equals TICRATE * 4, four seconds.
     }
 }
 
@@ -3971,16 +3988,25 @@ static void DrawGameplay2Menu(void)
         RD_M_DrawTextSmallENG(crosshair_draw ? "ON" : "OFF", 150 + wide_delta, 106,
                               crosshair_draw ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
 
+        // Shape
+        RD_M_DrawTextSmallENG(crosshair_shape == 1 ? "CROSS/2" :
+                              crosshair_shape == 2 ? "X" :
+                              crosshair_shape == 3 ? "CIRCLE" :
+                              crosshair_shape == 4 ? "ANGLE" :
+                              crosshair_shape == 5 ? "TRIANGLE" :
+                              crosshair_shape == 6 ? "DOT" : "CROSS",
+                              84 + wide_delta, 116, CR_WHITE2GREEN_HERETIC);
+
         // Indication
         RD_M_DrawTextSmallENG(crosshair_type == 1 ? "HEALTH" :
                               crosshair_type == 2 ? "TARGET HIGHLIGHTING" :
                               crosshair_type == 3 ? "TARGET HIGHLIGHTING+HEALTH" :
                               "STATIC",
-                              111 + wide_delta, 116,
+                              111 + wide_delta, 146,
                               crosshair_type ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
 
         // Increased size
-        RD_M_DrawTextSmallENG(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 126,
+        RD_M_DrawTextSmallENG(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 136,
                               crosshair_scale ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
     }
     else
@@ -4025,18 +4051,56 @@ static void DrawGameplay2Menu(void)
         RD_M_DrawTextSmallRUS(crosshair_draw ? "DRK" : "DSRK", 175 + wide_delta, 106,
                               crosshair_draw ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
 
+        // Форма
+        RD_M_DrawTextSmallRUS(crosshair_shape == 1 ? "RHTCN/2" :      // КРЕСТ/2
+                              crosshair_shape == 2 ? "[" :            // X
+                              crosshair_shape == 3 ? "RHEU" :         // КРУГ
+                              crosshair_shape == 4 ? "EUJK" :         // УГОЛ
+                              crosshair_shape == 5 ? "NHTEUJKMYBR" :  // ТРЕУГОЛЬНИК
+                              crosshair_shape == 6 ? "NJXRF" :        // ТОЧКА
+                                                     "RHTCN",         // КРЕСТ
+                              87 + wide_delta, 116, CR_WHITE2GREEN_HERETIC);
+
         // Индикация
         RD_M_DrawTextSmallRUS(crosshair_type == 1 ? "PLJHJDMT" : // ЗДОРОВЬЕ
                               crosshair_type == 2 ? "GJLCDTNRF WTKB" : // ПОДСВЕТКА ЦЕЛИ
                               crosshair_type == 3 ? "GJLCDTNRF WTKB+PLJHJDMT" :
                               "CNFNBXYFZ", // СТАТИЧНАЯ
-                              111 + wide_delta, 116,
+                              111 + wide_delta, 146,
                               crosshair_type ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
 
         // Увеличенный размер
-        RD_M_DrawTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 126,
+        RD_M_DrawTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 136,
                               crosshair_scale ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
     }
+
+    // Draw crosshair background.
+    V_DrawPatch(235 + wide_delta, 113, W_CacheLumpName("XHAIRBOX", PU_CACHE), NULL);
+    // Colorize crosshair depending on it's type.
+    Crosshair_Colorize_inMenu();
+    // Draw crosshair preview.
+    if (crosshair_scale)
+    {
+        V_DrawPatch(250 + wide_delta, 128, CrosshairPatch, CrosshairOpacity);
+    }
+    else
+    {
+        V_DrawPatchUnscaled(500 + wide_delta*2, 256, CrosshairPatch, CrosshairOpacity);
+    }
+    // Clear colorization.
+    dp_translation = NULL;
+
+    // Opacity | Непрозрачность
+    RD_M_DrawTextSmallENG(crosshair_opacity == 0 ? "20%" :
+                          crosshair_opacity == 1 ? "30%" :
+                          crosshair_opacity == 2 ? "40%" :
+                          crosshair_opacity == 3 ? "50%" :
+                          crosshair_opacity == 4 ? "60%" :
+                          crosshair_opacity == 5 ? "70%" :
+                          crosshair_opacity == 6 ? "80%" :
+                          crosshair_opacity == 7 ? "90%" : "100%",
+                          (english_language ? 95 : 149) + wide_delta,
+                          126, CR_WHITE2GRAY_HERETIC);
 }
 
 static void M_RD_ColoredSBar()
@@ -4069,14 +4133,27 @@ static void M_RD_CrossHairDraw()
     crosshair_draw ^= 1;
 }
 
-static void M_RD_CrossHairType(Direction_t direction)
+static void M_RD_CrossHairShape(Direction_t direction)
 {
-    RD_Menu_SpinInt(&crosshair_type, 0, 3, direction);
+    RD_Menu_SpinInt(&crosshair_shape, 0, 6, direction);
+    Crosshair_DefinePatch();
+}
+
+static void M_RD_CrossHairOpacity(Direction_t direction)
+{
+    RD_Menu_SlideInt(&crosshair_opacity, 0, 8, direction);
+    Crosshair_DefineOpacity();
 }
 
 static void M_RD_CrossHairScale()
 {
     crosshair_scale ^= 1;
+    Crosshair_DefineDrawingFunc();
+}
+
+static void M_RD_CrossHairType(Direction_t direction)
+{
+    RD_Menu_SpinInt(&crosshair_type, 0, 3, direction);
 }
 
 // -----------------------------------------------------------------------------
@@ -5025,8 +5102,13 @@ static void M_RD_BackToDefaults_Recommended(void)
     ammo_widget          = 0;
     ammo_widget_colored  = 0;
     crosshair_draw       = 0;
-    crosshair_type       = 1;
+    crosshair_shape      = 0;
+    crosshair_opacity    = 8;
     crosshair_scale      = 0;
+    crosshair_type       = 1;
+    Crosshair_DefinePatch();
+    Crosshair_DefineOpacity();
+    Crosshair_DefineDrawingFunc();
 
     // Gameplay (3)
     z_axis_sfx           = 1;
@@ -5166,8 +5248,13 @@ static void M_RD_BackToDefaults_Original(void)
     ammo_widget          = 0;
     ammo_widget_colored  = 0;
     crosshair_draw       = 0;
-    crosshair_type       = 1;
+    crosshair_shape      = 0;
+    crosshair_opacity    = 8;
     crosshair_scale      = 0;
+    crosshair_type       = 1;
+    Crosshair_DefinePatch();
+    Crosshair_DefineOpacity();
+    Crosshair_DefineDrawingFunc();
 
     // Gameplay (3)
     z_axis_sfx           = 0;

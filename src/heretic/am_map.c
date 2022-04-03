@@ -1706,10 +1706,8 @@ static void AM_drawkeys(void)
 
 static void AM_drawCrosshair (void)
 {
-    dp_translation = cr[CR_GREEN2GRAY_HERETIC];
     V_DrawPatchUnscaled(screenwidth/2, 160, 
-                        W_CacheLumpName("XHAIR_1S", PU_CACHE), NULL);
-    dp_translation = NULL;
+                        W_CacheLumpName("XHAIR_1", PU_CACHE), NULL);
 }
 
 void AM_Drawer(void)

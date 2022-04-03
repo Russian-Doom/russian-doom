@@ -6138,6 +6138,7 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     crosshair_type    = 1;
     Crosshair_DefinePatch();
     Crosshair_DefineOpacity();
+    Crosshair_DefineDrawingFunc();
 
     // Gameplay: Tactical
     secret_notification = 1;
@@ -6335,6 +6336,7 @@ static void M_RD_BackToDefaults_Original(int choice)
     crosshair_type    = 1;
     Crosshair_DefinePatch();
     Crosshair_DefineOpacity();
+    Crosshair_DefineDrawingFunc();
 
     // Gameplay: Physical
     improved_collision   = 0;

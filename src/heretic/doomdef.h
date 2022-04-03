@@ -60,6 +60,8 @@
 
 #include "d_loop.h"
 
+#include "v_patch.h"
+
 #include "rd_menu_control.h"
 #include "rd_text.h"
 
@@ -864,6 +866,16 @@ void SB_Init(void);
 boolean SB_Responder(event_t * event);
 void SB_Ticker(void);
 void SB_Drawer(void);
+
+// [JN] Crosshair stuff.
+extern patch_t *CrosshairPatch;
+extern patch_t *Crosshair_DefinePatch (void);
+extern byte *CrosshairOpacity;
+extern int  CrosshairShowcaseTimeout;
+extern void Crosshair_DefineOpacity (void);
+extern void Crosshair_DefineDrawingFunc (void);
+extern void Crosshair_Colorize_inMenu (void);
+extern void Crosshair_Draw (void);
 
 //-----------------
 // MENU (MN_menu.c)
