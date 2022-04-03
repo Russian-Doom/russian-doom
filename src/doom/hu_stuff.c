@@ -35,6 +35,7 @@
 #include "w_wad.h"
 #include "s_sound.h"
 #include "doomstat.h"
+#include "p_local.h"
 #include "st_stuff.h" // [JN] ST_HEIGHT
 #include "v_trans.h"  // [JN] Crosshair coloring
 #include "v_video.h"  // [JN] V_DrawPatch
@@ -1262,51 +1263,9 @@ void HU_Drawer(void)
     // [JN] Draw crosshair. 
     // Thanks to Fabian Greffrath for ORIGWIDTH, ORIGHEIGHT and ST_HEIGHT values,
     // thanks to Zodomaniac for proper health values!
-    if (crosshair_draw && !automapactive && !vanillaparm)
+    if (crosshair_draw && !automapactive && !menuactive && !vanillaparm)
     {
-        static int missilerange = 32*64*FRACUNIT; // [JN] MISSILERANGE
-        extern fixed_t  P_AimLineAttack(mobj_t *t1, angle_t angle, fixed_t distance);
-        extern mobj_t  *linetarget; // who got hit (or NULL)
-
-        if (crosshair_type == 1)
-        {
-            dp_translation = plr->health >= 67 ? cr[CR_GREEN] :
-                             plr->health >= 34 ? cr[CR_YELLOW] :
-                                                 cr[CR_RED];
-        }
-        else if (crosshair_type == 2)
-        {
-            P_AimLineAttack(plr->mo, plr->mo->angle, missilerange);
-
-            if (linetarget)
-            dp_translation = cr[CR_BLUE];
-        }
-        else if (crosshair_type == 3)
-        {
-            dp_translation = plr->health >= 67 ? cr[CR_GREEN] :
-                             plr->health >= 34 ? cr[CR_YELLOW] :
-                                                 cr[CR_RED];
-
-            P_AimLineAttack(plr->mo, plr->mo->angle, missilerange);
-
-            if (linetarget)
-            dp_translation = cr[CR_BLUE];
-        }
-
-        if (crosshair_scale)
-        {
-            V_DrawPatch(origwidth/2, ((screenblocks <= 10) ?
-                (ORIGHEIGHT-ST_HEIGHT+2)/2 : (ORIGHEIGHT+2)/2),
-                    W_CacheLumpName(DEH_String("XHAIR_1S"), PU_CACHE), NULL);
-        }
-        else
-        {
-            V_DrawPatchUnscaled(screenwidth/2, ((screenblocks <= 10) ?
-                (SCREENHEIGHT-ST_HEIGHT-26)/2 : (SCREENHEIGHT+4)/2),
-                    W_CacheLumpName(DEH_String("XHAIR_1U"), PU_CACHE), NULL);
-        }
-
-        dp_translation = NULL;
+        Crosshair_Draw();
     }
 
     // [crispy] demo timer widget
@@ -1668,3 +1627,81 @@ boolean HU_Responder(event_t *ev)
     return eatkey;
 }
 
+// -----------------------------------------------------------------------------
+// [JN] Crosshair routines. Defining, drawing, coloring.
+// -----------------------------------------------------------------------------
+
+patch_t *CrosshairPatch;
+byte    *CrosshairOpacity;
+
+patch_t *Crosshair_DefinePatch (void)
+{
+    return CrosshairPatch =
+        W_CacheLumpName(crosshair_shape == 1 ? "XHAIR_2" :
+                        crosshair_shape == 2 ? "XHAIR_3" :
+                        crosshair_shape == 3 ? "XHAIR_4" :
+                        crosshair_shape == 4 ? "XHAIR_5" :
+                        crosshair_shape == 5 ? "XHAIR_6" :
+                        crosshair_shape == 6 ? "XHAIR_7" :
+                                               "XHAIR_1", PU_CACHE);
+}
+
+void Crosshair_DefineOpacity (void)
+{
+    CrosshairOpacity = crosshair_opacity == 0 ? transtable20 :
+                       crosshair_opacity == 1 ? transtable30 :
+                       crosshair_opacity == 2 ? transtable40 :
+                       crosshair_opacity == 3 ? transtable50 :
+                       crosshair_opacity == 4 ? transtable60 :
+                       crosshair_opacity == 5 ? transtable70 :
+                       crosshair_opacity == 6 ? transtable80 :
+                       crosshair_opacity == 7 ? transtable90 :
+                                                NULL;
+}
+
+void Crosshair_Colorize (void)
+{
+        if (crosshair_type == 1)
+        {
+            dp_translation = plr->health >= 67 ? cr[CR_GREEN] :
+                             plr->health >= 34 ? cr[CR_YELLOW] :
+                                                 cr[CR_RED];
+        }
+        else if (crosshair_type == 2)
+        {
+            P_AimLineAttack(plr->mo, plr->mo->angle, MISSILERANGE);
+
+            if (linetarget)
+            dp_translation = cr[CR_BLUE];
+        }
+        else if (crosshair_type == 3)
+        {
+            dp_translation = plr->health >= 67 ? cr[CR_GREEN] :
+                             plr->health >= 34 ? cr[CR_YELLOW] :
+                                                 cr[CR_RED];
+
+            P_AimLineAttack(plr->mo, plr->mo->angle, MISSILERANGE);
+
+            if (linetarget)
+            dp_translation = cr[CR_BLUE];
+        }
+
+}
+
+void Crosshair_Draw (void)
+{
+    Crosshair_Colorize();
+
+    if (crosshair_scale)
+    {
+        V_DrawPatch(origwidth/2, screenblocks <= 10 ? 84 : 100,
+                    CrosshairPatch, CrosshairOpacity);
+    }
+    else
+    {
+        V_DrawPatchUnscaled(screenwidth/2, screenblocks <= 10 ? 168 : 200,
+                            CrosshairPatch, CrosshairOpacity);
+    }
+
+    dp_translation = NULL;
+}

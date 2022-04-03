@@ -2487,8 +2487,7 @@ static void AM_drawCrosshair (int color)
         if (!automap_follow)
         {
             dp_translation = cr[CR_GRAY];
-            V_DrawPatchUnscaled(screenwidth/2, (SCREENHEIGHT-ST_HEIGHT-26)/2,
-                                W_CacheLumpName(DEH_String("XHAIR_1S"), PU_CACHE), NULL);
+            V_DrawPatchUnscaled(screenwidth/2, 168, W_CacheLumpName(("XHAIR_1"), PU_CACHE), NULL);
             dp_translation = NULL;
         }
     }

@@ -78,3 +78,10 @@ extern byte *hud_level_color_set;
 extern byte *hud_values_color_set;
 
 extern char *chat_macros[10];
+
+extern patch_t *CrosshairPatch;
+extern patch_t *Crosshair_DefinePatch (void);
+extern byte *CrosshairOpacity;
+extern void Crosshair_DefineOpacity (void);
+extern void Crosshair_Colorize (void);
+extern void Crosshair_Draw (void);

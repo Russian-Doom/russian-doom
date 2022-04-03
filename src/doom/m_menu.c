@@ -280,6 +280,7 @@ static void M_RD_Draw_Gameplay_3();
 static void M_RD_Draw_Gameplay_4();
 static void M_RD_Draw_Gameplay_5();
 
+// Page 1
 static void M_RD_Change_Brightmaps();
 static void M_RD_Change_FakeContrast();
 static void M_RD_Change_Translucency();
@@ -291,6 +292,7 @@ static void M_RD_Change_LinearSky();
 static void M_RD_Change_FlipCorpses();
 static void M_RD_Change_FlipWeapons();
 
+// Page 2
 static void M_RD_Change_ExtraPlayerFaces();
 static void M_RD_Change_NegativeHealth();
 static void M_RD_Change_SBarColored(Direction_t direction);
@@ -302,16 +304,19 @@ static void M_RD_Change_SBarArmorType1(Direction_t direction);
 static void M_RD_Change_SBarArmorType2(Direction_t direction);
 static void M_RD_Change_SBarArmorType0(Direction_t direction);
 
+// Page 3
 static void M_RD_Change_ZAxisSfx();
 static void M_RD_Change_ExitSfx();
 static void M_RD_Change_CrushingSfx();
 static void M_RD_Change_BlazingSfx();
 static void M_RD_Change_AlertSfx();
+static void M_RD_Change_CrosshairDraw();
+static void M_RD_Change_CrosshairShape(Direction_t direction);
+static void M_RD_Change_CrosshairOpacity(Direction_t direction);
+static void M_RD_Change_CrosshairScale();
+static void M_RD_Change_CrosshairType(Direction_t direction);
 
-static void M_RD_Change_SecretNotify();
-static void M_RD_Change_InfraGreenVisor();
-static void M_RD_Change_HorizontalAiming();
-
+// Page 4
 static void M_RD_Change_ImprovedCollision();
 static void M_RD_Change_WalkOverUnder();
 static void M_RD_Change_Torque();
@@ -319,10 +324,11 @@ static void M_RD_Change_Bobbing();
 static void M_RD_Change_SSGBlast();
 static void M_RD_Change_FloatPowerups(Direction_t direction);
 static void M_RD_Change_TossDrop();
-static void M_RD_Change_CrosshairDraw();
-static void M_RD_Change_CrosshairType(Direction_t direction);
-static void M_RD_Change_CrosshairScale();
+static void M_RD_Change_SecretNotify();
+static void M_RD_Change_InfraGreenVisor();
+static void M_RD_Change_HorizontalAiming();
 
+// Page 5
 static void M_RD_Change_FixMapErrors();
 static void M_RD_Change_FlipLevels();
 static void M_RD_Change_LostSoulsQty();
@@ -1573,12 +1579,12 @@ static MenuItem_t Gameplay3Items[] = {
     {ITT_SWITCH,  "Sound of crushing corpses:",      "Pder hfplfdkbdfybz nhegjd:",    M_RD_Change_CrushingSfx,     0}, // Звук раздавливания трупов
     {ITT_SWITCH,  "Single sound of blazing door:",   "Jlbyjxysq pder ,scnhjq ldthb:", M_RD_Change_BlazingSfx,      0}, // Одиночный звук быстрой двери
     {ITT_SWITCH,  "Monster alert waking up others:", "J,ofz nhtdjuf e vjycnhjd:",     M_RD_Change_AlertSfx,        0}, // Общая тревога у монстров
-    {ITT_TITLE,   "Tactical",                        "Nfrnbrf",                       NULL,                        0}, // Тактика
-    {ITT_SWITCH,  "Notify of revealed secrets:",     "Cjj,ofnm j yfqltyyjv nfqybrt:", M_RD_Change_SecretNotify,    0}, // Сообщать о найденном тайнике
-    {ITT_SWITCH,  "Infragreen light amp. visor:",    "Byahfptktysq dbpjh jcdtotybz:", M_RD_Change_InfraGreenVisor, 0}, // Инфразеленый визор освещения
-    {ITT_LRFUNC,  "Horizontal autoaiming:",          "fdnjghbwtkbdfybt:",             M_RD_Change_HorizontalAiming, 0}, // Автоприцеливание
-    {ITT_EMPTY,   NULL,                              NULL,                            NULL,                        0},
-    {ITT_EMPTY,   NULL,                              NULL,                            NULL,                        0},
+    {ITT_TITLE,   "Crosshair",                       "Ghbwtk",                        NULL,                        0}, // Прицел
+    {ITT_SWITCH,  "Draw crosshair:",                 "Jnj,hf;fnm ghbwtk:",            M_RD_Change_CrosshairDraw,   0}, // Отображать прицел
+    {ITT_LRFUNC,  "Shape:",                          "Ajhvf:",                        M_RD_Change_CrosshairShape,  0}, // Форма
+    {ITT_LRFUNC,  "Opacity:",                        "Ytghjphfxyjcnm:",               M_RD_Change_CrosshairOpacity,0}, // Непрозрачность
+    {ITT_SWITCH,  "Increased size:",                 "Edtkbxtyysq hfpvth:",           M_RD_Change_CrosshairScale,  0}, // Увеличенный размер
+    {ITT_LRFUNC,  "Indication:",                     "Bylbrfwbz:",                    M_RD_Change_CrosshairType,   0}, // Индикация
     {ITT_SETMENU, NULL, /* Next page >   */          NULL,                            &Gameplay4Menu,              0}, // Далее >
     {ITT_SETMENU, NULL, /* < Prev page > */          NULL,                            &Gameplay2Menu,              0}  // < Назад
 };
@@ -1603,10 +1609,10 @@ static MenuItem_t Gameplay4Items[] = {
     {ITT_SWITCH,  "Lethal pellet of a point-blank SSG:", "ldecndjkrf hfphsdftn dhfujd:",    M_RD_Change_SSGBlast,       0}, // Двустволка разрывает врагов
     {ITT_LRFUNC,  "Floating powerups amplitude:",        "gjrfxbdfybt cath-fhntafrnjd:",    M_RD_Change_FloatPowerups,  0}, // Покачивание сфер-артефактов
     {ITT_SWITCH,  "Items are tossed when dropped:",      "Gjl,hfcsdfnm dsgfdibt ghtlvtns:", M_RD_Change_TossDrop,       0}, // Подбрасывать выпавшие предметы
-    {ITT_TITLE,   "Crosshair",                           "Ghbwtk",                          NULL,                       0}, // Прицел
-    {ITT_SWITCH,  "Draw crosshair:",                     "Jnj,hf;fnm ghbwtk:",              M_RD_Change_CrosshairDraw,  0}, // Отображать прицел
-    {ITT_LRFUNC,  "Indication:",                         "Bylbrfwbz:",                      M_RD_Change_CrosshairType,  0}, // Индикация
-    {ITT_SWITCH,  "Increased size:",                     "Edtkbxtyysq hfpvth:",             M_RD_Change_CrosshairScale, 0}, // Увеличенный размер
+    {ITT_TITLE,   "Tactical",                            "Nfrnbrf",                         NULL,                        0}, // Тактика
+    {ITT_SWITCH,  "Notify of revealed secrets:",         "Cjj,ofnm j yfqltyyjv nfqybrt:",   M_RD_Change_SecretNotify,    0}, // Сообщать о найденном тайнике
+    {ITT_SWITCH,  "Infragreen light amp. visor:",        "Byahfptktysq dbpjh jcdtotybz:",   M_RD_Change_InfraGreenVisor, 0}, // Инфразеленый визор освещения
+    {ITT_LRFUNC,  "Horizontal autoaiming:",              "fdnjghbwtkbdfybt:",               M_RD_Change_HorizontalAiming,0}, // Автоприцеливание
     {ITT_SETMENU, NULL, /* Next page >   */              NULL,                              &Gameplay5Menu,             0}, // Далее >
     {ITT_SETMENU, NULL, /* < Prev page > */              NULL,                              &Gameplay3Menu,             0}  // < Назад
 };
@@ -4597,23 +4603,28 @@ static void M_RD_Draw_Gameplay_3(void)
         RD_M_DrawTextSmallENG(noise_alert_sfx ? RD_ON : RD_OFF,263 + wide_delta, 75,
                               noise_alert_sfx ? CR_GREEN : CR_DARKRED);
 
-        // Notify of revealed secrets
-        RD_M_DrawTextSmallENG(secret_notification ? RD_ON : RD_OFF,232 + wide_delta, 95,
-                               secret_notification ? CR_GREEN : CR_DARKRED);
+        // Draw crosshair
+        RD_M_DrawTextSmallENG(crosshair_draw ? RD_ON : RD_OFF, 146 + wide_delta, 95,
+                              crosshair_draw ? CR_GREEN : CR_DARKRED);
 
-        // Infragreen light amp. visor
-        RD_M_DrawTextSmallENG(infragreen_visor ? RD_ON : RD_OFF,230 + wide_delta, 105,
-                              infragreen_visor ? CR_GREEN : CR_DARKRED);
+        // Shape
+        RD_M_DrawTextSmallENG(crosshair_shape == 1 ? "CROSS/2" :
+                              crosshair_shape == 2 ? "X" :
+                              crosshair_shape == 3 ? "CIRCLE" :
+                              crosshair_shape == 4 ? "ANGLE" :
+                              crosshair_shape == 5 ? "TRIANGLE" :
+                              crosshair_shape == 6 ? "DOT" : "CROSS",
+                              82 + wide_delta, 105, CR_GREEN);
+        // Increased size
+        RD_M_DrawTextSmallENG(crosshair_scale ? RD_ON : RD_OFF, 140 + wide_delta, 125,
+                              crosshair_scale ? CR_GREEN : CR_DARKRED);
 
-        // Horizontal autoaiming
-        RD_M_DrawTextSmallENG(horizontal_autoaim == 0 ? "hitscans only" : 
-                              horizontal_autoaim == 1 ? "projectiles only" :
-                              horizontal_autoaim == 2 ? "off" : 
-                                                        "on", 195 + wide_delta, 115,
-                              horizontal_autoaim == 0 ? CR_DARKGREEN :
-                              horizontal_autoaim == 1 ? CR_DARKGREEN :
-                              horizontal_autoaim == 2 ? CR_DARKRED : 
-                                                        CR_GREEN);
+        // Indication
+        RD_M_DrawTextSmallENG(crosshair_type == 1 ? "Health" :
+                              crosshair_type == 2 ? "Target highlighting" :
+                              crosshair_type == 3 ? "Target highlighting+Health" :
+                              "Static", 111 + wide_delta, 135,
+                              crosshair_type ? CR_GREEN : CR_DARKRED);
 
         //
         // Footer
@@ -4643,28 +4654,64 @@ static void M_RD_Draw_Gameplay_3(void)
         RD_M_DrawTextSmallRUS(noise_alert_sfx ? RD_ON_RUS : RD_OFF_RUS, 227 + wide_delta, 75,
                               noise_alert_sfx ? CR_GREEN : CR_DARKRED);
 
-        // Сообщать о найденном тайнике
-        RD_M_DrawTextSmallRUS(secret_notification ? RD_ON_RUS : RD_OFF_RUS, 260 + wide_delta, 95,
-                              secret_notification ? CR_GREEN : CR_DARKRED);
+        // Отображать прицел
+        RD_M_DrawTextSmallRUS(crosshair_draw ? RD_ON_RUS : RD_OFF_RUS, 180 + wide_delta, 95,
+                              crosshair_draw ? CR_GREEN : CR_DARKRED);
 
-        // Инфразеленый визор освещения
-        RD_M_DrawTextSmallRUS(infragreen_visor ? RD_ON_RUS : RD_OFF_RUS, 266 + wide_delta, 105,
-                              infragreen_visor ? CR_GREEN : CR_DARKRED);
+        // Форма
+        RD_M_DrawTextSmallRUS(crosshair_shape == 1 ? "RHTCN*2" :      // КРЕСТ/2
+                              crosshair_shape == 2 ? "[" :            // X
+                              crosshair_shape == 3 ? "RHEU" :         // КРУГ
+                              crosshair_shape == 4 ? "EUJK" :         // УГОЛ
+                              crosshair_shape == 5 ? "NHTEUJKMYBR" :  // ТРЕУГОЛЬНИК
+                              crosshair_shape == 6 ? "NJXRF" :        // ТОЧКА
+                                                     "RHTCN",         // КРЕСТ
+                              86 + wide_delta, 105, CR_GREEN);
 
-        // Horizontal autoaiming
-        RD_M_DrawTextSmallRUS(horizontal_autoaim == 0 ? "njkmrj [bncrfys" :  // только хитсканы
-                              horizontal_autoaim == 1 ? "njkmrj cyfhzls" :   // только снаряды
-                              horizontal_autoaim == 2 ? "dsrk" : 
-                                                        "drk", 172 + wide_delta, 115,
-                              horizontal_autoaim == 0 ? CR_DARKGREEN :
-                              horizontal_autoaim == 1 ? CR_DARKGREEN :
-                              horizontal_autoaim == 2 ? CR_DARKRED : 
-                                                        CR_GREEN);
+        // Увеличенный размер
+        RD_M_DrawTextSmallRUS(crosshair_scale ? RD_ON_RUS : RD_OFF_RUS, 185 + wide_delta, 125,
+                              crosshair_scale ? CR_GREEN : CR_DARKRED);
+
+        // Индикация
+        RD_M_DrawTextSmallRUS(crosshair_type == 1 ? "Pljhjdmt" :       // Здоровье
+                              crosshair_type == 2 ? "Gjlcdtnrf wtkb" : // Подсветка цели
+                              crosshair_type == 3 ? "Gjlcdtnrf wtkb+pljhjdmt" : // Подсветка цели + здоровье
+                              "Cnfnbxyfz", 117 + wide_delta, 135, // Статичная
+                              crosshair_type ? CR_GREEN : CR_DARKRED);
 
         // Footer
         RD_M_DrawTextSmallRUS(RD_NEXT_RUS, 35 + wide_delta, 145, CR_WHITE);
         RD_M_DrawTextSmallRUS(RD_PREV_RUS, 35 + wide_delta, 155, CR_WHITE);
     }
+
+    // Draw crosshair background.
+    V_DrawPatch(239 + wide_delta, 103, W_CacheLumpName("XHAIRBOX", PU_CACHE), NULL);
+    // Colorize crosshair depending on it's type.
+    Crosshair_Colorize();
+    // Draw crosshair preview.
+    if (crosshair_scale)
+    {
+        V_DrawPatch(249 + wide_delta, 113, CrosshairPatch, CrosshairOpacity);
+    }
+    else
+    {
+        V_DrawPatchUnscaled(498 + wide_delta*2, 226, CrosshairPatch, CrosshairOpacity);
+    }
+    // Clear colorization.
+    dp_translation = NULL;
+
+    // Opacity | Непрозрачность
+    RD_M_DrawTextSmallENG(crosshair_opacity == 0 ? "20%" :
+                          crosshair_opacity == 1 ? "30%" :
+                          crosshair_opacity == 2 ? "40%" :
+                          crosshair_opacity == 3 ? "50%" :
+                          crosshair_opacity == 4 ? "60%" :
+                          crosshair_opacity == 5 ? "70%" :
+                          crosshair_opacity == 6 ? "80%" :
+                          crosshair_opacity == 7 ? "90%" : "100%",
+                          (english_language ? 95 : 154) + wide_delta, 115, 
+                          crosshair_opacity == 0 ? CR_DARKRED :
+                          crosshair_opacity == 8 ? CR_GREEN : CR_NONE);
 }
 
 static void M_RD_Draw_Gameplay_4(void)
@@ -4708,20 +4755,23 @@ static void M_RD_Draw_Gameplay_4(void)
         RD_M_DrawTextSmallENG(toss_drop ? RD_ON : RD_OFF, 254 + wide_delta, 95,
                               toss_drop ? CR_GREEN : CR_DARKRED);
 
-        // Draw crosshair
-        RD_M_DrawTextSmallENG(crosshair_draw ? RD_ON : RD_OFF, 146 + wide_delta, 115,
-                              crosshair_draw ? CR_GREEN : CR_DARKRED);
+        // Notify of revealed secrets
+        RD_M_DrawTextSmallENG(secret_notification ? RD_ON : RD_OFF,232 + wide_delta, 115,
+                               secret_notification ? CR_GREEN : CR_DARKRED);
 
-        // Indication
-        RD_M_DrawTextSmallENG(crosshair_type == 1 ? "Health" :
-                              crosshair_type == 2 ? "Target highlighting" :
-                              crosshair_type == 3 ? "Target highlighting+Health" :
-                              "Static", 111 + wide_delta, 125,
-                              crosshair_type ? CR_GREEN : CR_DARKRED);
+        // Infragreen light amp. visor
+        RD_M_DrawTextSmallENG(infragreen_visor ? RD_ON : RD_OFF,230 + wide_delta, 125,
+                              infragreen_visor ? CR_GREEN : CR_DARKRED);
 
-        // Increased size
-        RD_M_DrawTextSmallENG(crosshair_scale ? RD_ON : RD_OFF, 140 + wide_delta, 135,
-                              crosshair_scale ? CR_GREEN : CR_DARKRED);
+        // Horizontal autoaiming
+        RD_M_DrawTextSmallENG(horizontal_autoaim == 0 ? "hitscans only" : 
+                              horizontal_autoaim == 1 ? "projectiles only" :
+                              horizontal_autoaim == 2 ? "off" : 
+                                                        "on", 195 + wide_delta, 135,
+                              horizontal_autoaim == 0 ? CR_DARKGREEN :
+                              horizontal_autoaim == 1 ? CR_DARKGREEN :
+                              horizontal_autoaim == 2 ? CR_DARKRED : 
+                                                        CR_GREEN);
 
         //
         // Footer
@@ -4761,20 +4811,25 @@ static void M_RD_Draw_Gameplay_4(void)
         RD_M_DrawTextSmallRUS(toss_drop ? RD_ON_RUS : RD_OFF_RUS, 285 + wide_delta, 95,
                               toss_drop ? CR_GREEN : CR_DARKRED);
 
-        // Отображать прицел
-        RD_M_DrawTextSmallRUS(crosshair_draw ? RD_ON_RUS : RD_OFF_RUS, 180 + wide_delta, 115,
-                              crosshair_draw ? CR_GREEN : CR_DARKRED);
+        // Сообщать о найденном тайнике
+        RD_M_DrawTextSmallRUS(secret_notification ? RD_ON_RUS : RD_OFF_RUS, 260 + wide_delta, 115,
+                              secret_notification ? CR_GREEN : CR_DARKRED);
 
-        // Индикация
-        RD_M_DrawTextSmallRUS(crosshair_type == 1 ? "Pljhjdmt" :       // Здоровье
-                              crosshair_type == 2 ? "Gjlcdtnrf wtkb" : // Подсветка цели
-                              crosshair_type == 3 ? "Gjlcdtnrf wtkb+pljhjdmt" : // Подсветка цели + здоровье
-                              "Cnfnbxyfz", 117 + wide_delta, 125, // Статичная
-                              crosshair_type ? CR_GREEN : CR_DARKRED);
+        // Инфразеленый визор освещения
+        RD_M_DrawTextSmallRUS(infragreen_visor ? RD_ON_RUS : RD_OFF_RUS, 266 + wide_delta, 125,
+                              infragreen_visor ? CR_GREEN : CR_DARKRED);
 
-        // Увеличенный размер
-        RD_M_DrawTextSmallRUS(crosshair_scale ? RD_ON_RUS : RD_OFF_RUS, 185 + wide_delta, 135,
-                              crosshair_scale ? CR_GREEN : CR_DARKRED);
+        // Horizontal autoaiming
+        RD_M_DrawTextSmallRUS(horizontal_autoaim == 0 ? "njkmrj [bncrfys" :  // только хитсканы
+                              horizontal_autoaim == 1 ? "njkmrj cyfhzls" :   // только снаряды
+                              horizontal_autoaim == 2 ? "dsrk" : 
+                                                        "drk", 172 + wide_delta, 135,
+                              horizontal_autoaim == 0 ? CR_DARKGREEN :
+                              horizontal_autoaim == 1 ? CR_DARKGREEN :
+                              horizontal_autoaim == 2 ? CR_DARKRED : 
+                                                        CR_GREEN);
+
+
 
         //
         // Footer
@@ -5128,37 +5183,34 @@ static void M_RD_Change_AlertSfx()
 }
 
 //
-// Gameplay: Tactical
+// Gameplay: Crosshair
 //
 
-static void M_RD_Change_SecretNotify()
+static void M_RD_Change_CrosshairDraw()
 {
-    secret_notification ^= 1;
+    crosshair_draw ^= 1;
 }
 
-static void M_RD_Change_InfraGreenVisor()
+static void M_RD_Change_CrosshairShape(Direction_t direction)
 {
-    infragreen_visor ^= 1;
-
-    // [JN] Update current COLORMAP
-    if (players[consoleplayer].powers[pw_infrared])
-    {
-        if (players[consoleplayer].powers[pw_invulnerability])
-        {
-            // Set B&W colormap
-            players[consoleplayer].fixedcolormap = 32;
-        }
-        else
-        {
-            // Set full bright colormap
-            players[consoleplayer].fixedcolormap = 1;
-        }
-    }
+    RD_Menu_SpinInt(&crosshair_shape, 0, 6, direction);
+    Crosshair_DefinePatch();
 }
 
-static void M_RD_Change_HorizontalAiming(Direction_t direction)
+static void M_RD_Change_CrosshairOpacity(Direction_t direction)
 {
-    RD_Menu_SpinInt(&horizontal_autoaim, 0, 3, direction);
+    RD_Menu_SlideInt(&crosshair_opacity, 0, 8, direction);
+    Crosshair_DefineOpacity();
+}
+
+static void M_RD_Change_CrosshairScale()
+{
+    crosshair_scale ^= 1;
+}
+
+static void M_RD_Change_CrosshairType(Direction_t direction)
+{
+    RD_Menu_SpinInt(&crosshair_type, 0, 3, direction);
 }
 
 //
@@ -5200,23 +5252,42 @@ static void M_RD_Change_TossDrop()
     toss_drop ^= 1;
 }
 
-static void M_RD_Change_CrosshairDraw()
+//
+// Gameplay: Tactical
+//
+
+static void M_RD_Change_SecretNotify()
 {
-    crosshair_draw ^= 1;
+    secret_notification ^= 1;
 }
 
-static void M_RD_Change_CrosshairType(Direction_t direction)
+static void M_RD_Change_InfraGreenVisor()
 {
-    RD_Menu_SpinInt(&crosshair_type, 0, 3, direction);
+    infragreen_visor ^= 1;
+
+    // [JN] Update current COLORMAP
+    if (players[consoleplayer].powers[pw_infrared])
+    {
+        if (players[consoleplayer].powers[pw_invulnerability])
+        {
+            // Set B&W colormap
+            players[consoleplayer].fixedcolormap = 32;
+        }
+        else
+        {
+            // Set full bright colormap
+            players[consoleplayer].fixedcolormap = 1;
+        }
+    }
 }
 
-static void M_RD_Change_CrosshairScale()
+static void M_RD_Change_HorizontalAiming(Direction_t direction)
 {
-    crosshair_scale ^= 1;
+    RD_Menu_SpinInt(&horizontal_autoaim, 0, 3, direction);
 }
 
 //
-// Gameplay: Physical
+// Gameplay: Gameplay
 //
 
 static void M_RD_Change_FixMapErrors()
@@ -6056,6 +6127,15 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     noise_alert_sfx      = 0;
     // correct_endlevel_sfx = 0; (hidden variable)
 
+    // Gameplay: Crosshair
+    crosshair_draw    = 0;
+    crosshair_shape   = 0;
+    crosshair_opacity = 8;
+    crosshair_scale   = 0;
+    crosshair_type    = 1;
+    Crosshair_DefinePatch();
+    Crosshair_DefineOpacity();
+
     // Gameplay: Tactical
     secret_notification = 1;
     negative_health     = 0;
@@ -6070,11 +6150,6 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     ssg_blast_enemies    = 1;
     floating_powerups    = 1;
     toss_drop            = 1;
-
-    // Gameplay: Crosshair
-    crosshair_draw   = 0;
-    crosshair_type   = 1;
-    crosshair_scale  = 0;
 
     // Gameplay: Gameplay
     fix_map_errors       = 1;
@@ -6249,11 +6324,14 @@ static void M_RD_BackToDefaults_Original(int choice)
     noise_alert_sfx      = 0;
     // correct_endlevel_sfx = 0; (hidden variable)
 
-    // Gameplay: Tactical
-    secret_notification = 0;
-    negative_health     = 0;
-    infragreen_visor    = 0;
-    horizontal_autoaim  = 3;
+    // Gameplay: Crosshair
+    crosshair_draw    = 0;
+    crosshair_shape   = 0;
+    crosshair_opacity = 8;
+    crosshair_scale   = 0;
+    crosshair_type    = 1;
+    Crosshair_DefinePatch();
+    Crosshair_DefineOpacity();
 
     // Gameplay: Physical
     improved_collision   = 0;
@@ -6264,10 +6342,11 @@ static void M_RD_BackToDefaults_Original(int choice)
     floating_powerups    = 0;
     toss_drop            = 0;
 
-    // Gameplay: Crosshair
-    crosshair_draw   = 0;
-    crosshair_type   = 0;
-    crosshair_scale  = 0;
+    // Gameplay: Tactical
+    secret_notification = 0;
+    negative_health     = 0;
+    infragreen_visor    = 0;
+    horizontal_autoaim  = 3;
 
     // Gameplay: Gameplay
     fix_map_errors       = 0;
