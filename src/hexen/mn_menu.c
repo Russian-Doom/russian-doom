@@ -216,6 +216,7 @@ static void M_RD_CrossHairShape(Direction_t direction);
 static void M_RD_CrossHairType();
 static void M_RD_CrossHairScale();
 static void M_RD_CrossHairOpacity();
+int CrosshairShowcaseTimeout;
 
 // Gameplay (page 3)
 static void DrawGameplay3Menu(void);
@@ -1808,6 +1809,16 @@ void MN_Ticker(void)
     if (speaker_test_timeout)
     {
         speaker_test_timeout--;
+    }
+
+    // [JN] Decrease crosshair color showcase timer, reset when it reaches zero.
+    if (CrosshairShowcaseTimeout > 0)
+    {
+        CrosshairShowcaseTimeout--;
+    }
+    else
+    {
+        CrosshairShowcaseTimeout = 105; // Equals TICRATE * 3, three seconds.
     }
 }
 
@@ -4265,7 +4276,7 @@ static void DrawGameplay2Menu(void)
     // Draw crosshair background.
     V_DrawPatch(235 + wide_delta, 103, W_CacheLumpName("XHAIRBOX", PU_CACHE), NULL);
     // Colorize crosshair depending on it's type.
-    Crosshair_Colorize();
+    Crosshair_Colorize_inMenu();
     // Draw crosshair preview.
     if (crosshair_scale)
     {
@@ -4330,6 +4341,7 @@ static void M_RD_CrossHairType()
 static void M_RD_CrossHairScale()
 {
     crosshair_scale ^= 1;
+    Crosshair_DefineDrawingFunc();
 }
 
 static void M_RD_CrossHairOpacity(Direction_t direction)

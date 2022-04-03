@@ -861,9 +861,10 @@ void D_DoomMain(void)
 
     ST_Done();
 
-    // [JN] Define crosshair GFX patch and opacity.
+    // [JN] Predefine crosshair GFX patch, opacity and drawing function.
     Crosshair_DefinePatch();
     Crosshair_DefineOpacity();
+    Crosshair_DefineDrawingFunc();
 
     // [JN] Define and load translated strings.
     RD_DefineLanguageStrings();

@@ -1748,7 +1748,7 @@ static void Crosshair_Colorize_inGame (void)
 
 static void Crosshair_Draw_Scaled (void)
 {
-    V_DrawPatch(origwidth/2, screenblocks <= 10 ? 84 : 100,
+    V_DrawPatch(origwidth/2, screenblocks <= 10 ? 84 : 102,
                 CrosshairPatch, CrosshairOpacity);
 }
 
@@ -1758,7 +1758,7 @@ static void Crosshair_Draw_Scaled (void)
 
 static void Crosshair_Draw_Unscaled (void)
 {
-    V_DrawPatchUnscaled(screenwidth/2, screenblocks <= 10 ? 168 : 200,
+    V_DrawPatchUnscaled(screenwidth/2, screenblocks <= 10 ? 168 : 204,
                         CrosshairPatch, CrosshairOpacity);
 }
 

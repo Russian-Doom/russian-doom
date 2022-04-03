@@ -1097,11 +1097,14 @@ void Draw_TeleportIcon(void);
 void Draw_SaveIcon(void);
 void Draw_LoadIcon(void);
 
+// [JN] Crosshair stuff.
 extern patch_t *CrosshairPatch;
 extern patch_t *Crosshair_DefinePatch (void);
 extern byte *CrosshairOpacity;
+extern int  CrosshairShowcaseTimeout;
 extern void Crosshair_DefineOpacity (void);
-extern void Crosshair_Colorize (void);
+extern void Crosshair_DefineDrawingFunc (void);
+extern void Crosshair_Colorize_inMenu (void);
 extern void Crosshair_Draw (void);
 
 //-----------------

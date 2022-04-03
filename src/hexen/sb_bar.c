@@ -2579,7 +2579,13 @@ static void CheatRevealFunc(player_t * player, Cheat_t * cheat)
 ================================================================================
 */
 
-patch_t *CrosshairPatch;
+patch_t      *CrosshairPatch;
+byte         *CrosshairOpacity;
+static void (*Crosshair_Draw_Func) (void);
+
+// -----------------------------------------------------------------------------
+// Crosshair_DefinePatch: which GFX patch will be used.
+// -----------------------------------------------------------------------------
 
 patch_t *Crosshair_DefinePatch (void)
 {
@@ -2593,7 +2599,9 @@ patch_t *Crosshair_DefinePatch (void)
                                                "XHAIR_1", PU_CACHE);
 }
 
-byte *CrosshairOpacity;
+// -----------------------------------------------------------------------------
+// Crosshair_DefineOpacity: what amount of transparency will be used.
+// -----------------------------------------------------------------------------
 
 void Crosshair_DefineOpacity (void)
 {
@@ -2608,35 +2616,81 @@ void Crosshair_DefineOpacity (void)
                                                 NULL;
 }
 
-void Crosshair_Colorize (void)
+// -----------------------------------------------------------------------------
+// Crosshair_Colorize_inMenu: coloring routine for menu. Cycling through colors.
+// -----------------------------------------------------------------------------
+
+void Crosshair_Colorize_inMenu (void)
 {
-    if (crosshair_type == 0)
+    if (crosshair_type == 1)
+    {
+        dp_translation = 
+            CrosshairShowcaseTimeout >= 70 ? cr[CR_GRAY2RED_HEXEN]      :
+            CrosshairShowcaseTimeout >= 35 ? cr[CR_GRAY2DARKGOLD_HEXEN] :
+                                             cr[CR_GRAY2GREEN_HEXEN];
+    }
+    else
     {
         dp_translation = cr[CR_GRAY2RED_HEXEN];
     }
-    else
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_Colorize_inGame: ingame coloring routine, actual colors/values.
+// -----------------------------------------------------------------------------
+
+static void Crosshair_Colorize_inGame (void)
+{
+    if (crosshair_type == 1)
     {
         dp_translation = CPlayer->health >= 67 ? cr[CR_GRAY2GREEN_HEXEN] :
                          CPlayer->health >= 34 ? cr[CR_GRAY2DARKGOLD_HEXEN] :
                                                  cr[CR_GRAY2RED_HEXEN];
     }
+    else
+    {
+        dp_translation = cr[CR_GRAY2RED_HEXEN];
+    }
 }
+
+// -----------------------------------------------------------------------------
+// Crosshair_Draw_Scaled: drawing func for scaled (big) crosshair.
+// -----------------------------------------------------------------------------
+
+static void Crosshair_Draw_Scaled (void)
+{
+    V_DrawPatch(origwidth/2, screenblocks <= 10 ? 81 : 102,
+                CrosshairPatch, CrosshairOpacity);
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_Draw_Unscaled: drawing func for unscaled (small) crosshair.
+// -----------------------------------------------------------------------------
+
+static void Crosshair_Draw_Unscaled (void)
+{
+    V_DrawPatchUnscaled(screenwidth/2, screenblocks <= 10 ? 162 : 204,
+                        CrosshairPatch, CrosshairOpacity);
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_DefineDrawingFunc: predefinition of drawing func for later use.
+// -----------------------------------------------------------------------------
+
+void Crosshair_DefineDrawingFunc (void)
+{
+    Crosshair_Draw_Func = crosshair_scale ? Crosshair_Draw_Scaled :
+                                            Crosshair_Draw_Unscaled;
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_Draw: actual coloring and drawing.
+// -----------------------------------------------------------------------------
 
 void Crosshair_Draw (void)
 {
-    Crosshair_Colorize();
-
-    if (crosshair_scale)
-    {
-        V_DrawPatch(origwidth/2, screenblocks <= 10 ? 81 : 102,
-                    CrosshairPatch, CrosshairOpacity);
-    }
-    else
-    {
-        V_DrawPatchUnscaled(screenwidth/2, screenblocks <= 10 ? 162 : 204,
-                            CrosshairPatch, CrosshairOpacity);
-    }
-
+    Crosshair_Colorize_inGame();
+    Crosshair_Draw_Func();
     dp_translation = NULL;
 }
 
