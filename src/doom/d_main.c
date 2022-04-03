@@ -3230,9 +3230,10 @@ void D_DoomMain (void)
                "ST_Init: Инициализация строки состояния.\n");
     ST_Init ();
 
-    // [JN] Predefine crosshair GFX patch and opacity.
+    // [JN] Predefine crosshair GFX patch, opacity and drawing function.
     Crosshair_DefinePatch();
     Crosshair_DefineOpacity();
+    Crosshair_DefineDrawingFunc();
 
     // [JN] Predifine automap color scheme and mark color.
     AM_initColors();

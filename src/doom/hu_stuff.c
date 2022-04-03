@@ -1627,13 +1627,19 @@ boolean HU_Responder(event_t *ev)
     return eatkey;
 }
 
-// -----------------------------------------------------------------------------
-// [JN] Crosshair routines. Defining, drawing, coloring.
-// -----------------------------------------------------------------------------
+// =============================================================================
+//
+// [JN] Crosshair routines. Pre/re-defining, drawing, coloring.
+//
+// =============================================================================
 
-patch_t *CrosshairPatch;
-byte    *CrosshairOpacity;
-extern int crosshair_color_timeout;
+patch_t      *CrosshairPatch;
+byte         *CrosshairOpacity;
+static void (*Crosshair_Draw_Func) (void);
+
+// -----------------------------------------------------------------------------
+// Crosshair_DefinePatch: which GFX patch will be used.
+// -----------------------------------------------------------------------------
 
 patch_t *Crosshair_DefinePatch (void)
 {
@@ -1646,6 +1652,10 @@ patch_t *Crosshair_DefinePatch (void)
                         crosshair_shape == 6 ? "XHAIR_7" :
                                                "XHAIR_1", PU_CACHE);
 }
+
+// -----------------------------------------------------------------------------
+// Crosshair_DefineOpacity: what amount of transparency will be used.
+// -----------------------------------------------------------------------------
 
 void Crosshair_DefineOpacity (void)
 {
@@ -1660,29 +1670,47 @@ void Crosshair_DefineOpacity (void)
                                                 NULL;
 }
 
+// -----------------------------------------------------------------------------
+// Crosshair_Colorize_inMenu: coloring routine for menu. Cycling through colors.
+// -----------------------------------------------------------------------------
+
 void Crosshair_Colorize_inMenu (void)
 {
     if (crosshair_type == 1)
     {
-        dp_translation = crosshair_color_timeout > 80 ? cr[CR_RED]    :
-                         crosshair_color_timeout > 40 ? cr[CR_YELLOW] :
-                                                        cr[CR_GREEN];
+        if (CrosshairShowcaseTimeout > 105)
+        {
+            CrosshairShowcaseTimeout = 105;
+        }
+
+        dp_translation = CrosshairShowcaseTimeout >= 70 ? cr[CR_RED]    :
+                         CrosshairShowcaseTimeout >= 35 ? cr[CR_YELLOW] :
+                                                          cr[CR_GREEN];
     }
     else if (crosshair_type == 2)
     {
-        dp_translation = crosshair_color_timeout > 60 ? cr[CR_RED] :
-                                                        cr[CR_BLUE];
+        if (CrosshairShowcaseTimeout > 70)
+        {
+            CrosshairShowcaseTimeout = 70;
+        }
+
+        dp_translation = CrosshairShowcaseTimeout >= 35 ? cr[CR_RED] :
+                                                          cr[CR_BLUE];
     }
     else if (crosshair_type == 3)
     {
-        dp_translation = crosshair_color_timeout > 90 ? cr[CR_RED]    :
-                         crosshair_color_timeout > 60 ? cr[CR_YELLOW] :
-                         crosshair_color_timeout > 30 ? cr[CR_GREEN]  :
-                                                        cr[CR_BLUE];
+        dp_translation = CrosshairShowcaseTimeout >= 105 ? cr[CR_RED]    :
+                         CrosshairShowcaseTimeout >=  70 ? cr[CR_YELLOW] :
+                         CrosshairShowcaseTimeout >=  35 ? cr[CR_GREEN]  :
+                                                           cr[CR_BLUE];
     }
 }
 
-void Crosshair_Colorize_inGame (void)
+// -----------------------------------------------------------------------------
+// Crosshair_Colorize_inGame: ingame coloring routine, actual colors/values.
+// -----------------------------------------------------------------------------
+
+static void Crosshair_Colorize_inGame (void)
 {
     if (crosshair_type == 1)
     {
@@ -1695,7 +1723,9 @@ void Crosshair_Colorize_inGame (void)
         P_AimLineAttack(plr->mo, plr->mo->angle, MISSILERANGE);
 
         if (linetarget)
-        dp_translation = cr[CR_BLUE];
+        {
+            dp_translation = cr[CR_BLUE];
+        }
     }
     else if (crosshair_type == 3)
     {
@@ -1706,24 +1736,49 @@ void Crosshair_Colorize_inGame (void)
         P_AimLineAttack(plr->mo, plr->mo->angle, MISSILERANGE);
 
         if (linetarget)
-        dp_translation = cr[CR_BLUE];
+        {
+            dp_translation = cr[CR_BLUE];
+        }
     }
 }
+
+// -----------------------------------------------------------------------------
+// Crosshair_Draw_Scaled: drawing func for scaled (big) crosshair.
+// -----------------------------------------------------------------------------
+
+static void Crosshair_Draw_Scaled (void)
+{
+    V_DrawPatch(origwidth/2, screenblocks <= 10 ? 84 : 100,
+                CrosshairPatch, CrosshairOpacity);
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_Draw_Unscaled: drawing func for unscaled (small) crosshair.
+// -----------------------------------------------------------------------------
+
+static void Crosshair_Draw_Unscaled (void)
+{
+    V_DrawPatchUnscaled(screenwidth/2, screenblocks <= 10 ? 168 : 200,
+                        CrosshairPatch, CrosshairOpacity);
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_DefineDrawingFunc: predefinition of drawing func for later use.
+// -----------------------------------------------------------------------------
+
+void Crosshair_DefineDrawingFunc (void)
+{
+    Crosshair_Draw_Func = crosshair_scale ? Crosshair_Draw_Scaled :
+                                            Crosshair_Draw_Unscaled;
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_Draw: actual coloring and drawing.
+// -----------------------------------------------------------------------------
 
 void Crosshair_Draw (void)
 {
     Crosshair_Colorize_inGame();
-
-    if (crosshair_scale)
-    {
-        V_DrawPatch(origwidth/2, screenblocks <= 10 ? 84 : 100,
-                    CrosshairPatch, CrosshairOpacity);
-    }
-    else
-    {
-        V_DrawPatchUnscaled(screenwidth/2, screenblocks <= 10 ? 168 : 200,
-                            CrosshairPatch, CrosshairOpacity);
-    }
-
+    Crosshair_Draw_Func();
     dp_translation = NULL;
 }

@@ -316,7 +316,7 @@ static void M_RD_Change_CrosshairOpacity(Direction_t direction);
 static void M_RD_Change_CrosshairScale();
 static void M_RD_Change_CrosshairType(Direction_t direction);
 
-int crosshair_color_timeout;
+int CrosshairShowcaseTimeout;
 
 // Page 4
 static void M_RD_Change_ImprovedCollision();
@@ -4687,7 +4687,7 @@ static void M_RD_Draw_Gameplay_3(void)
     }
 
     // Draw crosshair background.
-    V_DrawPatch(239 + wide_delta, 103, W_CacheLumpName("XHAIRBOX", PU_CACHE), NULL);
+    V_DrawShadowedPatchDoom(239 + wide_delta, 103, W_CacheLumpName("XHAIRBOX", PU_CACHE));
     // Colorize crosshair depending on it's type.
     Crosshair_Colorize_inMenu();
     // Draw crosshair preview.
@@ -5208,6 +5208,7 @@ static void M_RD_Change_CrosshairOpacity(Direction_t direction)
 static void M_RD_Change_CrosshairScale()
 {
     crosshair_scale ^= 1;
+    Crosshair_DefineDrawingFunc();
 }
 
 static void M_RD_Change_CrosshairType(Direction_t direction)
@@ -7900,13 +7901,13 @@ void M_Ticker (void)
     }
 
     // [JN] Decrease crosshair color showcase timer, reset when it reaches zero.
-    if (crosshair_color_timeout > 0)
+    if (CrosshairShowcaseTimeout > 0)
     {
-        crosshair_color_timeout--;
+        CrosshairShowcaseTimeout--;
     }
     else
     {
-        crosshair_color_timeout = 120;
+        CrosshairShowcaseTimeout = 140; // Equals TICRATE * 4, four seconds.
     }
 }
 
