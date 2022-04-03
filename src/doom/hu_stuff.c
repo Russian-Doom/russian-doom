@@ -1633,6 +1633,7 @@ boolean HU_Responder(event_t *ev)
 
 patch_t *CrosshairPatch;
 byte    *CrosshairOpacity;
+extern int crosshair_color_timeout;
 
 patch_t *Crosshair_DefinePatch (void)
 {
@@ -1659,38 +1660,59 @@ void Crosshair_DefineOpacity (void)
                                                 NULL;
 }
 
-void Crosshair_Colorize (void)
+void Crosshair_Colorize_inMenu (void)
 {
-        if (crosshair_type == 1)
-        {
-            dp_translation = plr->health >= 67 ? cr[CR_GREEN] :
-                             plr->health >= 34 ? cr[CR_YELLOW] :
-                                                 cr[CR_RED];
-        }
-        else if (crosshair_type == 2)
-        {
-            P_AimLineAttack(plr->mo, plr->mo->angle, MISSILERANGE);
+    if (crosshair_type == 1)
+    {
+        dp_translation = crosshair_color_timeout > 80 ? cr[CR_RED]    :
+                         crosshair_color_timeout > 40 ? cr[CR_YELLOW] :
+                                                        cr[CR_GREEN];
+    }
+    else if (crosshair_type == 2)
+    {
+        dp_translation = crosshair_color_timeout > 60 ? cr[CR_RED] :
+                                                        cr[CR_BLUE];
+    }
+    else if (crosshair_type == 3)
+    {
+        dp_translation = crosshair_color_timeout > 90 ? cr[CR_RED]    :
+                         crosshair_color_timeout > 60 ? cr[CR_YELLOW] :
+                         crosshair_color_timeout > 30 ? cr[CR_GREEN]  :
+                                                        cr[CR_BLUE];
+    }
+}
 
-            if (linetarget)
-            dp_translation = cr[CR_BLUE];
-        }
-        else if (crosshair_type == 3)
-        {
-            dp_translation = plr->health >= 67 ? cr[CR_GREEN] :
-                             plr->health >= 34 ? cr[CR_YELLOW] :
-                                                 cr[CR_RED];
+void Crosshair_Colorize_inGame (void)
+{
+    if (crosshair_type == 1)
+    {
+        dp_translation = plr->health >= 67 ? cr[CR_GREEN]  :
+                         plr->health >= 34 ? cr[CR_YELLOW] :
+                                             cr[CR_RED];
+    }
+    else if (crosshair_type == 2)
+    {
+        P_AimLineAttack(plr->mo, plr->mo->angle, MISSILERANGE);
 
-            P_AimLineAttack(plr->mo, plr->mo->angle, MISSILERANGE);
+        if (linetarget)
+        dp_translation = cr[CR_BLUE];
+    }
+    else if (crosshair_type == 3)
+    {
+        dp_translation = plr->health >= 67 ? cr[CR_GREEN]  :
+                         plr->health >= 34 ? cr[CR_YELLOW] :
+                                             cr[CR_RED];
 
-            if (linetarget)
-            dp_translation = cr[CR_BLUE];
-        }
+        P_AimLineAttack(plr->mo, plr->mo->angle, MISSILERANGE);
 
+        if (linetarget)
+        dp_translation = cr[CR_BLUE];
+    }
 }
 
 void Crosshair_Draw (void)
 {
-    Crosshair_Colorize();
+    Crosshair_Colorize_inGame();
 
     if (crosshair_scale)
     {
