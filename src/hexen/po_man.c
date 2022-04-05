@@ -723,8 +723,6 @@ static void UpdateSegBBox(seg_t * seg)
 //
 //==========================================================================
 
-
-// [crispy]
 static void RotatePolyVertices(polyobj_t *po, angle_t angle)
 {
     int count;
@@ -811,12 +809,10 @@ boolean PO_MovePolyobj(int num, int x, int y)
     blocked = false;
 
     // [crispy] sync poly vertices every gametic
-    if (uncapped_fps)
-    {
-        TranslatePolyVertices(po, po->rx, po->ry);
-        po->rx = 0;
-        po->ry = 0;
-    }
+    TranslatePolyVertices(po, x + po->rx, y + po->ry);
+    po->rx = 0;
+    po->ry = 0;
+
     validcount++;
     for (count = po->numsegs; count; count--, segList++, prevPts++)
     {
@@ -860,18 +856,25 @@ boolean PO_MovePolyobj(int num, int x, int y)
             segList++;
             prevPts++;
         }
-        po->dx = 0; // [crispy]
-        po->dy = 0; // [crispy]
+        TranslatePolyVertices(po, -x, -y); // [crispy]
         LinkPolyobj(po);
         return false;
     }
     po->startSpot.x += x;
     po->startSpot.y += y;
-    po->dx = x; // [crispy]
-    po->dy = y; // [crispy]
-    po->rx = x; // [crispy]
-    po->ry = y; // [crispy]
     LinkPolyobj(po);
+
+    // [crispy] Move points back after calculating bounding boxes. We'll handle
+    // the actual movement in PO_InterpolatePolyObjects().
+    if (uncapped_fps)
+    {
+        TranslatePolyVertices(po, -x, -y);
+        po->dx = x;
+        po->dy = y;
+        po->rx = x;
+        po->ry = y;
+    }
+
     return true;
 }
 
@@ -886,28 +889,39 @@ void PO_InterpolatePolyObjects(void)
 {
     polyobj_t *po;
     int i;
-    static fixed_t old_fractics = 0;
-    fixed_t dfractics = 0, dx = 0, dy = 0;
+    static fixed_t old_fractic;
+    fixed_t dfractic, fractic, dx, dy;
     angle_t interpangle;
+    static int old_gametic;
 
-    if (paused)
+    if (!(uncapped_fps && !paused))
     {
         return;
     }
 
-    if (uncapped_fps)
+    fractic = fractionaltic;
+
+    if (fractic < old_fractic)
     {
-        if (fractionaltic <= old_fractics)
+        dfractic = fractic;
+    }
+    else
+    {
+        if (gametic > old_gametic)
         {
-            dfractics = FRACUNIT + fractionaltic - old_fractics;
+            // Covers the case when fractionaltic is very close to 1 and we
+            // roll over to the new tic immediately after it's updated.
+            dfractic = 0;
+            fractic = 0;
         }
         else
         {
-            dfractics = fractionaltic - old_fractics;
+            dfractic = fractic - old_fractic;
         }
-
-        old_fractics = fractionaltic;
     }
+
+    old_fractic = fractic;
+    old_gametic = gametic;
 
     po = polyobjs;
 
@@ -915,32 +929,26 @@ void PO_InterpolatePolyObjects(void)
     {
         if (po->rx || po->ry)
         {
-            if (!uncapped_fps)
-            {
-                dx = po->rx;
-                dy = po->ry;
-            }
-            else
-            {
-                // Remainder terms and movement vectors must never have
-                // opposite signs.
-                if (po->rx)
-                {
-                    dx = FixedMul(dfractics, po->dx);
+            dx = dy = 0;
 
-                    if (((po->rx - dx) ^ dx) < 0)
-                    {
-                        dx = po->rx;
-                    }
+            // Coerce remainder terms to 0. They must never flip sign.
+            if (po->rx)
+            {
+                dx = FixedMul(dfractic, po->dx);
+
+                if (((po->rx - dx) ^ po->rx) < 0)
+                {
+                    dx = po->rx;
                 }
-                if (po->ry)
-                {
-                    dy = FixedMul(dfractics, po->dy);
+            }
 
-                    if (((po->ry - dy) ^ dy) < 0)
-                    {
-                        dy = po->ry;
-                    }
+            if (po->ry)
+            {
+                dy = FixedMul(dfractic, po->dy);
+
+                if (((po->ry - dy) ^ po->ry) < 0)
+                {
+                    dy = po->ry;
                 }
             }
 
@@ -949,9 +957,9 @@ void PO_InterpolatePolyObjects(void)
             po->ry -= dy;
         }
 
-        if (po->rtheta && uncapped_fps)
+        if (po->rtheta)
         {
-            interpangle = R_InterpolateAngle(0, po->dtheta, dfractics);
+            interpangle = R_InterpolateAngle(0, po->dtheta, dfractic);
 
             if (((po->rtheta - interpangle) < ANG180 && po->dtheta > ANG180) ||
                     ((po->rtheta - interpangle) > ANG180 && po->dtheta < ANG180))
@@ -1150,12 +1158,10 @@ static void LinkPolyobj(polyobj_t * po)
             bottomY = (*tempSeg)->v1->y;
         }
     }
-    // [crispy] Take total interpolated poly movement into account, even if the
-    // vertices haven't actually been moved yet.
-    po->bbox[BOXRIGHT] = (rightX - bmaporgx + po->dx) >> MAPBLOCKSHIFT;
-    po->bbox[BOXLEFT] = (leftX - bmaporgx + po->dx) >> MAPBLOCKSHIFT;
-    po->bbox[BOXTOP] = (topY - bmaporgy + po->dy) >> MAPBLOCKSHIFT;
-    po->bbox[BOXBOTTOM] = (bottomY - bmaporgy + po->dy) >> MAPBLOCKSHIFT;
+    po->bbox[BOXRIGHT] = (rightX - bmaporgx) >> MAPBLOCKSHIFT;
+    po->bbox[BOXLEFT] = (leftX - bmaporgx) >> MAPBLOCKSHIFT;
+    po->bbox[BOXTOP] = (topY - bmaporgy) >> MAPBLOCKSHIFT;
+    po->bbox[BOXBOTTOM] = (bottomY - bmaporgy) >> MAPBLOCKSHIFT;
     // add the polyobj to each blockmap section
     for (j = po->bbox[BOXBOTTOM] * bmapwidth;
          j <= po->bbox[BOXTOP] * bmapwidth; j += bmapwidth)
