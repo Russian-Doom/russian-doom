@@ -94,6 +94,7 @@ typedef	struct
     short   lightlevel;
     short   special;
     short   tag;
+    short   flow;  // [JN] Flow effect of swirling liquids.
 
     // 0 = untraversed, 1,2 = sndlines -1
     int     soundtraversed;
@@ -421,6 +422,7 @@ typedef struct visplane_s
     fixed_t height;
     int     picnum;
     int     lightlevel;
+    int     flow;  // [JN] Flow effect of swirling liquids.
     int     minx;
     int     maxx;
 

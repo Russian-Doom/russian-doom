@@ -21,3 +21,21 @@
 
 void  R_InitDistortedFlats (void);
 char *R_DistortedFlat (int flatnum);
+
+extern void R_FlowPlane (int flow);
+extern fixed_t FlowFactor_X;
+extern fixed_t FlowFactor_Y;
+extern fixed_t FlowDelta_X;
+extern fixed_t FlowDelta_Y;
+
+typedef struct
+{
+    int     mission;
+    int     epsiode;
+    int     map;
+    int     sector;
+    char   *floorpic;
+    int     flow;
+} flow_t;
+
+extern flow_t flow[];

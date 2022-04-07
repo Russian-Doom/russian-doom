@@ -197,8 +197,9 @@ static void R_MapPlane (int y, int x1, int x2)
 
     dx = x1 - centerx;
 
-    ds_xfrac = viewx + FixedMul(viewcos, distance) + dx * ds_xstep;
-    ds_yfrac = -viewy - FixedMul(viewsin, distance) + dx * ds_ystep;
+    // [JN] Add deltas to flow effect of swirling liquids.
+    ds_xfrac =  viewx + FlowDelta_X + FixedMul(viewcos, distance) + dx * ds_xstep;
+    ds_yfrac = -viewy + FlowDelta_Y - FixedMul(viewsin, distance) + dx * ds_ystep;
 
     if (fixedcolormap)
     {
@@ -277,7 +278,7 @@ static visplane_t *new_visplane (unsigned int hash)
 // R_FindPlane
 // -----------------------------------------------------------------------------
 
-visplane_t *R_FindPlane (fixed_t height, int picnum, int lightlevel)
+visplane_t *R_FindPlane (fixed_t height, int picnum, int lightlevel, int flow)
 {
     unsigned int  hash;
     visplane_t   *check;
@@ -292,7 +293,8 @@ visplane_t *R_FindPlane (fixed_t height, int picnum, int lightlevel)
     hash = visplane_hash(picnum, lightlevel, height);
     
     for (check = visplanes[hash]; check; check = check->next)
-        if (height == check->height && picnum == check->picnum && lightlevel == check->lightlevel)
+        if (height == check->height && picnum == check->picnum 
+        && lightlevel == check->lightlevel && flow == check->flow)
             return check;
 
     check = new_visplane(hash);
@@ -300,6 +302,7 @@ visplane_t *R_FindPlane (fixed_t height, int picnum, int lightlevel)
     check->height = height;
     check->picnum = picnum;
     check->lightlevel = lightlevel;
+    check->flow = flow;
     check->minx = screenwidth;
     check->maxx = -1;
 
@@ -322,6 +325,7 @@ visplane_t *R_DupPlane(const visplane_t *pl, int start, int stop)
     new_pl->height = pl->height;
     new_pl->picnum = pl->picnum;
     new_pl->lightlevel = pl->lightlevel;
+    new_pl->flow = pl->flow;
     new_pl->minx = start;
     new_pl->maxx = stop;
 
@@ -465,6 +469,17 @@ void R_DrawPlanes (void)
             ds_source = (flattranslation[pl->picnum] == -1) ?
                         R_DistortedFlat(pl->picnum) :
                         W_CacheLumpNum(lumpnum, PU_STATIC);
+
+            // [JN] Apply flow effect to swirling liquids.
+            if (swirling_liquids && !vanillaparm)
+            {
+                R_FlowPlane(pl->flow);
+            }
+            else
+            {
+                FlowDelta_X = 0;
+                FlowDelta_Y = 0;
+            }
 
             planeheight = abs(pl->height-viewz);
             light = (pl->lightlevel >> LIGHTSEGSHIFT) + extralight;

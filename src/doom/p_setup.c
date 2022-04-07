@@ -31,6 +31,7 @@
 #include "s_sound.h"
 #include "doomstat.h"
 #include "p_fix.h"
+#include "r_swirl.h"
 #include "jn.h"
 
 // [crispy] support maps with compressed ZDBSP nodes
@@ -502,6 +503,7 @@ static void P_LoadSectors (int lump)
         ss->lightlevel = SHORT(ms->lightlevel);
         ss->special = SHORT(ms->special);
         ss->tag = SHORT(ms->tag);
+        ss->flow = 0;  // [JN] Initialize flowing of swirling liquids.
         ss->thinglist = NULL;
         // [JN] Improved column clipping.
         ss->floor_xoffs = 0;
@@ -559,6 +561,27 @@ static void P_LoadSectors (int lump)
                         ss->tag = SHORT(sectorfix[j].newtag) << FRACBITS;
                     }
     
+                    break;
+                }
+            }
+        }
+
+        // [JN] Inject flow effect to swirling liquids on vanilla maps.
+        if (canmodify)
+        {
+            for (int j = 0; flow[j].mission != -1; j++)
+            {
+                if (i == flow[j].sector && gamemission == flow[j].mission
+                && gameepisode == flow[j].epsiode && gamemap == flow[j].map)
+                {
+                    if (*flow[j].floorpic)
+                    {
+                        ss->floorpic = R_FlatNumForName(flow[j].floorpic);
+                    }
+                    if (flow[j].flow)
+                    {
+                        ss->flow = SHORT(flow[j].flow);
+                    }
                     break;
                 }
             }

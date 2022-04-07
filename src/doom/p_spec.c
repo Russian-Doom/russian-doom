@@ -118,6 +118,9 @@ int     levelTimeCount;
 #define DONUT_FLOORHEIGHT_DEFAULT 0x00000000
 #define DONUT_FLOORPIC_DEFAULT 0x16
 
+// [JN] How far floor tile can flow before offset reset.
+#define FLOWLIMIT FRACUNIT*128
+
 extern boolean message_secret_keepvisible;
 
 
@@ -1248,6 +1251,20 @@ void P_UpdateSpecials (void)
                 memset(&buttonlist[i],0,sizeof(button_t));
             }
         }
+    }
+
+    // [JN] Update flowing flat offsets. 
+    // Once factor value reaches it's limit, reset it.
+    FlowFactor_X += FRACUNIT / 8;
+    if (FlowFactor_X >= FLOWLIMIT)
+    {
+        FlowFactor_X = 0;
+    }
+
+    FlowFactor_Y += FRACUNIT / 8;
+    if (FlowFactor_Y >= FLOWLIMIT)
+    {
+        FlowFactor_Y = 0;
     }
 
     // [crispy] draw fuzz effect independent of rendering frame rate

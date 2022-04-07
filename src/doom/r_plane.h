@@ -38,6 +38,6 @@ void R_InitVisplanesRes (void);
 void R_ClearPlanes (void);
 void R_DrawPlanes (void);
 
-visplane_t *R_FindPlane (fixed_t height, int picnum, int lightlevel);
+visplane_t *R_FindPlane (fixed_t height, int picnum, int lightlevel, int flow);
 visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop);
 visplane_t *R_DupPlane (const visplane_t *pl, int start, int stop);

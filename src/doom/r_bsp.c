@@ -462,13 +462,14 @@ static void R_Subsector (int num)
     floorplane = frontsector->interpfloorheight < viewz ?
                  R_FindPlane (frontsector->interpfloorheight,
                               frontsector->floorpic,
-                              frontsector->lightlevel) : NULL;
+                              frontsector->lightlevel,
+                              frontsector->flow) : NULL;
 
     ceilingplane = frontsector->interpceilingheight > viewz ||
                    frontsector->ceilingpic == skyflatnum ?
                    R_FindPlane (frontsector->interpceilingheight,
                                 frontsector->ceilingpic,
-                                frontsector->lightlevel) : NULL;
+                                frontsector->lightlevel, 0) : NULL;
 
     // BSP is traversed by subsector.
     // A sector might have been split into several 
