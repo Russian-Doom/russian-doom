@@ -1425,10 +1425,11 @@ static void SetVideoMode(void)
     window_flags |= SDL_WINDOW_ALLOW_HIGHDPI;
 
 #ifdef _WIN32
-    // [FG] work-around a bug in Windows 11's Direct3D9 VSync timer
+    // [JN] Windows 11 idiocy. Indicate that window using OpenGL mode (while it's
+    // a Direct3D in fact), so SDL texture will not be freezed upon vsync toggling.
     if (!force_software_renderer)
     {
-        SDL_SetHint(SDL_HINT_RENDER_DRIVER, "direct3d11");
+        window_flags |= SDL_WINDOW_OPENGL;
     }
 #endif
 
