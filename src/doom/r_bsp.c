@@ -150,6 +150,7 @@ static void R_RecalcLineFlags (line_t *linedef)
         // CPhipps - recode for speed, not certain if this is portable though
         if (backsector->interpceilingheight != frontsector->interpceilingheight
         || backsector->interpfloorheight != frontsector->interpfloorheight
+        || backsector->flow != frontsector->flow
         || curline->sidedef->midtexture
         || memcmp(&backsector->floor_xoffs, &frontsector->floor_xoffs,
         sizeof(frontsector->floor_xoffs) + sizeof(frontsector->floor_yoffs) +
