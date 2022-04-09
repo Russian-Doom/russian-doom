@@ -471,7 +471,7 @@ void R_DrawPlanes (void)
                         W_CacheLumpNum(lumpnum, PU_STATIC);
 
             // [JN] Apply flow effect to swirling liquids.
-            if (swirling_liquids && !vanillaparm)
+            if (swirling_liquids && flattranslation[pl->picnum] == -1 && !vanillaparm)
             {
                 R_FlowPlane(pl->flow);
             }
