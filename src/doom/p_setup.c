@@ -574,10 +574,6 @@ static void P_LoadSectors (int lump)
                 if (i == flow[j].sector && gamemission == flow[j].mission
                 && gameepisode == flow[j].epsiode && gamemap == flow[j].map)
                 {
-                    if (*flow[j].floorpic)
-                    {
-                        ss->floorpic = R_FlatNumForName(flow[j].floorpic);
-                    }
                     if (flow[j].flow)
                     {
                         ss->flow = SHORT(flow[j].flow);

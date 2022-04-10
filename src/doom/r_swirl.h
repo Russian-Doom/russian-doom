@@ -34,7 +34,6 @@ typedef struct
     int     epsiode;
     int     map;
     int     sector;
-    char   *floorpic;
     int     flow;
 } flow_t;
 

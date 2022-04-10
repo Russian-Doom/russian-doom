@@ -3635,11 +3635,13 @@ sectorfix_t sectorfix[] =
     { doom,             2,   7,    303, "",       "CEIL5_2",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             2,   7,    309, "",       "CEIL5_2",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
+    { doom,             2,   9,      0, "SWATER1",     "",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             2,   9,     16, "GATE6",  "GATE6",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom,             3,   1,     30, "",       "",         DEFAULT,     56,            DEFAULT,                            DEFAULT, DEFAULT },
 
-//  { doom,             3,   2,     25, "",       "",         DEFAULT,     DEFAULT,       DEFAULT,                                  4,       0 },
+    { doom,             3,   2,     26, "SWATER2","",         DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    
     { doom,             3,   2,     40, "",       "FLAT19",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             3,   2,     54, "",       "",         DEFAULT,     256,           DEFAULT,                            DEFAULT, DEFAULT },
 
@@ -3694,6 +3696,7 @@ sectorfix_t sectorfix[] =
     { doom,             4,   3,    155, "",       "",         DEFAULT,     DEFAULT,       0,                                  DEFAULT, DEFAULT },
 
     { doom,             4,   4,     62, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             4,   4,     75, "SWATER3","",         DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom,             4,   5,    134, "FLAT1",  "",         DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
@@ -3719,6 +3722,8 @@ sectorfix_t sectorfix[] =
     { doom2,            1,   2,     47, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom2,            1,   3,     52, "",        "CRATOP2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,   3,     63, "SWATER4","",         DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,   3,     67, "SWATER4","",         DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom2,            1,   4,      6, "",        "FLAT5_4", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,   4,     10, "SLIME15", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
@@ -3733,11 +3738,6 @@ sectorfix_t sectorfix[] =
     { doom2,            1,   5,     97, "FLOOR7_1","FLOOR7_1",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,   5,    104, "",        "CRATOP2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,   5,    107, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { doom2,            1,   5,    141, "SWATER1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { doom2,            1,   5,    143, "SWATER1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { doom2,            1,   5,    145, "SWATER1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { doom2,            1,   5,    146, "SWATER1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { doom2,            1,   5,    147, "SWATER1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 //  { doom2,            1,   5,    153, "",        "",        DEFAULT,     DEFAULT,       DEFAULT,                                  9,       0 },
 
     { doom2,            1,   4,     39, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
