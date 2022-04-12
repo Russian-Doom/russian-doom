@@ -1136,3 +1136,29 @@ flow_t flow[] =
 
     {        -1,       0,   0,      0,  32767 },
 };
+
+// =============================================================================
+//
+// [JN] Falling effect of liquid linedefs.
+//
+// Following table injects falling effect to linedefs with liquid textures.
+//
+// Nothing special about animation effect, just a five scroller types, where
+// 100 is slowest and 104 is fastest. This effect must be injected as separate
+// property, because engine allows only one effect per linedef, and this must
+// be taken to account. Notable example: MAP25 of Doom 2 whith bloodfall pillar
+// (sector 115) which is acting as a lift.
+//
+// Also, falling effect must be applied to both sides of linedef, since liquid
+// texture can be present on both sides as well.
+//
+// =========================================================== (2022-04-12) ====
+
+fall_t fall[] =
+{
+    //  mission, episode, map, linedef, flow
+//  TODO - fill me, example:
+//  {     doom2,       1,  25,     367,  102 },
+
+    {        -1,       0,   0,       0,  32767 },
+};

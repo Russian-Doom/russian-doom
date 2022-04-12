@@ -1149,6 +1149,7 @@ static void P_LoadLineDefs (int lump)
         ld->flags = (unsigned short)SHORT(mld->flags);
         ld->special = SHORT(mld->special);
         ld->tag = SHORT(mld->tag);
+        ld->fall = 0;  // [JN] Initialize falling liquid linedef.
 
         v1 = ld->v1 = &vertexes[(unsigned short)SHORT(mld->v1)]; // [crispy] extended nodes
         v2 = ld->v2 = &vertexes[(unsigned short)SHORT(mld->v2)]; // [crispy] extended nodes
@@ -1230,6 +1231,23 @@ static void P_LoadLineDefs (int lump)
         else
         {
             ld->backsector = 0;
+        }
+
+        // [JN] Inject fall effect to liquid linedefs on vanilla maps.
+        if (canmodify)
+        {
+            for (int j = 0; fall[j].mission != -1; j++)
+            {
+                if (i == fall[j].linedef && gamemission == fall[j].mission
+                && gameepisode == fall[j].epsiode && gamemap == fall[j].map)
+                {
+                    if (fall[j].fall)
+                    {
+                        ld->fall = SHORT(fall[j].fall);
+                    }
+                    break;
+                }
+            }
         }
     }
 

@@ -34,7 +34,18 @@ typedef struct
     int     epsiode;
     int     map;
     int     sector;
-    int     flow;
+    short   flow;
 } flow_t;
 
 extern flow_t flow[];
+
+typedef struct
+{
+    int     mission;
+    int     epsiode;
+    int     map;
+    int     linedef;
+    short   fall;
+} fall_t;
+
+extern fall_t fall[];

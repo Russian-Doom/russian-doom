@@ -166,6 +166,7 @@ typedef struct
 
     // [crispy] smooth texture scrolling
     fixed_t oldtextureoffset;
+    fixed_t oldrowoffset;
 
 } side_t;
 
@@ -196,6 +197,7 @@ typedef struct line_s
     unsigned short  flags;
     short           special;
     short           tag;
+    short           fall; // [JN] Falling liquid linedef.
 
     // Visual appearance: SideDefs.
     //  sidenum[1] will be -1 (NO_INDEX) if one sided

@@ -1204,6 +1204,24 @@ void P_UpdateSpecials (void)
             sides[line->sidenum[0]].textureoffset += FRACUNIT;
             break;
         }
+
+        // [JN] Animate falling liquids. Effect must be applied to
+        // both front and back sides, since liquid texture can be
+        // present on both sides as well.
+        if (swirling_liquids && !vanillaparm)
+        {
+            switch (line->fall)
+            {
+                case 100: case 101: case 102: case 103: case 104:
+                sides[line->sidenum[0]].oldrowoffset =
+                sides[line->sidenum[0]].rowoffset;
+                sides[line->sidenum[0]].rowoffset -= FRACUNIT;
+                sides[line->sidenum[1]].oldrowoffset =
+                sides[line->sidenum[1]].rowoffset;
+                sides[line->sidenum[1]].rowoffset -= FRACUNIT;
+                break;
+            }
+        }
     }
 
     // DO BUTTONS
@@ -1294,6 +1312,7 @@ void R_InterpolateTextureOffsets (void)
     {
         const line_t *line = linespeciallist[i];
         side_t *const side = &sides[line->sidenum[0]];
+        side_t *const sideb = &sides[line->sidenum[1]];
 
         if (line->special == 48)
         {
@@ -1302,6 +1321,16 @@ void R_InterpolateTextureOffsets (void)
         else if (line->special == 85)
         {
             side->textureoffset = side->oldtextureoffset - frac;
+        }
+
+        // [JN] Animate falling liquid linedef.
+        if (line->fall)
+        {
+            side->rowoffset = sideb->rowoffset = side->oldrowoffset
+                            - (line->fall == 100 ? frac/4 :
+                               line->fall == 101 ? frac/2 :
+                               line->fall == 103 ? frac*2 :
+                               line->fall == 104 ? frac*4 : frac);
         }
     }
 }
@@ -1621,6 +1650,15 @@ void P_SpawnSpecials (void)
                         "Превышен лимит линий со скроллингом текстур!\n (Оригинальный лимит равен 64)");
             }
             // EFFECT FIRSTCOL SCROLL+
+            linespeciallist[numlinespecials] = &lines[i];
+            numlinespecials++;
+            break;
+        }
+
+        // [JN] Animate falling liquid linedef.
+        switch (lines[i].fall)
+        {
+            case 100: case 101: case 102: case 103: case 104:
             linespeciallist[numlinespecials] = &lines[i];
             numlinespecials++;
             break;
