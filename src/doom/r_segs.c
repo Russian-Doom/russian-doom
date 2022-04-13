@@ -843,7 +843,12 @@ void R_StoreWallRange (int start, int stop)
             rw_bottomtexturemid = worldlow;
         }
 
-        rw_toptexturemid += sidedef->rowoffset;
+        // [JN] Don't scroll upper segment of liquid-defined 
+        // linedef, because it can be non-liquid.
+        if (linedef->fall == 0)
+        {
+            rw_toptexturemid += sidedef->rowoffset;
+        }       
         rw_bottomtexturemid += sidedef->rowoffset;
 
         // allocate space for masked texture tables
