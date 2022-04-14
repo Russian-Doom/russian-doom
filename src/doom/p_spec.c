@@ -1343,13 +1343,13 @@ void R_InterpolateTextureOffsets (void)
             FallFactor_102 = 0;
         }
 
-        FallFactor_103 = FallFactor_103_old + (frac * 4);
+        FallFactor_103 = FallFactor_103_old + (frac * 2);
         if (FallFactor_103 > FALLLIMIT)
         {
             FallFactor_103 = 0;
         }
 
-        FallFactor_104 = FallFactor_104_old + (frac * 8);
+        FallFactor_104 = FallFactor_104_old + (frac * 3);
         if (FallFactor_104 > FALLLIMIT)
         {
             FallFactor_104 = 0;
