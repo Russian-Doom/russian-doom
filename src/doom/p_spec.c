@@ -120,6 +120,8 @@ int     levelTimeCount;
 
 // [JN] How far floor tile can flow before offset reset.
 #define FLOWLIMIT FRACUNIT*128
+// [JN] How far linedef texture can fall before offset reset.
+#define FALLLIMIT FRACUNIT*127
 
 extern boolean message_secret_keepvisible;
 
@@ -1204,24 +1206,6 @@ void P_UpdateSpecials (void)
             sides[line->sidenum[0]].textureoffset += FRACUNIT;
             break;
         }
-
-        // [JN] Animate falling liquids. Effect must be applied to
-        // both front and back sides, since liquid texture can be
-        // present on both sides as well.
-        if (swirling_liquids && !vanillaparm)
-        {
-            switch (line->fall)
-            {
-                case 100: case 101: case 102: case 103: case 104:
-                sides[line->sidenum[0]].oldrowoffset =
-                sides[line->sidenum[0]].rowoffset;
-                sides[line->sidenum[0]].rowoffset -= FRACUNIT;
-                sides[line->sidenum[1]].oldrowoffset =
-                sides[line->sidenum[1]].rowoffset;
-                sides[line->sidenum[1]].rowoffset -= FRACUNIT;
-                break;
-            }
-        }
     }
 
     // DO BUTTONS
@@ -1285,6 +1269,20 @@ void P_UpdateSpecials (void)
         FlowFactor_Y = 0;
     }
 
+    // [JN] Apply fall effect to liquid linedef.
+    if (swirling_liquids && !vanillaparm)
+    {
+        R_FallLinedef();
+    }
+    else
+    {
+        FallFactor_100 = 0;
+        FallFactor_101 = 0;
+        FallFactor_102 = 0;
+        FallFactor_103 = 0;
+        FallFactor_104 = 0;
+    }
+
     // [crispy] draw fuzz effect independent of rendering frame rate
     R_SetFuzzPosTic();
 }
@@ -1312,7 +1310,6 @@ void R_InterpolateTextureOffsets (void)
     {
         const line_t *line = linespeciallist[i];
         side_t *const side = &sides[line->sidenum[0]];
-        side_t *const sideb = &sides[line->sidenum[1]];
 
         if (line->special == 48)
         {
@@ -1322,15 +1319,40 @@ void R_InterpolateTextureOffsets (void)
         {
             side->textureoffset = side->oldtextureoffset - frac;
         }
+    }
 
-        // [JN] Animate falling liquid linedef.
-        if (line->fall)
+    // [JN] Updage falling liquid linedef offsets.
+    if (swirling_liquids && !vanillaparm
+    && !paused && (!menuactive || demoplayback || netgame))
+    {
+        FallFactor_100 = FallFactor_100_old + (frac / 4);
+        if (FallFactor_100 > FALLLIMIT)
         {
-            side->rowoffset = sideb->rowoffset = side->oldrowoffset
-                            - (line->fall == 100 ? frac/4 :
-                               line->fall == 101 ? frac/2 :
-                               line->fall == 103 ? frac*2 :
-                               line->fall == 104 ? frac*4 : frac);
+            FallFactor_100 = 0;
+        }
+
+        FallFactor_101 = FallFactor_101_old + (frac / 2);
+        if (FallFactor_101 > FALLLIMIT)
+        {
+            FallFactor_101 = 0;
+        }
+
+        FallFactor_102 = FallFactor_102_old + frac;
+        if (FallFactor_102 > FALLLIMIT)
+        {
+            FallFactor_102 = 0;
+        }
+
+        FallFactor_103 = FallFactor_103_old + (frac * 4);
+        if (FallFactor_103 > FALLLIMIT)
+        {
+            FallFactor_103 = 0;
+        }
+
+        FallFactor_104 = FallFactor_104_old + (frac * 8);
+        if (FallFactor_104 > FALLLIMIT)
+        {
+            FallFactor_104 = 0;
         }
     }
 }

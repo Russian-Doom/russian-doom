@@ -22,6 +22,7 @@
 #include "doomstat.h"
 #include "r_local.h"
 #include "r_bmaps.h"
+#include "r_swirl.h"
 #include "jn.h"
 
 
@@ -714,6 +715,19 @@ void R_StoreWallRange (int start, int stop)
         }
         rw_midtexturemid += sidedef->rowoffset;
 
+        // [JN] Animate falling liquids.
+        if (linedef->fall)
+        {
+            switch (linedef->fall)
+            {
+                case 100:  rw_midtexturemid -= FallFactor_100;  break;
+                case 101:  rw_midtexturemid -= FallFactor_101;  break;
+                case 102:  rw_midtexturemid -= FallFactor_102;  break;
+                case 103:  rw_midtexturemid -= FallFactor_103;  break;
+                case 104:  rw_midtexturemid -= FallFactor_104;  break;
+            }
+        }
+
         ds_p->silhouette = SIL_BOTH;
         ds_p->sprtopclip = screenheightarray;
         ds_p->sprbottomclip = negonearray;
@@ -843,13 +857,21 @@ void R_StoreWallRange (int start, int stop)
             rw_bottomtexturemid = worldlow;
         }
 
-        // [JN] Don't scroll upper segment of liquid-defined 
-        // linedef, because it can be non-liquid.
-        if (linedef->fall == 0)
-        {
-            rw_toptexturemid += sidedef->rowoffset;
-        }       
+        rw_toptexturemid += sidedef->rowoffset;
         rw_bottomtexturemid += sidedef->rowoffset;
+
+        // [JN] Animate falling liquids.
+        if (linedef->fall)
+        {
+            switch (linedef->fall)
+            {
+                case 100:  rw_bottomtexturemid -= FallFactor_100;  break;
+                case 101:  rw_bottomtexturemid -= FallFactor_101;  break;
+                case 102:  rw_bottomtexturemid -= FallFactor_102;  break;
+                case 103:  rw_bottomtexturemid -= FallFactor_103;  break;
+                case 104:  rw_bottomtexturemid -= FallFactor_104;  break;
+            }
+        }
 
         // allocate space for masked texture tables
         if (sidedef->midtexture)

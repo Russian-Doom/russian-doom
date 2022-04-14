@@ -28,6 +28,13 @@ extern fixed_t FlowFactor_Y;
 extern fixed_t FlowDelta_X;
 extern fixed_t FlowDelta_Y;
 
+void R_FallLinedef (void);
+extern fixed_t FallFactor_100, FallFactor_100_old;
+extern fixed_t FallFactor_101, FallFactor_101_old;
+extern fixed_t FallFactor_102, FallFactor_102_old;
+extern fixed_t FallFactor_103, FallFactor_103_old;
+extern fixed_t FallFactor_104, FallFactor_104_old;
+
 typedef struct
 {
     int     mission;

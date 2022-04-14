@@ -1171,6 +1171,8 @@ flow_t flow[] =
     {   pack_tnt,      1,   8,     24,  100 },
     {   pack_tnt,      1,   8,     25,  100 },
     {   pack_tnt,      1,   8,     26,  101 },
+    {   pack_tnt,      1,   8,    109,  100 },
+    {   pack_tnt,      1,   8,    110,  100 },
     {   pack_tnt,      1,   8,    131,  102 },
     {   pack_tnt,      1,   8,    132,  102 },
     {   pack_tnt,      1,   8,    133,  102 },
@@ -1772,6 +1774,16 @@ flow_t flow[] =
     {   pack_tnt,      1,  32,    183,  223 },
     {   pack_tnt,      1,  32,    237,  221 },
     {   pack_tnt,      1,  32,    238,  221 },
+
+    {  pack_plut,      1,   1,      8,  100 },
+    {  pack_plut,      1,   1,     56,  100 },
+    {  pack_plut,      1,   1,     72,  100 },
+    {  pack_plut,      1,   1,     83,  100 },
+    {  pack_plut,      1,   1,     85,  100 },
+    {  pack_plut,      1,   1,     86,  100 },
+    {  pack_plut,      1,   1,     87,  100 },
+    {  pack_plut,      1,   1,     95,  100 },
+    {  pack_plut,      1,   1,     98,  100 },
     
     {        -1,       0,   0,      0,  32767 },
 };
@@ -1792,6 +1804,50 @@ flow_t flow[] =
 // texture can be present on both sides as well.
 //
 // =========================================================== (2022-04-12) ====
+
+fixed_t FallFactor_100, FallFactor_100_old;
+fixed_t FallFactor_101, FallFactor_101_old;
+fixed_t FallFactor_102, FallFactor_102_old;
+fixed_t FallFactor_103, FallFactor_103_old;
+fixed_t FallFactor_104, FallFactor_104_old;
+
+#define FALLDELTA_100  256
+#define FALLDELTA_101  512
+#define FALLDELTA_102  1024
+#define FALLDELTA_103  2560
+#define FALLDELTA_104  4096
+
+// -----------------------------------------------------------------------------
+// R_FlowPlane
+// [JN] Modify linedef texture extra offsets of falling liquids.
+// -----------------------------------------------------------------------------
+
+void R_FallLinedef (void)
+{
+    // Slowest
+    FallFactor_100_old = FallFactor_100;
+    FallFactor_100 += FALLDELTA_100;
+
+    // Slow
+    FallFactor_101_old = FallFactor_101;
+    FallFactor_101 += FALLDELTA_101;
+
+    // Normal
+    FallFactor_102_old = FallFactor_102;
+    FallFactor_102 += FALLDELTA_102;
+
+    // Fast
+    FallFactor_103_old = FallFactor_103;
+    FallFactor_103 += FALLDELTA_103;
+
+    // Fastest
+    FallFactor_104_old = FallFactor_104;
+    FallFactor_104 += FALLDELTA_104;
+}
+
+// -----------------------------------------------------------------------------
+// [JN] Inject fall specials to vanilla maps.
+// -----------------------------------------------------------------------------
 
 fall_t fall[] =
 {
@@ -1878,14 +1934,14 @@ fall_t fall[] =
     {     doom2,       1,  25,     389,  102 },
     {     doom2,       1,  25,     394,  102 },
     {     doom2,       1,  25,     452,  102 },
-    {     doom2,       1,  25,     472,  101 },
-    {     doom2,       1,  25,     473,  101 },
-    {     doom2,       1,  25,     474,  101 },
-    {     doom2,       1,  25,     475,  101 },
-    {     doom2,       1,  25,     476,  101 },
-    {     doom2,       1,  25,     477,  101 },
-    {     doom2,       1,  25,     478,  101 },
-    {     doom2,       1,  25,     479,  101 },
+    {     doom2,       1,  25,     472,  102 },
+    {     doom2,       1,  25,     473,  102 },
+    {     doom2,       1,  25,     474,  102 },
+    {     doom2,       1,  25,     475,  102 },
+    {     doom2,       1,  25,     476,  102 },
+    {     doom2,       1,  25,     477,  102 },
+    {     doom2,       1,  25,     478,  102 },
+    {     doom2,       1,  25,     479,  102 },
     {     doom2,       1,  28,     124,  101 },
     {     doom2,       1,  28,     125,  101 },
     {     doom2,       1,  28,     126,  101 },
