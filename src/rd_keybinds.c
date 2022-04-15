@@ -26,13 +26,6 @@
 #include "m_misc.h"
 #include "rd_menu.h"
 
-typedef enum
-{
-    keyboard,
-    mouse,
-    controller
-} device_t;
-
 typedef struct bind_descriptor_s
 {
     struct bind_descriptor_s* next;
@@ -516,7 +509,7 @@ void RemoveKeyFromBinds(device_t device, int key)
     }
 }
 
-static void AddBind(bound_key_t boundKey, device_t device, int key)
+void AddBind(bound_key_t boundKey, device_t device, int key)
 {
     bind_descriptor_t* bind = bind_descriptor[boundKey];
 

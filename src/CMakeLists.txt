@@ -79,6 +79,7 @@ add_library(Game STATIC EXCLUDE_FROM_ALL
     rd_keybinds.c       rd_keybinds.h
     rd_menu.c           rd_menu.h
                         rd_menu_control.h
+    rd_migration.c      rd_migration.h
     rd_text.c           rd_text.h
     sha1.c              sha1.h
     memio.c             memio.h
@@ -140,6 +141,7 @@ if(COMPILE_SETUP)
         net_sdl.c           net_sdl.h
         net_query.c         net_query.h
         net_structrw.c      net_structrw.h
+                            rd_migration.h
         z_native.c          z_zone.h
     )
     set_target_properties(SetupCommon PROPERTIES
