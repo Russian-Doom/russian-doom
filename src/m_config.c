@@ -37,6 +37,7 @@
 #include "m_config.h"
 #include "m_misc.h"
 #include "jn.h"
+#include "rd_migration.h"
 
 #ifndef ___RD_TARGET_SETUP___
     #include "rd_keybinds.h"
@@ -927,6 +928,7 @@ void M_SaveConfig (void)
     f = fopen(configPath, "w");
     if(!f)
         return; // can't write the file, but don't complain
+    fprintf(f, "config_version = %i\n\n", CURRENT_CONFIG_VERSION);
     section = sections;
     while(section)
     {
@@ -1034,6 +1036,15 @@ static void LoadSections(FILE *file)
     }
 }
 
+static void ApplyDefaults()
+{
+    M_AppendConfigSection("General", &defaultHandler);
+#ifndef ___RD_TARGET_SETUP___
+    BK_ApplyDefaultBindings();
+    M_AppendConfigSection("Keybinds", &keybindsHandler);
+#endif
+}
+
 //
 // M_LoadConfig
 //
@@ -1041,6 +1052,7 @@ void M_LoadConfig(void)
 {
     int i;
     FILE* file;
+    int firstChar, cfg_version = 0;
  
     // check for a custom default file
 
@@ -1070,12 +1082,27 @@ void M_LoadConfig(void)
     {
         // File not opened, but don't complain.
         // It's probably just the first time they ran the game.
-        M_AppendConfigSection("General", &defaultHandler);
-#ifndef ___RD_TARGET_SETUP___
-        BK_ApplyDefaultBindings();
-        M_AppendConfigSection("Keybinds", &keybindsHandler);
-#endif
+        ApplyDefaults();
         return;
+    }
+    firstChar = fgetc(file);
+    fseek(file, -1, SEEK_CUR);
+    if(firstChar == EOF)
+    {
+        // Empty file
+        ApplyDefaults();
+        fclose(file);
+        return;
+    }
+    if(firstChar != '[')
+    {
+        if(fscanf(file, "config_version = %i\n\n", &cfg_version) != 1)
+        {
+            printf("\tM_Config: Error: Unsupported config format\n");
+            ApplyDefaults();
+            fclose(file);
+            return;
+        }
     }
 
     LoadSections(file);
@@ -1088,6 +1115,9 @@ void M_LoadConfig(void)
         BK_ApplyDefaultBindings();
         M_AppendConfigSection("Keybinds", &keybindsHandler);
     }
+
+    config_version = cfg_version;
+    RD_ApplyMigration();
 #endif
 }
 
