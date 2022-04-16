@@ -143,6 +143,7 @@ int automap_color = 0;
 int automap_mark_color = 10;
 int automap_antialias = 1;
 int automap_stats = 1;
+int automap_skill = 1;
 int automap_level_time = 1;
 int automap_total_time = 0;
 int automap_coords = 0;
@@ -772,6 +773,7 @@ void D_BindVariables(void)
     M_BindIntVariable("automap_mark_color",     &automap_mark_color);
     M_BindIntVariable("automap_antialias",      &automap_antialias);
     M_BindIntVariable("automap_stats",          &automap_stats);
+    M_BindIntVariable("automap_skill",          &automap_skill);
     M_BindIntVariable("automap_level_time",     &automap_level_time);
     M_BindIntVariable("automap_total_time",     &automap_total_time);
     M_BindIntVariable("automap_coords",         &automap_coords);

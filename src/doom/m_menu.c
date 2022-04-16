@@ -197,6 +197,7 @@ static void M_RD_Change_AutomapGridSize(Direction_t direction);
 // Stats
 static void M_RD_Draw_StatsSettings();
 static void M_RD_Change_AutomapStats(Direction_t direction);
+static void M_RD_Change_AutomapSkill(Direction_t direction);
 static void M_RD_Change_AutomapLevelTime(Direction_t direction);
 static void M_RD_Change_AutomapTotalTime(Direction_t direction);
 static void M_RD_Change_AutomapCoords(Direction_t direction);
@@ -1122,11 +1123,11 @@ static Menu_t AutomapMenu = {
 static MenuItem_t StatsItems[] = {
     {ITT_TITLE,   "Statistics",     "Cnfnbcnbrf",         NULL,                         0}, // Статистика
     {ITT_LRFUNC,  "level stats:",   "cnfnbcnbrf ehjdyz:", M_RD_Change_AutomapStats,     0}, // Статистика уровня:
+    {ITT_LRFUNC,  "skill level:",   "ehjdtym ckj;yjcnb:", M_RD_Change_AutomapSkill,     0}, // Уровень сложности:
     {ITT_LRFUNC,  "level time:",    "dhtvz ehjdyz:",      M_RD_Change_AutomapLevelTime, 0}, // Время уровня:
     {ITT_LRFUNC,  "total time:",    "j,ott dhtvz:",       M_RD_Change_AutomapTotalTime, 0}, // Общее время:
     {ITT_LRFUNC,  "player coords:", "rjjhlbyfns buhjrf:", M_RD_Change_AutomapCoords,    0}, // Координаты игрока:
     {ITT_LRFUNC,  "coloring:",      "jrhfibdfybt:",       M_RD_Change_HUDWidgetColors,  0}, // Окрашивание:
-    {ITT_EMPTY,   NULL,             NULL,                 NULL,                         0},
     {ITT_EMPTY,   NULL,             NULL,                 NULL,                         0},
     {ITT_EMPTY,   NULL,             NULL,                 NULL,                         0},
     {ITT_EMPTY,   NULL,             NULL,                 NULL,                         0},
@@ -3023,29 +3024,34 @@ static void M_RD_Draw_StatsSettings(void)
                               124 + wide_delta, 35,
                               automap_stats ? CR_GREEN : CR_DARKRED);
 
+        // Skill level
+        RD_M_DrawTextSmallENG(automap_skill == 1 ? "in automap" :
+                              automap_skill == 2 ? "always" : "off",
+                              121 + wide_delta, 45,
+                              automap_skill ? CR_GREEN : CR_DARKRED);
 
         // Level time
         RD_M_DrawTextSmallENG(automap_level_time == 1 ? "in automap" :
                               automap_level_time == 2 ? "always" : "off",
-                              115 + wide_delta, 45,
+                              115 + wide_delta, 55,
                               automap_level_time ? CR_GREEN : CR_DARKRED);
 
         // Total time
         RD_M_DrawTextSmallENG(automap_total_time == 1 ? "in automap" :
                               automap_total_time == 2 ? "always" : "off",
-                              116 + wide_delta, 55,
+                              116 + wide_delta, 65,
                               automap_total_time ? CR_GREEN : CR_DARKRED);
 
         // Player coords
         RD_M_DrawTextSmallENG(automap_coords == 1 ? "in automap" :
                               automap_coords == 2 ? "always" : "off",
-                              142 + wide_delta, 65,
+                              142 + wide_delta, 75,
                               automap_coords ? CR_GREEN : CR_DARKRED);
 
         // Coloring
         RD_M_DrawTextSmallENG(hud_widget_colors == 1 ? "two colors" :
                               hud_widget_colors == 2 ? "four colors" :
-                              "off", 103 + wide_delta, 75,
+                              "off", 103 + wide_delta, 85,
                               hud_widget_colors ? CR_GREEN : CR_DARKRED);
 
         //
@@ -3061,28 +3067,34 @@ static void M_RD_Draw_StatsSettings(void)
                               "dsrk", 175 + wide_delta, 35,
                               automap_stats ? CR_GREEN : CR_DARKRED);
 
+        // Уровень сложности
+        RD_M_DrawTextSmallRUS(automap_skill == 1 ? "yf rfhnt" :
+                              automap_skill == 2 ? "dctulf" :
+                              "dsrk", 179 + wide_delta, 45,
+                              automap_skill ? CR_GREEN : CR_DARKRED);
+
         // Время уровня
         RD_M_DrawTextSmallRUS(automap_level_time == 1 ? "yf rfhnt" :
                               automap_level_time == 2 ? "dctulf" :
-                              "dsrk", 136 + wide_delta, 45,
+                              "dsrk", 136 + wide_delta, 55,
                               automap_level_time ? CR_GREEN : CR_DARKRED);
 
         // Общее время
         RD_M_DrawTextSmallRUS(automap_total_time == 1 ? "yf rfhnt" :
                               automap_total_time == 2 ? "dctulf" :
-                              "dsrk", 131 + wide_delta, 55,
+                              "dsrk", 131 + wide_delta, 65,
                               automap_total_time ? CR_GREEN : CR_DARKRED);
 
         // Координаты игрока
         RD_M_DrawTextSmallRUS(automap_coords == 1 ? "yf rfhnt" :
                               automap_coords == 2 ? "dctulf" :
-                              "dsrk", 178 + wide_delta, 65,
+                              "dsrk", 178 + wide_delta, 75,
                               automap_coords ? CR_GREEN : CR_DARKRED);
 
         // Окрашивание
         RD_M_DrawTextSmallRUS(hud_widget_colors == 1 ? "ldf wdtnf" :
                               hud_widget_colors == 2 ? "xtnsht wdtnf" :
-                              "dsrk", 133 + wide_delta, 75,
+                              "dsrk", 133 + wide_delta, 85,
                               hud_widget_colors ? CR_GREEN : CR_DARKRED);
 
         //
@@ -3095,6 +3107,11 @@ static void M_RD_Draw_StatsSettings(void)
 static void M_RD_Change_AutomapStats(Direction_t direction)
 {
     RD_Menu_SpinInt(&automap_stats, 0, 2, direction);
+}
+
+static void M_RD_Change_AutomapSkill(Direction_t direction)
+{
+    RD_Menu_SpinInt(&automap_skill, 0, 2, direction);
 }
 
 static void M_RD_Change_AutomapLevelTime(Direction_t direction)
@@ -6066,6 +6083,7 @@ static void M_RD_BackToDefaults_Recommended(int choice)
 
     // Stats
     automap_stats      = 1;
+    automap_skill      = 1;
     automap_level_time = 1;
     automap_total_time = 0;
     automap_coords     = 0;
@@ -6264,6 +6282,7 @@ static void M_RD_BackToDefaults_Original(int choice)
 
     // Stats
     automap_stats      = 0;
+    automap_skill      = 0;
     automap_level_time = 0;
     automap_total_time = 0;
     automap_coords     = 0;

@@ -749,9 +749,9 @@ void HU_Init_Widgets (void)
     // Set lengths:
     if (english_language)
     {
-        w_kills_title_lengh = M_StringWidth("kills: ");
-        w_items_title_lengh = M_StringWidth("items: ");
-        w_scrts_title_lengh = M_StringWidth("secret: ");
+        w_kills_title_lengh = M_StringWidth("k: ");
+        w_items_title_lengh = M_StringWidth("i: ");
+        w_scrts_title_lengh = M_StringWidth("s: ");
         w_skill_title_lengh = M_StringWidth("skill: ");
         w_coord_x_title_lengh = M_StringWidth("x: ");
         w_coord_y_title_lengh = M_StringWidth("y: ");
@@ -760,10 +760,10 @@ void HU_Init_Widgets (void)
     }
     else
     {
-        w_kills_title_lengh = M_StringWidth("dhfub: ");     // враги:
-        w_items_title_lengh = M_StringWidth("ghtlvtns: ");  // предметы:
-        w_scrts_title_lengh = M_StringWidth("nfqybrb: ");   // тайники:
-        w_skill_title_lengh = M_StringWidth("ckj;yjcnm: "); // сложность:
+        w_kills_title_lengh = M_StringWidth("d: ");         // (в)раги:
+        w_items_title_lengh = M_StringWidth("g: ");         // (п)редметы:
+        w_scrts_title_lengh = M_StringWidth("n: ");         // (т)айники:
+        w_skill_title_lengh = M_StringWidth("ck;: "); // слж:
         w_coord_x_title_lengh = M_StringWidth("[: ");       // x:
         w_coord_y_title_lengh = M_StringWidth("e: ");       // y:
         w_coord_z_title_lengh = M_StringWidth("x: ");       // z:
@@ -1011,7 +1011,7 @@ void HU_Drawer(void)
         //
         // Kills
         //
-        sprintf(str, english_language ? "Kills:" : "dhfub:");
+        sprintf(str, english_language ? "K:" : "d:");
         HUlib_clearTextLine(&w_kills_title);
         s = str;
         while (*s)
@@ -1058,7 +1058,7 @@ void HU_Drawer(void)
         //
         // Items
         //
-        sprintf(str, english_language ? "Items:" : "ghtlvtns:");
+        sprintf(str, english_language ? "I:" : "g:");
         HUlib_clearTextLine(&w_items_title);
         s = str;
         while (*s)
@@ -1081,7 +1081,7 @@ void HU_Drawer(void)
         //
         // Secrets
         //
-        sprintf(str, english_language ? "Secret:" : "nfqybrb:");
+        sprintf(str, english_language ? "S:" : "n:");
         HUlib_clearTextLine(&w_scrts_title);
         s = str;
         while (*s)
@@ -1100,11 +1100,14 @@ void HU_Drawer(void)
             HUlib_addCharToTextLine(&w_scrts, *(s++));
         }
         HUlib_drawTextLine(&w_scrts, false, hud_values);
+    }
 
-        //
-        // Skill
-        //
-        sprintf(str, english_language ? "Skill:" : "ckj;yjcnm:");
+    //
+    // Skill level
+    //
+    if (((automapactive && automap_skill == 1) || automap_skill == 2) && !vanillaparm)
+    {
+        sprintf(str, english_language ? "Skill:" : "ck;:");
         HUlib_clearTextLine(&w_skill_title);
         s = str;
         while (*s)
