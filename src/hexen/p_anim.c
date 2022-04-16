@@ -79,8 +79,8 @@ extern fixed_t Sky2SmoothScrollFactor;
 extern fixed_t Sky1SmoothScrollDelta;
 extern fixed_t Sky2SmoothScrollDelta;
 // [JN] Smooth plane scrolling.
-extern fixed_t FlatScrollFactor_X;
-extern fixed_t FlatScrollFactor_Y;
+extern fixed_t FlatScrollFactor_X, FlatScrollFactor_X_old;
+extern fixed_t FlatScrollFactor_Y, FlatScrollFactor_Y_old;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
@@ -211,6 +211,8 @@ void P_AnimateSurfaces(void)
     }
 
     // [JN] Update smoothed plane textures offsets.
+    FlatScrollFactor_X_old = FlatScrollFactor_X;
+    FlatScrollFactor_Y_old = FlatScrollFactor_Y;
     FlatScrollFactor_X += FRACUNIT;
     FlatScrollFactor_Y += FRACUNIT;
 
@@ -250,6 +252,18 @@ void P_AnimateSurfaces(void)
 
 void R_SmoothTextureScrolling()
 {
+	fixed_t frac;
+
+	if (uncapped_fps && !vanillaparm
+    && !paused && (!menuactive || demoplayback || netgame))
+	{
+		frac = fractionaltic;
+	}
+	else
+	{
+		frac = FRACUNIT;
+	}
+
     for (int i = 0; i < numlinespecials; i++)
     {
         const line_t *line = linespeciallist[i];
@@ -272,6 +286,9 @@ void R_SmoothTextureScrolling()
                 break;
         }
     }
+
+    FlatScrollFactor_X = FlatScrollFactor_X_old + frac;
+    FlatScrollFactor_Y = FlatScrollFactor_Y_old + frac;
 }
 
 //==========================================================================

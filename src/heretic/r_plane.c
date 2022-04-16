@@ -102,8 +102,8 @@ fixed_t *distscale = NULL;
 fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
 
 // [JN] Smooth plane scrolling.
-fixed_t FlatScrollFactor_X;
-fixed_t FlatScrollFactor_Y;
+fixed_t FlatScrollFactor_X, FlatScrollFactor_X_old;
+fixed_t FlatScrollFactor_Y, FlatScrollFactor_Y_old;
 static fixed_t FlatScrollDelta_X;
 static fixed_t FlatScrollDelta_Y;
 

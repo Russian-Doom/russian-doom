@@ -1257,12 +1257,14 @@ void P_UpdateSpecials (void)
 
     // [JN] Update flowing flat offsets. 
     // Once factor value reaches it's limit, reset it.
+    FlowFactor_X_old = FlowFactor_X;
     FlowFactor_X += FRACUNIT / 8;
     if (FlowFactor_X >= FLOWLIMIT)
     {
         FlowFactor_X = 0;
     }
 
+    FlowFactor_Y_old = FlowFactor_Y;
     FlowFactor_Y += FRACUNIT / 8;
     if (FlowFactor_Y >= FLOWLIMIT)
     {
@@ -1325,6 +1327,9 @@ void R_InterpolateTextureOffsets (void)
     if (swirling_liquids && !vanillaparm
     && !paused && (!menuactive || demoplayback || netgame))
     {
+        FlowFactor_X = FlowFactor_X_old + (frac / 8);
+        FlowFactor_Y = FlowFactor_Y_old + (frac / 8);
+
         FallFactor_100 = FallFactor_100_old + (frac / 4);
         if (FallFactor_100 > FALLLIMIT)
         {

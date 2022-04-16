@@ -237,10 +237,10 @@ struct
 mobj_t LavaInflictor;
 
 // [JN] Smooth plane scrolling.
-extern fixed_t FlatScrollFactor_X;
-extern fixed_t FlatScrollFactor_Y;
+extern fixed_t FlatScrollFactor_X, FlatScrollFactor_X_old;
+extern fixed_t FlatScrollFactor_Y, FlatScrollFactor_Y_old;
 // [JN] How far scrolling factor can go before reset.
-static const fixed_t FlatScrollLimit = FRACUNIT * 128;
+#define FLATSCROLLLIMIT FRACUNIT*128
 
 //----------------------------------------------------------------------------
 //
@@ -1066,14 +1066,16 @@ void P_UpdateSpecials(void)
     }
 
     // [JN] Update smoothed plane textures offsets.
+    FlatScrollFactor_X_old = FlatScrollFactor_X;
+    FlatScrollFactor_Y_old = FlatScrollFactor_Y;
     FlatScrollFactor_X += FRACUNIT;
     FlatScrollFactor_Y += FRACUNIT;
     // [JN] Once factor value reaches it's limit, reset it to zero.
-    if (FlatScrollFactor_X >= FlatScrollLimit)
+    if (FlatScrollFactor_X >= FLATSCROLLLIMIT)
     {
         FlatScrollFactor_X = 0;
     }
-    if (FlatScrollFactor_Y >= FlatScrollLimit)
+    if (FlatScrollFactor_Y >= FLATSCROLLLIMIT)
     {
         FlatScrollFactor_Y = 0;
     }
@@ -1159,6 +1161,9 @@ void R_InterpolateTextureOffsets()
 			side->textureoffset = side->oldtextureoffset - frac;
 		}
 	}
+
+    FlatScrollFactor_X = FlatScrollFactor_X_old + frac;
+    FlatScrollFactor_Y = FlatScrollFactor_Y_old + frac;
 }
 
 //============================================================
