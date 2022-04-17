@@ -22,7 +22,7 @@
 
 typedef enum
 {
-    //Movement
+    // Movement
     bk_forward = 0,
     bk_backward,
     bk_turn_left,
@@ -39,7 +39,7 @@ typedef enum
 
     bk_use,
 
-    //Weapon
+    // Weapon
     bk_fire,
     bk_weapon_1,
     bk_weapon_2,
@@ -52,18 +52,18 @@ typedef enum
     bk_weapon_prev,
     bk_weapon_next,
 
-    //Look
+    // Look
     bk_look_up,
     bk_look_down,
     bk_look_center,
     bk_toggle_mlook,
 
-    //Inventory
+    // Inventory
     bk_inv_left,
     bk_inv_right,
     bk_inv_use_artifact,
 
-    //Inventory: Strife
+    // Inventory: Strife
     bk_inv_use_health, // [Daspral] Reserved for safe addition of feature in future
 //  bk_inv_drop, // [Daspral] Uncommenting these lines will break binds in config files
 //  bk_inv_pop,
@@ -72,7 +72,7 @@ typedef enum
 //  bk_inv_end,
 //  bk_mission,
 
-    //Artifacts: Heretic
+    // Artifacts: Heretic
     bk_arti_quartz,
     bk_arti_urn,
     bk_arti_bomb,
@@ -84,7 +84,7 @@ typedef enum
     bk_arti_invulnerability,
     bk_arti_chaosdevice,
 
-    //Artifacts: Hexen
+    // Artifacts: Hexen
     bk_arti_all,
     bk_arti_blastradius,
     bk_arti_teleportother,
@@ -94,19 +94,11 @@ typedef enum
     bk_arti_speed,
     bk_arti_healingradius,
 
-    //Map keys
-    bk_map_toggle,
-    bk_map_zoom_in,
-    bk_map_zoom_out,
-    bk_map_zoom_max,
-    bk_map_follow,
-    bk_map_overlay,
-    bk_map_rotate,
-    bk_map_grid,
-    bk_map_mark,
-    bk_map_clearmark,
+    // Shortcuts
+    bk_screen_inc, // [Dasperal] screen_inc/dec do not work on automap so they should be related to "Controls" section
+    bk_screen_dec, // instead of "Shortcuts" section
 
-    //Shortcuts
+    bk__section_shortcuts, // [Dasperal] Bindings after this line are related to "Shortcuts" section
     bk_menu_help,
     bk_menu_save,
     bk_menu_load,
@@ -118,19 +110,17 @@ typedef enum
     bk_gamma,
     bk_nextlevel,
     bk_reloadlevel,
-    bk_screen_inc,
-    bk_screen_dec,
     bk_screenshot,
     bk_pause,
     bk_finish_demo,
 
-    //Toggles
+    // Toggles
     bk_toggle_crosshair,
     bk_messages,
     bk_detail,
     bk_toggle_fliplvls,
 
-    //Multiplayer
+    // Multiplayer
     bk_spy,
     bk_multi_msg,
     bk_multi_msg_player_0,
@@ -142,7 +132,20 @@ typedef enum
     bk_multi_msg_player_6,
     bk_multi_msg_player_7,
 
-    //System keys
+    // Map keys
+    bk__section_map, // [Dasperal] Bindings after this line are related to "Map" section
+    bk_map_toggle,
+    bk_map_zoom_in,
+    bk_map_zoom_out,
+    bk_map_zoom_max,
+    bk_map_follow,
+    bk_map_overlay,
+    bk_map_rotate,
+    bk_map_grid,
+    bk_map_mark,
+    bk_map_clearmark,
+
+    // System keys
     bk__serializable, // [Dasperal] Bindings after this line are not saved to config file
     bk_left,
     bk_right,
@@ -158,7 +161,7 @@ typedef enum
     bk_confirm,
     bk_abort,
 
-    bk__size, //size of bound_key_t
+    bk__size, // size of bound_key_t
     bk__null
 } bound_key_t;
 
