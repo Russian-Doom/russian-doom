@@ -191,7 +191,7 @@ void BK_StartBindingKey(bound_key_t key);
 
 void BK_BindKey(event_t* event);
 
-void AddBind(bound_key_t boundKey, device_t device, int key);
+void BK_AddBind(bound_key_t boundKey, device_t device, int key);
 
 /** Clears all binds for given bound_key */
 void BK_ClearBinds(bound_key_t key);
