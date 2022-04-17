@@ -201,7 +201,7 @@ static void M_RD_Change_AutomapSkill(Direction_t direction);
 static void M_RD_Change_AutomapLevelTime(Direction_t direction);
 static void M_RD_Change_AutomapTotalTime(Direction_t direction);
 static void M_RD_Change_AutomapCoords(Direction_t direction);
-static void M_RD_Change_HUDWidgetColors(Direction_t direction);
+static void M_RD_Change_HUDWidgetColors();
 
 // Sound
 static void M_RD_Draw_Audio();
@@ -1127,7 +1127,7 @@ static MenuItem_t StatsItems[] = {
     {ITT_LRFUNC,  "level time:",    "dhtvz ehjdyz:",      M_RD_Change_AutomapLevelTime, 0}, // Время уровня:
     {ITT_LRFUNC,  "total time:",    "j,ott dhtvz:",       M_RD_Change_AutomapTotalTime, 0}, // Общее время:
     {ITT_LRFUNC,  "player coords:", "rjjhlbyfns buhjrf:", M_RD_Change_AutomapCoords,    0}, // Координаты игрока:
-    {ITT_LRFUNC,  "coloring:",      "jrhfibdfybt:",       M_RD_Change_HUDWidgetColors,  0}, // Окрашивание:
+    {ITT_SWITCH,  "coloring:",      "jrhfibdfybt:",       M_RD_Change_HUDWidgetColors,  0}, // Окрашивание:
     {ITT_EMPTY,   NULL,             NULL,                 NULL,                         0},
     {ITT_EMPTY,   NULL,             NULL,                 NULL,                         0},
     {ITT_EMPTY,   NULL,             NULL,                 NULL,                         0},
@@ -3049,10 +3049,9 @@ static void M_RD_Draw_StatsSettings(void)
                               automap_coords ? CR_GREEN : CR_DARKRED);
 
         // Coloring
-        RD_M_DrawTextSmallENG(hud_widget_colors == 1 ? "two colors" :
-                              hud_widget_colors == 2 ? "four colors" :
-                              "off", 103 + wide_delta, 85,
-                              hud_widget_colors ? CR_GREEN : CR_DARKRED);
+        RD_M_DrawTextSmallENG(hud_stats_color ? "on" : "off",
+                              103 + wide_delta, 85,
+                              hud_stats_color ? CR_GREEN : CR_DARKRED);
 
         //
         // Footer
@@ -3092,10 +3091,9 @@ static void M_RD_Draw_StatsSettings(void)
                               automap_coords ? CR_GREEN : CR_DARKRED);
 
         // Окрашивание
-        RD_M_DrawTextSmallRUS(hud_widget_colors == 1 ? "ldf wdtnf" :
-                              hud_widget_colors == 2 ? "xtnsht wdtnf" :
-                              "dsrk", 133 + wide_delta, 85,
-                              hud_widget_colors ? CR_GREEN : CR_DARKRED);
+        RD_M_DrawTextSmallRUS(hud_stats_color ? "drk" : "dsrk",
+                              133 + wide_delta, 85,
+                              hud_stats_color ? CR_GREEN : CR_DARKRED);
 
         //
         // Footer
@@ -3129,12 +3127,9 @@ static void M_RD_Change_AutomapCoords(Direction_t direction)
     RD_Menu_SpinInt(&automap_coords, 0, 2, direction);
 }
 
-static void M_RD_Change_HUDWidgetColors(Direction_t direction)
+static void M_RD_Change_HUDWidgetColors()
 {
-    RD_Menu_SpinInt(&hud_widget_colors, 0, 2, direction);
-
-    // [JN] Redifine HUD widget colors and lengths.
-    HU_Init_Widgets();
+    hud_stats_color ^= 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -6087,7 +6082,7 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     automap_level_time = 1;
     automap_total_time = 0;
     automap_coords     = 0;
-    hud_widget_colors  = 0;
+    hud_stats_color    = 1;
 
     // Audio
     snd_samplerate = 44100;
@@ -6198,9 +6193,6 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     // Update screen size and fuzz effect
     R_SetViewSize (screenblocks, detailLevel);
 
-    // Redifine HUD widget colors and lengths
-    HU_Init_Widgets();
-
     // Update background of classic HUD and player face 
     if (gamestate == GS_LEVEL)
     {
@@ -6286,7 +6278,7 @@ static void M_RD_BackToDefaults_Original(int choice)
     automap_level_time = 0;
     automap_total_time = 0;
     automap_coords     = 0;
-    hud_widget_colors  = 0;
+    hud_stats_color    = 0;
 
     // Audio
     snd_samplerate = 44100;
@@ -6397,9 +6389,6 @@ static void M_RD_BackToDefaults_Original(int choice)
     // Update screen size and fuzz effect
     R_SetViewSize (screenblocks, detailLevel);
 
-    // Redifine HUD widget colors and lengths
-    HU_Init_Widgets();
-
     // Update background of classic HUD and player face 
     if (gamestate == GS_LEVEL)
     {
@@ -6450,9 +6439,6 @@ static void M_RD_ChangeLanguage(int choice)
             D_DoAdvanceDemo();
         }
     }
-
-    // Reinitialize HUD widget colors and lengths
-    HU_Init_Widgets();
 
     if (gamestate == GS_LEVEL)
     {

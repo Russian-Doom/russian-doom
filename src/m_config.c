@@ -616,6 +616,7 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(automap_follow),
     CONFIG_VARIABLE_INT(automap_grid),
     CONFIG_VARIABLE_INT(automap_grid_size),
+    CONFIG_VARIABLE_INT(hud_stats_color),
     CONFIG_VARIABLE_INT(hud_widget_colors),
 
     // Sound
