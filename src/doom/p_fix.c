@@ -3436,6 +3436,7 @@ linefix_t linefix[] =
     { pack_plut,        1,  12,     690,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
     { pack_plut,        1,  12,     985,    0, "",         "WOOD5",       "",                 64,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_plut,        1,  12,     988,    0, "",         "WOOD5",       "",                -32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  12,     996,    1, "",         "",       "WOOD1",                -96,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_plut,        1,  12,    1018,    0, "",         "",            "",            DEFAULT,         0, (ML_DONTPEGTOP | ML_DONTPEGBOTTOM), DEFAULT,                                    DEFAULT },
     { pack_plut,        1,  12,    1151,    0, "",         "WOOD5",       "",                -96,         0, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
@@ -4180,6 +4181,8 @@ sectorfix_t sectorfix[] =
     { pack_plut,        1,   8,    122, "",        "FLOOR7_1",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,   8,    130, "",        "",        DEFAULT,     0,             DEFAULT,                            DEFAULT, DEFAULT },
 
+    { pack_plut,        1,   9,     52, "SWATER2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_plut,        1,   9,     56, "SWATER2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,   9,     74, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,   9,     75, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,   9,     78, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
