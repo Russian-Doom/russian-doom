@@ -1526,7 +1526,7 @@ static MenuItem_t Gameplay1Items[] = {
     {ITT_SWITCH,  "Translucency:",                "Ghjphfxyjcnm j,]trnjd:",         M_RD_Change_Translucency,    0}, // Прозрачность объектов
     {ITT_LRFUNC,  "Fuzz effect:",                 "\'aatrn ievf:",                  M_RD_Change_ImprovedFuzz,    0}, // Эффект шума
     {ITT_SWITCH,  "Colored blood and corpses:",   "Hfpyjwdtnyfz rhjdm b nhegs:",    M_RD_Change_ColoredBlood,    0}, // Разноцветная кровь и трупы
-    {ITT_SWITCH,  "Swirling liquids:",            "ekexityyfz fybvfwbz ;blrjcntq:", M_RD_Change_SwirlingLiquids, 0}, // Улучшенная анимация жидкостей
+    {ITT_SWITCH,  "Liquids animation:",           "fybvfwbz ;blrjcntq:",            M_RD_Change_SwirlingLiquids, 0}, // Анимация жидкостей
     {ITT_SWITCH,  "Invulnerability affects sky:", "ytezpdbvjcnm jrhfibdftn yt,j:",  M_RD_Change_InvulSky,        0}, // Неуязвимость окрашивает небо
     {ITT_SWITCH,  "Sky drawing mode:",            "ht;bv jnhbcjdrb yt,f:",          M_RD_Change_LinearSky,       0}, // Режим отрисовки неба
     {ITT_SWITCH,  "Randomly mirrored corpses:",   "pthrfkmyjt jnhf;tybt nhegjd:",   M_RD_Change_FlipCorpses,     0}, // Зеркалирование трупов
@@ -4273,9 +4273,9 @@ static void M_RD_Draw_Gameplay_1(void)
         RD_M_DrawTextSmallENG(colored_blood ? RD_ON : RD_OFF, 229 + wide_delta, 75,
                              colored_blood ? CR_GREEN : CR_DARKRED);
 
-        // Swirling liquids
-        RD_M_DrawTextSmallENG(swirling_liquids ? RD_ON : RD_OFF, 150 + wide_delta, 85,
-                             swirling_liquids ? CR_GREEN : CR_DARKRED);
+        // Liquids animation
+        RD_M_DrawTextSmallENG(swirling_liquids ? "improved" : "original", 159 + wide_delta, 85,
+                              swirling_liquids ? CR_GREEN : CR_DARKRED);
 
         // Invulnerability affects sky
         RD_M_DrawTextSmallENG(invul_sky ? RD_ON : RD_OFF, 237 + wide_delta, 95,
@@ -4325,8 +4325,8 @@ static void M_RD_Draw_Gameplay_1(void)
         RD_M_DrawTextSmallRUS(colored_blood ? RD_ON_RUS : RD_OFF_RUS, 242 + wide_delta, 75,
                               colored_blood ? CR_GREEN : CR_DARKRED);
 
-        // Улучшенная анимация жидкостей
-        RD_M_DrawTextSmallRUS(swirling_liquids ? RD_ON_RUS : RD_OFF_RUS, 275 + wide_delta, 85,
+        // Анимация жидкостей
+        RD_M_DrawTextSmallRUS(swirling_liquids ? "ekexityyfz" : "jhbubyfkmyfz", 190 + wide_delta, 85,
                               swirling_liquids ? CR_GREEN : CR_DARKRED);
 
         // Неуязвимость окрашивает небо
