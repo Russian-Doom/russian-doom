@@ -725,6 +725,7 @@ void R_StoreWallRange (int start, int stop)
                 case 102:  rw_midtexturemid -= FallFactor_102;  break;
                 case 103:  rw_midtexturemid -= FallFactor_103;  break;
                 case 104:  rw_midtexturemid -= FallFactor_104;  break;
+                case 105:  rw_midtexturemid -= FallFactor_101;  break;
             }
         }
 
@@ -858,6 +859,14 @@ void R_StoreWallRange (int start, int stop)
         }
 
         rw_toptexturemid += sidedef->rowoffset;
+
+        // [JN] Animate falling liquids. 
+        // Special case for scrolling upper segment.
+        if (linedef->fall == 105)
+        {
+            rw_toptexturemid -= FallFactor_101;
+        }
+
         rw_bottomtexturemid += sidedef->rowoffset;
 
         // [JN] Animate falling liquids.
@@ -870,6 +879,7 @@ void R_StoreWallRange (int start, int stop)
                 case 102:  rw_bottomtexturemid -= FallFactor_102;  break;
                 case 103:  rw_bottomtexturemid -= FallFactor_103;  break;
                 case 104:  rw_bottomtexturemid -= FallFactor_104;  break;
+                case 105:  rw_bottomtexturemid -= FallFactor_101;  break;
             }
         }
 

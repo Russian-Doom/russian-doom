@@ -2273,16 +2273,20 @@ flow_t flow[] =
 //
 // Following table injects falling effect to linedefs with liquid textures.
 //
-// Nothing special about animation effect, just a five scroller types, where
-// 100 is slowest and 104 is fastest. This effect must be injected as separate
-// property, because engine allows only one effect per linedef, and this must
-// be taken to account. Notable example: MAP25 of Doom 2 whith bloodfall pillar
-// (sector 115) which is acting as a lift.
+// Nothing special about animation effect, just a six scroller types, where
+// 100 is slowest and 104 is fastest. 105 is a special case for scrolling
+// all three wall segments (upper/middle/lower) and using 101th speed, while
+// others are scrolling only two (middle and lower).
 //
-// Also, falling effect must be applied to both sides of linedef, since liquid
+// This effect must be injected as a separate property, because engine allows 
+// only one effect per linedef, and this must be taken to account. Notable 
+// example: MAP25 of Doom 2 whith bloodfall pillar (sector 115) which is acting 
+// as a lift.
+//
+// Also, falling effect is applied to both sides of linedef, since liquid
 // texture can be present on both sides as well.
 //
-// =========================================================== (2022-04-12) ====
+// =========================================================== (2022-04-17) ====
 
 fixed_t FallFactor_100, FallFactor_100_old;
 fixed_t FallFactor_101, FallFactor_101_old;
@@ -2449,7 +2453,7 @@ fall_t fall[] =
     {     doom2,       1,  28,     324,  101 },
     {     doom2,       1,  28,     325,  101 },
     {     doom2,       1,  28,     326,  101 },
-    {     doom2,       1,  28,     327,  101 },
+    {     doom2,       1,  28,     327,  105 },
     {     doom2,       1,  28,     351,  101 },
     {     doom2,       1,  28,     435,  101 },
     {     doom2,       1,  28,     436,  101 },
@@ -2494,13 +2498,24 @@ fall_t fall[] =
     {  pack_tnt,       1,  14,     247,  101 },
     {  pack_tnt,       1,  16,     302,  103 },
     {  pack_tnt,       1,  16,     527,  103 },
-    {  pack_tnt,       1,  16,     667,  100 },
+    {  pack_tnt,       1,  16,     599,  105 },
+    {  pack_tnt,       1,  16,     600,  105 },
+    {  pack_tnt,       1,  16,     601,  105 },
+    {  pack_tnt,       1,  16,     603,  105 },
+    {  pack_tnt,       1,  16,     604,  105 },
+    {  pack_tnt,       1,  16,     607,  105 },
+    {  pack_tnt,       1,  16,     608,  105 },
+    {  pack_tnt,       1,  16,     667,  105 },
     {  pack_tnt,       1,  16,     669,  100 },
     {  pack_tnt,       1,  16,     670,  100 },
     {  pack_tnt,       1,  16,     671,  100 },
     {  pack_tnt,       1,  16,     672,  100 },
     {  pack_tnt,       1,  16,     685,  100 },
     {  pack_tnt,       1,  16,     687,  100 },
+    {  pack_tnt,       1,  16,     897,  100 },
+    {  pack_tnt,       1,  16,     898,  100 },
+    {  pack_tnt,       1,  16,     899,  100 },
+    {  pack_tnt,       1,  16,     900,  100 },
     {  pack_tnt,       1,  16,    1238,  103 },
     {  pack_tnt,       1,  16,    1247,  103 },
     {  pack_tnt,       1,  16,    1248,  103 },
@@ -2548,6 +2563,8 @@ fall_t fall[] =
     {  pack_tnt,       1,  16,    1696,  102 },
     {  pack_tnt,       1,  16,    1706,  104 },
     {  pack_tnt,       1,  16,    1825,  101 },
+    {  pack_tnt,       1,  16,    1896,  105 },
+    {  pack_tnt,       1,  16,    1897,  105 },
     {  pack_tnt,       1,  16,    2060,  101 },
     {  pack_tnt,       1,  16,    2073,  101 },
     {  pack_tnt,       1,  16,    2128,  102 },
@@ -2715,18 +2732,18 @@ fall_t fall[] =
     {  pack_plut,      1,   8,     256,  103 },
     {  pack_plut,      1,   8,     260,  103 },
     {  pack_plut,      1,   8,     262,  103 },
-    {  pack_plut,      1,   9,     548,  102 },
-    {  pack_plut,      1,   9,     549,  102 },
-    {  pack_plut,      1,   9,     550,  102 },
-    {  pack_plut,      1,   9,     552,  102 },
-    {  pack_plut,      1,   9,     553,  102 },
-    {  pack_plut,      1,   9,     554,  102 },
-    {  pack_plut,      1,   9,     556,  102 },
-    {  pack_plut,      1,   9,     557,  102 },
-    {  pack_plut,      1,   9,     558,  102 },
-    {  pack_plut,      1,   9,     559,  102 },
-    {  pack_plut,      1,   9,     560,  102 },
-    {  pack_plut,      1,   9,     562,  102 },
+    {  pack_plut,      1,   9,     548,  101 },
+    {  pack_plut,      1,   9,     549,  101 },
+    {  pack_plut,      1,   9,     550,  101 },
+    {  pack_plut,      1,   9,     552,  101 },
+    {  pack_plut,      1,   9,     553,  105 },
+    {  pack_plut,      1,   9,     554,  101 },
+    {  pack_plut,      1,   9,     556,  101 },
+    {  pack_plut,      1,   9,     557,  101 },
+    {  pack_plut,      1,   9,     558,  105 },
+    {  pack_plut,      1,   9,     559,  101 },
+    {  pack_plut,      1,   9,     560,  101 },
+    {  pack_plut,      1,   9,     562,  101 },
     {  pack_plut,      1,  12,     148,  102 },
     {  pack_plut,      1,  12,     151,  102 },
     {  pack_plut,      1,  12,     335,  102 },
@@ -2846,16 +2863,16 @@ fall_t fall[] =
     {  pack_plut,      1,  16,     684,  100 },
     {  pack_plut,      1,  16,     686,  100 },
     {  pack_plut,      1,  16,     688,  100 },
-    {  pack_plut,      1,  16,     909,  102 },
-    {  pack_plut,      1,  16,     911,  102 },
-    {  pack_plut,      1,  16,     912,  102 },
-    {  pack_plut,      1,  16,     913,  102 },
-    {  pack_plut,      1,  16,     914,  102 },
-    {  pack_plut,      1,  16,     915,  102 },
-    {  pack_plut,      1,  16,     916,  102 },
-    {  pack_plut,      1,  16,     930,  102 },
-    {  pack_plut,      1,  16,     932,  102 },
-    {  pack_plut,      1,  16,     934,  102 },
+    {  pack_plut,      1,  16,     909,  101 },
+    {  pack_plut,      1,  16,     911,  101 },
+    {  pack_plut,      1,  16,     912,  101 },
+    {  pack_plut,      1,  16,     913,  101 },
+    {  pack_plut,      1,  16,     914,  101 },
+    {  pack_plut,      1,  16,     915,  101 },
+    {  pack_plut,      1,  16,     916,  101 },
+    {  pack_plut,      1,  16,     930,  105 },
+    {  pack_plut,      1,  16,     932,  105 },
+    {  pack_plut,      1,  16,     934,  105 },
     {  pack_plut,      1,  16,     937,  103 },
     {  pack_plut,      1,  16,     938,  103 },
     {  pack_plut,      1,  16,     939,  103 },
