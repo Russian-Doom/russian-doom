@@ -26,6 +26,12 @@
 #include "m_misc.h"
 #include "rd_menu.h"
 
+typedef struct
+{
+    bound_key_t from;
+    bound_key_t to;
+} bind_section_t;
+
 typedef struct bind_descriptor_s
 {
     struct bind_descriptor_s* next;
@@ -39,10 +45,10 @@ boolean isBindsLoaded = false;
 
 bind_descriptor_t* bind_descriptor[bk__size];
 boolean keyState[bk__size];
-boolean bindClearEnabled = true;
 
 // [Dasperal] This array must be in sync with bound_key_t enum!
 static const char* bkToName[] = {
+    // Movement
     "Forward",
     "Backward",
     "Turn_left",
@@ -56,7 +62,10 @@ static const char* bkToName[] = {
     "Strafe",
     "Jump",
     "Toggle_autorun",
+
     "Use",
+
+    // Weapon
     "Fire",
     "Weapon_1",
     "Weapon_2",
@@ -68,14 +77,22 @@ static const char* bkToName[] = {
     "Weapon_8",
     "Weapon_prev",
     "Weapon_next",
+
+    // Look
     "Look_up",
     "Look_down",
     "Look_center",
     "Toggle_mlook",
+
+    // Inventory
     "Inv_left",
     "Inv_right",
     "Inv_use_artifact",
+
+    // Inventory: Strife
     "Inv_use_health",
+
+    // Artifacts: Heretic
     "Arti_quartz",
     "Arti_urn",
     "Arti_bomb",
@@ -86,6 +103,8 @@ static const char* bkToName[] = {
     "Arti_torch",
     "Arti_invulnerability",
     "Arti_chaosdevice",
+
+    // Artifacts: Hexen
     "Arti_all",
     "Arti_blastradius",
     "Arti_teleportother",
@@ -94,16 +113,12 @@ static const char* bkToName[] = {
     "Arti_summon",
     "Arti_speed",
     "Arti_healingradius",
-    "Map_toggle",
-    "Map_zoom_in",
-    "Map_zoom_out",
-    "Map_zoom_max",
-    "Map_follow",
-    "Map_overlay",
-    "Map_rotate",
-    "Map_grid",
-    "Map_mark",
-    "Map_clearmark",
+
+    // Shortcuts
+    "Screen_inc", // [Dasperal] screen_inc/dec do not work on automap so they should be related to "Controls" section
+    "Screen_dec", // instead of "Shortcuts" section
+
+    "-shortcuts-", // [Dasperal] Bindings after this line are related to "Shortcuts" section
     "Help",
     "Msave",
     "Mload",
@@ -115,15 +130,17 @@ static const char* bkToName[] = {
     "Gamma",
     "Nextlevel",
     "Reloadlevel",
-    "Screen_inc",
-    "Screen_dec",
     "Screenshot",
     "Pause",
     "Finish_demo",
+
+    // Toggles
     "Toggle_crosshair",
     "Messages",
     "Detail",
     "Toggle_fliplvls",
+
+    // Multiplayer
     "Spy",
     "Multi_msg",
     "Multi_msg_player_0",
@@ -133,7 +150,20 @@ static const char* bkToName[] = {
     "Multi_msg_player_4",
     "Multi_msg_player_5",
     "Multi_msg_player_6",
-    "Multi_msg_player_7"
+    "Multi_msg_player_7",
+
+    // Map keys
+    "-map-", // [Dasperal] Bindings after this line are related to "Map" section
+    "Map_toggle",
+    "Map_zoom_in",
+    "Map_zoom_out",
+    "Map_zoom_max",
+    "Map_follow",
+    "Map_overlay",
+    "Map_rotate",
+    "Map_grid",
+    "Map_mark",
+    "Map_clearmark"
 };
 
 static int nameToBk[arrlen(bkToName)];
@@ -470,14 +500,14 @@ void BK_StartBindingKey(bound_key_t key)
 }
 
 // -----------------------------------------------------------------------------
-// RemoveKeyFromBinds
+// removeKeyFromBinds
 // Removes given key of device from all bound_keys
 // -----------------------------------------------------------------------------
-void RemoveKeyFromBinds(device_t device, int key)
+static void removeBindFromSection(const device_t device, const int key, const bind_section_t* section)
 {
     bind_descriptor_t *prevDescriptor, *tmp;
 
-    for(int i = bk_forward; i < bk__serializable; ++i)
+    for(int i = section->from; i < section->to; ++i)
     {
         if(bind_descriptor[i] == NULL)
             continue;
@@ -511,12 +541,30 @@ void RemoveKeyFromBinds(device_t device, int key)
 
 void AddBind(bound_key_t boundKey, device_t device, int key)
 {
-    bind_descriptor_t* bind = bind_descriptor[boundKey];
+    bind_section_t section;
+    bind_descriptor_t *bind;
+
+    if(boundKey > bk__section_map && boundKey < bk__serializable)
+    {
+        section.from = bk__section_shortcuts + 1;
+        section.to = bk__serializable;
+    }
+    else if(boundKey > bk__section_shortcuts && boundKey < bk__section_map)
+    {
+        section.from = bk_forward;
+        section.to = bk__serializable;
+    }
+    else // boundKey < bk__section_shortcuts
+    {
+        section.from = bk_forward;
+        section.to = bk__section_map;
+    }
+
+    bind = bind_descriptor[boundKey];
 
     if(bind == NULL)
     {
-        if(bindClearEnabled)
-            RemoveKeyFromBinds(device, key);
+        removeBindFromSection(device, key, &section);
         bind = malloc(sizeof(bind_descriptor));
         bind->next = NULL;
         bind->device = device;
@@ -533,15 +581,12 @@ void AddBind(bound_key_t boundKey, device_t device, int key)
         {
             if(bind->device == device && bind->key == key)
             {
-                if(bindClearEnabled)
-                {
-                    // Clear bind
-                    if (prevBind)
-                        prevBind->next = bind->next;
-                    else
-                        bind_descriptor[boundKey] = bind->next;
-                    free(bind);
-                }
+                // Clear bind
+                if (prevBind)
+                    prevBind->next = bind->next;
+                else
+                    bind_descriptor[boundKey] = bind->next;
+                free(bind);
                 return;
             }
             prevBind = bind;
@@ -549,8 +594,7 @@ void AddBind(bound_key_t boundKey, device_t device, int key)
         }
 
         // Add new bind
-        if(bindClearEnabled)
-            RemoveKeyFromBinds(device, key);
+        removeBindFromSection(device, key, &section);
         bind = malloc(sizeof(bind_descriptor));
         bind->next = NULL;
         bind->device = device;
@@ -606,8 +650,6 @@ void BK_ClearBinds(bound_key_t key)
 
 void BK_AddBindingsToSystemKeys()
 {
-    bindClearEnabled = false;
-
     // Keyboard
     AddBind(bk_left,  keyboard, SDL_SCANCODE_LEFT);
     AddBind(bk_right, keyboard, SDL_SCANCODE_RIGHT);
@@ -650,14 +692,10 @@ void BK_AddBindingsToSystemKeys()
 
     AddBind(bk_confirm, controller, CONTROLLER_A);
     AddBind(bk_abort,   controller, CONTROLLER_B);
-
-    bindClearEnabled = true;
 };
 
 void BK_ApplyDefaultBindings()
 {
-    bindClearEnabled = false;
-
     // Keyboard
     AddBind(bk_forward,        keyboard, SDL_SCANCODE_W);
     AddBind(bk_backward,       keyboard, SDL_SCANCODE_S);
@@ -773,7 +811,7 @@ void BK_ApplyDefaultBindings()
         AddBind(bk_multi_msg_player_2, keyboard, SDL_SCANCODE_Y);
         AddBind(bk_multi_msg_player_3, keyboard, SDL_SCANCODE_G);
         AddBind(bk_multi_msg_player_4, keyboard, SDL_SCANCODE_J);
-        AddBind(bk_multi_msg_player_5, keyboard, SDL_SCANCODE_W);
+        AddBind(bk_multi_msg_player_5, keyboard, SDL_SCANCODE_I);
         AddBind(bk_multi_msg_player_6, keyboard, SDL_SCANCODE_H);
         AddBind(bk_multi_msg_player_7, keyboard, SDL_SCANCODE_P);
     }
@@ -787,8 +825,6 @@ void BK_ApplyDefaultBindings()
 
     // Controller
     AddBind(bk_look_center, controller, CONTROLLER_RIGHT_STICK);
-
-    bindClearEnabled = true;
 }
 
 static int nameToBk_Comparator(const void *sample, const void *member)
@@ -901,7 +937,6 @@ void KeybindsHandler_HandleLine(char* keyName, char *value, size_t valueSize)
         return;
 
     bind = *bsearchResult;
-    bindClearEnabled = false;
     while(*value != '\0')
     {
         char deviceChar;
@@ -957,7 +992,6 @@ void KeybindsHandler_HandleLine(char* keyName, char *value, size_t valueSize)
         AddBind(bind, device, key);
         isBindsLoaded = true; // At least one bind have been loaded successfully
     }
-    bindClearEnabled = true;
 }
 
 void KeybindsHandler_Save(FILE* file, char* sectionName)
