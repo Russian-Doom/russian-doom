@@ -85,6 +85,7 @@ static void CheatScriptFunc1(player_t * player, Cheat_t * cheat);
 static void CheatScriptFunc2(player_t * player, Cheat_t * cheat);
 static void CheatScriptFunc3(player_t * player, Cheat_t * cheat);
 static void CheatRevealFunc(player_t * player, Cheat_t * cheat);
+static void Crosshair_Colorize_inGame (void);
 // [JN] Disabled. I need "`" key for using without SFX_PLATFORM_STOP sound.
 // static void CheatTrackFunc1(player_t * player, Cheat_t * cheat);
 // static void CheatTrackFunc2(player_t * player, Cheat_t * cheat);
@@ -853,7 +854,19 @@ void SB_Drawer(void)
     // [JN] Draw crosshair
     if (crosshair_draw && !automapactive && !vanillaparm)
     {
-        Crosshair_Draw();
+        // Crosshair_Draw(); [JN] TODO - potential crash on open/close automap.
+        Crosshair_Colorize_inGame();
+        if (crosshair_scale)
+        {
+            V_DrawPatch(origwidth/2, screenblocks <= 10 ? 81 : 102,
+                        CrosshairPatch, CrosshairOpacity);
+        }
+        else
+        {
+            V_DrawPatchUnscaled(screenwidth/2, screenblocks <= 10 ? 162 : 204,
+                                CrosshairPatch, CrosshairOpacity);
+        }
+        dp_translation = NULL;
     }
 
 // -----------------------------------------------------------------------------

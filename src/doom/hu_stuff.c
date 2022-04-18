@@ -149,6 +149,8 @@ int message_counter;                // [JN] Un-static for fading
 
 static boolean headsupactive = false;
 
+static void Crosshair_Colorize_inGame(void);
+
 extern int M_StringWidth(char *string);
 
 
@@ -963,7 +965,19 @@ void HU_Drawer(void)
         // thanks to Zodomaniac for proper health values!
         if (crosshair_draw && !automapactive && !menuactive)
         {
-            Crosshair_Draw();
+            // Crosshair_Draw(); [JN] TODO - potential crash on open/close automap.
+            Crosshair_Colorize_inGame();
+            if (crosshair_scale)
+            {
+                V_DrawPatch(origwidth/2, screenblocks <= 10 ? 84 : 102,
+                            CrosshairPatch, CrosshairOpacity);
+            }
+            else
+            {
+                V_DrawPatchUnscaled(screenwidth/2, screenblocks <= 10 ? 168 : 204,
+                                    CrosshairPatch, CrosshairOpacity);
+            }
+            dp_translation = NULL;
         }
 
         // [crispy] demo timer widget
