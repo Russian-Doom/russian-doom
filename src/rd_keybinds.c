@@ -446,12 +446,6 @@ static char* getBoundKeysString(bound_key_t key)
         if(bind->next)
         {
             M_StringConcat(string, ", ", 50);
-
-            if(aspect_ratio < 2 || screenblocks  == 9)
-            {
-                M_StringConcat(string, "...", 50);
-                break;
-            }
         }
 
         bind = bind->next;
