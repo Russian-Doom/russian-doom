@@ -153,7 +153,10 @@ static void M_RD_InvertY();
 static void M_RD_Novert();
 
 // Key Bindings
-void M_RD_Draw_Bindings();
+static void M_RD_Draw_Bindings();
+static void DrawResetControlsMenu();
+static void M_RD_ResetControls_Recommended();
+static void M_RD_ResetControls_Original();
 
 // Gamepad
 static void OpenControllerSelectMenu();
@@ -423,6 +426,7 @@ static Menu_t Bindings6Menu;
 static Menu_t Bindings7Menu;
 static Menu_t Bindings8Menu;
 static const Menu_t* BindingsMenuPages[] = {&Bindings1Menu, &Bindings2Menu, &Bindings3Menu, &Bindings4Menu, &Bindings5Menu, &Bindings6Menu, &Bindings7Menu, &Bindings8Menu};
+static Menu_t ResetControlsMenu;
 static Menu_t Gamepad1Menu;
 static Menu_t Gamepad2Menu;
 static const Menu_t* GamepadMenuPages[] = {&Gamepad1Menu, &Gamepad2Menu};
@@ -1063,22 +1067,22 @@ static Menu_t Bindings7Menu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Bindings8Items[] = {
-    {ITT_TITLE,   "MULTIPLAYER",         "CTNTDFZ BUHF",          NULL,               0},                     // Сетевая игра
-    {ITT_EFUNC,   "MULTIPLAYER SPY",     "DBL LHEUJUJ BUHJRF",    BK_StartBindingKey, bk_spy},                // Вид другого игрока
-    {ITT_EFUNC,   "SEND MESSAGE",        "JNGHFDBNM CJJ,OTYBT",   BK_StartBindingKey, bk_multi_msg},          // Отправить сообщение
-    {ITT_EFUNC,   "MESSAGE TO PLAYER 1", "CJJ,OTYBT BUHJRE 1",    BK_StartBindingKey, bk_multi_msg_player_0}, // Сообщение игроку 1
-    {ITT_EFUNC,   "MESSAGE TO PLAYER 2", "CJJ,OTYBT BUHJRE 2",    BK_StartBindingKey, bk_multi_msg_player_1}, // Сообщение игроку 2
-    {ITT_EFUNC,   "MESSAGE TO PLAYER 3", "CJJ,OTYBT BUHJRE 3",    BK_StartBindingKey, bk_multi_msg_player_2}, // Сообщение игроку 3
-    {ITT_EFUNC,   "MESSAGE TO PLAYER 4", "CJJ,OTYBT BUHJRE 4",    BK_StartBindingKey, bk_multi_msg_player_3}, // Сообщение игроку 4
-    {ITT_EFUNC,   "MESSAGE TO PLAYER 5", "CJJ,OTYBT BUHJRE 5",    BK_StartBindingKey, bk_multi_msg_player_4}, // Сообщение игроку 5
-    {ITT_EFUNC,   "MESSAGE TO PLAYER 6", "CJJ,OTYBT BUHJRE 6",    BK_StartBindingKey, bk_multi_msg_player_5}, // Сообщение игроку 6
-    {ITT_EFUNC,   "MESSAGE TO PLAYER 7", "CJJ,OTYBT BUHJRE 7",    BK_StartBindingKey, bk_multi_msg_player_6}, // Сообщение игроку 7
-    {ITT_EFUNC,   "MESSAGE TO PLAYER 8", "CJJ,OTYBT BUHJRE 8",    BK_StartBindingKey, bk_multi_msg_player_7}, // Сообщение игроку 8
-    {ITT_EMPTY,   NULL,                  NULL,                    NULL,               0},
-    {ITT_EMPTY,   NULL,                  NULL,                    NULL,               0},
-    {ITT_SETMENU, "FIRST PAGE >",        "GTHDFZ CNHFYBWF `",     &Bindings1Menu,     0},                     // Первая страница >
-    {ITT_SETMENU, "< PREV PAGE",         "^ GHTLSLEOFZ CNHFYBWF", &Bindings7Menu,     0},                     // < Предыдущая страница
-    {ITT_EMPTY,   NULL,                  NULL,                    NULL,               0}
+    {ITT_TITLE,   "MULTIPLAYER",         "CTNTDFZ BUHF",           NULL,               0},                     // Сетевая игра
+    {ITT_EFUNC,   "MULTIPLAYER SPY",     "DBL LHEUJUJ BUHJRF",     BK_StartBindingKey, bk_spy},                // Вид другого игрока
+    {ITT_EFUNC,   "SEND MESSAGE",        "JNGHFDBNM CJJ,OTYBT",    BK_StartBindingKey, bk_multi_msg},          // Отправить сообщение
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 1", "CJJ,OTYBT BUHJRE 1",     BK_StartBindingKey, bk_multi_msg_player_0}, // Сообщение игроку 1
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 2", "CJJ,OTYBT BUHJRE 2",     BK_StartBindingKey, bk_multi_msg_player_1}, // Сообщение игроку 2
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 3", "CJJ,OTYBT BUHJRE 3",     BK_StartBindingKey, bk_multi_msg_player_2}, // Сообщение игроку 3
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 4", "CJJ,OTYBT BUHJRE 4",     BK_StartBindingKey, bk_multi_msg_player_3}, // Сообщение игроку 4
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 5", "CJJ,OTYBT BUHJRE 5",     BK_StartBindingKey, bk_multi_msg_player_4}, // Сообщение игроку 5
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 6", "CJJ,OTYBT BUHJRE 6",     BK_StartBindingKey, bk_multi_msg_player_5}, // Сообщение игроку 6
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 7", "CJJ,OTYBT BUHJRE 7",     BK_StartBindingKey, bk_multi_msg_player_6}, // Сообщение игроку 7
+    {ITT_EFUNC,   "MESSAGE TO PLAYER 8", "CJJ,OTYBT BUHJRE 8",     BK_StartBindingKey, bk_multi_msg_player_7}, // Сообщение игроку 8
+    {ITT_EMPTY,   NULL,                  NULL,                     NULL,               0},
+    {ITT_SETMENU, "RESET CONTROLS...",   "C,HJCBNM EGHFDKTYBT>>>", &ResetControlsMenu, 0},                     // СБРОСИТЬ УПРАВЛЕНИЕ
+    {ITT_SETMENU, "FIRST PAGE >",        "GTHDFZ CNHFYBWF `",      &Bindings1Menu,     0},                     // Первая страница >
+    {ITT_SETMENU, "< PREV PAGE",         "^ GHTLSLEOFZ CNHFYBWF",  &Bindings7Menu,     0},                     // < Предыдущая страница
+    {ITT_EMPTY,   NULL,                  NULL,                     NULL,               0}
 };
 
 static Menu_t Bindings8Menu = {
@@ -1090,6 +1094,26 @@ static Menu_t Bindings8Menu = {
     &BindingsPageDescriptor,
     &ControlsMenu,
     1
+};
+
+// -----------------------------------------------------------------------------
+// Reset settings
+// -----------------------------------------------------------------------------
+
+static MenuItem_t ResetControlsItems[] = {
+    {ITT_EFUNC,  "RECOMMENDED", "HTRJVTYLJDFYYJT", M_RD_ResetControls_Recommended, 0}, // РЕКОМЕНДОВАННОЕ
+    {ITT_EFUNC,  "ORIGINAL",    "JHBUBYFKMYJT",    M_RD_ResetControls_Original,  0}, // ОРИГИНАЛЬНОЕ
+};
+
+static Menu_t ResetControlsMenu = {
+    115, 100,
+    95,
+    "", "", false,
+    2, ResetControlsItems, false,
+    DrawResetControlsMenu,
+    NULL,
+    &Bindings8Menu,
+    0
 };
 
 // -----------------------------------------------------------------------------
@@ -3488,7 +3512,7 @@ static void M_RD_Novert()
 // -----------------------------------------------------------------------------
 // Key bindings
 // -----------------------------------------------------------------------------
-void M_RD_Draw_Bindings()
+static void M_RD_Draw_Bindings()
 {
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
@@ -3510,6 +3534,68 @@ void M_RD_Draw_Bindings()
     }
 
     RD_Menu_Draw_Bindings(english_language ? 195 : 230);
+}
+
+// -----------------------------------------------------------------------------
+// DrawResetControlsMenu
+// -----------------------------------------------------------------------------
+
+static void DrawResetControlsMenu()
+{
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    if (english_language)
+    {
+        RD_M_DrawTextBigENG("CONTROLS RESET", 96 + wide_delta, 42);
+
+        // Explanations
+        RD_M_DrawTextSmallENG("CONTROLS WILL BE RESET TO", 75 + wide_delta, 145, CR_RED);
+        if (CurrentItPos == 0)
+        {
+            RD_M_DrawTextSmallENG("PORT'S DEFAULTS", 105 + wide_delta, 155, CR_RED);
+        }
+        else
+        {
+            RD_M_DrawTextSmallENG("ORIGINAL HEXEN DEFAULTS", 81 + wide_delta, 155, CR_RED);
+        }
+    }
+    else
+    {
+        RD_M_DrawTextBigRUS("C,HJC EGHFDKTYBZ", 82 + wide_delta, 42);  // СБРОС УПРАВЛЕНИЯ
+
+        // Пояснения
+        RD_M_DrawTextSmallRUS(",ELTN BCGJKMPJDFYJ EGHFDKTYBT", 60 + wide_delta, 145, CR_RED);  // Будет использовано управление
+        if (CurrentItPos == 0)
+        {
+            RD_M_DrawTextSmallRUS("HTRJVTYLETVJT GJHNJV", 92 + wide_delta, 155, CR_RED);  // рекомендуемое портом
+        }
+        else
+        {
+            RD_M_DrawTextSmallRUS("JHBUBYFKMYJUJ", 98 + wide_delta, 155, CR_RED);
+            RD_M_DrawTextSmallENG("HEXEN", 200 + wide_delta, 155, CR_RED);
+        }
+    }
+}
+
+static void M_RD_ResetControls_Recommended()
+{
+    for(bound_key_t key = bk_forward; key < bk__serializable; key++)
+    {
+        BK_ClearBinds(key);
+    }
+    BK_ApplyDefaultBindings();
+    RD_Menu_SetMenu(&Bindings1Menu);
+}
+
+static void M_RD_ResetControls_Original()
+{
+    for(bound_key_t key = bk_forward; key < bk__serializable; key++)
+    {
+        BK_ClearBinds(key);
+    }
+    BK_ApplyVanilaBindings();
+    RD_Menu_SetMenu(&Bindings1Menu);
 }
 
 // -----------------------------------------------------------------------------

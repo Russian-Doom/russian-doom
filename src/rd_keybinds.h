@@ -200,6 +200,8 @@ void BK_AddBindingsToSystemKeys();
 
 void BK_ApplyDefaultBindings();
 
+void BK_ApplyVanilaBindings();
+
 boolean KeybindsHandler_Handles(char* sectionName);
 
 void KeybindsHandler_HandleLine(char* keyName, char *value, size_t valueSize);
