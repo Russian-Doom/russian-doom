@@ -721,6 +721,7 @@ void BK_ApplyDefaultBindings()
     }
 
     BK_AddBind(bk_fire, keyboard, SDL_SCANCODE_LCTRL);
+    BK_AddBind(bk_fire, keyboard, SDL_SCANCODE_RCTRL);
 
     BK_AddBind(bk_weapon_1, keyboard, SDL_SCANCODE_1);
     BK_AddBind(bk_weapon_2, keyboard, SDL_SCANCODE_2);
@@ -751,6 +752,11 @@ void BK_ApplyDefaultBindings()
         BK_AddBind(bk_inv_use_artifact, keyboard, SDL_SCANCODE_RETURN);
     }
 
+    if(RD_GameType == gt_Heretic)
+    {
+        BK_AddBind(bk_arti_tome, keyboard, SDL_SCANCODE_BACKSPACE);
+    }
+
     BK_AddBind(bk_map_toggle, keyboard, SDL_SCANCODE_TAB);
     BK_AddBind(bk_map_zoom_in, keyboard, SDL_SCANCODE_EQUALS);
     BK_AddBind(bk_map_zoom_out, keyboard, SDL_SCANCODE_MINUS);
@@ -767,7 +773,12 @@ void BK_ApplyDefaultBindings()
     BK_AddBind(bk_menu_save, keyboard, SDL_SCANCODE_F2);
     BK_AddBind(bk_menu_load, keyboard, SDL_SCANCODE_F3);
     BK_AddBind(bk_menu_volume, keyboard, SDL_SCANCODE_F4);
-    BK_AddBind(bk_detail, keyboard, SDL_SCANCODE_F5);
+
+    if(RD_GameType == gt_Doom || RD_GameType == gt_Heretic)
+    {
+        BK_AddBind(bk_detail, keyboard, SDL_SCANCODE_F5);
+    }
+
     BK_AddBind(bk_qsave, keyboard, SDL_SCANCODE_F6);
     BK_AddBind(bk_end_game, keyboard, SDL_SCANCODE_F7);
     BK_AddBind(bk_messages, keyboard, SDL_SCANCODE_F8);
@@ -820,6 +831,138 @@ void BK_ApplyDefaultBindings()
     // Controller
     BK_AddBind(bk_look_center, controller, CONTROLLER_RIGHT_STICK);
 }
+
+void BK_ApplyVanilaBindings()
+{
+    // Keyboard
+    BK_AddBind(bk_forward, keyboard, SDL_SCANCODE_UP);
+    BK_AddBind(bk_backward, keyboard, SDL_SCANCODE_DOWN);
+    BK_AddBind(bk_turn_left, keyboard, SDL_SCANCODE_LEFT);
+    BK_AddBind(bk_turn_right, keyboard, SDL_SCANCODE_RIGHT);
+    BK_AddBind(bk_strafe_left, keyboard, SDL_SCANCODE_COMMA);
+    BK_AddBind(bk_strafe_right, keyboard, SDL_SCANCODE_PERIOD);
+    BK_AddBind(bk_speed, keyboard, SDL_SCANCODE_LSHIFT);
+    BK_AddBind(bk_speed, keyboard, SDL_SCANCODE_RSHIFT);
+    BK_AddBind(bk_strafe, keyboard, SDL_SCANCODE_LALT);
+    BK_AddBind(bk_strafe, keyboard, SDL_SCANCODE_RALT);
+
+    if(RD_GameType == gt_Heretic || RD_GameType == gt_Hexen)
+    {
+        BK_AddBind(bk_fly_up, keyboard, SDL_SCANCODE_PAGEUP);
+        BK_AddBind(bk_fly_down, keyboard, SDL_SCANCODE_INSERT);
+        BK_AddBind(bk_fly_stop, keyboard, SDL_SCANCODE_HOME);
+    }
+
+    BK_AddBind(bk_use, keyboard, SDL_SCANCODE_SPACE);
+
+    if(RD_GameType == gt_Hexen)
+    {
+        BK_AddBind(bk_jump, keyboard, SDL_SCANCODE_SLASH);
+    }
+
+    BK_AddBind(bk_fire, keyboard, SDL_SCANCODE_LCTRL);
+    BK_AddBind(bk_fire, keyboard, SDL_SCANCODE_RCTRL);
+
+    BK_AddBind(bk_weapon_1, keyboard, SDL_SCANCODE_1);
+    BK_AddBind(bk_weapon_2, keyboard, SDL_SCANCODE_2);
+    BK_AddBind(bk_weapon_3, keyboard, SDL_SCANCODE_3);
+    BK_AddBind(bk_weapon_4, keyboard, SDL_SCANCODE_4);
+
+    if(RD_GameType == gt_Doom || RD_GameType == gt_Heretic)
+    {
+        BK_AddBind(bk_weapon_5, keyboard, SDL_SCANCODE_5);
+        BK_AddBind(bk_weapon_6, keyboard, SDL_SCANCODE_6);
+        BK_AddBind(bk_weapon_7, keyboard, SDL_SCANCODE_7);
+    }
+    if(RD_GameType == gt_Doom)
+    {
+        BK_AddBind(bk_weapon_8, keyboard, SDL_SCANCODE_8);
+    }
+
+    if(RD_GameType == gt_Heretic || RD_GameType == gt_Hexen)
+    {
+        BK_AddBind(bk_look_up, keyboard, SDL_SCANCODE_PAGEDOWN);
+        BK_AddBind(bk_look_down, keyboard, SDL_SCANCODE_DELETE);
+        BK_AddBind(bk_look_center, keyboard, SDL_SCANCODE_END);
+
+        BK_AddBind(bk_inv_left, keyboard, SDL_SCANCODE_LEFTBRACKET);
+        BK_AddBind(bk_inv_right, keyboard, SDL_SCANCODE_RIGHTBRACKET);
+        BK_AddBind(bk_inv_use_artifact, keyboard, SDL_SCANCODE_RETURN);
+    }
+
+    if(RD_GameType == gt_Heretic)
+    {
+        BK_AddBind(bk_arti_tome, keyboard, SDL_SCANCODE_BACKSPACE);
+    }
+
+    BK_AddBind(bk_map_toggle, keyboard, SDL_SCANCODE_TAB);
+    BK_AddBind(bk_map_zoom_in, keyboard, SDL_SCANCODE_EQUALS);
+    BK_AddBind(bk_map_zoom_out, keyboard, SDL_SCANCODE_MINUS);
+    BK_AddBind(bk_map_zoom_max, keyboard, SDL_SCANCODE_0);
+    BK_AddBind(bk_map_follow, keyboard, SDL_SCANCODE_F);
+
+    BK_AddBind(bk_map_clearmark, keyboard, SDL_SCANCODE_C);
+    BK_AddBind(bk_map_mark, keyboard, SDL_SCANCODE_M);
+
+    BK_AddBind(bk_menu_help, keyboard, SDL_SCANCODE_F1);
+    BK_AddBind(bk_menu_save, keyboard, SDL_SCANCODE_F2);
+    BK_AddBind(bk_menu_load, keyboard, SDL_SCANCODE_F3);
+    BK_AddBind(bk_menu_volume, keyboard, SDL_SCANCODE_F4);
+
+    if(RD_GameType == gt_Doom || RD_GameType == gt_Heretic)
+    {
+        BK_AddBind(bk_detail, keyboard, SDL_SCANCODE_F5);
+    }
+
+    BK_AddBind(bk_qsave, keyboard, SDL_SCANCODE_F6);
+    BK_AddBind(bk_end_game, keyboard, SDL_SCANCODE_F7);
+    BK_AddBind(bk_messages, keyboard, SDL_SCANCODE_F8);
+    BK_AddBind(bk_qload, keyboard, SDL_SCANCODE_F9);
+    BK_AddBind(bk_quit, keyboard, SDL_SCANCODE_F10);
+    BK_AddBind(bk_gamma, keyboard, SDL_SCANCODE_F11);
+    BK_AddBind(bk_screen_inc, keyboard, SDL_SCANCODE_EQUALS);
+    BK_AddBind(bk_screen_dec, keyboard, SDL_SCANCODE_MINUS);
+    BK_AddBind(bk_screenshot, keyboard, SDL_SCANCODE_PRINTSCREEN);
+    BK_AddBind(bk_pause, keyboard, SDL_SCANCODE_PAUSE);
+
+    BK_AddBind(bk_spy, keyboard, SDL_SCANCODE_F12);
+    BK_AddBind(bk_multi_msg, keyboard, SDL_SCANCODE_T);
+
+    if(RD_GameType == gt_Doom)
+    {
+        BK_AddBind(bk_multi_msg_player_0, keyboard, SDL_SCANCODE_G);
+        BK_AddBind(bk_multi_msg_player_1, keyboard, SDL_SCANCODE_I);
+        BK_AddBind(bk_multi_msg_player_2, keyboard, SDL_SCANCODE_B);
+        BK_AddBind(bk_multi_msg_player_3, keyboard, SDL_SCANCODE_R);
+    }
+    if(RD_GameType == gt_Heretic)
+    {
+        BK_AddBind(bk_multi_msg_player_0, keyboard, SDL_SCANCODE_G);
+        BK_AddBind(bk_multi_msg_player_1, keyboard, SDL_SCANCODE_Y);
+        BK_AddBind(bk_multi_msg_player_2, keyboard, SDL_SCANCODE_R);
+        BK_AddBind(bk_multi_msg_player_3, keyboard, SDL_SCANCODE_B);
+    }
+    if(RD_GameType == gt_Hexen)
+    {
+        BK_AddBind(bk_multi_msg_player_0, keyboard, SDL_SCANCODE_B);
+        BK_AddBind(bk_multi_msg_player_1, keyboard, SDL_SCANCODE_R);
+        BK_AddBind(bk_multi_msg_player_2, keyboard, SDL_SCANCODE_Y);
+        BK_AddBind(bk_multi_msg_player_3, keyboard, SDL_SCANCODE_G);
+        BK_AddBind(bk_multi_msg_player_4, keyboard, SDL_SCANCODE_J);
+        BK_AddBind(bk_multi_msg_player_5, keyboard, SDL_SCANCODE_W);
+        BK_AddBind(bk_multi_msg_player_6, keyboard, SDL_SCANCODE_H);
+        BK_AddBind(bk_multi_msg_player_7, keyboard, SDL_SCANCODE_P);
+    }
+
+    // Mouse
+    BK_AddBind(bk_fire, mouse, MOUSE_LEFT);
+    BK_AddBind(bk_forward, mouse, MOUSE_MIDDLE);
+    BK_AddBind(bk_strafe, mouse, MOUSE_RIGHT);
+
+    // Controller
+    BK_AddBind(bk_look_center, controller, CONTROLLER_RIGHT_STICK);
+}
+
 
 static int nameToBk_Comparator(const void *sample, const void *member)
 {

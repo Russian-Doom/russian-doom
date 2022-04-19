@@ -235,6 +235,9 @@ static void M_RD_Change_Threshold(Direction_t direction);
 
 // Key bindings (1)
 static void M_RD_Draw_Bindings();
+static void DrawResetControlsMenu();
+static void M_RD_ResetControls_Recommended();
+static void M_RD_ResetControls_Original();
 
 // Gamepad
 static void OpenControllerSelectMenu();
@@ -760,6 +763,7 @@ static Menu_t Bindings4Menu;
 static Menu_t Bindings5Menu;
 static Menu_t Bindings6Menu;
 static const Menu_t* BindingsMenuPages[] = {&Bindings1Menu, &Bindings2Menu, &Bindings3Menu, &Bindings4Menu, &Bindings5Menu, &Bindings6Menu};
+static Menu_t ResetControlsMenu;
 static Menu_t Gamepad1Menu;
 static Menu_t Gamepad2Menu;
 static const Menu_t* GamepadMenuPages[] = {&Gamepad1Menu, &Gamepad2Menu};
@@ -1429,7 +1433,7 @@ static MenuItem_t Bindings6Items[] = {
     {ITT_EMPTY,   NULL,                  NULL,                  NULL,               0},
     {ITT_EMPTY,   NULL,                  NULL,                  NULL,               0},
     {ITT_EMPTY,   NULL,                  NULL,                  NULL,               0},
-    {ITT_EMPTY,   NULL,                  NULL,                  NULL,               0},
+    {ITT_SETMENU, NULL,                  NULL,                  &ResetControlsMenu, 0},                     // СБРОСИТЬ УПРАВЛЕНИЕ
     {ITT_SETMENU, NULL,                  NULL,                  &Bindings1Menu,     0},                     // Далее >
     {ITT_SETMENU, NULL,                  NULL,                  &Bindings5Menu,     0},                     // < Назад
     {ITT_EMPTY,   NULL,                  NULL,                  NULL,               0}
@@ -1445,6 +1449,27 @@ static Menu_t Bindings6Menu = {
     &ControlsMenu,
     1
 };
+
+// -----------------------------------------------------------------------------
+// Reset settings
+// -----------------------------------------------------------------------------
+
+static MenuItem_t ResetControlsItems[] = {
+    {ITT_EFUNC,  "RECOMMENDED", "HTRJVTYLJDFYYJT", M_RD_ResetControls_Recommended, 0}, // РЕКОМЕНДОВАННОЕ
+    {ITT_EFUNC,  "ORIGINAL",    "JHBUBYFKMYJT",    M_RD_ResetControls_Original,  0}, // ОРИГИНАЛЬНОЕ
+};
+
+static Menu_t ResetControlsMenu = {
+    115, 100,
+    95,
+    "", "", false,
+    2, ResetControlsItems, false,
+    DrawResetControlsMenu,
+    NULL,
+    &Bindings6Menu,
+    0
+};
+
 
 // -----------------------------------------------------------------------------
 // Gamepad
@@ -3701,6 +3726,9 @@ static void M_RD_Draw_Bindings()
 
     if (english_language)
     {
+        if(CurrentMenu == &Bindings6Menu)
+            RD_M_DrawTextSmallENG("RESET CONTROLS...", 35 + wide_delta, 145, CR_WHITE);
+
         RD_M_DrawTextSmallENG(CurrentMenu == &Bindings6Menu ? "first page >" : "next page >", 35 + wide_delta, 155, CR_WHITE);
         RD_M_DrawTextSmallENG(CurrentMenu == &Bindings1Menu ? "< last page" : "< prev page", 35 + wide_delta, 165, CR_WHITE);
 
@@ -3709,6 +3737,9 @@ static void M_RD_Draw_Bindings()
     }
     else
     {
+        if(CurrentMenu == &Bindings6Menu)
+            RD_M_DrawTextSmallRUS("C,HJCBNM EGHFDKTYBT>>>", 35 + wide_delta, 145, CR_WHITE);
+
         RD_M_DrawTextSmallRUS(RD_NEXT_RUS, 35 + wide_delta, 155, CR_WHITE);
         RD_M_DrawTextSmallRUS(RD_PREV_RUS, 35 + wide_delta, 165, CR_WHITE);
 
@@ -3722,6 +3753,73 @@ static void M_RD_Draw_Bindings()
     }
 
     RD_Menu_Draw_Bindings(english_language ? 195 : 210);
+}
+
+// -----------------------------------------------------------------------------
+// DrawResetControlsMenu
+// -----------------------------------------------------------------------------
+
+static void DrawResetControlsMenu()
+{
+    // [JN] Erase the entire screen to a tiled background.
+    inhelpscreens = true;
+    V_FillFlat("FLOOR4_8");
+
+    if (english_language)
+    {
+        M_WriteTextBigCentered_ENG(42, "Controls reset");
+
+        // Explanations
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmallCentered_ENG(145, "CONTROLS WILL BE RESET TO");
+        if (CurrentItPos == 0)
+        {
+            M_WriteTextSmallCentered_ENG(155, "PORT'S DEFAULTS");
+        }
+        else
+        {
+            M_WriteTextSmallCentered_ENG(155, "ORIGINAL DOOM DEFAULTS");
+        }
+        dp_translation = NULL;
+    }
+    else
+    {
+        M_WriteTextBigCentered_RUS(42, "C,hjc eghfdktybz");  // СБРОС УПРАВЛЕНИЯ
+
+        // Пояснения
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmallCentered_RUS(145, ",ELTN BCGJKMPJDFYJ EGHFDKTYBT");  // Будет использовано управление
+        if (CurrentItPos == 0)
+        {
+            M_WriteTextSmallCentered_RUS(155, "HTRJVTYLETVJT GJHNJV");  // рекомендуемое портом
+        }
+        else
+        {
+            RD_M_DrawTextSmallRUS("JHBUBYFKMYJUJ", 90 + wide_delta, 155, CR_DARKRED);
+            RD_M_DrawTextSmallENG("DOOM", 200 + wide_delta, 155, CR_DARKRED);
+        }
+        dp_translation = NULL;
+    }
+}
+
+static void M_RD_ResetControls_Recommended()
+{
+    for(bound_key_t key = bk_forward; key < bk__serializable; key++)
+    {
+        BK_ClearBinds(key);
+    }
+    BK_ApplyDefaultBindings();
+    RD_Menu_SetMenu(&Bindings1Menu);
+}
+
+static void M_RD_ResetControls_Original()
+{
+    for(bound_key_t key = bk_forward; key < bk__serializable; key++)
+    {
+        BK_ClearBinds(key);
+    }
+    BK_ApplyVanilaBindings();
+    RD_Menu_SetMenu(&Bindings1Menu);
 }
 
 // -----------------------------------------------------------------------------
