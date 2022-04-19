@@ -790,11 +790,11 @@ void HU_Start(void)
         s = HU_TITLE_CHEX;
     }
 
-    // dehacked substitution to get modified level name
-    s = DEH_String(s);
-
     // [JN] Create the level name string.
     level_name = s;
+
+    // dehacked substitution to get modified level name
+    s = DEH_String(s);
 
     // create the chat widget
     HUlib_initIText(&w_chat, HU_INPUTX, HU_INPUTY, hu_font, HU_FONTSTART, &chat_on);
@@ -965,19 +965,7 @@ void HU_Drawer(void)
         // thanks to Zodomaniac for proper health values!
         if (crosshair_draw && !automapactive && !menuactive)
         {
-            // Crosshair_Draw(); [JN] TODO - potential crash on open/close automap.
-            Crosshair_Colorize_inGame();
-            if (crosshair_scale)
-            {
-                V_DrawPatch(origwidth/2, screenblocks <= 10 ? 84 : 102,
-                            CrosshairPatch, CrosshairOpacity);
-            }
-            else
-            {
-                V_DrawPatchUnscaled(screenwidth/2, screenblocks <= 10 ? 168 : 204,
-                                    CrosshairPatch, CrosshairOpacity);
-            }
-            dp_translation = NULL;
+            Crosshair_Draw();
         }
 
         // [crispy] demo timer widget

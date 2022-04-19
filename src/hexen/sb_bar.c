@@ -854,19 +854,7 @@ void SB_Drawer(void)
     // [JN] Draw crosshair
     if (crosshair_draw && !automapactive && !vanillaparm)
     {
-        // Crosshair_Draw(); [JN] TODO - potential crash on open/close automap.
-        Crosshair_Colorize_inGame();
-        if (crosshair_scale)
-        {
-            V_DrawPatch(origwidth/2, screenblocks <= 10 ? 81 : 102,
-                        CrosshairPatch, CrosshairOpacity);
-        }
-        else
-        {
-            V_DrawPatchUnscaled(screenwidth/2, screenblocks <= 10 ? 162 : 204,
-                                CrosshairPatch, CrosshairOpacity);
-        }
-        dp_translation = NULL;
+        Crosshair_Draw();
     }
 
 // -----------------------------------------------------------------------------
