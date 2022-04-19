@@ -125,6 +125,8 @@ patch_t*    hu_font_big_eng[HU_FONTSIZE2];  // [JN] Big, unchangeable English fo
 patch_t*    hu_font_big_rus[HU_FONTSIZE2];  // [JN] Big, unchangeable Russian font (FNTBR)
 patch_t*    hu_font_gray[HU_FONTSIZE_GRAY]; // [JN] Small gray STCFG font
 
+static hu_textline_t w_title;
+
 boolean     chat_on;
 static      hu_itext_t w_chat;
 
@@ -132,7 +134,6 @@ static boolean always_off = false;
 static char	    chat_dest[MAXPLAYERS];
 static hu_itext_t w_inputbuffer[MAXPLAYERS];
 
-static char    *level_name;         // [JN] Level name
 static boolean  message_on;         // [JN] Item pickup
 static boolean  message_on_secret;  // [JN] Revealed secret
 static boolean  message_on_system;  // [JN] System messages
@@ -748,6 +749,13 @@ void HU_Start(void)
                     english_language ? hu_font : hu_font_small_rus,
                     HU_FONTSTART, &message_on_system);
 
+    // create the map title widget
+    HUlib_initTextLine(&w_title, HU_TITLEX, (gamemission == jaguar ?
+                                             HU_TITLEY_JAG :
+                                             HU_TITLEY),
+                                             english_language ? hu_font : hu_font_small_rus, 
+                                             HU_FONTSTART);
+
     switch ( logical_gamemission )
     {
         case doom:
@@ -790,11 +798,11 @@ void HU_Start(void)
         s = HU_TITLE_CHEX;
     }
 
-    // [JN] Create the level name string.
-    level_name = s;
-
     // dehacked substitution to get modified level name
     s = DEH_String(s);
+
+    while (*s)
+    HUlib_addCharToTextLine(&w_title, *(s++));
 
     // create the chat widget
     HUlib_initIText(&w_chat, HU_INPUTX, HU_INPUTY, hu_font, HU_FONTSTART, &chat_on);
@@ -826,7 +834,6 @@ void HU_Drawer(void)
     int time = leveltime / TICRATE;
     int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
     const int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
-    const int map_y = gamemission == jaguar ? 151 : 159;
     plr = &players[consoleplayer];
 
     HUlib_drawSText(&w_message, msg_pickup);
@@ -839,19 +846,7 @@ void HU_Drawer(void)
     // [JN] Level name (in automap only).
     if (automapactive)
     {
-        sprintf(str, "%s", level_name);
-
-        if (english_language)
-        {
-            dp_translation = hud_stats_color ? cr[CR_YELLOW] : NULL;
-            RD_M_DrawTextA(str, wide_4_3, map_y);
-            dp_translation = NULL;
-        }
-        else
-        {
-            RD_M_DrawTextSmallRUS(str, wide_4_3, map_y,
-                                  hud_stats_color ? CR_YELLOW : CR_NONE);
-        }
+        HUlib_drawTextLine(&w_title, false, hud_level);
     }
 
     // [JN] Level stats widgets.
@@ -994,6 +989,7 @@ void HU_Erase(void)
     HUlib_eraseSText(&w_message_system);
     HUlib_eraseSText(&w_message_chat);
     HUlib_eraseIText(&w_chat);
+    HUlib_eraseTextLine(&w_title);
 }
 
 

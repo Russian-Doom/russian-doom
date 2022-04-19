@@ -110,6 +110,7 @@ void HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor, MessageType_t typ
                 case msg_secret:  dp_translation = messages_secret_color_set == CR_NONE ? NULL : cr[messages_secret_color_set];  break;
                 case msg_system:  dp_translation = messages_system_color_set == CR_NONE ? NULL : cr[messages_system_color_set];  break;
                 case msg_chat:    dp_translation = messages_chat_color_set == CR_NONE ? NULL : cr[messages_chat_color_set];      break;
+                case hud_level:   dp_translation = hud_stats_color ? cr[CR_YELLOW] : NULL;   break;
                 // [JN] No coloring, including for "msg_uncolored" and fps/time widgets.
                 default:  dp_translation = NULL;  break;
             }
