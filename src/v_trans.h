@@ -57,8 +57,6 @@ typedef enum
     CR_KHAKI,
     CR_PINK,
     CR_BURGUNDY,
-    CR_RED2BLUE,
-    CR_RED2GREEN,
     // Heretic (big font)
     CR_GREEN2GRAY_HERETIC,
     CR_GREEN2RED_HERETIC,
@@ -139,14 +137,27 @@ typedef enum
     CR_GOLD2GREEN_STRIFE,
     CR_GOLD2RED_STRIFE,
     CR_GOLD2DARKGOLD_STRIFE,
+
+    // [JN] Terminator - don't override tablified colors after this point:
+    CR_STOP,
+
+    // [JN] Tablified colors:
+    CR_RED2BLUE,
+    CR_RED2GREEN,
+    CR_RED2GRAY,
+
     CRMAX,
     CR_NONE
 } Translation_CR_t;
 
 extern byte  *cr[CRMAX];
+extern char **crstr;
+
+#define cr_esc '~'
 
 extern byte  *tintmap;
 extern byte  *shademap;
 extern byte  *fuzzmap;
 
 int V_GetPaletteIndex(byte *palette, int r, int g, int b);
+byte V_Colorize (byte *playpal, int cr, byte source, boolean keepgray109);

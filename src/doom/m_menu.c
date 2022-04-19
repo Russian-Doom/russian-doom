@@ -7954,8 +7954,8 @@ void M_Init (void)
                         DEH_String("RD_THRMR"),
                         DEH_String("RD_THRMW"),
                         // [Dasperal] Gem translations
-                        CR_BLUE2,
-                        CR_DARKGRAY,
+                        CR_RED2BLUE,
+                        CR_RED2GRAY,
                         CR_NONE);
 
     RD_Menu_InitCursor(// [Dasperal] Big cursor
