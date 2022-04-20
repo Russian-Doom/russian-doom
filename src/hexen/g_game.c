@@ -320,7 +320,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         }
         if (joyturn != 0)
         {
-            side += joyturn;
+            side += FixedMul(sidemove[pClass][speed], joyturn);
         }
         if(mousex != 0)
         {
@@ -334,7 +334,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         if (BK_isKeyPressed(bk_turn_left))
             cmd->angleturn += angleturn[tspeed];
         if(joyturn != 0)
-            cmd->angleturn -= joyturn;
+            cmd->angleturn -= FixedMul(angleturn[1], joyturn);
         if(mousex != 0)
             cmd->angleturn -= mousex*0x8;
     }
@@ -600,12 +600,12 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         if (mlook || novert)
         {
             cmd->lookdir += mouse_y_invert ? -mousey : mousey;
-            cmd->lookdir += joyvlook;
+            cmd->lookdir += FixedMul(angleturn[2], joyvlook);
         }
         else if (!novert)
         {
             forward += mousey;
-            forward += joyvlook;
+            forward += FixedMul(forwardmove[pClass][speed], joyvlook);
         }
 
        if (players[consoleplayer].lookdir > LOOKDIRMAX * MLOOKUNIT)
