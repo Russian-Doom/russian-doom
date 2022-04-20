@@ -829,7 +829,47 @@ void BK_ApplyDefaultBindings()
     BK_AddBind(bk_strafe, mouse, MOUSE_RIGHT);
 
     // Controller
-    BK_AddBind(bk_look_center, controller, CONTROLLER_RIGHT_STICK);
+    BK_AddBind(bk_speed, controller, CONTROLLER_LEFT_TRIGGER);
+
+    if(RD_GameType == gt_Doom || RD_GameType == gt_Heretic)
+    {
+        BK_AddBind(bk_use, controller, CONTROLLER_A);
+    }
+    else
+    {
+        BK_AddBind(bk_jump, controller, CONTROLLER_A);
+        BK_AddBind(bk_use, controller, CONTROLLER_B);
+    }
+
+    BK_AddBind(bk_fire, controller, CONTROLLER_RIGHT_TRIGGER);
+
+    if(RD_GameType == gt_Doom)
+    {
+        BK_AddBind(bk_weapon_3, controller, CONTROLLER_DPAD_UP);
+        BK_AddBind(bk_weapon_4, controller, CONTROLLER_DPAD_RIGHT);
+        BK_AddBind(bk_weapon_5, controller, CONTROLLER_DPAD_DOWN);
+        BK_AddBind(bk_weapon_6, controller, CONTROLLER_DPAD_LEFT);
+    }
+    if(RD_GameType == gt_Heretic || RD_GameType == gt_Hexen)
+    {
+        BK_AddBind(bk_weapon_2, controller, CONTROLLER_DPAD_UP);
+        BK_AddBind(bk_weapon_3, controller, CONTROLLER_DPAD_DOWN);
+    }
+
+    BK_AddBind(bk_weapon_prev, controller, CONTROLLER_LEFT_SHOULDER);
+    BK_AddBind(bk_weapon_next, controller, CONTROLLER_RIGHT_SHOULDER);
+
+    if(RD_GameType == gt_Heretic || RD_GameType == gt_Hexen)
+    {
+        BK_AddBind(bk_look_center, controller, CONTROLLER_RIGHT_STICK);
+        BK_AddBind(bk_inv_left, controller, CONTROLLER_DPAD_LEFT);
+        BK_AddBind(bk_inv_right, controller, CONTROLLER_DPAD_RIGHT);
+        BK_AddBind(bk_inv_use_artifact, controller, CONTROLLER_Y);
+    }
+
+    BK_AddBind(bk_map_toggle, controller, CONTROLLER_BACK);
+    BK_AddBind(bk_map_zoom_in, controller, CONTROLLER_RIGHT_SHOULDER);
+    BK_AddBind(bk_map_zoom_out, controller, CONTROLLER_LEFT_SHOULDER);
 }
 
 void BK_ApplyVanilaBindings()
@@ -960,7 +1000,47 @@ void BK_ApplyVanilaBindings()
     BK_AddBind(bk_strafe, mouse, MOUSE_RIGHT);
 
     // Controller
-    BK_AddBind(bk_look_center, controller, CONTROLLER_RIGHT_STICK);
+    BK_AddBind(bk_speed, controller, CONTROLLER_LEFT_TRIGGER);
+
+    if(RD_GameType == gt_Doom || RD_GameType == gt_Heretic)
+    {
+        BK_AddBind(bk_use, controller, CONTROLLER_A);
+    }
+    else
+    {
+        BK_AddBind(bk_jump, controller, CONTROLLER_A);
+        BK_AddBind(bk_use, controller, CONTROLLER_B);
+    }
+
+    BK_AddBind(bk_fire, controller, CONTROLLER_RIGHT_TRIGGER);
+
+    if(RD_GameType == gt_Doom)
+    {
+        BK_AddBind(bk_weapon_3, controller, CONTROLLER_DPAD_UP);
+        BK_AddBind(bk_weapon_4, controller, CONTROLLER_DPAD_RIGHT);
+        BK_AddBind(bk_weapon_5, controller, CONTROLLER_DPAD_DOWN);
+        BK_AddBind(bk_weapon_6, controller, CONTROLLER_DPAD_LEFT);
+    }
+    if(RD_GameType == gt_Heretic || RD_GameType == gt_Hexen)
+    {
+        BK_AddBind(bk_weapon_2, controller, CONTROLLER_DPAD_UP);
+        BK_AddBind(bk_weapon_3, controller, CONTROLLER_DPAD_DOWN);
+    }
+
+    BK_AddBind(bk_weapon_prev, controller, CONTROLLER_LEFT_SHOULDER);
+    BK_AddBind(bk_weapon_next, controller, CONTROLLER_RIGHT_SHOULDER);
+
+    if(RD_GameType == gt_Heretic || RD_GameType == gt_Hexen)
+    {
+        BK_AddBind(bk_look_center, controller, CONTROLLER_RIGHT_STICK);
+        BK_AddBind(bk_inv_left, controller, CONTROLLER_DPAD_LEFT);
+        BK_AddBind(bk_inv_right, controller, CONTROLLER_DPAD_RIGHT);
+        BK_AddBind(bk_inv_use_artifact, controller, CONTROLLER_Y);
+    }
+
+    BK_AddBind(bk_map_toggle, controller, CONTROLLER_BACK);
+    BK_AddBind(bk_map_zoom_in, controller, CONTROLLER_RIGHT_SHOULDER);
+    BK_AddBind(bk_map_zoom_out, controller, CONTROLLER_LEFT_SHOULDER);
 }
 
 
