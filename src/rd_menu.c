@@ -360,11 +360,7 @@ void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos)
     }
     x = english_language ? menu->x_eng : menu->x_rus;
     y = menu->y;
-    subheaderTranslation =
-            RD_GameType == gt_Doom    ? CR_YELLOW :
-            RD_GameType == gt_Heretic ? CR_YELLOW :
-            RD_GameType == gt_Hexen   ? CR_GRAY2DARKGOLD_HEXEN :
-          /*RD_GameType == gt_Strife*/  CR_NONE;
+    subheaderTranslation = CR_YELLOW;
 
     if(english_language)
     {

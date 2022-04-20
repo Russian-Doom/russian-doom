@@ -201,7 +201,7 @@ static void ShowFinaleTime (void)
                    "TOTAL TIME:  %1d : %.2d : %.2d", hours, minutes, seconds);
 
         // Draw centered string with fade in effect, colorize to dark gray.
-        dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
+        dp_translation = cr[CR_GRAY];
         RD_M_DrawTextAFade (FinaleTime, 160 - (RD_M_TextAWidth(FinaleTime) / 2) + wide_delta, 179, 
                             FinaleCount < 403 ? transtable10 :
                             FinaleCount < 406 ? transtable20 :
@@ -220,7 +220,7 @@ static void ShowFinaleTime (void)
                    "J,OTT DHTVZ:  %1d : %.2d : %.2d", hours, minutes, seconds);
 
         // Draw centered string with fade in effect, colorize to dark gray.
-        dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
+        dp_translation = cr[CR_GRAY];
         RD_M_DrawTextSmallRUSFade (FinaleTime, 160 - (RD_M_TextSmallRUSWidth(FinaleTime) / 2) + wide_delta, 179, 
                             FinaleCount < 403 ? transtable10 :
                             FinaleCount < 406 ? transtable20 :

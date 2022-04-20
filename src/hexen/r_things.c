@@ -1140,7 +1140,7 @@ void R_ProjectSprite(mobj_t * thing)
         ||  thing->state - states == S_SORCBALL2_D8
         ||  thing->state - states == S_SORCBALL2_D9))
         {
-            vis->translation = cr[CR_GREEN2BLUE_HEXEN];
+            vis->translation = cr[CR_BLUE];
         }
     }
 }

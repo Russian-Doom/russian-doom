@@ -679,12 +679,9 @@ void RD_Menu_Draw_Bindings(int x)
             bindingTranslation = CR_WHITE;
             break;
         case gt_Heretic:
+        case gt_Hexen:
             noBindTranslation = CR_GRAY;
             bindingTranslation = CR_YELLOW;
-            break;
-        case gt_Hexen:
-            noBindTranslation = CR_GRAY2GDARKGRAY_HEXEN;
-            bindingTranslation = CR_GRAY2DARKGOLD_HEXEN;
             break;
     }
 

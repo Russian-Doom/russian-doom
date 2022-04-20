@@ -1568,7 +1568,7 @@ static void AM_drawMarks (void)
                     //
                     // TODO - consider implementing AM_initMarksColor, but this
                     // will require to create a lot of extra translation tables.
-                    dp_translation = cr[CR_GRAY2RED_HEXEN];
+                    dp_translation = cr[CR_RED];
                     V_DrawPatchUnscaled(flip_levels ? - fx : fx, fy, marknums[d], NULL);
                     dp_translation = NULL;
                 }

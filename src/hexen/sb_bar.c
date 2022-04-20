@@ -551,14 +551,14 @@ static void DrRedINumber(signed int val, int x, int y)
                 {
                     patch = PatchINumbers[val / 10];
 
-                    dp_translation = cr[CR_YELLOW2RED_HEXEN];
+                    dp_translation = cr[CR_RED];
                     V_DrawPatch(x + 9, y, patch, NULL);
                     dp_translation = NULL;
                 }
                 val = val % 10;
                 patch = PatchINumbers[val];
 
-                dp_translation = cr[CR_YELLOW2RED_HEXEN];
+                dp_translation = cr[CR_RED];
                 V_DrawPatch(x + 18, y, patch, NULL);
                 V_DrawPatch(x + 1, y, PatchNEGATIVE, NULL);
                 dp_translation = NULL;
@@ -568,7 +568,7 @@ static void DrRedINumber(signed int val, int x, int y)
         {
             val = -val;
 
-            dp_translation = cr[CR_YELLOW2RED_HEXEN];
+            dp_translation = cr[CR_RED];
             V_DrawPatch(x + 18, y, PatchINumbers[val], NULL);
             V_DrawPatch(x + 9, y, PatchNEGATIVE, NULL);
             dp_translation = NULL;
@@ -983,14 +983,14 @@ void SB_Drawer(void)
 
             if (show_artifacts_timer == 2)
             {
-                dp_translation = cr[CR_YELLOW2GRAY_HEXEN];
+                dp_translation = cr[CR_GRAY];
             }
             if (show_artifacts_timer == 3)
             {
                 if (CPlayer->powers[pw_speed] < FLIGHTTICS / 4)
-                dp_translation = cr[CR_YELLOW2RED_HEXEN];
+                dp_translation = cr[CR_RED];
                 else if (CPlayer->powers[pw_speed] > FLIGHTTICS / 2)
-                dp_translation = cr[CR_YELLOW2GREEN_HEXEN];
+                dp_translation = cr[CR_DARKGREEN];
             }
 
             DrSmallNumber(CPlayer->powers[pw_speed] / TICRATE,
@@ -1007,14 +1007,14 @@ void SB_Drawer(void)
 
             if (show_artifacts_timer == 2)
             {
-                dp_translation = cr[CR_YELLOW2GRAY_HEXEN];
+                dp_translation = cr[CR_GRAY];
             }
             if (show_artifacts_timer == 3)
             {
                 if (CPlayer->powers[pw_invulnerability] < FLIGHTTICS / 4)
-                dp_translation = cr[CR_YELLOW2RED_HEXEN];
+                dp_translation = cr[CR_RED];
                 else if (CPlayer->powers[pw_invulnerability] > FLIGHTTICS / 2)
-                dp_translation = cr[CR_YELLOW2GREEN_HEXEN];
+                dp_translation = cr[CR_DARKGREEN];
             }
 
             DrSmallNumber(CPlayer->powers[pw_invulnerability] / TICRATE,
@@ -1031,14 +1031,14 @@ void SB_Drawer(void)
 
             if (show_artifacts_timer == 2)
             {
-                dp_translation = cr[CR_YELLOW2GRAY_HEXEN];
+                dp_translation = cr[CR_GRAY];
             }
             if (show_artifacts_timer == 3)
             {
                 if (CPlayer->powers[pw_minotaur] < FLIGHTTICS / 4)
-                dp_translation = cr[CR_YELLOW2RED_HEXEN];
+                dp_translation = cr[CR_RED];
                 else if (CPlayer->powers[pw_minotaur] > FLIGHTTICS / 2)
-                dp_translation = cr[CR_YELLOW2GREEN_HEXEN];
+                dp_translation = cr[CR_DARKGREEN];
             }
 
             DrSmallNumber(CPlayer->powers[pw_minotaur] / TICRATE,
@@ -1262,11 +1262,11 @@ static byte *SBar_MainColor (int element)
         {
             if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
             {
-                return cr[CR_YELLOW2GRAY_HEXEN];
+                return cr[CR_GRAY];
             }
             else if (CPlayer->mo->health >= 67)
             {
-                return cr[CR_YELLOW2GREEN_HEXEN];
+                return cr[CR_DARKGREEN];
             }
             else
             {
@@ -1279,7 +1279,7 @@ static byte *SBar_MainColor (int element)
         {
             if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
             {
-                return cr[CR_YELLOW2GRAY_HEXEN];
+                return cr[CR_GRAY];
             }
             else
             if ((FixedDiv(armor, 5 * FRACUNIT) >> FRACBITS)
@@ -1287,7 +1287,7 @@ static byte *SBar_MainColor (int element)
                  CPlayer->class == 1 ? 7 :  // Cleric
                                        6))  // Mage
             {
-                return cr[CR_YELLOW2GREEN_HEXEN];
+                return cr[CR_DARKGREEN];
             }
             else 
             if ((FixedDiv(armor, 5 * FRACUNIT) >> FRACBITS)
@@ -1299,7 +1299,7 @@ static byte *SBar_MainColor (int element)
             }
             else
             {
-                return cr[CR_YELLOW2RED_HEXEN];
+                return cr[CR_RED];
             }
         }
         break;
@@ -1308,7 +1308,7 @@ static byte *SBar_MainColor (int element)
         {
             if (CPlayer->mana[0] >= MAX_MANA / 2)
             {
-                return cr[CR_YELLOW2GREEN_HEXEN];
+                return cr[CR_DARKGREEN];
             }
             else
             if (CPlayer->mana[0] >= MAX_MANA / 4)
@@ -1317,7 +1317,7 @@ static byte *SBar_MainColor (int element)
             }
             else
             {
-                return cr[CR_YELLOW2RED_HEXEN];
+                return cr[CR_RED];
             }
         }
         break;
@@ -1326,7 +1326,7 @@ static byte *SBar_MainColor (int element)
         {
             if (CPlayer->mana[1] >= MAX_MANA / 2)
             {
-                return cr[CR_YELLOW2GREEN_HEXEN];
+                return cr[CR_DARKGREEN];
             }
             else
             if (CPlayer->mana[1] >= MAX_MANA / 4)
@@ -1335,7 +1335,7 @@ static byte *SBar_MainColor (int element)
             }
             else
             {
-                return cr[CR_YELLOW2RED_HEXEN];
+                return cr[CR_RED];
             }
         }
         break;
@@ -1415,7 +1415,7 @@ static byte *SBar_FullScreenColor (int element)
         {
             if (CPlayer->mana[0] >= MAX_MANA / 2)
             {
-                return cr[CR_YELLOW2GREEN_HEXEN];
+                return cr[CR_DARKGREEN];
             }
             else
             if (CPlayer->mana[0] >= MAX_MANA / 4)
@@ -1424,7 +1424,7 @@ static byte *SBar_FullScreenColor (int element)
             }
             else
             {
-                return cr[CR_YELLOW2RED_HEXEN];
+                return cr[CR_RED];
             }
         }
         break;
@@ -1433,7 +1433,7 @@ static byte *SBar_FullScreenColor (int element)
         {
             if (CPlayer->mana[1] >= MAX_MANA / 2)
             {
-                return cr[CR_YELLOW2GREEN_HEXEN];
+                return cr[CR_DARKGREEN];
             }
             else
             if (CPlayer->mana[1] >= MAX_MANA / 4)
@@ -1442,7 +1442,7 @@ static byte *SBar_FullScreenColor (int element)
             }
             else
             {
-                return cr[CR_YELLOW2RED_HEXEN];
+                return cr[CR_RED];
             }
         }
         break;
@@ -1489,7 +1489,7 @@ void DrawCommonBar(void)
             else if (CPlayer->mo->health >= 25)  // Same to red digits when health is low.
             dp_translation = sbar_colored_gem == 1 ? cr[CR_RED2GOLD_HEXEN] : cr[CR_RED2YELLOW_HEXEN];
             else
-            dp_translation = sbar_colored_gem == 2 ? cr[CR_RED2DARKRED_HEXEN] : NULL;
+            dp_translation = sbar_colored_gem == 2 ? cr[CR_DARKRED] : NULL;
         }
         V_DrawPatch(7 + ((healthPos * 11) / 5) + wide_delta, 193, PatchLIFEGEM, NULL);
         dp_translation = NULL;
@@ -2626,13 +2626,13 @@ void Crosshair_Colorize_inMenu (void)
     if (crosshair_type == 1)
     {
         dp_translation = 
-            CrosshairShowcaseTimeout >= 70 ? cr[CR_GRAY2RED_HEXEN]      :
-            CrosshairShowcaseTimeout >= 35 ? cr[CR_GRAY2DARKGOLD_HEXEN] :
-                                             cr[CR_GRAY2GREEN_HEXEN];
+            CrosshairShowcaseTimeout >= 70 ? cr[CR_RED]      :
+            CrosshairShowcaseTimeout >= 35 ? cr[CR_YELLOW] :
+                                             cr[CR_GREEN];
     }
     else
     {
-        dp_translation = cr[CR_GRAY2RED_HEXEN];
+        dp_translation = cr[CR_RED];
     }
 }
 
@@ -2644,13 +2644,13 @@ static void Crosshair_Colorize_inGame (void)
 {
     if (crosshair_type == 1)
     {
-        dp_translation = CPlayer->health >= 67 ? cr[CR_GRAY2GREEN_HEXEN] :
-                         CPlayer->health >= 34 ? cr[CR_GRAY2DARKGOLD_HEXEN] :
-                                                 cr[CR_GRAY2RED_HEXEN];
+        dp_translation = CPlayer->health >= 67 ? cr[CR_GREEN] :
+                         CPlayer->health >= 34 ? cr[CR_YELLOW] :
+                                                 cr[CR_RED];
     }
     else
     {
-        dp_translation = cr[CR_GRAY2RED_HEXEN];
+        dp_translation = cr[CR_RED];
     }
 }
 
