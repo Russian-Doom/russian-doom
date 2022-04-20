@@ -923,14 +923,14 @@ void SB_Drawer(void)
 
                 if (show_artifacts_timer == 2)
                 {
-                    dp_translation = cr[CR_GOLD2GRAY_HERETIC];
+                    dp_translation = cr[CR_WHITE];
                 }
                 if (show_artifacts_timer == 3)
                 {
                     if (CPlayer->powers[pw_flight] < FLIGHTTICS / 4)
-                    dp_translation = cr[CR_GOLD2RED_HERETIC];
+                    dp_translation = cr[CR_RED];
                     else if (CPlayer->powers[pw_flight] > FLIGHTTICS / 2)
-                    dp_translation = cr[CR_GOLD2GREEN_HERETIC];
+                    dp_translation = cr[CR_GREEN];
                 }
 
                 DrSmallNumber(CPlayer->powers[pw_flight] / TICRATE,
@@ -961,14 +961,14 @@ void SB_Drawer(void)
 
                 if (show_artifacts_timer == 2)
                 {
-                    dp_translation = cr[CR_GOLD2GRAY_HERETIC];
+                    dp_translation = cr[CR_WHITE];
                 }
                 if (show_artifacts_timer == 3)
                 {
                     if (CPlayer->powers[pw_weaponlevel2] < WPNLEV2TICS / 4)
-                    dp_translation = cr[CR_GOLD2RED_HERETIC];
+                    dp_translation = cr[CR_RED];
                     else if (CPlayer->powers[pw_weaponlevel2] > WPNLEV2TICS / 2)
-                    dp_translation = cr[CR_GOLD2GREEN_HERETIC];
+                    dp_translation = cr[CR_GREEN];
                 }
 
                 DrSmallNumber(CPlayer->powers[pw_weaponlevel2] / TICRATE,
@@ -1000,14 +1000,14 @@ void SB_Drawer(void)
 
                     if (show_artifacts_timer == 2)
                     {
-                        dp_translation = cr[CR_GOLD2GRAY_HERETIC];
+                        dp_translation = cr[CR_WHITE];
                     }
                     if (show_artifacts_timer == 3)
                     {
                         if (CPlayer->powers[pw_invisibility] < INVISTICS / 4)
-                        dp_translation = cr[CR_GOLD2RED_HERETIC];
+                        dp_translation = cr[CR_RED];
                         else if (CPlayer->powers[pw_invisibility] > INVISTICS / 2)
-                        dp_translation = cr[CR_GOLD2GREEN_HERETIC];
+                        dp_translation = cr[CR_GREEN];
                     }
 
                     DrSmallNumber(CPlayer->powers[pw_invisibility] / TICRATE,
@@ -1036,14 +1036,14 @@ void SB_Drawer(void)
 
                     if (show_artifacts_timer == 2)
                     {
-                        dp_translation = cr[CR_GOLD2GRAY_HERETIC];
+                        dp_translation = cr[CR_WHITE];
                     }
                     if (show_artifacts_timer == 3)
                     {
                         if (CPlayer->powers[pw_infrared] < INFRATICS / 4)
-                        dp_translation = cr[CR_GOLD2RED_HERETIC];
+                        dp_translation = cr[CR_RED];
                         else if (CPlayer->powers[pw_infrared] > INFRATICS / 2)
-                        dp_translation = cr[CR_GOLD2GREEN_HERETIC];
+                        dp_translation = cr[CR_GREEN];
                     }
 
                     DrSmallNumber(CPlayer->powers[pw_infrared] / TICRATE,
@@ -1072,14 +1072,14 @@ void SB_Drawer(void)
 
                     if (show_artifacts_timer == 2)
                     {
-                        dp_translation = cr[CR_GOLD2GRAY_HERETIC];
+                        dp_translation = cr[CR_WHITE];
                     }
                     if (show_artifacts_timer == 3)
                     {
                         if (CPlayer->powers[pw_invulnerability] < INVULNTICS / 4)
-                        dp_translation = cr[CR_GOLD2RED_HERETIC];
+                        dp_translation = cr[CR_RED];
                         else if (CPlayer->powers[pw_invulnerability] > INVULNTICS / 2)
-                        dp_translation = cr[CR_GOLD2GREEN_HERETIC];
+                        dp_translation = cr[CR_GREEN];
                     }
 
                     DrSmallNumber(CPlayer->powers[pw_invulnerability] / TICRATE,
@@ -1257,11 +1257,11 @@ void DrawMainBar(void)
             if (sbar_colored && !vanillaparm)
             {
                 if (temp < 0)
-                dp_translation = cr[CR_GOLD2RED_HERETIC];
+                dp_translation = cr[CR_RED];
                 else if (temp == 0)
                 dp_translation = NULL;
                 else
-                dp_translation = cr[CR_GOLD2GREEN_HERETIC];
+                dp_translation = cr[CR_GREEN];
             }
             DrINumber(temp, 61 + wide_delta, 170);
             oldfrags = temp;
@@ -1295,13 +1295,13 @@ void DrawMainBar(void)
             if (sbar_colored && !vanillaparm)
             {
                 if ((CPlayer->cheats & CF_GODMODE) || CPlayer->powers[pw_invulnerability])
-                dp_translation = cr[CR_GOLD2ORANGE_HERETIC];
+                dp_translation = cr[CR_BRIGHTYELLOW];
                 else if (CPlayer->mo->health >= 67)
-                dp_translation = cr[CR_GOLD2GREEN_HERETIC];
+                dp_translation = cr[CR_GREEN];
                 else if (CPlayer->mo->health >= 34)
                 dp_translation = NULL;
                 else
-                dp_translation = cr[CR_GOLD2RED_HERETIC];
+                dp_translation = cr[CR_RED];
             }
 
             DrINumber(temp, 61 + wide_delta, 170);
@@ -1396,11 +1396,11 @@ void DrawMainBar(void)
                 int fullammo = CPlayer->maxammo[wpnlev1info[CPlayer->readyweapon].ammo];
                 
                 if (ammo < fullammo/4)
-                dp_translation = cr[CR_GOLD2RED_HERETIC];
+                dp_translation = cr[CR_RED];
                 else if (ammo < fullammo/2)
                 dp_translation = NULL;
                 else
-                dp_translation = cr[CR_GOLD2GREEN_HERETIC]; 
+                dp_translation = cr[CR_GREEN]; 
             }
             
             DrINumber(temp, 109 + wide_delta, 162);
@@ -1423,13 +1423,13 @@ void DrawMainBar(void)
         if (sbar_colored && !vanillaparm)
         {
             if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
-            dp_translation = cr[CR_GOLD2ORANGE_HERETIC];
+            dp_translation = cr[CR_BRIGHTYELLOW];
             else if (CPlayer->armortype >= 2)
             dp_translation = NULL;
             else if (CPlayer->armortype == 1)
-            dp_translation = cr[CR_GOLD2GRAY_HERETIC];
+            dp_translation = cr[CR_WHITE];
             else
-            dp_translation = cr[CR_GOLD2RED_HERETIC];
+            dp_translation = cr[CR_RED];
         }
 
         DrINumber(CPlayer->armorpoints, 228 + wide_delta, 170);
@@ -1498,13 +1498,13 @@ void DrawFullScreenStuff(void)
         if (sbar_colored && !vanillaparm)
         {
             if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
-            dp_translation = cr[CR_GREEN2ORANGE_HERETIC];
+            dp_translation = cr[CR_FLAME];
             else if (CPlayer->mo->health >= 67)
             dp_translation = NULL;
             else if (CPlayer->mo->health >= 34)
-            dp_translation = cr[CR_GREEN2GOLD_HERETIC];
+            dp_translation = cr[CR_BRIGHTYELLOW];
             else
-            dp_translation = cr[CR_GREEN2RED_HERETIC];
+            dp_translation = cr[CR_RED];
         }
 
         DrBNumber(CPlayer->mo->health, 5, 176);
@@ -1513,7 +1513,7 @@ void DrawFullScreenStuff(void)
     else
     {
         if (sbar_colored && !vanillaparm)
-        dp_translation = cr[CR_GREEN2RED_HERETIC];
+        dp_translation = cr[CR_RED];
 
         if (CPlayer->mo->health <= -99)
         CPlayer->mo->health = -99;
@@ -1534,9 +1534,9 @@ void DrawFullScreenStuff(void)
             int fullammo = CPlayer->maxammo[wpnlev1info[CPlayer->readyweapon].ammo];
 
             if (ammo < fullammo/4)
-            dp_translation = cr[CR_GREEN2RED_HERETIC];
+            dp_translation = cr[CR_RED];
             else if (ammo < fullammo/2)
-            dp_translation = cr[CR_GREEN2GOLD_HERETIC];
+            dp_translation = cr[CR_BRIGHTYELLOW];
             else
             dp_translation = NULL;
         }
@@ -1564,9 +1564,9 @@ void DrawFullScreenStuff(void)
             if (sbar_colored && !vanillaparm)
             {
                 if (temp < 0)
-                dp_translation = cr[CR_GREEN2RED_HERETIC];
+                dp_translation = cr[CR_RED];
                 else if (temp == 0)
-                dp_translation = cr[CR_GREEN2GOLD_HERETIC];
+                dp_translation = cr[CR_BRIGHTYELLOW];
                 else
                 dp_translation = NULL;
             }
@@ -1708,13 +1708,13 @@ void DrawFullScreenStuff(void)
             if (sbar_colored && !vanillaparm)
             {
                 if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
-                dp_translation = cr[CR_GREEN2ORANGE_HERETIC];
+                dp_translation = cr[CR_FLAME];
                 else if (CPlayer->armortype >= 2)
-                dp_translation = cr[CR_GREEN2GOLD_HERETIC];
+                dp_translation = cr[CR_BRIGHTYELLOW];
                 else if (CPlayer->armortype == 1)
-                dp_translation = cr[CR_GREEN2GRAY_HERETIC];
+                dp_translation = cr[CR_WHITE];
                 else
-                dp_translation = cr[CR_GREEN2RED_HERETIC];
+                dp_translation = cr[CR_RED];
             }
 
             // [JN] Draw ammount of armor
@@ -2151,9 +2151,9 @@ void Crosshair_Colorize_inMenu (void)
             CrosshairShowcaseTimeout = 105;
         }
 
-        dp_translation = CrosshairShowcaseTimeout >= 70 ? cr[CR_WHITE2RED_HERETIC]  :
-                         CrosshairShowcaseTimeout >= 35 ? cr[CR_WHITE2GOLD_HERETIC] :
-                                                          cr[CR_WHITE2GREEN_HERETIC];
+        dp_translation = CrosshairShowcaseTimeout >= 70 ? cr[CR_RED]  :
+                         CrosshairShowcaseTimeout >= 35 ? cr[CR_YELLOW] :
+                                                          cr[CR_GREEN];
     }
     else if (crosshair_type == 2)
     {
@@ -2162,19 +2162,19 @@ void Crosshair_Colorize_inMenu (void)
             CrosshairShowcaseTimeout = 70;
         }
 
-        dp_translation = CrosshairShowcaseTimeout >= 35 ? cr[CR_WHITE2RED_HERETIC] :
-                                                          cr[CR_WHITE2AZURE_HERETIC];
+        dp_translation = CrosshairShowcaseTimeout >= 35 ? cr[CR_RED] :
+                                                          cr[CR_AZURE];
     }
     else if (crosshair_type == 3)
     {
-        dp_translation = CrosshairShowcaseTimeout >= 105 ? cr[CR_WHITE2RED_HERETIC]   :
-                         CrosshairShowcaseTimeout >=  70 ? cr[CR_WHITE2GOLD_HERETIC]  :
-                         CrosshairShowcaseTimeout >=  35 ? cr[CR_WHITE2GREEN_HERETIC] :
-                                                           cr[CR_WHITE2AZURE_HERETIC];
+        dp_translation = CrosshairShowcaseTimeout >= 105 ? cr[CR_RED]   :
+                         CrosshairShowcaseTimeout >=  70 ? cr[CR_YELLOW]  :
+                         CrosshairShowcaseTimeout >=  35 ? cr[CR_GREEN] :
+                                                           cr[CR_AZURE];
     }
     else
     {
-        dp_translation = cr[CR_WHITE2RED_HERETIC];
+        dp_translation = cr[CR_RED];
     }
 }
 
@@ -2186,37 +2186,37 @@ static void Crosshair_Colorize_inGame (void)
 {
     if (crosshair_type == 1)
     {
-        dp_translation = CPlayer->health >= 67 ? cr[CR_WHITE2GREEN_HERETIC] :
-                         CPlayer->health >= 34 ? cr[CR_WHITE2GOLD_HERETIC]  :
-                                                 cr[CR_WHITE2RED_HERETIC];
+        dp_translation = CPlayer->health >= 67 ? cr[CR_GREEN] :
+                         CPlayer->health >= 34 ? cr[CR_YELLOW]  :
+                                                 cr[CR_RED];
     }
     else if (crosshair_type == 2)
     {
-        dp_translation = cr[CR_WHITE2RED_HERETIC];
+        dp_translation = cr[CR_RED];
 
         P_AimLineAttack(CPlayer->mo, CPlayer->mo->angle, MISSILERANGE);
 
         if (linetarget)
         {
-            dp_translation = cr[CR_WHITE2AZURE_HERETIC];
+            dp_translation = cr[CR_AZURE];
         }
     }
     else if (crosshair_type == 3)
     {
-        dp_translation = CPlayer->health >= 67 ? cr[CR_WHITE2GREEN_HERETIC] :
-                         CPlayer->health >= 34 ? cr[CR_WHITE2GOLD_HERETIC]  :
-                                                 cr[CR_WHITE2RED_HERETIC];
+        dp_translation = CPlayer->health >= 67 ? cr[CR_GREEN] :
+                         CPlayer->health >= 34 ? cr[CR_YELLOW]  :
+                                                 cr[CR_RED];
 
         P_AimLineAttack(CPlayer->mo, CPlayer->mo->angle, MISSILERANGE);
 
         if (linetarget)
         {
-            dp_translation = cr[CR_WHITE2AZURE_HERETIC];
+            dp_translation = cr[CR_AZURE];
         }
     }
     else
     {
-        dp_translation = cr[CR_WHITE2RED_HERETIC];
+        dp_translation = cr[CR_RED];
     }
 }
 
@@ -2309,17 +2309,17 @@ static void SB_Draw_Ammo_Widget (void)
     const int ammo6 = CPlayer->ammo[am_mace], fullammo6 = CPlayer->maxammo[am_mace];
 
     // Ammo GFX patches
-    //if (!(CPlayer->weaponowned[wp_goldwand])) dp_translation = cr[CR_MONOCHROME_HERETIC];
+    //if (!(CPlayer->weaponowned[wp_goldwand])) dp_translation = cr[CR_MONOCHROME];
     V_DrawPatchUnscaled(xpos_pic, 99 << hires, W_CacheLumpName(DEH_String("INAMGLD"), PU_CACHE),
                        (CPlayer->readyweapon == wp_goldwand || (automapactive && !automap_overlay)) ? NULL : transtable60);
     dp_translation = NULL;
 
-    if (!(CPlayer->weaponowned[wp_crossbow])) dp_translation = cr[CR_MONOCHROME_HERETIC];
+    if (!(CPlayer->weaponowned[wp_crossbow])) dp_translation = cr[CR_MONOCHROME];
     V_DrawPatchUnscaled(xpos_pic, 106 << hires, W_CacheLumpName(DEH_String("INAMBOW"), PU_CACHE),
                        (CPlayer->readyweapon == wp_crossbow || (automapactive && !automap_overlay)) ? NULL : transtable60);
     dp_translation = NULL;
 
-    if (!(CPlayer->weaponowned[wp_blaster])) dp_translation = cr[CR_MONOCHROME_HERETIC];
+    if (!(CPlayer->weaponowned[wp_blaster])) dp_translation = cr[CR_MONOCHROME];
     V_DrawPatchUnscaled(xpos_pic, 113 << hires, W_CacheLumpName(DEH_String("INAMBST"), PU_CACHE),
                        (CPlayer->readyweapon == wp_blaster || (automapactive && !automap_overlay)) ? NULL : transtable60);
     dp_translation = NULL;
@@ -2327,17 +2327,17 @@ static void SB_Draw_Ammo_Widget (void)
     // Following weapons not available in Shareware
     if (gamemode != shareware)
     {
-        if (!(CPlayer->weaponowned[wp_skullrod])) dp_translation = cr[CR_MONOCHROME_HERETIC];
+        if (!(CPlayer->weaponowned[wp_skullrod])) dp_translation = cr[CR_MONOCHROME];
         V_DrawPatchUnscaled(xpos_pic, 120 << hires, W_CacheLumpName(DEH_String("INAMRAM"), PU_CACHE),
                            (CPlayer->readyweapon == wp_skullrod || (automapactive && !automap_overlay)) ? NULL : transtable60);
         dp_translation = NULL;
 
-        if (!(CPlayer->weaponowned[wp_phoenixrod])) dp_translation = cr[CR_MONOCHROME_HERETIC];
+        if (!(CPlayer->weaponowned[wp_phoenixrod])) dp_translation = cr[CR_MONOCHROME];
         V_DrawPatchUnscaled(xpos_pic, 127 << hires, W_CacheLumpName(DEH_String("INAMPNX"), PU_CACHE),
                            (CPlayer->readyweapon == wp_phoenixrod || (automapactive && !automap_overlay)) ? NULL : transtable60);
         dp_translation = NULL;
 
-        if (!(CPlayer->weaponowned[wp_mace])) dp_translation = cr[CR_MONOCHROME_HERETIC];
+        if (!(CPlayer->weaponowned[wp_mace])) dp_translation = cr[CR_MONOCHROME];
         V_DrawPatchUnscaled(xpos_pic, 134 << hires, W_CacheLumpName(DEH_String("INAMLOB"), PU_CACHE),
                            (CPlayer->readyweapon == wp_mace || (automapactive && !automap_overlay)) ? NULL : transtable60);
         dp_translation = NULL;
@@ -2345,8 +2345,8 @@ static void SB_Draw_Ammo_Widget (void)
 
     // Wand ammo
     if (ammo_widget_colored)
-    dp_translation = ammo1 < fullammo1 / 4 ? cr[CR_GOLD2RED_HERETIC] :
-                     ammo1 < fullammo1 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
+    dp_translation = ammo1 < fullammo1 / 4 ? cr[CR_RED] :
+                     ammo1 < fullammo1 / 2 ? NULL : cr[CR_GREEN];
     DrSmallAmmoNumber(ammo1, xpos_qty1, 100,
                      (CPlayer->readyweapon == wp_goldwand || (automapactive && !automap_overlay)) ? true : false);
     if (ammo_widget == 2)
@@ -2360,9 +2360,9 @@ static void SB_Draw_Ammo_Widget (void)
 
     // Crossbow ammo
     if (ammo_widget_colored)
-    dp_translation = !(CPlayer->weaponowned[wp_crossbow]) ? cr[CR_GOLD2GRAY_HERETIC] :
-                     ammo2 < fullammo2 / 4 ? cr[CR_GOLD2RED_HERETIC] :
-                     ammo2 < fullammo2 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
+    dp_translation = !(CPlayer->weaponowned[wp_crossbow]) ? cr[CR_WHITE] :
+                     ammo2 < fullammo2 / 4 ? cr[CR_RED] :
+                     ammo2 < fullammo2 / 2 ? NULL : cr[CR_GREEN];
     DrSmallAmmoNumber(ammo2, xpos_qty1, 107,
                      (CPlayer->readyweapon == wp_crossbow || (automapactive && !automap_overlay)) ? true : false);
     if (ammo_widget == 2)
@@ -2376,9 +2376,9 @@ static void SB_Draw_Ammo_Widget (void)
 
     // Dragon Claw ammo
     if (ammo_widget_colored)
-    dp_translation = !(CPlayer->weaponowned[wp_blaster]) ? cr[CR_GOLD2GRAY_HERETIC] :
-                     ammo3 < fullammo3 / 4 ? cr[CR_GOLD2RED_HERETIC] :
-                     ammo3 < fullammo3 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
+    dp_translation = !(CPlayer->weaponowned[wp_blaster]) ? cr[CR_WHITE] :
+                     ammo3 < fullammo3 / 4 ? cr[CR_RED] :
+                     ammo3 < fullammo3 / 2 ? NULL : cr[CR_GREEN];
     DrSmallAmmoNumber(ammo3, xpos_qty1, 114,
                      (CPlayer->readyweapon == wp_blaster || (automapactive && !automap_overlay)) ? true : false);
     if (ammo_widget == 2)
@@ -2395,9 +2395,9 @@ static void SB_Draw_Ammo_Widget (void)
     {
         // Hellstaff ammo
         if (ammo_widget_colored)
-        dp_translation = !(CPlayer->weaponowned[wp_skullrod]) ? cr[CR_GOLD2GRAY_HERETIC] :
-                         ammo4 < fullammo4 / 4 ? cr[CR_GOLD2RED_HERETIC] :
-                         ammo4 < fullammo4 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
+        dp_translation = !(CPlayer->weaponowned[wp_skullrod]) ? cr[CR_WHITE] :
+                         ammo4 < fullammo4 / 4 ? cr[CR_RED] :
+                         ammo4 < fullammo4 / 2 ? NULL : cr[CR_GREEN];
         DrSmallAmmoNumber(ammo4, xpos_qty1, 121,
                          (CPlayer->readyweapon == wp_skullrod || (automapactive && !automap_overlay)) ? true : false);
         if (ammo_widget == 2)
@@ -2411,9 +2411,9 @@ static void SB_Draw_Ammo_Widget (void)
 
         // Phoenix Rod ammo
         if (ammo_widget_colored)
-        dp_translation = !(CPlayer->weaponowned[wp_phoenixrod]) ? cr[CR_GOLD2GRAY_HERETIC] :
-                         ammo5 < fullammo5 / 4 ? cr[CR_GOLD2RED_HERETIC] :
-                         ammo5 < fullammo5 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
+        dp_translation = !(CPlayer->weaponowned[wp_phoenixrod]) ? cr[CR_WHITE] :
+                         ammo5 < fullammo5 / 4 ? cr[CR_RED] :
+                         ammo5 < fullammo5 / 2 ? NULL : cr[CR_GREEN];
         DrSmallAmmoNumber(ammo5, xpos_qty1, 128,
                          (CPlayer->readyweapon == wp_phoenixrod || (automapactive && !automap_overlay)) ? true : false);
         if (ammo_widget == 2)
@@ -2427,9 +2427,9 @@ static void SB_Draw_Ammo_Widget (void)
 
         // Firemace ammo
         if (ammo_widget_colored)
-        dp_translation = !(CPlayer->weaponowned[wp_mace]) ? cr[CR_GOLD2GRAY_HERETIC] :
-                         ammo6 < fullammo6 / 4 ? cr[CR_GOLD2RED_HERETIC] :
-                         ammo6 < fullammo6 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
+        dp_translation = !(CPlayer->weaponowned[wp_mace]) ? cr[CR_WHITE] :
+                         ammo6 < fullammo6 / 4 ? cr[CR_RED] :
+                         ammo6 < fullammo6 / 2 ? NULL : cr[CR_GREEN];
         DrSmallAmmoNumber(ammo6, xpos_qty1, 135,
                          (CPlayer->readyweapon == wp_mace || (automapactive && !automap_overlay)) ? true : false);
         if (ammo_widget == 2)

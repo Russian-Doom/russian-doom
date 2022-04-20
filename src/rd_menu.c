@@ -362,9 +362,9 @@ void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos)
     y = menu->y;
     subheaderTranslation =
             RD_GameType == gt_Doom    ? CR_YELLOW :
-            RD_GameType == gt_Heretic ? CR_WHITE2DARKGOLD_HERETIC :
+            RD_GameType == gt_Heretic ? CR_YELLOW :
             RD_GameType == gt_Hexen   ? CR_GRAY2DARKGOLD_HEXEN :
-          /*RD_GameType == gt_Strife*/  CR_GOLD2GRAY_STRIFE;
+          /*RD_GameType == gt_Strife*/  CR_NONE;
 
     if(english_language)
     {

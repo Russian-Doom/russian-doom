@@ -300,24 +300,24 @@ void AM_initMarksColor (int color)
 
     switch (color)
     {
-        case 1:   *colorVar = CR_WHITE2GRAY_HERETIC;       break;
-        case 2:   *colorVar = CR_WHITE2DARKGRAY_HERETIC;   break;
-        case 3:   *colorVar = CR_WHITE2RED_HERETIC;        break;
-        case 4:   *colorVar = CR_WHITE2DARKRED_HERETIC;    break;
-        case 5:   *colorVar = CR_WHITE2GREEN_HERETIC;      break;
-        case 6:   *colorVar = CR_WHITE2DARKGREEN_HERETIC;  break;
-        case 7:   *colorVar = CR_WHITE2OLIVE_HERETIC;      break;
-        case 8:   *colorVar = CR_WHITE2BLUE_HERETIC;       break;
-        case 9:   *colorVar = CR_WHITE2DARKBLUE_HERETIC;   break;
-        case 10:  *colorVar = CR_WHITE2PURPLE_HERETIC;     break;
-        case 11:  *colorVar = CR_WHITE2NIAGARA_HERETIC;    break;
-        case 12:  *colorVar = CR_WHITE2AZURE_HERETIC;      break;
-        case 13:  *colorVar = CR_WHITE2YELLOW_HERETIC;     break;
-        case 14:  *colorVar = CR_WHITE2GOLD_HERETIC;       break;
-        case 15:  *colorVar = CR_WHITE2DARKGOLD_HERETIC;   break;
-        case 16:  *colorVar = CR_WHITE2TAN_HERETIC;        break;
-        case 17:  *colorVar = CR_WHITE2BROWN_HERETIC;      break;
-        default:  *colorVar = CR_WHITE2DARKGREEN_HERETIC;  break;
+        case 1:   *colorVar = CR_GRAY;          break;
+        case 2:   *colorVar = CR_DARKGRAY;      break;
+        case 3:   *colorVar = CR_RED;           break;
+        case 4:   *colorVar = CR_DARKRED;       break;
+        case 5:   *colorVar = CR_GREEN;         break;
+        case 6:   *colorVar = CR_DARKGREEN;     break;
+        case 7:   *colorVar = CR_OLIVE2;        break;
+        case 8:   *colorVar = CR_BLUE2;         break;
+        case 9:   *colorVar = CR_DARKBLUE;      break;
+        case 10:  *colorVar = CR_PURPLE;        break;
+        case 11:  *colorVar = CR_NIAGARA;       break;
+        case 12:  *colorVar = CR_AZURE;         break;
+        case 13:  *colorVar = CR_BRIGHTYELLOW;  break;
+        case 14:  *colorVar = CR_YELLOW;        break;
+        case 15:  *colorVar = CR_DARKGOLD;      break;
+        case 16:  *colorVar = CR_TAN;           break;
+        case 17:  *colorVar = CR_BROWN;         break;
+        default:  *colorVar = CR_DARKGREEN;     break;
     }
 }
 

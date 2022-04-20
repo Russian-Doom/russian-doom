@@ -38,6 +38,9 @@
 
 typedef enum
 {
+    CR_DARK,
+    CR_MONOCHROME,
+
     CR_RED,
     CR_DARKRED,
     CR_GREEN,
@@ -57,50 +60,17 @@ typedef enum
     CR_KHAKI,
     CR_PINK,
     CR_BURGUNDY,
-    // Heretic (big font)
-    CR_GREEN2GRAY_HERETIC,
-    CR_GREEN2RED_HERETIC,
-    CR_GREEN2GOLD_HERETIC,
-    CR_GREEN2ORANGE_HERETIC,
-    CR_GREEN2BLUE_HERETIC,
-    // Heretic (hud digits)
-    CR_GOLD2GREEN_HERETIC,
-    CR_GOLD2RED_HERETIC,
-    CR_GOLD2BLUE_HERETIC,
-    CR_GOLD2GRAY_HERETIC,
-    CR_GOLD2ORANGE_HERETIC,
-    // Heretic (small font)
-    CR_WHITE2GRAY_HERETIC,
-    CR_WHITE2DARKGRAY_HERETIC,
-    CR_WHITE2RED_HERETIC,
-    CR_WHITE2DARKRED_HERETIC,
-    CR_WHITE2GREEN_HERETIC,
-    CR_WHITE2DARKGREEN_HERETIC,
-    CR_WHITE2OLIVE_HERETIC,
-    CR_WHITE2BLUE_HERETIC,
-    CR_WHITE2DARKBLUE_HERETIC,
-    CR_WHITE2PURPLE_HERETIC,
-    CR_WHITE2NIAGARA_HERETIC,
-    CR_WHITE2AZURE_HERETIC,
-    CR_WHITE2YELLOW_HERETIC,
-    CR_WHITE2GOLD_HERETIC,
-    CR_WHITE2DARKGOLD_HERETIC,
-    CR_WHITE2TAN_HERETIC,
-    CR_WHITE2BROWN_HERETIC,
-    // Heretic (colored blood and health gem)
-    CR_RED2DARKRED_HERETIC,
-    CR_RED2GREEN_HERETIC,
-    CR_RED2MIDGREEN_HERETIC,
-    CR_RED2DARKGREEN_HERETIC,
-    CR_RED2YELLOW_HERETIC,
-    CR_RED2GOLD_HERETIC,
-    CR_RED2BROWN_HERETIC,
-    CR_RED2MAGENTA_HERETIC,
-    CR_RED2GRAY_HERETIC,
-    CR_RED2WHITE_HERETIC,
-    CR_RED2BLACK_HERETIC,
-    // Heretic (all-to-gray)
-    CR_MONOCHROME_HERETIC,
+
+    // Heretic-specific colors
+    CR_BRIGHTYELLOW,
+    CR_DARKGOLD,
+    CR_PURPLE,
+    CR_NIAGARA,
+    CR_AZURE,
+    CR_OLIVE2,
+    CR_FLAME,
+
+    // Hexen-specific colors
     // Hexen (big font and health gem)
     CR_RED2DARKRED_HEXEN,
     CR_RED2GREEN_HEXEN,
@@ -138,13 +108,29 @@ typedef enum
     CR_GOLD2RED_STRIFE,
     CR_GOLD2DARKGOLD_STRIFE,
 
-    // [JN] Terminator - don't override tablified colors after this point:
+    // Terminator - don't override tablified colors after this point
     CR_STOP,
 
-    // [JN] Tablified colors:
+    // Doom (colored blood and slider gem)
     CR_RED2BLUE,
     CR_RED2GREEN,
     CR_RED2GRAY,
+
+    // Heretic (slider gem)
+    CR_GREEN2GRAY_HERETIC,
+    CR_GREEN2RED_HERETIC,
+    // Heretic (health gem)
+    CR_RED2DARKRED_HERETIC,
+    CR_RED2GREEN_HERETIC,
+    CR_RED2MIDGREEN_HERETIC,
+    CR_RED2DARKGREEN_HERETIC,
+    CR_RED2YELLOW_HERETIC,
+    CR_RED2GOLD_HERETIC,
+    CR_RED2BROWN_HERETIC,
+    CR_RED2MAGENTA_HERETIC,
+    CR_RED2GRAY_HERETIC,
+    CR_RED2WHITE_HERETIC,
+    CR_RED2BLACK_HERETIC,
 
     CRMAX,
     CR_NONE
@@ -160,4 +146,4 @@ extern byte  *shademap;
 extern byte  *fuzzmap;
 
 int V_GetPaletteIndex(byte *palette, int r, int g, int b);
-byte V_Colorize (byte *playpal, int cr, byte source, boolean keepgray109);
+byte V_Colorize (byte *playpal, Translation_CR_t cr, byte source, boolean keepgray109);

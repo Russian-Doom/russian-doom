@@ -6539,7 +6539,7 @@ static void M_DrawLoad()
 
         // [crispy] shade empty savegame slots
         if (!saveStatus[i] && !vanillaparm)
-            dp_translation = cr[CR_DARKRED];
+            dp_translation = cr[CR_DARK];
 
         RD_M_DrawTextA(savegamestrings[i], x + wide_delta,LoadMenu.y+LINEHEIGHT*i);
 

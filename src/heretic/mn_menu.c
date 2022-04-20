@@ -320,23 +320,23 @@ static Translation_CR_t M_RD_ColorTranslation (int color)
 {
     switch (color)
     {
-        case 1:   return CR_WHITE2GRAY_HERETIC;
-        case 2:   return CR_WHITE2DARKGRAY_HERETIC;
-        case 3:   return CR_WHITE2RED_HERETIC;
-        case 4:   return CR_WHITE2DARKRED_HERETIC;
-        case 5:   return CR_WHITE2GREEN_HERETIC;
-        case 6:   return CR_WHITE2DARKGREEN_HERETIC;
-        case 7:   return CR_WHITE2OLIVE_HERETIC;
-        case 8:   return CR_WHITE2BLUE_HERETIC;
-        case 9:   return CR_WHITE2DARKBLUE_HERETIC;
-        case 10:  return CR_WHITE2PURPLE_HERETIC;
-        case 11:  return CR_WHITE2NIAGARA_HERETIC;
-        case 12:  return CR_WHITE2AZURE_HERETIC;
-        case 13:  return CR_WHITE2YELLOW_HERETIC;
-        case 14:  return CR_WHITE2GOLD_HERETIC;
-        case 15:  return CR_WHITE2DARKGOLD_HERETIC;
-        case 16:  return CR_WHITE2TAN_HERETIC;
-        case 17:  return CR_WHITE2BROWN_HERETIC;
+        case 1:   return CR_GRAY;
+        case 2:   return CR_DARKGRAY;
+        case 3:   return CR_RED;
+        case 4:   return CR_DARKRED;
+        case 5:   return CR_GREEN;
+        case 6:   return CR_DARKGREEN;
+        case 7:   return CR_OLIVE2;
+        case 8:   return CR_BLUE2;
+        case 9:   return CR_DARKBLUE;
+        case 10:  return CR_PURPLE;
+        case 11:  return CR_NIAGARA;
+        case 12:  return CR_AZURE;
+        case 13:  return CR_BRIGHTYELLOW;
+        case 14:  return CR_YELLOW;
+        case 15:  return CR_DARKGOLD;
+        case 16:  return CR_TAN;
+        case 17:  return CR_BROWN;
         default:  return CR_NONE;
     }
 }
@@ -1065,7 +1065,7 @@ static Menu_t Gamepad2Menu = {
 static const PageDescriptor_t GameplayPageDescriptor = {
     4, GameplayMenuPages,
     254, 176,
-    CR_WHITE2GRAY_HERETIC
+    CR_GRAY
 };
 
 static MenuItem_t Gameplay1Items[] = {
@@ -1207,7 +1207,7 @@ static Menu_t Gameplay4Menu = {
 static const PageDescriptor_t LevelSelectPageDescriptor = {
     3, LevelSelectMenuPages,
     254, 176,
-    CR_WHITE2GRAY_HERETIC
+    CR_GRAY
 };
 
 static MenuItem_t Level1Items[] = {
@@ -1526,6 +1526,7 @@ void MN_Init(void)
                         DEH_String("M_RDSLDR"),
                         DEH_String("M_RDSLG"),
                         // [Dasperal] Gem translations
+                        // [JN] TODO - tablified colors!
                         CR_NONE,
                         CR_GREEN2GRAY_HERETIC,
                         CR_GREEN2RED_HERETIC);
@@ -1852,13 +1853,13 @@ static void DrawRenderingMenu(void)
         if (aspect_ratio_temp != aspect_ratio)
         {
             RD_M_DrawTextSmallENG("THE PROGRAM MUST BE RESTARTED",
-                                  51 + wide_delta, 142, CR_WHITE2GREEN_HERETIC);
+                                  51 + wide_delta, 142, CR_GREEN);
         }
 
         // Vertical sync
         if (force_software_renderer)
         {
-            RD_M_DrawTextSmallENG("N/A", 216 + wide_delta, 52, CR_WHITE2GRAY_HERETIC);
+            RD_M_DrawTextSmallENG("N/A", 216 + wide_delta, 52, CR_GRAY);
         }
         else
         {
@@ -1870,10 +1871,10 @@ static void DrawRenderingMenu(void)
         // Numerical representation of slider position
         M_snprintf(num, 4, "%d", max_fps);
         RD_M_DrawTextSmallENG(num, 208 + wide_delta, 63, 
-                              max_fps < 60 ? CR_WHITE2GRAY_HERETIC :
+                              max_fps < 60 ? CR_GRAY :
                               max_fps < 100 ? CR_NONE :
-                              max_fps < 260 ? CR_WHITE2GREEN_HERETIC : 
-							  max_fps < 999 ? CR_WHITE2GOLD_HERETIC : CR_WHITE2RED_HERETIC);
+                              max_fps < 260 ? CR_GREEN : 
+							  max_fps < 999 ? CR_YELLOW : CR_RED);
 
         // Performance counter
         RD_M_DrawTextSmallENG(show_fps == 1 ? "FPS only" :
@@ -1883,7 +1884,7 @@ static void DrawRenderingMenu(void)
         // Pixel scaling
         if (force_software_renderer)
         {
-            RD_M_DrawTextSmallENG("N/A", 131 + wide_delta, 82, CR_WHITE2GRAY_HERETIC);
+            RD_M_DrawTextSmallENG("N/A", 131 + wide_delta, 82, CR_GRAY);
         }
         else
         {
@@ -1901,7 +1902,7 @@ static void DrawRenderingMenu(void)
         if (CurrentItPos == 3)
         {
             RD_M_DrawTextSmallENG("HOLD RUN BUTTON FOR FASTER SLIDING",
-                                  39 + wide_delta, 162, CR_WHITE2DARKGREEN_HERETIC);
+                                  39 + wide_delta, 162, CR_DARKGREEN);
         }
     }
     else
@@ -1918,13 +1919,13 @@ static void DrawRenderingMenu(void)
         if (aspect_ratio_temp != aspect_ratio)
         {
             RD_M_DrawTextSmallRUS("YTJ,[JLBV GTHTPFGECR GHJUHFVVS",
-                                  46 + wide_delta, 148, CR_WHITE2GREEN_HERETIC);
+                                  46 + wide_delta, 148, CR_GREEN);
         }
 
         // Вертикальная синхронизация
         if (force_software_renderer)
         {
-            RD_M_DrawTextSmallRUS("Y/L", 236 + wide_delta, 52, CR_WHITE2GRAY_HERETIC);
+            RD_M_DrawTextSmallRUS("Y/L", 236 + wide_delta, 52, CR_GRAY);
         }
         else
         {
@@ -1937,10 +1938,10 @@ static void DrawRenderingMenu(void)
         // Numerical representation of slider position
         M_snprintf(num, 4, "%d", max_fps);
         RD_M_DrawTextSmallENG(num, 262 + wide_delta, 63, 
-                              max_fps < 60 ? CR_WHITE2GRAY_HERETIC :
+                              max_fps < 60 ? CR_GRAY :
                               max_fps < 100 ? CR_NONE :
-                              max_fps < 260 ? CR_WHITE2GREEN_HERETIC : 
-							  max_fps < 999 ? CR_WHITE2GOLD_HERETIC : CR_WHITE2RED_HERETIC);
+                              max_fps < 260 ? CR_GREEN : 
+							  max_fps < 999 ? CR_YELLOW : CR_RED);
 
         // Счетчик производительности
         RD_M_DrawTextSmallRUS(show_fps == 1 ? "" : // Print as US string below
@@ -1952,7 +1953,7 @@ static void DrawRenderingMenu(void)
         // Пиксельное сглаживание
         if (force_software_renderer)
         {
-            RD_M_DrawTextSmallRUS("Y/L", 211 + wide_delta, 82, CR_WHITE2GRAY_HERETIC);
+            RD_M_DrawTextSmallRUS("Y/L", 211 + wide_delta, 82, CR_GRAY);
         }
         else
         {
@@ -1971,9 +1972,9 @@ static void DrawRenderingMenu(void)
         if (CurrentItPos == 3)
         {
             RD_M_DrawTextSmallRUS("LKZ ECRJHTYYJUJ GHJKBCNSDFYBZ",
-                                  51 + wide_delta, 162, CR_WHITE2DARKGREEN_HERETIC);
+                                  51 + wide_delta, 162, CR_DARKGREEN);
             RD_M_DrawTextSmallRUS("ELTH;BDFQNT RYJGRE ,TUF",
-                                  73 + wide_delta, 172, CR_WHITE2DARKGREEN_HERETIC);
+                                  73 + wide_delta, 172, CR_DARKGREEN);
         }
     }
 
@@ -2111,13 +2112,13 @@ static void DrawDisplayMenu(void)
     {
         RD_Menu_DrawSliderSmall(&DisplayMenu, 52, 4, screenblocks - 9);
         M_snprintf(num, 4, "%d", screenblocks);
-        RD_M_DrawTextSmallENG(num, 88 + wide_delta, 53, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallENG(num, 88 + wide_delta, 53, CR_GRAY);
     }
     else
     {
         RD_Menu_DrawSliderSmall(&DisplayMenu, 52, 10, screenblocks - 3);
         M_snprintf(num, 4, "%d", screenblocks);
-        dp_translation = cr[CR_WHITE2GRAY_HERETIC];
+        dp_translation = cr[CR_GRAY];
         RD_M_DrawTextA(num, 136 + wide_delta, 53);
         dp_translation = NULL;
     }
@@ -2126,7 +2127,7 @@ static void DrawDisplayMenu(void)
     RD_Menu_DrawSliderSmall(&DisplayMenu, 72, 9, extra_level_brightness);
     // Numerical representation of slider position
     M_snprintf(num, 4, "%d", extra_level_brightness);
-    dp_translation = cr[CR_WHITE2GRAY_HERETIC];
+    dp_translation = cr[CR_GRAY];
     RD_M_DrawTextA(num, 128 + wide_delta, 73);
     dp_translation = NULL;
 }
@@ -2196,11 +2197,11 @@ static void DrawColorMenu(void)
         RD_M_DrawTextSmallENG(show_palette ? "ON" : "OFF", 165 + wide_delta, 55, CR_NONE);
 
         RD_M_DrawTextSmallENG("COLOR INTENSITY",
-                              107 + wide_delta, 65, CR_WHITE2DARKGOLD_HERETIC);
+                              107 + wide_delta, 65, CR_DARKGOLD);
 
-        RD_M_DrawTextSmallENG("RED", 121 + wide_delta, 75, CR_WHITE2RED_HERETIC);
-        RD_M_DrawTextSmallENG("GREEN", 105 + wide_delta, 85, CR_WHITE2GREEN_HERETIC);
-        RD_M_DrawTextSmallENG("BLUE", 116 + wide_delta, 95, CR_WHITE2BLUE_HERETIC);
+        RD_M_DrawTextSmallENG("RED", 121 + wide_delta, 75, CR_RED);
+        RD_M_DrawTextSmallENG("GREEN", 105 + wide_delta, 85, CR_GREEN);
+        RD_M_DrawTextSmallENG("BLUE", 116 + wide_delta, 95, CR_BLUE2);
     }
     else
     {
@@ -2211,11 +2212,11 @@ static void DrawColorMenu(void)
         RD_M_DrawTextSmallRUS(show_palette ? "DRK" : "DSRK", 165 + wide_delta, 55, CR_NONE);
 
         RD_M_DrawTextSmallRUS("byntycbdyjcnm wdtnf",  // Интенсивность цвета
-                              89 + wide_delta, 65, CR_WHITE2DARKGOLD_HERETIC);
+                              89 + wide_delta, 65, CR_DARKGOLD);
 
-        RD_M_DrawTextSmallRUS("rhfcysq", 90 + wide_delta, 75, CR_WHITE2RED_HERETIC);    // Красный
-        RD_M_DrawTextSmallRUS("ptktysq", 90 + wide_delta, 85, CR_WHITE2GREEN_HERETIC);  // Зелёный
-        RD_M_DrawTextSmallRUS("cbybq", 109 + wide_delta, 95, CR_WHITE2BLUE_HERETIC);    // Синий
+        RD_M_DrawTextSmallRUS("rhfcysq", 90 + wide_delta, 75, CR_RED);    // Красный
+        RD_M_DrawTextSmallRUS("ptktysq", 90 + wide_delta, 85, CR_GREEN);  // Зелёный
+        RD_M_DrawTextSmallRUS("cbybq", 109 + wide_delta, 95, CR_BLUE2);   // Синий
     }
 
     // Brightness slider
@@ -2240,17 +2241,17 @@ static void DrawColorMenu(void)
     // RED intensity slider
     RD_Menu_DrawSliderSmall(&ColorMenu, 75, 10, r_color_factor * 10);
     M_snprintf(num, 5, "%3f", r_color_factor);  // Numerical representation of slider position
-    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 76, CR_WHITE2RED_HERETIC);
+    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 76, CR_RED);
 
     // GREEN intensity slider
     RD_Menu_DrawSliderSmall(&ColorMenu, 85, 10, g_color_factor * 10);
     M_snprintf(num, 5, "%3f", g_color_factor);  // Numerical representation of slider position
-    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 86, CR_WHITE2GREEN_HERETIC);
+    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 86, CR_GREEN);
 
     // BLUE intensity slider
     RD_Menu_DrawSliderSmall(&ColorMenu, 95, 10, b_color_factor * 10);
     M_snprintf(num, 5, "%3f", b_color_factor);  // Numerical representation of slider position
-    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 96, CR_WHITE2BLUE_HERETIC);
+    RD_M_DrawTextSmallENG(num, 264 + wide_delta, 96, CR_BLUE2);
 
     if (show_palette)
     {
@@ -2352,15 +2353,15 @@ static void DrawMessagesMenu(void)
                               messages_timeout == 7 ? "7 SECONDS" :
                               messages_timeout == 8 ? "8 SECONDS" :
                               messages_timeout == 9 ? "9 SECONDS" :
-                              "10 SECONDS", 136 + wide_delta, 73, CR_WHITE2GRAY_HERETIC);
+                              "10 SECONDS", 136 + wide_delta, 73, CR_GRAY);
 
         // Fading effect 
         RD_M_DrawTextSmallENG(message_fade ? "ON" : "OFF",
-                              140 + wide_delta, 82, CR_WHITE2GRAY_HERETIC);
+                              140 + wide_delta, 82, CR_GRAY);
 
         // Text casts shadows
         RD_M_DrawTextSmallENG(draw_shadowed_text ? "ON" : "OFF",
-                              179 + wide_delta, 92, CR_WHITE2GRAY_HERETIC);
+                              179 + wide_delta, 92, CR_GRAY);
 
         // Local time
         RD_M_DrawTextSmallENG(local_time == 1 ? "12-HOUR (HH:MM)" :
@@ -2405,7 +2406,7 @@ static void DrawMessagesMenu(void)
                               messages_timeout == 7 ? "7 CTREYL" :
                               messages_timeout == 8 ? "8 CTREYL" :
                               messages_timeout == 9 ? "9 CTREYL" :
-                              "10 CTREYL", 136 + wide_delta, 73, CR_WHITE2GRAY_HERETIC);
+                              "10 CTREYL", 136 + wide_delta, 73, CR_GRAY);
 
         // Плавное исчезновение
         RD_M_DrawTextSmallRUS(message_fade ? "DRK" : "DSRK", 193 + wide_delta, 82, CR_NONE);
@@ -2512,24 +2513,24 @@ void M_RD_Define_Msg_Color (MessageType_t messageType, int color)
     {
         switch (color)
         {
-            case 1:   *colorVar = CR_WHITE2GRAY_HERETIC;      break;
-            case 2:   *colorVar = CR_WHITE2DARKGRAY_HERETIC;  break;
-            case 3:   *colorVar = CR_WHITE2RED_HERETIC;       break;
-            case 4:   *colorVar = CR_WHITE2DARKRED_HERETIC;   break;
-            case 5:   *colorVar = CR_WHITE2GREEN_HERETIC;     break;
-            case 6:   *colorVar = CR_WHITE2DARKGREEN_HERETIC; break;
-            case 7:   *colorVar = CR_WHITE2OLIVE_HERETIC;     break;
-            case 8:   *colorVar = CR_WHITE2BLUE_HERETIC;      break;
-            case 9:   *colorVar = CR_WHITE2DARKBLUE_HERETIC;  break;
-            case 10:  *colorVar = CR_WHITE2PURPLE_HERETIC;    break;
-            case 11:  *colorVar = CR_WHITE2NIAGARA_HERETIC;   break;
-            case 12:  *colorVar = CR_WHITE2AZURE_HERETIC;     break;
-            case 13:  *colorVar = CR_WHITE2YELLOW_HERETIC;    break;
-            case 14:  *colorVar = CR_WHITE2GOLD_HERETIC;      break;
-            case 15:  *colorVar = CR_WHITE2DARKGOLD_HERETIC;  break;
-            case 16:  *colorVar = CR_WHITE2TAN_HERETIC;       break;
-            case 17:  *colorVar = CR_WHITE2BROWN_HERETIC;     break;
-            default:  *colorVar = CR_NONE;                    break;
+            case 1:   *colorVar = CR_GRAY;          break;
+            case 2:   *colorVar = CR_DARKGRAY;      break;
+            case 3:   *colorVar = CR_RED;           break;
+            case 4:   *colorVar = CR_DARKRED;       break;
+            case 5:   *colorVar = CR_GREEN;         break;
+            case 6:   *colorVar = CR_DARKGREEN;     break;
+            case 7:   *colorVar = CR_OLIVE2;        break;
+            case 8:   *colorVar = CR_BLUE2;         break;
+            case 9:   *colorVar = CR_DARKBLUE;      break;
+            case 10:  *colorVar = CR_PURPLE;        break;
+            case 11:  *colorVar = CR_NIAGARA;       break;
+            case 12:  *colorVar = CR_AZURE;         break;
+            case 13:  *colorVar = CR_BRIGHTYELLOW;  break;
+            case 14:  *colorVar = CR_YELLOW;        break;
+            case 15:  *colorVar = CR_DARKGOLD;      break;
+            case 16:  *colorVar = CR_TAN;           break;
+            case 17:  *colorVar = CR_BROWN;         break;
+            default:  *colorVar = CR_NONE;          break;
         }
     }
 }
@@ -2667,7 +2668,7 @@ static void DrawAutomapMenu(void)
     RD_Menu_DrawSliderSmall(&AutomapMenu, 72, 9, automap_overlay_bg / 3);
     // Numerical representation of slider position
     M_snprintf(num, 5, "%d", automap_overlay_bg);
-    RD_M_DrawTextSmallENG(num, 128 + wide_delta, 73, CR_WHITE2GRAY_HERETIC);
+    RD_M_DrawTextSmallENG(num, 128 + wide_delta, 73, CR_GRAY);
 }
 
 static void M_RD_AutoMapOverlay()
@@ -2747,17 +2748,17 @@ static void DrawSoundMenu(void)
     // SFX Volume
     RD_Menu_DrawSliderSmall(&SoundMenu, 52, 16, snd_MaxVolume_tmp);
     M_snprintf(num, 4, "%d", snd_MaxVolume_tmp);
-    RD_M_DrawTextSmallENG(num, 184 + wide_delta, 53, CR_WHITE2GRAY_HERETIC);
+    RD_M_DrawTextSmallENG(num, 184 + wide_delta, 53, CR_GRAY);
 
     // Music Volume
     RD_Menu_DrawSliderSmall(&SoundMenu, 72, 16, snd_MusicVolume);
     M_snprintf(num, 4, "%d", snd_MusicVolume);
-    RD_M_DrawTextSmallENG(num, 184 + wide_delta, 73, CR_WHITE2GRAY_HERETIC);
+    RD_M_DrawTextSmallENG(num, 184 + wide_delta, 73, CR_GRAY);
 
     // SFX Channels
     RD_Menu_DrawSliderSmall(&SoundMenu, 102, 16, snd_Channels / 4 - 1);
     M_snprintf(num, 4, "%d", snd_Channels);
-    RD_M_DrawTextSmallENG(num, 184 + wide_delta, 103, CR_WHITE2GRAY_HERETIC);
+    RD_M_DrawTextSmallENG(num, 184 + wide_delta, 103, CR_GRAY);
 }
 
 static void M_RD_SfxVolume(Direction_t direction)
@@ -2799,7 +2800,7 @@ static void DrawSoundSystemMenu(void)
         // Sound effects
         if (snd_sfxdevice == 0)
         {
-            RD_M_DrawTextSmallENG("DISABLED", 144 + wide_delta, 42, CR_WHITE2GRAY_HERETIC);
+            RD_M_DrawTextSmallENG("DISABLED", 144 + wide_delta, 42, CR_GRAY);
         }
         else if (snd_sfxdevice == 3)
         {
@@ -2809,7 +2810,7 @@ static void DrawSoundSystemMenu(void)
         // Music
         if (snd_musicdevice == 0)
         {
-            RD_M_DrawTextSmallENG("DISABLED", 80 + wide_delta, 52, CR_WHITE2GRAY_HERETIC);
+            RD_M_DrawTextSmallENG("DISABLED", 80 + wide_delta, 52, CR_GRAY);
         }
         else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, ""))
         {
@@ -2856,7 +2857,7 @@ static void DrawSoundSystemMenu(void)
         if (CurrentItPos == 1 || CurrentItPos == 2 || CurrentItPos == 4)
         {
             RD_M_DrawTextSmallENG("CHANGING WILL REQUIRE RESTART OF THE PROGRAM",
-                                  3 + wide_delta, 132, CR_WHITE2GREEN_HERETIC);
+                                  3 + wide_delta, 132, CR_GREEN);
         }
     }
     else
@@ -2865,7 +2866,7 @@ static void DrawSoundSystemMenu(void)
         if (snd_sfxdevice == 0)
         {
             // ОТКЛЮЧЕНЫ
-            RD_M_DrawTextSmallRUS("JNRK.XTYS", 173 + wide_delta, 42, CR_WHITE2GRAY_HERETIC);
+            RD_M_DrawTextSmallRUS("JNRK.XTYS", 173 + wide_delta, 42, CR_GRAY);
         }
         else if (snd_sfxdevice == 3)
         {
@@ -2877,7 +2878,7 @@ static void DrawSoundSystemMenu(void)
         if (snd_musicdevice == 0)
         {   
             // ОТКЛЮЧЕНА
-            RD_M_DrawTextSmallRUS("JNRK.XTYF", 91 + wide_delta, 52, CR_WHITE2GRAY_HERETIC);
+            RD_M_DrawTextSmallRUS("JNRK.XTYF", 91 + wide_delta, 52, CR_GRAY);
         }
         else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, ""))
         {
@@ -2930,7 +2931,7 @@ static void DrawSoundSystemMenu(void)
         if (CurrentItPos == 1 || CurrentItPos == 2 || CurrentItPos == 4)
         {
             RD_M_DrawTextSmallRUS("BPVTYTYBT GJNHT,ETN GTHTPFGECR GHJUHFVVS",
-                                  11 + wide_delta, 132, CR_WHITE2GREEN_HERETIC);
+                                  11 + wide_delta, 132, CR_GREEN);
         }
     }
 
@@ -2946,13 +2947,13 @@ static void DrawSoundSystemMenu(void)
                 if (english_language)
                 {
                     RD_M_DrawTextSmallENG("enable digital effects first!",
-                                        61 + wide_delta, 142, CR_WHITE2RED_HERETIC);
+                                        61 + wide_delta, 142, CR_RED);
                 }
                 else
                 {
                     // ВКЛЮЧИТЕ ЦИФРОВЫЕ ЭФФЕКТЫ!
                     RD_M_DrawTextSmallRUS("drk.xbnt wbahjdst \'aatrns!",
-                                        57 + wide_delta, 142, CR_WHITE2RED_HERETIC);
+                                        57 + wide_delta, 142, CR_RED);
                 }
             }
             speaker_test_left = false;
@@ -2965,13 +2966,13 @@ static void DrawSoundSystemMenu(void)
                 if (english_language)
                 {
                     RD_M_DrawTextSmallENG("< mono mode >", 116 + wide_delta, 
-                                          142, CR_WHITE2GREEN_HERETIC);
+                                          142, CR_GREEN);
                 }
                 else
                 {
                     // < МОНО РЕЖИМ >
                     RD_M_DrawTextSmallRUS("^ vjyj ht;bv `", 111 + wide_delta,
-                                          142, CR_WHITE2GREEN_HERETIC);
+                                          142, CR_GREEN);
                 }
             }
 
@@ -2992,13 +2993,13 @@ static void DrawSoundSystemMenu(void)
                 if (english_language)
                 {
                     RD_M_DrawTextSmallENG("< left channel", 112 + wide_delta,
-                                          142, CR_WHITE2GREEN_HERETIC);
+                                          142, CR_GREEN);
                 }
                 else
                 {
                     // < ЛЕВЫЙ КАНАЛ
                     RD_M_DrawTextSmallRUS("^ ktdsq rfyfk", 113 + wide_delta,
-                                          142, CR_WHITE2GREEN_HERETIC);
+                                          142, CR_GREEN);
                 }
 
                 if (speaker_test_left)
@@ -3014,13 +3015,13 @@ static void DrawSoundSystemMenu(void)
                 if (english_language)
                 {
                     RD_M_DrawTextSmallENG("right channel >", 108 + wide_delta,
-                                          142, CR_WHITE2GREEN_HERETIC);
+                                          142, CR_GREEN);
                 }
                 else
                 {
                     // ПРАВЫЙ КАНАЛ >
                     RD_M_DrawTextSmallRUS("ghfdsq rfyfk `", 109 + wide_delta, 
-                                          142, CR_WHITE2GREEN_HERETIC);
+                                          142, CR_GREEN);
                 }
 
                 if (speaker_test_right)
@@ -3182,11 +3183,11 @@ static void DrawControlsMenu(void)
 
         // Invert Y axis
         RD_M_DrawTextSmallENG(mouse_y_invert ? "ON" : "OFF",
-                              133 + wide_delta, 152, !mlook ? CR_WHITE2GRAY_HERETIC : CR_NONE);
+                              133 + wide_delta, 152, !mlook ? CR_GRAY : CR_NONE);
 
         // Novert
         RD_M_DrawTextSmallENG(!novert ? "ON" : "OFF",
-                              168 + wide_delta, 162, mlook ? CR_WHITE2GRAY_HERETIC : CR_NONE);
+                              168 + wide_delta, 162, mlook ? CR_GRAY : CR_NONE);
     }
     else
     {
@@ -3198,11 +3199,11 @@ static void DrawControlsMenu(void)
 
         // Вертикальная инверсия
         RD_M_DrawTextSmallRUS(mouse_y_invert ? "DRK" : "DSRK",
-                              199 + wide_delta, 152, !mlook ? CR_WHITE2GRAY_HERETIC : CR_NONE);
+                              199 + wide_delta, 152, !mlook ? CR_GRAY : CR_NONE);
 
         // Вертикальное перемещение
         RD_M_DrawTextSmallRUS(!novert ? "DRK" : "DSRK",
-                              227 + wide_delta, 162, mlook ? CR_WHITE2GRAY_HERETIC : CR_NONE);
+                              227 + wide_delta, 162, mlook ? CR_GRAY : CR_NONE);
     }
 
     //
@@ -3212,17 +3213,17 @@ static void DrawControlsMenu(void)
     // Mouse sensivity
     RD_Menu_DrawSliderSmall(&ControlsMenu, 92, 12, mouseSensitivity);
     M_snprintf(num, 4, "%d", mouseSensitivity);
-    RD_M_DrawTextSmallENG(num, 152 + wide_delta, 93, CR_WHITE2GRAY_HERETIC);
+    RD_M_DrawTextSmallENG(num, 152 + wide_delta, 93, CR_GRAY);
 
     // Acceleration
     RD_Menu_DrawSliderSmall(&ControlsMenu, 112, 12, mouse_acceleration * 4 - 4);
     M_snprintf(num, 4, "%f", mouse_acceleration);
-    RD_M_DrawTextSmallENG(num, 152 + wide_delta, 113, CR_WHITE2GRAY_HERETIC);
+    RD_M_DrawTextSmallENG(num, 152 + wide_delta, 113, CR_GRAY);
 
     // Threshold
     RD_Menu_DrawSliderSmall(&ControlsMenu, 132, 12, mouse_threshold / 2);
     M_snprintf(num, 4, "%d", mouse_threshold);
-    RD_M_DrawTextSmallENG(num, 152 + wide_delta, 133, CR_WHITE2GRAY_HERETIC);
+    RD_M_DrawTextSmallENG(num, 152 + wide_delta, 133, CR_GRAY);
 }
 
 static void M_RD_AlwaysRun()
@@ -3273,18 +3274,18 @@ void M_RD_Draw_Bindings()
 
     if (english_language)
     {
-        RD_M_DrawTextSmallENG("ENTER TO CHANGE, DEL TO CLEAR", 55 + wide_delta, 176, CR_WHITE2GREEN_HERETIC);
-        RD_M_DrawTextSmallENG("PGUP/PGDN TO TURN PAGES", 75 + wide_delta, 185, CR_WHITE2GREEN_HERETIC);
+        RD_M_DrawTextSmallENG("ENTER TO CHANGE, DEL TO CLEAR", 55 + wide_delta, 176, CR_GREEN);
+        RD_M_DrawTextSmallENG("PGUP/PGDN TO TURN PAGES", 75 + wide_delta, 185, CR_GREEN);
     }
     else
     {
-        RD_M_DrawTextSmallENG("ENTER =", 44 + wide_delta, 176, CR_WHITE2GREEN_HERETIC);
-        RD_M_DrawTextSmallRUS("= YFPYFXBNM<", 88 + wide_delta, 176, CR_WHITE2GREEN_HERETIC);
-        RD_M_DrawTextSmallENG("DEL =", 176 + wide_delta, 176, CR_WHITE2GREEN_HERETIC);
-        RD_M_DrawTextSmallRUS("JXBCNBNM", 213 + wide_delta, 176, CR_WHITE2GREEN_HERETIC);
+        RD_M_DrawTextSmallENG("ENTER =", 44 + wide_delta, 176, CR_GREEN);
+        RD_M_DrawTextSmallRUS("= YFPYFXBNM<", 88 + wide_delta, 176, CR_GREEN);
+        RD_M_DrawTextSmallENG("DEL =", 176 + wide_delta, 176, CR_GREEN);
+        RD_M_DrawTextSmallRUS("JXBCNBNM", 213 + wide_delta, 176, CR_GREEN);
 
-        RD_M_DrawTextSmallENG("PGUP/PGDN =", 55 + wide_delta, 185, CR_WHITE2GREEN_HERETIC);
-        RD_M_DrawTextSmallRUS("KBCNFNM CNHFYBWS", 139 + wide_delta, 185, CR_WHITE2GREEN_HERETIC);
+        RD_M_DrawTextSmallENG("PGUP/PGDN =", 55 + wide_delta, 185, CR_GREEN);
+        RD_M_DrawTextSmallRUS("KBCNFNM CNHFYBWS", 139 + wide_delta, 185, CR_GREEN);
     }
 
     RD_Menu_Draw_Bindings(english_language ? 195 : 210);
@@ -3324,12 +3325,12 @@ static void DrawGamepadSelectMenu()
     if(english_language)
     {
         RD_M_DrawTextSmallENG(useController ? "ON" : "OFF", 193 + wide_delta, 32,
-                              useController ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              useController ? CR_GREEN : CR_RED);
     }
     else
     {
         RD_M_DrawTextSmallRUS(useController ? "DRK" : "DSRK", 233 + wide_delta, 32,
-                              useController ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              useController ? CR_GREEN : CR_RED);
     }
 
     for(int i = 3; i < 13; ++i)
@@ -3407,124 +3408,124 @@ static void DrawGamepadMenu_1()
     if(english_language)
     {
         RD_M_DrawTextSmallENG(GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_LEFTX]),
-                              120 + wide_delta, 32, CR_WHITE2DARKGOLD_HERETIC);
+                              120 + wide_delta, 32, CR_DARKGOLD);
 
         RD_Menu_DrawSliderSmallInline(115, 42, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTX] - 1);
         if(currentController)
             M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTX]);
-        RD_M_DrawTextSmallENG(num, 263 + wide_delta, 42, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallENG(num, 263 + wide_delta, 42, CR_GRAY);
 
         RD_M_DrawTextSmallENG(currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTX] ? "ON" : "OFF",
                               120 + wide_delta, 52,
-                              currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTX] ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTX] ? CR_GREEN : CR_RED);
 
         RD_Menu_DrawSliderSmallInline(110, 62, 10,
                                       currentController->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTX] / 10);
         if(currentController)
             M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTX]);
-        RD_M_DrawTextSmallENG(num, 210 + wide_delta, 62, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallENG(num, 210 + wide_delta, 62, CR_GRAY);
 
 
         RD_M_DrawTextSmallENG(GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_LEFTY]),
-                              120 + wide_delta, 82, CR_WHITE2DARKGOLD_HERETIC);
+                              120 + wide_delta, 82, CR_DARKGOLD);
 
         RD_Menu_DrawSliderSmallInline(115, 92, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTY] - 1);
         if(currentController)
             M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTY]);
-        RD_M_DrawTextSmallENG(num, 263 + wide_delta, 92, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallENG(num, 263 + wide_delta, 92, CR_GRAY);
 
         RD_M_DrawTextSmallENG(currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTY] ? "ON" : "OFF",
                               120 + wide_delta, 102,
-                              currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTY] ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTY] ? CR_GREEN : CR_RED);
 
         RD_Menu_DrawSliderSmallInline(110, 112, 10,
                                       currentController->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTY] / 10);
         if(currentController)
             M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTY]);
-        RD_M_DrawTextSmallENG(num, 210 + wide_delta, 112, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallENG(num, 210 + wide_delta, 112, CR_GRAY);
 
 
         RD_M_DrawTextSmallENG(GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT]),
-                              130 + wide_delta, 132, CR_WHITE2DARKGOLD_HERETIC);
+                              130 + wide_delta, 132, CR_DARKGOLD);
 
         RD_Menu_DrawSliderSmallInline(115, 142, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERLEFT] - 1);
         if(currentController)
             M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERLEFT]);
-        RD_M_DrawTextSmallENG(num, 260 + wide_delta, 142, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallENG(num, 260 + wide_delta, 142, CR_GRAY);
 
         RD_M_DrawTextSmallENG(currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT] ? "ON" : "OFF",
                               120 + wide_delta, 152,
-                              currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT] ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT] ? CR_GREEN : CR_RED);
 
         RD_Menu_DrawSliderSmallInline(110, 162, 10,
                                       currentController->axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERLEFT] / 10);
         if(currentController)
             M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERLEFT]);
-        RD_M_DrawTextSmallENG(num, 210 + wide_delta, 162, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallENG(num, 210 + wide_delta, 162, CR_GRAY);
     }
     else
     {
         RD_M_DrawTextSmallRUS(GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_LEFTX]),
-                              110 + wide_delta, 32, CR_WHITE2DARKGOLD_HERETIC);
+                              110 + wide_delta, 32, CR_DARKGOLD);
 
         RD_Menu_DrawSliderSmallInline(145, 42, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTX] - 1);
         if(currentController)
             M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTX]);
-        RD_M_DrawTextSmallRUS(num, 293 + wide_delta, 42, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallRUS(num, 293 + wide_delta, 42, CR_GRAY);
 
         RD_M_DrawTextSmallRUS(currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTX] ? "DRK" : "DSRK",
                               155 + wide_delta, 52,
-                              currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTX] ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTX] ? CR_GREEN : CR_RED);
 
         RD_Menu_DrawSliderSmallInline(117, 62, 10,
                                       currentController->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTX] / 10);
         if(currentController)
             M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTX]);
-        RD_M_DrawTextSmallRUS(num, 217 + wide_delta, 62, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallRUS(num, 217 + wide_delta, 62, CR_GRAY);
 
 
         RD_M_DrawTextSmallRUS(GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_LEFTY]),
-                              107 + wide_delta, 82, CR_WHITE2DARKGOLD_HERETIC);
+                              107 + wide_delta, 82, CR_DARKGOLD);
 
         RD_Menu_DrawSliderSmallInline(145, 92, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTY] - 1);
         if(currentController)
             M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTY]);
-        RD_M_DrawTextSmallRUS(num, 293 + wide_delta, 92, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallRUS(num, 293 + wide_delta, 92, CR_GRAY);
 
         RD_M_DrawTextSmallRUS(currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTY] ? "DRK" : "DSRK",
                               155 + wide_delta, 102,
-                              currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTY] ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_LEFTY] ? CR_GREEN : CR_RED);
 
         RD_Menu_DrawSliderSmallInline(117, 112, 10,
                                       currentController->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTY] / 10);
         if(currentController)
             M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_LEFTY]);
-        RD_M_DrawTextSmallRUS(num, 217 + wide_delta, 112, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallRUS(num, 217 + wide_delta, 112, CR_GRAY);
 
 
         RD_M_DrawTextSmallRUS(GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT]),
-                              127 + wide_delta, 132, CR_WHITE2DARKGOLD_HERETIC);
+                              127 + wide_delta, 132, CR_DARKGOLD);
 
         RD_Menu_DrawSliderSmallInline(145, 142, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERLEFT] - 1);
         if(currentController)
             M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERLEFT]);
-        RD_M_DrawTextSmallRUS(num, 290 + wide_delta, 142, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallRUS(num, 290 + wide_delta, 142, CR_GRAY);
 
         RD_M_DrawTextSmallRUS(currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT] ? "DRK" : "DSRK",
                               155 + wide_delta, 152,
-                              currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT] ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT] ? CR_GREEN : CR_RED);
 
         RD_Menu_DrawSliderSmallInline(117, 162, 10,
                                       currentController->axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERLEFT] / 10);
         if(currentController)
             M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERLEFT]);
-        RD_M_DrawTextSmallRUS(num, 223 + wide_delta, 162, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallRUS(num, 223 + wide_delta, 162, CR_GRAY);
     }
 }
 
@@ -3607,124 +3608,124 @@ static void DrawGamepadMenu_2()
     if(english_language)
     {
         RD_M_DrawTextSmallENG(GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_RIGHTX]),
-                              125 + wide_delta, 32, CR_WHITE2DARKGOLD_HERETIC);
+                              125 + wide_delta, 32, CR_DARKGOLD);
 
         RD_Menu_DrawSliderSmallInline(115, 42, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTX] - 1);
         if(currentController)
             M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTX]);
-        RD_M_DrawTextSmallENG(num, 263 + wide_delta, 42, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallENG(num, 263 + wide_delta, 42, CR_GRAY);
 
         RD_M_DrawTextSmallENG(currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTX] ? "ON" : "OFF",
                               120 + wide_delta, 52,
-                              currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTX] ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTX] ? CR_GREEN : CR_RED);
 
         RD_Menu_DrawSliderSmallInline(110, 62, 10,
                                       currentController->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTX] / 10);
         if(currentController)
             M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTX]);
-        RD_M_DrawTextSmallENG(num, 210 + wide_delta, 62, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallENG(num, 210 + wide_delta, 62, CR_GRAY);
 
 
         RD_M_DrawTextSmallENG(GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_RIGHTY]),
-                              125 + wide_delta, 82, CR_WHITE2DARKGOLD_HERETIC);
+                              125 + wide_delta, 82, CR_DARKGOLD);
 
         RD_Menu_DrawSliderSmallInline(115, 92, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTY] - 1);
         if(currentController)
             M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTY]);
-        RD_M_DrawTextSmallENG(num, 263 + wide_delta, 92, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallENG(num, 263 + wide_delta, 92, CR_GRAY);
 
         RD_M_DrawTextSmallENG(currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTY] ? "ON" : "OFF",
                               120 + wide_delta, 102,
-                              currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTY] ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTY] ? CR_GREEN : CR_RED);
 
         RD_Menu_DrawSliderSmallInline(110, 112, 10,
                                       currentController->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTY] / 10);
         if(currentController)
             M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTY]);
-        RD_M_DrawTextSmallENG(num, 210 + wide_delta, 112, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallENG(num, 210 + wide_delta, 112, CR_GRAY);
 
 
         RD_M_DrawTextSmallENG(GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_TRIGGERRIGHT]),
-                              135 + wide_delta, 132, CR_WHITE2DARKGOLD_HERETIC);
+                              135 + wide_delta, 132, CR_DARKGOLD);
 
         RD_Menu_DrawSliderSmallInline(115, 142, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] - 1);
         if(currentController)
             M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERRIGHT]);
-        RD_M_DrawTextSmallENG(num, 260 + wide_delta, 142, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallENG(num, 260 + wide_delta, 142, CR_GRAY);
 
         RD_M_DrawTextSmallENG(currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] ? "ON" : "OFF",
                               120 + wide_delta, 152,
-                              currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] ? CR_GREEN : CR_RED);
 
         RD_Menu_DrawSliderSmallInline(110, 162, 10,
                                       currentController->axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] / 10);
         if(currentController)
             M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERRIGHT]);
-        RD_M_DrawTextSmallENG(num, 210 + wide_delta, 162, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallENG(num, 210 + wide_delta, 162, CR_GRAY);
     }
     else
     {
         RD_M_DrawTextSmallRUS(GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_RIGHTX]),
-                              117 + wide_delta, 32, CR_WHITE2DARKGOLD_HERETIC);
+                              117 + wide_delta, 32, CR_DARKGOLD);
 
         RD_Menu_DrawSliderSmallInline(145, 42, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTX] - 1);
         if(currentController)
             M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTX]);
-        RD_M_DrawTextSmallRUS(num, 293 + wide_delta, 42, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallRUS(num, 293 + wide_delta, 42, CR_GRAY);
 
         RD_M_DrawTextSmallRUS(currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTX] ? "DRK" : "DSRK",
                               155 + wide_delta, 52,
-                              currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTX] ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTX] ? CR_GREEN : CR_RED);
 
         RD_Menu_DrawSliderSmallInline(117, 62, 10,
                                       currentController->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTX] / 10);
         if(currentController)
             M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTX]);
-        RD_M_DrawTextSmallRUS(num, 217 + wide_delta, 62, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallRUS(num, 217 + wide_delta, 62, CR_GRAY);
 
 
         RD_M_DrawTextSmallRUS(GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_RIGHTY]),
-                              117 + wide_delta, 82, CR_WHITE2DARKGOLD_HERETIC);
+                              117 + wide_delta, 82, CR_DARKGOLD);
 
         RD_Menu_DrawSliderSmallInline(145, 92, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTY] - 1);
         if(currentController)
             M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTY]);
-        RD_M_DrawTextSmallRUS(num, 293 + wide_delta, 92, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallRUS(num, 293 + wide_delta, 92, CR_GRAY);
 
         RD_M_DrawTextSmallRUS(currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTY] ? "DRK" : "DSRK",
                               155 + wide_delta, 102,
-                              currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTY] ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_RIGHTY] ? CR_GREEN : CR_RED);
 
         RD_Menu_DrawSliderSmallInline(117, 112, 10,
                                       currentController->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTY] / 10);
         if(currentController)
             M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_RIGHTY]);
-        RD_M_DrawTextSmallRUS(num, 217 + wide_delta, 112, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallRUS(num, 217 + wide_delta, 112, CR_GRAY);
 
 
         RD_M_DrawTextSmallRUS(GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_TRIGGERRIGHT]),
-                              135 + wide_delta, 132, CR_WHITE2DARKGOLD_HERETIC);
+                              135 + wide_delta, 132, CR_DARKGOLD);
 
         RD_Menu_DrawSliderSmallInline(145, 142, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] - 1);
         if(currentController)
             M_snprintf(num, 6, "%2d", currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERRIGHT]);
-        RD_M_DrawTextSmallRUS(num, 290 + wide_delta, 142, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallRUS(num, 290 + wide_delta, 142, CR_GRAY);
 
         RD_M_DrawTextSmallRUS(currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] ? "DRK" : "DSRK",
                               155 + wide_delta, 152,
-                              currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              currentController->invertAxis[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] ? CR_GREEN : CR_RED);
 
         RD_Menu_DrawSliderSmallInline(117, 162, 10,
                                       currentController->axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] / 10);
         if(currentController)
             M_snprintf(num, 6, "%3d%%", currentController->axisDeadZone[SDL_CONTROLLER_AXIS_TRIGGERRIGHT]);
-        RD_M_DrawTextSmallRUS(num, 223 + wide_delta, 162, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallRUS(num, 223 + wide_delta, 162, CR_GRAY);
     }
 }
 
@@ -3814,39 +3815,39 @@ static void DrawGameplay1Menu(void)
 
         // Brightmaps
         RD_M_DrawTextSmallENG(brightmaps ? "ON" : "OFF", 119 + wide_delta, 36,
-                              brightmaps ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              brightmaps ? CR_GREEN : CR_RED);
 
         // Fake contrast
         RD_M_DrawTextSmallENG(fake_contrast ? "ON" : "OFF", 143 + wide_delta, 46,
-                              fake_contrast ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              fake_contrast ? CR_GREEN : CR_RED);
 
         // Extra translucency
         RD_M_DrawTextSmallENG(translucency ? "ON" : "OFF", 180 + wide_delta, 56,
-                              translucency ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              translucency ? CR_GREEN : CR_RED);
 
         // Colored blood
         RD_M_DrawTextSmallENG(colored_blood ? "ON" : "OFF", 139 + wide_delta, 66,
-                              colored_blood ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              colored_blood ? CR_GREEN : CR_RED);
 
         // Swirling liquids
         RD_M_DrawTextSmallENG(swirling_liquids ? "ON" : "OFF", 147 + wide_delta, 76,
-                              swirling_liquids ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              swirling_liquids ? CR_GREEN : CR_RED);
 
         // Invulnerability affects sky
         RD_M_DrawTextSmallENG(invul_sky ? "ON" : "OFF", 235 + wide_delta, 86,
-                              invul_sky ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              invul_sky ? CR_GREEN : CR_RED);
 
         // Sky drawing mode
         RD_M_DrawTextSmallENG(linear_sky ? "LINEAR" : "ORIGINAL", 162 + wide_delta, 96,
-                              linear_sky ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              linear_sky ? CR_GREEN : CR_RED);
 
         // Randomly flipped corpses
         RD_M_DrawTextSmallENG(randomly_flipcorpses ? "ON" : "OFF", 232 + wide_delta, 106,
-                              randomly_flipcorpses ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              randomly_flipcorpses ? CR_GREEN : CR_RED);
 
         // Flip weapons
         RD_M_DrawTextSmallENG(flip_weapons ? "ON" : "OFF", 130 + wide_delta, 116,
-                              flip_weapons ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              flip_weapons ? CR_GREEN : CR_RED);
     }
     else
     {
@@ -3856,39 +3857,39 @@ static void DrawGameplay1Menu(void)
 
         // Брайтмаппинг
         RD_M_DrawTextSmallRUS(brightmaps ? "DRK" : "DSRK", 133 + wide_delta, 36,
-                              brightmaps ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              brightmaps ? CR_GREEN : CR_RED);
 
         // Имитация контрастности
         RD_M_DrawTextSmallRUS(fake_contrast ? "DRK" : "DSRK", 205 + wide_delta, 46,
-                              fake_contrast ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              fake_contrast ? CR_GREEN : CR_RED);
 
         // Дополнительная прозрачность
         RD_M_DrawTextSmallRUS(translucency ? "DRK" : "DSRK", 245 + wide_delta, 56,
-                              translucency ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              translucency ? CR_GREEN : CR_RED);
 
         // Разноцветная кровь
         RD_M_DrawTextSmallRUS(colored_blood ? "DRK" : "DSRK", 178 + wide_delta, 66,
-                              colored_blood ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              colored_blood ? CR_GREEN : CR_RED);
 
         // Улучшенная анимация жидкостей
         RD_M_DrawTextSmallRUS(swirling_liquids ? "DRK" : "DSRK", 261 + wide_delta, 76,
-                              swirling_liquids ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              swirling_liquids ? CR_GREEN : CR_RED);
 
         // Неуязвимость окрашивает небо
         RD_M_DrawTextSmallRUS(invul_sky ? "DRK" : "DSRK", 253 + wide_delta, 86,
-                              invul_sky ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              invul_sky ? CR_GREEN : CR_RED);
 
         // Режим отрисовки неба
         RD_M_DrawTextSmallRUS(linear_sky ? "KBYTQYSQ" : "JHBUBYFKMYSQ", 195 + wide_delta, 96,
-                              linear_sky ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              linear_sky ? CR_GREEN : CR_RED);
 
         // Зеркальное отражение трупов
         RD_M_DrawTextSmallRUS(randomly_flipcorpses ? "DRK" : "DSRK", 247 + wide_delta, 106,
-                              randomly_flipcorpses ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              randomly_flipcorpses ? CR_GREEN : CR_RED);
 
         // Зеркальное отражение оружия
         RD_M_DrawTextSmallRUS(flip_weapons ? "DRK" : "DSRK", 250 + wide_delta, 116,
-                              flip_weapons ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              flip_weapons ? CR_GREEN : CR_RED);
     }
 }
 
@@ -3954,19 +3955,19 @@ static void DrawGameplay2Menu(void)
 
         // Colored Status Bar
         RD_M_DrawTextSmallENG(sbar_colored ? "ON" : "OFF", 177 + wide_delta, 36,
-                          sbar_colored ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                          sbar_colored ? CR_GREEN : CR_RED);
 
         // Colored health gem
         RD_M_DrawTextSmallENG(sbar_colored_gem == 1 ? "BRIGHT" :
                               sbar_colored_gem == 2 ? "DARK" : "OFF",
                               175 + wide_delta, 46,
-                              sbar_colored_gem == 1 ? CR_WHITE2GREEN_HERETIC :
-                              sbar_colored_gem == 2 ? CR_WHITE2DARKGREEN_HERETIC :
-                              CR_WHITE2RED_HERETIC);
+                              sbar_colored_gem == 1 ? CR_GREEN :
+                              sbar_colored_gem == 2 ? CR_DARKGREEN :
+                              CR_RED);
 
         // Negative health
         RD_M_DrawTextSmallENG(negative_health ? "ON" : "OFF", 190 + wide_delta, 56,
-                              negative_health ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              negative_health ? CR_GREEN : CR_RED);
 
         //
         // AMMO WIDGET
@@ -3974,11 +3975,11 @@ static void DrawGameplay2Menu(void)
 
         // Draw widget
         RD_M_DrawTextSmallENG(ammo_widget == 1 ? "BRIEF" : ammo_widget == 2 ? "FULL" :  "OFF",
-                              124 + wide_delta, 76, ammo_widget ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              124 + wide_delta, 76, ammo_widget ? CR_GREEN : CR_RED);
 
         // Coloring
         RD_M_DrawTextSmallENG(ammo_widget_colored ? "ON" : "OFF", 101 + wide_delta, 86,
-                              ammo_widget_colored ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              ammo_widget_colored ? CR_GREEN : CR_RED);
 
         //
         // CROSSHAIR
@@ -3986,7 +3987,7 @@ static void DrawGameplay2Menu(void)
 
         // Draw crosshair
         RD_M_DrawTextSmallENG(crosshair_draw ? "ON" : "OFF", 150 + wide_delta, 106,
-                              crosshair_draw ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              crosshair_draw ? CR_GREEN : CR_RED);
 
         // Shape
         RD_M_DrawTextSmallENG(crosshair_shape == 1 ? "CROSS/2" :
@@ -3995,7 +3996,7 @@ static void DrawGameplay2Menu(void)
                               crosshair_shape == 4 ? "ANGLE" :
                               crosshair_shape == 5 ? "TRIANGLE" :
                               crosshair_shape == 6 ? "DOT" : "CROSS",
-                              84 + wide_delta, 116, CR_WHITE2GREEN_HERETIC);
+                              84 + wide_delta, 116, CR_GREEN);
 
         // Indication
         RD_M_DrawTextSmallENG(crosshair_type == 1 ? "HEALTH" :
@@ -4003,11 +4004,11 @@ static void DrawGameplay2Menu(void)
                               crosshair_type == 3 ? "TARGET HIGHLIGHTING+HEALTH" :
                               "STATIC",
                               111 + wide_delta, 146,
-                              crosshair_type ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              crosshair_type ? CR_GREEN : CR_RED);
 
         // Increased size
         RD_M_DrawTextSmallENG(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 136,
-                              crosshair_scale ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              crosshair_scale ? CR_GREEN : CR_RED);
     }
     else
     {
@@ -4017,18 +4018,18 @@ static void DrawGameplay2Menu(void)
 
         // Разноцветные элементы
         RD_M_DrawTextSmallRUS(sbar_colored ? "DRK" : "DSRK", 206 + wide_delta, 36,
-                              sbar_colored ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              sbar_colored ? CR_GREEN : CR_RED);
 
         // Окрашивание камня здоровья
         RD_M_DrawTextSmallRUS(sbar_colored_gem == 1 ? "CDTNKJT" :
                               sbar_colored_gem == 2 ? "NTVYJT" : "DSRK", 238 + wide_delta, 46,
-                              sbar_colored_gem == 1 ? CR_WHITE2GREEN_HERETIC :
-                              sbar_colored_gem == 2 ? CR_WHITE2DARKGREEN_HERETIC :
-                              CR_WHITE2RED_HERETIC);
+                              sbar_colored_gem == 1 ? CR_GREEN :
+                              sbar_colored_gem == 2 ? CR_DARKGREEN :
+                              CR_RED);
 
         // Отрицательное здоровье
         RD_M_DrawTextSmallRUS(negative_health ? "DRK" : "DSRK", 211 + wide_delta, 56,
-                          negative_health ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                          negative_health ? CR_GREEN : CR_RED);
 
         //
         // ВИДЖЕТ БОЕЗАПАСА
@@ -4037,11 +4038,11 @@ static void DrawGameplay2Menu(void)
         // Отображать виджет
         RD_M_DrawTextSmallRUS(ammo_widget == 1 ? "RHFNRBQ" :
                               ammo_widget == 2 ? "GJLHJ,YSQ" : "DSRK", 179 + wide_delta, 76,
-                              ammo_widget ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              ammo_widget ? CR_GREEN : CR_RED);
 
         // Цветовая индикация
         RD_M_DrawTextSmallRUS(ammo_widget_colored ? "DRK" : "DSRK", 178 + wide_delta, 86,
-                              ammo_widget_colored ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              ammo_widget_colored ? CR_GREEN : CR_RED);
 
         //
         // ПРИЦЕЛ
@@ -4049,7 +4050,7 @@ static void DrawGameplay2Menu(void)
 
         // Отображать прицел
         RD_M_DrawTextSmallRUS(crosshair_draw ? "DRK" : "DSRK", 175 + wide_delta, 106,
-                              crosshair_draw ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              crosshair_draw ? CR_GREEN : CR_RED);
 
         // Форма
         RD_M_DrawTextSmallRUS(crosshair_shape == 1 ? "RHTCN/2" :      // КРЕСТ/2
@@ -4059,7 +4060,7 @@ static void DrawGameplay2Menu(void)
                               crosshair_shape == 5 ? "NHTEUJKMYBR" :  // ТРЕУГОЛЬНИК
                               crosshair_shape == 6 ? "NJXRF" :        // ТОЧКА
                                                      "RHTCN",         // КРЕСТ
-                              87 + wide_delta, 116, CR_WHITE2GREEN_HERETIC);
+                              87 + wide_delta, 116, CR_GREEN);
 
         // Индикация
         RD_M_DrawTextSmallRUS(crosshair_type == 1 ? "PLJHJDMT" : // ЗДОРОВЬЕ
@@ -4067,11 +4068,11 @@ static void DrawGameplay2Menu(void)
                               crosshair_type == 3 ? "GJLCDTNRF WTKB+PLJHJDMT" :
                               "CNFNBXYFZ", // СТАТИЧНАЯ
                               111 + wide_delta, 146,
-                              crosshair_type ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              crosshair_type ? CR_GREEN : CR_RED);
 
         // Увеличенный размер
         RD_M_DrawTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 136,
-                              crosshair_scale ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              crosshair_scale ? CR_GREEN : CR_RED);
     }
 
     // Draw crosshair background.
@@ -4100,7 +4101,7 @@ static void DrawGameplay2Menu(void)
                           crosshair_opacity == 6 ? "80%" :
                           crosshair_opacity == 7 ? "90%" : "100%",
                           (english_language ? 95 : 149) + wide_delta,
-                          126, CR_WHITE2GRAY_HERETIC);
+                          126, CR_GRAY);
 }
 
 static void M_RD_ColoredSBar()
@@ -4173,11 +4174,11 @@ static void DrawGameplay3Menu(void)
 
         // Sound attenuation axises
         RD_M_DrawTextSmallENG(z_axis_sfx ? "X/Y/Z" : "X/Y", 219 + wide_delta, 36,
-                              z_axis_sfx ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              z_axis_sfx ? CR_GREEN : CR_RED);
 
         // Monster alert waking up others
         RD_M_DrawTextSmallENG(noise_alert_sfx ? "ON" : "OFF", 262 + wide_delta, 46,
-                              noise_alert_sfx ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              noise_alert_sfx ? CR_GREEN : CR_RED);
 
         //
         // TACTICAL
@@ -4185,21 +4186,21 @@ static void DrawGameplay3Menu(void)
 
         // Notify of revealed secrets
         RD_M_DrawTextSmallENG(secret_notification ? "ON" : "OFF", 235 + wide_delta, 66,
-                              secret_notification ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              secret_notification ? CR_GREEN : CR_RED);
 
         // Active artifacts
         RD_M_DrawTextSmallENG(show_all_artifacts ? "ALL" : "WINGS/TOME", 195 + wide_delta, 76,
-                              show_all_artifacts ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              show_all_artifacts ? CR_GREEN : CR_RED);
 
         // Artifacts timer
         RD_M_DrawTextSmallENG(show_artifacts_timer == 1 ? "GOLD" :
                               show_artifacts_timer == 2 ? "SILVER" :
                               show_artifacts_timer == 3 ? "COLORED" : "OFF",
                               150 + wide_delta, 86,
-                              show_artifacts_timer == 1 ? CR_WHITE2DARKGOLD_HERETIC :
-                              show_artifacts_timer == 2 ? CR_WHITE2GRAY_HERETIC :
-                              show_artifacts_timer == 3 ? CR_WHITE2GREEN_HERETIC :
-                              CR_WHITE2RED_HERETIC);
+                              show_artifacts_timer == 1 ? CR_DARKGOLD :
+                              show_artifacts_timer == 2 ? CR_GRAY :
+                              show_artifacts_timer == 3 ? CR_GREEN :
+                              CR_RED);
 
         //
         // PHYSICAL
@@ -4207,21 +4208,21 @@ static void DrawGameplay3Menu(void)
        
         // Collision physics
         RD_M_DrawTextSmallENG(improved_collision ? "IMPROVED" : "ORIGINAL", 159 + wide_delta, 106,
-                              improved_collision ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              improved_collision ? CR_GREEN : CR_RED);
        
         // Corpses sliding from the ledges
         RD_M_DrawTextSmallENG(torque ? "ON" : "OFF", 238 + wide_delta, 116,
-                              torque ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              torque ? CR_GREEN : CR_RED);
 
         // Weapon bobbing while firing
         RD_M_DrawTextSmallENG(weapon_bobbing ? "ON" : "OFF", 233 + wide_delta, 126,
-                              weapon_bobbing ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              weapon_bobbing ? CR_GREEN : CR_RED);
 
         // Floating items amplitude
         RD_M_DrawTextSmallENG(floating_powerups == 1 ? "STANDARD" :
                               floating_powerups == 2 ? "HALFED" : "OFF",
                               209 + wide_delta, 136,
-                              floating_powerups ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              floating_powerups ? CR_GREEN : CR_RED);
     }
     else
     {
@@ -4232,11 +4233,11 @@ static void DrawGameplay3Menu(void)
         // Затухание звука по осям
         RD_M_DrawTextSmallENG(z_axis_sfx ? "X/Y/Z" : "X/Y",
                               209 + wide_delta, 36,
-                              z_axis_sfx ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              z_axis_sfx ? CR_GREEN : CR_RED);
 
         // Общая тревога у монстров
         RD_M_DrawTextSmallRUS(noise_alert_sfx ? "DRK" : "DSRK", 223 + wide_delta, 46,
-                              noise_alert_sfx ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              noise_alert_sfx ? CR_GREEN : CR_RED);
 
         //
         // ТАКТИКА
@@ -4244,21 +4245,21 @@ static void DrawGameplay3Menu(void)
 
         // Сообщать о найденном тайнике
         RD_M_DrawTextSmallRUS(secret_notification ? "DRK" : "DSRK", 251 + wide_delta, 66,
-                          secret_notification ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                          secret_notification ? CR_GREEN : CR_RED);
 
         // Индикация артефаектов
         RD_M_DrawTextSmallRUS(show_all_artifacts ? "DCT FHNTAFRNS" : "RHSKMZ/NJV", 196 + wide_delta, 76,
-                              show_all_artifacts ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              show_all_artifacts ? CR_GREEN : CR_RED);
 
         // Таймер артефаектов
         RD_M_DrawTextSmallRUS(show_artifacts_timer == 1 ? "PJKJNJQ" :
                               show_artifacts_timer == 2 ? "CTHT,HZYSQ" :
                               show_artifacts_timer == 3 ? "HFPYJWDTNYSQ" : "DSRK",
                               175 + wide_delta, 86,
-                              show_artifacts_timer == 1 ? CR_WHITE2DARKGOLD_HERETIC :
-                              show_artifacts_timer == 2 ? CR_WHITE2GRAY_HERETIC :
-                              show_artifacts_timer == 3 ? CR_WHITE2GREEN_HERETIC :
-                              CR_WHITE2RED_HERETIC);
+                              show_artifacts_timer == 1 ? CR_DARKGOLD :
+                              show_artifacts_timer == 2 ? CR_GRAY :
+                              show_artifacts_timer == 3 ? CR_GREEN :
+                              CR_RED);
 
         //
         // ФИЗИКА
@@ -4266,21 +4267,21 @@ static void DrawGameplay3Menu(void)
 
         // Физика столкновений
         RD_M_DrawTextSmallRUS(improved_collision ? "EKEXITYYFZ" : "JHBUBYFKMYFZ", 186 + wide_delta, 106,
-                              improved_collision ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              improved_collision ? CR_GREEN : CR_RED);
 
         // Трупы сползают с возвышений
         RD_M_DrawTextSmallRUS(torque ? "DRK" : "DSRK", 248 + wide_delta, 116,
-                              torque ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              torque ? CR_GREEN : CR_RED);
 
         // Улучшенное покачивание оружия
         RD_M_DrawTextSmallRUS(weapon_bobbing ? "DRK" : "DSRK", 260 + wide_delta, 126,
-                              weapon_bobbing ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              weapon_bobbing ? CR_GREEN : CR_RED);
 
         // Амплитуда левитации предметов
         RD_M_DrawTextSmallRUS(floating_powerups == 1 ? "CNFYLFHNYFZ" :
                               floating_powerups == 2 ? "EVTHTYYFZ" : "DSRK",
                               188 + wide_delta, 136,
-                              floating_powerups ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              floating_powerups ? CR_GREEN : CR_RED);
     }
 }
 
@@ -4346,27 +4347,27 @@ static void DrawGameplay4Menu(void)
 
         // Fix errors of vanilla maps
         RD_M_DrawTextSmallENG(fix_map_errors ? "ON" : "OFF", 226 + wide_delta, 36,
-                              fix_map_errors ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              fix_map_errors ? CR_GREEN : CR_RED);
 
         // Flip game levels
         RD_M_DrawTextSmallENG(flip_levels ? "ON" : "OFF",
                               153 + wide_delta, 46,
-                              flip_levels ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              flip_levels ? CR_GREEN : CR_RED);
 
         // Play internal demos
         RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON",
                               179 + wide_delta, 56,
-                              no_internal_demos ? CR_WHITE2RED_HERETIC : CR_WHITE2GREEN_HERETIC);
+                              no_internal_demos ? CR_RED : CR_GREEN);
 
         // Imitate player's breathing
         RD_M_DrawTextSmallENG(breathing ? "ON" : "OFF",
                               224 + wide_delta, 66,
-                              breathing ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              breathing ? CR_GREEN : CR_RED);
 
         // Wand start
         RD_M_DrawTextSmallENG(pistol_start ? "ON" : "OFF",
                               193 + wide_delta, 76,
-                              pistol_start ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              pistol_start ? CR_GREEN : CR_RED);
     }
     else
     {
@@ -4376,29 +4377,29 @@ static void DrawGameplay4Menu(void)
 
         // Устранять ошибки оригинальных уровней
         RD_M_DrawTextSmallRUS(fix_map_errors ? "DRK" : "DSRK", 257 + wide_delta, 36,
-                              fix_map_errors ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              fix_map_errors ? CR_GREEN : CR_RED);
 
         // Зеркальное отражение уровней
         RD_M_DrawTextSmallRUS(flip_levels ? "DRK" : "DSRK",
                               255 + wide_delta, 46,
-                              flip_levels ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              flip_levels ? CR_GREEN : CR_RED);
 
         // Проигрывать демозаписи
         RD_M_DrawTextSmallRUS(no_internal_demos ? "DSRK" : "DRK",
                               211 + wide_delta, 56,
-                              no_internal_demos ? CR_WHITE2RED_HERETIC : CR_WHITE2GREEN_HERETIC);
+                              no_internal_demos ? CR_RED : CR_GREEN);
 
         // Имитация дыхания игрока
         RD_M_DrawTextSmallRUS(breathing ? "DRK": "DSRK",
                               214 + wide_delta, 66,
-                              breathing ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              breathing ? CR_GREEN : CR_RED);
 
         // Режим игры "Wand start"
         RD_M_DrawTextSmallRUS("HT;BV BUHS", 36 + wide_delta, 76, CR_NONE);
         RD_M_DrawTextSmallENG("\"WAND START\":", 120 + wide_delta, 76, CR_NONE);
         RD_M_DrawTextSmallRUS(pistol_start ? "DRK" : "DSRK",
                               217 + wide_delta, 76,
-                              pistol_start ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              pistol_start ? CR_GREEN : CR_RED);
         
     }
 
@@ -4447,53 +4448,53 @@ static void DrawLevelSelect1Menu(void)
     {
         // Gauntlets
         RD_M_DrawTextSmallENG(selective_wp_gauntlets ? "YES" : "NO", 228 + wide_delta, 106,
-                              selective_wp_gauntlets ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_wp_gauntlets ? CR_GREEN : CR_RED);
 
         // Ethereal Crossbow
         RD_M_DrawTextSmallENG(selective_wp_crossbow ? "YES" : "NO", 228 + wide_delta, 116,
-                              selective_wp_crossbow ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_wp_crossbow ? CR_GREEN : CR_RED);
 
         // Dragon Claw
         RD_M_DrawTextSmallENG(selective_wp_dragonclaw ? "YES" : "NO", 228 + wide_delta, 126,
-                              selective_wp_dragonclaw ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_wp_dragonclaw ? CR_GREEN : CR_RED);
 
         // Hellstaff
         RD_M_DrawTextSmallENG(selective_wp_hellstaff ? "YES" : "NO", 228 + wide_delta, 136,
-                              selective_wp_hellstaff ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_wp_hellstaff ? CR_GREEN : CR_RED);
 
         // Phoenix Rod
         RD_M_DrawTextSmallENG(selective_wp_phoenixrod ? "YES" : "NO", 228 + wide_delta, 146,
-                              selective_wp_phoenixrod ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_wp_phoenixrod ? CR_GREEN : CR_RED);
 
         // Firemace
         RD_M_DrawTextSmallENG(selective_wp_firemace ? "YES" : "NO", 228 + wide_delta, 156,
-                              selective_wp_firemace ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_wp_firemace ? CR_GREEN : CR_RED);
     }
     else
     {
         // Перчатки
         RD_M_DrawTextSmallRUS(selective_wp_gauntlets ? "LF" : "YTN", 228 + wide_delta, 106,
-                              selective_wp_gauntlets ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_wp_gauntlets ? CR_GREEN : CR_RED);
 
         // Эфирный арбалет
         RD_M_DrawTextSmallRUS(selective_wp_crossbow ? "LF" : "YTN", 228 + wide_delta, 116,
-                              selective_wp_crossbow ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_wp_crossbow ? CR_GREEN : CR_RED);
 
         // Коготь дракона
         RD_M_DrawTextSmallRUS(selective_wp_dragonclaw ? "LF" : "YTN", 228 + wide_delta, 126,
-                              selective_wp_dragonclaw ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_wp_dragonclaw ? CR_GREEN : CR_RED);
 
         // Посох Ада
         RD_M_DrawTextSmallRUS(selective_wp_hellstaff ? "LF" : "YTN", 228 + wide_delta, 136,
-                              selective_wp_hellstaff ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_wp_hellstaff ? CR_GREEN : CR_RED);
 
         // Жезл Феникса
         RD_M_DrawTextSmallRUS(selective_wp_phoenixrod ? "LF" : "YTN", 228 + wide_delta, 146,
-                              selective_wp_phoenixrod ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_wp_phoenixrod ? CR_GREEN : CR_RED);
 
         // Огненная булава
         RD_M_DrawTextSmallRUS(selective_wp_firemace ? "LF" : "YTN", 228 + wide_delta, 156,
-                              selective_wp_firemace ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_wp_firemace ? CR_GREEN : CR_RED);
     }
 
     // Skill level | Сложность
@@ -4503,7 +4504,7 @@ static void DrawLevelSelect1Menu(void)
     // Episode | Эпизод
     if (gamemode == shareware)
     {
-        RD_M_DrawTextSmallENG("1", 228 + wide_delta, 36, CR_WHITE2GRAY_HERETIC);
+        RD_M_DrawTextSmallENG("1", 228 + wide_delta, 36, CR_GRAY);
     }
     else
     {
@@ -4518,21 +4519,21 @@ static void DrawLevelSelect1Menu(void)
     // Health | Здоровье
     M_snprintf(num, 4, "%d", selective_health);
     RD_M_DrawTextSmallENG(num, 228 + wide_delta, 66,
-                          selective_health >= 67 ? CR_WHITE2GREEN_HERETIC :
-                          selective_health >= 34 ? CR_WHITE2DARKGOLD_HERETIC :
-                          CR_WHITE2RED_HERETIC);
+                          selective_health >= 67 ? CR_GREEN :
+                          selective_health >= 34 ? CR_DARKGOLD :
+                          CR_RED);
 
     // Armor | Броня
     M_snprintf(num, 4, "%d", selective_armor);
     RD_M_DrawTextSmallENG(num, 228 + wide_delta, 76,
-                          selective_armor == 0 ? CR_WHITE2RED_HERETIC :
-                          selective_armortype == 1 ? CR_WHITE2DARKGOLD_HERETIC :
-                          CR_WHITE2GREEN_HERETIC);
+                          selective_armor == 0 ? CR_RED :
+                          selective_armortype == 1 ? CR_DARKGOLD :
+                          CR_GREEN);
 
     // Armor type | Тип брони
     M_snprintf(num, 4, "%d", selective_armortype);
     RD_M_DrawTextSmallENG(selective_armortype == 1 ? "1" : "2", 228 + wide_delta, 86,
-                          selective_armortype == 1 ? CR_WHITE2DARKGOLD_HERETIC : CR_WHITE2GREEN_HERETIC);
+                          selective_armortype == 1 ? CR_DARKGOLD : CR_GREEN);
 }
 
 static void M_RD_SelectiveSkill(Direction_t direction)
@@ -4621,96 +4622,96 @@ static void DrawLevelSelect2Menu(void)
     {
         // Bag of Holding
         RD_M_DrawTextSmallENG(selective_backpack ? "YES" : "NO", 228 + wide_delta, 26,
-                              selective_backpack ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_backpack ? CR_GREEN : CR_RED);
 
         // Yellow Key
         RD_M_DrawTextSmallENG(selective_key_0 ? "YES" : "NO", 228 + wide_delta, 106,
-                              selective_key_0 ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_key_0 ? CR_GREEN : CR_RED);
 
         // Green Key
         RD_M_DrawTextSmallENG(selective_key_1 ? "YES" : "NO", 228 + wide_delta, 116,
-                              selective_key_1 ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_key_1 ? CR_GREEN : CR_RED);
 
         // Blue Key
         RD_M_DrawTextSmallENG(selective_key_2 ? "YES" : "NO", 228 + wide_delta, 126,
-                              selective_key_2 ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_key_2 ? CR_GREEN : CR_RED);
 
         // Fast Monsters
         RD_M_DrawTextSmallENG(selective_fast ? "YES" : "NO", 228 + wide_delta, 146,
-                              selective_fast ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_fast ? CR_GREEN : CR_RED);
 
         // Respawning Monsters
         RD_M_DrawTextSmallENG(selective_respawn ? "YES" : "NO", 228 + wide_delta, 156,
-                              selective_respawn ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_respawn ? CR_GREEN : CR_RED);
     }
     else
     {
         // Носильный кошель
         RD_M_DrawTextSmallRUS(selective_backpack ? "LF" : "YTN", 228 + wide_delta, 26,
-                              selective_backpack ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_backpack ? CR_GREEN : CR_RED);
 
         // Желтый ключ
         RD_M_DrawTextSmallRUS(selective_key_0 ? "LF" : "YTN", 228 + wide_delta, 106,
-                              selective_key_0 ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_key_0 ? CR_GREEN : CR_RED);
 
         // Зеленый ключ
         RD_M_DrawTextSmallRUS(selective_key_1 ? "LF" : "YTN", 228 + wide_delta, 116,
-                              selective_key_1 ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_key_1 ? CR_GREEN : CR_RED);
 
         // Синий ключ
         RD_M_DrawTextSmallRUS(selective_key_2 ? "LF" : "YTN", 228 + wide_delta, 126,
-                              selective_key_2 ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_key_2 ? CR_GREEN : CR_RED);
 
         // Ускоренные
         RD_M_DrawTextSmallRUS(selective_fast ? "LF" : "YTN", 228 + wide_delta, 146,
-                              selective_fast ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_fast ? CR_GREEN : CR_RED);
 
         // Воскрешающиеся
         RD_M_DrawTextSmallRUS(selective_respawn ? "LF" : "YTN", 228 + wide_delta, 156,
-                              selective_respawn ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
+                              selective_respawn ? CR_GREEN : CR_RED);
     }
 
     // Wand Crystals | Кристаллы для жезла
     M_snprintf(num, 4, "%d", selective_ammo_0);
     RD_M_DrawTextSmallENG(num, 228 + wide_delta, 36,
-                          selective_ammo_0 >= 50 ? CR_WHITE2GREEN_HERETIC :
-                          selective_ammo_0 >= 25 ? CR_WHITE2DARKGOLD_HERETIC :
-                          CR_WHITE2RED_HERETIC);
+                          selective_ammo_0 >= 50 ? CR_GREEN :
+                          selective_ammo_0 >= 25 ? CR_DARKGOLD :
+                          CR_RED);
 
     // Ethereal Arrows | Эфирные стрелы
     M_snprintf(num, 4, "%d", selective_ammo_1);
     RD_M_DrawTextSmallENG(num, 228 + wide_delta, 46,
-                          selective_ammo_1 >= 25 ? CR_WHITE2GREEN_HERETIC :
-                          selective_ammo_1 >= 12 ? CR_WHITE2DARKGOLD_HERETIC :
-                          CR_WHITE2RED_HERETIC);
+                          selective_ammo_1 >= 25 ? CR_GREEN :
+                          selective_ammo_1 >= 12 ? CR_DARKGOLD :
+                          CR_RED);
 
     // Claw Orbs | Когтевые шары
     M_snprintf(num, 4, "%d", selective_ammo_2);
     RD_M_DrawTextSmallENG(num, 228 + wide_delta, 56,
-                          selective_ammo_2 >= 100 ? CR_WHITE2GREEN_HERETIC :
-                          selective_ammo_2 >= 50 ? CR_WHITE2DARKGOLD_HERETIC :
-                          CR_WHITE2RED_HERETIC);
+                          selective_ammo_2 >= 100 ? CR_GREEN :
+                          selective_ammo_2 >= 50 ? CR_DARKGOLD :
+                          CR_RED);
 
     // Hellstaff Runes | Руны посоха
     M_snprintf(num, 4, "%d", selective_ammo_3);
     RD_M_DrawTextSmallENG(num, 228 + wide_delta, 66,
-                          selective_ammo_3 >= 100 ? CR_WHITE2GREEN_HERETIC :
-                          selective_ammo_3 >= 50 ? CR_WHITE2DARKGOLD_HERETIC :
-                          CR_WHITE2RED_HERETIC);
+                          selective_ammo_3 >= 100 ? CR_GREEN :
+                          selective_ammo_3 >= 50 ? CR_DARKGOLD :
+                          CR_RED);
 
     // Flame Orbs | Пламенные шары
     M_snprintf(num, 4, "%d", selective_ammo_4);
     RD_M_DrawTextSmallENG(num, 228 + wide_delta, 76,
-                          selective_ammo_4 >= 10 ? CR_WHITE2GREEN_HERETIC :
-                          selective_ammo_4 >= 5 ? CR_WHITE2DARKGOLD_HERETIC :
-                          CR_WHITE2RED_HERETIC);
+                          selective_ammo_4 >= 10 ? CR_GREEN :
+                          selective_ammo_4 >= 5 ? CR_DARKGOLD :
+                          CR_RED);
 
     // Mace Spheres | Сферы булавы
     M_snprintf(num, 4, "%d", selective_ammo_5);
     RD_M_DrawTextSmallENG(num, 228 + wide_delta, 86,
-                          selective_ammo_5 >= 75 ? CR_WHITE2GREEN_HERETIC :
-                          selective_ammo_5 >= 37 ? CR_WHITE2DARKGOLD_HERETIC :
-                          CR_WHITE2RED_HERETIC);
+                          selective_ammo_5 >= 75 ? CR_GREEN :
+                          selective_ammo_5 >= 37 ? CR_DARKGOLD :
+                          CR_RED);
 }
 
 static void M_RD_SelectiveBag()
@@ -4802,43 +4803,43 @@ static void DrawLevelSelect3Menu(void)
 
     // Quartz Flask
     M_snprintf(num, 4, "%d", selective_arti_0);
-    RD_M_DrawTextSmallENG(num, 228 + wide_delta, 36, selective_arti_0 ? CR_NONE : CR_WHITE2GRAY_HERETIC);
+    RD_M_DrawTextSmallENG(num, 228 + wide_delta, 36, selective_arti_0 ? CR_NONE : CR_GRAY);
 
     // Mystic Urn
     M_snprintf(num, 4, "%d", selective_arti_1);
-    RD_M_DrawTextSmallENG(num, 228 + wide_delta, 46, selective_arti_1 ? CR_NONE : CR_WHITE2GRAY_HERETIC);
+    RD_M_DrawTextSmallENG(num, 228 + wide_delta, 46, selective_arti_1 ? CR_NONE : CR_GRAY);
 
     // Timebomb
     M_snprintf(num, 4, "%d", selective_arti_2);
-    RD_M_DrawTextSmallENG(num, 228 + wide_delta, 56, selective_arti_2 ? CR_NONE : CR_WHITE2GRAY_HERETIC);
+    RD_M_DrawTextSmallENG(num, 228 + wide_delta, 56, selective_arti_2 ? CR_NONE : CR_GRAY);
 
     // Tome of Power
     M_snprintf(num, 4, "%d", selective_arti_3);
-    RD_M_DrawTextSmallENG(num, 228 + wide_delta, 66, selective_arti_3 ? CR_NONE : CR_WHITE2GRAY_HERETIC);
+    RD_M_DrawTextSmallENG(num, 228 + wide_delta, 66, selective_arti_3 ? CR_NONE : CR_GRAY);
 
     // Ring of Invincibility
     M_snprintf(num, 4, "%d", selective_arti_4);
-    RD_M_DrawTextSmallENG(num, 228 + wide_delta, 76, selective_arti_4 ? CR_NONE : CR_WHITE2GRAY_HERETIC);
+    RD_M_DrawTextSmallENG(num, 228 + wide_delta, 76, selective_arti_4 ? CR_NONE : CR_GRAY);
 
     // Morph Ovum
     M_snprintf(num, 4, "%d", selective_arti_5);
-    RD_M_DrawTextSmallENG(num, 228 + wide_delta, 86, selective_arti_5 ? CR_NONE : CR_WHITE2GRAY_HERETIC);
+    RD_M_DrawTextSmallENG(num, 228 + wide_delta, 86, selective_arti_5 ? CR_NONE : CR_GRAY);
 
     // Chaos Device
     M_snprintf(num, 4, "%d", selective_arti_6);
-    RD_M_DrawTextSmallENG(num, 228 + wide_delta, 96, selective_arti_6 ? CR_NONE : CR_WHITE2GRAY_HERETIC);
+    RD_M_DrawTextSmallENG(num, 228 + wide_delta, 96, selective_arti_6 ? CR_NONE : CR_GRAY);
 
     // Shadowsphere
     M_snprintf(num, 4, "%d", selective_arti_7);
-    RD_M_DrawTextSmallENG(num, 228 + wide_delta, 106, selective_arti_7 ? CR_NONE : CR_WHITE2GRAY_HERETIC);
+    RD_M_DrawTextSmallENG(num, 228 + wide_delta, 106, selective_arti_7 ? CR_NONE : CR_GRAY);
 
     // Wings of Wrath
     M_snprintf(num, 4, "%d", selective_arti_8);
-    RD_M_DrawTextSmallENG(num, 228 + wide_delta, 116, selective_arti_8 ? CR_NONE : CR_WHITE2GRAY_HERETIC);
+    RD_M_DrawTextSmallENG(num, 228 + wide_delta, 116, selective_arti_8 ? CR_NONE : CR_GRAY);
 
     // Torch
     M_snprintf(num, 4, "%d", selective_arti_9);
-    RD_M_DrawTextSmallENG(num, 228 + wide_delta, 126, selective_arti_9 ? CR_NONE : CR_WHITE2GRAY_HERETIC);
+    RD_M_DrawTextSmallENG(num, 228 + wide_delta, 126, selective_arti_9 ? CR_NONE : CR_GRAY);
 }
 
 static void M_RD_SelectiveArti_0(Direction_t direction)
@@ -4909,14 +4910,14 @@ static void DrawResetSettingsMenu(void)
         RD_M_DrawTextSmallENG("WHICH LEVEL OF VALUES TO USE?", 58 + wide_delta, 85, CR_NONE);
 
         // Explanations
-        RD_M_DrawTextSmallENG("SETTINGS WILL BE RESET TO", 75 + wide_delta, 145, CR_WHITE2GREEN_HERETIC);
+        RD_M_DrawTextSmallENG("SETTINGS WILL BE RESET TO", 75 + wide_delta, 145, CR_GREEN);
         if (CurrentItPos == 0)
         {
-            RD_M_DrawTextSmallENG("DEFAULT PORT'S VALUES", 84 + wide_delta, 155, CR_WHITE2GREEN_HERETIC);
+            RD_M_DrawTextSmallENG("DEFAULT PORT'S VALUES", 84 + wide_delta, 155, CR_GREEN);
         }
         else
         {
-            RD_M_DrawTextSmallENG("ORIGINAL HERETIC VALUES", 80 + wide_delta, 155, CR_WHITE2GREEN_HERETIC);
+            RD_M_DrawTextSmallENG("ORIGINAL HERETIC VALUES", 80 + wide_delta, 155, CR_GREEN);
         }
     }
     else
@@ -4928,15 +4929,15 @@ static void DrawResetSettingsMenu(void)
         RD_M_DrawTextSmallRUS("DS,THBNT EHJDTYM PYFXTYBQ:", 66 + wide_delta, 85, CR_NONE);               // Выберите уровень значений:
 
         // Пояснения
-        RD_M_DrawTextSmallRUS(",ELEN BCGJKMPJDFYS PYFXTYBZ", 60 + wide_delta, 145, CR_WHITE2GREEN_HERETIC);  // Будут использованы значения
+        RD_M_DrawTextSmallRUS(",ELEN BCGJKMPJDFYS PYFXTYBZ", 60 + wide_delta, 145, CR_GREEN);  // Будут использованы значения
         if (CurrentItPos == 0)
         {
-            RD_M_DrawTextSmallRUS("HTRJVTYLETVST GJHNJV", 82 + wide_delta, 155, CR_WHITE2GREEN_HERETIC);  // рекомендуемые портом
+            RD_M_DrawTextSmallRUS("HTRJVTYLETVST GJHNJV", 82 + wide_delta, 155, CR_GREEN);  // рекомендуемые портом
         }
         else
         {
-            RD_M_DrawTextSmallRUS("JHBUBYFKMYJUJ", 83 + wide_delta, 155, CR_WHITE2GREEN_HERETIC);
-            RD_M_DrawTextSmallENG("HERETIC", 185 + wide_delta, 155, CR_WHITE2GREEN_HERETIC);
+            RD_M_DrawTextSmallRUS("JHBUBYFKMYJUJ", 83 + wide_delta, 155, CR_GREEN);
+            RD_M_DrawTextSmallENG("HERETIC", 185 + wide_delta, 155, CR_GREEN);
         }
     }
 }
