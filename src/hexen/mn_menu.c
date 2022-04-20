@@ -2912,7 +2912,7 @@ static void DrawAutomapMenu(void)
     RD_Menu_DrawSliderSmall(&AutomapMenu, 62, 9, automap_overlay_bg / 3);
     // Numerical representation of slider position
     M_snprintf(num, 5, "%d", automap_overlay_bg);
-    RD_M_DrawTextSmallENG(num, 128 + wide_delta, 63, CR_WHITE2GRAY_HERETIC);
+    RD_M_DrawTextSmallENG(num, 128 + wide_delta, 63, CR_GRAY);
 }
 
 static void M_RD_AutoMapOverlay()

@@ -914,6 +914,32 @@ static void R_InitColormaps (void)
 {
     // Load in the light tables 256 byte align tables.
     colormaps = W_CacheLumpNum(W_GetNumForName("COLORMAP"), PU_STATIC);
+
+    // [crispy] initialize color translation and color strings tables
+    {
+        byte *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
+        char c[3];
+        int i, j;
+
+        if (!crstr)
+        {
+            crstr = I_Realloc(NULL, CRMAX * sizeof(*crstr));
+        }
+
+        // [JN] CR_STOP: don't override tablified colors after this enum.
+        for (i = 0 ; i < CR_STOP ; i++)
+        {
+            for (j = 0; j < 256; j++)
+            {
+                cr[i][j] = V_Colorize(playpal, i, j, false);
+            }
+
+            M_snprintf(c, sizeof(c), "%c%c", cr_esc, '0' + i);
+            crstr[i] = M_StringDuplicate(c);
+        }
+
+        W_ReleaseLumpName("PLAYPAL");
+    }
 }
 
 /*
