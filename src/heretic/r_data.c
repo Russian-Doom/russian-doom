@@ -915,16 +915,10 @@ void R_InitSpriteLumps(void)
 ================================================================================
 */
 
-void R_InitColormaps(void)
+static void R_InitColormaps(void)
 {
-    int lump, length;
-
-    // load in the light tables 256 byte align tables
-
-    lump = W_GetNumForName(DEH_String("COLORMAP"));
-    length = W_LumpLength(lump);
-    colormaps = Z_Malloc(length, PU_STATIC, 0);
-    W_ReadLump(lump, colormaps);
+    // Load in the light tables 256 byte align tables.
+    colormaps = W_CacheLumpNum(W_GetNumForName(DEH_String("COLORMAP")), PU_STATIC);
 
     // [crispy] initialize color translation and color strings tables
     {
