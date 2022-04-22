@@ -68,7 +68,7 @@ jobs:
         id: configure
         run: |
           sha_short=$(echo ${{ github.sha }} | cut -c1-7)
-          cmake -G"${{ matrix.config.cmake_generator }}" -DBUILD_VERSION_OVERWRITE="$sha_short" -DCMAKE_BUILD_TYPE=Release -S . -B build
+          cmake -G"${{ matrix.config.cmake_generator }}" -DBUILD_VERSION_OVERWRITE="$sha_short" -DRELEASE_STRIP=OFF -DCMAKE_BUILD_TYPE=Release -S . -B build
           echo "::set-output name=sha_short::$sha_short"
 
       - name: Build
