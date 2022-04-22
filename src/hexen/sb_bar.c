@@ -1268,9 +1268,13 @@ static byte *SBar_MainColor (int element)
             {
                 return cr[CR_DARKGREEN];
             }
+            else if (CPlayer->mo->health >= 25)
+            {
+                return cr[CR_DARKGOLD];
+            }
             else
             {
-                return NULL;
+                return cr[CR_RED];
             }
         }
         break;
@@ -1295,7 +1299,7 @@ static byte *SBar_MainColor (int element)
                  CPlayer->class == 1 ? 2 :  // Cleric
                                        1))  // Mage
             {
-                return NULL;
+                return cr[CR_DARKGOLD];
             }
             else
             {
@@ -1313,7 +1317,7 @@ static byte *SBar_MainColor (int element)
             else
             if (CPlayer->mana[0] >= MAX_MANA / 4)
             {
-                return NULL;
+                return cr[CR_DARKGOLD];
             }
             else
             {
@@ -1331,7 +1335,7 @@ static byte *SBar_MainColor (int element)
             else
             if (CPlayer->mana[1] >= MAX_MANA / 4)
             {
-                return NULL;
+                return cr[CR_DARKGOLD];
             }
             else
             {
@@ -1363,21 +1367,21 @@ static byte *SBar_FullScreenColor (int element)
         {
             if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
             {
-                return cr[CR_RED2GRAY_HEXEN];
+                return cr[CR_GRAY];
             }
             else
             if (CPlayer->mo->health >= 67)
             {
-                return cr[CR_RED2GREEN_HEXEN];
+                return cr[CR_DARKGREEN];
             }
             else
             if (CPlayer->mo->health >= 25)
             {
-                return cr[CR_RED2YELLOW_HEXEN];
+                return cr[CR_DARKGOLD];
             }
             else
             {
-                return NULL;
+                return cr[CR_DARKRED];
             }
         }
         break;
@@ -1386,7 +1390,7 @@ static byte *SBar_FullScreenColor (int element)
         {
             if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
             {
-                return cr[CR_RED2GRAY_HEXEN];
+                return cr[CR_GRAY];
             }
             else
             if ((FixedDiv(armor, 5 * FRACUNIT) >> FRACBITS)
@@ -1394,7 +1398,7 @@ static byte *SBar_FullScreenColor (int element)
                  CPlayer->class == 1 ? 7 :  // Cleric
                                        6))  // Mage
             {
-                return cr[CR_RED2GREEN_HEXEN];
+                return cr[CR_DARKGREEN];
             }
             else 
             if ((FixedDiv(armor, 5 * FRACUNIT) >> FRACBITS)
@@ -1402,11 +1406,11 @@ static byte *SBar_FullScreenColor (int element)
                  CPlayer->class == 1 ? 2 :  // Cleric
                                        1))  // Mage
             {
-                return cr[CR_RED2YELLOW_HEXEN];
+                return cr[CR_DARKGOLD];
             }
             else
             {
-                return NULL;
+                return cr[CR_DARKRED];
             }
         }
         break;
@@ -1420,7 +1424,7 @@ static byte *SBar_FullScreenColor (int element)
             else
             if (CPlayer->mana[0] >= MAX_MANA / 4)
             {
-                return NULL;
+                return cr[CR_DARKGOLD];
             }
             else
             {
@@ -1438,7 +1442,7 @@ static byte *SBar_FullScreenColor (int element)
             else
             if (CPlayer->mana[1] >= MAX_MANA / 4)
             {
-                return NULL;
+                return cr[CR_DARKGOLD];
             }
             else
             {
