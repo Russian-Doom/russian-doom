@@ -26,7 +26,6 @@
 
 vertexfix_t vertexfix[] =
 {
-/*
    // mission, episode, map, vertex,  oldx,  oldy,  newx,  newy
 
     { doom,          1,   3,    771,  -328, -1920,  -320, -1920 },
@@ -51,13 +50,13 @@ vertexfix_t vertexfix[] =
 
    // mission, episode, map, vertex,  oldx,  oldy,  newx,  newy
 
-    //{ doom2,         1,   1,    288,   320,  1416,   320,  1408 },
+    { doom2,         1,   1,    288,   320,  1416,   320,  1408 },
 
-    //{ doom2,         1,   2,    273,   736,  1216,   736,  1208 },
+    { doom2,         1,   2,    273,   736,  1216,   736,  1208 },
 
     { doom2,         1,  30,     50,  4224,   -64,  4224,    64 },
     { doom2,         1,  30,     51,  4224,  -256,  4224,    64 },
-*/
+
     { -1,            0,   0,      0,     0,     0,     0,     0 }
 };
 
@@ -2326,6 +2325,10 @@ linefix_t linefix[] =
     { doom2,            1,  14,    1226,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  14,    1227,    0, "",         "",            "",                -32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  14,    1259,    1, "BSTONE2",  "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  14,    1281,    0, "",         "",            "",                 56,         0, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  14,    1282,    0, "",         "",            "",                 24,         0, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  14,    1283,    0, "",         "",            "",                 32,        72, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  14,    1284,    0, "",         "",            "",                 40,        72, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  14,    1287,    0, "",         "",            "",                 48,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  14,    1289,    0, "",         "",            "",                 16,        56, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  14,    1291,    0, "",         "",            "",                 40,        56, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -2336,7 +2339,7 @@ linefix_t linefix[] =
     { doom2,            1,  14,    1298,    0, "",         "",            "",            DEFAULT,   DEFAULT, (ML_DONTPEGTOP | ML_DONTPEGBOTTOM), DEFAULT,                                    DEFAULT },
     { doom2,            1,  14,    1303,    0, "",         "",            "",                 48,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  14,    1305,    1, "BSTONE1",  "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { doom2,            1,  14,    1306,    0, "",         "",            "",                 -8,        56, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  14,    1306,    0, "",         "",            "",                 48,         0, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  14,    1308,    0, "",         "",            "",                 32,        32, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  14,    1309,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  14,    1310,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -3485,6 +3488,7 @@ linefix_t linefix[] =
     { pack_plut,        1,  20,     904,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_plut,        1,  20,    1110,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_plut,        1,  20,    1115,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,    1146,    0, "",         "",            "",                104,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
     { pack_plut,        1,  22,     375,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_plut,        1,  22,     602,    0, "",         "",            "",                -20,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -3558,6 +3562,10 @@ linefix_t linefix[] =
 
     { pack_plut,        1,  31,     929,    0, "",         "",            "",            DEFAULT,        54, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
+    { pack_plut,        1,  32,     569,    0, "SUPPORT3", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  32,     570,    0, "SUPPORT3", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  32,     571,    0, "SUPPORT3", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  32,     572,    0, "SUPPORT3", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_plut,        1,  32,     805,    0, "A-BRICK3", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
     { -1,               0,   0,       0,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT }
@@ -4415,7 +4423,7 @@ sectorfix_t sectorfix[] =
 thingfix_t thingfix[] =
 {
    // mission,    episode, map, thing, type,                      oldx,    oldy,    newx,    newy,   angle, options
-/*
+
     { doom,             1,   6,    16, 3002,                       800,    -704,     800,    -688, DEFAULT, DEFAULT                            },
     { doom,             1,   6,   403,   58,                     -2016,    2096,   -2016,    2080, DEFAULT, DEFAULT                            },
 
@@ -4562,7 +4570,7 @@ thingfix_t thingfix[] =
     { pack_plut,        1,  30,   252,  2023,                    -1632,    2464,   -1632,    2464, DEFAULT, MTF_NETGAME                        },
     { pack_plut,        1,  30,   253,  2023,                     -288,    2400,    -288,    2400, DEFAULT, MTF_NETGAME                        },
     { pack_plut,        1,  30,   254,  2023,                    -1248,    3104,   -1248,    3104, DEFAULT, MTF_NETGAME                        },
-*/
+
     {        -1,        0,   0,     0,     0,                  DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT                            }
 };
 
