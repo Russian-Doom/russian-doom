@@ -67,7 +67,6 @@ typedef enum
     CR_PURPLE,
     CR_NIAGARA,
     CR_AZURE,
-    CR_OLIVE2,
     CR_FLAME,
 
     // Terminator - don't override tablified colors after this point

@@ -54,7 +54,6 @@ static byte cr_darkgold[256];
 static byte cr_purple[256];
 static byte cr_niagara[256];
 static byte cr_azure[256];
-static byte cr_olive2[256];
 static byte cr_flame[256];
 
 static byte cr_stop[256];
@@ -527,7 +526,6 @@ byte *cr[] =
     (byte *) &cr_purple,
     (byte *) &cr_niagara,
     (byte *) &cr_azure,
-    (byte *) &cr_olive2,
     (byte *) &cr_flame,
 
     // Terminator - don't override tablified colors after this point
@@ -800,18 +798,19 @@ byte V_Colorize (byte *playpal, Translation_CR_t cr, byte source, boolean keepgr
         }
         else if (cr == CR_GREEN)
         {
-            hsv.x = (145. * hsv.z + 120. * (1. - hsv.z))/360.;
+            hsv.x = 0.3;
+            hsv.z *= 1.15;
         }
         else if (cr == CR_DARKGREEN)
         {
-            hsv.x = (145. * hsv.z + 120. * (1. - hsv.z))/360.;
-            hsv.z *= 0.65;
+            hsv.x = 0.3;
+            hsv.z *= 0.666;
         }
         else if (cr == CR_OLIVE)
         {
-            hsv.x = 0.20;
-            hsv.y *= 0.65;
-            hsv.z *= 0.45;
+            hsv.x = 0.25;
+            hsv.y = 0.5;
+            hsv.z *= 0.5;
         }
         else if (cr == CR_BLUE)
         {
@@ -912,12 +911,6 @@ byte V_Colorize (byte *playpal, Translation_CR_t cr, byte source, boolean keepgr
         {
             hsv.x = 0.525;
             hsv.z *= 1.35;
-        }
-        else if (cr == CR_OLIVE2)
-        {
-            hsv.x = 0.4;
-            hsv.y = 0.5;
-            hsv.z *= 0.7;
         }
         else if (cr == CR_FLAME)
         {

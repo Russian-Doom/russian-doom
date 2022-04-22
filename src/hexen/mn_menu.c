@@ -345,7 +345,7 @@ static Translation_CR_t M_RD_ColorTranslation (int color)
         case 4:   return CR_DARKRED;
         case 5:   return CR_GREEN;
         case 6:   return CR_DARKGREEN;
-        case 7:   return CR_OLIVE2;
+        case 7:   return CR_OLIVE;
         case 8:   return CR_BLUE2;
         case 9:   return CR_DARKBLUE;
         case 10:  return CR_NIAGARA;
@@ -2883,7 +2883,7 @@ void M_RD_Define_Msg_Color (MessageType_t messageType, int color)
             case 4:   *colorVar = CR_DARKRED;       break;
             case 5:   *colorVar = CR_GREEN;         break;
             case 6:   *colorVar = CR_DARKGREEN;     break;
-            case 7:   *colorVar = CR_OLIVE2;        break;
+            case 7:   *colorVar = CR_OLIVE;        break;
             case 8:   *colorVar = CR_BLUE2;         break;            
             case 9:   *colorVar = CR_DARKBLUE;      break;
             case 10:  *colorVar = CR_NIAGARA;       break;
