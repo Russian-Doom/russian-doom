@@ -5199,18 +5199,18 @@ void M_RD_Define_SBarColorValue(byte** sbar_color_set, int color)
             case 4:   *sbar_color_set = cr[CR_OLIVE];      break;
             case 5:   *sbar_color_set = cr[CR_BLUE2];      break;
             case 6:   *sbar_color_set = cr[CR_DARKBLUE];   break;
-            case 7:   *sbar_color_set = cr[CR_YELLOW];       break;
+            case 7:   *sbar_color_set = cr[CR_YELLOW];     break;
             case 8:   *sbar_color_set = cr[CR_ORANGE];     break;
             case 9:   *sbar_color_set = cr[CR_WHITE];      break;
             case 10:  *sbar_color_set = cr[CR_GRAY];       break;
             case 11:  *sbar_color_set = cr[CR_DARKGRAY];   break;
             case 12:  *sbar_color_set = cr[CR_TAN];        break;
-            case 13:  *sbar_color_set = cr[CR_BROWN];    break;
-            case 14:  *sbar_color_set = cr[CR_ALMOND];      break;
-            case 15:  *sbar_color_set = cr[CR_KHAKI];  break;
-            case 16:  *sbar_color_set = cr[CR_PINK];      break;
-            case 17:  *sbar_color_set = cr[CR_BURGUNDY];  break;
-            default:  *sbar_color_set = NULL;              break;
+            case 13:  *sbar_color_set = cr[CR_BROWN];      break;
+            case 14:  *sbar_color_set = cr[CR_ALMOND];     break;
+            case 15:  *sbar_color_set = cr[CR_KHAKI];      break;
+            case 16:  *sbar_color_set = cr[CR_PINK];       break;
+            case 17:  *sbar_color_set = cr[CR_BURGUNDY];   break;
+            default:  *sbar_color_set = cr[CR_RED];        break;
         }
     }
 }
