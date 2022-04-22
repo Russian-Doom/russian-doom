@@ -1259,7 +1259,7 @@ void DrawMainBar(void)
                 if (temp < 0)
                 dp_translation = cr[CR_RED];
                 else if (temp == 0)
-                dp_translation = NULL;
+                dp_translation = cr[CR_YELLOW];
                 else
                 dp_translation = cr[CR_GREEN];
             }
@@ -1299,7 +1299,7 @@ void DrawMainBar(void)
                 else if (CPlayer->mo->health >= 67)
                 dp_translation = cr[CR_GREEN];
                 else if (CPlayer->mo->health >= 34)
-                dp_translation = NULL;
+                dp_translation = cr[CR_YELLOW];
                 else
                 dp_translation = cr[CR_RED];
             }
@@ -1398,7 +1398,7 @@ void DrawMainBar(void)
                 if (ammo < fullammo/4)
                 dp_translation = cr[CR_RED];
                 else if (ammo < fullammo/2)
-                dp_translation = NULL;
+                dp_translation = cr[CR_YELLOW];
                 else
                 dp_translation = cr[CR_GREEN]; 
             }
@@ -1425,7 +1425,7 @@ void DrawMainBar(void)
             if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
             dp_translation = cr[CR_BRIGHTYELLOW];
             else if (CPlayer->armortype >= 2)
-            dp_translation = NULL;
+            dp_translation = cr[CR_YELLOW];
             else if (CPlayer->armortype == 1)
             dp_translation = cr[CR_WHITE];
             else
@@ -1500,7 +1500,7 @@ void DrawFullScreenStuff(void)
             if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
             dp_translation = cr[CR_FLAME];
             else if (CPlayer->mo->health >= 67)
-            dp_translation = NULL;
+            dp_translation = cr[CR_GREEN];
             else if (CPlayer->mo->health >= 34)
             dp_translation = cr[CR_BRIGHTYELLOW];
             else
@@ -1527,7 +1527,7 @@ void DrawFullScreenStuff(void)
     // [JN] Always draw ammo in full screen HUD
     if (fs_ammo && CPlayer->readyweapon > 0 && CPlayer->readyweapon < 7)
     {
-        // [JN] Colored HUD: Health
+        // [JN] Colored HUD: Ammo
         if (sbar_colored && !vanillaparm)
         {
             int ammo =  CPlayer->ammo[wpnlev1info[CPlayer->readyweapon].ammo];
@@ -1538,7 +1538,7 @@ void DrawFullScreenStuff(void)
             else if (ammo < fullammo/2)
             dp_translation = cr[CR_BRIGHTYELLOW];
             else
-            dp_translation = NULL;
+            dp_translation = cr[CR_GREEN];
         }
 
         DrBNumber(fs_ammo, 274 + (wide_delta * 2), 176);
@@ -1568,7 +1568,7 @@ void DrawFullScreenStuff(void)
                 else if (temp == 0)
                 dp_translation = cr[CR_BRIGHTYELLOW];
                 else
-                dp_translation = NULL;
+                dp_translation = cr[CR_GREEN];
             }
 
             DrBNumber(temp, 173 + (wide_delta * 2), 176);
@@ -2346,7 +2346,7 @@ static void SB_Draw_Ammo_Widget (void)
     // Wand ammo
     if (ammo_widget_colored)
     dp_translation = ammo1 < fullammo1 / 4 ? cr[CR_RED] :
-                     ammo1 < fullammo1 / 2 ? NULL : cr[CR_GREEN];
+                     ammo1 < fullammo1 / 2 ? cr[CR_BRIGHTYELLOW] : cr[CR_GREEN];
     DrSmallAmmoNumber(ammo1, xpos_qty1, 100,
                      (CPlayer->readyweapon == wp_goldwand || (automapactive && !automap_overlay)) ? true : false);
     if (ammo_widget == 2)
@@ -2362,7 +2362,7 @@ static void SB_Draw_Ammo_Widget (void)
     if (ammo_widget_colored)
     dp_translation = !(CPlayer->weaponowned[wp_crossbow]) ? cr[CR_WHITE] :
                      ammo2 < fullammo2 / 4 ? cr[CR_RED] :
-                     ammo2 < fullammo2 / 2 ? NULL : cr[CR_GREEN];
+                     ammo2 < fullammo2 / 2 ? cr[CR_BRIGHTYELLOW] : cr[CR_GREEN];
     DrSmallAmmoNumber(ammo2, xpos_qty1, 107,
                      (CPlayer->readyweapon == wp_crossbow || (automapactive && !automap_overlay)) ? true : false);
     if (ammo_widget == 2)
@@ -2378,7 +2378,7 @@ static void SB_Draw_Ammo_Widget (void)
     if (ammo_widget_colored)
     dp_translation = !(CPlayer->weaponowned[wp_blaster]) ? cr[CR_WHITE] :
                      ammo3 < fullammo3 / 4 ? cr[CR_RED] :
-                     ammo3 < fullammo3 / 2 ? NULL : cr[CR_GREEN];
+                     ammo3 < fullammo3 / 2 ? cr[CR_BRIGHTYELLOW] : cr[CR_GREEN];
     DrSmallAmmoNumber(ammo3, xpos_qty1, 114,
                      (CPlayer->readyweapon == wp_blaster || (automapactive && !automap_overlay)) ? true : false);
     if (ammo_widget == 2)
@@ -2397,7 +2397,7 @@ static void SB_Draw_Ammo_Widget (void)
         if (ammo_widget_colored)
         dp_translation = !(CPlayer->weaponowned[wp_skullrod]) ? cr[CR_WHITE] :
                          ammo4 < fullammo4 / 4 ? cr[CR_RED] :
-                         ammo4 < fullammo4 / 2 ? NULL : cr[CR_GREEN];
+                         ammo4 < fullammo4 / 2 ? cr[CR_BRIGHTYELLOW] : cr[CR_GREEN];
         DrSmallAmmoNumber(ammo4, xpos_qty1, 121,
                          (CPlayer->readyweapon == wp_skullrod || (automapactive && !automap_overlay)) ? true : false);
         if (ammo_widget == 2)
@@ -2413,7 +2413,7 @@ static void SB_Draw_Ammo_Widget (void)
         if (ammo_widget_colored)
         dp_translation = !(CPlayer->weaponowned[wp_phoenixrod]) ? cr[CR_WHITE] :
                          ammo5 < fullammo5 / 4 ? cr[CR_RED] :
-                         ammo5 < fullammo5 / 2 ? NULL : cr[CR_GREEN];
+                         ammo5 < fullammo5 / 2 ? cr[CR_BRIGHTYELLOW] : cr[CR_GREEN];
         DrSmallAmmoNumber(ammo5, xpos_qty1, 128,
                          (CPlayer->readyweapon == wp_phoenixrod || (automapactive && !automap_overlay)) ? true : false);
         if (ammo_widget == 2)
@@ -2429,7 +2429,7 @@ static void SB_Draw_Ammo_Widget (void)
         if (ammo_widget_colored)
         dp_translation = !(CPlayer->weaponowned[wp_mace]) ? cr[CR_WHITE] :
                          ammo6 < fullammo6 / 4 ? cr[CR_RED] :
-                         ammo6 < fullammo6 / 2 ? NULL : cr[CR_GREEN];
+                         ammo6 < fullammo6 / 2 ? cr[CR_BRIGHTYELLOW] : cr[CR_GREEN];
         DrSmallAmmoNumber(ammo6, xpos_qty1, 135,
                          (CPlayer->readyweapon == wp_mace || (automapactive && !automap_overlay)) ? true : false);
         if (ammo_widget == 2)
