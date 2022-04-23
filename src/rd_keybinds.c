@@ -797,24 +797,24 @@ void BK_ApplyDefaultBindings()
 
     if(RD_GameType == gt_Doom)
     {
-        BK_AddBind(bk_multi_msg_player_0, keyboard, SDL_SCANCODE_G);
+        BK_AddBind(bk_multi_msg_player_0, keyboard, SDL_SCANCODE_P);
         BK_AddBind(bk_multi_msg_player_1, keyboard, SDL_SCANCODE_I);
         BK_AddBind(bk_multi_msg_player_2, keyboard, SDL_SCANCODE_B);
-        BK_AddBind(bk_multi_msg_player_3, keyboard, SDL_SCANCODE_R);
+        BK_AddBind(bk_multi_msg_player_3, keyboard, SDL_SCANCODE_K);
     }
     if(RD_GameType == gt_Heretic)
     {
-        BK_AddBind(bk_multi_msg_player_0, keyboard, SDL_SCANCODE_G);
+        BK_AddBind(bk_multi_msg_player_0, keyboard, SDL_SCANCODE_P);
         BK_AddBind(bk_multi_msg_player_1, keyboard, SDL_SCANCODE_Y);
-        BK_AddBind(bk_multi_msg_player_2, keyboard, SDL_SCANCODE_R);
+        BK_AddBind(bk_multi_msg_player_2, keyboard, SDL_SCANCODE_K);
         BK_AddBind(bk_multi_msg_player_3, keyboard, SDL_SCANCODE_B);
     }
     if(RD_GameType == gt_Hexen)
     {
         BK_AddBind(bk_multi_msg_player_0, keyboard, SDL_SCANCODE_B);
-        BK_AddBind(bk_multi_msg_player_1, keyboard, SDL_SCANCODE_R);
+        BK_AddBind(bk_multi_msg_player_1, keyboard, SDL_SCANCODE_K);
         BK_AddBind(bk_multi_msg_player_2, keyboard, SDL_SCANCODE_Y);
-        BK_AddBind(bk_multi_msg_player_3, keyboard, SDL_SCANCODE_G);
+        BK_AddBind(bk_multi_msg_player_3, keyboard, SDL_SCANCODE_L);
         BK_AddBind(bk_multi_msg_player_4, keyboard, SDL_SCANCODE_J);
         BK_AddBind(bk_multi_msg_player_5, keyboard, SDL_SCANCODE_I);
         BK_AddBind(bk_multi_msg_player_6, keyboard, SDL_SCANCODE_H);
