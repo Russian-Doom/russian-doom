@@ -81,9 +81,9 @@ extern char *chat_macros[10];
 
 // [JN] Crosshair stuff.
 extern patch_t *CrosshairPatch;
-extern patch_t *Crosshair_DefinePatch (void);
-extern byte *CrosshairOpacity;
+extern byte    *CrosshairOpacity;
 extern int  CrosshairShowcaseTimeout;
+extern void Crosshair_DefinePatch (void);
 extern void Crosshair_DefineOpacity (void);
 extern void Crosshair_DefineDrawingFunc (void);
 extern void Crosshair_Colorize_inMenu (void);
