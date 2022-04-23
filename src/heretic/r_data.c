@@ -931,8 +931,8 @@ static void R_InitColormaps(void)
             crstr = I_Realloc(NULL, CRMAX * sizeof(*crstr));
         }
 
-        // [JN] CR_STOP: don't override tablified colors after this enum.
-        for (i = 0 ; i < CR_STOP ; i++)
+        // [JN] CR__STOP: don't override tablified colors after this enum.
+        for (i = 0 ; i < CR__STOP ; i++)
         {
             for (j = 0; j < 256; j++)
             {
