@@ -118,8 +118,7 @@ static const char* bkToName[] = {
     "Screen_inc", // [Dasperal] screen_inc/dec do not work on automap so they should be related to "Controls" section
     "Screen_dec", // instead of "Shortcuts" section
 
-    "-shortcuts-", // [Dasperal] Bindings after this line are related to "Shortcuts" section
-    "Help",
+    "Help", // [Dasperal] Bindings starting from this line are related to "Shortcuts" section
     "Msave",
     "Mload",
     "Mvolume",
@@ -153,8 +152,7 @@ static const char* bkToName[] = {
     "Multi_msg_player_7",
 
     // Map keys
-    "-map-", // [Dasperal] Bindings after this line are related to "Map" section
-    "Map_toggle",
+    "Map_toggle", // [Dasperal] Bindings starting from this line are related to "Map" section
     "Map_zoom_in",
     "Map_zoom_out",
     "Map_zoom_max",
@@ -538,12 +536,12 @@ void BK_AddBind(bound_key_t boundKey, device_t device, int key)
     bind_section_t section;
     bind_descriptor_t *bind;
 
-    if(boundKey > bk__section_map && boundKey < bk__serializable)
+    if(boundKey >= bk__section_map && boundKey < bk__serializable)
     {
-        section.from = bk__section_shortcuts + 1;
+        section.from = bk__section_shortcuts;
         section.to = bk__serializable;
     }
-    else if(boundKey > bk__section_shortcuts && boundKey < bk__section_map)
+    else if(boundKey >= bk__section_shortcuts && boundKey < bk__section_map)
     {
         section.from = bk_forward;
         section.to = bk__serializable;

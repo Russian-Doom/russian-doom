@@ -98,8 +98,7 @@ typedef enum
     bk_screen_inc, // [Dasperal] screen_inc/dec do not work on automap so they should be related to "Controls" section
     bk_screen_dec, // instead of "Shortcuts" section
 
-    bk__section_shortcuts, // [Dasperal] Bindings after this line are related to "Shortcuts" section
-    bk_menu_help,
+    bk_menu_help, // [Dasperal] Bindings starting from this line are related to "Shortcuts" section
     bk_menu_save,
     bk_menu_load,
     bk_menu_volume,
@@ -133,8 +132,7 @@ typedef enum
     bk_multi_msg_player_7,
 
     // Map keys
-    bk__section_map, // [Dasperal] Bindings after this line are related to "Map" section
-    bk_map_toggle,
+    bk_map_toggle, // [Dasperal] Bindings starting from this line are related to "Map" section
     bk_map_zoom_in,
     bk_map_zoom_out,
     bk_map_zoom_max,
@@ -146,8 +144,7 @@ typedef enum
     bk_map_clearmark,
 
     // System keys
-    bk__serializable, // [Dasperal] Bindings after this line are not saved to config file
-    bk_left,
+    bk_left, // [Dasperal] Bindings starting from this line are not saved to config file
     bk_right,
     bk_up,
     bk_down,
@@ -162,7 +159,10 @@ typedef enum
     bk_abort,
 
     bk__size, // size of bound_key_t
-    bk__null
+    bk__null,
+    bk__serializable = bk_left,
+    bk__section_map = bk_map_toggle,
+    bk__section_shortcuts = bk_menu_help
 } bound_key_t;
 
 typedef enum
