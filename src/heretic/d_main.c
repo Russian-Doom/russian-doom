@@ -147,9 +147,11 @@ int automap_grid = 0;
 int automap_grid_size = 128;
 int automap_mark_color = 6;
 int automap_stats = 1;
+int automap_skill = 1;
 int automap_level_time = 1;
 int automap_total_time = 0;
 int automap_coords = 0;
+int hud_stats_color = 1;
 
 // Sound
 int snd_MaxVolume = 10;
@@ -991,9 +993,11 @@ void D_BindVariables(void)
     M_BindIntVariable("automap_grid_size",      &automap_grid_size);
     M_BindIntVariable("automap_mark_color",     &automap_mark_color);
     M_BindIntVariable("automap_stats",          &automap_stats);
+    M_BindIntVariable("automap_skill",          &automap_skill);
     M_BindIntVariable("automap_level_time",     &automap_level_time);
     M_BindIntVariable("automap_total_time",     &automap_total_time);
     M_BindIntVariable("automap_coords",         &automap_coords);
+    M_BindIntVariable("hud_stats_color",        &hud_stats_color);
 
     // Sound
     M_BindIntVariable("sfx_volume",             &snd_MaxVolume);

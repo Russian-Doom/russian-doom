@@ -638,7 +638,7 @@ void SB_Drawer(void)
     int xval;
     const int xval_widget = show_fps || local_time ? 50 : 0;
     static boolean hitCenterFrame;
-    boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
+    const int wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0) + 2;
 
     // [JN] Draw horns separatelly in non wide screen mode
     if (aspect_ratio < 2 && screenblocks <= 10 && automapactive && automap_overlay)
@@ -647,108 +647,93 @@ void SB_Drawer(void)
         V_DrawPatch(290 + wide_delta, 148, PatchRTFCTOP, NULL);
     }
 
-    // [JN] Show statistics
+    // [JN] Level stats widgets.
     if (screenblocks <= 11 && !vanillaparm)
     {
         char text[32];
         const int time = leveltime / TICRATE;
         const int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
+        CPlayer = &players[consoleplayer];
 
-        // [JN] Level stats
-        if ((automapactive && automap_stats == 1) || automap_stats == 2)
+        if (((automapactive && automap_stats == 1) || automap_stats == 2))
         {
-            if (english_language)
-            {
-                if (players[consoleplayer].extrakillcount)
-                {
-                    M_snprintf(text, sizeof(text), "KILLS: %d + %d/ %d",
-                               players[consoleplayer].killcount,
-                               players[consoleplayer].extrakillcount, totalkills);
-                }
-                else
-                {
-                    M_snprintf(text, sizeof(text), "KILLS: %d/ %d",
-                               players[consoleplayer].killcount, totalkills);
-                }
-                RD_M_DrawTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 38);
-            }
-            else
-            {
-                if (players[consoleplayer].extrakillcount)
-                {
-                    M_snprintf(text, sizeof(text), "DHFUB: %d + %d/ %d",
-                               players[consoleplayer].killcount,
-                               players[consoleplayer].extrakillcount, totalkills);
-                }
-                else
-                {
-                    M_snprintf(text, sizeof(text), "DHFUB: %d/ %d",
-                               players[consoleplayer].killcount, totalkills);
-                }
-                RD_M_DrawTextSmallRUS(text, 4 + (wide_4_3 ? wide_delta : 0), 38, CR_NONE);
-            }
-            M_snprintf(text, sizeof(text), english_language ? "ITEMS: %d/ %d" : "GHTLVTNS: %d/ %d",
-                       players[consoleplayer].itemcount, totalitems);
-            if (english_language)
-            {
-                RD_M_DrawTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 48);
-            }
-            else
-            {
-                RD_M_DrawTextSmallRUS(text, 4 + (wide_4_3 ? wide_delta : 0), 48, CR_NONE);
-            }
-            M_snprintf(text, sizeof(text), english_language ? "SECRETS: %d/ %d" : "NFQYBRB: %d/ %d",
-                       players[consoleplayer].secretcount, totalsecret);
-            if (english_language)
-            {
-                RD_M_DrawTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 58);
-            }
-            else
-            {
-                RD_M_DrawTextSmallRUS(text, 4 + (wide_4_3 ? wide_delta : 0), 58, CR_NONE);
-            }
-    
-            M_snprintf(text, sizeof(text), english_language ? "SKILL: %d" : "CKJ;YJCNM: %d",  gameskill +1);
-            if (english_language)
-            {
-                RD_M_DrawTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 68);
-            }
-            else
-            {
-                RD_M_DrawTextSmallRUS(text, 4 + (wide_4_3 ? wide_delta : 0), 68, CR_NONE);
-            }
+            // Kills:
+            sprintf(text, CPlayer->extrakillcount ? "%d+%d/%d" : "%d/%d",
+                    CPlayer->killcount,
+                    CPlayer->extrakillcount ? CPlayer->extrakillcount : totalkills,
+                    totalkills);
+
+            english_language ? RD_M_DrawTextA("K:", wide_4_3, 9) :
+                               RD_M_DrawTextSmallRUS("D:", wide_4_3, 9, CR_NONE);
+
+            dp_translation = hud_stats_color == 0 ? NULL :
+                             CPlayer->killcount == 0 ? cr[CR_RED] :
+                             CPlayer->killcount < totalkills ? cr[CR_YELLOW] : cr[CR_GREEN];
+            RD_M_DrawTextA(text, wide_4_3 + 16, 9);
+            dp_translation = NULL;
+
+            // Items:
+            sprintf(text, "%d/%d", CPlayer->itemcount, totalitems);
+
+            english_language ? RD_M_DrawTextA("I:", wide_4_3, 19) :
+                               RD_M_DrawTextSmallRUS("G:", wide_4_3, 19, CR_NONE);
+
+            dp_translation = hud_stats_color == 0 ? NULL :
+                             CPlayer->itemcount == 0 ? cr[CR_RED] :
+                             CPlayer->itemcount < totalitems ? cr[CR_YELLOW] : cr[CR_GREEN];
+            RD_M_DrawTextA(text, wide_4_3 + 16, 19);
+            dp_translation = NULL;
+
+            // Secret:
+            sprintf(text, "%d/%d", CPlayer->secretcount, totalsecret);
+
+            english_language ? RD_M_DrawTextA("S:", wide_4_3, 29) :
+                               RD_M_DrawTextSmallRUS("N:", wide_4_3, 29, CR_NONE);
+
+            dp_translation = hud_stats_color == 0 ? NULL :
+                             CPlayer->secretcount == 0 ? cr[CR_RED] :
+                             CPlayer->secretcount < totalsecret ? cr[CR_YELLOW] : cr[CR_GREEN];
+            RD_M_DrawTextA(text, wide_4_3 + 16, 29);
+            dp_translation = NULL;
         }
 
-        // [JN] Level time
+        // Skill Level:
+        if (((automapactive && automap_skill == 1) || automap_skill == 2))
+        {
+            sprintf(text, "%d", gameskill+1);
+
+            english_language ? RD_M_DrawTextA("SKL:", wide_4_3, 39) :
+                               RD_M_DrawTextSmallRUS("CK;:", wide_4_3, 39, CR_NONE);
+
+            dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+            RD_M_DrawTextA(text, wide_4_3 + (english_language ? 31 : 36), 39);
+            dp_translation = NULL;
+        }
+
+        // Level Time:
         if ((automapactive && automap_level_time == 1) || automap_level_time == 2)
         {
-            if (english_language)
-            {
-                RD_M_DrawTextA("LEVEL", 4 + (wide_4_3 ? wide_delta : 0), 78);
-            }
-            else
-            {
-                RD_M_DrawTextSmallRUS("EHJDTYM", 4 + (wide_4_3 ? wide_delta : 0), 78, CR_NONE);
-            }
+            sprintf(text, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
 
-            M_snprintf(text, sizeof(text), "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
-            RD_M_DrawTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 88);
+            english_language ? RD_M_DrawTextA("LEVEL", wide_4_3, 79) :
+                               RD_M_DrawTextSmallRUS("EHJDTYM", wide_4_3, 79, CR_NONE);
+
+            dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+            RD_M_DrawTextA(text, wide_4_3, 89);
+            dp_translation = NULL;
         }
 
-        // [JN] Total time
+        // Total Time:
         if ((automapactive && automap_total_time == 1) || automap_total_time == 2)
         {
-            if (english_language)
-            {
-                RD_M_DrawTextA("TOTAL", 4 + (wide_4_3 ? wide_delta : 0), 98);
-            }
-            else
-            {
-                RD_M_DrawTextSmallRUS("J,OTT", 4 + (wide_4_3 ? wide_delta : 0), 98, CR_NONE);
-            }
+            sprintf(text, "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
 
-            M_snprintf(text, sizeof(text), "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
-            RD_M_DrawTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 108);
+            english_language ? RD_M_DrawTextA("TOTAL", wide_4_3, 99) :
+                               RD_M_DrawTextSmallRUS("J,OTT", wide_4_3, 99, CR_NONE);
+
+            dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+            RD_M_DrawTextA(text, wide_4_3, 109);
+            dp_translation = NULL;
         }
 
         // [JN] Player coords
@@ -759,7 +744,7 @@ void SB_Drawer(void)
                        players[consoleplayer].mo->y >> FRACBITS,
                        players[consoleplayer].mo->z >> FRACBITS,
                        players[consoleplayer].mo->angle / ANG1);
-            RD_M_DrawTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 118);
+            RD_M_DrawTextA(text, wide_4_3, 122);
         }
     }
 

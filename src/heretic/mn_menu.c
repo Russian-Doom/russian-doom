@@ -114,10 +114,13 @@ static void M_RD_AutoMapFollow();
 static void M_RD_AutoMapGrid();
 static void M_RD_AutoMapGridSize(Direction_t direction);
 static void M_RD_AutomapMarkColor(Direction_t direction);
+// Stats
 static void M_RD_AutoMapStats(Direction_t direction);
+static void M_RD_AutoMapSkill(Direction_t direction);
 static void M_RD_AutoMapLevTime(Direction_t direction);
 static void M_RD_AutoMapTotTime(Direction_t direction);
 static void M_RD_AutoMapCoords(Direction_t direction);
+static void M_RD_AutoMapWidgetColors();
 
 // Sound
 static void DrawSoundMenu(void);
@@ -652,16 +655,18 @@ static MenuItem_t AutomapItems[] = {
     {ITT_LRFUNC, "MARK COLOR:",    "WDTN JNVTNJR:",      M_RD_AutomapMarkColor,0}, // ЦВЕТ ОТМЕТОК
     {ITT_TITLE,  "STATISTICS",     "CNFNBCNBRF",         NULL,                 0}, // СТАТИСТИКА
     {ITT_LRFUNC, "LEVEL STATS:",   "CNFNBCNBRF EHJDYZ:", M_RD_AutoMapStats,    0}, // СТАТИСТИКА УРОВНЯ
+    {ITT_LRFUNC, "SKILL LEVEL:",   "EHJDTYM CKJ;YJCNB:", M_RD_AutoMapSkill,    0}, // УРОВЕНЬ СЛОЖНОСТИ
     {ITT_LRFUNC, "LEVEL TIME:",    "DHTVZ EHJDYZ:",      M_RD_AutoMapLevTime,  0}, // ВРЕМЯ УРОВНЯ
     {ITT_LRFUNC, "TOTAL TIME:",    "J,OTT EHJDYZ:",      M_RD_AutoMapTotTime,  0}, // ОБЩЕЕ ВРЕМЯ
-    {ITT_LRFUNC, "PLAYER COORDS:", "RJJHLBYFNS BUHJRF:", M_RD_AutoMapCoords,   0}  // КООРДИНАТЫ ИГРОКА
+    {ITT_LRFUNC, "PLAYER COORDS:", "RJJHLBYFNS BUHJRF:", M_RD_AutoMapCoords,   0}, // КООРДИНАТЫ ИГРОКА
+    {ITT_SWITCH, "COLORING:",      "JRHFIBDFYBT:",       M_RD_AutoMapWidgetColors, 0}  // ОКРАШИВАНИЕ
 };
 
 static Menu_t AutomapMenu = {
     36, 36,
     32,
     "AUTOMAP AND STATISTICS", "RFHNF B CNFNBCNBRF", false, // КАРТА И СТАТИСТИКА
-    14, AutomapItems, false,
+    16, AutomapItems, false,
     DrawAutomapMenu,
     NULL,
     &DisplayMenu,
@@ -2699,20 +2704,29 @@ static void DrawAutomapMenu(void)
                               automap_stats == 2 ? "ALWAYS" : "OFF",
                               121 + wide_delta, 132, CR_NONE);
 
+        // Skill level
+        RD_M_DrawTextSmallENG(automap_skill == 1 ? "IN AUTOMAP" :
+                              automap_skill == 2 ? "ALWAYS" : "OFF",
+                              113 + wide_delta, 142, CR_NONE);
+
         // Level time
         RD_M_DrawTextSmallENG(automap_level_time == 1 ? "IN AUTOMAP" :
                               automap_level_time == 2 ? "ALWAYS" : "OFF",
-                              110 + wide_delta, 142, CR_NONE);
+                              110 + wide_delta, 152, CR_NONE);
 
         // Total time
         RD_M_DrawTextSmallENG(automap_total_time == 1 ? "IN AUTOMAP" :
                               automap_total_time == 2 ? "ALWAYS" : "OFF",
-                              111 + wide_delta, 152, CR_NONE);
+                              111 + wide_delta, 162, CR_NONE);
 
         // Player coords
         RD_M_DrawTextSmallENG(automap_coords == 1 ? "IN AUTOMAP" :
                               automap_coords == 2 ? "ALWAYS" : "OFF",
-                              142 + wide_delta, 162, CR_NONE);
+                              142 + wide_delta, 172, CR_NONE);
+
+        // Coloring
+        RD_M_DrawTextSmallENG(hud_stats_color ? "ON" : "OFF",
+                              101 + wide_delta, 182, CR_NONE);
     }
     else
     {
@@ -2741,20 +2755,29 @@ static void DrawAutomapMenu(void)
                               automap_stats == 2 ? "DCTULF" : "DSRK",
                               168 + wide_delta, 132, CR_NONE);
 
+        // Уровень сложности
+        RD_M_DrawTextSmallRUS(automap_skill == 1 ? "YF RFHNT" :
+                              automap_skill == 2 ? "DCTULF" : "DSRK",
+                              174 + wide_delta, 142, CR_NONE);
+
         // Время уровня
         RD_M_DrawTextSmallRUS(automap_level_time == 1 ? "YF RFHNT" :
                               automap_level_time == 2 ? "DCTULF" : "DSRK",
-                              133 + wide_delta, 142, CR_NONE);
+                              133 + wide_delta, 152, CR_NONE);
 
         // Общее время
         RD_M_DrawTextSmallRUS(automap_total_time == 1 ? "YF RFHNT" :
                               automap_total_time == 2 ? "DCTULF" : "DSRK",
-                              136 + wide_delta, 152, CR_NONE);
+                              136 + wide_delta, 162, CR_NONE);
 
         // Координаты игрока
         RD_M_DrawTextSmallRUS(automap_coords == 1 ? "YF RFHNT" :
                               automap_coords == 2 ? "DCTULF" : "DSRK",
-                              173 + wide_delta, 162, CR_NONE);
+                              173 + wide_delta, 172, CR_NONE);
+
+        // Окрашивание
+        RD_M_DrawTextSmallRUS(hud_stats_color ? "DRK" : "DSRK",
+                              129 + wide_delta, 182, CR_NONE);
     }
 
     // Overlay background opacity
@@ -2807,6 +2830,11 @@ static void M_RD_AutoMapStats(Direction_t direction)
     RD_Menu_SpinInt(&automap_stats, 0, 2, direction);
 }
 
+static void M_RD_AutoMapSkill(Direction_t direction)
+{
+    RD_Menu_SpinInt(&automap_skill, 0, 2, direction);
+}
+
 static void M_RD_AutoMapLevTime(Direction_t direction)
 {
     RD_Menu_SpinInt(&automap_level_time, 0, 2, direction);
@@ -2820,6 +2848,11 @@ static void M_RD_AutoMapTotTime(Direction_t direction)
 static void M_RD_AutoMapCoords(Direction_t direction)
 {
     RD_Menu_SpinInt(&automap_coords, 0, 2, direction);
+}
+
+static void M_RD_AutoMapWidgetColors()
+{
+    hud_stats_color ^= 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -5204,9 +5237,11 @@ static void M_RD_BackToDefaults_Recommended(void)
     automap_grid_size  = 128;    
     automap_mark_color = 6;
     automap_stats      = 1;
+    automap_skill      = 1;
     automap_level_time = 0;
     automap_total_time = 0;
     automap_coords     = 0;
+    hud_stats_color    = 1;
 
     // Audio
     snd_MaxVolume   = 8;
@@ -5350,9 +5385,11 @@ static void M_RD_BackToDefaults_Original(void)
     automap_grid_size  = 128;    
     automap_mark_color = 6;
     automap_stats      = 0;
+    automap_skill      = 0;
     automap_level_time = 0;
     automap_total_time = 0;
     automap_coords     = 0;
+    hud_stats_color    = 0;
 
     // Audio
     snd_MaxVolume   = 8;

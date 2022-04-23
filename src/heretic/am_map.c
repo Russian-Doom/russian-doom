@@ -1714,7 +1714,7 @@ void AM_Drawer(void)
 {
     char *level_name;
     int numepisodes;
-    boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
+    const int wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0) + 2;
 
     if (!automapactive)
     {
@@ -1785,13 +1785,11 @@ void AM_Drawer(void)
         {
             if (english_language)
             {
-                RD_M_DrawTextA(DEH_String(level_name), 4 +
-                              (wide_4_3 ? wide_delta : 0), 136);
+                RD_M_DrawTextA(DEH_String(level_name), wide_4_3, 136);
             }
             else
             {
-                RD_M_DrawTextSmallRUS(DEH_String(level_name), 4 +
-                                     (wide_4_3 ? wide_delta : 0), 136, CR_NONE);
+                RD_M_DrawTextSmallRUS(DEH_String(level_name), wide_4_3, 136, CR_NONE);
             }
         }
         else
