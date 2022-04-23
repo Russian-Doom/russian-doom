@@ -69,11 +69,8 @@ typedef enum
     CR_AZURE,
     CR_FLAME,
 
-    // Terminator - don't override tablified colors after this point
-    CR_STOP,
-
     // Doom (colored blood and slider gem)
-    CR_RED2BLUE,
+    CR_RED2BLUE, // Terminator - don't override tablified colors starting from this line
     CR_RED2GREEN,
     CR_RED2GRAY,
 
@@ -105,7 +102,8 @@ typedef enum
     CR_RED2DARKGRAY_HEXEN,
 
     CRMAX,
-    CR_NONE
+    CR_NONE,
+    CR__STOP = CR_RED2BLUE
 } Translation_CR_t;
 
 extern byte  *cr[CRMAX];

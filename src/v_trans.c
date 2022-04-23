@@ -56,8 +56,6 @@ static byte cr_niagara[256];
 static byte cr_azure[256];
 static byte cr_flame[256];
 
-static byte cr_stop[256];
-
 // Doom (colored blood and slider gem)
 static byte cr_red2blue[256] =
 	{  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15,
@@ -527,9 +525,6 @@ byte *cr[] =
     (byte *) &cr_niagara,
     (byte *) &cr_azure,
     (byte *) &cr_flame,
-
-    // Terminator - don't override tablified colors after this point
-    (byte *) &cr_stop,
 
     // Doom (colored blood and slider gem)
     (byte *) &cr_red2blue,
