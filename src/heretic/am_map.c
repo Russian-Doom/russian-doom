@@ -1707,7 +1707,7 @@ static void AM_drawkeys(void)
 static void AM_drawCrosshair (void)
 {
     V_DrawPatchUnscaled(screenwidth/2, 160, 
-                        W_CacheLumpName("XHAIR_1", PU_CACHE), NULL);
+                        W_CacheLumpName("XHAIR_1", PU_STATIC), NULL);
 }
 
 void AM_Drawer(void)

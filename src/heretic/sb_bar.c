@@ -2094,16 +2094,16 @@ static void (*Crosshair_Draw_Func) (void);
 // Crosshair_DefinePatch: which GFX patch will be used.
 // -----------------------------------------------------------------------------
 
-patch_t *Crosshair_DefinePatch (void)
+void Crosshair_DefinePatch (void)
 {
-    return CrosshairPatch =
+    CrosshairPatch =
         W_CacheLumpName(crosshair_shape == 1 ? "XHAIR_2" :
                         crosshair_shape == 2 ? "XHAIR_3" :
                         crosshair_shape == 3 ? "XHAIR_4" :
                         crosshair_shape == 4 ? "XHAIR_5" :
                         crosshair_shape == 5 ? "XHAIR_6" :
                         crosshair_shape == 6 ? "XHAIR_7" :
-                                               "XHAIR_1", PU_CACHE);
+                                               "XHAIR_1", PU_STATIC);
 }
 
 // -----------------------------------------------------------------------------
