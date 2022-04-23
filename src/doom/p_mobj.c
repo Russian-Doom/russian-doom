@@ -1356,7 +1356,7 @@ void P_SpawnBlood (fixed_t x, fixed_t y, fixed_t z, int damage, mobj_t *target)
     th->target = target;
 
     // [crispy] Spectres bleed spectre blood
-    if (colored_blood && !vanillaparm)
+    if (colored_blood == 2 && !vanillaparm)
     {
         th->flags |= (target->flags & MF_SHADOW);
     }
