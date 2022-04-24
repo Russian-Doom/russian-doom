@@ -2029,6 +2029,7 @@ void P_SetupLevel (int episode, int map, int playermask, skill_t skill)
              && singleplayer);
 
     leveltime = 0;
+    oldleveltime = 0; // [crispy] Track if game is running
 
     // [crispy] check and log map and nodes format
     crispy_mapformat = P_CheckMapFormat(lumpnum);

@@ -1137,8 +1137,7 @@ void R_InterpolateTextureOffsets()
 	int i;
 	fixed_t frac;
 
-	if (uncapped_fps && !vanillaparm &&
-	    !paused && (!menuactive || demoplayback || netgame))
+	if (uncapped_fps && !vanillaparm && leveltime > oldleveltime)
 	{
 		frac = fractionaltic;
 	}

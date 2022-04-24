@@ -86,6 +86,7 @@ static int recvtic;
 // The number of tics that have been run (using RunTic) so far.
 
 int gametic;
+int oldleveltime; // [crispy] check if leveltime keeps tickin'
 
 // When set to true, a single tic is run each time TryRunTics() is called.
 // This is used for -timedemo mode.
@@ -735,9 +736,11 @@ void TryRunTics (void)
     int realtics;
     int	availabletics;
     int	counts;
-    // [JN] Ingame variables for additional capping conditions
-    extern int paused, menuactive, demoplayback, netgame;
-    extern int gamestate;
+
+    // [AM] If we've uncapped the framerate and there are no tics
+    //      to run, return early instead of waiting around.
+    extern int leveltime;
+    #define return_early (uncapped_fps && counts == 0 && leveltime > oldleveltime && screenvisible)
 
     // get real tics
     entertic = I_GetTime() / ticdup;
@@ -765,6 +768,11 @@ void TryRunTics (void)
     if (new_sync)
     {
 	counts = availabletics;
+
+        // [AM] If we've uncapped the framerate and there are no tics
+        //      to run, return early instead of waiting around.
+        if (return_early)
+            return;
     }
     else
     {
@@ -778,11 +786,7 @@ void TryRunTics (void)
 
         // [AM] If we've uncapped the framerate and there are no tics
         //      to run, return early instead of waiting around.
-        // [JN] Also don't interpolate while paused state and active menu,
-        //      but interpolate in same conditions in demo playback and network game.
-        if (counts == 0 && uncapped_fps && gametic && screenvisible &&
-            !paused && (!menuactive || demoplayback || netgame) && !vanillaparm &&
-            gamestate == GS_LEVEL)
+        if (return_early)
             return;
 
         if (counts < 1)

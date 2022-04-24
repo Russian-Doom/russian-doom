@@ -1008,6 +1008,7 @@ void G_Ticker (void)
     }
 
     oldgamestate = gamestate;
+    oldleveltime = leveltime; // [crispy] Track if game is running
 
     // do main actions
     switch (gamestate) 

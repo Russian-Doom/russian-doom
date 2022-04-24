@@ -78,6 +78,7 @@ void D_StartNetGame(net_gamesettings_t *settings,
 
 extern boolean singletics;
 extern int gametic, ticdup;
+extern int oldleveltime; // [crispy] check if leveltime keeps tickin'
 
 // Check if it is permitted to record a demo with a non-vanilla feature.
 boolean D_NonVanillaRecord(boolean conditional, char *feature);

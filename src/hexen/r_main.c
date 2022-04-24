@@ -834,7 +834,7 @@ static void R_SetupFrame (player_t *player)
         // that would necessitate turning it off for a tic.
         player->mo->interp == true &&
         // Don't interpolate during a paused state
-        !paused && (!menuactive || demoplayback || netgame))
+        leveltime > oldleveltime)
     {
         viewx = player->mo->oldx + FixedMul(player->mo->x - player->mo->oldx, fractionaltic);
         viewy = player->mo->oldy + FixedMul(player->mo->y - player->mo->oldy, fractionaltic);

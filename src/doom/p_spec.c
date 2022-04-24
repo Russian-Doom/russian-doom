@@ -1298,8 +1298,7 @@ void R_InterpolateTextureOffsets (void)
 {
     fixed_t frac;
 
-    if (uncapped_fps && !vanillaparm
-    && !paused && (!menuactive || demoplayback || netgame))
+    if (uncapped_fps && !vanillaparm && leveltime > oldleveltime)
     {
         frac = fractionaltic;
     }
@@ -1324,8 +1323,7 @@ void R_InterpolateTextureOffsets (void)
     }
 
     // [JN] Updage falling liquid linedef offsets.
-    if (swirling_liquids && !vanillaparm
-    && !paused && (!menuactive || demoplayback || netgame))
+    if (swirling_liquids && !vanillaparm && leveltime > oldleveltime)
     {
         FlowFactor_X = FlowFactor_X_old + (frac / 8);
         FlowFactor_Y = FlowFactor_Y_old + (frac / 8);
