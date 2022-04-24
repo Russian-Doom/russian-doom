@@ -26,7 +26,8 @@ COMMON_SOURCE_FILES=\
 i_system.c           i_system.h            \
 m_argv.c             m_argv.h              \
 m_misc.c             m_misc.h              \
-rd_io.c              rd_io.h
+                     rd_io.h               \
+win_compat.c
 
 # Source files used by the game binaries (inter-doom, etc.)
 
