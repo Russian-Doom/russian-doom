@@ -667,6 +667,7 @@ void SB_Drawer(void)
                                RD_M_DrawTextSmallRUS("D:", wide_4_3, 9, CR_NONE);
 
             dp_translation = hud_stats_color == 0 ? NULL :
+                             totalkills == 0 ? cr[CR_GREEN] :
                              CPlayer->killcount == 0 ? cr[CR_RED] :
                              CPlayer->killcount < totalkills ? cr[CR_YELLOW] : cr[CR_GREEN];
             RD_M_DrawTextA(text, wide_4_3 + 16, 9);
@@ -679,6 +680,7 @@ void SB_Drawer(void)
                                RD_M_DrawTextSmallRUS("G:", wide_4_3, 19, CR_NONE);
 
             dp_translation = hud_stats_color == 0 ? NULL :
+                             totalitems == 0 ? cr[CR_GREEN] :
                              CPlayer->itemcount == 0 ? cr[CR_RED] :
                              CPlayer->itemcount < totalitems ? cr[CR_YELLOW] : cr[CR_GREEN];
             RD_M_DrawTextA(text, wide_4_3 + 16, 19);
@@ -691,6 +693,7 @@ void SB_Drawer(void)
                                RD_M_DrawTextSmallRUS("N:", wide_4_3, 29, CR_NONE);
 
             dp_translation = hud_stats_color == 0 ? NULL :
+                             totalsecret == 0 ? cr[CR_GREEN] :
                              CPlayer->secretcount == 0 ? cr[CR_RED] :
                              CPlayer->secretcount < totalsecret ? cr[CR_YELLOW] : cr[CR_GREEN];
             RD_M_DrawTextA(text, wide_4_3 + 16, 29);

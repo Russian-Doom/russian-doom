@@ -865,6 +865,7 @@ void HU_Drawer(void)
                                RD_M_DrawTextSmallRUS("D:", wide_4_3, 9, CR_NONE);
             
             dp_translation = hud_stats_color == 0 ? NULL :
+                             totalkills == 0 ? cr[CR_GREEN] :
                              plr->killcount == 0 ? cr[CR_RED] :
                              plr->killcount < totalkills ? cr[CR_YELLOW] : cr[CR_GREEN];
             RD_M_DrawTextA(str, wide_4_3 + 16, 9);
@@ -877,6 +878,7 @@ void HU_Drawer(void)
                                RD_M_DrawTextSmallRUS("G:", wide_4_3, 17, CR_NONE);
 
             dp_translation = hud_stats_color == 0 ? NULL :
+                             totalitems == 0 ? cr[CR_GREEN] :
                              plr->itemcount == 0 ? cr[CR_RED] :
                              plr->itemcount < totalitems ? cr[CR_YELLOW] : cr[CR_GREEN];
             RD_M_DrawTextA(str, wide_4_3 + 16, 17);
@@ -889,6 +891,7 @@ void HU_Drawer(void)
                                RD_M_DrawTextSmallRUS("N:", wide_4_3, 25, CR_NONE);
 
             dp_translation = hud_stats_color == 0 ? NULL :
+                             totalsecret == 0 ? cr[CR_GREEN] :
                              plr->secretcount == 0 ? cr[CR_RED] :
                              plr->secretcount < totalsecret ? cr[CR_YELLOW] : cr[CR_GREEN];
             RD_M_DrawTextA(str, wide_4_3 + 16, 25);
