@@ -1,5 +1,6 @@
 //
 //  Copyright(C) 2021 Roman Fomin
+//  Copyright(C) 2022 Roman Fomin, Julian Nechaevsky, Dasperal, kmeaw
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -25,6 +26,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <stdlib.h>
+#include "SDL_syswm.h"
 
 wchar_t* ConvertToUtf8(const char *str)
 {
@@ -96,6 +98,30 @@ int D_mkdir(const char *dirname)
 
     if(wdir) free(wdir);
     return ret;
+}
+
+void DisableWinRound(SDL_Window* screen)
+{
+    HMODULE hDllDwmApi;
+    HRESULT (*pDwmSetWindowAttribute) (HWND, DWORD, LPCVOID, DWORD);
+    SDL_SysWMinfo wmInfo;
+    HWND hwnd;
+    int noround = 1; // DWMWCP_DONOTROUND
+
+    pDwmSetWindowAttribute = NULL;
+    hDllDwmApi = LoadLibrary("dwmapi.dll");
+    if(hDllDwmApi != NULL)
+    {
+        pDwmSetWindowAttribute = (HRESULT (*)(HWND, DWORD, LPCVOID, DWORD)) GetProcAddress(hDllDwmApi, "DwmSetWindowAttribute");
+    }
+    if(pDwmSetWindowAttribute != NULL)
+    {
+        SDL_VERSION(&wmInfo.version);
+        SDL_GetWindowWMInfo(screen, &wmInfo);
+        hwnd = wmInfo.info.win.window;
+        pDwmSetWindowAttribute(hwnd, 33, // DWMWA_WINDOW_CORNER_PREFERENCE
+                               &noround, sizeof(noround));
+    }
 }
 
 #endif
