@@ -82,6 +82,12 @@
 #define YELLOW_JAGUAR    163
 #define MAGENTA_JAGUAR   254
 
+// [JN] IDDT extended colors
+#define REDS_IDDT        REDS
+#define YELLOWS_IDDT     YELLOWS
+#define GREENS_IDDT      GREENS
+#define GRAYS_IDDT       GRAYS
+
 // scale on entry
 #define INITSCALEMTOF (.2*FRACUNIT)
 
@@ -1380,6 +1386,18 @@ static void AM_drawFline (fline_t *fl, int color, int automap_color_set)
             DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[40][0]), 8, 3);
         if (color == 104)           // computermap visible lines
             DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[41][0]), 8, 3);
+
+        //
+        // IDDT extended colors:
+        //
+        if (color == REDS_IDDT)     // Alive monster
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[0][0]), 8, 3);
+        if (color == GRAYS_IDDT)    // Dead monster or decorations
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[5][0]), 8, 3);
+        if (color == YELLOWS_IDDT)  // Lost Soul or Explosive Barrel
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[36][0]), 8, 3);
+        if (color == GREENS_IDDT)   // Pickups
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[40][0]), 8, 3);
     }
     else
     {
@@ -2396,12 +2414,40 @@ static void AM_drawThings (int colors, int colorrange)
                 AM_rotatePoint(&pt);
             }
 
-            // [JN] Jaguar Doom: use dark green for things drawing
-            AM_drawLineCharacter(thintriangle_guy, 
-                                 arrlen(thintriangle_guy),
-                                 16 << FRACBITS, t->angle, 
-                                 gamemission == jaguar ? GREEN_JAGUAR : colors,
-                                 pt.x, pt.y);
+            // [JN] IDDT extended colors:
+            if (!vanillaparm)
+            {
+                // Monsters
+                if (t->flags & MF_COUNTKILL)
+                {
+                    AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy), 
+                                         16 << FRACBITS, t->angle, t->health > 0 ? REDS_IDDT : GRAYS_IDDT, pt.x, pt.y);
+                }
+                // Lost Soul and Explosive barrel (does not have a MF_COUNTKILL flag)
+                else if (t->type == MT_SKULL || t->type == MT_BARREL)
+                {
+                    AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy),
+                                 16 << FRACBITS, t->angle, YELLOWS_IDDT, pt.x, pt.y);
+                }
+                // Pickups
+                else if (t->flags & MF_SPECIAL)
+                {
+                    AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy),
+                                 16 << FRACBITS, t->angle, GREENS_IDDT, pt.x, pt.y);
+                }
+                // Everything else
+                else
+                {
+                    AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy),
+                                 16 << FRACBITS, t->angle, GRAYS_IDDT, pt.x, pt.y);
+                }
+            }
+            else
+            {
+                AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy),
+                                     16 << FRACBITS, t->angle, colors, pt.x, pt.y);
+            }
+
             t = t->snext;
         }
     }
