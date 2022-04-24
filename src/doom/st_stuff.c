@@ -2100,7 +2100,7 @@ static void ST_initData (void)
     st_oldchat = st_chat = false;
     st_cursoron = false;
 
-    faceindex = 0; // [crispy] fix status bar face hysteresis across level changes
+    faceindex = 1; // [crispy] fix status bar face hysteresis across level changes
     st_faceindex = 0;
     st_palette = -1;
 
