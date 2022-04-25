@@ -25,8 +25,6 @@ if(COMPILE_DOOM)
                 f_finale.c      f_finale.h
                 f_wipe.c        f_wipe.h
                 g_game.c        g_game.h
-                hu_lib.c        hu_lib.h
-                hu_stuff.c      hu_stuff.h
                 info.c          info.h
                 m_menu.c        m_menu.h
                 m_random.c      m_random.h
