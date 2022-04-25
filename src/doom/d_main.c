@@ -473,7 +473,8 @@ void DrawMessage(void)
     // [JN] Colorize depending on given color type.
     dp_translation = ColorizeMessage(player->messageType);
 
-    if (english_language)
+    // [JN] Netgame chat messages are always in English.
+    if (english_language || player->messageType == msg_chat)
     {
         if (player->messageTics < 10 && message_fade && !vanillaparm)
         {
