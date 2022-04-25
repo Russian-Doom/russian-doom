@@ -578,12 +578,9 @@ extern boolean setsizeneeded;
 
 void D_Display (void)
 {
-    static boolean      viewactivestate = false;
-    static boolean      menuactivestate = false;
     static boolean      inhelpscreensstate = false;
     static boolean      fullscreen = false;
     static gamestate_t  oldgamestate = -1;
-    static int          borderdrawcount;
     static int          saved_gametic = -1;
     int                 nowtime;
     int                 tics;
@@ -610,7 +607,6 @@ void D_Display (void)
     {
         R_ExecuteSetViewSize ();
         oldgamestate    = -1; // force background redraw
-        borderdrawcount = 3;
     }
 
     // save the current screen if about to wipe
@@ -677,9 +673,6 @@ void D_Display (void)
             {
                 I_VideoBuffer[y] = colormaps[automap_overlay_bg * 256 + I_VideoBuffer[y]];
             }
-
-            // Erase darkened screen borders imideatelly to prevent blinking. 
-            R_DrawViewBorder ();
         }
 
         if (aspect_ratio >= 2)
@@ -688,20 +681,12 @@ void D_Display (void)
             {
                 ST_Drawer(0, 0);
             }
-            if (screenblocks < 17 && !vanillaparm)
-            {
-                ST_WidgetsDrawer();
-            }
         }
         else
         {
             if (screenblocks == 11 || screenblocks == 12 || screenblocks == 13)
             {
                 ST_Drawer(0, 0);
-            }
-            if (screenblocks < 14 && !vanillaparm)
-            {
-                ST_WidgetsDrawer();
             }
         }
     }
@@ -715,21 +700,7 @@ void D_Display (void)
     // see if the border needs to be initially drawn
     if (gamestate == GS_LEVEL && oldgamestate != GS_LEVEL)
     {
-        viewactivestate = false;    // view was not active
         R_FillBackScreen ();    // draw the pattern into the back screen
-    }
-
-    // see if the border needs to be updated to the screen
-    if (gamestate == GS_LEVEL && (!automapactive || automap_overlay) && scaledviewwidth != (320 << hires))
-    {
-        if (menuactive || menuactivestate || !viewactivestate)
-        borderdrawcount = 3;
-
-        if (borderdrawcount)
-        {
-            R_DrawViewBorder (); // erase old menu stuff
-            borderdrawcount--;
-        }
     }
 
     if (testcontrols)
@@ -738,8 +709,6 @@ void D_Display (void)
         V_DrawMouseSpeedBox(testcontrols_mousespeed);
     }
 
-    menuactivestate = menuactive;
-    viewactivestate = viewactive;
     inhelpscreensstate = inhelpscreens;
     oldgamestate = wipegamestate = gamestate;
 
@@ -748,9 +717,33 @@ void D_Display (void)
     if (automapactive && automap_overlay)
     {
         AM_Drawer ();
+    }
 
-        // [crispy] force redraw of border
-        viewactivestate = false;
+    // [JN] Draw status bar widgets on top of automap and view border.
+    if (gamestate == GS_LEVEL)
+    {
+        if (aspect_ratio >= 2)
+        {
+            if (screenblocks < 17 && !vanillaparm)
+            {
+                ST_WidgetsDrawer();
+            }
+        }
+        else
+        {
+            // [JN] See if the border needs to be updated to the screen,
+            // erase old messages and menu stuff.
+            if (screenblocks < 10 && (!automapactive || automap_overlay))
+            {
+                R_DrawViewBorder();
+            }
+            if (screenblocks < 14 && !vanillaparm)
+            {
+               ST_WidgetsDrawer();
+            }
+        }
+
+        ST_MapNameDrawer();
     }
 
     // [JN] Menu backgound shading. 
@@ -762,7 +755,6 @@ void D_Display (void)
         }
     
         // [crispy] force redraw of status bar and border
-        viewactivestate = false;
         inhelpscreensstate = true;
     }
 

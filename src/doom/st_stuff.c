@@ -1929,12 +1929,12 @@ void ST_DemoProgressBar (void)
 
 // -----------------------------------------------------------------------------
 // [JN] ST_drawWidgets
-// Level stats widgets.
+// Various status bar widgets.
 // -----------------------------------------------------------------------------
 
 void ST_WidgetsDrawer (void)
 {
-    static char str[32];
+    static char str[128];
     int time = leveltime / TICRATE;
     int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
     const int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
@@ -2068,6 +2068,37 @@ void ST_WidgetsDrawer (void)
     if (demoplayback && demobar)
     {
         ST_DemoProgressBar();
+    }
+}
+
+// -----------------------------------------------------------------------------
+// ST_MapNameDrawer
+// Draws map name.
+// -----------------------------------------------------------------------------
+
+void ST_MapNameDrawer (void)
+{
+    static char str[128];
+    const int map_y = gamemission == jaguar ? 151 : 159;
+    const int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
+
+    // Level name:
+    if (automapactive)
+    {
+        extern char *level_name;
+
+        sprintf(str, "%s", level_name);
+        if (english_language)
+        {
+            dp_translation = (hud_stats_color && !vanillaparm) ? cr[CR_YELLOW] : NULL;
+            RD_M_DrawTextA(str, wide_4_3, map_y);
+            dp_translation = NULL;
+        }
+        else
+        {
+            RD_M_DrawTextSmallRUS(str, wide_4_3, map_y,
+                                  (hud_stats_color && !vanillaparm) ? CR_YELLOW : CR_NONE);
+        }
     }
 }
 

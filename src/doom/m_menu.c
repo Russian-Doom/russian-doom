@@ -6540,7 +6540,7 @@ static void M_RD_ChangeLanguage(int choice)
     extern void F_CastDrawer(void);
     extern void F_CastDrawerJaguar(void);
     extern void F_StartFinale(void);
-    extern void AM_LevelNameInit(void);
+    extern void P_LevelNameInit(void);
     extern int  demosequence;
     extern int  finalestage;
 
@@ -6575,7 +6575,7 @@ static void M_RD_ChangeLanguage(int choice)
         ST_createWidgets(); 
         
         // Re-set level name.
-        AM_LevelNameInit();
+        P_LevelNameInit();
     }
 
     // Update finale sequence
@@ -7190,6 +7190,8 @@ static void M_EndGameResponse(boolean confirmed)
 
     CurrentMenu->lastOn = CurrentItPos;
     RD_Menu_DeactivateMenu(true);
+    players[consoleplayer].messageTics = 1;
+    players[consoleplayer].message = NULL;
     D_StartTitle ();
 }
 
