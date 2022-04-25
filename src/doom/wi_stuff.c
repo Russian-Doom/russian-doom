@@ -40,7 +40,7 @@ static void WI_updateStatsJaguar(void);
 
 extern void M_WriteTextBigCentered_ENG();
 extern void M_WriteTextBigCentered_RUS();
-extern void HU_DemoProgressBar(void);
+extern void ST_DemoProgressBar(void);
 
 
 // =============================================================================
@@ -1002,7 +1002,7 @@ static void WI_drawShowNextLoc (void)
     // [crispy] demo progress bar
     if (demoplayback && demobar && !vanillaparm)
     {
-        HU_DemoProgressBar();
+        ST_DemoProgressBar();
     }
 }
 
@@ -1837,7 +1837,7 @@ static void WI_drawStats (void)
     // [crispy] demo progress bar
     if (demoplayback && demobar && !vanillaparm)
     {
-        HU_DemoProgressBar();
+        ST_DemoProgressBar();
     }
 }
 

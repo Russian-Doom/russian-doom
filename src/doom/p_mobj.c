@@ -25,7 +25,6 @@
 #include "m_random.h"
 #include "p_local.h"
 #include "st_stuff.h"
-#include "hu_stuff.h"
 #include "s_sound.h"
 #include "doomstat.h"
 #include "f_finale.h"
@@ -1099,6 +1098,9 @@ void P_SpawnPlayer (mapthing_t *mthing)
     p->playerstate = PST_LIVE;	
     p->refire = 0;
     p->message = NULL;
+    // [JN] Reset ultimatemsg, so other messages may appear.
+    // See: https://github.com/chocolate-doom/chocolate-doom/issues/781
+    ultimatemsg = false;
     p->damagecount = 0;
     p->bonuscount = 0;
     p->extralight = 0;
@@ -1122,8 +1124,6 @@ void P_SpawnPlayer (mapthing_t *mthing)
     {
         // wake up the status bar
         ST_Start ();
-        // wake up the heads up text
-        HU_Start ();		
     }
 }
 

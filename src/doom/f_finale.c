@@ -29,7 +29,7 @@
 #include "sounds.h"
 #include "doomstat.h"
 #include "r_main.h"
-#include "hu_stuff.h"
+#include "st_stuff.h"
 #include "jn.h"
 
 
@@ -156,6 +156,8 @@ void F_StartFinale (void)
     gamestate = GS_FINALE;
     viewactive = false;
     automapactive = false;
+    players[consoleplayer].messageTics = 1;
+    players[consoleplayer].message = NULL;
 
     if (logical_gamemission == doom)
     {

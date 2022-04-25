@@ -65,7 +65,6 @@
 #include "i_timer.h"
 #include "i_video.h"
 #include "g_game.h"
-#include "hu_stuff.h"
 #include "wi_stuff.h"
 #include "st_stuff.h"
 #include "am_map.h"
@@ -368,10 +367,149 @@ void D_ProcessEvents(void)
 }
 
 // -----------------------------------------------------------------------------
-// 
-// [JN] DrawTimeAndFPS
-// Draws time and FPS widgets separatelly from HUD system.
-//
+// ColorizeMessage
+// [JN] Apply coloring depending on message type.
+// -----------------------------------------------------------------------------
+
+static byte *ColorizeMessage (MessageType_t messageType)
+{
+    player_t *player = &players[consoleplayer];
+
+    if (player->messageType == msg_pickup)
+    {
+        // Item pickup
+        return messages_pickup_color_set == CR_NONE ?
+               NULL : cr[messages_pickup_color_set];
+    }
+    else if (player->messageType == msg_secret)
+    {
+        // Revealed secret
+        return messages_secret_color_set == CR_NONE ?
+               NULL : cr[messages_secret_color_set];
+    }
+    else if (player->messageType == msg_system)
+    {
+        // System message
+        return messages_system_color_set == CR_NONE ?
+               NULL : cr[messages_system_color_set];
+    }
+    else if (player->messageType == msg_chat)
+    {
+        // Netgame chat
+        return messages_chat_color_set == CR_NONE ?
+               NULL : cr[messages_chat_color_set];
+    }
+    else
+    {
+        // Not supposed to be colored.
+        return NULL;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// AlignMessage
+// [JN] Align message depending on given type of "messages_alignment":
+//   0 - left edge of the screen,
+//   1 - centered,
+//   2 - left edge of the status bar.
+// -----------------------------------------------------------------------------
+
+static int AlignMessage (int align, int english_language)
+{
+    player_t *player = &players[consoleplayer];
+    const int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
+    
+    return
+        messages_alignment == 0 ? wide_4_3 :
+        messages_alignment == 1 ? 160 - (english_language ? 
+                                         RD_M_TextAWidth(player->message) :
+                                         RD_M_TextSmallRUSWidth(player->message))
+                                         / 2 + wide_delta :
+                           /* 2*/ wide_delta;
+}
+
+// -----------------------------------------------------------------------------
+// FadeMessage
+// [JN] Do fading effect by scrolling though transparency tables.
+// -----------------------------------------------------------------------------
+
+static byte *FadeMessage (int messageTics)
+{
+    return
+        messageTics >= 9 ? transtable90 :
+        messageTics >= 8 ? transtable80 :
+        messageTics >= 7 ? transtable70 :
+        messageTics >= 6 ? transtable60 :
+        messageTics >= 5 ? transtable50 :
+        messageTics >= 4 ? transtable40 :
+        messageTics >= 3 ? transtable30 :
+        messageTics >= 2 ? transtable20 :
+                           transtable10 ;
+}
+
+// -----------------------------------------------------------------------------
+// DrawMessage
+// [JN] Main message drawing routine.
+// -----------------------------------------------------------------------------
+
+void DrawMessage(void)
+{
+    player_t *player = &players[consoleplayer];
+
+    // [JN] Activate message counter in non-level or paused states.
+    // Make messages go away in menu, finale and help screens.
+    // Tics can't go negative.
+    if ((gamestate != GS_LEVEL || paused || menuactive) && player->messageTics > 0)
+    {
+        player->messageTics--;
+    }
+
+    // No message.
+    if (player->messageTics <= 0 || !player->message)
+    {
+        return;
+    }
+
+    // [JN] Colorize depending on given color type.
+    dp_translation = ColorizeMessage(player->messageType);
+
+    if (english_language)
+    {
+        if (player->messageTics < 10 && message_fade && !vanillaparm)
+        {
+
+            RD_M_DrawTextAFade(player->message,
+                               AlignMessage(messages_alignment, english_language), 1,
+                               FadeMessage(player->messageTics));
+        }
+        else
+        {
+            RD_M_DrawTextA(player->message,
+                           AlignMessage(messages_alignment, english_language), 1);
+        }
+    }
+    else
+    {
+        if (player->messageTics < 10 && message_fade && !vanillaparm)
+        {
+            RD_M_DrawTextSmallRUSFade(player->message,
+                                      AlignMessage(messages_alignment, english_language), 1,
+                                      FadeMessage(player->messageTics));
+        }
+        else
+        {
+            RD_M_DrawTextSmallRUSFade(player->message,
+                                      AlignMessage(messages_alignment, english_language), 1, NULL);
+        }
+    }
+
+    // [JN] Clear color translation.
+    dp_translation = NULL;
+}
+
+// -----------------------------------------------------------------------------
+// DrawTimeAndFPS
+// [JN] Draws time and FPS widgets separatelly from HUD system.
 // -----------------------------------------------------------------------------
 
 static void DrawTimeAndFPS (void)
@@ -487,9 +625,6 @@ void D_Display (void)
         wipe = false;
     }
 
-    if (gamestate == GS_LEVEL && gametic)
-    HU_Erase();
-
     // do buffered drawing
     switch (gamestate)
     {
@@ -550,19 +685,26 @@ void D_Display (void)
         if (aspect_ratio >= 2)
         {
             if (screenblocks > 10 && screenblocks < 17)
-            ST_Drawer(0, 0);
+            {
+                ST_Drawer(0, 0);
+            }
+            if (screenblocks < 17 && !vanillaparm)
+            {
+                ST_WidgetsDrawer();
+            }
         }
         else
         {
             if (screenblocks == 11 || screenblocks == 12 || screenblocks == 13)
-            ST_Drawer(0, 0);            
+            {
+                ST_Drawer(0, 0);
+            }
+            if (screenblocks < 14 && !vanillaparm)
+            {
+                ST_WidgetsDrawer();
+            }
         }
     }
-
-    // [crispy] in automap overlay mode,
-    // the HUD is drawn on top of everything else
-    if (gamestate == GS_LEVEL && gametic && !(automapactive && automap_overlay))
-    HU_Drawer ();
 
     // clean up border stuff
     if (gamestate != oldgamestate && gamestate != GS_LEVEL)
@@ -606,7 +748,6 @@ void D_Display (void)
     if (automapactive && automap_overlay)
     {
         AM_Drawer ();
-        HU_Drawer ();
 
         // [crispy] force redraw of border
         viewactivestate = false;
@@ -650,6 +791,9 @@ void D_Display (void)
                                                                    "M_PAUSE" : "RD_PAUSE"), PU_CACHE));
         }
     }
+
+    // [JN] Handle player messages.
+    DrawMessage();
 
     // menus go directly to the screen
     M_Drawer ();    // menu is drawn even on top of everything
@@ -3220,13 +3364,8 @@ void D_DoomMain (void)
     PrintGameVersion();
 
     DEH_printf(english_language ?
-               "HU_Init: Setting up heads up display.\n" :
-               "HU_Init: Инициализация HUD.\n");
-    HU_Init ();
-
-    DEH_printf(english_language ?
-               "ST_Init: Init status bar.\n" :
-               "ST_Init: Инициализация строки состояния.\n");
+               "ST_Init: Init status bar and heads up display.\n" :
+               "ST_Init: Инициализация статус-бара и HUD.\n");
     ST_Init ();
 
     // [JN] Predefine crosshair GFX patch, opacity and drawing function.

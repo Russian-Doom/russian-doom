@@ -39,7 +39,6 @@
 #include "p_saveg.h"
 #include "d_main.h"
 #include "wi_stuff.h"
-#include "hu_stuff.h"
 #include "st_stuff.h"
 #include "am_map.h"
 #include "v_video.h"
@@ -343,7 +342,8 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     {
         alwaysRun ^= 1;
 
-        players[consoleplayer].message_system = alwaysRun ?  ststr_alwrun_on : ststr_alwrun_off;
+        P_SetMessage(&players[consoleplayer], alwaysRun ?
+                     ststr_alwrun_on : ststr_alwrun_off, msg_system, false);
         S_StartSound(NULL,sfx_swtchn);
 
         BK_ReleaseKey(bk_toggle_autorun);
@@ -419,7 +419,6 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     }
 
     // buttons
-    cmd->chatchar = HU_dequeueChatChar(); 
 
     if (BK_isKeyPressed(bk_fire))
     {
@@ -478,7 +477,8 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
             players[consoleplayer].lookdir = 0;
         }
 
-        players[consoleplayer].message_system = mlook ? ststr_mlook_on : ststr_mlook_off;
+        P_SetMessage(&players[consoleplayer], mlook ?
+                     ststr_mlook_on : ststr_mlook_off, msg_system, false);
         S_StartSound(NULL, sfx_swtchn);
 
         BK_ReleaseKey(bk_toggle_mlook);
@@ -716,7 +716,7 @@ void G_DoLoadLevel (void)
 
     if (testcontrols)
     {
-        players[consoleplayer].message_system = ststr_testctrls;
+        P_SetMessage(&players[consoleplayer], ststr_testctrls, msg_system, false);
     }
 }
 
@@ -756,8 +756,6 @@ boolean G_Responder (event_t *ev)
 
     if (gamestate == GS_LEVEL) 
     { 
-        if (HU_Responder (ev)) 
-            return true;	// chat ate the event
         if (ST_Responder (ev)) 
             return true;	// status window ate it
         if (AM_Responder (ev)) 
@@ -888,10 +886,6 @@ void G_Ticker (void)
 
             case ga_screenshot: // [JN] Extended name from "DOOM%02i.%s"
             V_ScreenShot("screenshot-doom-%02i.%s");
-            if (devparm)
-            {
-                players[consoleplayer].message_system = ststr_scrnsht;
-            }
             S_StartSound(NULL,sfx_itemup); // [JN] Audible feedback
             gameaction = ga_nothing;
             break;
@@ -942,7 +936,7 @@ void G_Ticker (void)
                 M_snprintf(turbomessage, sizeof(turbomessage),
                            "%s is turbo!", player_names[i]);
 
-                players[consoleplayer].message_chat = turbomessage;
+                P_SetMessage(&players[consoleplayer], turbomessage, msg_chat, false);
                 turbodetected[i] = false;
             }
 
@@ -1017,7 +1011,6 @@ void G_Ticker (void)
         P_Ticker (); 
         ST_Ticker (); 
         AM_Ticker (); 
-        HU_Ticker ();            
         break; 
 
         case GS_INTERMISSION: 
@@ -1063,6 +1056,7 @@ void G_PlayerFinishLevel (int player)
     memset (p->powers, 0, sizeof (p->powers)); 
     memset (p->cards, 0, sizeof (p->cards)); 
     memset (p->tryopen, 0, sizeof (p->tryopen)); // [crispy] blinking key or skull in the status bar
+    p->messageTics = 0;
     p->mo->flags &= ~MF_SHADOW; // cancel invisibility 
     p->extralight = 0;          // cancel gun flashes 
     p->fixedcolormap = 0;       // cancel ir gogles 
@@ -1101,6 +1095,7 @@ void G_PlayerReborn (int player)
     players[player].itemcount = itemcount; 
     players[player].secretcount = secretcount; 
 
+    p->messageTics = 0;
     p->usedown = p->attackdown = true;  // don't do anything immediately 
     p->playerstate = PST_LIVE;       
     p->health = deh_initial_health;     // Use dehacked value
@@ -1791,7 +1786,7 @@ void G_DoLoadGame (void)
     // [JN] Additional message after game load.
     if (!vanillaparm)
     {
-        players[consoleplayer].message_system = DEH_String(ggloaded);
+        P_SetMessage(&players[consoleplayer], DEH_String(ggloaded), msg_system, false);
     }
     
     // draw the pattern into the back screen
@@ -1889,7 +1884,7 @@ void G_DoSaveGame (void)
     gameaction = ga_nothing;
     M_StringCopy(savedescription, "", sizeof(savedescription));
 
-    players[consoleplayer].message_system = DEH_String(ggsaved);
+    P_SetMessage(&players[consoleplayer], DEH_String(ggsaved), msg_system, false);
 
     // draw the pattern into the back screen
     R_FillBackScreen ();

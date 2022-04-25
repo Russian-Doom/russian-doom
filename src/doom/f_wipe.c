@@ -27,7 +27,6 @@
 #include "d_mode.h"     // [JN] Jaguar Doom: gamemission
 #include "w_wad.h"      // [JN] Jaguar Doom: W_CacheLumpName
 #include "doomstat.h"   // [JN] Jaguar Doom: screenblocks
-#include "hu_stuff.h"
 #include "st_stuff.h"   // [JN] Jaguar Doom: Status bar widgets
 #include "jn.h"         // [JN] Jaguar Doom: english_language
 
@@ -188,7 +187,6 @@ static int wipe_exitMelt (int width, int height, int ticks)
     {
         ST_refreshBackground();
         ST_drawWidgets(true);
-        HU_Drawer();
     }
     return 0;
 }

@@ -38,6 +38,7 @@
 #include "d_ticcmd.h"
 
 #include "net_defs.h"
+#include "rd_text.h"
 
 
 //
@@ -118,10 +119,9 @@ typedef struct player_s
     int secretcount;
 
     // Hint messages.
-    char *message;          // [JN] Item pickup
-    char *message_secret;   // [JN] Revealed secret
-    char *message_system;   // [JN] System messages
-    char *message_chat;     // [JN] Netgame chat
+    char *message;
+    int   messageTics;
+    MessageType_t messageType;
 
     // For screen flashing (red or bright).
     int damagecount;

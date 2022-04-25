@@ -37,6 +37,7 @@
 #include "w_wad.h"
 #include "deh_main.h"
 #include "d_loop.h"
+#include "p_local.h"
 #include "jn.h"
 
 
@@ -65,7 +66,7 @@ static void PlayerQuitGame(player_t *player)
     exitmsg[english_language ? 7 : 6] += player_num;
 
     playeringame[player_num] = false;
-    players[consoleplayer].message_system = exitmsg;
+    P_SetMessage(&players[consoleplayer], exitmsg, msg_system, false);
     // [crispy] don't interpolate players who left the game
     player->mo->interp = false;
 
