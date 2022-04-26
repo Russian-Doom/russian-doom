@@ -3478,7 +3478,7 @@ static void DrawResetControlsMenu()
 
     if (english_language)
     {
-        RD_M_DrawTextBigCenteredENG("CONTROLS RESET", 42);
+        RD_M_DrawTextBigCenteredENG("Controls reset", 42);
 
         // Explanations
         RD_M_DrawTextSmallCenteredENG("CONTROLS WILL BE RESET TO", 145, CR_DARKRED);

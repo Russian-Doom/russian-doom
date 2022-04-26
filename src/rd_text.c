@@ -381,14 +381,14 @@ void RD_M_DrawTextBigCenteredENG(char *text, int y)
     int cx, cy;
     patch_t *p;
 
-    cx = 160 - RD_M_TextSmallRUSWidth(text) / 2 + wide_delta;;
+    cx = 160 - RD_M_TextBigENGWidth(text) / 2 + wide_delta;;
     cy = y;
 
     while ((c = *text++) != 0)
     {
         if (c == '\n')
         {
-            cx = 160 - RD_M_TextSmallRUSWidth(text) / 2 + wide_delta;;
+            cx = 160 - RD_M_TextBigENGWidth(text) / 2 + wide_delta;;
             cy += 12;
             continue;
         }
@@ -611,14 +611,14 @@ void RD_M_DrawTextBigCenteredRUS(char *text, int y)
     int cx, cy;
     patch_t *p;
 
-    cx = 160 - RD_M_TextSmallENGWidth(text) / 2 + wide_delta;;
+    cx = 160 - RD_M_TextBigRUSWidth(text) / 2 + wide_delta;;
     cy = y;
 
     while ((c = *text++) != 0)
     {
         if (c == '\n')
         {
-            cx = 160 - RD_M_TextSmallENGWidth(text) / 2 + wide_delta;;
+            cx = 160 - RD_M_TextBigRUSWidth(text) / 2 + wide_delta;;
             cy += 12;
             continue;
         }

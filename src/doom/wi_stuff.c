@@ -2483,7 +2483,7 @@ static void WI_drawStatsJaguar (void)
         if (english_language)
         {
             RD_M_DrawTextBigCenteredENG(LevelNamesJaguar[gamemap], 2);
-            RD_M_DrawTextBigCenteredENG("FINISHED", 20);
+            RD_M_DrawTextBigCenteredENG("Finished", 20);
         }
         else
         {
@@ -2563,7 +2563,7 @@ static void WI_drawStatsJaguar (void)
     {
         if (english_language)
         {
-            RD_M_DrawTextBigCenteredENG("ENTERING", 146);
+            RD_M_DrawTextBigCenteredENG("Entering", 146);
             RD_M_DrawTextBigCenteredENG(LevelNamesJaguar[wminfo.next+1], 164);
         }
         else
