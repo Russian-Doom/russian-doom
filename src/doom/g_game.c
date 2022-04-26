@@ -1015,7 +1015,10 @@ void G_Ticker (void)
         P_Ticker (); 
         ST_Ticker (); 
         AM_Ticker (); 
-        CT_Ticker ();
+        if (netgame)
+        {
+            CT_Ticker ();  // [JN] Not really needed in single player game.
+        }
         break; 
 
         case GS_INTERMISSION: 

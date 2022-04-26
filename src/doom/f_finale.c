@@ -30,6 +30,7 @@
 #include "doomstat.h"
 #include "r_main.h"
 #include "st_stuff.h"
+#include "ct_chat.h"
 #include "jn.h"
 
 

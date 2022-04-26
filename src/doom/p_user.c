@@ -387,7 +387,6 @@ void P_PlayerThink (player_t *player)
     if (!player->messageTics)
     {                           // Refresh the screen when a message goes away
         ultimatemsg = false;    // clear out any chat messages.
-        // BorderTopRefresh = true;
     }
 
     if (player->playerstate == PST_DEAD)

@@ -332,14 +332,6 @@ cheatseq_t cheat_god_beta    = CHEAT("tst", 0); // iddqd
 cheatseq_t cheat_ammo_beta   = CHEAT("amo", 0); // idkfa
 cheatseq_t cheat_noclip_beta = CHEAT("nc", 0);  // idclip
 
-// Fonts
-patch_t *hu_font[HU_FONTSIZE];
-patch_t *hu_font_small_eng[HU_FONTSIZE]; // [JN] Small, unchangeable English font (FNTSE)
-patch_t *hu_font_small_rus[HU_FONTSIZE]; // [JN] Small, unchangeable Russian font (FNTSR)
-patch_t *hu_font_big_eng[HU_FONTSIZE2];  // [JN] Big, unchangeable English font (FNTBE)
-patch_t *hu_font_big_rus[HU_FONTSIZE2];  // [JN] Big, unchangeable Russian font (FNTBR)
-patch_t *hu_font_gray[HU_FONTSIZE_GRAY]; // [JN] Small gray STCFG font
-
 
 // -----------------------------------------------------------------------------
 // STATUS BAR CODE
@@ -796,7 +788,7 @@ boolean ST_Responder (event_t *ev)
                                 players[consoleplayer].mo->x >> FRACBITS,
                                 players[consoleplayer].mo->y >> FRACBITS,
                                 players[consoleplayer].mo->angle / ANG1);
-                P_SetMessage(plyr, buf, msg_system, false);
+                P_SetMessage(plyr, buf, msg_system, true);
             }
         }
 
@@ -1938,6 +1930,7 @@ void ST_WidgetsDrawer (void)
     int time = leveltime / TICRATE;
     int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
     const int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
+    const int net_y = netgame ? 8 : 0;  // [JN] Shift one line down for chat string.
     plyr = &players[consoleplayer];
 
     if (((automapactive && automap_stats == 1) || automap_stats == 2))
@@ -1948,40 +1941,40 @@ void ST_WidgetsDrawer (void)
                 plyr->extrakillcount ? plyr->extrakillcount : totalkills,
                 totalkills);
 
-        english_language ? RD_M_DrawTextA("K:", wide_4_3, 9) :
-                           RD_M_DrawTextSmallRUS("D:", wide_4_3, 9, CR_NONE);
+        english_language ? RD_M_DrawTextA("K:", wide_4_3, 9+net_y) :
+                           RD_M_DrawTextSmallRUS("D:", wide_4_3, 9+net_y, CR_NONE);
         
         dp_translation = hud_stats_color == 0 ? NULL :
                          totalkills == 0 ? cr[CR_GREEN] :
                          plyr->killcount == 0 ? cr[CR_RED] :
                          plyr->killcount < totalkills ? cr[CR_YELLOW] : cr[CR_GREEN];
-        RD_M_DrawTextA(str, wide_4_3 + 16, 9);
+        RD_M_DrawTextA(str, wide_4_3 + 16, 9+net_y);
         dp_translation = NULL;
 
         // Items:
         sprintf(str, "%d/%d", plyr->itemcount, totalitems);
 
-        english_language ? RD_M_DrawTextA("I:", wide_4_3, 17) :
-                           RD_M_DrawTextSmallRUS("G:", wide_4_3, 17, CR_NONE);
+        english_language ? RD_M_DrawTextA("I:", wide_4_3, 17+net_y) :
+                           RD_M_DrawTextSmallRUS("G:", wide_4_3, 17+net_y, CR_NONE);
 
         dp_translation = hud_stats_color == 0 ? NULL :
                          totalitems == 0 ? cr[CR_GREEN] :
                          plyr->itemcount == 0 ? cr[CR_RED] :
                          plyr->itemcount < totalitems ? cr[CR_YELLOW] : cr[CR_GREEN];
-        RD_M_DrawTextA(str, wide_4_3 + 16, 17);
+        RD_M_DrawTextA(str, wide_4_3 + 16, 17+net_y);
         dp_translation = NULL;
 
         // Secret:
         sprintf(str, "%d/%d", plyr->secretcount, totalsecret);
 
-        english_language ? RD_M_DrawTextA("S:", wide_4_3, 25) :
-                           RD_M_DrawTextSmallRUS("N:", wide_4_3, 25, CR_NONE);
+        english_language ? RD_M_DrawTextA("S:", wide_4_3, 25+net_y) :
+                           RD_M_DrawTextSmallRUS("N:", wide_4_3, 25+net_y, CR_NONE);
 
         dp_translation = hud_stats_color == 0 ? NULL :
                          totalsecret == 0 ? cr[CR_GREEN] :
                          plyr->secretcount == 0 ? cr[CR_RED] :
                          plyr->secretcount < totalsecret ? cr[CR_YELLOW] : cr[CR_GREEN];
-        RD_M_DrawTextA(str, wide_4_3 + 16, 25);
+        RD_M_DrawTextA(str, wide_4_3 + 16, 25+net_y);
         dp_translation = NULL;
     }
 
@@ -1990,11 +1983,11 @@ void ST_WidgetsDrawer (void)
     {
         sprintf(str, "%d", gameskill+1);
 
-        english_language ? RD_M_DrawTextA("SKL:", wide_4_3, 33) :
-                           RD_M_DrawTextSmallRUS("CK;:", wide_4_3, 33, CR_NONE);
+        english_language ? RD_M_DrawTextA("SKL:", wide_4_3, 33+net_y) :
+                           RD_M_DrawTextSmallRUS("CK;:", wide_4_3, 33+net_y, CR_NONE);
 
         dp_translation = hud_stats_color == 0 ? NULL : cr[CR_WHITE];
-        RD_M_DrawTextA(str, wide_4_3 + (english_language ? 31 : 36), 33);
+        RD_M_DrawTextA(str, wide_4_3 + (english_language ? 31 : 36), 33+net_y);
         dp_translation = NULL;
     }
 
@@ -2003,11 +1996,11 @@ void ST_WidgetsDrawer (void)
     {
         sprintf(str, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
 
-        english_language ? RD_M_DrawTextA("LEVEL", wide_4_3, 49) :
-                           RD_M_DrawTextSmallRUS("EHJDTYM", wide_4_3, 49, CR_NONE);
+        english_language ? RD_M_DrawTextA("LEVEL", wide_4_3, 49+net_y) :
+                           RD_M_DrawTextSmallRUS("EHJDTYM", wide_4_3, 49+net_y, CR_NONE);
 
         dp_translation = hud_stats_color == 0 ? NULL : cr[CR_WHITE];
-        RD_M_DrawTextA(str, wide_4_3, 57);
+        RD_M_DrawTextA(str, wide_4_3, 57+net_y);
         dp_translation = NULL;
     }
 
@@ -2016,11 +2009,11 @@ void ST_WidgetsDrawer (void)
     {
         sprintf(str, "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
 
-        english_language ? RD_M_DrawTextA("TOTAL", wide_4_3, 73) :
-                           RD_M_DrawTextSmallRUS("J,OTT", wide_4_3, 73, CR_NONE);
+        english_language ? RD_M_DrawTextA("TOTAL", wide_4_3, 73+net_y) :
+                           RD_M_DrawTextSmallRUS("J,OTT", wide_4_3, 73+net_y, CR_NONE);
 
         dp_translation = hud_stats_color == 0 ? NULL : cr[CR_WHITE];
-        RD_M_DrawTextA(str, wide_4_3, 81);
+        RD_M_DrawTextA(str, wide_4_3, 81+net_y);
         dp_translation = NULL;
     }
 
@@ -2028,21 +2021,21 @@ void ST_WidgetsDrawer (void)
     if (((automapactive && automap_coords == 1) || automap_coords == 2))
     {
         dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GREEN];
-        RD_M_DrawTextA("X:", wide_4_3, 97);
-        RD_M_DrawTextA("Y:", wide_4_3, 105);
-        RD_M_DrawTextA("Z:", wide_4_3, 113);
-        RD_M_DrawTextA("ANG:", wide_4_3, 121);
+        RD_M_DrawTextA("X:", wide_4_3, 97+net_y);
+        RD_M_DrawTextA("Y:", wide_4_3, 105+net_y);
+        RD_M_DrawTextA("Z:", wide_4_3, 113+net_y);
+        RD_M_DrawTextA("ANG:", wide_4_3, 121+net_y);
         dp_translation = NULL;
 
         dp_translation = hud_stats_color == 0 ? NULL : cr[CR_WHITE];
         sprintf(str, "%d", plyr->mo->x >> FRACBITS);
-        RD_M_DrawTextA(str, wide_4_3 + 16, 97);
+        RD_M_DrawTextA(str, wide_4_3 + 16, 97+net_y);
         sprintf(str, "%d", plyr->mo->y >> FRACBITS);
-        RD_M_DrawTextA(str, wide_4_3 + 16, 105);
+        RD_M_DrawTextA(str, wide_4_3 + 16, 105+net_y);
         sprintf(str, "%d", plyr->mo->z >> FRACBITS);
-        RD_M_DrawTextA(str, wide_4_3 + 16, 113);
+        RD_M_DrawTextA(str, wide_4_3 + 16, 113+net_y);
         sprintf(str, "%d", plyr->mo->angle / ANG1);
-        RD_M_DrawTextA(str, wide_4_3 + 32, 121);
+        RD_M_DrawTextA(str, wide_4_3 + 32, 121+net_y);
         dp_translation = NULL;
     }
 
@@ -2514,16 +2507,6 @@ void ST_Stop (void)
 
 void ST_Init (void)
 {
-    // load the heads-up font
-    int i;
-    int j = HU_FONTSTART;
-    int o = HU_FONTSTART;
-    int p = HU_FONTSTART;
-    int q = HU_FONTSTART2;
-    int r = HU_FONTSTART2;
-    int g = HU_FONTSTART_GRAY;
-    char    buffer[9];
-
     ST_loadData();
 
     // [JN] Initialize status bar height.
@@ -2534,49 +2517,6 @@ void ST_Init (void)
     st_backing_screen = (byte *)Z_Malloc((screenwidth << hires) 
                                        * (st_height << hires)
                                        * sizeof(*st_backing_screen), PU_STATIC, 0);
-
-    // [JN] Load the heads-up fonts.
-    // [JN] Standard STCFN font
-    for (i=0;i<HU_FONTSIZE;i++)
-    {
-        DEH_snprintf(buffer, 9, "STCFN%.3d", j++);
-        hu_font[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
-    }
-
-    // [JN] Small, unchangeable English font (FNTSE)
-    for (i=0;i<HU_FONTSIZE;i++)
-    {
-        DEH_snprintf(buffer, 9, "FNTSE%.3d", o++);
-        hu_font_small_eng[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
-    }
-
-    // [JN] Small, unchangeable Russian font (FNTSR)
-    for (i=0;i<HU_FONTSIZE;i++)
-    {
-        DEH_snprintf(buffer, 9, "FNTSR%.3d", p++);
-        hu_font_small_rus[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
-    }
-
-    // [JN] Big, unchangeable English font (FNTBE)
-    for (i=0;i<HU_FONTSIZE2;i++)
-    {
-        DEH_snprintf(buffer, 9, "FNTBE%.3d", q++);
-        hu_font_big_eng[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
-    }
-
-    // [JN] Big, unchangeable Russian font (FNTBR)
-    for (i=0;i<HU_FONTSIZE2;i++)
-    {
-        DEH_snprintf(buffer, 9, "FNTBR%.3d", r++);
-        hu_font_big_rus[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
-    }    
-
-    // [JN] Small gray STCFG font, used for local time widget and FPS counter
-    for (i=0;i<HU_FONTSIZE_GRAY;i++)
-    {
-        DEH_snprintf(buffer, 9, "STCFG%.3d", g++);
-        hu_font_gray[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
-    }
 
     // [JN] Initialize status bar widget colors.
     M_RD_Define_SBarColorValue(&sbar_color_high_set, sbar_color_high);

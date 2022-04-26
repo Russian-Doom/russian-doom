@@ -3336,6 +3336,9 @@ void D_DoomMain (void)
                "M_Init: Инициализация внутренних данных.\n");
     M_Init ();
 
+    DEH_printf(english_language ?
+               "CT_Init: Init fonts and messages system." :
+               "CT_Init: Инициализация шрифтов и системы сообщений.");
     CT_Init();
 
     DEH_printf(english_language ?
