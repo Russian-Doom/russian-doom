@@ -8,7 +8,8 @@ add_library(Common STATIC EXCLUDE_FROM_ALL
     i_system.c           i_system.h
     m_argv.c             m_argv.h
     m_misc.c             m_misc.h
-    rd_io.c              rd_io.h
+                         rd_io.h
+    win_compat.c
 )
 target_include_directories(Common PUBLIC
     "${PROJECT_BINARY_DIR}"
