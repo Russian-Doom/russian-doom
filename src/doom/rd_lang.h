@@ -627,12 +627,6 @@ extern char* ststr_massacre;
 #define HUSTR_CHATMACRO9    "Yes"
 #define HUSTR_CHATMACRO0    "No"
 
-#define HUSTR_TALKTOSELF1   "You mumble to yourself"
-#define HUSTR_TALKTOSELF2   "Who's there?"
-#define HUSTR_TALKTOSELF3   "You scare yourself"
-#define HUSTR_TALKTOSELF4   "You start to rave"
-#define HUSTR_TALKTOSELF5   "You've lost it..."
-
 #define HUSTR_MESSAGESENT   "[Message Sent]"
 
 
@@ -1502,17 +1496,6 @@ extern char* ststr_massacre;
 #define JHUSTR_24_RUS   "ehjdtym 24: djtyyfz ,fpf"                  // Уровень 24: Военная база
 #define JHUSTR_25_RUS   "ehjdtym 25: 'rcnhf-htfkmyjcnm"             // Уровень 25: Экстра-реальность
 #define JHUSTR_26_RUS   "ehjdtym 26: rhjkbxbq cfl"                  // Уровень 26: Кроличий сад
-
-
-//
-// Макросы для чата
-// 
-
-#define HUSTR_TALKTOSELF1_RUS   "ythfp,jhxbdjt ,jhvjnfybt>>>"   // Неразборчивое бормотание...
-#define HUSTR_TALKTOSELF2_RUS   "rnj nfv?"                      // Кто там?
-#define HUSTR_TALKTOSELF3_RUS   "xnj 'nj ,skj?"                 // Что это было?
-#define HUSTR_TALKTOSELF4_RUS   "ds ,htlbnt>"                   // Вы бредите.
-#define HUSTR_TALKTOSELF5_RUS   "rfrfz ljcflf!"                 // Какая досада!
 
 
 //
