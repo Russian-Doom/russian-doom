@@ -294,6 +294,10 @@ extern int st_keyorskull[3];
 //
 // P_INTER
 //
+
+void P_SetMessage (player_t *player, char *message, MessageType_t messageType, boolean ultmsg);
+extern boolean ultimatemsg;
+
 extern int		maxammo[NUMAMMO];
 extern int		clipammo[NUMAMMO];
 

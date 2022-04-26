@@ -320,7 +320,6 @@ static void AM_rotatePoint (mpoint_t *pt);
 static mpoint_t mapcenter;
 static angle_t mapangle;
 
-
 // -----------------------------------------------------------------------------
 // AM_activateNewScale
 // Changes the map scale after zooming or translating.
@@ -876,26 +875,21 @@ boolean AM_Responder (event_t *ev)
         {
             automap_follow = !automap_follow;
             f_oldloc.x = INT_MAX;
-            if (automap_follow)
-            {
-                plr->message_system = DEH_String(amstr_followon);
-            }
-            else
-            {
-                plr->message_system = DEH_String(amstr_followoff);
-            }
+            P_SetMessage(plr, DEH_String(automap_follow ?
+                         amstr_followon : amstr_followoff), msg_system, false);
         }
         else if (BK_isKeyDown(ev, bk_map_grid))
         {
             automap_grid = !automap_grid;
-            plr->message_system = DEH_String(automap_grid ? amstr_gridon : amstr_gridoff);
+            P_SetMessage(plr, DEH_String(automap_grid ?
+                         amstr_gridon : amstr_gridoff), msg_system, false);
         }
         else if (BK_isKeyDown(ev, bk_map_mark))
         {
             // [JN] "Mark № added" / "Отметка № добавлена".
             M_snprintf(buffer, sizeof(buffer), "%s %d %s",
                        DEH_String(amstr_mark), markpointnum, DEH_String(amstr_added));
-            plr->message_system = buffer;
+            P_SetMessage(plr, buffer, msg_system, false);
             AM_addMark();
         }
         else if (BK_isKeyPressed(bk_speed) && BK_isKeyDown(ev, bk_map_clearmark))
@@ -903,7 +897,7 @@ boolean AM_Responder (event_t *ev)
             // [JN] Clear all mark by holding "run" button and pressing "clear mark".
             if (markpointnum > 0)
             {
-                plr->message_system = DEH_String(amstr_markscleared);
+                P_SetMessage(plr, DEH_String(amstr_markscleared), msg_system, false);
                 AM_clearMarks();
             }
         }
@@ -915,7 +909,7 @@ boolean AM_Responder (event_t *ev)
                 markpointnum--;
                 M_snprintf(buffer, sizeof(buffer), "%s %d %s",
                         DEH_String(amstr_mark), markpointnum, DEH_String(amstr_cleared));
-                plr->message_system = buffer;
+                P_SetMessage(plr, buffer, msg_system, false);
                 
             }
         }
@@ -924,12 +918,14 @@ boolean AM_Responder (event_t *ev)
             // [crispy] force redraw status bar
             inhelpscreens = true;
             automap_overlay = !automap_overlay;
-            plr->message_system = DEH_String(automap_overlay ? amstr_overlayon : amstr_overlayoff);
+            P_SetMessage(plr, DEH_String(automap_overlay ?
+                         amstr_overlayon : amstr_overlayoff), msg_system, false);
         }
         else if (BK_isKeyDown(ev, bk_map_rotate))
         {
             automap_rotate = !automap_rotate;
-            plr->message_system = DEH_String(automap_rotate ? amstr_rotateon : amstr_rotateoff);
+            P_SetMessage(plr, DEH_String(automap_rotate ?
+                         amstr_rotateon : amstr_rotateoff), msg_system, false);
         }
 
         else

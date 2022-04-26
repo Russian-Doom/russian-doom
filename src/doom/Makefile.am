@@ -4,6 +4,7 @@ noinst_LIBRARIES=libdoom.a
 
 SOURCE_FILES=                   \
 am_map.c           am_map.h     \
+ct_chat.c          ct_chat.h    \
 d_items.c          d_items.h    \
 d_main.c           d_main.h     \
 d_net.c                         \
@@ -15,8 +16,6 @@ doomstat.c         doomstat.h   \
 f_finale.c         f_finale.h   \
 f_wipe.c           f_wipe.h     \
 g_game.c           g_game.h     \
-hu_lib.c           hu_lib.h     \
-hu_stuff.c         hu_stuff.h   \
 info.c             info.h       \
 m_menu.c           m_menu.h     \
 m_random.c         m_random.h   \

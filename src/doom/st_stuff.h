@@ -25,6 +25,7 @@
 #include "doomtype.h"
 #include "d_event.h"
 #include "m_cheat.h"
+#include "v_patch.h"
 
 
 // Size of statusbar.
@@ -43,7 +44,6 @@ extern int st_height;
 extern void ST_DrawDemoTimer (const int time);
 extern int defdemotics, deftotaldemotics;
 
-
 //
 // STATUS BAR
 //
@@ -56,6 +56,8 @@ void ST_Ticker (void);
 
 // Called by main loop.
 void ST_Drawer (boolean fullscreen, boolean refresh);
+void ST_WidgetsDrawer (void);
+void ST_MapNameDrawer (void);
 
 // Called when the console player is spawned on each level.
 void ST_Start (void);
@@ -111,3 +113,13 @@ extern byte *sbar_color_critical_set;
 extern byte *sbar_color_armor_1_set;
 extern byte *sbar_color_armor_2_set;
 extern byte *sbar_color_armor_0_set;
+
+// [JN] Crosshair stuff.
+extern patch_t *CrosshairPatch;
+extern byte    *CrosshairOpacity;
+extern int  CrosshairShowcaseTimeout;
+extern void Crosshair_DefinePatch (void);
+extern void Crosshair_DefineOpacity (void);
+extern void Crosshair_DefineDrawingFunc (void);
+extern void Crosshair_Colorize_inMenu (void);
+extern void Crosshair_Draw (void);

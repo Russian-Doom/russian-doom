@@ -531,11 +531,11 @@ boolean ST_Responder (event_t *ev)
                         }
                         plyr->health = deh_god_mode_health;
                     }
-                    plyr->message_system = DEH_String(ststr_dqdon);
+                    P_SetMessage(plyr, DEH_String(ststr_dqdon), msg_system, false);
                 }
                 else
                 {
-                    plyr->message_system = DEH_String(ststr_dqdoff);
+                    P_SetMessage(plyr, DEH_String(ststr_dqdoff), msg_system, false);
                 }
             }
 
@@ -583,7 +583,7 @@ boolean ST_Responder (event_t *ev)
                     }
                 }
 
-                plyr->message_system = DEH_String(ststr_faadded);
+                P_SetMessage(plyr, DEH_String(ststr_faadded), msg_system, false);
             }
 
             // 'kfa' cheat for key full ammo
@@ -631,7 +631,7 @@ boolean ST_Responder (event_t *ev)
                     plyr->cards[i] = true;
                 }
 
-                plyr->message_system = DEH_String(ststr_kfaadded);
+                P_SetMessage(plyr, DEH_String(ststr_kfaadded), msg_system, false);
             }
 
             // [JN] 'ka' чит для выдачи ключей
@@ -642,7 +642,7 @@ boolean ST_Responder (event_t *ev)
                     plyr->cards[i] = true;
                 }
 
-                plyr->message_system = DEH_String(ststr_kaadded);
+                P_SetMessage(plyr, DEH_String(ststr_kaadded), msg_system, false);
             }
 
             // [crispy] implement Boom's "tntem" cheat
@@ -651,7 +651,7 @@ boolean ST_Responder (event_t *ev)
                 int killcount = ST_cheat_massacre();
 
                 M_snprintf(msg, sizeof(msg), "%s %d", ststr_massacre, killcount);
-                plyr->message_system = msg;
+                P_SetMessage(plyr, msg, msg_system, false);
             }
 
             // 'mus' cheat for changing music
@@ -660,7 +660,7 @@ boolean ST_Responder (event_t *ev)
                 char buf[3];
                 int  musnum;
 
-                plyr->message_system = DEH_String(ststr_mus);
+                P_SetMessage(plyr, DEH_String(ststr_mus), msg_system, false);
                 cht_GetParam(&cheat_mus, buf);
 
                 // Note: The original v1.9 had a bug that tried to play back
@@ -678,7 +678,7 @@ boolean ST_Responder (event_t *ev)
                     // [JN] Jaguar: do not try to play D_ROMER2 (map27) and higher
                     if (((((buf[0]-'0')*10 + buf[1]-'0') > 35 || musnum < mus_runnin) && gameversion >= exe_doom_1_8)
                     ||  ((((buf[0]-'0')*10 + buf[1]-'0') > 26 || musnum < mus_runnin) && gamemission == jaguar))
-                        plyr->message_system = DEH_String(ststr_nomus);
+                        P_SetMessage(plyr, DEH_String(ststr_nomus), msg_system, false);
                     else
                     {
                         S_ChangeMusic(musnum, 1);
@@ -696,7 +696,7 @@ boolean ST_Responder (event_t *ev)
                     // [JN] Sigil: allow to choose E5MX music, otherwise don't allow to choose E4MX music.
                     if ((((buf[0]-'1')*9 + buf[1]-'1') > (sgl_loaded ? 41 : 21) || buf[0] < '1' || buf[1] < '1'))
                     {
-                        plyr->message_system = DEH_String(ststr_nomus);
+                        P_SetMessage(plyr, DEH_String(ststr_nomus), msg_system, false);
                     }
                     else
                     {
@@ -729,14 +729,8 @@ boolean ST_Responder (event_t *ev)
 
                 plyr->cheats ^= CF_NOCLIP;
 
-                if (plyr->cheats & CF_NOCLIP)
-                {
-                    plyr->message_system = DEH_String(ststr_ncon);
-                }
-                else
-                {
-                    plyr->message_system = DEH_String(ststr_ncoff);
-                }
+                P_SetMessage(plyr, DEH_String(plyr->cheats & CF_NOCLIP ?
+                             ststr_ncon : ststr_ncoff), msg_system, false);
             }
 
             // 'behold?' power-up cheats
@@ -753,17 +747,17 @@ boolean ST_Responder (event_t *ev)
                     if (!plyr->powers[i])
                     {
                         P_GivePower( plyr, i);
-                        plyr->message_system = DEH_String(ststr_beholdx); // [JN] Активирован
+                        P_SetMessage(plyr, DEH_String(ststr_beholdx), msg_system, false);
                     }
                     else if (i!=pw_strength && i!=pw_allmap) // [crispy] disable full Automap
                     {
                         plyr->powers[i] = 1;
-                        plyr->message_system = DEH_String(ststr_beholdz); // [JN] Деактивирован
+                        P_SetMessage(plyr, DEH_String(ststr_beholdz), msg_system, false);
                     }
                     else
                     {
                         plyr->powers[i] = 0;
-                        plyr->message_system = DEH_String(ststr_beholdz); // [JN] Деактивирован
+                        P_SetMessage(plyr, DEH_String(ststr_beholdz), msg_system, false);
                     }
                 }
             }
@@ -771,7 +765,7 @@ boolean ST_Responder (event_t *ev)
             // 'behold' power-up menu
             if (cht_CheckCheat(&cheat_powerup[6], ev->data2))
             {
-                plyr->message_system = DEH_String(ststr_behold);
+                P_SetMessage(plyr, DEH_String(ststr_behold), msg_system, false);
             }
 
             // 'choppers' invulnerability & chainsaw
@@ -779,7 +773,7 @@ boolean ST_Responder (event_t *ev)
             {
                 plyr->weaponowned[wp_chainsaw] = true;
                 plyr->powers[pw_invulnerability] = true;
-                plyr->message_system = DEH_String(ststr_choppers);
+                P_SetMessage(plyr, DEH_String(ststr_choppers), msg_system, false);
             }
 
             // 'mypos' for player position
@@ -794,7 +788,7 @@ boolean ST_Responder (event_t *ev)
                                 players[consoleplayer].mo->x >> FRACBITS,
                                 players[consoleplayer].mo->y >> FRACBITS,
                                 players[consoleplayer].mo->angle / ANG1);
-                plyr->message_system = buf;
+                P_SetMessage(plyr, buf, msg_system, true);
             }
         }
 
@@ -880,7 +874,7 @@ boolean ST_Responder (event_t *ev)
             }
 
             // So be it.
-            plyr->message_system = DEH_String(ststr_clev);
+            P_SetMessage(plyr, DEH_String(ststr_clev), msg_system, false);
             G_DeferedInitNew(gameskill, epsd, map);
             // [crispy] eat key press, i.e. don't change weapon upon level change
             return true;
@@ -910,11 +904,11 @@ boolean ST_Responder (event_t *ev)
                     }
 
                     plyr->health = deh_god_mode_health;
-                    plyr->message_system = DEH_String(ststr_dqdon);
+                    P_SetMessage(plyr, DEH_String(ststr_dqdon), msg_system, false);
                 }
                 else
                 {
-                    plyr->message_system = DEH_String(ststr_dqdoff);
+                    P_SetMessage(plyr, DEH_String(ststr_dqdoff), msg_system, false);
                 }
             }
 
@@ -937,7 +931,7 @@ boolean ST_Responder (event_t *ev)
                     plyr->cards[i] = true;
                 }
 
-                plyr->message_system = DEH_String(ststr_kfaadded);
+                P_SetMessage(plyr, DEH_String(ststr_kfaadded), msg_system, false);
             }
 
             // 'NC' - noclipping mode
@@ -945,14 +939,8 @@ boolean ST_Responder (event_t *ev)
             {	
                 plyr->cheats ^= CF_NOCLIP;
 
-                if (plyr->cheats & CF_NOCLIP)
-                {
-                    plyr->message_system = DEH_String(ststr_ncon);
-                }
-                else
-                {
-                    plyr->message_system = DEH_String(ststr_ncoff);
-                }
+                P_SetMessage(plyr, DEH_String(plyr->cheats & CF_NOCLIP ?
+                             ststr_ncon : ststr_ncoff), msg_system, false);
             }
         }
     }
@@ -1902,6 +1890,212 @@ void ST_Drawer (boolean fullscreen, boolean refresh)
 }
 
 // -----------------------------------------------------------------------------
+// ST_DrawDemoTimer
+// [crispy] Demo Timer widget
+// -----------------------------------------------------------------------------
+
+void ST_DrawDemoTimer (const int time)
+{
+    const boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
+    const int mins = time / (60 * TICRATE);
+    const float secs = (float)(time % (60 * TICRATE)) / TICRATE;
+    char n[16];
+
+    sprintf(n, "%02i:%05.02f", mins, secs);
+
+    RD_M_DrawTextC(n, 278 + (wide_4_3 ? wide_delta : wide_delta*2), (viewwindowy >> hires) + 1);
+}
+
+// -----------------------------------------------------------------------------
+// ST_DrawDemoTimer
+// [crispy] print a bar indicating demo progress at the bottom of the screen
+// -----------------------------------------------------------------------------
+
+void ST_DemoProgressBar (void)
+{
+    const int i = screenwidth * defdemotics / deftotaldemotics;
+
+    V_DrawHorizLine(0, SCREENHEIGHT - 2, i, 0); // [crispy] black
+    V_DrawHorizLine(0, SCREENHEIGHT - 1, i, 4); // [crispy] white
+}
+
+// -----------------------------------------------------------------------------
+// [JN] ST_drawWidgets
+// Various status bar widgets.
+// -----------------------------------------------------------------------------
+
+void ST_WidgetsDrawer (void)
+{
+    static char str[128];
+    int time = leveltime / TICRATE;
+    int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
+    const int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
+    const int net_y = netgame ? 8 : 0;  // [JN] Shift one line down for chat string.
+    plyr = &players[consoleplayer];
+
+    if (((automapactive && automap_stats == 1) || automap_stats == 2))
+    {
+        // Kills:
+        sprintf(str, plyr->extrakillcount ? "%d+%d/%d" : "%d/%d",
+                plyr->killcount,
+                plyr->extrakillcount ? plyr->extrakillcount : totalkills,
+                totalkills);
+
+        english_language ? RD_M_DrawTextA("K:", wide_4_3, 9+net_y) :
+                           RD_M_DrawTextSmallRUS("D:", wide_4_3, 9+net_y, CR_NONE);
+        
+        dp_translation = hud_stats_color == 0 ? NULL :
+                         totalkills == 0 ? cr[CR_GREEN] :
+                         plyr->killcount == 0 ? cr[CR_RED] :
+                         plyr->killcount < totalkills ? cr[CR_YELLOW] : cr[CR_GREEN];
+        RD_M_DrawTextA(str, wide_4_3 + 16, 9+net_y);
+        dp_translation = NULL;
+
+        // Items:
+        sprintf(str, "%d/%d", plyr->itemcount, totalitems);
+
+        english_language ? RD_M_DrawTextA("I:", wide_4_3, 17+net_y) :
+                           RD_M_DrawTextSmallRUS("G:", wide_4_3, 17+net_y, CR_NONE);
+
+        dp_translation = hud_stats_color == 0 ? NULL :
+                         totalitems == 0 ? cr[CR_GREEN] :
+                         plyr->itemcount == 0 ? cr[CR_RED] :
+                         plyr->itemcount < totalitems ? cr[CR_YELLOW] : cr[CR_GREEN];
+        RD_M_DrawTextA(str, wide_4_3 + 16, 17+net_y);
+        dp_translation = NULL;
+
+        // Secret:
+        sprintf(str, "%d/%d", plyr->secretcount, totalsecret);
+
+        english_language ? RD_M_DrawTextA("S:", wide_4_3, 25+net_y) :
+                           RD_M_DrawTextSmallRUS("N:", wide_4_3, 25+net_y, CR_NONE);
+
+        dp_translation = hud_stats_color == 0 ? NULL :
+                         totalsecret == 0 ? cr[CR_GREEN] :
+                         plyr->secretcount == 0 ? cr[CR_RED] :
+                         plyr->secretcount < totalsecret ? cr[CR_YELLOW] : cr[CR_GREEN];
+        RD_M_DrawTextA(str, wide_4_3 + 16, 25+net_y);
+        dp_translation = NULL;
+    }
+
+    // Skill Level:
+    if (((automapactive && automap_skill == 1) || automap_skill == 2))
+    {
+        sprintf(str, "%d", gameskill+1);
+
+        english_language ? RD_M_DrawTextA("SKL:", wide_4_3, 33+net_y) :
+                           RD_M_DrawTextSmallRUS("CK;:", wide_4_3, 33+net_y, CR_NONE);
+
+        dp_translation = hud_stats_color == 0 ? NULL : cr[CR_WHITE];
+        RD_M_DrawTextA(str, wide_4_3 + (english_language ? 31 : 36), 33+net_y);
+        dp_translation = NULL;
+    }
+
+    // Level Time:
+    if (((automapactive && automap_level_time == 1) || automap_level_time == 2))
+    {
+        sprintf(str, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
+
+        english_language ? RD_M_DrawTextA("LEVEL", wide_4_3, 49+net_y) :
+                           RD_M_DrawTextSmallRUS("EHJDTYM", wide_4_3, 49+net_y, CR_NONE);
+
+        dp_translation = hud_stats_color == 0 ? NULL : cr[CR_WHITE];
+        RD_M_DrawTextA(str, wide_4_3, 57+net_y);
+        dp_translation = NULL;
+    }
+
+    // Total Time:
+    if (((automapactive && automap_total_time == 1) || automap_total_time == 2))
+    {
+        sprintf(str, "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
+
+        english_language ? RD_M_DrawTextA("TOTAL", wide_4_3, 73+net_y) :
+                           RD_M_DrawTextSmallRUS("J,OTT", wide_4_3, 73+net_y, CR_NONE);
+
+        dp_translation = hud_stats_color == 0 ? NULL : cr[CR_WHITE];
+        RD_M_DrawTextA(str, wide_4_3, 81+net_y);
+        dp_translation = NULL;
+    }
+
+    // Player Coords:
+    if (((automapactive && automap_coords == 1) || automap_coords == 2))
+    {
+        dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GREEN];
+        RD_M_DrawTextA("X:", wide_4_3, 97+net_y);
+        RD_M_DrawTextA("Y:", wide_4_3, 105+net_y);
+        RD_M_DrawTextA("Z:", wide_4_3, 113+net_y);
+        RD_M_DrawTextA("ANG:", wide_4_3, 121+net_y);
+        dp_translation = NULL;
+
+        dp_translation = hud_stats_color == 0 ? NULL : cr[CR_WHITE];
+        sprintf(str, "%d", plyr->mo->x >> FRACBITS);
+        RD_M_DrawTextA(str, wide_4_3 + 16, 97+net_y);
+        sprintf(str, "%d", plyr->mo->y >> FRACBITS);
+        RD_M_DrawTextA(str, wide_4_3 + 16, 105+net_y);
+        sprintf(str, "%d", plyr->mo->z >> FRACBITS);
+        RD_M_DrawTextA(str, wide_4_3 + 16, 113+net_y);
+        sprintf(str, "%d", plyr->mo->angle / ANG1);
+        RD_M_DrawTextA(str, wide_4_3 + 32, 121+net_y);
+        dp_translation = NULL;
+    }
+
+    // [JN] Draw crosshair. 
+    // Thanks to Fabian Greffrath for ORIGWIDTH, ORIGHEIGHT and ST_HEIGHT values,
+    // thanks to Zodomaniac for proper health values!
+    if (crosshair_draw && !automapactive && !menuactive)
+    {
+        Crosshair_Draw();
+    }
+
+    // [crispy] demo timer widget
+    if (demoplayback && (demotimer == 1 || demotimer == 3))
+    {
+        ST_DrawDemoTimer(demotimerdir ? (deftotaldemotics - defdemotics) : defdemotics);
+    }
+    else if (demorecording && (demotimer == 2 || demotimer == 3))
+    {
+        ST_DrawDemoTimer(leveltime);
+    }
+
+    // [crispy] demo progress bar
+    if (demoplayback && demobar)
+    {
+        ST_DemoProgressBar();
+    }
+}
+
+// -----------------------------------------------------------------------------
+// ST_MapNameDrawer
+// Draws map name.
+// -----------------------------------------------------------------------------
+
+void ST_MapNameDrawer (void)
+{
+    static char str[128];
+    const int map_y = gamemission == jaguar ? 151 : 159;
+    const int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
+
+    // Level name:
+    if (automapactive)
+    {
+        extern char *level_name;
+
+        sprintf(str, "%s", level_name);
+        if (english_language)
+        {
+            dp_translation = (hud_stats_color && !vanillaparm) ? cr[CR_YELLOW] : NULL;
+            RD_M_DrawTextA(str, wide_4_3, map_y);
+            dp_translation = NULL;
+        }
+        else
+        {
+            RD_M_DrawTextSmallRUS(str, wide_4_3, map_y,
+                                  (hud_stats_color && !vanillaparm) ? CR_YELLOW : CR_NONE);
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
 // ST_loadUnloadGraphics
 // Iterates through all graphics to be loaded or unloaded, along with
 // the variable they use, invoking the specified callback function.
@@ -2117,23 +2311,6 @@ static void ST_initData (void)
     }
 
     STlib_init();
-}
-
-// -----------------------------------------------------------------------------
-// ST_DrawDemoTimer
-// [crispy] Demo Timer widget
-// -----------------------------------------------------------------------------
-
-void ST_DrawDemoTimer (const int time)
-{
-    const boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
-    const int mins = time / (60 * TICRATE);
-    const float secs = (float)(time % (60 * TICRATE)) / TICRATE;
-    char n[16];
-
-    sprintf(n, "%02i:%05.02f", mins, secs);
-
-    RD_M_DrawTextC(n, 278 + (wide_4_3 ? wide_delta : wide_delta*2), (viewwindowy >> hires) + 1);
 }
 
 // -----------------------------------------------------------------------------
@@ -2537,4 +2714,160 @@ void ST_createWidgetsJaguar (void)
 
     STlib_initNum(&w_currentmap_wide, wide_delta*2 + (gamemap >= 10 ? 317 : 309), 174,
                   tallnum, &gamemap, &st_statusbaron, gamemap >= 10 ? 2 : 1);
+}
+
+// =============================================================================
+//
+// [JN] Crosshair routines. Pre/re-defining, drawing, coloring.
+//
+// =============================================================================
+
+patch_t      *CrosshairPatch;
+byte         *CrosshairOpacity;
+static void (*Crosshair_Draw_Func) (void);
+
+// -----------------------------------------------------------------------------
+// Crosshair_DefinePatch: which GFX patch will be used.
+// -----------------------------------------------------------------------------
+
+void Crosshair_DefinePatch (void)
+{
+    CrosshairPatch = 
+        W_CacheLumpName(crosshair_shape == 1 ? "XHAIR_2" :
+                        crosshair_shape == 2 ? "XHAIR_3" :
+                        crosshair_shape == 3 ? "XHAIR_4" :
+                        crosshair_shape == 4 ? "XHAIR_5" :
+                        crosshair_shape == 5 ? "XHAIR_6" :
+                        crosshair_shape == 6 ? "XHAIR_7" :
+                                               "XHAIR_1", PU_STATIC);
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_DefineOpacity: what amount of transparency will be used.
+// -----------------------------------------------------------------------------
+
+void Crosshair_DefineOpacity (void)
+{
+    CrosshairOpacity = crosshair_opacity == 0 ? transtable20 :
+                       crosshair_opacity == 1 ? transtable30 :
+                       crosshair_opacity == 2 ? transtable40 :
+                       crosshair_opacity == 3 ? transtable50 :
+                       crosshair_opacity == 4 ? transtable60 :
+                       crosshair_opacity == 5 ? transtable70 :
+                       crosshair_opacity == 6 ? transtable80 :
+                       crosshair_opacity == 7 ? transtable90 :
+                                                NULL;
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_Colorize_inMenu: coloring routine for menu. Cycling through colors.
+// -----------------------------------------------------------------------------
+
+void Crosshair_Colorize_inMenu (void)
+{
+    if (crosshair_type == 1)
+    {
+        if (CrosshairShowcaseTimeout > 105)
+        {
+            CrosshairShowcaseTimeout = 105;
+        }
+
+        dp_translation = CrosshairShowcaseTimeout >= 70 ? cr[CR_RED]    :
+                         CrosshairShowcaseTimeout >= 35 ? cr[CR_YELLOW] :
+                                                          cr[CR_GREEN];
+    }
+    else if (crosshair_type == 2)
+    {
+        if (CrosshairShowcaseTimeout > 70)
+        {
+            CrosshairShowcaseTimeout = 70;
+        }
+
+        dp_translation = CrosshairShowcaseTimeout >= 35 ? cr[CR_RED] :
+                                                          cr[CR_BLUE];
+    }
+    else if (crosshair_type == 3)
+    {
+        dp_translation = CrosshairShowcaseTimeout >= 105 ? cr[CR_RED]    :
+                         CrosshairShowcaseTimeout >=  70 ? cr[CR_YELLOW] :
+                         CrosshairShowcaseTimeout >=  35 ? cr[CR_GREEN]  :
+                                                           cr[CR_BLUE];
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_Colorize_inGame: ingame coloring routine, actual colors/values.
+// -----------------------------------------------------------------------------
+
+static void Crosshair_Colorize_inGame (void)
+{
+    if (crosshair_type == 1)
+    {
+        dp_translation = plyr->health >= 67 ? cr[CR_GREEN]  :
+                         plyr->health >= 34 ? cr[CR_YELLOW] :
+                                             cr[CR_RED];
+    }
+    else if (crosshair_type == 2)
+    {
+        P_AimLineAttack(plyr->mo, plyr->mo->angle, MISSILERANGE);
+
+        if (linetarget)
+        {
+            dp_translation = cr[CR_BLUE];
+        }
+    }
+    else if (crosshair_type == 3)
+    {
+        dp_translation = plyr->health >= 67 ? cr[CR_GREEN]  :
+                         plyr->health >= 34 ? cr[CR_YELLOW] :
+                                             cr[CR_RED];
+
+        P_AimLineAttack(plyr->mo, plyr->mo->angle, MISSILERANGE);
+
+        if (linetarget)
+        {
+            dp_translation = cr[CR_BLUE];
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_Draw_Scaled: drawing func for scaled (big) crosshair.
+// -----------------------------------------------------------------------------
+
+static void Crosshair_Draw_Scaled (void)
+{
+    V_DrawPatch(origwidth/2, screenblocks <= 10 ? 84 : 102,
+                CrosshairPatch, CrosshairOpacity);
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_Draw_Unscaled: drawing func for unscaled (small) crosshair.
+// -----------------------------------------------------------------------------
+
+static void Crosshair_Draw_Unscaled (void)
+{
+    V_DrawPatchUnscaled(screenwidth/2, screenblocks <= 10 ? 168 : 204,
+                        CrosshairPatch, CrosshairOpacity);
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_DefineDrawingFunc: predefinition of drawing func for later use.
+// -----------------------------------------------------------------------------
+
+void Crosshair_DefineDrawingFunc (void)
+{
+    Crosshair_Draw_Func = crosshair_scale ? Crosshair_Draw_Scaled :
+                                            Crosshair_Draw_Unscaled;
+}
+
+// -----------------------------------------------------------------------------
+// Crosshair_Draw: actual coloring and drawing.
+// -----------------------------------------------------------------------------
+
+void Crosshair_Draw (void)
+{
+    Crosshair_Colorize_inGame();
+    Crosshair_Draw_Func();
+    dp_translation = NULL;
 }

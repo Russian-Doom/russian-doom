@@ -210,7 +210,7 @@ int EV_DoLockedDoor (line_t *line, vldoor_e type, mobj_t *thing)
         case 133:
         if (!p->cards[it_bluecard] && !p->cards[it_blueskull])
         {
-            p->message_system = DEH_String(pd_blueo);
+            P_SetMessage(p, DEH_String(pd_blueo), msg_system, false);
             // [crispy] blinking key or skull in the status bar
             p->tryopen[it_bluecard] = KEYBLINKTICS;
             if (PTR_NoWayAudible(line))
@@ -226,7 +226,7 @@ int EV_DoLockedDoor (line_t *line, vldoor_e type, mobj_t *thing)
         case 135:
         if (!p->cards[it_redcard] && !p->cards[it_redskull])
         {
-            p->message_system = DEH_String(pd_redo);
+            P_SetMessage(p, DEH_String(pd_redo), msg_system, false);
             // [crispy] blinking key or skull in the status bar
             p->tryopen[it_redcard] = KEYBLINKTICS;
             if (PTR_NoWayAudible(line))
@@ -242,7 +242,7 @@ int EV_DoLockedDoor (line_t *line, vldoor_e type, mobj_t *thing)
         case 137:
         if (!p->cards[it_yellowcard] && !p->cards[it_yellowskull])
         {
-            p->message_system = DEH_String(pd_yellowo);
+            P_SetMessage(p, DEH_String(pd_yellowo), msg_system, false);
             // [crispy] blinking key or skull in the status bar
             p->tryopen[it_yellowcard] = KEYBLINKTICS;
             if (PTR_NoWayAudible(line))
@@ -377,7 +377,7 @@ void EV_VerticalDoor (line_t *line, mobj_t *thing)
         }
         if (!player->cards[it_bluecard] && !player->cards[it_blueskull])
         {
-            player->message_system = DEH_String(pd_bluek);
+            P_SetMessage(player, DEH_String(pd_bluek), msg_system, false);
             // [crispy] blinking key or skull in the status bar
             player->tryopen[it_bluecard] = KEYBLINKTICS;
             if (PTR_NoWayAudible(line))
@@ -397,7 +397,7 @@ void EV_VerticalDoor (line_t *line, mobj_t *thing)
         }
         if (!player->cards[it_yellowcard] && !player->cards[it_yellowskull])
         {
-            player->message_system = DEH_String(pd_yellowk);
+            P_SetMessage(player, DEH_String(pd_yellowk), msg_system, false);
             // [crispy] blinking key or skull in the status bar
             player->tryopen[it_yellowcard] = KEYBLINKTICS;
             if (PTR_NoWayAudible(line))
@@ -417,7 +417,7 @@ void EV_VerticalDoor (line_t *line, mobj_t *thing)
         }
         if (!player->cards[it_redcard] && !player->cards[it_redskull])
         {
-            player->message_system = DEH_String(pd_redk);
+            P_SetMessage(player, DEH_String(pd_redk), msg_system, false);
             // [crispy] blinking key or skull in the status bar
             player->tryopen[it_redcard] = KEYBLINKTICS;
             if (PTR_NoWayAudible(line))

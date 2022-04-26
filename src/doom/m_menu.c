@@ -38,7 +38,7 @@
 #include "w_wad.h"
 #include "z_zone.h"
 #include "r_local.h"
-#include "hu_stuff.h"
+#include "p_local.h"
 #include "g_game.h"
 #include "p_saveg.h"
 #include "s_sound.h"
@@ -47,6 +47,7 @@
 #include "st_stuff.h"
 #include "v_trans.h"
 #include "am_map.h"         // [JN] AM_initColors();
+#include "ct_chat.h"
 
 #include "rd_keybinds.h"
 #include "rd_lang.h"
@@ -2350,12 +2351,6 @@ static void M_RD_Change_ScreenSize(Direction_t direction)
         if (screenblocks > 17)
             screenblocks = 17;
 
-        // Reinitialize fps and time widget's horizontal offset
-        if (gamestate == GS_LEVEL)
-        {
-            HU_Start();
-        }
-        
         EnableLoadingDisk();
     }
     else
@@ -2388,13 +2383,13 @@ static void M_RD_Change_Detail()
 
     if (!detailLevel)
     {
-        players[consoleplayer].message_system = DEH_String(english_language ?
-                                            DETAILHI : DETAILHI_RUS);
+        P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
+                     DETAILHI : DETAILHI_RUS), msg_system, false);
     }
     else
     {
-        players[consoleplayer].message_system = DEH_String(english_language ?
-                                            DETAILLO : DETAILLO_RUS);
+        P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
+                     DETAILLO : DETAILLO_RUS), msg_system, false);
     }
 }
 
@@ -2729,16 +2724,14 @@ static void M_RD_Change_Messages()
 
     if (!showMessages)
     {
-        players[consoleplayer].message_system = DEH_String(english_language ?
-                                            MSGOFF : MSGOFF_RUS);
+        P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
+                     MSGOFF : MSGOFF_RUS), msg_system, true);
     }
     else
     {
-        players[consoleplayer].message_system = DEH_String(english_language ?
-                                            MSGON : MSGON_RUS);
+        P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
+                     MSGON : MSGON_RUS), msg_system, true);
     }
-
-    message_dontfuckwithme = true;
 }
 
 static void M_RD_Change_Msg_Alignment(Direction_t direction)
@@ -2764,12 +2757,6 @@ static void M_RD_Change_ShadowedText()
 static void M_RD_Change_LocalTime(Direction_t direction)
 {
     RD_Menu_SpinInt(&local_time, 0, 4, direction);
-
-    // Reinitialize time widget's horizontal offset
-    if (gamestate == GS_LEVEL)
-    {
-        HU_Start();
-    }
 }
 
 void M_RD_Define_Msg_Color(MessageType_t messageType, int color)
@@ -6344,7 +6331,7 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     M_snprintf(resetmsg, sizeof(resetmsg), english_language ? 
                                            "Settings reset" :
                                            "Yfcnhjqrb c,hjitys");
-    players[consoleplayer].message_system = resetmsg;
+    P_SetMessage(&players[consoleplayer], resetmsg, msg_system, false);
 }
 
 static void M_RD_BackToDefaults_Original(int choice)
@@ -6540,7 +6527,7 @@ static void M_RD_BackToDefaults_Original(int choice)
     M_snprintf(resetmsg, sizeof(resetmsg), english_language ? 
                                            "Settings reset" :
                                            "Yfcnhjqrb c,hjitys");
-    players[consoleplayer].message_system = resetmsg;
+    P_SetMessage(&players[consoleplayer], resetmsg, msg_system, false);
 }
 
 
@@ -6554,10 +6541,14 @@ static void M_RD_ChangeLanguage(int choice)
     extern void F_CastDrawer(void);
     extern void F_CastDrawerJaguar(void);
     extern void F_StartFinale(void);
+    extern void P_LevelNameInit(void);
     extern int  demosequence;
     extern int  finalestage;
 
     english_language ^= 1;
+
+    // Clear messages
+    players[consoleplayer].message = NULL;
 
     // Update messages
     RD_DefineLanguageStrings();
@@ -6576,9 +6567,6 @@ static void M_RD_ChangeLanguage(int choice)
 
     if (gamestate == GS_LEVEL)
     {
-        // Update HUD system
-        HU_Start();
-
         // Update status bar
         ST_doRefresh();
         // Update ARMS/FRAGS widget
@@ -6586,6 +6574,9 @@ static void M_RD_ChangeLanguage(int choice)
         ST_createWidgetsJaguar();
         else
         ST_createWidgets(); 
+        
+        // Re-set level name.
+        P_LevelNameInit();
     }
 
     // Update finale sequence
@@ -7200,6 +7191,8 @@ static void M_EndGameResponse(boolean confirmed)
 
     CurrentMenu->lastOn = CurrentItPos;
     RD_Menu_DeactivateMenu(true);
+    players[consoleplayer].messageTics = 1;
+    players[consoleplayer].message = NULL;
     D_StartTitle ();
 }
 
@@ -7714,7 +7707,7 @@ boolean M_Responder (event_t* ev)
 
         M_snprintf(crosshairmsg, sizeof(crosshairmsg),
                    crosshair_draw ? ststr_crosshair_on : ststr_crosshair_off);
-        players[consoleplayer].message_system = crosshairmsg;
+        P_SetMessage(&players[consoleplayer], crosshairmsg, msg_system, false);
         S_StartSound(NULL,sfx_swtchn);
 
         return true;
@@ -7831,33 +7824,31 @@ boolean M_Responder (event_t* ev)
         gamma_level = M_StringJoin(gammamsg, english_language ?
                                    gammalevel_names[usegamma] :
                                    gammalevel_names_rus[usegamma], NULL);
-        players[consoleplayer].message_system = DEH_String(gamma_level);
-
-        if (players[consoleplayer].message_system != gamma_level)
-        {
-            free(gamma_level);
-        }
+        P_SetMessage(&players[consoleplayer], DEH_String(gamma_level), msg_system, false);
+        free(gamma_level);
 
         return true;
     }
 
-    // [JN] Allow screen decreasing even while active menu.
-	if (BK_isKeyDown(ev, bk_screen_dec)) // Screen size down
-	{
-		if (automapactive || chat_on)
-		    return false;
-		M_RD_Change_ScreenSize(0);
-		return true;
-	}
+    // [JN] Allow screen decreasing/increasing even while active menu.
+    if (!chatmodeon)
+    {
+        if (BK_isKeyDown(ev, bk_screen_dec)) // Screen size down
+        {
+            if (automapactive)
+                return false;
+            M_RD_Change_ScreenSize(0);
+            return true;
+        }
 
-    // [JN] Allow screen increasing even while active menu.
-	if (BK_isKeyDown(ev, bk_screen_inc)) // Screen size up
-	{
-		if (automapactive || chat_on)
-		    return false;
-		M_RD_Change_ScreenSize(1);
-		return true;
-	}
+        if (BK_isKeyDown(ev, bk_screen_inc)) // Screen size up
+        {
+            if (automapactive)
+                return false;
+            M_RD_Change_ScreenSize(1);
+            return true;
+        }
+    }
 
     // Pop-up menu?
     if (!menuactive)

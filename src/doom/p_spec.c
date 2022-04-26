@@ -123,8 +123,6 @@ int     levelTimeCount;
 // [JN] How far linedef texture can fall before offset reset.
 #define FALLLIMIT FRACUNIT*127
 
-extern boolean message_secret_keepvisible;
-
 
 // -----------------------------------------------------------------------------
 // P_InitPicAnims
@@ -1104,9 +1102,7 @@ void P_PlayerInSpecialSector (player_t *player)
             sfx_id = I_GetSfxLumpNum(&S_sfx[sfx_secret]) != -1 ? sfx_secret :
                      I_GetSfxLumpNum(&S_sfx[sfx_getpow]) != -1 ? sfx_getpow : -1;
 
-            player->message_secret = secretfound;
-            // [JN] Keep revealed secret message visible.
-            message_secret_keepvisible = true;
+            P_SetMessage(&players[consoleplayer], DEH_String(secretfound), msg_secret, true);
             // [JN] Don't break revealed's secret sound by any others
             if (player == &players[consoleplayer] && sfx_id != -1)
             {
