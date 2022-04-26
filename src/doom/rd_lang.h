@@ -66,6 +66,11 @@ extern char* amstr_rotateoff;
 #define AMSTR_ROTATEOFF     "Rotate Mode OFF"
 
 
+// CT_chat.c
+extern char* txt_noplayers;
+
+#define TXT_NOPLAYERS   "THERE ARE NO OTHER PLAYERS IN THE GAME!"
+
 //
 // D_Main.C
 //
@@ -1050,6 +1055,10 @@ extern char* ststr_massacre;
 #define AMSTR_OVERLAYOFF_RUS    "ht;bv yfkj;tybz dsrk.xty"  // Режим наложения выключен
 #define AMSTR_ROTATEON_RUS      "ht;bv dhfotybz drk.xty"    // Режим вращения включен
 #define AMSTR_ROTATEOFF_RUS     "ht;bv dhfotybz dsrk.xty"   // Режим вращения выключен
+
+
+// CT_chat.c
+#define TXT_NOPLAYERS_RUS       "D BUHT YTN LHEUB[ BUHJRJD!" // В ИГРЕ НЕТ ДРУГИХ ИГРОКОВ!
 
 
 //

@@ -14,6 +14,7 @@ if(COMPILE_DOOM)
                 deh_sound.c
                 deh_thing.c
                 deh_weapon.c
+                ct_chat.c       ct_chat.h
                 d_items.c       d_items.h
                 d_main.c        d_main.h
                 d_net.c

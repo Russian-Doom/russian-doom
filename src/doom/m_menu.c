@@ -47,6 +47,7 @@
 #include "st_stuff.h"
 #include "v_trans.h"
 #include "am_map.h"         // [JN] AM_initColors();
+#include "ct_chat.h"
 
 #include "rd_keybinds.h"
 #include "rd_lang.h"
@@ -7829,23 +7830,25 @@ boolean M_Responder (event_t* ev)
         return true;
     }
 
-    // [JN] Allow screen decreasing even while active menu.
-	if (BK_isKeyDown(ev, bk_screen_dec)) // Screen size down
-	{
-		if (automapactive)
-		    return false;
-		M_RD_Change_ScreenSize(0);
-		return true;
-	}
+    // [JN] Allow screen decreasing/increasing even while active menu.
+    if (!chatmodeon)
+    {
+        if (BK_isKeyDown(ev, bk_screen_dec)) // Screen size down
+        {
+            if (automapactive)
+                return false;
+            M_RD_Change_ScreenSize(0);
+            return true;
+        }
 
-    // [JN] Allow screen increasing even while active menu.
-	if (BK_isKeyDown(ev, bk_screen_inc)) // Screen size up
-	{
-		if (automapactive)
-		    return false;
-		M_RD_Change_ScreenSize(1);
-		return true;
-	}
+        if (BK_isKeyDown(ev, bk_screen_inc)) // Screen size up
+        {
+            if (automapactive)
+                return false;
+            M_RD_Change_ScreenSize(1);
+            return true;
+        }
+    }
 
     // Pop-up menu?
     if (!menuactive)

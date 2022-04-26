@@ -158,6 +158,3 @@ extern void Crosshair_DefineOpacity (void);
 extern void Crosshair_DefineDrawingFunc (void);
 extern void Crosshair_Colorize_inMenu (void);
 extern void Crosshair_Draw (void);
-
-// [JN] Netgame chat.
-extern char *chat_macros[10];

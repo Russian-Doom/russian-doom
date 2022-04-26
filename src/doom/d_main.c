@@ -77,6 +77,7 @@
 #include "d_main.h"
 #include "d_name.h"
 #include "am_map.h"         // [JN] AM_initColors();
+#include "ct_chat.h"
 #include "jn.h"
 
 // -----------------------------------------------------------------------------
@@ -720,7 +721,7 @@ void D_Display (void)
         AM_Drawer ();
     }
 
-    // [JN] Draw status bar widgets on top of automap and view border.
+    // [JN] Draw status bar widgets and netgame chat on top of automap and view border.
     if (gamestate == GS_LEVEL)
     {
         if (aspect_ratio >= 2)
@@ -745,6 +746,7 @@ void D_Display (void)
         }
 
         ST_MapNameDrawer();
+        CT_Drawer();
     }
 
     // [JN] Menu backgound shading. 
@@ -3333,6 +3335,8 @@ void D_DoomMain (void)
                "M_Init: Init miscellaneous info.\n" :
                "M_Init: Инициализация внутренних данных.\n");
     M_Init ();
+
+    CT_Init();
 
     DEH_printf(english_language ?
                "R_Init: Init DOOM refresh daemon - [" :

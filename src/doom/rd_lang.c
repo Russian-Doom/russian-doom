@@ -40,6 +40,11 @@ char* amstr_rotateon;
 char* amstr_rotateoff;
 
 
+// CT_chat.c
+
+char* txt_noplayers;
+
+
 //
 // G_game.C
 //
@@ -264,6 +269,10 @@ void RD_DefineLanguageStrings (void)
         amstr_rotateon      = AMSTR_ROTATEON;
         amstr_rotateoff     = AMSTR_ROTATEOFF;
 
+        // CT_chat.c
+
+        txt_noplayers = TXT_NOPLAYERS;
+
         //
         // G_game.C
         //
@@ -405,6 +414,9 @@ void RD_DefineLanguageStrings (void)
         amstr_overlayoff    = AMSTR_OVERLAYOFF_RUS;
         amstr_rotateon      = AMSTR_ROTATEON_RUS;
         amstr_rotateoff     = AMSTR_ROTATEOFF_RUS;
+
+        // CT_chat.c
+        txt_noplayers = TXT_NOPLAYERS_RUS;
 
         //
         // G_game.C

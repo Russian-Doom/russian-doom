@@ -50,6 +50,7 @@
 #include "sounds.h"
 #include "r_data.h"
 #include "g_game.h"
+#include "ct_chat.h"
 #include "jn.h"
 
 #define MAXPLMOVE       (forwardmove[1]) 
@@ -420,6 +421,8 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
 
     // buttons
 
+    cmd->chatchar = CT_dequeueChatChar();
+
     if (BK_isKeyPressed(bk_fire))
     {
         cmd->buttons |= BT_ATTACK;
@@ -756,6 +759,8 @@ boolean G_Responder (event_t *ev)
 
     if (gamestate == GS_LEVEL) 
     { 
+        if (CT_Responder(ev))
+            return true;	// chat ate the event
         if (ST_Responder (ev)) 
             return true;	// status window ate it
         if (AM_Responder (ev)) 
@@ -930,11 +935,10 @@ void G_Ticker (void)
             && turbodetected[i])
             {
                 static char turbomessage[80];
-                extern char *player_names[4];
 
                 // [JN] Untranslated, since netgame chat using only English.
                 M_snprintf(turbomessage, sizeof(turbomessage),
-                           "%s is turbo!", player_names[i]);
+                           "%s is turbo!", CT_FromPlrText[i]);
 
                 P_SetMessage(&players[consoleplayer], turbomessage, msg_chat, false);
                 turbodetected[i] = false;
@@ -1011,6 +1015,7 @@ void G_Ticker (void)
         P_Ticker (); 
         ST_Ticker (); 
         AM_Ticker (); 
+        CT_Ticker ();
         break; 
 
         case GS_INTERMISSION: 

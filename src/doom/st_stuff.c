@@ -2931,32 +2931,3 @@ void Crosshair_Draw (void)
     Crosshair_Draw_Func();
     dp_translation = NULL;
 }
-
-// =============================================================================
-//
-// [JN] Netgame chat.
-//
-// =============================================================================
-
-
-char *chat_macros[10] =
-{
-    HUSTR_CHATMACRO0,
-    HUSTR_CHATMACRO1,
-    HUSTR_CHATMACRO2,
-    HUSTR_CHATMACRO3,
-    HUSTR_CHATMACRO4,
-    HUSTR_CHATMACRO5,
-    HUSTR_CHATMACRO6,
-    HUSTR_CHATMACRO7,
-    HUSTR_CHATMACRO8,
-    HUSTR_CHATMACRO9
-};
-
-char* player_names[] =
-{
-    HUSTR_PLRGREEN,
-    HUSTR_PLRINDIGO,
-    HUSTR_PLRBROWN,
-    HUSTR_PLRRED
-};
