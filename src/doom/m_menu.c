@@ -2725,12 +2725,12 @@ static void M_RD_Change_Messages()
     if (!showMessages)
     {
         P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
-                     MSGOFF : MSGOFF_RUS), msg_system, false);
+                     MSGOFF : MSGOFF_RUS), msg_system, true);
     }
     else
     {
         P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
-                     MSGON : MSGON_RUS), msg_system, false);
+                     MSGON : MSGON_RUS), msg_system, true);
     }
 }
 
