@@ -38,8 +38,6 @@
 static void WI_drawStatsJaguar(void);
 static void WI_updateStatsJaguar(void);
 
-extern void M_WriteTextBigCentered_ENG();
-extern void M_WriteTextBigCentered_RUS();
 extern void ST_DemoProgressBar(void);
 
 
@@ -2484,13 +2482,13 @@ static void WI_drawStatsJaguar (void)
     {
         if (english_language)
         {
-            M_WriteTextBigCentered_ENG(2, LevelNamesJaguar[gamemap]);
-            M_WriteTextBigCentered_ENG (20, "Finished");
+            RD_M_DrawTextBigCenteredENG(LevelNamesJaguar[gamemap], 2);
+            RD_M_DrawTextBigCenteredENG("FINISHED", 20);
         }
         else
         {
-            M_WriteTextBigCentered_RUS(2,LevelNamesJaguar_Russian[gamemap]);
-            M_WriteTextBigCentered_RUS (20, "ehjdtym pfdthity");
+            RD_M_DrawTextBigCenteredRUS(LevelNamesJaguar_Russian[gamemap], 2);
+            RD_M_DrawTextBigCenteredRUS("ehjdtym pfdthity", 20);
         }
     }
 
@@ -2565,13 +2563,13 @@ static void WI_drawStatsJaguar (void)
     {
         if (english_language)
         {
-            M_WriteTextBigCentered_ENG (146, "Entering");
-            M_WriteTextBigCentered_ENG (164, LevelNamesJaguar[wminfo.next+1]);
+            RD_M_DrawTextBigCenteredENG("ENTERING", 146);
+            RD_M_DrawTextBigCenteredENG(LevelNamesJaguar[wminfo.next+1], 164);
         }
         else
         {
-            M_WriteTextBigCentered_RUS (146, "pfuhe;ftncz ehjdtym");
-            M_WriteTextBigCentered_RUS (164, LevelNamesJaguar_Russian[wminfo.next+1]);
+            RD_M_DrawTextBigCenteredRUS("pfuhe;ftncz ehjdtym", 146);
+            RD_M_DrawTextBigCenteredRUS(LevelNamesJaguar_Russian[wminfo.next+1], 164);
         }
 
     }

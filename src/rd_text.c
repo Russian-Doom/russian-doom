@@ -16,6 +16,7 @@
 
 #include "d_name.h"
 #include "i_swap.h"
+#include "i_video.h"
 #include "v_patch.h"
 #include "v_video.h"
 #include "w_wad.h"
@@ -279,6 +280,42 @@ void RD_M_DrawTextSmallENG(char *text, int x, int y, Translation_CR_t translatio
     }
 }
 
+/** [JN] Draw centered string using a small English font*/
+void RD_M_DrawTextSmallCenteredENG(char *text, int y, Translation_CR_t translation)
+{
+    char c;
+    int cx, cy;
+    patch_t *p;
+
+    cx = 160 - RD_M_TextSmallENGWidth(text) / 2 + wide_delta;
+    cy = y;
+
+    while ((c = *text++) != 0)
+    {
+        if (c == '\n')
+        {
+            cx = 160 - RD_M_TextSmallENGWidth(text) / 2 + wide_delta;
+            cy += 12;
+            continue;
+        }
+
+        if (c < 33)
+        {
+            cx += (RD_GameType == gt_Doom ? 4 : 5);
+        }
+        else
+        {
+            c = toupper(c);
+            // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
+            p = W_CacheLumpNum(smallEngFont + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
+            dp_translation = translation == CR_NONE ? NULL : cr[translation];
+            drawShadowedPatch(cx, cy, p);
+            dp_translation = NULL;
+            cx += SHORT(p->width) - (RD_GameType == gt_Doom ? 0 : 1);
+        }
+    }
+}
+
 /** [JN] Returns the pixel width of a string using unreplaceable small English font*/
 int RD_M_TextSmallENGWidth(char *text)
 {
@@ -337,6 +374,39 @@ void RD_M_DrawTextBigENG(char *text, int x, int y)
     }
 }
 
+/** [JN] Draw centered string with unreplaceable big English font*/
+void RD_M_DrawTextBigCenteredENG(char *text, int y)
+{
+    char c;
+    int cx, cy;
+    patch_t *p;
+
+    cx = 160 - RD_M_TextSmallRUSWidth(text) / 2 + wide_delta;;
+    cy = y;
+
+    while ((c = *text++) != 0)
+    {
+        if (c == '\n')
+        {
+            cx = 160 - RD_M_TextSmallRUSWidth(text) / 2 + wide_delta;;
+            cy += 12;
+            continue;
+        }
+
+        if (c < 33)
+        {
+            cx += (RD_GameType == gt_Doom ? 10 : 8);
+        }
+        else
+        {
+            // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
+            p = W_CacheLumpNum(bigEngFont + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
+            drawShadowedPatch(cx, cy, p);
+            cx += SHORT(p->width) - 1;
+        }
+    }
+}
+
 /** [JN] Returns the pixel width of a string using unreplaceable big English font */
 int RD_M_TextBigENGWidth(char *text)
 {
@@ -376,6 +446,42 @@ void RD_M_DrawTextSmallRUS(char *text, int x, int y, Translation_CR_t translatio
         if (c == '\n')
         {
             cx = x;
+            cy += 12;
+            continue;
+        }
+
+        if (c < 33)
+        {
+            cx += (RD_GameType == gt_Doom ? 4 : 5);
+        }
+        else
+        {
+            c = toupper(c);
+            // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
+            p = W_CacheLumpNum(smallRusFont + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
+            dp_translation = translation == CR_NONE ? NULL : cr[translation];
+            drawShadowedPatch(cx, cy, p);
+            dp_translation = NULL;
+            cx += SHORT(p->width) - (RD_GameType == gt_Doom ? 0 : 1);
+        }
+    }
+}
+
+/** [JN] Draw centered string using a small Russian font*/
+void RD_M_DrawTextSmallCenteredRUS(char *text, int y, Translation_CR_t translation)
+{
+    char c;
+    int cx, cy;
+    patch_t *p;
+
+    cx = 160 - RD_M_TextSmallRUSWidth(text) / 2 + wide_delta;
+    cy = y;
+
+    while ((c = *text++) != 0)
+    {
+        if (c == '\n')
+        {
+            cx = 160 - RD_M_TextSmallRUSWidth(text) / 2 + wide_delta;
             cy += 12;
             continue;
         }
@@ -480,6 +586,39 @@ void RD_M_DrawTextBigRUS(char *text, int x, int y)
         if (c == '\n')
         {
             cx = x;
+            cy += 12;
+            continue;
+        }
+
+        if (c < 33)
+        {
+            cx += (RD_GameType == gt_Doom ? 10 : 8);
+        }
+        else
+        {
+            // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
+            p = W_CacheLumpNum(bigRusFont + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
+            drawShadowedPatch(cx, cy, p);
+            cx += SHORT(p->width) - 1;
+        }
+    }
+}
+
+/** [JN] Draw centered string with unreplaceable big Russian font*/
+void RD_M_DrawTextBigCenteredRUS(char *text, int y)
+{
+    char c;
+    int cx, cy;
+    patch_t *p;
+
+    cx = 160 - RD_M_TextSmallENGWidth(text) / 2 + wide_delta;;
+    cy = y;
+
+    while ((c = *text++) != 0)
+    {
+        if (c == '\n')
+        {
+            cx = 160 - RD_M_TextSmallENGWidth(text) / 2 + wide_delta;;
             cy += 12;
             continue;
         }

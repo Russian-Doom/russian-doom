@@ -92,14 +92,6 @@ static short whichSkull;         // which skull to draw
 // graphic name of skulls
 static char *skullName[2] = {"M_SKULL1", "M_SKULL2"};
 
-// -----------------------------------------------------------------------------
-// [JN] Custom RD menu: font writing prototypes
-// -----------------------------------------------------------------------------
-void M_WriteTextBigCentered_ENG(int y, char *string);
-void M_WriteTextBigCentered_RUS(int y, char *string);
-void M_WriteTextSmallCentered_ENG(int y, char *string);
-void M_WriteTextSmallCentered_RUS(int y, char *string);
-
 
 //
 // PROTOTYPES
@@ -399,259 +391,6 @@ static void M_RD_ChangeLanguage();
 
 static void M_Vanilla_DrawOptions(void);
 static void M_Vanilla_DrawSound(void);
-
-// -----------------------------------------------------------------------------
-// HU_WriteTextBigCentered
-//
-// [JN] Write a centered string using the BIG hu_font_big. Only Y coord is set.
-// -----------------------------------------------------------------------------
-
-void M_WriteTextBigCentered_ENG (int y, char *string)
-{
-    char*   ch;
-    int	    c;
-    int	    cx;
-    int	    cy;
-    int	    w;
-    int	    width;
-
-    // find width
-    ch = string;
-    width = 0;
-    cy = y;
-
-    while (ch)
-    {
-        c = *ch++;
-
-        if (!c)
-        break;
-
-        c = c - HU_FONTSTART2;
-
-        if (c < 0 || c> HU_FONTSIZE2)
-        {
-            width += 10;
-            continue;
-        }
-
-        w = SHORT (hu_font_big_eng[c]->width);
-        width += w;
-    }
-
-    // draw it
-    cx = origwidth/2-width/2;
-    ch = string;
-    while (ch)
-    {
-        c = *ch++;
-
-        if (!c)
-        break;
-
-        c = c - HU_FONTSTART2;
-
-        if (c < 0 || c> HU_FONTSIZE2)
-        {
-            cx += 10;
-            continue;
-        }
-
-        w = SHORT (hu_font_big_eng[c]->width);
-
-        V_DrawShadowedPatchDoom(cx, cy, hu_font_big_eng[c]);
-
-        cx+=w;
-    }
-}
-
-// -----------------------------------------------------------------------------
-// HU_WriteTextBigCentered
-//
-// [JN] Write a centered string using the BIG hu_font_big. Only Y coord is set.
-// -----------------------------------------------------------------------------
-
-void M_WriteTextBigCentered_RUS (int y, char *string)
-{
-    char*   ch;
-    int	    c;
-    int	    cx;
-    int	    cy;
-    int	    w;
-    int	    width;
-
-    // find width
-    ch = string;
-    width = 0;
-    cy = y;
-
-    while (ch)
-    {
-        c = *ch++;
-
-        if (!c)
-        break;
-
-        c = c - HU_FONTSTART2;
-
-        if (c < 0 || c> HU_FONTSIZE2)
-        {
-            width += 10;
-            continue;
-        }
-
-        w = SHORT (hu_font_big_rus[c]->width);
-        width += w;
-    }
-
-    // draw it
-    cx = origwidth/2-width/2;
-    ch = string;
-    while (ch)
-    {
-        c = *ch++;
-
-        if (!c)
-        break;
-
-        c = c - HU_FONTSTART2;
-
-        if (c < 0 || c> HU_FONTSIZE2)
-        {
-            cx += 10;
-            continue;
-        }
-
-        w = SHORT (hu_font_big_rus[c]->width);
-
-        V_DrawShadowedPatchDoom(cx, cy, hu_font_big_rus[c]);
-
-        cx+=w;
-    }
-}
-
-// -----------------------------------------------------------------------------
-// M_WriteTextSmallCentered_ENG
-// [JN] Write a centered string using a small hu_font_small_eng.
-// -----------------------------------------------------------------------------
-
-void M_WriteTextSmallCentered_ENG (int y, char *string)
-{
-    char *ch;
-    int   c, cx, cy;
-    int   w, width;
-
-    // find width
-    ch = string;
-    width = 0;
-    cy = y;
-
-    while (ch)
-    {
-        c = *ch++;
-
-        if (!c)
-        break;
-
-        c = toupper(c) - HU_FONTSTART;
-
-        if (c < 0 || c> HU_FONTSIZE)
-        {
-            width += 4;
-            continue;
-        }
-
-        w = SHORT (hu_font_small_eng[c]->width);
-        width += w;
-    }
-
-    // draw it
-    cx = origwidth/2-width/2;
-    ch = string;
-    while (ch)
-    {
-        c = *ch++;
-
-        if (!c)
-        break;
-
-        c = toupper(c) - HU_FONTSTART;
-
-        if (c < 0 || c> HU_FONTSIZE)
-        {
-            cx += 4;
-            continue;
-        }
-
-        w = SHORT (hu_font_small_eng[c]->width);
-
-        V_DrawShadowedPatchDoom(cx, cy, hu_font_small_eng[c]);
-
-        cx+=w;
-    }
-}
-
-
-// -----------------------------------------------------------------------------
-// M_WriteTextSmallCentered_RUS
-// [JN] Write a centered string using a small hu_font_small_rus.
-// -----------------------------------------------------------------------------
-
-void M_WriteTextSmallCentered_RUS (int y, char *string)
-{
-    char *ch;
-    int   c, cx, cy;
-    int   w, width;
-
-    // find width
-    ch = string;
-    width = 0;
-    cy = y;
-
-    while (ch)
-    {
-        c = *ch++;
-
-        if (!c)
-        break;
-
-        c = toupper(c) - HU_FONTSTART;
-
-        if (c < 0 || c> HU_FONTSIZE)
-        {
-            width += 4;
-            continue;
-        }
-
-        w = SHORT (hu_font_small_rus[c]->width);
-        width += w;
-    }
-
-    // draw it
-    cx = origwidth/2-width/2;
-    ch = string;
-    while (ch)
-    {
-        c = *ch++;
-
-        if (!c)
-        break;
-
-        c = toupper(c) - HU_FONTSTART;
-
-        if (c < 0 || c> HU_FONTSIZE)
-        {
-            cx += 4;
-            continue;
-        }
-
-        w = SHORT (hu_font_small_rus[c]->width);
-
-        V_DrawShadowedPatchDoom(cx, cy, hu_font_small_rus[c]);
-
-        cx+=w;
-    }
-}
 
 // -----------------------------------------------------------------------------
 // M_RD_ColorTranslation
@@ -1937,7 +1676,7 @@ void M_Vanilla_DrawOptions(void)
     else
     {
     // - "НАСТРОЙКИ" title -----------------------------------------------------
-    M_WriteTextBigCentered_RUS(15, "YFCNHJQRB");
+    RD_M_DrawTextBigCenteredRUS("YFCNHJQRB", 15);
 
     V_DrawPatch(180 + wide_delta, 53,
                 W_CacheLumpName(DEH_String(showMessages == 1 ?
@@ -1975,7 +1714,7 @@ void M_Vanilla_DrawSound(void)
     else
     {
     // - "ГРОМКОСТЬ" title -----------------------------------------------------
-    M_WriteTextBigCentered_RUS(38, "UHJVRJCNM");
+    RD_M_DrawTextBigCenteredRUS("UHJVRJCNM", 38);
     }
 
     // - Sfx volume slider -----------------------------------------------------
@@ -2012,9 +1751,7 @@ static void M_RD_Draw_Rendering(void)
         // Informative message
         if (aspect_ratio_temp != aspect_ratio && CurrentItPos != 3)
         {
-            dp_translation = cr[CR_WHITE];
-            M_WriteTextSmallCentered_ENG(150, "PROGRAM MUST BE RESTARTED");
-            dp_translation = NULL;
+            RD_M_DrawTextSmallCenteredENG("PROGRAM MUST BE RESTARTED", 150, CR_WHITE);
         }
 
         // Vertical synchronization
@@ -2072,9 +1809,7 @@ static void M_RD_Draw_Rendering(void)
         // Tip for faster sliding
         if (CurrentItPos == 3)
         {
-            dp_translation = cr[CR_DARKRED];
-            M_WriteTextSmallCentered_ENG(150, "HOLD RUN BUTTON FOR FASTER SLIDING");
-            dp_translation = NULL;
+            RD_M_DrawTextSmallCenteredENG("HOLD RUN BUTTON FOR FASTER SLIDING", 150, CR_DARKRED);
         }
     }
     else
@@ -2089,9 +1824,7 @@ static void M_RD_Draw_Rendering(void)
         // Informative message: Необходим перезапуск программы
         if (aspect_ratio_temp != aspect_ratio && CurrentItPos != 3)
         {
-            dp_translation = cr[CR_WHITE];
-            M_WriteTextSmallCentered_RUS(150, "ytj,[jlbv gthtpfgecr ghjuhfvvs");
-            dp_translation = NULL;
+            RD_M_DrawTextSmallCenteredRUS("ytj,[jlbv gthtpfgecr ghjuhfvvs", 150, CR_WHITE);
         }
 
         // Вертикальная синхронизация
@@ -2154,10 +1887,8 @@ static void M_RD_Draw_Rendering(void)
         // удерживайте кнопку бега
         if (CurrentItPos == 3)
         {
-            dp_translation = cr[CR_DARKRED];
-            M_WriteTextSmallCentered_RUS(150, "LKZ ECRJHTYYJUJ GHJKBCNSDFYBZ");
-            M_WriteTextSmallCentered_RUS(159, "ELTH;BDFQNT RYJGRE ,TUF");
-            dp_translation = NULL;
+            RD_M_DrawTextSmallCenteredRUS("LKZ ECRJHTYYJUJ GHJKBCNSDFYBZ", 150, CR_DARKRED);
+            RD_M_DrawTextSmallCenteredRUS("ELTH;BDFQNT RYJGRE ,TUF", 159, CR_DARKRED);
         }
     }
 }
@@ -2428,9 +2159,7 @@ static void M_RD_Draw_Colors(void)
         RD_M_DrawTextSmallENG("Show palette", 55 + wide_delta, 55, CR_NONE);
         RD_M_DrawTextSmallENG(show_palette ? "ON" : "OFF", 162 + wide_delta, 55, CR_NONE);
 
-        dp_translation = cr[CR_YELLOW];
-        M_WriteTextSmallCentered_ENG(65, "Color intensity");
-        dp_translation = NULL;
+        RD_M_DrawTextSmallCenteredENG("COLOR INTENSITY", 65, CR_YELLOW);
 
         RD_M_DrawTextSmallENG("RED", 123 + wide_delta, 75, CR_NONE);
         RD_M_DrawTextSmallENG("GREEN", 107 + wide_delta, 85, CR_GREEN);
@@ -2444,9 +2173,7 @@ static void M_RD_Draw_Colors(void)
         RD_M_DrawTextSmallRUS("wdtnjdfz gfkbnhf", 22 + wide_delta, 55, CR_NONE);  // Цветовая палитра
         RD_M_DrawTextSmallRUS(show_palette ? "DRK" : "DSRK", 162 + wide_delta, 55, CR_NONE);
 
-        dp_translation = cr[CR_YELLOW];
-        M_WriteTextSmallCentered_RUS(65, "byntycbdyjcnm wdtnf");  // Интенсивность цвета
-        dp_translation = NULL;
+        RD_M_DrawTextSmallCenteredRUS("byntycbdyjcnm wdtnf", 65, CR_YELLOW);  // Интенсивность цвета
 
         RD_M_DrawTextSmallRUS("rhfcysq", 89 + wide_delta, 75, CR_NONE);  // Красный
         RD_M_DrawTextSmallRUS("ptktysq", 89 + wide_delta, 85, CR_GREEN); // Зелёный
@@ -3353,16 +3080,14 @@ static void M_RD_Draw_Audio_System(void)
     // [JN] Speaker test routine.
     if (speaker_test_timeout)
     {
-        dp_translation = cr[CR_WHITE];
-
         if (snd_sfxdevice == 0 || snd_sfxdevice == 1)
         {
             if (speaker_test_timeout >= 15)
             {
                 if (english_language)
-                M_WriteTextSmallCentered_ENG(156, "enable digital effects first!");
+                RD_M_DrawTextSmallCenteredENG("ENABLE DIGITAL EFFECTS FIRST", 156, CR_WHITE);
                 else
-                M_WriteTextSmallCentered_RUS(156, "drk.xbnt wbahjdst \'aatrns!"); // включите цифровые эффекты!
+                RD_M_DrawTextSmallCenteredRUS("drk.xbnt wbahjdst \'aatrns!", 156, CR_WHITE);  // включите цифровые эффекты!
             }
             speaker_test_left = false;
             speaker_test_right = false;
@@ -3372,9 +3097,9 @@ static void M_RD_Draw_Audio_System(void)
             if (speaker_test_timeout <= 30)
             {
                 if (english_language)
-                M_WriteTextSmallCentered_ENG(156, "< mono mode >");
+                RD_M_DrawTextSmallCenteredENG("< MONO MODE >", 156, CR_WHITE);
                 else
-                M_WriteTextSmallCentered_RUS(156, "/ vjyj ht;bv \\");  // < моно режим >
+                RD_M_DrawTextSmallCenteredRUS("/ vjyj ht;bv \\", 156, CR_WHITE);  // < моно режим >
             }
 
             if (speaker_test_left && speaker_test_right)
@@ -3391,9 +3116,9 @@ static void M_RD_Draw_Audio_System(void)
             if (speaker_test_timeout > 30)
             {
                 if (english_language)
-                M_WriteTextSmallCentered_ENG(156, "< left channel");
+                RD_M_DrawTextSmallCenteredENG("< LEFT CHANNEL", 156, CR_WHITE);
                 else
-                M_WriteTextSmallCentered_RUS(156, "/ ktdsq rfyfk");  // < левый канал
+                RD_M_DrawTextSmallCenteredRUS("/ ktdsq rfyfk", 156, CR_WHITE); // < левый канал
     
                 if (speaker_test_left)
                 {
@@ -3405,9 +3130,9 @@ static void M_RD_Draw_Audio_System(void)
             else if (speaker_test_timeout <= 30)
             {
                 if (english_language)
-                M_WriteTextSmallCentered_ENG(156, "right channel >");
+                RD_M_DrawTextSmallCenteredENG("RIGHT CHANNEL >", 156, CR_WHITE);
                 else
-                M_WriteTextSmallCentered_RUS(156, "ghfdsq rfyfk \\");  // правый канал >
+                RD_M_DrawTextSmallCenteredRUS("ghfdsq rfyfk \\", 156, CR_WHITE);  // правый канал >
     
                 if (speaker_test_right)
                 {
@@ -3417,7 +3142,6 @@ static void M_RD_Draw_Audio_System(void)
                 speaker_test_right = false;
             }
         }
-        dp_translation = NULL;
     }
 }
 
@@ -3754,38 +3478,34 @@ static void DrawResetControlsMenu()
 
     if (english_language)
     {
-        M_WriteTextBigCentered_ENG(42, "Controls reset");
+        RD_M_DrawTextBigCenteredENG("CONTROLS RESET", 42);
 
         // Explanations
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmallCentered_ENG(145, "CONTROLS WILL BE RESET TO");
+        RD_M_DrawTextSmallCenteredENG("CONTROLS WILL BE RESET TO", 145, CR_DARKRED);
         if (CurrentItPos == 0)
         {
-            M_WriteTextSmallCentered_ENG(155, "PORT'S DEFAULTS");
+            RD_M_DrawTextSmallCenteredENG("PORT'S DEFAULTS", 155, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmallCentered_ENG(155, "ORIGINAL DOOM DEFAULTS");
+            RD_M_DrawTextSmallCenteredENG("ORIGINAL DOOM DEFAULTS", 155, CR_DARKRED);
         }
-        dp_translation = NULL;
     }
     else
     {
-        M_WriteTextBigCentered_RUS(42, "C,hjc eghfdktybz");  // СБРОС УПРАВЛЕНИЯ
+        RD_M_DrawTextBigCenteredRUS("C,hjc eghfdktybz", 42);  // СБРОС УПРАВЛЕНИЯ
 
         // Пояснения
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmallCentered_RUS(145, ",ELTN BCGJKMPJDFYJ EGHFDKTYBT");  // Будет использовано управление
+        RD_M_DrawTextSmallCenteredRUS(",ELTN BCGJKMPJDFYJ EGHFDKTYBT", 145, CR_DARKRED);  // Будет использовано управление
         if (CurrentItPos == 0)
         {
-            M_WriteTextSmallCentered_RUS(155, "HTRJVTYLETVJT GJHNJV");  // рекомендуемое портом
+            RD_M_DrawTextSmallCenteredRUS("HTRJVTYLETVJT GJHNJV", 155, CR_DARKRED);  // рекомендуемое портом
         }
         else
         {
             RD_M_DrawTextSmallRUS("JHBUBYFKMYJUJ", 90 + wide_delta, 155, CR_DARKRED);
             RD_M_DrawTextSmallENG("DOOM", 200 + wide_delta, 155, CR_DARKRED);
         }
-        dp_translation = NULL;
     }
 }
 
@@ -6099,42 +5819,38 @@ static void M_RD_Draw_Reset(void)
 
     if (english_language)
     {
-        M_WriteTextSmallCentered_ENG(65, "Graphical, audible and gameplay settings");
-        M_WriteTextSmallCentered_ENG(75, "will be reset to their default values.");
-        M_WriteTextSmallCentered_ENG(85, "Which level of values to use?");
+        RD_M_DrawTextSmallCenteredENG("GRAPHICAL, AUDIBLE AND GAMEPLAY SETTINGS", 65, CR_NONE);
+        RD_M_DrawTextSmallCenteredENG("WILL BE RESET TO THEIR DEFAULT VALUES.", 75, CR_NONE);
+        RD_M_DrawTextSmallCenteredENG("WHICH LEVEL OF VALUES TO USE?", 85, CR_NONE);
 
         // Explanations
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmallCentered_ENG(145, "Settings will be reset to");
+        RD_M_DrawTextSmallCenteredENG("SETTINGS WILL BE RESET TO", 145, CR_DARKRED);
         if (CurrentItPos == 0)
         {
-            M_WriteTextSmallCentered_ENG(155, "default port's values");
+            RD_M_DrawTextSmallCenteredENG("DEFAULT PORT'S VALUES", 155, CR_DARKRED);
         }
         else
         {
-            M_WriteTextSmallCentered_ENG(155, "original Doom values");
+            RD_M_DrawTextSmallCenteredENG("ORIGINAL DOOM VALUES", 155, CR_DARKRED);
         }
-        dp_translation = NULL;
     }
     else
     {
-        M_WriteTextSmallCentered_RUS(65, "Yfcnhjqrb uhfabrb< pderf b utqvgktz");     // Настройки графики, звука и геймплея
-        M_WriteTextSmallCentered_RUS(75, ",elen c,hjitys yf cnfylfhnyst pyfxtybz>"); // Будут сброшены на стандартные значения.
-        M_WriteTextSmallCentered_RUS(85, "Ds,thbnt ehjdtym pyfxtybq:");              // Выберите уровень значений:
+        RD_M_DrawTextSmallCenteredRUS("Yfcnhjqrb uhfabrb< pderf b utqvgktz", 65, CR_NONE);      // Настройки графики, звука и геймплея
+        RD_M_DrawTextSmallCenteredRUS(",elen c,hjitys yf cnfylfhnyst pyfxtybz>", 75, CR_NONE);  // Будут сброшены на стандартные значения.
+        RD_M_DrawTextSmallCenteredRUS("Ds,thbnt ehjdtym pyfxtybq:", 85, CR_NONE);               // Выберите уровень значений:
 
         // Пояснения
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmallCentered_RUS(145, ",elen bcgjkmpjdfys pyfxtybz");  // Будут использованы значения
+        RD_M_DrawTextSmallCenteredRUS(",elen bcgjkmpjdfys pyfxtybz", 145, CR_DARKRED);  // Будут использованы значения
         if (CurrentItPos == 0)
         {
-            M_WriteTextSmallCentered_RUS(155, "htrjvtyletvst gjhnjv");  // рекомендуемые портом
+            RD_M_DrawTextSmallCenteredRUS("htrjvtyletvst gjhnjv", 155, CR_DARKRED);  // рекомендуемые портом
         }
         else
         {
             RD_M_DrawTextSmallRUS("jhbubyfkmyjuj", 85 + wide_delta, 155, CR_DARKRED);  // оригинального Doom
             RD_M_DrawTextSmallENG("Doom", 193 + wide_delta, 155, CR_DARKRED);
         }
-        dp_translation = NULL;
     }
 }
 
@@ -6655,7 +6371,7 @@ static void M_DrawLoad()
     else
     {
         // ЗАГРУЗИТЬ ИГРУ
-        M_WriteTextBigCentered_RUS(LoadDef_y, "PFUHEPBNM BUHE");
+        RD_M_DrawTextBigCenteredRUS("PFUHEPBNM BUHE", LoadDef_y);
     }
 
     for (i = 0;i < 8; i++)
@@ -6746,9 +6462,13 @@ static void M_DrawSave()
     else
     {
         if (QuickSaveTitle) // БЫСТРОЕ СОХРАНЕНИЕ
-            M_WriteTextBigCentered_RUS(SaveDef_y, "<SCNHJT CJ{HFYTYBT");
+        {
+            RD_M_DrawTextBigCenteredRUS("<SCNHJT CJ{HFYTYBT", SaveDef_y);
+        }
         else                // СОХРАНИТЬ ИГРУ
-            M_WriteTextBigCentered_RUS(SaveDef_y, "CJ{HFYBNM BUHE");
+        {
+            RD_M_DrawTextBigCenteredRUS("CJ{HFYBNM BUHE", SaveDef_y);
+        }
     }
 
     for (i = 0;i < 8; i++)
@@ -7069,9 +6789,9 @@ static void M_DrawNewGame()
     else
     {
         // НОВАЯ ИГРА
-        M_WriteTextBigCentered_RUS(13, "YJDFZ BUHF");
+        RD_M_DrawTextBigCenteredRUS("YJDFZ BUHF", 13);
         // Уровень сложности:
-        M_WriteTextBigCentered_RUS(38, "Ehjdtym ckj;yjcnb#");
+        RD_M_DrawTextBigCenteredRUS("Ehjdtym ckj;yjcnb#", 38);
     }
 }
 
@@ -7111,9 +6831,9 @@ static void M_DrawEpisode()
     else
     {
         // НОВАЯ ИГРА
-        M_WriteTextBigCentered_RUS(13, "YJDFZ BUHF");
+        RD_M_DrawTextBigCenteredRUS("YJDFZ BUHF", 13);
         // Какой эпизод?
-        M_WriteTextBigCentered_RUS(38, "Rfrjq \'gbpjl?");
+        RD_M_DrawTextBigCenteredRUS("Rfrjq \'gbpjl?", 38);
     }
 }
 

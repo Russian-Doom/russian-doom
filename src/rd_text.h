@@ -63,16 +63,23 @@ void RD_M_DrawTextC(char *text, int x, int y);
 
 /** [JN] Draw text string with unreplaceable small English font*/
 void RD_M_DrawTextSmallENG(char *text, int x, int y, Translation_CR_t translation);
+/** [JN] Draw centered string using a small English font*/
+void RD_M_DrawTextSmallCenteredENG(char *text, int y, Translation_CR_t translation);
 /** [JN] Returns the pixel width of a string using unreplaceable small English font*/
 int RD_M_TextSmallENGWidth(char *text);
 
+
 /** [JN] Draw text string with unreplaceable big English font*/
 void RD_M_DrawTextBigENG(char *text, int x, int y);
+/** [JN] Draw centered string with unreplaceable big English font*/
+void RD_M_DrawTextBigCenteredENG(char *text, int y);
 /** [JN] Returns the pixel width of a string using unreplaceable big English font */
 int RD_M_TextBigENGWidth(char *text);
 
 /** [JN] Draw text string with unreplaceable small Russian font*/
 void RD_M_DrawTextSmallRUS(char* text, int x, int y, Translation_CR_t translation);
+/** [JN] Draw centered string using a small Russian font*/
+void RD_M_DrawTextSmallCenteredRUS(char* text, int y, Translation_CR_t translation);
 /** [JN] Draw text using unreplaceable small Russian font with fading effect*/
 void RD_M_DrawTextSmallRUSFade(char* text, int x, int y, byte *table);
 /** [JN] Returns the pixel width of a string using unreplaceable small Russian font*/
@@ -80,5 +87,7 @@ int RD_M_TextSmallRUSWidth(char* text);
 
 /** [JN] Draw text string with unreplaceable big Russian font*/
 void RD_M_DrawTextBigRUS(char* text, int x, int y);
+/** [JN] Draw centered string with unreplaceable big Russian font*/
+void RD_M_DrawTextBigCenteredRUS(char *text, int y);
 /** [JN] Returns the pixel width of a string using unreplaceable big Russian font*/
 int RD_M_TextBigRUSWidth(char* text);
