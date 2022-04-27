@@ -47,6 +47,10 @@ typedef enum
 } finalestage_t;
 
 
+// [JN] Base font lumps for handling in finale texts.
+static int EngFontFinaleLump;
+static int RusFontFinaleLump;
+
 // Stage of animation:
 finalestage_t finalestage;
 
@@ -200,6 +204,17 @@ void F_StartFinale (void)
 
     finalestage = F_STAGE_TEXT;
     finalecount = 0;
+
+    if (gamemission != jaguar)
+    {
+        EngFontFinaleLump = W_GetNumForName(DEH_String("STCFN033"));
+        RusFontFinaleLump = W_GetNumForName(DEH_String("FNTSR033"));   
+    }
+    else
+    {
+        EngFontFinaleLump = W_GetNumForName(DEH_String("FNTBE033"));
+        RusFontFinaleLump = W_GetNumForName(DEH_String("FNTBR033"));     
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -429,10 +444,11 @@ void F_Ticker (void)
 
 static void F_TextWrite (void)
 {
-    int    w;
+    int    c;
     int    cx, cy;
     char  *ch;
     signed int count;
+    patch_t *w;
 
     // [JN] Erase the entire screen to a tiled background.
     V_FillFlat (finaleflat);
@@ -477,7 +493,7 @@ static void F_TextWrite (void)
 
     for ( ; count ; count-- )
     {
-        int c = *ch++;
+        c = *ch++;
 
         if (!c)
         {
@@ -491,27 +507,24 @@ static void F_TextWrite (void)
             continue;
         }
 
-        c = toupper(c) - HU_FONTSTART;
-        if (c < 0 || c> HU_FONTSIZE)
+        c = toupper(c);
+
+        if (c < 33)
         {
             cx += 4;
             continue;
         }
 
-        if (english_language)
-        w = SHORT (hu_font[c]->width);
-        else
-        w = SHORT (hu_font_small_rus[c]->width);
+        w = W_CacheLumpNum((english_language ? EngFontFinaleLump : 
+                                               RusFontFinaleLump) + c - 33, PU_STATIC);
 
-        if (cx+w > origwidth)
-	    break;
+        if (cx + SHORT(w->width) > screenwidth)
+        {
+            break;
+        }
 
-        if (english_language)
-        V_DrawShadowedPatchDoom(cx + wide_delta, cy, hu_font[c]);
-        else
-        V_DrawShadowedPatchDoom(cx + wide_delta, cy, hu_font_small_rus[c]);
-
-        cx+=w;
+        V_DrawShadowedPatchDoom(cx + wide_delta, cy, w);
+        cx += SHORT(w->width);
     }
 }
 
@@ -810,69 +823,13 @@ static boolean F_CastResponder (event_t *ev)
 
 static void F_CastPrint (char *text)
 {
-    int    c;
-    int    cx;
-    int    w;
-    int    width;
-    char  *ch;
-
-    // find width
-    ch = text;
-    width = 0;
-
-    while (ch)
+    if (english_language)
     {
-        c = *ch++;
-
-        if (!c)
-        break;
-
-        c = toupper(c) - HU_FONTSTART;
-
-        if (c < 0 || c> HU_FONTSIZE)
-        {
-            width += 4;
-            continue;
-        }
-
-        if (english_language)
-        w = SHORT (hu_font[c]->width);
-        else
-        w = SHORT (hu_font_small_rus[c]->width);
-
-        width += w;
+        RD_M_DrawTextA(text, 160 - RD_M_TextAWidth(text) / 2 + wide_delta, 180);
     }
-
-    // draw it
-    cx = origwidth/2-width/2;
-    ch = text;
-    while (ch)
+    else
     {
-        c = *ch++;
-
-        if (!c)
-        break;
-
-        c = toupper(c) - HU_FONTSTART;
-
-        if (c < 0 || c> HU_FONTSIZE)
-        {
-            cx += 4;
-            continue;
-        }
-
-        if (english_language)
-        {
-            w = SHORT (hu_font[c]->width);
-            V_DrawShadowedPatchDoom(cx, 180, hu_font[c]);
-        }
-        else
-        {
-            w = SHORT (hu_font_small_rus[c]->width);
-            V_DrawShadowedPatchDoom(cx, 180, hu_font_small_rus[c]);
-        }
-
-        cx+=w;
+        RD_M_DrawTextSmallCenteredRUS(text, 180, CR_NONE);
     }
 }
 
@@ -1172,9 +1129,11 @@ void F_Drawer (void)
 
 static void F_TextWriteJaguar (void)
 {
-    int         w, cx, cy;
+    int         c;
+    int         cx, cy;
     signed int  count;
     char       *ch;
+    patch_t    *w;
 
     // Leaving MAP23, end game. Special background.
     V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE), false);
@@ -1191,10 +1150,12 @@ static void F_TextWriteJaguar (void)
 
     for ( ; count ; count-- )
     {
-        int c = *ch++;
+        c = *ch++;
 
         if (!c)
-        break;
+        {
+            break;
+        }
 
         if (c == '\n')
         {
@@ -1203,27 +1164,22 @@ static void F_TextWriteJaguar (void)
             continue;
         }
 
-        c = c - HU_FONTSTART2;
-        if (c < 0 || c> HU_FONTSIZE2)
+        if (c < 33)
         {
             cx += 7;
             continue;
         }
 
-        if (english_language)
-        w = SHORT (hu_font_big_eng[c]->width);
-        else
-        w = SHORT (hu_font_big_rus[c]->width);
+        w = W_CacheLumpNum((english_language ? EngFontFinaleLump : 
+                                               RusFontFinaleLump) + c - 33, PU_STATIC);
 
-        if (cx+w > origwidth)
-	    break;
+        if (cx + SHORT(w->width) > screenwidth)
+        {
+            break;
+        }
 
-        if (english_language)
-        V_DrawShadowedPatchDoom(cx + wide_delta, cy, hu_font_big_eng[c]);
-        else
-        V_DrawShadowedPatchDoom(cx + wide_delta, cy, hu_font_big_rus[c]);
-
-        cx+=w;
+        V_DrawShadowedPatchDoom(cx + wide_delta, cy, w);
+        cx += SHORT(w->width);
     }
 }
 
@@ -1327,65 +1283,13 @@ static void F_CastTickerJaguar (void)
 
 static void F_CastPrintJaguar (char *text)
 {
-    int	     c, cx, w, width;
-    char    *ch;
-
-    // find width
-    ch = text;
-    width = 0;
-
-    while (ch)
+    if (english_language)
     {
-        c = *ch++;
-
-        if (!c)
-        break;
-
-        c = tolower(c) - HU_FONTSTART2;
-
-        if (c < 0 || c> HU_FONTSIZE2)
-        {
-            width += 10;
-            continue;
-        }
-
-        if (english_language)
-        w = SHORT (hu_font_big_eng[c]->width);
-        else
-        w = SHORT (hu_font_big_rus[c]->width);
-        width += w;
+        RD_M_DrawTextBigCenteredENG(text, 15);
     }
-
-    // draw it
-    cx = origwidth/2-width/2;
-    ch = text;
-    while (ch)
+    else
     {
-        c = *ch++;
-
-        if (!c)
-        break;
-
-        c = tolower(c) - HU_FONTSTART2;
-
-        if (c < 0 || c> HU_FONTSIZE2)
-        {
-            cx += 10;
-            continue;
-        }
-
-        if (english_language)
-        {
-            w = SHORT (hu_font_big_eng[c]->width);
-            V_DrawShadowedPatchDoom(cx, 15, hu_font_big_eng[c]);
-        }
-        else
-        {
-            w = SHORT (hu_font_big_rus[c]->width);
-            V_DrawShadowedPatchDoom(cx, 15, hu_font_big_rus[c]);
-        }
-
-        cx+=w;
+        RD_M_DrawTextBigCenteredRUS(text, 15);
     }
 }
 

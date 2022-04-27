@@ -51,11 +51,8 @@
 
 // Public data
 
-patch_t *hu_font[HU_FONTSIZE];
-patch_t *hu_font_small_eng[HU_FONTSIZE];
-patch_t *hu_font_small_rus[HU_FONTSIZE];
-patch_t *hu_font_big_eng[HU_FONTSIZE2];
-patch_t *hu_font_big_rus[HU_FONTSIZE2];
+patch_t *EngFontBaseLump;
+patch_t *RusFontBaseLump;
 
 boolean chatmodeon;
 boolean altdown;
@@ -99,7 +96,7 @@ static char chat_msg[MAXPLAYERS][MESSAGESIZE];
 static char plr_lastmsg[MAXPLAYERS][MESSAGESIZE + 9];  // add in the length of the pre-string
 static byte ChatQueue[QUEUESIZE];
 
-static int FontBaseLump;
+static int ChatFontBaseLump;
 
 
 // -----------------------------------------------------------------------------
@@ -110,12 +107,6 @@ static int FontBaseLump;
 void CT_Init (void)
 {
     int i;
-    int j = HU_FONTSTART;
-    int o = HU_FONTSTART;
-    int p = HU_FONTSTART;
-    int q = HU_FONTSTART2;
-    int r = HU_FONTSTART2;
-    char    buffer[9];
 
     head = 0;  // Initialize the queue index.
     tail = 0;
@@ -131,33 +122,10 @@ void CT_Init (void)
         memset(chat_msg[i], 0, MESSAGESIZE);
     }
 
-    FontBaseLump = W_GetNumForName(DEH_String("STCFN033"));
-    
-    // [JN] Load the heads-up fonts:
-    for (i = 0 ; i < HU_FONTSIZE ; i++)
-    {
-        // Standard STCFN font.
-        DEH_snprintf(buffer, 9, "STCFN%.3d", j++);
-        hu_font[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
+    ChatFontBaseLump = W_GetNumForName(DEH_String("STCFN033"));
 
-        // Small, unchangeable English font (FNTSE).
-        DEH_snprintf(buffer, 9, "FNTSE%.3d", o++);
-        hu_font_small_eng[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
-
-        // Small, unchangeable Russian font (FNTSR).
-        DEH_snprintf(buffer, 9, "FNTSR%.3d", p++);
-        hu_font_small_rus[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
-    }
-    for (i = 0 ; i < HU_FONTSIZE2 ; i++)
-    {
-        // Big, unchangeable English font (FNTBE)
-        DEH_snprintf(buffer, 9, "FNTBE%.3d", q++);
-        hu_font_big_eng[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
-        
-        // Big, unchangeable Russian font (FNTBR)
-        DEH_snprintf(buffer, 9, "FNTBR%.3d", r++);
-        hu_font_big_rus[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
-    }
+    EngFontBaseLump = W_CacheLumpNum((W_GetNumForName(DEH_String("STCFN033"))), PU_STATIC);
+    RusFontBaseLump = W_CacheLumpNum((W_GetNumForName(DEH_String("FNTSR033"))), PU_STATIC);
 }
 
 // -----------------------------------------------------------------------------
@@ -396,7 +364,7 @@ void CT_Drawer (void)
             }
             else
             {
-                patch = W_CacheLumpNum(FontBaseLump + 
+                patch = W_CacheLumpNum(ChatFontBaseLump + 
                                        chat_msg[consoleplayer][i] - 33,
                                        PU_STATIC);
                 V_DrawShadowedPatchDoom(x, 10, patch);
@@ -466,7 +434,7 @@ static void CT_AddChar(int player, char c)
     }
     else
     {
-        patch = W_CacheLumpNum(FontBaseLump + c - 33, PU_CACHE);
+        patch = W_CacheLumpNum(ChatFontBaseLump + c - 33, PU_CACHE);
         msglen[player] += patch->width;
     }
 }
@@ -495,7 +463,7 @@ static void CT_BackSpace (int player)
     }
     else
     {
-        patch = W_CacheLumpNum(FontBaseLump + c - 33, PU_CACHE);
+        patch = W_CacheLumpNum(ChatFontBaseLump + c - 33, PU_CACHE);
         msglen[player] -= patch->width;
     }
 
