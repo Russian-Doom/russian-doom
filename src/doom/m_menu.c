@@ -123,7 +123,6 @@ static void M_DrawLoad();
 static void M_DrawSave();
 
 static void M_DrawSaveLoadBorder(int x,int y);
-int  M_StringWidth(char *string);
 static int  M_StringHeight(char *string);
 static void M_StartMessage(char *string,void *routine,boolean input);
 
@@ -6479,7 +6478,8 @@ static void M_DrawSave()
 
     if (saveStringEnter)
     {
-        i = M_StringWidth(savegamestrings[saveSlot]);
+        i = english_language ? RD_M_TextAWidth(savegamestrings[saveSlot]) :
+                               RD_M_TextSmallRUSWidth(savegamestrings[saveSlot]);
         RD_M_DrawTextA("_", x + i + wide_delta,LoadMenu.y+LINEHEIGHT*saveSlot);
     }
 }
@@ -7067,44 +7067,14 @@ M_StartMessage
 }
 
 //
-// Find string width from hu_font chars
-//
-int M_StringWidth(char* string)
-{
-    size_t  i;
-    int     w = 0;
-    int     c;
-
-    for (i = 0;i < strlen(string);i++)
-    {
-        c = toupper(string[i]) - HU_FONTSTART;
-        if (c < 0 || c >= HU_FONTSIZE)
-            w += 4;
-        else
-        {
-            if (english_language || CurrentMenu == &SaveMenu)
-            {
-                w += SHORT (hu_font[c]->width);
-            }
-            else
-            {
-                w += SHORT (hu_font_small_rus[c]->width);    
-            }
-        }
-    }
-
-    return w;
-}
-
-
-//
 // Find string height from hu_font chars
 //
 static int M_StringHeight(char* string)
 {
     size_t  i;
     int     h;
-    int     height = SHORT(hu_font[0]->height);
+    patch_t *p = W_CacheLumpNum((W_GetNumForName(DEH_String("STCFN033"))), PU_STATIC);
+    int     height = SHORT(p->height);
 
     h = height;
     for (i = 0;i < strlen(string);i++)
@@ -7364,15 +7334,15 @@ boolean M_Responder (event_t* ev)
 
             ch = toupper(ch);
 
-            if (ch != ' ' && (ch - HU_FONTSTART < 0 || ch - HU_FONTSTART >= HU_FONTSIZE))
+            if (ch != ' ' && (ch - '!' < 0 || ch - '!' >= ('_' - '!' + 1)))
             {
                 return true;
             }
 
             if (ch >= 32 && ch <= 127 &&
-                saveCharIndex < SAVESTRINGSIZE-1 &&
-                M_StringWidth(savegamestrings[saveSlot]) <
-                (SAVESTRINGSIZE-2)*8)
+                saveCharIndex < SAVESTRINGSIZE-1 && (english_language ? 
+                RD_M_TextAWidth(savegamestrings[saveSlot]) :
+                RD_M_TextSmallRUSWidth(savegamestrings[saveSlot])) < (SAVESTRINGSIZE-2)*8)
             {
                 savegamestrings[saveSlot][saveCharIndex++] = ch;
                 savegamestrings[saveSlot][saveCharIndex] = 0;
@@ -7652,6 +7622,7 @@ void M_Drawer (void)
     unsigned int    i;
     char            string[80];
     int             start;
+    patch_t        *w = W_CacheLumpNum((W_GetNumForName(DEH_String("STCFN033"))), PU_STATIC);
 
     inhelpscreens = false;
 
@@ -7687,17 +7658,18 @@ void M_Drawer (void)
                 start += strlen(string);
             }
 
-            x = 160 - M_StringWidth(string) / 2;
+            x = 160 - (english_language ? RD_M_TextAWidth(string) :
+                                          RD_M_TextSmallRUSWidth(string)) / 2;
 
             if (english_language)
             {
                 RD_M_DrawTextA(string, x + wide_delta, y);
-                y += SHORT(hu_font[0]->height);
+                y += SHORT(w->height);
             }
             else
             {
                 RD_M_DrawTextSmallRUS(string, x + wide_delta, y, CR_NONE);
-                y += SHORT(hu_font_small_rus[0]->height);                
+                y += SHORT(w->height);                
             }
         }
 

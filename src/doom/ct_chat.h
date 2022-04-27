@@ -28,23 +28,3 @@ boolean CT_Responder(event_t * ev);
 extern boolean chatmodeon;
 extern char *CT_FromPlrText[MAXPLAYERS];
 extern char *chat_macros[10];
-
-//
-// FONTS
-//
-
-#define HU_FONTSTART    '!' // the first font characters
-#define HU_FONTEND      '_' // the last font characters
-#define HU_FONTSIZE     (HU_FONTEND - HU_FONTSTART + 1)	
-
-// [JN] Big STCFB font
-#define HU_FONTSTART2   '!'	// the first font characters
-#define HU_FONTEND2     '}'	// the last font characters
-#define HU_FONTSIZE2    (HU_FONTEND2 - HU_FONTSTART2 + 1)
-
-// Global font definitions
-extern patch_t *hu_font[HU_FONTSIZE];
-extern patch_t *hu_font_small_eng[HU_FONTSIZE];
-extern patch_t *hu_font_small_rus[HU_FONTSIZE];
-extern patch_t *hu_font_big_eng[HU_FONTSIZE2];
-extern patch_t *hu_font_big_rus[HU_FONTSIZE2];
