@@ -25,6 +25,9 @@ char CT_dequeueChatChar (void);
 
 boolean CT_Responder(event_t * ev);
 
+extern patch_t *EngFontBaseLump;
+extern patch_t *RusFontBaseLump;
+
 extern boolean chatmodeon;
 extern char *CT_FromPlrText[MAXPLAYERS];
 extern char *chat_macros[10];

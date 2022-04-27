@@ -47,6 +47,10 @@ typedef enum
 } finalestage_t;
 
 
+// [JN] Base font lumps for handling in finale texts.
+static int EngFontFinaleLump;
+static int RusFontFinaleLump;
+
 // Stage of animation:
 finalestage_t finalestage;
 
@@ -200,6 +204,17 @@ void F_StartFinale (void)
 
     finalestage = F_STAGE_TEXT;
     finalecount = 0;
+
+    if (gamemission != jaguar)
+    {
+        EngFontFinaleLump = W_GetNumForName(DEH_String("STCFN033"));
+        RusFontFinaleLump = W_GetNumForName(DEH_String("FNTSR033"));   
+    }
+    else
+    {
+        EngFontFinaleLump = W_GetNumForName(DEH_String("FNTBE033"));
+        RusFontFinaleLump = W_GetNumForName(DEH_String("FNTBR033"));     
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -500,8 +515,8 @@ static void F_TextWrite (void)
             continue;
         }
 
-        w = W_CacheLumpNum((W_GetNumForName(DEH_String(english_language ?
-                           "STCFN033" : "FNTSR033"))) + c - 33, PU_STATIC);
+        w = W_CacheLumpNum((english_language ? EngFontFinaleLump : 
+                                               RusFontFinaleLump) + c - 33, PU_STATIC);
 
         if (cx + SHORT(w->width) > screenwidth)
         {
@@ -1155,8 +1170,8 @@ static void F_TextWriteJaguar (void)
             continue;
         }
 
-        w = W_CacheLumpNum((W_GetNumForName(DEH_String(english_language ?
-                           "FNTBE033" : "FNTBR033"))) + c - 33, PU_STATIC);
+        w = W_CacheLumpNum((english_language ? EngFontFinaleLump : 
+                                               RusFontFinaleLump) + c - 33, PU_STATIC);
 
         if (cx + SHORT(w->width) > screenwidth)
         {

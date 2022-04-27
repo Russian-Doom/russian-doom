@@ -51,6 +51,9 @@
 
 // Public data
 
+patch_t *EngFontBaseLump;
+patch_t *RusFontBaseLump;
+
 boolean chatmodeon;
 boolean altdown;
 boolean shiftdown;
@@ -93,7 +96,7 @@ static char chat_msg[MAXPLAYERS][MESSAGESIZE];
 static char plr_lastmsg[MAXPLAYERS][MESSAGESIZE + 9];  // add in the length of the pre-string
 static byte ChatQueue[QUEUESIZE];
 
-static int FontBaseLump;
+static int ChatFontBaseLump;
 
 
 // -----------------------------------------------------------------------------
@@ -119,7 +122,10 @@ void CT_Init (void)
         memset(chat_msg[i], 0, MESSAGESIZE);
     }
 
-    FontBaseLump = W_GetNumForName(DEH_String("STCFN033"));
+    ChatFontBaseLump = W_GetNumForName(DEH_String("STCFN033"));
+
+    EngFontBaseLump = W_CacheLumpNum((W_GetNumForName(DEH_String("STCFN033"))), PU_STATIC);
+    RusFontBaseLump = W_CacheLumpNum((W_GetNumForName(DEH_String("FNTSR033"))), PU_STATIC);
 }
 
 // -----------------------------------------------------------------------------
@@ -358,7 +364,7 @@ void CT_Drawer (void)
             }
             else
             {
-                patch = W_CacheLumpNum(FontBaseLump + 
+                patch = W_CacheLumpNum(ChatFontBaseLump + 
                                        chat_msg[consoleplayer][i] - 33,
                                        PU_STATIC);
                 V_DrawShadowedPatchDoom(x, 10, patch);
@@ -428,7 +434,7 @@ static void CT_AddChar(int player, char c)
     }
     else
     {
-        patch = W_CacheLumpNum(FontBaseLump + c - 33, PU_CACHE);
+        patch = W_CacheLumpNum(ChatFontBaseLump + c - 33, PU_CACHE);
         msglen[player] += patch->width;
     }
 }
@@ -457,7 +463,7 @@ static void CT_BackSpace (int player)
     }
     else
     {
-        patch = W_CacheLumpNum(FontBaseLump + c - 33, PU_CACHE);
+        patch = W_CacheLumpNum(ChatFontBaseLump + c - 33, PU_CACHE);
         msglen[player] -= patch->width;
     }
 

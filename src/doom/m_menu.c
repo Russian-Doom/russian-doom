@@ -7073,8 +7073,8 @@ static int M_StringHeight(char* string)
 {
     size_t  i;
     int     h;
-    patch_t *p = W_CacheLumpNum((W_GetNumForName(DEH_String("STCFN033"))), PU_STATIC);
-    int     height = SHORT(p->height);
+    int     height = SHORT(english_language ? EngFontBaseLump->height :
+                                              RusFontBaseLump->height);
 
     h = height;
     for (i = 0;i < strlen(string);i++)
@@ -7622,7 +7622,6 @@ void M_Drawer (void)
     unsigned int    i;
     char            string[80];
     int             start;
-    patch_t        *w = W_CacheLumpNum((W_GetNumForName(DEH_String("STCFN033"))), PU_STATIC);
 
     inhelpscreens = false;
 
@@ -7664,12 +7663,12 @@ void M_Drawer (void)
             if (english_language)
             {
                 RD_M_DrawTextA(string, x + wide_delta, y);
-                y += SHORT(w->height);
+                y += SHORT(EngFontBaseLump->height);
             }
             else
             {
                 RD_M_DrawTextSmallRUS(string, x + wide_delta, y, CR_NONE);
-                y += SHORT(w->height);                
+                y += SHORT(RusFontBaseLump->height);                
             }
         }
 
