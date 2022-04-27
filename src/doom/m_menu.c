@@ -6478,8 +6478,7 @@ static void M_DrawSave()
 
     if (saveStringEnter)
     {
-        i = english_language ? RD_M_TextAWidth(savegamestrings[saveSlot]) :
-                               RD_M_TextSmallRUSWidth(savegamestrings[saveSlot]);
+        i = RD_M_TextAWidth(savegamestrings[saveSlot]);
         RD_M_DrawTextA("_", x + i + wide_delta,LoadMenu.y+LINEHEIGHT*saveSlot);
     }
 }
@@ -7340,9 +7339,8 @@ boolean M_Responder (event_t* ev)
             }
 
             if (ch >= 32 && ch <= 127 &&
-                saveCharIndex < SAVESTRINGSIZE-1 && (english_language ? 
-                RD_M_TextAWidth(savegamestrings[saveSlot]) :
-                RD_M_TextSmallRUSWidth(savegamestrings[saveSlot])) < (SAVESTRINGSIZE-2)*8)
+                saveCharIndex < SAVESTRINGSIZE-1 && (RD_M_TextAWidth(savegamestrings[saveSlot]))
+                < (SAVESTRINGSIZE-2)*8)
             {
                 savegamestrings[saveSlot][saveCharIndex++] = ch;
                 savegamestrings[saveSlot][saveCharIndex] = 0;
