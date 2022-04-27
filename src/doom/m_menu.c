@@ -6265,6 +6265,9 @@ static void M_RD_ChangeLanguage(int choice)
     // Clear messages
     players[consoleplayer].message = NULL;
 
+    // Re-define font drawing functions
+    ID_InitFontFuncs();
+
     // Update messages
     RD_DefineLanguageStrings();
 
@@ -7742,6 +7745,9 @@ void M_Init (void)
                    // [JN] Unchangable Russian fonts
                    DEH_String("FNTSR033"),
                    DEH_String("FNTBR033"));
+
+    // [JN] Initialize font drawing functions.
+    ID_InitFontFuncs();
 
     RD_Menu_InitMenu(16, 10, NULL, NULL);
 

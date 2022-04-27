@@ -1941,54 +1941,46 @@ void ST_WidgetsDrawer (void)
                 plyr->extrakillcount ? plyr->extrakillcount : totalkills,
                 totalkills);
 
-        english_language ? RD_M_DrawTextA("K:", wide_4_3, 9+net_y) :
-                           RD_M_DrawTextSmallRUS("D:", wide_4_3, 9+net_y, CR_NONE);
+        ID_TextA(widget_kills, wide_4_3, 9 + net_y, CR_NONE);  // K: | В:
         
-        dp_translation = hud_stats_color == 0 ? NULL :
-                         totalkills == 0 ? cr[CR_GREEN] :
-                         plyr->killcount == 0 ? cr[CR_RED] :
-                         plyr->killcount < totalkills ? cr[CR_YELLOW] : cr[CR_GREEN];
-        RD_M_DrawTextA(str, wide_4_3 + 16, 9+net_y);
-        dp_translation = NULL;
-
+        ID_DrawTextA2(str, wide_4_3 + 16, 9 + net_y,
+                      hud_stats_color == 0 ? CR_NONE :
+                      totalkills == 0 ? CR_GREEN :
+                      plyr->killcount == 0 ? CR_RED :
+                      plyr->killcount < totalkills ? CR_YELLOW : CR_GREEN);
+        
         // Items:
         sprintf(str, "%d/%d", plyr->itemcount, totalitems);
 
-        english_language ? RD_M_DrawTextA("I:", wide_4_3, 17+net_y) :
-                           RD_M_DrawTextSmallRUS("G:", wide_4_3, 17+net_y, CR_NONE);
+        ID_TextA(widget_items, wide_4_3, 17 + net_y, CR_NONE);  // I: | П:
 
-        dp_translation = hud_stats_color == 0 ? NULL :
-                         totalitems == 0 ? cr[CR_GREEN] :
-                         plyr->itemcount == 0 ? cr[CR_RED] :
-                         plyr->itemcount < totalitems ? cr[CR_YELLOW] : cr[CR_GREEN];
-        RD_M_DrawTextA(str, wide_4_3 + 16, 17+net_y);
-        dp_translation = NULL;
-
+        ID_DrawTextA2(str, wide_4_3 + 16, 17 + net_y,
+                      hud_stats_color == 0 ? CR_NONE :
+                      totalitems == 0 ? CR_GREEN :
+                      plyr->itemcount == 0 ? CR_RED :
+                      plyr->itemcount < totalitems ? CR_YELLOW : CR_GREEN);
+        
         // Secret:
         sprintf(str, "%d/%d", plyr->secretcount, totalsecret);
 
-        english_language ? RD_M_DrawTextA("S:", wide_4_3, 25+net_y) :
-                           RD_M_DrawTextSmallRUS("N:", wide_4_3, 25+net_y, CR_NONE);
+        ID_TextA(widget_secret, wide_4_3, 25 + net_y, CR_NONE);  // S: | Т:
 
-        dp_translation = hud_stats_color == 0 ? NULL :
-                         totalsecret == 0 ? cr[CR_GREEN] :
-                         plyr->secretcount == 0 ? cr[CR_RED] :
-                         plyr->secretcount < totalsecret ? cr[CR_YELLOW] : cr[CR_GREEN];
-        RD_M_DrawTextA(str, wide_4_3 + 16, 25+net_y);
-        dp_translation = NULL;
+        ID_DrawTextA2(str, wide_4_3 + 16, 25 + net_y,
+                      hud_stats_color == 0 ? CR_NONE :
+                      totalsecret == 0 ? CR_GREEN :
+                      plyr->secretcount == 0 ? CR_RED :
+                      plyr->secretcount < totalsecret ? CR_YELLOW : CR_GREEN);
     }
 
-    // Skill Level:
+    // Skill Level: widget_skill widget_ltime widget_ttime
     if (((automapactive && automap_skill == 1) || automap_skill == 2))
     {
         sprintf(str, "%d", gameskill+1);
 
-        english_language ? RD_M_DrawTextA("SKL:", wide_4_3, 33+net_y) :
-                           RD_M_DrawTextSmallRUS("CK;:", wide_4_3, 33+net_y, CR_NONE);
+        ID_TextA(widget_skill, wide_4_3, 33 + net_y, CR_NONE);  // SKL: | СЛЖ:
 
-        dp_translation = hud_stats_color == 0 ? NULL : cr[CR_WHITE];
-        RD_M_DrawTextA(str, wide_4_3 + (english_language ? 31 : 36), 33+net_y);
-        dp_translation = NULL;
+        ID_DrawTextA2(str, wide_4_3 + (english_language ? 31 : 36), 33 + net_y,
+                      hud_stats_color == 0 ? CR_NONE : CR_WHITE);
     }
 
     // Level Time:
@@ -1996,12 +1988,10 @@ void ST_WidgetsDrawer (void)
     {
         sprintf(str, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
 
-        english_language ? RD_M_DrawTextA("LEVEL", wide_4_3, 49+net_y) :
-                           RD_M_DrawTextSmallRUS("EHJDTYM", wide_4_3, 49+net_y, CR_NONE);
+        ID_TextA(widget_ltime, wide_4_3, 49 + net_y, CR_NONE);  // Level: | Уровень:
 
-        dp_translation = hud_stats_color == 0 ? NULL : cr[CR_WHITE];
-        RD_M_DrawTextA(str, wide_4_3, 57+net_y);
-        dp_translation = NULL;
+        ID_DrawTextA2(str, wide_4_3, 57 + net_y,
+                      hud_stats_color == 0 ? CR_NONE : CR_WHITE);
     }
 
     // Total Time:
@@ -2009,12 +1999,10 @@ void ST_WidgetsDrawer (void)
     {
         sprintf(str, "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
 
-        english_language ? RD_M_DrawTextA("TOTAL", wide_4_3, 73+net_y) :
-                           RD_M_DrawTextSmallRUS("J,OTT", wide_4_3, 73+net_y, CR_NONE);
+        ID_TextA(widget_ttime, wide_4_3, 73 + net_y, CR_NONE);  // Total: | Общее:
 
-        dp_translation = hud_stats_color == 0 ? NULL : cr[CR_WHITE];
-        RD_M_DrawTextA(str, wide_4_3, 81+net_y);
-        dp_translation = NULL;
+        ID_DrawTextA2(str, wide_4_3 , 81 + net_y,
+                      hud_stats_color == 0 ? CR_NONE : CR_WHITE);
     }
 
     // Player Coords:
@@ -2081,17 +2069,9 @@ void ST_MapNameDrawer (void)
         extern char *level_name;
 
         sprintf(str, "%s", level_name);
-        if (english_language)
-        {
-            dp_translation = (hud_stats_color && !vanillaparm) ? cr[CR_YELLOW] : NULL;
-            RD_M_DrawTextA(str, wide_4_3, map_y);
-            dp_translation = NULL;
-        }
-        else
-        {
-            RD_M_DrawTextSmallRUS(str, wide_4_3, map_y,
-                                  (hud_stats_color && !vanillaparm) ? CR_YELLOW : CR_NONE);
-        }
+
+        ID_TextA(str, wide_4_3, map_y, 
+                 hud_stats_color && !vanillaparm ? CR_YELLOW : CR_NONE);
     }
 }
 

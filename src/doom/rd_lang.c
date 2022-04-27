@@ -240,6 +240,13 @@ char* ststr_behold;
 char* ststr_beholdx;
 char* ststr_beholdz;
 
+char* widget_kills;
+char* widget_items;
+char* widget_secret;
+char* widget_skill;
+char* widget_ltime;
+char* widget_ttime;
+
 // RD specific
 char* ststr_massacre;
 
@@ -392,6 +399,13 @@ void RD_DefineLanguageStrings (void)
         ststr_behold    = STSTR_BEHOLD;
         ststr_beholdx   = STSTR_BEHOLDX;
         ststr_beholdz   = STSTR_BEHOLDZ;
+        
+        widget_kills    = WIDGET_KILLS;
+        widget_items    = WIDGET_ITEMS;
+        widget_secret   = WIDGET_SECRET;
+        widget_skill    = WIDGET_SKILL;
+        widget_ltime    = WIDGET_LTIME;
+        widget_ttime    = WIDGET_TTIME;
 
         // RD specific
         ststr_massacre  = STSTR_MASSACRE;
@@ -537,6 +551,13 @@ void RD_DefineLanguageStrings (void)
         ststr_behold    = STSTR_BEHOLD_RUS;
         ststr_beholdx   = STSTR_BEHOLDX_RUS;
         ststr_beholdz   = STSTR_BEHOLDZ_RUS;
+        
+        widget_kills    = WIDGET_KILLS_RUS;
+        widget_items    = WIDGET_ITEMS_RUS;
+        widget_secret   = WIDGET_SECRET_RUS;
+        widget_skill    = WIDGET_SKILL_RUS;
+        widget_ltime    = WIDGET_LTIME_RUS;
+        widget_ttime    = WIDGET_TTIME_RUS;
 
         // RD specific
         ststr_massacre  = STSTR_MASSACRE_RUS;

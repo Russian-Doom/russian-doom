@@ -342,6 +342,13 @@ extern char* ststr_behold;
 extern char* ststr_beholdx;
 extern char* ststr_beholdz;
 
+extern char* widget_kills;
+extern char* widget_items;
+extern char* widget_secret;
+extern char* widget_skill;
+extern char* widget_ltime;
+extern char* widget_ttime;
+
 extern char* ststr_massacre;
 
 #define STSTR_MUS		"Music Change"
@@ -362,6 +369,13 @@ extern char* ststr_massacre;
 #define STSTR_BEHOLD	"inVuln, Str, Inviso, Rad, Allmap, or Lite-amp"
 #define STSTR_BEHOLDX	"Power-up Activated"
 #define STSTR_BEHOLDZ   "Power-up Deactivated"
+
+#define WIDGET_KILLS    "K:"
+#define WIDGET_ITEMS    "I:"
+#define WIDGET_SECRET   "S:"
+#define WIDGET_SKILL    "SKL:"
+#define WIDGET_LTIME    "LEVEL:"
+#define WIDGET_TTIME    "TOTAL:"
 
 #define STSTR_MASSACRE  "Monsters killed:"
 
@@ -1248,6 +1262,14 @@ extern char* ststr_massacre;
 #define STSTR_BEHOLD_RUS    "v=,tccv>< s=,thc>< i=ytd>< r=rjc>< a=rhn>< l=dbp>" // m=бессм., ы=берс., ш=нев., к=кос., ф=крт., д=виз.
 #define STSTR_BEHOLDX_RUS   "ghtlvtn frnbdbhjdfy"                       // Предмет активирован
 #define STSTR_BEHOLDZ_RUS   "ghtlvtn ltfrnbdbhjdfy"                     // Предмет деактивирован
+
+#define WIDGET_KILLS_RUS    "D:"        // В(раги):
+#define WIDGET_ITEMS_RUS    "G:"        // П(редметы):
+#define WIDGET_SECRET_RUS   "N:"        // Т(айники):
+#define WIDGET_SKILL_RUS    "CK;:"      // СЛЖ:
+#define WIDGET_LTIME_RUS    "EHJDTYM:"  // Уровень:
+#define WIDGET_TTIME_RUS    "J,OTT:"    // Общее:
+
 
 #define STSTR_MASSACRE_RUS  "eybxnj;tyj vjycnhjd:"                      // Уничтожено монстров:
 

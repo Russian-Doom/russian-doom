@@ -21,6 +21,7 @@
 #include "v_video.h"
 #include "w_wad.h"
 #include "z_zone.h"
+#include "jn.h"
 
 Translation_CR_t messages_pickup_color_set;
 Translation_CR_t messages_secret_color_set;
@@ -71,6 +72,29 @@ void RD_M_InitFonts(char* FontA, char* FontB, char* FontC,
     bigRusFont = W_GetNumForName(BigRusFont) + (RD_GameType != gt_Doom ? 1 : 0);
 }
 
+// -----------------------------------------------------------------------------
+// ID_InitFontFuncs
+// [JN] Pre-define font drawing functions to avoid extensive 
+// hitting of english_language variable.
+// -----------------------------------------------------------------------------
+
+void (*ID_TextA) (char *text, int x, int y, Translation_CR_t translation);
+
+void ID_InitFontFuncs (void)
+{
+    if (RD_GameType == gt_Doom)
+    {
+        if (english_language)
+        {
+            ID_TextA = ID_DrawTextA2;
+        }
+        else
+        {
+            ID_TextA = RD_M_DrawTextSmallRUS;
+        }
+    }
+}
+
 /** Draw text using replaceable English font A*/
 void RD_M_DrawTextA(char *text, int x, int y)
 {
@@ -100,6 +124,43 @@ void RD_M_DrawTextA(char *text, int x, int y)
             // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
             p = W_CacheLumpNum(fontA + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
             drawShadowedPatch(cx, cy, p);
+            cx += SHORT(p->width) - (RD_GameType == gt_Doom ? 0 : 1);
+        }
+    }
+}
+
+/** Draw text using replaceable English font A*/
+// [JN] Replica of RD_M_DrawTextA, remove once RD_M_DrawTextA will have a Translation_CR_t.
+void ID_DrawTextA2(char *text, int x, int y, Translation_CR_t translation)
+{
+    char c;
+    int cx, cy;
+    patch_t *p;
+
+    cx = x;
+    cy = y;
+
+    while ((c = *text++) != 0)
+    {
+        if (c == '\n')
+        {
+            cx = x;
+            cy += 12;
+            continue;
+        }
+
+        if (c < 33)
+        {
+            cx += (RD_GameType == gt_Doom ? 4 : 5);
+        }
+        else
+        {
+            c = toupper(c);
+            // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
+            p = W_CacheLumpNum(fontA + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
+            dp_translation = translation == CR_NONE ? NULL : cr[translation];
+            drawShadowedPatch(cx, cy, p);
+            dp_translation = NULL;
             cx += SHORT(p->width) - (RD_GameType == gt_Doom ? 0 : 1);
         }
     }

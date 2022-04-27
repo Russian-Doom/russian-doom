@@ -46,8 +46,12 @@ void RD_M_InitFonts(char* FontA, char* FontB, char* FontC,
                     char* SmallEngFont, char* BigEngFont,
                     char* SmallRusFont, char* BigRusFont);
 
+extern void (*ID_TextA) (char *text, int x, int y, Translation_CR_t translation);
+extern void ID_InitFontFuncs (void);
+
 /** Draw text using replaceable English font A*/
 void RD_M_DrawTextA(char *text, int x, int y);
+void RD_M_DrawTextA2(char *text, int x, int y, Translation_CR_t translation);
 /** Draw text using replaceable English font A with fading effect*/
 void RD_M_DrawTextAFade(char *text, int x, int y, byte *table);
 /** Returns the pixel width of a string using replaceable English font A*/
