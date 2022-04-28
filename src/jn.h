@@ -104,13 +104,7 @@ extern int message_color_pickup;
 extern int message_color_secret;
 extern int message_color_system;
 extern int message_color_chat;
-// TODO - remove once Heretic and Hexen will be done
-extern int message_pickup_color;
-extern int message_secret_color;
-extern int message_system_color;
-extern int message_chat_color;
-extern int message_quest_color;
-
+extern int message_color_quest;
 
 // -----------------------------------------------------------------------------
 // Automap
