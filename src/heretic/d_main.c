@@ -133,10 +133,10 @@ int messages_timeout = 4;
 int message_fade = 1;
 int draw_shadowed_text = 1;
 int local_time = 0;
-int message_pickup_color = 0;
-int message_secret_color = 15;
-int message_system_color = 0;
-int message_chat_color = 5;
+int message_color_pickup = 0;
+int message_color_secret = 15;
+int message_color_system = 0;
+int message_color_chat = 6;
 
 // Automap
 int automap_rotate = 0;
@@ -979,10 +979,10 @@ void D_BindVariables(void)
     M_BindIntVariable("message_fade",           &message_fade);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
     M_BindIntVariable("local_time",             &local_time);
-    M_BindIntVariable("message_pickup_color",   &message_pickup_color);
-    M_BindIntVariable("message_secret_color",   &message_secret_color);
-    M_BindIntVariable("message_system_color",   &message_system_color);
-    M_BindIntVariable("message_chat_color",     &message_chat_color);
+    M_BindIntVariable("message_color_pickup",   &message_color_pickup);
+    M_BindIntVariable("message_color_secret",   &message_color_secret);
+    M_BindIntVariable("message_color_system",   &message_color_system);
+    M_BindIntVariable("message_color_chat",     &message_color_chat);
 
     // Automap
     M_BindIntVariable("automap_rotate",         &automap_rotate);

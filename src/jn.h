@@ -100,12 +100,11 @@ extern int message_fade;
 extern int draw_shadowed_text;
 extern int messages_alignment;
 extern int messages_timeout;
-extern int message_pickup_color;
-extern int message_secret_color;
-extern int message_system_color;
-extern int message_chat_color;
-extern int message_quest_color;
-
+extern int message_color_pickup;
+extern int message_color_secret;
+extern int message_color_system;
+extern int message_color_chat;
+extern int message_color_quest;
 
 // -----------------------------------------------------------------------------
 // Automap
@@ -269,13 +268,13 @@ extern int extra_player_faces;
 extern int negative_health;
 extern int sbar_colored;
 extern int sbar_colored_gem;
-extern int sbar_color_high;
-extern int sbar_color_normal;
-extern int sbar_color_low;
-extern int sbar_color_critical;
-extern int sbar_color_armor_1;
-extern int sbar_color_armor_2;
-extern int sbar_color_armor_0;
+extern int stbar_color_high;
+extern int stbar_color_normal;
+extern int stbar_color_low;
+extern int stbar_color_critical;
+extern int stbar_color_armor_1;
+extern int stbar_color_armor_2;
+extern int stbar_color_armor_0;
 extern int ammo_widget;
 extern int ammo_widget_colored;
 

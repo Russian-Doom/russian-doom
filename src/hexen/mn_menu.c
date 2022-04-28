@@ -339,21 +339,21 @@ static Translation_CR_t M_RD_ColorTranslation (int color)
 {
     switch (color)
     {
-        case 1:   return CR_GRAY;
-        case 2:   return CR_DARKGRAY;
-        case 3:   return CR_RED;
-        case 4:   return CR_DARKRED;
-        case 5:   return CR_GREEN;
-        case 6:   return CR_DARKGREEN;
-        case 7:   return CR_OLIVE;
-        case 8:   return CR_BLUE2;
-        case 9:   return CR_DARKBLUE;
-        case 10:  return CR_NIAGARA;
-        case 11:  return CR_BRIGHTYELLOW;
-        case 12:  return CR_YELLOW;
-        case 13:  return CR_TAN;
-        case 14:  return CR_BROWN;
-
+        case 1:   return CR_WHITE;
+        case 2:   return CR_GRAY;
+        case 3:   return CR_DARKGRAY;
+        case 4:   return CR_RED;
+        case 5:   return CR_DARKRED;
+        case 6:   return CR_GREEN;
+        case 7:   return CR_DARKGREEN;
+        case 8:   return CR_OLIVE;
+        case 9:   return CR_BLUE2;
+        case 10:  return CR_DARKBLUE;
+        case 11:  return CR_NIAGARA;
+        case 12:  return CR_BRIGHTYELLOW;
+        case 13:  return CR_YELLOW;
+        case 14:  return CR_TAN;
+        case 15:  return CR_BROWN;
         default:  return CR_NONE;
     }
 }
@@ -362,21 +362,22 @@ static char *M_RD_ColorName (int color)
 {
     switch (color)
     {
-        case 1:   return english_language ? "GRAY"       : "CTHSQ";         // СЕРЫЙ
-        case 2:   return english_language ? "DARK GRAY"  : "NTVYJ-CTHSQ";   // ТЁМНО-СЕРЫЙ
-        case 3:   return english_language ? "RED"        : "RHFCYSQ";       // КРАСНЫЙ
-        case 4:   return english_language ? "DARK RED"   : "NTVYJ-RHFCYSQ"; // ТЁМНО-КРАСНЫЙ
-        case 5:   return english_language ? "GREEN"      : "PTKTYSQ";       // ЗЕЛЕНЫЙ
-        case 6:   return english_language ? "DARK GREEN" : "NTVYJ-PTKTYSQ"; // ТЕМНО-ЗЕЛЕНЫЙ
-        case 7:   return english_language ? "OLIVE"      : "JKBDRJDSQ";     // ОЛИВКОВЫЙ
-        case 8:   return english_language ? "BLUE"       : "CBYBQ";         // СИНИЙ
-        case 9:   return english_language ? "DARK BLUE"  : "NTVYJ-CBYBQ";   // ТЕМНО-СИНИЙ
-        case 10:  return english_language ? "NIAGARA"    : "YBFUFHF";       // НИАГАРА
-        case 11:  return english_language ? "YELLOW"     : ";TKNSQ";        // ЖЕЛТЫЙ
-        case 12:  return english_language ? "GOLD"       : "PJKJNJQ";       // ЗОЛОТОЙ
-        case 13:  return english_language ? "TAN"        : ",T;TDSQ";       // БЕЖЕВЫЙ
-        case 14:  return english_language ? "BROWN"      : "RJHBXYTDSQ";    // КОРИЧНЕВЫЙ
-        default:  return english_language ? "WHITE"      : ",TKSQ";         // БЕЛЫЙ
+        case 1:   return english_language ? "WHITE"      : ",TKSQ";            // БЕЛЫЙ
+        case 2:   return english_language ? "GRAY"       : "CTHSQ";            // СЕРЫЙ
+        case 3:   return english_language ? "DARK GRAY"  : "NTVYJ-CTHSQ";      // ТЁМНО-СЕРЫЙ
+        case 4:   return english_language ? "RED"        : "RHFCYSQ";          // КРАСНЫЙ
+        case 5:   return english_language ? "DARK RED"   : "NTVYJ-RHFCYSQ";    // ТЁМНО-КРАСНЫЙ
+        case 6:   return english_language ? "GREEN"      : "PTKTYSQ";          // ЗЕЛЕНЫЙ
+        case 7:   return english_language ? "DARK GREEN" : "NTVYJ-PTKTYSQ";    // ТЕМНО-ЗЕЛЕНЫЙ
+        case 8:   return english_language ? "OLIVE"      : "JKBDRJDSQ";        // ОЛИВКОВЫЙ
+        case 9:   return english_language ? "BLUE"       : "CBYBQ";            // СИНИЙ
+        case 10:  return english_language ? "DARK BLUE"  : "NTVYJ-CBYBQ";      // ТЕМНО-СИНИЙ
+        case 11:  return english_language ? "NIAGARA"    : "YBFUFHF";          // НИАГАРА
+        case 12:  return english_language ? "YELLOW"     : ";TKNSQ";           // ЖЕЛТЫЙ
+        case 13:  return english_language ? "GOLD"       : "PJKJNJQ";          // ЗОЛОТОЙ
+        case 14:  return english_language ? "TAN"        : ",T;TDSQ";          // БЕЖЕВЫЙ
+        case 15:  return english_language ? "BROWN"      : "RJHBXYTDSQ";       // КОРИЧНЕВЫЙ
+        default:  return english_language ? "UNCOLORED"  : ",TP JRHFIBDFYBZ";  // БЕЗ ОКРАШИВАНИЯ
     }
 }
 
@@ -1751,10 +1752,10 @@ void MN_Init(void)
     aspect_ratio_temp = aspect_ratio;
 
     // [JN] Init message colors.
-    M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);
-    M_RD_Define_Msg_Color(msg_quest, message_quest_color);
-    M_RD_Define_Msg_Color(msg_system, message_system_color);
-    M_RD_Define_Msg_Color(msg_chat, message_chat_color);
+    M_RD_Define_Msg_Color(msg_pickup, message_color_pickup);
+    M_RD_Define_Msg_Color(msg_quest, message_color_quest);
+    M_RD_Define_Msg_Color(msg_system, message_color_system);
+    M_RD_Define_Msg_Color(msg_chat, message_color_chat);
 }
 
 //==========================================================================
@@ -2737,20 +2738,20 @@ static void DrawMessagesMenu(void)
                               110 + wide_delta, 112, CR_NONE);
 
         // Item pickup
-        RD_M_DrawTextSmallENG(M_RD_ColorName(message_pickup_color), 120 + wide_delta, 132,
-                              M_RD_ColorTranslation(message_pickup_color));
+        RD_M_DrawTextSmallENG(M_RD_ColorName(message_color_pickup), 120 + wide_delta, 132,
+                              M_RD_ColorTranslation(message_color_pickup));
 
         // Quest message
-        RD_M_DrawTextSmallENG(M_RD_ColorName(message_quest_color), 144 + wide_delta, 142,
-                              M_RD_ColorTranslation(message_quest_color));
+        RD_M_DrawTextSmallENG(M_RD_ColorName(message_color_quest), 144 + wide_delta, 142,
+                              M_RD_ColorTranslation(message_color_quest));
 
         // System message
-        RD_M_DrawTextSmallENG(M_RD_ColorName(message_system_color), 152 + wide_delta, 152,
-                              M_RD_ColorTranslation(message_system_color));
+        RD_M_DrawTextSmallENG(M_RD_ColorName(message_color_system), 152 + wide_delta, 152,
+                              M_RD_ColorTranslation(message_color_system));
 
         // Netgame chat
-        RD_M_DrawTextSmallENG(M_RD_ColorName(message_chat_color), 135 + wide_delta, 162,
-                              M_RD_ColorTranslation(message_chat_color));
+        RD_M_DrawTextSmallENG(M_RD_ColorName(message_color_chat), 135 + wide_delta, 162,
+                              M_RD_ColorTranslation(message_color_chat));
     }
     else
     {
@@ -2789,20 +2790,20 @@ static void DrawMessagesMenu(void)
                               157 + wide_delta, 112, CR_NONE);
 
         // Получение предметов
-        RD_M_DrawTextSmallRUS(M_RD_ColorName(message_pickup_color), 187 + wide_delta, 132,
-                              M_RD_ColorTranslation(message_pickup_color));
+        RD_M_DrawTextSmallRUS(M_RD_ColorName(message_color_pickup), 187 + wide_delta, 132,
+                              M_RD_ColorTranslation(message_color_pickup));
 
         // Квестовое сообщение
-        RD_M_DrawTextSmallRUS(M_RD_ColorName(message_quest_color), 192 + wide_delta, 142,
-                              M_RD_ColorTranslation(message_quest_color));
+        RD_M_DrawTextSmallRUS(M_RD_ColorName(message_color_quest), 192 + wide_delta, 142,
+                              M_RD_ColorTranslation(message_color_quest));
 
         // Системные сообщения
-        RD_M_DrawTextSmallRUS(M_RD_ColorName(message_system_color), 191 + wide_delta, 152,
-                              M_RD_ColorTranslation(message_system_color));
+        RD_M_DrawTextSmallRUS(M_RD_ColorName(message_color_system), 191 + wide_delta, 152,
+                              M_RD_ColorTranslation(message_color_system));
 
         // Чат сетевой игры
-        RD_M_DrawTextSmallRUS(M_RD_ColorName(message_chat_color), 162 + wide_delta, 162,
-                              M_RD_ColorTranslation(message_chat_color));
+        RD_M_DrawTextSmallRUS(M_RD_ColorName(message_color_chat), 162 + wide_delta, 162,
+                              M_RD_ColorTranslation(message_color_chat));
     }
 
     // Messages timeout (slider)
@@ -2877,20 +2878,21 @@ void M_RD_Define_Msg_Color (MessageType_t messageType, int color)
     {
         switch (color)
         {
-            case 1:   *colorVar = CR_GRAY;          break;
-            case 2:   *colorVar = CR_DARKGRAY;      break;
-            case 3:   *colorVar = CR_RED;           break;
-            case 4:   *colorVar = CR_DARKRED;       break;
-            case 5:   *colorVar = CR_GREEN;         break;
-            case 6:   *colorVar = CR_DARKGREEN;     break;
-            case 7:   *colorVar = CR_OLIVE;        break;
-            case 8:   *colorVar = CR_BLUE2;         break;            
-            case 9:   *colorVar = CR_DARKBLUE;      break;
-            case 10:  *colorVar = CR_NIAGARA;       break;
-            case 11:  *colorVar = CR_BRIGHTYELLOW;  break;
-            case 12:  *colorVar = CR_YELLOW;        break;
-            case 13:  *colorVar = CR_TAN;           break;
-            case 14:  *colorVar = CR_BROWN;         break;
+            case 1:   *colorVar = CR_WHITE;         break;
+            case 2:   *colorVar = CR_GRAY;          break;
+            case 3:   *colorVar = CR_DARKGRAY;      break;
+            case 4:   *colorVar = CR_RED;           break;
+            case 5:   *colorVar = CR_DARKRED;       break;
+            case 6:   *colorVar = CR_GREEN;         break;
+            case 7:   *colorVar = CR_DARKGREEN;     break;
+            case 8:   *colorVar = CR_OLIVE;         break;
+            case 9:   *colorVar = CR_BLUE2;         break;            
+            case 10:  *colorVar = CR_DARKBLUE;      break;
+            case 11:  *colorVar = CR_NIAGARA;       break;
+            case 12:  *colorVar = CR_BRIGHTYELLOW;  break;
+            case 13:  *colorVar = CR_YELLOW;        break;
+            case 14:  *colorVar = CR_TAN;           break;
+            case 15:  *colorVar = CR_BROWN;         break;
             default:  *colorVar = CR_NONE;          break;
         }
     }
@@ -2898,34 +2900,34 @@ void M_RD_Define_Msg_Color (MessageType_t messageType, int color)
 
 void M_RD_Change_Msg_Pickup_Color(Direction_t direction)
 {
-    RD_Menu_SpinInt(&message_pickup_color, 0, 14, direction);
+    RD_Menu_SpinInt(&message_color_pickup, 0, 15, direction);
 
     // [JN] Redefine pickup message color.
-    M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);
+    M_RD_Define_Msg_Color(msg_pickup, message_color_pickup);
 }
 
 void M_RD_Change_Msg_Quest_Color(Direction_t direction)
 {
-    RD_Menu_SpinInt(&message_quest_color, 0, 14, direction);
+    RD_Menu_SpinInt(&message_color_quest, 0, 15, direction);
 
     // [JN] Redefine quest message color.
-    M_RD_Define_Msg_Color(msg_quest, message_quest_color);
+    M_RD_Define_Msg_Color(msg_quest, message_color_quest);
 }
 
 void M_RD_Change_Msg_System_Color(Direction_t direction)
 {
-    RD_Menu_SpinInt(&message_system_color, 0, 14, direction);
+    RD_Menu_SpinInt(&message_color_system, 0, 15, direction);
 
     // [JN] Redefine revealed secret message color.
-    M_RD_Define_Msg_Color(msg_system, message_system_color);
+    M_RD_Define_Msg_Color(msg_system, message_color_system);
 }
 
 void M_RD_Change_Msg_Chat_Color(Direction_t direction)
 {
-    RD_Menu_SpinInt(&message_chat_color, 0, 14, direction);
+    RD_Menu_SpinInt(&message_color_chat, 0, 15, direction);
 
     // [JN] Redefine netgame chat message color.
-    M_RD_Define_Msg_Color(msg_chat, message_chat_color);
+    M_RD_Define_Msg_Color(msg_chat, message_color_chat);
 }
 
 // -----------------------------------------------------------------------------
@@ -5536,10 +5538,10 @@ void M_RD_BackToDefaults_Recommended (void)
     message_fade       = 1;
     draw_shadowed_text = 1;
     local_time         = 0;
-    message_pickup_color = 0;
-    message_quest_color  = 0;
-    message_system_color = 0;
-    message_chat_color   = 5;
+    message_color_pickup = 0;
+    message_color_quest  = 0;
+    message_color_system = 0;
+    message_color_chat   = 6;
 
     // Automap
     automap_rotate     = 0;
@@ -5648,10 +5650,10 @@ static void M_RD_BackToDefaults_Original(void)
     message_fade       = 0;
     draw_shadowed_text = 0;
     local_time         = 0;
-    message_pickup_color = 0;
-    message_quest_color  = 0;
-    message_system_color = 0;
-    message_chat_color   = 5;
+    message_color_pickup = 0;
+    message_color_quest  = 0;
+    message_color_system = 0;
+    message_color_chat   = 0;
 
     // Automap
     automap_rotate     = 0;

@@ -106,13 +106,13 @@ extern cheatseq_t cheat_mypos;
 extern int st_palette;
 
 // [JN] Colored status bar widgets
-extern byte *sbar_color_high_set;
-extern byte *sbar_color_normal_set;
-extern byte *sbar_color_low_set;
-extern byte *sbar_color_critical_set;
-extern byte *sbar_color_armor_1_set;
-extern byte *sbar_color_armor_2_set;
-extern byte *sbar_color_armor_0_set;
+extern byte *stbar_color_high_set;
+extern byte *stbar_color_normal_set;
+extern byte *stbar_color_low_set;
+extern byte *stbar_color_critical_set;
+extern byte *stbar_color_armor_1_set;
+extern byte *stbar_color_armor_2_set;
+extern byte *stbar_color_armor_0_set;
 
 // [JN] Crosshair stuff.
 extern patch_t *CrosshairPatch;

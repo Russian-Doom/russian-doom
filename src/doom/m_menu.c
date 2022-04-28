@@ -400,84 +400,56 @@ static Translation_CR_t M_RD_ColorTranslation (int color)
 {
     switch (color)
     {
-        case 1:   return CR_DARKRED;    break;
-        case 2:   return CR_GREEN;      break;
-        case 3:   return CR_DARKGREEN;  break;
-        case 4:   return CR_OLIVE;      break;
-        case 5:   return CR_BLUE2;      break;
-        case 6:   return CR_DARKBLUE;   break;
-        case 7:   return CR_YELLOW;     break;
-        case 8:   return CR_ORANGE;     break;
-        case 9:   return CR_WHITE;      break;
-        case 10:  return CR_GRAY;       break;
-        case 11:  return CR_DARKGRAY;   break;
-        case 12:  return CR_TAN;        break;
-        case 13:  return CR_BROWN;      break;
-        case 14:  return CR_ALMOND;     break;
-        case 15:  return CR_KHAKI;      break;
-        case 16:  return CR_PINK;       break;
-        case 17:  return CR_BURGUNDY;   break;
-        default:  return CR_NONE;          break;
+        case 1:   return CR_RED;        break;
+        case 2:   return CR_DARKRED;    break;
+        case 3:   return CR_GREEN;      break;
+        case 4:   return CR_DARKGREEN;  break;
+        case 5:   return CR_OLIVE;      break;
+        case 6:   return CR_BLUE2;      break;
+        case 7:   return CR_DARKBLUE;   break;
+        case 8:   return CR_YELLOW;     break;
+        case 9:   return CR_ORANGE;     break;
+        case 10:  return CR_WHITE;      break;
+        case 11:  return CR_GRAY;       break;
+        case 12:  return CR_DARKGRAY;   break;
+        case 13:  return CR_TAN;        break;
+        case 14:  return CR_BROWN;      break;
+        case 15:  return CR_ALMOND;     break;
+        case 16:  return CR_KHAKI;      break;
+        case 17:  return CR_PINK;       break;
+        case 18:  return CR_BURGUNDY;   break;
+        default:  return CR_NONE;       break;
     }
 }
 
 // -----------------------------------------------------------------------------
-// M_RD_ColorName_ENG
-// [JN] Returns a color name for given variable, in English language.
+// M_ID_ColorName
+// [JN] Returns a color name for given variable.
 // -----------------------------------------------------------------------------
 
-static char *M_RD_ColorName_ENG (int color)
+static char *M_ID_ColorName (int color)
 {
     switch (color)
     {
-        case 1:   return "dark red";    break;
-        case 2:   return "green";       break;
-        case 3:   return "dark green";  break;
-        case 4:   return "olive";       break;
-        case 5:   return "blue";        break;
-        case 6:   return "dark blue";   break;
-        case 7:   return "yellow";      break;
-        case 8:   return "orange";      break;
-        case 9:   return "white";       break;
-        case 10:  return "gray";        break;
-        case 11:  return "dark gray";   break;
-        case 12:  return "tan";         break;
-        case 13:  return "brown";       break;
-        case 14:  return "almond";      break;
-        case 15:  return "khaki";       break;
-        case 16:  return "pink";        break;
-        case 17:  return "burgundy";    break;
-        default:  return "red";         break;
-    }
-}
-
-// -----------------------------------------------------------------------------
-// M_RD_ColorName_RUS
-// [JN] Returns a color name for given variable, in Russian language.
-// -----------------------------------------------------------------------------
-
-static char *M_RD_ColorName_RUS (int color)
-{
-    switch (color)
-    {
-        case 1:   return "ntvyj-rhfcysq";  break; // Тёмно-красный
-        case 2:   return "ptktysq";        break; // Зеленый
-        case 3:   return "ntvyj-ptktysq";  break; // Тёмно-зеленый
-        case 4:   return "jkbdrjdsq";      break; // Оливковый
-        case 5:   return "cbybq";          break; // Синий
-        case 6:   return "ntvyj-cbybq";    break; // Тёмно-синий
-        case 7:   return ";tknsq";         break; // Жёлтый
-        case 8:   return "jhfy;tdsq";      break; // Оранжевый
-        case 9:   return ",tksq";          break; // Белый
-        case 10:  return "cthsq";          break; // Серый
-        case 11:  return "ntvyj-cthsq";    break; // Тёмно-серый
-        case 12:  return ",t;tdsq";        break; // Бежевый
-        case 13:  return "rjhbxytdsq";     break; // Коричневый
-        case 14:  return "vbylfkmysq";     break; // Миндальный
-        case 15:  return "[frb";           break; // Хаки
-        case 16:  return "hjpjdsq";        break; // Розовый
-        case 17:  return ",jhljdsq";       break; // Бордовый
-        default:  return "rhfcysq";        break; // Красный
+        case 1:   return english_language ? "red"        : "rhfcysq";          break; // Красный
+        case 2:   return english_language ? "dark red"   : "ntvyj-rhfcysq";    break; // Тёмно-красный
+        case 3:   return english_language ? "green"      : "ptktysq";          break; // Зеленый
+        case 4:   return english_language ? "dark green" : "ntvyj-ptktysq";    break; // Тёмно-зеленый
+        case 5:   return english_language ? "olive"      : "jkbdrjdsq";        break; // Оливковый
+        case 6:   return english_language ? "blue"       : "cbybq";            break; // Синий
+        case 7:   return english_language ? "dark blue"  : "ntvyj-cbybq";      break; // Тёмно-синий
+        case 8:   return english_language ? "yellow"     : ";tknsq";           break; // Жёлтый
+        case 9:   return english_language ? "orange"     : "jhfy;tdsq";        break; // Оранжевый
+        case 10:  return english_language ? "white"      : ",tksq";            break; // Белый
+        case 11:  return english_language ? "gray"       : "cthsq";            break; // Серый
+        case 12:  return english_language ? "dark gray"  : "ntvyj-cthsq";      break; // Тёмно-серый
+        case 13:  return english_language ? "tan"        : ",t;tdsq";          break; // Бежевый
+        case 14:  return english_language ? "brown"      : "rjhbxytdsq";       break; // Коричневый
+        case 15:  return english_language ? "almond"     : "vbylfkmysq";       break; // Миндальный
+        case 16:  return english_language ? "khaki"      : "[frb";             break; // Хаки
+        case 17:  return english_language ? "pink"       : "hjpjdsq";          break; // Розовый
+        case 18:  return english_language ? "burgundy"   : ",jhljdsq";         break; // Бордовый
+        default:  return english_language ? "uncolored"  : ",tp jrhfibdfybz";  break;  // Без окрашивания
     }
 }
 
@@ -2323,8 +2295,8 @@ static void M_RD_Draw_MessagesSettings(void)
         }
         else
         {
-            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(message_pickup_color), 120 + wide_delta, 125,
-                                  M_RD_ColorTranslation(message_pickup_color));
+            RD_M_DrawTextSmallENG(M_ID_ColorName(message_color_pickup), 120 + wide_delta, 125,
+                                  M_RD_ColorTranslation(message_color_pickup));
         }
 
         // Revealed secret
@@ -2334,8 +2306,8 @@ static void M_RD_Draw_MessagesSettings(void)
         }
         else
         {
-            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(message_secret_color), 157 + wide_delta, 135,
-                                  M_RD_ColorTranslation(message_secret_color));
+            RD_M_DrawTextSmallENG(M_ID_ColorName(message_color_secret), 157 + wide_delta, 135,
+                                  M_RD_ColorTranslation(message_color_secret));
         }
 
         // System message
@@ -2345,8 +2317,8 @@ static void M_RD_Draw_MessagesSettings(void)
         }
         else
         {
-            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(message_system_color), 149 + wide_delta, 145,
-                                  M_RD_ColorTranslation(message_system_color));
+            RD_M_DrawTextSmallENG(M_ID_ColorName(message_color_system), 149 + wide_delta, 145,
+                                  M_RD_ColorTranslation(message_color_system));
         }
 
         // Netgame chat
@@ -2356,8 +2328,8 @@ static void M_RD_Draw_MessagesSettings(void)
         }
         else
         {
-            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(message_chat_color), 136 + wide_delta, 155,
-                                  M_RD_ColorTranslation(message_chat_color));
+            RD_M_DrawTextSmallENG(M_ID_ColorName(message_color_chat), 136 + wide_delta, 155,
+                                  M_RD_ColorTranslation(message_color_chat));
         }
     }
     else
@@ -2402,8 +2374,8 @@ static void M_RD_Draw_MessagesSettings(void)
         }
         else
         {
-            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(message_pickup_color), 193 + wide_delta, 125,
-                                  M_RD_ColorTranslation(message_pickup_color));
+            RD_M_DrawTextSmallRUS(M_ID_ColorName(message_color_pickup), 193 + wide_delta, 125,
+                                  M_RD_ColorTranslation(message_color_pickup));
         }
 
         // Обнаружение тайников
@@ -2413,8 +2385,8 @@ static void M_RD_Draw_MessagesSettings(void)
         }
         else
         {
-            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(message_secret_color), 203 + wide_delta, 135,
-                                  M_RD_ColorTranslation(message_secret_color));
+            RD_M_DrawTextSmallRUS(M_ID_ColorName(message_color_secret), 203 + wide_delta, 135,
+                                  M_RD_ColorTranslation(message_color_secret));
         }
 
         // Системные сообщения
@@ -2424,8 +2396,8 @@ static void M_RD_Draw_MessagesSettings(void)
         }
         else
         {
-            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(message_system_color), 197 + wide_delta, 145,
-                                  M_RD_ColorTranslation(message_system_color));
+            RD_M_DrawTextSmallRUS(M_ID_ColorName(message_color_system), 197 + wide_delta, 145,
+                                  M_RD_ColorTranslation(message_color_system));
         }
 
         // Чат сетевой игры
@@ -2435,8 +2407,8 @@ static void M_RD_Draw_MessagesSettings(void)
         }
         else
         {
-            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(message_chat_color), 164 + wide_delta, 155,
-                                  M_RD_ColorTranslation(message_chat_color));
+            RD_M_DrawTextSmallRUS(M_ID_ColorName(message_color_chat), 164 + wide_delta, 155,
+                                  M_RD_ColorTranslation(message_color_chat));
         }
     }
 
@@ -2515,23 +2487,24 @@ void M_RD_Define_Msg_Color(MessageType_t messageType, int color)
     {
         switch (color)
         {
-            case 1:   *colorVar = CR_DARKRED;    break;
-            case 2:   *colorVar = CR_GREEN;      break;
-            case 3:   *colorVar = CR_DARKGREEN;  break;
-            case 4:   *colorVar = CR_OLIVE;      break;
-            case 5:   *colorVar = CR_BLUE2;      break;
-            case 6:   *colorVar = CR_DARKBLUE;   break;
-            case 7:   *colorVar = CR_YELLOW;     break;
-            case 8:   *colorVar = CR_ORANGE;     break;
-            case 9:   *colorVar = CR_WHITE;      break;
-            case 10:  *colorVar = CR_GRAY;       break;
-            case 11:  *colorVar = CR_DARKGRAY;   break;
-            case 12:  *colorVar = CR_TAN;        break;
-            case 13:  *colorVar = CR_BROWN;      break;
-            case 14:  *colorVar = CR_ALMOND;     break;
-            case 15:  *colorVar = CR_KHAKI;      break;
-            case 16:  *colorVar = CR_PINK;       break;
-            case 17:  *colorVar = CR_BURGUNDY;   break;
+            case 1:   *colorVar = CR_RED;        break;
+            case 2:   *colorVar = CR_DARKRED;    break;
+            case 3:   *colorVar = CR_GREEN;      break;
+            case 4:   *colorVar = CR_DARKGREEN;  break;
+            case 5:   *colorVar = CR_OLIVE;      break;
+            case 6:   *colorVar = CR_BLUE2;      break;
+            case 7:   *colorVar = CR_DARKBLUE;   break;
+            case 8:   *colorVar = CR_YELLOW;     break;
+            case 9:   *colorVar = CR_ORANGE;     break;
+            case 10:  *colorVar = CR_WHITE;      break;
+            case 11:  *colorVar = CR_GRAY;       break;
+            case 12:  *colorVar = CR_DARKGRAY;   break;
+            case 13:  *colorVar = CR_TAN;        break;
+            case 14:  *colorVar = CR_BROWN;      break;
+            case 15:  *colorVar = CR_ALMOND;     break;
+            case 16:  *colorVar = CR_KHAKI;      break;
+            case 17:  *colorVar = CR_PINK;       break;
+            case 18:  *colorVar = CR_BURGUNDY;   break;
             default:  *colorVar = CR_NONE;       break;
         }
     }
@@ -2543,10 +2516,10 @@ static void M_RD_Change_Msg_Pickup_Color(Direction_t direction)
     if (gamemission == jaguar)
         return;
 
-    RD_Menu_SpinInt(&message_pickup_color, 0, 17, direction);
+    RD_Menu_SpinInt(&message_color_pickup, 0, 18, direction);
 
     // [JN] Redefine pickup message color.
-    M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);
+    M_RD_Define_Msg_Color(msg_pickup, message_color_pickup);
 }
 
 static void M_RD_Change_Msg_Secret_Color(Direction_t direction)
@@ -2555,10 +2528,10 @@ static void M_RD_Change_Msg_Secret_Color(Direction_t direction)
     if (gamemission == jaguar)
         return;
 
-    RD_Menu_SpinInt(&message_secret_color, 0, 17, direction);
+    RD_Menu_SpinInt(&message_color_secret, 0, 18, direction);
 
     // [JN] Redefine revealed secret message color.
-    M_RD_Define_Msg_Color(msg_secret, message_secret_color);
+    M_RD_Define_Msg_Color(msg_secret, message_color_secret);
 }
 
 static void M_RD_Change_Msg_System_Color(Direction_t direction)
@@ -2567,10 +2540,10 @@ static void M_RD_Change_Msg_System_Color(Direction_t direction)
     if (gamemission == jaguar)
         return;
 
-    RD_Menu_SpinInt(&message_system_color, 0, 17, direction);
+    RD_Menu_SpinInt(&message_color_system, 0, 18, direction);
 
     // [JN] Redefine system message color.
-    M_RD_Define_Msg_Color(msg_system, message_system_color);
+    M_RD_Define_Msg_Color(msg_system, message_color_system);
 }
 
 static void M_RD_Change_Msg_Chat_Color(Direction_t direction)
@@ -2579,10 +2552,10 @@ static void M_RD_Change_Msg_Chat_Color(Direction_t direction)
     if (gamemission == jaguar)
         return;
 
-    RD_Menu_SpinInt(&message_chat_color, 0, 17, direction);
+    RD_Menu_SpinInt(&message_color_chat, 0, 18, direction);
 
     // [JN] Redefine netgame chat message color.
-    M_RD_Define_Msg_Color(msg_chat, message_chat_color);
+    M_RD_Define_Msg_Color(msg_chat, message_color_chat);
 }
 
 // -----------------------------------------------------------------------------
@@ -2642,8 +2615,8 @@ static void M_RD_Draw_AutomapSettings(void)
         }
         else
         {
-            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(automap_mark_color), 120 + wide_delta, 125,
-                                  M_RD_ColorTranslation(automap_mark_color));
+            RD_M_DrawTextSmallENG(M_ID_ColorName(automap_mark_color+1), 120 + wide_delta, 125,
+                                  M_RD_ColorTranslation(automap_mark_color+1));
         }
 
         //
@@ -2700,8 +2673,8 @@ static void M_RD_Draw_AutomapSettings(void)
         }
         else
         {
-            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(automap_mark_color), 137 + wide_delta, 125,
-                                  M_RD_ColorTranslation(automap_mark_color));
+            RD_M_DrawTextSmallRUS(M_ID_ColorName(automap_mark_color+1), 137 + wide_delta, 125,
+                                  M_RD_ColorTranslation(automap_mark_color+1));
         }
 
         //
@@ -4235,8 +4208,8 @@ static void M_RD_Draw_Gameplay_2(void)
         }
         else
         {
-            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(sbar_color_high), 114 + wide_delta, 75,
-                                  M_RD_ColorTranslation(sbar_color_high));
+            RD_M_DrawTextSmallENG(M_ID_ColorName(stbar_color_high), 114 + wide_delta, 75,
+                                  M_RD_ColorTranslation(stbar_color_high));
         }
 
         // Normal Value
@@ -4246,8 +4219,8 @@ static void M_RD_Draw_Gameplay_2(void)
         }
         else
         {
-            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(sbar_color_normal), 135 + wide_delta, 85,
-                                  M_RD_ColorTranslation(sbar_color_normal));
+            RD_M_DrawTextSmallENG(M_ID_ColorName(stbar_color_normal), 135 + wide_delta, 85,
+                                  M_RD_ColorTranslation(stbar_color_normal));
         }
 
         // Low Value
@@ -4257,8 +4230,8 @@ static void M_RD_Draw_Gameplay_2(void)
         }
         else
         {
-            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(sbar_color_low), 111 + wide_delta, 95,
-                                 M_RD_ColorTranslation(sbar_color_low));
+            RD_M_DrawTextSmallENG(M_ID_ColorName(stbar_color_low), 111 + wide_delta, 95,
+                                 M_RD_ColorTranslation(stbar_color_low));
         }
 
         // Critical value
@@ -4268,8 +4241,8 @@ static void M_RD_Draw_Gameplay_2(void)
         }
         else
         {
-            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(sbar_color_critical), 142 + wide_delta, 105,
-                                  M_RD_ColorTranslation(sbar_color_critical));
+            RD_M_DrawTextSmallENG(M_ID_ColorName(stbar_color_critical), 142 + wide_delta, 105,
+                                  M_RD_ColorTranslation(stbar_color_critical));
         }
 
         // Armor type 1
@@ -4279,8 +4252,8 @@ static void M_RD_Draw_Gameplay_2(void)
         }
         else
         {
-            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(sbar_color_armor_1), 129 + wide_delta, 115,
-                                  M_RD_ColorTranslation(sbar_color_armor_1));
+            RD_M_DrawTextSmallENG(M_ID_ColorName(stbar_color_armor_1), 129 + wide_delta, 115,
+                                  M_RD_ColorTranslation(stbar_color_armor_1));
         }
 
         // Armor type 2
@@ -4290,8 +4263,8 @@ static void M_RD_Draw_Gameplay_2(void)
         }
         else
         {
-            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(sbar_color_armor_2), 132 + wide_delta, 125,
-                                  M_RD_ColorTranslation(sbar_color_armor_2));
+            RD_M_DrawTextSmallENG(M_ID_ColorName(stbar_color_armor_2), 132 + wide_delta, 125,
+                                  M_RD_ColorTranslation(stbar_color_armor_2));
         }
 
         // Armor type 0
@@ -4301,8 +4274,8 @@ static void M_RD_Draw_Gameplay_2(void)
         }
         else
         {
-            RD_M_DrawTextSmallENG(M_RD_ColorName_ENG(sbar_color_armor_0), 104 + wide_delta, 135,
-                                  M_RD_ColorTranslation(sbar_color_armor_0));
+            RD_M_DrawTextSmallENG(M_ID_ColorName(stbar_color_armor_0), 104 + wide_delta, 135,
+                                  M_RD_ColorTranslation(stbar_color_armor_0));
         }
 
         //
@@ -4348,8 +4321,8 @@ static void M_RD_Draw_Gameplay_2(void)
         }
         else
         {
-            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(sbar_color_high), 168 + wide_delta, 75,
-                                 M_RD_ColorTranslation(sbar_color_high));
+            RD_M_DrawTextSmallRUS(M_ID_ColorName(stbar_color_high), 168 + wide_delta, 75,
+                                 M_RD_ColorTranslation(stbar_color_high));
         }
 
         // Нормальное значение
@@ -4359,8 +4332,8 @@ static void M_RD_Draw_Gameplay_2(void)
         }
         else
         {
-            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(sbar_color_normal), 191 + wide_delta, 85,
-                                 M_RD_ColorTranslation(sbar_color_normal));
+            RD_M_DrawTextSmallRUS(M_ID_ColorName(stbar_color_normal), 191 + wide_delta, 85,
+                                 M_RD_ColorTranslation(stbar_color_normal));
         }
 
         // Низкое значение
@@ -4370,8 +4343,8 @@ static void M_RD_Draw_Gameplay_2(void)
         }
         else
         {
-            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(sbar_color_low), 158 + wide_delta, 95,
-                                  M_RD_ColorTranslation(sbar_color_low));
+            RD_M_DrawTextSmallRUS(M_ID_ColorName(stbar_color_low), 158 + wide_delta, 95,
+                                  M_RD_ColorTranslation(stbar_color_low));
         }
 
         // Низкое значение
@@ -4381,8 +4354,8 @@ static void M_RD_Draw_Gameplay_2(void)
         }
         else
         {
-            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(sbar_color_critical), 197 + wide_delta, 105,
-                                  M_RD_ColorTranslation(sbar_color_critical));
+            RD_M_DrawTextSmallRUS(M_ID_ColorName(stbar_color_critical), 197 + wide_delta, 105,
+                                  M_RD_ColorTranslation(stbar_color_critical));
         }
 
         // Тип брони 1
@@ -4392,8 +4365,8 @@ static void M_RD_Draw_Gameplay_2(void)
         }
         else
         {
-            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(sbar_color_armor_1), 120 + wide_delta, 115,
-                                  M_RD_ColorTranslation(sbar_color_armor_1));
+            RD_M_DrawTextSmallRUS(M_ID_ColorName(stbar_color_armor_1), 120 + wide_delta, 115,
+                                  M_RD_ColorTranslation(stbar_color_armor_1));
         }
 
         // Тип брони 2
@@ -4403,8 +4376,8 @@ static void M_RD_Draw_Gameplay_2(void)
         }
         else
         {
-            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(sbar_color_armor_2), 123 + wide_delta, 125,
-                                  M_RD_ColorTranslation(sbar_color_armor_2));
+            RD_M_DrawTextSmallRUS(M_ID_ColorName(stbar_color_armor_2), 123 + wide_delta, 125,
+                                  M_RD_ColorTranslation(stbar_color_armor_2));
         }
 
         // Отсутствие брони
@@ -4414,8 +4387,8 @@ static void M_RD_Draw_Gameplay_2(void)
         }
         else
         {
-            RD_M_DrawTextSmallRUS(M_RD_ColorName_RUS(sbar_color_armor_0), 167 + wide_delta, 135,
-                                  M_RD_ColorTranslation(sbar_color_armor_0));
+            RD_M_DrawTextSmallRUS(M_ID_ColorName(stbar_color_armor_0), 167 + wide_delta, 135,
+                                  M_RD_ColorTranslation(stbar_color_armor_0));
         }
 
         //
@@ -4901,24 +4874,25 @@ void M_RD_Define_SBarColorValue(byte** sbar_color_set, int color)
     {
         switch (color)
         {
-            case 1:   *sbar_color_set = cr[CR_DARKRED];    break;
-            case 2:   *sbar_color_set = cr[CR_GREEN];      break;
-            case 3:   *sbar_color_set = cr[CR_DARKGREEN];  break;
-            case 4:   *sbar_color_set = cr[CR_OLIVE];      break;
-            case 5:   *sbar_color_set = cr[CR_BLUE2];      break;
-            case 6:   *sbar_color_set = cr[CR_DARKBLUE];   break;
-            case 7:   *sbar_color_set = cr[CR_YELLOW];     break;
-            case 8:   *sbar_color_set = cr[CR_ORANGE];     break;
-            case 9:   *sbar_color_set = cr[CR_WHITE];      break;
-            case 10:  *sbar_color_set = cr[CR_GRAY];       break;
-            case 11:  *sbar_color_set = cr[CR_DARKGRAY];   break;
-            case 12:  *sbar_color_set = cr[CR_TAN];        break;
-            case 13:  *sbar_color_set = cr[CR_BROWN];      break;
-            case 14:  *sbar_color_set = cr[CR_ALMOND];     break;
-            case 15:  *sbar_color_set = cr[CR_KHAKI];      break;
-            case 16:  *sbar_color_set = cr[CR_PINK];       break;
-            case 17:  *sbar_color_set = cr[CR_BURGUNDY];   break;
-            default:  *sbar_color_set = cr[CR_RED];        break;
+            case 1:   *sbar_color_set = cr[CR_RED];        break;
+            case 2:   *sbar_color_set = cr[CR_DARKRED];    break;
+            case 3:   *sbar_color_set = cr[CR_GREEN];      break;
+            case 4:   *sbar_color_set = cr[CR_DARKGREEN];  break;
+            case 5:   *sbar_color_set = cr[CR_OLIVE];      break;
+            case 6:   *sbar_color_set = cr[CR_BLUE2];      break;
+            case 7:   *sbar_color_set = cr[CR_DARKBLUE];   break;
+            case 8:   *sbar_color_set = cr[CR_YELLOW];     break;
+            case 9:   *sbar_color_set = cr[CR_ORANGE];     break;
+            case 10:  *sbar_color_set = cr[CR_WHITE];      break;
+            case 11:  *sbar_color_set = cr[CR_GRAY];       break;
+            case 12:  *sbar_color_set = cr[CR_DARKGRAY];   break;
+            case 13:  *sbar_color_set = cr[CR_TAN];        break;
+            case 14:  *sbar_color_set = cr[CR_BROWN];      break;
+            case 15:  *sbar_color_set = cr[CR_ALMOND];     break;
+            case 16:  *sbar_color_set = cr[CR_KHAKI];      break;
+            case 17:  *sbar_color_set = cr[CR_PINK];       break;
+            case 18:  *sbar_color_set = cr[CR_BURGUNDY];   break;
+            default:  *sbar_color_set = NULL;              break;
         }
     }
 }
@@ -4929,10 +4903,10 @@ static void M_RD_Change_SBarHighValue(Direction_t direction)
     if (sbar_colored == 0 || gamemission == jaguar)
         return;
 
-    RD_Menu_SpinInt(&sbar_color_high, 0, 17, direction);
+    RD_Menu_SpinInt(&stbar_color_high, 0, 17, direction);
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarColorValue(&sbar_color_high_set, sbar_color_high);
+    M_RD_Define_SBarColorValue(&stbar_color_high_set, stbar_color_high);
 }
 
 static void M_RD_Change_SBarNormalValue(Direction_t direction)
@@ -4941,10 +4915,10 @@ static void M_RD_Change_SBarNormalValue(Direction_t direction)
     if (sbar_colored == 0 || gamemission == jaguar)
         return;
 
-    RD_Menu_SpinInt(&sbar_color_normal, 0, 17, direction);
+    RD_Menu_SpinInt(&stbar_color_normal, 0, 17, direction);
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarColorValue(&sbar_color_normal_set, sbar_color_normal);
+    M_RD_Define_SBarColorValue(&stbar_color_normal_set, stbar_color_normal);
 }
 
 static void M_RD_Change_SBarLowValue(Direction_t direction)
@@ -4953,10 +4927,10 @@ static void M_RD_Change_SBarLowValue(Direction_t direction)
     if (sbar_colored == 0 || gamemission == jaguar)
         return;
 
-    RD_Menu_SpinInt(&sbar_color_low, 0, 17, direction);
+    RD_Menu_SpinInt(&stbar_color_low, 0, 17, direction);
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarColorValue(&sbar_color_low_set, sbar_color_low);
+    M_RD_Define_SBarColorValue(&stbar_color_low_set, stbar_color_low);
 }
 
 static void M_RD_Change_SBarCriticalValue(Direction_t direction)
@@ -4965,10 +4939,10 @@ static void M_RD_Change_SBarCriticalValue(Direction_t direction)
     if (sbar_colored == 0 || gamemission == jaguar)
         return;
 
-    RD_Menu_SpinInt(&sbar_color_critical, 0, 17, direction);
+    RD_Menu_SpinInt(&stbar_color_critical, 0, 17, direction);
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarColorValue(&sbar_color_critical_set, sbar_color_critical);
+    M_RD_Define_SBarColorValue(&stbar_color_critical_set, stbar_color_critical);
 }
 
 static void M_RD_Change_SBarArmorType1(Direction_t direction)
@@ -4977,10 +4951,10 @@ static void M_RD_Change_SBarArmorType1(Direction_t direction)
     if (sbar_colored == 0 || gamemission == jaguar)
         return;
 
-    RD_Menu_SpinInt(&sbar_color_armor_1, 0, 17, direction);
+    RD_Menu_SpinInt(&stbar_color_armor_1, 0, 17, direction);
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarColorValue(&sbar_color_armor_1_set, sbar_color_armor_1);
+    M_RD_Define_SBarColorValue(&stbar_color_armor_1_set, stbar_color_armor_1);
 }
 
 static void M_RD_Change_SBarArmorType2(Direction_t direction)
@@ -4989,10 +4963,10 @@ static void M_RD_Change_SBarArmorType2(Direction_t direction)
     if (sbar_colored == 0 || gamemission == jaguar)
         return;
 
-    RD_Menu_SpinInt(&sbar_color_armor_2, 0, 17, direction);
+    RD_Menu_SpinInt(&stbar_color_armor_2, 0, 17, direction);
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarColorValue(&sbar_color_armor_2_set, sbar_color_armor_2);
+    M_RD_Define_SBarColorValue(&stbar_color_armor_2_set, stbar_color_armor_2);
 }
 
 static void M_RD_Change_SBarArmorType0(Direction_t direction)
@@ -5001,10 +4975,10 @@ static void M_RD_Change_SBarArmorType0(Direction_t direction)
     if (sbar_colored == 0 || gamemission == jaguar)
         return;
 
-    RD_Menu_SpinInt(&sbar_color_armor_0, 0, 17, direction);
+    RD_Menu_SpinInt(&stbar_color_armor_0, 0, 17, direction);
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarColorValue(&sbar_color_armor_0_set, sbar_color_armor_0);
+    M_RD_Define_SBarColorValue(&stbar_color_armor_0_set, stbar_color_armor_0);
 }
 
 //
@@ -5891,15 +5865,15 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     message_fade          = 0;
     draw_shadowed_text    = 1;
     local_time            = 0;
-    message_pickup_color  = 0;
-    message_secret_color  = 7;
-    message_system_color  = 0;
-    message_chat_color    = 2;
+    message_color_pickup  = 0;
+    message_color_secret  = 8;
+    message_color_system  = 0;
+    message_color_chat    = 3;
     // Reinit message colors.
-    M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);
-    M_RD_Define_Msg_Color(msg_secret, message_secret_color);
-    M_RD_Define_Msg_Color(msg_system, message_system_color);
-    M_RD_Define_Msg_Color(msg_chat, message_chat_color);
+    M_RD_Define_Msg_Color(msg_pickup, message_color_pickup);
+    M_RD_Define_Msg_Color(msg_secret, message_color_secret);
+    M_RD_Define_Msg_Color(msg_system, message_color_system);
+    M_RD_Define_Msg_Color(msg_chat, message_color_chat);
 
     // Automap
     automap_color      = 0;
@@ -5963,13 +5937,13 @@ static void M_RD_BackToDefaults_Recommended(int choice)
 
     // Gameplay: Status Bar
     sbar_colored        = 0;
-    sbar_color_high     = 5;
-    sbar_color_normal   = 2;
-    sbar_color_low      = 7;
-    sbar_color_critical = 0;
-    sbar_color_armor_1  = 2;
-    sbar_color_armor_2  = 5;
-    sbar_color_armor_0  = 0;
+    stbar_color_high     = 5;
+    stbar_color_normal   = 2;
+    stbar_color_low      = 7;
+    stbar_color_critical = 0;
+    stbar_color_armor_1  = 2;
+    stbar_color_armor_2  = 5;
+    stbar_color_armor_0  = 0;
 
     // Gameplay: Audible
     z_axis_sfx           = 0;
@@ -6087,15 +6061,15 @@ static void M_RD_BackToDefaults_Original(int choice)
     message_fade          = 0;
     draw_shadowed_text    = 0;
     local_time            = 0;
-    message_pickup_color  = 0;
-    message_secret_color  = 0;
-    message_system_color  = 0;
-    message_chat_color    = 0;
+    message_color_pickup  = 0;
+    message_color_secret  = 0;
+    message_color_system  = 0;
+    message_color_chat    = 0;
     // Reinit message colors.
-    M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);
-    M_RD_Define_Msg_Color(msg_secret, message_secret_color);
-    M_RD_Define_Msg_Color(msg_system, message_system_color);
-    M_RD_Define_Msg_Color(msg_chat, message_chat_color);
+    M_RD_Define_Msg_Color(msg_pickup, message_color_pickup);
+    M_RD_Define_Msg_Color(msg_secret, message_color_secret);
+    M_RD_Define_Msg_Color(msg_system, message_color_system);
+    M_RD_Define_Msg_Color(msg_chat, message_color_chat);
 
     // Automap
     automap_color      = 0;
@@ -6159,13 +6133,13 @@ static void M_RD_BackToDefaults_Original(int choice)
 
     // Gameplay: Status Bar
     sbar_colored        = 0;
-    sbar_color_high     = 5;
-    sbar_color_normal   = 2;
-    sbar_color_low      = 7;
-    sbar_color_critical = 0;
-    sbar_color_armor_1  = 2;
-    sbar_color_armor_2  = 5;
-    sbar_color_armor_0  = 0;
+    stbar_color_high     = 5;
+    stbar_color_normal   = 2;
+    stbar_color_low      = 7;
+    stbar_color_critical = 0;
+    stbar_color_armor_1  = 2;
+    stbar_color_armor_2  = 5;
+    stbar_color_armor_0  = 0;
 
     // Gameplay: Audible
     z_axis_sfx           = 0;
@@ -7768,10 +7742,10 @@ void M_Init (void)
                        -5, 0, -32, -8);
 
     // [JN] Init message colors.
-    M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);
-    M_RD_Define_Msg_Color(msg_secret, message_secret_color);
-    M_RD_Define_Msg_Color(msg_system, message_system_color);
-    M_RD_Define_Msg_Color(msg_chat, message_chat_color);
+    M_RD_Define_Msg_Color(msg_pickup, message_color_pickup);
+    M_RD_Define_Msg_Color(msg_secret, message_color_secret);
+    M_RD_Define_Msg_Color(msg_system, message_color_system);
+    M_RD_Define_Msg_Color(msg_chat, message_color_chat);
 
     // [JN] Widescreen: set temp variable for rendering menu.
     aspect_ratio_temp = aspect_ratio;

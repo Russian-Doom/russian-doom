@@ -872,7 +872,8 @@ byte V_Colorize (byte *playpal, Translation_CR_t cr, byte source, boolean keepgr
         }
         else if (cr == CR_PINK)
         {
-            hsv.y = 0.69;
+            hsv.y = 0.666;
+            hsv.z *= 1.45;
         }
         else if (cr == CR_BURGUNDY)
         {

@@ -288,13 +288,13 @@ int st_height;
 static int st_y;
 
 // [JN] status bar widget colors.
-byte *sbar_color_high_set;
-byte *sbar_color_normal_set;
-byte *sbar_color_low_set;
-byte *sbar_color_critical_set;
-byte *sbar_color_armor_1_set;
-byte *sbar_color_armor_2_set;
-byte *sbar_color_armor_0_set;
+byte *stbar_color_high_set;
+byte *stbar_color_normal_set;
+byte *stbar_color_low_set;
+byte *stbar_color_critical_set;
+byte *stbar_color_armor_1_set;
+byte *stbar_color_armor_2_set;
+byte *stbar_color_armor_0_set;
 
 cheatseq_t cheat_mus = CHEAT("idmus", 2);
 cheatseq_t cheat_god = CHEAT("iddqd", 0);
@@ -1528,13 +1528,13 @@ static byte *ST_WidgetColor (int i)
                 int fullammo = maxammo[weaponinfo[plyr->readyweapon].ammo];
 
                 if (ammo < fullammo/4)
-                    return sbar_color_critical_set;
+                    return stbar_color_critical_set;
                 else if (ammo < fullammo/2)
-                    return sbar_color_low_set;
+                    return stbar_color_low_set;
                 else if (ammo <= fullammo)
-                    return sbar_color_normal_set;
+                    return stbar_color_normal_set;
                 else
-                    return sbar_color_high_set;
+                    return stbar_color_high_set;
             }
             break;
         }
@@ -1548,13 +1548,13 @@ static byte *ST_WidgetColor (int i)
             if (plyr->cheats & CF_GODMODE || plyr->powers[pw_invulnerability])
                 return cr[CR_WHITE];
             else if (health > 100)
-                return sbar_color_high_set;
+                return stbar_color_high_set;
             else if (health >= 67)
-                return sbar_color_normal_set;
+                return stbar_color_normal_set;
             else if (health >= 34)
-                return sbar_color_low_set;            
+                return stbar_color_low_set;            
             else
-                return sbar_color_critical_set;
+                return stbar_color_critical_set;
             break;
         }
         case hudcolor_frags:
@@ -1562,11 +1562,11 @@ static byte *ST_WidgetColor (int i)
             int frags = st_fragscount;
 
             if (frags < 0)
-                return sbar_color_critical_set;
+                return stbar_color_critical_set;
             else if (frags == 0)
-                return sbar_color_low_set;
+                return stbar_color_low_set;
             else
-                return sbar_color_normal_set;
+                return stbar_color_normal_set;
 
             break;
         }
@@ -1577,11 +1577,11 @@ static byte *ST_WidgetColor (int i)
                 return cr[CR_WHITE];
 	    // [crispy] color by armor type
 	    else if (plyr->armortype >= 2)
-                return sbar_color_armor_2_set;
+                return stbar_color_armor_2_set;
 	    else if (plyr->armortype == 1)
-                return sbar_color_armor_1_set;
+                return stbar_color_armor_1_set;
 	    else if (plyr->armortype == 0)
-                return sbar_color_armor_0_set;
+                return stbar_color_armor_0_set;
             break;
         }
         case hudcolor_artifacts:
@@ -1594,13 +1594,13 @@ static byte *ST_WidgetColor (int i)
             if ((gameepisode == 1 && st_artifactscount == 36)
             ||  (gameepisode == 2 && st_artifactscount == 29)
             ||  (gameepisode == 3 && st_artifactscount == 25))
-            return sbar_color_normal_set;
+            return stbar_color_normal_set;
 
             else if (st_artifactscount > 0)
-            return sbar_color_low_set;
+            return stbar_color_low_set;
 
             else
-            return sbar_color_critical_set;
+            return stbar_color_critical_set;
 
             break;
         }
@@ -2487,13 +2487,13 @@ void ST_Init (void)
                                        * sizeof(*st_backing_screen), PU_STATIC, 0);
 
     // [JN] Initialize status bar widget colors.
-    M_RD_Define_SBarColorValue(&sbar_color_high_set, sbar_color_high);
-    M_RD_Define_SBarColorValue(&sbar_color_normal_set, sbar_color_normal);
-    M_RD_Define_SBarColorValue(&sbar_color_low_set, sbar_color_low);
-    M_RD_Define_SBarColorValue(&sbar_color_critical_set, sbar_color_critical);
-    M_RD_Define_SBarColorValue(&sbar_color_armor_1_set, sbar_color_armor_1);
-    M_RD_Define_SBarColorValue(&sbar_color_armor_2_set, sbar_color_armor_2);
-    M_RD_Define_SBarColorValue(&sbar_color_armor_0_set, sbar_color_armor_0);
+    M_RD_Define_SBarColorValue(&stbar_color_high_set, stbar_color_high);
+    M_RD_Define_SBarColorValue(&stbar_color_normal_set, stbar_color_normal);
+    M_RD_Define_SBarColorValue(&stbar_color_low_set, stbar_color_low);
+    M_RD_Define_SBarColorValue(&stbar_color_critical_set, stbar_color_critical);
+    M_RD_Define_SBarColorValue(&stbar_color_armor_1_set, stbar_color_armor_1);
+    M_RD_Define_SBarColorValue(&stbar_color_armor_2_set, stbar_color_armor_2);
+    M_RD_Define_SBarColorValue(&stbar_color_armor_0_set, stbar_color_armor_0);
 }
 
 
