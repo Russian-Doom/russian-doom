@@ -769,8 +769,7 @@ void D_Display (void)
         {
             V_DrawShadowedPatchDoom(wide_delta, gamestate == GS_INTERMISSION ?
                                     -40 : 0, // [JN] Do not obstruct titles on intermission screen
-                                    W_CacheLumpName (DEH_String(english_language ?
-                                                                "M_PAUSE" : "RD_PAUSE"), PU_CACHE));
+                                    m_pause);
         }
         else
         {
@@ -782,8 +781,7 @@ void D_Display (void)
             y = (viewwindowy >> hires)+4;
 
             V_DrawShadowedPatchDoom((viewwindowx >> hires) + ((scaledviewwidth >> hires) - 68) / 2, 
-                                    y, W_CacheLumpName (DEH_String(english_language ?
-                                                                   "M_PAUSE" : "RD_PAUSE"), PU_CACHE));
+                                    y, m_pause);
         }
     }
 

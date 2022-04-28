@@ -44,6 +44,12 @@ char* amstr_rotateoff;
 
 char* txt_noplayers;
 
+//
+// D_main.C
+//
+
+patch_t *m_pause;
+
 
 //
 // G_game.C
@@ -284,6 +290,12 @@ void RD_DefineLanguageStrings (void)
         txt_noplayers = TXT_NOPLAYERS;
 
         //
+        // D_main.C
+        //
+
+        m_pause = W_CacheLumpName(DEH_String("M_PAUSE"), PU_STATIC);
+
+        //
         // G_game.C
         //
 
@@ -438,6 +450,12 @@ void RD_DefineLanguageStrings (void)
 
         // CT_chat.c
         txt_noplayers = TXT_NOPLAYERS_RUS;
+
+        //
+        // D_main.C
+        //
+
+        m_pause = W_CacheLumpName(DEH_String("RD_PAUSE"), PU_STATIC);
 
         //
         // G_game.C

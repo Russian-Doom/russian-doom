@@ -80,6 +80,8 @@ extern char* txt_noplayers;
 // D_Main.C
 //
 
+extern patch_t *m_pause;
+
 #define D_DEVSTR    "Development mode ON.\n"
 #define D_CDROM     "CD-ROM Version: default.cfg from c:\\doomdata\n"
 
