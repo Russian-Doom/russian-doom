@@ -8,63 +8,69 @@ on:
 
 jobs:
   Cmake:
-    name: ${{ matrix.config.os_name }} | ${{ matrix.config.build_type }}
-    runs-on: ${{ matrix.config.os }}
+    name: ${{ matrix.os.name }} | ${{ matrix.arch.name }}
+    runs-on: ${{ matrix.os.runner }}
     strategy:
       fail-fast: false
       matrix:
-        config:
-        - {
-            os_name: "Windows",
-            os: "windows-latest",
-            shell: "msys2 {0}",
-            cmake_generator: "MinGW Makefiles",
-            build_type: "x86",
-            msystem: "MINGW32",
-            arch: "i686"
-        }
-        - {
-            os_name: "Windows",
-            os: "windows-latest",
-            shell: "msys2 {0}",
-            cmake_generator: "MinGW Makefiles",
-            build_type: "x64",
-            msystem: "MINGW64",
-            arch: "x86_64"
-        }
-        - {
-            os_name: "Linux",
-            os: "ubuntu-latest",
-            shell: "bash",
-            cmake_generator: "Unix Makefiles",
-            build_type: "x64"
-        }
+        os:
+          -
+            name: "Windows"
+            runner: "windows-latest"
+            shell: "msys2 {0}"
+            cmake_generator: "MinGW Makefiles"
+          -
+            name: "Linux"
+            runner: "ubuntu-latest"
+            shell: "bash"
+            cmake_generator: "Unix Makefiles"
+        arch:
+          -
+            name: "x86"
+            bits: "32"
+            msys_name: "i686"
+          -
+            name: "x64"
+            bits: "64"
+            msys_name: "x86_64"
+        compiler:
+          -
+            name: "gcc"
+            msys_msystem_prefix: "MINGW"
+            msys_package_prefix: "mingw-w64"
+        exclude:
+          -
+            os:
+              name: "Linux"
+            arch:
+              name: "x86"
     defaults:
       run:
-        shell: ${{ matrix.config.shell }}
+        shell: ${{ matrix.os.shell }}
     steps:
-      - name: Setup MSYS
-        if: ${{ matrix.config.os_name == 'Windows' }}
+      - name: Setup MSYS env
+        if: ${{ matrix.os.name == 'Windows' }}
         uses: msys2/setup-msys2@v2
         with:
-          msystem: ${{ matrix.config.msystem }}
+          msystem: ${{ matrix.compiler.msys_msystem_prefix }}${{ matrix.arch.bits }}
           update: false
           install: >-
-            mingw-w64-${{ matrix.config.arch }}-pkgconf
-            mingw-w64-${{ matrix.config.arch }}-gcc
-            mingw-w64-${{ matrix.config.arch }}-make
-            mingw-w64-${{ matrix.config.arch }}-cmake
-            mingw-w64-${{ matrix.config.arch }}-SDL2
-            mingw-w64-${{ matrix.config.arch }}-SDL2_net
-            mingw-w64-${{ matrix.config.arch }}-SDL2_mixer
-            mingw-w64-${{ matrix.config.arch }}-libsamplerate
-            mingw-w64-${{ matrix.config.arch }}-libpng
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-pkgconf
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-${{ matrix.compiler.name }}
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-make
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-cmake
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_net
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_mixer
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libsamplerate
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libpng
 
-      - name: Install Dependencies
-        if: ${{ matrix.config.os_name == 'Linux' }}
+      - name: Setup Linux env
+        if: ${{ matrix.os.name == 'Linux' }}
         run: |
+          sudo apt-get upgrade
           sudo apt-get update --fix-missing
-          sudo apt-get install --fix-missing gcc make cmake libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libpng-dev libsamplerate-dev
+          sudo apt-get install --fix-missing ${{ matrix.compiler.name }} make cmake libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libpng-dev libsamplerate-dev
 
       - uses: actions/checkout@v2
 
@@ -72,7 +78,7 @@ jobs:
         id: configure
         run: |
           sha_short=$(echo ${{ github.sha }} | cut -c1-7)
-          cmake -G"${{ matrix.config.cmake_generator }}" -DBUILD_VERSION_OVERWRITE="$sha_short" -DRELEASE_STRIP=OFF -DCMAKE_BUILD_TYPE=Release -S . -B build
+          cmake -G "${{ matrix.os.cmake_generator }}" -D BUILD_VERSION_OVERWRITE="$sha_short" -D RELEASE_STRIP=OFF -D CMAKE_BUILD_TYPE=Release -S . -B build
           echo "::set-output name=sha_short::$sha_short"
 
       - name: Build
@@ -81,15 +87,15 @@ jobs:
           cmake --build build --parallel 2
 
       - name: Install
-        if: ${{ github.repository == 'JNechaevsky/inter-doom' && github.event_name == 'push' && github.ref == 'refs/heads/master' && matrix.config.os_name == 'Windows' }}
+        if: ${{ github.repository == 'JNechaevsky/inter-doom' && github.event_name == 'push' && github.ref == 'refs/heads/master' && matrix.os.name == 'Windows' }}
         run: |
           cmake --install build --prefix "./build/install"
 
-      - name: Package
-        if: ${{ github.repository == 'JNechaevsky/inter-doom' && github.event_name == 'push' && github.ref == 'refs/heads/master' && matrix.config.os_name == 'Windows' }}
+      - name: Package Zip
+        if: ${{ github.repository == 'JNechaevsky/inter-doom' && github.event_name == 'push' && github.ref == 'refs/heads/master' && matrix.os.name == 'Windows' }}
         uses: actions/upload-artifact@v2
         with:
-          name: inter-doom-${{ steps.configure.outputs.sha_short }}-windows-${{ matrix.config.build_type }}
+          name: inter-doom-${{ steps.configure.outputs.sha_short }}-windows-${{ matrix.arch.name }}
           path: ./build/install/
 
   Autotools:
