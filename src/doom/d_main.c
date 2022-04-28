@@ -133,10 +133,10 @@ int messages_timeout = 4;
 int message_fade = 0;
 int draw_shadowed_text = 1;
 int local_time = 0;
-int message_pickup_color = 0;
-int message_secret_color = 7;
-int message_system_color = 0;
-int message_chat_color = 2;
+int message_color_pickup = 0;
+int message_color_secret = 8;
+int message_color_system = 0;
+int message_color_chat = 3;
 
 // Display: Automap
 int automap_color = 0;
@@ -215,13 +215,13 @@ int flip_weapons = 0;
 int extra_player_faces = 1;
 int negative_health = 0;
 int sbar_colored = 0;
-int sbar_color_high = 5;
-int sbar_color_normal = 2;
-int sbar_color_low = 7;
-int sbar_color_critical = 0;
-int sbar_color_armor_1 = 2;
-int sbar_color_armor_2 = 5;
-int sbar_color_armor_0 = 0;
+int stbar_color_high = 6;
+int stbar_color_normal = 3;
+int stbar_color_low = 8;
+int stbar_color_critical = 1;
+int stbar_color_armor_1 = 3;
+int stbar_color_armor_2 = 6;
+int stbar_color_armor_0 = 1;
 
 // Gameplay: Audible
 int z_axis_sfx = 0;
@@ -900,10 +900,10 @@ void D_BindVariables(void)
     M_BindIntVariable("message_fade",           &message_fade);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
     M_BindIntVariable("local_time",             &local_time);
-    M_BindIntVariable("message_pickup_color",   &message_pickup_color);
-    M_BindIntVariable("message_secret_color",   &message_secret_color);
-    M_BindIntVariable("message_system_color",   &message_system_color);
-    M_BindIntVariable("message_chat_color",     &message_chat_color);
+    M_BindIntVariable("message_color_pickup",   &message_color_pickup);
+    M_BindIntVariable("message_color_secret",   &message_color_secret);
+    M_BindIntVariable("message_color_system",   &message_color_system);
+    M_BindIntVariable("message_color_chat",     &message_color_chat);
 
     // Automap
     M_BindIntVariable("automap_color",          &automap_color);
@@ -949,13 +949,13 @@ void D_BindVariables(void)
     M_BindIntVariable("extra_player_faces",     &extra_player_faces);
     M_BindIntVariable("negative_health",        &negative_health);
     M_BindIntVariable("sbar_colored",           &sbar_colored);
-    M_BindIntVariable("sbar_color_high",        &sbar_color_high);
-    M_BindIntVariable("sbar_color_normal",      &sbar_color_normal);
-    M_BindIntVariable("sbar_color_low",         &sbar_color_low);
-    M_BindIntVariable("sbar_color_critical",    &sbar_color_critical);
-    M_BindIntVariable("sbar_color_armor_1",     &sbar_color_armor_1);
-    M_BindIntVariable("sbar_color_armor_2",     &sbar_color_armor_2);
-    M_BindIntVariable("sbar_color_armor_0",     &sbar_color_armor_0);
+    M_BindIntVariable("stbar_color_high",       &stbar_color_high);
+    M_BindIntVariable("stbar_color_normal",     &stbar_color_normal);
+    M_BindIntVariable("stbar_color_low",        &stbar_color_low);
+    M_BindIntVariable("stbar_color_critical",   &stbar_color_critical);
+    M_BindIntVariable("stbar_color_armor_1",    &stbar_color_armor_1);
+    M_BindIntVariable("stbar_color_armor_2",    &stbar_color_armor_2);
+    M_BindIntVariable("stbar_color_armor_0",    &stbar_color_armor_0);
 
     // Gameplay: Audible
     M_BindIntVariable("z_axis_sfx",             &z_axis_sfx);
