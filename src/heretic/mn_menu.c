@@ -2699,8 +2699,8 @@ static void DrawAutomapMenu(void)
         RD_M_DrawTextSmallENG(num, 105 + wide_delta, 102, CR_NONE);
 
         // Mark color
-        RD_M_DrawTextSmallENG(M_RD_ColorName(automap_mark_color), 118 + wide_delta, 112,
-                              M_RD_ColorTranslation(automap_mark_color));
+        RD_M_DrawTextSmallENG(M_RD_ColorName(automap_mark_color+1), 118 + wide_delta, 112,
+                              M_RD_ColorTranslation(automap_mark_color+1));
 
         // Level stats
         RD_M_DrawTextSmallENG(automap_stats == 1 ? "IN AUTOMAP" :
@@ -2749,8 +2749,8 @@ static void DrawAutomapMenu(void)
         RD_M_DrawTextSmallRUS(num, 133 + wide_delta, 102, CR_NONE);
 
         // Цвет отметок
-        RD_M_DrawTextSmallRUS(M_RD_ColorName(automap_mark_color), 133 + wide_delta, 112,
-                              M_RD_ColorTranslation(automap_mark_color));
+        RD_M_DrawTextSmallRUS(M_RD_ColorName(automap_mark_color+1), 133 + wide_delta, 112,
+                              M_RD_ColorTranslation(automap_mark_color+1));
 
 
         // Статистика уровня

@@ -554,7 +554,7 @@ void AM_initMarksColor (int color)
             case 15:  *colorVar = CR_KHAKI;      break;
             case 16:  *colorVar = CR_PINK;       break;
             case 17:  *colorVar = CR_BURGUNDY;   break;
-            default:  *colorVar = CR_NONE;       break;
+            default:  *colorVar = CR_RED;        break;
         }
     }
 }
