@@ -39,6 +39,7 @@
 #include "rd_text.h"
 #include "v_trans.h"
 #include "v_diskicon.h"
+#include "rd_lang.h"
 #include "jn.h"
 
 
@@ -233,7 +234,6 @@ static boolean st_fragson;        // !deathmatch
 static boolean st_artifactson;    // [JN] only in Press Beta
 static boolean st_stopped = true;
 
-static patch_t *sbar, *sbar_rus;  // main bar left
 static patch_t *tallnum[10];      // 0-9, tall numbers
 static patch_t *tallpercent;      // tall % sign
 static patch_t *shortnum[10];     // 0-9, short, yellow (,different!) numbers
@@ -244,7 +244,6 @@ static patch_t *keys[NUMCARDS+3];  // 3 key-cards, 3 skulls
 // [JN] Doubled array for extra god mode faces, thanks Brad Harding for help!
 static patch_t *faces[ST_NUMFACES * 2];  // face status patches
 static patch_t *faceback;                // face background   
-static patch_t *armsbg, *armsbg_rus;     // main bar right
 static patch_t *arms[6][2];              // weapon ownership patches
 
 static st_number_t w_ready, w_ready_wide;  // ready-weapon widget
@@ -397,19 +396,12 @@ void ST_refreshBackground (void)
         }
 
         // [JN] Always draw status bar on the center of the screen.
-        if (english_language)
-        {
-            V_DrawPatch(ST_X + (ORIGWIDTH - SHORT(sbar->width)) / 2 + wide_delta, 0, sbar, NULL);
-        }
-        else
-        {
-            V_DrawPatch(ST_X + (ORIGWIDTH - SHORT(sbar_rus->width)) / 2 + wide_delta, 0, sbar_rus, NULL);
-        }
+        V_DrawPatch((ORIGWIDTH - SHORT(stbar->width)) / 2 + wide_delta, 0, stbar, NULL);
 
         // [crispy] back up arms widget background
         if (!deathmatch && gamemode != pressbeta)
         {
-            V_DrawPatch(ST_ARMSBGX + wide_delta, 0, english_language ? armsbg : armsbg_rus, NULL);
+            V_DrawPatch(ST_ARMSBGX + wide_delta, 0, starms, NULL);
         }
 
         if (netgame)
@@ -1651,38 +1643,25 @@ void ST_drawWidgets (boolean refresh)
             // [JN] Don't draw ammo for fist and chainsaw
             if (weaponinfo[plyr->readyweapon].ammo != am_noammo)
             {
-                V_DrawPatch(2 + (wider_stbar ? 0 : wide_delta), 191, W_CacheLumpName
-                           (DEH_String(english_language ? "STCHAMMO" : "RDCHAMMO"), PU_CACHE), NULL);
+                V_DrawPatch(2 + (wider_stbar ? 0 : wide_delta), 191, stchammo, NULL);
             }
 
-            if (deathmatch)
-            {
-                // [JN] Frags
-                V_DrawPatch(108 + (wider_stbar ? 0: wide_delta), 191, W_CacheLumpName
-                           (DEH_String(english_language ? "STCHFRGS" : "RDCHFRGS"), PU_CACHE), NULL);
-            }
-            else
-            {
-                // [JN] Arms
-                V_DrawPatch(108 + (wider_stbar ? 0 : wide_delta), 191, W_CacheLumpName
-                           (DEH_String(english_language ? "STCHARMS" : "RDCHARMS"), PU_CACHE), NULL);
-            }
+            // [JN] Frags or Arms
+            V_DrawPatch(108 + (wider_stbar ? 0: wide_delta), 191, 
+                        deathmatch ? stchfrgs : stcharms, NULL);
 
             // [JN] Health
-            V_DrawPatch(52 + (wider_stbar ? 0 : wide_delta), 173, W_CacheLumpName
-                       (DEH_String(english_language ? "STCHHLTH" : "RDCHHLTH"), PU_CACHE), NULL);
+            V_DrawPatch(52 + (wider_stbar ? 0 : wide_delta), 173, stchhlth, NULL);
                        
             // [JN] Armor, ammo
-            V_DrawPatch(52 + (wider_stbar ? wide_delta*2 : wide_delta), 173, W_CacheLumpName
-                       (DEH_String(english_language ? "STCHARAM" : "RDCHARAM"), PU_CACHE), NULL);
+            V_DrawPatch(52 + (wider_stbar ? wide_delta*2 : wide_delta), 173, stcharam, NULL);
         }
     }
 
     // [JN] Yellow slashes
     if (screenblocks > 10 && screenblocks < 17 && (!automapactive || automap_overlay))
     {
-        V_DrawPatch(292 + (wider_stbar ? wide_delta*2 : wide_delta), 173,
-                    W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE), NULL);
+        V_DrawPatch(292 + (wider_stbar ? wide_delta*2 : wide_delta), 173, stysslsh, NULL);
     }
 
     // Ammo amount for current weapon
@@ -2129,10 +2108,6 @@ static void ST_loadUnloadGraphics (load_callback_t callback)
         callback(namebuf, &keys[i]);
     }
 
-    // arms background
-    callback(DEH_String("STARMS"), &armsbg);
-    callback(DEH_String("RDARMS"), &armsbg_rus);
-
     // arms ownership widgets
     for (i = 0; i < 6; i++)
     {
@@ -2148,10 +2123,6 @@ static void ST_loadUnloadGraphics (load_callback_t callback)
     // face backgrounds for different color players
     DEH_snprintf(namebuf, 9, "STFB%d", consoleplayer);
     callback(namebuf, &faceback);
-
-    // status bar background bits
-    callback(DEH_String("STBAR"), &sbar);
-    callback(DEH_String("RDSTBAR"), &sbar_rus);
 
     // face states
     facenum = 0;
@@ -2287,8 +2258,7 @@ static void ST_initData (void)
     st_gamestate = FirstPersonState;
 
     // [JN] Initialize STBAR horizontal offset with zero for centering.
-    sbar->leftoffset = 0;
-    sbar_rus->leftoffset = 0;
+    stbar->leftoffset = 0;
 
     st_statusbaron = true;
     st_oldchat = st_chat = false;
@@ -2350,12 +2320,10 @@ void ST_createWidgets (void)
 
     // arms background
     STlib_initBinIcon(&w_armsbg, ST_ARMSBGX + wide_delta, ST_ARMSBGY,
-                      english_language ? armsbg : armsbg_rus,
-                      &st_notdeathmatch, &st_statusbaron);
+                      starms, &st_notdeathmatch, &st_statusbaron);
 
     STlib_initBinIcon(&w_armsbg_wide, ST_ARMSBGX, ST_ARMSBGY,
-                      english_language ? armsbg : armsbg_rus,
-                      &st_notdeathmatch, &st_statusbaron);
+                      starms, &st_notdeathmatch, &st_statusbaron);
 
     // weapons owned
     for(i = 0 ; i < 6 ; i++)
@@ -2555,17 +2523,14 @@ void ST_drawWidgetsJaguar (boolean refresh)
         // Don't draw ammo for fist and chainsaw
         if (plyr->readyweapon != wp_fist && plyr->readyweapon != wp_chainsaw)
         {
-            V_DrawPatch((wider_stbar ? 0 : wide_delta), 0, W_CacheLumpName
-                    (DEH_String(english_language ? "STCHAMMO" : "RDCHAMMO"), PU_CACHE), NULL);
+            V_DrawPatch((wider_stbar ? 0 : wide_delta), 0, stchammo, NULL);
         }
 
         // Ammo
-        V_DrawPatch((wider_stbar ? 0 : wide_delta), 0, W_CacheLumpName
-                   (DEH_String(english_language ? "STCHHLTH" : "RDCHHLTH"), PU_CACHE), NULL);
+        V_DrawPatch((wider_stbar ? 0 : wide_delta), 0, stchhlth, NULL);
 
         // Armor, Arms, Area
-        V_DrawPatch((wider_stbar ? wide_delta*2 : wide_delta), 0, W_CacheLumpName
-                   (DEH_String(english_language ? "STCHARAM" : "RDCHARAM"), PU_CACHE), NULL);
+        V_DrawPatch((wider_stbar ? wide_delta*2 : wide_delta), 0, stcharam, NULL);
     }
 
     // Current weapon ammo

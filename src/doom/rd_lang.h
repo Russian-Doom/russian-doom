@@ -27,6 +27,11 @@
 
 #pragma once
 
+#include "deh_str.h"
+#include "v_patch.h"
+#include "w_wad.h"
+#include "z_zone.h"
+
 
 extern void RD_DefineLanguageStrings ();
 
@@ -343,6 +348,16 @@ extern char* ststr_beholdx;
 extern char* ststr_beholdz;
 
 extern char* ststr_massacre;
+
+extern patch_t *stbar;
+extern patch_t *starms;
+extern patch_t *stchammo;
+extern patch_t *stchfrgs;
+extern patch_t *stcharms;
+extern patch_t *stchhlth;
+extern patch_t *stcharam;
+extern patch_t *stysslsh;
+
 
 #define STSTR_MUS		"Music Change"
 #define STSTR_NOMUS		"IMPOSSIBLE SELECTION"

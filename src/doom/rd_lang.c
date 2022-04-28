@@ -243,6 +243,16 @@ char* ststr_beholdz;
 // RD specific
 char* ststr_massacre;
 
+// GFX patches
+patch_t *stbar;
+patch_t *starms;
+patch_t *stchammo;
+patch_t *stchfrgs;
+patch_t *stcharms;
+patch_t *stchhlth;
+patch_t *stcharam;
+patch_t *stysslsh;
+
 
 // -----------------------------------------------------------------------------
 // [JN] Function for (pre-)defining strings for text translations.
@@ -395,6 +405,17 @@ void RD_DefineLanguageStrings (void)
 
         // RD specific
         ststr_massacre  = STSTR_MASSACRE;
+
+        // GFX patches:
+        stbar = W_CacheLumpName(DEH_String("STBAR"), PU_STATIC);
+        starms = W_CacheLumpName(DEH_String("STARMS"), PU_STATIC);
+        stchammo = W_CacheLumpName(DEH_String("STCHAMMO"), PU_STATIC);
+        stchfrgs = W_CacheLumpName(DEH_String("STCHFRGS"), PU_STATIC);
+        stcharms = W_CacheLumpName(DEH_String("STCHARMS"), PU_STATIC);
+        stchhlth = W_CacheLumpName(DEH_String("STCHHLTH"), PU_STATIC);
+        stcharam = W_CacheLumpName(DEH_String("STCHARAM"), PU_STATIC);
+        stysslsh = W_CacheLumpName(DEH_String("STYSSLSH"), PU_STATIC);
+
     }
     else
     {
@@ -540,5 +561,15 @@ void RD_DefineLanguageStrings (void)
 
         // RD specific
         ststr_massacre  = STSTR_MASSACRE_RUS;
+        
+        // GFX patches:
+        stbar = W_CacheLumpName(DEH_String("RDSTBAR"), PU_STATIC);
+        starms = W_CacheLumpName(DEH_String("RDARMS"), PU_STATIC);
+        stchammo = W_CacheLumpName(DEH_String("RDCHAMMO"), PU_STATIC);
+        stchfrgs = W_CacheLumpName(DEH_String("RDCHFRGS"), PU_STATIC);
+        stcharms = W_CacheLumpName(DEH_String("RDCHARMS"), PU_STATIC);
+        stchhlth = W_CacheLumpName(DEH_String("RDCHHLTH"), PU_STATIC);
+        stcharam = W_CacheLumpName(DEH_String("RDCHARAM"), PU_STATIC);
+        stysslsh = W_CacheLumpName(DEH_String("STYSSLSH"), PU_STATIC);
     }
 }
