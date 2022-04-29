@@ -113,3 +113,4 @@ typedef struct
 extern mpoint_t *markpoints;
 extern int       markpointnum, markpointnum_max;
 void AM_clearMarks (void);
+void AM_initMarksColor (int color);

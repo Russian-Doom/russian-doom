@@ -88,6 +88,8 @@ static const int m_zoomout_fast = ((int) (FRACUNIT/1.08));
 static player_t *plr;           // the player represented by an arrow
 static vertex_t oldplr;
 
+// [JN] Choosen mark color.
+static Translation_CR_t automap_mark_color_set;
 static patch_t *marknums[10]; // numbers used for marking by the automap
 
 // [JN] killough 2/22/98: Remove limit on automap marks,
@@ -281,6 +283,34 @@ static void AM_changeWindowLoc(void)
 
     m_x2 = m_x + m_w;
     m_y2 = m_y + m_h;
+}
+
+// -----------------------------------------------------------------------------
+// AM_initMarksColor
+// -----------------------------------------------------------------------------
+
+void AM_initMarksColor (int color)
+{
+    Translation_CR_t *colorVar = &automap_mark_color_set;
+
+    switch (color)
+    {
+        case 1:   *colorVar = CR_GRAY;          break;
+        case 2:   *colorVar = CR_DARKGRAY;      break;
+        case 3:   *colorVar = CR_RED;           break;
+        case 4:   *colorVar = CR_DARKRED;       break;
+        case 5:   *colorVar = CR_GREEN;         break;
+        case 6:   *colorVar = CR_DARKGREEN;     break;
+        case 7:   *colorVar = CR_OLIVE;         break;
+        case 8:   *colorVar = CR_BLUE2;         break;
+        case 9:   *colorVar = CR_DARKBLUE;      break;
+        case 10:  *colorVar = CR_NIAGARA;       break;
+        case 11:  *colorVar = CR_BRIGHTYELLOW;  break;
+        case 12:  *colorVar = CR_YELLOW;        break;
+        case 13:  *colorVar = CR_TAN;           break;
+        case 14:  *colorVar = CR_BROWN;         break;
+        default:  *colorVar = CR_WHITE;         break;
+    }
 }
 
 /*
@@ -1575,10 +1605,7 @@ static void AM_drawMarks (void)
                 &&  fy >= f_y + 6 && fy <= f_h - 6)
                 {
                     // [JN] Use custom, precise patch versions and do coloring.
-                    //
-                    // TODO - consider implementing AM_initMarksColor, but this
-                    // will require to create a lot of extra translation tables.
-                    dp_translation = cr[CR_RED];
+                    dp_translation = cr[automap_mark_color_set];
                     V_DrawPatchUnscaled(flip_levels ? - fx : fx, fy, marknums[d], NULL);
                     dp_translation = NULL;
                 }

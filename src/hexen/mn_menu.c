@@ -34,6 +34,7 @@
 #include "s_sound.h"
 #include "v_trans.h"
 #include "v_video.h"
+#include "am_map.h"
 #include "rd_keybinds.h"
 #include "rd_menu.h"
 #include "rd_rushexen.h"
@@ -121,6 +122,7 @@ static void M_RD_AutoMapOverlay();
 static void M_RD_AutoMapOverlayBG(Direction_t direction);
 static void M_RD_AutoMapFollow();
 static void M_RD_AutoMapGrid();
+static void M_RD_AutomapMarkColor(Direction_t direction);
 
 // Sound
 static void DrawSoundMenu(void);
@@ -716,14 +718,15 @@ static MenuItem_t AutomapItems[] = {
     {ITT_LRFUNC, "OVERLAY BACKGROUND OPACITY",  "GHJPHFXYJCNM AJYF GHB YFKJ;TYBB",   M_RD_AutoMapOverlayBG,  0}, // ПРОЗРАЧНОСТЬ ФОНА ПРИ НАЛОЖЕНИИ
     {ITT_EMPTY,  NULL,            NULL,                NULL,                0},
     {ITT_SWITCH, "FOLLOW MODE:",  "HT;BV CKTLJDFYBZ:", M_RD_AutoMapFollow,  0}, // РЕЖИМ СЛЕДОВАНИЯ
-    {ITT_SWITCH, "GRID:",         "CTNRF:",            M_RD_AutoMapGrid,    0}  // СЕТКА
+    {ITT_SWITCH, "GRID:",         "CTNRF:",            M_RD_AutoMapGrid,    0}, // СЕТКА
+    {ITT_LRFUNC, "MARK COLOR:",   "WDTN JNVTNJR:",     M_RD_AutomapMarkColor,0}, // ЦВЕТ ОТМЕТОК
 };
 
 static Menu_t AutomapMenu = {
     36, 36,
     32,
     "AUTOMAP SETTINGS", "YFCNHJQRB RFHNS", false, // НАСТРОЙКИ КАРТЫ
-    6, AutomapItems, false,
+    7, AutomapItems, false,
     DrawAutomapMenu,
     NULL,
     &DisplayMenu,
@@ -2954,6 +2957,10 @@ static void DrawAutomapMenu(void)
 
         // Grid
         RD_M_DrawTextSmallENG(automap_grid ? "ON" : "OFF", 72 + wide_delta, 82, CR_NONE);
+
+        // Mark color
+        RD_M_DrawTextSmallENG(M_RD_ColorName(automap_mark_color+1), 118 + wide_delta, 92,
+                              M_RD_ColorTranslation(automap_mark_color+1));
     }
     else
     {
@@ -2968,6 +2975,10 @@ static void DrawAutomapMenu(void)
 
         // Сетка
         RD_M_DrawTextSmallRUS(automap_grid ? "DRK" : "DSRK", 82 + wide_delta, 82, CR_NONE);
+
+        // Цвет отметок
+        RD_M_DrawTextSmallRUS(M_RD_ColorName(automap_mark_color+1), 133 + wide_delta, 92,
+                              M_RD_ColorTranslation(automap_mark_color+1));
     }
 
     // Overlay background opacity
@@ -3000,6 +3011,14 @@ static void M_RD_AutoMapFollow()
 static void M_RD_AutoMapGrid()
 {
     automap_grid ^= 1;
+}
+
+static void M_RD_AutomapMarkColor(Direction_t direction)
+{
+    RD_Menu_SpinInt(&automap_mark_color, 0, 14, direction);
+
+    // [JN] Reinitialize automap mark color.
+    AM_initMarksColor(automap_mark_color);
 }
 
 // -----------------------------------------------------------------------------
@@ -5549,6 +5568,7 @@ void M_RD_BackToDefaults_Recommended (void)
     automap_overlay_bg = 0;
     automap_follow     = 1;
     automap_grid       = 0;
+    automap_mark_color = 3;
 
     // Audio
     snd_MaxVolume   = 8;
@@ -5661,6 +5681,7 @@ static void M_RD_BackToDefaults_Original(void)
     automap_overlay_bg = 0;
     automap_follow     = 1;
     automap_grid       = 0;
+    automap_mark_color = 3;
 
     // Audio
     snd_MaxVolume   = 8;
