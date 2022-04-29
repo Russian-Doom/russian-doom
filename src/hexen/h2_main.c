@@ -183,6 +183,7 @@ int automap_overlay = 0;
 int automap_overlay_bg = 0;
 int automap_follow = 1;
 int automap_grid = 0;
+int automap_grid_size = 128;
 int automap_mark_color = 3;
 
 // Sound
@@ -351,6 +352,7 @@ void D_BindVariables(void)
     M_BindIntVariable("automap_overlay_bg",     &automap_overlay_bg);
     M_BindIntVariable("automap_follow",         &automap_follow);
     M_BindIntVariable("automap_grid",           &automap_grid);
+    M_BindIntVariable("automap_grid_size",      &automap_grid_size);
     M_BindIntVariable("automap_mark_color",     &automap_mark_color);
 
     // Gameplay: Graphical

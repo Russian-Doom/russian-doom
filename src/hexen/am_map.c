@@ -1241,9 +1241,9 @@ static void AM_drawGrid(int color)
         start -= m_h / 2;
     }
 
-    if ((start-bmaporgx)%(MAPBLOCKUNITS<<FRACBITS))
+    if ((start-bmaporgx)%(automap_grid_size<<FRACBITS))
     {
-        start -= ((start-bmaporgx)%(MAPBLOCKUNITS<<FRACBITS));
+        start -= ((start-bmaporgx)%(automap_grid_size<<FRACBITS));
     }
 
     end = m_x + m_w;
@@ -1254,7 +1254,7 @@ static void AM_drawGrid(int color)
     }
 
     // draw vertical gridlines
-    for (x = start; x < end; x += (MAPBLOCKUNITS << FRACBITS))
+    for (x = start; x < end; x += (automap_grid_size << FRACBITS))
     {
         ml.a.x = x;
         ml.b.x = x;
@@ -1278,9 +1278,9 @@ static void AM_drawGrid(int color)
         start -= m_w / 2;
     }
 
-    if ((start-bmaporgy)%(MAPBLOCKUNITS<<FRACBITS))
+    if ((start-bmaporgy)%(automap_grid_size<<FRACBITS))
     {
-        start -= ((start-bmaporgy)%(MAPBLOCKUNITS<<FRACBITS));
+        start -= ((start-bmaporgy)%(automap_grid_size<<FRACBITS));
     }
 
     end = m_y + m_h;
@@ -1291,7 +1291,7 @@ static void AM_drawGrid(int color)
     }
 
     // draw horizontal gridlines
-    for (y = start; y < end; y += (MAPBLOCKUNITS << FRACBITS))
+    for (y = start; y < end; y += (automap_grid_size << FRACBITS))
     {
         ml.a.y = y;
         ml.b.y = y;

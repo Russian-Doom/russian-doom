@@ -122,6 +122,7 @@ static void M_RD_AutoMapOverlay();
 static void M_RD_AutoMapOverlayBG(Direction_t direction);
 static void M_RD_AutoMapFollow();
 static void M_RD_AutoMapGrid();
+static void M_RD_AutoMapGridSize(Direction_t direction);
 static void M_RD_AutomapMarkColor(Direction_t direction);
 
 // Sound
@@ -719,6 +720,7 @@ static MenuItem_t AutomapItems[] = {
     {ITT_EMPTY,  NULL,            NULL,                NULL,                0},
     {ITT_SWITCH, "FOLLOW MODE:",  "HT;BV CKTLJDFYBZ:", M_RD_AutoMapFollow,  0}, // РЕЖИМ СЛЕДОВАНИЯ
     {ITT_SWITCH, "GRID:",         "CTNRF:",            M_RD_AutoMapGrid,    0}, // СЕТКА
+    {ITT_LRFUNC, "GRID SIZE:",    "HFPVTH CTNRB:",     M_RD_AutoMapGridSize, 0}, // РАЗМЕР СЕТКИ
     {ITT_LRFUNC, "MARK COLOR:",   "WDTN JNVTNJR:",     M_RD_AutomapMarkColor,0}, // ЦВЕТ ОТМЕТОК
 };
 
@@ -726,7 +728,7 @@ static Menu_t AutomapMenu = {
     36, 36,
     32,
     "AUTOMAP SETTINGS", "YFCNHJQRB RFHNS", false, // НАСТРОЙКИ КАРТЫ
-    7, AutomapItems, false,
+    8, AutomapItems, false,
     DrawAutomapMenu,
     NULL,
     &DisplayMenu,
@@ -2941,6 +2943,8 @@ static void DrawAutomapMenu(void)
 {
     char num[4];
 
+    M_snprintf(num, 4, "%d", automap_grid_size);
+
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
@@ -2958,8 +2962,11 @@ static void DrawAutomapMenu(void)
         // Grid
         RD_M_DrawTextSmallENG(automap_grid ? "ON" : "OFF", 72 + wide_delta, 82, CR_NONE);
 
+        // Grid size
+        RD_M_DrawTextSmallENG(num, 105 + wide_delta, 92, CR_NONE);
+
         // Mark color
-        RD_M_DrawTextSmallENG(M_RD_ColorName(automap_mark_color+1), 118 + wide_delta, 92,
+        RD_M_DrawTextSmallENG(M_RD_ColorName(automap_mark_color+1), 118 + wide_delta, 102,
                               M_RD_ColorTranslation(automap_mark_color+1));
     }
     else
@@ -2976,8 +2983,11 @@ static void DrawAutomapMenu(void)
         // Сетка
         RD_M_DrawTextSmallRUS(automap_grid ? "DRK" : "DSRK", 82 + wide_delta, 82, CR_NONE);
 
+        // Размер сетки
+        RD_M_DrawTextSmallRUS(num, 133 + wide_delta, 92, CR_NONE);
+
         // Цвет отметок
-        RD_M_DrawTextSmallRUS(M_RD_ColorName(automap_mark_color+1), 133 + wide_delta, 92,
+        RD_M_DrawTextSmallRUS(M_RD_ColorName(automap_mark_color+1), 133 + wide_delta, 102,
                               M_RD_ColorTranslation(automap_mark_color+1));
     }
 
@@ -3011,6 +3021,11 @@ static void M_RD_AutoMapFollow()
 static void M_RD_AutoMapGrid()
 {
     automap_grid ^= 1;
+}
+
+static void M_RD_AutoMapGridSize(Direction_t direction)
+{
+    RD_Menu_ShiftSlideInt(&automap_grid_size, 32, 512, direction);
 }
 
 static void M_RD_AutomapMarkColor(Direction_t direction)
@@ -5568,6 +5583,7 @@ void M_RD_BackToDefaults_Recommended (void)
     automap_overlay_bg = 0;
     automap_follow     = 1;
     automap_grid       = 0;
+    automap_grid_size  = 128;
     automap_mark_color = 3;
 
     // Audio
@@ -5681,6 +5697,7 @@ static void M_RD_BackToDefaults_Original(void)
     automap_overlay_bg = 0;
     automap_follow     = 1;
     automap_grid       = 0;
+    automap_grid_size  = 128;
     automap_mark_color = 3;
 
     // Audio
