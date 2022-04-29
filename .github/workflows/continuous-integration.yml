@@ -97,26 +97,3 @@ jobs:
         with:
           name: inter-doom-${{ steps.configure.outputs.sha_short }}-windows-${{ matrix.arch.name }}
           path: ./build/install/
-
-  Autotools:
-    name: Autotools | Linux | x64
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install Dependencies
-        shell: bash
-        run: |
-          sudo apt-get update --fix-missing
-          sudo apt-get install --fix-missing gcc make automake libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libpng-dev libsamplerate-dev
-
-      - uses: actions/checkout@v2
-
-      - name: Configure
-        shell: bash
-        run: |
-          ./autogen.sh
-
-      - name: Build
-        shell: bash
-        run: |
-          export MAKEFLAGS=--keep-going
-          make -j 2
