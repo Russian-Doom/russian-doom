@@ -234,6 +234,8 @@ static boolean st_fragson;        // !deathmatch
 static boolean st_artifactson;    // [JN] only in Press Beta
 static boolean st_stopped = true;
 
+static byte *bezel_pattern;  // [JN] Bezel pattern to fill status bar in widescreen mode.
+
 static patch_t *tallnum[10];      // 0-9, tall numbers
 static patch_t *tallpercent;      // tall % sign
 static patch_t *shortnum[10];     // 0-9, short, yellow (,different!) numbers
@@ -356,22 +358,16 @@ void ST_refreshBackground (void)
             if ((screenwidth >> hires) != ORIGWIDTH)
             {
                 int x, y;
-                byte *src;
-                byte *dest;
-                char *name = (gamemode == commercial) ? DEH_String("GRNROCK") : 
-                                                        DEH_String("FLOOR7_2");
+                byte *dest = st_backing_screen;
                 const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
 
-                src = W_CacheLumpName(name, PU_CACHE);
-                dest = st_backing_screen;
-        
                 // [JN] Variable HUD detail level.
                 for (y = SCREENHEIGHT-(st_height << hires); y < SCREENHEIGHT; y++)
                 {
                     for (x = 0; x < screenwidth; x++)
                     {
-                        *dest++ = src[((( y >> shift_allowed) & 63) << 6) 
-                                     + (( x >> shift_allowed) & 63)];
+                        *dest++ = bezel_pattern[((( y >> shift_allowed) & 63) << 6) 
+                                               + (( x >> shift_allowed) & 63)];
                     }
                 }
         
@@ -2074,6 +2070,10 @@ static void ST_loadUnloadGraphics (load_callback_t callback)
     int   i, j;
     int   facenum;
     char  namebuf[9];
+
+    // [JN] Which background will be used to fill bezel pattern.
+    bezel_pattern = W_CacheLumpName(DEH_String(gamemode == commercial ?
+                                    "GRNROCK" : "FLOOR7_2"), PU_STATIC);
 
     // Load the numbers, tall and short
     for (i = 0 ; i < 10 ; i++)
