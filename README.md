@@ -25,7 +25,11 @@ Source code available on [GitHub](https://github.com/JNechaevsky/inter-doom/tree
 
 #### Other
 
-PNG font atlases: [inter-doom-fonts-png.zip](https://jnechaevsky.github.io/inter-doom/files/inter-doom-fonts-png.zip)<br /><br />
+PNG font atlases: [inter-doom-fonts-png.zip](https://jnechaevsky.github.io/inter-doom/files/inter-doom-fonts-png.zip)
+
+#### History of changes
+
+Changelog available in [English](https://github.com/JNechaevsky/inter-doom/wiki/Changelog) and [Russian](https://github.com/JNechaevsky/inter-doom/wiki/Changelog-(Rus)) languages.<br /><br />
 
 ### About
 
