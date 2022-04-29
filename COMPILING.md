@@ -20,14 +20,9 @@ so that the $PATH environment variable points to the proper toolchain.
 For the **mingw-w64-i686** toolchain (**32**-bit), use the **MSYS MinGW 32-bit** start menu/screen shortcut 
 and for the **mingw-w64-x86_64** toolchain (**64**-bit), use the **MSYS MinGW 64-bit** start menu/screen shortcut.
 
-There are two options to build with: **Cmake** or **Autotools**.  
-Autotools is the primary way but CMake is recommended.
-
-##### Step 2.1: Building with CMake
-
 To configure the project use the following command:
 ```
-cmake -G"MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -S . -B build
+cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release -S . -B build
 ```
 You can enable and disable the compilation of modules by changing cmake options:
 `COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE`, `COMPILE_SETUP`
@@ -40,31 +35,12 @@ cmake --build build
 
 After successful compilation, the resulting binaries can be found in the `build\src\` folder.
 
-##### Step 2.2: Building with Autotools
-
-To configure the project for 32-bit environment run
-```
-./autogen.sh --host=i686-w64-mingw64
-```
-or to configure the project for 64-bit environment run
-```
-./autogen.sh --host=x86_64-w64-mingw64
-```
-To build the project use the following command:
-```
-make
-```
-After successful compilation, the resulting binaries can be found in the `src\` folder.
-
 ##### Step 3: Installing International Doom
 
 To install International Doom to `<install directory>` use the following command:
 ```
 cmake --install build --prefix <install directory>
 ```
-
-If you are using Autotools, you have to install International Doom manually. Copy built executables and `base` folder from `src\`
-directory to `<install directory>` along with DLL libraries from `win_libs\<arch>\`.
 
 ### Building International Doom on Linux
 
@@ -75,12 +51,12 @@ Compiling on Linux is rather simple.
 First, make sure you have all the necessary dependencies for compilation.
 On Ubuntu Linux they can be installed by the following command:
 ```
-sudo apt-get install gcc cmake make automake libsdl2-dev libsdl2-net-dev \
+sudo apt-get install gcc cmake make libsdl2-dev libsdl2-net-dev \
 libsdl2-mixer-dev libpng-dev libsamplerate-dev
 ```
 On Fedora Linux they can be installed by the following command:
 ```
-sudo dnf install gcc cmake make automake SDL2-devel SDL2_mixer-devel \
+sudo dnf install gcc cmake make SDL2-devel SDL2_mixer-devel \
 SDL2_net-devel libpng-devel libsamplerate-devel
 ```
 On Manjaro Linux they can be installed by the following command:
@@ -93,14 +69,9 @@ libpng libsamplerate
 
 Download source code archive of latest release version or from Git repository and unpack it.
 
-There are two options to build with: **Cmake** or **Autotools**.  
-Autotools is the primary way but CMake is recommended.
-
-##### Step 2.1: Building with CMake
-
 To configure the project use the following command:
 ```
-cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
+cmake -D CMAKE_BUILD_TYPE=Release -S . -B build
 ```
 You can enable and disable the compilation of modules by changing cmake options:
 `COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE`, `COMPILE_SETUP`
@@ -123,18 +94,6 @@ cmake --build build
 ```
 After successful compilation, the resulting binaries can be found in the `build/src/` folder.
 
-##### Step 2.2: Building with Autotools
-
-To configure the project use the following command:
-```
-./autogen.sh
-```
-To build the project use the following command:
-```
-make
-```
-After successful compilation, the resulting binaries can be found in the `src/` directory.
-
 ##### Step 3: Installing International Doom
 
 To install International Doom use the following command:
@@ -143,9 +102,6 @@ cmake --install build
 ```
 For the portable version, you probably want to use `--prefix <install directory>` key to set install directory.
 Note that config files and savegames will be stored in that directory.
-
-If you are using Autotools, you have to install International Doom manually. Copy built executables from `src/`
-to `/usr/local/bin/` directory. Copy content of `src/base/` folder to `/usr/local/share/inter-doom/` directory.
 
 ### Building a DOS version of International Doom
 
