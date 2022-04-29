@@ -1,0 +1,102 @@
+name: Build release packages
+
+on:
+  release:
+    types: ["published"]
+
+jobs:
+  Release:
+    name: ${{ matrix.os.name }} | ${{ matrix.arch.name }}
+    if: ${{ github.repository == 'JNechaevsky/inter-doom' && !startsWith(github.ref_name, 'dos-') }}
+    runs-on: ${{ matrix.os.runner }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - name: "Windows"
+            runner: "windows-latest"
+            shell: "msys2 {0}"
+        arch:
+          - name: "x86"
+            bits: "32"
+            msys_name: "i686"
+          - name: "x64"
+            bits: "64"
+            msys_name: "x86_64"
+        compiler:
+          - name: "gcc"
+            msys_msystem_prefix: "MINGW"
+            msys_package_prefix: "mingw-w64"
+    permissions:
+      contents: write
+    defaults:
+      run:
+        shell: ${{ matrix.os.shell }}
+    steps:
+      - name: Setup MSYS env
+        if: ${{ matrix.os.name == 'Windows' }}
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: ${{ matrix.compiler.msys_msystem_prefix }}${{ matrix.arch.bits }}
+          update: true
+          install: >-
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-pkgconf
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-${{ matrix.compiler.name }}
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-ninja
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-cmake
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_net
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_mixer
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libsamplerate
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libpng
+
+      - uses: actions/checkout@v2
+
+      - name: Configure
+        id: configure
+        run: |
+          compile_doom="OFF"
+          compile_heretic="OFF"
+          compile_hexen="OFF"
+          compile_strife="OFF"
+          if [[ ${{ contains(github.ref_name, '-') }} == true ]]
+          then
+              game=$( echo "${{ github.ref_name }}" | cut -d'-' -f1 )
+              version=$( echo "${{ github.ref_name }}" | cut -d'-' -f2 )
+              if [[ $game == "heretic" ]]
+              then
+                  compile_heretic="ON"
+              elif [[ $game == "hexen" ]]
+              then
+                  compile_hexen="ON"
+              elif [[ $game == "strife" ]]
+              then
+                  compile_strife="ON"
+              fi
+          else
+              compile_doom="ON"
+              game="doom"
+              version="${{ github.ref_name }}"
+          fi
+          echo "::set-output name=game::$game"
+          echo "::set-output name=version::$version"
+          cmake -G "Ninja" -D COMPILE_DOOM="$compile_doom" -D COMPILE_HERETIC="$compile_heretic" -D COMPILE_HEXEN="$compile_hexen" -D COMPILE_STRIFE="$compile_strife" -D BUILD_VERSION_OVERWRITE="$version" -D CMAKE_BUILD_TYPE=Release -S . -B build
+
+      - name: Build
+        run: |
+          export MAKEFLAGS=--keep-going
+          cmake --build build --parallel 2
+
+      - name: Package Zip
+        if: ${{ matrix.os.name == 'Windows' }}
+        run: |
+          cd build
+          cpack -G ZIP
+
+      - name: Upload Zip
+        if: ${{ matrix.os.name == 'Windows' }}
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: |
+          gh release upload ${{ github.event.release.tag_name }} ./build/inter-${{ steps.configure.outputs.game }}-${{ steps.configure.outputs.version }}-windows-${{ matrix.arch.name }}.zip
