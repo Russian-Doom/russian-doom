@@ -1735,18 +1735,7 @@ void ST_drawWidgets (boolean refresh)
     // [JN] Player face background
     if ((screenblocks == 11 || screenblocks == 14) && (!automapactive || automap_overlay))
     {
-        // [JN] TODO - using different PU_CACHE backgrounds for netgame.
-        /*
-        if (netgame)
-        {
-            V_DrawPatch(ST_FX + wide_delta, ST_FY, faceback);
-        }
-        else
-        */
-        {
-            V_DrawPatch(ST_FX + wide_delta, ST_FY, 
-                        W_CacheLumpName(DEH_String("STPB1"), PU_CACHE), NULL);
-        }
+        V_DrawPatch(ST_FX + wide_delta, ST_FY, faceback, NULL);
     }
 
     // Player faces
@@ -2121,8 +2110,16 @@ static void ST_loadUnloadGraphics (load_callback_t callback)
     }
 
     // face backgrounds for different color players
-    DEH_snprintf(namebuf, 9, "STFB%d", consoleplayer);
-    callback(namebuf, &faceback);
+    if (netgame)
+    {
+        DEH_snprintf(namebuf, 9, "STFB%d", consoleplayer);
+        callback(namebuf, &faceback);
+    }
+    else
+    {
+        // [JN] Face background in single player game.
+        callback(DEH_String("STPB1"), &faceback);
+    }
 
     // face states
     facenum = 0;
