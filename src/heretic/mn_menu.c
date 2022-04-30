@@ -884,7 +884,7 @@ static MenuItem_t Bindings4Items[] = {
     {ITT_EFUNC,   "QUICK SAVE",         ",SCNHJT CJ[HFYTYBT",    BK_StartBindingKey, bk_qsave},       // Быстрое сохранение
     {ITT_EFUNC,   "End game",           "pfrjyxbnm buhe",        BK_StartBindingKey, bk_end_game},    // Закончить игру
     {ITT_EFUNC,   "QUICK LOAD",         ",SCNHFZ PFUHEPRF",      BK_StartBindingKey, bk_qload},       // Быстрая загрузка
-    {ITT_EFUNC,   "Quit game",          "da[jl",                 BK_StartBindingKey, bk_quit},        // Выход
+    {ITT_EFUNC,   "Quit game",          "ds[jl",                 BK_StartBindingKey, bk_quit},        // Выход
     {ITT_EFUNC,   "Change gamma level", "ehjdtym ufvvs",         BK_StartBindingKey, bk_gamma},       // Уровень гаммы
     {ITT_EFUNC,   "GO TO NEXT LEVEL",   "CKTLE.OBQ EHJDTYM",     BK_StartBindingKey, bk_nextlevel},   // Следующий уровень
     {ITT_EFUNC,   "RESTART LEVEL/DEMO", "GTHTPFGECR EHJDYZ",     BK_StartBindingKey, bk_reloadlevel}, // Перезапуск уровня
@@ -6120,7 +6120,9 @@ boolean MN_Responder(event_t * event)
            CurrentMenu == &Bindings3Menu ||
            CurrentMenu == &Bindings4Menu ||
            CurrentMenu == &Bindings5Menu ||
-           CurrentMenu == &Bindings6Menu)
+           CurrentMenu == &Bindings6Menu ||
+           CurrentMenu == &Bindings7Menu ||
+           CurrentMenu == &Bindings8Menu)
         {
             BK_ClearBinds(CurrentMenu->items[CurrentItPos].option);
             RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);

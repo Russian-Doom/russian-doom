@@ -873,7 +873,7 @@ static MenuItem_t Bindings2Items[] = {
     {ITT_EFUNC,   "FIRE/ATTACK",     "FNFRF/CNHTKM,F",        BK_StartBindingKey, bk_fire},        // Атака/стрельба
     {ITT_EFUNC,   "USE",             "BCGJKMPJDFNM",          BK_StartBindingKey, bk_use},         // Использовать
     {ITT_EFUNC,   "JUMP",            "GHS;JR",                BK_StartBindingKey, bk_jump},        //Прыжок
-    {ITT_TITLE,   "WEAPONS",         "JHE;BT",                NULL,               0},       // Оружие
+    {ITT_TITLE,   "WEAPONS",         "JHE;BT",                NULL,               0},              // Оружие
     {ITT_EFUNC,   "WEAPON 1",        "JHE;BT 1",              BK_StartBindingKey, bk_weapon_1},    // Оружие 1
     {ITT_EFUNC,   "WEAPON 2",        "JHE;BT 2",              BK_StartBindingKey, bk_weapon_2},    // Оружие 2
     {ITT_EFUNC,   "WEAPON 3",        "JHE;BT 3",              BK_StartBindingKey, bk_weapon_3},    // Оружие 3
@@ -904,20 +904,20 @@ static Menu_t Bindings2Menu = {
 
 static MenuItem_t Bindings3Items[] = {
     {ITT_TITLE,   "SHORTCUT KEYS",        ",SCNHSQ LJCNEG",        NULL,               0},
-    {ITT_EFUNC,   "Open help",            "'rhfy gjvjob",          BK_StartBindingKey, bk_menu_help},        // Экран помощи
-    {ITT_EFUNC,   "Open save menu",       "cj[hfytybt buhs",       BK_StartBindingKey, bk_menu_save},        // Сохранение игры
-    {ITT_EFUNC,   "Open load menu",       "pfuheprf buhs",         BK_StartBindingKey, bk_menu_load},        // Загрузка игры
-    {ITT_EFUNC,   "Open volume menu",     "yfcnhjqrb uhjvrjcnb",   BK_StartBindingKey, bk_menu_volume},      // Настройки громкости
-    {ITT_EFUNC,   "QUICK SAVE",           ",SCNHJT CJ[HFYTYBT",    BK_StartBindingKey, bk_qsave},            // Быстрое сохранение
-    {ITT_EFUNC,   "End game",             "pfrjyxbnm buhe",        BK_StartBindingKey, bk_end_game},         // Закончить игру
-    {ITT_EFUNC,   "QUICK LOAD",           ",SCNHFZ PFUHEPRF",      BK_StartBindingKey, bk_qload},            // Быстрая загрузка
-    {ITT_EFUNC,   "Quit game",            "da[jl",                 BK_StartBindingKey, bk_quit},             // Выход
-    {ITT_EFUNC,   "Change gamma level",   "ehjdtym ufvvs",         BK_StartBindingKey, bk_gamma},            // Уровень гаммы
-    {ITT_EFUNC,   "RESTART LEVEL/DEMO",   "GTHTPFGECR EHJDYZ",     BK_StartBindingKey, bk_reloadlevel},     // Перезапуск уровня
-    {ITT_EFUNC,   "Increase screen size", "edtk> hfpvth 'rhfyf",   BK_StartBindingKey, bk_screen_inc},      // Увел. размер экрана
+    {ITT_EFUNC,   "Open help",            "'rhfy gjvjob",          BK_StartBindingKey, bk_menu_help},   // Экран помощи
+    {ITT_EFUNC,   "Open save menu",       "cj[hfytybt buhs",       BK_StartBindingKey, bk_menu_save},   // Сохранение игры
+    {ITT_EFUNC,   "Open load menu",       "pfuheprf buhs",         BK_StartBindingKey, bk_menu_load},   // Загрузка игры
+    {ITT_EFUNC,   "Open volume menu",     "yfcnhjqrb uhjvrjcnb",   BK_StartBindingKey, bk_menu_volume}, // Настройки громкости
+    {ITT_EFUNC,   "QUICK SAVE",           ",SCNHJT CJ[HFYTYBT",    BK_StartBindingKey, bk_qsave},       // Быстрое сохранение
+    {ITT_EFUNC,   "End game",             "pfrjyxbnm buhe",        BK_StartBindingKey, bk_end_game},    // Закончить игру
+    {ITT_EFUNC,   "QUICK LOAD",           ",SCNHFZ PFUHEPRF",      BK_StartBindingKey, bk_qload},       // Быстрая загрузка
+    {ITT_EFUNC,   "Quit game",            "ds[jl",                 BK_StartBindingKey, bk_quit},        // Выход
+    {ITT_EFUNC,   "Change gamma level",   "ehjdtym ufvvs",         BK_StartBindingKey, bk_gamma},       // Уровень гаммы
+    {ITT_EFUNC,   "RESTART LEVEL/DEMO",   "GTHTPFGECR EHJDYZ",     BK_StartBindingKey, bk_reloadlevel}, // Перезапуск уровня
+    {ITT_EFUNC,   "Increase screen size", "edtk> hfpvth 'rhfyf",   BK_StartBindingKey, bk_screen_inc},  // Увел. размер экрана
     {ITT_EMPTY,   NULL,                   NULL,                    NULL,               0},
-    {ITT_SETMENU, "NEXT PAGE >",          "CKTLE.OFZ CNHFYBWF `",  &Bindings4Menu,     0},                  // Cледующая страница >
-    {ITT_SETMENU, "< PREV PAGE",          "^ GHTLSLEOFZ CNHFYBWF", &Bindings2Menu,     0},                  // < Предыдущая страница
+    {ITT_SETMENU, "NEXT PAGE >",          "CKTLE.OFZ CNHFYBWF `",  &Bindings4Menu,     0},              // Cледующая страница >
+    {ITT_SETMENU, "< PREV PAGE",          "^ GHTLSLEOFZ CNHFYBWF", &Bindings2Menu,     0},              // < Предыдущая страница
     {ITT_EMPTY,   NULL,                   NULL,                    NULL,               0}
 };
 
@@ -947,11 +947,11 @@ static MenuItem_t Bindings4Items[] = {
     {ITT_EFUNC,   "CROSSHAIR",             "GHBWTK",                BK_StartBindingKey, bk_toggle_crosshair}, // Прицел
     {ITT_EFUNC,   "Messages",              "cjj,otybz",             BK_StartBindingKey, bk_messages},         // Сообщения
     {ITT_EFUNC,   "Detail level",          "ltnfkbpfwbz uhfabrb",   BK_StartBindingKey, bk_detail},           // Детализация графики
-    {ITT_EFUNC,   "LEVEL FLIPPING",        "PTHRFKBHJDFYBT EHJDYZ", BK_StartBindingKey, bk_toggle_fliplvls}, // Зеркалирование уровня
+    {ITT_EFUNC,   "LEVEL FLIPPING",        "PTHRFKBHJDFYBT EHJDYZ", BK_StartBindingKey, bk_toggle_fliplvls},  // Зеркалирование уровня
     {ITT_EMPTY,   NULL,                    NULL,                    NULL,               0},
     {ITT_EMPTY,   NULL,                    NULL,                    NULL,               0},
-    {ITT_SETMENU, "NEXT PAGE >",           "CKTLE.OFZ CNHFYBWF `",  &Bindings5Menu,     0},                  // Cледующая страница >
-    {ITT_SETMENU, "< PREV PAGE",           "^ GHTLSLEOFZ CNHFYBWF", &Bindings3Menu,     0},                  // < Предыдущая страница
+    {ITT_SETMENU, "NEXT PAGE >",           "CKTLE.OFZ CNHFYBWF `",  &Bindings5Menu,     0},                   // Cледующая страница >
+    {ITT_SETMENU, "< PREV PAGE",           "^ GHTLSLEOFZ CNHFYBWF", &Bindings3Menu,     0},                   // < Предыдущая страница
     {ITT_EMPTY,   NULL,                    NULL,                    NULL,               0}
 };
 
@@ -1018,8 +1018,8 @@ static MenuItem_t Bindings6Items[] = {
     {ITT_EFUNC,   "PORKALATOR",           "CDBYJVJHATH",               BK_StartBindingKey, bk_arti_egg},
     {ITT_EFUNC,   "CHAOS DEVICE",         "'V,KTVF [FJCF",             BK_StartBindingKey, bk_arti_chaosdevice},
     {ITT_EMPTY,   NULL,                   NULL,                        NULL,               0},
-    {ITT_SETMENU, "NEXT PAGE >",          "CKTLE.OFZ CNHFYBWF `",      &Bindings7Menu,     0},                      // Cледующая страница >
-    {ITT_SETMENU, "< PREV PAGE",          "^ GHTLSLEOFZ CNHFYBWF",     &Bindings5Menu,     0},                      // < Предыдущая страница
+    {ITT_SETMENU, "NEXT PAGE >",          "CKTLE.OFZ CNHFYBWF `",      &Bindings7Menu,     0},                       // Cледующая страница >
+    {ITT_SETMENU, "< PREV PAGE",          "^ GHTLSLEOFZ CNHFYBWF",     &Bindings5Menu,     0},                       // < Предыдущая страница
     {ITT_EMPTY,   NULL,                   NULL,                        NULL,               0}
 };
 
@@ -6480,7 +6480,8 @@ boolean MN_Responder(event_t * event)
            CurrentMenu == &Bindings4Menu ||
            CurrentMenu == &Bindings5Menu ||
            CurrentMenu == &Bindings6Menu ||
-           CurrentMenu == &Bindings7Menu)
+           CurrentMenu == &Bindings7Menu ||
+           CurrentMenu == &Bindings8Menu)
         {
             BK_ClearBinds(CurrentMenu->items[CurrentItPos].option);
             RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
