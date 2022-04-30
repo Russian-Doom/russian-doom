@@ -111,9 +111,5 @@ extern char **crstr;
 
 #define cr_esc '~'
 
-extern byte  *tintmap;
-extern byte  *shademap;
-extern byte  *fuzzmap;
-
 int V_GetPaletteIndex(byte *palette, int r, int g, int b);
 byte V_Colorize (byte *playpal, Translation_CR_t cr, byte source, boolean keepgray109);

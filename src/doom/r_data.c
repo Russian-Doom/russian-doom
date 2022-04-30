@@ -1074,11 +1074,6 @@ static void R_InitColormaps (void)
 // -----------------------------------------------------------------------------
 // [crispy] initialize translucency filter map
 // based in parts on the implementation from boom202s/R_DATA.C:676-787
-//
-// [JN] Shortened to generate three maps:
-// 1) Common translucency for sprites (tintmap).
-// 2) Translucency for shadows casted by texts (shademap).
-// 3) Fuzz effect translucency, improved_full №4 (fuzzmap).
 // -----------------------------------------------------------------------------
 
 enum {
@@ -1092,9 +1087,6 @@ static void R_InitTransMaps (void)
     if (W_CheckMultipleLumps("PLAYPAL") == 1)
     {
         // [JN] We don't. Load pregenerated tables for faster startup.
-        tintmap = W_CacheLumpNum(W_CheckNumForName("TINTMAP"), PU_STATIC);
-        shademap = W_CacheLumpNum(W_CheckNumForName("TRNSTB60"), PU_STATIC);
-        fuzzmap = W_CacheLumpNum(W_CheckNumForName("FUZZMAP"), PU_STATIC);
         transtable90 = W_CacheLumpNum(W_CheckNumForName("TRNSTB90"), PU_STATIC);
         transtable80 = W_CacheLumpNum(W_CheckNumForName("TRNSTB80"), PU_STATIC);
         transtable70 = W_CacheLumpNum(W_CheckNumForName("TRNSTB70"), PU_STATIC);
@@ -1111,14 +1103,7 @@ static void R_InitTransMaps (void)
 
         // Compose a default transparent filter map based on PLAYPAL.
         unsigned char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
-        const int tint_filter_pct = 85;     // [JN] Common translucency
-        const int shade_filter_pct = 60;    // [JN] Text shadows
-        const int fuzz_filter_pct = 25;     // [JN] Translucent fuzz effect
 
-        tintmap = Z_Malloc(256*256, PU_STATIC, 0);
-        shademap = Z_Malloc(256*256, PU_STATIC, 0);
-        fuzzmap = Z_Malloc(256*256, PU_STATIC, 0);
-        // [JN] Fading effect for messages:
         transtable90 = Z_Malloc(256*256, PU_STATIC, 0);
         transtable80 = Z_Malloc(256*256, PU_STATIC, 0);
         transtable70 = Z_Malloc(256*256, PU_STATIC, 0);
@@ -1131,9 +1116,6 @@ static void R_InitTransMaps (void)
 
         {
             byte *fg, *bg, blend[3];
-            byte *tp1 = tintmap;
-            byte *tp2 = shademap;
-            byte *tp3 = fuzzmap;
             byte *tp90 = transtable90;
             byte *tp80 = transtable80;
             byte *tp70 = transtable70;
@@ -1154,9 +1136,6 @@ static void R_InitTransMaps (void)
                     // [crispy] shortcut: identical foreground and background
                     if (i == j)
                     {
-                        *tp1++ = i;
-                        *tp2++ = i;
-                        *tp3++ = i;
                         *tp90++ = i; *tp80++ = i; *tp70++ = i;
                         *tp60++ = i; *tp50++ = i; *tp40++ = i;
                         *tp30++ = i; *tp20++ = i; *tp10++ = i;
@@ -1165,21 +1144,6 @@ static void R_InitTransMaps (void)
 
                     bg = playpal + 3*i;
                     fg = playpal + 3*j;
-
-                    blend[r] = (tint_filter_pct * fg[r] + (100 - tint_filter_pct) * bg[r]) / 100;
-                    blend[g] = (tint_filter_pct * fg[g] + (100 - tint_filter_pct) * bg[g]) / 100;
-                    blend[b] = (tint_filter_pct * fg[b] + (100 - tint_filter_pct) * bg[b]) / 100;
-                    *tp1++ = V_GetPaletteIndex(playpal, blend[r], blend[g], blend[b]);
-
-                    blend[r] = (shade_filter_pct * fg[r] + (100 - shade_filter_pct) * bg[r]) / 100;
-                    blend[g] = (shade_filter_pct * fg[g] + (100 - shade_filter_pct) * bg[g]) / 100;
-                    blend[b] = (shade_filter_pct * fg[b] + (100 - shade_filter_pct) * bg[b]) / 100;
-                    *tp2++ = V_GetPaletteIndex(playpal, blend[r], blend[g], blend[b]);
-
-                    blend[r] = (fuzz_filter_pct * fg[r] + (100 - fuzz_filter_pct) * bg[r]) / 100;
-                    blend[g] = (fuzz_filter_pct * fg[g] + (100 - fuzz_filter_pct) * bg[g]) / 100;
-                    blend[b] = (fuzz_filter_pct * fg[b] + (100 - fuzz_filter_pct) * bg[b]) / 100;
-                    *tp3++ = V_GetPaletteIndex(playpal, blend[r], blend[g], blend[b]);
 
                     blend[r] = (90 * fg[r] + (100 - 90) * bg[r]) / 100;
                     blend[g] = (90 * fg[g] + (100 - 90) * bg[g]) / 100;
