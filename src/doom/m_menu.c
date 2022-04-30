@@ -1009,8 +1009,8 @@ static MenuItem_t Bindings2Items[] = {
     {ITT_EFUNC,   "Next weapon",     "cktle.ott jhe;bt",  BK_StartBindingKey, bk_weapon_next}, // Следующее оружие
     {ITT_EMPTY,   NULL,              NULL,                NULL,               0},
     {ITT_EMPTY,   NULL,              NULL,                NULL,               0},
-    {ITT_SETMENU, NULL,              NULL,                &Bindings3Menu,     0},               // Далее >
-    {ITT_SETMENU, NULL,              NULL,                &Bindings1Menu,     0},               // < Назад
+    {ITT_SETMENU, NULL,              NULL,                &Bindings3Menu,     0},              // Далее >
+    {ITT_SETMENU, NULL,              NULL,                &Bindings1Menu,     0},              // < Назад
     {ITT_EMPTY,   NULL,              NULL,                NULL,               0}
 };
 
@@ -1038,7 +1038,7 @@ static MenuItem_t Bindings3Items[] = {
     {ITT_EFUNC,   "Quick save",         ",scnhjt cj[hfytybt",  BK_StartBindingKey, bk_qsave},       // Быстрое сохранение
     {ITT_EFUNC,   "End game",           "pfrjyxbnm buhe",      BK_StartBindingKey, bk_end_game},    // Закончить игру
     {ITT_EFUNC,   "Quick load",         ",scnhfz pfuheprf",    BK_StartBindingKey, bk_qload},       // Быстрая загрузка
-    {ITT_EFUNC,   "Quit game",          "da[jl",               BK_StartBindingKey, bk_quit},        // Выход
+    {ITT_EFUNC,   "Quit game",          "ds[jl",               BK_StartBindingKey, bk_quit},        // Выход
     {ITT_EFUNC,   "Change gamma level", "ehjdtym ufvvs",       BK_StartBindingKey, bk_gamma},       // Уровень гаммы
     {ITT_EFUNC,   "Go to next level",   "cktle.obq ehjdtym",   BK_StartBindingKey, bk_nextlevel},   // Следующий уровень
     {ITT_EFUNC,   "Restart level/demo", "gthtpfgecr ehjdyz",   BK_StartBindingKey, bk_reloadlevel}, // Перезапуск уровня
@@ -7548,7 +7548,8 @@ boolean M_Responder (event_t* ev)
            CurrentMenu == &Bindings2Menu ||
            CurrentMenu == &Bindings3Menu ||
            CurrentMenu == &Bindings4Menu ||
-           CurrentMenu == &Bindings5Menu)
+           CurrentMenu == &Bindings5Menu ||
+           CurrentMenu == &Bindings6Menu)
         {
             BK_ClearBinds(CurrentMenu->items[CurrentItPos].option);
             S_StartSound(NULL,sfx_stnmov);
