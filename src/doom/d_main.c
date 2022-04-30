@@ -2692,6 +2692,8 @@ void D_DoomMain (void)
     int     p;
     char    file[256];
     char    demolumpname[9];
+    unsigned int starttime = SDL_GetTicks();
+    unsigned int endtime;
 
 #ifdef _WIN32
     // [JN] Get system preffed language...
@@ -3420,6 +3422,10 @@ void D_DoomMain (void)
             D_StartTitle ();    // start up intro loop
     }
 
+    endtime = SDL_GetTicks() - starttime;
+    DEH_printf(english_language ? "Startup process took %d ms.\n" :
+                                  "Процесс запуска занял %d мс.\n", endtime);
+    
     // [JN] Show the game we are playing
     DEH_printf(english_language ? "Starting game: " : "Запуск игры: ");
     DEH_printf("\"");

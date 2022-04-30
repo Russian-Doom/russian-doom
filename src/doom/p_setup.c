@@ -2080,8 +2080,8 @@ static void PadRejectArray (byte *array, unsigned int len)
     if (len > sizeof(rejectpad))
     {
         fprintf(stderr, english_language ?
-                "PadRejectArray: REJECT lump too short to pad! (%i > %i)\n" :
-                "PadRejectArray: блок REJECT слишком мал для заполнения! (%i > %i)\n",
+                "PadRejectArray: REJECT lump too short to pad! (%i > %i), " :
+                "PadRejectArray: блок REJECT слишком мал для заполнения! (%i > %i), ",
                 len, (int) sizeof(rejectpad));
 
         // Pad remaining space with 0 (or 0xff, if specified on command line).
@@ -2181,7 +2181,7 @@ static mapformat_t P_CheckMapFormat (int lumpnum)
     {
         fprintf(stderr, "BSP");
     }
-    fprintf(stderr, ")\n");
+    fprintf(stderr, "), ");
 
     if (nodes)
     {
@@ -2202,6 +2202,8 @@ void P_SetupLevel (int episode, int map, int playermask, skill_t skill)
     int		lumpnum;
     mapformat_t	crispy_mapformat;
     boolean crispy_validblockmap;
+    unsigned int starttime = SDL_GetTicks();
+    unsigned int endtime;
 
     totalkills = totalitems = totalsecret = wminfo.maxfrags = 0;
     wminfo.partime = 180;
@@ -2356,6 +2358,10 @@ void P_SetupLevel (int episode, int map, int playermask, skill_t skill)
 
     // [JN] Set level name.
     P_LevelNameInit();
+
+    endtime = SDL_GetTicks() - starttime;
+    DEH_printf(english_language ? "loaded in %d ms.\n" :
+                                  "загружен за %d мс.\n", endtime);
 }
 
 // -----------------------------------------------------------------------------

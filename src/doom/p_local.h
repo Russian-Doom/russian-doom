@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <SDL.h>
 #include "r_local.h"
 
 
