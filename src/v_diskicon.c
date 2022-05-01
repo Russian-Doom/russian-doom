@@ -41,12 +41,6 @@ static int loading_disk_yoffs = 0;
 // Number of bytes read since the last call to V_DrawDiskIcon().
 static size_t recent_bytes_read = 0;
 
-// [JN] Initially false, will be allowed only in Doom while D_DoomLoop().
-boolean disk_allowed = false;
-
-// [JN] Was disk icon drawn (true) or not (false).
-boolean disk_drawn;
-
 // [JN] Which icon to use, diskette or cdrom.
 char *disk_lump_name;
 
@@ -66,11 +60,10 @@ void V_BeginRead(size_t nbytes)
 
 void V_DrawDiskIcon(void)
 {
-    if (recent_bytes_read > diskicon_threshold && disk_drawn == false)
+    if (recent_bytes_read > diskicon_threshold)
     {
         V_DrawPatch(loading_disk_xoffs, loading_disk_yoffs, 
                     W_CacheLumpName(disk_lump_name, PU_CACHE), NULL);
-        disk_drawn = true;
     }
 
     recent_bytes_read = 0;

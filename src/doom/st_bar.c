@@ -1798,9 +1798,6 @@ void ST_Drawer (void)
     {
         ST_DrawFullScreenBar();
     }
-    
-    // [JN] Draw diskette icon on top of everything.
-    disk_drawn = false;
 }
 
 // -----------------------------------------------------------------------------

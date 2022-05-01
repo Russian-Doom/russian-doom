@@ -1047,10 +1047,6 @@ void D_DoomLoop (void)
     if (demorecording)
     G_BeginRecording ();
 
-    // [JN] Allow to use disk icon drawing functions,
-    // but it's is not used in Jaguar Doom.
-    disk_allowed = gamemission == jaguar ? false : true;
-
     main_loop_started = true;
 
     I_SetWindowTitle(english_language ? gamedescription_eng : gamedescription_rus);

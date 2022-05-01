@@ -997,7 +997,7 @@ void I_FinishUpdate (void)
 	}
 
     // Draw disk icon before blit, if necessary.
-    if (show_diskicon && disk_allowed)
+    if (show_diskicon)
     {
         V_DrawDiskIcon();
     }

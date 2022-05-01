@@ -29,6 +29,3 @@
 extern void V_EnableLoadingDisk(int xoffs, int yoffs);
 extern void V_BeginRead(size_t nbytes);
 extern void V_DrawDiskIcon(void);
-
-extern boolean disk_allowed;
-extern boolean disk_drawn;
