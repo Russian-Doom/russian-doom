@@ -29,7 +29,7 @@
 #include "doomstat.h"
 #include "d_main.h"
 #include "v_video.h"
-#include "st_stuff.h"
+#include "st_bar.h"
 #include "wi_stuff.h"
 #include "rd_text.h"
 #include "jn.h"

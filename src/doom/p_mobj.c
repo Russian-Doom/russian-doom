@@ -24,7 +24,7 @@
 #include "z_zone.h"
 #include "m_random.h"
 #include "p_local.h"
-#include "st_stuff.h"
+#include "st_bar.h"
 #include "s_sound.h"
 #include "doomstat.h"
 #include "f_finale.h"

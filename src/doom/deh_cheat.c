@@ -27,7 +27,7 @@
 #include "deh_io.h"
 #include "deh_main.h"
 #include "am_map.h"
-#include "st_stuff.h"
+#include "st_bar.h"
 
 typedef struct 
 {

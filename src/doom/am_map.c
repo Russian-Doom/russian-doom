@@ -24,7 +24,7 @@
 #include "deh_main.h"
 #include "z_zone.h"
 #include "doomdef.h"
-#include "st_stuff.h"
+#include "st_bar.h"
 #include "p_local.h"
 #include "w_wad.h"
 #include "m_cheat.h"
@@ -698,14 +698,6 @@ void AM_Stop (void)
     automapactive = false;
     ST_Responder(&st_notify);
     stopped = true;
-
-    // [JN] Press Beta: immediately update all widgets and background.
-    // Needed for correct redwaring of arms/artifacts section.
-    if (gamemode == pressbeta)
-    {
-        ST_refreshBackground();
-        ST_drawWidgets(true);
-    }
 }
 
 // -----------------------------------------------------------------------------

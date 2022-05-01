@@ -13,11 +13,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// DESCRIPTION:
-//	Status bar code.
-//	Does the face/direction indicator animatin.
-//	Does palette indicators as well (red pain/berserk, bright pickup)
-//
 
 
 #pragma once
@@ -28,71 +23,22 @@
 #include "v_patch.h"
 
 
-// Size of statusbar.
-// Now sensitive for scaling.
+// Sizes of statusbar.
 #define ST_HEIGHT       32
 #define ST_Y            (ORIGHEIGHT - ST_HEIGHT)
-
-// [JN] Jaguar status bar is 40 px tall
 #define ST_HEIGHT_JAG   40
 #define ST_Y_JAG        (ORIGHEIGHT - ST_HEIGHT_JAG)
 
 // [JN] Variable status bar height between common Doom and Jaguar Doom.
 extern int st_height;
 
+extern int st_palette;
+
 // [crispy] Demo Timer widget
 extern void ST_DrawDemoTimer (const int time);
 extern int defdemotics, deftotaldemotics;
 
-//
-// STATUS BAR
-//
-
-// Called by main loop.
-boolean ST_Responder (event_t* ev);
-
-// Called by main loop.
-void ST_Ticker (void);
-
-// Called by main loop.
-void ST_Drawer (boolean fullscreen, boolean refresh);
-void ST_WidgetsDrawer (void);
-void ST_MapNameDrawer (void);
-
-// Called when the console player is spawned on each level.
-void ST_Start (void);
-
-// Called by startup code.
-void ST_Init (void);
-
-// [JN] Called in options menu
-void ST_refreshBackground (void);
-void ST_drawWidgets (boolean refresh);
-void ST_doRefresh (void);
-void ST_createWidgets (void);
-
-
-// States for status bar code.
-typedef enum
-{
-    AutomapState,
-    FirstPersonState
-    
-} st_stateenum_t;
-
-
-// States for the chat code.
-typedef enum
-{
-    StartChatState,
-    WaitDestState,
-    GetChatState
-    
-} st_chatstateenum_t;
-
-
-
-extern byte *st_backing_screen;
+// Cheat codes
 extern cheatseq_t cheat_mus;
 extern cheatseq_t cheat_god;
 extern cheatseq_t cheat_ammo;
@@ -103,7 +49,6 @@ extern cheatseq_t cheat_powerup[7];
 extern cheatseq_t cheat_choppers;
 extern cheatseq_t cheat_clev;
 extern cheatseq_t cheat_mypos;
-extern int st_palette;
 
 // [JN] Colored status bar widgets
 extern byte *stbar_color_high_set;
@@ -123,3 +68,12 @@ extern void Crosshair_DefineOpacity (void);
 extern void Crosshair_DefineDrawingFunc (void);
 extern void Crosshair_Colorize_inMenu (void);
 extern void Crosshair_Draw (void);
+
+// Main functions
+boolean ST_Responder (event_t* ev);
+void ST_Ticker (void);
+void ST_Drawer (void);
+void ST_WidgetsDrawer (void);
+void ST_MapNameDrawer (void);
+void ST_Start (void);
+void ST_Init (void);

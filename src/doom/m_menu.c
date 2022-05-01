@@ -44,7 +44,7 @@
 #include "s_sound.h"
 #include "doomstat.h"
 #include "m_menu.h"
-#include "st_stuff.h"
+#include "st_bar.h"
 #include "v_trans.h"
 #include "am_map.h"         // [JN] AM_initColors();
 #include "ct_chat.h"
@@ -1941,13 +1941,6 @@ static void M_RD_Change_Smoothing()
 
     // Reinitialize graphics
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
-
-    // Update background of classic HUD and player face 
-    if (gamestate == GS_LEVEL)
-    {
-        ST_refreshBackground();
-        ST_drawWidgets(true);
-    }
 }
 
 static void M_RD_Change_PorchFlashing()
@@ -2727,12 +2720,6 @@ static void M_RD_Change_AutomapRotate()
 static void M_RD_Change_AutomapOverlay()
 {
     automap_overlay ^= 1;
-
-    // Refresh status bar
-    if (gamestate == GS_LEVEL)
-    {
-        ST_doRefresh();
-    }
 }
 
 static void M_RD_Change_AutomapOverlayBG(Direction_t direction)
@@ -4854,13 +4841,6 @@ static void M_RD_Change_NegativeHealth()
 static void M_RD_Change_SBarColored(Direction_t direction)
 {
     RD_Menu_SpinInt(&sbar_colored, 0, 2, direction);
-    
-    // Update background of classic HUD and player face 
-    if (gamestate == GS_LEVEL)
-    {
-        ST_refreshBackground();
-        ST_drawWidgets(true);
-    }
 }
 
 void M_RD_Define_SBarColorValue(byte** sbar_color_set, int color)
@@ -5168,12 +5148,6 @@ static void M_RD_Change_DemoTimerDir()
 static void M_RD_Change_DemoBar()
 {
     demobar ^= 1;
-
-    // Refresh status bar
-    if (gamestate == GS_LEVEL)
-    {
-        ST_doRefresh();
-    }
 }
 
 static void M_RD_Change_NoInternalDemos()
@@ -6003,13 +5977,6 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     // Update screen size and fuzz effect
     R_SetViewSize (screenblocks, detailLevel);
 
-    // Update background of classic HUD and player face 
-    if (gamestate == GS_LEVEL)
-    {
-        ST_refreshBackground();
-        ST_drawWidgets(true);
-    }
-
     // Update status bar / border background.
     inhelpscreens = true;
 
@@ -6199,13 +6166,6 @@ static void M_RD_BackToDefaults_Original(int choice)
     // Update screen size and fuzz effect
     R_SetViewSize (screenblocks, detailLevel);
 
-    // Update background of classic HUD and player face 
-    if (gamestate == GS_LEVEL)
-    {
-        ST_refreshBackground();
-        ST_drawWidgets(true);
-    }
-
     // Update status bar / border background.
     inhelpscreens = true;
 
@@ -6226,7 +6186,6 @@ static void M_RD_BackToDefaults_Original(int choice)
 
 static void M_RD_ChangeLanguage(int choice)
 {
-    extern void ST_createWidgetsJaguar(void);
     extern void F_CastDrawer(void);
     extern void F_CastDrawerJaguar(void);
     extern void F_StartFinale(void);
@@ -6256,14 +6215,6 @@ static void M_RD_ChangeLanguage(int choice)
 
     if (gamestate == GS_LEVEL)
     {
-        // Update status bar
-        ST_doRefresh();
-        // Update ARMS/FRAGS widget
-        if (gamemission == jaguar)
-        ST_createWidgetsJaguar();
-        else
-        ST_createWidgets(); 
-        
         // Re-set level name.
         P_LevelNameInit();
     }

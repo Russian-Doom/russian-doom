@@ -1076,17 +1076,10 @@ void P_DamageMobj (mobj_t *target, mobj_t *inflictor, mobj_t *source, int damage
         }
 
         player->health -= damage;             // mirror mobj health here for Dave
-        player->health_neg = player->health;  // [JN] Set negative health value
 
         if (player->health < 0)
         {
             player->health = 0;
-        }
-
-        // [crispy] & [JN] Negative player health
-        if (player->health_neg < -99)
-        {
-            player->health_neg = -99;
         }
 
         player->attacker = source;

@@ -29,7 +29,7 @@
 #include "v_trans.h"
 #include "doomstat.h"
 #include "m_random.h"
-#include "st_stuff.h"
+#include "st_bar.h"
 #include "jn.h"
 
 
