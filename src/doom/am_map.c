@@ -907,8 +907,6 @@ boolean AM_Responder (event_t *ev)
         }
         else if (BK_isKeyDown(ev, bk_map_overlay))
         {
-            // [crispy] force redraw status bar
-            inhelpscreens = true;
             automap_overlay = !automap_overlay;
             P_SetMessage(plr, DEH_String(automap_overlay ?
                          amstr_overlayon : amstr_overlayoff), msg_system, false);

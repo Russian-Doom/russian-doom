@@ -561,7 +561,7 @@ void R_DrawFuzzColumnImproved (void)
         *dest = colormaps[6*256+dest[screenwidth*fuzzoffset[fuzzpos]]]; 
 
         if (++fuzzpos == FUZZTABLE) 
-        fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
+        fuzzpos = paused || menuactive ? 0 : Crispy_Random()%49;
 
         dest += screenwidth;
     } while (count--); 
@@ -614,7 +614,7 @@ void R_DrawFuzzColumnLowImproved (void)
         *dest4 = *dest2 = colormaps[6*256+dest2[screenwidth*fuzzoffset[fuzzpos]]]; 
 
         if (++fuzzpos == FUZZTABLE) 
-        fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
+        fuzzpos = paused || menuactive ? 0 : Crispy_Random()%49;
 
         dest += screenwidth << hires;
         dest2 += screenwidth << hires;
@@ -672,7 +672,7 @@ void R_DrawFuzzColumnImprovedBW (void)
         *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256+dest[screenwidth*fuzzoffset[fuzzpos]]]; 
 
         if (++fuzzpos == FUZZTABLE) 
-        fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
+        fuzzpos = paused || menuactive ? 0 : Crispy_Random()%49;
 
         dest += screenwidth;
     } while (count--); 
@@ -732,7 +732,7 @@ void R_DrawFuzzColumnLowImprovedBW (void)
 
         if (++fuzzpos == FUZZTABLE)
         {
-            fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
+            fuzzpos = paused || menuactive ? 0 : Crispy_Random()%49;
         }
 
         dest += screenwidth << hires;

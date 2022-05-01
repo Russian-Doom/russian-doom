@@ -60,7 +60,6 @@
 
 void (*messageRoutine)(boolean);
 
-boolean inhelpscreens;
 static int InfoType = 0;
 
 extern int alwaysRun;
@@ -1707,10 +1706,6 @@ static void M_RD_Draw_Rendering(void)
 {
     static char num[4];
 
-    // [JN] Jaguar Doom: clear remainings of bottom strings from the status bar.
-    if (gamemission == jaguar)
-        inhelpscreens = true;
-
     if (english_language)
     {
         // Widescreen rendering
@@ -1980,10 +1975,6 @@ static void M_RD_Draw_Display(void)
 {
     static char num[4];
 
-    // [JN] Jaguar Doom: clear remainings of bottom strings from the status bar.
-    if (gamemission == jaguar)
-        inhelpscreens = true;
-
     if (english_language)
     {
         // Graphics detail
@@ -2096,9 +2087,6 @@ static void M_RD_Change_HUD_Detail()
 
     // [JN] Update screen border.
     setsizeneeded = true;
-
-    // [JN] Refresh status bar.
-    inhelpscreens = true;
 }
 
 
@@ -2239,11 +2227,6 @@ static void M_RD_Change_BLUE_Color(Direction_t direction)
 
 static void M_RD_Draw_MessagesSettings(void)
 {
-    if (gamemission == jaguar)
-    {
-        inhelpscreens = true;
-    }
-
     if (english_language)
     {
         // Messages
@@ -3391,7 +3374,6 @@ static void M_RD_Change_Threshold(Direction_t direction)
 static void M_RD_Draw_Bindings()
 {
     // [JN] Erase the entire screen to a tiled background.
-    inhelpscreens = true;
     V_FillFlat ("FLOOR4_8");
 
     if (english_language)
@@ -3432,7 +3414,6 @@ static void M_RD_Draw_Bindings()
 static void DrawResetControlsMenu()
 {
     // [JN] Erase the entire screen to a tiled background.
-    inhelpscreens = true;
     V_FillFlat("FLOOR4_8");
 
     if (english_language)
@@ -3517,7 +3498,6 @@ static void DrawGamepadSelectMenu()
     static char name[30];
 
     // [JN] Erase the entire screen to a tiled background.
-    inhelpscreens = true;
     V_FillFlat ("FLOOR4_8");
 
     if(english_language)
@@ -3601,7 +3581,6 @@ static void DrawGamepadMenu_1()
     static char num[5];
 
     // [JN] Erase the entire screen to a tiled background.
-    inhelpscreens = true;
     V_FillFlat ("FLOOR4_8");
 
     RD_M_DrawTextSmallENG(currentController->name,
@@ -3816,7 +3795,6 @@ static void DrawGamepadMenu_2()
     static char num[5];
 
     // [JN] Erase the entire screen to a tiled background.
-    inhelpscreens = true;
     V_FillFlat("FLOOR4_8");
 
     RD_M_DrawTextSmallENG(currentController->name,
@@ -4035,7 +4013,6 @@ static void M_RD_Draw_Gameplay_1(void)
     // Jaguar: hide game background, don't draw lines over the HUD
     if (gamemission == jaguar)
     {
-        inhelpscreens = true;
         V_DrawPatchFullScreen(W_CacheLumpName(DEH_String("INTERPIC"), PU_CACHE), false);
     }
 
@@ -4153,7 +4130,6 @@ static void M_RD_Draw_Gameplay_2(void)
     // Jaguar: hide game background, don't draw lines over the HUD
     if (gamemission == jaguar)
     {
-        inhelpscreens = true;
         V_DrawPatchFullScreen(W_CacheLumpName(DEH_String("INTERPIC"), PU_CACHE), false);
     }
 
@@ -4391,7 +4367,6 @@ static void M_RD_Draw_Gameplay_3(void)
     // Jaguar: hide game background, don't draw lines over the HUD
     if (gamemission == jaguar)
     {
-        inhelpscreens = true;
         V_DrawPatchFullScreen(W_CacheLumpName(DEH_String("INTERPIC"), PU_CACHE), false);
     }
 
@@ -4533,7 +4508,6 @@ static void M_RD_Draw_Gameplay_4(void)
     // Jaguar: hide game background, don't draw lines over the HUD
     if (gamemission == jaguar)
     {
-        inhelpscreens = true;
         V_DrawPatchFullScreen(W_CacheLumpName(DEH_String("INTERPIC"), PU_CACHE), false);
     }
 
@@ -4658,7 +4632,6 @@ static void M_RD_Draw_Gameplay_5(void)
     // Jaguar: hide game background, don't draw lines over the HUD
     if (gamemission == jaguar)
     {
-        inhelpscreens = true;
         V_DrawPatchFullScreen(W_CacheLumpName(DEH_String("INTERPIC"), PU_CACHE), false);
     }
 
@@ -5175,7 +5148,6 @@ static void M_RD_Draw_Level_1(void)
     static char num[4];
 
     // [JN] Erase the entire screen to a tiled background.
-    inhelpscreens = true;
     V_FillFlat ("FLOOR4_8");
 
     if (english_language)
@@ -5414,7 +5386,6 @@ static void M_RD_Draw_Level_2(void)
     static char num[4];
 
     // [JN] Erase the entire screen to a tiled background.
-    inhelpscreens = true;
     V_FillFlat ("FLOOR4_8");
 
     if (english_language)
@@ -5760,10 +5731,6 @@ static void M_RD_Change_Selective_Respawn()
 
 static void M_RD_Draw_Reset(void)
 {   
-    // [JN] Jaguar Doom: clear remainings of bottom strings from the status bar.
-    if (gamemission == jaguar)
-        inhelpscreens = true;
-
     if (english_language)
     {
         RD_M_DrawTextSmallCenteredENG("GRAPHICAL, AUDIBLE AND GAMEPLAY SETTINGS", 65, CR_NONE);
@@ -5977,9 +5944,6 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     // Update screen size and fuzz effect
     R_SetViewSize (screenblocks, detailLevel);
 
-    // Update status bar / border background.
-    inhelpscreens = true;
-
     // Reset Automap color scheme
     AM_initColors();
 
@@ -6165,9 +6129,6 @@ static void M_RD_BackToDefaults_Original(int choice)
 
     // Update screen size and fuzz effect
     R_SetViewSize (screenblocks, detailLevel);
-
-    // Update status bar / border background.
-    inhelpscreens = true;
 
     // Reset Automap color scheme
     AM_initColors();
@@ -6564,8 +6525,6 @@ static void M_DrawReadThis1()
     char *lumpname = "CREDIT";
     int skullx = 330, skully = 175;
 
-    inhelpscreens = true;
-
     // [JN] Различные экраны помощи и скорректированное положение M_SKULL для разных версий игры
 
     switch (gameversion)
@@ -6664,8 +6623,6 @@ static void M_DrawReadThis1()
 //
 static void M_DrawReadThis2()
 {
-    inhelpscreens = true;
-
     V_DrawPatchFullScreen(W_CacheLumpName(DEH_String
                (english_language ? "HELP1" : "HELP1R"), PU_CACHE), false);
 
@@ -6679,8 +6636,6 @@ static void M_DrawReadThis2()
 //
 static void M_DrawMainMenu(void)
 {
-    inhelpscreens = true;
-
     if (english_language)
     {
         // [JN] Always draw original "M_DOOM" in English language
@@ -6703,8 +6658,6 @@ static void M_DrawMainMenu(void)
 //
 static void M_DrawNewGame()
 {
-    inhelpscreens = true;
-
     if (english_language)
     {
         V_DrawShadowedPatchDoom(96 + wide_delta, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
@@ -6745,8 +6698,6 @@ static int epi;
 
 static void M_DrawEpisode()
 {
-    inhelpscreens = true;
-
     if (english_language)
     {
         V_DrawShadowedPatchDoom(96 + wide_delta, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
@@ -7546,8 +7497,6 @@ void M_Drawer (void)
     unsigned int    i;
     char            string[80];
     int             start;
-
-    inhelpscreens = false;
 
     // Horiz. & Vertically center string and print it.
     // [JN] Do not invoke if we are binding key.
