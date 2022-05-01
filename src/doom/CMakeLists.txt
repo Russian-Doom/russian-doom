@@ -66,7 +66,7 @@ if(COMPILE_DOOM)
                 rd_lang.c       rd_lang.h
                 s_sound.c       s_sound.h
                 sounds.c        sounds.h
-                st_stuff.c      st_stuff.h
+                st_bar.c        st_bar.h
                 wi_stuff.c      wi_stuff.h
     )
     set_target_properties(doom PROPERTIES
