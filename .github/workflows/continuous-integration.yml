@@ -53,7 +53,7 @@ jobs:
         uses: msys2/setup-msys2@v2
         with:
           msystem: ${{ matrix.compiler.msys_msystem_prefix }}${{ matrix.arch.bits }}
-          update: false
+          update: true
           install: >-
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-pkgconf
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-${{ matrix.compiler.name }}
@@ -78,7 +78,7 @@ jobs:
         id: configure
         run: |
           sha_short=$(echo ${{ github.sha }} | cut -c1-7)
-          cmake -G "${{ matrix.os.cmake_generator }}" -D BUILD_VERSION_OVERWRITE="$sha_short" -D RELEASE_STRIP=OFF -D CMAKE_BUILD_TYPE=Release -S . -B build
+          cmake -G "${{ matrix.os.cmake_generator }}" -D BUILD_VERSION_OVERWRITE="$sha_short" -D CMAKE_BUILD_TYPE=RelWithDebInfo -S . -B build
           echo "::set-output name=sha_short::$sha_short"
 
       - name: Build

@@ -28,8 +28,6 @@ You can enable and disable the compilation of modules by changing cmake options:
 `COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE`, `COMPILE_SETUP`
 to `ON` or `OFF`.
 
-If you want Release build with debug symbols, set cmake options`RELEASE_STRIP` to `OFF`.
-
 To build the project use the following command:
 ```
 cmake --build build
@@ -100,8 +98,6 @@ GUS Emulation and Timidity **won't work at all**.
 
 If you want to use a portable version like on Windows, set the `BUILD_PORTABLE` cmake option to `ON`.
 Portable version searches and stores internal resources, config files, and savegames in install directory among executables.
-
-If you want Release build with debug symbols, set cmake options`RELEASE_STRIP` to `OFF`.
 
 To build the project use the following command:
 ```
