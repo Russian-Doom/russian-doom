@@ -19,8 +19,6 @@ Option(COMPILE_STRIFE "Compile Strife module" OFF)
 # [Dasperal] Disable Setup by default. Usage of Setup resets many of the settings available in the game menu, so we don't distribute it
 Option(COMPILE_SETUP "Compile Setup module" OFF)
 
-Option(RELEASE_STRIP "Strip debug symbols in Release config" ON)
-
 # [Dasperal] BUILD_HAS_SDL_MIXER_PATCH should be ON only if used SDL_Mixer runtime library is new enough and has https://github.com/libsdl-org/SDL_mixer/commit/1c0092787398097360f7da745c7644fd32697f3b patch
 if(WIN32)
     set(BUILD_HAS_SDL_MIXER_PATCH ON) # [Dasperal] Bundled dlls for windows already meat requirement
@@ -53,6 +51,7 @@ set(RD_C_STANDARD 99)
 add_compile_options("-Wall" "-Wdeclaration-after-statement"
                     "-Wredundant-decls" "-Wno-unknown-pragmas" "-Wno-unused-result")
 string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
+string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
 
 find_package(SDL2 2.0.1 REQUIRED)
 find_package(SDL2_mixer 2.0.0 REQUIRED)
