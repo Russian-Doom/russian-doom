@@ -384,16 +384,13 @@ void I_ShutdownGraphics(void)
         // [JN] Get screen width and height.
         SDL_GetRendererOutputSize(renderer, &w, &h);
 
-        SDL_QuitSubSystem(SDL_INIT_VIDEO);
-
         // [JN] Place mouse cursor to the center of the screen.
-        // Not safe for Mac retina displays, may cause a segfault.
-        #ifndef APPLE
-		if (fullscreen)
-		{
+        if (fullscreen)
+        {
             SDL_WarpMouseGlobal(w / 2, h / 2);
         }
-        #endif
+
+        SDL_QuitSubSystem(SDL_INIT_VIDEO);
 
         initialized = false;
     }
