@@ -13,11 +13,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// DESCRIPTION:
-//	Status bar code.
-//	Does the face/direction indicator animatin.
-//	Does palette indicators as well (red pain/berserk, bright pickup)
-//
 
 
 #include "i_swap.h" // [crispy] SHORT()
@@ -1430,11 +1425,41 @@ static void ST_DrawValues (boolean wide)
     if (screenblocks == 11 || screenblocks == 12
     ||  screenblocks == 14 || screenblocks == 15)
     {
-        V_DrawPatch(left_delta + 2, 191, stchammo, NULL);
+        if (weaponinfo[plyr->readyweapon].ammo != am_noammo)
+        {
+            V_DrawPatch(left_delta + 2, 191, stchammo, NULL);
+        }
         V_DrawPatch(left_delta + 52, 173, stchhlth, NULL);
         V_DrawPatch(left_delta + 108, 191, stcharms, NULL);
         V_DrawPatch(right_delta + 52, 173, stcharam, NULL);
         V_DrawPatch(right_delta + 292, 173, stysslsh, NULL);
+    }
+
+    // [crispy] draw berserk pack instead of no ammo if appropriate
+    if (screenblocks > 10)
+    {
+        if (plyr->readyweapon == wp_fist && plyr->powers[pw_strength])
+        {
+            static int lump = -1;
+            patch_t *patch;
+
+            if (lump == -1)
+            {
+                lump = W_CheckNumForName(DEH_String("PSTRA0"));
+
+                if (lump == -1)
+                {
+                    lump = W_CheckNumForName(DEH_String("MEDIA0"));
+                }
+            }
+
+            patch = W_CacheLumpNum(lump, PU_CACHE);
+
+            // [crispy] (23,179) is the center of the Ammo widget
+            V_DrawPatch(left_delta + 23 - SHORT(patch->width)/2 + SHORT(patch->leftoffset),
+                        179 - SHORT(patch->height)/2 + SHORT(patch->topoffset),
+                        patch, NULL);
+        }
     }
 
     // Ammo amount for current weapon
@@ -1863,23 +1888,23 @@ static void ST_LoadData (void)
             ++facenum;
         }
 
-        DEH_snprintf(namebuf, 9, "STFTR%d0", i);	// turn right
+        DEH_snprintf(namebuf, 9, "STFTR%d0", i);   // turn right
         faces[facenum] = W_CacheLumpName(DEH_String(namebuf), PU_STATIC);
         ++facenum;
 
-        DEH_snprintf(namebuf, 9, "STFTL%d0", i);	// turn left
+        DEH_snprintf(namebuf, 9, "STFTL%d0", i);   // turn left
         faces[facenum] = W_CacheLumpName(DEH_String(namebuf), PU_STATIC);
         ++facenum;
 
-        DEH_snprintf(namebuf, 9, "STFOUCH%d", i);	// ouch!
+        DEH_snprintf(namebuf, 9, "STFOUCH%d", i);  // ouch!
         faces[facenum] = W_CacheLumpName(DEH_String(namebuf), PU_STATIC);
         ++facenum;
 
-        DEH_snprintf(namebuf, 9, "STFEVL%d", i);	// evil grin ;)
+        DEH_snprintf(namebuf, 9, "STFEVL%d", i);   // evil grin ;)
         faces[facenum] = W_CacheLumpName(DEH_String(namebuf), PU_STATIC);
         ++facenum;
 
-        DEH_snprintf(namebuf, 9, "STFKILL%d", i);	// pissed off
+        DEH_snprintf(namebuf, 9, "STFKILL%d", i);  // pissed off
         faces[facenum] = W_CacheLumpName(DEH_String(namebuf), PU_STATIC);
         ++facenum;
     }
@@ -1914,19 +1939,19 @@ static void ST_LoadData (void)
                 faces[facenum++] = W_CacheLumpName(DEH_String(namebuf), PU_STATIC);
             }
 
-            M_snprintf(namebuf, 9, "STFTR%i0G", i);          // turn right
+            M_snprintf(namebuf, 9, "STFTR%i0G", i);  // turn right
             faces[facenum++] = W_CacheLumpName(DEH_String(namebuf), PU_STATIC);
 
-            M_snprintf(namebuf, 9, "STFTL%i0G", i);          // turn left
+            M_snprintf(namebuf, 9, "STFTL%i0G", i);  // turn left
             faces[facenum++] = W_CacheLumpName(DEH_String(namebuf), PU_STATIC);
 
-            M_snprintf(namebuf, 9, "STFOUC%iG", i);         // ouch!
+            M_snprintf(namebuf, 9, "STFOUC%iG", i);  // ouch!
             faces[facenum++] = W_CacheLumpName(DEH_String(namebuf), PU_STATIC);
 
-            M_snprintf(namebuf, 9, "STFEVL%iG", i);          // evil grin ;)
+            M_snprintf(namebuf, 9, "STFEVL%iG", i);  // evil grin ;)
             faces[facenum++] = W_CacheLumpName(DEH_String(namebuf), PU_STATIC);
 
-            M_snprintf(namebuf, 9, "STFKIL%iG", i);         // pissed off
+            M_snprintf(namebuf, 9, "STFKIL%iG", i);  // pissed off
             faces[facenum++] = W_CacheLumpName(DEH_String(namebuf), PU_STATIC);
         }
         
@@ -1942,7 +1967,7 @@ static void ST_LoadData (void)
     }
 
     // Key cards and Skulls
-    for (i = 0 ; i < NUMCARDS+3 ; i++)  //jff 2/23/98 show both keys too
+    for (i = 0 ; i < NUMCARDS+3 ; i++)  // [JN] jff 2/23/98 show both keys too
     {
         DEH_snprintf(namebuf, 9, "STKEYS%d", i);
         keys[i] = W_CacheLumpName(DEH_String(namebuf), PU_STATIC);
