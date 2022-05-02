@@ -994,7 +994,7 @@ void I_FinishUpdate (void)
 	}
 
     // Draw disk icon before blit, if necessary.
-    if (show_diskicon)
+    if (RD_GameType == gt_Doom && show_diskicon)
     {
         V_DrawDiskIcon();
     }
