@@ -1,5 +1,6 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
+// Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
 // Copyright(C) 2016-2022 Julian Nechaevsky
 //
@@ -15,7 +16,7 @@
 //
 
 
-#include "i_swap.h" // [crispy] SHORT()
+#include "i_swap.h"
 #include "z_zone.h"
 #include "m_misc.h"
 #include "w_wad.h"
@@ -85,10 +86,10 @@
 #define ST_RAMPAGEDELAY         (2*TICRATE)
 
 // Amount of damage for ouch face.
-#define ST_MUCHPAIN             20
+#define ST_MUCHPAIN 20
 
 // Dimensions given in characters.
-#define ST_MSGWIDTH         52
+#define ST_MSGWIDTH 52
 
 
 extern boolean sgl_loaded;
@@ -114,13 +115,12 @@ typedef void (*load_callback_t)(char *lumpname, patch_t **variable);
 
 static player_t *plyr;          // Main player in game.
 
-static int   lu_palette;        // Lump number for PLAYPAL.
-
 // [JN] Different status bar heights between original Doom and Jaguar Doom.
 int          st_height;
 static int   st_y;
 
 int          st_palette = 0;
+static int   lu_palette;        // Lump number for PLAYPAL.
 static int   st_randomnumber;   // A random number per tick.
 static int   st_facecount = 0;  // Count until face changes.
 static int   st_faceindex = 0;  // Current face index.
@@ -171,19 +171,8 @@ static patch_t *faces[ST_NUMFACES * 2];
 // [JN] jff 2/23/98 show both keys too
 static patch_t *keys[NUMCARDS+3];
 
-
-
-
-
-
-
-
-
-
-
-
-
-int st_keyorskull[3];  // [crispy] blinking key or skull in the status bar
+// [crispy] blinking key or skull in the status bar
+int st_keyorskull[3];
 
 
 // =============================================================================
