@@ -1372,6 +1372,11 @@ static void ST_DrawSmallNumberY (int val, int x, int y)
     int oldval = val;
     int xpos = x;
 
+    if (val < 0)
+    {
+        val = 0;
+    }
+
     if (val > 99)
     {
         V_DrawPatch(xpos - 4, y, FontSNumbersY[val / 100], NULL);
