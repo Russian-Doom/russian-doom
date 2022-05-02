@@ -1055,6 +1055,16 @@ void ST_Ticker (void)
     st_randomnumber = rand();
 
     ST_updateFaceWidget();
+
+    // [JN] Update blinking key or skull timer.
+    for (int i = 0 ; i < 3 ; i++)
+    {
+        if (plyr->tryopen[i])
+        {
+            plyr->tryopen[i]--;
+        }
+    }
+
     if (deathmatch)
     {
         ST_UpdateFragsCounter();
@@ -1523,6 +1533,22 @@ static void ST_DrawValues (boolean wide)
     // Armor
     ST_DrawBigNumber(plyr->armorpoints, 183 + right_delta, 171, ST_WidgetColor(hudcolor_armor));
     ST_DrawPercent(221 + right_delta, 171, ST_WidgetColor(hudcolor_armor));
+
+    // [crispy] blinking key or skull in the status bar
+    for (int i = 0, y = 0 ; i < 3 ; i++, y += 10)
+    {
+        if (plyr->tryopen[i])
+        {
+            if (!(plyr->tryopen[i] & (2 * KEYBLINKMASK - 1)))
+            {
+                S_StartSound(NULL, sfx_itemup);
+            }
+            if (plyr->tryopen[i] & KEYBLINKMASK)
+            {
+                V_DrawPatch(239 + right_delta, 171 + y, keys[i + st_keyorskull[i]] , NULL);
+            }
+        }
+    }
 
     // Keys
     if (plyr->cards[it_bluecard] && plyr->cards[it_blueskull])
