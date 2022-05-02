@@ -27,7 +27,7 @@
 #include "d_mode.h"     // [JN] Jaguar Doom: gamemission
 #include "w_wad.h"      // [JN] Jaguar Doom: W_CacheLumpName
 #include "doomstat.h"   // [JN] Jaguar Doom: screenblocks
-#include "st_stuff.h"   // [JN] Jaguar Doom: Status bar widgets
+#include "st_bar.h"   // [JN] Jaguar Doom: Status bar widgets
 #include "jn.h"         // [JN] Jaguar Doom: english_language
 
 
@@ -181,13 +181,6 @@ static int wipe_exitMelt (int width, int height, int ticks)
     Z_Free(y);
     Z_Free(wipe_scr_start);
     Z_Free(wipe_scr_end);
-    // [JN] Need to update classic HUD
-    if ((gamemission == jaguar || screen_wiping == 2)
-    && screenblocks <= 10 && gamestate == GS_LEVEL)
-    {
-        ST_refreshBackground();
-        ST_drawWidgets(true);
-    }
     return 0;
 }
 

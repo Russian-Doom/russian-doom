@@ -39,7 +39,7 @@
 #include "p_saveg.h"
 #include "d_main.h"
 #include "wi_stuff.h"
-#include "st_stuff.h"
+#include "st_bar.h"
 #include "am_map.h"
 #include "v_video.h"
 #include "w_wad.h"
@@ -1107,7 +1107,6 @@ void G_PlayerReborn (int player)
     p->usedown = p->attackdown = true;  // don't do anything immediately 
     p->playerstate = PST_LIVE;       
     p->health = deh_initial_health;     // Use dehacked value
-    p->health_neg = 0;                  // [JN] Reinitialize value
     p->readyweapon = p->pendingweapon = wp_pistol; 
     p->weaponowned[wp_fist] = true; 
     p->weaponowned[wp_pistol] = true; 

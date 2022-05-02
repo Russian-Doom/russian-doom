@@ -66,7 +66,7 @@
 #include "i_video.h"
 #include "g_game.h"
 #include "wi_stuff.h"
-#include "st_stuff.h"
+#include "st_bar.h"
 #include "am_map.h"
 #include "net_client.h"
 #include "net_dedicated.h"
@@ -580,8 +580,6 @@ extern boolean setsizeneeded;
 
 void D_Display (void)
 {
-    static boolean      inhelpscreensstate = false;
-    static boolean      fullscreen = false;
     static gamestate_t  oldgamestate = -1;
     static int          saved_gametic = -1;
     int                 nowtime;
@@ -590,7 +588,6 @@ void D_Display (void)
     int                 y;
     boolean             done;
     boolean             wipe;
-    boolean             redrawsbar;
 
     realframe = (!uncapped_fps || gametic > saved_gametic);
 
@@ -601,8 +598,6 @@ void D_Display (void)
 
     if (nodrawers)
     return; // for comparative timing / profiling
-
-    redrawsbar = false;
 
     // change the view size if needed
     if (setsizeneeded)
@@ -637,14 +632,7 @@ void D_Display (void)
             AM_Drawer ();
         }
 
-        if (wipe || (scaledviewheight != SCREENHEIGHT && fullscreen))
-        redrawsbar = true;
-
-        if (inhelpscreensstate && !inhelpscreens)
-        redrawsbar = true; // just put away the help screen
-
-        ST_Drawer (scaledviewheight == SCREENHEIGHT, redrawsbar );
-        fullscreen = scaledviewheight == SCREENHEIGHT;
+        ST_Drawer ();
         break;
 
         case GS_INTERMISSION:
@@ -681,14 +669,14 @@ void D_Display (void)
         {
             if (screenblocks > 10 && screenblocks < 17)
             {
-                ST_Drawer(0, 0);
+                ST_Drawer();
             }
         }
         else
         {
             if (screenblocks == 11 || screenblocks == 12 || screenblocks == 13)
             {
-                ST_Drawer(0, 0);
+                ST_Drawer();
             }
         }
     }
@@ -711,7 +699,6 @@ void D_Display (void)
         V_DrawMouseSpeedBox(testcontrols_mousespeed);
     }
 
-    inhelpscreensstate = inhelpscreens;
     oldgamestate = wipegamestate = gamestate;
 
     // [crispy] in automap overlay mode,
@@ -756,9 +743,6 @@ void D_Display (void)
         {
             I_VideoBuffer[y] = colormaps[menu_shading * 256 + I_VideoBuffer[y]];
         }
-    
-        // [crispy] force redraw of status bar and border
-        inhelpscreensstate = true;
     }
 
     // [JN] Draw pause pic. Don't draw while actime game menu and help screens.
@@ -1062,10 +1046,6 @@ void D_DoomLoop (void)
 
     if (demorecording)
     G_BeginRecording ();
-
-    // [JN] Allow to use disk icon drawing functions,
-    // but it's is not used in Jaguar Doom.
-    disk_allowed = gamemission == jaguar ? false : true;
 
     main_loop_started = true;
 

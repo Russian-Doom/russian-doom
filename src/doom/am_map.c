@@ -24,7 +24,7 @@
 #include "deh_main.h"
 #include "z_zone.h"
 #include "doomdef.h"
-#include "st_stuff.h"
+#include "st_bar.h"
 #include "p_local.h"
 #include "w_wad.h"
 #include "m_cheat.h"
@@ -698,14 +698,6 @@ void AM_Stop (void)
     automapactive = false;
     ST_Responder(&st_notify);
     stopped = true;
-
-    // [JN] Press Beta: immediately update all widgets and background.
-    // Needed for correct redwaring of arms/artifacts section.
-    if (gamemode == pressbeta)
-    {
-        ST_refreshBackground();
-        ST_drawWidgets(true);
-    }
 }
 
 // -----------------------------------------------------------------------------
@@ -915,8 +907,6 @@ boolean AM_Responder (event_t *ev)
         }
         else if (BK_isKeyDown(ev, bk_map_overlay))
         {
-            // [crispy] force redraw status bar
-            inhelpscreens = true;
             automap_overlay = !automap_overlay;
             P_SetMessage(plr, DEH_String(automap_overlay ?
                          amstr_overlayon : amstr_overlayoff), msg_system, false);
