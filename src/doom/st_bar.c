@@ -1482,7 +1482,9 @@ static void ST_DrawValues (boolean wide)
     // Health, negative health
     ST_DrawBigNumber(negative_health ? plyr->mo->health : plyr->health, 
                      52 + left_delta, 171, ST_WidgetColor(hudcolor_health));
-    ST_DrawPercent(90 + left_delta, 171, ST_WidgetColor(hudcolor_health));
+    ST_DrawPercent(90 + left_delta, 171, sbar_colored == 1 ? cr[CR_WHITE] :
+                                         sbar_colored == 2 ?
+                                         ST_WidgetColor(hudcolor_health) : NULL);
 
     // Frags or Arms
     if (deathmatch)
@@ -1532,7 +1534,9 @@ static void ST_DrawValues (boolean wide)
 
     // Armor
     ST_DrawBigNumber(plyr->armorpoints, 183 + right_delta, 171, ST_WidgetColor(hudcolor_armor));
-    ST_DrawPercent(221 + right_delta, 171, ST_WidgetColor(hudcolor_armor));
+    ST_DrawPercent(221 + right_delta, 171, sbar_colored == 1 ? cr[CR_WHITE] :
+                                           sbar_colored == 2 ?
+                                           ST_WidgetColor(hudcolor_armor) : NULL);
 
     // [crispy] blinking key or skull in the status bar
     for (int i = 0, y = 0 ; i < 3 ; i++, y += 10)
