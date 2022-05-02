@@ -94,6 +94,8 @@
 extern boolean sgl_loaded;
 extern boolean old_godface;  // [JN] If false, we can use an extra GOD faces.
 
+// [JN] Pointer to a function for using different status bars.
+void (*ST_DrawValuesFunc) (boolean wide);
 
 enum
 {
@@ -1432,6 +1434,7 @@ static void ST_DrawValues (boolean wide)
         right_delta = wide_delta;
     }
 
+    // Transparent signs
     if (screenblocks == 11 || screenblocks == 12
     ||  screenblocks == 14 || screenblocks == 15)
     {
@@ -1520,10 +1523,15 @@ static void ST_DrawValues (boolean wide)
         }
     }
 
+    // Player face background
+    if ((screenblocks == 11 || screenblocks == 14) && (!automapactive || automap_overlay))
+    {
+        V_DrawPatch(143 + wide_delta, 168, faceback, NULL);        
+    }
+
     // Player face
     if ((screenblocks <= 11 || screenblocks == 14) || (automapactive && !automap_overlay))
     {
-        V_DrawPatch(143 + wide_delta, 168, faceback, NULL);
         V_DrawPatch(143 + wide_delta, 168, faces[st_faceindex], NULL);
         // Amount of lifes
         if (gamemode == pressbeta)
@@ -1590,6 +1598,140 @@ static void ST_DrawValues (boolean wide)
 }
 
 // -----------------------------------------------------------------------------
+// ST_DrawValuesJaguar
+// [JN] Draw various digit values, faces and keys, Jaguar Doom version.
+// -----------------------------------------------------------------------------
+
+static void ST_DrawValuesJaguar (boolean wide)
+{
+    int left_delta;
+    int right_delta;
+    
+    if (wide)
+    {
+        left_delta = screenblocks <= 13 ? wide_delta : 0;
+        right_delta = screenblocks <= 13 ? wide_delta : wide_delta*2;
+    }
+    else
+    {
+        left_delta = wide_delta;
+        right_delta = wide_delta;
+    }
+
+    // Transparent signs
+    if (screenblocks == 11 || screenblocks == 12
+    ||  screenblocks == 14 || screenblocks == 15)
+    {
+        if (weaponinfo[plyr->readyweapon].ammo != am_noammo)
+        {
+            V_DrawPatch(left_delta, 0, stchammo, NULL);
+        }
+        V_DrawPatch(left_delta, 0, stchhlth, NULL);
+        V_DrawPatch(right_delta, 0, stcharam, NULL);
+    }
+
+    // Ammo amount for current weapon
+    if (weaponinfo[plyr->readyweapon].ammo != am_noammo)
+    {
+        ST_DrawBigNumber(plyr->ammo[weaponinfo[plyr->readyweapon].ammo],
+                         13 + left_delta, 174, NULL);
+    }
+
+    // [crispy] draw berserk pack instead of no ammo if appropriate
+    if ((screenblocks >= 11 && screenblocks <= 16)
+    && (!automapactive || automap_overlay))
+    {
+        if (plyr->readyweapon == wp_fist && plyr->powers[pw_strength])
+        {
+            static int lump;
+            patch_t *patch;
+
+            lump = W_CheckNumForName(DEH_String("PSTRA0"));
+            patch = W_CacheLumpNum(lump, PU_CACHE);
+
+            // [crispy] (28,179) is the center of the Ammo widget
+            V_DrawPatch(left_delta + 28 - SHORT(patch->width)/2 + SHORT(patch->leftoffset),
+                        179 - SHORT(patch->height)/2 + SHORT(patch->topoffset),
+                         patch, NULL);
+        }
+    }
+
+    // Health, negative health
+    ST_DrawBigNumber(negative_health ? plyr->mo->health : plyr->health, 
+                     66 + left_delta, 174, NULL);
+    ST_DrawPercent(104 + left_delta, 174, NULL);
+
+    // [crispy] blinking key or skull in the status bar
+    for (int i = 0, y = 0 ; i < 3 ; i++, y += 12)
+    {
+        if (plyr->tryopen[i])
+        {
+            if (!(plyr->tryopen[i] & (2 * KEYBLINKMASK - 1)))
+            {
+                S_StartSound(NULL, sfx_itemup);
+            }
+            if (plyr->tryopen[i] & KEYBLINKMASK)
+            {
+                V_DrawPatch(124 + left_delta, 163 + y, keys[i + st_keyorskull[i]] , NULL);
+            }
+        }
+    }
+
+    // Keys (no combined versions)
+    if (plyr->cards[it_bluecard])
+    V_DrawPatch(124 + left_delta, 163, keys[0], NULL);
+    else if (plyr->cards[it_blueskull])
+    V_DrawPatch(124 + left_delta, 163, keys[3], NULL);  
+
+    if (plyr->cards[it_yellowcard])
+    V_DrawPatch(124 + left_delta, 175, keys[1], NULL);
+    else if (plyr->cards[it_yellowskull])
+    V_DrawPatch(124 + left_delta, 175, keys[4], NULL);
+
+    if (plyr->cards[it_redcard])
+    V_DrawPatch(124 + left_delta, 187, keys[2], NULL);
+    else if (plyr->cards[it_redskull])
+    V_DrawPatch(124 + left_delta, 187, keys[5], NULL);
+  
+      // Player face background
+    if ((screenblocks == 11 || screenblocks == 14) && (!automapactive || automap_overlay))
+    {
+        V_DrawPatch(143 + wide_delta, 168, faceback, NULL);        
+    }
+  
+    // Player face
+    if ((screenblocks <= 11 || screenblocks == 14) || (automapactive && !automap_overlay))
+    {
+        V_DrawPatch(143 + wide_delta, 166, faces[st_faceindex], NULL);
+    }
+
+    // Armor
+    ST_DrawBigNumber(plyr->armorpoints, 187 + right_delta, 174, NULL);
+    ST_DrawPercent(225 + right_delta, 174, NULL);
+
+    // Weapons or artifacts owned
+    ST_DrawSmallNumberY(2, 245 + right_delta, 175);
+    // Shotgun or Super Shotgun
+    plyr->weaponowned[2] || plyr->weaponowned[8] ? 
+                            ST_DrawSmallNumberY(3, 257 + right_delta, 175) :
+                            ST_DrawSmallNumberG(3, 257 + right_delta, 175) ;
+    // Chaingun
+    plyr->weaponowned[3] ? ST_DrawSmallNumberY(4, 269 + right_delta, 175) :
+                           ST_DrawSmallNumberG(4, 269 + right_delta, 175) ;
+    // Rocket Launcher
+    plyr->weaponowned[4] ? ST_DrawSmallNumberY(5, 245 + right_delta, 185) :
+                           ST_DrawSmallNumberG(5, 245 + right_delta, 185) ;
+    // Plasma Gun
+    plyr->weaponowned[5] ? ST_DrawSmallNumberY(6, 257 + right_delta, 185) :
+                           ST_DrawSmallNumberG(6, 257 + right_delta, 185) ;
+    // BFG9000
+    plyr->weaponowned[6] ? ST_DrawSmallNumberY(7, 269 + right_delta, 185) :
+                           ST_DrawSmallNumberG(7, 269 + right_delta, 185) ;
+
+    ST_DrawBigNumber(gamemap, 279 + right_delta, 174, NULL);
+}
+
+// -----------------------------------------------------------------------------
 // ST_DrawMainBar
 // [JN] Draws standard status bar with background patch.
 // -----------------------------------------------------------------------------
@@ -1616,7 +1758,7 @@ static void ST_DrawMainBar (void)
         V_DrawPatch(104 + wide_delta, 168, starms, NULL);
     }
 
-    ST_DrawValues(false);
+    ST_DrawValuesFunc(false);
 }
 
 // -----------------------------------------------------------------------------
@@ -1626,7 +1768,7 @@ static void ST_DrawMainBar (void)
 
 static void ST_DrawFullScreenBar (void)
 {
-    ST_DrawValues(screenblocks >= 14 ? true : false);
+    ST_DrawValuesFunc(screenblocks >= 14 ? true : false);
 }
 
 // -----------------------------------------------------------------------------
@@ -2037,6 +2179,10 @@ void ST_Init (void)
 
     // Load graphics.
     ST_LoadData();
+
+    // [JN] Jaguar Doom using defferent status bar values and arrangement.
+    ST_DrawValuesFunc = gamemission == jaguar ? ST_DrawValuesJaguar :
+                                                ST_DrawValues;
 
     // [JN] Initialize status bar widget colors.
     M_RD_Define_SBarColorValue(&stbar_color_high_set, stbar_color_high);
