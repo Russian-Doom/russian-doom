@@ -990,7 +990,7 @@ void SB_Drawer(void)
                 if (CPlayer->powers[pw_speed] < FLIGHTTICS / 4)
                 dp_translation = cr[CR_RED];
                 else if (CPlayer->powers[pw_speed] > FLIGHTTICS / 2)
-                dp_translation = cr[CR_GREEN_HEXEN];
+                dp_translation = cr[CR_GREEN];
             }
 
             DrSmallNumber(CPlayer->powers[pw_speed] / TICRATE,
@@ -1014,7 +1014,7 @@ void SB_Drawer(void)
                 if (CPlayer->powers[pw_invulnerability] < FLIGHTTICS / 4)
                 dp_translation = cr[CR_RED];
                 else if (CPlayer->powers[pw_invulnerability] > FLIGHTTICS / 2)
-                dp_translation = cr[CR_GREEN_HEXEN];
+                dp_translation = cr[CR_GREEN];
             }
 
             DrSmallNumber(CPlayer->powers[pw_invulnerability] / TICRATE,
@@ -1038,7 +1038,7 @@ void SB_Drawer(void)
                 if (CPlayer->powers[pw_minotaur] < FLIGHTTICS / 4)
                 dp_translation = cr[CR_RED];
                 else if (CPlayer->powers[pw_minotaur] > FLIGHTTICS / 2)
-                dp_translation = cr[CR_GREEN_HEXEN];
+                dp_translation = cr[CR_GREEN];
             }
 
             DrSmallNumber(CPlayer->powers[pw_minotaur] / TICRATE,
@@ -1266,7 +1266,7 @@ static byte *SBar_MainColor (int element)
             }
             else if (CPlayer->mo->health >= 67)
             {
-                return cr[CR_GREEN_HEXEN];
+                return cr[CR_GREEN];
             }
             else if (CPlayer->mo->health >= 25)
             {
@@ -1291,7 +1291,7 @@ static byte *SBar_MainColor (int element)
                  CPlayer->class == 1 ? 7 :  // Cleric
                                        6))  // Mage
             {
-                return cr[CR_GREEN_HEXEN];
+                return cr[CR_GREEN];
             }
             else 
             if ((FixedDiv(armor, 5 * FRACUNIT) >> FRACBITS)
@@ -1312,7 +1312,7 @@ static byte *SBar_MainColor (int element)
         {
             if (CPlayer->mana[0] >= MAX_MANA / 2)
             {
-                return cr[CR_GREEN_HEXEN];
+                return cr[CR_GREEN];
             }
             else
             if (CPlayer->mana[0] >= MAX_MANA / 4)
@@ -1330,7 +1330,7 @@ static byte *SBar_MainColor (int element)
         {
             if (CPlayer->mana[1] >= MAX_MANA / 2)
             {
-                return cr[CR_GREEN_HEXEN];
+                return cr[CR_GREEN];
             }
             else
             if (CPlayer->mana[1] >= MAX_MANA / 4)
@@ -1372,7 +1372,7 @@ static byte *SBar_FullScreenColor (int element)
             else
             if (CPlayer->mo->health >= 67)
             {
-                return cr[CR_GREEN_HEXEN];
+                return cr[CR_GREEN];
             }
             else
             if (CPlayer->mo->health >= 25)
@@ -1398,7 +1398,7 @@ static byte *SBar_FullScreenColor (int element)
                  CPlayer->class == 1 ? 7 :  // Cleric
                                        6))  // Mage
             {
-                return cr[CR_GREEN_HEXEN];
+                return cr[CR_GREEN];
             }
             else 
             if ((FixedDiv(armor, 5 * FRACUNIT) >> FRACBITS)
@@ -1419,7 +1419,7 @@ static byte *SBar_FullScreenColor (int element)
         {
             if (CPlayer->mana[0] >= MAX_MANA / 2)
             {
-                return cr[CR_GREEN_HEXEN];
+                return cr[CR_GREEN];
             }
             else
             if (CPlayer->mana[0] >= MAX_MANA / 4)
@@ -1437,7 +1437,7 @@ static byte *SBar_FullScreenColor (int element)
         {
             if (CPlayer->mana[1] >= MAX_MANA / 2)
             {
-                return cr[CR_GREEN_HEXEN];
+                return cr[CR_GREEN];
             }
             else
             if (CPlayer->mana[1] >= MAX_MANA / 4)
@@ -2632,7 +2632,7 @@ void Crosshair_Colorize_inMenu (void)
         dp_translation = 
             CrosshairShowcaseTimeout >= 70 ? cr[CR_RED]      :
             CrosshairShowcaseTimeout >= 35 ? cr[CR_YELLOW] :
-                                             cr[CR_GREEN];
+                                             cr[CR_AZURE];
     }
     else
     {
@@ -2648,7 +2648,7 @@ static void Crosshair_Colorize_inGame (void)
 {
     if (crosshair_type == 1)
     {
-        dp_translation = CPlayer->health >= 67 ? cr[CR_GREEN] :
+        dp_translation = CPlayer->health >= 67 ? cr[CR_AZURE] :
                          CPlayer->health >= 34 ? cr[CR_YELLOW] :
                                                  cr[CR_RED];
     }

@@ -16,6 +16,7 @@
 
 
 #include <math.h>
+#include "d_name.h"
 #include "v_trans.h"
 
 
@@ -55,10 +56,6 @@ static byte cr_purple[256];
 static byte cr_niagara[256];
 static byte cr_azure[256];
 static byte cr_flame[256];
-
-// Hexen (special green)
-static byte cr_green_hexen[256];
-static byte cr_darkgreen_hexen[256];
 
 // Doom (colored blood and slider gem)
 static byte cr_red2blue[256] =
@@ -551,8 +548,6 @@ byte *cr[] =
     (byte *) &cr_red2white_heretic,
     (byte *) &cr_red2black_heretic,
     
-    (byte *) &cr_green_hexen,
-    (byte *) &cr_darkgreen_hexen,
     // Hexen (slider gem)
     (byte *) &cr_green2gray_hexen,
     (byte *) &cr_green2red_hexen,
@@ -799,13 +794,33 @@ byte V_Colorize (byte *playpal, Translation_CR_t cr, byte source, boolean keepgr
         }
         else if (cr == CR_GREEN)
         {
-            hsv.x = 0.3;
-            hsv.z *= 1.15;
+            if (RD_GameType == gt_Doom || RD_GameType == gt_Heretic)
+            {
+                hsv.x = 0.3;
+                hsv.z *= 1.15;
+            }
+            else
+            {
+                // Hexen is using less saturated green color (~60%).
+                hsv.x = 0.3;
+                hsv.y = 0.75;
+                hsv.z *= 0.65;
+            }
         }
         else if (cr == CR_DARKGREEN)
         {
-            hsv.x = 0.3;
-            hsv.z *= 0.666;
+            if (RD_GameType == gt_Doom || RD_GameType == gt_Heretic)
+            {
+                hsv.x = 0.3;
+                hsv.z *= 0.666;
+            }
+            else
+            {
+                // Hexen is using less saturated green color (~60%).
+                hsv.x = 0.3;
+                hsv.y = 0.75;
+                hsv.z *= 0.35;
+            }
         }
         else if (cr == CR_OLIVE)
         {
@@ -911,25 +926,23 @@ byte V_Colorize (byte *playpal, Translation_CR_t cr, byte source, boolean keepgr
         }
         else if (cr == CR_AZURE)
         {
-            hsv.x = 0.525;
-            hsv.z *= 1.35;
+            if (RD_GameType == gt_Doom || RD_GameType == gt_Heretic)
+            {
+                hsv.x = 0.525;
+                hsv.z *= 1.35;
+            }
+            else
+            {
+                // CR_AZURE acting as CR_GREEN with full color saturion
+                // in Hexen and used only for crosshair coloring.
+                hsv.x = 0.3;
+                hsv.z *= 1.15;
+            }
         }
         else if (cr == CR_FLAME)
         {
             hsv.x = 0.125;
             hsv.z *= 1.75;
-        }
-        else if (cr == CR_GREEN_HEXEN)
-        {
-            hsv.x = 0.3;
-            hsv.y = 0.75;
-            hsv.z *= 0.65;
-        }
-        else if (cr == CR_DARKGREEN_HEXEN)
-        {
-            hsv.x = 0.3;
-            hsv.y = 0.75;
-            hsv.z *= 0.35;
         }
     }
 
