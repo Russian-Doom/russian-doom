@@ -295,21 +295,21 @@ void AM_initMarksColor (int color)
 
     switch (color)
     {
-        case 1:   *colorVar = CR_GRAY;          break;
-        case 2:   *colorVar = CR_DARKGRAY;      break;
-        case 3:   *colorVar = CR_RED;           break;
-        case 4:   *colorVar = CR_DARKRED;       break;
-        case 5:   *colorVar = CR_GREEN;         break;
-        case 6:   *colorVar = CR_DARKGREEN;     break;
-        case 7:   *colorVar = CR_OLIVE;         break;
-        case 8:   *colorVar = CR_BLUE2;         break;
-        case 9:   *colorVar = CR_DARKBLUE;      break;
-        case 10:  *colorVar = CR_NIAGARA;       break;
-        case 11:  *colorVar = CR_BRIGHTYELLOW;  break;
-        case 12:  *colorVar = CR_YELLOW;        break;
-        case 13:  *colorVar = CR_TAN;           break;
-        case 14:  *colorVar = CR_BROWN;         break;
-        default:  *colorVar = CR_WHITE;         break;
+        case 1:   *colorVar = CR_GRAY;             break;
+        case 2:   *colorVar = CR_DARKGRAY;         break;
+        case 3:   *colorVar = CR_RED;              break;
+        case 4:   *colorVar = CR_DARKRED;          break;
+        case 5:   *colorVar = CR_GREEN_HEXEN;      break;
+        case 6:   *colorVar = CR_DARKGREEN_HEXEN;  break;
+        case 7:   *colorVar = CR_OLIVE;            break;
+        case 8:   *colorVar = CR_BLUE2;            break;
+        case 9:   *colorVar = CR_DARKBLUE;         break;
+        case 10:  *colorVar = CR_NIAGARA;          break;
+        case 11:  *colorVar = CR_BRIGHTYELLOW;     break;
+        case 12:  *colorVar = CR_YELLOW;           break;
+        case 13:  *colorVar = CR_TAN;              break;
+        case 14:  *colorVar = CR_BROWN;            break;
+        default:  *colorVar = CR_WHITE;            break;
     }
 }
 

@@ -56,6 +56,10 @@ static byte cr_niagara[256];
 static byte cr_azure[256];
 static byte cr_flame[256];
 
+// Hexen (special green)
+static byte cr_green_hexen[256];
+static byte cr_darkgreen_hexen[256];
+
 // Doom (colored blood and slider gem)
 static byte cr_red2blue[256] =
 	{  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15,
@@ -547,6 +551,8 @@ byte *cr[] =
     (byte *) &cr_red2white_heretic,
     (byte *) &cr_red2black_heretic,
     
+    (byte *) &cr_green_hexen,
+    (byte *) &cr_darkgreen_hexen,
     // Hexen (slider gem)
     (byte *) &cr_green2gray_hexen,
     (byte *) &cr_green2red_hexen,
@@ -912,6 +918,18 @@ byte V_Colorize (byte *playpal, Translation_CR_t cr, byte source, boolean keepgr
         {
             hsv.x = 0.125;
             hsv.z *= 1.75;
+        }
+        else if (cr == CR_GREEN_HEXEN)
+        {
+            hsv.x = 0.3;
+            hsv.y = 0.75;
+            hsv.z *= 0.65;
+        }
+        else if (cr == CR_DARKGREEN_HEXEN)
+        {
+            hsv.x = 0.3;
+            hsv.y = 0.75;
+            hsv.z *= 0.35;
         }
     }
 

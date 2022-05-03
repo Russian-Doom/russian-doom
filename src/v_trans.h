@@ -69,6 +69,10 @@ typedef enum
     CR_AZURE,
     CR_FLAME,
 
+    // Hexen (special greens)
+    CR_GREEN_HEXEN,
+    CR_DARKGREEN_HEXEN,
+
     // Doom (colored blood and slider gem)
     CR_RED2BLUE, // Terminator - don't override tablified colors starting from this line
     CR_RED2GREEN,
