@@ -97,8 +97,6 @@ extern boolean old_godface;  // [JN] If false, we can use an extra GOD faces.
 
 // [JN] Pointer to a function for using different status bars.
 static void (*ST_DrawValuesFunc) (boolean wide);
-// [JN] ST_Ticker need this early.
-static void ST_DrawBackground (void);
 
 
 enum
@@ -734,6 +732,64 @@ boolean ST_Responder (event_t *ev)
 // =============================================================================
 
 // -----------------------------------------------------------------------------
+// ST_UpdateBackground
+// [JN] Draws standard status bar background patch and fills side borders.
+// -----------------------------------------------------------------------------
+
+static void ST_UpdateBackground (void)
+{
+    V_UseBuffer(st_backing_screen);
+    
+    // Draw side screen borders in wide screen mode.
+    if (aspect_ratio >= 2
+    && (screenblocks == 10 || (automapactive && !automap_overlay)))
+    {
+        // [crispy] this is our own local copy of R_FillBackScreen() to
+        // fill the entire background of st_backing_screen with the bezel pattern,
+        // so it appears to the left and right of the status bar in widescreen mode
+        int x, y;
+        byte *dest = st_backing_screen;
+        patch_t *patch = W_CacheLumpName(DEH_String("brdr_b"), PU_CACHE);
+        const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
+
+        // [JN] Variable HUD detail level.
+        for (y = SCREENHEIGHT-(st_height << hires); y < SCREENHEIGHT; y++)
+        {
+            for (x = 0; x < screenwidth; x++)
+            {
+                *dest++ = bezel_pattern[((( y >> shift_allowed) & 63) << 6) 
+                                       + (( x >> shift_allowed) & 63)];
+            }
+        }
+
+        // [JN] Draw bezel bottom edge.
+        for (x = 0; x < screenwidth; x += 8)
+        {
+            if (hud_detaillevel)
+            {
+                V_DrawPatch(x, 0, patch, NULL);
+            }
+            else
+            {
+                V_DrawPatchUnscaled(x, 0, patch, NULL);
+            }
+        }
+    }
+
+    // Always draw status bar on the center of the screen.
+    V_DrawPatch((ORIGWIDTH - SHORT(stbar->width)) / 2 + wide_delta, 0, stbar, NULL);
+
+    V_RestoreBuffer();
+    V_CopyRect(0, 0, st_backing_screen, origwidth, st_height, 0, st_y);
+
+    // Arms background.
+    if (!deathmatch && gamemode != pressbeta)
+    {
+        V_DrawPatch(104 + wide_delta, 168, starms, NULL);
+    }
+}
+
+// -----------------------------------------------------------------------------
 // ST_calcPainOffset
 // -----------------------------------------------------------------------------
 
@@ -1046,7 +1102,7 @@ void ST_Ticker (void)
     // 35 frames per second, not every FPS value per second.
     if (screenblocks <= 10 || (automapactive && !automap_overlay))
     {
-        ST_DrawBackground();
+        ST_UpdateBackground();
     }
 
     // [JN] Use real random number generator
@@ -1685,64 +1741,6 @@ static void ST_DrawValuesJaguar (boolean wide)
                            ST_DrawSmallNumberG(7, 269 + right_delta, 185) ;
 
     ST_DrawBigNumber(gamemap, 279 + right_delta, 174, NULL);
-}
-
-// -----------------------------------------------------------------------------
-// ST_DrawBackground
-// [JN] Draws standard status bar background patch and fills side borders.
-// -----------------------------------------------------------------------------
-
-static void ST_DrawBackground (void)
-{
-    V_UseBuffer(st_backing_screen);
-    
-    // Draw side screen borders in wide screen mode.
-    if (aspect_ratio >= 2
-    && (screenblocks == 10 || (automapactive && !automap_overlay)))
-    {
-        // [crispy] this is our own local copy of R_FillBackScreen() to
-        // fill the entire background of st_backing_screen with the bezel pattern,
-        // so it appears to the left and right of the status bar in widescreen mode
-        int x, y;
-        byte *dest = st_backing_screen;
-        patch_t *patch = W_CacheLumpName(DEH_String("brdr_b"), PU_CACHE);
-        const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
-
-        // [JN] Variable HUD detail level.
-        for (y = SCREENHEIGHT-(st_height << hires); y < SCREENHEIGHT; y++)
-        {
-            for (x = 0; x < screenwidth; x++)
-            {
-                *dest++ = bezel_pattern[((( y >> shift_allowed) & 63) << 6) 
-                                       + (( x >> shift_allowed) & 63)];
-            }
-        }
-
-        // [JN] Draw bezel bottom edge.
-        for (x = 0; x < screenwidth; x += 8)
-        {
-            if (hud_detaillevel)
-            {
-                V_DrawPatch(x, 0, patch, NULL);
-            }
-            else
-            {
-                V_DrawPatchUnscaled(x, 0, patch, NULL);
-            }
-        }
-    }
-
-    // Always draw status bar on the center of the screen.
-    V_DrawPatch((ORIGWIDTH - SHORT(stbar->width)) / 2 + wide_delta, 0, stbar, NULL);
-
-    V_RestoreBuffer();
-    V_CopyRect(0, 0, st_backing_screen, origwidth, st_height, 0, st_y);
-
-    // Arms background.
-    if (!deathmatch && gamemode != pressbeta)
-    {
-        V_DrawPatch(104 + wide_delta, 168, starms, NULL);
-    }
 }
 
 // -----------------------------------------------------------------------------
