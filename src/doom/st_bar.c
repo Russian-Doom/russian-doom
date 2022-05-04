@@ -1103,6 +1103,7 @@ void ST_Ticker (void)
     if (screenblocks <= 10 || (automapactive && !automap_overlay))
     {
         ST_UpdateBackground();
+        ST_DrawValuesFunc(false);
     }
 
     // [JN] Use real random number generator
@@ -1432,6 +1433,7 @@ static void ST_DrawSmallNumberG (int val, int x, int y)
 
 static void ST_DrawValues (boolean wide)
 {
+    printf ("."); // [JN] TODO - remove once everything will be checked
     int left_delta;
     int right_delta;
     
@@ -1959,11 +1961,8 @@ void ST_Drawer (void)
     // Do red-/gold-shifts from damage/items
     ST_DoPaletteStuff();
 
-    if (screenblocks <= 10 || (automapactive && !automap_overlay))
-    {
-        ST_DrawValuesFunc(false);
-    }
-    else
+    if (screenblocks > 10 && screenblocks < 14
+    && (!automapactive || automap_overlay))
     {
         ST_DrawValuesFunc(screenblocks >= 14 ? true : false);
     }
