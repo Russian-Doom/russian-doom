@@ -96,7 +96,8 @@ extern boolean sgl_loaded;
 extern boolean old_godface;  // [JN] If false, we can use an extra GOD faces.
 
 // [JN] Pointer to a function for using different status bars.
-void (*ST_DrawValuesFunc) (boolean wide);
+static void (*ST_DrawElementsFunc) (boolean wide);
+
 
 enum
 {
@@ -106,8 +107,6 @@ enum
     hudcolor_armor,
     hudcolor_artifacts
 } hudcolor_t;
-
-typedef void (*load_callback_t)(char *lumpname, patch_t **variable);
 
 //
 // Data
@@ -733,6 +732,64 @@ boolean ST_Responder (event_t *ev)
 // =============================================================================
 
 // -----------------------------------------------------------------------------
+// ST_DrawBackground
+// [JN] Draws standard status bar background patch and fills side borders.
+// -----------------------------------------------------------------------------
+
+static void ST_DrawBackground (void)
+{
+    V_UseBuffer(st_backing_screen);
+    
+    // Draw side screen borders in wide screen mode.
+    if (aspect_ratio >= 2
+    && (screenblocks == 10 || (automapactive && !automap_overlay)))
+    {
+        // [crispy] this is our own local copy of R_FillBackScreen() to
+        // fill the entire background of st_backing_screen with the bezel pattern,
+        // so it appears to the left and right of the status bar in widescreen mode
+        int x, y;
+        byte *dest = st_backing_screen;
+        patch_t *patch = W_CacheLumpName(DEH_String("brdr_b"), PU_CACHE);
+        const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
+
+        // [JN] Variable HUD detail level.
+        for (y = SCREENHEIGHT-(st_height << hires); y < SCREENHEIGHT; y++)
+        {
+            for (x = 0; x < screenwidth; x++)
+            {
+                *dest++ = bezel_pattern[((( y >> shift_allowed) & 63) << 6) 
+                                       + (( x >> shift_allowed) & 63)];
+            }
+        }
+
+        // [JN] Draw bezel bottom edge.
+        for (x = 0; x < screenwidth; x += 8)
+        {
+            if (hud_detaillevel)
+            {
+                V_DrawPatch(x, 0, patch, NULL);
+            }
+            else
+            {
+                V_DrawPatchUnscaled(x, 0, patch, NULL);
+            }
+        }
+    }
+
+    // Always draw status bar on the center of the screen.
+    V_DrawPatch((ORIGWIDTH - SHORT(stbar->width)) / 2 + wide_delta, 0, stbar, NULL);
+
+    V_RestoreBuffer();
+    V_CopyRect(0, 0, st_backing_screen, origwidth, st_height, 0, st_y);
+
+    // Arms background.
+    if (!deathmatch && gamemode != pressbeta)
+    {
+        V_DrawPatch(104 + wide_delta, 168, starms, NULL);
+    }
+}
+
+// -----------------------------------------------------------------------------
 // ST_calcPainOffset
 // -----------------------------------------------------------------------------
 
@@ -1062,6 +1119,14 @@ void ST_Ticker (void)
     }
     
     st_oldhealth = plyr->health;
+
+    // [JN] Do buffered drawing of status bar background/border
+    // and elemens independently from frame rate. 
+    if (screenblocks <= 10 || (automapactive && !automap_overlay))
+    {
+        ST_DrawBackground();
+        ST_DrawElementsFunc(false);
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1257,52 +1322,6 @@ static byte *ST_WidgetColor (int i)
 }
 
 // -----------------------------------------------------------------------------
-// ST_FillBorder
-// [JN] Fills screen border background with given pattern.
-// -----------------------------------------------------------------------------
-
-static void ST_FillBorder (void)
-{
-    // [crispy] this is our own local copy of R_FillBackScreen() to
-    // fill the entire background of st_backing_screen with the bezel pattern,
-    // so it appears to the left and right of the status bar in widescreen mode
-    if ((screenwidth >> hires) != ORIGWIDTH)
-    {
-        int x, y;
-        byte *dest = st_backing_screen;
-        const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
-
-        // [JN] Variable HUD detail level.
-        for (y = SCREENHEIGHT-(st_height << hires); y < SCREENHEIGHT; y++)
-        {
-            for (x = 0; x < screenwidth; x++)
-            {
-                *dest++ = bezel_pattern[((( y >> shift_allowed) & 63) << 6) 
-                                       + (( x >> shift_allowed) & 63)];
-            }
-        }
-
-        // [JN] Draw bezel bottom edge.
-        if (scaledviewwidth == screenwidth)
-        {
-            patch_t *patch = W_CacheLumpName(DEH_String("brdr_b"), PU_CACHE);
-
-            for (x = 0; x < screenwidth; x += 8)
-            {
-                if (hud_detaillevel)
-                {
-                    V_DrawPatch(x, 0, patch, NULL);
-                }
-                else
-                {
-                    V_DrawPatchUnscaled(x, 0, patch, NULL);
-                }
-            }
-        }
-    }
-}
-
-// -----------------------------------------------------------------------------
 // ST_DrawBigNumber
 // [JN] Draws a three digit big red number using STTNUM* graphics.
 // -----------------------------------------------------------------------------
@@ -1407,12 +1426,12 @@ static void ST_DrawSmallNumberG (int val, int x, int y)
 }
 
 // -----------------------------------------------------------------------------
-// ST_DrawValues
+// ST_DrawElements
 // [JN] Draw various digit values, faces and keys.
 // Wide boolean stand for wider status bar.
 // -----------------------------------------------------------------------------
 
-static void ST_DrawValues (boolean wide)
+static void ST_DrawElements (boolean wide)
 {
     int left_delta;
     int right_delta;
@@ -1592,11 +1611,11 @@ static void ST_DrawValues (boolean wide)
 }
 
 // -----------------------------------------------------------------------------
-// ST_DrawValuesJaguar
+// ST_DrawElementsJaguar
 // [JN] Draw various digit values, faces and keys, Jaguar Doom version.
 // -----------------------------------------------------------------------------
 
-static void ST_DrawValuesJaguar (boolean wide)
+static void ST_DrawElementsJaguar (boolean wide)
 {
     int left_delta;
     int right_delta;
@@ -1723,46 +1742,6 @@ static void ST_DrawValuesJaguar (boolean wide)
                            ST_DrawSmallNumberG(7, 269 + right_delta, 185) ;
 
     ST_DrawBigNumber(gamemap, 279 + right_delta, 174, NULL);
-}
-
-// -----------------------------------------------------------------------------
-// ST_DrawMainBar
-// [JN] Draws standard status bar with background patch.
-// -----------------------------------------------------------------------------
-
-static void ST_DrawMainBar (void)
-{
-    V_UseBuffer(st_backing_screen);
-    
-    // Draw side screen borders in wide screen mode.
-    if (aspect_ratio >= 2)
-    {
-        ST_FillBorder();
-    }
-
-    // Always draw status bar on the center of the screen.
-    V_DrawPatch((ORIGWIDTH - SHORT(stbar->width)) / 2 + wide_delta, 0, stbar, NULL);
-
-    V_RestoreBuffer();
-    V_CopyRect(0, 0, st_backing_screen, origwidth, st_height, 0, st_y);
-
-    // Arms background.
-    if (!deathmatch && gamemode != pressbeta)
-    {
-        V_DrawPatch(104 + wide_delta, 168, starms, NULL);
-    }
-
-    ST_DrawValuesFunc(false);
-}
-
-// -----------------------------------------------------------------------------
-// ST_DrawFullScreenBar
-// [JN] Draws fullscreen status bar w/o background patch.
-// -----------------------------------------------------------------------------
-
-static void ST_DrawFullScreenBar (void)
-{
-    ST_DrawValuesFunc(screenblocks >= 14 ? true : false);
 }
 
 // -----------------------------------------------------------------------------
@@ -1981,13 +1960,11 @@ void ST_Drawer (void)
     // Do red-/gold-shifts from damage/items
     ST_DoPaletteStuff();
 
-    if (screenblocks <= 10 || (automapactive && !automap_overlay))
+    // [JN] Draw full screen status bar in appropriated sizes
+    if (screenblocks > 10 && screenblocks < (aspect_ratio >= 2 ? 17 : 14)
+    && (!automapactive || automap_overlay))
     {
-        ST_DrawMainBar();
-    }
-    else
-    {
-        ST_DrawFullScreenBar();
+        ST_DrawElementsFunc(screenblocks >= 14 ? true : false);
     }
 }
 
@@ -2175,8 +2152,8 @@ void ST_Init (void)
     ST_LoadData();
 
     // [JN] Jaguar Doom using defferent status bar values and arrangement.
-    ST_DrawValuesFunc = gamemission == jaguar ? ST_DrawValuesJaguar :
-                                                ST_DrawValues;
+    ST_DrawElementsFunc = gamemission == jaguar ? ST_DrawElementsJaguar :
+                                                  ST_DrawElements;
 
     // [JN] Initialize status bar widget colors.
     M_RD_Define_SBarColorValue(&stbar_color_high_set, stbar_color_high);
