@@ -352,12 +352,6 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(vga_porch_flash),
 
     //!
-    // If non-zero, forces integer scales for resolution-independent rendering.
-    //
-
-    CONFIG_VARIABLE_INT(integer_scaling),
-
-    //!
     // Number of milliseconds to wait on startup after the video mode
     // has been set, before the game will start.  This allows the
     // screen to settle on some monitors that do not display an image

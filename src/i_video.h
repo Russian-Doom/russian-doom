@@ -129,5 +129,4 @@ extern int fullscreen;
 extern int aspect_ratio_correct;
 extern int smoothing;
 extern int vga_porch_flash;
-extern int integer_scaling;
 extern int force_software_renderer;
