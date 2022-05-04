@@ -337,7 +337,7 @@ static void AM_addMark (void)
     }
 
     // [crispy] keep the map static in overlay mode if not following the player
-    if (!(!automap_follow && automap_overlay))
+    if (!automap_follow)
     {
         markpoints[markpointnum].x = m_x + m_w/2;
         markpoints[markpointnum].y = m_y + m_h/2;
@@ -558,7 +558,7 @@ boolean AM_Responder(event_t *ev)
         {
             // [crispy] keep the map static in overlay mode
             // if not following the player
-            if (!automap_follow && !automap_overlay)
+            if (!automap_follow)
             {
                 m_paninc.x = flip_levels ? -FTOM(f_paninc) : FTOM(f_paninc);
             }
@@ -569,7 +569,7 @@ boolean AM_Responder(event_t *ev)
         }
         else if (BK_isKeyDown(ev, bk_left))            // pan left
         {
-            if (!automap_follow && !automap_overlay)
+            if (!automap_follow)
             {
                 m_paninc.x = flip_levels ? FTOM(f_paninc) : -FTOM(f_paninc);
             }
@@ -580,7 +580,7 @@ boolean AM_Responder(event_t *ev)
         }
         else if (BK_isKeyDown(ev, bk_up))           // pan up
         {
-            if (!automap_follow && !automap_overlay)
+            if (!automap_follow)
             {
                 m_paninc.y = FTOM(f_paninc);
             }
@@ -589,7 +589,7 @@ boolean AM_Responder(event_t *ev)
         }
         else if (BK_isKeyDown(ev, bk_down))           // pan down
         {
-            if (!automap_follow && !automap_overlay)
+            if (!automap_follow)
             {
                 m_paninc.y = -FTOM(f_paninc);
             }
