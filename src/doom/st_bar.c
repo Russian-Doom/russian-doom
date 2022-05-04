@@ -96,7 +96,7 @@ extern boolean sgl_loaded;
 extern boolean old_godface;  // [JN] If false, we can use an extra GOD faces.
 
 // [JN] Pointer to a function for using different status bars.
-static void (*ST_DrawValuesFunc) (boolean wide);
+static void (*ST_DrawElementsFunc) (boolean wide);
 
 
 enum
@@ -732,11 +732,11 @@ boolean ST_Responder (event_t *ev)
 // =============================================================================
 
 // -----------------------------------------------------------------------------
-// ST_UpdateBackground
+// ST_DrawBackground
 // [JN] Draws standard status bar background patch and fills side borders.
 // -----------------------------------------------------------------------------
 
-static void ST_UpdateBackground (void)
+static void ST_DrawBackground (void)
 {
     V_UseBuffer(st_backing_screen);
     
@@ -1098,14 +1098,6 @@ static void ST_UpdateFragsCounter (void)
 
 void ST_Ticker (void)
 {
-    // [JN] Draw status bar background/border only every 
-    // 35 frames per second, not every FPS value per second.
-    if (screenblocks <= 10 || (automapactive && !automap_overlay))
-    {
-        ST_UpdateBackground();
-        ST_DrawValuesFunc(false);
-    }
-
     // [JN] Use real random number generator
     // instead of M_Random LUT for faces stide.
     st_randomnumber = rand();
@@ -1127,6 +1119,14 @@ void ST_Ticker (void)
     }
     
     st_oldhealth = plyr->health;
+
+    // [JN] Do buffered drawing of status bar background/border
+    // and elemens independently from frame rate. 
+    if (screenblocks <= 10 || (automapactive && !automap_overlay))
+    {
+        ST_DrawBackground();
+        ST_DrawElementsFunc(false);
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1426,12 +1426,12 @@ static void ST_DrawSmallNumberG (int val, int x, int y)
 }
 
 // -----------------------------------------------------------------------------
-// ST_DrawValues
+// ST_DrawElements
 // [JN] Draw various digit values, faces and keys.
 // Wide boolean stand for wider status bar.
 // -----------------------------------------------------------------------------
 
-static void ST_DrawValues (boolean wide)
+static void ST_DrawElements (boolean wide)
 {
     int left_delta;
     int right_delta;
@@ -1446,8 +1446,6 @@ static void ST_DrawValues (boolean wide)
         left_delta = wide_delta;
         right_delta = wide_delta;
     }
-
-    printf ("."); // [JN] TODO - remove once everything will be checked
 
     // Transparent signs
     if (screenblocks == 11 || screenblocks == 12
@@ -1613,11 +1611,11 @@ static void ST_DrawValues (boolean wide)
 }
 
 // -----------------------------------------------------------------------------
-// ST_DrawValuesJaguar
+// ST_DrawElementsJaguar
 // [JN] Draw various digit values, faces and keys, Jaguar Doom version.
 // -----------------------------------------------------------------------------
 
-static void ST_DrawValuesJaguar (boolean wide)
+static void ST_DrawElementsJaguar (boolean wide)
 {
     int left_delta;
     int right_delta;
@@ -1962,11 +1960,12 @@ void ST_Drawer (void)
     // Do red-/gold-shifts from damage/items
     ST_DoPaletteStuff();
 
-        if (screenblocks > 10 && screenblocks < (aspect_ratio >= 2 ? 17 : 14)
-        && (!automapactive || automap_overlay))
-        {
-            ST_DrawValuesFunc(screenblocks >= 14 ? true : false);
-        }
+    // [JN] Draw full screen status bar in appropriated sizes
+    if (screenblocks > 10 && screenblocks < (aspect_ratio >= 2 ? 17 : 14)
+    && (!automapactive || automap_overlay))
+    {
+        ST_DrawElementsFunc(screenblocks >= 14 ? true : false);
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -2153,8 +2152,8 @@ void ST_Init (void)
     ST_LoadData();
 
     // [JN] Jaguar Doom using defferent status bar values and arrangement.
-    ST_DrawValuesFunc = gamemission == jaguar ? ST_DrawValuesJaguar :
-                                                ST_DrawValues;
+    ST_DrawElementsFunc = gamemission == jaguar ? ST_DrawElementsJaguar :
+                                                  ST_DrawElements;
 
     // [JN] Initialize status bar widget colors.
     M_RD_Define_SBarColorValue(&stbar_color_high_set, stbar_color_high);

@@ -648,22 +648,27 @@ void D_Display (void)
     }
 
     // draw the view directly
-    if (gamestate == GS_LEVEL && (!automapactive || automap_overlay) && gametic)
+    if (gamestate == GS_LEVEL && gametic)
     {
-        R_RenderPlayerView (&players[displayplayer]);
-
-        // [JN] Background opacity in automap overlay mode.
-        if (automapactive && automap_overlay)
+        if (!automapactive || automap_overlay)
         {
-            const int screenheight = screenblocks > 10 ?
-                                     SCREENHEIGHT : SCREENHEIGHT - (st_height << hires);
+            R_RenderPlayerView (&players[displayplayer]);
 
-            for (y = 0 ; y < screenwidth * screenheight ; y++)
+            // [JN] Background opacity in automap overlay mode.
+            if (automapactive && automap_overlay)
             {
-                I_VideoBuffer[y] = colormaps[automap_overlay_bg * 256 + I_VideoBuffer[y]];
+                const int screenheight = screenblocks > 10 ?
+                                         SCREENHEIGHT : SCREENHEIGHT - (st_height << hires);
+
+                for (y = 0 ; y < screenwidth * screenheight ; y++)
+                {
+                    I_VideoBuffer[y] = colormaps[automap_overlay_bg * 256 + I_VideoBuffer[y]];
+                }
             }
         }
 
+        // [JN] Do red-/gold-shifts from damage/items and
+        // draw full screen status bar in appropriated sizes.
         ST_Drawer();
     }
 
