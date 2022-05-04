@@ -1433,7 +1433,6 @@ static void ST_DrawSmallNumberG (int val, int x, int y)
 
 static void ST_DrawValues (boolean wide)
 {
-    printf ("."); // [JN] TODO - remove once everything will be checked
     int left_delta;
     int right_delta;
     
@@ -1447,6 +1446,8 @@ static void ST_DrawValues (boolean wide)
         left_delta = wide_delta;
         right_delta = wide_delta;
     }
+
+    printf ("."); // [JN] TODO - remove once everything will be checked
 
     // Transparent signs
     if (screenblocks == 11 || screenblocks == 12
@@ -1961,7 +1962,7 @@ void ST_Drawer (void)
     // Do red-/gold-shifts from damage/items
     ST_DoPaletteStuff();
 
-    if (screenblocks > 10 && screenblocks < 14
+    if (screenblocks > 10 && screenblocks < 17
     && (!automapactive || automap_overlay))
     {
         ST_DrawValuesFunc(screenblocks >= 14 ? true : false);
