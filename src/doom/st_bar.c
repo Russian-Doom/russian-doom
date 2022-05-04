@@ -1962,11 +1962,11 @@ void ST_Drawer (void)
     // Do red-/gold-shifts from damage/items
     ST_DoPaletteStuff();
 
-    if (screenblocks > 10 && screenblocks < 17
-    && (!automapactive || automap_overlay))
-    {
-        ST_DrawValuesFunc(screenblocks >= 14 ? true : false);
-    }
+        if (screenblocks > 10 && screenblocks < (aspect_ratio >= 2 ? 17 : 14)
+        && (!automapactive || automap_overlay))
+        {
+            ST_DrawValuesFunc(screenblocks >= 14 ? true : false);
+        }
 }
 
 // -----------------------------------------------------------------------------

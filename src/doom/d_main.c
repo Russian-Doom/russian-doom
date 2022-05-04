@@ -632,7 +632,6 @@ void D_Display (void)
             AM_Drawer ();
         }
 
-        ST_Drawer ();
         break;
 
         case GS_INTERMISSION:
@@ -665,20 +664,7 @@ void D_Display (void)
             }
         }
 
-        if (aspect_ratio >= 2)
-        {
-            if (screenblocks > 10 && screenblocks < 17)
-            {
-                ST_Drawer();
-            }
-        }
-        else
-        {
-            if (screenblocks == 11 || screenblocks == 12 || screenblocks == 13)
-            {
-                ST_Drawer();
-            }
-        }
+        ST_Drawer();
     }
 
     // clean up border stuff
