@@ -180,10 +180,6 @@ int smoothing = false;
 
 int vga_porch_flash = false;
 
-// Force integer scales for resolution-independent rendering
-
-int integer_scaling = false;
-
 // Force software rendering, for systems which lack effective hardware
 // acceleration
 
@@ -401,7 +397,7 @@ void I_ShutdownGraphics(void)
 // ratio consistent with the aspect_ratio_correct variable.
 static void AdjustWindowSize(void)
 {
-    if (aspect_ratio_correct || integer_scaling)
+    if (aspect_ratio_correct)
     {
         switch(changedWindowSize)
         {
@@ -1573,17 +1569,13 @@ static void SetVideoMode(void)
     // time this also defines the aspect ratio that is preserved while scaling
     // and stretching the texture into the window.
 
-    if (aspect_ratio_correct || integer_scaling)
+    if (aspect_ratio_correct)
     {
         SDL_RenderSetLogicalSize(renderer,
                                 screenwidth,
                                 actualheight);
     }
                              
-    // Force integer scales for resolution-independent rendering.
-    
-    SDL_RenderSetIntegerScale(renderer, integer_scaling);
-
     // Blank out the full screen area in case there is any junk in
     // the borders that won't otherwise be overwritten.
 
@@ -1851,7 +1843,7 @@ void I_ReInitGraphics (int reinit)
 			actualheight = SCREENHEIGHT;
 		}
 
-		if (aspect_ratio_correct || integer_scaling)
+		if (aspect_ratio_correct)
 		{
 			SDL_RenderSetLogicalSize(renderer,
 			                         screenwidth,
@@ -1861,10 +1853,6 @@ void I_ReInitGraphics (int reinit)
 		{
 			SDL_RenderSetLogicalSize(renderer, 0, 0);
 		}
-
-		#if SDL_VERSION_ATLEAST(2, 0, 5)
-		SDL_RenderSetIntegerScale(renderer, integer_scaling);
-		#endif
 	}
 
 	// [crispy] adjust the window size and re-set the palette
@@ -1882,22 +1870,8 @@ void I_RenderReadPixels(byte **data, int *w, int *h, int *p)
 	// [crispy] adjust cropping rectangle if necessary
 	rect.x = rect.y = 0;
 	SDL_GetRendererOutputSize(renderer, &rect.w, &rect.h);
-	if (aspect_ratio_correct || integer_scaling)
+	if (aspect_ratio_correct)
 	{
-		if (integer_scaling)
-		{
-			int temp1, temp2, scale;
-			temp1 = rect.w;
-			temp2 = rect.h;
-			scale = MIN(rect.w / screenwidth, rect.h / actualheight);
-
-			rect.w = screenwidth * scale;
-			rect.h = actualheight * scale;
-
-			rect.x = (temp1 - rect.w) / 2;
-			rect.y = (temp2 - rect.h) / 2;
-		}
-		else
 		if (rect.w * actualheight > rect.h * screenwidth)
 		{
 			temp = rect.w;
@@ -1948,7 +1922,6 @@ void I_BindVideoVariables(void)
     M_BindIntVariable("smoothing",                 &smoothing);
     M_BindIntVariable("max_fps",                   &max_fps);
     M_BindIntVariable("vga_porch_flash",           &vga_porch_flash);
-    M_BindIntVariable("integer_scaling",           &integer_scaling);
     M_BindIntVariable("startup_delay",             &startup_delay);
     M_BindIntVariable("resize_delay",              &resize_delay);
     M_BindIntVariable("fullscreen_width",          &fullscreen_width);

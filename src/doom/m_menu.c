@@ -7256,7 +7256,7 @@ boolean M_Responder (event_t* ev)
         return true;
     }
 
-    if ((devparm && BK_isKeyDown(ev, bk_menu_help)) || BK_isKeyDown(ev, bk_screenshot))
+    if (BK_isKeyDown(ev, bk_screenshot))
     {
         G_ScreenShot ();
         return true;

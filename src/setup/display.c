@@ -118,7 +118,6 @@ static char *video_driver = "";
 static int aspect_ratio_correct = 1;
 static int smoothing = 0;
 static int vga_porch_flash = 0;
-static int integer_scaling = 0;
 static int fullscreen = 1;
 static int aspect_ratio = 2;
 static int fullscreen_width = 0, fullscreen_height = 0;
@@ -287,12 +286,6 @@ static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
                         "���������� ����� ENDOOM ��� ������",
                         &show_endoom)),
 
-/*
-#if SDL_VERSION_ATLEAST(2, 0, 5)
-        TXT_NewCheckBox("������������� ��������������� ����", &integer_scaling),
-#endif
-*/
-
         NULL);
 
     //
@@ -451,7 +444,6 @@ void BindDisplayVariables(void)
     M_BindIntVariable("flashing_hom",              &flashing_hom);
 
     M_BindIntVariable("vga_porch_flash",           &vga_porch_flash);
-    M_BindIntVariable("integer_scaling",           &integer_scaling);
     M_BindIntVariable("fullscreen",                &fullscreen);
     M_BindIntVariable("aspect_ratio",              &aspect_ratio);
     M_BindIntVariable("fullscreen_width",          &fullscreen_width);
