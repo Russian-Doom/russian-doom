@@ -667,8 +667,7 @@ void D_Display (void)
             }
         }
 
-        // [JN] Do red-/gold-shifts from damage/items and
-        // draw full screen status bar in appropriated sizes.
+        // [JN] Do red-/gold-shifts from damage/items and draw status bar.
         ST_Drawer();
     }
 

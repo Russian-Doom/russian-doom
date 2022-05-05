@@ -1119,14 +1119,6 @@ void ST_Ticker (void)
     }
     
     st_oldhealth = plyr->health;
-
-    // [JN] Do buffered drawing of status bar background/border
-    // and elemens independently from frame rate. 
-    if (screenblocks <= 10 || (automapactive && !automap_overlay))
-    {
-        ST_DrawBackground();
-        ST_DrawElementsFunc(false);
-    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1960,7 +1952,15 @@ void ST_Drawer (void)
     // Do red-/gold-shifts from damage/items
     ST_DoPaletteStuff();
 
-    // [JN] Draw full screen status bar in appropriated sizes
+
+    // [JN] Draw standard status bar. 
+    if (screenblocks <= 10 || (automapactive && !automap_overlay))
+    {
+        ST_DrawBackground();
+        ST_DrawElementsFunc(false);
+    }
+
+    // [JN] Draw full screen status bar.
     if (screenblocks > 10 && screenblocks < (aspect_ratio >= 2 ? 17 : 14)
     && (!automapactive || automap_overlay))
     {
