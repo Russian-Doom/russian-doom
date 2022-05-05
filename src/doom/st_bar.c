@@ -122,7 +122,7 @@ int          st_palette = 0;
 static int   lu_palette;        // Lump number for PLAYPAL.
 static int   st_randomnumber;   // A random number per tick.
 static int   st_facecount = 0;  // Count until face changes.
-static int   st_faceindex = 0;  // Current face index.
+static int   st_faceindex = 1;  // Current face index.
 static int   faceindex;         // [crispy] fix status bar face hysteresis
 static int   st_oldhealth = -1; // Used to use appopriately pained face.
 static int   st_fragscount;     // Number of frags so far in deathmatch.
@@ -1049,7 +1049,7 @@ static void ST_updateFaceWidget (void)
     // look left or look right if the facecount has timed out
     if (!st_facecount)
     {
-        faceindex = st_randomnumber % 3;
+        faceindex = st_randomnumber;
         st_facecount = ST_STRAIGHTFACECOUNT;
         priority = 0;
     }
@@ -1100,7 +1100,7 @@ void ST_Ticker (void)
 {
     // [JN] Use real random number generator
     // instead of M_Random LUT for faces stide.
-    st_randomnumber = rand();
+    st_randomnumber = rand() % 3;
 
     ST_updateFaceWidget();
 
@@ -2127,7 +2127,7 @@ void ST_Start (void)
     plyr = &players[consoleplayer];
 
     faceindex = 1; // [crispy] fix status bar face hysteresis across level changes
-    st_faceindex = 0;
+    st_faceindex = 1;
     st_palette = -1;
     st_oldhealth = -1;
 }
