@@ -534,7 +534,20 @@ void D_Display(void)
                 R_RenderPlayerView(&players[displayplayer]);
             CT_Drawer();
             UpdateState |= I_FULLVIEW;
-            SB_Drawer();
+
+            // [JN] Drawing functions separated for better performance:
+            if (screenblocks <= 10)
+            {
+                SB_HornsDrawer();
+            }
+            if (screenblocks > 9 && automapactive && !automap_overlay)
+            {
+                SB_FillBackground();
+            }
+            if (screenblocks == 11 || (automapactive && !automap_overlay))
+            {
+                SB_Drawer();
+            }
             break;
         case GS_INTERMISSION:
             IN_Drawer();

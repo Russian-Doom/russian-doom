@@ -79,7 +79,9 @@ static void SB_Draw_Ammo_Widget (void);
 // Public Data
 
 // graphics are drawn to a backing screen and blitted to the real screen
-byte *st_backing_screen;
+static byte *st_backing_screen;
+// [JN] Bezel pattern to fill status bar in widescreen mode.
+static byte *bezel_pattern;
 
 boolean DebugSound;             // debug flag for displaying sound info
 
@@ -210,6 +212,10 @@ void SB_Init(void)
                                        * (40 << hires)
                                        * sizeof(*st_backing_screen), PU_STATIC, 0);
 
+    // [JN] Which background will be used to fill bezel pattern.
+    bezel_pattern = W_CacheLumpName(DEH_String(gamemode == shareware ?
+                                    "FLOOR04" : "FLAT513"), PU_STATIC);
+
     PatchLTFACE = W_CacheLumpName(DEH_String("LTFACE"), PU_STATIC);
     PatchRTFACE = W_CacheLumpName(DEH_String("RTFACE"), PU_STATIC);
     PatchBARBACK = W_CacheLumpName(DEH_String("BARBACK"), PU_STATIC);
@@ -261,6 +267,59 @@ void SB_Init(void)
     spinflylump = W_GetNumForName(DEH_String("SPFLY0"));
 }
 
+// -----------------------------------------------------------------------------
+// SB_HornsDrawer
+// [JN] Draw horns separatelly, as needed for direct view drawing.
+// -----------------------------------------------------------------------------
+
+void SB_HornsDrawer (void)
+{
+    V_DrawPatch(0 + wide_delta, 148, PatchLTFCTOP, NULL);
+    V_DrawPatch(290 + wide_delta, 148, PatchRTFCTOP, NULL);
+}
+
+// -----------------------------------------------------------------------------
+// SB_FillBackground
+// [JN] Draws standard status bar background patch and fills side borders.
+// -----------------------------------------------------------------------------
+
+void SB_FillBackground (void)
+{
+    V_UseBuffer(st_backing_screen);
+
+    // Draw side screen borders in wide screen mode.
+    if (aspect_ratio >= 2
+    && (screenblocks == 10 || (automapactive && !automap_overlay)))
+    {
+        // [crispy] this is our own local copy of R_FillBackScreen() to
+        // fill the entire background of st_backing_screen with the bezel pattern,
+        // so it appears to the left and right of the status bar in widescreen mode
+        int x, y;
+        byte *dest = st_backing_screen;
+        patch_t *patch = W_CacheLumpName(DEH_String("BORDB"), PU_CACHE);
+        const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
+    
+        // [JN] Variable HUD detail level.
+        for (y = SCREENHEIGHT-SBARHEIGHT; y < SCREENHEIGHT; y++)
+        {
+            for (x = 0; x < screenwidth; x++)
+            {
+                *dest++ = bezel_pattern[((( y >> shift_allowed) & 63) << 6) 
+                                       + (( x >> shift_allowed) & 63)];
+            }
+        }
+    
+        // [JN] Draw bezel bottom edge.
+        for (x = 0; x < screenwidth; x += 16)
+        {
+            V_DrawPatch(x, 0, patch, NULL);
+        }
+    }
+
+    V_RestoreBuffer();
+    V_CopyRect(0, 0, st_backing_screen, origwidth, 42, 0, 158);
+}
+
 //---------------------------------------------------------------------------
 //
 // PROC SB_Ticker
@@ -307,6 +366,14 @@ void SB_Ticker(void)
             delta = 8;
         }
         HealthMarker += delta;
+    }
+
+    // [JN] Do buffered drawing of status bar background/border
+    // independently from frame rate. 
+    if (screenblocks <= 10)
+    {
+        SB_FillBackground();
+        SB_Drawer();
     }
 }
 
@@ -640,13 +707,6 @@ void SB_Drawer(void)
     static boolean hitCenterFrame;
     const int wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0) + 2;
 
-    // [JN] Draw horns separatelly in non wide screen mode
-    if (aspect_ratio < 2 && screenblocks <= 10 && automapactive && automap_overlay)
-    {
-        V_DrawPatch(0 + wide_delta, 148, PatchLTFCTOP, NULL);
-        V_DrawPatch(290 + wide_delta, 148, PatchRTFCTOP, NULL);
-    }
-
     // [JN] Level stats widgets.
     if (screenblocks <= 11 && !vanillaparm)
     {
@@ -773,53 +833,6 @@ void SB_Drawer(void)
     }
     else
     {
-        // [JN] Draw side screen borders in wide screen mode.
-        if (aspect_ratio >= 2)
-        {
-            V_UseBuffer(st_backing_screen);
-            
-            // [crispy] this is our own local copy of R_FillBackScreen() to
-            // fill the entire background of st_backing_screen with the bezel pattern,
-            // so it appears to the left and right of the status bar in widescreen mode
-            if ((screenwidth >> hires) != ORIGWIDTH)
-            {
-                int x, y;
-                byte *src;
-                byte *dest;
-                char *name = DEH_String(gamemode == shareware ? "FLOOR04" : "FLAT513");
-                const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
-        
-                src = W_CacheLumpName(name, PU_CACHE);
-                dest = st_backing_screen;
-        
-                // [JN] Variable HUD detail level.
-                for (y = SCREENHEIGHT-SBARHEIGHT; y < SCREENHEIGHT; y++)
-                {
-                    for (x = 0; x < screenwidth; x++)
-                    {
-                        *dest++ = src[((( y >> shift_allowed) & 63) << 6) 
-                                     + (( x >> shift_allowed) & 63)];
-                    }
-                }
-        
-                // [JN] Draw bezel bottom edge.
-                if (scaledviewwidth == screenwidth)
-                {
-                    patch_t *patch = W_CacheLumpName(DEH_String("BORDB"), PU_CACHE);
-                
-                    for (x = 0; x < screenwidth; x += 16)
-                    {
-                        V_DrawPatch(x, 0, patch, NULL);
-                    }
-                }
-            }
-
-            V_RestoreBuffer();
-
-            V_CopyRect(0, 0, st_backing_screen, 
-                       origwidth, 42, 0, 158);
-        }
-
         if (SB_state == -1)
         {
             V_DrawPatch(0 + wide_delta, 158, PatchBARBACK, NULL);

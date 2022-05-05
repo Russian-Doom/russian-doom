@@ -866,6 +866,8 @@ void SB_Init(void);
 boolean SB_Responder(event_t * event);
 void SB_Ticker(void);
 void SB_Drawer(void);
+void SB_HornsDrawer(void);
+void SB_FillBackground(void);
 
 // [JN] Crosshair stuff.
 extern patch_t *CrosshairPatch;
