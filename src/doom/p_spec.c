@@ -321,81 +321,41 @@ fixed_t	P_FindHighestFloorSurrounding (sector_t *sec)
 
 // -----------------------------------------------------------------------------
 // P_FindNextHighestFloor
-// FIND NEXT HIGHEST FLOOR IN SURROUNDING SECTORS
-// Note: this should be doable w/o a fixed array.
-// Thanks to entryway for the Vanilla overflow emulation.
+// Passed a sector and a floor height, returns the fixed point value
+// of the smallest floor height in a surrounding sector larger than
+// the floor height passed. If no such height exists the floorheight
+// passed is returned.
+//
+// Rewritten by Lee Killough to avoid fixed array and to be faster.
 // -----------------------------------------------------------------------------
 
 fixed_t P_FindNextHighestFloor (sector_t *sec, int currentheight)
 {
-    int             i;
-    int             h;
-    int             min;
-    line_t         *check;
-    sector_t       *other;
-    fixed_t         height = currentheight;
-    static fixed_t *heightlist = NULL;
-    static int      heightlist_size = 0;
+    int       i;
+    sector_t *other;
 
-    // [crispy] remove MAX_ADJOINING_SECTORS Vanilla limit
-    // from prboom-plus/src/p_spec.c:404-411
-    if (sec->linecount > heightlist_size)
+    for (i = 0 ; i < sec->linecount ; i++)
     {
-        do
+        if ((other = getNextSector(sec->lines[i], sec))
+        && other->floorheight > currentheight)
         {
-            heightlist_size = heightlist_size ? 2 * heightlist_size : MAX_ADJOINING_SECTORS;
-        } while (sec->linecount > heightlist_size);
+            int height = other->floorheight;
 
-        heightlist = I_Realloc(heightlist, heightlist_size * sizeof(*heightlist));
-    }
-
-    for ( i = 0, h = 0 ; i < sec->linecount ; i++)
-    {
-        check = sec->lines[i];
-        other = getNextSector(check,sec);
-
-        if (!other)
-        {
-            continue;
-        }
-
-        if (other->floorheight > height)
-        {
-            // Emulation of memory (stack) overflow
-            if (h == MAX_ADJOINING_SECTORS + 1)
+            while (++i < sec->linecount)
             {
-                height = other->floorheight;
-            }
-            else if (h == MAX_ADJOINING_SECTORS + 2)
-            {
-                // Fatal overflow: game crashes at 22 sectors
-                printf(english_language ?
-                       "Sector with more than 22 adjoining sectors. Vanilla will crash here" :
-                       "Сектору назначено более 22 присоединенных секторов.");
+                if ((other = getNextSector(sec->lines[i], sec))
+                && other->floorheight < height
+                && other->floorheight > currentheight)
+                {
+                    height = other->floorheight;
+                }
             }
 
-            heightlist[h++] = other->floorheight;
+            return height;
         }
     }
 
-    // Find lowest height in list
-    if (!h)
-    {
-        return currentheight;
-    }
-
-    min = heightlist[0];
-
-    // Range checking? 
-    for (i = 1 ; i < h ; i++)
-    {
-        if (heightlist[i] < min)
-        {
-            min = heightlist[i];
-        }
-    }
-
-    return min;
+    return currentheight;
 }
 
 // -----------------------------------------------------------------------------
