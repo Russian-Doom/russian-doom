@@ -1309,14 +1309,11 @@ void R_SortVisSprites (void)
 // R_DrawSprite
 // -------------------------------------------------------------------------
 
-void R_DrawSprite (vissprite_t *spr)
+static void R_DrawSprite (vissprite_t *spr)
 {
-    int         x;
-    int         r1;
-    int         r2;
-    fixed_t     scale;
-    fixed_t     lowscale;
-    drawseg_t  *ds;
+    int x, r1, r2;
+    drawseg_t *ds;
+    fixed_t scale, lowscale;
 
     for (x = spr->x1 ; x<=spr->x2 ; x++)
     {
@@ -1386,59 +1383,8 @@ void R_DrawSprite (vissprite_t *spr)
                     cliptop[x] = ds->sprtopclip[x];
         }
     }
-    else
-    {
-        for (ds=ds_p ; ds-- > drawsegs ; )  // new -- killough
-        {   
-            // determine if the drawseg obscures the sprite
-            if (ds->x1 > spr->x2 || ds->x2 < spr->x1
-            || (!ds->silhouette && !ds->maskedtexturecol))
-            {
-                continue;   // does not cover sprite
-            }
-
-            r1 = ds->x1 < spr->x1 ? spr->x1 : ds->x1;
-            r2 = ds->x2 > spr->x2 ? spr->x2 : ds->x2;
-
-            if (ds->scale1 > ds->scale2)
-            {
-                lowscale = ds->scale2;
-                scale = ds->scale1;
-            }
-            else
-            {
-                lowscale = ds->scale1;
-                scale = ds->scale2;
-            }
-
-            if (scale < spr->scale || (lowscale < spr->scale
-            && !R_PointOnSegSide (spr->gx, spr->gy, ds->curline)))
-            {
-                if (ds->maskedtexturecol)   // masked mid texture?
-                {
-                    R_RenderMaskedSegRange(ds, r1, r2);
-                }
-
-                continue;                   // seg is behind sprite
-            }
-
-            // clip this piece of the sprite
-            // killough 3/27/98: optimized and made much shorter
-
-            if (ds->silhouette&SIL_BOTTOM && spr->gz < ds->bsilheight)  // bottom sil
-                for (x=r1 ; x<=r2 ; x++)
-                    if (clipbot[x] == -2)
-                        clipbot[x] = ds->sprbottomclip[x];
-
-            if (ds->silhouette&SIL_TOP && spr->gzt > ds->tsilheight)  // top sil
-                for (x=r1 ; x<=r2 ; x++)
-                    if (cliptop[x] == -2)
-                        cliptop[x] = ds->sprtopclip[x];
-        }
-    }
 
     // all clipping has been performed, so draw the sprite
-
     // check for unclipped columns
     for (x = spr->x1 ; x<=spr->x2 ; x++)
     {
