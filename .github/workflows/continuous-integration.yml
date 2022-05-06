@@ -68,8 +68,8 @@ jobs:
       - name: Setup Linux env
         if: ${{ matrix.os.name == 'Linux' }}
         run: |
-          sudo apt-get upgrade
           sudo apt-get update --fix-missing
+          sudo apt-get full-upgrade --fix-missing
           sudo apt-get install --fix-missing ${{ matrix.compiler.name }} make cmake libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libpng-dev libsamplerate-dev
 
       - uses: actions/checkout@v2
