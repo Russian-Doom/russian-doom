@@ -1370,7 +1370,7 @@ static Menu_t LevelSelectMenu1 = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Level2Items_F[] = {
-    {ITT_TITLE,   "WEAPONS",                "JHE:TT",                     NULL,                 0}, // ОРУЖЕЕ
+    {ITT_TITLE,   "WEAPONS",                "JHE;BT",                     NULL,                 0}, // ОРУЖИЕ
     {ITT_SWITCH,  "TIMON'S AXE:",           "NJGJH NBVJYF:",              M_RD_SelectiveWp_0,   0}, // ТОПОР ТИМОНА
     {ITT_SWITCH,  "HAMMER OF RETRIBUTION:", "VJKJN DJPVTPLBZ:",           M_RD_SelectiveWp_1,   0}, // МОЛОТ ВОЗМЕЗДИЯ
     {ITT_SWITCH,  "QUIETUS:",               "GJCKTLYBQ LJDJL:",           M_RD_SelectiveWp_2,   0}, // ПОСЛЕДНИЙ ДОВОД
@@ -1401,7 +1401,7 @@ static Menu_t LevelSelectMenu2_F = {
 };
 
 static MenuItem_t Level2Items_C[] = {
-    {ITT_TITLE,   "WEAPONS",               "JHE:TT",                  NULL,                 0}, // ОРУЖЕЕ
+    {ITT_TITLE,   "WEAPONS",               "JHE;BT",                  NULL,                 0}, // ОРУЖИЕ
     {ITT_SWITCH,  "SERPENT STAFF:",        "PVTBYSQ GJCJ[:",          M_RD_SelectiveWp_0,   0}, // ЗМЕИНЫЙ ПОСОХ
     {ITT_SWITCH,  "FIRESTORM:",            "JUYTYYSQ INJHV:",         M_RD_SelectiveWp_1,   0}, // ОГНЕННЫЙ ШТОРМ
     {ITT_SWITCH,  "WRAITHVERGE:",          ";TPK LE[JD:",             M_RD_SelectiveWp_2,   0}, // ЖЕЗЛ ДУХОВ
@@ -1432,7 +1432,7 @@ static Menu_t LevelSelectMenu2_C = {
 };
 
 static MenuItem_t Level2Items_M[] = {
-    {ITT_TITLE,   "WEAPONS",                 "JHE:TT",                      NULL,                 0}, // ОРУЖЕЕ
+    {ITT_TITLE,   "WEAPONS",                 "JHE;BT",                      NULL,                 0}, // ОРУЖИЕ
     {ITT_SWITCH,  "FROST SHARDS:",           "KTLZYST JCRJKRB:",            M_RD_SelectiveWp_0,   0}, // ЛЕДЯНЫЕ ОСКОЛКИ
     {ITT_SWITCH,  "ARC OF DEATH:",           "LEUF CVTHNB:",                M_RD_SelectiveWp_1,   0}, // ДУГА СМЕРТИ
     {ITT_SWITCH,  "BLOODSCOURGE:",           "RHJDFDSQ ,BX:",               M_RD_SelectiveWp_2,   0}, // КРОВАВЫЙ БИЧ
