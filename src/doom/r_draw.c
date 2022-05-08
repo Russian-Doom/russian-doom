@@ -57,7 +57,7 @@ static byte *background_buffer = NULL;
 
 
 // R_DrawColumn. Source is the top of the column to scale.
-lighttable_t *dc_colormap; 
+lighttable_t *dc_colormap[2]; // [crispy] brightmaps
 int           dc_x, dc_yl, dc_yh; 
 fixed_t       dc_iscale;
 fixed_t       dc_texturemid;
@@ -91,7 +91,8 @@ fixed_t ds_xfrac, ds_yfrac;
 fixed_t ds_xstep, ds_ystep;
 
 byte         *ds_source;  // start of a 64*64 tile image 
-lighttable_t *ds_colormap; 
+lighttable_t *ds_colormap[2];
+byte         *ds_brightmap;
 
 
 // -----------------------------------------------------------------------------
@@ -148,7 +149,9 @@ void R_DrawColumn (void)
         {
             // Re-map color indices from wall texture column
             //  using a lighting/special effects LUT.
-            *dest = dc_colormap[dc_source[frac>>FRACBITS]];
+            // [crispy] brightmaps
+            const byte source = dc_source[frac>>FRACBITS];
+            *dest = dc_colormap[dc_brightmap[source]][source];
             dest += screenwidth;
             if ((frac += dc_iscale) >= heightmask)
             {
@@ -162,7 +165,10 @@ void R_DrawColumn (void)
         {
             // Re-map color indices from wall texture column
             //  using a lighting/special effects LUT.
-            *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
+            // [crispy] brightmaps
+            const byte source = dc_source[(frac>>FRACBITS)&heightmask];
+            *dest = dc_colormap[dc_brightmap[source]][source];
+
             dest += screenwidth; 
             frac += dc_iscale;
         } while (count--); 
@@ -214,7 +220,9 @@ void R_DrawColumnLow (void)
 
         do
         {
-            *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_source[frac>>FRACBITS]];
+            // [crispy] brightmaps
+            const byte source = dc_source[frac>>FRACBITS];
+            *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_brightmap[source]][source];
 
             dest  += screenwidth << hires;
             dest2 += screenwidth << hires;
@@ -231,7 +239,9 @@ void R_DrawColumnLow (void)
     {
         do 
         {
-            *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]];
+            // [crispy] brightmaps
+            const byte source = dc_source[(frac>>FRACBITS)&heightmask];
+            *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_brightmap[source]][source];
 
             dest  += screenwidth << hires;
             dest2 += screenwidth << hires;
@@ -792,7 +802,7 @@ void R_DrawFuzzColumnTranslucent (void)
 
         do
         {
-            *dest = transtable30[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest = transtable30[(*dest<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
             dest += screenwidth;
             if ((frac += dc_iscale) >= heightmask)
             frac -= heightmask;
@@ -803,7 +813,7 @@ void R_DrawFuzzColumnTranslucent (void)
     {
         do
         {
-            *dest = transtable30[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
+            *dest = transtable30[(*dest<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
             dest += screenwidth;
             frac += dc_iscale;
         } while (count--);
@@ -850,10 +860,10 @@ void R_DrawFuzzColumnTranslucentLow (void)
 
         do
         {
-            *dest = transtable30[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-            *dest2 = transtable30[(*dest2<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-            *dest3 = transtable30[(*dest3<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-            *dest4 = transtable30[(*dest4<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest = transtable30[(*dest<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
+            *dest2 = transtable30[(*dest2<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
+            *dest3 = transtable30[(*dest3<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
+            *dest4 = transtable30[(*dest4<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
 
             dest  += screenwidth << hires;
             dest2 += screenwidth << hires;
@@ -870,10 +880,10 @@ void R_DrawFuzzColumnTranslucentLow (void)
     {
         do 
         {
-            *dest = transtable30[(*dest<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
-            *dest2 = transtable30[(*dest2<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
-            *dest3 = transtable30[(*dest3<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
-            *dest4 = transtable30[(*dest4<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest = transtable30[(*dest<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest2 = transtable30[(*dest2<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest3 = transtable30[(*dest3<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest4 = transtable30[(*dest4<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
 
             dest  += screenwidth << hires;
             dest2 += screenwidth << hires;
@@ -925,7 +935,7 @@ void R_DrawTranslatedColumn (void)
         // Translation tables are used to map certain colorramps to other ones,
         // used with PLAY sprites. Thus the "green" ramp of the player 0 sprite
         // is mapped to gray, red, black/indigo. 
-        *dest = dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]];
+        *dest = dc_colormap[0][dc_translation[dc_source[frac>>FRACBITS]]];
         dest += screenwidth;
 	
         frac += dc_iscale; 
@@ -967,7 +977,7 @@ void R_DrawTranslatedColumnLow (void)
     // Here we do an additional index re-mapping.
     do 
     {
-        *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]];
+        *dest4 = *dest3 = *dest2 = *dest = dc_colormap[0][dc_translation[dc_source[frac>>FRACBITS]]];
         dest  += screenwidth << hires;
         dest2 += screenwidth << hires;
         dest3 += screenwidth << hires;
@@ -1020,7 +1030,7 @@ void R_DrawTLColumn (void)
 
         do
         {
-            *dest = transtable80[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest = transtable80[(*dest<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
             dest += screenwidth;
             if ((frac += dc_iscale) >= heightmask)
             frac -= heightmask;
@@ -1031,7 +1041,7 @@ void R_DrawTLColumn (void)
     {
         do
         {
-            *dest = transtable80[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
+            *dest = transtable80[(*dest<<8)+dc_colormap[0][dc_source[frac>>FRACBITS & heightmask]]];
             dest += screenwidth;
             frac += dc_iscale;
         } while (count--);
@@ -1085,10 +1095,10 @@ void R_DrawTLColumnLow (void)
 
         do
         {
-            *dest  = transtable80[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-            *dest2 = transtable80[(*dest2<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-            *dest3 = transtable80[(*dest3<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-            *dest4 = transtable80[(*dest4<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest = transtable80[(*dest<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
+            *dest2 = transtable80[(*dest2<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
+            *dest3 = transtable80[(*dest3<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
+            *dest4 = transtable80[(*dest4<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
             dest  += screenwidth << hires;
             dest2 += screenwidth << hires;
             dest3 += screenwidth << hires;
@@ -1102,10 +1112,11 @@ void R_DrawTLColumnLow (void)
     {
         do 
         {
-            *dest  = transtable80[(*dest<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
-            *dest2 = transtable80[(*dest2<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
-            *dest3 = transtable80[(*dest3<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
-            *dest4 = transtable80[(*dest4<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest = transtable80[(*dest<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest2 = transtable80[(*dest2<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest3 = transtable80[(*dest3<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest4 = transtable80[(*dest4<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
+
             dest  += screenwidth << hires;
             dest2 += screenwidth << hires;
             dest3 += screenwidth << hires;
@@ -1164,7 +1175,7 @@ void R_DrawSpan (void)
         // Lookup pixel from flat texture tile,
         //  re-index using light/colormap.
         dest = ylookup[ds_y] + columnofs[flipviewwidth[ds_x1++]];
-        *dest = ds_colormap[ds_source[spot]];
+        *dest = ds_colormap[ds_brightmap[ds_source[spot]]][ds_source[spot]];
 
         ds_xfrac += ds_xstep;
         ds_yfrac += ds_ystep;
@@ -1207,13 +1218,13 @@ void R_DrawSpanLow (void)
 
         // Lowres/blocky mode does it twice, while scale is adjusted appropriately.
         dest = ylookup[(ds_y << hires)] + columnofs[flipviewwidth[ds_x1]];
-        *dest = ds_colormap[ds_source[spot]];
+        *dest = ds_colormap[ds_brightmap[ds_source[spot]]][ds_source[spot]];
         dest2 = ylookup[(ds_y << hires) + 1] + columnofs[flipviewwidth[ds_x1++]];
-        *dest2 = ds_colormap[ds_source[spot]];
+        *dest2 = ds_colormap[ds_brightmap[ds_source[spot]]][ds_source[spot]];
         dest = ylookup[(ds_y << hires)] + columnofs[flipviewwidth[ds_x1]];
-        *dest = ds_colormap[ds_source[spot]];
+        *dest = ds_colormap[ds_brightmap[ds_source[spot]]][ds_source[spot]];
         dest2 = ylookup[(ds_y << hires) + 1] + columnofs[flipviewwidth[ds_x1++]];
-        *dest2 = ds_colormap[ds_source[spot]];
+        *dest2 = ds_colormap[ds_brightmap[ds_source[spot]]][ds_source[spot]];
 
         // position += step;
         ds_xfrac += ds_xstep;

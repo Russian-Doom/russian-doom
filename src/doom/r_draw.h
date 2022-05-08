@@ -35,7 +35,8 @@ extern int           dc_x, dc_yl, dc_yh;
 extern int           dc_texheight;
 extern fixed_t       dc_iscale;
 extern fixed_t       dc_texturemid;
-extern lighttable_t *dc_colormap; 
+extern lighttable_t *dc_colormap[2];
+extern byte         *dc_brightmap;
 extern byte         *dc_source;
 
 //
@@ -84,7 +85,8 @@ extern int           ds_y, ds_x1, ds_x2;
 extern fixed_t       ds_xfrac, ds_yfrac;
 extern fixed_t       ds_xstep, ds_ystep;
 extern byte         *ds_source;
-extern lighttable_t *ds_colormap;
+extern lighttable_t *ds_colormap[2];
+extern byte         *ds_brightmap;
 
 //
 // Video buffering stuff.

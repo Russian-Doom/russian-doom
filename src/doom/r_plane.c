@@ -203,7 +203,7 @@ static void R_MapPlane (int y, int x1, int x2)
 
     if (fixedcolormap)
     {
-        ds_colormap = fixedcolormap;
+        ds_colormap[0] = ds_colormap[1] = fixedcolormap;
     }
     else
     {
@@ -213,7 +213,8 @@ static void R_MapPlane (int y, int x1, int x2)
         if (index >= maxlightz)
             index = maxlightz-1;
 
-        ds_colormap = planezlight[index];
+        ds_colormap[0] = planezlight[index];
+        ds_colormap[1] = zlight[LIGHTLEVELS-1][MAXLIGHTZ-1];
     }
 
     ds_y = y;
@@ -437,11 +438,11 @@ void R_DrawPlanes (void)
             
             if (invul_sky && !vanillaparm)
             {
-                dc_colormap = (fixedcolormap ? fixedcolormap : colormaps);
+                dc_colormap[0] = dc_colormap[1] = fixedcolormap ? fixedcolormap : colormaps;
             }
             else
             {
-                dc_colormap = colormaps;
+                dc_colormap[0] = dc_colormap[1] = colormaps;
             }
 
             dc_texturemid = skytexturemid;
@@ -469,6 +470,7 @@ void R_DrawPlanes (void)
             ds_source = (flattranslation[pl->picnum] == -1) ?
                         R_DistortedFlat(pl->picnum) :
                         W_CacheLumpNum(lumpnum, PU_STATIC);
+            ds_brightmap = R_BrightmapForFlatNum(lumpnum-firstflat);
 
             // [JN] Apply flow effect to swirling liquids.
             if (swirling_liquids && flattranslation[pl->picnum] == -1 && !vanillaparm)
@@ -496,21 +498,6 @@ void R_DrawPlanes (void)
             stop = pl->maxx + 1;
             planezlight = zlight[light];
             pl->top[pl->minx-1] = pl->top[stop] = UINT_MAX; // [crispy] 32-bit integer math
-
-            // [JN] Apply brightmaps to floor/ceiling...
-            if (brightmaps && brightmaps_allowed)
-            {
-                if (pl->picnum == bmapflatnum1  // CONS1_1
-                ||  pl->picnum == bmapflatnum2  // CONS1_5
-                ||  pl->picnum == bmapflatnum3) // CONS1_7
-                {
-                    planezlight = fullbright_notgrayorbrown_floor[light];
-                }
-                if (pl->picnum == bmapflatnum4) // GATE6
-                {
-                    planezlight = fullbright_orangeyellow_floor[light];
-                }
-            }
 
             for (x = pl->minx ; x <= stop ; x++)
             {

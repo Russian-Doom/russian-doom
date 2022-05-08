@@ -140,6 +140,7 @@ unsigned  **texturecolumnofs;   // [crispy] column offsets for composited transl
 unsigned  **texturecolumnofs2;  // [crispy] column offsets for composited opaque textures
 byte      **texturecomposite;   // [crispy] composited translucent mid-textures on 2S walls
 byte      **texturecomposite2;  // [crispy] composited opaque textures
+byte      **texturebrightmap;   // [crispy] brightmaps
 
 // for global animation
 int        *flattranslation, *texturetranslation;
@@ -150,26 +151,6 @@ fixed_t    *spritewidth, *spriteoffset, *spritetopoffset;
 // colormaps
 lighttable_t *colormaps;
 lighttable_t *colormaps_rd; // [JN] Infragreen vison and B&W fuzz effect
-
-// [JN] Brightmaps
-lighttable_t *brightmaps_notgray;
-lighttable_t *brightmaps_notgrayorbrown;
-lighttable_t *brightmaps_redonly;
-lighttable_t *brightmaps_greenonly1;
-lighttable_t *brightmaps_greenonly2;
-lighttable_t *brightmaps_greenonly3;
-lighttable_t *brightmaps_orangeyellow;
-lighttable_t *brightmaps_dimmeditems;
-lighttable_t *brightmaps_brighttan;
-lighttable_t *brightmaps_redonly1;
-lighttable_t *brightmaps_explosivebarrel;
-lighttable_t *brightmaps_alllights;
-lighttable_t *brightmaps_candles;
-lighttable_t *brightmaps_pileofskulls;
-lighttable_t *brightmaps_redonly2;
-
-// [JN] Brightmaps: define where they can be applied.
-boolean brightmaps_allowed;
 
 
 // =============================================================================
@@ -842,6 +823,7 @@ static void R_InitTextures (void)
     texturewidthmask = Z_Malloc (numtextures * sizeof(*texturewidthmask), PU_STATIC, 0);
     texturewidth = Z_Malloc (numtextures * sizeof(*texturewidth), PU_STATIC, 0);
     textureheight = Z_Malloc (numtextures * sizeof(*textureheight), PU_STATIC, 0);
+    texturebrightmap = Z_Malloc (numtextures * sizeof(*texturebrightmap), PU_STATIC, 0);
 
     //	Really complex printing shit...
     temp1 = W_GetNumForName (DEH_String("S_START"));  // P_???????
@@ -898,6 +880,9 @@ static void R_InitTextures (void)
         memcpy (texture->name, mtexture->name, sizeof(texture->name));
         mpatch = &mtexture->patches[0];
         patch = &texture->patches[0];
+
+        // [crispy] initialize brightmaps
+        texturebrightmap[i] = R_BrightmapForTexName(texture->name);
 
         for (j=0 ; j < texture->patchcount ; j++, mpatch++, patch++)
         {
@@ -1197,37 +1182,6 @@ static void R_InitTransMaps (void)
     }
 }
 
-
-// -----------------------------------------------------------------------------
-// R_InitBrightmaps
-// [JN] Load in the brightmaps.
-// Note: some tables as well as it's valuaes are taken from Doom Retro (r_data.c).
-// Many thanks to Brad Harding for his amazing research of brightmap tables and colors!
-// -----------------------------------------------------------------------------
-
-static void R_InitBrightmaps (void)
-{
-    brightmaps_notgray         = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP1")), PU_STATIC);
-    brightmaps_notgrayorbrown  = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP2")), PU_STATIC);
-    brightmaps_redonly         = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP3")), PU_STATIC);
-    brightmaps_greenonly1      = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP4")), PU_STATIC);
-    brightmaps_greenonly2      = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP5")), PU_STATIC);
-    brightmaps_greenonly3      = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP6")), PU_STATIC);
-    brightmaps_orangeyellow    = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP7")), PU_STATIC);
-    brightmaps_dimmeditems     = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP8")), PU_STATIC);
-    brightmaps_brighttan       = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP9")), PU_STATIC);
-    brightmaps_redonly1        = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP10")), PU_STATIC);
-    brightmaps_explosivebarrel = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP11")), PU_STATIC);
-    brightmaps_alllights       = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP12")), PU_STATIC);    
-    brightmaps_candles         = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP13")), PU_STATIC);    
-    brightmaps_pileofskulls    = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP14")), PU_STATIC);    
-    brightmaps_redonly2        = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP15")), PU_STATIC);
-
-    // [JN] Brightmaps are loaded. But where can they be applied?
-    brightmaps_allowed = !vanillaparm && gamevariant != freedoom 
-                                      && gamevariant != freedm;
-}
-
 // -----------------------------------------------------------------------------
 // R_InitData
 // Locates all the lumps that will be used by all views.
@@ -1239,6 +1193,7 @@ void R_InitData (void)
     // [JN] Moved R_InitFlats to the top, needed for 
     // R_GenerateComposite ivoking while level loading.
     R_InitFlats ();
+    R_InitBrightmaps ();
     printf (".");
     R_InitTextures ();
     printf (".");
@@ -1249,13 +1204,6 @@ void R_InitData (void)
     // [JN] Generate translucency tables
     R_InitTransMaps ();
     printf (".");
-
-    if (gamevariant != freedoom && gamevariant != freedm)
-    {
-        R_InitBrightmaps ();
-        printf (".");
-        R_InitBrightmappedTextures ();
-    }
 }
 
 // -----------------------------------------------------------------------------

@@ -1,5 +1,9 @@
 //
-// Copyright(C) 2017-2019 Julian Nechaevsky
+// Copyright(C) 1993-1996 Id Software, Inc.
+// Copyright(C) 2005-2014 Simon Howard
+// Copyright(C) 2013-2017 Brad Harding
+// Copyright(C) 2017 Fabian Greffrath
+// Copyright(C) 2017-2022 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -16,281 +20,490 @@
 //
 
 
-#include "doomdef.h"
 #include "doomstat.h"
-#include "d_main.h"
 #include "r_bmaps.h"
 #include "jn.h"
 
 
-// Floors and ceilings:
-int bmapflatnum1, bmapflatnum2, bmapflatnum3, bmapflatnum4;
+// -----------------------------------------------------------------------------
+// [crispy] brightmap data
+// -----------------------------------------------------------------------------
 
-// Walls:
-int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05,
-    bmaptexture06, bmaptexture07, bmaptexture08, bmaptexture09, bmaptexture10,
-    bmaptexture11, bmaptexture12, bmaptexture13, bmaptexture14, bmaptexture15,
-    bmaptexture16, bmaptexture17, bmaptexture18, bmaptexture19, bmaptexture20,
-    bmaptexture21, bmaptexture22, bmaptexture23, bmaptexture24, bmaptexture25,
-    bmaptexture26, bmaptexture27, bmaptexture28, bmaptexture29, bmaptexture30,
-    bmaptexture31, bmaptexture32, bmaptexture33, bmaptexture34, bmaptexture35,
-    bmaptexture36, bmaptexture37, bmaptexture38, bmaptexture39, bmaptexture40,
-    bmaptexture41, bmaptexture42, bmaptexture43, bmaptexture44, bmaptexture45,
-    bmaptexture46, bmaptexture47, bmaptexture48, bmaptexture49, bmaptexture50,
-    bmaptexture51, bmaptexture52, bmaptexture53, bmaptexture54, bmaptexture55,
-    bmaptexture56, bmaptexture57, bmaptexture58, bmaptexture59, bmaptexture60,
-    bmaptexture61, bmaptexture62, bmaptexture63, bmaptexture64, bmaptexture65,
-    bmaptexture66, bmaptexture67, bmaptexture68, bmaptexture69, bmaptexture70,
-    bmaptexture71, bmaptexture72, bmaptexture73, bmaptexture74, bmaptexture75,
-    bmaptexture76, bmaptexture77, bmaptexture78, bmaptexture79, bmaptexture80,
-    bmaptexture81, bmaptexture82, bmaptexture83, bmaptexture84, bmaptexture85,
-    bmaptexture86, bmaptexture87, bmaptexture88, bmaptexture89, bmaptexture90,
-    bmaptexture91, bmaptexture92, bmaptexture93, bmaptexture94;
+static byte nobrightmap[256] = {0};
 
-//
-// [JN] Lookup and init all the textures for brightmapping.
-// This function is called at startup, see R_Init.
-//
-
-void R_InitBrightmappedTextures(void)
+static byte notgray[256] =
 {
-    // Texture lookup. There are many strict definitions,
-    // for example, no need to lookup Doom 1 textures in TNT.
+    0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+};
 
-    // -------------------------------------------------------
-    //  Atari Jaguar
-    // -------------------------------------------------------
-    if (gamemission == jaguar)
+static byte notgrayorbrown[256] =
+{
+    0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+};
+
+static byte redonly[256] =
+{
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+};
+
+static byte redonly2[256] =
+{
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+};
+
+static byte redandgreen[256] =
+{
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+};
+
+static byte greenonly1[256] =
+{
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+};
+
+static byte greenonly2[256] =
+{
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+};
+
+static byte greenonly3[256] =
+{
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+};
+
+static byte yellowonly[256] =
+{
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+};
+
+static byte blueandgreen[256] =
+{
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+};
+
+static byte brighttan[256] =
+{
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0,
+    1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+    0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+};
+
+byte *dc_brightmap = nobrightmap;
+
+// -----------------------------------------------------------------------------
+// [crispy] brightmaps for textures
+// -----------------------------------------------------------------------------
+
+enum
+{
+    DOOM1AND2,
+    DOOM1ONLY,
+    DOOM2ONLY,
+};
+
+typedef struct
+{
+    const char *const texture;
+    const int game;
+    byte *colormask;
+} fullbright_t;
+
+static const fullbright_t fullbright_doom[] = {
+    // [crispy] common textures
+    {"COMP2",    DOOM1AND2, blueandgreen},
+    {"COMPSTA1", DOOM1AND2, notgray},
+    {"COMPSTA2", DOOM1AND2, notgray},
+    {"COMPUTE1", DOOM1AND2, notgrayorbrown},
+    {"COMPUTE2", DOOM1AND2, notgrayorbrown},
+    {"COMPUTE3", DOOM1AND2, notgrayorbrown},
+    {"EXITSIGN", DOOM1AND2, notgray},
+    {"EXITSTON", DOOM1AND2, redonly},
+    {"METAL3",   DOOM2ONLY, redonly},
+    {"PLANET1",  DOOM1AND2, notgray},
+    {"SILVER2",  DOOM1AND2, notgray},
+    {"SILVER3",  DOOM1AND2, notgrayorbrown},
+    {"SLADSKUL", DOOM1AND2, redonly},
+    {"SW1BRCOM", DOOM1AND2, redonly},
+    {"SW1BRIK",  DOOM1AND2, redonly},
+    {"SW1BRN1",  DOOM2ONLY, redonly},
+    {"SW1COMM",  DOOM1AND2, redonly},
+    {"SW1DIRT",  DOOM1AND2, redonly},
+    {"SW1MET2",  DOOM1AND2, redonly},
+    {"SW1STARG", DOOM2ONLY, redonly},
+    {"SW1STON1", DOOM1AND2, redonly},
+    {"SW1STON2", DOOM2ONLY, redonly},
+    {"SW1STONE", DOOM1AND2, redonly},
+    {"SW1STRTN", DOOM1AND2, redonly},
+    {"SW2BLUE",  DOOM1AND2, redonly},
+    {"SW2BRCOM", DOOM1AND2, greenonly2},
+    {"SW2BRIK",  DOOM1AND2, greenonly1},
+    {"SW2BRN1",  DOOM1AND2, greenonly2},
+    {"SW2BRN2",  DOOM1AND2, greenonly1},
+    {"SW2BRNGN", DOOM1AND2, greenonly3},
+    {"SW2COMM",  DOOM1AND2, greenonly1},
+    {"SW2COMP",  DOOM1AND2, redonly},
+    {"SW2DIRT",  DOOM1AND2, greenonly2},
+    {"SW2EXIT",  DOOM1AND2, notgray},
+    {"SW2GRAY",  DOOM1AND2, notgray},
+    {"SW2GRAY1", DOOM1AND2, notgray},
+    {"SW2GSTON", DOOM1AND2, redonly},
+    // [JN] Special case: fewer colors lit.
+    {"SW2HOT",   DOOM1AND2, redonly2},
+    {"SW2MARB",  DOOM2ONLY, redonly},
+    {"SW2MET2",  DOOM1AND2, greenonly1},
+    {"SW2METAL", DOOM1AND2, greenonly3},
+    {"SW2MOD1",  DOOM1AND2, greenonly1},
+    {"SW2PANEL", DOOM1AND2, redonly},
+    {"SW2ROCK",  DOOM1AND2, redonly},
+    {"SW2SLAD",  DOOM1AND2, redonly},
+    {"SW2STARG", DOOM2ONLY, greenonly2},
+    {"SW2STON1", DOOM1AND2, greenonly3},
+    // [crispy] beware!
+    {"SW2STON2", DOOM1ONLY, redonly},
+    {"SW2STON2", DOOM2ONLY, greenonly2},
+    {"SW2STON6", DOOM1AND2, redonly},
+    {"SW2STONE", DOOM1AND2, greenonly2},
+    {"SW2STRTN", DOOM1AND2, greenonly1},
+    {"SW2TEK",   DOOM1AND2, greenonly1},
+    {"SW2VINE",  DOOM1AND2, greenonly1},
+    {"SW2WOOD",  DOOM1AND2, redonly},
+    {"SW2ZIM",   DOOM1AND2, redonly},
+    {"WOOD4",    DOOM1AND2, redonly},
+    {"WOODGARG", DOOM1AND2, redonly},
+    {"WOODSKUL", DOOM1AND2, redonly},
+//  {"ZELDOOR",  DOOM1AND2, redonly},
+    {"LITEBLU1", DOOM1AND2, notgray},
+    {"LITEBLU2", DOOM1AND2, notgray},
+    {"SPCDOOR3", DOOM2ONLY, greenonly1},
+    {"PIPEWAL1", DOOM2ONLY, greenonly1},
+    {"TEKLITE2", DOOM2ONLY, greenonly1},
+    {"TEKBRON2", DOOM2ONLY, yellowonly},
+    {"TEKWALL2", DOOM1ONLY, redonly},
+    {"TEKWALL5", DOOM1ONLY, redonly},
+    // [JN] Green in Doom 2, red in Plutonia.
+    {"SW2SKULL", DOOM2ONLY, redandgreen},
+    {"SW2SATYR", DOOM1AND2, brighttan},
+    {"SW2LION",  DOOM1AND2, brighttan},
+    {"SW2GARG",  DOOM1AND2, brighttan},
+    // [crispy] Final Doom textures
+    // TNT - Evilution exclusive
+    {"PNK4EXIT", DOOM2ONLY, redonly},
+    {"SLAD2",    DOOM2ONLY, notgrayorbrown},
+    {"SLAD3",    DOOM2ONLY, notgrayorbrown},
+    {"SLAD4",    DOOM2ONLY, notgrayorbrown},
+    {"SLAD5",    DOOM2ONLY, notgrayorbrown},
+    {"SLAD6",    DOOM2ONLY, notgrayorbrown},
+    {"SLAD7",    DOOM2ONLY, notgrayorbrown},
+    {"SLAD8",    DOOM2ONLY, notgrayorbrown},
+    {"SLAD9",    DOOM2ONLY, notgrayorbrown},
+    {"SLAD10",   DOOM2ONLY, notgrayorbrown},
+    {"SLAD11",   DOOM2ONLY, notgrayorbrown},
+    {"SLADRIP1", DOOM2ONLY, notgrayorbrown},
+    {"SLADRIP3", DOOM2ONLY, notgrayorbrown},
+    {"M_TEC",    DOOM2ONLY, greenonly2},
+    {"LITERED2", DOOM2ONLY, redonly},
+    {"BTNTMETL", DOOM2ONLY, notgrayorbrown},
+    {"BTNTSLVR", DOOM2ONLY, notgrayorbrown},
+    {"LITEYEL2", DOOM2ONLY, yellowonly},
+    {"LITEYEL3", DOOM2ONLY, yellowonly},
+    {"YELMETAL", DOOM2ONLY, yellowonly},
+    // Plutonia exclusive
+//  {"SW2SKULL", DOOM2ONLY, redonly},
+};
+
+static byte *R_BrightmapForTexName_Doom (const char *texname)
+{
+    int i;
+
+    for (i = 0; i < arrlen(fullbright_doom); i++)
     {
-        // Flats
-        bmapflatnum4 = R_FlatNumForName("GATE5");
+        const fullbright_t *fullbright = &fullbright_doom[i];
 
-        // Textures
+        if ((gamemission == doom && fullbright->game == DOOM2ONLY)
+        ||  (gamemission != doom && fullbright->game == DOOM1ONLY))
+        {
+            continue;
+        }
 
-        // Red only:
-        bmaptexture39 = R_CheckTextureNumForName("EXITSIGN");
-        bmaptexture08 = R_CheckTextureNumForName("SW2WOOD");
-        bmaptexture17 = R_CheckTextureNumForName("SW2GSTON");
-        bmaptexture34 = R_CheckTextureNumForName("SW2HOT");
-
-        // Bright tan:
-        bmaptexture88 = R_CheckTextureNumForName("SW2GARG");
-
-        // Don't look up any farther
-        return;
+        if (!strncasecmp(fullbright->texture, texname, 8))
+        {
+            return fullbright->colormask;
+        }
     }
 
-    // -------------------------------------------------------
-    //  Flats and ceilings (available in all games)
-    // -------------------------------------------------------
-    {
-        bmapflatnum1 = R_FlatNumForName("CONS1_1");
-        bmapflatnum2 = R_FlatNumForName("CONS1_5");
-        bmapflatnum3 = R_FlatNumForName("CONS1_7");
-        bmapflatnum4 = R_FlatNumForName("GATE6");
-    }
-
-    // -------------------------------------------------------
-    //  Not in Shareware
-    // -------------------------------------------------------
-    if (gamemode != shareware)
-    {
-        // Red only
-        bmaptexture08 = R_CheckTextureNumForName("SW2WOOD");
-        bmaptexture09 = R_CheckTextureNumForName("WOOD4");
-        bmaptexture11 = R_CheckTextureNumForName("SLADSKUL");
-        bmaptexture16 = R_CheckTextureNumForName("SW2BLUE");
-        bmaptexture17 = R_CheckTextureNumForName("SW2GSTON");
-        bmaptexture23 = R_CheckTextureNumForName("WOODGARG");
-        bmaptexture34 = R_CheckTextureNumForName("EXITSTON");
-
-        // Green only 1
-        bmaptexture73 = R_CheckTextureNumForName("SW2VINE");
-
-        // Bright tan
-        bmaptexture86 = R_CheckTextureNumForName("SW2SATYR");
-        bmaptexture87 = R_CheckTextureNumForName("SW2LION");
-        bmaptexture88 = R_CheckTextureNumForName("SW2GARG");
-
-        // Red only 2
-        bmaptexture93 = R_CheckTextureNumForName("SW2HOT");
-    }
-
-    // -------------------------------------------------------
-    //  Doom 1 only, not in Shareware
-    // -------------------------------------------------------
-    if (gamemode == registered || gamemode == retail)
-    {
-        // Red only
-        bmaptexture10 = R_CheckTextureNumForName("WOODSKUL");
-    }
-
-    // -------------------------------------------------------
-    //  Doom 1 only
-    // -------------------------------------------------------
-    if (gamemode == shareware || gamemode == registered || gamemode == retail 
-    ||  gamemode == pressbeta)
-    {
-        // Not gray
-        bmaptexture30 = R_CheckTextureNumForName("PLANET1");
-        bmaptexture38 = R_CheckTextureNumForName("LITEBLU2");
-
-        // Not gray or brown
-        bmaptexture40 = R_CheckTextureNumForName("COMP2");
-        bmaptexture41 = R_CheckTextureNumForName("COMPUTE2");
-        bmaptexture43 = R_CheckTextureNumForName("COMPUTE1");
-        bmaptexture44 = R_CheckTextureNumForName("COMPUTE3");
-
-        // Red only 1
-        bmaptexture89 = R_CheckTextureNumForName("TEKWALL2");
-        bmaptexture90 = R_CheckTextureNumForName("TEKWALL5");
-
-        // SW2STON2 is a special case.
-        // It's presented in both Doom 1 and Doom 2,
-        // but uses "redonly" in Doom 1 and "greenonly2" in Doom 2.
-        // See below for `else` condition and different bmap name.
-        bmaptexture24 = R_CheckTextureNumForName("SW2STON2");
-    }
-    else
-    {
-        bmaptexture94 = R_CheckTextureNumForName("SW2STON2");
-    }
-
-    // -------------------------------------------------------
-    //  Sigil
-    // -------------------------------------------------------
-    if (sgl_loaded || sgl_compat_loaded)
-    {
-        bmaptexture92 = R_CheckTextureNumForName("SIGIL");
-    }
-
-    // -------------------------------------------------------
-    //  Not in Doom 1
-    // -------------------------------------------------------
-    if (gamemode == commercial)
-    {
-        // Red only
-        bmaptexture01 = R_CheckTextureNumForName("SW1STARG");
-        bmaptexture02 = R_CheckTextureNumForName("SW2MARB");
-        bmaptexture06 = R_CheckTextureNumForName("SW2PANEL");
-        bmaptexture12 = R_CheckTextureNumForName("SW1BRIK");
-        bmaptexture14 = R_CheckTextureNumForName("SW1MET2");
-        bmaptexture18 = R_CheckTextureNumForName("SW2ROCK");
-        bmaptexture19 = R_CheckTextureNumForName("SW2STON6");
-        bmaptexture20 = R_CheckTextureNumForName("SW2ZIM");
-        bmaptexture25 = R_CheckTextureNumForName("SW1BRN1");
-        bmaptexture26 = R_CheckTextureNumForName("SW1STON2");
-        bmaptexture91 = R_CheckTextureNumForName("METAL3");
-
-        // Not gray or brown
-        bmaptexture35 = R_CheckTextureNumForName("SILVER2");
-        bmaptexture42 = R_CheckTextureNumForName("SILVER3");
-
-        // Green only 1
-        bmaptexture45 = R_CheckTextureNumForName("SW2MOD1");
-        bmaptexture58 = R_CheckTextureNumForName("SPCDOOR3");
-        bmaptexture66 = R_CheckTextureNumForName("SW2TEK");
-        bmaptexture67 = R_CheckTextureNumForName("SW2BRIK");
-        bmaptexture71 = R_CheckTextureNumForName("SW2MET2");
-        bmaptexture74 = R_CheckTextureNumForName("PIPEWAL1");
-        bmaptexture75 = R_CheckTextureNumForName("TEKLITE2");
-
-        // Green only 2
-        bmaptexture61 = R_CheckTextureNumForName("SW2STARG");
-        bmaptexture62 = R_CheckTextureNumForName("SW2BRN1");
-
-        // Orange and yellow
-        bmaptexture81 = R_CheckTextureNumForName("TEKBRON2");
-    }
-
-    // -------------------------------------------------------
-    //  Doom 2 only
-    // -------------------------------------------------------
-    if (gamemission == doom2)
-    {
-        // Green only 2
-        bmaptexture78 = R_CheckTextureNumForName("SW2SKULL");
-    }
-
-    // -------------------------------------------------------
-    //  TNT Evilution only
-    // -------------------------------------------------------
-    if (gamemission == pack_tnt)
-    {
-        // Red only
-        bmaptexture27 = R_CheckTextureNumForName("LITERED2");
-        bmaptexture28 = R_CheckTextureNumForName("PNK4EXIT");
-
-        // Not gray or brown
-        bmaptexture46 = R_CheckTextureNumForName("BTNTMETL");
-        bmaptexture47 = R_CheckTextureNumForName("BTNTSLVR");
-        bmaptexture48 = R_CheckTextureNumForName("SLAD2");
-        bmaptexture49 = R_CheckTextureNumForName("SLAD3");
-        bmaptexture50 = R_CheckTextureNumForName("SLAD4");
-        bmaptexture51 = R_CheckTextureNumForName("SLAD5");
-        bmaptexture52 = R_CheckTextureNumForName("SLAD6");
-        bmaptexture53 = R_CheckTextureNumForName("SLAD7");
-        bmaptexture54 = R_CheckTextureNumForName("SLAD8");
-        bmaptexture55 = R_CheckTextureNumForName("SLAD9");
-        bmaptexture56 = R_CheckTextureNumForName("SLAD10");
-        bmaptexture57 = R_CheckTextureNumForName("SLAD11");
-        bmaptexture59 = R_CheckTextureNumForName("SLADRIP1");
-        bmaptexture60 = R_CheckTextureNumForName("SLADRIP3");
-
-        // Green only 2
-        bmaptexture79 = R_CheckTextureNumForName("M_TEC");
-
-        // Orange and yellow
-        bmaptexture82 = R_CheckTextureNumForName("LITEYEL2");
-        bmaptexture83 = R_CheckTextureNumForName("LITEYEL3");
-        bmaptexture84 = R_CheckTextureNumForName("YELMETAL");
-    }
-    // -------------------------------------------------------
-    //  Plutonia only
-    // -------------------------------------------------------
-    if (gamemission == pack_plut)
-    {
-        // Dimmed items (red color)
-        bmaptexture85 = R_CheckTextureNumForName("SW2SKULL");
-    }
-
-    // -------------------------------------------------------
-    //  All games
-    // -------------------------------------------------------
-    {
-        // Red only
-        bmaptexture03 = R_CheckTextureNumForName("SW1BRCOM");
-        bmaptexture04 = R_CheckTextureNumForName("SW1DIRT");
-        bmaptexture05 = R_CheckTextureNumForName("SW1STRTN");
-        bmaptexture07 = R_CheckTextureNumForName("SW2SLAD");
-        bmaptexture13 = R_CheckTextureNumForName("SW1COMM");
-        bmaptexture15 = R_CheckTextureNumForName("SW1STON1");
-        bmaptexture21 = R_CheckTextureNumForName("SW2COMP");
-        bmaptexture22 = R_CheckTextureNumForName("SW1STONE");
-        bmaptexture39 = R_CheckTextureNumForName("EXITSIGN");
-
-        // Not gray
-        bmaptexture29 = R_CheckTextureNumForName("COMPSTA2");
-        bmaptexture31 = R_CheckTextureNumForName("SW2EXIT");
-        bmaptexture32 = R_CheckTextureNumForName("SW2GRAY1");
-        bmaptexture33 = R_CheckTextureNumForName("COMPSTA1");
-        bmaptexture36 = R_CheckTextureNumForName("LITEBLU1");
-        bmaptexture37 = R_CheckTextureNumForName("SW2GRAY");
-
-        // Green only 1
-        bmaptexture68 = R_CheckTextureNumForName("SW2BRN2");
-        bmaptexture69 = R_CheckTextureNumForName("SW2COMM");
-        bmaptexture72 = R_CheckTextureNumForName("SW2STRTN");
-
-        // Green only 2
-        bmaptexture63 = R_CheckTextureNumForName("SW2BRCOM");
-        bmaptexture64 = R_CheckTextureNumForName("SW2STON1");
-        bmaptexture65 = R_CheckTextureNumForName("SW2STONE");
-        bmaptexture70 = R_CheckTextureNumForName("SW2DIRT");
-
-        // Green only 3
-        bmaptexture77 = R_CheckTextureNumForName("SW2BRNGN");
-        bmaptexture80 = R_CheckTextureNumForName("SW2METAL");
-    }
+    return nobrightmap;
 }
 
+// -----------------------------------------------------------------------------
+// [crispy] brightmaps for sprites
+// -----------------------------------------------------------------------------
+
+static byte *R_BrightmapForSprite_Doom (const int type)
+{
+    if (brightmaps)
+    {
+        switch (type)
+        {
+            // Armor Bonus
+            case SPR_BON2:
+            // Cell Charge
+            case SPR_CELL:
+            {
+                return greenonly1;
+                break;
+            }
+            // Barrel
+            case SPR_BAR1:
+            {
+                return greenonly3;
+                break;
+            }
+            // Cell Charge Pack
+            case SPR_CELP:
+            {
+                return yellowonly;
+                break;
+            }
+            // BFG9000
+            case SPR_BFUG:
+            // Plasmagun
+            case SPR_PLAS:
+            {
+                return redonly;
+                break;
+            }
+        }
+    }
+
+    return nobrightmap;
+}
+
+// -----------------------------------------------------------------------------
+// [crispy] brightmaps for flats
+// -----------------------------------------------------------------------------
+
+static int bmapflatnum[12];
+
+static byte *R_BrightmapForFlatNum_Doom (const int num)
+{
+    if (brightmaps)
+    {
+        if (num == bmapflatnum[0]
+        ||  num == bmapflatnum[1]
+        ||  num == bmapflatnum[2])
+        {
+            return notgrayorbrown;
+        }
+    }
+
+    return nobrightmap;
+}
+
+// -----------------------------------------------------------------------------
+// [crispy] brightmaps for states
+// -----------------------------------------------------------------------------
+
+static byte *R_BrightmapForState_Doom (const int state)
+{
+    if (brightmaps)
+    {
+        switch (state)
+        {
+            case S_BFG1:
+            case S_BFG2:
+            case S_BFG3:
+            case S_BFG4:
+            {
+                return redonly;
+                break;
+            }
+        }
+	}
+
+    return nobrightmap;
+}
+
+// -----------------------------------------------------------------------------
+// [crispy] initialize brightmaps
+// -----------------------------------------------------------------------------
+
+byte *(*R_BrightmapForTexName) (const char *texname);
+byte *(*R_BrightmapForSprite) (const int type);
+byte *(*R_BrightmapForFlatNum) (const int num);
+byte *(*R_BrightmapForState) (const int state);
+
+void R_InitBrightmaps ()
+{
+    // [crispy] only three select brightmapped flats
+    bmapflatnum[0] = R_FlatNumForName("CONS1_1");
+    bmapflatnum[1] = R_FlatNumForName("CONS1_5");
+    bmapflatnum[2] = R_FlatNumForName("CONS1_7");
+
+    R_BrightmapForTexName = R_BrightmapForTexName_Doom;
+    R_BrightmapForSprite = R_BrightmapForSprite_Doom;
+    R_BrightmapForFlatNum = R_BrightmapForFlatNum_Doom;
+    R_BrightmapForState = R_BrightmapForState_Doom;
+}

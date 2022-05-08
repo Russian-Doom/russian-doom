@@ -1,5 +1,9 @@
 //
-// Copyright(C) 2017-2019 Julian Nechaevsky
+// Copyright(C) 1993-1996 Id Software, Inc.
+// Copyright(C) 2005-2014 Simon Howard
+// Copyright(C) 2013-2017 Brad Harding
+// Copyright(C) 2017 Fabian Greffrath
+// Copyright(C) 2017-2022 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -21,29 +25,11 @@
 #include "r_data.h"
 
 
-// Prototypes
-void R_InitBrightmappedTextures (void);
+extern void R_InitBrightmaps ();
 
-// Floors and ceilings:
-extern int bmapflatnum1, bmapflatnum2, bmapflatnum3, bmapflatnum4;
+extern byte *(*R_BrightmapForTexName) (const char *texname);
+extern byte *(*R_BrightmapForSprite) (const int type);
+extern byte *(*R_BrightmapForFlatNum) (const int num);
+extern byte *(*R_BrightmapForState) (const int state);
 
-// Walls:
-extern int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05,
-bmaptexture06, bmaptexture07, bmaptexture08, bmaptexture09, bmaptexture10,
-bmaptexture11, bmaptexture12, bmaptexture13, bmaptexture14, bmaptexture15,
-bmaptexture16, bmaptexture17, bmaptexture18, bmaptexture19, bmaptexture20,
-bmaptexture21, bmaptexture22, bmaptexture23, bmaptexture24, bmaptexture25,
-bmaptexture26, bmaptexture27, bmaptexture28, bmaptexture29, bmaptexture30,
-bmaptexture31, bmaptexture32, bmaptexture33, bmaptexture34, bmaptexture35,
-bmaptexture36, bmaptexture37, bmaptexture38, bmaptexture39, bmaptexture40,
-bmaptexture41, bmaptexture42, bmaptexture43, bmaptexture44, bmaptexture45,
-bmaptexture46, bmaptexture47, bmaptexture48, bmaptexture49, bmaptexture50,
-bmaptexture51, bmaptexture52, bmaptexture53, bmaptexture54, bmaptexture55,
-bmaptexture56, bmaptexture57, bmaptexture58, bmaptexture59, bmaptexture60,
-bmaptexture61, bmaptexture62, bmaptexture63, bmaptexture64, bmaptexture65,
-bmaptexture66, bmaptexture67, bmaptexture68, bmaptexture69, bmaptexture70,
-bmaptexture71, bmaptexture72, bmaptexture73, bmaptexture74, bmaptexture75,
-bmaptexture76, bmaptexture77, bmaptexture78, bmaptexture79, bmaptexture80,
-bmaptexture81, bmaptexture82, bmaptexture83, bmaptexture84, bmaptexture85,
-bmaptexture86, bmaptexture87, bmaptexture88, bmaptexture89, bmaptexture90,
-bmaptexture91, bmaptexture92, bmaptexture93, bmaptexture94;
+extern byte **texturebrightmap;

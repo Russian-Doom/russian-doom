@@ -536,10 +536,6 @@ static void R_InitLightTables (void)
             level = NUMCOLORMAPS-1;
 
             zlight[i][j] = colormaps + level*256;
-            
-            // [JN] Floor brightmaps
-            fullbright_notgrayorbrown_floor[i][j] = brightmaps_notgrayorbrown + level * 256;
-            fullbright_orangeyellow_floor[i][j] = brightmaps_orangeyellow + level * 256;
         }
     }
 }
@@ -767,23 +763,6 @@ void R_ExecuteSetViewSize (void)
             }
 
             scalelight[i][j] = colormaps + level*256;
-
-            // [JN] Wall and sprite brightmaps
-            fullbright_redonly[i][j] = brightmaps_redonly + level*256;
-            fullbright_notgray[i][j] = brightmaps_notgray + level*256;
-            fullbright_notgrayorbrown[i][j] = brightmaps_notgrayorbrown + level*256;
-            fullbright_greenonly1[i][j] = brightmaps_greenonly1 + level*256;
-            fullbright_greenonly2[i][j] = brightmaps_greenonly2 + level*256;
-            fullbright_greenonly3[i][j] = brightmaps_greenonly3 + level*256;
-            fullbright_orangeyellow[i][j] = brightmaps_orangeyellow + level*256;
-            fullbright_dimmeditems[i][j] = brightmaps_dimmeditems + level*256;
-            fullbright_brighttan[i][j] = brightmaps_brighttan + level*256;
-            fullbright_redonly1[i][j] = brightmaps_redonly1 + level*256;
-            fullbright_explosivebarrel[i][j] = brightmaps_explosivebarrel + level*256;
-            fullbright_alllights[i][j] = brightmaps_alllights + level*256;
-            fullbright_candles[i][j] = brightmaps_candles + level*256;
-            fullbright_pileofskulls[i][j] = brightmaps_pileofskulls + level*256;
-            fullbright_redonly2[i][j] = brightmaps_redonly2 + level*256;
         }
     }
 

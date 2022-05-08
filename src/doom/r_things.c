@@ -26,6 +26,7 @@
 #include "r_local.h"
 #include "doomstat.h"
 #include "v_trans.h"
+#include "r_bmaps.h"
 #include "jn.h"
 
 
@@ -42,16 +43,6 @@
 fixed_t pspritescale, pspriteiscale;
 
 static lighttable_t **spritelights;
-
-// [JN] Brightmaps
-static lighttable_t **fullbrights_notgray;
-static lighttable_t **fullbrights_redonly;
-static lighttable_t **fullbrights_greenonly1;
-static lighttable_t **fullbrights_dimmeditems;
-static lighttable_t **fullbrights_explosivebarrel;
-static lighttable_t **fullbrights_alllights;
-static lighttable_t **fullbrights_candles;
-static lighttable_t **fullbrights_pileofskulls;
 
 // psprite clipping and initializing clipping
 int *negonearray;           // [JN] killough 2/8/98: // dropoff overflow
@@ -490,9 +481,12 @@ void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
 
     patch = W_CacheLumpNum (vis->patch+firstspritelump, PU_CACHE);
 
-    dc_colormap = vis->colormap;
+    // [crispy] brightmaps for select sprites
+    dc_colormap[0] = vis->colormap[0];
+    dc_colormap[1] = vis->colormap[1];
+    dc_brightmap = vis->brightmap;
 
-    if (!dc_colormap)
+    if (!dc_colormap[0])
     {
         // NULL colormap = shadow draw
         colfunc = fuzzcolfunc;
@@ -744,17 +738,17 @@ void R_ProjectSprite (mobj_t *thing)
     if (thing->flags & MF_SHADOW && improved_fuzz < 4)
     {
         // shadow draw
-        vis->colormap = NULL;
+        vis->colormap[0] = vis->colormap[1] = NULL;
     }
     else if (fixedcolormap)
     {
         // fixed map
-        vis->colormap = fixedcolormap;
+        vis->colormap[0] = vis->colormap[1] = fixedcolormap;
     }
     else if (thing->frame & FF_FULLBRIGHT)
     {
         // full bright
-        vis->colormap = colormaps;
+        vis->colormap[0] = vis->colormap[1] = colormaps;
     }
     else
     {
@@ -766,75 +760,12 @@ void R_ProjectSprite (mobj_t *thing)
             index = MAXLIGHTSCALE-1;
         }
 
-        vis->colormap = spritelights[index];
-
-        // [JN] Applying brightmaps to sprites...
-        if (brightmaps && brightmaps_allowed)
-        {
-            // Armor Bonus (don't light up Skull Chest from Press Beta)
-            if ((thing->type == MT_MISC3 && gamemode != pressbeta) 
-            ||   thing->type == MT_MISC20  // Cell Charge
-            ||   thing->type == MT_MISC21) // Cell Charge Pack
-            vis->colormap = fullbrights_dimmeditems[index];
-
-            if (thing->type == MT_MISC25  // BFG9000
-            ||  thing->type == MT_MISC28) // Plasmagun
-            vis->colormap = fullbrights_redonly[index];
-
-            if (thing->state - states == S_BAR1   // Explosive barrel (idle)
-            ||  thing->state - states == S_BAR2
-            ||  thing->state - states == S_BEXP)
-            vis->colormap = fullbrights_explosivebarrel[index];
-
-            if (thing->state - states == S_BEXP3) // Explosive barrel (explosion)
-            vis->colormap = fullbrights_alllights[index];
-
-            if (thing->type == MT_MISC73) // Pile of skulls and candles (29)
-            vis->colormap = fullbrights_pileofskulls[index];
-
-            if (thing->type == MT_MISC49  // Candlestick (34)
-            ||  thing->type == MT_MISC50) // Candelabra (35)
-            vis->colormap = fullbrights_candles[index];
-
-            if (thing->type == MT_MISC41  // Tall blue torch (44)
-            ||  thing->type == MT_MISC42  // Tall green torch (45)
-            ||  thing->type == MT_MISC43  // Tall red torch (46)
-            ||  thing->type == MT_MISC44  // Short blue torch (55)
-            ||  thing->type == MT_MISC45  // Short green torch (56)
-            ||  thing->type == MT_MISC46  // Short red torch (57)
-            ||  thing->type == MT_MISC77  // Burning barrel (70)
-            ||  thing->type == MT_MISC29  // Tall tech lamp (85)
-            ||  thing->type == MT_MISC30  // Short tech lamp (86)
-            ||  thing->type == MT_MISC31) // Floor lamp (2028)
-            vis->colormap = fullbrights_alllights[index];
-            
-            // Press Beta's Lost Soul
-            if (thing->type == MT_SKULL && gamemode == pressbeta)
-            vis->colormap = fullbrights_notgray[index];
-        }
-        // [JN] Fallback. If we are not using brightmaps, apply full brightness
-        // to the objects, thats no longer lit in info.c.
-        else
-        {
-            if (thing->type == MT_MISC49    // Candlestick
-            ||  thing->type == MT_MISC50    // Candelabra
-            ||  thing->type == MT_MISC41    // Tall blue torch
-            ||  thing->type == MT_MISC42    // Tall green torch
-            ||  thing->type == MT_MISC43    // Tall red torch
-            ||  thing->type == MT_MISC44    // Short blue torch
-            ||  thing->type == MT_MISC45    // Short green torch
-            ||  thing->type == MT_MISC46    // Short red torch
-            ||  thing->state - states == S_BEXP  // Explosive barrel
-            ||  thing->state - states == S_BEXP2
-            ||  thing->state - states == S_BEXP3
-            ||  thing->type == MT_MISC73    // Pile of skulls and candles
-            ||  thing->type == MT_MISC77    // Burning barrel
-            ||  thing->type == MT_MISC29    // Tall tech lamp
-            ||  thing->type == MT_MISC30    // Short tech lamp
-            ||  thing->type == MT_MISC31)   // Floor lamp
-            vis->colormap = colormaps;
-        }
+        // [crispy] brightmaps for select sprites
+        vis->colormap[0] = spritelights[index];
+        vis->colormap[1] = scalelight[LIGHTLEVELS-1][MAXLIGHTSCALE-1];
     }	
+
+    vis->brightmap = R_BrightmapForSprite(thing->sprite);
 
     // [crispy] colored blood
     if (colored_blood && !vanillaparm
@@ -868,44 +799,14 @@ void R_AddSprites (sector_t *sec)
     if (lightnum < 0)		
     {
         spritelights = scalelight[0];
-
-        // [JN] Calculating sprite brightmaps
-        fullbrights_notgray = fullbright_notgray[0];
-        fullbrights_greenonly1 = fullbright_greenonly1[0];
-        fullbrights_dimmeditems = fullbright_dimmeditems[0];
-        fullbrights_redonly = fullbright_redonly[0];
-        fullbrights_explosivebarrel = fullbright_explosivebarrel[0];
-        fullbrights_alllights = fullbright_alllights[0];
-        fullbrights_candles = fullbright_candles[0];
-        fullbrights_pileofskulls = fullbright_pileofskulls[0];
     }
     else if (lightnum >= LIGHTLEVELS)
     {
         spritelights = scalelight[LIGHTLEVELS-1];
-
-        // [JN] Calculating sprite brightmaps
-        fullbrights_notgray = fullbright_notgray[LIGHTLEVELS-1];
-        fullbrights_greenonly1 = fullbright_greenonly1[LIGHTLEVELS-1];
-        fullbrights_dimmeditems = fullbright_dimmeditems[LIGHTLEVELS-1];
-        fullbrights_redonly = fullbright_redonly[LIGHTLEVELS-1];
-        fullbrights_explosivebarrel = fullbright_explosivebarrel[LIGHTLEVELS-1];
-        fullbrights_alllights = fullbright_alllights[LIGHTLEVELS-1];
-        fullbrights_candles = fullbright_candles[LIGHTLEVELS-1];
-        fullbrights_pileofskulls = fullbright_pileofskulls[LIGHTLEVELS-1];
     }
     else
     {
         spritelights = scalelight[lightnum];
-
-        // [JN] Calculating sprite brightmaps
-        fullbrights_notgray = fullbright_notgray[lightnum];
-        fullbrights_greenonly1 = fullbright_greenonly1[lightnum];
-        fullbrights_dimmeditems = fullbright_dimmeditems[lightnum];
-        fullbrights_redonly = fullbright_redonly[lightnum];
-        fullbrights_explosivebarrel = fullbright_explosivebarrel[lightnum];
-        fullbrights_alllights = fullbright_alllights[lightnum];
-        fullbrights_candles = fullbright_candles[lightnum];
-        fullbrights_pileofskulls = fullbright_pileofskulls[lightnum];
     }
 
     // Handle all things in sector.
@@ -1089,19 +990,19 @@ void R_DrawPSprite (pspdef_t *psp)
         if (gamemode == pressbeta)
         {
             // [JN] Press Beta: always use inverted palette for Partial Invisibility
-            vis->colormap = fixedcolormap ? fixedcolormap : spritelights[MAXLIGHTSCALE-1];
+            vis->colormap[0] = vis->colormap[1] = fixedcolormap ? fixedcolormap : spritelights[MAXLIGHTSCALE-1];
         }
         else
         {
             if (improved_fuzz < 4)
             {
                 // shadow draw
-                vis->colormap = NULL;
+                vis->colormap[0] = vis->colormap[1] = NULL;
             }
             else
             {
                 // [JN] Translucent fuzz effect.
-                vis->colormap = fixedcolormap ? fixedcolormap : spritelights[MAXLIGHTSCALE-1];
+                vis->colormap[0] = vis->colormap[1] = fixedcolormap ? fixedcolormap : spritelights[MAXLIGHTSCALE-1];
                 vis->mobjflags |= MF_SHADOW;
             }
         }
@@ -1109,18 +1010,21 @@ void R_DrawPSprite (pspdef_t *psp)
     else if (fixedcolormap)
     {
         // fixed color
-        vis->colormap = fixedcolormap;
+        vis->colormap[0] = vis->colormap[1] = fixedcolormap;
     }
     else if (psp->state->frame & FF_FULLBRIGHT)
     {
         // full bright
-        vis->colormap = colormaps;
+        vis->colormap[0] = vis->colormap[1] = colormaps;
     }
     else
     {
         // local light
-        vis->colormap = spritelights[MAXLIGHTSCALE-1];
+        vis->colormap[0] = spritelights[MAXLIGHTSCALE-1];
+        vis->colormap[1] = scalelight[LIGHTLEVELS-1][MAXLIGHTSCALE-1];
     }
+    
+    vis->brightmap = R_BrightmapForState(psp->state - states);
 	
     // [JN] e6y: interpolation for weapon bobbing
     if (uncapped_fps && weapon_bobbing && !vanillaparm)
@@ -1178,7 +1082,6 @@ void R_DrawPlayerSprites (void)
 {
     int         i;
     int         lightnum;
-    const int   state = viewplayer->psprites[ps_weapon].state - states; // [from-crispy] We need to define what "state" actually is
     pspdef_t   *psp;    
 
     // get light level
@@ -1194,18 +1097,7 @@ void R_DrawPlayerSprites (void)
     }
     else
     {
-        // [JN] Standard formula first
         spritelights = scalelight[lightnum];
-
-        // [JN] Applying brightmaps to HUD weapons...
-        if (brightmaps && !vanillaparm && gamevariant != freedoom && gamevariant != freedm)
-        {
-            // BFG9000
-            if (state == S_BFG1 || state == S_BFG2 || state == S_BFG3 || state == S_BFG4)
-            {
-                spritelights = fullbright_redonly[lightnum];
-            }
-        }
     }
 
     // clip to screen bounds
