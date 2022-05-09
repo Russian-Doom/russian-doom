@@ -847,26 +847,6 @@ static inline void R_ApplyWeaponBob (fixed_t *sx, boolean bobx, fixed_t *sy, boo
 }
 
 // -----------------------------------------------------------------------------
-// R_ApplyRaiseLowerBob
-// [JN] Smooth bobbing for raise and lowering weapons
-// -----------------------------------------------------------------------------
-
-static inline void R_ApplyRaiseLowerBob (fixed_t *sx, boolean bobx)
-{
-    const angle_t angle = (128 * leveltime) & FINEMASK;
-
-    if (sx)
-    {
-        *sx = FRACUNIT;
-
-        if (bobx)
-        {
-            *sx += FixedMul(viewplayer->bob, finecosine[angle]);
-        }
-    }
-}
-
-// -----------------------------------------------------------------------------
 // R_DrawPSprite
 // -----------------------------------------------------------------------------
 
@@ -916,7 +896,7 @@ void R_DrawPSprite (pspdef_t *psp)
         // [JN] ...except X-bobbing only for raising and lowering states.
         else
         {
-            R_ApplyRaiseLowerBob(&psp_sx, true);
+            R_ApplyWeaponBob(&psp_sx, true, 0, false);
         }
 
         // [crispy] squat down weapon sprite a bit after hitting the ground
