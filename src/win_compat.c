@@ -102,6 +102,7 @@ int D_mkdir(const char *dirname)
 
 void DisableWinRound(SDL_Window* screen)
 {
+#ifdef _WIN64
     HMODULE hDllDwmApi;
     HRESULT (*pDwmSetWindowAttribute) (HWND, DWORD, LPCVOID, DWORD);
     SDL_SysWMinfo wmInfo;
@@ -122,6 +123,7 @@ void DisableWinRound(SDL_Window* screen)
         pDwmSetWindowAttribute(hwnd, 33, // DWMWA_WINDOW_CORNER_PREFERENCE
                                &noround, sizeof(noround));
     }
+#endif
 }
 
 #endif
