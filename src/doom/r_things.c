@@ -542,7 +542,7 @@ void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
 // Generates a vissprite for a thing if it might be visible.
 // -----------------------------------------------------------------------------
 
-void R_ProjectSprite (mobj_t *thing)
+static void R_ProjectSprite (mobj_t *thing, int lightnum)
 {
     int            x1, x2, lump, index;
     unsigned       rot;
@@ -762,7 +762,18 @@ void R_ProjectSprite (mobj_t *thing)
 
         // [crispy] brightmaps for select sprites
         vis->colormap[0] = spritelights[index];
-        vis->colormap[1] = colormaps;
+
+        // [JN] Don't lit up Armor Bonus with full brightness in dark areas.
+        if (thing->type == MT_MISC3)
+        {
+            vis->colormap[1] = lightnum < 6 ? 
+                               &colormaps[15*256] : // Static half-bright w/o diminishing
+                               spritelights[47];    // Maximum bright with diminishing
+        }
+        else
+        {
+            vis->colormap[1] = colormaps;
+        }
     }	
 
     vis->brightmap = R_BrightmapForSprite(thing->sprite);
@@ -812,7 +823,7 @@ void R_AddSprites (sector_t *sec)
     // Handle all things in sector.
     for (thing = sec->thinglist ; thing ; thing = thing->snext)
     {
-        R_ProjectSprite (thing);
+        R_ProjectSprite (thing, lightnum);
     }
 }
 
