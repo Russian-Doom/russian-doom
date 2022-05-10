@@ -1,24 +1,19 @@
 //
-//  Copyright(C) 2021 Roman Fomin
-//  Copyright(C) 2022 Roman Fomin, Julian Nechaevsky, Dasperal, kmeaw
+// Copyright(C) 2021 Roman Fomin
+// Copyright(C) 2022 Roman Fomin, Julian Nechaevsky, Dasperal, kmeaw
 //
-//  This program is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU General Public License
-//  as published by the Free Software Foundation; either version 2
-//  of the License, or (at your option) any later version.
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
 //
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 
-//  02111-1307, USA.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
 //
 // DESCRIPTION:
-//      unicode paths for fopen() on Windows
+//  Several compatibility functions for Windows OS
 
 #include "rd_io.h"
 
@@ -100,14 +95,44 @@ int D_mkdir(const char *dirname)
     return ret;
 }
 
+typedef long (__stdcall *PRTLGETVERSION)(PRTL_OSVERSIONINFOEXW);
+
+int I_CheckWindows11(void)
+{
+    PRTLGETVERSION  pRtlGetVersion = (PRTLGETVERSION) GetProcAddress(GetModuleHandle("ntdll.dll"), "RtlGetVersion");
+
+    if(pRtlGetVersion)
+    {
+        OSVERSIONINFOEXW info;
+
+        memset(&info, 0, sizeof(OSVERSIONINFOEXW));
+        info.dwOSVersionInfoSize = sizeof(RTL_OSVERSIONINFOEXW);
+
+        pRtlGetVersion((PRTL_OSVERSIONINFOEXW)&info);
+
+        if(info.dwPlatformId == VER_PLATFORM_WIN32_NT)
+        {
+            if(info.dwMajorVersion == 10)
+            {
+                if(info.dwBuildNumber >= 22000)
+                    return 1;
+            }
+        }
+    }
+
+    return 0;
+}
+
 void DisableWinRound(SDL_Window* screen)
 {
-#ifdef _WIN64
     HMODULE hDllDwmApi;
     HRESULT (*pDwmSetWindowAttribute) (HWND, DWORD, LPCVOID, DWORD);
     SDL_SysWMinfo wmInfo;
     HWND hwnd;
     int noround = 1; // DWMWCP_DONOTROUND
+
+    if(!I_CheckWindows11())
+		return;
 
     pDwmSetWindowAttribute = NULL;
     hDllDwmApi = LoadLibrary("dwmapi.dll");
@@ -123,7 +148,6 @@ void DisableWinRound(SDL_Window* screen)
         pDwmSetWindowAttribute(hwnd, 33, // DWMWA_WINDOW_CORNER_PREFERENCE
                                &noround, sizeof(noround));
     }
-#endif
 }
 
 #endif

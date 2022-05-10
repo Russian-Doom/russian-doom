@@ -1397,7 +1397,7 @@ static void CenterWindow(int *x, int *y, int w, int h)
     *y = bounds.y + SDL_max((bounds.h - h) / 2, 0);
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 extern void DisableWinRound(SDL_Window* screen);
 #endif
 
@@ -1483,7 +1483,7 @@ static void SetVideoMode(void)
             SDL_GetError());
         }
 
-#ifdef WIN32
+#ifdef _WIN32
         DisableWinRound(screen);
 #endif
 
