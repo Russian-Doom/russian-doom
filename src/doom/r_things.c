@@ -762,7 +762,7 @@ void R_ProjectSprite (mobj_t *thing)
 
         // [crispy] brightmaps for select sprites
         vis->colormap[0] = spritelights[index];
-        vis->colormap[1] = scalelight[LIGHTLEVELS-1][MAXLIGHTSCALE-1];
+        vis->colormap[1] = colormaps;
     }	
 
     vis->brightmap = R_BrightmapForSprite(thing->sprite);
@@ -1001,7 +1001,7 @@ void R_DrawPSprite (pspdef_t *psp)
     {
         // local light
         vis->colormap[0] = spritelights[MAXLIGHTSCALE-1];
-        vis->colormap[1] = scalelight[LIGHTLEVELS-1][MAXLIGHTSCALE-1];
+        vis->colormap[1] = colormaps;
     }
     
     vis->brightmap = R_BrightmapForState(psp->state - states);

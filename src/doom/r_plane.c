@@ -214,7 +214,7 @@ static void R_MapPlane (int y, int x1, int x2)
             index = maxlightz-1;
 
         ds_colormap[0] = planezlight[index];
-        ds_colormap[1] = zlight[LIGHTLEVELS-1][MAXLIGHTZ-1];
+        ds_colormap[1] = colormaps;
     }
 
     ds_y = y;
