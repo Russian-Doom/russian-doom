@@ -650,7 +650,7 @@ void SB_Drawer(void)
     // [JN] Level stats widgets.
     if (screenblocks <= 11 && !vanillaparm)
     {
-        char text[32];
+        char text[128];
         const int time = leveltime / TICRATE;
         const int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
         CPlayer = &players[consoleplayer];
