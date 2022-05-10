@@ -22,8 +22,10 @@ and for the **mingw-w64-x86_64** toolchain (**64**-bit), use the **MSYS MinGW 64
 
 To configure the project use the following command:
 ```
-cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release -S . -B build
+cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE="Release" -S . -B build
 ```
+Available build types are `Release`, `Debug`, `RelWithDebInfo`, `MinSizeRel`.
+
 You can enable and disable the compilation of modules by changing cmake options:
 `COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE`, `COMPILE_SETUP`
 to `ON` or `OFF`.
@@ -82,8 +84,10 @@ Download source code archive of latest release version or from Git repository an
 
 To configure the project use the following command:
 ```
-cmake -D CMAKE_BUILD_TYPE=Release -S . -B build
+cmake -D CMAKE_BUILD_TYPE="Release" -S . -B build
 ```
+Available build types are `Release`, `Debug`, `RelWithDebInfo`, `MinSizeRel`.
+
 You can enable and disable the compilation of modules by changing cmake options:
 `COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE`, `COMPILE_SETUP`
 to `ON` or `OFF`.
