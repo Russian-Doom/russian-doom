@@ -57,6 +57,7 @@ jobs:
           install: >-
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-pkgconf
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-${{ matrix.compiler.name }}
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-gdb
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-make
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-cmake
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2
@@ -85,6 +86,12 @@ jobs:
         run: |
           export MAKEFLAGS=--keep-going
           cmake --build build --parallel 2
+
+      - name: Test
+        if: ${{ matrix.os.name == 'Windows' }} # Linux runers have no video device
+        run: |
+          cd build
+          ctest --output-on-failure
 
       - name: Install
         if: ${{ github.repository == 'JNechaevsky/inter-doom' && github.event_name == 'push' && github.ref == 'refs/heads/master' && matrix.os.name == 'Windows' }}

@@ -1,0 +1,1 @@
+This directory contains shareware wads of Doom, Heretic and Hexen used for tests on CI.

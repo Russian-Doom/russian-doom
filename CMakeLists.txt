@@ -145,6 +145,7 @@ endif()
 configure_file(cmake/config.h.cin config.h)
 
 include(RDUtils)
+enable_testing()
 
 foreach(SUBDIR textscreen opl pcsound src)
     add_subdirectory("${SUBDIR}")
