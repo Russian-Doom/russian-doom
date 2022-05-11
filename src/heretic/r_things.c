@@ -22,6 +22,7 @@
 #include "deh_str.h"
 #include "i_swap.h"
 #include "i_system.h"
+#include "r_bmaps.h"
 #include "r_local.h"
 #include "v_trans.h"
 #include "jn.h"
@@ -32,19 +33,7 @@
 // clockwise (protractor).  There was a lot of stuff grabbed wrong, so I changed it...
 fixed_t pspritescale, pspriteiscale;
 
-// [JN] Light tables and brightmaps.
 static lighttable_t **spritelights;
-static lighttable_t **fullbrights_greenonly;
-static lighttable_t **fullbrights_redonly;
-static lighttable_t **fullbrights_blueonly;
-static lighttable_t **fullbrights_purpleonly;
-static lighttable_t **fullbrights_notbronze;
-static lighttable_t **fullbrights_flame;
-static lighttable_t **fullbrights_greenonly_dim;
-static lighttable_t **fullbrights_redonly_dim;
-static lighttable_t **fullbrights_blueonly_dim;
-static lighttable_t **fullbrights_yellowonly_dim;
-static lighttable_t **fullbrights_ethereal;
 
 // Constant arrays used for psprite clipping and initializing clipping.
 int *negonearray;           // [JN] killough 2/8/98: // dropoff overflow
@@ -482,7 +471,10 @@ void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
 
     patch = W_CacheLumpNum(vis->patch + firstspritelump, PU_CACHE);
 
-    dc_colormap = vis->colormap;
+    // [crispy] brightmaps for select sprites
+    dc_colormap[0] = vis->colormap[0];
+    dc_colormap[1] = vis->colormap[1];
+    dc_brightmap = vis->brightmap;
 
     if (vis->mobjflags & MF_SHADOW)
     {
@@ -575,7 +567,7 @@ void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
 ================================================================================
 */
 
-void R_ProjectSprite (mobj_t *thing)
+static void R_ProjectSprite (mobj_t *thing, int lightnum)
 {
     int            x1, x2, lump, index;
     unsigned       rot;
@@ -796,12 +788,12 @@ void R_ProjectSprite (mobj_t *thing)
     if (fixedcolormap)
     {
         // Fixed map.
-        vis->colormap = fixedcolormap;
+        vis->colormap[0] = vis->colormap[1] = fixedcolormap;
     }
     else if (thing->frame & FF_FULLBRIGHT)
     {
         // Full bright.
-        vis->colormap = colormaps;
+        vis->colormap[0] = vis->colormap[1] = colormaps;
     }
     else
     {
@@ -811,141 +803,29 @@ void R_ProjectSprite (mobj_t *thing)
         if (index >= MAXLIGHTSCALE)
             index = MAXLIGHTSCALE - 1;
 
-        vis->colormap = spritelights[index];
-
-        // [JN] Applying brightmaps to sprites...
-        if (brightmaps && !vanillaparm)
-        {
-            // Green only
-            if (thing->type == MT_ARTIEGG       // Morph Ovum
-            ||  thing->type == MT_AMCBOWHEFTY)  // Quiver of Etherial Arrows
-            {
-                vis->colormap = fullbrights_greenonly[index];
-            }
-
-            // Red only
-            if (thing->type == MT_AMSKRDWIMPY   // Lesser Runes
-            ||  thing->type == MT_AMSKRDHEFTY   // Greater Runes
-            ||  thing->type == MT_ARTITELEPORT  // Chaos Device
-            ||  thing->type == MT_MUMMYSOUL     // Golem's freed ghost
-            ||  thing->type == MT_HEAD)         // Iron Lich
-            {
-                vis->colormap = fullbrights_redonly[index];
-            }
-
-            // Blue only
-            if (thing->type == MT_SORCERER1     // D'Sparil on Serpent
-            ||  thing->type == MT_SORCERER2     // D'Sparil walking
-            ||  thing->type == MT_SOR2TELEFADE) // D'Sparil teleporting
-            {
-                vis->colormap = fullbrights_blueonly[index];
-            }
-
-            // Not bronze
-            if (thing->type == MT_ARTIINVULNERABILITY) // Ring of Invulnerability
-            {
-                vis->colormap = fullbrights_notbronze[index];
-            }
-
-            // Purple only
-            if (thing->type == MT_WIZARD
-            &&  thing->state - states != S_WIZARD_DIE8) // Disciple of D'Sparil
-            {
-                vis->colormap = fullbrights_purpleonly[index];
-            }
-
-            // Flame
-            if (thing->type == MT_AMPHRDWIMPY  // Flame Orb
-            ||  thing->type == MT_AMPHRDHEFTY  // Inferno Orb
-            ||  thing->type == MT_MISC4        // Torch (Artifact)
-            ||  thing->type == MT_CHANDELIER   // Chandelier
-            ||  thing->type == MT_MISC10       // Torch
-            ||  thing->type == MT_SERPTORCH    // Serpent Torch
-            ||  thing->type == MT_MISC6        // Fire Brazier
-            ||  thing->type == MT_MISC12       // Volcano
-            ||  thing->state - states == S_CLINK_DIE1 // Sabreclaw's death sequence
-            ||  thing->state - states == S_CLINK_DIE2
-            ||  thing->state - states == S_CLINK_DIE3
-            ||  thing->state - states == S_CLINK_DIE4
-            ||  thing->state - states == S_CLINK_DIE5
-            ||  thing->state - states == S_CLINK_DIE6)
-            {
-                vis->colormap = fullbrights_flame[index];
-            }
-
-            // Green only (diminished)
-            if (thing->type == MT_MISC15        // Etherial Crossbow
-            ||  thing->type == MT_AMCBOWWIMPY   // Etherial Arrows
-            ||  thing->state - states == S_KNIGHT_ATK1  // Undead Warrior's attacking and death sequence
-            ||  thing->state - states == S_KNIGHT_ATK2
-            ||  thing->state - states == S_KNIGHT_ATK3
-            ||  thing->state - states == S_KNIGHT_ATK4
-            ||  thing->state - states == S_KNIGHT_ATK5
-            ||  thing->state - states == S_KNIGHT_ATK6
-            ||  thing->state - states == S_KNIGHT_DIE1
-            ||  thing->state - states == S_KNIGHT_DIE2
-            ||  thing->state - states == S_KNIGHT_DIE3
-            ||  thing->state - states == S_KNIGHT_DIE4
-            ||  thing->state - states == S_KNIGHT_DIE5
-            ||  thing->state - states == S_KNIGHT_DIE6)
-            {
-                vis->colormap = fullbrights_greenonly_dim[index];
-            }
-
-            // Red only (diminished)
-            if (thing->type == MT_WSKULLROD     // Hellstaff
-            ||  thing->type == MT_WPHOENIXROD   // Phoenix Rod
-            ||  thing->type == MT_ITEMSHIELD2   // Enchanted Shield
-            ||  thing->state - states == S_BEAST_ATK1 // Weredragon's attacking frames
-            ||  thing->state - states == S_BEAST_ATK2)
-            {
-                vis->colormap = fullbrights_redonly_dim[index];
-            }
-
-            // Blue only
-            if (thing->type == MT_AMBLSRWIMPY   // Claw Orb
-            ||  thing->type == MT_AMBLSRHEFTY)  // Energy Orb
-            {
-                vis->colormap = fullbrights_blueonly_dim[index];
-            }
-
-            // Yellow only
-            if (thing->type == MT_AMGWNDWIMPY   // Wand Crystal
-            ||  thing->type == MT_AMGWNDHEFTY   // Crystal Geode
-            ||  thing->state - states == S_IMP_MEATK2   // Gargoyle melee attack
-            ||  thing->state - states == S_IMP_MEATK3
-            ||  thing->state - states == S_IMP_MSATK2_1 // Gargoyle missle attack
-            ||  thing->state - states == S_IMP_MSATK2_2)
-            {
-                vis->colormap = fullbrights_yellowonly_dim[index];
-            }
-
-            // Standard full bright formula
-            if (thing->type == MT_BEASTBALL       // Weredragon's fireball
-            ||  thing->type == MT_BURNBALL        // Weredragon's fireball
-            ||  thing->type == MT_BURNBALLFB      // Weredragon's fireball
-            ||  thing->type == MT_PUFFY           // Weredragon's fireball
-            ||  thing->type == MT_HEADFX3         // Iron Lich's fire column
-            ||  thing->type == MT_VOLCANOBLAST    // Volcano blast
-            ||  thing->type == MT_VOLCANOTBLAST)  // Volcano blast (impact)
-            {
-                vis->colormap = colormaps;
-            }
-        }
+        // [crispy] brightmaps for select sprites
+        vis->colormap[0] = spritelights[index];
         
-        // [JN] Fallback. If we are not using brightmaps, apply full brightness
-        // to the objects, that no longer lighten up in info.c:
-        // (S_FIREBRAZIER* and S_WALLTORCH*).
-        if (!brightmaps || vanillaparm)
+        // [JN] Don't lit up ammo with full brightness in dark areas.
+        if (thing->type == MT_AMGWNDWIMPY
+        ||  thing->type == MT_AMGWNDHEFTY
+        ||  thing->type == MT_AMCBOWWIMPY
+        ||  thing->type == MT_AMBLSRWIMPY
+        ||  thing->type == MT_AMBLSRHEFTY
+        ||  thing->type == MT_AMSKRDWIMPY
+        ||  thing->type == MT_AMSKRDHEFTY)
         {
-            if (thing->type == MT_MISC4    // Torch (Artifact)
-            ||  thing->type == MT_MISC6    // S_FIREBRAZIER*
-            ||  thing->type == MT_MISC10)  // S_WALLTORCH*
-            {
-                vis->colormap = colormaps;
-            }
+            vis->colormap[1] = lightnum < 9 ? 
+                               &colormaps[16*256] : // Static half-bright w/o diminishing
+                               spritelights[24];    // Half-bright with diminishing
+        }
+        else
+        {
+            vis->colormap[1] = colormaps;
         }
     }
+    
+    vis->brightmap = R_BrightmapForSprite(thing->sprite);
 
     // [JN] Colored blood
     if (colored_blood && !vanillaparm &&  thing->type == MT_BLOODSPLATTER && thing->target)
@@ -981,58 +861,19 @@ void R_AddSprites (sector_t *sec)
     if (lightnum < 0)
     {
         spritelights = scalelight[0];
-
-        // [JN] Brightmaps
-        fullbrights_greenonly = fullbright_greenonly[0];
-        fullbrights_redonly = fullbright_redonly[0];
-        fullbrights_blueonly = fullbright_blueonly[0];
-        fullbrights_purpleonly = fullbright_purpleonly[0];
-        fullbrights_notbronze = fullbright_notbronze[0];
-        fullbrights_flame = fullbright_flame[0];
-        fullbrights_greenonly_dim = fullbright_greenonly_dim[0];
-        fullbrights_redonly_dim = fullbright_redonly_dim[0];
-        fullbrights_blueonly_dim = fullbright_blueonly_dim[0];
-        fullbrights_yellowonly_dim = fullbright_yellowonly_dim[0];
-        fullbrights_ethereal = fullbright_ethereal[0];
     }
     else if (lightnum >= LIGHTLEVELS)
     {
         spritelights = scalelight[LIGHTLEVELS - 1];
-
-        // [JN] Brightmaps
-        fullbrights_greenonly = fullbright_greenonly[LIGHTLEVELS - 1];
-        fullbrights_redonly = fullbright_redonly[LIGHTLEVELS - 1];
-        fullbrights_blueonly = fullbright_blueonly[LIGHTLEVELS - 1];
-        fullbrights_purpleonly = fullbright_purpleonly[LIGHTLEVELS - 1];
-        fullbrights_notbronze = fullbright_notbronze[LIGHTLEVELS - 1];
-        fullbrights_flame = fullbright_flame[LIGHTLEVELS - 1];
-        fullbrights_greenonly_dim = fullbright_greenonly_dim[LIGHTLEVELS - 1];
-        fullbrights_redonly_dim = fullbright_redonly_dim[LIGHTLEVELS - 1];
-        fullbrights_blueonly_dim = fullbright_blueonly_dim[LIGHTLEVELS - 1];
-        fullbrights_yellowonly_dim = fullbright_yellowonly_dim[LIGHTLEVELS - 1];
-        fullbrights_ethereal = fullbright_ethereal[LIGHTLEVELS - 1];
     }
     else
     {
         spritelights = scalelight[lightnum];
-
-        // [JN] Brightmaps
-        fullbrights_greenonly = fullbright_greenonly[lightnum];
-        fullbrights_redonly = fullbright_redonly[lightnum];
-        fullbrights_blueonly = fullbright_blueonly[lightnum];
-        fullbrights_purpleonly = fullbright_purpleonly[lightnum];
-        fullbrights_notbronze = fullbright_notbronze[lightnum];
-        fullbrights_flame = fullbright_flame[lightnum];
-        fullbrights_greenonly_dim = fullbright_greenonly_dim[lightnum];
-        fullbrights_redonly_dim = fullbright_redonly_dim[lightnum];
-        fullbrights_blueonly_dim = fullbright_blueonly_dim[lightnum];
-        fullbrights_yellowonly_dim = fullbright_yellowonly_dim[lightnum];
-        fullbrights_ethereal = fullbright_ethereal[lightnum];
     }
 
     for (thing = sec->thinglist; thing; thing = thing->snext)
     {
-        R_ProjectSprite(thing);
+        R_ProjectSprite(thing, lightnum);
     }
 }
 
@@ -1343,25 +1184,28 @@ void R_DrawPSprite (pspdef_t *psp)
         // [JN] Fixed vanilla bug: translucent HUD weapons 
         // should also be affected by yellow invulnerability palette.
         // Invisibility
-        vis->colormap = fixedcolormap ? fixedcolormap : 
-                                        spritelights[MAXLIGHTSCALE - 1];
+        vis->colormap[0] = vis->colormap[1] = fixedcolormap ? 
+                                              fixedcolormap : spritelights[MAXLIGHTSCALE - 1];
         vis->mobjflags |= MF_SHADOW;
     }
     else if (fixedcolormap)
     {
         // Fixed color
-        vis->colormap = fixedcolormap;
+        vis->colormap[0] = vis->colormap[1] = fixedcolormap;
     }
     else if (psp->state->frame & FF_FULLBRIGHT)
     {
         // Full bright
-        vis->colormap = colormaps;
+        vis->colormap[0] = vis->colormap[1] = colormaps;
     }
     else
     {
         // local light
-        vis->colormap = spritelights[MAXLIGHTSCALE - 1];
+        vis->colormap[0] = spritelights[MAXLIGHTSCALE - 1];
+        vis->colormap[1] = colormaps;
     }
+
+    vis->brightmap = R_BrightmapForState(psp->state - states);
 
     // [JN] e6y: interpolation for weapon bobbing
     if (uncapped_fps && weapon_bobbing && !vanillaparm)
@@ -1420,8 +1264,6 @@ void R_DrawPlayerSprites (void)
 {
     int i, lightnum;
     pspdef_t *psp;
-    // [JN] We need to define what "state" actually is (from Crispy)
-    const int state = viewplayer->psprites[ps_weapon].state - states;
 
 //
 // get light level
@@ -1438,121 +1280,8 @@ void R_DrawPlayerSprites (void)
     else
     {
         spritelights = scalelight[lightnum];
-
-        // [JN] Applying brightmaps to HUD weapons...
-        if (brightmaps && !vanillaparm)
-        {
-            // Staff+
-            if (state == S_STAFFDOWN2 || state == S_STAFFUP2
-            ||  state == S_STAFFREADY2_1 || state == S_STAFFREADY2_2
-            ||  state == S_STAFFREADY2_3 || state == S_STAFFATK2_1
-            ||  state == S_STAFFATK2_2 || state == S_STAFFATK2_3)
-            spritelights = fullbright_blueonly[lightnum];
-            // Gauntlets
-            else
-            if (state == S_GAUNTLETATK1_1 || state == S_GAUNTLETATK1_2
-            ||  state == S_GAUNTLETATK1_3 || state == S_GAUNTLETATK1_4
-            ||  state == S_GAUNTLETATK1_5 || state == S_GAUNTLETATK1_6
-            ||  state == S_GAUNTLETATK1_7)
-            spritelights = fullbright_greenonly[lightnum];
-            // Gauntlets+
-            else
-            if (state == S_GAUNTLETREADY2_1 || state == S_GAUNTLETREADY2_2 || state == S_GAUNTLETREADY2_3
-            ||  state == S_GAUNTLETDOWN2  || state == S_GAUNTLETUP2
-            ||  state == S_GAUNTLETATK2_1 || state == S_GAUNTLETATK2_2
-            ||  state == S_GAUNTLETATK2_3 || state == S_GAUNTLETATK2_4
-            ||  state == S_GAUNTLETATK2_5 || state == S_GAUNTLETATK2_6
-            ||  state == S_GAUNTLETATK2_7)
-            spritelights = fullbright_redonly[lightnum];
-            // Wand
-            else
-            if (state == S_GOLDWANDATK1_1 || state == S_GOLDWANDATK1_2
-            ||  state == S_GOLDWANDATK1_3 || state == S_GOLDWANDATK1_4)
-            spritelights = fullbright_flame[lightnum];
-            // Wand+
-            else
-            if (state == S_GOLDWANDATK2_1 || state == S_GOLDWANDATK2_2
-            ||  state == S_GOLDWANDATK2_3 || state == S_GOLDWANDATK2_4)
-            spritelights = fullbright_flame[lightnum];
-            // Crossbow
-            else
-            if (state == S_CRBOWDOWN || state == S_CRBOWUP
-            ||  state == S_CRBOW1 || state == S_CRBOW2
-            ||  state == S_CRBOW3 || state == S_CRBOW4
-            ||  state == S_CRBOW5 || state == S_CRBOW6
-            ||  state == S_CRBOW7 || state == S_CRBOW8
-            ||  state == S_CRBOW9 || state == S_CRBOW10
-            ||  state == S_CRBOW11 || state == S_CRBOW12
-            ||  state == S_CRBOW13 || state == S_CRBOW14
-            ||  state == S_CRBOW15 || state == S_CRBOW16
-            ||  state == S_CRBOW17 || state == S_CRBOW18
-            ||  state == S_CRBOWATK1_1 || state == S_CRBOWATK1_2
-            ||  state == S_CRBOWATK1_3 || state == S_CRBOWATK1_4
-            ||  state == S_CRBOWATK1_5 || state == S_CRBOWATK1_6
-            ||  state == S_CRBOWATK1_7 || state == S_CRBOWATK1_8)
-            spritelights = fullbright_ethereal[lightnum];
-            // Crossbow+
-            else
-            if (state == S_CRBOWATK2_1 || state == S_CRBOWATK2_2
-            ||  state == S_CRBOWATK2_3 || state == S_CRBOWATK2_4
-            ||  state == S_CRBOWATK2_5 || state == S_CRBOWATK2_6
-            ||  state == S_CRBOWATK2_7 || state == S_CRBOWATK2_8)
-            spritelights = fullbright_ethereal[lightnum];
-            // Dragon Claw
-            else
-            if (state == S_BLASTERREADY || state == S_BLASTERDOWN
-            ||  state == S_BLASTERUP || state == S_BLASTERATK1_1
-            ||  state == S_BLASTERATK1_2 || state == S_BLASTERATK1_3
-            ||  state == S_BLASTERATK1_4 || state == S_BLASTERATK1_5
-            ||  state == S_BLASTERATK1_6)
-            spritelights = fullbright_blueonly[lightnum];
-            // Dragon Claw+
-            else
-            if (state == S_BLASTERATK2_1 || state == S_BLASTERATK2_2
-            ||  state == S_BLASTERATK2_3 || state == S_BLASTERATK2_4
-            ||  state == S_BLASTERATK2_5 || state == S_BLASTERATK2_6)
-            spritelights = fullbright_blueonly[lightnum];
-            // Hell Staff 
-            else
-            if (state == S_HORNRODATK1_1 || state == S_HORNRODATK1_2
-            ||  state == S_HORNRODATK1_3)
-            spritelights = fullbright_redonly[lightnum];
-            // Hell Staff+
-            else
-            if (state == S_HORNRODATK2_1 || state == S_HORNRODATK2_2
-            ||  state == S_HORNRODATK2_3 || state == S_HORNRODATK2_4
-            ||  state == S_HORNRODATK2_5 || state == S_HORNRODATK2_6
-            ||  state == S_HORNRODATK2_7 || state == S_HORNRODATK2_8
-            ||  state == S_HORNRODATK2_9)
-            spritelights = fullbright_redonly[lightnum];
-            // Phoenix Rod
-            else
-            if (state == S_PHOENIXATK1_1 || state == S_PHOENIXATK1_2
-            ||  state == S_PHOENIXATK1_3 || state == S_PHOENIXATK1_4)
-            spritelights = fullbright_flame[lightnum];
-            // Phoenix Rod+
-            else
-            if (state == S_PHOENIXATK2_1 || state == S_PHOENIXATK2_3
-            ||  state == S_PHOENIXATK2_4)
-            spritelights = fullbright_flame[lightnum];
-            // Phoenix Rod's red gem
-            else
-            if (state == S_PHOENIXREADY || state == S_PHOENIXDOWN
-            ||  state == S_PHOENIXUP)
-            spritelights = fullbright_redonly[lightnum];
-        }
     }
 
-    // [JN] Fallback. If we are not using brightmaps, apply full brightness
-    // to the objects, that no longer lighten up in info.c:
-    // (S_GAUNTLETATK1_3-5 and S_GAUNTLETATK2_3-5).
-    if (!brightmaps || vanillaparm)
-    {
-        if (state == S_GAUNTLETATK1_3 || state == S_GAUNTLETATK1_4
-        ||  state == S_GAUNTLETATK1_5 || state == S_GAUNTLETATK2_3
-        ||  state == S_GAUNTLETATK2_4 || state == S_GAUNTLETATK2_5)
-        spritelights = scalelight[LIGHTLEVELS-1]; 
-    }
 //
 // clip to screen bounds
 //

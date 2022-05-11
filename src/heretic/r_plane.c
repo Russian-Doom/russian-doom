@@ -251,14 +251,15 @@ void R_MapPlane (int y, int x1, int x2)
     
     if (fixedcolormap)
     {
-        ds_colormap = fixedcolormap;
+        ds_colormap[0] = ds_colormap[1] = fixedcolormap;
     }
     else
     {
         index = distance >> LIGHTZSHIFT;
         if (index >= MAXLIGHTZ)
             index = MAXLIGHTZ - 1;
-        ds_colormap = planezlight[index];
+        ds_colormap[0] = planezlight[index];
+        ds_colormap[1] = colormaps;
     }
 
     ds_y = y;
@@ -522,18 +523,18 @@ void R_DrawPlanes (void)
                         {
                             // [JN] Invulnerability effect will colorize sky texture,
                             // with out any changes in sky texture light level.
-                            dc_colormap = fixedcolormap;
+                            dc_colormap[0] = dc_colormap[1] = fixedcolormap;
                         }
                         else
                         {
                             // [JN] Otherwise, sky is allways drawn full bright.
-                            dc_colormap = colormaps;
+                            dc_colormap[0] = dc_colormap[1] = colormaps;
                         }
                     }
                     else
                     {
                         // sky is allways drawn full bright
-                        dc_colormap = colormaps;
+                        dc_colormap[0] = dc_colormap[1] = colormaps;
                     }
 
                     skycolfunc ();
@@ -656,6 +657,7 @@ void R_DrawPlanes (void)
             }
 
             ds_source = tempSource;
+            ds_brightmap = R_BrightmapForFlatNum(lumpnum-firstflat);
             planeheight = abs(pl->height - viewz);
             light = (pl->lightlevel >> LIGHTSEGSHIFT) + extralight;
 
@@ -671,17 +673,6 @@ void R_DrawPlanes (void)
             stop = pl->maxx + 1;
             planezlight = zlight[light];
             pl->top[pl->minx-1] = pl->top[stop] = UINT_MAX; // [crispy] 32-bit integer math
-
-            // [JN] Apply brightmaps to floor/ceiling...
-            if (brightmaps && !vanillaparm
-            &&(pl->picnum == bmapflatnum1   // FLOOR21
-            || pl->picnum == bmapflatnum2   // FLOOR22
-            || pl->picnum == bmapflatnum3   // FLOOR23
-            || pl->picnum == bmapflatnum4   // FLOOR24
-            || pl->picnum == bmapflatnum5)) // FLOOR26
-            {
-                planezlight = fullbright_blueonly_floor[light];
-            }
 
             for (x = pl->minx ; x <= stop ; x++)
             {

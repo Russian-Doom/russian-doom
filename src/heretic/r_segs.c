@@ -64,9 +64,6 @@ fixed_t topstep, bottomstep;
 
 
 lighttable_t **walllights;
-lighttable_t **walllights_top;     // 
-lighttable_t **walllights_middle;  // [JN] Additional tables for brightmaps
-lighttable_t **walllights_bottom;  //
 
 static int *maskedtexturecol; // [crispy] 32-bit integer math
 
@@ -257,7 +254,7 @@ void R_RenderMaskedSegRange (drawseg_t *ds, int x1, int x2)
 
     if (fixedcolormap)
     {
-        dc_colormap = fixedcolormap;
+        dc_colormap[0] = dc_colormap[1] = fixedcolormap;
     }
 
     // Draw the columns.
@@ -275,7 +272,8 @@ void R_RenderMaskedSegRange (drawseg_t *ds, int x1, int x2)
                     index = MAXLIGHTSCALE - 1;
                 }
 
-                dc_colormap = walllights[index];
+                // [crispy] no brightmaps for mid-textures
+                dc_colormap[0] = dc_colormap[1] = walllights[index];
             }
 
             // [crispy] apply Killough's int64 sprtopscreen overflow fix
@@ -392,9 +390,6 @@ static void R_RenderSegLoop(void)
             floorclip[rw_x] = top;
         }
         
-        // [JN] Moved outside "segtextured"
-        index = rw_scale >> (LIGHTSCALESHIFT - (detailshift && hires) + hires);
-
         // texturecolumn and lighting are independent of wall tiers
         if (segtextured)
         {
@@ -404,12 +399,15 @@ static void R_RenderSegLoop(void)
             texturecolumn >>= FRACBITS;
 
             // calculate lighting
+            index = rw_scale >> (LIGHTSCALESHIFT - (detailshift && hires) + hires);
             if (index >= MAXLIGHTSCALE)
             {
                 index = MAXLIGHTSCALE-1;
             }
 
-            // [JN] All wall segments (top/middle/bottom) now using own lights
+            // [crispy] optional brightmaps
+            dc_colormap[0] = walllights[index];
+            dc_colormap[1] = (!fixedcolormap && brightmaps) ? colormaps : dc_colormap[0];
             dc_x = rw_x;
             dc_iscale = 0xffffffffu / (unsigned)rw_scale - SPARKLEFIX; // [JN] Sparkle fix
         }
@@ -423,17 +421,7 @@ static void R_RenderSegLoop(void)
             dc_texturemid = rw_midtexturemid;
             dc_source = R_GetColumn(midtexture, texturecolumn,true);
             dc_texheight = textureheight[midtexture] >> FRACBITS;
-
-            // [JN] Account fixed colormap
-            if (fixedcolormap)
-            {
-                dc_colormap = fixedcolormap;
-            }
-            else
-            {
-                dc_colormap = walllights_middle[index];
-            }
-
+            dc_brightmap = texturebrightmap[midtexture];
             colfunc ();
             ceilingclip[rw_x] = viewheight;
             floorclip[rw_x] = -1;
@@ -459,17 +447,7 @@ static void R_RenderSegLoop(void)
                     dc_texturemid = rw_toptexturemid + (dc_yl - centery + 1) * SPARKLEFIX; // [JN] Sparkle fix
                     dc_source = R_GetColumn(toptexture,texturecolumn,true);
                     dc_texheight = textureheight[toptexture]>>FRACBITS;
-
-                    // [JN] Account fixed colormap
-                    if (fixedcolormap)
-                    {
-                        dc_colormap = fixedcolormap;
-                    }
-                    else
-                    {
-                        dc_colormap = walllights_top[index];
-                    }
-
+                    dc_brightmap = texturebrightmap[toptexture];
                     colfunc ();
                     ceilingclip[rw_x] = mid;
                 }
@@ -506,17 +484,7 @@ static void R_RenderSegLoop(void)
                     dc_texturemid = rw_bottomtexturemid + (dc_yl - centery + 1) * SPARKLEFIX; // [JN] Sparkle fix
                     dc_source = R_GetColumn(bottomtexture,texturecolumn,true);
                     dc_texheight = textureheight[bottomtexture]>>FRACBITS;
-
-                    // [JN] Account fixed colormap
-                    if (fixedcolormap)
-                    {
-                        dc_colormap = fixedcolormap;
-                    }
-                    else
-                    {
-                        dc_colormap = walllights_bottom[index];
-                    }
-
+                    dc_brightmap = texturebrightmap[bottomtexture];
                     colfunc ();
                     floorclip[rw_x] = mid;
                 }
@@ -915,111 +883,19 @@ void R_StoreWallRange (int start, int stop)
                 {
                     lightnum++;
                 }
-
-                // [JN] Brightmapped line can't have lightlevel 0,
-                // otherwise brightmap will not work at all.
-                if (brightmaps && frontsector->lightlevel == 0)
-                {
-                    lightnum++;
-                }
             }
 
             if (lightnum < 0)
             {
                 walllights = scalelight[0];
-
-                // [JN] If sector brightness = 0
-                walllights_top = scalelight[0];
-                walllights_middle = scalelight[0];
-                walllights_bottom = scalelight[0];
             }
             else if (lightnum >= LIGHTLEVELS)
             {
                 walllights = scalelight[LIGHTLEVELS - 1];
-
-                // [JN] If sector brightness = 256
-                walllights_top = scalelight[LIGHTLEVELS-1];
-                walllights_middle = scalelight[LIGHTLEVELS-1];
-                walllights_bottom = scalelight[LIGHTLEVELS-1];
             }
             else
             {
-                // [JN] Standard formulas first
                 walllights = scalelight[lightnum];
-                walllights_top = scalelight[lightnum];
-                walllights_middle = scalelight[lightnum];
-                walllights_bottom = scalelight[lightnum];
-
-                // [JN] Apply brightmaps to walls...
-                if (brightmaps && !vanillaparm)
-                {
-                    //
-                    // [JN] Middle segment
-                    //
-                    if (midtexture)
-                    {
-                        //  Red only
-                        if (midtexture == bmaptexture01)
-                        {
-                            walllights_middle = fullbright_redonly[lightnum];
-                        }
-                        //  Blue only
-                        if (midtexture == bmaptexture02 || midtexture == bmaptexture03
-                        ||  midtexture == bmaptexture04 || midtexture == bmaptexture05)
-                        {
-                            walllights_middle = fullbright_blueonly[lightnum];
-                        }
-                        //  Not bronze
-                        if (midtexture == bmaptexture06 || midtexture == bmaptexture07)
-                        {
-                            walllights_middle = fullbright_notbronze[lightnum];
-                        }
-                    }
-                    //
-                    // [JN] Top segment
-                    //
-                    if (toptexture)
-                    {
-                        //  Red only
-                        if (toptexture == bmaptexture01)
-                        {
-                            walllights_top = fullbright_redonly[lightnum];
-                        }
-                        //  Blue only
-                        if (toptexture == bmaptexture02 || toptexture == bmaptexture03
-                        ||  toptexture == bmaptexture04 || toptexture == bmaptexture05)
-                        {
-                            walllights_top = fullbright_blueonly[lightnum];
-                        }
-                        //  Not bronze
-                        if (toptexture == bmaptexture06 || toptexture == bmaptexture07)
-                        {
-                            walllights_top = fullbright_notbronze[lightnum];
-                        }
-                    }
-                    //
-                    // [JN] Bottom segment
-                    //
-                    if (bottomtexture)
-                    {
-                        //  Red only
-                        if (bottomtexture == bmaptexture01)
-                        {
-                            walllights_bottom = fullbright_redonly[lightnum];
-                        }
-                        //  Blue only
-                        if (bottomtexture == bmaptexture02 || bottomtexture == bmaptexture03
-                        ||  bottomtexture == bmaptexture04 || bottomtexture == bmaptexture05)
-                        {
-                            walllights_bottom = fullbright_blueonly[lightnum];
-                        }
-                        //  Not bronze
-                        if (bottomtexture == bmaptexture06 || bottomtexture == bmaptexture07)
-                        {
-                            walllights_bottom = fullbright_notbronze[lightnum];
-                        }
-                    }
-                }
             }
         }
     }
