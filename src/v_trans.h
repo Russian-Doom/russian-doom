@@ -89,6 +89,7 @@ typedef enum
     CR_RED2GRAY_HERETIC,
     CR_RED2WHITE_HERETIC,
     CR_RED2BLACK_HERETIC,
+    CR_MAGENTA2GRAY_HERETIC,
 
     // Hexen (slider gem)
     CR_GREEN2GRAY_HEXEN,
