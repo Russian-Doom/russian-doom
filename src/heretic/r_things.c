@@ -839,13 +839,6 @@ static void R_ProjectSprite (mobj_t *thing, int lightnum)
             vis->translation = cr[CR_RED2GRAY_HERETIC];
         }
     }
-
-    // [JN] Desaturate magenta colors of Disciple of D'Sparil
-    // last death frame to make them non-bright.
-    if (brightmaps && thing->state - states == S_WIZARD_DIE8)
-    {
-        vis->translation = cr[CR_MAGENTA2GRAY_HERETIC];
-    }
 }
 
 /*
