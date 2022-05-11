@@ -226,10 +226,6 @@ byte *R_BrightmapForSprite (const int type)
             case SPR_AMS1:
             // Greater Runes:
             case SPR_AMS2:
-            // Volcano Balls:
-            case SPR_VFBL:
-            case SPR_XPL1:
-            case SPR_VTFB:
             {
                 return fullbright;
                 break;
