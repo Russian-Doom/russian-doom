@@ -39,7 +39,7 @@ int columnofs[WIDESCREENWIDTH];
 byte translations[3][256];
 
 // R_DrawColumn. Source is the top of the column to scale.
-lighttable_t *dc_colormap;
+lighttable_t *dc_colormap[2]; // [crispy] brightmaps
 int           dc_x, dc_yl, dc_yh;
 fixed_t       dc_iscale;
 fixed_t       dc_texturemid;
@@ -58,7 +58,8 @@ fixed_t ds_xfrac, ds_yfrac;
 fixed_t ds_xstep, ds_ystep;
 
 byte         *ds_source;  // start of a 64*64 tile image 
-lighttable_t *ds_colormap; 
+lighttable_t *ds_colormap[2];
+byte         *ds_brightmap;
 
 
 /*
@@ -111,7 +112,9 @@ void R_DrawColumn (void)
             // Re-map color indices from wall texture column
             //  using a lighting/special effects LUT.
             // heightmask is the Tutti-Frutti fix -- killough
-            *dest = dc_colormap[dc_source[frac>>FRACBITS]];
+            // [crispy] brightmaps
+            const byte source = dc_source[frac>>FRACBITS];
+            *dest = dc_colormap[dc_brightmap[source]][source];
             dest += screenwidth;
             if ((frac += dc_iscale) >= heightmask)
             {
@@ -123,8 +126,10 @@ void R_DrawColumn (void)
     {
         do
         {
-            *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
-            dest += screenwidth;
+            // [crispy] brightmaps
+            const byte source = dc_source[(frac>>FRACBITS)&heightmask];
+            *dest = dc_colormap[dc_brightmap[source]][source];
+            dest += screenwidth; 
             frac += dc_iscale;
         } while (count--); 
     }
@@ -180,7 +185,9 @@ void R_DrawColumnLow (void)
 
         do
         {
-            *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_source[frac>>FRACBITS]];
+            // [crispy] brightmaps
+            const byte source = dc_source[frac>>FRACBITS];
+            *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_brightmap[source]][source];
 
             dest += screenwidth << hires;
             dest2 += screenwidth << hires;
@@ -197,7 +204,9 @@ void R_DrawColumnLow (void)
     {
         do 
         {
-            *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]];
+            // [crispy] brightmaps
+            const byte source = dc_source[(frac>>FRACBITS)&heightmask];
+            *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_brightmap[source]][source];
             dest += screenwidth << hires;
             dest2 += screenwidth << hires;
             dest3 += screenwidth << hires;
@@ -247,7 +256,9 @@ void R_DrawSkyColumn(void)
 
         do
         {
-           *dest = dc_colormap[dc_source[frac>>FRACBITS]];
+            // [crispy] brightmaps
+            const byte source = dc_source[frac>>FRACBITS];
+            *dest = dc_colormap[dc_brightmap[source]][source];
             dest += screenwidth;
             if ((frac += skyiscale) >= heightmask)
             {
@@ -260,7 +271,8 @@ void R_DrawSkyColumn(void)
     {
         do 
         {
-            *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
+            const byte source = dc_source[(frac>>FRACBITS) & heightmask];
+            *dest = dc_colormap[dc_brightmap[source]][source];
             dest += screenwidth;
             frac += dc_iscale;
         } while (count--);
@@ -309,7 +321,9 @@ void R_DrawSkyColumnLow(void)
 
         do
         {
-            *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_source[frac >> FRACBITS]];
+            // [crispy] brightmaps
+            const byte source = dc_source[frac>>FRACBITS];
+            *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_brightmap[source]][source];
             dest  += screenwidth << hires;
             dest2 += screenwidth << hires;
             dest3 += screenwidth << hires;
@@ -325,8 +339,9 @@ void R_DrawSkyColumnLow(void)
     {
         do 
         {
-            *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]];
-
+            // [crispy] brightmaps
+            const byte source = dc_source[(frac>>FRACBITS)&heightmask];
+            *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_brightmap[source]][source];
             dest  += screenwidth << hires;
             dest2 += screenwidth << hires;
             dest3 += screenwidth << hires;
@@ -386,7 +401,7 @@ void R_DrawTLColumn (void)
 
         do
         {
-            *dest = tinttable[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest = tinttable[(*dest<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
             dest += screenwidth;
             if ((frac += dc_iscale) >= heightmask)
             {
@@ -399,7 +414,7 @@ void R_DrawTLColumn (void)
     {
         do
         {
-            *dest = tinttable[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
+            *dest = tinttable[(*dest<<8)+dc_colormap[0][dc_source[frac>>FRACBITS & heightmask]]];
             dest += screenwidth;
             frac += dc_iscale;
         } while (count--);
@@ -456,10 +471,10 @@ void R_DrawTLColumnLow (void)
 
         do
         {
-            *dest = tinttable[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-            *dest2 = tinttable[(*dest2<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-            *dest3 = tinttable[(*dest3<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-            *dest4 = tinttable[(*dest4<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest = tinttable[(*dest<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
+            *dest2 = tinttable[(*dest2<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
+            *dest3 = tinttable[(*dest3<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
+            *dest4 = tinttable[(*dest4<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
 
             dest += screenwidth << hires;
             dest2 += screenwidth << hires;
@@ -476,10 +491,10 @@ void R_DrawTLColumnLow (void)
     {
         do 
         {
-            *dest = tinttable[(*dest<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
-            *dest2 = tinttable[(*dest2<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
-            *dest3 = tinttable[(*dest3<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
-            *dest4 = tinttable[(*dest4<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest = tinttable[(*dest<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest2 = tinttable[(*dest2<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest3 = tinttable[(*dest3<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest4 = tinttable[(*dest4<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
 
             dest += screenwidth << hires;
             dest2 += screenwidth << hires;
@@ -540,7 +555,7 @@ void R_DrawExtraTLColumn(void)
 
         do
         {
-            *dest = extratinttable[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest = extratinttable[(*dest<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
             dest += screenwidth;
             if ((frac += dc_iscale) >= heightmask)
             {
@@ -552,7 +567,7 @@ void R_DrawExtraTLColumn(void)
     {
         do
         {
-            *dest = extratinttable[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
+            *dest = extratinttable[(*dest<<8)+dc_colormap[0][dc_source[frac>>FRACBITS & heightmask]]];
             dest += screenwidth;
             frac += dc_iscale;
         } while (count--);
@@ -609,10 +624,10 @@ void R_DrawExtraTLColumnLow (void)
 
         do
         {
-            *dest = extratinttable[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-            *dest2 = extratinttable[(*dest2<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-            *dest3 = extratinttable[(*dest3<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-            *dest4 = extratinttable[(*dest4<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest = extratinttable[(*dest<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
+            *dest2 = extratinttable[(*dest2<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
+            *dest3 = extratinttable[(*dest3<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
+            *dest4 = extratinttable[(*dest4<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
 
             dest += screenwidth << hires;
             dest2 += screenwidth << hires;
@@ -629,10 +644,10 @@ void R_DrawExtraTLColumnLow (void)
     {
         do 
         {
-            *dest = extratinttable[(*dest<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
-            *dest2 = extratinttable[(*dest2<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
-            *dest3 = extratinttable[(*dest3<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
-            *dest4 = extratinttable[(*dest4<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest = extratinttable[(*dest<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest2 = extratinttable[(*dest2<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest3 = extratinttable[(*dest3<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest4 = extratinttable[(*dest4<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
 
             dest += screenwidth << hires;
             dest2 += screenwidth << hires;
@@ -677,7 +692,7 @@ void R_DrawTranslatedColumn (void)
 
     do
     {
-        *dest = dc_colormap[dc_translation[dc_source[frac >> FRACBITS]]];
+        *dest = dc_colormap[0][dc_translation[dc_source[frac>>FRACBITS]]];
         dest += screenwidth;
         frac += dc_iscale;
     } while (count--);
@@ -723,7 +738,7 @@ void R_DrawTranslatedColumnLow (void)
 
     do 
     {
-        *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]];
+        *dest4 = *dest3 = *dest2 = *dest = dc_colormap[0][dc_translation[dc_source[frac>>FRACBITS]]];
 
         dest += screenwidth << hires;
         dest2 += screenwidth << hires;
@@ -758,7 +773,7 @@ void R_DrawTranslatedTLColumn(void)
 
     do
     {
-        *dest = tinttable[((*dest) << 8) + dc_colormap[dc_translation[dc_source[frac >> FRACBITS]]]];
+        *dest = tinttable[(*dest<<8)+dc_colormap[0][dc_translation[frac>>FRACBITS]]];
         dest += screenwidth;
         frac += dc_iscale;
     }
@@ -817,10 +832,10 @@ void R_DrawTranslatedTLColumnLow(void)
 
         do
         {
-            *dest = tinttable[(*dest<<8)+dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]]];
-            *dest2 = tinttable[(*dest2<<8)+dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]]];
-            *dest3 = tinttable[(*dest3<<8)+dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]]];
-            *dest4 = tinttable[(*dest4<<8)+dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]]];
+            *dest = tinttable[(*dest<<8)+dc_colormap[0][dc_translation[frac>>FRACBITS]]];
+            *dest2 = tinttable[(*dest2<<8)+dc_colormap[0][dc_translation[frac>>FRACBITS]]];
+            *dest3 = tinttable[(*dest3<<8)+dc_colormap[0][dc_translation[frac>>FRACBITS]]];
+            *dest4 = tinttable[(*dest4<<8)+dc_colormap[0][dc_translation[frac>>FRACBITS]]];
 
             dest += screenwidth << hires;
             dest2 += screenwidth << hires;
@@ -837,10 +852,10 @@ void R_DrawTranslatedTLColumnLow(void)
     {
         do 
         {
-            *dest = tinttable[(*dest<<8)+dc_colormap[dc_translation[dc_source[(frac>>FRACBITS)&heightmask]]]];
-            *dest2 = tinttable[(*dest2<<8)+dc_colormap[dc_translation[dc_source[(frac>>FRACBITS)&heightmask]]]];
-            *dest3 = tinttable[(*dest3<<8)+dc_colormap[dc_translation[dc_source[(frac>>FRACBITS)&heightmask]]]];
-            *dest4 = tinttable[(*dest4<<8)+dc_colormap[dc_translation[dc_source[(frac>>FRACBITS)&heightmask]]]];
+            *dest = tinttable[(*dest<<8)+dc_colormap[0][dc_translation[(frac>>FRACBITS)&heightmask]]];
+            *dest2 = tinttable[(*dest2<<8)+dc_colormap[0][dc_translation[(frac>>FRACBITS)&heightmask]]];
+            *dest3 = tinttable[(*dest3<<8)+dc_colormap[0][dc_translation[(frac>>FRACBITS)&heightmask]]];
+            *dest4 = tinttable[(*dest4<<8)+dc_colormap[0][dc_translation[(frac>>FRACBITS)&heightmask]]];
 
             dest += screenwidth << hires;
             dest2 += screenwidth << hires;
@@ -938,7 +953,7 @@ void R_DrawSpan(void)
         // Lookup pixel from flat texture tile,
         //  re-index using light/colormap.
         dest = ylookup[ds_y] + columnofs[flipviewwidth[ds_x1++]];
-        *dest = ds_colormap[ds_source[spot]];
+        *dest = ds_colormap[ds_brightmap[ds_source[spot]]][ds_source[spot]];
 
         ds_xfrac += ds_xstep;
         ds_yfrac += ds_ystep;
@@ -986,13 +1001,13 @@ void R_DrawSpanLow(void)
 
         // Lowres/blocky mode does it twice, while scale is adjusted appropriately.
         dest = ylookup[(ds_y << hires)] + columnofs[flipviewwidth[ds_x1]];
-        *dest = ds_colormap[ds_source[spot]];
+        *dest = ds_colormap[ds_brightmap[ds_source[spot]]][ds_source[spot]];
         dest2 = ylookup[(ds_y << hires) + 1] + columnofs[flipviewwidth[ds_x1++]];
-        *dest2 = ds_colormap[ds_source[spot]];
+        *dest2 = ds_colormap[ds_brightmap[ds_source[spot]]][ds_source[spot]];
         dest = ylookup[(ds_y << hires)] + columnofs[flipviewwidth[ds_x1]];
-        *dest = ds_colormap[ds_source[spot]];
+        *dest = ds_colormap[ds_brightmap[ds_source[spot]]][ds_source[spot]];
         dest2 = ylookup[(ds_y << hires) + 1] + columnofs[flipviewwidth[ds_x1++]];
-        *dest2 = ds_colormap[ds_source[spot]];
+        *dest2 = ds_colormap[ds_brightmap[ds_source[spot]]][ds_source[spot]];
 
         // position += step;
         ds_xfrac += ds_xstep;

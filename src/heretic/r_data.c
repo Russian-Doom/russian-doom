@@ -72,6 +72,7 @@ short     **texturecolumnlump;
 unsigned  **texturecolumnofs;   // [crispy] fix Medusa bug
 unsigned  **texturecolumnofs2;  // [crispy] original column offsets for single-patched textures
 byte      **texturecomposite;
+byte      **texturebrightmap;   // [crispy] brightmaps
 
 int        *flattranslation;    // for global animation
 int        *texturetranslation; // for global animation
@@ -80,19 +81,7 @@ fixed_t    *spritewidth;           // needed for pre rendering
 fixed_t    *spriteoffset;
 fixed_t    *spritetopoffset;
 
-// [JN] Colormap and brightmaps
 lighttable_t *colormaps;
-lighttable_t *brightmaps_greenonly;
-lighttable_t *brightmaps_redonly;
-lighttable_t *brightmaps_blueonly;
-lighttable_t *brightmaps_purpleonly;
-lighttable_t *brightmaps_notbronze;
-lighttable_t *brightmaps_flame;
-lighttable_t *brightmaps_greenonly_dim;
-lighttable_t *brightmaps_redonly_dim;
-lighttable_t *brightmaps_blueonly_dim;
-lighttable_t *brightmaps_yellowonly_dim;
-lighttable_t *brightmaps_ethereal;
 
 
 /*
@@ -728,7 +717,7 @@ void R_InitTextures (void)
     texturecompositesize = Z_Malloc (numtextures * sizeof(*texturecompositesize), PU_STATIC, 0);
     texturewidthmask = Z_Malloc (numtextures * sizeof(*texturewidthmask), PU_STATIC, 0);
     textureheight = Z_Malloc (numtextures * sizeof(*textureheight), PU_STATIC, 0);
-    // texturebrightmap = Z_Malloc (numtextures * sizeof(*texturebrightmap), PU_STATIC, 0);
+    texturebrightmap = Z_Malloc (numtextures * sizeof(*texturebrightmap), PU_STATIC, 0);
 
     //	Really complex printing shit...
     temp1 = W_GetNumForName (DEH_String("S_START"));  // P_???????
@@ -786,7 +775,7 @@ void R_InitTextures (void)
 	patch = &texture->patches[0];
 
 	// [crispy] initialize brightmaps
-	// texturebrightmap[i] = R_BrightmapForTexName(texture->name);
+	texturebrightmap[i] = R_BrightmapForTexName(texture->name);
 
 	for (j=0 ; j<texture->patchcount ; j++, mpatch++, patch++)
 	{
@@ -945,30 +934,6 @@ static void R_InitColormaps(void)
 
         W_ReleaseLumpName("PLAYPAL");
     }
-}
-
-
-/*
-================================================================================
-=
-= R_InitColormaps
-=
-================================================================================
-*/
-
-static void R_InitBrightmaps (void)
-{
-    brightmaps_greenonly      = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP1")), PU_STATIC);
-    brightmaps_redonly        = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP2")), PU_STATIC);
-    brightmaps_blueonly       = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP3")), PU_STATIC);
-    brightmaps_purpleonly     = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP4")), PU_STATIC);
-    brightmaps_notbronze      = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP5")), PU_STATIC);
-    brightmaps_flame          = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP6")), PU_STATIC);
-    brightmaps_greenonly_dim  = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP7")), PU_STATIC);
-    brightmaps_redonly_dim    = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP8")), PU_STATIC);
-    brightmaps_blueonly_dim   = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP9")), PU_STATIC);
-    brightmaps_yellowonly_dim = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP10")), PU_STATIC);
-    brightmaps_ethereal       = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP11")), PU_STATIC);
 }
 
 /*
@@ -1131,6 +1096,7 @@ void R_InitData(void)
     // [JN] Moved R_InitFlats to the top, needed for 
     // R_GenerateComposite ivoking while level loading.
     R_InitFlats();
+    R_InitBrightmaps ();
     printf (".");
     R_InitTextures();
     printf (".");
@@ -1140,12 +1106,6 @@ void R_InitData(void)
     // [JN] Generate extra translucency table.
     R_InitTransMaps();
     printf (".");
-
-    if (!vanillaparm)
-    {
-        R_InitBrightmaps();
-        R_InitBrightmappedTextures ();
-    }
 }
 
 /*

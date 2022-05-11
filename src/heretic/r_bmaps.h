@@ -1,5 +1,9 @@
 //
-// Copyright(C) 2017-2019 Julian Nechaevsky
+// Copyright(C) 1993-1996 Id Software, Inc.
+// Copyright(C) 2005-2014 Simon Howard
+// Copyright(C) 2013-2017 Brad Harding
+// Copyright(C) 2017 Fabian Greffrath
+// Copyright(C) 2017-2022 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -19,12 +23,11 @@
 #pragma once
 
 
-// Prototypes
-void R_InitBrightmappedTextures (void);
+extern void R_InitBrightmaps ();
 
-// Floors and ceilings:
-extern int bmapflatnum1, bmapflatnum2, bmapflatnum3, bmapflatnum4, bmapflatnum5;
+extern byte *R_BrightmapForTexName (const char *texname);
+extern byte *R_BrightmapForSprite (const int type);
+extern byte *R_BrightmapForFlatNum (const int num);
+extern byte *R_BrightmapForState (const int state);
 
-// Walls:
-extern int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05,
-bmaptexture06, bmaptexture07;
+extern byte **texturebrightmap;

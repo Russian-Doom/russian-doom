@@ -75,22 +75,6 @@ lighttable_t *scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t *scalelightfixed[MAXLIGHTSCALE];
 lighttable_t *zlight[LIGHTLEVELS][MAXLIGHTZ];
 
-// [JN] Floor brightmaps
-lighttable_t* fullbright_blueonly_floor[LIGHTLEVELS][MAXLIGHTZ];
-
-// [JN] Brightmaps
-lighttable_t *fullbright_greenonly[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_redonly[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_blueonly[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_purpleonly[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_notbronze[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_flame[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_greenonly_dim[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_redonly_dim[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_blueonly_dim[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_yellowonly_dim[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_ethereal[LIGHTLEVELS][MAXLIGHTSCALE];
-
 int extralight;                 // bumped light from gun blasts
 
 void (*colfunc) (void);
@@ -517,9 +501,6 @@ void R_InitLightTables (void)
             if (level >= NUMCOLORMAPS)
                 level = NUMCOLORMAPS - 1;
             zlight[i][j] = colormaps + level * 256;
-            
-            // [JN] Floor brightmaps
-            fullbright_blueonly_floor[i][j] = brightmaps_blueonly + level * 256;
         }
     }
 }
@@ -685,19 +666,6 @@ void R_ExecuteSetViewSize (void)
             if (level >= NUMCOLORMAPS)
                 level = NUMCOLORMAPS - 1;
             scalelight[i][j] = colormaps + level * 256;
-            
-            // [JN] Brightmaps
-            fullbright_greenonly[i][j] = brightmaps_greenonly + level * 256;
-            fullbright_redonly[i][j] = brightmaps_redonly + level * 256;
-            fullbright_blueonly[i][j] = brightmaps_blueonly + level * 256;
-            fullbright_purpleonly[i][j] = brightmaps_purpleonly + level * 256;
-            fullbright_notbronze[i][j] = brightmaps_notbronze + level * 256;
-            fullbright_flame[i][j] = brightmaps_flame + level * 256;
-            fullbright_greenonly_dim[i][j] = brightmaps_greenonly_dim + level * 256;
-            fullbright_redonly_dim[i][j] = brightmaps_redonly_dim + level * 256;
-            fullbright_blueonly_dim[i][j] = brightmaps_blueonly_dim + level * 256;
-            fullbright_yellowonly_dim[i][j] = brightmaps_yellowonly_dim + level * 256;
-            fullbright_ethereal[i][j] = brightmaps_ethereal + level * 256;
         }
     }
 
