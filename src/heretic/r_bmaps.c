@@ -274,6 +274,8 @@ byte *R_BrightmapForSprite (const int type)
             case SPR_TRCH:
             // Volcano
             case SPR_VLCO:
+            // Sabreclaw
+            case SPR_CLNK:
             {
                 return flame;
                 break;
