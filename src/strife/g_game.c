@@ -2450,7 +2450,7 @@ boolean G_CheckDemoStatus (void)
         timingdemo = false;
         demoplayback = false;
 
-        I_Error ("timed %i gametics in %i realtics (%f fps)",
+        I_Error ("Timed %i gametics in %i realtics (%f fps)",
                  gametic, realtics, fps);
     } 
 
