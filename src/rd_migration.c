@@ -47,4 +47,14 @@ void RD_ApplyMigration()
         BK_AddBind(bk_screen_dec,  keyboard, SDL_SCANCODE_MINUS);
         BK_AddBind(bk_pause,       keyboard, SDL_SCANCODE_PAUSE);
     }
+
+    // Do not rebing following keys so they will not
+    // be cleared after migration:
+    BK_AddBind(bk_map_rotate,  keyboard, SDL_SCANCODE_R);
+    BK_AddBind(bk_map_grid,    keyboard, SDL_SCANCODE_G);
+
+    if(RD_GameType == gt_Hexen)
+    {
+        BK_AddBind(bk_forward, keyboard, SDL_SCANCODE_W);
+    }
 }
