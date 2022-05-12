@@ -233,7 +233,7 @@ foreach(MODULE ${COMPILE_MODULES})
     )
 
     set_tests_properties("${PROGRAM_PREFIX}${MODULE}" PROPERTIES
-        PASS_REGULAR_EXPRESSION "((Насчитано [0-9]+ gametics в [0-9]+ realtics)|([tT]imed [0-9]+ gametics in [0-9]+ realtics))"
+        PASS_REGULAR_EXPRESSION "Насчитано [0-9]+ gametics в [0-9]+ realtics;Timed [0-9]+ gametics in [0-9]+ realtics"
         FAIL_REGULAR_EXPRESSION "SEGV"
         TIMEOUT 60
     )
