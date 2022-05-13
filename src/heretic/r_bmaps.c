@@ -280,6 +280,7 @@ byte *R_BrightmapForSprite (const int type)
             // Disciple of D'Sparil
             case SPR_WZRD:
             // D'Sparil
+            case SPR_SRCR:
             case SPR_SOR2:
             case SPR_SDTH:
             {
