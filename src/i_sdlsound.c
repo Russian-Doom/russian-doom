@@ -408,6 +408,7 @@ static int SRC_ConversionMode(void)
 //   samplerate --> mixer_freq
 // Returns number of clipped samples.
 // DWF 2008-02-10 with cleanups by Simon Howard.
+static int retn;
 
 static boolean ExpandSoundData_SRC(sfxinfo_t *sfxinfo,
                                    byte *data,
@@ -419,7 +420,6 @@ static boolean ExpandSoundData_SRC(sfxinfo_t *sfxinfo,
     float *data_in;
     uint32_t i, abuf_index=0, clipped=0;
 //    uint32_t alen;
-    int retn;
     int16_t *expanded;
     allocated_sound_t *snd;
     Mix_Chunk *chunk;
