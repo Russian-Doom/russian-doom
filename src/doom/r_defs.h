@@ -372,7 +372,7 @@ typedef struct vissprite_s
     // for color translation and shadow draw, maxbright frames as well
     // [crispy] brightmaps for select sprites
     lighttable_t *colormap[2];
-    byte   *brightmap;
+    const byte   *brightmap;
 
     int     mobjflags;
     byte   *translation;

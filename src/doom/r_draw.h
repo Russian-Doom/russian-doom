@@ -32,7 +32,7 @@ void R_DrawColumnLow (void);
 
 extern const lighttable_t *dc_colormap[2];
 extern const byte         *dc_source;
-extern byte               *dc_brightmap;
+extern const byte         *dc_brightmap;
 extern fixed_t dc_x, dc_yl, dc_yh; 
 extern fixed_t dc_texheight;
 extern fixed_t dc_iscale;

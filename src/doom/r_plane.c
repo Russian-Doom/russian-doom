@@ -20,14 +20,10 @@
 //
 
 
-#include <stdio.h>
 #include <stdlib.h>
 #include "i_system.h"
 #include "z_zone.h"
 #include "w_wad.h"
-#include "doomdef.h"
-#include "doomstat.h"
-#include "r_data.h"
 #include "r_local.h"
 #include "r_swirl.h"
 #include "r_bmaps.h"
@@ -159,7 +155,7 @@ void R_InitVisplanesRes (void)
 // BASIC PRIMITIVE
 // -----------------------------------------------------------------------------
 
-static void R_MapPlane (int y, int x1, int x2)
+static void R_MapPlane (const int y, const int x1, const int x2)
 {
     unsigned index;
     int      dx, dy;
@@ -256,7 +252,7 @@ void R_ClearPlanes (void)
 // New function, by Lee Killough
 // -----------------------------------------------------------------------------
 
-static visplane_t *new_visplane (unsigned int hash)
+static visplane_t *new_visplane (unsigned const int hash)
 {
     visplane_t *check = freetail;
 
@@ -279,7 +275,7 @@ static visplane_t *new_visplane (unsigned int hash)
 // R_FindPlane
 // -----------------------------------------------------------------------------
 
-visplane_t *R_FindPlane (fixed_t height, int picnum, int lightlevel, int flow)
+visplane_t *R_FindPlane (fixed_t height, const int picnum, int lightlevel, const int flow)
 {
     unsigned int  hash;
     visplane_t   *check;
@@ -319,7 +315,7 @@ visplane_t *R_FindPlane (fixed_t height, int picnum, int lightlevel, int flow)
 // R_DupPlane
 // -----------------------------------------------------------------------------
 
-visplane_t *R_DupPlane(const visplane_t *pl, int start, int stop)
+visplane_t *R_DupPlane(const visplane_t *pl, const int start, const int stop)
 {
     visplane_t  *new_pl = new_visplane(visplane_hash(pl->picnum, pl->lightlevel, pl->height));
 
@@ -383,8 +379,8 @@ visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop)
 // -----------------------------------------------------------------------------
 
 static void
-R_MakeSpans (int x, unsigned int t1, unsigned int b1, // [crispy] 32-bit integer math
-                    unsigned int t2, unsigned int b2) // [crispy] 32-bit integer math
+R_MakeSpans (const int x, unsigned int t1, unsigned int b1, // [crispy] 32-bit integer math
+                          unsigned int t2, unsigned int b2) // [crispy] 32-bit integer math
 {
     for ( ; t1 < t2 && t1 <= b1 ; t1++)
     {

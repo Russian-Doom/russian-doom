@@ -20,16 +20,8 @@
 //
 
 
-#include <stdlib.h>
-#include <math.h>
-#include "doomdef.h"
 #include "doomstat.h" // [AM] leveltime, paused, menuactive
-#include "d_loop.h"
-#include "m_bbox.h"
-#include "m_menu.h"
 #include "p_local.h"
-#include "r_local.h"
-#include "g_game.h"
 #include "z_zone.h"
 #include "v_video.h"
 #include "jn.h"
@@ -89,27 +81,6 @@ lighttable_t *scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t *scalelightfixed[MAXLIGHTSCALE];
 lighttable_t *zlight[LIGHTLEVELS][MAXLIGHTZ];
 
-// [JN] Floor brightmaps
-lighttable_t *fullbright_notgrayorbrown_floor[LIGHTLEVELS][MAXLIGHTZ];
-lighttable_t *fullbright_orangeyellow_floor[LIGHTLEVELS][MAXLIGHTZ];
-
-// [JN] Wall and sprite brightmaps
-lighttable_t *fullbright_redonly[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_notgray[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_notgrayorbrown[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_greenonly1[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_greenonly2[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_greenonly3[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_orangeyellow[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_dimmeditems[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_brighttan[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_redonly1[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_explosivebarrel[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_alllights[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_candles[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_pileofskulls[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t *fullbright_redonly2[LIGHTLEVELS][MAXLIGHTSCALE];
-
 extern lighttable_t **walllights;
 
 // sky mapping
@@ -126,8 +97,7 @@ void (*spanfunc) (void);
 
 // -----------------------------------------------------------------------------
 // R_PointOnSide
-// Traverse BSP (sub) tree,
-//  check point against partition plane.
+// Traverse BSP (sub) tree, check point against partition plane.
 // Returns side 0 (front) or 1 (back).
 //
 // [JN] killough 5/2/98: reformatted
@@ -204,7 +174,8 @@ int R_PointOnSegSide (fixed_t x, fixed_t y, const seg_t *line)
 // -----------------------------------------------------------------------------
 
 angle_t R_PointToAngleSlope (fixed_t x, fixed_t y,
-                             int (*slope_div)(unsigned int num, unsigned int den))
+                             int (*slope_div)(unsigned const int num, 
+                                              unsigned const int den))
 {	
     x -= viewx;
     y -= viewy;
@@ -292,7 +263,7 @@ angle_t R_PointToAngleSlope (fixed_t x, fixed_t y,
 // R_PointToAngle
 // -----------------------------------------------------------------------------
 
-angle_t R_PointToAngle (fixed_t x, fixed_t y)
+angle_t R_PointToAngle (const fixed_t x, const fixed_t y)
 {
     return R_PointToAngleSlope (x, y, SlopeDiv);
 }
@@ -325,7 +296,8 @@ angle_t R_PointToAngleCrispy (fixed_t x, fixed_t y)
 // R_PointToAngle2
 // -----------------------------------------------------------------------------
 
-angle_t R_PointToAngle2 (fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2)
+angle_t R_PointToAngle2 (const fixed_t x1, const fixed_t y1, 
+                         const fixed_t x2, const fixed_t y2)
 {	
     viewx = x1;
     viewy = y1;
@@ -338,7 +310,7 @@ angle_t R_PointToAngle2 (fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2)
 // R_PointToDist
 // -----------------------------------------------------------------------------
 
-fixed_t R_PointToDist (fixed_t x, fixed_t y)
+fixed_t R_PointToDist (const fixed_t x, const fixed_t y)
 {
     int     angle;
     fixed_t dx, dy;
@@ -378,7 +350,7 @@ fixed_t R_PointToDist (fixed_t x, fixed_t y)
 // [AM] Interpolate between two angles.
 // -----------------------------------------------------------------------------
 
-angle_t R_InterpolateAngle (angle_t oangle, angle_t nangle, fixed_t scale)
+angle_t R_InterpolateAngle (const angle_t oangle, const angle_t nangle, const fixed_t scale)
 {
     if (nangle == oangle)
     {
@@ -566,19 +538,17 @@ static void R_InitSkyMap (void)
 
 static void R_InitTranslationTables (void)
 {
-    int i;
-
     translationtables = Z_Malloc (256*3, PU_STATIC, 0);
 
     // translate just the 16 green colors
-    for (i = 0 ; i < 256 ; i++)
+    for (int i = 0 ; i < 256 ; i++)
     {
         if (i >= 0x70 && i <= 0x7f)
         {
             // map green ramp to gray, brown, red
             translationtables[i] = 0x60 + (i&0xf);
-            translationtables [i+256] = 0x40 + (i&0xf);
-            translationtables [i+512] = 0x20 + (i&0xf);
+            translationtables[i+256] = 0x40 + (i&0xf);
+            translationtables[i+512] = 0x20 + (i&0xf);
         }
         else
         {
@@ -596,7 +566,7 @@ static void R_InitTranslationTables (void)
 // middle of a refresh. The change will take effect next refresh.
 // -----------------------------------------------------------------------------
 
-void R_SetViewSize (int blocks, int detail)
+void R_SetViewSize (const int blocks, const int detail)
 {
     setsizeneeded = true;
     setblocks = blocks;
@@ -821,7 +791,7 @@ void R_Init (void)
 // [JN] killough 5/2/98: reformatted, cleaned up
 // -----------------------------------------------------------------------------
 
-subsector_t *R_PointInSubsector (fixed_t x, fixed_t y)
+subsector_t *R_PointInSubsector (const fixed_t x, const fixed_t y)
 {
     int nodenum = numnodes-1;
 

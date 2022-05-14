@@ -25,7 +25,6 @@
 #include "w_wad.h"
 #include "r_local.h"
 #include "doomstat.h"
-#include "v_trans.h"
 #include "r_bmaps.h"
 #include "jn.h"
 
@@ -134,7 +133,7 @@ void R_InitSpritesRes(void)
 // Local function for R_InitSprites.
 // -----------------------------------------------------------------------------
 
-void R_InstallSpriteLump (int lump, unsigned frame, char rot, boolean flipped)
+static void R_InstallSpriteLump (const int lump, unsigned const frame, char rot, boolean flipped)
 {
     int r;
     // [crispy] support 16 sprite rotations
@@ -220,7 +219,7 @@ void R_InstallSpriteLump (int lump, unsigned frame, char rot, boolean flipped)
 // The rotation character can be 0 to signify no rotations.
 // -----------------------------------------------------------------------------
 
-void R_InitSpriteDefs (char **namelist)
+static void R_InitSpriteDefs (char **namelist)
 {
     int    i;
     int    l;
@@ -373,29 +372,12 @@ void R_ClearSprites (void)
 // R_NewVisSprite
 // -----------------------------------------------------------------------------
 
-// static vissprite_t overflowsprite;
-// static int max;
-
-vissprite_t* R_NewVisSprite (void)
+static vissprite_t* R_NewVisSprite (void)
 {
     if (num_vissprite >= num_vissprite_alloc)   // [JN] killough
     {
         
         size_t num_vissprite_alloc_prev = num_vissprite_alloc;
-
-        /*
-        // [crispy] cap MAXVISSPRITES limit at 4096
-        // [JN] TODO - consider make optional?
-        if (!max && num_vissprite_alloc == 4096)
-        {
-            max++;
-        }
-        if (max)
-        {
-            return &overflowsprite;
-        }
-        */
-
         num_vissprite_alloc = num_vissprite_alloc ? num_vissprite_alloc*2 : 128;
         vissprites = I_Realloc(vissprites,num_vissprite_alloc*sizeof(*vissprites));
 
@@ -413,7 +395,7 @@ vissprite_t* R_NewVisSprite (void)
 // Masked means: partly transparent, i.e. stored in posts/runs of opaque pixels.
 // -----------------------------------------------------------------------------
 
-void R_DrawMaskedColumn (column_t *column)
+void R_DrawMaskedColumn (const column_t *column)
 {
     int64_t	topscreen, bottomscreen; // [crispy] WiggleFix
     fixed_t	basetexturemid;
@@ -472,7 +454,7 @@ void R_DrawMaskedColumn (column_t *column)
 //  mfloorclip and mceilingclip should also be set.
 // -----------------------------------------------------------------------------
 
-void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
+static void R_DrawVisSprite (const vissprite_t *vis, const int x1, const int x2)
 {
     column_t *column;
     int       texturecolumn;
@@ -542,7 +524,7 @@ void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
 // Generates a vissprite for a thing if it might be visible.
 // -----------------------------------------------------------------------------
 
-static void R_ProjectSprite (mobj_t *thing, int lightnum)
+static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
 {
     int            x1, x2, lump, index;
     unsigned       rot;
@@ -554,9 +536,9 @@ static void R_ProjectSprite (mobj_t *thing, int lightnum)
     vissprite_t   *vis;
     spritedef_t   *sprdef;
     spriteframe_t *sprframe;
-    boolean         flip;
-    angle_t         ang;    
-    fixed_t         interpx, interpy, interpz, interpangle;
+    boolean        flip;
+    angle_t        ang;    
+    fixed_t        interpx, interpy, interpz, interpangle;
 
     // [AM] Interpolate between current and last position,
     //      if prudent.
@@ -800,12 +782,10 @@ static void R_ProjectSprite (mobj_t *thing, int lightnum)
 // During BSP traversal, this adds sprites by sector.
 // -----------------------------------------------------------------------------
 
-void R_AddSprites (sector_t *sec)
+void R_AddSprites (const sector_t *sec)
 {
-    mobj_t *thing;
-    int     lightnum;
-
-    lightnum = (sec->lightlevel >> LIGHTSEGSHIFT)+extralight;
+    const mobj_t *thing;
+    const int lightnum = (sec->lightlevel >> LIGHTSEGSHIFT)+extralight;
 
     if (lightnum < 0)		
     {
@@ -861,7 +841,7 @@ static inline void R_ApplyWeaponBob (fixed_t *sx, boolean bobx, fixed_t *sy, boo
 // R_DrawPSprite
 // -----------------------------------------------------------------------------
 
-void R_DrawPSprite (pspdef_t *psp)
+static void R_DrawPSprite (const pspdef_t *psp)
 {
     int             x1, x2;
     int             lump;
@@ -1069,14 +1049,12 @@ void R_DrawPSprite (pspdef_t *psp)
 // R_DrawPlayerSprites
 // -----------------------------------------------------------------------------
 
-void R_DrawPlayerSprites (void)
+static void R_DrawPlayerSprites (void)
 {
-    int         i;
-    int         lightnum;
-    pspdef_t   *psp;    
-
+    int i;
+    const pspdef_t *psp;
     // get light level
-    lightnum = (viewplayer->mo->subsector->sector->lightlevel >> LIGHTSEGSHIFT) + extralight;
+    const int lightnum = (viewplayer->mo->subsector->sector->lightlevel >> LIGHTSEGSHIFT) + extralight;
 
     if (lightnum < 0)		
     {
@@ -1116,7 +1094,7 @@ void R_DrawPlayerSprites (void)
 
 // killough 9/2/98: merge sort
 
-static void msort(vissprite_t **s, vissprite_t **t, int n)
+static void msort(vissprite_t **s, vissprite_t **t, const int n)
 {
     if (n >= 16)
     {
@@ -1159,7 +1137,7 @@ static void msort(vissprite_t **s, vissprite_t **t, int n)
 // R_SortVisSprites
 // -----------------------------------------------------------------------------
 
-void R_SortVisSprites (void)
+static void R_SortVisSprites (void)
 {
     if (num_vissprite)
     {
@@ -1192,7 +1170,7 @@ void R_SortVisSprites (void)
 // R_DrawSprite
 // -------------------------------------------------------------------------
 
-static void R_DrawSprite (vissprite_t *spr)
+static void R_DrawSprite (const vissprite_t *spr)
 {
     int x, r1, r2;
     drawseg_t *ds;
@@ -1295,7 +1273,7 @@ static void R_DrawSprite (vissprite_t *spr)
 void R_DrawMasked (void)
 {
     int        i;
-    int        cx = screenwidth / 2;
+    const int  cx = screenwidth / 2;
     drawseg_t *ds;
 
     R_SortVisSprites();

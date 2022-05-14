@@ -133,14 +133,14 @@ int        *texturewidthmask;
 int        *texturewidth;       // [crispy] texture width for wrapping column getter function
 
 // needed for texture pegging
-fixed_t    *textureheight;      // [crispy] texture height for Tutti-Frutti fix	
-int        *texturecompositesize;
-short     **texturecolumnlump;
-unsigned  **texturecolumnofs;   // [crispy] column offsets for composited translucent mid-textures on 2S walls
-unsigned  **texturecolumnofs2;  // [crispy] column offsets for composited opaque textures
-byte      **texturecomposite;   // [crispy] composited translucent mid-textures on 2S walls
-byte      **texturecomposite2;  // [crispy] composited opaque textures
-byte      **texturebrightmap;   // [crispy] brightmaps
+fixed_t     *textureheight;      // [crispy] texture height for Tutti-Frutti fix	
+int         *texturecompositesize;
+short      **texturecolumnlump;
+unsigned   **texturecolumnofs;   // [crispy] column offsets for composited translucent mid-textures on 2S walls
+unsigned   **texturecolumnofs2;  // [crispy] column offsets for composited opaque textures
+const byte **texturecomposite;   // [crispy] composited translucent mid-textures on 2S walls
+const byte **texturecomposite2;  // [crispy] composited opaque textures
+const byte **texturebrightmap;   // [crispy] brightmaps
 
 // for global animation
 int        *flattranslation, *texturetranslation;
@@ -544,7 +544,7 @@ static void R_GenerateLookup (int texnum)
 // Retrieve column data for span blitting.
 // -----------------------------------------------------------------------------
 
-byte *R_GetColumn (int tex, int col)
+const byte *R_GetColumn (const int tex, int col)
 {
     int ofs;
 
@@ -564,7 +564,7 @@ byte *R_GetColumn (int tex, int col)
 // translucent mid-textures on 2S walls
 // -----------------------------------------------------------------------------
 
-byte *R_GetColumnMod (int tex, int col)
+const byte *R_GetColumnMod (const int tex, int col)
 {
     int ofs;
 

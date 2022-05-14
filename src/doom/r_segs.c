@@ -174,7 +174,7 @@ static void R_FixWiggle (sector_t *sector)
 // R_RenderMaskedSegRange
 // -----------------------------------------------------------------------------
 
-void R_RenderMaskedSegRange (drawseg_t *ds, int x1, int x2)
+void R_RenderMaskedSegRange (drawseg_t *ds, const int x1, const int x2)
 {
     int       lightnum;
     int       texnum;
@@ -511,12 +511,12 @@ static void R_RenderSegLoop (void)
 // above R_StoreWallRange
 // -----------------------------------------------------------------------------
 
-static fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
+static fixed_t R_ScaleFromGlobalAngle (const angle_t visangle)
 {
-    int     anglea = ANG90 + (visangle - viewangle);
-    int     angleb = ANG90 + (visangle - rw_normalangle);
-    int     den = FixedMul(rw_distance, finesine[anglea >> ANGLETOFINESHIFT]);
-    fixed_t	num = FixedMul(projection, finesine[angleb >> ANGLETOFINESHIFT]);
+    const fixed_t anglea = ANG90 + (visangle - viewangle);
+    const fixed_t angleb = ANG90 + (visangle - rw_normalangle);
+    const fixed_t den = FixedMul(rw_distance, finesine[anglea >> ANGLETOFINESHIFT]);
+    const fixed_t num = FixedMul(projection, finesine[angleb >> ANGLETOFINESHIFT]);
     fixed_t scale;
 
     if (den > (num >> 16))
@@ -547,7 +547,7 @@ static fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
 // A wall segment will be drawn between start and stop pixels (inclusive).
 // -----------------------------------------------------------------------------
 
-void R_StoreWallRange (int start, int stop)
+void R_StoreWallRange (const int start, const int stop)
 {
     fixed_t     vtop;
     int         lightnum;
@@ -605,8 +605,8 @@ void R_StoreWallRange (int start, int stop)
     {     
         extern int *openings; // dropoff overflow
         extern size_t maxopenings;
-        size_t pos = lastopening - openings;
-        size_t need = (rw_stopx - start)*sizeof(*lastopening) + pos;
+        const size_t pos = lastopening - openings;
+        const size_t need = (rw_stopx - start)*sizeof(*lastopening) + pos;
 
         if (need > maxopenings)
         {
