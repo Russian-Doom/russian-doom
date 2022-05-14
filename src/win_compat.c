@@ -123,10 +123,12 @@ int I_CheckWindows11(void)
     return 0;
 }
 
+typedef HRESULT (WINAPI *PDWMSETWINDOWATTRIBUTE)(HWND, DWORD, LPCVOID, DWORD);
+
 void DisableWinRound(SDL_Window* screen)
 {
     HMODULE hDllDwmApi;
-    HRESULT (*pDwmSetWindowAttribute) (HWND, DWORD, LPCVOID, DWORD);
+    PDWMSETWINDOWATTRIBUTE pDwmSetWindowAttribute;
     SDL_SysWMinfo wmInfo;
     HWND hwnd;
     int noround = 1; // DWMWCP_DONOTROUND
@@ -138,7 +140,7 @@ void DisableWinRound(SDL_Window* screen)
     hDllDwmApi = LoadLibrary("dwmapi.dll");
     if(hDllDwmApi != NULL)
     {
-        pDwmSetWindowAttribute = (HRESULT (*)(HWND, DWORD, LPCVOID, DWORD)) GetProcAddress(hDllDwmApi, "DwmSetWindowAttribute");
+        pDwmSetWindowAttribute = (PDWMSETWINDOWATTRIBUTE) GetProcAddress(hDllDwmApi, "DwmSetWindowAttribute");
     }
     if(pDwmSetWindowAttribute != NULL)
     {
