@@ -26,7 +26,6 @@
 #include "w_wad.h"
 #include "r_local.h"
 #include "v_video.h"
-#include "v_trans.h"
 #include "doomstat.h"
 #include "m_random.h"
 #include "st_bar.h"
@@ -55,21 +54,22 @@ static int   columnofs[WIDESCREENWIDTH];
 // surrounding background.
 static byte *background_buffer = NULL;
 
-
 // R_DrawColumn. Source is the top of the column to scale.
-lighttable_t *dc_colormap[2]; // [crispy] brightmaps
-int           dc_x, dc_yl, dc_yh; 
-fixed_t       dc_iscale;
-fixed_t       dc_texturemid;
-int           dc_texheight;
+const lighttable_t *dc_colormap[2];  // [crispy] brightmaps
+const byte         *dc_source;       // First pixel in a column (possibly virtual).
+fixed_t dc_x, dc_yl, dc_yh; 
+fixed_t dc_iscale;
+fixed_t dc_texturemid;
+fixed_t dc_texheight;
 
-// First pixel in a column (possibly virtual).
-byte *dc_source;
+// Translated columns.
+const byte *dc_translation;
+byte       *translationtables;
 
 // Spectre/Invisibility fuzz effect.
 #define FUZZTABLE 50
 
-static int fuzzoffset[FUZZTABLE] =
+static const int fuzzoffset[FUZZTABLE] =
 {
     1, -1,  1, -1,  1,  1, -1,  1,  1, -1,
     1,  1,  1, -1,  1,  1,  1, -1, -1, -1,
@@ -81,18 +81,14 @@ static int fuzzoffset[FUZZTABLE] =
 static int fuzzpos = 0;
 static int fuzzpos_tic;
 
-// Translated columns.
-byte *dc_translation;
-byte *translationtables;
-
 // Spans.
-int     ds_y, ds_x1, ds_x2;
+fixed_t ds_y, ds_x1, ds_x2;
 fixed_t ds_xfrac, ds_yfrac;
 fixed_t ds_xstep, ds_ystep;
 
-byte         *ds_source;  // start of a 64*64 tile image 
-lighttable_t *ds_colormap[2];
-byte         *ds_brightmap;
+const lighttable_t *ds_colormap[2];
+const byte         *ds_source;  // start of a 64*64 tile image 
+const byte         *ds_brightmap;
 
 
 // -----------------------------------------------------------------------------
@@ -1236,10 +1232,10 @@ void R_DrawSpanLow (void)
 // -----------------------------------------------------------------------------
 // R_InitBuffer 
 // Creats lookup tables that avoid multiplies and other hazzles
-//  for getting the framebuffer address  of a pixel to draw.
+//  for getting the framebuffer address of a pixel to draw.
 // -----------------------------------------------------------------------------
 
-void R_InitBuffer (int width, int height) 
+void R_InitBuffer (const int width, const int height) 
 { 
     int i; 
 
@@ -1401,7 +1397,7 @@ void R_FillBackScreen (void)
 // Copy a screen buffer.
 // -----------------------------------------------------------------------------
 
-void R_VideoErase (unsigned ofs, int count)
+void R_VideoErase (unsigned ofs, const int count)
 { 
     // LFB copy.
     // This might not be a good idea if memcpy

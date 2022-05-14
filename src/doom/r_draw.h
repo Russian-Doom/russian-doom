@@ -30,14 +30,27 @@
 void R_DrawColumn (void);
 void R_DrawColumnLow (void);
 
+extern const lighttable_t *dc_colormap[2];
+extern const byte         *dc_source;
+extern byte               *dc_brightmap;
+extern fixed_t dc_x, dc_yl, dc_yh; 
+extern fixed_t dc_texheight;
+extern fixed_t dc_iscale;
+extern fixed_t dc_texturemid;
 
-extern int           dc_x, dc_yl, dc_yh; 
-extern int           dc_texheight;
-extern fixed_t       dc_iscale;
-extern fixed_t       dc_texturemid;
-extern lighttable_t *dc_colormap[2];
-extern byte         *dc_brightmap;
-extern byte         *dc_source;
+//
+// Translated columns.
+//
+
+// Draw with color translation tables, for player sprite rendering,
+//  Green/Red/Blue/Indigo shirts.
+void R_DrawTranslatedColumn (void);
+void R_DrawTranslatedColumnLow (void);
+void R_DrawTLColumn (void);
+void R_DrawTLColumnLow (void);
+
+extern const byte *dc_translation;
+extern byte       *translationtables;
 
 //
 // The Spectre/Invisibility effect.
@@ -59,20 +72,6 @@ void R_SetFuzzPosTic (void);
 void R_SetFuzzPosDraw (void);
 
 //
-// Translated columns.
-//
-
-// Draw with color translation tables, for player sprite rendering,
-//  Green/Red/Blue/Indigo shirts.
-void R_DrawTranslatedColumn (void);
-void R_DrawTranslatedColumnLow (void);
-void R_DrawTLColumn (void);
-void R_DrawTLColumnLow (void);
-
-extern byte *translationtables;
-extern byte *dc_translation;
-
-//
 // Spans.
 //
 
@@ -81,12 +80,13 @@ void R_DrawSpan (void);
 // Low resolution mode, 160x200?
 void R_DrawSpanLow (void);
 
-extern int           ds_y, ds_x1, ds_x2;
-extern fixed_t       ds_xfrac, ds_yfrac;
-extern fixed_t       ds_xstep, ds_ystep;
-extern byte         *ds_source;
-extern lighttable_t *ds_colormap[2];
-extern byte         *ds_brightmap;
+extern fixed_t ds_y, ds_x1, ds_x2;
+extern fixed_t ds_xfrac, ds_yfrac;
+extern fixed_t ds_xstep, ds_ystep;
+
+extern const lighttable_t *ds_colormap[2];
+extern const byte         *ds_source;
+extern const byte         *ds_brightmap;
 
 //
 // Video buffering stuff.
@@ -96,6 +96,6 @@ void R_InitBuffer (int width, int height);
 // Rendering function.
 void R_FillBackScreen (void);
 // Copy a screen buffer.
-void R_VideoErase (unsigned ofs, int count);
+void R_VideoErase (unsigned ofs, const int count);
 // If the view size is not full screen, draws a border around it.
 void R_DrawViewBorder (void);
