@@ -40,7 +40,6 @@
 #include "r_local.h"
 #include "p_local.h"
 #include "g_game.h"
-#include "p_saveg.h"
 #include "s_sound.h"
 #include "doomstat.h"
 #include "m_menu.h"

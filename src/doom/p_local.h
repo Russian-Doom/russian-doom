@@ -524,6 +524,38 @@ void P_MovePsprites (player_t *player);
 void P_SetupPsprites (player_t *player);
 
 // -----------------------------------------------------------------------------
+// P_SAVEG
+// -----------------------------------------------------------------------------
+
+#define SAVEGAME_EOF        0x1d
+#define VERSIONSIZE         16
+#define SAVESTRINGSIZE      24
+
+extern FILE *save_stream;
+extern boolean savegame_error;
+extern void M_ConfirmDeleteGame (void);
+
+boolean P_ReadSaveGameEOF (void);
+boolean P_ReadSaveGameHeader (void);
+char *P_SaveGameFile (int slot);
+char *P_TempSaveGameFile (void);
+thinker_t *P_IndexToThinker (uint32_t index);
+uint32_t P_ThinkerToIndex (thinker_t *thinker);
+void P_ArchiveAutomap (void);
+void P_ArchivePlayers (void);
+void P_ArchiveSpecials (void);
+void P_ArchiveThinkers (void);
+void P_ArchiveWorld (void);
+void P_RestoreTargets (void);
+void P_UnArchiveAutomap (void);
+void P_UnArchivePlayers (void);
+void P_UnArchiveSpecials (void);
+void P_UnArchiveThinkers (void);
+void P_UnArchiveWorld (void);
+void P_WriteSaveGameEOF (void);
+void P_WriteSaveGameHeader (char *description);
+
+// -----------------------------------------------------------------------------
 // P_SETUP
 // -----------------------------------------------------------------------------
 
