@@ -20,6 +20,7 @@
 //
 
 
+#include <string.h>
 #include <stdlib.h>
 #include "i_system.h"
 #include "z_zone.h"

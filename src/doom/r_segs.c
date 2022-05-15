@@ -18,6 +18,7 @@
 //
 
 
+#include <string.h>
 #include "i_system.h"
 #include "doomstat.h"
 #include "r_local.h"

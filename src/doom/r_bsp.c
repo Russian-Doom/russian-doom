@@ -18,6 +18,7 @@
 //
 
 
+#include <string.h>
 #include <stdlib.h>
 #include "m_bbox.h"
 #include "i_system.h"

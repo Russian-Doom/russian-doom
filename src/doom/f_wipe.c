@@ -18,6 +18,7 @@
 //
 
 
+#include <string.h>
 #include <stdlib.h>     // [JN] rand()
 #include "z_zone.h"
 #include "i_video.h"
