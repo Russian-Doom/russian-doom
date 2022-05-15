@@ -115,17 +115,17 @@ P_SpawnMobj
 
 void 	P_RemoveMobj (mobj_t* th);
 mobj_t* P_SubstNullMobj (mobj_t* th);
-boolean	P_SetMobjState (mobj_t* mobj, statenum_t state);
+const boolean P_SetMobjState (mobj_t* mobj, statenum_t state);
 void 	P_MobjThinker (mobj_t* mobj);
 
-void	P_SpawnPuff (fixed_t x, fixed_t y, fixed_t z);
-
-void 	P_SpawnColoredBlood (fixed_t x, fixed_t y, fixed_t z, int damage, mobj_t* target);
-void 	P_SpawnBlood (fixed_t x, fixed_t y, fixed_t z, int damage, mobj_t* target);
+void P_SpawnPuff (fixed_t x, fixed_t y, fixed_t z);
+void P_SpawnPuffSafe (const fixed_t x, const fixed_t y, const fixed_t z, const boolean safe); 
+void P_SpawnBlood (const fixed_t x, const fixed_t y, fixed_t z, 
+                   const int damage, mobj_t *target);
 mobj_t* P_SpawnMissile (mobj_t* source, mobj_t* dest, mobjtype_t type);
-void	P_SpawnPlayerMissile (mobj_t* source, mobjtype_t type);
+void	P_SpawnPlayerMissile (mobj_t* source, const mobjtype_t type);
 
-void	P_SpawnPuffSafe (fixed_t x, fixed_t y, fixed_t z, boolean safe); 
+
 
 //
 // P_ENEMY
@@ -133,89 +133,9 @@ void	P_SpawnPuffSafe (fixed_t x, fixed_t y, fixed_t z, boolean safe);
 void P_NoiseAlert (mobj_t* target, mobj_t* emmiter);
 
 
-//
-// P_MAPUTL
-//
-typedef struct
-{
-    fixed_t	x;
-    fixed_t	y;
-    fixed_t	dx;
-    fixed_t	dy;
-    
-} divline_t;
-
-typedef struct
-{
-    fixed_t	frac;		// along trace line
-    boolean	isaline;
-    union {
-	mobj_t*	thing;
-	line_t*	line;
-    }			d;
-} intercept_t;
-
-// Extended MAXINTERCEPTS, to allow for intercepts overrun emulation.
-
-#define MAXINTERCEPTS_ORIGINAL 128*16 // [JN] Лимит шестнадцатикратно умножен
-#define MAXINTERCEPTS          (MAXINTERCEPTS_ORIGINAL + 61)
-
-extern intercept_t	intercepts[MAXINTERCEPTS];
-extern intercept_t*	intercept_p;
-
-typedef boolean (*traverser_t) (intercept_t *in);
-
-fixed_t P_AproxDistance (fixed_t dx, fixed_t dy);
-fixed_t P_ApproxDistanceZ(fixed_t dx, fixed_t dy, fixed_t dz);
-int 	P_PointOnLineSide (fixed_t x, fixed_t y, const line_t *line);
-int 	P_PointOnDivlineSide (fixed_t x, fixed_t y, const divline_t *line);
-void 	P_MakeDivline (line_t* li, divline_t* dl);
-fixed_t P_InterceptVector (divline_t* v2, divline_t* v1);
-int 	P_BoxOnLineSide (const fixed_t *tmbox, const line_t *ld);
-
-extern fixed_t		opentop;
-extern fixed_t 		openbottom;
-extern fixed_t		openrange;
-extern fixed_t		lowfloor;
-
-void 	P_LineOpening (line_t* linedef);
-
-boolean P_BlockLinesIterator (int x, int y, boolean(*func)(line_t*) );
-boolean P_BlockThingsIterator (int x, int y, boolean(*func)(mobj_t*));
-boolean PIT_RadiusAttack (mobj_t* thing);
-boolean PIT_ChangeSector (mobj_t* thing);
-
-#define PT_ADDLINES		1
-#define PT_ADDTHINGS	2
-
-extern divline_t	trace;
-
-boolean
-P_PathTraverse
-( fixed_t	x1,
-  fixed_t	y1,
-  int64_t	x2,
-  int64_t	y2,
-  int		flags,
-  boolean	(*trav) (intercept_t *));
-
-void P_UnsetThingPosition (mobj_t* thing);
-void P_SetThingPosition (mobj_t* thing);
-
-
-//
+// -----------------------------------------------------------------------------
 // P_MAP
-//
-
-// If "floatok" true, move would be ok
-// if within "tmfloorz - tmceilingz".
-extern boolean		floatok;
-extern fixed_t		tmfloorz;
-extern fixed_t		tmceilingz;
-extern mobj_t		*BlockingMobj;
-
-
-extern	line_t*		ceilingline;
+// -----------------------------------------------------------------------------
 
 // fraggle: I have increased the size of this buffer.  In the original Doom,
 // overrunning past this limit caused other bits of memory to be overwritten,
@@ -225,51 +145,95 @@ extern	line_t*		ceilingline;
 // We keep the original limit, to detect what variables in memory were
 // overwritten (see SpechitOverrun())
 
-#define MAXSPECIALCROSS 		20
-#define MAXSPECIALCROSS_ORIGINAL	8
+#define MAXSPECIALCROSS             20
+#define MAXSPECIALCROSS_ORIGINAL    8
 
-extern	line_t*	spechit[MAXSPECIALCROSS];
-extern	int	numspechit;
+extern boolean  floatok;
+extern fixed_t  tmfloorz;
+extern fixed_t  tmceilingz;
+extern line_t  *ceilingline;
+extern line_t  *spechit[MAXSPECIALCROSS];
+extern int      numspechit;
+extern mobj_t  *BlockingMobj;
+extern mobj_t  *linetarget;
 
-boolean P_CheckPosition (mobj_t *thing, fixed_t x, fixed_t y);
-boolean P_TryMove (mobj_t* thing, fixed_t x, fixed_t y);
-boolean P_CheckLineSide(mobj_t *actor, fixed_t x, fixed_t y);
-boolean P_TeleportMove (mobj_t* thing, fixed_t x, fixed_t y);
-void	P_SlideMove (mobj_t* mo);
-boolean P_CheckSight (mobj_t* t1, mobj_t* t2);
+const boolean P_TeleportMove (mobj_t* thing, const fixed_t x, const fixed_t y);
+const boolean P_CheckLineSide (mobj_t *actor, const fixed_t x, const fixed_t y);
+const boolean P_CheckPosition (mobj_t *thing, const fixed_t x, const fixed_t y);
+const boolean P_TryMove (mobj_t* thing, const fixed_t x, const fixed_t y);
+void P_ApplyTorque(mobj_t *mo);
+void P_SlideMove (mobj_t *mo);
+const fixed_t P_AimLineAttack (mobj_t *t1, angle_t angle, const fixed_t distance);
+void P_LineAttack (mobj_t *t1, angle_t angle, int64_t distance, 
+                   const fixed_t slope, const int damage);
 boolean PTR_NoWayAudible (line_t *line);
-void 	P_UseLines (player_t* player);
-
+void 	P_UseLines (const player_t* player);
+boolean PIT_RadiusAttack (mobj_t* thing);
+void P_RadiusAttack (mobj_t *spot, mobj_t *source, int damage);
+boolean PIT_ChangeSector (mobj_t *thing);
 boolean P_ChangeSector (sector_t* sector, boolean crunch);
 
-extern mobj_t*	linetarget;	// who got hit (or NULL)
+// -----------------------------------------------------------------------------
+// P_MAPUTL
+// -----------------------------------------------------------------------------
 
-fixed_t
-P_AimLineAttack
-( mobj_t*	t1,
-  angle_t	angle,
-  fixed_t	distance );
+typedef struct
+{
+    fixed_t	x;
+    fixed_t	y;
+    fixed_t	dx;
+    fixed_t	dy;
+} divline_t;
 
-void
-P_LineAttack
-( mobj_t*	t1,
-  angle_t	angle,
-  int64_t	distance,
-  fixed_t	slope,
-  int		damage );
+typedef struct
+{
+    fixed_t	frac;		// along trace line
+    boolean	isaline;
+    union {
+	mobj_t*	thing;
+	line_t*	line;
+    }
+    d;
+} intercept_t;
 
-void
-P_RadiusAttack
-( mobj_t*	spot,
-  mobj_t*	source,
-  int		damage );
+typedef boolean (*traverser_t) (intercept_t *in);
 
-void P_ApplyTorque(mobj_t *mo);     // killough 9/12/98
+const fixed_t P_AproxDistance (fixed_t dx, fixed_t dy);
+const fixed_t P_ApproxDistanceZ (fixed_t dx, fixed_t dy, fixed_t dz);
+const fixed_t P_InterceptVector (const divline_t* v2, const divline_t* v1);
+const int P_PointOnLineSide (const fixed_t x, const fixed_t y, const line_t *line);
+const int P_BoxOnLineSide (const fixed_t *tmbox, const line_t *ld);
+const int P_PointOnDivlineSide (fixed_t x, fixed_t y, const divline_t *line);
+void P_MakeDivline (line_t* li, divline_t* dl);
 
+extern fixed_t opentop;
+extern fixed_t openbottom;
+extern fixed_t openrange;
+extern fixed_t lowfloor;
+void P_LineOpening (const line_t *linedef);
 
-//
+void P_UnsetThingPosition (const mobj_t* thing);
+void P_SetThingPosition (mobj_t* thing);
+
+const boolean P_BlockLinesIterator (const int x, const int y, boolean(*func)(line_t*));
+const boolean P_BlockThingsIterator (const int x, const int y, boolean(*func)(mobj_t*));
+
+// Extended MAXINTERCEPTS, to allow for intercepts overrun emulation.
+#define MAXINTERCEPTS_ORIGINAL  128*16 // [JN] Лимит шестнадцатикратно умножен
+#define MAXINTERCEPTS           (MAXINTERCEPTS_ORIGINAL + 61)
+#define PT_ADDLINES             1
+#define PT_ADDTHINGS            2
+
+extern intercept_t  intercepts[MAXINTERCEPTS];
+extern intercept_t *intercept_p;
+extern divline_t    trace;
+boolean P_PathTraverse (fixed_t x1, fixed_t	y1, int64_t	x2, int64_t	y2,
+                        int flags, boolean (*trav) (intercept_t *));
+
+// -----------------------------------------------------------------------------
 // P_SETUP
-//
+// -----------------------------------------------------------------------------
+
 extern byte*		rejectmatrix;	// for fast sight rejection
 extern int32_t*		blockmaplump;	// offsets in blockmap are from here // [crispy] BLOCKMAP limit
 extern int32_t*		blockmap; // [crispy] BLOCKMAP limit
@@ -280,7 +244,7 @@ extern fixed_t		bmaporgy;	// origin of block map
 extern mobj_t**		blocklinks;	// for thing chains
 
 // NOT called by W_Ticker. Fixme.
-void P_SetupLevel (int episode, int map, int playermask, skill_t skill);
+void P_SetupLevel (const int episode, const int map, const int playermask, const skill_t skill);
 
 // Called by startup code.
 void P_Init (void);
@@ -291,6 +255,11 @@ void P_Init (void);
 #define KEYBLINKTICS (7*KEYBLINKMASK)
 extern int st_keyorskull[3];
 
+// -----------------------------------------------------------------------------
+// P_SIGHT
+// -----------------------------------------------------------------------------
+
+const boolean P_CheckSight (const mobj_t* t1, const mobj_t* t2);
 
 //
 // P_INTER

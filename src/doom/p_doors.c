@@ -190,172 +190,6 @@ void T_VerticalDoor (vldoor_t *door)
 }
 
 // -----------------------------------------------------------------------------
-// EV_DoLockedDoor
-// Move a locked door up/down
-// -----------------------------------------------------------------------------
-
-int EV_DoLockedDoor (line_t *line, vldoor_e type, mobj_t *thing)
-{
-    player_t *p = thing->player;
-
-    if (!p)
-    {
-        return 0;
-    }
-		
-    switch(line->special)
-    {
-        // Blue Lock
-        case 99:
-        case 133:
-        if (!p->cards[it_bluecard] && !p->cards[it_blueskull])
-        {
-            P_SetMessage(p, DEH_String(pd_blueo), msg_system, false);
-            // [crispy] blinking key or skull in the status bar
-            p->tryopen[it_bluecard] = KEYBLINKTICS;
-            if (PTR_NoWayAudible(line))
-            {
-                S_StartSound(NULL,sfx_oof);
-            }
-            return 0;
-        }
-        break;
-
-        // Red Lock
-        case 134: 
-        case 135:
-        if (!p->cards[it_redcard] && !p->cards[it_redskull])
-        {
-            P_SetMessage(p, DEH_String(pd_redo), msg_system, false);
-            // [crispy] blinking key or skull in the status bar
-            p->tryopen[it_redcard] = KEYBLINKTICS;
-            if (PTR_NoWayAudible(line))
-            {
-                S_StartSound(NULL,sfx_oof);
-            }
-            return 0;
-        }
-        break;
-
-        // Yellow Lock
-        case 136:	
-        case 137:
-        if (!p->cards[it_yellowcard] && !p->cards[it_yellowskull])
-        {
-            P_SetMessage(p, DEH_String(pd_yellowo), msg_system, false);
-            // [crispy] blinking key or skull in the status bar
-            p->tryopen[it_yellowcard] = KEYBLINKTICS;
-            if (PTR_NoWayAudible(line))
-            {
-                S_StartSound(NULL,sfx_oof);
-            }
-            return 0;
-        }
-        break;	
-    }
-
-    return EV_DoDoor(line,type);
-}
-
-// -----------------------------------------------------------------------------
-// EV_DoDoor
-// -----------------------------------------------------------------------------
-
-int EV_DoDoor (line_t *line, vldoor_e type)
-{
-    int       secnum, rtn;
-    sector_t *sec;
-    vldoor_t *door;
-
-    secnum = -1;
-    rtn = 0;
-
-    while ((secnum = P_FindSectorFromLineTag(line,secnum)) >= 0)
-    {
-        sec = &sectors[secnum];
-
-        if (sec->specialdata)
-        {
-            continue;
-        }
-
-        // new door thinker
-        rtn = 1;
-        door = Z_Malloc (sizeof(*door), PU_LEVSPEC, 0);
-        P_AddThinker (&door->thinker);
-        sec->specialdata = door;
-
-        door->thinker.function.acp1 = (actionf_p1) T_VerticalDoor;
-        door->sector = sec;
-        door->type = type;
-        door->topwait = VDOORWAIT;
-        door->speed = VDOORSPEED;
-
-        switch(type)
-        {
-            case vld_blazeClose:
-            door->topheight = P_FindLowestCeilingSurrounding(sec);
-            door->topheight -= 4*FRACUNIT;
-            door->direction = -1;
-            door->speed = VDOORSPEED * 4;
-            // [JN] Z-axis sfx distance: sound invoked from the ceiling
-            door->sector->soundorg.z = door->sector->ceilingheight;
-            S_StartSound(&door->sector->soundorg, sfx_bdcls);
-            break;
-
-            case vld_close:
-            door->topheight = P_FindLowestCeilingSurrounding(sec);
-            door->topheight -= 4*FRACUNIT;
-            door->direction = -1;
-            // [JN] Z-axis sfx distance: sound invoked from the ceiling
-            door->sector->soundorg.z = door->sector->ceilingheight;
-            S_StartSound(&door->sector->soundorg, sfx_dorcls);
-            break;
-
-            case vld_close30ThenOpen:
-            door->topheight = sec->ceilingheight;
-            door->direction = -1;
-            // [JN] Z-axis sfx distance: sound invoked from ceiling
-            door->sector->soundorg.z = door->sector->ceilingheight;
-            S_StartSound(&door->sector->soundorg, sfx_dorcls);
-            break;
-
-            case vld_blazeRaise:
-            case vld_blazeOpen:
-            door->direction = 1;
-            door->topheight = P_FindLowestCeilingSurrounding(sec);
-            door->topheight -= 4*FRACUNIT;
-            door->speed = VDOORSPEED * 4;
-
-            if (door->topheight != sec->ceilingheight)
-            {
-                // [JN] Z-axis sfx distance: sound invoked from ceiling
-                door->sector->soundorg.z = door->sector->ceilingheight;
-                S_StartSound(&door->sector->soundorg, sfx_bdopn);
-            }
-            break;
-
-            case vld_normal:
-            case vld_open:
-            door->direction = 1;
-            door->topheight = P_FindLowestCeilingSurrounding(sec);
-            door->topheight -= 4*FRACUNIT;
-            if (door->topheight != sec->ceilingheight)
-            {
-                // [JN] Z-axis sfx distance: sound invoked from ceiling
-                door->sector->soundorg.z = door->sector->ceilingheight;
-                S_StartSound(&door->sector->soundorg, sfx_doropn);
-            }
-            break;
-
-            default:
-            break;
-        }
-    }
-    return rtn;
-}
-
-// -----------------------------------------------------------------------------
 // EV_VerticalDoor : open a door manually, no tag value
 // -----------------------------------------------------------------------------
 
@@ -595,6 +429,172 @@ void EV_VerticalDoor (line_t *line, mobj_t *thing)
 }
 
 // -----------------------------------------------------------------------------
+// EV_DoDoor
+// -----------------------------------------------------------------------------
+
+const int EV_DoDoor (const line_t *line, const vldoor_e type)
+{
+    int       secnum, rtn;
+    sector_t *sec;
+    vldoor_t *door;
+
+    secnum = -1;
+    rtn = 0;
+
+    while ((secnum = P_FindSectorFromLineTag(line,secnum)) >= 0)
+    {
+        sec = &sectors[secnum];
+
+        if (sec->specialdata)
+        {
+            continue;
+        }
+
+        // new door thinker
+        rtn = 1;
+        door = Z_Malloc (sizeof(*door), PU_LEVSPEC, 0);
+        P_AddThinker (&door->thinker);
+        sec->specialdata = door;
+
+        door->thinker.function.acp1 = (actionf_p1) T_VerticalDoor;
+        door->sector = sec;
+        door->type = type;
+        door->topwait = VDOORWAIT;
+        door->speed = VDOORSPEED;
+
+        switch(type)
+        {
+            case vld_blazeClose:
+            door->topheight = P_FindLowestCeilingSurrounding(sec);
+            door->topheight -= 4*FRACUNIT;
+            door->direction = -1;
+            door->speed = VDOORSPEED * 4;
+            // [JN] Z-axis sfx distance: sound invoked from the ceiling
+            door->sector->soundorg.z = door->sector->ceilingheight;
+            S_StartSound(&door->sector->soundorg, sfx_bdcls);
+            break;
+
+            case vld_close:
+            door->topheight = P_FindLowestCeilingSurrounding(sec);
+            door->topheight -= 4*FRACUNIT;
+            door->direction = -1;
+            // [JN] Z-axis sfx distance: sound invoked from the ceiling
+            door->sector->soundorg.z = door->sector->ceilingheight;
+            S_StartSound(&door->sector->soundorg, sfx_dorcls);
+            break;
+
+            case vld_close30ThenOpen:
+            door->topheight = sec->ceilingheight;
+            door->direction = -1;
+            // [JN] Z-axis sfx distance: sound invoked from ceiling
+            door->sector->soundorg.z = door->sector->ceilingheight;
+            S_StartSound(&door->sector->soundorg, sfx_dorcls);
+            break;
+
+            case vld_blazeRaise:
+            case vld_blazeOpen:
+            door->direction = 1;
+            door->topheight = P_FindLowestCeilingSurrounding(sec);
+            door->topheight -= 4*FRACUNIT;
+            door->speed = VDOORSPEED * 4;
+
+            if (door->topheight != sec->ceilingheight)
+            {
+                // [JN] Z-axis sfx distance: sound invoked from ceiling
+                door->sector->soundorg.z = door->sector->ceilingheight;
+                S_StartSound(&door->sector->soundorg, sfx_bdopn);
+            }
+            break;
+
+            case vld_normal:
+            case vld_open:
+            door->direction = 1;
+            door->topheight = P_FindLowestCeilingSurrounding(sec);
+            door->topheight -= 4*FRACUNIT;
+            if (door->topheight != sec->ceilingheight)
+            {
+                // [JN] Z-axis sfx distance: sound invoked from ceiling
+                door->sector->soundorg.z = door->sector->ceilingheight;
+                S_StartSound(&door->sector->soundorg, sfx_doropn);
+            }
+            break;
+
+            default:
+            break;
+        }
+    }
+    return rtn;
+}
+
+// -----------------------------------------------------------------------------
+// EV_DoLockedDoor
+// Move a locked door up/down
+// -----------------------------------------------------------------------------
+
+const int EV_DoLockedDoor (line_t *line, const vldoor_e type, const mobj_t *thing)
+{
+    player_t *p = thing->player;
+
+    if (!p)
+    {
+        return 0;
+    }
+		
+    switch(line->special)
+    {
+        // Blue Lock
+        case 99:
+        case 133:
+        if (!p->cards[it_bluecard] && !p->cards[it_blueskull])
+        {
+            P_SetMessage(p, DEH_String(pd_blueo), msg_system, false);
+            // [crispy] blinking key or skull in the status bar
+            p->tryopen[it_bluecard] = KEYBLINKTICS;
+            if (PTR_NoWayAudible(line))
+            {
+                S_StartSound(NULL,sfx_oof);
+            }
+            return 0;
+        }
+        break;
+
+        // Red Lock
+        case 134: 
+        case 135:
+        if (!p->cards[it_redcard] && !p->cards[it_redskull])
+        {
+            P_SetMessage(p, DEH_String(pd_redo), msg_system, false);
+            // [crispy] blinking key or skull in the status bar
+            p->tryopen[it_redcard] = KEYBLINKTICS;
+            if (PTR_NoWayAudible(line))
+            {
+                S_StartSound(NULL,sfx_oof);
+            }
+            return 0;
+        }
+        break;
+
+        // Yellow Lock
+        case 136:	
+        case 137:
+        if (!p->cards[it_yellowcard] && !p->cards[it_yellowskull])
+        {
+            P_SetMessage(p, DEH_String(pd_yellowo), msg_system, false);
+            // [crispy] blinking key or skull in the status bar
+            p->tryopen[it_yellowcard] = KEYBLINKTICS;
+            if (PTR_NoWayAudible(line))
+            {
+                S_StartSound(NULL,sfx_oof);
+            }
+            return 0;
+        }
+        break;	
+    }
+
+    return EV_DoDoor(line,type);
+}
+
+// -----------------------------------------------------------------------------
 // Spawn a door that closes after 30 seconds
 // -----------------------------------------------------------------------------
 
@@ -620,7 +620,7 @@ void P_SpawnDoorCloseIn30 (sector_t *sec)
 // Spawn a door that opens after 5 minutes
 // -----------------------------------------------------------------------------
 
-void P_SpawnDoorRaiseIn5Mins (sector_t *sec, int secnum)
+void P_SpawnDoorRaiseIn5Mins (sector_t *sec, const int secnum)
 {
     vldoor_t *door = Z_Malloc ( sizeof(*door), PU_LEVSPEC, 0);
 

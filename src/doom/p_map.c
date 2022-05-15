@@ -19,7 +19,6 @@
 //
 
 
-#include <stdlib.h>
 #include "deh_misc.h"
 #include "m_bbox.h"
 #include "m_random.h"
@@ -41,10 +40,9 @@ static int ls_x, ls_y;     // Lost Soul position for Lost Soul checks      // ph
 // If "floatok" true, move would be ok
 // if within "tmfloorz - tmceilingz".
 boolean floatok;
-
 fixed_t tmfloorz;
 fixed_t tmceilingz;
-fixed_t tmdropoffz;
+static fixed_t tmdropoffz;
 
 // keep track of the line that lowers the ceiling,
 // so missiles don't explode against sky hack walls
@@ -104,7 +102,7 @@ static boolean PIT_StompThing (mobj_t *thing)
 // P_TeleportMove
 // -----------------------------------------------------------------------------
 
-boolean P_TeleportMove (mobj_t *thing, fixed_t x, fixed_t y)
+const boolean P_TeleportMove (mobj_t *thing, const fixed_t x, const fixed_t y)
 {
     int          xl, xh;
     int          yl, yh;
@@ -496,7 +494,7 @@ static boolean PIT_CheckThing (mobj_t *thing)
 // false.
 // -----------------------------------------------------------------------------
 
-boolean P_CheckLineSide(mobj_t *actor, fixed_t x, fixed_t y)
+const boolean P_CheckLineSide(mobj_t *actor, const fixed_t x, const fixed_t y)
 {
     int xl, xh;
     int yl, yh;
@@ -564,7 +562,7 @@ boolean P_CheckLineSide(mobj_t *actor, fixed_t x, fixed_t y)
 //  numspeciallines
 // -----------------------------------------------------------------------------
 
-boolean P_CheckPosition (mobj_t *thing, fixed_t x, fixed_t y)
+const boolean P_CheckPosition (mobj_t *thing, const fixed_t x, const fixed_t y)
 {
     int xl, xh;
     int yl, yh;
@@ -650,7 +648,7 @@ boolean P_CheckPosition (mobj_t *thing, fixed_t x, fixed_t y)
 // crossing special lines unless MF_TELEPORT is set.
 // -----------------------------------------------------------------------------
 
-boolean P_TryMove (mobj_t *thing, fixed_t x, fixed_t y)
+const boolean P_TryMove (mobj_t *thing, const fixed_t x, const fixed_t y)
 {
     fixed_t	oldx, oldy;
 
@@ -873,11 +871,11 @@ void P_ApplyTorque (mobj_t *mo)
 // the lowest value and false will be returned.
 // -----------------------------------------------------------------------------
 
-static sector_t *movingsector;
+static const sector_t *movingsector;
 
-static boolean P_ThingHeightClip (mobj_t* thing)
+static const boolean P_ThingHeightClip (mobj_t* thing)
 {
-    boolean onfloor = (thing->z == thing->floorz);
+    const boolean onfloor = (thing->z == thing->floorz);
 
     P_CheckPosition (thing, thing->x, thing->y);	
     // what about stranding a monster partially off an edge?
@@ -922,10 +920,10 @@ static boolean P_ThingHeightClip (mobj_t* thing)
 // Allows the player to slide along any angled walls.
 // =============================================================================
 
-fixed_t  bestslidefrac, secondslidefrac;
-line_t  *bestslideline, *secondslideline;
-fixed_t  tmxmove, tmymove;
-mobj_t  *slidemo;
+static fixed_t  bestslidefrac, secondslidefrac;
+static line_t  *bestslideline, *secondslideline;
+static fixed_t  tmxmove, tmymove;
+static mobj_t  *slidemo;
 
 // -----------------------------------------------------------------------------
 // P_HitSlideLine
@@ -980,7 +978,7 @@ static void P_HitSlideLine (line_t* ld)
 // PTR_SlideTraverse
 // -----------------------------------------------------------------------------
 
-boolean PTR_SlideTraverse (intercept_t *in)
+static boolean PTR_SlideTraverse (intercept_t *in)
 {
     line_t *li;
 
@@ -1499,7 +1497,7 @@ static boolean PTR_ShootTraverse (intercept_t* in)
 // P_AimLineAttack
 // -----------------------------------------------------------------------------
 
-fixed_t P_AimLineAttack (mobj_t *t1, angle_t angle, fixed_t distance)
+const fixed_t P_AimLineAttack (mobj_t *t1, angle_t angle, const fixed_t distance)
 {
     fixed_t	x2, y2;
 
@@ -1536,7 +1534,8 @@ fixed_t P_AimLineAttack (mobj_t *t1, angle_t angle, fixed_t distance)
 // If damage == 0, it is just a test trace that will leave linetarget set.
 // -----------------------------------------------------------------------------
 
-void P_LineAttack (mobj_t *t1, angle_t angle, int64_t distance, fixed_t slope, int damage)
+void P_LineAttack (mobj_t *t1, angle_t angle, int64_t distance, 
+                   const fixed_t slope, const int damage)
 {
     int64_t	x2, y2;
 
@@ -1567,7 +1566,7 @@ void P_LineAttack (mobj_t *t1, angle_t angle, int64_t distance, fixed_t slope, i
 
 static mobj_t *usething;
 
-static boolean	PTR_UseTraverse (intercept_t *in)
+static boolean PTR_UseTraverse (intercept_t *in)
 {
     int side;
 
@@ -1613,7 +1612,7 @@ static boolean	PTR_UseTraverse (intercept_t *in)
 // by Lee Killough
 // -----------------------------------------------------------------------------
 
-static boolean PTR_NoWayTraverse(intercept_t *in)
+static boolean PTR_NoWayTraverse (intercept_t *in)
 {
     line_t *ld = in->d.line;                          // This linedef
 
@@ -1635,7 +1634,7 @@ static boolean PTR_NoWayTraverse(intercept_t *in)
 
 boolean PTR_NoWayAudible (line_t *line)
 {
-    mobj_t *mo = viewplayer->mo;
+    const mobj_t *mo = viewplayer->mo;
 
     P_LineOpening(line);
 
@@ -1649,15 +1648,13 @@ boolean PTR_NoWayAudible (line_t *line)
 // Looks for special lines in front of the player to activate.
 // -----------------------------------------------------------------------------
 
-void P_UseLines (player_t *player) 
+void P_UseLines (const player_t *player) 
 {
-    int		angle;
+    const int angle = player->mo->angle >> ANGLETOFINESHIFT;
     fixed_t	x1, y1;
     fixed_t	x2, y2;
 
     usething = player->mo;
-
-    angle = player->mo->angle >> ANGLETOFINESHIFT;
 
     x1 = player->mo->x;
     y1 = player->mo->y;

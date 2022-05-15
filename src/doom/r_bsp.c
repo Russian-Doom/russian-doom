@@ -19,24 +19,22 @@
 
 
 #include <stdlib.h>
-#include "doomdef.h"
 #include "m_bbox.h"
 #include "i_system.h"
 #include "r_main.h"
 #include "r_plane.h"
 #include "r_things.h"
 #include "doomstat.h"
-#include "r_state.h"
 #include "r_bsp.h"
 #include "jn.h"
 
 
-seg_t     *curline;
-side_t    *sidedef;
-line_t    *linedef;
-sector_t  *frontsector;
-sector_t  *backsector;
-drawseg_t *ds_p;
+const seg_t  *curline;
+const side_t *sidedef;
+line_t       *linedef;
+sector_t     *frontsector;
+sector_t     *backsector;
+drawseg_t    *ds_p;
 
 // [JN] killough: New code which removes 2s linedef limit
 drawseg_t *drawsegs;
@@ -74,9 +72,9 @@ void R_ClearDrawSegs (void)
 // columns which aren't solid, and updates the solidcol[] array appropriately
 // -----------------------------------------------------------------------------
 
-static void R_ClipWallSegment (int first, int last, boolean solid)
+static void R_ClipWallSegment (int first, const int last, const boolean solid)
 {
-    byte *p;
+    const byte *p;
 
     while (first < last)
     {
@@ -169,7 +167,10 @@ static void R_RecalcLineFlags (line_t *linedef)
     }
 
     // cph - I'm too lazy to try and work with offsets in this
-    if (curline->sidedef->rowoffset) return;
+    if (curline->sidedef->rowoffset)
+    {
+        return;
+    }
 
     // Now decide on texture tiling
     if (linedef->flags & ML_TWOSIDED)
@@ -217,7 +218,7 @@ void R_ClearClipSegs (void)
 // [AM] Interpolate the passed sector, if prudent.
 // -----------------------------------------------------------------------------
 
-void R_MaybeInterpolateSector (sector_t *sector)
+static void R_MaybeInterpolateSector (sector_t *sector)
 {
     if (uncapped_fps && !vanillaparm &&
         // Only if we moved the sector last tic.
@@ -246,7 +247,7 @@ void R_MaybeInterpolateSector (sector_t *sector)
 // and adds any visible pieces to the line list.
 // -----------------------------------------------------------------------------
 
-static void R_AddLine (seg_t *line)
+static void R_AddLine (const seg_t *line)
 {
     int      x1, x2;
     angle_t  angle1, angle2;
@@ -441,11 +442,11 @@ static boolean R_CheckBBox (const fixed_t *bspcoord)
 // [JN] killough 1/31/98 -- made static, polished
 // -----------------------------------------------------------------------------
 
-static void R_Subsector (int num)
+static void R_Subsector (const int num)
 {
-    subsector_t *sub = &subsectors[num];
-    seg_t       *line = &segs[sub->firstline];
-    int          count = sub->numlines;
+    const subsector_t *sub = &subsectors[num];
+    const seg_t       *line = &segs[sub->firstline];
+    int   count = sub->numlines;
 
 #ifdef RANGECHECK
     if (num>=numsubsectors)

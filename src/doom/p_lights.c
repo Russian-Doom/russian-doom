@@ -216,7 +216,7 @@ void P_SpawnStrobeFlash (sector_t *sector, int fastOrSlow, int inSync)
 // Start strobing lights (usually from a trigger)
 // -----------------------------------------------------------------------------
 
-void EV_StartLightStrobing(line_t *line)
+void EV_StartLightStrobing (line_t *line)
 {
     int secnum = -1;
 
@@ -238,7 +238,7 @@ void EV_StartLightStrobing(line_t *line)
 // Turn line's tag lights off
 // -----------------------------------------------------------------------------
 
-void EV_TurnTagLightsOff(line_t *line)
+void EV_TurnTagLightsOff (line_t *line)
 {
     int j;
 
@@ -265,7 +265,7 @@ void EV_LightTurnOn (line_t *line, int bright)
     int i;
 	
     // [JN] killough 10/98: replace inefficient search with fast search
-    for (i = -1; (i = P_FindSectorFromLineTag(line,i)) >= 0;)
+    for (i = -1; (i = P_FindSectorFromLineTag(line,i)) >= 0 ; )
     {
         sector_t *temp, *sector = sectors+i;
         int tbright = bright; // [JN] jff 5/17/98 search for maximum PER sector

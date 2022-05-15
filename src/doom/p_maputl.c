@@ -22,22 +22,18 @@
 //
 
 
-#include <stdlib.h>
-#include <math.h>
 #include "m_bbox.h"
-#include "doomdef.h"
 #include "doomstat.h"
 #include "p_local.h"
-#include "r_state.h"
 #include "jn.h"
 
 
 // -----------------------------------------------------------------------------
 // P_AproxDistance
-// Gives an estimation of distance (not exact)
+// Gives an estimation of distance (not exact).
 // -----------------------------------------------------------------------------
 
-fixed_t P_AproxDistance (fixed_t dx, fixed_t dy)
+const fixed_t P_AproxDistance (fixed_t dx, fixed_t dy)
 {
     dx = abs(dx);
     dy = abs(dy);
@@ -54,7 +50,7 @@ fixed_t P_AproxDistance (fixed_t dx, fixed_t dy)
 // Adapted from EDGE, converted to fixed point math.
 // -----------------------------------------------------------------------------
 
-fixed_t P_ApproxDistanceZ(fixed_t dx, fixed_t dy, fixed_t dz)
+const fixed_t P_ApproxDistanceZ (fixed_t dx, fixed_t dy, fixed_t dz)
 {
 	fixed_t dxy;
 
@@ -68,13 +64,46 @@ fixed_t P_ApproxDistanceZ(fixed_t dx, fixed_t dy, fixed_t dz)
 }
 
 // -----------------------------------------------------------------------------
+// P_InterceptVector
+// Returns the fractional intercept point along the first divline.
+// This is only called by the addthings and addlines traversers.
+//
+// [JN] killough 5/3/98: reformatted, cleaned up
+// -----------------------------------------------------------------------------
+
+const fixed_t P_InterceptVector (const divline_t *v2, const divline_t *v1)
+{
+    if (singleplayer)
+    {
+        // [JN] cph - no precision/overflow problems
+        const int64_t den = ((int64_t)v1->dy * v2->dx - (int64_t)v1->dx * v2->dy) >> 16;
+        
+        if (!den)
+        {
+            return 0;
+        }
+
+        return (fixed_t)(((int64_t)(v1->x - v2->x) * v1->dy
+                        - (int64_t)(v1->y - v2->y) * v1->dx) / den);
+    }
+    else
+    {
+        // [JN] Original demo-safe code.
+        const fixed_t den = FixedMul(v1->dy >> 8, v2->dx) - FixedMul(v1->dx >> 8, v2->dy);
+
+        return den ? FixedDiv((FixedMul((v1->x-v2->x) >> 8, v1->dy)
+                   + FixedMul((v2->y-v1->y) >> 8, v1->dx)), den) : 0;
+    }
+}
+
+// -----------------------------------------------------------------------------
 // P_PointOnLineSide
 // Returns 0 or 1
 //
 // [JN] killough 5/3/98: reformatted, cleaned up
 // -----------------------------------------------------------------------------
 
-int P_PointOnLineSide (fixed_t x, fixed_t y, const line_t *line)
+const int P_PointOnLineSide (const fixed_t x, const fixed_t y, const line_t *line)
 {
     return
     !line->dx ? x <= line->v1->x ? line->dy > 0 : line->dy < 0 :
@@ -91,7 +120,7 @@ int P_PointOnLineSide (fixed_t x, fixed_t y, const line_t *line)
 // [JN] killough 5/3/98: reformatted, cleaned up
 // -----------------------------------------------------------------------------
 
-int P_BoxOnLineSide (const fixed_t *tmbox, const line_t *ld)
+const int P_BoxOnLineSide (const fixed_t *tmbox, const line_t *ld)
 {
     switch (ld->slopetype)
     {
@@ -123,7 +152,7 @@ int P_BoxOnLineSide (const fixed_t *tmbox, const line_t *ld)
 // [JN] killough 5/3/98: reformatted, cleaned up
 // -----------------------------------------------------------------------------
 
-int P_PointOnDivlineSide (fixed_t x, fixed_t y, const divline_t *line)
+const int P_PointOnDivlineSide (fixed_t x, fixed_t y, const divline_t *line)
 {
     return
     !line->dx ? x <= line->x ? line->dy > 0 : line->dy < 0 :
@@ -145,40 +174,6 @@ void P_MakeDivline (line_t *li, divline_t *dl)
 }
 
 // -----------------------------------------------------------------------------
-// P_InterceptVector
-// Returns the fractional intercept point along the first divline.
-// This is only called by the addthings and addlines traversers.
-//
-// [JN] killough 5/3/98: reformatted, cleaned up
-// -----------------------------------------------------------------------------
-
-fixed_t P_InterceptVector (divline_t *v2, divline_t *v1)
-{
-    if (singleplayer)
-    {
-        // [JN] cph - no precision/overflow problems
-        int64_t den = (int64_t)v1->dy * v2->dx - (int64_t)v1->dx * v2->dy;
-        den >>= 16;
-        
-        if (!den)
-        {
-            return 0;
-        }
-
-        return (fixed_t)(((int64_t)(v1->x - v2->x) * v1->dy
-                        - (int64_t)(v1->y - v2->y) * v1->dx) / den);
-    }
-    else
-    {
-        // [JN] Original demo-safe code.
-        fixed_t den = FixedMul(v1->dy >> 8, v2->dx) - FixedMul(v1->dx >> 8, v2->dy);
-
-        return den ? FixedDiv((FixedMul((v1->x-v2->x) >> 8, v1->dy)
-                   + FixedMul((v2->y-v1->y) >> 8, v1->dx)), den) : 0;
-    }
-}
-
-// -----------------------------------------------------------------------------
 // P_LineOpening
 // Sets opentop and openbottom to the window
 // through a two sided line.
@@ -190,10 +185,10 @@ fixed_t openbottom;
 fixed_t openrange;
 fixed_t lowfloor;
 
-void P_LineOpening (line_t *linedef)
+void P_LineOpening (const line_t *linedef)
 {
-    sector_t *front = linedef->frontsector;
-    sector_t *back = linedef->backsector;
+    const sector_t *front = linedef->frontsector;
+    const sector_t *back = linedef->backsector;
 
     if (linedef->sidenum[1] == NO_INDEX)
     {
@@ -240,7 +235,7 @@ void P_LineOpening (line_t *linedef)
 // these structures need to be updated.
 // -----------------------------------------------------------------------------
 
-void P_UnsetThingPosition (mobj_t *thing)
+void P_UnsetThingPosition (const mobj_t *thing)
 {
     if (!(thing->flags & MF_NOSECTOR))
     {
@@ -288,63 +283,63 @@ void P_UnsetThingPosition (mobj_t *thing)
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // P_SetThingPosition
 // Links a thing into both a block and a subsector
 // based on it's x y.
 // Sets thing->subsector properly
-//
-void
-P_SetThingPosition (mobj_t* thing)
+// -----------------------------------------------------------------------------
+
+void P_SetThingPosition (mobj_t *thing)
 {
-    subsector_t*	ss;
-    sector_t*		sec;
-    
+    subsector_t *ss;
+    sector_t    *sec;
+
     // link into subsector
     ss = R_PointInSubsector (thing->x,thing->y);
     thing->subsector = ss;
-    
+
     if ( ! (thing->flags & MF_NOSECTOR) )
     {
-	// invisible things don't go into the sector links
-	sec = ss->sector;
-	
-	thing->sprev = NULL;
-	thing->snext = sec->thinglist;
+        // invisible things don't go into the sector links
+        sec = ss->sector;
 
-	if (sec->thinglist)
-	    sec->thinglist->sprev = thing;
+        thing->sprev = NULL;
+        thing->snext = sec->thinglist;
 
-	sec->thinglist = thing;
+        if (sec->thinglist)
+        {
+            sec->thinglist->sprev = thing;
+        }
+
+        sec->thinglist = thing;
     }
-
     
     // link into blockmap
-    if ( ! (thing->flags & MF_NOBLOCKMAP) )
+    if (!(thing->flags & MF_NOBLOCKMAP))
     {
-	// inert things don't need to be in blockmap		
-	int blockx = (thing->x - bmaporgx) >> MAPBLOCKSHIFT;
-	int blocky = (thing->y - bmaporgy) >> MAPBLOCKSHIFT;
+        // inert things don't need to be in blockmap		
+        const int blockx = (thing->x - bmaporgx) >> MAPBLOCKSHIFT;
+        const int blocky = (thing->y - bmaporgy) >> MAPBLOCKSHIFT;
 
-	if (blockx>=0
-	    && blockx < bmapwidth
-	    && blocky>=0
-	    && blocky < bmapheight)
-	{
-	    mobj_t **link = &blocklinks[blocky*bmapwidth+blockx];
-	    thing->bprev = NULL;
-	    thing->bnext = *link;
-	    if (*link)
-		(*link)->bprev = thing;
+        if (blockx >= 0 && blockx < bmapwidth && blocky >= 0 && blocky < bmapheight)
+        {
+            mobj_t **link = &blocklinks[blocky*bmapwidth+blockx];
+            thing->bprev = NULL;
+            thing->bnext = *link;
 
-	    *link = thing;
-	}
-	else
-	{
-	    // thing is off the map
-	    thing->bnext = thing->bprev = NULL;
-	}
+            if (*link)
+            {
+                (*link)->bprev = thing;
+            }
+
+            *link = thing;
+        }
+        else
+        {
+            // thing is off the map
+            thing->bnext = thing->bprev = NULL;
+        }
     }
 }
 
@@ -366,7 +361,7 @@ P_SetThingPosition (mobj_t* thing)
 // [JN] killough 5/3/98: reformatted, cleaned up
 // -----------------------------------------------------------------------------
 
-boolean P_BlockLinesIterator (int x, int y, boolean(*func)(line_t*))
+const boolean P_BlockLinesIterator (const int x, const int y, boolean(*func)(line_t*))
 {
     int offset;
     int32_t *list;  // [crispy] BLOCKMAP limit
@@ -404,7 +399,7 @@ boolean P_BlockLinesIterator (int x, int y, boolean(*func)(line_t*))
 // P_BlockThingsIterator
 // -----------------------------------------------------------------------------
 
-boolean P_BlockThingsIterator (int x, int y, boolean (*func)(mobj_t*))
+const boolean P_BlockThingsIterator (int x, int y, boolean (*func)(mobj_t*))
 {
     mobj_t *mobj;
 
@@ -550,7 +545,7 @@ divline_t    trace;
 // [JN] 2021-07-24: cleaned up, 'earlyout' in original code was never finished.
 // -----------------------------------------------------------------------------
 
-boolean PIT_AddLineIntercepts (line_t *ld)
+static boolean PIT_AddLineIntercepts (line_t *ld)
 {
     int        s1;
     int        s2;
@@ -604,7 +599,7 @@ boolean PIT_AddLineIntercepts (line_t *ld)
 // [JN] killough 5/3/98: reformatted, cleaned up
 // -----------------------------------------------------------------------------
 
-boolean PIT_AddThingIntercepts (mobj_t *thing)
+static boolean PIT_AddThingIntercepts (mobj_t *thing)
 {
     fixed_t    x1, y1;
     fixed_t    x2, y2;
@@ -669,7 +664,7 @@ boolean PIT_AddThingIntercepts (mobj_t *thing)
 // [JN] killough 5/3/98: reformatted, cleaned up
 // -----------------------------------------------------------------------------
 
-boolean P_TraverseIntercepts (traverser_t func, fixed_t maxfrac)
+static boolean P_TraverseIntercepts (const traverser_t func, const fixed_t maxfrac)
 {
     intercept_t *in = NULL;
     int count = intercept_p - intercepts;

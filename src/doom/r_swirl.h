@@ -20,9 +20,9 @@
 #pragma once
 
 void  R_InitDistortedFlats (void);
-char *R_DistortedFlat (int flatnum);
+const char *R_DistortedFlat (const int flatnum);
 
-extern void R_FlowPlane (int flow);
+extern void R_FlowPlane (const int flow);
 extern fixed_t FlowFactor_X, FlowFactor_X_old;
 extern fixed_t FlowFactor_Y, FlowFactor_Y_old;
 extern fixed_t FlowDelta_X;
@@ -44,7 +44,7 @@ typedef struct
     short   flow;
 } flow_t;
 
-extern flow_t flow[];
+extern const flow_t flow[];
 
 typedef struct
 {
@@ -55,4 +55,4 @@ typedef struct
     short   fall;
 } fall_t;
 
-extern fall_t fall[];
+extern const fall_t fall[];

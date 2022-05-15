@@ -22,15 +22,11 @@
 //
 
 
-#include <stdlib.h>
 #include "doomstat.h"
-#include "deh_main.h"
 #include "i_system.h"
-#include "z_zone.h"
 #include "m_argv.h"
 #include "m_misc.h"
 #include "m_random.h"
-#include "w_wad.h"
 #include "p_local.h"
 #include "g_game.h"
 #include "s_sound.h"
@@ -212,7 +208,7 @@ void P_InitPicAnims (void)
 // the line number, and the side (0/1) that you want.
 // -----------------------------------------------------------------------------
 
-side_t *getSide (int currentSector, int line, int side)
+side_t *getSide (const int currentSector, const int line, const int side)
 {
     return &sides[(sectors[currentSector].lines[line])->sidenum[side]];
 }
@@ -223,7 +219,7 @@ side_t *getSide (int currentSector, int line, int side)
 //  the line number and the side (0/1) that you want.
 // -----------------------------------------------------------------------------
 
-sector_t *getSector (int currentSector, int line, int side)
+sector_t *getSector (const int currentSector, const int line, const int side)
 {
     return sides[(sectors[currentSector].lines[line])->sidenum[side]].sector;
 }
@@ -234,7 +230,7 @@ sector_t *getSector (int currentSector, int line, int side)
 // it will tell you whether the line is two-sided or not.
 // -----------------------------------------------------------------------------
 
-int twoSided (int sector, int line)
+const int twoSided (const int sector, const int line)
 {
     return (sectors[sector].lines[line])->flags & ML_TWOSIDED;
 }
@@ -244,7 +240,7 @@ int twoSided (int sector, int line)
 // Return sector_t * of sector next to current. NULL if not two-sided line.
 // -----------------------------------------------------------------------------
 
-sector_t *getNextSector (line_t *line, sector_t *sec)
+sector_t *getNextSector (const line_t *line, const sector_t *sec)
 {
     if (!(line->flags & ML_TWOSIDED))
     {
@@ -264,11 +260,11 @@ sector_t *getNextSector (line_t *line, sector_t *sec)
 // FIND LOWEST FLOOR HEIGHT IN SURROUNDING SECTORS
 // -----------------------------------------------------------------------------
 
-fixed_t	P_FindLowestFloorSurrounding (sector_t *sec)
+const fixed_t P_FindLowestFloorSurrounding (const sector_t *sec)
 {
-    line_t   *check;
-    sector_t *other;
-    fixed_t   floor = sec->floorheight;
+    const line_t   *check;
+    const sector_t *other;
+    fixed_t floor = sec->floorheight;
 	
     for (int i=0 ; i < sec->linecount ; i++)
     {
@@ -294,11 +290,11 @@ fixed_t	P_FindLowestFloorSurrounding (sector_t *sec)
 // FIND HIGHEST FLOOR HEIGHT IN SURROUNDING SECTORS
 // -----------------------------------------------------------------------------
 
-fixed_t	P_FindHighestFloorSurrounding (sector_t *sec)
+const fixed_t P_FindHighestFloorSurrounding (const sector_t *sec)
 {
-    line_t   *check;
-    sector_t *other;
-    fixed_t   floor = -500*FRACUNIT;
+    line_t  *check;
+    fixed_t  floor = -500*FRACUNIT;
+    const sector_t *other;
 
     for (int i=0 ;i < sec->linecount ; i++)
     {
@@ -329,12 +325,11 @@ fixed_t	P_FindHighestFloorSurrounding (sector_t *sec)
 // Rewritten by Lee Killough to avoid fixed array and to be faster.
 // -----------------------------------------------------------------------------
 
-fixed_t P_FindNextHighestFloor (sector_t *sec, int currentheight)
+const fixed_t P_FindNextHighestFloor (const sector_t *sec, const int currentheight)
 {
-    int       i;
-    sector_t *other;
+    const sector_t *other;
 
-    for (i = 0 ; i < sec->linecount ; i++)
+    for (int i = 0 ; i < sec->linecount ; i++)
     {
         if ((other = getNextSector(sec->lines[i], sec))
         && other->floorheight > currentheight)
@@ -363,14 +358,13 @@ fixed_t P_FindNextHighestFloor (sector_t *sec, int currentheight)
 // FIND LOWEST CEILING IN THE SURROUNDING SECTORS
 // -----------------------------------------------------------------------------
 
-fixed_t P_FindLowestCeilingSurrounding (sector_t *sec)
+const fixed_t P_FindLowestCeilingSurrounding (const sector_t *sec)
 {
-    int       i;
-    line_t   *check;
-    sector_t *other;
-    fixed_t   height = INT_MAX;
+    line_t  *check;
+    fixed_t  height = INT_MAX;
+    const sector_t *other;
 
-    for (i = 0 ; i < sec->linecount ; i++)
+    for (int i = 0 ; i < sec->linecount ; i++)
     {
         check = sec->lines[i];
         other = getNextSector(check,sec);
@@ -394,14 +388,13 @@ fixed_t P_FindLowestCeilingSurrounding (sector_t *sec)
 // FIND HIGHEST CEILING IN THE SURROUNDING SECTORS
 // -----------------------------------------------------------------------------
 
-fixed_t	P_FindHighestCeilingSurrounding (sector_t *sec)
+const fixed_t P_FindHighestCeilingSurrounding (const sector_t *sec)
 {
-    int       i;
     line_t   *check;
     sector_t *other;
     fixed_t	height = 0;
 	
-    for (i = 0 ; i < sec->linecount ; i++)
+    for (int i = 0 ; i < sec->linecount ; i++)
     {
         check = sec->lines[i];
         other = getNextSector(check,sec);
@@ -425,7 +418,7 @@ fixed_t	P_FindHighestCeilingSurrounding (sector_t *sec)
 // RETURN NEXT SECTOR # THAT LINE TAG REFERS TO
 // -----------------------------------------------------------------------------
 
-int P_FindSectorFromLineTag (line_t *line, int start)
+const int P_FindSectorFromLineTag (const line_t *line, const int start)
 {
     for (int i = start+1 ; i < numsectors ; i++)
         if (sectors[i].tag == line->tag)
@@ -439,16 +432,15 @@ int P_FindSectorFromLineTag (line_t *line, int start)
 // Find minimum light from an adjacent sector
 // -----------------------------------------------------------------------------
 
-int P_FindMinSurroundingLight (sector_t *sector, int max)
+const int P_FindMinSurroundingLight (const sector_t *sector, const int max)
 {
-    int       i;
     int       min;
     line_t   *line;
     sector_t *check;
 
     min = max;
 
-    for (i = 0 ; i < sector->linecount ; i++)
+    for (int i = 0 ; i < sector->linecount ; i++)
     {
         line = sector->lines[i];
         check = getNextSector(line,sector);
@@ -479,13 +471,13 @@ int P_FindMinSurroundingLight (sector_t *sector, int max)
 // Called every time a thing origin is about to cross a line with a non 0 special.
 // -----------------------------------------------------------------------------
 
-void P_CrossSpecialLine (int linenum, int side, mobj_t *thing)
+void P_CrossSpecialLine (const int linenum, const int side, mobj_t *thing)
 {
     return P_CrossSpecialLinePtr(&lines[linenum], side, thing);
 }
 
 // [crispy] more MBF code pointers
-void P_CrossSpecialLinePtr (line_t *line, int side, mobj_t *thing)
+void P_CrossSpecialLinePtr (line_t *line, const int side, mobj_t *thing)
 {
     int ok;
    
@@ -951,7 +943,7 @@ void P_CrossSpecialLinePtr (line_t *line, int side, mobj_t *thing)
 // Called when a thing shoots a special line.
 // -----------------------------------------------------------------------------
 
-void P_ShootSpecialLine (mobj_t *thing, line_t *line)
+void P_ShootSpecialLine (const mobj_t *thing, line_t *line)
 {
     int ok;
 

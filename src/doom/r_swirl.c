@@ -20,7 +20,6 @@
 // [crispy] adapted from smmu/r_ripple.c, by Simon Howard
 
 #include "doomstat.h"
-#include "tables.h"
 #include "i_system.h"
 #include "w_wad.h"
 #include "z_zone.h"
@@ -90,7 +89,7 @@ void R_InitDistortedFlats (void)
 	}
 }
 
-char *R_DistortedFlat(int flatnum)
+const char *R_DistortedFlat (const int flatnum)
 {
 	static int swirltic = -1;
 	static int swirlflat = -1;
@@ -154,7 +153,7 @@ fixed_t FlowDelta_Y;
 // [JN] Modify floor texture offset deltas of flowing surfaces.
 // -----------------------------------------------------------------------------
 
-void R_FlowPlane (int scroller)
+void R_FlowPlane (const int scroller)
 {
     const fixed_t FlowAmplitude = (FINEANGLES / 160 * leveltime) & FINEMASK;
 
@@ -440,7 +439,7 @@ void R_FlowPlane (int scroller)
 // [JN] Inject scroller specials to vanilla maps.
 // -----------------------------------------------------------------------------
 
-flow_t flow[] =
+const flow_t flow[] =
 {
     //  mission, episode, map, sector, flow
     {      doom,       1,   1,      0,  102 },
@@ -2332,7 +2331,7 @@ void R_FallLinedef (void)
 // [JN] Inject fall specials to vanilla maps.
 // -----------------------------------------------------------------------------
 
-fall_t fall[] =
+const fall_t fall[] =
 {
     //  mission, episode, map, linedef, fall
     {     doom2,       1,  24,      58,  102 },

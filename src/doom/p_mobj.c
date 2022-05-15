@@ -18,8 +18,6 @@
 //
 
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "i_system.h"
 #include "z_zone.h"
 #include "m_random.h"
@@ -42,7 +40,7 @@ int        iquehead;
 int        iquetail;
 
 void G_PlayerReborn (int player);
-void P_SpawnMapThing (mapthing_t*	mthing);
+void P_SpawnMapThing (mapthing_t *mthing);
 
 extern fixed_t attackrange;
 
@@ -117,7 +115,7 @@ static const fixed_t FloatBobOffsetsB[64] = {
 // an arbitrary very large limit is reached.
 // -----------------------------------------------------------------------------
 
-boolean P_SetMobjState (mobj_t *mobj, statenum_t state)
+const boolean P_SetMobjState (mobj_t *mobj, statenum_t state)
 {
     state_t *st;
     int	cycle_counter = 0;
@@ -163,7 +161,7 @@ boolean P_SetMobjState (mobj_t *mobj, statenum_t state)
 // so that no action pointer is ever called
 // -----------------------------------------------------------------------------
 
-static statenum_t P_LatestSafeState(statenum_t state)
+static const statenum_t P_LatestSafeState (statenum_t state)
 {
     statenum_t safestate = S_NULL;
     static statenum_t laststate, lastsafestate;
@@ -199,7 +197,7 @@ static statenum_t P_LatestSafeState(statenum_t state)
 // P_ExplodeMissile  
 // -----------------------------------------------------------------------------
 
-static void P_ExplodeMissileSafe (mobj_t *mo, boolean safe)
+static void P_ExplodeMissileSafe (mobj_t *mo, const boolean safe)
 {
     mo->momx = mo->momy = mo->momz = 0;
 
@@ -828,8 +826,8 @@ void P_MobjThinker (mobj_t *mobj)
 // P_SpawnMobj
 // -----------------------------------------------------------------------------
 
-static mobj_t *P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, 
-                                mobjtype_t type, boolean safe)
+static mobj_t *P_SpawnMobjSafe (const fixed_t x, const fixed_t y, const fixed_t z, 
+                                const mobjtype_t type, const boolean safe)
 {
     mobj_t     *mobj;
     state_t    *st;
@@ -914,7 +912,8 @@ static mobj_t *P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z,
 // P_SpawnMobj
 // -----------------------------------------------------------------------------
 
-mobj_t *P_SpawnMobj (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type)
+mobj_t *P_SpawnMobj (const fixed_t x, const fixed_t y, 
+                     const fixed_t z, const mobjtype_t type)
 {
     return P_SpawnMobjSafe(x, y, z, type, false);
 } 
@@ -953,10 +952,10 @@ void P_RemoveMobj (mobj_t *mobj)
 // P_FindDoomedNum
 //
 // Finds a mobj type with a matching doomednum
-// killough 8/24/98: rewrote to use hashing
+// [JN] killough 8/24/98: rewrote to use hashing
 // -----------------------------------------------------------------------------
 
-static int P_FindDoomedNum (unsigned type)
+static const int P_FindDoomedNum (unsigned const type)
 {
     static struct { int first, next; } *hash;
     int i;
@@ -1055,7 +1054,7 @@ void P_RespawnSpecials (void)
 // Most of the player structure stays unchanged between levels.
 // -----------------------------------------------------------------------------
 
-void P_SpawnPlayer (mapthing_t *mthing)
+void P_SpawnPlayer (const mapthing_t *mthing)
 {
     fixed_t   x, y, z;
     player_t *p;
@@ -1293,7 +1292,7 @@ void P_SpawnMapThing (mapthing_t *mthing)
 // P_SpawnPuff
 // -----------------------------------------------------------------------------
 
-void P_SpawnPuff (fixed_t x, fixed_t y, fixed_t z)
+void P_SpawnPuff (const fixed_t x, const fixed_t y, const fixed_t z)
 {
     return P_SpawnPuffSafe(x, y, z, false);
 }
@@ -1302,7 +1301,7 @@ void P_SpawnPuff (fixed_t x, fixed_t y, fixed_t z)
 // P_SpawnPuffSafe
 // -----------------------------------------------------------------------------
 
-void P_SpawnPuffSafe (fixed_t x, fixed_t y, fixed_t z, boolean safe)
+void P_SpawnPuffSafe (const fixed_t x, const fixed_t y, fixed_t z, const boolean safe)
 {
     mobj_t *th;
 
@@ -1329,7 +1328,8 @@ void P_SpawnPuffSafe (fixed_t x, fixed_t y, fixed_t z, boolean safe)
 // [JN] Modified using a method by Fabian Greffrath (pass thing type)
 // -----------------------------------------------------------------------------
 
-void P_SpawnBlood (fixed_t x, fixed_t y, fixed_t z, int damage, mobj_t *target)
+void P_SpawnBlood (const fixed_t x, const fixed_t y, fixed_t z, 
+                   const int damage, mobj_t *target)
 {
     mobj_t *th;
 
@@ -1396,7 +1396,7 @@ void P_CheckMissileSpawn (mobj_t *th)
 // pointers for pointers to a dummy mobj, to avoid a crash.
 // -----------------------------------------------------------------------------
 
-mobj_t *P_SubstNullMobj(mobj_t *mobj)
+mobj_t *P_SubstNullMobj (mobj_t *mobj)
 {
     if (mobj == NULL)
     {
@@ -1463,7 +1463,7 @@ mobj_t *P_SpawnMissile (mobj_t *source, mobj_t *dest, mobjtype_t type)
 // Tries to aim at a nearby monster.
 // -----------------------------------------------------------------------------
 
-void P_SpawnPlayerMissile (mobj_t *source, mobjtype_t type)
+void P_SpawnPlayerMissile (mobj_t *source, const mobjtype_t type)
 {
     mobj_t  *th;
     angle_t  an;

@@ -18,10 +18,8 @@
 //
 
 
-#include "doomdef.h"
 #include "i_system.h"
 #include "p_local.h"
-#include "r_state.h"
 #include "jn.h"
 
 
@@ -38,7 +36,7 @@ static int sightcounts[2];
 // Returns side 0 (front), 1 (back), or 2 (on).
 // -----------------------------------------------------------------------------
 
-static int P_DivlineSide (fixed_t x, fixed_t y, divline_t *node)
+static int P_DivlineSide (const fixed_t x, const fixed_t y, const divline_t *node)
 {
     fixed_t	dx, dy;
     fixed_t	left, right;
@@ -98,7 +96,7 @@ static int P_DivlineSide (fixed_t x, fixed_t y, divline_t *node)
 // This is only called by the addthings and addlines traversers.
 // -----------------------------------------------------------------------------
 
-static fixed_t P_InterceptVector2 (divline_t *v2, divline_t *v1)
+static const fixed_t P_InterceptVector2 (const divline_t *v2, const divline_t *v1)
 {
     fixed_t	frac, num, den;
 
@@ -121,7 +119,7 @@ static fixed_t P_InterceptVector2 (divline_t *v2, divline_t *v1)
 // Returns true if strace crosses the given subsector successfully.
 // -----------------------------------------------------------------------------
 
-static boolean P_CrossSubsector (int num)
+static const boolean P_CrossSubsector (const int num)
 {
     seg_t        *seg;
     line_t       *line;
@@ -271,7 +269,7 @@ static boolean P_CrossSubsector (int num)
 // Returns true if strace crosses the given node successfully.
 // -----------------------------------------------------------------------------
 
-static boolean P_CrossBSPNode (int bspnum)
+static const boolean P_CrossBSPNode (const int bspnum)
 {
     node_t *bsp;
     int     side;
@@ -320,7 +318,7 @@ static boolean P_CrossBSPNode (int bspnum)
 // Uses REJECT.
 // -----------------------------------------------------------------------------
 
-boolean P_CheckSight (mobj_t *t1, mobj_t *t2)
+const boolean P_CheckSight (const mobj_t *t1, const mobj_t *t2)
 {
     int s1, s2;
     int pnum, bytenum, bitnum;

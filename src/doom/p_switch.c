@@ -19,7 +19,6 @@
 //
 
 
-#include <stdio.h>
 #include "i_system.h"
 #include "deh_main.h"
 #include "p_local.h"
@@ -33,7 +32,7 @@
 // CHANGE THE TEXTURE OF A WALL SWITCH TO ITS OPPOSITE
 // =============================================================================
 
-switchlist_t alphSwitchList[] =
+static switchlist_t alphSwitchList[] =
 {
     // Doom shareware episode 1 switches
     {"SW1BRCOM",    "SW2BRCOM", 1},
@@ -84,7 +83,7 @@ switchlist_t alphSwitchList[] =
     {"\0",          "\0",       0}
 };
 
-switchlist_t jaguarSwitchList[] =
+static switchlist_t jaguarSwitchList[] =
 {
     // [JN] Jaguar Doom switches
     {"SW1BRN1",     "SW2BRN1",  3},
@@ -114,7 +113,7 @@ button_t   buttonlist[MAXBUTTONS];
 static void P_InitSwitchListJaguar (void)
 {
     int i, index;
-    int episode = 3;
+    const int episode = 3;
 
     for (index = 0,i = 0;i < MAXSWITCHES;i++)
     {
@@ -181,7 +180,7 @@ void P_InitSwitchList (void)
 // Start a button counting down till it turns off.
 // -----------------------------------------------------------------------------
 
-void P_StartButton (line_t *line, bwhere_e w, int texture, int time)
+void P_StartButton (line_t *line, const bwhere_e w, const int texture, const int time)
 {
     int i;
 
@@ -223,7 +222,7 @@ void P_StartButton (line_t *line, bwhere_e w, int texture, int time)
 // Tell it if switch is ok to use again (1=yes, it's a button).
 // -----------------------------------------------------------------------------
 
-void P_ChangeSwitchTexture (line_t *line, int useAgain)
+void P_ChangeSwitchTexture (line_t *line, const int useAgain)
 {
     int     texTop;
     int     texMid;
@@ -334,7 +333,7 @@ void P_ChangeSwitchTexture (line_t *line, int useAgain)
 // Only the front sides of lines are usable.
 // -----------------------------------------------------------------------------
 
-boolean P_UseSpecialLine (mobj_t *thing, line_t *line, int side)
+const boolean P_UseSpecialLine (mobj_t *thing, line_t *line, const int side)
 {               
     if (side)
     {

@@ -21,12 +21,12 @@
 #pragma once
 
 
-extern seg_t     *curline;
-extern side_t    *sidedef;
-extern line_t    *linedef;
-extern sector_t  *frontsector;
-extern sector_t  *backsector;
-extern drawseg_t *ds_p;
+extern const seg_t  *curline;
+extern const side_t *sidedef;
+extern line_t       *linedef;
+extern sector_t     *frontsector;
+extern sector_t     *backsector;
+extern drawseg_t    *ds_p;
 
 // [JN] killough: New code which removes 2s linedef limit
 extern drawseg_t *drawsegs;

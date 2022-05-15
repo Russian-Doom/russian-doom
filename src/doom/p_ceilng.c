@@ -164,7 +164,7 @@ void T_MoveCeiling (ceiling_t *ceiling)
 // Move a ceiling up/down and all around!
 // -----------------------------------------------------------------------------
 
-int EV_DoCeiling (line_t *line, ceiling_e type)
+const int EV_DoCeiling (line_t *line, ceiling_e type)
 {
     int         secnum, rtn;
     sector_t   *sec;
@@ -297,7 +297,7 @@ void P_ActivateInStasisCeiling(line_t *line)
 // Stop a ceiling from crushing!
 // -----------------------------------------------------------------------------
 
-int	EV_CeilingCrushStop (line_t *line)
+const int EV_CeilingCrushStop (line_t *line)
 {
     int rtn;
 	

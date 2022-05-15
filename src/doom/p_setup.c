@@ -19,14 +19,11 @@
 //
 
 
-#include "z_zone.h"
-#include "deh_main.h"
 #include "i_swap.h"
 #include "m_argv.h"
 #include "m_bbox.h"
 #include "g_game.h"
 #include "i_system.h"
-#include "w_wad.h"
 #include "p_local.h"
 #include "s_sound.h"
 #include "doomstat.h"
@@ -347,7 +344,7 @@ void P_LevelNameInit (void)
 // adapted from prboom-plus/src/p_setup.c:474-482
 // -----------------------------------------------------------------------------
 
-static fixed_t GetOffset (vertex_t *v1, vertex_t *v2)
+static const fixed_t GetOffset (const vertex_t *v1, const vertex_t *v2)
 {
     fixed_t dx, dy;
     fixed_t r;
@@ -363,7 +360,7 @@ static fixed_t GetOffset (vertex_t *v1, vertex_t *v2)
 // P_LoadVertexes
 // -----------------------------------------------------------------------------
 
-static void P_LoadVertexes (int lump)
+static void P_LoadVertexes (const int lump)
 {
     byte        *data;
     vertex_t    *li;
@@ -441,7 +438,7 @@ static sector_t *GetSectorAtNullAddress (void)
 // P_LoadSegs
 // -----------------------------------------------------------------------------
 
-static void P_LoadSegs (int lump)
+static void P_LoadSegs (const int lump)
 {
     int       linedef, side, sidenum;
     byte     *data;
@@ -579,7 +576,7 @@ static void P_LoadSegs (int lump)
 // adapted from prboom-plus/src/p_setup.c:633-752
 // -----------------------------------------------------------------------------
 
-static void P_LoadSegs_DeePBSP (int lump)
+static void P_LoadSegs_DeePBSP (const int lump)
 {
     mapseg_deepbsp_t *data;
 
@@ -665,7 +662,7 @@ static void P_SegLengths (void)
 // P_LoadSubsectors
 // -----------------------------------------------------------------------------
 
-static void P_LoadSubsectors (int lump)
+static void P_LoadSubsectors (const int lump)
 {
     byte           *data;
     subsector_t    *ss;
@@ -694,7 +691,7 @@ static void P_LoadSubsectors (int lump)
 // adapted from prboom-plus/src/p_setup.c:843-863
 // -----------------------------------------------------------------------------
 
-static void P_LoadSubsectors_DeePBSP (int lump)
+static void P_LoadSubsectors_DeePBSP (const int lump)
 {
     mapsubsector_deepbsp_t *data;
 
@@ -715,7 +712,7 @@ static void P_LoadSubsectors_DeePBSP (int lump)
 // P_LoadSectors
 // -----------------------------------------------------------------------------
 
-static void P_LoadSectors (int lump)
+static void P_LoadSectors (const int lump)
 {
     byte        *data;
     sector_t    *ss;
@@ -826,7 +823,7 @@ static void P_LoadSectors (int lump)
 // P_LoadNodes
 // -----------------------------------------------------------------------------
 
-static void P_LoadNodes (int lump)
+static void P_LoadNodes (const int lump)
 {
     byte      *data;
     node_t    *no;
@@ -882,7 +879,7 @@ static void P_LoadNodes (int lump)
 // adapted from prboom-plus/src/p_setup.c:995-1038
 // -----------------------------------------------------------------------------
 
-static void P_LoadNodes_DeePBSP (int lump)
+static void P_LoadNodes_DeePBSP (const int lump)
 {
     const byte *data;
 
@@ -946,7 +943,7 @@ static void P_LoadNodes_DeePBSP (int lump)
 // - added support for flipped levels
 // -----------------------------------------------------------------------------
 
-static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
+static void P_LoadNodes_ZDBSP (const int lump, const boolean compressed)
 {
     byte *data;
     unsigned int i;
@@ -1220,7 +1217,7 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
 // P_LoadThings
 // -----------------------------------------------------------------------------
 
-static void P_LoadThings (int lump)
+static void P_LoadThings (const int lump)
 {
     int         i;
     int         numthings;
@@ -1333,7 +1330,7 @@ static void P_LoadThings (int lump)
 // adapted from chocolate-doom/src/hexen/p_setup.c:348-400
 // -----------------------------------------------------------------------------
 
-static void P_LoadThings_Hexen (int lump)
+static void P_LoadThings_Hexen (const int lump)
 {
     int               numthings;
     byte             *data;
@@ -1364,7 +1361,7 @@ static void P_LoadThings_Hexen (int lump)
 // Also counts secret lines for intermissions.
 // -----------------------------------------------------------------------------
 
-static void P_LoadLineDefs (int lump)
+static void P_LoadLineDefs (const int lump)
 {
     byte         *data;
     line_t       *ld;
@@ -1495,7 +1492,7 @@ static void P_LoadLineDefs (int lump)
 // adapted from chocolate-doom/src/hexen/p_setup.c:410-490
 // -----------------------------------------------------------------------------
 
-static void P_LoadLineDefs_Hexen (int lump)
+static void P_LoadLineDefs_Hexen (const int lump)
 {
     byte               *data;
     line_t             *ld;
@@ -1609,7 +1606,7 @@ static void P_LoadLineDefs_Hexen (int lump)
 // P_LoadSideDefs
 // -----------------------------------------------------------------------------
 
-static void P_LoadSideDefs (int lump)
+static void P_LoadSideDefs (const int lump)
 {
     byte         *data;
     side_t       *sd;
@@ -1822,7 +1819,7 @@ static void P_CreateBlockMap (void)
 // adapted from boom202s/P_SETUP.C:1025-1076
 // -----------------------------------------------------------------------------
 
-static boolean P_LoadBlockMap (int lump)
+static const boolean P_LoadBlockMap (const int lump)
 {
     int count;
     int lumplen;
@@ -2046,7 +2043,7 @@ static void P_RemoveSlimeTrails (void)
 // to simulate a REJECT buffer overflow in Vanilla Doom.
 // -----------------------------------------------------------------------------
 
-static void PadRejectArray (byte *array, unsigned int len)
+static void PadRejectArray (byte *array, unsigned const int len)
 {
     unsigned int  i;
     unsigned int  byte_num;
@@ -2103,7 +2100,7 @@ static void PadRejectArray (byte *array, unsigned int len)
 // P_LoadReject
 // -----------------------------------------------------------------------------
 
-static void P_LoadReject (int lumpnum)
+static void P_LoadReject (const int lumpnum)
 {
     int minlength, lumplen;
 
@@ -2135,7 +2132,7 @@ static void P_LoadReject (int lumpnum)
 // format or DeePBSP format and/or LINEDEFS and THINGS lumps in Hexen format
 // -----------------------------------------------------------------------------
 
-static mapformat_t P_CheckMapFormat (int lumpnum)
+static const mapformat_t P_CheckMapFormat (const int lumpnum)
 {
     int b;
     mapformat_t format = 0;
@@ -2195,14 +2192,14 @@ static mapformat_t P_CheckMapFormat (int lumpnum)
 // P_SetupLevel
 // -----------------------------------------------------------------------------
 
-void P_SetupLevel (int episode, int map, int playermask, skill_t skill)
+void P_SetupLevel (const int episode, const int map, const int playermask, const skill_t skill)
 {
     int		i;
     char	lumpname[9];
     int		lumpnum;
     mapformat_t	crispy_mapformat;
     boolean crispy_validblockmap;
-    unsigned int starttime = SDL_GetTicks();
+    unsigned const int starttime = SDL_GetTicks();
     unsigned int endtime;
 
     totalkills = totalitems = totalsecret = wminfo.maxfrags = 0;

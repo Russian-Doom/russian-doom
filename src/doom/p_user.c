@@ -20,8 +20,6 @@
 //
 
 
-#include "doomdef.h"
-#include "d_event.h"
 #include "p_local.h"
 #include "doomstat.h"
 #include "g_game.h"
@@ -41,7 +39,7 @@ static boolean onground;
 // Moves the given origin along a given angle.
 // -----------------------------------------------------------------------------
 
-static void P_Thrust (player_t *player, angle_t angle, fixed_t move)
+static void P_Thrust (const player_t *player, angle_t angle, const fixed_t move)
 {
     angle >>= ANGLETOFINESHIFT;
 

@@ -18,12 +18,9 @@
 //
 
 
-#include "doomdef.h"
 #include "doomstat.h"
 #include "s_sound.h"
 #include "p_local.h"
-#include "sounds.h"
-#include "r_state.h"
 #include "jn.h"
 
 
@@ -31,7 +28,7 @@
 // TELEPORTATION
 // =============================================================================
 
-int EV_Teleport (line_t *line, int side, mobj_t *thing)
+const int EV_Teleport (const line_t *line, const int side, mobj_t *thing)
 {
     int        i, tag;
     unsigned   an;
