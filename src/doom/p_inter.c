@@ -31,20 +31,15 @@
 #include "jn.h"
 
 
-#define BONUSADD	6
-
-
 // a weapon is found with two clip loads,
 // a big item has five clip loads
-int	maxammo[NUMAMMO] = {200, 50, 300, 50};
-int	clipammo[NUMAMMO] = {10, 4, 20, 1};
+int maxammo[NUMAMMO] = {200, 50, 300, 50};
+int clipammo[NUMAMMO] = {10, 4, 20, 1};
 
 
-//--------------------------------------------------------------------------
-//
-// PROC P_SetMessage
-//
-//--------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// P_SetMessage
+//------------------------------------------------------------------------------
 
 boolean ultimatemsg;
 
@@ -72,7 +67,8 @@ void P_SetMessage (player_t *player, char *message, MessageType_t messageType, b
 // Num is the number of clip loads, not the individual count (0= 1/2 clip).
 // Returns false if the ammo can't be picked up at all.
 // -----------------------------------------------------------------------------
-boolean P_GiveAmmo (player_t *player, ammotype_t ammo, int num)
+
+static boolean P_GiveAmmo (player_t *player, const ammotype_t ammo, int num)
 {
     int oldammo;
 
@@ -183,7 +179,7 @@ boolean P_GiveAmmo (player_t *player, ammotype_t ammo, int num)
 // The weapon name may have a MF_DROPPED flag ored in.
 // -----------------------------------------------------------------------------
 
-boolean P_GiveWeapon (player_t *player, weapontype_t weapon, boolean dropped)
+static boolean P_GiveWeapon (player_t *player, const weapontype_t weapon, const boolean dropped)
 {
     boolean	gaveammo;
     boolean	gaveweapon;
@@ -238,10 +234,10 @@ boolean P_GiveWeapon (player_t *player, weapontype_t weapon, boolean dropped)
 
 // -----------------------------------------------------------------------------
 // P_GiveBody
-// Returns false if the body isn't needed at all
+// Returns false if the body isn't needed at all.
 // -----------------------------------------------------------------------------
 
-boolean P_GiveBody (player_t *player, int num)
+static boolean P_GiveBody (player_t *player, const int num)
 {
     if (player->health >= MAXHEALTH)
     {
@@ -265,7 +261,7 @@ boolean P_GiveBody (player_t *player, int num)
 // Returns false if the armor is worse than the current armor.
 // -----------------------------------------------------------------------------
 
-boolean P_GiveArmor (player_t *player, int armortype)
+static boolean P_GiveArmor (player_t *player, const int armortype)
 {
     int hits;
 
@@ -286,7 +282,7 @@ boolean P_GiveArmor (player_t *player, int armortype)
 // P_GiveCard
 // -----------------------------------------------------------------------------
 
-void P_GiveCard (player_t *player, card_t card)
+static void P_GiveCard (player_t *player, const card_t card)
 {
     if (player->cards[card])
     {
@@ -311,7 +307,7 @@ void P_GiveCard (player_t *player, card_t card)
 // P_GivePower
 // -----------------------------------------------------------------------------
 
-boolean P_GivePower (player_t *player, int power)
+boolean P_GivePower (player_t *player, const int power)
 {
     if (power == pw_invulnerability)
     {
@@ -359,11 +355,11 @@ boolean P_GivePower (player_t *player, int power)
 // P_TouchSpecialThing
 // -----------------------------------------------------------------------------
 
-void P_TouchSpecialThing (mobj_t *special, mobj_t *toucher)
+void P_TouchSpecialThing (const mobj_t *special, const mobj_t *toucher)
 {
     int        sound;
     player_t  *player;
-    fixed_t    delta = special->z - toucher->z;
+    const fixed_t delta = special->z - toucher->z;
 
     if (delta > toucher->height || delta < -8 * FRACUNIT)
     {
@@ -826,10 +822,10 @@ void P_TouchSpecialThing (mobj_t *special, mobj_t *toucher)
 }
 
 // -----------------------------------------------------------------------------
-// KillMobj
+// P_KillMobj
 // -----------------------------------------------------------------------------
 
-void P_KillMobj (mobj_t *source, mobj_t *target)
+static void P_KillMobj (const mobj_t *source, mobj_t *target)
 {
     mobjtype_t  item;
     mobj_t     *mo;
@@ -980,7 +976,7 @@ void P_KillMobj (mobj_t *source, mobj_t *target)
 // Source can be NULL for slime, barrel explosions and other environmental stuff.
 // -----------------------------------------------------------------------------
 
-void P_DamageMobj (mobj_t *target, mobj_t *inflictor, mobj_t *source, int damage)
+void P_DamageMobj (mobj_t *target, const mobj_t *inflictor, mobj_t *source, int damage)
 {
     player_t  *player;
     fixed_t    thrust;

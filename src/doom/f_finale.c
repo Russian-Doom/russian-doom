@@ -31,6 +31,7 @@
 #include "r_main.h"
 #include "st_bar.h"
 #include "ct_chat.h"
+#include "p_local.h"
 #include "jn.h"
 
 

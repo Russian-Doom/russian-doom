@@ -25,10 +25,6 @@
 #include "info.h"
 
 
-// [JN] killough 11/98 - for torque simulation:
-#define OVERDRIVE 6
-#define MAXGEAR   (OVERDRIVE+16)
-
 // =============================================================================
 // NOTES: mobj_t
 //

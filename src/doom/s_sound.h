@@ -55,7 +55,7 @@ void S_StartSoundOnce(void *origin, int sound_id);
 void S_StartSoundNoBreak(int sfx_id);
 
 // Stop sound for thing at <origin>
-void S_StopSound(mobj_t *origin);
+void S_StopSound(const mobj_t *origin);
 
 // [Dasperal] & [JN] Prevents opening sound for door 
 // which is already opened.

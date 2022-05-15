@@ -61,7 +61,6 @@
 
 void    G_ReadDemoTiccmd (ticcmd_t *cmd);
 void    G_WriteDemoTiccmd (ticcmd_t *cmd);
-void    G_PlayerReborn (int player);
 void    G_DoReborn (int playernum);
 void    G_DoLoadLevel (void);
 void    G_DoNewGame (void);
@@ -1079,7 +1078,7 @@ void G_PlayerFinishLevel (int player)
 // Called after a player dies 
 // almost everything is cleared and initialized 
 //
-void G_PlayerReborn (int player) 
+void G_PlayerReborn (const int player) 
 { 
     int         i; 
     int         frags[MAXPLAYERS]; 

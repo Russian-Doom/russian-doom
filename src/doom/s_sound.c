@@ -378,7 +378,7 @@ void S_Start (void)
 // S_StopSound
 // -----------------------------------------------------------------------------
 
-void S_StopSound (mobj_t *origin)
+void S_StopSound (const mobj_t *origin)
 {
     for (int cnum=0 ; cnum<snd_channels ; cnum++)
     {

@@ -25,6 +25,7 @@
 #include "w_wad.h"
 #include "r_local.h"
 #include "doomstat.h"
+#include "p_local.h"
 #include "r_bmaps.h"
 #include "jn.h"
 

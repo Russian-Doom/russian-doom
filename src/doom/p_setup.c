@@ -27,7 +27,6 @@
 #include "p_local.h"
 #include "s_sound.h"
 #include "doomstat.h"
-#include "p_fix.h"
 #include "r_swirl.h"
 #include "rd_lang.h"
 #include "jn.h"
@@ -38,8 +37,6 @@
 #include <zlib.h>
 #endif
 
-
-void P_SpawnMapThing (mapthing_t *mthing);
 
 boolean canmodify;
 

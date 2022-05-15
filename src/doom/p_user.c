@@ -26,11 +26,6 @@
 #include "jn.h"
 
 
-#define INVERSECOLORMAP     32  // Index of the special effects (INVUL inverse) map.
-#define INFRAGREENCOLORMAP  1   // [JN] Infra green light amplification visor.
-#define MAXBOB  0x100000        // 16 pixels of bob
-#define ANG5    (ANG90/18)
-
 static boolean onground;
 
 
@@ -56,14 +51,10 @@ void P_CalcHeight (player_t *player, boolean safe)
 {
     int      angle;
     fixed_t	 bob;
-    extern boolean max_bobbing;
 
-    // Regular movement bobbing
-    // (needs to be calculated for gun swing
-    // even if not on ground)
-    // OPTIMIZE: tablify angle
-    // Note: a LUT allows for effects
-    //  like a ramp with low health.
+    // Regular movement bobbing (needs to be calculated for gun swing
+    // even if not on ground).
+    // Note: a LUT allows for effects like a ramp with low health.
     if (!safe)
     {
         player->bob =

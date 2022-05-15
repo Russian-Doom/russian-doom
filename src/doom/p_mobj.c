@@ -39,12 +39,10 @@ int        itemrespawntime[ITEMQUESIZE];
 int        iquehead;
 int        iquetail;
 
-void G_PlayerReborn (int player);
-void P_SpawnMapThing (mapthing_t *mthing);
 
-extern fixed_t attackrange;
-
-// [JN] Floating amplitude LUT.
+// -----------------------------------------------------------------------------
+// [JN] Floating amplitude LUTs.
+// -----------------------------------------------------------------------------
 
 // Small (/3).
 static const fixed_t FloatBobOffsetsS[64] = {
@@ -223,7 +221,7 @@ static void P_ExplodeMissileSafe (mobj_t *mo, const boolean safe)
 // P_ExplodeMissile
 // -----------------------------------------------------------------------------
 
-void P_ExplodeMissile (mobj_t *mo)
+static void P_ExplodeMissile (mobj_t *mo)
 {
     return P_ExplodeMissileSafe(mo, false);
 }
@@ -922,7 +920,7 @@ mobj_t *P_SpawnMobj (const fixed_t x, const fixed_t y,
 // P_RemoveMobj
 // -----------------------------------------------------------------------------
 
-void P_RemoveMobj (mobj_t *mobj)
+void P_RemoveMobj (const mobj_t *mobj)
 {
     if ((mobj->flags & MF_SPECIAL) && !(mobj->flags & MF_DROPPED)
     && (mobj->type != MT_INV) && (mobj->type != MT_INS))

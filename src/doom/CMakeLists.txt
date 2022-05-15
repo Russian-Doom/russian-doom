@@ -33,7 +33,7 @@ if(COMPILE_DOOM)
                 p_ceilng.c
                 p_doors.c
                 p_enemy.c
-                p_fix.c         p_fix.h
+                p_fix.c
                 p_floor.c
                 p_inter.c
                 p_lights.c
@@ -46,7 +46,7 @@ if(COMPILE_DOOM)
                 p_saveg.c       p_saveg.h
                 p_setup.c
                 p_sight.c
-                p_spec.c        p_spec.h
+                p_spec.c
                 p_switch.c
                 p_telept.c
                 p_tick.c
