@@ -219,7 +219,7 @@ static cheatseq_t cheat_noclip_beta = CHEAT("nc", 0);  // idclip
 // [crispy] adapted from boom202s/M_CHEAT.C:467-498
 // -----------------------------------------------------------------------------
 
-static int ST_cheat_massacre (void)
+static const int ST_cheat_massacre (void)
 {
     int killcount = 0;
     thinker_t *th;
@@ -260,7 +260,7 @@ static int ST_cheat_massacre (void)
 // Respond to keyboard input events, intercept cheats.
 // -----------------------------------------------------------------------------
 
-boolean ST_Responder (event_t *ev)
+const boolean ST_Responder (const event_t *ev)
 {
     int i;
 
@@ -792,7 +792,7 @@ static void ST_DrawBackground (void)
 // ST_calcPainOffset
 // -----------------------------------------------------------------------------
 
-static int ST_calcPainOffset (void)
+static const int ST_calcPainOffset (void)
 {
     int         health;
     static int  lastcalc;
@@ -1233,7 +1233,7 @@ static void ST_DoPaletteStuff (void)
 // [crispy] return ammo/health/armor widget color
 // -----------------------------------------------------------------------------
 
-static byte *ST_WidgetColor (int i)
+static byte *ST_WidgetColor (const int i)
 {
     if (!sbar_colored || vanillaparm)
     {
@@ -1340,7 +1340,7 @@ static byte *ST_WidgetColor (int i)
 // [JN] Draws a three digit big red number using STTNUM* graphics.
 // -----------------------------------------------------------------------------
 
-static void ST_DrawBigNumber (int val, int x, int y, byte *table)
+static void ST_DrawBigNumber (int val, const int x, const int y, byte *table)
 {
     int oldval = val;
     int xpos = x;
@@ -1388,7 +1388,7 @@ static void ST_DrawBigNumber (int val, int x, int y, byte *table)
 // [JN] Draws big red percent sign.
 // -----------------------------------------------------------------------------
 
-static void ST_DrawPercent (int x, int y, byte *table)
+static void ST_DrawPercent (const int x, const int y, byte *table)
 {
     dp_translation = table;
     V_DrawPatch(x, y, FontBPercent, NULL);
@@ -1400,7 +1400,7 @@ static void ST_DrawPercent (int x, int y, byte *table)
 // [JN] Draws a three digit yellow number using STYSNUM* graphics.
 // -----------------------------------------------------------------------------
 
-static void ST_DrawSmallNumberY (int val, int x, int y)
+static void ST_DrawSmallNumberY (int val, const int x, const int y)
 {
     int oldval = val;
     int xpos = x;
@@ -1434,7 +1434,7 @@ static void ST_DrawSmallNumberY (int val, int x, int y)
 // [JN] Draws a one digit gray number using STGNUM* graphics.
 // -----------------------------------------------------------------------------
 
-static void ST_DrawSmallNumberG (int val, int x, int y)
+static void ST_DrawSmallNumberG (int val, const int x, const int y)
 {
     V_DrawPatch(x + 4, y, FontSNumbersG[val], NULL);
 }
@@ -1445,7 +1445,7 @@ static void ST_DrawSmallNumberG (int val, int x, int y)
 // Wide boolean stand for wider status bar.
 // -----------------------------------------------------------------------------
 
-static void ST_DrawElements (boolean wide)
+static void ST_DrawElements (const boolean wide)
 {
     int left_delta;
     int right_delta;
@@ -1629,7 +1629,7 @@ static void ST_DrawElements (boolean wide)
 // [JN] Draw various digit values, faces and keys, Jaguar Doom version.
 // -----------------------------------------------------------------------------
 
-static void ST_DrawElementsJaguar (boolean wide)
+static void ST_DrawElementsJaguar (const boolean wide)
 {
     int left_delta;
     int right_delta;
@@ -1796,8 +1796,8 @@ void ST_DemoProgressBar (void)
 void ST_WidgetsDrawer (void)
 {
     static char str[128];
-    int time = leveltime / TICRATE;
-    int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
+    const int time = leveltime / TICRATE;
+    const int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
     const int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
     const int net_y = netgame ? 8 : 0;  // [JN] Shift one line down for chat string.
     plyr = &players[consoleplayer];

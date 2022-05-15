@@ -49,7 +49,7 @@ static int  *y;
 // wipe_shittyColMajorXform
 // -----------------------------------------------------------------------------
 
-static void wipe_shittyColMajorXform (short *array, int width, int height)
+static void wipe_shittyColMajorXform (short *array, const int width, const int height)
 {
     short *dest = (short*) Z_Malloc(width * height * sizeof(*dest), PU_STATIC, 0);
 
@@ -66,7 +66,7 @@ static void wipe_shittyColMajorXform (short *array, int width, int height)
 // wipe_initMelt
 // -----------------------------------------------------------------------------
 
-static int wipe_initMelt (int width, int height, int ticks)
+static const int wipe_initMelt (const int width, const int height, const int ticks)
 {
     int i;
 
@@ -101,7 +101,7 @@ static int wipe_initMelt (int width, int height, int ticks)
 // wipe_doMelt
 // -----------------------------------------------------------------------------
 
-static int wipe_doMelt (int width, int height, int ticks)
+static const int wipe_doMelt (int width, const int height, int ticks)
 {
     int     i;
     int     j;
@@ -176,7 +176,7 @@ static int wipe_doMelt (int width, int height, int ticks)
 // wipe_exitMelt
 // -----------------------------------------------------------------------------
 
-static int wipe_exitMelt (int width, int height, int ticks)
+static const int wipe_exitMelt (const int width, const int height, const int ticks)
 {
     Z_Free(y);
     Z_Free(wipe_scr_start);
@@ -188,7 +188,7 @@ static int wipe_exitMelt (int width, int height, int ticks)
 // wipe_StartScreen
 // -----------------------------------------------------------------------------
 
-int wipe_StartScreen (int x, int y, int width, int height)
+const int wipe_StartScreen (const int x, const int y, const int width, const int height)
 {
     wipe_scr_start = Z_Malloc(screenwidth * SCREENHEIGHT 
                    * sizeof(*wipe_scr_start), PU_STATIC, NULL);
@@ -200,7 +200,7 @@ int wipe_StartScreen (int x, int y, int width, int height)
 // wipe_EndScreen
 // -----------------------------------------------------------------------------
 
-int wipe_EndScreen (int x, int y, int width, int height)
+const int wipe_EndScreen (const int x, const int y, const int width, const int height)
 {
     wipe_scr_end = Z_Malloc(screenwidth * SCREENHEIGHT
                  * sizeof(*wipe_scr_end), PU_STATIC, NULL);
@@ -213,7 +213,7 @@ int wipe_EndScreen (int x, int y, int width, int height)
 // wipe_ScreenWipe
 // -----------------------------------------------------------------------------
 
-int wipe_ScreenWipe (int x, int y, int width, int height, int ticks)
+const int wipe_ScreenWipe (const int x, const int y, const int width, const int height, int ticks)
 {
     int rc;
 

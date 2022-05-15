@@ -17,8 +17,6 @@
 //
 
 
-#include <stdlib.h>
-#include "i_sound.h"
 #include "i_system.h"
 #include "deh_str.h"
 #include "doomstat.h"
@@ -80,7 +78,7 @@ int idmusnum;
 //  allocates channel buffer, sets S_sfx lookup.
 // -----------------------------------------------------------------------------
 
-void S_Init (int sfxVolume, int musicVolume)
+void S_Init (const int sfxVolume, const int musicVolume)
 {
     int i;
 
@@ -242,7 +240,7 @@ void S_Shutdown (void)
 // S_StopChannel
 // -----------------------------------------------------------------------------
 
-static void S_StopChannel (int cnum)
+static void S_StopChannel (const int cnum)
 {
     channel_t *c = &channels[cnum];
 
@@ -380,7 +378,7 @@ void S_Start (void)
 
 void S_StopSound (const mobj_t *origin)
 {
-    for (int cnum=0 ; cnum<snd_channels ; cnum++)
+    for (int cnum = 0 ; cnum < snd_channels ; cnum++)
     {
         if (channels[cnum].sfxinfo && channels[cnum].origin == origin)
         {
@@ -471,7 +469,7 @@ static int S_GetChannel (mobj_t *origin, sfxinfo_t *sfxinfo)
 // Otherwise, modifies parameters and returns 1.
 // -----------------------------------------------------------------------------
 
-static int S_AdjustSoundParams(mobj_t *listener, mobj_t *source,
+static int S_AdjustSoundParams(const mobj_t *listener, const mobj_t *source,
                                int *vol, int *sep)
 {
     fixed_t        approx_dist;
@@ -547,7 +545,7 @@ static int S_AdjustSoundParams(mobj_t *listener, mobj_t *source,
 // clamp supplied integer to the range 0 <= x <= 255.
 // -----------------------------------------------------------------------------
 
-static int Clamp (int x)
+static int Clamp (const int x)
 {
     if (x < 0)
     {
@@ -564,7 +562,7 @@ static int Clamp (int x)
 // S_StartSound
 // -----------------------------------------------------------------------------
 
-void S_StartSound (void *origin_p, int sfx_id)
+void S_StartSound (void *origin_p, const int sfx_id)
 {
     sfxinfo_t *sfx;
     mobj_t *origin;
@@ -686,7 +684,7 @@ void S_StartSound (void *origin_p, int sfx_id)
 // S_StartSoundOnce
 // -----------------------------------------------------------------------------
 
-void S_StartSoundOnce (void *origin_p, int sfx_id)
+void S_StartSoundOnce (void *origin_p, const int sfx_id)
 {
     int cnum;
     const sfxinfo_t *const sfx = &S_sfx[sfx_id];
@@ -708,7 +706,7 @@ void S_StartSoundOnce (void *origin_p, int sfx_id)
 // [JN] Plays unbreakable sound on the last available sound channel.
 // -----------------------------------------------------------------------------
 
-void S_StartSoundNoBreak(int sfx_id)
+void S_StartSoundNoBreak (const int sfx_id)
 {
     sfxinfo_t *sfx = &S_sfx[sfx_id];
 
@@ -836,7 +834,7 @@ void S_UpdateSounds(mobj_t *listener)
 // S_SetMusicVolume
 // -----------------------------------------------------------------------------
 
-void S_SetMusicVolume (int volume)
+void S_SetMusicVolume (const int volume)
 {
     if (volume < 0 || volume > 15)
     {
@@ -863,7 +861,7 @@ void S_SetMusicVolume (int volume)
 // S_SetSfxVolume
 // -----------------------------------------------------------------------------
 
-void S_SetSfxVolume (int volume)
+void S_SetSfxVolume (const int volume)
 {
     if (volume < 0 || volume > 127)
     {
@@ -880,7 +878,7 @@ void S_SetSfxVolume (int volume)
 // Starts some music with the music id found in sounds.h.
 // -----------------------------------------------------------------------------
 
-void S_StartMusic (int m_id)
+void S_StartMusic (const int m_id)
 {
     S_ChangeMusic(m_id, false);
 }
@@ -889,7 +887,7 @@ void S_StartMusic (int m_id)
 // S_ChangeMusic
 // -----------------------------------------------------------------------------
 
-void S_ChangeMusic (int musicnum, int looping)
+void S_ChangeMusic (int musicnum, const int looping)
 {
     musicinfo_t *music = NULL;
     char namebuf[9];
@@ -954,7 +952,7 @@ void S_ChangeMusic (int musicnum, int looping)
 // S_MusicPlaying
 // -----------------------------------------------------------------------------
 
-boolean S_MusicPlaying (void)
+const boolean S_MusicPlaying (void)
 {
     return I_MusicIsPlaying();
 }

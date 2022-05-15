@@ -51,20 +51,20 @@ static const unsigned char rndtable[256] = {
 };
 
 // Which one is deterministic?
-int P_Random (void)
+const int P_Random (void)
 {
     prndindex = (prndindex+1)&0xff;
     return rndtable[prndindex];
 }
 
-int M_Random (void)
+const int M_Random (void)
 {
     rndindex = (rndindex+1)&0xff;
     return rndtable[rndindex];
 }
 
 // [crispy] our own private random function
-int Crispy_Random (void)
+const int Crispy_Random (void)
 {
     crndindex = (crndindex+1)&0xff;
     return rndtable[crndindex];
@@ -76,13 +76,13 @@ void M_ClearRandom (void)
 }
 
 // inspired by the same routine in Eternity, thanks haleyjd
-int P_SubRandom (void)
+const int P_SubRandom (void)
 {
     int r = P_Random();
     return r - P_Random();
 }
 
-int Crispy_SubRandom (void)
+const int Crispy_SubRandom (void)
 {
     int r = Crispy_Random();
     return r - Crispy_Random();

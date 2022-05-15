@@ -70,10 +70,11 @@ extern void Crosshair_Colorize_inMenu (void);
 extern void Crosshair_Draw (void);
 
 // Main functions
-boolean ST_Responder (event_t* ev);
+const boolean ST_Responder (const event_t* ev);
 void ST_Ticker (void);
 void ST_Drawer (void);
 void ST_WidgetsDrawer (void);
 void ST_MapNameDrawer (void);
 void ST_Start (void);
 void ST_Init (void);
+void ST_DemoProgressBar(void);

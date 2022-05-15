@@ -25,6 +25,7 @@
 #include "st_bar.h"
 #include "s_sound.h"
 #include "doomstat.h"
+#include "d_items.h"
 #include "f_finale.h"
 #include "jn.h"
 

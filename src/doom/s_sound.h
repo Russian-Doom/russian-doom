@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include "p_mobj.h"
 #include "r_local.h"
 #include "sounds.h"
 
@@ -69,7 +68,7 @@ void S_StartMusic(int m_id);
 void S_ChangeMusic(int musicnum, int looping);
 
 // query if music is playing
-boolean S_MusicPlaying(void);
+const boolean S_MusicPlaying(void);
 
 // Stops the music fer sure.
 void S_StopMusic(void);

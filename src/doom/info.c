@@ -25,12 +25,11 @@
 #include <stdlib.h>
 
 // Data.
+#include "doomdef.h"
 #include "sounds.h"
 #include "m_fixed.h"
 
 #include "info.h"
-
-#include "p_mobj.h"
 
 char *sprnames[] = {
     "TROO","SHTG","PUNG","PISG","PISF","SHTF","SHT2","CHGG","CHGF","MISG",

@@ -222,7 +222,7 @@ void F_StartFinale (void)
 // F_Responder
 // -----------------------------------------------------------------------------
 
-boolean F_Responder (event_t *event)
+const boolean F_Responder (event_t *event)
 {
     if (finalestage == F_STAGE_CAST || finalestage == F_STAGE_CAST_JAGUAR)
     {
@@ -540,7 +540,7 @@ typedef struct
     mobjtype_t  type;
 } castinfo_t;
 
-static castinfo_t castorder[] = {
+static const castinfo_t castorder[] = {
     {CC_ZOMBIE,  MT_POSSESSED},
     {CC_SHOTGUN, MT_SHOTGUY},
     {CC_HEAVY,   MT_CHAINGUY},
@@ -562,7 +562,7 @@ static castinfo_t castorder[] = {
     {NULL,0}
 };
 
-static castinfo_t castorder_rus[] = {
+static const castinfo_t castorder_rus[] = {
     {CC_ZOMBIE_RUS,  MT_POSSESSED},
     {CC_SHOTGUN_RUS, MT_SHOTGUY},
     {CC_HEAVY_RUS,   MT_CHAINGUY},
@@ -585,7 +585,7 @@ static castinfo_t castorder_rus[] = {
 };
 
 // [JN] Jaguar: own casting order
-static castinfo_t castorder_jaguar[] = {
+static const castinfo_t castorder_jaguar[] = {
     {CC_ZOMBIE,  MT_POSSESSED},
     {CC_SHOTGUN, MT_SHOTGUY},
     {CC_IMP,     MT_TROOP},
@@ -597,7 +597,7 @@ static castinfo_t castorder_jaguar[] = {
     {NULL,0}
 };
 
-static castinfo_t castorder_jaguar_russian[] = {
+static const castinfo_t castorder_jaguar_russian[] = {
     {CC_ZOMBIE_RUS,  MT_POSSESSED},
     {CC_SHOTGUN_RUS, MT_SHOTGUY},
     {CC_IMP_RUS,     MT_TROOP},
@@ -878,7 +878,7 @@ void F_CastDrawer (void)
 // F_DrawPatchCol
 // -----------------------------------------------------------------------------
 
-static void F_DrawPatchCol (int x, patch_t *patch, int col)
+static void F_DrawPatchCol (const int x, const patch_t *patch, const int col)
 {
     int        count, f;
     byte      *source;

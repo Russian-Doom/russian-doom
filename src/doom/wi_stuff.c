@@ -38,8 +38,6 @@
 static void WI_drawStatsJaguar(void);
 static void WI_updateStatsJaguar(void);
 
-extern void ST_DemoProgressBar(void);
-
 
 // =============================================================================
 // Data needed to add patches to full screen intermission pics.
@@ -134,7 +132,7 @@ typedef struct
 } anim_t;
 
 
-static point_t lnodes[NUMEPISODES][NUMMAPS] =
+static const point_t lnodes[NUMEPISODES][NUMMAPS] =
 {
     // Episode 1 World Map
     {
@@ -221,7 +219,7 @@ static anim_t epsd2animinfo[] =
     ANIM(ANIM_ALWAYS, TICRATE/4, 3, 40,  0,   0),
 };
 
-static int NUMANIMS[NUMEPISODES] =
+static const int NUMANIMS[NUMEPISODES] =
 {
     arrlen(epsd0animinfo),
     arrlen(epsd1animinfo),
@@ -563,7 +561,7 @@ static void WI_drawEL (void)
 // WI_drawOnLnode
 // -----------------------------------------------------------------------------
 
-static void WI_drawOnLnode (int n, patch_t *c[])
+static void WI_drawOnLnode (const int n, patch_t *c[])
 {
     int i;
     int left;
@@ -737,7 +735,7 @@ static void WI_drawAnimatedBack (void)
 
 static int WI_drawNum (int x, int y, int n, int digits)
 {
-    int fontwidth = SHORT(num[0]->width);
+    const int fontwidth = SHORT(num[0]->width);
     int neg;
     int temp;
 
@@ -795,7 +793,7 @@ static int WI_drawNum (int x, int y, int n, int digits)
 // WI_drawPercent
 // -----------------------------------------------------------------------------
 
-static void WI_drawPercent (int x, int y, int p)
+static void WI_drawPercent (const int x, const int y, const int p)
 {
     if (p < 0)
     {
@@ -811,7 +809,7 @@ static void WI_drawPercent (int x, int y, int p)
 // Display level completion time and par, or "sucks" message if overflow.
 // -----------------------------------------------------------------------------
 
-static void WI_drawTime (int x, int y, int t, boolean suck)
+static void WI_drawTime (int x, int y, int t, const boolean suck)
 {
     int div;
     int n;
@@ -1018,7 +1016,7 @@ static void WI_drawNoState (void)
 // WI_fragSum
 // -----------------------------------------------------------------------------
 
-static int WI_fragSum (int playernum)
+static const int WI_fragSum (const int playernum)
 {
     int frags = 0;
 
@@ -1501,7 +1499,7 @@ static void WI_drawNetgameStats (void)
     int i;
     int x;
     int y;
-    int pwidth = SHORT(percent->width);
+    const int pwidth = SHORT(percent->width);
 
     WI_slamBackground();
     
@@ -1725,7 +1723,7 @@ static void WI_updateStats (void)
 
 static void WI_drawStats (void)
 {
-    int lh = (3*SHORT(num[0]->height))/2;  // line height
+    const int lh = (3*SHORT(num[0]->height))/2;  // line height
 
     if (gamemission == jaguar)
     {

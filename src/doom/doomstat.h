@@ -25,9 +25,8 @@
 
 #pragma once
 
-#include "doomdata.h"
 #include "d_loop.h"
-#include "d_player.h"
+#include "d_items.h"
 #include "d_mode.h"
 #include "net_defs.h"
 #include "rd_menu_control.h"

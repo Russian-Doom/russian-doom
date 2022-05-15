@@ -25,7 +25,6 @@
 #include "p_local.h"
 #include "s_sound.h"
 #include "doomstat.h"
-#include "p_pspr.h"
 #include "jn.h"
 
 

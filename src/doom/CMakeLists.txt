@@ -18,10 +18,8 @@ if(COMPILE_DOOM)
                 d_items.c       d_items.h
                 d_main.c        d_main.h
                 d_net.c
-                                doomdata.h
                                 doomdef.h
                 doomstat.c      doomstat.h
-                                d_player.h
                                 d_think.h
                 f_finale.c      f_finale.h
                 f_wipe.c        f_wipe.h
@@ -41,9 +39,9 @@ if(COMPILE_DOOM)
                                 p_local.h
                 p_map.c
                 p_maputl.c
-                p_mobj.c        p_mobj.h
+                p_mobj.c
                 p_plats.c
-                p_pspr.c        p_pspr.h
+                p_pspr.c
                 p_saveg.c
                 p_setup.c
                 p_sight.c

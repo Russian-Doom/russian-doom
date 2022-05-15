@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "d_player.h"
+#include "d_items.h"
 #include "i_video.h"
 #include "v_patch.h"
 
