@@ -25,8 +25,6 @@
 #include "z_zone.h"
 #include "w_wad.h"
 #include "r_local.h"
-#include "r_swirl.h"
-#include "r_bmaps.h"
 #include "jn.h"
 
 

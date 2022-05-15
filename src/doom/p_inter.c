@@ -18,7 +18,7 @@
 //
 
 #include "doomdef.h"
-#include "rd_lang.h"
+#include "id_lang.h"
 #include "sounds.h"
 #include "deh_main.h"
 #include "deh_misc.h"

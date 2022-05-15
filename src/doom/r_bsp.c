@@ -21,11 +21,8 @@
 #include <stdlib.h>
 #include "m_bbox.h"
 #include "i_system.h"
-#include "r_main.h"
-#include "r_plane.h"
-#include "r_things.h"
+#include "r_local.h"
 #include "doomstat.h"
-#include "r_bsp.h"
 #include "jn.h"
 
 

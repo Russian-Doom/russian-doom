@@ -30,8 +30,8 @@
 #include "p_local.h"
 #include "g_game.h"
 #include "s_sound.h"
-#include "rd_lang.h"
-#include "r_swirl.h"
+#include "id_lang.h"
+#include "r_local.h"
 #include "jn.h"
 
 

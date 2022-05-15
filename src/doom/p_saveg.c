@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include "i_system.h"
 #include "am_map.h"
-#include "rd_lang.h"
+#include "id_lang.h"
 #include "deh_main.h"
 #include "i_system.h"
 #include "z_zone.h"
@@ -34,7 +34,6 @@
 #include "doomstat.h"
 #include "g_game.h"
 #include "m_misc.h"
-#include "r_state.h"
 #include "s_sound.h"
 
 #include "jn.h"

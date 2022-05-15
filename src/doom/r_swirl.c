@@ -23,7 +23,7 @@
 #include "i_system.h"
 #include "w_wad.h"
 #include "z_zone.h"
-#include "r_swirl.h"
+#include "r_local.h"
 
 // swirl factors determine the number of waves per flat width
 
@@ -38,8 +38,6 @@
 
 static int *offsets;
 static int *offset;
-
-extern int firstflat;
 
 #define AMP 2
 #define AMP2 2

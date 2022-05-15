@@ -30,11 +30,10 @@
 #include "s_sound.h"
 #include "v_video.h"
 #include "doomstat.h"
-#include "rd_lang.h"
+#include "id_lang.h"
 #include "rd_text.h"
 #include "v_trans.h"
 #include "v_diskicon.h"
-#include "rd_lang.h"
 #include "jn.h"
 
 

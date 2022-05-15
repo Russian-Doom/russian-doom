@@ -21,12 +21,10 @@
 
 #include <stdio.h>
 #include <string.h>
-
 #include "deh_defs.h"
 #include "deh_io.h"
 #include "deh_main.h"
-
-#include "rd_lang.h"
+#include "id_lang.h"
 
 typedef struct {
     char *macro;

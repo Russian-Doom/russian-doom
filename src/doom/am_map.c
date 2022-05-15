@@ -33,7 +33,7 @@
 #include "v_video.h"
 #include "doomstat.h"
 #include "rd_keybinds.h"
-#include "rd_lang.h"
+#include "id_lang.h"
 #include "am_map.h"
 #include "jn.h"
 

@@ -39,7 +39,7 @@
 #include "deh_main.h"
 #include "doomdef.h"
 #include "doomstat.h"
-#include "rd_lang.h"
+#include "id_lang.h"
 #include "doomfeatures.h"
 #include "sounds.h"
 #include "d_iwad.h"

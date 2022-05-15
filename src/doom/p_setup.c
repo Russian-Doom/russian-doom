@@ -27,8 +27,8 @@
 #include "p_local.h"
 #include "s_sound.h"
 #include "doomstat.h"
-#include "r_swirl.h"
-#include "rd_lang.h"
+#include "r_local.h"
+#include "id_lang.h"
 #include "jn.h"
 
 // [crispy] support maps with compressed ZDBSP nodes

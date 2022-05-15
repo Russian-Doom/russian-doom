@@ -22,7 +22,7 @@
 #include "p_local.h"
 #include "s_sound.h"
 #include "doomstat.h"
-#include "rd_lang.h"
+#include "id_lang.h"
 #include "sounds.h"
 #include "jn.h"
 

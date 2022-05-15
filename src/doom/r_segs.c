@@ -21,8 +21,6 @@
 #include "i_system.h"
 #include "doomstat.h"
 #include "r_local.h"
-#include "r_bmaps.h"
-#include "r_swirl.h"
 #include "jn.h"
 
 

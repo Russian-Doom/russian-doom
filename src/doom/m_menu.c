@@ -50,7 +50,7 @@
 #include "ct_chat.h"
 
 #include "rd_keybinds.h"
-#include "rd_lang.h"
+#include "id_lang.h"
 #include "rd_menu.h"
 #include "jn.h"
 

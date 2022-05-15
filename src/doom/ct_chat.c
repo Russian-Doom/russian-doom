@@ -29,7 +29,7 @@
 #include "rd_keybinds.h"
 #include "s_sound.h"
 #include "v_video.h"
-#include "rd_lang.h"
+#include "id_lang.h"
 #include "w_wad.h"
 #include "z_zone.h"
 #include "doomstat.h"

@@ -27,6 +27,7 @@ if(COMPILE_DOOM)
                 f_wipe.c        f_wipe.h
                 g_game.c        g_game.h
                 info.c          info.h
+                id_lang.c       id_lang.h
                 m_menu.c        m_menu.h
                 m_random.c      m_random.h
                 p_bexptr.c
@@ -51,19 +52,16 @@ if(COMPILE_DOOM)
                 p_telept.c
                 p_tick.c
                 p_user.c
-                r_bmaps.c       r_bmaps.h
-                r_bsp.c         r_bsp.h
-                r_data.c        r_data.h
-                                r_defs.h
-                r_draw.c        r_draw.h
+                r_bmaps.c
+                r_bsp.c
+                r_data.c
+                r_draw.c
                                 r_local.h
-                r_main.c        r_main.h
-                r_plane.c       r_plane.h
+                r_main.c
+                r_plane.c
                 r_segs.c
-                                r_state.h
-                r_swirl.c       r_swirl.h
-                r_things.c      r_things.h
-                rd_lang.c       rd_lang.h
+                r_swirl.c
+                r_things.c
                 s_sound.c       s_sound.h
                 sounds.c        sounds.h
                 st_bar.c        st_bar.h

@@ -21,7 +21,7 @@
 #pragma once
 
 #include "p_mobj.h"
-#include "r_defs.h"
+#include "r_local.h"
 #include "sounds.h"
 
 

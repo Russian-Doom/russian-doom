@@ -15,7 +15,7 @@
 
 #include "doomstat.h"
 #include "jn.h"
-#include "rd_lang.h"
+#include "id_lang.h"
 
 
 // -----------------------------------------------------------------------------
