@@ -1462,8 +1462,10 @@ static void ST_DrawElements (const boolean wide)
     }
 
     // Transparent signs
-    if (screenblocks == 11 || screenblocks == 12
-    ||  screenblocks == 14 || screenblocks == 15)
+    if ((screenblocks == 11 || screenblocks == 12
+    ||   screenblocks == 14 || screenblocks == 15)
+    && (!automapactive || automap_overlay))
+    
     {
         if (weaponinfo[plyr->readyweapon].ammo != am_noammo)
         {
