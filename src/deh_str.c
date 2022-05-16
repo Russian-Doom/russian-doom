@@ -208,6 +208,13 @@ void DEH_AddStringReplacement(char *from_text, char *to_text)
     }
 }
 
+// [crispy] returns true if a string has been substituted
+
+boolean DEH_HasStringReplacement(char *s)
+{
+    return DEH_String(s) != s;
+}
+
 typedef enum
 {
     FORMAT_ARG_INVALID,

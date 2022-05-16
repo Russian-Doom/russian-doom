@@ -21,6 +21,7 @@
 
 #include <stdio.h>
 #include "doomfeatures.h"
+#include "doomtype.h"
 
 
 // Used to do dehacked text substitutions throughout the program
@@ -32,6 +33,7 @@ void DEH_printf(char *fmt, ...);
 void DEH_fprintf(FILE *fstream, char *fmt, ...);
 void DEH_snprintf(char *buffer, size_t len, char *fmt, ...);
 void DEH_AddStringReplacement(char *from_text, char *to_text);
+boolean DEH_HasStringReplacement(char *s);
 
 
 #else

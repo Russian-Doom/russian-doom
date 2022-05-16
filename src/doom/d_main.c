@@ -3147,8 +3147,8 @@ void D_DoomMain (void)
                 (W_CheckNumForName("map33") != -1) &&
                 (W_CheckNumForName("cwilv32") != -1);
 
-    // [crispy] change level name for MAP33
-    if (havemap33)
+    // [crispy] change level name for MAP33 if not already changed
+    if (havemap33 && !DEH_HasStringReplacement(PHUSTR_1))
     {
         DEH_AddStringReplacement(PHUSTR_1, "level 33: betray");
         DEH_AddStringReplacement(PHUSTR_1_RUS, "ehjdtym 33: ghtlfntkmcndj"); // уровень 33: предательство
