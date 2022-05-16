@@ -7244,7 +7244,7 @@ boolean M_Responder (event_t* ev)
         flip_levels ^= 1;
         R_ExecuteSetViewSize();         // Redraw game screen
         S_UpdateStereoSeparation();     // Update stereo separation
-        S_StartSound(NULL, sfx_stnmov); // Play quiet sound
+        S_StartSound(NULL, sfx_swtchn); // Play sound
 
         return true;
     }
