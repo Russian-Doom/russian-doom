@@ -35,8 +35,10 @@
 #include "m_misc.h"
 
 // Sound sample rate to use for digital output (Hz)
+// [JN] Now const and not available in config file, 
+// since changing sample frequence no longer working in SDL 2.0.22.
 
-int snd_samplerate = 44100;
+const int snd_samplerate = 44100;
 
 // Maximum number of bytes to dedicate to allocated sound effects.
 // (Default: 64MB)
@@ -436,7 +438,6 @@ void I_BindSoundVariables(void)
     M_BindIntVariable("snd_maxslicetime_ms",     &snd_maxslicetime_ms);
     M_BindStringVariable("snd_musiccmd",         &snd_musiccmd);
     M_BindStringVariable("snd_dmxoption",        &snd_dmxoption);
-    M_BindIntVariable("snd_samplerate",          &snd_samplerate);
     M_BindIntVariable("snd_cachesize",           &snd_cachesize);
     M_BindIntVariable("opl_io_port",             &opl_io_port);
     M_BindIntVariable("snd_pitchshift",          &snd_pitchshift);
