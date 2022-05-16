@@ -2035,12 +2035,12 @@ static void ST_LoadData (void)
     // Face backgrounds for different color players
     if (netgame)
     {
-        DEH_snprintf(namebuf, 9, "STPB%d", consoleplayer);
+        DEH_snprintf(namebuf, 9, "ID#STPB%d", consoleplayer);
         faceback = W_CacheLumpName(DEH_String(namebuf), PU_STATIC);
     }
     else
     {
-        faceback = W_CacheLumpName(DEH_String("STPB1"), PU_STATIC);
+        faceback = W_CacheLumpName(DEH_String("ID#STPB1"), PU_STATIC);
     }
 
     // Player faces
