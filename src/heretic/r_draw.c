@@ -59,7 +59,7 @@ fixed_t ds_xstep, ds_ystep;
 
 byte         *ds_source;  // start of a 64*64 tile image 
 lighttable_t *ds_colormap[2];
-byte         *ds_brightmap;
+const byte   *ds_brightmap;
 
 
 /*

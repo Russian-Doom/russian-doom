@@ -825,7 +825,7 @@ static void R_ProjectSprite (mobj_t *thing, int lightnum)
         }
     }
     
-    vis->brightmap = R_BrightmapForSprite(thing->sprite);
+    vis->brightmap = R_BrightmapForSprite(thing->state - states);
 
     // [JN] Colored blood
     if (colored_blood && !vanillaparm &&  thing->type == MT_BLOODSPLATTER && thing->target)
