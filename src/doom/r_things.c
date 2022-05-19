@@ -745,12 +745,21 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
         // [crispy] brightmaps for select sprites
         vis->colormap[0] = spritelights[index];
 
-        // [JN] Don't lit up Armor Bonus with full brightness in dark areas.
+        // [JN] Don't lit up Armor Bonus with full brightness 
+        // in dark areas, apply half-bright instead:
         if (thing->type == MT_MISC3)
         {
-            vis->colormap[1] = lightnum < 6 ? 
-                               &colormaps[15*256] : // Static half-bright w/o diminishing
-                               spritelights[47];    // Maximum bright with diminishing
+            int half_bright = index;
+
+            if (half_bright < MINBRIGHT)
+            {
+                half_bright = MINBRIGHT;
+            }
+
+            // If sector brightness < 96, apply half-bright.
+            // Otherwise, use standard diminished lighting.
+            vis->colormap[1] = lightnum < 6 ? &colormaps[MINBRIGHT*256] :
+                                              spritelights[half_bright];
         }
         else
         {

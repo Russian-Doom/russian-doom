@@ -23,6 +23,8 @@
 #pragma once
 
 
+#define MINBRIGHT   24  // [JN] Minimal COLORMAP level for half-brights.
+
 extern void R_InitBrightmaps ();
 
 extern const byte *R_BrightmapForTexName (const char *texname);
