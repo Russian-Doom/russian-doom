@@ -20,9 +20,7 @@
 #include <ctype.h>
 #include <SDL_scancode.h>
 
-#include "doomdef.h"
 #include "doomkeys.h"
-#include "deh_str.h"
 #include "i_input.h"
 #include "m_misc.h"
 #include "p_local.h"
@@ -30,11 +28,7 @@
 #include "s_sound.h"
 #include "v_video.h"
 #include "id_lang.h"
-#include "w_wad.h"
-#include "z_zone.h"
 #include "doomstat.h"
-#include "jn.h"
-#include "ct_chat.h"
 
 
 #define QUEUESIZE       128
@@ -65,7 +59,7 @@ char *CT_FromPlrText[MAXPLAYERS] = {
     HUSTR_PLRRED
 };
 
-char *chat_macros[10] =
+const char *chat_macros[10] =
 {
     HUSTR_CHATMACRO0,
     HUSTR_CHATMACRO1,
@@ -142,7 +136,7 @@ static void CT_Stop (void)
 // ValidChatChar
 // [JN] These keys are allowed by Vanilla Doom:
 // -----------------------------------------------------------------------------
-static boolean ValidChatChar (char c)
+static const boolean ValidChatChar (const char c)
 {
     return (c >= 'a' && c <= 'z')
         || (c >= 'A' && c <= 'Z')
@@ -158,10 +152,10 @@ static boolean ValidChatChar (char c)
 // CT_Responder
 // -----------------------------------------------------------------------------
 
-boolean CT_Responder(event_t *ev)
+boolean CT_Responder (event_t *ev)
 {
     int   sendto;
-    char *macro;
+    const char *macro;
 
     if (!netgame)
     {
@@ -267,7 +261,7 @@ boolean CT_Responder(event_t *ev)
 // CT_Ticker
 // -----------------------------------------------------------------------------
 
-void CT_Ticker(void)
+void CT_Ticker (void)
 {
     int  i, j;
     char c;
@@ -383,7 +377,7 @@ void CT_Drawer (void)
 // CT_queueChatChar
 // -----------------------------------------------------------------------------
 
-static void CT_queueChatChar (char ch)
+static void CT_queueChatChar (const char ch)
 {
     if (((tail + 1) & (QUEUESIZE - 1)) == head)
     {
@@ -416,7 +410,7 @@ char CT_dequeueChatChar (void)
 // CT_AddChar
 // -----------------------------------------------------------------------------
 
-static void CT_AddChar(int player, char c)
+static void CT_AddChar (const int player, const char c)
 {
     patch_t *patch;
 
@@ -444,7 +438,7 @@ static void CT_AddChar(int player, char c)
 // Backs up a space, when the user hits (obviously) backspace.
 // -----------------------------------------------------------------------------
 
-static void CT_BackSpace (int player)
+static void CT_BackSpace (const int player)
 {
     patch_t *patch;
     char c;
@@ -475,7 +469,8 @@ static void CT_BackSpace (int player)
 // Clears out the data for the chat message, but the player's message 
 // is still saved in plrmsg.
 // -----------------------------------------------------------------------------
-static void CT_ClearChatMessage (int player)
+
+static void CT_ClearChatMessage (const int player)
 {
     memset(chat_msg[player], 0, MESSAGESIZE);
     msgptr[player] = 0;
