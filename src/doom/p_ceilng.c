@@ -260,7 +260,7 @@ void P_AddActiveCeiling (ceiling_t *c)
 // Remove a ceiling's thinker
 // -----------------------------------------------------------------------------
 
-void P_RemoveActiveCeiling (ceiling_t *c)
+void P_RemoveActiveCeiling (const ceiling_t *c)
 {
     for (int i = 0 ; i < MAXCEILINGS ; i++)
     {

@@ -1086,7 +1086,7 @@ static void I_InitGammaTables (void)
 //
 // I_SetPalette
 //
-void I_SetPalette (byte *doompalette)
+void I_SetPalette (const byte *doompalette)
 {
     int i;
 
@@ -1128,7 +1128,7 @@ void I_SetPalette (byte *doompalette)
 
 // Given an RGB value, find the closest matching palette index.
 
-int I_GetPaletteIndex(int r, int g, int b)
+const int I_GetPaletteIndex (const int r, const int g, const int b)
 {
     int best, best_diff, diff;
     int i;

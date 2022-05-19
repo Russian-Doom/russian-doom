@@ -1151,7 +1151,6 @@ static void ST_DoPaletteStuff (void)
 {
     int   cnt;
     int   palette;
-    byte *pal;
 
     cnt = plyr->damagecount;
 
@@ -1222,8 +1221,9 @@ static void ST_DoPaletteStuff (void)
 
     if (palette != st_palette)
     {
+        byte *pal = (byte *) W_CacheLumpNum ((lu_palette), PU_CACHE) + palette * 768;
+
         st_palette = palette;
-        pal = (byte *) W_CacheLumpNum ((lu_palette), PU_CACHE) + palette * 768;
         I_SetPalette (pal);
     }
 }

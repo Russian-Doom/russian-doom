@@ -1003,11 +1003,9 @@ static void P_LoadNodes_ZDBSP (const int lump, const boolean compressed)
         }
 
         fprintf(stderr, english_language ?
-        {
                 "P_LoadNodes: ZDBSP nodes compression ratio %.3f\n" :
                 "P_LoadNodes: степень сжатия нодов ZDBSP: %.3f\n",
                 (float)zstream->total_out/zstream->total_in);
-        }
 
         data = output;
         len = zstream->total_out;

@@ -2247,7 +2247,6 @@ G_InitNew
     // [crispy] CPhipps - total time for all completed levels
     totalleveltimes = 0;
     defdemotics = 0;
-    viewactive = true;
 
     // [JN] jff 4/16/98 force marks on automap cleared every new level start
     AM_clearMarks();

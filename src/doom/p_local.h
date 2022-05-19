@@ -92,7 +92,7 @@ const int EV_CeilingCrushStop(line_t *line);
 const int EV_DoCeiling (line_t *line, ceiling_e type);
 void P_ActivateInStasisCeiling(line_t *line);
 void P_AddActiveCeiling (ceiling_t *c);
-void P_RemoveActiveCeiling(ceiling_t *c);
+void P_RemoveActiveCeiling(const ceiling_t *c);
 void T_MoveCeiling (ceiling_t *ceiling);
 
 // -----------------------------------------------------------------------------
@@ -540,7 +540,7 @@ boolean P_ReadSaveGameHeader (void);
 char *P_SaveGameFile (int slot);
 char *P_TempSaveGameFile (void);
 thinker_t *P_IndexToThinker (uint32_t index);
-uint32_t P_ThinkerToIndex (thinker_t *thinker);
+const uint32_t P_ThinkerToIndex (const thinker_t *thinker);
 void P_ArchiveAutomap (void);
 void P_ArchivePlayers (void);
 void P_ArchiveSpecials (void);

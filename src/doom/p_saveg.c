@@ -1816,7 +1816,7 @@ void P_UnArchiveThinkers (void)
 
 int restoretargets_fail = 0;
 
-uint32_t P_ThinkerToIndex (thinker_t* thinker)
+const uint32_t P_ThinkerToIndex (const thinker_t *thinker)
 {
     thinker_t*	th;
     uint32_t	i;

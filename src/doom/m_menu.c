@@ -3055,7 +3055,7 @@ static void M_RD_Draw_Audio_System(void)
 
                 speaker_test_left = false;
             }
-            else if (speaker_test_timeout <= 30)
+            else
             {
                 if (english_language)
                 RD_M_DrawTextSmallCenteredENG("RIGHT CHANNEL >", 156, CR_WHITE);
