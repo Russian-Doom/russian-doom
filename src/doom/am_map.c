@@ -220,10 +220,6 @@ static fixed_t max_y;
 static fixed_t max_w;
 static fixed_t max_h;
 
-// based on player size
-static fixed_t min_w;
-static fixed_t min_h;
-
 static fixed_t min_scale_mtof; // used to tell when to stop zooming out
 static fixed_t max_scale_mtof; // used to tell when to stop zooming in
 
@@ -449,9 +445,6 @@ static void AM_findMinMaxBoundaries (void)
     max_w = max_x/2 - min_x/2;
     max_h = max_y/2 - min_y/2;
 
-    min_w = 2*PLAYERRADIUS; // const? never changed?
-    min_h = 2*PLAYERRADIUS;
-
     a = FixedDiv(f_w<<FRACBITS, max_w);
     b = FixedDiv(f_h<<FRACBITS, max_h);
 
@@ -464,7 +457,7 @@ static void AM_findMinMaxBoundaries (void)
 // Moves the map window by the global variables m_paninc.x, m_paninc.y
 // -----------------------------------------------------------------------------
 
-static void AM_changeWindowLoc(void)
+static void AM_changeWindowLoc (void)
 {
     int64_t incx, incy;
 
@@ -524,7 +517,7 @@ void AM_initColors (void)
 // AM_initMarksColor
 // -----------------------------------------------------------------------------
 
-void AM_initMarksColor (int color)
+void AM_initMarksColor (const int color)
 {
     Translation_CR_t *colorVar = &automap_mark_color_set;
     
@@ -563,10 +556,9 @@ void AM_initMarksColor (int color)
 // AM_initVariables
 // -----------------------------------------------------------------------------
 
-static void AM_initVariables(void)
+static void AM_initVariables (void)
 {
     int pnum;
-    static event_t st_notify = { ev_keyup, false, AM_MSGENTERED, 0, 0, 0 };
 
     automapactive = true;
 
@@ -608,9 +600,6 @@ static void AM_initVariables(void)
     old_m_y = m_y;
     old_m_w = m_w;
     old_m_h = m_h;
-
-    // inform the status bar of the change
-    ST_Responder(&st_notify);
 }
 
 // -----------------------------------------------------------------------------
@@ -692,11 +681,8 @@ static void AM_LevelInit (void)
 
 void AM_Stop (void)
 {
-    static event_t st_notify = { ev_keyup, false, AM_MSGEXITED, 0, 0, 0 };
-
     AM_unloadPics();
     automapactive = false;
-    ST_Responder(&st_notify);
     stopped = true;
 }
 
@@ -731,7 +717,7 @@ void AM_Start (void)
 // Set the window scale to the maximum size.
 // -----------------------------------------------------------------------------
 
-static void AM_minOutWindowScale(void)
+static void AM_minOutWindowScale (void)
 {
     scale_mtof = min_scale_mtof;
     scale_ftom = FixedDiv(FRACUNIT, scale_mtof);
@@ -743,7 +729,7 @@ static void AM_minOutWindowScale(void)
 // Set the window scale to the minimum size.
 // -----------------------------------------------------------------------------
 
-static void AM_maxOutWindowScale(void)
+static void AM_maxOutWindowScale (void)
 {
     scale_mtof = max_scale_mtof;
     scale_ftom = FixedDiv(FRACUNIT, scale_mtof);
@@ -755,12 +741,12 @@ static void AM_maxOutWindowScale(void)
 // Handle events (user inputs) in automap mode.
 // -----------------------------------------------------------------------------
 
-boolean AM_Responder (event_t *ev)
+const boolean AM_Responder (event_t *ev)
 {
     int rc;
     static int bigstate=0;
     static char buffer[32];
-    boolean speed_toggler = BK_isKeyPressed(bk_speed);
+    const boolean speed_toggler = BK_isKeyPressed(bk_speed);
 
     // [JN] If run button is hold, pan/zoom Automap faster.    
     if (speed_toggler)
@@ -1043,7 +1029,7 @@ void AM_Ticker (void)
 // Clear automap frame buffer.
 // -----------------------------------------------------------------------------
 
-static void AM_clearFB (int color)
+static void AM_clearFB (const int color)
 {
     memset(I_VideoBuffer, color, f_w*f_h*sizeof(*I_VideoBuffer));
 }
@@ -1057,7 +1043,7 @@ static void AM_clearFB (int color)
 // use a hash algorithm to handle  the common cases.
 // -----------------------------------------------------------------------------
 
-static boolean AM_clipMline (mline_t *ml, fline_t *fl)
+static boolean AM_clipMline (const mline_t *ml, fline_t *fl)
 {
     enum
     {
@@ -1217,7 +1203,7 @@ static boolean AM_clipMline (mline_t *ml, fline_t *fl)
 // Classic Bresenham w/ whatever optimizations needed for speed.
 // -----------------------------------------------------------------------------
 
-static void AM_drawFline (fline_t *fl, int color, int automap_color_set)
+static void AM_drawFline (const fline_t *fl, const int color, const int automap_color_set)
 {
     int x, y, dx, dy, sx, sy, ax, ay, d;
 
@@ -1463,7 +1449,7 @@ static void AM_drawFline (fline_t *fl, int color, int automap_color_set)
 //          the intensity of the drawing color. 2**IntensityBits==NumLevels
 // -----------------------------------------------------------------------------
 
-static void PUTDOT (short xx, short yy, const byte *cc, const byte *cm)
+static void PUTDOT (const short xx, const short yy, const byte *cc, const byte *cm)
 {
     static int oldyy;
     static int oldyyshifted;
@@ -1511,7 +1497,7 @@ static void PUTDOT (short xx, short yy, const byte *cc, const byte *cm)
 // -----------------------------------------------------------------------------
 
 static void DrawWuLine(int X0, int Y0, int X1, int Y1, const byte *BaseColor,
-                       int NumLevels, unsigned short IntensityBits)
+                       const int NumLevels, const unsigned short IntensityBits)
 {
     unsigned short IntensityShift, ErrorAdj, ErrorAcc;
     unsigned short ErrorAccTemp, Weighting, WeightingComplementMask;
@@ -1650,7 +1636,7 @@ static void DrawWuLine(int X0, int Y0, int X1, int Y1, const byte *BaseColor,
 // Clip lines, draw visible parts of lines.
 // -----------------------------------------------------------------------------
 
-static void AM_drawMline (mline_t *ml, int color)
+static void AM_drawMline (const mline_t *ml, const int color)
 {
     static fline_t fl;
 
@@ -1666,7 +1652,7 @@ static void AM_drawMline (mline_t *ml, int color)
 // Draws flat (floor/ceiling tile) aligned grid lines.
 // -----------------------------------------------------------------------------
 
-static void AM_drawGrid (int color)
+static void AM_drawGrid (const int color)
 {
     int64_t x, y;
     int64_t start, end;
@@ -1753,7 +1739,7 @@ static void AM_drawGrid (int color)
 // This is LineDef based, not LineSeg based.
 // -----------------------------------------------------------------------------
 
-static void AM_drawWalls (int automap_color_set)
+static void AM_drawWalls (const int automap_color_set)
 {
     int    i;
     static mline_t l;
@@ -2189,7 +2175,7 @@ static void AM_drawWalls (int automap_color_set)
 // Rotation in 2D. Used to rotate player arrow line character.
 // -----------------------------------------------------------------------------
 
-static void AM_rotate (int64_t *x, int64_t *y, angle_t a)
+static void AM_rotate (int64_t *x, int64_t *y, const angle_t a)
 {
     int64_t tmpx;
 
@@ -2230,8 +2216,8 @@ static void AM_rotatePoint (mpoint_t *pt)
 // Draws a vector graphic according to numerous parameters.
 // -----------------------------------------------------------------------------
 
-static void AM_drawLineCharacter (const mline_t *lineguy, int lineguylines, fixed_t scale, 
-                                  angle_t angle, int color, fixed_t x, fixed_t y)
+static void AM_drawLineCharacter (const mline_t *lineguy, const int lineguylines, const fixed_t scale, 
+                                  angle_t angle, const int color, const fixed_t x, const fixed_t y)
 {
     int     i;
     mline_t l;
@@ -2374,7 +2360,7 @@ static void AM_drawPlayers (void)
 // Draws the things on the automap in double IDDT cheat mode.
 // -----------------------------------------------------------------------------
 
-static void AM_drawThings (int colors, int colorrange)
+static void AM_drawThings (const int colors, const int colorrange)
 {
     int       i;
     mpoint_t  pt;
@@ -2515,7 +2501,7 @@ static void AM_drawMarks (void)
 // [JN] Draw crosshair representing map center, or single point in vanilla mode.
 // -----------------------------------------------------------------------------
 
-static void AM_drawCrosshair (int color)
+static void AM_drawCrosshair (const int color)
 {
     if (vanillaparm)
     {

@@ -23,11 +23,6 @@
 #include "d_event.h"
 #include "m_cheat.h"
 
-// Used by ST StatusBar stuff.
-#define AM_MSGHEADER    (('a'<<24)+('m'<<16))
-#define AM_MSGENTERED   (AM_MSGHEADER | ('e'<<8))
-#define AM_MSGEXITED    (AM_MSGHEADER | ('x'<<8))
-
 
 typedef struct
 {
@@ -38,7 +33,7 @@ extern mpoint_t *markpoints;
 extern int markpointnum, markpointnum_max;
 
 // Called by main loop.
-boolean AM_Responder (event_t* ev);
+const boolean AM_Responder (event_t *ev);
 
 // Called by main loop.
 void AM_Ticker (void);
