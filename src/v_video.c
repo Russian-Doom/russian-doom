@@ -50,8 +50,7 @@
 // is common code. Fix this.
 #define RANGECHECK
 
-// Blending table used for fuzzpatch, etc.
-// Only used in Heretic/Hexen
+// [JN] Blending tables used for translucent sprites and text fading/shadow.
 byte *tinttable = NULL;
 byte *extratinttable = NULL;
 byte *transtable90 = NULL;
@@ -81,10 +80,11 @@ int dirtybox[4];
 static vpatchclipfunc_t patchclip_callback = NULL;
 
 
-//
+// -----------------------------------------------------------------------------
 // V_MarkRect 
-// 
-void V_MarkRect(int x, int y, int width, int height) 
+// -----------------------------------------------------------------------------
+
+void V_MarkRect (const int x, const int y, const int width, const int height) 
 { 
     // If we are temporarily using an alternate screen, do not 
     // affect the update box.
@@ -96,13 +96,13 @@ void V_MarkRect(int x, int y, int width, int height)
     }
 } 
  
-
-//
+// -----------------------------------------------------------------------------
 // V_CopyRect 
-// 
-void V_CopyRect(int srcx, int srcy, byte *source,
-                int width, int height,
-                int destx, int desty)
+// -----------------------------------------------------------------------------
+
+void V_CopyRect (int srcx, int srcy, byte *source,
+                 int width, int height,
+                 int destx, int desty)
 { 
     byte *src;
     byte *dest; 
@@ -143,7 +143,7 @@ void V_CopyRect(int srcx, int srcy, byte *source,
     } 
 } 
  
-//
+// -----------------------------------------------------------------------------
 // V_SetPatchClipCallback
 //
 // haleyjd 08/28/10: Added for Strife support.
@@ -152,18 +152,19 @@ void V_CopyRect(int srcx, int srcy, byte *source,
 // Some versions of vanilla DOOM also behaved differently than the default
 // implementation, so this could possibly be extended to those as well for
 // accurate emulation.
-//
+// -----------------------------------------------------------------------------
+
 void V_SetPatchClipCallback(vpatchclipfunc_t func)
 {
     patchclip_callback = func;
 }
 
-//
+// -----------------------------------------------------------------------------
 // V_DrawPatch
 // Masks a column based masked pic to the screen. 
-//
+// -----------------------------------------------------------------------------
 
-void V_DrawPatch(int x, int y, patch_t *patch, byte *table)
+void V_DrawPatch (int x, int y, const patch_t *patch, const byte *table)
 { 
     int count;
     int col;
@@ -178,24 +179,13 @@ void V_DrawPatch(int x, int y, patch_t *patch, byte *table)
     x -= SHORT(patch->leftoffset);
 
     // haleyjd 08/28/10: Strife needs silent error checking here.
-    if(patchclip_callback)
+    if (patchclip_callback)
     {
-        if(!patchclip_callback(patch, x, y))
+        if (!patchclip_callback(patch, x, y))
+        {
             return;
+        }
     }
-
-// [JN] Do not crash if patch goes out of screen bounds.
-#ifdef RANGECHECK_NO_THANKS
-    if (x < 0
-     || x + SHORT(patch->width) > screenwidth
-     || y < 0
-     || y + SHORT(patch->height) > SCREENHEIGHT)
-    {
-        I_Error(english_language ?
-                "Bad V_DrawPatch" :
-                "Ошибка V_DrawPatch");
-    }
-#endif
 
     V_MarkRect(x, y, SHORT(patch->width), SHORT(patch->height));
 
@@ -283,8 +273,11 @@ void V_DrawPatch(int x, int y, patch_t *patch, byte *table)
     }
 }
 
+// -----------------------------------------------------------------------------
+// V_DrawPatchFullScreen
+// -----------------------------------------------------------------------------
 
-void V_DrawPatchFullScreen(patch_t *patch, boolean flipped)
+void V_DrawPatchFullScreen (patch_t *patch, const boolean flipped)
 {
     int x = ((screenwidth >> hires) - SHORT(patch->width)) / 2;
 
@@ -307,14 +300,13 @@ void V_DrawPatchFullScreen(patch_t *patch, boolean flipped)
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // V_DrawPatchFlipped
 // Masks a column based masked pic to the screen.
 // Flips horizontally, e.g. to mirror face.
-//
+// -----------------------------------------------------------------------------
 
-void V_DrawPatchFlipped(int x, int y, patch_t *patch)
+void V_DrawPatchFlipped (int x, int y, const patch_t *patch)
 {
     int count;
     int col; 
@@ -334,19 +326,6 @@ void V_DrawPatchFlipped(int x, int y, patch_t *patch)
         if(!patchclip_callback(patch, x, y))
             return;
     }
-
-// [JN] Do not crash if patch goes out of screen bounds.
-#ifdef RANGECHECK_NO_THANKS
-    if (x < 0
-     || x + SHORT(patch->width) > ORIGWIDTH
-     || y < 0
-     || y + SHORT(patch->height) > ORIGHEIGHT)
-    {
-        I_Error(english_language ?
-                "Bad V_DrawPatchFlipped" :
-                "Ошибка V_DrawPatchFlipped");
-    }
-#endif
 
     V_MarkRect (x, y, SHORT(patch->width), SHORT(patch->height));
 
@@ -425,14 +404,12 @@ void V_DrawPatchFlipped(int x, int y, patch_t *patch)
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // V_DrawTLPatch
-//
 // Masks a column based translucent masked pic to the screen.
-//
+// -----------------------------------------------------------------------------
 
-void V_DrawTLPatch(int x, int y, patch_t * patch)
+void V_DrawTLPatch (int x, int y, const patch_t *patch)
 {
     int count, col;
     column_t *column;
@@ -441,19 +418,6 @@ void V_DrawTLPatch(int x, int y, patch_t * patch)
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
-
-// [JN] Do not crash if patch goes out of screen bounds.
-#ifdef RANGECHECK_NO_THANKS
-    if (x < 0
-     || x + SHORT(patch->width) > ORIGWIDTH
-     || y < 0
-     || y + SHORT(patch->height) > ORIGHEIGHT)
-    {
-        I_Error(english_language ?
-                "Bad V_DrawTLPatch" :
-                "Ошибка V_DrawTLPatch");
-    }
-#endif
 
     col = 0;
     desttop = dest_screen + (y << hires) * screenwidth + x;
@@ -489,13 +453,12 @@ void V_DrawTLPatch(int x, int y, patch_t * patch)
     }
 }
 
-//
+// -----------------------------------------------------------------------------
 // V_DrawXlaPatch
-//
 // villsa [STRIFE] Masks a column based translucent masked pic to the screen.
-//
+// -----------------------------------------------------------------------------
 
-void V_DrawXlaPatch(int x, int y, patch_t * patch)
+void V_DrawXlaPatch (int x, int y, const patch_t *patch)
 {
     int count, col;
     column_t *column;
@@ -546,13 +509,12 @@ void V_DrawXlaPatch(int x, int y, patch_t * patch)
     }
 }
 
-//
+// -----------------------------------------------------------------------------
 // V_DrawAltTLPatch
-//
 // Masks a column based translucent masked pic to the screen.
-//
+// -----------------------------------------------------------------------------
 
-void V_DrawAltTLPatch(int x, int y, patch_t * patch)
+void V_DrawAltTLPatch (int x, int y, const patch_t *patch)
 {
     int count, col;
     column_t *column;
@@ -561,19 +523,6 @@ void V_DrawAltTLPatch(int x, int y, patch_t * patch)
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
-
-// [JN] Do not crash if patch goes out of screen bounds.
-#ifdef RANGECHECK_NO_THANKS
-    if (x < 0
-     || x + SHORT(patch->width) > screenwidth
-     || y < 0
-     || y + SHORT(patch->height) > SCREENHEIGHT)
-    {
-        I_Error(english_language ?
-                "Bad V_DrawAltTLPatch" :
-                "Ошибка V_DrawAltTLPatch");
-    }
-#endif
 
     col = 0;
     desttop = dest_screen + (y << hires) * screenwidth + x;
@@ -609,13 +558,12 @@ void V_DrawAltTLPatch(int x, int y, patch_t * patch)
     }
 }
 
-//
+// -----------------------------------------------------------------------------
 // V_DrawFadePatch
-//
 // [JN] Draws colorized with variable transluceny, with given tinting table.
-//
+// -----------------------------------------------------------------------------
 
-void V_DrawFadePatch(int x, int y, patch_t * patch, byte *table)
+void V_DrawFadePatch(int x, int y, const patch_t *patch, const byte *table)
 {
     int       count, col, w, f;
     byte     *desttop, *dest, *source, *sourcetrans;
@@ -689,13 +637,12 @@ void V_DrawFadePatch(int x, int y, patch_t * patch, byte *table)
     }
 }
 
-//
+// -----------------------------------------------------------------------------
 // V_DrawShadowedPatch
-//
 // Masks a column based masked pic to the screen.
-//
+// -----------------------------------------------------------------------------
 
-void V_DrawShadowedPatch(int x, int y, patch_t *patch)
+void V_DrawShadowedPatch (int x, int y, const patch_t *patch)
 {
     int count, col;
     column_t *column;
@@ -705,19 +652,6 @@ void V_DrawShadowedPatch(int x, int y, patch_t *patch)
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
-
-// [JN] Do not crash if patch goes out of screen bounds.
-#ifdef RANGECHECK_NO_THANKS
-    if (x < 0
-     || x + SHORT(patch->width) > ORIGWIDTH
-     || y < 0
-     || y + SHORT(patch->height) > ORIGHEIGHT)
-    {
-        I_Error(english_language ?
-                "Bad V_DrawShadowedPatch" :
-                "Ошибка V_DrawShadowedPatch");
-    }
-#endif
 
     col = 0;
     desttop = dest_screen + (y << hires) * screenwidth + x;
@@ -801,12 +735,12 @@ void V_DrawShadowedPatch(int x, int y, patch_t *patch)
     }
 }
 
-//
-// [JN] V_DrawShadowedPatchDoom - отдельная функция для Doom.
-// Размер отбрасываемой тени уменьшен до 1 пиксела.
-//
+// -----------------------------------------------------------------------------
+// V_DrawShadowedPatchDoom
+// [JN] Separated function for Doom, shadow size decreased to one pixel.
+// -----------------------------------------------------------------------------
 
-void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
+void V_DrawShadowedPatchDoom (int x, int y, const patch_t *patch)
 {
     int count, col;
     column_t *column;
@@ -816,19 +750,6 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
-
-// [JN] Do not crash if patch goes out of screen bounds.
-#ifdef RANGECHECK_NO_THANKS
-    if (x < 0
-     || x + SHORT(patch->width) > screenwidth
-     || y < 0
-     || y + SHORT(patch->height) > SCREENHEIGHT)
-    {
-        I_Error(english_language ?
-                "Bad V_DrawShadowedPatchDoom" :
-                "Ошибка V_DrawShadowedPatchDoom");
-    }
-#endif
 
     col = 0;
     desttop = dest_screen + (y << hires) * screenwidth + x;
@@ -935,12 +856,13 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
     }
 }
 
-//
-// [JN] V_DrawShadowedPatchRaven - отдельная функция для Heretic и Hexen.
-// Размер отбрасываемой тени уменьшен до 1 пиксела.
-//
+// -----------------------------------------------------------------------------
+// V_DrawShadowedPatchRaven
+// [JN] Separated function for Heretic and Hexen, 
+// shadow size decreased to one pixel.
+// -----------------------------------------------------------------------------
 
-void V_DrawShadowedPatchRaven(int x, int y, patch_t *patch)
+void V_DrawShadowedPatchRaven (int x, int y, const patch_t *patch)
 {
     int count, col;
     column_t *column;
@@ -950,19 +872,6 @@ void V_DrawShadowedPatchRaven(int x, int y, patch_t *patch)
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
-
-// [JN] Do not crash if patch goes out of screen bounds.
-#ifdef RANGECHECK_NO_THANKS
-    if (x < 0
-     || x + SHORT(patch->width) > screenwidth
-     || y < 0
-     || y + SHORT(patch->height) > SCREENHEIGHT)
-    {
-        I_Error(english_language ?
-                "Bad V_DrawShadowedPatchRaven" :
-                "Ошибка V_DrawShadowedPatchRaven");
-    }
-#endif
 
     col = 0;
     desttop = dest_screen + (y << hires) * screenwidth + x;
@@ -1068,13 +977,12 @@ void V_DrawShadowedPatchRaven(int x, int y, patch_t *patch)
     }
 }
 
-//
-// [JN] V_DrawShadowedPatchStrife - отдельная функция для Strife.
-// Размер отбрасываемой тени уменьшен до 1 пиксела, используется
-// штатная карта прозрачности XLATAB.
-//
+// -----------------------------------------------------------------------------
+// V_DrawShadowedPatchStrife
+// [JN] Separated function for Strife, shadow size decreased to one pixel.
+// -----------------------------------------------------------------------------
 
-void V_DrawShadowedPatchStrife(int x, int y, patch_t *patch)
+void V_DrawShadowedPatchStrife (int x, int y, const patch_t *patch)
 {
     int count, col;
     column_t *column;
@@ -1086,16 +994,6 @@ void V_DrawShadowedPatchStrife(int x, int y, patch_t *patch)
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
-
-    if (x < 0
-     || x + SHORT(patch->width) > SCREENWIDTH
-     || y < 0
-     || y + SHORT(patch->height) > SCREENHEIGHT)
-    {
-        I_Error(english_language ?
-                "Bad V_DrawShadowedPatchStrife" :
-                "Ошибка V_DrawShadowedPatchStrife");
-    }
 
     col = 0;
     desttop = dest_screen + (y << hires) * SCREENWIDTH + x;
@@ -1141,12 +1039,12 @@ void V_DrawShadowedPatchStrife(int x, int y, patch_t *patch)
     }
 }
 
+// -----------------------------------------------------------------------------
+// V_DrawPatchUnscaled
+// [JN] hires independent version of V_DrawPatch.
+// -----------------------------------------------------------------------------
 
-//
-// [JN] V_DrawPatchUnscaled - hires independent version of V_DrawPatch 
-//
-
-void V_DrawPatchUnscaled(int x, int y, patch_t *patch, byte *table)
+void V_DrawPatchUnscaled (int x, int y, const patch_t *patch, const byte *table)
 {
     int count;
     int col;
@@ -1201,7 +1099,7 @@ void V_DrawPatchUnscaled(int x, int y, patch_t *patch, byte *table)
 // Written with extensive support of Fabian Greffrath, thanks! (16.01.2019)
 // -----------------------------------------------------------------------------
 
-void V_DrawPatchFinale(int x, int y, patch_t *patch)
+void V_DrawPatchFinale (int x, int y, const patch_t *patch)
 { 
     int       count, col, w, f;
     column_t *column;
@@ -1218,16 +1116,6 @@ void V_DrawPatchFinale(int x, int y, patch_t *patch)
         if(!patchclip_callback(patch, x, y))
             return;
     }
-
-#ifdef RANGECHECK_NO_THANKS
-    if (x < 0
-     || x + SHORT(patch->width) > screenwidth
-     || y < 0
-     || y + SHORT(patch->height) > SCREENHEIGHT)
-    {
-        I_Error("Bad V_DrawPatchFinale");
-    }
-#endif
 
     V_MarkRect(x, y, SHORT(patch->width), SHORT(patch->height));
 
@@ -1297,60 +1185,56 @@ void V_FillFlat (char *lump)
     }
 }
 
-//
+// -----------------------------------------------------------------------------
 // Load tint table from TINTTAB lump.
-//
+// -----------------------------------------------------------------------------
 
-void V_LoadTintTable(void)
+void V_LoadTintTable (void)
 {
     tinttable = W_CacheLumpName("TINTTAB", PU_STATIC);
 }
 
-//
+// -----------------------------------------------------------------------------
 // V_LoadXlaTable
-//
 // villsa [STRIFE] Load xla table from XLATAB lump.
-//
+// -----------------------------------------------------------------------------
 
-void V_LoadXlaTable(void)
+void V_LoadXlaTable (void)
 {
     xlatab = W_CacheLumpName("XLATAB", PU_STATIC);
 }
 
-//
+// -----------------------------------------------------------------------------
 // V_DrawBlock
 // Draw a linear block of pixels into the view buffer.
-//
+// -----------------------------------------------------------------------------
 
-void V_DrawBlock(int x, int y, int width, int height, byte *src) 
+void V_DrawBlock (const int x, const int y, const int width, int height, const byte *src)
 { 
     byte *dest; 
  
 #ifdef RANGECHECK 
-    if (x < 0
-     || x + width > screenwidth
-     || y < 0
-     || y + height > SCREENHEIGHT)
+    if (x < 0 || x + width > screenwidth || y < 0 || y + height > SCREENHEIGHT)
     {
-	I_Error (english_language ?
-             "Bad V_DrawBlock" :
-             "Ошибка V_DrawBlock");
+        I_Error (english_language ?
+                "Bad V_DrawBlock" :
+                "Ошибка V_DrawBlock");
     }
 #endif 
- 
+
     V_MarkRect (x, y, width, height); 
- 
+
     dest = dest_screen + (y << hires) * screenwidth + x;
 
     while (height--) 
     { 
-	memcpy (dest, src, width * sizeof(*dest));
-	src += width; 
-	dest += screenwidth; 
+        memcpy (dest, src, width * sizeof(*dest));
+        src += width; 
+        dest += screenwidth; 
     } 
 } 
 
-void V_DrawScaledBlock(int x, int y, int width, int height, byte *src)
+void V_DrawScaledBlock (const int x, const int y, int width, int height, const byte *src)
 {
     byte *dest;
     int i, j;
@@ -1380,7 +1264,7 @@ void V_DrawScaledBlock(int x, int y, int width, int height, byte *src)
     }
 }
 
-void V_DrawFilledBox(int x, int y, int w, int h, int c)
+void V_DrawFilledBox (const int x, const int y, const int w, const int h, const int c)
 {
     uint8_t *buf, *buf1;
     int x1, y1;
@@ -1400,7 +1284,7 @@ void V_DrawFilledBox(int x, int y, int w, int h, int c)
     }
 }
 
-void V_DrawHorizLine(int x, int y, int w, int c)
+void V_DrawHorizLine (const int x, const int y, const int w, const int c)
 {
     uint8_t *buf;
     int x1;
@@ -1413,7 +1297,7 @@ void V_DrawHorizLine(int x, int y, int w, int c)
     }
 }
 
-void V_DrawVertLine(int x, int y, int h, int c)
+void V_DrawVertLine (const int x, const int y, const int h, const int c)
 {
     uint8_t *buf;
     int y1;
@@ -1427,7 +1311,7 @@ void V_DrawVertLine(int x, int y, int h, int c)
     }
 }
 
-void V_DrawBox(int x, int y, int w, int h, int c)
+void V_DrawBox (const int x, const int y, const int w, const int h, const int c)
 {
     V_DrawHorizLine(x, y, w, c);
     V_DrawHorizLine(x, y+h-1, w, c);
@@ -1435,12 +1319,12 @@ void V_DrawBox(int x, int y, int w, int h, int c)
     V_DrawVertLine(x+w-1, y, h, c);
 }
 
-//
-// Draw a "raw" screen (lump containing raw data to blit directly
-// to the screen)
-//
+// -----------------------------------------------------------------------------
+// V_CopyScaledBuffer
+// Draw a "raw" screen (lump containing raw data to blit directly to the screen)
+// -----------------------------------------------------------------------------
 
-void V_CopyScaledBuffer(byte *dest, byte *src, size_t size)
+void V_CopyScaledBuffer (byte *dest, const byte *src, const size_t size)
 {
     int i, j, k;
 
@@ -1469,15 +1353,16 @@ void V_CopyScaledBuffer(byte *dest, byte *src, size_t size)
     }
 }
  
-void V_DrawRawScreen(byte *raw)
+void V_DrawRawScreen (const byte *raw)
 {
     V_CopyScaledBuffer(dest_screen, raw, ORIGWIDTH * ORIGHEIGHT);
 }
 
 // -----------------------------------------------------------------------------
-// [JN] V_Init
-// Used for setting aspect ratio variables: width, height and deltas.
+// V_Init
+// [JN] Used for setting aspect ratio variables: width, height and deltas.
 // -----------------------------------------------------------------------------
+
 void V_Init (void) 
 { 
     if (aspect_ratio == 0)
@@ -1532,14 +1417,14 @@ void V_Init (void)
 
 // Set the buffer that the code draws to.
 
-void V_UseBuffer(byte *buffer)
+void V_UseBuffer (byte *buffer)
 {
     dest_screen = buffer;
 }
 
 // Restore screen buffer to the i_video screen buffer.
 
-void V_RestoreBuffer(void)
+void V_RestoreBuffer (void)
 {
     dest_screen = I_VideoBuffer;
 }
@@ -1579,9 +1464,9 @@ typedef struct
 // WritePCXfile
 //
 
-void WritePCXfile(char *filename, byte *data,
-                  int width, int height,
-                  byte *palette)
+void WritePCXfile (const char *filename, const byte *data,
+                   const int width, const int height,
+                   const byte *palette)
 {
     int		i;
     int		length;
@@ -1712,7 +1597,7 @@ void WritePNGfile(char *filename, byte *data,
 // V_ScreenShot
 //
 
-void V_ScreenShot(char *format)
+void V_ScreenShot (const char *format)
 {
     int i;
     char lbmname[32]; // haleyjd 20110213: BUG FIX - 12 is too small!
@@ -1775,22 +1660,22 @@ void V_ScreenShot(char *format)
     }
 }
 
-#define MOUSE_SPEED_BOX_WIDTH  120
-#define MOUSE_SPEED_BOX_HEIGHT 9
-
-//
+// -----------------------------------------------------------------------------
 // V_DrawMouseSpeedBox
 //
-
 // If box is only to calibrate speed, testing relative speed (as a measure
 // of game pixels to movement units) is important whether physical mouse DPI
 // is high or low. Line resolution starts at 1 pixel per 1 move-unit: if
 // line maxes out, resolution becomes 1 pixel per 2 move-units, then per
 // 3 move-units, etc.
+// -----------------------------------------------------------------------------
+
+#define MOUSE_SPEED_BOX_WIDTH  120
+#define MOUSE_SPEED_BOX_HEIGHT 9
 
 static int linelen_multiplier = 1;
 
-void V_DrawMouseSpeedBox(int speed)
+void V_DrawMouseSpeedBox (const int speed)
 {
     extern int usemouse;
     int bgcolor, bordercolor, red, black, white, yellow;

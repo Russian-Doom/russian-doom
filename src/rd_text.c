@@ -28,7 +28,7 @@ Translation_CR_t messages_system_color_set;
 Translation_CR_t messages_chat_color_set;
 Translation_CR_t messages_quest_color_set;
 
-void (*drawShadowedPatch)(int x, int y, patch_t *patch);
+void (*drawShadowedPatch)(int x, int y, const patch_t *patch);
 
 static lumpindex_t fontA;
 static lumpindex_t fontB;
