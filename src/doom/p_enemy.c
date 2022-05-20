@@ -357,7 +357,7 @@ static boolean P_Move (mobj_t*	actor)
         //
         // Do NOT simply return false 1/4th of the time (causes monsters to
         // back out when they shouldn't, and creates secondary stickiness).
-        if (singleplayer && !vanillaparm)
+        if (improved_collision && singleplayer && !vanillaparm)
         {
             line_t *blockline = spechit[numspechit];
 

@@ -455,7 +455,7 @@ boolean PIT_CheckThing(mobj_t * thing)
 
     // [JN] Check if things are stuck and allow them to move further apart.
     // Taken from DOOM Retro, slightly adopted for Heretic.
-    if (singleplayer && !vanillaparm && !thing->player 
+    if (improved_collision && singleplayer && !vanillaparm && !thing->player 
     && (thing->flags & MF_SHOOTABLE && thing->type != MT_POD))
     {
         if (tmx == tmthing->x && tmy == tmthing->y)
