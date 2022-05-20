@@ -26,6 +26,6 @@
 #define LOADING_DISK_W (16 << hires)
 #define LOADING_DISK_H (16 << hires)
 
-extern void V_EnableLoadingDisk(int xoffs, int yoffs);
-extern void V_BeginRead(size_t nbytes);
-extern void V_DrawDiskIcon(void);
+extern void V_EnableLoadingDisk (const int xoffs, const int yoffs);
+extern void V_BeginRead (const size_t nbytes);
+extern void V_DrawDiskIcon (void);

@@ -71,7 +71,7 @@ typedef boolean (*grabmouse_callback_t)(void);
 void I_InitGraphics (void);
 
 // [crispy] re-initialize only the parts of the rendering stack that are really necessary
-void I_ReInitGraphics (int reinit);
+void I_ReInitGraphics (const int reinit);
 
 void I_GraphicsCheckCommandLine(void);
 
@@ -88,7 +88,7 @@ void I_ReadScreen (byte* scr);
 
 void I_BeginRead (void);
 
-void I_SetWindowTitle(char *title);
+void I_SetWindowTitle(const char *title);
 
 void I_CheckIsScreensaver(void);
 void I_SetGrabMouseCallback(grabmouse_callback_t func);

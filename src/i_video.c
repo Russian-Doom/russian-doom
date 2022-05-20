@@ -61,7 +61,7 @@ static SDL_Renderer *renderer;
 
 // Window title
 
-static char *window_title = "";
+static const char *window_title = "";
 
 // These are (1) the 320x200x8 paletted buffer that we draw to (i.e. the one
 // that holds I_VideoBuffer), (2) the 320x200x32 RGBA intermediate buffer that
@@ -305,7 +305,7 @@ void *I_GetSDLRenderer(void)
     return renderer;
 }
 
-static boolean MouseShouldBeGrabbed()
+static const boolean MouseShouldBeGrabbed()
 {
     // never grab the mouse when in screensaver mode
    
@@ -346,19 +346,19 @@ static boolean MouseShouldBeGrabbed()
     }
 }
 
-void I_SetGrabMouseCallback(grabmouse_callback_t func)
+void I_SetGrabMouseCallback (const grabmouse_callback_t func)
 {
     grabmouse_callback = func;
 }
 
 // Set the variable controlling FPS dots.
 
-void I_DisplayFPSDots(boolean dots_on)
+void I_DisplayFPSDots (const boolean dots_on)
 {
     display_fps_dots = dots_on;
 }
 
-static void SetShowCursor(boolean show)
+static void SetShowCursor (const boolean show)
 {
     if (!screensaver_mode)
     {
@@ -423,7 +423,7 @@ static void AdjustWindowSize(void)
     changedWindowSize = cs_WIDTH_AND_HEIGHT;
 }
 
-static void HandleWindowEvent(SDL_WindowEvent *event)
+static void HandleWindowEvent (const SDL_WindowEvent *event)
 {
     int i;
 
@@ -516,7 +516,7 @@ static int HandleWindowResize (void* data, SDL_Event *event)
 }
 
 // [JN] Alt + Return (the Enter key on main keyboard)
-static boolean ToggleFullScreenKeyShortcut(SDL_Keysym *sym)
+static const boolean ToggleFullScreenKeyShortcut (const SDL_Keysym *sym)
 {
     Uint16 flags = (KMOD_LALT | KMOD_RALT);
 #if defined(__MACOSX__)
@@ -748,7 +748,7 @@ static void LimitTextureSize(int *w_upscale, int *h_upscale)
     }
 }
 
-static void CreateUpscaledTexture(boolean force)
+static void CreateUpscaledTexture(const boolean force)
 {
     int w, h;
     int h_upscale, w_upscale;
@@ -1160,7 +1160,7 @@ const int I_GetPaletteIndex (const int r, const int g, const int b)
 // Set the window title
 //
 
-void I_SetWindowTitle(char *title)
+void I_SetWindowTitle (const char *title)
 {
     window_title = title;
 }
@@ -1197,7 +1197,7 @@ void I_InitWindowIcon(void)
 
 // Set video size to a particular scale factor (1x, 2x, 3x, etc.)
 
-static void SetScaleFactor(int factor)
+static void SetScaleFactor (const int factor)
 {
     // Pick 320x200 or 320x240, depending on aspect ratio correct
 
@@ -1382,7 +1382,7 @@ static void SetSDLVideoDriver(void)
 // Check the display bounds of the display referred to by 'video_display' and
 // set x and y to a location that places the window in the center of that
 // display.
-static void CenterWindow(int *x, int *y, int w, int h)
+static void CenterWindow(int *x, int *y, const int w, const int h)
 {
     SDL_Rect bounds;
 
@@ -1756,7 +1756,7 @@ void I_InitGraphics(void)
 
 // [crispy] re-initialize only the parts of the rendering stack that are really necessary
 
-void I_ReInitGraphics (int reinit)
+void I_ReInitGraphics (const int reinit)
 {
 	// [crispy] re-set rendering resolution and re-create framebuffers
 	if (reinit & REINIT_FRAMEBUFFERS)

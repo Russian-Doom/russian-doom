@@ -45,7 +45,7 @@ static size_t recent_bytes_read = 0;
 char *disk_lump_name;
 
 
-void V_EnableLoadingDisk(int xoffs, int yoffs)
+void V_EnableLoadingDisk (const int xoffs, const int yoffs)
 {
     disk_lump_name = M_CheckParm("-cdrom") > 0 ? "STCDROM" : "STDISK";
 
@@ -53,12 +53,12 @@ void V_EnableLoadingDisk(int xoffs, int yoffs)
     loading_disk_yoffs = yoffs >> hires;
 }
 
-void V_BeginRead(size_t nbytes)
+void V_BeginRead(const size_t nbytes)
 {
     recent_bytes_read += nbytes;
 }
 
-void V_DrawDiskIcon(void)
+void V_DrawDiskIcon (void)
 {
     if (recent_bytes_read > diskicon_threshold)
     {
