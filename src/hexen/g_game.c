@@ -349,7 +349,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     }
     if (joymove != 0)
     {
-        forward += joymove;
+        forward += FixedMul(forwardmove[pClass][speed], joymove);
     }
     if (BK_isKeyPressed(bk_strafe_right))
     {
@@ -361,7 +361,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     }
     if (joystrafemove != 0)
     {
-        side += joystrafemove;
+        side += FixedMul(sidemove[pClass][speed], joystrafemove);
     }
 
     // Look up/down/center keys
@@ -592,11 +592,11 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         testcontrols_mousespeed = 0;
     }
 
-   // [JN] Mouselook: initials
-   // TODO: make it safe for network game
-   if (players[consoleplayer].playerstate == PST_LIVE && !netgame 
-   && !demoplayback && !menuactive && !askforquit && !paused)
-   {
+    // [JN] Mouselook: initials
+    // TODO: make it safe for network game
+    if (players[consoleplayer].playerstate == PST_LIVE && !netgame
+    && !demoplayback && !menuactive && !askforquit && !paused)
+    {
         if (mlook || novert)
         {
             cmd->lookdir += mouse_y_invert ? -mousey : mousey;
@@ -608,11 +608,11 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
             forward += FixedMul(forwardmove[pClass][speed], joyvlook);
         }
 
-       if (players[consoleplayer].lookdir > LOOKDIRMAX * MLOOKUNIT)
-           players[consoleplayer].lookdir = LOOKDIRMAX * MLOOKUNIT;
-       else if (players[consoleplayer].lookdir < -LOOKDIRMIN * MLOOKUNIT)
-           players[consoleplayer].lookdir = -LOOKDIRMIN * MLOOKUNIT;
-   }
+        if (players[consoleplayer].lookdir > LOOKDIRMAX * MLOOKUNIT)
+            players[consoleplayer].lookdir = LOOKDIRMAX * MLOOKUNIT;
+        else if (players[consoleplayer].lookdir < -LOOKDIRMIN * MLOOKUNIT)
+            players[consoleplayer].lookdir = -LOOKDIRMIN * MLOOKUNIT;
+    }
 
     // [JN] Mouselook: toggling
     if (BK_isKeyPressed(bk_toggle_mlook))
