@@ -412,7 +412,7 @@ const byte *R_BrightmapForSprite (const int type)
             // Cell Charge
             case SPR_CELL:
             {
-                return greenonly1;
+                return greenonly2;
                 break;
             }
             // Barrel
