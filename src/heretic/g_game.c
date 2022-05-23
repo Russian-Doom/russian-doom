@@ -392,13 +392,13 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     if (BK_isKeyPressed(bk_backward))
         forward -= forwardmove[speed];
     if(joymove != 0)
-        forward += joymove;
+        forward += FixedMul(forwardmove[speed], joymove);
     if (BK_isKeyPressed(bk_strafe_right))
         side += sidemove[speed];
     if (BK_isKeyPressed(bk_strafe_left))
         side -= sidemove[speed];
     if(joystrafemove != 0)
-        side += joystrafemove;
+        side += FixedMul(sidemove[speed], joystrafemove);
 
     // Look up/down/center keys
     if (BK_isKeyPressed(bk_look_up))
@@ -583,10 +583,10 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
             forward += FixedMul(forwardmove[speed], joyvlook);
         }
         
-         if (players[consoleplayer].lookdir > LOOKDIRMAX * MLOOKUNIT)
-             players[consoleplayer].lookdir = LOOKDIRMAX * MLOOKUNIT;
-         else if (players[consoleplayer].lookdir < -LOOKDIRMIN * MLOOKUNIT)
-             players[consoleplayer].lookdir = -LOOKDIRMIN * MLOOKUNIT;
+        if (players[consoleplayer].lookdir > LOOKDIRMAX * MLOOKUNIT)
+            players[consoleplayer].lookdir = LOOKDIRMAX * MLOOKUNIT;
+        else if (players[consoleplayer].lookdir < -LOOKDIRMIN * MLOOKUNIT)
+            players[consoleplayer].lookdir = -LOOKDIRMIN * MLOOKUNIT;
     }
 
     // [JN] Mouselook: toggling
