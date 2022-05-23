@@ -265,18 +265,18 @@ static const fullbright_t fullbright_walls[] = {
     {"SPAWN12", surfaces2},
     {"SW51_ON", surfaces2},
     {"SW52_ON", surfaces2},
-    {"X_FAC01", fullbright},
-    {"X_FAC02", fullbright},
-    {"X_FAC03", fullbright},
-    {"X_FAC04", fullbright},
-    {"X_FAC05", fullbright},
-    {"X_FAC06", fullbright},
-    {"X_FAC07", fullbright},
-    {"X_FAC08", fullbright},
-    {"X_FAC09", fullbright},
-    {"X_FAC10", fullbright},
-    {"X_FAC11", fullbright},
-    {"X_FAC12", fullbright},
+    {"X_FAC01", surfaces1},
+    {"X_FAC02", surfaces1},
+    {"X_FAC03", surfaces1},
+    {"X_FAC04", surfaces1},
+    {"X_FAC05", surfaces1},
+    {"X_FAC06", surfaces1},
+    {"X_FAC07", surfaces1},
+    {"X_FAC08", surfaces1},
+    {"X_FAC09", surfaces1},
+    {"X_FAC10", surfaces1},
+    {"X_FAC11", surfaces1},
+    {"X_FAC12", surfaces1},
 
 };
 
@@ -925,33 +925,4 @@ const byte *R_BrightmapForState (const int state)
 	}
 
     return nobrightmap;
-}
-
-/*
-================================================================================
-= R_InitBrightmaps
-=
-= [JN] Predefince Korax textures to apply on twosided midtextures.
-=
-================================================================================
-*/
-
-int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04,
-    bmaptexture05, bmaptexture06, bmaptexture07, bmaptexture08,
-    bmaptexture09, bmaptexture10, bmaptexture11, bmaptexture12;
-
-void R_InitBrightmaps (void)
-{
-    bmaptexture01 = R_CheckTextureNumForName("X_FAC01");
-    bmaptexture02 = R_CheckTextureNumForName("X_FAC02");
-    bmaptexture03 = R_CheckTextureNumForName("X_FAC03");
-    bmaptexture04 = R_CheckTextureNumForName("X_FAC04");
-    bmaptexture05 = R_CheckTextureNumForName("X_FAC05");
-    bmaptexture06 = R_CheckTextureNumForName("X_FAC06");
-    bmaptexture07 = R_CheckTextureNumForName("X_FAC07");
-    bmaptexture08 = R_CheckTextureNumForName("X_FAC08");
-    bmaptexture09 = R_CheckTextureNumForName("X_FAC09");
-    bmaptexture10 = R_CheckTextureNumForName("X_FAC10");
-    bmaptexture11 = R_CheckTextureNumForName("X_FAC11");
-    bmaptexture12 = R_CheckTextureNumForName("X_FAC12");
 }

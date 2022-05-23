@@ -1096,8 +1096,6 @@ void R_InitData (void)
     // R_GenerateComposite ivoking while level loading.
     R_InitFlats();
     R_InitTextures();
-    // [JN] Predefince Korax textures to apply on twosided midtextures.
-    R_InitBrightmaps ();
     R_InitSpriteLumps();
     R_InitColormaps();
     // [JN] Generate extra translucency tables.
