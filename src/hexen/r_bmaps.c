@@ -479,7 +479,7 @@ const byte *R_BrightmapForSprite (const int state)
             case S_ZWALLTORCH6:
             case S_ZWALLTORCH7:
             case S_ZWALLTORCH8:
-            // Twined TOrch
+            // Twined Torch
             case S_ZTWINEDTORCH_1:
             case S_ZTWINEDTORCH_2:
             case S_ZTWINEDTORCH_3:
@@ -616,7 +616,6 @@ const byte *R_BrightmapForSprite (const int state)
             case S_ARTI_TRCH1:
             case S_ARTI_TRCH2:
             case S_ARTI_TRCH3:
-            
             // Blue Candle
             case S_ZBLUE_CANDLE1:
             case S_ZBLUE_CANDLE2:
@@ -658,7 +657,7 @@ const byte *R_BrightmapForSprite (const int state)
             case S_ZWALLTORCH6:
             case S_ZWALLTORCH7:
             case S_ZWALLTORCH8:
-            // Twined TOrch
+            // Twined Torch
             case S_ZTWINEDTORCH_1:
             case S_ZTWINEDTORCH_2:
             case S_ZTWINEDTORCH_3:
@@ -685,7 +684,6 @@ const byte *R_BrightmapForSprite (const int state)
             case S_ZFIREBULL5:
             case S_ZFIREBULL6:
             case S_ZFIREBULL7:
-
             // Blue Mana
             case S_MANA1_1:
             case S_MANA1_2:
@@ -713,6 +711,30 @@ const byte *R_BrightmapForSprite (const int state)
             case S_MANA2_14:
             case S_MANA2_15:
             case S_MANA2_16:
+            // Afrit
+            case S_FIRED_LOOK1:
+            case S_FIRED_LOOK2:
+            case S_FIRED_LOOK3:
+            case S_FIRED_LOOK4:
+            case S_FIRED_LOOK5:
+            case S_FIRED_LOOK6:
+            case S_FIRED_LOOK7:
+            case S_FIRED_LOOK8:
+            case S_FIRED_LOOK9:
+            case S_FIRED_LOOK0:
+            case S_FIRED_LOOKA:
+            case S_FIRED_LOOKB:
+            case S_FIRED_WALK1:
+            case S_FIRED_WALK2:
+            case S_FIRED_WALK3:
+            case S_FIRED_ATTACK1:
+            case S_FIRED_ATTACK2:
+            case S_FIRED_ATTACK3:
+            case S_FIRED_ATTACK4:
+            case S_FIRED_DEATH1:
+            case S_FIRED_DEATH2:
+            case S_FIRED_DEATH3:
+            case S_FIRED_DEATH4:
             {
                 return fullbright;
                 break;
