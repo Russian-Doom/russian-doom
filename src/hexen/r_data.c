@@ -1095,8 +1095,9 @@ void R_InitData (void)
     // [JN] Moved R_InitFlats to the top, needed for 
     // R_GenerateComposite ivoking while level loading.
     R_InitFlats();
-    //  R_InitBrightmaps ();
     R_InitTextures();
+    // [JN] Predefince Korax textures to apply on twosided midtextures.
+    R_InitBrightmaps ();
     R_InitSpriteLumps();
     R_InitColormaps();
     // [JN] Generate extra translucency tables.

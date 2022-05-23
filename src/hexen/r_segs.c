@@ -265,8 +265,28 @@ void R_RenderMaskedSegRange (drawseg_t *ds, int x1, int x2)
                     index = MAXLIGHTSCALE - 1;
                 }
 
-                // [crispy] no brightmaps for mid-textures
-                dc_colormap[0] = dc_colormap[1] = walllights[index];
+                // [JN] Apply brightmaps to Korax face.
+                if (brightmaps && !vanillaparm 
+                && (curline->sidedef->midtexture == bmaptexture01
+                ||  curline->sidedef->midtexture == bmaptexture02
+                ||  curline->sidedef->midtexture == bmaptexture03
+                ||  curline->sidedef->midtexture == bmaptexture04
+                ||  curline->sidedef->midtexture == bmaptexture05
+                ||  curline->sidedef->midtexture == bmaptexture06
+                ||  curline->sidedef->midtexture == bmaptexture07
+                ||  curline->sidedef->midtexture == bmaptexture08
+                ||  curline->sidedef->midtexture == bmaptexture09
+                ||  curline->sidedef->midtexture == bmaptexture10
+                ||  curline->sidedef->midtexture == bmaptexture11
+                ||  curline->sidedef->midtexture == bmaptexture12))
+                {
+                    dc_colormap[0] = dc_colormap[1] = colormaps;
+                }
+                else
+                {
+                    // [crispy] no brightmaps for mid-textures
+                    dc_colormap[0] = dc_colormap[1] = walllights[index];
+                }
             }
 
             // [crispy] apply Killough's int64 sprtopscreen overflow fix

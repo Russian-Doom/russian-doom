@@ -32,3 +32,7 @@ extern const byte *R_BrightmapForSprite (const int state);
 extern const byte *R_BrightmapForState (const int state);
 
 extern const byte **texturebrightmap;
+
+extern int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04,
+           bmaptexture05, bmaptexture06, bmaptexture07, bmaptexture08,
+           bmaptexture09, bmaptexture10, bmaptexture11, bmaptexture12;
