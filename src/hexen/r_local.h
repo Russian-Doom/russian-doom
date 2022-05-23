@@ -293,7 +293,9 @@ typedef struct vissprite_s
     fixed_t xiscale;            // negative if flipped
     fixed_t texturemid;
     int patch;
-    lighttable_t *colormap;
+    // [crispy] brightmaps for select sprites
+    lighttable_t *colormap[2];
+    const byte *brightmap;
     int mobjflags;              // for color translation and shadow draw
     boolean psprite;            // true if psprite
     int class;                  // player class (used in translation)
@@ -379,30 +381,6 @@ extern int validcount;
 extern lighttable_t *scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t *scalelightfixed[MAXLIGHTSCALE];
 extern lighttable_t *zlight[LIGHTLEVELS][MAXLIGHTZ];
-
-// [JN] Brightmaps
-extern lighttable_t *fullbright_greenonly[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_redonly[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_blueonly[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_purpleonly[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_flame[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_yellowred[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_firebull[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_mana[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_afrit[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_heresiarch[LIGHTLEVELS][MAXLIGHTSCALE];
-// [JN] ...erm?!
-extern lighttable_t *brightmaps_greenonly;
-extern lighttable_t *brightmaps_redonly;
-extern lighttable_t *brightmaps_blueonly;
-extern lighttable_t *brightmaps_purpleonly;
-extern lighttable_t *brightmaps_flame;
-extern lighttable_t *brightmaps_yellowred;
-extern lighttable_t *brightmaps_firebull;
-extern lighttable_t *brightmaps_mana;
-extern lighttable_t *brightmaps_afrit;
-extern lighttable_t *brightmaps_heresiarch;
-
 
 extern int extralight;
 extern lighttable_t *fixedcolormap;
@@ -566,7 +544,7 @@ void R_ClipVisSprite(vissprite_t * vis, int xl, int xh);
 // R_draw.c
 //
 
-extern lighttable_t *dc_colormap;
+extern lighttable_t *dc_colormap[2];
 extern int dc_x;
 extern int dc_yl;
 extern int dc_yh;
@@ -574,6 +552,7 @@ extern fixed_t dc_iscale;
 extern fixed_t dc_texturemid;
 extern int dc_texheight;
 extern byte *dc_source;         // first pixel in a column
+extern const byte *dc_brightmap;
 
 void R_DrawColumn(void);
 void R_DrawColumnLow(void);
@@ -598,6 +577,7 @@ extern fixed_t ds_yfrac;
 extern fixed_t ds_xstep;
 extern fixed_t ds_ystep;
 extern byte *ds_source;         // start of a 64*64 tile image
+extern const byte *ds_brightmap;
 
 extern byte *translationtables;
 extern byte *dc_translation;

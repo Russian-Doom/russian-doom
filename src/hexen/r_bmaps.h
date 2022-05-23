@@ -1,5 +1,9 @@
 //
-// Copyright(C) 2017-2019 Julian Nechaevsky
+// Copyright(C) 1993-1996 Id Software, Inc.
+// Copyright(C) 2005-2014 Simon Howard
+// Copyright(C) 2013-2017 Brad Harding
+// Copyright(C) 2017 Fabian Greffrath
+// Copyright(C) 2017-2022 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -19,11 +23,12 @@
 #pragma once
 
 
-// Prototypes
-void R_InitBrightmappedTextures (void);
+#define MINBRIGHT   24  // [JN] Minimal COLORMAP level for half-brights.
 
-extern int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05,
-           bmaptexture06, bmaptexture07, bmaptexture08, bmaptexture09, bmaptexture10,
-           bmaptexture11, bmaptexture12, bmaptexture13, bmaptexture14, bmaptexture15,
-           bmaptexture16, bmaptexture17, bmaptexture18, bmaptexture19, bmaptexture20,
-           bmaptexture21, bmaptexture22, bmaptexture23;
+extern void R_InitBrightmaps ();
+
+extern const byte *R_BrightmapForTexName (const char *texname);
+extern const byte *R_BrightmapForSprite (const int state);
+extern const byte *R_BrightmapForState (const int state);
+
+extern const byte **texturebrightmap;

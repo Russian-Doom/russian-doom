@@ -67,6 +67,7 @@ short      **texturecolumnlump;
 unsigned   **texturecolumnofs;   // [crispy] fix Medusa bug
 unsigned   **texturecolumnofs2;  // [crispy] original column offsets for single-patched textures
 byte       **texturecomposite;
+const byte **texturebrightmap;   // [crispy] brightmaps
 
 int         *flattranslation;    // for global animation
 int         *texturetranslation; // for global animation
@@ -75,18 +76,7 @@ fixed_t     *spritewidth;        // needed for pre rendering
 fixed_t     *spriteoffset;
 fixed_t     *spritetopoffset;
 
-// [JN] Colormap and brightmaps
 lighttable_t *colormaps;
-lighttable_t *brightmaps_greenonly;
-lighttable_t *brightmaps_redonly;
-lighttable_t *brightmaps_blueonly;
-lighttable_t *brightmaps_purpleonly;
-lighttable_t *brightmaps_flame;
-lighttable_t *brightmaps_yellowred;
-lighttable_t *brightmaps_firebull;
-lighttable_t *brightmaps_mana;
-lighttable_t *brightmaps_afrit;
-lighttable_t *brightmaps_heresiarch;
 
 
 /*
@@ -716,6 +706,7 @@ static void R_InitTextures (void)
     texturecompositesize = Z_Malloc (numtextures * sizeof(*texturecompositesize), PU_STATIC, 0);
     texturewidthmask = Z_Malloc (numtextures * sizeof(*texturewidthmask), PU_STATIC, 0);
     textureheight = Z_Malloc (numtextures * sizeof(*textureheight), PU_STATIC, 0);
+    texturebrightmap = Z_Malloc (numtextures * sizeof(*texturebrightmap), PU_STATIC, 0);
 
     //	Really complex printing shit...
     temp1 = W_GetNumForName ("S_START");  // P_???????
@@ -771,6 +762,9 @@ static void R_InitTextures (void)
         memcpy (texture->name, mtexture->name, sizeof(texture->name));
         mpatch = &mtexture->patches[0];
         patch = &texture->patches[0];
+
+        // [crispy] initialize brightmaps
+        texturebrightmap[i] = R_BrightmapForTexName(texture->name);
 
         for (j=0 ; j<texture->patchcount ; j++, mpatch++, patch++)
         {
@@ -945,30 +939,6 @@ static void R_InitColormaps (void)
 /*
 ================================================================================
 =
-= R_InitBrightmaps
-=
-= [JN] Load in the brightmaps.
-=
-================================================================================
-*/
-
-static void R_InitBrightmaps(void)
-{
-    brightmaps_greenonly = W_CacheLumpNum(W_GetNumForName("BRTMAP1"), PU_STATIC);
-    brightmaps_redonly = W_CacheLumpNum(W_GetNumForName("BRTMAP2"), PU_STATIC);
-    brightmaps_blueonly = W_CacheLumpNum(W_GetNumForName("BRTMAP3"), PU_STATIC);
-    brightmaps_purpleonly = W_CacheLumpNum(W_GetNumForName("BRTMAP4"), PU_STATIC);
-    brightmaps_flame = W_CacheLumpNum(W_GetNumForName("BRTMAP5"), PU_STATIC);
-    brightmaps_yellowred = W_CacheLumpNum(W_GetNumForName("BRTMAP6"), PU_STATIC);
-    brightmaps_firebull = W_CacheLumpNum(W_GetNumForName("BRTMAP7"), PU_STATIC);
-    brightmaps_mana = W_CacheLumpNum(W_GetNumForName("BRTMAP8"), PU_STATIC);
-    brightmaps_afrit = W_CacheLumpNum(W_GetNumForName("BRTMAP9"), PU_STATIC);
-    brightmaps_heresiarch = W_CacheLumpNum(W_GetNumForName("BRTMAP10"), PU_STATIC);
-}
-
-/*
-================================================================================
-=
 = R_InitTransMaps
 =
 = [JN] Generates extra translucency tables.
@@ -1122,19 +1092,14 @@ static void R_InitTransMaps (void)
 
 void R_InitData (void)
 {
+    // [JN] Moved R_InitFlats to the top, needed for 
+    // R_GenerateComposite ivoking while level loading.
     R_InitFlats();
     R_InitTextures();
     R_InitSpriteLumps();
     R_InitColormaps();
     // [JN] Generate extra translucency tables.
     R_InitTransMaps();
-
-    // [JN] Lookup and init all the textures for brightmapping
-    if (!vanillaparm)
-    {
-        R_InitBrightmaps();
-        R_InitBrightmappedTextures ();
-    }
 }
 
 /*
