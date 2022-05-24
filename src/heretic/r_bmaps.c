@@ -264,9 +264,12 @@ static const fullbright_t fullbright_walls[] = {
 
 const byte *R_BrightmapForTexName (const char *texname)
 {
-    int i;
+    if (vanillaparm)
+    {
+        return nobrightmap;
+    }
 
-    for (i = 0; i < arrlen(fullbright_walls); i++)
+    for (int i = 0; i < arrlen(fullbright_walls); i++)
     {
         const fullbright_t *fullbright = &fullbright_walls[i];
 
@@ -289,7 +292,7 @@ const byte *R_BrightmapForTexName (const char *texname)
 
 const byte *R_BrightmapForSprite (const int state)
 {
-    if (brightmaps)
+    if (brightmaps && !vanillaparm)
     {
         switch (state)
         {
@@ -486,12 +489,6 @@ const byte *R_BrightmapForSprite (const int state)
             case S_VOLCANOTBALLX5:
             case S_VOLCANOTBALLX6:
             case S_VOLCANOTBALLX7:
-            {
-                return fullbright;
-                break;
-            }
-
-            // [JN] TODO - ammo pickups should use half-brights.
             // Wand Crystal
             case S_AMG1:
             // Crystal Geode
@@ -545,6 +542,10 @@ const byte *R_BrightmapForSprite (const int state)
             case S_ARTI_TRCH1:
             case S_ARTI_TRCH2:
             case S_ARTI_TRCH3:
+            // Wall Torch
+            case S_WALLTORCH1:
+            case S_WALLTORCH2:
+            case S_WALLTORCH3:
             {
                 return fullbright;
                 break;
@@ -567,7 +568,7 @@ static int bmapflatnum[12];
 
 const byte *R_BrightmapForFlatNum (const int num)
 {
-    if (brightmaps)
+    if (brightmaps && !vanillaparm)
     {
         if (num == bmapflatnum[0]
         ||  num == bmapflatnum[1]
@@ -592,7 +593,7 @@ const byte *R_BrightmapForFlatNum (const int num)
 
 const byte *R_BrightmapForState (const int state)
 {
-    if (brightmaps)
+    if (brightmaps && !vanillaparm)
     {
         switch (state)
         {

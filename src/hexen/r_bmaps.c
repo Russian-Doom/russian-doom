@@ -282,9 +282,12 @@ static const fullbright_t fullbright_walls[] = {
 
 const byte *R_BrightmapForTexName (const char *texname)
 {
-    int i;
+    if (vanillaparm)
+    {
+        return nobrightmap;
+    }
 
-    for (i = 0; i < arrlen(fullbright_walls); i++)
+    for (int i = 0; i < arrlen(fullbright_walls); i++)
     {
         const fullbright_t *fullbright = &fullbright_walls[i];
 
@@ -307,7 +310,7 @@ const byte *R_BrightmapForTexName (const char *texname)
 
 const byte *R_BrightmapForSprite (const int state)
 {
-    if (brightmaps)
+    if (brightmaps && !vanillaparm)
     {
         switch (state)
         {
@@ -565,11 +568,6 @@ const byte *R_BrightmapForSprite (const int state)
     {
         switch (state)
         {
-            // Banishment Device
-            case S_ARTI_TELOTHER1:
-            case S_ARTI_TELOTHER2:
-            case S_ARTI_TELOTHER3:
-            case S_ARTI_TELOTHER4:
             // Boots of Speed
             case S_ARTI_BOOTS1:
             case S_ARTI_BOOTS2:
@@ -579,11 +577,6 @@ const byte *R_BrightmapForSprite (const int state)
             case S_ARTI_BOOTS6:
             case S_ARTI_BOOTS7:
             case S_ARTI_BOOTS8:
-            // Chaos Device
-            case S_ARTI_ATLP1:
-            case S_ARTI_ATLP2:
-            case S_ARTI_ATLP3:
-            case S_ARTI_ATLP4:
             // Dragonskin Bracers
             case S_ARTI_ARMOR1:
             case S_ARTI_ARMOR2:
@@ -755,7 +748,7 @@ const byte *R_BrightmapForSprite (const int state)
 
 const byte *R_BrightmapForState (const int state)
 {
-    if (brightmaps)
+    if (brightmaps && !vanillaparm)
     {
         switch (state)
         {
@@ -937,14 +930,83 @@ const byte *R_BrightmapForState (const int state)
                 return blueonly;
                 break;
             }
-
-            default:
+        }
+	}
+    else
+    {
+        switch (state)
+        {
+            // Fighter: Sword
+            case S_FSWORDDOWN:
+            case S_FSWORDUP:
+            case S_FSWORDREADY:
+            case S_FSWORDREADY1:
+            case S_FSWORDREADY2:
+            case S_FSWORDREADY3:
+            case S_FSWORDREADY4:
+            case S_FSWORDREADY5:
+            case S_FSWORDREADY6:
+            case S_FSWORDREADY7:
+            case S_FSWORDREADY8:
+            case S_FSWORDREADY9:
+            case S_FSWORDREADY10:
+            case S_FSWORDREADY11:
+            case S_FSWORDATK_1:
+            case S_FSWORDATK_2:
+            case S_FSWORDATK_3:
+            case S_FSWORDATK_4:
+            case S_FSWORDATK_5:
+            case S_FSWORDATK_6:
+            case S_FSWORDATK_7:
+            case S_FSWORDATK_8:
+            case S_FSWORDATK_9:
+            case S_FSWORDATK_10:
+            case S_FSWORDATK_11:
+            case S_FSWORDATK_12:
+            // Mage: Lightning
+            case S_MLIGHTNINGREADY:
+            case S_MLIGHTNINGREADY2:
+            case S_MLIGHTNINGREADY3:
+            case S_MLIGHTNINGREADY4:
+            case S_MLIGHTNINGREADY5:
+            case S_MLIGHTNINGREADY6:
+            case S_MLIGHTNINGREADY7:
+            case S_MLIGHTNINGREADY8:
+            case S_MLIGHTNINGREADY9:
+            case S_MLIGHTNINGREADY10:
+            case S_MLIGHTNINGREADY11:
+            case S_MLIGHTNINGREADY12:
+            case S_MLIGHTNINGREADY13:
+            case S_MLIGHTNINGREADY14:
+            case S_MLIGHTNINGREADY15:
+            case S_MLIGHTNINGREADY16:
+            case S_MLIGHTNINGREADY17:
+            case S_MLIGHTNINGREADY18:
+            case S_MLIGHTNINGREADY19:
+            case S_MLIGHTNINGREADY20:
+            case S_MLIGHTNINGREADY21:
+            case S_MLIGHTNINGREADY22:
+            case S_MLIGHTNINGREADY23:
+            case S_MLIGHTNINGREADY24:
+            case S_MLIGHTNINGDOWN:
+            case S_MLIGHTNINGUP:
+            case S_MLIGHTNINGATK_1:
+            case S_MLIGHTNINGATK_2:
+            case S_MLIGHTNINGATK_3:
+            case S_MLIGHTNINGATK_4:
+            case S_MLIGHTNINGATK_5:
+            case S_MLIGHTNINGATK_6:
+            case S_MLIGHTNINGATK_7:
+            case S_MLIGHTNINGATK_8:
+            case S_MLIGHTNINGATK_9:
+            case S_MLIGHTNINGATK_10:
+            case S_MLIGHTNINGATK_11:
             {
-                return nobrightmap;
+                return fullbright;
                 break;
             }
         }
-	}
+    }
 
     return nobrightmap;
 }

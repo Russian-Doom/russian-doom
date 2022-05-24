@@ -376,9 +376,12 @@ static const fullbright_t fullbright_walls[] = {
 
 const byte *R_BrightmapForTexName (const char *texname)
 {
-    int i;
+    if (vanillaparm)
+    {
+        return nobrightmap;
+    }
 
-    for (i = 0; i < arrlen(fullbright_walls); i++)
+    for (int i = 0; i < arrlen(fullbright_walls); i++)
     {
         const fullbright_t *fullbright = &fullbright_walls[i];
 
@@ -403,7 +406,7 @@ const byte *R_BrightmapForTexName (const char *texname)
 
 const byte *R_BrightmapForSprite (const int type)
 {
-    if (brightmaps)
+    if (brightmaps && !vanillaparm)
     {
         switch (type)
         {
@@ -449,7 +452,7 @@ static int bmapflatnum[12];
 
 const byte *R_BrightmapForFlatNum (const int num)
 {
-    if (brightmaps)
+    if (brightmaps && !vanillaparm)
     {
         if (num == bmapflatnum[0]
         ||  num == bmapflatnum[1]
@@ -468,7 +471,7 @@ const byte *R_BrightmapForFlatNum (const int num)
 
 const byte *R_BrightmapForState (const int state)
 {
-    if (brightmaps)
+    if (brightmaps && !vanillaparm)
     {
         switch (state)
         {
