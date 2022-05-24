@@ -18,12 +18,10 @@ jobs:
             name: "Windows"
             runner: "windows-latest"
             shell: "msys2 {0}"
-            cmake_generator: "MinGW Makefiles"
           -
             name: "Linux"
             runner: "ubuntu-latest"
             shell: "bash"
-            cmake_generator: "Unix Makefiles"
         arch:
           -
             name: "x86"
@@ -58,7 +56,7 @@ jobs:
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-pkgconf
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-${{ matrix.compiler.name }}
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-gdb
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-make
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-ninja
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-cmake
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_net
@@ -71,7 +69,7 @@ jobs:
         run: |
           sudo apt-get update --fix-missing
           sudo apt-get full-upgrade --fix-missing
-          sudo apt-get install --fix-missing ${{ matrix.compiler.name }} make cmake libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libpng-dev libsamplerate-dev
+          sudo apt-get install --fix-missing ${{ matrix.compiler.name }} ninja-build cmake libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libpng-dev libsamplerate-dev
 
       - uses: actions/checkout@v2
 
@@ -79,7 +77,7 @@ jobs:
         id: configure
         run: |
           sha_short=$(echo ${{ github.sha }} | cut -c1-7)
-          cmake -G "${{ matrix.os.cmake_generator }}" -D BUILD_VERSION_OVERWRITE="$sha_short" -D CMAKE_BUILD_TYPE=RelWithDebInfo -S . -B build
+          cmake -G "Ninja" -D BUILD_VERSION_OVERWRITE="$sha_short" -D CMAKE_BUILD_TYPE=RelWithDebInfo -S . -B build
           echo "::set-output name=sha_short::$sha_short"
 
       - name: Build
@@ -88,7 +86,7 @@ jobs:
           cmake --build build --parallel 2
 
       - name: Test
-        if: ${{ matrix.os.name == 'Windows' }} # Linux runers have no video device
+        if: ${{ matrix.os.name == 'Windows' }} # Linux runners have no video device
         run: |
           cd build
           ctest --output-on-failure
