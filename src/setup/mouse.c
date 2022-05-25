@@ -22,7 +22,7 @@
 #include "mode.h"
 #include "mouse.h"
 
-#define WINDOW_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/index.html"
+#define WINDOW_HELP_URL "https://github.com/JNechaevsky/inter-doom/wiki"
 
 static int usemouse = 1;
 

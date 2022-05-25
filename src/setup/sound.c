@@ -28,7 +28,7 @@
 #include "mode.h"
 #include "sound.h"
 
-#define WINDOW_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/index.html"
+#define WINDOW_HELP_URL "https://github.com/JNechaevsky/inter-doom/wiki"
 
 typedef enum
 {
