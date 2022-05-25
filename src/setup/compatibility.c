@@ -22,7 +22,7 @@
 
 #include "compatibility.h"
 
-#define WINDOW_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/index.html"
+#define WINDOW_HELP_URL "https://github.com/JNechaevsky/inter-doom/wiki"
 
 
 // Display
@@ -132,7 +132,7 @@ void CompatibilitySettings(void)
 
     window = TXT_NewWindow(english_language ?
                            "Optional Gameplay Enhacements" :
-                           "„ополнительные параметры игры");
+                           "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ");
     window_features = TXT_NewTable(1);
 
     if (english_language)
@@ -162,170 +162,170 @@ void CompatibilitySettings(void)
 
     TXT_NewSeparator(english_language ?
         "Graphical" :
-        "ѓрафика"),
+        "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"),
         TXT_NewCheckBox(english_language ?
             "Brightmaps for textures and sprites" :
-            "Ѓрайтмаппинг текстур и спрайтов",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
             &brightmaps),
         TXT_NewCheckBox(english_language ?
             "Apply fake contrast on walls" :
-            "€митация контрастного освещения стен",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
             &fake_contrast),
         TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
             "Translucency" :
-            "ћффект прозрачности у некоторых объектов",
+            "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
             &translucency)),
         TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
             "Swirling liquids" :
-            "“лучшенная анимация жидкостей",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
             &swirling_liquids)),
         TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox(english_language ?
             "Invulberability affects sky" :
-            "Ќеуязвимость окрашивает небо",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
             &invul_sky)),    
         TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox(english_language ?
             "Colored HUD elements" :
-            "ђазноцветные элементы HUD",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ HUD",
             &colored_hud)),
         TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox(english_language ?
             "Colored blood and corpses" :
-            "ђазноцветная кровь и трупы",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ",
             &colored_blood)),
         TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
             "Red resurrection flash" :
-            "Љрасная вспышка воскрешения монстров",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
             &red_resurrection_flash)),
         TXT_NewCheckBox(english_language ?
             "Texts are dropping shadow" :
-            "ћлементы меню и тексты отбрасывают тень",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
             &draw_shadowed_text),
         TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
             "Show disk icon" :
-            "Џоказывать значок дискеты",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
             &show_diskicon)),
 
     TXT_If(gamemission == doom, TXT_NewSeparator(english_language ?
         "Audible" :
-        "‡вук")), 
+        "пїЅпїЅпїЅпїЅ")), 
         TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
             "Sound of crushing corpses" :
-            "‡вук раздавливания трупов",
+            "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ",
             &crushed_corpses_sfx)),
         TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
             "Single sound of closing blazing door" :
-            "Ћдиночный звук закрытия быстрой двери",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ",
             &blazing_door_fix_sfx)),
         TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
             "Play exit sounds" :
-            "Џроигрывать звук при выходе из игры",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ",
             &play_exit_sfx)),
         TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
             "Correct sound of level ending" :
-            "Љорректный звук завершения уровня",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ",
             &correct_endlevel_sfx)),
         TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
             "Monsters alert sound waking up others" :
-            "’ревога монстра пробуждает других монстров",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
             &noise_alert_sfx)),
 
     TXT_If(gamemission == doom || gamemission == heretic, TXT_NewSeparator(english_language ?
     "Tactical" :
-    "’актика")),
+    "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ")),
         TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox(english_language ?
             "Show level stats on automap" :
-            "Ћтображать статистику уровня на карте",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ",
             &automap_stats)),
         TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox(english_language ?
             "Notification of revealed secters" :
-            "“ведомление об обнаружении тайников",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
             &secret_notification)),
         TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox(english_language ?
             "Show negative health" :
-            "Ћтображать отрицательное здоровье",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
             &negative_health)),
         TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
             "Infragreen light amplification visor" :
-            "€нфразеленый визор усиления освещения",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
             &infragreen_visor)),
 
     TXT_If(gamemission == doom || gamemission == heretic, TXT_NewSeparator(english_language ?
     "Physical" :
-    "”изика")),
+    "пїЅпїЅпїЅпїЅпїЅпїЅ")),
         TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
             "Walk over and under monsters" :
-            "€грок может проходить под и над монстрами",
+            "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
             &over_under)),
         TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox(english_language ?
             "Corpses sliding from the ledges" :
-            "’рупы соскальзывают с выступов и обрывов",
+            "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
             &torque)),
         TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox(english_language ?
             "Weapon bobbing while firing" :
-            "Џокачивание оружия при стрельбе в движении",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
             &weapon_bobbing)),
         TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
             "Lethal pellet of a point-blank SSG" :
-            "„вуствольное ружье может разрывать врагов",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ",
             &ssg_blast_enemies)),
         TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox(english_language ?
             "Randomly mirrored corpses" :
-            "Џроизвольное зеркальное отражение трупов",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ",
             &randomly_flipcorpses)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox(english_language ?
             "Floating powerups" :
-            "‹евитирующие сферы-артефакты",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
             &floating_powerups)),
 
     TXT_NewSeparator(english_language ?
     "Gameplay" :
-    "ѓеймплей"),
+    "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"),
         TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
             "Fix errors of vanilla maps" :
-            "€справлять ошибки оригинальных уровней",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
             &fix_map_errors)),
         TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox(english_language ?
             "Flip game levels" :
-            "‡еркальное отражение уровней",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
             &flip_levels)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox(english_language ?
             "Extra player faces on the HUD" :
-            "„ополнительные лица игрока в HUD",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ HUD",
             &extra_player_faces)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox(english_language ?
             "Pain Elemental without Souls limit" :
-            "ћлементаль Ѓоли без ограничения душ",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ",
             &unlimited_lost_souls)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox(english_language ?
             "More agressive Lost Souls" :
-            "Џовышенная агрессивность Џотерянных душ",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ",
             &agressive_lost_souls)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox(english_language ?
             "Don't prompt for quick loading/saving" :
-            "Ќе выводить запрос при быстрой загрузке",
+            "пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
             &fast_quickload)),
         TXT_NewCheckBox(english_language ?
             "Don't play internal demos" :
-            "Ќе проигрывать внутренние демозаписи",
+            "пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
             &no_internal_demos),
 
     TXT_NewSeparator(english_language ?
     "Crosshair" :
-    "Џрицел"),
+    "пїЅпїЅпїЅпїЅпїЅпїЅ"),
         TXT_NewCheckBox(english_language ?
             "Draw crosshair" :
-            "Ћтображать прицел",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ",
             &crosshair_draw),
         TXT_NewCheckBox(english_language ?
             "Health indication" :
-            "€ндикация здоровья",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
             &crosshair_health),
         TXT_NewCheckBox(english_language ?
             "Increased size" :
-            "“величенный размер",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ",
             &crosshair_scale),
 
-        // TXT_If(gamemission == strife, TXT_NewCheckBox("Џоказывать значок песочных часов",        &show_diskicon)),
-        // TXT_If(gamemission == strife, TXT_NewCheckBox("Џоказывать заставку при выходе",          &show_exit_sequence)),
+        // TXT_If(gamemission == strife, TXT_NewCheckBox("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ",        &show_diskicon)),
+        // TXT_If(gamemission == strife, TXT_NewCheckBox("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ",          &show_exit_sequence)),
 
     NULL);
 }

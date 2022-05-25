@@ -22,7 +22,7 @@
 #include "mode.h"
 #include "mouse.h"
 
-#define WINDOW_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/index.html"
+#define WINDOW_HELP_URL "https://github.com/JNechaevsky/inter-doom/wiki"
 
 static int usemouse = 1;
 
@@ -32,7 +32,7 @@ static int mouse_threshold = 10;
 static int mlook = 0;
 static int grabmouse = 1;
 
-int novert = 1; // [JN] Вертикальное перемещение отключено по умолчанию.
+int novert = 1; // [JN] пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 int mouse_y_invert = 0; // [crispy]
 
 void ConfigMouse(void)
@@ -41,7 +41,7 @@ void ConfigMouse(void)
 
     window = TXT_NewWindow(english_language ?
                            "Mouse configuration" :
-                           "Ќастройки мыши");
+                           "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ");
 
     TXT_SetTableColumns(window, 2);
 
@@ -65,44 +65,44 @@ void ConfigMouse(void)
     TXT_AddWidgets(window,
         TXT_NewCheckBox(english_language ?
                         "Enable mouse" :
-                        "ђазрешить использование мыши",
+                        "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
                         &usemouse),
         TXT_TABLE_OVERFLOW_RIGHT,
             TXT_NewCheckBox(english_language ?
                             "Allow mouse look" :
-                            "Ћбзор мышью",
+                            "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ",
                             &mlook),
         TXT_TABLE_OVERFLOW_RIGHT,
             TXT_NewCheckBox(english_language ?
                             "Invert Y axis" :
-                            "‚ертикальная инверсия",
+                            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
                             &mouse_y_invert),
         TXT_TABLE_OVERFLOW_RIGHT,
             TXT_NewInvertedCheckBox(english_language ?
                                     "Allow vertical mouse movement" :
-                                    "‚ертикальное перемещение",
+                                    "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
                                     &novert),
         TXT_TABLE_OVERFLOW_RIGHT,
         TXT_NewCheckBox(english_language ?
                         "Grab mouse in windowed mode" :
-                        "‡ахват мыши в оконном режиме",
+                        "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ",
                         &grabmouse),
         TXT_TABLE_OVERFLOW_RIGHT,
 
         TXT_NewSeparator(english_language ?
                          "Mouse motion" :
-                         "Ќастройка перемещения"),
+                         "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"),
         TXT_NewLabel(english_language ?
                      "Speed" :
-                     "‘корость"),
+                     "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"),
         TXT_NewSpinControl(&mouseSensitivity, 1, 256),
         TXT_NewLabel(english_language ?
                      "Acceleration" :
-                     "Ђкселерация"),
+                     "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"),
         TXT_NewFloatSpinControl(&mouse_acceleration, 1.0F, 5.0F),
         TXT_NewLabel(english_language ?
                      "Acceleration threshold" :
-                     "Џорог акселерации"),
+                     "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"),
         TXT_NewSpinControl(&mouse_threshold, 0, 32), NULL);
 }
 

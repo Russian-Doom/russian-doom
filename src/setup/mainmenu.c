@@ -43,7 +43,7 @@
 #include "multiplayer.h"
 #include "sound.h"
 
-#define WINDOW_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/index.html"
+#define WINDOW_HELP_URL "https://github.com/JNechaevsky/inter-doom/wiki"
 
 // -----------------------------------------------------------------------------
 // [Dasperal] d_name.h var definition
@@ -244,15 +244,15 @@ static void QuitConfirm(void *unused1, void *unused2)
     TXT_AddWidgets(window, 
                    label = TXT_NewLabel(english_language ?
                                         "Exiting setup.\nSave settings?" :
-                                        "‚ыход из программы настроек.\n‘охранить внесенные изменения?"),
+                                        "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.\nпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ?"),
                    TXT_NewStrut(24, 0),
                    yes_button = TXT_NewButton2(english_language ?
                                                "  Yes  " :
-                                               " ‘охранить    ",
+                                               " пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ    ",
                                                DoQuit, DoQuit),
                    no_button = TXT_NewButton2(english_language ?
                                               "  No   " :
-                                              " Ќе сохранять ",
+                                              " пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ",
                                               DoQuit, NULL),
                    NULL);
 
@@ -301,27 +301,27 @@ static txt_button_t *GetLaunchButton(void)
         case doom:
             label = english_language ?
                     "Save parameters and launch DOOM     " :
-                    "‘охранить настройки и запустить DOOM";
+                    "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ DOOM";
             break;
         case heretic:
             label = english_language ?
                     "Save parameters and launch Heretic     " :
-                    "‘охранить настройки и запустить Heretic";
+                    "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Heretic";
             break;
         case hexen:
             label = english_language ?
                     "Save parameters and launch Hexen     " :
-                    "‘охранить настройки и запустить Hexen";
+                    "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Hexen";
             break;
         case strife:
             label = english_language ?
                     "Save parameters and launch STRIFE!     " :
-                    "‘охранить настройки и запустить STRIFE!";
+                    "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ STRIFE!";
             break;
         default:
             label = english_language ?
                     "Save parameters and launch game     " :
-                    "‘охранить настройки и запустить игру";
+                    "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ";
             break;
         }
 
@@ -337,7 +337,7 @@ void MainMenu(void)
 
     window = TXT_NewWindow(english_language ?
                            "Main Menu" :
-                           "ѓлавное меню");
+                           "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ");
 
     if (english_language)
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
@@ -346,36 +346,36 @@ void MainMenu(void)
 
     TXT_AddWidgets(window,
     TXT_NewButton2(english_language ?
-                   "Configure Display" : "Ќастройки экрана",
+                   "Configure Display" : "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ",
                    (TxtWidgetSignalFunc) ConfigDisplay, NULL),
     TXT_NewButton2(english_language ?
                    "Configure Sound" :
-                   "Ќастройки звука",
+                   "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ",
                    (TxtWidgetSignalFunc) ConfigSound, NULL),
     TXT_NewButton2(english_language ?
                    "Configure Mouse" :
-                   "Ќастройки мыши",
+                   "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
                    (TxtWidgetSignalFunc) ConfigMouse, NULL),
     // [JN] No longer used, now using in-game menu
     /*
     TXT_NewButton2(english_language ?
                    "Optional Gameplay Enhacements" :
-                   "„ополнительные параметры игры",
+                   "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
                    (TxtWidgetSignalFunc) CompatibilitySettings, NULL),
     */
     GetLaunchButton(),
     TXT_NewStrut(0, 1),
     TXT_NewButton2(english_language ?
                    "Start a Network Game" :
-                   "Ќачать сетевую игру",
+                   "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
                    (TxtWidgetSignalFunc) StartMultiGame, NULL),
     TXT_NewButton2(english_language ?
                    "Join a Network Game" :
-                   "Џрисоединиться к сетевой игре",
+                   "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
                    (TxtWidgetSignalFunc) JoinMultiGame, NULL),
     TXT_NewButton2(english_language ?
                    "Multiplayer Configuration" :
-                   "Ќастройки сетевой игры",
+                   "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
                    (TxtWidgetSignalFunc) MultiplayerConfig, NULL),
     TXT_NewStrut(0, 1),
     NULL);
@@ -384,9 +384,9 @@ void MainMenu(void)
     // [JN] ESC = Quit, F2 = Warp, F4 = Language selection
     //
 
-    quit_action = TXT_NewWindowAction(KEY_ESCAPE, english_language ? "Quit" : "‚ыход");
-    warp_action = TXT_NewWindowAction(KEY_F2,     english_language ? "Warp" : "“ровень");
-    lang_action = TXT_NewWindowActionY(KEY_F4,    english_language ? "ђусский" : "English");
+    quit_action = TXT_NewWindowAction(KEY_ESCAPE, english_language ? "Quit" : "пїЅпїЅпїЅпїЅпїЅ");
+    warp_action = TXT_NewWindowAction(KEY_F2,     english_language ? "Warp" : "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+    lang_action = TXT_NewWindowActionY(KEY_F4,    english_language ? "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ" : "English");
 
 
     TXT_SignalConnect(quit_action, "pressed", QuitConfirm, NULL);
@@ -448,7 +448,7 @@ static void InitTextscreen(void)
         {
             fprintf(stderr, english_language ?
                             "Failed to initialize GUI\n" :
-                            "Невозможно инициализировать интерфейс\n");
+                            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n");
             exit(-1);
         }
 

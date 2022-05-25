@@ -28,7 +28,7 @@
 #include "mode.h"
 #include "sound.h"
 
-#define WINDOW_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/index.html"
+#define WINDOW_HELP_URL "https://github.com/JNechaevsky/inter-doom/wiki"
 
 typedef enum
 {
@@ -120,7 +120,7 @@ void ConfigSound(void)
 
     window = TXT_NewWindow(english_language ?
                            "Sound configuration" :
-                           "Ќастройки звука");
+                           "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ");
 
     if (english_language)
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
@@ -134,19 +134,19 @@ void ConfigSound(void)
     TXT_AddWidgets(window,
         TXT_NewSeparator(english_language ?
                          "Sound effects" :
-                         "‡вуковые эффекты"),
+                         "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"),
         TXT_NewRadioButton(english_language ?
                            "Disabled" :
-                           "Ћтключены",
+                           "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
                            &snd_sfxdevice, SNDDEVICE_NONE),
         TXT_If(gamemission == doom,
             TXT_NewRadioButton(english_language ?
                                "PC speaker effects" :
-                               "„инамик ЏЉ",
+                               "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ",
                                &snd_sfxdevice, SNDDEVICE_PCSPEAKER)),
         TXT_NewRadioButton(english_language ?
                            "Digital sound effects" :
-                           "–ифровые",
+                           "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
                            &snd_sfxdevice,
                            SNDDEVICE_SB),
         TXT_If(gamemission == doom || gamemission == heretic
@@ -156,7 +156,7 @@ void ConfigSound(void)
                     TXT_NewStrut(4, 0),
                     TXT_NewCheckBox(english_language ?
                                     "Pitch-shifted sounds" :
-                                    "Џроизвольный питч-шифтинг",
+                                    "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
                                     &snd_pitchshift),
                                     NULL))),
         TXT_If(gamemission == doom || gamemission == heretic
@@ -166,7 +166,7 @@ void ConfigSound(void)
                     TXT_NewStrut(4, 0),
                     TXT_NewCheckBox(english_language ?
                                     "Mono sounds" :
-                                    "Њоно режим",
+                                    "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ",
                                     &snd_monomode),
                                     NULL))),
         TXT_If(gamemission == strife,
@@ -175,15 +175,15 @@ void ConfigSound(void)
                     TXT_NewStrut(4, 0),
                     TXT_NewCheckBox(english_language ?
                                     "Show text with voices" :
-                                    "Џоказывать субтитры", &show_talk),
+                                    "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", &show_talk),
                                     NULL))),
 
         TXT_NewSeparator(english_language ?
                          "Music" :
-                         "Њузыка"),
+                         "пїЅпїЅпїЅпїЅпїЅпїЅ"),
         TXT_NewRadioButton(english_language ?
                            "Disabled" :
-                           "Ћтключена",
+                           "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
                            &snd_musicdevice, SNDDEVICE_NONE),
 
         TXT_NewRadioButton("OPL (Adlib/Soundblaster)", &snd_musicdevice,
@@ -193,27 +193,27 @@ void ConfigSound(void)
                 TXT_NewStrut(4, 0),
                 TXT_NewLabel(english_language ?
                 "Chip type: " :
-                "ђежим: "),
+                "пїЅпїЅпїЅпїЅпїЅ: "),
                 OPLTypeSelector(),
                 NULL)),
 
         TXT_NewRadioButton(english_language ?
                            "GUS (emulated)" :
-                           "GUS (эмуляция)",
+                           "GUS (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)",
                            &snd_musicdevice, SNDDEVICE_GUS),
         TXT_NewConditional(&snd_musicdevice, SNDDEVICE_GUS,
             TXT_NewHorizBox(
                 TXT_NewStrut(4, 0),
                 TXT_NewLabel(english_language ?
                              "Select directory containing GUS patches" :
-                             "ђасположение патчей GUS: "),
+                             "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ GUS: "),
                              NULL)),
         TXT_NewConditional(&snd_musicdevice, SNDDEVICE_GUS,
             TXT_NewHorizBox(
                 TXT_NewStrut(4, 0),
                 TXT_NewFileSelector(&gus_patch_path, 34, english_language ?
                                     "Select directory containing GUS patches" :
-                                    "“кажите путь к патчам GUS",
+                                    "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ GUS",
                                     TXT_DIRECTORY),
                 NULL)),
 
@@ -224,23 +224,23 @@ void ConfigSound(void)
                 TXT_NewStrut(4, 0),
                 TXT_NewLabel(english_language ?
                              "Timidity configuration file: " :
-                             "Љонфигурационный файл Timidity: "),
+                             "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ Timidity: "),
                              NULL)),
         TXT_NewConditional(&snd_musicdevice, SNDDEVICE_GENMIDI,
             TXT_NewHorizBox(
                 TXT_NewStrut(4, 0),
                 TXT_NewFileSelector(&timidity_cfg_path, 34, english_language ?
                                     "Select Timidity config file" :
-                                    "‚ыберите конфигурационный файл Timidity",
+                                    "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ Timidity",
                                     cfg_extension),
                 NULL)),
 
         TXT_NewSeparator(english_language ?
                          "Misc." :
-                         "„ополнительно"),
+                         "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"),
         TXT_NewCheckBox(english_language ?
                         "Mute inactive window" :
-                        "‡вук в неактивном окне",
+                        "пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
                         &mute_inactive_window),
 
         NULL);
