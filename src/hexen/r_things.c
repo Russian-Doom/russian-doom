@@ -943,7 +943,7 @@ void R_ProjectSprite(mobj_t *thing, const int lightnum)
 
         // [crispy] brightmaps for select sprites
         vis->colormap[0] = spritelights[index];
-        vis->colormap[1] = colormaps;
+        vis->colormap[1] = LevelUseFullBright ? colormaps : spritelights[index];
     }
 
     vis->brightmap = R_BrightmapForSprite(thing->state - states);
@@ -1180,7 +1180,7 @@ void R_DrawPSprite(pspdef_t * psp)
 
     if (viewplayer->powers[pw_invulnerability] && viewplayer->class == PCLASS_CLERIC)
     {
-        vis->colormap[0] = vis->colormap[1] =spritelights[MAXLIGHTSCALE - 1];
+        vis->colormap[0] = vis->colormap[1] = spritelights[MAXLIGHTSCALE - 1];
         if (viewplayer->powers[pw_invulnerability] > 4 * 32)
         {
             if (viewplayer->mo->flags2 & MF2_DONTDRAW)
@@ -1212,7 +1212,7 @@ void R_DrawPSprite(pspdef_t * psp)
     {
         // Local light.
         vis->colormap[0] = spritelights[MAXLIGHTSCALE - 1];
-        vis->colormap[1] = colormaps;
+        vis->colormap[1] = LevelUseFullBright ? colormaps : spritelights[MAXLIGHTSCALE - 1];
     }
 
     vis->brightmap = R_BrightmapForState(psp->state - states);

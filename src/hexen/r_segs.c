@@ -268,7 +268,7 @@ void R_RenderMaskedSegRange (drawseg_t *ds, int x1, int x2)
                 // [JN] Brightmaps for two-sided midtextures.
                 dc_brightmap = texturebrightmap[texnum];
                 dc_colormap[0] = walllights[index];
-                dc_colormap[1] = brightmaps ? colormaps : dc_colormap[0];
+                dc_colormap[1] = brightmaps && LevelUseFullBright ? colormaps : dc_colormap[0];
             }
 
             // [crispy] apply Killough's int64 sprtopscreen overflow fix
@@ -400,7 +400,7 @@ static void R_RenderSegLoop(void)
 
             // [crispy] optional brightmaps
             dc_colormap[0] = walllights[index];
-            dc_colormap[1] = (!fixedcolormap && brightmaps) ? colormaps : dc_colormap[0];
+            dc_colormap[1] = (!fixedcolormap && brightmaps && LevelUseFullBright) ? colormaps : dc_colormap[0];
             dc_x = rw_x;
             dc_iscale = 0xffffffffu / (unsigned)rw_scale - SPARKLEFIX; // [JN] Sparkle fix
         }
