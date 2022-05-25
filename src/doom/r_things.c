@@ -745,9 +745,9 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
         // [crispy] brightmaps for select sprites
         vis->colormap[0] = spritelights[index];
 
-        // [JN] Don't lit up Armor Bonus with full brightness 
-        // in dark areas, apply half-bright instead:
-        if (thing->type == MT_MISC3)
+        // [JN] Apply half-brights for following objects:
+        if (thing->type == MT_MISC3     // Armor Bonus
+        ||  thing->type == MT_BARREL)   // Explosive Barrel
         {
             int half_bright = index;
 
