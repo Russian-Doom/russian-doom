@@ -33,12 +33,7 @@ void RD_ApplyMigration()
         BK_AddBind(bk_menu_save,   keyboard, SDL_SCANCODE_F2);
         BK_AddBind(bk_menu_load,   keyboard, SDL_SCANCODE_F3);
         BK_AddBind(bk_menu_volume, keyboard, SDL_SCANCODE_F4);
-
-        if(RD_GameType == gt_Doom || RD_GameType == gt_Heretic)
-        {
-            BK_AddBind(bk_detail, keyboard, SDL_SCANCODE_F5);
-        }
-
+        BK_AddBind(bk_detail,      keyboard, SDL_SCANCODE_F5);
         BK_AddBind(bk_end_game,    keyboard, SDL_SCANCODE_F7);
         BK_AddBind(bk_messages,    keyboard, SDL_SCANCODE_F8);
         BK_AddBind(bk_quit,        keyboard, SDL_SCANCODE_F10);
