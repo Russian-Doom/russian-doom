@@ -745,27 +745,68 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
         // [crispy] brightmaps for select sprites
         vis->colormap[0] = spritelights[index];
 
-        // [JN] Apply half-brights for following objects:
-        if (thing->type == MT_MISC3     // Armor Bonus
-        ||  thing->type == MT_BARREL)   // Explosive Barrel
+        // [JN] Apply different types half-brights for certain objects.
+        //  Not to be confused:
+        //   * Semi-bright. Lits up brightmapped pixels with non-full power.
+        //     If sector brightness < 96, apply semi-bright. Otherwise, 
+        //     use standard diminished lighting.
+        //   * Demi-bright. Lits up brightmapped pixels with full power,
+        //     and non-brightmapped pixels with distance index miltipled by 2.
+        //   * Hemi-bright. Lits up brightmapped pixels with full power,
+        //     and non-brightmapped pixels with distance index miltipled by 4.
+        
+        // Semi-brigths:
+        if (thing->sprite == SPR_BON2   // Armor Bonus
+        ||  thing->sprite == SPR_BAR1)  // Explosive Barrel
         {
-            int half_bright = index;
+            int semi_bright = index;
 
-            if (half_bright < MINBRIGHT)
+            if (semi_bright < MINBRIGHT)
             {
-                half_bright = MINBRIGHT;
+                semi_bright = MINBRIGHT;
             }
-
-            // If sector brightness < 96, apply half-bright.
-            // Otherwise, use standard diminished lighting.
             vis->colormap[1] = lightnum < 6 ? &colormaps[MINBRIGHT*256] :
-                                              spritelights[half_bright];
+                                              spritelights[semi_bright];
         }
+        // Demi-brigths:
+        else
+        if (thing->sprite == SPR_CAND   // Candestick
+        ||  thing->sprite == SPR_CBRA   // Candelabra
+        ||  thing->sprite == SPR_COLU   // Floor Lamp
+        ||  thing->sprite == SPR_FCAN   // Flaming Barrel
+        ||  thing->sprite == SPR_TLMP   // Tall Tech Lamp
+        ||  thing->sprite == SPR_TLP2)  // Short Tech Lamp
+        {
+            int demi_bright = index*2;
+            
+            if (demi_bright > 47)
+            {
+                demi_bright = 47;
+            }
+            vis->colormap[0] = spritelights[demi_bright];
+            vis->colormap[1] = colormaps;
+        }
+        // Hemi-brigths:
+        else
+        if (thing->sprite == SPR_TBLU   // Tall Blue Torch
+        ||  thing->sprite == SPR_TGRN   // Tall Green Torch
+        ||  thing->sprite == SPR_TRED)  // Tall Red Torch
+        {
+            int hemi_bright = index*4;
+            
+            if (hemi_bright > 47)
+            {
+                hemi_bright = 47;
+            }
+            vis->colormap[0] = spritelights[hemi_bright];
+            vis->colormap[1] = colormaps;
+        }
+        // Normal brightmap:
         else
         {
             vis->colormap[1] = colormaps;
         }
-    }	
+    }
 
     vis->brightmap = R_BrightmapForSprite(thing->sprite);
 
