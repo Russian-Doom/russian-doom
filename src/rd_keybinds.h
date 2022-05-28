@@ -202,7 +202,7 @@ void BK_ApplyDefaultBindings();
 
 void BK_ApplyVanilaBindings();
 
-boolean KeybindsHandler_Handles(char* sectionName);
+boolean KeybindsHandler_isHandling(char* sectionName);
 
 void KeybindsHandler_HandleLine(char* keyName, char *value, size_t valueSize);
 

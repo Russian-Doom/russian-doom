@@ -527,7 +527,7 @@ void I_BindControllerVariables(void)
     M_BindIntVariable("use_controller", &useController);
 }
 
-boolean ControllerHandler_Handles(char* sectionName)
+boolean ControllerHandler_isHandling(char* sectionName)
 {
     if(strstr(sectionName, "Controller_") != sectionName)
         return false;

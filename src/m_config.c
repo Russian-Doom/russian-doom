@@ -700,27 +700,27 @@ static default_collection_t default_collection =
 
 static void DefaultHandler_Save(FILE* file, char* sectionName);
 static void DefaultHandler_HandleLine(char* keyName, char *value, size_t valueSize);
-static boolean DefaultHandler_Handles(char* sectionName)
+static boolean DefaultHandler_isHandling(char* sectionName)
 {
     return strcmp("General", sectionName) == 0;
 }
 
 static sectionHandler_t defaultHandler = {
-    DefaultHandler_Handles,
+    DefaultHandler_isHandling,
     DefaultHandler_HandleLine,
     DefaultHandler_Save,
     NULL
 };
 #ifndef ___RD_TARGET_SETUP___
 static sectionHandler_t keybindsHandler = {
-    KeybindsHandler_Handles,
+    KeybindsHandler_isHandling,
     KeybindsHandler_HandleLine,
     KeybindsHandler_Save,
     NULL
 };
 
 sectionHandler_t controllerHandler = {
-    ControllerHandler_Handles,
+    ControllerHandler_isHandling,
     ControllerHandler_HandleLine,
     ControllerHandler_Save,
     ControllerHandler_onFinishHandling
@@ -988,7 +988,7 @@ static void LoadSections(FILE *file)
         {
             for(i = 0; i < handlersSize; ++i)
             {
-                if(handlers[i]->handles(sectionName))
+                if(handlers[i]->isHandling(sectionName))
                 {
                     printf(english_language ?
                            "\tM_Config: Loading section \"%s\"\n" :
