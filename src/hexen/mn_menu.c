@@ -905,13 +905,13 @@ static MenuItem_t Bindings3Items[] = {
     {ITT_EFUNC,   "Open save menu",       "cj[hfytybt buhs",       BK_StartBindingKey, bk_menu_save},   // Сохранение игры
     {ITT_EFUNC,   "Open load menu",       "pfuheprf buhs",         BK_StartBindingKey, bk_menu_load},   // Загрузка игры
     {ITT_EFUNC,   "Open volume menu",     "yfcnhjqrb uhjvrjcnb",   BK_StartBindingKey, bk_menu_volume}, // Настройки громкости
+    {ITT_EFUNC,   "Suicide",              "Cebwbl",                BK_StartBindingKey, bk_detail},      // СУИЦИД
     {ITT_EFUNC,   "QUICK SAVE",           ",SCNHJT CJ[HFYTYBT",    BK_StartBindingKey, bk_qsave},       // Быстрое сохранение
     {ITT_EFUNC,   "End game",             "pfrjyxbnm buhe",        BK_StartBindingKey, bk_end_game},    // Закончить игру
     {ITT_EFUNC,   "QUICK LOAD",           ",SCNHFZ PFUHEPRF",      BK_StartBindingKey, bk_qload},       // Быстрая загрузка
     {ITT_EFUNC,   "Quit game",            "ds[jl",                 BK_StartBindingKey, bk_quit},        // Выход
     {ITT_EFUNC,   "Change gamma level",   "ehjdtym ufvvs",         BK_StartBindingKey, bk_gamma},       // Уровень гаммы
     {ITT_EFUNC,   "RESTART LEVEL/DEMO",   "GTHTPFGECR EHJDYZ",     BK_StartBindingKey, bk_reloadlevel}, // Перезапуск уровня
-    {ITT_EFUNC,   "Increase screen size", "edtk> hfpvth 'rhfyf",   BK_StartBindingKey, bk_screen_inc},  // Увел. размер экрана
     {ITT_EMPTY,   NULL,                   NULL,                    NULL,               0},
     {ITT_SETMENU, "NEXT PAGE >",          "CKTLE.OFZ CNHFYBWF `",  &Bindings4Menu,     0},              // Cледующая страница >
     {ITT_SETMENU, "< PREV PAGE",          "^ GHTLSLEOFZ CNHFYBWF", &Bindings2Menu,     0},              // < Предыдущая страница
@@ -934,6 +934,7 @@ static Menu_t Bindings3Menu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Bindings4Items[] = {
+    {ITT_EFUNC,   "Increase screen size", "edtk> hfpvth 'rhfyf",   BK_StartBindingKey, bk_screen_inc},  // Увел. размер экрана
     {ITT_EFUNC,   "Decrease screen size",  "evtym> hfpvth 'rhfyf",  BK_StartBindingKey, bk_screen_dec},       // Умень. размер экрана
     {ITT_EFUNC,   "SAVE A SCREENSHOT",     "CRHBYIJN",              BK_StartBindingKey, bk_screenshot},       // Скриншот
     {ITT_EFUNC,   "Pause",                 "gfepf",                 BK_StartBindingKey, bk_pause},            // Пауза
@@ -945,7 +946,6 @@ static MenuItem_t Bindings4Items[] = {
     {ITT_EFUNC,   "Messages",              "cjj,otybz",             BK_StartBindingKey, bk_messages},         // Сообщения
     {ITT_EFUNC,   "Detail level",          "ltnfkbpfwbz uhfabrb",   BK_StartBindingKey, bk_detail},           // Детализация графики
     {ITT_EFUNC,   "LEVEL FLIPPING",        "PTHRFKBHJDFYBT EHJDYZ", BK_StartBindingKey, bk_toggle_fliplvls},  // Зеркалирование уровня
-    {ITT_EMPTY,   NULL,                    NULL,                    NULL,               0},
     {ITT_EMPTY,   NULL,                    NULL,                    NULL,               0},
     {ITT_SETMENU, "NEXT PAGE >",           "CKTLE.OFZ CNHFYBWF `",  &Bindings5Menu,     0},                   // Cледующая страница >
     {ITT_SETMENU, "< PREV PAGE",           "^ GHTLSLEOFZ CNHFYBWF", &Bindings3Menu,     0},                   // < Предыдущая страница
