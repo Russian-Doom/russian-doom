@@ -30,7 +30,7 @@ typedef struct
      * Returns true if section with a given name is handled by this handler.
      * This function also used to initialize handlers internal state if section is handled by this handler.
      */
-    boolean (*handles) (char* sectionName);
+    boolean (*isHandling) (char* sectionName);
     /**
      * Called for every line in the handled section.
      */

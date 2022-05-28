@@ -1119,7 +1119,7 @@ static void prepareIndex()
     }
 }
 
-boolean KeybindsHandler_Handles(char* sectionName)
+boolean KeybindsHandler_isHandling(char* sectionName)
 {
     if(strcmp("Keybinds", sectionName) == 0)
     {

@@ -96,7 +96,7 @@ void I_ShutdownController(void);
 void I_UpdateController(void);
 
 void I_BindControllerVariables(void);
-boolean ControllerHandler_Handles(char* sectionName);
+boolean ControllerHandler_isHandling(char* sectionName);
 void ControllerHandler_HandleLine(char* keyName, char *value, size_t valueSize);
 void ControllerHandler_Save(FILE* file, char* sectionName);
 void ControllerHandler_onFinishHandling();
