@@ -5,9 +5,9 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 project("International Doom" LANGUAGES C NONE)
 
 # Versions
-set(BUILD_DOOM_VERSION "5.2.1")
-set(BUILD_HERETIC_VERSION "5.1.1")
-set(BUILD_HEXEN_VERSION "5.0")
+set(BUILD_DOOM_VERSION "5.3")
+set(BUILD_HERETIC_VERSION "5.2")
+set(BUILD_HEXEN_VERSION "5.1")
 set(BUILD_STRIFE_VERSION "0.0")
 
 # Compile modules
@@ -21,7 +21,7 @@ Option(COMPILE_SETUP "Compile Setup module" OFF)
 
 # [Dasperal] BUILD_HAS_SDL_MIXER_PATCH should be ON only if used SDL_Mixer runtime library is new enough and has https://github.com/libsdl-org/SDL_mixer/commit/1c0092787398097360f7da745c7644fd32697f3b patch
 if(WIN32)
-    set(BUILD_HAS_SDL_MIXER_PATCH ON) # [Dasperal] Bundled dlls for windows already meat requirement
+    set(BUILD_HAS_SDL_MIXER_PATCH ON) # [Dasperal] Bundled dlls for windows already meet requirement
 else()
     # [Dasperal] On Linux still require compiled from source SDL_Mixer
     Option(BUILD_HAS_SDL_MIXER_PATCH "Use features available in new enough SDL_mixer runtime library (see COMPILING.MD)" OFF)
