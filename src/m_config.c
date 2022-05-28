@@ -86,17 +86,6 @@ typedef struct
     // Type of the variable
     default_type_t type;
 
-    // If this is a key value, the original integer scancode we read from
-    // the config file before translating it to the internal key value.
-    // If zero, we didn't read this value from a config file.
-    int untranslated;
-
-    // The value we translated the scancode into when we read the 
-    // config file on startup.  If the variable value is different from
-    // this, it has been changed and needs to be converted; otherwise,
-    // use the 'untranslated' value.
-    int original_translated;
-
     // If true, this config variable has been bound to a variable
     // and is being used.
     boolean bound;
@@ -109,7 +98,7 @@ typedef struct
 } default_collection_t;
 
 #define CONFIG_VARIABLE_GENERIC(name, type) \
-    { #name, {NULL}, type, 0, 0, false }
+    { #name, {NULL}, type, false }
 
 #define CONFIG_VARIABLE_INT(name) \
     CONFIG_VARIABLE_GENERIC(name, DEFAULT_INT)
