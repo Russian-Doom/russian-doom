@@ -307,45 +307,6 @@ angle_t R_PointToAngle2 (const fixed_t x1, const fixed_t y1,
 }
 
 // -----------------------------------------------------------------------------
-// R_PointToDist
-// -----------------------------------------------------------------------------
-
-fixed_t R_PointToDist (const fixed_t x, const fixed_t y)
-{
-    int     angle;
-    fixed_t dx, dy;
-    fixed_t temp, dist, frac;
-
-    dx = abs(x - viewx);
-    dy = abs(y - viewy);
-
-    if (dy>dx)
-    {
-        temp = dx;
-        dx = dy;
-        dy = temp;
-    }
-
-    // Fix crashes in udm1.wad
-
-    if (dx != 0)
-    {
-        frac = FixedDiv(dy, dx);
-    }
-    else
-    {
-        frac = 0;
-    }
-
-    angle = (tantoangle[frac>>DBITS]+ANG90) >> ANGLETOFINESHIFT;
-
-    // use as cosine
-    dist = FixedDiv (dx, finesine[angle] );	
-
-    return dist;
-}
-
-// -----------------------------------------------------------------------------
 // R_InterpolateAngle
 // [AM] Interpolate between two angles.
 // -----------------------------------------------------------------------------
