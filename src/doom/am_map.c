@@ -21,15 +21,9 @@
 
 #include <stdlib.h>
 #include "i_system.h"
-#include "deh_main.h"
-#include "z_zone.h"
-#include "doomdef.h"
 #include "st_bar.h"
 #include "p_local.h"
-#include "w_wad.h"
-#include "m_cheat.h"
 #include "m_misc.h"
-#include "v_trans.h"
 #include "v_video.h"
 #include "doomstat.h"
 #include "rd_keybinds.h"
@@ -40,37 +34,26 @@
 // For use if I do walls with outsides/insides
 #define REDS             176
 #define REDRANGE         16
-#define BLUES            200
-#define BLUERANGE        8
 #define GREENS           112
 #define GREENRANGE       16
 #define GRAYS            96
-#define GRAYSRANGE       16
 #define BROWNS           64
-#define BROWNRANGE       16
 #define YELLOWS          231
-#define YELLOWRANGE      1
 #define BLACK            0
 #define WHITE            209
 
 // Automap colors
 #define BACKGROUND       BLACK
 #define YOURCOLORS       WHITE
-#define YOURRANGE        0
 #define WALLCOLORS       REDS
 #define WALLRANGE        REDRANGE
 #define TSWALLCOLORS     GRAYS
-#define TSWALLRANGE      GRAYSRANGE
 #define FDWALLCOLORS     BROWNS
-#define FDWALLRANGE      BROWNRANGE
 #define CDWALLCOLORS     YELLOWS
-#define CDWALLRANGE      YELLOWRANGE
 #define THINGCOLORS      GREENS
 #define THINGRANGE       GREENRANGE
 #define SECRETWALLCOLORS WALLCOLORS
-#define SECRETWALLRANGE  WALLRANGE
 #define GRIDCOLORS       104
-#define GRIDRANGE        0
 #define XHAIRCOLORS      GRAYS
 
 // The MACRO!
@@ -190,8 +173,6 @@ static int automap_color_set;
 // [JN] Choosen mark color.
 static Translation_CR_t automap_mark_color_set;
 
-boolean automapactive = false;
-
 // location of window on screen
 static int f_x;
 static int f_y;
@@ -206,7 +187,6 @@ static fixed_t  ftom_zoommul; // how far the window zooms in each tic (fb coords
 
 static int64_t m_x, m_y;   // LL x,y where the window is on the map (map coords)
 static int64_t m_x2, m_y2; // UR x,y where the window is on the map (map coords)
-
 
 // width/height of window on map (map coords)
 static int64_t m_w;
@@ -246,10 +226,10 @@ mpoint_t *markpoints = NULL;     // where the points are
 int       markpointnum = 0;      // next point to be assigned (also number of points now)
 int       markpointnum_max = 0;  // killough 2/22/98
 
-
 cheatseq_t cheat_amap = CHEAT("iddt", 0);
 cheatseq_t cheat_amap_beta = CHEAT("eek", 0);  // [JN] Press Beta cheat code
 
+boolean automapactive = false;
 static boolean stopped = true;
 
 
