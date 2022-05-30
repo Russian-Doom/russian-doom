@@ -1092,20 +1092,6 @@ static void ST_UpdateFragsCounter (void)
 }
 
 // -----------------------------------------------------------------------------
-// ST_BackgroundDrawer
-// [JN] Consolidated function of drawing status bar background and elements.
-// -----------------------------------------------------------------------------
-
-void ST_BackgroundDrawer (void)
-{
-    if (screenblocks <= 10 || (automapactive && !automap_overlay))
-    {
-        ST_DrawBackground();
-        ST_DrawElementsFunc(false);
-    }
-}
-
-// -----------------------------------------------------------------------------
 // ST_Ticker
 // -----------------------------------------------------------------------------
 
@@ -1968,7 +1954,11 @@ void ST_Drawer (void)
     ST_DoPaletteStuff();
 
     // [JN] Refresh standard status bar background.
-    ST_BackgroundDrawer();
+    if (screenblocks <= 10 || (automapactive && !automap_overlay))
+    {
+        ST_DrawBackground();
+        ST_DrawElementsFunc(false);
+    }
 
     // [JN] Draw full screen status bar.
     if (screenblocks > 10 && screenblocks < (aspect_ratio >= 2 ? 17 : 14)
