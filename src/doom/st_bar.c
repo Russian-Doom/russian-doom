@@ -1094,8 +1094,6 @@ static void ST_UpdateFragsCounter (void)
 // -----------------------------------------------------------------------------
 // ST_BackgroundDrawer
 // [JN] Consolidated function of drawing status bar background and elements.
-// Called once (in fact) in ST_Drawer while wiping to draw beneath effect, 
-// and constantly in ST_Ticker to make drawing independent from framerate.
 // -----------------------------------------------------------------------------
 
 void ST_BackgroundDrawer (void)
@@ -1134,13 +1132,6 @@ void ST_Ticker (void)
     }
     
     st_oldhealth = plyr->health;
-
-    // [JN] Once wipe effect done, draw standard 
-    // status bar independently from framerate.
-    if (wipegamestate == GS_LEVEL)
-    {
-        ST_BackgroundDrawer();
-    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1976,11 +1967,8 @@ void ST_Drawer (void)
     // Do red-/gold-shifts from damage/items
     ST_DoPaletteStuff();
 
-    // [JN] Refresh standard status bar beneath wipe effect.
-    if (wipegamestate != GS_LEVEL)
-    {
-        ST_BackgroundDrawer();
-    }
+    // [JN] Refresh standard status bar background.
+    ST_BackgroundDrawer();
 
     // [JN] Draw full screen status bar.
     if (screenblocks > 10 && screenblocks < (aspect_ratio >= 2 ? 17 : 14)
