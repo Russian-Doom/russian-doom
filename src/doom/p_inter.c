@@ -31,6 +31,8 @@
 #include "jn.h"
 
 
+#define MAX_BONUSCOUNT_TIME 4*TICRATE
+
 // a weapon is found with two clip loads,
 // a big item has five clip loads
 int maxammo[NUMAMMO] = {200, 50, 300, 50};
@@ -807,10 +809,10 @@ void P_TouchSpecialThing (const mobj_t *special, const mobj_t *toucher)
 
     P_RemoveMobj (special);
 
-    // [JN] Limit bonus palette duration to 4 seconds
-    if (player->bonuscount >= 4 * TICRATE)
+    // [JN] Limit bonus palette duration to 4 seconds.
+    if (player->bonuscount >= MAX_BONUSCOUNT_TIME)
     {
-        player->bonuscount = 4 * TICRATE;
+        player->bonuscount = MAX_BONUSCOUNT_TIME;
     }
 
     player->bonuscount += BONUSADD;
