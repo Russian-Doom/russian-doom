@@ -27,7 +27,7 @@
 #include "d_iwad.h"
 #include "m_config.h"
 #include "m_misc.h"
-#include "doom/rd_lang.h"
+#include "doom/id_lang.h"
 
 #include "multiplayer.h"
 #include "mode.h"

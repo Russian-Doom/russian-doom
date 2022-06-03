@@ -49,7 +49,7 @@ static char *cfg_extension[] = { "cfg", NULL };
 
 int snd_sfxdevice = SNDDEVICE_SB;
 int snd_musicdevice = SNDDEVICE_SB;
-int snd_samplerate = 44100;
+const int snd_samplerate = 44100;
 int opl_io_port = 0x388;
 int snd_cachesize = 64 * 1024 * 1024;
 int snd_maxslicetime_ms = 28;
@@ -262,7 +262,6 @@ void BindSoundVariables(void)
     M_BindIntVariable("snd_sfxdevice",            &snd_sfxdevice);
     M_BindIntVariable("snd_musicdevice",          &snd_musicdevice);
     M_BindIntVariable("snd_channels",             &numChannels);
-    M_BindIntVariable("snd_samplerate",           &snd_samplerate);
     M_BindIntVariable("sfx_volume",               &sfxVolume);
     M_BindIntVariable("music_volume",             &musicVolume);
     M_BindIntVariable("snd_monomode",             &snd_monomode);
