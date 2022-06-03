@@ -1380,7 +1380,7 @@ static MenuItem_t Gameplay4Items[] = {
     {ITT_TITLE,   "Tactical",                            "Nfrnbrf",                         NULL,                        0}, // Тактика
     {ITT_SWITCH,  "Notify of revealed secrets:",         "Cjj,ofnm j yfqltyyjv nfqybrt:",   M_RD_Change_SecretNotify,    0}, // Сообщать о найденном тайнике
     {ITT_SWITCH,  "Infragreen light amp. visor:",        "Byahfptktysq dbpjh jcdtotybz:",   M_RD_Change_InfraGreenVisor, 0}, // Инфразеленый визор освещения
-    {ITT_LRFUNC,  "Horizontal autoaiming:",              "fdnjghbwtkbdfybt:",               M_RD_Change_HorizontalAiming,0}, // Автоприцеливание
+    {ITT_LRFUNC,  "Horizontal autoaiming:",              "ujh> fdnjghbwtkbdfybt:",          M_RD_Change_HorizontalAiming,0}, // Гор. Автоприцеливание
     {ITT_SETMENU, NULL, /* Next page >   */              NULL,                              &Gameplay5Menu,             0}, // Далее >
     {ITT_SETMENU, NULL, /* < Prev page > */              NULL,                              &Gameplay3Menu,             0}  // < Назад
 };
@@ -4570,11 +4570,11 @@ static void M_RD_Draw_Gameplay_4(void)
         RD_M_DrawTextSmallRUS(infragreen_visor ? RD_ON_RUS : RD_OFF_RUS, 266 + wide_delta, 125,
                               infragreen_visor ? CR_GREEN : CR_DARKRED);
 
-        // Horizontal autoaiming
-        RD_M_DrawTextSmallRUS(horizontal_autoaim == 0 ? "njkmrj [bncrfys" :  // только хитсканы
-                              horizontal_autoaim == 1 ? "njkmrj cyfhzls" :   // только снаряды
+        // Гор. автоприцеливание
+        RD_M_DrawTextSmallRUS(horizontal_autoaim == 0 ? "[bncrfys" :  // хитсканы
+                              horizontal_autoaim == 1 ? "cyfhzls" :   // снаряды
                               horizontal_autoaim == 2 ? "dsrk" : 
-                                                        "drk", 172 + wide_delta, 135,
+                                                        "drk", 204 + wide_delta, 135,
                               horizontal_autoaim == 0 ? CR_DARKGREEN :
                               horizontal_autoaim == 1 ? CR_DARKGREEN :
                               horizontal_autoaim == 2 ? CR_DARKRED : 
