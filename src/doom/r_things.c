@@ -558,6 +558,8 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
     boolean        flip;
     angle_t        ang;    
     fixed_t        interpx, interpy, interpz, interpangle;
+    const int      can_animate_bmap = leveltime & 31 && (rand() % 255 > 220) 
+                                      && gametic & 1 &&  leveltime > oldleveltime;
 
     // [AM] Interpolate between current and last position,
     //      if prudent.
@@ -799,8 +801,7 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
             int demi_bright = index*2;
             
             // Apply some extra randomness and prevent too fast animation.
-            if (leveltime & 31 && (rand()%255 > 220) && gametic & 1
-            &&  leveltime > oldleveltime)
+            if (can_animate_bmap)
             {
                 vis->brightmap_anim = brightmap_anim;
             }
@@ -830,12 +831,19 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
         {
             int hemi_bright = index*4;
             
+            // Apply some extra randomness and prevent too fast animation.
+            // Animation amplitude is lower here (/3).
+            if (can_animate_bmap)
+            {
+                vis->brightmap_anim = brightmap_anim;
+            }
+
             if (hemi_bright > 47)
             {
                 hemi_bright = 47;
             }
             vis->colormap[0] = spritelights[hemi_bright];
-            vis->colormap[1] = colormaps;
+            vis->colormap[1] = &colormaps[vis->brightmap_anim/3*256];
         }
         // Normal brightmap:
         else
