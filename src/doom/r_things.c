@@ -520,6 +520,25 @@ static void R_DrawVisSprite (const vissprite_t *vis, const int x1, const int x2)
 }
 
 // -----------------------------------------------------------------------------
+// R_AnimateBrightmaps
+// [JN] Animate brightmaps by randomizing light level.
+// -----------------------------------------------------------------------------
+
+static int brightmap_anim;
+
+void R_AnimateBrightmaps (void)
+{
+    if (brightmaps && !vanillaparm)
+    {
+        brightmap_anim = rand() % 16;
+    }
+    else
+    {
+        brightmap_anim = 0;
+    }
+}
+
+// -----------------------------------------------------------------------------
 // R_ProjectSprite
 // Generates a vissprite for a thing if it might be visible.
 // -----------------------------------------------------------------------------
@@ -779,12 +798,29 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
         {
             int demi_bright = index*2;
             
+            // Apply some extra randomness and prevent too fast animation.
+            if (leveltime & 31 && (rand()%255 > 220) && gametic & 1
+            &&  leveltime > oldleveltime)
+            {
+                vis->brightmap_anim = brightmap_anim;
+            }
+
             if (demi_bright > 47)
             {
                 demi_bright = 47;
             }
             vis->colormap[0] = spritelights[demi_bright];
-            vis->colormap[1] = colormaps;
+            
+            // Animated brightmaps:
+            if (thing->sprite == SPR_CAND   // Candestick
+            ||  thing->sprite == SPR_CBRA)  // Candelabra
+            {
+                vis->colormap[1] = &colormaps[vis->brightmap_anim*256];
+            }
+            else
+            {
+                vis->colormap[1] = colormaps;
+            }
         }
         // Hemi-brigths:
         else

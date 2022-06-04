@@ -373,6 +373,8 @@ typedef struct vissprite_s
     // [crispy] brightmaps for select sprites
     lighttable_t *colormap[2];
     const byte   *brightmap;
+    // [JN] Light level of brightmap animation.
+    int     brightmap_anim;
 
     int     mobjflags;
     byte   *translation;
@@ -722,6 +724,7 @@ extern fixed_t  pspriteiscale;
 
 void R_AddPSprites (void);
 void R_AddSprites (const sector_t *sec);
+void R_AnimateBrightmaps (void);
 void R_ClearSprites (void);
 void R_ClipVisSprite (vissprite_t *vis, int xl, int xh);
 void R_DrawMasked (void);
