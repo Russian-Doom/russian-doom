@@ -558,7 +558,7 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
     boolean        flip;
     angle_t        ang;    
     fixed_t        interpx, interpy, interpz, interpangle;
-    const int      can_animate_bmap = leveltime & 31 && (rand() % 255 > 220) 
+    const boolean  can_animate_bmap = leveltime & 31 && (rand() % 255 > 220) 
                                       && gametic & 1 &&  leveltime > oldleveltime;
 
     // [AM] Interpolate between current and last position,
@@ -844,6 +844,41 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
             }
             vis->colormap[0] = spritelights[hemi_bright];
             vis->colormap[1] = &colormaps[vis->brightmap_anim/3*256];
+        }
+        // Just animated
+        else
+        if (thing->sprite == SPR_SMBT   // Short Blue Torch
+        ||  thing->sprite == SPR_SMGT   // Short Green Torch
+        ||  thing->sprite == SPR_SMRT)  // Short Red Torch
+        {
+            // Apply some extra randomness and prevent too fast animation.
+            // Animation amplitude is lower here (/4).
+            if (can_animate_bmap)
+            {
+                vis->brightmap_anim = brightmap_anim;
+            }
+
+            vis->colormap[0] = vis->colormap[1] = &colormaps[vis->brightmap_anim/4*256];
+        }
+        else
+        if (thing->sprite == SPR_CEYE)  // Evil Eye
+        {
+            if (can_animate_bmap)
+            {
+                vis->brightmap_anim = brightmap_anim;
+            }
+
+            vis->colormap[0] = vis->colormap[1] = &colormaps[(vis->brightmap_anim/2)*256];
+        }
+        else
+        if (thing->sprite == SPR_POL3)  // Pile of Skulls and Candles
+        {
+            if (can_animate_bmap)
+            {
+                vis->brightmap_anim = brightmap_anim;
+            }
+
+            vis->colormap[0] = vis->colormap[1] = &colormaps[(vis->brightmap_anim/3)*256];
         }
         // Normal brightmap:
         else
