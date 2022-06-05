@@ -899,7 +899,6 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
             }
             case SPR_FSKU:  // Floating Skull Rock
             {
-               
                 if (can_animate_bmap)
                 {
                     vis->brightmap_anim = bmap_anim;

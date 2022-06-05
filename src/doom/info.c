@@ -1085,11 +1085,10 @@ state_t	states[NUMSTATES] = {
     {SPR_CEYE,1,6,{NULL},S_EVILEYE3,0,0},	// S_EVILEYE2
     {SPR_CEYE,2,6,{NULL},S_EVILEYE4,0,0},	// S_EVILEYE3
     {SPR_CEYE,1,6,{NULL},S_EVILEYE,0,0},	// S_EVILEYE4
-    // 
+    // Disable full bright for Floating Skull Rock, use brightmap instead.
     {SPR_FSKU,0,6,{NULL},S_FLOATSKULL2,0,0},	// S_FLOATSKULL
     {SPR_FSKU,1,6,{NULL},S_FLOATSKULL3,0,0},	// S_FLOATSKULL2
     {SPR_FSKU,2,6,{NULL},S_FLOATSKULL,0,0},	// S_FLOATSKULL3
-    
     {SPR_COL5,0,14,{NULL},S_HEARTCOL2,0,0},	// S_HEARTCOL
     {SPR_COL5,1,14,{NULL},S_HEARTCOL,0,0},	// S_HEARTCOL2
     // [JN] Disable full bright for Tall Blue Torch, use brightmap instead.
