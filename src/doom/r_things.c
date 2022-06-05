@@ -521,20 +521,42 @@ static void R_DrawVisSprite (const vissprite_t *vis, const int x1, const int x2)
 
 // -----------------------------------------------------------------------------
 // R_AnimateBrightmaps
-// [JN] Animate brightmaps by randomizing light level.
+// [JN] Simple routine to emulate flickering and glowing effects for brightmaps.
 // -----------------------------------------------------------------------------
 
-static int brightmap_anim;
+static signed int bmap_anim = 0;
+static signed int bmap_glow = 0;
+static signed int bmap_count = 0;
 
 void R_AnimateBrightmaps (void)
 {
     if (brightmaps && !vanillaparm)
     {
-        brightmap_anim = rand() % 16;
+        // Random flickering effect.
+        bmap_anim = rand() % 16;
+        
+        // Glowing effect.
+        bmap_count++;
+
+        if (bmap_count < 7)
+        {
+            bmap_glow++;
+        }
+        else if (bmap_count < 13)
+        {
+            bmap_glow--;
+        }
+        
+        if (bmap_count == 13)
+        {
+            bmap_count = 0;
+        }
     }
     else
     {
-        brightmap_anim = 0;
+        bmap_anim = 0;
+        bmap_count = 0;
+        bmap_glow = 0;
     }
 }
 
@@ -810,7 +832,7 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
                 }
                 if (can_animate_bmap)
                 {
-                    vis->brightmap_anim = brightmap_anim;
+                    vis->brightmap_anim = bmap_anim;
                 }
                 vis->colormap[0] = spritelights[demi_bright];
 
@@ -844,7 +866,7 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
                 }
                 if (can_animate_bmap)
                 {
-                    vis->brightmap_anim = brightmap_anim;
+                    vis->brightmap_anim = bmap_anim;
                 }
                 vis->colormap[0] = spritelights[hemi_bright];
                 // Animation amplitude is lower here (/3).
@@ -858,7 +880,7 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
             {
                 if (can_animate_bmap)
                 {
-                    vis->brightmap_anim = brightmap_anim;
+                    vis->brightmap_anim = bmap_anim;
                 }
                 // Animation amplitude is lower here (/4).
                 vis->colormap[0] = vis->colormap[1]
@@ -869,17 +891,28 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
             {
                 if (can_animate_bmap)
                 {
-                    vis->brightmap_anim = brightmap_anim;
+                    vis->brightmap_anim = bmap_anim;
                 }
                 vis->colormap[0] = vis->colormap[1]
-                                 = &colormaps[(vis->brightmap_anim/2)*256];
+                                 = &colormaps[bmap_glow*256];
+                break;
+            }
+            case SPR_FSKU:  // Floating Skull Rock
+            {
+               
+                if (can_animate_bmap)
+                {
+                    vis->brightmap_anim = bmap_anim;
+                }
+                vis->colormap[0] = vis->colormap[1]
+                                 = &colormaps[bmap_glow*256];
                 break;
             }
             case SPR_POL3:  // Pile of Skulls and Candles
             {
                 if (can_animate_bmap)
                 {
-                    vis->brightmap_anim = brightmap_anim;
+                    vis->brightmap_anim = bmap_anim;
                 }
                 vis->colormap[0] = vis->colormap[1]
                                  = &colormaps[(vis->brightmap_anim/3)*256];

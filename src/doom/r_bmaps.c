@@ -556,6 +556,8 @@ const byte *R_BrightmapForSprite (const int type)
                 return greenonly1;
                 break;
             }
+            // Floating Skull Rock
+            case SPR_FSKU:
             // Pile of Skulls and Candles
             case SPR_POL3:
             {
@@ -571,6 +573,7 @@ const byte *R_BrightmapForSprite (const int type)
             case SPR_FCAN:
             case SPR_CAND:
             case SPR_CEYE:
+            case SPR_FSKU:
             case SPR_CBRA:
             case SPR_COLU:
             case SPR_TLMP:
