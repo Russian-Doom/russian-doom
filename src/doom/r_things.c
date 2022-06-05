@@ -799,7 +799,8 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
         //     and non-brightmapped pixels with distance index miltipled by 2.
         //   * Hemi-bright. Lits up brightmapped pixels with full power,
         //     and non-brightmapped pixels with distance index miltipled by 4.
-        
+        //   * Just animated. Lits up all sprite pixels and applies animation.
+
         switch (thing->sprite)
         {
             // Semi-brigths:

@@ -1236,7 +1236,7 @@ void P_UpdateSpecials (void)
     // [crispy] draw fuzz effect independent of rendering frame rate
     R_SetFuzzPosTic();
     
-    // [JN] Animate brightmaps by randomizing their light level.
+    // [JN] Apply animation to brightmaps.
     R_AnimateBrightmaps();
 }
 
