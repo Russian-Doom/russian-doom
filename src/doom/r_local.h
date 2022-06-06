@@ -722,6 +722,7 @@ extern fixed_t  pspriteiscale;
 
 void R_AddPSprites (void);
 void R_AddSprites (const sector_t *sec);
+void R_AnimateBrightmaps (void);
 void R_ClearSprites (void);
 void R_ClipVisSprite (vissprite_t *vis, int xl, int xh);
 void R_DrawMasked (void);

@@ -520,6 +520,90 @@ static void R_DrawVisSprite (const vissprite_t *vis, const int x1, const int x2)
 }
 
 // -----------------------------------------------------------------------------
+// R_AnimateBrightmaps
+// [JN] Simple routine to emulate flickering and glowing effects for brightmaps.
+//
+// Note: flickering effect (mo->brightmap_anim) is a mobj, not a vissprite 
+// property, since we need to update effect independently from framerate and
+// can't rely only on screen renderer.
+// -----------------------------------------------------------------------------
+
+static int bmap_flick = 0;
+static int bmap_glow = 0;
+static int bmap_count_flick = 0;
+static int bmap_count_glow = 0;
+
+void R_AnimateBrightmaps (void)
+{
+    thinker_t *th;
+
+    // Run timers.
+    bmap_count_flick++;
+    bmap_count_glow++;
+
+    // Random flickering effect.
+    if (bmap_count_flick < 2)
+    {
+        for (th = thinkercap.next ; th != &thinkercap ; th = th->next)
+        {
+            if (th->function.acp1 == (actionf_p1)P_MobjThinker)
+            {
+                mobj_t *mo = (mobj_t *)th;
+    
+                if (mo->sprite == SPR_CAND  // Candestick
+                ||  mo->sprite == SPR_CBRA  // Candelabra
+                ||  mo->sprite == SPR_FCAN  // Flaming Barrel
+                ||  mo->sprite == SPR_TBLU  // Tall Blue Torch
+                ||  mo->sprite == SPR_TGRN  // Tall Green Torch
+                ||  mo->sprite == SPR_TRED  // Tall Red Torch
+                ||  mo->sprite == SPR_SMBT  // Short Blue Torch
+                ||  mo->sprite == SPR_SMGT  // Short Green Torch
+                ||  mo->sprite == SPR_SMRT  // Short Red Torch
+                ||  mo->sprite == SPR_POL3) // Pile of Skulls and Candles
+                {
+                    if (brightmaps && !vanillaparm)
+                    {
+                        mo->bmap_flick = rand() % 16;
+                    }
+                    else
+                    {
+                        mo->bmap_flick =  0;
+                    }
+                }
+            }
+        }
+    }
+
+    // Glowing effect.
+    if (brightmaps && !vanillaparm)
+    {
+        if (bmap_count_glow < 7)
+        {
+            bmap_glow++;
+        }
+        else if (bmap_count_glow < 13)
+        {
+            bmap_glow--;
+        }
+    }
+    else
+    {
+        bmap_glow = 0;
+        bmap_count_glow = 0;
+    }
+
+    // Reset timers.
+    if (bmap_count_flick == 4)
+    {
+        bmap_count_flick = 0;
+    }
+    if (bmap_count_glow == 13)
+    {
+        bmap_count_glow = 0;
+    }
+}
+
+// -----------------------------------------------------------------------------
 // R_ProjectSprite
 // Generates a vissprite for a thing if it might be visible.
 // -----------------------------------------------------------------------------
@@ -745,6 +829,9 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
         // [crispy] brightmaps for select sprites
         vis->colormap[0] = spritelights[index];
 
+        // [JN] Get flickering light level from R_AnimateBrightmaps.
+        bmap_flick = thing->bmap_flick;
+
         // [JN] Apply different types half-brights for certain objects.
         //  Not to be confused:
         //   * Semi-bright. Lits up brightmapped pixels with non-full power.
@@ -754,57 +841,106 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
         //     and non-brightmapped pixels with distance index miltipled by 2.
         //   * Hemi-bright. Lits up brightmapped pixels with full power,
         //     and non-brightmapped pixels with distance index miltipled by 4.
-        
-        // Semi-brigths:
-        if (thing->sprite == SPR_BON2   // Armor Bonus
-        ||  thing->sprite == SPR_BAR1)  // Explosive Barrel
-        {
-            int semi_bright = index;
+        //   * Just animated. Lits up all sprite pixels and applies animation.
 
-            if (semi_bright < MINBRIGHT)
-            {
-                semi_bright = MINBRIGHT;
-            }
-            vis->colormap[1] = lightnum < 6 ? &colormaps[MINBRIGHT*256] :
-                                              spritelights[semi_bright];
-        }
-        // Demi-brigths:
-        else
-        if (thing->sprite == SPR_CAND   // Candestick
-        ||  thing->sprite == SPR_CBRA   // Candelabra
-        ||  thing->sprite == SPR_COLU   // Floor Lamp
-        ||  thing->sprite == SPR_FCAN   // Flaming Barrel
-        ||  thing->sprite == SPR_TLMP   // Tall Tech Lamp
-        ||  thing->sprite == SPR_TLP2)  // Short Tech Lamp
+        switch (thing->sprite)
         {
-            int demi_bright = index*2;
-            
-            if (demi_bright > 47)
+            // Semi-brigths:
+            case SPR_BON2:  // Armor Bonus
+            case SPR_BAR1:  // Explosive Barrel
             {
-                demi_bright = 47;
+                int semi_bright = index;
+
+                if (semi_bright < MINBRIGHT)
+                {
+                    semi_bright = MINBRIGHT;
+                }
+                vis->colormap[1] = lightnum < 6 ? &colormaps[MINBRIGHT*256] :
+                                                  spritelights[semi_bright];
+                break;
             }
-            vis->colormap[0] = spritelights[demi_bright];
-            vis->colormap[1] = colormaps;
-        }
-        // Hemi-brigths:
-        else
-        if (thing->sprite == SPR_TBLU   // Tall Blue Torch
-        ||  thing->sprite == SPR_TGRN   // Tall Green Torch
-        ||  thing->sprite == SPR_TRED)  // Tall Red Torch
-        {
-            int hemi_bright = index*4;
-            
-            if (hemi_bright > 47)
+            // Demi-brigths:
+            case SPR_CAND:  // Candestick
+            case SPR_CBRA:  // Candelabra
+            case SPR_COLU:  // Floor Lamp
+            case SPR_FCAN:  // Flaming Barrel
+            case SPR_TLMP:  // Tall Tech Lamp
+            case SPR_TLP2:  // Short Tech Lamp
             {
-                hemi_bright = 47;
+                int demi_bright = index*2;
+
+                if (demi_bright > 47)
+                {
+                    demi_bright = 47;
+                }
+
+                vis->colormap[0] = spritelights[demi_bright];
+
+                // Animated brightmaps:
+                if (thing->sprite == SPR_CAND   // Candestick
+                ||  thing->sprite == SPR_CBRA)  // Candelabra
+                {
+                    vis->colormap[1] = &colormaps[bmap_flick*256];
+                }
+                else
+                if (thing->sprite == SPR_FCAN)   // Flaming Barrel
+                {
+                    vis->colormap[1] = &colormaps[bmap_flick/3*256];
+                }
+                else
+                {
+                    vis->colormap[1] = colormaps;
+                }
+                break;
             }
-            vis->colormap[0] = spritelights[hemi_bright];
-            vis->colormap[1] = colormaps;
-        }
-        // Normal brightmap:
-        else
-        {
-            vis->colormap[1] = colormaps;
+            // Hemi-brigths:
+            case SPR_TBLU:   // Tall Blue Torch
+            case SPR_TGRN:   // Tall Green Torch
+            case SPR_TRED:   // Tall Red Torch
+            {
+                int hemi_bright = index*4;
+
+                if (hemi_bright > 47)
+                {
+                    hemi_bright = 47;
+                }
+
+                vis->colormap[0] = spritelights[hemi_bright];
+                vis->colormap[1] = &colormaps[bmap_flick/3*256];
+                break;
+            }
+            // Just animated:
+            case SPR_SMBT:  // Short Blue Torch
+            case SPR_SMGT:  // Short Green Torch
+            case SPR_SMRT:  // Short Red Torch
+            {
+                vis->colormap[0] = vis->colormap[1]
+                                 = &colormaps[bmap_flick/4*256];
+                break;
+            }
+            case SPR_CEYE:  // Evil Eye
+            {
+                vis->colormap[0] = vis->colormap[1]
+                                 = &colormaps[bmap_glow*256];
+                break;
+            }
+            case SPR_FSKU:  // Floating Skull Rock
+            {
+                vis->colormap[0] = vis->colormap[1]
+                                 = &colormaps[bmap_glow*256];
+                break;
+            }
+            case SPR_POL3:  // Pile of Skulls and Candles
+            {
+                vis->colormap[0] = vis->colormap[1]
+                                 = &colormaps[bmap_flick/3*256];
+                break;
+            }
+            // Normal brightmap:
+            default:
+            {
+                vis->colormap[1] = colormaps;
+            }
         }
     }
 

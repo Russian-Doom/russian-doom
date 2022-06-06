@@ -536,12 +536,32 @@ const byte *R_BrightmapForSprite (const int type)
             case SPR_TGRN:
             // Tall Red Torch
             case SPR_TRED:
+            // Short Blue Torch
+            case SPR_SMBT:
+            // Short Green Torch
+            case SPR_SMGT:
+            // Short Red Torch
+            case SPR_SMRT:
             // Tall Technocolumn
             case SPR_TLMP:
             // Short Technocolumn
             case SPR_TLP2:
             {
                 return light_sources;
+                break;
+            }
+            // Evil Eye
+            case SPR_CEYE:
+            {
+                return greenonly1;
+                break;
+            }
+            // Floating Skull Rock
+            case SPR_FSKU:
+            // Pile of Skulls and Candles
+            case SPR_POL3:
+            {
+                return fullbright;
                 break;
             }
         }
@@ -552,6 +572,8 @@ const byte *R_BrightmapForSprite (const int type)
         {
             case SPR_FCAN:
             case SPR_CAND:
+            case SPR_CEYE:
+            case SPR_FSKU:
             case SPR_CBRA:
             case SPR_COLU:
             case SPR_TLMP:
@@ -559,6 +581,9 @@ const byte *R_BrightmapForSprite (const int type)
             case SPR_TBLU:
             case SPR_TGRN:
             case SPR_TRED:
+            case SPR_SMBT:
+            case SPR_SMGT:
+            case SPR_SMRT:
             {
                 return fullbright;
                 break;
