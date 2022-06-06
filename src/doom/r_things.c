@@ -563,11 +563,11 @@ void R_AnimateBrightmaps (void)
                 {
                     if (brightmaps && !vanillaparm)
                     {
-                        mo->brightmap_anim = rand() % 16;
+                        mo->bmap_flick = rand() % 16;
                     }
                     else
                     {
-                        mo->brightmap_anim =  0;
+                        mo->bmap_flick =  0;
                     }
                 }
             }
@@ -830,7 +830,7 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
         vis->colormap[0] = spritelights[index];
 
         // [JN] Get flickering light level from R_AnimateBrightmaps.
-        bmap_flick = thing->brightmap_anim;
+        bmap_flick = thing->bmap_flick;
 
         // [JN] Apply different types half-brights for certain objects.
         //  Not to be confused:
