@@ -373,8 +373,6 @@ typedef struct vissprite_s
     // [crispy] brightmaps for select sprites
     lighttable_t *colormap[2];
     const byte   *brightmap;
-    // [JN] Light level of brightmap animation.
-    int     brightmap_anim;
 
     int     mobjflags;
     byte   *translation;
