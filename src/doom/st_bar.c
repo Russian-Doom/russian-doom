@@ -2135,6 +2135,11 @@ void ST_Start (void)
     st_faceindex = 1;
     st_palette = -1;
     st_oldhealth = -1;
+
+    for (int i = 0 ; i < NUMWEAPONS ; i++)
+    {
+        oldweaponsowned[i] = plyr->weaponowned[i];
+    }
 }
 
 // -----------------------------------------------------------------------------
