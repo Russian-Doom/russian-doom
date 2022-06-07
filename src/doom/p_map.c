@@ -353,7 +353,7 @@ static boolean PIT_CheckThing (mobj_t *thing)
     }
     
     // [JN] Torque: make sliding corpses passable
-    if (tmthing->intflags & MIF_FALLING)
+    if (singleplayer && !vanillaparm && torque && tmthing->intflags & MIF_FALLING)
     {
         return true;
     }
