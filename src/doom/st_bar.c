@@ -916,58 +916,59 @@ static void ST_updateFaceWidget (void)
 
     if (priority < 8) 
     {
-        //if (gamemode != pressbeta)
+        if (plyr->damagecount && plyr->attacker && plyr->attacker != plyr->mo)
         {
-            if (plyr->damagecount && plyr->attacker && plyr->attacker != plyr->mo)
-            {
-                // being attacked
-                priority = 7;
+            // being attacked
+            priority = 7;
 
-                // [crispy] show "Ouch Face" as intended
-                if (st_oldhealth - plyr->health > ST_MUCHPAIN)
+            // [crispy] show "Ouch Face" as intended
+            if (vanillaparm ? (plyr->health - st_oldhealth > ST_MUCHPAIN) :
+                              (st_oldhealth - plyr->health > ST_MUCHPAIN))
+            {
+                // [crispy] raise "Ouch Face" priority
+                if (!vanillaparm)
                 {
-                    // [crispy] raise "Ouch Face" priority
                     priority = 8;
-                    st_facecount = ST_TURNCOUNT;
-                    faceindex = ST_OUCHOFFSET;
+                }
+                st_facecount = ST_TURNCOUNT;
+                faceindex = ST_OUCHOFFSET;
+            }
+            else
+            {
+                badguyangle = R_PointToAngle2(plyr->mo->x,
+                                              plyr->mo->y,
+                                              plyr->attacker->x,
+                                              plyr->attacker->y);
+	
+                if (badguyangle > plyr->mo->angle)
+                {
+                    // whether right or left
+                    diffang = badguyangle - plyr->mo->angle;
+                    i = diffang > ANG180; 
                 }
                 else
                 {
-                    badguyangle = R_PointToAngle2(plyr->mo->x,
-                                                  plyr->mo->y,
-                                                  plyr->attacker->x,
-                                                  plyr->attacker->y);
-		
-                    if (badguyangle > plyr->mo->angle)
-                    {
-                        // whether right or left
-                        diffang = badguyangle - plyr->mo->angle;
-                        i = diffang > ANG180; 
-                    }
-                    else
-                    {
-                        // whether left or right
-                        diffang = plyr->mo->angle - badguyangle;
-                        i = diffang <= ANG180; 
-                    } // confusing, aint it?
+                    // whether left or right
+                    diffang = plyr->mo->angle - badguyangle;
+                    i = diffang <= ANG180; 
+                } // confusing, aint it?
 
-                    st_facecount = ST_TURNCOUNT;
+                st_facecount = ST_TURNCOUNT;
 
-                    if (diffang < ANG45)
-                    {
-                        // head-on    
-                        faceindex = ST_RAMPAGEOFFSET;
-                    }
-                    else if (i)
-                    {
-                        // turn face right
-                        faceindex = ST_TURNOFFSET;
-                    }
-                    else
-                    {
-                        // turn face left
-                        faceindex = ST_TURNOFFSET+1;
-                    }
+                if (diffang < ANG45)
+                {
+                    // head-on    
+                    faceindex = ST_RAMPAGEOFFSET;
+                }
+                else if (i)
+                {
+                    // turn face right
+                    faceindex = ST_TURNOFFSET;
+                }
+                else
+                {
+                    // turn face left
+                    faceindex = ST_TURNOFFSET+1;
                 }
             }
         }
@@ -979,7 +980,8 @@ static void ST_updateFaceWidget (void)
         if (plyr->damagecount)
         {
             // [crispy] show "Ouch Face" as intended
-            if (st_oldhealth - plyr->health > ST_MUCHPAIN)
+            if (vanillaparm ? (plyr->health - st_oldhealth > ST_MUCHPAIN) :
+                              (st_oldhealth - plyr->health > ST_MUCHPAIN))
             {
                 priority = 7;
                 st_facecount = ST_TURNCOUNT;
