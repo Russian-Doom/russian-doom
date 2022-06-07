@@ -329,6 +329,22 @@ char mapdir[1024];   // directory of development maps
 
 boolean hasDelayEvents = false;
 
+int* JN_getNotCommonIntVarPointer(notCommonVar_t var)
+{
+    switch(var)
+    {
+        case v_message_color_secret: return &message_color_secret;
+        case v_stbar_color_high: return &stbar_color_high;
+        case v_stbar_color_normal: return &stbar_color_normal;
+        case v_stbar_color_low: return &stbar_color_low;
+        case v_stbar_color_critical: return &stbar_color_critical;
+        case v_stbar_color_armor_1: return &stbar_color_armor_1;
+        case v_stbar_color_armor_2: return &stbar_color_armor_2;
+        case v_stbar_color_armor_0: return &stbar_color_armor_0;
+        default: return NULL;
+    }
+}
+
 //
 // D_ProcessEvents
 // Send all the events of the given timestamp down the responder chain

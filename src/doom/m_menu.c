@@ -5840,13 +5840,13 @@ static void M_RD_BackToDefaults_Recommended(int choice)
 
     // Gameplay: Status Bar
     sbar_colored        = 0;
-    stbar_color_high     = 5;
-    stbar_color_normal   = 2;
-    stbar_color_low      = 7;
-    stbar_color_critical = 0;
-    stbar_color_armor_1  = 2;
-    stbar_color_armor_2  = 5;
-    stbar_color_armor_0  = 0;
+    stbar_color_high     = 6;
+    stbar_color_normal   = 3;
+    stbar_color_low      = 8;
+    stbar_color_critical = 1;
+    stbar_color_armor_1  = 3;
+    stbar_color_armor_2  = 6;
+    stbar_color_armor_0  = 1;
 
     // Gameplay: Audible
     z_axis_sfx           = 0;
@@ -6025,13 +6025,13 @@ static void M_RD_BackToDefaults_Original(int choice)
 
     // Gameplay: Status Bar
     sbar_colored        = 0;
-    stbar_color_high     = 5;
-    stbar_color_normal   = 2;
-    stbar_color_low      = 7;
-    stbar_color_critical = 0;
-    stbar_color_armor_1  = 2;
-    stbar_color_armor_2  = 5;
-    stbar_color_armor_0  = 0;
+    stbar_color_high     = 6;
+    stbar_color_normal   = 3;
+    stbar_color_low      = 8;
+    stbar_color_critical = 1;
+    stbar_color_armor_1  = 3;
+    stbar_color_armor_2  = 6;
+    stbar_color_armor_0  = 1;
 
     // Gameplay: Audible
     z_axis_sfx           = 0;

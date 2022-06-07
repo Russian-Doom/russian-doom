@@ -331,3 +331,22 @@ extern int no_internal_demos;
 
 extern int artifactcount;   // Amount of artifacts
 extern int lifecount;       // Amount of lifes
+
+typedef enum
+{
+    v_message_color_secret = 0,
+    v_message_color_quest,
+    v_stbar_color_high,
+    v_stbar_color_normal,
+    v_stbar_color_low,
+    v_stbar_color_critical,
+    v_stbar_color_armor_1,
+    v_stbar_color_armor_2,
+    v_stbar_color_armor_0
+} notCommonVar_t;
+
+/**
+ * [Dasperal] This function is used to get a pointer to some of the previously declared variables.
+ * It is needed because direct use of them leads to a linking error
+ */
+int* JN_getNotCommonIntVarPointer(notCommonVar_t var);
