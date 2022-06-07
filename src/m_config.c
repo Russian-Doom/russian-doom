@@ -63,14 +63,6 @@ static char *config_file_name;
 // DEFAULTS
 //
 
-typedef enum
-{
-    DEFAULT_INT,
-    DEFAULT_INT_HEX,
-    DEFAULT_STRING,
-    DEFAULT_FLOAT,
-} default_type_t;
-
 typedef struct
 {
     // Name of the variable
@@ -791,9 +783,17 @@ static void SetVariable(default_t *def, char *value);
 static void DefaultHandler_HandleLine(char* keyName, char *value, size_t valueSize)
 {
     default_t *def;
+#ifndef ___RD_TARGET_SETUP___
+    defaultTracker_t* tracker;
 
+    tracker = M_GetDefaultTracker(keyName);
+#endif
     def = SearchCollection(&default_collection, keyName);
-    if(def == NULL || !def->bound)
+    if((def == NULL || !def->bound)
+#ifndef ___RD_TARGET_SETUP___
+    && tracker == NULL
+#endif
+    )
     {
         // Unknown variable?  Unbound variables are also treated as unknown.
         return;
@@ -813,7 +813,12 @@ static void DefaultHandler_HandleLine(char* keyName, char *value, size_t valueSi
         memmove(value, value + 1, valueSize - 1);
     }
 
-    SetVariable(def, value);
+    if(def != NULL && def->bound)
+        SetVariable(def, value);
+#ifndef ___RD_TARGET_SETUP___
+    if(tracker != NULL)
+        M_SetTrackedValue(tracker, value);
+#endif
 }
 
 // Parses integer values in the configuration file
@@ -1081,6 +1086,11 @@ void M_LoadConfig(void)
         }
     }
 
+#ifndef ___RD_TARGET_SETUP___
+    config_version = cfg_version;
+    M_RegisterTrackedFields();
+#endif
+
     LoadSections(file);
 
     fclose(file);
@@ -1092,8 +1102,7 @@ void M_LoadConfig(void)
         M_AppendConfigSection("Keybinds", &keybindsHandler);
     }
 
-    config_version = cfg_version;
-    RD_ApplyMigration();
+    M_ApplyMigration();
 #endif
 }
 

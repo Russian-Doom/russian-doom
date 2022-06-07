@@ -15,15 +15,41 @@
 
 #pragma once
 
-/**
- * [Dasperal] This is only growing number that should be incremented when config structure changes
- * in a way that require use of migration mechanism
- */
-#define CURRENT_CONFIG_VERSION 1
+#include "doomtype.h"
+#include "m_config.h"
+
+enum {
+   /**
+    * [Dasperal] This is only growing number that should be incremented when config structure changes
+    * in a way that require use of migration mechanism\n
+    *\n
+    * Meaning of values:\n
+    * 0 - Initial state\n
+    * 1 - Made keys F[1, 2, 3, 4, 5, 7, 8, 10, 11], -, =, Pause not hardcoded and bindable\n
+    * 2 - Changed names of 'message_*_color' and 'sbar_color_*' config entries\n
+    */
+    CURRENT_CONFIG_VERSION = 2
+};
 
 /**
  * Version of the read config
  */
 extern int config_version;
 
-void RD_ApplyMigration();
+typedef struct defaultTracker_s
+{
+    struct defaultTracker_s* next;
+    const char* name;    // Name of the config variable
+    default_type_t type; // Type of the variable
+    union {
+        int i;   // DEFAULT_INT and DEFAULT_INT_HEX types
+        float f; // DEFAULT_FLOAT type
+        char* s; // DEFAULT_STRING type
+    } value;       // Value of the tracked config variable
+    boolean found; // Is 'value' field contains valid data
+} defaultTracker_t;
+
+defaultTracker_t* M_GetDefaultTracker(const char* name);
+void M_SetTrackedValue(defaultTracker_t *tracker, char *value);
+void M_RegisterTrackedFields();
+void M_ApplyMigration();

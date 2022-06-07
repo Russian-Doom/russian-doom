@@ -259,6 +259,13 @@ boolean F_Responder(event_t * ev);
 
 boolean hasDelayEvents = false;
 
+int* JN_getNotCommonIntVarPointer(notCommonVar_t var)
+{
+    if(var == v_message_color_secret)
+        return &message_color_secret;
+    return NULL;
+}
+
 //---------------------------------------------------------------------------
 //
 // PROC D_ProcessEvents

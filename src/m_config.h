@@ -47,6 +47,14 @@ typedef struct
     void (*onFinishHandling) ();
 } sectionHandler_t;
 
+typedef enum
+{
+    DEFAULT_INT,
+    DEFAULT_INT_HEX,
+    DEFAULT_STRING,
+    DEFAULT_FLOAT
+} default_type_t;
+
 void M_LoadConfig(void);
 void M_SaveConfig(void);
 void M_AppendConfigSection(const char* sectionName, sectionHandler_t* handler);

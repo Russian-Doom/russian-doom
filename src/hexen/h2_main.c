@@ -295,6 +295,13 @@ static int WarpMap;
 
 // CODE --------------------------------------------------------------------
 
+int* JN_getNotCommonIntVarPointer(notCommonVar_t var)
+{
+    if(var == v_message_color_quest)
+        return &message_color_quest;
+    return NULL;
+}
+
 void D_BindVariables(void)
 {
     int i;
