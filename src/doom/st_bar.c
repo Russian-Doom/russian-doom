@@ -1489,7 +1489,7 @@ static void ST_DrawElements (const boolean wide)
     }
 
     // Health, negative health
-    ST_DrawBigNumber(negative_health ? plyr->mo->health : plyr->health, 
+    ST_DrawBigNumber(negative_health && !vanillaparm ? plyr->mo->health : plyr->health, 
                      52 + left_delta, 171, ST_WidgetColor(hudcolor_health));
     ST_DrawPercent(90 + left_delta, 171, sbar_colored == 1 ? cr[CR_WHITE] :
                                          sbar_colored == 2 ?
