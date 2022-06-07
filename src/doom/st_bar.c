@@ -1553,17 +1553,20 @@ static void ST_DrawElements (const boolean wide)
                                            ST_WidgetColor(hudcolor_armor) : NULL);
 
     // [crispy] blinking key or skull in the status bar
-    for (int i = 0, y = 0 ; i < 3 ; i++, y += 10)
+    if (!vanillaparm)
     {
-        if (plyr->tryopen[i])
+        for (int i = 0, y = 0 ; i < 3 ; i++, y += 10)
         {
-            if (!(plyr->tryopen[i] & (2 * KEYBLINKMASK - 1)))
+            if (plyr->tryopen[i])
             {
-                S_StartSound(NULL, sfx_itemup);
-            }
-            if (plyr->tryopen[i] & KEYBLINKMASK)
-            {
-                V_DrawPatch(239 + right_delta, 171 + y, keys[i + st_keyorskull[i]] , NULL);
+                if (!(plyr->tryopen[i] & (2 * KEYBLINKMASK - 1)))
+                {
+                    S_StartSound(NULL, sfx_itemup);
+                }
+                if (plyr->tryopen[i] & KEYBLINKMASK)
+                {
+                    V_DrawPatch(239 + right_delta, 171 + y, keys[i + st_keyorskull[i]] , NULL);
+                }
             }
         }
     }
