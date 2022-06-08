@@ -1728,25 +1728,20 @@ static void ST_DrawElementsJaguar (const boolean wide)
     ST_DrawBigNumber(plyr->armorpoints, 187 + right_delta, 174, NULL);
     ST_DrawPercent(225 + right_delta, 174, NULL);
 
-    // Weapons or artifacts owned
+    // Pistol
     ST_DrawSmallNumberY(2, 245 + right_delta, 175);
-    // Shotgun or Super Shotgun
-    plyr->weaponowned[2] || plyr->weaponowned[8] ? 
-                            ST_DrawSmallNumberY(3, 257 + right_delta, 175) :
-                            ST_DrawSmallNumberG(3, 257 + right_delta, 175) ;
+    // Shotgun (no Super Shotgun in Jaguar Doom)
+    ST_DrawWeaponNumberFunc(3, 257 + right_delta, 175, plyr->weaponowned[2]);
     // Chaingun
-    plyr->weaponowned[3] ? ST_DrawSmallNumberY(4, 269 + right_delta, 175) :
-                           ST_DrawSmallNumberG(4, 269 + right_delta, 175) ;
+    ST_DrawWeaponNumberFunc(4, 269 + right_delta, 175, plyr->weaponowned[3]);
     // Rocket Launcher
-    plyr->weaponowned[4] ? ST_DrawSmallNumberY(5, 245 + right_delta, 185) :
-                           ST_DrawSmallNumberG(5, 245 + right_delta, 185) ;
+    ST_DrawWeaponNumberFunc(5, 245 + right_delta, 185, plyr->weaponowned[4]);
     // Plasma Gun
-    plyr->weaponowned[5] ? ST_DrawSmallNumberY(6, 257 + right_delta, 185) :
-                           ST_DrawSmallNumberG(6, 257 + right_delta, 185) ;
+    ST_DrawWeaponNumberFunc(6, 257 + right_delta, 185, plyr->weaponowned[5]);
     // BFG9000
-    plyr->weaponowned[6] ? ST_DrawSmallNumberY(7, 269 + right_delta, 185) :
-                           ST_DrawSmallNumberG(7, 269 + right_delta, 185) ;
+    ST_DrawWeaponNumberFunc(7, 269 + right_delta, 185, plyr->weaponowned[6]);
 
+    // Current map
     ST_DrawBigNumber(gamemap, 279 + right_delta, 174, NULL);
 }
 
