@@ -828,6 +828,10 @@ static void ST_updateFaceWidget (void)
     angle_t     diffang;
     boolean     doevilgrin;
 
+    // [JN] Keep vanilla ouch face behavior for -vanilla game mode.
+    const boolean ouch_condition = vanillaparm ? (plyr->health - st_oldhealth > ST_MUCHPAIN) :
+                                                 (st_oldhealth - plyr->health > ST_MUCHPAIN);
+
     if (priority < 10)
     {
         // dead
@@ -922,8 +926,7 @@ static void ST_updateFaceWidget (void)
             priority = 7;
 
             // [crispy] show "Ouch Face" as intended
-            if (vanillaparm ? (plyr->health - st_oldhealth > ST_MUCHPAIN) :
-                              (st_oldhealth - plyr->health > ST_MUCHPAIN))
+            if (ouch_condition)
             {
                 // [crispy] raise "Ouch Face" priority
                 if (!vanillaparm)
@@ -980,8 +983,7 @@ static void ST_updateFaceWidget (void)
         if (plyr->damagecount)
         {
             // [crispy] show "Ouch Face" as intended
-            if (vanillaparm ? (plyr->health - st_oldhealth > ST_MUCHPAIN) :
-                              (st_oldhealth - plyr->health > ST_MUCHPAIN))
+            if (ouch_condition)
             {
                 priority = 7;
                 st_facecount = ST_TURNCOUNT;
