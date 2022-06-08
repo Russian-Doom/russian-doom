@@ -1421,6 +1421,17 @@ static void ST_DrawSmallNumberG (int val, const int x, const int y)
 }
 
 // -----------------------------------------------------------------------------
+// ST_DrawSmallNumberFunc
+// [JN] Decides which small font drawing function to use: if weapon is owned,
+//      draw using yellow font. Else, draw using gray font.
+// -----------------------------------------------------------------------------
+
+static void ST_DrawWeaponNumberFunc (const int val, const int x, const int y, const boolean have_it)
+{
+    have_it ? ST_DrawSmallNumberY(val, x, y) : ST_DrawSmallNumberG(val, x, y);
+}
+
+// -----------------------------------------------------------------------------
 // ST_DrawElements
 // [JN] Draw various digit values, faces and keys.
 // Wide boolean stand for wider status bar.
@@ -1509,23 +1520,18 @@ static void ST_DrawElements (const boolean wide)
         // Weapons or artifacts owned
         if (gamemode != pressbeta)
         {
-            ST_DrawSmallNumberY(2, 107 + left_delta, 172);
+            // Pistol
+            ST_DrawWeaponNumberFunc(2, 107 + left_delta, 172, plyr->weaponowned[1]);
             // Shotgun or Super Shotgun
-            plyr->weaponowned[2] || plyr->weaponowned[8] ? 
-                                    ST_DrawSmallNumberY(3, 119 + left_delta, 172) :
-                                    ST_DrawSmallNumberG(3, 119 + left_delta, 172) ;
+            ST_DrawWeaponNumberFunc(3, 119 + left_delta, 172, plyr->weaponowned[2] || plyr->weaponowned[8]);
             // Chaingun
-            plyr->weaponowned[3] ? ST_DrawSmallNumberY(4, 131 + left_delta, 172) :
-                                   ST_DrawSmallNumberG(4, 131 + left_delta, 172) ;
+            ST_DrawWeaponNumberFunc(4, 131 + left_delta, 172, plyr->weaponowned[3]);
             // Rocket Launcher
-            plyr->weaponowned[4] ? ST_DrawSmallNumberY(5, 107 + left_delta, 182) :
-                                   ST_DrawSmallNumberG(5, 107 + left_delta, 182) ;
+            ST_DrawWeaponNumberFunc(5, 107 + left_delta, 182, plyr->weaponowned[4]);
             // Plasma Gun
-            plyr->weaponowned[5] ? ST_DrawSmallNumberY(6, 119 + left_delta, 182) :
-                                   ST_DrawSmallNumberG(6, 119 + left_delta, 182) ;
+            ST_DrawWeaponNumberFunc(6, 119 + left_delta, 182, plyr->weaponowned[5]);
             // BFG9000
-            plyr->weaponowned[6] ? ST_DrawSmallNumberY(7, 131 + left_delta, 182) :
-                                   ST_DrawSmallNumberG(7, 131 + left_delta, 182) ;
+            ST_DrawWeaponNumberFunc(7, 131 + left_delta, 182, plyr->weaponowned[6]);
         }
         else
         {
