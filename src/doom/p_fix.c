@@ -674,6 +674,7 @@ linefix_t linefix[] =
     { doom,             3,   5,     557,    0, "",         "",            "",            DEFAULT,   DEFAULT, (ML_DONTPEGTOP | ML_DONTPEGBOTTOM), DEFAULT,                                    DEFAULT },
     { doom,             3,   5,     597,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
     { doom,             3,   5,     598,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+	{ doom,             3,   5,     665,    0, "",         "",            "",            DEFAULT,       -48, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
     { doom,             3,   5,     762,    0, "",         "",            "",                168,        32, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   5,     764,    0, "",         "",            "",                  8,        32, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   5,     775,    0, "",         "",            "",                 40,         0, DEFAULT,                            DEFAULT,                                    DEFAULT },
