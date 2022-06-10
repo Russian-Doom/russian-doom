@@ -74,8 +74,8 @@ void P_RemoveThinker (thinker_t *thinker)
 // -----------------------------------------------------------------------------
 // P_RunThinkers
 // [JN] Additionally, animate flickering and glowing effect for brightmaps.
-// Animation is thinker/calculated tic based, and  have a constant update speed,
-// that's why We can't rely only on screen renderer in this case.
+// Animation is thinker/calculated tic based, and have a constant update speed,
+// that's why we can't rely only on screen renderer in this case.
 // -----------------------------------------------------------------------------
 
 int bmap_flick = 0;
@@ -193,11 +193,11 @@ void P_RunThinkers (void)
     }
 
     // [JN] Reset brightmap timers.
-    if (bmap_count_flick == 4)
+    if (bmap_count_flick >= 4)
     {
         bmap_count_flick = 0;
     }
-    if (bmap_count_glow == 13)
+    if (bmap_count_glow >= 13)
     {
         bmap_count_glow = 0;
     }
