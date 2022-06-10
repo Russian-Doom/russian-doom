@@ -520,90 +520,6 @@ static void R_DrawVisSprite (const vissprite_t *vis, const int x1, const int x2)
 }
 
 // -----------------------------------------------------------------------------
-// R_AnimateBrightmaps
-// [JN] Simple routine to emulate flickering and glowing effects for brightmaps.
-//
-// Note: flickering effect (mo->brightmap_anim) is a mobj, not a vissprite 
-// property, since we need to update effect independently from framerate and
-// can't rely only on screen renderer.
-// -----------------------------------------------------------------------------
-
-static int bmap_flick = 0;
-static int bmap_glow = 0;
-static int bmap_count_flick = 0;
-static int bmap_count_glow = 0;
-
-void R_AnimateBrightmaps (void)
-{
-    thinker_t *th;
-
-    // Run timers.
-    bmap_count_flick++;
-    bmap_count_glow++;
-
-    // Random flickering effect.
-    if (bmap_count_flick < 2)
-    {
-        for (th = thinkercap.next ; th != &thinkercap ; th = th->next)
-        {
-            if (th->function.acp1 == (actionf_p1)P_MobjThinker)
-            {
-                mobj_t *mo = (mobj_t *)th;
-    
-                if (mo->sprite == SPR_CAND  // Candestick
-                ||  mo->sprite == SPR_CBRA  // Candelabra
-                ||  mo->sprite == SPR_FCAN  // Flaming Barrel
-                ||  mo->sprite == SPR_TBLU  // Tall Blue Torch
-                ||  mo->sprite == SPR_TGRN  // Tall Green Torch
-                ||  mo->sprite == SPR_TRED  // Tall Red Torch
-                ||  mo->sprite == SPR_SMBT  // Short Blue Torch
-                ||  mo->sprite == SPR_SMGT  // Short Green Torch
-                ||  mo->sprite == SPR_SMRT  // Short Red Torch
-                ||  mo->sprite == SPR_POL3) // Pile of Skulls and Candles
-                {
-                    if (brightmaps && !vanillaparm)
-                    {
-                        mo->bmap_flick = rand() % 16;
-                    }
-                    else
-                    {
-                        mo->bmap_flick =  0;
-                    }
-                }
-            }
-        }
-    }
-
-    // Glowing effect.
-    if (brightmaps && !vanillaparm)
-    {
-        if (bmap_count_glow < 7)
-        {
-            bmap_glow++;
-        }
-        else if (bmap_count_glow < 13)
-        {
-            bmap_glow--;
-        }
-    }
-    else
-    {
-        bmap_glow = 0;
-        bmap_count_glow = 0;
-    }
-
-    // Reset timers.
-    if (bmap_count_flick == 4)
-    {
-        bmap_count_flick = 0;
-    }
-    if (bmap_count_glow == 13)
-    {
-        bmap_count_glow = 0;
-    }
-}
-
-// -----------------------------------------------------------------------------
 // R_ProjectSprite
 // Generates a vissprite for a thing if it might be visible.
 // -----------------------------------------------------------------------------
@@ -829,7 +745,7 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
         // [crispy] brightmaps for select sprites
         vis->colormap[0] = spritelights[index];
 
-        // [JN] Get flickering light level from R_AnimateBrightmaps.
+        // [JN] Flickering light level is set in P_RunThinkers.
         bmap_flick = thing->bmap_flick;
 
         // [JN] Apply different types half-brights for certain objects.

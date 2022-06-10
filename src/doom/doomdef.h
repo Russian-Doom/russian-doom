@@ -550,7 +550,7 @@ typedef struct mobj_s
     fixed_t oldz;
     angle_t oldangle;
 
-    // [JN] Light level of brightmap animation.
+    // [JN] Animated brightmaps.
     int     bmap_flick;
 
 } mobj_t;

@@ -719,10 +719,11 @@ extern fixed_t  spryscale;
 extern int64_t  sprtopscreen; // [crispy] WiggleFix
 extern fixed_t  pspritescale;
 extern fixed_t  pspriteiscale;
+extern int      bmap_flick;   // [JN] Animated brightmaps.
+extern int      bmap_glow;
 
 void R_AddPSprites (void);
 void R_AddSprites (const sector_t *sec);
-void R_AnimateBrightmaps (void);
 void R_ClearSprites (void);
 void R_ClipVisSprite (vissprite_t *vis, int xl, int xh);
 void R_DrawMasked (void);
