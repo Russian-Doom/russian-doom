@@ -1083,14 +1083,13 @@ static void I_InitGammaTables (void)
     }
 }
 
-//
-// I_SetPalette
-//
-void I_SetPalette (const byte *doompalette)
-{
-    int i;
+// -----------------------------------------------------------------------------
+// I_CheckPaletteValues
+// [JN] Safe-guard conditions to fix possibly incorrect values.
+// -----------------------------------------------------------------------------
 
-    // [JN] Safe-guard conditions to fix incorrect values:
+static void I_CheckPaletteValues (void)
+{
     if (brightness < 0) brightness = 0;
     if (brightness > 1) brightness = 1;
     
@@ -1106,6 +1105,14 @@ void I_SetPalette (const byte *doompalette)
     if (g_color_factor > 1) g_color_factor = 1;
     if (b_color_factor < 0) b_color_factor = 0;
     if (b_color_factor > 1) b_color_factor = 1;
+}
+
+//
+// I_SetPalette
+//
+void I_SetPalette (const byte *doompalette)
+{
+    int i;
 
     for (i=0; i<256; ++i)
     {
@@ -1719,6 +1726,7 @@ void I_InitGraphics(void)
     // Set the palette
 
     doompal = W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE);
+    I_CheckPaletteValues();
     I_SetPalette(doompal);
     SDL_SetPaletteColors(screenbuffer->format->palette, palette, 0, 256);
 
