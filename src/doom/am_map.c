@@ -2266,8 +2266,19 @@ static void AM_drawPlayers (void)
 
     if (!netgame)
     {
-        pt.x = plr->mo->x;
-        pt.y = plr->mo->y;
+        // [JN] Interpolate player arrow in non-follow mode if possible.
+        // Note: do not apply interpolation in follow mode, otherwise
+        // player arrow will have jerking.
+        if (!automap_follow && uncapped_fps && !vanillaparm && leveltime > oldleveltime)
+        {
+            pt.x = plr->mo->oldx + FixedMul(plr->mo->x - plr->mo->oldx, fractionaltic);
+            pt.y = plr->mo->oldy + FixedMul(plr->mo->y - plr->mo->oldy, fractionaltic);
+        }
+        else
+        {
+            pt.x = plr->mo->x;
+            pt.y = plr->mo->y;
+        }
 
         if (automap_rotate)
         {
