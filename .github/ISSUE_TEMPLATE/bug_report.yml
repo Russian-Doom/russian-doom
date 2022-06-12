@@ -17,7 +17,7 @@ body:
       description: |
         What version are you using? If you are building International doom from source, specify revision.
         Make sure to update to latest [release](https://github.com/JNechaevsky/inter-doom/releases) version and test again before continuing.
-      placeholder: "International Doom 5.2.1 | International Heretic 5.1.1 | International Hexen 5.0"
+      placeholder: "International Doom 5.3 | International Heretic 5.2 | International Hexen 5.1"
     validations:
       required: true
   - type: dropdown
