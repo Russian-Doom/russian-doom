@@ -590,10 +590,12 @@ void R_DrawPlanes(void)
                                     if (source[frac >> FRACBITS])
                                     {
                                         *dest4 = *dest3 = *dest2 = *dest1 = source[frac >> FRACBITS];
+#ifdef WHEN_ITS_DONE
                                         if (isPSX)
                                         {
                                             *dest4 = *dest3 = *dest2 = *dest1 = transtable70[(*dest1<<8)+source2[frac>>FRACBITS]];
                                         }
+#endif
                                     }
                                     else
                                     {
@@ -621,10 +623,12 @@ void R_DrawPlanes(void)
                                     if (source[(frac >> FRACBITS) & heightmask])
                                     {
                                         *dest4 = *dest3 = *dest2 = *dest1 = source[(frac >> FRACBITS) & heightmask];
+#ifdef WHEN_ITS_DONE
                                         if (isPSX)
                                         {
                                             *dest4 = *dest3 = *dest2 = *dest1 = transtable70[(*dest1<<8)+(source2[frac>>FRACBITS] & heightmask)];
                                         }
+#endif
                                     }
                                     else
                                     {
@@ -662,10 +666,12 @@ void R_DrawPlanes(void)
                                     if (source[frac >> FRACBITS])
                                     {
                                         *dest = source[frac >> FRACBITS];
+#ifdef WHEN_ITS_DONE
                                         if (isPSX)
                                         {
                                             *dest = transtable70[(*dest<<8)+source2[frac>>FRACBITS]];
                                         }
+#endif
                                     }
                                     else
                                     {
@@ -687,10 +693,12 @@ void R_DrawPlanes(void)
                                     if (source[(frac >> FRACBITS) & heightmask])
                                     {
                                         *dest = source[(frac >> FRACBITS) & heightmask];
+#ifdef WHEN_ITS_DONE
                                         if (isPSX)
                                         {
                                             *dest = transtable70[(*dest<<8)+(source2[frac>>FRACBITS] & heightmask)];
                                         }
+#endif
                                     }
                                     else
                                     {

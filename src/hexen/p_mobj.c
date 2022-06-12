@@ -1689,6 +1689,7 @@ void P_SpawnMapThing(mapthing_t * mthing)
         return;
     }
 
+#ifdef WHEN_ITS_DONE
     // [JN] PSX: replace Green Serpents with Brown Serpents.
     if (isPSX)
     {
@@ -1697,6 +1698,7 @@ void P_SpawnMapThing(mapthing_t * mthing)
             mthing->type = 8080;
         }
     }
+#endif
 
     // Check current game type with spawn flags
     if (netgame == false)

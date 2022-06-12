@@ -605,12 +605,14 @@ void D_SetGameDescription(void)
         }
     }
 
+#ifdef WHEN_ITS_DONE
     if (M_CheckParm("-psx"))
     {
         hasUnknownPWads = true;
         isPSX = true;
         W_MergeFile(RD_M_FindInternalResource("hexen-psx.wad"));
     }
+#endif
 
     // [JN] Параметр "-file" перенесен из w_main.c
     // Необходимо для того, чтобы любые ресурсы из pwad-файлов
