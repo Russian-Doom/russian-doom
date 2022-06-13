@@ -7350,7 +7350,6 @@ boolean M_Responder (event_t* ev)
                                    gammalevel_names[usegamma] :
                                    gammalevel_names_rus[usegamma], NULL);
         P_SetMessage(&players[consoleplayer], DEH_String(gamma_level), msg_system, false);
-        free(gamma_level);
 
         return true;
     }

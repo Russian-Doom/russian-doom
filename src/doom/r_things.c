@@ -748,6 +748,10 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
         // [JN] Flickering light level is set in P_RunThinkers.
         bmap_flick = thing->bmap_flick;
 
+        // [JN] Prevent garbage values to be used.
+        if (bmap_flick > 16) bmap_flick = 16;
+        if (bmap_flick < 0)  bmap_flick = 0;
+
         // [JN] Apply different types half-brights for certain objects.
         //  Not to be confused:
         //   * Semi-bright. Lits up brightmapped pixels with non-full power.
