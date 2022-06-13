@@ -172,6 +172,14 @@ typedef enum
     controller
 } device_t;
 
+typedef struct bind_descriptor_s
+{
+    struct bind_descriptor_s* next;
+    device_t device;
+    int key;
+} bind_descriptor_t;
+
+extern bind_descriptor_t* bind_descriptor[bk__size];
 extern boolean isBinding;
 extern boolean isBindsLoaded;
 
@@ -207,3 +215,5 @@ boolean KeybindsHandler_isHandling(char* sectionName);
 void KeybindsHandler_HandleLine(char* keyName, char *value, size_t valueSize);
 
 void KeybindsHandler_Save(FILE* file, char* sectionName);
+
+void BK_TraverseBinds(void (*lambda)(bound_key_t key, bind_descriptor_t* bindDescriptor));
