@@ -63,6 +63,11 @@ if(COMPILE_HEXEN)
         C_STANDARD "${RD_C_STANDARD}"
         C_STANDARD_REQUIRED ON
     )
+    target_compile_definitions(hexen PRIVATE
+        BUILD_HEXEN_VERSION="${BUILD_HEXEN_VERSION}"
+        PACKAGE_PREFIX="${PACKAGE_PREFIX}"
+        PROGRAM_PREFIX="${PROGRAM_PREFIX}"
+    )
     target_link_libraries(hexen PRIVATE
         SDL2::SDL2
         SDL2::mixer

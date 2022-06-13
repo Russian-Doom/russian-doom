@@ -23,7 +23,6 @@
 #include <winnls.h> // [JN] GetSystemDefaultLCID()
 #endif
 
-#include "config.h"
 #include "textscreen.h"
 
 #include "execute.h"

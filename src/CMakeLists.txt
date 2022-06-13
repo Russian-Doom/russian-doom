@@ -19,12 +19,18 @@ add_library(Common STATIC EXCLUDE_FROM_ALL
     z_zone.c            z_zone.h
 )
 target_include_directories(Common PUBLIC
-    "${PROJECT_BINARY_DIR}"
     "${CMAKE_CURRENT_SOURCE_DIR}"
 )
 set_target_properties(Common PROPERTIES
     C_STANDARD "${RD_C_STANDARD}"
     C_STANDARD_REQUIRED ON
+)
+target_compile_definitions(Common PRIVATE
+    "$<$<BOOL:${BUILD_PORTABLE}>:BUILD_PORTABLE>"
+    PACKAGE_TARNAME="${PACKAGE_TARNAME}"
+    PUBLIC
+    "$<IF:$<BOOL:${HAVE_DECL_STRCASECMP}>,HAVE_DECL_STRCASECMP=1,HAVE_DECL_STRCASECMP=0>"
+    "$<IF:$<BOOL:${HAVE_DECL_STRNCASECMP}>,HAVE_DECL_STRNCASECMP=1,HAVE_DECL_STRNCASECMP=0>"
 )
 
 if(PC_SDL2_FOUND AND NOT (SDL2_MAIN_LIBRARY STREQUAL "SDL2_MAIN_LIBRARY-NOTFOUND"))
@@ -99,14 +105,18 @@ add_library(Game STATIC EXCLUDE_FROM_ALL
     w_file_win32.c
     w_merge.c           w_merge.h
 )
-if(BUILD_HAS_SDL_MIXER_PATCH)
-    target_compile_definitions(Game
-        PRIVATE "RD_BUILD_HAS_SDL_MIXER_PATCH"
-    )
-endif()
 set_target_properties(Game PROPERTIES
     C_STANDARD "${RD_C_STANDARD}"
     C_STANDARD_REQUIRED ON
+)
+target_compile_definitions(Game PRIVATE
+    "$<$<BOOL:${BUILD_HAS_SDL_MIXER_PATCH}>:RD_BUILD_HAS_SDL_MIXER_PATCH>"
+    "$<$<BOOL:${SAMPLERATE_FOUND}>:HAVE_LIBSAMPLERATE>"
+    "$<$<BOOL:${PNG_FOUND}>:HAVE_LIBPNG>"
+    "$<$<BOOL:${HAVE_MMAP}>:HAVE_MMAP>"
+    "$<$<BOOL:${BUILD_PORTABLE}>:BUILD_PORTABLE>"
+    PACKAGE_TARNAME="${PACKAGE_TARNAME}"
+    PROGRAM_PREFIX="${PROGRAM_PREFIX}"
 )
 target_link_libraries(Game PUBLIC
     Common
@@ -115,17 +125,10 @@ target_link_libraries(Game PUBLIC
     textscreen
     pcsound
     opl
+    "$<$<BOOL:${SAMPLERATE_FOUND}>:samplerate::samplerate>"
+    "$<$<BOOL:${PNG_FOUND}>:PNG::PNG>"
+    "$<$<BOOL:${WIN32}>:winmm>"
 )
-
-if(SAMPLERATE_FOUND)
-    target_link_libraries(Game PUBLIC samplerate::samplerate)
-endif()
-if(PNG_FOUND)
-    target_link_libraries(Game PUBLIC PNG::PNG)
-endif()
-if(WIN32)
-    target_link_libraries(Game PUBLIC winmm)
-endif()
 
 
 # SetupCommon libraty
@@ -148,8 +151,10 @@ if(COMPILE_SETUP)
         C_STANDARD "${RD_C_STANDARD}"
         C_STANDARD_REQUIRED ON
     )
-    target_compile_definitions(SetupCommon
-        PRIVATE "___RD_TARGET_SETUP___"
+    target_compile_definitions(SetupCommon PRIVATE
+        "___RD_TARGET_SETUP___"
+        "$<$<BOOL:${BUILD_PORTABLE}>:BUILD_PORTABLE>"
+        PACKAGE_TARNAME="${PACKAGE_TARNAME}"
     )
     target_link_libraries(SetupCommon PUBLIC
         Common

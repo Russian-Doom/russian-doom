@@ -18,8 +18,6 @@
 //
 
 
-
-#include "config.h"
 #include "doomfeatures.h"
 #include "d_iwad.h"
 #include "i_system.h"

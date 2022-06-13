@@ -18,9 +18,6 @@
 //
 
 
-
-#include "config.h"
-
 #include <assert.h>
 #include <stdio.h>
 #include <time.h>   // [JN] srand(time(0))

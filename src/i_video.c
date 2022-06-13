@@ -32,7 +32,6 @@
 #endif
 
 #include "icon.h"
-#include "config.h"
 #include "d_name.h"
 #include "d_loop.h"
 #include "deh_str.h"

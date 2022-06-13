@@ -29,7 +29,6 @@
 #include "mode.h"
 
 #include "display.h"
-#include "config.h"
 
 #define WINDOW_HELP_URL "https://github.com/JNechaevsky/inter-doom/wiki"
 

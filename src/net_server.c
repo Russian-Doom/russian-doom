@@ -22,7 +22,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "config.h"
 #include "doomtype.h"
 #include "d_name.h"
 #include "d_mode.h"

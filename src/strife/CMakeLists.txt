@@ -71,6 +71,11 @@ if(COMPILE_STRIFE)
         C_STANDARD "${RD_C_STANDARD}"
         C_STANDARD_REQUIRED ON
     )
+    target_compile_definitions(strife PRIVATE
+        BUILD_STRIFE_VERSION="${BUILD_STRIFE_VERSION}"
+        PACKAGE_PREFIX="${PACKAGE_PREFIX}"
+        PROGRAM_PREFIX="${PROGRAM_PREFIX}"
+    )
     target_link_libraries(strife PRIVATE
         textscreen
         SDL2::SDL2

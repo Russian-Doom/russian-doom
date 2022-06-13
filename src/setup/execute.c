@@ -40,7 +40,6 @@
 
 #include "textscreen.h"
 
-#include "config.h"
 #include "execute.h"
 #include "mode.h"
 #include "m_argv.h"

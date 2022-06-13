@@ -20,7 +20,6 @@
 
 #include "doomtype.h"
 
-#include "config.h"
 #include "textscreen.h"
 
 #include "doomtype.h"

@@ -21,7 +21,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "config.h"
 #include "doomtype.h"
 #include "i_video.h"
 #include "jn.h"

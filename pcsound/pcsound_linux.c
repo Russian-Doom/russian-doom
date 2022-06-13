@@ -17,9 +17,6 @@
 //
 
 
-
-#include "config.h"
-
 #ifdef HAVE_LINUX_KD_H
 
 #include <stdio.h>

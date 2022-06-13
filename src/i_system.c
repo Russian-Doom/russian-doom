@@ -34,7 +34,6 @@
 #endif
 
 #include "SDL.h"
-#include "config.h"
 #include "doomtype.h"
 #include "d_name.h"
 #include "m_argv.h"
