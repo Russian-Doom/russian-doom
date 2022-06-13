@@ -53,8 +53,8 @@ add_compile_options("-Wall" "-Wdeclaration-after-statement"
 string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
 string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
 
-find_package(SDL2 2.0.1 REQUIRED)
-find_package(SDL2_mixer 2.0.0 REQUIRED)
+find_package(SDL2 2.0.4 REQUIRED)
+find_package(SDL2_mixer 2.0.2 REQUIRED)
 find_package(SDL2_net 2.0.0 REQUIRED)
 
 # Check for libsamplerate.
