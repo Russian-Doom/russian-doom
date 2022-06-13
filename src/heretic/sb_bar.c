@@ -20,6 +20,7 @@
 
 #include "doomdef.h"
 #include "deh_str.h"
+#include "d_name.h"
 #include "i_video.h"
 #include "i_swap.h"
 #include "i_timer.h"    // [JN] TICRATE
@@ -70,6 +71,7 @@ static void CheatChickenFunc(player_t * player, Cheat_t * cheat);
 static void CheatMassacreFunc(player_t * player, Cheat_t * cheat);
 static void CheatIDKFAFunc(player_t * player, Cheat_t * cheat);
 static void CheatIDDQDFunc(player_t * player, Cheat_t * cheat);
+static void CheatVERSIONFunc(player_t * player, Cheat_t * cheat);
 static void CheatRAVMUSFunc(player_t * player, Cheat_t * cheat);
 
 // [JN] Ammo widget prototypes.
@@ -169,6 +171,9 @@ cheatseq_t CheatMassacreSeq = CHEAT("massacre", 0);
 cheatseq_t CheatIDKFASeq = CHEAT("idkfa", 0);
 cheatseq_t CheatIDDQDSeq = CHEAT("iddqd", 0);
 
+// [JN] Чит-код отображения версии проекта
+cheatseq_t CheatVERSIONSeq = CHEAT("version", 0);
+
 // [JN] Music changing.
 cheatseq_t CheatRAVMUSSeq = CHEAT("ravmus", 2);
 cheatseq_t CheatIDMUSSeq = CHEAT("idmus", 2);
@@ -190,6 +195,7 @@ static Cheat_t Cheats[] = {
     {CheatMassacreFunc,  &CheatMassacreSeq},
     {CheatIDKFAFunc,     &CheatIDKFASeq},
     {CheatIDDQDFunc,     &CheatIDDQDSeq},
+    {CheatVERSIONFunc,   &CheatVERSIONSeq},
     {CheatRAVMUSFunc,    &CheatRAVMUSSeq},
     {CheatRAVMUSFunc,    &CheatIDMUSSeq},
     {NULL,               NULL} 
@@ -2033,6 +2039,19 @@ static void CheatIDDQDFunc(player_t * player, Cheat_t * cheat)
     NIGHTMARE_NETGAME_CHECK;
     P_DamageMobj(player->mo, NULL, player->mo, 10000);
     P_SetMessage(player, DEH_String(txt_cheatiddqd), msg_system, true);
+}
+
+static void CheatVERSIONFunc(player_t * player, Cheat_t * cheat)
+{
+    static char msg[38];
+
+    char* version = english_language
+                  ? RD_Project_Version
+                  : M_StringReplace(RD_Project_Version, ".", ">");
+    M_snprintf(msg, sizeof(msg), "%s %s",
+               english_language ? "Version" : "dthcbz", version);
+
+    P_SetMessage(player, msg, msg_system, true);
 }
 
 /*

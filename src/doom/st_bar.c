@@ -22,6 +22,7 @@
 #include "w_wad.h"
 #include "deh_main.h"
 #include "deh_misc.h"
+#include "d_name.h"
 #include "g_game.h"
 #include "st_bar.h"
 #include "p_local.h"
@@ -215,6 +216,9 @@ static cheatseq_t cheat_buddha = CHEAT("buddha", 0);
 static cheatseq_t cheat_god_beta    = CHEAT("tst", 0); // iddqd
 static cheatseq_t cheat_ammo_beta   = CHEAT("amo", 0); // idkfa
 static cheatseq_t cheat_noclip_beta = CHEAT("nc", 0);  // idclip
+
+// [JN] Чит-код отображения версии проекта
+cheatseq_t cheat_version = CHEAT("version", 0);
 
 // -----------------------------------------------------------------------------
 // ST_cheat_massacre
@@ -437,6 +441,18 @@ const boolean ST_Responder (const event_t *ev)
                 int killcount = ST_cheat_massacre(false);
 
                 M_snprintf(msg, sizeof(msg), "%s %d", ststr_massacre, killcount);
+                P_SetMessage(plyr, msg, msg_system, false);
+            }
+
+            // [JN] Отображение версии проекта
+            else if (cht_CheckCheat(&cheat_version, ev->data2))
+            {
+                char* version = english_language
+                              ? RD_Project_Version
+                              : M_StringReplace(RD_Project_Version, ".", ">");
+                M_snprintf(msg, sizeof(msg), "%s %s",
+                           english_language ? "Version" : "dthcbz", version);
+
                 P_SetMessage(plyr, msg, msg_system, false);
             }
 

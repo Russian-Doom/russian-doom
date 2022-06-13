@@ -27,4 +27,5 @@ typedef enum
 // [Dasperal] Those vars should be defined in game-specific code
 extern char* RD_Project_Name;
 extern char* RD_Project_String;
+extern char* RD_Project_Version;
 extern GameType_t RD_GameType;

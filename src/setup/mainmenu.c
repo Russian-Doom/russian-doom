@@ -49,6 +49,7 @@
 // -----------------------------------------------------------------------------
 char* RD_Project_Name = PACKAGE_PREFIX " Setup";
 char* RD_Project_String = PACKAGE_PREFIX " Setup " BUILD_DOOM_VERSION;
+char* RD_Project_Version = BUILD_DOOM_VERSION;
 GameType_t RD_GameType = gt_Doom;
 
 //
