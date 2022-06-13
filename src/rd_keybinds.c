@@ -25,19 +25,7 @@
 #include "jn.h"
 #include "m_misc.h"
 #include "rd_menu.h"
-
-typedef struct
-{
-    bound_key_t from;
-    bound_key_t to;
-} bind_section_t;
-
-typedef struct bind_descriptor_s
-{
-    struct bind_descriptor_s* next;
-    device_t device;
-    int key;
-} bind_descriptor_t;
+#include "rd_migration.h"
 
 boolean isBinding = false;
 bound_key_t keyToBind = bk__null;
@@ -491,108 +479,71 @@ void BK_StartBindingKey(bound_key_t key)
     keyToBind = key;
 }
 
-// -----------------------------------------------------------------------------
-// removeKeyFromBinds
-// Removes given key of device from all bound_keys
-// -----------------------------------------------------------------------------
-static void removeBindFromSection(const device_t device, const int key, const bind_section_t* section)
+static inline boolean removeBinding(bind_descriptor_t** list, const device_t device, const int key)
 {
-    bind_descriptor_t *prevDescriptor, *tmp;
-
-    for(int i = section->from; i < section->to; ++i)
+    while(*list != NULL)
     {
-        if(bind_descriptor[i] == NULL)
-            continue;
-
-        if(bind_descriptor[i]->device == device && bind_descriptor[i]->key == key)
+        if((*list)->device == device && (*list)->key == key)
         {
-            tmp = bind_descriptor[i];
-            bind_descriptor[i] = bind_descriptor[i]->next;
-            free(tmp);
-            continue;
+            bind_descriptor_t* bind = *list;
+            *list = bind->next;
+            free(bind);
+            return true;
         }
 
-        prevDescriptor = bind_descriptor[i];
-        tmp = prevDescriptor->next;
-        while(tmp)
-        {
-            if(tmp->device == device && tmp->key == key)
-            {
-                prevDescriptor->next = tmp->next;
-                free(tmp);
-                break; // from while loop
-            }
-            else
-            {
-                prevDescriptor = tmp;
-                tmp = prevDescriptor->next;
-            }
-        }
+        list = &((*list)->next);
     }
+
+    return false;
+}
+
+static inline bind_descriptor_t* allocateBinding(const device_t device, const int key)
+{
+    bind_descriptor_t* bind;
+
+    bind = malloc(sizeof(bind_descriptor_t));
+    bind->next = NULL;
+    bind->device = device;
+    bind->key = key;
+    return bind;
+}
+
+static inline void appendBinding(bind_descriptor_t** list, const device_t device, const int key)
+{
+    while(*list != NULL)
+    {
+        list = &((*list)->next);
+    }
+    *list = allocateBinding(device, key);
 }
 
 void BK_AddBind(bound_key_t boundKey, device_t device, int key)
 {
-    bind_section_t section;
-    bind_descriptor_t *bind;
-
-    if(boundKey >= bk__section_map && boundKey < bk__serializable)
+    if(!removeBinding(&bind_descriptor[boundKey], device, key))
     {
-        section.from = bk__section_shortcuts;
-        section.to = bk__serializable;
-    }
-    else if(boundKey >= bk__section_shortcuts && boundKey < bk__section_map)
-    {
-        section.from = bk_forward;
-        section.to = bk__serializable;
-    }
-    else // boundKey < bk__section_shortcuts
-    {
-        section.from = bk_forward;
-        section.to = bk__section_map;
-    }
+        int from, to;
 
-    bind = bind_descriptor[boundKey];
-
-    if(bind == NULL)
-    {
-        removeBindFromSection(device, key, &section);
-        bind = malloc(sizeof(bind_descriptor));
-        bind->next = NULL;
-        bind->device = device;
-        bind->key = key;
-
-        bind_descriptor[boundKey] = bind;
-    }
-    else
-    {
-        bind_descriptor_t* prevBind = NULL;
-
-        // Iterate binds
-        while(bind)
+        if(boundKey >= bk__section_map && boundKey < bk__serializable)
         {
-            if(bind->device == device && bind->key == key)
-            {
-                // Clear bind
-                if (prevBind)
-                    prevBind->next = bind->next;
-                else
-                    bind_descriptor[boundKey] = bind->next;
-                free(bind);
-                return;
-            }
-            prevBind = bind;
-            bind = bind->next;
+            from = bk__section_shortcuts;
+            to = bk__serializable;
+        }
+        else if(boundKey >= bk__section_shortcuts && boundKey < bk__section_map)
+        {
+            from = bk_forward;
+            to = bk__serializable;
+        }
+        else // boundKey < bk__section_shortcuts
+        {
+            from = bk_forward;
+            to = bk__section_map;
         }
 
-        // Add new bind
-        removeBindFromSection(device, key, &section);
-        bind = malloc(sizeof(bind_descriptor));
-        bind->next = NULL;
-        bind->device = device;
-        bind->key = key;
-
-        prevBind->next = bind;
+        for(int i = from; i < to; ++i)
+        {
+            removeBinding(&bind_descriptor[i], device, key);
+        }
+        appendBinding(&bind_descriptor[boundKey], device, key);
     }
 }
 
@@ -1133,15 +1084,18 @@ boolean KeybindsHandler_isHandling(char* sectionName)
 void KeybindsHandler_HandleLine(char* keyName, char *value, size_t valueSize)
 {
     int* bsearchResult;
-    bound_key_t bind;
+    keybindsTracker_t* tracker;
+    bound_key_t bind = bk__null;
 
+    tracker = M_GetKeybindsTracker(keyName);
     bsearchResult = bsearch(keyName,
                             nameToBk, arrlen(bkToName),
                             sizeof(int), nameToBk_Comparator);
-    if(bsearchResult == NULL)
+    if(bsearchResult == NULL && tracker == NULL)
         return;
 
-    bind = *bsearchResult;
+    if(bsearchResult != NULL)
+        bind = *bsearchResult;
     while(*value != '\0')
     {
         char deviceChar;
@@ -1194,8 +1148,15 @@ void KeybindsHandler_HandleLine(char* keyName, char *value, size_t valueSize)
                 continue;
         }
 
-        BK_AddBind(bind, device, key);
-        isBindsLoaded = true; // At least one bind have been loaded successfully
+        if(tracker != NULL)
+        {
+            appendBinding(&tracker->descriptors, device, key);
+        }
+        if(bind != bk__null)
+        {
+            BK_AddBind(bind, device, key);
+            isBindsLoaded = true; // At least one bind have been loaded successfully
+        }
     }
 }
 
@@ -1238,6 +1199,20 @@ void KeybindsHandler_Save(FILE* file, char* sectionName)
                 bind = bind->next;
             }
             fprintf(file, "\n");
+        }
+    }
+}
+
+void BK_TraverseBinds(void (*lambda)(bound_key_t key, bind_descriptor_t* bindDescriptor))
+{
+    bind_descriptor_t* bind;
+    for(int i = bk_forward; i < bk__serializable; ++i)
+    {
+        bind = bind_descriptor[i];
+        while(bind != NULL)
+        {
+            lambda(i, bind);
+            bind = bind->next;
         }
     }
 }

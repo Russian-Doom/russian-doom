@@ -23,17 +23,27 @@
 #include "m_misc.h"
 #include "rd_keybinds.h"
 
+static void SetKeyBindingsToTracked(bound_key_t key, const keybindsTracker_t *tracker);
 static void RegisterTrackedDefault(const char* name, default_type_t type);
-static void FreeTrackers();
+static void RegisterTrackedKeybind(const char* keyName);
+static void FreeTrackers(void);
+static boolean IsBindingsEqual(bind_descriptor_t **configBinds, bind_descriptor_t **realBinds);
+static boolean IsBindingsListContains(bind_descriptor_t** list, device_t device, int key);
+static void Lambda_KP_COMA_to_KP_PERIOD(bound_key_t key, bind_descriptor_t* bindDescriptor);
 
 int config_version = 0;
 static defaultTracker_t* defaultTrackers;
+static keybindsTracker_t* keybindsTrackers;
 
 void M_RegisterTrackedFields()
 {
     if(config_version == CURRENT_CONFIG_VERSION)
         return;
 
+    //
+    // Changed names of 'message_*_color' and 'sbar_color_*' config entries.
+    // Fixed broken bk_map_rotate, bk_map_rotate and bk_forward.
+    //
     if(config_version < 2)
     {
         RegisterTrackedDefault("message_pickup_color", DEFAULT_INT);
@@ -54,6 +64,11 @@ void M_RegisterTrackedFields()
             RegisterTrackedDefault("sbar_color_armor_2", DEFAULT_INT);
             RegisterTrackedDefault("sbar_color_armor_0", DEFAULT_INT);
         }
+
+        RegisterTrackedKeybind("Map_rotate");
+        RegisterTrackedKeybind("Map_grid");
+        if(RD_GameType == gt_Hexen)
+            RegisterTrackedKeybind("Forward");
     }
 }
 
@@ -62,7 +77,11 @@ void M_ApplyMigration()
     if(config_version == CURRENT_CONFIG_VERSION)
         return;
 
-    if(config_version < 1) // Made keys F[1, 2, 3, 4, 5, 7, 8, 10, 11], -, =, Pause not hardcoded and bindable
+    //
+    // Made keys F[1, 2, 3, 4, 5, 7, 8, 10, 11], -, =, Pause not hardcoded and bindable.
+    // Changed text representation of NumPad 'Del' key from 'KP_,' to 'KP_.'.
+    //
+    if(config_version < 1)
     {
         // Add missing(previously hardcoded) bindings
         BK_AddBind(bk_menu_help,   keyboard, SDL_SCANCODE_F1);
@@ -77,19 +96,17 @@ void M_ApplyMigration()
         BK_AddBind(bk_screen_inc,  keyboard, SDL_SCANCODE_EQUALS);
         BK_AddBind(bk_screen_dec,  keyboard, SDL_SCANCODE_MINUS);
         BK_AddBind(bk_pause,       keyboard, SDL_SCANCODE_PAUSE);
+
+        // Replace SDL_SCANCODE_KP_COMMA with SDL_SCANCODE_KP_PERIOD to compensate
+        // change of NumPad 'Del' key text representation from 'KP_,' to 'KP_.'
+        BK_TraverseBinds(&Lambda_KP_COMA_to_KP_PERIOD);
     }
 
-    // Do not rebing following keys so they will not
-    // be cleared after migration:
-    BK_AddBind(bk_map_rotate,  keyboard, SDL_SCANCODE_R);
-    BK_AddBind(bk_map_grid,    keyboard, SDL_SCANCODE_G);
-
-    if(RD_GameType == gt_Hexen)
-    {
-        BK_AddBind(bk_forward, keyboard, SDL_SCANCODE_W);
-    }
-
-    if(config_version < 2) // Changed names of 'message_*_color' and 'sbar_color_*' config entries
+    //
+    // Changed names of 'message_*_color' and 'sbar_color_*' config entries.
+    // Fixed broken bk_map_rotate, bk_map_rotate and bk_forward.
+    //
+    if(config_version < 2)
     {
         defaultTracker_t* message_pickup_color = M_GetDefaultTracker("message_pickup_color");
         defaultTracker_t* message_system_color = M_GetDefaultTracker("message_system_color");
@@ -139,6 +156,46 @@ void M_ApplyMigration()
                 *JN_getNotCommonIntVarPointer(v_stbar_color_armor_2) = sbar_color_armor_2->value.i + 1;
             if(JN_getNotCommonIntVarPointer(v_stbar_color_armor_0) != NULL && sbar_color_armor_0->found)
                 *JN_getNotCommonIntVarPointer(v_stbar_color_armor_0) = sbar_color_armor_0->value.i + 1;
+        }
+
+        // Reread binds for bk_map_rotate, bk_map_rotate and bk_forward to prioritize them over multiplayer chat keys
+        keybindsTracker_t* Map_rotate_tracker = M_GetKeybindsTracker("Map_rotate");
+        keybindsTracker_t* Map_Grid_tracker = M_GetKeybindsTracker("Map_grid");
+        keybindsTracker_t* Forward_tracker = M_GetKeybindsTracker("Forward");
+
+        if(Map_rotate_tracker != NULL
+        && !IsBindingsEqual(
+            &Map_rotate_tracker->descriptors,
+            &bind_descriptor[bk_map_rotate])
+        && IsBindingsListContains(
+            &bind_descriptor[RD_GameType == gt_Doom ? bk_multi_msg_player_3
+                : RD_GameType == gt_Heretic ? bk_multi_msg_player_2
+                : bk_multi_msg_player_1],
+            keyboard, SDL_SCANCODE_R))
+        {
+            SetKeyBindingsToTracked(bk_map_rotate, Map_rotate_tracker);
+        }
+
+        if(Map_Grid_tracker != NULL
+        && !IsBindingsEqual(
+            &Map_Grid_tracker->descriptors,
+            &bind_descriptor[bk_map_rotate])
+        && IsBindingsListContains(
+            &bind_descriptor[RD_GameType == gt_Doom || RD_GameType == gt_Heretic ? bk_multi_msg_player_0
+                : bk_multi_msg_player_3],
+            keyboard, SDL_SCANCODE_G))
+        {
+            SetKeyBindingsToTracked(bk_map_grid, Map_Grid_tracker);
+        }
+
+        if(RD_GameType == gt_Hexen
+        && Forward_tracker != NULL
+        && !IsBindingsEqual(
+            &Forward_tracker->descriptors,
+            &bind_descriptor[bk_forward])
+        && IsBindingsListContains(&bind_descriptor[bk_multi_msg_player_5], keyboard, SDL_SCANCODE_W))
+        {
+            SetKeyBindingsToTracked(bk_forward, Forward_tracker);
         }
     }
 
@@ -211,6 +268,31 @@ void M_SetTrackedValue(defaultTracker_t *tracker, char *value)
     tracker->found = true;
 }
 
+keybindsTracker_t* M_GetKeybindsTracker(const char* name)
+{
+    keybindsTracker_t* tracker = keybindsTrackers;
+    while(tracker != NULL)
+    {
+        if(strcmp(tracker->keyName, name) == 0)
+            return tracker;
+        tracker = tracker->next;
+    }
+    return NULL;
+}
+
+static void SetKeyBindingsToTracked(const bound_key_t key, const keybindsTracker_t* tracker)
+{
+    bind_descriptor_t* const* list;
+
+    BK_ClearBinds(key);
+    list = &tracker->descriptors;
+    while(*list != NULL)
+    {
+        BK_AddBind(key, (*list)->device, (*list)->key);
+        list = &((*list)->next);
+    }
+}
+
 static void RegisterTrackedDefault(const char* name, const default_type_t type)
 {
     defaultTracker_t* tracker = malloc(sizeof(defaultTracker_t));
@@ -226,9 +308,23 @@ static void RegisterTrackedDefault(const char* name, const default_type_t type)
     defaultTrackers = tracker;
 }
 
-static void FreeTrackers()
+static void RegisterTrackedKeybind(const char* keyName)
 {
-    defaultTracker_t *tracker;
+    keybindsTracker_t* tracker = malloc(sizeof(keybindsTracker_t));
+    tracker->keyName = keyName;
+    tracker->descriptors = NULL;
+    tracker->next = NULL;
+
+    if(keybindsTrackers != NULL)
+        tracker->next = keybindsTrackers;
+
+    keybindsTrackers = tracker;
+}
+
+static void FreeTrackers(void)
+{
+    defaultTracker_t *dTracker;
+    keybindsTracker_t *kTracker;
 
     while(defaultTrackers != NULL)
     {
@@ -239,8 +335,64 @@ static void FreeTrackers()
             free(defaultTrackers->value.s);
         }
 
-        tracker = defaultTrackers;
-        defaultTrackers = tracker->next;
-        free(tracker);
+        dTracker = defaultTrackers;
+        defaultTrackers = dTracker->next;
+        free(dTracker);
+    }
+
+    while(keybindsTrackers != NULL)
+    {
+        while(keybindsTrackers->descriptors != NULL)
+        {
+            bind_descriptor_t* tmp;
+
+            tmp = keybindsTrackers->descriptors;
+            keybindsTrackers->descriptors = keybindsTrackers->descriptors->next;
+            free(tmp);
+        }
+
+        kTracker = keybindsTrackers;
+        keybindsTrackers = kTracker->next;
+        free(kTracker);
+    }
+}
+
+static boolean IsBindingsEqual(bind_descriptor_t** configBinds, bind_descriptor_t** realBinds)
+{
+    while(*configBinds != NULL)
+    {
+        if(*realBinds != NULL
+           && (*configBinds)->device == (*realBinds)->device
+           && (*configBinds)->key == (*realBinds)->key)
+        {
+            realBinds = &((*realBinds)->next);
+        }
+        else
+        {
+            return false;
+        }
+        configBinds = &((*configBinds)->next);
+    }
+    return true;
+}
+
+static boolean IsBindingsListContains(bind_descriptor_t** list, const device_t device, const int key)
+{
+    while(*list != NULL)
+    {
+        if((*list)->device == device && (*list)->key == key)
+        {
+            return true;
+        }
+        list = &((*list)->next);
+    }
+    return false;
+}
+
+static void Lambda_KP_COMA_to_KP_PERIOD(const bound_key_t key, bind_descriptor_t* bindDescriptor)
+{
+    if(bindDescriptor->device == keyboard && bindDescriptor->key == SDL_SCANCODE_KP_COMMA)
+    {
+        bindDescriptor->key = SDL_SCANCODE_KP_PERIOD;
     }
 }

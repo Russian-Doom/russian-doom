@@ -17,6 +17,7 @@
 
 #include "doomtype.h"
 #include "m_config.h"
+#include "rd_keybinds.h"
 
 enum {
    /**
@@ -25,8 +26,10 @@ enum {
     *\n
     * Meaning of values:\n
     * 0 - Initial state\n
-    * 1 - Made keys F[1, 2, 3, 4, 5, 7, 8, 10, 11], -, =, Pause not hardcoded and bindable\n
-    * 2 - Changed names of 'message_*_color' and 'sbar_color_*' config entries\n
+    * 1 - Made keys F[1, 2, 3, 4, 5, 7, 8, 10, 11], -, =, Pause not hardcoded and bindable.
+    *     Changed text representation of NumPad 'Del' key from 'KP_,' to 'KP_.'.\n
+    * 2 - Changed names of 'message_*_color' and 'sbar_color_*' config entries.
+    *     Fixed broken bk_map_rotate, bk_map_rotate and bk_forward.\n
     */
     CURRENT_CONFIG_VERSION = 2
 };
@@ -49,7 +52,15 @@ typedef struct defaultTracker_s
     boolean found; // Is 'value' field contains valid data
 } defaultTracker_t;
 
+typedef struct keybindsTracker_s
+{
+    struct keybindsTracker_s* next;
+    const char* keyName;
+    bind_descriptor_t* descriptors;
+}keybindsTracker_t;
+
 defaultTracker_t* M_GetDefaultTracker(const char* name);
+keybindsTracker_t* M_GetKeybindsTracker(const char* name);
 void M_SetTrackedValue(defaultTracker_t *tracker, char *value);
 void M_RegisterTrackedFields();
 void M_ApplyMigration();
