@@ -40,7 +40,6 @@
 #include "v_trans.h"
 #include "jn.h"
 
-#include "config.h"
 #ifdef HAVE_LIBPNG
 #include <png.h>
 #endif

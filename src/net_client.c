@@ -22,7 +22,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "config.h"
 #include "doomtype.h"
 #include "deh_main.h"
 #include "deh_str.h"

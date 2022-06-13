@@ -69,6 +69,11 @@ if(COMPILE_DOOM)
         C_STANDARD "${RD_C_STANDARD}"
         C_STANDARD_REQUIRED ON
     )
+    target_compile_definitions(doom PRIVATE
+        BUILD_DOOM_VERSION="${BUILD_DOOM_VERSION}"
+        PACKAGE_PREFIX="${PACKAGE_PREFIX}"
+        PROGRAM_PREFIX="${PROGRAM_PREFIX}"
+    )
     target_link_libraries(doom PRIVATE
         SDL2::SDL2
         SDL2::mixer

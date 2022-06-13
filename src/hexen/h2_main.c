@@ -31,7 +31,6 @@
 #include <windows.h>
 #endif
 
-#include "config.h"
 #include "doomfeatures.h"
 
 #include "h2def.h"

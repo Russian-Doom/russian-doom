@@ -35,7 +35,6 @@
 #include <windows.h>
 #endif
 
-#include "config.h"
 #include "deh_main.h"
 #include "doomdef.h"
 #include "doomstat.h"

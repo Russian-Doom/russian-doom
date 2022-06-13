@@ -61,6 +61,11 @@ if(COMPILE_HERETIC)
         C_STANDARD "${RD_C_STANDARD}"
         C_STANDARD_REQUIRED ON
     )
+    target_compile_definitions(heretic PRIVATE
+        BUILD_HERETIC_VERSION="${BUILD_HERETIC_VERSION}"
+        PACKAGE_PREFIX="${PACKAGE_PREFIX}"
+        PROGRAM_PREFIX="${PROGRAM_PREFIX}"
+    )
     target_link_libraries(heretic PRIVATE
         textscreen
         SDL2::SDL2

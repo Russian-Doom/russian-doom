@@ -24,7 +24,6 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include "config.h"
 #include "d_name.h"
 #include "i_system.h"
 #include "i_timer.h"

@@ -18,9 +18,6 @@
 //
 
 
-
-#include "config.h"
-
 // OpenBSD/NetBSD:
 
 #ifdef HAVE_DEV_ISA_SPKRIO_H

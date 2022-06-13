@@ -17,9 +17,6 @@
 //
 
 
-
-#include "config.h"
-
 #if (defined(__i386__) || defined(__x86_64__)) && defined(HAVE_IOPERM)
 
 #include <stdio.h>

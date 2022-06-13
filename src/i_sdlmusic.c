@@ -29,7 +29,6 @@
 
 #include "i_winmusic.h"
 
-#include "config.h"
 #include "doomtype.h"
 #include "memio.h"
 #include "mus2mid.h"

@@ -29,7 +29,6 @@
 
 #include "SDL_filesystem.h"
 
-#include "config.h"
 #include "doomtype.h"
 #include "doomfeatures.h"
 #include "i_system.h"

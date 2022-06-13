@@ -23,7 +23,6 @@
 
 #include "SDL_mixer.h"
 
-#include "config.h"
 #include "doomfeatures.h"
 #include "doomtype.h"
 
