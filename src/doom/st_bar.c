@@ -147,16 +147,13 @@ byte *stbar_color_armor_0_set;
 static byte    *bezel_pattern;
 
 // Big font
-static int      FontBNumBase;
 static patch_t *FontBNumbers[10];
 static patch_t *FontBPercent;
 static patch_t *FontBMinus;
 
 // Small yellow font
-static int      FontSNumBaseY;
 static patch_t *FontSNumbersY[10];
 // Small gray font
-static int      FontSNumBaseG;
 static patch_t *FontSNumbersG[10];
 
 // Face backgrounds for different color players
@@ -1342,6 +1339,10 @@ static void ST_DrawBigNumber (int val, const int x, const int y, byte *table)
         // However, values below -10 requires some correction in "x" placement.
         V_DrawPatch(xpos + (val <= 9 ? 20 : 5) - 4, y, FontBMinus, NULL);
     }
+    if (val > 999)
+    {
+        val = 999;
+    }
 
     if (val > 99)
     {
@@ -1389,6 +1390,10 @@ static void ST_DrawSmallNumberY (int val, const int x, const int y)
     if (val < 0)
     {
         val = 0;
+    }
+    if (val > 999)
+    {
+        val = 999;
     }
 
     if (val > 99)
@@ -1977,6 +1982,15 @@ void ST_Drawer (void)
 }
 
 // -----------------------------------------------------------------------------
+// ST_LoadCallback
+// -----------------------------------------------------------------------------
+
+static void ST_LoadCallback (char *lumpname, patch_t **variable)
+{
+    *variable = W_CacheLumpName(lumpname, PU_STATIC);
+}
+
+// -----------------------------------------------------------------------------
 // ST_LoadData
 // -----------------------------------------------------------------------------
 
@@ -1995,28 +2009,24 @@ static void ST_LoadData (void)
     // [JN] Initialize STBAR horizontal offset with zero for centering.
     stbar->leftoffset = 0;
 
-    // Big font
-    FontBNumBase = W_GetNumForName(DEH_String("STTNUM0"));
+    // Status bar digits
     for (i = 0; i < 10; i++)
     {
-        FontBNumbers[i] = W_CacheLumpNum(FontBNumBase + i, PU_STATIC);
+        // Big red
+        DEH_snprintf(namebuf, 9, "STTNUM%d", i);
+        ST_LoadCallback(namebuf, &FontBNumbers[i]);
+
+        // Small yellow
+        DEH_snprintf(namebuf, 9, "STYSNUM%d", i);
+        ST_LoadCallback(namebuf, &FontSNumbersY[i]);
+
+        // Small gray
+        DEH_snprintf(namebuf, 9, "STGNUM%d", i);
+        ST_LoadCallback(namebuf, &FontSNumbersG[i]);
     }
+
     FontBPercent = W_CacheLumpName(DEH_String("STTPRCNT"), PU_STATIC);
     FontBMinus = W_CacheLumpName(DEH_String("STTMINUS"), PU_STATIC);
-
-    // Small yellow font
-    FontSNumBaseY = W_GetNumForName(DEH_String("STYSNUM0"));
-    for (i = 0; i < 10; i++)
-    {
-        FontSNumbersY[i] = W_CacheLumpNum(FontSNumBaseY + i, PU_STATIC);
-    }
-
-    // Small gray font
-    FontSNumBaseG = W_GetNumForName(DEH_String("STGNUM0"));
-    for (i = 0; i < 10; i++)
-    {
-        FontSNumbersG[i] = W_CacheLumpNum(FontSNumBaseG + i, PU_STATIC);
-    }
 
     // Face backgrounds for different color players
     if (netgame)
