@@ -260,12 +260,15 @@ static void SetMission(mission_config_t *config)
     {
         case heretic:
             RD_Project_String = PACKAGE_PREFIX " Setup " BUILD_HERETIC_VERSION;
+            RD_Project_Version = BUILD_HERETIC_VERSION;
             break;
         case hexen:
             RD_Project_String = PACKAGE_PREFIX " Setup " BUILD_HEXEN_VERSION;
+            RD_Project_Version = BUILD_HEXEN_VERSION;
             break;
         case strife:
             RD_Project_String = PACKAGE_PREFIX " Setup " BUILD_STRIFE_VERSION;
+            RD_Project_Version = BUILD_STRIFE_VERSION;
             break;
         // [Dasperal] For everything else use default doom version
         default:

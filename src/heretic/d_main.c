@@ -60,6 +60,7 @@
 // -----------------------------------------------------------------------------
 char* RD_Project_Name = PACKAGE_PREFIX " Heretic";
 char* RD_Project_String = PACKAGE_PREFIX " Heretic " BUILD_HERETIC_VERSION;
+char* RD_Project_Version = BUILD_HERETIC_VERSION;
 GameType_t RD_GameType = gt_Heretic;
 
 GameMode_t gamemode = indetermined;

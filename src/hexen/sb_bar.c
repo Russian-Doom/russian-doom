@@ -20,6 +20,7 @@
 // HEADER FILES ------------------------------------------------------------
 
 #include <time.h>
+#include "d_name.h"
 #include "h2def.h"
 #include "i_cdmus.h"
 #include "i_timer.h"    // [JN] TICRATE
@@ -85,6 +86,7 @@ static void CheatScriptFunc1(player_t * player, Cheat_t * cheat);
 static void CheatScriptFunc2(player_t * player, Cheat_t * cheat);
 static void CheatScriptFunc3(player_t * player, Cheat_t * cheat);
 static void CheatRevealFunc(player_t * player, Cheat_t * cheat);
+static void CheatRusVersionFunc(player_t * player, Cheat_t * cheat);
 static void Crosshair_Colorize_inGame (void);
 // [JN] Disabled. I need "`" key for using without SFX_PLATFORM_STOP sound.
 // static void CheatTrackFunc1(player_t * player, Cheat_t * cheat);
@@ -237,6 +239,9 @@ cheatseq_t CheatScriptSeq3 = CHEAT("puke", 2);
 
 cheatseq_t CheatRevealSeq = CHEAT("mapsco", 0);
 
+// [JN] Чит-код отображения версии проекта
+cheatseq_t CheatRusVersionSeq = CHEAT("version", 0);
+
 // [JN] Disabled. I need "`" key for using without SFX_PLATFORM_STOP sound.
 // cheatseq_t CheatTrackSeq1 = CHEAT("`", 0);
 // cheatseq_t CheatTrackSeq2 = CHEAT("`", 2);
@@ -269,6 +274,7 @@ static Cheat_t Cheats[] = {
     {CheatScriptFunc2, &CheatScriptSeq2},
     {CheatScriptFunc3, &CheatScriptSeq3},
     {CheatRevealFunc, &CheatRevealSeq},
+    {CheatRusVersionFunc, &CheatRusVersionSeq},
 };
 
 #define SET_CHEAT(cheat, seq) \
@@ -2567,6 +2573,19 @@ static void CheatScriptFunc3(player_t * player, Cheat_t * cheat)
         M_snprintf(textBuffer, sizeof(textBuffer), "%s %d", txt_running_script, script);
         P_SetMessage(player, textBuffer, msg_system, true);
     }
+}
+
+static void CheatRusVersionFunc(player_t * player, Cheat_t * cheat)
+{
+    static char msg[38];
+
+    char* version = english_language
+                  ? RD_Project_Version
+                  : M_StringReplace(RD_Project_Version, ".", ">");
+    M_snprintf(msg, sizeof(msg), "%s %s",
+               english_language ? "Version" : "dthcbz", version);
+
+    P_SetMessage(player, msg, msg_system, true);
 }
 
 extern int cheating;
