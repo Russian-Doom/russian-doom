@@ -48,8 +48,7 @@ endif()
 # subdirectories should go here.  Use judiciously.
 set(RD_C_STANDARD 99)
 
-add_compile_options("-Wall" "-Wdeclaration-after-statement"
-                    "-Wredundant-decls" "-Wno-unknown-pragmas" "-Wno-unused-result")
+add_compile_options("-Wall" "-Wredundant-decls" "-Wno-unknown-pragmas" "-Wno-unused-result")
 string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
 string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
 
