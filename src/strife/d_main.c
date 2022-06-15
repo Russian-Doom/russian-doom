@@ -83,12 +83,14 @@
 #include "rd_lang.h"
 #include "jn.h"
 
+#include "git_info.h"
+
 // -----------------------------------------------------------------------------
 // [Dasperal] d_name.h var definition
 // -----------------------------------------------------------------------------
 char* RD_Project_Name = PACKAGE_PREFIX " Strife";
 char* RD_Project_String = PACKAGE_PREFIX " Strife " BUILD_STRIFE_VERSION;
-char* RD_Project_Version = BUILD_STRIFE_VERSION;
+char* RD_Project_Version = BUILD_STRIFE_VERSION GIT_SHA_SUFFIX;
 GameType_t RD_GameType = gt_Strife;
 
 //

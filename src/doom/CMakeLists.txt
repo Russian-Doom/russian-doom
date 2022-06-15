@@ -80,4 +80,5 @@ if(COMPILE_DOOM)
         SDL2::net
         Game
     )
+    add_dependencies(doom revision_check)
 endif()
