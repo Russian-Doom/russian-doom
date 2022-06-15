@@ -1,7 +1,7 @@
 name: Bug Report
 description: File a Bug report
 title: '[BUG] '
-labels: bug
+labels: ["bug"]
 
 body:
   - type: markdown
@@ -15,7 +15,8 @@ body:
     attributes:
       label: International Doom version
       description: |
-        What version are you using? If you are building International doom from source, specify revision.
+        What version are you using? If you are building International doom from source, specify git commit SHA.
+        You can check version by running International Doom with `--version` command line argument or by using `VERSION` ingame cheat.
         Make sure to update to latest [release](https://github.com/JNechaevsky/inter-doom/releases) version and test again before continuing.
       placeholder: "International Doom 5.3 | International Heretic 5.2 | International Hexen 5.1"
     validations:
@@ -43,16 +44,18 @@ body:
       multiple: false
       options:
         - x86 (x32, win32)
-        - x64 (amd64, x86_64, win64)
+        - x64 (x86_64, win64, amd64)
+        - AArch32 (arm32)
+        - AArch64 (arm64)
         - Other
     validations:
       required: true
   - type: input
     id: other
     attributes:
-      label: If Other OS or Build variant, please describe
+      label: Please describe your specific OS version
       description: Other details
-      placeholder: "Debian, Ubuntu, Arch, etc."
+      placeholder: "Windows 11 Home/Pro/Server/etc, Debian 10/11/etc, Ubuntu 18/20/etc, Arch, etc."
     validations:
       required: false
   - type: input
@@ -99,7 +102,6 @@ body:
       description: |
         Share the config file you've been using to run the program. (`inter-doom.ini`, `inter-heretic.ini`, `inter-hexen.ini`) 
         Please avoid pasting the full config, _use attachments or links_ in a [Gist](https://gist.github.com/)
-#     render: ini # syntax highlighting [Dasperal] Config files are not actual ini files yet
     validations:
       required: false
   - type: textarea
