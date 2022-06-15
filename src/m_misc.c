@@ -41,16 +41,11 @@
 #endif
 
 #include "doomtype.h"
-#include "deh_str.h"
 #include "config.h"
-#include "i_swap.h"
 #include "i_system.h"
 #include "i_timer.h"
-#include "i_video.h"
 #include "m_argv.h"
 #include "m_misc.h"
-#include "v_video.h"
-#include "w_wad.h"
 #include "z_zone.h"
 #include "jn.h"
 

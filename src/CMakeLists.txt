@@ -4,12 +4,19 @@ endforeach()
 
 # Common library
 add_library(Common STATIC EXCLUDE_FROM_ALL
-                         jn.h
-    i_system.c           i_system.h
-    m_argv.c             m_argv.h
-    m_misc.c             m_misc.h
-                         rd_io.h
+                        doomtype.h
+    d_event.c           d_event.h
+                        d_name.h
+                        d_ticcmd.h
+                        jn.h
+    i_system.c          i_system.h
+    i_timer.c           i_timer.h
+    m_argv.c            m_argv.h
+    m_misc.c            m_misc.h
+    m_fixed.c           m_fixed.h
+                        rd_io.h
     win_compat.c
+    z_zone.c            z_zone.h
 )
 target_include_directories(Common PUBLIC
     "${PROJECT_BINARY_DIR}"
@@ -33,15 +40,11 @@ target_link_libraries(Common PUBLIC
 # Game Library
 add_library(Game STATIC EXCLUDE_FROM_ALL
     aes_prng.c          aes_prng.h
-    d_event.c           d_event.h
                         doomkeys.h
                         doomfeatures.h
-                        doomtype.h
     d_iwad.c            d_iwad.h
     d_loop.c            d_loop.h
     d_mode.c            d_mode.h
-                        d_name.h
-                        d_ticcmd.h
     deh_str.c           deh_str.h
     gusconf.c           gusconf.h
     i_cdmus.c           i_cdmus.h
@@ -55,7 +58,6 @@ add_library(Game STATIC EXCLUDE_FROM_ALL
     i_sdlmusic.c
     i_oplmusic.c
     i_sound.c           i_sound.h
-    i_timer.c           i_timer.h
     i_video.c           i_video.h
     i_videohr.c         i_videohr.h
     i_winmusic.c        i_winmusic.h
@@ -64,7 +66,6 @@ add_library(Game STATIC EXCLUDE_FROM_ALL
     m_bbox.c            m_bbox.h
     m_cheat.c           m_cheat.h
     m_config.c          m_config.h
-    m_fixed.c           m_fixed.h
     net_client.c        net_client.h
     net_common.c        net_common.h
     net_dedicated.c     net_dedicated.h
@@ -97,7 +98,6 @@ add_library(Game STATIC EXCLUDE_FROM_ALL
     w_file_posix.c
     w_file_win32.c
     w_merge.c           w_merge.h
-    z_zone.c            z_zone.h
 )
 if(BUILD_HAS_SDL_MIXER_PATCH)
     target_compile_definitions(Game
@@ -135,7 +135,6 @@ if(COMPILE_SETUP)
         d_mode.c            d_mode.h
         d_iwad.c            d_iwad.h
                             icon.h
-        i_timer.c           i_timer.h
         m_config.c          m_config.h
         net_io.c            net_io.h
         net_packet.c        net_packet.h
@@ -143,7 +142,7 @@ if(COMPILE_SETUP)
         net_query.c         net_query.h
         net_structrw.c      net_structrw.h
                             rd_migration.h
-        z_native.c          z_zone.h
+        z_native.c
     )
     set_target_properties(SetupCommon PROPERTIES
         C_STANDARD "${RD_C_STANDARD}"

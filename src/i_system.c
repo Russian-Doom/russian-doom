@@ -35,18 +35,11 @@
 
 #include "SDL.h"
 #include "config.h"
-#include "deh_str.h"
 #include "doomtype.h"
 #include "d_name.h"
 #include "m_argv.h"
-#include "m_config.h"
 #include "m_misc.h"
-#include "i_sound.h"
-#include "i_timer.h"
-#include "i_video.h"
 #include "i_system.h"
-#include "w_wad.h"
-#include "z_zone.h"
 #include "jn.h"
 
 // [JN] Объём необходимой памяти увеличен вдвое
