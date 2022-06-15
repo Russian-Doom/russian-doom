@@ -73,4 +73,5 @@ if(COMPILE_HERETIC)
         SDL2::net
         Game
     )
+    add_dependencies(heretic revision_check)
 endif()

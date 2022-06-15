@@ -105,6 +105,9 @@ add_library(Game STATIC EXCLUDE_FROM_ALL
     w_file_win32.c
     w_merge.c           w_merge.h
 )
+target_include_directories(Game PUBLIC
+    "${PROJECT_BINARY_DIR}"
+)
 set_target_properties(Game PROPERTIES
     C_STANDARD "${RD_C_STANDARD}"
     C_STANDARD_REQUIRED ON
@@ -146,6 +149,9 @@ if(COMPILE_SETUP)
         net_structrw.c      net_structrw.h
                             rd_migration.h
         z_native.c
+    )
+    target_include_directories(SetupCommon PUBLIC
+        "${PROJECT_BINARY_DIR}"
     )
     set_target_properties(SetupCommon PROPERTIES
         C_STANDARD "${RD_C_STANDARD}"

@@ -42,6 +42,8 @@
 #include "multiplayer.h"
 #include "sound.h"
 
+#include "git_info.h"
+
 #define WINDOW_HELP_URL "https://github.com/JNechaevsky/inter-doom/wiki"
 
 // -----------------------------------------------------------------------------
@@ -49,7 +51,7 @@
 // -----------------------------------------------------------------------------
 char* RD_Project_Name = PACKAGE_PREFIX " Setup";
 char* RD_Project_String = PACKAGE_PREFIX " Setup " BUILD_DOOM_VERSION;
-char* RD_Project_Version = BUILD_DOOM_VERSION;
+char* RD_Project_Version = BUILD_DOOM_VERSION GIT_SHA_SUFFIX;
 GameType_t RD_GameType = gt_Doom;
 
 //

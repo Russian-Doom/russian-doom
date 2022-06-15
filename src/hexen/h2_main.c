@@ -57,6 +57,8 @@
 #include "rd_rushexen.h"
 #include "rd_psx.h"
 
+#include "git_info.h"
+
 // EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
 
 void D_ConnectNetGame(void);
@@ -99,7 +101,7 @@ extern int alwaysRun;
 // -----------------------------------------------------------------------------
 char* RD_Project_Name = PACKAGE_PREFIX " Hexen";
 char* RD_Project_String = PACKAGE_PREFIX " Hexen " BUILD_HEXEN_VERSION;
-char* RD_Project_Version = BUILD_HEXEN_VERSION;
+char* RD_Project_Version = BUILD_HEXEN_VERSION GIT_SHA_SUFFIX;
 GameType_t RD_GameType = gt_Hexen;
 
 GameMode_t gamemode;

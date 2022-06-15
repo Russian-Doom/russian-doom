@@ -78,12 +78,14 @@
 #include "ct_chat.h"
 #include "jn.h"
 
+#include "git_info.h"
+
 // -----------------------------------------------------------------------------
 // [Dasperal] d_name.h var definition
 // -----------------------------------------------------------------------------
 char* RD_Project_Name = PACKAGE_PREFIX " Doom";
 char* RD_Project_String = PACKAGE_PREFIX " Doom " BUILD_DOOM_VERSION;
-char* RD_Project_Version = BUILD_DOOM_VERSION;
+char* RD_Project_Version = BUILD_DOOM_VERSION GIT_SHA_SUFFIX;
 GameType_t RD_GameType = gt_Doom;
 
 // -----------------------------------------------------------------------------

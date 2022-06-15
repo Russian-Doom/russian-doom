@@ -83,4 +83,5 @@ if(COMPILE_STRIFE)
         SDL2::net
         Game
     )
+    add_dependencies(strife revision_check)
 endif()

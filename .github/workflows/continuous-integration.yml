@@ -76,8 +76,8 @@ jobs:
       - name: Configure
         id: configure
         run: |
+          cmake -G "Ninja" -D BUILD_VERSION_OVERWRITE="5.x.x" -D FORCE_GIT_HASH_SUFFIX=ON -D CMAKE_BUILD_TYPE=RelWithDebInfo -S . -B build
           sha_short=$(echo ${{ github.sha }} | cut -c1-7)
-          cmake -G "Ninja" -D BUILD_VERSION_OVERWRITE="$sha_short" -D CMAKE_BUILD_TYPE=RelWithDebInfo -S . -B build
           echo "::set-output name=sha_short::$sha_short"
 
       - name: Build
@@ -100,5 +100,5 @@ jobs:
         if: ${{ github.repository == 'JNechaevsky/inter-doom' && github.event_name == 'push' && github.ref == 'refs/heads/master' && matrix.os.name == 'Windows' }}
         uses: actions/upload-artifact@v2
         with:
-          name: inter-doom-${{ steps.configure.outputs.sha_short }}-windows-${{ matrix.arch.name }}
+          name: inter-doom-5.x.x-${{ steps.configure.outputs.sha_short }}-windows-${{ matrix.arch.name }}
           path: ./build/install/

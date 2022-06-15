@@ -74,4 +74,5 @@ if(COMPILE_HEXEN)
         SDL2::net
         Game
     )
+    add_dependencies(hexen revision_check)
 endif()
