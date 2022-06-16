@@ -202,16 +202,23 @@ foreach(MODULE ${COMPILE_MODULES})
         )
     endif()
 
+    target_compile_definitions("${PROGRAM_PREFIX}${MODULE}" PRIVATE
+        "$<$<BOOL:${BUILD_PORTABLE}>:BUILD_PORTABLE>"
+    )
     target_link_libraries("${PROGRAM_PREFIX}${MODULE}" PUBLIC
         ${MODULE}
         Game
     )
-
+    add_dependencies("${PROGRAM_PREFIX}${MODULE}" revision_check)
     if(COMPILE_SETUP)
+        target_compile_definitions("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE
+            "$<$<BOOL:${BUILD_PORTABLE}>:BUILD_PORTABLE>"
+        )
         target_link_libraries("${PROGRAM_PREFIX}${MODULE}-setup" PUBLIC
             setup
             SetupCommon
         )
+        add_dependencies("${PROGRAM_PREFIX}${MODULE}-setup" revision_check)
     endif()
 
     # Properties and Link options
