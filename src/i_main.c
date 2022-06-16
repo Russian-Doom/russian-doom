@@ -23,6 +23,8 @@
 #include <time.h>   // [JN] srand(time(0))
 
 #include "SDL.h"
+#include "SDL_mixer.h"
+#include "SDL_net.h"
 
 #ifdef _WIN32
 #ifndef WIN32_LEAN_AND_MEAN
@@ -40,9 +42,13 @@
 #endif
 
 #include "doomtype.h"
-#include "i_system.h"
+#include "d_name.h"
 #include "m_argv.h"
 #include "m_misc.h"
+
+#include "git_info.h"
+
+static void printVersion(void);
 
 // [JN] Vanilla game mode available for all three games in RD
 boolean vanillaparm;
@@ -157,6 +163,12 @@ int main(int argc, char **argv)
     // Check for -devparm being activated
     devparm = M_CheckParm ("-devparm");
 
+    if(M_CheckParm("--version"))
+    {
+        printVersion();
+        return 0;
+    }
+
     // [JN] Activate vanilla gameplay mode.
     // All optional enhancements will be disabled 
     // without modifying configuration files.
@@ -170,5 +182,25 @@ int main(int argc, char **argv)
     D_DoomMain ();
 
     return 0;
+}
+
+static void printVersion(void)
+{
+    printf("%s %s\n", RD_Project_Name, RD_Project_Version);
+    printf("Revision: %s (%s)\n", GIT_SHA, GIT_TIME);
+    printf("Tag: %s\n", GIT_TAG);
+#ifdef BUILD_PORTABLE
+    printf("Portable version\n");
+#endif
+    printf("\nCompiled with SDL version: %d.%d.%d\n", SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_PATCHLEVEL);
+    SDL_version sdlVersion;
+    SDL_GetVersion(&sdlVersion);
+    printf("\tRuntime SDL version: %d.%d.%d\n", sdlVersion.major, sdlVersion.minor, sdlVersion.patch);
+    printf("Compiled with SDL_mixer version: %d.%d.%d\n", SDL_MIXER_MAJOR_VERSION, SDL_MIXER_MINOR_VERSION, SDL_MIXER_PATCHLEVEL);
+    const SDL_version* sdl_mixerVersion = Mix_Linked_Version();
+    printf("\tRuntime SDL_mixer version: %d.%d.%d\n", sdl_mixerVersion->major, sdl_mixerVersion->minor, sdl_mixerVersion->patch);
+    printf("Compiled with SDL_net version: %d.%d.%d\n", SDL_NET_MAJOR_VERSION, SDL_NET_MINOR_VERSION, SDL_NET_PATCHLEVEL);
+    const SDL_version* sdl_netVersion = SDLNet_Linked_Version();
+    printf("\tRuntime SDL_net version: %d.%d.%d\n", sdl_netVersion->major, sdl_netVersion->minor, sdl_netVersion->patch);
 }
 
