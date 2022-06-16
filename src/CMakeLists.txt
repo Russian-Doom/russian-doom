@@ -214,11 +214,15 @@ foreach(MODULE ${COMPILE_MODULES})
         )
     endif()
 
-    # Link flags
+    # Properties and Link options
     set_target_properties("${PROGRAM_PREFIX}${MODULE}" PROPERTIES
         C_STANDARD "${RD_C_STANDARD}"
         C_STANDARD_REQUIRED ON
     )
+
+    if(WIN32)
+        target_link_options("${PROGRAM_PREFIX}${MODULE}" PRIVATE "-mconsole")
+    endif()
 
     add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}" POST_BUILD
         MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}>"
@@ -230,6 +234,11 @@ foreach(MODULE ${COMPILE_MODULES})
             C_STANDARD "${RD_C_STANDARD}"
             C_STANDARD_REQUIRED ON
         )
+
+        if(WIN32)
+            target_link_options("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE "-mconsole")
+        endif()
+
         add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}-setup" POST_BUILD
             MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-setup>"
             COMMAND $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:${CMAKE_STRIP}> $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:"$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-setup>">

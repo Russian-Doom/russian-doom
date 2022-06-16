@@ -50,28 +50,6 @@ boolean vanillaparm;
 // [JN] Devparm available for all three games in RD
 boolean devparm;
 
-
-#ifdef _WIN32
-// -----------------------------------------------------------------------------
-// RD_CreateWindowsConsole
-// [JN] Creates console output Window. For Windows OS only.
-// -----------------------------------------------------------------------------
-void RD_CreateWindowsConsole (void)
-{
-    // [JN] Allocate console.
-    AllocConsole();
-
-    // [JN] Head text outputs.
-    freopen("CONIN$", "r",stdin); 
-    freopen("CONOUT$","w",stdout); 
-    freopen("CONOUT$","w",stderr); 
-
-    // [JN] Set a proper codepage.
-    SetConsoleOutputCP(CP_UTF8);
-    SetConsoleCP(CP_UTF8);
-}
-#endif
-
 void M_SetExeDir(void)
 {
     char *dirname;
@@ -153,6 +131,22 @@ int main(int argc, char **argv)
         myargv[i] = M_StringDuplicate(argv[i]);
     }
 
+#ifdef _WIN32
+    char consoleTitle[300];
+    GetConsoleTitle(consoleTitle, 300);
+    if(strncmp(consoleTitle, myargv[0], 300) == 0)
+    {
+        printf("Console title: %s\nExecution command: %s\nConsole assumed to be auto-created and closed\n",
+               consoleTitle, myargv[0]);
+        FreeConsole();
+    }
+    else
+    {
+        SetConsoleOutputCP(CP_UTF8);
+        SetConsoleCP(CP_UTF8);
+    }
+#endif
+
     M_SetExeDir();
 #ifdef __APPLE__
     packageResourcesDir = SDL_GetBasePath();
@@ -162,14 +156,6 @@ int main(int argc, char **argv)
 
     // Check for -devparm being activated
     devparm = M_CheckParm ("-devparm");
-
-#ifdef _WIN32
-    // [JN] Create a console output on Windows for devparm mode.
-    if (devparm)
-    {
-        RD_CreateWindowsConsole();
-    }
-#endif
 
     // [JN] Activate vanilla gameplay mode.
     // All optional enhancements will be disabled 
