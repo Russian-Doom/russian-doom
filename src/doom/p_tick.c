@@ -113,13 +113,13 @@ void P_RunThinkers (void)
 
     while (currentthinker != &thinkercap)
     {
-		// [JN] Random brightmap flickering effect.
-        if (bmap_count_flick < 2)
+        if (currentthinker->function.acp1 == (actionf_p1)P_MobjThinker)
         {
-            if (currentthinker->function.acp1 == (actionf_p1)P_MobjThinker)
-            {
-                mobj_t *mo = (mobj_t *)currentthinker;
+            mobj_t *mo = (mobj_t *)currentthinker;
 
+            // [JN] Random brightmap flickering effect.
+            if (bmap_count_flick < 2)
+            {
                 if (mo->sprite == SPR_CAND  // Candestick
                 ||  mo->sprite == SPR_CBRA  // Candelabra
                 ||  mo->sprite == SPR_FCAN  // Flaming Barrel
@@ -140,6 +140,16 @@ void P_RunThinkers (void)
                         mo->bmap_flick =  0;
                     }
                 }
+            }
+
+            // [JN] Prevent garbage values to be set.
+            if (mo->bmap_flick > 16)
+            {
+                mo->bmap_flick = 16;
+            }
+            if (mo->bmap_flick < 0)
+            {
+                mo->bmap_flick = 0;
             }
         }
 
