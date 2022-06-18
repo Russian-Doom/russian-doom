@@ -70,26 +70,6 @@ extern lighttable_t *scalelightfixed[MAXLIGHTSCALE];
 extern lighttable_t *zlight[LIGHTLEVELS][MAXLIGHTZ];
 extern lighttable_t *fixedcolormap;
 
-// [JN] Floor brightmaps
-extern lighttable_t *fullbright_notgrayorbrown_floor[LIGHTLEVELS][MAXLIGHTZ];
-
-// [JN] Wall and thing brightmaps
-extern lighttable_t *fullbright_redonly[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_notgray[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_notgrayorbrown[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_greenonly1[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_greenonly2[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_greenonly3[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_orangeyellow[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_dimmeditems[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_brighttan[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_redonly1[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_explosivebarrel[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_alllights[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_candles[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_pileofskulls[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *fullbright_redonly2[LIGHTLEVELS][MAXLIGHTSCALE];
-
 extern int extralight;
 
 //

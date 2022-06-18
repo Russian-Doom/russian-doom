@@ -47,24 +47,6 @@ extern lighttable_t *colormaps;
 // [JN] Black and white colormap
 extern lighttable_t *colormaps_bw;
 
-// [JN] Brightmaps
-extern lighttable_t *brightmaps_notgray;
-extern lighttable_t *brightmaps_notgrayorbrown;
-extern lighttable_t *brightmaps_redonly;
-extern lighttable_t *brightmaps_greenonly1;
-extern lighttable_t *brightmaps_greenonly2;
-extern lighttable_t *brightmaps_greenonly3;
-extern lighttable_t *brightmaps_orangeyellow;
-extern lighttable_t *brightmaps_dimmeditems;
-extern lighttable_t *brightmaps_brighttan;
-extern lighttable_t *brightmaps_redonly1;
-extern lighttable_t *brightmaps_explosivebarrel;
-extern lighttable_t *brightmaps_alllights;
-extern lighttable_t *brightmaps_candles;
-extern lighttable_t *brightmaps_pileofskulls;
-extern lighttable_t *brightmaps_redonly2;
-
-
 // for global animation
 extern int   firstflat;
 extern int  *flattranslation;	

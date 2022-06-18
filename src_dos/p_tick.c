@@ -19,9 +19,11 @@
 //	Thinker, Ticker.
 //
 
+#include <stdlib.h>
 #include "z_zone.h"
 #include "p_local.h"
 #include "doomstat.h"
+#include "jn.h"
 
 
 int	leveltime;
@@ -76,14 +78,54 @@ void P_RemoveThinker (thinker_t *thinker)
 //
 // P_RunThinkers
 //
+
+int bmap_flick = 0;
+int bmap_glow = 0;
+static int bmap_count_flick = 0;
+static int bmap_count_glow = 0;
+
 void P_RunThinkers (void)
 {
     thinker_t *currentthinker;
 
     currentthinker = thinkercap.next;
 
+    // [JN] Run brightmap timers.
+    bmap_count_flick++;
+    bmap_count_glow++;
+
     while (currentthinker != &thinkercap)
     {
+		// [JN] Random brightmap flickering effect.
+        if (bmap_count_flick < 2)
+        {
+            if (currentthinker->function.acp1 == (actionf_p1)P_MobjThinker)
+            {
+                mobj_t *mo = (mobj_t *)currentthinker;
+
+                if (mo->sprite == SPR_CAND  // Candestick
+                ||  mo->sprite == SPR_CBRA  // Candelabra
+                ||  mo->sprite == SPR_FCAN  // Flaming Barrel
+                ||  mo->sprite == SPR_TBLU  // Tall Blue Torch
+                ||  mo->sprite == SPR_TGRN  // Tall Green Torch
+                ||  mo->sprite == SPR_TRED  // Tall Red Torch
+                ||  mo->sprite == SPR_SMBT  // Short Blue Torch
+                ||  mo->sprite == SPR_SMGT  // Short Green Torch
+                ||  mo->sprite == SPR_SMRT  // Short Red Torch
+                ||  mo->sprite == SPR_POL3) // Pile of Skulls and Candles
+                {
+                    if (brightmaps && !vanilla)
+                    {
+                        mo->bmap_flick = rand() % 16;
+                    }
+                    else
+                    {
+                        mo->bmap_flick =  0;
+                    }
+                }
+            }
+        }
+
         if (currentthinker->function.acv == (actionf_v)(-1))
         {
             // time to remove it
@@ -97,6 +139,34 @@ void P_RunThinkers (void)
             currentthinker->function.acp1 (currentthinker);
         }
         currentthinker = currentthinker->next;
+    }
+
+    // [JN] Brightmap glowing effect.
+    if (brightmaps && !vanilla)
+    {
+        if (bmap_count_glow < 7)
+        {
+            bmap_glow++;
+        }
+        else if (bmap_count_glow < 13)
+        {
+            bmap_glow--;
+        }
+    }
+    else
+    {
+        bmap_glow = 0;
+        bmap_count_glow = 0;
+    }
+
+    // [JN] Reset brightmap timers.
+    if (bmap_count_flick >= 4)
+    {
+        bmap_count_flick = 0;
+    }
+    if (bmap_count_glow >= 13)
+    {
+        bmap_count_glow = 0;
     }
 }
 

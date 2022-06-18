@@ -944,9 +944,10 @@ state_t	states[NUMSTATES] = {
     {SPR_BEXP,32770,5,{NULL},S_BEXP4,0,0},	// S_BEXP3
     {SPR_BEXP,32771,10,{A_Explode},S_BEXP5,0,0},	// S_BEXP4
     {SPR_BEXP,32772,10,{NULL},S_NULL,0,0},	// S_BEXP5
-    {SPR_FCAN,32768,4,{NULL},S_BBAR2,0,0},	// S_BBAR1
-    {SPR_FCAN,32769,4,{NULL},S_BBAR3,0,0},	// S_BBAR2
-    {SPR_FCAN,32770,4,{NULL},S_BBAR1,0,0},	// S_BBAR3
+    // [JN] Diable full bright for Burning Barrel, use brightmap instead.
+    {SPR_FCAN,0,4,{NULL},S_BBAR2,0,0},	// S_BBAR1
+    {SPR_FCAN,1,4,{NULL},S_BBAR3,0,0},	// S_BBAR2
+    {SPR_FCAN,2,4,{NULL},S_BBAR1,0,0},	// S_BBAR3
     {SPR_BON1,0,6,{NULL},S_BON1A,0,0},	// S_BON1
     {SPR_BON1,1,6,{NULL},S_BON1B,0,0},	// S_BON1A
     {SPR_BON1,2,6,{NULL},S_BON1C,0,0},	// S_BON1B
@@ -1017,7 +1018,7 @@ state_t	states[NUMSTATES] = {
     {SPR_PLAS,0,-1,{NULL},S_NULL,0,0},	// S_PLAS
     {SPR_SHOT,0,-1,{NULL},S_NULL,0,0},	// S_SHOT
     {SPR_SGN2,0,-1,{NULL},S_NULL,0,0},	// S_SHOT2
-    // [JN] Disable full bright, use brightmap instead
+    // [JN] Disable full bright for Floor Lamp, use brightmap instead.
     {SPR_COLU,0,-1,{NULL},S_NULL,0,0},	// S_COLU
     {SPR_SMT2,0,-1,{NULL},S_NULL,0,0},	// S_STALAG
     {SPR_GOR1,0,10,{NULL},S_BLOODYTWITCH2,0,0},	// S_BLOODYTWITCH
@@ -1029,7 +1030,7 @@ state_t	states[NUMSTATES] = {
     {SPR_POL2,0,-1,{NULL},S_NULL,0,0},	// S_HEADSONSTICK
     {SPR_POL5,0,-1,{NULL},S_NULL,0,0},	// S_GIBS
     {SPR_POL4,0,-1,{NULL},S_NULL,0,0},	// S_HEADONASTICK
-    // [JN] Disable full bright, use brightmap instead
+    // [JN] Disable full bright for Pile of Skulls and Candles, use brightmap instead.
     {SPR_POL3,0,6,{NULL},S_HEADCANDLES2,0,0},	// S_HEADCANDLES
     {SPR_POL3,1,6,{NULL},S_HEADCANDLES,0,0},	// S_HEADCANDLES2
     {SPR_POL1,0,-1,{NULL},S_NULL,0,0},	// S_DEADSTICK
@@ -1044,49 +1045,51 @@ state_t	states[NUMSTATES] = {
     {SPR_COL2,0,-1,{NULL},S_NULL,0,0},	// S_SHRTGRNCOL
     {SPR_COL3,0,-1,{NULL},S_NULL,0,0},	// S_TALLREDCOL
     {SPR_COL4,0,-1,{NULL},S_NULL,0,0},	// S_SHRTREDCOL
-    // [JN] Disable full bright, use brightmap instead
+    // [JN] Disable full bright for Candestick, use brightmap instead.
     {SPR_CAND,0,-1,{NULL},S_NULL,0,0},	// S_CANDLESTIK
-    // [JN] Disable full bright, use brightmap instead
+    // [JN] Disable full bright for Candelabra, use brightmap instead.
     {SPR_CBRA,0,-1,{NULL},S_NULL,0,0},	// S_CANDELABRA
     {SPR_COL6,0,-1,{NULL},S_NULL,0,0},	// S_SKULLCOL
     {SPR_TRE1,0,-1,{NULL},S_NULL,0,0},	// S_TORCHTREE
     {SPR_TRE2,0,-1,{NULL},S_NULL,0,0},	// S_BIGTREE
     {SPR_ELEC,0,-1,{NULL},S_NULL,0,0},	// S_TECHPILLAR
-    {SPR_CEYE,32768,6,{NULL},S_EVILEYE2,0,0},	// S_EVILEYE
-    {SPR_CEYE,32769,6,{NULL},S_EVILEYE3,0,0},	// S_EVILEYE2
-    {SPR_CEYE,32770,6,{NULL},S_EVILEYE4,0,0},	// S_EVILEYE3
-    {SPR_CEYE,32769,6,{NULL},S_EVILEYE,0,0},	// S_EVILEYE4
-    {SPR_FSKU,32768,6,{NULL},S_FLOATSKULL2,0,0},	// S_FLOATSKULL
-    {SPR_FSKU,32769,6,{NULL},S_FLOATSKULL3,0,0},	// S_FLOATSKULL2
-    {SPR_FSKU,32770,6,{NULL},S_FLOATSKULL,0,0},	// S_FLOATSKULL3
+    // [JN] Disable full bright for Evil Eye, use brightmap instead.
+    {SPR_CEYE,0,6,{NULL},S_EVILEYE2,0,0},	// S_EVILEYE
+    {SPR_CEYE,1,6,{NULL},S_EVILEYE3,0,0},	// S_EVILEYE2
+    {SPR_CEYE,2,6,{NULL},S_EVILEYE4,0,0},	// S_EVILEYE3
+    {SPR_CEYE,1,6,{NULL},S_EVILEYE,0,0},	// S_EVILEYE4
+    // [JN] Disable full bright for Floating Skull Rock, use brightmap instead.
+    {SPR_FSKU,0,6,{NULL},S_FLOATSKULL2,0,0},	// S_FLOATSKULL
+    {SPR_FSKU,1,6,{NULL},S_FLOATSKULL3,0,0},	// S_FLOATSKULL2
+    {SPR_FSKU,2,6,{NULL},S_FLOATSKULL,0,0},	// S_FLOATSKULL3
     {SPR_COL5,0,14,{NULL},S_HEARTCOL2,0,0},	// S_HEARTCOL
     {SPR_COL5,1,14,{NULL},S_HEARTCOL,0,0},	// S_HEARTCOL2
-    // [JN] Disable full bright, use brightmap instead
+    // [JN] Disable full bright for Tall Blue Torch, use brightmap instead.
     {SPR_TBLU,0,4,{NULL},S_BLUETORCH2,0,0},	// S_BLUETORCH
     {SPR_TBLU,1,4,{NULL},S_BLUETORCH3,0,0},	// S_BLUETORCH2
     {SPR_TBLU,2,4,{NULL},S_BLUETORCH4,0,0},	// S_BLUETORCH3
     {SPR_TBLU,3,4,{NULL},S_BLUETORCH,0,0},	// S_BLUETORCH4
-    // [JN] Disable full bright, use brightmap instead
+    // [JN] Disable full bright for Tall Green Torch, use brightmap instead.
     {SPR_TGRN,0,4,{NULL},S_GREENTORCH2,0,0},	// S_GREENTORCH
     {SPR_TGRN,1,4,{NULL},S_GREENTORCH3,0,0},	// S_GREENTORCH2
     {SPR_TGRN,2,4,{NULL},S_GREENTORCH4,0,0},	// S_GREENTORCH3
     {SPR_TGRN,3,4,{NULL},S_GREENTORCH,0,0},	// S_GREENTORCH4
-    // [JN] Disable full bright, use brightmap instead
+    // [JN] Disable full bright for Tall Red Torch, use brightmap instead.
     {SPR_TRED,0,4,{NULL},S_REDTORCH2,0,0},	// S_REDTORCH
     {SPR_TRED,1,4,{NULL},S_REDTORCH3,0,0},	// S_REDTORCH2
     {SPR_TRED,2,4,{NULL},S_REDTORCH4,0,0},	// S_REDTORCH3
     {SPR_TRED,3,4,{NULL},S_REDTORCH,0,0},	// S_REDTORCH4
-    // [JN] Disable full bright, use brightmap instead
+    // [JN] Disable full bright for Short Blue Torch, use brightmap instead.
     {SPR_SMBT,0,4,{NULL},S_BTORCHSHRT2,0,0},	// S_BTORCHSHRT
     {SPR_SMBT,1,4,{NULL},S_BTORCHSHRT3,0,0},	// S_BTORCHSHRT2
     {SPR_SMBT,2,4,{NULL},S_BTORCHSHRT4,0,0},	// S_BTORCHSHRT3
     {SPR_SMBT,3,4,{NULL},S_BTORCHSHRT,0,0},	// S_BTORCHSHRT4
-    // [JN] Disable full bright, use brightmap instead
+    // [JN] Disable full bright for Short Green Torch, use brightmap instead
     {SPR_SMGT,0,4,{NULL},S_GTORCHSHRT2,0,0},	// S_GTORCHSHRT
     {SPR_SMGT,1,4,{NULL},S_GTORCHSHRT3,0,0},	// S_GTORCHSHRT2
     {SPR_SMGT,2,4,{NULL},S_GTORCHSHRT4,0,0},	// S_GTORCHSHRT3
     {SPR_SMGT,3,4,{NULL},S_GTORCHSHRT,0,0},	// S_GTORCHSHRT4
-    // [JN] Disable full bright, use brightmap instead
+    // [JN] Disable full bright for Short Red Torch, use brightmap instead.
     {SPR_SMRT,0,4,{NULL},S_RTORCHSHRT2,0,0},	// S_RTORCHSHRT
     {SPR_SMRT,1,4,{NULL},S_RTORCHSHRT3,0,0},	// S_RTORCHSHRT2
     {SPR_SMRT,2,4,{NULL},S_RTORCHSHRT4,0,0},	// S_RTORCHSHRT3
@@ -1100,12 +1103,12 @@ state_t	states[NUMSTATES] = {
     {SPR_POB1,0,-1,{NULL},S_NULL,0,0},	// S_COLONGIBS
     {SPR_POB2,0,-1,{NULL},S_NULL,0,0},	// S_SMALLPOOL
     {SPR_BRS1,0,-1,{NULL},S_NULL,0,0},		// S_BRAINSTEM
-    // [JN] Disable full bright, use brightmap instead
+    // [JN] Disable full bright for Tall Tech Lamp, use brightmap instead.
     {SPR_TLMP,0,4,{NULL},S_TECHLAMP2,0,0},	// S_TECHLAMP
     {SPR_TLMP,1,4,{NULL},S_TECHLAMP3,0,0},	// S_TECHLAMP2
     {SPR_TLMP,2,4,{NULL},S_TECHLAMP4,0,0},	// S_TECHLAMP3
     {SPR_TLMP,3,4,{NULL},S_TECHLAMP,0,0},	// S_TECHLAMP4
-    // [JN] Disable full bright, use brightmap instead
+    // [JN] Disable full bright for Short Tech Lamp, use brightmap instead.
     {SPR_TLP2,0,4,{NULL},S_TECH2LAMP2,0,0},	// S_TECH2LAMP
     {SPR_TLP2,1,4,{NULL},S_TECH2LAMP3,0,0},	// S_TECH2LAMP2
     {SPR_TLP2,2,4,{NULL},S_TECH2LAMP4,0,0},	// S_TECH2LAMP3

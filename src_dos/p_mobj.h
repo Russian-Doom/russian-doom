@@ -298,4 +298,7 @@ typedef struct mobj_s
     // Thing being chased/attacked for tracers.
     struct mobj_s *tracer;	
 
+    // [JN] Animated brightmaps.
+    int     bmap_flick;
+
 } mobj_t;

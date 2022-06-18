@@ -29,13 +29,15 @@ extern int           dc_texheight;
 extern byte         *dc_source;  // first pixel in a column
 extern fixed_t       dc_iscale;
 extern fixed_t       dc_texturemid;
-extern lighttable_t *dc_colormap;
+extern const lighttable_t *dc_colormap[2];
+extern const byte   *dc_brightmap;
 
 extern int           ds_y;
 extern int           ds_x1;
 extern int           ds_x2;
 extern byte         *ds_source;		    // start of a 64*64 tile image
-extern lighttable_t *ds_colormap;
+extern lighttable_t *ds_colormap[2];
+extern const byte   *ds_brightmap;
 extern fixed_t       ds_xfrac;
 extern fixed_t       ds_yfrac;
 extern fixed_t       ds_xstep;

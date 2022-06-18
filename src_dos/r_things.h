@@ -36,6 +36,8 @@ extern int64_t       sprtopscreen;
 extern fixed_t       spryscale;
 extern fixed_t       pspritescale;
 extern fixed_t       pspriteiscale;
+extern int           bmap_flick;   // [JN] Animated brightmaps.
+extern int           bmap_glow;
 
 
 void R_DrawMaskedColumn (column_t *column);

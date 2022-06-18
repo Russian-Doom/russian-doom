@@ -31,6 +31,7 @@
 #include "p_local.h"
 #include "doomstat.h"
 #include "r_data.h"
+#include "r_bmaps.h"
 #include "jn.h"
 
 
@@ -138,6 +139,7 @@ short        **texturecolumnlump;
 unsigned     **texturecolumnofs;  // [JN] killough 4/9/98: make 32-bit
 unsigned     **texturecolumnofs2; // [crispy] original column offsets for single-patched textures
 byte         **texturecomposite;
+const byte   **texturebrightmap;  // [crispy] brightmaps
 
 // for global animation
 int           *flattranslation;
@@ -150,25 +152,6 @@ fixed_t       *spritetopoffset;
 
 lighttable_t  *colormaps;
 lighttable_t  *colormaps_bw; // [JN] Black and white colormap
-
-// [JN] Brightmaps
-lighttable_t  *brightmaps_notgray;
-lighttable_t  *brightmaps_notgrayorbrown;
-lighttable_t  *brightmaps_redonly;
-lighttable_t  *brightmaps_greenonly1;
-lighttable_t  *brightmaps_greenonly2;
-lighttable_t  *brightmaps_greenonly3;
-lighttable_t  *brightmaps_orangeyellow;
-lighttable_t  *brightmaps_dimmeditems;
-lighttable_t  *brightmaps_brighttan;
-lighttable_t  *brightmaps_redonly1;
-lighttable_t  *brightmaps_explosivebarrel;
-lighttable_t  *brightmaps_alllights;
-lighttable_t  *brightmaps_candles;
-lighttable_t  *brightmaps_pileofskulls;
-lighttable_t  *brightmaps_redonly2;
-
-// [JN] Translucency
 
 
 //
@@ -664,6 +647,7 @@ void R_InitTextures (void)
     texturecompositesize = Z_Malloc (numtextures*sizeof*(texturecompositesize), PU_STATIC, 0);
     texturewidthmask = Z_Malloc (numtextures*sizeof*(texturewidthmask), PU_STATIC, 0);
     textureheight = Z_Malloc (numtextures*sizeof*(textureheight), PU_STATIC, 0);
+    texturebrightmap = Z_Malloc (numtextures * sizeof(*texturebrightmap), PU_STATIC, 0);
 
     totalwidth = 0;
     
@@ -713,6 +697,9 @@ void R_InitTextures (void)
         memcpy (texture->name, mtexture->name, sizeof(texture->name));
         mpatch = &mtexture->patches[0];
         patch = &texture->patches[0];
+
+        // [crispy] initialize brightmaps
+        texturebrightmap[i] = R_BrightmapForTexName(texture->name);
 
         for (j=0 ; j<texture->patchcount ; j++, mpatch++, patch++)
         {
@@ -837,7 +824,6 @@ void R_InitSpriteLumps (void)
 void R_InitColormaps (void)
 {
     int length = W_LumpLength (W_GetNumForName("COLORMAP")) + 255;
-    int length_bmap = W_LumpLength (W_GetNumForName("BRTMAP1")) + 255;
 
     // Load in the light tables, 
     //  256 byte align tables.
@@ -846,73 +832,9 @@ void R_InitColormaps (void)
     W_ReadLump (W_GetNumForName("COLORMAP"), colormaps); 
 
     // [JN] Black and white light table
-    colormaps_bw = Z_Malloc (length_bmap, PU_STATIC, 0); 
+    colormaps_bw = Z_Malloc (length, PU_STATIC, 0); 
     colormaps_bw = (byte *)( ((int)colormaps_bw + 255)&~0xff); 
     W_ReadLump (W_GetNumForName("COLORMAB"), colormaps_bw); 
-
-    // [JN] Loading brightmaps
-    // Note: tables as well as it's valuaes are taken from Doom Retro (r_data.c).
-    // Many thanks to Brad Harding for his amazing research of brightmap tables and colors!
-
-    brightmaps_notgray = Z_Malloc (length_bmap, PU_STATIC, 0); 
-    brightmaps_notgray = (byte *)( ((int)brightmaps_notgray + 255)&~0xff); 
-    W_ReadLump (W_GetNumForName("BRTMAP1"), brightmaps_notgray);
-
-    brightmaps_notgrayorbrown = Z_Malloc (length_bmap, PU_STATIC, 0); 
-    brightmaps_notgrayorbrown = (byte *)( ((int)brightmaps_notgrayorbrown + 255)&~0xff); 
-    W_ReadLump (W_GetNumForName("BRTMAP2"), brightmaps_notgrayorbrown); 
-
-    brightmaps_redonly = Z_Malloc (length_bmap, PU_STATIC, 0); 
-    brightmaps_redonly = (byte *)( ((int)brightmaps_redonly + 255)&~0xff); 
-    W_ReadLump (W_GetNumForName("BRTMAP3"), brightmaps_redonly);
-    
-    brightmaps_greenonly1 = Z_Malloc (length_bmap, PU_STATIC, 0); 
-    brightmaps_greenonly1 = (byte *)( ((int)brightmaps_greenonly1 + 255)&~0xff); 
-    W_ReadLump (W_GetNumForName("BRTMAP4"), brightmaps_greenonly1); 
-    
-    brightmaps_greenonly2 = Z_Malloc (length_bmap, PU_STATIC, 0); 
-    brightmaps_greenonly2 = (byte *)( ((int)brightmaps_greenonly2 + 255)&~0xff); 
-    W_ReadLump (W_GetNumForName("BRTMAP5"), brightmaps_greenonly2);
-
-    brightmaps_greenonly3 = Z_Malloc (length_bmap, PU_STATIC, 0); 
-    brightmaps_greenonly3 = (byte *)( ((int)brightmaps_greenonly3 + 255)&~0xff); 
-    W_ReadLump (W_GetNumForName("BRTMAP6"), brightmaps_greenonly3);
-    
-    brightmaps_orangeyellow = Z_Malloc (length_bmap, PU_STATIC, 0); 
-    brightmaps_orangeyellow = (byte *)( ((int)brightmaps_orangeyellow + 255)&~0xff); 
-    W_ReadLump (W_GetNumForName("BRTMAP7"), brightmaps_orangeyellow);
-    
-    brightmaps_dimmeditems = Z_Malloc (length_bmap, PU_STATIC, 0); 
-    brightmaps_dimmeditems = (byte *)( ((int)brightmaps_dimmeditems + 255)&~0xff); 
-    W_ReadLump (W_GetNumForName("BRTMAP8"), brightmaps_dimmeditems);
-
-    brightmaps_brighttan = Z_Malloc (length_bmap, PU_STATIC, 0); 
-    brightmaps_brighttan = (byte *)( ((int)brightmaps_brighttan + 255)&~0xff); 
-    W_ReadLump (W_GetNumForName("BRTMAP9"), brightmaps_brighttan);
-
-    brightmaps_redonly1 = Z_Malloc (length_bmap, PU_STATIC, 0); 
-    brightmaps_redonly1 = (byte *)( ((int)brightmaps_redonly1 + 255)&~0xff); 
-    W_ReadLump (W_GetNumForName("BRTMAP10"), brightmaps_redonly1);
-
-    brightmaps_explosivebarrel = Z_Malloc (length_bmap, PU_STATIC, 0); 
-    brightmaps_explosivebarrel = (byte *)( ((int)brightmaps_explosivebarrel + 255)&~0xff); 
-    W_ReadLump (W_GetNumForName("BRTMAP11"), brightmaps_explosivebarrel);
-
-    brightmaps_alllights = Z_Malloc (length_bmap, PU_STATIC, 0); 
-    brightmaps_alllights = (byte *)( ((int)brightmaps_alllights + 255)&~0xff); 
-    W_ReadLump (W_GetNumForName("BRTMAP12"), brightmaps_alllights);
-
-    brightmaps_candles = Z_Malloc (length_bmap, PU_STATIC, 0); 
-    brightmaps_candles = (byte *)( ((int)brightmaps_candles + 255)&~0xff); 
-    W_ReadLump (W_GetNumForName("BRTMAP13"), brightmaps_candles);    
-
-    brightmaps_pileofskulls = Z_Malloc (length_bmap, PU_STATIC, 0);
-    brightmaps_pileofskulls = (byte *)( ((int)brightmaps_pileofskulls + 255)&~0xff);
-    W_ReadLump (W_GetNumForName("BRTMAP14"), brightmaps_pileofskulls);
-
-    brightmaps_redonly2 = Z_Malloc (length_bmap, PU_STATIC, 0);
-    brightmaps_redonly2 = (byte *)( ((int)brightmaps_redonly2 + 255)&~0xff);
-    W_ReadLump (W_GetNumForName("BRTMAP15"), brightmaps_redonly2);
 }
 
 
@@ -1051,9 +973,12 @@ void R_InitTintMap()
 //
 void R_InitData (void)
 {
-    R_InitTextures ();
-    printf (".");
+    // [JN] Moved R_InitFlats to the top, needed for 
+    // R_GenerateComposite ivoking while level loading.
     R_InitFlats ();
+    R_InitBrightmaps ();
+    printf (".");
+    R_InitTextures ();
     printf (".");
     R_InitSpriteLumps ();
     printf (".");

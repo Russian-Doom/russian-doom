@@ -30,6 +30,7 @@
 #include "r_local.h"
 #include "doomstat.h"
 #include "v_trans.h"
+#include "r_bmaps.h"
 #include "jn.h"
 
 
@@ -47,14 +48,6 @@
 fixed_t pspritescale, pspriteiscale;
 
 static lighttable_t **spritelights;
-
-// [JN] Brightmaps
-static lighttable_t **fullbrights_redonly;
-static lighttable_t **fullbrights_dimmeditems;
-static lighttable_t **fullbrights_explosivebarrel;
-static lighttable_t **fullbrights_alllights;
-static lighttable_t **fullbrights_candles;
-static lighttable_t **fullbrights_pileofskulls;
 
 // psprite clipping and initializing clipping
 int *negonearray;           // [JN] killough 2/8/98: // dropoff overflow
@@ -435,9 +428,12 @@ void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
     column_t  *column;
 
     patch = W_CacheLumpNum (vis->patch+firstspritelump, PU_CACHE);
-    dc_colormap = vis->colormap;
+    // [crispy] brightmaps for select sprites
+    dc_colormap[0] = vis->colormap[0];
+    dc_colormap[1] = vis->colormap[1];
+    dc_brightmap = vis->brightmap;
 
-    if (!dc_colormap)
+    if (!dc_colormap[0])
     {
         // NULL colormap = shadow draw
         colfunc = fuzzcolfunc;
@@ -487,7 +483,7 @@ void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
 // Generates a vissprite for a thing if it might be visible.
 // -----------------------------------------------------------------------------
 
-void R_ProjectSprite (mobj_t *thing)
+void R_ProjectSprite (mobj_t *thing, const int lightnum)
 {
     int             index;
     int             lump;
@@ -654,17 +650,17 @@ void R_ProjectSprite (mobj_t *thing)
     if (thing->flags & MF_SHADOW)
     {
         // shadow draw
-        vis->colormap = NULL;
+        vis->colormap[0] = vis->colormap[1] = NULL;
     }
     else if (fixedcolormap)
     {
         // fixed map
-        vis->colormap = fixedcolormap;
+        vis->colormap[0] = vis->colormap[1] = fixedcolormap;
     }
     else if (thing->frame & FF_FULLBRIGHT)
     {
         // full bright
-        vis->colormap = colormaps;
+        vis->colormap[0] = vis->colormap[1] = colormaps;
     }
     else
     {
@@ -676,109 +672,129 @@ void R_ProjectSprite (mobj_t *thing)
             index = MAXLIGHTSCALE-1;
         }
 
-        vis->colormap = spritelights[index];
+        // [crispy] brightmaps for select sprites
+        vis->colormap[0] = spritelights[index];
 
-        // [JN] Applying brightmaps to sprites...
-        if (brightmaps && !vanilla)
+        // [JN] Flickering light level is set in P_RunThinkers.
+        bmap_flick = thing->bmap_flick;
+
+        // [JN] Prevent garbage values to be used.
+        if (bmap_flick > 16) bmap_flick = 16;
+        if (bmap_flick < 0)  bmap_flick = 0;
+
+        // [JN] Apply different types half-brights for certain objects.
+        //  Not to be confused:
+        //   * Semi-bright. Lits up brightmapped pixels with non-full power.
+        //     If sector brightness < 96, apply semi-bright. Otherwise, 
+        //     use standard diminished lighting.
+        //   * Demi-bright. Lits up brightmapped pixels with full power,
+        //     and non-brightmapped pixels with distance index miltipled by 2.
+        //   * Hemi-bright. Lits up brightmapped pixels with full power,
+        //     and non-brightmapped pixels with distance index miltipled by 4.
+        //   * Just animated. Lits up all sprite pixels and applies animation.
+
+        switch (thing->sprite)
         {
-            // Armor Bonus
-            if (thing->type == MT_MISC3)
-            vis->colormap = fullbrights_dimmeditems[index];
-
-            // Cell Charge
-            else if (thing->type == MT_MISC20)
-            vis->colormap = fullbrights_dimmeditems[index];
-
-            // Cell Charge Pack
-            else if (thing->type == MT_MISC21)
-            vis->colormap = fullbrights_dimmeditems[index];
-
-            // BFG9000
-            else if (thing->type == MT_MISC25)
-            vis->colormap = fullbrights_redonly[index];
-
-            // Plasmagun
-            else if (thing->type == MT_MISC28)
-            vis->colormap = fullbrights_redonly[index];
-
-            // Explosive barrel
-            else if (thing->type == MT_BARREL)
-            vis->colormap = fullbrights_explosivebarrel[index];
-
-            // Pile of skulls and candles (29)
-            else if (thing->type == MT_MISC73)
-            vis->colormap = fullbrights_pileofskulls[index];
-
-            // Candlestick (34)
-            else if (thing->type == MT_MISC49)
-            vis->colormap = fullbrights_candles[index];
-
-            // Candelabra (35)
-            else if (thing->type == MT_MISC50)
-            vis->colormap = fullbrights_candles[index];
-
-            // Tall blue torch (44)
-            else if (thing->type == MT_MISC41)
-            vis->colormap = fullbrights_alllights[index];
-
-            // Tall green torch (45)
-            else if (thing->type == MT_MISC42)
-            vis->colormap = fullbrights_alllights[index];
-
-            // Tall red torch (46)
-            else if (thing->type == MT_MISC43)
-            vis->colormap = fullbrights_alllights[index];
-
-            // Short blue torch (55)
-            else if (thing->type == MT_MISC44)
-            vis->colormap = fullbrights_alllights[index];
-
-            // Short green torch (56)
-            else if (thing->type == MT_MISC45)
-            vis->colormap = fullbrights_alllights[index];
-
-            // Short red torch (57)
-            else if (thing->type == MT_MISC46)
-            vis->colormap = fullbrights_alllights[index];
-
-            // Burning barrel (70)
-            else if (thing->type == MT_MISC77)
-            vis->colormap = fullbrights_alllights[index];
-
-            // Tall tech lamp (85)
-            else if (thing->type == MT_MISC29)
-            vis->colormap = fullbrights_alllights[index];
-
-            // Short tech lamp (86)
-            else if (thing->type == MT_MISC30)
-            vis->colormap = fullbrights_alllights[index];
-
-            // Floor lamp (2028)
-            else if (thing->type == MT_MISC31)
-            vis->colormap = fullbrights_alllights[index];
-        }
-        // [JN] Fallback. If we are not using brightmaps, apply full brightness
-        // to the objects, thats no longer lit in info.c.
-        else
-        {
-            if (thing->type == MT_MISC49    // Candlestick
-            ||  thing->type == MT_MISC50    // Candelabra
-            ||  thing->type == MT_MISC41    // Tall blue torch
-            ||  thing->type == MT_MISC42    // Tall green torch
-            ||  thing->type == MT_MISC43    // Tall red torch
-            ||  thing->type == MT_MISC44    // Short blue torch
-            ||  thing->type == MT_MISC45    // Short green torch
-            ||  thing->type == MT_MISC46    // Short red torch
-            ||  thing->type == MT_MISC73    // Pile of skulls and candles
-            ||  thing->type == MT_MISC77    // Burning barrel
-            ||  thing->type == MT_MISC29    // Tall tech lamp
-            ||  thing->type == MT_MISC30    // Short tech lamp
-            ||  thing->type == MT_MISC31)   // Floor lamp
+            // Semi-brigths:
+            case SPR_BON2:  // Armor Bonus
+            case SPR_BAR1:  // Explosive Barrel
             {
-                vis->colormap = colormaps;
+                int semi_bright = index;
+
+                if (semi_bright < MINBRIGHT)
+                {
+                    semi_bright = MINBRIGHT;
+                }
+                vis->colormap[1] = lightnum < 6 ? &colormaps[MINBRIGHT*256] :
+                                                  spritelights[semi_bright];
+                break;
+            }
+            // Demi-brigths:
+            case SPR_CAND:  // Candestick
+            case SPR_CBRA:  // Candelabra
+            case SPR_COLU:  // Floor Lamp
+            case SPR_FCAN:  // Flaming Barrel
+            case SPR_TLMP:  // Tall Tech Lamp
+            case SPR_TLP2:  // Short Tech Lamp
+            {
+                int demi_bright = index*2;
+
+                if (demi_bright > 47)
+                {
+                    demi_bright = 47;
+                }
+
+                vis->colormap[0] = spritelights[demi_bright];
+
+                // Animated brightmaps:
+                if (thing->sprite == SPR_CAND   // Candestick
+                ||  thing->sprite == SPR_CBRA)  // Candelabra
+                {
+                    vis->colormap[1] = &colormaps[bmap_flick*256];
+                }
+                else
+                if (thing->sprite == SPR_FCAN)   // Flaming Barrel
+                {
+                    vis->colormap[1] = &colormaps[bmap_flick/3*256];
+                }
+                else
+                {
+                    vis->colormap[1] = colormaps;
+                }
+                break;
+            }
+            // Hemi-brigths:
+            case SPR_TBLU:   // Tall Blue Torch
+            case SPR_TGRN:   // Tall Green Torch
+            case SPR_TRED:   // Tall Red Torch
+            {
+                int hemi_bright = index*4;
+
+                if (hemi_bright > 47)
+                {
+                    hemi_bright = 47;
+                }
+
+                vis->colormap[0] = spritelights[hemi_bright];
+                vis->colormap[1] = &colormaps[bmap_flick/3*256];
+                break;
+            }
+            // Just animated:
+            case SPR_SMBT:  // Short Blue Torch
+            case SPR_SMGT:  // Short Green Torch
+            case SPR_SMRT:  // Short Red Torch
+            {
+                vis->colormap[0] = vis->colormap[1]
+                                 = &colormaps[bmap_flick/4*256];
+                break;
+            }
+            case SPR_CEYE:  // Evil Eye
+            {
+                vis->colormap[0] = vis->colormap[1]
+                                 = &colormaps[bmap_glow*256];
+                break;
+            }
+            case SPR_FSKU:  // Floating Skull Rock
+            {
+                vis->colormap[0] = vis->colormap[1]
+                                 = &colormaps[bmap_glow*256];
+                break;
+            }
+            case SPR_POL3:  // Pile of Skulls and Candles
+            {
+                vis->colormap[0] = vis->colormap[1]
+                                 = &colormaps[bmap_flick/3*256];
+                break;
+            }
+            // Normal brightmap:
+            default:
+            {
+                vis->colormap[1] = colormaps;
             }
         }
-    }	
+    }
+
+    vis->brightmap = R_BrightmapForSprite(thing->sprite);
 
     // [crispy] colored blood 
     if (colored_blood && !vanilla 
@@ -816,44 +832,20 @@ void R_AddSprites (sector_t *sec)
     if (lightnum < 0)		
     {
         spritelights = scalelight[0];
-
-        // [JN] Calculating sprite brightmaps
-        fullbrights_dimmeditems = fullbright_dimmeditems[0];
-        fullbrights_redonly = fullbright_redonly[0];
-        fullbrights_explosivebarrel = fullbright_explosivebarrel[0];
-        fullbrights_alllights = fullbright_alllights[0];
-        fullbrights_candles = fullbright_candles[0];
-        fullbrights_pileofskulls = fullbright_pileofskulls[0];
     }
     else if (lightnum >= LIGHTLEVELS)
     {
         spritelights = scalelight[LIGHTLEVELS-1];
-
-        // [JN] Calculating sprite brightmaps
-        fullbrights_dimmeditems = fullbright_dimmeditems[LIGHTLEVELS-1];
-        fullbrights_redonly = fullbright_redonly[LIGHTLEVELS-1];
-        fullbrights_explosivebarrel = fullbright_explosivebarrel[LIGHTLEVELS-1];
-        fullbrights_alllights = fullbright_alllights[LIGHTLEVELS-1];
-        fullbrights_candles = fullbright_candles[LIGHTLEVELS-1];
-        fullbrights_pileofskulls = fullbright_pileofskulls[LIGHTLEVELS-1];
     }
     else
     {
         spritelights = scalelight[lightnum];
-
-        // [JN] Calculating sprite brightmaps
-        fullbrights_dimmeditems = fullbright_dimmeditems[lightnum];
-        fullbrights_redonly = fullbright_redonly[lightnum];
-        fullbrights_explosivebarrel = fullbright_explosivebarrel[lightnum];
-        fullbrights_alllights = fullbright_alllights[lightnum];
-        fullbrights_candles = fullbright_candles[lightnum];
-        fullbrights_pileofskulls = fullbright_pileofskulls[lightnum];
     }
 
     // Handle all things in sector.
     for (thing = sec->thinglist ; thing ; thing = thing->snext)
     {
-        R_ProjectSprite (thing);
+        R_ProjectSprite (thing, lightnum);
     }
 }
 
@@ -1101,23 +1093,26 @@ void R_DrawPSprite (pspdef_t *psp)
     || viewplayer->powers[pw_invisibility] & 8)
     {
         // shadow draw
-        vis->colormap = NULL;
+        vis->colormap[0] = vis->colormap[1] = NULL;
     }
     else if (fixedcolormap)
     {
         // fixed color
-        vis->colormap = fixedcolormap;
+        vis->colormap[0] = vis->colormap[1] = fixedcolormap;
     }
     else if (psp->state->frame & FF_FULLBRIGHT)
     {
         // full bright
-        vis->colormap = colormaps;
+        vis->colormap[0] = vis->colormap[1] = colormaps;
     }
     else
     {
         // local light
-        vis->colormap = spritelights[MAXLIGHTSCALE-1];
+        vis->colormap[0] = spritelights[MAXLIGHTSCALE-1];
+        vis->colormap[1] = scalelight[LIGHTLEVELS-1][MAXLIGHTSCALE-1];
     }
+
+    vis->brightmap = R_BrightmapForState(psp->state - states);
 
     R_DrawVisSprite (vis, vis->x1, vis->x2);
 }
@@ -1131,8 +1126,6 @@ void R_DrawPlayerSprites (void)
     int        i;
     int        lightnum;
     pspdef_t  *psp;
-    // [JN] Define what "state" actually is:
-    const int  state = viewplayer->psprites[ps_weapon].state - states;
 
     // get light level
     lightnum = ((viewplayer->mo->subsector->sector->lightlevel + level_brightness)
@@ -1148,16 +1141,7 @@ void R_DrawPlayerSprites (void)
     }
     else
     {
-        // [JN] Standard formula first
         spritelights = scalelight[lightnum];
-
-        // [JN] Applying brightmaps to HUD weapons...
-        if (brightmaps && !vanilla)
-        {
-            // BFG9000
-            if (state == S_BFG1 || state == S_BFG2 || state == S_BFG3 || state == S_BFG4)
-            spritelights = fullbright_redonly[lightnum];
-        }
     }
 
     // clip to screen bounds

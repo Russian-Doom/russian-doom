@@ -208,7 +208,7 @@ static void R_MapPlane (int y, int x1, int x2)
 
     if (fixedcolormap)
     {
-        ds_colormap = fixedcolormap;
+        ds_colormap[0] = ds_colormap[1] = fixedcolormap;
     }
     else
     {
@@ -218,7 +218,8 @@ static void R_MapPlane (int y, int x1, int x2)
         if (index >= maxlightz)
             index = maxlightz-1;
 
-        ds_colormap = planezlight[index];
+        ds_colormap[0] = planezlight[index];
+        ds_colormap[1] = zlight[LIGHTLEVELS-1][MAXLIGHTZ-1];
     }
 
     ds_y = y;
@@ -507,11 +508,11 @@ void R_DrawPlanes (void)
             // [JN] INVUL sphere now affects the sky
             if (invul_sky && !vanilla)
             {
-                dc_colormap = (fixedcolormap ? fixedcolormap : colormaps);
+                dc_colormap[0] = dc_colormap[1] = fixedcolormap ? fixedcolormap : colormaps;
             }
             else
             {
-                dc_colormap = colormaps;
+                dc_colormap[0] = dc_colormap[1] = colormaps;
             }
 
             dc_texturemid = skytexturemid;
@@ -539,6 +540,7 @@ void R_DrawPlanes (void)
         ds_source = (flattranslation[pl->picnum] == -1) ?
                     R_DistortedFlat(pl->picnum) :
                     W_CacheLumpNum(firstflat + flattranslation[pl->picnum], PU_STATIC);
+        ds_brightmap = R_BrightmapForFlatNum((firstflat + flattranslation[pl->picnum])-firstflat);
 
         planeheight = abs(pl->height-viewz);
         light = ((pl->lightlevel + level_brightness)
@@ -554,15 +556,6 @@ void R_DrawPlanes (void)
         }
 
         planezlight = zlight[light];
-
-        // [JN] Applying brightmaps to floor/ceiling...
-        if (brightmaps && !vanilla
-        && (pl->picnum == bmapflatnum1      // CONS1_1
-        ||  pl->picnum == bmapflatnum2      // CONS1_5
-        ||  pl->picnum == bmapflatnum3))    // CONS1_7
-        {
-            planezlight = fullbright_notgrayorbrown_floor[light];
-        }
 
         pl->top[pl->maxx+1] = SHRT_MAX; // [crispy] hires / 32-bit integer math
         pl->top[pl->minx-1] = SHRT_MAX; // [crispy] hires / 32-bit integer math

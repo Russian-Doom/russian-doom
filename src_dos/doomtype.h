@@ -47,3 +47,5 @@ typedef unsigned char byte;
 // Max negative 32-bit integer.
 #define MININT      ((int)0x80000000)	
 #define MINLONG     ((long)0x80000000)
+
+#define arrlen(array) (sizeof(array) / sizeof(*array))
