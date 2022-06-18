@@ -476,6 +476,20 @@ int W_GetNumForName (char *name)
     return -1;
 }
 
+int W_CheckNumForNameFromTo(const char *name, int from, int to)
+{
+    int i;
+
+    for (i = from; i >= to; i--)
+    {
+        if (!strncasecmp(lumpinfo[i].name, name, 8))
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
 
 //
 // W_LumpLength

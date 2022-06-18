@@ -63,35 +63,29 @@
 // The other refresh files only know about ccordinates, not the architecture
 // of the frame buffer. Conveniently, the frame buffer is a linear one,
 // and we need only the base address, and the total size == width*height*depth/8.
-byte   *viewimage;
 int     viewwidth, scaledviewwidth;
 int     viewwindowx, viewwindowy;
 int     viewheight;
 
-byte   *ylookup[MAXHEIGHT]; 
-int     columnofs[MAXWIDTH]; 
-
-// Color tables for different players, translate a limited part to another
-// (color ramps used for suit colors).
-byte   *dc_translation;
-byte   *translationtables;
-byte    translations[3][256];	
+static byte *ylookup[MAXHEIGHT]; 
+static int   columnofs[MAXWIDTH]; 
 
 // R_DrawColumn. Source is the top of the column to scale.
-const lighttable_t *dc_colormap[2]; // [crispy] brightmaps
-int              dc_x, dc_yl, dc_yh;
-int              dc_texheight;
-fixed_t          dc_iscale, dc_texturemid;
+const lighttable_t *dc_colormap[2];  // [crispy] brightmaps
+const byte         *dc_source;       // First pixel in a column (possibly virtual).
+fixed_t dc_x, dc_yl, dc_yh; 
+fixed_t dc_iscale;
+fixed_t dc_texturemid;
+fixed_t dc_texheight;
 
-// First pixel in a column (possibly virtual).
-byte            *dc_source;
+// Translated columns.
+const byte *dc_translation;
+byte       *translationtables;
 
 // Spectre/Invisibility fuzz effect.
 #define FUZZTABLE 50 
 #define FUZZOFF   (SCREENWIDTH/4)
 
-static int fuzzpos = 0;
-static int fuzzpos_tic;
 static const int fuzzoffset[FUZZTABLE] =
 {
     FUZZOFF, -FUZZOFF,  FUZZOFF, -FUZZOFF,  FUZZOFF,
@@ -106,14 +100,17 @@ static const int fuzzoffset[FUZZTABLE] =
    -FUZZOFF,  FUZZOFF,  FUZZOFF, -FUZZOFF,  FUZZOFF 
 }; 
 
+static int fuzzpos = 0;
+static int fuzzpos_tic;
+
 // Spans.
-int     ds_y, ds_x1, ds_x2;
-fixed_t ds_xfrac, ds_yfrac; 
+fixed_t ds_y, ds_x1, ds_x2;
+fixed_t ds_xfrac, ds_yfrac;
 fixed_t ds_xstep, ds_ystep;
 
-byte            *ds_source;  // start of a 64*64 tile image 
-lighttable_t    *ds_colormap[2];
-const byte      *ds_brightmap;
+const lighttable_t *ds_colormap[2];
+byte               *ds_source;  // start of a 64*64 tile image 
+const byte         *ds_brightmap;
 
 
 // -----------------------------------------------------------------------------
@@ -1229,7 +1226,7 @@ void R_DrawViewBorder (void)
     ofs = top*SCREENWIDTH + SCREENWIDTH-side;
     side <<= 1;
 
-    for (i=1 ; i<viewheight ; i++) 
+    for (i = 1 ; i < viewheight ; i++) 
     { 
         R_VideoErase (ofs, side); 
         ofs += SCREENWIDTH; 

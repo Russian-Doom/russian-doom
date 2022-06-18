@@ -555,7 +555,7 @@ static fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
 // A wall segment will be drawn between start and stop pixels (inclusive).
 // -----------------------------------------------------------------------------
 
-void R_StoreWallRange (int start, int stop)
+void R_StoreWallRange (const int start, const int stop)
 {
     fixed_t     vtop;
     int         lightnum;

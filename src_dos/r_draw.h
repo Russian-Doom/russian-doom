@@ -22,29 +22,24 @@
 #pragma once
 
 
-extern int           dc_x;
-extern int           dc_yl;
-extern int           dc_yh;
-extern int           dc_texheight;
-extern byte         *dc_source;  // first pixel in a column
-extern fixed_t       dc_iscale;
-extern fixed_t       dc_texturemid;
 extern const lighttable_t *dc_colormap[2];
-extern const byte   *dc_brightmap;
+extern const byte         *dc_source;
+extern const byte         *dc_brightmap;
+extern fixed_t     dc_x, dc_yl, dc_yh; 
+extern fixed_t     dc_texheight;
+extern fixed_t     dc_iscale;
+extern fixed_t     dc_texturemid;
+extern const byte *dc_translation;
+extern byte       *translationtables;
 
-extern int           ds_y;
-extern int           ds_x1;
-extern int           ds_x2;
-extern byte         *ds_source;		    // start of a 64*64 tile image
-extern lighttable_t *ds_colormap[2];
-extern const byte   *ds_brightmap;
-extern fixed_t       ds_xfrac;
-extern fixed_t       ds_yfrac;
-extern fixed_t       ds_xstep;
-extern fixed_t       ds_ystep;
+extern fixed_t ds_y, ds_x1, ds_x2;
+extern fixed_t ds_xfrac, ds_yfrac;
+extern fixed_t ds_xstep, ds_ystep;
 
-extern byte         *translationtables;
-extern byte         *dc_translation;
+extern const lighttable_t *ds_colormap[2];
+extern byte               *ds_source;
+extern const byte         *ds_brightmap;
+
 
 // The span blitting interface. Hook in assembler or system specific BLT here.
 void R_DrawColumn (void);

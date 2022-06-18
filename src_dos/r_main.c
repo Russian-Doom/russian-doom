@@ -129,7 +129,7 @@ int R_PointOnSide (fixed_t x, fixed_t y, node_t *node)
 // [JN] killough 5/2/98: reformatted
 // -----------------------------------------------------------------------------
 
-int R_PointOnSegSide (fixed_t x, fixed_t y, seg_t *line)
+int R_PointOnSegSide (fixed_t x, fixed_t y, const seg_t *line)
 {
     fixed_t lx = line->v1->x;
     fixed_t ly = line->v1->y;

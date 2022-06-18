@@ -27,32 +27,27 @@
 #include "r_plane.h"
 #include "r_things.h"
 #include "doomstat.h"
+#include "r_segs.h"
 #include "r_state.h"
 #include "jn.h"
 
 
-seg_t       *curline;
-side_t      *sidedef;
-line_t      *linedef;
-sector_t    *frontsector;
-sector_t    *backsector;
-drawseg_t   *ds_p;
+const seg_t  *curline;
+const side_t *sidedef;
+line_t       *linedef;
+sector_t     *frontsector;
+sector_t     *backsector;
+drawseg_t    *ds_p;
 
 // [JN] killough: New code which removes 2s linedef limit
 drawseg_t *drawsegs;
 unsigned   maxdrawsegs;
-
-// [JN] killough 4/7/98: indicates doors closed wrt automap bugfix:
-int doorclosed;
 
 // [JN] CPhipps - 
 // Instead of clipsegs, let's try using an array with one entry for each column, 
 // indicating whether it's blocked by a solid wall yet or not.
 
 byte *solidcol;
-
-void R_StoreWallRange (int start, int stop);
-
 
 // -----------------------------------------------------------------------------
 // R_InitClipSegs
@@ -223,7 +218,7 @@ void R_ClearClipSegs (void)
 // and adds any visible pieces to the line list.
 // -----------------------------------------------------------------------------
 
-void R_AddLine (seg_t *line)
+static void R_AddLine (const seg_t *line)
 {
     int      x1, x2;
     angle_t  angle1, angle2;
@@ -291,14 +286,7 @@ void R_AddLine (seg_t *line)
     backsector = line->backsector;
 
     // Single sided line?
-    if (backsector)
-    {
-        // [AM] Interpolate sector movement before
-        //      running clipping tests.  Frontsector
-        //      should already be interpolated.
-        // R_MaybeInterpolateSector(backsector);
-    }
-    else
+    if (!backsector)
     {
         // [JN] If no backsector is present, 
         // just clip the line as a solid segment.
@@ -322,13 +310,13 @@ void R_AddLine (seg_t *line)
     }
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // R_CheckBBox
 // Checks BSP node/subtree bounding box.
 // Returns true
 //  if some part of the bbox might be visible.
-//
+// -----------------------------------------------------------------------------
+
 static const int checkcoord[12][4] =
 {
     {3,0,2,1},
@@ -348,7 +336,7 @@ static const int checkcoord[12][4] =
 // R_CheckBBox
 // -----------------------------------------------------------------------------
 
-boolean R_CheckBBox (fixed_t *bspcoord)
+static boolean R_CheckBBox (const fixed_t *bspcoord)
 {
     angle_t    angle1, angle2;
     int        boxpos;
@@ -419,11 +407,11 @@ boolean R_CheckBBox (fixed_t *bspcoord)
 // [JN] killough 1/31/98 -- made static, polished
 // -----------------------------------------------------------------------------
 
-void R_Subsector (int num)
+static void R_Subsector (const int num)
 {
-    subsector_t *sub = &subsectors[num];
-    seg_t       *line = &segs[sub->firstline];
-    int          count = sub->numlines;
+    const subsector_t *sub = &subsectors[num];
+    const seg_t       *line = &segs[sub->firstline];
+    int   count = sub->numlines;
 
 #ifdef RANGECHECK
     if (num>=numsubsectors)
@@ -433,10 +421,6 @@ void R_Subsector (int num)
 #endif
 
     frontsector = sub->sector;
-
-    // [AM] Interpolate sector movement.  Usually only needed
-    //      when you're standing inside the sector.
-    // R_MaybeInterpolateSector(frontsector);
 
     floorplane = frontsector->floorheight < viewz ?
                  R_FindPlane (frontsector->floorheight,

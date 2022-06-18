@@ -31,7 +31,7 @@
 
 
 // Retrieve column data for span blitting.
-byte *R_GetColumn (int tex, int col, boolean opaque);
+const byte *R_GetColumn (const int tex, int col, boolean opaque);
 
 // I/O, setting up the stuff.
 void R_InitData (void);
