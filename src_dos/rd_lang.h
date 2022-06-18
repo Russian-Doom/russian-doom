@@ -155,24 +155,24 @@ PRESSYN
 #define DETAILLO    "Low detail"
 
 // Improved (PALFIX) and standard (PLAYPAL) gamma correction
-#define GAMMA_IMPROVED_OFF  "Improved gamma correction OFF"
-#define GAMMA_IMPROVED_05   "Improved gamma correction level 0.5"
-#define GAMMA_IMPROVED_1    "Improved gamma correction level 1.0"
-#define GAMMA_IMPROVED_15   "Improved gamma correction level 1.5"
-#define GAMMA_IMPROVED_2    "Improved gamma correction level 2.0"
-#define GAMMA_IMPROVED_25   "Improved gamma correction level 2.5"
-#define GAMMA_IMPROVED_3    "Improved gamma correction level 3.0"
-#define GAMMA_IMPROVED_35   "Improved gamma correction level 3.5"
-#define GAMMA_IMPROVED_4    "Improved gamma correction level 4.0"
-#define GAMMA_ORIGINAL_OFF  "Standard gamma correction OFF"
-#define GAMMA_ORIGINAL_05   "Standard gamma correction level 0.5"
-#define GAMMA_ORIGINAL_1    "Standard gamma correction level 1.0"
-#define GAMMA_ORIGINAL_15   "Standard gamma correction level 1.5"
-#define GAMMA_ORIGINAL_2    "Standard gamma correction level 2.0"
-#define GAMMA_ORIGINAL_25   "Standard gamma correction level 2.5"
-#define GAMMA_ORIGINAL_3    "Standard gamma correction level 3.0"
-#define GAMMA_ORIGINAL_35   "Standard gamma correction level 3.5"
-#define GAMMA_ORIGINAL_4    "Standard gamma correction level 4.0"
+#define GAMMA_0_50  "GAMMA CORRECTION LEVEL 0.50"
+#define GAMMA_0_55  "GAMMA CORRECTION LEVEL 0.55"
+#define GAMMA_0_60  "GAMMA CORRECTION LEVEL 0.60"
+#define GAMMA_0_65  "GAMMA CORRECTION LEVEL 0.65"
+#define GAMMA_0_70  "GAMMA CORRECTION LEVEL 0.70"
+#define GAMMA_0_75  "GAMMA CORRECTION LEVEL 0.75"
+#define GAMMA_0_80  "GAMMA CORRECTION LEVEL 0.80"
+#define GAMMA_0_85  "GAMMA CORRECTION LEVEL 0.85"
+#define GAMMA_0_90  "GAMMA CORRECTION LEVEL 0.90"
+#define GAMMA_1_0   "GAMMA CORRECTION LEVEL 1.00"
+#define GAMMA_1_125 "GAMMA CORRECTION LEVEL 1.125"
+#define GAMMA_1_25  "GAMMA CORRECTION LEVEL 1.25"
+#define GAMMA_1_375 "GAMMA CORRECTION LEVEL 1.375"
+#define GAMMA_1_5   "GAMMA CORRECTION LEVEL 1.5"
+#define GAMMA_1_625 "GAMMA CORRECTION LEVEL 1.625"
+#define GAMMA_1_75  "GAMMA CORRECTION LEVEL 1.75"
+#define GAMMA_1_875 "GAMMA CORRECTION LEVEL 1.875"
+#define GAMMA_2_0   "GAMMA CORRECTION LEVEL 2.0"
 
 #define EMPTYSTRING	"-"
 
@@ -1059,24 +1059,24 @@ PRESSYN_RUS
 #define DETAILLO_RUS    "ybprfz ltnfkbpfwbz"    // Низкая детализация
 
 // Улучшенная (PALFIX) и стандартная (PLAYPAL) гамма-коррекция 
-#define GAMMA_IMPROVED_OFF_RUS  "ekexityyfz ufvvf-rjhhtrwbz jnrk.xtyf"     // Улучшенная гамма-коррекция отключена
-#define GAMMA_IMPROVED_05_RUS   "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 0>5"   // Уровень улучшенной гамма-коррекции 0.5
-#define GAMMA_IMPROVED_1_RUS    "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 1>0"   // Уровень улучшенной гамма-коррекции 1.0
-#define GAMMA_IMPROVED_15_RUS   "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 1>5"   // Уровень улучшенной гамма-коррекции 1.5
-#define GAMMA_IMPROVED_2_RUS    "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 2>0"   // Уровень улучшенной гамма-коррекции 2.0
-#define GAMMA_IMPROVED_25_RUS   "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 2>5"   // Уровень улучшенной гамма-коррекции 2.5
-#define GAMMA_IMPROVED_3_RUS    "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 3>0"   // Уровень улучшенной гамма-коррекции 3.0
-#define GAMMA_IMPROVED_35_RUS   "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 3>5"   // Уровень улучшенной гамма-коррекции 3.5
-#define GAMMA_IMPROVED_4_RUS    "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 4>0"   // Уровень улучшенной гамма-коррекции 4.0
-#define GAMMA_ORIGINAL_OFF_RUS  "cnfylfhnyfz ufvvf-rjhhtrwbz jnrk.xtyf"    // Стандартная гамма-коррекция отключена
-#define GAMMA_ORIGINAL_05_RUS   "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 0>5"  // Уровень стандартной гамма-коррекции 0.5
-#define GAMMA_ORIGINAL_1_RUS    "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 1>0"  // Уровень стандартной гамма-коррекции 1.0
-#define GAMMA_ORIGINAL_15_RUS   "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 1>5"  // Уровень стандартной гамма-коррекции 1.5
-#define GAMMA_ORIGINAL_2_RUS    "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 2>0"  // Уровень стандартной гамма-коррекции 2.0
-#define GAMMA_ORIGINAL_25_RUS   "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 2>5"  // Уровень стандартной гамма-коррекции 2.5
-#define GAMMA_ORIGINAL_3_RUS    "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 3>0"  // Уровень стандартной гамма-коррекции 3.0
-#define GAMMA_ORIGINAL_35_RUS   "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 3>5"  // Уровень стандартной гамма-коррекции 3.5
-#define GAMMA_ORIGINAL_4_RUS    "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 4>0"  // Уровень стандартной гамма-коррекции 4.0
+#define GAMMA_0_50_RUS  "ehjdtym ufvvf-rjhhtrwbb 0>50"
+#define GAMMA_0_55_RUS  "ehjdtym ufvvf-rjhhtrwbb 0>55"
+#define GAMMA_0_60_RUS  "ehjdtym ufvvf-rjhhtrwbb 0>60"
+#define GAMMA_0_65_RUS  "ehjdtym ufvvf-rjhhtrwbb 0>65"
+#define GAMMA_0_70_RUS  "ehjdtym ufvvf-rjhhtrwbb 0>70"
+#define GAMMA_0_75_RUS  "ehjdtym ufvvf-rjhhtrwbb 0>75"
+#define GAMMA_0_80_RUS  "ehjdtym ufvvf-rjhhtrwbb 0>80"
+#define GAMMA_0_85_RUS  "ehjdtym ufvvf-rjhhtrwbb 0>85"
+#define GAMMA_0_90_RUS  "ehjdtym ufvvf-rjhhtrwbb 0>90"
+#define GAMMA_1_0_RUS   "ehjdtym ufvvf-rjhhtrwbb 1>00"
+#define GAMMA_1_125_RUS "ehjdtym ufvvf-rjhhtrwbb 1>125"
+#define GAMMA_1_25_RUS  "ehjdtym ufvvf-rjhhtrwbb 1>25"
+#define GAMMA_1_375_RUS "ehjdtym ufvvf-rjhhtrwbb 1>375"
+#define GAMMA_1_5_RUS   "ehjdtym ufvvf-rjhhtrwbb 1>5"
+#define GAMMA_1_625_RUS "ehjdtym ufvvf-rjhhtrwbb 1>625"
+#define GAMMA_1_75_RUS  "ehjdtym ufvvf-rjhhtrwbb 1>75"
+#define GAMMA_1_875_RUS "ehjdtym ufvvf-rjhhtrwbb 1>875"
+#define GAMMA_2_0_RUS   "ehjdtym ufvvf-rjhhtrwbb 2>0"
 
 
 //
