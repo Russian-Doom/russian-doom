@@ -989,8 +989,8 @@ void D_DoomMain (void)
            "M_LoadDefaults: Загрузка системных стандартов.\n");
     M_LoadDefaults();
 
-    // [JN] Load Russian Doom resource PWAD.
-    D_AddFile ("rusdoom.wad");
+    // [JN] Load International Doom resource PWAD.
+    D_AddFile ("intrdoom.wad");
 
     // [JN] Define and load translated strings
     RD_DefineLanguageStrings();
