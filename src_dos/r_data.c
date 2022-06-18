@@ -32,6 +32,7 @@
 #include "doomstat.h"
 #include "r_data.h"
 #include "r_bmaps.h"
+#include "v_trans.h"
 #include "jn.h"
 
 
@@ -837,130 +838,64 @@ void R_InitColormaps (void)
     W_ReadLump (W_GetNumForName("COLORMAB"), colormaps_bw); 
 }
 
-
-//
+// -----------------------------------------------------------------------------
 // R_InitTintMap
-// [JN] Initialize translucency filter map.
-// Original implementation by Lee Killough (1998-02-21),
-// slightly modified for Russian Doom. Now it's used for
-// both // translucent sprites and text shadows.
-//
-// Note - historically, translucency map in Russian Doom
-// called "TINTMAP", not "TRANMAP" or "TINTTAB".
-//
+// [crispy] initialize translucency filter map
+// based in parts on the implementation from boom202s/R_DATA.C:676-787
+// -----------------------------------------------------------------------------
 
 byte *tintmap;
-int tran_filter_pct = 75;   // [JN] Filter percent, increased from 66
 
-void R_InitTintMap()
+enum {
+    r, g, b
+} rgb_t;
+
+static void R_InitTintMap (void)
 {
-    int lump = W_GetNumForName("TINTMAP");
-    
-    // If a tranlucency filter map lump is present, use it
-    
-    if (lump != -1)  // Set a pointer to the translucency filter maps.
+    // [JN] Check if we have a modified PLAYPAL palette:
+    if (W_CheckMultipleLumps("PLAYPAL") == 1)
     {
-        tintmap = W_CacheLumpNum(lump, PU_STATIC);   // killough 4/11/98
+        // [JN] We don't. Load pregenerated TINTMAP for faster startup.
+        tintmap = W_CacheLumpNum(W_GetNumForName("TINTMAP"), PU_STATIC);
     }
     else
     {
-        {   // Compose a default transparent filter map based on PLAYPAL.
-            unsigned char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
-            char fname[PATH_MAX+1];
-            struct {
-            unsigned char pct;
-            unsigned char playpal[256];
-            } cache;
-            FILE *cachefp = fopen(strcat(strcpy(fname, "."),
-                                                "/tintmap.dat"),"r+b");
+        // [JN] We do. Generate TINTMAP dynamically.
 
-            tintmap = Z_Malloc(256*256, PU_STATIC, 0);  // killough 4/11/98
+        // Compose a default transparent filter map based on PLAYPAL.
+        unsigned char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
+        tintmap = Z_Malloc(256*256, PU_STATIC, 0);
+        
+        {
+            byte *fg, *bg, blend[3];
+            byte *tp75 = tintmap;
+            int i, j;
 
-            // Use cached translucency filter if it's available
-
-            if (!cachefp ? cachefp = fopen(fname,"wb") , 1 :
-            fread(&cache, 1, sizeof cache, cachefp) != sizeof cache ||
-            cache.pct != tran_filter_pct ||
-            memcmp(cache.playpal, playpal, sizeof cache.playpal) ||
-            fread(tintmap, 256, 256, cachefp) != 256 ) // killough 4/11/98
+            // [crispy] background color
+            for (i = 0; i < 256; i++)
             {
-                long pal[3][256], tot[256], pal_w1[3][256];
-                long w1 = ((unsigned long) tran_filter_pct<<12)/100;
-                long w2 = (1l<<12)-w1;
-
-                // First, convert playpal into long int type, and transpose array,
-                // for fast inner-loop calculations. Precompute tot array.
+                // [crispy] foreground color
+                for (j = 0; j < 256; j++)
                 {
-                    int i = 255;
-                    const unsigned char *p = playpal+255*3;
-
-                    do
+                    // [crispy] shortcut: identical foreground and background
+                    if (i == j)
                     {
-                        long t,d;
-
-                        pal_w1[0][i] = (pal[0][i] = t = p[0]) * w1;
-                        d = t*t;
-                        pal_w1[1][i] = (pal[1][i] = t = p[1]) * w1;
-                        d += t*t;
-                        pal_w1[2][i] = (pal[2][i] = t = p[2]) * w1;
-                        d += t*t;
-                        p -= 3;
-                        tot[i] = d << (12-1);
-                    } while (--i>=0);
-                }
-
-                // Next, compute all entries using minimum arithmetic.
-                {
-                    int i,j;
-                    byte *tp = tintmap;
-
-                    for (i=0 ; i<256 ; i++)
-                    {
-                        long r1 = pal[0][i] * w2;
-                        long g1 = pal[1][i] * w2;
-                        long b1 = pal[2][i] * w2;
-
-                        if (!(~i & 15))
-                        {
-                            if (i & 32) // killough 10/98: display flashing disk
-                            I_EndRead();
-                            else
-                            I_BeginRead();
-                        }
-
-                    for (j=0 ; j<256 ; j++,tp++)
-                    {
-                        int color = 255;
-                        long err;
-                        long r = pal_w1[0][j] + r1;
-                        long g = pal_w1[1][j] + g1;
-                        long b = pal_w1[2][j] + b1;
-                        long best = LONG_MAX;
-
-                        do
-                          if ((err = tot[color] - pal[0][color]*r
-                              - pal[1][color]*g - pal[2][color]*b) < best)
-                            best = err, *tp = color;
-                        while (--color >= 0);
+                        *tp75++ = i;
+                        continue;
                     }
-                    }
-                }
 
-                if (cachefp)    // write out the cached translucency map
-                {
-                    cache.pct = tran_filter_pct;
-                    memcpy(cache.playpal, playpal, 256);
-                    fseek(cachefp, 0, SEEK_SET);
-                    fwrite(&cache, 1, sizeof cache, cachefp);
-                    fwrite(tintmap, 256, 256, cachefp);
+                    bg = playpal + 3*i;
+                    fg = playpal + 3*j;
+
+                    blend[r] = (90 * fg[r] + (100 - 90) * bg[r]) / 100;
+                    blend[g] = (90 * fg[g] + (100 - 90) * bg[g]) / 100;
+                    blend[b] = (90 * fg[b] + (100 - 90) * bg[b]) / 100;
+                    *tp75++ = V_GetPaletteIndex(playpal, blend[r], blend[g], blend[b]);
                 }
             }
-
-            if (cachefp)        // killough 11/98: fix filehandle leak
-            fclose(cachefp);
-
-            Z_ChangeTag(playpal, PU_CACHE);
         }
+
+        Z_ChangeTag(playpal, PU_CACHE);
     }
 }
 
@@ -984,7 +919,7 @@ void R_InitData (void)
     printf (".");
     R_InitColormaps ();
     printf (".");
-    // [JN] Initialize translucency filter map
+    // [JN] Load or generate dynamically TINTMAP translucency table.
     R_InitTintMap ();
 }
 

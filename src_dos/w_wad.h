@@ -70,6 +70,7 @@ void   *W_CacheLumpNum (int lump, int tag);
 void   *W_CacheLumpName (char* name, int tag);
 
 int     W_CheckNumForName (char* name);
+int     W_CheckMultipleLumps (char *name);
 int     W_GetNumForName (char* name);
 int     W_LumpLength (int lump);
 

@@ -434,6 +434,25 @@ unsigned int W_LumpNameHash(char *s)
 
 
 //
+// W_CheckMultipleLumps
+// Check if there's more than one of the same lump.
+//
+// [JN] Adaptaken from DOOM Retro, thanks Brad Harding!
+//
+int W_CheckMultipleLumps(char *name)
+{
+    int i;
+    int count = 0;
+
+    for (i = numlumps - 1; i >= 0; i--)
+        if (!strncasecmp(lumpinfo[i].name, name, 8))
+            count++;
+
+    return count;
+}
+
+
+//
 // W_GetNumForName
 // Returns -1 if name not found.
 //

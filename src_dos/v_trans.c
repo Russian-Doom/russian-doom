@@ -27,6 +27,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <limits.h>
 #include "doomtype.h"
 
 // -----------------------------------------------------------------------------
@@ -267,3 +268,32 @@ byte *cr[] =
     (byte *) &cr_red2blue,
     (byte *) &cr_red2green,
 };
+
+// [crispy] copied over from i_video.c
+int V_GetPaletteIndex(byte *palette, int r, int g, int b)
+{
+    int best, best_diff, diff;
+    int i;
+
+    best = 0; best_diff = INT_MAX;
+
+    for (i = 0; i < 256; ++i)
+    {
+        diff = (r - palette[3 * i + 0]) * (r - palette[3 * i + 0])
+             + (g - palette[3 * i + 1]) * (g - palette[3 * i + 1])
+             + (b - palette[3 * i + 2]) * (b - palette[3 * i + 2]);
+
+        if (diff < best_diff)
+        {
+            best = i;
+            best_diff = diff;
+        }
+
+        if (diff == 0)
+        {
+            break;
+        }
+    }
+
+    return best;
+}

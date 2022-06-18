@@ -51,3 +51,5 @@ enum
 };
 
 extern byte  *cr[CRMAX];
+
+int V_GetPaletteIndex(byte *palette, int r, int g, int b);
