@@ -479,21 +479,18 @@ static char *R_DistortedFlat (int flatnum)
 
 void R_DrawPlanes (void)
 {
-    int          light;
-    int          i, x;
-    int          stop;
-    int          angle;
-    visplane_t  *pl;
+    int i, x;
+    visplane_t *pl;
 
     for (i = 0 ; i < MAXVISPLANES ; i++)
-    {
     for (pl = visplanes[i] ; pl ; pl = pl->next)
+    if (pl->minx <= pl->maxx)
     {
         // sky flat
         if (pl->picnum == skyflatnum)
         {
-            // [JN] Original:
             dc_iscale = pspriteiscale>>detailshift;
+
             // [JN] Mouselook addition:
             if (mlook)
             {
@@ -520,11 +517,14 @@ void R_DrawPlanes (void)
 
             for (x=pl->minx ; x <= pl->maxx ; x++)
             {
-                dc_yl = pl->top[x];
-                dc_yh = pl->bottom[x];
-
                 if ((dc_yl = pl->top[x]) != SHRT_MAX && dc_yl <= (dc_yh = pl->bottom[x])) // [crispy] 32-bit integer math
                 {
+                    // [crispy] Optionally draw skies horizontally linear.
+                    int angle = ((viewangle + (linear_sky && !vanilla ? 
+                                linearskyangle[x] : xtoviewangle[x])) >> ANGLETOSKYSHIFT);
+                    dc_x = x;
+
+
                     angle = (viewangle + (linear_sky && !vanilla ? 
                                           linearskyangle[x] : xtoviewangle[x])) >> ANGLETOSKYSHIFT;
                     dc_x = x;
@@ -532,49 +532,43 @@ void R_DrawPlanes (void)
                     colfunc ();
                 }
             }
-            continue;
         }
-
-        // regular flat
-        // [crispy] add support for SMMU swirling flats
-        ds_source = (flattranslation[pl->picnum] == -1) ?
-                    R_DistortedFlat(pl->picnum) :
-                    W_CacheLumpNum(firstflat + flattranslation[pl->picnum], PU_STATIC);
-        ds_brightmap = R_BrightmapForFlatNum((firstflat + flattranslation[pl->picnum])-firstflat);
-
-        planeheight = abs(pl->height-viewz);
-        light = ((pl->lightlevel + level_brightness)
-                >> LIGHTSEGSHIFT) + extralight;
-
-        if (light >= LIGHTLEVELS)
+        else  // regular flat
         {
-            light = LIGHTLEVELS-1;
+            int stop, light;
+
+            // [crispy] add support for SMMU swirling flats
+            ds_source = (flattranslation[pl->picnum] == -1) ?
+                        R_DistortedFlat(pl->picnum) :
+                        W_CacheLumpNum(firstflat + flattranslation[pl->picnum], PU_STATIC);
+            ds_brightmap = R_BrightmapForFlatNum((firstflat + flattranslation[pl->picnum])-firstflat);
+
+            planeheight = abs(pl->height-viewz);
+            light = ((pl->lightlevel + level_brightness) >> LIGHTSEGSHIFT) + extralight;
+
+            if (light >= LIGHTLEVELS)
+            {
+                light = LIGHTLEVELS-1;
+            }
+            if (light < 0)
+            {
+                light = 0;
+            }
+
+            stop = pl->maxx + 1;
+            planezlight = zlight[light];
+            pl->top[pl->minx-1] = pl->top[stop] = SHRT_MAX; // [crispy] 32-bit integer math
+
+            for (x=pl->minx ; x<= stop ; x++)
+            {
+                R_MakeSpans(x,pl->top[x-1], pl->bottom[x-1], pl->top[x], pl->bottom[x]);
+            }
+
+            // [crispy] add support for SMMU swirling flats
+            if (flattranslation[pl->picnum] != -1)
+            {
+                Z_ChangeTag (ds_source, PU_CACHE);
+            }
         }
-        if (light < 0)
-        {
-            light = 0;
-        }
-
-        planezlight = zlight[light];
-
-        pl->top[pl->maxx+1] = SHRT_MAX; // [crispy] hires / 32-bit integer math
-        pl->top[pl->minx-1] = SHRT_MAX; // [crispy] hires / 32-bit integer math
-
-        stop = pl->maxx + 1;
-
-        for (x=pl->minx ; x<= stop ; x++)
-        {
-            R_MakeSpans(x,pl->top[x-1],
-                        pl->bottom[x-1],
-                        pl->top[x],
-                        pl->bottom[x]);
-        }
-
-        // [crispy] add support for SMMU swirling flats
-        if (flattranslation[pl->picnum] != -1)
-        {
-            Z_ChangeTag (ds_source, PU_CACHE);
-        }
-    }
     }
 }
