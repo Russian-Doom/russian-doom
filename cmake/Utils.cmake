@@ -22,3 +22,20 @@ function(add_copy_target)
         OUT_FILES "${DESTINATION_FILES}"
     )
 endfunction()
+
+include(CheckCCompilerFlag)
+
+# Don't support generator expressions
+function(add_compile_options_checked)
+    foreach(flag ${ARGV})
+        # Turn flag into suitable internal cache variable.
+        string(REGEX REPLACE "-(.*)" "CFLAG_\\1" flag_found ${flag})
+        string(REPLACE "=" "_" flag_found "${flag_found}")
+
+        check_c_compiler_flag(${flag} ${flag_found})
+        if(${flag_found})
+            list(APPEND flag_list ${flag})
+        endif()
+    endforeach()
+    add_compile_options(${flag_list})
+endfunction()

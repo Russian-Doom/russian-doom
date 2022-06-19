@@ -31,6 +31,8 @@
 #define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
+#include <stdlib.h>
+
 #elif defined(__APPLE__)
 #include <mach-o/dyld.h>
 #include <stdint.h>

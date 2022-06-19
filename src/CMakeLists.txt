@@ -33,7 +33,7 @@ target_compile_definitions(Common PRIVATE
     "$<IF:$<BOOL:${HAVE_DECL_STRNCASECMP}>,HAVE_DECL_STRNCASECMP=1,HAVE_DECL_STRNCASECMP=0>"
 )
 
-if(PC_SDL2_FOUND AND NOT (SDL2_MAIN_LIBRARY STREQUAL "SDL2_MAIN_LIBRARY-NOTFOUND"))
+if(SDL2_MAIN_LIBRARY)
     target_link_libraries(Common PUBLIC
         SDL2::SDL2main
     )
@@ -228,7 +228,10 @@ foreach(MODULE ${COMPILE_MODULES})
     )
 
     if(WIN32)
-        target_link_options("${PROGRAM_PREFIX}${MODULE}" PRIVATE "-mconsole")
+        target_link_options("${PROGRAM_PREFIX}${MODULE}" PRIVATE
+            "$<$<BOOL:${MSVC}>:/MANIFEST:NO>"
+            "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:CONSOLE,-mconsole>"
+        )
     endif()
 
     add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}" POST_BUILD
@@ -243,7 +246,10 @@ foreach(MODULE ${COMPILE_MODULES})
         )
 
         if(WIN32)
-            target_link_options("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE "-mconsole")
+            target_link_options("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE
+                "$<$<BOOL:${MSVC}>:/MANIFEST:NO>"
+                "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:CONSOLE,-mconsole>"
+            )
         endif()
 
         add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}-setup" POST_BUILD
@@ -267,7 +273,11 @@ endforeach()
 
 # Copying gus patches
 file(GLOB GUS_PATCHES_SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/base/gus_patches/*")
-add_copy_target(NAME gus-patches SOURCE ${GUS_PATCHES_SRC_FILES} DESTINATION "base/gus_patches")
+if(MSVC OR CMAKE_GENERATOR STREQUAL "Ninja Multi-Config")
+    add_copy_target(NAME gus-patches SOURCE ${GUS_PATCHES_SRC_FILES} DESTINATION "$<CONFIG>/base/gus_patches")
+else()
+    add_copy_target(NAME gus-patches SOURCE ${GUS_PATCHES_SRC_FILES} DESTINATION "base/gus_patches")
+endif()
 
 foreach(MODULE ${COMPILE_MODULES})
     add_dependencies("${PROGRAM_PREFIX}${MODULE}" gus-patches)
@@ -276,14 +286,22 @@ endforeach()
 # Copying game support wads
 foreach(MODULE ${COMPILE_MODULES})
     file(GLOB WADS "${CMAKE_CURRENT_SOURCE_DIR}/base/${MODULE}-*.wad")
-    add_copy_target(NAME "${MODULE}-wads" SOURCE ${WADS} DESTINATION "base")
+    if(MSVC OR CMAKE_GENERATOR STREQUAL "Ninja Multi-Config")
+        add_copy_target(NAME "${MODULE}-wads" SOURCE ${WADS} DESTINATION "$<CONFIG>/base")
+    else()
+        add_copy_target(NAME "${MODULE}-wads" SOURCE ${WADS} DESTINATION "base")
+    endif()
     add_dependencies("${PROGRAM_PREFIX}${MODULE}" "${MODULE}-wads")
 endforeach()
 
 # Windows DLLs
 if(WIN32)
     file(GLOB WIN_LIBS "${PROJECT_SOURCE_DIR}/win_libs/${ARCH}/*.dll")
-    add_copy_target(NAME win-libs SOURCE ${WIN_LIBS} DESTINATION ".")
+    if(MSVC OR CMAKE_GENERATOR STREQUAL "Ninja Multi-Config")
+        add_copy_target(NAME win-libs SOURCE ${WIN_LIBS} DESTINATION "$<CONFIG>/.")
+    else()
+        add_copy_target(NAME win-libs SOURCE ${WIN_LIBS} DESTINATION ".")
+    endif()
 
     foreach(MODULE ${COMPILE_MODULES})
         add_dependencies("${PROGRAM_PREFIX}${MODULE}" win-libs)

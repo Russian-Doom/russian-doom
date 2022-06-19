@@ -16,6 +16,8 @@
 //
 
 
+#include <ctype.h>
+#include <stdlib.h>
 #include "i_swap.h"
 #include "z_zone.h"
 #include "m_misc.h"

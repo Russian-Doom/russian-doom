@@ -18,6 +18,7 @@
 //
 
 
+#include <ctype.h>
 #include "deh_main.h"
 #include "i_swap.h"
 #include "z_zone.h"

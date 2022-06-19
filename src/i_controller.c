@@ -17,8 +17,7 @@
 //
 
 
-
-#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <SDL.h>
 
@@ -558,7 +557,7 @@ void ControllerHandler_HandleLine(char* keyName, char *value, size_t valueSize)
     SDL_GameControllerAxis axis;
     axisOption_t axisOption;
 
-    if(sscanf(keyName, "%10[^_]_%20s", axisName, axisOptionName) != 2)
+    if(sscanf_s(keyName, "%10[^_]_%20s", axisName, 11, axisOptionName, 21) != 2)
     {
         return;
     }

@@ -12,6 +12,7 @@
 // GNU General Public License for more details.
 //
 
+#include <ctype.h>
 #include "rd_text.h"
 
 #include "d_name.h"

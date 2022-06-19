@@ -21,6 +21,10 @@ Option(COMPILE_SETUP "Compile Setup module" OFF)
 
 include(CMakeDependentOption)
 
+if(NOT WIN32)
+    Option(BUILD_PORTABLE "Build portable version with Windows like behavior (see COMPILING.MD)" OFF)
+endif()
+
 # Hash suffix options
 option(NO_GIT_HASH_SUFFIX "For Devs only! Never append hash suffix to project version" OFF)
 cmake_dependent_option(FORCE_GIT_HASH_SUFFIX "For Devs only! Always append hash suffix to project version" OFF "NOT NO_GIT_HASH_SUFFIX" OFF)
@@ -34,20 +38,72 @@ set(PACKAGE_COPYRIGHT "Copyright \\xA9 2016-2022 Julian Nechaevsky. Licensed und
 
 # Check architecture
 if(WIN32)
-    if("${CMAKE_C_COMPILER}" MATCHES "^(.*mingw64.*)|(.*clang64.*)")
+    if("${CMAKE_C_COMPILER}" MATCHES "^(.*mingw64.*)|(.*clang64.*)" OR
+    (MSVC AND "${CMAKE_GENERATOR_PLATFORM}" STREQUAL "x64"))
         set(ARCH x64)
-    elseif("${CMAKE_C_COMPILER}" MATCHES "^(.*mingw32.*)|(.*clang32.*)")
+    elseif("${CMAKE_C_COMPILER}" MATCHES "^(.*mingw32.*)|(.*clang32.*)" OR
+    (MSVC AND "${CMAKE_GENERATOR_PLATFORM}" STREQUAL "Win32"))
         set(ARCH x86)
     endif()
 endif()
 
-# Any settings that should apply to all targets in this directory and all
-# subdirectories should go here.  Use judiciously.
+# Any settings that should apply to all targets in this directory and all subdirectories should go here
 set(RD_C_STANDARD 99)
 
-add_compile_options("-Wall" "-Wredundant-decls" "-Wno-unknown-pragmas" "-Wno-unused-result")
-string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
-string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
+include(Utils)
+
+# Parameters we want to check for on all compilers
+#
+# Note that we want to check for these, even on MSVC, because some compilers
+# that pretend to be MSVC can take both GCC and MSVC-style parameters at the
+# same time, like clang-cl.exe
+
+add_compile_options_checked(
+    # Extra errors
+    -Werror=implicit-function-declaration
+    -Werror=incompatible-pointer-types
+    -Werror=int-conversion
+
+    # Extra warnings
+    -Wformat=2
+    -Wredundant-decls
+    -Wrestrict
+
+    # Disable warnings
+    -Wno-unknown-pragmas
+    -Wno-unused-result
+)
+
+if(MSVC)
+    add_compile_options_checked(
+        # Silence the usual warnings for POSIX and standard C functions
+        /D_CRT_NONSTDC_NO_DEPRECATE
+        /D_CRT_SECURE_NO_WARNINGS
+        /D_CRT_SECURE_NO_DEPRECATE
+
+        # Default warning setting for MSVC
+        /W3
+
+        # Extra errors for cl.exe
+        /we4013 # Implicit function declaration
+        /we4133 # Incompatible types
+        /we4477 # Format string mismatch
+
+        # Disable warnings for cl.exe
+        /wd4244 # Disable "possible loss of data" warning
+        /wd4068 # Disable "unknown pragma" warning
+
+        # Disable warnings for clang-cl.exe - prevents warning spam in SDL headers
+        -Wno-pragma-pack
+    )
+    string(REPLACE "/O3" "/O2" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
+    string(REPLACE "/O3" "/O2" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
+else()
+    # We only want -Wall on GCC compilers, since /Wall on MSVC is noisy
+    add_compile_options_checked(-Wall)
+    string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
+    string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
+endif()
 
 find_package(SDL2 2.0.4 REQUIRED)
 find_package(SDL2_mixer 2.0.2 REQUIRED)
@@ -72,12 +128,7 @@ check_include_file("linux/kd.h" HAVE_LINUX_KD_H)
 string(REPLACE " Doom" "" PACKAGE_PREFIX "${PROJECT_NAME}")
 string(REPLACE "doom" "" PROGRAM_PREFIX "${PACKAGE_TARNAME}")
 
-if(NOT WIN32)
-    Option(BUILD_PORTABLE "Build portable version with Windows like behavior (see COMPILING.MD)" OFF)
-endif()
-
 # [Dasperal] BUILD_VERSION_OVERWRITE variable is used on CI to replace version with git hash
-
 if(COMPILE_DOOM)
     string(REPLACE "." ", " WINDOWS_RC_DOOM_VERSION ${BUILD_DOOM_VERSION})
     if(BUILD_VERSION_OVERWRITE)
@@ -139,7 +190,6 @@ if(COMPILE_SETUP)
     configure_file(src/setup/setup-manifest.xml.in src/setup/setup-manifest.xml @ONLY)
 endif()
 
-include(RDUtils)
 enable_testing()
 
 # Update git_info.h
