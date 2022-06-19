@@ -92,14 +92,6 @@ You can enable and disable the compilation of modules by changing cmake options:
 `COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE`, `COMPILE_SETUP`
 to `ON` or `OFF`.
 
-If used SDL_mixer runtime library is new enough and has [this patch](https://github.com/libsdl-org/SDL_mixer/commit/1c0092787398097360f7da745c7644fd32697f3b),
-you can set cmake option `BUILD_HAS_SDL_MIXER_PATCH` to `ON`.
-This will add the ability to use GUS Emulation if the install path contains spaces
-and the ability to use Timidity for MIDI music if the value of config variable `timidity_cfg_path` contains spaces.
-
-**NOTE:** If cmake option `BUILD_HAS_SDL_MIXER_PATCH` set to `ON` and used SDL_mixer runtime library **doesn't have** patch applied,
-GUS Emulation and Timidity **won't work at all**.
-
 If you want to use a portable version like on Windows, set the `BUILD_PORTABLE` cmake option to `ON`.
 Portable version searches and stores internal resources, config files, and savegames in install directory among executables.
 

@@ -29,9 +29,6 @@ endif()
 option(NO_GIT_HASH_SUFFIX "For Devs only! Never append hash suffix to project version" OFF)
 cmake_dependent_option(FORCE_GIT_HASH_SUFFIX "For Devs only! Always append hash suffix to project version" OFF "NOT NO_GIT_HASH_SUFFIX" OFF)
 
-# [Dasperal] BUILD_HAS_SDL_MIXER_PATCH should be ON only if used SDL_Mixer runtime library is new enough and has https://github.com/libsdl-org/SDL_mixer/commit/1c0092787398097360f7da745c7644fd32697f3b patch
-cmake_dependent_option(BUILD_HAS_SDL_MIXER_PATCH "Use features available in new enough SDL_mixer runtime library (see COMPILING.MD)" OFF "NOT WIN32" ON)
-
 # Package related variables
 set(PACKAGE_TARNAME "inter-doom")
 set(PACKAGE_COPYRIGHT "Copyright \\xA9 2016-2022 Julian Nechaevsky. Licensed under GNU General Public License, version 2")
