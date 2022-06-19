@@ -80,7 +80,7 @@ void P_RemoveThinker (thinker_t *thinker)
 
 int bmap_flick = 0;
 int bmap_glow = 0;
-static int bmap_count_flick = 0;
+static int bmap_count_common = 0;
 static int bmap_count_glow = 0;
 
 void P_RunThinkers (void)
@@ -88,7 +88,7 @@ void P_RunThinkers (void)
     thinker_t *currentthinker, *nextthinker;
 
     // [JN] Run brightmap timers.
-    bmap_count_flick++;
+    bmap_count_common++;
     bmap_count_glow++;
 
     // [JN] Prevent dropped item from jittering on moving platforms.
@@ -117,39 +117,38 @@ void P_RunThinkers (void)
         {
             mobj_t *mo = (mobj_t *)currentthinker;
 
-            // [JN] Random brightmap flickering effect.
-            if (bmap_count_flick < 2)
+            if (brightmaps && !vanillaparm)
             {
-                if (mo->sprite == SPR_CAND  // Candestick
-                ||  mo->sprite == SPR_CBRA  // Candelabra
-                ||  mo->sprite == SPR_FCAN  // Flaming Barrel
-                ||  mo->sprite == SPR_TBLU  // Tall Blue Torch
-                ||  mo->sprite == SPR_TGRN  // Tall Green Torch
-                ||  mo->sprite == SPR_TRED  // Tall Red Torch
-                ||  mo->sprite == SPR_SMBT  // Short Blue Torch
-                ||  mo->sprite == SPR_SMGT  // Short Green Torch
-                ||  mo->sprite == SPR_SMRT  // Short Red Torch
-                ||  mo->sprite == SPR_POL3) // Pile of Skulls and Candles
+                if (bmap_count_common < 2)
                 {
-                    if (brightmaps && !vanillaparm)
+                    // [JN] Random brightmap flickering effect.
+                    if (mo->sprite == SPR_CAND  // Candestick
+                    ||  mo->sprite == SPR_CBRA  // Candelabra
+                    ||  mo->sprite == SPR_FCAN  // Flaming Barrel
+                    ||  mo->sprite == SPR_TBLU  // Tall Blue Torch
+                    ||  mo->sprite == SPR_TGRN  // Tall Green Torch
+                    ||  mo->sprite == SPR_TRED  // Tall Red Torch
+                    ||  mo->sprite == SPR_SMBT  // Short Blue Torch
+                    ||  mo->sprite == SPR_SMGT  // Short Green Torch
+                    ||  mo->sprite == SPR_SMRT  // Short Red Torch
+                    ||  mo->sprite == SPR_POL3) // Pile of Skulls and Candles
                     {
                         mo->bmap_flick = rand() % 16;
                     }
-                    else
+
+                    // [JN] Smooth brightmap glowing effect.
+                    if (mo->sprite == SPR_FCAN  // Flaming Barrel
+                    ||  mo->sprite == SPR_CEYE  // Evil Eye
+                    ||  mo->sprite == SPR_FSKU) // Floating Skull Rock
                     {
-                        mo->bmap_flick =  0;
+                        mo->bmap_glow = rand() % 6;
                     }
                 }
             }
-
-            // [JN] Prevent garbage values to be set.
-            if (mo->bmap_flick > 16)
+            else
             {
-                mo->bmap_flick = 16;
-            }
-            if (mo->bmap_flick < 0)
-            {
-                mo->bmap_flick = 0;
+                mo->bmap_flick =  0;
+                mo->bmap_glow = 0;
             }
         }
 
@@ -203,9 +202,9 @@ void P_RunThinkers (void)
     }
 
     // [JN] Reset brightmap timers.
-    if (bmap_count_flick >= 4)
+    if (bmap_count_common >= 4)
     {
-        bmap_count_flick = 0;
+        bmap_count_common = 0;
     }
     if (bmap_count_glow >= 13)
     {

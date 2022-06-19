@@ -900,6 +900,10 @@ static mobj_t *P_SpawnMobjSafe (const fixed_t x, const fixed_t y, const fixed_t 
     mobj->oldz = mobj->z;
     mobj->oldangle = mobj->angle;
 
+    // [JN] Initialize brightmap animations.
+    mobj->bmap_flick = 0;
+    mobj->bmap_glow = 0;
+
     mobj->thinker.function.acp1 = (actionf_p1)P_MobjThinker;
 
     P_AddThinker (&mobj->thinker);

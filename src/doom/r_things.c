@@ -745,8 +745,9 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
         // [crispy] brightmaps for select sprites
         vis->colormap[0] = spritelights[index];
 
-        // [JN] Flickering light level is set in P_RunThinkers.
+        // [JN] Flickering and glowing light level are set in P_RunThinkers.
         bmap_flick = thing->bmap_flick;
+        bmap_glow  = thing->bmap_glow;
 
         // [JN] Apply different types half-brights for certain objects.
         //  Not to be confused:
@@ -801,7 +802,7 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
                 else
                 if (thing->sprite == SPR_FCAN)   // Flaming Barrel
                 {
-                    vis->colormap[1] = &colormaps[bmap_flick/3*256];
+                    vis->colormap[1] = &colormaps[bmap_glow*256];
                 }
                 else
                 {
@@ -835,11 +836,6 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
                 break;
             }
             case SPR_CEYE:  // Evil Eye
-            {
-                vis->colormap[0] = vis->colormap[1]
-                                 = &colormaps[bmap_glow*256];
-                break;
-            }
             case SPR_FSKU:  // Floating Skull Rock
             {
                 vis->colormap[0] = vis->colormap[1]

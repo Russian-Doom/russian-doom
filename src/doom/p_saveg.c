@@ -1801,6 +1801,10 @@ void P_UnArchiveThinkers (void)
 	    // mobj->floorz = mobj->subsector->sector->floorheight;
 	    // mobj->ceilingz = mobj->subsector->sector->ceilingheight;
 
+	    // [JN] Reset brightmap animations to full brightness.
+	    mobj->bmap_flick = 0;
+	    mobj->bmap_glow = 0;
+
 	    mobj->thinker.function.acp1 = (actionf_p1)P_MobjThinker;
 	    P_AddThinker (&mobj->thinker);
 	    break;
