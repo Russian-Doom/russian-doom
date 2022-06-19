@@ -113,7 +113,6 @@ set_target_properties(Game PROPERTIES
     C_STANDARD_REQUIRED ON
 )
 target_compile_definitions(Game PRIVATE
-    "$<$<BOOL:${BUILD_HAS_SDL_MIXER_PATCH}>:RD_BUILD_HAS_SDL_MIXER_PATCH>"
     "$<$<BOOL:${SAMPLERATE_FOUND}>:HAVE_LIBSAMPLERATE>"
     "$<$<BOOL:${PNG_FOUND}>:HAVE_LIBPNG>"
     "$<$<BOOL:${HAVE_MMAP}>:HAVE_MMAP>"

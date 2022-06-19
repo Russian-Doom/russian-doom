@@ -23,26 +23,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-
 #include "SDL.h"
 #include "SDL_mixer.h"
 
 #include "i_winmusic.h"
-
 #include "doomtype.h"
 #include "memio.h"
 #include "mus2mid.h"
-
-#include "deh_str.h"
 #include "gusconf.h"
 #include "i_sound.h"
-#include "i_system.h"
 #include "i_swap.h"
-#include "m_argv.h"
-#include "m_config.h"
 #include "m_misc.h"
-#include "sha1.h"
-#include "w_wad.h"
 #include "z_zone.h"
 
 #include "jn.h"
@@ -78,8 +69,9 @@ static boolean WriteWrapperTimidityConfig(char *write_path)
 {
     char *path;
     FILE *fstream;
+    const SDL_version* sdl_mixer_version = Mix_Linked_Version();
 
-    if (!strcmp(timidity_cfg_path, ""))
+    if(!strcmp(timidity_cfg_path, ""))
     {
         return false;
     }
@@ -88,17 +80,17 @@ static boolean WriteWrapperTimidityConfig(char *write_path)
            "I_SDLMusic: Using Timidity config from:\n \t%s\n" :
            "I_SDLMusic: Используется Timidity конфиг из файла:\n \t%s\n",
            timidity_cfg_path);
-#ifndef RD_BUILD_HAS_SDL_MIXER_PATCH
-    if(strchr(timidity_cfg_path, ' '))
+
+    if(!LIB_VERSION_ATLEAST(sdl_mixer_version, 2, 5, 0) && strchr(timidity_cfg_path, ' '))
     {
         printf(english_language ?
-               "\tError: The path contains spaces, which are not allowed\n" :
-               "\tОшибка: Путь содержит пробелы, что недопустимо\n");
+               "\tError: The path contains spaces, which are not supported by your SDL_mixer library. Update SDL_mixer to at least 2.5.0\n" :
+               "\tОшибка: Путь содержит пробелы, что не поддерживается вашей версией библиотеки SDL_mixer. Обновите SDL_mixer хотя бы до версии 2.5.0\n");
     }
-#endif
+
     fstream = fopen(write_path, "w");
 
-    if (fstream == NULL)
+    if(fstream == NULL)
     {
         printf(english_language ?
                "Error: Could not write Timidity config\n" :
@@ -107,18 +99,24 @@ static boolean WriteWrapperTimidityConfig(char *write_path)
     }
 
     path = M_DirName(timidity_cfg_path);
-#ifdef RD_BUILD_HAS_SDL_MIXER_PATCH
-    fprintf(fstream, "dir \"%s\"\n", path);
-#else
-    fprintf(fstream, "dir %s\n", path);
-#endif
+    if(LIB_VERSION_ATLEAST(sdl_mixer_version, 2, 5, 0))
+    {
+        fprintf(fstream, "dir \"%s\"\n", path);
+    }
+    else
+    {
+        fprintf(fstream, "dir %s\n", path);
+    }
     free(path);
 
-#ifdef RD_BUILD_HAS_SDL_MIXER_PATCH
-    fprintf(fstream, "source \"%s\"\n", timidity_cfg_path);
-#else
-    fprintf(fstream, "source %s\n", timidity_cfg_path);
-#endif
+    if(LIB_VERSION_ATLEAST(sdl_mixer_version, 2, 5, 0))
+    {
+        fprintf(fstream, "source \"%s\"\n", timidity_cfg_path);
+    }
+    else
+    {
+        fprintf(fstream, "source %s\n", timidity_cfg_path);
+    }
     fclose(fstream);
 
     return true;

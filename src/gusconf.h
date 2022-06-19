@@ -21,6 +21,13 @@
 
 #include "doomtype.h"
 
+/**
+ * Dynamic version of SDL_MIXER_VERSION_ATLEAST macro
+ */
+#define LIB_VERSION_ATLEAST(lpVersionStruct, X, Y, Z) \
+    (((lpVersionStruct)->major >= (X)) && \
+     ((lpVersionStruct)->major > (X) || (lpVersionStruct)->minor >= (Y)) && \
+     ((lpVersionStruct)->major > (X) || (lpVersionStruct)->minor > (Y) || (lpVersionStruct)->patch >= (Z)))
 
 extern char *gus_patch_path;
 extern int gus_ram_kb;
