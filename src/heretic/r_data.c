@@ -18,6 +18,7 @@
 
 
 
+#include <malloc.h>
 #include "doomdef.h"
 #include "deh_str.h"
 #include "i_swap.h"

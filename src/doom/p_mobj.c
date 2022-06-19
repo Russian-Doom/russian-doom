@@ -18,6 +18,7 @@
 //
 
 
+#include <stdlib.h>
 #include "i_system.h"
 #include "z_zone.h"
 #include "m_random.h"

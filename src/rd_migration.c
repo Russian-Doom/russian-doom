@@ -18,6 +18,8 @@
 #include <locale.h>
 #include <SDL_scancode.h>
 #include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
 #include "d_name.h"
 #include "jn.h"
 #include "m_misc.h"
@@ -112,11 +114,11 @@ void M_ApplyMigration()
         defaultTracker_t* message_system_color = M_GetDefaultTracker("message_system_color");
         defaultTracker_t* message_chat_color = M_GetDefaultTracker("message_chat_color");
 
-        if(message_pickup_color->found)
+        if(message_pickup_color != NULL && message_pickup_color->found)
             message_color_pickup = message_pickup_color->value.i != 0 ? message_pickup_color->value.i + 1 : 0;
-        if(message_system_color->found)
+        if(message_system_color != NULL && message_system_color->found)
             message_color_system = message_system_color->value.i != 0 ? message_system_color->value.i + 1 : 0;
-        if(message_chat_color->found)
+        if(message_chat_color != NULL && message_chat_color->found)
             message_color_chat = message_chat_color->value.i != 0 ? message_chat_color->value.i + 1 : 0;
 
         if(RD_GameType != gt_Hexen && JN_getNotCommonIntVarPointer(v_message_color_secret) != NULL)
