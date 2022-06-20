@@ -1481,7 +1481,7 @@ static void ST_DrawElements (const boolean wide)
             V_DrawPatch(left_delta + 2, 191, stchammo, NULL);
         }
         V_DrawPatch(left_delta + 52, 173, stchhlth, NULL);
-        V_DrawPatch(left_delta + 108, 191, stcharms, NULL);
+        V_DrawPatch(left_delta + 108, 191, deathmatch ? stchfrgs : stcharms, NULL);
         V_DrawPatch(right_delta + 52, 173, stcharam, NULL);
         V_DrawPatch(right_delta + 292, 173, stysslsh, NULL);
     }
