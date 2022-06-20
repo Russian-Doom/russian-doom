@@ -348,16 +348,6 @@ void P_PlayerThink (player_t *player)
     player->oldviewz = player->viewz;
     player->oldlookdir = player->lookdir;
 
-    // fixme: do this in the cheat code
-    if (player->cheats & CF_NOCLIP)
-    {
-        player->mo->flags |= MF_NOCLIP;
-    }
-    else
-    {
-        player->mo->flags &= ~MF_NOCLIP;
-    }
-    
     // chain saw run forward
     cmd = &player->cmd;
 

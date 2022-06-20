@@ -489,20 +489,24 @@ const boolean ST_Responder (const event_t *ev)
                 return isdigit(buf[0]);
             }
 
+            // Noclip cheat.
             // [crispy] allow both idspispopd and idclip cheats in all gamemissions
-            else if ( ( /* logical_gamemission == doom
-            && */ cht_CheckCheat(&cheat_noclip, ev->data2))
-            || ( /* logical_gamemission != doom
-            && */ cht_CheckCheat(&cheat_commercial_noclip,ev->data2)))
-            {	
-                // Noclip cheat.
-                // For Doom 1, use the idspipsopd cheat; for all others, use
-                // idclip
-
+            else
+            if (cht_CheckCheat(&cheat_noclip, ev->data2)
+            || (cht_CheckCheat(&cheat_commercial_noclip,ev->data2)))
+            {
                 plyr->cheats ^= CF_NOCLIP;
 
-                P_SetMessage(plyr, DEH_String(plyr->cheats & CF_NOCLIP ?
-                             ststr_ncon : ststr_ncoff), msg_system, false);
+                if (plyr->cheats & CF_NOCLIP)
+                {
+                    plyr->mo->flags |= MF_NOCLIP;
+                    P_SetMessage(plyr, DEH_String(ststr_ncon), msg_system, false);
+                }
+                else
+                {
+                    plyr->mo->flags &= ~MF_NOCLIP;
+                    P_SetMessage(plyr, DEH_String(ststr_ncoff), msg_system, false);
+                }
             }
 
             // 'behold?' power-up cheats
@@ -711,8 +715,16 @@ const boolean ST_Responder (const event_t *ev)
             {	
                 plyr->cheats ^= CF_NOCLIP;
 
-                P_SetMessage(plyr, DEH_String(plyr->cheats & CF_NOCLIP ?
-                             ststr_ncon : ststr_ncoff), msg_system, false);
+                if (plyr->cheats & CF_NOCLIP)
+                {
+                    plyr->mo->flags |= MF_NOCLIP;
+                    P_SetMessage(plyr, DEH_String(ststr_ncon), msg_system, false);
+                }
+                else
+                {
+                    plyr->mo->flags &= ~MF_NOCLIP;
+                    P_SetMessage(plyr, DEH_String(ststr_ncoff), msg_system, false);
+                }
             }
         }
     }
