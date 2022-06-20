@@ -787,6 +787,12 @@ static void ST_DrawBackground (void)
     // Always draw status bar on the center of the screen.
     V_DrawPatch((ORIGWIDTH - SHORT(stbar->width)) / 2 + wide_delta, 0, stbar, NULL);
 
+    // Face background representing player color.
+    if (netgame)
+    {
+        V_DrawPatch(143 + wide_delta, 0, faceback, NULL);
+    }
+
     V_RestoreBuffer();
     V_CopyRect(0, 0, st_backing_screen, origwidth, st_height, 0, st_y);
 
