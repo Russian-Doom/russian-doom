@@ -1111,6 +1111,11 @@ void P_SpawnPlayer (const mapthing_t *mthing)
     p->deltaviewheight = 0;
     p->lookdir = 0;
     p->psp_dy = p->psp_dy_max = 0;
+    // [JN] Keep NOCLIP cheat across the levels.
+    if (p->cheats & CF_NOCLIP)
+    {
+        p->mo->flags |= MF_NOCLIP;
+    }
     skippsprinterp = true;
     finale_wipe_done = false;
 
