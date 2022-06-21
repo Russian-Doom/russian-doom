@@ -39,6 +39,7 @@
 typedef enum
 {
     CR_DARK,
+    CR_THIRDSATURTION,
     CR_MONOCHROME,
 
     CR_RED,
