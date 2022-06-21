@@ -92,6 +92,7 @@ void (*basecolfunc) (void);
 void (*fuzzcolfunc) (void);
 void (*transcolfunc) (void);
 void (*tlcolfunc) (void);
+void (*ghostcolfunc) (void);
 void (*spanfunc) (void);
 
 
@@ -614,6 +615,7 @@ void R_ExecuteSetViewSize (void)
                                                             R_DrawFuzzColumnTranslucent;
         transcolfunc = R_DrawTranslatedColumn;
         tlcolfunc = R_DrawTLColumn;
+        ghostcolfunc = R_DrawGhostColumn;
         spanfunc = R_DrawSpan;
     }
     else
@@ -626,6 +628,7 @@ void R_ExecuteSetViewSize (void)
                                                             R_DrawFuzzColumnTranslucentLow;
         transcolfunc = R_DrawTranslatedColumnLow;
         tlcolfunc = R_DrawTLColumnLow;
+        ghostcolfunc = R_DrawGhostColumnLow;
         spanfunc = R_DrawSpanLow;
     }
 

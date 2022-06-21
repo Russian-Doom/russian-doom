@@ -1126,6 +1126,74 @@ void R_DrawTLColumnLow (void)
 }
 
 // -----------------------------------------------------------------------------
+// R_DrawGhostColumn
+// [JN] Draw translucent (50%) with given color translation (CR_THIRDSATURTION).
+// Used exclusively for ghost monsters, ressurected by Arch-Vile.
+// -----------------------------------------------------------------------------
+
+void R_DrawGhostColumn (void)
+{
+    int      count = dc_yh - dc_yl;
+    byte    *dest;
+    fixed_t  frac;
+
+    if (count < 0)
+    {
+        return;
+    }
+
+    dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
+
+    do
+    {
+        *dest = transtable50[(*dest<<8)+dc_colormap[0][dc_translation[dc_source[frac>>FRACBITS]]]];
+        dest += screenwidth;
+        frac += dc_iscale;
+    } while (count--);
+}
+
+// -----------------------------------------------------------------------------
+// R_DrawGhostColumn
+// [JN] Draw translucent (50%) with given color translation (CR_THIRDSATURTION).
+// Low-resolution version.
+// -----------------------------------------------------------------------------
+
+void R_DrawGhostColumnLow (void)
+{
+    const int x = dc_x << 1;
+    int       count = dc_yh - dc_yl;
+    byte     *dest1, *dest2, *dest3, *dest4;
+    fixed_t   frac;
+
+    if (count < 0)
+    {
+        return;
+    }
+
+    dest1 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
+    frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
+
+    do
+    {
+        *dest1 = transtable50[(*dest1<<8)+dc_colormap[0][dc_translation[dc_source[frac>>FRACBITS]]]];
+        *dest2 = transtable50[(*dest2<<8)+dc_colormap[0][dc_translation[dc_source[frac>>FRACBITS]]]];
+        *dest3 = transtable50[(*dest3<<8)+dc_colormap[0][dc_translation[dc_source[frac>>FRACBITS]]]];
+        *dest4 = transtable50[(*dest4<<8)+dc_colormap[0][dc_translation[dc_source[frac>>FRACBITS]]]];
+
+        dest1 += screenwidth << hires;
+        dest2 += screenwidth << hires;
+        dest3 += screenwidth << hires;
+        dest4 += screenwidth << hires;
+
+        frac += dc_iscale;
+    } while (count--);
+}
+
+// -----------------------------------------------------------------------------
 // R_DrawSpan 
 // With DOOM style restrictions on view orientation, the floors and ceilings
 // consist of horizontal slices or spans with constant z depth. However,

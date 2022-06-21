@@ -497,6 +497,13 @@ static void R_DrawVisSprite (const vissprite_t *vis, const int x1, const int x2)
         colfunc = fuzzcolfunc;
     }
 
+    // [JN] Ghost monsters.
+    if (colored_blood && !vanillaparm && (vis->mobjflags & MF_GHOST))
+    {
+        colfunc = ghostcolfunc;
+        dc_translation = cr[CR_THIRDSATURTION];
+    }
+
     dc_iscale = abs(vis->xiscale)>>(detailshift && !hires);
     dc_texturemid = vis->texturemid;
     frac = vis->startfrac;
