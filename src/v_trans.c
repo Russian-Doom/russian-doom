@@ -27,6 +27,7 @@
 // -----------------------------------------------------------------------------
 
 static byte cr_dark[256];
+static byte cr_thirdsaturtion[256];
 static byte cr_monochrome[256];
 
 static byte cr_red[256];
@@ -497,6 +498,7 @@ static byte cr_red2darkgray_hexen[256] =
 byte *cr[] =
 {
     (byte *) &cr_dark,
+    (byte *) &cr_thirdsaturtion,
     (byte *) &cr_monochrome,
 
     (byte *) &cr_red,
@@ -773,6 +775,10 @@ byte V_Colorize (byte *playpal, Translation_CR_t cr, byte source, boolean keepgr
     if (cr == CR_DARK)
     {
         hsv.z *= 0.666;
+    }
+    else if (cr == CR_THIRDSATURTION)
+    {
+        hsv.y *= 0.3;
     }
     else if (cr == CR_MONOCHROME)
     {

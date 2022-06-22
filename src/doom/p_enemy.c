@@ -1446,9 +1446,10 @@ void A_VileChase (mobj_t *actor)
                     corpsehit->health = info->spawnhealth;
                     corpsehit->target = NULL;
 
+                    // [JN] Resurrected ghost monster is translucent and desaturated.
                     if (corpsehit->height == 0 && corpsehit->radius == 0)
                     {
-                        corpsehit->flags |= MF_TRANSLUCENT;
+                        corpsehit->flags |= MF_GHOST;
                     }
 
                     return;

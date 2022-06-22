@@ -527,6 +527,8 @@ void R_DrawFuzzColumnLowImproved (void);
 void R_DrawFuzzColumnLowImprovedBW (void);
 void R_DrawFuzzColumnTranslucent (void);
 void R_DrawFuzzColumnTranslucentLow (void);
+void R_DrawGhostColumn (void);
+void R_DrawGhostColumnLow (void);
 void R_DrawSpan (void);
 void R_DrawSpanLow (void);
 void R_DrawTLColumn (void);
@@ -585,6 +587,7 @@ extern void (*fuzzcolfunc) (void);
 extern void (*spanfunc) (void);
 extern void (*tlcolfunc) (void);
 extern void (*transcolfunc) (void);
+extern void (*ghostcolfunc) (void);
 extern void R_ClearStats (void);
 
 angle_t R_InterpolateAngle(angle_t oangle, angle_t nangle, fixed_t scale);
