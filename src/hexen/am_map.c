@@ -1470,6 +1470,8 @@ static void AM_drawPlayers(void)
     };
     int their_color = -1;
     int color;
+    // [JN] Smooth player arrow rotation:
+    const angle_t smoothangle = automap_rotate ? plr->mo->angle : viewangle;
 
     if (!netgame)
     {
@@ -1492,7 +1494,7 @@ static void AM_drawPlayers(void)
             AM_rotatePoint(&pt);
         }
 
-        AM_drawLineCharacter(player_arrow, NUMPLYRLINES, 0, plr->mo->angle,
+        AM_drawLineCharacter(player_arrow, NUMPLYRLINES, 0, smoothangle,
                              WHITE, pt.x, pt.y);
         return;
     }
