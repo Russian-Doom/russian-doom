@@ -205,6 +205,7 @@ static cheatseq_t cheat_clev1 = CHEAT("idclev", 1);
 
 // [crispy] new cheats
 static cheatseq_t cheat_massacre = CHEAT("tntem", 0);
+static cheatseq_t cheat_buddha = CHEAT("buddha", 0);
 
 // [JN] Press Beta cheat codes
 static cheatseq_t cheat_god_beta    = CHEAT("tst", 0); // iddqd
@@ -424,6 +425,14 @@ const boolean ST_Responder (const event_t *ev)
 
                 M_snprintf(msg, sizeof(msg), "%s %d", ststr_massacre, killcount);
                 P_SetMessage(plyr, msg, msg_system, false);
+            }
+
+            // [JN] Implement Woof's "buddha" cheat.
+            else if (cht_CheckCheat(&cheat_buddha, ev->data2))
+            {
+                plyr->cheats ^= CF_BUDDHA;
+                P_SetMessage(plyr, DEH_String(plyr->cheats & CF_BUDDHA ?
+                             ststr_buddhaon : ststr_buddhaoff), msg_system, false);
             }
 
             // 'mus' cheat for changing music

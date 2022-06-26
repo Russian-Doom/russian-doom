@@ -669,7 +669,8 @@ typedef enum
 {
     CF_NOCLIP		= 1, // No clipping, walk through barriers.
     CF_GODMODE		= 2, // No damage, no health loss.
-    CF_NOMOMENTUM	= 4  // Not really a cheat, just a debug aid.
+    CF_NOMOMENTUM	= 4, // Not really a cheat, just a debug aid.
+    CF_BUDDHA	    = 8  // [JN] BUDDHA cheat.
 } cheat_t;
 
 //

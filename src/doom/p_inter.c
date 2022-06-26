@@ -1075,6 +1075,12 @@ void P_DamageMobj (mobj_t *target, const mobj_t *inflictor, mobj_t *source, int 
 
         player->health -= damage;             // mirror mobj health here for Dave
 
+        // [JN] BUDDHA cheat.
+        if (player->cheats & CF_BUDDHA && player->health < 1)
+        {
+            player->health = 1;
+        }
+        else
         if (player->health < 0)
         {
             player->health = 0;
@@ -1098,6 +1104,12 @@ void P_DamageMobj (mobj_t *target, const mobj_t *inflictor, mobj_t *source, int 
     // do the damage	
     target->health -= damage;	
 
+    // [JN] BUDDHA cheat.
+    if (player && player->cheats & CF_BUDDHA && target->health < 1)
+    {
+        target->health = 1;
+    }
+    else
     if (target->health <= 0)
     {
         // [crispy] the lethal pellet of a point-blank SSG blast

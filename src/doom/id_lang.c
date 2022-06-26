@@ -246,8 +246,10 @@ char* ststr_behold;
 char* ststr_beholdx;
 char* ststr_beholdz;
 
-// RD specific
+// International Doom specific
 char* ststr_massacre;
+char* ststr_buddhaon;
+char* ststr_buddhaoff;
 
 // GFX patches
 patch_t *stbar;
@@ -264,7 +266,7 @@ patch_t *stysslsh;
 // [JN] Function for (pre-)defining strings for text translations.
 // -----------------------------------------------------------------------------
 
-void RD_DefineLanguageStrings (void)
+void ID_DefineLanguageStrings (void)
 {
     if (english_language)
     {
@@ -415,8 +417,10 @@ void RD_DefineLanguageStrings (void)
         ststr_beholdx   = STSTR_BEHOLDX;
         ststr_beholdz   = STSTR_BEHOLDZ;
 
-        // RD specific
+        // International Doom specific
         ststr_massacre  = STSTR_MASSACRE;
+        ststr_buddhaon  = STSTR_BUDDHAON;
+        ststr_buddhaoff = STSTR_BUDDHAOFF;
 
         // GFX patches:
         stbar = W_CacheLumpName(DEH_String("STBAR"), PU_STATIC);
@@ -577,8 +581,10 @@ void RD_DefineLanguageStrings (void)
         ststr_beholdx   = STSTR_BEHOLDX_RUS;
         ststr_beholdz   = STSTR_BEHOLDZ_RUS;
 
-        // RD specific
+        // International Doom specific
         ststr_massacre  = STSTR_MASSACRE_RUS;
+        ststr_buddhaon  = STSTR_BUDDHAON_RUS;
+        ststr_buddhaoff = STSTR_BUDDHAOFF_RUS;
         
         // GFX patches:
         stbar = W_CacheLumpName(DEH_String("RDSTBAR"), PU_STATIC);

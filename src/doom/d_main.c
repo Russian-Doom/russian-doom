@@ -2160,7 +2160,7 @@ void D_SetGameDescription(void)
     }
 
     // [JN] Define and load translated strings
-    RD_DefineLanguageStrings();
+    ID_DefineLanguageStrings();
 
     // [JN] Sky scaling determination. Sky itself can be loaded as new
     // patches, composed in TEXTURE1 lump, or as patches with standard names.

@@ -33,7 +33,7 @@
 #include "z_zone.h"
 
 
-extern void RD_DefineLanguageStrings ();
+extern void ID_DefineLanguageStrings ();
 
 
 // -----------------------------------------------------------------------------
@@ -350,6 +350,8 @@ extern char* ststr_beholdx;
 extern char* ststr_beholdz;
 
 extern char* ststr_massacre;
+extern char* ststr_buddhaon;
+extern char* ststr_buddhaoff;
 
 extern patch_t *stbar;
 extern patch_t *starms;
@@ -381,6 +383,8 @@ extern patch_t *stysslsh;
 #define STSTR_BEHOLDZ   "Power-up Deactivated"
 
 #define STSTR_MASSACRE  "Monsters killed:"
+#define STSTR_BUDDHAON  "BUDDHA MODE ON"
+#define STSTR_BUDDHAOFF "BUDDHA MODE OFF"
 
 
 //
@@ -1267,6 +1271,8 @@ extern patch_t *stysslsh;
 #define STSTR_BEHOLDZ_RUS   "ghtlvtn ltfrnbdbhjdfy"                     // Предмет деактивирован
 
 #define STSTR_MASSACRE_RUS  "eybxnj;tyj vjycnhjd:"                      // Уничтожено монстров:
+#define STSTR_BUDDHAON_RUS  "ht;bv ,ells frnbdbhjdfy"                   // Режим Будды активирован
+#define STSTR_BUDDHAOFF_RUS "ht;bv ,ells ltfrnbdbhjdfy"                 // Режим Будды деактивирован
 
 
 //

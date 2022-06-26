@@ -6121,7 +6121,7 @@ static void M_RD_ChangeLanguage(int choice)
     players[consoleplayer].message = NULL;
 
     // Update messages
-    RD_DefineLanguageStrings();
+    ID_DefineLanguageStrings();
 
     // Update TITLEPIC/CREDIT screens in live mode
     if (gamestate == GS_DEMOSCREEN)
