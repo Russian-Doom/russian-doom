@@ -37,6 +37,7 @@
 
 #define TEXTSPEED   3
 #define TEXTWAIT    250
+#define TEXTEND     25
 
 
 typedef enum
@@ -56,6 +57,7 @@ static int RusFontFinaleLump;
 finalestage_t finalestage;
 
 static unsigned int finalecount;
+static unsigned int finaleendcount;
 
 // [JN] Was final wipe done?
 boolean finale_wipe_done = false;
@@ -202,6 +204,9 @@ void F_StartFinale (void)
 
     finaletext = DEH_String(finaletext);
     finaleflat = DEH_String(finaleflat);
+    // [JN] Count intermission/finale text lenght. Once it's fully printed, 
+    // no extra "attack/use" button pressing is needed for skipping.
+    finaleendcount = strlen(finaletext) * TEXTSPEED + TEXTEND;
 
     finalestage = F_STAGE_TEXT;
     finalecount = 0;
@@ -271,10 +276,10 @@ void F_Ticker (void)
                 {
                     if (!players[i].attackdown)
                     {
-                        if (finalecount >= 5003)
+                        if (finalecount >= finaleendcount)
                         break;
     
-                        finalecount += 5000;
+                        finalecount += finaleendcount;
                         players[i].attackdown = true;
                     }
                     players[i].attackdown = true;
@@ -289,21 +294,20 @@ void F_Ticker (void)
                 {
                     if (!players[i].usedown)
                     {
-                        if (finalecount >= 5003)
+                        if (finalecount >= finaleendcount)
                         break;
     
-                        finalecount += 5000;
+                        finalecount += finaleendcount;
                         players[i].usedown = true;
                     }
                     players[i].usedown = true;
-    
                 }
                 else
                 {
                     players[i].usedown = false;
                 }
             }
-    
+
             if (i < MAXPLAYERS)
             {
                 if (gamemode != commercial)
