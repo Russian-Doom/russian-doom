@@ -204,7 +204,8 @@ static cheatseq_t cheat_mus1  = CHEAT("idmus", 1);
 static cheatseq_t cheat_clev1 = CHEAT("idclev", 1);
 
 // [crispy] new cheats
-static cheatseq_t cheat_massacre = CHEAT("tntem", 0);
+static cheatseq_t cheat_massacre1 = CHEAT("tntem", 0);
+static cheatseq_t cheat_massacre2 = CHEAT("killem", 0);
 static cheatseq_t cheat_buddha = CHEAT("buddha", 0);
 
 // [JN] Press Beta cheat codes
@@ -217,7 +218,7 @@ static cheatseq_t cheat_noclip_beta = CHEAT("nc", 0);  // idclip
 // [crispy] adapted from boom202s/M_CHEAT.C:467-498
 // -----------------------------------------------------------------------------
 
-static const int ST_cheat_massacre (void)
+static const int ST_cheat_massacre (const boolean explode)
 {
     int killcount = 0;
     thinker_t *th;
@@ -229,13 +230,14 @@ static const int ST_cheat_massacre (void)
         if (th->function.acp1 == (actionf_p1)P_MobjThinker)
         {
             mobj_t *mo = (mobj_t *)th;
+            const int amount = explode ? 10000 : mo->health;
 
             if (mo->flags & MF_COUNTKILL || mo->flags & MF_COUNTEXTRAKILL
             ||  mo->type == MT_SKULL)
             {
                 if (mo->health > 0)
                 {
-                    P_DamageMobj(mo, NULL, NULL, 10000);
+                    P_DamageMobj(mo, NULL, NULL, amount);
                     killcount++;
                 }
                 if (mo->type == MT_PAIN)
@@ -419,9 +421,18 @@ const boolean ST_Responder (const event_t *ev)
             }
 
             // [crispy] implement Boom's "tntem" cheat
-            else if (cht_CheckCheat(&cheat_massacre, ev->data2))
+            else if (cht_CheckCheat(&cheat_massacre1, ev->data2))
             {
-                int killcount = ST_cheat_massacre();
+                int killcount = ST_cheat_massacre(true);
+
+                M_snprintf(msg, sizeof(msg), "%s %d", ststr_massacre, killcount);
+                P_SetMessage(plyr, msg, msg_system, false);
+            }
+
+            // [JN] implement MBF's "killem" cheat, which kills, not explodes enemies.
+            else if (cht_CheckCheat(&cheat_massacre2, ev->data2))
+            {
+                int killcount = ST_cheat_massacre(false);
 
                 M_snprintf(msg, sizeof(msg), "%s %d", ststr_massacre, killcount);
                 P_SetMessage(plyr, msg, msg_system, false);
