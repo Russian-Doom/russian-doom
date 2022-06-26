@@ -72,18 +72,18 @@ static fixed_t scale_ftom;
 
 // [JN] How much the automap moves window per tic in frame-buffer coordinates.
 static int f_paninc;
-static const int f_paninc_slow = 8;   // 280 map units in 1 second.
-static const int f_paninc_fast = 16;  // 560 map units in 1 second.
+#define F_PANINC_SLOW 8   // 280 map units in 1 second.
+#define F_PANINC_FAST 16  // 560 map units in 1 second.
 
 // [JN] How much zoom-in per tic goes to 2x in 1 second.
 static int m_zoomin;
-static const int m_zoomin_slow = ((int) (1.04*FRACUNIT));
-static const int m_zoomin_fast = ((int) (1.08*FRACUNIT));
+#define M_ZOOMIN_SLOW ((int) (1.04*FRACUNIT))
+#define M_ZOOMIN_FAST ((int) (1.08*FRACUNIT))
 
 // [JN] How much zoom-out per tic pulls out to 0.5x in 1 second.
 static int m_zoomout;
-static const int m_zoomout_slow = ((int) (FRACUNIT/1.04));
-static const int m_zoomout_fast = ((int) (FRACUNIT/1.08));
+#define M_ZOOMOUT_SLOW ((int) (FRACUNIT/1.04))
+#define M_ZOOMOUT_FAST ((int) (FRACUNIT/1.08))
 
 static player_t *plr;           // the player represented by an arrow
 static vertex_t oldplr;
@@ -512,15 +512,15 @@ boolean AM_Responder(event_t * ev)
     // [JN] If run button is hold, pan/zoom Automap faster.    
     if (speed_toggler)
     {
-        f_paninc = f_paninc_fast;
-        m_zoomin = m_zoomin_fast;
-        m_zoomout = m_zoomout_fast;
+        f_paninc = F_PANINC_FAST;
+        m_zoomin = M_ZOOMIN_FAST;
+        m_zoomout = M_ZOOMOUT_FAST;
     }
     else
     {
-        f_paninc = f_paninc_slow;
-        m_zoomin = m_zoomin_slow;
-        m_zoomout = m_zoomout_slow;
+        f_paninc = F_PANINC_SLOW;
+        m_zoomin = M_ZOOMIN_SLOW;
+        m_zoomout = M_ZOOMOUT_SLOW;
     }
 
     rc = false;
