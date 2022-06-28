@@ -386,12 +386,7 @@ void A_Lower (mobj_t *mobj, player_t *player, pspdef_t *psp)
 
 void A_Raise (mobj_t *mobj, player_t *player, pspdef_t *psp)
 {
-    int angle;
     statenum_t newstate;
-
-    // [JN] Define bobbing angles
-    angle = (128*leveltime)&FINEMASK;
-    angle &= FINEANGLES/2-1;
 
     if (!player)
     {
@@ -401,16 +396,8 @@ void A_Raise (mobj_t *mobj, player_t *player, pspdef_t *psp)
 
     psp->sy -= RAISESPEED;
 
-    // [JN] Smoothen bobbing while weapon raising.
-    // Accout Y bobbing for WEAPONTOP position. Not safe for internal demos!
-    if (singleplayer && weapon_bobbing && !vanillaparm)
+    if (psp->sy > WEAPONTOP)
     {
-        if (psp->sy > WEAPONTOP + FixedMul (player->bob, finesine[angle]))
-        return;
-    }
-    else
-    {
-        if (psp->sy > WEAPONTOP)
         return;
     }
 
