@@ -66,9 +66,30 @@
 #define PACKEDATTR __attribute__((packed))
 #endif
 
+#define PRINTF_ATTR(fmt, first) __attribute__((format(printf, fmt, first)))
+#define PRINTF_ARG_ATTR(x) __attribute__((format_arg(x)))
+#define NORETURN __attribute__((noreturn))
+
+#else
+#if defined(_MSC_VER)
+#define PACKEDATTR __pragma(pack(pop))
 #else
 #define PACKEDATTR
 #endif
+#define PRINTF_ATTR(fmt, first)
+#define PRINTF_ARG_ATTR(x)
+#define NORETURN
+#endif
+
+#ifdef __WATCOMC__
+#define PACKEDPREFIX _Packed
+#elif defined(_MSC_VER)
+#define PACKEDPREFIX __pragma(pack(push,1))
+#else
+#define PACKEDPREFIX
+#endif
+
+#define PACKED_STRUCT(...) PACKEDPREFIX struct __VA_ARGS__ PACKEDATTR
 
 // C99 integer types; with gcc we just use this.  Other compilers 
 // should add conditional statements that define the C99 types.
