@@ -642,7 +642,7 @@ typedef struct
     degenmobj_t *soundorg;
 } button_t;
 
-extern button_t	buttonlist[MAXBUTTONS]; 
+extern button_t	*buttonlist;
 
 const boolean P_UseSpecialLine (mobj_t *thing, line_t *line, const int side);
 void P_ChangeSwitchTexture (line_t *line, int useAgain);

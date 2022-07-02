@@ -25,6 +25,9 @@
 #include "g_game.h"
 #include "s_sound.h"
 #include "doomstat.h"
+#include "i_swap.h"
+#include "w_wad.h"
+#include "z_zone.h"
 #include "jn.h"
 
 
@@ -32,7 +35,8 @@
 // CHANGE THE TEXTURE OF A WALL SWITCH TO ITS OPPOSITE
 // =============================================================================
 
-static switchlist_t alphSwitchList[] =
+// [crispy] add support for SWITCHES lumps
+static switchlist_t alphSwitchList_vanilla[] =
 {
     // Doom shareware episode 1 switches
     {"SW1BRCOM",    "SW2BRCOM", 1},
@@ -80,57 +84,17 @@ static switchlist_t alphSwitchList[] =
     {"SW1MARB",     "SW2MARB",  3},
     {"SW1SKULL",    "SW2SKULL", 3},
 
+    // [crispy] SWITCHES lumps are supposed to end like this
     {"\0",          "\0",       0}
 };
 
-static switchlist_t jaguarSwitchList[] =
-{
-    // [JN] Jaguar Doom switches
-    {"SW1BRN1",     "SW2BRN1",  3},
-    {"SW1GARG",     "SW2GARG",  3},
-    {"SW1GSTON",    "SW2GSTON", 3},
-    {"SW1HOT",      "SW2HOT",   3},
-    {"SW1HOT",      "SW2HOT",   3},
-    {"SW1STAR",     "SW2STAR",  3},
-    {"SW1WOOD",     "SW2WOOD",  3},
-    {"SW1WOOD",     "SW2WOOD",  3},
+// [crispy] remove MAXSWITCHES limit
+static size_t  maxswitches;
+static int    *switchlist;
+static int     numswitches;
+static int     maxbuttons; // [crispy] remove MAXBUTTONS limit
+button_t      *buttonlist; // [crispy] remove MAXBUTTONS limit
 
-    {"\0",          "\0",       0}
-};
-
-
-static int switchlist[MAXSWITCHES * 2];
-static int numswitches;
-
-button_t   buttonlist[MAXBUTTONS];
-
-
-// -----------------------------------------------------------------------------
-// [JN] P_InitSwitchListJaguar
-// Jaguar Doom exclusive init.
-// -----------------------------------------------------------------------------
-
-static void P_InitSwitchListJaguar (void)
-{
-    int i, index;
-    const int episode = 3;
-
-    for (index = 0,i = 0;i < MAXSWITCHES;i++)
-    {
-        if (!jaguarSwitchList[i].episode)
-        {
-            numswitches = index/2;
-            switchlist[index] = -1;
-            break;
-        }
-
-        if (jaguarSwitchList[i].episode <= episode)
-        {
-            switchlist[index++] = R_TextureNumForName(DEH_String(jaguarSwitchList[i].name1));
-            switchlist[index++] = R_TextureNumForName(DEH_String(jaguarSwitchList[i].name2));
-        }
-    }
-}
 
 // -----------------------------------------------------------------------------
 // P_InitSwitchList
@@ -139,40 +103,93 @@ static void P_InitSwitchListJaguar (void)
 
 void P_InitSwitchList (void)
 {
-    int i, index, episode;
+    int i, slindex, episode;
 
-    // [JN] Jaguar Doom: use own, simplified initialization.
-    if (gamemission == jaguar)
-    {
-        return P_InitSwitchListJaguar();
-    }
-	
-    episode = 1;
+    // [crispy] add support for SWITCHES lumps
+    switchlist_t *alphSwitchList;
+    boolean from_lump;
 
-    if (gamemode == registered || gamemode == retail || gamemode == pressbeta)
+    if ((from_lump = (W_CheckNumForName("SWITCHES") != -1)))
     {
-        episode = 2;
+        alphSwitchList = W_CacheLumpName("SWITCHES", PU_STATIC);
     }
-    else if (gamemode == commercial)
+    else
     {
-	    episode = 3;
+        alphSwitchList = alphSwitchList_vanilla;
     }
 
-    for (index = 0, i = 0 ; i < MAXSWITCHES ; i++)
+    // Note that this is called "episode" here but it's actually something
+    // quite different. As we progress from Shareware->Registered->Doom II
+    // we support more switch textures.
+    switch (gamemode)
     {
-        if (!alphSwitchList[i].episode)
-        {
-            numswitches = index/2;
-            switchlist[index] = -1;
+        case registered:
+        case retail:
+        case pressbeta:
+            episode = 2;
             break;
+        case commercial:
+            episode = 3;
+            break;
+        default:
+            episode = 1;
+            break;
+    }
+
+    slindex = 0;
+
+    for (i = 0; alphSwitchList[i].episode; i++)
+    {
+        const short alphSwitchList_episode = from_lump ?
+                    SHORT(alphSwitchList[i].episode) :
+                    alphSwitchList[i].episode;
+
+        // [crispy] remove MAXSWITCHES limit
+        if (slindex + 1 >= maxswitches)
+        {
+            size_t newmax = maxswitches ? 2 * maxswitches : MAXSWITCHES;
+            switchlist = I_Realloc(switchlist, newmax * sizeof(*switchlist));
+            maxswitches = newmax;
         }
 
-        if (alphSwitchList[i].episode <= episode)
+        // [crispy] ignore switches referencing unknown texture names,
+        // warn if either one is missing, but only add if both are valid
+        if (alphSwitchList_episode <= episode)
         {
-            switchlist[index++] = R_TextureNumForName(DEH_String(alphSwitchList[i].name1));
-            switchlist[index++] = R_TextureNumForName(DEH_String(alphSwitchList[i].name2));
+            int texture1, texture2;
+            char *name1 = DEH_String(alphSwitchList[i].name1);
+            char *name2 = DEH_String(alphSwitchList[i].name2);
+
+            texture1 = R_CheckTextureNumForName(name1);
+            texture2 = R_CheckTextureNumForName(name2);
+
+            if (texture1 == -1 || texture2 == -1)
+            {
+                fprintf(stderr, english_language ? 
+                        "P_InitSwitchList: could not add %s(%d)/%s(%d)\n" :
+                        "P_InitSwitchList: невозможно добавить %s(%d)/%s(%d)\n",
+                        name1, texture1, name2, texture2);
+            }
+            else
+            {
+                switchlist[slindex++] = texture1;
+                switchlist[slindex++] = texture2;
+            }
         }
     }
+
+    numswitches = slindex / 2;
+    switchlist[slindex] = -1;
+
+    // [crispy] add support for SWITCHES lumps
+    if (from_lump)
+    {
+        W_ReleaseLumpName("SWITCHES");
+    }
+
+    // [crispy] pre-allocate some memory for the buttonlist[] array
+    buttonlist = I_Realloc(NULL, sizeof(*buttonlist) * (maxbuttons = MAXBUTTONS));
+    memset(buttonlist, 0, sizeof(*buttonlist) * maxbuttons);
 }
 
 // -----------------------------------------------------------------------------
@@ -185,7 +202,7 @@ void P_StartButton (line_t *line, const bwhere_e w, const int texture, const int
     int i;
 
     // See if button is already pressed
-    for (i = 0 ; i < MAXBUTTONS ; i++)
+    for (i = 0 ; i < maxbuttons ; i++)
     {
         if (buttonlist[i].btimer && buttonlist[i].line == line)
         {
@@ -198,7 +215,7 @@ void P_StartButton (line_t *line, const bwhere_e w, const int texture, const int
         }
     }
 
-    for (i = 0 ; i < MAXBUTTONS ; i++)
+    for (i = 0 ; i < maxbuttons ; i++)
     {
         if (!buttonlist[i].btimer)
         {
@@ -209,6 +226,14 @@ void P_StartButton (line_t *line, const bwhere_e w, const int texture, const int
             buttonlist[i].soundorg = &line->soundorg; // [from-crispy] Corrected sound source
             return;
         }
+    }
+
+    // [crispy] remove MAXBUTTONS limit
+    {
+        maxbuttons = 2 * maxbuttons;
+        buttonlist = I_Realloc(buttonlist, sizeof(*buttonlist) * maxbuttons);
+        memset(buttonlist + maxbuttons/2, 0, sizeof(*buttonlist) * maxbuttons/2);
+        return P_StartButton(line, w, texture, time);
     }
 
     I_Error(english_language ?
