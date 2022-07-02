@@ -24,6 +24,7 @@
 
 #include "doomstat.h"
 #include "i_system.h"
+#include "i_swap.h"
 #include "m_argv.h"
 #include "m_misc.h"
 #include "m_random.h"
@@ -48,16 +49,22 @@ typedef struct
 } anim_t;
 
 // Source animation definition.
-typedef struct
+// [crispy] change istexture type from int to char and
+// add PACKEDATTR for reading ANIMATED lumps from memory
+typedef PACKED_STRUCT (
 {
-    int     istexture;  // if false, it is a flat
+    signed char istexture;  // if false, it is a flat
     char    endname[9];
     char    startname[9];
     int     speed;
-} animdef_t;
+}) animdef_t;
+
+// [JN] Add support for toggleable swirling liquid in ANIMATED lumps.
+static int swirl_speed;
 
 // [JN] Duration 9 = apply swirling liquids effect.
-static animdef_t animdefs[] =
+// [crispy] add support for ANIMATED lumps
+static animdef_t animdefs_vanilla[] =
 {
     {false, "NUKAGE3",  "NUKAGE1",  9}, // Кислота
     {false, "FWATER4",  "FWATER1",  9}, // Вода
@@ -132,6 +139,21 @@ void P_InitPicAnims (void)
 {
     int i;
 
+    // [crispy] add support for ANIMATED lumps
+    animdef_t *animdefs;
+    const boolean from_lump = (W_CheckNumForName("ANIMATED") != -1);
+
+    if (from_lump)
+    {
+        animdefs = W_CacheLumpName("ANIMATED", PU_STATIC);
+        swirl_speed = 65535;
+    }
+    else
+    {
+        animdefs = animdefs_vanilla;
+        swirl_speed = 8;
+    }
+
     // Init animation
     lastanim = anims;
 
@@ -175,6 +197,7 @@ void P_InitPicAnims (void)
 
         lastanim->istexture = animdefs[i].istexture;
         lastanim->numpics = lastanim->picnum - lastanim->basepic + 1;
+        lastanim->speed = from_lump ? LONG(animdefs[i].speed) : animdefs[i].speed;
 
         if (lastanim->numpics < 2)
         {
@@ -186,8 +209,12 @@ void P_InitPicAnims (void)
             continue;
         }
 
-        lastanim->speed = animdefs[i].speed;
         lastanim++;
+    }
+
+    if (from_lump)
+    {
+        W_ReleaseLumpName("ANIMATED");
     }
 
     // [JN] Not needed in "-vanilla", since there is no swirling flats
@@ -1127,7 +1154,8 @@ void P_UpdateSpecials (void)
             {
                 // [crispy] add support for SMMU swirling flats
                 // [JN] Animate only flats with 9 speed (set in animdefs).
-                if (anim->speed > 8 && swirling_liquids && !vanillaparm)
+                if ((anim->speed > swirl_speed || anim->numpics == 1)
+                && swirling_liquids && !vanillaparm)
                 {
                     flattranslation[i] = -1;
                 }
