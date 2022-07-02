@@ -1507,7 +1507,7 @@ void R_DrawMasked (void)
 {
     int i;
     drawseg_t*      ds;
-    int cx = screenwidth / 2;
+    const int cx = centerx;
 
     R_SortVisSprites();
 

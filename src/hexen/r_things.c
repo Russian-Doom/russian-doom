@@ -1507,7 +1507,7 @@ static void R_DrawSprite (vissprite_t *spr)
 void R_DrawMasked (void)
 {
     int        i;
-    int        cx = screenwidth / 2;
+    const int  cx = centerx;
     drawseg_t *ds;
 
     R_SortVisSprites();

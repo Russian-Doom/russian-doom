@@ -1378,7 +1378,7 @@ static void R_DrawSprite (const vissprite_t *spr)
 void R_DrawMasked (void)
 {
     int        i;
-    const int  cx = screenwidth / 2;
+    const int  cx = centerx;
     drawseg_t *ds;
 
     R_SortVisSprites();
@@ -1386,7 +1386,7 @@ void R_DrawMasked (void)
     // [JN] e6y
     // Makes sense for scenes with huge amount of drawsegs.
     // ~12% of speed improvement on epic.wad map05
-    for(i = 0 ; i < DS_RANGES_COUNT ; i++)
+    for (i = 0 ; i < DS_RANGES_COUNT ; i++)
     {
         drawsegs_xranges[i].count = 0;
     }
