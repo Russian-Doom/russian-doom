@@ -123,7 +123,9 @@ typedef struct
 // A line drawing of the player pointing right, starting from the middle.
 // -----------------------------------------------------------------------------
 
-#define R ((8*PLAYERRADIUS)/7)
+#define MAPPLAYERRADIUS  (16*(1<<MAPBITS))
+
+#define R ((8*MAPPLAYERRADIUS)/7)
 static const mline_t player_arrow[] = {
     { { -R+R/8,   0 }, {  R,      0   } }, // -----
     { {  R,       0 }, {  R-R/2,  R/4 } }, // ----->
@@ -135,7 +137,7 @@ static const mline_t player_arrow[] = {
 };
 #undef R
 
-#define R ((8*PLAYERRADIUS)/7)
+#define R ((8*MAPPLAYERRADIUS)/7)
 static const mline_t cheat_player_arrow[] = {
     { { -R+R/8,     0        }, {  R,           0 } }, // -----
     { {  R,         0        }, {  R-R/2,     R/6 } }, // ----->
@@ -345,8 +347,8 @@ static void AM_restoreScaleAndLoc (void)
     }
     else 
     {
-        m_x = plr->mo->x - m_w/2;
-        m_y = plr->mo->y - m_h/2;
+        m_x = (plr->mo->x >> FRACTOMAPBITS) - m_w/2;
+        m_y = (plr->mo->y >> FRACTOMAPBITS) - m_h/2;
     }
 
     m_x2 = m_x + m_w;
@@ -380,8 +382,8 @@ static void AM_addMark (void)
     }
     else
     {
-        markpoints[markpointnum].x = plr->mo->x;
-        markpoints[markpointnum].y = plr->mo->y;
+        markpoints[markpointnum].x = plr->mo->x >> FRACTOMAPBITS;
+        markpoints[markpointnum].y = plr->mo->y >> FRACTOMAPBITS;
     }
     markpointnum++;
 }
@@ -422,14 +424,14 @@ static void AM_findMinMaxBoundaries (void)
     }
 
     // [crispy] cope with huge level dimensions which span the entire INT range
-    max_w = max_x/2 - min_x/2;
-    max_h = max_y/2 - min_y/2;
+    max_w = (max_x/2 - min_x/2) >> FRACTOMAPBITS;
+    max_h = (max_y/2 - min_y/2) >> FRACTOMAPBITS;
 
     a = FixedDiv(f_w<<FRACBITS, max_w);
     b = FixedDiv(f_h<<FRACBITS, max_h);
 
     min_scale_mtof = a < b ? a/2 : b/2;
-    max_scale_mtof = FixedDiv(f_h<<FRACBITS, 2*PLAYERRADIUS);
+    max_scale_mtof = FixedDiv(f_h<<FRACBITS, 2*MAPPLAYERRADIUS);
 }
 
 // -----------------------------------------------------------------------------
@@ -570,8 +572,8 @@ static void AM_initVariables (void)
         }
     }
 
-    m_x = plr->mo->x - m_w/2;
-    m_y = plr->mo->y - m_h/2;
+    m_x = (plr->mo->x >> FRACTOMAPBITS) - m_w/2;
+    m_y = (plr->mo->y >> FRACTOMAPBITS) - m_h/2;
 
     AM_changeWindowLoc();
 
@@ -959,13 +961,13 @@ static void AM_doFollowPlayer (void)
         // scrolling and static player arrow position.
         if (!vanillaparm)
         {
-            m_x = plr->mo->x - m_w/2;
-            m_y = plr->mo->y - m_h/2;
+            m_x = (plr->mo->x >> FRACTOMAPBITS) - m_w/2;
+            m_y = (plr->mo->y >> FRACTOMAPBITS) - m_h/2;
         }
         else
         {
-            m_x = FTOM(MTOF(plr->mo->x)) - m_w/2;
-            m_y = FTOM(MTOF(plr->mo->y)) - m_h/2;
+            m_x = FTOM(MTOF(plr->mo->x >> FRACTOMAPBITS)) - m_w/2;
+            m_y = FTOM(MTOF(plr->mo->y >> FRACTOMAPBITS)) - m_h/2;
         }
         m_x2 = m_x + m_w;
         m_y2 = m_y + m_h;
@@ -1636,6 +1638,7 @@ static void AM_drawGrid (const int color)
 {
     int64_t x, y;
     int64_t start, end;
+    const fixed_t gridsize = automap_grid_size << MAPBITS;
     mline_t ml;
 
     // Figure out start of vertical gridlines
@@ -1645,9 +1648,9 @@ static void AM_drawGrid (const int color)
         start -= m_h / 2;
     }
 
-    if ((start-bmaporgx)%(automap_grid_size<<FRACBITS))
+    if ((start-(bmaporgx>>FRACTOMAPBITS))%gridsize)
     {
-        start -= ((start-bmaporgx)%(automap_grid_size<<FRACBITS));
+        start -= ((start-(bmaporgx>>FRACTOMAPBITS))%gridsize);
     }
 
     end = m_x + m_w;
@@ -1658,7 +1661,7 @@ static void AM_drawGrid (const int color)
     }
 
     // draw vertical gridlines
-    for (x = start ; x < end ; x += (automap_grid_size<<FRACBITS))
+    for (x = start ; x < end ; x += gridsize)
     {
         ml.a.x = x;
         ml.b.x = x;
@@ -1682,9 +1685,9 @@ static void AM_drawGrid (const int color)
         start -= m_w / 2;
     }
 
-    if ((start-bmaporgy)%(automap_grid_size<<FRACBITS))
+    if ((start-(bmaporgy>>FRACTOMAPBITS))%gridsize)
     {
-        start -= ((start-bmaporgy)%(automap_grid_size<<FRACBITS));
+        start -= ((start-(bmaporgy>>FRACTOMAPBITS))%gridsize);
     }
 
     end = m_y + m_h;
@@ -1695,7 +1698,7 @@ static void AM_drawGrid (const int color)
     }
 
     // draw horizontal gridlines
-    for (y = start ; y < end ; y += (automap_grid_size<<FRACBITS))
+    for (y = start ; y < end ; y += gridsize)
     {
         ml.a.y = y;
         ml.b.y = y;
@@ -1726,10 +1729,10 @@ static void AM_drawWalls (const int automap_color_set)
 
     for (i = 0 ; i < numlines ; i++)
     {
-        l.a.x = lines[i].v1->x;
-        l.a.y = lines[i].v1->y;
-        l.b.x = lines[i].v2->x;
-        l.b.y = lines[i].v2->y;
+        l.a.x = lines[i].v1->x >> FRACTOMAPBITS;
+        l.a.y = lines[i].v1->y >> FRACTOMAPBITS;
+        l.b.x = lines[i].v2->x >> FRACTOMAPBITS;
+        l.b.y = lines[i].v2->y >> FRACTOMAPBITS;
 
         if (automap_rotate)
         {
@@ -2271,13 +2274,13 @@ static void AM_drawPlayers (void)
         // player arrow will have jerking.
         if (!automap_follow && uncapped_fps && !vanillaparm && leveltime > oldleveltime)
         {
-            pt.x = plr->mo->oldx + FixedMul(plr->mo->x - plr->mo->oldx, fractionaltic);
-            pt.y = plr->mo->oldy + FixedMul(plr->mo->y - plr->mo->oldy, fractionaltic);
+            pt.x = viewx >> FRACTOMAPBITS;
+            pt.y = viewy >> FRACTOMAPBITS;
         }
         else
         {
-            pt.x = plr->mo->x;
-            pt.y = plr->mo->y;
+            pt.x = plr->mo->x >> FRACTOMAPBITS;
+            pt.y = plr->mo->y >> FRACTOMAPBITS;
         }
 
         if (automap_rotate)
@@ -2372,13 +2375,13 @@ static void AM_drawThings (const int colors, const int colorrange)
             // [JN] Interpolate things if possible.
             if (uncapped_fps && !vanillaparm && leveltime > oldleveltime)
             {
-                pt.x = t->oldx + FixedMul(t->x - t->oldx, fractionaltic);
-                pt.y = t->oldy + FixedMul(t->y - t->oldy, fractionaltic);
+                pt.x = (t->oldx + FixedMul(t->x - t->oldx, fractionaltic)) >> FRACTOMAPBITS;
+                pt.y = (t->oldy + FixedMul(t->y - t->oldy, fractionaltic)) >> FRACTOMAPBITS;
             }
             else
             {
-                pt.x = t->x;
-                pt.y = t->y;
+                pt.x = t->x >> FRACTOMAPBITS;
+                pt.y = t->y >> FRACTOMAPBITS;
             }
 
             if (automap_rotate)
@@ -2393,31 +2396,31 @@ static void AM_drawThings (const int colors, const int colorrange)
                 if (t->flags & MF_COUNTKILL)
                 {
                     AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy), 
-                                         16 << FRACBITS, t->angle, t->health > 0 ? REDS_IDDT : GRAYS_IDDT, pt.x, pt.y);
+                                         16 << MAPBITS, t->angle, t->health > 0 ? REDS_IDDT : GRAYS_IDDT, pt.x, pt.y);
                 }
                 // Lost Soul and Explosive barrel (does not have a MF_COUNTKILL flag)
                 else if (t->type == MT_SKULL || t->type == MT_BARREL)
                 {
                     AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy),
-                                 16 << FRACBITS, t->angle, YELLOWS_IDDT, pt.x, pt.y);
+                                 16 << MAPBITS, t->angle, YELLOWS_IDDT, pt.x, pt.y);
                 }
                 // Pickups
                 else if (t->flags & MF_SPECIAL)
                 {
                     AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy),
-                                 16 << FRACBITS, t->angle, GREENS_IDDT, pt.x, pt.y);
+                                 16 << MAPBITS, t->angle, GREENS_IDDT, pt.x, pt.y);
                 }
                 // Everything else
                 else
                 {
                     AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy),
-                                 16 << FRACBITS, t->angle, GRAYS_IDDT, pt.x, pt.y);
+                                 16 << MAPBITS, t->angle, GRAYS_IDDT, pt.x, pt.y);
                 }
             }
             else
             {
                 AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy),
-                                     16 << FRACBITS, t->angle, colors, pt.x, pt.y);
+                                     16 << MAPBITS, t->angle, colors, pt.x, pt.y);
             }
 
             t = t->snext;

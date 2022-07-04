@@ -24,6 +24,9 @@
 #include "m_cheat.h"
 
 
+#define MAPBITS 12
+#define FRACTOMAPBITS (FRACBITS-MAPBITS)
+
 typedef struct
 {
     int64_t x,y;
