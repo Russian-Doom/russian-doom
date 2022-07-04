@@ -71,6 +71,15 @@
 #define GREENS_IDDT      GREENS
 #define GRAYS_IDDT       GRAYS
 
+// [JN] FRACTOMAPBITS: overflow-safe coordinate system.
+// Written by Andrey Budko (entryway), adapted from prboom-plus/src/am_map.*
+#define MAPBITS 12
+#define FRACTOMAPBITS (FRACBITS-MAPBITS)
+
+// [JN] New radius to use with FRACTOMAPBITS, since orginal 
+// PLAYERRADIUS macro can't be used in this implementation.
+#define MAPPLAYERRADIUS (16*(1<<MAPBITS))
+
 // scale on entry
 #define INITSCALEMTOF (.2*FRACUNIT)
 
@@ -122,8 +131,6 @@ typedef struct
 // The vector graphics for the automap.
 // A line drawing of the player pointing right, starting from the middle.
 // -----------------------------------------------------------------------------
-
-#define MAPPLAYERRADIUS  (16*(1<<MAPBITS))
 
 #define R ((8*MAPPLAYERRADIUS)/7)
 static const mline_t player_arrow[] = {
