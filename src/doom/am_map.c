@@ -431,8 +431,8 @@ static void AM_findMinMaxBoundaries (void)
     }
 
     // [crispy] cope with huge level dimensions which span the entire INT range
-    max_w = (max_x/2 - min_x/2) >> FRACTOMAPBITS;
-    max_h = (max_y/2 - min_y/2) >> FRACTOMAPBITS;
+    max_w = (max_x >>= FRACTOMAPBITS) - (min_x >>= FRACTOMAPBITS);
+    max_h = (max_y >>= FRACTOMAPBITS) - (min_y >>= FRACTOMAPBITS);
 
     a = FixedDiv(f_w<<FRACBITS, max_w);
     b = FixedDiv(f_h<<FRACBITS, max_h);
