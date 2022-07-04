@@ -2338,8 +2338,8 @@ static void AM_drawPlayers (void)
             color = their_colors[their_color];
         }
 
-        pt.x = p->mo->x;
-        pt.y = p->mo->y;
+        pt.x = p->mo->x >> FRACTOMAPBITS;
+        pt.y = p->mo->y >> FRACTOMAPBITS;
 
         if (automap_rotate)
         {
