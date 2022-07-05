@@ -2361,6 +2361,7 @@ static void AM_drawThings (const int colors, const int colorrange)
     int       i;
     mpoint_t  pt;
     mobj_t   *t;
+    angle_t   actualangle;
 
     for (i = 0 ; i < numsectors ; i++)
     {
@@ -2379,11 +2380,13 @@ static void AM_drawThings (const int colors, const int colorrange)
             {
                 pt.x = (t->oldx + FixedMul(t->x - t->oldx, fractionaltic)) >> FRACTOMAPBITS;
                 pt.y = (t->oldy + FixedMul(t->y - t->oldy, fractionaltic)) >> FRACTOMAPBITS;
+                actualangle = R_InterpolateAngle(t->oldangle, t->angle, fractionaltic);
             }
             else
             {
                 pt.x = t->x >> FRACTOMAPBITS;
                 pt.y = t->y >> FRACTOMAPBITS;
+                actualangle = t->angle;
             }
 
             if (automap_rotate)
@@ -2398,31 +2401,31 @@ static void AM_drawThings (const int colors, const int colorrange)
                 if (t->flags & MF_COUNTKILL)
                 {
                     AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy), 
-                                         16 << MAPBITS, t->angle, t->health > 0 ? REDS_IDDT : GRAYS_IDDT, pt.x, pt.y);
+                                         16 << MAPBITS, actualangle, t->health > 0 ? REDS_IDDT : GRAYS_IDDT, pt.x, pt.y);
                 }
                 // Lost Soul and Explosive barrel (does not have a MF_COUNTKILL flag)
                 else if (t->type == MT_SKULL || t->type == MT_BARREL)
                 {
                     AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy),
-                                 16 << MAPBITS, t->angle, YELLOWS_IDDT, pt.x, pt.y);
+                                 16 << MAPBITS, actualangle, YELLOWS_IDDT, pt.x, pt.y);
                 }
                 // Pickups
                 else if (t->flags & MF_SPECIAL)
                 {
                     AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy),
-                                 16 << MAPBITS, t->angle, GREENS_IDDT, pt.x, pt.y);
+                                 16 << MAPBITS, actualangle, GREENS_IDDT, pt.x, pt.y);
                 }
                 // Everything else
                 else
                 {
                     AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy),
-                                 16 << MAPBITS, t->angle, GRAYS_IDDT, pt.x, pt.y);
+                                 16 << MAPBITS, actualangle, GRAYS_IDDT, pt.x, pt.y);
                 }
             }
             else
             {
                 AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy),
-                                     16 << MAPBITS, t->angle, colors, pt.x, pt.y);
+                                     16 << MAPBITS, actualangle, colors, pt.x, pt.y);
             }
 
             t = t->snext;
