@@ -296,7 +296,7 @@ static int OPL_SDL_Init(unsigned int port_base)
 
         if (Mix_OpenAudioDevice(opl_sample_rate, AUDIO_S16SYS, 2, GetSliceSize(), NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE) < 0)
         {
-            fprintf(stderr, "Error initialising SDL_mixer: %s\n", Mix_GetError());
+            fprintf(stderr, "Error initialising SDL_mixer: %s\n", SDL_GetError());
 
             SDL_QuitSubSystem(SDL_INIT_AUDIO);
             return 0;

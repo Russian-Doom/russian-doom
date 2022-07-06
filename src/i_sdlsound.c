@@ -1038,7 +1038,7 @@ static int I_SDL_StartSound(sfxinfo_t *sfxinfo, int channel, int vol, int sep, i
 
     // play sound
 
-    Mix_PlayChannel(channel, &snd->chunk, 0);
+    Mix_PlayChannelTimed(channel, &snd->chunk, 0, -1);
 
     channels_playing[channel] = snd;
 
@@ -1161,7 +1161,7 @@ static boolean I_SDL_InitSound(boolean _use_sfx_prefix)
         fprintf(stderr, english_language ?
                         "Error initialising SDL_mixer: %s\n" :
                         "Ошибка инициализации SDL_mixer: %s\n",
-                        Mix_GetError());
+                        SDL_GetError());
         return false;
     }
 
