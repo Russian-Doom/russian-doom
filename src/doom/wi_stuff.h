@@ -29,6 +29,9 @@ typedef enum
     ShowNextLoc,
 } stateenum_t;
 
+// [JN] Define drawing/updating functions. Called by main loop.
+void WI_Init(void);
+
 // Called by main loop, animate the intermission.
 void WI_Ticker(void);
 

@@ -34,9 +34,8 @@
 #include "rd_text.h"
 #include "jn.h"
 
-// [JN] Jaguar: prototypes
-static void WI_drawStatsJaguar(void);
-static void WI_updateStatsJaguar(void);
+static void (*WI_drawStatsFunc) (void);
+static void (*WI_updateStatsFunc) (void);
 
 
 // =============================================================================
@@ -1582,12 +1581,6 @@ static void WI_initStats (void)
 
 static void WI_updateStats (void)
 {
-    if (gamemission == jaguar)
-    {
-        WI_updateStatsJaguar();
-        return;
-    }
-
     WI_updateAnimatedBack();
 
     if (acceleratestage && sp_state != 10)
@@ -1725,12 +1718,6 @@ static void WI_drawStats (void)
 {
     const int lh = (3*SHORT(num[0]->height))/2;  // line height
 
-    if (gamemission == jaguar)
-    {
-        WI_drawStatsJaguar();
-        return;
-    }
-    
     WI_slamBackground();
     WI_drawAnimatedBack();  // draw animated background
     WI_drawLF();
@@ -1933,7 +1920,7 @@ void WI_Ticker (void)
         else if (netgame) 
         WI_updateNetgameStats();
         else 
-        WI_updateStats();
+        WI_updateStatsFunc();
         break;
 
         case ShowNextLoc:
@@ -2244,7 +2231,7 @@ void WI_Drawer (void)
         }
         else
         {
-            WI_drawStats();
+            WI_drawStatsFunc();
         }
         break;
 	
@@ -2570,5 +2557,25 @@ static void WI_drawStatsJaguar (void)
             RD_M_DrawTextBigCenteredRUS(LevelNamesJaguar_Russian[wminfo.next+1], 164);
         }
 
+    }
+}
+
+// -----------------------------------------------------------------------------
+// WI_Init
+// [JN] Jaguar Doom using own world intermission screens, so we define here
+// which functions to use to avoid extra condition checkings.
+// -----------------------------------------------------------------------------
+
+void WI_Init (void)
+{
+    if (gamemission == jaguar)
+    {
+        WI_drawStatsFunc = WI_drawStatsJaguar;
+        WI_updateStatsFunc = WI_updateStatsJaguar;
+    }
+    else
+    {
+        WI_drawStatsFunc = WI_drawStats;
+        WI_updateStatsFunc = WI_updateStats;
     }
 }

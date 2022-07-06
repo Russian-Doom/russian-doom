@@ -3353,6 +3353,10 @@ void D_DoomMain (void)
                "ST_Init: Инициализация статус-бара и HUD.\n");
     ST_Init ();
 
+    // [JN] Jaguar Doom using own world intermission screens, so we define here
+    // which functions to use to avoid extra condition checkings.
+    WI_Init ();
+
     // [JN] Predefine crosshair GFX patch, opacity and drawing function.
     Crosshair_DefinePatch();
     Crosshair_DefineOpacity();
