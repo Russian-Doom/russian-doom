@@ -205,7 +205,7 @@ static int PCSound_SDL_Init(pcsound_callback_func callback_func)
 
         if (Mix_OpenAudioDevice(pcsound_sample_rate, AUDIO_S16SYS, 2, slicesize, NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE) < 0)
         {
-            fprintf(stderr, "Error initializing SDL_mixer: %s\n", Mix_GetError());
+            fprintf(stderr, "Error initializing SDL_mixer: %s\n", SDL_GetError());
 
             SDL_QuitSubSystem(SDL_INIT_AUDIO);
             return 0;
