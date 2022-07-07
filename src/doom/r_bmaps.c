@@ -638,7 +638,7 @@ const byte *R_BrightmapForSprite (const int type)
 // [crispy] brightmaps for flats
 // -----------------------------------------------------------------------------
 
-static int bmapflatnum[12];
+static int bmapflatnum[4];
 
 const byte *R_BrightmapForFlatNum (const int num)
 {
@@ -646,7 +646,8 @@ const byte *R_BrightmapForFlatNum (const int num)
     {
         if (num == bmapflatnum[0]
         ||  num == bmapflatnum[1]
-        ||  num == bmapflatnum[2])
+        ||  num == bmapflatnum[2]
+        ||  num == bmapflatnum[3])
         {
             return notgrayorbrown;
         }
@@ -685,8 +686,9 @@ const byte *R_BrightmapForState (const int state)
 
 void R_InitBrightmaps ()
 {
-    // [crispy] only three select brightmapped flats
+    // [crispy] only four select brightmapped flats
     bmapflatnum[0] = R_FlatNumForName("CONS1_1");
     bmapflatnum[1] = R_FlatNumForName("CONS1_5");
     bmapflatnum[2] = R_FlatNumForName("CONS1_7");
+    bmapflatnum[3] = R_FlatNumForName("GATE6");
 }
