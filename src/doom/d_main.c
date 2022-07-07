@@ -2991,7 +2991,7 @@ void D_DoomMain (void)
     // Disable automatic loading of Dehacked patches for certain
     // IWAD files.
     //
-    if (!M_ParmExists("-nodeh"))
+    if (!M_ParmExists("-nodeh") && !M_ParmExists("-nodehlump"))
     {
         // Some IWADs have dehacked patches that need to be loaded for
         // them to be played properly.
