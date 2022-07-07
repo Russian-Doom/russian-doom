@@ -302,10 +302,7 @@ visplane_t *R_FindPlane (fixed_t height, const int picnum, int lightlevel, const
     check->minx = screenwidth;
     check->maxx = -1;
 
-    for (int i = 0; i != screenwidth; i++)
-    {
-        check->top[i] = SHRT_MAX;
-    }
+    memset(check->top, UINT_MAX, sizeof(check->top));
 
     return check;
 }
@@ -325,10 +322,7 @@ visplane_t *R_DupPlane(const visplane_t *pl, const int start, const int stop)
     new_pl->minx = start;
     new_pl->maxx = stop;
 
-    for (int i = 0; i != screenwidth; i++)
-    {
-        new_pl->top[i] = SHRT_MAX;
-    }
+    memset(new_pl->top, UINT_MAX, sizeof(new_pl->top));
 
     return new_pl;
 }
@@ -359,7 +353,7 @@ visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop)
         unionh = pl->maxx, intrh  = stop;
     }
 
-    for (x=intrl ; x <= intrh && pl->top[x] == SHRT_MAX; x++); // [crispy] hires / 32-bit integer math
+    for (x=intrl ; x <= intrh && pl->top[x] == UINT_MAX; x++); // [crispy] hires / 32-bit integer math
     if (x > intrh)
     {
         // Can use existing plane; extend range
@@ -445,7 +439,7 @@ void R_DrawPlanes (void)
 
             for (x=pl->minx ; x <= pl->maxx ; x++)
             {
-                if ((dc_yl = pl->top[x]) != SHRT_MAX && dc_yl <= (dc_yh = pl->bottom[x])) // [crispy] 32-bit integer math
+                if ((dc_yl = pl->top[x]) != UINT_MAX && dc_yl <= (dc_yh = pl->bottom[x])) // [crispy] 32-bit integer math
                 {
                     // [crispy] Optionally draw skies horizontally linear.
                     int angle = ((viewangle + (linear_sky && !vanillaparm ? linearskyangle[x] : 
