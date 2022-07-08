@@ -122,7 +122,7 @@ void ST_Init(void)
     
     using_graphical_startup = false;
 
-    if (graphical_startup && !debugmode && !testcontrols)
+    if (graphical_startup && !testcontrols)
     {
         I_SetWindowTitleHR("Запуск Hexen"); // [JN] "Hexen startup - " RD_Project_String
 

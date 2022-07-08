@@ -111,7 +111,6 @@ static char demolumpname[9];    // Demo lump to start playing.
 boolean nomonsters;             // checkparm of -nomonsters
 boolean respawnparm;            // checkparm of -respawn
 boolean randomclass;            // checkparm of -randclass
-boolean debugmode;              // checkparm of -debug
 boolean ravpic;                 // checkparm of -ravpic
 boolean cdrom = false;          // true if cd-rom mode active
 boolean cmdfrag;                // true if a CMD_FRAG packet should be sent out
@@ -122,7 +121,6 @@ int startepisode;
 int startmap;
 boolean autostart;
 boolean advancedemo;
-FILE *debugfile;
 int UpdateState;
 int maxplayers = MAXPLAYERS;
 int demosequence;
@@ -1010,8 +1008,6 @@ static void HandleArgs(void)
 
     artiskip = M_ParmExists("-artiskip");
 
-    debugmode = M_ParmExists("-debug");
-
     //!
     // @vanilla
     // @category net
@@ -1181,12 +1177,6 @@ static void WarpCheck(void)
 
 void H2_GameLoop(void)
 {
-    if (M_CheckParm("-debugfile"))
-    {
-        char filename[20];
-        M_snprintf(filename, sizeof(filename), "debug%i.txt", consoleplayer);
-        debugfile = fopen(filename, "w");
-    }
     I_SetWindowTitle(gamedescription);
     I_GraphicsCheckCommandLine();
     I_SetGrabMouseCallback(D_GrabMouseCallback);

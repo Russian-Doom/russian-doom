@@ -70,7 +70,6 @@ char *gamedescription = "unknown";
 
 boolean nomonsters;             // checkparm of -nomonsters
 boolean respawnparm;            // checkparm of -respawn
-boolean debugmode;              // checkparm of -debug
 boolean ravpic;                 // checkparm of -ravpic
 boolean cdrom;                  // true if cd-rom mode active
 boolean noartiskip;             // whether shift-enter skips an artifact
@@ -85,7 +84,6 @@ boolean autostart;
 
 boolean advancedemo;
 
-FILE *debugfile;
 
 // -----------------------------------------------------------------------------
 // [JN] Support for English language.
@@ -624,12 +622,6 @@ boolean D_GrabMouseCallback(void)
 
 void D_DoomLoop(void)
 {
-    if (M_CheckParm("-debugfile"))
-    {
-        char filename[20];
-        M_snprintf(filename, sizeof(filename), "debug%i.txt", consoleplayer);
-        debugfile = fopen(filename, "w");
-    }
     I_GraphicsCheckCommandLine();
     I_SetGrabMouseCallback(D_GrabMouseCallback);
     I_InitGraphics();
@@ -896,10 +888,6 @@ char *basedefault = "heretic.ini";
 
 void wadprintf(void)
 {
-    if (debugmode)
-    {
-        return;
-    }
     // haleyjd FIXME: convert to textscreen code?
 #ifdef __WATCOMC__
     _settextposition(23, 2);
@@ -1196,7 +1184,6 @@ void D_DoomMain(void)
 
     noartiskip = M_ParmExists("-noartiskip");
 
-    debugmode = M_ParmExists("-debug");
     startskill = sk_medium;
     startepisode = 1;
     startmap = 1;

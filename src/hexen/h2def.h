@@ -640,8 +640,6 @@ extern boolean respawnparm;     // checkparm of -respawn
 
 extern boolean randomclass;     // checkparm of -randclass
 
-extern boolean debugmode;       // checkparm of -debug
-
 extern boolean usergame;        // ok to save / end game
 
 extern boolean ravpic;          // checkparm of -ravpic
