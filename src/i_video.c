@@ -975,8 +975,7 @@ void I_FinishUpdate (void)
 		mili = i - lastmili;
 
 		// Update FPS counter every second
-        // [JN] Update 10x time faster (1000 reduced to 100)
-		if (mili >= 100)
+		if (mili >= 1000)
 		{
 			real_fps = (fpscount * 1000) / mili;
 			fpscount = 0;
