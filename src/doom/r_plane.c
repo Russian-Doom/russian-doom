@@ -274,21 +274,22 @@ static visplane_t *new_visplane (unsigned const int hash)
 // R_FindPlane
 // -----------------------------------------------------------------------------
 
-visplane_t *R_FindPlane (const fixed_t height, const int picnum, const int lightlevel, const int flow)
+visplane_t *R_FindPlane (fixed_t height, const int picnum, const int lightlevel, const int flow)
 {
     visplane_t *check;
+    unsigned int hash;
+
+    if (picnum == skyflatnum)
+    {
+        height = 0; // all skys map together
+        // [JN] Don't modify lightlevel parameter of visplane with sky texture.
+        // Otherwise hash function will consider it as unique one, forcing 
+        // creation of new visplane.
+        // lightlevel = 0;
+    }
 
     // New visplane algorithm uses hash table -- killough
-    unsigned const int hash = visplane_hash(picnum, lightlevel, height);
-
-    // [JN] Do not modify parameters of planes with sky texture,
-    // to let them use same range and do not create new visplanes.
-
-    // if (picnum == skyflatnum)
-    // {
-    //     height = 0; // all skys map together
-    //     lightlevel = 0;
-    // }
+    hash = visplane_hash(picnum, lightlevel, height);
 
     for (check = visplanes[hash]; check; check = check->next)
         if (height == check->height && picnum == check->picnum 

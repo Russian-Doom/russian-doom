@@ -614,7 +614,7 @@ extern int     *lastopening; // [crispy] 32-bit integer math
 
 visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop);
 visplane_t *R_DupPlane (const visplane_t *pl, int start, int stop);
-visplane_t *R_FindPlane (const fixed_t height, const int picnum, const int lightlevel, const int flow);
+visplane_t *R_FindPlane (fixed_t height, const int picnum, const int lightlevel, const int flow);
 void R_ClearPlanes (void);
 void R_DrawPlanes (void);
 void R_InitPlanesRes (void);
