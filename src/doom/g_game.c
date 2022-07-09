@@ -2725,7 +2725,7 @@ void G_DoPlayDemo (void)
     for (i=0 ; i<MAXPLAYERS ; i++) 
 	playeringame[i] = *demo_p++; 
 
-    if (playeringame[1] || M_CheckParm("-solo-net") > 0 || M_CheckParm("-netdemo") > 0)
+    if(playeringame[1] || M_CheckParm("-solo-net") > 0)
     {
         netgame = true;
         netdemo = true;
