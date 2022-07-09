@@ -481,7 +481,7 @@ void R_ClearPlanes(void);
 void R_MapPlane(int y, int x1, int x2);
 void R_DrawPlanes(void);
 
-visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel, int special);
+visplane_t *R_FindPlane(fixed_t height, const int picnum, const int lightlevel, const int special);
 visplane_t *R_CheckPlane(visplane_t * pl, int start, int stop);
 visplane_t *R_DupPlane (const visplane_t *pl, int start, int stop);
 
@@ -550,14 +550,14 @@ void R_ClipVisSprite(vissprite_t * vis, int xl, int xh);
 //
 //=============================================================================
 
-extern lighttable_t *dc_colormap[2];
+extern const lighttable_t *dc_colormap[2];
 extern int dc_x;
 extern int dc_yl;
 extern int dc_yh;
 extern fixed_t dc_iscale;
 extern fixed_t dc_texturemid;
 extern int dc_texheight;
-extern byte *dc_source;         // first pixel in a column
+extern const byte *dc_source;         // first pixel in a column
 extern const byte *dc_brightmap;
 extern int skytexturemid;
 extern fixed_t skyiscale;
@@ -581,12 +581,12 @@ void R_DrawTranslatedTLColumnLow(void);
 extern int ds_y;
 extern int ds_x1;
 extern int ds_x2;
-extern lighttable_t *ds_colormap[2];
+extern const lighttable_t *ds_colormap[2];
 extern fixed_t ds_xfrac;
 extern fixed_t ds_yfrac;
 extern fixed_t ds_xstep;
 extern fixed_t ds_ystep;
-extern byte *ds_source;         // start of a 64*64 tile image
+extern const byte *ds_source;         // start of a 64*64 tile image
 extern const byte *ds_brightmap;
 
 extern byte *translationtables;

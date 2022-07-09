@@ -217,18 +217,7 @@ void R_RenderMaskedSegRange (drawseg_t *ds, int x1, int x2)
         }
     }
 
-    if (lightnum < 0)
-    {
-        walllights = scalelight[0];
-    }
-    else if (lightnum >= LIGHTLEVELS)
-    {
-        walllights = scalelight[LIGHTLEVELS - 1];
-    }
-    else
-    {
-        walllights = scalelight[lightnum];
-    }
+    walllights = scalelight[BETWEEN(0, LIGHTLEVELS - 1, lightnum)];
 
     maskedtexturecol = ds->maskedtexturecol;
 
@@ -302,7 +291,7 @@ void R_RenderMaskedSegRange (drawseg_t *ds, int x1, int x2)
                 sprtopscreen = (int64_t)(t >> FRACBITS); // [crispy] WiggleFix
             }
 
-            dc_iscale = 0xffffffffu / (unsigned)spryscale;
+            dc_iscale = UINT_MAX / (unsigned)spryscale;
 
             // draw the texture
             col = (column_t *)((byte *)R_GetColumn(texnum, maskedtexturecol[dc_x], false) - 3);
@@ -330,14 +319,11 @@ void R_RenderMaskedSegRange (drawseg_t *ds, int x1, int x2)
 ================================================================================
 */
 
-static int didsolidcol;  // True if at least one column was marked solid
+static boolean didsolidcol;  // True if at least one column was marked solid
 
 static void R_RenderSegLoop(void)
 {
-    angle_t     angle;
-    unsigned    index;
-    int         mid;
-    fixed_t     texturecolumn = 0; // [JN] Purely to shut up the compiler.
+    fixed_t texturecolumn = 0;  // [JN] Purely to shut up the compiler.
 
     rendered_segs++;
 
@@ -396,22 +382,26 @@ static void R_RenderSegLoop(void)
         if (segtextured)
         {
             // calculate texture offset
-            angle = (rw_centerangle + xtoviewangle[rw_x]) >> ANGLETOFINESHIFT;
+            const angle_t angle = (rw_centerangle + xtoviewangle[rw_x]) >> ANGLETOFINESHIFT;
             texturecolumn = rw_offset - FixedMul(finetangent[angle], rw_distance);
             texturecolumn >>= FRACBITS;
 
             // calculate lighting
-            index = rw_scale >> (LIGHTSCALESHIFT - (detailshift && hires) + hires);
-            if (index >= MAXLIGHTSCALE)
+            if (!fixedcolormap)
             {
-                index = MAXLIGHTSCALE-1;
+                const int index = MIN(rw_scale >> (LIGHTSCALESHIFT - (detailshift && hires) + hires), MAXLIGHTSCALE-1);
+
+                // [crispy] optional brightmaps
+                dc_colormap[0] = walllights[index];
+                dc_colormap[1] = brightmaps ? colormaps : dc_colormap[0];
+            }
+            else
+            {
+                dc_colormap[0] = dc_colormap[1] = fixedcolormap;
             }
 
-            // [crispy] optional brightmaps
-            dc_colormap[0] = walllights[index];
-            dc_colormap[1] = (!fixedcolormap && brightmaps) ? colormaps : dc_colormap[0];
             dc_x = rw_x;
-            dc_iscale = 0xffffffffu / (unsigned)rw_scale - SPARKLEFIX; // [JN] Sparkle fix
+            dc_iscale = UINT_MAX / (unsigned)rw_scale - SPARKLEFIX; // [JN] Sparkle fix
         }
 
         // draw the wall tiers
@@ -433,14 +423,9 @@ static void R_RenderSegLoop(void)
             // two sided line
             if (toptexture)
             {
-                // top wall
-                mid = (int)(pixhigh>>heightbits); // [crispy] WiggleFix
+                // top wall ([crispy] WiggleFix)
+                const int mid = MIN((int)(pixhigh >> heightbits), floorclip[rw_x] - 1);
                 pixhigh += pixhighstep;
-
-                if (mid >= floorclip[rw_x])
-                {
-                    mid = floorclip[rw_x]-1;
-                }
 
                 if (mid >= yl)
                 {
@@ -469,15 +454,9 @@ static void R_RenderSegLoop(void)
 
             if (bottomtexture)
             {
-                // bottom wall
-                mid = (int)((pixlow+heightunit-1) >> heightbits); // [crispy] WiggleFix
+                // bottom wall ([crispy] WiggleFix)
+                const int mid = MAX((int)((pixlow + heightunit - 1) >> heightbits), ceilingclip[rw_x] + 1);
                 pixlow += pixlowstep;
-
-                // no space above wall?
-                if (mid <= ceilingclip[rw_x])
-                {
-                    mid = ceilingclip[rw_x]+1;
-                }
 
                 if (mid <= yh)
                 {
@@ -509,7 +488,7 @@ static void R_RenderSegLoop(void)
             if ((markceiling || markfloor) && (floorclip[rw_x] <= ceilingclip[rw_x] + 1)) 
             {
                 solidcol[rw_x] = 1; 
-                didsolidcol = 1;
+                didsolidcol = true;
             }
 
             if (maskedtexture)
@@ -984,7 +963,7 @@ void R_StoreWallRange (int start, int stop)
         }
     }
 
-    didsolidcol = 0;
+    didsolidcol = false;
     R_RenderSegLoop();
 
     // [JN] cph - if a column was made solid by this wall, 

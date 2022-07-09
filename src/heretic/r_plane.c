@@ -336,7 +336,7 @@ static visplane_t *new_visplane(unsigned int hash)
 ================================================================================
 */
 
-visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel, int special)
+visplane_t *R_FindPlane(fixed_t height, const int picnum, const int lightlevel, const int special)
 {
     visplane_t   *check;
     unsigned int  hash;
@@ -345,7 +345,10 @@ visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel, int special)
     {
         // all skies map together
         height = 0;
-        lightlevel = 0;
+        // [JN] Don't modify lightlevel parameter of visplane with sky texture.
+        // Otherwise hash function will consider it as unique one, forcing 
+        // creation of new visplane.
+        // lightlevel = 0;
     }
 
     // New visplane algorithm uses hash table -- killough
@@ -365,7 +368,7 @@ visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel, int special)
     check->minx = screenwidth;
     check->maxx = -1;
 
-    memset(check->top, 0xff, sizeof(check->top));
+    memset(check->top, UINT_MAX, sizeof(check->top));
 
     return (check);
 }
@@ -390,10 +393,7 @@ visplane_t *R_DupPlane (const visplane_t *pl, int start, int stop)
     new_pl->minx = start;
     new_pl->maxx = stop;
 
-    for (int i = 0; i != screenwidth; i++)
-    {
-        new_pl->top[i] = SHRT_MAX;
-    }
+    memset(new_pl->top, UINT_MAX, sizeof(new_pl->top));
 
     return new_pl;
 }
@@ -428,7 +428,7 @@ visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop)
         unionh = pl->maxx, intrh  = stop;
     }
 
-    for (x=intrl ; x <= intrh && pl->top[x] == SHRT_MAX; x++); // [crispy] hires / 32-bit integer math
+    for (x=intrl ; x <= intrh && pl->top[x] == UINT_MAX; x++); // [crispy] hires / 32-bit integer math
     if (x > intrh)
     {
         // Can use existing plane; extend range
@@ -503,13 +503,8 @@ void R_DrawPlanes (void)
         {
             for (x = pl->minx; x <= pl->maxx; x++)
             {
-                dc_yl = pl->top[x];
-                dc_yh = pl->bottom[x];
-
-                if ((unsigned) dc_yl <= dc_yh) // [crispy] 32-bit integer math
+                if ((dc_yl = pl->top[x]) != UINT_MAX && dc_yl <= (dc_yh = pl->bottom[x])) // [crispy] 32-bit integer math
                 {
-
-
                     // [crispy] Optionally draw skies horizontally linear.
                     angle = ((viewangle + (linear_sky && !vanillaparm ? linearskyangle[x] : 
                                            xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
