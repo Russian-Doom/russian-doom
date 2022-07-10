@@ -72,7 +72,7 @@ boolean nomonsters;             // checkparm of -nomonsters
 boolean respawnparm;            // checkparm of -respawn
 boolean ravpic;                 // checkparm of -ravpic
 boolean cdrom;                  // true if cd-rom mode active
-boolean noartiskip;             // whether shift-enter skips an artifact
+int artiskip = false;           // whether shift-enter skips an artifact
 boolean realframe, skippsprinterp; // [JN] Interpolation for weapon bobbing
 
 skill_t startskill;
@@ -1006,6 +1006,7 @@ void D_BindVariables(void)
     M_BindIntVariable("always_run",             &alwaysRun);
     M_BindIntVariable("mlook",                  &mlook);
     M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
+    M_BindIntVariable("artiskip",               &artiskip);
 
     // Gameplay: Graphical
     M_BindIntVariable("brightmaps",             &brightmaps);
@@ -1175,14 +1176,6 @@ void D_DoomMain(void)
     //
 
     ravpic = M_ParmExists("-ravpic");
-
-    //!
-    // @vanilla
-    //
-    // Allow artifacts to be used when the run key is held down.
-    //
-
-    noartiskip = M_ParmExists("-noartiskip");
 
     startskill = sk_medium;
     startepisode = 1;

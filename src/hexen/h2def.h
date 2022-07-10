@@ -728,6 +728,8 @@ extern int testcontrols_mousespeed;
 extern boolean realframe;
 extern boolean skippsprinterp;
 
+extern int artiskip;            // whether shift-enter skips an artifact
+
 /*
 ===============================================================================
 

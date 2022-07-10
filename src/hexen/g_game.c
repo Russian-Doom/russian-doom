@@ -195,8 +195,6 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     int pClass;
     extern boolean askforquit;
 
-    extern boolean artiskip;
-
     // haleyjd: removed externdriver crap
 
     pClass = players[consoleplayer].class;
