@@ -147,6 +147,7 @@ static int speaker_test_timeout;
 // Controls
 static void DrawControlsMenu(void);
 static void M_RD_AlwaysRun();
+static void M_RD_Artiskip();
 static void M_RD_Sensitivity(Direction_t direction);
 static void M_RD_Acceleration(Direction_t direction);
 static void M_RD_Threshold(Direction_t direction);
@@ -793,27 +794,28 @@ static Menu_t SoundSysMenu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t ControlsItems[] = {
-    {ITT_TITLE,   "CONTROLS",              "EGHFDKTYBT",                NULL,                     0}, // УПРАВЛЕНИЕ
-    {ITT_SETMENU, "CUSTOMIZE CONTROLS...", "YFCNHJQRB EGHFDKTYBZ>>>",   &Bindings1Menu,           0}, // Настройки управления...
-    {ITT_EFUNC,   "GAMEPAD SETTINGS...",   "YFCNHJQRB UTQVGFLF>>>",     OpenControllerSelectMenu, 0}, // Настройки геймпада...
-    {ITT_SWITCH,  "ALWAYS RUN:",           "HT;BV GJCNJZYYJUJ ,TUF:",   M_RD_AlwaysRun,           0}, // РЕЖИМ ПОСТОЯННОГО БЕГА
-    {ITT_TITLE,   "MOUSE",                 "VSIM",                      NULL,                     0}, // МЫШЬ
-    {ITT_LRFUNC,  "MOUSE SENSIVITY",       "CRJHJCNM VSIB",             M_RD_Sensitivity,         0}, // СКОРОСТЬ МЫШИ
-    {ITT_EMPTY,   NULL,                    NULL,                        NULL,                     0},
-    {ITT_LRFUNC,  "ACCELERATION",          "FRCTKTHFWBZ",               M_RD_Acceleration,        0}, // АКСЕЛЕРАЦИЯ
-    {ITT_EMPTY,   NULL,                     NULL,                       NULL,                     0},
-    {ITT_LRFUNC,  "ACCELERATION THRESHOLD","GJHJU FRCTKTHFWBB",         M_RD_Threshold,           0}, // ПОРОГ АКСЕЛЕРАЦИИ
-    {ITT_EMPTY,   NULL,                     NULL,                       NULL,                     0},
-    {ITT_SWITCH,  "MOUSE LOOK:",           "J,PJH VSIM.:",              M_RD_MouseLook,           0}, // ОБЗОР МЫШЬЮ
-    {ITT_SWITCH,  "INVERT Y AXIS:",        "DTHNBRFKMYFZ BYDTHCBZ:",    M_RD_InvertY,             0}, // ВЕРТИКАЛЬНАЯ ИНВЕРСИЯ
-    {ITT_SWITCH,  "VERTICAL MOVEMENT:",    "DTHNBRFKMYJT GTHTVTOTYBT:", M_RD_Novert,              0}  // ВЕРТИКАЛЬНОЕ ПЕРЕМЕЩЕНИЕ
+    {ITT_TITLE,   "CONTROLS",                              "EGHFDKTYBT",                       NULL,                     0}, // УПРАВЛЕНИЕ
+    {ITT_SETMENU, "CUSTOMIZE CONTROLS...",                 "YFCNHJQRB EGHFDKTYBZ>>>",          &Bindings1Menu,           0}, // Настройки управления...
+    {ITT_EFUNC,   "GAMEPAD SETTINGS...",                   "YFCNHJQRB UTQVGFLF>>>",            OpenControllerSelectMenu, 0}, // Настройки геймпада...
+    {ITT_SWITCH,  "ALWAYS RUN:",                           "HT;BV GJCNJZYYJUJ ,TUF:",          M_RD_AlwaysRun,           0}, // РЕЖИМ ПОСТОЯННОГО БЕГА
+    {ITT_SWITCH,  "SKIP ARTEFACT ON 'USE' WHILE RUNNING:", "CRBG FHNTAFRNF YF BCG> GHB ,TUT:", M_RD_Artiskip,            0}, // СКИП АРТЕФАКТА НА ИСП. ПРИ БЕГЕ
+    {ITT_TITLE,   "MOUSE",                                 "VSIM",                             NULL,                     0}, // МЫШЬ
+    {ITT_LRFUNC,  "MOUSE SENSIVITY",                       "CRJHJCNM VSIB",                    M_RD_Sensitivity,         0}, // СКОРОСТЬ МЫШИ
+    {ITT_EMPTY,   NULL,                                    NULL,                               NULL,                     0},
+    {ITT_LRFUNC,  "ACCELERATION",                          "FRCTKTHFWBZ",                      M_RD_Acceleration,        0}, // АКСЕЛЕРАЦИЯ
+    {ITT_EMPTY,   NULL,                                     NULL,                              NULL,                     0},
+    {ITT_LRFUNC,  "ACCELERATION THRESHOLD",                "GJHJU FRCTKTHFWBB",                M_RD_Threshold,           0}, // ПОРОГ АКСЕЛЕРАЦИИ
+    {ITT_EMPTY,   NULL,                                     NULL,                              NULL,                     0},
+    {ITT_SWITCH,  "MOUSE LOOK:",                           "J,PJH VSIM.:",                     M_RD_MouseLook,           0}, // ОБЗОР МЫШЬЮ
+    {ITT_SWITCH,  "INVERT Y AXIS:",                        "DTHNBRFKMYFZ BYDTHCBZ:",           M_RD_InvertY,             0}, // ВЕРТИКАЛЬНАЯ ИНВЕРСИЯ
+    {ITT_SWITCH,  "VERTICAL MOVEMENT:",                    "DTHNBRFKMYJT GTHTVTOTYBT:",        M_RD_Novert,              0}  // ВЕРТИКАЛЬНОЕ ПЕРЕМЕЩЕНИЕ
 };
 
 static Menu_t ControlsMenu = {
     36, 36,
     32,
     "CONTROL SETTINGS", "EGHFDKTYBT", false, // УПРАВЛЕНИЕ
-    14, ControlsItems, false,
+    15, ControlsItems, false,
     DrawControlsMenu,
     NULL,
     &RDOptionsMenu,
@@ -3424,15 +3426,18 @@ static void DrawControlsMenu(void)
         // Always run
         RD_M_DrawTextSmallENG(alwaysRun ? "ON" : "OFF", 118 + wide_delta, 62, CR_NONE);
 
+        // Artiskip
+        RD_M_DrawTextSmallENG(artiskip ? "ON" : "OFF", 292 + wide_delta, 72, CR_NONE);
+
         // Mouse look
-        RD_M_DrawTextSmallENG(mlook ? "ON" : "OFF", 118 + wide_delta, 142, CR_NONE);
+        RD_M_DrawTextSmallENG(mlook ? "ON" : "OFF", 118 + wide_delta, 152, CR_NONE);
 
         // Invert Y axis
-        RD_M_DrawTextSmallENG(mouse_y_invert ? "ON" : "OFF", 133 + wide_delta, 152,
+        RD_M_DrawTextSmallENG(mouse_y_invert ? "ON" : "OFF", 133 + wide_delta, 162,
                               !mlook ? CR_GRAY : CR_NONE);
 
         // Novert
-        RD_M_DrawTextSmallENG(!novert ? "ON" : "OFF", 168 + wide_delta, 162,
+        RD_M_DrawTextSmallENG(!novert ? "ON" : "OFF", 168 + wide_delta, 172,
                               mlook ? CR_GRAY : CR_NONE);
     }
     else
@@ -3440,15 +3445,18 @@ static void DrawControlsMenu(void)
         // Режим постоянного бега
         RD_M_DrawTextSmallRUS(alwaysRun ? "DRK" : "DSRK", 209 + wide_delta, 62, CR_NONE);
 
+        // Скип артефактов
+        RD_M_DrawTextSmallRUS(artiskip ? "DRK" : "DSRK", 263 + wide_delta, 72, CR_NONE);
+
         // Обзор мышью
-        RD_M_DrawTextSmallRUS(mlook ? "DRK" : "DSRK", 132 + wide_delta, 142, CR_NONE);
+        RD_M_DrawTextSmallRUS(mlook ? "DRK" : "DSRK", 132 + wide_delta, 152, CR_NONE);
 
         // Вертикальная инверсия
-        RD_M_DrawTextSmallRUS(mouse_y_invert ? "DRK" : "DSRK", 199 + wide_delta, 152,
+        RD_M_DrawTextSmallRUS(mouse_y_invert ? "DRK" : "DSRK", 199 + wide_delta, 162,
                               !mlook ? CR_GRAY : CR_NONE);
 
         // Вертикальное перемещение
-        RD_M_DrawTextSmallRUS(!novert ? "DRK" : "DSRK", 227 + wide_delta, 162,
+        RD_M_DrawTextSmallRUS(!novert ? "DRK" : "DSRK", 227 + wide_delta, 172,
                               mlook ? CR_GRAY : CR_NONE);
     }
 
@@ -3457,24 +3465,29 @@ static void DrawControlsMenu(void)
     //
 
     // Mouse sensivity
-    RD_Menu_DrawSliderSmall(&ControlsMenu, 92, 12, mouseSensitivity);
+    RD_Menu_DrawSliderSmall(&ControlsMenu, 102, 12, mouseSensitivity);
     M_snprintf(num, 4, "%d", mouseSensitivity);
-    RD_M_DrawTextSmallENG(num, 152 + wide_delta, 93, CR_GRAY);
+    RD_M_DrawTextSmallENG(num, 152 + wide_delta, 103, CR_GRAY);
 
     // Acceleration
-    RD_Menu_DrawSliderSmall(&ControlsMenu, 112, 12, mouse_acceleration * 4 - 4);
+    RD_Menu_DrawSliderSmall(&ControlsMenu, 122, 12, mouse_acceleration * 4 - 4);
     M_snprintf(num, 4, "%f", mouse_acceleration);
-    RD_M_DrawTextSmallENG(num, 152 + wide_delta, 113, CR_GRAY);
+    RD_M_DrawTextSmallENG(num, 152 + wide_delta, 123, CR_GRAY);
 
     // Threshold
-    RD_Menu_DrawSliderSmall(&ControlsMenu, 132, 12, mouse_threshold / 2);
+    RD_Menu_DrawSliderSmall(&ControlsMenu, 142, 12, mouse_threshold / 2);
     M_snprintf(num, 4, "%d", mouse_threshold);
-    RD_M_DrawTextSmallENG(num, 152 + wide_delta, 133, CR_GRAY);
+    RD_M_DrawTextSmallENG(num, 152 + wide_delta, 143, CR_GRAY);
 }
 
 static void M_RD_AlwaysRun()
 {
     alwaysRun ^= 1;
+}
+
+static void M_RD_Artiskip()
+{
+    artiskip ^= 1;
 }
 
 static void M_RD_MouseLook()
@@ -5567,7 +5580,8 @@ void M_RD_BackToDefaults_Recommended (void)
     mlook              = 0; players[consoleplayer].centering = true;
     mouse_acceleration = 2.0F;
     mouse_threshold    = 10;
-    novert             = 1;    
+    novert             = 1;
+    artiskip           = 0;
 
     // Gameplay (1)
     brightmaps           = 1;
@@ -5681,7 +5695,8 @@ static void M_RD_BackToDefaults_Original(void)
     mlook              = 0; players[consoleplayer].centering = true;
     mouse_acceleration = 2.0F;
     mouse_threshold    = 10;
-    novert             = 1;    
+    novert             = 1;
+    artiskip           = 0;
 
     // Gameplay (1)
     brightmaps           = 0;

@@ -114,7 +114,7 @@ boolean randomclass;            // checkparm of -randclass
 boolean ravpic;                 // checkparm of -ravpic
 boolean cdrom = false;          // true if cd-rom mode active
 boolean cmdfrag;                // true if a CMD_FRAG packet should be sent out
-boolean artiskip;               // whether shift-enter skips an artifact
+int artiskip = false;           // whether shift-enter skips an artifact
 int maxzone = 0x800000;         // Maximum allocated for zone heap (8meg default)
 skill_t startskill;
 int startepisode;
@@ -340,6 +340,7 @@ void D_BindVariables(void)
     M_BindIntVariable("extra_level_brightness", &extra_level_brightness);
     M_BindIntVariable("detaillevel",            &detailLevel);
     M_BindIntVariable("hud_detaillevel",        &hud_detaillevel);
+    M_BindIntVariable("artiskip",               &artiskip);
 
     // Messages and texts
     M_BindIntVariable("show_messages",          &show_messages);
@@ -999,14 +1000,6 @@ static void HandleArgs(void)
     //
 
     ravpic = M_ParmExists("-ravpic");
-
-    //!
-    // @vanilla
-    //
-    // Don't allow artifacts to be used when the run key is held down.
-    //
-
-    artiskip = M_ParmExists("-artiskip");
 
     //!
     // @vanilla

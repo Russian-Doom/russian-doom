@@ -616,6 +616,7 @@ extern int show_messages;
 extern boolean testcontrols;
 extern int testcontrols_mousespeed;
 
+extern int artiskip;            // whether shift-enter skips an artifact
 
 /*
 ===============================================================================

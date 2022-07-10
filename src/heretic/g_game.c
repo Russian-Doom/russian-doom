@@ -266,7 +266,6 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     int look, arti;
     int flyheight;
     extern boolean askforquit;
-    extern boolean noartiskip;
 
     // haleyjd: removed externdriver crap
 
@@ -436,7 +435,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     // Use artifact key
     if (BK_isKeyPressed(bk_inv_use_artifact))
     {
-        if (BK_isKeyPressed(bk_speed) && !noartiskip)
+        if (BK_isKeyPressed(bk_speed) && artiskip)
         {
             if (players[consoleplayer].inventory[inv_ptr].type != arti_none)
             {
