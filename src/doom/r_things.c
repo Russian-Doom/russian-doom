@@ -892,18 +892,7 @@ void R_AddSprites (const sector_t *sec)
     const mobj_t *thing;
     const int lightnum = (sec->lightlevel >> LIGHTSEGSHIFT)+extralight;
 
-    if (lightnum < 0)		
-    {
-        spritelights = scalelight[0];
-    }
-    else if (lightnum >= LIGHTLEVELS)
-    {
-        spritelights = scalelight[LIGHTLEVELS-1];
-    }
-    else
-    {
-        spritelights = scalelight[lightnum];
-    }
+    spritelights = scalelight[BETWEEN(0, LIGHTLEVELS-1, lightnum)];
 
     // Handle all things in sector.
     for (thing = sec->thinglist ; thing ; thing = thing->snext)
@@ -1161,18 +1150,7 @@ static void R_DrawPlayerSprites (void)
     // get light level
     const int lightnum = (viewplayer->mo->subsector->sector->lightlevel >> LIGHTSEGSHIFT) + extralight;
 
-    if (lightnum < 0)		
-    {
-        spritelights = scalelight[0];
-    }
-    else if (lightnum >= LIGHTLEVELS)
-    {
-        spritelights = scalelight[LIGHTLEVELS-1];
-    }
-    else
-    {
-        spritelights = scalelight[lightnum];
-    }
+    spritelights = scalelight[BETWEEN(0, LIGHTLEVELS-1, lightnum)];
 
     // clip to screen bounds
     mfloorclip = screenheightarray;

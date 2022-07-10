@@ -203,7 +203,7 @@ void R_RenderMaskedSegRange (drawseg_t *ds, const int x1, const int x2)
         }
     }
 
-    walllights = scalelight[BETWEEN(0, LIGHTLEVELS - 1, lightnum)];
+    walllights = scalelight[BETWEEN(0, LIGHTLEVELS-1, lightnum)];
 
     maskedtexturecol = ds->maskedtexturecol;
 
@@ -872,18 +872,7 @@ void R_StoreWallRange (const int start, const int stop)
                 }
             }
 
-            if (lightnum < 0)
-            {
-                walllights = scalelight[0];
-            }
-            else if (lightnum >= LIGHTLEVELS)
-            {
-                walllights = scalelight[LIGHTLEVELS-1];
-            }
-            else
-            {
-                walllights = scalelight[lightnum];
-            }
+            walllights = scalelight[BETWEEN(0, LIGHTLEVELS-1, lightnum)];
         }
     }
 

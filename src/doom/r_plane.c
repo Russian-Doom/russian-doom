@@ -403,11 +403,8 @@ R_MakeSpans (const int x, unsigned int t1, unsigned int b1, // [crispy] 32-bit i
 
 void R_DrawPlanes (void) 
 {
-    int i, x;
-    visplane_t *pl;
-
-    for (i = 0 ; i < MAXVISPLANES ; i++)
-    for (pl = visplanes[i] ; pl ; pl = pl->next, rendered_visplanes++)
+    for (int i = 0 ; i < MAXVISPLANES ; i++)
+    for (visplane_t *pl = visplanes[i] ; pl ; pl = pl->next, rendered_visplanes++)
     if (pl->minx <= pl->maxx)
     {
         // sky flat
@@ -418,14 +415,11 @@ void R_DrawPlanes (void)
             // [JN] Scale sky texture if appropriate.
             if (mlook && scaled_sky)
             {
-                dc_iscale = dc_iscale / 2;
+                dc_iscale /= 2;
             }
 
-            // Sky is allways drawn full bright, 
-            //  i.e. colormaps[0] is used.
-            // Because of this hack, sky is not affected
-            //  by INVUL inverse mapping.
-            //
+            // Sky is allways drawn full bright, i.e. colormaps[0] is used.
+            // Because of this hack, sky is not affected by INVUL inverse mapping.
             // [JN] Make optional, "Invulnerability affects sky" feature.
             
             if (invul_sky && !vanillaparm)
@@ -440,13 +434,13 @@ void R_DrawPlanes (void)
             dc_texturemid = skytexturemid;
             dc_texheight = textureheight[skytexture]>>FRACBITS;
 
-            for (x=pl->minx ; x <= pl->maxx ; x++)
+            for (int x = pl->minx ; x <= pl->maxx ; x++)
             {
                 if ((dc_yl = pl->top[x]) != UINT_MAX && dc_yl <= (dc_yh = pl->bottom[x])) // [crispy] 32-bit integer math
                 {
                     // [crispy] Optionally draw skies horizontally linear.
-                    int angle = ((viewangle + (linear_sky && !vanillaparm ? linearskyangle[x] : 
-                                               xtoviewangle[x]))^flip_levels)>>ANGLETOSKYSHIFT;
+                    const int angle = ((viewangle + (linear_sky && !vanillaparm ?
+                                        linearskyangle[x] : xtoviewangle[x]))^flip_levels)>>ANGLETOSKYSHIFT;
                     dc_x = x;
                     dc_source = R_GetColumn(skytexture, angle);
                     colfunc ();
@@ -455,13 +449,13 @@ void R_DrawPlanes (void)
         }
         else  // regular flat
         {
-            int stop, light;
+            const int stop = pl->maxx + 1;
+            const int light = MIN((pl->lightlevel >> LIGHTSEGSHIFT) + extralight, LIGHTLEVELS - 1);
             const int lumpnum = firstflat + flattranslation[pl->picnum];
 
             // [crispy] add support for SMMU swirling flats
             ds_source = (flattranslation[pl->picnum] == -1) ?
-                        R_DistortedFlat(pl->picnum) :
-                        W_CacheLumpNum(lumpnum, PU_STATIC);
+                         R_DistortedFlat(pl->picnum) : W_CacheLumpNum(lumpnum, PU_STATIC);
             ds_brightmap = R_BrightmapForFlatNum(lumpnum-firstflat);
 
             // [JN] Apply flow effect to swirling liquids.
@@ -476,22 +470,10 @@ void R_DrawPlanes (void)
             }
 
             planeheight = abs(pl->height-viewz);
-            light = (pl->lightlevel >> LIGHTSEGSHIFT) + extralight;
-
-            if (light >= LIGHTLEVELS)
-            {
-                light = LIGHTLEVELS-1;
-            }
-            if (light < 0)
-            {
-                light = 0;
-            }
-
-            stop = pl->maxx + 1;
             planezlight = zlight[light];
             pl->top[pl->minx-1] = pl->top[stop] = UINT_MAX; // [crispy] 32-bit integer math
 
-            for (x = pl->minx ; x <= stop ; x++)
+            for (int x = pl->minx ; x <= stop ; x++)
             {
                 R_MakeSpans(x,pl->top[x-1], pl->bottom[x-1], pl->top[x], pl->bottom[x]);
             }
