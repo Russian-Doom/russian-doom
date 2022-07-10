@@ -18,6 +18,7 @@
 //
 
 
+#include "doomstat.h"
 #include "i_system.h"
 #include "p_local.h"
 #include "jn.h"
@@ -34,60 +35,21 @@ static int sightcounts[2];
 // -----------------------------------------------------------------------------
 // P_DivlineSide
 // Returns side 0 (front), 1 (back), or 2 (on).
+// [JN] killough 4/19/98: made static, cleaned up
 // -----------------------------------------------------------------------------
 
 static int P_DivlineSide (const fixed_t x, const fixed_t y, const divline_t *node)
 {
-    fixed_t	dx, dy;
-    fixed_t	left, right;
+    fixed_t left, right;
 
-    if (!node->dx)
-    {
-        if (x == node->x)
-        {
-            return 2;
-        }
-
-        if (x <= node->x)
-        {
-            return node->dy > 0;
-        }
-
-        return node->dy < 0;
-    }
-
-    if (!node->dy)
-    {
-        if (x==node->y)
-        {
-            return 2;
-        }
-
-        if (y <= node->y)
-        {
-            return node->dx < 0;
-        }
-
-        return node->dx > 0;
-    }
-
-    dx = (x - node->x);
-    dy = (y - node->y);
-
-    left  = (node->dy>>FRACBITS) * (dx>>FRACBITS);
-    right = (dy>>FRACBITS) * (node->dx>>FRACBITS);
-
-    if (right < left)
-    {
-        return 0;  // front side
-    }
-    
-    if (left == right)
-    {
-        return 2;
-    }
-
-    return 1;		// back side
+    return
+        !node->dx ? x == node->x ? 2 : x <= node->x ? node->dy > 0 : node->dy < 0 :
+        // [JN] Fix https://doomwiki.org/wiki/Sleeping_shotgun_guy_in_MAP02_(Doom_II)
+        !node->dy ? (singleplayer && !vanillaparm ? y : x)  
+                      == node->y ? 2 : y <= node->y ? node->dx < 0 : node->dx > 0 :
+        (right = ((y - node->y) >> FRACBITS) * (node->dx >> FRACBITS)) <
+        (left  = ((x - node->x) >> FRACBITS) * (node->dy >> FRACBITS)) ? 0 :
+        right == left ? 2 : 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -276,14 +238,7 @@ static const boolean P_CrossBSPNode (const int bspnum)
 
     if (bspnum & NF_SUBSECTOR)
     {
-        if (bspnum == -1)
-        {
-            return P_CrossSubsector (0);
-        }
-        else
-        {
-            return P_CrossSubsector (bspnum&(~NF_SUBSECTOR));
-        }
+        return P_CrossSubsector (bspnum == -1 ? 0 : bspnum&(~NF_SUBSECTOR));
     }
 
     bsp = &nodes[bspnum];
@@ -320,20 +275,13 @@ static const boolean P_CrossBSPNode (const int bspnum)
 
 const boolean P_CheckSight (const mobj_t *t1, const mobj_t *t2)
 {
-    int s1, s2;
-    int pnum, bytenum, bitnum;
-
-    // First check for trivial rejection.
-
     // Determine subsector entries in REJECT table.
-    s1 = (t1->subsector->sector - sectors);
-    s2 = (t2->subsector->sector - sectors);
-    pnum = s1*numsectors + s2;
-    bytenum = pnum>>3;
-    bitnum = 1 << (pnum&7);
+    const int s1 = (t1->subsector->sector - sectors);
+    const int s2 = (t2->subsector->sector - sectors);
+    const int pnum = s1*numsectors + s2;
 
-    // Check in REJECT table.
-    if (rejectmatrix[bytenum]&bitnum)
+    // Check for trivial rejection in REJECT table.
+    if (rejectmatrix[pnum>>3] & (1 << (pnum&7)))
     {
         sightcounts[0]++;
 
