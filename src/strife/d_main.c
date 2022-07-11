@@ -1897,25 +1897,35 @@ void D_DoomMain (void)
     //
 
     p = M_CheckParmWithArgs("-warp", 1);
-
-    if (p)
+    if(!p)
     {
-        if (gamemode == commercial)
-            startmap = atoi (myargv[p+1]);
+        p = M_CheckParmWithArgs("-map", 1);
+    }
+
+    if(p)
+    {
+        char* arg = myargv[p + 1];
+        char* result;
+        if(M_StringStartsWith(arg, "MAP") || M_StringStartsWith(arg, "map"))
+        {
+            startmap = strtol((arg += 3), &result, 10);
+        }
         else
         {
-            startepisode = myargv[p+1][0]-'0';
-
-            if (p + 2 < myargc)
-            {
-                startmap = myargv[p+2][0]-'0';
-            }
-            else
-            {
-                startmap = 1;
-            }
+            startmap = strtol(arg, &result, 10);
         }
-        autostart = true;
+
+        if(result == arg)
+        {
+            startmap = 3;
+            printf("-%s: %s.\n",
+                       M_ParmExists("-warp") ? "WARP" : "MAP",
+                       english_language ? "Invalid map number" : "Некорректный номер уровня");
+        }
+        else
+        {
+            autostart = true;
+        }
     }
 
     if (testcontrols)
