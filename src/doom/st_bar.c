@@ -169,6 +169,9 @@ static patch_t *keys[NUMCARDS+3];
 // [crispy] blinking key or skull in the status bar
 int st_keyorskull[3];
 
+// [JN] Update background/belez only every calculated tic, not framerate tic.
+static boolean st_bg_needsupdate;
+
 
 // =============================================================================
 //
@@ -766,6 +769,12 @@ const boolean ST_Responder (const event_t *ev)
 
 static void ST_DrawBackground (void)
 {
+    // [JN] No update needed, rely on buffered drawing.
+    if (!st_bg_needsupdate)
+    {
+       return;
+    }
+
     V_UseBuffer(st_backing_screen);
     
     // Draw side screen borders in wide screen mode.
@@ -821,6 +830,9 @@ static void ST_DrawBackground (void)
     {
         V_DrawPatch(104 + wide_delta, 168, starms, NULL);
     }
+
+    // [JN] Done drawing, suppress update until next calculated tic.
+    st_bg_needsupdate = false;
 }
 
 // -----------------------------------------------------------------------------
@@ -1157,6 +1169,9 @@ void ST_Ticker (void)
     }
     
     st_oldhealth = plyr->health;
+
+    // [JN] Values have been updated, update stbar background/belez as well.
+    st_bg_needsupdate = true;
 }
 
 // -----------------------------------------------------------------------------
