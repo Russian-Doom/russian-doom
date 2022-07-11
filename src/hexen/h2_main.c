@@ -1136,14 +1136,32 @@ static void WarpCheck(void)
     int map;
 
     p = M_CheckParm("-warp");
-    if (p && p < myargc - 1)
+    if(!p)
     {
-        WarpMap = atoi(myargv[p + 1]);
-        map = P_TranslateMap(WarpMap);
-        if (map == -1)
-        {                       // Couldn't find real map number
+        p = M_CheckParm("-map");
+    }
+
+    if(p && p < myargc - 1)
+    {
+        char* arg = myargv[p + 1];
+        char* result;
+        if(M_StringStartsWith(arg, "MAP") || M_StringStartsWith(arg, "map"))
+        {
+            map = strtol((arg += 3), &result, 10);
+            WarpMap = P_GetMapWarpTrans(map);
+        }
+        else
+        {
+            WarpMap = strtol(arg, &result, 10);
+            map = P_TranslateMap(WarpMap);
+        }
+
+        if(map == -1 || WarpMap == 0 || result == arg)
+        {                       // Couldn't find a real map number
             startmap = 1;
-            ST_Message("-WARP: Некорректный номер уровня.\n");	// "-WARP: Invalid map number.\n"
+            ST_Message("-%s: %s.\n",
+                       M_ParmExists("-warp") ? "WARP" : "MAP",
+                       english_language ? "Invalid map number" : "Некорректный номер уровня");
         }
         else
         {                       // Found a valid startmap
@@ -1155,7 +1173,7 @@ static void WarpCheck(void)
     {
         WarpMap = 1;
         startmap = P_TranslateMap(1);
-        if (startmap == -1)
+        if(startmap == -1)
         {
             startmap = 1;
         }

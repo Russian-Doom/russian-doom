@@ -3260,26 +3260,73 @@ void D_DoomMain (void)
     //
 
     p = M_CheckParmWithArgs("-warp", 1);
-
-    if (p)
+    if(!p)
     {
-        if (gamemode == commercial)
-            startmap = atoi (myargv[p+1]);
-        else
-        {
-            startepisode = myargv[p+1][0]-'0';
+        p = M_CheckParmWithArgs("-map", 1);
+    }
 
-            if (p + 2 < myargc)
+    if(p)
+    {
+        char* arg = myargv[p + 1];
+        char* result;
+        if(gamemode == commercial)
+        {
+            if(M_StringStartsWith(arg, "MAP") || M_StringStartsWith(arg, "map"))
             {
-                startmap = myargv[p+2][0]-'0';
+                startmap = strtol((arg += 3), &result, 10);
             }
             else
             {
-                startmap = 1;
+                startmap = strtol(arg, &result, 10);
             }
         }
-        gameaction = ga_newgame;
-        autostart = true;
+        else
+        {
+            if(arg[0] == 'E' || arg[0] == 'e')
+            {
+                startepisode = strtol((arg + 1), &result, 10);
+                if(result != arg
+                && (result[0] == 'M' || result[0] == 'm'))
+                {
+                    startmap = strtol((arg = result + 1), &result, 10);
+                }
+                else
+                {
+                    result = arg; // set error
+                }
+            }
+            else
+            {
+                startepisode = strtol(arg, &result, 10);
+
+                if(result != arg)
+                {
+                    if(p + 2 < myargc) // optional <map> argument
+                    {
+                        arg = myargv[p + 2];
+                        startmap = strtol(arg, &result, 10);
+                    }
+                    else
+                    {
+                        startmap = 1;
+                    }
+                }
+            }
+        }
+
+        if(result == arg)
+        {
+            startmap = 1;
+            startepisode = 1;
+            printf("-%s: %s.\n",
+                   M_ParmExists("-warp") ? "WARP" : "MAP",
+                   english_language ? "Invalid map number" : "Некорректный номер уровня");
+        }
+        else
+        {
+            gameaction = ga_newgame;
+            autostart = true;
+        }
     }
 
     // Undocumented:

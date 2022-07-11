@@ -1235,12 +1235,53 @@ void D_DoomMain(void)
     // Start a game immediately, warping to level ExMy.
     //
 
-    p = M_CheckParmWithArgs("-warp", 2);
-    if (p && p < myargc - 2)
+    p = M_CheckParmWithArgs("-warp", 1); // at least 1 arg for E<x>M<y> syntax
+    if(!p)
     {
-        startepisode = myargv[p + 1][0] - '0';
-        startmap = myargv[p + 2][0] - '0';
-        autostart = true;
+        p = M_CheckParmWithArgs("-map", 1);
+    }
+
+    if(p)
+    {
+        char* arg = myargv[p + 1];
+        char* result;
+
+        if(arg[0] == 'E' || arg[0] == 'e')
+        {
+            startepisode = strtol((arg + 1), &result, 10);
+            if(result != arg
+               && (result[0] == 'M' || result[0] == 'm'))
+            {
+                startmap = strtol((arg = result + 1), &result, 10);
+            }
+            else
+            {
+                result = arg; // set error
+            }
+        }
+        else
+        {
+            startepisode = strtol(arg, &result, 10);
+
+            if(result != arg && p + 2 < myargc)
+            {
+                arg = myargv[p + 2];
+                startmap = strtol(arg, &result, 10);
+            }
+        }
+
+        if(result == arg)
+        {
+            startmap = 1;
+            startepisode = 1;
+            printf("-%s: %s.\n",
+                   M_ParmExists("-warp") ? "WARP" : "MAP",
+                   english_language ? "Invalid map number" : "Некорректный номер уровня");
+        }
+        else
+        {
+            autostart = true;
+        }
     }
 
     // Check for -CDROM
