@@ -1148,6 +1148,9 @@ static void ST_UpdateFragsCounter (void)
 
 void ST_Ticker (void)
 {
+    // [JN] Allow to update background/belez before values update.
+    st_bg_needsupdate = true;
+
     // [JN] Use real random number generator
     // instead of M_Random LUT for faces stide.
     st_randomnumber = rand() % 3;
@@ -1169,9 +1172,6 @@ void ST_Ticker (void)
     }
     
     st_oldhealth = plyr->health;
-
-    // [JN] Values have been updated, update stbar background/belez as well.
-    st_bg_needsupdate = true;
 }
 
 // -----------------------------------------------------------------------------
