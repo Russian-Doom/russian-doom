@@ -22,8 +22,6 @@
 #include "m_random.h"
 #include "s_sound.h"
 
-extern void A_Explode();
-extern void A_FaceTarget();
 
 extern boolean P_CheckMeleeRange (mobj_t *actor);
 extern void P_Thrust (player_t* player, angle_t angle, fixed_t move);

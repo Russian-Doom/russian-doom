@@ -19,101 +19,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "info.h"
-
 #include "deh_io.h"
 #include "deh_main.h"
 
-extern void A_Light0();
-extern void A_WeaponReady();
-extern void A_Lower();
-extern void A_Raise();
-extern void A_Punch();
-extern void A_ReFire();
-extern void A_FirePistol();
-extern void A_Light1();
-extern void A_FireShotgun();
-extern void A_Light2();
-extern void A_FireShotgun2();
-extern void A_CheckReload();
-extern void A_OpenShotgun2();
-extern void A_LoadShotgun2();
-extern void A_CloseShotgun2();
-extern void A_FireCGun();
-extern void A_GunFlash();
-extern void A_FireMissile();
-extern void A_Saw();
-extern void A_FirePlasma();
-extern void A_BFGsound();
-extern void A_FireBFG();
-extern void A_BFGSpray();
-extern void A_Explode();
-extern void A_Pain();
-extern void A_PlayerScream();
-extern void A_Fall();
-extern void A_XScream();
-extern void A_Look();
-extern void A_Chase();
-extern void A_FaceTarget();
-extern void A_PosAttack();
-extern void A_Scream();
-extern void A_SPosAttack();
-extern void A_VileChase();
-extern void A_VileStart();
-extern void A_VileTarget();
-extern void A_VileAttack();
-extern void A_StartFire();
-extern void A_Fire();
-extern void A_FireCrackle();
-extern void A_Tracer();
-extern void A_SkelWhoosh();
-extern void A_SkelFist();
-extern void A_SkelMissile();
-extern void A_FatRaise();
-extern void A_FatAttack1();
-extern void A_FatAttack2();
-extern void A_FatAttack3();
-extern void A_BossDeath();
-extern void A_CPosAttack();
-extern void A_CPosRefire();
-extern void A_TroopAttack();
-extern void A_SargAttack();
-extern void A_HeadAttack();
-extern void A_BruisAttack();
-extern void A_SkullAttack();
-extern void A_Metal();
-extern void A_SpidRefire();
-extern void A_BabyMetal();
-extern void A_BspiAttack();
-extern void A_Hoof();
-extern void A_CyberAttack();
-extern void A_PainAttack();
-extern void A_PainDie();
-extern void A_KeenDie();
-extern void A_BrainPain();
-extern void A_BrainScream();
-extern void A_BrainDie();
-extern void A_BrainAwake();
-extern void A_BrainSpit();
-extern void A_SpawnSound();
-extern void A_SpawnFly();
-extern void A_BrainExplode();
-// [crispy] additional BOOM and MBF states, sprites and code pointers
-extern void A_Stop();
-extern void A_Die();
-extern void A_FireOldBFG();
-extern void A_Detonate();
-extern void A_Mushroom();
-extern void A_BetaSkullAttack();
-// [crispy] more MBF code pointers
-extern void A_Spawn();
-extern void A_Turn();
-extern void A_Face();
-extern void A_Scratch();
-extern void A_PlaySound();
-extern void A_RandomJump();
-extern void A_LineEffect();
 
 typedef struct {
     const char *mnemonic;

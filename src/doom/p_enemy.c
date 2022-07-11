@@ -80,9 +80,6 @@ static int   braintargeton = 0;
 static int   maxbraintargets;  // [crispy] remove braintargets limit
 
 
-void A_Fall (mobj_t *actor);
-
-
 // =============================================================================
 // ENEMY THINKING
 // Enemies are allways spawned // with targetplayer = -1, threshold = 0
@@ -1476,8 +1473,6 @@ void A_VileStart (mobj_t *actor)
 // Keep fire in front of player unless out of sight
 // -----------------------------------------------------------------------------
 
-void A_Fire (mobj_t *actor);
-
 void A_StartFire (mobj_t *actor)
 {
     // [JN] Not called by the engine
@@ -2321,8 +2316,6 @@ void A_BrainSpit (mobj_t *mo)
 // -----------------------------------------------------------------------------
 // A_SpawnFly
 // -----------------------------------------------------------------------------
-
-void A_SpawnFly (mobj_t *mo);
 
 // travelling cube sound
 void A_SpawnSound (mobj_t *mo)	
