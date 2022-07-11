@@ -32,6 +32,7 @@
 
 #define	SKULLSPEED  (20*FRACUNIT)
 #define	FATSPREAD   (ANG90/8)
+#define	TRACEANGLE  (0xc000000)
 
 
 typedef enum
@@ -68,8 +69,6 @@ static mobj_t *soundtarget;
 
 static fixed_t xspeed[8] = {FRACUNIT,47000,0,-47000,-FRACUNIT,-47000,0,47000};
 static fixed_t yspeed[8] = {0,47000,FRACUNIT,47000,0,-47000,-FRACUNIT,-47000};
-
-static int TRACEANGLE = 0xc000000;
 
 static mobj_t *corpsehit, *vileobj;
 static fixed_t viletryx, viletryy;
@@ -1726,40 +1725,35 @@ void A_SkullAttack (mobj_t *actor)
 
 void A_PainShootSkull (mobj_t *actor, angle_t angle)
 {
-    int        prestep, count;
+    int        prestep;
     fixed_t	   x, y, z;
     angle_t    an;
     mobj_t    *newmobj;
-    thinker_t *currentthinker;
 
-    // count total number of skull currently on the level
-    count = 0;
-
-    currentthinker = thinkercap.next;
-
-    while (currentthinker != &thinkercap)
+    // [JN] Optionally removed Lost Souls spawn limit.
+    if (!unlimited_lost_souls || !singleplayer || vanillaparm)
     {
-        if ((currentthinker->function.acp1 == (actionf_p1)P_MobjThinker)
-        && ((mobj_t *)currentthinker)->type == MT_SKULL)
+        // Count total number of skull currently on the level.
+        int count = 0;
+        thinker_t *currentthinker = thinkercap.next;
+
+        while (currentthinker != &thinkercap)
         {
-            count++;
-        }
-        currentthinker = currentthinker->next;
-    }
+            if ((currentthinker->function.acp1 == (actionf_p1)P_MobjThinker)
+            && ((mobj_t *)currentthinker)->type == MT_SKULL)
+            {
+                count++;
+            }
 
-    // [JN] Optionally remove Lost Souls spawn limit.
-    if (singleplayer && !vanillaparm)
-    {
-        if ((unlimited_lost_souls && count > 10240)
-        || (!unlimited_lost_souls && count > 20))
-        return;
-    }
-    else
-    {
-        // if there are allready 20 skulls on the level,
-        // don't spit another one
-        if (count > 20)
-        return;
+            // If there are allready 20 skulls on the level, 
+            // don't spit another one.
+            if (count > 20)
+            {
+                return;
+            }
+
+            currentthinker = currentthinker->next;
+        }
     }
 
     // okay, there's playe for another one
