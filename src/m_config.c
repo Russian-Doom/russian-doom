@@ -799,6 +799,12 @@ static void DefaultHandler_HandleLine(char* keyName, char *value, size_t valueSi
         return;
     }
 
+    if(lang_param && strcmp(keyName, "english_language") == 0)
+    {
+        // Ignore english_language entry in config with -lang mode
+        return;
+    }
+
     // Strip off trailing non-printable characters
     while(strlen(value) > 0 && !isprint(value[strlen(value)-1]))
     {
