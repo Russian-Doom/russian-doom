@@ -1530,7 +1530,7 @@ static void ST_DrawElements (const boolean wide)
     }
 
     // [crispy] draw berserk pack instead of no ammo if appropriate
-    if (screenblocks > 10)
+    if (screenblocks > 10 && (!automapactive || automap_overlay))
     {
         if (plyr->readyweapon == wp_fist && plyr->powers[pw_strength])
         {
