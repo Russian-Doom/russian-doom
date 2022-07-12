@@ -830,6 +830,9 @@ static void ST_DrawBackground (void)
         V_DrawPatch(104 + wide_delta, 168, starms, NULL);
     }
 
+    // [JN] Draw/update elements. Only non-wide (false) drawing is needed here.
+    ST_DrawElementsFunc(false);
+
     // [JN] Done drawing, suppress update until next calculated tic.
     st_bg_needsupdate = false;
 }
@@ -2018,11 +2021,10 @@ void ST_Drawer (void)
     // Do red-/gold-shifts from damage/items
     ST_DoPaletteStuff();
 
-    // [JN] Refresh standard status bar background.
+    // [JN] Refresh standard status bar background and elements.
     if (screenblocks <= 10 || (automapactive && !automap_overlay))
     {
         ST_DrawBackground();
-        ST_DrawElementsFunc(false);
     }
 
     // [JN] Draw full screen status bar.
