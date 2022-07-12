@@ -234,7 +234,7 @@ static void AM_changeWindowLoc(void)
         automap_follow = 0;
     }
 
-    if (uncapped_fps)
+    if (uncapped_fps && leveltime > oldleveltime)
     {
         incx = FixedMul(m_paninc.x, fractionaltic);
         incy = FixedMul(m_paninc.y, fractionaltic);
@@ -711,7 +711,7 @@ boolean AM_Responder(event_t * ev)
 
 static void AM_changeWindowScale(void)
 {
-    if (uncapped_fps)
+    if (uncapped_fps && leveltime > oldleveltime)
     {
         float f_paninc_smooth = (float)f_paninc / (float)FRACUNIT * (float)fractionaltic;
 
