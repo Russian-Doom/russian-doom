@@ -492,6 +492,7 @@ int R_FlatNumForName (char *name);
 int R_TextureNumForName (char *name);
 void R_InitData (void);
 void R_PrecacheLevel (void);
+boolean R_IsPatchLump (const int lump);
 
 // -----------------------------------------------------------------------------
 // R_DRAW

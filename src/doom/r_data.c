@@ -457,6 +457,15 @@ static void R_GenerateLookup (int texnum)
             int x, x1 = patch++->originx, x2 = x1 + SHORT(realpatch->width);
             const int *cofs = realpatch->columnofs - x1;
 
+            if (!R_IsPatchLump(pat))
+            {
+                fprintf(stderr, english_language ?
+                        "\nR_GenerateLookup: Texture %.8s patch num %d (%.8s) is not valid" :
+                        "\nR_GenerateLookup: некорректная текстура %.8s с номером патча %d (%.8s)",
+                        texture->name, i, lumpinfo[pat]->name);
+                continue;
+            }
+
             if (x2 > texture->width)
             {
                 x2 = texture->width;
@@ -1376,4 +1385,55 @@ void R_PrecacheLevel (void)
         }
 
     free(hitlist);
+}
+
+// -----------------------------------------------------------------------------
+// [FG] check if the lump can be a Doom patch
+// taken from PrBoom+ prboom2/src/r_patch.c:L350-L390
+// -----------------------------------------------------------------------------
+
+boolean R_IsPatchLump (const int lump)
+{
+    int size;
+    int width, height;
+    const patch_t *patch;
+    boolean result;
+
+    size = W_LumpLength(lump);
+
+    // minimum length of a valid Doom patch
+    if (size < 13)
+    {
+        return false;
+    }
+
+    patch = (const patch_t *)W_CacheLumpNum(lump, PU_CACHE);
+
+    width = SHORT(patch->width);
+    height = SHORT(patch->height);
+
+    result = (height > 0 && height <= 16384 && width > 0 && width <= 16384 && width < size / 4);
+
+    if (result)
+    {
+        // The dimensions seem like they might be valid for a patch, so
+        // check the column directory for extra security. All columns
+        // must begin after the column directory, and none of them must
+        // point past the end of the patch.
+        int x;
+
+        for (x = 0; x < width; x++)
+        {
+            unsigned int ofs = LONG(patch->columnofs[x]);
+
+            // Need one byte for an empty column (but there's patches that don't know that!)
+            if (ofs < (unsigned int)width * 4 + 8 || ofs >= (unsigned int)size)
+            {
+                result = false;
+                break;
+            }
+        }
+    }
+
+    return result;
 }
