@@ -44,6 +44,7 @@ enum
 	REINIT_ASPECTRATIO = 8,
 };
 
+extern int lang_param;
 
 // -----------------------------------------------------------------------------
 // Language (0 = Russian, 1 = English)

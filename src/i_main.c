@@ -47,6 +47,7 @@
 #include "d_name.h"
 #include "m_argv.h"
 #include "m_misc.h"
+#include "jn.h"
 
 #include "git_info.h"
 
@@ -57,6 +58,30 @@ boolean vanillaparm;
 
 // [JN] Devparm available for all three games in RD
 boolean devparm;
+
+int lang_param;
+
+static void CheckLangParam()
+{
+    lang_param = M_CheckParmWithArgs("-lang", 1);
+    if(!lang_param)
+        return;
+
+    if(strcmp(myargv[lang_param + 1], "en") == 0)
+    {
+        english_language = 1; // english
+    }
+    else if(strcmp(myargv[lang_param + 1], "ru") == 0)
+    {
+        english_language = 0; // russian
+    }
+    else
+    {
+        printf("-LANG: Unknown language");
+        // default to english for readability because old Windows versions can't display UTF-8 chars in console
+        english_language = 1;
+    }
+}
 
 void M_SetExeDir(void)
 {
@@ -160,7 +185,30 @@ int main(int argc, char **argv)
     packageResourcesDir = SDL_GetBasePath();
 #endif
 
+    // Check for -lang param before loading response file to show potential errors in the correct language
+    CheckLangParam();
+
     M_FindResponseFile();
+
+    // Check for -lang param again after loading response file to set correct language if -lang param was in response file
+    CheckLangParam();
+
+#ifdef _WIN32
+    // [JN] if game language is not set yet (-1), and OS-preferred language
+    // is appropriate for using Russian language in the game, use it.
+    if(english_language == -1)
+    {
+        // [JN] Get system-preferred language
+        DWORD lang_id = PRIMARYLANGID(LANGIDFROMLCID(GetSystemDefaultLCID()));
+
+        if(lang_id != LANG_RUSSIAN
+        && lang_id != LANG_UKRAINIAN
+        && lang_id != LANG_BELARUSIAN)
+            english_language = 1;
+        else
+            english_language = 0;
+    }
+#endif
 
     // Check for -devparm being activated
     devparm = M_CheckParm ("-devparm");
