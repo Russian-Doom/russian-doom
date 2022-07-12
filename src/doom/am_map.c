@@ -90,13 +90,13 @@ static int f_paninc;
 
 // [JN] How much zoom-in per tic goes to 2x in 1 second.
 static int m_zoomin;
-#define M_ZOOMIN_SLOW ((int) (1.04*FRACUNIT))
-#define M_ZOOMIN_FAST ((int) (1.08*FRACUNIT))
+#define M_ZOOMIN_SLOW ((int) ((float)FRACUNIT * (1.04f + f_paninc / 200.0f)))
+#define M_ZOOMIN_FAST ((int) ((float)FRACUNIT * (1.08f + f_paninc / 200.0f)))
 
 // [JN] How much zoom-out per tic pulls out to 0.5x in 1 second.
 static int m_zoomout;
-#define M_ZOOMOUT_SLOW ((int) (FRACUNIT/1.04))
-#define M_ZOOMOUT_FAST ((int) (FRACUNIT/1.08))
+#define M_ZOOMOUT_SLOW ((int) ((float)FRACUNIT / (1.04f + f_paninc / 200.0f)))
+#define M_ZOOMOUT_FAST ((int) ((float)FRACUNIT / (1.08f + f_paninc / 200.0f)))
 
 // translates between frame-buffer and map distances
 #define FTOM(x) (((int64_t)((x)<<16) * scale_ftom) >> FRACBITS)
@@ -193,9 +193,11 @@ static int f_h;
 static mpoint_t m_paninc;     // how far the window pans each tic (map coords)
 static fixed_t  mtof_zoommul; // how far the window zooms in each tic (map coords)
 static fixed_t  ftom_zoommul; // how far the window zooms in each tic (fb coords)
+static fixed_t  curr_mtof_zoommul; // [JN] Zooming interpolation.
 
 static int64_t m_x, m_y;   // LL x,y where the window is on the map (map coords)
 static int64_t m_x2, m_y2; // UR x,y where the window is on the map (map coords)
+static fixed_t prev_m_x, prev_m_y; // [JN] Panning interpolation.
 
 // width/height of window on map (map coords)
 static int64_t m_w;
@@ -218,6 +220,7 @@ static int64_t old_m_x, old_m_y;
 
 // used by MTOF to scale from map-to-frame-buffer coords
 static fixed_t scale_mtof = (fixed_t)INITSCALEMTOF;
+static fixed_t prev_scale_mtof = (fixed_t)INITSCALEMTOF; // [JN] Panning interpolation.
 // used by FTOM to scale from frame-buffer-to-map coords (=1/scale_mtof)
 static fixed_t scale_ftom;
 
@@ -452,16 +455,24 @@ static void AM_changeWindowLoc (void)
         automap_follow = 0;
     }
 
-    incx = m_paninc.x;
-    incy = m_paninc.y;
+    if (uncapped_fps)
+    {
+        incx = FixedMul(m_paninc.x, fractionaltic);
+        incy = FixedMul(m_paninc.y, fractionaltic);
+    }
+    else
+    {
+        incx = m_paninc.x;
+        incy = m_paninc.y;
+    }
 
     if (automap_rotate)
     {
         AM_rotate(&incx, &incy, -mapangle);
     }
 
-    m_x += incx;
-    m_y += incy;
+    m_x = prev_m_x + incx;
+    m_y = prev_m_y + incy;
 
     if (m_x + m_w/2 > max_x)
     {
@@ -804,11 +815,13 @@ const boolean AM_Responder (event_t *ev)
         {
             mtof_zoommul = m_zoomout;
             ftom_zoommul = m_zoomin;
+            curr_mtof_zoommul = mtof_zoommul;
         }
         else if (BK_isKeyDown(ev, bk_map_zoom_in))   // zoom in
         {
             mtof_zoommul = m_zoomin;
             ftom_zoommul = m_zoomout;
+            curr_mtof_zoommul = mtof_zoommul;
         }
         else if (BK_isKeyDown(ev, bk_map_toggle))
         {
@@ -924,6 +937,29 @@ const boolean AM_Responder (event_t *ev)
 
 static void AM_changeWindowScale (void)
 {
+    if (uncapped_fps)
+    {
+        float f_paninc_smooth = (float)f_paninc / (float)FRACUNIT * (float)fractionaltic;
+
+        if (f_paninc_smooth < 0.01f)
+        {
+            f_paninc_smooth = 0.01f;
+        }
+    
+        scale_mtof = prev_scale_mtof;
+
+        if (curr_mtof_zoommul == m_zoomin)
+        {
+            mtof_zoommul = ((int) ((float)FRACUNIT * (1.00f + f_paninc_smooth / 200.0f)));
+            ftom_zoommul = ((int) ((float)FRACUNIT / (1.00f + f_paninc_smooth / 200.0f)));
+        }
+        if (curr_mtof_zoommul == m_zoomout)
+        {
+            mtof_zoommul = ((int) ((float)FRACUNIT / (1.00f + f_paninc_smooth / 200.0f)));
+            ftom_zoommul = ((int) ((float)FRACUNIT * (1.00f + f_paninc_smooth / 200.0f)));
+        }
+    }
+
     // Change the scaling multipliers
     scale_mtof = FixedMul(scale_mtof, mtof_zoommul);
     scale_ftom = FixedDiv(FRACUNIT, scale_mtof);
@@ -977,17 +1013,9 @@ void AM_Ticker (void)
         return;
     }
 
-    // Change the zoom if necessary
-    if (ftom_zoommul != FRACUNIT)
-    {
-        AM_changeWindowScale();
-    }
-
-    // Change x,y location
-    if (m_paninc.x || m_paninc.y)
-    {
-        AM_changeWindowLoc();
-    }
+    prev_scale_mtof = scale_mtof;
+    prev_m_x = m_x;
+    prev_m_y = m_y;
 }
 
 // -----------------------------------------------------------------------------
@@ -2508,6 +2536,20 @@ void AM_Drawer (void)
     if (automap_follow)
     {
         AM_doFollowPlayer();
+    }
+
+    // Change the zoom if necessary.
+    // [JN] Moved from AM_Ticker for zooming interpolation.
+    if (ftom_zoommul != FRACUNIT)
+    {
+        AM_changeWindowScale();
+    }
+
+    // Change X and Y location.
+    // [JN] Moved from AM_Ticker for paning interpolation.
+    if (m_paninc.x || m_paninc.y)
+    {
+        AM_changeWindowLoc();
     }
 
     // [crispy] required for AM_rotatePoint()
