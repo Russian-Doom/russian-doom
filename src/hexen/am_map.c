@@ -392,6 +392,7 @@ static void AM_initVariables(void)
     m_x = (plr->mo->x >> FRACTOMAPBITS) - m_w / 2;
     m_y = (plr->mo->y >> FRACTOMAPBITS) - m_h / 2;
 
+    AM_Ticker();
     AM_changeWindowLoc();
 
     // for saving & restoring
