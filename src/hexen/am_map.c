@@ -62,9 +62,6 @@ static fixed_t max_scale_mtof;  // used to tell when to stop zooming in
 static int64_t old_m_w, old_m_h;
 static int64_t old_m_x, old_m_y;
 
-// old location used by the Follower routine
-static mpoint_t f_oldloc;
-
 // used by MTOF to scale from map-to-frame-buffer coords
 static fixed_t scale_mtof = (fixed_t)INITSCALEMTOF;
 // used by FTOM to scale from frame-buffer-to-map coords (=1/scale_mtof)
@@ -232,7 +229,6 @@ static void AM_changeWindowLoc(void)
     if (m_paninc.x || m_paninc.y)
     {
         automap_follow = 0;
-        f_oldloc.x = INT_MAX;
     }
 
     incx = m_paninc.x;
@@ -366,8 +362,6 @@ static void AM_initVariables(void)
     thinker_t *think;
 
     automapactive = true;
-
-    f_oldloc.x = INT_MAX;
 
     m_paninc.x = m_paninc.y = 0;
     ftom_zoommul = FRACUNIT;
@@ -608,7 +602,6 @@ boolean AM_Responder(event_t * ev)
         else if (BK_isKeyDown(ev, bk_map_follow))
         {
             automap_follow = !automap_follow;
-            f_oldloc.x = INT_MAX;
             P_SetMessage(plr, automap_follow ? amstr_followon : amstr_followoff, msg_system, false);
         }
         else if (BK_isKeyDown(ev, bk_map_overlay))
@@ -725,18 +718,12 @@ static void AM_changeWindowScale(void)
 
 static void AM_doautomap_follow (void)
 {
-    if (f_oldloc.x != plr->mo->x || f_oldloc.y != plr->mo->y)
-    {
-        // [JN] Use interpolated player coords for smooth
-        // scrolling and static player arrow position.
-        m_x = (plr->mo->x >> FRACTOMAPBITS) - m_w/2;
-        m_y = (plr->mo->y >> FRACTOMAPBITS) - m_h/2;
-        m_x2 = m_x + m_w;
-        m_y2 = m_y + m_h;
-
-        f_oldloc.x = plr->mo->x;
-        f_oldloc.y = plr->mo->y;
-    }
+    // [JN] Use interpolated player coords for smooth
+    // scrolling and static player arrow position.
+    m_x = (viewx >> FRACTOMAPBITS) - m_w/2;
+    m_y = (viewy >> FRACTOMAPBITS) - m_h/2;
+    m_x2 = m_x + m_w;
+    m_y2 = m_y + m_h;
 }
 
 void AM_Ticker(void)
@@ -744,10 +731,6 @@ void AM_Ticker(void)
     if (!automapactive)
     {
         return;
-    }
-    if (automap_follow)
-    {
-        AM_doautomap_follow();
     }
 
     // Change the zoom if necessary
@@ -1472,19 +1455,9 @@ static void AM_drawPlayers(void)
 
     if (!netgame)
     {
-        // [JN] Interpolate player arrow in non-follow mode if possible.
-        // Note: do not apply interpolation in follow mode, otherwise
-        // player arrow will have jerking.
-        if (!automap_follow && uncapped_fps && !vanillaparm && leveltime > oldleveltime)
-        {
-            pt.x = viewx >> FRACTOMAPBITS;
-            pt.y = viewy >> FRACTOMAPBITS;
-        }
-        else
-        {
-            pt.x = plr->mo->x >> FRACTOMAPBITS;
-            pt.y = plr->mo->y >> FRACTOMAPBITS;
-        }
+        // [JN] Interpolate player arrow.
+        pt.x = viewx >> FRACTOMAPBITS;
+        pt.y = viewy >> FRACTOMAPBITS;
 
         if (automap_rotate)
         {
@@ -1651,6 +1624,12 @@ void AM_Drawer(void)
     if (!automapactive)
     {
         return;
+    }
+
+    // [JN] Moved from AM_Ticker for drawing interpolation.
+    if (automap_follow)
+    {
+        AM_doautomap_follow();
     }
 
     // [crispy] required for AM_rotatePoint()
