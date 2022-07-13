@@ -2164,71 +2164,109 @@ G_InitNew
         fast_applied = false;
     }
     
-    // [JN] Ultra Nightmare definitions
-    if (skill == sk_ultranm)
+    // [JN] Ultra Nightmare definitions:
     {
-        // Monster's speed                           Who (initial value)
-        mobjinfo[MT_POSSESSED].speed = 12;           // Zombieman (8)
-        mobjinfo[MT_SHOTGUY].speed = 12;             // Shotgun guy (8)
-        mobjinfo[MT_CHAINGUY].speed = 12;            // Chaingunner (8)
-        mobjinfo[MT_TROOP].speed = 13;               // Imp (8)
-        mobjinfo[MT_SKULL].speed = 14;               // Lost Soul (8)
-        mobjinfo[MT_HEAD].speed = 14;                // Cacodemon (8)
-        mobjinfo[MT_KNIGHT].speed = 14;              // Hell Knight (8)
-        mobjinfo[MT_BRUISER].speed = 14;             // Baron of Hell (8)
-        mobjinfo[MT_BABY].speed = 17;                // Arachnotron (12)
-        mobjinfo[MT_PAIN].speed = 14;                // Pain Elemental (8)
-        mobjinfo[MT_UNDEAD].speed = 14;              // Revenant (10)
-        mobjinfo[MT_FATSO].speed = 11;               // Mancubus (8)
-        mobjinfo[MT_VILE].speed = 18;                // Archvile (15)
-        mobjinfo[MT_SPIDER].speed = 17;              // Spider Mastermind (12)
-        mobjinfo[MT_CYBORG].speed = 20;              // Cyberdemon (16)
-        mobjinfo[MT_WOLFSS].speed = 13;              // Wolf SS (8)
+        // First, keep original or given by Dehacked mobj info as separated values.
+        
+        // Monster's speed                           
+        const int MT_POSSESSED_speed = mobjinfo[MT_POSSESSED].speed;
+        const int MT_SHOTGUY_speed = mobjinfo[MT_SHOTGUY].speed;
+        const int MT_CHAINGUY_speed = mobjinfo[MT_CHAINGUY].speed;
+        const int MT_TROOP_speed = mobjinfo[MT_TROOP].speed;
+        const int MT_SKULL_speed = mobjinfo[MT_SKULL].speed;
+        const int MT_HEAD_speed = mobjinfo[MT_HEAD].speed;
+        const int MT_KNIGHT_speed = mobjinfo[MT_KNIGHT].speed;
+        const int MT_BRUISER_speed = mobjinfo[MT_BRUISER].speed;
+        const int MT_BABY_speed = mobjinfo[MT_BABY].speed;
+        const int MT_PAIN_speed = mobjinfo[MT_PAIN].speed;
+        const int MT_UNDEAD_speed = mobjinfo[MT_UNDEAD].speed;
+        const int MT_FATSO_speed = mobjinfo[MT_FATSO].speed;
+        const int MT_VILE_speed = mobjinfo[MT_VILE].speed;
+        const int MT_SPIDER_speed = mobjinfo[MT_VILE].speed;
+        const int MT_CYBORG_speed = mobjinfo[MT_CYBORG].speed;
+        const int MT_WOLFSS_speed = mobjinfo[MT_WOLFSS].speed;
 
-        // Monster's missiles speed                  What (initial value)
-        mobjinfo[MT_ARACHPLAZ].speed = 30*FRACUNIT;  // Arachnotron (25*FRACUNIT)
-        mobjinfo[MT_FATSHOT].speed = 25*FRACUNIT;    // Mancubus (20*FRACUNIT)
+        // Monster's missiles speed
+        const int MT_ARACHPLAZ_speed = mobjinfo[MT_ARACHPLAZ].speed;
+        const int MT_FATSHOT_speed = mobjinfo[MT_FATSHOT].speed;
 
-        // Monster's damage                          What (initial value)
-        mobjinfo[MT_TROOPSHOT].damage = 4;           // Imp (3)
-        mobjinfo[MT_HEADSHOT].damage = 7;            // Cacodemon (5)
-        mobjinfo[MT_BRUISERSHOT].damage = 10;        // Knight / Baron (8) 
-        mobjinfo[MT_ARACHPLAZ].damage = 7;           // Arachnotron (5)
-        mobjinfo[MT_TRACER].damage = 12;             // Revenant (10)
-        mobjinfo[MT_FATSHOT].damage = 12;            // Mancubus (8)
-    }
-    // [JN] Fallback to standard values
-    else
-    {
-        // Monster's speed                          Who
-        mobjinfo[MT_POSSESSED].speed = 8;           // Zombieman
-        mobjinfo[MT_SHOTGUY].speed = 8;             // Shotgun guy
-        mobjinfo[MT_CHAINGUY].speed = 8;            // Chaingunner
-        mobjinfo[MT_TROOP].speed = 8;               // Imp
-        mobjinfo[MT_SKULL].speed = 8;               // Lost Soul
-        mobjinfo[MT_HEAD].speed = 8;                // Cacodemon
-        mobjinfo[MT_KNIGHT].speed = 8;              // Hell Knight
-        mobjinfo[MT_BRUISER].speed = 8;             // Baron of Hell
-        mobjinfo[MT_BABY].speed = 12;               // Arachnotron
-        mobjinfo[MT_PAIN].speed = 8;                // Pain Elemental
-        mobjinfo[MT_UNDEAD].speed = 10;             // Revenant
-        mobjinfo[MT_FATSO].speed = 8;               // Mancubus
-        mobjinfo[MT_VILE].speed = 15;               // Archvile
-        mobjinfo[MT_SPIDER].speed = 12;             // Spider Mastermind
-        mobjinfo[MT_CYBORG].speed = 16;             // Cyberdemon
-        mobjinfo[MT_WOLFSS].speed = 8;              // Wolf SS
+        // Monster's damage
+        const int MT_TROOPSHOT_damage = mobjinfo[MT_TROOPSHOT].damage;
+        const int MT_HEADSHOT_damage = mobjinfo[MT_HEADSHOT].damage;
+        const int MT_BRUISERSHOT_damage = mobjinfo[MT_BRUISERSHOT].damage;
+        const int MT_ARACHPLAZ_damage = mobjinfo[MT_ARACHPLAZ].damage;
+        const int MT_TRACER_damage = mobjinfo[MT_TRACER].damage;
+        const int MT_FATSHOT_damage = mobjinfo[MT_FATSHOT].damage;
 
-        // Monster's missiles speed                 What
-        mobjinfo[MT_ARACHPLAZ].speed = 25*FRACUNIT; // Arachnotron plasma
-        mobjinfo[MT_FATSHOT].speed = 20*FRACUNIT;   // Mancubus fireball
+        // Next, properly assign values according to selected skill level.
+        // UNM definitions are might be not optimal for possible Dehacked mods, 
+        // but this skill itself is designed for original Doom, and UNM menu item
+        // will be hidden if replaced M_ROUGH gfx is provided in PWAD.
 
-        // Monster's damage                         What
-        mobjinfo[MT_TROOPSHOT].damage = 3;          // Imp fireball
-        mobjinfo[MT_HEADSHOT].damage = 5;           // Cacodemon fireball
-        mobjinfo[MT_BRUISERSHOT].damage = 8;        // Knight / Baron fireball 
-        mobjinfo[MT_ARACHPLAZ].damage = 5;          // Arachnotron plasma
-        mobjinfo[MT_TRACER].damage = 10;            // Revenant fireball
-        mobjinfo[MT_FATSHOT].damage = 8;            // Mancubus fireball
+        if (skill == sk_ultranm)
+        {
+            // Monster's speed                                      Who
+            mobjinfo[MT_POSSESSED].speed = MT_POSSESSED_speed + 4;  // Zombieman (8 to 12)
+            mobjinfo[MT_SHOTGUY].speed = MT_SHOTGUY_speed + 4;      // Shotgun guy (8 to 12)
+            mobjinfo[MT_CHAINGUY].speed = MT_CHAINGUY_speed + 4;    // Chaingunner (8 to 12)
+            mobjinfo[MT_TROOP].speed = MT_TROOP_speed + 5;          // Imp (8 to 13)
+            mobjinfo[MT_SKULL].speed = MT_SKULL_speed + 6;          // Lost Soul (8 to 14)
+            mobjinfo[MT_HEAD].speed = MT_HEAD_speed + 6;            // Cacodemon (8 to 14)
+            mobjinfo[MT_KNIGHT].speed = MT_KNIGHT_speed + 6;        // Hell Knight (8 to 14)
+            mobjinfo[MT_BRUISER].speed = MT_BRUISER_speed + 6;      // Baron of Hell (8 to 14)
+            mobjinfo[MT_BABY].speed = MT_BABY_speed + 5;            // Arachnotron (12 to 17)
+            mobjinfo[MT_PAIN].speed = MT_PAIN_speed + 6;            // Pain Elemental (8 to 14)
+            mobjinfo[MT_UNDEAD].speed = MT_UNDEAD_speed + 4;        // Revenant (10 to 14)
+            mobjinfo[MT_FATSO].speed = MT_FATSO_speed + 3;          // Mancubus (8 to 12)
+            mobjinfo[MT_VILE].speed = MT_VILE_speed + 3;            // Archvile (15 to 18)
+            mobjinfo[MT_SPIDER].speed = MT_SPIDER_speed + 5;        // Spider Mastermind (12 to 17)
+            mobjinfo[MT_CYBORG].speed = MT_CYBORG_speed + 4;        // Cyberdemon (16 to 20)
+            mobjinfo[MT_WOLFSS].speed = MT_WOLFSS_speed + 5;        // Wolf SS (8 to 13)
+
+            // Monster's missiles speed                                        What
+            mobjinfo[MT_ARACHPLAZ].speed = MT_ARACHPLAZ_speed + (5*FRACUNIT);  // Arachnotron (25 to 30)
+            mobjinfo[MT_FATSHOT].speed = MT_FATSHOT_speed + (5*FRACUNIT);      // Mancubus (20 to 25)
+
+            // Monster's damage                                           What
+            mobjinfo[MT_TROOPSHOT].damage = MT_TROOPSHOT_damage + 1;      // Imp (3 to 4)
+            mobjinfo[MT_HEADSHOT].damage = MT_HEADSHOT_damage + 2;        // Cacodemon (5 to 7)
+            mobjinfo[MT_BRUISERSHOT].damage = MT_BRUISERSHOT_damage + 2;  // Knight / Baron (8 to 10) 
+            mobjinfo[MT_ARACHPLAZ].damage = MT_ARACHPLAZ_damage + 2;      // Arachnotron (5 to 7)
+            mobjinfo[MT_TRACER].damage = MT_TRACER_damage + 2;            // Revenant (10 to 12)
+            mobjinfo[MT_FATSHOT].damage = MT_FATSHOT_damage + 4;          // Mancubus (8 to 12)
+        }
+        else
+        {
+            // Monster's speed
+            mobjinfo[MT_POSSESSED].speed = MT_POSSESSED_speed;
+            mobjinfo[MT_SHOTGUY].speed = MT_SHOTGUY_speed;
+            mobjinfo[MT_CHAINGUY].speed = MT_CHAINGUY_speed;
+            mobjinfo[MT_TROOP].speed = MT_TROOP_speed;
+            mobjinfo[MT_SKULL].speed = MT_SKULL_speed;
+            mobjinfo[MT_HEAD].speed = MT_HEAD_speed;
+            mobjinfo[MT_KNIGHT].speed = MT_KNIGHT_speed;
+            mobjinfo[MT_BRUISER].speed = MT_BRUISER_speed;
+            mobjinfo[MT_BABY].speed = MT_BABY_speed;
+            mobjinfo[MT_PAIN].speed = MT_PAIN_speed;
+            mobjinfo[MT_UNDEAD].speed = MT_UNDEAD_speed;
+            mobjinfo[MT_FATSO].speed = MT_FATSO_speed;
+            mobjinfo[MT_VILE].speed = MT_VILE_speed;
+            mobjinfo[MT_SPIDER].speed = MT_SPIDER_speed;
+            mobjinfo[MT_CYBORG].speed = MT_CYBORG_speed;
+            mobjinfo[MT_WOLFSS].speed = MT_WOLFSS_speed;
+
+            // Monster's missiles speed
+            mobjinfo[MT_ARACHPLAZ].speed = MT_ARACHPLAZ_speed;
+            mobjinfo[MT_FATSHOT].speed = MT_FATSHOT_speed;
+
+            // Monster's damage
+            mobjinfo[MT_TROOPSHOT].damage = MT_TROOPSHOT_damage;
+            mobjinfo[MT_HEADSHOT].damage = MT_HEADSHOT_damage;
+            mobjinfo[MT_BRUISERSHOT].damage = MT_BRUISERSHOT_damage;
+            mobjinfo[MT_ARACHPLAZ].damage = MT_ARACHPLAZ_damage;
+            mobjinfo[MT_TRACER].damage = MT_TRACER_damage;
+            mobjinfo[MT_FATSHOT].damage = MT_FATSHOT_damage;
+        }
     }
 
     // force players to be initialized upon first level load
