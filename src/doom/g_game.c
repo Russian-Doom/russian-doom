@@ -2049,6 +2049,74 @@ void G_DoSelectiveGame (int choice)
     plr->cards[5] = selective_key_5; // red skull key
 } 
 
+// -----------------------------------------------------------------------------
+// G_KeepOriginalSpeeds
+// [JN] Keep original or given by Dehacked mobj info as separated values,
+// so they can be safely toggled between common and UNM skill levels.
+// -----------------------------------------------------------------------------
+
+// Monster's speed                           
+static int MT_POSSESSED_speed;
+static int MT_SHOTGUY_speed;
+static int MT_CHAINGUY_speed;
+static int MT_TROOP_speed;
+static int MT_SKULL_speed;
+static int MT_HEAD_speed;
+static int MT_KNIGHT_speed;
+static int MT_BRUISER_speed;
+static int MT_BABY_speed;
+static int MT_PAIN_speed;
+static int MT_UNDEAD_speed;
+static int MT_FATSO_speed;
+static int MT_VILE_speed;
+static int MT_SPIDER_speed;
+static int MT_CYBORG_speed;
+static int MT_WOLFSS_speed;
+
+// Monster's missiles speed
+static int MT_ARACHPLAZ_speed;
+static int MT_FATSHOT_speed;
+
+// Monster's damage
+static int MT_TROOPSHOT_damage;
+static int MT_HEADSHOT_damage;
+static int MT_BRUISERSHOT_damage;
+static int MT_ARACHPLAZ_damage;
+static int MT_TRACER_damage;
+static int MT_FATSHOT_damage;
+
+static void G_KeepOriginalSpeeds (void)
+{
+    // Monster's speed                           
+    MT_POSSESSED_speed = mobjinfo[MT_POSSESSED].speed;
+    MT_SHOTGUY_speed = mobjinfo[MT_SHOTGUY].speed;
+    MT_CHAINGUY_speed = mobjinfo[MT_CHAINGUY].speed;
+    MT_TROOP_speed = mobjinfo[MT_TROOP].speed;
+    MT_SKULL_speed = mobjinfo[MT_SKULL].speed;
+    MT_HEAD_speed = mobjinfo[MT_HEAD].speed;
+    MT_KNIGHT_speed = mobjinfo[MT_KNIGHT].speed;
+    MT_BRUISER_speed = mobjinfo[MT_BRUISER].speed;
+    MT_BABY_speed = mobjinfo[MT_BABY].speed;
+    MT_PAIN_speed = mobjinfo[MT_PAIN].speed;
+    MT_UNDEAD_speed = mobjinfo[MT_UNDEAD].speed;
+    MT_FATSO_speed = mobjinfo[MT_FATSO].speed;
+    MT_VILE_speed = mobjinfo[MT_VILE].speed;
+    MT_SPIDER_speed = mobjinfo[MT_VILE].speed;
+    MT_CYBORG_speed = mobjinfo[MT_CYBORG].speed;
+    MT_WOLFSS_speed = mobjinfo[MT_WOLFSS].speed;
+
+    // Monster's missiles speed
+    MT_ARACHPLAZ_speed = mobjinfo[MT_ARACHPLAZ].speed;
+    MT_FATSHOT_speed = mobjinfo[MT_FATSHOT].speed;
+
+    // Monster's damage
+    MT_TROOPSHOT_damage = mobjinfo[MT_TROOPSHOT].damage;
+    MT_HEADSHOT_damage = mobjinfo[MT_HEADSHOT].damage;
+    MT_BRUISERSHOT_damage = mobjinfo[MT_BRUISERSHOT].damage;
+    MT_ARACHPLAZ_damage = mobjinfo[MT_ARACHPLAZ].damage;
+    MT_TRACER_damage = mobjinfo[MT_TRACER].damage;
+    MT_FATSHOT_damage = mobjinfo[MT_FATSHOT].damage;
+}
 
 void
 G_InitNew
@@ -2060,6 +2128,8 @@ G_InitNew
     int     i;
     // [crispy] make sure "fast" parameters are really only applied once
     static boolean fast_applied;
+    // [JN] Make sure speeds are really only applied once.
+    static boolean speeds_applied;
 
     if (paused)
     {
@@ -2167,36 +2237,11 @@ G_InitNew
     // [JN] Ultra Nightmare definitions:
     {
         // First, keep original or given by Dehacked mobj info as separated values.
-        
-        // Monster's speed                           
-        const int MT_POSSESSED_speed = mobjinfo[MT_POSSESSED].speed;
-        const int MT_SHOTGUY_speed = mobjinfo[MT_SHOTGUY].speed;
-        const int MT_CHAINGUY_speed = mobjinfo[MT_CHAINGUY].speed;
-        const int MT_TROOP_speed = mobjinfo[MT_TROOP].speed;
-        const int MT_SKULL_speed = mobjinfo[MT_SKULL].speed;
-        const int MT_HEAD_speed = mobjinfo[MT_HEAD].speed;
-        const int MT_KNIGHT_speed = mobjinfo[MT_KNIGHT].speed;
-        const int MT_BRUISER_speed = mobjinfo[MT_BRUISER].speed;
-        const int MT_BABY_speed = mobjinfo[MT_BABY].speed;
-        const int MT_PAIN_speed = mobjinfo[MT_PAIN].speed;
-        const int MT_UNDEAD_speed = mobjinfo[MT_UNDEAD].speed;
-        const int MT_FATSO_speed = mobjinfo[MT_FATSO].speed;
-        const int MT_VILE_speed = mobjinfo[MT_VILE].speed;
-        const int MT_SPIDER_speed = mobjinfo[MT_VILE].speed;
-        const int MT_CYBORG_speed = mobjinfo[MT_CYBORG].speed;
-        const int MT_WOLFSS_speed = mobjinfo[MT_WOLFSS].speed;
-
-        // Monster's missiles speed
-        const int MT_ARACHPLAZ_speed = mobjinfo[MT_ARACHPLAZ].speed;
-        const int MT_FATSHOT_speed = mobjinfo[MT_FATSHOT].speed;
-
-        // Monster's damage
-        const int MT_TROOPSHOT_damage = mobjinfo[MT_TROOPSHOT].damage;
-        const int MT_HEADSHOT_damage = mobjinfo[MT_HEADSHOT].damage;
-        const int MT_BRUISERSHOT_damage = mobjinfo[MT_BRUISERSHOT].damage;
-        const int MT_ARACHPLAZ_damage = mobjinfo[MT_ARACHPLAZ].damage;
-        const int MT_TRACER_damage = mobjinfo[MT_TRACER].damage;
-        const int MT_FATSHOT_damage = mobjinfo[MT_FATSHOT].damage;
+        if (!speeds_applied)
+        {
+            G_KeepOriginalSpeeds();
+            speeds_applied = true;
+        }
 
         // Next, properly assign values according to selected skill level.
         // UNM definitions are might be not optimal for possible Dehacked mods, 
