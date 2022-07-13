@@ -52,3 +52,5 @@ boolean M_ParmExists(char *check);
 // Get name of executable used to run this program:
 
 char *M_GetExecutableName(void);
+
+void M_PrintHelp(void);
