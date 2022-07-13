@@ -219,6 +219,16 @@ int main(int argc, char **argv)
         return 0;
     }
 
+    if(M_CheckParm("--help") // Standard Linux help
+    || M_CheckParm("-h")     // Standard Linux help (short CLI_Parameter)
+    || M_CheckParm("-help")  // Linux help
+    || M_CheckParm("/?")     // Standard Windows CMD help
+    || M_CheckParm("-?"))    // Standard Windows PowerShell help
+    {
+        M_PrintHelp();
+        return 0;
+    }
+
     // [JN] Activate vanilla gameplay mode.
     // All optional enhancements will be disabled 
     // without modifying configuration files.
