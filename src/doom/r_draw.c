@@ -358,29 +358,34 @@ void R_DrawFuzzColumn (void)
 
 
 // low detail mode version
-void R_DrawFuzzColumnLow (void) 
-{ 
-    int      count; 
-    int      x = dc_x << 1;  // low detail mode, need to multiply by 2
-    byte    *dest, *dest2, *dest3, *dest4;
-    boolean  cutoff = false;
+void R_DrawFuzzColumnLow (void)
+{
+    int        count;
+    const int  x = dc_x << 1;  // low detail mode, need to multiply by 2
+    const int  screenwidth_low = screenwidth << hires;
+    byte      *dest1, *dest2, *dest3, *dest4;
+    boolean    cutoff = false;
 
-    // Adjust borders. Low... 
-    if (!dc_yl) 
-    dc_yl = 1;
+    // Adjust borders. Low...
+    if (!dc_yl)
+    {
+        dc_yl = 1;
+    }
 
     // .. and high.
     if (dc_yh == viewheight-1)
     {
-        dc_yh = viewheight - 2; 
+        dc_yh = viewheight - 2;
         cutoff = true;
     }
 
-    count = dc_yh - dc_yl; 
+    count = dc_yh - dc_yl;
 
     // Zero length.
-    if (count < 0) 
-    return; 
+    if (count < 0)
+    {
+        return;
+    }
 
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -392,15 +397,15 @@ void R_DrawFuzzColumnLow (void)
     }
 #endif
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest1 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
     dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
     dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
     dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
 
-    do 
+    do
     {
-        *dest3 = *dest = colormaps[6*256+dest[screenwidth*fuzzoffset[fuzzpos]]]; 
-        *dest4 = *dest2 = colormaps[6*256+dest2[screenwidth*fuzzoffset[fuzzpos]]]; 
+        *dest3 = *dest1 = colormaps[6*256+dest1[screenwidth*fuzzoffset[fuzzpos]]];
+        *dest4 = *dest2 = colormaps[6*256+dest2[screenwidth*fuzzoffset[fuzzpos]]];
 
         // Clamp table lookup index.
         if (++fuzzpos == FUZZTABLE)
@@ -408,17 +413,17 @@ void R_DrawFuzzColumnLow (void)
             fuzzpos = 0;
         }
 
-        dest += screenwidth << hires;
-        dest2 += screenwidth << hires;
-        dest3 += screenwidth << hires;
-        dest4 += screenwidth << hires;
-    } while (count--); 
+        dest1 += screenwidth_low;
+        dest2 += screenwidth_low;
+        dest3 += screenwidth_low;
+        dest4 += screenwidth_low;
+    } while (count--);
 
     // [crispy] if the line at the bottom had to be cut off,
     // draw one extra line using only pixels of that line and the one above
     if (cutoff)
     {
-        *dest3 = *dest = colormaps[6*256+dest[(screenwidth*fuzzoffset[fuzzpos]-screenwidth)/2]];
+        *dest3 = *dest1 = colormaps[6*256+dest1[(screenwidth*fuzzoffset[fuzzpos]-screenwidth)/2]];
         *dest4 = *dest2 = colormaps[6*256+dest2[(screenwidth*fuzzoffset[fuzzpos]-screenwidth)/2]];
     }
 } 
@@ -429,26 +434,30 @@ void R_DrawFuzzColumnLow (void)
 
 void R_DrawFuzzColumnBW (void) 
 { 
-    int      count; 
+    int      count;
     byte    *dest;
     boolean  cutoff = false;
-    const boolean greenfuzz = infragreen_visor 
+    const boolean greenfuzz = infragreen_visor
                             &&  players[consoleplayer].powers[pw_infrared]
                             && !players[consoleplayer].powers[pw_invulnerability];
 
-    if (!dc_yl) 
-    dc_yl = 1;
-
-    if (dc_yh == viewheight-1) 
+    if (!dc_yl)
     {
-        dc_yh = viewheight - 2; 
+        dc_yl = 1;
+    }
+
+    if (dc_yh == viewheight-1)
+    {
+        dc_yh = viewheight-2;
         cutoff = true;
     }
 
-    count = dc_yh - dc_yl; 
+    count = dc_yh - dc_yl;
 
-    if (count < 0) 
-    return; 
+    if (count < 0)
+    {
+        return;
+    }
 
 #ifdef RANGECHECK 
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -461,47 +470,52 @@ void R_DrawFuzzColumnBW (void)
 
     dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
 
-    do 
+    do
     {
         *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256
-              + dest[screenwidth*fuzzoffset[fuzzpos]]]; 
+              + dest[screenwidth*fuzzoffset[fuzzpos]]];
 
         if (++fuzzpos == FUZZTABLE)
         fuzzpos = 0;
 
         dest += screenwidth;
-    } while (count--); 
+    } while (count--);
 
     if (cutoff)
     {
         *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256
               + dest[(screenwidth*fuzzoffset[fuzzpos]-screenwidth)/2]];
     }
-} 
+}
 
-void R_DrawFuzzColumnLowBW (void) 
-{ 
-    int      count; 
-    int      x = dc_x << 1;
-    byte    *dest, *dest2, *dest3, *dest4;
-    boolean  cutoff = false;
-    const boolean greenfuzz = infragreen_visor 
+void R_DrawFuzzColumnLowBW (void)
+{
+    int        count;
+    const int  x = dc_x << 1;
+    const int  screenwidth_low = screenwidth << hires;
+    byte      *dest1, *dest2, *dest3, *dest4;
+    boolean    cutoff = false;
+    const boolean greenfuzz = infragreen_visor
                             && players[consoleplayer].powers[pw_infrared]
                             && !players[consoleplayer].powers[pw_invulnerability];
 
-    if (!dc_yl) 
-    dc_yl = 1;
+    if (!dc_yl)
+    {
+        dc_yl = 1;
+    }
 
     if (dc_yh == viewheight-1)
     {
-        dc_yh = viewheight - 2; 
+        dc_yh = viewheight-2;
         cutoff = true;
     }
 
-    count = dc_yh - dc_yl; 
+    count = dc_yh - dc_yl;
 
-    if (count < 0) 
-    return; 
+    if (count < 0)
+    {
+        return;
+    }
 
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -513,15 +527,15 @@ void R_DrawFuzzColumnLowBW (void)
     }
 #endif
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest1 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
     dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
     dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
     dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
 
     do 
     {
-        *dest3 = *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256
-               + dest[screenwidth*fuzzoffset[fuzzpos]]]; 
+        *dest3 = *dest1 = colormaps_rd[(greenfuzz ? 1 : 2) * 256
+               + dest1[screenwidth*fuzzoffset[fuzzpos]]]; 
         *dest4 = *dest2 = colormaps_rd[(greenfuzz ? 1 : 2) * 256
                + dest2[screenwidth*fuzzoffset[fuzzpos]]]; 
 
@@ -530,16 +544,16 @@ void R_DrawFuzzColumnLowBW (void)
             fuzzpos = 0;
         }
 
-        dest += screenwidth << hires;
-        dest2 += screenwidth << hires;
-        dest3 += screenwidth << hires;
-        dest4 += screenwidth << hires;
+        dest1 += screenwidth_low;
+        dest2 += screenwidth_low;
+        dest3 += screenwidth_low;
+        dest4 += screenwidth_low;
     } while (count--); 
 
     if (cutoff)
     {
-        *dest3 = *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256
-               + dest[(screenwidth*fuzzoffset[fuzzpos]-screenwidth)/2]];
+        *dest3 = *dest1 = colormaps_rd[(greenfuzz ? 1 : 2) * 256
+               + dest1[(screenwidth*fuzzoffset[fuzzpos]-screenwidth)/2]];
         *dest4 = *dest2 = colormaps_rd[(greenfuzz ? 1 : 2) * 256
                + dest2[(screenwidth*fuzzoffset[fuzzpos]-screenwidth)/2]];
     }
@@ -550,24 +564,28 @@ void R_DrawFuzzColumnLowBW (void)
 // -----------------------------------------------------------------------------
 
 void R_DrawFuzzColumnImproved (void)
-{ 
-    int      count; 
-    byte    *dest; 
+{
+    int      count;
+    byte    *dest;
     boolean  cutoff = false;
 
-    if (!dc_yl) 
-    dc_yl = 1;
-
-    if (dc_yh == viewheight-1) 
+    if (!dc_yl)
     {
-        dc_yh = viewheight - 2; 
+        dc_yl = 1;
+    }
+
+    if (dc_yh == viewheight-1)
+    {
+        dc_yh = viewheight-2;
         cutoff = true;
     }
 
-    count = dc_yh - dc_yl; 
+    count = dc_yh - dc_yl;
 
-    if (count < 0) 
-    return; 
+    if (count < 0)
+    {
+        return;
+    }
 
 #ifdef RANGECHECK 
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -578,17 +596,19 @@ void R_DrawFuzzColumnImproved (void)
     }
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]]; 
+    dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
 
-    do 
+    do
     {
-        *dest = colormaps[6*256+dest[screenwidth*fuzzoffset[fuzzpos]]]; 
+        *dest = colormaps[6*256+dest[screenwidth*fuzzoffset[fuzzpos]]];
 
-        if (++fuzzpos == FUZZTABLE) 
-        fuzzpos = paused || menuactive ? 0 : Crispy_Random()%49;
+        if (++fuzzpos == FUZZTABLE)
+        {
+            fuzzpos = leveltime > oldleveltime ? Crispy_Random() % 49 : 0;
+        }
 
         dest += screenwidth;
-    } while (count--); 
+    } while (count--);
 
     if (cutoff)
     {
@@ -597,25 +617,30 @@ void R_DrawFuzzColumnImproved (void)
 } 
 
 void R_DrawFuzzColumnLowImproved (void) 
-{ 
-    int      count; 
-    int      x = dc_x << 1;
-    byte    *dest, *dest2, *dest3, *dest4;
-    boolean  cutoff = false;
+{
+    int        count;
+    const int  x = dc_x << 1;
+    const int  screenwidth_low = screenwidth << hires;
+    byte      *dest1, *dest2, *dest3, *dest4;
+    boolean    cutoff = false;
 
-    if (!dc_yl) 
-    dc_yl = 1;
+    if (!dc_yl)
+    {
+        dc_yl = 1;
+    }
 
     if (dc_yh == viewheight-1)
     {
-        dc_yh = viewheight - 2; 
+        dc_yh = viewheight-2;
         cutoff = true;
     }
 
-    count = dc_yh - dc_yl; 
+    count = dc_yh - dc_yl;
 
-    if (count < 0) 
-    return; 
+    if (count < 0)
+    {
+        return;
+    }
 
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -627,28 +652,30 @@ void R_DrawFuzzColumnLowImproved (void)
     }
 #endif
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest1 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
     dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
     dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
     dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
 
     do 
     {
-        *dest3 = *dest = colormaps[6*256+dest[screenwidth*fuzzoffset[fuzzpos]]]; 
+        *dest3 = *dest1 = colormaps[6*256+dest1[screenwidth*fuzzoffset[fuzzpos]]]; 
         *dest4 = *dest2 = colormaps[6*256+dest2[screenwidth*fuzzoffset[fuzzpos]]]; 
 
-        if (++fuzzpos == FUZZTABLE) 
-        fuzzpos = paused || menuactive ? 0 : Crispy_Random()%49;
+        if (++fuzzpos == FUZZTABLE)
+        {
+            fuzzpos = leveltime > oldleveltime ? Crispy_Random() % 49 : 0;
+        }
 
-        dest += screenwidth << hires;
-        dest2 += screenwidth << hires;
-        dest3 += screenwidth << hires;
-        dest4 += screenwidth << hires;
+        dest1 += screenwidth_low;
+        dest2 += screenwidth_low;
+        dest3 += screenwidth_low;
+        dest4 += screenwidth_low;
     } while (count--); 
 
     if (cutoff)
     {
-        *dest3 = *dest = colormaps[6*256+dest[(screenwidth*fuzzoffset[fuzzpos]-screenwidth)/2]];
+        *dest3 = *dest1 = colormaps[6*256+dest1[(screenwidth*fuzzoffset[fuzzpos]-screenwidth)/2]];
         *dest4 = *dest2 = colormaps[6*256+dest2[(screenwidth*fuzzoffset[fuzzpos]-screenwidth)/2]];
     }
 }
@@ -659,26 +686,30 @@ void R_DrawFuzzColumnLowImproved (void)
 
 void R_DrawFuzzColumnImprovedBW (void)
 { 
-    int     count; 
+    int     count;
     byte   *dest;
     boolean cutoff = false;
-    const boolean greenfuzz = infragreen_visor 
+    const boolean greenfuzz = infragreen_visor
                             && players[consoleplayer].powers[pw_infrared]
                             && !players[consoleplayer].powers[pw_invulnerability];
 
-    if (!dc_yl) 
-    dc_yl = 1;
-
-    if (dc_yh == viewheight-1) 
+    if (!dc_yl)
     {
-        dc_yh = viewheight - 2; 
+        dc_yl = 1;
+    }
+
+    if (dc_yh == viewheight-1)
+    {
+        dc_yh = viewheight-2;
         cutoff = true;
     }
 
     count = dc_yh - dc_yl; 
 
-    if (count < 0) 
-    return; 
+    if (count < 0)
+    {
+        return;
+    }
 
 #ifdef RANGECHECK 
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -691,12 +722,14 @@ void R_DrawFuzzColumnImprovedBW (void)
 
     dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
 
-    do 
+    do
     {
-        *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256+dest[screenwidth*fuzzoffset[fuzzpos]]]; 
+        *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256+dest[screenwidth*fuzzoffset[fuzzpos]]];
 
-        if (++fuzzpos == FUZZTABLE) 
-        fuzzpos = paused || menuactive ? 0 : Crispy_Random()%49;
+        if (++fuzzpos == FUZZTABLE)
+        {
+            fuzzpos = leveltime > oldleveltime ? Crispy_Random() % 49 : 0;
+        }
 
         dest += screenwidth;
     } while (count--); 
@@ -709,28 +742,33 @@ void R_DrawFuzzColumnImprovedBW (void)
 } 
 
 void R_DrawFuzzColumnLowImprovedBW (void) 
-{ 
-    int      count; 
-    int      x = dc_x << 1;
-    byte    *dest, *dest2, *dest3, *dest4;
-    boolean  cutoff = false;
-    const boolean greenfuzz = infragreen_visor 
+{
+    int        count;
+    const int  x = dc_x << 1;
+    const int  screenwidth_low = screenwidth << hires;
+    byte      *dest1, *dest2, *dest3, *dest4;
+    boolean    cutoff = false;
+    const boolean greenfuzz = infragreen_visor
                             && players[consoleplayer].powers[pw_infrared]
                             && !players[consoleplayer].powers[pw_invulnerability];
 
-    if (!dc_yl) 
-    dc_yl = 1;
+    if (!dc_yl)
+    {
+        dc_yl = 1;
+    }
 
     if (dc_yh == viewheight-1)
     {
-        dc_yh = viewheight - 2; 
+        dc_yh = viewheight-2;
         cutoff = true;
     }
 
-    count = dc_yh - dc_yl; 
+    count = dc_yh - dc_yl;
 
-    if (count < 0) 
-    return; 
+    if (count < 0)
+    {
+        return;
+    }
 
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -742,33 +780,33 @@ void R_DrawFuzzColumnLowImprovedBW (void)
     }
 #endif
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest1 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
     dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
     dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
     dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
 
-    do 
+    do
     {
-        *dest3 = *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256
-               + dest[screenwidth*fuzzoffset[fuzzpos]]]; 
+        *dest3 = *dest1 = colormaps_rd[(greenfuzz ? 1 : 2) * 256
+               + dest1[screenwidth*fuzzoffset[fuzzpos]]];
         *dest4 = *dest2 = colormaps_rd[(greenfuzz ? 1 : 2) * 256
-               + dest2[screenwidth*fuzzoffset[fuzzpos]]]; 
+               + dest2[screenwidth*fuzzoffset[fuzzpos]]];
 
         if (++fuzzpos == FUZZTABLE)
         {
-            fuzzpos = paused || menuactive ? 0 : Crispy_Random()%49;
+            fuzzpos = leveltime > oldleveltime ? Crispy_Random() % 49 : 0;
         }
 
-        dest += screenwidth << hires;
-        dest2 += screenwidth << hires;
-        dest3 += screenwidth << hires;
-        dest4 += screenwidth << hires;
-    } while (count--); 
+        dest1 += screenwidth_low;
+        dest2 += screenwidth_low;
+        dest3 += screenwidth_low;
+        dest4 += screenwidth_low;
+    } while (count--);
 
     if (cutoff)
     {
-        *dest3 = *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256
-              + dest[(screenwidth*fuzzoffset[fuzzpos]-screenwidth)/2]];
+        *dest3 = *dest1 = colormaps_rd[(greenfuzz ? 1 : 2) * 256
+              + dest1[(screenwidth*fuzzoffset[fuzzpos]-screenwidth)/2]];
         *dest4 = *dest2 = colormaps_rd[(greenfuzz ? 1 : 2) * 256
                + dest2[(screenwidth*fuzzoffset[fuzzpos]-screenwidth)/2]];
     }
@@ -843,6 +881,7 @@ void R_DrawFuzzColumnTranslucent (void)
 void R_DrawFuzzColumnTranslucentLow (void)
 {
     const int x = dc_x << 1;
+    const int screenwidth_low = screenwidth << hires;
     int       count = dc_yh - dc_yl;
     byte     *dest1, *dest2, *dest3, *dest4;
     fixed_t   frac, fracstep;
@@ -894,10 +933,10 @@ void R_DrawFuzzColumnTranslucentLow (void)
                 *dest3 = transtable30[(*dest3<<8)+colormap[0][src]];
                 *dest4 = transtable30[(*dest4<<8)+colormap[0][src]];
 
-                dest1 += screenwidth << hires;
-                dest2 += screenwidth << hires;
-                dest3 += screenwidth << hires;
-                dest4 += screenwidth << hires;
+                dest1 += screenwidth_low;
+                dest2 += screenwidth_low;
+                dest3 += screenwidth_low;
+                dest4 += screenwidth_low;
 
                 if ((frac += fracstep) >= heightmask)
                 {
@@ -916,10 +955,10 @@ void R_DrawFuzzColumnTranslucentLow (void)
                 *dest3 = transtable30[(*dest3<<8)+colormap[0][src]];
                 *dest4 = transtable30[(*dest4<<8)+colormap[0][src]];
 
-                dest1 += screenwidth << hires;
-                dest2 += screenwidth << hires;
-                dest3 += screenwidth << hires;
-                dest4 += screenwidth << hires;
+                dest1 += screenwidth_low;
+                dest2 += screenwidth_low;
+                dest3 += screenwidth_low;
+                dest4 += screenwidth_low;
 
                 frac += fracstep; 
 
