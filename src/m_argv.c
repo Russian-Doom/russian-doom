@@ -320,6 +320,12 @@ void M_PrintHelp(void)
 #define CLI_Parameter(keys, description_eng, description_rus) \
 printf("  %-31s  %s\n", (keys), english_language ? (description_eng) : (description_rus))
 
+#ifdef _WIN32
+    extern void RD_CreateWindowsConsole (void);
+
+    RD_CreateWindowsConsole();
+#endif
+
     printf("%s 'inter-%s --help -lang %s'\n\n",
            english_language ? "Чтобы увидить это сообщение на русском запустите" : "To see this message in english run",
            RD_GameType == gt_Doom ? "doom" :
@@ -802,4 +808,8 @@ printf("  %-31s  %s\n", (keys), english_language ? (description_eng) : (descript
                       "Search the local LAN for running servers",
                       "Поиск действующих серверов в локальной сети");
     }
+
+#ifdef _WIN32
+    system("PAUSE");
+#endif
 }

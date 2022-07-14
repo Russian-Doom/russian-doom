@@ -59,6 +59,37 @@ boolean vanillaparm;
 // [JN] Devparm available for all three games in RD
 boolean devparm;
 
+#ifdef _WIN32
+// -----------------------------------------------------------------------------
+// RD_CreateWindowsConsole
+// [JN] Creates console output Window. For Windows OS only.
+// -----------------------------------------------------------------------------
+static boolean console_created = false;
+
+void RD_CreateWindowsConsole (void)
+{
+    // [JN] Console already created, don't try to create it again.
+    if (console_created)
+    {
+        return;
+    }
+
+    // [JN] Allocate console.
+    AllocConsole();
+
+    // [JN] Head text outputs.
+    freopen("CONIN$", "r",stdin); 
+    freopen("CONOUT$","w",stdout); 
+    freopen("CONOUT$","w",stderr); 
+
+    // [JN] Set a proper codepage.
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+    
+    console_created = true;
+}
+#endif
+
 int lang_param;
 
 static void CheckLangParam()
@@ -164,22 +195,6 @@ int main(int argc, char **argv)
         myargv[i] = M_StringDuplicate(argv[i]);
     }
 
-#ifdef _WIN32
-    char consoleTitle[300];
-    GetConsoleTitle(consoleTitle, 300);
-    if(strncmp(consoleTitle, myargv[0], 300) == 0)
-    {
-        printf("Console title: %s\nExecution command: %s\nConsole assumed to be auto-created and closed\n",
-               consoleTitle, myargv[0]);
-        FreeConsole();
-    }
-    else
-    {
-        SetConsoleOutputCP(CP_UTF8);
-        SetConsoleCP(CP_UTF8);
-    }
-#endif
-
     M_SetExeDir();
 #ifdef __APPLE__
     packageResourcesDir = SDL_GetBasePath();
@@ -212,6 +227,14 @@ int main(int argc, char **argv)
 
     // Check for -devparm being activated
     devparm = M_CheckParm ("-devparm");
+
+#ifdef _WIN32
+    // [JN] Create a console output on Windows for devparm mode.
+    if (devparm)
+    {
+        RD_CreateWindowsConsole();
+    }
+#endif
 
     if(M_CheckParm("--version"))
     {
@@ -246,6 +269,10 @@ int main(int argc, char **argv)
 
 static void printVersion(void)
 {
+#ifdef _WIN32
+    RD_CreateWindowsConsole();
+#endif
+
     printf("%s %s\n", RD_Project_Name, RD_Project_Version);
     printf("Revision: %s (%s)\n", GIT_SHA, GIT_TIME);
     printf("Tag: %s\n", GIT_TAG);
@@ -262,5 +289,9 @@ static void printVersion(void)
     printf("Compiled with SDL_net version: %d.%d.%d\n", SDL_NET_MAJOR_VERSION, SDL_NET_MINOR_VERSION, SDL_NET_PATCHLEVEL);
     const SDL_version* sdl_netVersion = SDLNet_Linked_Version();
     printf("\tRuntime SDL_net version: %d.%d.%d\n", sdl_netVersion->major, sdl_netVersion->minor, sdl_netVersion->patch);
+
+#ifdef _WIN32
+    system("PAUSE");
+#endif
 }
 
