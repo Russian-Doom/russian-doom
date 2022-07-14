@@ -31,6 +31,7 @@
 
 #define MINZ        (FRACUNIT*4)
 #define BASEYCENTER (ORIGHEIGHT/2)
+#define MAXDIMINDEX 47
 
 
 //
@@ -771,12 +772,8 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
         if (thing->sprite == SPR_BON2   // Armor Bonus
         ||  thing->sprite == SPR_BAR1)  // Explosive Barrel
         {
-            int semi_bright = index;
+            const int semi_bright = MAX(index, MINBRIGHT);
 
-            if (semi_bright < MINBRIGHT)
-            {
-                semi_bright = MINBRIGHT;
-            }
             vis->colormap[1] = lightnum < 6 ? &colormaps[MINBRIGHT*256] :
                                               spritelights[semi_bright];
         }
@@ -789,12 +786,7 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
         ||  thing->sprite == SPR_TLMP   // Tall Tech Lamp
         ||  thing->sprite == SPR_TLP2)  // Short Tech Lamp
         {
-            int demi_bright = index*2;
-
-            if (demi_bright > 47)
-            {
-                demi_bright = 47;
-            }
+            const int demi_bright = MIN(index*2, MAXDIMINDEX);
 
             vis->colormap[0] = spritelights[demi_bright];
 
@@ -820,12 +812,7 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
         ||  thing->sprite == SPR_TGRN   // Tall Green Torch
         ||  thing->sprite == SPR_TRED)  // Tall Red Torch
         {
-            int hemi_bright = index*4;
-
-            if (hemi_bright > 47)
-            {
-                hemi_bright = 47;
-            }
+            const int hemi_bright = MIN(index*4, MAXDIMINDEX);
 
             vis->colormap[0] = spritelights[hemi_bright];
             vis->colormap[1] = &colormaps[bmap_flick/3*256];
