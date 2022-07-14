@@ -485,9 +485,8 @@ static void R_DrawVisSprite (const vissprite_t *vis, const int x1, const int x2)
         colfunc = transcolfunc;
         dc_translation = vis->translation;
     }
-
     // [crispy] translucent sprites
-    if (translucency && !vanillaparm && (vis->mobjflags & MF_TRANSLUCENT))
+    else if (translucency && !vanillaparm && (vis->mobjflags & MF_TRANSLUCENT))
     {
         colfunc = tlcolfunc;
     }
