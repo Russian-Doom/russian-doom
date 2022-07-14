@@ -2,6 +2,7 @@ name: Continuous Integration
 
 on:
   push:
+    branches: ["*"]
     paths-ignore: ["src_dos/**"]
     tags-ignore: ["*"]
   pull_request:
