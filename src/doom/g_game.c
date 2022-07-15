@@ -485,35 +485,32 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     }
 
     // [JN] Mouselook: handling
-    if (!demoplayback && players[consoleplayer].playerstate == PST_LIVE && !paused && !menuactive)
+    if (mlook)
     {
-        if (mlook)
-        {
-            cmd->lookdir += mouse_y_invert ? -mousey : mousey;
-            cmd->lookdir += FixedMul(angleturn[2], joyvlook);
-        }
-        else if (!novert)
-        {
-            forward += mousey;
-            forward += FixedMul(forwardmove[speed], joyvlook);
-        }
-        
-        if (players[consoleplayer].lookdir > LOOKDIRMAX * MLOOKUNIT)
-        {
-            players[consoleplayer].lookdir = LOOKDIRMAX * MLOOKUNIT;
-        }
-        else if (players[consoleplayer].lookdir < -LOOKDIRMIN * MLOOKUNIT)
-        {
-            players[consoleplayer].lookdir = -LOOKDIRMIN * MLOOKUNIT;
-        }
-        
-        if (look < 0)
-        {
-            look += 16;
-        }
-
-        cmd->lookfly = look;
+        cmd->lookdir += mouse_y_invert ? -mousey : mousey;
+        cmd->lookdir += FixedMul(angleturn[2], joyvlook);
     }
+    else if (!novert)
+    {
+        forward += mousey;
+        forward += FixedMul(forwardmove[speed], joyvlook);
+    }
+        
+    if (players[consoleplayer].lookdir > LOOKDIRMAX * MLOOKUNIT)
+    {
+        players[consoleplayer].lookdir = LOOKDIRMAX * MLOOKUNIT;
+    }
+    else if (players[consoleplayer].lookdir < -LOOKDIRMIN * MLOOKUNIT)
+    {
+        players[consoleplayer].lookdir = -LOOKDIRMIN * MLOOKUNIT;
+    }
+        
+    if (look < 0)
+    {
+        look += 16;
+    }
+
+    cmd->lookfly = look;
 
     mousex = mousey = joyturn = joyvlook = 0;
 
