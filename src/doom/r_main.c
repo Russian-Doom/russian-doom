@@ -738,6 +738,8 @@ void R_Init (void)
     
     R_InitData ();
     printf (".");
+    // [JN] Define back screen background patch only once at startup. 
+    R_InitBackScreenFlat();
     // viewwidth / viewheight / detailLevel are set by the defaults
     R_SetViewSize (screenblocks, detailLevel);
     printf (".");

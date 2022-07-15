@@ -1439,6 +1439,32 @@ void R_InitBuffer (const int width, const int height)
 }
 
 // -----------------------------------------------------------------------------
+// R_InitBackScreenFlat
+// [JN] Define back screen background patch only once at startup.
+// -----------------------------------------------------------------------------
+
+static char *backscreen_flat;
+
+void R_InitBackScreenFlat (void)
+{
+    if (gamemission == jaguar)
+    {
+        // [JN] Atari Jaguar border patch.
+        backscreen_flat = DEH_String("FLOOR7_1");
+    }
+    else if (gamemode == commercial)
+    {
+        // DOOM II border patch.
+        backscreen_flat = DEH_String("GRNROCK");
+    }
+    else
+    {
+        // DOOM border patch.
+        backscreen_flat = DEH_String("FLOOR7_2");
+    }
+}
+
+// -----------------------------------------------------------------------------
 // R_FillBackScreen
 // Fills the back screen with a pattern for variable screen sizes.
 // Also draws a beveled edge.
@@ -1449,17 +1475,6 @@ void R_FillBackScreen (void)
     int      x, y; 
     byte    *src, *dest; 
     patch_t *patch;
-
-    // DOOM border patch.
-    char *name1 = DEH_String("FLOOR7_2");
-
-    // DOOM II border patch.
-    char *name2 = DEH_String("GRNROCK");
-
-    // [JN] Atari Jaguar border patch.
-    char *name3 = DEH_String("FLOOR7_1");
-
-    char *name;
 
     // [JN] Function not used in widescreen rendering.
     if (aspect_ratio >= 2)
@@ -1491,21 +1506,7 @@ void R_FillBackScreen (void)
                                                     PU_STATIC, NULL);
     }
 
-    if (gamemode == commercial)
-    {
-        name = name2;
-    }
-    else
-    {
-        name = name1;
-    }
-
-    if (gamemission == jaguar)
-    {
-        name = name3;
-    }
-
-    src = W_CacheLumpName(name, PU_CACHE); 
+    src = W_CacheLumpName(backscreen_flat, PU_CACHE); 
     dest = background_buffer;
 
     // [JN] Variable HUD detail level.
