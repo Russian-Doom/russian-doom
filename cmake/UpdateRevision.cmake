@@ -16,7 +16,7 @@ endmacro()
 # from source repository.  If anything goes wrong return something in "Error."
 function(query_repo_info TagPattern)
     execute_process(
-        COMMAND git describe --tags --dirty=-m --abbrev=7 --no-match --match ${TagPattern}
+        COMMAND "${Git_executable}" describe --tags --dirty=-m --abbrev=7 --no-match --match ${TagPattern}
         RESULT_VARIABLE Error
         OUTPUT_VARIABLE Tag
         ERROR_QUIET
@@ -26,7 +26,7 @@ function(query_repo_info TagPattern)
         set(Tag "<unknown>")
     endif()
     execute_process(
-        COMMAND git log -1 "--format=%ai;%H"
+        COMMAND "${Git_executable}" log -1 "--format=%ai;%H"
         RESULT_VARIABLE Error
         OUTPUT_VARIABLE CommitInfo
         ERROR_QUIET
@@ -61,11 +61,12 @@ function(get_existing_hash File)
 endfunction()
 
 function(main)
-    if(NOT CMAKE_ARGC EQUAL 5) # cmake -P UpdateRevision.cmake <OutputFile> <TagPattern>
-        message(NOTICE "Usage: ${CMAKE_ARGV2} <path to git_info.h> <TagPattern>")
+    if(NOT CMAKE_ARGC EQUAL 6) # cmake -P UpdateRevision.cmake <OutputFile> <TagPattern> <path to git>
+        message(NOTICE "Usage: ${CMAKE_ARGV2} <path to git_info.h> <TagPattern> <path to git>")
         return()
     endif()
     set(OutputFile "${CMAKE_ARGV3}")
+    set(Git_executable "${CMAKE_ARGV5}")
 
     get_filename_component(ScriptDir "${CMAKE_SCRIPT_MODE_FILE}" DIRECTORY)
 

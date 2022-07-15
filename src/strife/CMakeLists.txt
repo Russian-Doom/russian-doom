@@ -83,5 +83,7 @@ if(COMPILE_STRIFE)
         SDL2::net
         Game
     )
-    add_dependencies(strife revision_check)
+    if(NOT NO_GIT_HASH)
+        add_dependencies(strife revision_check)
+    endif()
 endif()

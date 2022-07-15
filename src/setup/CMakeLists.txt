@@ -28,7 +28,9 @@ if(COMPILE_SETUP)
         SDL2::mixer
         SetupCommon
     )
-    add_dependencies(setup revision_check)
+    if(NOT NO_GIT_HASH)
+        add_dependencies(setup revision_check)
+    endif()
 
     # [Dasperal] Disable clang warnings for windows-1251 strings
     if (CMAKE_C_COMPILER_ID STREQUAL "Clang")

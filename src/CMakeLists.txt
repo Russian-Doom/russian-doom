@@ -209,7 +209,9 @@ foreach(MODULE ${COMPILE_MODULES})
         ${MODULE}
         Game
     )
-    add_dependencies("${PROGRAM_PREFIX}${MODULE}" revision_check)
+    if(NOT NO_GIT_HASH)
+        add_dependencies("${PROGRAM_PREFIX}${MODULE}" revision_check)
+    endif()
     if(COMPILE_SETUP)
         target_compile_definitions("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE
             "$<$<BOOL:${BUILD_PORTABLE}>:BUILD_PORTABLE>"
@@ -218,7 +220,9 @@ foreach(MODULE ${COMPILE_MODULES})
             setup
             SetupCommon
         )
-        add_dependencies("${PROGRAM_PREFIX}${MODULE}-setup" revision_check)
+        if(NOT NO_GIT_HASH)
+            add_dependencies("${PROGRAM_PREFIX}${MODULE}-setup" revision_check)
+        endif()
     endif()
 
     # Properties and Link options

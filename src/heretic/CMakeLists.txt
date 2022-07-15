@@ -73,5 +73,7 @@ if(COMPILE_HERETIC)
         SDL2::net
         Game
     )
-    add_dependencies(heretic revision_check)
+    if(NOT NO_GIT_HASH)
+        add_dependencies(heretic revision_check)
+    endif()
 endif()
