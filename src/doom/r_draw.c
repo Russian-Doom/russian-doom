@@ -1299,6 +1299,9 @@ void R_DrawGhostColumnLow (void)
 void R_DrawSpan (void) 
 { 
     unsigned int count = ds_x2 - ds_x1;  // We do not check for zero spans here.
+    const byte  *source = ds_source;
+    const byte  *brightmap = ds_brightmap;
+    const byte **colormap = ds_colormap;
 
 #ifdef RANGECHECK
     if (ds_x2 < ds_x1 || ds_x1<0 || ds_x2>=screenwidth || (unsigned)ds_y>SCREENHEIGHT)
@@ -1317,10 +1320,7 @@ void R_DrawSpan (void)
 
     do
     {
-        const byte  *source = ds_source;
-        const byte  *brightmap = ds_brightmap;
-        const byte **colormap = ds_colormap;
-        byte        *dest = ylookup[ds_y] + columnofs[flipviewwidth[ds_x1++]];
+        byte *dest = ylookup[ds_y] + columnofs[flipviewwidth[ds_x1++]];
 
         // Calculate current texture index in u,v.
         // [crispy] fix flats getting more distorted the closer they are to the right
@@ -1344,6 +1344,11 @@ void R_DrawSpan (void)
 void R_DrawSpanLow (void)
 {
     unsigned int count = ds_x2 - ds_x1;  // We do not check for zero spans here.
+    const int    ds_y_low = ds_y << hires;
+    const byte  *source = ds_source;
+    const byte  *brightmap = ds_brightmap;
+    const byte **colormap = ds_colormap;
+    byte        *dest1, *dest2;
 
 #ifdef RANGECHECK
     if (ds_x2 < ds_x1 || ds_x1<0 || ds_x2>=screenwidth || (unsigned)ds_y>SCREENHEIGHT)
@@ -1366,12 +1371,6 @@ void R_DrawSpanLow (void)
 
     do
     {
-        const byte  *source = ds_source;
-        const byte  *brightmap = ds_brightmap;
-        const byte **colormap = ds_colormap;
-        byte        *dest1;
-        byte        *dest2;
-
         // Calculate current texture index in u,v.
         // [crispy] fix flats getting more distorted the closer they are to the right
         unsigned const int ytemp = (ds_yfrac >> 10) & 0x0fc0;
@@ -1379,13 +1378,13 @@ void R_DrawSpanLow (void)
         unsigned const int spot = xtemp | ytemp;
 
         // Lowres/blocky mode does it twice, while scale is adjusted appropriately.
-         dest1 = ylookup[(ds_y << hires)] + columnofs[flipviewwidth[ds_x1]];
+         dest1 = ylookup[ds_y_low] + columnofs[flipviewwidth[ds_x1]];
         *dest1 = colormap[brightmap[source[spot]]][source[spot]];
-         dest2 = ylookup[(ds_y << hires) + 1] + columnofs[flipviewwidth[ds_x1++]];
+         dest2 = ylookup[ds_y_low+1] + columnofs[flipviewwidth[ds_x1++]];
         *dest2 = colormap[brightmap[source[spot]]][source[spot]];
-         dest1 = ylookup[(ds_y << hires)] + columnofs[flipviewwidth[ds_x1]];
+         dest1 = ylookup[ds_y_low] + columnofs[flipviewwidth[ds_x1]];
         *dest1 = colormap[brightmap[source[spot]]][source[spot]];
-         dest2 = ylookup[(ds_y << hires) + 1] + columnofs[flipviewwidth[ds_x1++]];
+         dest2 = ylookup[ds_y_low+1] + columnofs[flipviewwidth[ds_x1++]];
         *dest2 = colormap[brightmap[source[spot]]][source[spot]];
 
         // position += step;
