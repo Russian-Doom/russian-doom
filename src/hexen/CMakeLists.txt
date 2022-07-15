@@ -74,5 +74,7 @@ if(COMPILE_HEXEN)
         SDL2::net
         Game
     )
-    add_dependencies(hexen revision_check)
+    if(NOT NO_GIT_HASH)
+        add_dependencies(hexen revision_check)
+    endif()
 endif()
