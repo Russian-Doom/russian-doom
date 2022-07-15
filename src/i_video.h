@@ -51,6 +51,7 @@ extern int aspect_ratio;
 extern int aspect_ratio_temp;
 extern int wide_delta;
 extern int screenwidth;
+extern int screenwidth_low;
 extern int origwidth;
 extern int actualheight;
 

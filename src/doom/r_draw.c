@@ -237,10 +237,10 @@ void R_DrawColumnLow (void)
                 const byte src = source[frac>>FRACBITS];
                 *dest4 = *dest3 = *dest2 = *dest1 = colormap[brightmap[src]][src];
 
-                dest1 += screenwidth << hires;
-                dest2 += screenwidth << hires;
-                dest3 += screenwidth << hires;
-                dest4 += screenwidth << hires;
+                dest1 += screenwidth_low;
+                dest2 += screenwidth_low;
+                dest3 += screenwidth_low;
+                dest4 += screenwidth_low;
 
                 if ((frac += fracstep) >= heightmask)
                 {
@@ -256,10 +256,10 @@ void R_DrawColumnLow (void)
                 const byte src = source[(frac>>FRACBITS)&heightmask];
                 *dest4 = *dest3 = *dest2 = *dest1 = colormap[brightmap[src]][src];
 
-                dest1 += screenwidth << hires;
-                dest2 += screenwidth << hires;
-                dest3 += screenwidth << hires;
-                dest4 += screenwidth << hires;
+                dest1 += screenwidth_low;
+                dest2 += screenwidth_low;
+                dest3 += screenwidth_low;
+                dest4 += screenwidth_low;
 
                 frac += fracstep; 
 
@@ -362,7 +362,6 @@ void R_DrawFuzzColumnLow (void)
 {
     int        count;
     const int  x = dc_x << 1;  // low detail mode, need to multiply by 2
-    const int  screenwidth_low = screenwidth << hires;
     byte      *dest1, *dest2, *dest3, *dest4;
     boolean    cutoff = false;
 
@@ -492,7 +491,6 @@ void R_DrawFuzzColumnLowBW (void)
 {
     int        count;
     const int  x = dc_x << 1;
-    const int  screenwidth_low = screenwidth << hires;
     byte      *dest1, *dest2, *dest3, *dest4;
     boolean    cutoff = false;
     const boolean greenfuzz = infragreen_visor
@@ -620,7 +618,6 @@ void R_DrawFuzzColumnLowImproved (void)
 {
     int        count;
     const int  x = dc_x << 1;
-    const int  screenwidth_low = screenwidth << hires;
     byte      *dest1, *dest2, *dest3, *dest4;
     boolean    cutoff = false;
 
@@ -745,7 +742,6 @@ void R_DrawFuzzColumnLowImprovedBW (void)
 {
     int        count;
     const int  x = dc_x << 1;
-    const int  screenwidth_low = screenwidth << hires;
     byte      *dest1, *dest2, *dest3, *dest4;
     boolean    cutoff = false;
     const boolean greenfuzz = infragreen_visor
@@ -881,7 +877,6 @@ void R_DrawFuzzColumnTranslucent (void)
 void R_DrawFuzzColumnTranslucentLow (void)
 {
     const int x = dc_x << 1;
-    const int screenwidth_low = screenwidth << hires;
     int       count = dc_yh - dc_yl;
     byte     *dest1, *dest2, *dest3, *dest4;
     fixed_t   frac, fracstep;
@@ -1049,10 +1044,10 @@ void R_DrawTranslatedColumnLow (void)
     do 
     {
         *dest4 = *dest3 = *dest2 = *dest = dc_colormap[0][dc_translation[dc_source[frac>>FRACBITS]]];
-        dest  += screenwidth << hires;
-        dest2 += screenwidth << hires;
-        dest3 += screenwidth << hires;
-        dest4 += screenwidth << hires;
+        dest  += screenwidth_low;
+        dest2 += screenwidth_low;
+        dest3 += screenwidth_low;
+        dest4 += screenwidth_low;
 
         frac += dc_iscale; 
     } while (count--); 
@@ -1183,10 +1178,10 @@ void R_DrawTLColumnLow (void)
                 *dest2 = transtable80[(*dest2<<8)+colormap[0][src]];
                 *dest3 = transtable80[(*dest3<<8)+colormap[0][src]];
                 *dest4 = transtable80[(*dest4<<8)+colormap[0][src]];
-                dest1 += screenwidth << hires;
-                dest2 += screenwidth << hires;
-                dest3 += screenwidth << hires;
-                dest4 += screenwidth << hires;
+                dest1 += screenwidth_low;
+                dest2 += screenwidth_low;
+                dest3 += screenwidth_low;
+                dest4 += screenwidth_low;
     
                 if ((frac += fracstep) >= heightmask)
                 {
@@ -1205,10 +1200,10 @@ void R_DrawTLColumnLow (void)
                 *dest3 = transtable80[(*dest3<<8)+colormap[0][src]];
                 *dest4 = transtable80[(*dest4<<8)+colormap[0][src]];
     
-                dest1 += screenwidth << hires;
-                dest2 += screenwidth << hires;
-                dest3 += screenwidth << hires;
-                dest4 += screenwidth << hires;
+                dest1 += screenwidth_low;
+                dest2 += screenwidth_low;
+                dest3 += screenwidth_low;
+                dest4 += screenwidth_low;
     
                 frac += fracstep; 
     
@@ -1281,10 +1276,10 @@ void R_DrawGhostColumnLow (void)
         *dest3 = transtable50[(*dest3<<8)+colormap[0][trans]];
         *dest4 = transtable50[(*dest4<<8)+colormap[0][trans]];
 
-        dest1 += screenwidth << hires;
-        dest2 += screenwidth << hires;
-        dest3 += screenwidth << hires;
-        dest4 += screenwidth << hires;
+        dest1 += screenwidth_low;
+        dest2 += screenwidth_low;
+        dest3 += screenwidth_low;
+        dest4 += screenwidth_low;
 
         frac += fracstep;
     } while (count--);

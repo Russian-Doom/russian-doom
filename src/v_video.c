@@ -1401,6 +1401,8 @@ void V_Init (void)
         wide_delta = 120;
     }
 
+    screenwidth_low = screenwidth << hires;
+
     if (aspect_ratio_correct)
     {
         if (aspect_ratio == 1)
