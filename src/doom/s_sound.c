@@ -576,7 +576,8 @@ void S_StartSound (void *origin_p, const int sfx_id)
     volume = snd_SfxVolume;
 
     // [crispy] make non-fatal, consider zero volume
-    if (sfx_id == sfx_None || !snd_SfxVolume)
+    // [JN] Do not play sound if sound system is disabled.
+    if (sfx_id == sfx_None || !snd_SfxVolume || !snd_sfxdevice)
     {
         return;
     }
@@ -711,7 +712,7 @@ void S_StartSoundNoBreak (const int sfx_id)
     sfxinfo_t *sfx = &S_sfx[sfx_id];
 
     // [JN] Do not play sound if not audible.
-    if (sfx_id < 1 || sfx_id > NUMSFX || !snd_SfxVolume)
+    if (sfx_id < 1 || sfx_id > NUMSFX || !snd_SfxVolume || !snd_sfxdevice)
     {
         return;
     }
