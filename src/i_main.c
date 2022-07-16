@@ -212,11 +212,6 @@ int main(int argc, char **argv)
     }
 #endif
 
-    M_SetExeDir();
-#ifdef __APPLE__
-    packageResourcesDir = SDL_GetBasePath();
-#endif
-
     // Check for -lang param before loading response file to show potential errors in the correct language
     CheckLangParam();
 
@@ -224,6 +219,11 @@ int main(int argc, char **argv)
 
     // Check for -lang param again after loading response file to set correct language if -lang param was in response file
     CheckLangParam();
+
+    M_SetExeDir();
+#ifdef __APPLE__
+    packageResourcesDir = SDL_GetBasePath();
+#endif
 
     // Check for -devparm being activated
     devparm = M_CheckParm ("-devparm");
