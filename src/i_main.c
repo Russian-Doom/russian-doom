@@ -195,19 +195,6 @@ int main(int argc, char **argv)
         myargv[i] = M_StringDuplicate(argv[i]);
     }
 
-    M_SetExeDir();
-#ifdef __APPLE__
-    packageResourcesDir = SDL_GetBasePath();
-#endif
-
-    // Check for -lang param before loading response file to show potential errors in the correct language
-    CheckLangParam();
-
-    M_FindResponseFile();
-
-    // Check for -lang param again after loading response file to set correct language if -lang param was in response file
-    CheckLangParam();
-
 #ifdef _WIN32
     // [JN] if game language is not set yet (-1), and OS-preferred language
     // is appropriate for using Russian language in the game, use it.
@@ -224,6 +211,19 @@ int main(int argc, char **argv)
             english_language = 0;
     }
 #endif
+
+    M_SetExeDir();
+#ifdef __APPLE__
+    packageResourcesDir = SDL_GetBasePath();
+#endif
+
+    // Check for -lang param before loading response file to show potential errors in the correct language
+    CheckLangParam();
+
+    M_FindResponseFile();
+
+    // Check for -lang param again after loading response file to set correct language if -lang param was in response file
+    CheckLangParam();
 
     // Check for -devparm being activated
     devparm = M_CheckParm ("-devparm");
