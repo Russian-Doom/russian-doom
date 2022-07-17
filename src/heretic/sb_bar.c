@@ -62,7 +62,6 @@ static void CheatPowerFunc(player_t * player, Cheat_t * cheat);
 static void CheatHealthFunc(player_t * player, Cheat_t * cheat);
 static void CheatKeysFunc(player_t * player, Cheat_t * cheat);
 static void CheatSoundFunc(player_t * player, Cheat_t * cheat);
-static void CheatTickerFunc(player_t * player, Cheat_t * cheat);
 static void CheatArtifact1Func(player_t * player, Cheat_t * cheat);
 static void CheatArtifact2Func(player_t * player, Cheat_t * cheat);
 static void CheatArtifact3Func(player_t * player, Cheat_t * cheat);
@@ -89,8 +88,6 @@ boolean inventory;
 int curpos;
 int inv_ptr;
 int ArtifactFlash;
-
-static int DisplayTicker = 0;
 
 // Private Data
 
@@ -147,9 +144,6 @@ cheatseq_t CheatKeysSeq = CHEAT("skel", 0);
 // Toggle sound debug info
 cheatseq_t CheatSoundSeq = CHEAT("noise", 0);
 
-// Toggle ticker
-cheatseq_t CheatTickerSeq = CHEAT("ticker", 0);
-
 // Get an artifact 1st stage (ask for type)
 cheatseq_t CheatArtifact1Seq = CHEAT("gimme", 0);
 
@@ -186,7 +180,6 @@ static Cheat_t Cheats[] = {
     {CheatHealthFunc,    &CheatHealthSeq},
     {CheatKeysFunc,      &CheatKeysSeq},
     {CheatSoundFunc,     &CheatSoundSeq},
-    {CheatTickerFunc,    &CheatTickerSeq},
     {CheatArtifact1Func, &CheatArtifact1Seq},
     {CheatArtifact2Func, &CheatArtifact2Seq},
     {CheatArtifact3Func, &CheatArtifact3Seq},
@@ -1903,14 +1896,6 @@ static void CheatSoundFunc(player_t * player, Cheat_t * cheat)
     DebugSound = !DebugSound;
     P_SetMessage(player, DEH_String(DebugSound ?
                  txt_cheatsoundon : txt_cheatsoundoff), msg_system, false);
-}
-
-static void CheatTickerFunc(player_t * player, Cheat_t * cheat)
-{
-    DisplayTicker = !DisplayTicker;
-    P_SetMessage(player, DEH_String(DisplayTicker ?
-                 txt_cheattickeron : txt_cheattickeroff), msg_system, false);
-    I_DisplayFPSDots(DisplayTicker);
 }
 
 static void CheatArtifact1Func(player_t * player, Cheat_t * cheat)

@@ -55,7 +55,6 @@ static deh_cheat_t allcheats[] =
     {"Enviro Suit",         &cheat_powerup[2] },
     {"Health",              &cheat_powerup[3] },
     {"Backpack",            &cheat_powerup[4] },
-    // STRIFE-FIXME/TODO: Does SeHackEd not support PUMPUP{S,T,nil}, or "DOTS" ?
 };
 
 static deh_cheat_t *FindCheatByName(char *name)

@@ -124,8 +124,6 @@ char* txt_cheathealth;
 char* txt_cheatkeys;
 char* txt_cheatsoundon;
 char* txt_cheatsoundoff;
-char* txt_cheattickeron;
-char* txt_cheattickeroff;
 char* txt_cheatartifacts3;
 char* txt_cheatartifactsfail;
 char* txt_cheatwarp;
@@ -251,8 +249,6 @@ void RD_DefineLanguageStrings (void)
         txt_cheatkeys          = TXT_CHEATKEYS;
         txt_cheatsoundon       = TXT_CHEATSOUNDON;
         txt_cheatsoundoff      = TXT_CHEATSOUNDOFF;
-        txt_cheattickeron      = TXT_CHEATTICKERON;
-        txt_cheattickeroff     = TXT_CHEATTICKEROFF;
         txt_cheatartifacts3    = TXT_CHEATARTIFACTS3;
         txt_cheatartifactsfail = TXT_CHEATARTIFACTSFAIL;
         txt_cheatwarp          = TXT_CHEATWARP;
@@ -372,8 +368,6 @@ void RD_DefineLanguageStrings (void)
         txt_cheatkeys          = TXT_CHEATKEYS_RUS;
         txt_cheatsoundon       = TXT_CHEATSOUNDON_RUS;
         txt_cheatsoundoff      = TXT_CHEATSOUNDOFF_RUS;
-        txt_cheattickeron      = TXT_CHEATTICKERON_RUS;
-        txt_cheattickeroff     = TXT_CHEATTICKEROFF_RUS;
         txt_cheatartifacts3    = TXT_CHEATARTIFACTS3_RUS;
         txt_cheatartifactsfail = TXT_CHEATARTIFACTSFAIL_RUS;
         txt_cheatwarp          = TXT_CHEATWARP_RUS;

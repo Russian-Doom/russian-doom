@@ -254,7 +254,6 @@ cheatseq_t cheat_keys       = CHEAT("jimmy", 0);        // [STRIFE]: new cheat j
 cheatseq_t cheat_stealth    = CHEAT("gripper", 0);      // [STRIFE]: new cheat gripper
 cheatseq_t cheat_midas      = CHEAT("donnytrump", 0);   // [STRIFE]: new cheat
 cheatseq_t cheat_lego       = CHEAT("lego", 0);         // [STRIFE]: new cheat
-cheatseq_t cheat_dev        = CHEAT("dots", 0);         // [STRIFE]: new cheat
 
 // haleyjd 20110224: enumeration for access to powerup cheats
 enum
@@ -494,15 +493,6 @@ boolean ST_Responder(event_t* ev)
             plyr->message = DEH_String(ststr_nomus);
         else
             S_ChangeMusic(musnum, 1);
-    }
-    // [STRIFE]: "dev" cheat - "DOTS"
-    else if (cht_CheckCheat(&cheat_dev, ev->data2))
-    {
-        devparm = !devparm;
-        if (devparm)
-            plyr->message = DEH_String("devparm ON");
-        else
-            plyr->message = DEH_String("devparm OFF");
     }
 
     // [STRIFE] Cheats below are not allowed in netgames or demos

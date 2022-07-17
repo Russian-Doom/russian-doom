@@ -94,8 +94,6 @@ extern char* txt_cheathealth;
 extern char* txt_cheatkeys;
 extern char* txt_cheatsoundon;
 extern char* txt_cheatsoundoff;
-extern char* txt_cheattickeron;
-extern char* txt_cheattickeroff;
 extern char* txt_cheatartifacts1;
 extern char* txt_cheatartifacts2;
 extern char* txt_cheatartifacts3;
@@ -229,8 +227,6 @@ extern char* txt_mlook_off;
 #define TXT_CHEATKEYS           "ALL KEYS"
 #define TXT_CHEATSOUNDON        "SOUND DEBUG ON"
 #define TXT_CHEATSOUNDOFF       "SOUND DEBUG OFF"
-#define TXT_CHEATTICKERON       "TICKER ON"
-#define TXT_CHEATTICKEROFF      "TICKER OFF"
 #define TXT_CHEATARTIFACTS1     "CHOOSE AN ARTIFACT ( A - J )"
 #define TXT_CHEATARTIFACTS2     "HOW MANY ( 1 - 9 )"
 #define TXT_CHEATARTIFACTS3     "YOU GOT IT"
@@ -462,8 +458,6 @@ extern char* txt_mlook_off;
 #define TXT_CHEATKEYS_RUS           "DCT RK.XB"                             // ВСЕ КЛЮЧИ
 #define TXT_CHEATSOUNDON_RUS        "JNKFLRF PDERF DRK.XTYF"                // ОТЛАДКА ЗВУКА ВКЛЮЧЕНА
 #define TXT_CHEATSOUNDOFF_RUS       "JNKFLRF PDERF JNRK.XTYF"               // ОТЛАДКА ЗВУКА ОТКЛЮЧЕНА
-#define TXT_CHEATTICKERON_RUS       "CXTNXBR RFLHJDJQ XFCNJNS DRK.XTY"      // СЧЕТЧИК КАДРОВОЙ ЧАСТОТЫ ВКЛЮЧЕН
-#define TXT_CHEATTICKEROFF_RUS      "CXTNXBR RFLHJDJQ XFCNJNS JNRK.XTY"     // СЧЕТЧИК КАДРОВОЙ ЧАСТОТЫ ОТКЛЮЧЕН
 #define TXT_CHEATARTIFACTS1_RUS     "DS,THBNT FHNTAFRN ( F - J )"           // ВЫБЕРИТЕ АРТЕФАКТ ( А - O )
 #define TXT_CHEATARTIFACTS2_RUS     "ERF;BNT RJKBXTCNDJ ( 1 - 9 )"          // УКАЖИТЕ КОЛИЧЕСТВО ( 1 - 9 )
 #define TXT_CHEATARTIFACTS3_RUS     "GJKEXTYJ"                              // ПОЛУЧЕНО 

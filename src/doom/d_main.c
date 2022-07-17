@@ -2803,8 +2803,6 @@ void D_DoomMain (void)
 
     fastparm = M_CheckParm ("-fast");
 
-    I_DisplayFPSDots(devparm);
-
     //!
     // @category net
     // @vanilla

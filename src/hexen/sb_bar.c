@@ -67,7 +67,6 @@ static void CheatWeaponsFunc(player_t * player, Cheat_t * cheat);
 static void CheatHealthFunc(player_t * player, Cheat_t * cheat);
 static void CheatKeysFunc(player_t * player, Cheat_t * cheat);
 static void CheatSoundFunc(player_t * player, Cheat_t * cheat);
-static void CheatTickerFunc(player_t * player, Cheat_t * cheat);
 static void CheatArtifactAllFunc(player_t * player, Cheat_t * cheat);
 static void CheatPuzzleFunc(player_t * player, Cheat_t * cheat);
 static void CheatWarpFunc(player_t * player, Cheat_t * cheat);
@@ -110,7 +109,6 @@ int ArtifactFlash;
 
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 
-static int DisplayTicker = 0;
 static int HealthMarker;
 //static int ChainWiggle;
 static player_t *CPlayer;
@@ -194,9 +192,6 @@ cheatseq_t CheatKeysSeq = CHEAT("locksmith", 0);
 // Toggle sound debug info
 cheatseq_t CheatSoundSeq = CHEAT("noise", 0);
 
-// Toggle ticker
-cheatseq_t CheatTickerSeq = CHEAT("ticker", 0);
-
 // Get all artifacts
 cheatseq_t CheatArtifactAllSeq = CHEAT("indiana", 0);
 
@@ -255,7 +250,6 @@ static Cheat_t Cheats[] = {
     {CheatHealthFunc, &CheatHealthSeq},
     {CheatKeysFunc, &CheatKeysSeq},
     {CheatSoundFunc, &CheatSoundSeq},
-    {CheatTickerFunc, &CheatTickerSeq},
     {CheatArtifactAllFunc, &CheatArtifactAllSeq},
     {CheatPuzzleFunc, &CheatPuzzleSeq},
     {CheatWarpFunc, &CheatWarpSeq},
@@ -373,7 +367,6 @@ void SB_Init(void)
 	SET_CHEAT(CheatHealthSeq,"sgurno");
 	SET_CHEAT(CheatKeysSeq, "mraymondjudy");
 	SET_CHEAT(CheatSoundSeq, "kschilder");
-	SET_CHEAT(CheatTickerSeq, "rrettenmund");
 	SET_CHEAT(CheatArtifactAllSeq, "braffel");
 	SET_CHEAT(CheatPuzzleSeq, "tmoore");
 	SET_CHEAT(CheatWarpSeq, "bpelletier");
@@ -2328,21 +2321,6 @@ static void CheatSoundFunc(player_t * player, Cheat_t * cheat)
     {
         P_SetMessage(player, txt_cheatsoundoff, msg_system, true);
     }
-}
-
-static void CheatTickerFunc(player_t * player, Cheat_t * cheat)
-{
-    DisplayTicker = !DisplayTicker;
-    if (DisplayTicker)
-    {
-        P_SetMessage(player, txt_cheattickeron, msg_system, true);
-    }
-    else
-    {
-        P_SetMessage(player, txt_cheattickeroff, msg_system, true);
-    }
-
-    I_DisplayFPSDots(DisplayTicker);
 }
 
 static void CheatArtifactAllFunc(player_t * player, Cheat_t * cheat)

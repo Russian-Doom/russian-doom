@@ -122,8 +122,6 @@ extern char *txt_cheathealth;
 extern char *txt_cheatkeys;
 extern char *txt_cheatsoundon;
 extern char *txt_cheatsoundoff;
-extern char *txt_cheattickeron;
-extern char *txt_cheattickeroff;
 extern char *txt_cheatartifacts3;
 extern char *txt_cheatartifactsfail;
 extern char *txt_cheatwarp;
@@ -305,8 +303,6 @@ extern char *txt_running_script;
 #define TXT_CHEATKEYS               "ALL KEYS"
 #define TXT_CHEATSOUNDON            "SOUND DEBUG ON"
 #define TXT_CHEATSOUNDOFF           "SOUND DEBUG OFF"
-#define TXT_CHEATTICKERON           "TICKER ON"
-#define TXT_CHEATTICKEROFF          "TICKER OFF"
 #define TXT_CHEATARTIFACTS3         "ALL ARTIFACTS"
 #define TXT_CHEATARTIFACTSFAIL      "BAD INPUT"
 #define TXT_CHEATWARP               "LEVEL WARP"
@@ -479,8 +475,6 @@ extern char *txt_running_script;
 #define TXT_CHEATKEYS_RUS           "DCT RK.XB"                               // ВСЕ КЛЮЧИ
 #define TXT_CHEATSOUNDON_RUS        "JNKFLRF PDERF DRK.XTYF"                  // ОТЛАДКА ЗВУКА ВКЛЮЧЕНА
 #define TXT_CHEATSOUNDOFF_RUS       "JNKFLRF PDERF JNRK.XTYF"                 // ОТЛАДКА ЗВУКА ОТКЛЮЧЕНА
-#define TXT_CHEATTICKERON_RUS       "CXTNXBR RFLHJDJQ XFCNJNS DRK.XTY"        // СЧЕТЧИК КАДРОВОЙ ЧАСТОТЫ ВКЛЮЧЕН
-#define TXT_CHEATTICKEROFF_RUS      "CXTNXBR RFLHJDJQ XFCNJNS JNRK.XTY"       // СЧЕТЧИК КАДРОВОЙ ЧАСТОТЫ ОТКЛЮЧЕН
 #define TXT_CHEATARTIFACTS3_RUS     "DCT FHNTAFRNS"                           // ВСЕ АРТЕФАКТЫ
 #define TXT_CHEATARTIFACTSFAIL_RUS  "YTRJHHTRNYSQ DDJL"                       // НЕКОРРЕНТНЫЙ ВВОД
 #define TXT_CHEATWARP_RUS           "GTHTVTOTYBT YF EHJDTYM"                  // ПЕРЕМЕЩЕНИЕ НА УРОВЕНЬ

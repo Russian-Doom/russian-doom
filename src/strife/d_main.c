@@ -1549,8 +1549,6 @@ void D_DoomMain (void)
 
     fastparm = M_CheckParm ("-fast");
 
-    I_DisplayFPSDots(devparm);
-
     // haleyjd 20110206 [STRIFE]: -devparm implies -nograph
     if(devparm)
         showintro = false;
