@@ -76,10 +76,6 @@
 #define MAPBITS 12
 #define FRACTOMAPBITS (FRACBITS-MAPBITS)
 
-// [JN] New radius to use with FRACTOMAPBITS, since orginal 
-// PLAYERRADIUS macro can't be used in this implementation.
-#define MAPPLAYERRADIUS (16*(1<<MAPBITS))
-
 // scale on entry
 #define INITSCALEMTOF (.2*FRACUNIT)
 
@@ -90,13 +86,13 @@ static int f_paninc;
 
 // [JN] How much zoom-in per tic goes to 2x in 1 second.
 static int m_zoomin;
-#define M_ZOOMIN_SLOW ((int) ((float)FRACUNIT * (1.04f + f_paninc / 200.0f)))
-#define M_ZOOMIN_FAST ((int) ((float)FRACUNIT * (1.08f + f_paninc / 200.0f)))
+#define M_ZOOMIN_SLOW ((int) (1.04*FRACUNIT))
+#define M_ZOOMIN_FAST ((int) (1.08*FRACUNIT))
 
 // [JN] How much zoom-out per tic pulls out to 0.5x in 1 second.
 static int m_zoomout;
-#define M_ZOOMOUT_SLOW ((int) ((float)FRACUNIT / (1.04f + f_paninc / 200.0f)))
-#define M_ZOOMOUT_FAST ((int) ((float)FRACUNIT / (1.08f + f_paninc / 200.0f)))
+#define M_ZOOMOUT_SLOW ((int) (FRACUNIT/1.04))
+#define M_ZOOMOUT_FAST ((int) (FRACUNIT/1.08))
 
 // translates between frame-buffer and map distances
 #define FTOM(x) (((int64_t)((x)<<16) * scale_ftom) >> FRACBITS)
@@ -132,7 +128,7 @@ typedef struct
 // A line drawing of the player pointing right, starting from the middle.
 // -----------------------------------------------------------------------------
 
-#define R ((8*MAPPLAYERRADIUS)/7)
+#define R ((8*FRACUNIT)/7)
 static const mline_t player_arrow[] = {
     { { -R+R/8,   0 }, {  R,      0   } }, // -----
     { {  R,       0 }, {  R-R/2,  R/4 } }, // ----->
@@ -144,7 +140,7 @@ static const mline_t player_arrow[] = {
 };
 #undef R
 
-#define R ((8*MAPPLAYERRADIUS)/7)
+#define R ((8*FRACUNIT)/7)
 static const mline_t cheat_player_arrow[] = {
     { { -R+R/8,     0        }, {  R,           0 } }, // -----
     { {  R,         0        }, {  R-R/2,     R/6 } }, // ----->
@@ -438,7 +434,7 @@ static void AM_findMinMaxBoundaries (void)
     b = FixedDiv(f_h<<FRACBITS, max_h);
 
     min_scale_mtof = a < b ? a : b;
-    max_scale_mtof = FixedDiv(f_h<<FRACBITS, 2*MAPPLAYERRADIUS);
+    max_scale_mtof = FixedDiv(f_h<<FRACBITS, 2*FRACUNIT);
 }
 
 // -----------------------------------------------------------------------------
@@ -2399,35 +2395,34 @@ static void AM_drawThings (const int colors, const int colorrange)
             // [JN] IDDT extended colors:
             if (!vanillaparm)
             {
-                // Monsters
-                if (t->flags & MF_COUNTKILL)
-                {
-                    AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy), 
-                                         MAPPLAYERRADIUS, actualangle, t->health > 0 ? REDS_IDDT : GRAYS_IDDT, pt.x, pt.y);
-                }
-                // Lost Soul and Explosive barrel (does not have a MF_COUNTKILL flag)
-                else if (t->type == MT_SKULL || t->type == MT_BARREL)
+                // [JN] Use actual radius for things drawing.
+                const fixed_t actualradius = t->radius >> FRACTOMAPBITS;
+
+                // [crispy] draw blood splats and puffs as small squares
+                if (t->type == MT_BLOOD || t->type == MT_PUFF)
                 {
                     AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy),
-                                 MAPPLAYERRADIUS, actualangle, YELLOWS_IDDT, pt.x, pt.y);
+                                         actualradius >> 2, actualangle, GRAYS_IDDT, pt.x, pt.y);
                 }
-                // Pickups
-                else if (t->flags & MF_SPECIAL)
-                {
-                    AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy),
-                                 MAPPLAYERRADIUS, actualangle, GREENS_IDDT, pt.x, pt.y);
-                }
-                // Everything else
                 else
                 {
-                    AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy),
-                                 MAPPLAYERRADIUS, actualangle, GRAYS_IDDT, pt.x, pt.y);
+                    AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy), 
+                                         actualradius, actualangle, 
+                                         // Monsters
+                                         t->flags & MF_COUNTKILL ? (t->health > 0 ? REDS_IDDT : GRAYS_IDDT) :
+                                         // Lost Souls and Explosive barrels (does not have a MF_COUNTKILL flag)
+                                         t->type == MT_SKULL || t->type == MT_BARREL ? YELLOWS_IDDT :
+                                         // Pickups
+                                         t->flags & MF_SPECIAL ? GREENS_IDDT :
+                                         // Everything else
+                                         GRAYS_IDDT,
+                                         pt.x, pt.y);
                 }
             }
             else
             {
                 AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy),
-                                     MAPPLAYERRADIUS, actualangle, colors, pt.x, pt.y);
+                                     FRACUNIT, actualangle, colors, pt.x, pt.y);
             }
 
             t = t->snext;
