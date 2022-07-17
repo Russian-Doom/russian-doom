@@ -25,10 +25,8 @@
 #include "v_video.h"
 #include "f_wipe.h"
 #include "deh_str.h"
-#include "d_mode.h"     // [JN] Jaguar Doom: gamemission
 #include "w_wad.h"      // [JN] Jaguar Doom: W_CacheLumpName
 #include "doomstat.h"   // [JN] Jaguar Doom: screenblocks
-#include "st_bar.h"   // [JN] Jaguar Doom: Status bar widgets
 #include "jn.h"         // [JN] Jaguar Doom: english_language
 
 
@@ -36,29 +34,26 @@
 // SCREEN WIPE PACKAGE
 // =============================================================================
 
-// when zero, stop the wipe
-static boolean go = 0;
-
 static byte *wipe_scr_start;
 static byte *wipe_scr_end;
 static byte *wipe_scr;
 
 static int  *y;
 
-
 // -----------------------------------------------------------------------------
 // wipe_shittyColMajorXform
 // -----------------------------------------------------------------------------
 
-static void wipe_shittyColMajorXform (short *array, const int width, const int height)
+static void wipe_shittyColMajorXform (short *array)
 {
-    short *dest = (short*) Z_Malloc(width * height * sizeof(*dest), PU_STATIC, 0);
+    const int width = screenwidth/2;
+    short *dest = (short*) Z_Malloc(width * SCREENHEIGHT * sizeof(*dest), PU_STATIC, 0);
 
-    for(int yy = 0 ; yy < height ; yy++)
+    for(int yy = 0 ; yy < SCREENHEIGHT ; yy++)
         for(int xx = 0 ; xx < width ; xx++)
-            dest[xx*height+yy] = array[yy*width+xx];
+            dest[xx*SCREENHEIGHT+yy] = array[yy*width+xx];
 
-    memcpy(array, dest, width*height*sizeof(*dest));
+    memcpy(array, dest, width*SCREENHEIGHT*sizeof(*dest));
 
     Z_Free(dest);
 }
@@ -67,24 +62,22 @@ static void wipe_shittyColMajorXform (short *array, const int width, const int h
 // wipe_initMelt
 // -----------------------------------------------------------------------------
 
-static const int wipe_initMelt (const int width, const int height, const int ticks)
+static const int wipe_initMelt (const int ticks)
 {
-    int i;
-
     // copy start screen to main screen
-    memcpy(wipe_scr, wipe_scr_start, width * height * sizeof(*wipe_scr));
+    memcpy(wipe_scr, wipe_scr_start, screenwidth * SCREENHEIGHT * sizeof(*wipe_scr));
 
     // makes this wipe faster (in theory)
     // to have stuff in column-major format
-    wipe_shittyColMajorXform((short*)wipe_scr_start, width/2, height);
-    wipe_shittyColMajorXform((short*)wipe_scr_end, width/2, height);
+    wipe_shittyColMajorXform((short*)wipe_scr_start);
+    wipe_shittyColMajorXform((short*)wipe_scr_end);
 
     // setup initial column positions
     // (y<0 => not ready to scroll yet)
-    y = (int *) Z_Malloc(width*sizeof(int), PU_STATIC, 0);
+    y = (int *) Z_Malloc(screenwidth*sizeof(int), PU_STATIC, 0);
     // [JN] Use real random number generator instead of M_Random.
     y[0] = -(rand()%16);
-    for (i=1;i<width;i++)
+    for (int i = 1 ; i < screenwidth ; i++)
     {
         static int r;
 
@@ -102,7 +95,7 @@ static const int wipe_initMelt (const int width, const int height, const int tic
 // wipe_doMelt
 // -----------------------------------------------------------------------------
 
-static const int wipe_doMelt (int width, const int height, int ticks)
+static const int wipe_doMelt (int ticks)
 {
     int     i;
     int     j;
@@ -113,7 +106,7 @@ static const int wipe_doMelt (int width, const int height, int ticks)
     short*  d;
     boolean done = true;
 
-    width/=2;
+    const int width = screenwidth/2;
 
     while (ticks--)
     {
@@ -123,7 +116,7 @@ static const int wipe_doMelt (int width, const int height, int ticks)
             {
                 y[i]++; done = false;
             }
-            else if (y[i] < height)
+            else if (y[i] < SCREENHEIGHT)
             {
                 // [JN] Loading delay emulation
                 if ((gamemission == jaguar || screen_wiping == 2) && !vanillaparm)
@@ -138,12 +131,12 @@ static const int wipe_doMelt (int width, const int height, int ticks)
                 {
                     dy = (y[i] < 16) ? y[i]+1 : 8;
 
-                    if (y[i]+dy >= height)
+                    if (y[i]+dy >= SCREENHEIGHT)
                     {
-                        dy = height - y[i];
+                        dy = SCREENHEIGHT - y[i];
                     }
 
-                    s = &((short *)wipe_scr_end)[i*height+y[i]];
+                    s = &((short *)wipe_scr_end)[i*SCREENHEIGHT+y[i]];
                     d = &((short *)wipe_scr)[y[i]*width+i];
                     idx = 0;
 
@@ -154,11 +147,11 @@ static const int wipe_doMelt (int width, const int height, int ticks)
                     }
 
                     y[i] += dy;
-                    s = &((short *)wipe_scr_start)[i*height];
+                    s = &((short *)wipe_scr_start)[i*SCREENHEIGHT];
                     d = &((short *)wipe_scr)[y[i]*width+i];
                     idx = 0;
 
-                    for (j = height-y[i] ; j ; j--)
+                    for (j = SCREENHEIGHT-y[i] ; j ; j--)
                     {
                         d[idx] = *(s++);
                         idx += width;
@@ -177,7 +170,7 @@ static const int wipe_doMelt (int width, const int height, int ticks)
 // wipe_exitMelt
 // -----------------------------------------------------------------------------
 
-static const int wipe_exitMelt (const int width, const int height, const int ticks)
+static const int wipe_exitMelt (void)
 {
     Z_Free(y);
     Z_Free(wipe_scr_start);
@@ -189,7 +182,7 @@ static const int wipe_exitMelt (const int width, const int height, const int tic
 // wipe_StartScreen
 // -----------------------------------------------------------------------------
 
-const int wipe_StartScreen (const int x, const int y, const int width, const int height)
+const int wipe_StartScreen (void)
 {
     wipe_scr_start = Z_Malloc(screenwidth * SCREENHEIGHT 
                    * sizeof(*wipe_scr_start), PU_STATIC, NULL);
@@ -201,12 +194,12 @@ const int wipe_StartScreen (const int x, const int y, const int width, const int
 // wipe_EndScreen
 // -----------------------------------------------------------------------------
 
-const int wipe_EndScreen (const int x, const int y, const int width, const int height)
+const int wipe_EndScreen (void)
 {
     wipe_scr_end = Z_Malloc(screenwidth * SCREENHEIGHT
                  * sizeof(*wipe_scr_end), PU_STATIC, NULL);
     I_ReadScreen(wipe_scr_end);
-    V_DrawBlock(x, y, width, height, wipe_scr_start); // restore start scr.
+    V_DrawBlock(0, 0, screenwidth, SCREENHEIGHT, wipe_scr_start); // restore start scr.
     return 0;
 }
 
@@ -214,29 +207,27 @@ const int wipe_EndScreen (const int x, const int y, const int width, const int h
 // wipe_ScreenWipe
 // -----------------------------------------------------------------------------
 
-const int wipe_ScreenWipe (const int x, const int y, const int width, const int height, int ticks)
+const int wipe_ScreenWipe (const int ticks)
 {
-    int rc;
-
-    ticks <<= hires;
+    // when false, stop the wipe
+    static boolean go;
 
     // initial stuff
     if (!go)
     {
-        go = 1;
+        go = true;
         wipe_scr = I_VideoBuffer;
-        (*wipe_initMelt)(width, height, ticks);
+        (*wipe_initMelt)(ticks);
     }
 
     // do a piece of wipe-in
-    V_MarkRect(0, 0, width, height);
-    rc = (*wipe_doMelt)(width, height, ticks);
+    V_MarkRect(0, 0, screenwidth, SCREENHEIGHT);
 
     // final stuff
-    if (rc)
+    if ((*wipe_doMelt)(ticks))
     {
-        go = 0;
-        (*wipe_exitMelt)(width, height, ticks);
+        go = false;
+        (*wipe_exitMelt)();
     }
 
     // [JN] Draw "Loading" picture

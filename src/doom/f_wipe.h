@@ -21,6 +21,6 @@
 #pragma once
 
 
-const int wipe_StartScreen (const int x, const int y, const int width, const int height);
-const int wipe_EndScreen (const int x, const int y, const int width, const int height);
-const int wipe_ScreenWipe (const int x, const int y, const int width, const int height, int ticks);
+const int wipe_StartScreen (void);
+const int wipe_EndScreen (void);
+const int wipe_ScreenWipe (const int ticks);
