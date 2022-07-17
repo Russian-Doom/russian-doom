@@ -68,6 +68,8 @@ static boolean console_created = false;
 
 void RD_CreateWindowsConsole (void)
 {
+    DWORD mode;
+
     // [JN] Console already created, don't try to create it again.
     if (console_created)
     {
@@ -82,10 +84,14 @@ void RD_CreateWindowsConsole (void)
     freopen("CONOUT$","w",stdout); 
     freopen("CONOUT$","w",stderr); 
 
-    // [JN] Set a proper codepage.
+    // [JN] Set a proper codepage and mode
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
-    
+
+    HANDLE handle = GetStdHandle(STD_INPUT_HANDLE);
+    GetConsoleMode(handle, &mode);
+    SetConsoleMode(handle, mode | ENABLE_QUICK_EDIT_MODE | ENABLE_EXTENDED_FLAGS);
+
     console_created = true;
 }
 #endif
