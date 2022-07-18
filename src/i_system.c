@@ -29,6 +29,7 @@
 #define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
+#include <conio.h>
 #else
 #include <unistd.h>
 #endif
@@ -410,4 +411,13 @@ boolean I_GetMemoryValue(unsigned int offset, void *value, int size)
 
     return false;
 }
+
+#ifdef _WIN32
+void I_ConsolePause(void)
+{
+    printf("Press any key to continue . . .");
+    getch();
+    printf("\n");
+}
+#endif
 

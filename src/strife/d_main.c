@@ -1467,7 +1467,9 @@ void D_DoomMain (void)
 
     if (M_CheckParm("-search"))
     {
+        CONSOLE_PROLOG
         NET_MasterQuery();
+        CONSOLE_EPILOG
         exit(0);
     }
 
@@ -1483,7 +1485,9 @@ void D_DoomMain (void)
 
     if (p)
     {
+        CONSOLE_PROLOG
         NET_QueryAddress(myargv[p+1]);
+        CONSOLE_EPILOG
         exit(0);
     }
 
@@ -1495,7 +1499,9 @@ void D_DoomMain (void)
 
     if (M_CheckParm("-localsearch"))
     {
+        CONSOLE_PROLOG
         NET_LANQuery();
+        CONSOLE_EPILOG
         exit(0);
     }
 
