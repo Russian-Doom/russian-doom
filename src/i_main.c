@@ -45,6 +45,7 @@
 
 #include "doomtype.h"
 #include "d_name.h"
+#include "i_system.h"
 #include "m_argv.h"
 #include "m_misc.h"
 #include "jn.h"
@@ -62,16 +63,16 @@ boolean devparm;
 #ifdef _WIN32
 // -----------------------------------------------------------------------------
 // RD_CreateWindowsConsole
-// [JN] Creates console output Window. For Windows OS only.
+// [JN] Creates a console output Window. For Windows OS only.
 // -----------------------------------------------------------------------------
 static boolean console_created = false;
 
-void RD_CreateWindowsConsole (void)
+void RD_CreateWindowsConsole(void)
 {
     DWORD mode;
 
     // [JN] Console already created, don't try to create it again.
-    if (console_created)
+    if(console_created)
     {
         return;
     }
@@ -201,6 +202,15 @@ int main(int argc, char **argv)
         myargv[i] = M_StringDuplicate(argv[i]);
     }
 
+    // Check for CLI params demanding console being activated
+    devparm = M_CheckParm ("-devparm");
+    const int version_param = M_CheckParm("--version");
+    const boolean help_param = M_CheckParm("--help") // Standard Linux help
+                            || M_CheckParm("-h")     // Standard Linux help (short CLI_Parameter)
+                            || M_CheckParm("-help")  // Linux help
+                            || M_CheckParm("/?")     // Standard Windows CMD help
+                            || M_CheckParm("-?");    // Standard Windows PowerShell help
+
 #ifdef _WIN32
     // [JN] if game language is not set yet (-1), and OS-preferred language
     // is appropriate for using Russian language in the game, use it.
@@ -216,6 +226,12 @@ int main(int argc, char **argv)
         else
             english_language = 0;
     }
+
+    // [JN] Create a console output on Windows if any of CLI params demand it
+    if(devparm || version_param || help_param)
+    {
+        RD_CreateWindowsConsole();
+    }
 #endif
 
     // Check for -lang param before loading response file to show potential errors in the correct language
@@ -226,37 +242,24 @@ int main(int argc, char **argv)
     // Check for -lang param again after loading response file to set correct language if -lang param was in response file
     CheckLangParam();
 
+    if(version_param)
+    {
+        printVersion();
+        CONSOLE_EPILOG
+        return 0;
+    }
+
+    if(help_param)
+    {
+        M_PrintHelp();
+        CONSOLE_EPILOG
+        return 0;
+    }
+
     M_SetExeDir();
 #ifdef __APPLE__
     packageResourcesDir = SDL_GetBasePath();
 #endif
-
-    // Check for -devparm being activated
-    devparm = M_CheckParm ("-devparm");
-
-#ifdef _WIN32
-    // [JN] Create a console output on Windows for devparm mode.
-    if (devparm)
-    {
-        RD_CreateWindowsConsole();
-    }
-#endif
-
-    if(M_CheckParm("--version"))
-    {
-        printVersion();
-        return 0;
-    }
-
-    if(M_CheckParm("--help") // Standard Linux help
-    || M_CheckParm("-h")     // Standard Linux help (short CLI_Parameter)
-    || M_CheckParm("-help")  // Linux help
-    || M_CheckParm("/?")     // Standard Windows CMD help
-    || M_CheckParm("-?"))    // Standard Windows PowerShell help
-    {
-        M_PrintHelp();
-        return 0;
-    }
 
     // [JN] Activate vanilla gameplay mode.
     // All optional enhancements will be disabled 
@@ -275,10 +278,6 @@ int main(int argc, char **argv)
 
 static void printVersion(void)
 {
-#ifdef _WIN32
-    RD_CreateWindowsConsole();
-#endif
-
     printf("%s %s\n", RD_Project_Name, RD_Project_Version);
     printf("Revision: %s (%s)\n", GIT_SHA, GIT_TIME);
     printf("Tag: %s\n", GIT_TAG);
@@ -295,9 +294,5 @@ static void printVersion(void)
     printf("Compiled with SDL_net version: %d.%d.%d\n", SDL_NET_MAJOR_VERSION, SDL_NET_MINOR_VERSION, SDL_NET_PATCHLEVEL);
     const SDL_version* sdl_netVersion = SDLNet_Linked_Version();
     printf("\tRuntime SDL_net version: %d.%d.%d\n", sdl_netVersion->major, sdl_netVersion->minor, sdl_netVersion->patch);
-
-#ifdef _WIN32
-    system("PAUSE");
-#endif
 }
 

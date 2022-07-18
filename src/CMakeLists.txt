@@ -234,7 +234,7 @@ foreach(MODULE ${COMPILE_MODULES})
     if(WIN32)
         target_link_options("${PROGRAM_PREFIX}${MODULE}" PRIVATE
             "$<$<BOOL:${MSVC}>:/MANIFEST:NO>"
-    #       "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:CONSOLE,-mconsole>"
+            "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:WINDOWS,-mwindows>"
         )
     endif()
 
@@ -252,7 +252,6 @@ foreach(MODULE ${COMPILE_MODULES})
         if(WIN32)
             target_link_options("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE
                 "$<$<BOOL:${MSVC}>:/MANIFEST:NO>"
-        #       "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:CONSOLE,-mconsole>"
             )
         endif()
 

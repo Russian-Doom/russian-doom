@@ -64,3 +64,14 @@ void I_AtExit(atexit_func_t func, boolean run_if_error);
 // Add all system-specific config file variable bindings.
 
 void I_BindVariables(void);
+
+#ifdef _WIN32
+void RD_CreateWindowsConsole(void);
+void I_ConsolePause(void);
+
+#define CONSOLE_PROLOG RD_CreateWindowsConsole();
+#define CONSOLE_EPILOG I_ConsolePause();
+#else
+#define CONSOLE_PROLOG
+#define CONSOLE_EPILOG
+#endif
