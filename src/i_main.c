@@ -66,13 +66,60 @@ boolean devparm;
 // [JN] Creates a console output Window. For Windows OS only.
 // -----------------------------------------------------------------------------
 static boolean console_created = false;
+boolean console_connected = false;
+
+static void ReopenConsoleHandles(void)
+{
+    HANDLE handle;
+    DWORD lpmode = 0;
+
+    handle = GetStdHandle(STD_INPUT_HANDLE);
+    if(GetConsoleMode(handle, &lpmode))
+    {
+        freopen("CONIN$", "rt", stdin);
+    }
+
+    handle = GetStdHandle(STD_OUTPUT_HANDLE);
+    if(GetConsoleMode(handle, &lpmode))
+    {
+        freopen("CONOUT$", "wt", stdout);
+    }
+
+    handle = GetStdHandle(STD_ERROR_HANDLE);
+    if(GetConsoleMode(handle, &lpmode))
+    {
+        freopen("CONOUT$", "wt", stderr);
+    }
+}
+
+static void ConnectOrCreateConsole(boolean consoleDemanded)
+{
+    wchar_t console_env[2] = {0};
+
+    if(!GetEnvironmentVariableW(L"_console", console_env, 2)
+    || wcsncmp(console_env, L"1", 1) != 0
+    || !AttachConsole(ATTACH_PARENT_PROCESS))
+    {
+        if(consoleDemanded)
+            RD_CreateWindowsConsole();
+        return;
+    }
+
+    SetEnvironmentVariableW(L"_console", NULL);
+
+    // We have a console window.
+    // Redirect input/output streams to that console's low-level handles, so things that use stdio work later on.
+    ReopenConsoleHandles();
+
+    console_connected = true;
+}
 
 void RD_CreateWindowsConsole(void)
 {
     DWORD mode;
 
     // [JN] Console already created, don't try to create it again.
-    if(console_created)
+    if(console_connected || console_created)
     {
         return;
     }
@@ -81,9 +128,7 @@ void RD_CreateWindowsConsole(void)
     AllocConsole();
 
     // [JN] Head text outputs.
-    freopen("CONIN$", "r",stdin); 
-    freopen("CONOUT$","w",stdout); 
-    freopen("CONOUT$","w",stderr); 
+    ReopenConsoleHandles();
 
     // [JN] Set a proper codepage and mode
     SetConsoleOutputCP(CP_UTF8);
@@ -227,11 +272,9 @@ int main(int argc, char **argv)
             english_language = 0;
     }
 
-    // [JN] Create a console output on Windows if any of CLI params demand it
-    if(devparm || version_param || help_param)
-    {
-        RD_CreateWindowsConsole();
-    }
+    // [Dasperal] Connect to a console wrapper or
+    // [JN] Create a console output window if any of CLI params demands it
+    ConnectOrCreateConsole(devparm || version_param || help_param);
 #endif
 
     // Check for -lang param before loading response file to show potential errors in the correct language

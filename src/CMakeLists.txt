@@ -236,6 +236,22 @@ foreach(MODULE ${COMPILE_MODULES})
             "$<$<BOOL:${MSVC}>:/MANIFEST:NO>"
             "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:WINDOWS,-mwindows>"
         )
+
+        # Console wrapper
+        add_executable("conredir-${MODULE}" WIN32
+            "win_console_wrapper.c"
+        )
+        target_link_options("conredir-${MODULE}" PRIVATE
+            "$<$<BOOL:${MSVC}>:/MANIFEST:NO>"
+            "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:CONSOLE,-mconsole>"
+            "$<$<NOT:$<BOOL:${MSVC}>>:-municode>"
+        )
+        set_target_properties("conredir-${MODULE}" PROPERTIES
+            C_STANDARD "${RD_C_STANDARD}"
+            C_STANDARD_REQUIRED ON
+            RUNTIME_OUTPUT_NAME "${PROGRAM_PREFIX}${MODULE}"
+            SUFFIX ".com"
+        )
     endif()
 
     add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}" POST_BUILD
@@ -319,6 +335,9 @@ list(REMOVE_ITEM COMPILE_MODULES "strife") # strife is not production ready
 
 foreach(MODULE ${COMPILE_MODULES})
     set(INSTALL_TARGETS "${PROGRAM_PREFIX}${MODULE}")
+    if(WIN32)
+        list(APPEND INSTALL_TARGETS "conredir-${MODULE}")
+    endif()
     if(COMPILE_SETUP)
         list(APPEND INSTALL_TARGETS "${PROGRAM_PREFIX}${MODULE}-setup")
     endif()
