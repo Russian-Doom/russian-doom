@@ -728,7 +728,7 @@ static void AM_maxOutWindowScale (void)
 
 const boolean AM_Responder (event_t *ev)
 {
-    int rc;
+    boolean rc;
     static int bigstate=0;
     static char buffer[32];
     const boolean speed_toggler = BK_isKeyPressed(bk_speed);
@@ -754,7 +754,6 @@ const boolean AM_Responder (event_t *ev)
         if (BK_isKeyDown(ev, bk_map_toggle))
         {
             AM_Start ();
-            viewactive = false;
             rc = true;
         }
     }
@@ -823,7 +822,6 @@ const boolean AM_Responder (event_t *ev)
         else if (BK_isKeyDown(ev, bk_map_toggle))
         {
             bigstate = 0;
-            viewactive = true;
             AM_Stop ();
         }
         else if (BK_isKeyDown(ev, bk_map_zoom_max))

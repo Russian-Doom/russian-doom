@@ -132,10 +132,8 @@ extern int snd_DesiredSfxDevice;
 // Depending on view size - no status bar?
 // Note that there is no way to disable the
 //  status bar explicitely.
-extern boolean statusbaractive;
 extern boolean automapactive;   // In AutoMap mode?
 extern boolean paused;          // Game Pause?
-extern boolean viewactive;
 extern boolean nodrawers;
 extern boolean testcontrols;
 

@@ -93,8 +93,6 @@ boolean         nodrawers;  // for comparative timing purposes
 int             starttime;  // for comparative timing purposes
 int             alwaysRun = 1;  // is always run enabled
 
-boolean         viewactive;
-
 int             deathmatch; // only if started as net death
 boolean         netgame;    // only true if packets are broadcast
 boolean         playeringame[MAXPLAYERS];
@@ -1655,7 +1653,6 @@ void G_DoCompleted (void)
     wminfo.totaltimes = (totalleveltimes += (leveltime - leveltime % TICRATE));
 
     gamestate = GS_INTERMISSION; 
-    viewactive = false; 
     automapactive = false; 
 
     WI_Start (&wminfo); 
@@ -1722,7 +1719,6 @@ void G_DoWorldDone (void)
     gamemap = wminfo.next+1; 
     G_DoLoadLevel (); 
     gameaction = ga_nothing; 
-    viewactive = true; 
     AM_clearMarks();  // [JN] jff 4/12/98 clear any marks on the automap
 } 
 
@@ -2319,7 +2315,6 @@ G_InitNew
     paused = false;
     demoplayback = false;
     automapactive = false;
-    viewactive = true;
     gameepisode = episode;
     gamemap = map;
     gameskill = skill;
