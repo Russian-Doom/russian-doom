@@ -223,6 +223,7 @@ static fixed_t scale_ftom;
 // the player represented by an arrow
 static player_t *plr;
 
+static patch_t *am_crosshair; // [JN] Crosshair patch in non-follow mode.
 static patch_t *marknums[10]; // numbers used for marking by the automap
 
 // [JN] killough 2/22/98: Remove limit on automap marks,
@@ -594,36 +595,24 @@ static void AM_initVariables (void)
 }
 
 // -----------------------------------------------------------------------------
-// AM_loadPics
+// AM_initPics
+// [JN] Preload automap graphics once at game startup.
 // -----------------------------------------------------------------------------
 
-static void AM_loadPics (void)
+void AM_initPics (void)
 {
     int i;
     char namebuf[9];
 
+    // Load crosshair patch.
+    am_crosshair = W_CacheLumpName("XHAIR_1", PU_STATIC);
+
+    // Load custom, precise versions of automap marks.
     for (i = 0 ; i < 10 ; i++)
     {
-        // [JN] Use custom, precise versions of automap marks.
+        
         DEH_snprintf(namebuf, 9, "MARKNUM%d", i);
         marknums[i] = W_CacheLumpName(namebuf, PU_STATIC);
-    }
-}
-
-// -----------------------------------------------------------------------------
-// AM_unloadPics
-// -----------------------------------------------------------------------------
-
-static void AM_unloadPics (void)
-{
-    int i;
-    char namebuf[9];
-
-    for (i = 0 ; i < 10 ; i++)
-    {
-        // [JN] Use custom, precise versions of automap marks.
-        DEH_snprintf(namebuf, 9, "MARKNUM%d", i);
-        W_ReleaseLumpName(namebuf);
     }
 }
 
@@ -666,7 +655,6 @@ static void AM_LevelInit (void)
 
 void AM_Stop (void)
 {
-    AM_unloadPics();
     automapactive = false;
     stopped = true;
 }
@@ -694,7 +682,6 @@ void AM_Start (void)
     }
 
     AM_initVariables();
-    AM_loadPics();
 }
 
 // -----------------------------------------------------------------------------
@@ -2508,7 +2495,7 @@ static void AM_drawCrosshair (const int color)
         if (!automap_follow)
         {
             dp_translation = cr[CR_GRAY];
-            V_DrawPatchUnscaled(screenwidth/2, 168, W_CacheLumpName(("XHAIR_1"), PU_STATIC), NULL);
+            V_DrawPatchUnscaled(origwidth, 168, am_crosshair, NULL);
             dp_translation = NULL;
         }
     }

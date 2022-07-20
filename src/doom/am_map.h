@@ -51,6 +51,9 @@ void AM_Stop (void);
 // Called at game startup or when scheme is changed.
 void AM_initColors (void);
 
+// [JN] Preload automap graphics once at game startup.
+void AM_initPics (void);
+
 // [JN] Automap mark color scheme init.
 // Called at game startup or when color is changed.
 void AM_initMarksColor (int color);
