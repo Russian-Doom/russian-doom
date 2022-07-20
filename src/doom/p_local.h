@@ -574,7 +574,7 @@ extern fixed_t   bmaporgy;      // origin of block map
 extern mobj_t  **blocklinks;    // for thing chains
 
 void P_Init (void);
-void P_SetupLevel (const int episode, const int map, const int playermask, const skill_t skill);
+void P_SetupLevel (const int episode, const int map, const skill_t skill);
 
 // -----------------------------------------------------------------------------
 // P_SIGHT

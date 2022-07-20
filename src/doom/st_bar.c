@@ -2392,7 +2392,7 @@ static void Crosshair_Draw_Scaled (void)
 
 static void Crosshair_Draw_Unscaled (void)
 {
-    V_DrawPatchUnscaled(screenwidth/2, screenblocks <= 10 ? 168 : 204,
+    V_DrawPatchUnscaled(origwidth, screenblocks <= 10 ? 168 : 204,
                         CrosshairPatch, CrosshairOpacity);
 }
 

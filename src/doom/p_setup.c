@@ -2200,7 +2200,7 @@ static const mapformat_t P_CheckMapFormat (const int lumpnum)
 // P_SetupLevel
 // -----------------------------------------------------------------------------
 
-void P_SetupLevel (const int episode, const int map, const int playermask, const skill_t skill)
+void P_SetupLevel (const int episode, const int map, const skill_t skill)
 {
     int		i;
     char	lumpname[9];
