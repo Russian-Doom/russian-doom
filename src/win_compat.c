@@ -21,36 +21,69 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <stdlib.h>
+
 #include "SDL_syswm.h"
 
 wchar_t* ConvertToUtf8(const char *str)
 {
     wchar_t *wstr = NULL;
-    int wlen = 0;
+    int wlen;
 
     wlen = MultiByteToWideChar(CP_UTF8, 0, str, -1, NULL, 0);
 
-    wstr = (wchar_t *) malloc(sizeof(wchar_t) * wlen);
+    if(!wlen)
+    {
+        errno = EINVAL;
+        printf("Warning: Failed to convert path to UTF8\n");
+        return NULL;
+    }
 
-    MultiByteToWideChar(CP_UTF8, 0, str, -1, wstr, wlen);
+    wstr = malloc(sizeof(wchar_t) * wlen);
+
+    if(!wstr)
+    {
+        printf("ConvertToUtf8: Failed to allocate new string\n");
+        return NULL;
+    }
+
+    if(MultiByteToWideChar(CP_UTF8, 0, str, -1, wstr, wlen) == 0)
+    {
+        errno = EINVAL;
+        printf("Warning: Failed to convert path to UTF8\n");
+        free(wstr);
+        return NULL;
+    }
 
     return wstr;
 }
 
 FILE* D_fopen(const char *filename, const char *mode)
 {
-    FILE *f;
+    FILE *file;
     wchar_t *wname = NULL;
     wchar_t *wmode = NULL;
 
     wname = ConvertToUtf8(filename);
+
+    if(!wname)
+    {
+        return NULL;
+    }
+
     wmode = ConvertToUtf8(mode);
 
-    f = _wfopen(wname, wmode);
+    if(!wmode)
+    {
+        free(wname);
+        return NULL;
+    }
 
-    if(wname) free(wname);
-    if(wmode) free(wmode);
-    return f;
+    file = _wfopen(wname, wmode);
+
+    free(wname);
+    free(wmode);
+
+    return file;
 }
 
 int D_remove(const char *path)
@@ -60,9 +93,15 @@ int D_remove(const char *path)
 
     wpath = ConvertToUtf8(path);
 
+    if(!wpath)
+    {
+        return 0;
+    }
+
     ret = _wremove(wpath);
 
-    if(wpath) free(wpath);
+    free(wpath);
+
     return ret;
 }
 
@@ -73,12 +112,25 @@ int D_rename(const char *oldname, const char *newname)
     int ret;
 
     wold = ConvertToUtf8(oldname);
+
+    if(!wold)
+    {
+        return 0;
+    }
+
     wnew = ConvertToUtf8(newname);
+
+    if(!wnew)
+    {
+        free(wold);
+        return 0;
+    }
 
     ret = _wrename(wold, wnew);
 
-    if(wold) free(wold);
-    if(wnew) free(wnew);
+    free(wold);
+    free(wnew);
+
     return ret;
 }
 
@@ -89,9 +141,14 @@ int D_mkdir(const char *dirname)
 
     wdir = ConvertToUtf8(dirname);
 
+    if(!wdir)
+    {
+        return 0;
+    }
+
     ret = _wmkdir(wdir);
 
-    if(wdir) free(wdir);
+    free(wdir);
     return ret;
 }
 
