@@ -22,9 +22,7 @@ Option(COMPILE_SETUP "Compile Setup module" OFF)
 include(CMakeDependentOption)
 find_package(Git)
 
-if(NOT WIN32)
-    Option(BUILD_PORTABLE "Build portable version with Windows like behavior (see COMPILING.MD)" OFF)
-endif()
+cmake_dependent_option(BUILD_PORTABLE "Build portable version with Windows like behavior (see COMPILING.MD)" OFF "NOT WIN32" OFF)
 
 # Hash suffix options
 cmake_dependent_option(NO_GIT_HASH "For Devs only! Don't run 'revision_check' at all" OFF "GIT_FOUND" ON)
