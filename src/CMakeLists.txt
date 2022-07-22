@@ -32,14 +32,8 @@ target_compile_definitions(Common PRIVATE
     "$<IF:$<BOOL:${HAVE_DECL_STRCASECMP}>,HAVE_DECL_STRCASECMP=1,HAVE_DECL_STRCASECMP=0>"
     "$<IF:$<BOOL:${HAVE_DECL_STRNCASECMP}>,HAVE_DECL_STRNCASECMP=1,HAVE_DECL_STRNCASECMP=0>"
 )
-
-if(SDL2_MAIN_LIBRARY)
-    target_link_libraries(Common PUBLIC
-        SDL2::SDL2main
-    )
-endif()
-
 target_link_libraries(Common PUBLIC
+    "$<$<BOOL:${SDL2_MAIN_LIBRARY}>:SDL2::SDL2main>"
     SDL2::SDL2
 )
 
@@ -133,7 +127,6 @@ target_link_libraries(Game PUBLIC
     "$<$<BOOL:${WIN32}>:winmm>"
 )
 
-
 # SetupCommon libraty
 if(COMPILE_SETUP)
     add_library(SetupCommon STATIC EXCLUDE_FROM_ALL
@@ -176,21 +169,6 @@ foreach(MODULE ${COMPILE_MODULES})
         "${PROJECT_SOURCE_DIR}/data/${MODULE}_icon.c"
     )
 
-    if(COMPILE_SETUP)
-        add_executable("${PROGRAM_PREFIX}${MODULE}-setup" WIN32
-            i_main.c
-            "${PROJECT_SOURCE_DIR}/data/setup_icon.c"
-        )
-    endif()
-
-    # Add resources for windows
-    if(WIN32)
-        target_sources("${PROGRAM_PREFIX}${MODULE}" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/${MODULE}/resource.rc")
-        if(COMPILE_SETUP)
-            target_sources("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/setup/${MODULE}-resource.rc")
-        endif()
-    endif()
-
     # Dehacked sources
     if(NOT "${MODULE}" STREQUAL "hexen")
         target_sources("${PROGRAM_PREFIX}${MODULE}" PUBLIC
@@ -212,26 +190,17 @@ foreach(MODULE ${COMPILE_MODULES})
     if(NOT NO_GIT_HASH)
         add_dependencies("${PROGRAM_PREFIX}${MODULE}" revision_check)
     endif()
-    if(COMPILE_SETUP)
-        target_compile_definitions("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE
-            "$<$<BOOL:${BUILD_PORTABLE}>:BUILD_PORTABLE>"
-        )
-        target_link_libraries("${PROGRAM_PREFIX}${MODULE}-setup" PUBLIC
-            setup
-            SetupCommon
-        )
-        if(NOT NO_GIT_HASH)
-            add_dependencies("${PROGRAM_PREFIX}${MODULE}-setup" revision_check)
-        endif()
-    endif()
 
-    # Properties and Link options
+    # Properties
     set_target_properties("${PROGRAM_PREFIX}${MODULE}" PROPERTIES
         C_STANDARD "${RD_C_STANDARD}"
         C_STANDARD_REQUIRED ON
     )
 
     if(WIN32)
+        # Add resources for windows
+        target_sources("${PROGRAM_PREFIX}${MODULE}" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/${MODULE}/resource.rc")
+        # Link options
         target_link_options("${PROGRAM_PREFIX}${MODULE}" PRIVATE
             "$<$<BOOL:${MSVC}>:/MANIFEST:NO>"
             "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:WINDOWS,-mwindows>"
@@ -260,15 +229,33 @@ foreach(MODULE ${COMPILE_MODULES})
     )
 
     if(COMPILE_SETUP)
+        add_executable("${PROGRAM_PREFIX}${MODULE}-setup" WIN32
+            i_main.c
+            "${PROJECT_SOURCE_DIR}/data/setup_icon.c"
+        )
         set_target_properties("${PROGRAM_PREFIX}${MODULE}-setup" PROPERTIES
             C_STANDARD "${RD_C_STANDARD}"
             C_STANDARD_REQUIRED ON
         )
 
         if(WIN32)
+            # Add resources for windows
+            target_sources("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/setup/${MODULE}-resource.rc")
+            # Link options
             target_link_options("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE
                 "$<$<BOOL:${MSVC}>:/MANIFEST:NO>"
             )
+        endif()
+
+        target_compile_definitions("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE
+            "$<$<BOOL:${BUILD_PORTABLE}>:BUILD_PORTABLE>"
+        )
+        target_link_libraries("${PROGRAM_PREFIX}${MODULE}-setup" PUBLIC
+            setup
+            SetupCommon
+        )
+        if(NOT NO_GIT_HASH)
+            add_dependencies("${PROGRAM_PREFIX}${MODULE}-setup" revision_check)
         endif()
 
         add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}-setup" POST_BUILD
@@ -282,7 +269,6 @@ foreach(MODULE ${COMPILE_MODULES})
         COMMAND gdb -ex run -ex quit --args $<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}> -timedemo demo1 -nogui -nosound
         WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/test_data"
     )
-
     set_tests_properties("${PROGRAM_PREFIX}${MODULE}" PROPERTIES
         PASS_REGULAR_EXPRESSION "Насчитано [0-9]+ gametics в [0-9]+ realtics;Timed [0-9]+ gametics in [0-9]+ realtics"
         FAIL_REGULAR_EXPRESSION "SEGV"
