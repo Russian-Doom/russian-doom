@@ -362,8 +362,11 @@ static void R_GenerateComposite (int texnum)
 
     // Now that the texture has been built in column cache,
     //  it is purgable from zone memory.
+    // [JN] Keep generated textures in memory.
+    /*
     Z_ChangeTag (block, PU_CACHE);
     Z_ChangeTag (block2, PU_CACHE);
+    */
 }
 
 // -----------------------------------------------------------------------------
@@ -559,10 +562,13 @@ const byte *R_GetColumn (const int tex, int col)
     col &= texturewidthmask[tex];
     ofs = texturecolumnofs2[tex][col];
 
+    // [JN] All composite textures were generated at startup.
+    /*
     if (!texturecomposite2[tex])
     {
         R_GenerateComposite(tex);
     }
+    */
 
     return texturecomposite2[tex] + ofs;
 }
@@ -584,10 +590,13 @@ const byte *R_GetColumnMod (const int tex, int col)
     col %= texturewidth[tex];
     ofs = texturecolumnofs[tex][col];
 
+    // [JN] All composite textures were generated at startup.
+    /*
     if (!texturecomposite[tex])
     {
         R_GenerateComposite(tex);
     }
+    */
 
     return texturecomposite[tex] + ofs;
 }
@@ -948,6 +957,8 @@ static void R_InitTextures (void)
     for (i=0 ; i<numtextures ; i++)
     {
         R_GenerateLookup (i);
+        // [JN] Generate composite textures at startup.
+        R_GenerateComposite (i);
     }
 
     // Create translation table for global animation.
@@ -1352,7 +1363,10 @@ void R_PrecacheLevel (void)
             int j = texture->patchcount;
 
             // [crispy] precache composite textures
+            // [JN] All composite textures were generated at startup.
+            /*
             R_GenerateComposite(i);
+            */
 
             while (--j >= 0)
             W_CacheLumpNum(texture->patches[j].patch, PU_STATIC);
