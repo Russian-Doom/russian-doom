@@ -930,18 +930,16 @@ static void R_InitTextures (void)
     free(texturelumps);
     
     // Precalculate whatever possible.	
-    for (i=0 ; i<numtextures ; i++)
-    {
-        R_GenerateLookup (i);
-        // [JN] Generate composite textures at startup.
-        R_GenerateComposite (i);
-    }
 
     // Create translation table for global animation.
     texturetranslation = Z_Malloc ((numtextures+1)*sizeof(*texturetranslation), PU_STATIC, 0);
 
     for (i=0 ; i<numtextures ; i++)
     {
+        R_GenerateLookup (i);
+        // [JN] Generate composite textures at startup.
+        R_GenerateComposite (i);
+        // [JN] Create animation table.
         texturetranslation[i] = i;
     }
 
