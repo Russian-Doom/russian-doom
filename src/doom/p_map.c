@@ -50,8 +50,10 @@ line_t *ceilingline;
 
 // keep track of special lines as they are hit,
 // but don't process them until the move is proven valid
-line_t *spechit[MAXSPECIALCROSS];
-int     numspechit;
+// [JN] 1/11/98 killough: removed limit on special lines crossed
+line_t     **spechit;
+static int   spechit_max;
+int          numspechit;
 
 mobj_t *BlockingMobj;
 
@@ -281,8 +283,13 @@ static boolean PIT_CheckLine (line_t *ld)
     // if contacted a special line, add it to the list
     if (ld->special)
     {
-        spechit[numspechit] = ld;
-        numspechit++;
+        // [JN] 1/11/98 killough: remove limit on lines hit, by array doubling
+        if (numspechit >= spechit_max)
+        {
+            spechit_max = spechit_max ? spechit_max*2 : 8;
+            spechit = I_Realloc(spechit, sizeof*spechit*spechit_max);
+        }
+        spechit[numspechit++] = ld;
     }
 
     return true;
