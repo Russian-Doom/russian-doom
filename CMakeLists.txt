@@ -209,7 +209,7 @@ else()
     )
 endif()
 
-foreach(SUBDIR textscreen opl pcsound src)
+foreach(SUBDIR win_libs textscreen opl pcsound src)
     add_subdirectory("${SUBDIR}")
 endforeach()
 
