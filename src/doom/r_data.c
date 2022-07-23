@@ -999,6 +999,9 @@ static void R_InitSpriteLumps (void)
         spriteoffset[i] = SHORT(patch->leftoffset)<<FRACBITS;
         spritetopoffset[i] = SHORT(patch->topoffset)<<FRACBITS;
     }
+
+    // [JN] Generate doomednum hash at startup.
+    P_FindDoomedNum(1);
 }
 
 // -----------------------------------------------------------------------------

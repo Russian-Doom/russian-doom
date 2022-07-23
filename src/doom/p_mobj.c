@@ -959,7 +959,7 @@ void P_RemoveMobj (const mobj_t *mobj)
 // [JN] killough 8/24/98: rewrote to use hashing
 // -----------------------------------------------------------------------------
 
-static const int P_FindDoomedNum (unsigned const type)
+const int P_FindDoomedNum (unsigned const type)
 {
     static struct { int first, next; } *hash;
     int i;

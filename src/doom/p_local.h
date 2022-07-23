@@ -430,6 +430,7 @@ void P_UnsetThingPosition (const mobj_t* thing);
 #define OVERDRIVE       6
 #define MAXGEAR         (OVERDRIVE+16)
 
+extern const int P_FindDoomedNum (unsigned const type);
 extern mapthing_t itemrespawnque[ITEMQUESIZE];
 extern int itemrespawntime[ITEMQUESIZE];
 extern int iquehead;
