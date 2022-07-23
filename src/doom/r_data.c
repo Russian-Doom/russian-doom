@@ -359,11 +359,6 @@ static void R_GenerateComposite (int texnum)
 
     free(source); // free temporary column
     free(marks); // free transparency marks
-
-    // Now that the texture has been built in column cache,
-    //  it is purgable from zone memory.
-    Z_ChangeTag (block, PU_CACHE);
-    Z_ChangeTag (block2, PU_CACHE);
 }
 
 // -----------------------------------------------------------------------------
@@ -559,11 +554,6 @@ const byte *R_GetColumn (const int tex, int col)
     col &= texturewidthmask[tex];
     ofs = texturecolumnofs2[tex][col];
 
-    if (!texturecomposite2[tex])
-    {
-        R_GenerateComposite(tex);
-    }
-
     return texturecomposite2[tex] + ofs;
 }
 
@@ -583,11 +573,6 @@ const byte *R_GetColumnMod (const int tex, int col)
 
     col %= texturewidth[tex];
     ofs = texturecolumnofs[tex][col];
-
-    if (!texturecomposite[tex])
-    {
-        R_GenerateComposite(tex);
-    }
 
     return texturecomposite[tex] + ofs;
 }
@@ -945,16 +930,16 @@ static void R_InitTextures (void)
     free(texturelumps);
     
     // Precalculate whatever possible.	
-    for (i=0 ; i<numtextures ; i++)
-    {
-        R_GenerateLookup (i);
-    }
 
     // Create translation table for global animation.
     texturetranslation = Z_Malloc ((numtextures+1)*sizeof(*texturetranslation), PU_STATIC, 0);
 
     for (i=0 ; i<numtextures ; i++)
     {
+        R_GenerateLookup (i);
+        // [JN] Generate composite textures at startup.
+        R_GenerateComposite (i);
+        // [JN] Create animation table.
         texturetranslation[i] = i;
     }
 
@@ -1350,9 +1335,6 @@ void R_PrecacheLevel (void)
         {
             texture_t *texture = textures[i];
             int j = texture->patchcount;
-
-            // [crispy] precache composite textures
-            R_GenerateComposite(i);
 
             while (--j >= 0)
             W_CacheLumpNum(texture->patches[j].patch, PU_STATIC);
