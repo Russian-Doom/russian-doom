@@ -45,6 +45,7 @@
 
 #include "doomtype.h"
 #include "d_name.h"
+#include "i_system.h"
 #include "m_argv.h"
 #include "m_misc.h"
 #include "jn.h"
@@ -62,14 +63,63 @@ boolean devparm;
 #ifdef _WIN32
 // -----------------------------------------------------------------------------
 // RD_CreateWindowsConsole
-// [JN] Creates console output Window. For Windows OS only.
+// [JN] Creates a console output Window. For Windows OS only.
 // -----------------------------------------------------------------------------
 static boolean console_created = false;
+boolean console_connected = false;
 
-void RD_CreateWindowsConsole (void)
+static void ReopenConsoleHandles(void)
 {
+    HANDLE handle;
+    DWORD lpmode = 0;
+
+    handle = GetStdHandle(STD_INPUT_HANDLE);
+    if(GetConsoleMode(handle, &lpmode))
+    {
+        freopen("CONIN$", "rt", stdin);
+    }
+
+    handle = GetStdHandle(STD_OUTPUT_HANDLE);
+    if(GetConsoleMode(handle, &lpmode))
+    {
+        freopen("CONOUT$", "wt", stdout);
+    }
+
+    handle = GetStdHandle(STD_ERROR_HANDLE);
+    if(GetConsoleMode(handle, &lpmode))
+    {
+        freopen("CONOUT$", "wt", stderr);
+    }
+}
+
+static void ConnectOrCreateConsole(boolean consoleDemanded)
+{
+    wchar_t console_env[2] = {0};
+
+    if(!GetEnvironmentVariableW(L"_console", console_env, 2)
+    || wcsncmp(console_env, L"1", 1) != 0
+    || !AttachConsole(ATTACH_PARENT_PROCESS))
+    {
+        if(consoleDemanded)
+            RD_CreateWindowsConsole();
+        return;
+    }
+
+    SetEnvironmentVariableW(L"_console", NULL);
+
+    // We have a console window.
+    // Redirect input/output streams to that console's low-level handles, so things that use stdio work later on.
+    ReopenConsoleHandles();
+
+    console_connected = true;
+}
+
+void RD_CreateWindowsConsole(void)
+{
+    DWORD mode;
+
     // [JN] Console already created, don't try to create it again.
-    if (console_created)
+    if(console_connected || console_created)
     {
         return;
     }
@@ -78,14 +128,16 @@ void RD_CreateWindowsConsole (void)
     AllocConsole();
 
     // [JN] Head text outputs.
-    freopen("CONIN$", "r",stdin); 
-    freopen("CONOUT$","w",stdout); 
-    freopen("CONOUT$","w",stderr); 
+    ReopenConsoleHandles();
 
-    // [JN] Set a proper codepage.
+    // [JN] Set a proper codepage and mode
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
-    
+
+    HANDLE handle = GetStdHandle(STD_INPUT_HANDLE);
+    GetConsoleMode(handle, &mode);
+    SetConsoleMode(handle, mode | ENABLE_QUICK_EDIT_MODE | ENABLE_EXTENDED_FLAGS);
+
     console_created = true;
 }
 #endif
@@ -195,18 +247,14 @@ int main(int argc, char **argv)
         myargv[i] = M_StringDuplicate(argv[i]);
     }
 
-    M_SetExeDir();
-#ifdef __APPLE__
-    packageResourcesDir = SDL_GetBasePath();
-#endif
-
-    // Check for -lang param before loading response file to show potential errors in the correct language
-    CheckLangParam();
-
-    M_FindResponseFile();
-
-    // Check for -lang param again after loading response file to set correct language if -lang param was in response file
-    CheckLangParam();
+    // Check for CLI params demanding console being activated
+    devparm = M_CheckParm ("-devparm");
+    const int version_param = M_CheckParm("--version");
+    const boolean help_param = M_CheckParm("--help") // Standard Linux help
+                            || M_CheckParm("-h")     // Standard Linux help (short CLI_Parameter)
+                            || M_CheckParm("-help")  // Linux help
+                            || M_CheckParm("/?")     // Standard Windows CMD help
+                            || M_CheckParm("-?");    // Standard Windows PowerShell help
 
 #ifdef _WIN32
     // [JN] if game language is not set yet (-1), and OS-preferred language
@@ -223,34 +271,38 @@ int main(int argc, char **argv)
         else
             english_language = 0;
     }
+
+    // [Dasperal] Connect to a console wrapper or
+    // [JN] Create a console output window if any of CLI params demands it
+    ConnectOrCreateConsole(devparm || version_param || help_param);
 #endif
 
-    // Check for -devparm being activated
-    devparm = M_CheckParm ("-devparm");
+    // Check for -lang param before loading response file to show potential errors in the correct language
+    CheckLangParam();
 
-#ifdef _WIN32
-    // [JN] Create a console output on Windows for devparm mode.
-    if (devparm)
-    {
-        RD_CreateWindowsConsole();
-    }
-#endif
+    M_FindResponseFile();
 
-    if(M_CheckParm("--version"))
+    // Check for -lang param again after loading response file to set correct language if -lang param was in response file
+    CheckLangParam();
+
+    if(version_param)
     {
         printVersion();
+        CONSOLE_EPILOG
         return 0;
     }
 
-    if(M_CheckParm("--help") // Standard Linux help
-    || M_CheckParm("-h")     // Standard Linux help (short CLI_Parameter)
-    || M_CheckParm("-help")  // Linux help
-    || M_CheckParm("/?")     // Standard Windows CMD help
-    || M_CheckParm("-?"))    // Standard Windows PowerShell help
+    if(help_param)
     {
         M_PrintHelp();
+        CONSOLE_EPILOG
         return 0;
     }
+
+    M_SetExeDir();
+#ifdef __APPLE__
+    packageResourcesDir = SDL_GetBasePath();
+#endif
 
     // [JN] Activate vanilla gameplay mode.
     // All optional enhancements will be disabled 
@@ -269,10 +321,6 @@ int main(int argc, char **argv)
 
 static void printVersion(void)
 {
-#ifdef _WIN32
-    RD_CreateWindowsConsole();
-#endif
-
     printf("%s %s\n", RD_Project_Name, RD_Project_Version);
     printf("Revision: %s (%s)\n", GIT_SHA, GIT_TIME);
     printf("Tag: %s\n", GIT_TAG);
@@ -289,9 +337,5 @@ static void printVersion(void)
     printf("Compiled with SDL_net version: %d.%d.%d\n", SDL_NET_MAJOR_VERSION, SDL_NET_MINOR_VERSION, SDL_NET_PATCHLEVEL);
     const SDL_version* sdl_netVersion = SDLNet_Linked_Version();
     printf("\tRuntime SDL_net version: %d.%d.%d\n", sdl_netVersion->major, sdl_netVersion->minor, sdl_netVersion->patch);
-
-#ifdef _WIN32
-    system("PAUSE");
-#endif
 }
 

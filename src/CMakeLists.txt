@@ -209,7 +209,9 @@ foreach(MODULE ${COMPILE_MODULES})
         ${MODULE}
         Game
     )
-    add_dependencies("${PROGRAM_PREFIX}${MODULE}" revision_check)
+    if(NOT NO_GIT_HASH)
+        add_dependencies("${PROGRAM_PREFIX}${MODULE}" revision_check)
+    endif()
     if(COMPILE_SETUP)
         target_compile_definitions("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE
             "$<$<BOOL:${BUILD_PORTABLE}>:BUILD_PORTABLE>"
@@ -218,7 +220,9 @@ foreach(MODULE ${COMPILE_MODULES})
             setup
             SetupCommon
         )
-        add_dependencies("${PROGRAM_PREFIX}${MODULE}-setup" revision_check)
+        if(NOT NO_GIT_HASH)
+            add_dependencies("${PROGRAM_PREFIX}${MODULE}-setup" revision_check)
+        endif()
     endif()
 
     # Properties and Link options
@@ -230,7 +234,23 @@ foreach(MODULE ${COMPILE_MODULES})
     if(WIN32)
         target_link_options("${PROGRAM_PREFIX}${MODULE}" PRIVATE
             "$<$<BOOL:${MSVC}>:/MANIFEST:NO>"
-    #       "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:CONSOLE,-mconsole>"
+            "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:WINDOWS,-mwindows>"
+        )
+
+        # Console wrapper
+        add_executable("conredir-${MODULE}" WIN32
+            "win_console_wrapper.c"
+        )
+        target_link_options("conredir-${MODULE}" PRIVATE
+            "$<$<BOOL:${MSVC}>:/MANIFEST:NO>"
+            "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:CONSOLE,-mconsole>"
+            "$<$<NOT:$<BOOL:${MSVC}>>:-municode>"
+        )
+        set_target_properties("conredir-${MODULE}" PROPERTIES
+            C_STANDARD "${RD_C_STANDARD}"
+            C_STANDARD_REQUIRED ON
+            RUNTIME_OUTPUT_NAME "${PROGRAM_PREFIX}${MODULE}"
+            SUFFIX ".com"
         )
     endif()
 
@@ -248,7 +268,6 @@ foreach(MODULE ${COMPILE_MODULES})
         if(WIN32)
             target_link_options("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE
                 "$<$<BOOL:${MSVC}>:/MANIFEST:NO>"
-        #       "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:CONSOLE,-mconsole>"
             )
         endif()
 
@@ -316,6 +335,9 @@ list(REMOVE_ITEM COMPILE_MODULES "strife") # strife is not production ready
 
 foreach(MODULE ${COMPILE_MODULES})
     set(INSTALL_TARGETS "${PROGRAM_PREFIX}${MODULE}")
+    if(WIN32)
+        list(APPEND INSTALL_TARGETS "conredir-${MODULE}")
+    endif()
     if(COMPILE_SETUP)
         list(APPEND INSTALL_TARGETS "${PROGRAM_PREFIX}${MODULE}-setup")
     endif()

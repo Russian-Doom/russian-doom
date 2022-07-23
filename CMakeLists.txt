@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15...3.23)
+cmake_minimum_required(VERSION 3.15...3.24)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
@@ -20,13 +20,15 @@ Option(COMPILE_STRIFE "Compile Strife module" OFF)
 Option(COMPILE_SETUP "Compile Setup module" OFF)
 
 include(CMakeDependentOption)
+find_package(Git)
 
 if(NOT WIN32)
     Option(BUILD_PORTABLE "Build portable version with Windows like behavior (see COMPILING.MD)" OFF)
 endif()
 
 # Hash suffix options
-option(NO_GIT_HASH_SUFFIX "For Devs only! Never append hash suffix to project version" OFF)
+cmake_dependent_option(NO_GIT_HASH "For Devs only! Don't run 'revision_check' at all" OFF "GIT_FOUND" ON)
+cmake_dependent_option(NO_GIT_HASH_SUFFIX "For Devs only! Never append hash suffix to project version" OFF "NOT NO_GIT_HASH" ON)
 cmake_dependent_option(FORCE_GIT_HASH_SUFFIX "For Devs only! Always append hash suffix to project version" OFF "NOT NO_GIT_HASH_SUFFIX" OFF)
 
 # Package related variables
@@ -191,18 +193,23 @@ endif()
 enable_testing()
 
 # Update git_info.h
-if(NO_GIT_HASH_SUFFIX)
-    unset(GIT_INFO_TAG_PATTERN)
+if(NO_GIT_HASH)
+    # Use a function to avoid accidentally messing the real variables
+    configure_empty_git_info("cmake/git_info.h.in" "git_info.h")
+else()
+    if(NO_GIT_HASH_SUFFIX)
+        unset(GIT_INFO_TAG_PATTERN)
+    endif()
+    if(FORCE_GIT_HASH_SUFFIX)
+        # Check against an already existing outdated tag so that
+        # 'revision_check' always finds new commits and emits a hash suffix
+        set(GIT_INFO_TAG_PATTERN "5.3")
+    endif()
+    add_custom_target(revision_check
+        COMMAND "${CMAKE_COMMAND}" -P "\"${CMAKE_SOURCE_DIR}/cmake/UpdateRevision.cmake\"" "\"git_info.h\"" "\"${GIT_INFO_TAG_PATTERN}\"" "${GIT_EXECUTABLE}"
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    )
 endif()
-if(FORCE_GIT_HASH_SUFFIX)
-    # Check against an already existing outdated tag so that
-    # 'revision_check' always finds new commits and emits a hash suffix
-    set(GIT_INFO_TAG_PATTERN "5.3")
-endif()
-add_custom_target(revision_check
-    COMMAND "${CMAKE_COMMAND}" -P "\"${CMAKE_SOURCE_DIR}/cmake/UpdateRevision.cmake\"" "\"git_info.h\"" "\"${GIT_INFO_TAG_PATTERN}\""
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-)
 
 foreach(SUBDIR textscreen opl pcsound src)
     add_subdirectory("${SUBDIR}")
