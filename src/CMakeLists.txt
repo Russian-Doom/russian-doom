@@ -1,4 +1,4 @@
-foreach(SUBDIR doom heretic hexen strife setup)
+foreach(SUBDIR base doom heretic hexen strife setup)
     add_subdirectory("${SUBDIR}")
 endforeach()
 
@@ -191,6 +191,8 @@ foreach(MODULE ${COMPILE_MODULES})
         add_dependencies("${PROGRAM_PREFIX}${MODULE}" revision_check)
     endif()
 
+    add_dependencies("${PROGRAM_PREFIX}${MODULE}" "${MODULE}-wads" gus-patches)
+
     # Properties
     set_target_properties("${PROGRAM_PREFIX}${MODULE}" PROPERTIES
         C_STANDARD "${RD_C_STANDARD}"
@@ -198,6 +200,7 @@ foreach(MODULE ${COMPILE_MODULES})
     )
 
     if(WIN32)
+        add_dependencies("${PROGRAM_PREFIX}${MODULE}" win-libs)
         # Add resources for windows
         target_sources("${PROGRAM_PREFIX}${MODULE}" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/${MODULE}/resource.rc")
         # Link options
@@ -239,6 +242,7 @@ foreach(MODULE ${COMPILE_MODULES})
         )
 
         if(WIN32)
+            add_dependencies("${PROGRAM_PREFIX}${MODULE}-setup" win-libs)
             # Add resources for windows
             target_sources("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/setup/${MODULE}-resource.rc")
             # Link options
@@ -276,46 +280,6 @@ foreach(MODULE ${COMPILE_MODULES})
     )
 endforeach()
 
-# Copying gus patches
-file(GLOB GUS_PATCHES_SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/base/gus_patches/*")
-if(MSVC OR CMAKE_GENERATOR STREQUAL "Ninja Multi-Config")
-    add_copy_target(NAME gus-patches SOURCE ${GUS_PATCHES_SRC_FILES} DESTINATION "$<CONFIG>/base/gus_patches")
-else()
-    add_copy_target(NAME gus-patches SOURCE ${GUS_PATCHES_SRC_FILES} DESTINATION "base/gus_patches")
-endif()
-
-foreach(MODULE ${COMPILE_MODULES})
-    add_dependencies("${PROGRAM_PREFIX}${MODULE}" gus-patches)
-endforeach()
-
-# Copying game support wads
-foreach(MODULE ${COMPILE_MODULES})
-    file(GLOB WADS "${CMAKE_CURRENT_SOURCE_DIR}/base/${MODULE}-*.wad")
-    if(MSVC OR CMAKE_GENERATOR STREQUAL "Ninja Multi-Config")
-        add_copy_target(NAME "${MODULE}-wads" SOURCE ${WADS} DESTINATION "$<CONFIG>/base")
-    else()
-        add_copy_target(NAME "${MODULE}-wads" SOURCE ${WADS} DESTINATION "base")
-    endif()
-    add_dependencies("${PROGRAM_PREFIX}${MODULE}" "${MODULE}-wads")
-endforeach()
-
-# Windows DLLs
-if(WIN32)
-    file(GLOB WIN_LIBS "${PROJECT_SOURCE_DIR}/win_libs/${ARCH}/*.dll")
-    if(MSVC OR CMAKE_GENERATOR STREQUAL "Ninja Multi-Config")
-        add_copy_target(NAME win-libs SOURCE ${WIN_LIBS} DESTINATION "$<CONFIG>/.")
-    else()
-        add_copy_target(NAME win-libs SOURCE ${WIN_LIBS} DESTINATION ".")
-    endif()
-
-    foreach(MODULE ${COMPILE_MODULES})
-        add_dependencies("${PROGRAM_PREFIX}${MODULE}" win-libs)
-        if(COMPILE_SETUP)
-            add_dependencies("${PROGRAM_PREFIX}${MODULE}-setup" win-libs)
-        endif()
-    endforeach()
-endif()
-
 # Install rules
 list(REMOVE_ITEM COMPILE_MODULES "strife") # strife is not production ready
 
@@ -331,18 +295,7 @@ foreach(MODULE ${COMPILE_MODULES})
             DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${BUILD_PORTABLE}>>,.,bin>
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
     )
-    install(FILES $<TARGET_PROPERTY:${MODULE}-wads,OUT_FILES>
-            DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${BUILD_PORTABLE}>>,base,share/${PACKAGE_TARNAME}>
-    )
 endforeach()
-install(FILES $<TARGET_PROPERTY:gus-patches,OUT_FILES>
-        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${BUILD_PORTABLE}>>,base,share/${PACKAGE_TARNAME}>/gus_patches
-)
-if(WIN32)
-    install(FILES $<TARGET_PROPERTY:win-libs,OUT_FILES>
-            DESTINATION .
-    )
-endif()
 if(WIN32 OR BUILD_PORTABLE)
     install(FILES "${PROJECT_SOURCE_DIR}/LICENSE.txt"
         RENAME "GPL.txt"
