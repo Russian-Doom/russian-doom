@@ -23,6 +23,7 @@ if(COMPILE_DOOM)
 
     install(FILES $<GENEX_EVAL:$<TARGET_PROPERTY:doom-wads,OUT_FILES>>
         DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${BUILD_PORTABLE}>>,base,share/${PACKAGE_TARNAME}>
+        COMPONENT doom
     )
 endif()
 
@@ -33,6 +34,7 @@ if(COMPILE_HERETIC)
 
     install(FILES $<GENEX_EVAL:$<TARGET_PROPERTY:heretic-wads,OUT_FILES>>
         DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${BUILD_PORTABLE}>>,base,share/${PACKAGE_TARNAME}>
+        COMPONENT heretic
     )
 endif()
 
@@ -44,6 +46,7 @@ if(COMPILE_HEXEN)
 
     install(FILES $<GENEX_EVAL:$<TARGET_PROPERTY:hexen-wads,OUT_FILES>>
         DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${BUILD_PORTABLE}>>,base,share/${PACKAGE_TARNAME}>
+        COMPONENT hexen
     )
 endif()
 
@@ -55,5 +58,6 @@ if(COMPILE_STRIFE)
 
     install(FILES $<GENEX_EVAL:$<TARGET_PROPERTY:strife-wads,OUT_FILES>>
         DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${BUILD_PORTABLE}>>,base,share/${PACKAGE_TARNAME}>
+        COMPONENT strife
     )
 endif()

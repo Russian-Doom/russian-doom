@@ -294,6 +294,7 @@ foreach(MODULE ${COMPILE_MODULES})
     install(TARGETS ${INSTALL_TARGETS}
             DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${BUILD_PORTABLE}>>,.,bin>
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
+            COMPONENT "${MODULE}"
     )
 endforeach()
 if(WIN32 OR BUILD_PORTABLE)
@@ -301,6 +302,15 @@ if(WIN32 OR BUILD_PORTABLE)
         RENAME "GPL.txt"
         DESTINATION .
     )
+    # Same install rule but for component based install
+    foreach(MODULE ${COMPILE_MODULES})
+        install(FILES "${PROJECT_SOURCE_DIR}/LICENSE.txt"
+            RENAME "GPL.txt"
+            DESTINATION .
+            COMPONENT "${MODULE}"
+            EXCLUDE_FROM_ALL
+        )
+    endforeach()
 endif()
 
 # Source groups

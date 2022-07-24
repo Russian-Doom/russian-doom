@@ -43,6 +43,11 @@ To install International Doom to `<install directory>` use the following command
 ```
 cmake --install build --prefix <install directory>
 ```
+If you want to install only one game, you can use the following command:
+```
+cmake --install build --prefix <install directory> --component <game>
+```
+Available components are `doom`, `heretic`, `hexen`.
 
 ##### Step 4: Packaging International Doom
 
@@ -107,6 +112,12 @@ To install International Doom use the following command:
 ```
 cmake --install build
 ```
+If you want to install only one game, you can use the following command:
+```
+cmake --install build --component <game>
+```
+Available components are `doom`, `heretic`, `hexen`. 
+
 For the portable version, you probably want to use `--prefix <install directory>` key to set install directory.
 Note that config files and savegames will be stored in that directory.
 
