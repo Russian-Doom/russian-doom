@@ -1495,6 +1495,15 @@ static void ST_DrawSmallNumberY (int val, const int x, const int y)
 
 static void ST_DrawSmallNumberG (int val, const int x, const int y)
 {
+    if (val < 0)
+    {
+        val = 0;
+    }
+    if (val > 9)
+    {
+        val = 9;
+    }
+
     V_DrawPatch(x + 4, y, FontSNumbersG[val], NULL);
 }
 
