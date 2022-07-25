@@ -1074,6 +1074,7 @@ void P_DamageMobj (mobj_t *target, const mobj_t *inflictor, mobj_t *source, int 
         }
 
         player->health -= damage;             // mirror mobj health here for Dave
+        player->health_negative = player->health;  // [JN] Set negative health value.
 
         // [JN] BUDDHA cheat.
         if (player->cheats & CF_BUDDHA && player->health < 1)

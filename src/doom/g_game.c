@@ -1099,6 +1099,7 @@ void G_PlayerReborn (const int player)
     p->usedown = p->attackdown = true;  // don't do anything immediately 
     p->playerstate = PST_LIVE;       
     p->health = deh_initial_health;     // Use dehacked value
+    p->health_negative = 0;             // [JN] Negative health.
     p->readyweapon = p->pendingweapon = wp_pistol; 
     p->weaponowned[wp_fist] = true; 
     p->weaponowned[wp_pistol] = true; 
