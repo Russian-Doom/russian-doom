@@ -187,8 +187,8 @@ int selective_backpack = 0;
 
 int selective_ammo_0 = 50;  // bullets
 int selective_ammo_1 = 0;   // shells
-int selective_ammo_2 = 0;   // cells
-int selective_ammo_3 = 0;   // rockets
+int selective_ammo_2 = 0;   // rockets
+int selective_ammo_3 = 0;   // cells
 
 int selective_key_0 = 0;    // blue keycard
 int selective_key_1 = 0;    // yellow keycard

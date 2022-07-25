@@ -1470,8 +1470,8 @@ static MenuItem_t LevelSelect2Items[] = {
     {ITT_SWITCH,  "backpack",            "h.rpfr",             M_RD_Change_Selective_Backpack, 0}, // Рюкзак
     {ITT_LRFUNC,  "bullets",             "gekb",               M_RD_Change_Selective_Ammo_0,   0}, // Пули
     {ITT_LRFUNC,  "shells",              "lhj,m",              M_RD_Change_Selective_Ammo_1,   0}, // Дробь
-    {ITT_LRFUNC,  "rockets",             "hfrtns",             M_RD_Change_Selective_Ammo_3,   0}, // Ракеты
-    {ITT_LRFUNC,  "cells",               "\'ythubz",           M_RD_Change_Selective_Ammo_2,   0}, // Энергия
+    {ITT_LRFUNC,  "rockets",             "hfrtns",             M_RD_Change_Selective_Ammo_2,   0}, // Ракеты
+    {ITT_LRFUNC,  "cells",               "\'ythubz",           M_RD_Change_Selective_Ammo_3,   0}, // Энергия
     {ITT_TITLE,   "KEYS",                "rk.xb",              NULL,                           0}, // Ключи
     {ITT_SWITCH,  "blue keycard",        "cbyzz rk.x-rfhnf",   M_RD_Change_Selective_Key_0,    0}, // Синяя ключ-карта
     {ITT_SWITCH,  "yellow keycard",      ";tknfz rk.x-rfhnf",  M_RD_Change_Selective_Key_1,    0}, // Желтая ключ-карта
@@ -5374,19 +5374,19 @@ static void M_RD_Draw_Level_2(void)
                               CR_RED);
 
         // Rockets
-        M_snprintf(num, 4, "%d", selective_ammo_3);
+        M_snprintf(num, 4, "%d", selective_ammo_2);
         RD_M_DrawTextSmallENG(num, 226 + wide_delta, 51,
-                              selective_ammo_3 >   50 ? CR_BLUE2 :
-                              selective_ammo_3 >=  25 ? CR_GREEN :
-                              selective_ammo_3 >=  12 ? CR_YELLOW :
+                              selective_ammo_2 >   50 ? CR_BLUE2 :
+                              selective_ammo_2 >=  25 ? CR_GREEN :
+                              selective_ammo_2 >=  12 ? CR_YELLOW :
                               CR_RED);
 
         // Cells
-        M_snprintf(num, 4, "%d", selective_ammo_2);
+        M_snprintf(num, 4, "%d", selective_ammo_3);
         RD_M_DrawTextSmallENG(num, 226 + wide_delta, 61,
-                              selective_ammo_2 >  300 ? CR_BLUE2 :
-                              selective_ammo_2 >= 150 ? CR_GREEN :
-                              selective_ammo_2 >=  75 ? CR_YELLOW :
+                              selective_ammo_3 >  300 ? CR_BLUE2 :
+                              selective_ammo_3 >= 150 ? CR_GREEN :
+                              selective_ammo_3 >=  75 ? CR_YELLOW :
                               CR_RED);
 
         // Blue keycard
@@ -5451,19 +5451,19 @@ static void M_RD_Draw_Level_2(void)
                                                       CR_RED);
 
         // Ракеты
-        M_snprintf(num, 4, "%d", selective_ammo_3);
+        M_snprintf(num, 4, "%d", selective_ammo_2);
         RD_M_DrawTextSmallENG(num, 226 + wide_delta, 51,
-                              selective_ammo_3 >  50 ? CR_BLUE2 :
-                              selective_ammo_3 >= 25 ? CR_GREEN :
-                              selective_ammo_3 >= 12 ? CR_YELLOW :
+                              selective_ammo_2 >  50 ? CR_BLUE2 :
+                              selective_ammo_2 >= 25 ? CR_GREEN :
+                              selective_ammo_2 >= 12 ? CR_YELLOW :
                                                       CR_RED);
 
         // Энергия
-        M_snprintf(num, 4, "%d", selective_ammo_2);
+        M_snprintf(num, 4, "%d", selective_ammo_3);
         RD_M_DrawTextSmallENG(num, 226 + wide_delta, 61,
-                              selective_ammo_2 >  300 ? CR_BLUE2 :
-                              selective_ammo_2 >= 150 ? CR_GREEN :
-                              selective_ammo_2 >=  75 ? CR_YELLOW :
+                              selective_ammo_3 >  300 ? CR_BLUE2 :
+                              selective_ammo_3 >= 150 ? CR_GREEN :
+                              selective_ammo_3 >=  75 ? CR_YELLOW :
                                                        CR_RED);
 
         // Синяя ключ-карта
@@ -5620,10 +5620,10 @@ static void M_RD_Change_Selective_Backpack(Direction_t direction)
             selective_ammo_0 = 200;
         if (selective_ammo_1 > 50)
             selective_ammo_1 = 50;
-        if (selective_ammo_3 > 50)
-            selective_ammo_3 = 50;
-        if (selective_ammo_2 > 300)
-            selective_ammo_2 = 300;
+        if (selective_ammo_2 > 50)
+            selective_ammo_2 = 50;
+        if (selective_ammo_3 > 300)
+            selective_ammo_3 = 300;
     }
 }
 
@@ -5639,12 +5639,12 @@ static void M_RD_Change_Selective_Ammo_1(Direction_t direction)
 
 static void M_RD_Change_Selective_Ammo_2(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_ammo_2, 0, selective_backpack ? 600 : 300, direction);
+    RD_Menu_SlideInt(&selective_ammo_2, 0, selective_backpack ? 100 : 50, direction);
 }
 
 static void M_RD_Change_Selective_Ammo_3(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_ammo_3, 0, selective_backpack ? 100 : 50, direction);
+    RD_Menu_SlideInt(&selective_ammo_3, 0, selective_backpack ? 600 : 300, direction);
 }
 
 static void M_RD_Change_Selective_Key_0()

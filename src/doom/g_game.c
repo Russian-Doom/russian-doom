@@ -2031,8 +2031,8 @@ void G_DoSelectiveGame (int choice)
     // Ammo
     plr->ammo[0] = selective_ammo_0; // bullets
     plr->ammo[1] = selective_ammo_1; // shells
-    plr->ammo[2] = selective_ammo_2; // cells
-    plr->ammo[3] = selective_ammo_3; // rockets
+    plr->ammo[2] = selective_ammo_2; // rockets
+    plr->ammo[3] = selective_ammo_3; // cells
 
     // Keys
     plr->cards[0] = selective_key_0; // blue keycard
