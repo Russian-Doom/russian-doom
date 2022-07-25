@@ -2420,9 +2420,9 @@ static void AM_drawThings (const int colors, const int colorrange)
 // Draw the marked locations on the automap.
 // -----------------------------------------------------------------------------
 
-static const int mark_w = 5 << hires;
-static const int mark_flip_1 = 1 << hires;
-static const int mark_flip_2 = 9 << hires;
+#define MARK_W      (5 << hires)
+#define MARK_FLIP_1 (1 << hires)
+#define MARK_FLIP_2 (9 << hires)
 
 static void AM_drawMarks (void)
 {
@@ -2456,7 +2456,7 @@ static void AM_drawMarks (void)
                 // killough 2/22/98: less spacing for '1'
                 if (d == 1)
                 {
-                    fx += (flip_levels ? -mark_flip_1 : mark_flip_1); // -1 : 1
+                    fx += (flip_levels ? -MARK_FLIP_1 : MARK_FLIP_1);
                 }
 
                 if (fx >= f_x + 5 && fx <= f_w - 5
@@ -2469,7 +2469,7 @@ static void AM_drawMarks (void)
                 }
 
                 // killough 2/22/98: 1 space backwards
-                fx -= mark_w - (flip_levels ? mark_flip_2 : mark_flip_1); // 9 : 1
+                fx -= MARK_W - (flip_levels ? MARK_FLIP_2 : MARK_FLIP_1);
 
                 j /= 10;
             } while (j > 0);
