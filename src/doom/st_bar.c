@@ -1163,38 +1163,6 @@ static void ST_UpdateFragsCounter (void)
 }
 
 // -----------------------------------------------------------------------------
-// ST_Ticker
-// -----------------------------------------------------------------------------
-
-void ST_Ticker (void)
-{
-    // [JN] Allow to update background/belez before values update.
-    st_bg_needsupdate = true;
-
-    // [JN] Use real random number generator
-    // instead of M_Random LUT for faces stide.
-    st_randomnumber = rand() % 3;
-
-    ST_updateFaceWidget();
-
-    // [JN] Update blinking key or skull timer.
-    for (int i = 0 ; i < 3 ; i++)
-    {
-        if (plyr->tryopen[i])
-        {
-            plyr->tryopen[i]--;
-        }
-    }
-
-    if (deathmatch)
-    {
-        ST_UpdateFragsCounter();
-    }
-    
-    st_oldhealth = plyr->health;
-}
-
-// -----------------------------------------------------------------------------
 // ST_DoPaletteStuff
 // -----------------------------------------------------------------------------
 
@@ -1277,6 +1245,41 @@ static void ST_DoPaletteStuff (void)
         st_palette = palette;
         I_SetPalette (pal);
     }
+}
+
+// -----------------------------------------------------------------------------
+// ST_Ticker
+// -----------------------------------------------------------------------------
+
+void ST_Ticker (void)
+{
+    // Do red-/gold-shifts from damage/items
+    ST_DoPaletteStuff();
+
+    // [JN] Allow to update background/belez before values update.
+    st_bg_needsupdate = true;
+
+    // [JN] Use real random number generator
+    // instead of M_Random LUT for faces stide.
+    st_randomnumber = rand() % 3;
+
+    ST_updateFaceWidget();
+
+    // [JN] Update blinking key or skull timer.
+    for (int i = 0 ; i < 3 ; i++)
+    {
+        if (plyr->tryopen[i])
+        {
+            plyr->tryopen[i]--;
+        }
+    }
+
+    if (deathmatch)
+    {
+        ST_UpdateFragsCounter();
+    }
+    
+    st_oldhealth = plyr->health;
 }
 
 // -----------------------------------------------------------------------------
@@ -2045,9 +2048,6 @@ void ST_MapNameDrawer (void)
 
 void ST_Drawer (void)
 {
-    // Do red-/gold-shifts from damage/items
-    ST_DoPaletteStuff();
-
     // [JN] Refresh standard status bar background and elements.
     if (screenblocks <= 10 || (automapactive && !automap_overlay))
     {
