@@ -667,7 +667,7 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
     x1 = (centerxfrac + FixedMul (tx,xscale) ) >>FRACBITS;
 
     tx +=  spritewidth[lump];
-    x2 = ((centerxfrac + FixedMul (tx,xscale) ) >>FRACBITS) - 1;
+    x2 = ((centerxfrac + FixedMul (tx,xscale) - FRACUNIT/2) >>FRACBITS) - 1;
 
     gzt = interpz + spritetopoffset[lump];
 

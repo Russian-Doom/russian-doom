@@ -2153,14 +2153,18 @@ static void AM_drawWalls (const int automap_color_set)
 // Rotation in 2D. Used to rotate player arrow line character.
 // -----------------------------------------------------------------------------
 
-static void AM_rotate (int64_t *x, int64_t *y, const angle_t a)
+static void AM_rotate (int64_t *x, int64_t *y, angle_t a)
 {
     int64_t tmpx;
 
-    tmpx = FixedMul(*x,finecosine[a>>ANGLETOFINESHIFT]) 
-         - FixedMul(*y,finesine[a>>ANGLETOFINESHIFT]);
-    *y = FixedMul(*x,finesine[a>>ANGLETOFINESHIFT])
-       + FixedMul(*y,finecosine[a>>ANGLETOFINESHIFT]);
+    a >>= ANGLETOFINESHIFT;
+
+    tmpx = FixedMul(*x, finecosine[a])
+         - FixedMul(*y, finesine[a]);
+
+    *y = FixedMul(*x, finesine[a])
+       + FixedMul(*y, finecosine[a]);
+
     *x = tmpx;
 }
 
@@ -2173,17 +2177,18 @@ static void AM_rotate (int64_t *x, int64_t *y, const angle_t a)
 static void AM_rotatePoint (mpoint_t *pt)
 {
     int64_t tmpx;
-    const angle_t actualangle = (!(!automap_follow && automap_overlay)) ? ANG90 - viewangle : mapangle;
+    const angle_t actualangle = ((!(!automap_follow && automap_overlay)) ?
+                                 ANG90 - viewangle : mapangle) >> ANGLETOFINESHIFT;
 
     pt->x -= mapcenter.x;
     pt->y -= mapcenter.y;
 
-    tmpx = (int64_t)FixedMul(pt->x, finecosine[actualangle>>ANGLETOFINESHIFT])
-         - (int64_t)FixedMul(pt->y, finesine[actualangle>>ANGLETOFINESHIFT])
+    tmpx = (int64_t)FixedMul(pt->x, finecosine[actualangle])
+         - (int64_t)FixedMul(pt->y, finesine[actualangle])
          + mapcenter.x;
 
-    pt->y = (int64_t)FixedMul(pt->x, finesine[actualangle>>ANGLETOFINESHIFT])
-          + (int64_t)FixedMul(pt->y, finecosine[actualangle>>ANGLETOFINESHIFT])
+    pt->y = (int64_t)FixedMul(pt->x, finesine[actualangle])
+          + (int64_t)FixedMul(pt->y, finecosine[actualangle])
           + mapcenter.y;
 
     pt->x = tmpx;
