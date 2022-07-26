@@ -1817,18 +1817,19 @@ boolean PIT_ChangeSector (mobj_t *thing)
         thing->height = 0;
         thing->radius = 0;
 
-        // [JN] Бочка и Потерянная Душа не издают звук *шмяк!*
-        if (crushed_corpses_sfx && !vanillaparm 
-        && !(thing->type == MT_BARREL || thing->type == MT_SKULL))
+        // [JN] Play extra crushing sound (D*SLOP2):
+        if (crushed_corpses_sfx && !vanillaparm)
         {
-            S_StartSound(thing, sfx_slop2);
-        }
-
-        // [JN] Звук раздавливания игрока NULLифицирован.
-        // Необходимо для замещения звука боли при смерти от крашера.
-        if (crushed_corpses_sfx && !vanillaparm && thing->type == MT_PLAYER)
-        {
-            S_StartSound(singleplayer? NULL : thing, sfx_slop2);
+            if (thing->type == MT_PLAYER)
+            {
+                // NULL-sourced for player for breaking pain/death sounds.
+                S_StartSound(singleplayer ? NULL : thing, sfx_slop2);
+            }
+            if (thing->type != MT_BARREL)
+            {
+                // No sound for Explosive Barrels.
+                S_StartSound(thing, sfx_slop2);
+            }
         }
 
         // [crispy] connect giblet object with the crushed monster
