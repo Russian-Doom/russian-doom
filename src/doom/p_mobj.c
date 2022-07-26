@@ -1537,8 +1537,9 @@ void P_SpawnPlayerMissile (mobj_t *source, const mobjtype_t type)
 
     th->target = source;
     th->angle = an;
-    th->momx = FixedMul( th->info->speed, finecosine[an>>ANGLETOFINESHIFT]);
-    th->momy = FixedMul( th->info->speed, finesine[an>>ANGLETOFINESHIFT]);
+    an >>= ANGLETOFINESHIFT;
+    th->momx = FixedMul( th->info->speed, finecosine[an]);
+    th->momy = FixedMul( th->info->speed, finesine[an]);
     th->momz = FixedMul( th->info->speed, slope);
 
     P_CheckMissileSpawn (th);
