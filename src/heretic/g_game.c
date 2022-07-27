@@ -93,8 +93,6 @@ boolean usergame;               // ok to save / end game
 boolean timingdemo;             // if true, exit with report on completion
 int starttime;                  // for comparative timing purposes
 
-boolean viewactive;
-
 boolean deathmatch;             // only if started as net death
 boolean netgame;                // only true if packets are broadcast
 boolean playeringame[MAXPLAYERS];
@@ -1501,7 +1499,6 @@ void G_DoWorldDone(void)
     gamestate = GS_LEVEL;
     G_DoLoadLevel();
     gameaction = ga_nothing;
-    viewactive = true;
     AM_clearMarks();  // [JN] jff 4/12/98 clear any marks on the automap
 }
 
@@ -1841,11 +1838,9 @@ void G_InitNew(skill_t skill, int episode, int map, int fast_monsters)
     automapactive = false; 
     // [JN] jff 4/16/98 force marks on automap cleared every new level start
     AM_clearMarks();
-    viewactive = true;
     gameepisode = episode;
     gamemap = map;
     gameskill = skill;
-    viewactive = true;
     BorderNeedRefresh = true;
 
     // [crispy] CPhipps - total time for all completed levels

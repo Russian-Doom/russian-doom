@@ -1601,7 +1601,8 @@ void D_DoomMain(void)
     // [JN] Define and load translated strings
     RD_DefineLanguageStrings();
 
-    // [JN] Predifine automap marks color.
+    // [JN] Predifine automap crosshair, marks and their color.
+    AM_initPics();
     AM_initMarksColor(automap_mark_color);
 
 //

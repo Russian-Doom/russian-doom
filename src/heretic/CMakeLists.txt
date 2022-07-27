@@ -1,6 +1,5 @@
 if(COMPILE_HERETIC)
     add_library(heretic STATIC
-                                    am_data.h
                 am_map.c            am_map.h
                 ct_chat.c           ct_chat.h
                 deh_ammo.c

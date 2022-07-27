@@ -46,7 +46,6 @@ static int yval;
 static int nextscroll;
 
 static boolean reset_scroll_delay;
-extern boolean viewactive;
 
 extern void D_StartTitle(void);
 
@@ -62,7 +61,6 @@ void F_StartFinale(void)
 {
     gameaction = ga_nothing;
     gamestate = GS_FINALE;
-    viewactive = false;
     automapactive = false;
     players[consoleplayer].messageTics = 1;
     players[consoleplayer].message = NULL;

@@ -277,7 +277,7 @@ boolean P_ChickenMorphPlayer(player_t * player);
 
 // ***** AM_MAP *****
 
-boolean AM_Responder(event_t * ev);
+const boolean AM_Responder(event_t * ev);
 void AM_Ticker(void);
 void AM_Drawer(void);
 
