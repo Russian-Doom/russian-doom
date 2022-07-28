@@ -72,12 +72,13 @@ add_compile_options_checked(
 )
 
 if(MSVC)
-    add_compile_options_checked(
+    add_compile_definitions(
         # Silence the usual warnings for POSIX and standard C functions
-        /D_CRT_NONSTDC_NO_DEPRECATE
-        /D_CRT_SECURE_NO_WARNINGS
-        /D_CRT_SECURE_NO_DEPRECATE
-
+        _CRT_NONSTDC_NO_DEPRECATE
+        _CRT_SECURE_NO_WARNINGS
+        _CRT_SECURE_NO_DEPRECATE
+    )
+    add_compile_options_checked(
         # Default warning setting for MSVC
         /W3
 
