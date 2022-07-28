@@ -401,7 +401,14 @@ boolean P_GiveArtifact(player_t * player, artitype_t arti, mobj_t * mo)
 void P_SetDormantArtifact(mobj_t * arti)
 {
     arti->flags &= ~MF_SPECIAL;
-    arti->flags |= MF_EXTRATRANS;  // [JN] Make pickup fog translucent.
+
+    // [JN] Make pickup fog translucent, but don't apply
+    // for Shadowsphere - it's fog is already translucent.    
+    if (arti->type != MT_ARTIINVISIBILITY)
+    {
+        arti->flags |= MF_EXTRATRANS;
+    }
+
     if (deathmatch && (arti->type != MT_ARTIINVULNERABILITY)
         && (arti->type != MT_ARTIINVISIBILITY))
     {
