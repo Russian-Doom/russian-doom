@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15...3.24)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 project("International Doom" LANGUAGES C NONE)
 
@@ -196,8 +196,8 @@ else()
         set(GIT_INFO_TAG_PATTERN "5.3")
     endif()
     add_custom_target(revision_check
-        COMMAND "${CMAKE_COMMAND}" -P "\"${CMAKE_SOURCE_DIR}/cmake/UpdateRevision.cmake\"" "\"git_info.h\"" "\"${GIT_INFO_TAG_PATTERN}\"" "${GIT_EXECUTABLE}"
-        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        COMMAND "${CMAKE_COMMAND}" -P "\"${PROJECT_SOURCE_DIR}/cmake/UpdateRevision.cmake\"" "\"git_info.h\"" "\"${GIT_INFO_TAG_PATTERN}\"" "${GIT_EXECUTABLE}"
+        WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
     )
 endif()
 

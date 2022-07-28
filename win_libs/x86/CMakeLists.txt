@@ -12,5 +12,5 @@ add_copy_target(win-libs SOURCE
     SDL2_mixer.dll
     SDL2_net.dll
     zlib1.dll
-    DESTINATION "${CMAKE_BINARY_DIR}/src"
+    DESTINATION "${PROJECT_BINARY_DIR}/src"
 )
