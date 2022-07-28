@@ -56,7 +56,7 @@ To package International Doom run following commands:
 cd build
 cpack -G ZIP
 ```
-The resulting packages of the previously compiled components can be found in the `build` directory.
+The resulting packages of the previously compiled components and their checksums can be found in the `build` directory.
 
 The only supported generators are [Archive Generators](https://cmake.org/cmake/help/latest/cpack_gen/archive.html).  
 If you want to overwrite the package version, set `BUILD_VERSION_OVERWRITE` cmake variable at configuring time
