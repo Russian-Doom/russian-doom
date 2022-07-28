@@ -164,7 +164,7 @@ void R_InitVisplanesRes (void)
     freetail = NULL;
     freehead = &freetail;
 
-    for (int i = 0; i < MAXVISPLANES; i++)
+    for (int i = 0 ; i < MAXVISPLANES ; i++)
     {
         visplanes[i] = 0;
     }
@@ -207,11 +207,11 @@ void R_InitSkyMap (void)
 ================================================================================
 */
 
-void R_MapPlane (int y, int x1, int x2)
+static void R_MapPlane (const int y, const int x1, const int x2)
 {
-    fixed_t   distance;
     unsigned  index;
     int       dx, dy;
+    fixed_t   distance;
 
 #ifdef RANGECHECK
     if (x2 < x1 || x1 < 0 || x2 >= viewwidth || (unsigned) y > viewheight)
@@ -256,8 +256,12 @@ void R_MapPlane (int y, int x1, int x2)
     else
     {
         index = distance >> LIGHTZSHIFT;
+
         if (index >= MAXLIGHTZ)
+        {
             index = MAXLIGHTZ - 1;
+        }
+
         ds_colormap[0] = planezlight[index];
         ds_colormap[1] = colormaps;
     }
@@ -266,7 +270,8 @@ void R_MapPlane (int y, int x1, int x2)
     ds_x1 = x1;
     ds_x2 = x2;
 
-    spanfunc();                 // high or low detail
+    // High or low detail
+    spanfunc();
 }
 
 /*
@@ -284,19 +289,23 @@ void R_ClearPlanes (void)
     int i;
 
     // opening / clipping determination
-    for (i = 0; i < viewwidth; i++)
+    for (i = 0 ; i < viewwidth ; i++)
     {
         floorclip[i] = viewheight;
         ceilingclip[i] = -1;
     }
 
-    for (i = 0; i < MAXVISPLANES; i++)
-        for (*freehead = visplanes[i], visplanes[i] = NULL; *freehead; )
+    for (i = 0 ; i < MAXVISPLANES ; i++)  // [JN] new code -- killough
+    {
+        for (*freehead = visplanes[i], visplanes[i] = NULL ; *freehead ; )
+        {
             freehead = &(*freehead)->next;
+        }
+    }
 
     lastopening = openings;
 
-    // texture calculation
+    // Texture calculation
     memset(cachedheight, 0, sizeof(cachedheight));
 }
 
@@ -311,7 +320,7 @@ void R_ClearPlanes (void)
 ================================================================================
 */
 
-static visplane_t *new_visplane(unsigned int hash)
+static visplane_t *new_visplane (unsigned int hash)
 {
     visplane_t *check = freetail;
 
@@ -381,7 +390,7 @@ visplane_t *R_FindPlane(fixed_t height, const int picnum, const int lightlevel, 
 ================================================================================
 */
 
-visplane_t *R_DupPlane (const visplane_t *pl, int start, int stop)
+visplane_t *R_DupPlane (const visplane_t *pl, const int start, const int stop)
 {
     unsigned int  hash = visplane_hash(pl->picnum, pl->lightlevel, pl->height);
     visplane_t   *new_pl = new_visplane(hash);
@@ -486,19 +495,14 @@ void R_DrawPlanes (void)
 {
     visplane_t  *pl;
     int          i;
-    int          light;
-    int          x, stop;
-    int          lumpnum;
+    int          x;
     int          angle;
-    byte        *tempSource;
 
     for (i = 0 ; i < MAXVISPLANES ; i++)
     for (pl = visplanes[i] ; pl ; pl = pl->next, rendered_visplanes++)
     if (pl->minx <= pl->maxx)
     {
-        //
-        // sky flat
-        //
+        // Sky flat
         if (pl->picnum == skyflatnum)
         {
             for (x = pl->minx; x <= pl->maxx; x++)
@@ -537,16 +541,16 @@ void R_DrawPlanes (void)
             }
             continue;
         }
-        //
-        // regular flat
-        //
+        // Regular flat
         else
         {
-            lumpnum = firstflat + flattranslation[pl->picnum];
+            const int stop = pl->maxx + 1;
+            const int light = MIN((pl->lightlevel >> LIGHTSEGSHIFT) + extralight, LIGHTLEVELS - 1);
+            const int lumpnum = firstflat + flattranslation[pl->picnum];
             // [crispy] add support for SMMU swirling flats
-            tempSource = (flattranslation[pl->picnum] == -1) ?
-                          R_DistortedFlat(pl->picnum) :
-                          W_CacheLumpNum(lumpnum, PU_STATIC);
+            const byte *tempSource = (flattranslation[pl->picnum] == -1) ?
+                                      R_DistortedFlat(pl->picnum) :
+                                      W_CacheLumpNum(lumpnum, PU_STATIC);
 
             // [JN] Handle smooth scrolling flats.
             switch (pl->special)
@@ -653,19 +657,8 @@ void R_DrawPlanes (void)
 
             ds_source = tempSource;
             ds_brightmap = R_BrightmapForFlatNum(lumpnum-firstflat);
+
             planeheight = abs(pl->height - viewz);
-            light = (pl->lightlevel >> LIGHTSEGSHIFT) + extralight;
-
-            if (light >= LIGHTLEVELS)
-            {
-                light = LIGHTLEVELS - 1;
-            }
-            if (light < 0)
-            {
-                light = 0;
-            }
-
-            stop = pl->maxx + 1;
             planezlight = zlight[light];
             pl->top[pl->minx-1] = pl->top[stop] = UINT_MAX; // [crispy] 32-bit integer math
 

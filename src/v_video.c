@@ -51,7 +51,6 @@
 
 // [JN] Blending tables used for translucent sprites and text fading/shadow.
 byte *tinttable = NULL;
-byte *extratinttable = NULL;
 byte *transtable90 = NULL;
 byte *transtable80 = NULL;
 byte *transtable70 = NULL;

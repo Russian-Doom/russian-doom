@@ -595,7 +595,7 @@ void R_DrawExtraTLColumn(void)
 
         do
         {
-            *dest = extratinttable[(*dest<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
+            *dest = transtable80[(*dest<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
             dest += screenwidth;
             if ((frac += dc_iscale) >= heightmask)
             {
@@ -607,7 +607,7 @@ void R_DrawExtraTLColumn(void)
     {
         do
         {
-            *dest = extratinttable[(*dest<<8)+dc_colormap[0][dc_source[frac>>FRACBITS & heightmask]]];
+            *dest = transtable80[(*dest<<8)+dc_colormap[0][dc_source[frac>>FRACBITS & heightmask]]];
             dest += screenwidth;
             frac += dc_iscale;
         } while (count--);
@@ -661,10 +661,10 @@ void R_DrawExtraTLColumnLow (void)
 
         do
         {
-            *dest = extratinttable[(*dest<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
-            *dest2 = extratinttable[(*dest2<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
-            *dest3 = extratinttable[(*dest3<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
-            *dest4 = extratinttable[(*dest4<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
+            *dest = transtable80[(*dest<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
+            *dest2 = transtable80[(*dest2<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
+            *dest3 = transtable80[(*dest3<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
+            *dest4 = transtable80[(*dest4<<8)+dc_colormap[0][dc_source[frac>>FRACBITS]]];
 
             dest += screenwidth << hires;
             dest2 += screenwidth << hires;
@@ -681,10 +681,10 @@ void R_DrawExtraTLColumnLow (void)
     {
         do 
         {
-            *dest = extratinttable[(*dest<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
-            *dest2 = extratinttable[(*dest2<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
-            *dest3 = extratinttable[(*dest3<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
-            *dest4 = extratinttable[(*dest4<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest = transtable80[(*dest<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest2 = transtable80[(*dest2<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest3 = transtable80[(*dest3<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest4 = transtable80[(*dest4<<8)+dc_colormap[0][dc_source[(frac>>FRACBITS)&heightmask]]];
 
             dest += screenwidth << hires;
             dest2 += screenwidth << hires;

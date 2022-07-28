@@ -22,40 +22,37 @@
 #include "doomdef.h"
 #include "r_local.h"
 #include "p_local.h"
+#include "v_video.h"
 #include "jn.h"
 
 
 // [JN] Used by perfomance counter.
 int rendered_segs, rendered_visplanes, rendered_vissprites;
 
-int viewangleoffset;
-int validcount = 1;             // increment every time a check is made
-
+int           detailshift;      // 0 = high, 1 = low
+int           viewangleoffset;
+int           validcount = 1;   // increment every time a check is made
+int           centerx, centery;
+fixed_t       centerxfrac, centeryfrac;
+fixed_t       projection;
+fixed_t       viewx, viewy, viewz;
+fixed_t       viewcos, viewsin;
+angle_t       viewangle;
+player_t     *viewplayer;
 lighttable_t *fixedcolormap;
 
-int centerx, centery;
-fixed_t centerxfrac, centeryfrac;
-fixed_t projection;
-
-fixed_t viewx, viewy, viewz;
-fixed_t viewcos, viewsin;
-angle_t viewangle;
-
-player_t *viewplayer;
-
-int detailshift;                // 0 = high, 1 = low
-
+int     setblocks, setdetail;
 boolean setsizeneeded;
-int setblocks, setdetail;
 
 // [crispy] lookup table for horizontal screen coordinates
 // [JN] Resolution limitation is removed.
 int *flipscreenwidth;
 int *flipviewwidth;
 
-//
+// bumped light from gun blasts
+int extralight;
+
 // precalculated math tables
-//
 angle_t clipangle;
 
 // The viewangletox[viewangle + FINEANGLES/4] lookup maps the visible view
@@ -75,7 +72,6 @@ lighttable_t *scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t *scalelightfixed[MAXLIGHTSCALE];
 lighttable_t *zlight[LIGHTLEVELS][MAXLIGHTZ];
 
-int extralight;                 // bumped light from gun blasts
 
 void (*colfunc) (void);
 void (*skycolfunc) (void);
@@ -100,20 +96,26 @@ void (*spanfunc) (void);
 ================================================================================
 */
 
-int R_PointOnSide(fixed_t x, fixed_t y, node_t * node)
+int R_PointOnSide (fixed_t x, fixed_t y, const node_t *node)
 {
     if (!node->dx)
-    return x <= node->x ? node->dy > 0 : node->dy < 0;
+    {
+        return x <= node->x ? node->dy > 0 : node->dy < 0;
+    }
 
     if (!node->dy)
-    return y <= node->y ? node->dx < 0 : node->dx > 0;
+    {
+        return y <= node->y ? node->dx < 0 : node->dx > 0;
+    }
 
     x -= node->x;
     y -= node->y;
 
     // Try to quickly decide by looking at sign bits.
     if ((node->dy ^ node->dx ^ x ^ y) < 0)
-    return (node->dy ^ x) < 0;  // (left is negative)
+    {
+        return (node->dy ^ x) < 0;  // (left is negative)
+    }
 
     return FixedMul(y, node->dx>>FRACBITS) >= FixedMul(node->dy>>FRACBITS, x);		
 }
@@ -128,7 +130,7 @@ int R_PointOnSide(fixed_t x, fixed_t y, node_t * node)
 ================================================================================
 */
 
-int R_PointOnSegSide (fixed_t x, fixed_t y, seg_t *line)
+int R_PointOnSegSide (fixed_t x, fixed_t y, const seg_t *line)
 {
     fixed_t lx = line->v1->x;
     fixed_t ly = line->v1->y;
@@ -136,17 +138,23 @@ int R_PointOnSegSide (fixed_t x, fixed_t y, seg_t *line)
     fixed_t ldy = line->v2->y - ly;
 
     if (!ldx)
-    return x <= lx ? ldy > 0 : ldy < 0;
+    {
+        return x <= lx ? ldy > 0 : ldy < 0;
+    }
 
     if (!ldy)
-    return y <= ly ? ldx < 0 : ldx > 0;
+    {
+        return y <= ly ? ldx < 0 : ldx > 0;
+    }
 
     x -= lx;
     y -= ly;
 
     // Try to quickly decide by looking at sign bits.
     if ((ldy ^ ldx ^ x ^ y) < 0)
-    return (ldy ^ x) < 0;   // (left is negative)
+    {
+        return (ldy ^ x) < 0;   // (left is negative)
+    }
 
     return FixedMul(y, ldx>>FRACBITS) >= FixedMul(ldy>>FRACBITS, x);	
 }
@@ -160,92 +168,97 @@ int R_PointOnSegSide (fixed_t x, fixed_t y, seg_t *line)
 = until they are in the first octant of the coordinate system, then the y (<=x)
 = is scaled and divided by x to get a tangent (slope) value which is looked up 
 = in the tantoangle[] table.
-
-// [crispy] turned into a general R_PointToAngle() flavor
-// called with either slope_div = SlopeDivCrispy() from R_PointToAngleCrispy()
-// or slope_div = SlopeDiv() else
+=
+= [crispy] turned into a general R_PointToAngle() flavor
+= called with either slope_div = SlopeDivCrispy() from R_PointToAngleCrispy()
+= or slope_div = SlopeDiv() else
+=
 ================================================================================
 */
 
-angle_t R_PointToAngleSlope (fixed_t x, fixed_t y, int (*slope_div) (unsigned int num, unsigned int den))
+static const angle_t R_PointToAngleSlope (fixed_t x, fixed_t y,
+                                          int (*slope_div) (unsigned const int num, 
+                                                            unsigned const int den))
 {	
     x -= viewx;
     y -= viewy;
     
-    if ( (!x) && (!y) )
-	return 0;
-
-    if (x>= 0)
+    if ((!x) && (!y))
     {
-	// x >=0
-	if (y>= 0)
-	{
-	    // y>= 0
+        return 0;
+    }
 
-	    if (x>y)
-	    {
-		// octant 0
-		return tantoangle[slope_div(y,x)];
-	    }
-	    else
-	    {
-		// octant 1
-		return ANG90-1-tantoangle[slope_div(x,y)];
-	    }
-	}
-	else
-	{
-	    // y<0
-	    y = -y;
+    if (x >= 0)
+    {
+        // x >=0
+        if (y>= 0)
+        {
+            // y>= 0
+            if (x>y)
+            {
+                // octant 0
+                return tantoangle[slope_div(y,x)];
+            }
+            else
+            {
+                // octant 1
+                return ANG90-1-tantoangle[slope_div(x,y)];
+            }
+        }
+        else
+        {
+            // y<0
+            y = -y;
 
-	    if (x>y)
-	    {
-		// octant 8
-		return -tantoangle[slope_div(y,x)];
-	    }
-	    else
-	    {
-		// octant 7
-		return ANG270+tantoangle[slope_div(x,y)];
-	    }
-	}
+            if (x>y)
+            {
+                // octant 8
+                return -tantoangle[slope_div(y,x)];
+            }
+            else
+            {
+                // octant 7
+                return ANG270+tantoangle[slope_div(x,y)];
+            }
+        }
     }
     else
     {
-	// x<0
-	x = -x;
+        // x<0
+        x = -x;
 
-	if (y>= 0)
-	{
-	    // y>= 0
-	    if (x>y)
-	    {
-		// octant 3
-		return ANG180-1-tantoangle[slope_div(y,x)];
-	    }
-	    else
-	    {
-		// octant 2
-		return ANG90+ tantoangle[slope_div(x,y)];
-	    }
-	}
-	else
-	{
-	    // y<0
-	    y = -y;
+        if (y>= 0)
+        {
+            // y>= 0
+            if (x>y)
+            {
+                // octant 3
+                return ANG180-1-tantoangle[slope_div(y,x)];
+            }
+            else
+            {
+                // octant 2
+                return ANG90+ tantoangle[slope_div(x,y)];
+            }
+        }
+        else
+        {
+            // y<0
+            y = -y;
 
-	    if (x>y)
-	    {
-		// octant 4
-		return ANG180+tantoangle[slope_div(y,x)];
-	    }
-	    else
-	    {
-		 // octant 5
-		return ANG270-1-tantoangle[slope_div(x,y)];
-	    }
-	}
+            if (x>y)
+            {
+                // octant 4
+                return ANG180+tantoangle[slope_div(y,x)];
+            }
+            else
+            {
+                // octant 5
+                return ANG270-1-tantoangle[slope_div(x,y)];
+            }
+        }
     }
+
     return 0;
 }
 
@@ -257,7 +270,7 @@ angle_t R_PointToAngleSlope (fixed_t x, fixed_t y, int (*slope_div) (unsigned in
 ================================================================================
 */
 
-angle_t R_PointToAngle (fixed_t x, fixed_t y)
+angle_t R_PointToAngle (const fixed_t x, const fixed_t y)
 {
     return R_PointToAngleSlope (x, y, SlopeDiv);
 }
@@ -280,12 +293,12 @@ angle_t R_PointToAngleCrispy (fixed_t x, fixed_t y)
     int64_t x_viewx = (int64_t)x - viewx;
 
     // [crispy] the worst that could happen is e.g. INT_MIN-INT_MAX = 2*INT_MIN
-    if (x_viewx < INT_MIN || x_viewx > INT_MAX ||
-        y_viewy < INT_MIN || y_viewy > INT_MAX)
+    if (x_viewx < INT_MIN || x_viewx > INT_MAX
+    ||  y_viewy < INT_MIN || y_viewy > INT_MAX)
     {
-	// [crispy] preserving the angle by halfing the distance in both directions
-	x = x_viewx / 2 + viewx;
-	y = y_viewy / 2 + viewy;
+        // [crispy] preserving the angle by halfing the distance in both directions
+        x = x_viewx / 2 + viewx;
+        y = y_viewy / 2 + viewy;
     }
 
     return R_PointToAngleSlope (x, y, SlopeDivCrispy);
@@ -299,55 +312,13 @@ angle_t R_PointToAngleCrispy (fixed_t x, fixed_t y)
 ================================================================================
 */
 
-angle_t R_PointToAngle2 (fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2)
+angle_t R_PointToAngle2 (const fixed_t x1, const fixed_t y1, const fixed_t x2, const fixed_t y2)
 {
     viewx = x1;
     viewy = y1;
 
     // [crispy] R_PointToAngle2() is never called during rendering
     return R_PointToAngleSlope (x2, y2, SlopeDiv);
-}
-
-/*
-================================================================================
-=
-= R_PointToDist
-=
-================================================================================
-*/
-
-fixed_t R_PointToDist (fixed_t x, fixed_t y)
-{
-    int      angle;
-    fixed_t  dx, dy, temp;
-    fixed_t  dist, frac;
-
-    dx = abs(x - viewx);
-    dy = abs(y - viewy);
-
-    if (dy > dx)
-    {
-        temp = dx;
-        dx = dy;
-        dy = temp;
-    }
-
-    // [JN] Fix crashes in udm1.wad
-    if (dx != 0)
-    {
-        frac = FixedDiv(dy, dx);
-    }
-    else
-    {
-        frac = 0;
-    }
-
-    angle = (tantoangle[frac>>DBITS]+ANG90) >> ANGLETOFINESHIFT;
-
-    // use as cosine
-    dist = FixedDiv (dx, finesine[angle]);
-
-    return dist;
 }
 
 /*
@@ -360,7 +331,7 @@ fixed_t R_PointToDist (fixed_t x, fixed_t y)
 ================================================================================
 */
 
-angle_t R_InterpolateAngle (angle_t oangle, angle_t nangle, fixed_t scale)
+angle_t R_InterpolateAngle (const angle_t oangle, const angle_t nangle, const fixed_t scale)
 {
     if (nangle == oangle)
     {
@@ -398,11 +369,9 @@ angle_t R_InterpolateAngle (angle_t oangle, angle_t nangle, fixed_t scale)
 ================================================================================
 */
 
-void R_InitTextureMapping (void)
+static void R_InitTextureMapping (void)
 {
-    int     i;
-    int     x;
-    int     t;
+    int     i, x, t;
     fixed_t focallength;
 
     // Use tangent table to generate viewangletox:
@@ -416,24 +385,31 @@ void R_InitTextureMapping (void)
     // pixels shows the same part of the game scene as in regular rendering mode
     fixed_t focalwidth;
     focalwidth = (((ORIGWIDTH << hires)>>detailshift)/2)<<FRACBITS;
-
     focallength = FixedDiv(aspect_ratio >= 2 ? focalwidth : centerxfrac, 
                            finetangent[FINEANGLES / 4 + FIELDOFVIEW / 2]);
 
-    for (i = 0; i < FINEANGLES / 2; i++)
+    for (i = 0 ; i < FINEANGLES / 2 ; i++)
     {
         if (finetangent[i] > FRACUNIT * 2)
+        {
             t = -1;
+        }
         else if (finetangent[i] < -FRACUNIT * 2)
+        {
             t = viewwidth + 1;
+        }
         else
         {
             t = FixedMul(finetangent[i], focallength);
             t = (centerxfrac - t + FRACUNIT - 1) >> FRACBITS;
             if (t < -1)
+            {
                 t = -1;
+            }
             else if (t > viewwidth + 1)
+            {
                 t = viewwidth + 1;
+            }
         }
         viewangletox[i] = t;
     }
@@ -441,11 +417,15 @@ void R_InitTextureMapping (void)
     // Scan viewangletox[] to generate xtoviewangle[]:
     //  xtoviewangle will give the smallest view angle
     //  that maps to x.	
-    for (x = 0; x <= viewwidth; x++)
+    for (x = 0 ; x <= viewwidth ; x++)
     {
         i = 0;
+
         while (viewangletox[i] > x)
+        {
             i++;
+        }
+
         xtoviewangle[x] = (i << ANGLETOFINESHIFT) - ANG90;
         // [crispy] calculate sky angle for drawing horizontally linear skies.
         // Taken from GZDoom and refactored for integer math.
@@ -454,14 +434,18 @@ void R_InitTextureMapping (void)
     }
 
     // Take out the fencepost cases from viewangletox.
-    for (i = 0; i < FINEANGLES / 2; i++)
+    for (i = 0 ; i < FINEANGLES / 2 ; i++)
     {
         t = FixedMul(finetangent[i], focallength);
         t = centerx - t;
         if (viewangletox[i] == -1)
+        {
             viewangletox[i] = 0;
+        }
         else if (viewangletox[i] == viewwidth + 1)
+        {
             viewangletox[i] = viewwidth;
+        }
     }
 
     clipangle = xtoviewangle[0];
@@ -480,31 +464,69 @@ void R_InitTextureMapping (void)
 
 #define		DISTMAP	2
 
-void R_InitLightTables (void)
+static void R_InitLightTables (void)
 {
-    int i, j, level, startmap;
+    int level, startmap;
     int scale;
 
     // Calculate the light levels to use for each level / distance combination
-    for (i = 0; i < LIGHTLEVELS; i++)
+    for (int i = 0 ; i < LIGHTLEVELS; i++)
     {
         startmap = ((LIGHTLEVELS - 1 - i) * 2) * NUMCOLORMAPS / LIGHTLEVELS;
-        for (j = 0; j < MAXLIGHTZ; j++)
+        for (int j = 0; j < MAXLIGHTZ; j++)
         {
-            scale =
-                FixedDiv((320 / 2 * FRACUNIT),
-                         (j + 1) << LIGHTZSHIFT);
+            scale = FixedDiv((320 / 2 * FRACUNIT), (j + 1) << LIGHTZSHIFT);
             scale >>= LIGHTSCALESHIFT;
             level = startmap - scale / DISTMAP;
+
             if (level < 0)
+            {
                 level = 0;
+            }
             if (level >= NUMCOLORMAPS)
+            {
                 level = NUMCOLORMAPS - 1;
+            }
+
             zlight[i][j] = colormaps + level * 256;
         }
     }
 }
 
+
+/*
+================================================================================
+=
+= R_InitTranslationTables
+=
+================================================================================
+*/
+
+static void R_InitTranslationTables (void)
+{
+    int i;
+
+    V_LoadTintTable();
+
+    // Allocate translation tables
+    translationtables = Z_Malloc(256 * 3, PU_STATIC, 0);
+
+    // Fill out the translation tables
+    for (i = 0; i < 256; i++)
+    {
+        if (i >= 225 && i <= 240)
+        {
+            translationtables[i] = 114 + (i - 225);       // yellow
+            translationtables[i + 256] = 145 + (i - 225); // red
+            translationtables[i + 512] = 190 + (i - 225); // blue
+        }
+        else
+        {
+            translationtables[i] = translationtables[i + 256]
+                                 = translationtables[i + 512] = i;
+        }
+    }
+}
 
 /*
 ================================================================================
@@ -517,7 +539,7 @@ void R_InitLightTables (void)
 ================================================================================
 */
 
-void R_SetViewSize(int blocks, int detail)
+void R_SetViewSize (const int blocks, const int detail)
 {
     setsizeneeded = true;
     setblocks = blocks;
@@ -535,7 +557,7 @@ void R_SetViewSize(int blocks, int detail)
 void R_ExecuteSetViewSize (void)
 {
     fixed_t cosadj, dy;
-    int i, j, level, startmap;
+    int i, j, level;
 
     setsizeneeded = false;
 
@@ -571,12 +593,13 @@ void R_ExecuteSetViewSize (void)
 
     detailshift = setdetail;
     viewwidth = scaledviewwidth >> detailshift;
-    viewheight = scaledviewheight>>(detailshift && hires);
+    viewheight = scaledviewheight >> (detailshift && hires);
 
     centery = viewheight / 2;
     centerx = viewwidth / 2;
     centerxfrac = centerx << FRACBITS;
     centeryfrac = centery << FRACBITS;
+
     if (aspect_ratio >= 2)
     {
         projection = MIN(centerxfrac, (((320 << hires)>>detailshift)/2)<<FRACBITS);
@@ -585,7 +608,6 @@ void R_ExecuteSetViewSize (void)
     {
         projection = centerxfrac;
     }
-
 
     if (!detailshift)
     {
@@ -640,13 +662,14 @@ void R_ExecuteSetViewSize (void)
                    * (screenblocks < 11 ? screenblocks : 11) / 10))<<FRACBITS)+FRACUNIT/2;
             }
 
-        dy = abs(dy);
-        yslopes[j][i] = FixedDiv (aspect_ratio >= 2 ? num_wide : num, dy);
+            dy = abs(dy);
+            yslopes[j][i] = FixedDiv (aspect_ratio >= 2 ? num_wide : num, dy);
         }
     }
+
     yslope = yslopes[LOOKDIRMIN];
 
-    for (i = 0; i < viewwidth; i++)
+    for (i = 0 ; i < viewwidth ; i++)
     {
         cosadj = abs(finecosine[xtoviewangle[i] >> ANGLETOFINESHIFT]);
         distscale[i] = FixedDiv(FRACUNIT, cosadj);
@@ -655,16 +678,20 @@ void R_ExecuteSetViewSize (void)
     // Calculate the light levels to use for each level / scale combination
     for (i = 0 ; i < LIGHTLEVELS ; i++)
     {
-        startmap = ((LIGHTLEVELS - 1 - i) * 2) * NUMCOLORMAPS / LIGHTLEVELS;
+        const int startmap = ((LIGHTLEVELS - 1 - i) * 2) * NUMCOLORMAPS / LIGHTLEVELS;
         for (j = 0; j < MAXLIGHTSCALE; j++)
         {
-            level =
-                startmap -
-                j * screenwidth / (viewwidth << detailshift) / DISTMAP;
+            level = startmap - j * screenwidth / (viewwidth << detailshift) / DISTMAP;
+
             if (level < 0)
+            {
                 level = 0;
+            }
             if (level >= NUMCOLORMAPS)
+            {
                 level = NUMCOLORMAPS - 1;
+            }
+
             scalelight[i][j] = colormaps + level * 256;
         }
     }
@@ -735,16 +762,20 @@ void R_Init (void)
 ================================================================================
 */
 
-subsector_t *R_PointInSubsector (fixed_t x, fixed_t y)
+subsector_t *R_PointInSubsector (const fixed_t x, const fixed_t y)
 {
     int nodenum = numnodes-1;
 
-    // special case for trivial maps (single subsector, no nodes)
+    // Special case for trivial maps (single subsector, no nodes)
     if (numnodes == 0)
-    return subsectors;
+    {
+        return subsectors;
+    }
 
     while (!(nodenum & NF_SUBSECTOR))
-    nodenum = nodes[nodenum].children[R_PointOnSide(x, y, nodes+nodenum)];
+    {
+        nodenum = nodes[nodenum].children[R_PointOnSide(x, y, nodes+nodenum)];
+    }
 
     return &subsectors[nodenum & ~NF_SUBSECTOR];
 }
@@ -757,9 +788,8 @@ subsector_t *R_PointInSubsector (fixed_t x, fixed_t y)
 ================================================================================
 */
 
-void R_SetupFrame (player_t *player)
+static void R_SetupFrame (player_t *player)
 {
-    int i;
     int tempCentery;
     int pitch;
 
@@ -790,6 +820,7 @@ void R_SetupFrame (player_t *player)
             viewx = player->mo->oldx + FixedMul(player->mo->x - player->mo->oldx, fractionaltic);
             viewy = player->mo->oldy + FixedMul(player->mo->y - player->mo->oldy, fractionaltic);
         }
+
         viewz = player->oldviewz + FixedMul(player->viewz - player->oldviewz, fractionaltic);
         viewangle = R_InterpolateAngle(player->mo->oldangle,
                                        player->mo->angle, fractionaltic)
@@ -841,15 +872,19 @@ void R_SetupFrame (player_t *player)
         yslope = yslopes[LOOKDIRMIN + pitch];
     }
 
-    viewsin = finesine[viewangle>>ANGLETOFINESHIFT];
-    viewcos = finecosine[viewangle>>ANGLETOFINESHIFT];
+    {
+        const fixed_t viewangle_shifted = viewangle >> ANGLETOFINESHIFT;
+
+        viewsin = finesine[viewangle_shifted];
+        viewcos = finecosine[viewangle_shifted];
+    }
 
     if (player->fixedcolormap)
     {
         fixedcolormap = colormaps + player->fixedcolormap * 256 * sizeof(lighttable_t);
         walllights = scalelightfixed;
 
-        for (i = 0; i < MAXLIGHTSCALE; i++)
+        for (int i = 0; i < MAXLIGHTSCALE; i++)
         {
             scalelightfixed[i] = fixedcolormap;
         }
@@ -871,6 +906,7 @@ void R_SetupFrame (player_t *player)
         BorderTopRefresh = false;
         UpdateState |= I_FULLSCRN;
     }
+
     if (BorderTopRefresh)
     {
         if (setblocks < 10)
@@ -907,19 +943,18 @@ void R_ClearStats (void)
 
 void R_RenderPlayerView(player_t *player)
 {
-    extern void V_DrawFilledBox (int x, int y, int w, int h, int c);
-    extern void R_InterpolateTextureOffsets (void);
-
     R_SetupFrame(player);
 
     // Clear buffers.
     R_ClearClipSegs();
     R_ClearDrawSegs();
+
     if (automapactive && !automap_overlay)
     {
         R_RenderBSPNode (numnodes-1);
         return;
     }
+
     // [JN] Fill level's "out of bounds" with black color.
     // Flash with red/black color if flashing HOM feature enabled.
     V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight,

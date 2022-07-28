@@ -27,24 +27,20 @@
 
 // All drawing to the view buffer is accomplished in this file.  The other refresh
 // files only know about ccordinates, not the architecture of the frame buffer.
-byte *viewimage;
 int   viewwidth, scaledviewwidth;
 int   viewheight, scaledviewheight;
 int   viewwindowx, viewwindowy;
 
-byte *ylookup[SCREENHEIGHT];
-int columnofs[WIDESCREENWIDTH];
-
-// color tables for different players
-byte translations[3][256];
+static byte *ylookup[SCREENHEIGHT]; 
+static int   columnofs[WIDESCREENWIDTH]; 
 
 // R_DrawColumn. Source is the top of the column to scale.
 const lighttable_t *dc_colormap[2];  // [crispy] brightmaps
 const byte         *dc_source;       // First pixel in a column (possibly virtual).
-int           dc_x, dc_yl, dc_yh;
-fixed_t       dc_iscale;
-fixed_t       dc_texturemid;
-int           dc_texheight;
+fixed_t dc_x, dc_yl, dc_yh;
+fixed_t dc_iscale;
+fixed_t dc_texturemid;
+fixed_t dc_texheight;
 
 // Translated columns.
 byte *dc_translation;
@@ -63,7 +59,7 @@ const byte         *ds_brightmap;
 /*
 ================================================================================
 =
-= R_DrawColumnLow
+= R_DrawColumn
 =
 ================================================================================
 */
@@ -90,7 +86,7 @@ void R_DrawColumn (void)
 
     dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
     fracstep = dc_iscale;
-    frac = dc_texturemid + (dc_yl-centery)*fracstep;
+    frac = dc_texturemid + (dc_yl-centery) * fracstep;
 
     // Inner loop that does the actual texture mapping, e.g. a DDA-lile scaling.
     // This is as fast as it gets.
@@ -99,7 +95,7 @@ void R_DrawColumn (void)
         const byte *source = dc_source;
         const byte *brightmap = dc_brightmap;
         const lighttable_t *const *colormap = dc_colormap;
-        int heightmask = dc_texheight-1;
+        int heightmask = dc_texheight - 1;
 
         if (dc_texheight & heightmask)   // not a power of 2 -- killough
         {
@@ -132,8 +128,6 @@ void R_DrawColumn (void)
         {
             do
             {
-                // Re-map color indices from wall texture column
-                //  using a lighting/special effects LUT.
                 // [crispy] brightmaps
                 const byte src = source[(frac>>FRACBITS)&heightmask];
 
@@ -176,18 +170,18 @@ void R_DrawColumnLow (void)
 #endif
 
     dest1 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires)+1] + columnofs[flipviewwidth[x]];
-    dest4 = ylookup[(dc_yl << hires)+1] + columnofs[flipviewwidth[x+1]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x + 1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x + 1]];
     fracstep = dc_iscale; 
-    frac = dc_texturemid + (dc_yl-centery)*fracstep;
+    frac = dc_texturemid + (dc_yl-centery) * fracstep;
 
     // Inner loop that does the actual texture mapping, e.g. a DDA-lile scaling.
     {
         const byte *source = dc_source;
         const byte *brightmap = dc_brightmap;
         const lighttable_t *const *colormap = dc_colormap;
-        int heightmask = dc_texheight-1;
+        int heightmask = dc_texheight - 1;
 
         if (dc_texheight & heightmask)  // not a power of 2 -- killough
         {
@@ -247,7 +241,7 @@ void R_DrawColumnLow (void)
 ================================================================================
 */
 
-void R_DrawSkyColumn(void)
+void R_DrawSkyColumn (void)
 {
     int      count = dc_yh - dc_yl;
     byte    *dest;
@@ -266,7 +260,7 @@ void R_DrawSkyColumn(void)
         const byte *source = dc_source;
         const byte *brightmap = dc_brightmap;
         const lighttable_t *const *colormap = dc_colormap;
-        int heightmask = skytextureheight-1;
+        int heightmask = skytextureheight - 1;
 
         if (skytextureheight & heightmask)  // not a power of 2 -- killough
         {
@@ -328,9 +322,9 @@ void R_DrawSkyColumnLow(void)
     }
 
     dest1 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x + 1]];
     dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x + 1]];
     fracstep = skyiscale_low; 
     frac  = skytexturemid + (dc_yl - centery) * fracstep;
 
@@ -338,7 +332,7 @@ void R_DrawSkyColumnLow(void)
         const byte *source = dc_source;
         const byte *brightmap = dc_brightmap;
         const lighttable_t *const *colormap = dc_colormap;
-        int heightmask = skytextureheight-1;
+        int heightmask = skytextureheight - 1;
 
         if (skytextureheight & heightmask) // not a power of 2 -- killough
         {
@@ -420,12 +414,12 @@ void R_DrawTLColumn (void)
 
     dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
     fracstep = dc_iscale; 
-    frac = dc_texturemid + (dc_yl-centery)*fracstep;
+    frac = dc_texturemid + (dc_yl - centery) * fracstep;
 
     {
         const byte *source = dc_source;
         const lighttable_t *const *colormap = dc_colormap;
-        int heightmask = dc_texheight-1;
+        int heightmask = dc_texheight - 1;
 
         if (dc_texheight & heightmask)  // not a power of 2 -- killough
         {
@@ -440,7 +434,7 @@ void R_DrawTLColumn (void)
 
             do
             {
-                *dest = tinttable[(*dest<<8)+colormap[0][source[frac>>FRACBITS]]];
+                *dest = tinttable[(*dest << 8) + colormap[0][source[frac >> FRACBITS]]];
                 dest += screenwidth;
                 if ((frac += fracstep) >= heightmask)
                 {
@@ -452,7 +446,7 @@ void R_DrawTLColumn (void)
         {
             do
             {
-                *dest = tinttable[(*dest<<8)+colormap[0][source[frac>>FRACBITS & heightmask]]];
+                *dest = tinttable[(*dest << 8) + colormap[0][source[(frac >> FRACBITS) & heightmask]]];
                 dest += screenwidth;
                 frac += fracstep;
             } while (count--);
@@ -493,16 +487,16 @@ void R_DrawTLColumnLow (void)
 #endif
 
     dest1 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires)+1] + columnofs[flipviewwidth[x]];
-    dest4 = ylookup[(dc_yl << hires)+1] + columnofs[flipviewwidth[x+1]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x + 1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x + 1]];
     fracstep = dc_iscale; 
     frac  = dc_texturemid + (dc_yl-centery)*fracstep;
 
     {
         const byte *source = dc_source;
         const lighttable_t *const *colormap = dc_colormap;
-        int heightmask = dc_texheight-1;
+        int heightmask = dc_texheight - 1;
 
         if (dc_texheight & heightmask)  // not a power of 2 -- killough
         {
@@ -517,12 +511,12 @@ void R_DrawTLColumnLow (void)
 
             do
             {
-                const byte src = source[frac>>FRACBITS];
+                const byte src = source[frac >> FRACBITS];
 
-                *dest1 = tinttable[(*dest1<<8)+colormap[0][src]];
-                *dest2 = tinttable[(*dest2<<8)+colormap[0][src]];
-                *dest3 = tinttable[(*dest3<<8)+colormap[0][src]];
-                *dest4 = tinttable[(*dest4<<8)+colormap[0][src]];
+                *dest1 = tinttable[(*dest1 << 8) + colormap[0][src]];
+                *dest2 = tinttable[(*dest2 << 8) + colormap[0][src]];
+                *dest3 = tinttable[(*dest3 << 8) + colormap[0][src]];
+                *dest4 = tinttable[(*dest4 << 8) + colormap[0][src]];
                 dest1 += screenwidth << hires;
                 dest2 += screenwidth << hires;
                 dest3 += screenwidth << hires;
@@ -538,12 +532,12 @@ void R_DrawTLColumnLow (void)
         {
             do 
             {
-                const byte src = source[(frac>>FRACBITS)&heightmask];
+                const byte src = source[(frac >> FRACBITS) & heightmask];
 
-                *dest1 = tinttable[(*dest1<<8)+colormap[0][src]];
-                *dest2 = tinttable[(*dest2<<8)+colormap[0][src]];
-                *dest3 = tinttable[(*dest3<<8)+colormap[0][src]];
-                *dest4 = tinttable[(*dest4<<8)+colormap[0][src]];
+                *dest1 = tinttable[(*dest1 << 8) +colormap[0][src]];
+                *dest2 = tinttable[(*dest2 << 8) +colormap[0][src]];
+                *dest3 = tinttable[(*dest3 << 8) +colormap[0][src]];
+                *dest4 = tinttable[(*dest4 << 8) +colormap[0][src]];
     
                 dest1 += screenwidth << hires;
                 dest2 += screenwidth << hires;
@@ -567,7 +561,7 @@ void R_DrawTLColumnLow (void)
 ================================================================================
 */
 
-void R_DrawExtraTLColumn(void)
+void R_DrawExtraTLColumn (void)
 {
     int      count = dc_yh - dc_yl;
     byte    *dest;
@@ -590,12 +584,12 @@ void R_DrawExtraTLColumn(void)
 
     dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
     fracstep = dc_iscale; 
-    frac = dc_texturemid + (dc_yl-centery)*fracstep;
+    frac = dc_texturemid + (dc_yl - centery) * fracstep;
 
     {
         const byte *source = dc_source;
         const lighttable_t *const *colormap = dc_colormap;
-        int heightmask = dc_texheight-1;
+        int heightmask = dc_texheight - 1;
 
         if (dc_texheight & heightmask)  // not a power of 2 -- killough
         {
@@ -610,7 +604,7 @@ void R_DrawExtraTLColumn(void)
 
             do
             {
-                *dest = extratinttable[(*dest<<8)+colormap[0][source[frac>>FRACBITS]]];
+                *dest = transtable80[(*dest << 8) + colormap[0][source[frac >> FRACBITS]]];
                 dest += screenwidth;
                 if ((frac += fracstep) >= heightmask)
                 {
@@ -622,7 +616,7 @@ void R_DrawExtraTLColumn(void)
         {
             do
             {
-                *dest = extratinttable[(*dest<<8)+colormap[0][source[frac>>FRACBITS & heightmask]]];
+                *dest = transtable80[(*dest << 8) + colormap[0][source[(frac >> FRACBITS) & heightmask]]];
                 dest += screenwidth;
                 frac += fracstep;
             } while (count--);
@@ -663,16 +657,16 @@ void R_DrawExtraTLColumnLow (void)
 #endif
 
     dest1 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x + 1]];
     dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x + 1]];
     fracstep = dc_iscale; 
     frac  = dc_texturemid + (dc_yl-centery)*fracstep;
 
     {
         const byte *source = dc_source;
         const lighttable_t *const *colormap = dc_colormap;
-        int heightmask = dc_texheight-1;
+        int heightmask = dc_texheight - 1;
 
         if (dc_texheight & heightmask) // not a power of 2 -- killough
         {
@@ -687,12 +681,12 @@ void R_DrawExtraTLColumnLow (void)
 
             do
             {
-                const byte src = source[frac>>FRACBITS];
+                const byte src = source[frac >> FRACBITS];
 
-                *dest1 = extratinttable[(*dest1<<8)+colormap[0][src]];
-                *dest2 = extratinttable[(*dest2<<8)+colormap[0][src]];
-                *dest4 = extratinttable[(*dest4<<8)+colormap[0][src]];
-                *dest3 = extratinttable[(*dest3<<8)+colormap[0][src]];
+                *dest1 = transtable80[(*dest1 << 8) + colormap[0][src]];
+                *dest2 = transtable80[(*dest2 << 8) + colormap[0][src]];
+                *dest4 = transtable80[(*dest4 << 8) + colormap[0][src]];
+                *dest3 = transtable80[(*dest3 << 8) + colormap[0][src]];
 
                 dest1 += screenwidth << hires;
                 dest2 += screenwidth << hires;
@@ -711,10 +705,10 @@ void R_DrawExtraTLColumnLow (void)
             {
                 const byte src = source[(frac>>FRACBITS)&heightmask];
 
-                *dest1 = extratinttable[(*dest1<<8)+colormap[0][src]];
-                *dest2 = extratinttable[(*dest2<<8)+colormap[0][src]];
-                *dest3 = extratinttable[(*dest3<<8)+colormap[0][src]];
-                *dest4 = extratinttable[(*dest4<<8)+colormap[0][src]];
+                *dest1 = transtable80[(*dest1 << 8) + colormap[0][src]];
+                *dest2 = transtable80[(*dest2 << 8) + colormap[0][src]];
+                *dest3 = transtable80[(*dest3 << 8) + colormap[0][src]];
+                *dest4 = transtable80[(*dest4 << 8) + colormap[0][src]];
 
                 dest1 += screenwidth << hires;
                 dest2 += screenwidth << hires;
@@ -756,11 +750,11 @@ void R_DrawTranslatedColumn (void)
 #endif
 
     dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
-    frac = dc_texturemid + (dc_yl-centery)*dc_iscale; 
+    frac = dc_texturemid + (dc_yl - centery) * dc_iscale; 
 
     do
     {
-        *dest = dc_colormap[0][dc_translation[dc_source[frac>>FRACBITS]]];
+        *dest = dc_colormap[0][dc_translation[dc_source[frac >> FRACBITS]]];
         dest += screenwidth;
         frac += dc_iscale;
     } while (count--);
@@ -780,7 +774,7 @@ void R_DrawTranslatedColumnLow (void)
 { 
     const int x = dc_x << 1;  // low detail, need to scale by 2
     int       count = dc_yh - dc_yl; 
-    byte     *dest, *dest2, *dest3, *dest4;
+    byte     *dest1, *dest2, *dest3, *dest4;
     fixed_t   frac; 
 
     if (count < 0)
@@ -798,17 +792,17 @@ void R_DrawTranslatedColumnLow (void)
     }
 #endif 
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest1 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x + 1]];
     dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x + 1]];
     frac = dc_texturemid + (dc_yl-centery)*dc_iscale; 
 
     do 
     {
-        *dest4 = *dest3 = *dest2 = *dest = dc_colormap[0][dc_translation[dc_source[frac>>FRACBITS]]];
+        *dest4 = *dest3 = *dest2 = *dest1 = dc_colormap[0][dc_translation[dc_source[frac >> FRACBITS]]];
 
-        dest += screenwidth << hires;
+        dest1 += screenwidth << hires;
         dest2 += screenwidth << hires;
         dest3 += screenwidth << hires;
         dest4 += screenwidth << hires;
@@ -841,7 +835,7 @@ void R_DrawTranslatedTLColumn(void)
 
     do
     {
-        *dest = tinttable[(*dest<<8)+dc_colormap[0][dc_translation[frac>>FRACBITS]]];
+        *dest = tinttable[(*dest << 8) + dc_colormap[0][dc_translation[frac >> FRACBITS]]];
         dest += screenwidth;
         frac += dc_iscale;
     }
@@ -858,12 +852,11 @@ void R_DrawTranslatedTLColumn(void)
 ================================================================================
 */
 
-void R_DrawTranslatedTLColumnLow(void)
+void R_DrawTranslatedTLColumnLow (void)
 {
     const int x = dc_x << 1; // Blocky mode, need to multiply by 2.
     int       count = dc_yh - dc_yl;
-    int       heightmask = dc_texheight - 1;
-    byte     *dest, *dest2, *dest3, *dest4;
+    byte     *dest1, *dest2, *dest3, *dest4;
     fixed_t   frac;
 
     if (count < 0)
@@ -881,91 +874,62 @@ void R_DrawTranslatedTLColumnLow(void)
     }
 #endif
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest1 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x + 1]];
     dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x + 1]];
     frac = dc_texturemid + (dc_yl-centery)*dc_iscale;
 
-    if (dc_texheight & heightmask)  // not a power of 2 -- killough
     {
-        heightmask++;
-        heightmask <<= FRACBITS;
+        const lighttable_t *const *colormap = dc_colormap;
+        int heightmask = dc_texheight - 1;
 
-        if (frac < 0)
-            while ((frac += heightmask) < 0);
-        else
-            while (frac >= heightmask)
-                   frac -= heightmask;
-
-        do
+        if (dc_texheight & heightmask)  // not a power of 2 -- killough
         {
-            *dest = tinttable[(*dest<<8)+dc_colormap[0][dc_translation[frac>>FRACBITS]]];
-            *dest2 = tinttable[(*dest2<<8)+dc_colormap[0][dc_translation[frac>>FRACBITS]]];
-            *dest3 = tinttable[(*dest3<<8)+dc_colormap[0][dc_translation[frac>>FRACBITS]]];
-            *dest4 = tinttable[(*dest4<<8)+dc_colormap[0][dc_translation[frac>>FRACBITS]]];
-
-            dest += screenwidth << hires;
-            dest2 += screenwidth << hires;
-            dest3 += screenwidth << hires;
-            dest4 += screenwidth << hires;
-
-            if ((frac += dc_iscale) >= heightmask)
+            heightmask++;
+            heightmask <<= FRACBITS;
+        
+            if (frac < 0)
+                while ((frac += heightmask) < 0);
+            else
+                while (frac >= heightmask)
+                       frac -= heightmask;
+        
+            do
             {
-                frac -= heightmask;
-            }
-        } while (count--);
-    }
-    else  // texture height is a power of 2 -- killough
-    {
-        do 
-        {
-            *dest = tinttable[(*dest<<8)+dc_colormap[0][dc_translation[(frac>>FRACBITS)&heightmask]]];
-            *dest2 = tinttable[(*dest2<<8)+dc_colormap[0][dc_translation[(frac>>FRACBITS)&heightmask]]];
-            *dest3 = tinttable[(*dest3<<8)+dc_colormap[0][dc_translation[(frac>>FRACBITS)&heightmask]]];
-            *dest4 = tinttable[(*dest4<<8)+dc_colormap[0][dc_translation[(frac>>FRACBITS)&heightmask]]];
-
-            dest += screenwidth << hires;
-            dest2 += screenwidth << hires;
-            dest3 += screenwidth << hires;
-            dest4 += screenwidth << hires;
-
-            frac += dc_iscale; 
-
-        } while (count--);
-    }
-}
-
-/*
-================================================================================
-=
-= R_InitTranslationTables
-=
-================================================================================
-*/
-
-void R_InitTranslationTables (void)
-{
-    int i;
-
-    V_LoadTintTable();
-
-    // Allocate translation tables
-    translationtables = Z_Malloc(256 * 3, PU_STATIC, 0);
-
-    // Fill out the translation tables
-    for (i = 0; i < 256; i++)
-    {
-        if (i >= 225 && i <= 240)
-        {
-            translationtables[i] = 114 + (i - 225);       // yellow
-            translationtables[i + 256] = 145 + (i - 225); // red
-            translationtables[i + 512] = 190 + (i - 225); // blue
+                *dest1 = tinttable[(*dest1 << 8) + colormap[0][dc_translation[frac >> FRACBITS]]];
+                *dest2 = tinttable[(*dest2 << 8) + colormap[0][dc_translation[frac >> FRACBITS]]];
+                *dest3 = tinttable[(*dest3 << 8) + colormap[0][dc_translation[frac >> FRACBITS]]];
+                *dest4 = tinttable[(*dest4 << 8) + colormap[0][dc_translation[frac >> FRACBITS]]];
+        
+                dest1 += screenwidth << hires;
+                dest2 += screenwidth << hires;
+                dest3 += screenwidth << hires;
+                dest4 += screenwidth << hires;
+        
+                if ((frac += dc_iscale) >= heightmask)
+                {
+                    frac -= heightmask;
+                }
+            } while (count--);
         }
-        else
+        else  // texture height is a power of 2 -- killough
         {
-            translationtables[i] = translationtables[i + 256]
-                                 = translationtables[i + 512] = i;
+            do 
+            {
+                *dest1 = tinttable[(*dest1 << 8) + colormap[0][dc_translation[(frac >> FRACBITS) & heightmask]]];
+                *dest2 = tinttable[(*dest2 << 8) + colormap[0][dc_translation[(frac >> FRACBITS) & heightmask]]];
+                *dest3 = tinttable[(*dest3 << 8) + colormap[0][dc_translation[(frac >> FRACBITS) & heightmask]]];
+                *dest4 = tinttable[(*dest4 << 8) + colormap[0][dc_translation[(frac >> FRACBITS) & heightmask]]];
+        
+                dest1 += screenwidth << hires;
+                dest2 += screenwidth << hires;
+                dest3 += screenwidth << hires;
+                dest4 += screenwidth << hires;
+        
+                frac += dc_iscale; 
+        
+            } while (count--);
         }
     }
 }
@@ -986,9 +950,12 @@ void R_InitTranslationTables (void)
 ================================================================================
 */
 
-void R_DrawSpan(void)
+void R_DrawSpan (void)
 {
     unsigned int count = ds_x2 - ds_x1;  // We do not check for zero spans here.
+    const byte  *source = ds_source;
+    const byte  *brightmap = ds_brightmap;
+    const byte **colormap = ds_colormap;
 
 #ifdef RANGECHECK
     if (ds_x2 < ds_x1 || ds_x1 < 0 || ds_x2 >= screenwidth
@@ -1007,10 +974,7 @@ void R_DrawSpan(void)
 
     do
     {
-        const byte  *source = ds_source;
-        const byte  *brightmap = ds_brightmap;
-        const byte **colormap = ds_colormap;
-        byte        *dest = ylookup[ds_y] + columnofs[flipviewwidth[ds_x1++]];
+        byte *dest = ylookup[ds_y] + columnofs[flipviewwidth[ds_x1++]];
 
         // Calculate current texture index in u,v.
         // [crispy] fix flats getting more distorted the closer they are to the right
@@ -1029,16 +993,21 @@ void R_DrawSpan(void)
 /*
 ================================================================================
 =
-= R_DrawSpan
+= R_DrawSpanLow
 =
 = Again...
 =
 ================================================================================
 */
 
-void R_DrawSpanLow(void)
+void R_DrawSpanLow (void)
 {
     unsigned int count = ds_x2 - ds_x1;  // We do not check for zero spans here.
+    const int    ds_y_low = ds_y << hires;
+    const byte  *source = ds_source;
+    const byte  *brightmap = ds_brightmap;
+    const byte **colormap = ds_colormap;
+    byte        *dest1, *dest2;
 
 #ifdef RANGECHECK
     if (ds_x2 < ds_x1 || ds_x1<0 || ds_x2>=screenwidth || (unsigned)ds_y>SCREENHEIGHT)
@@ -1061,12 +1030,6 @@ void R_DrawSpanLow(void)
 
     do
     {
-        const byte  *source = ds_source;
-        const byte  *brightmap = ds_brightmap;
-        const byte **colormap = ds_colormap;
-        byte        *dest1;
-        byte        *dest2;
-
         // Calculate current texture index in u,v.
         // [crispy] fix flats getting more distorted the closer they are to the right
         unsigned const int ytemp = (ds_yfrac >> 10) & 0x0fc0;
@@ -1074,13 +1037,13 @@ void R_DrawSpanLow(void)
         unsigned const int spot = xtemp | ytemp;
 
         // Lowres/blocky mode does it twice, while scale is adjusted appropriately.
-         dest1 = ylookup[(ds_y << hires)] + columnofs[flipviewwidth[ds_x1]];
+         dest1 = ylookup[ds_y_low] + columnofs[flipviewwidth[ds_x1]];
         *dest1 = colormap[brightmap[source[spot]]][source[spot]];
-         dest2 = ylookup[(ds_y << hires) + 1] + columnofs[flipviewwidth[ds_x1++]];
+         dest2 = ylookup[ds_y_low + 1] + columnofs[flipviewwidth[ds_x1++]];
         *dest2 = colormap[brightmap[source[spot]]][source[spot]];
-         dest1 = ylookup[(ds_y << hires)] + columnofs[flipviewwidth[ds_x1]];
+         dest1 = ylookup[ds_y_low] + columnofs[flipviewwidth[ds_x1]];
         *dest1 = colormap[brightmap[source[spot]]][source[spot]];
-         dest2 = ylookup[(ds_y << hires) + 1] + columnofs[flipviewwidth[ds_x1++]];
+         dest2 = ylookup[ds_y_low + 1] + columnofs[flipviewwidth[ds_x1++]];
         *dest2 = colormap[brightmap[source[spot]]][source[spot]];
 
         // position += step;
@@ -1090,39 +1053,51 @@ void R_DrawSpanLow(void)
     } while (count--);
 }
 
-
-
 /*
-================
+================================================================================
 =
 = R_InitBuffer
 =
-=================
+================================================================================
 */
 
-void R_InitBuffer(int width, int height)
+void R_InitBuffer (const int width, const int height)
 {
     int i;
 
+    // Handle resize, e.g. smaller view windows with border and/or status bar.
     viewwindowx = (screenwidth - width) >> 1;
-    for (i = 0; i < width; i++)
+
+    for (i = 0 ; i < width ; i++)
+    {
         columnofs[i] = viewwindowx + i;
+    }
+
+    // Same with base row offset.
     if (width == screenwidth)
+    {
         viewwindowy = 0;
+    }
     else
+    {
         viewwindowy = (SCREENHEIGHT - SBARHEIGHT - height) >> 1;
+    }
+
+    // Preclaculate all row offsets.
     for (i = 0; i < height; i++)
+    {
         ylookup[i] = I_VideoBuffer + (i + viewwindowy) * screenwidth;
+    }
 }
 
-
 /*
-==================
+================================================================================
 =
 = R_DrawViewBorder
 =
 = Draws the border around the view for different size windows
-==================
+=
+================================================================================
 */
 
 boolean BorderNeedRefresh;
@@ -1134,8 +1109,11 @@ void R_DrawViewBorder(void)
     const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
 
     if (scaledviewwidth == screenwidth)
+    {
         return;
+    }
 
+    // [JN] TODO -- predefine background flats at strtup
     if (gamemode == shareware)
     {
         src = W_CacheLumpName(DEH_String("FLOOR04"), PU_CACHE);
@@ -1144,25 +1122,27 @@ void R_DrawViewBorder(void)
     {
         src = W_CacheLumpName(DEH_String("FLAT513"), PU_CACHE);
     }
+
     dest = I_VideoBuffer;
 
     // [JN] Simplified, same to V_FillFlat now.
-    for (y = 0; y < SCREENHEIGHT - SBARHEIGHT; y++)
+    for (y = 0 ; y < SCREENHEIGHT - SBARHEIGHT ; y++)
     {
-        for (x = 0; x < screenwidth; x++)
+        for (x = 0 ; x < screenwidth ; x++)
         {
             *dest++ = src[(((y >> shift_allowed) & 63) << 6) 
                          + ((x >> shift_allowed) & 63)];
         }
     }
-    for (x = (viewwindowx >> hires); x < ((viewwindowx >> hires) + (scaledviewwidth >> hires)); x += 16)
+
+    for (x = (viewwindowx >> hires) ; x < ((viewwindowx >> hires) + (scaledviewwidth >> hires)) ; x += 16)
     {
         V_DrawPatch(x, (viewwindowy >> hires) - 4,
                     W_CacheLumpName(DEH_String("bordt"), PU_CACHE), NULL);
         V_DrawPatch(x, (viewwindowy >> hires) + (scaledviewheight >> hires),
                     W_CacheLumpName(DEH_String("bordb"), PU_CACHE), NULL);
     }
-    for (y = (viewwindowy >> hires); y < ((viewwindowy >> hires) + (scaledviewheight >> hires)); y += 16)
+    for (y = (viewwindowy >> hires) ; y < ((viewwindowy >> hires) + (scaledviewheight >> hires)) ; y += 16)
     {
         V_DrawPatch((viewwindowx >> hires) - 4, y,
                     W_CacheLumpName(DEH_String("bordl"), PU_CACHE), NULL);
@@ -1180,24 +1160,29 @@ void R_DrawViewBorder(void)
 }
 
 /*
-==================
+================================================================================
 =
 = R_DrawTopBorder
 =
 = Draws the top border around the view for different size windows
-==================
+=
+================================================================================
 */
+
 
 boolean BorderTopRefresh;
 
-void R_DrawTopBorder(void)
+void R_DrawTopBorder (void)
 {
     byte *src, *dest;
     int x, y;
 
     if (scaledviewwidth == screenwidth)
+    {
         return;
+    }
 
+    // [JN] TODO -- predefine background flats at strtup
     if (gamemode == shareware)
     {
         src = W_CacheLumpName(DEH_String("FLOOR04"), PU_CACHE);
@@ -1206,11 +1191,12 @@ void R_DrawTopBorder(void)
     {
         src = W_CacheLumpName(DEH_String("FLAT513"), PU_CACHE);
     }
+
     dest = I_VideoBuffer;
 
-    for (y = 0; y < (30 << hires); y++)
+    for (y = 0 ; y < (30 << hires) ; y++)
     {
-        for (x = 0; x < screenwidth / 64; x++)
+        for (x = 0 ; x < screenwidth / 64 ; x++)
         {
             memcpy(dest, src + ((y & 63) << 6), 64);
             dest += 64;
@@ -1221,6 +1207,7 @@ void R_DrawTopBorder(void)
             dest += (screenwidth & 63);
         }
     }
+
     if ((viewwindowy >> hires) < 25)
     {
         for (x = (viewwindowx >> hires); x < ((viewwindowx >> hires) + (viewwidth >> hires)); x += 16)

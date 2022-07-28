@@ -347,8 +347,6 @@ extern int flyheight;
 extern fixed_t centerxfrac;
 extern fixed_t centeryfrac;
 extern fixed_t projection;
-extern byte *ylookup[SCREENHEIGHT];
-extern int   columnofs[WIDESCREENWIDTH];
 
 extern int validcount;
 
@@ -403,19 +401,22 @@ extern void (*transtlcolfunc) (void);
 extern void (*spanfunc) (void);
 extern void R_ExecuteSetViewSize();
 
-int R_PointOnSide(fixed_t x, fixed_t y, node_t * node);
-int R_PointOnSegSide(fixed_t x, fixed_t y, seg_t * line);
-angle_t R_PointToAngle(fixed_t x, fixed_t y);
+int R_PointOnSide(fixed_t x, fixed_t y, const node_t *node);
+int R_PointOnSegSide(fixed_t x, fixed_t y, const seg_t *line);
+angle_t R_PointToAngle(const fixed_t x, const fixed_t y);
 angle_t R_PointToAngleCrispy(fixed_t x, fixed_t y);
-angle_t R_PointToAngle2(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2);
+angle_t R_PointToAngle2 (const fixed_t x1, const fixed_t y1, const fixed_t x2, const fixed_t y2);
 fixed_t R_PointToDist(fixed_t x, fixed_t y);
-subsector_t *R_PointInSubsector(fixed_t x, fixed_t y);
+subsector_t *R_PointInSubsector(const fixed_t x, const fixed_t y);
 // [AM] Interpolate between two angles.
-angle_t R_InterpolateAngle(angle_t oangle, angle_t nangle, fixed_t scale);
+angle_t R_InterpolateAngle (const angle_t oangle, const angle_t nangle, const fixed_t scale);
 
 // [JN] Used by perfomance counter.
 extern void R_ClearStats (void);
 extern int rendered_segs, rendered_visplanes, rendered_vissprites;
+
+// [crispy] smooth texture scrolling
+void R_InterpolateTextureOffsets (void);
 
 //
 // R_bsp.c
@@ -448,14 +449,14 @@ void R_ClearDrawSegs(void);
 void R_InitSkyMap(void);
 void R_RenderBSPNode(int bspnum);
 
-void R_StoreWallRange (int start, int stop);
+void R_StoreWallRange (const int start, const int stop);
 
 //
 // R_segs.c
 //
 extern int rw_angle1;           // angle to line origin
 
-void R_RenderMaskedSegRange(drawseg_t * ds, int x1, int x2);
+void R_RenderMaskedSegRange(drawseg_t *ds, const int x1, const int x2);
 
 
 //
@@ -478,12 +479,11 @@ void R_InitPlanesRes(void);
 void R_InitVisplanesRes(void);
 void R_InitPlanes(void);
 void R_ClearPlanes(void);
-void R_MapPlane(int y, int x1, int x2);
 void R_DrawPlanes(void);
 
 visplane_t *R_FindPlane(fixed_t height, const int picnum, const int lightlevel, const int special);
 visplane_t *R_CheckPlane(visplane_t * pl, int start, int stop);
-visplane_t *R_DupPlane (const visplane_t *pl, int start, int stop);
+visplane_t *R_DupPlane (const visplane_t *pl, const int start, const int stop);
 
 
 //
@@ -511,7 +511,7 @@ extern int *texturetranslation; // for global animation
 
 extern int firstspritelump, lastspritelump, numspritelumps;
 
-byte *R_GetColumn(int tex, int col, boolean opaque);
+const byte *R_GetColumn(const int tex, int col, const boolean opaque);
 void R_InitData(void);
 void R_PrecacheLevel(void);
 
@@ -534,9 +534,9 @@ extern int64_t sprbotscreen;
 extern fixed_t pspritescale, pspriteiscale;
 
 void R_InitSpritesRes (void);
-void R_DrawMaskedColumn(column_t * column, signed int baseclip);
+void R_DrawMaskedColumn(const column_t *column, signed const int baseclip);
 void R_SortVisSprites(void);
-void R_AddSprites(sector_t * sec);
+void R_AddSprites(const sector_t * sec);
 void R_AddPSprites(void);
 void R_DrawSprites(void);
 void R_InitSprites(char **namelist);
@@ -551,12 +551,12 @@ void R_ClipVisSprite(vissprite_t * vis, int xl, int xh);
 //=============================================================================
 
 extern const lighttable_t *dc_colormap[2];
-extern int dc_x;
-extern int dc_yl;
-extern int dc_yh;
+extern fixed_t dc_x;
+extern fixed_t dc_yl;
+extern fixed_t dc_yh;
 extern fixed_t dc_iscale;
 extern fixed_t dc_texturemid;
-extern int dc_texheight;
+extern fixed_t dc_texheight;
 extern const byte *dc_source;         // first pixel in a column
 extern const byte *dc_brightmap;
 extern int skytexturemid;
@@ -595,5 +595,4 @@ extern byte *dc_translation;
 void R_DrawSpan(void);
 void R_DrawSpanLow(void);
 
-void R_InitBuffer(int width, int height);
-void R_InitTranslationTables(void);
+void R_InitBuffer(const int width, const int height);

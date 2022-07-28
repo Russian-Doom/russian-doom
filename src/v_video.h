@@ -38,7 +38,6 @@
 extern int dirtybox[4];
 
 extern byte *tinttable;
-extern byte *extratinttable;
 extern byte *transtable90;
 extern byte *transtable80;
 extern byte *transtable70;

@@ -14,8 +14,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// R_data.c
-
 
 
 #include <malloc.h>
@@ -31,17 +29,28 @@
 #include "v_trans.h"
 #include "jn.h"
 
-extern void CheckAbortStartup(void);
+
+/*
+================================================================================
+= A single patch from a texture definition, basically a rectangular
+= area within the texture rectangle.
+================================================================================
+*/
 
 typedef struct
 {
-    int originx;        // block origin (allways UL), which has allready
-    int originy;        // accounted  for the patch's internal origin
+    int originx;  // Block origin (allways UL), which has allready
+    int originy;  // Accounted  for the patch's internal origin
     int patch;
 } texpatch_t;
 
-// a maptexturedef_t describes a rectangular texture, which is composed of one
-// or more mappatch_t structures that arrange graphic patches
+/*
+================================================================================
+= A maptexturedef_t describes a rectangular texture, which is composed of one
+= or more mappatch_t structures that arrange graphic patches.
+================================================================================
+*/
+
 typedef struct texture_s texture_t;
 
 struct texture_s
@@ -59,29 +68,30 @@ struct texture_s
     texpatch_t  patches[1];		
 };
 
-int firstflat, lastflat, numflats;
-int firstpatch, lastpatch, numpatches;
-int firstspritelump, lastspritelump, numspritelumps;
-
+int         firstflat, lastflat, numflats;
+int         firstpatch, lastpatch, numpatches;
+int         firstspritelump, lastspritelump, numspritelumps;
 int         numtextures;
 texture_t **textures;
 texture_t **textures_hashtable;
+
 int        *texturewidthmask;
-fixed_t    *textureheight;      // needed for texture pegging
-int        *texturecompositesize;
-short     **texturecolumnlump;
-unsigned  **texturecolumnofs;   // [crispy] fix Medusa bug
-unsigned  **texturecolumnofs2;  // [crispy] original column offsets for single-patched textures
-byte      **texturecomposite;
-const byte **texturebrightmap;  // [crispy] brightmaps
+fixed_t    *textureheight;       // Needed for texture pegging
 
-int        *flattranslation;    // for global animation
-int        *texturetranslation; // for global animation
+int         *texturecompositesize;
+short      **texturecolumnlump;
+unsigned   **texturecolumnofs;   // [crispy] fix Medusa bug
+unsigned   **texturecolumnofs2;  // [crispy] original column offsets for single-patched textures
+byte       **texturecomposite;
+const byte **texturebrightmap;   // [crispy] brightmaps
 
-fixed_t    *spritewidth;           // needed for pre rendering
-fixed_t    *spriteoffset;
-fixed_t    *spritetopoffset;
+// For global animation
+int        *flattranslation, *texturetranslation;
 
+// Needed for pre rendering
+fixed_t    *spritewidth, *spriteoffset, *spritetopoffset;
+
+// Colormap
 lighttable_t *colormaps;
 
 
@@ -115,7 +125,8 @@ will have new column_ts generated.
 ================================================================================
 */
 
-void R_DrawColumnInCache (column_t *patch, byte *cache, int originy, int cacheheight, byte *marks)
+static void R_DrawColumnInCache (column_t *patch, byte *cache, int originy,
+                                 int cacheheight, byte *marks)
 {
     int    count;
     int    position;
@@ -177,7 +188,7 @@ void R_DrawColumnInCache (column_t *patch, byte *cache, int originy, int cachehe
 ================================================================================
 */
 
-void R_GenerateComposite (int texnum)
+static void R_GenerateComposite (int texnum)
 {
     byte *block = Z_Malloc(texturecompositesize[texnum], PU_STATIC, 
                           (void **) &texturecomposite[texnum]);
@@ -264,7 +275,7 @@ void R_GenerateComposite (int texnum)
     // Now that the texture has been built in column cache,
     // it is purgable from zone memory.
 
-    Z_ChangeTag(block, PU_CACHE);
+    //Z_ChangeTag(block, PU_CACHE);
 }
 
 /*
@@ -452,7 +463,7 @@ static void R_GenerateLookup (int texnum)
 ================================================================================
 */
 
-byte *R_GetColumn (int tex, int col, boolean opaque)
+const byte *R_GetColumn (const int tex, int col, const boolean opaque)
 {
     int lump, ofs, ofs2;
 
@@ -462,10 +473,9 @@ byte *R_GetColumn (int tex, int col, boolean opaque)
     ofs2 = texturecolumnofs2[tex][col];
     // [crispy] single-patched mid-textures on two-sided walls
     if (lump > 0 && !opaque)
-    return (byte *)W_CacheLumpNum(lump,PU_CACHE)+ofs2;
-
-    if (!texturecomposite[tex])
-    R_GenerateComposite(tex);
+    {
+        return (byte *)W_CacheLumpNum(lump,PU_CACHE)+ofs2;
+    }
 
     return texturecomposite[tex] + ofs;
 }
@@ -491,13 +501,13 @@ static void GenerateTextureHashTable (void)
 
     // Add all textures to hash table
 
-    for (i=0; i<numtextures; ++i)
+    for (i = 0; i < numtextures ; ++i)
     {
         // Store index
 
         textures[i]->index = i;
 
-        // Vanilla Doom does a linear search of the texures array
+        // Vanilla Heretic does a linear search of the texures array
         // and stops at the first entry it finds.  If there are two
         // entries with the same name, the first one in the array
         // wins. The new entry must therefore be added at the end
@@ -531,7 +541,7 @@ static void GenerateTextureHashTable (void)
 ================================================================================
 */
 
-void R_InitTextures (void)
+static void R_InitTextures (void)
 {
     maptexture_t*	mtexture;
     texture_t*		texture;
@@ -828,14 +838,17 @@ void R_InitTextures (void)
     
     // Precalculate whatever possible.	
 
-    for (i=0 ; i<numtextures ; i++)
-	R_GenerateLookup (i);
-    
     // Create translation table for global animation.
     texturetranslation = Z_Malloc ((numtextures+1)*sizeof(*texturetranslation), PU_STATIC, 0);
-    
+
     for (i=0 ; i<numtextures ; i++)
-	texturetranslation[i] = i;
+    {
+        R_GenerateLookup (i);
+        // [JN] Generate composite textures at startup.
+        R_GenerateComposite (i);
+        // [JN] Create animation table.
+        texturetranslation[i] = i;
+    }
 
     GenerateTextureHashTable();
 }
@@ -849,10 +862,8 @@ void R_InitTextures (void)
 ================================================================================
 */
 
-void R_InitFlats(void)
+static void R_InitFlats (void)
 {
-    int i;
-
     firstflat = W_GetNumForName(DEH_String("F_START")) + 1;
     lastflat = W_GetNumForName(DEH_String("F_END")) - 1;
     numflats = lastflat - firstflat + 1;
@@ -860,8 +871,10 @@ void R_InitFlats(void)
     // translation table for global animation
     flattranslation = Z_Malloc((numflats + 1) * sizeof(int), PU_STATIC, 0);
 
-    for (i = 0; i < numflats; i++)
+    for (int i = 0; i < numflats; i++)
+    {
         flattranslation[i] = i;
+    }
 }
 
 /*
@@ -875,9 +888,8 @@ void R_InitFlats(void)
 ================================================================================
 */
 
-void R_InitSpriteLumps(void)
+static void R_InitSpriteLumps (void)
 {
-    int i;
     patch_t *patch;
 
     firstspritelump = W_GetNumForName(DEH_String("S_START")) + 1;
@@ -887,7 +899,7 @@ void R_InitSpriteLumps(void)
     spriteoffset = Z_Malloc(numspritelumps * sizeof(fixed_t), PU_STATIC, 0);
     spritetopoffset = Z_Malloc(numspritelumps * sizeof(fixed_t), PU_STATIC, 0);
 
-    for (i = 0; i < numspritelumps; i++)
+    for (int i = 0; i < numspritelumps; i++)
     {
         patch = W_CacheLumpNum(firstspritelump + i, PU_CACHE);
         spritewidth[i] = SHORT(patch->width) << FRACBITS;
@@ -905,7 +917,7 @@ void R_InitSpriteLumps(void)
 ================================================================================
 */
 
-static void R_InitColormaps(void)
+static void R_InitColormaps (void)
 {
     // Load in the light tables 256 byte align tables.
     colormaps = W_CacheLumpNum(W_GetNumForName(DEH_String("COLORMAP")), PU_STATIC);
@@ -958,7 +970,6 @@ static void R_InitTransMaps (void)
     if (W_CheckMultipleLumps("PLAYPAL") == 1)
     {
         // [JN] We don't. Load pregenerated tables for faster startup.
-        extratinttable = W_CacheLumpNum(W_CheckNumForName("TRNSTB80"), PU_STATIC);
         transtable90 = W_CacheLumpNum(W_CheckNumForName("TRNSTB90"), PU_STATIC);
         transtable80 = W_CacheLumpNum(W_CheckNumForName("TRNSTB80"), PU_STATIC);
         transtable70 = W_CacheLumpNum(W_CheckNumForName("TRNSTB70"), PU_STATIC);
@@ -975,10 +986,7 @@ static void R_InitTransMaps (void)
 
         // Compose a default transparent filter map based on PLAYPAL.
         unsigned char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
-        const int filter_pct = 80;
 
-        // [JN] Extra translucency for sprites:
-        extratinttable = Z_Malloc(256*256, PU_STATIC, 0);
         // [JN] Fading effect for messages:
         transtable90 = Z_Malloc(256*256, PU_STATIC, 0);
         transtable80 = Z_Malloc(256*256, PU_STATIC, 0);
@@ -992,7 +1000,6 @@ static void R_InitTransMaps (void)
 
         {
             byte *fg, *bg, blend[3];
-            byte *tp = extratinttable;
             byte *tp90 = transtable90;
             byte *tp80 = transtable80;
             byte *tp70 = transtable70;
@@ -1013,7 +1020,6 @@ static void R_InitTransMaps (void)
                     // [crispy] shortcut: identical foreground and background
                     if (i == j)
                     {
-                        *tp++ = i;
                         *tp90++ = i; *tp80++ = i; *tp70++ = i;
                         *tp60++ = i; *tp50++ = i; *tp40++ = i;
                         *tp30++ = i; *tp20++ = i; *tp10++ = i;
@@ -1022,11 +1028,6 @@ static void R_InitTransMaps (void)
 
                     bg = playpal + 3*i;
                     fg = playpal + 3*j;
-
-                    blend[r] = (filter_pct * fg[r] + (100 - filter_pct) * bg[r]) / 100;
-                    blend[g] = (filter_pct * fg[g] + (100 - filter_pct) * bg[g]) / 100;
-                    blend[b] = (filter_pct * fg[b] + (100 - filter_pct) * bg[b]) / 100;
-                    *tp++ = V_GetPaletteIndex(playpal, blend[r], blend[g], blend[b]);
 
                     blend[r] = (90 * fg[r] + (100 - 90) * bg[r]) / 100;
                     blend[g] = (90 * fg[g] + (100 - 90) * bg[g]) / 100;
@@ -1092,7 +1093,7 @@ static void R_InitTransMaps (void)
 ================================================================================
 */
 
-void R_InitData(void)
+void R_InitData (void)
 {
     // [JN] Moved R_InitFlats to the top, needed for 
     // R_GenerateComposite ivoking while level loading.
@@ -1158,7 +1159,9 @@ int R_CheckTextureNumForName (char *name)
 
     // "NoTexture" marker.
     if (name[0] == '-')
-    return 0;
+    {
+        return 0;
+    }
 
     texture=textures_hashtable[key]; 
 
@@ -1259,9 +1262,6 @@ void R_PrecacheLevel (void)
         {
             texture_t *texture = textures[i];
             int j = texture->patchcount;
-
-            // [crispy] precache composite textures
-            R_GenerateComposite(i);
 
             while (--j >= 0)
             W_CacheLumpNum(texture->patches[j].patch, PU_CACHE);

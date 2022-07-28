@@ -802,7 +802,7 @@ void R_DrawViewBorder(void);
 void R_DrawTopBorder(void);
 // if the view size is not full screen, draws a border around it
 
-void R_SetViewSize(int blocks, int detail);
+void R_SetViewSize(const int blocks, const int detail);
 // called by M_Responder
 
 int R_FlatNumForName(char *name);

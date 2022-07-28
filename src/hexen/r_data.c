@@ -957,7 +957,6 @@ static void R_InitTransMaps (void)
     if (W_CheckMultipleLumps("PLAYPAL") == 1)
     {
         // [JN] We don't. Load pregenerated tables for faster startup.
-        extratinttable = W_CacheLumpNum(W_CheckNumForName("TRNSTB80"), PU_STATIC);
         transtable90 = W_CacheLumpNum(W_CheckNumForName("TRNSTB90"), PU_STATIC);
         transtable80 = W_CacheLumpNum(W_CheckNumForName("TRNSTB80"), PU_STATIC);
         transtable70 = W_CacheLumpNum(W_CheckNumForName("TRNSTB70"), PU_STATIC);
@@ -974,10 +973,7 @@ static void R_InitTransMaps (void)
 
         // Compose a default transparent filter map based on PLAYPAL.
         unsigned char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
-        const int filter_pct = 80;
 
-        // [JN] Extra translucency for sprites:
-        extratinttable = Z_Malloc(256*256, PU_STATIC, 0);
         // [JN] Fading effect for messages:
         transtable90 = Z_Malloc(256*256, PU_STATIC, 0);
         transtable80 = Z_Malloc(256*256, PU_STATIC, 0);
@@ -991,7 +987,6 @@ static void R_InitTransMaps (void)
 
         {
             byte *fg, *bg, blend[3];
-            byte *tp = extratinttable;
             byte *tp90 = transtable90;
             byte *tp80 = transtable80;
             byte *tp70 = transtable70;
@@ -1012,7 +1007,6 @@ static void R_InitTransMaps (void)
                     // [crispy] shortcut: identical foreground and background
                     if (i == j)
                     {
-                        *tp++ = i;
                         *tp90++ = i; *tp80++ = i; *tp70++ = i;
                         *tp60++ = i; *tp50++ = i; *tp40++ = i;
                         *tp30++ = i; *tp20++ = i; *tp10++ = i;
@@ -1021,11 +1015,6 @@ static void R_InitTransMaps (void)
 
                     bg = playpal + 3*i;
                     fg = playpal + 3*j;
-
-                    blend[r] = (filter_pct * fg[r] + (100 - filter_pct) * bg[r]) / 100;
-                    blend[g] = (filter_pct * fg[g] + (100 - filter_pct) * bg[g]) / 100;
-                    blend[b] = (filter_pct * fg[b] + (100 - filter_pct) * bg[b]) / 100;
-                    *tp++ = V_GetPaletteIndex(playpal, blend[r], blend[g], blend[b]);
 
                     blend[r] = (90 * fg[r] + (100 - 90) * bg[r]) / 100;
                     blend[g] = (90 * fg[g] + (100 - 90) * bg[g]) / 100;
