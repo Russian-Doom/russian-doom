@@ -213,6 +213,7 @@ if(WIN32)
     # Common CPack settings
     set(CPACK_PACKAGE_NAME "${PROGRAM_PREFIX}$COMPONENT$") # Will be configured by CPackProjectConfig.cmake
     set(CPACK_PACKAGE_VERSION "$VERSION$") # Will be configured by CPackProjectConfig.cmake
+    set(CPACK_PACKAGE_CHECKSUM SHA256)
 
     get_cmake_property(CPACK_COMPONENTS_ALL COMPONENTS)
     list(REMOVE_ITEM CPACK_COMPONENTS_ALL "Unspecified")

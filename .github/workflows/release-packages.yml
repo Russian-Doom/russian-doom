@@ -100,3 +100,4 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: |
           gh release upload ${{ github.event.release.tag_name }} ./build/inter-${{ steps.configure.outputs.game }}-${{ steps.configure.outputs.version }}-windows-${{ matrix.arch.name }}.zip
+          gh release upload ${{ github.event.release.tag_name }} ./build/inter-${{ steps.configure.outputs.game }}-${{ steps.configure.outputs.version }}-windows-${{ matrix.arch.name }}.zip.sha256
