@@ -1,0 +1,28 @@
+set(doom_version "@BUILD_DOOM_VERSION@")
+set(heretic_version "@BUILD_HERETIC_VERSION@")
+set(hexen_version "@BUILD_HEXEN_VERSION@")
+set(strife_version "@BUILD_STRIFE_VERSION@")
+
+# Global generator settings
+    # Archive Generator
+if(CPACK_GENERATOR MATCHES "(ZIP)|(7Z)|(TBZ2)|(TGZ)|(TXZ)|(TZ)|(TZST)")
+    set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
+    set(CPACK_COMPONENT_INCLUDE_TOPLEVEL_DIRECTORY OFF)
+    set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
+    set(CPACK_ARCHIVE_THREADS 0) # For Cmake 3.18+
+endif()
+
+# Per component settings
+foreach(Component ${CPACK_COMPONENTS_ALL})
+    string(TOUPPER "${Component}" Component_caps)
+
+    # Archive Generator
+    if(CPACK_GENERATOR MATCHES "(ZIP)|(7Z)|(TBZ2)|(TGZ)|(TXZ)|(TZ)|(TZST)")
+        string(REPLACE "$COMPONENT$" "${Component}"
+               CPACK_ARCHIVE_${Component_caps}_FILE_NAME
+               "${CPACK_PACKAGE_FILE_NAME}")
+        string(REPLACE "$VERSION$" "${${Component}_version}"
+               CPACK_ARCHIVE_${Component_caps}_FILE_NAME
+               "${CPACK_ARCHIVE_${Component_caps}_FILE_NAME}")
+    endif()
+endforeach()
