@@ -271,7 +271,7 @@ foreach(MODULE ${COMPILE_MODULES})
     # Tests
     add_test(NAME "${PROGRAM_PREFIX}${MODULE}"
         COMMAND gdb -ex run -ex quit --args $<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}> -timedemo demo1 -nogui -nosound
-        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/test_data"
+        WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/test_data"
     )
     set_tests_properties("${PROGRAM_PREFIX}${MODULE}" PROPERTIES
         PASS_REGULAR_EXPRESSION "Насчитано [0-9]+ gametics в [0-9]+ realtics;Timed [0-9]+ gametics in [0-9]+ realtics"
