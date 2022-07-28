@@ -1074,6 +1074,46 @@ void V_DrawPatchUnscaled (int x, int y, const patch_t *patch, const byte *table)
             dest = desttop + column->topdelta*screenwidth;
             count = column->length;
 
+            // [crispy] prevent framebuffer overflows
+            {
+                int tmpy = y + column->topdelta;
+
+                // [crispy] too far left
+                if (x < 0)
+                {
+                    continue;
+                }
+
+                // [crispy] too far right / width
+                if (x >= screenwidth)
+                {
+                    break;
+                }
+
+                // [crispy] too high
+                while (tmpy < 0)
+                {
+                    count--;
+                    source++;
+                    sourcetrans++; // [Dasperal] Increment sourcetrans as well in case dp_translation is NULL
+                    dest += screenwidth;
+                    tmpy++;
+                }
+
+                // [crispy] too low / height
+                while (tmpy + count > screenwidth)
+                {
+                    count--;
+                }
+
+                // [crispy] nothing left to draw?
+                if (count < 1)
+                {
+                    continue;
+                }
+            }
+
+
             while (count--)
             {
                 if (dp_translation)
