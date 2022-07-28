@@ -51,14 +51,20 @@ Available components are `doom`, `heretic`, `hexen`.
 
 ##### Step 4: Packaging International Doom
 
-In order to get the correct package from Cpack, you need to configure and build only one game at a time.
-Set all of the `COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE` cmake options
-to `OFF` except one and build the project.
-Then run folowing commands to create zip package:
+To package International Doom run following commands:
 ```
 cd build
 cpack -G ZIP
 ```
+The resulting packages of the previously compiled components can be found in the `build` directory.
+
+The only supported generators are [Archive Generators](https://cmake.org/cmake/help/latest/cpack_gen/archive.html).  
+If you want to overwrite the package version, set `BUILD_VERSION_OVERWRITE` cmake variable at configuring time
+instead of using `-R` Cpack parameter.
+
+It is **recommended** to configure, build and package only one component at a time selecting it with the following cmake options
+by setting required one to `ON` and the rest to `OFF`:
+`COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE`.
 
 ### Building International Doom on Linux
 
