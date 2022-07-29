@@ -1,5 +1,8 @@
 //
-// Copyright(C) 2021-2022 Dasperal
+// Copyright(C) 1993-2008 Raven Software
+// Copyright(C) 2005-2014 Simon Howard
+// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2021-2022 Dasperal/Leonid Murin
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License

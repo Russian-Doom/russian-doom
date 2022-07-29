@@ -1,6 +1,6 @@
 //
 // Copyright(C) 2021 Roman Fomin
-// Copyright(C) 2022 Roman Fomin, Julian Nechaevsky, Dasperal, kmeaw
+// Copyright(C) 2022 Roman Fomin, Julian Nechaevsky, Dasperal/Leonid Murin, kmeaw
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
