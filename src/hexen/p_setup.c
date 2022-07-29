@@ -1200,14 +1200,6 @@ void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
     }
     players[consoleplayer].viewz = 1;   // will be set by player think
 
-    // Waiting-for-level-load song; not played if playing music from CD
-    // (the seek time will be so long it will just make loading take
-    // longer)
-    if (!cdmusic)
-    {
-        S_StartSongName("chess", true);
-    }
-
     Z_FreeTags(PU_LEVEL, PU_PURGELEVEL - 1);
 
     P_InitThinkers();

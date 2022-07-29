@@ -85,6 +85,7 @@ int S_GetSoundID(char *name);
 void S_StartSoundAtVolume(mobj_t * origin, int sound_id, int volume);
 void S_StopSound(mobj_t * origin);
 void S_StopAllSound(void);
+void S_ResetMapMusicNumber(void);
 void S_PauseSound(void);
 void S_ResumeSound(void);
 void S_UpdateSounds(mobj_t * listener);

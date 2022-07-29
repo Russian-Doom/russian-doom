@@ -125,7 +125,6 @@ int UpdateState;
 int maxplayers = MAXPLAYERS;
 int demosequence;
 
-boolean title_mus_played = false;
 boolean realframe, skippsprinterp;  // [JN] Interpolation for weapon bobbing
 
 boolean hasUnknownPWads = false;
@@ -1702,10 +1701,7 @@ void H2_DoAdvanceDemo(void)
             {
                 pagename = isDK ? "TITLEDKR" : "TITLE";
             }
-            if (!title_mus_played)
             S_StartSongName("hexen", false);
-            if (no_internal_demos)
-            title_mus_played = true;
             break;
         case 1:
             pagetic = 210;

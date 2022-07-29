@@ -6156,6 +6156,10 @@ boolean MN_Responder(event_t * event)
                     typeofask = 0;
                     paused = false;
                     I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+                    // [JN] Force to initialize map music number.
+                    S_ResetMapMusicNumber();
+                    // [JN] Start title music.
+                    S_StartSongName("hexen", false);
                     H2_StartTitle();    // go to intro/demo mode.
                     return false;
                 case 5:
