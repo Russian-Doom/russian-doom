@@ -38,6 +38,7 @@
 
 
 boolean canmodify;
+boolean canapplyfixes;  // [JN] Apply map fixes only once.
 
 // MAP related Lookup tables.
 // Store VERTEXES, LINEDEFS, SIDEDEFS, etc.
@@ -2268,7 +2269,14 @@ void P_SetupLevel (const int episode, const int map, const skill_t skill)
              && gamemode != pressbeta
              && gamemission != jaguar
              && gamevariant != freedoom && gamevariant != freedm))
-             && singleplayer);
+             && singleplayer
+             && canapplyfixes);
+
+    if (canapplyfixes)
+    {
+        // [JN] TODO -- degug print!
+        printf (" ### CAN APPLY MAP FIXES! ### \n");
+    }
 
     leveltime = 0;
     oldleveltime = 0; // [crispy] Track if game is running
