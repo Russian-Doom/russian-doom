@@ -3261,7 +3261,7 @@ void D_DoomMain (void)
         char* arg = myargv[p + 1];
         char* result;
 
-        // [JN] Allow to apply map fixes for new game.
+        // [JN] Allow to apply map fixes for new warp game.
         canapplyfixes = true;
 
         if(gamemode == commercial)

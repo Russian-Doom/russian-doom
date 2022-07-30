@@ -1963,7 +1963,7 @@ void G_DoSelectiveGame (int choice)
     // Close "Level select" menu
     RD_Menu_DeactivateMenu(false);
 
-    // [JN] Allow to apply map fixes for new game.
+    // [JN] Allow to apply map fixes for new selective game.
     canapplyfixes = true;
 
     G_InitNew (selective_skill,
