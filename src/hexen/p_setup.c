@@ -21,6 +21,7 @@
 
 #include <math.h>
 #include <stdlib.h>
+#include "SDL.h"
 #include "h2def.h"
 #include "i_system.h"
 #include "m_argv.h"
@@ -1192,6 +1193,8 @@ void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
     const CMDInjectionRecord_t* injectionTable;
     mobj_t *mobj;
     boolean crispy_validblockmap;
+    unsigned const int starttime = SDL_GetTicks();
+    unsigned int endtime;
 
     for (i = 0; i < maxplayers; i++)
     {
@@ -1339,6 +1342,10 @@ void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
     S_StopAllSound();
     SN_StopAllSequences();
     S_StartSong(gamemap, true);
+
+    endtime = SDL_GetTicks() - starttime;
+    ST_Message(english_language ? "Level loaded in %d ms.\n" :
+                                  "Уровень загружен за %d мс.\n", endtime);
 
 //printf ("free memory: 0x%x\n", Z_FreeMemory());
 

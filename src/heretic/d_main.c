@@ -29,6 +29,7 @@
 #include <windows.h>
 #endif
 
+#include "SDL.h"
 #include "doomfeatures.h"
 #include "net_client.h"
 #include "am_map.h"
@@ -1108,6 +1109,8 @@ void D_DoomMain(void)
     char demolumpname[9];
     int newpwadfile;
     char* internalWadName;
+    unsigned int starttime = SDL_GetTicks();
+    unsigned int endtime;
 
 #ifdef _WIN32
     // [JN] Print colorized title
@@ -1681,6 +1684,10 @@ void D_DoomMain(void)
             D_StartTitle();
         }
     }
+
+    endtime = SDL_GetTicks() - starttime;
+    DEH_printf(english_language ? "Startup process took %d ms.\n" :
+                                  "Процесс запуска занял %d мс.\n", endtime);
 
     // [JN] Show the game we are playing
     DEH_printf(english_language ? "Starting game: " : "Запуск игры: ");

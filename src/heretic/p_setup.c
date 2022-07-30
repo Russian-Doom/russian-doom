@@ -21,7 +21,9 @@
 #include <math.h>
 #include <stdlib.h>
 
+#include "SDL.h"
 #include "d_mode.h"
+#include "deh_str.h"
 #include "doomdef.h"
 #include "i_swap.h"
 #include "i_system.h"
@@ -1961,7 +1963,7 @@ mapformat_t P_CheckMapFormat (int lumpnum)
     {
         fprintf(stderr, "BSP");
     }
-    fprintf(stderr, ")\n");
+    fprintf(stderr, ") ");
 
     if (nodes)
     W_ReleaseLumpNum(b);
@@ -1986,6 +1988,8 @@ void P_SetupLevel (int episode, int map, int playermask, skill_t skill)
     mobj_t      *mobj;
     mapformat_t	 crispy_mapformat;
     boolean      crispy_validblockmap;
+    unsigned const int starttime = SDL_GetTicks();
+    unsigned int endtime;
 
     totalkills = totalitems = totalsecret = 0;
 
@@ -2125,6 +2129,10 @@ void P_SetupLevel (int episode, int map, int playermask, skill_t skill)
     {
         R_PrecacheLevel();
     }
+
+    endtime = SDL_GetTicks() - starttime;
+    DEH_printf(english_language ? "loaded in %d ms.\n" :
+                                  "загружен за %d мс.\n", endtime);
 }
 
 /*

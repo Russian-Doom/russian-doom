@@ -31,6 +31,7 @@
 #include <windows.h>
 #endif
 
+#include "SDL.h"
 #include "doomfeatures.h"
 
 #include "h2def.h"
@@ -668,6 +669,8 @@ void D_DoomMain(void)
 {
     GameMission_t gamemission;
     int p;
+    unsigned int starttime = SDL_GetTicks();
+    unsigned int endtime;
 
 #ifdef _WIN32
     // [JN] Print colorized title
@@ -931,6 +934,10 @@ void D_DoomMain(void)
             H2_StartTitle();
         }
     }
+
+    endtime = SDL_GetTicks() - starttime;
+    ST_Message(english_language ? "Startup process took %d ms.\n" :
+                                  "Процесс запуска занял %d мс.\n", endtime);
 
     // [JN] Show the game we are playing
     ST_Message(english_language ? "Starting game: " : "Запуск игры: ");
