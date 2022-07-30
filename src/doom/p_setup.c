@@ -2274,7 +2274,7 @@ void P_SetupLevel (const int episode, const int map, const skill_t skill)
 
     if (canapplyfixes)
     {
-        // [JN] TODO -- degug print!
+        // [JN] TODO -- debug print!
         printf (" ### CAN APPLY MAP FIXES! ### \n");
     }
 
