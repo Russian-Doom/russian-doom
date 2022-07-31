@@ -1761,6 +1761,9 @@ void G_DoLoadGame (void)
 
     savedleveltime = leveltime;
 
+    // [JN] Do not allow to apply map fixes for loaded savegame.
+    canapplyfixes = false;
+
     // load a base level 
     G_InitNew (gameskill, gameepisode, gamemap); 
  
@@ -1927,6 +1930,10 @@ void G_DoNewGame (void)
     nomonsters = false;
     */
     consoleplayer = 0;
+
+    // [JN] Allow to apply map fixes for new game.
+    canapplyfixes = true;
+
     G_InitNew (d_skill, d_episode, d_map); 
     gameaction = ga_nothing; 
     flag667 = false;
@@ -1955,6 +1962,9 @@ void G_DoSelectiveGame (int choice)
 
     // Close "Level select" menu
     RD_Menu_DeactivateMenu(false);
+
+    // [JN] Allow to apply map fixes for new selective game.
+    canapplyfixes = true;
 
     G_InitNew (selective_skill,
                // Set appropriate episode
