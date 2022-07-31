@@ -166,7 +166,7 @@ typedef struct
     char  *toptexture;
     char  *middletexture;
     char  *bottomtexture;
-    short  offset;
+    short  textureoffset;
     short  rowoffset;
     int    flags;
     int    special;

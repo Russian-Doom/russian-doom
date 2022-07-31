@@ -533,10 +533,9 @@ static void P_LoadSegs (const int lump)
                     {
                         li->sidedef->bottomtexture = R_TextureNumForName(linefix[j].bottomtexture);
                     }
-                    if (linefix[j].offset != DEFAULT)
+                    if (linefix[j].textureoffset != DEFAULT)
                     {
-                        li->offset = SHORT(linefix[j].offset) << FRACBITS;
-                        li->sidedef->textureoffset = 0;
+                        li->sidedef->textureoffset = SHORT(linefix[j].textureoffset) << FRACBITS;
                     }
                     if (linefix[j].rowoffset != DEFAULT)
                     {
