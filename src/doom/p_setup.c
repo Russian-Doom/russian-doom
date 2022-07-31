@@ -2272,12 +2272,6 @@ void P_SetupLevel (const int episode, const int map, const skill_t skill)
              && canapplyfixes
              && singleplayer);
 
-    if (canapplyfixes)
-    {
-        // [JN] TODO -- debug print!
-        printf (" ### CAN APPLY MAP FIXES! ### \n");
-    }
-
     leveltime = 0;
     oldleveltime = 0; // [crispy] Track if game is running
 
