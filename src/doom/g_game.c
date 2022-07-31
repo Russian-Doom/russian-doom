@@ -1656,6 +1656,9 @@ void G_DoCompleted (void)
     gamestate = GS_INTERMISSION; 
     automapactive = false; 
 
+    // [JN] Allow to apply map fixes for next map.
+    canapplyfixes = true;
+
     WI_Start (&wminfo); 
 } 
 
