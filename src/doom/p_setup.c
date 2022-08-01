@@ -38,7 +38,6 @@
 
 
 boolean canmodify;
-boolean canapplyfixes;  // [JN] Apply map fixes only once per map.
 
 // MAP related Lookup tables.
 // Store VERTEXES, LINEDEFS, SIDEDEFS, etc.
@@ -533,9 +532,10 @@ static void P_LoadSegs (const int lump)
                     {
                         li->sidedef->bottomtexture = R_TextureNumForName(linefix[j].bottomtexture);
                     }
-                    if (linefix[j].textureoffset != DEFAULT)
+                    if (linefix[j].offset != DEFAULT)
                     {
-                        li->sidedef->textureoffset = SHORT(linefix[j].textureoffset) << FRACBITS;
+                        li->offset = SHORT(linefix[j].offset) << FRACBITS;
+                        li->sidedef->textureoffset = 0;
                     }
                     if (linefix[j].rowoffset != DEFAULT)
                     {
@@ -2268,7 +2268,6 @@ void P_SetupLevel (const int episode, const int map, const skill_t skill)
              && gamemode != pressbeta
              && gamemission != jaguar
              && gamevariant != freedoom && gamevariant != freedm))
-             && canapplyfixes
              && singleplayer);
 
     leveltime = 0;

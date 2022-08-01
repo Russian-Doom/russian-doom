@@ -166,7 +166,7 @@ typedef struct
     char  *toptexture;
     char  *middletexture;
     char  *bottomtexture;
-    short  textureoffset;
+    short  offset;
     short  rowoffset;
     int    flags;
     int    special;
@@ -554,7 +554,6 @@ void P_WriteSaveGameHeader (char *description);
 #define KEYBLINKTICS (7*KEYBLINKMASK)
 extern int st_keyorskull[3];
 
-extern boolean   canapplyfixes;
 extern byte     *rejectmatrix;  // for fast sight rejection
 extern int32_t  *blockmaplump;  // offsets in blockmap are from here // [crispy] BLOCKMAP limit
 extern int32_t  *blockmap;      // [crispy] BLOCKMAP limit
