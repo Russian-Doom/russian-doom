@@ -201,10 +201,22 @@ typedef struct
     int options;
 } thingfix_t;
 
-extern vertexfix_t  vertexfix[];
-extern linefix_t    linefix[];
-extern sectorfix_t  sectorfix[];
-extern thingfix_t   thingfix[];
+extern vertexfix_t  vertexfix_doom1[];
+extern vertexfix_t  vertexfix_doom2[];
+extern vertexfix_t  vertexfix_plut[];
+extern vertexfix_t  vertexfix_tnt[];
+extern linefix_t    linefix_doom1[];
+extern linefix_t    linefix_doom2[];
+extern linefix_t    linefix_plut[];
+extern linefix_t    linefix_tnt[];
+extern sectorfix_t  sectorfix_doom1[];
+extern sectorfix_t  sectorfix_doom2[];
+extern sectorfix_t  sectorfix_plut[];
+extern sectorfix_t  sectorfix_tnt[];
+extern thingfix_t   thingfix_doom1[];
+extern thingfix_t   thingfix_doom2[];
+extern thingfix_t   thingfix_plut[];
+extern thingfix_t   thingfix_tnt[];
 
 // -----------------------------------------------------------------------------
 // P_FLOOR

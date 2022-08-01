@@ -38,6 +38,11 @@
 
 
 boolean canmodify;
+// [JN] Tables with fixed separated for different games.
+static vertexfix_t *selected_vertexfix;
+static linefix_t   *selected_linefix;
+static sectorfix_t *selected_sectorfix;
+static thingfix_t  *selected_thingfix;
 
 // MAP related Lookup tables.
 // Store VERTEXES, LINEDEFS, SIDEDEFS, etc.
@@ -385,15 +390,15 @@ static void P_LoadVertexes (const int lump)
         // [BH] Apply any map-specific fixes.
         if (canmodify && fix_map_errors)
         {
-            for (int j = 0; vertexfix[j].mission != -1; j++)
+            for (int j = 0; selected_vertexfix[j].mission != -1; j++)
             {
-                if (i == vertexfix[j].vertex && gamemission == vertexfix[j].mission
-                && gameepisode == vertexfix[j].epsiode && gamemap == vertexfix[j].map
-                && vertexes[i].x == SHORT(vertexfix[j].oldx) << FRACBITS
-                && vertexes[i].y == SHORT(vertexfix[j].oldy) << FRACBITS)
+                if (i == selected_vertexfix[j].vertex && gamemission == selected_vertexfix[j].mission
+                && gameepisode == selected_vertexfix[j].epsiode && gamemap == selected_vertexfix[j].map
+                && vertexes[i].x == SHORT(selected_vertexfix[j].oldx) << FRACBITS
+                && vertexes[i].y == SHORT(selected_vertexfix[j].oldy) << FRACBITS)
                 {
-                    vertexes[i].x = SHORT(vertexfix[j].newx) << FRACBITS;
-                    vertexes[i].y = SHORT(vertexfix[j].newy) << FRACBITS;
+                    vertexes[i].x = SHORT(selected_vertexfix[j].newx) << FRACBITS;
+                    vertexes[i].y = SHORT(selected_vertexfix[j].newy) << FRACBITS;
 
                     break;
                 }
@@ -514,47 +519,47 @@ static void P_LoadSegs (const int lump)
         // [BH] Apply any map-specific fixes.
         if (canmodify && fix_map_errors)
         {
-            for (int j = 0; linefix[j].mission != -1; j++)
+            for (int j = 0; selected_linefix[j].mission != -1; j++)
             {
-                if (linedef == linefix[j].linedef && gamemission == linefix[j].mission
-                && gameepisode == linefix[j].epsiode && gamemap == linefix[j].map
-                && side == linefix[j].side)
+                if (linedef == selected_linefix[j].linedef && gamemission == selected_linefix[j].mission
+                && gameepisode == selected_linefix[j].epsiode && gamemap == selected_linefix[j].map
+                && side == selected_linefix[j].side)
                 {
-                    if (*linefix[j].toptexture)
+                    if (*selected_linefix[j].toptexture)
                     {
-                        li->sidedef->toptexture = R_TextureNumForName(linefix[j].toptexture);
+                        li->sidedef->toptexture = R_TextureNumForName(selected_linefix[j].toptexture);
                     }
-                    if (*linefix[j].middletexture)
+                    if (*selected_linefix[j].middletexture)
                     {
-                        li->sidedef->midtexture = R_TextureNumForName(linefix[j].middletexture);
+                        li->sidedef->midtexture = R_TextureNumForName(selected_linefix[j].middletexture);
                     }
-                    if (*linefix[j].bottomtexture)
+                    if (*selected_linefix[j].bottomtexture)
                     {
-                        li->sidedef->bottomtexture = R_TextureNumForName(linefix[j].bottomtexture);
+                        li->sidedef->bottomtexture = R_TextureNumForName(selected_linefix[j].bottomtexture);
                     }
-                    if (linefix[j].offset != DEFAULT)
+                    if (selected_linefix[j].offset != DEFAULT)
                     {
-                        li->offset = SHORT(linefix[j].offset) << FRACBITS;
+                        li->offset = SHORT(selected_linefix[j].offset) << FRACBITS;
                         li->sidedef->textureoffset = 0;
                     }
-                    if (linefix[j].rowoffset != DEFAULT)
+                    if (selected_linefix[j].rowoffset != DEFAULT)
                     {
-                        li->sidedef->rowoffset = SHORT(linefix[j].rowoffset) << FRACBITS;
+                        li->sidedef->rowoffset = SHORT(selected_linefix[j].rowoffset) << FRACBITS;
                     }
-                    if (linefix[j].flags != DEFAULT)
+                    if (selected_linefix[j].flags != DEFAULT)
                     {
-                        if (li->linedef->flags & linefix[j].flags)
-                            li->linedef->flags &= ~linefix[j].flags;
+                        if (li->linedef->flags & selected_linefix[j].flags)
+                            li->linedef->flags &= ~selected_linefix[j].flags;
                         else
-                            li->linedef->flags |= linefix[j].flags;
+                            li->linedef->flags |= selected_linefix[j].flags;
                     }
-                    if (linefix[j].special != DEFAULT)
+                    if (selected_linefix[j].special != DEFAULT)
                     {
-                        li->linedef->special = linefix[j].special;
+                        li->linedef->special = selected_linefix[j].special;
                     }
-                    if (linefix[j].tag != DEFAULT)
+                    if (selected_linefix[j].tag != DEFAULT)
                     {
-                        li->linedef->tag = linefix[j].tag;
+                        li->linedef->tag = selected_linefix[j].tag;
                     }
 
                     break;
@@ -758,35 +763,35 @@ static void P_LoadSectors (const int lump)
         // [BH] Apply any level-specific fixes.
         if (canmodify && fix_map_errors)
         {
-            for (int j = 0; sectorfix[j].mission != -1; j++)
+            for (int j = 0; selected_sectorfix[j].mission != -1; j++)
             {
-                if (i == sectorfix[j].sector && gamemission == sectorfix[j].mission
-                && gameepisode == sectorfix[j].epsiode && gamemap == sectorfix[j].map)
+                if (i == selected_sectorfix[j].sector && gamemission == selected_sectorfix[j].mission
+                && gameepisode == selected_sectorfix[j].epsiode && gamemap == selected_sectorfix[j].map)
                 {
-                    if (*sectorfix[j].floorpic)
+                    if (*selected_sectorfix[j].floorpic)
                     {
-                        ss->floorpic = R_FlatNumForName(sectorfix[j].floorpic);
+                        ss->floorpic = R_FlatNumForName(selected_sectorfix[j].floorpic);
                     }
-                    if (*sectorfix[j].ceilingpic)
+                    if (*selected_sectorfix[j].ceilingpic)
                     {
-                        ss->ceilingpic = R_FlatNumForName(sectorfix[j].ceilingpic);
+                        ss->ceilingpic = R_FlatNumForName(selected_sectorfix[j].ceilingpic);
                     }
-                    if (sectorfix[j].floorheight != DEFAULT)
+                    if (selected_sectorfix[j].floorheight != DEFAULT)
                     {
-                        ss->floorheight = SHORT(sectorfix[j].floorheight) << FRACBITS;
+                        ss->floorheight = SHORT(selected_sectorfix[j].floorheight) << FRACBITS;
                     }
-                    if (sectorfix[j].ceilingheight != DEFAULT)
+                    if (selected_sectorfix[j].ceilingheight != DEFAULT)
                     {
-                        ss->ceilingheight = SHORT(sectorfix[j].ceilingheight) << FRACBITS;
+                        ss->ceilingheight = SHORT(selected_sectorfix[j].ceilingheight) << FRACBITS;
                     }
-                    if (sectorfix[j].special != DEFAULT)
+                    if (selected_sectorfix[j].special != DEFAULT)
                     {
-                        ss->special = SHORT(sectorfix[j].special);
+                        ss->special = SHORT(selected_sectorfix[j].special);
                     }
-                    if (sectorfix[j].newtag != DEFAULT && (sectorfix[j].oldtag == DEFAULT
-                        || sectorfix[j].oldtag == ss->tag))
+                    if (selected_sectorfix[j].newtag != DEFAULT && (selected_sectorfix[j].oldtag == DEFAULT
+                        || selected_sectorfix[j].oldtag == ss->tag))
                     {
-                        ss->tag = SHORT(sectorfix[j].newtag) << FRACBITS;
+                        ss->tag = SHORT(selected_sectorfix[j].newtag) << FRACBITS;
                     }
     
                     break;
@@ -1275,29 +1280,29 @@ static void P_LoadThings (const int lump)
         // [BH] Apply any level-specific fixes.
         if (canmodify && fix_map_errors)
         {
-            for (int j = 0; thingfix[j].mission != -1; j++)
+            for (int j = 0; selected_thingfix[j].mission != -1; j++)
             {
-                if (gamemission == thingfix[j].mission && gameepisode == thingfix[j].epsiode
-                && gamemap == thingfix[j].map && i == thingfix[j].thing && spawnthing.type == thingfix[j].type
-                && spawnthing.x == SHORT(thingfix[j].oldx) && spawnthing.y == SHORT(thingfix[j].oldy))
+                if (gamemission == selected_thingfix[j].mission && gameepisode == selected_thingfix[j].epsiode
+                && gamemap == selected_thingfix[j].map && i == selected_thingfix[j].thing && spawnthing.type == selected_thingfix[j].type
+                && spawnthing.x == SHORT(selected_thingfix[j].oldx) && spawnthing.y == SHORT(selected_thingfix[j].oldy))
                 {
-                    if (thingfix[j].newx == REMOVE && thingfix[j].newy == REMOVE)
+                    if (selected_thingfix[j].newx == REMOVE && selected_thingfix[j].newy == REMOVE)
                     {
                         spawn = false;
                     }
                     else
                     {
-                        spawnthing.x = SHORT(thingfix[j].newx);
-                        spawnthing.y = SHORT(thingfix[j].newy);
+                        spawnthing.x = SHORT(selected_thingfix[j].newx);
+                        spawnthing.y = SHORT(selected_thingfix[j].newy);
                     }
 
-                    if (thingfix[j].angle != DEFAULT)
+                    if (selected_thingfix[j].angle != DEFAULT)
                     {
-                        spawnthing.angle = SHORT(thingfix[j].angle);
+                        spawnthing.angle = SHORT(selected_thingfix[j].angle);
                     }
-                    if (thingfix[j].options != DEFAULT)
+                    if (selected_thingfix[j].options != DEFAULT)
                     {
-                        spawnthing.options = thingfix[j].options;
+                        spawnthing.options = selected_thingfix[j].options;
                     }
 
                     break;
@@ -2378,4 +2383,36 @@ void P_Init (void)
     P_InitSwitchList ();
     P_InitPicAnims ();
     R_InitSprites (sprnames);
+
+    // [JN] Define which game will use which map fixes.
+    if (logical_gamemission == doom)
+    {
+        selected_vertexfix = vertexfix_doom1;
+        selected_linefix = linefix_doom1;
+        selected_sectorfix = sectorfix_doom1;
+        selected_thingfix = thingfix_doom1;
+    }
+    else
+    if (logical_gamemission == doom2)
+    {
+        selected_vertexfix = vertexfix_doom2;
+        selected_linefix = linefix_doom2;
+        selected_sectorfix = sectorfix_doom2;
+        selected_thingfix = thingfix_doom2;
+    }
+    else
+    if (logical_gamemission == pack_plut)
+    {
+        selected_vertexfix = vertexfix_plut;
+        selected_linefix = linefix_plut;
+        selected_sectorfix = sectorfix_plut;
+        selected_thingfix = thingfix_plut;
+    }
+    else
+    {
+        selected_vertexfix = vertexfix_tnt;
+        selected_linefix = linefix_tnt;
+        selected_sectorfix = sectorfix_tnt;
+        selected_thingfix = thingfix_tnt;
+    }
 }

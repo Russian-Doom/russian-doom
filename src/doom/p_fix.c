@@ -23,7 +23,11 @@
 #include "p_local.h"
 
 
-vertexfix_t vertexfix[] =
+// =============================================================================
+// VERTEXES
+// =============================================================================
+
+vertexfix_t vertexfix_doom1[] =
 {
    // mission, episode, map, vertex,  oldx,  oldy,  newx,  newy
 
@@ -47,7 +51,12 @@ vertexfix_t vertexfix[] =
     { doom,          2,   7,    393,  1944,  1024,  1952,  1024 },
     { doom,          2,   7,    495,  1944,   960,  1952,   960 },
 
-   // mission, episode, map, vertex,  oldx,  oldy,  newx,  newy
+    { -1,            0,   0,      0,     0,     0,     0,     0 }
+};
+
+vertexfix_t vertexfix_doom2[] =
+{
+   // mission,  episode, map, vertex,  oldx,  oldy,  newx,  newy
 
     { doom2,         1,   1,    288,   320,  1416,   320,  1408 },
 
@@ -59,7 +68,23 @@ vertexfix_t vertexfix[] =
     { -1,            0,   0,      0,     0,     0,     0,     0 }
 };
 
-linefix_t linefix[] =
+vertexfix_t vertexfix_plut[] =
+{
+  // mission,  episode, map, vertex,  oldx,  oldy,  newx,  newy
+    { -1,            0,   0,      0,     0,     0,     0,     0 }
+};
+
+vertexfix_t vertexfix_tnt[] =
+{
+  // mission,  episode, map, vertex,  oldx,  oldy,  newx,  newy
+    { -1,            0,   0,      0,     0,     0,     0,     0 }
+};
+
+// =============================================================================
+// LINES
+// =============================================================================
+
+linefix_t linefix_doom1[] =
 {
    // mission,    episode, map, linedef, side, toptexture, middletexture, bottomtexture,  offset, rowoffset, flags,                              special,                                    tag
 
@@ -1264,7 +1289,12 @@ linefix_t linefix[] =
     { doom,             4,   9,    1584,    0, "",         "",            "",                 64,      -120, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             4,   9,    1585,    0, "",         "",            "",            DEFAULT,      -120, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
-   // mission,    episode, map, linedef, side, toptexture, middletexture, bottomtexture,  offset, rowoffset, flags,                              special,                                    tag
+    { -1,               0,   0,       0,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT }
+};
+
+linefix_t linefix_doom2[] =
+{
+  // mission,    episode, map, linedef, side, toptexture, middletexture, bottomtexture,  offset, rowoffset, flags,                              special,                                    tag
 
     { doom2,            1,   1,       4,    0, "",         "",            "",                  5,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,   1,       6,    0, "",         "",            "",                  5,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -3022,7 +3052,221 @@ linefix_t linefix[] =
     { doom2,            1,  32,      30,    0, "",         "",            "",            DEFAULT,         0, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  32,      31,    0, "",         "",            "",            DEFAULT,         0, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
-   // mission,    episode, map, linedef, side, toptexture, middletexture, bottomtexture,  offset, rowoffset, flags,                              special,                                    tag
+    { -1,               0,   0,       0,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT }
+};
+
+linefix_t linefix_plut[] =
+{
+  // mission,    episode, map, linedef, side, toptexture, middletexture, bottomtexture,  offset, rowoffset, flags,                              special,                                    tag
+
+    { pack_plut,        1,   1,     552,    0, "",         "",            "",                  1,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   1,    1110,    0, "",         "",            "",                  0,         0, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,   2,      44,    0, "",         "",            "",                 -4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   2,    1173,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   2,    1174,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   2,    1176,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,   3,     558,    1, "",         "",            "",                 -6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,     560,    1, "",         "",            "",                 -6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,     693,    1, "",         "",            "",                 64,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,     694,    1, "",         "",            "",                207,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,     695,    1, "",         "",            "",                 79,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,     696,    1, "",         "",            "",                222,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,     716,    1, "",         "",            "",                 91,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,     717,    1, "",         "",            "",                234,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,     719,    1, "",         "",            "",                128,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,     720,    1, "",         "",            "",                 15,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,    1173,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,    1174,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,    1176,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,   4,     303,    1, "",         "MIDBRONZ",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   4,     308,    1, "",         "MIDBRONZ",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   4,     531,    0, "",         "",            "",            DEFAULT,        18, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   4,     532,    0, "",         "",            "",            DEFAULT,        18, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   4,     762,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   4,     763,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   4,     845,    0, "",         "",            "",                  4,        -2, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   4,     852,    0, "",         "",            "",                  4,        -2, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   4,     975,    0, "",         "",            "",                 87,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,   5,     411,    0, "A-BROCK2", "",            "A-BROCK2",    DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,   6,    1337,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   6,    1343,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,   6,     236,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   6,     239,    1, "",         "A-RAIL1",     "",                 -7,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,   7,      50,    0, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   7,      51,    0, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   7,      79,    0, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   7,      82,    0, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,   8,     236,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   8,     239,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   8,     247,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   8,     249,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   8,     857,    0, "",         "",            "",                -16,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,   9,     849,    0, "",         "",            "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   9,     850,    0, "",         "",            "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   9,     942,    0, "",         "",            "",                 18,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   9,    1179,    0, "",         "DOORTRAK",    "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   9,    1181,    0, "",         "DOORTRAK",    "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  10,     137,    0, "",         "",            "",                  6,         4, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  10,     138,    0, "",         "",            "",                  6,         4, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  10,     141,    0, "",         "",            "",                  6,         4, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  10,     142,    0, "",         "",            "",                  6,         4, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  10,     254,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, ML_BLOCKING,                        DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  10,     720,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  10,     799,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  10,     800,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  10,     988,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  10,    1010,    0, "GSTONE1",  "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  12,     230,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, ML_BLOCKING,                        DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  12,     690,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  12,     985,    0, "",         "WOOD5",       "",                 64,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  12,     988,    0, "",         "WOOD5",       "",                -32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  12,     996,    1, "",         "",       "WOOD1",                -96,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  12,    1018,    0, "",         "",            "",            DEFAULT,         0, (ML_DONTPEGTOP | ML_DONTPEGBOTTOM), DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  12,    1151,    0, "",         "WOOD5",       "",                -96,         0, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  13,     107,    1, "A-BROWN5",  "",           "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  13,     119,    1, "A-BROWN5",  "",           "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  14,     770,    0, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  14,     808,    1, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  14,    1099,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  14,    1103,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  14,    1113,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  15,      65,    0, "",         "",            "",                  0,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  15,     407,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  15,     874,    1, "",         "BRNSMAL2",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  15,    1113,    0, "",         "",            "",                  0,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  16,     667,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  16,     740,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  16,     751,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  19,     361,    1, "",         "MIDBRONZ",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  19,     366,    1, "",         "MIDBRONZ",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  19,     677,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  19,     678,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  19,     679,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  19,     824,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  20,     179,    0, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     194,    0, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     267,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     297,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     315,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     511,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     666,    0, "",         "",            "",            DEFAULT,       -13, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     670,    0, "",         "",            "",            DEFAULT,       -13, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     671,    0, "",         "",            "",            DEFAULT,       -13, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     672,    0, "",         "",            "",            DEFAULT,       -13, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     678,    0, "",         "",            "",            DEFAULT,       -13, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     679,    0, "",         "",            "",            DEFAULT,       -13, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     680,    0, "",         "",            "",            DEFAULT,       -13, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     681,    0, "",         "",            "",            DEFAULT,       -13, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     869,    0, "",         "",            "",            DEFAULT,       -50, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     876,    0, "",         "",            "",            DEFAULT,        65, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     882,    0, "",         "",            "",            DEFAULT,        65, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     904,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,    1110,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,    1115,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,    1146,    0, "",         "",            "",                104,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  22,     375,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,     602,    0, "",         "",            "",                -20,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,     604,    0, "",         "",            "",                 13,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,     763,    0, "",         "",            "",                 17,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,     765,    0, "",         "",            "",                 17,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,    1026,    1, "",         "",            "",                 45,        40, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,    1028,    1, "",         "",            "",                -16,        40, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,    1033,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,    1034,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,    1035,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,    1115,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,    1636,    0, "",         "",            "",                  6,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,    1637,    0, "",         "",            "",                  2,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,    1639,    0, "",         "",            "",                  2,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,    1672,    0, "",         "",            "",                  7,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,    1673,    0, "",         "",            "",                  7,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,    1674,    0, "",         "",            "",                  7,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  23,    1100,    0, "",         "",            "",            DEFAULT,        16, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  23,    1463,    1, "",         "BRNSMALR",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  23,    1468,    1, "",         "BRNSMALC",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  23,    1468,    1, "",         "BRNSMALL",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  24,     828,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  24,     834,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  24,     835,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  24,     990,    0, "",         "",            "",                  3,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  24,     996,    0, "",         "",            "",                  3,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  25,     142,    0, "",         "",            "",            DEFAULT,         4, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  25,     144,    0, "",         "",            "",            DEFAULT,         4, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  25,     952,    0, "",         "",            "",                  6,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  25,     954,    1, "",         "",            "",                  6,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  25,    1152,    0, "A-BROCK2", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  25,    1341,    0, "",         "",            "",                 -8,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  25,    1342,    0, "",         "",            "",                  4,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  25,    1343,    0, "",         "",            "",                  0,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  26,     389,    0, "",         "DOORTRAK",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },    
+    { pack_plut,        1,  26,     398,    0, "",         "DOORTRAK",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },    
+
+    { pack_plut,        1,  28,     179,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,     195,    1, "",         "BRNSMAL2",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,     199,    1, "",         "BRNSMAL2",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,     204,    1, "",         "BRNSMAL2",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,     209,    1, "",         "BRNSMAL1",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,     675,    0, "",         "",            "BRICK10",     DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,     676,    0, "",         "",            "BRICK10",     DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    1232,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    1233,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    1234,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    1235,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    1711,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    1712,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    1713,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    1714,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    1715,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    1716,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    1717,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    1718,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    1719,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    1720,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    2352,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    2360,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    2496,    0, "BRICK10",  "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  29,    2842,    0, "A-BROCK2", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  30,     730,    0, "",         "",            "ROCKRED1",    DEFAULT,   DEFAULT, (ML_DONTPEGTOP | ML_DONTPEGBOTTOM), DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  31,     929,    0, "",         "",            "",            DEFAULT,        54, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  32,     569,    0, "SUPPORT3", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  32,     570,    0, "SUPPORT3", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  32,     571,    0, "SUPPORT3", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  32,     572,    0, "SUPPORT3", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  32,     805,    0, "A-BRICK3", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { -1,               0,   0,       0,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT }
+
+};
+
+linefix_t linefix_tnt[] =
+{
+  // mission,    episode, map, linedef, side, toptexture, middletexture, bottomtexture,  offset, rowoffset, flags,                              special,                                    tag
 
     { pack_tnt,         1,   1,      12,    0, "",         "",            "",                -24,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_tnt,         1,   1,      19,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -3365,216 +3609,17 @@ linefix_t linefix[] =
     { pack_tnt,         1,  32,    1223,    0, "",         "",            "",                 72,        56, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_tnt,         1,  32,    1281,    0, "",         "",            "",                 59,         8, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
-   // mission,    episode, map, linedef, side, toptexture, middletexture, bottomtexture,  offset, rowoffset, flags,                              special,                                    tag
-
-    { pack_plut,        1,   1,     552,    0, "",         "",            "",                  1,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   1,    1110,    0, "",         "",            "",                  0,         0, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,   2,      44,    0, "",         "",            "",                 -4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   2,    1173,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   2,    1174,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   2,    1176,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,   3,     558,    1, "",         "",            "",                 -6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   3,     560,    1, "",         "",            "",                 -6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   3,     693,    1, "",         "",            "",                 64,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   3,     694,    1, "",         "",            "",                207,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   3,     695,    1, "",         "",            "",                 79,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   3,     696,    1, "",         "",            "",                222,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   3,     716,    1, "",         "",            "",                 91,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   3,     717,    1, "",         "",            "",                234,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   3,     719,    1, "",         "",            "",                128,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   3,     720,    1, "",         "",            "",                 15,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   3,    1173,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   3,    1174,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   3,    1176,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,   4,     303,    1, "",         "MIDBRONZ",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   4,     308,    1, "",         "MIDBRONZ",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   4,     531,    0, "",         "",            "",            DEFAULT,        18, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   4,     532,    0, "",         "",            "",            DEFAULT,        18, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   4,     762,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   4,     763,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   4,     845,    0, "",         "",            "",                  4,        -2, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   4,     852,    0, "",         "",            "",                  4,        -2, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   4,     975,    0, "",         "",            "",                 87,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,   5,     411,    0, "A-BROCK2", "",            "A-BROCK2",    DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,   6,    1337,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   6,    1343,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,   6,     236,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   6,     239,    1, "",         "A-RAIL1",     "",                 -7,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,   7,      50,    0, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   7,      51,    0, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   7,      79,    0, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   7,      82,    0, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,   8,     236,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   8,     239,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   8,     247,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   8,     249,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   8,     857,    0, "",         "",            "",                -16,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,   9,     849,    0, "",         "",            "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   9,     850,    0, "",         "",            "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   9,     942,    0, "",         "",            "",                 18,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   9,    1179,    0, "",         "DOORTRAK",    "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,   9,    1181,    0, "",         "DOORTRAK",    "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,  10,     137,    0, "",         "",            "",                  6,         4, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  10,     138,    0, "",         "",            "",                  6,         4, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  10,     141,    0, "",         "",            "",                  6,         4, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  10,     142,    0, "",         "",            "",                  6,         4, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  10,     254,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, ML_BLOCKING,                        DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  10,     720,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  10,     799,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  10,     800,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  10,     988,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  10,    1010,    0, "GSTONE1",  "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,  12,     230,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, ML_BLOCKING,                        DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  12,     690,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  12,     985,    0, "",         "WOOD5",       "",                 64,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  12,     988,    0, "",         "WOOD5",       "",                -32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  12,     996,    1, "",         "",       "WOOD1",                -96,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  12,    1018,    0, "",         "",            "",            DEFAULT,         0, (ML_DONTPEGTOP | ML_DONTPEGBOTTOM), DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  12,    1151,    0, "",         "WOOD5",       "",                -96,         0, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,  13,     107,    1, "A-BROWN5",  "",           "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  13,     119,    1, "A-BROWN5",  "",           "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,  14,     770,    0, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  14,     808,    1, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  14,    1099,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  14,    1103,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  14,    1113,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,  15,      65,    0, "",         "",            "",                  0,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  15,     407,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  15,     874,    1, "",         "BRNSMAL2",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  15,    1113,    0, "",         "",            "",                  0,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,  16,     667,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  16,     740,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  16,     751,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,  19,     361,    1, "",         "MIDBRONZ",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  19,     366,    1, "",         "MIDBRONZ",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  19,     677,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  19,     678,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  19,     679,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  19,     824,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,  20,     179,    0, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  20,     194,    0, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  20,     267,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  20,     297,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  20,     315,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  20,     511,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  20,     666,    0, "",         "",            "",            DEFAULT,       -13, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  20,     670,    0, "",         "",            "",            DEFAULT,       -13, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  20,     671,    0, "",         "",            "",            DEFAULT,       -13, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  20,     672,    0, "",         "",            "",            DEFAULT,       -13, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  20,     678,    0, "",         "",            "",            DEFAULT,       -13, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  20,     679,    0, "",         "",            "",            DEFAULT,       -13, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  20,     680,    0, "",         "",            "",            DEFAULT,       -13, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  20,     681,    0, "",         "",            "",            DEFAULT,       -13, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  20,     869,    0, "",         "",            "",            DEFAULT,       -50, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  20,     876,    0, "",         "",            "",            DEFAULT,        65, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  20,     882,    0, "",         "",            "",            DEFAULT,        65, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  20,     904,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  20,    1110,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  20,    1115,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  20,    1146,    0, "",         "",            "",                104,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,  22,     375,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  22,     602,    0, "",         "",            "",                -20,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  22,     604,    0, "",         "",            "",                 13,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  22,     763,    0, "",         "",            "",                 17,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  22,     765,    0, "",         "",            "",                 17,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  22,    1026,    1, "",         "",            "",                 45,        40, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  22,    1028,    1, "",         "",            "",                -16,        40, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  22,    1033,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  22,    1034,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  22,    1035,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  22,    1115,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  22,    1636,    0, "",         "",            "",                  6,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  22,    1637,    0, "",         "",            "",                  2,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  22,    1639,    0, "",         "",            "",                  2,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  22,    1672,    0, "",         "",            "",                  7,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  22,    1673,    0, "",         "",            "",                  7,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  22,    1674,    0, "",         "",            "",                  7,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,  23,    1100,    0, "",         "",            "",            DEFAULT,        16, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  23,    1463,    1, "",         "BRNSMALR",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  23,    1468,    1, "",         "BRNSMALC",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  23,    1468,    1, "",         "BRNSMALL",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,  24,     828,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  24,     834,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  24,     835,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  24,     990,    0, "",         "",            "",                  3,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  24,     996,    0, "",         "",            "",                  3,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,  25,     142,    0, "",         "",            "",            DEFAULT,         4, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  25,     144,    0, "",         "",            "",            DEFAULT,         4, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  25,     952,    0, "",         "",            "",                  6,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  25,     954,    1, "",         "",            "",                  6,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  25,    1152,    0, "A-BROCK2", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  25,    1341,    0, "",         "",            "",                 -8,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  25,    1342,    0, "",         "",            "",                  4,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  25,    1343,    0, "",         "",            "",                  0,         1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,  26,     389,    0, "",         "DOORTRAK",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },    
-    { pack_plut,        1,  26,     398,    0, "",         "DOORTRAK",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },    
-
-    { pack_plut,        1,  28,     179,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,     195,    1, "",         "BRNSMAL2",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,     199,    1, "",         "BRNSMAL2",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,     204,    1, "",         "BRNSMAL2",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,     209,    1, "",         "BRNSMAL1",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,     675,    0, "",         "",            "BRICK10",     DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,     676,    0, "",         "",            "BRICK10",     DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,    1232,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,    1233,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,    1234,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,    1235,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,    1711,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,    1712,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,    1713,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,    1714,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,    1715,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,    1716,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,    1717,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,    1718,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,    1719,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,    1720,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,    2352,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,    2360,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  28,    2496,    0, "BRICK10",  "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,  29,    2842,    0, "A-BROCK2", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,  30,     730,    0, "",         "",            "ROCKRED1",    DEFAULT,   DEFAULT, (ML_DONTPEGTOP | ML_DONTPEGBOTTOM), DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,  31,     929,    0, "",         "",            "",            DEFAULT,        54, DEFAULT,                            DEFAULT,                                    DEFAULT },
-
-    { pack_plut,        1,  32,     569,    0, "SUPPORT3", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  32,     570,    0, "SUPPORT3", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  32,     571,    0, "SUPPORT3", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  32,     572,    0, "SUPPORT3", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,        1,  32,     805,    0, "A-BRICK3", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
     { -1,               0,   0,       0,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT }
 };
 
-sectorfix_t sectorfix[] =
-{
-   // mission,    episode, map, sector, floorpic, ceilingpic, floorheight, ceilingheight, special,                            oldtag,  newtag
+// =============================================================================
+// SECTORS
+// =============================================================================
 
+sectorfix_t sectorfix_doom1[] =
+{
+  // mission,    episode, map, sector, floorpic, ceilingpic, floorheight, ceilingheight, special,                            oldtag,  newtag
     { doom,             1,   1,     67, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             1,   1,     71, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
@@ -3723,8 +3768,12 @@ sectorfix_t sectorfix[] =
     { doom,             4,   9,    238, "",       "FLAT20",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             4,   9,    240, "",       "FLAT20",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
-   // mission,    episode, map, sector, floorpic, ceilingpic, floorheight, ceilingheight, special,                            oldtag,  newtag
+    { -1,               0,   0,      0, "",        "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+};
 
+sectorfix_t sectorfix_doom2[] =
+{
+  // mission,    episode, map, sector, floorpic, ceilingpic, floorheight, ceilingheight, special,                            oldtag,  newtag
     { doom2,            1,   1,     29, "RROCK09", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,   1,     35, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
@@ -3913,221 +3962,13 @@ sectorfix_t sectorfix[] =
     { doom2,            1,  29,      6, "CEIL5_2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,  29,    152, "",        "",        DEFAULT,     936,           DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,  29,    204, "",        "FLAT5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    
+    { -1,               0,   0,      0, "",        "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+};
 
-   // mission,    episode, map, sector, floorpic, ceilingpic, floorheight, ceilingheight, special,                            oldtag,  newtag
-
-    { pack_tnt,         1,   1,      5, "",        "",             21,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,   2,     64, "",        "CEIL5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   2,     77, "",        "FLOOR7_2",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   2,     78, "",        "DEM1_6",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   2,     82, "",        "SLIME16", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   2,    116, "",        "FLOOR7_2",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   2,    119, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   2,    152, "",        "FLOOR7_1",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,   4,     86, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   4,     87, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   4,     88, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   4,    208, "CEIL5_2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   4,    209, "CEIL5_2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   4,    210, "CEIL5_2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   4,    216, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,   5,      2, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   5,     79, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   5,     90, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   5,    105, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   5,    120, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   5,    158, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   5,    168, "",        "CEIL5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   5,    170, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   5,    209, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,   6,    121, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,   7,     58, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   7,    106, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   7,    121, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   7,    153, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   7,    169, "FLAT19",  "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,   8,     28, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   8,     74, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   8,    304, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   8,    419, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,   9,      2, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   9,      8, "",        "CEIL5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   9,     17, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   9,     20, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   9,     21, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   9,     29, "",        "CEIL5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   9,     43, "",        "CRATOP2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   9,    107, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   9,    152, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   9,    182, "",        "CRATOP2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   9,    201, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   9,    274, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   9,    277, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   9,    364, "",        "FLAT23",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   9,    366, "",        "FLAT23",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   9,    368, "",        "FLAT23",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   9,    369, "",        "FLAT23",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   9,    370, "",        "FLAT23",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   9,    412, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,   9,    419, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,  10,      2, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  10,      9, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  10,     25, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  10,     50, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  10,     57, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  10,    174, "",        "FLOOR7_2",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  10,    175, "",        "FLOOR7_2",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  10,    231, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  10,    254, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  10,    257, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,  11,     24, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,     70, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,     83, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,    173, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,    179, "FLAT5_4", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,    181, "CRATOP2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,    196, "FLAT5_4", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,    197, "FLAT5_4", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,    210, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,    221, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,    228, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,    242, "CRATOP2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,    244, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,    249, "FLAT5_4", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,    250, "FLAT5_4", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,    258, "FLAT19",  "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,    261, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,    262, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,    263, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,    265, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,    268, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  11,    272, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,  12,     12, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  12,     86, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  12,    141, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  12,    142, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  12,    143, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,  13,    191, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,  14,      1, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  14,    143, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  14,    163, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  14,    175, "FLAT5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,  15,    170, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  15,    180, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  15,    287, "CEIL5_2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  15,    306, "FLAT19",  "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  15,    307, "FLAT19",  "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,  16,      5, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  16,     41, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  16,     44, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  16,     74, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  16,    150, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  16,    273, "",        "FLOOR7_2",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  16,    329, "",        "FLAT5_5", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  16,    295, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  16,    323, "",        "FLOOR7_2",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  16,    352, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  16,    360, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  16,    364, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,  17,    120, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  17,    127, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  17,    143, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  17,    171, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  17,    265, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  17,    271, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,  18,     45, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  18,     64, "",        "CEIL5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  18,    112, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  18,    114, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  18,    131, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  18,    109, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  18,    134, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  18,    146, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  18,    179, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  18,    180, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  18,    212, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  18,    241, "FLAT23",  "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  18,    327, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,  19,     82, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  19,     84, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  19,    118, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  19,    212, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  19,    362, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  19,    451, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  19,    446, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,  20,    146, "",        "FLOOR7_1",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,  22,    373, "",        "FLOOR3_3",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,  24,     19, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,  25,     39, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  25,     98, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  25,    118, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  25,    126, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  25,    144, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  25,    169, "",        "FLAT5_5", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  25,    193, "",        "RROCK09", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  25,    237, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  25,    273, "",        "FLOOR7_2",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  25,    276, "",        "FLAT5_5", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  25,    277, "",        "FLAT5_5", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  25,    278, "",        "FLAT5_5", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  25,    279, "",        "FLAT5_5", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  25,    292, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  25,    304, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  25,    306, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  25,    319, "",        "RROCK09", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,  26,     23, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  26,     35, "",        "FLAT5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  26,     44, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  26,     90, "",        "FLAT5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  26,    234, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,  28,     86, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  28,     87, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  28,     89, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,  29,    129, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  29,    119, "",        "FLAT5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,  30,    283, "FLAT23",  "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,  31,    131, "",        "FLOOR7_2",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  31,    137, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  31,    138, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  31,    143, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  31,    231, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  31,    311, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-    { pack_tnt,         1,  32,     86, "FLOOR3_3","",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  32,     81, "RROCK09", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  32,     87, "CEIL5_2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  32,     94, "FLOOR7_1","",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  32,    201, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_tnt,         1,  32,    247, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-
-   // mission,    episode, map, sector, floorpic, ceilingpic, floorheight, ceilingheight, special,                            oldtag,  newtag
-
+sectorfix_t sectorfix_plut[] =
+{
+  // mission,    episode, map, sector, floorpic, ceilingpic, floorheight, ceilingheight, special,                            oldtag,  newtag
     { pack_plut,        1,   1,     23, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,   1,     24, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,   1,     28, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
@@ -4420,7 +4261,227 @@ sectorfix_t sectorfix[] =
     { -1,               0,   0,      0, "",        "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 };
 
-thingfix_t thingfix[] =
+sectorfix_t sectorfix_tnt[] =
+{
+  // mission,    episode, map, sector, floorpic, ceilingpic, floorheight, ceilingheight, special,                            oldtag,  newtag
+    { pack_tnt,         1,   1,      5, "",        "",             21,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,   2,     64, "",        "CEIL5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   2,     77, "",        "FLOOR7_2",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   2,     78, "",        "DEM1_6",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   2,     82, "",        "SLIME16", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   2,    116, "",        "FLOOR7_2",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   2,    119, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   2,    152, "",        "FLOOR7_1",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,   4,     86, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   4,     87, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   4,     88, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   4,    208, "CEIL5_2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   4,    209, "CEIL5_2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   4,    210, "CEIL5_2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   4,    216, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,   5,      2, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   5,     79, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   5,     90, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   5,    105, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   5,    120, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   5,    158, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   5,    168, "",        "CEIL5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   5,    170, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   5,    209, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,   6,    121, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,   7,     58, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   7,    106, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   7,    121, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   7,    153, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   7,    169, "FLAT19",  "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,   8,     28, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   8,     74, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   8,    304, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   8,    419, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,   9,      2, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   9,      8, "",        "CEIL5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   9,     17, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   9,     20, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   9,     21, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   9,     29, "",        "CEIL5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   9,     43, "",        "CRATOP2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   9,    107, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   9,    152, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   9,    182, "",        "CRATOP2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   9,    201, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   9,    274, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   9,    277, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   9,    364, "",        "FLAT23",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   9,    366, "",        "FLAT23",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   9,    368, "",        "FLAT23",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   9,    369, "",        "FLAT23",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   9,    370, "",        "FLAT23",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   9,    412, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,   9,    419, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  10,      2, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  10,      9, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  10,     25, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  10,     50, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  10,     57, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  10,    174, "",        "FLOOR7_2",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  10,    175, "",        "FLOOR7_2",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  10,    231, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  10,    254, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  10,    257, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  11,     24, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,     70, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,     83, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,    173, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,    179, "FLAT5_4", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,    181, "CRATOP2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,    196, "FLAT5_4", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,    197, "FLAT5_4", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,    210, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,    221, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,    228, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,    242, "CRATOP2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,    244, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,    249, "FLAT5_4", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,    250, "FLAT5_4", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,    258, "FLAT19",  "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,    261, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,    262, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,    263, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,    265, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,    268, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  11,    272, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  12,     12, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  12,     86, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  12,    141, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  12,    142, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  12,    143, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  13,    191, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  14,      1, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  14,    143, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  14,    163, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  14,    175, "FLAT5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  15,    170, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  15,    180, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  15,    287, "CEIL5_2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  15,    306, "FLAT19",  "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  15,    307, "FLAT19",  "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  16,      5, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  16,     41, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  16,     44, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  16,     74, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  16,    150, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  16,    273, "",        "FLOOR7_2",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  16,    329, "",        "FLAT5_5", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  16,    295, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  16,    323, "",        "FLOOR7_2",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  16,    352, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  16,    360, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  16,    364, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  17,    120, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  17,    127, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  17,    143, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  17,    171, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  17,    265, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  17,    271, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  18,     45, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  18,     64, "",        "CEIL5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  18,    112, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  18,    114, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  18,    131, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  18,    109, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  18,    134, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  18,    146, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  18,    179, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  18,    180, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  18,    212, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  18,    241, "FLAT23",  "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  18,    327, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  19,     82, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  19,     84, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  19,    118, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  19,    212, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  19,    362, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  19,    451, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  19,    446, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  20,    146, "",        "FLOOR7_1",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  22,    373, "",        "FLOOR3_3",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  24,     19, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  25,     39, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,     98, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    118, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    126, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    144, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    169, "",        "FLAT5_5", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    193, "",        "RROCK09", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    237, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    273, "",        "FLOOR7_2",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    276, "",        "FLAT5_5", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    277, "",        "FLAT5_5", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    278, "",        "FLAT5_5", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    279, "",        "FLAT5_5", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    292, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    304, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    306, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    319, "",        "RROCK09", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  26,     23, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  26,     35, "",        "FLAT5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  26,     44, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  26,     90, "",        "FLAT5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  26,    234, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  28,     86, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  28,     87, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  28,     89, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  29,    129, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  29,    119, "",        "FLAT5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  30,    283, "FLAT23",  "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  31,    131, "",        "FLOOR7_2",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  31,    137, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  31,    138, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  31,    143, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  31,    231, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  31,    311, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  32,     86, "FLOOR3_3","",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  32,     81, "RROCK09", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  32,     87, "CEIL5_2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  32,     94, "FLOOR7_1","",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  32,    201, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  32,    247, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { -1,               0,   0,      0, "",        "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+};
+
+// =============================================================================
+// THINGS
+// =============================================================================
+
+thingfix_t thingfix_doom1[] =
 {
    // mission,    episode, map, thing, type,                      oldx,    oldy,    newx,    newy,   angle, options
 
@@ -4461,6 +4522,11 @@ thingfix_t thingfix[] =
 
     { doom,             4,   7,   236, 2022,                        88,   -1472,     104,   -1472, DEFAULT, DEFAULT                            },
 
+    {        -1,        0,   0,     0,     0,                  DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT                            }
+};
+
+thingfix_t thingfix_doom2[] =
+{
    // mission,    episode, map, thing, type,                      oldx,    oldy,    newx,    newy,   angle, options
 
     { doom2,            1,   2,    68, 2035,                       240,     976,     242,     986, DEFAULT, DEFAULT                            },
@@ -4528,6 +4594,32 @@ thingfix_t thingfix[] =
 
     { doom2,            1,  32,    67,   11,                      1216,    4640,    1216,    4832, DEFAULT, DEFAULT                            },
 
+    {        -1,        0,   0,     0,     0,                  DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT                            }
+};
+
+thingfix_t thingfix_plut[] =
+{
+   // mission,    episode, map, thing, type,                      oldx,    oldy,    newx,    newy,   angle, options
+
+    { pack_plut,        1,   9,   304,    56,                    -5216,   -1568,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
+
+    { pack_plut,        1,  12,   225,     0,                     1600,   -3104,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
+    { pack_plut,        1,  12,   226,     0,                      992,   -3360,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
+
+    { pack_plut,        1,  28,    49,  2013,                      352,   -1312,     364,   -1312, DEFAULT, DEFAULT                            },
+
+    { pack_plut,        1,  30,   206,    83,                     -480,    1920,    -480,    1920, DEFAULT, MTF_NETGAME                        },
+    { pack_plut,        1,  30,   250,  2023,                    -2368,    3424,   -2368,    3424, DEFAULT, MTF_NETGAME                        },
+    { pack_plut,        1,  30,   251,  2023,                    -2272,    2368,   -2272,    2368, DEFAULT, MTF_NETGAME                        },
+    { pack_plut,        1,  30,   252,  2023,                    -1632,    2464,   -1632,    2464, DEFAULT, MTF_NETGAME                        },
+    { pack_plut,        1,  30,   253,  2023,                     -288,    2400,    -288,    2400, DEFAULT, MTF_NETGAME                        },
+    { pack_plut,        1,  30,   254,  2023,                    -1248,    3104,   -1248,    3104, DEFAULT, MTF_NETGAME                        },
+
+    {        -1,        0,   0,     0,     0,                  DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT                            }
+};
+
+thingfix_t thingfix_tnt[] =
+{
    // mission,    episode, map, thing, type,                      oldx,    oldy,    newx,    newy,   angle, options
 
     { pack_tnt,         1,   3,     7,    14,                     -416,     416,    -416,     416,     135, DEFAULT                            },
@@ -4555,22 +4647,5 @@ thingfix_t thingfix[] =
     { pack_tnt,         1,  31,   179,     9,                     -576,     672,    -576,     672,      90, DEFAULT                            },
     { pack_tnt,         1,  31,   180,     9,                     -608,     624,    -608,     624,      90, DEFAULT                            },
 
-   // mission,    episode, map, thing, type,                      oldx,    oldy,    newx,    newy,   angle, options
-
-    { pack_plut,        1,   9,   304,    56,                    -5216,   -1568,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
-
-    { pack_plut,        1,  12,   225,     0,                     1600,   -3104,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
-    { pack_plut,        1,  12,   226,     0,                      992,   -3360,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
-
-    { pack_plut,        1,  28,    49,  2013,                      352,   -1312,     364,   -1312, DEFAULT, DEFAULT                            },
-
-    { pack_plut,        1,  30,   206,    83,                     -480,    1920,    -480,    1920, DEFAULT, MTF_NETGAME                        },
-    { pack_plut,        1,  30,   250,  2023,                    -2368,    3424,   -2368,    3424, DEFAULT, MTF_NETGAME                        },
-    { pack_plut,        1,  30,   251,  2023,                    -2272,    2368,   -2272,    2368, DEFAULT, MTF_NETGAME                        },
-    { pack_plut,        1,  30,   252,  2023,                    -1632,    2464,   -1632,    2464, DEFAULT, MTF_NETGAME                        },
-    { pack_plut,        1,  30,   253,  2023,                     -288,    2400,    -288,    2400, DEFAULT, MTF_NETGAME                        },
-    { pack_plut,        1,  30,   254,  2023,                    -1248,    3104,   -1248,    3104, DEFAULT, MTF_NETGAME                        },
-
     {        -1,        0,   0,     0,     0,                  DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT                            }
 };
-
