@@ -38,11 +38,6 @@
 
 
 boolean canmodify;
-// [JN] Tables with fixed separated for different games.
-static vertexfix_t *selected_vertexfix;
-static linefix_t   *selected_linefix;
-static sectorfix_t *selected_sectorfix;
-static thingfix_t  *selected_thingfix;
 
 // MAP related Lookup tables.
 // Store VERTEXES, LINEDEFS, SIDEDEFS, etc.
@@ -387,6 +382,11 @@ static void P_LoadVertexes (const int lump)
         li->x = SHORT(ml->x) << FRACBITS;
         li->y = SHORT(ml->y) << FRACBITS;
     
+        // [crispy] initialize pseudovertexes with actual vertex coordinates
+        li->px = li->x;
+        li->py = li->y;
+        li->moved = false;
+
         // [BH] Apply any map-specific fixes.
         if (canmodify && fix_map_errors)
         {
@@ -397,18 +397,14 @@ static void P_LoadVertexes (const int lump)
                 && vertexes[i].x == SHORT(selected_vertexfix[j].oldx) << FRACBITS
                 && vertexes[i].y == SHORT(selected_vertexfix[j].oldy) << FRACBITS)
                 {
-                    vertexes[i].x = SHORT(selected_vertexfix[j].newx) << FRACBITS;
-                    vertexes[i].y = SHORT(selected_vertexfix[j].newy) << FRACBITS;
+                    vertexes[i].px = SHORT(selected_vertexfix[j].newx) << FRACBITS;
+                    vertexes[i].py = SHORT(selected_vertexfix[j].newy) << FRACBITS;
 
                     break;
                 }
             }
         }
 
-        // [crispy] initialize pseudovertexes with actual vertex coordinates
-        li->px = li->x;
-        li->py = li->y;
-        li->moved = false;
     }
 
     // Free buffer memory.
@@ -761,55 +757,55 @@ static void P_LoadSectors (const int lump)
         ss->oldgametic = -1;
 
         // [BH] Apply any level-specific fixes.
-        if (canmodify && fix_map_errors)
-        {
-            for (int j = 0; selected_sectorfix[j].mission != -1; j++)
-            {
-                if (i == selected_sectorfix[j].sector && gamemission == selected_sectorfix[j].mission
-                && gameepisode == selected_sectorfix[j].epsiode && gamemap == selected_sectorfix[j].map)
-                {
-                    if (*selected_sectorfix[j].floorpic)
-                    {
-                        ss->floorpic = R_FlatNumForName(selected_sectorfix[j].floorpic);
-                    }
-                    if (*selected_sectorfix[j].ceilingpic)
-                    {
-                        ss->ceilingpic = R_FlatNumForName(selected_sectorfix[j].ceilingpic);
-                    }
-                    if (selected_sectorfix[j].floorheight != DEFAULT)
-                    {
-                        ss->floorheight = SHORT(selected_sectorfix[j].floorheight) << FRACBITS;
-                    }
-                    if (selected_sectorfix[j].ceilingheight != DEFAULT)
-                    {
-                        ss->ceilingheight = SHORT(selected_sectorfix[j].ceilingheight) << FRACBITS;
-                    }
-                    if (selected_sectorfix[j].special != DEFAULT)
-                    {
-                        ss->special = SHORT(selected_sectorfix[j].special);
-                    }
-                    if (selected_sectorfix[j].newtag != DEFAULT && (selected_sectorfix[j].oldtag == DEFAULT
-                        || selected_sectorfix[j].oldtag == ss->tag))
-                    {
-                        ss->tag = SHORT(selected_sectorfix[j].newtag) << FRACBITS;
-                    }
-    
-                    break;
-                }
-            }
-        }
-
-        // [JN] Inject flow effect to swirling liquids on vanilla maps.
         if (canmodify)
         {
-            for (int j = 0; flow[j].mission != -1; j++)
+            if (fix_map_errors)
             {
-                if (i == flow[j].sector && gamemission == flow[j].mission
-                && gameepisode == flow[j].epsiode && gamemap == flow[j].map)
+                for (int j = 0; selected_sectorfix[j].mission != -1; j++)
                 {
-                    if (flow[j].flow)
+                    if (i == selected_sectorfix[j].sector && gamemission == selected_sectorfix[j].mission
+                    && gameepisode == selected_sectorfix[j].epsiode && gamemap == selected_sectorfix[j].map)
                     {
-                        ss->flow = SHORT(flow[j].flow);
+                        if (*selected_sectorfix[j].floorpic)
+                        {
+                            ss->floorpic = R_FlatNumForName(selected_sectorfix[j].floorpic);
+                        }
+                        if (*selected_sectorfix[j].ceilingpic)
+                        {
+                            ss->ceilingpic = R_FlatNumForName(selected_sectorfix[j].ceilingpic);
+                        }
+                        if (selected_sectorfix[j].floorheight != DEFAULT)
+                        {
+                            ss->floorheight = SHORT(selected_sectorfix[j].floorheight) << FRACBITS;
+                        }
+                        if (selected_sectorfix[j].ceilingheight != DEFAULT)
+                        {
+                            ss->ceilingheight = SHORT(selected_sectorfix[j].ceilingheight) << FRACBITS;
+                        }
+                        if (selected_sectorfix[j].special != DEFAULT)
+                        {
+                            ss->special = SHORT(selected_sectorfix[j].special);
+                        }
+                        if (selected_sectorfix[j].newtag != DEFAULT && (selected_sectorfix[j].oldtag == DEFAULT
+                            || selected_sectorfix[j].oldtag == ss->tag))
+                        {
+                            ss->tag = SHORT(selected_sectorfix[j].newtag) << FRACBITS;
+                        }
+
+                        break;
+                    }
+                }
+            }
+
+            // [JN] Inject flow effect to swirling liquids.
+            for (int j = 0; selected_flow[j].mission != -1; j++)
+            {
+                if (i == selected_flow[j].sector && gamemission == selected_flow[j].mission
+                && gameepisode == selected_flow[j].epsiode && gamemap == selected_flow[j].map)
+                {
+                    if (selected_flow[j].flow)
+                    {
+                        ss->flow = SHORT(selected_flow[j].flow);
                     }
                     break;
                 }
@@ -1467,14 +1463,14 @@ static void P_LoadLineDefs (const int lump)
         // [JN] Inject fall effect to liquid linedefs on vanilla maps.
         if (canmodify)
         {
-            for (int j = 0; fall[j].mission != -1; j++)
+            for (int j = 0; selected_fall[j].mission != -1; j++)
             {
-                if (i == fall[j].linedef && gamemission == fall[j].mission
-                && gameepisode == fall[j].epsiode && gamemap == fall[j].map)
+                if (i == selected_fall[j].linedef && gamemission == selected_fall[j].mission
+                && gameepisode == selected_fall[j].epsiode && gamemap == selected_fall[j].map)
                 {
-                    if (fall[j].fall)
+                    if (selected_fall[j].fall)
                     {
-                        ld->fall = SHORT(fall[j].fall);
+                        ld->fall = SHORT(selected_fall[j].fall);
                     }
                     break;
                 }
@@ -2275,6 +2271,12 @@ void P_SetupLevel (const int episode, const int map, const skill_t skill)
              && gamevariant != freedoom && gamevariant != freedm))
              && singleplayer);
 
+    // [JN] If level can be modified, setup it's fixes and flow/fall effects.
+    if (canmodify)
+    {
+        P_SetupFixes(episode, map);
+    }
+
     leveltime = 0;
     oldleveltime = 0; // [crispy] Track if game is running
 
@@ -2383,36 +2385,4 @@ void P_Init (void)
     P_InitSwitchList ();
     P_InitPicAnims ();
     R_InitSprites (sprnames);
-
-    // [JN] Define which game will use which map fixes.
-    if (logical_gamemission == doom)
-    {
-        selected_vertexfix = vertexfix_doom1;
-        selected_linefix = linefix_doom1;
-        selected_sectorfix = sectorfix_doom1;
-        selected_thingfix = thingfix_doom1;
-    }
-    else
-    if (logical_gamemission == doom2)
-    {
-        selected_vertexfix = vertexfix_doom2;
-        selected_linefix = linefix_doom2;
-        selected_sectorfix = sectorfix_doom2;
-        selected_thingfix = thingfix_doom2;
-    }
-    else
-    if (logical_gamemission == pack_plut)
-    {
-        selected_vertexfix = vertexfix_plut;
-        selected_linefix = linefix_plut;
-        selected_sectorfix = sectorfix_plut;
-        selected_thingfix = thingfix_plut;
-    }
-    else
-    {
-        selected_vertexfix = vertexfix_tnt;
-        selected_linefix = linefix_tnt;
-        selected_sectorfix = sectorfix_tnt;
-        selected_thingfix = thingfix_tnt;
-    }
 }

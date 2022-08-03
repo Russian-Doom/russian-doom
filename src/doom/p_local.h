@@ -201,23 +201,6 @@ typedef struct
     int options;
 } thingfix_t;
 
-extern vertexfix_t  vertexfix_doom1[];
-extern vertexfix_t  vertexfix_doom2[];
-extern vertexfix_t  vertexfix_plut[];
-extern vertexfix_t  vertexfix_tnt[];
-extern linefix_t    linefix_doom1[];
-extern linefix_t    linefix_doom2[];
-extern linefix_t    linefix_plut[];
-extern linefix_t    linefix_tnt[];
-extern sectorfix_t  sectorfix_doom1[];
-extern sectorfix_t  sectorfix_doom2[];
-extern sectorfix_t  sectorfix_plut[];
-extern sectorfix_t  sectorfix_tnt[];
-extern thingfix_t   thingfix_doom1[];
-extern thingfix_t   thingfix_doom2[];
-extern thingfix_t   thingfix_plut[];
-extern thingfix_t   thingfix_tnt[];
-
 // -----------------------------------------------------------------------------
 // P_FLOOR
 // -----------------------------------------------------------------------------
@@ -575,8 +558,16 @@ extern fixed_t   bmaporgx;
 extern fixed_t   bmaporgy;      // origin of block map
 extern mobj_t  **blocklinks;    // for thing chains
 
+extern const vertexfix_t *selected_vertexfix;
+extern const linefix_t   *selected_linefix;
+extern const sectorfix_t *selected_sectorfix;
+extern const thingfix_t  *selected_thingfix;
+extern const flow_t      *selected_flow;
+extern const fall_t      *selected_fall;
+
 void P_Init (void);
 void P_SetupLevel (const int episode, const int map, const skill_t skill);
+void P_SetupFixes (const int episode, const int map);
 
 // -----------------------------------------------------------------------------
 // P_SIGHT
