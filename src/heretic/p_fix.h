@@ -43,6 +43,7 @@
 #define REMOVE  0
 
 
+/*
 typedef struct
 {
     int     mission;
@@ -52,8 +53,7 @@ typedef struct
     int     oldx, oldy;
     int     newx, newy;
 } vertexfix_t;
-
-extern vertexfix_t  vertexfix[];
+*/
 
 typedef struct
 {
@@ -72,8 +72,6 @@ typedef struct
     int     tag;
 } linefix_t;
 
-extern linefix_t    linefix[];
-
 typedef struct
 {
     int     mission;
@@ -89,8 +87,7 @@ typedef struct
     int     newtag;
 } sectorfix_t;
 
-extern sectorfix_t  sectorfix[];
-
+/*
 typedef struct
 {
     int     mission;
@@ -103,5 +100,11 @@ typedef struct
     int     angle;
     int     options;
 } thingfix_t;
+*/
 
-extern thingfix_t   thingfix[];
+extern void P_SetupFixes (const int episode, const int map);
+
+extern const linefix_t   *selected_linefix;
+extern const sectorfix_t *selected_sectorfix;
+//extern const vertexfix_t *selected_vertexfix;
+//extern const thingfix_t  *selected_thingfix;

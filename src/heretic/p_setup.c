@@ -148,9 +148,11 @@ void P_LoadVertexes (int lump)
         li->y = SHORT(ml->y)<<FRACBITS;
 
         // [JN] Apply any map-specific fixes.
+        // Uncomment if there will be any.
+        /*
         if (canmodify && fix_map_errors)
         {
-            for (int j = 0; vertexfix[j].mission != 0; j++)
+            for (int j = 0; vertexfix[j].mission != -1; j++)
             {
                 if (gameepisode == vertexfix[j].epsiode
                 && gamemap == vertexfix[j].map
@@ -165,6 +167,7 @@ void P_LoadVertexes (int lump)
                 }
             }
         }
+        */
 
         // [crispy] initialize pseudovertexes with actual vertex coordinates
         li->px = li->x;
@@ -290,54 +293,54 @@ void P_LoadSegs(int lump)
         // [JN] Apply any map-specific fixes.
         if (canmodify && fix_map_errors)
         {
-            for (int j = 0; linefix[j].mission != 0; j++)
+            for (int j = 0; selected_linefix[j].mission != -1; j++)
             {
-                if (gameepisode == linefix[j].epsiode
-                && gamemap == linefix[j].map
-                && linedef == linefix[j].linedef
-                && side == linefix[j].side)
+                if (gameepisode == selected_linefix[j].epsiode
+                && gamemap == selected_linefix[j].map
+                && linedef == selected_linefix[j].linedef
+                && side == selected_linefix[j].side)
                 {
-                    if (*linefix[j].toptexture)
+                    if (*selected_linefix[j].toptexture)
                     {
-                        li->sidedef->toptexture = R_TextureNumForName(linefix[j].toptexture);
+                        li->sidedef->toptexture = R_TextureNumForName(selected_linefix[j].toptexture);
                     }
 
-                    if (*linefix[j].middletexture)
+                    if (*selected_linefix[j].middletexture)
                     {
-                        li->sidedef->midtexture = R_TextureNumForName(linefix[j].middletexture);
+                        li->sidedef->midtexture = R_TextureNumForName(selected_linefix[j].middletexture);
                     }
 
-                    if (*linefix[j].bottomtexture)
+                    if (*selected_linefix[j].bottomtexture)
                     {
-                        li->sidedef->bottomtexture = R_TextureNumForName(linefix[j].bottomtexture);
+                        li->sidedef->bottomtexture = R_TextureNumForName(selected_linefix[j].bottomtexture);
                     }
 
-                    if (linefix[j].offset != DEFAULT)
+                    if (selected_linefix[j].offset != DEFAULT)
                     {
-                        li->offset = SHORT(linefix[j].offset) << FRACBITS;
+                        li->offset = SHORT(selected_linefix[j].offset) << FRACBITS;
                         li->sidedef->textureoffset = 0;
                     }
 
-                    if (linefix[j].rowoffset != DEFAULT)
+                    if (selected_linefix[j].rowoffset != DEFAULT)
                     {
-                        li->sidedef->rowoffset = SHORT(linefix[j].rowoffset) << FRACBITS;
+                        li->sidedef->rowoffset = SHORT(selected_linefix[j].rowoffset) << FRACBITS;
                     }
 
-                    if (linefix[j].flags != DEFAULT)
+                    if (selected_linefix[j].flags != DEFAULT)
                     {
-                        if (li->linedef->flags & linefix[j].flags)
-                            li->linedef->flags &= ~linefix[j].flags;
+                        if (li->linedef->flags & selected_linefix[j].flags)
+                            li->linedef->flags &= ~selected_linefix[j].flags;
                         else
-                            li->linedef->flags |= linefix[j].flags;
+                            li->linedef->flags |= selected_linefix[j].flags;
                     }
-                    if (linefix[j].special != DEFAULT)
+                    if (selected_linefix[j].special != DEFAULT)
                     {
-                        li->linedef->special = linefix[j].special;
+                        li->linedef->special = selected_linefix[j].special;
                     }
 
-                    if (linefix[j].tag != DEFAULT)
+                    if (selected_linefix[j].tag != DEFAULT)
                     {
-                        li->linedef->tag = linefix[j].tag;
+                        li->linedef->tag = selected_linefix[j].tag;
                     }
 
                     break;
@@ -569,41 +572,41 @@ void P_LoadSectors (int lump)
         // [JN] Apply any map-specific fixes.
         if (canmodify && fix_map_errors)
         {
-            for (int j = 0; sectorfix[j].mission != 0; j++)
+            for (int j = 0; selected_sectorfix[j].mission != -1; j++)
             {
-                if (gameepisode == sectorfix[j].epsiode
-                && gamemap == sectorfix[j].map
-                && i == sectorfix[j].sector)
+                if (gameepisode == selected_sectorfix[j].epsiode
+                && gamemap == selected_sectorfix[j].map
+                && i == selected_sectorfix[j].sector)
                 {
-                    if (*sectorfix[j].floorpic)
+                    if (*selected_sectorfix[j].floorpic)
                     {
-                        ss->floorpic = R_FlatNumForName(sectorfix[j].floorpic);
+                        ss->floorpic = R_FlatNumForName(selected_sectorfix[j].floorpic);
                     }
     
-                    if (*sectorfix[j].ceilingpic)
+                    if (*selected_sectorfix[j].ceilingpic)
                     {
-                        ss->ceilingpic = R_FlatNumForName(sectorfix[j].ceilingpic);
+                        ss->ceilingpic = R_FlatNumForName(selected_sectorfix[j].ceilingpic);
                     }
     
-                    if (sectorfix[j].floorheight != DEFAULT)
+                    if (selected_sectorfix[j].floorheight != DEFAULT)
                     {
-                        ss->floorheight = SHORT(sectorfix[j].floorheight) << FRACBITS;
+                        ss->floorheight = SHORT(selected_sectorfix[j].floorheight) << FRACBITS;
                     }
     
-                    if (sectorfix[j].ceilingheight != DEFAULT)
+                    if (selected_sectorfix[j].ceilingheight != DEFAULT)
                     {
-                        ss->ceilingheight = SHORT(sectorfix[j].ceilingheight) << FRACBITS;
+                        ss->ceilingheight = SHORT(selected_sectorfix[j].ceilingheight) << FRACBITS;
                     }
     
-                    if (sectorfix[j].special != DEFAULT)
+                    if (selected_sectorfix[j].special != DEFAULT)
                     {
-                        ss->special = SHORT(sectorfix[j].special);
+                        ss->special = SHORT(selected_sectorfix[j].special);
                     }
     
-                    if (sectorfix[j].newtag != DEFAULT && (sectorfix[j].oldtag == DEFAULT
-                        || sectorfix[j].oldtag == ss->tag))
+                    if (selected_sectorfix[j].newtag != DEFAULT && (selected_sectorfix[j].oldtag == DEFAULT
+                        || selected_sectorfix[j].oldtag == ss->tag))
                     {
-                        ss->tag = SHORT(sectorfix[j].newtag) << FRACBITS;
+                        ss->tag = SHORT(selected_sectorfix[j].newtag) << FRACBITS;
                     }
     
                     break;
@@ -1047,9 +1050,11 @@ void P_LoadThings (int lump)
         spawnthing.options = SHORT(mt->options);
 
         // [JN] Apply any map-specific fixes.
+        // Uncomment if there will be any.
+        /*
         if (canmodify && fix_map_errors)
         {
-            for (int j = 0; thingfix[j].mission != 0; j++)
+            for (int j = 0; thingfix[j].mission != -1; j++)
             {
                 if (gameepisode == thingfix[j].epsiode
                 && gamemap == thingfix[j].map
@@ -1080,6 +1085,7 @@ void P_LoadThings (int lump)
                 }
             }
         }
+        */
 
         P_SpawnMapThing(&spawnthing);
     }
@@ -2023,6 +2029,12 @@ void P_SetupLevel (int episode, int map, int playermask, skill_t skill)
     // Adaptaken from Doom Retro, thanks Brad Harding!
     canmodify = (W_CheckMultipleLumps(lumpname) == 1
               && (!netgame && !vanillaparm && gamemode != shareware && singleplayer));
+
+    // [JN] If level can be modified, setup it's fixes and flow/fall effects.
+    if (canmodify)
+    {
+        P_SetupFixes(episode, map);
+    }
 
     // [crispy] check and log map and nodes format
     crispy_mapformat = P_CheckMapFormat(lumpnum);
