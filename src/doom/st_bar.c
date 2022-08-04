@@ -146,9 +146,6 @@ byte *stbar_color_armor_0_set;
 // Graphics
 //
 
-// [JN] Bezel pattern to fill status bar in widescreen mode.
-static byte    *bezel_pattern;
-
 // Big font
 static patch_t *FontBNumbers[10];
 static patch_t *FontBPercent;
@@ -811,8 +808,8 @@ static void ST_DrawBackground (void)
         {
             for (x = 0; x < screenwidth; x++)
             {
-                *dest++ = bezel_pattern[((( y >> shift_allowed) & 63) << 6) 
-                                       + (( x >> shift_allowed) & 63)];
+                *dest++ = backscreen_flat[((( y >> shift_allowed) & 63) << 6) 
+                                         + (( x >> shift_allowed) & 63)];
             }
         }
 
@@ -2078,10 +2075,6 @@ static void ST_LoadData (void)
     char  namebuf[9];
 
     lu_palette = W_GetNumForName (DEH_String("PLAYPAL"));
-
-    // [JN] Which background will be used to fill bezel pattern.
-    bezel_pattern = W_CacheLumpName(DEH_String(gamemode == commercial ?
-                                    "GRNROCK" : "FLOOR7_2"), PU_STATIC);
 
     // [JN] Initialize STBAR horizontal offset with zero for centering.
     stbar->leftoffset = 0;

@@ -516,6 +516,8 @@ extern const lighttable_t *ds_colormap[2];
 extern const byte         *ds_source;
 extern const byte         *ds_brightmap;
 
+extern const char *backscreen_flat;
+
 void R_DrawColumn (void);
 void R_DrawColumnLow (void);
 void R_DrawFuzzColumn (void);
