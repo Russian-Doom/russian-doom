@@ -544,8 +544,8 @@ void R_DrawPlanes (void)
         // Regular flat
         else
         {
+            int light = (pl->lightlevel >> LIGHTSEGSHIFT) + extralight;
             const int stop = pl->maxx + 1;
-            const int light = MIN((pl->lightlevel >> LIGHTSEGSHIFT) + extralight, LIGHTLEVELS - 1);
             const int lumpnum = firstflat + flattranslation[pl->picnum];
             // [crispy] add support for SMMU swirling flats
             const byte *tempSource = (flattranslation[pl->picnum] == -1) ?
@@ -659,6 +659,14 @@ void R_DrawPlanes (void)
             ds_brightmap = R_BrightmapForFlatNum(lumpnum-firstflat);
 
             planeheight = abs(pl->height - viewz);
+            if (light >= LIGHTLEVELS)
+            {
+                light = LIGHTLEVELS-1;
+            }
+            if (light < 0)
+            {
+                light = 0;
+            }
             planezlight = zlight[light];
             pl->top[pl->minx-1] = pl->top[stop] = UINT_MAX; // [crispy] 32-bit integer math
 
