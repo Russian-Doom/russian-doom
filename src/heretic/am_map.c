@@ -2297,6 +2297,7 @@ void AM_Drawer (void)
     if (!automap_overlay)
     {
         AM_drawBackground();
+        skippsprinterp = true;
     }
     else
     {
