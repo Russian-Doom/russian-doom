@@ -540,7 +540,7 @@ void R_DrawTranslatedColumn (void);
 void R_DrawTranslatedColumnLow (void);
 void R_DrawViewBorder (void);
 void R_FillBackScreen (void);
-void R_InitBackScreenFlat (void);
+void R_InitBackScreenGfx (void);
 void R_InitBuffer (int width, int height);
 void R_SetFuzzPosDraw (void);
 void R_SetFuzzPosTic (void);

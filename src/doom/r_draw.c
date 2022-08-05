@@ -91,8 +91,17 @@ const lighttable_t *ds_colormap[2];
 const byte         *ds_source;  // start of a 64*64 tile image 
 const byte         *ds_brightmap;
 
-// [JN] Bezel pattern to fill status bar background.
+// [JN] Pattern to fill status bar background.
 const char *backscreen_flat;
+// [JN] Bezel sides and corners.
+static const patch_t *brdr_t;
+static const patch_t *brdr_b;
+static const patch_t *brdr_l;
+static const patch_t *brdr_r;
+static const patch_t *brdr_tl;
+static const patch_t *brdr_tr;
+static const patch_t *brdr_bl;
+static const patch_t *brdr_br;
 
 
 // -----------------------------------------------------------------------------
@@ -1436,27 +1445,40 @@ void R_InitBuffer (const int width, const int height)
 }
 
 // -----------------------------------------------------------------------------
-// R_InitBackScreenFlat
-// [JN] Define back screen background patch only once at startup.
+// R_InitBackScreenGfx
+// [JN] Define back screen graphics.
 // -----------------------------------------------------------------------------
 
-void R_InitBackScreenFlat (void)
+void R_InitBackScreenGfx (void)
 {
+    // Background flat.
     if (gamemission == jaguar)
     {
-        // [JN] Atari Jaguar border patch.
+         // Jaguar Doom background.
         backscreen_flat = W_CacheLumpName(DEH_String("FLOOR7_1"), PU_STATIC);
     }
     else if (gamemode == commercial)
     {
-        // DOOM II border patch.
+        // DOOM II background.
         backscreen_flat = W_CacheLumpName(DEH_String("GRNROCK"), PU_STATIC);
     }
     else
     {
-        // DOOM border patch.
+        // DOOM background.
         backscreen_flat = W_CacheLumpName(DEH_String("FLOOR7_2"), PU_STATIC);
     }
+
+    // Inner bezel side edges.
+    brdr_t = W_CacheLumpName(DEH_String("brdr_t"), PU_STATIC);
+    brdr_b = W_CacheLumpName(DEH_String("brdr_b"), PU_STATIC);
+    brdr_l = W_CacheLumpName(DEH_String("brdr_l"), PU_STATIC);
+    brdr_r = W_CacheLumpName(DEH_String("brdr_r"), PU_STATIC);
+
+    // Inner bezel corners.
+    brdr_tl = W_CacheLumpName(DEH_String("brdr_tl"), PU_STATIC);
+    brdr_tr = W_CacheLumpName(DEH_String("brdr_tr"), PU_STATIC);
+    brdr_bl = W_CacheLumpName(DEH_String("brdr_bl"), PU_STATIC);
+    brdr_br = W_CacheLumpName(DEH_String("brdr_br"), PU_STATIC);
 }
 
 // -----------------------------------------------------------------------------
@@ -1469,8 +1491,6 @@ void R_FillBackScreen (void)
 { 
     int      x, y; 
     byte    *dest; 
-    patch_t *patch;
-    const int sbarheight = gamemission == jaguar ? SBARHEIGHT_JAG : SBARHEIGHT;
 
     // [JN] Function not used in widescreen rendering.
     if (aspect_ratio >= 2)
@@ -1496,7 +1516,7 @@ void R_FillBackScreen (void)
 
     if (background_buffer == NULL)
     {
-        background_buffer = Z_Malloc(screenwidth * (SCREENHEIGHT - sbarheight)
+        background_buffer = Z_Malloc(screenwidth * (SCREENHEIGHT - st_height)
                                                     *sizeof(*background_buffer),
                                                     PU_STATIC, NULL);
     }
@@ -1507,7 +1527,7 @@ void R_FillBackScreen (void)
     {
         const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
 
-        for (y = 0; y < SCREENHEIGHT - sbarheight; y++)
+        for (y = 0; y < SCREENHEIGHT - st_height; y++)
         {
             for (x = 0; x < screenwidth; x++)
             {
@@ -1521,39 +1541,42 @@ void R_FillBackScreen (void)
 
     V_UseBuffer(background_buffer);
 
-    patch = W_CacheLumpName(DEH_String("brdr_t"),PU_CACHE);
-
-    for (x=0 ; x<(scaledviewwidth >> hires) ; x+=8)
-    V_DrawPatch((viewwindowx >> hires)+x, (viewwindowy >> hires)-8, patch, NULL);
-    patch = W_CacheLumpName(DEH_String("brdr_b"),PU_CACHE);
-
-    for (x=0 ; x<(scaledviewwidth >> hires) ; x+=8)
-    V_DrawPatch((viewwindowx >> hires)+x, (viewwindowy >> hires)+(scaledviewheight >> hires), patch, NULL);
-    patch = W_CacheLumpName(DEH_String("brdr_l"),PU_CACHE);
-
-    for (y=0 ; y<(scaledviewheight >> hires) ; y+=8)
-    V_DrawPatch((viewwindowx >> hires)-8, (viewwindowy >> hires)+y, patch, NULL);
-    patch = W_CacheLumpName(DEH_String("brdr_r"),PU_CACHE);
-
-    for (y=0 ; y<(scaledviewheight >> hires); y+=8)
-    V_DrawPatch((viewwindowx >> hires)+(scaledviewwidth >> hires), (viewwindowy >> hires)+y, patch, NULL);
+    for (x = 0 ; x < (scaledviewwidth >> hires) ; x += 8)
+    {
+        V_DrawPatch((viewwindowx >> hires)+x,
+                    (viewwindowy >> hires)-8, brdr_t, NULL);
+    }
+    
+    for (x = 0 ; x < (scaledviewwidth >> hires) ; x += 8)
+    {
+        V_DrawPatch((viewwindowx >> hires)+x,
+                    (viewwindowy >> hires)+(scaledviewheight >> hires), brdr_b, NULL);
+    }
+    
+    for (y = 0 ; y < (scaledviewheight >> hires) ; y += 8)
+    {
+        V_DrawPatch((viewwindowx >> hires)-8,
+                    (viewwindowy >> hires)+y, brdr_l, NULL);
+    }
+    
+    for (y = 0 ; y < (scaledviewheight >> hires); y += 8)
+    {
+        V_DrawPatch((viewwindowx >> hires)+(scaledviewwidth >> hires),
+                    (viewwindowy >> hires)+y, brdr_r, NULL);
+    }
 
     // Draw beveled edge. 
     V_DrawPatch((viewwindowx >> hires)-8,
-                (viewwindowy >> hires)-8,
-                W_CacheLumpName(DEH_String("brdr_tl"),PU_CACHE), NULL);
+                (viewwindowy >> hires)-8, brdr_tl, NULL);
 
     V_DrawPatch((viewwindowx >> hires)+(scaledviewwidth >> hires),
-                (viewwindowy >> hires)-8,
-                W_CacheLumpName(DEH_String("brdr_tr"),PU_CACHE), NULL);
+                (viewwindowy >> hires)-8, brdr_tr, NULL);
 
     V_DrawPatch((viewwindowx >> hires)-8,
-                (viewwindowy >> hires)+(scaledviewheight >> hires),
-                W_CacheLumpName(DEH_String("brdr_bl"),PU_CACHE), NULL);
+                (viewwindowy >> hires)+(scaledviewheight >> hires), brdr_bl, NULL);
 
     V_DrawPatch((viewwindowx >> hires)+(scaledviewwidth >> hires),
-                (viewwindowy >> hires)+(scaledviewheight >> hires),
-                W_CacheLumpName(DEH_String("brdr_br"),PU_CACHE), NULL);
+                (viewwindowy >> hires)+(scaledviewheight >> hires), brdr_br, NULL);
 
     V_RestoreBuffer();
 }
