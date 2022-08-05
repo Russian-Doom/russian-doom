@@ -2554,6 +2554,7 @@ void AM_Drawer (void)
     if (!automap_overlay)
     {
         AM_clearFB(BACKGROUND);
+        skippsprinterp = true;
     }
 
     if (automap_grid)
