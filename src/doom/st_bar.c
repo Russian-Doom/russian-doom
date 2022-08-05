@@ -800,7 +800,6 @@ static void ST_DrawBackground (void)
         // so it appears to the left and right of the status bar in widescreen mode
         int x, y;
         byte *dest = st_backing_screen;
-        patch_t *patch = W_CacheLumpName(DEH_String("brdr_b"), PU_CACHE);
         const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
 
         // [JN] Variable HUD detail level.
@@ -818,11 +817,11 @@ static void ST_DrawBackground (void)
         {
             if (hud_detaillevel)
             {
-                V_DrawPatch(x, 0, patch, NULL);
+                V_DrawPatch(x, 0, brdr_b, NULL);
             }
             else
             {
-                V_DrawPatchUnscaled(x, 0, patch, NULL);
+                V_DrawPatchUnscaled(x, 0, brdr_b, NULL);
             }
         }
     }

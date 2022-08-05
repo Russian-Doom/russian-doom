@@ -517,6 +517,7 @@ extern const byte         *ds_source;
 extern const byte         *ds_brightmap;
 
 extern const char *backscreen_flat;
+extern const patch_t *brdr_b;
 
 void R_DrawColumn (void);
 void R_DrawColumnLow (void);

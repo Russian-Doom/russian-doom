@@ -94,8 +94,8 @@ const byte         *ds_brightmap;
 // [JN] Pattern to fill status bar background.
 const char *backscreen_flat;
 // [JN] Bezel sides and corners.
+const patch_t *brdr_b;
 static const patch_t *brdr_t;
-static const patch_t *brdr_b;
 static const patch_t *brdr_l;
 static const patch_t *brdr_r;
 static const patch_t *brdr_tl;
