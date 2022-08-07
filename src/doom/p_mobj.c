@@ -1267,7 +1267,13 @@ void P_SpawnMapThing (mapthing_t *mthing)
 
     // [crispy] randomly flip space marine corpse objects
     if (mobj->info->spawnstate == S_PLAY_DIE7
-    ||  mobj->info->spawnstate == S_PLAY_XDIE9)
+    ||  mobj->info->spawnstate == S_PLAY_XDIE9
+    // [JN] Randomly flip dead monster map objects as well.
+    || mobj->info->spawnstate == S_POSS_DIE5
+    || mobj->info->spawnstate == S_SPOS_DIE5
+    || mobj->info->spawnstate == S_TROO_DIE5
+    || mobj->info->spawnstate == S_SARG_DIE6
+    || mobj->info->spawnstate == S_HEAD_DIE6)
     {
         mobj->health -= Crispy_Random() & 1;
         // [crispy] randomly colorize space marine corpse objects

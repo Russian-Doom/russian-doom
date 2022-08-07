@@ -652,7 +652,13 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
         && thing->type != MT_BARREL
         && thing->type != MT_BOSSBRAIN)
         || thing->info->spawnstate == S_PLAY_DIE7
-        || thing->info->spawnstate == S_PLAY_XDIE9)
+        || thing->info->spawnstate == S_PLAY_XDIE9
+        // [JN] Flip dead monster map objects as well.
+        || thing->info->spawnstate == S_POSS_DIE5
+        || thing->info->spawnstate == S_SPOS_DIE5
+        || thing->info->spawnstate == S_TROO_DIE5
+        || thing->info->spawnstate == S_SARG_DIE6
+        || thing->info->spawnstate == S_HEAD_DIE6)
         {
            if (thing->health & 1)
            {
