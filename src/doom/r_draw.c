@@ -988,6 +988,7 @@ void R_DrawTranslatedColumn (void)
     int      count = dc_yh - dc_yl; 
     byte    *dest;
     fixed_t  frac;
+    fixed_t  fracstep;
 
     if (count < 0)
     {
@@ -1005,7 +1006,8 @@ void R_DrawTranslatedColumn (void)
 #endif 
 
     dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
-    frac = dc_texturemid + (dc_yl-centery)*dc_iscale; 
+    fracstep = dc_iscale;
+    frac = dc_texturemid + (dc_yl-centery)*fracstep; 
 
     // Here we do an additional index re-mapping.
     do 
@@ -1016,7 +1018,7 @@ void R_DrawTranslatedColumn (void)
         *dest = dc_colormap[0][dc_translation[dc_source[frac>>FRACBITS]]];
         dest += screenwidth;
 	
-        frac += dc_iscale; 
+        frac += fracstep;
     } while (count--); 
 } 
 
@@ -1030,6 +1032,7 @@ void R_DrawTranslatedColumnLow (void)
     int     count = dc_yh - dc_yl; 
     byte   *dest, *dest2, *dest3, *dest4;
     fixed_t frac;
+    fixed_t fracstep;
 
     if (count < 0)
     {
@@ -1050,7 +1053,8 @@ void R_DrawTranslatedColumnLow (void)
     dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
     dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x]];
     dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipviewwidth[x+1]];
-    frac  = dc_texturemid + (dc_yl-centery)*dc_iscale; 
+    fracstep = dc_iscale;
+    frac  = dc_texturemid + (dc_yl-centery)*fracstep; 
 
     // Here we do an additional index re-mapping.
     do 
@@ -1061,7 +1065,7 @@ void R_DrawTranslatedColumnLow (void)
         dest3 += screenwidth_low;
         dest4 += screenwidth_low;
 
-        frac += dc_iscale; 
+        frac += fracstep;
     } while (count--); 
 }
 
