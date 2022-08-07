@@ -156,8 +156,16 @@ static patch_t *FontSNumbersY[10];
 // Small gray font
 static patch_t *FontSNumbersG[10];
 
-// Face backgrounds for different color players
-static patch_t *faceback;
+// [JN] Face backgrounds for different color players.
+// There are two different types of backgrounds:
+
+// 1) STFB* - used on standard status bar to represent player color
+//    and never used in single player game.
+static patch_t *faceback_1[4];
+
+// 2) STPB* - used on tally screen of mulitplayer games and have an
+//    extra pixel line of bottom stroke. Used on transparent status bar as well.
+patch_t *faceback_2[4];
 
 // Player faces
 static patch_t *faces[ST_NUMFACES * 2];
@@ -832,7 +840,7 @@ static void ST_DrawBackground (void)
     // Face background representing player color.
     if (netgame)
     {
-        V_DrawPatch(143 + wide_delta, 0, faceback, NULL);
+        V_DrawPatch(143 + wide_delta, 0, faceback_1[consoleplayer], NULL);
     }
 
     V_RestoreBuffer();
@@ -1527,7 +1535,6 @@ static void ST_DrawElements (const boolean wide)
 {
     int left_delta;
     int right_delta;
-    const boolean neghealth = negative_health && plyr->health <= 0 && !vanillaparm;
     
     if (wide)
     {
@@ -1591,11 +1598,15 @@ static void ST_DrawElements (const boolean wide)
     }
 
     // Health, negative health
-    ST_DrawBigNumber(neghealth ? plyr->health_negative : plyr->health, 
-                     52 + left_delta, 171, ST_WidgetColor(hudcolor_health));
-    ST_DrawPercent(90 + left_delta, 171, sbar_colored == 1 ? cr[CR_WHITE] :
-                                         sbar_colored == 2 ?
-                                         ST_WidgetColor(hudcolor_health) : NULL);
+    {
+        const boolean neghealth = negative_health && plyr->health <= 0 && !vanillaparm;
+
+        ST_DrawBigNumber(neghealth ? plyr->health_negative : plyr->health, 
+                         52 + left_delta, 171, ST_WidgetColor(hudcolor_health));
+        ST_DrawPercent(90 + left_delta, 171, sbar_colored == 1 ? cr[CR_WHITE] :
+                                             sbar_colored == 2 ?
+                                             ST_WidgetColor(hudcolor_health) : NULL);
+    }
 
     // Frags or Arms
     if (deathmatch)
@@ -1629,7 +1640,7 @@ static void ST_DrawElements (const boolean wide)
     // Player face background
     if ((screenblocks == 11 || screenblocks == 14) && (!automapactive || automap_overlay))
     {
-        V_DrawPatch(143 + wide_delta, 168, faceback, NULL);        
+        V_DrawPatch(143 + wide_delta, 168, faceback_2[netgame ? consoleplayer : 1], NULL);        
     }
 
     // Player face
@@ -1758,9 +1769,13 @@ static void ST_DrawElementsJaguar (const boolean wide)
     }
 
     // Health, negative health
-    ST_DrawBigNumber(negative_health ? plyr->mo->health : plyr->health, 
-                     66 + left_delta, 174, NULL);
-    ST_DrawPercent(104 + left_delta, 174, NULL);
+    {
+        const boolean neghealth = negative_health && plyr->health <= 0 && !vanillaparm;
+
+        ST_DrawBigNumber(neghealth ? plyr->health_negative : plyr->health, 
+                         66 + left_delta, 174, NULL);
+        ST_DrawPercent(104 + left_delta, 174, NULL);
+    }
 
     // [crispy] blinking key or skull in the status bar
     for (int i = 0, y = 0 ; i < 3 ; i++, y += 12)
@@ -1797,7 +1812,8 @@ static void ST_DrawElementsJaguar (const boolean wide)
       // Player face background
     if ((screenblocks == 11 || screenblocks == 14) && (!automapactive || automap_overlay))
     {
-        V_DrawPatch(143 + wide_delta, 168, faceback, NULL);        
+        // Note: [1] means always same color since no netgame support in Jaguar.
+        V_DrawPatch(143 + wide_delta, 168, faceback_2[1], NULL);
     }
   
     // Player face
@@ -2098,14 +2114,13 @@ static void ST_LoadData (void)
     FontBMinus = W_CacheLumpName(DEH_String("STTMINUS"), PU_STATIC);
 
     // Face backgrounds for different color players
-    if (netgame)
+    for (i = 0; i < 4; i++)
     {
-        DEH_snprintf(namebuf, 9, "ID#STPB%d", consoleplayer);
-        faceback = W_CacheLumpName(DEH_String(namebuf), PU_STATIC);
-    }
-    else
-    {
-        faceback = W_CacheLumpName(DEH_String("ID#STPB1"), PU_STATIC);
+        DEH_snprintf(namebuf, 9, "STFB%d", i);
+        ST_LoadCallback(namebuf, &faceback_1[i]);
+
+        DEH_snprintf(namebuf, 9, "STPB%d", i);
+        ST_LoadCallback(namebuf, &faceback_2[i]);
     }
 
     // Player faces

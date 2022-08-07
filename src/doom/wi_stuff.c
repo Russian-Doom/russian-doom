@@ -341,10 +341,10 @@ static patch_t *overtime;       // "Общее время:"
 static patch_t *star;   // your face
 static patch_t *bstar;  // your dead face
 
-static patch_t *p[MAXPLAYERS];   // "red P[1..MAXPLAYERS]"
-static patch_t *bp[MAXPLAYERS];  // "gray P[1..MAXPLAYERS]"
+// [JN] STPB* player face background, shared with status bar code.
+extern patch_t *faceback_2[4];
 
- static patch_t **lnames; // Name graphics of each level (centered)
+static patch_t **lnames; // Name graphics of each level (centered)
 
 // [JN] Russian level names
 static patch_t  **lnames_d1_rus;
@@ -1223,22 +1223,16 @@ static void WI_drawDeathmatchStats (void)
         // [JN] Портрет игровка в режиме Дефматч
         if (playeringame[i])
         {
-            V_DrawPatch((x-SHORT(p[i]->width)/2)+wide_delta, DM_MATRIXY - WI_SPACINGY, p[i], NULL);
-            V_DrawPatch((DM_MATRIXX-SHORT(p[i]->width)/2)+wide_delta, y, p[i], NULL);
+            V_DrawPatch((x-SHORT(faceback_2[i]->width)/2)+wide_delta, DM_MATRIXY - WI_SPACINGY, faceback_2[i], NULL);
+            V_DrawPatch((DM_MATRIXX-SHORT(faceback_2[i]->width)/2)+wide_delta, y, faceback_2[i], NULL);
 
             if (i == me)
             {
-                V_DrawPatch((x-SHORT(p[i]->width)/2)+wide_delta, DM_MATRIXY - WI_SPACINGY, bstar, NULL);
-                V_DrawPatch((DM_MATRIXX-SHORT(p[i]->width)/2)+wide_delta, y, star, NULL);
+                V_DrawPatch((x-SHORT(faceback_2[i]->width)/2)+wide_delta, DM_MATRIXY - WI_SPACINGY, bstar, NULL);
+                V_DrawPatch((DM_MATRIXX-SHORT(faceback_2[i]->width)/2)+wide_delta, y, star, NULL);
             }
         }
-        else
-        {
-            // V_DrawPatch(x-SHORT(bp[i]->width)/2,
-            //   DM_MATRIXY - WI_SPACINGY, bp[i]);
-            // V_DrawPatch(DM_MATRIXX-SHORT(bp[i]->width)/2,
-            //   y, bp[i]);
-        }
+
         x += DM_SPACINGX;
         y += WI_SPACINGY;
     }
@@ -1542,10 +1536,10 @@ static void WI_drawNetgameStats (void)
         x = NG_STATSX;
 
         // [JN] Портрет игрока в режиме совместного прохождения
-        V_DrawPatch((x-SHORT(p[i]->width))+wide_delta, y, p[i], NULL);
+        V_DrawPatch((x-SHORT(faceback_2[i]->width))+wide_delta, y, faceback_2[i], NULL);
 
         if (i == me)
-        V_DrawPatch((x-SHORT(p[i]->width))+wide_delta, y, star, NULL);
+        V_DrawPatch((x-SHORT(faceback_2[i]->width))+wide_delta, y, star, NULL);
 
         x += NG_SPACINGX + wide_delta*2;
         WI_drawPercent(x-pwidth, y+10, cnt_kills[i]);	x += NG_SPACINGX;
@@ -2112,17 +2106,6 @@ static void WI_loadUnloadData (load_callback_t callback)
 
     // ":"
     callback(DEH_String("WICOLON"), &colon);
-
-    for (i=0 ; i<MAXPLAYERS ; i++)
-    {
-        // "1,2,3,4"
-        DEH_snprintf(name, 9, "STPB%d", i);
-        callback(name, &p[i]);
-
-        // "1,2,3,4"
-        DEH_snprintf(name, 9, "WIBP%d", i+1);
-        callback(name, &bp[i]);
-    }
 
     // Background image
 
