@@ -1143,7 +1143,7 @@ static void ST_updateFaceWidget (void)
 // [JN] Updated to int type, allowing to show frags of any player.
 // -----------------------------------------------------------------------------
 
-static int ST_UpdateFragsCounter (int playernum, boolean big_values)
+static const int ST_UpdateFragsCounter (const int playernum, const boolean big_values)
 {
     st_fragscount = 0;
 
