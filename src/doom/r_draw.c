@@ -1229,6 +1229,162 @@ void R_DrawTLColumnLow (void)
 }
 
 // -----------------------------------------------------------------------------
+// R_DrawTranslatedTLColumn
+// [JN] draw translucent, color-translated column
+// -----------------------------------------------------------------------------
+
+void R_DrawTranslatedTLColumn (void)
+{
+    int      count = dc_yh - dc_yl;
+    byte    *dest;
+    fixed_t  frac, fracstep;
+
+    if (count < 0)
+    {
+        return;
+    }
+
+#ifdef RANGECHECK
+    if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ?
+                 "R_DrawTranslatedTLColumn: %i to %i at %i" :
+                 "R_DrawTranslatedTLColumn: %i к %i у %i",
+                 dc_yl, dc_yh, dc_x);
+    }
+#endif
+
+    dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
+    fracstep = dc_iscale; 
+    frac = dc_texturemid + (dc_yl-centery)*fracstep;
+
+    {
+        const byte *translation = dc_translation;
+        const byte *source = dc_source;
+        const lighttable_t *const *colormap = dc_colormap;
+        int heightmask = dc_texheight-1;
+
+        if (dc_texheight & heightmask)   // not a power of 2 -- killough
+        {
+            heightmask++;
+            heightmask <<= FRACBITS;
+        
+            if (frac < 0)
+            while ((frac += heightmask) < 0);
+            else
+            while (frac >= heightmask)
+            frac -= heightmask;
+        
+            do
+            {
+                *dest = transtable30[(*dest<<8)+colormap[0][translation[source[frac>>FRACBITS]]]];
+                dest += screenwidth;
+                if ((frac += fracstep) >= heightmask)
+                frac -= heightmask;
+            }
+            while (count--);
+        }
+        else    // texture height is a power of 2 -- killough
+        {
+            do
+            {
+                *dest = transtable30[(*dest<<8)+colormap[0][translation[source[frac>>FRACBITS & heightmask]]]];
+                dest += screenwidth;
+                frac += fracstep;
+            } while (count--);
+        }
+    }
+}
+
+void R_DrawTranslatedTLColumnLow (void)
+{
+    const int x = dc_x << 1;  // Blocky mode, need to multiply by 2.
+    int       count = dc_yh - dc_yl;
+    byte     *dest1, *dest2, *dest3, *dest4;
+    fixed_t   frac, fracstep;
+
+    if (count < 0)
+    {
+        return;
+    }
+
+#ifdef RANGECHECK
+    if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ?
+                 "R_DrawTranslatedTLColumnLow: %i to %i at %i" :
+                 "R_DrawTranslatedTLColumnLow: %i к %i у %i",
+                 dc_yl, dc_yh, x);
+    }
+#endif
+
+    dest1 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires)+1] + columnofs[flipviewwidth[x]];
+    dest4 = ylookup[(dc_yl << hires)+1] + columnofs[flipviewwidth[x+1]];
+    fracstep = dc_iscale; 
+    frac  = dc_texturemid + (dc_yl-centery)*fracstep;
+
+    {
+        const byte *translation = dc_translation;
+        const byte *source = dc_source;
+        const lighttable_t *const *colormap = dc_colormap;
+        int heightmask = dc_texheight-1;
+
+        if (dc_texheight & heightmask) // not a power of 2 -- killough
+        {
+            heightmask++;
+            heightmask <<= FRACBITS;
+    
+            if (frac < 0)
+            while ((frac += heightmask) < 0);
+            else
+            while (frac >= heightmask)
+            frac -= heightmask;
+    
+            do
+            {
+                const byte src = translation[source[frac>>FRACBITS]];
+
+                *dest1 = transtable30[(*dest1<<8)+colormap[0][src]];
+                *dest2 = transtable30[(*dest2<<8)+colormap[0][src]];
+                *dest3 = transtable30[(*dest3<<8)+colormap[0][src]];
+                *dest4 = transtable30[(*dest4<<8)+colormap[0][src]];
+                dest1 += screenwidth_low;
+                dest2 += screenwidth_low;
+                dest3 += screenwidth_low;
+                dest4 += screenwidth_low;
+    
+                if ((frac += fracstep) >= heightmask)
+                {
+                    frac -= heightmask;
+                }
+            } while (count--);
+        }
+        else // texture height is a power of 2 -- killough
+        {
+            do 
+            {
+                const byte src = translation[source[(frac>>FRACBITS)&heightmask]];
+
+                *dest1 = transtable30[(*dest1<<8)+colormap[0][src]];
+                *dest2 = transtable30[(*dest2<<8)+colormap[0][src]];
+                *dest3 = transtable30[(*dest3<<8)+colormap[0][src]];
+                *dest4 = transtable30[(*dest4<<8)+colormap[0][src]];
+    
+                dest1 += screenwidth_low;
+                dest2 += screenwidth_low;
+                dest3 += screenwidth_low;
+                dest4 += screenwidth_low;
+    
+                frac += fracstep; 
+    
+            } while (count--);
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
 // R_DrawGhostColumn
 // [JN] Draw translucent (50%) with given color translation (CR_THIRDSATURTION).
 // Used exclusively for ghost monsters, ressurected by Arch-Vile.

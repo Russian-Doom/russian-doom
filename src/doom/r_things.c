@@ -494,7 +494,7 @@ static void R_DrawVisSprite (const vissprite_t *vis, const int x1, const int x2)
     // [JN] Translucent fuzz effect.
     if (vis->mobjflags & MF_SHADOW && improved_fuzz == 4)
     {
-        colfunc = fuzzcolfunc;
+        colfunc = vis->mobjflags & MF_TRANSLATION ? transtlcolfunc : fuzzcolfunc;
     }
 
     // [JN] Ghost monsters.
