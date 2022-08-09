@@ -391,7 +391,7 @@ void D_ProcessEvents(void)
 
 static byte *ColorizeMessage (MessageType_t messageType)
 {
-    player_t *player = &players[consoleplayer];
+    player_t *player = &players[displayplayer];
 
     if (player->messageType == msg_pickup)
     {
