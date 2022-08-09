@@ -2267,7 +2267,7 @@ static void ST_LoadData (void)
 void ST_Start (void)
 {
     I_SetPalette (W_CacheLumpNum ((lu_palette), PU_CACHE));
-    plyr = &players[consoleplayer];
+    plyr = &players[displayplayer];
 
     faceindex = 1; // [crispy] fix status bar face hysteresis across level changes
     st_faceindex = 1;
