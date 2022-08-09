@@ -840,7 +840,7 @@ static void ST_DrawBackground (void)
     // Face background representing player color.
     if (netgame)
     {
-        V_DrawPatch(143 + wide_delta, 0, faceback_1[consoleplayer], NULL);
+        V_DrawPatch(143 + wide_delta, 0, faceback_1[displayplayer], NULL);
     }
 
     V_RestoreBuffer();
@@ -1140,30 +1140,36 @@ static void ST_updateFaceWidget (void)
 
 // -----------------------------------------------------------------------------
 // ST_UpdateFragsCounter
+// [JN] Updated to int type, allowing to show frags of any player.
 // -----------------------------------------------------------------------------
 
-static void ST_UpdateFragsCounter (void)
+static const int ST_UpdateFragsCounter (const int playernum, const boolean big_values)
 {
     st_fragscount = 0;
 
     for (int i = 0 ; i < MAXPLAYERS ; i++)
     {
-        if (i != consoleplayer)
+        if (i != playernum)
         {
-            st_fragscount += plyr->frags[i];
+            st_fragscount += players[playernum].frags[i];
         }
         else
         {
-            st_fragscount -= plyr->frags[i];
+            st_fragscount -= players[playernum].frags[i];
         }
     }
     
     // [JN] Prevent overflow, ST_DrawBigNumber can only draw three 
     // digit number, and status bar fits well only two digits number
-    if (st_fragscount > 99)
-        st_fragscount = 99;
-    if (st_fragscount < -99)
-        st_fragscount = -99;
+    if (!big_values)
+    {
+        if (st_fragscount > 99)
+            st_fragscount = 99;
+        if (st_fragscount < -99)
+            st_fragscount = -99;
+    }
+
+    return st_fragscount;
 }
 
 // -----------------------------------------------------------------------------
@@ -1276,11 +1282,6 @@ void ST_Ticker (void)
         {
             plyr->tryopen[i]--;
         }
-    }
-
-    if (deathmatch)
-    {
-        ST_UpdateFragsCounter();
     }
     
     st_oldhealth = plyr->health;
@@ -1611,6 +1612,7 @@ static void ST_DrawElements (const boolean wide)
     // Frags or Arms
     if (deathmatch)
     {
+        st_fragscount = ST_UpdateFragsCounter(displayplayer, false);
         ST_DrawBigNumber(st_fragscount, 100 + left_delta, 171, ST_WidgetColor(hudcolor_frags));
     }
     else
@@ -1640,7 +1642,7 @@ static void ST_DrawElements (const boolean wide)
     // Player face background
     if ((screenblocks == 11 || screenblocks == 14) && (!automapactive || automap_overlay))
     {
-        V_DrawPatch(143 + wide_delta, 168, faceback_2[netgame ? consoleplayer : 1], NULL);        
+        V_DrawPatch(143 + wide_delta, 168, faceback_2[netgame ? displayplayer : 1], NULL);        
     }
 
     // Player face
@@ -1885,64 +1887,103 @@ void ST_WidgetsDrawer (void)
     const int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
     const int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
     const int net_y = netgame ? 8 : 0;  // [JN] Shift one line down for chat string.
-    plyr = &players[consoleplayer];
+    plyr = &players[displayplayer];
 
-    if (((automapactive && automap_stats == 1) || automap_stats == 2))
+    // Level stats / Frags:
+    if (deathmatch)
     {
-        // Kills:
-        sprintf(str, plyr->extrakillcount ? "%d+%d/%d" : "%d/%d",
-                plyr->killcount,
-                plyr->extrakillcount ? plyr->extrakillcount : totalkills,
-                totalkills);
-
-        english_language ? RD_M_DrawTextA("K:", wide_4_3, 9+net_y) :
-                           RD_M_DrawTextSmallRUS("D:", wide_4_3, 9+net_y, CR_NONE);
-        
-        dp_translation = hud_stats_color == 0 ? NULL :
-                         totalkills == 0 ? cr[CR_GREEN] :
-                         plyr->killcount == 0 ? cr[CR_RED] :
-                         plyr->killcount < totalkills ? cr[CR_YELLOW] : cr[CR_GREEN];
-        RD_M_DrawTextA(str, wide_4_3 + 16, 9+net_y);
-        dp_translation = NULL;
-
-        // Items:
-        sprintf(str, "%d/%d", plyr->itemcount, totalitems);
-
-        english_language ? RD_M_DrawTextA("I:", wide_4_3, 17+net_y) :
-                           RD_M_DrawTextSmallRUS("G:", wide_4_3, 17+net_y, CR_NONE);
-
-        dp_translation = hud_stats_color == 0 ? NULL :
-                         totalitems == 0 ? cr[CR_GREEN] :
-                         plyr->itemcount == 0 ? cr[CR_RED] :
-                         plyr->itemcount < totalitems ? cr[CR_YELLOW] : cr[CR_GREEN];
-        RD_M_DrawTextA(str, wide_4_3 + 16, 17+net_y);
-        dp_translation = NULL;
-
-        // Secret:
-        sprintf(str, "%d/%d", plyr->secretcount, totalsecret);
-
-        english_language ? RD_M_DrawTextA("S:", wide_4_3, 25+net_y) :
-                           RD_M_DrawTextSmallRUS("N:", wide_4_3, 25+net_y, CR_NONE);
-
-        dp_translation = hud_stats_color == 0 ? NULL :
-                         totalsecret == 0 ? cr[CR_GREEN] :
-                         plyr->secretcount == 0 ? cr[CR_RED] :
-                         plyr->secretcount < totalsecret ? cr[CR_YELLOW] : cr[CR_GREEN];
-        RD_M_DrawTextA(str, wide_4_3 + 16, 25+net_y);
-        dp_translation = NULL;
+        if (playeringame[0])
+        {
+            dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GREEN];
+            RD_M_DrawTextA("G:", wide_4_3, 17);
+            sprintf(str, "%d", ST_UpdateFragsCounter(0, true));
+            RD_M_DrawTextA(str, wide_4_3 + 16, 17);
+            dp_translation = NULL;
+        }
+        if (playeringame[1])
+        {
+            dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+            RD_M_DrawTextA("I:", wide_4_3, 25);
+            sprintf(str, "%d", ST_UpdateFragsCounter(1, true));
+            RD_M_DrawTextA(str, wide_4_3 + 16, 25);
+            dp_translation = NULL;
+        }
+        if (playeringame[2])
+        {
+            dp_translation = hud_stats_color == 0 ? NULL : cr[CR_BROWN];
+            RD_M_DrawTextA("B:", wide_4_3, 33);
+            sprintf(str, "%d", ST_UpdateFragsCounter(2, true));
+            RD_M_DrawTextA(str, wide_4_3 + 16, 33);
+            dp_translation = NULL;
+        }
+        if (playeringame[3])
+        {
+            dp_translation = hud_stats_color == 0 ? NULL : cr[CR_RED];
+            RD_M_DrawTextA("R:", wide_4_3, 41);
+            sprintf(str, "%d", ST_UpdateFragsCounter(3, true));
+            RD_M_DrawTextA(str, wide_4_3 + 16, 41);
+            dp_translation = NULL;
+        }
     }
-
-    // Skill Level:
-    if (((automapactive && automap_skill == 1) || automap_skill == 2))
+    else
     {
-        sprintf(str, "%d", gameskill+1);
-
-        english_language ? RD_M_DrawTextA("SKL:", wide_4_3, 33+net_y) :
-                           RD_M_DrawTextSmallRUS("CK;:", wide_4_3, 33+net_y, CR_NONE);
-
-        dp_translation = hud_stats_color == 0 ? NULL : cr[CR_WHITE];
-        RD_M_DrawTextA(str, wide_4_3 + (english_language ? 31 : 36), 33+net_y);
-        dp_translation = NULL;
+        if (((automapactive && automap_stats == 1) || automap_stats == 2))
+        {
+            // Kills:
+            sprintf(str, plyr->extrakillcount ? "%d+%d/%d" : "%d/%d",
+                    plyr->killcount,
+                    plyr->extrakillcount ? plyr->extrakillcount : totalkills,
+                    totalkills);
+        
+            english_language ? RD_M_DrawTextA("K:", wide_4_3, 9+net_y) :
+                               RD_M_DrawTextSmallRUS("D:", wide_4_3, 9+net_y, CR_NONE);
+            
+            dp_translation = hud_stats_color == 0 ? NULL :
+                             totalkills == 0 ? cr[CR_GREEN] :
+                             plyr->killcount == 0 ? cr[CR_RED] :
+                             plyr->killcount < totalkills ? cr[CR_YELLOW] : cr[CR_GREEN];
+            RD_M_DrawTextA(str, wide_4_3 + 16, 9+net_y);
+            dp_translation = NULL;
+        
+            // Items:
+            sprintf(str, "%d/%d", plyr->itemcount, totalitems);
+        
+            english_language ? RD_M_DrawTextA("I:", wide_4_3, 17+net_y) :
+                               RD_M_DrawTextSmallRUS("G:", wide_4_3, 17+net_y, CR_NONE);
+        
+            dp_translation = hud_stats_color == 0 ? NULL :
+                             totalitems == 0 ? cr[CR_GREEN] :
+                             plyr->itemcount == 0 ? cr[CR_RED] :
+                             plyr->itemcount < totalitems ? cr[CR_YELLOW] : cr[CR_GREEN];
+            RD_M_DrawTextA(str, wide_4_3 + 16, 17+net_y);
+            dp_translation = NULL;
+        
+            // Secret:
+            sprintf(str, "%d/%d", plyr->secretcount, totalsecret);
+        
+            english_language ? RD_M_DrawTextA("S:", wide_4_3, 25+net_y) :
+                               RD_M_DrawTextSmallRUS("N:", wide_4_3, 25+net_y, CR_NONE);
+        
+            dp_translation = hud_stats_color == 0 ? NULL :
+                             totalsecret == 0 ? cr[CR_GREEN] :
+                             plyr->secretcount == 0 ? cr[CR_RED] :
+                             plyr->secretcount < totalsecret ? cr[CR_YELLOW] : cr[CR_GREEN];
+            RD_M_DrawTextA(str, wide_4_3 + 16, 25+net_y);
+            dp_translation = NULL;
+        }
+        
+        // Skill Level:
+        if (((automapactive && automap_skill == 1) || automap_skill == 2))
+        {
+            sprintf(str, "%d", gameskill+1);
+        
+            english_language ? RD_M_DrawTextA("SKL:", wide_4_3, 33+net_y) :
+                               RD_M_DrawTextSmallRUS("CK;:", wide_4_3, 33+net_y, CR_NONE);
+        
+            dp_translation = hud_stats_color == 0 ? NULL : cr[CR_WHITE];
+            RD_M_DrawTextA(str, wide_4_3 + (english_language ? 31 : 36), 33+net_y);
+            dp_translation = NULL;
+        }
     }
 
     // Level Time:
@@ -2226,7 +2267,7 @@ static void ST_LoadData (void)
 void ST_Start (void)
 {
     I_SetPalette (W_CacheLumpNum ((lu_palette), PU_CACHE));
-    plyr = &players[consoleplayer];
+    plyr = &players[displayplayer];
 
     faceindex = 1; // [crispy] fix status bar face hysteresis across level changes
     st_faceindex = 1;

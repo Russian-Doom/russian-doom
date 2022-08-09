@@ -834,19 +834,19 @@ static Menu_t AutomapMenu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t StatsItems[] = {
-    {ITT_TITLE,   "Statistics",     "Cnfnbcnbrf",         NULL,                         0}, // Статистика
-    {ITT_LRFUNC,  "level stats:",   "cnfnbcnbrf ehjdyz:", M_RD_Change_AutomapStats,     0}, // Статистика уровня:
-    {ITT_LRFUNC,  "skill level:",   "ehjdtym ckj;yjcnb:", M_RD_Change_AutomapSkill,     0}, // Уровень сложности:
-    {ITT_LRFUNC,  "level time:",    "dhtvz ehjdyz:",      M_RD_Change_AutomapLevelTime, 0}, // Время уровня:
-    {ITT_LRFUNC,  "total time:",    "j,ott dhtvz:",       M_RD_Change_AutomapTotalTime, 0}, // Общее время:
-    {ITT_LRFUNC,  "player coords:", "rjjhlbyfns buhjrf:", M_RD_Change_AutomapCoords,    0}, // Координаты игрока:
-    {ITT_SWITCH,  "coloring:",      "jrhfibdfybt:",       M_RD_Change_HUDWidgetColors,  0}, // Окрашивание:
-    {ITT_EMPTY,   NULL,             NULL,                 NULL,                         0},
-    {ITT_EMPTY,   NULL,             NULL,                 NULL,                         0},
-    {ITT_EMPTY,   NULL,             NULL,                 NULL,                         0},
-    {ITT_EMPTY,   NULL,             NULL,                 NULL,                         0},
-    {ITT_EMPTY,   NULL,             NULL,                 NULL,                         0},
-    {ITT_SETMENU, NULL,             NULL,                 &AutomapMenu,                 0}
+    {ITT_TITLE,   "Statistics",         "Cnfnbcnbrf",               NULL,                         0}, // Статистика
+    {ITT_LRFUNC,  "level stats/frags:", "cnfnbcnbrf ehjdyz*ahfub:", M_RD_Change_AutomapStats,     0}, // Статистика уровня/фраги:
+    {ITT_LRFUNC,  "skill level:",       "ehjdtym ckj;yjcnb:",       M_RD_Change_AutomapSkill,     0}, // Уровень сложности:
+    {ITT_LRFUNC,  "level time:",        "dhtvz ehjdyz:",            M_RD_Change_AutomapLevelTime, 0}, // Время уровня:
+    {ITT_LRFUNC,  "total time:",        "j,ott dhtvz:",             M_RD_Change_AutomapTotalTime, 0}, // Общее время:
+    {ITT_LRFUNC,  "player coords:",     "rjjhlbyfns buhjrf:",       M_RD_Change_AutomapCoords,    0}, // Координаты игрока:
+    {ITT_SWITCH,  "coloring:",          "jrhfibdfybt:",             M_RD_Change_HUDWidgetColors,  0}, // Окрашивание:
+    {ITT_EMPTY,   NULL,                 NULL,                       NULL,                         0},
+    {ITT_EMPTY,   NULL,                 NULL,                       NULL,                         0},
+    {ITT_EMPTY,   NULL,                 NULL,                       NULL,                         0},
+    {ITT_EMPTY,   NULL,                 NULL,                       NULL,                         0},
+    {ITT_EMPTY,   NULL,                 NULL,                       NULL,                         0},
+    {ITT_SETMENU, NULL,                 NULL,                       &AutomapMenu,                 0}
 };
 
 static Menu_t StatsMenu = {
@@ -2729,10 +2729,10 @@ static void M_RD_Draw_StatsSettings(void)
 {
     if (english_language)
     {
-        // Level stats
+        // Level stats/frags
         RD_M_DrawTextSmallENG(automap_stats == 1 ? "in automap" :
                               automap_stats == 2 ? "always" : "off",
-                              124 + wide_delta, 35,
+                              170 + wide_delta, 35,
                               automap_stats ? CR_GREEN : CR_DARKRED);
 
         // Skill level
@@ -2771,10 +2771,10 @@ static void M_RD_Draw_StatsSettings(void)
     }
     else
     {
-        // Статистика уровня
+        // Статистика уровня/фраги
         RD_M_DrawTextSmallRUS(automap_stats == 1 ? "yf rfhnt" :
                               automap_stats == 2 ? "dctulf" :
-                              "dsrk", 175 + wide_delta, 35,
+                              "dsrk", 224 + wide_delta, 35,
                               automap_stats ? CR_GREEN : CR_DARKRED);
 
         // Уровень сложности

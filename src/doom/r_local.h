@@ -539,6 +539,8 @@ void R_DrawTLColumn (void);
 void R_DrawTLColumnLow (void);
 void R_DrawTranslatedColumn (void);
 void R_DrawTranslatedColumnLow (void);
+void R_DrawTranslatedTLColumn (void);
+void R_DrawTranslatedTLColumnLow (void);
 void R_DrawViewBorder (void);
 void R_FillBackScreen (void);
 void R_InitBackScreenGfx (void);
@@ -592,6 +594,7 @@ extern void (*fuzzcolfunc) (void);
 extern void (*spanfunc) (void);
 extern void (*tlcolfunc) (void);
 extern void (*transcolfunc) (void);
+extern void (*transtlcolfunc) (void);
 extern void (*ghostcolfunc) (void);
 extern void R_ClearStats (void);
 

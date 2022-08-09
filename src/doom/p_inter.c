@@ -893,7 +893,8 @@ static void P_KillMobj (const mobj_t *source, mobj_t *target)
 
         P_DropWeapon (target->player);
 
-        if (target->player == &players[consoleplayer] && automapactive)
+        if (target->player == &players[consoleplayer] && automapactive
+        && !demoplayback) // [JN] Don't close automap while demo playing.
         {
             // don't die in auto map,
             // switch view prior to dying

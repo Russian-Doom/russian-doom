@@ -391,7 +391,7 @@ void D_ProcessEvents(void)
 
 static byte *ColorizeMessage (MessageType_t messageType)
 {
-    player_t *player = &players[consoleplayer];
+    player_t *player = &players[displayplayer];
 
     if (player->messageType == msg_pickup)
     {
@@ -472,7 +472,7 @@ static byte *FadeMessage (int messageTics)
 
 void DrawMessage(void)
 {
-    player_t *player = &players[consoleplayer];
+    player_t *player = &players[displayplayer];
 
     // [JN] Activate message counter in non-level or paused states.
     // Make messages go away in menu, finale and help screens.
