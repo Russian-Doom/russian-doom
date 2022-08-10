@@ -1178,10 +1178,8 @@ static const int ST_UpdateFragsCounter (const int playernum, const boolean big_v
 
 static void ST_DoPaletteStuff (void)
 {
-    int   cnt;
-    int   palette;
-
-    cnt = plyr->damagecount;
+    int cnt = plyr->damagecount;
+    int palette;
 
     if (plyr->powers[pw_strength])
     {
@@ -2068,16 +2066,16 @@ void ST_WidgetsDrawer (void)
 
 void ST_MapNameDrawer (void)
 {
-    static char str[128];
-    const int map_y = gamemission == jaguar ? 151 : 159;
-    const int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
-
     // Level name:
     if (automapactive)
     {
+        static char str[128];
+        const int map_y = gamemission == jaguar ? 151 : 159;
+        const int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
         extern char *level_name;
 
         sprintf(str, "%s", level_name);
+
         if (english_language)
         {
             dp_translation = (hud_stats_color && !vanillaparm) ? cr[CR_YELLOW] : NULL;
