@@ -834,19 +834,19 @@ static Menu_t AutomapMenu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t StatsItems[] = {
-    {ITT_TITLE,   "Statistics",         "Cnfnbcnbrf",               NULL,                         0}, // Статистика
-    {ITT_LRFUNC,  "level stats/frags:", "cnfnbcnbrf ehjdyz*ahfub:", M_RD_Change_AutomapStats,     0}, // Статистика уровня/фраги:
-    {ITT_LRFUNC,  "skill level:",       "ehjdtym ckj;yjcnb:",       M_RD_Change_AutomapSkill,     0}, // Уровень сложности:
-    {ITT_LRFUNC,  "level time:",        "dhtvz ehjdyz:",            M_RD_Change_AutomapLevelTime, 0}, // Время уровня:
-    {ITT_LRFUNC,  "total time:",        "j,ott dhtvz:",             M_RD_Change_AutomapTotalTime, 0}, // Общее время:
-    {ITT_LRFUNC,  "player coords:",     "rjjhlbyfns buhjrf:",       M_RD_Change_AutomapCoords,    0}, // Координаты игрока:
-    {ITT_SWITCH,  "coloring:",          "jrhfibdfybt:",             M_RD_Change_HUDWidgetColors,  0}, // Окрашивание:
-    {ITT_EMPTY,   NULL,                 NULL,                       NULL,                         0},
-    {ITT_EMPTY,   NULL,                 NULL,                       NULL,                         0},
-    {ITT_EMPTY,   NULL,                 NULL,                       NULL,                         0},
-    {ITT_EMPTY,   NULL,                 NULL,                       NULL,                         0},
-    {ITT_EMPTY,   NULL,                 NULL,                       NULL,                         0},
-    {ITT_SETMENU, NULL,                 NULL,                       &AutomapMenu,                 0}
+    {ITT_TITLE,   "Statistics",                   "Cnfnbcnbrf",                   NULL,                         0}, // Статистика
+    {ITT_LRFUNC,  "level stats/frags:",           "cnfnbcnbrf ehjdyz*ahfub:",     M_RD_Change_AutomapStats,     0}, // Статистика уровня/фраги:
+    {ITT_LRFUNC,  "skill level:",                 "ehjdtym ckj;yjcnb:",           M_RD_Change_AutomapSkill,     0}, // Уровень сложности:
+    {ITT_LRFUNC,  "level/deathmatch timer:",      "nfqvth ehjdyz*ltavfnx:",       M_RD_Change_AutomapLevelTime, 0}, // Таймер уровня/дефматч:
+    {ITT_LRFUNC,  "total time:",                  "j,ott dhtvz:",                 M_RD_Change_AutomapTotalTime, 0}, // Общее время:
+    {ITT_LRFUNC,  "player coords:",               "rjjhlbyfns buhjrf:",           M_RD_Change_AutomapCoords,    0}, // Координаты игрока:
+    {ITT_SWITCH,  "coloring:",                    "jrhfibdfybt:",                 M_RD_Change_HUDWidgetColors,  0}, // Окрашивание:
+    {ITT_EMPTY,   NULL,                           NULL,                           NULL,                         0},
+    {ITT_EMPTY,   NULL,                           NULL,                           NULL,                         0},
+    {ITT_EMPTY,   NULL,                           NULL,                           NULL,                         0},
+    {ITT_EMPTY,   NULL,                           NULL,                           NULL,                         0},
+    {ITT_EMPTY,   NULL,                           NULL,                           NULL,                         0},
+    {ITT_SETMENU, NULL,                           NULL,                           &AutomapMenu,                 0}
 };
 
 static Menu_t StatsMenu = {
@@ -2741,10 +2741,10 @@ static void M_RD_Draw_StatsSettings(void)
                               121 + wide_delta, 45,
                               automap_skill ? CR_GREEN : CR_DARKRED);
 
-        // Level time
+        // Level/deathmatch timer
         RD_M_DrawTextSmallENG(automap_level_time == 1 ? "in automap" :
                               automap_level_time == 2 ? "always" : "off",
-                              115 + wide_delta, 55,
+                              211 + wide_delta, 55,
                               automap_level_time ? CR_GREEN : CR_DARKRED);
 
         // Total time
@@ -2783,10 +2783,10 @@ static void M_RD_Draw_StatsSettings(void)
                               "dsrk", 179 + wide_delta, 45,
                               automap_skill ? CR_GREEN : CR_DARKRED);
 
-        // Время уровня
+        // Таймер уровня/дефматч
         RD_M_DrawTextSmallRUS(automap_level_time == 1 ? "yf rfhnt" :
                               automap_level_time == 2 ? "dctulf" :
-                              "dsrk", 136 + wide_delta, 55,
+                              "dsrk", 210 + wide_delta, 55,
                               automap_level_time ? CR_GREEN : CR_DARKRED);
 
         // Общее время

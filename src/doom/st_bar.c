@@ -1883,8 +1883,6 @@ void ST_DemoProgressBar (void)
 void ST_WidgetsDrawer (void)
 {
     static char str[128];
-    const int time = leveltime / TICRATE;
-    const int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
     const int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
     const int net_y = netgame ? 8 : 0;  // [JN] Shift one line down for chat string.
     plyr = &players[displayplayer];
@@ -1986,13 +1984,15 @@ void ST_WidgetsDrawer (void)
         }
     }
 
-    // Level Time:
+    // Level / Deathmatch timer:
     if (((automapactive && automap_level_time == 1) || automap_level_time == 2))
     {
+        const int time = (deathmatch && levelTimer ? levelTimeCount : leveltime) / TICRATE;
+
         sprintf(str, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
 
-        english_language ? RD_M_DrawTextA("LEVEL", wide_4_3, 49+net_y) :
-                           RD_M_DrawTextSmallRUS("EHJDTYM", wide_4_3, 49+net_y, CR_NONE);
+        english_language ? RD_M_DrawTextA(levelTimer ? "TIMER" : "LEVEL", wide_4_3, 49+net_y) :
+                           RD_M_DrawTextSmallRUS(levelTimer ? "NFQVTH" : "EHJDTYM", wide_4_3, 49+net_y, CR_NONE);
 
         dp_translation = hud_stats_color == 0 ? NULL : cr[CR_WHITE];
         RD_M_DrawTextA(str, wide_4_3, 57+net_y);
@@ -2002,6 +2002,8 @@ void ST_WidgetsDrawer (void)
     // Total Time:
     if (((automapactive && automap_total_time == 1) || automap_total_time == 2))
     {
+        const int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
+
         sprintf(str, "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
 
         english_language ? RD_M_DrawTextA("TOTAL", wide_4_3, 73+net_y) :
