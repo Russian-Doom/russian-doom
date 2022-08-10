@@ -2246,11 +2246,12 @@ static void AM_drawPlayers (void)
     const int   their_colors[] = { GREENS, GRAYS, BROWNS, REDS };
     mpoint_t    pt;
     player_t   *p;
-    // [JN] Smooth player arrow rotation:
-    const angle_t smoothangle = automap_rotate ? plr->mo->angle : viewangle;
 
     if (!netgame)
     {
+        // [JN] Smooth player arrow rotation.
+        const angle_t smoothangle = automap_rotate ? plr->mo->angle : viewangle;
+
         // [JN] Interpolate player arrow.
         pt.x = viewx >> FRACTOMAPBITS;
         pt.y = viewy >> FRACTOMAPBITS;
@@ -2308,8 +2309,17 @@ static void AM_drawPlayers (void)
             color = their_colors[their_color];
         }
 
-        pt.x = p->mo->x >> FRACTOMAPBITS;
-        pt.y = p->mo->y >> FRACTOMAPBITS;
+        // [JN] Interpolate other player arrows.
+        if (uncapped_fps && !vanillaparm && leveltime > oldleveltime)
+        {
+            pt.x = (p->mo->oldx + FixedMul(p->mo->x - p->mo->oldx, fractionaltic)) >> FRACTOMAPBITS;
+            pt.y = (p->mo->oldy + FixedMul(p->mo->y - p->mo->oldy, fractionaltic)) >> FRACTOMAPBITS;
+        }
+        else
+        {
+            pt.x = p->mo->x >> FRACTOMAPBITS;
+            pt.y = p->mo->y >> FRACTOMAPBITS;
+        }
 
         if (automap_rotate)
         {
