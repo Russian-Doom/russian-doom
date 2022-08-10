@@ -739,8 +739,14 @@ void D_Display (void)
             }
         }
 
-        ST_MapNameDrawer();
-        CT_Drawer();
+        if (automapactive)
+        {
+            ST_MapNameDrawer();
+        }
+        if (netgame && chatmodeon)
+        {
+            CT_Drawer();
+        }
     }
 
     // [JN] Menu backgound shading. 

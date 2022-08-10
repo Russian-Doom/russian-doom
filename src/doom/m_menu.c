@@ -7223,32 +7223,6 @@ boolean M_Responder (event_t* ev)
         return true;
     }
 
-    // [JN] Crosshair toggling. Disalloved in vanilla mode (no crosshair there).
-    if (BK_isKeyDown(ev, bk_toggle_crosshair) && !vanillaparm)
-    {
-        static char crosshairmsg[24];
-
-        crosshair_draw ^= 1;
-
-        M_snprintf(crosshairmsg, sizeof(crosshairmsg),
-                   crosshair_draw ? ststr_crosshair_on : ststr_crosshair_off);
-        P_SetMessage(&players[consoleplayer], crosshairmsg, msg_system, false);
-        S_StartSound(NULL,sfx_swtchn);
-
-        return true;
-    }
-
-    // [JN] Toggle level flipping.
-    if (BK_isKeyDown(ev, bk_toggle_fliplvls))
-    {
-        flip_levels ^= 1;
-        R_ExecuteSetViewSize();         // Redraw game screen
-        S_UpdateStereoSeparation();     // Update stereo separation
-        S_StartSound(NULL, sfx_swtchn); // Play sound
-
-        return true;
-    }
-
     // F-Keys
     if (!menuactive)
     {
@@ -7370,6 +7344,32 @@ boolean M_Responder (event_t* ev)
             if (automapactive)
                 return false;
             M_RD_Change_ScreenSize(1);
+            return true;
+        }
+
+        // [JN] Crosshair toggling. Disalloved in vanilla mode (no crosshair there).
+        if (BK_isKeyDown(ev, bk_toggle_crosshair) && !vanillaparm)
+        {
+            static char crosshairmsg[24];
+
+            crosshair_draw ^= 1;
+
+            M_snprintf(crosshairmsg, sizeof(crosshairmsg),
+                       crosshair_draw ? ststr_crosshair_on : ststr_crosshair_off);
+            P_SetMessage(&players[consoleplayer], crosshairmsg, msg_system, false);
+            S_StartSound(NULL,sfx_swtchn);
+
+            return true;
+        }
+
+        // [JN] Toggle level flipping.
+        if (BK_isKeyDown(ev, bk_toggle_fliplvls))
+        {
+            flip_levels ^= 1;
+            R_ExecuteSetViewSize();         // Redraw game screen
+            S_UpdateStereoSeparation();     // Update stereo separation
+            S_StartSound(NULL, sfx_swtchn); // Play sound
+
             return true;
         }
     }

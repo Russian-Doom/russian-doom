@@ -462,7 +462,7 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     }
 
     // [JN] Mouselook: toggling
-    if (BK_isKeyPressed(bk_toggle_mlook))
+    if (BK_isKeyPressed(bk_toggle_mlook) && !chatmodeon)
     {
         if (!mlook)
         {

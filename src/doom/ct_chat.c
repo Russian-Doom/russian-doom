@@ -339,38 +339,32 @@ void CT_Ticker (void)
 
 void CT_Drawer (void)
 {
-    int      i, x;
-    patch_t *patch;
+    int x = 0;
 
-    if (chatmodeon)
+    // [JN] Colorize printed text.
+    dp_translation = messages_chat_color_set == CR_NONE ?
+                     NULL : cr[messages_chat_color_set];
+
+    for (int i = 0 ; i < msgptr[consoleplayer] ; i++)
     {
-        // [JN] Colorize printed text.
-        dp_translation = messages_chat_color_set == CR_NONE ?
-                         NULL : cr[messages_chat_color_set];
-
-        x = 0;
-
-        for (i = 0 ; i < msgptr[consoleplayer] ; i++)
+        if (chat_msg[consoleplayer][i] < 33)
         {
-            if (chat_msg[consoleplayer][i] < 33)
-            {
-                x += 4;
-            }
-            else
-            {
-                patch = W_CacheLumpNum(ChatFontBaseLump + 
-                                       chat_msg[consoleplayer][i] - 33,
-                                       PU_STATIC);
-                V_DrawShadowedPatchDoom(x, 10, patch);
-                x += patch->width;
-            }
+            x += 4;
         }
-
-        V_DrawShadowedPatchDoom(x, 10, W_CacheLumpName  // [JN] Draw cursor.
-                                (DEH_String("STCFN095"), PU_STATIC));
-
-        dp_translation = NULL;
+        else
+        {
+            const patch_t *patch = W_CacheLumpNum(ChatFontBaseLump + 
+                                   chat_msg[consoleplayer][i] - 33,
+                                   PU_STATIC);
+            V_DrawShadowedPatchDoom(x, 10, patch);
+            x += patch->width;
+        }
     }
+
+    V_DrawShadowedPatchDoom(x, 10, W_CacheLumpName  // [JN] Draw cursor.
+                            (DEH_String("STCFN095"), PU_STATIC));
+
+    dp_translation = NULL;
 }
 
 // -----------------------------------------------------------------------------
