@@ -1724,7 +1724,7 @@ static void AM_drawWalls (const int automap_color_set)
             //
             case 1:
             {
-                if (cheating || (lines[i].flags & ML_MAPPED))
+                if (cheating || deathmatch || (lines[i].flags & ML_MAPPED))
                 {
                     if (!lines[i].backsector)
                     {
@@ -1812,7 +1812,7 @@ static void AM_drawWalls (const int automap_color_set)
             //
             case 2:
             {
-                if (cheating || (lines[i].flags & ML_MAPPED))
+                if (cheating || deathmatch || (lines[i].flags & ML_MAPPED))
                 {
                     if (!lines[i].backsector)
                     {
@@ -1863,7 +1863,7 @@ static void AM_drawWalls (const int automap_color_set)
             //
             case 3:
             {
-                if (cheating || (lines[i].flags & ML_MAPPED))
+                if (cheating || deathmatch || (lines[i].flags & ML_MAPPED))
                 {
                     if (!lines[i].backsector)
                     {
@@ -1934,7 +1934,7 @@ static void AM_drawWalls (const int automap_color_set)
             //
             case 4:
             {
-                if (cheating || (lines[i].flags & ML_MAPPED))
+                if (cheating || deathmatch || (lines[i].flags & ML_MAPPED))
                 {
                     // villsa [STRIFE]
                     // [JN] Changed to Doom exit lines
@@ -1992,7 +1992,7 @@ static void AM_drawWalls (const int automap_color_set)
             //
             case 5:
             {
-                if (cheating || (lines[i].flags & ML_MAPPED))
+                if (cheating || deathmatch || (lines[i].flags & ML_MAPPED))
                 {
                     if ((lines[i].flags & ML_DONTDRAW) && !cheating)
                     {
@@ -2081,7 +2081,7 @@ static void AM_drawWalls (const int automap_color_set)
             //
             default:
             {
-                if (cheating || (lines[i].flags & ML_MAPPED))
+                if (cheating || deathmatch || (lines[i].flags & ML_MAPPED))
                 {
                     if ((lines[i].flags & ML_DONTDRAW) && !cheating)
                     {
