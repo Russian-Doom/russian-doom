@@ -2287,6 +2287,9 @@ static void AM_drawPlayers (void)
 
     for (i = 0 ; i < MAXPLAYERS ; i++)
     {
+        // [JN] Interpolate other player arrows angle.
+        angle_t smoothangle;
+
         their_color++;
         p = &players[i];
 
@@ -2324,10 +2327,15 @@ static void AM_drawPlayers (void)
         if (automap_rotate)
         {
             AM_rotatePoint(&pt);
+            smoothangle = p->mo->angle;
+        }
+        else
+        {
+            smoothangle = R_InterpolateAngle(p->mo->oldangle, p->mo->angle, fractionaltic);
         }
 
         AM_drawLineCharacter(player_arrow, arrlen(player_arrow), 0,
-                             p->mo->angle, color,pt.x, pt.y);
+                             smoothangle, color,pt.x, pt.y);
     }
 }
 
