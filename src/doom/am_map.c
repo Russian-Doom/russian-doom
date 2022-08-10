@@ -549,10 +549,8 @@ void AM_initMarksColor (const int color)
 // AM_initVariables
 // -----------------------------------------------------------------------------
 
-static void AM_initVariables (void)
+void AM_initVariables (void)
 {
-    int pnum;
-
     automapactive = true;
 
     m_paninc.x = m_paninc.y = 0;
@@ -562,24 +560,8 @@ static void AM_initVariables (void)
     m_w = FTOM(f_w);
     m_h = FTOM(f_h);
 
-    // find player to center on initially
-    if (playeringame[consoleplayer])
-    {
-        plr = &players[consoleplayer];
-    }
-    else
-    {
-        plr = &players[0];
-
-        for (pnum=0;pnum<MAXPLAYERS;pnum++)
-        {
-            if (playeringame[pnum])
-            {
-                plr = &players[pnum];
-                break;
-            }
-        }
-    }
+    // [JN] Find player to center.
+    plr = &players[displayplayer];
 
     m_x = (plr->mo->x >> FRACTOMAPBITS) - m_w/2;
     m_y = (plr->mo->y >> FRACTOMAPBITS) - m_h/2;

@@ -61,4 +61,7 @@ void AM_initMarksColor (int color);
 // [JN] Make global, since mark preserved in saved games.
 void AM_clearMarks (void);
 
+// [JN] Re-init in G_Responder on toggling spy mode (F12).
+void AM_initVariables (void);
+
 extern cheatseq_t cheat_amap;
