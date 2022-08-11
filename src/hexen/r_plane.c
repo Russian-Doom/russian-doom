@@ -520,7 +520,6 @@ void R_DrawPlanes(void)
     int         count, frac, fracstep = FRACUNIT >> !detailshift;
     byte       *source, *source2, *tempSource;
     byte       *dest, *dest1, *dest2, *dest3, *dest4;
-    boolean     smooth_sky = uncapped_fps && !vanillaparm;
 
     extern byte *ylookup[SCREENHEIGHT];
     extern int columnofs[WIDESCREENWIDTH];
@@ -554,14 +553,14 @@ void R_DrawPlanes(void)
                             return;
                         }
                         // [crispy] Optionally draw skies horizontally linear.
-                        angle = ((viewangle + (smooth_sky ? Sky1SmoothScrollDelta : 0)
+                        angle = ((viewangle + (uncapped_fps ? Sky1SmoothScrollDelta : 0)
                               + (linear_sky && !vanillaparm ? linearskyangle[x] : xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
 
-                        angle2 = ((viewangle + (smooth_sky ? Sky2SmoothScrollDelta : 0)
+                        angle2 = ((viewangle + (uncapped_fps ? Sky2SmoothScrollDelta : 0)
                                + (linear_sky && !vanillaparm ? linearskyangle[x] : xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
 
-                        source = R_GetColumn(skyTexture, angle + (smooth_sky ? 0 : offset), false);
-                        source2 = R_GetColumn(skyTexture2, angle2 + (smooth_sky ? 0 : offset2), false);
+                        source = R_GetColumn(skyTexture, angle + (uncapped_fps ? 0 : offset), false);
+                        source2 = R_GetColumn(skyTexture2, angle2 + (uncapped_fps ? 0 : offset2), false);
                         frac = SKYTEXTUREMIDSHIFTED * FRACUNIT + (dc_yl - centery) * fracstep;
                         heightmask = SKYTEXTUREMIDSHIFTED-1;
 
@@ -746,9 +745,9 @@ void R_DrawPlanes(void)
                             return;
                         }
                         // [crispy] Optionally draw skies horizontally linear.
-                        angle = ((viewangle + (smooth_sky ? Sky1SmoothScrollDelta : 0)
+                        angle = ((viewangle + (uncapped_fps ? Sky1SmoothScrollDelta : 0)
                               + (linear_sky && !vanillaparm ? linearskyangle[x] : xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
-                        source = R_GetColumn(skyTexture, angle + (smooth_sky ? 0 : offset), false);
+                        source = R_GetColumn(skyTexture, angle + (uncapped_fps ? 0 : offset), false);
                         frac = SKYTEXTUREMIDSHIFTED * FRACUNIT + (dc_yl - centery) * fracstep;
                         heightmask = SKYTEXTUREMIDSHIFTED-1;
 

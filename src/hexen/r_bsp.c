@@ -234,7 +234,7 @@ void R_ClearClipSegs(void)
 
 void R_MaybeInterpolateSector(sector_t *sector)
 {
-    if (uncapped_fps && !vanillaparm &&
+    if (uncapped_fps &&
         // Only if we moved the sector last tic.
         sector->oldgametic == gametic - 1)
     {

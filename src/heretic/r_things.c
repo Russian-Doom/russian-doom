@@ -576,7 +576,7 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
     fixed_t        interpx, interpy, interpz, interpangle;
 
     // [AM] Interpolate between current and last position, if prudent.
-    if (uncapped_fps && !vanillaparm &&
+    if (uncapped_fps &&
         // Don't interpolate if the mobj did something
         // that would necessitate turning it off for a tic.
         thing->interp == true &&
@@ -1203,7 +1203,7 @@ void R_DrawPSprite (const pspdef_t *psp)
     vis->brightmap = R_BrightmapForState(psp->state - states);
 
     // [JN] e6y: interpolation for weapon bobbing
-    if (uncapped_fps && weapon_bobbing && !vanillaparm)
+    if (uncapped_fps && weapon_bobbing)
     {
         typedef struct interpolate_s
         {

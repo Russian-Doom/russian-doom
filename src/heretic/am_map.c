@@ -2048,7 +2048,7 @@ static void AM_drawThings (const int colors, const int colorrange)
             }
 
             // [JN] Interpolate things if possible.
-            if (uncapped_fps && !vanillaparm && leveltime > oldleveltime)
+            if (uncapped_fps && leveltime > oldleveltime)
             {
                 pt.x = (t->oldx + FixedMul(t->x - t->oldx, fractionaltic)) >> FRACTOMAPBITS;
                 pt.y = (t->oldy + FixedMul(t->y - t->oldy, fractionaltic)) >> FRACTOMAPBITS;

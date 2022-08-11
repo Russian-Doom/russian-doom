@@ -254,7 +254,7 @@ void R_SmoothTextureScrolling()
 {
 	fixed_t frac;
 
-	if (uncapped_fps && !vanillaparm && leveltime > oldleveltime)
+	if (uncapped_fps && leveltime > oldleveltime)
 	{
 		frac = fractionaltic;
 	}

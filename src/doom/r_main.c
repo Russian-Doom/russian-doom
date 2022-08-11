@@ -791,7 +791,7 @@ static void R_SetupFrame (player_t *player)
 
     // [AM] Interpolate the player camera if the feature is enabled.
 
-    if (uncapped_fps && !vanillaparm &&
+    if (uncapped_fps &&
         // Don't interpolate on the first tic of a level,
         // otherwise oldviewz might be garbage.
         leveltime > 1 &&

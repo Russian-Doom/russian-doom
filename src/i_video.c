@@ -1679,7 +1679,7 @@ void I_InitGraphics(void)
     SDL_AddEventWatch(HandleWindowResize, screen);
 
     // [JN] Set correct capped/uncapped mode at startup.
-    if (max_fps == 35)
+    if (max_fps == 35 || vanillaparm)
     {
         uncapped_fps = 0;
     }
