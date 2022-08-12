@@ -824,13 +824,18 @@ void D_Display (void)
     } while (!done);
 }
 
-
-// [JN] Un-static for position hot switching
-void EnableLoadingDisk(void)
+// -----------------------------------------------------------------------------
+// EnableLoadingDisk
+// [JN] Un-static for position hot switching.
+// If draw on top (show_diskicon == 2), shift icon two pixel down so
+// no pixel remainings will left beneath wiping effect.
+// -----------------------------------------------------------------------------
+void EnableLoadingDisk (void)
 {
     V_EnableLoadingDisk((aspect_ratio >= 2 && screenblocks == 9 ? 
                          SCREENWIDTH+wide_delta*2 : screenwidth) -
-                         LOADING_DISK_W, SCREENHEIGHT - LOADING_DISK_H);
+                         LOADING_DISK_W,
+                         show_diskicon == 2 ? 2 : SCREENHEIGHT - LOADING_DISK_H);
 }
 
 

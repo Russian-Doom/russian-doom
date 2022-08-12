@@ -136,7 +136,7 @@ static void M_RD_Change_MaxFPS(Direction_t direction);
 static void M_RD_Change_PerfCounter();
 static void M_RD_Change_Smoothing();
 static void M_RD_Change_PorchFlashing();
-static void M_RD_Change_DiskIcon();
+static void M_RD_Change_DiskIcon(Direction_t direction);
 static void M_RD_Change_Wiping(Direction_t direction);
 static void M_RD_Change_Screenshots();
 static void M_RD_Change_ENDOOM();
@@ -686,7 +686,7 @@ static MenuItem_t RenderingItems[] = {
     {ITT_SWITCH, "Pixel scaling:",            "Gbrctkmyjt cukf;bdfybt:",         M_RD_Change_Smoothing,     0},
     {ITT_SWITCH, "Porch palette changing:",   "Bpvtytybt gfkbnhs rhftd 'rhfyf:", M_RD_Change_PorchFlashing, 0},
     {ITT_TITLE,  "Extra",                     "ljgjkybntkmyj",                   NULL,                      0}, // Дополнительно
-    {ITT_SWITCH, "Show disk icon:",           "Jnj,hf;fnm pyfxjr lbcrtns:",      M_RD_Change_DiskIcon,      0},
+    {ITT_LRFUNC, "Show disk icon:",           "Jnj,hf;fnm pyfxjr lbcrtns:",      M_RD_Change_DiskIcon,      0},
     {ITT_LRFUNC, "Screen wiping effect:",     "\'aatrn cvtys \'rhfyjd:",         M_RD_Change_Wiping,        0},
     {ITT_SWITCH, "Screenshot format:",        "Ajhvfn crhbyijnjd:",              M_RD_Change_Screenshots,   0},
     {ITT_SWITCH, "Show ENDOOM screen:",       "Gjrfpsdfnm \'rhfy",               M_RD_Change_ENDOOM,        0}
@@ -1755,7 +1755,9 @@ static void M_RD_Draw_Rendering(void)
         RD_M_DrawTextSmallENG(vga_porch_flash ? "on" : "off", 207 + wide_delta, 85, CR_NONE);
 
         // Show disk icon
-        RD_M_DrawTextSmallENG(show_diskicon ? "on" : "off", 138 + wide_delta, 105, CR_NONE);
+        RD_M_DrawTextSmallENG(show_diskicon == 1 ? "bottom" :
+                              show_diskicon == 2 ? "top" :
+                              "off", 138 + wide_delta, 105, CR_NONE);
 
         // Screen wiping effect
         RD_M_DrawTextSmallENG(screen_wiping == 1 ? "standard" :
@@ -1831,7 +1833,9 @@ static void M_RD_Draw_Rendering(void)
         RD_M_DrawTextSmallRUS(vga_porch_flash ? "drk" : "dsrk", 274 + wide_delta, 85, CR_NONE);
 
         // Отображать значок дискеты
-        RD_M_DrawTextSmallRUS(show_diskicon ? "drk" : "dsrk", 241 + wide_delta, 105, CR_NONE);
+        RD_M_DrawTextSmallRUS(show_diskicon == 1 ? "cybpe" :
+                              show_diskicon == 2 ? "cdth[e" :
+                              "dsrk", 241 + wide_delta, 105, CR_NONE);
 
         // Эффект смены экранов
         RD_M_DrawTextSmallRUS(screen_wiping == 1 ? "cnfylfhnysq" :
@@ -1942,9 +1946,12 @@ static void M_RD_Change_PorchFlashing()
     I_DrawBlackBorders();
 }
 
-static void M_RD_Change_DiskIcon()
+static void M_RD_Change_DiskIcon(Direction_t direction)
 {
-    show_diskicon ^= 1;
+    RD_Menu_SpinInt(&show_diskicon, 0, 2, direction);
+
+    // Recalculate position
+    EnableLoadingDisk();
 }
 
 static void M_RD_Change_Wiping(Direction_t direction)
@@ -2020,8 +2027,6 @@ static void M_RD_Draw_Display(void)
 
 static void M_RD_Change_ScreenSize(Direction_t direction)
 {
-    extern void EnableLoadingDisk();
-
     RD_Menu_SlideInt(&screenblocks, 0, 17, direction);
 
     if (aspect_ratio >= 2)
