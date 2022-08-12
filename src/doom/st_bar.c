@@ -2070,6 +2070,9 @@ void ST_Drawer (void)
     if (screenblocks <= 10 || (automapactive && !automap_overlay))
     {
         ST_DrawBackground();
+        // Don't execute any farther because ST_DrawBackground
+        // drawing non-wide elements by it's own.
+        return;
     }
 
     // [JN] Draw full screen status bar.
