@@ -142,7 +142,7 @@ byte *I_ZoneBase (int *size)
     }
 
     // [crispy] do not allocate new zones ad infinitum
-    if (i > 8)
+    if (i > 16)
     {
         min_ram = default_ram + 1;
     }
