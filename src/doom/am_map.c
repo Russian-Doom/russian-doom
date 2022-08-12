@@ -2507,7 +2507,34 @@ static void AM_drawCrosshair (const int color)
 }
 
 // -----------------------------------------------------------------------------
-// AM_drawCrosshair
+// AM_MapNameDrawer
+// Draws map name.
+// -----------------------------------------------------------------------------
+
+static void AM_MapNameDrawer (void)
+{
+    static char str[128];
+    const int map_y = gamemission == jaguar ? 151 : 159;
+    const int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
+    extern char *level_name;
+
+    sprintf(str, "%s", level_name);
+
+    if (english_language)
+    {
+        dp_translation = (hud_stats_color && !vanillaparm) ? cr[CR_YELLOW] : NULL;
+        RD_M_DrawTextA(str, wide_4_3, map_y);
+        dp_translation = NULL;
+    }
+    else
+    {
+        RD_M_DrawTextSmallRUS(str, wide_4_3, map_y,
+                              (hud_stats_color && !vanillaparm) ? CR_YELLOW : CR_NONE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+// AM_Drawer
 // Draws the entire automap.
 // -----------------------------------------------------------------------------
 
@@ -2578,6 +2605,9 @@ void AM_Drawer (void)
     }
 
     AM_drawMarks();
+
+    // [JN] Draw map name on top of everything.
+    AM_MapNameDrawer();
 
     V_MarkRect(f_x, f_y, f_w, f_h);
 }
