@@ -1109,7 +1109,7 @@ void D_DoomLoop (void)
         }
 
         // move positional sounds
-        S_UpdateSounds (players[consoleplayer].mo);
+        S_UpdateSounds (players[displayplayer].mo);
     }
 }
 

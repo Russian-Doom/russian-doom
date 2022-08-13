@@ -177,6 +177,26 @@ static boolean P_GiveAmmo (player_t *player, const ammotype_t ammo, int num)
 }
 
 // -----------------------------------------------------------------------------
+// [crispy] show weapon pickup messages in multiplayer games
+// [JN] Double array for both languages. Russian is first because:
+//   "english_language 0" = Russian language,
+//   "english_language 1" = English language.
+// -----------------------------------------------------------------------------
+
+static char *const WpnPickupMessages[NUMWEAPONS][2] =
+{
+	{NULL,            NULL       }, // wp_fist
+	{NULL,            NULL       }, // wp_pistol
+	{GOTSHOTGUN_RUS,  GOTSHOTGUN },
+	{GOTCHAINGUN_RUS, GOTCHAINGUN},
+	{GOTLAUNCHER_RUS, GOTLAUNCHER},
+	{GOTPLASMA_RUS,   GOTPLASMA  },
+	{GOTBFG9000_RUS,  GOTBFG9000 },
+	{GOTCHAINSAW_RUS, GOTCHAINSAW},
+	{GOTSHOTGUN2_RUS, GOTSHOTGUN2}
+};
+
+// -----------------------------------------------------------------------------
 // P_GiveWeapon
 // The weapon name may have a MF_DROPPED flag ored in.
 // -----------------------------------------------------------------------------
@@ -201,7 +221,10 @@ static boolean P_GiveWeapon (player_t *player, const weapontype_t weapon, const 
 
         player->pendingweapon = weapon;
 
-        if (player == &players[consoleplayer])
+        // [crispy] show weapon pickup messages in multiplayer games
+        P_SetMessage(player, DEH_String(WpnPickupMessages[weapon][english_language]), msg_pickup, false);
+
+        if (player == &players[displayplayer])
         {
             S_StartSound (NULL, sfx_wpnup);
         }
@@ -817,7 +840,7 @@ void P_TouchSpecialThing (const mobj_t *special, const mobj_t *toucher)
 
     player->bonuscount += BONUSADD;
 
-    if (player == &players[consoleplayer])
+    if (player == &players[displayplayer])
     {
         S_StartSound (NULL, sound);
     }

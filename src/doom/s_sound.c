@@ -615,15 +615,15 @@ void S_StartSound (void *origin_p, const int sfx_id)
 
     // Check to see if it is audible,
     //  and if not, modify the params
-    if (origin && origin != players[consoleplayer].mo)
+    if (origin && origin != players[displayplayer].mo)
     {
-        rc = S_AdjustSoundParams(players[consoleplayer].mo,
+        rc = S_AdjustSoundParams(players[displayplayer].mo,
                                  origin,
                                  &volume,
                                  &sep);
 
-        if (origin->x == players[consoleplayer].mo->x
-        &&  origin->y == players[consoleplayer].mo->y)
+        if (origin->x == players[displayplayer].mo->x
+        &&  origin->y == players[displayplayer].mo->y)
         {
             sep = NORM_SEP;
         }

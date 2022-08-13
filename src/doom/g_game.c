@@ -105,6 +105,7 @@ int             displayplayer;      // view being displayed
 int             levelstarttic;      // gametic at level start 
 int             totalkills, totalitems, totalsecret;    // for intermission
 int             totalleveltimes;    // [crispy] CPhipps - total time for all completed levels
+int             demostarttic;       // [crispy] fix revenant internal demo bug
  
 // [JN] Press Beta: value for player's artifacts and lifes.
 // Note that these are "local" values, not placed into the player's structure -
@@ -556,8 +557,12 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     // special buttons
     if (sendpause)
     {
-        sendpause = false;
-        cmd->buttons = BT_SPECIAL | BTS_PAUSE;
+        sendpause = false; 
+        // [crispy] ignore un-pausing in menus during demo recording
+        if (!(menuactive && demorecording && paused) && gameaction != ga_loadgame)
+        {
+            cmd->buttons = BT_SPECIAL | BTS_PAUSE; 
+        }
     }
 
     if (sendsave)
@@ -721,6 +726,23 @@ void G_DoLoadLevel (void)
 // 
 boolean G_Responder (event_t *ev) 
 { 
+    // [crispy] demo pause (from prboom-plus)
+    if (gameaction == ga_nothing && (demoplayback || gamestate == GS_DEMOSCREEN))
+    {
+        if (BK_isKeyDown(ev, bk_pause))
+        {
+            if (paused ^= 2)
+            {
+                S_PauseSound();
+            }
+            else
+            {
+                S_ResumeSound();
+            }
+            return true;
+        }
+    }
+
     // allow spy mode changes even during the demo
     if (gamestate == GS_LEVEL && BK_isKeyDown(ev, bk_spy) && (singledemo || !deathmatch))
     {
@@ -733,6 +755,9 @@ boolean G_Responder (event_t *ev)
                 displayplayer = 0; 
             }
         } while (!playeringame[displayplayer] && displayplayer != consoleplayer); 
+
+        // [JN] Update sound values for appropriate player.
+        S_UpdateSounds(players[displayplayer].mo);
 
         // [JN] Re-init automap variables for correct player arrow angle.
         if (automapactive)
@@ -899,6 +924,13 @@ void G_Ticker (void)
         } 
     }
 
+    // [crispy] demo sync of revenant tracers and RNG (from prboom-plus)
+    if (paused & 2 || (!demoplayback && menuactive && !netgame))
+    {
+        demostarttic++;
+    }
+    else
+    {
     // get commands, check consistancy,
     // and build new consistancy check
     buf = (gametic/ticdup)%BACKUPTICS; 
@@ -913,7 +945,8 @@ void G_Ticker (void)
 
             if (demoplayback) 
             G_ReadDemoTiccmd (cmd); 
-            if (demorecording) 
+            // [crispy] do not record tics while still playing back in demo continue mode
+            if (demorecording && !demoplayback)
             G_WriteDemoTiccmd (cmd);
 	    
             // check for turbo cheats
@@ -991,10 +1024,17 @@ void G_Ticker (void)
                 savegameslot =  
                 (players[i].cmd.buttons & BTS_SAVEMASK)>>BTS_SAVESHIFT; 
                 gameaction = ga_savegame; 
+                // [crispy] un-pause immediately after saving
+                // (impossible to send save and pause specials within the same tic)
+                if (demorecording && paused)
+                {
+                    sendpause = true;
+                }
                 break; 
                 } 
             } 
         }
+    }
     }
 
     // Have we just finished displaying an intermission screen?
@@ -1006,6 +1046,13 @@ void G_Ticker (void)
 
     oldgamestate = gamestate;
     oldleveltime = leveltime; // [crispy] Track if game is running
+
+    // [crispy] no pause at intermission screen during demo playback 
+    // to avoid desyncs (from prboom-plus)
+    if ((paused & 2 || (!demoplayback && menuactive && !netgame)) && gamestate != GS_LEVEL)
+    {
+        return;
+    }
 
     // do main actions
     switch (gamestate) 
@@ -2331,6 +2378,7 @@ G_InitNew
     // [crispy] CPhipps - total time for all completed levels
     totalleveltimes = 0;
     defdemotics = 0;
+    demostarttic = gametic; // [crispy] fix revenant internal demo bug
 
     // [JN] jff 4/16/98 force marks on automap cleared every new level start
     AM_clearMarks();
@@ -2737,6 +2785,7 @@ void G_DoPlayDemo (void)
     G_InitNew (skill, episode, map); 
     precache = true; 
     starttime = I_GetTime (); 
+    demostarttic = gametic; // [crispy] fix revenant internal demo bug
 
     usergame = false; 
     demoplayback = true; 

@@ -1214,22 +1214,11 @@ void A_Tracer (mobj_t *actor)
     fixed_t	slope;
     mobj_t*	dest;
     mobj_t*	th;
+    extern int demostarttic;
 
-    // killough 1/18/98: this is why some missiles do not have smoke
-    // and some do. Also, internal demos start at random gametics, thus
-    // the bug in which revenants cause internal demos to go out of sync.
-    //
-    // killough 3/6/98: fix revenant internal demo bug by subtracting
-    // levelstarttic from gametic:
-
-    if (singleplayer)
+    // [crispy] fix revenant internal demo bug
+    if ((gametic  - demostarttic) & 3)
     {
-        if (leveltime & 3)
-        return;
-    }
-    else
-    {
-        if (gametic & 3)
         return;
     }
 
