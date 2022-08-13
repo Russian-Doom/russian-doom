@@ -36,7 +36,7 @@ extern int st_palette;
 
 // [crispy] Demo Timer widget
 extern void ST_DrawDemoTimer (const int time);
-extern int defdemotics, deftotaldemotics;
+extern int defdemotics, deftotaldemotics, deftotalplayers;
 
 // Cheat codes
 extern cheatseq_t cheat_mus;

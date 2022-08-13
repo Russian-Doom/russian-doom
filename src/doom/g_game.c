@@ -2401,7 +2401,7 @@ G_InitNew
 #define DEMOMARKER  0x80
 
 // [crispy] demo progress bar and timer widget
-int defdemotics = 0, deftotaldemotics;
+int defdemotics = 0, deftotaldemotics, deftotalplayers = 0;
 
 void G_ReadDemoTiccmd (ticcmd_t* cmd) 
 { 
@@ -2751,6 +2751,14 @@ void G_DoPlayDemo (void)
         {
             demo_ptr += (longtics ? 5 : 4);
             deftotaldemotics++;
+        }
+
+        for (int i = 0 ; i < MAXPLAYERS ; i++)
+        {
+            if (playeringame[i])
+            {
+                deftotalplayers++;
+            }
         }
     }
 } 
