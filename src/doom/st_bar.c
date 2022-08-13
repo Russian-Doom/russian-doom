@@ -2045,7 +2045,17 @@ void ST_WidgetsDrawer (void)
     // [crispy] demo timer widget
     if (demoplayback && (demotimer == 1 || demotimer == 3))
     {
-        ST_DrawDemoTimer(demotimerdir ? (deftotaldemotics - defdemotics) : defdemotics);
+        int j = 0;
+
+        for (int i = 0 ; i < MAXPLAYERS ; i++)
+        {
+            if (playeringame[i])
+            {
+                j++;
+            }
+        }
+
+        ST_DrawDemoTimer(demotimerdir ? (deftotaldemotics - defdemotics) / j : defdemotics / j);
     }
     else if (demorecording && (demotimer == 2 || demotimer == 3))
     {
