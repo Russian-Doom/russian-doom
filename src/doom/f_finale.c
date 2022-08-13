@@ -68,75 +68,42 @@ typedef struct
     GameMission_t mission;
     int episode, level;
     char *background;
-    char *text;
+    char *text_eng;
+    char *text_rus;
 } textscreen_t;
 
 static textscreen_t textscreens[] =
 {
-    { doom,      1, 8,  "FLOOR4_8",  E1TEXT},
-    { doom,      2, 8,  "SFLR6_1",   E2TEXT},
-    { doom,      3, 8,  "MFLR8_4",   E3TEXT},
-    { doom,      4, 8,  "MFLR8_3",   E4TEXT},
-    { doom,      5, 8,  "FLOOR7_2",  E5TEXT}, // [crispy] Sigil
+    { doom,      1, 8,  "FLOOR4_8",  E1TEXT, E1TEXT_RUS},
+    { doom,      2, 8,  "SFLR6_1",   E2TEXT, E2TEXT_RUS},
+    { doom,      3, 8,  "MFLR8_4",   E3TEXT, E3TEXT_RUS},
+    { doom,      4, 8,  "MFLR8_3",   E4TEXT, E4TEXT_RUS},
+    { doom,      5, 8,  "FLOOR7_2",  E5TEXT, E5TEXT_RUS}, // [crispy] & [JN] Sigil
 
-    { doom2,     1, 6,  "SLIME16",   C1TEXT},
-    { doom2,     1, 11, "RROCK14",   C2TEXT},
-    { doom2,     1, 20, "RROCK07",   C3TEXT},
-    { doom2,     1, 30, "RROCK17",   C4TEXT},
-    { doom2,     1, 15, "RROCK13",   C5TEXT},
-    { doom2,     1, 31, "RROCK19",   C6TEXT},
+    { doom2,     1, 6,  "SLIME16",   C1TEXT, C1TEXT_RUS},
+    { doom2,     1, 11, "RROCK14",   C2TEXT, C2TEXT_RUS},
+    { doom2,     1, 20, "RROCK07",   C3TEXT, C3TEXT_RUS},
+    { doom2,     1, 30, "RROCK17",   C4TEXT, C4TEXT_RUS},
+    { doom2,     1, 15, "RROCK13",   C5TEXT, C5TEXT_RUS},
+    { doom2,     1, 31, "RROCK19",   C6TEXT, C6TEXT_RUS},
 
-    { pack_tnt,  1, 6,  "SLIME16",   T1TEXT},
-    { pack_tnt,  1, 11, "RROCK14",   T2TEXT},
-    { pack_tnt,  1, 20, "RROCK07",   T3TEXT},
-    { pack_tnt,  1, 30, "RROCK17",   T4TEXT},
-    { pack_tnt,  1, 15, "RROCK13",   T5TEXT},
-    { pack_tnt,  1, 31, "RROCK19",   T6TEXT},
+    { pack_tnt,  1, 6,  "SLIME16",   T1TEXT, T1TEXT_RUS},
+    { pack_tnt,  1, 11, "RROCK14",   T2TEXT, T2TEXT_RUS},
+    { pack_tnt,  1, 20, "RROCK07",   T3TEXT, T3TEXT_RUS},
+    { pack_tnt,  1, 30, "RROCK17",   T4TEXT, T4TEXT_RUS},
+    { pack_tnt,  1, 15, "RROCK13",   T5TEXT, T5TEXT_RUS},
+    { pack_tnt,  1, 31, "RROCK19",   T6TEXT, T6TEXT_RUS},
 
-    { pack_plut, 1, 6,  "SLIME16",   P1TEXT},
-    { pack_plut, 1, 11, "RROCK14",   P2TEXT},
-    { pack_plut, 1, 20, "RROCK07",   P3TEXT},
-    { pack_plut, 1, 30, "RROCK17",   P4TEXT},
-    { pack_plut, 1, 15, "RROCK13",   P5TEXT},
-    { pack_plut, 1, 31, "RROCK19",   P6TEXT},
+    { pack_plut, 1, 6,  "SLIME16",   P1TEXT, P1TEXT_RUS},
+    { pack_plut, 1, 11, "RROCK14",   P2TEXT, P2TEXT_RUS},
+    { pack_plut, 1, 20, "RROCK07",   P3TEXT, P3TEXT_RUS},
+    { pack_plut, 1, 30, "RROCK17",   P4TEXT, P4TEXT_RUS},
+    { pack_plut, 1, 15, "RROCK13",   P5TEXT, P5TEXT_RUS},
+    { pack_plut, 1, 31, "RROCK19",   P6TEXT, P6TEXT_RUS},
 
-    { pack_nerve, 1, 8, "SLIME16",   N1TEXT},
+    { pack_nerve, 1, 8, "SLIME16",   N1TEXT, N1TEXT_RUS},
 
-    { jaguar,    1, 23, "ROCKS",     J1TEXT},
-};
-
-static textscreen_t textscreens_rus[] =
-{
-    { doom,      1, 8,  "FLOOR4_8",  E1TEXT_RUS},
-    { doom,      2, 8,  "SFLR6_1",   E2TEXT_RUS},
-    { doom,      3, 8,  "MFLR8_4",   E3TEXT_RUS},
-    { doom,      4, 8,  "MFLR8_3",   E4TEXT_RUS},
-    { doom,      5, 8,  "FLOOR7_2",  E5TEXT_RUS}, // [JN] Sigil
-
-    { doom2,     1, 6,  "SLIME16",   C1TEXT_RUS},
-    { doom2,     1, 11, "RROCK14",   C2TEXT_RUS},
-    { doom2,     1, 20, "RROCK07",   C3TEXT_RUS},
-    { doom2,     1, 30, "RROCK17",   C4TEXT_RUS},
-    { doom2,     1, 15, "RROCK13",   C5TEXT_RUS},
-    { doom2,     1, 31, "RROCK19",   C6TEXT_RUS},
-
-    { pack_tnt,  1, 6,  "SLIME16",   T1TEXT_RUS},
-    { pack_tnt,  1, 11, "RROCK14",   T2TEXT_RUS},
-    { pack_tnt,  1, 20, "RROCK07",   T3TEXT_RUS},
-    { pack_tnt,  1, 30, "RROCK17",   T4TEXT_RUS},
-    { pack_tnt,  1, 15, "RROCK13",   T5TEXT_RUS},
-    { pack_tnt,  1, 31, "RROCK19",   T6TEXT_RUS},
-
-    { pack_plut, 1, 6,  "SLIME16",   P1TEXT_RUS},
-    { pack_plut, 1, 11, "RROCK14",   P2TEXT_RUS},
-    { pack_plut, 1, 20, "RROCK07",   P3TEXT_RUS},
-    { pack_plut, 1, 30, "RROCK17",   P4TEXT_RUS},
-    { pack_plut, 1, 15, "RROCK13",   P5TEXT_RUS},
-    { pack_plut, 1, 31, "RROCK19",   P6TEXT_RUS},
-
-    { pack_nerve, 1, 8, "SLIME16",   N1TEXT_RUS},
-
-    { jaguar,    1, 23, "ROCKS",     J1TEXT_RUS},
+    { jaguar,    1, 23, "ROCKS",     J1TEXT, J1TEXT_RUS},
 };
 
 
@@ -180,9 +147,7 @@ void F_StartFinale (void)
 
     for (size_t i = 0; i < arrlen(textscreens) ; ++i)
     {
-        textscreen_t *screen = english_language ? 
-                               &textscreens[i] :
-                               &textscreens_rus[i];
+        textscreen_t *screen = &textscreens[i];
 
         // Hack for Chex Quest
 
@@ -195,7 +160,7 @@ void F_StartFinale (void)
         && (logical_gamemission != doom || gameepisode == screen->episode)
         && gamemap == screen->level)
         {
-            finaletext = screen->text;
+            finaletext = english_language ? screen->text_eng : screen->text_rus;
             finaleflat = screen->background;
         }
     }
