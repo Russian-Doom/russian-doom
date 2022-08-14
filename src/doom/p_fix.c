@@ -5541,17 +5541,13 @@ static const linefix_t linefix_plut_map06[] =
 static const sectorfix_t sectorfix_plut_map06[] =
 {
     { pack_plut, 1, 6,  49,        "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 6,  60,        "",         "", DEFAULT,      36, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 6,  61,        "",         "", DEFAULT,      36, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 6,  72,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 6,  74,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 6,  98,        "",  "CEIL3_5", DEFAULT,      36, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 6, 102, "CEIL5_2",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 6, 118, "CEIL5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 6, 133,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 6, 149,        "",   "FLAT23", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 6, 150,        "",   "FLAT23", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 6, 187,        "",         "", DEFAULT,      36, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 6, 193, "SLIME15",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
 };
