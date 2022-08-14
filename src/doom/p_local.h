@@ -188,19 +188,6 @@ typedef struct
     int   newtag;
 } sectorfix_t;
 
-typedef struct
-{
-    int mission;
-    int epsiode;
-    int map;
-    int thing;
-    int type;
-    int oldx, oldy;
-    int newx, newy;
-    int angle;
-    int options;
-} thingfix_t;
-
 // -----------------------------------------------------------------------------
 // P_FLOOR
 // -----------------------------------------------------------------------------
@@ -561,7 +548,6 @@ extern mobj_t  **blocklinks;    // for thing chains
 extern const vertexfix_t *selected_vertexfix;
 extern const linefix_t   *selected_linefix;
 extern const sectorfix_t *selected_sectorfix;
-extern const thingfix_t  *selected_thingfix;
 extern const flow_t      *selected_flow;
 extern const fall_t      *selected_fall;
 

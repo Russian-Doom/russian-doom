@@ -1273,39 +1273,6 @@ static void P_LoadThings (const int lump)
         spawnthing.type = SHORT(mt->type);
         spawnthing.options = SHORT(mt->options);
 
-        // [BH] Apply any level-specific fixes.
-        if (canmodify && fix_map_errors)
-        {
-            for (int j = 0; selected_thingfix[j].mission != -1; j++)
-            {
-                if (gamemission == selected_thingfix[j].mission && gameepisode == selected_thingfix[j].epsiode
-                && gamemap == selected_thingfix[j].map && i == selected_thingfix[j].thing && spawnthing.type == selected_thingfix[j].type
-                && spawnthing.x == SHORT(selected_thingfix[j].oldx) && spawnthing.y == SHORT(selected_thingfix[j].oldy))
-                {
-                    if (selected_thingfix[j].newx == REMOVE && selected_thingfix[j].newy == REMOVE)
-                    {
-                        spawn = false;
-                    }
-                    else
-                    {
-                        spawnthing.x = SHORT(selected_thingfix[j].newx);
-                        spawnthing.y = SHORT(selected_thingfix[j].newy);
-                    }
-
-                    if (selected_thingfix[j].angle != DEFAULT)
-                    {
-                        spawnthing.angle = SHORT(selected_thingfix[j].angle);
-                    }
-                    if (selected_thingfix[j].options != DEFAULT)
-                    {
-                        spawnthing.options = selected_thingfix[j].options;
-                    }
-
-                    break;
-                }
-            }
-        }
-	
         P_SpawnMapThing(&spawnthing);
     }
 

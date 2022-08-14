@@ -29,7 +29,6 @@
 #define VERTEXFIX_END  { -1, 0, 0, 0, 0, 0, 0, 0 }
 #define LINEFIX_END    { -1, 0, 0, 0, 0, "", "", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT }
 #define SECTORFIX_END  { -1, 0, 0, 0, "", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-#define THINGFIX_END   { -1, 0, 0, 0, 0, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT }
 
 #define FLOW_END       { -1, 0, 0, 0, DEFAULT }
 #define FALL_END       { -1, 0, 0, 0, DEFAULT }
@@ -37,7 +36,6 @@
 static const vertexfix_t vertexfix_dummy[] = { VERTEXFIX_END };
 static const linefix_t   linefix_dummy[]   = { LINEFIX_END   };
 static const sectorfix_t sectorfix_dummy[] = { SECTORFIX_END };
-static const thingfix_t  thingfix_dummy[]  = { THINGFIX_END  };
 
 static const flow_t flow_dummy[] = { FLOW_END };
 static const fall_t fall_dummy[] = { FLOW_END };
@@ -46,7 +44,6 @@ static const fall_t fall_dummy[] = { FLOW_END };
 const vertexfix_t *selected_vertexfix;
 const linefix_t   *selected_linefix;
 const sectorfix_t *selected_sectorfix;
-const thingfix_t  *selected_thingfix;
 
 // [JN] Tables with liquid flow/fall effect.
 const flow_t *selected_flow;
@@ -315,13 +312,6 @@ static const sectorfix_t sectorfix_doom1_e1m6[] =
     SECTORFIX_END
 };
 
-static const thingfix_t thingfix_doom1_e1m6[] =
-{
-    { doom, 1, 6,  16, 3002,   800, -704,   800, -688, DEFAULT, DEFAULT },
-    { doom, 1, 6, 403,   58, -2016, 2096, -2016, 2080, DEFAULT, DEFAULT },
-    THINGFIX_END
-};
-
 static const flow_t flow_doom1_e1m6[] =
 {
     { doom, 1, 6,  34, 101 },
@@ -384,16 +374,6 @@ static const sectorfix_t sectorfix_doom1_e1m7[] =
 {
     { doom, 1, 7, 109, "", "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
-};
-
-static const thingfix_t thingfix_doom1_e1m7[] =
-{
-    { doom, 1, 7, 15, 2012, -304, -2256, -304, -2264, DEFAULT, DEFAULT },
-    { doom, 1, 7, 16, 2049, -272, -2256, -272, -2264, DEFAULT, DEFAULT },
-    { doom, 1, 7, 17, 2048, -240, -2256, -240, -2264, DEFAULT, DEFAULT },
-    { doom, 1, 7, 18, 2002, -208, -2256, -208, -2264, DEFAULT, DEFAULT },
-    { doom, 1, 7, 19, 2048, -176, -2256, -176, -2264, DEFAULT, DEFAULT },
-    THINGFIX_END
 };
 
 static const flow_t flow_doom1_e1m7[] =
@@ -585,13 +565,6 @@ static const sectorfix_t sectorfix_doom1_e2m2[] =
     SECTORFIX_END
 };
 
-static const thingfix_t thingfix_doom1_e2m2[] =
-{
-//  { doom, 2, 2, 2, 1, 608, 4576, 608, 4574, DEFAULT, DEFAULT }, [JN] Not safe for DEMO2
-//  { doom, 2, 2, 3, 2,  96, 4576,  96, 4574, DEFAULT, DEFAULT }, [JN] Not safe for DEMO2
-    THINGFIX_END
-};
-
 static const flow_t flow_doom1_e2m2[] =
 {
     { doom, 2, 2,   0, 202 },
@@ -675,12 +648,6 @@ static const sectorfix_t sectorfix_doom1_e2m3[] =
     { doom, 2, 3, 112, "",   "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom, 2, 3, 115, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
-};
-
-static const thingfix_t thingfix_doom1_e2m3[] =
-{
-    { doom, 2, 3, 37, 8, 864, -224, 864, -216, DEFAULT, DEFAULT },
-    THINGFIX_END
 };
 
 static const flow_t flow_doom1_e2m3[] =
@@ -814,12 +781,6 @@ static const sectorfix_t sectorfix_doom1_e2m5[] =
     SECTORFIX_END
 };
 
-static const thingfix_t thingfix_doom1_e2m5[] =
-{
-    { doom, 2, 5, 79, 2005, -1056, 160, -1052, 160, DEFAULT, DEFAULT },
-    THINGFIX_END
-};
-
 static const flow_t flow_doom1_e2m5[] =
 {
     { doom, 2, 5,  49, 222 },
@@ -907,13 +868,6 @@ static const sectorfix_t sectorfix_doom1_e2m6[] =
     { doom, 2, 6, 165,         "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom, 2, 6, 170,         "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
-};
-
-static const thingfix_t thingfix_doom1_e2m6[] =
-{
-    { doom, 2, 6, 290, 3002,  992, -128, REMOVE, REMOVE, DEFAULT, DEFAULT },
-    { doom, 2, 6, 291, 3002, 1056, -128, REMOVE, REMOVE, DEFAULT, DEFAULT },
-    THINGFIX_END
 };
 
 static const flow_t flow_doom1_e2m6[] =
@@ -1210,13 +1164,6 @@ static const sectorfix_t sectorfix_doom1_e3m3[] =
     { doom, 3, 3, 172, "",  "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom, 3, 3, 176, "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
-};
-
-static const thingfix_t thingfix_doom1_e3m3[] =
-{
-    { doom, 3, 3,  19, 2047, -480, 864,  REMOVE, REMOVE, DEFAULT, DEFAULT },
-    { doom, 3, 3, 180,   34, -576, 848,    -576,    840, DEFAULT, DEFAULT },
-    THINGFIX_END
 };
 
 static const flow_t flow_doom1_e3m3[] =
@@ -1786,15 +1733,6 @@ static const sectorfix_t sectorfix_doom1_e4m1[] =
     SECTORFIX_END
 };
 
-static const thingfix_t thingfix_doom1_e4m1[] =
-{
-    { doom, 4, 1, 0, 1, 160, 352, 160, 350, DEFAULT, DEFAULT },
-    { doom, 4, 1, 1, 2, 288, 352, 288, 350, DEFAULT, DEFAULT },
-    { doom, 4, 1, 2, 3, 416, 224, 414, 224, DEFAULT, DEFAULT },
-    { doom, 4, 1, 3, 4,  32, 224,  34, 224, DEFAULT, DEFAULT },
-    THINGFIX_END
-};
-
 static const flow_t flow_doom1_e4m1[] =
 {
     { doom, 4, 1, 16, 101 },
@@ -1978,13 +1916,6 @@ static const sectorfix_t sectorfix_doom1_e4m3[] =
     SECTORFIX_END
 };
 
-static const thingfix_t thingfix_doom1_e4m3[] =
-{
-    { doom, 4, 3,  69, 3001, -608, -1696,   -640,  -1696, DEFAULT, DEFAULT },
-    { doom, 4, 3, 232, 2010, 1296,  1008, REMOVE, REMOVE, DEFAULT, DEFAULT },
-    THINGFIX_END
-};
-
 static const flow_t flow_doom1_e4m3[] =
 {
     { doom, 4, 3,  12, 232 },
@@ -2079,15 +2010,6 @@ static const sectorfix_t sectorfix_doom1_e4m4[] =
     { doom, 4, 4, 62,        "", "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom, 4, 4, 75, "SWATER3",      "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
-};
-
-static const thingfix_t thingfix_doom1_e4m4[] =
-{
-    { doom, 4, 4, 106,   58, 320, -160, 328, -128, DEFAULT, DEFAULT },
-    { doom, 4, 4, 107,   58, -16, -160,  -8, -128, DEFAULT, DEFAULT },
-    { doom, 4, 4, 108, 3005, 320,  -96, 328,  -88, DEFAULT, DEFAULT },
-    { doom, 4, 4, 109, 3005, -16,  -96,  -8,  -88, DEFAULT, DEFAULT },
-    THINGFIX_END
 };
 
 static const flow_t flow_doom1_e4m4[] =
@@ -2318,12 +2240,6 @@ static const sectorfix_t sectorfix_doom1_e4m7[] =
     { doom, 4, 7, 212,      "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom, 4, 7, 264,      "",        "",       0, DEFAULT,       0, DEFAULT, DEFAULT },
     SECTORFIX_END
-};
-
-static const thingfix_t thingfix_doom1_e4m7[] =
-{
-    { doom, 4, 7, 236, 2022, 88, -1472, 104, -1472, DEFAULT, DEFAULT },
-    THINGFIX_END
 };
 
 static const flow_t flow_doom1_e4m7[] =
@@ -2656,23 +2572,6 @@ static const sectorfix_t sectorfix_doom2_map02[] =
     SECTORFIX_END
 };
 
-static const thingfix_t thingfix_doom2_map02[] =
-{
-
-    { doom2, 1, 2, 68, 2035, 240,  976, 242,  986, DEFAULT, DEFAULT },
-    { doom2, 1, 2, 69, 2035, 464,  784, 464,  800, DEFAULT, DEFAULT },
-    { doom2, 1, 2, 70, 2035, 352,  720, 354,  718, DEFAULT, DEFAULT },
-    { doom2, 1, 2, 71, 2035, 352,  528, 352,  518, DEFAULT, DEFAULT },
-    { doom2, 1, 2, 73, 2035, 864,  528, 864,  518, DEFAULT, DEFAULT },
-    { doom2, 1, 2, 74, 2035, 144, 1040, 142, 1040, DEFAULT, DEFAULT },
-    { doom2, 1, 2, 75, 2035, 560,  528, 560,  518, DEFAULT, DEFAULT },
-    { doom2, 1, 2, 76, 2035, 720,  528, 720,  518, DEFAULT, DEFAULT },
-    { doom2, 1, 2, 77, 2035, 224, 1136, 222, 1136, DEFAULT, DEFAULT },
-    { doom2, 1, 2, 84, 2035, 992,  896, 992,  904, DEFAULT, DEFAULT },
-    { doom2, 1, 2, 85,    9, 944,  896, 944,  912, DEFAULT, DEFAULT },
-    THINGFIX_END
-};
-
 static const flow_t flow_doom2_map02[] =
 {
     { doom2, 1, 2,  2, 101 },
@@ -2871,13 +2770,6 @@ static const sectorfix_t sectorfix_doom2_map04[] =
     SECTORFIX_END
 };
 
-static const thingfix_t thingfix_doom2_map04[] =
-{
-    { doom2, 1, 4, 136, 86, -368,  880, -360,  880, DEFAULT, DEFAULT },
-    { doom2, 1, 4, 137, 86, -368, 1072, -360, 1080, DEFAULT, DEFAULT },
-    THINGFIX_END
-};
-
 static const flow_t flow_doom2_map04[] =
 {
     { doom2, 1, 4, 24, 100 },
@@ -3017,12 +2909,6 @@ static const sectorfix_t sectorfix_doom2_map05[] =
     SECTORFIX_END
 };
 
-static const thingfix_t thingfix_doom2_map05[] =
-{
-    { doom2, 1, 5, 108, 3006, 2848, -400, REMOVE, REMOVE, DEFAULT, DEFAULT },
-    THINGFIX_END
-};
-
 static const flow_t flow_doom2_map05[] =
 {
     { doom2, 1, 5,   5, 231 },
@@ -3093,22 +2979,6 @@ static const sectorfix_t sectorfix_doom2_map06[] =
     { doom2, 1, 6, 86, "",  "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 6, 87, "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
-};
-
-static const thingfix_t thingfix_doom2_map06[] =
-{
-    { doom2, 1, 6, 244,   86, 1264,  336, 1264,  344, DEFAULT, DEFAULT },
-    { doom2, 1, 6,  96,   85, 1280, 1200, 1288, 1200, DEFAULT, DEFAULT },
-    { doom2, 1, 6, 205, 2015, 1104, 1248, 1116, 1248, DEFAULT, DEFAULT },
-    { doom2, 1, 6, 206, 2015, 1136, 1248, 1148, 1248, DEFAULT, DEFAULT },
-    { doom2, 1, 6, 207, 2015, 1168, 1248, 1180, 1248, DEFAULT, DEFAULT },
-    { doom2, 1, 6, 208, 2015, 1104, 1216, 1116, 1216, DEFAULT, DEFAULT },
-    { doom2, 1, 6, 209, 2015, 1136, 1216, 1148, 1216, DEFAULT, DEFAULT },
-    { doom2, 1, 6, 210, 2015, 1168, 1216, 1180, 1216, DEFAULT, DEFAULT },
-    { doom2, 1, 6, 211, 2015, 1104, 1184, 1116, 1184, DEFAULT, DEFAULT },
-    { doom2, 1, 6, 212, 2015, 1136, 1184, 1148, 1184, DEFAULT, DEFAULT },
-    { doom2, 1, 6, 213, 2015, 1168, 1184, 1180, 1184, DEFAULT, DEFAULT },
-    THINGFIX_END
 };
 
 static const flow_t flow_doom2_map06[] =
@@ -3349,7 +3219,6 @@ static const sectorfix_t sectorfix_doom2_map10[] =
     { doom2, 1, 10,  37, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 10,  52, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 10,  75, "", "FLAT5_4", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 10, 101, "",        "", DEFAULT,     128, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
 };
 
@@ -3463,12 +3332,6 @@ static const sectorfix_t sectorfix_doom2_map11[] =
 {
 { doom2, 1, 11, 90, "SLIME16", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
-};
-
-static const thingfix_t thingfix_doom2_map11[] =
-{
-    { doom2, 1, 11, 236, 17, 1952, 272, REMOVE, REMOVE, DEFAULT, DEFAULT },
-    THINGFIX_END
 };
 
 static const flow_t flow_doom2_map11[] =
@@ -3697,13 +3560,6 @@ static const sectorfix_t sectorfix_doom2_map13[] =
     { doom2, 1, 13,  79,        "",        "", DEFAULT,     512, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 13, 151,        "", "CEIL5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
-};
-
-static const thingfix_t thingfix_doom2_map13[] =
-{
-    { doom2, 1, 13, 216, 3001, 1408, -3232, 1416, -3232, DEFAULT, DEFAULT },
-    { doom2, 1, 13, 218, 3001, 1408, -2912, 1416, -2912, DEFAULT, DEFAULT },
-    THINGFIX_END
 };
 
 // -----------------------------------------------------------------------------
@@ -4104,18 +3960,6 @@ static const sectorfix_t sectorfix_doom2_map14[] =
     SECTORFIX_END
 };
 
-static const thingfix_t thingfix_doom2_map14[] =
-{
-    { doom2, 1, 14, 24, 45, 1408, 240, 1400, 240, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 26, 45, 1120, 448, 1128, 456, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 27, 45, 1408, 448, 1400, 456, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 32, 46, 3248, 384, 3248, 392, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 33, 46, 3120, 384, 3120, 392, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 34, 46, 2928, 384, 2928, 392, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 35, 46, 2800, 384, 2800, 392, DEFAULT, DEFAULT },
-    THINGFIX_END
-};
-
 static const flow_t flow_doom2_map14[] =
 {
     { doom2, 1, 14,   0, 102 },
@@ -4314,16 +4158,6 @@ static const sectorfix_t sectorfix_doom2_map17[] =
     SECTORFIX_END
 };
 
-static const thingfix_t thingfix_doom2_map17[] =
-{
-    { doom2, 1, 17, 127, 58, -1888, -2896, -1896, -2872, DEFAULT, DEFAULT },
-    { doom2, 1, 17, 128, 58, -1984, -2896, -1976, -2872, DEFAULT, DEFAULT },
-    { doom2, 1, 17, 129, 58, -2064, -2896, -2056, -2872, DEFAULT, DEFAULT },
-    { doom2, 1, 17, 130, 58, -1936, -2848, -1936, -2800, DEFAULT, DEFAULT },
-    { doom2, 1, 17, 131, 58, -2016, -2848, -2016, -2800, DEFAULT, DEFAULT },
-    THINGFIX_END
-};
-
 static const flow_t flow_doom2_map17[] =
 {
     { doom2, 1, 17,   0, 101 },
@@ -4431,14 +4265,6 @@ static const sectorfix_t sectorfix_doom2_map18[] =
     SECTORFIX_END
 };
 
-static const thingfix_t thingfix_doom2_map18[] =
-{
-    { doom2, 1, 18, 188, 2048,  816, 1216,  812, 1216, DEFAULT, DEFAULT },
-    { doom2, 1, 18, 189, 2047,  816, 1168,  812, 1168, DEFAULT, DEFAULT },
-    { doom2, 1, 18, 278, 2015, -912,  368, -916,  368, DEFAULT, DEFAULT },
-    THINGFIX_END
-};
-
 static const flow_t flow_doom2_map18[] =
 {
     { doom2, 1, 18, 45, 231 },
@@ -4502,17 +4328,10 @@ static const linefix_t linefix_doom2_map19[] =
 
 static const sectorfix_t sectorfix_doom2_map19[] =
 {
-    { doom2, 1, 19,  63,        "",       "",     176, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 19, 187, "FLAT5_4",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 19, 193, "FLAT5_4",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 19, 229,        "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
-};
-
-static const thingfix_t thingfix_doom2_map19[] =
-{
-    { doom2, 1, 19, 112, 14, -912, -880, -912, -880, DEFAULT, (MTF_EASY | MTF_NORMAL | MTF_HARD) },
-    THINGFIX_END
 };
 
 static const flow_t flow_doom2_map19[] =
@@ -4599,7 +4418,6 @@ static const linefix_t linefix_doom2_map20[] =
     { doom2, 1, 20,  530, 0, "", "",        "",      -1, DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 20,  531, 0, "", "",        "",       8, DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 20,  556, 0, "", "",        "",     -16, DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 20,  557, 0, "", "",        "", DEFAULT, DEFAULT,          DEFAULT,      37, DEFAULT },
     { doom2, 1, 20,  567, 0, "", "",        "",       4, DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 20,  570, 0, "", "",        "",      -8, DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 20,  590, 0, "", "",        "",       8,     -33,          DEFAULT, DEFAULT, DEFAULT },
@@ -4920,13 +4738,6 @@ static const linefix_t linefix_doom2_map24[] =
     { doom2, 1,  24,  985, 1, "", "",        "",     -20, DEFAULT,     DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1,  24, 1038, 0, "", "",        "", DEFAULT, DEFAULT, ML_DONTDRAW, DEFAULT, DEFAULT },
     LINEFIX_END
-};
-
-static const thingfix_t thingfix_doom2_map24[] =
-{
-    { doom2, 1, 24, 238, 3002, -1200, -352, -1184, -352, DEFAULT, DEFAULT },
-    { doom2, 1, 24, 239, 3002, -1136, -352, -1120, -352, DEFAULT, DEFAULT },
-    THINGFIX_END
 };
 
 static const flow_t flow_doom2_map24[] =
@@ -5426,12 +5237,6 @@ static const linefix_t linefix_doom2_map30[] =
     LINEFIX_END
 };
 
-static const thingfix_t thingfix_doom2_map30[] =
-{
-    { doom2, 1, 30, 1, 89, 2880, 1424, 2880, 1424, 270, DEFAULT },
-    THINGFIX_END
-};
-
 static const flow_t flow_doom2_map30[] =
 {
     { doom2, 1, 30, 0, 102 },
@@ -5493,12 +5298,6 @@ static const linefix_t linefix_doom2_map31[] =
     LINEFIX_END
 };
 
-static const thingfix_t thingfix_doom2_map31[] =
-{
-    { doom2, 1, 31, 60, 3002, 1376, 800, 1376, 736, DEFAULT, DEFAULT },
-    THINGFIX_END
-};
-
 // -----------------------------------------------------------------------------
 // LEVEL 32: GROSSE
 // -----------------------------------------------------------------------------
@@ -5508,12 +5307,6 @@ static const linefix_t linefix_doom2_map32[] =
     { doom2, 1, 32, 30, 0, "", "", "", DEFAULT, 0, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 32, 31, 0, "", "", "", DEFAULT, 0, DEFAULT, DEFAULT, DEFAULT },
     LINEFIX_END
-};
-
-static const thingfix_t thingfix_doom2_map32[] =
-{
-    { doom2, 1, 32, 67, 11, 1216, 4640, 1216, 4832, DEFAULT, DEFAULT },
-    THINGFIX_END
 };
 
 
@@ -6008,12 +5801,6 @@ static const sectorfix_t sectorfix_plut_map09[] =
     SECTORFIX_END
 };
 
-static const thingfix_t thingfix_plut_map09[] =
-{
-    { pack_plut, 1, 9, 304, 56, -5216, -1568, REMOVE, REMOVE, DEFAULT, DEFAULT },
-    THINGFIX_END
-};
-
 static const flow_t flow_plut_map09[] =
 {
     { pack_plut, 1, 9,   6, 100 },
@@ -6168,13 +5955,6 @@ static const sectorfix_t sectorfix_plut_map12[] =
     { pack_plut, 1, 12, 155,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 12, 160,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
-};
-
-static const thingfix_t thingfix_plut_map12[] =
-{
-    { pack_plut, 1, 12, 225, 0, 1600, -3104, REMOVE, REMOVE, DEFAULT, DEFAULT },
-    { pack_plut, 1, 12, 226, 0,  992, -3360, REMOVE, REMOVE, DEFAULT, DEFAULT },
-    THINGFIX_END
 };
 
 static const flow_t flow_plut_map12[] =
@@ -7300,12 +7080,6 @@ static const sectorfix_t sectorfix_plut_map28[] =
     SECTORFIX_END
 };
 
-static const thingfix_t thingfix_plut_map28[] =
-{
-    { pack_plut, 1, 28, 49, 2013, 352, -1312, 364, -1312, DEFAULT, DEFAULT },
-    THINGFIX_END
-};
-
 static const flow_t flow_plut_map28[] =
 {
     { pack_plut, 1, 28,   0, 100 },
@@ -7429,17 +7203,6 @@ static const sectorfix_t sectorfix_plut_map30[] =
     { pack_plut, 1, 30,  35,        "", "RROCK09", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 30, 127, "CEIL5_1", "CEIL5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
-};
-
-static const thingfix_t thingfix_plut_map30[] =
-{
-    { pack_plut, 1, 30, 206,   83,  -480, 1920,  -480, 1920, DEFAULT, MTF_NETGAME },
-    { pack_plut, 1, 30, 250, 2023, -2368, 3424, -2368, 3424, DEFAULT, MTF_NETGAME },
-    { pack_plut, 1, 30, 251, 2023, -2272, 2368, -2272, 2368, DEFAULT, MTF_NETGAME },
-    { pack_plut, 1, 30, 252, 2023, -1632, 2464, -1632, 2464, DEFAULT, MTF_NETGAME },
-    { pack_plut, 1, 30, 253, 2023,  -288, 2400,  -288, 2400, DEFAULT, MTF_NETGAME },
-    { pack_plut, 1, 30, 254, 2023, -1248, 3104, -1248, 3104, DEFAULT, MTF_NETGAME },
-    THINGFIX_END
 };
 
 static const flow_t flow_plut_map30[] =
@@ -7667,13 +7430,6 @@ static const linefix_t linefix_tnt_map03[] =
     { pack_tnt, 1, 3, 1354, 0, "",         "", "",      48, DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
     { pack_tnt, 1, 3, 1364, 0, "",         "", "",      16, DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
     LINEFIX_END
-};
-
-static const thingfix_t thingfix_tnt_map03[] =
-{
-    { pack_tnt, 1, 3,  7, 14, -416,  416, -416,  416, 135, DEFAULT },
-    { pack_tnt, 1, 3, 34, 14,  960, 1472,  960, 1472, 135, DEFAULT },
-    THINGFIX_END
 };
 
 static const flow_t flow_tnt_map03[] =
@@ -8089,13 +7845,6 @@ static const sectorfix_t sectorfix_tnt_map11[] =
     { pack_tnt, 1, 11, 268,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_tnt, 1, 11, 272,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
-};
-
-static const thingfix_t thingfix_tnt_map11[] =
-{
-    { pack_tnt, 1, 11, 314, 26, 1640, 936, 1624, 944, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11, 315, 25, 1816, 936, 1832, 944, DEFAULT, DEFAULT },
-    THINGFIX_END
 };
 
 static const flow_t flow_tnt_map11[] =
@@ -8783,12 +8532,6 @@ static const sectorfix_t sectorfix_tnt_map20[] =
     SECTORFIX_END
 };
 
-static const thingfix_t thingfix_tnt_map20[] =
-{
-    { pack_tnt, 1, 20, 511, 17, 2910, -1595, REMOVE, REMOVE, DEFAULT, DEFAULT },
-    THINGFIX_END
-};
-
 static const flow_t flow_tnt_map20[] =
 {
     { pack_tnt, 1, 20,  69, 101 },
@@ -8993,12 +8736,6 @@ static const sectorfix_t sectorfix_tnt_map24[] =
     SECTORFIX_END
 };
 
-static const thingfix_t thingfix_tnt_map24[] =
-{
-    { pack_tnt, 1, 24, 158, 70, -912, 1440, REMOVE, REMOVE, DEFAULT, DEFAULT },
-    THINGFIX_END
-};
-
 static const flow_t flow_tnt_map24[] =
 {
     {   pack_tnt, 1, 24,   0, 100 },
@@ -9075,12 +8812,6 @@ static const sectorfix_t sectorfix_tnt_map25[] =
     { pack_tnt, 1, 25, 306, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_tnt, 1, 25, 319, "",  "RROCK09", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
-};
-
-static const thingfix_t thingfix_tnt_map25[] =
-{
-    { pack_tnt, 1, 25, 362, 2046, 1656, -512, REMOVE, REMOVE, DEFAULT, DEFAULT },
-    THINGFIX_END
 };
 
 static const flow_t flow_tnt_map25[] =
@@ -9261,12 +8992,6 @@ static const sectorfix_t sectorfix_tnt_map29[] =
     SECTORFIX_END
 };
 
-static const thingfix_t thingfix_tnt_map29[] =
-{
-    { pack_tnt, 1, 29, 405, 67, -5536,992, REMOVE, REMOVE, DEFAULT, DEFAULT },
-    THINGFIX_END
-};
-
 static const flow_t flow_tnt_map29[] =
 {
     { pack_tnt, 1, 29,   1, 100 },
@@ -9405,21 +9130,6 @@ static const sectorfix_t sectorfix_tnt_map31[] =
     SECTORFIX_END
 };
 
-static const thingfix_t thingfix_tnt_map31[] =
-{
-    { pack_tnt, 1,  31, 171, 9, -608, 912, -608, 912, 90, DEFAULT },
-    { pack_tnt, 1,  31, 172, 9, -640, 864, -640, 864, 90, DEFAULT },
-    { pack_tnt, 1,  31, 173, 9, -576, 864, -576, 864, 90, DEFAULT },
-    { pack_tnt, 1,  31, 174, 9, -640, 800, -640, 800, 90, DEFAULT },
-    { pack_tnt, 1,  31, 175, 9, -576, 800, -576, 800, 90, DEFAULT },
-    { pack_tnt, 1,  31, 176, 9, -640, 736, -640, 736, 90, DEFAULT },
-    { pack_tnt, 1,  31, 177, 9, -576, 736, -576, 736, 90, DEFAULT },
-    { pack_tnt, 1,  31, 178, 9, -640, 672, -640, 672, 90, DEFAULT },
-    { pack_tnt, 1,  31, 179, 9, -576, 672, -576, 672, 90, DEFAULT },
-    { pack_tnt, 1,  31, 180, 9, -608, 624, -608, 624, 90, DEFAULT },
-    THINGFIX_END
-};
-
 static const flow_t flow_tnt_map31[] =
 {
     { pack_tnt, 1, 31, 109, 100 },
@@ -9511,7 +9221,6 @@ void P_SetupFixes (const int episode, const int map)
     selected_vertexfix = vertexfix_dummy;
     selected_linefix   = linefix_dummy;
     selected_sectorfix = sectorfix_dummy;
-    selected_thingfix  = thingfix_dummy;
 
     selected_flow = flow_dummy;
     selected_fall = fall_dummy;
@@ -9560,7 +9269,6 @@ void P_SetupFixes (const int episode, const int map)
             {
                 selected_linefix   = linefix_doom1_e1m6;
                 selected_sectorfix = sectorfix_doom1_e1m6;
-                selected_thingfix  = thingfix_doom1_e1m6;
                 selected_flow      = flow_doom1_e1m6;
             }
             else
@@ -9568,7 +9276,6 @@ void P_SetupFixes (const int episode, const int map)
             {
                 selected_linefix   = linefix_doom1_e1m7;
                 selected_sectorfix = sectorfix_doom1_e1m7;
-                selected_thingfix  = thingfix_doom1_e1m7;
                 selected_flow      = flow_doom1_e1m7;
             }
             else
@@ -9598,7 +9305,6 @@ void P_SetupFixes (const int episode, const int map)
                 selected_vertexfix = vertexfix_doom1_e2m2;
                 selected_linefix   = linefix_doom1_e2m2;
                 selected_sectorfix = sectorfix_doom1_e2m2;
-                selected_thingfix  = thingfix_doom1_e2m2;
                 selected_flow      = flow_doom1_e2m2;
             }
             else
@@ -9606,7 +9312,6 @@ void P_SetupFixes (const int episode, const int map)
             {
                 selected_linefix   = linefix_doom1_e2m3;
                 selected_sectorfix = sectorfix_doom1_e2m3;
-                selected_thingfix  = thingfix_doom1_e2m3;
                 selected_flow      = flow_doom1_e2m3;
             }
             else
@@ -9621,7 +9326,6 @@ void P_SetupFixes (const int episode, const int map)
             {
                 selected_linefix   = linefix_doom1_e2m5;
                 selected_sectorfix = sectorfix_doom1_e2m5;
-                selected_thingfix  = thingfix_doom1_e2m5;
                 selected_flow      = flow_doom1_e2m5;
             }
             else
@@ -9630,7 +9334,6 @@ void P_SetupFixes (const int episode, const int map)
                 selected_vertexfix = vertexfix_doom1_e2m6;
                 selected_linefix   = linefix_doom1_e2m6;
                 selected_sectorfix = sectorfix_doom1_e2m6;
-                selected_thingfix  = thingfix_doom1_e2m6;
                 selected_flow      = flow_doom1_e2m6;
             }
             else
@@ -9670,7 +9373,6 @@ void P_SetupFixes (const int episode, const int map)
             {
                 selected_linefix   = linefix_doom1_e3m3;
                 selected_sectorfix = sectorfix_doom1_e3m3;
-                selected_thingfix  = thingfix_doom1_e3m3;
                 selected_flow      = flow_doom1_e3m3;
             }
             else
@@ -9721,7 +9423,6 @@ void P_SetupFixes (const int episode, const int map)
             {
                 selected_linefix   = linefix_doom1_e4m1;
                 selected_sectorfix = sectorfix_doom1_e4m1;
-                selected_thingfix  = thingfix_doom1_e4m1;
                 selected_flow      = flow_doom1_e4m1;
             }
             else
@@ -9736,7 +9437,6 @@ void P_SetupFixes (const int episode, const int map)
             {
                 selected_linefix   = linefix_doom1_e4m3;
                 selected_sectorfix = sectorfix_doom1_e4m3;
-                selected_thingfix  = thingfix_doom1_e4m3;
                 selected_flow      = flow_doom1_e4m3;
             }
             else
@@ -9744,7 +9444,6 @@ void P_SetupFixes (const int episode, const int map)
             {
                 selected_linefix   = linefix_doom1_e4m4;
                 selected_sectorfix = sectorfix_doom1_e4m4;
-                selected_thingfix  = thingfix_doom1_e4m4;
                 selected_flow      = flow_doom1_e4m4;
             }
             else
@@ -9765,7 +9464,6 @@ void P_SetupFixes (const int episode, const int map)
             {
                 selected_linefix   = linefix_doom1_e4m7;
                 selected_sectorfix = sectorfix_doom1_e4m7;
-                selected_thingfix  = thingfix_doom1_e4m7;
                 selected_flow      = flow_doom1_e4m7;
             }
             else
@@ -9800,7 +9498,6 @@ void P_SetupFixes (const int episode, const int map)
             selected_vertexfix = vertexfix_doom2_map02;
             selected_linefix   = linefix_doom2_map02;
             selected_sectorfix = sectorfix_doom2_map02;
-            selected_thingfix  = thingfix_doom2_map02;
             selected_flow      = flow_doom2_map02;
         }
         else
@@ -9815,7 +9512,6 @@ void P_SetupFixes (const int episode, const int map)
         {
             selected_linefix   = linefix_doom2_map04;
             selected_sectorfix = sectorfix_doom2_map04;
-            selected_thingfix  = thingfix_doom2_map04;
             selected_flow      = flow_doom2_map04;
         }
         else
@@ -9823,7 +9519,6 @@ void P_SetupFixes (const int episode, const int map)
         {
             selected_linefix   = linefix_doom2_map05;
             selected_sectorfix = sectorfix_doom2_map05;
-            selected_thingfix  = thingfix_doom2_map05;
             selected_flow      = flow_doom2_map05;
         }
         else
@@ -9831,7 +9526,6 @@ void P_SetupFixes (const int episode, const int map)
         {
             selected_linefix   = linefix_doom2_map06;
             selected_sectorfix = sectorfix_doom2_map06;
-            selected_thingfix  = thingfix_doom2_map06;
             selected_flow      = flow_doom2_map06;
         }
         else
@@ -9865,7 +9559,6 @@ void P_SetupFixes (const int episode, const int map)
         {
             selected_linefix   = linefix_doom2_map11;
             selected_sectorfix = sectorfix_doom2_map11;
-            selected_thingfix  = thingfix_doom2_map11;
             selected_flow      = flow_doom2_map11;
         }
         else
@@ -9880,14 +9573,12 @@ void P_SetupFixes (const int episode, const int map)
         {
             selected_linefix   = linefix_doom2_map13;
             selected_sectorfix = sectorfix_doom2_map13;
-            selected_thingfix  = thingfix_doom2_map13;
         }
         else
         if (gamemap == 14)
         {
             selected_linefix   = linefix_doom2_map14;
             selected_sectorfix = sectorfix_doom2_map14;
-            selected_thingfix  = thingfix_doom2_map14;
             selected_flow      = flow_doom2_map14;
         }
         else
@@ -9909,7 +9600,6 @@ void P_SetupFixes (const int episode, const int map)
         {
             selected_linefix   = linefix_doom2_map17;
             selected_sectorfix = sectorfix_doom2_map17;
-            selected_thingfix  = thingfix_doom2_map17;
             selected_flow      = flow_doom2_map17;
         }
         else
@@ -9917,7 +9607,6 @@ void P_SetupFixes (const int episode, const int map)
         {
              selected_linefix   = linefix_doom2_map18;
              selected_sectorfix = sectorfix_doom2_map18;
-             selected_thingfix  = thingfix_doom2_map18;
              selected_flow      = flow_doom2_map18;
         }
         else
@@ -9925,7 +9614,6 @@ void P_SetupFixes (const int episode, const int map)
         {
             selected_linefix   = linefix_doom2_map19;
             selected_sectorfix = sectorfix_doom2_map19;
-            selected_thingfix  = thingfix_doom2_map19;
             selected_flow      = flow_doom2_map19;
         }
         else
@@ -9960,7 +9648,6 @@ void P_SetupFixes (const int episode, const int map)
         if (gamemap == 24)
         {
              selected_linefix   = linefix_doom2_map24;
-             selected_thingfix  = thingfix_doom2_map24;
              selected_flow      = flow_doom2_map24;
              selected_fall      = fall_doom2_map24;
         }
@@ -10006,7 +9693,6 @@ void P_SetupFixes (const int episode, const int map)
         {
             selected_vertexfix = vertexfix_doom2_map30;
             selected_linefix   = linefix_doom2_map30;
-            selected_thingfix  = thingfix_doom2_map30;
             selected_flow      = flow_doom2_map30;
             selected_fall      = fall_doom2_map30;
         }
@@ -10014,13 +9700,11 @@ void P_SetupFixes (const int episode, const int map)
         if (gamemap == 31)
         {
             selected_linefix   = linefix_doom2_map31;
-            selected_thingfix  = thingfix_doom2_map31;
         }
         else
         if (gamemap == 32)
         {
             selected_linefix   = linefix_doom2_map32;
-            selected_thingfix  = thingfix_doom2_map32;
         }
     }
     else
@@ -10090,7 +9774,6 @@ void P_SetupFixes (const int episode, const int map)
         {
             selected_linefix   = linefix_plut_map09;
             selected_sectorfix = sectorfix_plut_map09;
-            selected_thingfix  = thingfix_plut_map09;
             selected_flow      = flow_plut_map09;
             selected_fall      = fall_plut_map09;
         }
@@ -10112,7 +9795,6 @@ void P_SetupFixes (const int episode, const int map)
         {
             selected_linefix   = linefix_plut_map12;
             selected_sectorfix = sectorfix_plut_map12;
-            selected_thingfix  = thingfix_plut_map12;
             selected_flow      = flow_plut_map12;
             selected_fall      = fall_plut_map12;
         }
@@ -10231,7 +9913,6 @@ void P_SetupFixes (const int episode, const int map)
         {
             selected_linefix   = linefix_plut_map28;
             selected_sectorfix = sectorfix_plut_map28;
-            selected_thingfix  = thingfix_plut_map28;
             selected_flow      = flow_plut_map28;
             selected_fall      = fall_plut_map28;
         }
@@ -10247,7 +9928,6 @@ void P_SetupFixes (const int episode, const int map)
         {
             selected_linefix   = linefix_plut_map30;
             selected_sectorfix = sectorfix_plut_map30;
-            selected_thingfix  = thingfix_plut_map30;
             selected_flow      = flow_plut_map30;
             selected_fall      = fall_plut_map30;
         }
@@ -10287,7 +9967,6 @@ void P_SetupFixes (const int episode, const int map)
         if (gamemap == 3)
         {
             selected_linefix   = linefix_tnt_map03;
-            selected_thingfix  = thingfix_tnt_map03;
             selected_flow      = flow_tnt_map03;
         }
         else
@@ -10342,7 +10021,6 @@ void P_SetupFixes (const int episode, const int map)
         {
             selected_linefix   = linefix_tnt_map11;
             selected_sectorfix = sectorfix_tnt_map11;
-            selected_thingfix  = thingfix_tnt_map11;
             selected_flow      = flow_tnt_map11;
         }
         else
@@ -10406,7 +10084,6 @@ void P_SetupFixes (const int episode, const int map)
         {
             selected_linefix   = linefix_tnt_map20;
             selected_sectorfix = sectorfix_tnt_map20;
-            selected_thingfix  = thingfix_tnt_map20;
             selected_flow      = flow_tnt_map20;
             selected_fall      = fall_tnt_map20;
         }
@@ -10433,7 +10110,6 @@ void P_SetupFixes (const int episode, const int map)
         if (gamemap == 24)
         {
             selected_sectorfix = sectorfix_tnt_map24;
-            selected_thingfix  = thingfix_tnt_map24;
             selected_flow      = flow_tnt_map24;
         }
         else
@@ -10441,7 +10117,6 @@ void P_SetupFixes (const int episode, const int map)
         {
             selected_linefix   = linefix_tnt_map25;
             selected_sectorfix = sectorfix_tnt_map25;
-            selected_thingfix  = thingfix_tnt_map25;
             selected_flow      = flow_tnt_map25;
         }
         else
@@ -10469,7 +10144,6 @@ void P_SetupFixes (const int episode, const int map)
         {
             selected_linefix   = linefix_tnt_map29;
             selected_sectorfix = sectorfix_tnt_map29;
-            selected_thingfix  = thingfix_tnt_map29;
             selected_flow      = flow_tnt_map29;
             selected_fall      = fall_tnt_map29;
         }
@@ -10484,7 +10158,6 @@ void P_SetupFixes (const int episode, const int map)
         {
             selected_linefix   = linefix_tnt_map31;
             selected_sectorfix = sectorfix_tnt_map31;
-            selected_thingfix  = thingfix_tnt_map31;
             selected_flow      = flow_tnt_map31;
         }
         else
