@@ -549,14 +549,6 @@ static void P_LoadSegs (const int lump)
                         else
                             li->linedef->flags |= selected_linefix[j].flags;
                     }
-                    if (selected_linefix[j].special != DEFAULT)
-                    {
-                        li->linedef->special = selected_linefix[j].special;
-                    }
-                    if (selected_linefix[j].tag != DEFAULT)
-                    {
-                        li->linedef->tag = selected_linefix[j].tag;
-                    }
 
                     break;
                 }

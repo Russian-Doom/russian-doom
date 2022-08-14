@@ -169,8 +169,6 @@ typedef struct
     short  offset;
     short  rowoffset;
     int    flags;
-    int    special;
-    int    tag;
 } linefix_t;
 
 typedef struct
