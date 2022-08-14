@@ -505,83 +505,50 @@ static void F_TextWrite (void)
 // =============================================================================
 typedef struct
 {
-    char       *name;
+    char       *name_eng;
+    char       *name_rus;
     mobjtype_t  type;
 } castinfo_t;
 
 static const castinfo_t castorder[] = {
-    {CC_ZOMBIE,  MT_POSSESSED},
-    {CC_SHOTGUN, MT_SHOTGUY},
-    {CC_HEAVY,   MT_CHAINGUY},
-    {CC_IMP,     MT_TROOP},
-    {CC_DEMON,   MT_SERGEANT},
-    {CC_LOST,    MT_SKULL},
-    {CC_CACO,    MT_HEAD},
-    {CC_HELL,    MT_KNIGHT},
-    {CC_BARON,   MT_BRUISER},
-    {CC_ARACH,   MT_BABY},
-    {CC_PAIN,    MT_PAIN},
-    {CC_REVEN,   MT_UNDEAD},
-    {CC_MANCU,   MT_FATSO},
-    {CC_ARCH,    MT_VILE},
-    {CC_SPIDER,  MT_SPIDER},
-    {CC_CYBER,   MT_CYBORG},
-    {CC_HERO,    MT_PLAYER},
+    {CC_ZOMBIE,  CC_ZOMBIE_RUS,  MT_POSSESSED},
+    {CC_SHOTGUN, CC_SHOTGUN_RUS, MT_SHOTGUY  },
+    {CC_HEAVY,   CC_HEAVY_RUS,   MT_CHAINGUY },
+    {CC_IMP,     CC_IMP_RUS,     MT_TROOP    },
+    {CC_DEMON,   CC_DEMON_RUS,   MT_SERGEANT },
+    {CC_LOST,    CC_LOST_RUS,    MT_SKULL    },
+    {CC_CACO,    CC_CACO_RUS,    MT_HEAD     },
+    {CC_HELL,    CC_HELL_RUS,    MT_KNIGHT   },
+    {CC_BARON,   CC_BARON_RUS,   MT_BRUISER  },
+    {CC_ARACH,   CC_ARACH_RUS,   MT_BABY     },
+    {CC_PAIN,    CC_PAIN_RUS,    MT_PAIN     },
+    {CC_REVEN,   CC_REVEN_RUS,   MT_UNDEAD   },
+    {CC_MANCU,   CC_MANCU_RUS,   MT_FATSO    },
+    {CC_ARCH,    CC_ARCH_RUS,    MT_VILE     },
+    {CC_SPIDER,  CC_SPIDER_RUS,  MT_SPIDER   },
+    {CC_CYBER,   CC_CYBER_RUS,   MT_CYBORG   },
+    {CC_HERO,    CC_HERO_RUS,    MT_PLAYER   },
 
-    {NULL,0}
-};
-
-static const castinfo_t castorder_rus[] = {
-    {CC_ZOMBIE_RUS,  MT_POSSESSED},
-    {CC_SHOTGUN_RUS, MT_SHOTGUY},
-    {CC_HEAVY_RUS,   MT_CHAINGUY},
-    {CC_IMP_RUS,     MT_TROOP},
-    {CC_DEMON_RUS,   MT_SERGEANT},
-    {CC_LOST_RUS,    MT_SKULL},
-    {CC_CACO_RUS,    MT_HEAD},
-    {CC_HELL_RUS,    MT_KNIGHT},
-    {CC_BARON_RUS,   MT_BRUISER},
-    {CC_ARACH_RUS,   MT_BABY},
-    {CC_PAIN_RUS,    MT_PAIN},
-    {CC_REVEN_RUS,   MT_UNDEAD},
-    {CC_MANCU_RUS,   MT_FATSO},
-    {CC_ARCH_RUS,    MT_VILE},
-    {CC_SPIDER_RUS,  MT_SPIDER},
-    {CC_CYBER_RUS,   MT_CYBORG},
-    {CC_HERO_RUS,    MT_PLAYER},
-
-    {NULL,0}
+    {NULL, NULL, 0}
 };
 
 // [JN] Jaguar: own casting order
 static const castinfo_t castorder_jaguar[] = {
-    {CC_ZOMBIE,  MT_POSSESSED},
-    {CC_SHOTGUN, MT_SHOTGUY},
-    {CC_IMP,     MT_TROOP},
-    {CC_DEMON,   MT_SERGEANT},
-    {CC_LOST,    MT_SKULL},
-    {CC_CACO,    MT_HEAD},
-    {CC_BARON,   MT_BRUISER},
-    {CC_HERO,    MT_PLAYER},
-    {NULL,0}
-};
-
-static const castinfo_t castorder_jaguar_russian[] = {
-    {CC_ZOMBIE_RUS,  MT_POSSESSED},
-    {CC_SHOTGUN_RUS, MT_SHOTGUY},
-    {CC_IMP_RUS,     MT_TROOP},
-    {CC_DEMON_RUS,   MT_SERGEANT},
-    {CC_LOST_RUS,    MT_SKULL},
-    {CC_CACO_RUS,    MT_HEAD},
-    {CC_BARON_RUS,   MT_BRUISER},
-    {CC_HERO_RUS,    MT_PLAYER},
-    {NULL,0}
+    {CC_ZOMBIE,  CC_ZOMBIE_RUS,  MT_POSSESSED},
+    {CC_SHOTGUN, CC_SHOTGUN_RUS, MT_SHOTGUY  },
+    {CC_IMP,     CC_IMP_RUS,     MT_TROOP    },
+    {CC_DEMON,   CC_DEMON_RUS,   MT_SERGEANT },
+    {CC_LOST,    CC_LOST_RUS,    MT_SKULL    },
+    {CC_CACO,    CC_CACO_RUS,    MT_HEAD     },
+    {CC_BARON,   CC_BARON_RUS,   MT_BRUISER  },
+    {CC_HERO,    CC_HERO_RUS,    MT_PLAYER   },
+    {NULL, NULL, 0}
 };
 
 static int      castnum, casttics;
 static int      castframes, castonmelee;
-static state_t *caststate;
 static boolean  castdeath, castattacking;
+static const state_t *caststate;
 
 
 // -----------------------------------------------------------------------------
@@ -637,7 +604,8 @@ static void F_CastTicker (void)
         castnum++;
         castdeath = false;
 
-        if (castorder[castnum].name == NULL)
+        if (castorder[castnum].name_eng == NULL
+        ||  castorder[castnum].name_rus == NULL)
         castnum = 0;
 
         if (mobjinfo[castorder[castnum].type].seesound)
@@ -822,8 +790,8 @@ void F_CastDrawer (void)
     V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("BOSSBACK"), PU_CACHE), false);
 
     F_CastPrint (DEH_String(english_language ?
-                            castorder[castnum].name :
-                            castorder_rus[castnum].name));
+                            castorder[castnum].name_eng :
+                            castorder[castnum].name_rus));
 
     // draw the current frame in the middle of the screen
     sprdef = &sprites[caststate->sprite];
@@ -1171,7 +1139,8 @@ static void F_CastTickerJaguar (void)
         castnum++;
         castdeath = false;
 
-        if (castorder_jaguar[castnum].name == NULL)
+        if (castorder_jaguar[castnum].name_eng == NULL
+        ||  castorder_jaguar[castnum].name_rus == NULL)
         castnum = 0;
 
         if (mobjinfo[castorder_jaguar[castnum].type].seesound)
@@ -1278,8 +1247,8 @@ void F_CastDrawerJaguar (void)
     V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("VICPIC"), PU_CACHE), false);
 
     F_CastPrintJaguar (DEH_String(english_language ?
-                                  castorder_jaguar[castnum].name :
-                                  castorder_jaguar_russian[castnum].name));
+                                  castorder_jaguar[castnum].name_eng :
+                                  castorder_jaguar[castnum].name_rus));
     
     // draw the current frame in the middle of the screen
     sprdef = &sprites[caststate->sprite];
