@@ -549,14 +549,6 @@ static void P_LoadSegs (const int lump)
                         else
                             li->linedef->flags |= selected_linefix[j].flags;
                     }
-                    if (selected_linefix[j].special != DEFAULT)
-                    {
-                        li->linedef->special = selected_linefix[j].special;
-                    }
-                    if (selected_linefix[j].tag != DEFAULT)
-                    {
-                        li->linedef->tag = selected_linefix[j].tag;
-                    }
 
                     break;
                 }
@@ -773,23 +765,6 @@ static void P_LoadSectors (const int lump)
                         if (*selected_sectorfix[j].ceilingpic)
                         {
                             ss->ceilingpic = R_FlatNumForName(selected_sectorfix[j].ceilingpic);
-                        }
-                        if (selected_sectorfix[j].floorheight != DEFAULT)
-                        {
-                            ss->floorheight = SHORT(selected_sectorfix[j].floorheight) << FRACBITS;
-                        }
-                        if (selected_sectorfix[j].ceilingheight != DEFAULT)
-                        {
-                            ss->ceilingheight = SHORT(selected_sectorfix[j].ceilingheight) << FRACBITS;
-                        }
-                        if (selected_sectorfix[j].special != DEFAULT)
-                        {
-                            ss->special = SHORT(selected_sectorfix[j].special);
-                        }
-                        if (selected_sectorfix[j].newtag != DEFAULT && (selected_sectorfix[j].oldtag == DEFAULT
-                            || selected_sectorfix[j].oldtag == ss->tag))
-                        {
-                            ss->tag = SHORT(selected_sectorfix[j].newtag) << FRACBITS;
                         }
 
                         break;
@@ -1273,39 +1248,6 @@ static void P_LoadThings (const int lump)
         spawnthing.type = SHORT(mt->type);
         spawnthing.options = SHORT(mt->options);
 
-        // [BH] Apply any level-specific fixes.
-        if (canmodify && fix_map_errors)
-        {
-            for (int j = 0; selected_thingfix[j].mission != -1; j++)
-            {
-                if (gamemission == selected_thingfix[j].mission && gameepisode == selected_thingfix[j].epsiode
-                && gamemap == selected_thingfix[j].map && i == selected_thingfix[j].thing && spawnthing.type == selected_thingfix[j].type
-                && spawnthing.x == SHORT(selected_thingfix[j].oldx) && spawnthing.y == SHORT(selected_thingfix[j].oldy))
-                {
-                    if (selected_thingfix[j].newx == REMOVE && selected_thingfix[j].newy == REMOVE)
-                    {
-                        spawn = false;
-                    }
-                    else
-                    {
-                        spawnthing.x = SHORT(selected_thingfix[j].newx);
-                        spawnthing.y = SHORT(selected_thingfix[j].newy);
-                    }
-
-                    if (selected_thingfix[j].angle != DEFAULT)
-                    {
-                        spawnthing.angle = SHORT(selected_thingfix[j].angle);
-                    }
-                    if (selected_thingfix[j].options != DEFAULT)
-                    {
-                        spawnthing.options = selected_thingfix[j].options;
-                    }
-
-                    break;
-                }
-            }
-        }
-	
         P_SpawnMapThing(&spawnthing);
     }
 
@@ -2262,14 +2204,13 @@ void P_SetupLevel (const int episode, const int map, const skill_t skill)
     // Adaptaken from DOOM Retro, thanks Brad Harding!
     //  Fixes also should not work for: network game, shareware, IWAD versions below 1.9,
     //  vanilla game mode, Press Beta, Atari Jaguar, Freedoom and FreeDM.
-    canmodify = (((W_CheckMultipleLumps(lumpname) == 1 || gamemission == pack_nerve)
-             && (!netgame && !vanillaparm
+    canmodify = (((W_CheckMultipleLumps(lumpname) == 1)
+             && (!vanillaparm
              && gamemode != shareware
              && gameversion >= exe_doom_1_9
              && gamemode != pressbeta
              && gamemission != jaguar
-             && gamevariant != freedoom && gamevariant != freedm))
-             && singleplayer);
+             && gamevariant != freedoom && gamevariant != freedm)));
 
     // [JN] If level can be modified, setup it's fixes and flow/fall effects.
     if (canmodify)

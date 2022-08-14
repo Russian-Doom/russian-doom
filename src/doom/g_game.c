@@ -2150,7 +2150,7 @@ static void G_KeepOriginalSpeeds (void)
     MT_UNDEAD_speed = mobjinfo[MT_UNDEAD].speed;
     MT_FATSO_speed = mobjinfo[MT_FATSO].speed;
     MT_VILE_speed = mobjinfo[MT_VILE].speed;
-    MT_SPIDER_speed = mobjinfo[MT_VILE].speed;
+    MT_SPIDER_speed = mobjinfo[MT_SPIDER].speed;
     MT_CYBORG_speed = mobjinfo[MT_CYBORG].speed;
     MT_WOLFSS_speed = mobjinfo[MT_WOLFSS].speed;
 
