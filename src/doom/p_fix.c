@@ -28,7 +28,7 @@
 
 #define VERTEXFIX_END  { -1, 0, 0, 0, 0, 0, 0, 0 }
 #define LINEFIX_END    { -1, 0, 0, 0, 0, "", "", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT }
-#define SECTORFIX_END  { -1, 0, 0, 0, "", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+#define SECTORFIX_END  { -1, 0, 0, 0, "", "" },
 
 #define FLOW_END       { -1, 0, 0, 0, DEFAULT }
 #define FALL_END       { -1, 0, 0, 0, DEFAULT }
@@ -73,8 +73,8 @@ static const linefix_t linefix_doom1_e1m1[] =
 
 static const sectorfix_t sectorfix_doom1_e1m1[] =
 {
-    { doom, 1, 1, 67, "", "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 1, 1, 71, "", "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 1, 1, 67, "", "FLAT1" },
+    { doom, 1, 1, 71, "", "FLAT1" },
     SECTORFIX_END
 };
 
@@ -140,10 +140,10 @@ static const linefix_t linefix_doom1_e1m3[] =
 
 static const sectorfix_t sectorfix_doom1_e1m3[] =
 {
-    { doom, 1, 3,  1, "",  "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 1, 3,  6, "",  "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 1, 3, 30, "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 1, 3, 42, "",  "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 1, 3,  1, "",  "FLAT1" },
+    { doom, 1, 3,  6, "",  "FLAT1" },
+    { doom, 1, 3, 30, "", "FLAT20" },
+    { doom, 1, 3, 42, "",  "FLAT1" },
     SECTORFIX_END
 };
 
@@ -211,7 +211,7 @@ static const linefix_t linefix_doom1_e1m4[] =
 
 static const sectorfix_t sectorfix_doom1_e1m4[] =
 {
-    { doom, 1, 4, 56, "", "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 1, 4, 56, "", "FLAT1" },
     SECTORFIX_END
 };
 
@@ -258,11 +258,11 @@ static const linefix_t linefix_doom1_e1m5[] =
 
 static const sectorfix_t sectorfix_doom1_e1m5[] =
 {
-    { doom, 1, 5,   6, "", "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 1, 5,   8, "", "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 1, 5,  10, "", "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 1, 5, 114, "",  "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 1, 5, 117, "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 1, 5,   6, "", "FLAT19" },
+    { doom, 1, 5,   8, "", "FLAT19" },
+    { doom, 1, 5,  10, "", "FLAT19" },
+    { doom, 1, 5, 114, "",  "FLAT1" },
+    { doom, 1, 5, 117, "", "FLAT20" },
     SECTORFIX_END
 };
 
@@ -308,7 +308,7 @@ static const linefix_t linefix_doom1_e1m6[] =
 
 static const sectorfix_t sectorfix_doom1_e1m6[] =
 {
-    { doom, 1, 6, 32, "", "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 1, 6, 32, "", "FLAT1" },
     SECTORFIX_END
 };
 
@@ -372,7 +372,7 @@ static const linefix_t linefix_doom1_e1m7[] =
 
 static const sectorfix_t sectorfix_doom1_e1m7[] =
 {
-    { doom, 1, 7, 109, "", "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 1, 7, 109, "", "FLAT1" },
     SECTORFIX_END
 };
 
@@ -412,8 +412,8 @@ static const linefix_t linefix_doom1_e1m8[] =
 
 static const sectorfix_t sectorfix_doom1_e1m9[] =
 {
-    { doom, 1, 9, 44, "", "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 1, 9, 53, "", "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 1, 9, 44, "", "FLAT1" },
+    { doom, 1, 9, 53, "", "FLAT1" },
     SECTORFIX_END
 };
 
@@ -476,8 +476,8 @@ static const linefix_t linefix_doom1_e2m1[] =
 
 static const sectorfix_t sectorfix_doom1_e2m1[] =
 {
-    { doom, 2, 1, 33, "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 1, 87, "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 2, 1, 33, "", "FLAT20" },
+    { doom, 2, 1, 87, "", "FLAT20" },
     SECTORFIX_END
 };
 
@@ -560,8 +560,8 @@ static const linefix_t linefix_doom1_e2m2[] =
 
 static const sectorfix_t sectorfix_doom1_e2m2[] =
 {
-    { doom, 2, 2,  8, "",  "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 2, 11, "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 2, 2,  8, "",  "FLAT1" },
+    { doom, 2, 2, 11, "", "FLAT20" },
     SECTORFIX_END
 };
 
@@ -643,10 +643,10 @@ static const linefix_t linefix_doom1_e2m3[] =
 
 static const sectorfix_t sectorfix_doom1_e2m3[] =
 {
-    { doom, 2, 3, 104, "", "FLAT5_5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 3, 111, "",   "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 3, 112, "",   "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 3, 115, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 2, 3, 104, "", "FLAT5_5" },
+    { doom, 2, 3, 111, "",   "FLAT1" },
+    { doom, 2, 3, 112, "",   "FLAT1" },
+    { doom, 2, 3, 115, "",  "FLAT20" },
     SECTORFIX_END
 };
 
@@ -721,13 +721,13 @@ static const linefix_t linefix_doom1_e2m4[] =
 
 static const sectorfix_t sectorfix_doom1_e2m4[] =
 {
-    { doom, 2, 4,  51,       "", "FLAT5_3", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 4, 151, "FLAT14",  "FLAT14", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 4, 170,       "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 4, 173, "BLOOD3",   "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 4, 177, "BLOOD3",   "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 4, 202,       "",   "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 4, 204,       "",   "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 2, 4,  51,       "", "FLAT5_3" },
+    { doom, 2, 4, 151, "FLAT14",  "FLAT14" },
+    { doom, 2, 4, 170,       "",  "FLAT20" },
+    { doom, 2, 4, 173, "BLOOD3",   "FLAT1" },
+    { doom, 2, 4, 177, "BLOOD3",   "FLAT1" },
+    { doom, 2, 4, 202,       "",   "FLAT1" },
+    { doom, 2, 4, 204,       "",   "FLAT1" },
     SECTORFIX_END
 };
 
@@ -773,11 +773,11 @@ static const linefix_t linefix_doom1_e2m5[] =
 
 static const sectorfix_t sectorfix_doom1_e2m5[] =
 {
-    { doom, 2, 5, 114,      "",   "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 5, 119,      "",   "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 5, 127,      "", "FLAT5_4", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 5, 220,      "", "FLAT5_4", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 5, 235, "GATE6",   "GATE6", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 2, 5, 114,      "",   "FLAT1" },
+    { doom, 2, 5, 119,      "",   "FLAT1" },
+    { doom, 2, 5, 127,      "", "FLAT5_4" },
+    { doom, 2, 5, 220,      "", "FLAT5_4" },
+    { doom, 2, 5, 235, "GATE6",   "GATE6" },
     SECTORFIX_END
 };
 
@@ -858,15 +858,15 @@ static const linefix_t linefix_doom1_e2m6[] =
 
 static const sectorfix_t sectorfix_doom1_e2m6[] =
 {
-    { doom, 2, 6,  20, "FLOOR5_4",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 6,  91,   "FLAT19",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 6,  92,   "FLAT19",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 6,  93,   "FLAT19",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 6, 161,         "",  "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 6, 162,         "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 6, 164,   "FLAT14",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 6, 165,         "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 6, 170,         "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 2, 6,  20, "FLOOR5_4",       "" },
+    { doom, 2, 6,  91,   "FLAT19",       "" },
+    { doom, 2, 6,  92,   "FLAT19",       "" },
+    { doom, 2, 6,  93,   "FLAT19",       "" },
+    { doom, 2, 6, 161,         "",  "FLAT1" },
+    { doom, 2, 6, 162,         "", "FLAT20" },
+    { doom, 2, 6, 164,   "FLAT14",       "" },
+    { doom, 2, 6, 165,         "", "FLAT20" },
+    { doom, 2, 6, 170,         "", "FLAT20" },
     SECTORFIX_END
 };
 
@@ -975,16 +975,16 @@ static const linefix_t linefix_doom1_e2m7[] =
 
 static const sectorfix_t sectorfix_doom1_e2m7[] =
 {
-    { doom, 2, 7,  32,        "",  "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 7,  33,        "",  "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 7,  37,        "",  "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 7,  38,        "", "FLAT5_4", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 7,  57,        "",   "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 7,  60,        "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 7,  77,        "", "CEIL3_4", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 7, 251, "CRATOP2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 7, 303,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 7, 309,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 2, 7,  32,        "",  "FLAT19" },
+    { doom, 2, 7,  33,        "",  "FLAT19" },
+    { doom, 2, 7,  37,        "",  "FLAT19" },
+    { doom, 2, 7,  38,        "", "FLAT5_4" },
+    { doom, 2, 7,  57,        "",   "FLAT1" },
+    { doom, 2, 7,  60,        "",  "FLAT20" },
+    { doom, 2, 7,  77,        "", "CEIL3_4" },
+    { doom, 2, 7, 251, "CRATOP2",        "" },
+    { doom, 2, 7, 303,        "", "CEIL5_2" },
+    { doom, 2, 7, 309,        "", "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -1035,8 +1035,8 @@ static const linefix_t linefix_doom1_e2m9[] =
 
 static const sectorfix_t sectorfix_doom1_e2m9[] =
 {
-    { doom, 2, 9,  0, "SWATER1",      "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 2, 9, 16, "GATE6",   "GATE6", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 2, 9,  0, "SWATER1",      "" },
+    { doom, 2, 9, 16, "GATE6",   "GATE6" },
     SECTORFIX_END
 };
 
@@ -1104,8 +1104,8 @@ static const linefix_t linefix_doom1_e3m2[] =
 
 static const sectorfix_t sectorfix_doom1_e3m2[] =
 {
-    { doom, 3, 2, 26, "SWATER2",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 3, 2, 40,        "", "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 3, 2, 26, "SWATER2",       "" },
+    { doom, 3, 2, 40,        "", "FLAT19" },
     SECTORFIX_END
 };
 
@@ -1153,8 +1153,8 @@ static const linefix_t linefix_doom1_e3m3[] =
 
 static const sectorfix_t sectorfix_doom1_e3m3[] =
 {
-    { doom, 3, 3, 172, "",  "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 3, 3, 176, "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 3, 3, 172, "",  "FLAT1" },
+    { doom, 3, 3, 176, "", "FLAT20" },
     SECTORFIX_END
 };
 
@@ -1293,13 +1293,13 @@ static const linefix_t linefix_doom1_e3m4[] =
 
 static const sectorfix_t sectorfix_doom1_e3m4[] =
 {
-    { doom, 3, 4,  62, "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 3, 4,  69, "",  "CEIL3_3", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 3, 4, 109, "",    "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 3, 4, 118, "", "FLOOR7_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 3, 4, 125, "",    "FLAT5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 3, 4, 178, "", "FLOOR7_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 3, 4, 185, "",    "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 3, 4,  62, "",   "FLAT20" },
+    { doom, 3, 4,  69, "",  "CEIL3_3" },
+    { doom, 3, 4, 109, "",    "FLAT1" },
+    { doom, 3, 4, 118, "", "FLOOR7_2" },
+    { doom, 3, 4, 125, "",    "FLAT5" },
+    { doom, 3, 4, 178, "", "FLOOR7_2" },
+    { doom, 3, 4, 185, "",    "FLAT1" },
     SECTORFIX_END
 };
 
@@ -1360,8 +1360,8 @@ static const linefix_t linefix_doom1_e3m5[] =
 
 static const sectorfix_t sectorfix_doom1_e3m5[] =
 {
-    { doom, 3, 5,  65, "", "CEIL3_5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 3, 5, 150, "",   "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 3, 5,  65, "", "CEIL3_5" },
+    { doom, 3, 5, 150, "",   "FLAT1" },
     SECTORFIX_END
 };
 
@@ -1415,7 +1415,7 @@ static const linefix_t linefix_doom1_e3m6[] =
 
 static const sectorfix_t sectorfix_doom1_e3m6[] =
 {
-    { doom, 3, 6, 29, "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 3, 6, 29, "", "FLAT20" },
     SECTORFIX_END
 };
 
@@ -1534,7 +1534,7 @@ static const linefix_t linefix_doom1_e3m7[] =
 
 static const sectorfix_t sectorfix_doom1_e3m7[] =
 {
-    { doom, 3, 7, 42, "", "MFLR8_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 3, 7, 42, "", "MFLR8_2" },
     SECTORFIX_END
 };
 
@@ -1581,7 +1581,7 @@ static const flow_t flow_doom1_e3m7[] =
 
 static const sectorfix_t sectorfix_doom1_e3m8[] =
 {
-    { doom, 3, 8, 16, "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 3, 8, 16, "", "FLOOR7_1" },
     SECTORFIX_END
 };
 
@@ -1610,7 +1610,7 @@ static const linefix_t linefix_doom1_e3m9[] =
 
 static const sectorfix_t sectorfix_doom1_e3m9[] =
 {
-    { doom, 3, 9, 27, "FLAT20", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 3, 9, 27, "FLAT20", "" },
     SECTORFIX_END
 };
 
@@ -1719,7 +1719,7 @@ static const linefix_t linefix_doom1_e4m1[] =
 
 static const sectorfix_t sectorfix_doom1_e4m1[] =
 {
-    { doom, 4, 1, 64, "", "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 4, 1, 64, "", "FLAT1" },
     SECTORFIX_END
 };
 
@@ -1778,7 +1778,7 @@ static const linefix_t linefix_doom1_e4m2[] =
 
 static const sectorfix_t sectorfix_doom1_e4m2[] =
 {
-    { doom, 4, 2, 14, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 4, 2, 14, "", "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -1882,7 +1882,7 @@ static const linefix_t linefix_doom1_e4m3[] =
 
 static const sectorfix_t sectorfix_doom1_e4m3[] =
 {
-    { doom, 4, 3, 153, "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 4, 3, 153, "", "FLOOR7_1" },
     SECTORFIX_END
 };
 
@@ -1977,8 +1977,8 @@ static const linefix_t linefix_doom1_e4m4[] =
 
 static const sectorfix_t sectorfix_doom1_e4m4[] =
 {
-    { doom, 4, 4, 62,        "", "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 4, 4, 75, "SWATER3",      "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 4, 4, 62,        "", "FLAT1" },
+    { doom, 4, 4, 75, "SWATER3",      "" },
     SECTORFIX_END
 };
 
@@ -2074,7 +2074,7 @@ static const linefix_t linefix_doom1_e4m5[] =
 
 static const sectorfix_t sectorfix_doom1_e4m5[] =
 {
-    { doom, 4, 5, 134, "FLAT1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 4, 5, 134, "FLAT1", "" },
     SECTORFIX_END
 };
 
@@ -2205,8 +2205,8 @@ static const linefix_t linefix_doom1_e4m7[] =
 
 static const sectorfix_t sectorfix_doom1_e4m7[] =
 {
-    { doom, 4, 7, 186, "FLAT1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 4, 7, 212,      "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 4, 7, 186, "FLAT1",        "" },
+    { doom, 4, 7, 212,      "", "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -2314,8 +2314,8 @@ static const linefix_t linefix_doom1_e4m8[] =
 
 static const sectorfix_t sectorfix_doom1_e4m8[] =
 {
-    { doom, 4, 8, 79, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 4, 8, 96, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 4, 8, 79, "", "CEIL5_2" },
+    { doom, 4, 8, 96, "", "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -2366,9 +2366,9 @@ static const linefix_t linefix_doom1_e4m9[] =
 
 static const sectorfix_t sectorfix_doom1_e4m9[] =
 {
-    { doom, 4, 9, 100, "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 4, 9, 238, "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 4, 9, 240, "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 4, 9, 100, "", "FLOOR7_1" },
+    { doom, 4, 9, 238, "",   "FLAT20" },
+    { doom, 4, 9, 240, "",   "FLAT20" },
     SECTORFIX_END
 };
 
@@ -2419,8 +2419,8 @@ static const linefix_t linefix_doom2_map01[] =
 
 static const sectorfix_t sectorfix_doom2_map01[] =
 {
-    { doom2, 1, 1, 29, "RROCK09",      "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 1, 35,        "", "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 1, 29, "RROCK09",      "" },
+    { doom2, 1, 1, 35,        "", "FLAT1" },
     SECTORFIX_END
 };
 
@@ -2533,7 +2533,7 @@ static const linefix_t linefix_doom2_map02[] =
 
 static const sectorfix_t sectorfix_doom2_map02[] =
 {
-    { doom2, 1, 2, 47, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 2, 47, "", "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -2598,9 +2598,9 @@ static const linefix_t linefix_doom2_map03[] =
 
 static const sectorfix_t sectorfix_doom2_map03[] =
 {
-    { doom2, 1, 3, 52,        "", "CRATOP2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 3, 63, "SWATER4",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 3, 67, "SWATER4",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 3, 52,        "", "CRATOP2" },
+    { doom2, 1, 3, 63, "SWATER4",        "" },
+    { doom2, 1, 3, 67, "SWATER4",        "" },
     SECTORFIX_END
 };
 
@@ -2724,14 +2724,14 @@ static const linefix_t linefix_doom2_map04[] =
 
 static const sectorfix_t sectorfix_doom2_map04[] =
 {
-    { doom2, 1, 4,  6,        "", "FLAT5_4", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 4, 10, "SLIME15",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 4, 35,        "", "FLAT5_4", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 4, 39, "CRATOP1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 4, 40, "CRATOP1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 4, 46, "CRATOP1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 4, 64,        "", "FLAT5_4", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 4, 77,        "", "FLAT5_4", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 4,  6,        "", "FLAT5_4" },
+    { doom2, 1, 4, 10, "SLIME15",        "" },
+    { doom2, 1, 4, 35,        "", "FLAT5_4" },
+    { doom2, 1, 4, 39, "CRATOP1",        "" },
+    { doom2, 1, 4, 40, "CRATOP1",        "" },
+    { doom2, 1, 4, 46, "CRATOP1",        "" },
+    { doom2, 1, 4, 64,        "", "FLAT5_4" },
+    { doom2, 1, 4, 77,        "", "FLAT5_4" },
     SECTORFIX_END
 };
 
@@ -2858,14 +2858,14 @@ static const linefix_t linefix_doom2_map05[] =
 
 static const sectorfix_t sectorfix_doom2_map05[] =
 {
-    { doom2, 1, 5, 26,         "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 5, 41,         "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 5, 42, "FLOOR7_1", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 5, 95,  "CEIL5_2",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 5, 97, "FLOOR7_1", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 5, 104,        "",  "CRATOP2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 5, 107, "CEIL5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 5, 155,        "",    "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 5, 26,         "",  "CEIL5_2" },
+    { doom2, 1, 5, 41,         "",  "CEIL5_2" },
+    { doom2, 1, 5, 42, "FLOOR7_1", "FLOOR7_1" },
+    { doom2, 1, 5, 95,  "CEIL5_2",         "" },
+    { doom2, 1, 5, 97, "FLOOR7_1", "FLOOR7_1" },
+    { doom2, 1, 5, 104,        "",  "CRATOP2" },
+    { doom2, 1, 5, 107, "CEIL5_1",         "" },
+    { doom2, 1, 5, 155,        "",    "FLAT1" },
     SECTORFIX_END
 };
 
@@ -2931,11 +2931,11 @@ static const linefix_t linefix_doom2_map06[] =
 
 static const sectorfix_t sectorfix_doom2_map06[] =
 {
-    { doom2, 1, 6, 15, "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 6, 25, "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 6, 47, "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 6, 86, "",  "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 6, 87, "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 6, 15, "", "FLAT20" },
+    { doom2, 1, 6, 25, "", "FLAT20" },
+    { doom2, 1, 6, 47, "", "FLAT20" },
+    { doom2, 1, 6, 86, "",  "FLAT1" },
+    { doom2, 1, 6, 87, "", "FLAT20" },
     SECTORFIX_END
 };
 
@@ -3040,10 +3040,10 @@ static const linefix_t linefix_doom2_map08[] =
 
 static const sectorfix_t sectorfix_doom2_map08[] =
 {
-    { doom2, 1, 8, 92, "", "CEIL3_6", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 8, 94, "", "CEIL3_6", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 8, 95, "", "CEIL3_6", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 8, 96, "", "CEIL3_6", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 8, 92, "", "CEIL3_6" },
+    { doom2, 1, 8, 94, "", "CEIL3_6" },
+    { doom2, 1, 8, 95, "", "CEIL3_6" },
+    { doom2, 1, 8, 96, "", "CEIL3_6" },
     SECTORFIX_END
 };
 
@@ -3100,12 +3100,12 @@ static const linefix_t linefix_doom2_map09[] =
 
 static const sectorfix_t sectorfix_doom2_map09[] =
 {
-    { doom2, 1, 9,  27, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 9,  60, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 9,  81, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 9,  83, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 9, 111, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 9, 112, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 9,  27, "",  "FLAT20" },
+    { doom2, 1, 9,  60, "",  "FLAT20" },
+    { doom2, 1, 9,  81, "", "CEIL5_2" },
+    { doom2, 1, 9,  83, "", "CEIL5_2" },
+    { doom2, 1, 9, 111, "", "CEIL5_2" },
+    { doom2, 1, 9, 112, "", "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -3172,11 +3172,11 @@ static const linefix_t linefix_doom2_map10[] =
 
 static const sectorfix_t sectorfix_doom2_map10[] =
 {
-    { doom2, 1, 10,   6, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 10,  15, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 10,  37, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 10,  52, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 10,  75, "", "FLAT5_4", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 10,   6, "",  "FLAT20" },
+    { doom2, 1, 10,  15, "",  "FLAT20" },
+    { doom2, 1, 10,  37, "",  "FLAT20" },
+    { doom2, 1, 10,  52, "",  "FLAT20" },
+    { doom2, 1, 10,  75, "", "FLAT5_4" },
     SECTORFIX_END
 };
 
@@ -3288,7 +3288,7 @@ static const linefix_t linefix_doom2_map11[] =
 
 static const sectorfix_t sectorfix_doom2_map11[] =
 {
-{ doom2, 1, 11, 90, "SLIME16", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+{ doom2, 1, 11, 90, "SLIME16", "" },
     SECTORFIX_END
 };
 
@@ -3388,12 +3388,12 @@ static const linefix_t linefix_doom2_map12[] =
 
 static const sectorfix_t sectorfix_doom2_map12[] =
 {
-    { doom2, 1, 12,   8, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 12,  10, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 12,  18, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 12,  39, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 12,  42, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 12, 134, "", "FLOOR4_6", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 12,   8, "",  "CEIL5_2" },
+    { doom2, 1, 12,  10, "",  "CEIL5_2" },
+    { doom2, 1, 12,  18, "",  "CEIL5_2" },
+    { doom2, 1, 12,  39, "",  "CEIL5_2" },
+    { doom2, 1, 12,  42, "",  "CEIL5_2" },
+    { doom2, 1, 12, 134, "", "FLOOR4_6" },
     SECTORFIX_END
 };
 
@@ -3512,8 +3512,8 @@ static const linefix_t linefix_doom2_map13[] =
 
 static const sectorfix_t sectorfix_doom2_map13[] =
 {
-    { doom2, 1, 13,  72, "FLAT5_4",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 13, 151,        "", "CEIL5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 13,  72, "FLAT5_4",        "" },
+    { doom2, 1, 13, 151,        "", "CEIL5_1" },
     SECTORFIX_END
 };
 
@@ -3896,22 +3896,22 @@ static const linefix_t linefix_doom2_map14[] =
 static const sectorfix_t sectorfix_doom2_map14[] =
 {
 
-    { doom2, 1, 14,  16, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 14,  71, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 122, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 123, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 128, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 155, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 180, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 195, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 203, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 207, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 223, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 260, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 297, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 326, "", "RROCK12", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 328, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 329, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 14,  16, "", "CEIL5_2" },
+    { doom2, 1, 14,  71, "", "CEIL5_2" },
+    { doom2, 1, 14, 122, "", "CEIL5_2" },
+    { doom2, 1, 14, 123, "", "CEIL5_2" },
+    { doom2, 1, 14, 128, "", "CEIL5_2" },
+    { doom2, 1, 14, 155, "", "CEIL5_2" },
+    { doom2, 1, 14, 180, "", "CEIL5_2" },
+    { doom2, 1, 14, 195, "", "CEIL5_2" },
+    { doom2, 1, 14, 203, "", "CEIL5_2" },
+    { doom2, 1, 14, 207, "", "CEIL5_2" },
+    { doom2, 1, 14, 223, "", "CEIL5_2" },
+    { doom2, 1, 14, 260, "", "CEIL5_2" },
+    { doom2, 1, 14, 297, "", "CEIL5_2" },
+    { doom2, 1, 14, 326, "", "RROCK12" },
+    { doom2, 1, 14, 328, "", "CEIL5_2" },
+    { doom2, 1, 14, 329, "", "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -3978,8 +3978,8 @@ static const linefix_t linefix_doom2_map15[] =
 
 static const sectorfix_t sectorfix_doom2_map15[] =
 {
-    { doom2, 1, 15, 195,      "", "SLIME13", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 15, 197, "GATE5",   "GATE5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 15, 195,      "", "SLIME13" },
+    { doom2, 1, 15, 197, "GATE5",   "GATE5" },
     SECTORFIX_END
 };
 
@@ -4093,11 +4093,11 @@ static const linefix_t linefix_doom2_map17[] =
 
 static const sectorfix_t sectorfix_doom2_map17[] =
 {
-    { doom2, 1, 17,  47, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 17,  59, "", "FLOOR6_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 17,  70, "",  "CEIL5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 17, 112, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 17, 147, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 17,  47, "",  "CEIL5_2" },
+    { doom2, 1, 17,  59, "", "FLOOR6_2" },
+    { doom2, 1, 17,  70, "",  "CEIL5_1" },
+    { doom2, 1, 17, 112, "",  "CEIL5_2" },
+    { doom2, 1, 17, 147, "",  "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -4201,9 +4201,9 @@ static const linefix_t linefix_doom2_map18[] =
 
 static const sectorfix_t sectorfix_doom2_map18[] =
 {
-    { doom2, 1, 18,  4, "FLOOR5_1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 18, 10, "FLOOR5_1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 18, 32, "FLOOR5_1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 18,  4, "FLOOR5_1", "" },
+    { doom2, 1, 18, 10, "FLOOR5_1", "" },
+    { doom2, 1, 18, 32, "FLOOR5_1", "" },
     SECTORFIX_END
 };
 
@@ -4270,9 +4270,9 @@ static const linefix_t linefix_doom2_map19[] =
 
 static const sectorfix_t sectorfix_doom2_map19[] =
 {
-    { doom2, 1, 19, 187, "FLAT5_4",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 19, 193, "FLAT5_4",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 19, 229,        "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 19, 187, "FLAT5_4",       "" },
+    { doom2, 1, 19, 193, "FLAT5_4",       "" },
+    { doom2, 1, 19, 229,        "", "FLAT20" },
     SECTORFIX_END
 };
 
@@ -4387,11 +4387,11 @@ static const linefix_t linefix_doom2_map20[] =
 
 static const sectorfix_t sectorfix_doom2_map20[] =
 {
-    { doom2, 1, 20,  17,        "", "RROCK09", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 20,  26, "RROCK13",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 20,  62,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 20,  80,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 20,  83,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 20,  17,        "", "RROCK09" },
+    { doom2, 1, 20,  26, "RROCK13",        "" },
+    { doom2, 1, 20,  62,        "", "CEIL5_2" },
+    { doom2, 1, 20,  80,        "", "CEIL5_2" },
+    { doom2, 1, 20,  83,        "", "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -4435,10 +4435,10 @@ static const linefix_t linefix_doom2_map21[] =
 
 static const sectorfix_t sectorfix_doom2_map21[] =
 {
-    { doom2, 1, 21, 17, "SWATER2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 21, 22, "SWATER2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 21, 23, "SWATER2", "RROCK09", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 21, 24,        "", "RROCK11", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 21, 17, "SWATER2",        "" },
+    { doom2, 1, 21, 22, "SWATER2",        "" },
+    { doom2, 1, 21, 23, "SWATER2", "RROCK09" },
+    { doom2, 1, 21, 24,        "", "RROCK11" },
     SECTORFIX_END
 };
 
@@ -4550,34 +4550,34 @@ static const linefix_t linefix_doom2_map22[] =
 
 static const sectorfix_t sectorfix_doom2_map22[] =
 {
-    { doom2, 1,  22,   8,        "",  "FLAT5_5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22,  17,        "",  "FLAT5_5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22,  18,        "",  "FLAT5_4", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22,  23,        "", "FLOOR7_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22,  27,        "",  "FLAT5_4", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22,  28,        "",  "FLAT5_4", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22,  30, "CEIL5_1",  "CEIL5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22,  31,        "",  "FLAT5_5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22,  43,        "",  "FLAT5_4", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22,  45,        "",  "FLAT5_4", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22,  51,        "", "FLOOR7_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22,  56,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22,  58,        "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22,  81,        "",  "CEIL5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22, 114, "FLAT5_4",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22, 115, "FLAT5_4",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22, 116, "FLAT5_4",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22, 117, "FLAT5_4",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22, 118, "FLAT5_4",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22, 119,        "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22, 120,        "",  "RROCK03", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22, 121, "FLAT5_4",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22, 124, "FLAT5_4",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22, 125, "CEIL5_2",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22, 126, "FLAT5_4",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22, 128, "FLAT5_4",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22, 130, "FLAT5_4",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  22, 133, "FLAT5_4",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1,  22,   8,        "",  "FLAT5_5" },
+    { doom2, 1,  22,  17,        "",  "FLAT5_5" },
+    { doom2, 1,  22,  18,        "",  "FLAT5_4" },
+    { doom2, 1,  22,  23,        "", "FLOOR7_2" },
+    { doom2, 1,  22,  27,        "",  "FLAT5_4" },
+    { doom2, 1,  22,  28,        "",  "FLAT5_4" },
+    { doom2, 1,  22,  30, "CEIL5_1",  "CEIL5_1" },
+    { doom2, 1,  22,  31,        "",  "FLAT5_5" },
+    { doom2, 1,  22,  43,        "",  "FLAT5_4" },
+    { doom2, 1,  22,  45,        "",  "FLAT5_4" },
+    { doom2, 1,  22,  51,        "", "FLOOR7_2" },
+    { doom2, 1,  22,  56,        "",   "FLAT20" },
+    { doom2, 1,  22,  58,        "",  "CEIL5_2" },
+    { doom2, 1,  22,  81,        "",  "CEIL5_1" },
+    { doom2, 1,  22, 114, "FLAT5_4",         "" },
+    { doom2, 1,  22, 115, "FLAT5_4",         "" },
+    { doom2, 1,  22, 116, "FLAT5_4",         "" },
+    { doom2, 1,  22, 117, "FLAT5_4",         "" },
+    { doom2, 1,  22, 118, "FLAT5_4",         "" },
+    { doom2, 1,  22, 119,        "",  "CEIL5_2" },
+    { doom2, 1,  22, 120,        "",  "RROCK03" },
+    { doom2, 1,  22, 121, "FLAT5_4",         "" },
+    { doom2, 1,  22, 124, "FLAT5_4",         "" },
+    { doom2, 1,  22, 125, "CEIL5_2",         "" },
+    { doom2, 1,  22, 126, "FLAT5_4",         "" },
+    { doom2, 1,  22, 128, "FLAT5_4",         "" },
+    { doom2, 1,  22, 130, "FLAT5_4",         "" },
+    { doom2, 1,  22, 133, "FLAT5_4",         "" },
     SECTORFIX_END
 };
 
@@ -4619,7 +4619,7 @@ static const linefix_t linefix_doom2_map23[] =
 
 static const sectorfix_t sectorfix_doom2_map23[] =
 {
-    { doom2, 1, 23, 50, "CEIL5_1", "CEIL5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 23, 50, "CEIL5_1", "CEIL5_1" },
     SECTORFIX_END
 };
 
@@ -4832,12 +4832,12 @@ static const linefix_t linefix_doom2_map25[] =
 
 static const sectorfix_t sectorfix_doom2_map25[] =
 {
-    { doom2, 1, 25,  94,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 25, 103,        "", "FLAT5_4", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 25, 125, "SWATER2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 25, 126, "SWATER2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 25, 127, "SWATER4",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 25, 128, "SWATER4",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 25,  94,        "", "CEIL5_2" },
+    { doom2, 1, 25, 103,        "", "FLAT5_4" },
+    { doom2, 1, 25, 125, "SWATER2",        "" },
+    { doom2, 1, 25, 126, "SWATER2",        "" },
+    { doom2, 1, 25, 127, "SWATER4",        "" },
+    { doom2, 1, 25, 128, "SWATER4",        "" },
     SECTORFIX_END
 };
 
@@ -4895,10 +4895,10 @@ static const linefix_t linefix_doom2_map26[] =
 
 static const sectorfix_t sectorfix_doom2_map26[] =
 {
-    { doom2, 1,  26,  74,        "", "CEIL5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  26,  79, "SWATER1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  26, 113,        "",  "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1,  26, 115,        "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1,  26,  74,        "", "CEIL5_1" },
+    { doom2, 1,  26,  79, "SWATER1",        "" },
+    { doom2, 1,  26, 113,        "",  "FLAT19" },
+    { doom2, 1,  26, 115,        "",  "FLAT20" },
     SECTORFIX_END
 };
 
@@ -4957,11 +4957,11 @@ static const linefix_t linefix_doom2_map27[] =
 
 static const sectorfix_t sectorfix_doom2_map27[] =
 {
-    { doom2, 1, 27,  27, "",   "FLAT10", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 27,  80, "",  "FLAT5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 27,  82, "", "FLOOR7_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 27,  87, "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 27, 142, "",  "FLAT5_3", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 27,  27, "",   "FLAT10" },
+    { doom2, 1, 27,  80, "",  "FLAT5_2" },
+    { doom2, 1, 27,  82, "", "FLOOR7_2" },
+    { doom2, 1, 27,  87, "",   "FLAT20" },
+    { doom2, 1, 27, 142, "",  "FLAT5_3" },
     SECTORFIX_END
 };
 
@@ -5115,8 +5115,8 @@ static const linefix_t linefix_doom2_map29[] =
 
 static const sectorfix_t sectorfix_doom2_map29[] =
 {
-    { doom2, 1, 29,   6, "CEIL5_2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 29, 204,        "", "FLAT5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 29,   6, "CEIL5_2",        "" },
+    { doom2, 1, 29, 204,        "", "FLAT5_1" },
     SECTORFIX_END
 };
 
@@ -5253,19 +5253,19 @@ static const linefix_t linefix_plut_map01[] =
 
 static const sectorfix_t sectorfix_plut_map01[] =
 {
-    { pack_plut, 1, 1,  23,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 1,  24,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 1,  28, "CRATOP1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 1,  32,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 1,  34, "CRATOP1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 1,  40, "CEIL5_2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 1,  80,        "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 1,  81,        "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 1,  82,   "FLAT1",   "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 1,  94,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 1, 103,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 1, 117,        "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 1, 124,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 1,  23,        "", "CEIL5_2" },
+    { pack_plut, 1, 1,  24,        "", "CEIL5_2" },
+    { pack_plut, 1, 1,  28, "CRATOP1",        "" },
+    { pack_plut, 1, 1,  32,        "", "CEIL5_2" },
+    { pack_plut, 1, 1,  34, "CRATOP1",        "" },
+    { pack_plut, 1, 1,  40, "CEIL5_2",        "" },
+    { pack_plut, 1, 1,  80,        "",  "FLAT20" },
+    { pack_plut, 1, 1,  81,        "",  "FLAT20" },
+    { pack_plut, 1, 1,  82,   "FLAT1",   "FLAT1" },
+    { pack_plut, 1, 1,  94,        "", "CEIL5_2" },
+    { pack_plut, 1, 1, 103,        "", "CEIL5_2" },
+    { pack_plut, 1, 1, 117,        "",  "FLAT20" },
+    { pack_plut, 1, 1, 124,        "", "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -5298,11 +5298,11 @@ static const linefix_t linefix_plut_map02[] =
 
 static const sectorfix_t sectorfix_plut_map02[] =
 {
-    { pack_plut, 1, 2, 16,        "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 2, 78,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 2, 89, "CEIL5_1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 2, 93,        "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 2, 96,  "FLAT23",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 2, 16,        "",  "FLAT20" },
+    { pack_plut, 1, 2, 78,        "", "CEIL5_2" },
+    { pack_plut, 1, 2, 89, "CEIL5_1",        "" },
+    { pack_plut, 1, 2, 93,        "",  "FLAT20" },
+    { pack_plut, 1, 2, 96,  "FLAT23",        "" },
     SECTORFIX_END
 };
 
@@ -5402,10 +5402,10 @@ static const linefix_t linefix_plut_map03[] =
 
 static const sectorfix_t sectorfix_plut_map03[] =
 {
-    { pack_plut, 1, 3,  35, "", "FLAT5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 3, 120, "",  "FLAT23", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 3, 121, "",  "FLAT23", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 3, 128, "",   "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 3,  35, "", "FLAT5_1" },
+    { pack_plut, 1, 3, 120, "",  "FLAT23" },
+    { pack_plut, 1, 3, 121, "",  "FLAT23" },
+    { pack_plut, 1, 3, 128, "",   "FLAT1" },
     SECTORFIX_END
 };
 
@@ -5454,15 +5454,15 @@ static const linefix_t linefix_plut_map04[] =
 
 static const sectorfix_t sectorfix_plut_map04[] =
 {
-    { pack_plut, 1, 4,  35,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 4,  63,        "",  "CRATOP2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 4,  64,        "",  "CRATOP2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 4, 103, "CEIL5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 4, 139,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 4, 147,  "FLAT19",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 4, 148,   "FLAT1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 4, 164,        "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 4, 169,        "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 4,  35,        "",   "FLAT20" },
+    { pack_plut, 1, 4,  63,        "",  "CRATOP2" },
+    { pack_plut, 1, 4,  64,        "",  "CRATOP2" },
+    { pack_plut, 1, 4, 103, "CEIL5_1",         "" },
+    { pack_plut, 1, 4, 139,        "",   "FLAT20" },
+    { pack_plut, 1, 4, 147,  "FLAT19",         "" },
+    { pack_plut, 1, 4, 148,   "FLAT1",         "" },
+    { pack_plut, 1, 4, 164,        "", "FLOOR7_1" },
+    { pack_plut, 1, 4, 169,        "", "FLOOR7_1" },
     SECTORFIX_END
 };
 
@@ -5495,7 +5495,7 @@ static const linefix_t linefix_plut_map05[] =
 
 static const sectorfix_t sectorfix_plut_map05[] =
 {
-    { pack_plut, 1, 5, 103, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 5, 103, "", "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -5540,15 +5540,15 @@ static const linefix_t linefix_plut_map06[] =
 
 static const sectorfix_t sectorfix_plut_map06[] =
 {
-    { pack_plut, 1, 6,  49,        "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 6,  72,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 6,  74,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 6, 102, "CEIL5_2",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 6, 118, "CEIL5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 6, 133,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 6, 149,        "",   "FLAT23", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 6, 150,        "",   "FLAT23", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 6, 193, "SLIME15",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 6,  49,        "", "FLOOR7_1" },
+    { pack_plut, 1, 6,  72,        "",   "FLAT20" },
+    { pack_plut, 1, 6,  74,        "",   "FLAT20" },
+    { pack_plut, 1, 6, 102, "CEIL5_2",         "" },
+    { pack_plut, 1, 6, 118, "CEIL5_1",         "" },
+    { pack_plut, 1, 6, 133,        "",   "FLAT20" },
+    { pack_plut, 1, 6, 149,        "",   "FLAT23" },
+    { pack_plut, 1, 6, 150,        "",   "FLAT23" },
+    { pack_plut, 1, 6, 193, "SLIME15",         "" },
     SECTORFIX_END
 };
 
@@ -5598,8 +5598,8 @@ static const linefix_t linefix_plut_map07[] =
 
 static const sectorfix_t sectorfix_plut_map07[] =
 {
-    { pack_plut, 1, 7, 31,        "", "FLOOR3_3", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 7, 33, "FLAT5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 7, 31,        "", "FLOOR3_3" },
+    { pack_plut, 1, 7, 33, "FLAT5_1",         "" },
     SECTORFIX_END
 };
 
@@ -5627,11 +5627,11 @@ static const linefix_t linefix_plut_map08[] =
 
 static const sectorfix_t sectorfix_plut_map08[] =
 {
-    { pack_plut, 1, 8,   9,       "",  "RROCK09", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 8,  12,       "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 8,  60,       "",  "CRATOP2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 8,  98, "FLAT19",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 8, 122,       "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 8,   9,       "",  "RROCK09" },
+    { pack_plut, 1, 8,  12,       "",  "CEIL5_2" },
+    { pack_plut, 1, 8,  60,       "",  "CRATOP2" },
+    { pack_plut, 1, 8,  98, "FLAT19",         "" },
+    { pack_plut, 1, 8, 122,       "", "FLOOR7_1" },
     SECTORFIX_END
 };
 
@@ -5708,16 +5708,16 @@ static const linefix_t linefix_plut_map09[] =
 
 static const sectorfix_t sectorfix_plut_map09[] =
 {
-    { pack_plut, 1, 9,  52,  "SWATER2",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 9,  56,  "SWATER2",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 9,  74,  "CEIL5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 9,  75,  "CEIL5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 9,  78,         "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 9,  80,  "CEIL5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 9,  83, "FLOOR3_3",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 9,  99,         "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 9, 103,         "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 9, 118,         "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 9,  52,  "SWATER2",         "" },
+    { pack_plut, 1, 9,  56,  "SWATER2",         "" },
+    { pack_plut, 1, 9,  74,  "CEIL5_1",         "" },
+    { pack_plut, 1, 9,  75,  "CEIL5_1",         "" },
+    { pack_plut, 1, 9,  78,         "",  "CEIL5_2" },
+    { pack_plut, 1, 9,  80,  "CEIL5_1",         "" },
+    { pack_plut, 1, 9,  83, "FLOOR3_3",         "" },
+    { pack_plut, 1, 9,  99,         "",  "CEIL5_2" },
+    { pack_plut, 1, 9, 103,         "", "FLOOR7_1" },
+    { pack_plut, 1, 9, 118,         "",  "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -5782,25 +5782,25 @@ static const linefix_t linefix_plut_map10[] =
 
 static const sectorfix_t sectorfix_plut_map10[] =
 {
-    { pack_plut, 1, 10,   3,        "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 10,  24, "CEIL5_2",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 10,  35,  "FLAT19",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 10,  38, "RROCK09",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 10,  44,        "",  "FLAT5_5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 10,  46,  "FLAT19",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 10,  56, "CEIL5_2",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 10,  64,        "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 10,  65,        "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 10,  66,        "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 10,  67,        "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 10,  68,        "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 10,  74, "CEIL5_2",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 10,  83,        "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 10,  90,        "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 10, 102,        "", "FLOOR5_4", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 10, 110, "CEIL5_2",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 10, 112,        "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 10, 117,        "",  "FLAT5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 10,   3,        "", "FLOOR7_1" },
+    { pack_plut, 1, 10,  24, "CEIL5_2",         "" },
+    { pack_plut, 1, 10,  35,  "FLAT19",         "" },
+    { pack_plut, 1, 10,  38, "RROCK09",         "" },
+    { pack_plut, 1, 10,  44,        "",  "FLAT5_5" },
+    { pack_plut, 1, 10,  46,  "FLAT19",         "" },
+    { pack_plut, 1, 10,  56, "CEIL5_2",         "" },
+    { pack_plut, 1, 10,  64,        "",  "CEIL5_2" },
+    { pack_plut, 1, 10,  65,        "",  "CEIL5_2" },
+    { pack_plut, 1, 10,  66,        "",  "CEIL5_2" },
+    { pack_plut, 1, 10,  67,        "",  "CEIL5_2" },
+    { pack_plut, 1, 10,  68,        "",  "CEIL5_2" },
+    { pack_plut, 1, 10,  74, "CEIL5_2",         "" },
+    { pack_plut, 1, 10,  83,        "",  "CEIL5_2" },
+    { pack_plut, 1, 10,  90,        "",  "CEIL5_2" },
+    { pack_plut, 1, 10, 102,        "", "FLOOR5_4" },
+    { pack_plut, 1, 10, 110, "CEIL5_2",         "" },
+    { pack_plut, 1, 10, 112,        "", "FLOOR7_1" },
+    { pack_plut, 1, 10, 117,        "",  "FLAT5_1" },
     SECTORFIX_END
 };
 
@@ -5833,11 +5833,11 @@ static const flow_t flow_plut_map10[] =
 
 static const sectorfix_t sectorfix_plut_map11[] =
 {
-    { pack_plut, 1, 11,  7, "FLAT5_1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 11,  8, "FLAT5_1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 11, 52,        "", "FLAT5_5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 11, 53,        "", "FLAT5_5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 11, 54, "CEIL5_1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 11,  7, "FLAT5_1",        "" },
+    { pack_plut, 1, 11,  8, "FLAT5_1",        "" },
+    { pack_plut, 1, 11, 52,        "", "FLAT5_5" },
+    { pack_plut, 1, 11, 53,        "", "FLAT5_5" },
+    { pack_plut, 1, 11, 54, "CEIL5_1",        "" },
     SECTORFIX_END
 };
 
@@ -5864,14 +5864,14 @@ static const linefix_t linefix_plut_map12[] =
 
 static const sectorfix_t sectorfix_plut_map12[] =
 {
-    { pack_plut, 1, 12,  14,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 12,  97, "CEIL5_2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 12, 109,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 12, 111, "CEIL5_2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 12, 125,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 12, 142,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 12, 155,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 12, 160,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 12,  14,        "", "CEIL5_2" },
+    { pack_plut, 1, 12,  97, "CEIL5_2",        "" },
+    { pack_plut, 1, 12, 109,        "", "CEIL5_2" },
+    { pack_plut, 1, 12, 111, "CEIL5_2",        "" },
+    { pack_plut, 1, 12, 125,        "", "CEIL5_2" },
+    { pack_plut, 1, 12, 142,        "", "CEIL5_2" },
+    { pack_plut, 1, 12, 155,        "", "CEIL5_2" },
+    { pack_plut, 1, 12, 160,        "", "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -5932,24 +5932,24 @@ static const linefix_t linefix_plut_map13[] =
 
 static const sectorfix_t sectorfix_plut_map13[] =
 {
-    { pack_plut, 1, 13,  33,         "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 13,  33,         "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 13,  34,         "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 13,  46,  "RROCK09",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 13,  82, "FLOOR7_1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 13,  83, "FLOOR7_1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 13,  84, "FLOOR7_1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 13,  85, "FLOOR7_1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 13,  86, "FLOOR7_1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 13,  87, "FLOOR7_1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 13,  88, "FLOOR7_1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 13,  89, "FLOOR7_1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 13,  90, "FLOOR7_1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 13,  93, "FLAT5_5",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 13, 114, "FLOOR3_3",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 13, 149,  "CEIL5_2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 13, 169,   "FLAT19",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 13, 170,         "", "RROCK09", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 13,  33,         "", "CEIL5_2" },
+    { pack_plut, 1, 13,  33,         "", "CEIL5_2" },
+    { pack_plut, 1, 13,  34,         "", "CEIL5_2" },
+    { pack_plut, 1, 13,  46,  "RROCK09",        "" },
+    { pack_plut, 1, 13,  82, "FLOOR7_1",        "" },
+    { pack_plut, 1, 13,  83, "FLOOR7_1",        "" },
+    { pack_plut, 1, 13,  84, "FLOOR7_1",        "" },
+    { pack_plut, 1, 13,  85, "FLOOR7_1",        "" },
+    { pack_plut, 1, 13,  86, "FLOOR7_1",        "" },
+    { pack_plut, 1, 13,  87, "FLOOR7_1",        "" },
+    { pack_plut, 1, 13,  88, "FLOOR7_1",        "" },
+    { pack_plut, 1, 13,  89, "FLOOR7_1",        "" },
+    { pack_plut, 1, 13,  90, "FLOOR7_1",        "" },
+    { pack_plut, 1, 13,  93, "FLAT5_5",         "" },
+    { pack_plut, 1, 13, 114, "FLOOR3_3",        "" },
+    { pack_plut, 1, 13, 149,  "CEIL5_2",        "" },
+    { pack_plut, 1, 13, 169,   "FLAT19",        "" },
+    { pack_plut, 1, 13, 170,         "", "RROCK09" },
     SECTORFIX_END
 };
 
@@ -6011,8 +6011,8 @@ static const linefix_t linefix_plut_map14[] =
 
 static const sectorfix_t sectorfix_plut_map14[] =
 {
-    { pack_plut, 1, 14,  56, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 14, 105, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 14,  56, "", "CEIL5_2" },
+    { pack_plut, 1, 14, 105, "", "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -6068,9 +6068,9 @@ static const linefix_t linefix_plut_map15[] =
 
 static const sectorfix_t sectorfix_plut_map15[] =
 {
-    { pack_plut, 1,  15,  55,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1,  15,  97, "CEIL5_2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1,  15, 139,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1,  15,  55,        "", "CEIL5_2" },
+    { pack_plut, 1,  15,  97, "CEIL5_2",        "" },
+    { pack_plut, 1,  15, 139,        "", "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -6102,11 +6102,11 @@ static const linefix_t linefix_plut_map16[] =
 
 static const sectorfix_t sectorfix_plut_map16[] =
 {
-    { pack_plut, 1, 16,  70, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 16,  78, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 16,  94, "", "FLAT5_5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 16,  97, "", "NUKAGE1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 16, 104, "", "NUKAGE1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 16,  70, "", "CEIL5_2" },
+    { pack_plut, 1, 16,  78, "", "CEIL5_2" },
+    { pack_plut, 1, 16,  94, "", "FLAT5_5" },
+    { pack_plut, 1, 16,  97, "", "NUKAGE1" },
+    { pack_plut, 1, 16, 104, "", "NUKAGE1" },
     SECTORFIX_END
 };
 
@@ -6282,11 +6282,11 @@ static const fall_t fall_plut_map16[] =
 
 static const sectorfix_t sectorfix_plut_map17[] =
 {
-    { pack_plut, 1, 17,  79,        "",  "FLAT5_5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 17,  83, "CEIL5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 17,  92,        "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 17,  96,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 17, 121,        "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 17,  79,        "",  "FLAT5_5" },
+    { pack_plut, 1, 17,  83, "CEIL5_1",         "" },
+    { pack_plut, 1, 17,  92,        "",  "CEIL5_2" },
+    { pack_plut, 1, 17,  96,        "",   "FLAT20" },
+    { pack_plut, 1, 17, 121,        "", "FLOOR7_1" },
     SECTORFIX_END
 };
 
@@ -6327,12 +6327,12 @@ static const fall_t fall_plut_map17[] =
 
 static const sectorfix_t sectorfix_plut_map18[] =
 {
-    { pack_plut, 1, 18, 105,         "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 18, 106,   "FLAT20",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 18, 110, "FLOOR7_1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 18, 139,         "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 18, 162,         "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 18, 164,   "FLAT20",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 18, 105,         "", "CEIL5_2" },
+    { pack_plut, 1, 18, 106,   "FLAT20",        "" },
+    { pack_plut, 1, 18, 110, "FLOOR7_1",        "" },
+    { pack_plut, 1, 18, 139,         "", "CEIL5_2" },
+    { pack_plut, 1, 18, 162,         "", "CEIL5_2" },
+    { pack_plut, 1, 18, 164,   "FLAT20",        "" },
     SECTORFIX_END
 };
 
@@ -6369,8 +6369,8 @@ static const linefix_t linefix_plut_map19[] =
 
 static const sectorfix_t sectorfix_plut_map19[] =
 {
-    { pack_plut, 1, 19,  21, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 19, 125, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 19,  21, "", "CEIL5_2" },
+    { pack_plut, 1, 19, 125, "", "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -6443,23 +6443,23 @@ static const linefix_t linefix_plut_map20[] =
 
 static const sectorfix_t sectorfix_plut_map20[] =
 {
-    { pack_plut, 1, 20,  45,  "CEIL5_2",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 20,  49,         "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 20,  59, "FLOOR7_2", "FLOOR7_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 20,  69,  "FLAT5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 20,  80,         "",  "FLAT5_4", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 20,  81,         "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 20, 100, "FLOOR3_3",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 20, 105,         "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 20, 106,         "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 20, 119,         "",  "RROCK09", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 20, 125,         "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 20, 128, "FLOOR7_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 20, 144,         "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 20, 164,         "",  "FLAT5_4", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 20, 177, "FLOOR7_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 20, 183,         "",  "CRATOP2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 20, 189,  "CEIL5_2",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 20,  45,  "CEIL5_2",  "CEIL5_2" },
+    { pack_plut, 1, 20,  49,         "",   "FLAT20" },
+    { pack_plut, 1, 20,  59, "FLOOR7_2", "FLOOR7_2" },
+    { pack_plut, 1, 20,  69,  "FLAT5_1",         "" },
+    { pack_plut, 1, 20,  80,         "",  "FLAT5_4" },
+    { pack_plut, 1, 20,  81,         "",  "CEIL5_2" },
+    { pack_plut, 1, 20, 100, "FLOOR3_3",         "" },
+    { pack_plut, 1, 20, 105,         "",   "FLAT20" },
+    { pack_plut, 1, 20, 106,         "",   "FLAT20" },
+    { pack_plut, 1, 20, 119,         "",  "RROCK09" },
+    { pack_plut, 1, 20, 125,         "",  "CEIL5_2" },
+    { pack_plut, 1, 20, 128, "FLOOR7_1",         "" },
+    { pack_plut, 1, 20, 144,         "",   "FLAT20" },
+    { pack_plut, 1, 20, 164,         "",  "FLAT5_4" },
+    { pack_plut, 1, 20, 177, "FLOOR7_1",         "" },
+    { pack_plut, 1, 20, 183,         "",  "CRATOP2" },
+    { pack_plut, 1, 20, 189,  "CEIL5_2",         "" },
     SECTORFIX_END
 };
 
@@ -6496,8 +6496,8 @@ static const flow_t flow_plut_map20[] =
 
 static const sectorfix_t sectorfix_plut_map21[] =
 {
-    { pack_plut, 1, 21, 46, "", "FLAT5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 21, 47, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 21, 46, "", "FLAT5_1" },
+    { pack_plut, 1, 21, 47, "", "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -6540,16 +6540,16 @@ static const linefix_t linefix_plut_map22[] =
 
 static const sectorfix_t sectorfix_plut_map22[] =
 {
-    { pack_plut, 1, 22,   4,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 22,   5,        "", "CEIL5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 22,  22,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 22,  34,        "", "CEIL5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 22,  87,        "", "CEIL5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 22,  89,        "", "CEIL5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 22, 100, "RROCK09",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },    
-    { pack_plut, 1, 22, 127,        "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 22, 129,        "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 22, 137, "CEIL1_1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 22,   4,        "", "CEIL5_2" },
+    { pack_plut, 1, 22,   5,        "", "CEIL5_1" },
+    { pack_plut, 1, 22,  22,        "", "CEIL5_2" },
+    { pack_plut, 1, 22,  34,        "", "CEIL5_1" },
+    { pack_plut, 1, 22,  87,        "", "CEIL5_1" },
+    { pack_plut, 1, 22,  89,        "", "CEIL5_1" },
+    { pack_plut, 1, 22, 100, "RROCK09",        "" },    
+    { pack_plut, 1, 22, 127,        "",  "FLAT20" },
+    { pack_plut, 1, 22, 129,        "",  "FLAT20" },
+    { pack_plut, 1, 22, 137, "CEIL1_1",        "" },
     SECTORFIX_END
 };
 
@@ -6648,17 +6648,17 @@ static const linefix_t linefix_plut_map23[] =
 
 static const sectorfix_t sectorfix_plut_map23[] =
 {
-    { pack_plut, 1, 23,  29,        "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 23,  37,        "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 23,  39,        "",  "RROCK14", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 23,  68, "FLAT5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 23,  69, "FLAT5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 23,  86,        "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 23, 200,        "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 23, 226,        "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 23, 230,        "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 23, 243,        "",  "FLAT5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 23, 244,        "",  "FLAT5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 23,  29,        "", "FLOOR7_1" },
+    { pack_plut, 1, 23,  37,        "", "FLOOR7_1" },
+    { pack_plut, 1, 23,  39,        "",  "RROCK14" },
+    { pack_plut, 1, 23,  68, "FLAT5_1",         "" },
+    { pack_plut, 1, 23,  69, "FLAT5_1",         "" },
+    { pack_plut, 1, 23,  86,        "", "FLOOR7_1" },
+    { pack_plut, 1, 23, 200,        "", "FLOOR7_1" },
+    { pack_plut, 1, 23, 226,        "", "FLOOR7_1" },
+    { pack_plut, 1, 23, 230,        "",  "CEIL5_2" },
+    { pack_plut, 1, 23, 243,        "",  "FLAT5_2" },
+    { pack_plut, 1, 23, 244,        "",  "FLAT5_1" },
     SECTORFIX_END
 };
 
@@ -6741,9 +6741,9 @@ static const linefix_t linefix_plut_map24[] =
 
 static const sectorfix_t sectorfix_plut_map24[] =
 {
-    { pack_plut, 1, 24,  61, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 24, 123, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 24, 146, "", "RROCK09", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 24,  61, "",  "FLAT20" },
+    { pack_plut, 1, 24, 123, "",  "FLAT20" },
+    { pack_plut, 1, 24, 146, "", "RROCK09" },
     SECTORFIX_END
 };
 
@@ -6807,13 +6807,13 @@ static const linefix_t linefix_plut_map25[] =
 
 static const sectorfix_t sectorfix_plut_map25[] =
 {
-    { pack_plut, 1, 25,  47,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 25,  48,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 25,  49,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 25,  51,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 25,  52,        "", "FLOOR7_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 25,  69,        "",  "CRATOP2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 25, 126, "CEIL5_2",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 25,  47,        "",   "FLAT20" },
+    { pack_plut, 1, 25,  48,        "",   "FLAT20" },
+    { pack_plut, 1, 25,  49,        "",   "FLAT20" },
+    { pack_plut, 1, 25,  51,        "",   "FLAT20" },
+    { pack_plut, 1, 25,  52,        "", "FLOOR7_2" },
+    { pack_plut, 1, 25,  69,        "",  "CRATOP2" },
+    { pack_plut, 1, 25, 126, "CEIL5_2",         "" },
     SECTORFIX_END
 };
 
@@ -6848,14 +6848,14 @@ static const linefix_t linefix_plut_map26[] =
 
 static const sectorfix_t sectorfix_plut_map26[] =
 {
-    { pack_plut, 1, 26,  60,        "", "CRATOP2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 26,  82,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 26,  98,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 26, 134,        "", "CRATOP2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 26, 162,  "FLAT23",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 26, 167,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 26, 182, "CEIL3_5",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 26, 202, "CEIL3_5",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 26,  60,        "", "CRATOP2" },
+    { pack_plut, 1, 26,  82,        "", "CEIL5_2" },
+    { pack_plut, 1, 26,  98,        "", "CEIL5_2" },
+    { pack_plut, 1, 26, 134,        "", "CRATOP2" },
+    { pack_plut, 1, 26, 162,  "FLAT23",        "" },
+    { pack_plut, 1, 26, 167,        "", "CEIL5_2" },
+    { pack_plut, 1, 26, 182, "CEIL3_5",        "" },
+    { pack_plut, 1, 26, 202, "CEIL3_5",        "" },
     SECTORFIX_END
 };
 
@@ -6915,13 +6915,13 @@ static const fall_t fall_plut_map26[] =
 
 static const sectorfix_t sectorfix_plut_map27[] =
 {
-    { pack_plut, 1, 27,   9,  "FLAT5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 27,  12, "FLOOR7_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 27,  14,         "",  "FLAT5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 27,  38,         "",  "FLAT5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 27,  39,  "FLAT5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 27,  95,         "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 27, 139,  "FLAT5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 27,   9,  "FLAT5_1",         "" },
+    { pack_plut, 1, 27,  12, "FLOOR7_1",         "" },
+    { pack_plut, 1, 27,  14,         "",  "FLAT5_1" },
+    { pack_plut, 1, 27,  38,         "",  "FLAT5_1" },
+    { pack_plut, 1, 27,  39,  "FLAT5_1",         "" },
+    { pack_plut, 1, 27,  95,         "", "FLOOR7_1" },
+    { pack_plut, 1, 27, 139,  "FLAT5_1",         "" },
     SECTORFIX_END
 };
 
@@ -6970,19 +6970,19 @@ static const linefix_t linefix_plut_map28[] =
 
 static const sectorfix_t sectorfix_plut_map28[] =
 {
-    { pack_plut, 1, 28,  23,        "",  "FLAT5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 28,  49,        "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 28,  62,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 28,  98,        "", "FLOOR7_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 28,  99,        "", "FLOOR7_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 28, 116,        "",  "FLAT5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 28, 162,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 28, 177,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 28, 225,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 28, 227, "CEIL5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 28, 245, "FLAT5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 28, 248,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 28, 287,        "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 28,  23,        "",  "FLAT5_1" },
+    { pack_plut, 1, 28,  49,        "",  "CEIL5_2" },
+    { pack_plut, 1, 28,  62,        "",   "FLAT20" },
+    { pack_plut, 1, 28,  98,        "", "FLOOR7_2" },
+    { pack_plut, 1, 28,  99,        "", "FLOOR7_2" },
+    { pack_plut, 1, 28, 116,        "",  "FLAT5_1" },
+    { pack_plut, 1, 28, 162,        "",   "FLAT20" },
+    { pack_plut, 1, 28, 177,        "",   "FLAT20" },
+    { pack_plut, 1, 28, 225,        "",   "FLAT20" },
+    { pack_plut, 1, 28, 227, "CEIL5_1",         "" },
+    { pack_plut, 1, 28, 245, "FLAT5_1",         "" },
+    { pack_plut, 1, 28, 248,        "",   "FLAT20" },
+    { pack_plut, 1, 28, 287,        "",  "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -7057,21 +7057,21 @@ static const linefix_t linefix_plut_map29[] =
 
 static const sectorfix_t sectorfix_plut_map29[] =
 {
-    { pack_plut, 1, 29,   5,        "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 29,  10,        "",  "FLAT5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 29,  81,        "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 29,  82,        "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 29, 111,        "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 29, 128,        "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 29, 129,        "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 29, 160, "CEIL5_2",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 29, 161,        "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 29, 233,        "",  "RROCK09", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 29, 234,        "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 29, 236, "RROCK09",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 29, 243,        "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 29, 246,        "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 29, 274,        "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 29,   5,        "",  "CEIL5_2" },
+    { pack_plut, 1, 29,  10,        "",  "FLAT5_1" },
+    { pack_plut, 1, 29,  81,        "",  "CEIL5_2" },
+    { pack_plut, 1, 29,  82,        "",  "CEIL5_2" },
+    { pack_plut, 1, 29, 111,        "", "FLOOR7_1" },
+    { pack_plut, 1, 29, 128,        "", "FLOOR7_1" },
+    { pack_plut, 1, 29, 129,        "", "FLOOR7_1" },
+    { pack_plut, 1, 29, 160, "CEIL5_2",         "" },
+    { pack_plut, 1, 29, 161,        "", "FLOOR7_1" },
+    { pack_plut, 1, 29, 233,        "",  "RROCK09" },
+    { pack_plut, 1, 29, 234,        "", "FLOOR7_1" },
+    { pack_plut, 1, 29, 236, "RROCK09",         "" },
+    { pack_plut, 1, 29, 243,        "", "FLOOR7_1" },
+    { pack_plut, 1, 29, 246,        "", "FLOOR7_1" },
+    { pack_plut, 1, 29, 274,        "",  "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -7106,8 +7106,8 @@ static const linefix_t linefix_plut_map30[] =
 
 static const sectorfix_t sectorfix_plut_map30[] =
 {
-    { pack_plut, 1, 30,  35,        "", "RROCK09", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 30, 127, "CEIL5_1", "CEIL5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 30,  35,        "", "RROCK09" },
+    { pack_plut, 1, 30, 127, "CEIL5_1", "CEIL5_1" },
     SECTORFIX_END
 };
 
@@ -7150,12 +7150,12 @@ static const linefix_t linefix_plut_map31[] =
 
 static const sectorfix_t sectorfix_plut_map31[] =
 {
-    { pack_plut, 1, 31,  36,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 31,  47, "CEIL5_2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 31, 113,        "",  "FLAT23", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 31, 146,        "", "CRATOP2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 31, 150, "CEIL5_2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 31, 152,        "", "CRATOP2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 31,  36,        "", "CEIL5_2" },
+    { pack_plut, 1, 31,  47, "CEIL5_2",        "" },
+    { pack_plut, 1, 31, 113,        "",  "FLAT23" },
+    { pack_plut, 1, 31, 146,        "", "CRATOP2" },
+    { pack_plut, 1, 31, 150, "CEIL5_2",        "" },
+    { pack_plut, 1, 31, 152,        "", "CRATOP2" },
     SECTORFIX_END
 };
 
@@ -7189,15 +7189,15 @@ static const linefix_t linefix_plut_map32[] =
 
 static const sectorfix_t sectorfix_plut_map32[] =
 {
-    { pack_plut, 1, 32,  43, "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 32,  46, "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 32,  69, "",  "RROCK10", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 32,  71, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 32, 118, "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 32, 148, "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 32, 149, "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 32, 150, "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 32, 152, "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_plut, 1, 32,  43, "", "FLOOR7_1" },
+    { pack_plut, 1, 32,  46, "", "FLOOR7_1" },
+    { pack_plut, 1, 32,  69, "",  "RROCK10" },
+    { pack_plut, 1, 32,  71, "",  "CEIL5_2" },
+    { pack_plut, 1, 32, 118, "", "FLOOR7_1" },
+    { pack_plut, 1, 32, 148, "", "FLOOR7_1" },
+    { pack_plut, 1, 32, 149, "", "FLOOR7_1" },
+    { pack_plut, 1, 32, 150, "", "FLOOR7_1" },
+    { pack_plut, 1, 32, 152, "", "FLOOR7_1" },
     SECTORFIX_END
 };
 
@@ -7278,13 +7278,13 @@ static const linefix_t linefix_tnt_map02[] =
 
 static const sectorfix_t sectorfix_tnt_map02[] =
 {
-    { pack_tnt, 1, 2,  64, "",  "CEIL5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 2,  77, "", "FLOOR7_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 2,  78, "",   "DEM1_6", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 2,  82, "",  "SLIME16", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 2, 116, "", "FLOOR7_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 2, 119, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 2, 152, "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 2,  64, "",  "CEIL5_1" },
+    { pack_tnt, 1, 2,  77, "", "FLOOR7_2" },
+    { pack_tnt, 1, 2,  78, "",   "DEM1_6" },
+    { pack_tnt, 1, 2,  82, "",  "SLIME16" },
+    { pack_tnt, 1, 2, 116, "", "FLOOR7_2" },
+    { pack_tnt, 1, 2, 119, "",  "CEIL5_2" },
+    { pack_tnt, 1, 2, 152, "", "FLOOR7_1" },
     SECTORFIX_END
 };
 
@@ -7390,13 +7390,13 @@ static const linefix_t linefix_tnt_map04[] =
 
 static const sectorfix_t sectorfix_tnt_map04[] =
 {
-    { pack_tnt, 1, 4,  86, "CEIL5_1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 4,  87, "CEIL5_1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 4,  88, "CEIL5_1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 4, 208, "CEIL5_2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 4, 209, "CEIL5_2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 4, 210, "CEIL5_2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 4, 216,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 4,  86, "CEIL5_1",        "" },
+    { pack_tnt, 1, 4,  87, "CEIL5_1",        "" },
+    { pack_tnt, 1, 4,  88, "CEIL5_1",        "" },
+    { pack_tnt, 1, 4, 208, "CEIL5_2",        "" },
+    { pack_tnt, 1, 4, 209, "CEIL5_2",        "" },
+    { pack_tnt, 1, 4, 210, "CEIL5_2",        "" },
+    { pack_tnt, 1, 4, 216,        "", "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -7418,15 +7418,15 @@ static const linefix_t linefix_tnt_map05[] =
 
 static const sectorfix_t sectorfix_tnt_map05[] =
 {
-    { pack_tnt, 1, 5,   2, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 5,  79, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 5,  90, "",  "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 5, 105, "",  "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 5, 120, "",   "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 5, 158, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 5, 168, "", "CEIL5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 5, 170, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 5, 209, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 5,   2, "",  "FLAT20" },
+    { pack_tnt, 1, 5,  79, "", "CEIL5_2" },
+    { pack_tnt, 1, 5,  90, "",  "FLAT19" },
+    { pack_tnt, 1, 5, 105, "",  "FLAT19" },
+    { pack_tnt, 1, 5, 120, "",   "FLAT1" },
+    { pack_tnt, 1, 5, 158, "", "CEIL5_2" },
+    { pack_tnt, 1, 5, 168, "", "CEIL5_1" },
+    { pack_tnt, 1, 5, 170, "", "CEIL5_2" },
+    { pack_tnt, 1, 5, 209, "", "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -7449,7 +7449,7 @@ static const linefix_t linefix_tnt_map06[] =
 
 static const sectorfix_t sectorfix_tnt_map06[] =
 {
-    { pack_tnt, 1, 6, 121, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 6, 121, "", "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -7465,11 +7465,11 @@ static const flow_t flow_tnt_map06[] =
 
 static const sectorfix_t sectorfix_tnt_map07[] =
 {
-    { pack_tnt, 1, 7,  58,       "",  "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 7, 106,       "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 7, 121,       "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 7, 153,       "", "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 7, 169, "FLAT19",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 7,  58,       "",  "FLAT1" },
+    { pack_tnt, 1, 7, 106,       "", "FLAT20" },
+    { pack_tnt, 1, 7, 121,       "", "FLAT20" },
+    { pack_tnt, 1, 7, 153,       "", "FLAT19" },
+    { pack_tnt, 1, 7, 169, "FLAT19",       "" },
     SECTORFIX_END
 };
 
@@ -7490,10 +7490,10 @@ static const flow_t flow_tnt_map07[] =
 
 static const sectorfix_t sectorfix_tnt_map08[] =
 {
-    { pack_tnt, 1, 8,  28, "",   "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 8,  74, "",  "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 8, 304, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 8, 419, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 8,  28, "",   "FLAT1" },
+    { pack_tnt, 1, 8,  74, "",  "FLAT19" },
+    { pack_tnt, 1, 8, 304, "", "CEIL5_2" },
+    { pack_tnt, 1, 8, 419, "",  "FLAT20" },
     SECTORFIX_END
 };
 
@@ -7595,26 +7595,26 @@ static const linefix_t linefix_tnt_map09[] =
 
 static const sectorfix_t sectorfix_tnt_map09[] =
 {
-    { pack_tnt, 1, 9,   2, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 9,   8, "", "CEIL5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 9,  17, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 9,  20, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 9,  21, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 9,  29, "", "CEIL5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 9,  43, "", "CRATOP2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 9, 107, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 9, 152, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 9, 182, "", "CRATOP2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 9, 201, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 9, 274, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 9, 277, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 9, 364, "",  "FLAT23", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 9, 366, "",  "FLAT23", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 9, 368, "",  "FLAT23", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 9, 369, "",  "FLAT23", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 9, 370, "",  "FLAT23", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 9, 412, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 9, 419, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 9,   2, "",  "FLAT20" },
+    { pack_tnt, 1, 9,   8, "", "CEIL5_1" },
+    { pack_tnt, 1, 9,  17, "", "CEIL5_2" },
+    { pack_tnt, 1, 9,  20, "",  "FLAT20" },
+    { pack_tnt, 1, 9,  21, "",  "FLAT20" },
+    { pack_tnt, 1, 9,  29, "", "CEIL5_1" },
+    { pack_tnt, 1, 9,  43, "", "CRATOP2" },
+    { pack_tnt, 1, 9, 107, "", "CEIL5_2" },
+    { pack_tnt, 1, 9, 152, "",  "FLAT20" },
+    { pack_tnt, 1, 9, 182, "", "CRATOP2" },
+    { pack_tnt, 1, 9, 201, "", "CEIL5_2" },
+    { pack_tnt, 1, 9, 274, "",  "FLAT20" },
+    { pack_tnt, 1, 9, 277, "", "CEIL5_2" },
+    { pack_tnt, 1, 9, 364, "",  "FLAT23" },
+    { pack_tnt, 1, 9, 366, "",  "FLAT23" },
+    { pack_tnt, 1, 9, 368, "",  "FLAT23" },
+    { pack_tnt, 1, 9, 369, "",  "FLAT23" },
+    { pack_tnt, 1, 9, 370, "",  "FLAT23" },
+    { pack_tnt, 1, 9, 412, "",  "FLAT20" },
+    { pack_tnt, 1, 9, 419, "",  "FLAT20" },
     SECTORFIX_END
 };
 
@@ -7662,16 +7662,16 @@ static const linefix_t linefix_tnt_map10[] =
 
 static const sectorfix_t sectorfix_tnt_map10[] =
 {
-    { pack_tnt, 1, 10,   2, "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 10,   9, "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 10,  25, "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 10,  50, "",   "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 10,  57, "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 10, 174, "", "FLOOR7_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 10, 175, "", "FLOOR7_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 10, 231, "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 10, 254, "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 10, 257, "",    "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 10,   2, "",   "FLAT20" },
+    { pack_tnt, 1, 10,   9, "",   "FLAT20" },
+    { pack_tnt, 1, 10,  25, "",   "FLAT20" },
+    { pack_tnt, 1, 10,  50, "",   "FLAT19" },
+    { pack_tnt, 1, 10,  57, "",   "FLAT20" },
+    { pack_tnt, 1, 10, 174, "", "FLOOR7_2" },
+    { pack_tnt, 1, 10, 175, "", "FLOOR7_2" },
+    { pack_tnt, 1, 10, 231, "",   "FLAT20" },
+    { pack_tnt, 1, 10, 254, "",   "FLAT20" },
+    { pack_tnt, 1, 10, 257, "",    "FLAT1" },
     SECTORFIX_END
 };
 
@@ -7722,28 +7722,28 @@ static const linefix_t linefix_tnt_map11[] =
 
 static const sectorfix_t sectorfix_tnt_map11[] =
 {
-    { pack_tnt, 1, 11,  24,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11,  70,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11,  83,        "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11, 173,        "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11, 179, "FLAT5_4",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11, 181, "CRATOP2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11, 196, "FLAT5_4",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11, 197, "FLAT5_4",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11, 210,        "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11, 221,        "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11, 228,        "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11, 242, "CRATOP2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11, 244,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11, 249, "FLAT5_4",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11, 250, "FLAT5_4",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11, 258,  "FLAT19",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11, 261, "CRATOP1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11, 262, "CRATOP1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11, 263, "CRATOP1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11, 265, "CRATOP1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11, 268,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 11, 272,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 11,  24,        "", "CEIL5_2" },
+    { pack_tnt, 1, 11,  70,        "", "CEIL5_2" },
+    { pack_tnt, 1, 11,  83,        "",  "FLAT20" },
+    { pack_tnt, 1, 11, 173,        "",  "FLAT20" },
+    { pack_tnt, 1, 11, 179, "FLAT5_4",        "" },
+    { pack_tnt, 1, 11, 181, "CRATOP2",        "" },
+    { pack_tnt, 1, 11, 196, "FLAT5_4",        "" },
+    { pack_tnt, 1, 11, 197, "FLAT5_4",        "" },
+    { pack_tnt, 1, 11, 210,        "",  "FLAT20" },
+    { pack_tnt, 1, 11, 221,        "",  "FLAT20" },
+    { pack_tnt, 1, 11, 228,        "",  "FLAT20" },
+    { pack_tnt, 1, 11, 242, "CRATOP2",        "" },
+    { pack_tnt, 1, 11, 244,        "", "CEIL5_2" },
+    { pack_tnt, 1, 11, 249, "FLAT5_4",        "" },
+    { pack_tnt, 1, 11, 250, "FLAT5_4",        "" },
+    { pack_tnt, 1, 11, 258,  "FLAT19",        "" },
+    { pack_tnt, 1, 11, 261, "CRATOP1",        "" },
+    { pack_tnt, 1, 11, 262, "CRATOP1",        "" },
+    { pack_tnt, 1, 11, 263, "CRATOP1",        "" },
+    { pack_tnt, 1, 11, 265, "CRATOP1",        "" },
+    { pack_tnt, 1, 11, 268,        "", "CEIL5_2" },
+    { pack_tnt, 1, 11, 272,        "", "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -7796,11 +7796,11 @@ static const linefix_t linefix_tnt_map12[] =
 
 static const sectorfix_t sectorfix_tnt_map12[] =
 {
-    { pack_tnt, 1, 12,  12,        "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 12,  86,        "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 12, 141, "CRATOP1",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 12, 142, "CRATOP1",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 12, 143,        "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 12,  12,        "", "FLAT20" },
+    { pack_tnt, 1, 12,  86,        "", "FLAT20" },
+    { pack_tnt, 1, 12, 141, "CRATOP1",       "" },
+    { pack_tnt, 1, 12, 142, "CRATOP1",       "" },
+    { pack_tnt, 1, 12, 143,        "", "FLAT20" },
     SECTORFIX_END
 };
 
@@ -7914,7 +7914,7 @@ static const linefix_t linefix_tnt_map13[] =
 
 static const sectorfix_t sectorfix_tnt_map13[] =
 {
-    { pack_tnt, 1, 13, 191, "", "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 13, 191, "", "FLAT1" },
     SECTORFIX_END
 };
 
@@ -7937,10 +7937,10 @@ static const flow_t flow_tnt_map13[] =
 
 static const sectorfix_t sectorfix_tnt_map14[] =
 {
-    { pack_tnt, 1, 14,   1,        "", "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 14, 143,        "", "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 14, 163, "CEIL5_1",      "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 14, 175, "FLAT5_1",      "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 14,   1,        "", "FLAT1" },
+    { pack_tnt, 1, 14, 143,        "", "FLAT1" },
+    { pack_tnt, 1, 14, 163, "CEIL5_1",      "" },
+    { pack_tnt, 1, 14, 175, "FLAT5_1",      "" },
     SECTORFIX_END
 };
 
@@ -8049,11 +8049,11 @@ static const linefix_t linefix_tnt_map15[] =
 
 static const sectorfix_t sectorfix_tnt_map15[] =
 {
-    { pack_tnt, 1, 15, 170,        "",  "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 15, 180,        "", "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 15, 287, "CEIL5_2",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 15, 306,  "FLAT19",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 15, 307,  "FLAT19",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 15, 170,        "",  "FLAT1" },
+    { pack_tnt, 1, 15, 180,        "", "FLAT19" },
+    { pack_tnt, 1, 15, 287, "CEIL5_2",       "" },
+    { pack_tnt, 1, 15, 306,  "FLAT19",       "" },
+    { pack_tnt, 1, 15, 307,  "FLAT19",       "" },
     SECTORFIX_END
 };
 
@@ -8076,18 +8076,18 @@ static const flow_t flow_tnt_map15[] =
 
 static const sectorfix_t sectorfix_tnt_map16[] =
 {
-    { pack_tnt, 1, 16,   5, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 16,  41, "",   "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 16,  44, "",   "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 16,  74, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 16, 150, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 16, 273, "", "FLOOR7_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 16, 329, "",  "FLAT5_5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 16, 295, "",   "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 16, 323, "", "FLOOR7_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 16, 352, "",   "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 16, 360, "",   "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 16, 364, "",   "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 16,   5, "",  "CEIL5_2" },
+    { pack_tnt, 1, 16,  41, "",   "FLAT19" },
+    { pack_tnt, 1, 16,  44, "",   "FLAT19" },
+    { pack_tnt, 1, 16,  74, "",  "CEIL5_2" },
+    { pack_tnt, 1, 16, 150, "",  "CEIL5_2" },
+    { pack_tnt, 1, 16, 273, "", "FLOOR7_2" },
+    { pack_tnt, 1, 16, 329, "",  "FLAT5_5" },
+    { pack_tnt, 1, 16, 295, "",   "FLAT19" },
+    { pack_tnt, 1, 16, 323, "", "FLOOR7_2" },
+    { pack_tnt, 1, 16, 352, "",   "FLAT19" },
+    { pack_tnt, 1, 16, 360, "",   "FLAT19" },
+    { pack_tnt, 1, 16, 364, "",   "FLAT19" },
     SECTORFIX_END
 };
 
@@ -8306,12 +8306,12 @@ static const linefix_t linefix_tnt_map17[] =
 
 static const sectorfix_t sectorfix_tnt_map17[] =
 {
-    { pack_tnt, 1, 17, 120, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 17, 127, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 17, 143, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 17, 171, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 17, 265, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 17, 271, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 17, 120, "",  "FLAT20" },
+    { pack_tnt, 1, 17, 127, "", "CEIL5_2" },
+    { pack_tnt, 1, 17, 143, "",  "FLAT20" },
+    { pack_tnt, 1, 17, 171, "",  "FLAT20" },
+    { pack_tnt, 1, 17, 265, "",  "FLAT20" },
+    { pack_tnt, 1, 17, 271, "",  "FLAT20" },
     SECTORFIX_END
 };
 
@@ -8335,19 +8335,19 @@ static const flow_t flow_tnt_map17[] =
 
 static const sectorfix_t sectorfix_tnt_map18[] =
 {
-    { pack_tnt, 1, 18,  45,       "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 18,  64,       "", "CEIL5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 18, 112,       "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 18, 114,       "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 18, 131,       "",   "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 18, 109,       "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 18, 134,       "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 18, 146,       "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 18, 179,       "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 18, 180,       "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 18, 212,       "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 18, 241, "FLAT23",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 18, 327,       "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 18,  45,       "",  "FLAT20" },
+    { pack_tnt, 1, 18,  64,       "", "CEIL5_1" },
+    { pack_tnt, 1, 18, 112,       "",  "FLAT20" },
+    { pack_tnt, 1, 18, 114,       "",  "FLAT20" },
+    { pack_tnt, 1, 18, 131,       "",   "FLAT1" },
+    { pack_tnt, 1, 18, 109,       "",  "FLAT20" },
+    { pack_tnt, 1, 18, 134,       "", "CEIL5_2" },
+    { pack_tnt, 1, 18, 146,       "", "CEIL5_2" },
+    { pack_tnt, 1, 18, 179,       "",  "FLAT20" },
+    { pack_tnt, 1, 18, 180,       "",  "FLAT20" },
+    { pack_tnt, 1, 18, 212,       "", "CEIL5_2" },
+    { pack_tnt, 1, 18, 241, "FLAT23",        "" },
+    { pack_tnt, 1, 18, 327,       "",  "FLAT20" },
     SECTORFIX_END
 };
 
@@ -8392,13 +8392,13 @@ static const linefix_t linefix_tnt_map19[] =
 
 static const sectorfix_t sectorfix_tnt_map19[] =
 {
-    { pack_tnt, 1, 19,  82, "CRATOP1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 19,  84, "CRATOP1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 19, 118,        "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 19, 212,        "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 19, 362, "CEIL5_1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 19, 451,        "" , "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 19, 446,        "" , "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 19,  82, "CRATOP1",        "" },
+    { pack_tnt, 1, 19,  84, "CRATOP1",        "" },
+    { pack_tnt, 1, 19, 118,        "",  "FLAT20" },
+    { pack_tnt, 1, 19, 212,        "",  "FLAT20" },
+    { pack_tnt, 1, 19, 362, "CEIL5_1",        "" },
+    { pack_tnt, 1, 19, 451,        "" , "FLAT20" },
+    { pack_tnt, 1, 19, 446,        "" , "FLAT20" },
     SECTORFIX_END
 };
 
@@ -8428,7 +8428,7 @@ static const linefix_t linefix_tnt_map20[] =
 
 static const sectorfix_t sectorfix_tnt_map20[] =
 {
-    { pack_tnt, 1, 20, 146, "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 20, 146, "", "FLOOR7_1" },
     SECTORFIX_END
 };
 
@@ -8515,7 +8515,7 @@ static const linefix_t linefix_tnt_map22[] =
 
 static const sectorfix_t sectorfix_tnt_map22[] =
 {
-    { pack_tnt, 1, 22, 373, "", "FLOOR3_3", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 22, 373, "", "FLOOR3_3" },
     SECTORFIX_END
 };
 
@@ -8632,7 +8632,7 @@ static const fall_t fall_tnt_map23[] =
 
 static const sectorfix_t sectorfix_tnt_map24[] =
 {
-    { pack_tnt, 1, 24, 19, "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 24, 19, "", "FLAT20" },
     SECTORFIX_END
 };
 
@@ -8694,23 +8694,23 @@ static const linefix_t linefix_tnt_map25[] =
 
 static const sectorfix_t sectorfix_tnt_map25[] =
 {
-    { pack_tnt, 1, 25,  39, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 25,  98, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 25, 118, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 25, 126, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 25, 144, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 25, 169, "",  "FLAT5_5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 25, 193, "",  "RROCK09", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 25, 237, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 25, 273, "", "FLOOR7_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 25, 276, "",  "FLAT5_5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 25, 277, "",  "FLAT5_5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 25, 278, "",  "FLAT5_5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 25, 279, "",  "FLAT5_5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 25, 292, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 25, 304, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 25, 306, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 25, 319, "",  "RROCK09", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 25,  39, "",  "CEIL5_2" },
+    { pack_tnt, 1, 25,  98, "",  "CEIL5_2" },
+    { pack_tnt, 1, 25, 118, "",  "CEIL5_2" },
+    { pack_tnt, 1, 25, 126, "",  "CEIL5_2" },
+    { pack_tnt, 1, 25, 144, "",  "CEIL5_2" },
+    { pack_tnt, 1, 25, 169, "",  "FLAT5_5" },
+    { pack_tnt, 1, 25, 193, "",  "RROCK09" },
+    { pack_tnt, 1, 25, 237, "",  "CEIL5_2" },
+    { pack_tnt, 1, 25, 273, "", "FLOOR7_2" },
+    { pack_tnt, 1, 25, 276, "",  "FLAT5_5" },
+    { pack_tnt, 1, 25, 277, "",  "FLAT5_5" },
+    { pack_tnt, 1, 25, 278, "",  "FLAT5_5" },
+    { pack_tnt, 1, 25, 279, "",  "FLAT5_5" },
+    { pack_tnt, 1, 25, 292, "",  "CEIL5_2" },
+    { pack_tnt, 1, 25, 304, "",  "CEIL5_2" },
+    { pack_tnt, 1, 25, 306, "",  "CEIL5_2" },
+    { pack_tnt, 1, 25, 319, "",  "RROCK09" },
     SECTORFIX_END
 };
 
@@ -8767,11 +8767,11 @@ static const linefix_t linefix_tnt_map26[] =
 
 static const sectorfix_t sectorfix_tnt_map26[] =
 {
-    { pack_tnt, 1, 26,  23, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 26,  35, "", "FLAT5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 26,  44, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 26,  90, "", "FLAT5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 26, 234, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 26,  23, "",  "FLAT20" },
+    { pack_tnt, 1, 26,  35, "", "FLAT5_1" },
+    { pack_tnt, 1, 26,  44, "", "CEIL5_2" },
+    { pack_tnt, 1, 26,  90, "", "FLAT5_1" },
+    { pack_tnt, 1, 26, 234, "", "CEIL5_2" },
     SECTORFIX_END
 };
 
@@ -8855,9 +8855,9 @@ static const flow_t flow_tnt_map27[] =
 
 static const sectorfix_t sectorfix_tnt_map28[] =
 {
-    { pack_tnt, 1, 28, 86, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 28, 87, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 28, 89, "",  "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 28, 86, "", "CEIL5_2" },
+    { pack_tnt, 1, 28, 87, "", "CEIL5_2" },
+    { pack_tnt, 1, 28, 89, "",  "FLAT20" },
     SECTORFIX_END
 };
 
@@ -8887,8 +8887,8 @@ static const linefix_t linefix_tnt_map29[] =
 
 static const sectorfix_t sectorfix_tnt_map29[] =
 {
-    { pack_tnt, 1, 29, 129, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 29, 119, "", "FLAT5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 29, 129, "", "CEIL5_2" },
+    { pack_tnt, 1, 29, 119, "", "FLAT5_1" },
     SECTORFIX_END
 };
 
@@ -8982,7 +8982,7 @@ static const fall_t fall_tnt_map29[] =
 
 static const sectorfix_t sectorfix_tnt_map30[] =
 {
-    { pack_tnt, 1, 30, 283, "FLAT23", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 30, 283, "FLAT23", "" },
     SECTORFIX_END
 };
 
@@ -9021,12 +9021,12 @@ static const linefix_t linefix_tnt_map31[] =
 
 static const sectorfix_t sectorfix_tnt_map31[] =
 {
-    { pack_tnt, 1, 31, 131, "", "FLOOR7_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 31, 137, "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 31, 138, "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 31, 143, "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 31, 231, "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 31, 311, "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 31, 131, "", "FLOOR7_2" },
+    { pack_tnt, 1, 31, 137, "",   "FLAT20" },
+    { pack_tnt, 1, 31, 138, "",   "FLAT20" },
+    { pack_tnt, 1, 31, 143, "",   "FLAT20" },
+    { pack_tnt, 1, 31, 231, "",  "CEIL5_2" },
+    { pack_tnt, 1, 31, 311, "",   "FLAT20" },
     SECTORFIX_END
 };
 
@@ -9062,12 +9062,12 @@ static const linefix_t linefix_tnt_map32[] =
 
 static const sectorfix_t sectorfix_tnt_map32[] =
 {
-    { pack_tnt, 1, 32,  86, "FLOOR3_3",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 32,  81,  "RROCK09",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 32,  87,  "CEIL5_2",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 32,  94, "FLOOR7_1",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 32, 201,         "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_tnt, 1, 32, 247,         "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { pack_tnt, 1, 32,  86, "FLOOR3_3",       "" },
+    { pack_tnt, 1, 32,  81,  "RROCK09",       "" },
+    { pack_tnt, 1, 32,  87,  "CEIL5_2",       "" },
+    { pack_tnt, 1, 32,  94, "FLOOR7_1",       "" },
+    { pack_tnt, 1, 32, 201,         "", "FLAT20" },
+    { pack_tnt, 1, 32, 247,         "", "FLAT20" },
     SECTORFIX_END
 };
 

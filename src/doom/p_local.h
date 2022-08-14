@@ -181,11 +181,6 @@ typedef struct
     int   sector;
     char *floorpic;
     char *ceilingpic;
-    int   floorheight;
-    int   ceilingheight;
-    int   special;
-    int   oldtag;
-    int   newtag;
 } sectorfix_t;
 
 // -----------------------------------------------------------------------------

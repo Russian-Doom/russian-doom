@@ -774,23 +774,6 @@ static void P_LoadSectors (const int lump)
                         {
                             ss->ceilingpic = R_FlatNumForName(selected_sectorfix[j].ceilingpic);
                         }
-                        if (selected_sectorfix[j].floorheight != DEFAULT)
-                        {
-                            ss->floorheight = SHORT(selected_sectorfix[j].floorheight) << FRACBITS;
-                        }
-                        if (selected_sectorfix[j].ceilingheight != DEFAULT)
-                        {
-                            ss->ceilingheight = SHORT(selected_sectorfix[j].ceilingheight) << FRACBITS;
-                        }
-                        if (selected_sectorfix[j].special != DEFAULT)
-                        {
-                            ss->special = SHORT(selected_sectorfix[j].special);
-                        }
-                        if (selected_sectorfix[j].newtag != DEFAULT && (selected_sectorfix[j].oldtag == DEFAULT
-                            || selected_sectorfix[j].oldtag == ss->tag))
-                        {
-                            ss->tag = SHORT(selected_sectorfix[j].newtag) << FRACBITS;
-                        }
 
                         break;
                     }
