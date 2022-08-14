@@ -2229,14 +2229,13 @@ void P_SetupLevel (const int episode, const int map, const skill_t skill)
     // Adaptaken from DOOM Retro, thanks Brad Harding!
     //  Fixes also should not work for: network game, shareware, IWAD versions below 1.9,
     //  vanilla game mode, Press Beta, Atari Jaguar, Freedoom and FreeDM.
-    canmodify = (((W_CheckMultipleLumps(lumpname) == 1 || gamemission == pack_nerve)
-             && (!netgame && !vanillaparm
+    canmodify = (((W_CheckMultipleLumps(lumpname) == 1)
+             && (!vanillaparm
              && gamemode != shareware
              && gameversion >= exe_doom_1_9
              && gamemode != pressbeta
              && gamemission != jaguar
-             && gamevariant != freedoom && gamevariant != freedm))
-             && singleplayer);
+             && gamevariant != freedoom && gamevariant != freedm)));
 
     // [JN] If level can be modified, setup it's fixes and flow/fall effects.
     if (canmodify)
