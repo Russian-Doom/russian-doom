@@ -1002,9 +1002,8 @@ void P_ShootSpecialLine (const mobj_t *thing, line_t *line)
 
         case 46:
         // OPEN DOOR
-        // [JN] Specific changed to "once only" for vanilla maps
         EV_DoDoor(line,vld_open);
-        P_ChangeSwitchTexture(line, canmodify ? 0 : 1);
+        P_ChangeSwitchTexture(line, 1);
         break;
 
         case 47:
