@@ -1059,12 +1059,6 @@ static const linefix_t linefix_doom1_e3m1[] =
     LINEFIX_END
 };
 
-static const sectorfix_t sectorfix_doom1_e3m1[] =
-{
-    { doom, 3, 1, 30, "", "", DEFAULT, 56, DEFAULT, DEFAULT, DEFAULT },
-    SECTORFIX_END
-};
-
 static const flow_t flow_doom1_e3m1[] =
 {
     { doom, 3, 1,  0, 102 },
@@ -1112,7 +1106,6 @@ static const sectorfix_t sectorfix_doom1_e3m2[] =
 {
     { doom, 3, 2, 26, "SWATER2",       "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom, 3, 2, 40,        "", "FLAT19", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 3, 2, 54,        "",       "", DEFAULT,     256, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
 };
 
@@ -1148,7 +1141,6 @@ static const linefix_t linefix_doom1_e3m3[] =
     { doom, 3, 3,  853, 0,         "",         "", "",      40,  DEFAULT,     DEFAULT, DEFAULT, DEFAULT },
     { doom, 3, 3,  854, 1,         "", "MIDGRATE", "", DEFAULT,  DEFAULT,     DEFAULT, DEFAULT, DEFAULT },
     { doom, 3, 3,  855, 1,         "", "MIDGRATE", "", DEFAULT,  DEFAULT,     DEFAULT, DEFAULT, DEFAULT },
-    { doom, 3, 3,  919, 0,         "",         "", "",      88,  DEFAULT, ML_BLOCKING, DEFAULT, DEFAULT },
     { doom, 3, 3,  994, 1, "SLADWALL", "MIDGRATE", "", DEFAULT,  DEFAULT,     DEFAULT, DEFAULT, DEFAULT },
     { doom, 3, 3,  995, 1,         "", "MIDGRATE", "", DEFAULT,  DEFAULT,     DEFAULT, DEFAULT, DEFAULT },
     { doom, 3, 3,  996, 1,         "", "MIDGRATE", "", DEFAULT,  DEFAULT,     DEFAULT, DEFAULT, DEFAULT },
@@ -1424,8 +1416,6 @@ static const linefix_t linefix_doom1_e3m6[] =
 static const sectorfix_t sectorfix_doom1_e3m6[] =
 {
     { doom, 3, 6, 29, "", "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 3, 6, 34, "",       "", DEFAULT,      96, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 3, 6, 89, "",       "", DEFAULT,      96, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
 };
 
@@ -1892,27 +1882,7 @@ static const linefix_t linefix_doom1_e4m3[] =
 
 static const sectorfix_t sectorfix_doom1_e4m3[] =
 {
-    { doom, 4, 3, 124, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
-    { doom, 4, 3, 125, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
-    { doom, 4, 3, 127, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
-    { doom, 4, 3, 128, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
-    { doom, 4, 3, 129, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
-    { doom, 4, 3, 130, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
-    { doom, 4, 3, 131, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
-    { doom, 4, 3, 132, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
-    { doom, 4, 3, 134, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
-    { doom, 4, 3, 136, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
-    { doom, 4, 3, 137, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
-    { doom, 4, 3, 138, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
-    { doom, 4, 3, 147, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
-    { doom, 4, 3, 148, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
-    { doom, 4, 3, 149, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
-    { doom, 4, 3, 150, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
-    { doom, 4, 3, 151, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
-    { doom, 4, 3, 152, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
     { doom, 4, 3, 153, "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 4, 3, 154, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
-    { doom, 4, 3, 155, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
     SECTORFIX_END
 };
 
@@ -2219,7 +2189,6 @@ static const flow_t flow_doom1_e4m6[] =
 
 static const linefix_t linefix_doom1_e4m7[] =
 {
-    { doom, 4, 7, 276, 0, "",         "",         "", DEFAULT,       128, DEFAULT, DEFAULT, DEFAULT },
     { doom, 4, 7, 325, 1, "",  "BRNBIGR",         "", DEFAULT,   DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom, 4, 7, 326, 1, "",  "BRNBIGC",         "", DEFAULT,   DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom, 4, 7, 327, 1, "",  "BRNBIGL",         "", DEFAULT,   DEFAULT, DEFAULT, DEFAULT, DEFAULT },
@@ -2236,9 +2205,8 @@ static const linefix_t linefix_doom1_e4m7[] =
 
 static const sectorfix_t sectorfix_doom1_e4m7[] =
 {
-    { doom, 4, 7, 186, "FLAT1",        "",     128, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
+    { doom, 4, 7, 186, "FLAT1",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom, 4, 7, 212,      "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 4, 7, 264,      "",        "",       0, DEFAULT,       0, DEFAULT, DEFAULT },
     SECTORFIX_END
 };
 
@@ -2399,9 +2367,6 @@ static const linefix_t linefix_doom1_e4m9[] =
 static const sectorfix_t sectorfix_doom1_e4m9[] =
 {
     { doom, 4, 9, 100, "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 4, 9, 154, "",         "", DEFAULT,     216, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 4, 9, 162, "",         "", DEFAULT,     216, DEFAULT, DEFAULT, DEFAULT },
-    { doom, 4, 9, 163, "",         "", DEFAULT,     216, DEFAULT, DEFAULT, DEFAULT },
     { doom, 4, 9, 238, "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom, 4, 9, 240, "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
@@ -2860,16 +2825,12 @@ static const linefix_t linefix_doom2_map05[] =
     { doom2, 1, 5, 608, 0,         "", "", "",      26, DEFAULT,                            DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 5, 609, 0,         "", "", "",     -32, DEFAULT,                            DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 5, 610, 0,         "", "", "", DEFAULT, DEFAULT,                      ML_DONTPEGTOP, DEFAULT, DEFAULT },
-    { doom2, 1, 5, 633, 0,         "", "", "", DEFAULT, DEFAULT,                        ML_BLOCKING, DEFAULT, DEFAULT },
-    { doom2, 1, 5, 634, 0,         "", "", "", DEFAULT, DEFAULT,                        ML_BLOCKING, DEFAULT, DEFAULT },
     { doom2, 1, 5, 655, 0,         "", "", "",      48, DEFAULT,                            DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 5, 657, 0,         "", "", "",      16, DEFAULT,                            DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 5, 670, 0,         "", "", "",      -3, DEFAULT,                            DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 5, 671, 0,         "", "", "",      24, DEFAULT,                            DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 5, 672, 0,         "", "", "",      51, DEFAULT,                            DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 5, 711, 0,         "", "", "",      -3, DEFAULT,                            DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 5, 778, 0,         "", "", "", DEFAULT, DEFAULT,                        ML_BLOCKING, DEFAULT, DEFAULT },
-    { doom2, 1, 5, 788, 0,         "", "", "", DEFAULT, DEFAULT,                        ML_BLOCKING, DEFAULT, DEFAULT },
     { doom2, 1, 5, 799, 0,         "", "", "",     -40, DEFAULT,                            DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 5, 801, 0,         "", "", "",     -16, DEFAULT,                            DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 5, 807, 0,         "", "", "",       4, DEFAULT,                            DEFAULT, DEFAULT, DEFAULT },
@@ -2904,7 +2865,6 @@ static const sectorfix_t sectorfix_doom2_map05[] =
     { doom2, 1, 5, 97, "FLOOR7_1", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 5, 104,        "",  "CRATOP2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 5, 107, "CEIL5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-//  { doom2, 1, 5, 153,        "",         "", DEFAULT, DEFAULT, DEFAULT,       9,       0 },
     { doom2, 1, 5, 155,        "",    "FLAT1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
 };
@@ -2936,8 +2896,6 @@ static const flow_t flow_doom2_map05[] =
 
 static const linefix_t linefix_doom2_map06[] =
 {
-//  { doom2, 1, 6,  24, 0, "", "", "", DEFAULT, DEFAULT, DEFAULT,       0, DEFAULT },
-//  { doom2, 1, 6,  25, 0, "", "", "", DEFAULT, DEFAULT, DEFAULT,       0, DEFAULT },
     { doom2, 1, 6, 332, 0, "", "", "",       4, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 6, 339, 0, "", "", "",       4, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 6, 340, 0, "", "", "",       4, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
@@ -3555,9 +3513,6 @@ static const linefix_t linefix_doom2_map13[] =
 static const sectorfix_t sectorfix_doom2_map13[] =
 {
     { doom2, 1, 13,  72, "FLAT5_4",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 13,  73,        "",        "", DEFAULT,     512, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 13,  78,        "",        "", DEFAULT,     512, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 13,  79,        "",        "", DEFAULT,     512, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 13, 151,        "", "CEIL5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
 };
@@ -3761,6 +3716,9 @@ static const linefix_t linefix_doom2_map14[] =
     { doom2, 1, 14,  602, 0,         "",         "", "",       8, DEFAULT,                            DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 14,  603, 0,         "",         "", "",      40, DEFAULT, (ML_DONTPEGTOP | ML_DONTPEGBOTTOM), DEFAULT, DEFAULT },
     { doom2, 1, 14,  604, 0,         "",         "", "",      56,      16, (ML_DONTPEGTOP | ML_DONTPEGBOTTOM), DEFAULT, DEFAULT },
+    { doom2, 1, 14,  607, 1,  "BSTONE2",         "", "", DEFAULT, DEFAULT,                            DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 14,  608, 1,  "BSTONE2",         "", "", DEFAULT, DEFAULT,                            DEFAULT, DEFAULT, DEFAULT },
+    { doom2, 1, 14,  609, 1,  "BSTONE2",         "", "", DEFAULT, DEFAULT,                            DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 14,  610, 0,         "",         "", "",     -40, DEFAULT,                            DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 14,  611, 0,         "",         "", "",      -8, DEFAULT, (ML_DONTPEGTOP | ML_DONTPEGBOTTOM), DEFAULT, DEFAULT },
     { doom2, 1, 14,  612, 0,         "",         "", "",     -32,     -16, (ML_DONTPEGTOP | ML_DONTPEGBOTTOM), DEFAULT, DEFAULT },
@@ -3939,14 +3897,11 @@ static const sectorfix_t sectorfix_doom2_map14[] =
 {
 
     { doom2, 1, 14,  16, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 14,  70, "",        "", DEFAULT,     272, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 14,  71, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 106, "",        "",     176, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 14, 122, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 14, 123, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 14, 128, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 14, 155, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 14, 163, "", "FLAT1_1", DEFAULT,     248, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 14, 180, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 14, 195, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 14, 203, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
@@ -4023,8 +3978,6 @@ static const linefix_t linefix_doom2_map15[] =
 
 static const sectorfix_t sectorfix_doom2_map15[] =
 {
-    { doom2, 1, 15, 147,      "",        "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
-    { doom2, 1, 15, 148,      "",        "", DEFAULT, DEFAULT,       9, DEFAULT, DEFAULT },
     { doom2, 1, 15, 195,      "", "SLIME13", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 15, 197, "GATE5",   "GATE5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
@@ -4078,16 +4031,6 @@ static const linefix_t linefix_doom2_map16[] =
     { doom2, 1, 16, 605, 0,         "", "",         "", DEFAULT,       6, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 16, 610, 0,         "", "",         "",      43, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     LINEFIX_END
-};
-
-static const sectorfix_t sectorfix_doom2_map16[] =
-{
-    { doom2, 1, 16, 1, "", "", DEFAULT, 256, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 16, 2, "", "", DEFAULT, 256, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 16, 3, "", "", DEFAULT, 256, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 16, 4, "", "", DEFAULT, 256, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 16, 5, "", "", DEFAULT, 256, DEFAULT, DEFAULT, DEFAULT },
-    SECTORFIX_END
 };
 
 static const flow_t flow_doom2_map16[] =
@@ -4261,7 +4204,6 @@ static const sectorfix_t sectorfix_doom2_map18[] =
     { doom2, 1, 18,  4, "FLOOR5_1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 18, 10, "FLOOR5_1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 18, 32, "FLOOR5_1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 18, 47,         "", "", DEFAULT,     320, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
 };
 
@@ -4450,7 +4392,6 @@ static const sectorfix_t sectorfix_doom2_map20[] =
     { doom2, 1, 20,  62,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 20,  80,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 20,  83,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 20, 179,        "",        "", DEFAULT,     368, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
 };
 
@@ -4498,7 +4439,6 @@ static const sectorfix_t sectorfix_doom2_map21[] =
     { doom2, 1, 21, 22, "SWATER2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 21, 23, "SWATER2", "RROCK09", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 21, 24,        "", "RROCK11", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 21, 50,        "",        "", DEFAULT,     200, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
 };
 
@@ -4892,11 +4832,8 @@ static const linefix_t linefix_doom2_map25[] =
 
 static const sectorfix_t sectorfix_doom2_map25[] =
 {
-    { doom2, 1, 25,  25,        "",        "", DEFAULT,     232, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 25,  94,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 25, 103,        "", "FLAT5_4", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 25, 114,        "",        "", DEFAULT,     232, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 25, 115,        "",        "", DEFAULT,     232, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 25, 125, "SWATER2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 25, 126, "SWATER2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 25, 127, "SWATER4",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
@@ -4991,7 +4928,6 @@ static const linefix_t linefix_doom2_map27[] =
     { doom2, 1, 27,   4, 0,        "", "",         "",      40, DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 27,  66, 0,        "", "",         "",      -5, DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 27,  67, 0,        "", "",         "",      -5, DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 27, 342, 0,        "", "",         "", DEFAULT, DEFAULT,      ML_BLOCKING, DEFAULT, DEFAULT },
     { doom2, 1, 27, 375, 0,        "", "",         "",      40, DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 27, 376, 0,        "", "",         "",      24, DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 27, 385, 0,        "", "",         "",     -24, DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
@@ -5013,12 +4949,9 @@ static const linefix_t linefix_doom2_map27[] =
     { doom2, 1, 27, 548, 0,        "", "",         "",      24, DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 27, 578, 0,        "", "",         "", DEFAULT, DEFAULT, ML_DONTPEGBOTTOM, DEFAULT, DEFAULT },
     { doom2, 1, 27, 579, 0,        "", "",         "", DEFAULT, DEFAULT, ML_DONTPEGBOTTOM, DEFAULT, DEFAULT },
-    { doom2, 1, 27, 580, 0,        "", "",         "", DEFAULT, DEFAULT,          DEFAULT,      31, DEFAULT },
-    { doom2, 1, 27, 581, 0,        "", "",         "", DEFAULT, DEFAULT,          DEFAULT,      31, DEFAULT },
     { doom2, 1, 27, 582, 1, "ZIMMER3", "",         "", DEFAULT, DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 27, 797, 0,        "", "",         "", DEFAULT, DEFAULT,    ML_DONTPEGTOP, DEFAULT, DEFAULT },
     { doom2, 1, 27, 810, 1,        "", "", "WOODVERT", DEFAULT, DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 27, 814, 0,        "", "",         "", DEFAULT, DEFAULT,          DEFAULT,      28, DEFAULT },
     LINEFIX_END
 };
 
@@ -5028,7 +4961,6 @@ static const sectorfix_t sectorfix_doom2_map27[] =
     { doom2, 1, 27,  80, "",  "FLAT5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 27,  82, "", "FLOOR7_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 27,  87, "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 27,  93, "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
     { doom2, 1, 27, 142, "",  "FLAT5_3", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
 };
@@ -5097,12 +5029,6 @@ static const linefix_t linefix_doom2_map28[] =
     { doom2, 1, 28, 690, 0,         "",         "",         "",      52, DEFAULT, DEFAULT, DEFAULT, DEFAULT },    
     { doom2, 1, 28, 692, 0,         "",         "",         "",     192, DEFAULT, DEFAULT, DEFAULT, DEFAULT },    
     LINEFIX_END
-};
-
-static const sectorfix_t sectorfix_doom2_map28[] =
-{
-    { doom2, 1, 28, 14, "", "", -44, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    SECTORFIX_END
 };
 
 static const flow_t flow_doom2_map28[] =
@@ -5190,7 +5116,6 @@ static const linefix_t linefix_doom2_map29[] =
 static const sectorfix_t sectorfix_doom2_map29[] =
 {
     { doom2, 1, 29,   6, "CEIL5_2",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { doom2, 1, 29, 152,        "",        "", DEFAULT,     936, DEFAULT, DEFAULT, DEFAULT },
     { doom2, 1, 29, 204,        "", "FLAT5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
 };
@@ -5711,7 +5636,6 @@ static const sectorfix_t sectorfix_plut_map08[] =
     { pack_plut, 1, 8,  60,       "",  "CRATOP2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 8,  98, "FLAT19",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 8, 122,       "", "FLOOR7_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 8, 130,       "",         "", DEFAULT,       0, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
 };
 
@@ -5852,7 +5776,6 @@ static const linefix_t linefix_plut_map10[] =
     { pack_plut, 1, 10,  138, 0,        "",        "", "",       6,       4,       DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 10,  141, 0,        "",        "", "",       6,       4,       DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 10,  142, 0,        "",        "", "",       6,       4,       DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 10,  254, 1,        "", "A-RAIL1", "", DEFAULT, DEFAULT,   ML_BLOCKING, DEFAULT, DEFAULT },
     { pack_plut, 1, 10,  720, 0,        "",        "", "", DEFAULT, DEFAULT, ML_DONTPEGTOP, DEFAULT, DEFAULT },
     { pack_plut, 1, 10,  799, 0,        "",        "", "", DEFAULT, DEFAULT, ML_DONTPEGTOP, DEFAULT, DEFAULT },
     { pack_plut, 1, 10,  800, 0,        "",        "", "", DEFAULT, DEFAULT, ML_DONTPEGTOP, DEFAULT, DEFAULT },
@@ -5934,7 +5857,6 @@ static const flow_t flow_plut_map11[] =
 
 static const linefix_t linefix_plut_map12[] =
 {
-    { pack_plut, 1, 12,  230, 1, "", "MIDGRATE",      "", DEFAULT, DEFAULT,                        ML_BLOCKING, DEFAULT, DEFAULT },
     { pack_plut, 1, 12,  690, 0, "",         "",      "", DEFAULT, DEFAULT,                   ML_DONTPEGBOTTOM, DEFAULT, DEFAULT },
     { pack_plut, 1, 12,  985, 0, "",    "WOOD5",      "",      64, DEFAULT,                            DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 12,  988, 0, "",    "WOOD5",      "",     -32, DEFAULT,                            DEFAULT, DEFAULT, DEFAULT },
@@ -6187,8 +6109,6 @@ static const sectorfix_t sectorfix_plut_map16[] =
     { pack_plut, 1, 16,  70, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 16,  78, "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 16,  94, "", "FLAT5_5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 16,  95, "",        "", DEFAULT, DEFAULT,      16, DEFAULT, DEFAULT },
-    { pack_plut, 1, 16,  96, "",        "", DEFAULT, DEFAULT,      16, DEFAULT, DEFAULT },
     { pack_plut, 1, 16,  97, "", "NUKAGE1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 16, 104, "", "NUKAGE1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     SECTORFIX_END
@@ -6366,7 +6286,6 @@ static const fall_t fall_plut_map16[] =
 
 static const sectorfix_t sectorfix_plut_map17[] =
 {
-    { pack_plut, 1, 17,  30,        "",         "", DEFAULT,     153, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 17,  79,        "",  "FLAT5_5", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 17,  83, "CEIL5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 17,  92,        "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
@@ -6749,7 +6668,6 @@ static const sectorfix_t sectorfix_plut_map23[] =
 
 static const flow_t flow_plut_map23[] =
 {
-
     { pack_plut, 1, 23,   3, 101 },
     { pack_plut, 1, 23,   6, 101 },
     { pack_plut, 1, 23,  19, 101 },
@@ -6934,14 +6852,10 @@ static const linefix_t linefix_plut_map26[] =
 
 static const sectorfix_t sectorfix_plut_map26[] =
 {
-    { pack_plut, 1, 26,   9,        "",  "F_SKY1", DEFAULT,     205, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 26,  10,        "",  "F_SKY1", DEFAULT,     205, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 26,  40, "CEIL5_2",  "F_SKY1", DEFAULT,     112, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 26,  60,        "", "CRATOP2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 26,  82,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 26,  98,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 26, 134,        "", "CRATOP2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 26, 156,        "",        "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
     { pack_plut, 1, 26, 162,  "FLAT23",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 26, 167,        "", "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 26, 182, "CEIL3_5",        "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
@@ -7063,15 +6977,11 @@ static const sectorfix_t sectorfix_plut_map28[] =
     { pack_plut, 1, 28,  23,        "",  "FLAT5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 28,  49,        "",  "CEIL5_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 28,  62,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 28,  63,        "",         "", DEFAULT, DEFAULT,       0, DEFAULT, DEFAULT },
-    { pack_plut, 1, 28,  64,        "",  "CEIL5_2", DEFAULT, DEFAULT,       9, DEFAULT, DEFAULT },
     { pack_plut, 1, 28,  98,        "", "FLOOR7_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 28,  99,        "", "FLOOR7_2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 28, 116,        "",  "FLAT5_1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 28, 162,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 28, 177,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 28, 203,        "",         "", DEFAULT,      95, DEFAULT, DEFAULT, DEFAULT },
-    { pack_plut, 1, 28, 203,        "",         "", DEFAULT,      95, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 28, 225,        "",   "FLAT20", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 28, 227, "CEIL5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_plut, 1, 28, 245, "FLAT5_1",         "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
@@ -7335,12 +7245,6 @@ static const linefix_t linefix_tnt_map01[] =
     { pack_tnt, 1, 1, 541, 0,         "", "", "", 12, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { pack_tnt, 1, 1, 582, 0,         "", "", "", -7, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     LINEFIX_END
-};
-
-static const sectorfix_t sectorfix_tnt_map01[] =
-{
-    { pack_tnt, 1, 1, 5, "", "", 21, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    SECTORFIX_END
 };
 
 static const flow_t flow_tnt_map01[] =
@@ -9358,7 +9262,6 @@ void P_SetupFixes (const int episode, const int map)
             if (gamemap == 1)
             {
                 selected_linefix   = linefix_doom1_e3m1;
-                selected_sectorfix = sectorfix_doom1_e3m1;
                 selected_flow      = flow_doom1_e3m1;
             }
             else
@@ -9592,7 +9495,6 @@ void P_SetupFixes (const int episode, const int map)
         if (gamemap == 16)
         {
             selected_linefix   = linefix_doom2_map16;
-            selected_sectorfix = sectorfix_doom2_map16;
             selected_flow      = flow_doom2_map16;
         }
         else
@@ -9677,7 +9579,6 @@ void P_SetupFixes (const int episode, const int map)
         if (gamemap == 28)
         {
             selected_linefix   = linefix_doom2_map28;
-            selected_sectorfix = sectorfix_doom2_map28;
             selected_flow      = flow_doom2_map28;
             selected_fall      = fall_doom2_map28;
         }
@@ -9953,7 +9854,6 @@ void P_SetupFixes (const int episode, const int map)
         if (gamemap == 1)
         {
             selected_linefix   = linefix_tnt_map01;
-            selected_sectorfix = sectorfix_tnt_map01;
             selected_flow      = flow_tnt_map01;
         }
         else
