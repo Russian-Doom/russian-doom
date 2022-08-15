@@ -1855,10 +1855,19 @@ void ST_DrawDemoTimer (const int time)
     const int mins = time / (60 * TICRATE) % 60;
     const float secs = (float)(time % (60 * TICRATE)) / TICRATE;
     char n[16];
+    int x = 270;
 
-    sprintf(n, "%02i:%02i:%05.02f", hours, mins, secs);
+    if (hours)
+    {
+        sprintf(n, "%02i:%02i:%05.02f", hours, mins, secs);
+    }
+    else
+    {
+        sprintf(n, "%02i:%05.02f", mins, secs);
+        x += 12;
+    }
 
-    RD_M_DrawTextC(n, 270 + (wide_4_3 ? wide_delta : wide_delta*2), (viewwindowy >> hires) + 1);
+    RD_M_DrawTextC(n, x + (wide_4_3 ? wide_delta : wide_delta*2), (viewwindowy >> hires) + 1);
 }
 
 // -----------------------------------------------------------------------------
