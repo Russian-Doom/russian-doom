@@ -212,6 +212,9 @@ int linear_sky = 1;
 int randomly_flipcorpses = 1;
 int flip_weapons = 0;
 
+// Gameplay: Game Mechanics
+int strict_mode = 0;
+
 // Gameplay: Status Bar
 int extra_player_faces = 1;
 int negative_health = 0;
@@ -943,6 +946,9 @@ void D_BindVariables(void)
     M_BindIntVariable("linear_sky",             &linear_sky);
     M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);
     M_BindIntVariable("flip_weapons",           &flip_weapons);
+
+    // Gameplay: Game Mechanics
+    M_BindIntVariable("strict_mode",            &strict_mode);
 
     // Gameplay: Status bar
     M_BindIntVariable("extra_player_faces",     &extra_player_faces);

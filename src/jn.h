@@ -264,6 +264,9 @@ extern int linear_sky;
 extern int randomly_flipcorpses;
 extern int flip_weapons;
 
+// Gameplay: Game Mechanics
+extern int strict_mode;
+
 // Gameplay: Status Bar
 extern int extra_player_faces;
 extern int negative_health;

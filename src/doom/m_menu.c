@@ -283,7 +283,7 @@ static void M_RD_Change_SwirlingLiquids();
 static void M_RD_Change_InvulSky();
 static void M_RD_Change_LinearSky();
 static void M_RD_Change_FlipCorpses();
-static void M_RD_Change_FlipWeapons();
+static void M_RD_Change_StrictMode();
 
 // Page 2
 static void M_RD_Change_ExtraPlayerFaces();
@@ -1295,8 +1295,8 @@ static MenuItem_t Gameplay1Items[] = {
     {ITT_SWITCH,  "Invulnerability affects sky:", "ytezpdbvjcnm jrhfibdftn yt,j:",  M_RD_Change_InvulSky,        0}, // Неуязвимость окрашивает небо
     {ITT_SWITCH,  "Sky drawing mode:",            "ht;bv jnhbcjdrb yt,f:",          M_RD_Change_LinearSky,       0}, // Режим отрисовки неба
     {ITT_SWITCH,  "Randomly mirrored corpses:",   "pthrfkmyjt jnhf;tybt nhegjd:",   M_RD_Change_FlipCorpses,     0}, // Зеркалирование трупов
-    {ITT_SWITCH,  "Flip weapons:",                "pthrfkmyjt jnhf;tybt jhe;bz:",   M_RD_Change_FlipWeapons,     0}, // Зеркальное отражение оружия
-    {ITT_EMPTY,   NULL,                           NULL,                             NULL,                        0},
+    {ITT_TITLE,   "Game mechanics",               "BUHJDFZ VT[FYBRF",               NULL,                        0}, // Игровая механика
+    {ITT_SWITCH,  "Strict vanilla mode:",         "cnhjuj jhbubyfkmysq ht;bv:",     M_RD_Change_StrictMode,      0}, // Строго оригинальный режим
     {ITT_SETMENU, NULL, /* Next Page > */         NULL,                             &Gameplay2Menu,              0}, // Далее >
     {ITT_SETMENU, NULL, /* < Last Page */         NULL,                             &Gameplay5Menu,              0}  // < Назад
 };
@@ -4028,9 +4028,9 @@ static void M_RD_Draw_Gameplay_1(void)
         RD_M_DrawTextSmallENG(randomly_flipcorpses ? RD_ON : RD_OFF, 231 + wide_delta, 115,
                               randomly_flipcorpses ? CR_GREEN : CR_DARKRED);
 
-        // Flip weapons
-        RD_M_DrawTextSmallENG(flip_weapons ? RD_ON : RD_OFF, 131 + wide_delta, 125,
-                             flip_weapons ? CR_GREEN : CR_DARKRED);
+        // Strict Vanilla mode
+        RD_M_DrawTextSmallENG(strict_mode ? RD_ON : RD_OFF, 178 + wide_delta, 135,
+                              strict_mode ? CR_GREEN : CR_DARKRED);
 
         //
         // Footer
@@ -4081,9 +4081,9 @@ static void M_RD_Draw_Gameplay_1(void)
         RD_M_DrawTextSmallRUS(randomly_flipcorpses ? RD_ON_RUS : RD_OFF_RUS, 255 + wide_delta, 115,
                               randomly_flipcorpses ? CR_GREEN : CR_DARKRED);
 
-        // Зеркальное отражение оружия
-        RD_M_DrawTextSmallRUS(flip_weapons ? RD_ON_RUS : RD_OFF_RUS, 259 + wide_delta, 125,
-                              flip_weapons ? CR_GREEN : CR_DARKRED);
+        // Строго оригинальный режим
+        RD_M_DrawTextSmallRUS(strict_mode ? RD_ON_RUS : RD_OFF_RUS, 242 + wide_delta, 135,
+                              strict_mode ? CR_GREEN : CR_DARKRED);
 
         //
         // Footer
@@ -4757,12 +4757,9 @@ static void M_RD_Change_FlipCorpses()
     randomly_flipcorpses ^= 1;
 }
 
-static void M_RD_Change_FlipWeapons()
+static void M_RD_Change_StrictMode()
 {
-    flip_weapons ^= 1;
-
-    // [JN] Skip weapon bobbing interpolation for next frame.
-    skippsprinterp = true;
+    strict_mode ^= 1;
 }
 
 //
@@ -5842,6 +5839,7 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     linear_sky       = 1;
     randomly_flipcorpses = 1;
     flip_weapons     = 0;
+    strict_mode      = 0;
 
     // Gameplay: Status Bar
     sbar_colored        = 0;
@@ -6027,6 +6025,7 @@ static void M_RD_BackToDefaults_Original(int choice)
     linear_sky       = 0;
     randomly_flipcorpses = 0;
     flip_weapons     = 0;
+    strict_mode      = 1;
 
     // Gameplay: Status Bar
     sbar_colored        = 0;

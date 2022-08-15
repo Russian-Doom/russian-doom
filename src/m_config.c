@@ -615,6 +615,9 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(randomly_flipcorpses),
     CONFIG_VARIABLE_INT(flip_weapons),
 
+    // Gameplay: Game Mechanics
+    CONFIG_VARIABLE_INT(strict_mode),
+
     // Gameplay: Status Bar
     CONFIG_VARIABLE_INT(extra_player_faces),
     CONFIG_VARIABLE_INT(negative_health),
