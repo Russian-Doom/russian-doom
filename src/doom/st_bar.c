@@ -1851,13 +1851,14 @@ static void ST_DrawElementsJaguar (const boolean wide)
 void ST_DrawDemoTimer (const int time)
 {
     const boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
-    const int mins = time / (60 * TICRATE);
+    const int hours = time / (3600 * TICRATE);
+    const int mins = time / (60 * TICRATE) % 60;
     const float secs = (float)(time % (60 * TICRATE)) / TICRATE;
     char n[16];
 
-    sprintf(n, "%02i:%05.02f", mins, secs);
+    sprintf(n, "%02i:%02i:%05.02f", hours, mins, secs);
 
-    RD_M_DrawTextC(n, 278 + (wide_4_3 ? wide_delta : wide_delta*2), (viewwindowy >> hires) + 1);
+    RD_M_DrawTextC(n, 270 + (wide_4_3 ? wide_delta : wide_delta*2), (viewwindowy >> hires) + 1);
 }
 
 // -----------------------------------------------------------------------------
