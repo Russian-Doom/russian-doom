@@ -1871,16 +1871,28 @@ void ST_DrawDemoTimer (const int time)
 }
 
 // -----------------------------------------------------------------------------
-// ST_DrawDemoTimer
+// ST_DemoProgressBar
 // [crispy] print a bar indicating demo progress at the bottom of the screen
 // -----------------------------------------------------------------------------
 
 void ST_DemoProgressBar (void)
 {
-    const int i = screenwidth * defdemotics / deftotaldemotics;
+    int i, x;
 
-    V_DrawHorizLine(0, SCREENHEIGHT - 2, i, 0); // [crispy] black
-    V_DrawHorizLine(0, SCREENHEIGHT - 1, i, 4); // [crispy] white
+    // [JN] Clamp bar in emulated 4:3 display of wide screen mode.
+    if (aspect_ratio >= 2 && screenblocks == 9)
+    {
+        x = wide_delta * 2;
+        i = SCREENWIDTH * defdemotics / deftotaldemotics;
+    }
+    else
+    {
+        x = 0;
+        i = screenwidth * defdemotics / deftotaldemotics;
+    }
+
+    V_DrawHorizLine(x, SCREENHEIGHT - 2, i, 0); // [crispy] black
+    V_DrawHorizLine(x, SCREENHEIGHT - 1, i, 4); // [crispy] white
 }
 
 // -----------------------------------------------------------------------------
