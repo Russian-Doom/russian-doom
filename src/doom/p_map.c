@@ -333,7 +333,7 @@ static boolean PIT_CheckThing (mobj_t *thing)
     if (tmthing->flags & MF_SKULLFLY)
     {
         // [crispy] check if attacking skull flies over player
-        if (singleplayer && !vanillaparm && over_under && thing->player)
+        if (singleplayer && over_under && thing->player && !strict_mode && !vanillaparm)
         {
             if (tmthing->z > thing->z + thing->height)
             {
@@ -348,7 +348,7 @@ static boolean PIT_CheckThing (mobj_t *thing)
         // [JN] Fix bug: https://doomwiki.org/wiki/Lost_soul_colliding_with_items
         // Thanks AXDOOMER for this fix!
 
-        if (!singleplayer || !agressive_lost_souls || vanillaparm)
+        if (!singleplayer || !agressive_lost_souls || strict_mode || vanillaparm)
         {
             tmthing->flags &= ~MF_SKULLFLY;
             tmthing->momx = tmthing->momy = tmthing->momz = 0;
@@ -360,7 +360,7 @@ static boolean PIT_CheckThing (mobj_t *thing)
     }
     
     // [JN] Torque: make sliding corpses passable
-    if (singleplayer && !vanillaparm && torque && tmthing->intflags & MIF_FALLING)
+    if (singleplayer && torque && tmthing->intflags & MIF_FALLING && !strict_mode && !vanillaparm)
     {
         return true;
     }
@@ -430,7 +430,7 @@ static boolean PIT_CheckThing (mobj_t *thing)
         return !solid;
     }
 
-    if (singleplayer && !vanillaparm)
+    if (singleplayer && !strict_mode && !vanillaparm)
     {
         if (over_under)
         {
@@ -899,7 +899,7 @@ static const boolean P_ThingHeightClip (mobj_t* thing)
         // [JN] Update player's view when on moving platform.
         // Idea by Brad Harding, code by Fabian Greffrath.
         // Thanks, colleagues! (02.04.2018)
-        if (singleplayer && !vanillaparm && thing->player
+        if (singleplayer && !strict_mode && !vanillaparm && thing->player
         && thing->subsector->sector == movingsector)
         {
             P_CalcHeight (thing->player, true);
@@ -1000,8 +1000,9 @@ static boolean PTR_SlideTraverse (intercept_t *in)
     li = in->d.line;
 
     // [JN] Treat two sided linedefs as single sided for smooth sliding.
-    if (li->flags & ML_BLOCKING && li->flags & ML_TWOSIDED
-    && improved_collision && singleplayer && !vanillaparm)
+    if (singleplayer && improved_collision && 
+    li->flags & ML_BLOCKING && li->flags & ML_TWOSIDED
+    && !strict_mode && !vanillaparm)
     {
         goto isblocking;
     }
@@ -1550,7 +1551,7 @@ void P_LineAttack (mobj_t *t1, angle_t angle, int64_t distance,
     // [JN] Extend range so puffs may appear in long distances of hitscan attacks.
     // No damage will be dealed if range is greater than original MISSILERANGE,
     // (see PTR_ShootTraverse). Only for player, not for monsters. 
-    if (t1->player && distance >= MISSILERANGE && singleplayer && !vanillaparm)
+    if (singleplayer && t1->player && distance >= MISSILERANGE && !strict_mode && !vanillaparm)
     {
         distance = INT_MAX;
     }
@@ -1864,7 +1865,7 @@ boolean PIT_ChangeSector (mobj_t *thing)
 
         // spray blood in a random direction
 
-        if (thing->type == MT_BARREL && singleplayer && !vanillaparm)
+        if (singleplayer && thing->type == MT_BARREL && !strict_mode && !vanillaparm)
         {
             // [JN] Barrel should not bleed by crushed damage
             return true;

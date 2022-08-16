@@ -241,7 +241,7 @@ static boolean WeaponSelectable(weapontype_t weapon)
     && players[consoleplayer].weaponowned[wp_chainsaw]
     && !players[consoleplayer].powers[pw_strength])
     {
-        return (singleplayer);  // [crispy] yes, we can
+        return (singleplayer && !strict_mode && !vanillaparm);  // [crispy] yes, we can
     }
 
     return true;
@@ -697,7 +697,7 @@ void G_DoLoadLevel (void)
     } 
 
     // [JN] Pistol start
-    if (singleplayer && !vanillaparm && pistol_start)
+    if (singleplayer && pistol_start && !vanillaparm)
     {
         G_PlayerReborn(0);
     }

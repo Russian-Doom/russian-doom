@@ -82,10 +82,10 @@ const result_e T_MovePlane (sector_t *sector, const fixed_t speed, fixed_t dest,
 
             case 1:
             // [JN] Don't allow platform floor go through the ceiling.
-            if (singleplayer)
+            if (singleplayer && !strict_mode && !vanillaparm)
             {
                 dest = dest < sector->ceilingheight ?
-                    dest : sector->ceilingheight;
+                       dest : sector->ceilingheight;
             }
 
             // UP
@@ -100,7 +100,7 @@ const result_e T_MovePlane (sector_t *sector, const fixed_t speed, fixed_t dest,
                     P_ChangeSector(sector,crush);
                     // [JN] Crush everyone to death. 
                     // Special fix for E2M4 and probably other maps.
-                    if (singleplayer)
+                    if (singleplayer && !strict_mode && !vanillaparm)
                     return crushed;
                 }
                 return pastdest;
