@@ -45,7 +45,7 @@ static int P_DivlineSide (const fixed_t x, const fixed_t y, const divline_t *nod
     return
         !node->dx ? x == node->x ? 2 : x <= node->x ? node->dy > 0 : node->dy < 0 :
         // [JN] Fix https://doomwiki.org/wiki/Sleeping_shotgun_guy_in_MAP02_(Doom_II)
-        !node->dy ? (singleplayer && !vanillaparm ? y : x)  
+        !node->dy ? (singleplayer && !strict_mode && !vanillaparm ? y : x)  
                       == node->y ? 2 : y <= node->y ? node->dx < 0 : node->dx > 0 :
         (right = ((y - node->y) >> FRACBITS) * (node->dx >> FRACBITS)) <
         (left  = ((x - node->x) >> FRACBITS) * (node->dy >> FRACBITS)) ? 0 :

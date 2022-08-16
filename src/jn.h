@@ -252,6 +252,9 @@ extern int selective_puzzle_16; // SIGIL OF THE MAGUS
 // Gameplay feautures
 // -----------------------------------------------------------------------------
 
+// Gameplay: Game Mechanics
+extern int strict_mode;
+
 // Gameplay: Graphical
 extern int brightmaps;
 extern int fake_contrast;

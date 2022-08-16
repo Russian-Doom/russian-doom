@@ -97,7 +97,7 @@ const int EV_Teleport (const line_t *line, const int side, mobj_t *thing)
                 //
                 // [JN] Fix behavior, safe for demos.
                 // https://doomwiki.org/wiki/Final_Doom_teleporters_do_not_set_Z_coordinate
-                if (gameversion != exe_final || (singleplayer && !vanillaparm))
+                if (gameversion != exe_final || (singleplayer && !strict_mode && !vanillaparm))
                 {
                     thing->z = thing->floorz;
                 }

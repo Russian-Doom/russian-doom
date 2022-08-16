@@ -20,7 +20,9 @@
 
 
 #include "deh_misc.h"
+#include "m_argv.h"
 #include "m_bbox.h"
+#include "m_misc.h"
 #include "m_random.h"
 #include "i_system.h"
 #include "p_local.h"
@@ -54,6 +56,12 @@ line_t *ceilingline;
 line_t     **spechit;
 static int   spechit_max;
 int          numspechit;
+
+#define MAXSPECIALCROSS             20
+#define MAXSPECIALCROSS_ORIGINAL    8
+#define DEFAULT_SPECHIT_MAGIC       0x01C09C98
+
+static void SpechitOverrun (line_t *ld);
 
 mobj_t *BlockingMobj;
 
@@ -283,13 +291,26 @@ static boolean PIT_CheckLine (line_t *ld)
     // if contacted a special line, add it to the list
     if (ld->special)
     {
-        // [JN] 1/11/98 killough: remove limit on lines hit, by array doubling
+        // [crispy] remove SPECHIT limit
         if (numspechit >= spechit_max)
         {
-            spechit_max = spechit_max ? spechit_max*2 : 8;
-            spechit = I_Realloc(spechit, sizeof*spechit*spechit_max);
+            spechit_max = spechit_max ? spechit_max * 2 : MAXSPECIALCROSS;
+            spechit = I_Realloc(spechit, sizeof(*spechit) * spechit_max);
         }
-        spechit[numspechit++] = ld;
+
+        spechit[numspechit] = ld;
+        numspechit++;
+
+        // fraggle: spechits overrun emulation code from prboom-plus
+        if (numspechit > MAXSPECIALCROSS_ORIGINAL)
+        {
+            // [crispy] print a warning
+            if (numspechit == MAXSPECIALCROSS_ORIGINAL + 1)
+            {
+                fprintf(stderr, "PIT_CheckLine: Triggered SPECHITS overflow!\n");
+            }
+            SpechitOverrun(ld);
+        }
     }
 
     return true;
@@ -333,7 +354,7 @@ static boolean PIT_CheckThing (mobj_t *thing)
     if (tmthing->flags & MF_SKULLFLY)
     {
         // [crispy] check if attacking skull flies over player
-        if (singleplayer && !vanillaparm && over_under && thing->player)
+        if (singleplayer && over_under && thing->player && !strict_mode && !vanillaparm)
         {
             if (tmthing->z > thing->z + thing->height)
             {
@@ -348,7 +369,7 @@ static boolean PIT_CheckThing (mobj_t *thing)
         // [JN] Fix bug: https://doomwiki.org/wiki/Lost_soul_colliding_with_items
         // Thanks AXDOOMER for this fix!
 
-        if (!singleplayer || !agressive_lost_souls || vanillaparm)
+        if (!singleplayer || !agressive_lost_souls || strict_mode || vanillaparm)
         {
             tmthing->flags &= ~MF_SKULLFLY;
             tmthing->momx = tmthing->momy = tmthing->momz = 0;
@@ -360,7 +381,7 @@ static boolean PIT_CheckThing (mobj_t *thing)
     }
     
     // [JN] Torque: make sliding corpses passable
-    if (singleplayer && !vanillaparm && torque && tmthing->intflags & MIF_FALLING)
+    if (singleplayer && torque && tmthing->intflags & MIF_FALLING && !strict_mode && !vanillaparm)
     {
         return true;
     }
@@ -430,7 +451,7 @@ static boolean PIT_CheckThing (mobj_t *thing)
         return !solid;
     }
 
-    if (singleplayer && !vanillaparm)
+    if (singleplayer && !strict_mode && !vanillaparm)
     {
         if (over_under)
         {
@@ -899,7 +920,7 @@ static const boolean P_ThingHeightClip (mobj_t* thing)
         // [JN] Update player's view when on moving platform.
         // Idea by Brad Harding, code by Fabian Greffrath.
         // Thanks, colleagues! (02.04.2018)
-        if (singleplayer && !vanillaparm && thing->player
+        if (singleplayer && !strict_mode && !vanillaparm && thing->player
         && thing->subsector->sector == movingsector)
         {
             P_CalcHeight (thing->player, true);
@@ -1000,8 +1021,9 @@ static boolean PTR_SlideTraverse (intercept_t *in)
     li = in->d.line;
 
     // [JN] Treat two sided linedefs as single sided for smooth sliding.
-    if (li->flags & ML_BLOCKING && li->flags & ML_TWOSIDED
-    && improved_collision && singleplayer && !vanillaparm)
+    if (singleplayer && improved_collision && 
+    li->flags & ML_BLOCKING && li->flags & ML_TWOSIDED
+    && !strict_mode && !vanillaparm)
     {
         goto isblocking;
     }
@@ -1550,7 +1572,7 @@ void P_LineAttack (mobj_t *t1, angle_t angle, int64_t distance,
     // [JN] Extend range so puffs may appear in long distances of hitscan attacks.
     // No damage will be dealed if range is greater than original MISSILERANGE,
     // (see PTR_ShootTraverse). Only for player, not for monsters. 
-    if (t1->player && distance >= MISSILERANGE && singleplayer && !vanillaparm)
+    if (singleplayer && t1->player && distance >= MISSILERANGE && !strict_mode && !vanillaparm)
     {
         distance = INT_MAX;
     }
@@ -1864,7 +1886,7 @@ boolean PIT_ChangeSector (mobj_t *thing)
 
         // spray blood in a random direction
 
-        if (thing->type == MT_BARREL && singleplayer && !vanillaparm)
+        if (singleplayer && thing->type == MT_BARREL && !strict_mode && !vanillaparm)
         {
             // [JN] Barrel should not bleed by crushed damage
             return true;
@@ -1914,4 +1936,69 @@ boolean P_ChangeSector (sector_t *sector, boolean crunch)
     }
 	
     return nofit;
+}
+
+// -----------------------------------------------------------------------------
+// SpechitOverrun
+// Code to emulate the behavior of Vanilla Doom when encountering an overrun
+// of the spechit array.  This is by Andrey Budko (e6y) and comes from his
+// PrBoom plus port.  A big thanks to Andrey for this.
+// -----------------------------------------------------------------------------
+
+static void SpechitOverrun (line_t *ld)
+{
+    static unsigned int baseaddr = 0;
+    unsigned int addr;
+   
+    if (baseaddr == 0)
+    {
+        int p;
+
+        // This is the first time we have had an overrun.  Work out
+        // what base address we are going to use.
+        // Allow a spechit value to be specified on the command line.
+
+        //!
+        // @category compat
+        // @arg <n>
+        //
+        // Use the specified magic value when emulating spechit overruns.
+        //
+
+        p = M_CheckParmWithArgs("-spechit", 1);
+        
+        if (p > 0)
+        {
+            M_StrToInt(myargv[p+1], (int *) &baseaddr);
+        }
+        else
+        {
+            baseaddr = DEFAULT_SPECHIT_MAGIC;
+        }
+    }
+    
+    // Calculate address used in doom2.exe
+
+    addr = baseaddr + (ld - lines) * 0x3E;
+
+    switch(numspechit)
+    {
+        case 9: 
+        case 10:
+        case 11:
+        case 12:
+            tmbbox[numspechit-9] = addr;
+            break;
+        case 13: 
+            crushchange = addr; 
+            break;
+        case 14: 
+            nofit = addr; 
+            break;
+        default:
+            fprintf(stderr, "SpechitOverrun: Warning: unable to emulate"
+                            "an overrun where numspechit=%i\n",
+                            numspechit);
+            break;
+    }
 }

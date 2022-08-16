@@ -246,7 +246,7 @@ void P_XYMovement (mobj_t* mo)
             mo->momx = mo->momy = mo->momz = 0;
 
             // [JN] Optionally fix bug: https://doomwiki.org/wiki/Lost_soul_target_amnesia
-            if (singleplayer && agressive_lost_souls && !vanillaparm)
+            if (singleplayer && agressive_lost_souls && !strict_mode && !vanillaparm)
             {
                 P_SetMobjState (mo, mo->info->seestate);
             }
@@ -302,7 +302,7 @@ void P_XYMovement (mobj_t* mo)
         //
         // Thanks AXDOOMER and Brad Harding!
 
-        if (improved_collision && singleplayer && !vanillaparm ? 
+        if (singleplayer && improved_collision && !strict_mode && !vanillaparm ? 
             mo->player ? ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) && (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)) 
                        : ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) || (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2))
                        :  (xmove > MAXMOVE/2 || ymove > MAXMOVE/2))
@@ -326,7 +326,7 @@ void P_XYMovement (mobj_t* mo)
             {	// try to slide along it
                 if (BlockingMobj == NULL          // [JN] Mobj is not blocking.
                 ||  BlockingMobj->health <= 0     // [JN] Allow to slightly bump into falling corpse.
-                || !improved_collision || !singleplayer || vanillaparm)  // [JN] Keep demo compatibility.
+                || !singleplayer || !improved_collision || strict_mode || vanillaparm)  // [JN] Keep demo compatibility.
                 {   
                     // [JN] Slide movement.
                     P_SlideMove(mo);
@@ -359,7 +359,7 @@ void P_XYMovement (mobj_t* mo)
                 &&  ceilingline->backsector->ceilingpic == skyflatnum)
                 {
                     if (mo->z > ceilingline->backsector->ceilingheight 
-                    || vanillaparm) // [JN] Keep vanilla behaviour by removing missile object.
+                    || strict_mode || vanillaparm) // [JN] Keep vanilla behaviour by removing missile object.
                     {
                         // Hack to prevent missiles exploding
                         // against the sky. Does not handle sky floors.
@@ -421,8 +421,8 @@ void P_XYMovement (mobj_t* mo)
     // killough 8/11/98: add bouncers
     // killough 9/15/98: add objects falling off ledges
     // killough 11/98: only include bouncers hanging off ledges
-    if (singleplayer && (/*(mo->flags & MF_BOUNCES && mo->z > mo->dropoffz) ||*/
-    mo->flags & MF_CORPSE || mo->intflags & MIF_FALLING) 
+    if (singleplayer && !strict_mode && !vanillaparm
+    && (mo->flags & MF_CORPSE || mo->intflags & MIF_FALLING) 
     && (mo->momx > FRACUNIT/4 || mo->momx < -FRACUNIT/4
     ||  mo->momy > FRACUNIT/4 || mo->momy < -FRACUNIT/4) 
     &&  mo->floorz != mo->subsector->sector->floorheight)
@@ -615,7 +615,8 @@ void P_ZMovement (mobj_t *mo)
         if ((mo->flags & MF_MISSILE) && !(mo->flags & MF_NOCLIP))
         {
             // [JN] Fix projectiles explode on impact with "sky" ceilings
-            if (singleplayer && !vanillaparm && mo->subsector->sector->ceilingpic == skyflatnum)
+            if (singleplayer && !strict_mode && !vanillaparm
+            &&  mo->subsector->sector->ceilingpic == skyflatnum)
             {
                 P_RemoveMobj(mo);
             }
@@ -643,7 +644,7 @@ void P_NightmareRespawn (mobj_t *mobj)
     mapthing_t  *mthing = &mobj->spawnpoint;
 
     // [BH] Fix (0,0) respawning bug. See <http://doomwiki.org/wiki/(0,0)_respawning_bug>.
-    if (singleplayer && !x && !y)
+    if (singleplayer && !x && !y && !strict_mode && !vanillaparm)
     {
         x = mobj->x;
         y = mobj->y;
@@ -737,7 +738,7 @@ void P_MobjThinker (mobj_t *mobj)
     }
 
     if ((mobj->z != mobj->floorz) || mobj->momz
-    || (BlockingMobj && improved_collision && singleplayer && !vanillaparm))
+    || (singleplayer && BlockingMobj && improved_collision && !strict_mode && !vanillaparm))
     {
         P_ZMovement (mobj);
 
@@ -749,7 +750,7 @@ void P_MobjThinker (mobj_t *mobj)
     }
 
     // [JN] Activation of floating items
-    if (floating_powerups && !vanillaparm && singleplayer
+    if (singleplayer && floating_powerups && !vanillaparm
     && (mobj->type == MT_MEGA       // Megasphere
     ||  mobj->type == MT_MISC12     // Supercharge
     ||  mobj->type == MT_INV        // Invulnerability
@@ -764,7 +765,7 @@ void P_MobjThinker (mobj_t *mobj)
 
     // [JN] killough 9/12/98: objects fall off ledges if they are hanging off
     // slightly push off of ledge if hanging more than halfway off
-    if (singleplayer && !vanillaparm && torque)
+    if (singleplayer && torque && !strict_mode && !vanillaparm)
     {
         if (mobj->z > mobj->dropoffz        // Only objects contacting dropoff
         && !(mobj->flags & MF_NOGRAVITY)    // Only objects which fall
@@ -1495,7 +1496,7 @@ void P_SpawnPlayerMissile (mobj_t *source, const mobjtype_t type)
     {
         // [JN] Optional horizontal aiming.
         if ((horizontal_autoaim == 1 || horizontal_autoaim == 3)
-        || !singleplayer || vanillaparm)
+        || !singleplayer || strict_mode || vanillaparm)
         {
             an += 1 << 26;
             slope = P_AimLineAttack (source, an, 16*64*FRACUNIT);
@@ -1514,7 +1515,7 @@ void P_SpawnPlayerMissile (mobj_t *source, const mobjtype_t type)
         }
 
         // [JN] Mouselook: also count vertical angles
-        if (singleplayer && !linetarget && mlook)
+        if (singleplayer && !linetarget && mlook && !strict_mode && !vanillaparm)
         {
             an = source->angle;
 

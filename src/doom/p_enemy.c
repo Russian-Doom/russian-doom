@@ -185,7 +185,7 @@ boolean P_CheckMeleeRange (mobj_t *actor)
     }
 
     // [crispy] height check for melee attacks (from Hexen)
-    if (singleplayer && !vanillaparm && over_under && pl->player)
+    if (singleplayer && over_under && pl->player && !strict_mode && !vanillaparm)
     {
         // [crispy] Target is higher than the attacker
         if (pl->z > actor->z + actor->height)
@@ -353,7 +353,7 @@ static boolean P_Move (mobj_t*	actor)
         //
         // Do NOT simply return false 1/4th of the time (causes monsters to
         // back out when they shouldn't, and creates secondary stickiness).
-        if (improved_collision && singleplayer && !vanillaparm)
+        if (singleplayer && improved_collision && !strict_mode && !vanillaparm)
         {
             line_t *blockline = spechit[numspechit];
 
@@ -735,7 +735,7 @@ void A_Look (mobj_t *actor)
     // [JN] Original id Software's idea: 
     // If a monster yells at a player, it will 
     // alert other monsters to the player.
-    if (singleplayer && !vanillaparm && noise_alert_sfx)
+    if (singleplayer && noise_alert_sfx && !strict_mode && !vanillaparm)
     {
         P_NoiseAlert (actor->target, actor);
     }
@@ -1163,7 +1163,7 @@ void A_BruisAttack (mobj_t *actor)
 
     // [JN] Исправление оригинального бага с отсутствующим A_FaceTarget
     // https://doomwiki.org/wiki/Baron_attacks_a_monster_behind_him
-    if (singleplayer && !vanillaparm)
+    if (singleplayer && !strict_mode && !vanillaparm)
     {
         A_FaceTarget (actor);
     }
@@ -1505,7 +1505,7 @@ void A_Fire (mobj_t *actor)
     // of its (faulty) spawn sector and the target's actual sector.
     // Thanks to Quasar for his excellent analysis at
     // https://www.doomworld.com/vb/post/1297952
-    if (singleplayer && !vanillaparm)
+    if (singleplayer && !strict_mode && !vanillaparm)
     {
         actor->floorz = actor->subsector->sector->floorheight;
         actor->ceilingz = actor->subsector->sector->ceilingheight;
@@ -1531,7 +1531,7 @@ void A_VileTarget (mobj_t *actor)
     fog = P_SpawnMobj (actor->target->x,
                        // [JN] Fix fire spawned at wrong location.
                        // https://doomwiki.org/wiki/Arch-Vile_fire_spawned_at_the_wrong_location
-                       singleplayer ? actor->target->y : actor->target->x,
+                       singleplayer && !strict_mode && !vanillaparm ? actor->target->y : actor->target->x,
                        actor->target->z, MT_FIRE);
 
     actor->tracer = fog;
@@ -1720,7 +1720,7 @@ void A_PainShootSkull (mobj_t *actor, angle_t angle)
     mobj_t    *newmobj;
 
     // [JN] Optionally removed Lost Souls spawn limit.
-    if (!unlimited_lost_souls || !singleplayer || vanillaparm)
+    if (!singleplayer || !unlimited_lost_souls || vanillaparm)
     {
         // Count total number of skull currently on the level.
         int count = 0;
@@ -1757,7 +1757,7 @@ void A_PainShootSkull (mobj_t *actor, angle_t angle)
     // [DOOM Retro] Check whether the Lost Soul is being fired through a 1-sided
     // wall or an impassible line, or a "monsters can't cross" line.
     // If it is, then we don't allow the spawn.
-    if (singleplayer)
+    if (singleplayer && !strict_mode && !vanillaparm)
     {
         if (P_CheckLineSide(actor, x, y))
         {
@@ -1772,7 +1772,7 @@ void A_PainShootSkull (mobj_t *actor, angle_t angle)
     // [DOOM Retro] Check to see if the new Lost Soul's z value is above the
     // ceiling of its new sector, or below the floor. If so, kill it.
     || ((newmobj->z > newmobj->subsector->sector->ceilingheight - newmobj->height
-    || newmobj->z < newmobj->subsector->sector->floorheight) && singleplayer))
+    || newmobj->z < newmobj->subsector->sector->floorheight) && singleplayer && !strict_mode && !vanillaparm))
     {
         // kill it immediately
         P_DamageMobj (newmobj,actor,actor,10000);	

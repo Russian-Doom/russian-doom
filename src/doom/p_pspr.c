@@ -34,7 +34,7 @@
 #define WEAPONTOP       32*FRACUNIT
 
 
-static fixed_t bulletslope;
+fixed_t bulletslope;
 
 // -----------------------------------------------------------------------------
 // P_SetPsprite
@@ -456,7 +456,7 @@ void A_Punch (mobj_t *mobj, player_t *player, pspdef_t *psp)
     slope = P_AimLineAttack (player->mo, angle, MELEERANGE);
 
     // [JN] Also accout vertical attack angles
-    if (singleplayer && !linetarget && mlook)
+    if (singleplayer && !linetarget && mlook && !strict_mode && !vanillaparm)
     {
         if (aspect_ratio >= 2)
         {
@@ -507,7 +507,7 @@ void A_Saw (mobj_t *mobj, player_t *player, pspdef_t *psp)
     slope = P_AimLineAttack (player->mo, angle, MELEERANGE+1);
 
     // [JN] Also accout vertical attack angles
-    if (singleplayer && !linetarget && mlook)
+    if (singleplayer && !linetarget && mlook && !strict_mode && !vanillaparm)
     {
         if (aspect_ratio >= 2)
         {
@@ -676,7 +676,7 @@ static void P_BulletSlope (mobj_t *mo)
     {
         // [JN] Optional horizontal aiming.
         if ((horizontal_autoaim == 0 || horizontal_autoaim == 3)
-        || !singleplayer || vanillaparm)
+        || !singleplayer || strict_mode || vanillaparm)
         {
             an += 1<<26;
             bulletslope = P_AimLineAttack (mo, an, 16*64*FRACUNIT);
@@ -689,7 +689,7 @@ static void P_BulletSlope (mobj_t *mo)
         }
 
         // [JN] Mouselook: also count vertical angles
-        if (singleplayer && !linetarget && mlook)
+        if (singleplayer && !linetarget && mlook && !strict_mode && !vanillaparm)
         {
             if (aspect_ratio >= 2)
             {

@@ -200,6 +200,9 @@ int selective_key_5 = 0;    // red skull key
 int selective_fast = 0;
 int selective_respawn = 0;
 
+// Gameplay: Game Mechanics
+int strict_mode = 0;
+
 // Gameplay: Graphical
 int brightmaps = 1;
 int fake_contrast = 0;
@@ -931,6 +934,9 @@ void D_BindVariables(void)
     M_BindIntVariable("always_run",             &alwaysRun);
     M_BindIntVariable("mlook",                  &mlook);
     M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
+
+    // Gameplay: Game Mechanics
+    M_BindIntVariable("strict_mode",            &strict_mode);
 
     // Gameplay: Graphical
     M_BindIntVariable("brightmaps",             &brightmaps);

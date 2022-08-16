@@ -346,7 +346,7 @@ void P_UseLines (const player_t *player);
 // -----------------------------------------------------------------------------
 
 // Extended MAXINTERCEPTS, to allow for intercepts overrun emulation.
-#define MAXINTERCEPTS_ORIGINAL  128*16 // [JN] Лимит шестнадцатикратно умножен
+#define MAXINTERCEPTS_ORIGINAL  128
 #define MAXINTERCEPTS           (MAXINTERCEPTS_ORIGINAL + 61)
 #define PT_ADDLINES             1
 #define PT_ADDTHINGS            2
@@ -372,7 +372,6 @@ typedef struct
 
 typedef boolean (*traverser_t) (intercept_t *in);
 
-extern intercept_t  intercepts[MAXINTERCEPTS];
 extern intercept_t *intercept_p;
 extern divline_t    trace;
 extern fixed_t      opentop;

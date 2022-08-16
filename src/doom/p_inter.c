@@ -511,7 +511,7 @@ void P_TouchSpecialThing (const mobj_t *special, const mobj_t *toucher)
             P_GiveArmor (player, 2);
             // [JN] Force to upgrade armor type to blue, to fix keeping
             // green armor while player have 200% armor points (from DOOM Retro).
-            if (singleplayer && !vanillaparm)
+            if (singleplayer && !strict_mode && !vanillaparm)
             {
                 player->armortype = 2;
             }
@@ -641,7 +641,7 @@ void P_TouchSpecialThing (const mobj_t *special, const mobj_t *toucher)
             // [JN] Allow to pickup automap if player already have it,
             // to make 100% items possible on levels with few automaps. 
             // Notable example: MAP27 of Hell on Earth.
-            if (singleplayer && !vanillaparm)
+            if (singleplayer && !strict_mode && !vanillaparm)
             {
                 P_GivePower (player, pw_allmap);
             }
@@ -977,7 +977,7 @@ static void P_KillMobj (const mobj_t *source, mobj_t *target)
     }
 
     // [JN] Dropped items tossing feature (from DOOM Retro).
-    if (toss_drop && singleplayer && !vanillaparm)
+    if (singleplayer && toss_drop && !strict_mode && !vanillaparm)
     {
         mo = P_SpawnMobj(target->x ,target->y, target->floorz
                                              + target->height
@@ -1139,11 +1139,11 @@ void P_DamageMobj (mobj_t *target, const mobj_t *inflictor, mobj_t *source, int 
     {
         // [crispy] the lethal pellet of a point-blank SSG blast
         // gets an extra damage boost for the occasional gib chance
-        if (ssg_blast_enemies && !vanillaparm)
+        if (singleplayer && ssg_blast_enemies && !strict_mode && !vanillaparm)
         {
             extern boolean P_CheckMeleeRange (mobj_t *actor);
 
-            if (singleplayer && source && source->player
+            if (source && source->player
             && source->player->readyweapon == wp_supershotgun
             && target->info->xdeathstate && P_CheckMeleeRange(target) && damage >= 10)
             {
@@ -1157,7 +1157,7 @@ void P_DamageMobj (mobj_t *target, const mobj_t *inflictor, mobj_t *source, int 
 
     // [JN] Fix bug: https://doomwiki.org/wiki/Lost_soul_charging_backwards
     // Thanks AXDOOMER for this fix!
-    if (singleplayer && agressive_lost_souls && !vanillaparm)
+    if (singleplayer && agressive_lost_souls && !strict_mode && !vanillaparm)
     {
         if (P_Random () < target->info->painchance)
         {
