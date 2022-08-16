@@ -935,6 +935,9 @@ void D_BindVariables(void)
     M_BindIntVariable("mlook",                  &mlook);
     M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
 
+    // Gameplay: Game Mechanics
+    M_BindIntVariable("strict_mode",            &strict_mode);
+
     // Gameplay: Graphical
     M_BindIntVariable("brightmaps",             &brightmaps);
     M_BindIntVariable("fake_contrast",          &fake_contrast);
@@ -946,9 +949,6 @@ void D_BindVariables(void)
     M_BindIntVariable("linear_sky",             &linear_sky);
     M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);
     M_BindIntVariable("flip_weapons",           &flip_weapons);
-
-    // Gameplay: Game Mechanics
-    M_BindIntVariable("strict_mode",            &strict_mode);
 
     // Gameplay: Status bar
     M_BindIntVariable("extra_player_faces",     &extra_player_faces);
