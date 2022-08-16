@@ -603,6 +603,9 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(mouse_y_invert),
     CONFIG_VARIABLE_INT(artiskip),
 
+    // Gameplay: Game Mechanics
+    CONFIG_VARIABLE_INT(strict_mode),
+
     // Gameplay: Graphical
     CONFIG_VARIABLE_INT(brightmaps),
     CONFIG_VARIABLE_INT(fake_contrast),
@@ -614,9 +617,6 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(linear_sky),
     CONFIG_VARIABLE_INT(randomly_flipcorpses),
     CONFIG_VARIABLE_INT(flip_weapons),
-
-    // Gameplay: Game Mechanics
-    CONFIG_VARIABLE_INT(strict_mode),
 
     // Gameplay: Status Bar
     CONFIG_VARIABLE_INT(extra_player_faces),

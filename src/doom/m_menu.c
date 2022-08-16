@@ -274,6 +274,7 @@ static void M_RD_Draw_Gameplay_4();
 static void M_RD_Draw_Gameplay_5();
 
 // Page 1
+static void M_RD_Change_StrictMode();
 static void M_RD_Change_Brightmaps();
 static void M_RD_Change_FakeContrast();
 static void M_RD_Change_Translucency();
@@ -283,7 +284,6 @@ static void M_RD_Change_SwirlingLiquids();
 static void M_RD_Change_InvulSky();
 static void M_RD_Change_LinearSky();
 static void M_RD_Change_FlipCorpses();
-static void M_RD_Change_StrictMode();
 
 // Page 2
 static void M_RD_Change_ExtraPlayerFaces();
@@ -1285,6 +1285,8 @@ static const PageDescriptor_t GameplayPageDescriptor = {
 };
 
 static MenuItem_t Gameplay1Items[] = {
+    {ITT_TITLE,   "Game mechanics",               "BUHJDFZ VT[FYBRF",               NULL,                        0}, // Игровая механика
+    {ITT_SWITCH,  "Strict vanilla mode:",         "cnhjuj jhbubyfkmysq ht;bv:",     M_RD_Change_StrictMode,      0}, // Строго оригинальный режим
     {ITT_TITLE,   "Graphical",                    "uhfabrf",                        NULL,                        0}, // Графика
     {ITT_SWITCH,  "Brightmaps:",                  ",hfqnvfggbyu:",                  M_RD_Change_Brightmaps,      0}, // Брайтмаппинг
     {ITT_SWITCH,  "Fake contrast:",               "Bvbnfwbz rjynhfcnyjcnb:",        M_RD_Change_FakeContrast,    0}, // Имитация контрастности
@@ -1295,8 +1297,6 @@ static MenuItem_t Gameplay1Items[] = {
     {ITT_SWITCH,  "Invulnerability affects sky:", "ytezpdbvjcnm jrhfibdftn yt,j:",  M_RD_Change_InvulSky,        0}, // Неуязвимость окрашивает небо
     {ITT_SWITCH,  "Sky drawing mode:",            "ht;bv jnhbcjdrb yt,f:",          M_RD_Change_LinearSky,       0}, // Режим отрисовки неба
     {ITT_SWITCH,  "Randomly mirrored corpses:",   "pthrfkmyjt jnhf;tybt nhegjd:",   M_RD_Change_FlipCorpses,     0}, // Зеркалирование трупов
-    {ITT_TITLE,   "Game mechanics",               "BUHJDFZ VT[FYBRF",               NULL,                        0}, // Игровая механика
-    {ITT_SWITCH,  "Strict vanilla mode:",         "cnhjuj jhbubyfkmysq ht;bv:",     M_RD_Change_StrictMode,      0}, // Строго оригинальный режим
     {ITT_SETMENU, NULL, /* Next Page > */         NULL,                             &Gameplay2Menu,              0}, // Далее >
     {ITT_SETMENU, NULL, /* < Last Page */         NULL,                             &Gameplay5Menu,              0}  // < Назад
 };
@@ -3986,17 +3986,21 @@ static void M_RD_Draw_Gameplay_1(void)
 
     if (english_language)
     {
+        // Strict Vanilla mode
+        RD_M_DrawTextSmallENG(strict_mode ? RD_ON : RD_OFF, 178 + wide_delta, 35,
+                              strict_mode ? CR_GREEN : CR_DARKRED);
+
         // Brightmaps
-        RD_M_DrawTextSmallENG(brightmaps ? RD_ON : RD_OFF, 119 + wide_delta, 35,
+        RD_M_DrawTextSmallENG(brightmaps ? RD_ON : RD_OFF, 119 + wide_delta, 55,
                               brightmaps ? CR_GREEN : CR_DARKRED);
 
 
         // Fake contrast
-        RD_M_DrawTextSmallENG(fake_contrast ? RD_ON : RD_OFF,142 + wide_delta, 45,
+        RD_M_DrawTextSmallENG(fake_contrast ? RD_ON : RD_OFF,142 + wide_delta, 65,
                               fake_contrast ? CR_GREEN : CR_DARKRED);
 
         // Translucency
-        RD_M_DrawTextSmallENG(translucency ? RD_ON : RD_OFF, 138 + wide_delta, 55,
+        RD_M_DrawTextSmallENG(translucency ? RD_ON : RD_OFF, 138 + wide_delta, 75,
                               translucency ? CR_GREEN : CR_DARKRED);
 
         // Fuzz effect
@@ -4004,33 +4008,29 @@ static void M_RD_Draw_Gameplay_1(void)
                               improved_fuzz == 1 ? "Original (b&w)" :
                               improved_fuzz == 2 ? "Improved" :
                               improved_fuzz == 3 ? "Improved (b&w)" :
-                              "Translucent", 125 + wide_delta, 65,
+                              "Translucent", 125 + wide_delta, 85,
                               improved_fuzz > 0 ? CR_GREEN : CR_DARKRED);
 
         // Colored blood and corpses
         RD_M_DrawTextSmallENG(colored_blood == 1 ? "ON" :
                               colored_blood == 2 ? "ON+FUZZY" : "OFF",
-                              229 + wide_delta, 75, colored_blood ? CR_GREEN : CR_DARKRED);
+                              229 + wide_delta, 95, colored_blood ? CR_GREEN : CR_DARKRED);
 
         // Liquids animation
-        RD_M_DrawTextSmallENG(swirling_liquids ? "improved" : "original", 159 + wide_delta, 85,
+        RD_M_DrawTextSmallENG(swirling_liquids ? "improved" : "original", 159 + wide_delta, 105,
                               swirling_liquids ? CR_GREEN : CR_DARKRED);
 
         // Invulnerability affects sky
-        RD_M_DrawTextSmallENG(invul_sky ? RD_ON : RD_OFF, 237 + wide_delta, 95,
+        RD_M_DrawTextSmallENG(invul_sky ? RD_ON : RD_OFF, 237 + wide_delta, 115,
                              invul_sky ? CR_GREEN : CR_DARKRED);
 
         // Horizontally linear sky drawing
-        RD_M_DrawTextSmallENG(linear_sky ? "linear" : "original", 160 + wide_delta, 105,
+        RD_M_DrawTextSmallENG(linear_sky ? "linear" : "original", 160 + wide_delta, 125,
                              linear_sky ? CR_GREEN : CR_DARKRED);
 
         // Randomly mirrored corpses
-        RD_M_DrawTextSmallENG(randomly_flipcorpses ? RD_ON : RD_OFF, 231 + wide_delta, 115,
+        RD_M_DrawTextSmallENG(randomly_flipcorpses ? RD_ON : RD_OFF, 231 + wide_delta, 135,
                               randomly_flipcorpses ? CR_GREEN : CR_DARKRED);
-
-        // Strict Vanilla mode
-        RD_M_DrawTextSmallENG(strict_mode ? RD_ON : RD_OFF, 178 + wide_delta, 135,
-                              strict_mode ? CR_GREEN : CR_DARKRED);
 
         //
         // Footer
@@ -4040,16 +4040,20 @@ static void M_RD_Draw_Gameplay_1(void)
     }
     else
     {
+        // Строго оригинальный режим
+        RD_M_DrawTextSmallRUS(strict_mode ? RD_ON_RUS : RD_OFF_RUS, 242 + wide_delta, 35,
+                              strict_mode ? CR_GREEN : CR_DARKRED);
+
         // Брайтмаппинг
-        RD_M_DrawTextSmallRUS(brightmaps ? RD_ON_RUS : RD_OFF_RUS, 140 + wide_delta, 35,
+        RD_M_DrawTextSmallRUS(brightmaps ? RD_ON_RUS : RD_OFF_RUS, 140 + wide_delta, 55,
                               brightmaps ? CR_GREEN : CR_DARKRED);
 
         // Имитация контрастности
-        RD_M_DrawTextSmallRUS(fake_contrast ? RD_ON_RUS : RD_OFF_RUS, 217 + wide_delta, 45,
+        RD_M_DrawTextSmallRUS(fake_contrast ? RD_ON_RUS : RD_OFF_RUS, 217 + wide_delta, 65,
                               fake_contrast ? CR_GREEN : CR_DARKRED);
 
         // Прозрачность объектов
-        RD_M_DrawTextSmallRUS(translucency ? RD_ON_RUS : RD_OFF_RUS, 207 + wide_delta, 55,
+        RD_M_DrawTextSmallRUS(translucency ? RD_ON_RUS : RD_OFF_RUS, 207 + wide_delta, 75,
                               translucency ? CR_GREEN : CR_DARKRED);
 
         // Эффект шума
@@ -4057,33 +4061,29 @@ static void M_RD_Draw_Gameplay_1(void)
                               improved_fuzz == 1 ? "Jhbubyfkmysq (x*,)" :
                               improved_fuzz == 2 ? "Ekexityysq" :
                               improved_fuzz == 3 ? "Ekexityysq (x*,)" :
-                              "Ghjphfxysq", 134 + wide_delta, 65,
+                              "Ghjphfxysq", 134 + wide_delta, 85,
                               improved_fuzz > 0 ? CR_GREEN : CR_DARKRED);
 
         // Разноцветная кровь и трупы
         RD_M_DrawTextSmallRUS(colored_blood == 1 ? "drk" :
                               colored_blood == 2 ? "drk+iev" : "dsrk",
-                              242 + wide_delta, 75, colored_blood ? CR_GREEN : CR_DARKRED);
+                              242 + wide_delta, 95, colored_blood ? CR_GREEN : CR_DARKRED);
 
         // Анимация жидкостей
-        RD_M_DrawTextSmallRUS(swirling_liquids ? "ekexityyfz" : "jhbubyfkmyfz", 190 + wide_delta, 85,
+        RD_M_DrawTextSmallRUS(swirling_liquids ? "ekexityyfz" : "jhbubyfkmyfz", 190 + wide_delta, 105,
                               swirling_liquids ? CR_GREEN : CR_DARKRED);
 
         // Неуязвимость окрашивает небо
-        RD_M_DrawTextSmallRUS(invul_sky ? RD_ON_RUS : RD_OFF_RUS, 262 + wide_delta, 95,
+        RD_M_DrawTextSmallRUS(invul_sky ? RD_ON_RUS : RD_OFF_RUS, 262 + wide_delta, 115,
                               invul_sky ? CR_GREEN : CR_DARKRED);
 
         // Режим отрисовки неба
-        RD_M_DrawTextSmallRUS(linear_sky ? "kbytqysq" : "jhbubyfkmysq", 200 + wide_delta, 105,
+        RD_M_DrawTextSmallRUS(linear_sky ? "kbytqysq" : "jhbubyfkmysq", 200 + wide_delta, 125,
                               linear_sky ? CR_GREEN : CR_DARKRED);
 
         // Зеркальное отражение трупов
-        RD_M_DrawTextSmallRUS(randomly_flipcorpses ? RD_ON_RUS : RD_OFF_RUS, 255 + wide_delta, 115,
+        RD_M_DrawTextSmallRUS(randomly_flipcorpses ? RD_ON_RUS : RD_OFF_RUS, 255 + wide_delta, 135,
                               randomly_flipcorpses ? CR_GREEN : CR_DARKRED);
-
-        // Строго оригинальный режим
-        RD_M_DrawTextSmallRUS(strict_mode ? RD_ON_RUS : RD_OFF_RUS, 242 + wide_delta, 135,
-                              strict_mode ? CR_GREEN : CR_DARKRED);
 
         //
         // Footer
@@ -4709,6 +4709,11 @@ static void M_RD_Draw_Gameplay_5(void)
     }
 }
 
+static void M_RD_Change_StrictMode()
+{
+    strict_mode ^= 1;
+}
+
 static void M_RD_Change_Brightmaps()
 {
     brightmaps ^= 1;
@@ -4755,11 +4760,6 @@ static void M_RD_Change_LinearSky()
 static void M_RD_Change_FlipCorpses()
 {
     randomly_flipcorpses ^= 1;
-}
-
-static void M_RD_Change_StrictMode()
-{
-    strict_mode ^= 1;
 }
 
 //
@@ -5828,6 +5828,9 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     mouse_threshold  = 10;
     novert           = 1;
 
+    // Gameplay: Game Mechanics
+    strict_mode      = 0;
+
     // Gameplay: Graphical
     brightmaps       = 1;
     fake_contrast    = 0;
@@ -5839,7 +5842,6 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     linear_sky       = 1;
     randomly_flipcorpses = 1;
     flip_weapons     = 0;
-    strict_mode      = 0;
 
     // Gameplay: Status Bar
     sbar_colored        = 0;
@@ -6014,6 +6016,9 @@ static void M_RD_BackToDefaults_Original(int choice)
     mouse_threshold    = 10;
     novert             = 1;
 
+    // Gameplay: Game Mechanics
+    strict_mode      = 1;
+
     // Gameplay: Graphical
     brightmaps       = 0;
     fake_contrast    = 1;
@@ -6025,7 +6030,6 @@ static void M_RD_BackToDefaults_Original(int choice)
     linear_sky       = 0;
     randomly_flipcorpses = 0;
     flip_weapons     = 0;
-    strict_mode      = 1;
 
     // Gameplay: Status Bar
     sbar_colored        = 0;

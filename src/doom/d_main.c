@@ -200,6 +200,9 @@ int selective_key_5 = 0;    // red skull key
 int selective_fast = 0;
 int selective_respawn = 0;
 
+// Gameplay: Game Mechanics
+int strict_mode = 0;
+
 // Gameplay: Graphical
 int brightmaps = 1;
 int fake_contrast = 0;
@@ -211,9 +214,6 @@ int invul_sky = 1;
 int linear_sky = 1;
 int randomly_flipcorpses = 1;
 int flip_weapons = 0;
-
-// Gameplay: Game Mechanics
-int strict_mode = 0;
 
 // Gameplay: Status Bar
 int extra_player_faces = 1;
