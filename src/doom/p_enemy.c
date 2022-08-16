@@ -2194,10 +2194,11 @@ void A_BrainPain (mobj_t *mo)
 void A_BrainScream (mobj_t *mo)
 {
     int x;
-
-    // [JN] Взрывы Иконы греха отцентрированы. Исправление бага:
+    // [JN] Safe fix for centering Icon of Sin death explosions.
     // https://doomwiki.org/wiki/Lopsided_final_boss_explosions
-    for (x=mo->x - 320*FRACUNIT ; x< mo->x + 320*FRACUNIT ; x+= FRACUNIT*8)
+    const int safe_x = canmodify && singleplayer && !strict_mode && !vanillaparm ? 320 : 196;
+
+    for (x=mo->x - safe_x*FRACUNIT ; x< mo->x + 320*FRACUNIT ; x+= FRACUNIT*8)
     {
         int y = mo->y - 320*FRACUNIT;
         int z = 128 + P_Random()*2*FRACUNIT;
