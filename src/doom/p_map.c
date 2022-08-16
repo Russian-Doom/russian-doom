@@ -20,7 +20,9 @@
 
 
 #include "deh_misc.h"
+#include "m_argv.h"
 #include "m_bbox.h"
+#include "m_misc.h"
 #include "m_random.h"
 #include "i_system.h"
 #include "p_local.h"
@@ -54,6 +56,12 @@ line_t *ceilingline;
 line_t     **spechit;
 static int   spechit_max;
 int          numspechit;
+
+#define MAXSPECIALCROSS             20
+#define MAXSPECIALCROSS_ORIGINAL    8
+#define DEFAULT_SPECHIT_MAGIC       0x01C09C98
+
+static void SpechitOverrun (line_t *ld);
 
 mobj_t *BlockingMobj;
 
@@ -283,13 +291,26 @@ static boolean PIT_CheckLine (line_t *ld)
     // if contacted a special line, add it to the list
     if (ld->special)
     {
-        // [JN] 1/11/98 killough: remove limit on lines hit, by array doubling
+        // [crispy] remove SPECHIT limit
         if (numspechit >= spechit_max)
         {
-            spechit_max = spechit_max ? spechit_max*2 : 8;
-            spechit = I_Realloc(spechit, sizeof*spechit*spechit_max);
+            spechit_max = spechit_max ? spechit_max * 2 : MAXSPECIALCROSS;
+            spechit = I_Realloc(spechit, sizeof(*spechit) * spechit_max);
         }
-        spechit[numspechit++] = ld;
+
+        spechit[numspechit] = ld;
+        numspechit++;
+
+        // fraggle: spechits overrun emulation code from prboom-plus
+        if (numspechit > MAXSPECIALCROSS_ORIGINAL)
+        {
+            // [crispy] print a warning
+            if (numspechit == MAXSPECIALCROSS_ORIGINAL + 1)
+            {
+                fprintf(stderr, "PIT_CheckLine: Triggered SPECHITS overflow!\n");
+            }
+            SpechitOverrun(ld);
+        }
     }
 
     return true;
@@ -1915,4 +1936,69 @@ boolean P_ChangeSector (sector_t *sector, boolean crunch)
     }
 	
     return nofit;
+}
+
+// -----------------------------------------------------------------------------
+// SpechitOverrun
+// Code to emulate the behavior of Vanilla Doom when encountering an overrun
+// of the spechit array.  This is by Andrey Budko (e6y) and comes from his
+// PrBoom plus port.  A big thanks to Andrey for this.
+// -----------------------------------------------------------------------------
+
+static void SpechitOverrun (line_t *ld)
+{
+    static unsigned int baseaddr = 0;
+    unsigned int addr;
+   
+    if (baseaddr == 0)
+    {
+        int p;
+
+        // This is the first time we have had an overrun.  Work out
+        // what base address we are going to use.
+        // Allow a spechit value to be specified on the command line.
+
+        //!
+        // @category compat
+        // @arg <n>
+        //
+        // Use the specified magic value when emulating spechit overruns.
+        //
+
+        p = M_CheckParmWithArgs("-spechit", 1);
+        
+        if (p > 0)
+        {
+            M_StrToInt(myargv[p+1], (int *) &baseaddr);
+        }
+        else
+        {
+            baseaddr = DEFAULT_SPECHIT_MAGIC;
+        }
+    }
+    
+    // Calculate address used in doom2.exe
+
+    addr = baseaddr + (ld - lines) * 0x3E;
+
+    switch(numspechit)
+    {
+        case 9: 
+        case 10:
+        case 11:
+        case 12:
+            tmbbox[numspechit-9] = addr;
+            break;
+        case 13: 
+            crushchange = addr; 
+            break;
+        case 14: 
+            nofit = addr; 
+            break;
+        default:
+            fprintf(stderr, "SpechitOverrun: Warning: unable to emulate"
+                            "an overrun where numspechit=%i\n",
+                            numspechit);
+            break;
+    }
 }
