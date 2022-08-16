@@ -34,7 +34,7 @@
 #define WEAPONTOP       32*FRACUNIT
 
 
-static fixed_t bulletslope;
+fixed_t bulletslope;
 
 // -----------------------------------------------------------------------------
 // P_SetPsprite
