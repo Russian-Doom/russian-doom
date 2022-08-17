@@ -318,22 +318,25 @@ char* packageResourcesDir = NULL;
 void M_PrintHelp(void)
 {
 #define CLI_Parameter(keys, description_eng, description_rus) \
-printf("  %-31s  %s\n", (keys), english_language ? (description_eng) : (description_rus))
+printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (description_rus))
 
-    printf("%s 'inter-%s --help -lang %s'\n\n",
-           english_language ? "Чтобы увидить это сообщение на русском запустите" : "To see this message in english run",
-           RD_GameType == gt_Doom ? "doom" :
-           RD_GameType == gt_Heretic ? "heretic" :
-           RD_GameType == gt_Hexen ? "hexen" : "strife",
+    const char* const game = RD_GameType == gt_Doom ? "doom" :
+                             RD_GameType == gt_Heretic ? "heretic" :
+                             RD_GameType == gt_Hexen ? "hexen" : "strife";
+
+    printf("%s '%s%s --help -lang %s'\n\n",
+           english_language ? "Чтобы увидеть это сообщение на русском запустите" : "To see this message in english run",
+           PROGRAM_PREFIX,
+           game,
            english_language ? "ru" : "en");
 
-    printf("%s:\tinter-%s [%s]\n%s:\n",
+    printf("%s:\t%s%s [%s]\n%s:\n",
            english_language ? "Usage" : "Использование",
-           RD_GameType == gt_Doom ? "doom" :
-           RD_GameType == gt_Heretic ? "heretic" :
-           RD_GameType == gt_Hexen ? "hexen" : "strife",
+           PROGRAM_PREFIX,
+           game,
            english_language ? "Options" : "опции",
            english_language ? "Options" : "Опции");
+
     CLI_Parameter("-h, --help",
                   "Show this help message",
                   "Показать это сообщение");
@@ -346,12 +349,12 @@ printf("  %-31s  %s\n", (keys), english_language ? (description_eng) : (descript
     CLI_Parameter("-iwad <path>",
                   "Specify an IWAD file. <path> can be absolute or relative to one of the WAD search locations",
                   "Задать IWAD файл. <path> может быть абсолютным или относительным одному из мест поиска WAD'ов");
-    CLI_Parameter("-file <path ...>",
+    CLI_Parameter("-file <path> ...",
                   "Load the given PWAD(s). <path> can be absolute or relative to one of the WAD search locations",
                   "Загрузить указанные PWAD'ы. <path> может быть абсолютным или относительным одному из мест поиска WAD'ов");
     if(RD_GameType != gt_Hexen)
     {
-        CLI_Parameter("-deh <path ...>",
+        CLI_Parameter("-deh <path> ...",
                       "Load the given dehacked patch(es). <path> can be absolute or relative to one of the WAD search locations",
                       "Загрузить указанные патчи dehacked. <path> может быть абсолютным или относительным одному из мест поиска WAD'ов");
         CLI_Parameter("-nocheats",
@@ -364,16 +367,16 @@ printf("  %-31s  %s\n", (keys), english_language ? (description_eng) : (descript
                       "Don't load DEHACKED lumps from WADs",
                       "Не загружать DEHACKED лампы из вадов");
     }
-    CLI_Parameter("-nwtmerge <path ...>",
+    CLI_Parameter("-nwtmerge <path> ...",
                   "Simulates the behavior of NWT's -merge option. Multiple files may be specified",
                   "Эмулировать поведение опции -merge из NWT. Можно указать несколько файлов");
-    CLI_Parameter("-af <path ...>",
+    CLI_Parameter("-af <path> ...",
                   "Simulates the behavior of NWT's -af option, merging flats into the main IWAD. Multiple files may be specified",
                   "Эмулировать поведение опции -af из NWT, объединяя текстуры полов с главным IWAD'ом. Можно указать несколько файлов");
-    CLI_Parameter("-as <path ...>",
+    CLI_Parameter("-as <path> ...",
                   "Simulates the behavior of NWT's -as option, merging sprites into the main IWAD. Multiple files may be specified",
                   "Эмулировать поведение опции -as из NWT, объединяя спрайты с главным IWAD'ом. Можно указать несколько файлов");
-    CLI_Parameter("-aa <path ...>",
+    CLI_Parameter("-aa <path> ...",
                   "Equivalent to \"-af <paths> -as <paths>\"",
                   "Эквивалент \"-af <paths> -as <paths>\"");
     if(RD_GameType == gt_Hexen)
@@ -437,16 +440,16 @@ printf("  %-31s  %s\n", (keys), english_language ? (description_eng) : (descript
     }
     if(RD_GameType == gt_Doom)
     {
-        CLI_Parameter("-map, -warp {<x> [<y>], E<x>M<y>}",
+        CLI_Parameter("-map, -warp {<x> [<y>] | E<x>M<y>}",
                       "Start a game immediately, warping to level E<x>M<y> (Doom 1) (default y = 1)",
                       "Начать игру сразу же, переместившись на уровень E<x>M<y> (Doom 1) (по умолчанию y = 1)");
-        CLI_Parameter("-map, -warp {<x>, MAP<x>}",
+        CLI_Parameter("-map, -warp {<x> | MAP<x>}",
                       "Start a game immediately, warping to level MAP<x> (Doom 2)",
                       "Начать игру сразу же, переместившись на уровень MAP<x> (Doom 2)");
     }
     else if(RD_GameType == gt_Heretic)
     {
-        CLI_Parameter("-map, -warp {<x> <y>, E<x>M<y>}",
+        CLI_Parameter("-map, -warp {<x> <y> | E<x>M<y>}",
                       "Start a game immediately, warping to level E<x>M<y>",
                       "Начать игру сразу же, переместившись на уровень E<x>M<y>");
     }
@@ -538,7 +541,8 @@ printf("  %-31s  %s\n", (keys), english_language ? (description_eng) : (descript
     }
     else if(RD_GameType == gt_Strife)
     {
-        CLI_Parameter("-gameversion <version>", "Emulate a specific version of Strife. Valid values are \"1.2\" and \"1.31\"",
+        CLI_Parameter("-gameversion <version>",
+                      "Emulate a specific version of Strife. Valid values are \"1.2\" and \"1.31\"",
                       "Эмулировать конкретную версию Strife. Поддерживаемые значения: \"1.2\" и \"1.31\"");
     }
 
@@ -722,7 +726,8 @@ printf("  %-31s  %s\n", (keys), english_language ? (description_eng) : (descript
     CLI_Parameter("-server",
                   "Start a multiplayer server, listening for connections",
                   "Запустить сервер сетевой игры ожидающий соединений");
-    CLI_Parameter("-privateserver", "When running a server, don't register with the chocolate-doom global master server. Implies -server",
+    CLI_Parameter("-privateserver",
+                  "When running a server, don't register with the chocolate-doom global master server. Implies -server",
                   "При запуске сервера не регистрировать его в глобальном списке серверов на мастер-сервере chocolate-doom. Подразумевает -server");
     if(RD_GameType == gt_Doom || RD_GameType == gt_Strife)
     {
