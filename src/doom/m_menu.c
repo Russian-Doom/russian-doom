@@ -1375,7 +1375,7 @@ static MenuItem_t Gameplay4Items[] = {
     {ITT_SWITCH,  NULL,                            NULL,                             M_RD_Change_Torque,            0}, // Трупы сползают с возвышений
     {ITT_SWITCH,  "Weapon bobbing while firing:",  "Ekexityyjt gjrfxbdfybt jhe;bz:", M_RD_Change_Bobbing,           0}, // Улучшенное покачивание оружия
     {ITT_SWITCH,  NULL,                            NULL,                             M_RD_Change_SSGBlast,          0}, // Двустволка разрывает врагов
-    {ITT_LRFUNC,  "Floating powerups amplitude:",  "gjrfxbdfybt cath-fhntafrnjd:",   M_RD_Change_FloatPowerups,     0}, // Покачивание сфер-артефактов
+    {ITT_LRFUNC,  NULL,                            NULL,                             M_RD_Change_FloatPowerups,     0}, // Покачивание сфер-артефактов
     {ITT_SWITCH,  NULL,                            NULL,                             M_RD_Change_TossDrop,          0}, // Подбрасывать выпавшие предметы
     {ITT_TITLE,   "Tactical",                      "Nfrnbrf",                        NULL,                          0}, // Тактика
     {ITT_SWITCH,  "Notify of revealed secrets:",   "Cjj,ofnm j yfqltyyjv nfqybrt:",  M_RD_Change_SecretNotify,      0}, // Сообщать о найденном тайнике
@@ -4540,10 +4540,20 @@ static void M_RD_Draw_Gameplay_4(void)
         }
 
         // Floating powerups
-        RD_M_DrawTextSmallENG(floating_powerups == 1 ? "LOW" : 
-                              floating_powerups == 2 ? "MIDDLE" : 
-                              floating_powerups == 3 ? "HIGH" : "OFF",
-                              244 + wide_delta, 85, floating_powerups ? CR_GREEN : CR_DARKRED);
+        RD_M_DrawTextSmallENG("Floating powerups amplitude:", 35 + wide_delta, 85,
+                              strict_mode || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+
+        if (strict_mode)
+        {
+            RD_M_DrawTextSmallENG("N/A", 244 + wide_delta, 85, CR_DARKRED);
+        }
+        else
+        {
+            RD_M_DrawTextSmallENG(floating_powerups == 1 ? "LOW" : 
+                                  floating_powerups == 2 ? "MIDDLE" : 
+                                  floating_powerups == 3 ? "HIGH" : "OFF",
+                                  244 + wide_delta, 85, floating_powerups ? CR_GREEN : CR_DARKRED);
+        }
 
         // Items are tossed when dropped
         RD_M_DrawTextSmallENG("Items are tossed when dropped:", 35 + wide_delta, 95,
@@ -4658,10 +4668,20 @@ static void M_RD_Draw_Gameplay_4(void)
         }
 
         // Амплитуда левитации артефактов
-        RD_M_DrawTextSmallRUS(floating_powerups == 1 ? "CKF,JT"  :          // Слабое
-                              floating_powerups == 2 ? "CHTLYTT" :          // Среднее
-                              floating_powerups == 3 ? "CBKMYJT" : "DSRK",  // Сильное | Выкл
-                              256 + wide_delta, 85, floating_powerups ? CR_GREEN : CR_DARKRED);
+        RD_M_DrawTextSmallRUS("gjrfxbdfybt cath-fhntafrnjd:", 35 + wide_delta, 85,
+                              strict_mode || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+
+        if (strict_mode)
+        {
+            RD_M_DrawTextSmallRUS("Y*L", 256 + wide_delta, 85, CR_DARKRED);
+        }
+        else
+        {
+            RD_M_DrawTextSmallRUS(floating_powerups == 1 ? "CKF,JT"  :          // Слабое
+                                  floating_powerups == 2 ? "CHTLYTT" :          // Среднее
+                                  floating_powerups == 3 ? "CBKMYJT" : "DSRK",  // Сильное | Выкл
+                                  256 + wide_delta, 85, floating_powerups ? CR_GREEN : CR_DARKRED);
+        }
 
         // Подбрасывать выпавшие предметы
         RD_M_DrawTextSmallRUS("Gjl,hfcsdfnm dsgfdibt ghtlvtns:", 35 + wide_delta, 95,
@@ -5151,6 +5171,11 @@ static void M_RD_Change_SSGBlast()
 
 static void M_RD_Change_FloatPowerups(Direction_t direction)
 {
+    if (strict_mode)
+    {
+        return; // Disallow toggling in strict vanilla mode.
+    }
+
     RD_Menu_SpinInt(&floating_powerups, 0, 3, direction);
 }
 
