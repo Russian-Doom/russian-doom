@@ -750,7 +750,7 @@ void P_MobjThinker (mobj_t *mobj)
     }
 
     // [JN] Activation of floating items
-    if (singleplayer && floating_powerups && !vanillaparm
+    if (singleplayer && floating_powerups && !strict_mode && !vanillaparm
     && (mobj->type == MT_MEGA       // Megasphere
     ||  mobj->type == MT_MISC12     // Supercharge
     ||  mobj->type == MT_INV        // Invulnerability
