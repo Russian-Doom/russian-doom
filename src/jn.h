@@ -301,10 +301,10 @@ extern int show_artifacts_timer;
 extern int improved_collision;
 extern int over_under;
 extern int torque;
-extern int weapon_bobbing;
 extern int ssg_blast_enemies;
 extern int floating_powerups;
 extern int toss_drop;
+extern int weapon_bobbing;
 
 // Gameplay: Crosshair
 extern int crosshair_draw;
@@ -316,10 +316,10 @@ extern int crosshair_opacity;
 // Gameplay: Gameplay
 extern int fix_map_errors;
 extern int flip_levels;
+extern int pistol_start;
+extern int breathing;
 extern int unlimited_lost_souls;
 extern int agressive_lost_souls;
-extern int breathing;
-extern int pistol_start;
 extern int fast_quickload;
 
 // Gameplay: Demos

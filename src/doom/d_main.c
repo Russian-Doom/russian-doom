@@ -246,10 +246,10 @@ int crosshair_type = 1;
 int improved_collision = 1;
 int over_under = 0;
 int torque = 1;
-int weapon_bobbing = 1;
 int ssg_blast_enemies = 1;
 int floating_powerups = 1;
 int toss_drop = 1;
+int weapon_bobbing = 1;
 
 // Gameplay: Tactical
 int secret_notification = 1;
@@ -258,12 +258,12 @@ int horizontal_autoaim = 3;
 
 // Gameplay: Gameplay
 int fix_map_errors = 1;
+int flip_levels = 0;
+int pistol_start = 0;
+int breathing = 0;
 int unlimited_lost_souls = 1;
 int agressive_lost_souls = 0;
-int breathing = 0;
-int pistol_start = 0;
 int fast_quickload = 1;
-int flip_levels = 0;
 
 // Gameplay: Demos
 int demotimer = 0;
@@ -979,10 +979,10 @@ void D_BindVariables(void)
     M_BindIntVariable("improved_collision",     &improved_collision);
     M_BindIntVariable("over_under",             &over_under);
     M_BindIntVariable("torque",                 &torque);
-    M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);
     M_BindIntVariable("ssg_blast_enemies",      &ssg_blast_enemies);
     M_BindIntVariable("floating_powerups",      &floating_powerups);
     M_BindIntVariable("toss_drop",              &toss_drop);
+    M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);
 
     // Gameplay: Crosshair
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);
@@ -994,10 +994,10 @@ void D_BindVariables(void)
     // Gameplay: Gameplay
     M_BindIntVariable("fix_map_errors",         &fix_map_errors);
     M_BindIntVariable("flip_levels",            &flip_levels);
+    M_BindIntVariable("pistol_start",           &pistol_start);
+    M_BindIntVariable("breathing",              &breathing);
     M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);
     M_BindIntVariable("agressive_lost_souls",   &agressive_lost_souls);
-    M_BindIntVariable("breathing",              &breathing);
-    M_BindIntVariable("pistol_start",           &pistol_start);
     M_BindIntVariable("fast_quickload",         &fast_quickload);
     M_BindIntVariable("demotimer",              &demotimer);
     M_BindIntVariable("demotimerdir",           &demotimerdir);

@@ -652,10 +652,10 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(improved_collision),
     CONFIG_VARIABLE_INT(over_under),
     CONFIG_VARIABLE_INT(torque),
-    CONFIG_VARIABLE_INT(weapon_bobbing),
     CONFIG_VARIABLE_INT(ssg_blast_enemies),
     CONFIG_VARIABLE_INT(floating_powerups),
     CONFIG_VARIABLE_INT(toss_drop),
+    CONFIG_VARIABLE_INT(weapon_bobbing),
 
     // Gameplay: Crosshair
     CONFIG_VARIABLE_INT(crosshair_draw),
@@ -667,10 +667,10 @@ static default_t defaults_list[] =
     // Gameplay: Gameplay
     CONFIG_VARIABLE_INT(fix_map_errors),
     CONFIG_VARIABLE_INT(flip_levels),
+    CONFIG_VARIABLE_INT(pistol_start),
+    CONFIG_VARIABLE_INT(breathing),
     CONFIG_VARIABLE_INT(unlimited_lost_souls),
     CONFIG_VARIABLE_INT(agressive_lost_souls),
-    CONFIG_VARIABLE_INT(breathing),
-    CONFIG_VARIABLE_INT(pistol_start),
     CONFIG_VARIABLE_INT(fast_quickload),
 
     // Gameplay: Demos
