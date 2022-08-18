@@ -629,6 +629,16 @@ static void AM_LevelInit (void)
     }
 
     scale_ftom = FixedDiv(FRACUNIT, scale_mtof);
+
+    // [JN] If running Deathmatch mode, mark all automap lines as mapped
+    // so they will appear initially. DM mode is not about map reveal.
+    if (deathmatch)
+    {
+        for (int i = 0 ; i < numlines ; i++)
+        {
+            lines[i].flags |= ML_MAPPED;
+        }
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1724,7 +1734,7 @@ static void AM_drawWalls (const int automap_color_set)
             //
             case 1:
             {
-                if (cheating || deathmatch || (lines[i].flags & ML_MAPPED))
+                if (cheating || (lines[i].flags & ML_MAPPED))
                 {
                     if (!lines[i].backsector)
                     {
@@ -1812,7 +1822,7 @@ static void AM_drawWalls (const int automap_color_set)
             //
             case 2:
             {
-                if (cheating || deathmatch || (lines[i].flags & ML_MAPPED))
+                if (cheating || (lines[i].flags & ML_MAPPED))
                 {
                     if (!lines[i].backsector)
                     {
@@ -1863,7 +1873,7 @@ static void AM_drawWalls (const int automap_color_set)
             //
             case 3:
             {
-                if (cheating || deathmatch || (lines[i].flags & ML_MAPPED))
+                if (cheating || (lines[i].flags & ML_MAPPED))
                 {
                     if (!lines[i].backsector)
                     {
@@ -1934,7 +1944,7 @@ static void AM_drawWalls (const int automap_color_set)
             //
             case 4:
             {
-                if (cheating || deathmatch || (lines[i].flags & ML_MAPPED))
+                if (cheating || (lines[i].flags & ML_MAPPED))
                 {
                     // villsa [STRIFE]
                     // [JN] Changed to Doom exit lines
@@ -1992,7 +2002,7 @@ static void AM_drawWalls (const int automap_color_set)
             //
             case 5:
             {
-                if (cheating || deathmatch || (lines[i].flags & ML_MAPPED))
+                if (cheating || (lines[i].flags & ML_MAPPED))
                 {
                     if ((lines[i].flags & ML_DONTDRAW) && !cheating)
                     {
@@ -2081,7 +2091,7 @@ static void AM_drawWalls (const int automap_color_set)
             //
             default:
             {
-                if (cheating || deathmatch || (lines[i].flags & ML_MAPPED))
+                if (cheating || (lines[i].flags & ML_MAPPED))
                 {
                     if ((lines[i].flags & ML_DONTDRAW) && !cheating)
                     {
