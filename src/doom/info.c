@@ -2150,9 +2150,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {
 	100,		// mass
 	0,		// damage
 	sfx_None,		// activesound
-    // [JN] MF_NOBLOCKMAP flag replaced with 0. This allows blood to be properly
-    // dropped on floor in moving down plafroms and lifts. Safe for internal demos.
-	0,		// flags
+	MF_NOBLOCKMAP,		// flags
 	S_NULL		// raisestate
     },
 
