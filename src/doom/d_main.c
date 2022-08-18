@@ -742,6 +742,10 @@ void D_Display (void)
             }
         }
 
+        if (automapactive)
+        {
+            ST_MapNameDrawer();
+        }
         if (netgame && chatmodeon)
         {
             CT_Drawer();

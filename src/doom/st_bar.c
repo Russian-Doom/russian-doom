@@ -1867,7 +1867,7 @@ void ST_DrawDemoTimer (const int time)
         x += 12;
     }
 
-    RD_M_DrawTextC(n, x + (wide_4_3 ? wide_delta : wide_delta*2), (viewwindowy >> hires) + 1);
+    RD_M_DrawTextC(n, x + (wide_4_3 ? wide_delta : wide_delta*2), 1);
 }
 
 // -----------------------------------------------------------------------------
@@ -2078,6 +2078,28 @@ void ST_WidgetsDrawer (void)
     if (demoplayback && demobar)
     {
         ST_DemoProgressBar();
+    }
+}
+
+void ST_MapNameDrawer (void)
+{
+    static char str[128];
+    const int map_y = gamemission == jaguar ? 151 : 159;
+    const int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
+    extern char *level_name;
+
+    sprintf(str, "%s", level_name);
+
+    if (english_language)
+    {
+        dp_translation = (hud_stats_color && !vanillaparm) ? cr[CR_YELLOW] : NULL;
+        RD_M_DrawTextA(str, wide_4_3, map_y);
+        dp_translation = NULL;
+    }
+    else
+    {
+        RD_M_DrawTextSmallRUS(str, wide_4_3, map_y,
+                              (hud_stats_color && !vanillaparm) ? CR_YELLOW : CR_NONE);
     }
 }
 
