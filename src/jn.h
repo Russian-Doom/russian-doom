@@ -58,6 +58,7 @@ extern int english_language;
 // -----------------------------------------------------------------------------
 
 extern boolean vanillaparm;
+extern int demowarp; // [JN] Demo warp from Crispy Doom.
 
 
 // -----------------------------------------------------------------------------

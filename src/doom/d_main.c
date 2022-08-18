@@ -325,6 +325,7 @@ int startepisode;
 int startmap;
 int startloadgame;
 
+int demowarp; // [JN] Demo warp from Crispy Doom.
 
 // If true, the main game loop has started.
 boolean main_loop_started = false;
@@ -3335,6 +3336,8 @@ void D_DoomMain (void)
         {
             gameaction = ga_newgame;
             autostart = true;
+            // [crispy] if used with -playdemo, fast-forward demo up to the desired map
+            demowarp = startmap;
         }
     }
 
@@ -3448,6 +3451,7 @@ void D_DoomMain (void)
         G_DeferedPlayDemo (demolumpname);
         D_DoomLoop ();      // never returns
     }
+    demowarp = 0; // [crispy] we don't play a demo, so don't skip maps
 
     p = M_CheckParmWithArgs("-timedemo", 1);
     if (p)
