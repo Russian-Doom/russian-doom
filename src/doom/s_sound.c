@@ -277,6 +277,8 @@ static void S_StopChannel (const int cnum)
 // Kills playing sounds at start of level, determines music if any, changes music.
 // -----------------------------------------------------------------------------
 
+static short prevmap = -1;
+
 void S_Start (void)
 {
     int cnum, mnum;
@@ -367,6 +369,18 @@ void S_Start (void)
                                   spmus_se[gamemap-1] :
                                   spmus[gamemap-1];
         }
+    }
+
+    // [crispy] do not change music if not changing map (preserves IDMUS choice)
+    {
+        const short curmap = (gameepisode << 8) + gamemap;
+    
+        if (prevmap == curmap || (nodrawers && singletics))
+        {
+            return;
+        }
+    
+        prevmap = curmap;
     }
 
     S_ChangeMusic(mnum, true);
@@ -577,7 +591,7 @@ void S_StartSound (void *origin_p, const int sfx_id)
 
     // [crispy] make non-fatal, consider zero volume
     // [JN] Do not play sound if sound system is disabled.
-    if (sfx_id == sfx_None || !snd_SfxVolume || !snd_sfxdevice)
+    if (sfx_id == sfx_None || !snd_SfxVolume || !snd_sfxdevice || (nodrawers && singletics))
     {
         return;
     }
@@ -712,7 +726,7 @@ void S_StartSoundNoBreak (const int sfx_id)
     sfxinfo_t *sfx = &S_sfx[sfx_id];
 
     // [JN] Do not play sound if not audible.
-    if (sfx_id < 1 || sfx_id > NUMSFX || !snd_SfxVolume || !snd_sfxdevice)
+    if (sfx_id < 1 || sfx_id > NUMSFX || !snd_SfxVolume || !snd_sfxdevice || (nodrawers && singletics))
     {
         return;
     }
@@ -893,6 +907,17 @@ void S_ChangeMusic (int musicnum, const int looping)
     musicinfo_t *music = NULL;
     char namebuf[9];
     void *handle;
+
+    if (gamestate != GS_LEVEL)
+    {
+        prevmap = -1;
+    }
+
+    // [crispy] play no music if this is not the right map
+    if (nodrawers && singletics)
+    {
+        return;
+    }
 
     // The Doom IWAD file has two versions of the intro music: d_intro
     // and d_introa.  The latter is used for OPL playback.
