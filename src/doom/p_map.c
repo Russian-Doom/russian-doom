@@ -1664,13 +1664,11 @@ static boolean PTR_NoWayTraverse (intercept_t *in)
 
 boolean PTR_NoWayAudible (line_t *line)
 {
-    const mobj_t *mo = viewplayer->mo;
-
     P_LineOpening(line);
 
     return (openrange <= 0 ||
-            openbottom > mo->z + 24*FRACUNIT ||
-            opentop < mo->z + mo->height);
+            openbottom > usething->z + 24*FRACUNIT ||
+            opentop < usething->z + usething->height);
 }
 
 // -----------------------------------------------------------------------------
