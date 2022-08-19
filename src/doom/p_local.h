@@ -590,12 +590,13 @@ void R_InterpolateTextureOffsets (void);
 #define MAXBUTTONS      16*2  // 4 players, 4 buttons each at once, max.
 #define BUTTONTIME      35    // 1 second, in ticks. 
 
-typedef struct
+// [crispy] add PACKEDATTR for reading SWITCHES lumps from memory
+typedef PACKED_STRUCT (
 {
     char  name1[9];
     char  name2[9];
     short episode;
-} switchlist_t;
+}) switchlist_t;
 
 typedef enum
 {
