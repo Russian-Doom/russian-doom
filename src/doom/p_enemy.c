@@ -2038,14 +2038,17 @@ void A_BossDeath (mobj_t *mo)
 
             if (mo->type == MT_BABY)
             {
-                // [JN] (from DOOM Retro) Активировать подъем 
-                // сектора 667 только один раз. Исправляет баг:
-                // https://doomwiki.org/wiki/Tag_667#Bugs
+                // [JN] [DOOM Retro] Raise sector tag 667 only once. 
+                // Fixes bug: https://doomwiki.org/wiki/Tag_667#Bugs
                 if (!flag667)
                 {
                     junk.tag = 667;
                     EV_DoFloor(&junk,raiseToTexture);
-                    flag667 = true;
+                    // [JN] Make safe for demos.
+                    if (singleplayer)
+                    {
+                        flag667 = true;
+                    }
                 }
 	        return;
             }
