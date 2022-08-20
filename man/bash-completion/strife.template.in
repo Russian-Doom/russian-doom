@@ -1,0 +1,57 @@
+# bash completion for @PACKAGE_PREFIX@ Strife          -*- shell-script -*-
+
+_@PACKAGE_PREFIX@_Strife()
+{
+    local cur prev words cword
+    _init_completion || return
+
+    # Save the previous switch on the command line in the prevsw variable
+    local i prevsw=""
+    for (( i=1; $cword > 1 && i <= $cword; i++ )); do
+        if [[ ${words[i]} == -* ]]; then
+            prevsw=${words[i]}
+        fi
+    done
+
+    # Allow adding more than one file with the same extension to the same switch
+    case $prevsw in
+        -file|-iwad|-aa|-af|-as|-nwtmerge)
+            _filedir wad
+            ;;
+        -deh)
+            _filedir '@(bex|deh)'
+            ;;
+    esac
+
+    case $prev in
+        -config)
+            _filedir ini
+            ;;
+        -response)
+            _filedir txt
+            ;;
+        -gus_patches|-savedir)
+            _filedir -d
+            ;;
+        -playdemo|-timedemo|-record)
+            _filedir lmp
+            ;;
+        -lang)
+            COMPREPLY=( $( compgen -W 'en ru' -- "$cur" ) )
+            ;;
+        -setmem)
+            COMPREPLY=( $( compgen -W 'dos622 dos71 dosbox' -- "$cur" ))
+            ;;
+        -gameversion)
+            COMPREPLY=( $( compgen -W '1.2 1.31' -- "$cur" ))
+            ;;
+    esac
+
+    if [[ $cur == -* ]]; then
+        COMPREPLY=( $( compgen -W '@content' -- "$cur" ) )
+    fi
+} &&
+
+complete -F _@PACKAGE_PREFIX@_Strife @PROGRAM_PREFIX@strife
+
+# ex: ts=4 sw=4 et filetype=sh

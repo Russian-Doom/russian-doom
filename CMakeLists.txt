@@ -21,6 +21,7 @@ Option(COMPILE_SETUP "Compile Setup module" OFF)
 
 include(CMakeDependentOption)
 find_package(Git)
+find_package(Python3 COMPONENTS Interpreter)
 
 cmake_dependent_option(BUILD_PORTABLE "Build portable version with Windows like behavior (see COMPILING.MD)" OFF "NOT WIN32" OFF)
 
@@ -202,7 +203,7 @@ else()
     )
 endif()
 
-foreach(SUBDIR win_libs textscreen opl pcsound src)
+foreach(SUBDIR win_libs man textscreen opl pcsound src)
     add_subdirectory("${SUBDIR}")
 endforeach()
 
