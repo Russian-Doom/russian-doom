@@ -2044,8 +2044,8 @@ void A_BossDeath (mobj_t *mo)
                 {
                     junk.tag = 667;
                     EV_DoFloor(&junk,raiseToTexture);
-                    // [JN] Make safe for demos.
-                    if (singleplayer)
+                    // [JN] Keep demo compatibility.
+                    if (singleplayer && canmodify)
                     {
                         flag667 = true;
                     }
