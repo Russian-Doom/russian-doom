@@ -317,6 +317,10 @@ char* packageResourcesDir = NULL;
 
 void M_PrintHelp(void)
 {
+/**
+ * Each argument of the CLI_Parameter macros MUST be on a separate line.
+ * Double quotes (") MUST NOT be used inside strings.
+ */
 #define CLI_Parameter(keys, description_eng, description_rus) \
 printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (description_rus))
 
@@ -344,8 +348,8 @@ printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (descript
                   "Show version information",
                   "Показать информацию о версии");
     CLI_Parameter("-lang <lang>",
-                  "Force specified language before config file is loaded and ignoring the value from it. Language can be changed later in the Options menu. Valid values are: \"en\", \"ru\"",
-                  "Принудительно установить заданный язык до загрузки конфигурационного файла и игнорируя значение из него. Язык позже можно будет изменить в меню Настроек. Поддерживаемые значения: \"en\", \"ru\"");
+                  "Force specified language before config file is loaded and ignoring the value from it. Language can be changed later in the Options menu. Valid values are: 'en', 'ru'",
+                  "Принудительно установить заданный язык до загрузки конфигурационного файла и игнорируя значение из него. Язык позже можно будет изменить в меню Настроек. Поддерживаемые значения: 'en', 'ru'");
     CLI_Parameter("-iwad <path>",
                   "Specify an IWAD file. <path> can be absolute or relative to one of the WAD search locations",
                   "Задать IWAD файл. <path> может быть абсолютным или относительным одному из мест поиска WAD'ов");
@@ -377,8 +381,8 @@ printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (descript
                   "Simulates the behavior of NWT's -as option, merging sprites into the main IWAD. Multiple files may be specified",
                   "Эмулировать поведение опции -as из NWT, объединяя спрайты с главным IWAD'ом. Можно указать несколько файлов");
     CLI_Parameter("-aa <path> ...",
-                  "Equivalent to \"-af <paths> -as <paths>\"",
-                  "Эквивалент \"-af <paths> -as <paths>\"");
+                  "Equivalent to '-af <paths> -as <paths>'",
+                  "Эквивалент '-af <paths> -as <paths>'");
     if(RD_GameType == gt_Hexen)
     {
         CLI_Parameter("-scripts <path>",
@@ -456,8 +460,8 @@ printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (descript
     else if(RD_GameType == gt_Hexen)
     {
         CLI_Parameter("-map, -warp [<x>]",
-                      "Start a game immediately, warping to level with hxvisit <x> (default \"1\")",
-                      "Начать игру сразу же, переместившись на уровень с hxvisit <x> (по умолчанию \"1\")");
+                      "Start a game immediately, warping to level with hxvisit <x> (default '1')",
+                      "Начать игру сразу же, переместившись на уровень с hxvisit <x> (по умолчанию '1')");
         CLI_Parameter("-map, -warp MAP<x>",
                       "Start a game immediately, warping to level with map number <x>",
                       "Начать игру сразу же, переместившись на уровень с номером карты <x>");
@@ -471,14 +475,14 @@ printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (descript
     if(RD_GameType == gt_Doom)
     {
         CLI_Parameter("-episode <n>",
-                      "Start playing on episode <n> (1-3, 1-4 for \"The Ultimate Doom\", episode 5 available if non-compat version of SIGIL.WAD is loaded)",
-                      "Начать игру с эпизода <n> (1-3, 1-4 для \"The Ultimate Doom\", эпизод 5 доступен если загружена не compat версия SIGIL.WAD");
+                      "Start playing on episode <n> (1-3, 1-4 for 'The Ultimate Doom', episode 5 available if non-compat version of SIGIL.WAD is loaded)",
+                      "Начать игру с эпизода <n> (1-3, 1-4 для 'The Ultimate Doom', эпизод 5 доступен если загружена не compat версия SIGIL.WAD");
     }
     else if(RD_GameType == gt_Heretic)
     {
         CLI_Parameter("-episode <n>",
-                      "Start playing on episode <n> (1-3, 1-5 for \"Shadow of the Serpent Riders\")",
-                      "Начать игру с эпизода <n> (1-3, 1-5 для \"Shadow of the Serpent Riders\")");
+                      "Start playing on episode <n> (1-3, 1-5 for 'Shadow of the Serpent Riders')",
+                      "Начать игру с эпизода <n> (1-3, 1-5 для 'Shadow of the Serpent Riders')");
     }
     CLI_Parameter("-nomonsters",
                   "Disable monsters",
@@ -516,11 +520,11 @@ printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (descript
                       "Emulate Atari Jaguar Doom version",
                       "Эмулировать версию Doom для Atari Jaguar");
         CLI_Parameter("-pack <pack>",
-                      "Explicitly specify a Doom II \"mission pack\" to run as, instead of detecting it based on the file name. Valid values are: \"doom2\", \"tnt\" and \"plutonia\"",
-                      "Явно задать \"mission pack\" для Doom II, вместо того чтобы определять его по имени файла. Поддерживаемые значения: \"doom2\", \"tnt\" и \"plutonia\"");
+                      "Explicitly specify a Doom II 'mission pack' to run as, instead of detecting it based on the file name. Valid values are: 'doom2', 'tnt' and 'plutonia'",
+                      "Явно задать 'mission pack' для Doom II, вместо того чтобы определять его по имени файла. Поддерживаемые значения: 'doom2', 'tnt' и 'plutonia'");
         CLI_Parameter("-gameversion <version>",
-                      "Emulate a specific version of Doom. Valid values are \"1.666\", \"1.7\", \"1.8\", \"1.9\", \"ultimate\", \"doomse\", \"final\", \"final2\"",
-                      "Эмулировать конкретную версию Doom. Поддерживаемые значения: \"1.666\", \"1.7\", \"1.8\", \"1.9\", \"ultimate\", \"doomse\", \"final\", \"final2\"");
+                      "Emulate a specific version of Doom. Valid values are '1.666', '1.7', '1.8', '1.9', 'ultimate', 'doomse', 'final', 'final2'",
+                      "Эмулировать конкретную версию Doom. Поддерживаемые значения: '1.666', '1.7', '1.8', '1.9', 'ultimate', 'doomse', 'final', 'final2'");
     }
     else if(RD_GameType == gt_Hexen)
     {
@@ -536,24 +540,24 @@ printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (descript
     else if(RD_GameType == gt_Heretic)
     {
         CLI_Parameter("-hhever <version>",
-                      "Select the Heretic version number that was used to generate the HHE patch to be loaded. Patches for each of the Vanilla Heretic versions (\"1.0\", \"1.2\", \"1.3\") can be loaded, but the correct version number must be specified",
-                      "Задать номер версии Heretic которая использовалась для генерации загружаемых HHE патчей. Патчи для каждой оригинальной версии Heretic (\"1.0\", \"1.2\", \"1.3\") могут быть загружены, но корректный номер версии должен быть указан");
+                      "Select the Heretic version number that was used to generate the HHE patch to be loaded. Patches for each of the Vanilla Heretic versions ('1.0', '1.2', '1.3') can be loaded, but the correct version number must be specified",
+                      "Задать номер версии Heretic которая использовалась для генерации загружаемых HHE патчей. Патчи для каждой оригинальной версии Heretic ('1.0', '1.2', '1.3') могут быть загружены, но корректный номер версии должен быть указан");
     }
     else if(RD_GameType == gt_Strife)
     {
         CLI_Parameter("-gameversion <version>",
-                      "Emulate a specific version of Strife. Valid values are \"1.2\" and \"1.31\"",
-                      "Эмулировать конкретную версию Strife. Поддерживаемые значения: \"1.2\" и \"1.31\"");
+                      "Emulate a specific version of Strife. Valid values are '1.2' and '1.31'",
+                      "Эмулировать конкретную версию Strife. Поддерживаемые значения: '1.2' и '1.31'");
     }
 
 
 // System
     CLI_Parameter("-mb <size>",
-                  "Specify the heap <size>, in MiB (default \"16\")",
-                  "Задать размера кучи в MiB (по умолчанию \"16\")");
+                  "Specify the heap <size>, in MiB (default '16')",
+                  "Задать размера кучи в MiB (по умолчанию '16')");
     CLI_Parameter("-setmem <version>",
-                  "Specify DOS version to emulate for NULL pointer dereference emulation. Supported versions are: \"dos622\", \"dos71\", \"dosbox\". The default is to emulate DOS 7.1 (Windows 98)",
-                  "Задать эмулируемую версию DOS для случая эмуляции разыменования нулевого указателя. Поддерживаемые значения: \"dos622\", \"dos71\", \"dosbox\". По умолчанию эмулируется DOS 7.1 (Windows 98)");
+                  "Specify DOS version to emulate for NULL pointer dereference emulation. Supported versions are: 'dos622', 'dos71', 'dosbox'. The default is to emulate DOS 7.1 (Windows 98)",
+                  "Задать эмулируемую версию DOS для случая эмуляции разыменования нулевого указателя. Поддерживаемые значения: 'dos622', 'dos71', 'dosbox'. По умолчанию эмулируется DOS 7.1 (Windows 98)");
     if(RD_GameType == gt_Doom || RD_GameType == gt_Strife)
     {
         CLI_Parameter("-donut <x> <y>",
@@ -679,8 +683,8 @@ printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (descript
     if(RD_GameType == gt_Heretic || RD_GameType == gt_Hexen)
     {
         CLI_Parameter("-recordfrom <slot> <demo>",
-                      "Load the game in savegame <slot> and start recording demo to file <demo>.lmp stored into working directory. Equivalent to \"-loadgame <slot> -record <demo>\"",
-                      "Загрузить сохранённую игру из слота <slot> и начать запись демо в файл <demo>.lmp расположенный в рабочей директории. Эквивалент \"-loadgame <slot> -record <demo>\"");
+                      "Load the game in savegame <slot> and start recording demo to file <demo>.lmp stored into working directory. Equivalent to '-loadgame <slot> -record <demo>'",
+                      "Загрузить сохранённую игру из слота <slot> и начать запись демо в файл <demo>.lmp расположенный в рабочей директории. Эквивалент '-loadgame <slot> -record <demo>'");
     }
     CLI_Parameter("-maxdemo <size>",
                   "Specify the demo buffer size (KiB)",
@@ -697,8 +701,8 @@ printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (descript
     if(RD_GameType == gt_Doom)
     {
         CLI_Parameter("-statdump <file>",
-                      "Dump statistics information of the levels that were played to the specified <file>. The output from this option matches the output from statdump.exe. If \"-\" provided as <file> argument, statistics will be printed to console",
-                      "Вывести статистическую информацию об уровнях, которые были воспроизведены, в указанный <file>. Выходные данные этого параметра совпадают с выходными данными из statdump.exe. Если в качестве аргумента <file> передан \"-\", статистика будет выведена в консоль");
+                      "Dump statistics information of the levels that were played to the specified <file>. The output from this option matches the output from statdump.exe. If '-' provided as <file> argument, statistics will be printed to console",
+                      "Вывести статистическую информацию об уровнях, которые были воспроизведены, в указанный <file>. Выходные данные этого параметра совпадают с выходными данными из statdump.exe. Если в качестве аргумента <file> передан '-', статистика будет выведена в консоль");
     }
     CLI_Parameter("-longtics",
                   "Record or playback a demo with high resolution turning",
@@ -736,8 +740,8 @@ printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (descript
                       "Режим выделенного сервера, маршрутизирует пакеты, но не участвует в самой игре");
     }
     CLI_Parameter("-port <port>",
-                  "Use the specified UDP <port> for communications (default \"2342\")",
-                  "Использовать заданный UDP порт для связи (по умолчанию \"2342\")");
+                  "Use the specified UDP <port> for communications (default '2342')",
+                  "Использовать заданный UDP порт для связи (по умолчанию '2342')");
     CLI_Parameter("-servername <name>",
                   "When starting a network server, specify a <name> for the server",
                   "В режиме сервера установить его имя");
