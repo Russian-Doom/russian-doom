@@ -1223,9 +1223,7 @@ void P_SpawnMapThing (mapthing_t *mthing)
     }
 
     // don't spawn any monsters if -nomonsters
-    // [JN] Keep Commander Keen so player can exit MAP32.
-    if (nomonsters && i != MT_KEEN 
-    && (i == MT_SKULL || (mobjinfo[i].flags & MF_COUNTKILL)))
+    if (nomonsters && (i == MT_SKULL || (mobjinfo[i].flags & MF_COUNTKILL)))
     {
         return;
     }
