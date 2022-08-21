@@ -1313,7 +1313,7 @@ void R_PrecacheLevel (void)
 
     for (i = numflats ; --i >= 0 ; )
         if (hitlist[i])
-            W_CacheLumpNum(firstflat + i, PU_STATIC);
+            W_CacheLumpNum(firstflat + i, PU_CACHE);
 
     // Precache textures.
 
@@ -1340,7 +1340,7 @@ void R_PrecacheLevel (void)
             int j = texture->patchcount;
 
             while (--j >= 0)
-            W_CacheLumpNum(texture->patches[j].patch, PU_STATIC);
+            W_CacheLumpNum(texture->patches[j].patch, PU_CACHE);
         }
 
     // Precache sprites.
