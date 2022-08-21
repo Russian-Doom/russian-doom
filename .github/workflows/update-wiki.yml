@@ -1,0 +1,37 @@
+name: Update Wiki
+
+on:
+  push:
+    branches: ["master"]
+    paths: ["src/m_argv.c"]
+
+jobs:
+  Update-Wiki:
+    name: Update Wiki
+    if: ${{ github.repository == 'JNechaevsky/inter-doom' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          path: code
+      - name: Checkout wiki
+        uses: actions/checkout@v2
+        with:
+          repository: ${{github.repository}}.wiki
+          path: wiki
+      - name: Generate files
+        run: |
+          python3 "./code/man/docgen.py" -d "_WIN32,_APPLE_" -g "doom;heretic;hexen" -M "./code/.github/wiki_templates/CLI_en.md.template" -o "./wiki/CLI.md" "./code/src/m_argv.c"
+          python3 "./code/man/docgen.py" -d "_WIN32,_APPLE_" -g "doom;heretic;hexen" -l ru -M "./code/.github/wiki_templates/CLI_ru.md.template" -o "./wiki/CLI-(Rus).md" "./code/src/m_argv.c"
+      - name: Push to wiki
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: |
+          cd wiki
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git diff-index --quiet HEAD || git commit -m "Update CLI description" && git push

@@ -1,0 +1,14 @@
+## Command line interface
+
+### Usage
+
+```shell
+inter-doom [options]
+inter-heretic [options]
+inter-hexen [options]
+```
+
+### Options
+| Option | Description | Available in |
+| ------ | ----------- |--------------|
+@content
