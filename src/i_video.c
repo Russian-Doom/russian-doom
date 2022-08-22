@@ -691,8 +691,7 @@ static void LimitTextureSize(int *w_upscale, int *h_upscale)
     // Query renderer and limit to maximum texture dimensions of hardware:
     if (SDL_GetRendererInfo(renderer, &rinfo) != 0)
     {
-        I_Error("CreateUpscaledTexture: SDL_GetRendererInfo() call failed: %s",
-                SDL_GetError());
+        return;
     }
 
     while (*w_upscale * screenwidth > rinfo.max_texture_width)
@@ -759,13 +758,7 @@ static void CreateUpscaledTexture(const boolean force)
     // Get the size of the renderer output. The units this gives us will be
     // real world pixels, which are not necessarily equivalent to the screen's
     // window size (because of highdpi).
-    if (SDL_GetRendererOutputSize(renderer, &w, &h) != 0)
-    {
-        I_Error(english_language ?
-                "Failed to get renderer output size: %s" :
-                "Невозможно выполнить рендеринг размера: %s",
-                SDL_GetError());
-    }
+    SDL_GetRendererOutputSize(renderer, &w, &h);
 
     // When the screen or window dimensions do not match the aspect ratio
     // of the texture, the rendered area is scaled down to fit. Calculate
@@ -1481,14 +1474,6 @@ static void SetVideoMode(void)
                                         window_border == 0 ? 0 : window_position_y,
                                         w, h, window_flags);
 
-        if (screen == NULL)
-        {
-            I_Error(english_language ?
-                    "Error creating window for video startup: %s" :
-                    "Ошибка создания окна для видео-загрузки: %s",
-            SDL_GetError());
-        }
-
 #ifdef _WIN32
         DisableWinRound(screen);
 #endif
@@ -1561,14 +1546,6 @@ static void SetVideoMode(void)
         {
             force_software_renderer = 1;
         }
-    }
-
-    if (renderer == NULL)
-    {
-        I_Error(english_language ?
-                "Error creating renderer for screen window: %s" :
-                "Ошибка создания рендеринга для окна: %s",
-                SDL_GetError());
     }
 
     // Important: Set the "logical size" of the rendering context. At the same

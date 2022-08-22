@@ -50,6 +50,7 @@
 #include "g_game.h"
 #include "ct_chat.h"
 #include "jn.h"
+#include "statdump.h"
 
 #define MAXPLMOVE       (forwardmove[1]) 
 #define TURBOTHRESHOLD  0x32
@@ -1709,6 +1710,12 @@ void G_DoCompleted (void)
 
     gamestate = GS_INTERMISSION; 
     automapactive = false; 
+
+    // [crispy] no statdump output for ExM8
+    if (gamemode == commercial || gamemap != 8)
+    {
+    StatCopy(&wminfo);
+    }
 
     WI_Start (&wminfo); 
 } 

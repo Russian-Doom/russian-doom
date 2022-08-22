@@ -77,6 +77,7 @@
 #include "am_map.h"         // [JN] AM_initColors();
 #include "ct_chat.h"
 #include "jn.h"
+#include "statdump.h"
 
 #include "git_info.h"
 
@@ -3427,6 +3428,14 @@ void D_DoomMain (void)
     AM_initColors();
     AM_initPics();
     AM_initMarksColor(automap_mark_color);
+
+    if (M_CheckParmWithArgs("-statdump", 1))
+    {
+        I_AtExit(StatDump, true);
+        DEH_printf(english_language ?
+                   "External statistics registered.\n" :
+                   "Регистрация внешней статистики.\n");
+    }
 
     //!
     // @arg <x>

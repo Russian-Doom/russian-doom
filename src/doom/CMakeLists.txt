@@ -62,6 +62,7 @@ if(COMPILE_DOOM)
                 r_things.c
                 s_sound.c       s_sound.h
                 sounds.c        sounds.h
+                statdump.c      statdump.h
                 st_bar.c        st_bar.h
                 wi_stuff.c      wi_stuff.h
     )
