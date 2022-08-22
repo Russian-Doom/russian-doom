@@ -71,14 +71,15 @@ jobs:
         run: |
           sudo apt-get update --fix-missing
           sudo apt-get full-upgrade --fix-missing
-          sudo apt-get install --fix-missing ${{ matrix.compiler.name }} ninja-build cmake libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libpng-dev libsamplerate-dev
+          sudo apt-get install --fix-missing ${{ matrix.compiler.name }} gdb ninja-build cmake libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libpng-dev libsamplerate-dev
 
       - uses: actions/checkout@v2
 
       - name: Configure
         id: configure
+        # -D BUILD_PORTABLE=ON for tests on linux without install
         run: |
-          cmake -G "Ninja" -D BUILD_VERSION_OVERWRITE="5.x.x" -D FORCE_GIT_HASH_SUFFIX=ON -D CMAKE_BUILD_TYPE=RelWithDebInfo -S . -B build
+          cmake -G "Ninja" -D BUILD_VERSION_OVERWRITE="5.x.x" -D FORCE_GIT_HASH_SUFFIX=ON -D CMAKE_BUILD_TYPE=RelWithDebInfo -D BUILD_PORTABLE=ON -S . -B build
           sha_short=$(echo ${{ github.sha }} | cut -c1-7)
           echo "::set-output name=sha_short::$sha_short"
 
@@ -87,8 +88,16 @@ jobs:
           export MAKEFLAGS=--keep-going
           cmake --build build --parallel 2
 
-      - name: Test
-        if: ${{ matrix.os.name == 'Windows' }} # Linux runners have no video device
+      - name: Test Windows
+        if: ${{ matrix.os.name == 'Windows' }}
+        run: |
+          cd build
+          ctest --output-on-failure
+
+      - name: Test Linux
+        if: ${{ matrix.os.name == 'Linux' }}
+        env:
+          SDL_VIDEODRIVER: dummy
         run: |
           cd build
           ctest --output-on-failure
