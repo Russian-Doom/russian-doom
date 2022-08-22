@@ -1064,6 +1064,7 @@ static MenuItem_t Bindings4Items[] = {
     {ITT_EFUNC,   "Save a screenshot",     "crhbyijn",              BK_StartBindingKey, bk_screenshot},       // Скриншот
     {ITT_EFUNC,   "Pause",                 "gfepf",                 BK_StartBindingKey, bk_pause},            // Пауза
     {ITT_EFUNC,   "Finish demo recording", "pfrjyxbnm pfgbcm ltvj", BK_StartBindingKey, bk_finish_demo},      // Закончить запись демо
+    {ITT_EFUNC,   "Demo fast-forward",     ",scnhfz gthtvjnrf ltvj", BK_StartBindingKey,bk_demo_speed},       // Быстрая перемотка демо
     {ITT_TITLE,   "Toggleables",           "gthtrk.xtybt",          NULL,               0},
     {ITT_EFUNC,   "Mouse look",            "j,pjh vsim.",           BK_StartBindingKey, bk_toggle_mlook},     // Обзор мышью
     {ITT_EFUNC,   "Always run",            "gjcnjzyysq ,tu",        BK_StartBindingKey, bk_toggle_autorun},   // Постоянный бег
@@ -1071,7 +1072,6 @@ static MenuItem_t Bindings4Items[] = {
     {ITT_EFUNC,   "Messages",              "cjj,otybz",             BK_StartBindingKey, bk_messages},         // Сообщения
     {ITT_EFUNC,   "Detail level",          "ltnfkbpfwbz uhfabrb",   BK_StartBindingKey, bk_detail},           // Детализация графики
     {ITT_EFUNC,   "Level flipping",        "pthrfkbhjdfybt ehjdyz", BK_StartBindingKey, bk_toggle_fliplvls},  // Зеркалирование уровня
-    {ITT_EMPTY,   NULL,                    NULL,                    NULL,               0},
     {ITT_SETMENU, NULL,                    NULL,                    &Bindings5Menu,     0},                   // Далее >
     {ITT_SETMENU, NULL,                    NULL,                    &Bindings3Menu,     0},                   // < Назад
     {ITT_EMPTY,   NULL,                    NULL,                    NULL,               0}

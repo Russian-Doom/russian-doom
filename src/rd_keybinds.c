@@ -120,6 +120,7 @@ static const char* bkToName[] = {
     "Screenshot",
     "Pause",
     "Finish_demo",
+    "Demo_speed",
 
     // Toggles
     "Toggle_crosshair",
