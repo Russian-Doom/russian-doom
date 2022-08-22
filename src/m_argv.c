@@ -690,6 +690,12 @@ printf("  %-31s  %s\n", (keys), english_language ? (description_eng) : (descript
                       "Record or playback a demo without automatically quitting after either level exit or player respawn",
                       "Записать или проиграть демо без автоматического выхода после завершения уровня или возрождения игрока");
     }
+    if(RD_GameType == gt_Doom)
+    {
+        CLI_Parameter("-statdump <file>",
+                      "Dump statistics information of the levels that were played to the specified <file>. The output from this option matches the output from statdump.exe. If \"-\" provided as <file> argument, statistics will be printed to console",
+                      "Вывести статистическую информацию об уровнях, которые были воспроизведены, в указанный <file>. Выходные данные этого параметра совпадают с выходными данными из statdump.exe. Если в качестве аргумента <file> передан \"-\", статистика будет выведена в консоль");
+    }
     CLI_Parameter("-longtics",
                   "Record or playback a demo with high resolution turning",
                   "Записать или проиграть демо с высоким разрешением поворота");
