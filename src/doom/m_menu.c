@@ -1398,7 +1398,7 @@ static Menu_t Gameplay4Menu = {
 
 static MenuItem_t Gameplay5Items[] = {
     {ITT_TITLE,   "Gameplay",                            "Utqvgktq",                        NULL,                        0}, // Геймплей
-    {ITT_SWITCH,  "Fix errors of vanilla maps:",         "ecnhfyznm jib,rb jhbu> ehjdytq:", M_RD_Change_FixMapErrors,    0}, // Устранять ошибки ориг. уровней
+    {ITT_SWITCH,  "Fix textures on vanilla maps:",       "ntrcnehs jhbu> ehjdytq:",         M_RD_Change_FixMapErrors,    0}, // Текстуры ориг. уровней
     {ITT_SWITCH,  "Flip game levels:",                   "pthrfkmyjt jnhf;tybt ehjdytq:",   M_RD_Change_FlipLevels,      0}, // Зеркальное отражение уровней
     {ITT_SWITCH,  NULL,                                  NULL, /*[JN] Joint EN/RU string*/  M_RD_Change_PistolStart,     0}, // Режим игры "Pistol start"
     {ITT_SWITCH,  "Imitate player's breathing:",         "bvbnfwbz ls[fybz buhjrf:",        M_RD_Change_Breathing,       0}, // Имитация дыхания игрока
@@ -4765,8 +4765,8 @@ static void M_RD_Draw_Gameplay_5(void)
 
     if (english_language)
     {
-        // Fix errors of vanilla maps
-        RD_M_DrawTextSmallENG(fix_map_errors ? RD_ON : RD_OFF, 226 + wide_delta, 35,
+        // Fix textures on vanilla maps
+        RD_M_DrawTextSmallENG(fix_map_errors ? RD_ON : RD_OFF, 243 + wide_delta, 35,
                               fix_map_errors ? CR_GREEN : CR_DARKRED);
 
         // Flip game levels
@@ -4827,8 +4827,8 @@ static void M_RD_Draw_Gameplay_5(void)
     }
     else
     {
-        // Устранять ошибки ориг. уровней
-        RD_M_DrawTextSmallRUS(fix_map_errors ? RD_ON_RUS : RD_OFF_RUS, 269 + wide_delta, 35,
+        // Текстуры ориг. уровней
+        RD_M_DrawTextSmallRUS(fix_map_errors ? "bcghfdktyyst" : ",tp bpvtytybq", 209 + wide_delta, 35,
                               fix_map_errors ? CR_GREEN : CR_DARKRED);
 
         // Устранять ошибки ориг. уровней
