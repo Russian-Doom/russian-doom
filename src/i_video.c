@@ -689,7 +689,10 @@ static void LimitTextureSize(int *w_upscale, int *h_upscale)
     orig_h = *h_upscale;
 
     // Query renderer and limit to maximum texture dimensions of hardware:
-    SDL_GetRendererInfo(renderer, &rinfo);
+    if (SDL_GetRendererInfo(renderer, &rinfo) != 0)
+    {
+        return;
+    }
 
     while (*w_upscale * screenwidth > rinfo.max_texture_width)
     {
