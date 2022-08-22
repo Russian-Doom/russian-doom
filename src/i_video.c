@@ -1417,10 +1417,6 @@ static void SetVideoMode(void)
     // retina displays, especially when using small window sizes.
     window_flags |= SDL_WINDOW_ALLOW_HIGHDPI;
 
-    SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER,
-                            opengles_renderer ? "opengles2" : "direct3d",
-                            SDL_HINT_OVERRIDE);
-
 #ifdef _WIN32
     // [JN] Windows 11 idiocy. Indicate that window using OpenGL mode (while it's
     // a Direct3D in fact), so SDL texture will not be freezed upon vsync toggling.
