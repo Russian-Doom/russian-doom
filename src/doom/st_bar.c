@@ -1867,7 +1867,7 @@ void ST_DrawDemoTimer (const int time)
         x += 12;
     }
 
-    RD_M_DrawTextC(n, x + (wide_4_3 ? wide_delta : wide_delta*2), 1);
+    RD_M_DrawTextC(n, x + (wide_4_3 ? wide_delta : wide_delta*2), 9);
 }
 
 // -----------------------------------------------------------------------------
