@@ -1859,11 +1859,11 @@ void ST_DrawDemoTimer (const int time)
 
     if (hours)
     {
-        sprintf(n, "%02i:%02i:%05.02f", hours, mins, secs);
+        M_snprintf(n, sizeof(n), "%02i:%02i:%05.02f", hours, mins, secs);
     }
     else
     {
-        sprintf(n, "%02i:%05.02f", mins, secs);
+        M_snprintf(n, sizeof(n), "%02i:%05.02f", mins, secs);
         x += 12;
     }
 
