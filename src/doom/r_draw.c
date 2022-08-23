@@ -91,18 +91,6 @@ const lighttable_t *ds_colormap[2];
 const byte         *ds_source;  // start of a 64*64 tile image 
 const byte         *ds_brightmap;
 
-// [JN] Pattern to fill status bar background.
-const char *backscreen_flat;
-// [JN] Bezel sides and corners.
-const patch_t *brdr_b;
-static const patch_t *brdr_t;
-static const patch_t *brdr_l;
-static const patch_t *brdr_r;
-static const patch_t *brdr_tl;
-static const patch_t *brdr_tr;
-static const patch_t *brdr_bl;
-static const patch_t *brdr_br;
-
 
 // -----------------------------------------------------------------------------
 // R_DrawColumn
@@ -1605,43 +1593,6 @@ void R_InitBuffer (const int width, const int height)
 }
 
 // -----------------------------------------------------------------------------
-// R_InitBackScreenGfx
-// [JN] Define back screen graphics.
-// -----------------------------------------------------------------------------
-
-void R_InitBackScreenGfx (void)
-{
-    // Background flat.
-    if (gamemission == jaguar)
-    {
-         // Jaguar Doom background.
-        backscreen_flat = W_CacheLumpName(DEH_String("FLOOR7_1"), PU_STATIC);
-    }
-    else if (gamemode == commercial)
-    {
-        // DOOM II background.
-        backscreen_flat = W_CacheLumpName(DEH_String("GRNROCK"), PU_STATIC);
-    }
-    else
-    {
-        // DOOM background.
-        backscreen_flat = W_CacheLumpName(DEH_String("FLOOR7_2"), PU_STATIC);
-    }
-
-    // Inner bezel side edges.
-    brdr_t = W_CacheLumpName(DEH_String("brdr_t"), PU_STATIC);
-    brdr_b = W_CacheLumpName(DEH_String("brdr_b"), PU_STATIC);
-    brdr_l = W_CacheLumpName(DEH_String("brdr_l"), PU_STATIC);
-    brdr_r = W_CacheLumpName(DEH_String("brdr_r"), PU_STATIC);
-
-    // Inner bezel corners.
-    brdr_tl = W_CacheLumpName(DEH_String("brdr_tl"), PU_STATIC);
-    brdr_tr = W_CacheLumpName(DEH_String("brdr_tr"), PU_STATIC);
-    brdr_bl = W_CacheLumpName(DEH_String("brdr_bl"), PU_STATIC);
-    brdr_br = W_CacheLumpName(DEH_String("brdr_br"), PU_STATIC);
-}
-
-// -----------------------------------------------------------------------------
 // R_FillBackScreen
 // Fills the back screen with a pattern for variable screen sizes.
 // Also draws a beveled edge.
@@ -1651,6 +1602,24 @@ void R_FillBackScreen (void)
 { 
     int      x, y; 
     byte    *dest; 
+    char    *backscreen_flat;
+    patch_t *patch;
+
+    if (gamemission == jaguar)
+    {
+         // Jaguar Doom background.
+        backscreen_flat = W_CacheLumpName(DEH_String("FLOOR7_1"), PU_CACHE);
+    }
+    else if (gamemode == commercial)
+    {
+        // DOOM II background.
+        backscreen_flat = W_CacheLumpName(DEH_String("GRNROCK"), PU_CACHE);
+    }
+    else
+    {
+        // DOOM background.
+        backscreen_flat = W_CacheLumpName(DEH_String("FLOOR7_2"), PU_CACHE);
+    }
 
     // [JN] Function not used in widescreen rendering.
     if (aspect_ratio >= 2)
@@ -1701,42 +1670,54 @@ void R_FillBackScreen (void)
 
     V_UseBuffer(background_buffer);
 
+    patch = W_CacheLumpName(DEH_String("brdr_t"),PU_CACHE);
+
     for (x = 0 ; x < (scaledviewwidth >> hires) ; x += 8)
     {
         V_DrawPatch((viewwindowx >> hires)+x,
-                    (viewwindowy >> hires)-8, brdr_t, NULL);
+                    (viewwindowy >> hires)-8, patch, NULL);
     }
-    
+
+    patch = W_CacheLumpName(DEH_String("brdr_b"), PU_CACHE);
+
     for (x = 0 ; x < (scaledviewwidth >> hires) ; x += 8)
     {
         V_DrawPatch((viewwindowx >> hires)+x,
-                    (viewwindowy >> hires)+(scaledviewheight >> hires), brdr_b, NULL);
+                    (viewwindowy >> hires)+(scaledviewheight >> hires), patch, NULL);
     }
-    
+
+    patch = W_CacheLumpName(DEH_String("brdr_l"), PU_CACHE);
+
     for (y = 0 ; y < (scaledviewheight >> hires) ; y += 8)
     {
         V_DrawPatch((viewwindowx >> hires)-8,
-                    (viewwindowy >> hires)+y, brdr_l, NULL);
+                    (viewwindowy >> hires)+y, patch, NULL);
     }
-    
+
+    patch = W_CacheLumpName(DEH_String("brdr_r"), PU_CACHE);
+
     for (y = 0 ; y < (scaledviewheight >> hires); y += 8)
     {
         V_DrawPatch((viewwindowx >> hires)+(scaledviewwidth >> hires),
-                    (viewwindowy >> hires)+y, brdr_r, NULL);
+                    (viewwindowy >> hires)+y, patch, NULL);
     }
 
     // Draw beveled edge. 
     V_DrawPatch((viewwindowx >> hires)-8,
-                (viewwindowy >> hires)-8, brdr_tl, NULL);
+                (viewwindowy >> hires)-8,
+                W_CacheLumpName(DEH_String("brdr_tl"), PU_CACHE), NULL);
 
     V_DrawPatch((viewwindowx >> hires)+(scaledviewwidth >> hires),
-                (viewwindowy >> hires)-8, brdr_tr, NULL);
+                (viewwindowy >> hires)-8,
+                W_CacheLumpName(DEH_String("brdr_tr"), PU_CACHE), NULL);
 
     V_DrawPatch((viewwindowx >> hires)-8,
-                (viewwindowy >> hires)+(scaledviewheight >> hires), brdr_bl, NULL);
+                (viewwindowy >> hires)+(scaledviewheight >> hires),
+                W_CacheLumpName(DEH_String("brdr_bl"), PU_CACHE), NULL);
 
     V_DrawPatch((viewwindowx >> hires)+(scaledviewwidth >> hires),
-                (viewwindowy >> hires)+(scaledviewheight >> hires), brdr_br, NULL);
+                (viewwindowy >> hires)+(scaledviewheight >> hires),
+                W_CacheLumpName(DEH_String("brdr_br"), PU_CACHE), NULL);
 
     V_RestoreBuffer();
 }

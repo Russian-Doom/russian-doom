@@ -741,8 +741,6 @@ void R_Init (void)
     
     R_InitData ();
     printf (".");
-    // [JN] Define back screen graphics. 
-    R_InitBackScreenGfx();
     // viewwidth / viewheight / detailLevel are set by the defaults
     R_SetViewSize (screenblocks, detailLevel);
     printf (".");
