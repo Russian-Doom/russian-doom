@@ -301,21 +301,20 @@ foreach(MODULE ${COMPILE_MODULES})
             COMPONENT "${MODULE}"
     )
 endforeach()
-if(WIN32 OR BUILD_PORTABLE)
+
+install(FILES "${PROJECT_SOURCE_DIR}/LICENSE.txt"
+    RENAME "GPL.txt"
+    DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${BUILD_PORTABLE}>>,.,share/doc/${PACKAGE_TARNAME}>
+)
+# Same install rule but for component based install
+foreach(MODULE ${COMPILE_MODULES})
     install(FILES "${PROJECT_SOURCE_DIR}/LICENSE.txt"
         RENAME "GPL.txt"
-        DESTINATION .
+        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${BUILD_PORTABLE}>>,.,share/doc/${PACKAGE_TARNAME}>
+        COMPONENT "${MODULE}"
+        EXCLUDE_FROM_ALL
     )
-    # Same install rule but for component based install
-    foreach(MODULE ${COMPILE_MODULES})
-        install(FILES "${PROJECT_SOURCE_DIR}/LICENSE.txt"
-            RENAME "GPL.txt"
-            DESTINATION .
-            COMPONENT "${MODULE}"
-            EXCLUDE_FROM_ALL
-        )
-    endforeach()
-endif()
+endforeach()
 
 # Source groups
 source_group("Opl" REGULAR_EXPRESSION "^${PROJECT_SOURCE_DIR}/opl/.+")
