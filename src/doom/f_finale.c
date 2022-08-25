@@ -434,7 +434,7 @@ static void F_TextWrite (void)
         }
     }
     // [JN] Draw special background on entering Wolfenstein and Grosse levels
-    else if (gamemission == doom2 && !vanillaparm)
+    else if (gamemission == doom2 && canmodify && !vanillaparm )
     {
         // [JN] Leaving MAP15, entering MAP31: blue Wolfenstein 3D background.
         if (gamemap == 15)

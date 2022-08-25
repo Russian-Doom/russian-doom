@@ -516,9 +516,6 @@ extern const lighttable_t *ds_colormap[2];
 extern const byte         *ds_source;
 extern const byte         *ds_brightmap;
 
-extern const char *backscreen_flat;
-extern const patch_t *brdr_b;
-
 void R_DrawColumn (void);
 void R_DrawColumnLow (void);
 void R_DrawFuzzColumn (void);
@@ -543,7 +540,6 @@ void R_DrawTranslatedTLColumn (void);
 void R_DrawTranslatedTLColumnLow (void);
 void R_DrawViewBorder (void);
 void R_FillBackScreen (void);
-void R_InitBackScreenGfx (void);
 void R_InitBuffer (int width, int height);
 void R_SetFuzzPosDraw (void);
 void R_SetFuzzPosTic (void);

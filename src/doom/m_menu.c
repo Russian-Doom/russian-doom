@@ -1066,6 +1066,7 @@ static MenuItem_t Bindings4Items[] = {
     {ITT_EFUNC,   "Save a screenshot",     "crhbyijn",              BK_StartBindingKey, bk_screenshot},       // Скриншот
     {ITT_EFUNC,   "Pause",                 "gfepf",                 BK_StartBindingKey, bk_pause},            // Пауза
     {ITT_EFUNC,   "Finish demo recording", "pfrjyxbnm pfgbcm ltvj", BK_StartBindingKey, bk_finish_demo},      // Закончить запись демо
+    {ITT_EFUNC,   "Demo fast-forward",     ",scnhfz gthtvjnrf ltvj", BK_StartBindingKey,bk_demo_speed},       // Быстрая перемотка демо
     {ITT_TITLE,   "Toggleables",           "gthtrk.xtybt",          NULL,               0},
     {ITT_EFUNC,   "Mouse look",            "j,pjh vsim.",           BK_StartBindingKey, bk_toggle_mlook},     // Обзор мышью
     {ITT_EFUNC,   "Always run",            "gjcnjzyysq ,tu",        BK_StartBindingKey, bk_toggle_autorun},   // Постоянный бег
@@ -1073,7 +1074,6 @@ static MenuItem_t Bindings4Items[] = {
     {ITT_EFUNC,   "Messages",              "cjj,otybz",             BK_StartBindingKey, bk_messages},         // Сообщения
     {ITT_EFUNC,   "Detail level",          "ltnfkbpfwbz uhfabrb",   BK_StartBindingKey, bk_detail},           // Детализация графики
     {ITT_EFUNC,   "Level flipping",        "pthrfkbhjdfybt ehjdyz", BK_StartBindingKey, bk_toggle_fliplvls},  // Зеркалирование уровня
-    {ITT_EMPTY,   NULL,                    NULL,                    NULL,               0},
     {ITT_SETMENU, NULL,                    NULL,                    &Bindings5Menu,     0},                   // Далее >
     {ITT_SETMENU, NULL,                    NULL,                    &Bindings3Menu,     0},                   // < Назад
     {ITT_EMPTY,   NULL,                    NULL,                    NULL,               0}
@@ -1400,9 +1400,9 @@ static Menu_t Gameplay4Menu = {
 
 static MenuItem_t Gameplay5Items[] = {
     {ITT_TITLE,   "Gameplay",                            "Utqvgktq",                        NULL,                        0}, // Геймплей
-    {ITT_SWITCH,  "Fix errors of vanilla maps:",         "ecnhfyznm jib,rb jhbu> ehjdytq:", M_RD_Change_FixMapErrors,    0}, // Устранять ошибки ориг. уровней
+    {ITT_SWITCH,  "Fix textures on vanilla maps:",       "ntrcnehs jhbu> ehjdytq:",         M_RD_Change_FixMapErrors,    0}, // Текстуры ориг. уровней
     {ITT_SWITCH,  "Flip game levels:",                   "pthrfkmyjt jnhf;tybt ehjdytq:",   M_RD_Change_FlipLevels,      0}, // Зеркальное отражение уровней
-    {ITT_SWITCH,  "Pistol start game mode:",             NULL, /*[JN] Joint EN/RU string*/  M_RD_Change_PistolStart,     0}, // Режим игры "Pistol start"
+    {ITT_SWITCH,  NULL,                                  NULL, /*[JN] Joint EN/RU string*/  M_RD_Change_PistolStart,     0}, // Режим игры "Pistol start"
     {ITT_SWITCH,  "Imitate player's breathing:",         "bvbnfwbz ls[fybz buhjrf:",        M_RD_Change_Breathing,       0}, // Имитация дыхания игрока
     {ITT_SWITCH,  "Pain Elemental without Souls limit:", "'ktvtynfkm ,tp juhfybxtybz lei:", M_RD_Change_LostSoulsQty,    0}, // Элементаль без ограничения душ
     {ITT_SWITCH,  NULL,                                  NULL,                              M_RD_Change_LostSoulsAgr,    0}, // Повышенная агрессивность душ
@@ -4395,7 +4395,7 @@ static void M_RD_Draw_Gameplay_3(void)
 
         // Monster alert waking up others
         RD_M_DrawTextSmallENG("Monster alert waking up others:", 35 + wide_delta, 75,
-                              strict_mode || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
                           
         if (strict_mode)
         {
@@ -4404,7 +4404,7 @@ static void M_RD_Draw_Gameplay_3(void)
         else
         {                          
             RD_M_DrawTextSmallENG(noise_alert_sfx ? RD_ON : RD_OFF, 263 + wide_delta, 75,
-                                  noise_alert_sfx ? CR_GREEN : CR_DARKRED);
+                                  noise_alert_sfx && !netgame ? CR_GREEN : CR_DARKRED);
         }
 
         // Draw crosshair
@@ -4456,7 +4456,7 @@ static void M_RD_Draw_Gameplay_3(void)
 
         // Общая тревога у монстров
         RD_M_DrawTextSmallRUS("J,ofz nhtdjuf e vjycnhjd:", 35 + wide_delta, 75,
-                              strict_mode || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
                           
         if (strict_mode)
         {
@@ -4465,7 +4465,7 @@ static void M_RD_Draw_Gameplay_3(void)
         else
         {    
             RD_M_DrawTextSmallRUS(noise_alert_sfx ? RD_ON_RUS : RD_OFF_RUS, 227 + wide_delta, 75,
-                                  noise_alert_sfx ? CR_GREEN : CR_DARKRED);
+                                  noise_alert_sfx && !netgame ? CR_GREEN : CR_DARKRED);
         }
 
         // Отображать прицел
@@ -4540,7 +4540,7 @@ static void M_RD_Draw_Gameplay_4(void)
     {
         // Collision physics
         RD_M_DrawTextSmallENG("Collision physics:", 35 + wide_delta, 35,
-                              strict_mode || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
         if (strict_mode)
         {
             RD_M_DrawTextSmallENG("N/A", 160 + wide_delta, 35, CR_DARKRED);
@@ -4548,12 +4548,12 @@ static void M_RD_Draw_Gameplay_4(void)
         else
         {
             RD_M_DrawTextSmallENG(improved_collision ? "IMPROVED" : "ORIGINAL", 160 + wide_delta, 35,
-                                  improved_collision ? CR_GREEN : CR_DARKRED);
+                                  improved_collision && !netgame ? CR_GREEN : CR_DARKRED);
         }
 
         // Walk over and under monsters
         RD_M_DrawTextSmallENG("Walk over and under monsters:", 35 + wide_delta, 45,
-                              strict_mode || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
         if (strict_mode)
         {
             RD_M_DrawTextSmallENG("N/A", 250 + wide_delta, 45, CR_DARKRED);
@@ -4561,12 +4561,12 @@ static void M_RD_Draw_Gameplay_4(void)
         else
         {
             RD_M_DrawTextSmallENG(over_under ? RD_ON : RD_OFF, 250 + wide_delta, 45,
-                                  over_under ? CR_GREEN : CR_DARKRED);
+                                  over_under && !netgame ? CR_GREEN : CR_DARKRED);
         }
 
         // Corpses sliding from the ledges
         RD_M_DrawTextSmallENG("Corpses sliding from the ledges:", 35 + wide_delta, 55,
-                              strict_mode || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
 
         if (strict_mode)
         {
@@ -4575,12 +4575,12 @@ static void M_RD_Draw_Gameplay_4(void)
         else
         {
             RD_M_DrawTextSmallENG(torque ? RD_ON : RD_OFF, 264 + wide_delta, 55,
-                                  torque ? CR_GREEN : CR_DARKRED);
+                                  torque && !netgame ? CR_GREEN : CR_DARKRED);
         }
 
         // Lethal pellet of a point-blank SSG
         RD_M_DrawTextSmallENG("Lethal pellet of a point-blank SSG:", 35 + wide_delta, 65,
-                              strict_mode || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
 
         if (strict_mode)
         {
@@ -4589,12 +4589,12 @@ static void M_RD_Draw_Gameplay_4(void)
         else
         {
             RD_M_DrawTextSmallENG(ssg_blast_enemies ? RD_ON : RD_OFF, 287 + wide_delta, 65,
-                                  ssg_blast_enemies ? CR_GREEN : CR_DARKRED);
+                                  ssg_blast_enemies && !netgame ? CR_GREEN : CR_DARKRED);
         }
 
         // Floating powerups
         RD_M_DrawTextSmallENG("Floating powerups amplitude:", 35 + wide_delta, 75,
-                              strict_mode || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
 
         if (strict_mode)
         {
@@ -4605,12 +4605,12 @@ static void M_RD_Draw_Gameplay_4(void)
             RD_M_DrawTextSmallENG(floating_powerups == 1 ? "LOW" : 
                                   floating_powerups == 2 ? "MIDDLE" : 
                                   floating_powerups == 3 ? "HIGH" : "OFF",
-                                  244 + wide_delta, 75, floating_powerups ? CR_GREEN : CR_DARKRED);
+                                  244 + wide_delta, 75, floating_powerups && !netgame ? CR_GREEN : CR_DARKRED);
         }
 
         // Items are tossed when dropped
         RD_M_DrawTextSmallENG("Items are tossed when dropped:", 35 + wide_delta, 85,
-                              strict_mode || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
 
         if (strict_mode)
         {
@@ -4619,7 +4619,7 @@ static void M_RD_Draw_Gameplay_4(void)
         else
         {
             RD_M_DrawTextSmallENG(toss_drop ? RD_ON : RD_OFF, 254 + wide_delta, 85,
-                                  toss_drop ? CR_GREEN : CR_DARKRED);
+                                  toss_drop && !netgame ? CR_GREEN : CR_DARKRED);
         }
 
         // Weapon bobbing while firing
@@ -4636,7 +4636,7 @@ static void M_RD_Draw_Gameplay_4(void)
 
         // Horizontal autoaiming
         RD_M_DrawTextSmallENG("Horizontal autoaiming:", 35 + wide_delta, 135,
-                              strict_mode || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
 
         if (strict_mode)
         {
@@ -4648,6 +4648,7 @@ static void M_RD_Draw_Gameplay_4(void)
                                   horizontal_autoaim == 1 ? "projectiles only" :
                                   horizontal_autoaim == 2 ? "off" : 
                                                             "on", 195 + wide_delta, 135,
+                                                  netgame ? CR_DARKRED :
                                   horizontal_autoaim == 0 ? CR_DARKGREEN :
                                   horizontal_autoaim == 1 ? CR_DARKGREEN :
                                   horizontal_autoaim == 2 ? CR_DARKRED : 
@@ -4664,7 +4665,7 @@ static void M_RD_Draw_Gameplay_4(void)
     {
         // Физика столкновений
         RD_M_DrawTextSmallRUS("abpbrf cnjkryjdtybq:", 35 + wide_delta, 35,
-                              strict_mode || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
                               
         if (strict_mode)
         {
@@ -4673,12 +4674,12 @@ static void M_RD_Draw_Gameplay_4(void)
         else
         {
             RD_M_DrawTextSmallRUS(improved_collision ? "EKEXITYYFZ" : "JHBUBYFKMYFZ", 193 + wide_delta, 35,
-                                  improved_collision ? CR_GREEN : CR_DARKRED);
+                                  improved_collision && !netgame ? CR_GREEN : CR_DARKRED);
         }
 
         // Перемещение под/над монстрами
         RD_M_DrawTextSmallRUS("Gthtvtotybt gjl*yfl vjycnhfvb:", 35 + wide_delta, 45,
-                              strict_mode || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
 
         if (strict_mode)
         {
@@ -4687,12 +4688,12 @@ static void M_RD_Draw_Gameplay_4(void)
         else
         {
             RD_M_DrawTextSmallRUS(over_under ? RD_ON_RUS : RD_OFF_RUS, 274 + wide_delta, 45,
-                                  over_under ? CR_GREEN : CR_DARKRED);
+                                  over_under && !netgame ? CR_GREEN : CR_DARKRED);
         }
 
         // Трупы сползают с возвышений
         RD_M_DrawTextSmallRUS("Nhegs cgjkpf.n c djpdsitybq:", 35 + wide_delta, 55,
-                              strict_mode || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
 
         if (strict_mode)
         {
@@ -4701,12 +4702,12 @@ static void M_RD_Draw_Gameplay_4(void)
         else
         {
             RD_M_DrawTextSmallRUS(torque ? RD_ON_RUS : RD_OFF_RUS, 256 + wide_delta, 55,
-                                  torque ? CR_GREEN : CR_DARKRED);
+                                  torque && !netgame ? CR_GREEN : CR_DARKRED);
         }
 
         // Двустволка разрывает врагов
         RD_M_DrawTextSmallRUS("ldecndjkrf hfphsdftn dhfujd:", 35 + wide_delta, 65,
-                              strict_mode || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
 
         if (strict_mode)
         {
@@ -4715,12 +4716,12 @@ static void M_RD_Draw_Gameplay_4(void)
         else
         {
             RD_M_DrawTextSmallRUS(ssg_blast_enemies ? RD_ON_RUS : RD_OFF_RUS, 254 + wide_delta, 65,
-                                  ssg_blast_enemies ? CR_GREEN : CR_DARKRED);
+                                  ssg_blast_enemies && !netgame ? CR_GREEN : CR_DARKRED);
         }
 
         // Амплитуда левитации артефактов
         RD_M_DrawTextSmallRUS("gjrfxbdfybt cath-fhntafrnjd:", 35 + wide_delta, 75,
-                              strict_mode || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
 
         if (strict_mode)
         {
@@ -4731,12 +4732,12 @@ static void M_RD_Draw_Gameplay_4(void)
             RD_M_DrawTextSmallRUS(floating_powerups == 1 ? "CKF,JT"  :          // Слабое
                                   floating_powerups == 2 ? "CHTLYTT" :          // Среднее
                                   floating_powerups == 3 ? "CBKMYJT" : "DSRK",  // Сильное | Выкл
-                                  256 + wide_delta, 75, floating_powerups ? CR_GREEN : CR_DARKRED);
+                                  256 + wide_delta, 75, floating_powerups && !netgame ? CR_GREEN : CR_DARKRED);
         }
 
         // Подбрасывать выпавшие предметы
         RD_M_DrawTextSmallRUS("Gjl,hfcsdfnm dsgfdibt ghtlvtns:", 35 + wide_delta, 85,
-                              strict_mode || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
 
         if (strict_mode)
         {
@@ -4745,7 +4746,7 @@ static void M_RD_Draw_Gameplay_4(void)
         else
         {
             RD_M_DrawTextSmallRUS(toss_drop ? RD_ON_RUS : RD_OFF_RUS, 285 + wide_delta, 85,
-                                  toss_drop ? CR_GREEN : CR_DARKRED);
+                                  toss_drop && !netgame ? CR_GREEN : CR_DARKRED);
         }
 
         // Улучшенное покачивание оружия
@@ -4762,7 +4763,7 @@ static void M_RD_Draw_Gameplay_4(void)
 
         // Гор. автоприцеливание
         RD_M_DrawTextSmallRUS("ujh> fdnjghbwtkbdfybt:", 35 + wide_delta, 135,
-                              strict_mode || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
 
         if (strict_mode)
         {
@@ -4774,6 +4775,7 @@ static void M_RD_Draw_Gameplay_4(void)
                                   horizontal_autoaim == 1 ? "cyfhzls" :   // снаряды
                                   horizontal_autoaim == 2 ? "dsrk" : 
                                                             "drk", 204 + wide_delta, 135,
+                                                  netgame ? CR_DARKRED :
                                   horizontal_autoaim == 0 ? CR_DARKGREEN :
                                   horizontal_autoaim == 1 ? CR_DARKGREEN :
                                   horizontal_autoaim == 2 ? CR_DARKRED : 
@@ -4800,8 +4802,8 @@ static void M_RD_Draw_Gameplay_5(void)
 
     if (english_language)
     {
-        // Fix errors of vanilla maps
-        RD_M_DrawTextSmallENG(fix_map_errors ? RD_ON : RD_OFF, 226 + wide_delta, 35,
+        // Fix textures on vanilla maps
+        RD_M_DrawTextSmallENG(fix_map_errors ? RD_ON : RD_OFF, 243 + wide_delta, 35,
                               fix_map_errors ? CR_GREEN : CR_DARKRED);
 
         // Flip game levels
@@ -4809,8 +4811,9 @@ static void M_RD_Draw_Gameplay_5(void)
                               flip_levels ? CR_GREEN : CR_DARKRED);
 
         // Pistol start
+        RD_M_DrawTextSmallENG("Pistol start game mode:", 35 + wide_delta, 55, netgame ? CR_DARKRED : CR_NONE);
         RD_M_DrawTextSmallENG(pistol_start ? RD_ON : RD_OFF, 203 + wide_delta, 55,
-                              pistol_start ? CR_GREEN : CR_DARKRED);
+                              pistol_start && !netgame ? CR_GREEN : CR_DARKRED);
 
         // Imitate player's breathing
         RD_M_DrawTextSmallENG(breathing ? RD_ON : RD_OFF, 227 + wide_delta, 65,
@@ -4822,7 +4825,7 @@ static void M_RD_Draw_Gameplay_5(void)
 
         // More agressive lost souls
         RD_M_DrawTextSmallENG("More aggressive lost souls:", 35 + wide_delta, 85,
-                              strict_mode || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
 
         if (strict_mode)
         {
@@ -4831,7 +4834,7 @@ static void M_RD_Draw_Gameplay_5(void)
         else
         {
             RD_M_DrawTextSmallENG(agressive_lost_souls ? RD_ON : RD_OFF, 230 + wide_delta, 85,
-                                  agressive_lost_souls ? CR_GREEN : CR_DARKRED);
+                                  agressive_lost_souls && !netgame ? CR_GREEN : CR_DARKRED);
         }
 
         // Show demo timer
@@ -4861,8 +4864,8 @@ static void M_RD_Draw_Gameplay_5(void)
     }
     else
     {
-        // Устранять ошибки ориг. уровней
-        RD_M_DrawTextSmallRUS(fix_map_errors ? RD_ON_RUS : RD_OFF_RUS, 269 + wide_delta, 35,
+        // Текстуры ориг. уровней
+        RD_M_DrawTextSmallRUS(fix_map_errors ? "bcghfdktyyst" : ",tp bpvtytybq", 209 + wide_delta, 35,
                               fix_map_errors ? CR_GREEN : CR_DARKRED);
 
         // Устранять ошибки ориг. уровней
@@ -4870,10 +4873,10 @@ static void M_RD_Draw_Gameplay_5(void)
                               flip_levels ? CR_GREEN : CR_DARKRED);
 
         // Режим игры "Pistol start"
-        RD_M_DrawTextSmallRUS("ht;bv buhs ^", 35 + wide_delta, 55, CR_NONE);
-        RD_M_DrawTextSmallENG("\"Pistol start\":", 121 + wide_delta, 55, CR_NONE);
+        RD_M_DrawTextSmallRUS("ht;bv buhs ^", 35 + wide_delta, 55, netgame ? CR_DARKRED : CR_NONE);
+        RD_M_DrawTextSmallENG("\"Pistol start\":", 121 + wide_delta, 55, netgame ? CR_DARKRED : CR_NONE);
         RD_M_DrawTextSmallRUS(pistol_start ? RD_ON_RUS : RD_OFF_RUS, 229 + wide_delta, 55,
-                              pistol_start ? CR_GREEN : CR_DARKRED);
+                              pistol_start && !netgame ? CR_GREEN : CR_DARKRED);
 
         // Имитация дыхания игрока
         RD_M_DrawTextSmallRUS(breathing ? RD_ON_RUS : RD_OFF_RUS, 225 + wide_delta, 65,
@@ -4885,7 +4888,7 @@ static void M_RD_Draw_Gameplay_5(void)
 
         // Повышенная агрессивность Душ
         RD_M_DrawTextSmallRUS("gjdsityyfz fuhtccbdyjcnm lei:", 35 + wide_delta, 85,
-                              strict_mode || gamemission == jaguar ? CR_DARKRED : CR_NONE);
+                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
 
         if (strict_mode)
         {
@@ -4894,7 +4897,7 @@ static void M_RD_Draw_Gameplay_5(void)
         else
         {
             RD_M_DrawTextSmallRUS(agressive_lost_souls ? RD_ON_RUS : RD_OFF_RUS, 266 + wide_delta, 85,
-                                  agressive_lost_souls ? CR_GREEN : CR_DARKRED);
+                                  agressive_lost_souls && !netgame ? CR_GREEN : CR_DARKRED);
         }
 
         // Отображать таймер

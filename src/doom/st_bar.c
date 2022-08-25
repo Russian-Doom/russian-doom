@@ -807,16 +807,23 @@ static void ST_DrawBackground (void)
         // fill the entire background of st_backing_screen with the bezel pattern,
         // so it appears to the left and right of the status bar in widescreen mode
         int x, y;
+        byte *src;
         byte *dest = st_backing_screen;
         const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
+        const patch_t *const patch = W_CacheLumpName(DEH_String("brdr_b"), PU_CACHE);
+        char *name = gamemission == jaguar ? DEH_String("FLOOR7_1") :  // Jaguar Doom
+                    gamemode == commercial ? DEH_String("GRNROCK")  :  // Doom 2
+                                             DEH_String("FLOOR7_2") ;  // Doom 1
+        
+        src = W_CacheLumpName(name, PU_CACHE);
 
         // [JN] Variable HUD detail level.
         for (y = SCREENHEIGHT-(st_height << hires); y < SCREENHEIGHT; y++)
         {
             for (x = 0; x < screenwidth; x++)
             {
-                *dest++ = backscreen_flat[((( y >> shift_allowed) & 63) << 6) 
-                                         + (( x >> shift_allowed) & 63)];
+                *dest++ = src[((( y >> shift_allowed) & 63) << 6) 
+                             + (( x >> shift_allowed) & 63)];
             }
         }
 
@@ -825,11 +832,11 @@ static void ST_DrawBackground (void)
         {
             if (hud_detaillevel)
             {
-                V_DrawPatch(x, 0, brdr_b, NULL);
+                V_DrawPatch(x, 0, patch, NULL);
             }
             else
             {
-                V_DrawPatchUnscaled(x, 0, brdr_b, NULL);
+                V_DrawPatchUnscaled(x, 0, patch, NULL);
             }
         }
     }
@@ -1859,15 +1866,15 @@ void ST_DrawDemoTimer (const int time)
 
     if (hours)
     {
-        sprintf(n, "%02i:%02i:%05.02f", hours, mins, secs);
+        M_snprintf(n, sizeof(n), "%02i:%02i:%05.02f", hours, mins, secs);
     }
     else
     {
-        sprintf(n, "%02i:%05.02f", mins, secs);
+        M_snprintf(n, sizeof(n), "%02i:%05.02f", mins, secs);
         x += 12;
     }
 
-    RD_M_DrawTextC(n, x + (wide_4_3 ? wide_delta : wide_delta*2), 1);
+    RD_M_DrawTextC(n, x + (wide_4_3 ? wide_delta : wide_delta*2), 9);
 }
 
 // -----------------------------------------------------------------------------
@@ -2067,7 +2074,7 @@ void ST_WidgetsDrawer (void)
     // [crispy] demo timer widget
     if (demoplayback && (demotimer == 1 || demotimer == 3))
     {
-        ST_DrawDemoTimer((demotimerdir ? (deftotaldemotics - defdemotics) : defdemotics) / deftotalplayers);
+        ST_DrawDemoTimer(demotimerdir ? (deftotaldemotics - defdemotics) : defdemotics);
     }
     else if (demorecording && (demotimer == 2 || demotimer == 3))
     {

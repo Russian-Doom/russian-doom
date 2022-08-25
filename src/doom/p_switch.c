@@ -264,7 +264,7 @@ void P_ChangeSwitchTexture (line_t *line, const int useAgain)
             sound = sfx_swtchx;
         }
     }
-    else if (gamemission == doom2 && gamemap == 31 && !vanillaparm)
+    else if (gamemission == doom2 && gamemap == 31 && canmodify && !vanillaparm)
     {
         // [JN] Exit switch sound from Wolfenstein 3D
         if (line->special == 11 || line->special == 51)
@@ -407,20 +407,6 @@ const boolean P_UseSpecialLine (mobj_t *thing, line_t *line, const int side)
         case 117:   // Blazing door raise
         case 118:   // Blazing door open
         EV_VerticalDoor (line, thing);
-
-        // [JN] Allow to finish E4M8 with -nomonsters.
-        // Taken from DOOM Retro.
-        if (nomonsters)
-        {
-            if (gamemode == retail && gameepisode == 4 && gamemap == 8)
-            {
-                line_t junk;
-
-                junk.tag = 666;
-                EV_DoFloor (&junk, lowerFloorToLowest);
-            }
-        }
-
         break;
 	
         // [JN] Non-switches, just play an "oof" sound by pressing "use":
@@ -503,19 +489,6 @@ const boolean P_UseSpecialLine (mobj_t *thing, line_t *line, const int side)
         if (EV_DoFloor(line,lowerFloorToLowest))
         {
             P_ChangeSwitchTexture(line,0);
-        }
-
-        // [JN] Allow to finish E1M8 and MAP07 with -nomonsters.
-        // Taken from DOOM Retro.
-        if (nomonsters && ((gamemode != commercial && gameepisode == 1 && gamemap == 8) 
-        || (gamemode == commercial && gamemap == 7)))
-        {
-            line_t junk;
-
-            junk.tag = 666;
-            EV_DoFloor (&junk, lowerFloorToLowest);
-            junk.tag = 667;
-            EV_DoFloor (&junk, raiseToTexture);
         }
         break;
 
@@ -654,19 +627,6 @@ const boolean P_UseSpecialLine (mobj_t *thing, line_t *line, const int side)
         if (EV_DoLockedDoor (line,vld_blazeOpen,thing))
         {
             P_ChangeSwitchTexture(line,0);
-        }
-
-        // [JN] Allow to finish E4M6 with -nomonsters.
-        // Taken from DOOM Retro.
-        if (nomonsters)
-        {
-            if (gamemode == retail && gameepisode == 4 && gamemap == 6)
-            {
-                line_t junk;
-
-                junk.tag = 666;
-                EV_DoDoor (&junk, vld_blazeOpen);
-            }
         }
         break;
 

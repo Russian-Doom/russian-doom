@@ -112,6 +112,7 @@ typedef enum
     bk_screenshot,
     bk_pause,
     bk_finish_demo,
+    bk_demo_speed, // [crispy] demo fast-forward
 
     // Toggles
     bk_toggle_crosshair,

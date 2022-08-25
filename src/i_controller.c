@@ -557,7 +557,7 @@ void ControllerHandler_HandleLine(char* keyName, char *value, size_t valueSize)
     SDL_GameControllerAxis axis;
     axisOption_t axisOption;
 
-#if HAVE_DECL_SSCANF_S
+#if HAVE_DECL_SSCANF_S && (!defined(_WIN32) || defined(_WIN64))
     if(sscanf_s(keyName, "%10[^_]_%20s", axisName, 11, axisOptionName, 21) != 2)
 #else
     if(sscanf(keyName, "%10[^_]_%20s", axisName, axisOptionName) != 2)

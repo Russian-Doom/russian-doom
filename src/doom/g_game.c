@@ -50,6 +50,7 @@
 #include "g_game.h"
 #include "ct_chat.h"
 #include "jn.h"
+#include "statdump.h"
 
 #define MAXPLMOVE       (forwardmove[1]) 
 #define TURBOTHRESHOLD  0x32
@@ -743,6 +744,13 @@ boolean G_Responder (event_t *ev)
         }
     }
 
+    // [crispy] demo fast-forward
+    if (BK_isKeyDown(ev, bk_demo_speed) && (demoplayback || gamestate == GS_DEMOSCREEN))
+    {
+        singletics = !singletics;
+        return true;
+    }
+
     // allow spy mode changes even during the demo
     if (gamestate == GS_LEVEL && BK_isKeyDown(ev, bk_spy) && (singledemo || !deathmatch))
     {
@@ -996,6 +1004,12 @@ void G_Ticker (void)
                 }
             } 
         }
+    }
+
+    // [crispy] increase demo tics counter
+    if (demoplayback || demorecording)
+    {
+        defdemotics++;
     }
 
     // check for special buttons
@@ -1710,6 +1724,12 @@ void G_DoCompleted (void)
     gamestate = GS_INTERMISSION; 
     automapactive = false; 
 
+    // [crispy] no statdump output for ExM8
+    if (gamemode == commercial || gamemap != 8)
+    {
+    StatCopy(&wminfo);
+    }
+
     WI_Start (&wminfo); 
 } 
 
@@ -1973,6 +1993,8 @@ void G_DoNewGame (void)
     netdemo = false;
     netgame = false;
     deathmatch = false;
+    // [crispy] reset game speed after demo fast-forward
+    singletics = false;
     playeringame[1] = playeringame[2] = playeringame[3] = 0;
     // [crispy] do not reset -respawn, -fast and -nomonsters parameters
     /*
@@ -2449,7 +2471,7 @@ G_InitNew
 #define DEMOMARKER  0x80
 
 // [crispy] demo progress bar and timer widget
-int defdemotics = 0, deftotaldemotics, deftotalplayers;
+int defdemotics = 0, deftotaldemotics;
 
 void G_ReadDemoTiccmd (ticcmd_t* cmd) 
 { 
@@ -2476,11 +2498,6 @@ void G_ReadDemoTiccmd (ticcmd_t* cmd)
     }
 
     cmd->buttons = (unsigned char)*demo_p++; 
-
-    // [crispy] increase demo tics counter
-    // applies to both recording and playback,
-    // because G_WriteDemoTiccmd() calls G_ReadDemoTiccmd() once
-    defdemotics++;
 } 
 
 // Increase the size of the demo buffer to allow unlimited demos
@@ -2800,24 +2817,23 @@ void G_DoPlayDemo (void)
     
     // [crispy] demo progress bar
     {
+        int numplayersingame = 0;
         byte *demo_ptr = demo_p;
+
+        for (int i = 0; i < MAXPLAYERS; i++)
+        {
+            if (playeringame[i])
+            {
+                numplayersingame++;
+            }
+        }
 
         deftotaldemotics = defdemotics = 0;
 
         while (*demo_ptr != DEMOMARKER && (demo_ptr - demobuffer) < lumplength)
         {
-            demo_ptr += (longtics ? 5 : 4);
+            demo_ptr += numplayersingame * (longtics ? 5 : 4);
             deftotaldemotics++;
-        }
-
-        deftotalplayers = 0;
-
-        for (int i = 0 ; i < MAXPLAYERS ; i++)
-        {
-            if (playeringame[i])
-            {
-                deftotalplayers++;
-            }
         }
     }
 } 

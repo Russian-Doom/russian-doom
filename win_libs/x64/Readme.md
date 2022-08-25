@@ -8,7 +8,7 @@
 | libsamplerate-0.dll | 42dfec799508735ff39d945a401ea68b |         MSYS2 0.1.9-1         |
 | libvorbis-0.dll     | 7b12b6881e95378a47f60e30b2aade6d | Bundled with SDL2_mixer 2.0.4 |
 | libvorbisfile-3.dll | ee01de3f148b0912b88d79d6b34ae3d1 | Bundled with SDL2_mixer 2.0.4 |
-| SDL2.dll            | 5a2819c823a5af53420511a1ceb7a9aa |            2.0.22             |
+| SDL2.dll            | 7d72aa745dd4eef44e9c016d4c3aefe4 |            2.24.0             |
 | SDL2_mixer.dll      | 73ed03d67e46c17f43a92b9f86a9a7b7 |             2.6.1             |
 | SDL2_net.dll        | 4a73bf460ffba869fd68f4eca9e0b138 |             2.0.1             |
 | zlib1.dll           | 66cd727fb33126b1c03b174aa1e6735a |        MSYS2 1.2.12-1         |
