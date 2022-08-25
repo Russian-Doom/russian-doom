@@ -46,5 +46,31 @@ if(UNIX AND Python3_Interpreter_FOUND)
         )
     endfunction()
 
+    function(generate_man MODULE)
+        set(Out "${CMAKE_CURRENT_BINARY_DIR}/${PROGRAM_PREFIX}${MODULE}.6")
+        add_docgen("${Out}"
+            GAMES ${MODULE}
+            MANPAGE_TEMPLATE "${CMAKE_CURRENT_BINARY_DIR}/${MODULE}.template"
+            SOURCE "\"${PROJECT_SOURCE_DIR}/src/m_argv.c\""
+        )
+        add_custom_target("man-${MODULE}"
+            DEPENDS ${Out}
+        )
+        set_target_properties("man-${MODULE}" PROPERTIES
+            OUT_FILES "${Out}"
+        )
+    endfunction()
+
+    foreach(MODULE ${COMPILE_MODULES})
+        configure_file("${MODULE}.template.in" "${MODULE}.template" @ONLY)
+
+        generate_man(${MODULE})
+
+        install(FILES $<TARGET_PROPERTY:man-${MODULE},OUT_FILES>
+            DESTINATION "share/man/man6"
+            COMPONENT ${MODULE}
+        )
+    endforeach()
+
     add_subdirectory(bash-completion)
 endif()
