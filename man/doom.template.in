@@ -1,0 +1,27 @@
+.TH @PROGRAM_PREFIX@doom 6
+.SH NAME
+@PACKAGE_PREFIX@ Doom
+.SH SYNOPSIS
+.B @PROGRAM_PREFIX@doom
+[\fIOPTIONS\fR]
+.SH DESCRIPTION
+.PP
+See https://github.com/JNechaevsky/inter-doom/wiki for more information.
+.SH OPTIONS
+@content
+.SH FILES
+.TP
+\fB$HOME/.local/share/@PACKAGE_TARNAME@/@PROGRAM_PREFIX@doom.ini\fR
+The configuration file for @PROGRAM_PREFIX@doom.
+.SH AUTHOR
+@PACKAGE_PREFIX@ Doom is written and maintained by Julian Nechaevsky.  It is based on
+the Chocolate Doom by Simon Howard and Crispy Doom by Fabian Greffrath,
+with significant additions from Doom Retro by Brad Harding.
+.SH COPYRIGHT
+Copyright \(co id Software Inc.
+Copyright \(co 2005-2016 Simon Howard.
+Copyright \(co 2016–2022 Julian Nechaevsky.
+.br
+This is free software.  You may redistribute copies of it under the terms of
+the GNU General Public License v2.0 https://www.gnu.org/licenses/old-licenses/gpl-2.0.html.
+There is NO WARRANTY, to the extent permitted by law.
