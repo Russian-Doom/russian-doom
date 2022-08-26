@@ -1398,9 +1398,15 @@ static void SetVideoMode(void)
     // retina displays, especially when using small window sizes.
     window_flags |= SDL_WINDOW_ALLOW_HIGHDPI;
 
-    SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER,
-                            opengles_renderer ? "opengles2" : "direct3d",
-                            SDL_HINT_OVERRIDE);
+    // [JN] Set screen renderer...
+    SDL_SetHint(SDL_HINT_RENDER_DRIVER, opengles_renderer ? "opengles2" : 
+#ifdef _WIN32
+    // ... On Windows, default is always Direct 3D 9.
+    "direct3d");
+#else
+    // ... On other OSes it is unclear, so don't set a hint at all.
+    "");
+#endif
 
 #ifdef _WIN32
     // [JN] Windows 11 idiocy. Indicate that window using OpenGL mode (while it's
@@ -1843,12 +1849,16 @@ void I_ShutdownGraphics(void)
 
 #ifdef _WIN32
             // [JN] More Windows 11 idiocy. It possible to stuck in black
-            // screen after toggling vsync and quit program, until Win+L
-            // or Ctrl+Alt+Del is pressed. Reason unknown. Toggling full
-            // screen right before closing video system fixes this issue.
+            // screen after toggling vsync and quit program when using
+            // Open GL ES renderer, until Win+L or Ctrl+Alt+Del is pressed.
+            // Reason unknown. Toggling full screen right before closing 
+            // video system fixes this issue.
             
             // TODO - check if not whole I_ToggleFullScreen is needed.
-            I_ToggleFullScreen();
+            if (opengles_renderer)
+            {
+                I_ToggleFullScreen();
+            }
 #endif
         }
 
