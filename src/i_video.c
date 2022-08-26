@@ -1025,7 +1025,14 @@ void I_FinishUpdate (void)
 
     // Draw!
 
-    SDL_RenderPresent(renderer);
+    if (opengles_renderer)
+    {
+        SDL_GL_SwapWindow(screen);
+    }
+    else
+    {
+        SDL_RenderPresent(renderer);
+    }
 
     // [AM] Figure out how far into the current tic we're in as a fixed_t.
     if (uncapped_fps)
