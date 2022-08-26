@@ -10,7 +10,7 @@ on:
 
 jobs:
   Cmake:
-    name: ${{ matrix.os.name }} | ${{ matrix.arch.name }}
+    name: ${{ matrix.os.name }} | ${{ matrix.arch.name }} | ${{ matrix.compiler.display_name }}
     runs-on: ${{ matrix.os.runner }}
     strategy:
       fail-fast: false
@@ -27,17 +27,23 @@ jobs:
         arch:
           -
             name: "x86"
-            bits: "32"
+            msys_bits: "32"
             msys_name: "i686"
           -
             name: "x64"
-            bits: "64"
+            msys_bits: "64"
             msys_name: "x86_64"
         compiler:
           -
+            display_name: "GCC"
             name: "gcc"
             msys_msystem_prefix: "MINGW"
             msys_package_prefix: "mingw-w64"
+          -
+            display_name: "Clang"
+            name: "clang"
+            msys_msystem_prefix: "CLANG"
+            msys_package_prefix: "mingw-w64-clang"
         exclude:
           -
             os:
@@ -49,10 +55,10 @@ jobs:
         shell: ${{ matrix.os.shell }}
     steps:
       - name: Setup MSYS env
-        if: ${{ matrix.os.name == 'Windows' }}
+        if: matrix.os.name == 'Windows'
         uses: msys2/setup-msys2@v2
         with:
-          msystem: ${{ matrix.compiler.msys_msystem_prefix }}${{ matrix.arch.bits }}
+          msystem: ${{ matrix.compiler.msys_msystem_prefix }}${{ matrix.arch.msys_bits }}
           update: true
           install: >-
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-pkgconf
@@ -67,32 +73,41 @@ jobs:
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libpng
 
       - name: Setup Linux env
-        if: ${{ matrix.os.name == 'Linux' }}
+        if: matrix.os.name == 'Linux'
         run: |
           sudo apt-get update --fix-missing
           sudo apt-get full-upgrade --fix-missing
-          sudo apt-get install --fix-missing ${{ matrix.compiler.name }} gdb ninja-build cmake libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libpng-dev libsamplerate-dev
+          sudo apt-get install ${{ matrix.compiler.name }} gdb ninja-build python3 cmake \
+                               libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libpng-dev libsamplerate-dev
 
       - uses: actions/checkout@v2
 
       - name: Configure
         id: configure
-        # -D BUILD_PORTABLE=ON for tests on linux without install
+        env:
+          CC: ${{ matrix.compiler.name }}
         run: |
-          cmake -G "Ninja" -D BUILD_VERSION_OVERWRITE="5.x.x" -D FORCE_GIT_HASH_SUFFIX=ON -D CMAKE_BUILD_TYPE=RelWithDebInfo -D BUILD_PORTABLE=ON -S . -B build
+          if [[ '${{ matrix.os.name }}' == 'Linux' ]]
+          then
+              build_portable='-D BUILD_PORTABLE=ON'
+          fi
+          cmake -G "Ninja" \
+                -D BUILD_VERSION_OVERWRITE="6.x.x" -D FORCE_GIT_HASH_SUFFIX=ON -D CMAKE_BUILD_TYPE=RelWithDebInfo \
+                $build_portable \
+                -S . -B build
           sha_short=$(echo ${{ github.sha }} | cut -c1-7)
           echo "::set-output name=sha_short::$sha_short"
 
       - name: Build
         run: |
           export MAKEFLAGS=--keep-going
-          cmake --build build --parallel 2
+          cmake --build build --config RelWithDebInfo --parallel 2
 
       - name: Test Windows
         if: ${{ matrix.os.name == 'Windows' }}
         run: |
           cd build
-          ctest --output-on-failure
+          ctest --output-on-failure -C RelWithDebInfo
 
       - name: Test Linux
         if: ${{ matrix.os.name == 'Linux' }}
@@ -103,13 +118,21 @@ jobs:
           ctest --output-on-failure
 
       - name: Install
-        if: ${{ github.repository == 'JNechaevsky/inter-doom' && github.event_name == 'push' && github.ref == 'refs/heads/master' && matrix.os.name == 'Windows' }}
+        if: |
+          github.repository == 'JNechaevsky/inter-doom' &&
+          github.event_name == 'push' &&
+          github.ref == 'refs/heads/master' &&
+          matrix.os.name == 'Windows'
         run: |
-          cmake --install build --prefix "./build/install"
+          cmake --install build --config RelWithDebInfo --prefix "./build/install"
 
       - name: Package Zip
-        if: ${{ github.repository == 'JNechaevsky/inter-doom' && github.event_name == 'push' && github.ref == 'refs/heads/master' && matrix.os.name == 'Windows' }}
+        if: |
+          github.repository == 'JNechaevsky/inter-doom' &&
+          github.event_name == 'push' &&
+          github.ref == 'refs/heads/master' &&
+          matrix.os.name == 'Windows'
         uses: actions/upload-artifact@v2
         with:
-          name: inter-doom-5.x.x-${{ steps.configure.outputs.sha_short }}-windows-${{ matrix.arch.name }}
+          name: inter-doom-6.x.x-${{ steps.configure.outputs.sha_short }}-windows-${{ matrix.arch.name }}-${{ matrix.compiler.display_name }}
           path: ./build/install/

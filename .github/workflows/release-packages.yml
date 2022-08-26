@@ -13,18 +13,22 @@ jobs:
       fail-fast: true
       matrix:
         os:
-          - name: "Windows"
+          -
+            name: "Windows"
             runner: "windows-latest"
             shell: "msys2 {0}"
         arch:
-          - name: "x86"
+          -
+            name: "x86"
             bits: "32"
             msys_name: "i686"
-          - name: "x64"
+          -
+            name: "x64"
             bits: "64"
             msys_name: "x86_64"
         compiler:
-          - name: "gcc"
+          -
+            name: "gcc"
             msys_msystem_prefix: "MINGW"
             msys_package_prefix: "mingw-w64"
     permissions:
