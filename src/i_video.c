@@ -371,30 +371,6 @@ static void SetShowCursor (const boolean show)
     }
 }
 
-void I_ShutdownGraphics(void)
-{
-    if (initialized)
-    {
-        static int w, h;
-        
-        SetShowCursor(true);
-
-        // [JN] Get screen width and height.
-        SDL_GetRendererOutputSize(renderer, &w, &h);
-
-        // [JN] Place mouse cursor to the center of the screen.
-        if (fullscreen)
-        {
-            SDL_WarpMouseGlobal(w / 2, h / 2);
-        }
-
-        SDL_QuitSubSystem(SDL_INIT_VIDEO);
-
-        initialized = false;
-    }
-}
-
-
 // Adjust window_width / window_height variables to be an an aspect
 // ratio consistent with the aspect_ratio_correct variable.
 static void AdjustWindowSize(void)
@@ -1847,6 +1823,40 @@ void I_ReInitGraphics (const int reinit)
 
 	// [crispy] adjust the window size and re-set the palette
 	need_resize = true;
+}
+
+void I_ShutdownGraphics(void)
+{
+    if (initialized)
+    {
+        static int w, h;
+        
+        SetShowCursor(true);
+
+        // [JN] Get screen width and height.
+        SDL_GetRendererOutputSize(renderer, &w, &h);
+
+        // [JN] Place mouse cursor to the center of the screen.
+        if (fullscreen)
+        {
+            SDL_WarpMouseGlobal(w / 2, h / 2);
+
+#ifdef _WIN32
+            // [JN] More Windows 11 idiocy. It possible to stuck in black
+            // screen after toggling vsync and quit program, until Win+L
+            // or Ctrl+Alt+Del is pressed. Reason unknown. Toggling full
+            // screen right before closing video system fixes this issue.
+            
+            // TODO - check if not whole I_ToggleFullScreen is needed.
+            I_ToggleFullScreen();
+#endif
+        }
+
+        
+        SDL_QuitSubSystem(SDL_INIT_VIDEO);
+
+        initialized = false;
+    }
 }
 
 void I_RenderReadPixels(byte **data, int *w, int *h, int *p)
