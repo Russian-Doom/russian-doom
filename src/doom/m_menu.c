@@ -1719,8 +1719,15 @@ static void M_RD_Draw_Rendering(void)
         }
         else
         {
-            RD_M_DrawTextSmallENG(opengles_renderer_temp ? "OPENGL ES 2.0" : "DIRECT 3D",
-                                  158 + wide_delta, 45, CR_NONE);
+            RD_M_DrawTextSmallENG(opengles_renderer_temp ? "OPENGL ES 2.0" :
+#ifdef _WIN32
+            // On Windows, default is always Direct 3D 9.
+            "DIRECT 3D",
+#else
+            // On other OSes it is unclear, so use OS preferred.
+            "PREFERRED BY OS",
+#endif
+            158 + wide_delta, 45, CR_NONE);
         }
 
         // Informative messages
@@ -1806,8 +1813,20 @@ static void M_RD_Draw_Rendering(void)
         }
         else
         {
-            RD_M_DrawTextSmallENG(opengles_renderer_temp ? "OPENGL ES 2.0" : "DIRECT 3D",
-                                  158 + wide_delta, 45, CR_NONE);
+            if (opengles_renderer_temp)
+            {
+                RD_M_DrawTextSmallENG("OPENGL ES 2.0", 160 + wide_delta, 45, CR_NONE);
+            }
+            else
+            {
+#ifdef _WIN32
+                // On Windows, default is always Direct 3D 9.
+                RD_M_DrawTextSmallENG("DIRECT 3D", 160 + wide_delta, 45, CR_NONE);
+#else
+                // On other OSes it is unclear, so use OS preferred.
+                RD_M_DrawTextSmallRUS("GJ DS,JHE JC", 160 + wide_delta, 45, CR_NONE); // ПО ВЫБОРУ ОС
+#endif
+            }
         }
 
         // Informative message: Необходим перезапуск программы
