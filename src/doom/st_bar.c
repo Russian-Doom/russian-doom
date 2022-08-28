@@ -180,6 +180,10 @@ int st_keyorskull[3];
 // [JN] Update background/belez only every calculated tic, not framerate tic.
 static boolean st_bg_needsupdate;
 
+// [JN] Versions prior 1.4 does not have STTMINUS patch.
+// If case of using such versions, drawing negative health is not possible.
+static boolean no_sttminus = false;
+
 
 // =============================================================================
 //
@@ -1605,7 +1609,7 @@ static void ST_DrawElements (const boolean wide)
 
     // Health, negative health
     {
-        const boolean neghealth = negative_health && plyr->health <= 0 && !vanillaparm;
+        const boolean neghealth = negative_health && plyr->health <= 0 && !vanillaparm && !no_sttminus;
 
         ST_DrawBigNumber(neghealth ? plyr->health_negative : plyr->health, 
                          52 + left_delta, 171, ST_WidgetColor(hudcolor_health));
@@ -2175,7 +2179,17 @@ static void ST_LoadData (void)
     }
 
     FontBPercent = W_CacheLumpName(DEH_String("STTPRCNT"), PU_STATIC);
-    FontBMinus = W_CacheLumpName(DEH_String("STTMINUS"), PU_STATIC);
+
+    // [JN] Versions prior 1.4 does not have STTMINUS patch.
+    if (W_CheckNumForName(DEH_String("WIMINUS")) > 0)
+    {
+        FontBMinus = W_CacheLumpName(DEH_String("STTMINUS"), PU_STATIC);
+    }
+    else
+    {
+        FontBMinus = W_CacheLumpName(DEH_String("TNT1A0"), PU_STATIC);
+        no_sttminus = true;
+    }
 
     // Face backgrounds for different color players
     for (i = 0; i < 4; i++)

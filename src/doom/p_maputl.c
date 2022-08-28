@@ -535,6 +535,7 @@ const boolean P_BlockThingsIterator (int x, int y, boolean (*func)(mobj_t*))
 static intercept_t *intercepts; // [crispy] remove INTERCEPTS limit
 intercept_t        *intercept_p;
 divline_t           trace;
+static boolean      earlyout;
 
 static void InterceptsOverrun (int num_intercepts, intercept_t *intercept);
 
@@ -562,8 +563,7 @@ static void check_intercept (void)
 // add to the intercepts list.
 //
 // A line is crossed if its endpoints are on opposite sides of the trace.
-//
-// [JN] 2021-07-24: cleaned up, 'earlyout' in original code was never finished.
+// Returns true if earlyout and a solid line hit.
 // -----------------------------------------------------------------------------
 
 static boolean PIT_AddLineIntercepts (line_t *ld)
@@ -598,6 +598,12 @@ static boolean PIT_AddLineIntercepts (line_t *ld)
     if (frac < 0)
     {
         return true;  // behind source
+    }
+
+    // try to early out the check
+    if (earlyout && frac < FRACUNIT && !ld->backsector)
+    {
+        return false;  // stop checking
     }
 
     check_intercept(); // [crispy] remove INTERCEPTS limit
@@ -883,6 +889,8 @@ boolean P_PathTraverse (fixed_t x1, fixed_t y1, int64_t x2, int64_t y2,
     int     mapx1, mapy1;
     int     mapxstep, mapystep;
     int		count;
+
+    earlyout = (flags & PT_EARLYOUT) != 0;
 
     validcount++;
     intercept_p = intercepts;

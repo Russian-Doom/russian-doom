@@ -508,26 +508,37 @@ void P_CrossSpecialLinePtr (line_t *line, const int side, mobj_t *thing)
 {
     int ok;
    
-    //	Triggers that other things can activate
+    if (gameversion <= exe_doom_1_2)
+    {
+        if (line->special > 98 && line->special != 104)
+        {
+            return;
+        }
+    }
+    else
+    {
+        //	Triggers that other things can activate
+        if (!thing->player)
+        {
+            // Things that should NOT trigger specials...
+            switch(thing->type)
+            {
+                case MT_ROCKET:
+                case MT_PLASMA:
+                case MT_BFG:
+                case MT_TROOPSHOT:
+                case MT_HEADSHOT:
+                case MT_BRUISERSHOT:
+                case MT_PLASMA1:  // [JN] killough 8/28/98: exclude beta fireballs
+                    return;
+
+                default: break;
+            }
+        }
+    }
+    
     if (!thing->player)
     {
-        // Things that should NOT trigger specials...
-        switch (thing->type)
-        {
-            case MT_ROCKET:
-            case MT_PLASMA:
-            case MT_BFG:
-            case MT_TROOPSHOT:
-            case MT_HEADSHOT:
-            case MT_BRUISERSHOT:
-            case MT_PLASMA1:  // killough 8/28/98: exclude beta fireballs
-            return;
-            break;
-
-            default:
-            break;
-        }
-
         ok = 0;
 
         switch (line->special)
