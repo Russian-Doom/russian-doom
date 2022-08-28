@@ -1,13 +1,13 @@
 if(UNIX AND Python3_Interpreter_FOUND)
     function(add_docgen OUT)
         cmake_parse_arguments(PARSE_ARGV 1 "MAN"
-            "RU" # List of Options
-            "DEFINES;CONFIG_FILE;MANPAGE_TEMPLATE;MARKDOWN_TEMPLATE;PLAINTEXT_TEMPLATE;COMPLETION_TEMPLATE" # List of Values
+            "" # List of Options
+            "LANG;DEFINES;CONFIG_FILE;MANPAGE_TEMPLATE;MARKDOWN_TEMPLATE;PLAINTEXT_TEMPLATE;COMPLETION_TEMPLATE" # List of Values
             "GAMES;SOURCE" # List of Lists
         )
 
-        if(MAN_RU)
-            list(APPEND DOCGEN_ARGS -l ru)
+        if(MAN_LANG)
+            list(APPEND DOCGEN_ARGS -l ${MAN_LANG})
         endif()
         if(MAN_GAMES)
             list(APPEND DOCGEN_ARGS -g ${MAN_GAMES})
@@ -47,23 +47,28 @@ if(UNIX AND Python3_Interpreter_FOUND)
     endfunction()
 
     function(generate_man MODULE)
-        set(Out "${CMAKE_CURRENT_BINARY_DIR}/${PROGRAM_PREFIX}${MODULE}.6")
-        add_docgen("${Out}"
-            GAMES ${MODULE}
-            MANPAGE_TEMPLATE "${CMAKE_CURRENT_BINARY_DIR}/${MODULE}.template"
-            SOURCE "\"${PROJECT_SOURCE_DIR}/src/m_argv.c\""
-        )
+        foreach(Lang . ru)
+            configure_file("${Lang}/${MODULE}.template.in" "${Lang}/${MODULE}.template" @ONLY)
+
+            set(Out "${CMAKE_CURRENT_BINARY_DIR}/${Lang}/${PROGRAM_PREFIX}${MODULE}.6")
+            add_docgen("${Out}"
+                GAMES ${MODULE}
+                MANPAGE_TEMPLATE "${CMAKE_CURRENT_BINARY_DIR}/${Lang}/${MODULE}.template"
+                LANG ${Lang}
+                SOURCE "\"${PROJECT_SOURCE_DIR}/src/m_argv.c\""
+            )
+            list(APPEND Out_list ${Out})
+        endforeach()
+
         add_custom_target("man-${MODULE}"
-            DEPENDS ${Out}
+            DEPENDS ${Out_list}
         )
         set_target_properties("man-${MODULE}" PROPERTIES
-            OUT_FILES "${Out}"
+            OUT_FILES "${Out_list}"
         )
     endfunction()
 
     foreach(MODULE ${COMPILE_MODULES})
-        configure_file("${MODULE}.template.in" "${MODULE}.template" @ONLY)
-
         generate_man(${MODULE})
 
         install(FILES $<TARGET_PROPERTY:man-${MODULE},OUT_FILES>
