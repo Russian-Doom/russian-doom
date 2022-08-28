@@ -2603,6 +2603,11 @@ static void InitGameVersion(void)
 
     if (p)
     {
+        if (atoi(myargv[p+1]) == 0) // Doom v1.2
+        {
+            gameversion = exe_doom_1_2;
+        }
+        else
         if (atoi(myargv[p+1]) == 1) // Doom v1.666
         {
             gameversion = exe_doom_1_666;
