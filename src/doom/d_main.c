@@ -301,6 +301,9 @@ char* savegamedir;
 // location of IWAD and WAD files
 char* iwadfile;
 
+// [JN] Oldest versions of Doom 1 (0.9 or 1.1).
+boolean oldest_version = false;
+
 // [JN] Loaded SIGIL PWAD
 boolean sgl_loaded;
 boolean sgl_compat_loaded;
@@ -2282,9 +2285,11 @@ void D_SetGameDescription(void)
     // indicates it's an older versions of Doom 1 (0.9 or 1.1) which have
     // mixed order of STCFN patches and causing incorrect font drawing.
     // To avoid this, we replace original STCFN font with port's FNTSE.
+    // Also these versions does not use fullbright flag for certain powerups.
     if (W_CheckMultipleLumps("M_NMARE") == 1)
     {
         DEH_AddStringReplacement ("STCFN033", "FNTSE033");
+        oldest_version = true;
     }
 
     // [JN] Check if we have exactly two TITLEPICs loaded in Russian version
@@ -3092,11 +3097,6 @@ void D_DoomMain (void)
     else if (W_CheckNumForName("DMENUPIC") >= 0)
     {
         gamevariant = bfgedition;
-    }
-    // [JN] Checking for older sharewares
-    else if (gamemode == shareware && W_CheckNumForName("STCHAT") >= 0)
-    {
-        gamevariant = old_shareware;
     }
     // [JN] Checking for Press Beta
     else if (W_CheckNumForName("DOOMPRES") >= 0)

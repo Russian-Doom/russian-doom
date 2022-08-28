@@ -18,6 +18,7 @@
 //
 
 
+#include "d_main.h"
 #include "deh_main.h"
 #include "i_swap.h"
 #include "i_system.h"
@@ -742,11 +743,26 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
     }
     else if (thing->frame & FF_FULLBRIGHT)
     {
-        // full bright
-        vis->colormap[0] = vis->colormap[1] = colormaps;
+        // [JN] Certain powerups are not in full bright in Doom 0.9 and 1.1.
+        if (oldest_version
+        && (thing->type == MT_MISC13   // Berserk
+        ||  thing->type == MT_MISC15   // Computer map
+        ||  thing->type == MT_INS      // Partial invisibility
+        ||  thing->type == MT_INV      // Invulnerability
+        ||  thing->type == MT_MISC14   // Radiation suit
+        ||  thing->type == MT_MISC12)) // Supercharge
+        {
+            goto diminished;
+        }
+        else
+        {
+            // full bright
+            vis->colormap[0] = vis->colormap[1] = colormaps;
+        }
     }
     else
     {
+        diminished:
         // diminished light
         index = xscale >> (LIGHTSCALESHIFT-detailshift+hires);
 
