@@ -523,8 +523,11 @@ printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (descript
                       "Explicitly specify a Doom II 'mission pack' to run as, instead of detecting it based on the file name. Valid values are: 'doom2', 'tnt' and 'plutonia'",
                       "Явно задать 'mission pack' для Doom II, вместо того чтобы определять его по имени файла. Поддерживаемые значения: 'doom2', 'tnt' и 'plutonia'");
         CLI_Parameter("-gameversion <version>",
-                      "Emulate a specific version of Doom. Valid values are '1.666', '1.7', '1.8', '1.9', 'ultimate', 'doomse', 'final', 'final2'",
-                      "Эмулировать конкретную версию Doom. Поддерживаемые значения: '1.666', '1.7', '1.8', '1.9', 'ultimate', 'doomse', 'final', 'final2'");
+                      "Emulate a specific version of Doom. Valid values are '1.2', '1.666', '1.7', '1.8', '1.9', 'ultimate', 'doomse', 'final', 'final2'",
+                      "Эмулировать конкретную версию Doom. Поддерживаемые значения: '1.2', '1.666', '1.7', '1.8', '1.9', 'ultimate', 'doomse', 'final', 'final2'");
+        CLI_Parameter("-complevel <n>",
+                      "Toggle various bug fixes and enhanced features for maximum compatibility with other (related) source ports. Valid values are: '0' - Doom v1.2, '1' - Doom v1.666, '2' - Doom v1.9, '3' - Ultimate Doom, '4' - Final Doom",
+                      "Включает различные баг фиксы и улучшения для максимальной совместимости с другими (связанными) портами. В Поддерживаемые значения: '0' - Doom v1.2, '1' - Doom v1.666, '2' - Doom v1.9, '3' - Ultimate Doom, '4' - Final Doom");
     }
     else if(RD_GameType == gt_Hexen)
     {
