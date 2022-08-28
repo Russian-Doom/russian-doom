@@ -3477,6 +3477,7 @@ void D_DoomMain (void)
                "R_Init: Init DOOM refresh daemon - [" :
                "R_Init: Инициализация процесса запуска DOOM - [");
     R_Init ();
+    printf("]");
 
     DEH_printf(english_language ?
                "\nP_Init: Init Playloop state.\n" :

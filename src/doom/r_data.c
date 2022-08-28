@@ -632,7 +632,6 @@ static void GenerateTextureHashTable(void)
 static void R_InitTextures (void)
 {
     int			   i, j, k;
-    int			   temp1, temp2, temp3;
     int			   nummappatches;
     int			   offset;
     int			   maxoff = 0;
@@ -819,20 +818,6 @@ static void R_InitTextures (void)
     texturebrightmap = Z_Malloc (numtextures * sizeof(*texturebrightmap), PU_STATIC, 0);
 
     //	Really complex printing shit...
-    temp1 = W_GetNumForName (DEH_String("S_START"));  // P_???????
-    temp2 = W_GetNumForName (DEH_String("S_END")) - 1;
-    temp3 = ((temp2-temp1+63)/64) + ((numtextures+63)/64);
-
-    // [JN] Printed D_DoomMain()
-    //printf("[");
-
-    for (i = 0; i < temp3 + 9; i++)
-    printf(" ");
-
-    printf("]");
-
-    for (i = 0; i < temp3 + 10; i++)
-    printf("\b");
 
     for (i=0 ; i<numtextures ; i++, directory++)
     {
