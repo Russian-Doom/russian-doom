@@ -2237,7 +2237,8 @@ void D_SetGameDescription(void)
     || W_CheckMultipleLumps("RSKY1") > 1        // Doom 2 patches
     || W_CheckMultipleLumps("RSKY2") > 1
     || W_CheckMultipleLumps("RSKY3") > 1
-    || is_freedoom)                             // Freedoom is also not supported
+    || is_freedoom                              // Freedoom is also not supported
+    || gamemode == shareware)                   // Don't load in Shareware (lots of missing patches)
     {
         scaled_sky = true;
     }
