@@ -320,6 +320,9 @@ boolean old_godface; // [JN] Boolean for extra faces while in GOD mode
 boolean pfub2_replaced = false; // [JN] Check if we have a replaced PFUB2 gfx
 boolean realframe, skippsprinterp; // [JN] Interpolation for weapon bobbing
 
+// [JN] Support for -complevel command line parameter.
+static int     complevel_number;
+static boolean complevel_wrong = false;
 
 skill_t startskill;
 boolean autostart;
@@ -2575,6 +2578,41 @@ static void InitGameVersion(void)
         }
     }
 
+    // [JN] Allow to use '-complevel N' to set emulated engine version.
+    // Reference: https://doomwiki.org/wiki/PrBoom
+
+    p = M_CheckParmWithArgs("-complevel", 1);
+
+    if (p)
+    {
+        if (atoi(myargv[p+1]) == 1) // Doom v1.666
+        {
+            gameversion = exe_doom_1_666;
+        }
+        else
+        if (atoi(myargv[p+1]) == 2) // Doom v1.9
+        {
+            gameversion = exe_doom_1_9;
+        }
+        else
+        if (atoi(myargv[p+1]) == 3) // Ultimate Doom & Doom95
+        {
+            gameversion = exe_ultimate;
+        }
+        else
+        if (atoi(myargv[p+1]) == 4) // Final Doom
+        {
+            gameversion = exe_final;
+        }
+        else
+        {
+            // If non-supported complevel is selected,
+            // a warning will be printed in PrintGameVersion.
+            complevel_wrong = true;
+            complevel_number = atoi(myargv[p+1]);
+        }
+    }
+
     // The original exe does not support retail - 4th episode not supported
 
     if (gameversion < exe_ultimate && gamemode == retail)
@@ -2593,6 +2631,13 @@ static void InitGameVersion(void)
 void PrintGameVersion(void)
 {
     int i;
+
+    if (complevel_wrong)
+    {
+        printf (english_language ?
+                "Unsupported compatibility level selected: %d.\n" :
+                "Указан неподдерживаемый уровень совместимости: %d.\n", complevel_number);
+    }
 
     for (i=0; gameversions[i].description != NULL; ++i)
     {
@@ -3448,8 +3493,6 @@ void D_DoomMain (void)
                "D_CheckNetGame: Проверка статуса сетевой игры.\n");
     D_CheckNetGame ();
 
-    PrintGameVersion();
-
     DEH_printf(english_language ?
                "ST_Init: Init status bar and heads up display.\n" :
                "ST_Init: Инициализация статус-бара и HUD.\n");
@@ -3468,6 +3511,8 @@ void D_DoomMain (void)
     AM_initColors();
     AM_initPics();
     AM_initMarksColor(automap_mark_color);
+
+    PrintGameVersion();
 
     if (M_CheckParmWithArgs("-statdump", 1))
     {
@@ -3523,16 +3568,16 @@ void D_DoomMain (void)
             D_StartTitle ();    // start up intro loop
     }
 
-    endtime = SDL_GetTicks() - starttime;
-    DEH_printf(english_language ? "Startup process took %d ms.\n" :
-                                  "Процесс запуска занял %d мс.\n", endtime);
-    
     // [JN] Show the game we are playing
     DEH_printf(english_language ? "Starting game: " : "Запуск игры: ");
     DEH_printf("\"");
     DEH_printf(english_language ? gamedescription_eng : gamedescription_rus);
     DEH_printf("\".");
     DEH_printf("\n");
+
+    endtime = SDL_GetTicks() - starttime;
+    DEH_printf(english_language ? "Startup process took %d ms.\n" :
+                                  "Процесс запуска занял %d мс.\n", endtime);
 
     D_DoomLoop ();  // never returns
 }
