@@ -1867,8 +1867,7 @@ void I_ShutdownGraphics(void)
             // Open GL ES renderer, until Win+L or Ctrl+Alt+Del is pressed.
             // Reason unknown. Toggling full screen right before closing 
             // video system fixes this issue.
-            
-            // TODO - check if not whole I_ToggleFullScreen is needed.
+
             if (opengles_renderer)
             {
                 I_ToggleFullScreen();
