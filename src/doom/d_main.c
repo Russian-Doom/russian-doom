@@ -111,6 +111,8 @@ char *autoloaddoom1pwad[10]     = { "", "", "", "" };
 char *autoloaddoom2pwad[10]     = { "", "", "", "" };
 char *autoloadplutoniapwad[10]  = { "", "", "", "" };
 char *autoloadtntpwad[10]       = { "", "", "", "" };
+char *autoloadfreedoom1pwad[10] = { "", "", "", "" };
+char *autoloadfreedoom2pwad[10] = { "", "", "", "" };
 
 // -----------------------------------------------------------------------------
 // [JN] Default values
@@ -869,7 +871,7 @@ void D_BindVariables(void)
     // [JN] PWAD autoloading. Note that we are using variables 1..4, not 0...3.
     for (i = 1 ; i < 5 ; ++i)
     {
-        static char pwad[24];
+        static char pwad[32];
 
         M_snprintf(pwad, sizeof(pwad), "autoload_global_pwad%i", i);
         M_BindStringVariable(pwad, &autoloadglobalpwad[i]);
@@ -885,6 +887,12 @@ void D_BindVariables(void)
 
         M_snprintf(pwad, sizeof(pwad), "autoload_tnt_pwad%i", i);
         M_BindStringVariable(pwad, &autoloadtntpwad[i]);
+
+        M_snprintf(pwad, sizeof(pwad), "autoload_freedoom2_pwad%i", i);
+        M_BindStringVariable(pwad, &autoloadfreedoom1pwad[i]);
+
+        M_snprintf(pwad, sizeof(pwad), "autoload_freedoom2_pwad%i", i);
+        M_BindStringVariable(pwad, &autoloadfreedoom2pwad[i]);
     }
 
     // Rendering
@@ -1862,6 +1870,10 @@ void D_SetGameDescription(void)
                 autoloadplutoniapwad[i] = "";
             if (autoloadtntpwad[i] == NULL)
                 autoloadtntpwad[i] = "";
+            if (autoloadfreedoom1pwad[i] == NULL)
+                autoloadfreedoom1pwad[i] = "";
+            if (autoloadfreedoom2pwad[i] == NULL)
+                autoloadfreedoom2pwad[i] = "";
 
             if (strcmp(autoloadglobalpwad[i], ""))
             {
@@ -1871,66 +1883,94 @@ void D_SetGameDescription(void)
                         autoloadglobalpwad[i]);
             }
 
-            if (logical_gamemission == doom)
+            if (!is_freedoom && !is_freedm)
             {
-                if (strcmp(autoloaddoom1pwad[i], ""))
+                if (logical_gamemission == doom)
                 {
-                    W_MergeFile(autoloaddoom1pwad[i]);
-                    printf(english_language ?
-                           " autoloading: %s\n" : " автозагрузка: %s\n",
-                           autoloaddoom1pwad[i]);
-
-                    // [JN] Check for SIGIL (main) autoloading
-                    if (M_StrCaseStr(autoloaddoom1pwad[i],"sigil.wad")
-                    ||  M_StrCaseStr(autoloaddoom1pwad[i],"sigil_v1_2.wad")
-                    ||  M_StrCaseStr(autoloaddoom1pwad[i],"sigil_v1_21.wad"))
+                    if (strcmp(autoloaddoom1pwad[i], ""))
                     {
-                        D_RD_LoadSigilAssets(false);
+                        W_MergeFile(autoloaddoom1pwad[i]);
+                        printf(english_language ?
+                               " autoloading: %s\n" : " автозагрузка: %s\n",
+                               autoloaddoom1pwad[i]);
+                
+                        // [JN] Check for SIGIL (main) autoloading
+                        if (M_StrCaseStr(autoloaddoom1pwad[i],"sigil.wad")
+                        ||  M_StrCaseStr(autoloaddoom1pwad[i],"sigil_v1_2.wad")
+                        ||  M_StrCaseStr(autoloaddoom1pwad[i],"sigil_v1_21.wad"))
+                        {
+                            D_RD_LoadSigilAssets(false);
+                        }
+                
+                        // [JN] Check for SIGIL (compat) autoloading
+                        if (M_StrCaseStr(autoloaddoom1pwad[i],"sigil_compat.wad")
+                        ||  M_StrCaseStr(autoloaddoom1pwad[i],"sigil_compat_v1_2.wad")
+                        ||  M_StrCaseStr(autoloaddoom1pwad[i],"sigil_compat_v1_21.wad"))
+                        {
+                            D_RD_LoadSigilAssets(true);
+                        }
                     }
-
-                    // [JN] Check for SIGIL (compat) autoloading
-                    if (M_StrCaseStr(autoloaddoom1pwad[i],"sigil_compat.wad")
-                    ||  M_StrCaseStr(autoloaddoom1pwad[i],"sigil_compat_v1_2.wad")
-                    ||  M_StrCaseStr(autoloaddoom1pwad[i],"sigil_compat_v1_21.wad"))
+                }
+                else if (logical_gamemission == doom2)
+                {
+                    if (strcmp(autoloaddoom2pwad[i], ""))
                     {
-                        D_RD_LoadSigilAssets(true);
+                        W_MergeFile(autoloaddoom2pwad[i]);
+                        printf(english_language ?
+                               " autoloading: %s\n" : " автозагрузка: %s\n",
+                               autoloaddoom2pwad[i]);
+                
+                        // [JN] Check for No Rest for Living autoloading
+                        if (M_StrCaseStr(autoloaddoom2pwad[i],"nerve.wad"))
+                        {
+                            D_RD_LoadNerveAssets();
+                        }
+                    }
+                }
+                else if (logical_gamemission == pack_plut)
+                {
+                    if (strcmp(autoloadplutoniapwad[i], ""))
+                    {
+                        W_MergeFile(autoloadplutoniapwad[i]);
+                        printf(english_language ?
+                               " autoloading: %s\n" : " автозагрузка: %s\n",
+                               autoloadplutoniapwad[i]);
+                    }
+                }
+                else if (logical_gamemission == pack_tnt)
+                {
+                    if (strcmp(autoloadtntpwad[i], ""))
+                    {
+                        W_MergeFile(autoloadtntpwad[i]);
+                        printf(english_language ?
+                               " autoloading: %s\n" : " автозагрузка: %s\n",
+                               autoloadtntpwad[i]);
                     }
                 }
             }
-            else if (logical_gamemission == doom2)
+            else
             {
-                if (strcmp(autoloaddoom2pwad[i], ""))
+                // [JN] Freedoom: Phase 1
+                if (logical_gamemission == doom)
                 {
-                    W_MergeFile(autoloaddoom2pwad[i]);
-                    printf(english_language ?
-                           " autoloading: %s\n" : " автозагрузка: %s\n",
-                           autoloaddoom2pwad[i]);
-
-                    // [JN] Check for No Rest for Living autoloading
-                    if (M_StrCaseStr(autoloaddoom2pwad[i],"nerve.wad"))
+                    if (strcmp(autoloadfreedoom1pwad[i], ""))
                     {
-                        D_RD_LoadNerveAssets();
+                        W_MergeFile(autoloadfreedoom1pwad[i]);
+                        printf(english_language ?
+                               " autoadding: %s\n" : " автодобавление: %s\n",
+                               autoloadfreedoom1pwad[i]);
                     }
                 }
-            }
-            else if (logical_gamemission == pack_plut)
-            {
-                if (strcmp(autoloadplutoniapwad[i], ""))
+                // [JN] Freedoom: Phase 2
+                else
                 {
-                    W_MergeFile(autoloadplutoniapwad[i]);
-                    printf(english_language ?
-                           " autoloading: %s\n" : " автозагрузка: %s\n",
-                           autoloadplutoniapwad[i]);
-                }
-            }
-            else if (logical_gamemission == pack_tnt)
-            {
-                if (strcmp(autoloadtntpwad[i], ""))
-                {
-                    W_MergeFile(autoloadtntpwad[i]);
-                    printf(english_language ?
-                           " autoadding: %s\n" : " автодобавление: %s\n",
-                           autoloadtntpwad[i]);
+                    if (strcmp(autoloadfreedoom2pwad[i], ""))
+                    {
+                        W_MergeFile(autoloadfreedoom2pwad[i]);
+                        printf(english_language ?
+                               " autoadding: %s\n" : " автодобавление: %s\n",
+                               autoloadfreedoom2pwad[i]);
+                    }
                 }
             }
         }

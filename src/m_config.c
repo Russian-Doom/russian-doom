@@ -139,6 +139,16 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_STRING(autoload_tnt_pwad3),
     CONFIG_VARIABLE_STRING(autoload_tnt_pwad4),
 
+    CONFIG_VARIABLE_STRING(autoload_freedoom1_pwad1),
+    CONFIG_VARIABLE_STRING(autoload_freedoom1_pwad2),
+    CONFIG_VARIABLE_STRING(autoload_freedoom1_pwad3),
+    CONFIG_VARIABLE_STRING(autoload_freedoom1_pwad4),
+
+    CONFIG_VARIABLE_STRING(autoload_freedoom2_pwad1),
+    CONFIG_VARIABLE_STRING(autoload_freedoom2_pwad2),
+    CONFIG_VARIABLE_STRING(autoload_freedoom2_pwad3),
+    CONFIG_VARIABLE_STRING(autoload_freedoom2_pwad4),
+
     //!
     // [JN] Heretic PWAD autoloading
     //
