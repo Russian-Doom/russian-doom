@@ -743,7 +743,7 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
     }
     else if (thing->frame & FF_FULLBRIGHT)
     {
-        // [JN] Certain powerups are not in full bright in Doom 0.9 and 1.1.
+        // [JN] Certain powerups are not in full bright in Doom 1.0 and 1.1.
         if (oldest_version
         && (thing->type == MT_MISC13   // Berserk
         ||  thing->type == MT_MISC15   // Computer map

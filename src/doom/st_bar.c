@@ -845,7 +845,7 @@ static void ST_DrawBackground (void)
         }
     }
 
-    // [JN] Draw right side of bar if needed (Doom 0.99 and 1.1).
+    // [JN] Draw right side of bar if needed (Doom 1.0 and 1.1).
     // Not needed in Russian language because it have own full-width bar.
     if (stbarr && english_language)
     {

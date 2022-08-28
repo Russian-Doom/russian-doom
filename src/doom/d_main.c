@@ -301,7 +301,7 @@ char* savegamedir;
 // location of IWAD and WAD files
 char* iwadfile;
 
-// [JN] Oldest versions of Doom 1 (0.9 or 1.1).
+// [JN] Oldest versions of Doom 1 (1.0 or 1.1).
 boolean oldest_version = false;
 
 // [JN] Loaded SIGIL PWAD
@@ -2282,7 +2282,7 @@ void D_SetGameDescription(void)
     }
 
     // [JN] Exactly one M_NMARE lump, located in base/doom-common.wad,
-    // indicates it's an older versions of Doom 1 (0.9 or 1.1) which have
+    // indicates it's an older versions of Doom 1 (1.0 or 1.1) which have
     // mixed order of STCFN patches and causing incorrect font drawing.
     // To avoid this, we replace original STCFN font with port's FNTSE.
     // Also these versions does not use fullbright flag for certain powerups.
