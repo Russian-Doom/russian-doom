@@ -845,8 +845,18 @@ static void ST_DrawBackground (void)
         }
     }
 
-    // Always draw status bar on the center of the screen.
-    V_DrawPatch((ORIGWIDTH - SHORT(stbar->width)) / 2 + wide_delta, 0, stbar, NULL);
+    // [JN] Draw right side of bar if needed (Doom 0.99 and 1.1).
+    // Not needed in Russian language because it have own full-width bar.
+    if (stbarr && english_language)
+    {
+        V_DrawPatch(wide_delta, 0, stbar, NULL);
+        V_DrawPatch(104 + wide_delta, 0, stbarr, NULL);
+    }
+    else
+    {
+        // Always draw status bar on the center of the screen.
+        V_DrawPatch((ORIGWIDTH - SHORT(stbar->width)) / 2 + wide_delta, 0, stbar, NULL);        
+    }
 
     // Face background representing player color.
     if (netgame)

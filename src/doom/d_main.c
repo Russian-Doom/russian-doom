@@ -2278,6 +2278,15 @@ void D_SetGameDescription(void)
         }
     }
 
+    // [JN] Exactly one M_NMARE lump, located in base/doom-common.wad,
+    // indicates it's an older versions of Doom 1 (0.9 or 1.1) which have
+    // mixed order of STCFN patches and causing incorrect font drawing.
+    // To avoid this, we replace original STCFN font with port's FNTSE.
+    if (W_CheckMultipleLumps("M_NMARE") == 1)
+    {
+        DEH_AddStringReplacement ("STCFN033", "FNTSE033");
+    }
+
     // [JN] Check if we have exactly two TITLEPICs loaded in Russian version
     // of Doom registered. If two, we are free to use wide version: TITLEPIR,
     // since there is a TITLEPIC for ultimate game mode already. More clear:

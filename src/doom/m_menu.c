@@ -6788,6 +6788,7 @@ static void M_DrawReadThis1()
 
     switch (gameversion)
     {
+        case exe_doom_1_2:
         case exe_doom_1_666:    // [JN] Needed for Shareware 1.6 / 1.666
         case exe_doom_1_8:      // [JN] Needed for Shareware 1.8
         case exe_doom_1_9:
@@ -7086,6 +7087,7 @@ static void M_ReadThis2()
     // [JN] Show second screen also 1.6, 1.666 and 1.8 Sharewares
 
     if ((gameversion == exe_doom_1_9 && gamemode != commercial)
+    || (gameversion == exe_doom_1_2 && gamemode == shareware)
     || (gameversion == exe_doom_1_666 && gamemode == shareware)
     || (gameversion == exe_doom_1_8 && gamemode == shareware))
     {

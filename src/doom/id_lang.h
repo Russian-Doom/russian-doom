@@ -354,6 +354,7 @@ extern char* ststr_buddhaon;
 extern char* ststr_buddhaoff;
 
 extern patch_t *stbar;
+extern patch_t *stbarr;
 extern patch_t *starms;
 extern patch_t *stchammo;
 extern patch_t *stchfrgs;
