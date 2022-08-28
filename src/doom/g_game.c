@@ -2774,9 +2774,9 @@ void G_DoPlayDemo (void)
     {
         longtics = true;
     }
-    else if (demoversion != G_VanillaVersionCode() && !(gameversion <= exe_doom_1_2 && olddemo))
+    else if ((demoversion != G_VanillaVersionCode() && !(gameversion <= exe_doom_1_2 && olddemo)) || oldest_version)
     {
-        char *message = "Demo is from a different game version!\n"
+        char *message = "\nDemo is from a different game version!\n"
                         "(read %i, should be %i)\n"
                         "\n"
                         "*** You may need to upgrade your version "
