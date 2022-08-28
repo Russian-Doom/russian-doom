@@ -154,6 +154,8 @@ int fullscreen = true;
 
 int aspect_ratio = 2;
 int aspect_ratio_temp; // used for in-game toggling
+int opengles_renderer = 0;
+int opengles_renderer_temp; // used for in-game toggling
 int wide_delta;
 int screenwidth;
 int screenwidth_low; // [JN] Used in low detail column drawing.
@@ -368,30 +370,6 @@ static void SetShowCursor (const boolean show)
         SDL_GetRelativeMouseState(NULL, NULL);
     }
 }
-
-void I_ShutdownGraphics(void)
-{
-    if (initialized)
-    {
-        static int w, h;
-        
-        SetShowCursor(true);
-
-        // [JN] Get screen width and height.
-        SDL_GetRendererOutputSize(renderer, &w, &h);
-
-        // [JN] Place mouse cursor to the center of the screen.
-        if (fullscreen)
-        {
-            SDL_WarpMouseGlobal(w / 2, h / 2);
-        }
-
-        SDL_QuitSubSystem(SDL_INIT_VIDEO);
-
-        initialized = false;
-    }
-}
-
 
 // Adjust window_width / window_height variables to be an an aspect
 // ratio consistent with the aspect_ratio_correct variable.
@@ -1004,7 +982,14 @@ void I_FinishUpdate (void)
     // Blit from the paletted 8-bit screen buffer to the intermediate
     // 32-bit RGBA buffer that we can load into the texture.
 
-    SDL_LowerBlit(screenbuffer, &blit_rect, argbbuffer, &blit_rect);
+    if (opengles_renderer)
+    {
+        SDL_BlitSurface(screenbuffer, &blit_rect, argbbuffer, &blit_rect);
+    }
+    else
+    {
+        SDL_LowerBlit(screenbuffer, &blit_rect, argbbuffer, &blit_rect);
+    }
 
     // Update the intermediate texture with the contents of the RGBA buffer.
 
@@ -1040,7 +1025,14 @@ void I_FinishUpdate (void)
 
     // Draw!
 
-    SDL_RenderPresent(renderer);
+    if (opengles_renderer)
+    {
+        SDL_GL_SwapWindow(screen);
+    }
+    else
+    {
+        SDL_RenderPresent(renderer);
+    }
 
     // [AM] Figure out how far into the current tic we're in as a fixed_t.
     if (uncapped_fps)
@@ -1419,6 +1411,16 @@ static void SetVideoMode(void)
     // Set the highdpi flag - this makes a big difference on Macs with
     // retina displays, especially when using small window sizes.
     window_flags |= SDL_WINDOW_ALLOW_HIGHDPI;
+
+    // [JN] Set screen renderer...
+    SDL_SetHint(SDL_HINT_RENDER_DRIVER, opengles_renderer ? "opengles2" : 
+#ifdef _WIN32
+    // ... On Windows, default is always Direct 3D 9.
+    "direct3d");
+#else
+    // ... On other OSes it is unclear, so don't set a hint at all.
+    "");
+#endif
 
 #ifdef _WIN32
     // [JN] Windows 11 idiocy. Indicate that window using OpenGL mode (while it's
@@ -1843,6 +1845,43 @@ void I_ReInitGraphics (const int reinit)
 	need_resize = true;
 }
 
+void I_ShutdownGraphics(void)
+{
+    if (initialized)
+    {
+        static int w, h;
+        
+        SetShowCursor(true);
+
+        // [JN] Get screen width and height.
+        SDL_GetRendererOutputSize(renderer, &w, &h);
+
+        // [JN] Place mouse cursor to the center of the screen.
+        if (fullscreen)
+        {
+            SDL_WarpMouseGlobal(w / 2, h / 2);
+
+#ifdef _WIN32
+            // [JN] More Windows 11 idiocy. It possible to stuck in black
+            // screen after toggling vsync and quit program when using
+            // Open GL ES renderer, until Win+L or Ctrl+Alt+Del is pressed.
+            // Reason unknown. Toggling full screen right before closing 
+            // video system fixes this issue.
+
+            if (opengles_renderer)
+            {
+                I_ToggleFullScreen();
+            }
+#endif
+        }
+
+        
+        SDL_QuitSubSystem(SDL_INIT_VIDEO);
+
+        initialized = false;
+    }
+}
+
 void I_RenderReadPixels(byte **data, int *w, int *h, int *p)
 {
 	SDL_Rect rect;
@@ -1899,6 +1938,7 @@ void I_BindVideoVariables(void)
     M_BindIntVariable("use_mouse",                 &usemouse);
     M_BindIntVariable("fullscreen",                &fullscreen);
     M_BindIntVariable("aspect_ratio",              &aspect_ratio);
+    M_BindIntVariable("opengles_renderer",         &opengles_renderer);
     M_BindIntVariable("video_display",             &video_display);
     M_BindIntVariable("vsync",                     &vsync);
     M_BindIntVariable("show_fps",                  &show_fps);

@@ -49,6 +49,8 @@
 
 extern int aspect_ratio;
 extern int aspect_ratio_temp;
+extern int opengles_renderer;
+extern int opengles_renderer_temp;
 extern int wide_delta;
 extern int screenwidth;
 extern int screenwidth_low;

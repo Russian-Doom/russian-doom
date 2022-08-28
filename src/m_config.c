@@ -327,6 +327,12 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(aspect_ratio),
 
     //!
+    // [JN] OpenGL ES 2.0 video renderer.
+    //
+
+    CONFIG_VARIABLE_INT(opengles_renderer),
+
+    //!
     // Index of the display on which the game should run. This has no
     // effect if running in windowed mode (fullscreen=0) and
     // window_position is not set to "center".
