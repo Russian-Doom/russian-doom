@@ -338,8 +338,8 @@ printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (descript
            english_language ? "Usage" : "Использование",
            PROGRAM_PREFIX,
            game,
-           english_language ? "Options" : "опции",
-           english_language ? "Options" : "Опции");
+           english_language ? "Options" : "параметры",
+           english_language ? "Options" : "Параметры");
 
     CLI_Parameter("-h, --help",
                   "Show this help message",
