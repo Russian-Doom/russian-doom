@@ -323,10 +323,6 @@ boolean old_godface; // [JN] Boolean for extra faces while in GOD mode
 boolean pfub2_replaced = false; // [JN] Check if we have a replaced PFUB2 gfx
 boolean realframe, skippsprinterp; // [JN] Interpolation for weapon bobbing
 
-// [JN] Support for -complevel command line parameter.
-static int     complevel_number;
-static boolean complevel_wrong = false;
-
 skill_t startskill;
 boolean autostart;
 boolean advancedemo;
@@ -2474,6 +2470,52 @@ static struct
     { NULL,                  NULL,         0},
 };
 
+// -----------------------------------------------------------------------------
+// [FG] support named complevels on the command line, e.g. "-complevel boom",
+// [JN] Slightly rearranged for InterDoom.
+// -----------------------------------------------------------------------------
+
+static const int G_GetNamedComplevel (const char *arg)
+{
+    const struct 
+    {
+        int level;
+        const char *const name;
+        int exe;
+    }
+    named_complevel[] = {
+    {-1,  "vanilla",              -1},
+    { 0,        "0",   exe_doom_1_2 },
+    { 0,      "1.2",   exe_doom_1_2 },
+    { 1,        "1", exe_doom_1_666 },
+    { 1,    "1.666", exe_doom_1_666 },
+    { 2,        "2",   exe_doom_1_9 },
+    { 2,      "1.9",   exe_doom_1_9 },
+    { 2,    "doom2",   exe_doom_1_9 },
+    { 3,        "3",   exe_ultimate },
+    { 3, "ultimate",   exe_ultimate },
+    { 4,        "4",      exe_final },
+    { 4,    "final",      exe_final },
+    { 4, "plutonia",      exe_final },
+    { 4,      "tnt",      exe_final },
+    };
+
+    for (int i = 0 ; i < sizeof(named_complevel)/sizeof(*named_complevel) ; i++)
+    {
+        if (!strcasecmp(arg, named_complevel[i].name))
+        {
+            if (named_complevel[i].exe >= 0)
+            {
+                gameversion = named_complevel[i].exe;
+            }
+
+            return named_complevel[i].level;
+        }
+    }
+
+    return -1;
+}
+
 // Initialize the game version
 
 static void InitGameVersion(void)
@@ -2603,41 +2645,30 @@ static void InitGameVersion(void)
 
     // [JN] Allow to use '-complevel N' to set emulated engine version.
     // Reference: https://doomwiki.org/wiki/PrBoom
-
-    p = M_CheckParmWithArgs("-complevel", 1);
-
-    if (p)
     {
-        if (atoi(myargv[p+1]) == 0) // Doom v1.2
+        int i = M_CheckParmWithArgs("-complevel", 1);
+
+        if (i > 0)
         {
-            gameversion = exe_doom_1_2;
-        }
-        else
-        if (atoi(myargv[p+1]) == 1) // Doom v1.666
-        {
-            gameversion = exe_doom_1_666;
-        }
-        else
-        if (atoi(myargv[p+1]) == 2) // Doom v1.9
-        {
-            gameversion = exe_doom_1_9;
-        }
-        else
-        if (atoi(myargv[p+1]) == 3) // Ultimate Doom & Doom95
-        {
-            gameversion = exe_ultimate;
-        }
-        else
-        if (atoi(myargv[p+1]) == 4) // Final Doom
-        {
-            gameversion = exe_final;
-        }
-        else
-        {
-            // If non-supported complevel is selected,
-            // a warning will be printed in PrintGameVersion.
-            complevel_wrong = true;
-            complevel_number = atoi(myargv[p+1]);
+            int l = G_GetNamedComplevel(myargv[i+1]);
+
+            if (l > -1)
+            {
+                demoversion = l;
+            }
+            else
+            {
+                const char *valid_complevels = "\t0 - Doom v1.2\n"
+                                               "\t1 - Doom v1.666\n"
+                                               "\t2 - Doom v1.9\n"
+                                               "\t3 - Ultimate Doom\n"
+                                               "\t4 - Final Doom\n";
+
+                I_Error(english_language ?
+                        "Invalid parameter '%s' for -complevel.\nValid parameters are:\n%s" :
+                        "Некорректный параметр '%s' для -complevel.\nДопустимые параметры:\n%s",
+                        myargv[i+1], valid_complevels);
+            }
         }
     }
 
@@ -2665,13 +2696,6 @@ static void InitGameVersion(void)
 void PrintGameVersion(void)
 {
     int i;
-
-    if (complevel_wrong)
-    {
-        printf (english_language ?
-                "Unsupported compatibility level selected: %d.\n" :
-                "Указан неподдерживаемый уровень совместимости: %d.\n", complevel_number);
-    }
 
     for (i=0; gameversions[i].description != NULL; ++i)
     {
