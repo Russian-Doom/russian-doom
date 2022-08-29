@@ -681,12 +681,12 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(crosshair_opacity),
 
     // Gameplay: Gameplay
+    CONFIG_VARIABLE_INT(default_skill),
     CONFIG_VARIABLE_INT(fix_map_errors),
     CONFIG_VARIABLE_INT(flip_levels),
     CONFIG_VARIABLE_INT(pistol_start),
     CONFIG_VARIABLE_INT(breathing),
     CONFIG_VARIABLE_INT(unlimited_lost_souls),
-    CONFIG_VARIABLE_INT(agressive_lost_souls),
     CONFIG_VARIABLE_INT(fast_quickload),
 
     // Gameplay: Demos

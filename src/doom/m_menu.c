@@ -325,12 +325,12 @@ static void M_RD_Change_InfraGreenVisor();
 static void M_RD_Change_HorizontalAiming();
 
 // Page 5
+static void M_RD_Change_DefaultSkill();
 static void M_RD_Change_FixMapErrors();
 static void M_RD_Change_FlipLevels();
 static void M_RD_Change_PistolStart();
 static void M_RD_Change_Breathing();
 static void M_RD_Change_LostSoulsQty();
-static void M_RD_Change_LostSoulsAgr();
 static void M_RD_Change_DemoTimer(Direction_t direction);
 static void M_RD_Change_DemoTimerDir();
 static void M_RD_Change_DemoBar();
@@ -1400,12 +1400,12 @@ static Menu_t Gameplay4Menu = {
 
 static MenuItem_t Gameplay5Items[] = {
     {ITT_TITLE,   "Gameplay",                            "Utqvgktq",                        NULL,                        0}, // Геймплей
+    {ITT_LRFUNC,  "Default skill level:",                "ehjdtym ckj;yjcnb gj evjkxfyb.:", M_RD_Change_DefaultSkill,    0}, // Уровень сложности по умолчанию
     {ITT_SWITCH,  "Fix textures on vanilla maps:",       "ntrcnehs jhbu> ehjdytq:",         M_RD_Change_FixMapErrors,    0}, // Текстуры ориг. уровней
     {ITT_SWITCH,  "Flip game levels:",                   "pthrfkmyjt jnhf;tybt ehjdytq:",   M_RD_Change_FlipLevels,      0}, // Зеркальное отражение уровней
     {ITT_SWITCH,  NULL,                                  NULL, /*[JN] Joint EN/RU string*/  M_RD_Change_PistolStart,     0}, // Режим игры "Pistol start"
     {ITT_SWITCH,  "Imitate player's breathing:",         "bvbnfwbz ls[fybz buhjrf:",        M_RD_Change_Breathing,       0}, // Имитация дыхания игрока
     {ITT_SWITCH,  "Pain Elemental without Souls limit:", "'ktvtynfkm ,tp juhfybxtybz lei:", M_RD_Change_LostSoulsQty,    0}, // Элементаль без ограничения душ
-    {ITT_SWITCH,  NULL,                                  NULL,                              M_RD_Change_LostSoulsAgr,    0}, // Повышенная агрессивность душ
     {ITT_TITLE,   "Demos",                               "Ltvjpfgbcb",                      NULL,                        0}, // Демозаписи
     {ITT_LRFUNC,  "Show demo timer:",                    "jnj,hf;fnm nfqvth:",              M_RD_Change_DemoTimer,       0}, // Отображать таймер
     {ITT_SWITCH,  "timer direction:",                    "dhtvz nfqvthf:",                  M_RD_Change_DemoTimerDir,    0}, // Время таймера
@@ -1419,7 +1419,7 @@ static Menu_t Gameplay5Menu = {
     35, 35,
     25,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
-    15, Gameplay5Items, false,
+    14, Gameplay5Items, false,
     M_RD_Draw_Gameplay_5,
     &GameplayPageDescriptor,
     &RDOptionsMenu,
@@ -4819,6 +4819,28 @@ static void M_RD_Draw_Gameplay_4(void)
     }
 }
 
+// [JN] Note: Russian skill names are too wide to fit into 4:3
+// and abbreviations looks rather odd, so let's just use numbers.
+static char *const DefSkillName[6][2] = {
+    { "1", "I\'M TOO YOUNG TO DIE" },
+    { "2", "HEY, NOT TOO ROUGH"    },
+    { "3", "HURT ME PLENTY"        },
+    { "4", "ULTRA-VIOLENCE"        },
+    { "5", "NIGHTMARE"             },
+    { "6", "ULTRA-NIGHTMARE!"      }
+};
+
+static const Translation_CR_t DefSkillColor (int skill)
+{
+    return
+        skill == 0 ? CR_OLIVE :
+        skill == 1 ? CR_DARKGREEN :
+        skill == 2 ? CR_GREEN :
+        skill == 3 ? CR_YELLOW :
+        skill == 4 ? CR_ORANGE :
+                     CR_RED;
+}
+
 static void M_RD_Draw_Gameplay_5(void)
 {   
     // Jaguar: hide game background, don't draw lines over the HUD
@@ -4829,40 +4851,30 @@ static void M_RD_Draw_Gameplay_5(void)
 
     if (english_language)
     {
+        // Default skill level
+        RD_M_DrawTextSmallENG(DefSkillName[default_skill][english_language], 181 + wide_delta, 35,
+                              DefSkillColor(default_skill));
+
         // Fix textures on vanilla maps
-        RD_M_DrawTextSmallENG(fix_map_errors ? RD_ON : RD_OFF, 243 + wide_delta, 35,
+        RD_M_DrawTextSmallENG(fix_map_errors ? RD_ON : RD_OFF, 243 + wide_delta, 45,
                               fix_map_errors ? CR_GREEN : CR_DARKRED);
 
         // Flip game levels
-        RD_M_DrawTextSmallENG(flip_levels ? RD_ON : RD_OFF, 158 + wide_delta, 45,
+        RD_M_DrawTextSmallENG(flip_levels ? RD_ON : RD_OFF, 158 + wide_delta, 55,
                               flip_levels ? CR_GREEN : CR_DARKRED);
 
         // Pistol start
-        RD_M_DrawTextSmallENG("Pistol start game mode:", 35 + wide_delta, 55, netgame ? CR_DARKRED : CR_NONE);
-        RD_M_DrawTextSmallENG(pistol_start ? RD_ON : RD_OFF, 203 + wide_delta, 55,
+        RD_M_DrawTextSmallENG("Pistol start game mode:", 35 + wide_delta, 65, netgame ? CR_DARKRED : CR_NONE);
+        RD_M_DrawTextSmallENG(pistol_start ? RD_ON : RD_OFF, 203 + wide_delta, 65,
                               pistol_start && !netgame ? CR_GREEN : CR_DARKRED);
 
         // Imitate player's breathing
-        RD_M_DrawTextSmallENG(breathing ? RD_ON : RD_OFF, 227 + wide_delta, 65,
+        RD_M_DrawTextSmallENG(breathing ? RD_ON : RD_OFF, 227 + wide_delta, 75,
                               breathing ? CR_GREEN : CR_DARKRED);
 
         // Pain Elemental without Souls limit
-        RD_M_DrawTextSmallENG(unlimited_lost_souls ? RD_ON : RD_OFF, 284 + wide_delta, 75,
+        RD_M_DrawTextSmallENG(unlimited_lost_souls ? RD_ON : RD_OFF, 284 + wide_delta, 85,
                               unlimited_lost_souls ? CR_GREEN : CR_DARKRED);
-
-        // More agressive lost souls
-        RD_M_DrawTextSmallENG("More aggressive lost souls:", 35 + wide_delta, 85,
-                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-
-        if (strict_mode)
-        {
-            RD_M_DrawTextSmallENG("N/A", 230 + wide_delta, 85, CR_DARKRED);
-        }
-        else
-        {
-            RD_M_DrawTextSmallENG(agressive_lost_souls ? RD_ON : RD_OFF, 230 + wide_delta, 85,
-                                  agressive_lost_souls && !netgame ? CR_GREEN : CR_DARKRED);
-        }
 
         // Show demo timer
         RD_M_DrawTextSmallENG(demotimer == 1 ? "playback" :
@@ -4891,41 +4903,31 @@ static void M_RD_Draw_Gameplay_5(void)
     }
     else
     {
+        // Уровень сложности по умолчанию
+        RD_M_DrawTextSmallRUS(DefSkillName[default_skill][english_language], 278 + wide_delta, 35,
+                              DefSkillColor(default_skill));
+
         // Текстуры ориг. уровней
-        RD_M_DrawTextSmallRUS(fix_map_errors ? "bcghfdktyyst" : ",tp bpvtytybq", 209 + wide_delta, 35,
+        RD_M_DrawTextSmallRUS(fix_map_errors ? "bcghfdktyyst" : ",tp bpvtytybq", 209 + wide_delta, 45,
                               fix_map_errors ? CR_GREEN : CR_DARKRED);
 
         // Устранять ошибки ориг. уровней
-        RD_M_DrawTextSmallRUS(flip_levels ? RD_ON_RUS : RD_OFF_RUS, 263 + wide_delta, 45,
+        RD_M_DrawTextSmallRUS(flip_levels ? RD_ON_RUS : RD_OFF_RUS, 263 + wide_delta, 55,
                               flip_levels ? CR_GREEN : CR_DARKRED);
 
         // Режим игры "Pistol start"
-        RD_M_DrawTextSmallRUS("ht;bv buhs ^", 35 + wide_delta, 55, netgame ? CR_DARKRED : CR_NONE);
-        RD_M_DrawTextSmallENG("\"Pistol start\":", 121 + wide_delta, 55, netgame ? CR_DARKRED : CR_NONE);
-        RD_M_DrawTextSmallRUS(pistol_start ? RD_ON_RUS : RD_OFF_RUS, 229 + wide_delta, 55,
+        RD_M_DrawTextSmallRUS("ht;bv buhs ^", 35 + wide_delta, 65, netgame ? CR_DARKRED : CR_NONE);
+        RD_M_DrawTextSmallENG("\"Pistol start\":", 121 + wide_delta, 65, netgame ? CR_DARKRED : CR_NONE);
+        RD_M_DrawTextSmallRUS(pistol_start ? RD_ON_RUS : RD_OFF_RUS, 229 + wide_delta, 65,
                               pistol_start && !netgame ? CR_GREEN : CR_DARKRED);
 
         // Имитация дыхания игрока
-        RD_M_DrawTextSmallRUS(breathing ? RD_ON_RUS : RD_OFF_RUS, 225 + wide_delta, 65,
+        RD_M_DrawTextSmallRUS(breathing ? RD_ON_RUS : RD_OFF_RUS, 225 + wide_delta, 75,
                               breathing ? CR_GREEN : CR_DARKRED);
 
         // Элементаль без ограничения Душ
-        RD_M_DrawTextSmallRUS(unlimited_lost_souls ? RD_ON_RUS : RD_OFF_RUS, 274 + wide_delta, 75,
+        RD_M_DrawTextSmallRUS(unlimited_lost_souls ? RD_ON_RUS : RD_OFF_RUS, 274 + wide_delta, 85,
                               unlimited_lost_souls ? CR_GREEN : CR_DARKRED);
-
-        // Повышенная агрессивность Душ
-        RD_M_DrawTextSmallRUS("gjdsityyfz fuhtccbdyjcnm lei:", 35 + wide_delta, 85,
-                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-
-        if (strict_mode)
-        {
-            RD_M_DrawTextSmallRUS("Y*L", 266 + wide_delta, 85, CR_DARKRED);
-        }
-        else
-        {
-            RD_M_DrawTextSmallRUS(agressive_lost_souls ? RD_ON_RUS : RD_OFF_RUS, 266 + wide_delta, 85,
-                                  agressive_lost_souls && !netgame ? CR_GREEN : CR_DARKRED);
-        }
 
         // Отображать таймер
         RD_M_DrawTextSmallRUS(demotimer == 1 ? "ghb ghjbuhsdfybb" :
@@ -5322,6 +5324,11 @@ static void M_RD_Change_HorizontalAiming(Direction_t direction)
 // Gameplay: Gameplay
 //
 
+static void M_RD_Change_DefaultSkill(Direction_t direction)
+{
+    RD_Menu_SpinInt(&default_skill, 0, 5, direction);
+}
+
 static void M_RD_Change_FixMapErrors()
 {
     fix_map_errors ^= 1;
@@ -5341,16 +5348,6 @@ static void M_RD_Change_FlipLevels()
 static void M_RD_Change_LostSoulsQty()
 {
     unlimited_lost_souls ^= 1;
-}
-
-static void M_RD_Change_LostSoulsAgr()
-{
-    if (strict_mode)
-    {
-        return; // Disallow toggling in strict vanilla mode.
-    }
-
-    agressive_lost_souls ^= 1;
 }
 
 static void M_RD_Change_Breathing()
@@ -6178,12 +6175,12 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     weapon_bobbing       = 1;
 
     // Gameplay: Gameplay
+    default_skill        = 2;
     fix_map_errors       = 1;
     flip_levels          = 0;
     pistol_start         = 0;
     breathing            = 0;
     unlimited_lost_souls = 1;
-    agressive_lost_souls = 0;
     fast_quickload       = 1;
 
     // Gameplay: Demos
@@ -6366,12 +6363,12 @@ static void M_RD_BackToDefaults_Original(int choice)
     horizontal_autoaim  = 3;
 
     // Gameplay: Gameplay
+    default_skill        = 2;
     fix_map_errors       = 0;
     flip_levels          = 0;
     pistol_start         = 0;
     breathing            = 0;
     unlimited_lost_souls = 0;
-    agressive_lost_souls = 0;
     fast_quickload       = 1;
 
     // Gameplay: Demos
@@ -7992,6 +7989,9 @@ void M_Init (void)
     OptionsMenu->prevMenu = MainMenu;
     LoadMenu.prevMenu = MainMenu;
     SaveMenu.prevMenu = MainMenu;
+
+    // [JN] Set cursor position in skill menu to default skill level.
+    NewGameMenu.lastOn = default_skill;
 
     CurrentMenu = MainMenu;
     CurrentItPos = CurrentMenu->lastOn;

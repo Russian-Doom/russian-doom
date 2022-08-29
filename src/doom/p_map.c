@@ -366,18 +366,12 @@ static boolean PIT_CheckThing (mobj_t *thing)
 
         P_DamageMobj (thing, tmthing, tmthing, damage);
 
-        // [JN] Fix bug: https://doomwiki.org/wiki/Lost_soul_colliding_with_items
-        // Thanks AXDOOMER for this fix!
+        tmthing->flags &= ~MF_SKULLFLY;
+        tmthing->momx = tmthing->momy = tmthing->momz = 0;
 
-        if (!singleplayer || !agressive_lost_souls || strict_mode || vanillaparm)
-        {
-            tmthing->flags &= ~MF_SKULLFLY;
-            tmthing->momx = tmthing->momy = tmthing->momz = 0;
+        P_SetMobjState(tmthing, tmthing->info->spawnstate);
 
-            P_SetMobjState(tmthing, tmthing->info->spawnstate);
-
-            return false;		// stop moving
-        }
+        return false;		// stop moving
     }
     
     // [JN] Torque: make sliding corpses passable

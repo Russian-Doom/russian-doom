@@ -1179,28 +1179,10 @@ void P_DamageMobj (mobj_t *target, const mobj_t *inflictor, mobj_t *source, int 
         return;
     }
 
-    // [JN] Fix bug: https://doomwiki.org/wiki/Lost_soul_charging_backwards
-    // Thanks AXDOOMER for this fix!
-    if (singleplayer && agressive_lost_souls && !strict_mode && !vanillaparm)
+    if ((P_Random () < target->info->painchance) && !(target->flags & MF_SKULLFLY))
     {
-        if (P_Random () < target->info->painchance)
-        {
-            if (target->flags & MF_SKULLFLY)
-            {
-                target->flags &= ~MF_SKULLFLY;
-            }
-
-            target->flags |= MF_JUSTHIT;	// fight back!
-            P_SetMobjState (target, target->info->painstate);
-        }
-    }
-    else
-    {
-        if ((P_Random () < target->info->painchance) && !(target->flags & MF_SKULLFLY))
-        {
-            target->flags |= MF_JUSTHIT;	// fight back!
-            P_SetMobjState (target, target->info->painstate);
-        }        
+        target->flags |= MF_JUSTHIT;  // fight back!
+        P_SetMobjState (target, target->info->painstate);
     }
 
     target->reactiontime = 0;   // we're awake now...	

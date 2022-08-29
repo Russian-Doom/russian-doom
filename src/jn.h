@@ -315,12 +315,12 @@ extern int crosshair_scale;
 extern int crosshair_opacity;
 
 // Gameplay: Gameplay
+extern int default_skill;
 extern int fix_map_errors;
 extern int flip_levels;
 extern int pistol_start;
 extern int breathing;
 extern int unlimited_lost_souls;
-extern int agressive_lost_souls;
 extern int fast_quickload;
 
 // Gameplay: Demos

@@ -245,15 +245,7 @@ void P_XYMovement (mobj_t* mo)
             mo->flags &= ~MF_SKULLFLY;
             mo->momx = mo->momy = mo->momz = 0;
 
-            // [JN] Optionally fix bug: https://doomwiki.org/wiki/Lost_soul_target_amnesia
-            if (singleplayer && agressive_lost_souls && !strict_mode && !vanillaparm)
-            {
-                P_SetMobjState (mo, mo->info->seestate);
-            }
-            else
-            {
-                P_SetMobjState (mo, mo->info->spawnstate);
-            }
+            P_SetMobjState (mo, mo->info->spawnstate);
         }
 
         return;
