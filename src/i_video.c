@@ -1476,10 +1476,6 @@ static void SetVideoMode(void)
                                         window_border == 0 ? 0 : window_position_y,
                                         w, h, window_flags);
 
-#ifdef _WIN32
-        DisableWinRound(screen);
-#endif
-
         pixel_format = SDL_GetWindowPixelFormat(screen);
 
         // [JN] Allow game window to be downscaled to 1:1 pixel size.
@@ -1549,6 +1545,12 @@ static void SetVideoMode(void)
             force_software_renderer = 1;
         }
     }
+
+	// [JN] After window and renderer were created, unoptionally
+	// disable window corners rounding in Windows 11.
+#ifdef _WIN32
+	DisableWinRound(screen);
+#endif
 
     // Important: Set the "logical size" of the rendering context. At the same
     // time this also defines the aspect ratio that is preserved while scaling
