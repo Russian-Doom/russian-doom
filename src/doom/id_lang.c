@@ -253,6 +253,7 @@ char* ststr_buddhaoff;
 
 // GFX patches
 patch_t *stbar;
+patch_t *stbarr;
 patch_t *starms;
 patch_t *stchammo;
 patch_t *stchfrgs;
@@ -423,7 +424,16 @@ void ID_DefineLanguageStrings (void)
         ststr_buddhaoff = STSTR_BUDDHAOFF;
 
         // GFX patches:
-        stbar = W_CacheLumpName(DEH_String("STBAR"), PU_STATIC);
+        if (W_CheckNumForName(DEH_String("STBAR")) > 0)
+        {
+            stbar = W_CacheLumpName(DEH_String("STBAR"), PU_STATIC);
+            stbarr = NULL;
+        }
+        else
+        {
+            stbar = W_CacheLumpName(DEH_String("STMBARL"), PU_STATIC);
+            stbarr = W_CacheLumpName(DEH_String("STMBARR"), PU_STATIC);
+        }
         starms = W_CacheLumpName(DEH_String("STARMS"), PU_STATIC);
         stchammo = W_CacheLumpName(DEH_String("STCHAMMO"), PU_STATIC);
         stchfrgs = W_CacheLumpName(DEH_String("STCHFRGS"), PU_STATIC);

@@ -306,7 +306,8 @@ const int EV_DoFloor (line_t *line, const floor_e floortype)
             floor->speed = FLOORSPEED * 4;
             floor->floordestheight = 
             P_FindHighestFloorSurrounding(sec);
-            if (floor->floordestheight != sec->floorheight)
+            if (gameversion == exe_doom_1_2
+            ||  floor->floordestheight != sec->floorheight)
             {
                 floor->floordestheight += 8*FRACUNIT;
             }

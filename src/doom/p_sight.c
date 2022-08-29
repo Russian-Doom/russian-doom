@@ -33,6 +33,55 @@ static int sightcounts[2];
 
 
 // -----------------------------------------------------------------------------
+// PTR_SightTraverse() for Doom 1.2 sight calculations
+// taken from prboom-plus/src/p_sight.c:69-102
+// -----------------------------------------------------------------------------
+static boolean PTR_SightTraverse(intercept_t *in)
+{
+    line_t *li;
+    fixed_t slope;
+
+    li = in->d.line;
+
+    //
+    // crosses a two sided line
+    //
+    P_LineOpening(li);
+
+    if (openbottom >= opentop)  // quick test for totally closed doors
+    {
+        return false;  // stop
+    }
+
+    if (li->frontsector->floorheight != li->backsector->floorheight)
+    {
+        slope = FixedDiv(openbottom - sightzstart , in->frac);
+
+        if (slope > bottomslope)
+        {
+            bottomslope = slope;
+        }
+    }
+
+    if (li->frontsector->ceilingheight != li->backsector->ceilingheight)
+    {
+        slope = FixedDiv(opentop - sightzstart, in->frac);
+
+        if (slope < topslope)
+        {
+            topslope = slope;
+        }
+    }
+
+    if (topslope <= bottomslope)
+    {
+        return false;  // stop
+    }
+
+    return true;  // keep going
+}
+
+// -----------------------------------------------------------------------------
 // P_DivlineSide
 // Returns side 0 (front), 1 (back), or 2 (on).
 // [JN] killough 4/19/98: made static, cleaned up
@@ -298,6 +347,12 @@ const boolean P_CheckSight (const mobj_t *t1, const mobj_t *t2)
     sightzstart = t1->z + t1->height - (t1->height>>2);
     topslope = (t2->z+t2->height) - sightzstart;
     bottomslope = (t2->z) - sightzstart;
+
+    if (gameversion <= exe_doom_1_2)
+    {
+        return P_PathTraverse(t1->x, t1->y, t2->x, t2->y,
+                              PT_EARLYOUT | PT_ADDLINES, PTR_SightTraverse);
+    }
 
     strace.x = t1->x;
     strace.y = t1->y;

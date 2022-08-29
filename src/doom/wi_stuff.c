@@ -2042,7 +2042,9 @@ static void WI_loadUnloadData (load_callback_t callback)
     }
 
     // More hacks on minus sign.
-    callback(DEH_String("WIMINUS"), &wiminus);
+    // [JN] Versions prior 1.4 does not have WIMINUS patch.
+    callback(DEH_String(W_CheckNumForName(DEH_String("WIMINUS")) > 0 ?
+                        "WIMINUS" : "TNT1A0"), &wiminus);
 
     for (i=0;i<10;i++)
     {

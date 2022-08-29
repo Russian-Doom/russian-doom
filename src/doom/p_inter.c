@@ -450,7 +450,7 @@ void P_TouchSpecialThing (const mobj_t *special, const mobj_t *toucher)
             {
                 // [JN] Jaguar Doom: doubled bonus (can go over 100%)
                 player->armorpoints += (gamemission == jaguar ? 2 : 1);
-                if (player->armorpoints > deh_max_armor)
+                if (player->armorpoints > deh_max_armor && gameversion != exe_doom_1_2)
                 {
                     player->armorpoints = deh_max_armor;
                     // deh_green_armor_class only applies to the green armor shirt;
@@ -495,7 +495,10 @@ void P_TouchSpecialThing (const mobj_t *special, const mobj_t *toucher)
             }
             player->mo->health = player->health;
             P_SetMessage(player, DEH_String(gotsuper), msg_pickup, false);
-            sound = sfx_getpow;
+            if (gameversion > exe_doom_1_2)
+            {
+                sound = sfx_getpow;
+            }
         }
         break;
 
@@ -516,7 +519,10 @@ void P_TouchSpecialThing (const mobj_t *special, const mobj_t *toucher)
                 player->armortype = 2;
             }
             P_SetMessage(player, DEH_String(gotmsphere), msg_pickup, false);
-            sound = sfx_getpow;
+            if (gameversion > exe_doom_1_2)
+            {
+                sound = sfx_getpow;
+            }
         }
         break;
 
@@ -601,7 +607,10 @@ void P_TouchSpecialThing (const mobj_t *special, const mobj_t *toucher)
             if (!P_GivePower (player, pw_invulnerability))
             return;
             P_SetMessage(player, DEH_String(gotinvul), msg_pickup, false);
-            sound = sfx_getpow;
+            if (gameversion > exe_doom_1_2)
+            {
+                sound = sfx_getpow;
+            }
         }
         break;
 
@@ -614,7 +623,10 @@ void P_TouchSpecialThing (const mobj_t *special, const mobj_t *toucher)
             {
                 player->pendingweapon = wp_fist;
             }
-            sound = sfx_getpow;
+            if (gameversion > exe_doom_1_2)
+            {
+                sound = sfx_getpow;
+            }
         }
         break;
 
@@ -623,7 +635,10 @@ void P_TouchSpecialThing (const mobj_t *special, const mobj_t *toucher)
             if (!P_GivePower (player, pw_invisibility))
             return;
             P_SetMessage(player, DEH_String(gotinvis), msg_pickup, false);
-            sound = sfx_getpow;
+            if (gameversion > exe_doom_1_2)
+            {
+                sound = sfx_getpow;
+            }
         }
         break;
 
@@ -632,7 +647,10 @@ void P_TouchSpecialThing (const mobj_t *special, const mobj_t *toucher)
             if (!P_GivePower (player, pw_ironfeet))
             return;
             P_SetMessage(player, DEH_String(gotsuit), msg_pickup, false);
-            sound = sfx_getpow;
+            if (gameversion > exe_doom_1_2)
+            {
+                sound = sfx_getpow;
+            }
         }
         break;
 
@@ -651,7 +669,10 @@ void P_TouchSpecialThing (const mobj_t *special, const mobj_t *toucher)
                 return;
             }
             P_SetMessage(player, DEH_String(gotmap), msg_pickup, false);
-            sound = sfx_getpow;
+            if (gameversion > exe_doom_1_2)
+            {
+                sound = sfx_getpow;
+            }
         }
         break;
 
@@ -660,7 +681,10 @@ void P_TouchSpecialThing (const mobj_t *special, const mobj_t *toucher)
             if (!P_GivePower (player, pw_infrared))
             return;
             P_SetMessage(player, DEH_String(gotvisor), msg_pickup, false);
-            sound = sfx_getpow;
+            if (gameversion > exe_doom_1_2)
+            {
+                sound = sfx_getpow;
+            }
         }
         break;
 
@@ -1181,8 +1205,9 @@ void P_DamageMobj (mobj_t *target, const mobj_t *inflictor, mobj_t *source, int 
 
     target->reactiontime = 0;   // we're awake now...	
 
-    if ( (!target->threshold || target->type == MT_VILE)
-    && source && source != target && source->type != MT_VILE)
+    if ((!target->threshold || target->type == MT_VILE)
+    && source && (source != target || gameversion <= exe_doom_1_2)
+    && source->type != MT_VILE)
     {
         // if not intent on another player,
         // chase after this one

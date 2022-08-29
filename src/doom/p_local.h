@@ -350,6 +350,7 @@ void P_UseLines (const player_t *player);
 #define MAXINTERCEPTS           (MAXINTERCEPTS_ORIGINAL + 61)
 #define PT_ADDLINES             1
 #define PT_ADDTHINGS            2
+#define PT_EARLYOUT             4
 
 typedef struct
 {

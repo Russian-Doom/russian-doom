@@ -921,13 +921,10 @@ void S_ChangeMusic (int musicnum, const int looping)
 
     // The Doom IWAD file has two versions of the intro music: d_intro
     // and d_introa.  The latter is used for OPL playback.
-    //
-    // [JN] Some older shareware version does not have d_introa music.
-    // I don't have a definitions for them, so let's just don't play
-    // d_introa in shareware mode at all.
 
-    if (musicnum == mus_intro && gamemode != shareware
-    && (snd_musicdevice == SNDDEVICE_ADLIB || snd_musicdevice == SNDDEVICE_SB))
+    if (musicnum == mus_intro
+    && (snd_musicdevice == SNDDEVICE_ADLIB || snd_musicdevice == SNDDEVICE_SB)
+    &&  W_CheckNumForName("D_INTROA") > 0)
     {
         musicnum = mus_introa;
     }
