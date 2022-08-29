@@ -18,44 +18,75 @@ jobs:
         os:
           -
             name: "Windows"
-            runner: "windows-latest"
-            shell: "msys2 {0}"
+            runner: "windows-2019" # windows-2022
           -
             name: "Linux"
             runner: "ubuntu-22.04"
-            shell: "bash"
         arch:
           -
             name: "x86"
             bits: "32"
             msys_name: "i686"
+            msvc_gen_opts: "-T v141_xp -A Win32"
           -
             name: "x64"
             bits: "64"
             msys_name: "x86_64"
+            msvc_gen_opts: "-A x64"
         compiler:
           -
             display_name: "GCC"
             name: "gcc"
             msys_msystem_prefix: "MINGW"
             msys_package_prefix: "mingw-w64"
+            cmake_gen: "Ninja"
           -
             display_name: "Clang"
             name: "clang"
             msys_msystem_prefix: "CLANG"
             msys_package_prefix: "mingw-w64-clang"
+            cmake_gen: "Ninja"
+          -
+            display_name: "MSVC"
+            name: "cl"
+            cmake_gen: "Visual Studio 16 2019" # Visual Studio 17 2022
         exclude:
           -
             os:
               name: "Linux"
             arch:
               name: "x86"
+          -
+            os:
+              name: "Linux"
+            compiler:
+              display_name: "MSVC"
+          - # Disable MSVC compiler
+            compiler:
+              display_name: "MSVC"
+        include:
+          -
+            shell: "bash"
+          -
+            os:
+              name: "Windows"
+            compiler:
+              display_name: "GCC"
+            shell: "msys2 {0}"
+          -
+            os:
+              name: "Windows"
+            compiler:
+              display_name: "Clang"
+            shell: "msys2 {0}"
     defaults:
       run:
-        shell: ${{ matrix.os.shell }}
+        shell: ${{ matrix.shell }}
     steps:
       - name: Setup MSYS env
-        if: matrix.os.name == 'Windows'
+        if: |
+          matrix.os.name == 'Windows' &&
+          matrix.compiler.display_name != 'MSVC'
         timeout-minutes: 10
         uses: msys2/setup-msys2@v2
         with:
@@ -72,6 +103,25 @@ jobs:
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_mixer
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libsamplerate
             git
+
+      - name: Setup MSVC env
+        if: |
+          matrix.os.name == 'Windows' &&
+          matrix.compiler.display_name == 'MSVC'
+        run: |
+          if [[ '${{ matrix.os.runner }}' == 'windows-2022' && '${{ matrix.arch.name }}' == 'x86' ]]
+          then
+              echo "Installing Microsoft.VisualStudio.Component.WinXP"
+              "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer" modify \
+                  --installPath "C:\Program Files\Microsoft Visual Studio\2022\Enterprise" \
+                  --add Microsoft.VisualStudio.Component.WinXP \
+                  --nocache --norestart --quiet
+              echo "Installation of Microsoft.VisualStudio.Component.WinXP finished"
+          fi
+          cd $VCPKG_INSTALLATION_ROOT && git pull
+
+#         vcpkg integrate install
+#         vcpkg install --triplet=${{ matrix.arch.msvc_triplet }} sdl2 sdl2-mixer[core,nativemidi,libmodplug,opusfile] sdl2-net libsamplerate
 
       - name: Setup Linux env
         if: matrix.os.name == 'Linux'
@@ -90,12 +140,19 @@ jobs:
         env:
           CC: ${{ matrix.compiler.name }}
         run: |
+          if [[ '${{ matrix.compiler.display_name }}' == 'MSVC' ]]
+          then
+              msvc_gen_opts='${{ matrix.arch.msvc_gen_opts }}'
+              msvc_cmake_toolchain='-D CMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake'
+          fi
           if [[ '${{ matrix.os.name }}' == 'Linux' ]]
           then
               build_portable='-D BUILD_PORTABLE=ON'
           fi
           rev_number=$(git rev-list --count HEAD)
-          cmake -G "Ninja" \
+          cmake -G "${{ matrix.compiler.cmake_gen }}" \
+                $msvc_gen_opts \
+                $msvc_cmake_toolchain \
                 -D BUILD_VERSION_OVERWRITE="r$rev_number" \
                 -D FORCE_GIT_HASH_SUFFIX=ON \
                 -D CMAKE_BUILD_TYPE=RelWithDebInfo \
