@@ -2776,25 +2776,30 @@ void G_DoPlayDemo (void)
     }
     else if ((demoversion != G_VanillaVersionCode() && !(gameversion <= exe_doom_1_2 && olddemo)) || oldest_version)
     {
-        char *message = "\nDemo is from a different game version!\n"
-                        "(read %i, should be %i)\n"
-                        "\n"
-                        "*** You may need to upgrade your version "
-                            "of Doom to v1.9. ***\n"
-                        "    See: https://www.doomworld.com/classicdoom"
-                                  "/info/patches.php\n"
-                        "    This appears to be %s.";
+        char *message_eng = "\nDemo is from a different game version!\n"
+                            "(read %i, should be %i)\n"
+                            "\n"
+                            "*** You may need to upgrade your version of Doom to v1.9. ***\n"
+                            "    See: https://www.doomworld.com/classicdoom/info/patches.php\n"
+                            "    This appears to be %s.";
+
+        char *message_rus = "\nДемозапись от другой версии игры!\n"
+                            "(версия %i, должна быть %i)\n"
+                            "\n"
+                            "*** Вам необходимо обновить вашу версию Doom до v1.9 ***\n"
+                            "    Дополнительная информация: https://www.doomworld.com/classicdoom/info/patches.php\n"
+                            "    Предположительно, ваша версия: %s.";
 
         if (singledemo)
         {
-            I_Error(message, demoversion, G_VanillaVersionCode(),
-                             DemoVersionDescription(demoversion));
+            I_Error(english_language ? message_eng : message_rus, demoversion,
+                    G_VanillaVersionCode(), DemoVersionDescription(demoversion));
         }
         else
         {
             // [crispy] make non-fatal
-            fprintf(stderr, message, demoversion, G_VanillaVersionCode(),
-                    DemoVersionDescription(demoversion));
+            fprintf(stderr, english_language ? message_eng : message_rus, demoversion,
+                    G_VanillaVersionCode(), DemoVersionDescription(demoversion));
             fprintf(stderr, "\n");
             demoplayback = true;
             G_CheckDemoStatus();
