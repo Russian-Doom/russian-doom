@@ -245,8 +245,12 @@ static registry_value_t steam_install_location =
 static char *steam_install_subdirs[] =
 {
     "steamapps\\common\\doom 2\\base",
+    "steamapps\\common\\Doom 2\\rerelease\\doom ii_data\\streamingassets",
+    "steamapps\\common\\doom 2\\finaldoombase",
+    "steamapps\\common\\doom 2\\masterbase\\master\\wads",
     "steamapps\\common\\final doom\\base",
     "steamapps\\common\\ultimate doom\\base",
+    "steamapps\\common\\Ultimate Doom\\rerelease\\doom_data\\streamingassets",
     "steamapps\\common\\heretic shadow of the serpent riders\\base",
     "steamapps\\common\\hexen\\base",
     "steamapps\\common\\hexen deathkings of the dark citadel\\base",
@@ -661,8 +665,12 @@ static void AddSteamDirs(void)
     steampath = M_StringJoin(homedir, "/.steam/root/steamapps/common", NULL);
 
     AddIWADPath(steampath, "/Doom 2/base");
+    AddIWADPath(steampath, "/Doom 2/rerelease/DOOM II_Data/StreamingAssets");
+    AddIWADPath(steampath, "/Doom 2/finaldoombase");
+    AddIWADPath(steampath, "/Doom 2/masterbase/master/wads");
     AddIWADPath(steampath, "/Master Levels of Doom/doom2");
     AddIWADPath(steampath, "/Ultimate Doom/base");
+    AddIWADPath(steampath, "/Ultimate Doom/rerelease/DOOM_Data/StreamingAssets");
     AddIWADPath(steampath, "/Final Doom/base");
     AddIWADPath(steampath, "/DOOM 3 BFG Edition/base/wads");
     AddIWADPath(steampath, "/Heretic Shadow of the Serpent Riders/base");
