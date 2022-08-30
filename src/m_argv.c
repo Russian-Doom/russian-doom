@@ -710,6 +710,12 @@ printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (descript
     CLI_Parameter("-longtics",
                   "Record or playback a demo with high resolution turning",
                   "Записать или проиграть демо с высоким разрешением поворота");
+    if(RD_GameType == gt_Doom)
+    {
+        CLI_Parameter("-shorttics",
+                      "Play with low turning resolution to emulate demo recording",
+                      "Играть с низким разрешением поворота, чтобы эмулировать запись демо");
+    }
     if(RD_GameType == gt_Heretic || RD_GameType == gt_Hexen)
     {
         CLI_Parameter("-shortticfix",
