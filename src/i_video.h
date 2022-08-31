@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <SDL.h>
 #include "doomtype.h"
 
 
@@ -101,6 +102,8 @@ void I_BindVideoVariables(void);
 
 void I_InitWindowTitle(void);
 void I_InitWindowIcon(void);
+void I_ToggleWindowBorder (void);
+void I_KeepWindowOnTop (void);
 
 // Called before processing any tics in a frame (just after displaying a frame).
 // Time consuming syncronous operations are performed here (joystick reading).
@@ -115,6 +118,10 @@ void I_StartTic (void);
 // Enable the loading disk image displayed when reading from disk.
 
 void I_EnableLoadingDisk(int xoffs, int yoffs);
+
+void AdjustWindowSize(void);
+
+extern SDL_Window *screen;
 
 extern char *video_driver;
 extern boolean screenvisible;
@@ -133,3 +140,9 @@ extern int aspect_ratio_correct;
 extern int smoothing;
 extern int vga_porch_flash;
 extern int force_software_renderer;
+
+extern int window_border;
+extern int window_width;
+extern int window_height;
+extern int window_title_short;
+extern int window_ontop;

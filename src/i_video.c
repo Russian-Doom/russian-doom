@@ -55,7 +55,7 @@
 // These are (1) the window (or the full screen) that our game is rendered to
 // and (2) the renderer that scales the texture (see below) into this window.
 
-static SDL_Window *screen;
+SDL_Window *screen;
 static SDL_Renderer *renderer;
 
 // Window title
@@ -113,6 +113,10 @@ int window_position_x = 0;
 // [JN] Use bordered or borderless window.
 
 int window_border = 1;
+
+// [JN] Is window always on top?
+
+int window_ontop = 0;
 
 // SDL display number on which to run.
 
@@ -373,7 +377,7 @@ static void SetShowCursor (const boolean show)
 
 // Adjust window_width / window_height variables to be an an aspect
 // ratio consistent with the aspect_ratio_correct variable.
-static void AdjustWindowSize(void)
+void AdjustWindowSize(void)
 {
     if (aspect_ratio_correct)
     {
@@ -530,6 +534,31 @@ static void I_ToggleFullScreen(void)
         AdjustWindowSize();
         SDL_SetWindowSize(screen, window_width, window_height);
     }
+}
+
+void I_ToggleWindowBorder (void)
+{
+    // Prevent window title to appear above screen bounds,
+    // if borded is toggled in full screen mode.
+    const int x_old = window_position_x == 0 ? 64 : window_position_x;
+    const int y_old = window_position_y == 0 ? 64 : window_position_y;
+	
+    if (window_border)
+    {
+        SDL_SetWindowBordered(screen, SDL_TRUE);
+        SDL_SetWindowPosition(screen, x_old, y_old);
+        
+    }
+    else
+    {
+        SDL_SetWindowBordered(screen, SDL_FALSE);
+        SDL_SetWindowPosition(screen, 0, 0);
+    }
+}
+
+void I_KeepWindowOnTop (void)
+{
+    SDL_SetWindowAlwaysOnTop(screen, window_ontop ? SDL_TRUE : SDL_FALSE);
 }
 
 void I_GetEvent(void)
@@ -1552,6 +1581,10 @@ static void SetVideoMode(void)
 	DisableWinRound(screen);
 #endif
 
+    // [JN] Should we keep window above other windows?
+
+    I_KeepWindowOnTop();
+
     // Important: Set the "logical size" of the rendering context. At the same
     // time this also defines the aspect ratio that is preserved while scaling
     // and stretching the texture into the window.
@@ -1956,6 +1989,7 @@ void I_BindVideoVariables(void)
     M_BindIntVariable("window_width",              &window_width);
     M_BindIntVariable("window_height",             &window_height);
     M_BindIntVariable("window_border",             &window_border);
+    M_BindIntVariable("window_ontop",              &window_ontop);
     M_BindIntVariable("grabmouse",                 &grabmouse);
     M_BindStringVariable("video_driver",           &video_driver);
     M_BindIntVariable("window_position_x",         &window_position_x);

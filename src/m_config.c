@@ -364,6 +364,12 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(window_title_short),
 
     //!
+    // [JN] If true, window will be pinned on top of other windows.
+    //
+
+    CONFIG_VARIABLE_INT(window_ontop),
+
+    //!
     // Window width when running in windowed mode.
     //
 
