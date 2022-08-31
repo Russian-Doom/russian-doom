@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <SDL_scancode.h>
+#include <SDL_video.h>
 
 #include "rd_io.h"
 #include "doomdef.h"
