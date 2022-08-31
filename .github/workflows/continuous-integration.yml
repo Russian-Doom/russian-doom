@@ -22,7 +22,7 @@ jobs:
             shell: "msys2 {0}"
           -
             name: "Linux"
-            runner: "ubuntu-latest"
+            runner: "ubuntu-22.04"
             shell: "bash"
         arch:
           -
