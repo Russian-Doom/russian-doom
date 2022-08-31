@@ -556,6 +556,11 @@ void I_ToggleWindowBorder (void)
     }
 }
 
+void I_KeepWindowOnTop (void)
+{
+    SDL_SetWindowAlwaysOnTop(screen, window_ontop ? SDL_TRUE : SDL_FALSE);
+}
+
 void I_GetEvent(void)
 {
     extern void I_HandleKeyboardEvent(SDL_Event *sdlevent);
@@ -1575,6 +1580,10 @@ static void SetVideoMode(void)
 #ifdef _WIN32
 	DisableWinRound(screen);
 #endif
+
+    // [JN] Should we keep window above other windows?
+
+    I_KeepWindowOnTop();
 
     // Important: Set the "logical size" of the rendering context. At the same
     // time this also defines the aspect ratio that is preserved while scaling

@@ -2207,7 +2207,7 @@ static void M_RD_Change_AlwaysOnTop()
 {
     window_ontop ^= 1;
 
-    SDL_SetWindowAlwaysOnTop(screen, window_ontop ? SDL_TRUE : SDL_FALSE);
+    I_KeepWindowOnTop();
 }
 
 static void M_RD_Change_DiskIcon(Direction_t direction)

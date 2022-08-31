@@ -103,6 +103,7 @@ void I_BindVideoVariables(void);
 void I_InitWindowTitle(void);
 void I_InitWindowIcon(void);
 void I_ToggleWindowBorder (void);
+void I_KeepWindowOnTop (void);
 
 // Called before processing any tics in a frame (just after displaying a frame).
 // Time consuming syncronous operations are performed here (joystick reading).
