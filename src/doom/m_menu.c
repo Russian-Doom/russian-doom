@@ -146,6 +146,7 @@ static void M_RD_Change_WindowBorder();
 static void M_RD_Change_WindowSize(Direction_t direction);
 static void M_RD_Change_WindowTitle();
 static void M_RD_Change_AlwaysOnTop();
+static void M_RD_Change_WindowAspectRatio();
 static void M_RD_Change_DiskIcon(Direction_t direction);
 static void M_RD_Change_Wiping(Direction_t direction);
 static void M_RD_Change_Screenshots();
@@ -724,20 +725,20 @@ static Menu_t Rendering1Menu = {
 };
 
 static MenuItem_t Rendering2Items[] = {
-    {ITT_TITLE,   "Window options",         "Yfcnhjqrb jryf",             NULL,                     0}, // Настройки окна
-    {ITT_SWITCH,  "Bordered window:",       "jryj c hfvrjq:",             M_RD_Change_WindowBorder, 0}, // Окно с рамкой
-    {ITT_LRFUNC,  "Window size:",           "hfpvth jryf:",               M_RD_Change_WindowSize,   0}, // Размер окна
-    {ITT_SWITCH,  "Window title:",          "pfujkjdjr jryf:",            M_RD_Change_WindowTitle,  0}, // Заголовок окна
-    {ITT_SWITCH,  "Always on top:",         "gjdth[ lheub[ jrjy:",        M_RD_Change_AlwaysOnTop,  0}, // Поверх других окон
-    {ITT_TITLE,   "Extra",                  "ljgjkybntkmyj",              NULL,                     0}, // Дополнительно
-    {ITT_LRFUNC,  "Show disk icon:",        "Jnj,hf;fnm pyfxjr lbcrtns:", M_RD_Change_DiskIcon,     0}, // Отображать значок дискеты
-    {ITT_LRFUNC,  "Screen wiping effect:",  "\'aatrn cvtys \'rhfyjd:",    M_RD_Change_Wiping,       0}, // Эффект смены экранов
-    {ITT_SWITCH,  "Screenshot format:",     "Ajhvfn crhbyijnjd:",         M_RD_Change_Screenshots,  0}, // Формат скриншотов
-    {ITT_SWITCH,  "Show ENDOOM screen:",    "Gjrfpsdfnm \'rhfy",          M_RD_Change_ENDOOM,       0}, // Показывать экран ENDOOM
-    {ITT_EMPTY,   NULL,                     NULL,                         NULL,                     0},
-    {ITT_EMPTY,   NULL,                     NULL,                         NULL,                     0},
-    {ITT_EMPTY,   NULL,                     NULL,                         NULL,                     0},
-    {ITT_SETMENU, NULL, /* < Prev Page > */ NULL,                         &Rendering1Menu,          0}  // < Назад
+    {ITT_TITLE,   "Window options",                "Yfcnhjqrb jryf",             NULL,                          0}, // Настройки окна
+    {ITT_SWITCH,  "Bordered window:",              "jryj c hfvrjq:",             M_RD_Change_WindowBorder,      0}, // Окно с рамкой
+    {ITT_LRFUNC,  "Window size:",                  "hfpvth jryf:",               M_RD_Change_WindowSize,        0}, // Размер окна
+    {ITT_SWITCH,  "Window title:",                 "pfujkjdjr jryf:",            M_RD_Change_WindowTitle,       0}, // Заголовок окна
+    {ITT_SWITCH,  "Always on top:",                "gjdth[ lheub[ jrjy:",        M_RD_Change_AlwaysOnTop,       0}, // Поверх других окон
+    {ITT_SWITCH,  "Preserve window aspect ratio:", "ghjgjhwbb jryf:",            M_RD_Change_WindowAspectRatio, 0}, // Пропорции окна
+    {ITT_TITLE,   "Extra",                         "ljgjkybntkmyj",              NULL,                          0}, // Дополнительно
+    {ITT_LRFUNC,  "Show disk icon:",               "Jnj,hf;fnm pyfxjr lbcrtns:", M_RD_Change_DiskIcon,          0}, // Отображать значок дискеты
+    {ITT_LRFUNC,  "Screen wiping effect:",         "\'aatrn cvtys \'rhfyjd:",    M_RD_Change_Wiping,            0}, // Эффект смены экранов
+    {ITT_SWITCH,  "Screenshot format:",            "Ajhvfn crhbyijnjd:",         M_RD_Change_Screenshots,       0}, // Формат скриншотов
+    {ITT_SWITCH,  "Show ENDOOM screen:",           "Gjrfpsdfnm \'rhfy",          M_RD_Change_ENDOOM,            0}, // Показывать экран ENDOOM
+    {ITT_EMPTY,   NULL,                            NULL,                         NULL,                          0},
+    {ITT_EMPTY,   NULL,                            NULL,                         NULL,                          0},
+    {ITT_SETMENU, NULL, /* < Prev Page > */        NULL,                         &Rendering1Menu,               0}  // < Назад
 };
 
 static Menu_t Rendering2Menu = {
@@ -1965,21 +1966,24 @@ static void M_RD_Draw_Rendering_2 (void)
         // Always on top
         RD_M_DrawTextSmallENG(window_ontop ? "on" : "off", 139 + wide_delta, 65, CR_NONE);
 
+        // Preserve window aspect ratio
+        RD_M_DrawTextSmallENG(aspect_ratio_correct ? "on" : "off", 246 + wide_delta, 75, CR_NONE);
+
         // Show disk icon
         RD_M_DrawTextSmallENG(show_diskicon == 1 ? "bottom" :
                               show_diskicon == 2 ? "top" :
-                              "off", 138 + wide_delta, 85, CR_NONE);
+                              "off", 138 + wide_delta, 95, CR_NONE);
 
         // Screen wiping effect
         RD_M_DrawTextSmallENG(screen_wiping == 1 ? "standard" :
                               screen_wiping == 2 ? "loading" :
-                              "off", 187 + wide_delta, 95, CR_NONE);
+                              "off", 187 + wide_delta, 105, CR_NONE);
 
         // Screenshot format
-        RD_M_DrawTextSmallENG(png_screenshots ? "png" : "pcx", 174 + wide_delta, 105, CR_NONE);
+        RD_M_DrawTextSmallENG(png_screenshots ? "png" : "pcx", 174 + wide_delta, 115, CR_NONE);
 
         // Show ENDOOM screen
-        RD_M_DrawTextSmallENG(show_endoom ? "on" : "off", 179 + wide_delta, 115, CR_NONE);
+        RD_M_DrawTextSmallENG(show_endoom ? "on" : "off", 179 + wide_delta, 125, CR_NONE);
 
         //
         // Footer
@@ -2016,22 +2020,25 @@ static void M_RD_Draw_Rendering_2 (void)
         // Поверх других окон
         RD_M_DrawTextSmallRUS(window_ontop ? "drk" : "dsrk", 182 + wide_delta, 65, CR_NONE);
 
+        // Пропорции окна
+        RD_M_DrawTextSmallRUS(aspect_ratio_correct  ? "abrcbhjdfyyst" : "cdj,jlyst", 152 + wide_delta, 75, CR_NONE);
+
         // Отображать значок дискеты
         RD_M_DrawTextSmallRUS(show_diskicon == 1 ? "cybpe" :
                               show_diskicon == 2 ? "cdth[e" :
-                              "dsrk", 241 + wide_delta, 85, CR_NONE);
+                              "dsrk", 241 + wide_delta, 95, CR_NONE);
 
         // Эффект смены экранов
         RD_M_DrawTextSmallRUS(screen_wiping == 1 ? "cnfylfhnysq" :
                               screen_wiping == 2 ? "pfuheprf" :
-                              "dsrk", 202 + wide_delta, 95, CR_NONE);
+                              "dsrk", 202 + wide_delta, 105, CR_NONE);
 
         // Формат скриншотов
-        RD_M_DrawTextSmallENG(png_screenshots ? "png" : "pcx", 180 + wide_delta, 105, CR_NONE);
+        RD_M_DrawTextSmallENG(png_screenshots ? "png" : "pcx", 180 + wide_delta, 115, CR_NONE);
 
         // Показывать экран ENDOOM
-        RD_M_DrawTextSmallENG("ENDOOM:", 165 + wide_delta, 115, CR_NONE);
-        RD_M_DrawTextSmallRUS(show_endoom ? "drk" : "dsrk", 222 + wide_delta, 115, CR_NONE);
+        RD_M_DrawTextSmallENG("ENDOOM:", 165 + wide_delta, 125, CR_NONE);
+        RD_M_DrawTextSmallRUS(show_endoom ? "drk" : "dsrk", 222 + wide_delta, 125, CR_NONE);
 
         //
         // Footer
@@ -2208,6 +2215,13 @@ static void M_RD_Change_AlwaysOnTop()
     window_ontop ^= 1;
 
     I_KeepWindowOnTop();
+}
+
+static void M_RD_Change_WindowAspectRatio()
+{
+    aspect_ratio_correct ^= 1;
+    
+    I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
 }
 
 static void M_RD_Change_DiskIcon(Direction_t direction)
