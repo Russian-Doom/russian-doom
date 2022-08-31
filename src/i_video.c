@@ -534,10 +534,13 @@ static void I_ToggleFullScreen(void)
 
 void I_ToggleWindowBorder (void)
 {
+    const int x_old = window_position_x;
+    const int y_old = window_position_y;
+	
     if (window_border)
     {
         SDL_SetWindowBordered(screen, SDL_TRUE);
-        SDL_SetWindowPosition(screen, 64, 64);
+        SDL_SetWindowPosition(screen, x_old, y_old);
         
     }
     else
