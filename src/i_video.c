@@ -114,6 +114,10 @@ int window_position_x = 0;
 
 int window_border = 1;
 
+// [JN] Is window always on top?
+
+int window_ontop = 0;
+
 // SDL display number on which to run.
 
 int video_display = 0;
@@ -1974,6 +1978,7 @@ void I_BindVideoVariables(void)
     M_BindIntVariable("window_width",              &window_width);
     M_BindIntVariable("window_height",             &window_height);
     M_BindIntVariable("window_border",             &window_border);
+	M_BindIntVariable("window_ontop",              &window_ontop);
     M_BindIntVariable("grabmouse",                 &grabmouse);
     M_BindStringVariable("video_driver",           &video_driver);
     M_BindIntVariable("window_position_x",         &window_position_x);
