@@ -373,7 +373,7 @@ static void SetShowCursor (const boolean show)
 
 // Adjust window_width / window_height variables to be an an aspect
 // ratio consistent with the aspect_ratio_correct variable.
-static void AdjustWindowSize(void)
+void AdjustWindowSize(void)
 {
     if (aspect_ratio_correct)
     {

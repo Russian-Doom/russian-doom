@@ -136,4 +136,6 @@ extern int vga_porch_flash;
 extern int force_software_renderer;
 
 extern int window_border;
+extern int window_width;
+extern int window_height;
 extern int window_title_short;
