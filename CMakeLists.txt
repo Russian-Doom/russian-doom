@@ -104,7 +104,7 @@ else()
     string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
 endif()
 
-find_package(SDL2 2.0.4 REQUIRED)
+find_package(SDL2 2.0.16 REQUIRED)
 find_package(SDL2_mixer 2.0.2 REQUIRED)
 find_package(SDL2_net 2.0.0 REQUIRED)
 find_package(samplerate)
