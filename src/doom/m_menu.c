@@ -129,7 +129,8 @@ static void M_StartMessage(char *string,void *routine,boolean input);
 // -----------------------------------------------------------------------------
 
 // Rendering
-static void M_RD_Draw_Rendering();
+static void M_RD_Draw_Rendering_1();
+static void M_RD_Draw_Rendering_2();
 static void M_RD_Change_Widescreen(Direction_t direction);
 static void M_RD_Change_Renderer();
 static void M_RD_Change_VSync();
@@ -137,6 +138,8 @@ static void M_RD_Change_MaxFPS(Direction_t direction);
 static void M_RD_Change_PerfCounter();
 static void M_RD_Change_Smoothing();
 static void M_RD_Change_PorchFlashing();
+
+static void M_RD_Change_WindowBorder();
 static void M_RD_Change_DiskIcon(Direction_t direction);
 static void M_RD_Change_Wiping(Direction_t direction);
 static void M_RD_Change_Screenshots();
@@ -455,7 +458,9 @@ static Menu_t* EpisodeMenu;
 static Menu_t* OptionsMenu;
 static Menu_t NewGameMenu;
 static Menu_t RDOptionsMenu;
-static Menu_t RenderingMenu;
+static Menu_t Rendering1Menu;
+static Menu_t Rendering2Menu;
+static const Menu_t* RenderingMenuPages[] = {&Rendering1Menu, &Rendering2Menu};
 static Menu_t DisplayMenu;
 static Menu_t ColorMenu;
 static Menu_t MessagesMenu;
@@ -652,7 +657,7 @@ static Menu_t NewGameMenu = {
 // =============================================================================
 
 static MenuItem_t RDOptionsItems[] = {
-    {ITT_SETMENU, "Rendering",        "Dbltj",          &RenderingMenu,      0},
+    {ITT_SETMENU, "Rendering",        "Dbltj",          &Rendering1Menu,     0},
     {ITT_SETMENU, "Display",          "\"rhfy",         &DisplayMenu,        0},
     {ITT_SETMENU, "Sound",            "Felbj",          &SoundMenu,          0},
     {ITT_SETMENU, "Controls",         "Eghfdktybt",     &ControlsMenu,       0},
@@ -675,32 +680,67 @@ static Menu_t RDOptionsMenu = {
 };
 
 // -----------------------------------------------------------------------------
-// Video and Rendering
+// Rendering options
 // -----------------------------------------------------------------------------
 
-static MenuItem_t RenderingItems[] = {
-    {ITT_TITLE,  "Rendering",                 "htylthbyu",                       NULL,                      0}, // Рендеринг
-    {ITT_LRFUNC, "Display aspect ratio:",     "Cjjnyjitybt cnjhjy \'rhfyf:",     M_RD_Change_Widescreen,    0},
-    {ITT_LRFUNC, "Screen renderer:",          "Htylthth \'rhfyf:",               M_RD_Change_Renderer,      0},
-    {ITT_SWITCH, "Vertical synchronization:", "Dthnbrfkmyfz cby[hjybpfwbz:",     M_RD_Change_VSync,         0},
-    {ITT_LRFUNC, "FPS limit:",                "juhfybxtybt",                     M_RD_Change_MaxFPS,        0},
-    {ITT_LRFUNC, "Performance counter:",      "Cxtnxbr ghjbpdjlbntkmyjcnb:",     M_RD_Change_PerfCounter,   0},
-    {ITT_SWITCH, "Pixel scaling:",            "Gbrctkmyjt cukf;bdfybt:",         M_RD_Change_Smoothing,     0},
-    {ITT_SWITCH, "Porch palette changing:",   "Bpvtytybt gfkbnhs rhftd 'rhfyf:", M_RD_Change_PorchFlashing, 0},
+static const PageDescriptor_t RenderingDescriptor = {
+    2, RenderingMenuPages,
+    252, 155,
+    CR_WHITE
+};
+
+static MenuItem_t Rendering1Items[] = {
+    {ITT_TITLE,   "Rendering",                 "htylthbyu",                       NULL,                      0}, // Рендеринг
+    {ITT_LRFUNC,  "Display aspect ratio:",     "Cjjnyjitybt cnjhjy \'rhfyf:",     M_RD_Change_Widescreen,    0},
+    {ITT_LRFUNC,  "Screen renderer:",          "Htylthth \'rhfyf:",               M_RD_Change_Renderer,      0},
+    {ITT_SWITCH,  "Vertical synchronization:", "Dthnbrfkmyfz cby[hjybpfwbz:",     M_RD_Change_VSync,         0},
+    {ITT_LRFUNC,  "FPS limit:",                "juhfybxtybt",                     M_RD_Change_MaxFPS,        0},
+    {ITT_LRFUNC,  "Performance counter:",      "Cxtnxbr ghjbpdjlbntkmyjcnb:",     M_RD_Change_PerfCounter,   0},
+    {ITT_SWITCH,  "Pixel scaling:",            "Gbrctkmyjt cukf;bdfybt:",         M_RD_Change_Smoothing,     0},
+    {ITT_SWITCH,  "Porch palette changing:",   "Bpvtytybt gfkbnhs rhftd 'rhfyf:", M_RD_Change_PorchFlashing, 0},
+    {ITT_EMPTY,   NULL,                        NULL,                              NULL,                      0},
+    {ITT_EMPTY,   NULL,                        NULL,                              NULL,                      0},
+    {ITT_EMPTY,   NULL,                        NULL,                              NULL,                      0},
+    {ITT_EMPTY,   NULL,                        NULL,                              NULL,                      0},
+    {ITT_EMPTY,   NULL,                        NULL,                              NULL,                      0},
+    {ITT_SETMENU, NULL, /* Next Page > */      NULL,                              &Rendering2Menu,           0}  // Далее >
+};
+
+static Menu_t Rendering1Menu = {
+    35, 35,
+    25,
+    "RENDERING OPTIONS", "YFCNHJQRB DBLTJ", false, // НАСТРОЙКИ ВИДЕО
+    14, Rendering1Items, false,
+    M_RD_Draw_Rendering_1,
+    &RenderingDescriptor,
+    &RDOptionsMenu,
+    1
+};
+
+static MenuItem_t Rendering2Items[] = {
+    {ITT_TITLE,  "Window options",            "Yfcnhjqrb jryf",                  NULL,                      0}, // Настройки окна
+    {ITT_SWITCH, "Bordered window:",          "jryj c hfvrjq: d",             M_RD_Change_WindowBorder,   0},
     {ITT_TITLE,  "Extra",                     "ljgjkybntkmyj",                   NULL,                      0}, // Дополнительно
     {ITT_LRFUNC, "Show disk icon:",           "Jnj,hf;fnm pyfxjr lbcrtns:",      M_RD_Change_DiskIcon,      0},
     {ITT_LRFUNC, "Screen wiping effect:",     "\'aatrn cvtys \'rhfyjd:",         M_RD_Change_Wiping,        0},
     {ITT_SWITCH, "Screenshot format:",        "Ajhvfn crhbyijnjd:",              M_RD_Change_Screenshots,   0},
-    {ITT_SWITCH, "Show ENDOOM screen:",       "Gjrfpsdfnm \'rhfy",               M_RD_Change_ENDOOM,        0}
+    {ITT_SWITCH, "Show ENDOOM screen:",       "Gjrfpsdfnm \'rhfy",               M_RD_Change_ENDOOM,        0},
+    {ITT_EMPTY,   NULL,                        NULL,                             NULL,                      0},
+    {ITT_EMPTY,   NULL,                        NULL,                             NULL,                      0},
+    {ITT_EMPTY,   NULL,                        NULL,                             NULL,                      0},
+    {ITT_EMPTY,   NULL,                        NULL,                             NULL,                      0},
+    {ITT_EMPTY,   NULL,                        NULL,                             NULL,                      0},
+    {ITT_EMPTY,   NULL,                        NULL,                             NULL,                      0},
+    {ITT_SETMENU, NULL, /* < Prev Page > */    NULL,                             &Rendering1Menu,           0}  // < Назад
 };
 
-static Menu_t RenderingMenu = {
+static Menu_t Rendering2Menu = {
     35, 35,
     25,
     "RENDERING OPTIONS", "YFCNHJQRB DBLTJ", false, // НАСТРОЙКИ ВИДЕО
-    13, RenderingItems, false,
-    M_RD_Draw_Rendering,
-    NULL,
+    14, Rendering2Items, false,
+    M_RD_Draw_Rendering_2,
+    &RenderingDescriptor,
     &RDOptionsMenu,
     1
 };
@@ -1700,7 +1740,7 @@ void M_Vanilla_DrawSound(void)
 // Rendering
 // -----------------------------------------------------------------------------
 
-static void M_RD_Draw_Rendering(void)
+static void M_RD_Draw_Rendering_1 (void)
 {
     static char num[4];
 
@@ -1775,27 +1815,16 @@ static void M_RD_Draw_Rendering(void)
         // Porch palette changing
         RD_M_DrawTextSmallENG(vga_porch_flash ? "on" : "off", 207 + wide_delta, 95, CR_NONE);
 
-        // Show disk icon
-        RD_M_DrawTextSmallENG(show_diskicon == 1 ? "bottom" :
-                              show_diskicon == 2 ? "top" :
-                              "off", 138 + wide_delta, 115, CR_NONE);
-
-        // Screen wiping effect
-        RD_M_DrawTextSmallENG(screen_wiping == 1 ? "standard" :
-                              screen_wiping == 2 ? "loading" :
-                              "off", 187 + wide_delta, 125, CR_NONE);
-
-        // Screenshot format
-        RD_M_DrawTextSmallENG(png_screenshots ? "png" : "pcx", 174 + wide_delta, 135, CR_NONE);
-
-        // Show ENDOOM screen
-        RD_M_DrawTextSmallENG(show_endoom ? "on" : "off", 179 + wide_delta, 145, CR_NONE);
-
         // Tip for faster sliding
         if (CurrentItPos == 4)
         {
             RD_M_DrawTextSmallCenteredENG("HOLD RUN BUTTON FOR FASTER SLIDING", 155, CR_DARKRED);
         }
+
+        //
+        // Footer
+        //
+        RD_M_DrawTextSmallENG("next page >", 35 + wide_delta, 155, CR_WHITE);
     }
     else
     {
@@ -1877,23 +1906,6 @@ static void M_RD_Draw_Rendering(void)
         // Изменение палитры краёв экрана
         RD_M_DrawTextSmallRUS(vga_porch_flash ? "drk" : "dsrk", 274 + wide_delta, 95, CR_NONE);
 
-        // Отображать значок дискеты
-        RD_M_DrawTextSmallRUS(show_diskicon == 1 ? "cybpe" :
-                              show_diskicon == 2 ? "cdth[e" :
-                              "dsrk", 241 + wide_delta, 115, CR_NONE);
-
-        // Эффект смены экранов
-        RD_M_DrawTextSmallRUS(screen_wiping == 1 ? "cnfylfhnysq" :
-                              screen_wiping == 2 ? "pfuheprf" :
-                              "dsrk", 202 + wide_delta, 125, CR_NONE);
-
-        // Формат скриншотов
-        RD_M_DrawTextSmallENG(png_screenshots ? "png" : "pcx", 180 + wide_delta, 135, CR_NONE);
-
-        // Показывать экран ENDOOM
-        RD_M_DrawTextSmallENG("ENDOOM:", 165 + wide_delta, 145, CR_NONE);
-        RD_M_DrawTextSmallRUS(show_endoom ? "drk" : "dsrk", 222 + wide_delta, 145, CR_NONE);
-
         // Для ускоренного пролистывания
         // удерживайте кнопку бега
         if (CurrentItPos == 4)
@@ -1901,6 +1913,70 @@ static void M_RD_Draw_Rendering(void)
             RD_M_DrawTextSmallCenteredRUS("LKZ ECRJHTYYJUJ GHJKBCNSDFYBZ", 155, CR_DARKRED);
             RD_M_DrawTextSmallCenteredRUS("ELTH;BDFQNT RYJGRE ,TUF", 164, CR_DARKRED);
         }
+
+        //
+        // Footer
+        //
+        RD_M_DrawTextSmallRUS(RD_NEXT_RUS, 35 + wide_delta, 155, CR_WHITE);
+    }
+}
+
+static void M_RD_Draw_Rendering_2 (void)
+{
+    //static char num[4];
+    
+    if (english_language)
+    {
+        // Bordered window
+        RD_M_DrawTextSmallENG(window_border ? "on" : "off", 157 + wide_delta, 35, CR_NONE);
+
+        // Show disk icon
+        RD_M_DrawTextSmallENG(show_diskicon == 1 ? "bottom" :
+                              show_diskicon == 2 ? "top" :
+                              "off", 138 + wide_delta, 55, CR_NONE);
+
+        // Screen wiping effect
+        RD_M_DrawTextSmallENG(screen_wiping == 1 ? "standard" :
+                              screen_wiping == 2 ? "loading" :
+                              "off", 187 + wide_delta, 65, CR_NONE);
+
+        // Screenshot format
+        RD_M_DrawTextSmallENG(png_screenshots ? "png" : "pcx", 174 + wide_delta, 75, CR_NONE);
+
+        // Show ENDOOM screen
+        RD_M_DrawTextSmallENG(show_endoom ? "on" : "off", 179 + wide_delta, 85, CR_NONE);
+
+        //
+        // Footer
+        //
+        RD_M_DrawTextSmallENG("< prev page", 35 + wide_delta, 155, CR_WHITE);
+    }
+    else
+    {
+        // Окно с рамкой
+        RD_M_DrawTextSmallRUS(window_border ? "drk" : "dsrk", 140 + wide_delta, 35, CR_NONE);
+
+        // Отображать значок дискеты
+        RD_M_DrawTextSmallRUS(show_diskicon == 1 ? "cybpe" :
+                              show_diskicon == 2 ? "cdth[e" :
+                              "dsrk", 241 + wide_delta, 55, CR_NONE);
+
+        // Эффект смены экранов
+        RD_M_DrawTextSmallRUS(screen_wiping == 1 ? "cnfylfhnysq" :
+                              screen_wiping == 2 ? "pfuheprf" :
+                              "dsrk", 202 + wide_delta, 65, CR_NONE);
+
+        // Формат скриншотов
+        RD_M_DrawTextSmallENG(png_screenshots ? "png" : "pcx", 180 + wide_delta, 75, CR_NONE);
+
+        // Показывать экран ENDOOM
+        RD_M_DrawTextSmallENG("ENDOOM:", 165 + wide_delta, 85, CR_NONE);
+        RD_M_DrawTextSmallRUS(show_endoom ? "drk" : "dsrk", 222 + wide_delta, 85, CR_NONE);
+
+        //
+        // Footer
+        //
+        RD_M_DrawTextSmallRUS(RD_PREV_RUS, 35 + wide_delta, 155, CR_WHITE);
     }
 }
 
@@ -2008,6 +2084,13 @@ static void M_RD_Change_PorchFlashing()
 
     // Update black borders
     I_DrawBlackBorders();
+}
+
+static void M_RD_Change_WindowBorder()
+{
+    window_border ^= 1;
+    
+    I_ToggleWindowBorder();
 }
 
 static void M_RD_Change_DiskIcon(Direction_t direction)

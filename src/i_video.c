@@ -55,7 +55,7 @@
 // These are (1) the window (or the full screen) that our game is rendered to
 // and (2) the renderer that scales the texture (see below) into this window.
 
-static SDL_Window *screen;
+SDL_Window *screen;
 static SDL_Renderer *renderer;
 
 // Window title
@@ -529,6 +529,21 @@ static void I_ToggleFullScreen(void)
     {
         AdjustWindowSize();
         SDL_SetWindowSize(screen, window_width, window_height);
+    }
+}
+
+void I_ToggleWindowBorder (void)
+{
+    if (window_border)
+    {
+        SDL_SetWindowBordered(screen, SDL_TRUE);
+        SDL_SetWindowPosition(screen, 64, 64);
+        
+    }
+    else
+    {
+        SDL_SetWindowBordered(screen, SDL_FALSE);
+        SDL_SetWindowPosition(screen, 0, 0);
     }
 }
 

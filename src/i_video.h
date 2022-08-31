@@ -133,3 +133,6 @@ extern int aspect_ratio_correct;
 extern int smoothing;
 extern int vga_porch_flash;
 extern int force_software_renderer;
+
+extern int window_border;
+extern void I_ToggleWindowBorder (void);
