@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <SDL.h>
 #include "doomtype.h"
 
 
@@ -116,6 +117,10 @@ void I_StartTic (void);
 // Enable the loading disk image displayed when reading from disk.
 
 void I_EnableLoadingDisk(int xoffs, int yoffs);
+
+void AdjustWindowSize(void);
+
+extern SDL_Window *screen;
 
 extern char *video_driver;
 extern boolean screenvisible;

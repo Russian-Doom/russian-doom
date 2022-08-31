@@ -22,7 +22,6 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <SDL_scancode.h>
-#include <SDL_video.h>
 
 #include "rd_io.h"
 #include "doomdef.h"
@@ -132,6 +131,8 @@ static void M_StartMessage(char *string,void *routine,boolean input);
 // Rendering
 static void M_RD_Draw_Rendering_1();
 static void M_RD_Draw_Rendering_2();
+
+// Page 1
 static void M_RD_Change_Widescreen(Direction_t direction);
 static void M_RD_Change_Renderer();
 static void M_RD_Change_VSync();
@@ -140,6 +141,7 @@ static void M_RD_Change_PerfCounter();
 static void M_RD_Change_Smoothing();
 static void M_RD_Change_PorchFlashing();
 
+// Page 2
 static void M_RD_Change_WindowBorder();
 static void M_RD_Change_WindowSize(Direction_t direction);
 static void M_RD_Change_WindowTitle();
@@ -722,20 +724,20 @@ static Menu_t Rendering1Menu = {
 };
 
 static MenuItem_t Rendering2Items[] = {
-    {ITT_TITLE,  "Window options",            "Yfcnhjqrb jryf",                  NULL,                      0}, // Настройки окна
-    {ITT_SWITCH, "Bordered window:",          "jryj c hfvrjq:",             M_RD_Change_WindowBorder,   0}, // 
-    {ITT_LRFUNC, "Window size:",              "hfpvth jryf:",      			M_RD_Change_WindowSize,      0}, // Размер окна
-	{ITT_SWITCH, "Window title:",             "pfujkjdjr jryf:",            M_RD_Change_WindowTitle,    0}, // Заголовок окна
-	{ITT_SWITCH, "Always on top:",            "gjdth[ lheub[ jrjy:",        M_RD_Change_AlwaysOnTop,    0}, // Поверх других окон
-    {ITT_TITLE,  "Extra",                     "ljgjkybntkmyj",                   NULL,                      0}, // Дополнительно
-	{ITT_LRFUNC, "Show disk icon:",           "Jnj,hf;fnm pyfxjr lbcrtns:",      M_RD_Change_DiskIcon,      0},
-    {ITT_LRFUNC, "Screen wiping effect:",     "\'aatrn cvtys \'rhfyjd:",         M_RD_Change_Wiping,        0},
-    {ITT_SWITCH, "Screenshot format:",        "Ajhvfn crhbyijnjd:",              M_RD_Change_Screenshots,   0},
-    {ITT_SWITCH, "Show ENDOOM screen:",       "Gjrfpsdfnm \'rhfy",               M_RD_Change_ENDOOM,        0},
-    {ITT_EMPTY,   NULL,                        NULL,                             NULL,                      0},
-    {ITT_EMPTY,   NULL,                        NULL,                             NULL,                      0},
-    {ITT_EMPTY,   NULL,                        NULL,                             NULL,                      0},
-    {ITT_SETMENU, NULL, /* < Prev Page > */    NULL,                             &Rendering1Menu,           0}  // < Назад
+    {ITT_TITLE,   "Window options",         "Yfcnhjqrb jryf",             NULL,                     0}, // Настройки окна
+    {ITT_SWITCH,  "Bordered window:",       "jryj c hfvrjq:",             M_RD_Change_WindowBorder, 0}, // Окно с рамкой
+    {ITT_LRFUNC,  "Window size:",           "hfpvth jryf:",               M_RD_Change_WindowSize,   0}, // Размер окна
+    {ITT_SWITCH,  "Window title:",          "pfujkjdjr jryf:",            M_RD_Change_WindowTitle,  0}, // Заголовок окна
+    {ITT_SWITCH,  "Always on top:",         "gjdth[ lheub[ jrjy:",        M_RD_Change_AlwaysOnTop,  0}, // Поверх других окон
+    {ITT_TITLE,   "Extra",                  "ljgjkybntkmyj",              NULL,                     0}, // Дополнительно
+    {ITT_LRFUNC,  "Show disk icon:",        "Jnj,hf;fnm pyfxjr lbcrtns:", M_RD_Change_DiskIcon,     0}, // Отображать значок дискеты
+    {ITT_LRFUNC,  "Screen wiping effect:",  "\'aatrn cvtys \'rhfyjd:",    M_RD_Change_Wiping,       0}, // Эффект смены экранов
+    {ITT_SWITCH,  "Screenshot format:",     "Ajhvfn crhbyijnjd:",         M_RD_Change_Screenshots,  0}, // Формат скриншотов
+    {ITT_SWITCH,  "Show ENDOOM screen:",    "Gjrfpsdfnm \'rhfy",          M_RD_Change_ENDOOM,       0}, // Показывать экран ENDOOM
+    {ITT_EMPTY,   NULL,                     NULL,                         NULL,                     0},
+    {ITT_EMPTY,   NULL,                     NULL,                         NULL,                     0},
+    {ITT_EMPTY,   NULL,                     NULL,                         NULL,                     0},
+    {ITT_SETMENU, NULL, /* < Prev Page > */ NULL,                         &Rendering1Menu,          0}  // < Назад
 };
 
 static Menu_t Rendering2Menu = {
@@ -1775,10 +1777,9 @@ static void M_RD_Draw_Rendering_1 (void)
         }
 
         // Informative messages
-        if ((aspect_ratio_temp != aspect_ratio || opengles_renderer_temp != opengles_renderer)
-        && CurrentItPos != 4)
+        if (aspect_ratio_temp != aspect_ratio || opengles_renderer_temp != opengles_renderer)
         {
-            RD_M_DrawTextSmallCenteredENG("PROGRAM MUST BE RESTARTED", 155, CR_WHITE);
+            RD_M_DrawTextSmallCenteredENG("PROGRAM MUST BE RESTARTED", 135, MenuTime & 32 ? CR_WHITE : CR_GRAY);
         }
 
         // Vertical synchronization
@@ -1822,7 +1823,7 @@ static void M_RD_Draw_Rendering_1 (void)
         // Tip for faster sliding
         if (CurrentItPos == 4)
         {
-            RD_M_DrawTextSmallCenteredENG("HOLD RUN BUTTON FOR FASTER SLIDING", 155, CR_DARKRED);
+            RD_M_DrawTextSmallCenteredENG("HOLD RUN BUTTON FOR FASTER SLIDING", 145, CR_GRAY);
         }
 
         //
@@ -1863,10 +1864,9 @@ static void M_RD_Draw_Rendering_1 (void)
         }
 
         // Informative message: Необходим перезапуск программы
-        if ((aspect_ratio_temp != aspect_ratio || opengles_renderer_temp != opengles_renderer)
-        && CurrentItPos != 4)
+        if (aspect_ratio_temp != aspect_ratio || opengles_renderer_temp != opengles_renderer)
         {
-            RD_M_DrawTextSmallCenteredRUS("ytj,[jlbv gthtpfgecr ghjuhfvvs", 155, CR_WHITE);
+            RD_M_DrawTextSmallCenteredRUS("ytj,[jlbv gthtpfgecr ghjuhfvvs", 125, MenuTime & 32 ? CR_WHITE : CR_GRAY);
         }
 
         // Вертикальная синхронизация
@@ -1914,8 +1914,8 @@ static void M_RD_Draw_Rendering_1 (void)
         // удерживайте кнопку бега
         if (CurrentItPos == 4)
         {
-            RD_M_DrawTextSmallCenteredRUS("LKZ ECRJHTYYJUJ GHJKBCNSDFYBZ", 155, CR_DARKRED);
-            RD_M_DrawTextSmallCenteredRUS("ELTH;BDFQNT RYJGRE ,TUF", 164, CR_DARKRED);
+            RD_M_DrawTextSmallCenteredRUS("LKZ ECRJHTYYJUJ GHJKBCNSDFYBZ", 135, CR_GRAY);
+            RD_M_DrawTextSmallCenteredRUS("ELTH;BDFQNT RYJGRE ,TUF", 145, CR_GRAY);
         }
 
         //
@@ -1927,8 +1927,8 @@ static void M_RD_Draw_Rendering_1 (void)
 
 static void M_RD_Draw_Rendering_2 (void)
 {
-    char win_width[8];
-    char win_height[8];
+    char  win_width[8];
+    char  win_height[8];
     char *window_size;
 
     // Consolidate window size string for printing.
@@ -1942,13 +1942,28 @@ static void M_RD_Draw_Rendering_2 (void)
         RD_M_DrawTextSmallENG(window_border ? "on" : "off", 157 + wide_delta, 35, CR_NONE);
 
         // Window size
-        RD_M_DrawTextSmallENG(window_size, 119 + wide_delta, 45, CR_NONE);
+        RD_M_DrawTextSmallENG(window_size, 119 + wide_delta, 45, fullscreen ? CR_DARKRED : CR_NONE);
+
+        // Tip for faster sliding
+        if (CurrentItPos == 2)
+        {
+            if (fullscreen)
+            {
+                RD_M_DrawTextSmallCenteredENG("SWITCH TO WINDOWED MODE FIRST", 135, CR_GRAY);
+                RD_M_DrawTextSmallCenteredENG("BY PRESSING \"ALT+ENTER\"", 145, CR_GRAY);
+            }
+            else
+            {
+                RD_M_DrawTextSmallCenteredENG("USE ARROW KEYS TO CHANGE SIZE,", 135, CR_GRAY);
+                RD_M_DrawTextSmallCenteredENG("HOLD RUN BUTTON FOR FASTER SLIDING.", 145, CR_GRAY);
+            }
+        }
 
         // Window title
         RD_M_DrawTextSmallENG(window_title_short ? "brief" : "full", 129 + wide_delta, 55, CR_NONE);
 
-		// Always on top
-		RD_M_DrawTextSmallENG(window_ontop ? "on" : "off", 139 + wide_delta, 65, CR_NONE);
+        // Always on top
+        RD_M_DrawTextSmallENG(window_ontop ? "on" : "off", 139 + wide_delta, 65, CR_NONE);
 
         // Show disk icon
         RD_M_DrawTextSmallENG(show_diskicon == 1 ? "bottom" :
@@ -1977,13 +1992,29 @@ static void M_RD_Draw_Rendering_2 (void)
         RD_M_DrawTextSmallRUS(window_border ? "drk" : "dsrk", 140 + wide_delta, 35, CR_NONE);
 
         // Размер окна
-        RD_M_DrawTextSmallENG(window_size, 128 + wide_delta, 45, CR_NONE);
+        RD_M_DrawTextSmallENG(window_size, 128 + wide_delta, 45, fullscreen ? CR_DARKRED : CR_NONE);
+
+        // Подсказка для ускоренного изменения размера
+        if (CurrentItPos == 2)
+        {
+            if (fullscreen)
+            {
+                RD_M_DrawTextSmallCenteredRUS("GTHTRK.XBNTCM D JRJYYSQ HT;BV", 135, CR_GRAY);
+                RD_M_DrawTextSmallRUS("BCGJKMPEZ CJXTNFYBT RKFDBI", 16, 145, CR_GRAY);
+                RD_M_DrawTextSmallENG("\"ALT+ENTER\"", 220 + wide_delta, 145, CR_GRAY);
+            }
+            else
+            {
+            RD_M_DrawTextSmallCenteredRUS("LKZ ECRJHTYYJUJ BPVTYTYBZ HFPVTHF", 135, CR_GRAY);
+            RD_M_DrawTextSmallCenteredRUS("ELTH;BDFQNT RYJGRE ,TUF", 145, CR_GRAY);
+            }
+        }
 
         // Заголовок окна
         RD_M_DrawTextSmallRUS(window_title_short ? "rhfnrbq" : "gjlhj,ysq", 151 + wide_delta, 55, CR_NONE);
 
-		// Поверх других окон
-		RD_M_DrawTextSmallRUS(window_ontop ? "drk" : "dsrk", 182 + wide_delta, 65, CR_NONE);
+        // Поверх других окон
+        RD_M_DrawTextSmallRUS(window_ontop ? "drk" : "dsrk", 182 + wide_delta, 65, CR_NONE);
 
         // Отображать значок дискеты
         RD_M_DrawTextSmallRUS(show_diskicon == 1 ? "cybpe" :
@@ -2122,34 +2153,24 @@ static void M_RD_Change_WindowBorder()
     I_ToggleWindowBorder();
 }
 
-extern SDL_Window *screen;
+
 static void M_RD_Change_WindowSize(Direction_t direction)
 {
-	extern void AdjustWindowSize(void);
+    // Disallow to change size in full screen mode.
+    if (fullscreen)
+    {
+        return;
+    }
 
     switch (direction)
     {
         case LEFT_DIR:
             window_width  -= BK_isKeyPressed(bk_speed) ? 10 : 1;
-			window_height -= BK_isKeyPressed(bk_speed) ? 10 : 1;
-			// [JN] Sensible?
-			/*
-            if (window_width >= 320 || window_height >= 240)
-            {
-                S_StartSound (NULL, sfx_stnmov);
-            }
-			*/
+            window_height -= BK_isKeyPressed(bk_speed) ? 10 : 1;
         break;
         case RIGHT_DIR:
             window_width  += BK_isKeyPressed(bk_speed) ? 10 : 1;
-			window_height += BK_isKeyPressed(bk_speed) ? 10 : 1;
-			// [JN] Sensible?
-			/*
-            if (window_width <= 3440 || window_height <= 1440)
-            {
-                S_StartSound (NULL, sfx_stnmov);
-            }
-			*/
+            window_height += BK_isKeyPressed(bk_speed) ? 10 : 1;
         break;
     }
 
@@ -2171,8 +2192,8 @@ static void M_RD_Change_WindowSize(Direction_t direction)
         window_height = 1440;
     }
 
-	AdjustWindowSize();
-	SDL_SetWindowSize(screen, window_width, window_height);
+    AdjustWindowSize();
+    SDL_SetWindowSize(screen, window_width, window_height);
 }
 
 static void M_RD_Change_WindowTitle()

@@ -538,8 +538,10 @@ static void I_ToggleFullScreen(void)
 
 void I_ToggleWindowBorder (void)
 {
-    const int x_old = window_position_x;
-    const int y_old = window_position_y;
+    // Prevent window title to appear above screen bounds,
+    // if borded is toggled in full screen mode.
+    const int x_old = window_position_x == 0 ? 64 : window_position_x;
+    const int y_old = window_position_y == 0 ? 64 : window_position_y;
 	
     if (window_border)
     {
@@ -1978,7 +1980,7 @@ void I_BindVideoVariables(void)
     M_BindIntVariable("window_width",              &window_width);
     M_BindIntVariable("window_height",             &window_height);
     M_BindIntVariable("window_border",             &window_border);
-	M_BindIntVariable("window_ontop",              &window_ontop);
+    M_BindIntVariable("window_ontop",              &window_ontop);
     M_BindIntVariable("grabmouse",                 &grabmouse);
     M_BindStringVariable("video_driver",           &video_driver);
     M_BindIntVariable("window_position_x",         &window_position_x);
