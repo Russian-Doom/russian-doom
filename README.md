@@ -39,5 +39,5 @@ DOS version is based on [PCDoom](https://github.com/nukeykt/PCDoom-v2) by Alexey
 
 The project, along with all its translation materials and source code, are available under the terms and conditions of [GNU General Public License version 2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
 
-Copyright &copy; 2016&ndash;2022 [Julian Nechaevsky](https://jnechaevsky.github.io/author.html)
+Copyright &copy; 2016&ndash;2022 [Julian Nechaevsky](https://jnechaevsky.github.io/author.html)<br />
 Copyright &copy; 2020&ndash;2022 [Leonid Murin (Dasperal)](https://github.com/Dasperal)
