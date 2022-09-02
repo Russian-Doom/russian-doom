@@ -380,7 +380,7 @@ extern fixed_t      openbottom;
 extern fixed_t      openrange;
 extern fixed_t      lowfloor;
 
-boolean P_PathTraverse (fixed_t x1, fixed_t y1, int64_t x2, int64_t y2, int flags, boolean (*trav)(intercept_t *));
+boolean P_PathTraverse (fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2, int flags, boolean (*trav)(intercept_t *));
 const boolean P_BlockLinesIterator (const int x, const int y, boolean(*func)(line_t*));
 const boolean P_BlockThingsIterator (const int x, const int y, boolean(*func)(mobj_t*));
 const fixed_t P_ApproxDistanceZ (fixed_t dx, fixed_t dy, fixed_t dz);
