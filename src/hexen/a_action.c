@@ -449,14 +449,14 @@ void A_LeafCheck(mobj_t * actor)
 static int A_LeafFlowAngle (int s)
 {
     // Sector special:
-    return s == 201 || s == 202 || s == 203 ? 1073741824 :  // NORTH (ANG90)
-           s == 207 || s == 208 || s == 209 ? 3221225472 :  // SOUTH (ANG270)
-           s == 210 || s == 211 || s == 212 ? 2147483648 :  // WEST (ANG180)
-           s == 213 || s == 214 || s == 215 ? 1610612736 :  // NORTH-WEST (ANG135)
-           s == 216 || s == 217 || s == 218 ? 536870912  :  // NORTH-EAST (ANG45)
-           s == 219 || s == 220 || s == 212 ? 3758096384 :  // SOUTH-EAST (ANG315)
-           s == 222 || s == 223 || s == 224 ? 2684354560 :  // SOUTH-WEST (ANG225) 
-                                                       0 ;  // EAST (ANG0)
+    return s == 201 || s == 202 || s == 203 ? ANG90  :  // NORTH
+           s == 207 || s == 208 || s == 209 ? ANG270 :  // SOUTH
+           s == 210 || s == 211 || s == 212 ? ANG180 :  // WEST
+           s == 213 || s == 214 || s == 215 ? ANG135 :  // NORTH-WEST
+           s == 216 || s == 217 || s == 218 ? ANG45  :  // NORTH-EAST
+           s == 219 || s == 220 || s == 212 ? ANG315 :  // SOUTH-EAST
+           s == 222 || s == 223 || s == 224 ? ANG225 :  // SOUTH-WEST
+                                                   0 ;  // EAST
 }
 
 static int A_LeafFlowThrust (int t)
