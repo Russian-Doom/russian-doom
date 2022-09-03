@@ -800,7 +800,12 @@ byte V_Colorize (byte *playpal, Translation_CR_t cr, byte source, boolean keepgr
         }
         else if (cr == CR_GREEN)
         {
-            if (RD_GameType == gt_Doom || RD_GameType == gt_Heretic)
+            if (RD_GameType == gt_Doom)
+            {
+                hsv.x = (145. * hsv.z + 140. * (1. - hsv.z))/360.;
+            }
+            else
+            if (RD_GameType == gt_Heretic)
             {
                 hsv.x = 0.3;
                 hsv.z *= 1.15;
