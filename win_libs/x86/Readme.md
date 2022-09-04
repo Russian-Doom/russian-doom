@@ -11,5 +11,5 @@
 | libvorbisfile-3.dll | ea20e1550ad37aa978897989bebe3098 | Bundled with SDL2_mixer 2.0.4 |
 | SDL2.dll            | a399b08b541a11c56d88f32881231f4f |            2.0.22             |
 | SDL2_mixer.dll      | f410700b6cf66990c23057a91b1722a4 |             2.6.1             |
-| SDL2_net.dll        | c1332b71a2f74e35fc6ae892f081272c |             2.0.1             |
+| SDL2_net.dll        | 9d8b6e7a088ea3686d2143eb94fdea8f |             2.2.0             |
 | zlib1.dll           | 2c8bdc6126d122d7017a0fe84bf3426f |        MSYS2 1.2.12-1         |
