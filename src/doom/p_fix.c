@@ -8824,11 +8824,15 @@ static const fall_t fall_tnt_map26[] =
 
 static const linefix_t linefix_tnt_map27[] =
 {
-    { pack_tnt, 1, 27, 1175, 0, "", "BROWNGRN", "", DEFAULT, DEFAULT,                            DEFAULT },
-    { pack_tnt, 1, 27, 1177, 0, "", "BROWNGRN", "", DEFAULT, DEFAULT,                            DEFAULT },
-    { pack_tnt, 1, 27, 1190, 0, "",         "", "", DEFAULT, DEFAULT, (ML_DONTPEGTOP | ML_DONTPEGBOTTOM) },
-    { pack_tnt, 1, 27, 1244, 0, "", "BROWNGRN", "", DEFAULT, DEFAULT,                            DEFAULT },
-    { pack_tnt, 1, 27, 1245, 0, "", "BROWNGRN", "", DEFAULT, DEFAULT,                            DEFAULT },
+    { pack_tnt, 1, 27, 1175, 0,         "", "BROWNGRN", "", DEFAULT, DEFAULT,                            DEFAULT },
+    { pack_tnt, 1, 27, 1177, 0,         "", "BROWNGRN", "", DEFAULT, DEFAULT,                            DEFAULT },
+    { pack_tnt, 1, 27, 1190, 0,         "",         "", "", DEFAULT, DEFAULT, (ML_DONTPEGTOP | ML_DONTPEGBOTTOM) },
+    { pack_tnt, 1, 27, 1244, 0,         "", "BROWNGRN", "", DEFAULT, DEFAULT,                            DEFAULT },
+    { pack_tnt, 1, 27, 1245, 0,         "", "BROWNGRN", "", DEFAULT, DEFAULT,                            DEFAULT },
+    { pack_tnt, 1, 27, 1604, 1, "ROCKRED1",         "", "", DEFAULT, DEFAULT,                            DEFAULT },
+    { pack_tnt, 1, 27, 2002, 1, "ROCKRED1",         "", "", DEFAULT, DEFAULT,                            DEFAULT },
+    { pack_tnt, 1, 27, 2007, 1, "ROCKRED1",         "", "", DEFAULT, DEFAULT,                            DEFAULT },
+    { pack_tnt, 1, 27, 2008, 1, "ROCKRED1",         "", "", DEFAULT, DEFAULT,                            DEFAULT },
     LINEFIX_END
 };
 
