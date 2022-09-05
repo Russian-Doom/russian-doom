@@ -151,9 +151,9 @@ class Variable:
         return result
 
     def markdown_output(self):
-        name = self.name.replace("|", "\\|")
+        name = self.name.replace("|", "&#124;")
 
-        text = self.text.replace("|", "\\|")
+        text = self.text.replace("|", "&#124;")
 
         result = "| %s | %s |\n" % (name, text)
 
@@ -309,10 +309,10 @@ class CLIParam:
         name: str = ', '.join(self.names)
         if self.args:
             name += ' ' + ' '.join(self.args)
-        name = name.replace("|", "\\|")
+        name = name.replace("|", "&#124;")
 
         text: str = self.rus_text if doc_lang == 'ru' else self.eng_text
-        text = text.replace("|", "\\|")
+        text = text.replace("|", "&#124;")
 
         games = ', '.join((filter(lambda game: game in match_games, map(str.capitalize, self.games))))
         if self.platform == '_WIN32':
@@ -321,8 +321,9 @@ class CLIParam:
         result = "| %s | %s | %s |\n" % (name, text, games)
 
         # html escape
-        result = result.replace("<", "\\<")
-        result = result.replace(">", "\\>")
+        result = result.replace("<", "&lt;")
+        result = result.replace(">", "&gt;")
+        result = result.replace("\\'", "\"")
         result = result.replace("'", "`")
 
         return result
