@@ -70,6 +70,7 @@ add_compile_options_checked(
     # Disable warnings
     -Wno-unknown-pragmas
     -Wno-unused-result
+    -Wno-format-nonliteral
 )
 
 if(MSVC)
