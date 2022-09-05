@@ -215,11 +215,6 @@ boolean screensaver_mode = false;
 
 boolean screenvisible = true;
 
-// If true, we display dots at the bottom of the screen to 
-// indicate FPS.
-
-static boolean display_fps_dots;
-
 // If this is true, the screen is rendered but not blitted to the
 // video buffer.
 
@@ -355,13 +350,6 @@ static const boolean MouseShouldBeGrabbed()
 void I_SetGrabMouseCallback (const grabmouse_callback_t func)
 {
     grabmouse_callback = func;
-}
-
-// Set the variable controlling FPS dots.
-
-void I_DisplayFPSDots (const boolean dots_on)
-{
-    display_fps_dots = dots_on;
 }
 
 static void SetShowCursor (const boolean show)
@@ -883,10 +871,6 @@ void I_DrawBlackBorders (void)
 //
 void I_FinishUpdate (void)
 {
-    static int lasttic;
-    int tics;
-    int i;
-
     if (!initialized)
         return;
 
@@ -947,27 +931,13 @@ void I_FinishUpdate (void)
         halftics_old = halftics;
     }
 
-    // draws little dots on the bottom of the screen
-
-    if (display_fps_dots)
-    {
-	i = I_GetTime();
-	tics = i - lasttic;
-	lasttic = i;
-	if (tics > 20) tics = 20;
-
-	for (i=0 ; i<tics*4 ; i+=4)
-	    I_VideoBuffer[ (SCREENHEIGHT-1)*screenwidth + i] = 0xff;
-	for ( ; i<20*4 ; i+=4)
-	    I_VideoBuffer[ (SCREENHEIGHT-1)*screenwidth + i] = 0x0;
-    }
-
 	// [crispy] [AM] Real FPS counter
     if (show_fps)
 	{
 		static int lastmili;
 		static int fpscount;
 		int mili;
+		int i;
 
 		fpscount++;
 
