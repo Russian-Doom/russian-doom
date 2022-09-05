@@ -355,7 +355,7 @@ printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (descript
                   "Задать IWAD файл. <path> может быть абсолютным или относительным одному из мест поиска WAD'ов");
     CLI_Parameter("-file <path> ...",
                   "Load the given PWAD(s). <path> can be absolute or relative to one of the WAD search locations",
-                  "Загрузить указанные PWAD'ы. <path> может быть абсолютным или относительным одному из мест поиска WAD'ов");
+                  "Загрузить указанные PWAD(ы). <path> может быть абсолютным или относительным одному из мест поиска WAD'ов");
     if(RD_GameType != gt_Hexen)
     {
         CLI_Parameter("-deh <path> ...",
@@ -439,8 +439,8 @@ printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (descript
     if(RD_GameType == gt_Hexen)
     {
         CLI_Parameter("-class <n>",
-                      "Specify player class: 0 = fighter, 1 = cleric, 2 = mage, 3 = pig",
-                      "Задать класс игрока: 0 = воин, 1 = клирик, 2 = маг, 3 = свинья");
+                      "Specify player class: '0' - Fighter, '1' - Cleric, '2' - Mage, '3' - Pig",
+                      "Задать класс игрока: '0' - Воин, '1' - Клирик, '2' - Маг, '3' - Свинья");
     }
     if(RD_GameType == gt_Doom)
     {
@@ -475,14 +475,14 @@ printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (descript
     if(RD_GameType == gt_Doom)
     {
         CLI_Parameter("-episode <n>",
-                      "Start playing on episode <n> (1-3, 1-4 for 'The Ultimate Doom', episode 5 available if non-compat version of SIGIL.WAD is loaded)",
-                      "Начать игру с эпизода <n> (1-3, 1-4 для 'The Ultimate Doom', эпизод 5 доступен если загружена не compat версия SIGIL.WAD");
+                      "Start playing on episode <n> (1-3, 1-4 for \'The Ultimate Doom\', episode 5 available if non-compat version of SIGIL.WAD is loaded)",
+                      "Начать игру с эпизода <n> (1-3, 1-4 для \'The Ultimate Doom\', эпизод 5 доступен если загружена не compat версия SIGIL.WAD");
     }
     else if(RD_GameType == gt_Heretic)
     {
         CLI_Parameter("-episode <n>",
-                      "Start playing on episode <n> (1-3, 1-5 for 'Shadow of the Serpent Riders')",
-                      "Начать игру с эпизода <n> (1-3, 1-5 для 'Shadow of the Serpent Riders')");
+                      "Start playing on episode <n> (1-3, 1-5 for \'Shadow of the Serpent Riders\')",
+                      "Начать игру с эпизода <n> (1-3, 1-5 для \'Shadow of the Serpent Riders\')");
     }
     CLI_Parameter("-nomonsters",
                   "Disable monsters",
@@ -520,8 +520,8 @@ printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (descript
                       "Emulate Atari Jaguar Doom version",
                       "Эмулировать версию Doom для Atari Jaguar");
         CLI_Parameter("-pack <pack>",
-                      "Explicitly specify a Doom II 'mission pack' to run as, instead of detecting it based on the file name. Valid values are: 'doom2', 'tnt' and 'plutonia'",
-                      "Явно задать 'mission pack' для Doom II, вместо того чтобы определять его по имени файла. Поддерживаемые значения: 'doom2', 'tnt' и 'plutonia'");
+                      "Explicitly specify a Doom II \'mission pack\' to run as, instead of detecting it based on the file name. Valid values are: 'doom2', 'tnt' and 'plutonia'",
+                      "Явно задать \'mission pack\' для Doom II, вместо того чтобы определять его по имени файла. Поддерживаемые значения: 'doom2', 'tnt' и 'plutonia'");
         CLI_Parameter("-gameversion <version>",
                       "Emulate a specific version of Doom. Valid values are '1.2', '1.666', '1.7', '1.8', '1.9', 'ultimate', 'doomse', 'final', 'final2'",
                       "Эмулировать конкретную версию Doom. Поддерживаемые значения: '1.2', '1.666', '1.7', '1.8', '1.9', 'ultimate', 'doomse', 'final', 'final2'");
@@ -604,23 +604,23 @@ printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (descript
                   "Run in a window",
                   "Оконный режим");
     CLI_Parameter("-width <W>",
-                  "Specify the screen width, in pixels. Height is determent automatically. Implies -window",
-                  "Задать ширину экрана в пикселах. Высота определяется автоматически. Подразумевает -window");
+                  "Specify the screen width, in pixels. Height is determent automatically. Implies '-window'",
+                  "Задать ширину экрана в пикселах. Высота определяется автоматически. Подразумевает '-window'");
     CLI_Parameter("-height <H>",
-                  "Specify the screen height, in pixels. Width is determent automatically. Implies -window",
-                  "Задать высоту экрана в пикселах. Ширина определяется автоматически. Подразумевает -window");
+                  "Specify the screen height, in pixels. Width is determent automatically. Implies '-window'",
+                  "Задать высоту экрана в пикселах. Ширина определяется автоматически. Подразумевает '-window'");
     CLI_Parameter("-geometry <W>x<H>",
-                  "Specify the dimensions of the window. Implies -window",
-                  "Задать размеры экрана. Подразумевает -window");
+                  "Specify the dimensions of the window. Implies '-window'",
+                  "Задать размеры экрана. Подразумевает '-window'");
     CLI_Parameter("-1",
-                  "Don't scale up the screen. Implies -window",
-                  "Не масштабировать экран. Подразумевает -window");
+                  "Don't scale up the screen. Implies '-window'",
+                  "Не масштабировать экран. Подразумевает '-window'");
     CLI_Parameter("-2",
-                  "Double up the screen to 2x its normal size. Implies -window",
-                  "Увеличить экран в два раза относительно нормальных размеров. Подразумевает -window");
+                  "Double up the screen to 2x its normal size. Implies '-window'",
+                  "Увеличить экран в два раза относительно нормальных размеров. Подразумевает '-window'");
     CLI_Parameter("-3",
-                  "Double up the screen to 3x its normal size. Implies -window",
-                  "Увеличить экран в три раза относительно нормальных размеров. Подразумевает -window");
+                  "Double up the screen to 3x its normal size. Implies '-window'",
+                  "Увеличить экран в три раза относительно нормальных размеров. Подразумевает '-window'");
     CLI_Parameter("-devparm",
                   "Show console window and log more debug info",
                   "Показать окно консоли и логировать больше отладочной информации");
