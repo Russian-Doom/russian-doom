@@ -1105,7 +1105,7 @@ void KeybindsHandler_HandleLine(char* keyName, char *value, size_t valueSize)
         char keyString[50];
         int key;
 
-        if(sscanf(value, "\"%c_%50[^\"]\"%n", &deviceChar, keyString, &charsToSkip) != 2)
+        if(sscanf(value, "\"%c_%49[^\"]\"%n", &deviceChar, keyString, &charsToSkip) != 2)
         {
             value += charsToSkip;
             if(*value != '\0')
