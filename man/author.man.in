@@ -1,0 +1,13 @@
+.SH AUTHORS
+@PACKAGE_PREFIX@ Doom is written and maintained by Julian Nechaevsky and Leonid Murin (Dasperal).  It is based on
+the Chocolate Doom by Simon Howard and Crispy Doom by Fabian Greffrath,
+with significant additions from Doom Retro by Brad Harding.
+.SH COPYRIGHT
+Copyright \(co id Software Inc.
+Copyright \(co 2005-2016 Simon Howard.
+Copyright \(co 2016–2022 Julian Nechaevsky.
+Copyright \(co 2020–2022 Leonid Murin (Dasperal).
+.br
+This is free software.  You may redistribute copies of it under the terms of
+the GNU General Public License v2.0 https://www.gnu.org/licenses/old-licenses/gpl-2.0.html.
+There is NO WARRANTY, to the extent permitted by law.

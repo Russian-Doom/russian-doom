@@ -46,36 +46,39 @@ if(UNIX AND Python3_Interpreter_FOUND)
         )
     endfunction()
 
-    function(generate_man MODULE)
-        foreach(Lang . ru)
-            configure_file("${Lang}/${MODULE}.template.in" "${Lang}/${MODULE}.template" @ONLY)
+    function(generate_man MODULE Lang)
 
-            set(Out "${CMAKE_CURRENT_BINARY_DIR}/${Lang}/${PROGRAM_PREFIX}${MODULE}.6")
-            add_docgen("${Out}"
-                GAMES ${MODULE}
-                MANPAGE_TEMPLATE "${CMAKE_CURRENT_BINARY_DIR}/${Lang}/${MODULE}.template"
-                LANG ${Lang}
-                SOURCE "\"${PROJECT_SOURCE_DIR}/src/m_argv.c\""
-            )
-            list(APPEND Out_list ${Out})
-        endforeach()
+        configure_file("${MODULE}.template.in" "${MODULE}.template" @ONLY)
 
-        add_custom_target("man-${MODULE}"
+        set(Out "${CMAKE_CURRENT_BINARY_DIR}/${PROGRAM_PREFIX}${MODULE}.6")
+        add_docgen("${Out}"
+            GAMES ${MODULE}
+            MANPAGE_TEMPLATE "${CMAKE_CURRENT_BINARY_DIR}/${MODULE}.template"
+            LANG ${Lang}
+            SOURCE "\"${PROJECT_SOURCE_DIR}/src/m_argv.c\""
+        )
+        list(APPEND Out_list ${Out})
+
+        add_custom_target("man-${MODULE}-${Lang}"
             DEPENDS ${Out_list}
         )
-        set_target_properties("man-${MODULE}" PROPERTIES
+        set_target_properties("man-${MODULE}-${Lang}" PROPERTIES
             OUT_FILES "${Out_list}"
         )
     endfunction()
 
-    foreach(MODULE ${COMPILE_MODULES})
-        generate_man(${MODULE})
+	configure_file("author.man.in" "author.man" @ONLY)
 
-        install(FILES $<TARGET_PROPERTY:man-${MODULE},OUT_FILES>
-            DESTINATION "share/man/man6"
-            COMPONENT ${MODULE}
-        )
-    endforeach()
+	foreach(MODULE ${COMPILE_MODULES})
+		generate_man(${MODULE} en)
+
+		install(FILES $<TARGET_PROPERTY:man-${MODULE}-en,OUT_FILES>
+			DESTINATION "share/man/man6"
+			COMPONENT ${MODULE}
+		)
+	endforeach()
+
+	add_subdirectory(ru)
 
     add_subdirectory(bash-completion)
 endif()

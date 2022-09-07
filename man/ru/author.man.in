@@ -1,0 +1,13 @@
+.SH АВТОРЫ
+@PACKAGE_PREFIX@ Doom написан и поддерживается Юлианом Нечаевским и Леонидом Муриным (Dasperal).  Проект основан
+на Chocolate Doom от Simon Howard и Crispy Doom от Fabian Greffrath,
+с существенными дополнениями из Doom Retro от Brad Harding.
+.SH COPYRIGHT
+Copyright \(co id Software Inc.
+Copyright \(co 2005-2016 Simon Howard.
+Copyright \(co 2016–2022 Юлиан Нечаевский.
+Copyright \(co 2020–2022 Леонид Мурин (Dasperal).
+.br
+Это свободное программное обеспечение.  Вы можете распространять его копии в соответствии с условиями лицензии
+GNU General Public License v2.0 https://www.gnu.org/licenses/old-licenses/gpl-2.0.html.
+НИКАКИХ ГАРАНТИЙ, насколько это разрешено законом, НЕ предоставляется.
