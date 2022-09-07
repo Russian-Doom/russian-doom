@@ -194,7 +194,7 @@ foreach(MODULE ${COMPILE_MODULES})
 
     add_dependencies("${PROGRAM_PREFIX}${MODULE}" "${MODULE}-wads" gus-patches)
     if(UNIX AND Python3_Interpreter_FOUND)
-        add_dependencies("${PROGRAM_PREFIX}${MODULE}" "man-${MODULE}" "completion-${MODULE}")
+        add_dependencies("${PROGRAM_PREFIX}${MODULE}" "man-${MODULE}-en" "completion-${MODULE}")
     endif()
 
     # Properties

@@ -490,12 +490,7 @@ def process_file(filename):
 
 
 def print_template(template_file, content):
-    f = io.open(template_file, encoding='UTF-8')
-    of = None
-    if output_file:
-        of = io.open(output_file, mode='wt', encoding='UTF-8')
-
-    try:
+    with io.open(template_file, encoding='UTF-8') as f:
         for line in f:
             match = INCLUDE_STATEMENT_RE.search(line)
             if match:
@@ -505,14 +500,10 @@ def print_template(template_file, content):
                 print_template(filename, content)
             else:
                 line = line.replace("@content", content).rstrip() + '\n'
-                if of:
+                if output_file_handle:
                     of.write(line)
                 else:
                     stdout(line.encode('UTF-8'))
-    finally:
-        f.close()
-        if of:
-            of.close()
 
 
 def manpage_output(targets, template_file):
@@ -574,6 +565,7 @@ opts, args = getopt.getopt(sys.argv[1:], "m:M:p:b:c:g:l:d:o:")
 
 output_function = None
 output_file = None
+output_file_handle = None
 template = None
 doc_config_file = None
 doc_lang = 'en'
@@ -619,4 +611,9 @@ else:
         documentation_targets = [cli_parameters]
 
     # Generate the output
-    output_function(documentation_targets, template)
+    if output_file:
+        with io.open(output_file, mode='wt', encoding='UTF-8') as of:
+            output_file_handle = of
+            output_function(documentation_targets, template)
+    else:
+        output_function(documentation_targets, template)
