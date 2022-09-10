@@ -608,6 +608,7 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(automap_grid_size),
     CONFIG_VARIABLE_INT(hud_stats_color),
     CONFIG_VARIABLE_INT(hud_widget_colors),
+    CONFIG_VARIABLE_INT(hud_level_name),
 
     // Sound
     CONFIG_VARIABLE_INT(sfx_volume),

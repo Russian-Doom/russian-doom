@@ -202,6 +202,7 @@ static void M_RD_Change_AutomapSkill(Direction_t direction);
 static void M_RD_Change_AutomapLevelTime(Direction_t direction);
 static void M_RD_Change_AutomapTotalTime(Direction_t direction);
 static void M_RD_Change_AutomapCoords(Direction_t direction);
+static void M_RD_Change_HUDLevelName();
 static void M_RD_Change_HUDWidgetColors();
 
 // Sound
@@ -889,8 +890,8 @@ static MenuItem_t StatsItems[] = {
     {ITT_LRFUNC,  "level/deathmatch timer:",      "nfqvth ehjdyz*ltavfnx:",       M_RD_Change_AutomapLevelTime, 0}, // Таймер уровня/дефматч:
     {ITT_LRFUNC,  "total time:",                  "j,ott dhtvz:",                 M_RD_Change_AutomapTotalTime, 0}, // Общее время:
     {ITT_LRFUNC,  "player coords:",               "rjjhlbyfns buhjrf:",           M_RD_Change_AutomapCoords,    0}, // Координаты игрока:
+    {ITT_SWITCH,  "level name:",                  "yfpdfybt ehjdyz:",             M_RD_Change_HUDLevelName,     0}, // Название уровня:
     {ITT_SWITCH,  "coloring:",                    "jrhfibdfybt:",                 M_RD_Change_HUDWidgetColors,  0}, // Окрашивание:
-    {ITT_EMPTY,   NULL,                           NULL,                           NULL,                         0},
     {ITT_EMPTY,   NULL,                           NULL,                           NULL,                         0},
     {ITT_EMPTY,   NULL,                           NULL,                           NULL,                         0},
     {ITT_EMPTY,   NULL,                           NULL,                           NULL,                         0},
@@ -3042,9 +3043,14 @@ static void M_RD_Draw_StatsSettings(void)
                               142 + wide_delta, 75,
                               automap_coords ? CR_GREEN : CR_DARKRED);
 
+        // Level name
+        RD_M_DrawTextSmallENG(hud_level_name ? "always" : "in automap",
+                              119 + wide_delta, 85,
+                              hud_level_name ? CR_GREEN : CR_DARKRED);
+
         // Coloring
         RD_M_DrawTextSmallENG(hud_stats_color ? "on" : "off",
-                              103 + wide_delta, 85,
+                              103 + wide_delta, 95,
                               hud_stats_color ? CR_GREEN : CR_DARKRED);
 
         //
@@ -3084,9 +3090,14 @@ static void M_RD_Draw_StatsSettings(void)
                               "dsrk", 178 + wide_delta, 75,
                               automap_coords ? CR_GREEN : CR_DARKRED);
 
+        // Название уровня
+        RD_M_DrawTextSmallRUS(hud_level_name ? "dctulf" : "yf rfhnt",
+                              159 + wide_delta, 85,
+                              hud_level_name ? CR_GREEN : CR_DARKRED);
+
         // Окрашивание
         RD_M_DrawTextSmallRUS(hud_stats_color ? "drk" : "dsrk",
-                              133 + wide_delta, 85,
+                              133 + wide_delta, 95,
                               hud_stats_color ? CR_GREEN : CR_DARKRED);
 
         //
@@ -3119,6 +3130,11 @@ static void M_RD_Change_AutomapTotalTime(Direction_t direction)
 static void M_RD_Change_AutomapCoords(Direction_t direction)
 {
     RD_Menu_SpinInt(&automap_coords, 0, 2, direction);
+}
+
+static void M_RD_Change_HUDLevelName()
+{
+    hud_level_name ^= 1;
 }
 
 static void M_RD_Change_HUDWidgetColors()
@@ -6300,6 +6316,7 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     automap_total_time = 0;
     automap_coords     = 0;
     hud_stats_color    = 1;
+    hud_level_name     = 0;
 
     // Audio
     snd_sfxdevice        = 3;
@@ -6488,6 +6505,7 @@ static void M_RD_BackToDefaults_Original(int choice)
     automap_total_time = 0;
     automap_coords     = 0;
     hud_stats_color    = 0;
+    hud_level_name     = 0;
 
     // Audio
     snd_sfxdevice        = 3;

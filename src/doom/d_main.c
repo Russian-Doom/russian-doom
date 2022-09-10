@@ -158,6 +158,7 @@ int automap_rotate  = 0;
 int automap_grid    = 0;
 int automap_grid_size = 128;
 int hud_stats_color = 1;
+int hud_level_name = 0;
 
 // Sound
 int sfxVolume = 8;          // Maximum volume of a sound effect (internal: 0-15)
@@ -732,6 +733,11 @@ void D_Display (void)
             if (screenblocks < 17 && !vanillaparm)
             {
                 ST_WidgetsDrawer();
+
+                if (automapactive || hud_level_name)
+                {
+                    ST_MapNameDrawer();
+                }
             }
         }
         else
@@ -745,13 +751,14 @@ void D_Display (void)
             if (screenblocks < 14 && !vanillaparm)
             {
                ST_WidgetsDrawer();
+
+               if (automapactive || hud_level_name)
+               {
+                   ST_MapNameDrawer();
+               }
             }
         }
 
-        if (automapactive)
-        {
-            ST_MapNameDrawer();
-        }
         if (netgame && chatmodeon)
         {
             CT_Drawer();
@@ -939,6 +946,7 @@ void D_BindVariables(void)
     M_BindIntVariable("automap_grid",           &automap_grid);
     M_BindIntVariable("automap_grid_size",      &automap_grid_size);
     M_BindIntVariable("hud_stats_color",        &hud_stats_color);
+    M_BindIntVariable("hud_level_name",       &hud_level_name);
 
     // Sound
     M_BindIntVariable("sfx_volume",             &sfxVolume);

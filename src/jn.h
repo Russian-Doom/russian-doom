@@ -128,6 +128,7 @@ extern int automap_grid;
 extern int automap_grid_size;
 extern int hud_stats_color;
 extern int hud_widget_colors;
+extern int hud_level_name;
 
 // -----------------------------------------------------------------------------
 // Sound
