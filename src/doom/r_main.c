@@ -440,15 +440,15 @@ static void R_InitTextureMapping (void)
 
 #define DISTMAP     2
 
-static void R_InitLightTables (void)
+void R_InitLightTables (void)
 {
     int i, j;
     int level;
     int scale;
 
     // [JN] Define, which diminished lighting to use
-    lightzshift = vanillaparm ? LIGHTZSHIFT_VANILLA : LIGHTZSHIFT;
-    maxlightz = vanillaparm ? MAXLIGHTZ_VANILLA : MAXLIGHTZ;
+    lightzshift = smoothlight && !vanillaparm ? LIGHTZSHIFT : LIGHTZSHIFT_VANILLA;
+    maxlightz = smoothlight && !vanillaparm ? MAXLIGHTZ : MAXLIGHTZ_VANILLA;
 
     // Calculate the light levels to use
     //  for each level / distance combination.
@@ -456,7 +456,6 @@ static void R_InitLightTables (void)
     {
         const int firstmap = ((LIGHTLEVELS-1-i)*2)*NUMCOLORMAPS/LIGHTLEVELS;
 
-        // [JN] Note: no smooth diminished lighting in -vanilla mode
         for (j=0 ; j < maxlightz ; j++)
         {
             scale = FixedDiv ((320 / 2*FRACUNIT), ((j+1)<<lightzshift));

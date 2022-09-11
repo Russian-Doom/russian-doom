@@ -119,6 +119,7 @@ char *autoloadfreedoom2pwad[10] = { "", "", "", "" };
 // -----------------------------------------------------------------------------
 
 // Rendering
+int smoothlight = 1;
 int screen_wiping = 1;
 int show_endoom = 0;
 int flashing_hom = 0;
@@ -906,6 +907,7 @@ void D_BindVariables(void)
 
     // Rendering
     M_BindIntVariable("uncapped_fps",           &uncapped_fps);
+    M_BindIntVariable("smoothlight",            &smoothlight);
     M_BindIntVariable("show_diskicon",          &show_diskicon);
     M_BindIntVariable("screen_wiping",          &screen_wiping);
     M_BindIntVariable("show_endoom",            &show_endoom);

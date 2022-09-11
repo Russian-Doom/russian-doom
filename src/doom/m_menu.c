@@ -140,6 +140,7 @@ static void M_RD_Change_MaxFPS(Direction_t direction);
 static void M_RD_Change_PerfCounter();
 static void M_RD_Change_Smoothing();
 static void M_RD_Change_PorchFlashing();
+static void M_RD_Change_DiminishedLighting();
 
 // Page 2
 static void M_RD_Change_WindowBorder();
@@ -706,7 +707,7 @@ static MenuItem_t Rendering1Items[] = {
     {ITT_LRFUNC,  "Performance counter:",      "Cxtnxbr ghjbpdjlbntkmyjcnb:",     M_RD_Change_PerfCounter,   0},
     {ITT_SWITCH,  "Pixel scaling:",            "Gbrctkmyjt cukf;bdfybt:",         M_RD_Change_Smoothing,     0},
     {ITT_SWITCH,  "Porch palette changing:",   "Bpvtytybt gfkbnhs rhftd 'rhfyf:", M_RD_Change_PorchFlashing, 0},
-    {ITT_EMPTY,   NULL,                        NULL,                              NULL,                      0},
+    {ITT_SWITCH,  "Diminished lighting:",      "Eufcfybt jcdtotybz:",             M_RD_Change_DiminishedLighting, 0},
     {ITT_EMPTY,   NULL,                        NULL,                              NULL,                      0},
     {ITT_EMPTY,   NULL,                        NULL,                              NULL,                      0},
     {ITT_EMPTY,   NULL,                        NULL,                              NULL,                      0},
@@ -1822,6 +1823,9 @@ static void M_RD_Draw_Rendering_1 (void)
         // Porch palette changing
         RD_M_DrawTextSmallENG(vga_porch_flash ? "on" : "off", 207 + wide_delta, 95, CR_NONE);
 
+        // Diminished lighting
+        RD_M_DrawTextSmallENG(smoothlight ? "smooth" : "original", 171 + wide_delta, 105, CR_NONE);
+
         // Tip for faster sliding
         if (CurrentItPos == 4)
         {
@@ -1911,6 +1915,9 @@ static void M_RD_Draw_Rendering_1 (void)
 
         // Изменение палитры краёв экрана
         RD_M_DrawTextSmallRUS(vga_porch_flash ? "drk" : "dsrk", 274 + wide_delta, 95, CR_NONE);
+
+        // Угасание освещения
+        RD_M_DrawTextSmallRUS(smoothlight ? "gkfdyjt" : "jhbubyfkmyjt", 186 + wide_delta, 105, CR_NONE);
 
         // Для ускоренного пролистывания
         // удерживайте кнопку бега
@@ -2152,6 +2159,14 @@ static void M_RD_Change_PorchFlashing()
 
     // Update black borders
     I_DrawBlackBorders();
+}
+
+static void M_RD_Change_DiminishedLighting()
+{
+    smoothlight ^= 1;
+
+    // Recalculate light tables
+    R_InitLightTables();
 }
 
 static void M_RD_Change_WindowBorder()
@@ -6261,6 +6276,7 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     show_fps                = 0;
     smoothing               = 0;
     vga_porch_flash         = 0;
+    smoothlight             = 1;
     show_diskicon           = 1;
     screen_wiping           = 1;
     png_screenshots         = 1;
@@ -6426,6 +6442,9 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     // Reset palette.
     I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
 
+    // Recalculate light tables
+    R_InitLightTables();
+
     // Update screen size and fuzz effect
     R_SetViewSize (screenblocks, detailLevel);
 
@@ -6450,6 +6469,7 @@ static void M_RD_BackToDefaults_Original(int choice)
     show_fps                = 0;
     smoothing               = 0;
     vga_porch_flash         = 0;
+    smoothlight             = 0;
     show_diskicon           = 1;
     screen_wiping           = 1;
     png_screenshots         = 1;
@@ -6614,6 +6634,9 @@ static void M_RD_BackToDefaults_Original(int choice)
 
     // Reset palette.
     I_SetPalette ((byte *)W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE) + st_palette * 768);
+
+    // Recalculate light tables
+    R_InitLightTables();
 
     // Update screen size and fuzz effect
     R_SetViewSize (screenblocks, detailLevel);

@@ -592,6 +592,7 @@ extern void (*tlcolfunc) (void);
 extern void (*transcolfunc) (void);
 extern void (*transtlcolfunc) (void);
 extern void (*ghostcolfunc) (void);
+extern void R_InitLightTables (void);
 extern void R_ClearStats (void);
 
 angle_t R_InterpolateAngle(angle_t oangle, angle_t nangle, fixed_t scale);
