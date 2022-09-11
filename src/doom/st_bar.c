@@ -923,6 +923,10 @@ static void ST_updateFaceWidget (void)
     // [JN] Keep vanilla ouch face behavior for -vanilla game mode.
     const boolean ouch_condition = vanillaparm ? (plyr->health - st_oldhealth > ST_MUCHPAIN) :
                                                  (st_oldhealth - plyr->health > ST_MUCHPAIN);
+    // [JN] No evil grin or rampage face when invulnerable, 
+    // but allow under certain conditions.
+    const boolean extraface_condition = ((extra_player_faces && !old_godface)
+                                      || (old_godface && !((plyr->cheats & CF_GODMODE) || plyr->powers[pw_invulnerability])));
 
     if (priority < 10)
     {
@@ -988,19 +992,14 @@ static void ST_updateFaceWidget (void)
             {
                 if (oldweaponsowned[i] != plyr->weaponowned[i])
                 {
-                    // [BH] no evil grin when invulnerable
-                    // [JN] extra god faces have grin, use them in god mode
-                    if (extra_player_faces
-                    || old_godface
-                    || (!old_godface && !(plyr->cheats & CF_GODMODE) && !plyr->powers[pw_invulnerability]))
-                    {
-                        doevilgrin = true;
-                        oldweaponsowned[i] = plyr->weaponowned[i];
-                    }
+                    doevilgrin = true;
+                    oldweaponsowned[i] = plyr->weaponowned[i];
                 }
             }
 
-            if (doevilgrin) 
+            // [BH] no evil grin when invulnerable
+            // [JN] extra god faces have grin, use them in god mode
+            if (doevilgrin && extraface_condition)
             {
                 // evil grin if just picked up weapon
                 priority = 8;
@@ -1095,23 +1094,18 @@ static void ST_updateFaceWidget (void)
         // rapid firing
         if (plyr->attackdown)
         {
+            if (lastattackdown==-1)
+            {
+                lastattackdown = ST_RAMPAGEDELAY;
+            }
             // [BH] no rampage face when invulnerable
             // [JN] extra god faces have rampage, use them in god mode
-            if (extra_player_faces
-            || old_godface
-            || (!old_godface && !(plyr->cheats & CF_GODMODE) && !plyr->powers[pw_invulnerability]))
+            else if (!--lastattackdown && extraface_condition)
             {
-                if (lastattackdown==-1)
-                {
-                    lastattackdown = ST_RAMPAGEDELAY;
-                }
-                else if (!--lastattackdown)
-                {
-                    priority = 5;
-                    faceindex = ST_RAMPAGEOFFSET;
-                    st_facecount = 1;
-                    lastattackdown = 1;
-                }
+                priority = 5;
+                faceindex = ST_RAMPAGEOFFSET;
+                st_facecount = 1;
+                lastattackdown = 1;
             }
         }
         else
