@@ -886,7 +886,7 @@ static void R_InitTextures (void)
                 fprintf (stderr, english_language ? 
                          "R_InitTextures: Missing patch in texture %s\n" :
                          "R_InitTextures: отсутствует патч в текстуре %s\n", texturename);
-                patch->patch = 0;
+                patch->patch = W_CheckNumForName("TNT1A0"); // [crispy] dummy patch
             }
         }
 
