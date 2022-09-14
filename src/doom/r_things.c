@@ -849,7 +849,7 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
         }
         else
         if (thing->sprite == SPR_CEYE   // Evil Eye
-        ||  thing->sprite == SPR_CEYE)  // Floating Skull Rock
+        ||  thing->sprite == SPR_FSKU)  // Floating Skull Rock
         {
             vis->colormap[0] = vis->colormap[1]
                              = &colormaps[bmap_glow*256];
