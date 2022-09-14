@@ -63,7 +63,7 @@ int *openings, *lastopening; // [crispy] 32-bit integer math
 //  ceilingclip starts out -1
 //
 
-// [JN] e6y: resolution limitation is removed
+// [JN] Andrey Budko: resolution limitation is removed
 int *floorclip = NULL;    // dropoff overflow
 int *ceilingclip = NULL;  // dropoff overflow
 
@@ -72,7 +72,7 @@ int *ceilingclip = NULL;  // dropoff overflow
 // initialized to 0 at start
 //
 
-// [JN] e6y: resolution limitation is removed
+// [JN] Andrey Budko: resolution limitation is removed
 static int *spanstart = NULL;  // killough 2/8/98
 
 
@@ -87,7 +87,7 @@ static fixed_t cacheddistance[SCREENHEIGHT];
 static fixed_t cachedxstep[SCREENHEIGHT];
 static fixed_t cachedystep[SCREENHEIGHT];
 
-// [JN] e6y: resolution limitation is removed
+// [JN] Andrey Budko: resolution limitation is removed
 fixed_t *yslope = NULL;
 fixed_t *distscale = NULL;
 fixed_t  yslopes[LOOKDIRS][SCREENHEIGHT];

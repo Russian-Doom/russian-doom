@@ -1488,7 +1488,7 @@ int EV_DoDonut (line_t *line)
 
             if (s3 == NULL)
             {
-                // e6y
+                // Andrey Budko
                 // s3 is NULL, so
                 // s3->floorheight is an int at 0000:0000
                 // s3->floorpic is a short at 0000:0008

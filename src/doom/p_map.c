@@ -36,8 +36,9 @@ static mobj_t  *tmthing;
 static int      tmflags;
 static fixed_t	tmx, tmy;
 
-static int pe_x, pe_y;     // Pain Elemental position for Lost Soul checks // phares
-static int ls_x, ls_y;     // Lost Soul position for Lost Soul checks      // phares
+// [JN] Rand Phares:
+static int pe_x, pe_y;     // Pain Elemental position for Lost Soul checks
+static int ls_x, ls_y;     // Lost Soul position for Lost Soul checks
 
 // If "floatok" true, move would be ok
 // if within "tmfloorz - tmceilingz".
@@ -1349,7 +1350,7 @@ static boolean PTR_ShootTraverse (intercept_t* in)
 
         dist = FixedMul (attackrange, in->frac);
 
-        // e6y: emulation of missed back side on two-sided lines.
+        // Andrey Budko: emulation of missed back side on two-sided lines.
         // backsector can be NULL when emulating missing back side.
         if (li->backsector == NULL)
         {
@@ -1936,7 +1937,7 @@ boolean P_ChangeSector (sector_t *sector, boolean crunch)
 // -----------------------------------------------------------------------------
 // SpechitOverrun
 // Code to emulate the behavior of Vanilla Doom when encountering an overrun
-// of the spechit array.  This is by Andrey Budko (e6y) and comes from his
+// of the spechit array.  This is by Andrey Budko (entryway) and comes from his
 // PrBoom plus port.  A big thanks to Andrey for this.
 // -----------------------------------------------------------------------------
 

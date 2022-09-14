@@ -511,7 +511,7 @@ const int EV_BuildStairs (line_t *line, const stair_e type)
         floor->floordestheight = height;
         // Initialize
         floor->type = lowerFloor;
-        // e6y
+        // Andrey Budko
         // Uninitialized crush field will not be equal to 0 or 1 (true)
         // with high probability. So, initialize it with any other value
         floor->crush = STAIRS_UNINITIALIZED_CRUSH_FIELD_VALUE;
@@ -569,7 +569,7 @@ const int EV_BuildStairs (line_t *line, const stair_e type)
                 floor->floordestheight = height;
                 // Initialize
                 floor->type = lowerFloor;
-                // e6y
+                // Andrey Budko
                 // Uninitialized crush field will not be equal to 0 or 1 (true)
                 // with high probability. So, initialize it with any other value
                 floor->crush = STAIRS_UNINITIALIZED_CRUSH_FIELD_VALUE;
