@@ -1,10 +1,10 @@
 ![](https://jnechaevsky.github.io/inter-doom/files/inter-doom-git.png)
 
-#### International Doom 5.3 (released: June 12, 2022)
+#### International Doom 6.0 (released: September 16, 2022)
 
-Windows (32-bit): [inter-doom-5.3-win32.zip](https://github.com/JNechaevsky/inter-doom/releases/download/5.3/inter-doom-5.3-win32.zip)<br />
-Windows (64-bit): [inter-doom-5.3-win64.zip](https://github.com/JNechaevsky/inter-doom/releases/download/5.3/inter-doom-5.3-win64.zip)<br />
-Source code available in [zip](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/5.3.zip) and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/5.3.tar.gz) formats<br />
+Windows (32-bit): [inter-doom-6.0-windows-x86.zip](https://github.com/JNechaevsky/inter-doom/releases/download/6.0/inter-doom-6.0-windows-x86.zip)<br />
+Windows (64-bit): [inter-doom-6.0-windows-x64.zip](https://github.com/JNechaevsky/inter-doom/releases/download/6.0/inter-doom-6.0-windows-x64.zip)<br />
+Source code available in [zip](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/6.0.zip) and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/6.0.tar.gz) formats<br />
 
 #### International Heretic 5.2 (released: June 12, 2022)
 
