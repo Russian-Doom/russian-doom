@@ -587,7 +587,14 @@ void P_ZMovement(mobj_t * mo)
         && leveltime & 2)
     {
         // [JN] Smooth floating
-        mo->z += finesine[(FINEANGLES/160*gametic)&FINEMASK]/16;
+        if (singleplayer && !vanillaparm)
+        {
+            mo->z += finesine[(FINEANGLES/160*gametic)&FINEMASK]/16;
+        }
+        else
+        {
+            mo->z += finesine[(FINEANGLES / 20 * leveltime >> 2) & FINEMASK];
+        }
     }
 
 //
