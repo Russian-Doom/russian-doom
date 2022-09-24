@@ -20,7 +20,7 @@ foreach(MODULE ${COMPILE_MODULES})
     add_completion(${MODULE})
 
     install(FILES $<TARGET_PROPERTY:completion-${MODULE},OUT_FILES>
-        DESTINATION "share/bash-completion/completions"
+        DESTINATION "${CMAKE_INSTALL_DATADIR}/bash-completion/completions"
         COMPONENT ${MODULE}
     )
 endforeach()

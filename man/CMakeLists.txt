@@ -73,7 +73,7 @@ if(UNIX AND Python3_Interpreter_FOUND)
 		generate_man(${MODULE} en)
 
 		install(FILES $<TARGET_PROPERTY:man-${MODULE}-en,OUT_FILES>
-			DESTINATION "share/man/man6"
+			DESTINATION "${CMAKE_INSTALL_MANDIR}/man6"
 			COMPONENT ${MODULE}
 		)
 	endforeach()
