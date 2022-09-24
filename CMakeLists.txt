@@ -204,6 +204,8 @@ else()
     )
 endif()
 
+include(GNUInstallDirs)
+
 foreach(SUBDIR win_libs man textscreen opl pcsound src)
     add_subdirectory("${SUBDIR}")
 endforeach()
