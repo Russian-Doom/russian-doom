@@ -91,6 +91,7 @@ boolean sendsave;               // send a save event next tic
 boolean usergame;               // ok to save / end game
 
 boolean timingdemo;             // if true, exit with report on completion
+boolean nodrawers = false;      // [crispy] for the demowarp feature
 int starttime;                  // for comparative timing purposes
 
 boolean deathmatch;             // only if started as net death
@@ -2089,6 +2090,13 @@ void G_DeferedPlayDemo(char *name)
 {
     defdemoname = name;
     gameaction = ga_playdemo;
+
+    // [crispy] fast-forward demo up to the desired map
+    if (demowarp)
+    {
+        nodrawers = true;
+        singletics = true;
+    }
 }
 
 void G_DoPlayDemo(void)
