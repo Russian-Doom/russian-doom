@@ -116,6 +116,7 @@ state_t states[NUMSTATES] = {
     {SPR_FX01, 32774, 3, NULL, S_EGGFXI1_4, 0, 0},      // S_EGGFXI1_3
     {SPR_FX01, 32775, 3, NULL, S_NULL, 0, 0},   // S_EGGFXI1_4
     {SPR_SPHL, 0, 350, NULL, S_ARTI_SPHL1, 0, 0},       // S_ARTI_SPHL1
+    // [JN] Disable full bright, use brightmaps instead
     {SPR_TRCH, 0, 3, NULL, S_ARTI_TRCH2, 0, 0},     // S_ARTI_TRCH1
     {SPR_TRCH, 1, 3, NULL, S_ARTI_TRCH3, 0, 0},     // S_ARTI_TRCH2
     {SPR_TRCH, 2, 3, NULL, S_ARTI_TRCH1, 0, 0},     // S_ARTI_TRCH3
@@ -989,12 +990,10 @@ state_t states[NUMSTATES] = {
     {SPR_IMPX, 25, -1, NULL, S_NULL, 0, 0},     // S_IMP_XCRASH3
     {SPR_IMPX, 12, 5, NULL, S_IMP_CHUNKA2, 0, 0},       // S_IMP_CHUNKA1
     {SPR_IMPX, 13, 700, NULL, S_IMP_CHUNKA3, 0, 0},     // S_IMP_CHUNKA2
-    // [JN] Do not remove chunk after 700 tics
-    {SPR_IMPX, 14, -1, NULL, S_NULL, 0, 0},    // S_IMP_CHUNKA3
+    {SPR_IMPX, 14, 700, NULL, S_NULL, 0, 0},    // S_IMP_CHUNKA3
     {SPR_IMPX, 15, 5, NULL, S_IMP_CHUNKB2, 0, 0},       // S_IMP_CHUNKB1
     {SPR_IMPX, 16, 700, NULL, S_IMP_CHUNKB3, 0, 0},     // S_IMP_CHUNKB2
-    // [JN] Do not remove chunk after 700 tics
-    {SPR_IMPX, 17, -1, NULL, S_NULL, 0, 0},    // S_IMP_CHUNKB3
+    {SPR_IMPX, 17, 700, NULL, S_NULL, 0, 0},    // S_IMP_CHUNKB3
     {SPR_FX10, 32768, 6, NULL, S_IMPFX2, 0, 0}, // S_IMPFX1
     {SPR_FX10, 32769, 6, NULL, S_IMPFX3, 0, 0}, // S_IMPFX2
     {SPR_FX10, 32770, 6, NULL, S_IMPFX1, 0, 0}, // S_IMPFX3
@@ -4432,10 +4431,6 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {
      MF2_NOTELEPORT             // flags2
      },
 
-    // [JN] MF_NOBLOOD is disabled, needed for dynamical swapping 
-    // of colored blood. Now it behaves as:
-    // - Colored blood ON: Liches are bleeding gray blood
-    // - Colored blood OFF (or vanillaparm): Liches bleeding invisible blood
     {                           // MT_HEAD
      6,                         // doomednum
      S_HEAD_LOOK,               // spawnstate
@@ -4459,7 +4454,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {
      325,                       // mass
      0,                         // damage
      sfx_hedact,                // activesound
-     MF_SOLID | MF_SHOOTABLE | MF_COUNTKILL /*| MF_NOBLOOD*/,   // flags
+     MF_SOLID | MF_SHOOTABLE | MF_COUNTKILL | MF_NOBLOOD,       // flags
      MF2_PASSMOBJ               // flags2
      },
 
@@ -4732,7 +4727,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {
      100,                       // mass
      0,                         // damage
      sfx_None,                  // activesound
-     MF_DROPOFF,                // flags
+     MF_NOBLOCKMAP,             // flags
      0                          // flags2
      },
 
@@ -4759,7 +4754,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {
      100,                       // mass
      0,                         // damage
      sfx_None,                  // activesound
-     MF_DROPOFF,                // flags
+     MF_NOBLOCKMAP,             // flags
      0                          // flags2
      },
 
