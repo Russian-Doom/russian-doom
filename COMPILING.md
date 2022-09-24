@@ -185,11 +185,11 @@ After successful compilation, the resulting binaries can be found in the `build/
 
 To install International Doom, use the following command:
 ```shell
-cmake --install build
+sudo cmake --install build
 ```
 If you want to install only one game, you can use the following command:
 ```shell
-cmake --install build --component <game>
+sudo cmake --install build --component <game>
 ```
 Available components are `doom`, `heretic`, `hexen`. 
 
