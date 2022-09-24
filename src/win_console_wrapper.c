@@ -77,8 +77,6 @@ int wmain(int argc, wchar_t **argv, wchar_t **envp)
     wchar_t *cmd;
     wchar_t exe[MAX_PATH];
     UINT orig_output_code_page;
-    UINT orig_input_code_page;
-    DWORD orig_mode;
     HANDLE handle;
     int ret;
 
@@ -92,18 +90,13 @@ int wmain(int argc, wchar_t **argv, wchar_t **envp)
 
     handle = GetStdHandle(STD_INPUT_HANDLE);
     orig_output_code_page = GetConsoleOutputCP();
-    orig_input_code_page = GetConsoleCP();
-    GetConsoleMode(handle, &orig_mode);
 
     SetConsoleOutputCP(CP_UTF8);
-    SetConsoleCP(CP_UTF8);
-    SetConsoleMode(handle, orig_mode | ENABLE_QUICK_EDIT_MODE | ENABLE_EXTENDED_FLAGS);
+    SetConsoleMode(handle, ENABLE_QUICK_EDIT_MODE | ENABLE_EXTENDED_FLAGS);
 
     ret = cr_runproc(exe, cmd);
 
     SetConsoleOutputCP(orig_output_code_page);
-    SetConsoleCP(orig_input_code_page);
-    SetConsoleMode(handle, orig_mode);
 
     return ret;
 }
