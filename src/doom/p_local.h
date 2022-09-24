@@ -324,7 +324,7 @@ extern line_t **spechit;
 extern int      numspechit;
 extern mobj_t  *BlockingMobj;
 extern mobj_t  *linetarget;
-extern int64_t  attackrange;
+extern fixed_t  attackrange;
 
 boolean P_ChangeSector (sector_t *sector, boolean crunch);
 boolean PIT_ChangeSector (mobj_t *thing);
@@ -336,7 +336,7 @@ const boolean P_TeleportMove (mobj_t* thing, const fixed_t x, const fixed_t y);
 const boolean P_TryMove (mobj_t* thing, const fixed_t x, const fixed_t y);
 const fixed_t P_AimLineAttack (mobj_t *t1, angle_t angle, const fixed_t distance);
 void P_ApplyTorque(mobj_t *mo);
-void P_LineAttack (mobj_t *t1, angle_t angle, int64_t distance, const fixed_t slope, const int damage);
+void P_LineAttack (mobj_t *t1, angle_t angle, fixed_t distance, const fixed_t slope, const int damage);
 void P_RadiusAttack (mobj_t *spot, mobj_t *source, int damage);
 void P_SlideMove (mobj_t *mo);
 void P_UseLines (const player_t *player);

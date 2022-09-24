@@ -1195,7 +1195,7 @@ static mobj_t *shootthing;
 static fixed_t shootz;	
 
 static int la_damage;
-int64_t    attackrange;
+fixed_t    attackrange;
 fixed_t    aimslope;
 
 // slopes to top and bottom of target
@@ -1215,7 +1215,7 @@ static boolean PTR_AimTraverse (intercept_t *in)
     fixed_t  slope;
     fixed_t  thingtopslope;
     fixed_t  thingbottomslope;
-    int64_t  dist;
+    fixed_t  dist;
 
     if (in->isaline)
     {
@@ -1559,18 +1559,10 @@ const fixed_t P_AimLineAttack (mobj_t *t1, angle_t angle, const fixed_t distance
 // If damage == 0, it is just a test trace that will leave linetarget set.
 // -----------------------------------------------------------------------------
 
-void P_LineAttack (mobj_t *t1, angle_t angle, int64_t distance, 
+void P_LineAttack (mobj_t *t1, angle_t angle, fixed_t distance, 
                    const fixed_t slope, const int damage)
 {
-    int64_t	x2, y2;
-
-    // [JN] Extend range so puffs may appear in long distances of hitscan attacks.
-    // No damage will be dealed if range is greater than original MISSILERANGE,
-    // (see PTR_ShootTraverse). Only for player, not for monsters. 
-    if (singleplayer && t1->player && distance >= MISSILERANGE && !strict_mode && !vanillaparm)
-    {
-        distance = INT_MAX;
-    }
+    fixed_t	x2, y2;
 
     angle >>= ANGLETOFINESHIFT;
     shootthing = t1;
