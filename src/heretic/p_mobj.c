@@ -865,10 +865,20 @@ void P_MobjThinker(mobj_t * mobj)
         }
     }
     if (mobj->flags2 & MF2_FLOATBOB)
-    {                           // Floating item bobbing motion
-                                // [JN] Variable floating amplitude.
-        mobj->z = mobj->floorz + (floating_powerups == 1 ? FloatBobOffsets[(mobj->health++) & 63] :
-                                  floating_powerups == 2 ? FloatBobOffsetsHalfed[(mobj->health++) & 63] : 0);
+    {
+        // Floating item bobbing motion
+        // [JN] Variable floating amplitude.
+        // TODO - simplify condition!
+        if (singleplayer && !vanillaparm)
+        {
+            mobj->z = mobj->floorz + (floating_powerups == 1 ? FloatBobOffsets[(mobj->health++) & 63] :
+                                      floating_powerups == 2 ? FloatBobOffsetsHalfed[(mobj->health++) & 63] : 0);
+        }
+        else
+        {
+            // Keep demo sync.
+            mobj->z = mobj->floorz + FloatBobOffsets[(mobj->health++) & 63];
+        }
     }
     else if ((mobj->z != mobj->floorz) || mobj->momz 
     || (BlockingMobj && improved_collision && singleplayer && !vanillaparm))
