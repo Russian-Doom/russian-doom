@@ -1152,13 +1152,13 @@ void P_UpdateSpecials (void)
     // ANIMATE FLATS AND TEXTURES GLOBALLY
     for (anim = anims ; anim < lastanim ; anim++)
     {
-        for (i=anim->basepic ; i<anim->basepic+anim->numpics ; i++)
+        for (i = 0 ; i < anim->numpics ; i++)
         {
             pic = anim->basepic + ( (leveltime/anim->speed + i)%anim->numpics );
 
             if (anim->istexture)
             {
-                texturetranslation[i] = pic;
+                texturetranslation[anim->basepic + i] = pic;
             }
             else
             {
@@ -1167,11 +1167,11 @@ void P_UpdateSpecials (void)
                 if ((anim->speed > swirl_speed || anim->numpics == 1)
                 && swirling_liquids && !vanillaparm)
                 {
-                    flattranslation[i] = -1;
+                    flattranslation[anim->basepic + i] = -1;
                 }
                 else
                 {
-                    flattranslation[i] = pic;
+                    flattranslation[anim->basepic + i] = pic;
                 }
             }
         }
