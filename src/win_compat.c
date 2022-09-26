@@ -135,6 +135,31 @@ int D_rename(const char *oldname, const char *newname)
     return ret;
 }
 
+int D_stat(const char *path, struct stat *buf)
+{
+    wchar_t *wpath = NULL;
+    struct _stat wbuf;
+    int ret;
+
+    wpath = ConvertToUtf8(path);
+
+    if (!wpath)
+    {
+        return -1;
+    }
+
+    ret = _wstat(wpath, &wbuf);
+
+    // The _wstat() function expects a struct _stat* parameter that is
+    // incompatible with struct stat*. We copy only the required compatible
+    // field.
+    buf->st_mode = wbuf.st_mode;
+
+    free(wpath);
+
+    return ret;
+}
+
 int D_mkdir(const char *dirname)
 {
     wchar_t *wdir;

@@ -122,6 +122,7 @@ check_symbol_exists(mmap "sys/mman.h" HAVE_MMAP)
 check_symbol_exists(i386_iopl "i386/pio.h" HAVE_LIBI386)
 check_symbol_exists(amd64_iopl "amd64/pio.h" HAVE_LIBAMD64)
 
+check_include_file("dirent.h" HAVE_DIRENT_H)
 check_include_file("dev/isa/spkrio.h" HAVE_DEV_ISA_SPKRIO_H)
 check_include_file("dev/speaker/speaker.h" HAVE_DEV_SPEAKER_SPEAKER_H)
 check_include_file("linux/kd.h" HAVE_LINUX_KD_H)
