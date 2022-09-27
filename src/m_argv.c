@@ -389,6 +389,12 @@ printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (descript
                       "Specify <path> to level scripts. Development option",
                       "Задать путь к скриптам уровней. Опция для разработки");
     }
+    CLI_Parameter("-autoloadroot <dir>",
+                  "Specify root directory for autoload",
+                  "Задать корневую директорию для автозагрузки");
+    CLI_Parameter("-noautoload",
+                  "Disable auto-loading of WAD files",
+                  "Отключить автозагрузку WAD файлов");
     CLI_Parameter("-response <path>",
                   "Load extra command line arguments from the given response file",
                   "Загрузить дополнительные параметры командной строки из данного файла ответов");

@@ -71,6 +71,8 @@ add_compile_options_checked(
     -Wno-unknown-pragmas
     -Wno-unused-result
     -Wno-format-nonliteral
+    -Wno-discarded-qualifiers
+    -Wno-incompatible-pointer-types-discards-qualifiers
 )
 
 if(MSVC)
