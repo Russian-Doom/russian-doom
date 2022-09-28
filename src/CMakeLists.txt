@@ -38,6 +38,12 @@ target_link_libraries(Common PUBLIC
     SDL2::SDL2
 )
 
+if(WIN32 AND MSVC)
+    target_sources(Common PRIVATE
+        win_opendir.c       win_opendir.h
+    )
+endif()
+
 # Game Library
 add_library(Game STATIC EXCLUDE_FROM_ALL
     aes_prng.c          aes_prng.h
@@ -53,6 +59,7 @@ add_library(Game STATIC EXCLUDE_FROM_ALL
     i_controller.c      i_controller.h
     i_endoom.c          i_endoom.h
     i_input.c           i_input.h
+    i_glob.c            i_glob.h
                         i_swap.h
     i_pcsound.c
     i_sdlsound.c
@@ -112,6 +119,7 @@ target_compile_definitions(Game PRIVATE
     "$<$<BOOL:${PNG_FOUND}>:HAVE_LIBPNG>"
     "$<$<BOOL:${HAVE_MMAP}>:HAVE_MMAP>"
     "$<$<BOOL:${BUILD_PORTABLE}>:BUILD_PORTABLE>"
+    "$<$<BOOL:${HAVE_DIRENT_H}>:HAVE_DIRENT_H>"
     "$<IF:$<BOOL:${HAVE_DECL_SSCANF_S}>,HAVE_DECL_SSCANF_S=1,HAVE_DECL_SSCANF_S=0>"
     PACKAGE_TARNAME="${PACKAGE_TARNAME}"
     PROGRAM_PREFIX="${PROGRAM_PREFIX}"

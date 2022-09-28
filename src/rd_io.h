@@ -18,17 +18,18 @@
 #pragma once
 
 #include <stdio.h>
+#include <sys/stat.h>
 
 
 #ifdef _WIN32
 #include <io.h>
-#include <sys/stat.h>
 #include <direct.h>
 
 wchar_t* ConvertToUtf8(const char *str);
 FILE* D_fopen(const char *filename, const char *mode);
 int D_remove(const char *path);
 int D_rename(const char *oldname, const char *newname);
+int D_stat(const char *path, struct stat *buf);
 int D_mkdir(const char *dirname);
 
 #undef  fopen
@@ -40,10 +41,10 @@ int D_mkdir(const char *dirname);
 #undef  rename
 #define rename(o, n) D_rename(o, n)
 
-// [Dasperal] not used
-// #undef  stat
-// #define stat(p, b) D_stat(p, b)
+#undef  stat
+#define stat(p, b) D_stat(p, b)
 
+// [Dasperal] not used
 // #undef  open
 // #define open(n, of) D_open(n, of)
 

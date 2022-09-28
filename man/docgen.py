@@ -321,8 +321,18 @@ class CLIParam:
         result = "| %s | %s | %s |\n" % (name, text, games)
 
         # html escape
-        result = result.replace("<", "&lt;")
-        result = result.replace(">", "&gt;")
+        result_list = list(result)
+        in_quotas: bool = False
+        index: int = 0
+        while index < result_list.__len__():
+            if result_list[index] == '\'':
+                in_quotas = not in_quotas
+            elif not in_quotas and (result_list[index] == '<' or result_list[index] == '>'):
+                result_list.insert(index, "\\")
+                index += 1
+            index += 1
+
+        result = ''.join(result_list)
         result = result.replace("\\'", "\"")
         result = result.replace("'", "`")
 

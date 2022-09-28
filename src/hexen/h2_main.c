@@ -44,6 +44,7 @@
 #include "s_sound.h"
 #include "i_controller.h"
 #include "i_input.h"
+#include "i_glob.h"
 #include "i_system.h"
 #include "i_timer.h"
 #include "m_argv.h"
@@ -149,15 +150,12 @@ int english_language = -1;
 int english_language = 1;
 #endif
 
-/*
-================================================================================
-=
-= [JN] PWAD autoloading. Initially all 4 values are empty.
-=
-================================================================================
-*/
+// -----------------------------------------------------------------------------
+// [JN] PWAD autoloading
+// -----------------------------------------------------------------------------
 
-static char *autoloadglobalpwad[10] = { "", "", "", "" };
+char* autoload_root = "";
+char* autoload_dir  = NULL;
 
 // Display
 int screenblocks = 10;
@@ -319,14 +317,8 @@ void D_BindVariables(void)
 
     M_BindIntVariable("english_language",       &english_language);
 
-    // [JN] PWAD autoloading. Note that we are using variables 1..4, not 0...3.
-    for (i = 1 ; i < 5 ; ++i)
-    {
-        static char pwad[32];
-
-        M_snprintf(pwad, sizeof(pwad), "autoload_global_pwad%i", i);
-        M_BindStringVariable(pwad, &autoloadglobalpwad[i]);
-    }
+    // [JN] PWAD autoloading
+    M_BindStringVariable("autoload_root", &autoload_root);
 
     M_BindIntVariable("graphical_startup",      &graphical_startup);
     M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
@@ -560,6 +552,63 @@ static void PSX_DefineFunctions (void)
     }
 }
 
+void AutoloadFiles(char* wadName);
+
+void LoadFile(char* filePath, boolean autoload)
+{
+    printf(english_language ?
+           " adding: %s\n" :
+           " добавление: %s\n",
+           filePath);
+    W_MergeFile(filePath);
+
+    char* fileName = M_FileName(filePath);
+
+    // [JN] Поддержка Hexen: Deathkings of the Dark Citadel
+    // Больше спасибо CapnClever за оказанную помощь!
+    // [Dasperal] Переписано на нормальный код
+
+    // Deathkings of the Dark Citadel
+    if(M_StrCaseStr(fileName, "hexdd.wad"))
+    {
+        isDK = true;
+        gamedescription = english_language ?
+                          "Hexen: Deathkings of the Dark Citadel" :
+                          "Hexen: Короли Смерти Темной Цитадели";
+    }
+    else // Any unknown pwad
+    {
+        hasUnknownPWads = true;
+    }
+
+    if(autoload && M_StrCaseStr(fileName, ".wad"))
+    {
+        AutoloadFiles(fileName);
+    }
+}
+
+void AutoloadFiles(char* wadName)
+{
+    char* autoload_subdir = M_StringDuplicate(wadName);
+    M_ForceLowercase(autoload_subdir);
+    char* autoload_path = M_StringJoin(autoload_dir, DIR_SEPARATOR_S, autoload_subdir, NULL);
+    free(autoload_subdir);
+
+    glob_t* glob;
+    char* filename;
+
+    glob = I_StartMultiGlob(autoload_path, GLOB_FLAG_NOCASE|GLOB_FLAG_SORTED, "*.*", NULL);
+    while((filename = I_NextGlob(glob)) != NULL)
+    {
+        printf(english_language ?
+               " [Autoload]" :
+               " [Автозагрузка]");
+        LoadFile(filename, false);
+    }
+    I_EndGlob(glob);
+    free(autoload_path);
+}
+
 // Set the gamedescription string.
 
 void D_SetGameDescription(void)
@@ -593,24 +642,21 @@ void D_SetGameDescription(void)
     // [JN] PWAD autoloading routine. Scan through all 4 
     // available variables, and don't load an empty ones. 
     // Note: you cannot use autoload with the Shareware, buy a full version!
-    if (gamemode != shareware)
+    int autoloadDir_param = M_CheckParmWithArgs("-autoloadroot", 1);
+    if(autoloadDir_param)
     {
-        int i;
+        autoload_dir = myargv[autoloadDir_param + 1];
+    }
+    else
+    {
+        autoload_dir = autoload_root;
+    }
 
-        for (i = 1 ; i < 5 ; ++i)
-        {
-            // [JN] If autoloads have not been set, initialize with defaults.
-            if (autoloadglobalpwad[i] == NULL)
-                autoloadglobalpwad[i] = "";
-
-            if (strcmp(autoloadglobalpwad[i], ""))
-            {
-                W_MergeFile(autoloadglobalpwad[i]);
-                printf(english_language ? 
-                      " autoloading: %s\n" : " автозагрузка: %s\n",
-                        autoloadglobalpwad[i]);
-            }
-        }
+    boolean allowAutoload = gamemode != shareware && !M_ParmExists("-noautoload") && strcmp(autoload_dir, "") != 0;
+    if(allowAutoload)
+    {
+        AutoloadFiles("hexen-all");
+        AutoloadFiles(iwadfile);
     }
 
 #ifdef WHEN_ITS_DONE
@@ -631,29 +677,8 @@ void D_SetGameDescription(void)
     {
         while (++newpwadfile != myargc && myargv[newpwadfile][0] != '-')
         {
-            char    *filename;
-
-            filename = D_TryFindWADByName(myargv[newpwadfile]);
-            printf(english_language ?
-                   " adding: %s\n" :
-                   " добавление: %s\n",
-                   filename);
-            W_MergeFile(filename);
-
-            // [JN] Поддержка Hexen: Deathkings of the Dark Citadel
-            // Больше спасибо CapnClever за оказанную помощь!
-            // [Dasperal] Переписано на нормальный код
-            if (M_StrCaseStr(myargv[newpwadfile], "hexdd.wad")) //Deathkings of the Dark Citadel
-            {
-                isDK = true;
-                gamedescription = english_language ? 
-                                  "Hexen: Deathkings of the Dark Citadel" :
-                                  "Hexen: Короли Смерти Темной Цитадели";
-            }
-            else //Any unknown pwad
-            {
-                hasUnknownPWads = true;
-            }
+            char* filePath = D_TryFindWADByName(myargv[newpwadfile]);
+            LoadFile(filePath, allowAutoload);
         }
     }
 }
