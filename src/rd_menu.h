@@ -92,6 +92,14 @@ typedef struct
     int option;
 } MenuItem_t;
 
+#define I_EMPTY {ITT_EMPTY, NULL, NULL, NULL, 0}
+#define I_TITLE(text_eng, text_rus) {ITT_TITLE, text_eng, text_rus, NULL, 0}
+#define I_EFUNC(text_eng, text_rus, pointer, option) {ITT_EFUNC, text_eng, text_rus, pointer, option}
+#define I_LRFUNC(text_eng, text_rus, pointer) {ITT_LRFUNC, text_eng, text_rus, pointer, 0}
+#define I_SWITCH(text_eng, text_rus, pointer) {ITT_SWITCH, text_eng, text_rus, pointer, 0}
+#define I_SETMENU(text_eng, text_rus, pointer) {ITT_SETMENU, text_eng, text_rus, pointer, 0}
+#define I_SETMENU_NONET(text_eng, text_rus, pointer, option) {ITT_SETMENU_NONET, text_eng, text_rus, pointer, option}
+
 typedef struct
 {
     const int pageCount;
@@ -113,15 +121,41 @@ typedef struct Menu_s
     const MenuItem_t* const items;
     const boolean bigFont;
     void (*drawFunc) (void);
+    const struct Menu_s* prevMenu;
+
     /** If the menu supports PageUp and PageDn this field must point to a pagination descriptor struct
      *  otherwise, this field must be NULL.
      */
     const PageDescriptor_t* const pageDescriptor;
-    const struct Menu_s* prevMenu;
 
     /** The initial value of this field must be the index of the first clickable menu item */
     int lastOn;
 } Menu_t;
+
+#define MENU_STATIC(field,                \
+x_eng, x_rus,                             \
+y,                                        \
+title_eng, title_rus, replaceableBigFont, \
+items, bigFont,                           \
+drawFunc,                                 \
+prevMenu,                                 \
+lastOn)                                   \
+static Menu_t field = {                   \
+x_eng, x_rus, y, title_eng, title_rus, replaceableBigFont, arrlen(items), items, \
+bigFont, drawFunc, prevMenu, NULL, lastOn}
+
+#define MENU_PAGED(field, \
+x_eng, x_rus, \
+y,              \
+title_eng, title_rus, replaceableBigFont, \
+items, bigFont,                \
+drawFunc,       \
+prevMenu,       \
+pageDescriptor, \
+lastOn)         \
+static Menu_t field = \
+{x_eng, x_rus, y, title_eng, title_rus, replaceableBigFont, arrlen(items), items, \
+bigFont, drawFunc, prevMenu, pageDescriptor, lastOn}
 
 extern Menu_t* MainMenu;
 extern Menu_t* CurrentMenu;
