@@ -697,6 +697,8 @@ void RD_Menu_SetMenu(const Menu_t* menu)
 {
     CurrentMenu->lastOn = CurrentItPos;
     CurrentMenu = (Menu_t*) menu;
+    if(CurrentMenu->initFunc != NULL)
+        CurrentMenu->initFunc(CurrentMenu);
     CurrentItPos = CurrentMenu->lastOn;
 }
 

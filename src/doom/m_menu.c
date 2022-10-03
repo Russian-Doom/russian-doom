@@ -116,6 +116,7 @@ static void M_DrawMainMenu();
 static void M_DrawReadThis1();
 static void M_DrawReadThis2();
 static void M_DrawNewGame();
+static void M_InitEpisode(struct Menu_s* menu);
 static void M_DrawEpisode();
 static void M_DrawLoad();
 static void M_DrawSave();
@@ -242,7 +243,7 @@ static void M_RD_ResetControls_Recommended();
 static void M_RD_ResetControls_Original();
 
 // Gamepad
-static void OpenControllerSelectMenu();
+static void InitControllerSelectMenu(struct Menu_s* menu);
 
 static void DrawGamepadSelectMenu();
 
@@ -487,6 +488,7 @@ static Menu_t Bindings5Menu;
 static Menu_t Bindings6Menu;
 static const Menu_t* BindingsMenuPages[] = {&Bindings1Menu, &Bindings2Menu, &Bindings3Menu, &Bindings4Menu, &Bindings5Menu, &Bindings6Menu};
 static Menu_t ResetControlsMenu;
+static Menu_t GamepadSelectMenu;
 static Menu_t Gamepad1Menu;
 static Menu_t Gamepad2Menu;
 static const Menu_t* GamepadMenuPages[] = {&Gamepad1Menu, &Gamepad2Menu};
@@ -579,7 +581,7 @@ static MenuItem_t DoomEpisodeItems [] = {
     I_EFUNC("kM_EPI1", "gRD_EPI1", M_Episode, 0),
     I_EFUNC("tM_EPI2", "gRD_EPI2", M_Episode, 1),
     I_EFUNC("iM_EPI3", "bRD_EPI3", M_Episode, 2),
-    I_EFUNC("sM_EPI5", "cRD_EPI5", M_Episode, 4) // [Dasperal]
+    I_EFUNC("sM_EPI5", "cRD_EPI5", M_Episode, 4) // [Dasperal] Sigil compat
 };
 
 static MenuItem_t UltimateEpisodeItems [] = {
@@ -590,49 +592,27 @@ static MenuItem_t UltimateEpisodeItems [] = {
     I_EFUNC("sM_EPI5", "cRD_EPI5", M_Episode, 4) // [crispy] Sigil
 };
 
-static Menu_t DoomEpisodeMenu = {
+MENU_DYNAMIC(DoomEpisodeMenu,
     48, 48,
     63,
     NULL, NULL, true,
-    3, DoomEpisodeItems, true,
+    DoomEpisodeItems, true,
     M_DrawEpisode,
+    M_InitEpisode,
     &DoomMenu,
-    NULL,
     0
-};
+);
 
-static Menu_t DoomSigilEpisodeMenu = {
+MENU_DYNAMIC(UltimateEpisodeMenu,
     48, 48,
     63,
     NULL, NULL, true,
-    4, DoomEpisodeItems, true,
+    UltimateEpisodeItems, true,
     M_DrawEpisode,
+    M_InitEpisode,
     &DoomMenu,
-    NULL,
     0
-};
-
-static Menu_t UltimateEpisodeMenu = {
-    48, 48,
-    63,
-    NULL, NULL, true,
-    4, UltimateEpisodeItems, true,
-    M_DrawEpisode,
-    &DoomMenu,
-    NULL,
-    0
-};
-
-static Menu_t UltimateSigilEpisodeMenu = {
-    48, 48,
-    63,
-    NULL, NULL, true,
-    5, UltimateEpisodeItems, true,
-    M_DrawEpisode,
-    &DoomMenu,
-    NULL,
-    0
-};
+);
 
 // =============================================================================
 // NEW GAME
@@ -962,7 +942,7 @@ MENU_STATIC(SoundSysMenu,
 static MenuItem_t ControlsItems[] = {
     I_TITLE(  "Controls",               "eghfdktybt"), // Управление
     I_SETMENU("Customize Controls...",  "yfcnhjqrb eghfdktybz>>>",   &Bindings1Menu), // Настройки управления...
-    I_EFUNC(  "Gamepad Settings...",    "yfcnhjqrb utqvgflf>>>",     OpenControllerSelectMenu, 0), // Настройки геймпада...
+    I_SETMENU("Gamepad Settings...",    "yfcnhjqrb utqvgflf>>>",     &GamepadSelectMenu), // Настройки геймпада...
     I_SWITCH( "Always run:",            "Ht;bv gjcnjzyyjuj ,tuf:",   M_RD_Change_AlwaysRun), // Режим постоянного бега
     I_TITLE(  "mouse",                  "vsim"), // Мышь
     I_LRFUNC( "sensivity",              "crjhjcnm",                  M_RD_Change_Sensitivity), // Скорость
@@ -1236,12 +1216,13 @@ static MenuItem_t GamepadSelectItems[] = {
     {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1}
 };
 
-MENU_STATIC(GamepadSelectMenu,
+MENU_DYNAMIC(GamepadSelectMenu,
     76, 66,
     32,
     "GAMEPAD SETTINGS", "YFCNHJQRB UTQVGFLF", false, // Настройки геймпада
     GamepadSelectItems, false,
     DrawGamepadSelectMenu,
+    InitControllerSelectMenu,
     &ControlsMenu,
     0
 );
@@ -3732,24 +3713,23 @@ static void M_RD_ResetControls_Original()
 // DrawGamepadMenu
 // -----------------------------------------------------------------------------
 
-static void OpenControllerSelectMenu()
+static void InitControllerSelectMenu(struct Menu_s* const menu)
 {
     for(int i = 3; i < 13; ++i)
     {
         if(activeControllers[i - 3] != NULL)
         {
-            GamepadSelectItems[i].type = ITT_EFUNC;
-            GamepadSelectItems[i].option = i - 3;
+            menu->items[i].type = ITT_EFUNC;
+            menu->items[i].option = i - 3;
         }
         else
         {
-            GamepadSelectItems[i].type = ITT_EMPTY;
-            GamepadSelectItems[i].option = -1;
+            menu->items[i].type = ITT_EMPTY;
+            menu->items[i].option = -1;
         }
     }
 
     currentController = NULL;
-    RD_Menu_SetMenu(&GamepadSelectMenu);
 }
 
 static void DrawGamepadSelectMenu()
@@ -3788,7 +3768,7 @@ static void M_RD_UseGamepad()
         I_InitControllerModule();
     else
         I_ShutdownController();
-    OpenControllerSelectMenu();
+    InitControllerSelectMenu(&GamepadSelectMenu);
 }
 
 static void OpenControllerOptionsMenu(int controller)
@@ -7191,6 +7171,30 @@ static void M_NewGame()
 //
 static int epi;
 
+static void M_InitEpisode(struct Menu_s* const menu)
+{
+    // Versions of doom.exe before the Ultimate Doom release only had
+    // three episodes; if we're emulating one of those, then don't try
+    // to show episode four. If we are, then do show episode four
+    // (should crash if missing).
+    if (gameversion < exe_ultimate)
+    {
+        // [Dasperal] Sigil
+        if (sgl_loaded)
+            menu->itemCount = 4;
+        else
+            menu->itemCount = 3;
+    }
+    else
+    {
+        // [crispy] & [JN] Sigil
+        if (sgl_loaded)
+            menu->itemCount = 5;
+        else
+            menu->itemCount = 4;
+    }
+}
+
 static void M_DrawEpisode()
 {
     if (english_language)
@@ -8195,22 +8199,10 @@ void M_Init (void)
     // three episodes; if we're emulating one of those then don't try
     // to show episode four. If we are, then do show episode four
     // (should crash if missing).
-    if (gameversion < exe_ultimate)
-    {
-        // [Dasperal] Sigil
-        if (sgl_loaded)
-            EpisodeMenu = &DoomSigilEpisodeMenu;
-        else
-            EpisodeMenu = &DoomEpisodeMenu;
-    }
+    if(gameversion < exe_ultimate)
+        EpisodeMenu = &DoomEpisodeMenu;
     else
-    {
-        // [crispy] & [JN] Sigil
-        if (sgl_loaded)
-            EpisodeMenu = &UltimateSigilEpisodeMenu;
-        else
-            EpisodeMenu = &UltimateEpisodeMenu;
-    }
+        EpisodeMenu = &UltimateEpisodeMenu;
 
     if(vanillaparm)
         OptionsMenu = &VanillaOptionsMenu;

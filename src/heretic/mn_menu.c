@@ -47,6 +47,7 @@
 
 static void SCQuitGame(int option);
 static void SCEpisode(int option);
+static void M_InitEpisode(struct Menu_s* menu);
 static void SCSkill(int option);
 static void SCLoadGame(int option);
 static void SCSaveGame(int option);
@@ -153,7 +154,7 @@ static void M_RD_InvertY();
 static void M_RD_Novert();
 
 // Gamepad
-static void OpenControllerSelectMenu();
+static void InitControllerSelectMenu(struct Menu_s* menu);
 
 static void DrawGamepadSelectMenu();
 
@@ -392,9 +393,8 @@ static boolean sfxbgdraw;
 int mouseSensitivity = 5;
 
 //[Dasperal] Predeclare menu variables to allow referencing them before they initialized
-static Menu_t* EpisodeMenu;
 static Menu_t* OptionsMenu;
-static Menu_t RegisteredEpisodeMenu;
+static Menu_t EpisodeMenu;
 static Menu_t RDOptionsMenu;
 static Menu_t RenderingMenu;
 static Menu_t DisplayMenu;
@@ -414,6 +414,7 @@ static Menu_t Bindings7Menu;
 static Menu_t Bindings8Menu;
 static const Menu_t* BindingsMenuPages[] = {&Bindings1Menu, &Bindings2Menu, &Bindings3Menu, &Bindings4Menu, &Bindings5Menu, &Bindings6Menu, &Bindings7Menu, &Bindings8Menu};
 static Menu_t ResetControlsMenu;
+static Menu_t GamepadSelectMenu;
 static Menu_t Gamepad1Menu;
 static Menu_t Gamepad2Menu;
 static const Menu_t* GamepadMenuPages[] = {&Gamepad1Menu, &Gamepad2Menu};
@@ -433,7 +434,7 @@ static Menu_t LoadMenu;
 static Menu_t SaveMenu;
 
 static MenuItem_t HMainItems[] = {
-    I_SETMENU_NONET("NEW GAME",   "YJDFZ BUHF", &RegisteredEpisodeMenu, 1), // НОВАЯ ИГРА
+    I_SETMENU_NONET("NEW GAME",   "YJDFZ BUHF", &EpisodeMenu, 1), // НОВАЯ ИГРА
     I_SETMENU(      "OPTIONS",    "YFCNHJQRB",  &RDOptionsMenu), // НАСТРОЙКИ
     I_SETMENU(      "GAME FILES", "AFQKS BUHS", &FilesMenu), // ФАЙЛЫ ИГРЫ
     I_EFUNC(        "INFO",       "BYAJHVFWBZ", SCInfo, 0), // ИНФОРМАЦИЯ
@@ -458,27 +459,16 @@ static MenuItem_t EpisodeItems[] = {
     I_EFUNC("THE STAGNANT DEMESNE", "PFCNJQYST DKFLTYBZ", SCEpisode, 5)  // ЗАСТОЙНЫЕ ВЛАДЕНИЯ
 };
 
-static Menu_t RegisteredEpisodeMenu = {
+MENU_DYNAMIC(EpisodeMenu,
     80, 55,
     50,
     NULL, NULL, true,
-    3, EpisodeItems, true,
+    EpisodeItems, true,
     NULL,
+    M_InitEpisode,
     &HMainMenu,
-    NULL,
     0
-};
-
-static Menu_t RetailEpisodeMenu = {
-    80, 55,
-    30,
-    NULL, NULL, true,
-    5, EpisodeItems, true,
-    NULL,
-    &HMainMenu,
-    NULL,
-    0
-};
+);
 
 static MenuItem_t SkillItems[] = {
     I_EFUNC("THOU NEEDETH A WET-NURSE",       "YZYTXRF YFLJ,YF VYT",    SCSkill, sk_baby),      // НЯНЕЧКА НАДОБНА МНЕ
@@ -495,7 +485,7 @@ MENU_STATIC(SkillMenu,
     NULL, NULL, true,
     SkillItems, true,
     NULL,
-    &RegisteredEpisodeMenu,
+    &EpisodeMenu,
     2
 );
 
@@ -726,7 +716,7 @@ MENU_STATIC(SoundSysMenu,
 static MenuItem_t ControlsItems[] = {
     I_TITLE(  "CONTROLS",                              "EGHFDKTYBT"), // УПРАВЛЕНИЕ
     I_SETMENU("CUSTOMIZE CONTROLS...",                 "YFCNHJQRB EGHFDKTYBZ>>>",          &Bindings1Menu), // Настройки управления...
-    I_EFUNC(  "GAMEPAD SETTINGS...",                   "YFCNHJQRB UTQVGFLF>>>",            OpenControllerSelectMenu, 0), // Настройки геймпада...
+    I_SETMENU("GAMEPAD SETTINGS...",                   "YFCNHJQRB UTQVGFLF>>>",            &GamepadSelectMenu), // Настройки геймпада...
     I_SWITCH( "ALWAYS RUN:",                           "HT;BV GJCNJZYYJUJ ,TUF:",          M_RD_AlwaysRun), // РЕЖИМ ПОСТОЯННОГО БЕГА
     I_SWITCH( "SKIP ARTEFACT ON 'USE' WHILE RUNNING:", "CRBG FHNTAFRNF YF BCG> GHB ,TUT:", M_RD_Artiskip), // СКИП АРТЕФАКТА НА ИСП. ПРИ БЕГЕ
     I_TITLE(  "MOUSE",                                 "VSIM"), // МЫШЬ
@@ -1068,12 +1058,13 @@ static MenuItem_t GamepadSelectItems[] = {
     {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1}
 };
 
-MENU_STATIC(GamepadSelectMenu,
+MENU_DYNAMIC(GamepadSelectMenu,
     76, 66,
     32,
     "GAMEPAD SETTINGS", "YFCNHJQRB UTQVGFLF", false, // Настройки геймпада
     GamepadSelectItems, false,
     DrawGamepadSelectMenu,
+    InitControllerSelectMenu,
     &ControlsMenu,
     0
 );
@@ -1625,19 +1616,12 @@ void MN_Init(void)
     // [JN] Widescreen: set temp variable for rendering menu.
     aspect_ratio_temp = aspect_ratio;
 
-    if (gamemode == retail)
-        EpisodeMenu = &RetailEpisodeMenu;
-    else
-        EpisodeMenu = &RegisteredEpisodeMenu;
-
     if(vanillaparm)
         OptionsMenu = &VanillaOptionsMenu;
     else
         OptionsMenu = &RDOptionsMenu;
 
-    HMainItems[0].pointer = EpisodeMenu;
     HMainItems[1].pointer = OptionsMenu;
-    SkillMenu.prevMenu = EpisodeMenu;
     MainMenu = &HMainMenu;
 
     CurrentMenu = MainMenu;
@@ -3444,24 +3428,23 @@ static void M_RD_ResetControls_Original()
 // DrawGamepadMenu
 // -----------------------------------------------------------------------------
 
-static void OpenControllerSelectMenu()
+static void InitControllerSelectMenu(struct Menu_s* const menu)
 {
     for(int i = 3; i < 13; ++i)
     {
         if(activeControllers[i - 3] != NULL)
         {
-            GamepadSelectItems[i].type = ITT_EFUNC;
-            GamepadSelectItems[i].option = i - 3;
+            menu->items[i].type = ITT_EFUNC;
+            menu->items[i].option = i - 3;
         }
         else
         {
-            GamepadSelectItems[i].type = ITT_EMPTY;
-            GamepadSelectItems[i].option = -1;
+            menu->items[i].type = ITT_EMPTY;
+            menu->items[i].option = -1;
         }
     }
 
     currentController = NULL;
-    RD_Menu_SetMenu(&GamepadSelectMenu);
 }
 
 static void DrawGamepadSelectMenu()
@@ -3500,7 +3483,7 @@ static void M_RD_UseGamepad()
         I_InitControllerModule();
     else
         I_ShutdownController();
-    OpenControllerSelectMenu();
+    InitControllerSelectMenu(&GamepadSelectMenu);
 }
 
 static void OpenControllerOptionsMenu(int controller)
@@ -5636,6 +5619,20 @@ static void SCSaveGame(int option)
 // PROC SCEpisode
 //
 //---------------------------------------------------------------------------
+
+static void M_InitEpisode(struct Menu_s* const menu)
+{
+    if(gamemode == retail)
+    {
+        menu->itemCount = 3;
+        menu->y = 50;
+    }
+    else
+    {
+        menu->itemCount = 5;
+        menu->y = 30;
+    }
+}
 
 static void SCEpisode(int option)
 {
