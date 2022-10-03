@@ -162,7 +162,7 @@ static void M_RD_ResetControls_Recommended();
 static void M_RD_ResetControls_Original();
 
 // Gamepad
-static void OpenControllerSelectMenu();
+static void InitControllerSelectMenu(struct Menu_s* menu);
 
 static void DrawGamepadSelectMenu();
 
@@ -431,6 +431,7 @@ static Menu_t Bindings7Menu;
 static Menu_t Bindings8Menu;
 static const Menu_t* BindingsMenuPages[] = {&Bindings1Menu, &Bindings2Menu, &Bindings3Menu, &Bindings4Menu, &Bindings5Menu, &Bindings6Menu, &Bindings7Menu, &Bindings8Menu};
 static Menu_t ResetControlsMenu;
+static Menu_t GamepadSelectMenu;
 static Menu_t Gamepad1Menu;
 static Menu_t Gamepad2Menu;
 static const Menu_t* GamepadMenuPages[] = {&Gamepad1Menu, &Gamepad2Menu};
@@ -782,7 +783,7 @@ MENU_STATIC(SoundSysMenu,
 static MenuItem_t ControlsItems[] = {
     I_TITLE(  "CONTROLS",                              "EGHFDKTYBT"), // УПРАВЛЕНИЕ
     I_SETMENU("CUSTOMIZE CONTROLS...",                 "YFCNHJQRB EGHFDKTYBZ>>>",          &Bindings1Menu), // Настройки управления...
-    I_EFUNC(  "GAMEPAD SETTINGS...",                   "YFCNHJQRB UTQVGFLF>>>",            OpenControllerSelectMenu, 0), // Настройки геймпада...
+    I_SETMENU("GAMEPAD SETTINGS...",                   "YFCNHJQRB UTQVGFLF>>>",            &GamepadSelectMenu), // Настройки геймпада...
     I_SWITCH( "ALWAYS RUN:",                           "HT;BV GJCNJZYYJUJ ,TUF:",          M_RD_AlwaysRun), // РЕЖИМ ПОСТОЯННОГО БЕГА
     I_SWITCH( "SKIP ARTEFACT ON 'USE' WHILE RUNNING:", "CRBG FHNTAFRNF YF BCG> GHB ,TUT:", M_RD_Artiskip), // СКИП АРТЕФАКТА НА ИСП. ПРИ БЕГЕ
     I_TITLE(  "MOUSE",                                 "VSIM"), // МЫШЬ
@@ -3592,24 +3593,23 @@ static void M_RD_ResetControls_Original()
 // DrawGamepadMenu
 // -----------------------------------------------------------------------------
 
-static void OpenControllerSelectMenu()
+static void InitControllerSelectMenu(struct Menu_s* const menu)
 {
     for(int i = 3; i < 13; ++i)
     {
         if(activeControllers[i - 3] != NULL)
         {
-            GamepadSelectItems[i].type = ITT_EFUNC;
-            GamepadSelectItems[i].option = i - 3;
+            menu->items[i].type = ITT_EFUNC;
+            menu->items[i].option = i - 3;
         }
         else
         {
-            GamepadSelectItems[i].type = ITT_EMPTY;
-            GamepadSelectItems[i].option = -1;
+            menu->items[i].type = ITT_EMPTY;
+            menu->items[i].option = -1;
         }
     }
 
     currentController = NULL;
-    RD_Menu_SetMenu(&GamepadSelectMenu);
 }
 
 static void DrawGamepadSelectMenu()
@@ -3648,7 +3648,7 @@ static void M_RD_UseGamepad()
         I_InitControllerModule();
     else
         I_ShutdownController();
-    OpenControllerSelectMenu();
+    InitControllerSelectMenu(&GamepadSelectMenu);
 }
 
 static void OpenControllerOptionsMenu(int controller)

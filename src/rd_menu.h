@@ -109,6 +109,10 @@ typedef struct
     const Translation_CR_t translation;
 } PageDescriptor_t;
 
+struct Menu_s;
+
+typedef void (*MENU_INITIALIZER)(struct Menu_s* const menu);
+
 typedef struct Menu_s
 {
     int x_eng; //
@@ -117,10 +121,11 @@ typedef struct Menu_s
     const char* const title_eng;
     const char* const title_rus;
     const boolean replaceableBigFont;
-    const int itemCount;
-    const MenuItem_t* const items;
+    int itemCount; // [Dasperal] make this non-const temporary
+    MenuItem_t* const items;
     const boolean bigFont;
     void (*drawFunc) (void);
+    MENU_INITIALIZER initFunc;
     const struct Menu_s* prevMenu;
 
     /** If the menu supports PageUp and PageDn this field must point to a pagination descriptor struct
@@ -142,7 +147,20 @@ prevMenu,                                 \
 lastOn)                                   \
 static Menu_t field = {                   \
 x_eng, x_rus, y, title_eng, title_rus, replaceableBigFont, arrlen(items), items, \
-bigFont, drawFunc, prevMenu, NULL, lastOn}
+bigFont, drawFunc, NULL, prevMenu, NULL, lastOn}
+
+#define MENU_DYNAMIC(field,               \
+x_eng, x_rus,                             \
+y,                                        \
+title_eng, title_rus, replaceableBigFont, \
+items, bigFont,                           \
+drawFunc,                                 \
+initFunc,                                 \
+prevMenu,                                 \
+lastOn)                                   \
+static Menu_t field = {                   \
+x_eng, x_rus, y, title_eng, title_rus, replaceableBigFont, arrlen(items), items, \
+bigFont, drawFunc, initFunc, prevMenu, NULL, lastOn}
 
 #define MENU_PAGED(field, \
 x_eng, x_rus, \
@@ -155,7 +173,7 @@ pageDescriptor, \
 lastOn)         \
 static Menu_t field = \
 {x_eng, x_rus, y, title_eng, title_rus, replaceableBigFont, arrlen(items), items, \
-bigFont, drawFunc, prevMenu, pageDescriptor, lastOn}
+bigFont, drawFunc, NULL, prevMenu, pageDescriptor, lastOn}
 
 extern Menu_t* MainMenu;
 extern Menu_t* CurrentMenu;
