@@ -2261,7 +2261,7 @@ static void DrawColorMenu(void)
         RD_M_DrawTextSmallENG(show_palette ? "ON" : "OFF", 165 + wide_delta, 55, CR_NONE);
 
         RD_M_DrawTextSmallENG("COLOR INTENSITY",
-                              107 + wide_delta, 65, CR_DARKGOLD);
+                              107 + wide_delta, 65, CR_YELLOW);
 
         RD_M_DrawTextSmallENG("RED", 121 + wide_delta, 75, CR_RED);
         RD_M_DrawTextSmallENG("GREEN", 105 + wide_delta, 85, CR_GREEN);
@@ -2276,7 +2276,7 @@ static void DrawColorMenu(void)
         RD_M_DrawTextSmallRUS(show_palette ? "DRK" : "DSRK", 165 + wide_delta, 55, CR_NONE);
 
         RD_M_DrawTextSmallRUS("byntycbdyjcnm wdtnf",  // Интенсивность цвета
-                              89 + wide_delta, 65, CR_DARKGOLD);
+                              89 + wide_delta, 65, CR_YELLOW);
 
         RD_M_DrawTextSmallRUS("rhfcysq", 90 + wide_delta, 75, CR_RED);    // Красный
         RD_M_DrawTextSmallRUS("ptktysq", 90 + wide_delta, 85, CR_GREEN);  // Зелёный
@@ -3540,7 +3540,7 @@ static void DrawGamepadMenu_1()
     if(english_language)
     {
         RD_M_DrawTextSmallENG(GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_LEFTX]),
-                              120 + wide_delta, 32, CR_DARKGOLD);
+                              120 + wide_delta, 32, CR_YELLOW);
 
         RD_Menu_DrawSliderSmallInline(115, 42, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTX] - 1);
@@ -3560,7 +3560,7 @@ static void DrawGamepadMenu_1()
 
 
         RD_M_DrawTextSmallENG(GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_LEFTY]),
-                              120 + wide_delta, 82, CR_DARKGOLD);
+                              120 + wide_delta, 82, CR_YELLOW);
 
         RD_Menu_DrawSliderSmallInline(115, 92, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTY] - 1);
@@ -3580,7 +3580,7 @@ static void DrawGamepadMenu_1()
 
 
         RD_M_DrawTextSmallENG(GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT]),
-                              130 + wide_delta, 132, CR_DARKGOLD);
+                              130 + wide_delta, 132, CR_YELLOW);
 
         RD_Menu_DrawSliderSmallInline(115, 142, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERLEFT] - 1);
@@ -3601,7 +3601,7 @@ static void DrawGamepadMenu_1()
     else
     {
         RD_M_DrawTextSmallRUS(GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_LEFTX]),
-                              110 + wide_delta, 32, CR_DARKGOLD);
+                              110 + wide_delta, 32, CR_YELLOW);
 
         RD_Menu_DrawSliderSmallInline(145, 42, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTX] - 1);
@@ -3621,7 +3621,7 @@ static void DrawGamepadMenu_1()
 
 
         RD_M_DrawTextSmallRUS(GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_LEFTY]),
-                              107 + wide_delta, 82, CR_DARKGOLD);
+                              107 + wide_delta, 82, CR_YELLOW);
 
         RD_Menu_DrawSliderSmallInline(145, 92, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_LEFTY] - 1);
@@ -3641,7 +3641,7 @@ static void DrawGamepadMenu_1()
 
 
         RD_M_DrawTextSmallRUS(GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_TRIGGERLEFT]),
-                              127 + wide_delta, 132, CR_DARKGOLD);
+                              127 + wide_delta, 132, CR_YELLOW);
 
         RD_Menu_DrawSliderSmallInline(145, 142, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERLEFT] - 1);
@@ -3740,7 +3740,7 @@ static void DrawGamepadMenu_2()
     if(english_language)
     {
         RD_M_DrawTextSmallENG(GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_RIGHTX]),
-                              125 + wide_delta, 32, CR_DARKGOLD);
+                              125 + wide_delta, 32, CR_YELLOW);
 
         RD_Menu_DrawSliderSmallInline(115, 42, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTX] - 1);
@@ -3760,7 +3760,7 @@ static void DrawGamepadMenu_2()
 
 
         RD_M_DrawTextSmallENG(GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_RIGHTY]),
-                              125 + wide_delta, 82, CR_DARKGOLD);
+                              125 + wide_delta, 82, CR_YELLOW);
 
         RD_Menu_DrawSliderSmallInline(115, 92, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTY] - 1);
@@ -3780,7 +3780,7 @@ static void DrawGamepadMenu_2()
 
 
         RD_M_DrawTextSmallENG(GetAxisNameENG(currentController->bindAxis[SDL_CONTROLLER_AXIS_TRIGGERRIGHT]),
-                              135 + wide_delta, 132, CR_DARKGOLD);
+                              135 + wide_delta, 132, CR_YELLOW);
 
         RD_Menu_DrawSliderSmallInline(115, 142, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] - 1);
@@ -3801,7 +3801,7 @@ static void DrawGamepadMenu_2()
     else
     {
         RD_M_DrawTextSmallRUS(GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_RIGHTX]),
-                              117 + wide_delta, 32, CR_DARKGOLD);
+                              117 + wide_delta, 32, CR_YELLOW);
 
         RD_Menu_DrawSliderSmallInline(145, 42, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTX] - 1);
@@ -3821,7 +3821,7 @@ static void DrawGamepadMenu_2()
 
 
         RD_M_DrawTextSmallRUS(GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_RIGHTY]),
-                              117 + wide_delta, 82, CR_DARKGOLD);
+                              117 + wide_delta, 82, CR_YELLOW);
 
         RD_Menu_DrawSliderSmallInline(145, 92, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_RIGHTY] - 1);
@@ -3841,7 +3841,7 @@ static void DrawGamepadMenu_2()
 
 
         RD_M_DrawTextSmallRUS(GetAxisNameRUS(currentController->bindAxis[SDL_CONTROLLER_AXIS_TRIGGERRIGHT]),
-                              135 + wide_delta, 132, CR_DARKGOLD);
+                              135 + wide_delta, 132, CR_YELLOW);
 
         RD_Menu_DrawSliderSmallInline(145, 142, 16,
                                       currentController->axisSensitivity[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] - 1);
@@ -4329,7 +4329,7 @@ static void DrawGameplay3Menu(void)
                               show_artifacts_timer == 2 ? "SILVER" :
                               show_artifacts_timer == 3 ? "COLORED" : "OFF",
                               150 + wide_delta, 86,
-                              show_artifacts_timer == 1 ? CR_DARKGOLD :
+                              show_artifacts_timer == 1 ? CR_YELLOW :
                               show_artifacts_timer == 2 ? CR_GRAY :
                               show_artifacts_timer == 3 ? CR_GREEN :
                               CR_RED);
@@ -4388,7 +4388,7 @@ static void DrawGameplay3Menu(void)
                               show_artifacts_timer == 2 ? "CTHT,HZYSQ" :
                               show_artifacts_timer == 3 ? "HFPYJWDTNYSQ" : "DSRK",
                               175 + wide_delta, 86,
-                              show_artifacts_timer == 1 ? CR_DARKGOLD :
+                              show_artifacts_timer == 1 ? CR_YELLOW :
                               show_artifacts_timer == 2 ? CR_GRAY :
                               show_artifacts_timer == 3 ? CR_GREEN :
                               CR_RED);
@@ -4652,20 +4652,20 @@ static void DrawLevelSelect1Menu(void)
     M_snprintf(num, 4, "%d", selective_health);
     RD_M_DrawTextSmallENG(num, 228 + wide_delta, 66,
                           selective_health >= 67 ? CR_GREEN :
-                          selective_health >= 34 ? CR_DARKGOLD :
+                          selective_health >= 34 ? CR_YELLOW :
                           CR_RED);
 
     // Armor | Броня
     M_snprintf(num, 4, "%d", selective_armor);
     RD_M_DrawTextSmallENG(num, 228 + wide_delta, 76,
                           selective_armor == 0 ? CR_RED :
-                          selective_armortype == 1 ? CR_DARKGOLD :
+                          selective_armortype == 1 ? CR_YELLOW :
                           CR_GREEN);
 
     // Armor type | Тип брони
     M_snprintf(num, 4, "%d", selective_armortype);
     RD_M_DrawTextSmallENG(selective_armortype == 1 ? "1" : "2", 228 + wide_delta, 86,
-                          selective_armortype == 1 ? CR_DARKGOLD : CR_GREEN);
+                          selective_armortype == 1 ? CR_YELLOW : CR_GREEN);
 }
 
 static void M_RD_SelectiveSkill(Direction_t direction)
@@ -4807,42 +4807,42 @@ static void DrawLevelSelect2Menu(void)
     M_snprintf(num, 4, "%d", selective_ammo_0);
     RD_M_DrawTextSmallENG(num, 228 + wide_delta, 36,
                           selective_ammo_0 >= 50 ? CR_GREEN :
-                          selective_ammo_0 >= 25 ? CR_DARKGOLD :
+                          selective_ammo_0 >= 25 ? CR_YELLOW :
                           CR_RED);
 
     // Ethereal Arrows | Эфирные стрелы
     M_snprintf(num, 4, "%d", selective_ammo_1);
     RD_M_DrawTextSmallENG(num, 228 + wide_delta, 46,
                           selective_ammo_1 >= 25 ? CR_GREEN :
-                          selective_ammo_1 >= 12 ? CR_DARKGOLD :
+                          selective_ammo_1 >= 12 ? CR_YELLOW :
                           CR_RED);
 
     // Claw Orbs | Когтевые шары
     M_snprintf(num, 4, "%d", selective_ammo_2);
     RD_M_DrawTextSmallENG(num, 228 + wide_delta, 56,
                           selective_ammo_2 >= 100 ? CR_GREEN :
-                          selective_ammo_2 >= 50 ? CR_DARKGOLD :
+                          selective_ammo_2 >= 50 ? CR_YELLOW :
                           CR_RED);
 
     // Hellstaff Runes | Руны посоха
     M_snprintf(num, 4, "%d", selective_ammo_3);
     RD_M_DrawTextSmallENG(num, 228 + wide_delta, 66,
                           selective_ammo_3 >= 100 ? CR_GREEN :
-                          selective_ammo_3 >= 50 ? CR_DARKGOLD :
+                          selective_ammo_3 >= 50 ? CR_YELLOW :
                           CR_RED);
 
     // Flame Orbs | Пламенные шары
     M_snprintf(num, 4, "%d", selective_ammo_4);
     RD_M_DrawTextSmallENG(num, 228 + wide_delta, 76,
                           selective_ammo_4 >= 10 ? CR_GREEN :
-                          selective_ammo_4 >= 5 ? CR_DARKGOLD :
+                          selective_ammo_4 >= 5 ? CR_YELLOW :
                           CR_RED);
 
     // Mace Spheres | Сферы булавы
     M_snprintf(num, 4, "%d", selective_ammo_5);
     RD_M_DrawTextSmallENG(num, 228 + wide_delta, 86,
                           selective_ammo_5 >= 75 ? CR_GREEN :
-                          selective_ammo_5 >= 37 ? CR_DARKGOLD :
+                          selective_ammo_5 >= 37 ? CR_YELLOW :
                           CR_RED);
 }
 
