@@ -838,7 +838,7 @@ static MenuItem_t Bindings1Items[] = {
     I_EMPTY
 };
 
-MENU_PAGED(Bindings1Menu,
+MENU_STATIC_PAGED(Bindings1Menu,
     35, 35,
     25,
     "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
@@ -872,7 +872,7 @@ static MenuItem_t Bindings2Items[] = {
     I_EMPTY
 };
 
-MENU_PAGED(Bindings2Menu,
+MENU_STATIC_PAGED(Bindings2Menu,
     35, 35,
     25,
     "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
@@ -906,7 +906,7 @@ static MenuItem_t Bindings3Items[] = {
     I_EMPTY
 };
 
-MENU_PAGED(Bindings3Menu,
+MENU_STATIC_PAGED(Bindings3Menu,
     35, 35,
     25,
     "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
@@ -940,7 +940,7 @@ static MenuItem_t Bindings4Items[] = {
     I_EMPTY
 };
 
-MENU_PAGED(Bindings4Menu,
+MENU_STATIC_PAGED(Bindings4Menu,
     35, 35,
     25,
     "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
@@ -974,7 +974,7 @@ static MenuItem_t Bindings5Items[] = {
     I_EMPTY
 };
 
-MENU_PAGED(Bindings5Menu,
+MENU_STATIC_PAGED(Bindings5Menu,
     35, 35,
     25,
     "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
@@ -1008,7 +1008,7 @@ static MenuItem_t Bindings6Items[] = {
     I_EMPTY
 };
 
-MENU_PAGED(Bindings6Menu,
+MENU_STATIC_PAGED(Bindings6Menu,
     35, 35,
     25,
     "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
@@ -1042,7 +1042,7 @@ static MenuItem_t Bindings7Items[] = {
     I_EMPTY
 };
 
-MENU_PAGED(Bindings7Menu,
+MENU_STATIC_PAGED(Bindings7Menu,
     35, 35,
     25,
     "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
@@ -1076,7 +1076,7 @@ static MenuItem_t Bindings8Items[] = {
     I_EMPTY
 };
 
-MENU_PAGED(Bindings8Menu,
+MENU_STATIC_PAGED(Bindings8Menu,
     35, 35,
     25,
     "CUSTOMIZE CONTROLS", "YFCNHJQRB EGHFDKTYBZ", false, // Настройки управления
@@ -1114,16 +1114,16 @@ static MenuItem_t GamepadSelectItems[] = {
     I_SWITCH("ENABLE GAMEPAD:",     "BCGJKMPJDFNM UTQVGFL:", M_RD_UseGamepad), // ИСПОЛЬЗОВАТЬ ГЕЙМПАД
     I_EMPTY,
     I_TITLE( "ACTIVE CONTROLLERS:", "FRNBDYST UTQVGFLS:"), // АКТИАНЫЕ ГЕЙМПАДЫ
-    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
-    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
-    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
-    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
-    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
-    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
-    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
-    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
-    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
-    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1}
+    I_EFUNC(NULL, NULL, OpenControllerOptionsMenu, -1),
+    I_EFUNC(NULL, NULL, OpenControllerOptionsMenu, -1),
+    I_EFUNC(NULL, NULL, OpenControllerOptionsMenu, -1),
+    I_EFUNC(NULL, NULL, OpenControllerOptionsMenu, -1),
+    I_EFUNC(NULL, NULL, OpenControllerOptionsMenu, -1),
+    I_EFUNC(NULL, NULL, OpenControllerOptionsMenu, -1),
+    I_EFUNC(NULL, NULL, OpenControllerOptionsMenu, -1),
+    I_EFUNC(NULL, NULL, OpenControllerOptionsMenu, -1),
+    I_EFUNC(NULL, NULL, OpenControllerOptionsMenu, -1),
+    I_EFUNC(NULL, NULL, OpenControllerOptionsMenu, -1)
 };
 
 MENU_STATIC(GamepadSelectMenu,
@@ -1161,7 +1161,7 @@ static MenuItem_t Gamepad1Items[] = {
     I_SETMENU("NEXT PAGE >", "CKTLE>OFZ CNHFYBWF `", &Gamepad2Menu)
 };
 
-MENU_PAGED(Gamepad1Menu,
+MENU_STATIC_PAGED(Gamepad1Menu,
     36, 21,
     32,
     "GAMEPAD SETTINGS", "YFCNHJQRB UTQVGFLF", false, // Настройки геймпада
@@ -1191,7 +1191,7 @@ static MenuItem_t Gamepad2Items[] = {
     I_SETMENU("< PREV PAGE", "^ GHTLSLEOFZ CNHFYBWF", &Gamepad1Menu)
 };
 
-MENU_PAGED(Gamepad2Menu,
+MENU_STATIC_PAGED(Gamepad2Menu,
     36, 21,
     32,
     "GAMEPAD SETTINGS", "YFCNHJQRB UTQVGFLF", false, // Настройки геймпада
@@ -1230,7 +1230,7 @@ static MenuItem_t Gameplay1Items[] = {
     I_SETMENU("< LAST PAGE", "^ GJCKTLYZZ CNHFYBWF", &Gameplay3Menu)  // < ПОСЛЕДНЯЯ СТРАНИЦА
 };
 
-MENU_PAGED(Gameplay1Menu,
+MENU_STATIC_PAGED(Gameplay1Menu,
     36, 36,
     32,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
@@ -1263,7 +1263,7 @@ static MenuItem_t Gameplay2Items[] = {
     I_SETMENU("< FIRST PAGE", "^ GTHDFZ CNHFYBWF",    &Gameplay1Menu)  // < ПЕРВАЯ СТРАНИЦА
 };
 
-MENU_PAGED(Gameplay2Menu,
+MENU_STATIC_PAGED(Gameplay2Menu,
     36, 36,
     32,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
@@ -1296,7 +1296,7 @@ static MenuItem_t Gameplay3Items[] = {
     I_SETMENU("< PREV PAGE",  "^ GHTLSLEOFZ CNHFYBWF", &Gameplay2Menu)  // < ПРЕДЫДУЩАЯ СТРАНИЦА
 };
 
-MENU_PAGED(Gameplay3Menu,
+MENU_STATIC_PAGED(Gameplay3Menu,
     36, 36,
     32,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
@@ -1337,7 +1337,7 @@ static MenuItem_t Level1Items[] = {
     I_EFUNC("START GAME",    "YFXFNM BUHE",          G_DoSelectiveGame, 0) // НАЧАТЬ ИГРУ
 };
 
-MENU_PAGED(LevelSelectMenu1,
+MENU_STATIC_PAGED(LevelSelectMenu1,
     74, 40,
     26,
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
@@ -1372,7 +1372,7 @@ static MenuItem_t Level2Items_F[] = {
     I_EFUNC("START GAME",    "YFXFNM BUHE",          G_DoSelectiveGame, 0)  // НАЧАТЬ ИГРУ
 };
 
-MENU_PAGED(LevelSelectMenu2_F,
+MENU_STATIC_PAGED(LevelSelectMenu2_F,
     74, 40,
     26,
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
@@ -1403,7 +1403,7 @@ static MenuItem_t Level2Items_C[] = {
     I_EFUNC("START GAME",    "YFXFNM BUHE",          G_DoSelectiveGame, 0) // НАЧАТЬ ИГРУ
 };
 
-MENU_PAGED(LevelSelectMenu2_C,
+MENU_STATIC_PAGED(LevelSelectMenu2_C,
     74, 40,
     26,
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
@@ -1434,7 +1434,7 @@ static MenuItem_t Level2Items_M[] = {
     I_EFUNC("START GAME",    "YFXFNM BUHE",          G_DoSelectiveGame, 0) // НАЧАТЬ ИГРУ
 };
 
-MENU_PAGED(LevelSelectMenu2_M,
+MENU_STATIC_PAGED(LevelSelectMenu2_M,
     74, 40,
     26,
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
@@ -1469,7 +1469,7 @@ static MenuItem_t Level3Items[] = {
     I_EFUNC("START GAME",    "YFXFNM BUHE",          G_DoSelectiveGame, 0) // НАЧАТЬ ИГРУ
 };
 
-MENU_PAGED(LevelSelectMenu3,
+MENU_STATIC_PAGED(LevelSelectMenu3,
     74, 40,
     26,
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
@@ -1504,7 +1504,7 @@ static MenuItem_t Level4Items[] = {
     I_EFUNC("START GAME",    "YFXFNM BUHE",          G_DoSelectiveGame, 0) // НАЧАТЬ ИГРУ
 };
 
-MENU_PAGED(LevelSelectMenu4,
+MENU_STATIC_PAGED(LevelSelectMenu4,
     74, 40,
     26,
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
@@ -1539,7 +1539,7 @@ static MenuItem_t Level5Items[] = {
     I_EFUNC("START GAME",     "YFXFNM BUHE",       G_DoSelectiveGame, 0) // НАЧАТЬ ИГРУ
 };
 
-MENU_PAGED(LevelSelectMenu5,
+MENU_STATIC_PAGED(LevelSelectMenu5,
     74, 40,
     26,
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
@@ -3599,12 +3599,12 @@ static void InitControllerSelectMenu(struct Menu_s* const menu)
     {
         if(activeControllers[i - 3] != NULL)
         {
-            menu->items[i].type = ITT_EFUNC;
+            menu->items[i].status = ENABLED;
             menu->items[i].option = i - 3;
         }
         else
         {
-            menu->items[i].type = ITT_EMPTY;
+            menu->items[i].status = HIDDEN;
             menu->items[i].option = -1;
         }
     }
