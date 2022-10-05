@@ -283,9 +283,13 @@ static void M_RD_DeadZoneAxis_RT(Direction_t direction);
 // Gameplay
 static void M_RD_Draw_Gameplay_1();
 static void M_RD_Draw_Gameplay_2();
+static void Init_Gameplay_2(struct Menu_s* menu);
 static void M_RD_Draw_Gameplay_3();
+static void Init_Gameplay_3(struct Menu_s* menu);
 static void M_RD_Draw_Gameplay_4();
+static void Init_Gameplay_4(struct Menu_s* menu);
 static void M_RD_Draw_Gameplay_5();
+static void Init_Gameplay_5(struct Menu_s* menu);
 
 // Page 1
 static void M_RD_Change_StrictMode();
@@ -464,9 +468,9 @@ static char *M_ID_ColorName (int color)
     }
 }
 
-static Menu_t* EpisodeMenu;
 static Menu_t* OptionsMenu;
 static Menu_t NewGameMenu;
+static Menu_t EpisodeMenu;
 static Menu_t RDOptionsMenu;
 static Menu_t Rendering1Menu;
 static Menu_t Rendering2Menu;
@@ -577,14 +581,7 @@ MENU_STATIC(MainMenuBeta,
 // EPISODE SELECT
 // =============================================================================
 
-static MenuItem_t DoomEpisodeItems [] = {
-    I_EFUNC("kM_EPI1", "gRD_EPI1", M_Episode, 0),
-    I_EFUNC("tM_EPI2", "gRD_EPI2", M_Episode, 1),
-    I_EFUNC("iM_EPI3", "bRD_EPI3", M_Episode, 2),
-    I_EFUNC("sM_EPI5", "cRD_EPI5", M_Episode, 4) // [Dasperal] Sigil compat
-};
-
-static MenuItem_t UltimateEpisodeItems [] = {
+static MenuItem_t EpisodeItems [] = {
     I_EFUNC("kM_EPI1", "gRD_EPI1", M_Episode, 0),
     I_EFUNC("tM_EPI2", "gRD_EPI2", M_Episode, 1),
     I_EFUNC("iM_EPI3", "bRD_EPI3", M_Episode, 2),
@@ -592,22 +589,11 @@ static MenuItem_t UltimateEpisodeItems [] = {
     I_EFUNC("sM_EPI5", "cRD_EPI5", M_Episode, 4) // [crispy] Sigil
 };
 
-MENU_DYNAMIC(DoomEpisodeMenu,
+MENU_DYNAMIC(EpisodeMenu,
     48, 48,
     63,
     NULL, NULL, true,
-    DoomEpisodeItems, true,
-    M_DrawEpisode,
-    M_InitEpisode,
-    &DoomMenu,
-    0
-);
-
-MENU_DYNAMIC(UltimateEpisodeMenu,
-    48, 48,
-    63,
-    NULL, NULL, true,
-    UltimateEpisodeItems, true,
+    EpisodeItems, true,
     M_DrawEpisode,
     M_InitEpisode,
     &DoomMenu,
@@ -633,7 +619,7 @@ MENU_STATIC(NewGameMenu,
     NULL, NULL, true,
     NewGameItems, true,
     M_DrawNewGame,
-    &DoomEpisodeMenu,
+    &EpisodeMenu,
     2
 );
 
@@ -690,7 +676,7 @@ static MenuItem_t Rendering1Items[] = {
     I_SETMENU(NULL, /* Next Page > */ NULL, &Rendering2Menu)  // Далее >
 };
 
-MENU_PAGED(Rendering1Menu,
+MENU_STATIC_PAGED(Rendering1Menu,
     35, 35,
     25,
     "RENDERING OPTIONS", "YFCNHJQRB DBLTJ", false, // НАСТРОЙКИ ВИДЕО
@@ -718,7 +704,7 @@ static MenuItem_t Rendering2Items[] = {
     I_SETMENU(NULL, /* < Prev Page > */ NULL, &Rendering1Menu)  // < Назад
 };
 
-MENU_PAGED(Rendering2Menu,
+MENU_STATIC_PAGED(Rendering2Menu,
     35, 35,
     25,
     "RENDERING OPTIONS", "YFCNHJQRB DBLTJ", false, // НАСТРОЙКИ ВИДЕО
@@ -841,7 +827,7 @@ static MenuItem_t AutomapItems[] = {
     I_SETMENU(NULL, NULL, &StatsMenu)
 };
 
-MENU_PAGED(AutomapMenu,
+MENU_STATIC_PAGED(AutomapMenu,
     35, 35,
     25,
     "AUTOMAP AND STATS", "RFHNF B CNFNBCNBRF", false, // КАРТА И СТАТИСТИКА
@@ -872,7 +858,7 @@ static MenuItem_t StatsItems[] = {
     I_SETMENU(NULL, NULL, &AutomapMenu)
 };
 
-MENU_PAGED(StatsMenu,
+MENU_STATIC_PAGED(StatsMenu,
     35, 35,
     25,
     "AUTOMAP AND STATS", "RFHNF B CNFNBCNBRF", false, // КАРТА И СТАТИСТИКА
@@ -995,7 +981,7 @@ static MenuItem_t Bindings1Items[] = {
     I_EMPTY
 };
 
-MENU_PAGED(Bindings1Menu,
+MENU_STATIC_PAGED(Bindings1Menu,
     35, 35,
     25,
     "Customize controls", "Yfcnhjqrb eghfdktybz", false, // Настройки управления
@@ -1029,7 +1015,7 @@ static MenuItem_t Bindings2Items[] = {
     I_EMPTY
 };
 
-MENU_PAGED(Bindings2Menu,
+MENU_STATIC_PAGED(Bindings2Menu,
     35, 35,
     25,
     "Customize controls", "Yfcnhjqrb eghfdktybz", false, // Настройки управления
@@ -1063,7 +1049,7 @@ static MenuItem_t Bindings3Items[] = {
     I_EMPTY
 };
 
-MENU_PAGED(Bindings3Menu,
+MENU_STATIC_PAGED(Bindings3Menu,
     35, 35,
     25,
     "Customize controls", "Yfcnhjqrb eghfdktybz", false, // Настройки управления
@@ -1097,7 +1083,7 @@ static MenuItem_t Bindings4Items[] = {
     I_EMPTY
 };
 
-MENU_PAGED(Bindings4Menu,
+MENU_STATIC_PAGED(Bindings4Menu,
     35, 35,
     25,
     "Customize controls", "Yfcnhjqrb eghfdktybz", false, // Настройки управления
@@ -1131,7 +1117,7 @@ static MenuItem_t Bindings5Items[] = {
     I_EMPTY
 };
 
-MENU_PAGED(Bindings5Menu,
+MENU_STATIC_PAGED(Bindings5Menu,
     35, 35,
     25,
     "Customize controls", "Yfcnhjqrb eghfdktybz", false, // Настройки управления
@@ -1165,7 +1151,7 @@ static MenuItem_t Bindings6Items[] = {
     I_EMPTY
 };
 
-MENU_PAGED(Bindings6Menu,
+MENU_STATIC_PAGED(Bindings6Menu,
     35, 35,
     25,
     "Customize controls", "Yfcnhjqrb eghfdktybz", false, // Настройки управления
@@ -1204,16 +1190,16 @@ static MenuItem_t GamepadSelectItems[] = {
     I_SWITCH("ENABLE GAMEPAD:",     "BCGJKMPJDFNM UTQVGFL:", M_RD_UseGamepad), // ИСПОЛЬЗОВАТЬ ГЕЙМПАД
     I_EMPTY,
     I_TITLE( "ACTIVE CONTROLLERS:", "FRNBDYST UTQVGFLS:"), // АКТИАНЫЕ ГЕЙМПАДЫ
-    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
-    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
-    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
-    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
-    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
-    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
-    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
-    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
-    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1},
-    {ITT_EMPTY,  NULL,                  NULL,                    OpenControllerOptionsMenu, -1}
+    I_EFUNC(NULL, NULL, OpenControllerOptionsMenu, -1),
+    I_EFUNC(NULL, NULL, OpenControllerOptionsMenu, -1),
+    I_EFUNC(NULL, NULL, OpenControllerOptionsMenu, -1),
+    I_EFUNC(NULL, NULL, OpenControllerOptionsMenu, -1),
+    I_EFUNC(NULL, NULL, OpenControllerOptionsMenu, -1),
+    I_EFUNC(NULL, NULL, OpenControllerOptionsMenu, -1),
+    I_EFUNC(NULL, NULL, OpenControllerOptionsMenu, -1),
+    I_EFUNC(NULL, NULL, OpenControllerOptionsMenu, -1),
+    I_EFUNC(NULL, NULL, OpenControllerOptionsMenu, -1),
+    I_EFUNC(NULL, NULL, OpenControllerOptionsMenu, -1)
 };
 
 MENU_DYNAMIC(GamepadSelectMenu,
@@ -1252,7 +1238,7 @@ static MenuItem_t Gamepad1Items[] = {
     I_SETMENU(NULL, NULL, &Gamepad2Menu)
 };
 
-MENU_PAGED(Gamepad1Menu,
+MENU_STATIC_PAGED(Gamepad1Menu,
     36, 11,
     32,
     "GAMEPAD SETTINGS", "YFCNHJQRB UTQVGFLF", false, // Настройки геймпада
@@ -1282,7 +1268,7 @@ static MenuItem_t Gamepad2Items[] = {
     I_SETMENU(NULL, NULL, &Gamepad1Menu)
 };
 
-MENU_PAGED(Gamepad2Menu,
+MENU_STATIC_PAGED(Gamepad2Menu,
     36, 11,
     32,
     "GAMEPAD SETTINGS", "YFCNHJQRB UTQVGFLF", false, // Настройки геймпада
@@ -1320,7 +1306,7 @@ static MenuItem_t Gameplay1Items[] = {
     I_SETMENU(NULL, /* < Last Page */ NULL, &Gameplay5Menu)  // < Назад
 };
 
-MENU_PAGED(Gameplay1Menu,
+MENU_STATIC_PAGED(Gameplay1Menu,
     35, 35,
     25,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
@@ -1337,23 +1323,24 @@ static MenuItem_t Gameplay2Items[] = {
     I_SWITCH("Show negative health:", "jnhbwfntkmyjt pljhjdmt:",     M_RD_Change_NegativeHealth), // Отрицательное здоровье
     I_LRFUNC("Colored elements:",     "Hfpyjwdtnyst 'ktvtyns:",      M_RD_Change_SBarColored), // Разноцветные элементы
     I_TITLE( "Coloring",              "wdtnf"), // Цвета
-    I_LRFUNC(NULL,                    NULL,                          M_RD_Change_SBarHighValue), // Высокое значение
-    I_LRFUNC(NULL,                    NULL,                          M_RD_Change_SBarNormalValue), // Нормальное значение
-    I_LRFUNC(NULL,                    NULL,                          M_RD_Change_SBarLowValue), // Низкое значение
-    I_LRFUNC(NULL,                    NULL,                          M_RD_Change_SBarCriticalValue), // Критическое значение
-    I_LRFUNC(NULL,                    NULL,                          M_RD_Change_SBarArmorType1), // Тип брони 1
-    I_LRFUNC(NULL,                    NULL,                          M_RD_Change_SBarArmorType2), // Тип брони 2
-    I_LRFUNC(NULL,                    NULL,                          M_RD_Change_SBarArmorType0), // Отсутствие брони
+    I_LRFUNC("High value:",           "Dscjrjt pyfxtybt:",           M_RD_Change_SBarHighValue), // Высокое значение
+    I_LRFUNC("Normal value:",         "Yjhvfkmyjt pyfxtybt:",        M_RD_Change_SBarNormalValue), // Нормальное значение
+    I_LRFUNC("Low value:",            "Ybprjt pyfxtybt:",            M_RD_Change_SBarLowValue), // Низкое значение
+    I_LRFUNC("Critical value:",       "Rhbnbxtcrjt pyfxtybt:",       M_RD_Change_SBarCriticalValue), // Критическое значение
+    I_LRFUNC("Armor type 1:",         "Nbg ,hjyb 1:",                M_RD_Change_SBarArmorType1), // Тип брони 1
+    I_LRFUNC("Armor type 2:",         "Nbg ,hjyb 2:",                M_RD_Change_SBarArmorType2), // Тип брони 2
+    I_LRFUNC("No armor:",             "Jncencndbt ,hjyb:",           M_RD_Change_SBarArmorType0), // Отсутствие брони
     I_SETMENU(NULL, /* Next Page > */ NULL, &Gameplay3Menu), // Далее >
     I_SETMENU(NULL, /* < Prev page */ NULL, &Gameplay1Menu)  // < Назад
 };
 
-MENU_PAGED(Gameplay2Menu,
+MENU_DYNAMIC_PAGED(Gameplay2Menu,
     35, 35,
     25,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     Gameplay2Items, false,
     M_RD_Draw_Gameplay_2,
+    Init_Gameplay_2,
     &RDOptionsMenu,
     &GameplayPageDescriptor,
     1
@@ -1365,7 +1352,7 @@ static MenuItem_t Gameplay3Items[] = {
     I_SWITCH("Play exit sounds:",               "Pderb ghb ds[jlt bp buhs:",     M_RD_Change_ExitSfx), // Звук при выходе из игры
     I_SWITCH("Sound of crushing corpses:",      "Pder hfplfdkbdfybz nhegjd:",    M_RD_Change_CrushingSfx), // Звук раздавливания трупов
     I_SWITCH("Single sound of blazing door:",   "Jlbyjxysq pder ,scnhjq ldthb:", M_RD_Change_BlazingSfx), // Одиночный звук быстрой двери
-    I_SWITCH(NULL,                              NULL,                            M_RD_Change_AlertSfx), // Общая тревога у монстров
+    I_SWITCH("Monster alert waking up others:", "J,ofz nhtdjuf e vjycnhjd:",     M_RD_Change_AlertSfx), // Общая тревога у монстров
     I_TITLE( "Crosshair",                       "Ghbwtk"), // Прицел
     I_SWITCH("Draw crosshair:",                 "Jnj,hf;fnm ghbwtk:",            M_RD_Change_CrosshairDraw), // Отображать прицел
     I_LRFUNC("Shape:",                          "Ajhvf:",                        M_RD_Change_CrosshairShape), // Форма
@@ -1376,40 +1363,42 @@ static MenuItem_t Gameplay3Items[] = {
     I_SETMENU(NULL, /* < Prev page > */ NULL, &Gameplay2Menu)  // < Назад
 };
 
-MENU_PAGED(Gameplay3Menu,
+MENU_DYNAMIC_PAGED(Gameplay3Menu,
     35, 35,
     25,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     Gameplay3Items, false,
     M_RD_Draw_Gameplay_3,
+    Init_Gameplay_3,
     &RDOptionsMenu,
     &GameplayPageDescriptor,
     1
 );
 
 static MenuItem_t Gameplay4Items[] = {
-    I_TITLE( "Physical",                      "Abpbrf"), // Физика
-    I_SWITCH(NULL,                            NULL,                             M_RD_Change_ImprovedCollision), // Физика столкновений
-    I_SWITCH(NULL,                            NULL,                             M_RD_Change_WalkOverUnder), // Перемещение над/под монстрами
-    I_SWITCH(NULL,                            NULL,                             M_RD_Change_Torque), // Трупы сползают с возвышений
-    I_SWITCH(NULL,                            NULL,                             M_RD_Change_SSGBlast), // Двустволка разрывает врагов
-    I_LRFUNC(NULL,                            NULL,                             M_RD_Change_FloatPowerups), // Покачивание сфер-артефактов
-    I_SWITCH(NULL,                            NULL,                             M_RD_Change_TossDrop), // Подбрасывать выпавшие предметы
-    I_SWITCH("Weapon bobbing while firing:",  "Ekexityyjt gjrfxbdfybt jhe;bz:", M_RD_Change_Bobbing), // Улучшенное покачивание оружия
-    I_TITLE( "Tactical",                      "Nfrnbrf"), // Тактика
-    I_SWITCH("Notify of revealed secrets:",   "Cjj,ofnm j yfqltyyjv nfqybrt:",  M_RD_Change_SecretNotify), // Сообщать о найденном тайнике
-    I_SWITCH("Infragreen light amp. visor:",  "Byahfptktysq dbpjh jcdtotybz:",  M_RD_Change_InfraGreenVisor), // Инфразеленый визор освещения
-    I_LRFUNC(NULL,                            NULL,                             M_RD_Change_HorizontalAiming), // Гор. Автоприцеливание
+    I_TITLE( "Physical",                            "Abpbrf"), // Физика
+    I_SWITCH("Collision physics:",                  "abpbrf cnjkryjdtybq:",            M_RD_Change_ImprovedCollision), // Физика столкновений
+    I_SWITCH("Walk over and under monsters:",       "Gthtvtotybt gjl*yfl vjycnhfvb:",  M_RD_Change_WalkOverUnder), // Перемещение над/под монстрами
+    I_SWITCH("Corpses sliding from the ledges:",    "Nhegs cgjkpf.n c djpdsitybq:",    M_RD_Change_Torque), // Трупы сползают с возвышений
+    I_SWITCH("Lethal pellet of a point-blank SSG:", "ldecndjkrf hfphsdftn dhfujd:",    M_RD_Change_SSGBlast), // Двустволка разрывает врагов
+    I_LRFUNC("Floating powerups amplitude:",        "gjrfxbdfybt cath-fhntafrnjd:",    M_RD_Change_FloatPowerups), // Покачивание сфер-артефактов
+    I_SWITCH("Items are tossed when dropped:",      "Gjl,hfcsdfnm dsgfdibt ghtlvtns:", M_RD_Change_TossDrop), // Подбрасывать выпавшие предметы
+    I_SWITCH("Weapon bobbing while firing:",        "Ekexityyjt gjrfxbdfybt jhe;bz:",  M_RD_Change_Bobbing), // Улучшенное покачивание оружия
+    I_TITLE( "Tactical",                            "Nfrnbrf"), // Тактика
+    I_SWITCH("Notify of revealed secrets:",         "Cjj,ofnm j yfqltyyjv nfqybrt:",   M_RD_Change_SecretNotify), // Сообщать о найденном тайнике
+    I_SWITCH("Infragreen light amp. visor:",        "Byahfptktysq dbpjh jcdtotybz:",  M_RD_Change_InfraGreenVisor), // Инфразеленый визор освещения
+    I_LRFUNC("Horizontal autoaiming:",              "ujh> fdnjghbwtkbdfybt:",         M_RD_Change_HorizontalAiming), // Гор. Автоприцеливание
     I_SETMENU(NULL, /* Next page >   */ NULL, &Gameplay5Menu), // Далее >
     I_SETMENU(NULL, /* < Prev page > */ NULL, &Gameplay3Menu)  // < Назад
 };
 
-MENU_PAGED(Gameplay4Menu,
+MENU_DYNAMIC_PAGED(Gameplay4Menu,
     35, 35,
     25,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     Gameplay4Items, false,
     M_RD_Draw_Gameplay_4,
+    Init_Gameplay_4,
     &RDOptionsMenu,
     &GameplayPageDescriptor,
     1
@@ -1420,7 +1409,7 @@ static MenuItem_t Gameplay5Items[] = {
     I_LRFUNC("Default skill level:",                "ehjdtym ckj;yjcnb gj evjkxfyb.:", M_RD_Change_DefaultSkill), // Уровень сложности по умолчанию
     I_SWITCH("Fix textures on vanilla maps:",       "ntrcnehs jhbu> ehjdytq:",         M_RD_Change_FixMapErrors), // Текстуры ориг. уровней
     I_SWITCH("Flip game levels:",                   "pthrfkmyjt jnhf;tybt ehjdytq:",   M_RD_Change_FlipLevels), // Зеркальное отражение уровней
-    I_SWITCH(NULL,                                  NULL, /*[JN] Joint EN/RU string*/  M_RD_Change_PistolStart), // Режим игры "Pistol start"
+    I_SWITCH("Pistol start game mode:",             NULL, /*[JN] Joint EN/RU string*/  M_RD_Change_PistolStart), // Режим игры "Pistol start"
     I_SWITCH("Imitate player's breathing:",         "bvbnfwbz ls[fybz buhjrf:",        M_RD_Change_Breathing), // Имитация дыхания игрока
     I_SWITCH("Pain Elemental without Souls limit:", "'ktvtynfkm ,tp juhfybxtybz lei:", M_RD_Change_LostSoulsQty), // Элементаль без ограничения душ
     I_TITLE( "Demos",                               "Ltvjpfgbcb"), // Демозаписи
@@ -1432,12 +1421,13 @@ static MenuItem_t Gameplay5Items[] = {
     I_SETMENU(NULL, /* < Prev page > */ NULL, &Gameplay4Menu)  // < Назад
 };
 
-MENU_PAGED(Gameplay5Menu,
+MENU_DYNAMIC_PAGED(Gameplay5Menu,
     35, 35,
     25,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     Gameplay5Items, false,
     M_RD_Draw_Gameplay_5,
+    Init_Gameplay_5,
     &RDOptionsMenu,
     &GameplayPageDescriptor,
     1
@@ -1474,7 +1464,7 @@ static MenuItem_t LevelSelect1Items[] = {
     I_EFUNC(  NULL, NULL, G_DoSelectiveGame, 0)
 };
 
-MENU_PAGED(LevelSelect1Menu,
+MENU_STATIC_PAGED(LevelSelect1Menu,
     75, 72,
     21,
     "LEVEL SELECT", "DS<JH EHJDYZ", false, // ВЫБОР УРОВНЯ
@@ -1506,7 +1496,7 @@ static MenuItem_t LevelSelect2Items[] = {
     I_EFUNC(NULL, NULL, G_DoSelectiveGame, 0)
 };
 
-MENU_PAGED(LevelSelect2Menu,
+MENU_STATIC_PAGED(LevelSelect2Menu,
     75, 72,
     21,
     "LEVEL SELECT", "DS<JH EHJDYZ", false, // ВЫБОР УРОВНЯ
@@ -3719,12 +3709,12 @@ static void InitControllerSelectMenu(struct Menu_s* const menu)
     {
         if(activeControllers[i - 3] != NULL)
         {
-            menu->items[i].type = ITT_EFUNC;
+            menu->items[i].status = ENABLED;
             menu->items[i].option = i - 3;
         }
         else
         {
-            menu->items[i].type = ITT_EMPTY;
+            menu->items[i].status = HIDDEN;
             menu->items[i].option = -1;
         }
     }
@@ -4364,6 +4354,31 @@ static void M_RD_Draw_Gameplay_1(void)
     }
 }
 
+static void Init_Gameplay_2(struct Menu_s* const menu)
+{
+    if(gamemission == jaguar
+    || sbar_colored == 0)
+    {
+        menu->items[5].status = DISABLED;
+        menu->items[6].status = DISABLED;
+        menu->items[7].status = DISABLED;
+        menu->items[8].status = DISABLED;
+        menu->items[9].status = DISABLED;
+        menu->items[10].status = DISABLED;
+        menu->items[11].status = DISABLED;
+    }
+    else
+    {
+        menu->items[5].status = ENABLED;
+        menu->items[6].status = ENABLED;
+        menu->items[7].status = ENABLED;
+        menu->items[8].status = ENABLED;
+        menu->items[9].status = ENABLED;
+        menu->items[10].status = ENABLED;
+        menu->items[11].status = ENABLED;
+    }
+}
+
 static void M_RD_Draw_Gameplay_2(void)
 {
     // Jaguar: hide game background, don't draw lines over the HUD
@@ -4387,21 +4402,6 @@ static void M_RD_Draw_Gameplay_2(void)
                               sbar_colored == 2 ? "ON" : "OFF", 167 + wide_delta, 55,
                               sbar_colored ? CR_GREEN : CR_DARKRED);
 
-        RD_M_DrawTextSmallENG("High value:",35 + wide_delta, 75,
-                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-        RD_M_DrawTextSmallENG("Normal value:",35 + wide_delta, 85,
-                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-        RD_M_DrawTextSmallENG("Low value:",35 + wide_delta, 95,
-                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-        RD_M_DrawTextSmallENG("Critical value:",35 + wide_delta, 105,
-                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-        RD_M_DrawTextSmallENG("Armor type 1:",35 + wide_delta, 115,
-                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-        RD_M_DrawTextSmallENG("Armor type 2:",35 + wide_delta, 125,
-                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-        RD_M_DrawTextSmallENG("No armor:", 35 + wide_delta, 135,
-                              sbar_colored == 0 || gamemission == jaguar? CR_DARKRED : CR_NONE);
-        
         // High Value
         if (sbar_colored == 0 || gamemission == jaguar)
         {
@@ -4501,22 +4501,6 @@ static void M_RD_Draw_Gameplay_2(void)
                               sbar_colored == 2 ? "DRK" : "DSRK", 213 + wide_delta, 55,
                               sbar_colored ? CR_GREEN : CR_DARKRED);
 
-        // Высокое значение
-        RD_M_DrawTextSmallRUS("Dscjrjt pyfxtybt:", 35 + wide_delta, 75,      // Высокое значение
-                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-        RD_M_DrawTextSmallRUS("Yjhvfkmyjt pyfxtybt:", 35 + wide_delta, 85,   // Нормальное значение
-                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-        RD_M_DrawTextSmallRUS("Ybprjt pyfxtybt:", 35 + wide_delta, 95,       // Низкое значение
-                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-        RD_M_DrawTextSmallRUS("Rhbnbxtcrjt pyfxtybt:", 35 + wide_delta, 105, // Критическое значение
-                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-        RD_M_DrawTextSmallRUS("Nbg ,hjyb 1:", 35 + wide_delta, 115,          // Тип брони 1
-                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-        RD_M_DrawTextSmallRUS("Nbg ,hjyb 2:", 35 + wide_delta, 125,          // Тип брони 2
-                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-        RD_M_DrawTextSmallRUS("Jncencndbt ,hjyb:", 35 + wide_delta, 135,     // Отсутствие брони
-                              sbar_colored == 0 || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-        
         if (sbar_colored == 0 || gamemission == jaguar)
         {
             RD_M_DrawTextSmallRUS("y*l", 168 + wide_delta, 75, CR_DARKRED);
@@ -4601,6 +4585,20 @@ static void M_RD_Draw_Gameplay_2(void)
     }
 }
 
+static void Init_Gameplay_3(struct Menu_s* const menu)
+{
+    if(gamemission == jaguar
+    || netgame
+    || strict_mode)
+    {
+        menu->items[5].status = DISABLED;
+    }
+    else
+    {
+        menu->items[5].status = ENABLED;
+    }
+}
+
 static void M_RD_Draw_Gameplay_3(void)
 {   
     // Jaguar: hide game background, don't draw lines over the HUD
@@ -4627,10 +4625,6 @@ static void M_RD_Draw_Gameplay_3(void)
         RD_M_DrawTextSmallENG(blazing_door_fix_sfx ? RD_ON : RD_OFF,240 + wide_delta, 65,
                               blazing_door_fix_sfx ? CR_GREEN : CR_DARKRED);
 
-        // Monster alert waking up others
-        RD_M_DrawTextSmallENG("Monster alert waking up others:", 35 + wide_delta, 75,
-                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-                          
         if (strict_mode)
         {
             RD_M_DrawTextSmallENG("N/A", 263 + wide_delta, 75, CR_DARKRED);
@@ -4688,10 +4682,6 @@ static void M_RD_Draw_Gameplay_3(void)
         RD_M_DrawTextSmallRUS(blazing_door_fix_sfx ? RD_ON_RUS : RD_OFF_RUS, 260 + wide_delta, 65,
                               blazing_door_fix_sfx ? CR_GREEN : CR_DARKRED);
 
-        // Общая тревога у монстров
-        RD_M_DrawTextSmallRUS("J,ofz nhtdjuf e vjycnhjd:", 35 + wide_delta, 75,
-                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-                          
         if (strict_mode)
         {
             RD_M_DrawTextSmallRUS("Y*L", 227 + wide_delta, 75, CR_DARKRED);
@@ -4762,6 +4752,32 @@ static void M_RD_Draw_Gameplay_3(void)
                           crosshair_opacity == 8 ? CR_GREEN : CR_NONE);
 }
 
+static void Init_Gameplay_4(struct Menu_s* const menu)
+{
+    if(gamemission == jaguar
+       || netgame
+       || strict_mode)
+    {
+        menu->items[1].status = DISABLED;
+        menu->items[2].status = DISABLED;
+        menu->items[3].status = DISABLED;
+        menu->items[4].status = DISABLED;
+        menu->items[5].status = DISABLED;
+        menu->items[6].status = DISABLED;
+        menu->items[11].status = DISABLED;
+    }
+    else
+    {
+        menu->items[1].status = ENABLED;
+        menu->items[2].status = ENABLED;
+        menu->items[3].status = ENABLED;
+        menu->items[4].status = ENABLED;
+        menu->items[5].status = ENABLED;
+        menu->items[6].status = ENABLED;
+        menu->items[11].status = ENABLED;
+    }
+}
+
 static void M_RD_Draw_Gameplay_4(void)
 {   
     // Jaguar: hide game background, don't draw lines over the HUD
@@ -4773,8 +4789,6 @@ static void M_RD_Draw_Gameplay_4(void)
     if (english_language)
     {
         // Collision physics
-        RD_M_DrawTextSmallENG("Collision physics:", 35 + wide_delta, 35,
-                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
         if (strict_mode)
         {
             RD_M_DrawTextSmallENG("N/A", 160 + wide_delta, 35, CR_DARKRED);
@@ -4786,8 +4800,6 @@ static void M_RD_Draw_Gameplay_4(void)
         }
 
         // Walk over and under monsters
-        RD_M_DrawTextSmallENG("Walk over and under monsters:", 35 + wide_delta, 45,
-                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
         if (strict_mode)
         {
             RD_M_DrawTextSmallENG("N/A", 250 + wide_delta, 45, CR_DARKRED);
@@ -4799,9 +4811,6 @@ static void M_RD_Draw_Gameplay_4(void)
         }
 
         // Corpses sliding from the ledges
-        RD_M_DrawTextSmallENG("Corpses sliding from the ledges:", 35 + wide_delta, 55,
-                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-
         if (strict_mode)
         {
             RD_M_DrawTextSmallENG("N/A", 264 + wide_delta, 55, CR_DARKRED);
@@ -4813,9 +4822,6 @@ static void M_RD_Draw_Gameplay_4(void)
         }
 
         // Lethal pellet of a point-blank SSG
-        RD_M_DrawTextSmallENG("Lethal pellet of a point-blank SSG:", 35 + wide_delta, 65,
-                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-
         if (strict_mode)
         {
             RD_M_DrawTextSmallENG("N/A", 287 + wide_delta, 65, CR_DARKRED);
@@ -4827,9 +4833,6 @@ static void M_RD_Draw_Gameplay_4(void)
         }
 
         // Floating powerups
-        RD_M_DrawTextSmallENG("Floating powerups amplitude:", 35 + wide_delta, 75,
-                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-
         if (strict_mode)
         {
             RD_M_DrawTextSmallENG("N/A", 244 + wide_delta, 75, CR_DARKRED);
@@ -4843,9 +4846,6 @@ static void M_RD_Draw_Gameplay_4(void)
         }
 
         // Items are tossed when dropped
-        RD_M_DrawTextSmallENG("Items are tossed when dropped:", 35 + wide_delta, 85,
-                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-
         if (strict_mode)
         {
             RD_M_DrawTextSmallENG("N/A", 254 + wide_delta, 85, CR_DARKRED);
@@ -4869,9 +4869,6 @@ static void M_RD_Draw_Gameplay_4(void)
                               infragreen_visor ? CR_GREEN : CR_DARKRED);
 
         // Horizontal autoaiming
-        RD_M_DrawTextSmallENG("Horizontal autoaiming:", 35 + wide_delta, 135,
-                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-
         if (strict_mode)
         {
             RD_M_DrawTextSmallENG("N/A", 195 + wide_delta, 135, CR_DARKRED);
@@ -4898,9 +4895,6 @@ static void M_RD_Draw_Gameplay_4(void)
     else
     {
         // Физика столкновений
-        RD_M_DrawTextSmallRUS("abpbrf cnjkryjdtybq:", 35 + wide_delta, 35,
-                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-                              
         if (strict_mode)
         {
             RD_M_DrawTextSmallRUS("Y*L", 193 + wide_delta, 35, CR_DARKRED);
@@ -4912,9 +4906,6 @@ static void M_RD_Draw_Gameplay_4(void)
         }
 
         // Перемещение под/над монстрами
-        RD_M_DrawTextSmallRUS("Gthtvtotybt gjl*yfl vjycnhfvb:", 35 + wide_delta, 45,
-                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-
         if (strict_mode)
         {
             RD_M_DrawTextSmallRUS("Y*L", 274 + wide_delta, 45, CR_DARKRED);
@@ -4926,9 +4917,6 @@ static void M_RD_Draw_Gameplay_4(void)
         }
 
         // Трупы сползают с возвышений
-        RD_M_DrawTextSmallRUS("Nhegs cgjkpf.n c djpdsitybq:", 35 + wide_delta, 55,
-                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-
         if (strict_mode)
         {
             RD_M_DrawTextSmallRUS("Y*L", 256 + wide_delta, 55, CR_DARKRED);
@@ -4940,9 +4928,6 @@ static void M_RD_Draw_Gameplay_4(void)
         }
 
         // Двустволка разрывает врагов
-        RD_M_DrawTextSmallRUS("ldecndjkrf hfphsdftn dhfujd:", 35 + wide_delta, 65,
-                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-
         if (strict_mode)
         {
             RD_M_DrawTextSmallRUS("Y*L", 254 + wide_delta, 65, CR_DARKRED);
@@ -4954,9 +4939,6 @@ static void M_RD_Draw_Gameplay_4(void)
         }
 
         // Амплитуда левитации артефактов
-        RD_M_DrawTextSmallRUS("gjrfxbdfybt cath-fhntafrnjd:", 35 + wide_delta, 75,
-                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-
         if (strict_mode)
         {
             RD_M_DrawTextSmallRUS("Y*L", 256 + wide_delta, 75, CR_DARKRED);
@@ -4970,9 +4952,6 @@ static void M_RD_Draw_Gameplay_4(void)
         }
 
         // Подбрасывать выпавшие предметы
-        RD_M_DrawTextSmallRUS("Gjl,hfcsdfnm dsgfdibt ghtlvtns:", 35 + wide_delta, 85,
-                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-
         if (strict_mode)
         {
             RD_M_DrawTextSmallRUS("Y*L", 285 + wide_delta, 85, CR_DARKRED);
@@ -4996,9 +4975,6 @@ static void M_RD_Draw_Gameplay_4(void)
                               infragreen_visor ? CR_GREEN : CR_DARKRED);
 
         // Гор. автоприцеливание
-        RD_M_DrawTextSmallRUS("ujh> fdnjghbwtkbdfybt:", 35 + wide_delta, 135,
-                              strict_mode || netgame || gamemission == jaguar ? CR_DARKRED : CR_NONE);
-
         if (strict_mode)
         {
             RD_M_DrawTextSmallRUS("Y*L", 204 + wide_delta, 135, CR_DARKRED);
@@ -5037,7 +5013,7 @@ static char *const DefSkillName[6][2] = {
     { "6", "ULTRA-NIGHTMARE!"      }
 };
 
-static const Translation_CR_t DefSkillColor (int skill)
+static Translation_CR_t DefSkillColor(int skill)
 {
     return
         skill == 0 ? CR_OLIVE :
@@ -5046,6 +5022,18 @@ static const Translation_CR_t DefSkillColor (int skill)
         skill == 3 ? CR_YELLOW :
         skill == 4 ? CR_ORANGE :
                      CR_RED;
+}
+
+static void Init_Gameplay_5(struct Menu_s* const menu)
+{
+    if(netgame)
+    {
+        menu->items[4].status = DISABLED;
+    }
+    else
+    {
+        menu->items[4].status = ENABLED;
+    }
 }
 
 static void M_RD_Draw_Gameplay_5(void)
@@ -5071,7 +5059,6 @@ static void M_RD_Draw_Gameplay_5(void)
                               flip_levels ? CR_GREEN : CR_DARKRED);
 
         // Pistol start
-        RD_M_DrawTextSmallENG("Pistol start game mode:", 35 + wide_delta, 65, netgame ? CR_DARKRED : CR_NONE);
         RD_M_DrawTextSmallENG(pistol_start ? RD_ON : RD_OFF, 203 + wide_delta, 65,
                               pistol_start && !netgame ? CR_GREEN : CR_DARKRED);
 
@@ -5233,6 +5220,7 @@ static void M_RD_Change_NegativeHealth()
 static void M_RD_Change_SBarColored(Direction_t direction)
 {
     RD_Menu_SpinInt(&sbar_colored, 0, 2, direction);
+    Init_Gameplay_2(&Gameplay2Menu);
 }
 
 void M_RD_Define_SBarColorValue(byte** sbar_color_set, int color)
@@ -5295,10 +5283,6 @@ static void M_RD_Change_SBarNormalValue(Direction_t direction)
 
 static void M_RD_Change_SBarLowValue(Direction_t direction)
 {
-    // [JN] Disallow changing if not appropriate.
-    if (sbar_colored == 0 || gamemission == jaguar)
-        return;
-
     RD_Menu_SpinInt(&stbar_color_low, 0, 17, direction);
 
     // [JN] Redefine system message color.
@@ -5307,10 +5291,6 @@ static void M_RD_Change_SBarLowValue(Direction_t direction)
 
 static void M_RD_Change_SBarCriticalValue(Direction_t direction)
 {
-    // [JN] Disallow changing if not appropriate.
-    if (sbar_colored == 0 || gamemission == jaguar)
-        return;
-
     RD_Menu_SpinInt(&stbar_color_critical, 0, 17, direction);
 
     // [JN] Redefine system message color.
@@ -5319,10 +5299,6 @@ static void M_RD_Change_SBarCriticalValue(Direction_t direction)
 
 static void M_RD_Change_SBarArmorType1(Direction_t direction)
 {
-    // [JN] Disallow changing if not appropriate.
-    if (sbar_colored == 0 || gamemission == jaguar)
-        return;
-
     RD_Menu_SpinInt(&stbar_color_armor_1, 0, 17, direction);
 
     // [JN] Redefine system message color.
@@ -5331,10 +5307,6 @@ static void M_RD_Change_SBarArmorType1(Direction_t direction)
 
 static void M_RD_Change_SBarArmorType2(Direction_t direction)
 {
-    // [JN] Disallow changing if not appropriate.
-    if (sbar_colored == 0 || gamemission == jaguar)
-        return;
-
     RD_Menu_SpinInt(&stbar_color_armor_2, 0, 17, direction);
 
     // [JN] Redefine system message color.
@@ -5343,10 +5315,6 @@ static void M_RD_Change_SBarArmorType2(Direction_t direction)
 
 static void M_RD_Change_SBarArmorType0(Direction_t direction)
 {
-    // [JN] Disallow changing if not appropriate.
-    if (sbar_colored == 0 || gamemission == jaguar)
-        return;
-
     RD_Menu_SpinInt(&stbar_color_armor_0, 0, 17, direction);
 
     // [JN] Redefine system message color.
@@ -5379,11 +5347,6 @@ static void M_RD_Change_BlazingSfx()
 
 static void M_RD_Change_AlertSfx()
 {
-    if (strict_mode)
-    {
-        return; // Disallow toggling in strict vanilla mode.
-    }
-
     noise_alert_sfx ^= 1;
 }
 
@@ -5425,31 +5388,16 @@ static void M_RD_Change_CrosshairType(Direction_t direction)
 
 static void M_RD_Change_ImprovedCollision()
 {
-    if (strict_mode)
-    {
-        return; // Disallow toggling in strict vanilla mode.
-    }
-
     improved_collision ^= 1;
 }
 
 static void M_RD_Change_WalkOverUnder()
 {
-    if (strict_mode)
-    {
-        return; // Disallow toggling in strict vanilla mode.
-    }
-
     over_under ^= 1;
 }
 
 static void M_RD_Change_Torque()
 {
-    if (strict_mode)
-    {
-        return; // Disallow toggling in strict vanilla mode.
-    }
-
     torque ^= 1;
 }
 
@@ -5460,31 +5408,16 @@ static void M_RD_Change_Bobbing()
 
 static void M_RD_Change_SSGBlast()
 {
-    if (strict_mode)
-    {
-        return; // Disallow toggling in strict vanilla mode.
-    }
-
     ssg_blast_enemies ^= 1;
 }
 
 static void M_RD_Change_FloatPowerups(Direction_t direction)
 {
-    if (strict_mode)
-    {
-        return; // Disallow toggling in strict vanilla mode.
-    }
-
     RD_Menu_SpinInt(&floating_powerups, 0, 3, direction);
 }
 
 static void M_RD_Change_TossDrop()
 {
-    if (strict_mode)
-    {
-        return; // Disallow toggling in strict vanilla mode.
-    }
-
     toss_drop ^= 1;
 }
 
@@ -5519,11 +5452,6 @@ static void M_RD_Change_InfraGreenVisor()
 
 static void M_RD_Change_HorizontalAiming(Direction_t direction)
 {
-    if (strict_mode)
-    {
-        return; // Disallow toggling in strict vanilla mode.
-    }
-
     RD_Menu_SpinInt(&horizontal_autoaim, 0, 3, direction);
 }
 
@@ -7162,7 +7090,7 @@ static void M_NewGame()
     if (gamemode == commercial || gameversion == exe_chex)
         RD_Menu_SetMenu(&NewGameMenu);
     else
-        RD_Menu_SetMenu(EpisodeMenu);
+        RD_Menu_SetMenu(&EpisodeMenu);
 }
 
 
@@ -7177,22 +7105,12 @@ static void M_InitEpisode(struct Menu_s* const menu)
     // three episodes; if we're emulating one of those, then don't try
     // to show episode four. If we are, then do show episode four
     // (should crash if missing).
-    if (gameversion < exe_ultimate)
-    {
-        // [Dasperal] Sigil
-        if (sgl_loaded)
-            menu->itemCount = 4;
-        else
-            menu->itemCount = 3;
-    }
-    else
-    {
-        // [crispy] & [JN] Sigil
-        if (sgl_loaded)
-            menu->itemCount = 5;
-        else
-            menu->itemCount = 4;
-    }
+    if(gameversion < exe_ultimate)
+        menu->items[3].status = HIDDEN;
+
+    // [crispy] & [JN] & [Dasperal] Sigil
+    if(!sgl_loaded)
+        menu->items[4].status = HIDDEN;
 }
 
 static void M_DrawEpisode()
@@ -7258,7 +7176,7 @@ static void M_Episode(int choice)
                                   SWSTRING : SWSTRING_RUS),
                                   NULL,false);
         // [JN] Return to Episode menu.
-        RD_Menu_SetMenu(EpisodeMenu);
+        RD_Menu_SetMenu(&EpisodeMenu);
         return;
     }
 
@@ -7748,7 +7666,7 @@ boolean M_Responder (event_t* ev)
         if (CurrentMenu != &SaveMenu
         &&  CurrentMenu != &LoadMenu
         // [JN] Do not close Episode menu after closing "purchase entire trilogy" message in Shareware.
-        &&  (CurrentMenu != EpisodeMenu && gamemode == shareware)
+        &&  (CurrentMenu != &EpisodeMenu && gamemode == shareware)
         // [JN] Do not close Options menu after pressing "N" in End Game.
         &&  CurrentMenu != OptionsMenu)
         {
@@ -8195,15 +8113,6 @@ void M_Init (void)
         RDOptionsMenu.y -= 6;
     }
 
-    // Versions of doom.exe before the Ultimate Doom release only had
-    // three episodes; if we're emulating one of those then don't try
-    // to show episode four. If we are, then do show episode four
-    // (should crash if missing).
-    if(gameversion < exe_ultimate)
-        EpisodeMenu = &DoomEpisodeMenu;
-    else
-        EpisodeMenu = &UltimateEpisodeMenu;
-
     if(vanillaparm)
         OptionsMenu = &VanillaOptionsMenu;
     else
@@ -8212,10 +8121,6 @@ void M_Init (void)
     DoomItems[1].pointer = OptionsMenu;
     Doom2Items[1].pointer = OptionsMenu;
     MainMenuBetaItems[3].pointer = OptionsMenu;
-
-    // [JN] Correct return to previous menu
-    if (NewGameMenu.prevMenu != MainMenu)
-        NewGameMenu.prevMenu = EpisodeMenu;
     OptionsMenu->prevMenu = MainMenu;
     LoadMenu.prevMenu = MainMenu;
     SaveMenu.prevMenu = MainMenu;

@@ -355,6 +355,7 @@ void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos)
     int y;
     const MenuItem_t *item;
     Translation_CR_t subheaderTranslation;
+    Translation_CR_t disabledTranslation;
 
     if (menu->drawFunc != NULL)
     {
@@ -363,6 +364,7 @@ void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos)
     x = english_language ? menu->x_eng : menu->x_rus;
     y = menu->y;
     subheaderTranslation = CR_YELLOW;
+    disabledTranslation = RD_GameType == gt_Doom ? CR_DARKRED : CR_GRAY;
 
     if(english_language)
     {
@@ -389,15 +391,18 @@ void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos)
     }
 
     item = menu->items;
-    for (i = 0; i < menu->itemCount; i++)
+    for(i = 0; i < menu->itemCount; i++)
     {
-        if (item->type != ITT_EMPTY && (english_language ? item->text_eng : item->text_rus))
+        if(item->type != ITT_EMPTY
+        && item->status != HIDDEN
+        && item->status != EMPTY
+        && (english_language ? item->text_eng : item->text_rus))
         {
             // [JN] Define where to use big and where small fonts,
             // and where to use big or small vertical spacing.
-            if (english_language)
+            if(english_language)
             {
-                if (menu->bigFont)
+                if(menu->bigFont)
                 {
                     if(menu->replaceableBigFont)
                     {
@@ -418,12 +423,13 @@ void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos)
                 else
                 {
                     RD_M_DrawTextSmallENG((char *) item->text_eng, x + wide_delta, y,
-                                          item->type == ITT_TITLE ? subheaderTranslation : CR_NONE);
+                                          item->type == ITT_TITLE ? subheaderTranslation :
+                                          item->status == DISABLED ? disabledTranslation : CR_NONE);
                 }
             }
             else
             {
-                if (menu->bigFont)
+                if(menu->bigFont)
                 {
                     if(RD_GameType == gt_Doom && menu->replaceableBigFont)
                     {
@@ -442,13 +448,16 @@ void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos)
             }
         }
 
-        if (menu->bigFont)
+        if(item->status != HIDDEN)
         {
-            y += item_Height;
-        }
-        else
-        {
-            y += item_Height_Small;
+            if(menu->bigFont)
+            {
+                y += item_Height;
+            }
+            else
+            {
+                y += item_Height_Small;
+            }
         }
 
         item++;
@@ -470,18 +479,47 @@ void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos)
 
     if (menu->bigFont)
     {
-        y = menu->y + (currentItPos * item_Height) + cursor_Y_Offset;
+        y = menu->y + cursor_Y_Offset;
+        for(i = 0; i < CurrentItPos; i++)
+        {
+            y += menu->items[i].status != HIDDEN ? item_Height : 0;
+        }
         drawShadowedPatch(x + cursor_X_Offset + wide_delta, y,
             W_CacheLumpNum(menuTime & (RD_GameType == gt_Doom ? 8 : 16) ? 
                            bigCursor1_patch : bigCursor2_patch, PU_CACHE));
     }
     else
     {
-        y = menu->y + (currentItPos * item_Height_Small) + cursor_Y_Offset_Small;
+        y = menu->y + cursor_Y_Offset_Small;
+        for(i = 0; i < CurrentItPos; i++)
+        {
+            y += menu->items[i].status != HIDDEN ? item_Height_Small : 0;
+        }
         drawShadowedPatch(x + cursor_X_Offset_Small + wide_delta, y,
             W_CacheLumpNum(menuTime & (RD_GameType == gt_Doom ? 8 : 16) ?
                            smallCursor1_patch : smallCursor2_patch, PU_CACHE));
     }
+}
+
+boolean isActiveItem(MenuItem_t *item)
+{
+    return item->type != ITT_EMPTY && item->type != ITT_TITLE && item->status == ENABLED;
+}
+
+static int getNextActiveItemPos(const Menu_t* const menu, int curPos)
+{
+    do
+    {
+        if(curPos + 1 > menu->itemCount - 1)
+        {
+            curPos = 0;
+        }
+        else
+        {
+            curPos++;
+        }
+    } while(!isActiveItem(&menu->items[curPos]));
+    return curPos;
 }
 
 boolean RD_Menu_Responder(event_t* event)
@@ -503,8 +541,7 @@ boolean RD_Menu_Responder(event_t* event)
             {
                 CurrentItPos++;
             }
-        } while (CurrentMenu->items[CurrentItPos].type == ITT_EMPTY ||
-                 CurrentMenu->items[CurrentItPos].type == ITT_TITLE);
+        } while(!isActiveItem(&CurrentMenu->items[CurrentItPos]));
         RD_Menu_StartSound(MENU_SOUND_CURSOR_MOVE);
         return true;
     }
@@ -520,8 +557,7 @@ boolean RD_Menu_Responder(event_t* event)
             {
                 CurrentItPos--;
             }
-        } while (CurrentMenu->items[CurrentItPos].type == ITT_EMPTY ||
-                 CurrentMenu->items[CurrentItPos].type == ITT_TITLE);
+        } while(!isActiveItem(&CurrentMenu->items[CurrentItPos]));
         RD_Menu_StartSound(MENU_SOUND_CURSOR_MOVE);
         return true;
     }
@@ -568,7 +604,6 @@ boolean RD_Menu_Responder(event_t* event)
         }
         else if (item->pointer != NULL)
         {
-            CurrentMenu->lastOn = CurrentItPos;
             if (item->type == ITT_LRFUNC)
             {
                 ((void (*)(Direction_t)) item->pointer)(RIGHT_DIR);
@@ -649,20 +684,20 @@ boolean RD_Menu_Responder(event_t* event)
             return true;
         }
     }
-    else if (event->type == ev_keydown && event->data2 != 0)
+    else if(event->type == ev_keydown && event->data2 != 0)
     {
         // Jump to menu item based on first letter:
 
-        for (i = CurrentItPos + 1; i < CurrentMenu->itemCount; i++)
+        for(i = CurrentItPos + 1; i < CurrentMenu->itemCount; i++)
         {
-            if (CurrentMenu->items[i].type != ITT_TITLE && CurrentMenu->items[i].type != ITT_EMPTY &&
-                (english_language ? CurrentMenu->items[i].text_eng : CurrentMenu->items[i].text_rus))
+            if(isActiveItem(&CurrentMenu->items[i])
+            && (english_language ? CurrentMenu->items[i].text_eng : CurrentMenu->items[i].text_rus))
             {
                 const char *textString = english_language ? CurrentMenu->items[i].text_eng
                                                           : CurrentMenu->items[i].text_rus;
-                if (textString)
+                if(textString)
                 {
-                    if (toupper(event->data2) == toupper(textString[0]))
+                    if(toupper(event->data2) == toupper(textString[0]))
                     {
                         CurrentItPos = i;
                         return true;
@@ -671,16 +706,16 @@ boolean RD_Menu_Responder(event_t* event)
             }
         }
 
-        for (i = 0; i <= CurrentItPos; i++)
+        for(i = 0; i <= CurrentItPos; i++)
         {
-            if (CurrentMenu->items[i].type != ITT_TITLE && CurrentMenu->items[i].type != ITT_EMPTY &&
-                (english_language ? CurrentMenu->items[i].text_eng : CurrentMenu->items[i].text_rus))
+            if(isActiveItem(&CurrentMenu->items[i])
+            && (english_language ? CurrentMenu->items[i].text_eng : CurrentMenu->items[i].text_rus))
             {
                 const char *textString = english_language ? CurrentMenu->items[i].text_eng
                                                           : CurrentMenu->items[i].text_rus;
-                if (textString)
+                if(textString)
                 {
-                    if (toupper(event->data2) == toupper(textString[0]))
+                    if(toupper(event->data2) == toupper(textString[0]))
                     {
                         CurrentItPos = i;
                         return true;
@@ -697,9 +732,14 @@ void RD_Menu_SetMenu(const Menu_t* menu)
 {
     CurrentMenu->lastOn = CurrentItPos;
     CurrentMenu = (Menu_t*) menu;
+
     if(CurrentMenu->initFunc != NULL)
         CurrentMenu->initFunc(CurrentMenu);
-    CurrentItPos = CurrentMenu->lastOn;
+
+    if(isActiveItem(&CurrentMenu->items[CurrentMenu->lastOn]))
+        CurrentItPos = CurrentMenu->lastOn;
+    else
+        CurrentItPos = getNextActiveItemPos(CurrentMenu, CurrentMenu->lastOn);
 }
 
 void RD_Menu_ActivateMenu(void)
