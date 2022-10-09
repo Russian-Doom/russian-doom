@@ -1933,15 +1933,15 @@ mapformat_t P_CheckMapFormat (int lumpnum)
     &&  !strncasecmp(lumpinfo[b]->name, "BEHAVIOR", 8))
     {
         fprintf(stderr, english_language ? 
-                "P_CheckMapFormat: Hexen format (" :
-                "P_CheckMapFormat: формат Hexen (");
+                "Hexen format (" :
+                "формат Hexen (");
         format |= HEXEN;
     }
     else
     {
         fprintf(stderr, english_language ?
-                "P_CheckMapFormat: Doom format (" :
-                "P_CheckMapFormat: формат Doom (");
+                "Doom format (" :
+                "формат Doom (");
     }
 
     if (!((b = lumpnum+ML_NODES) < numlumps
@@ -2043,6 +2043,9 @@ void P_SetupLevel (int episode, int map, int playermask, skill_t skill)
     {
         P_SetupFixes(episode, map);
     }
+
+    // [JN] Indicate the map we are loading
+    fprintf(stderr, "P_SetupLevel: E%dM%d, ", gameepisode, gamemap);
 
     // [crispy] check and log map and nodes format
     crispy_mapformat = P_CheckMapFormat(lumpnum);
