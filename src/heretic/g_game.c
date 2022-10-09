@@ -2174,6 +2174,10 @@ void G_TimeDemo(char *name)
     G_InitNew(skill, episode, map, 0);
     starttime = I_GetTime();
 
+    // Disable screen rendering entirely,
+    // if command line parameter is present.
+    nodrawers = M_CheckParm ("-nodraw");
+
     usergame = false;
     demoplayback = true;
     timingdemo = true;

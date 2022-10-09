@@ -501,6 +501,12 @@ void D_Display(void)
         saved_gametic = gametic;
     }
 
+    // For comparative timing / profiling.
+    if (nodrawers)
+    {
+        return;
+    }
+
     // [JN] Set correct palette. Allow finale stages use own palettes.
     if (gamestate != GS_LEVEL && gamestate != GS_FINALE)
     {
