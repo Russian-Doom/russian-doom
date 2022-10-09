@@ -392,7 +392,7 @@ void IN_UnloadPics(void)
 void IN_Ticker(void)
 {
     // [JN] Make PAUSE working properly on intermission screen
-    if (paused)
+    if (singleplayer && paused)
     {
         return;
     }
@@ -505,7 +505,7 @@ void IN_CheckForSkip(void)
                 player->usedown = false;
             }
             // [JN] Pressing PAUSE should not skip intermission screen
-            if (player->cmd.buttons & BTS_PAUSE)
+            if (singleplayer && player->cmd.buttons & BTS_PAUSE)
             {
                 skipintermission = 0;
             }
