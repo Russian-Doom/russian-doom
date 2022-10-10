@@ -2034,9 +2034,9 @@ void P_SetupLevel (int episode, int map, int playermask, skill_t skill)
     lumpnum = W_GetNumForName(lumpname);
 
     // [JN] Checking for multiple map lump names for allowing map fixes to work.
-    // Adaptaken from Doom Retro, thanks Brad Harding!
+    // Adaptaken from DOOM Retro, thanks Brad Harding!
     canmodify = (W_CheckMultipleLumps(lumpname) == 1
-              && (!netgame && !vanillaparm && gamemode != shareware && singleplayer));
+              && (!vanillaparm && gamemode != shareware));
 
     // [JN] If level can be modified, setup it's fixes and flow/fall effects.
     if (canmodify)
