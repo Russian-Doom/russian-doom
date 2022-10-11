@@ -190,8 +190,6 @@ animdef_t animdefs[] = {
     {false, "FLATHUH4", "FLATHUH1", 9}, // Super Lava (ex. 8)
     {true, "LAVAFL3", "LAVAFL1", 6},    // Texture: Lavaflow
     {true, "WATRWAL3", "WATRWAL1", 4},  // Texture: Waterfall
-    // [JN] Custom smooth lava flat
-    {false, "SMLAVA40", "SMLAVA1",  1},
     {-1,    "",         "",         0},
 };
 
@@ -205,32 +203,11 @@ struct
     int type;
 } TerrainTypeDefs[] =
 {
-    // [JN] Account all animation flat frames as terrain types.
     { "FLTWAWA1", FLOOR_WATER },
-    { "FLTWAWA2", FLOOR_WATER },
-    { "FLTWAWA3", FLOOR_WATER },
     { "FLTFLWW1", FLOOR_WATER },
-    { "FLTFLWW2", FLOOR_WATER },
-    { "FLTFLWW3", FLOOR_WATER },
     { "FLTLAVA1", FLOOR_LAVA },
-    { "FLTLAVA2", FLOOR_LAVA },
-    { "FLTLAVA3", FLOOR_LAVA },
-    { "FLTLAVA4", FLOOR_LAVA },
     { "FLATHUH1", FLOOR_LAVA },
-    { "FLATHUH2", FLOOR_LAVA },
-    { "FLATHUH3", FLOOR_LAVA },
-    { "FLATHUH4", FLOOR_LAVA },
     { "FLTSLUD1", FLOOR_SLUDGE },
-    { "FLTSLUD2", FLOOR_SLUDGE },
-    { "FLTSLUD3", FLOOR_SLUDGE },
-    // [JN] Custom smooth lava flat
-    { "SMLAVA1",  FLOOR_LAVA },
-    // [JN] Custom flats for scrolling in any direction
-    { "WATSCRN1", FLOOR_WATER },
-    { "WATSCRE1", FLOOR_WATER },
-    { "WATSCRS1", FLOOR_WATER },
-    { "WATSCRW1", FLOOR_WATER },
-    { "WATSCRX1", FLOOR_WATER },
     { "END", -1 }
 };
 

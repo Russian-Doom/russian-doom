@@ -1933,15 +1933,15 @@ mapformat_t P_CheckMapFormat (int lumpnum)
     &&  !strncasecmp(lumpinfo[b]->name, "BEHAVIOR", 8))
     {
         fprintf(stderr, english_language ? 
-                "P_CheckMapFormat: Hexen format (" :
-                "P_CheckMapFormat: формат Hexen (");
+                "Hexen format (" :
+                "формат Hexen (");
         format |= HEXEN;
     }
     else
     {
         fprintf(stderr, english_language ?
-                "P_CheckMapFormat: Doom format (" :
-                "P_CheckMapFormat: формат Doom (");
+                "Doom format (" :
+                "формат Doom (");
     }
 
     if (!((b = lumpnum+ML_NODES) < numlumps
@@ -2008,6 +2008,14 @@ void P_SetupLevel (int episode, int map, int playermask, skill_t skill)
     }
     players[consoleplayer].viewz = 1;   // will be set by player think
 
+    // [crispy] stop demo warp mode now
+    if (demowarp == map)
+    {
+        demowarp = 0;
+        nodrawers = false;
+        singletics = false;
+    }
+
     S_Start();  // make sure all sounds are stopped before Z_FreeTags
 
     Z_FreeTags(PU_LEVEL, PU_PURGELEVEL - 1);
@@ -2026,15 +2034,18 @@ void P_SetupLevel (int episode, int map, int playermask, skill_t skill)
     lumpnum = W_GetNumForName(lumpname);
 
     // [JN] Checking for multiple map lump names for allowing map fixes to work.
-    // Adaptaken from Doom Retro, thanks Brad Harding!
+    // Adaptaken from DOOM Retro, thanks Brad Harding!
     canmodify = (W_CheckMultipleLumps(lumpname) == 1
-              && (!netgame && !vanillaparm && gamemode != shareware && singleplayer));
+              && (!vanillaparm && gamemode != shareware));
 
     // [JN] If level can be modified, setup it's fixes and flow/fall effects.
     if (canmodify)
     {
         P_SetupFixes(episode, map);
     }
+
+    // [JN] Indicate the map we are loading
+    fprintf(stderr, "P_SetupLevel: E%dM%d, ", gameepisode, gamemap);
 
     // [crispy] check and log map and nodes format
     crispy_mapformat = P_CheckMapFormat(lumpnum);

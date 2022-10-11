@@ -148,36 +148,6 @@ static const linefix_t linefix_e1m7[] =
 };
 
 // -----------------------------------------------------------------------------
-// E2M1:  THE CRATER
-// -----------------------------------------------------------------------------
-
-static const sectorfix_t sectorfix_e2m1[] =
-{
-    { heretic, 2, 1, 23, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 1, 28, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 1, 30, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 1, 32, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    SECTORFIX_END
-};
-
-// -----------------------------------------------------------------------------
-// E2M2:  THE LAVA PITS
-// -----------------------------------------------------------------------------
-
-static const sectorfix_t sectorfix_e2m2[] =
-{
-    { heretic, 2, 2,  95, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 2, 103, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 2, 104, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 2, 106, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 2, 108, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 2, 108, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 2, 114, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 2, 115, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    SECTORFIX_END
-};
-
-// -----------------------------------------------------------------------------
 // E2M3:  THE RIVER OF FIRE
 // -----------------------------------------------------------------------------
 
@@ -185,34 +155,6 @@ static const linefix_t linefix_e2m3[] =
 {
     { heretic, 2, 3, 1029, 1, "", "", "LAVA1", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     LINEFIX_END
-};
-
-static const sectorfix_t sectorfix_e2m3[] =
-{
-    { heretic, 2, 3,  16, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 3,  19, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 3,  26, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 3,  29, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 3,  53, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 3,  61, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 3,  63, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 3,  80, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 3,  82, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 3,  85, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 3,  87, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 3, 115, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    SECTORFIX_END
-};
-
-// -----------------------------------------------------------------------------
-// E2M4:  THE ICE GROTTO
-// -----------------------------------------------------------------------------
-
-static const sectorfix_t sectorfix_e2m4[] =
-{
-    { heretic, 2, 4, 33, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 4, 79, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    SECTORFIX_END
 };
 
 // -----------------------------------------------------------------------------
@@ -231,13 +173,6 @@ static const linefix_t linefix_e2m5[] =
     { heretic, 2, 5,  557, 0, "GRSTNPB", "", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { heretic, 2, 5, 1029, 1, "CHAINSD", "", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     LINEFIX_END
-};
-
-static const sectorfix_t sectorfix_e2m5[] =
-{
-    { heretic, 2, 5, 0, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 5, 3, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    SECTORFIX_END
 };
 
 // -----------------------------------------------------------------------------
@@ -267,24 +202,6 @@ static const linefix_t linefix_e2m7[] =
     { heretic, 2, 7, 629, 1, "LOOSERCK", "",       "",      16, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { heretic, 2, 7, 749, 0,         "", "",  "METL1",     -32, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     LINEFIX_END
-};
-
-static const sectorfix_t sectorfix_e2m7[] =
-{
-    { heretic, 2, 7, 105, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 7, 110, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 7, 111, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 7, 112, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 7, 113, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 7, 114, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 7, 115, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 7, 116, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 7, 117, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 7, 118, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 7, 119, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 7, 120, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 2, 7, 122, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    SECTORFIX_END
 };
 
 // -----------------------------------------------------------------------------
@@ -357,16 +274,6 @@ static const linefix_t linefix_e3m7[] =
 };
 
 // -----------------------------------------------------------------------------
-// E3M9:  THE AQUIFER
-// -----------------------------------------------------------------------------
-
-static const sectorfix_t sectorfix_e3m9[] =
-{
-    { heretic, 3, 9, 87, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    SECTORFIX_END
-};
-
-// -----------------------------------------------------------------------------
 // E4M1:  CATAFALQUE
 // -----------------------------------------------------------------------------
 
@@ -436,25 +343,6 @@ static const linefix_t linefix_e4m7[] =
     LINEFIX_END
 };
 
-static const sectorfix_t sectorfix_e4m7[] =
-{
-    { heretic, 4, 7,  50, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 4, 7,  95, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 4, 7,  96, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 4, 7,  99, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 4, 7, 104, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 4, 7, 105, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 4, 7, 125, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 4, 7, 157, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 4, 7, 187, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 4, 7, 225, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 4, 7, 306, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 4, 7, 307, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 4, 7, 338, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 4, 7, 340, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    SECTORFIX_END
-};
-
 // -----------------------------------------------------------------------------
 // E4M8:  SHATTERED BRIDGE
 // -----------------------------------------------------------------------------
@@ -466,16 +354,6 @@ static const linefix_t linefix_e4m8[] =
     { heretic, 4, 8, 384, 0, "", "", "", DEFAULT, DEFAULT, ML_DONTPEGTOP, DEFAULT, DEFAULT },
     { heretic, 4, 8, 411, 0, "", "", "", DEFAULT, DEFAULT, ML_DONTPEGTOP, DEFAULT, DEFAULT },
     LINEFIX_END
-};
-
-// -----------------------------------------------------------------------------
-// E4M9:  MAUSOLEUM
-// -----------------------------------------------------------------------------
-
-static const sectorfix_t sectorfix_e4m9[] =
-{
-    { heretic, 4, 9, 380, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    SECTORFIX_END
 };
 
 // -----------------------------------------------------------------------------
@@ -511,13 +389,6 @@ static const linefix_t linefix_e5m3[] =
     LINEFIX_END
 };
 
-static const sectorfix_t sectorfix_e5m3[] =
-{
-    { heretic, 5, 3, 176, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 5, 3, 210,        "", "",      56,      56, DEFAULT, DEFAULT, DEFAULT },
-    SECTORFIX_END
-};
-
 // -----------------------------------------------------------------------------
 // E5M4:  COURTYARD
 // -----------------------------------------------------------------------------
@@ -542,17 +413,6 @@ static const linefix_t linefix_e5m5[] =
     { heretic, 5, 5, 1636, 1,       "", "", "METL2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     { heretic, 5, 5, 1642, 1,       "", "", "METL2", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
     LINEFIX_END
-};
-
-static const sectorfix_t sectorfix_e5m5[] =
-{
-    { heretic, 5, 5, 192, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 5, 5, 196, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 5, 5, 197, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 5, 5, 219, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 5, 5, 268, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    { heretic, 5, 5, 272, "SMLAVA1", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT },
-    SECTORFIX_END
 };
 
 // -----------------------------------------------------------------------------
@@ -670,31 +530,14 @@ void P_SetupFixes (const int episode, const int map)
     else
     if (gameepisode == 2)
     {
-        if (gamemap == 1)
-        {
-            selected_sectorfix = sectorfix_e2m1;
-        }
-        else
-        if (gamemap == 2)
-        {
-            selected_sectorfix = sectorfix_e2m2;
-        }
-        else
         if (gamemap == 3)
         {
             selected_linefix   = linefix_e2m3;
-            selected_sectorfix = sectorfix_e2m3;
-        }
-        else
-        if (gamemap == 4)
-        {
-            selected_sectorfix = sectorfix_e2m4;
         }
         else
         if (gamemap == 5)
         {
             selected_linefix   = linefix_e2m5;
-            selected_sectorfix = sectorfix_e2m5;
         }
         else
         if (gamemap == 6)
@@ -705,7 +548,6 @@ void P_SetupFixes (const int episode, const int map)
         if (gamemap == 7)
         {
             selected_linefix   = linefix_e2m7;
-            selected_sectorfix = sectorfix_e2m7;
         }
     }
     else
@@ -735,11 +577,6 @@ void P_SetupFixes (const int episode, const int map)
         {
             selected_linefix   = linefix_e3m7;
         }
-        else
-        if (gamemap == 9)
-        {
-            selected_sectorfix = sectorfix_e3m9;
-        }
     }
     else
     if (gameepisode == 4)
@@ -762,17 +599,11 @@ void P_SetupFixes (const int episode, const int map)
         if (gamemap == 7)
         {
             selected_linefix   = linefix_e4m7;
-            selected_sectorfix = sectorfix_e4m7;
         }
         else
         if (gamemap == 8)
         {
             selected_linefix   = linefix_e4m8;
-        }
-        else
-        if (gamemap == 9)
-        {
-            selected_sectorfix = sectorfix_e4m9;
         }
     }
     else
@@ -786,7 +617,6 @@ void P_SetupFixes (const int episode, const int map)
         if (gamemap == 3)
         {
             selected_linefix   = linefix_e5m3;
-            selected_sectorfix = sectorfix_e5m3;
         }
         else
         if (gamemap == 4)
@@ -797,7 +627,6 @@ void P_SetupFixes (const int episode, const int map)
         if (gamemap == 5)
         {
             selected_linefix   = linefix_e5m5;
-            selected_sectorfix = sectorfix_e5m5;
         }
         else
         if (gamemap == 6)

@@ -91,6 +91,7 @@ boolean sendsave;               // send a save event next tic
 boolean usergame;               // ok to save / end game
 
 boolean timingdemo;             // if true, exit with report on completion
+boolean nodrawers = false;      // [crispy] for the demowarp feature
 int starttime;                  // for comparative timing purposes
 
 boolean deathmatch;             // only if started as net death
@@ -111,6 +112,7 @@ boolean longtics;               // specify high resolution turning in demos
 boolean lowres_turn;
 boolean shortticfix;            // calculate lowres turning like doom
 boolean demoplayback;
+boolean netdemo;
 boolean demoextend;
 byte *demobuffer, *demo_p, *demoend;
 boolean singledemo;             // quit after playing a demo from cmdline
@@ -713,14 +715,6 @@ void G_DoLoadLevel(void)
 {
     int i;
 
-    // [JN] Properly remove paused state and resume music playing.
-    // Fixes a bug when pausing intermission screen causes locking up sound.
-    if (paused)
-    {
-        paused = false;
-        S_ResumeSound ();
-    }
-
     levelstarttic = gametic;    // for time calculation
     gamestate = GS_LEVEL;
     for (i = 0; i < MAXPLAYERS; i++)
@@ -1007,7 +1001,7 @@ void G_Ticker(void)
             if (demorecording)
                 G_WriteDemoTiccmd(cmd);
 
-            if (netgame && !(gametic % ticdup))
+            if (netgame && !netdemo && !(gametic % ticdup))
             {
                 if (gametic > BACKUPTICS
                     && consistancy[i][buf] != cmd->consistancy)
@@ -1833,6 +1827,7 @@ void G_InitNew(skill_t skill, int episode, int map, int fast_monsters)
     paused = false;
     demorecording = false;
     demoplayback = false;
+    netdemo = false;
     // [JN] Reset automap scale. Fixes:
     // https://doomwiki.org/wiki/Automap_scale_preserved_after_warps_in_Heretic_and_Hexen
     automapactive = false; 
@@ -2089,6 +2084,13 @@ void G_DeferedPlayDemo(char *name)
 {
     defdemoname = name;
     gameaction = ga_playdemo;
+
+    // [crispy] fast-forward demo up to the desired map
+    if (demowarp)
+    {
+        nodrawers = true;
+        singletics = true;
+    }
 }
 
 void G_DoPlayDemo(void)
@@ -2125,11 +2127,22 @@ void G_DoPlayDemo(void)
     for (i = 0; i < MAXPLAYERS; i++)
         playeringame[i] = (*demo_p++) != 0;
 
+    if (playeringame[1] || M_ParmExists("-solo-net")
+                        || M_ParmExists("-netdemo"))
+    {
+    	netgame = true;
+    }
+
     precache = false;           // don't spend a lot of time in loadlevel
     G_InitNew(skill, episode, map, 0);
     precache = true;
     usergame = false;
     demoplayback = true;
+
+    if (netgame)
+    {
+        netdemo = true;
+    }
 }
 
 
@@ -2163,13 +2176,28 @@ void G_TimeDemo(char *name)
         playeringame[i] = (*demo_p++) != 0;
     }
 
+    if (playeringame[1] || M_ParmExists("-solo-net")
+                        || M_ParmExists("-netdemo"))
+    {
+        netgame = true;
+    }
+
     G_InitNew(skill, episode, map, 0);
     starttime = I_GetTime();
+
+    // Disable screen rendering entirely,
+    // if command line parameter is present.
+    nodrawers = M_CheckParm ("-nodraw");
 
     usergame = false;
     demoplayback = true;
     timingdemo = true;
     singletics = true;
+
+    if (netgame)
+    {
+        netdemo = true;
+    }
 }
 
 
@@ -2213,6 +2241,8 @@ boolean G_CheckDemoStatus(void)
 
         W_ReleaseLumpName(defdemoname);
         demoplayback = false;
+        netdemo = false;
+        netgame = false;
         D_AdvanceDemo();
         return true;
     }
