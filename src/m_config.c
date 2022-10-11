@@ -111,57 +111,12 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(english_language),
 
     //!
-    // [JN] Doom PWAD autoloading
-    //
+    // Full path to a directory in which WAD files and dehacked patches
+    // can be placed to be automatically loaded on startup. A subdirectory
+    // of this directory matching the IWAD name is checked to find the
+    // files to load.
 
-    CONFIG_VARIABLE_STRING(autoload_global_pwad1),
-    CONFIG_VARIABLE_STRING(autoload_global_pwad2),
-    CONFIG_VARIABLE_STRING(autoload_global_pwad3),
-    CONFIG_VARIABLE_STRING(autoload_global_pwad4),
-
-    CONFIG_VARIABLE_STRING(autoload_doom1_pwad1),
-    CONFIG_VARIABLE_STRING(autoload_doom1_pwad2),
-    CONFIG_VARIABLE_STRING(autoload_doom1_pwad3),
-    CONFIG_VARIABLE_STRING(autoload_doom1_pwad4),
-
-    CONFIG_VARIABLE_STRING(autoload_doom2_pwad1),
-    CONFIG_VARIABLE_STRING(autoload_doom2_pwad2),
-    CONFIG_VARIABLE_STRING(autoload_doom2_pwad3),
-    CONFIG_VARIABLE_STRING(autoload_doom2_pwad4),
-
-    CONFIG_VARIABLE_STRING(autoload_plutonia_pwad1),
-    CONFIG_VARIABLE_STRING(autoload_plutonia_pwad2),
-    CONFIG_VARIABLE_STRING(autoload_plutonia_pwad3),
-    CONFIG_VARIABLE_STRING(autoload_plutonia_pwad4),
-
-    CONFIG_VARIABLE_STRING(autoload_tnt_pwad1),
-    CONFIG_VARIABLE_STRING(autoload_tnt_pwad2),
-    CONFIG_VARIABLE_STRING(autoload_tnt_pwad3),
-    CONFIG_VARIABLE_STRING(autoload_tnt_pwad4),
-
-    CONFIG_VARIABLE_STRING(autoload_freedoom1_pwad1),
-    CONFIG_VARIABLE_STRING(autoload_freedoom1_pwad2),
-    CONFIG_VARIABLE_STRING(autoload_freedoom1_pwad3),
-    CONFIG_VARIABLE_STRING(autoload_freedoom1_pwad4),
-
-    CONFIG_VARIABLE_STRING(autoload_freedoom2_pwad1),
-    CONFIG_VARIABLE_STRING(autoload_freedoom2_pwad2),
-    CONFIG_VARIABLE_STRING(autoload_freedoom2_pwad3),
-    CONFIG_VARIABLE_STRING(autoload_freedoom2_pwad4),
-
-    //!
-    // [JN] Heretic PWAD autoloading
-    //
-
-    CONFIG_VARIABLE_STRING(autoload_registered_pwad1),
-    CONFIG_VARIABLE_STRING(autoload_registered_pwad2),
-    CONFIG_VARIABLE_STRING(autoload_registered_pwad3),
-    CONFIG_VARIABLE_STRING(autoload_registered_pwad4),
-
-    CONFIG_VARIABLE_STRING(autoload_retail_pwad1),
-    CONFIG_VARIABLE_STRING(autoload_retail_pwad2),
-    CONFIG_VARIABLE_STRING(autoload_retail_pwad3),
-    CONFIG_VARIABLE_STRING(autoload_retail_pwad4),
+    CONFIG_VARIABLE_STRING(autoload_root),
 
     //!
     // @game strife

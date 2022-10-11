@@ -6,7 +6,7 @@ foreach(MODULE ${COMPILE_MODULES})
 	add_dependencies(man-${MODULE}-en man-${MODULE}-ru)
 
 	install(FILES $<TARGET_PROPERTY:man-${MODULE}-ru,OUT_FILES>
-		DESTINATION "share/man/man6/ru"
+		DESTINATION "${CMAKE_INSTALL_MANDIR}/man6/ru"
 		COMPONENT ${MODULE}
 	)
 endforeach()

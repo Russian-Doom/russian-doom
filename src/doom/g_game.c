@@ -1988,7 +1988,7 @@ G_DeferedInitNew
 
 void G_DoNewGame (void) 
 {
-    idmusnum = -1;  // [JN] e6y: allow new level's music to be loaded
+    idmusnum = -1;  // [JN] Andrey Budko: allow new level's music to be loaded
     demoplayback = false; 
     netdemo = false;
     netgame = false;

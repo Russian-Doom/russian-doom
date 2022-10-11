@@ -462,7 +462,7 @@ static void P_LoadSegs (const int lump)
         li->linedef = ldef;
         side = SHORT(ml->side);
 
-        // e6y: check for wrong indexes
+        // Andrey Budko: check for wrong indexes
         if ((unsigned)ldef->sidenum[side] >= (unsigned)numsides)
         {
             I_Error(english_language ?

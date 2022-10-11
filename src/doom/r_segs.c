@@ -567,7 +567,7 @@ void R_StoreWallRange (const int start, const int stop)
     rw_normalangle = curline->r_angle + ANG90;
 
     // [crispy] fix long wall wobble
-    // thank you very much Linguica, e6y and kb1
+    // thank you very much Linguica, Andrey Budko and kb1
     // http://www.doomworld.com/vb/post/1340718
     // shift right to avoid possibility of int64 overflow in rw_distance calculation
     dx = ((int64_t)curline->v2->px - curline->v1->px) >> 1;

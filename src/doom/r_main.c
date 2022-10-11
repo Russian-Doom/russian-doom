@@ -70,7 +70,7 @@ int viewangletox[FINEANGLES/2];
 // The xtoviewangleangle[] table maps a screen pixel
 // to the lowest viewangle that maps back to x ranges
 // from clipangle to -clipangle.
-// [JN] e6y: resolution limitation is removed
+// [JN] Andrey Budko: resolution limitation is removed
 angle_t *xtoviewangle;  // killough 2/8/98
 
 // [crispy] calculate the linear sky angle component here

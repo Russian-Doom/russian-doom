@@ -5,7 +5,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 project("International Doom" LANGUAGES C NONE)
 
 # Versions
-set(BUILD_DOOM_VERSION "6.0")
+set(BUILD_DOOM_VERSION "6.0.1")
 set(BUILD_HERETIC_VERSION "5.3")
 set(BUILD_HEXEN_VERSION "5.2")
 set(BUILD_STRIFE_VERSION "0.0")
@@ -71,6 +71,8 @@ add_compile_options_checked(
     -Wno-unknown-pragmas
     -Wno-unused-result
     -Wno-format-nonliteral
+    -Wno-discarded-qualifiers
+    -Wno-incompatible-pointer-types-discards-qualifiers
 )
 
 if(MSVC)
@@ -122,6 +124,7 @@ check_symbol_exists(mmap "sys/mman.h" HAVE_MMAP)
 check_symbol_exists(i386_iopl "i386/pio.h" HAVE_LIBI386)
 check_symbol_exists(amd64_iopl "amd64/pio.h" HAVE_LIBAMD64)
 
+check_include_file("dirent.h" HAVE_DIRENT_H)
 check_include_file("dev/isa/spkrio.h" HAVE_DEV_ISA_SPKRIO_H)
 check_include_file("dev/speaker/speaker.h" HAVE_DEV_SPEAKER_SPEAKER_H)
 check_include_file("linux/kd.h" HAVE_LINUX_KD_H)
@@ -203,6 +206,8 @@ else()
         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
     )
 endif()
+
+include(GNUInstallDirs)
 
 foreach(SUBDIR win_libs man textscreen opl pcsound src)
     add_subdirectory("${SUBDIR}")

@@ -383,7 +383,7 @@ static vissprite_t* R_NewVisSprite (void)
         num_vissprite_alloc = num_vissprite_alloc ? num_vissprite_alloc*2 : 128;
         vissprites = I_Realloc(vissprites,num_vissprite_alloc*sizeof(*vissprites));
 
-        // [JN] e6y: set all fields to zero
+        // [JN] Andrey Budko: set all fields to zero
         memset(vissprites + num_vissprite_alloc_prev, 0,
         (num_vissprite_alloc - num_vissprite_alloc_prev)*sizeof(*vissprites));
     }
@@ -849,7 +849,7 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
         }
         else
         if (thing->sprite == SPR_CEYE   // Evil Eye
-        ||  thing->sprite == SPR_CEYE)  // Floating Skull Rock
+        ||  thing->sprite == SPR_FSKU)  // Floating Skull Rock
         {
             vis->colormap[0] = vis->colormap[1]
                              = &colormaps[bmap_glow*256];
@@ -1095,7 +1095,7 @@ static void R_DrawPSprite (const pspdef_t *psp)
     
     vis->brightmap = R_BrightmapForState(psp->state - states);
 	
-    // [JN] e6y: interpolation for weapon bobbing
+    // [JN] Andrey Budko: interpolation for weapon bobbing
     if (uncapped_fps && weapon_bobbing)
     {
         typedef struct interpolate_s
@@ -1275,7 +1275,7 @@ static void R_DrawSprite (const vissprite_t *spr)
     // (pointer check was originally nonportable
     // and buggy, by going past LEFT end of array):
 
-    // [JN] e6y: optimization
+    // [JN] Andrey Budko: optimization
 
     if (drawsegs_xrange_size)
     {
@@ -1364,7 +1364,7 @@ void R_DrawMasked (void)
 
     R_SortVisSprites();
 
-    // [JN] e6y
+    // [JN] Andrey Budko
     // Makes sense for scenes with huge amount of drawsegs.
     // ~12% of speed improvement on epic.wad map05
     for (i = 0 ; i < DS_RANGES_COUNT ; i++)
@@ -1394,7 +1394,7 @@ void R_DrawMasked (void)
                 drawsegs_xranges[0].items[drawsegs_xranges[0].count].x2 = ds->x2;
                 drawsegs_xranges[0].items[drawsegs_xranges[0].count].user = ds;
 
-                // [JN] e6y: ~13% of speed improvement on sunder.wad map10
+                // [JN] Andrey Budko: ~13% of speed improvement on sunder.wad map10
                 if (ds->x1 < centerx)
                 {
                     drawsegs_xranges[1].items[drawsegs_xranges[1].count] = 

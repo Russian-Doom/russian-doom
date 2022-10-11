@@ -41,6 +41,7 @@
 #include "i_endoom.h"
 #include "i_controller.h"
 #include "i_input.h"
+#include "i_glob.h"
 #include "i_sound.h"
 #include "i_system.h"
 #include "i_timer.h"
@@ -101,17 +102,12 @@ int english_language = -1;
 int english_language = 1;
 #endif
 
-/*
-================================================================================
-=
-= [JN] PWAD autoloading. Initially all 4 values are empty.
-=
-================================================================================
-*/
+// -----------------------------------------------------------------------------
+// [JN] PWAD autoloading
+// -----------------------------------------------------------------------------
 
-static char *autoloadglobalpwad[10]     = { "", "", "", "" };
-static char *autoloadregisteredpwad[10] = { "", "", "", "" };
-static char *autoloadretailpwad[10]     = { "", "", "", "" };
+char* autoload_root = "";
+char* autoload_dir  = NULL;
 
 //------------------------------------------------------------------------------
 //
@@ -953,20 +949,8 @@ void D_BindVariables(void)
     // [JN] Support for fallback to the English language.
     M_BindIntVariable("english_language",       &english_language);
 
-    // [JN] PWAD autoloading. Note that we are using variables 1..4, not 0...3.
-    for (i = 1 ; i < 5 ; ++i)
-    {
-        static char pwad[32];
-
-        M_snprintf(pwad, sizeof(pwad), "autoload_global_pwad%i", i);
-        M_BindStringVariable(pwad, &autoloadglobalpwad[i]);
-
-        M_snprintf(pwad, sizeof(pwad), "autoload_registered_pwad%i", i);
-        M_BindStringVariable(pwad, &autoloadregisteredpwad[i]);
-
-        M_snprintf(pwad, sizeof(pwad), "autoload_retail_pwad%i", i);
-        M_BindStringVariable(pwad, &autoloadretailpwad[i]);
-    }
+    // [JN] PWAD autoloading
+    M_BindStringVariable("autoload_root", &autoload_root);
 
     // Rendering
     M_BindIntVariable("uncapped_fps",           &uncapped_fps);
@@ -1101,6 +1085,48 @@ static void D_Endoom(void)
     }
 
     I_Endoom(endoom_data);
+}
+
+void AutoloadFiles(const char* wadName);
+
+void LoadFile(char* filePath, boolean autoload)
+{
+    printf(english_language ?
+           " adding: %s\n" :
+           " добавление: %s\n",
+           filePath);
+    W_MergeFile(filePath);
+
+    char* fileName = M_FileName(filePath);
+
+    // * Add special wad support here
+
+    if(autoload && M_StrCaseStr(fileName, ".wad"))
+    {
+        AutoloadFiles(fileName);
+    }
+}
+
+void AutoloadFiles(const char* wadName)
+{
+    char* autoload_subdir = M_StringDuplicate(wadName);
+    M_ForceLowercase(autoload_subdir);
+    char* autoload_path = M_StringJoin(autoload_dir, DIR_SEPARATOR_S, autoload_subdir, NULL);
+    free(autoload_subdir);
+
+    glob_t* glob;
+    char* filename;
+
+    glob = I_StartMultiGlob(autoload_path, GLOB_FLAG_NOCASE|GLOB_FLAG_SORTED, "*.*", NULL);
+    while((filename = I_NextGlob(glob)) != NULL)
+    {
+        printf(english_language ?
+               " [Autoload]" :
+               " [Автозагрузка]");
+        LoadFile(filename, false);
+    }
+    I_EndGlob(glob);
+    free(autoload_path);
 }
 
 //---------------------------------------------------------------------------
@@ -1465,49 +1491,21 @@ void D_DoomMain(void)
     // [JN] PWAD autoloading routine. Scan through all 3 
     // available variables, and don't load an empty ones. 
     // Note: you cannot use autoload with the Shareware, buy a full version!
-    if (gamemode != shareware)
+    int autoloadDir_param = M_CheckParmWithArgs("-autoloadroot", 1);
+    if(autoloadDir_param)
     {
-        int i;
+        autoload_dir = myargv[autoloadDir_param + 1];
+    }
+    else
+    {
+        autoload_dir = autoload_root;
+    }
 
-        for (i = 1 ; i < 5 ; ++i)
-        {
-            // [JN] If autoloads have not been set, initialize with defaults.
-            if (autoloadglobalpwad[i] == NULL)
-                autoloadglobalpwad[i] = "";
-            if (autoloadregisteredpwad[i] == NULL)
-                autoloadregisteredpwad[i] = "";
-            if (autoloadretailpwad[i] == NULL)
-                autoloadretailpwad[i] = "";
-
-            if (strcmp(autoloadglobalpwad[i], ""))
-            {
-                W_MergeFile(autoloadglobalpwad[i]);
-                printf(english_language ? 
-                      " autoloading: %s\n" : " автозагрузка: %s\n",
-                        autoloadglobalpwad[i]);
-            }
-
-            if (gamemode == registered)
-            {
-                if (strcmp(autoloadregisteredpwad[i], ""))
-                {
-                    W_MergeFile(autoloadregisteredpwad[i]);
-                    printf(english_language ?
-                           " autoloading: %s\n" : " автозагрузка: %s\n",
-                           autoloadregisteredpwad[i]);
-                }
-            }
-            else if (gamemode == retail)
-            {
-                if (strcmp(autoloadretailpwad[i], ""))
-                {
-                    W_MergeFile(autoloadretailpwad[i]);
-                    printf(english_language ?
-                           " autoloading: %s\n" : " автозагрузка: %s\n",
-                           autoloadretailpwad[i]);
-                }
-            }
-        }
+    boolean allowAutoload = gamemode != shareware && !M_ParmExists("-noautoload") && strcmp(autoload_dir, "") != 0;
+    if(allowAutoload)
+    {
+        AutoloadFiles("heretic-all");
+        AutoloadFiles(iwadfile);
     }
 
     // [JN] Параметр "-file" перенесен из w_main.c
@@ -1521,11 +1519,7 @@ void D_DoomMain(void)
         {
             char *filename;
             filename = D_TryFindWADByName(myargv[newpwadfile]);
-            printf(english_language ?
-                   " adding: %s\n" :
-                   " добавление: %s\n",
-                   filename);
-            W_MergeFile(filename);
+            LoadFile(filename, allowAutoload);
         }
     }
 
