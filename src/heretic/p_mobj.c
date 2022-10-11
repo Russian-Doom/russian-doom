@@ -583,16 +583,16 @@ void P_ZMovement(mobj_t * mo)
                 mo->z += FLOATSPEED;
         }
     }
-    if (mo->player && mo->flags2 & MF2_FLY && !(mo->z <= mo->floorz)
-        && leveltime & 2)
+    if (mo->player && mo->flags2 & MF2_FLY && !(mo->z <= mo->floorz) && leveltime & 2)
     {
-        // [JN] Smooth floating
         if (singleplayer && !vanillaparm)
         {
+            // [JN] Smooth floating amplitude.
             mo->z += finesine[(FINEANGLES/160*gametic)&FINEMASK]/16;
         }
         else
         {
+            // [JN] Keep demo / netgame sync.
             mo->z += finesine[(FINEANGLES / 20 * leveltime >> 2) & FINEMASK];
         }
     }
@@ -874,16 +874,15 @@ void P_MobjThinker(mobj_t * mobj)
     if (mobj->flags2 & MF2_FLOATBOB)
     {
         // Floating item bobbing motion
-        // [JN] Variable floating amplitude.
-        // TODO - simplify condition!
         if (singleplayer && !vanillaparm)
         {
+            // [JN] Variable floating amplitude.
             mobj->z = mobj->floorz + (floating_powerups == 1 ? FloatBobOffsets[(mobj->health++) & 63] :
                                       floating_powerups == 2 ? FloatBobOffsetsHalfed[(mobj->health++) & 63] : 0);
         }
         else
         {
-            // Keep demo sync.
+            // [JN] Keep demo / netgame sync.
             mobj->z = mobj->floorz + FloatBobOffsets[(mobj->health++) & 63];
         }
     }
