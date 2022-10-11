@@ -467,8 +467,7 @@ MENU_STATIC(HMainMenu,
     NULL, NULL, true,
     HMainItems, true,
     DrawMainMenu,
-    NULL,
-    0
+    NULL
 );
 
 static MenuItem_t ClassItems[] = {
@@ -484,8 +483,7 @@ MENU_STATIC(ClassMenu,
     NULL, NULL, true,
     ClassItems, true,
     DrawClassMenu,
-    &HMainMenu,
-    0
+    &HMainMenu
 );
 
 static MenuItem_t SkillItems_F[] = {
@@ -497,7 +495,7 @@ static MenuItem_t SkillItems_F[] = {
     I_EFUNC("AVATAR",    "DTHIBNTKM",  SCSkill, sk_ultranm)    // ВЕРШИТЕЛЬ
 };
 
-MENU_STATIC(SkillMenu_F,
+MENU_STATIC_SKILL(SkillMenu_F,
     115, 99,
     30,
     "CHOOSE SKILL LEVEL:", "EHJDTYM CKJ;YJCNB:", true, // УРОВЕНЬ СЛОЖНОСТИ:
@@ -516,7 +514,7 @@ static MenuItem_t SkillItems_C[] = {
     I_EFUNC("APOSTLE",   "FGJCNJK",   SCSkill, sk_ultranm)    // АПОСТОЛ
 };
 
-MENU_STATIC(SkillMenu_C,
+MENU_STATIC_SKILL(SkillMenu_C,
     118, 102,
     30,
     "CHOOSE SKILL LEVEL:", "EHJDTYM CKJ;YJCNB:", true, // УРОВЕНЬ СЛОЖНОСТИ:
@@ -535,7 +533,7 @@ static MenuItem_t SkillItems_M[] = {
     I_EFUNC("GREAT ARCHMAGE", "DTKBRBQ FH[BVFU", SCSkill, sk_ultranm)    // ВЕЛИКИЙ АРХИМАГ
 };
 
-MENU_STATIC(SkillMenu_M,
+MENU_STATIC_SKILL(SkillMenu_M,
     87, 69,
     30,
     "CHOOSE SKILL LEVEL:", "EHJDTYM CKJ;YJCNB:", true, // УРОВЕНЬ СЛОЖНОСТИ:
@@ -554,7 +552,7 @@ static MenuItem_t SkillItems_R[] = {
     I_EFUNC("QUICKETH ART THEE, FOUL WRAITH", "RJIVFHJV BCGJKYTY Z",    SCSkill, sk_ultranm)    // КОШМАРОМ ИСПОЛНЕН Я // [JN] Thanks to Jon Dowland for this :)
 };
 
-MENU_STATIC(SkillMenu_R,
+MENU_STATIC_SKILL(SkillMenu_R,
     38, 38,
     30,
     "CHOOSE SKILL LEVEL:", "EHJDTYM CKJ;YJCNB:", true, // УРОВЕНЬ СЛОЖНОСТИ:
@@ -585,8 +583,7 @@ MENU_STATIC(RDOptionsMenu,
     "OPTIONS", "YFCNHJQRB", false,
     RDOptionsItems, true,
     DrawOptionsMenu,
-    &HMainMenu,
-    0
+    &HMainMenu
 );
 
 // -----------------------------------------------------------------------------
@@ -611,8 +608,7 @@ MENU_STATIC(RenderingMenu,
     "RENDERING OPTIONS", "YFCNHJQRB DBLTJ", false, // НАСТРОЙКИ ВИДЕО
     RenderingItems, false,
     DrawRenderingMenu,
-    &RDOptionsMenu,
-    1
+    &RDOptionsMenu
 );
 
 // -----------------------------------------------------------------------------
@@ -639,8 +635,7 @@ MENU_STATIC(DisplayMenu,
     "DISPLAY OPTIONS", "YFCNHJQRB \'RHFYF", false, // НАСТРОЙКИ ЭКРАНА
     DisplayItems, false,
     DrawDisplayMenu,
-    &RDOptionsMenu,
-    1
+    &RDOptionsMenu
 );
 
 // -----------------------------------------------------------------------------
@@ -664,8 +659,7 @@ MENU_STATIC(ColorMenu,
     "COLOR OPTIONS", "YFCNHJQRF WDTNF", false,  // НАСТРОЙКИ ЦВЕТА
     ColorItems, false,
     DrawColorMenu,
-    &DisplayMenu,
-    0
+    &DisplayMenu
 );
 
 // -----------------------------------------------------------------------------
@@ -695,8 +689,7 @@ MENU_STATIC(MessagesMenu,
     "MESSAGES AND TEXTS", "CJJ,OTYBZ B NTRCNS", false, // СООБЩЕНИЯ И ТЕКСТЫ
     MessagesItems, false,
     DrawMessagesMenu,
-    &DisplayMenu,
-    1
+    &DisplayMenu
 );
 
 // -----------------------------------------------------------------------------
@@ -720,8 +713,7 @@ MENU_STATIC(AutomapMenu,
     "AUTOMAP SETTINGS", "YFCNHJQRB RFHNS", false, // НАСТРОЙКИ КАРТЫ
     AutomapItems, false,
     DrawAutomapMenu,
-    &DisplayMenu,
-    0
+    &DisplayMenu
 );
 
 // -----------------------------------------------------------------------------
@@ -747,8 +739,7 @@ MENU_STATIC(SoundMenu,
     "SOUND OPTIONS", "YFCNHJQRB PDERF", false, // НАСТРОЙКИ ЗВУКА
     SoundItems, false,
     DrawSoundMenu,
-    &RDOptionsMenu,
-    1
+    &RDOptionsMenu
 );
 
 // -----------------------------------------------------------------------------
@@ -772,8 +763,7 @@ MENU_STATIC(SoundSysMenu,
     "SOUND SYSTEM SETTINGS", "YFCNHJQRB PDERJDJQ CBCNTVS", false, // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ
     SoundSysItems, false,
     DrawSoundSystemMenu,
-    &SoundMenu,
-    1
+    &SoundMenu
 );
 
 // -----------------------------------------------------------------------------
@@ -804,8 +794,7 @@ MENU_STATIC(ControlsMenu,
     "CONTROL SETTINGS", "EGHFDKTYBT", false, // УПРАВЛЕНИЕ
     ControlsItems, false,
     DrawControlsMenu,
-    &RDOptionsMenu,
-    1
+    &RDOptionsMenu
 );
 
 // -----------------------------------------------------------------------------
@@ -845,8 +834,7 @@ MENU_STATIC_PAGED(Bindings1Menu,
     Bindings1Items, false,
     M_RD_Draw_Bindings,
     &ControlsMenu,
-    &BindingsPageDescriptor,
-    1
+    &BindingsPageDescriptor
 );
 
 // -----------------------------------------------------------------------------
@@ -879,8 +867,7 @@ MENU_STATIC_PAGED(Bindings2Menu,
     Bindings2Items, false,
     M_RD_Draw_Bindings,
     &ControlsMenu,
-    &BindingsPageDescriptor,
-    1
+    &BindingsPageDescriptor
 );
 
 // -----------------------------------------------------------------------------
@@ -913,8 +900,7 @@ MENU_STATIC_PAGED(Bindings3Menu,
     Bindings3Items, false,
     M_RD_Draw_Bindings,
     &ControlsMenu,
-    &BindingsPageDescriptor,
-    1
+    &BindingsPageDescriptor
 );
 
 // -----------------------------------------------------------------------------
@@ -947,8 +933,7 @@ MENU_STATIC_PAGED(Bindings4Menu,
     Bindings4Items, false,
     M_RD_Draw_Bindings,
     &ControlsMenu,
-    &BindingsPageDescriptor,
-    0
+    &BindingsPageDescriptor
 );
 
 // -----------------------------------------------------------------------------
@@ -981,8 +966,7 @@ MENU_STATIC_PAGED(Bindings5Menu,
     Bindings5Items, false,
     M_RD_Draw_Bindings,
     &ControlsMenu,
-    &BindingsPageDescriptor,
-    1
+    &BindingsPageDescriptor
 );
 
 // -----------------------------------------------------------------------------
@@ -1015,8 +999,7 @@ MENU_STATIC_PAGED(Bindings6Menu,
     Bindings6Items, false,
     M_RD_Draw_Bindings,
     &ControlsMenu,
-    &BindingsPageDescriptor,
-    1
+    &BindingsPageDescriptor
 );
 
 // -----------------------------------------------------------------------------
@@ -1049,8 +1032,7 @@ MENU_STATIC_PAGED(Bindings7Menu,
     Bindings7Items, false,
     M_RD_Draw_Bindings,
     &ControlsMenu,
-    &BindingsPageDescriptor,
-    0
+    &BindingsPageDescriptor
 );
 
 // -----------------------------------------------------------------------------
@@ -1083,8 +1065,7 @@ MENU_STATIC_PAGED(Bindings8Menu,
     Bindings8Items, false,
     M_RD_Draw_Bindings,
     &ControlsMenu,
-    &BindingsPageDescriptor,
-    1
+    &BindingsPageDescriptor
 );
 
 // -----------------------------------------------------------------------------
@@ -1102,8 +1083,7 @@ MENU_STATIC(ResetControlsMenu,
     "", "", false,
     ResetControlsItems, false,
     DrawResetControlsMenu,
-    &Bindings8Menu,
-    0
+    &Bindings8Menu
 );
 
 // -----------------------------------------------------------------------------
@@ -1132,8 +1112,7 @@ MENU_STATIC(GamepadSelectMenu,
     "GAMEPAD SETTINGS", "YFCNHJQRB UTQVGFLF", false, // Настройки геймпада
     GamepadSelectItems, false,
     DrawGamepadSelectMenu,
-    &ControlsMenu,
-    0
+    &ControlsMenu
 );
 
 static const PageDescriptor_t GamepadPageDescriptor = {
@@ -1168,8 +1147,7 @@ MENU_STATIC_PAGED(Gamepad1Menu,
     Gamepad1Items, false,
     DrawGamepadMenu_1,
     &GamepadSelectMenu,
-    &GamepadPageDescriptor,
-    0
+    &GamepadPageDescriptor
 );
 
 static MenuItem_t Gamepad2Items[] = {
@@ -1198,8 +1176,7 @@ MENU_STATIC_PAGED(Gamepad2Menu,
     Gamepad2Items, false,
     DrawGamepadMenu_2,
     &GamepadSelectMenu,
-    &GamepadPageDescriptor,
-    0
+    &GamepadPageDescriptor
 );
 
 // -----------------------------------------------------------------------------
@@ -1237,8 +1214,7 @@ MENU_STATIC_PAGED(Gameplay1Menu,
     Gameplay1Items, false,
     DrawGameplay1Menu,
     &RDOptionsMenu,
-    &GameplayPageDescriptor,
-    1
+    &GameplayPageDescriptor
 );
 
 // -----------------------------------------------------------------------------
@@ -1270,8 +1246,7 @@ MENU_STATIC_PAGED(Gameplay2Menu,
     Gameplay2Items, false,
     DrawGameplay2Menu,
     &RDOptionsMenu,
-    &GameplayPageDescriptor,
-    1
+    &GameplayPageDescriptor
 );
 
 // -----------------------------------------------------------------------------
@@ -1303,8 +1278,7 @@ MENU_STATIC_PAGED(Gameplay3Menu,
     Gameplay3Items, false,
     DrawGameplay3Menu,
     &RDOptionsMenu,
-    &GameplayPageDescriptor,
-    1
+    &GameplayPageDescriptor
 );
 
 // -----------------------------------------------------------------------------
@@ -1344,8 +1318,7 @@ MENU_STATIC_PAGED(LevelSelectMenu1,
     Level1Items, false,
     DrawLevelSelect1Menu,
     &RDOptionsMenu,
-    &LevelSelectPageDescriptor,
-    0
+    &LevelSelectPageDescriptor
 );
 
 // -----------------------------------------------------------------------------
@@ -1379,8 +1352,7 @@ MENU_STATIC_PAGED(LevelSelectMenu2_F,
     Level2Items_F, false,
     DrawLevelSelect2Menu,
     &RDOptionsMenu,
-    &LevelSelectPageDescriptor,
-    1
+    &LevelSelectPageDescriptor
 );
 
 static MenuItem_t Level2Items_C[] = {
@@ -1410,8 +1382,7 @@ MENU_STATIC_PAGED(LevelSelectMenu2_C,
     Level2Items_C, false,
     DrawLevelSelect2Menu,
     &RDOptionsMenu,
-    &LevelSelectPageDescriptor,
-    1
+    &LevelSelectPageDescriptor
 );
 
 static MenuItem_t Level2Items_M[] = {
@@ -1441,8 +1412,7 @@ MENU_STATIC_PAGED(LevelSelectMenu2_M,
     Level2Items_M, false,
     DrawLevelSelect2Menu,
     &RDOptionsMenu,
-    &LevelSelectPageDescriptor,
-    1
+    &LevelSelectPageDescriptor
 );
 
 // -----------------------------------------------------------------------------
@@ -1476,8 +1446,7 @@ MENU_STATIC_PAGED(LevelSelectMenu3,
     Level3Items, false,
     DrawLevelSelect3Menu,
     &RDOptionsMenu,
-    &LevelSelectPageDescriptor,
-    0
+    &LevelSelectPageDescriptor
 );
 
 // -----------------------------------------------------------------------------
@@ -1511,8 +1480,7 @@ MENU_STATIC_PAGED(LevelSelectMenu4,
     Level4Items, false,
     DrawLevelSelect4Menu,
     &RDOptionsMenu,
-    &LevelSelectPageDescriptor,
-    0
+    &LevelSelectPageDescriptor
 );
 
 // -----------------------------------------------------------------------------
@@ -1546,8 +1514,7 @@ MENU_STATIC_PAGED(LevelSelectMenu5,
     Level5Items, false,
     DrawLevelSelect5Menu,
     &RDOptionsMenu,
-    &LevelSelectPageDescriptor,
-    0
+    &LevelSelectPageDescriptor
 );
 
 // -----------------------------------------------------------------------------
@@ -1565,8 +1532,7 @@ MENU_STATIC(ResetSettings,
     "", "", false,
     ResetSettingstems, false,
     DrawResetSettingsMenu,
-    &RDOptionsMenu,
-    0
+    &RDOptionsMenu
 );
 
 // -----------------------------------------------------------------------------
@@ -1587,8 +1553,7 @@ MENU_STATIC(VanillaOptionsMenu,
     NULL, NULL, true,
     VanillaOptionsItems, true,
     DrawOptionsMenu_Vanilla,
-    &HMainMenu,
-    0
+    &HMainMenu
 );
 
 static MenuItem_t VanillaOptions2Items[] = {
@@ -1606,8 +1571,7 @@ MENU_STATIC(VanillaOptions2Menu,
     NULL, NULL, true,
     VanillaOptions2Items, true,
     DrawOptions2Menu_Vanilla,
-    &VanillaOptionsMenu,
-    0
+    &VanillaOptionsMenu
 );
 
 static MenuItem_t FilesItems[] = {
@@ -1621,8 +1585,7 @@ MENU_STATIC(FilesMenu,
     NULL, NULL, true,
     FilesItems, true,
     DrawFilesMenu,
-    &HMainMenu,
-    0
+    &HMainMenu
 );
 
 static MenuItem_t LoadItems[] = {
@@ -1641,8 +1604,7 @@ MENU_STATIC(LoadMenu,
     NULL, NULL, true, // ЗАГРУЗИТЬ ИГРУ
     LoadItems, true,
     DrawSaveLoadMenu,
-    &FilesMenu,
-    0
+    &FilesMenu
 );
 
 static MenuItem_t SaveItems[] = {
@@ -1661,8 +1623,7 @@ MENU_STATIC(SaveMenu,
     NULL, NULL, true,
     SaveItems, true,
     DrawSaveLoadMenu,
-    &FilesMenu,
-    0
+    &FilesMenu
 );
 
 // CODE --------------------------------------------------------------------
