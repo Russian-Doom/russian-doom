@@ -156,11 +156,21 @@ typedef struct Menu_s
      */
     const PageDescriptor_t* const pageDescriptor;
 
-    /** The initial value of this field must be the index of the first clickable menu item */
     int lastOn;
 } Menu_t;
 
 #define MENU_STATIC(field,                \
+x_eng, x_rus,                             \
+y,                                        \
+title_eng, title_rus, replaceableBigFont, \
+items, bigFont,                           \
+drawFunc,                                 \
+prevMenu)                                 \
+static Menu_t field = {                   \
+x_eng, x_rus, y, title_eng, title_rus, replaceableBigFont, arrlen(items), items, \
+bigFont, drawFunc, NULL, prevMenu, NULL, -1}
+
+#define MENU_STATIC_SKILL(field,          \
 x_eng, x_rus,                             \
 y,                                        \
 title_eng, title_rus, replaceableBigFont, \
@@ -179,11 +189,10 @@ title_eng, title_rus, replaceableBigFont, \
 items, bigFont,                           \
 drawFunc,                                 \
 initFunc,                                 \
-prevMenu,                                 \
-lastOn)                                   \
+prevMenu)                                 \
 static Menu_t field = {                   \
 x_eng, x_rus, y, title_eng, title_rus, replaceableBigFont, arrlen(items), items, \
-bigFont, drawFunc, initFunc, prevMenu, NULL, lastOn}
+bigFont, drawFunc, initFunc, prevMenu, NULL, -1}
 
 #define MENU_STATIC_PAGED(field,          \
 x_eng, x_rus,                             \
@@ -192,11 +201,10 @@ title_eng, title_rus, replaceableBigFont, \
 items, bigFont,                           \
 drawFunc,                                 \
 prevMenu,                                 \
-pageDescriptor,                           \
-lastOn)                                   \
+pageDescriptor)                           \
 static Menu_t field =                     \
 {x_eng, x_rus, y, title_eng, title_rus, replaceableBigFont, arrlen(items), items, \
-bigFont, drawFunc, NULL, prevMenu, pageDescriptor, lastOn}
+bigFont, drawFunc, NULL, prevMenu, pageDescriptor, -1}
 
 #define MENU_DYNAMIC_PAGED(field,         \
 x_eng, x_rus,                             \
@@ -206,11 +214,10 @@ items, bigFont,                           \
 drawFunc,                                 \
 initFunc,                                 \
 prevMenu,                                 \
-pageDescriptor,                           \
-lastOn)                                   \
+pageDescriptor)                           \
 static Menu_t field =                     \
 {x_eng, x_rus, y, title_eng, title_rus, replaceableBigFont, arrlen(items), items, \
-bigFont, drawFunc, initFunc, prevMenu, pageDescriptor, lastOn}
+bigFont, drawFunc, initFunc, prevMenu, pageDescriptor, -1}
 
 extern Menu_t* MainMenu;
 extern Menu_t* CurrentMenu;

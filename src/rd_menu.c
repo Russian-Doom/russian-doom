@@ -736,7 +736,7 @@ void RD_Menu_SetMenu(const Menu_t* menu)
     if(CurrentMenu->initFunc != NULL)
         CurrentMenu->initFunc(CurrentMenu);
 
-    if(isActiveItem(&CurrentMenu->items[CurrentMenu->lastOn]))
+    if(CurrentMenu->lastOn > -1 && isActiveItem(&CurrentMenu->items[CurrentMenu->lastOn]))
         CurrentItPos = CurrentMenu->lastOn;
     else
         CurrentItPos = getNextActiveItemPos(CurrentMenu, CurrentMenu->lastOn);
@@ -752,7 +752,10 @@ void RD_Menu_ActivateMenu(void)
     MenuTime = 0;
 
     CurrentMenu = MainMenu;
-    CurrentItPos = CurrentMenu->lastOn;
+    if(CurrentMenu->lastOn > -1 && isActiveItem(&CurrentMenu->items[CurrentMenu->lastOn]))
+        CurrentItPos = CurrentMenu->lastOn;
+    else
+        CurrentItPos = getNextActiveItemPos(CurrentMenu, CurrentMenu->lastOn);
 
     RD_Menu_StartSound(MENU_SOUND_ACTIVATE);
 
