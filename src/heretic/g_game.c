@@ -790,6 +790,19 @@ boolean G_Responder(event_t * ev)
         return (true);
     }
 
+    // any other key pops up menu if in demos
+    if (gameaction == ga_nothing && !singledemo && (demoplayback || gamestate == GS_DEMOSCREEN)) 
+    { 
+        if (ev->type == ev_keydown
+        ||  ev->type == ev_mouse_keydown
+        ||  ev->type == ev_controller_keydown)
+        { 
+            RD_Menu_ActivateMenu();
+            return true; 
+        } 
+        return false; 
+    }
+
     if (gamestate == GS_LEVEL)
     {
         if (CT_Responder(ev))
