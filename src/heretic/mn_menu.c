@@ -6065,7 +6065,9 @@ boolean MN_Responder(event_t * event)
 
     if (!menuactive)
     {
-        if (BK_isKeyDown(event, bk_menu_activate) || gamestate == GS_DEMOSCREEN || demoplayback)
+        // [JN] Open Main Menu only by pressing it's key to allow certain 
+        // actions like automap opening and corsshair toggling to be invoked any time.
+        if (BK_isKeyDown(event, bk_menu_activate) /*|| gamestate == GS_DEMOSCREEN || demoplayback*/)
         {
             RD_Menu_ActivateMenu();
             return (true);
