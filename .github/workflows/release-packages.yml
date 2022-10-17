@@ -54,7 +54,7 @@ jobs:
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libsamplerate
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libpng
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Configure
         id: configure
