@@ -134,11 +134,11 @@ static int player_class;
 // 35 fps clock adjusted by offsetms milliseconds
 // [crispy] variable rendering framerate
 
-int GetAdjustedTimeN(const int N)
+uint64_t GetAdjustedTimeN(const int N)
 {
-    int time_ms;
+    uint64_t time_ms;
 
-    time_ms = I_GetTimeMS();
+    time_ms = I_GetTimeMS64();
 
     if (new_sync)
     {
@@ -151,7 +151,7 @@ int GetAdjustedTimeN(const int N)
     return (time_ms * N) / 1000;
 }
 
-static int GetAdjustedTime(void)
+static uint64_t GetAdjustedTime(void)
 {
     return GetAdjustedTimeN(TICRATE);
 }
