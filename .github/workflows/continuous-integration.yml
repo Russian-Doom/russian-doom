@@ -96,7 +96,7 @@ jobs:
                 $build_portable \
                 -S . -B build
           sha_short=$(echo ${{ github.sha }} | cut -c1-7)
-          echo "::set-output name=sha_short::$sha_short"
+          echo "sha_short=$sha_short" >> $GITHUB_OUTPUT
 
       - name: Build
         run: |
