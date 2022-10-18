@@ -82,8 +82,8 @@ jobs:
               game="doom"
               version="${{ github.ref_name }}"
           fi
-          echo "::set-output name=game::$game"
-          echo "::set-output name=version::$version"
+          echo "game=$game" >> $GITHUB_OUTPUT
+          echo "version=$version" >> $GITHUB_OUTPUT
           cmake -G "Ninja" -D COMPILE_DOOM="$compile_doom" -D COMPILE_HERETIC="$compile_heretic" -D COMPILE_HEXEN="$compile_hexen" -D COMPILE_STRIFE="$compile_strife" -D BUILD_VERSION_OVERWRITE="$version" -D CMAKE_BUILD_TYPE=Release -S . -B build
 
       - name: Build
