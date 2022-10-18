@@ -3,7 +3,7 @@ name: Update Wiki
 on:
   push:
     branches: ["master"]
-    paths: ["src/m_argv.c"]
+    paths: ["src/m_argv.c", "man/docgen.py", ".github/wiki_templates/*", ".github/workflows/update-wiki.yml"]
 
 jobs:
   Update-Wiki:
