@@ -92,28 +92,6 @@ static void ReopenConsoleHandles(void)
     }
 }
 
-static void ConnectOrCreateConsole(boolean consoleDemanded)
-{
-    wchar_t console_env[2] = {0};
-
-    if(!GetEnvironmentVariableW(L"_console", console_env, 2)
-    || wcsncmp(console_env, L"1", 1) != 0
-    || !AttachConsole(ATTACH_PARENT_PROCESS))
-    {
-        if(consoleDemanded)
-            RD_CreateWindowsConsole();
-        return;
-    }
-
-    SetEnvironmentVariableW(L"_console", NULL);
-
-    // We have a console window.
-    // Redirect input/output streams to that console's low-level handles, so things that use stdio work later on.
-    ReopenConsoleHandles();
-
-    console_connected = true;
-}
-
 void RD_CreateWindowsConsole(void)
 {
     DWORD mode;
@@ -233,8 +211,11 @@ void M_SetExeDir(void)
 
 void D_DoomMain (void);
 
-
+#ifdef _WIN32
+dll_export int InterDoom_Main(int argc, char** argv)
+#else
 int main(int argc, char **argv)
+#endif
 {
     // save arguments
 
@@ -272,9 +253,11 @@ int main(int argc, char **argv)
             english_language = 0;
     }
 
-    // [Dasperal] Connect to a console wrapper or
     // [JN] Create a console output window if any of CLI params demands it
-    ConnectOrCreateConsole(devparm || version_param || help_param);
+    if(!console_connected && (devparm || version_param || help_param))
+    {
+        RD_CreateWindowsConsole();
+    }
 #endif
 
     // Check for -lang param before loading response file to show potential errors in the correct language
