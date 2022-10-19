@@ -921,7 +921,7 @@ void I_FinishUpdate (void)
     {
         static int halftics_old;
         int halftics;
-        extern int GetAdjustedTimeN (const int N);
+        extern uint64_t GetAdjustedTimeN(const int N);
 
         while ((halftics = GetAdjustedTimeN(max_fps)) == halftics_old)
         {
