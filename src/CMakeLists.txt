@@ -173,14 +173,76 @@ endif()
 
 # Create executables
 foreach(MODULE ${COMPILE_MODULES})
-    add_executable("${PROGRAM_PREFIX}${MODULE}" WIN32
-        i_main.c
-        "${PROJECT_SOURCE_DIR}/data/${MODULE}_icon.c"
-    )
+    if(WIN32)
+        add_library("${PROGRAM_PREFIX}${MODULE}" SHARED EXCLUDE_FROM_ALL
+            i_main.c
+            "${PROJECT_SOURCE_DIR}/data/${MODULE}_icon.c"
+        )
+        set_target_properties("${PROGRAM_PREFIX}${MODULE}" PROPERTIES
+            PREFIX ""
+        )
+        add_dependencies("${PROGRAM_PREFIX}${MODULE}" win-libs)
+
+        # .exe
+        add_executable("${PROGRAM_PREFIX}${MODULE}-exe" WIN32
+            win_launcher.c
+            "${CMAKE_CURRENT_BINARY_DIR}/${MODULE}/resource.rc"
+        )
+        target_link_options("${PROGRAM_PREFIX}${MODULE}-exe" PRIVATE
+            "$<$<BOOL:${MSVC}>:/MANIFEST:NO>"
+            "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:WINDOWS,-mwindows>"
+        )
+        set_target_properties("${PROGRAM_PREFIX}${MODULE}-exe" PROPERTIES
+            C_STANDARD "${RD_C_STANDARD}"
+            C_STANDARD_REQUIRED ON
+            RUNTIME_OUTPUT_NAME "${PROGRAM_PREFIX}${MODULE}"
+        )
+        target_link_libraries("${PROGRAM_PREFIX}${MODULE}-exe" PRIVATE
+            "$<$<BOOL:${SDL2_MAIN_LIBRARY}>:SDL2::SDL2main>"
+            SDL2::SDL2
+            "${PROGRAM_PREFIX}${MODULE}"
+        )
+        add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}-exe" POST_BUILD
+            MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-exe>"
+            COMMAND $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:${CMAKE_STRIP}> $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:"$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-exe>">
+        )
+
+        # .com
+        add_executable("${PROGRAM_PREFIX}${MODULE}-com" WIN32
+            win_launcher.c
+        )
+        target_link_options("${PROGRAM_PREFIX}${MODULE}-com" PRIVATE
+            "$<$<BOOL:${MSVC}>:/MANIFEST:NO>"
+            "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:CONSOLE,-mconsole>"
+        )
+        set_target_properties("${PROGRAM_PREFIX}${MODULE}-com" PROPERTIES
+            C_STANDARD "${RD_C_STANDARD}"
+            C_STANDARD_REQUIRED ON
+            RUNTIME_OUTPUT_NAME "${PROGRAM_PREFIX}${MODULE}"
+            SUFFIX ".com"
+        )
+        target_compile_definitions("${PROGRAM_PREFIX}${MODULE}-com" PRIVATE
+            HAVE_CONSOLE
+        )
+        target_link_libraries("${PROGRAM_PREFIX}${MODULE}-com" PRIVATE
+            "$<$<BOOL:${SDL2_MAIN_LIBRARY}>:SDL2::SDL2main>"
+            SDL2::SDL2
+            "${PROGRAM_PREFIX}${MODULE}"
+        )
+        add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}-com" POST_BUILD
+            MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-com>"
+            COMMAND $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:${CMAKE_STRIP}> $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:"$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-com>">
+        )
+    else()
+        add_executable("${PROGRAM_PREFIX}${MODULE}"
+            i_main.c
+            "${PROJECT_SOURCE_DIR}/data/${MODULE}_icon.c"
+        )
+    endif()
 
     # Dehacked sources
     if(NOT "${MODULE}" STREQUAL "hexen")
-        target_sources("${PROGRAM_PREFIX}${MODULE}" PUBLIC
+        target_sources("${PROGRAM_PREFIX}${MODULE}" PRIVATE
                                 deh_defs.h
             deh_io.c            deh_io.h
             deh_main.c          deh_main.h
@@ -192,7 +254,7 @@ foreach(MODULE ${COMPILE_MODULES})
     target_compile_definitions("${PROGRAM_PREFIX}${MODULE}" PRIVATE
         "$<$<BOOL:${BUILD_PORTABLE}>:BUILD_PORTABLE>"
     )
-    target_link_libraries("${PROGRAM_PREFIX}${MODULE}" PUBLIC
+    target_link_libraries("${PROGRAM_PREFIX}${MODULE}" PRIVATE
         ${MODULE}
         Game
     )
@@ -210,33 +272,6 @@ foreach(MODULE ${COMPILE_MODULES})
         C_STANDARD "${RD_C_STANDARD}"
         C_STANDARD_REQUIRED ON
     )
-
-    if(WIN32)
-        add_dependencies("${PROGRAM_PREFIX}${MODULE}" win-libs)
-        # Add resources for windows
-        target_sources("${PROGRAM_PREFIX}${MODULE}" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/${MODULE}/resource.rc")
-        # Link options
-        target_link_options("${PROGRAM_PREFIX}${MODULE}" PRIVATE
-            "$<$<BOOL:${MSVC}>:/MANIFEST:NO>"
-            "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:WINDOWS,-mwindows>"
-        )
-
-        # Console wrapper
-        add_executable("conredir-${MODULE}" WIN32
-            "win_console_wrapper.c"
-        )
-        target_link_options("conredir-${MODULE}" PRIVATE
-            "$<$<BOOL:${MSVC}>:/MANIFEST:NO>"
-            "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:CONSOLE,-mconsole>"
-            "$<$<NOT:$<BOOL:${MSVC}>>:-municode>"
-        )
-        set_target_properties("conredir-${MODULE}" PROPERTIES
-            C_STANDARD "${RD_C_STANDARD}"
-            C_STANDARD_REQUIRED ON
-            RUNTIME_OUTPUT_NAME "${PROGRAM_PREFIX}${MODULE}"
-            SUFFIX ".com"
-        )
-    endif()
 
     add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}" POST_BUILD
         MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}>"
@@ -256,17 +291,22 @@ foreach(MODULE ${COMPILE_MODULES})
         if(WIN32)
             add_dependencies("${PROGRAM_PREFIX}${MODULE}-setup" win-libs)
             # Add resources for windows
-            target_sources("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/setup/${MODULE}-resource.rc")
+            target_sources("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE
+                win_launcher.c
+                "${CMAKE_CURRENT_BINARY_DIR}/setup/${MODULE}-resource.rc"
+            )
             # Link options
             target_link_options("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE
                 "$<$<BOOL:${MSVC}>:/MANIFEST:NO>"
+                "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:WINDOWS,-mwindows>"
             )
         endif()
 
         target_compile_definitions("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE
             "$<$<BOOL:${BUILD_PORTABLE}>:BUILD_PORTABLE>"
+            "___RD_TARGET_SETUP___"
         )
-        target_link_libraries("${PROGRAM_PREFIX}${MODULE}-setup" PUBLIC
+        target_link_libraries("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE
             setup
             SetupCommon
         )
@@ -282,7 +322,7 @@ foreach(MODULE ${COMPILE_MODULES})
 
     # Tests
     add_test(NAME "${PROGRAM_PREFIX}${MODULE}"
-        COMMAND gdb -ex run -ex quit --args $<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}> -timedemo demo1 -nogui -nosound
+        COMMAND gdb -ex run -ex quit --args $<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}$<$<BOOL:${WIN32}>:-exe>> -timedemo demo1 -nogui -nosound
         WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/test_data"
     )
     set_tests_properties("${PROGRAM_PREFIX}${MODULE}" PROPERTIES
@@ -298,7 +338,7 @@ list(REMOVE_ITEM COMPILE_MODULES "strife") # strife is not production ready
 foreach(MODULE ${COMPILE_MODULES})
     set(INSTALL_TARGETS "${PROGRAM_PREFIX}${MODULE}")
     if(WIN32)
-        list(APPEND INSTALL_TARGETS "conredir-${MODULE}")
+        list(APPEND INSTALL_TARGETS "${PROGRAM_PREFIX}${MODULE}-exe" "${PROGRAM_PREFIX}${MODULE}-com")
     endif()
     if(COMPILE_SETUP)
         list(APPEND INSTALL_TARGETS "${PROGRAM_PREFIX}${MODULE}-setup")

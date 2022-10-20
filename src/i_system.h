@@ -66,7 +66,7 @@ void I_AtExit(atexit_func_t func, boolean run_if_error);
 void I_BindVariables(void);
 
 #ifdef _WIN32
-extern boolean console_connected;
+dll_export extern boolean console_connected;
 
 void RD_CreateWindowsConsole(void);
 void I_ConsolePause(void);
