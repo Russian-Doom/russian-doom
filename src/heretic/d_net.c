@@ -60,15 +60,13 @@ static void PlayerQuitGame(player_t *player)
                  "BUHJR 1 GJRBYEK BUHE"), // ИГРОК 1 ПОКИНУЛ ИГРУ
                  sizeof(exitmsg));
 
-    if (english_language)
-    exitmsg[7] += player_num;
-    else
-    exitmsg[6] += player_num;
-
-    players[consoleplayer].message = exitmsg;
+    exitmsg[english_language ? 7 : 6] += player_num;
 
     playeringame[player_num] = false;
     players[consoleplayer].message = exitmsg;
+    // [JN] Fix missing quit message from above.
+    P_SetMessage(&players[consoleplayer], exitmsg, msg_system, false);
+
     // [crispy] don't interpolate players who left the game
     player->mo->interp = false;
 
