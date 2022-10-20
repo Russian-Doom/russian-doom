@@ -228,34 +228,35 @@ typedef struct
 #define	MF_NOGRAVITY	512       // don't apply gravity every tic
 
 // movement flags
-#define	MF_DROPOFF	0x400     // allow jumps from high places
-#define	MF_PICKUP	0x800     // for players to pick up items
-#define	MF_NOCLIP	0x1000    // player cheat
-#define	MF_SLIDE	0x2000    // keep info about sliding along walls
-#define	MF_FLOAT	0x4000    // allow moves to any height, no gravity
-#define	MF_TELEPORT	0x8000    // don't cross lines or look at heights
-#define MF_MISSILE	0x10000   // don't hit same species, explode on block
+#define	MF_DROPOFF  1024    // allow jumps from high places
+#define	MF_PICKUP   2048    // for players to pick up items
+#define	MF_NOCLIP   4096    // player cheat
+#define	MF_SLIDE    8192    // keep info about sliding along walls
+#define	MF_FLOAT    16384   // allow moves to any height, no gravity
+#define	MF_TELEPOR  32768   // don't cross lines or look at heights
+#define MF_MISSILE  65536   // don't hit same species, explode on block
 
-#define	MF_DROPPED	0x20000   // dropped by a demon, not level spawned
-#define	MF_SHADOW	0x40000   // use translucent draw (shadow demons / invis)
-#define	MF_NOBLOOD	0x80000   // don't bleed when shot (use puff)
-#define	MF_CORPSE	0x100000  // don't stop moving halfway off a step
-#define	MF_INFLOAT	0x200000  // floating to a height for a move, don't
-                                  // auto float to target's height
+#define	MF_DROPPED  131072  // dropped by a demon, not level spawned
+#define	MF_SHADOW   262144  // use translucent draw (shadow demons / invis)
+#define	MF_NOBLOOD  524288  // don't bleed when shot (use puff)
+#define	MF_CORPSE   1048576 // don't stop moving halfway off a step
+#define	MF_INFLOAT  2097152 // floating to a height for a move, don't
+                            // auto float to target's height
 
-#define	MF_COUNTKILL	0x400000  // count towards intermission kill total
-#define	MF_COUNTITEM	0x800000  // count towards intermission item total
+#define	MF_COUNTKILL  4194304  // count towards intermission kill total
+#define	MF_COUNTITEM  8388608  // count towards intermission item total
 
-#define	MF_SKULLFLY	0x1000000 // skull in flight
-#define	MF_NOTDMATCH	0x2000000 // don't spawn in death match (key cards)
+#define	MF_SKULLFLY   16777216  // skull in flight
+#define	MF_NOTDMATCH  33554432  // don't spawn in death match (key cards)
 
-#define	MF_TRANSLATION	0xc000000 // if 0x4 0x8 or 0xc, use a translation
-#define	MF_TRANSSHIFT	26      // table for player colormaps
+#define	MF_TRANSLATION  67108864  // if 0x4 0x8 or 0xc, use a translation
+#define	MF_TRANSSHIFT   26        // table for player colormaps
 
-#define MF_EXTRATRANS   0x4000000 // [JN] Extra translucency
+// [JN] Extra translucency
+#define MF_EXTRATRANS  134217728
 
 // [JN] Resurrected monster is counted by extra counter.
-#define MF_COUNTEXTRAKILL 0x8000000
+#define MF_COUNTEXTRAKILL  268435456
 
 // --- mobj.flags2 ---
 
