@@ -233,7 +233,7 @@ typedef struct
 #define	MF_NOCLIP   4096    // player cheat
 #define	MF_SLIDE    8192    // keep info about sliding along walls
 #define	MF_FLOAT    16384   // allow moves to any height, no gravity
-#define	MF_TELEPOR  32768   // don't cross lines or look at heights
+#define	MF_TELEPORT 32768   // don't cross lines or look at heights
 #define MF_MISSILE  65536   // don't hit same species, explode on block
 
 #define	MF_DROPPED  131072  // dropped by a demon, not level spawned
