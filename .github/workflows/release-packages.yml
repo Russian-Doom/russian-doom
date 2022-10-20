@@ -39,6 +39,7 @@ jobs:
     steps:
       - name: Setup MSYS env
         if: ${{ matrix.os.name == 'Windows' }}
+        timeout-minutes: 10
         uses: msys2/setup-msys2@v2
         with:
           msystem: ${{ matrix.compiler.msys_msystem_prefix }}${{ matrix.arch.bits }}
@@ -54,7 +55,7 @@ jobs:
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libsamplerate
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libpng
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Configure
         id: configure
@@ -82,8 +83,8 @@ jobs:
               game="doom"
               version="${{ github.ref_name }}"
           fi
-          echo "::set-output name=game::$game"
-          echo "::set-output name=version::$version"
+          echo "game=$game" >> $GITHUB_OUTPUT
+          echo "version=$version" >> $GITHUB_OUTPUT
           cmake -G "Ninja" -D COMPILE_DOOM="$compile_doom" -D COMPILE_HERETIC="$compile_heretic" -D COMPILE_HEXEN="$compile_hexen" -D COMPILE_STRIFE="$compile_strife" -D BUILD_VERSION_OVERWRITE="$version" -D CMAKE_BUILD_TYPE=Release -S . -B build
 
       - name: Build

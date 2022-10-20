@@ -56,6 +56,7 @@ jobs:
     steps:
       - name: Setup MSYS env
         if: matrix.os.name == 'Windows'
+        timeout-minutes: 10
         uses: msys2/setup-msys2@v2
         with:
           msystem: ${{ matrix.compiler.msys_msystem_prefix }}${{ matrix.arch.msys_bits }}
@@ -80,7 +81,7 @@ jobs:
           sudo apt-get install ${{ matrix.compiler.name }} gdb ninja-build python3 cmake \
                                libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libpng-dev libsamplerate-dev
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Configure
         id: configure
@@ -96,7 +97,7 @@ jobs:
                 $build_portable \
                 -S . -B build
           sha_short=$(echo ${{ github.sha }} | cut -c1-7)
-          echo "::set-output name=sha_short::$sha_short"
+          echo "sha_short=$sha_short" >> $GITHUB_OUTPUT
 
       - name: Build
         run: |
@@ -132,7 +133,7 @@ jobs:
           github.event_name == 'push' &&
           github.ref == 'refs/heads/master' &&
           matrix.os.name == 'Windows'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: inter-doom-6.x.x-${{ steps.configure.outputs.sha_short }}-windows-${{ matrix.arch.name }}-${{ matrix.compiler.display_name }}
           path: ./build/install/
