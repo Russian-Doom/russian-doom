@@ -62,6 +62,18 @@ int I_GetTimeMS(void)
     return ticks - basetime;
 }
 
+unsigned long long I_GetTimeMS64(void)
+{
+    Uint64 ticks;
+
+    ticks = SDL_GetTicks64();
+
+    if (basetime == 0)
+        basetime = ticks;
+
+    return ticks - basetime;
+}
+
 // Sleep for a specified number of ms
 
 void I_Sleep(int ms)

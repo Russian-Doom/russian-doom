@@ -31,6 +31,7 @@ int I_GetTime (void);
 
 // returns current time in ms
 int I_GetTimeMS (void);
+unsigned long long I_GetTimeMS64 (void);
 
 // Pause for a specified number of ms
 void I_Sleep(int ms);
