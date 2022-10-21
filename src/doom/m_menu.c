@@ -2114,17 +2114,17 @@ static void M_RD_Change_WindowSize(Direction_t direction)
     }
 
     // Prevent overflows / incorrect values.
-    if (window_width < 320)
+    if (window_width < screenwidth >> hires)
     {
-        window_width = 320;
+        window_width = screenwidth >> hires; // SDL_SetWindowMinimumSize in i_video.c
     }
     if (window_width > 3440)
     {
         window_width = 3440;
     }
-    if (window_height < 240)
+    if (window_height < actualheight >> hires)
     {
-        window_height = 240;
+        window_height = actualheight >> hires; // SDL_SetWindowMinimumSize in i_video.c
     }
     if (window_height > 1440)
     {
