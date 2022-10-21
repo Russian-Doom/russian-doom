@@ -197,6 +197,10 @@ foreach(MODULE ${COMPILE_MODULES})
             C_STANDARD_REQUIRED ON
             RUNTIME_OUTPUT_NAME "${PROGRAM_PREFIX}${MODULE}"
         )
+        target_compile_definitions("${PROGRAM_PREFIX}${MODULE}-exe" PRIVATE
+            "$<IF:$<BOOL:${HAVE_DECL_STRCASECMP}>,HAVE_DECL_STRCASECMP=1,HAVE_DECL_STRCASECMP=0>"
+            "$<IF:$<BOOL:${HAVE_DECL_STRNCASECMP}>,HAVE_DECL_STRNCASECMP=1,HAVE_DECL_STRNCASECMP=0>"
+        )
         target_link_libraries("${PROGRAM_PREFIX}${MODULE}-exe" PRIVATE
             "$<$<BOOL:${SDL2_MAIN_LIBRARY}>:SDL2::SDL2main>"
             SDL2::SDL2
@@ -222,6 +226,8 @@ foreach(MODULE ${COMPILE_MODULES})
             SUFFIX ".com"
         )
         target_compile_definitions("${PROGRAM_PREFIX}${MODULE}-com" PRIVATE
+            "$<IF:$<BOOL:${HAVE_DECL_STRCASECMP}>,HAVE_DECL_STRCASECMP=1,HAVE_DECL_STRCASECMP=0>"
+            "$<IF:$<BOOL:${HAVE_DECL_STRNCASECMP}>,HAVE_DECL_STRNCASECMP=1,HAVE_DECL_STRNCASECMP=0>"
             HAVE_CONSOLE
         )
         target_link_libraries("${PROGRAM_PREFIX}${MODULE}-com" PRIVATE
