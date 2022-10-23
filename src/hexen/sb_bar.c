@@ -1928,33 +1928,34 @@ static const char *Pieces[NUMCLASSES][3] = {
 static void DrawAssembledWeaponWidget (const int type)
 {
     const int class = PlayerClass[consoleplayer];
+    const int delta = wide_delta * 4;
 
     if (type == 1)
     {
         // Draw background shadow.
         dp_translation = cr[CR_BLACK];
-        V_DrawPatchUnscaled(577 + wide_delta*4, 306, PatchWEAPONSLOT, transtable50);
+        V_DrawPatchUnscaled(577 + delta, 306, PatchWEAPONSLOT, transtable50);
         dp_translation = NULL;
 
         if (CPlayer->pieces == 7)
         {
-            V_DrawPatchUnscaled(575 + wide_delta*4, 304, PatchWEAPONFULL, NULL);
+            V_DrawPatchUnscaled(575 + delta, 304, PatchWEAPONFULL, NULL);
         }
         else
         {
-            V_DrawPatchUnscaled(575 + wide_delta*4, 304, PatchWEAPONSLOT, NULL);
+            V_DrawPatchUnscaled(575 + delta, 304, PatchWEAPONSLOT, NULL);
             
             if (CPlayer->pieces & WPIECE1)
             {
-                V_DrawPatchUnscaled(PieceHor[class][0] + wide_delta*4, 304, PatchPIECE1, NULL);
+                V_DrawPatchUnscaled(PieceHor[class][0] + delta, 304, PatchPIECE1, NULL);
             }
             if (CPlayer->pieces & WPIECE2)
             {
-                V_DrawPatchUnscaled(PieceHor[class][1] + wide_delta*4, 304, PatchPIECE2, NULL);
+                V_DrawPatchUnscaled(PieceHor[class][1] + delta, 304, PatchPIECE2, NULL);
             }
             if (CPlayer->pieces & WPIECE3)
             {
-                V_DrawPatchUnscaled(PieceHor[class][2] + wide_delta*4, 304, PatchPIECE3, NULL);
+                V_DrawPatchUnscaled(PieceHor[class][2] + delta, 304, PatchPIECE3, NULL);
             }
         }
     }
@@ -1969,15 +1970,15 @@ static void DrawAssembledWeaponWidget (const int type)
 
         if (CPlayer->pieces & WPIECE1)
         {
-            V_DrawPatchUnscaled(617 + wide_delta*4, PieceVert[class][0], patch1, NULL);
+            V_DrawPatchUnscaled(617 + delta, PieceVert[class][0], patch1, NULL);
         }
         if (CPlayer->pieces & WPIECE2)
         {
-            V_DrawPatchUnscaled(617 + wide_delta*4, PieceVert[class][1], patch2, NULL);
+            V_DrawPatchUnscaled(617 + delta, PieceVert[class][1], patch2, NULL);
         }
         if (CPlayer->pieces & WPIECE3)
         {
-            V_DrawPatchUnscaled(617 + wide_delta*4, PieceVert[class][2], patch3, NULL);
+            V_DrawPatchUnscaled(617 + delta, PieceVert[class][2], patch3, NULL);
         }
     }
 }
