@@ -89,6 +89,7 @@ boolean paused;
 boolean sendpause;              // send a pause event next tic
 boolean sendsave;               // send a save event next tic
 boolean usergame;               // ok to save / end game
+extern boolean askforquit;
 
 boolean timingdemo;             // if true, exit with report on completion
 boolean nodrawers = false;      // [crispy] for the demowarp feature
@@ -265,7 +266,6 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     int forward, side;
     int look, arti;
     int flyheight;
-    extern boolean askforquit;
 
     // haleyjd: removed externdriver crap
 
@@ -791,7 +791,7 @@ boolean G_Responder(event_t * ev)
     }
 
     // any other key pops up menu if in demos
-    if (gameaction == ga_nothing && !singledemo && (demoplayback || gamestate == GS_DEMOSCREEN)) 
+    if (gameaction == ga_nothing && !singledemo && (demoplayback || gamestate == GS_DEMOSCREEN) && !askforquit) 
     { 
         if (ev->type == ev_keydown
         ||  ev->type == ev_mouse_keydown
