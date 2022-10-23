@@ -1894,6 +1894,94 @@ static void DrawWeaponPieces(void)
     }
 }
 
+/*
+================================================================================
+=
+= [JN] Assembled weapon widget. There are two types:
+=      1) Horizontal, formed from status bar graphics.
+=      2) Vertical, formed from sprites.
+=
+================================================================================
+*/
+
+static const int PieceHor[NUMCLASSES][3] = {
+    {575, 610, 619},
+    {575, 598, 611},
+    {575, 590, 609},
+    {  0,   0,   0}  // Pig is never used, still.
+};
+
+static const int PieceVert[NUMCLASSES][3] = {
+    {300, 325, 338},
+    {302, 319, 336},
+    {292, 311, 334},
+    {  0,   0,   0}  // Oink!
+};
+
+static const char *Pieces[NUMCLASSES][3] = {
+    {"WFR1A0", "WFR2A0", "WFR3A0"},
+    {"WCH1A0", "WCH2A0", "WCH3A0"},
+    {"WMS1A0", "WMS2A0", "WMS3A0"},
+    {  0,   0,   0}  // Squeal!
+};
+
+static void DrawAssembledWeaponWidget (const int type)
+{
+    const int class = PlayerClass[consoleplayer];
+
+    if (type == 1)
+    {
+        // Draw background shadow.
+        dp_translation = cr[CR_BLACK];
+        V_DrawPatchUnscaled(577 + wide_delta*4, 306, PatchWEAPONSLOT, transtable50);
+        dp_translation = NULL;
+
+        if (CPlayer->pieces == 7)
+        {
+            V_DrawPatchUnscaled(575 + wide_delta*4, 304, PatchWEAPONFULL, NULL);
+        }
+        else
+        {
+            V_DrawPatchUnscaled(575 + wide_delta*4, 304, PatchWEAPONSLOT, NULL);
+            
+            if (CPlayer->pieces & WPIECE1)
+            {
+                V_DrawPatchUnscaled(PieceHor[class][0] + wide_delta*4, 304, PatchPIECE1, NULL);
+            }
+            if (CPlayer->pieces & WPIECE2)
+            {
+                V_DrawPatchUnscaled(PieceHor[class][1] + wide_delta*4, 304, PatchPIECE2, NULL);
+            }
+            if (CPlayer->pieces & WPIECE3)
+            {
+                V_DrawPatchUnscaled(PieceHor[class][2] + wide_delta*4, 304, PatchPIECE3, NULL);
+            }
+        }
+    }
+    else if (type == 2)
+    {
+        const int lump1 = W_CheckNumForName(Pieces[class][0]);
+        const int lump2 = W_CheckNumForName(Pieces[class][1]);
+        const int lump3 = W_CheckNumForName(Pieces[class][2]);
+        const patch_t *patch1 = W_CacheLumpNum(lump1, PU_CACHE);
+        const patch_t *patch2 = W_CacheLumpNum(lump2, PU_CACHE);
+        const patch_t *patch3 = W_CacheLumpNum(lump3, PU_CACHE);
+
+        if (CPlayer->pieces & WPIECE1)
+        {
+            V_DrawPatchUnscaled(617 + wide_delta*4, PieceVert[class][0], patch1, NULL);
+        }
+        if (CPlayer->pieces & WPIECE2)
+        {
+            V_DrawPatchUnscaled(617 + wide_delta*4, PieceVert[class][1], patch2, NULL);
+        }
+        if (CPlayer->pieces & WPIECE3)
+        {
+            V_DrawPatchUnscaled(617 + wide_delta*4, PieceVert[class][2], patch3, NULL);
+        }
+    }
+}
+
 //==========================================================================
 //
 // DrawFullScreenStuff
@@ -1940,6 +2028,9 @@ void DrawFullScreenStuff(void)
         DrBNumber(0, 5, 176);
     }
 
+    // [JN] Assembled weapon widget
+    DrawAssembledWeaponWidget(weapon_widget);
+    
     // [JN] Mana
     {
         // [JN] First weapon?
