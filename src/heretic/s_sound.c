@@ -172,7 +172,7 @@ void S_StartSound(void *_origin, int sound_id)
 
     listener = GetSoundListener();
 
-    if (sound_id == 0 || snd_MaxVolume == 0)
+    if (sound_id == 0 || snd_MaxVolume == 0 || !snd_sfxdevice || (nodrawers && singletics))
         return;
     if (origin == NULL)
     {
@@ -329,7 +329,7 @@ void S_StartSoundAtVolume(void *_origin, int sound_id, int volume)
 
     listener = GetSoundListener();
 
-    if (sound_id == 0 || snd_MaxVolume == 0)
+    if (sound_id == 0 || snd_MaxVolume == 0 || !snd_sfxdevice || (nodrawers && singletics))
         return;
     if (origin == NULL)
     {
@@ -393,6 +393,9 @@ void S_StartSoundAmbient(void *_origin, int sound_id)
 
     // [JN] Player is always listener.
     listener = players[consoleplayer].mo;
+
+    if (snd_MaxVolume == 0 || !snd_sfxdevice || (nodrawers && singletics))
+        return;
 
     if (origin == NULL)
     {
