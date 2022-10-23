@@ -1927,8 +1927,13 @@ static const char *Pieces[NUMCLASSES][3] = {
 
 static void DrawAssembledWeaponWidget (const int type)
 {
-    const int class = PlayerClass[consoleplayer];
-    const int delta = wide_delta * 4;
+    const  int class = PlayerClass[consoleplayer];
+    static int delta = -1;
+
+    if (delta == -1)
+    {
+        delta = wide_delta * 4;
+    }
 
     if (type == 1)
     {
