@@ -69,6 +69,7 @@ void OnDeactivateMenu(void);
 // Rendering
 static void DrawRenderingMenu(void);
 static void M_RD_Change_Widescreen(Direction_t direction);
+static void M_RD_Change_Renderer();
 static void M_RD_Change_VSync();
 static void M_RD_MaxFPS(Direction_t direction);
 static void M_RD_PerfCounter(Direction_t direction);
@@ -518,6 +519,7 @@ MENU_STATIC(RDOptionsMenu,
 static MenuItem_t RenderingItems[] = {
     I_TITLE( "RENDERING",                 "HTYLTHBYU"), // РЕНДЕРИНГ
     I_LRFUNC("DISPLAY ASPECT RATIO:",     "CJJNYJITYBT CNJHJY \'RHFYF:",     M_RD_Change_Widescreen), // СООТНОШЕНИЕ СТОРОН ЭКРАНА
+    I_LRFUNC("SCREEN RENDERER:",          "HTYLTHTH \'RHFYF:",               M_RD_Change_Renderer), // РЕНДЕРЕР ЭКРАНА
     I_SWITCH("VERTICAL SYNCHRONIZATION:", "DTHNBRFKMYFZ CBY[HJYBPFWBZ:",     M_RD_Change_VSync), // ВЕРТИКАЛЬНАЯ СИНХРОНИЗАЦИЯ
     I_LRFUNC("FPS LIMIT:",                "JUHFYBXTYBT",                     M_RD_MaxFPS), // ОГРАНИЧЕНИЕ FPS
     I_LRFUNC("PERFORMANCE COUNTER:",      "CXTNXBR GHJBPDJLBNTKMYJCNB:",     M_RD_PerfCounter), // СЧЕТЧИК ПРОИЗВОДИТЕЛЬНОСТИ
@@ -1579,6 +1581,8 @@ void MN_Init(void)
 
     // [JN] Widescreen: set temp variable for rendering menu.
     aspect_ratio_temp = aspect_ratio;
+    // [JN] Screen renderer: set temp variable for rendering menu.
+    opengles_renderer_temp = opengles_renderer;
 
     if(vanillaparm)
         OptionsMenu = &VanillaOptionsMenu;
@@ -1877,28 +1881,47 @@ static void DrawRenderingMenu(void)
                               aspect_ratio_temp == 4 ? "21:9" :
                               "4:3",
                               185 + wide_delta, 42, CR_NONE);
+
+        // Screen renderer
+        if (force_software_renderer == 1)
+        {
+            RD_M_DrawTextSmallENG("N/A", 161 + wide_delta, 52, CR_DARKRED);
+        }
+        else
+        {
+            RD_M_DrawTextSmallENG(opengles_renderer_temp ? "OPENGL ES 2.0" :
+#ifdef _WIN32
+            // On Windows, default is always Direct 3D 9.
+            "DIRECT 3D",
+#else
+            // On other OSes it is unclear, so use OS preferred.
+            "PREFERRED BY OS",
+#endif
+            161 + wide_delta, 52, CR_NONE);
+        }
+
         // Informative message
-        if (aspect_ratio_temp != aspect_ratio)
+        if (aspect_ratio_temp != aspect_ratio || opengles_renderer_temp != opengles_renderer)
         {
             RD_M_DrawTextSmallENG("THE PROGRAM MUST BE RESTARTED",
-                                  51 + wide_delta, 142, CR_GREEN);
+                                  51 + wide_delta, 152, CR_GREEN);
         }
 
         // Vertical sync
         if (force_software_renderer)
         {
-            RD_M_DrawTextSmallENG("N/A", 216 + wide_delta, 52, CR_GRAY);
+            RD_M_DrawTextSmallENG("N/A", 216 + wide_delta, 62, CR_GRAY);
         }
         else
         {
-            RD_M_DrawTextSmallENG(vsync ? "ON" : "OFF", 216 + wide_delta, 52, CR_NONE);
+            RD_M_DrawTextSmallENG(vsync ? "ON" : "OFF", 216 + wide_delta, 62, CR_NONE);
         }
 
         // FPS limit
-        RD_Menu_DrawSliderSmallInline(100, 62, 11, (max_fps-40) / 20);
+        RD_Menu_DrawSliderSmallInline(100, 72, 11, (max_fps-40) / 20);
         // Numerical representation of slider position
         M_snprintf(num, 4, "%d", max_fps);
-        RD_M_DrawTextSmallENG(num, 208 + wide_delta, 63, 
+        RD_M_DrawTextSmallENG(num, 208 + wide_delta, 73, 
                               max_fps < 60 ? CR_GRAY :
                               max_fps < 100 ? CR_NONE :
                               max_fps < 260 ? CR_GREEN : 
@@ -1907,30 +1930,30 @@ static void DrawRenderingMenu(void)
         // Performance counter
         RD_M_DrawTextSmallENG(show_fps == 1 ? "FPS only" :
                               show_fps == 2 ? "FULL" : "OFF", 
-                              192 + wide_delta, 72, CR_NONE);
+                              192 + wide_delta, 82, CR_NONE);
 
         // Pixel scaling
         if (force_software_renderer)
         {
-            RD_M_DrawTextSmallENG("N/A", 131 + wide_delta, 82, CR_GRAY);
+            RD_M_DrawTextSmallENG("N/A", 131 + wide_delta, 92, CR_GRAY);
         }
         else
         {
-            RD_M_DrawTextSmallENG(smoothing ? "SMOOTH" : "SHARP", 131 + wide_delta, 82, CR_NONE);
+            RD_M_DrawTextSmallENG(smoothing ? "SMOOTH" : "SHARP", 131 + wide_delta, 92, CR_NONE);
         }
 
         // Porch palette changing
-        RD_M_DrawTextSmallENG(vga_porch_flash ? "ON" : "OFF", 205 + wide_delta, 92, CR_NONE);
+        RD_M_DrawTextSmallENG(vga_porch_flash ? "ON" : "OFF", 205 + wide_delta, 102, CR_NONE);
 
 
         // Show ENDTEXT screen
-        RD_M_DrawTextSmallENG(show_endoom ? "ON" : "OFF", 188 + wide_delta, 122, CR_NONE);
+        RD_M_DrawTextSmallENG(show_endoom ? "ON" : "OFF", 188 + wide_delta, 132, CR_NONE);
 
         // Tip for faster sliding
         if (CurrentItPos == 3)
         {
             RD_M_DrawTextSmallENG("HOLD RUN BUTTON FOR FASTER SLIDING",
-                                  39 + wide_delta, 162, CR_DARKGREEN);
+                                  39 + wide_delta, 172, CR_DARKGREEN);
         }
     }
     else
@@ -1943,29 +1966,52 @@ static void DrawRenderingMenu(void)
                               "4:3",
                               230 + wide_delta, 42, CR_NONE);
 
+        // Экрнанный рендерер
+        if (force_software_renderer == 1)
+        {
+            RD_M_DrawTextSmallRUS("Y/L", 157 + wide_delta, 52, CR_DARKRED); // Н/Д
+        }
+        else
+        {
+            if (opengles_renderer_temp)
+            {
+                RD_M_DrawTextSmallENG("OPENGL ES 2.0", 157 + wide_delta, 52, CR_NONE);
+            }
+            else
+            {
+#ifdef _WIN32
+                // On Windows, default is always Direct 3D 9.
+                RD_M_DrawTextSmallENG("DIRECT 3D", 157 + wide_delta, 52, CR_NONE);
+#else
+                // On other OSes it is unclear, so use OS preferred.
+                RD_M_DrawTextSmallRUS("GJ DS,JHE JC", 157 + wide_delta, 52, CR_NONE); // ПО ВЫБОРУ ОС
+#endif
+            }
+        }
+
         // Informative message: НЕОБХОДИМ ПЕРЕЗАПУСК ИГРЫ
-        if (aspect_ratio_temp != aspect_ratio)
+        if (aspect_ratio_temp != aspect_ratio || opengles_renderer_temp != opengles_renderer)
         {
             RD_M_DrawTextSmallRUS("YTJ,[JLBV GTHTPFGECR GHJUHFVVS",
-                                  46 + wide_delta, 148, CR_GREEN);
+                                  46 + wide_delta, 158, CR_GREEN);
         }
 
         // Вертикальная синхронизация
         if (force_software_renderer)
         {
-            RD_M_DrawTextSmallRUS("Y/L", 236 + wide_delta, 52, CR_GRAY);
+            RD_M_DrawTextSmallRUS("Y/L", 236 + wide_delta, 62, CR_GRAY);
         }
         else
         {
-            RD_M_DrawTextSmallRUS(vsync ? "DRK" : "DSRK", 236 + wide_delta, 52, CR_NONE);
+            RD_M_DrawTextSmallRUS(vsync ? "DRK" : "DSRK", 236 + wide_delta, 62, CR_NONE);
         }
 
         // Ограничение FPS
-        RD_M_DrawTextSmallENG("FPS:", 123 + wide_delta, 62, CR_NONE);
-        RD_Menu_DrawSliderSmallInline(154, 62, 11, (max_fps-40) / 20);
+        RD_M_DrawTextSmallENG("FPS:", 123 + wide_delta, 72, CR_NONE);
+        RD_Menu_DrawSliderSmallInline(154, 72, 11, (max_fps-40) / 20);
         // Numerical representation of slider position
         M_snprintf(num, 4, "%d", max_fps);
-        RD_M_DrawTextSmallENG(num, 262 + wide_delta, 63, 
+        RD_M_DrawTextSmallENG(num, 262 + wide_delta, 73, 
                               max_fps < 60 ? CR_GRAY :
                               max_fps < 100 ? CR_NONE :
                               max_fps < 260 ? CR_GREEN : 
@@ -1974,40 +2020,40 @@ static void DrawRenderingMenu(void)
         // Счетчик производительности
         RD_M_DrawTextSmallRUS(show_fps == 1 ? "" : // Print as US string below
                               show_fps == 2 ? "gjkysq" : "dsrk",
-                              236 + wide_delta, 72, CR_NONE);
+                              236 + wide_delta, 82, CR_NONE);
         // Print "FPS" separately, RU sting doesn't fit in 4:3 aspect ratio :(
-        if (show_fps == 1) RD_M_DrawTextSmallENG("fps", 236 + wide_delta, 72, CR_NONE);
+        if (show_fps == 1) RD_M_DrawTextSmallENG("fps", 236 + wide_delta, 82, CR_NONE);
 
         // Пиксельное сглаживание
         if (force_software_renderer)
         {
-            RD_M_DrawTextSmallRUS("Y/L", 211 + wide_delta, 82, CR_GRAY);
+            RD_M_DrawTextSmallRUS("Y/L", 211 + wide_delta, 92, CR_GRAY);
         }
         else
         {
-            RD_M_DrawTextSmallRUS(smoothing ? "DRK" : "DSRK", 211 + wide_delta, 82, CR_NONE);
+            RD_M_DrawTextSmallRUS(smoothing ? "DRK" : "DSRK", 211 + wide_delta, 102, CR_NONE);
         }
 
         // Изменение палитры краев экрана
-        RD_M_DrawTextSmallRUS(vga_porch_flash ? "DRK" : "DSRK", 265 + wide_delta, 92, CR_NONE);
+        RD_M_DrawTextSmallRUS(vga_porch_flash ? "DRK" : "DSRK", 265 + wide_delta, 102, CR_NONE);
 
         // Показывать экран ENDTEXT
-        RD_M_DrawTextSmallENG("ENDTEXT:", 160 + wide_delta, 122, CR_NONE);
-        RD_M_DrawTextSmallRUS(show_endoom ? "DRK" : "DSRK", 222 + wide_delta, 122, CR_NONE);
+        RD_M_DrawTextSmallENG("ENDTEXT:", 160 + wide_delta, 132, CR_NONE);
+        RD_M_DrawTextSmallRUS(show_endoom ? "DRK" : "DSRK", 222 + wide_delta, 132, CR_NONE);
 
         // Для ускоренного пролистывания
         // удерживайте кнопку бега
         if (CurrentItPos == 3)
         {
             RD_M_DrawTextSmallRUS("LKZ ECRJHTYYJUJ GHJKBCNSDFYBZ",
-                                  51 + wide_delta, 162, CR_DARKGREEN);
+                                  51 + wide_delta, 172, CR_DARKGREEN);
             RD_M_DrawTextSmallRUS("ELTH;BDFQNT RYJGRE ,TUF",
-                                  73 + wide_delta, 172, CR_DARKGREEN);
+                                  73 + wide_delta, 182, CR_DARKGREEN);
         }
     }
 
     // Screenshot format / Формат скриншотов (same english values)
-    RD_M_DrawTextSmallENG(png_screenshots ? "PNG" : "PCX", 175 + wide_delta, 112, CR_NONE);
+    RD_M_DrawTextSmallENG(png_screenshots ? "PNG" : "PCX", 175 + wide_delta, 122, CR_NONE);
 
 }
 
@@ -2018,6 +2064,17 @@ static void M_RD_Change_Widescreen(Direction_t direction)
     RD_Menu_SpinInt(&aspect_ratio_temp, 0, 4, direction);
 }
 
+static void M_RD_Change_Renderer()
+{
+    // [JN] Disable toggling in software renderer
+    if (force_software_renderer == 1)
+    {
+        return;
+    }
+
+    opengles_renderer_temp ^= 1;
+}
+
 static void M_RD_Change_VSync()
 {
     // [JN] Disable "vsync" toggling in software renderer
@@ -2026,8 +2083,16 @@ static void M_RD_Change_VSync()
 
     vsync ^= 1;
 
-    // Reinitialize graphics
-    I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
+    if (opengles_renderer)
+    {
+        // [JN] Use native OpenGL vsync toggling.
+        SDL_GL_SetSwapInterval(vsync);
+    }
+    else
+    {
+        // Reinitialize graphics
+        I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
+    }
 }
 
 static void M_RD_MaxFPS(Direction_t direction)
@@ -5663,6 +5728,8 @@ boolean MN_Responder(event_t * event)
         {
             // [JN] Widescreen: remember choosen widescreen variable before quit.
             aspect_ratio = aspect_ratio_temp;
+            // [JN] Screen renderer: remember choosen renderer variable before quit.
+            opengles_renderer = opengles_renderer_temp;
 
             I_Quit();
             return true;
@@ -5683,6 +5750,8 @@ boolean MN_Responder(event_t * event)
 
             // [JN] Widescreen: remember choosen widescreen variable before quit.
             aspect_ratio = aspect_ratio_temp;
+            // [JN] Screen renderer: remember choosen renderer variable before quit.
+            opengles_renderer = opengles_renderer_temp;
             I_Quit();
         }
         else
@@ -5749,6 +5818,8 @@ boolean MN_Responder(event_t * event)
                     G_CheckDemoStatus();
                     // [JN] Widescreen: remember choosen widescreen variable before quit.
                     aspect_ratio = aspect_ratio_temp;
+                    // [JN] Screen renderer: remember choosen renderer variable before quit.
+                    opengles_renderer = opengles_renderer_temp;
                     I_Quit();
                     return false;
 
