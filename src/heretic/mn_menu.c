@@ -5651,7 +5651,7 @@ static void SCSaveGame(int option)
 
 static void M_InitEpisode(struct Menu_s* const menu)
 {
-    if(gamemode == retail)
+    if(gamemode != retail)
     {
         menu->items[3].status = HIDDEN;
         menu->items[4].status = HIDDEN;
