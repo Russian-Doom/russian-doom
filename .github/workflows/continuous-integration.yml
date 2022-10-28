@@ -27,11 +27,11 @@ jobs:
         arch:
           -
             name: "x86"
-            msys_bits: "32"
+            bits: "32"
             msys_name: "i686"
           -
             name: "x64"
-            msys_bits: "64"
+            bits: "64"
             msys_name: "x86_64"
         compiler:
           -
@@ -59,7 +59,7 @@ jobs:
         timeout-minutes: 10
         uses: msys2/setup-msys2@v2
         with:
-          msystem: ${{ matrix.compiler.msys_msystem_prefix }}${{ matrix.arch.msys_bits }}
+          msystem: ${{ matrix.compiler.msys_msystem_prefix }}${{ matrix.arch.bits }}
           update: true
           install: >-
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-pkgconf
@@ -70,8 +70,9 @@ jobs:
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_net
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_mixer
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libsamplerate
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libpng
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-wget
+            unzip
 
       - name: Setup Linux env
         if: matrix.os.name == 'Linux'
@@ -83,6 +84,13 @@ jobs:
 
       - uses: actions/checkout@v3
 
+      - name: Download extra dependencies
+        if: ${{ matrix.os.name == 'Windows' }}
+        run: |
+          cd lib/thirdparty
+          wget -q "https://github.com/libsndfile/libsamplerate/releases/download/0.2.2/libsamplerate-0.2.2-win${{ matrix.arch.bits }}.zip"
+          unzip "libsamplerate-0.2.2-win${{ matrix.arch.bits }}.zip"
+
       - name: Configure
         id: configure
         env:
@@ -93,6 +101,7 @@ jobs:
               build_portable='-D BUILD_PORTABLE=ON'
           fi
           cmake -G "Ninja" \
+                -D SAMPLERATE_DIR="lib/thirdparty/libsamplerate-0.2.2-win${{ matrix.arch.bits }}" \
                 -D BUILD_VERSION_OVERWRITE="6.x.x" -D FORCE_GIT_HASH_SUFFIX=ON -D CMAKE_BUILD_TYPE=RelWithDebInfo \
                 $build_portable \
                 -S . -B build

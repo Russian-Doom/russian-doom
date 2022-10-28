@@ -4,7 +4,7 @@ add_copy_target(win-libs SOURCE
     libmpg123-0.dll
     libogg-0.dll
     libpng16-16.dll
-    libsamplerate-0.dll
+    samplerate.dll
     libvorbis-0.dll
     libvorbisfile-3.dll
     SDL2.dll
