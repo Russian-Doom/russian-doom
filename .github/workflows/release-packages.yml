@@ -52,10 +52,18 @@ jobs:
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_net
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_mixer
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libsamplerate
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libpng
+            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-wget
+            unzip
 
       - uses: actions/checkout@v3
+
+      - name: Download extra dependencies
+        if: ${{ matrix.os.name == 'Windows' }}
+        run: |
+          cd lib/thirdparty
+          wget -q "https://github.com/libsndfile/libsamplerate/releases/download/0.2.2/libsamplerate-0.2.2-win${{ matrix.arch.bits }}.zip"
+          unzip "libsamplerate-0.2.2-win${{ matrix.arch.bits }}.zip"
 
       - name: Configure
         id: configure
@@ -85,7 +93,7 @@ jobs:
           fi
           echo "game=$game" >> $GITHUB_OUTPUT
           echo "version=$version" >> $GITHUB_OUTPUT
-          cmake -G "Ninja" -D COMPILE_DOOM="$compile_doom" -D COMPILE_HERETIC="$compile_heretic" -D COMPILE_HEXEN="$compile_hexen" -D COMPILE_STRIFE="$compile_strife" -D BUILD_VERSION_OVERWRITE="$version" -D CMAKE_BUILD_TYPE=Release -S . -B build
+          cmake -G "Ninja" -D SAMPLERATE_DIR="lib/thirdparty/libsamplerate-0.2.2-win${{ matrix.arch.bits }}" -D COMPILE_DOOM="$compile_doom" -D COMPILE_HERETIC="$compile_heretic" -D COMPILE_HEXEN="$compile_hexen" -D COMPILE_STRIFE="$compile_strife" -D BUILD_VERSION_OVERWRITE="$version" -D CMAKE_BUILD_TYPE=Release -S . -B build
 
       - name: Build
         run: |
