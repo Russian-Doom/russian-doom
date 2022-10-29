@@ -51,6 +51,8 @@ int *flipviewwidth;
 
 // bumped light from gun blasts
 int extralight;
+// [JN] Smooth and vanilla diminished lighting
+int lightzshift, maxlightz;
 
 // precalculated math tables
 angle_t clipangle;
@@ -464,20 +466,26 @@ static void R_InitTextureMapping (void)
 
 #define		DISTMAP	2
 
-static void R_InitLightTables (void)
+void R_InitLightTables (void)
 {
-    int level, startmap;
+    int level;
     int scale;
 
-    // Calculate the light levels to use for each level / distance combination
-    for (int i = 0 ; i < LIGHTLEVELS; i++)
+    // [JN] Define, which diminished lighting to use
+    lightzshift = smoothlight && !vanillaparm ? LIGHTZSHIFT : LIGHTZSHIFT_VANILLA;
+    maxlightz = smoothlight && !vanillaparm ? MAXLIGHTZ : MAXLIGHTZ_VANILLA;
+
+    // Calculate the light levels to use for each level / distance combination.
+    for (int i = 0 ; i< LIGHTLEVELS ; i++)
     {
-        startmap = ((LIGHTLEVELS - 1 - i) * 2) * NUMCOLORMAPS / LIGHTLEVELS;
-        for (int j = 0; j < MAXLIGHTZ; j++)
+        const int firstmap = ((LIGHTLEVELS-1-i)*2)*NUMCOLORMAPS/LIGHTLEVELS;
+
+        for (int j = 0 ; j < maxlightz ; j++)
         {
-            scale = FixedDiv((320 / 2 * FRACUNIT), (j + 1) << LIGHTZSHIFT);
+            scale = FixedDiv((320 / 2 * FRACUNIT), ((j + 1) << lightzshift));
+
             scale >>= LIGHTSCALESHIFT;
-            level = startmap - scale / DISTMAP;
+            level = firstmap - scale / DISTMAP;
 
             if (level < 0)
             {

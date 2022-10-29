@@ -255,11 +255,11 @@ static void R_MapPlane (const int y, const int x1, const int x2)
     }
     else
     {
-        index = distance >> LIGHTZSHIFT;
+        index = distance >> lightzshift;
 
-        if (index >= MAXLIGHTZ)
+        if (index >= maxlightz)
         {
-            index = MAXLIGHTZ - 1;
+            index = maxlightz - 1;
         }
 
         ds_colormap[0] = planezlight[index];

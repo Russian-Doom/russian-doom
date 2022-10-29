@@ -78,6 +78,7 @@ static void M_RD_MaxFPS(Direction_t direction);
 static void M_RD_PerfCounter(Direction_t direction);
 static void M_RD_Smoothing();
 static void M_RD_PorchFlashing();
+static void M_RD_DiminishedLighting();
 
 // Page2
 static void M_RD_WindowBorder();
@@ -543,7 +544,7 @@ static MenuItem_t Rendering1Items[] = {
     I_LRFUNC("PERFORMANCE COUNTER:",      "CXTNXBR GHJBPDJLBNTKMYJCNB:",     M_RD_PerfCounter),        // СЧЕТЧИК ПРОИЗВОДИТЕЛЬНОСТИ
     I_SWITCH("PIXEL SCALING:",            "GBRCTKMYJT CUKF;BDFYBT:",         M_RD_Smoothing),          // ПИКСЕЛЬНОЕ СГЛАЖИВАНИЕ
     I_SWITCH("PORCH PALETTE CHANGING:",   "BPVTYTYBT GFKBNHS RHFTD 'RHFYF:", M_RD_PorchFlashing),      // ИЗМЕНЕНИЕ ПАЛИТРЫ КРАЕВ ЭКРАНА
-    I_EMPTY,
+    I_SWITCH("DIMINISHED LIGHTING:",      "EUFCFYBT JCDTOTYBZ:",             M_RD_DiminishedLighting), // УГАСАНИЕ ОСВЕЩЕНИЯ
     I_EMPTY,
     I_EMPTY,
     I_EMPTY,
@@ -1996,6 +1997,9 @@ static void DrawRenderingMenu1(void)
         // Porch palette changing
         RD_M_DrawTextSmallENG(vga_porch_flash ? "ON" : "OFF", 205 + wide_delta, 102, CR_NONE);
 
+        // Diminished lighting
+        RD_M_DrawTextSmallENG(smoothlight ? "SMOOTH" : "ORIGINAL", 169 + wide_delta, 112, CR_NONE);
+
         // Tip for faster sliding
         if (CurrentItPos == 4)
         {
@@ -2083,6 +2087,9 @@ static void DrawRenderingMenu1(void)
 
         // Изменение палитры краев экрана
         RD_M_DrawTextSmallRUS(vga_porch_flash ? "DRK" : "DSRK", 265 + wide_delta, 102, CR_NONE);
+
+        // Угасание освещения
+        RD_M_DrawTextSmallRUS(smoothlight ? "GKFDYJT" : "JHBUBYFKMYJT", 180 + wide_delta, 112, CR_NONE);
 
         // Для ускоренного пролистывания
         // удерживайте кнопку бега
@@ -2291,6 +2298,14 @@ static void M_RD_PorchFlashing()
 
     // Update black borders
     I_DrawBlackBorders();
+}
+
+static void M_RD_DiminishedLighting()
+{
+    smoothlight ^= 1;
+
+    // Recalculate light tables
+    R_InitLightTables();
 }
 
 static void M_RD_WindowBorder()
@@ -5370,6 +5385,7 @@ static void M_RD_BackToDefaults_Recommended(void)
     show_fps                = 0;
     smoothing               = 0;
     vga_porch_flash         = 0;
+    smoothlight             = 1;
     png_screenshots         = 1;
 
     // Display
@@ -5519,6 +5535,7 @@ static void M_RD_BackToDefaults_Original(void)
     show_fps                = 0;
     smoothing               = 0;
     vga_porch_flash         = 0;
+    smoothlight             = 0;
     png_screenshots         = 1;
 
     // Display

@@ -116,6 +116,7 @@ char* autoload_dir  = NULL;
 //------------------------------------------------------------------------------
 
 // Rendering
+int smoothlight = 1;
 int show_endoom = 0;
 int flashing_hom = 0;
 
@@ -954,6 +955,7 @@ void D_BindVariables(void)
 
     // Rendering
     M_BindIntVariable("uncapped_fps",           &uncapped_fps);
+    M_BindIntVariable("smoothlight",            &smoothlight);
     M_BindIntVariable("show_endoom",            &show_endoom);
     M_BindIntVariable("flashing_hom",           &flashing_hom);
 

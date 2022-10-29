@@ -50,8 +50,8 @@
 #define MAXLIGHTZ			1024
 #define LIGHTZSHIFT			17
 // [JN] Vanilla values
-//#define MAXLIGHTZ			128
-//#define LIGHTZSHIFT		20
+#define MAXLIGHTZ_VANILLA   128
+#define LIGHTZSHIFT_VANILLA 20
 #define	NUMCOLORMAPS		32      // number of diminishing
 #define	INVERSECOLORMAP		32
 
@@ -385,6 +385,9 @@ extern lighttable_t* brightmaps_ethereal;
 
 
 extern int extralight;
+extern int maxlightz, lightzshift;
+
+extern void R_InitLightTables (void);
 extern lighttable_t *fixedcolormap;
 
 extern fixed_t viewcos, viewsin;
