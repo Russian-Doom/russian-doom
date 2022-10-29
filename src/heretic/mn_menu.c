@@ -67,7 +67,10 @@ void OnDeactivateMenu(void);
 // -----------------------------------------------------------------------------
 
 // Rendering
-static void DrawRenderingMenu(void);
+static void DrawRenderingMenu1(void);
+static void DrawRenderingMenu2(void);
+
+// Page 1
 static void M_RD_Change_Widescreen(Direction_t direction);
 static void M_RD_Change_Renderer();
 static void M_RD_Change_VSync();
@@ -75,6 +78,13 @@ static void M_RD_MaxFPS(Direction_t direction);
 static void M_RD_PerfCounter(Direction_t direction);
 static void M_RD_Smoothing();
 static void M_RD_PorchFlashing();
+
+// Page2
+static void M_RD_WindowBorder();
+static void M_RD_WindowSize(Direction_t direction);
+static void M_RD_WindowTitle();
+static void M_RD_AlwaysOnTop();
+static void M_RD_WindowAspectRatio();
 static void M_RD_Screenshots();
 static void M_RD_EndText();
 
@@ -397,7 +407,9 @@ int mouseSensitivity = 5;
 static Menu_t* OptionsMenu;
 static Menu_t EpisodeMenu;
 static Menu_t RDOptionsMenu;
-static Menu_t RenderingMenu;
+static Menu_t Rendering1Menu;
+static Menu_t Rendering2Menu;
+static const Menu_t* RenderingMenuPages[] = {&Rendering1Menu, &Rendering2Menu};
 static Menu_t DisplayMenu;
 static Menu_t ColorMenu;
 static Menu_t MessagesMenu;
@@ -493,7 +505,7 @@ MENU_STATIC_SKILL(SkillMenu,
 // -----------------------------------------------------------------------------
 
 static MenuItem_t RDOptionsItems[] = {
-    I_SETMENU("RENDERING",         "DBLTJ",          &RenderingMenu), // ВИДЕО
+    I_SETMENU("RENDERING",         "DBLTJ",          &Rendering1Menu), // ВИДЕО
     I_SETMENU("DISPLAY",           "\'RHFY",         &DisplayMenu), // ЭКРАН
     I_SETMENU("SOUND",             "FELBJ",          &SoundMenu), // АУДИО
     I_SETMENU("CONTROLS",          "EGHFDKTYBT",     &ControlsMenu), // УПРАВЛЕНИЕ
@@ -516,27 +528,66 @@ MENU_STATIC(RDOptionsMenu,
 // Video and Rendering
 // -----------------------------------------------------------------------------
 
-static MenuItem_t RenderingItems[] = {
-    I_TITLE( "RENDERING",                 "HTYLTHBYU"), // РЕНДЕРИНГ
-    I_LRFUNC("DISPLAY ASPECT RATIO:",     "CJJNYJITYBT CNJHJY \'RHFYF:",     M_RD_Change_Widescreen), // СООТНОШЕНИЕ СТОРОН ЭКРАНА
-    I_LRFUNC("SCREEN RENDERER:",          "HTYLTHTH \'RHFYF:",               M_RD_Change_Renderer), // РЕНДЕРЕР ЭКРАНА
-    I_SWITCH("VERTICAL SYNCHRONIZATION:", "DTHNBRFKMYFZ CBY[HJYBPFWBZ:",     M_RD_Change_VSync), // ВЕРТИКАЛЬНАЯ СИНХРОНИЗАЦИЯ
-    I_LRFUNC("FPS LIMIT:",                "JUHFYBXTYBT",                     M_RD_MaxFPS), // ОГРАНИЧЕНИЕ FPS
-    I_LRFUNC("PERFORMANCE COUNTER:",      "CXTNXBR GHJBPDJLBNTKMYJCNB:",     M_RD_PerfCounter), // СЧЕТЧИК ПРОИЗВОДИТЕЛЬНОСТИ
-    I_SWITCH("PIXEL SCALING:",            "GBRCTKMYJT CUKF;BDFYBT:",         M_RD_Smoothing), // ПИКСЕЛЬНОЕ СГЛАЖИВАНИЕ
-    I_SWITCH("PORCH PALETTE CHANGING:",   "BPVTYTYBT GFKBNHS RHFTD 'RHFYF:", M_RD_PorchFlashing), // ИЗМЕНЕНИЕ ПАЛИТРЫ КРАЕВ ЭКРАНА
-    I_TITLE( "EXTRA",                     "LJGJKYBNTKMYJ"), // ДОПОЛНИТЕЛЬНО
-    I_SWITCH("SCREENSHOT FORMAT:",        "AJHVFN CRHBYIJNJD:",              M_RD_Screenshots), // ФОРМАТ СКРИНШОТОВ
-    I_SWITCH("SHOW ENDTEXT SCREEN:",      "GJRFPSDFNM \'RHFY",               M_RD_EndText)  // ПОКАЗЫВАТЬ ЭКРАН ENDTEXT
+static const PageDescriptor_t RenderingDescriptor = { // pitto
+    2, RenderingMenuPages,
+    252, 162,
+    CR_GRAY
 };
 
-MENU_STATIC(RenderingMenu,
+static MenuItem_t Rendering1Items[] = {
+    I_TITLE( "RENDERING",                 "HTYLTHBYU"), // РЕНДЕРИНГ
+    I_LRFUNC("DISPLAY ASPECT RATIO:",     "CJJNYJITYBT CNJHJY \'RHFYF:",     M_RD_Change_Widescreen),  // СООТНОШЕНИЕ СТОРОН ЭКРАНА
+    I_LRFUNC("SCREEN RENDERER:",          "HTYLTHTH \'RHFYF:",               M_RD_Change_Renderer),    // РЕНДЕРЕР ЭКРАНА
+    I_SWITCH("VERTICAL SYNCHRONIZATION:", "DTHNBRFKMYFZ CBY[HJYBPFWBZ:",     M_RD_Change_VSync),       // ВЕРТИКАЛЬНАЯ СИНХРОНИЗАЦИЯ
+    I_LRFUNC("FPS LIMIT:",                "JUHFYBXTYBT",                     M_RD_MaxFPS),             // ОГРАНИЧЕНИЕ FPS
+    I_LRFUNC("PERFORMANCE COUNTER:",      "CXTNXBR GHJBPDJLBNTKMYJCNB:",     M_RD_PerfCounter),        // СЧЕТЧИК ПРОИЗВОДИТЕЛЬНОСТИ
+    I_SWITCH("PIXEL SCALING:",            "GBRCTKMYJT CUKF;BDFYBT:",         M_RD_Smoothing),          // ПИКСЕЛЬНОЕ СГЛАЖИВАНИЕ
+    I_SWITCH("PORCH PALETTE CHANGING:",   "BPVTYTYBT GFKBNHS RHFTD 'RHFYF:", M_RD_PorchFlashing),      // ИЗМЕНЕНИЕ ПАЛИТРЫ КРАЕВ ЭКРАНА
+    I_EMPTY,
+    I_EMPTY,
+    I_EMPTY,
+    I_EMPTY,
+    I_EMPTY,
+    I_SETMENU("NEXT PAGE >", "LFKTT `", &Rendering2Menu),  // ДАЛЕЕ >
+    I_EMPTY
+};
+
+MENU_STATIC_PAGED(Rendering1Menu,
     36, 36,
     32,
     "RENDERING OPTIONS", "YFCNHJQRB DBLTJ", false, // НАСТРОЙКИ ВИДЕО
-    RenderingItems, false,
-    DrawRenderingMenu,
-    &RDOptionsMenu
+    Rendering1Items, false,
+    DrawRenderingMenu1,
+    &RDOptionsMenu,
+    &RenderingDescriptor
+);
+
+static MenuItem_t Rendering2Items[] = {
+    I_TITLE( "WINDOW OPTIONS",                "YFCNHJQRB JRYF"),                               // НАСТРОЙКИ ОКНА
+    I_SWITCH("BORDERED WINDOW:",              "JRYJ C HFVRJQ:",      M_RD_WindowBorder),       // ОКНО С РАМКОЙ
+    I_LRFUNC("WINDOW SIZE:",                  "HFPVTH JRYF:",        M_RD_WindowSize),         // РАЗМЕР ОКНА
+    I_SWITCH("WINDOW TITLE:",                 "PFUJKJDJR JRYF:",     M_RD_WindowTitle),        // ЗАГОЛОВОК ОКНА
+    I_SWITCH("ALWAYS ON TOP:",                "GJDTH[ LHEUB[ JRJY:", M_RD_AlwaysOnTop),        // ПОВЕРХ ДРУГИХ ОКОН
+    I_SWITCH("PRESERVE WINDOW ASPECT RATIO:", "GHJGJHWBB JRYF:",     M_RD_WindowAspectRatio),  // ПРОПОРЦИИ ОКНА
+    I_TITLE( "EXTRA",                         "LJGJKYBNTKMYJ"),                                // ДОПОЛНИТЕЛЬНО
+    I_SWITCH("SCREENSHOT FORMAT:",            "AJHVFN CRHBYIJNJD:",  M_RD_Screenshots),        // ФОРМАТ СКРИНШОТОВ
+    I_SWITCH("SHOW ENDTEXT SCREEN:",          "GJRFPSDFNM \'RHFY",   M_RD_EndText),            // ПОКАЗЫВАТЬ ЭКРАН ENDTEXT
+    I_EMPTY,
+    I_EMPTY,
+    I_EMPTY,
+    I_EMPTY,
+    I_SETMENU("< PREV PAGE", "^ YFPFL", &Rendering1Menu),  // < НАЗАД
+    I_EMPTY
+};
+
+MENU_STATIC_PAGED(Rendering2Menu,
+    36, 36,
+    32,
+    "RENDERING OPTIONS", "YFCNHJQRB DBLTJ", false, // НАСТРОЙКИ ВИДЕО
+    Rendering2Items, false,
+    DrawRenderingMenu2,
+    &RDOptionsMenu,
+    &RenderingDescriptor
 );
 
 // -----------------------------------------------------------------------------
@@ -1865,7 +1916,7 @@ static void DrawOptionsMenu(void)
 // DrawRenderingMenu
 // -----------------------------------------------------------------------------
 
-static void DrawRenderingMenu(void)
+static void DrawRenderingMenu1(void)
 {
 	static char num[4];
 
@@ -1904,7 +1955,7 @@ static void DrawRenderingMenu(void)
         if (aspect_ratio_temp != aspect_ratio || opengles_renderer_temp != opengles_renderer)
         {
             RD_M_DrawTextSmallENG("THE PROGRAM MUST BE RESTARTED",
-                                  51 + wide_delta, 152, CR_GREEN);
+                                  51 + wide_delta, 132, MenuTime & 32 ? CR_GREEN : CR_DARKGREEN);
         }
 
         // Vertical sync
@@ -1945,15 +1996,11 @@ static void DrawRenderingMenu(void)
         // Porch palette changing
         RD_M_DrawTextSmallENG(vga_porch_flash ? "ON" : "OFF", 205 + wide_delta, 102, CR_NONE);
 
-
-        // Show ENDTEXT screen
-        RD_M_DrawTextSmallENG(show_endoom ? "ON" : "OFF", 188 + wide_delta, 132, CR_NONE);
-
         // Tip for faster sliding
-        if (CurrentItPos == 3)
+        if (CurrentItPos == 4)
         {
             RD_M_DrawTextSmallENG("HOLD RUN BUTTON FOR FASTER SLIDING",
-                                  39 + wide_delta, 172, CR_DARKGREEN);
+                                  39 + wide_delta, 142, CR_DARKGREEN);
         }
     }
     else
@@ -1969,22 +2016,22 @@ static void DrawRenderingMenu(void)
         // Экрнанный рендерер
         if (force_software_renderer == 1)
         {
-            RD_M_DrawTextSmallRUS("Y/L", 157 + wide_delta, 52, CR_DARKRED); // Н/Д
+            RD_M_DrawTextSmallRUS("Y/L", 158 + wide_delta, 52, CR_DARKRED); // Н/Д
         }
         else
         {
             if (opengles_renderer_temp)
             {
-                RD_M_DrawTextSmallENG("OPENGL ES 2.0", 157 + wide_delta, 52, CR_NONE);
+                RD_M_DrawTextSmallENG("OPENGL ES 2.0", 158 + wide_delta, 52, CR_NONE);
             }
             else
             {
 #ifdef _WIN32
                 // On Windows, default is always Direct 3D 9.
-                RD_M_DrawTextSmallENG("DIRECT 3D", 157 + wide_delta, 52, CR_NONE);
+                RD_M_DrawTextSmallENG("DIRECT 3D", 158 + wide_delta, 52, CR_NONE);
 #else
                 // On other OSes it is unclear, so use OS preferred.
-                RD_M_DrawTextSmallRUS("GJ DS,JHE JC", 157 + wide_delta, 52, CR_NONE); // ПО ВЫБОРУ ОС
+                RD_M_DrawTextSmallRUS("GJ DS,JHE JC", 158 + wide_delta, 52, CR_NONE); // ПО ВЫБОРУ ОС
 #endif
             }
         }
@@ -1993,7 +2040,7 @@ static void DrawRenderingMenu(void)
         if (aspect_ratio_temp != aspect_ratio || opengles_renderer_temp != opengles_renderer)
         {
             RD_M_DrawTextSmallRUS("YTJ,[JLBV GTHTPFGECR GHJUHFVVS",
-                                  46 + wide_delta, 158, CR_GREEN);
+                                  46 + wide_delta, 132, MenuTime & 32 ? CR_GREEN : CR_DARKGREEN);
         }
 
         // Вертикальная синхронизация
@@ -2031,29 +2078,113 @@ static void DrawRenderingMenu(void)
         }
         else
         {
-            RD_M_DrawTextSmallRUS(smoothing ? "DRK" : "DSRK", 211 + wide_delta, 102, CR_NONE);
+            RD_M_DrawTextSmallRUS(smoothing ? "DRK" : "DSRK", 211 + wide_delta, 92, CR_NONE);
         }
 
         // Изменение палитры краев экрана
         RD_M_DrawTextSmallRUS(vga_porch_flash ? "DRK" : "DSRK", 265 + wide_delta, 102, CR_NONE);
 
-        // Показывать экран ENDTEXT
-        RD_M_DrawTextSmallENG("ENDTEXT:", 160 + wide_delta, 132, CR_NONE);
-        RD_M_DrawTextSmallRUS(show_endoom ? "DRK" : "DSRK", 222 + wide_delta, 132, CR_NONE);
-
         // Для ускоренного пролистывания
         // удерживайте кнопку бега
-        if (CurrentItPos == 3)
+        if (CurrentItPos == 4)
         {
             RD_M_DrawTextSmallRUS("LKZ ECRJHTYYJUJ GHJKBCNSDFYBZ",
-                                  51 + wide_delta, 172, CR_DARKGREEN);
+                                  51 + wide_delta, 142, CR_DARKGREEN);
             RD_M_DrawTextSmallRUS("ELTH;BDFQNT RYJGRE ,TUF",
-                                  73 + wide_delta, 182, CR_DARKGREEN);
+                                  73 + wide_delta, 152, CR_DARKGREEN);
         }
+    }
+}
+
+static void DrawRenderingMenu2(void)
+{
+    char  win_width[8];
+    char  win_height[8];
+    char *window_size;
+
+    // Consolidate window size string for printing.
+    M_snprintf(win_width, 8, "%d", window_width);
+    M_snprintf(win_height, 8, "%d", window_height);
+    window_size = M_StringJoin(win_width, "x", win_height, NULL);
+
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    if (english_language)
+    {
+        // Bordered window
+        RD_M_DrawTextSmallENG(window_border ? "ON" : "OFF", 157 + wide_delta, 42, CR_NONE);
+
+        // Window size
+        RD_M_DrawTextSmallENG(window_size, 121 + wide_delta, 52, fullscreen ? CR_GRAY : CR_NONE);
+
+        // Tip for faster sliding
+        if (CurrentItPos == 2)
+        {
+            if (fullscreen)
+            {
+                RD_M_DrawTextSmallCenteredENG("SWITCH TO WINDOWED MODE FIRST", 132, CR_DARKGREEN);
+                RD_M_DrawTextSmallCenteredENG("BY PRESSING \"ALT+ENTER\"", 142, CR_DARKGREEN);
+            }
+            else
+            {
+                RD_M_DrawTextSmallCenteredENG("USE ARROW KEYS TO CHANGE SIZE,", 132, CR_DARKGREEN);
+                RD_M_DrawTextSmallCenteredENG("HOLD RUN BUTTON FOR FASTER SLIDING.", 142, CR_DARKGREEN);
+            }
+        }
+
+        // Window title
+        RD_M_DrawTextSmallENG(window_title_short ? "BRIEF" : "FULL", 124 + wide_delta, 62, CR_NONE);
+
+        // Always on top
+        RD_M_DrawTextSmallENG(window_ontop ? "ON" : "OFF", 138 + wide_delta, 72, CR_NONE);
+
+        // Preserve window aspect ratio
+        RD_M_DrawTextSmallENG(aspect_ratio_correct ? "ON" : "OFF", 249 + wide_delta, 82, CR_NONE);
+
+        // Show ENDTEXT screen
+        RD_M_DrawTextSmallENG(show_endoom ? "ON" : "OFF", 188 + wide_delta, 112, CR_NONE);
+    }
+    else
+    {
+        // Окно с рамкой
+        RD_M_DrawTextSmallRUS(window_border ? "DRK" : "DSRK", 138 + wide_delta, 42, CR_NONE);
+
+        // Размер окна
+        RD_M_DrawTextSmallENG(window_size, 126 + wide_delta, 52, fullscreen ? CR_GRAY : CR_NONE);
+
+        // Подсказка для ускоренного изменения размера
+        if (CurrentItPos == 2)
+        {
+            if (fullscreen)
+            {
+                RD_M_DrawTextSmallCenteredRUS("GTHTRK.XBNTCM D JRJYYSQ HT;BV", 132, CR_DARKGREEN);
+                RD_M_DrawTextSmallRUS("BCGJKMPEZ CJXTNFYBT RKFDBI", 16, 142, CR_DARKGREEN);
+                RD_M_DrawTextSmallENG("\"ALT+ENTER\"", 220 + wide_delta, 142, CR_DARKGREEN);
+            }
+            else
+            {
+            RD_M_DrawTextSmallCenteredRUS("LKZ ECRJHTYYJUJ BPVTYTYBZ HFPVTHF", 132, CR_DARKGREEN);
+            RD_M_DrawTextSmallCenteredRUS("ELTH;BDFQNT RYJGRE ,TUF", 142, CR_DARKGREEN);
+            }
+        }
+
+        // Заголовок окна
+        RD_M_DrawTextSmallRUS(window_title_short ? "RHFNRBQ" : "GJLHJ,YSQ", 148 + wide_delta, 62, CR_NONE);
+
+        // Поверх других окон
+        RD_M_DrawTextSmallRUS(window_ontop ? "DRK" : "DSRK", 177 + wide_delta, 72, CR_NONE);
+
+        // Пропорции окна
+        RD_M_DrawTextSmallRUS(aspect_ratio_correct  ? "ABRCBHJDFYYST" : "CDJ,JLYST", 147 + wide_delta, 82, CR_NONE);
+
+        // Показывать экран ENDTEXT
+        RD_M_DrawTextSmallENG("ENDTEXT:", 160 + wide_delta, 112, CR_NONE);
+        RD_M_DrawTextSmallRUS(show_endoom ? "DRK" : "DSRK", 222 + wide_delta, 112, CR_NONE);
     }
 
     // Screenshot format / Формат скриншотов (same english values)
-    RD_M_DrawTextSmallENG(png_screenshots ? "PNG" : "PCX", 175 + wide_delta, 122, CR_NONE);
+    RD_M_DrawTextSmallENG(png_screenshots ? "PNG" : "PCX", 176 + wide_delta, 102, CR_NONE);
 
 }
 
@@ -2160,6 +2291,77 @@ static void M_RD_PorchFlashing()
 
     // Update black borders
     I_DrawBlackBorders();
+}
+
+static void M_RD_WindowBorder()
+{
+    window_border ^= 1;
+    
+    I_ToggleWindowBorder();
+}
+
+
+static void M_RD_WindowSize(Direction_t direction)
+{
+    // Disallow to change size in full screen mode.
+    if (fullscreen)
+    {
+        return;
+    }
+
+    switch (direction)
+    {
+        case LEFT_DIR:
+            window_width  -= BK_isKeyPressed(bk_speed) ? 10 : 1;
+            window_height -= BK_isKeyPressed(bk_speed) ? 10 : 1;
+        break;
+        case RIGHT_DIR:
+            window_width  += BK_isKeyPressed(bk_speed) ? 10 : 1;
+            window_height += BK_isKeyPressed(bk_speed) ? 10 : 1;
+        break;
+    }
+
+    // Prevent overflows / incorrect values.
+    if (window_width < screenwidth >> hires)
+    {
+        window_width = screenwidth >> hires; // SDL_SetWindowMinimumSize in i_video.c
+    }
+    if (window_width > 3440)
+    {
+        window_width = 3440;
+    }
+    if (window_height < actualheight >> hires)
+    {
+        window_height = actualheight >> hires; // SDL_SetWindowMinimumSize in i_video.c
+    }
+    if (window_height > 1440)
+    {
+        window_height = 1440;
+    }
+
+    AdjustWindowSize();
+    SDL_SetWindowSize(screen, window_width, window_height);
+}
+
+static void M_RD_WindowTitle()
+{
+    window_title_short ^= 1;
+    
+    I_InitWindowTitle();
+}
+
+static void M_RD_AlwaysOnTop()
+{
+    window_ontop ^= 1;
+
+    I_KeepWindowOnTop();
+}
+
+static void M_RD_WindowAspectRatio()
+{
+    aspect_ratio_correct ^= 1;
+    
+    I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
 }
 
 static void M_RD_Screenshots()
