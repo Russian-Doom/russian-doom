@@ -6,7 +6,7 @@ project("International Doom" LANGUAGES C NONE)
 
 # Versions
 set(BUILD_DOOM_VERSION "6.1")
-set(BUILD_HERETIC_VERSION "5.3")
+set(BUILD_HERETIC_VERSION "6.0")
 set(BUILD_HEXEN_VERSION "5.2")
 set(BUILD_STRIFE_VERSION "0.0")
 
