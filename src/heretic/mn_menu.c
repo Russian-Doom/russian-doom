@@ -791,7 +791,7 @@ MENU_STATIC(ControlsMenu,
 static const PageDescriptor_t BindingsPageDescriptor = {
     8, BindingsMenuPages,
     252, 165,
-    CR_WHITE
+    CR_GRAY
 };
 
 static MenuItem_t Bindings1Items[] = {
@@ -1105,7 +1105,7 @@ MENU_DYNAMIC(GamepadSelectMenu,
 static const PageDescriptor_t GamepadPageDescriptor = {
     2, GamepadMenuPages,
     252, 182,
-    CR_WHITE
+    CR_GRAY
 };
 
 static MenuItem_t Gamepad1Items[] = {
