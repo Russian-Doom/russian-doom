@@ -833,8 +833,6 @@ extern boolean automapactive;
 // Interlude (IN_lude.c)
 //----------------------
 
-extern boolean intermission;
-
 void IN_Start(void);
 void IN_Ticker(void);
 void IN_Drawer(void);

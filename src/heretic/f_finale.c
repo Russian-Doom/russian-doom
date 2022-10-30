@@ -27,8 +27,12 @@
 #include "jn.h"
 
 
+// Macros
+
 #define TEXTSPEED  3
 #define TEXTWAIT   250
+
+// Private data
 
 static int FontABaseLump;
 static int FontFBaseLump;
