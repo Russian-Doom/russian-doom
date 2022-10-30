@@ -908,9 +908,9 @@ void IN_DrawCoopStats(void)
     }
     else
     {
-        RD_M_DrawTextB(DEH_String("DHFUB"), 81 + wide_delta, 35);    // ВРАГИ (95, 35)
-        RD_M_DrawTextB(DEH_String(",JYECS"), 150 + wide_delta, 35);  // БОНУСЫ (155, 35)
-        RD_M_DrawTextB(DEH_String("NFQYBRB"), 232 + wide_delta, 35); // ТАЙНИКИ (232, 35)
+        RD_M_DrawTextBigRUS(DEH_String("DHFUB"), 81 + wide_delta, 35);    // ВРАГИ
+        RD_M_DrawTextBigRUS(DEH_String(",JYECS"), 148 + wide_delta, 35);  // БОНУСЫ
+        RD_M_DrawTextBigRUS(DEH_String("NFQYBRB"), 230 + wide_delta, 35); // ТАЙНИКИ
     }
 
     if (english_language)
