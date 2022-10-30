@@ -642,7 +642,7 @@ void P_ZMovement(mobj_t * mo)
 
                 // haleyjd: removed externdriver crap
                 // [JN] Mouselook: disable centering while mouselook
-                if (!mlook)
+                if (!mlook || !singleplayer)
                 mo->player->centering = true;
             }
             mo->momz = 0;

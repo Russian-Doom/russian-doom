@@ -276,6 +276,12 @@ void P_MovePlayer(player_t * player)
             }
         }
     }
+    // [crispy] Handle mouselook
+    // [JN] TODO - not working in netgame, causing desyncs!
+    if (!demoplayback && !netgame)
+    {
+        player->lookdir = BETWEEN(-110, 90, player->lookdir + cmd->lookdir);
+    }
     if (player->centering)
     {
         if (player->lookdir > 0)

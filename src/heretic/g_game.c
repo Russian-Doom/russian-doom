@@ -35,6 +35,11 @@
 #include "v_video.h"
 #include "jn.h"
 
+// Macros
+
+#define MLOOKUNIT 8         // [crispy] for mouselook
+#define MLOOKUNITLOWRES 16  // [crispy] for mouselook when recording
+
 // Functions
 
 boolean G_CheckDemoStatus(void);
@@ -564,6 +569,58 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     if (mousex == 0)
     {
         testcontrols_mousespeed = 0;
+    }
+
+    // [crispy] Handle mouselook
+    if (mlook)
+    {
+        if (demorecording || lowres_turn)
+        {
+            // [crispy] Map mouse movement to look variable when recording
+            look += mouse_y_invert ? -mousey / MLOOKUNITLOWRES
+                                   :  mousey / MLOOKUNITLOWRES;
+
+            // [crispy] Limit to max speed of keyboard look up/down
+            if (look > 2)
+            {
+                look = 2;
+            }
+            else if (look < -2)
+            {
+                look = -2;
+            }
+        }
+        else
+        {
+            cmd->lookdir = mouse_y_invert ? -mousey : mousey;
+            cmd->lookdir /= MLOOKUNIT;
+        }
+    }
+    else if (!novert)
+    {
+        forward += mousey;
+    }
+
+    // [JN] Toggle mouselook
+    if (BK_isKeyPressed(bk_toggle_mlook))
+    {
+        if (!mlook)
+        {
+            mlook = true;
+        }
+        else
+        {
+            mlook = false;
+            look = TOCENTER;
+            players[consoleplayer].lookdir = 0;
+        }
+
+        P_SetMessage(&players[consoleplayer], (mlook == true ?
+                     txt_mlook_on : txt_mlook_off), msg_system, false);
+
+        S_StartSound(NULL, sfx_chat);
+
+        BK_ReleaseKey(bk_toggle_mlook);
     }
 
     mousex = mousey = joyturn = joyvlook = 0;
