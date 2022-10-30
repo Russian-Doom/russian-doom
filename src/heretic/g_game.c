@@ -94,7 +94,6 @@ boolean paused;
 boolean sendpause;              // send a pause event next tic
 boolean sendsave;               // send a save event next tic
 boolean usergame;               // ok to save / end game
-extern boolean askforquit;
 
 boolean timingdemo;             // if true, exit with report on completion
 boolean nodrawers = false;      // [crispy] for the demowarp feature

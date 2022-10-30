@@ -259,7 +259,6 @@ void D_ConnectNetGame(void);
 void D_CheckNetGame(void);
 void D_PageDrawer(void);
 void D_AdvanceDemo(void);
-boolean F_Responder(event_t * ev);
 
 boolean hasDelayEvents = false;
 
@@ -496,7 +495,6 @@ extern boolean finalestage;
 void D_Display(void)
 {
     static int saved_gametic = -1;
-    extern boolean askforquit;
 
     realframe = (!uncapped_fps || gametic > saved_gametic);
 

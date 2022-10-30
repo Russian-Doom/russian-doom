@@ -75,8 +75,25 @@ typedef enum
 
 #define BASETHRESHOLD 100       // follow a player exlusively for 3 seconds
 
-// ***** MN_MENU *****
+/* 
+================================================================================
+=
+= F_FINALE
+=
+================================================================================
+*/
 
+extern const boolean F_Responder (const event_t *event);
+
+/* 
+================================================================================
+=
+= MN_MENU
+=
+================================================================================
+*/
+
+extern boolean askforquit;
 extern byte *ammo_widget_opacity_set;
 
 // ***** P_TICK *****
