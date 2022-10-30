@@ -19,7 +19,6 @@ if(COMPILE_HERETIC)
                 in_lude.c
                 m_random.c
                 mn_menu.c
-                                    p_action.h
                 p_ceilng.c
                 p_doors.c
                 p_enemy.c

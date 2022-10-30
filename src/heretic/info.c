@@ -18,7 +18,6 @@
 
 
 #include "doomdef.h"
-#include "p_action.h"
 
 char *sprnames[] = {
     "IMPX","ACLO","PTN1","SHLD","SHD2","BAGH","SPMP","INVS","PTN2","SOAR",
