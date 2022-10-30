@@ -1054,7 +1054,7 @@ void R_DrawPSprite (const pspdef_t *psp)
 
     // [JN] Applying weapon bobbing for ready states, halfed for firing states 
     // and x-only for raise/lower states. "Plus" means activated Tome of Power.
-    if (weapon_bobbing && singleplayer && !vanillaparm)
+    if (weapon_bobbing && !vanillaparm)
     {
         if (/* Staff+   */ state == S_STAFFREADY2_1    || state == S_STAFFREADY2_2    || state == S_STAFFREADY2_3    ||
         /* Gauntlets+   */ state == S_GAUNTLETREADY2_1 || state == S_GAUNTLETREADY2_2 || state == S_GAUNTLETREADY2_3 ||
