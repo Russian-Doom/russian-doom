@@ -20,7 +20,6 @@
 
 #include "doomdef.h"
 #include "i_system.h"
-#include "m_random.h"
 #include "p_local.h"
 #include "s_sound.h"
 #include "v_video.h"

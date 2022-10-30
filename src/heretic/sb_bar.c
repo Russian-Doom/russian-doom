@@ -26,7 +26,6 @@
 #include "i_timer.h"    // [JN] TICRATE
 #include "m_cheat.h"
 #include "m_misc.h"
-#include "m_random.h"
 #include "p_local.h"
 #include "s_sound.h"
 #include "v_video.h"

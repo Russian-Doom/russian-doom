@@ -17,7 +17,7 @@ if(COMPILE_HERETIC)
                 g_game.c
                 info.c              info.h
                 in_lude.c
-                m_random.c          m_random.h
+                m_random.c
                 mn_menu.c
                                     p_action.h
                 p_ceilng.c

@@ -88,6 +88,30 @@ extern const boolean F_Responder (const event_t *event);
 /* 
 ================================================================================
 =
+= M_RANDOM
+=
+================================================================================
+*/
+
+// Most damage defined using HITDICE
+#define HITDICE(a) ((1+(P_Random()&7))*a)
+
+const int M_Random(void);
+// returns a number from 0 to 255
+const int P_Random(void);
+// as M_Random, but used only by the play simulation
+
+void M_ClearRandom(void);
+// fix randoms for demos
+
+extern int rndindex;
+
+// Defined version of P_Random() - P_Random()
+const int P_SubRandom (void);
+
+/* 
+================================================================================
+=
 = MN_MENU
 =
 ================================================================================
