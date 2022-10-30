@@ -635,7 +635,7 @@ void SB_Drawer(void)
 {
     int frame;
     int xval;
-    const int xval_widget = show_fps || local_time ? 50 : 0;
+    const int xval_widget = demotimer || show_fps || local_time ? 50 : 0;
     static boolean hitCenterFrame;
     const int wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0) + 2;
 
@@ -1078,6 +1078,16 @@ void SB_Drawer(void)
             BorderNeedRefresh = true;
             UpdateState |= I_MESSAGES;
         }
+    }
+
+    // [crispy] demo timer widget
+    if (demoplayback && (demotimer == 1 || demotimer == 3))
+    {
+        SB_DrawDemoTimer(demotimerdir ? (deftotaldemotics - defdemotics) : defdemotics);
+    }
+    else if (demorecording && (demotimer == 2 || demotimer == 3))
+    {
+        SB_DrawDemoTimer(leveltime);
     }
 
     // [JN] Draw ammo widget.
@@ -2439,6 +2449,36 @@ static void SB_Draw_Ammo_Widget (void)
         }
         dp_translation = NULL;
     }
+}
+
+/*
+================================================================================
+=
+= [crispy] Demo Timer widget
+=
+================================================================================
+*/
+
+void SB_DrawDemoTimer (const int time)
+{
+    const boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
+    const int hours = time / (3600 * TICRATE);
+    const int mins = time / (60 * TICRATE) % 60;
+    const float secs = (float)(time % (60 * TICRATE)) / TICRATE;
+    char n[16];
+    int x = 273;
+
+    if (hours)
+    {
+        M_snprintf(n, sizeof(n), "%02i:%02i:%05.02f", hours, mins, secs);
+    }
+    else
+    {
+        M_snprintf(n, sizeof(n), "%02i:%05.02f", mins, secs);
+        x += 12;
+    }
+
+    RD_M_DrawTextC(n, x + (wide_4_3 ? wide_delta : wide_delta*2), 11);
 }
 
 /*

@@ -206,12 +206,14 @@ int crosshair_type = 1;
 // Gameplay: Gameplay
 int fix_map_errors = 1;
 int flip_levels = 0;
-int no_internal_demos = 0;
 int breathing = 0;
 int pistol_start = 0;
 
 // Gameplay: Demos
+int demotimer = 0;
+int demotimerdir = 0;
 int demobar = 0;
+int no_internal_demos = 0;
 
 // Level Select (1)
 int selective_skill = 2;
@@ -445,11 +447,11 @@ void DrawTimeAndFPS(void)
                      local_time == 4 ? "%H:%M:%S" :    // 24-hour (HH:MM:SS)
                                        "", tm);        // No time
 
-            RD_M_DrawTextC(s, (local_time == 1 ? 281 :
-                               local_time == 2 ? 269 :
-                               local_time == 3 ? 293 :
-                               local_time == 4 ? 281 : 0)
-                              + (wide_4_3 ? wide_delta : wide_delta * 2), 13);
+            RD_M_DrawTextC(s, (local_time == 1 ? 285 :
+                               local_time == 2 ? 273 :
+                               local_time == 3 ? 297 :
+                               local_time == 4 ? 285 : 0)
+                              + (wide_4_3 ? wide_delta : wide_delta * 2), 21);
         }
 
         if (show_fps)
@@ -457,23 +459,23 @@ void DrawTimeAndFPS(void)
             char digit[9999];
             
             sprintf (digit, "%d", real_fps);
-            RD_M_DrawTextC("FPS:", 279 + (wide_4_3 ? wide_delta : wide_delta * 2), 23);
-            RD_M_DrawTextC(digit, 297 + (wide_4_3 ? wide_delta : wide_delta * 2), 23);   // [JN] fps digits
+            RD_M_DrawTextC("FPS:", 283 + (wide_4_3 ? wide_delta : wide_delta * 2), 30);
+            RD_M_DrawTextC(digit, 301 + (wide_4_3 ? wide_delta : wide_delta * 2), 30);   // [JN] fps digits
 
             // [JN] Draw extra counters, only while playing in game level.
             if (show_fps == 2 && gamestate == GS_LEVEL)
             {
                 sprintf (digit, "%9d", rendered_segs);
-                RD_M_DrawTextC("SEGS", 297 + (wide_4_3 ? wide_delta : wide_delta*2), 32);
-                RD_M_DrawTextC(digit, 277 + (wide_4_3 ? wide_delta : wide_delta*2), 39);
+                RD_M_DrawTextC("SEGS", 301 + (wide_4_3 ? wide_delta : wide_delta*2), 39);
+                RD_M_DrawTextC(digit, 281 + (wide_4_3 ? wide_delta : wide_delta*2), 46);
 
                 sprintf (digit, "%9d", rendered_visplanes);
-                RD_M_DrawTextC("VISPLANES", 277 + (wide_4_3 ? wide_delta : wide_delta*2), 49);
-                RD_M_DrawTextC(digit, 277 + (wide_4_3 ? wide_delta : wide_delta*2), 56);
+                RD_M_DrawTextC("VISPLANES", 281 + (wide_4_3 ? wide_delta : wide_delta*2), 55);
+                RD_M_DrawTextC(digit, 281 + (wide_4_3 ? wide_delta : wide_delta*2), 62);
 
                 sprintf (digit, "%9d", rendered_vissprites);
-                RD_M_DrawTextC("SPRITES", 285 + (wide_4_3 ? wide_delta : wide_delta*2), 66);
-                RD_M_DrawTextC(digit, 277 + (wide_4_3 ? wide_delta : wide_delta*2), 73);
+                RD_M_DrawTextC("SPRITES", 289 + (wide_4_3 ? wide_delta : wide_delta*2), 71);
+                RD_M_DrawTextC(digit, 281 + (wide_4_3 ? wide_delta : wide_delta*2), 78);
             }
         }
     }
@@ -1049,12 +1051,14 @@ void D_BindVariables(void)
     // Gameplay: Gameplay
     M_BindIntVariable("fix_map_errors",         &fix_map_errors);
     M_BindIntVariable("flip_levels",            &flip_levels);
-    M_BindIntVariable("no_internal_demos",      &no_internal_demos);
     M_BindIntVariable("breathing",              &breathing);
     M_BindIntVariable("pistol_start",           &pistol_start);
 
     // Gameplay: Demos
+    M_BindIntVariable("demotimer",              &demotimer);
+    M_BindIntVariable("demotimerdir",           &demotimerdir);
     M_BindIntVariable("demobar",                &demobar);
+    M_BindIntVariable("no_internal_demos",      &no_internal_demos);
 
     for (i=0; i<10; ++i)
     {

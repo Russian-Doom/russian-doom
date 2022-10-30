@@ -284,4 +284,8 @@ void AM_Drawer(void);
 
 extern int SB_state;
 extern int ArtifactFlash;
+extern int defdemotics, deftotaldemotics;
+
 void SB_PaletteFlash(void);
+extern void SB_DrawDemoTimer (const int time);
+extern void SB_DemoProgressBar (void);

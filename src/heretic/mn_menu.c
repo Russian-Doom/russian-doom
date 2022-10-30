@@ -253,6 +253,8 @@ static void M_RD_FixMapErrors();
 static void M_RD_FlipLevels();
 static void M_RD_Breathing();
 static void M_RD_WandStart();
+static void M_RD_DemoTimer(Direction_t direction);
+static void M_RD_DemoTimerDir();
 static void M_RD_DemoBar();
 static void M_RD_NoDemos();
 
@@ -1283,10 +1285,10 @@ static MenuItem_t Gameplay4Items[] = {
     I_SWITCH("IMITATE PLAYER'S BREATHING:", "BVBNFWBZ LS[FYBZ BUHJRF:",        M_RD_Breathing), // ИМИТАЦИЯ ДЫХАНИЯ ИГРОКА
     I_SWITCH("WAND START GAME MODE:",       NULL, /* [JN] Joint EN/RU string*/ M_RD_WandStart), // РЕЖИМ ИГРЫ "WAND START"
     I_TITLE( "GAMEPLAY",                    "LTVJPFGBCB"), // ДЕМОЗАПИСИ
+    I_LRFUNC("SHOW DEMO TIMER:",            "JNJ,HF;FNM NFQVTH:",              M_RD_DemoTimer), // ОТОБРАЖАТЬ ТАЙМЕР
+    I_SWITCH("TIMER DIRECTION:",            "DHTVZ NFQVTHF:",                  M_RD_DemoTimerDir), // ВРЕМЯ ТАЙМЕРА
     I_SWITCH("SHOW PROGRESS BAR:",          "IRFKF GHJUHTCCF:",                M_RD_DemoBar), // ШКАЛА ПРОГРЕССА
     I_SWITCH("PLAY INTERNAL DEMOS:",        "GHJBUHSDFNM LTVJPFGBCB:",         M_RD_NoDemos), // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
-    I_EMPTY,
-    I_EMPTY,
     I_EMPTY,
     I_EMPTY,
     I_EMPTY,
@@ -4747,13 +4749,24 @@ static void DrawGameplay4Menu(void)
         // DEMOS
         //
 
+        // Show demo timer
+        RD_M_DrawTextSmallENG(demotimer == 1 ? "PLAYBACK" :
+                              demotimer == 2 ? "RECORDING" :
+                              demotimer == 3 ? "ALWAYS" :
+                              "OFF", 153 + wide_delta, 86,
+                              demotimer > 0 ? CR_GREEN : CR_RED);
+
+        // Timer direction
+        RD_M_DrawTextSmallENG(demotimerdir ? "BACKWARD" : "FORWARD", 147 + wide_delta, 96,
+                              demotimer > 0 ? CR_GREEN : CR_RED);
+
         // Show progress bar 
-        RD_M_DrawTextSmallENG(demobar ? "ON" : "OFF", 174 + wide_delta, 86,
+        RD_M_DrawTextSmallENG(demobar ? "ON" : "OFF", 174 + wide_delta, 106,
                               demobar ? CR_GREEN : CR_RED);
 
         // Play internal demos
         RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON",
-                              179 + wide_delta, 96,
+                              179 + wide_delta, 116,
                               no_internal_demos ? CR_RED : CR_GREEN);
     }
     else
@@ -4787,13 +4800,24 @@ static void DrawGameplay4Menu(void)
         // ДЕМОЗАПИСИ
         //
 
+        // Отображать таймер
+        RD_M_DrawTextSmallRUS(demotimer == 1 ? "GHB GHJBUHSDFYBB" :
+                              demotimer == 2 ? "GHB PFGBCB" :
+                              demotimer == 3 ? "DCTULF" :
+                              "DSRK", 175 + wide_delta, 86,
+                              demotimer > 0 ? CR_GREEN : CR_DARKRED);
+
+        // Время таймера
+        RD_M_DrawTextSmallRUS(demotimerdir ? "JCNFDITTCZ" : "GHJITLITT", 142 + wide_delta, 96,
+                              demotimer > 0 ? CR_GREEN : CR_DARKRED);
+
         // Шкала прогресса
-        RD_M_DrawTextSmallRUS(demobar ? "DRK" : "DSRK", 161 + wide_delta, 86,
+        RD_M_DrawTextSmallRUS(demobar ? "DRK" : "DSRK", 161 + wide_delta, 106,
                               demobar ? CR_GREEN : CR_RED);
 
         // Проигрывать демозаписи
         RD_M_DrawTextSmallRUS(no_internal_demos ? "DSRK" : "DRK",
-                              211 + wide_delta, 96,
+                              211 + wide_delta, 116,
                               no_internal_demos ? CR_RED : CR_GREEN);        
     }
 
@@ -4820,6 +4844,16 @@ static void M_RD_Breathing()
 static void M_RD_WandStart()
 {
     pistol_start ^= 1;
+}
+
+static void M_RD_DemoTimer(Direction_t direction)
+{
+    RD_Menu_SpinInt(&demotimer, 0, 3, direction);
+}
+
+static void M_RD_DemoTimerDir()
+{
+    demotimerdir ^= 1;
 }
 
 static void M_RD_DemoBar()
@@ -5530,6 +5564,8 @@ static void M_RD_BackToDefaults_Recommended(void)
     flip_levels          = 0;
     breathing            = 0;
     pistol_start         = 0;
+    demotimer            = 0;
+    demotimerdir         = 0;
     demobar              = 0;
     no_internal_demos    = 0;
 
@@ -5681,6 +5717,8 @@ static void M_RD_BackToDefaults_Original(void)
     flip_levels          = 0;
     breathing            = 0;
     pistol_start         = 0;
+    demotimer            = 0;
+    demotimerdir         = 0;
     demobar              = 0;
     no_internal_demos    = 0;
 

@@ -590,6 +590,13 @@ void IN_Drawer(void)
             break;
     }
 
+    // [crispy] demo timer widget
+    if (((demoplayback && (demotimer == 1 || demotimer == 3))
+    ||   (demorecording && (demotimer == 2 || demotimer == 3))))
+    {
+        SB_DrawDemoTimer(leveltime);
+    }
+
     // [crispy] demo progress bar
     if (demoplayback && demobar)
     {
