@@ -35,6 +35,11 @@
 #include "v_video.h"
 #include "jn.h"
 
+// Macros
+
+#define MLOOKUNIT 8         // [crispy] for mouselook
+#define MLOOKUNITLOWRES 16  // [crispy] for mouselook when recording
+
 // Functions
 
 boolean G_CheckDemoStatus(void);
@@ -566,29 +571,37 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         testcontrols_mousespeed = 0;
     }
 
-    // [JN] Mouselook: initials
-    // TODO: make it safe for network game
-    if (players[consoleplayer].playerstate == PST_LIVE && !netgame 
-    && !demoplayback && !menuactive && !askforquit && !paused)
+    // [crispy] Handle mouselook
+    if (mlook)
     {
-        if (mlook || novert)
+        if (demorecording || lowres_turn)
         {
-            cmd->lookdir += mouse_y_invert ? -mousey : mousey;
-            cmd->lookdir += FixedMul(angleturn[2], joyvlook);
+            // [crispy] Map mouse movement to look variable when recording
+            look += mouse_y_invert ? -mousey / MLOOKUNITLOWRES
+                                   :  mousey / MLOOKUNITLOWRES;
+
+            // [crispy] Limit to max speed of keyboard look up/down
+            if (look > 2)
+            {
+                look = 2;
+            }
+            else if (look < -2)
+            {
+                look = -2;
+            }
         }
-        else if (!novert)
+        else
         {
-            forward += mousey;
-            forward += FixedMul(forwardmove[speed], joyvlook);
+            cmd->lookdir = mouse_y_invert ? -mousey : mousey;
+            cmd->lookdir /= MLOOKUNIT;
         }
-        
-        if (players[consoleplayer].lookdir > LOOKDIRMAX * MLOOKUNIT)
-            players[consoleplayer].lookdir = LOOKDIRMAX * MLOOKUNIT;
-        else if (players[consoleplayer].lookdir < -LOOKDIRMIN * MLOOKUNIT)
-            players[consoleplayer].lookdir = -LOOKDIRMIN * MLOOKUNIT;
+    }
+    else if (!novert)
+    {
+        forward += mousey;
     }
 
-    // [JN] Mouselook: toggling
+    // [JN] Toggle mouselook
     if (BK_isKeyPressed(bk_toggle_mlook))
     {
         if (!mlook)

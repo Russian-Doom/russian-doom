@@ -834,8 +834,8 @@ static void R_SetupFrame (player_t *player)
                                        player->mo->angle, fractionaltic)
                                        + viewangleoffset;
 
-        pitch = (player->oldlookdir + (player->lookdir - player->oldlookdir)
-                                    * FIXED2DOUBLE(fractionaltic)) / MLOOKUNIT;
+        pitch = player->oldlookdir + (player->lookdir - player->oldlookdir)
+                                   * FIXED2DOUBLE(fractionaltic);
     }
     else
     {
@@ -844,9 +844,7 @@ static void R_SetupFrame (player_t *player)
         viewy = player->mo->y;
         viewz = player->viewz;
         viewangle = player->mo->angle + viewangleoffset;
-
-        // [crispy] pitch is actual lookdir /*and weapon pitch*/
-        pitch = player->lookdir / MLOOKUNIT;
+        pitch = player->lookdir; // [crispy]
     }
 
     extralight = player->extralight;
