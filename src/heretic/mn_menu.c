@@ -251,9 +251,10 @@ static void M_RD_FloatAmplitude(Direction_t direction);
 static void DrawGameplay4Menu(void);
 static void M_RD_FixMapErrors();
 static void M_RD_FlipLevels();
-static void M_RD_NoDemos();
 static void M_RD_Breathing();
 static void M_RD_WandStart();
+static void M_RD_DemoBar();
+static void M_RD_NoDemos();
 
 // Level Select (page 1)
 static void DrawLevelSelect1Menu(void);
@@ -1279,11 +1280,11 @@ static MenuItem_t Gameplay4Items[] = {
     I_TITLE( "GAMEPLAY",                    "UTQVGKTQ"), // ГЕЙМПЛЕЙ
     I_SWITCH("FIX ERRORS ON VANILLA MAPS:", "ECNHFYZNM JIB,RB JHBU> EHJDYTQ:", M_RD_FixMapErrors), // УСТРАНЯТЬ ОШИБКИ ОРИГИНАЛЬНЫХ УРОВНЕЙ
     I_SWITCH("FLIP GAME LEVELS:",           "PTHRFKMYJT JNHF;TYBT EHJDYTQ:",   M_RD_FlipLevels), // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
-    I_SWITCH("PLAY INTERNAL DEMOS:",        "GHJBUHSDFNM LTVJPFGBCB:",         M_RD_NoDemos), // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
     I_SWITCH("IMITATE PLAYER'S BREATHING:", "BVBNFWBZ LS[FYBZ BUHJRF:",        M_RD_Breathing), // ИМИТАЦИЯ ДЫХАНИЯ ИГРОКА
     I_SWITCH("WAND START GAME MODE:",       NULL, /* [JN] Joint EN/RU string*/ M_RD_WandStart), // РЕЖИМ ИГРЫ "WAND START"
-    I_EMPTY,
-    I_EMPTY,
+    I_TITLE( "GAMEPLAY",                    "LTVJPFGBCB"), // ДЕМОЗАПИСИ
+    I_SWITCH("SHOW PROGRESS BAR:",          "IRFKF GHJUHTCCF:",                M_RD_DemoBar), // ШКАЛА ПРОГРЕССА
+    I_SWITCH("PLAY INTERNAL DEMOS:",        "GHJBUHSDFNM LTVJPFGBCB:",         M_RD_NoDemos), // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
     I_EMPTY,
     I_EMPTY,
     I_EMPTY,
@@ -4732,20 +4733,28 @@ static void DrawGameplay4Menu(void)
                               153 + wide_delta, 46,
                               flip_levels ? CR_GREEN : CR_RED);
 
-        // Play internal demos
-        RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON",
-                              179 + wide_delta, 56,
-                              no_internal_demos ? CR_RED : CR_GREEN);
-
         // Imitate player's breathing
         RD_M_DrawTextSmallENG(breathing ? "ON" : "OFF",
-                              224 + wide_delta, 66,
+                              224 + wide_delta, 56,
                               breathing ? CR_GREEN : CR_RED);
 
         // Wand start
         RD_M_DrawTextSmallENG(pistol_start ? "ON" : "OFF",
-                              193 + wide_delta, 76,
+                              193 + wide_delta, 66,
                               pistol_start ? CR_GREEN : CR_RED);
+
+        //
+        // DEMOS
+        //
+
+        // Show progress bar 
+        RD_M_DrawTextSmallENG(demobar ? "ON" : "OFF", 174 + wide_delta, 86,
+                              demobar ? CR_GREEN : CR_RED);
+
+        // Play internal demos
+        RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON",
+                              179 + wide_delta, 96,
+                              no_internal_demos ? CR_RED : CR_GREEN);
     }
     else
     {
@@ -4762,23 +4771,30 @@ static void DrawGameplay4Menu(void)
                               255 + wide_delta, 46,
                               flip_levels ? CR_GREEN : CR_RED);
 
-        // Проигрывать демозаписи
-        RD_M_DrawTextSmallRUS(no_internal_demos ? "DSRK" : "DRK",
-                              211 + wide_delta, 56,
-                              no_internal_demos ? CR_RED : CR_GREEN);
-
         // Имитация дыхания игрока
         RD_M_DrawTextSmallRUS(breathing ? "DRK": "DSRK",
-                              214 + wide_delta, 66,
+                              214 + wide_delta, 56,
                               breathing ? CR_GREEN : CR_RED);
 
         // Режим игры "Wand start"
-        RD_M_DrawTextSmallRUS("HT;BV BUHS", 36 + wide_delta, 76, CR_NONE);
-        RD_M_DrawTextSmallENG("\"WAND START\":", 120 + wide_delta, 76, CR_NONE);
+        RD_M_DrawTextSmallRUS("HT;BV BUHS", 36 + wide_delta, 66, CR_NONE);
+        RD_M_DrawTextSmallENG("\"WAND START\":", 120 + wide_delta, 66, CR_NONE);
         RD_M_DrawTextSmallRUS(pistol_start ? "DRK" : "DSRK",
-                              217 + wide_delta, 76,
+                              217 + wide_delta, 66,
                               pistol_start ? CR_GREEN : CR_RED);
-        
+
+        //
+        // ДЕМОЗАПИСИ
+        //
+
+        // Шкала прогресса
+        RD_M_DrawTextSmallRUS(demobar ? "DRK" : "DSRK", 161 + wide_delta, 86,
+                              demobar ? CR_GREEN : CR_RED);
+
+        // Проигрывать демозаписи
+        RD_M_DrawTextSmallRUS(no_internal_demos ? "DSRK" : "DRK",
+                              211 + wide_delta, 96,
+                              no_internal_demos ? CR_RED : CR_GREEN);        
     }
 
 }
@@ -4796,11 +4812,6 @@ static void M_RD_FlipLevels()
     R_ExecuteSetViewSize();
 }
 
-static void M_RD_NoDemos()
-{
-    no_internal_demos ^= 1;
-}
-
 static void M_RD_Breathing()
 {
     breathing ^= 1;
@@ -4809,6 +4820,16 @@ static void M_RD_Breathing()
 static void M_RD_WandStart()
 {
     pistol_start ^= 1;
+}
+
+static void M_RD_DemoBar()
+{
+    demobar ^= 1;
+}
+
+static void M_RD_NoDemos()
+{
+    no_internal_demos ^= 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -5507,9 +5528,10 @@ static void M_RD_BackToDefaults_Recommended(void)
     // Gameplay (4)
     fix_map_errors       = 1;
     flip_levels          = 0;
-    no_internal_demos    = 0;
     breathing            = 0;
     pistol_start         = 0;
+    demobar              = 0;
+    no_internal_demos    = 0;
 
     // Reinitialize graphics
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
@@ -5657,9 +5679,10 @@ static void M_RD_BackToDefaults_Original(void)
     // Gameplay (4)
     fix_map_errors       = 0;
     flip_levels          = 0;
-    no_internal_demos    = 0;
     breathing            = 0;
     pistol_start         = 0;
+    demobar              = 0;
+    no_internal_demos    = 0;
 
     // Reinitialize graphics
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);

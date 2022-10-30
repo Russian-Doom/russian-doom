@@ -199,6 +199,9 @@ char savedescription[32];
 
 int inventoryTics;
 
+// [crispy] demo progress bar and timer widget
+int defdemotics = 0, deftotaldemotics;
+
 // haleyjd: removed WATCOMC
 
 static boolean WeaponSelectable(weapontype_t weapon)
@@ -1058,6 +1061,12 @@ void G_Ticker(void)
             }
         }
 
+    // [crispy] increase demo tics counter
+    if (demoplayback || demorecording)
+    {
+        defdemotics++;
+    }
+
 //
 // check for special buttons
 //
@@ -1884,6 +1893,7 @@ void G_InitNew(skill_t skill, int episode, int map, int fast_monsters)
 
     // [crispy] CPhipps - total time for all completed levels
     totalleveltimes = 0;
+    defdemotics = 0;
 
     // Set the sky map
     if (episode > 5)
@@ -2141,11 +2151,22 @@ void G_DoPlayDemo(void)
 {
     skill_t skill;
     int i, lumpnum, episode, map;
+    int lumplength; // [crispy]
 
     gameaction = ga_nothing;
     lumpnum = W_GetNumForName(defdemoname);
     demobuffer = W_CacheLumpNum(lumpnum, PU_STATIC);
     demo_p = demobuffer;
+
+    // [crispy] ignore empty demo lumps
+    lumplength = W_LumpLength(lumpnum);
+    if (lumplength < 0xd)
+    {
+        demoplayback = true;
+        G_CheckDemoStatus();
+        return;
+    }
+
     skill = *demo_p++;
     episode = *demo_p++;
     map = *demo_p++;
@@ -2187,6 +2208,28 @@ void G_DoPlayDemo(void)
     {
         netdemo = true;
     }
+
+    // [crispy] demo progress bar
+    {
+        int i, numplayersingame = 0;
+        byte *demo_ptr = demo_p;
+
+        for (i = 0; i < MAXPLAYERS; i++)
+        {
+            if (playeringame[i])
+            {
+                numplayersingame++;
+            }
+        }
+
+        deftotaldemotics = defdemotics = 0;
+
+        while (*demo_ptr != DEMOMARKER && (demo_ptr - demobuffer) < lumplength)
+        {
+            demo_ptr += numplayersingame * (longtics ? 7 : 6);
+            deftotaldemotics++;
+        }
+    }
 }
 
 
@@ -2202,8 +2245,20 @@ void G_TimeDemo(char *name)
 {
     skill_t skill;
     int episode, map, i;
+    int lumpnum, lumplength; // [crispy]
 
     demobuffer = demo_p = W_CacheLumpName(name, PU_STATIC);
+
+    // [crispy] ignore empty demo lumps
+    lumpnum = W_GetNumForName(name);
+    lumplength = W_LumpLength(lumpnum);
+    if (lumplength < 0xd)
+    {
+        demoplayback = true;
+        G_CheckDemoStatus();
+        return;
+    }
+
     skill = *demo_p++;
     episode = *demo_p++;
     map = *demo_p++;
@@ -2241,6 +2296,28 @@ void G_TimeDemo(char *name)
     if (netgame)
     {
         netdemo = true;
+    }
+
+    // [crispy] demo progress bar
+    {
+        int i, numplayersingame = 0;
+        byte *demo_ptr = demo_p;
+
+        for (i = 0; i < MAXPLAYERS; i++)
+        {
+            if (playeringame[i])
+            {
+                numplayersingame++;
+            }
+        }
+
+        deftotaldemotics = defdemotics = 0;
+
+        while (*demo_ptr != DEMOMARKER && (demo_ptr - demobuffer) < lumplength)
+        {
+            demo_ptr += numplayersingame * (longtics ? 7 : 6);
+            deftotaldemotics++;
+        }
     }
 }
 

@@ -589,6 +589,12 @@ void IN_Drawer(void)
             I_Error("IN_lude: Ошибка последовательности в межмиссионном экране.\n");
             break;
     }
+
+    // [crispy] demo progress bar
+    if (demoplayback && demobar)
+    {
+        SB_DemoProgressBar();
+    }
 }
 
 //========================================================================

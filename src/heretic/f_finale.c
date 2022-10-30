@@ -582,4 +582,10 @@ void F_Drawer(void)
                 break;
         }
     }
+
+    // [crispy] demo progress bar
+    if (demoplayback && demobar)
+    {
+        SB_DemoProgressBar();
+    }
 }
