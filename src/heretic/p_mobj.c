@@ -1770,35 +1770,13 @@ mobj_t *P_SpawnPlayerMissile(mobj_t * source, mobjtype_t type)
         if (!linetarget)
         {
             an = source->angle;
-
-        if (aspect_ratio >= 2)
-        {
-            // [JN] Wide screen: new magic number :(
-            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 177;
-        }
-        else
-        {
-            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
-                    (screenblocks <= 10 ? 161 : 146);
-        }
+            slope = ((source->player->lookdir) << FRACBITS) / 173;
         }
     }
     x = source->x;
     y = source->y;
-
-    if (aspect_ratio >= 2)
-    {
-        // [JN] Wide screen: new magic number :(
-        z = source->z + 4 * 8 * FRACUNIT +
-        ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 177;
-    }
-    else
-    {
-        z = source->z + 4 * 8 * FRACUNIT +
-            ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
-            (screenblocks <= 10 ? 161 : 146);
-    }
-
+    z = source->z + 4 * 8 * FRACUNIT +
+        ((source->player->lookdir) << FRACBITS) / 173;
     if (source->flags2 & MF2_FEETARECLIPPED)
     {
         z -= FOOTCLIPSIZE;
@@ -1864,35 +1842,13 @@ mobj_t *P_SPMAngle(mobj_t * source, mobjtype_t type, angle_t angle)
         if (!linetarget)
         {
             an = angle;
-
-        if (aspect_ratio >= 2)
-        {
-            // [JN] Wide screen: new magic number :(
-            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 177;
-        }
-        else
-        {
-            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
-                    (screenblocks <= 10 ? 161 : 146);
-        }
+            slope = ((source->player->lookdir) << FRACBITS) / 173;
         }
     }
     x = source->x;
     y = source->y;
-
-    if (aspect_ratio >= 2)
-    {
-        // [JN] Wide screen: new magic number :(
-        z = source->z + 4 * 8 * FRACUNIT +
-        ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 177;
-    }
-    else
-    {
-        z = source->z + 4 * 8 * FRACUNIT +
-            ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
-            (screenblocks <= 10 ? 161 : 146);
-    }
-
+    z = source->z + 4 * 8 * FRACUNIT +
+        ((source->player->lookdir) << FRACBITS) / 173;
     if (source->flags2 & MF2_FEETARECLIPPED)
     {
         z -= FOOTCLIPSIZE;

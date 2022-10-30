@@ -793,17 +793,7 @@ void P_BulletSlope(mobj_t * mo)
         if (!linetarget)
         {
             an += 2 << 26;
-
-            if (aspect_ratio >= 2)
-            {
-                // [JN] Wide screen: new magic number :(
-                bulletslope = (mo->player->lookdir / MLOOKUNIT << FRACBITS) / 177;
-            }
-            else
-            {
-                bulletslope = (mo->player->lookdir / MLOOKUNIT << FRACBITS) /
-                              (screenblocks <= 10 ? 161 : 146);
-            }
+            bulletslope = (mo->player->lookdir << FRACBITS) / 173;
         }
     }
 }
@@ -830,20 +820,6 @@ void A_BeakAttackPL1(player_t * player, pspdef_t * psp)
     angle = player->mo->angle;
     slope = P_AimLineAttack(player->mo, angle, MELEERANGE);
     PuffType = MT_BEAKPUFF;
-    // [JN] Also account vertical attack angles
-    if (singleplayer && !linetarget)
-    {
-        if (aspect_ratio >= 2)
-        {
-            // [JN] Wide screen: new magic number :(
-            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 177;
-        }
-        else
-        {
-            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 
-                    (screenblocks <= 10 ? 161 : 146);
-        }
-    }
     P_LineAttack(player->mo, angle, MELEERANGE, slope, damage);
     if (linetarget)
     {
@@ -872,20 +848,6 @@ void A_BeakAttackPL2(player_t * player, pspdef_t * psp)
     angle = player->mo->angle;
     slope = P_AimLineAttack(player->mo, angle, MELEERANGE);
     PuffType = MT_BEAKPUFF;
-    // [JN] Also account vertical attack angles
-    if (singleplayer && !linetarget)
-    {
-        if (aspect_ratio >= 2)
-        {
-            // [JN] Wide screen: new magic number :(
-            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 177;
-        }
-        else
-        {
-            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 
-                    (screenblocks <= 10 ? 161 : 146);
-        }
-    }
     P_LineAttack(player->mo, angle, MELEERANGE, slope, damage);
     if (linetarget)
     {
@@ -915,20 +877,6 @@ void A_StaffAttackPL1(player_t * player, pspdef_t * psp)
     angle += P_SubRandom() << 18;
     slope = P_AimLineAttack(player->mo, angle, MELEERANGE);
     PuffType = MT_STAFFPUFF;
-    // [JN] Also account vertical attack angles
-    if (singleplayer && !linetarget)
-    {
-        if (aspect_ratio >= 2)
-        {
-            // [JN] Wide screen: new magic number :(
-            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 177;
-        }
-        else
-        {
-            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 
-                    (screenblocks <= 10 ? 161 : 146);
-        }
-    }
     P_LineAttack(player->mo, angle, MELEERANGE, slope, damage);
     if (linetarget)
     {
@@ -957,20 +905,6 @@ void A_StaffAttackPL2(player_t * player, pspdef_t * psp)
     angle += P_SubRandom() << 18;
     slope = P_AimLineAttack(player->mo, angle, MELEERANGE);
     PuffType = MT_STAFFPUFF2;
-    // [JN] Also account vertical attack angles
-    if (singleplayer && !linetarget)
-    {
-        if (aspect_ratio >= 2)
-        {
-            // [JN] Wide screen: new magic number :(
-            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 177;
-        }
-        else
-        {
-            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 
-                    (screenblocks <= 10 ? 161 : 146);
-        }
-    }
     P_LineAttack(player->mo, angle, MELEERANGE, slope, damage);
     if (linetarget)
     {
@@ -1115,11 +1049,11 @@ void A_FireMacePL1B(player_t * player, pspdef_t * psp)
     ball = P_SpawnMobj(pmo->x, pmo->y, pmo->z + 28 * FRACUNIT
                        - FOOTCLIPSIZE * (pmo->flags2 & 1), MT_MACEFX2);
 
-    ball->momz = 2 * FRACUNIT + ((player->lookdir / MLOOKUNIT) << (FRACBITS - 5));
+    ball->momz = 2 * FRACUNIT + ((player->lookdir) << (FRACBITS - 5));
     angle = pmo->angle;
     ball->target = pmo;
     ball->angle = angle;
-    ball->z += (player->lookdir / MLOOKUNIT) << (FRACBITS - 4);
+    ball->z += (player->lookdir) << (FRACBITS - 4);
     angle >>= ANGLETOFINESHIFT;
     ball->momx = (pmo->momx >> 1)
         + FixedMul(ball->info->speed, finecosine[angle]);
@@ -1287,7 +1221,7 @@ void A_FireMacePL2(player_t * player, pspdef_t * psp)
     {
         mo->momx += player->mo->momx;
         mo->momy += player->mo->momy;
-        mo->momz = 2 * FRACUNIT + ((player->lookdir / MLOOKUNIT) << (FRACBITS - 5));
+        mo->momz = 2 * FRACUNIT + ((player->lookdir) << (FRACBITS - 5));
         if (linetarget)
         {
             mo->special1.m = linetarget;
@@ -1744,15 +1678,12 @@ void A_FirePhoenixPL2(player_t * player, pspdef_t * psp)
     angle = pmo->angle;
     x = pmo->x + (P_SubRandom() << 9);
     y = pmo->y + (P_SubRandom() << 9);
-    z = pmo->z + 26 * FRACUNIT + ((player->lookdir / MLOOKUNIT) << FRACBITS) /
-                                  (screenblocks <= 10 ? 161 : 146);
+    z = pmo->z + 26 * FRACUNIT + ((player->lookdir) << FRACBITS) / 173;
     if (pmo->flags2 & MF2_FEETARECLIPPED)
     {
         z -= FOOTCLIPSIZE;
     }
-    slope = ((player->lookdir / MLOOKUNIT) << FRACBITS) /
-             (screenblocks <= 10 ? 161 : 146) +
-             (FRACUNIT / 10);
+    slope = ((player->lookdir) << FRACBITS) / 173 + (FRACUNIT / 10);
     mo = P_SpawnMobj(x, y, z, MT_PHOENIXFX2);
     mo->target = pmo;
     mo->angle = angle;
@@ -1833,20 +1764,6 @@ void A_GauntletAttack(player_t * player, pspdef_t * psp)
         PuffType = MT_GAUNTLETPUFF1;
     }
     slope = P_AimLineAttack(player->mo, angle, dist);
-    // [JN] Also account vertical attack angles
-    if (singleplayer && !linetarget)
-    {
-        if (aspect_ratio >= 2)
-        {
-            // [JN] Wide screen: new magic number :(
-            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 177;
-        }
-        else
-        {
-            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 
-                    (screenblocks <= 10 ? 161 : 146);
-        }
-    }
     P_LineAttack(player->mo, angle, dist, slope, damage);
     if (!linetarget)
     {

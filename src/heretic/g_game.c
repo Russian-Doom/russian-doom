@@ -566,50 +566,6 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         testcontrols_mousespeed = 0;
     }
 
-    // [JN] Mouselook: initials
-    // TODO: make it safe for network game
-    if (players[consoleplayer].playerstate == PST_LIVE && !netgame 
-    && !demoplayback && !menuactive && !askforquit && !paused)
-    {
-        if (mlook || novert)
-        {
-            cmd->lookdir += mouse_y_invert ? -mousey : mousey;
-            cmd->lookdir += FixedMul(angleturn[2], joyvlook);
-        }
-        else if (!novert)
-        {
-            forward += mousey;
-            forward += FixedMul(forwardmove[speed], joyvlook);
-        }
-        
-        if (players[consoleplayer].lookdir > LOOKDIRMAX * MLOOKUNIT)
-            players[consoleplayer].lookdir = LOOKDIRMAX * MLOOKUNIT;
-        else if (players[consoleplayer].lookdir < -LOOKDIRMIN * MLOOKUNIT)
-            players[consoleplayer].lookdir = -LOOKDIRMIN * MLOOKUNIT;
-    }
-
-    // [JN] Mouselook: toggling
-    if (BK_isKeyPressed(bk_toggle_mlook))
-    {
-        if (!mlook)
-        {
-            mlook = true;
-        }
-        else
-        {
-            mlook = false;
-            look = TOCENTER;
-            players[consoleplayer].lookdir = 0;
-        }
-
-        P_SetMessage(&players[consoleplayer], (mlook == true ?
-                     txt_mlook_on : txt_mlook_off), msg_system, false);
-
-        S_StartSound(NULL, sfx_chat);
-
-        BK_ReleaseKey(bk_toggle_mlook);
-    }
-
     mousex = mousey = joyturn = joyvlook = 0;
 
     // [JN] "false" must be set as initial and returning condition.
