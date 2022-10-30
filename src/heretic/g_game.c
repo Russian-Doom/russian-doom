@@ -787,6 +787,13 @@ boolean G_Responder(event_t * ev)
         usearti = true;
     }
 
+    // [crispy] demo fast-forward
+    if (BK_isKeyDown(ev, bk_demo_speed) && (demoplayback || gamestate == GS_DEMOSCREEN))
+    {
+        singletics = !singletics;
+        return true;
+    }
+
     // Check for spy mode player cycle
     if (gamestate == GS_LEVEL && BK_isKeyDown(ev, bk_spy) && !deathmatch)
     {                           // Cycle the display player
@@ -1675,6 +1682,8 @@ void G_DoSelectiveGame(int option)
     demoplayback = false; 
     netgame = false;
     deathmatch = false;
+    // [crispy] reset game speed after demo fast-forward
+    singletics = false;
     playeringame[1] = playeringame[2] = playeringame[3] = 0;
     consoleplayer = 0;
     gameaction = ga_nothing; 
@@ -1861,6 +1870,8 @@ void G_InitNew(skill_t skill, int episode, int map, int fast_monsters)
     demorecording = false;
     demoplayback = false;
     netdemo = false;
+    // [crispy] reset game speed after demo fast-forward
+    singletics = false;
     // [JN] Reset automap scale. Fixes:
     // https://doomwiki.org/wiki/Automap_scale_preserved_after_warps_in_Heretic_and_Hexen
     automapactive = false; 
