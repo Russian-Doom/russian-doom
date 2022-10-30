@@ -33,7 +33,6 @@
 #include "doomfeatures.h"
 #include "net_client.h"
 #include "am_map.h"
-#include "ct_chat.h"
 #include "doomdef.h"
 #include "deh_main.h"
 #include "d_iwad.h"
@@ -331,13 +330,15 @@ void DrawMessage(void)
 
     // [JN] Activate message counter in non-level or paused states.
     // Make messages go away in menu, finale and help screens.
-    if (gamestate != GS_LEVEL || paused)
+    // Tics can't go negative.
+    if ((gamestate != GS_LEVEL || paused || menuactive) && player->messageTics > 0)
     {
-        player->messageTics--;  // Can go negative
+        player->messageTics--;
     }
 
+    // No message.
     if (player->messageTics <= 0 || !player->message)
-    {                           // No message
+    {
         return;
     }
 
@@ -361,7 +362,8 @@ void DrawMessage(void)
             break;
     }
 
-    if (english_language)
+    // [JN] Netgame chat messages are always in English.
+    if (english_language || player->messageType == msg_chat)
     {
         if (player->messageTics < 10 && message_fade && !vanillaparm)
         {
@@ -550,7 +552,11 @@ void D_Display(void)
             }
             else
                 R_RenderPlayerView(&players[displayplayer]);
-            CT_Drawer();
+            // [JN] Not used outside of multiplayer game.
+            if (netgame && chatmodeon)
+            {
+                CT_Drawer();
+            }
             UpdateState |= I_FULLVIEW;
             SB_Drawer();
             break;

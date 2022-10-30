@@ -77,7 +77,6 @@ extern char* txt_wpnphoenixrod;
 extern char* txt_wpngauntlets;
 
 // CT_chat.c
-extern char* txt_msgsent;
 extern char* txt_noplayers;
 
 // SB_bar.c
@@ -210,7 +209,6 @@ extern char* txt_mlook_off;
 #define TXT_WPNGAUNTLETS        "GAUNTLETS OF THE NECROMANCER"
 
 // CT_chat.c
-#define TXT_MSGSENT             "-MESSAGE SENT-"
 #define TXT_NOPLAYERS           "THERE ARE NO OTHER PLAYERS IN THE GAME!"
 
 // SB_bar.c
@@ -441,7 +439,6 @@ extern char* txt_mlook_off;
 #define TXT_WPNGAUNTLETS_RUS        "GTHXFNRB YTRHJVFYNF"   // ПЕРЧАТКИ НЕКРОМАНТА
 
 // CT_chat.c
-#define TXT_MSGSENT_RUS             "-CJJ<OTYBT JNGHFDKTYJ-"     // -СООБЩЕНИЕ ОТПРАВЛЕНО-
 #define TXT_NOPLAYERS_RUS           "D BUHT YTN LHEUB[ BUHJRJD!" // В ИГРЕ НЕТ ДРУГИХ ИГРОКОВ!
 
 // SB_bar.c

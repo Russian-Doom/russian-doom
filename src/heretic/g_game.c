@@ -1138,7 +1138,11 @@ void G_Ticker(void)
             P_Ticker();
             SB_Ticker();
             AM_Ticker();
-            CT_Ticker();
+            // [JN] Not used outside of multiplayer game.
+            if (netgame)
+            {
+                CT_Ticker();
+            }
             break;
         case GS_INTERMISSION:
             IN_Ticker();

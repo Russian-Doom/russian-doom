@@ -69,7 +69,6 @@ char* txt_wpnphoenixrod;
 char* txt_wpngauntlets;
 
 // CT_chat.c
-char* txt_msgsent;
 char* txt_noplayers;
 
 // SB_bar.c
@@ -317,7 +316,6 @@ void RD_DefineLanguageStrings (void)
         txt_wpngauntlets  = TXT_WPNGAUNTLETS;
 
         // CT_chat.c
-        txt_msgsent   = TXT_MSGSENT;
         txt_noplayers = TXT_NOPLAYERS;
 
         // SB_bar.c
@@ -445,7 +443,6 @@ void RD_DefineLanguageStrings (void)
         txt_wpngauntlets  = TXT_WPNGAUNTLETS_RUS;
 
         // CT_chat.c
-        txt_msgsent   = TXT_MSGSENT_RUS;
         txt_noplayers = TXT_NOPLAYERS_RUS;
 
         // SB_bar.c

@@ -652,6 +652,7 @@ void SB_Drawer(void)
         char text[128];
         const int time = leveltime / TICRATE;
         const int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
+        const int net_y = netgame ? 10 : 0;  // [JN] Shift one line down for chat string.
         CPlayer = &players[consoleplayer];
 
         if (((automapactive && automap_stats == 1) || automap_stats == 2))
@@ -662,40 +663,40 @@ void SB_Drawer(void)
                     CPlayer->extrakillcount ? CPlayer->extrakillcount : totalkills,
                     totalkills);
 
-            english_language ? RD_M_DrawTextA("K:", wide_4_3, 9) :
-                               RD_M_DrawTextSmallRUS("D:", wide_4_3, 9, CR_NONE);
+            english_language ? RD_M_DrawTextA("K:", wide_4_3, 9 + net_y) :
+                               RD_M_DrawTextSmallRUS("D:", wide_4_3, 9 + net_y, CR_NONE);
 
             dp_translation = hud_stats_color == 0 ? NULL :
                              totalkills == 0 ? cr[CR_GREEN] :
                              CPlayer->killcount == 0 ? cr[CR_RED] :
                              CPlayer->killcount < totalkills ? cr[CR_YELLOW] : cr[CR_GREEN];
-            RD_M_DrawTextA(text, wide_4_3 + 16, 9);
+            RD_M_DrawTextA(text, wide_4_3 + 16, 9 + net_y);
             dp_translation = NULL;
 
             // Items:
             sprintf(text, "%d/%d", CPlayer->itemcount, totalitems);
 
-            english_language ? RD_M_DrawTextA("I:", wide_4_3, 19) :
-                               RD_M_DrawTextSmallRUS("G:", wide_4_3, 19, CR_NONE);
+            english_language ? RD_M_DrawTextA("I:", wide_4_3, 19 + net_y) :
+                               RD_M_DrawTextSmallRUS("G:", wide_4_3, 19 + net_y, CR_NONE);
 
             dp_translation = hud_stats_color == 0 ? NULL :
                              totalitems == 0 ? cr[CR_GREEN] :
                              CPlayer->itemcount == 0 ? cr[CR_RED] :
                              CPlayer->itemcount < totalitems ? cr[CR_YELLOW] : cr[CR_GREEN];
-            RD_M_DrawTextA(text, wide_4_3 + 16, 19);
+            RD_M_DrawTextA(text, wide_4_3 + 16, 19 + net_y);
             dp_translation = NULL;
 
             // Secret:
             sprintf(text, "%d/%d", CPlayer->secretcount, totalsecret);
 
-            english_language ? RD_M_DrawTextA("S:", wide_4_3, 29) :
-                               RD_M_DrawTextSmallRUS("N:", wide_4_3, 29, CR_NONE);
+            english_language ? RD_M_DrawTextA("S:", wide_4_3, 29 + net_y) :
+                               RD_M_DrawTextSmallRUS("N:", wide_4_3, 29 + net_y, CR_NONE);
 
             dp_translation = hud_stats_color == 0 ? NULL :
                              totalsecret == 0 ? cr[CR_GREEN] :
                              CPlayer->secretcount == 0 ? cr[CR_RED] :
                              CPlayer->secretcount < totalsecret ? cr[CR_YELLOW] : cr[CR_GREEN];
-            RD_M_DrawTextA(text, wide_4_3 + 16, 29);
+            RD_M_DrawTextA(text, wide_4_3 + 16, 29 + net_y);
             dp_translation = NULL;
         }
 
@@ -704,11 +705,11 @@ void SB_Drawer(void)
         {
             sprintf(text, "%d", gameskill+1);
 
-            english_language ? RD_M_DrawTextA("SKL:", wide_4_3, 39) :
-                               RD_M_DrawTextSmallRUS("CK;:", wide_4_3, 39, CR_NONE);
+            english_language ? RD_M_DrawTextA("SKL:", wide_4_3, 39 + net_y) :
+                               RD_M_DrawTextSmallRUS("CK;:", wide_4_3, 39 + net_y, CR_NONE);
 
             dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
-            RD_M_DrawTextA(text, wide_4_3 + (english_language ? 31 : 36), 39);
+            RD_M_DrawTextA(text, wide_4_3 + (english_language ? 31 : 36), 39 + net_y);
             dp_translation = NULL;
         }
 
