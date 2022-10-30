@@ -555,9 +555,8 @@ void AM_clearMarks (void)
 ================================================================================
 */
 
-static void AM_initVariables (void)
+void AM_initVariables (void)
 {
-    int        pnum;
     thinker_t *think;
     mobj_t    *mo;
 
@@ -570,19 +569,9 @@ static void AM_initVariables (void)
     m_w = FTOM(f_w);
     m_h = FTOM(f_h);
 
-    // Find player to center on initially
-    if (!playeringame[pnum = consoleplayer])
-    {
-        for (pnum = 0; pnum < MAXPLAYERS; pnum++)
-        {
-            if (playeringame[pnum])
-            {
-                break;
-            }
-        }
-    }
+    // [JN] Find player to center.
+    plr = &players[displayplayer];
 
-    plr = &players[pnum];
     m_x = (plr->mo->x >> FRACTOMAPBITS) - m_w / 2;
     m_y = (plr->mo->y >> FRACTOMAPBITS) - m_h / 2;
 
@@ -1963,11 +1952,12 @@ static void AM_drawPlayers (void)
     const int  their_colors[] = { GREENKEY, YELLOWKEY, BLOODRED, BLUEKEY };
     mpoint_t   pt;
     player_t  *p;
-    // [JN] Smooth player arrow rotation:
-    const angle_t smoothangle = automap_rotate ? plr->mo->angle : viewangle;
 
     if (!netgame)
     {
+        // [JN] Smooth player arrow rotation.
+        const angle_t smoothangle = automap_rotate ? plr->mo->angle : viewangle;
+
         // [JN] Interpolate player arrow.
         pt.x = viewx >> FRACTOMAPBITS;
         pt.y = viewy >> FRACTOMAPBITS;
@@ -1984,6 +1974,9 @@ static void AM_drawPlayers (void)
 
     for (i = 0 ; i < MAXPLAYERS ; i++)
     {
+        // [JN] Interpolate other player arrows angle.
+        angle_t smoothangle;
+
         their_color++;
         p = &players[i];
 
@@ -2006,15 +1999,29 @@ static void AM_drawPlayers (void)
             color = their_colors[their_color];
         }
 
-        pt.x = p->mo->x >> FRACTOMAPBITS;
-        pt.y = p->mo->y >> FRACTOMAPBITS;
+        // [JN] Interpolate other player arrows.
+        if (uncapped_fps && leveltime > oldleveltime)
+        {
+            pt.x = (p->mo->oldx + FixedMul(p->mo->x - p->mo->oldx, fractionaltic)) >> FRACTOMAPBITS;
+            pt.y = (p->mo->oldy + FixedMul(p->mo->y - p->mo->oldy, fractionaltic)) >> FRACTOMAPBITS;
+        }
+        else
+        {
+            pt.x = p->mo->x >> FRACTOMAPBITS;
+            pt.y = p->mo->y >> FRACTOMAPBITS;
+        }
 
         if (automap_rotate)
         {
             AM_rotatePoint(&pt);
+            smoothangle = p->mo->angle;
+        }
+        else
+        {
+            smoothangle = R_InterpolateAngle(p->mo->oldangle, p->mo->angle, fractionaltic);
         }
 
-        AM_drawLineCharacter(player_arrow, NUMPLYRLINES, 0, p->mo->angle,
+        AM_drawLineCharacter(player_arrow, NUMPLYRLINES, 0, smoothangle,
                              color, pt.x, pt.y);
     }
 }

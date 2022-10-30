@@ -30,6 +30,7 @@ typedef struct
 extern mpoint_t *markpoints;
 extern int       markpointnum, markpointnum_max;
 
+void AM_initVariables (void);
 // [JN] Preload automap graphics once at game startup.
 void AM_initPics (void);
 
