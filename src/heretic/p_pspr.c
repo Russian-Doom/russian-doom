@@ -819,6 +819,11 @@ void A_BeakAttackPL1(player_t * player, pspdef_t * psp)
     damage = 1 + (P_Random() & 3);
     angle = player->mo->angle;
     slope = P_AimLineAttack(player->mo, angle, MELEERANGE);
+    // [JN] Also account vertical attack angles
+    if (singleplayer && !linetarget)
+    {
+        slope = (player->lookdir << FRACBITS) / 173;
+    }
     PuffType = MT_BEAKPUFF;
     P_LineAttack(player->mo, angle, MELEERANGE, slope, damage);
     if (linetarget)
@@ -847,6 +852,11 @@ void A_BeakAttackPL2(player_t * player, pspdef_t * psp)
     damage = HITDICE(4);
     angle = player->mo->angle;
     slope = P_AimLineAttack(player->mo, angle, MELEERANGE);
+    // [JN] Also account vertical attack angles
+    if (singleplayer && !linetarget)
+    {
+        slope = (player->lookdir << FRACBITS) / 173;
+    }
     PuffType = MT_BEAKPUFF;
     P_LineAttack(player->mo, angle, MELEERANGE, slope, damage);
     if (linetarget)
@@ -876,6 +886,11 @@ void A_StaffAttackPL1(player_t * player, pspdef_t * psp)
     angle = player->mo->angle;
     angle += P_SubRandom() << 18;
     slope = P_AimLineAttack(player->mo, angle, MELEERANGE);
+    // [JN] Also account vertical attack angles
+    if (singleplayer && !linetarget)
+    {
+        slope = (player->lookdir << FRACBITS) / 173;
+    }
     PuffType = MT_STAFFPUFF;
     P_LineAttack(player->mo, angle, MELEERANGE, slope, damage);
     if (linetarget)
@@ -904,6 +919,11 @@ void A_StaffAttackPL2(player_t * player, pspdef_t * psp)
     angle = player->mo->angle;
     angle += P_SubRandom() << 18;
     slope = P_AimLineAttack(player->mo, angle, MELEERANGE);
+    // [JN] Also account vertical attack angles
+    if (singleplayer && !linetarget)
+    {
+        slope = (player->lookdir << FRACBITS) / 173;
+    }
     PuffType = MT_STAFFPUFF2;
     P_LineAttack(player->mo, angle, MELEERANGE, slope, damage);
     if (linetarget)
@@ -1764,6 +1784,11 @@ void A_GauntletAttack(player_t * player, pspdef_t * psp)
         PuffType = MT_GAUNTLETPUFF1;
     }
     slope = P_AimLineAttack(player->mo, angle, dist);
+    // [JN] Also account vertical attack angles
+    if (singleplayer && !linetarget)
+    {
+        slope = (player->lookdir << FRACBITS) / 173;
+    }
     P_LineAttack(player->mo, angle, dist, slope, damage);
     if (!linetarget)
     {
