@@ -478,62 +478,73 @@ void DrawMessage (void)
 /*
 ================================================================================
 =
-= DrawTimeAndFPS
+= DrawTime
 =
-= [JN] Draws local time and FPS widgets.
+= [JN] Draws local time widget.
 =
 ================================================================================
 */
 
-void DrawTimeAndFPS(void)
+static void DrawTime (void)
 {
-    const boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
-
-    if (!vanillaparm)
+    if (local_time)
     {
-        if (local_time)
+        const boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
+        const int   wide_width = wide_4_3 ? wide_delta : wide_delta * 2;
+        const char  s[64];
+        const time_t t = time(NULL);
+        const struct tm *tm = localtime(&t);
+
+        strftime(s, sizeof(s), 
+                 local_time == 1 ? "%I:%M %p" :    // 12-hour (HH:MM designation)
+                 local_time == 2 ? "%I:%M:%S %p" : // 12-hour (HH:MM:SS designation)
+                 local_time == 3 ? "%H:%M" :       // 24-hour (HH:MM)
+                 local_time == 4 ? "%H:%M:%S" :    // 24-hour (HH:MM:SS)
+                                   "", tm);        // No time
+
+        RD_M_DrawTextC(s, (local_time == 1 ? 285 :
+                           local_time == 2 ? 273 :
+                           local_time == 3 ? 297 :
+                           local_time == 4 ? 285 : 0) + wide_width, 21);
+    }
+}
+
+/*
+================================================================================
+=
+= DrawPerformance
+=
+= [JN] Draws performance widget.
+=
+================================================================================
+*/
+
+static void DrawPerformance (void)
+{
+    if (show_fps)
+    {
+        const boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
+        const int  wide_width = wide_4_3 ? wide_delta : wide_delta * 2;
+        const char digit[9999];
+
+        sprintf (digit, "%d", real_fps);
+        RD_M_DrawTextC("FPS:", 283 + wide_width, 30);
+        RD_M_DrawTextC(digit, 301 + wide_width, 30);   // [JN] fps digits
+
+        // [JN] Draw extra counters, only while playing in game level.
+        if (show_fps == 2 && gamestate == GS_LEVEL)
         {
-            char   s[64];
-            time_t t = time(NULL);
-            struct tm *tm = localtime(&t);
-
-            strftime(s, sizeof(s), 
-                     local_time == 1 ? "%I:%M %p" :    // 12-hour (HH:MM designation)
-                     local_time == 2 ? "%I:%M:%S %p" : // 12-hour (HH:MM:SS designation)
-                     local_time == 3 ? "%H:%M" :       // 24-hour (HH:MM)
-                     local_time == 4 ? "%H:%M:%S" :    // 24-hour (HH:MM:SS)
-                                       "", tm);        // No time
-
-            RD_M_DrawTextC(s, (local_time == 1 ? 285 :
-                               local_time == 2 ? 273 :
-                               local_time == 3 ? 297 :
-                               local_time == 4 ? 285 : 0)
-                              + (wide_4_3 ? wide_delta : wide_delta * 2), 21);
-        }
-
-        if (show_fps)
-        {
-            char digit[9999];
-            
-            sprintf (digit, "%d", real_fps);
-            RD_M_DrawTextC("FPS:", 283 + (wide_4_3 ? wide_delta : wide_delta * 2), 30);
-            RD_M_DrawTextC(digit, 301 + (wide_4_3 ? wide_delta : wide_delta * 2), 30);   // [JN] fps digits
-
-            // [JN] Draw extra counters, only while playing in game level.
-            if (show_fps == 2 && gamestate == GS_LEVEL)
-            {
-                sprintf (digit, "%9d", rendered_segs);
-                RD_M_DrawTextC("SEGS", 301 + (wide_4_3 ? wide_delta : wide_delta*2), 39);
-                RD_M_DrawTextC(digit, 281 + (wide_4_3 ? wide_delta : wide_delta*2), 46);
-
-                sprintf (digit, "%9d", rendered_visplanes);
-                RD_M_DrawTextC("VISPLANES", 281 + (wide_4_3 ? wide_delta : wide_delta*2), 55);
-                RD_M_DrawTextC(digit, 281 + (wide_4_3 ? wide_delta : wide_delta*2), 62);
-
-                sprintf (digit, "%9d", rendered_vissprites);
-                RD_M_DrawTextC("SPRITES", 289 + (wide_4_3 ? wide_delta : wide_delta*2), 71);
-                RD_M_DrawTextC(digit, 281 + (wide_4_3 ? wide_delta : wide_delta*2), 78);
-            }
+            sprintf (digit, "%9d", rendered_segs);
+            RD_M_DrawTextC("SEGS", 301 + wide_width, 39);
+            RD_M_DrawTextC(digit, 281 + wide_width, 46);
+    
+            sprintf (digit, "%9d", rendered_visplanes);
+            RD_M_DrawTextC("VISPLANES", 281 + wide_width, 55);
+            RD_M_DrawTextC(digit, 281 + wide_width, 62);
+    
+            sprintf (digit, "%9d", rendered_vissprites);
+            RD_M_DrawTextC("SPRITES", 289 + wide_width, 71);
+            RD_M_DrawTextC(digit, 281 + wide_width, 78);
         }
     }
 }
@@ -654,8 +665,12 @@ void D_Display(void)
     // Menu drawing
     MN_Drawer();
 
-    // [JN] Draw local time and FPS widgets on top of everything.
-    DrawTimeAndFPS();
+    // [JN] Draw local time and performance widgets.
+    if (!vanillaparm)
+    {
+        DrawTime();
+        DrawPerformance();
+    }
 
     // [JN] Performance counters were drawn, reset them.
     R_ClearStats();
