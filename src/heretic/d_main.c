@@ -32,7 +32,6 @@
 #include "SDL.h"
 #include "doomfeatures.h"
 #include "net_client.h"
-#include "am_map.h"
 #include "doomdef.h"
 #include "deh_main.h"
 #include "d_iwad.h"

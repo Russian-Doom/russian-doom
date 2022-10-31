@@ -23,7 +23,6 @@
 #include "deh_str.h"
 #include "p_local.h"
 #include "rd_keybinds.h"
-#include "am_map.h"
 #include "v_video.h"
 #include "m_cheat.h"
 #include "m_misc.h"
@@ -507,7 +506,7 @@ static void AM_addMark (void)
 ================================================================================
 */
 
-void AM_initMarksColor (int color)
+void AM_initMarksColor (const int color)
 {
     Translation_CR_t *colorVar = &automap_mark_color_set;
 
@@ -767,7 +766,7 @@ static void AM_maxOutWindowScale (void)
 ================================================================================
 */
 
-const boolean AM_Responder(event_t *ev)
+const boolean AM_Responder (const event_t *ev)
 {
     boolean     rc;
     static int  bigstate = 0;

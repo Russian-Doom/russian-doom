@@ -269,12 +269,7 @@ typedef struct
 ===============================================================================
 */
 
-// a pic is an unmasked block of pixels
-typedef struct
-{
-    byte width, height;
-    byte data;
-} pic_t;
+
 
 
 

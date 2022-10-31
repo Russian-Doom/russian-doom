@@ -22,7 +22,6 @@
 #include "deh_str.h"
 #include "i_swap.h"
 #include "i_system.h"
-#include "r_bmaps.h"
 #include "r_local.h"
 #include "v_trans.h"
 #include "jn.h"

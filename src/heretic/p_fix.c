@@ -35,7 +35,7 @@
 
 #include "d_mode.h"
 #include "doomdef.h"
-#include "p_fix.h"
+#include "p_local.h"
 
 
 #define LINEFIX_END       { -1, 0, 0, 0, 0, "", "", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT }

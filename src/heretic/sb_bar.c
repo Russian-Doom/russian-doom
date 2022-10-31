@@ -30,7 +30,7 @@
 #include "s_sound.h"
 #include "v_video.h"
 #include "v_trans.h"
-#include "rd_lang.h"
+#include "id_lang.h"
 #include "jn.h"
 
 // Types

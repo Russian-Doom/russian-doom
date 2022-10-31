@@ -65,7 +65,7 @@ void P_InitThinkers (void)
 ================================================================================
 */
 
-void P_AddThinker(thinker_t *thinker)
+void P_AddThinker (thinker_t *thinker)
 {
     thinkercap.prev->next = thinker;
     thinker->next = &thinkercap;
@@ -84,7 +84,7 @@ void P_AddThinker(thinker_t *thinker)
 ================================================================================
 */
 
-void P_RemoveThinker(thinker_t *thinker)
+void P_RemoveThinker (thinker_t *thinker)
 {
     thinker->function = (think_t) - 1;
 }

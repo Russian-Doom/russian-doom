@@ -21,7 +21,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "am_map.h"
 #include "doomdef.h"
 #include "deh_str.h"
 #include "i_timer.h"
@@ -44,7 +43,6 @@
 boolean G_CheckDemoStatus(void);
 void G_ReadDemoTiccmd(ticcmd_t * cmd);
 void G_WriteDemoTiccmd(ticcmd_t * cmd);
-void G_PlayerReborn(int player);
 
 void G_DoReborn(int playernum);
 

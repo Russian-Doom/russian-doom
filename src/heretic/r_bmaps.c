@@ -21,7 +21,7 @@
 
 
 #include "doomdef.h"
-#include "r_bmaps.h"
+#include "r_local.h"
 #include "jn.h"
 
 

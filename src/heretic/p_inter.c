@@ -17,14 +17,13 @@
 // P_inter.c
 
 
-#include "am_map.h"
 #include "doomdef.h"
 #include "deh_str.h"
 #include "i_system.h"
 #include "i_timer.h"
 #include "p_local.h"
 #include "s_sound.h"
-#include "rd_lang.h"
+#include "id_lang.h"
 #include "jn.h"
 
 #define BONUSADD 6

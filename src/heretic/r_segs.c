@@ -20,7 +20,6 @@
 #include "i_system.h"
 #include "doomdef.h"
 #include "r_local.h"
-#include "r_bmaps.h"
 #include "jn.h"
 
 

@@ -24,7 +24,6 @@
 #include "m_misc.h"
 #include "r_local.h"
 #include "p_local.h"
-#include "r_bmaps.h"
 #include "v_video.h"
 #include "v_trans.h"
 #include "jn.h"
