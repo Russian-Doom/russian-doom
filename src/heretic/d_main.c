@@ -315,16 +315,114 @@ void D_ProcessEvents(void)
     }
 }
 
-//---------------------------------------------------------------------------
-//
-// PROC DrawMessage
-//
-//---------------------------------------------------------------------------
+/*
+================================================================================
+=
+= ColorizeMessage
+=
+= [JN] Apply coloring depending on message type.
+=
+================================================================================
+*/
 
-void DrawMessage(void)
+static const byte *ColorizeMessage (const MessageType_t messageType)
+{
+    player_t *player = &players[displayplayer];
+
+    if (player->messageType == msg_pickup)
+    {
+        // Item pickup
+        return messages_pickup_color_set == CR_NONE ?
+               NULL : cr[messages_pickup_color_set];
+    }
+    else if (player->messageType == msg_secret)
+    {
+        // Revealed secret
+        return messages_secret_color_set == CR_NONE ?
+               NULL : cr[messages_secret_color_set];
+    }
+    else if (player->messageType == msg_system)
+    {
+        // System message
+        return messages_system_color_set == CR_NONE ?
+               NULL : cr[messages_system_color_set];
+    }
+    else if (player->messageType == msg_chat)
+    {
+        // Netgame chat
+        return messages_chat_color_set == CR_NONE ?
+               NULL : cr[messages_chat_color_set];
+    }
+    else
+    {
+        // Not supposed to be colored.
+        return NULL;
+    }
+}
+
+/*
+================================================================================
+=
+= AlignMessage
+=
+= [JN] Align message depending on given type of "messages_alignment":
+=   0 - centered,
+=   1 - left edge of the screen,
+=   2 - left edge of the status bar.
+=
+================================================================================
+*/
+
+static const int AlignMessage (const int align, const int english_language)
 {
     player_t *player = &players[consoleplayer];
-    int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
+    const int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
+    
+    return
+        messages_alignment == 0 ? 160 - (english_language ?
+                                         RD_M_TextAWidth(player->message) :
+                                         RD_M_TextSmallRUSWidth(player->message))
+                                         / 2 + wide_delta :
+        messages_alignment == 1 ? 4 + wide_4_3 :
+                           /* 2*/ wide_delta;
+}
+
+/*
+================================================================================
+=
+= FadeMessage
+=
+= [JN] Do fading effect by scrolling though transparency tables.
+=
+================================================================================
+*/
+
+static const byte *FadeMessage (const int messageTics)
+{
+    return
+        messageTics >= 9 ? transtable90 :
+        messageTics >= 8 ? transtable80 :
+        messageTics >= 7 ? transtable70 :
+        messageTics >= 6 ? transtable60 :
+        messageTics >= 5 ? transtable50 :
+        messageTics >= 4 ? transtable40 :
+        messageTics >= 3 ? transtable30 :
+        messageTics >= 2 ? transtable20 :
+                           transtable10 ;
+}
+
+/*
+================================================================================
+=
+= DrawMessage
+=
+=
+================================================================================
+*/
+
+void DrawMessage (void)
+{
+    player_t *player = &players[consoleplayer];
 
     // [JN] Activate message counter in non-level or paused states.
     // Make messages go away in menu, finale and help screens.
@@ -341,24 +439,7 @@ void DrawMessage(void)
     }
 
     // [JN] Colorize depending on given color type.
-    switch (player->messageType)
-    {
-        case msg_pickup: // Item pickup.
-            dp_translation = messages_pickup_color_set == CR_NONE ? NULL : cr[messages_pickup_color_set];
-            break;
-        case msg_secret: // Revealed secret
-            dp_translation = messages_secret_color_set == CR_NONE ? NULL : cr[messages_secret_color_set];
-            break;
-        case msg_system: // System message
-            dp_translation = messages_system_color_set == CR_NONE ? NULL : cr[messages_system_color_set];
-            break;
-        case msg_chat: // Netgame chat
-            dp_translation = messages_chat_color_set == CR_NONE ? NULL : cr[messages_chat_color_set];
-            break;
-        case msg_uncolored: // Not supposed to be colored.
-        default:
-            break;
-    }
+    dp_translation = ColorizeMessage(player->messageType);
 
     // [JN] Netgame chat messages are always in English.
     if (english_language || player->messageType == msg_chat)
@@ -366,25 +447,13 @@ void DrawMessage(void)
         if (player->messageTics < 10 && message_fade && !vanillaparm)
         {
             RD_M_DrawTextAFade(player->message,
-                           messages_alignment == 0 ? 160 - RD_M_TextAWidth(player->message) / 2 + wide_delta :  // centered
-                           messages_alignment == 1 ? 4 + wide_4_3 :   // left edge of the screen
-                                                     wide_delta, 1,   // left edge of the status bar
-                           player->messageTics >= 9 ? transtable90 :
-                           player->messageTics >= 8 ? transtable80 :
-                           player->messageTics >= 7 ? transtable70 :
-                           player->messageTics >= 6 ? transtable60 :
-                           player->messageTics >= 5 ? transtable50 :
-                           player->messageTics >= 4 ? transtable40 :
-                           player->messageTics >= 3 ? transtable30 :
-                           player->messageTics >= 2 ? transtable20 :
-                                                      transtable10);
+                               AlignMessage(messages_alignment, english_language), 1,
+                               FadeMessage(player->messageTics));
         }
         else
         {
             RD_M_DrawTextA(player->message,
-                       messages_alignment == 0 ? 160 - RD_M_TextAWidth(player->message) / 2 + wide_delta :  // centered
-                       messages_alignment == 1 ? 4 + wide_4_3 :       // left edge of the screen
-                                                 wide_delta, 1);      // left edge of the status bar
+                           AlignMessage(messages_alignment, english_language), 1);
         }
     }
     else
@@ -392,25 +461,13 @@ void DrawMessage(void)
         if (player->messageTics < 10 && message_fade && !vanillaparm)
         {
             RD_M_DrawTextSmallRUSFade(player->message,
-                                      messages_alignment == 0 ? 160 - RD_M_TextSmallRUSWidth(player->message) / 2 + wide_delta :  // по центру
-                                      messages_alignment == 1 ? 4 + wide_4_3 :      // по краю экрана
-                                                                    wide_delta, 1,  // по краю статус-бара
-                                      player->messageTics >= 9 ? transtable90 :
-                                      player->messageTics >= 8 ? transtable80 :
-                                      player->messageTics >= 7 ? transtable70 :
-                                      player->messageTics >= 6 ? transtable60 :
-                                      player->messageTics >= 5 ? transtable50 :
-                                      player->messageTics >= 4 ? transtable40 :
-                                      player->messageTics >= 3 ? transtable30 :
-                                      player->messageTics >= 2 ? transtable20 :
-                                                                 transtable10);
+                                      AlignMessage(messages_alignment, english_language), 1,
+                                      FadeMessage(player->messageTics));
         }
         else
         {
             RD_M_DrawTextSmallRUSFade(player->message,
-                                  messages_alignment == 0 ? 160 - RD_M_TextSmallRUSWidth(player->message) / 2 + wide_delta :  // по центру
-                                  messages_alignment == 1 ? 4 + wide_4_3 :           // по краю экрана
-                                                            wide_delta, 1, NULL); // по краю статус-бара
+                                  AlignMessage(messages_alignment, english_language), 1, NULL);
         }
     }
 
