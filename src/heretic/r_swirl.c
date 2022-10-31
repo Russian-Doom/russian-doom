@@ -23,7 +23,7 @@
 #include "i_system.h"
 #include "w_wad.h"
 #include "z_zone.h"
-#include "doomdef.h"
+#include "hr_local.h"
 
 // swirl factors determine the number of waves per flat width
 

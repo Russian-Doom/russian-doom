@@ -22,7 +22,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <SDL_scancode.h>
-#include "doomdef.h"
+#include "hr_local.h"
 #include "doomkeys.h"
 #include "deh_str.h"
 #include "i_input.h"

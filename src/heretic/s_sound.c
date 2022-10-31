@@ -18,7 +18,7 @@
 
 #include <stdlib.h>
 
-#include "doomdef.h"
+#include "hr_local.h"
 #include "i_system.h"
 #include "sounds.h"
 #include "s_sound.h"

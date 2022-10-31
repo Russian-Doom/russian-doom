@@ -20,7 +20,7 @@
 
 #include <stdlib.h>
 
-#include "doomdef.h"
+#include "hr_local.h"
 #include "i_system.h"
 #include "m_bbox.h"
 #include "p_local.h"

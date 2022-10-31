@@ -18,7 +18,7 @@
 
 
 
-#include "doomdef.h"
+#include "hr_local.h"
 #include "deh_str.h"
 #include "d_name.h"
 #include "i_video.h"

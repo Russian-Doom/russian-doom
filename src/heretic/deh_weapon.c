@@ -25,7 +25,7 @@
 #include "doomtype.h"
 #include "m_misc.h"
 
-#include "doomdef.h"
+#include "hr_local.h"
 
 #include "deh_defs.h"
 #include "deh_main.h"

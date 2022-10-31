@@ -22,7 +22,7 @@
 
 #include "rd_io.h"
 #include "deh_str.h"
-#include "doomdef.h"
+#include "hr_local.h"
 #include "i_controller.h"
 #include "i_input.h"
 #include "i_system.h"

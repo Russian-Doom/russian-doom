@@ -9,12 +9,11 @@ if(COMPILE_HERETIC)
                 deh_sound.c
                 deh_thing.c
                 deh_weapon.c
-                d_main.c
-                d_net.c
-                                    doomdata.h
-                                    doomdef.h
                 f_finale.c
                 g_game.c
+                                    hr_local.h
+                hr_main.c
+                hr_net.c
                 id_lang.c           id_lang.h
                 info.c              info.h
                 in_lude.c

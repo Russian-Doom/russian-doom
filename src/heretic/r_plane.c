@@ -18,7 +18,7 @@
 
 
 #include <stdlib.h>
-#include "doomdef.h"
+#include "hr_local.h"
 #include "deh_str.h"
 #include "i_system.h"
 #include "r_local.h"

@@ -18,7 +18,7 @@
 
 
 
-#include "doomdef.h"
+#include "hr_local.h"
 #include "i_sound.h"
 #include "sounds.h"
 

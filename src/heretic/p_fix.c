@@ -34,7 +34,7 @@
 
 
 #include "d_mode.h"
-#include "doomdef.h"
+#include "hr_local.h"
 #include "p_local.h"
 
 

@@ -24,7 +24,7 @@
 #include "SDL.h"
 #include "d_mode.h"
 #include "deh_str.h"
-#include "doomdef.h"
+#include "hr_local.h"
 #include "i_swap.h"
 #include "i_system.h"
 #include "m_argv.h"
