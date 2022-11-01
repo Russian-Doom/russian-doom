@@ -2138,13 +2138,6 @@ void G_DeferedPlayDemo(char *name)
 {
     defdemoname = name;
     gameaction = ga_playdemo;
-
-    // [crispy] fast-forward demo up to the desired map
-    if (demowarp)
-    {
-        nodrawers = true;
-        singletics = true;
-    }
 }
 
 void G_DoPlayDemo(void)
@@ -2207,6 +2200,13 @@ void G_DoPlayDemo(void)
     if (netgame)
     {
         netdemo = true;
+    }
+
+    // [crispy] fast-forward demo up to the desired map
+    if (demowarp)
+    {
+        nodrawers = true;
+        singletics = true;
     }
 
     // [crispy] demo progress bar
