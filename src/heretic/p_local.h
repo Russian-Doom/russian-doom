@@ -14,7 +14,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// P_local.h
 
 
 #pragma once
@@ -22,41 +21,13 @@
 #include "r_local.h"
 
 
-#define STARTREDPALS	1
-#define STARTBONUSPALS	9
-#define NUMREDPALS		8
-#define NUMBONUSPALS	4
-
-#define FOOTCLIPSIZE	10*FRACUNIT
-
-#define TOCENTER -8
-#define	FLOATSPEED (FRACUNIT*4)
-
-#define	MAXHEALTH 100
-#define MAXCHICKENHEALTH 30
-#define	VIEWHEIGHT (41*FRACUNIT)
-
-// mapblocks are used to check movement against lines and things
-#define MAPBLOCKUNITS	128
-#define	MAPBLOCKSIZE	(MAPBLOCKUNITS*FRACUNIT)
-#define	MAPBLOCKSHIFT	(FRACBITS+7)
-#define	MAPBMASK		(MAPBLOCKSIZE-1)
-#define	MAPBTOFRAC		(MAPBLOCKSHIFT-FRACBITS)
-
-// player radius for movement checking
-#define PLAYERRADIUS 16*FRACUNIT
-
-// MAXRADIUS is for precalculated sector block boxes
-// the spider demon is larger, but we don't have any moving sectors
-// nearby
-#define MAXRADIUS 32*FRACUNIT
-
-#define	GRAVITY FRACUNIT
-#define	MAXMOVE (30*FRACUNIT)
-
-#define	USERANGE (64*FRACUNIT)
-#define	MELEERANGE (64*FRACUNIT)
-#define	MISSILERANGE (32*64*FRACUNIT)
+/*
+================================================================================
+=
+= P_ENEMY
+=
+================================================================================
+*/
 
 typedef enum
 {
@@ -71,121 +42,6 @@ typedef enum
     DI_NODIR,
     NUMDIRS
 } dirtype_t;
-
-#define BASETHRESHOLD 100       // follow a player exlusively for 3 seconds
-
-/*
-================================================================================
-=
-= AM_MAP
-=
-================================================================================
-*/
-
-typedef struct
-{
-    int64_t x,y;
-} mpoint_t;
-
-extern mpoint_t *markpoints;
-extern int       markpointnum, markpointnum_max;
-
-extern boolean automapactive;
-extern const boolean AM_Responder (const event_t *ev);
-
-extern void AM_clearMarks (void);
-extern void AM_Drawer (void);
-extern void AM_initMarksColor (const int color);
-extern void AM_initPics (void);
-extern void AM_initVariables (void);
-extern void AM_Start (void);
-extern void AM_Stop (void);
-extern void AM_Ticker (void);
-
-/*
-================================================================================
-=
-= CT_CHAT (Chat mode)
-=
-================================================================================
-*/
-
-extern char *chat_macros[10];
-extern const char CT_dequeueChatChar (void);
-extern const boolean CT_Responder (event_t *ev);
-extern boolean chatmodeon;
-extern boolean ultimatemsg;
-
-extern void CT_Drawer (void);
-extern void CT_Init (void);
-extern void CT_Ticker (void);
-
-/* 
-================================================================================
-=
-= F_FINALE (Finale screens)
-=
-================================================================================
-*/
-
-extern const boolean F_Responder (const event_t *event);
-
-extern void F_Drawer (void);
-extern void F_StartFinale (void);
-extern void F_Ticker (void);
-
-/* 
-================================================================================
-=
-= G_GAME
-=
-================================================================================
-*/
-
-extern void G_PlayerReborn (int player);
-
-/* 
-================================================================================
-=
-= M_RANDOM
-=
-================================================================================
-*/
-
-// Most damage defined using HITDICE
-#define HITDICE(a) ((1+(P_Random()&7))*a)
-
-extern int rndindex;
-extern const int M_Random (void);
-extern const int P_Random (void);
-extern const int P_SubRandom (void);
-
-extern void M_ClearRandom (void);
-
-
-/* 
-================================================================================
-=
-= MN_MENU
-=
-================================================================================
-*/
-
-extern boolean MN_Responder (event_t *event);
-extern boolean askforquit;
-extern byte *ammo_widget_opacity_set;
-
-extern void MN_Drawer (void);
-extern void MN_Init (void);
-extern void MN_Ticker (void);
-
-/*
-================================================================================
-=
-= P_ENEMY
-=
-================================================================================
-*/
 
 void P_NoiseAlert (mobj_t *target, mobj_t *emmiter);
 void P_InitMonsters (void);
@@ -334,6 +190,13 @@ extern void P_UpdateBeak (player_t *player, pspdef_t *psp);
 ================================================================================
 */
 
+#define PLAYERRADIUS     (16*FRACUNIT)
+#define	MAXHEALTH        100
+#define MAXCHICKENHEALTH 30
+#define	VIEWHEIGHT       (41*FRACUNIT)
+#define TOCENTER         -8
+#define	GRAVITY          FRACUNIT
+
 extern int P_GetPlayerNum(player_t * player);
 
 extern boolean P_UseArtifact(player_t * player, artitype_t arti);
@@ -360,6 +223,8 @@ extern void P_Thrust (player_t *player, angle_t angle, fixed_t move);
 #define ONFLOORZ      INT_MIN
 #define ONCEILINGZ    INT_MAX
 #define FLOATRANDZ    (INT_MAX-1)
+
+#define	FLOATSPEED    (FRACUNIT*4)
 
 extern mobjtype_t  PuffType;
 extern mobj_t     *MissileMobj;
@@ -398,6 +263,8 @@ extern void P_ThrustMobj (mobj_t *mo, angle_t angle, fixed_t move);
 =
 ================================================================================
 */
+
+#define FOOTCLIPSIZE    10*FRACUNIT
 
 #define PT_ADDLINES     1
 #define	PT_ADDTHINGS    2
@@ -455,6 +322,10 @@ extern void P_UnsetThingPosition (mobj_t *thing);
 ================================================================================
 */
 
+#define	USERANGE (64*FRACUNIT)
+#define	MELEERANGE (64*FRACUNIT)
+#define	MISSILERANGE (32*64*FRACUNIT)
+
 extern boolean floatok;  // if true, move would be ok if
 extern boolean P_ChangeSector(sector_t * sector, boolean crunch);
 extern boolean P_CheckPosition(mobj_t * thing, fixed_t x, fixed_t y);
@@ -483,10 +354,62 @@ extern void P_UseLines(player_t * player);
 /*
 ================================================================================
 =
+= P_SAVEG
+=
+================================================================================
+*/
+
+#define SAVEGAMESIZE          0x30000
+#define SAVESTRINGSIZE        24
+#define SAVE_GAME_TERMINATOR  0x1d
+#define	SAVEGAMENAME          "heretic-save-"
+
+extern char *savegamedir;
+
+extern thinker_t *P_IndexToThinker (uint32_t index);
+
+extern uint32_t P_ThinkerToIndex (thinker_t* thinker);
+
+// Support routines for saving games
+extern byte SV_ReadByte (void);
+extern char *SV_Filename (int slot);
+extern uint16_t SV_ReadWord (void);
+extern uint32_t SV_ReadLong (void);
+extern void SV_Close (char *fileName);
+extern void SV_Open (char *fileName);
+extern void SV_OpenRead (char *fileName);
+extern void SV_Read (void *buffer, int size);
+extern void SV_Write (void *buffer, int size);
+extern void SV_WriteByte (byte val);
+extern void SV_WriteLong (unsigned int val);
+extern void SV_WriteWord (unsigned short val);
+
+extern void P_ArchiveAutomap (void);
+extern void P_ArchivePlayers (void);
+extern void P_ArchiveSpecials (void);
+extern void P_ArchiveThinkers (void);
+extern void P_ArchiveWorld (void);
+extern void P_RestoreTargets (void);
+extern void P_UnArchiveAutomap (void);
+extern void P_UnArchivePlayers (void);
+extern void P_UnArchiveSpecials (void);
+extern void P_UnArchiveThinkers (void);
+extern void P_UnArchiveWorld (void);
+
+/*
+================================================================================
+=
 = P_SETUP
 =
 ================================================================================
 */
+
+#define MAPBLOCKUNITS	128
+#define	MAPBLOCKSIZE	(MAPBLOCKUNITS*FRACUNIT)
+#define	MAPBLOCKSHIFT	(FRACBITS+7)
+#define	MAPBTOFRAC		(MAPBLOCKSHIFT-FRACBITS)
+#define MAXRADIUS       (32*FRACUNIT)
+#define	MAXMOVE         (30*FRACUNIT)
 
 extern byte *rejectmatrix;          // for fast sight rejection
 
@@ -498,6 +421,9 @@ extern int32_t *blockmap;
 extern int32_t *blockmaplump;       // offsets in blockmap are from here
 
 extern mobj_t **blocklinks;         // for thing chains
+
+extern void P_Init (void);
+extern void P_SetupLevel (int episode, int map, int playermask, skill_t skill);
 
 /*
 ================================================================================
@@ -584,6 +510,8 @@ extern void P_ShootSpecialLine (mobj_t *thing, line_t *line);
 =
 ================================================================================
 */
+
+#define BASETHRESHOLD 100  // follow a player exlusively for 3 seconds
 
 extern boolean P_ChickenMorphPlayer(player_t *player);
 extern boolean P_GiveAmmo(player_t *player, ammotype_t ammo, int count);
@@ -896,19 +824,3 @@ extern void P_InitSwitchList (void);
 
 extern boolean EV_Teleport (line_t *line, int side, mobj_t *thing);
 extern boolean P_Teleport (mobj_t *thing, fixed_t x, fixed_t y, angle_t angle);
-
-/*
-================================================================================
-=
-= SB_BAR
-=
-================================================================================
-*/
-
-extern int ArtifactFlash;
-extern int defdemotics, deftotaldemotics;
-extern int SB_state;
-
-extern void SB_DemoProgressBar (void);
-extern void SB_DrawDemoTimer (const int time);
-extern void SB_PaletteFlash(void);

@@ -14,7 +14,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// R_local.h
 
 
 #pragma once
@@ -22,47 +21,6 @@
 #include "i_video.h"
 #include "v_patch.h"
 
-
-#define LOOKDIRMIN	160 // [crispy] -110, actually // [JN] increased to 160 (i.e. -160)
-#define LOOKDIRMAX	90
-#define LOOKDIRS	(LOOKDIRMIN+1+LOOKDIRMAX) // [crispy] lookdir range: -160..0..90
-
-#define	ANGLETOSKYSHIFT		22      // sky map is 256*128*4 maps
-
-#define	BASEYCENTER			100
-
-#define	PI					3.141592657
-
-#define	CENTERY				(SCREENHEIGHT/2)
-
-#define	MINZ			(FRACUNIT*4)
-
-#define	FIELDOFVIEW		2048    // fineangles in the SCREENWIDTH wide window
-
-//
-// lighting constants
-//
-#define	LIGHTLEVELS			16
-#define	LIGHTSEGSHIFT		4
-#define	MAXLIGHTSCALE		48
-#define	LIGHTSCALESHIFT		12
-// [crispy] & [JN] smoother diminished lighting
-#define MAXLIGHTZ			1024
-#define LIGHTZSHIFT			17
-// [JN] Vanilla values
-#define MAXLIGHTZ_VANILLA   128
-#define LIGHTZSHIFT_VANILLA 20
-#define	NUMCOLORMAPS		32      // number of diminishing
-#define	INVERSECOLORMAP		32
-
-// [BH] Compensate for rounding errors in DOOM's renderer by stretching wall
-//  columns by 1px. This eliminates the randomly-colored pixels ("sparkles")
-//  that appear at the bottom of some columns.
-#define SPARKLEFIX          64
-
-// [AM] Fractional part of the current tic, in the half-open
-//      range of [0.0, 1.0).  Used for interpolation.
-extern fixed_t          fractionaltic;
 
 /*
 ==============================================================================
@@ -72,18 +30,14 @@ extern fixed_t          fractionaltic;
 ==============================================================================
 */
 
-//================ used by play and refresh
-
 typedef struct
 {
     fixed_t x, y;
-
-// [crispy] remove slime trails
-// pseudovertexes are dummies that have their coordinates modified to get
-// moved towards the linedef associated with their seg by projecting them
-// using the law of cosines in p_setup.c:P_RemoveSlimeTrails();
-// they are *only* used in rendering
-
+    // [crispy] remove slime trails
+    // pseudovertexes are dummies that have their coordinates modified to get
+    // moved towards the linedef associated with their seg by projecting them
+    // using the law of cosines in p_setup.c:P_RemoveSlimeTrails();
+    // they are *only* used in rendering
     fixed_t	px;
     fixed_t	py;
     boolean	moved;
@@ -204,7 +158,6 @@ typedef struct
     int children[2];            // if NF_SUBSECTOR its a subsector
 } node_t;
 
-
 /*
 ==============================================================================
 
@@ -212,6 +165,10 @@ typedef struct
 
 ==============================================================================
 */
+
+// [AM] Fractional part of the current tic, in the half-open
+//      range of [0.0, 1.0).  Used for interpolation.
+extern fixed_t fractionaltic;
 
 typedef byte lighttable_t;      // this could be wider for >8 bit display
 
@@ -297,10 +254,8 @@ typedef struct
     spriteframe_t *spriteframes;
 } spritedef_t;
 
-extern spritedef_t *sprites;
 extern int numsprites;
-
-//=============================================================================
+extern spritedef_t *sprites;
 
 extern int numvertexes;
 extern vertex_t *vertexes;
@@ -323,18 +278,16 @@ extern line_t *lines;
 extern int numsides;
 extern side_t *sides;
 
-
+extern angle_t *linearskyangle;
+extern angle_t *xtoviewangle;
+extern angle_t clipangle;
+extern angle_t viewangle;
 
 extern fixed_t viewx, viewy, viewz;
-extern angle_t viewangle;
-extern player_t *viewplayer;
-
-
-extern angle_t clipangle;
 
 extern int viewangletox[FINEANGLES / 2];
-extern angle_t *xtoviewangle;
-extern angle_t *linearskyangle;
+
+extern player_t *viewplayer;
 
 /*
 ================================================================================
@@ -344,11 +297,42 @@ extern angle_t *linearskyangle;
 ================================================================================
 */
 
+#define	FIELDOFVIEW 2048  // fineangles in the SCREENWIDTH wide window
+#define LOOKDIRMIN  160   // [crispy] -110, actually ([JN] increased to 160 (i.e. -160))
+#define LOOKDIRMAX  90
+#define LOOKDIRS    (LOOKDIRMIN+1+LOOKDIRMAX) // [crispy] lookdir range: -160..0..90
+
+// Lighting constants
+#define	LIGHTLEVELS			16
+#define	LIGHTSEGSHIFT		4
+#define	MAXLIGHTSCALE		48
+#define	LIGHTSCALESHIFT		12
+// [crispy] & [JN] smoother diminished lighting
+#define MAXLIGHTZ			1024
+#define LIGHTZSHIFT			17
+// [JN] Vanilla values
+#define MAXLIGHTZ_VANILLA   128
+#define LIGHTZSHIFT_VANILLA 20
+#define	NUMCOLORMAPS		32      // number of diminishing
+#define	INVERSECOLORMAP		32
+
+// Define the different areas for the dirty map
+#define I_NOUPDATE  0
+#define I_FULLVIEW  1
+#define I_STATBAR   2
+#define I_MESSAGES  4
+#define I_FULLSCRN  8
+
 // [AM] Interpolate between two angles.
 extern angle_t R_InterpolateAngle (const angle_t oangle, const angle_t nangle, const fixed_t scale);
 extern angle_t R_PointToAngle(const fixed_t x, const fixed_t y);
 extern angle_t R_PointToAngle2 (const fixed_t x1, const fixed_t y1, const fixed_t x2, const fixed_t y2);
 extern angle_t R_PointToAngleCrispy(fixed_t x, fixed_t y);
+
+extern boolean setsizeneeded;
+extern boolean BorderNeedRefresh;
+extern boolean BorderTopRefresh;
+
 extern fixed_t centerxfrac;
 extern fixed_t centeryfrac;
 extern fixed_t projection;
@@ -360,10 +344,14 @@ extern int detailshift;  // 0 = high, 1 = low
 extern int extralight;
 extern int flyheight;
 extern int maxlightz, lightzshift;
+extern int R_CheckTextureNumForName (char *name);
+extern int R_FlatNumForName (char *name);
 extern int R_PointOnSegSide(fixed_t x, fixed_t y, const seg_t *line);
 extern int R_PointOnSide(fixed_t x, fixed_t y, const node_t *node);
+extern int R_TextureNumForName (char *name);
 extern int rendered_segs, rendered_visplanes, rendered_vissprites;
 extern int scaledviewwidth;
+extern int UpdateState;
 extern int validcount;
 extern int viewwidth, viewheight, scaledviewheight, viewwindowx, viewwindowy;
 
@@ -384,10 +372,14 @@ extern void (*tlcolfunc) (void);
 extern void (*transcolfunc) (void);
 extern void (*transtlcolfunc) (void);
 extern void R_ClearStats (void); // [JN] Used by perfomance counter.
+extern void R_DrawTopBorder(void);
+extern void R_DrawViewBorder(void);
 extern void R_ExecuteSetViewSize();
+extern void R_Init(void);
 extern void R_InitLightTables (void);
 extern void R_InterpolateTextureOffsets (void); // [crispy] smooth texture scrolling
-
+extern void R_RenderPlayerView(player_t * player);
+extern void R_SetViewSize(const int blocks, const int detail);
 
 /*
 ================================================================================
@@ -432,6 +424,11 @@ extern void R_StoreWallRange (const int start, const int stop);
 ================================================================================
 */
 
+// [BH] Compensate for rounding errors in DOOM's renderer by stretching wall
+//  columns by 1px. This eliminates the randomly-colored pixels ("sparkles")
+//  that appear at the bottom of some columns.
+#define SPARKLEFIX 64
+
 extern int rw_angle1;  // angle to line origin
 
 extern void R_RenderMaskedSegRange (drawseg_t *ds, const int x1, const int x2);
@@ -443,6 +440,8 @@ extern void R_RenderMaskedSegRange (drawseg_t *ds, const int x1, const int x2);
 =
 ================================================================================
 */
+
+#define	ANGLETOSKYSHIFT 22  // sky map is 256*128*4 maps
 
 typedef void (*planefunction_t) (int top, int bottom);
 
@@ -501,6 +500,9 @@ extern void R_PrecacheLevel(void);
 =
 ================================================================================
 */
+
+#define	BASEYCENTER  100
+#define	MINZ         (FRACUNIT*4)
 
 // constant arrays used for psprite clipping and initializing clipping
 extern int *negonearray;       // [JN] killough 2/8/98: // dropoff overflow
@@ -610,4 +612,3 @@ extern const byte *R_BrightmapForState (const int state);
 extern char *R_DistortedFlat (int flatnum);
 
 extern void R_InitDistortedFlats ();
-
