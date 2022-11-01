@@ -2123,6 +2123,40 @@ void G_RecordDemo(skill_t skill, int numplayers, int episode, int map,
     demorecording = true;
 }
 
+/*
+================================================================================
+=
+= G_DemoProgressBar
+=
+= [crispy] demo progress bar
+=
+================================================================================
+*/
+
+static void G_DemoProgressBar (const int lumplength)
+{
+    int   numplayersingame = 0;
+    byte *demo_ptr = demo_p;
+
+    for (int i = 0; i < MAXPLAYERS; i++)
+    {
+        if (playeringame[i])
+        {
+            numplayersingame++;
+        }
+    }
+
+    deftotaldemotics = defdemotics = 0;
+
+    while (*demo_ptr != DEMOMARKER && (demo_ptr - demobuffer) < lumplength)
+    {
+        // [JN] Note: Heretic using extra two pointers: lookfly and arti,
+        // so unlike Doom (5 : 4) we using (7 : 6) here.
+        // Thanks to Roman Fomin for pointing out.
+        demo_ptr += numplayersingame * (longtics ? 7 : 6);
+        deftotaldemotics++;
+    }
+}
 
 /*
 ===================
@@ -2210,26 +2244,7 @@ void G_DoPlayDemo(void)
     }
 
     // [crispy] demo progress bar
-    {
-        int i, numplayersingame = 0;
-        byte *demo_ptr = demo_p;
-
-        for (i = 0; i < MAXPLAYERS; i++)
-        {
-            if (playeringame[i])
-            {
-                numplayersingame++;
-            }
-        }
-
-        deftotaldemotics = defdemotics = 0;
-
-        while (*demo_ptr != DEMOMARKER && (demo_ptr - demobuffer) < lumplength)
-        {
-            demo_ptr += numplayersingame * (longtics ? 7 : 6);
-            deftotaldemotics++;
-        }
-    }
+    G_DemoProgressBar(lumplength);
 }
 
 
@@ -2299,26 +2314,7 @@ void G_TimeDemo(char *name)
     }
 
     // [crispy] demo progress bar
-    {
-        int i, numplayersingame = 0;
-        byte *demo_ptr = demo_p;
-
-        for (i = 0; i < MAXPLAYERS; i++)
-        {
-            if (playeringame[i])
-            {
-                numplayersingame++;
-            }
-        }
-
-        deftotaldemotics = defdemotics = 0;
-
-        while (*demo_ptr != DEMOMARKER && (demo_ptr - demobuffer) < lumplength)
-        {
-            demo_ptr += numplayersingame * (longtics ? 7 : 6);
-            deftotaldemotics++;
-        }
-    }
+    G_DemoProgressBar(lumplength);
 }
 
 
