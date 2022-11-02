@@ -87,6 +87,12 @@ void S_StartSong(int song, boolean loop, boolean replay)
 {
     int mus_len;
 
+    // [JN] Do not start music until demo warping is finished.
+    if (demowarp)
+    {
+        return;
+    }
+
     // Don't replay an old song.
     if (song == mus_song)
     {
