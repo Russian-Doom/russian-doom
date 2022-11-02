@@ -1830,8 +1830,16 @@ static void CheatNoClipFunc(player_t * player, Cheat_t * cheat)
 {
     NIGHTMARE_NETGAME_CHECK;
     player->cheats ^= CF_NOCLIP;
-    P_SetMessage(player, DEH_String(player->cheats & CF_NOCLIP ?
-                 txt_cheatnoclipon : txt_cheatnoclipoff), msg_system, false);
+    if (player->cheats & CF_NOCLIP)
+    {
+        player->mo->flags |= MF_NOCLIP;
+        P_SetMessage(player, DEH_String(txt_cheatnoclipon), msg_system, false);
+    }
+    else
+    {
+        player->mo->flags &= ~MF_NOCLIP;
+        P_SetMessage(player, DEH_String(txt_cheatnoclipoff), msg_system, false);
+    }
 }
 
 static void CheatWeaponsFunc(player_t * player, Cheat_t * cheat)

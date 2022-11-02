@@ -582,15 +582,6 @@ void P_PlayerThink(player_t *player)
     player->oldviewz = player->viewz;
     player->oldlookdir = player->lookdir;
 
-    // No-clip cheat
-    if (player->cheats & CF_NOCLIP)
-    {
-        player->mo->flags |= MF_NOCLIP;
-    }
-    else
-    {
-        player->mo->flags &= ~MF_NOCLIP;
-    }
     cmd = &player->cmd;
     if (player->mo->flags & MF_JUSTATTACKED)
     {                           // Gauntlets attack auto forward motion
