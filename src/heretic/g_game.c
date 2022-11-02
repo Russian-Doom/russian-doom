@@ -2296,16 +2296,16 @@ void G_TimeDemo(char *name)
         netgame = true;
     }
 
-    G_InitNew(skill, episode, map, 0);
-    starttime = I_GetTime();
-
     // Disable screen rendering entirely,
     // if command line parameter is present.
     nodrawers = M_CheckParm ("-nodraw");
+    timingdemo = true;
+
+    G_InitNew(skill, episode, map, 0);
+    starttime = I_GetTime();
 
     usergame = false;
     demoplayback = true;
-    timingdemo = true;
     singletics = true;
 
     if (netgame)

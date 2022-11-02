@@ -87,8 +87,9 @@ void S_StartSong(int song, boolean loop, boolean replay)
 {
     int mus_len;
 
-    // [JN] Do not start music until demo warping is finished.
-    if (demowarp)
+    // [JN] Do not start music until demo warping is finished,
+    // or while -nodraw and -timedemo runs.
+    if (demowarp || (nodrawers && timingdemo))
     {
         return;
     }

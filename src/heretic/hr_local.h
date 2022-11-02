@@ -895,6 +895,7 @@ extern void F_Ticker (void);
 */
 
 extern boolean G_Responder(event_t * ev);
+extern boolean timingdemo;
 
 extern void G_DeathMatchSpawnPlayer(int playernum);
 extern void G_DeferedInitNew(skill_t skill, int episode, int map);
