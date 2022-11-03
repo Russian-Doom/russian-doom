@@ -997,7 +997,6 @@ extern void SB_DemoProgressBar (void);
 extern void SB_DrawDemoTimer (const int time);
 extern void SB_Drawer (void);
 extern void SB_Init (void);
-extern void SB_PaletteFlash (void);
 extern void SB_Ticker (void);
 
 #include "sounds.h"

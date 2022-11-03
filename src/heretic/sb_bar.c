@@ -259,6 +259,58 @@ void SB_Init(void)
     spinflylump = W_GetNumForName(DEH_String("SPFLY0"));
 }
 
+/*
+================================================================================
+=
+= SB_PaletteFlash
+=
+= Sets the new palette based upon current values of player->damagecount
+= and player->bonuscount.
+=
+================================================================================
+*/
+
+static void SB_PaletteFlash (void)
+{
+    static int  sb_palette = 0;
+    int         palette;
+    const byte *pal;
+
+    CPlayer = &players[consoleplayer];
+
+    if (CPlayer->damagecount)
+    {
+        palette = (CPlayer->damagecount + 7) >> 3;
+        if (palette >= NUMREDPALS)
+        {
+            palette = NUMREDPALS - 1;
+        }
+        palette += STARTREDPALS;
+    }
+    // [crispy] never show the yellow bonus palette for a dead player
+    else if (CPlayer->bonuscount && CPlayer->health > 0)
+    {
+        // [JN] One extra palette for pickup flashing
+        // https://doomwiki.org/wiki/PLAYPAL
+        palette = (CPlayer->bonuscount + 7) >> 3;
+        if (palette >= NUMBONUSPALS)
+        {
+            palette = NUMBONUSPALS;
+        }
+        palette += STARTBONUSPALS-1;
+    }
+    else
+    {
+        palette = 0;
+    }
+    if (palette != sb_palette)
+    {
+        sb_palette = palette;
+        pal = (byte *) W_CacheLumpNum(playpalette, PU_CACHE) + palette * 768;
+        I_SetPalette(pal);
+    }
+}
+
 //---------------------------------------------------------------------------
 //
 // PROC SB_Ticker
@@ -271,6 +323,9 @@ void SB_Ticker(void)
     int curHealth;
 
     curHealth = players[consoleplayer].mo->health;
+
+    // [JN] Do red-/gold-shifts from damage/items.
+    SB_PaletteFlash();
 
     if (leveltime & 1 && curHealth > 0)
     {
@@ -853,7 +908,6 @@ void SB_Drawer(void)
             SB_state = 1;
         }
     }
-    SB_PaletteFlash();
 
     // [JN] Apply golden eyes to HUD gargoyles while Ring of Invincibility
     if ((screenblocks <= 10 || (automapactive && !automap_overlay))
@@ -1105,49 +1159,6 @@ void SB_Drawer(void)
     // [JN] Always update whole status bar.
     // TODO: remove bunch of other update conditions.
     SB_state = -1;
-}
-
-// sets the new palette based upon current values of player->damagecount
-// and player->bonuscount
-void SB_PaletteFlash(void)
-{
-    static int sb_palette = 0;
-    int palette;
-    byte *pal;
-
-    CPlayer = &players[consoleplayer];
-
-    if (CPlayer->damagecount)
-    {
-        palette = (CPlayer->damagecount + 7) >> 3;
-        if (palette >= NUMREDPALS)
-        {
-            palette = NUMREDPALS - 1;
-        }
-        palette += STARTREDPALS;
-    }
-    // [crispy] never show the yellow bonus palette for a dead player
-    else if (CPlayer->bonuscount && CPlayer->health > 0)
-    {
-        // [JN] One extra palette for pickup flashing
-        // https://doomwiki.org/wiki/PLAYPAL
-        palette = (CPlayer->bonuscount + 7) >> 3;
-        if (palette >= NUMBONUSPALS)
-        {
-            palette = NUMBONUSPALS;
-        }
-        palette += STARTBONUSPALS-1;
-    }
-    else
-    {
-        palette = 0;
-    }
-    if (palette != sb_palette)
-    {
-        sb_palette = palette;
-        pal = (byte *) W_CacheLumpNum(playpalette, PU_CACHE) + palette * 768;
-        I_SetPalette(pal);
-    }
 }
 
 //---------------------------------------------------------------------------
