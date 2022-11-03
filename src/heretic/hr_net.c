@@ -27,7 +27,7 @@
 #include "i_system.h"
 #include "i_timer.h"
 #include "i_video.h"
-#include "doomdef.h"
+#include "hr_local.h"
 #include "m_argv.h"
 #include "m_misc.h"
 #include "w_checksum.h"

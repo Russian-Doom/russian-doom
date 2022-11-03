@@ -17,7 +17,7 @@
 // R_draw.c
 
 
-#include "doomdef.h"
+#include "hr_local.h"
 #include "deh_str.h"
 #include "r_local.h"
 #include "i_video.h"

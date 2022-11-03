@@ -18,22 +18,24 @@
 
 
 
-#include "doomdef.h"
+#include "hr_local.h"
 #include "i_system.h"
-#include "m_random.h"
 #include "p_local.h"
 #include "s_sound.h"
 #include "jn.h"
 
 // Macros
 
-#define LOWERSPEED FRACUNIT*6
-#define RAISESPEED FRACUNIT*6
+#define LOWERSPEED     6*FRACUNIT
+#define RAISESPEED     6*FRACUNIT
 #define WEAPONBOTTOM 128*FRACUNIT
-#define WEAPONTOP 32*FRACUNIT
-#define FLAME_THROWER_TICS 10*35
-#define MAGIC_JUNK 1234
-#define MAX_MACE_SPOTS 8
+#define WEAPONTOP     32*FRACUNIT
+
+#define FLAME_THROWER_TICS  10*35
+#define MAGIC_JUNK          1234
+#define MAX_MACE_SPOTS      8
+
+// Private data
 
 static int MaceSpotCount;
 static struct
@@ -42,9 +44,9 @@ static struct
     fixed_t y;
 } MaceSpots[MAX_MACE_SPOTS];
 
-fixed_t bulletslope;
+static fixed_t bulletslope;
 
-static int WeaponAmmoUsePL1[NUMWEAPONS] = {
+static const int WeaponAmmoUsePL1[NUMWEAPONS] = {
     0,                          // staff
     USE_GWND_AMMO_1,            // gold wand
     USE_CBOW_AMMO_1,            // crossbow
@@ -56,7 +58,7 @@ static int WeaponAmmoUsePL1[NUMWEAPONS] = {
     0                           // beak
 };
 
-static int WeaponAmmoUsePL2[NUMWEAPONS] = {
+static const int WeaponAmmoUsePL2[NUMWEAPONS] = {
     0,                          // staff
     USE_GWND_AMMO_2,            // gold wand
     USE_CBOW_AMMO_2,            // crossbow
@@ -68,171 +70,173 @@ static int WeaponAmmoUsePL2[NUMWEAPONS] = {
     0                           // beak
 };
 
+// Public data
+
 weaponinfo_t wpnlev1info[NUMWEAPONS] = {
     {                           // Staff
-     am_noammo,                 // ammo
-     S_STAFFUP,                 // upstate
-     S_STAFFDOWN,               // downstate
-     S_STAFFREADY,              // readystate
-     S_STAFFATK1_1,             // atkstate
-     S_STAFFATK1_1,             // holdatkstate
-     S_NULL                     // flashstate
-     },
+        am_noammo,              // ammo
+        S_STAFFUP,              // upstate
+        S_STAFFDOWN,            // downstate
+        S_STAFFREADY,           // readystate
+        S_STAFFATK1_1,          // atkstate
+        S_STAFFATK1_1,          // holdatkstate
+        S_NULL                  // flashstate
+    },
     {                           // Gold wand
-     am_goldwand,               // ammo
-     S_GOLDWANDUP,              // upstate
-     S_GOLDWANDDOWN,            // downstate
-     S_GOLDWANDREADY,           // readystate
-     S_GOLDWANDATK1_1,          // atkstate
-     S_GOLDWANDATK1_1,          // holdatkstate
-     S_NULL                     // flashstate
-     },
+        am_goldwand,            // ammo
+        S_GOLDWANDUP,           // upstate
+        S_GOLDWANDDOWN,         // downstate
+        S_GOLDWANDREADY,        // readystate
+        S_GOLDWANDATK1_1,       // atkstate
+        S_GOLDWANDATK1_1,       // holdatkstate
+        S_NULL                  // flashstate
+    },
     {                           // Crossbow
-     am_crossbow,               // ammo
-     S_CRBOWUP,                 // upstate
-     S_CRBOWDOWN,               // downstate
-     S_CRBOW1,                  // readystate
-     S_CRBOWATK1_1,             // atkstate
-     S_CRBOWATK1_1,             // holdatkstate
-     S_NULL                     // flashstate
-     },
+        am_crossbow,            // ammo
+        S_CRBOWUP,              // upstate
+        S_CRBOWDOWN,            // downstate
+        S_CRBOW1,               // readystate
+        S_CRBOWATK1_1,          // atkstate
+        S_CRBOWATK1_1,          // holdatkstate
+        S_NULL                  // flashstate
+    },
     {                           // Blaster
-     am_blaster,                // ammo
-     S_BLASTERUP,               // upstate
-     S_BLASTERDOWN,             // downstate
-     S_BLASTERREADY,            // readystate
-     S_BLASTERATK1_1,           // atkstate
-     S_BLASTERATK1_3,           // holdatkstate
-     S_NULL                     // flashstate
-     },
+        am_blaster,             // ammo
+        S_BLASTERUP,            // upstate
+        S_BLASTERDOWN,          // downstate
+        S_BLASTERREADY,         // readystate
+        S_BLASTERATK1_1,        // atkstate
+        S_BLASTERATK1_3,        // holdatkstate
+        S_NULL                  // flashstate
+    },
     {                           // Skull rod
-     am_skullrod,               // ammo
-     S_HORNRODUP,               // upstate
-     S_HORNRODDOWN,             // downstate
-     S_HORNRODREADY,            // readystae
-     S_HORNRODATK1_1,           // atkstate
-     S_HORNRODATK1_1,           // holdatkstate
-     S_NULL                     // flashstate
-     },
+        am_skullrod,            // ammo
+        S_HORNRODUP,            // upstate
+        S_HORNRODDOWN,          // downstate
+        S_HORNRODREADY,         // readystae
+        S_HORNRODATK1_1,        // atkstate
+        S_HORNRODATK1_1,        // holdatkstate
+        S_NULL                  // flashstate
+    },
     {                           // Phoenix rod
-     am_phoenixrod,             // ammo
-     S_PHOENIXUP,               // upstate
-     S_PHOENIXDOWN,             // downstate
-     S_PHOENIXREADY,            // readystate
-     S_PHOENIXATK1_1,           // atkstate
-     S_PHOENIXATK1_1,           // holdatkstate
-     S_NULL                     // flashstate
-     },
+        am_phoenixrod,          // ammo
+        S_PHOENIXUP,            // upstate
+        S_PHOENIXDOWN,          // downstate
+        S_PHOENIXREADY,         // readystate
+        S_PHOENIXATK1_1,        // atkstate
+        S_PHOENIXATK1_1,        // holdatkstate
+        S_NULL                  // flashstate
+    },
     {                           // Mace
-     am_mace,                   // ammo
-     S_MACEUP,                  // upstate
-     S_MACEDOWN,                // downstate
-     S_MACEREADY,               // readystate
-     S_MACEATK1_1,              // atkstate
-     S_MACEATK1_2,              // holdatkstate
-     S_NULL                     // flashstate
-     },
+        am_mace,                // ammo
+        S_MACEUP,               // upstate
+        S_MACEDOWN,             // downstate
+        S_MACEREADY,            // readystate
+        S_MACEATK1_1,           // atkstate
+        S_MACEATK1_2,           // holdatkstate
+        S_NULL                  // flashstate
+    },
     {                           // Gauntlets
-     am_noammo,                 // ammo
-     S_GAUNTLETUP,              // upstate
-     S_GAUNTLETDOWN,            // downstate
-     S_GAUNTLETREADY,           // readystate
-     S_GAUNTLETATK1_1,          // atkstate
-     S_GAUNTLETATK1_3,          // holdatkstate
-     S_NULL                     // flashstate
-     },
+        am_noammo,              // ammo
+        S_GAUNTLETUP,           // upstate
+        S_GAUNTLETDOWN,         // downstate
+        S_GAUNTLETREADY,        // readystate
+        S_GAUNTLETATK1_1,       // atkstate
+        S_GAUNTLETATK1_3,       // holdatkstate
+        S_NULL                  // flashstate
+    },
     {                           // Beak
-     am_noammo,                 // ammo
-     S_BEAKUP,                  // upstate
-     S_BEAKDOWN,                // downstate
-     S_BEAKREADY,               // readystate
-     S_BEAKATK1_1,              // atkstate
-     S_BEAKATK1_1,              // holdatkstate
-     S_NULL                     // flashstate
-     }
+        am_noammo,              // ammo
+        S_BEAKUP,               // upstate
+        S_BEAKDOWN,             // downstate
+        S_BEAKREADY,            // readystate
+        S_BEAKATK1_1,           // atkstate
+        S_BEAKATK1_1,           // holdatkstate
+        S_NULL                  // flashstate
+    }
 };
 
 weaponinfo_t wpnlev2info[NUMWEAPONS] = {
     {                           // Staff
-     am_noammo,                 // ammo
-     S_STAFFUP2,                // upstate
-     S_STAFFDOWN2,              // downstate
-     S_STAFFREADY2_1,           // readystate
-     S_STAFFATK2_1,             // atkstate
-     S_STAFFATK2_1,             // holdatkstate
-     S_NULL                     // flashstate
-     },
+        am_noammo,              // ammo
+        S_STAFFUP2,             // upstate
+        S_STAFFDOWN2,           // downstate
+        S_STAFFREADY2_1,        // readystate
+        S_STAFFATK2_1,          // atkstate
+        S_STAFFATK2_1,          // holdatkstate
+        S_NULL                  // flashstate
+    },
     {                           // Gold wand
-     am_goldwand,               // ammo
-     S_GOLDWANDUP,              // upstate
-     S_GOLDWANDDOWN,            // downstate
-     S_GOLDWANDREADY,           // readystate
-     S_GOLDWANDATK2_1,          // atkstate
-     S_GOLDWANDATK2_1,          // holdatkstate
-     S_NULL                     // flashstate
-     },
+        am_goldwand,            // ammo
+        S_GOLDWANDUP,           // upstate
+        S_GOLDWANDDOWN,         // downstate
+        S_GOLDWANDREADY,        // readystate
+        S_GOLDWANDATK2_1,       // atkstate
+        S_GOLDWANDATK2_1,       // holdatkstate
+        S_NULL                  // flashstate
+    },
     {                           // Crossbow
-     am_crossbow,               // ammo
-     S_CRBOWUP,                 // upstate
-     S_CRBOWDOWN,               // downstate
-     S_CRBOW1,                  // readystate
-     S_CRBOWATK2_1,             // atkstate
-     S_CRBOWATK2_1,             // holdatkstate
-     S_NULL                     // flashstate
-     },
+        am_crossbow,            // ammo
+        S_CRBOWUP,              // upstate
+        S_CRBOWDOWN,            // downstate
+        S_CRBOW1,               // readystate
+        S_CRBOWATK2_1,          // atkstate
+        S_CRBOWATK2_1,          // holdatkstate
+        S_NULL                  // flashstate
+    },
     {                           // Blaster
-     am_blaster,                // ammo
-     S_BLASTERUP,               // upstate
-     S_BLASTERDOWN,             // downstate
-     S_BLASTERREADY,            // readystate
-     S_BLASTERATK2_1,           // atkstate
-     S_BLASTERATK2_3,           // holdatkstate
-     S_NULL                     // flashstate
-     },
+        am_blaster,             // ammo
+        S_BLASTERUP,            // upstate
+        S_BLASTERDOWN,          // downstate
+        S_BLASTERREADY,         // readystate
+        S_BLASTERATK2_1,        // atkstate
+        S_BLASTERATK2_3,        // holdatkstate
+        S_NULL                  // flashstate
+    },
     {                           // Skull rod
-     am_skullrod,               // ammo
-     S_HORNRODUP,               // upstate
-     S_HORNRODDOWN,             // downstate
-     S_HORNRODREADY,            // readystae
-     S_HORNRODATK2_1,           // atkstate
-     S_HORNRODATK2_1,           // holdatkstate
-     S_NULL                     // flashstate
-     },
+        am_skullrod,            // ammo
+        S_HORNRODUP,            // upstate
+        S_HORNRODDOWN,          // downstate
+        S_HORNRODREADY,         // readystae
+        S_HORNRODATK2_1,        // atkstate
+        S_HORNRODATK2_1,        // holdatkstate
+        S_NULL                  // flashstate
+    },
     {                           // Phoenix rod
-     am_phoenixrod,             // ammo
-     S_PHOENIXUP,               // upstate
-     S_PHOENIXDOWN,             // downstate
-     S_PHOENIXREADY,            // readystate
-     S_PHOENIXATK2_1,           // atkstate
-     S_PHOENIXATK2_2,           // holdatkstate
-     S_NULL                     // flashstate
-     },
+        am_phoenixrod,          // ammo
+        S_PHOENIXUP,            // upstate
+        S_PHOENIXDOWN,          // downstate
+        S_PHOENIXREADY,         // readystate
+        S_PHOENIXATK2_1,        // atkstate
+        S_PHOENIXATK2_2,        // holdatkstate
+        S_NULL                  // flashstate
+    },
     {                           // Mace
-     am_mace,                   // ammo
-     S_MACEUP,                  // upstate
-     S_MACEDOWN,                // downstate
-     S_MACEREADY,               // readystate
-     S_MACEATK2_1,              // atkstate
-     S_MACEATK2_1,              // holdatkstate
-     S_NULL                     // flashstate
-     },
+        am_mace,                // ammo
+        S_MACEUP,               // upstate
+        S_MACEDOWN,             // downstate
+        S_MACEREADY,            // readystate
+        S_MACEATK2_1,           // atkstate
+        S_MACEATK2_1,           // holdatkstate
+        S_NULL                  // flashstate
+    },
     {                           // Gauntlets
-     am_noammo,                 // ammo
-     S_GAUNTLETUP2,             // upstate
-     S_GAUNTLETDOWN2,           // downstate
-     S_GAUNTLETREADY2_1,        // readystate
-     S_GAUNTLETATK2_1,          // atkstate
-     S_GAUNTLETATK2_3,          // holdatkstate
-     S_NULL                     // flashstate
-     },
+        am_noammo,              // ammo
+        S_GAUNTLETUP2,          // upstate
+        S_GAUNTLETDOWN2,        // downstate
+        S_GAUNTLETREADY2_1,     // readystate
+        S_GAUNTLETATK2_1,       // atkstate
+        S_GAUNTLETATK2_3,       // holdatkstate
+        S_NULL                  // flashstate
+    },
     {                           // Beak
-     am_noammo,                 // ammo
-     S_BEAKUP,                  // upstate
-     S_BEAKDOWN,                // downstate
-     S_BEAKREADY,               // readystate
-     S_BEAKATK2_1,              // atkstate
-     S_BEAKATK2_1,              // holdatkstate
-     S_NULL                     // flashstate
+        am_noammo,              // ammo
+        S_BEAKUP,               // upstate
+        S_BEAKDOWN,             // downstate
+        S_BEAKREADY,            // readystate
+        S_BEAKATK2_1,           // atkstate
+        S_BEAKATK2_1,           // holdatkstate
+        S_NULL                  // flashstate
      }
 };
 
@@ -244,7 +248,7 @@ weaponinfo_t wpnlev2info[NUMWEAPONS] = {
 //
 //---------------------------------------------------------------------------
 
-void P_OpenWeapons(void)
+void P_OpenWeapons (void)
 {
     MaceSpotCount = 0;
 }
@@ -255,7 +259,7 @@ void P_OpenWeapons(void)
 //
 //---------------------------------------------------------------------------
 
-void P_AddMaceSpot(mapthing_t * mthing)
+void P_AddMaceSpot (const mapthing_t *mthing)
 {
     if (MaceSpotCount == MAX_MACE_SPOTS)
     {
@@ -276,7 +280,7 @@ void P_AddMaceSpot(mapthing_t * mthing)
 //
 //---------------------------------------------------------------------------
 
-void P_RepositionMace(mobj_t * mo)
+void P_RepositionMace(mobj_t *mo)
 {
     int spot;
     subsector_t *ss;
@@ -299,7 +303,7 @@ void P_RepositionMace(mobj_t * mo)
 //
 //---------------------------------------------------------------------------
 
-void P_CloseWeapons(void)
+void P_CloseWeapons (void)
 {
     int spot;
 
@@ -321,7 +325,7 @@ void P_CloseWeapons(void)
 //
 //---------------------------------------------------------------------------
 
-void P_SetPsprite(player_t * player, int position, statenum_t stnum)
+void P_SetPsprite (const player_t *player, const int position, statenum_t stnum)
 {
     pspdef_t *psp;
     state_t *state;
@@ -361,7 +365,7 @@ void P_SetPsprite(player_t * player, int position, statenum_t stnum)
 //
 //---------------------------------------------------------------------------
 
-void P_ActivateBeak(player_t * player)
+void P_ActivateBeak (player_t *player)
 {
     player->pendingweapon = wp_nochange;
     player->readyweapon = wp_beak;
@@ -375,7 +379,7 @@ void P_ActivateBeak(player_t * player)
 //
 //---------------------------------------------------------------------------
 
-void P_PostChickenWeapon(player_t * player, weapontype_t weapon)
+void P_PostChickenWeapon (player_t *player, weapontype_t weapon)
 {
     if (weapon == wp_beak)
     {                           // Should never happen
@@ -540,7 +544,7 @@ void P_FireWeapon(player_t * player)
 //
 //---------------------------------------------------------------------------
 
-void P_DropWeapon(player_t * player)
+void P_DropWeapon (const player_t *player)
 {
     if (player->powers[pw_weaponlevel2])
     {
@@ -628,7 +632,7 @@ void A_WeaponReady(player_t * player, pspdef_t * psp)
 //
 //---------------------------------------------------------------------------
 
-void P_UpdateBeak(player_t * player, pspdef_t * psp)
+void P_UpdateBeak (player_t *player, pspdef_t * psp)
 {
     psp->sy = WEAPONTOP + (player->chickenPeck << (FRACBITS - 1));
 }
@@ -1864,7 +1868,7 @@ void A_Light2(player_t * player, pspdef_t * psp)
 //
 //------------------------------------------------------------------------
 
-void P_SetupPsprites(player_t * player)
+void P_SetupPsprites (player_t *player)
 {
     int i;
 
@@ -1886,7 +1890,7 @@ void P_SetupPsprites(player_t * player)
 //
 //------------------------------------------------------------------------
 
-void P_MovePsprites(player_t * player)
+void P_MovePsprites (player_t *player)
 {
     int i;
     pspdef_t *psp;

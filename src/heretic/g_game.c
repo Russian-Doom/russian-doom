@@ -21,14 +21,12 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "am_map.h"
-#include "doomdef.h"
+#include "hr_local.h"
 #include "deh_str.h"
 #include "i_timer.h"
 #include "i_system.h"
 #include "m_argv.h"
 #include "m_misc.h"
-#include "m_random.h"
 #include "p_local.h"
 #include "rd_keybinds.h"
 #include "s_sound.h"
@@ -45,7 +43,6 @@
 boolean G_CheckDemoStatus(void);
 void G_ReadDemoTiccmd(ticcmd_t * cmd);
 void G_WriteDemoTiccmd(ticcmd_t * cmd);
-void G_PlayerReborn(int player);
 
 void G_DoReborn(int playernum);
 
@@ -94,7 +91,6 @@ boolean paused;
 boolean sendpause;              // send a pause event next tic
 boolean sendsave;               // send a save event next tic
 boolean usergame;               // ok to save / end game
-extern boolean askforquit;
 
 boolean timingdemo;             // if true, exit with report on completion
 boolean nodrawers = false;      // [crispy] for the demowarp feature
@@ -2127,6 +2123,40 @@ void G_RecordDemo(skill_t skill, int numplayers, int episode, int map,
     demorecording = true;
 }
 
+/*
+================================================================================
+=
+= G_DemoProgressBar
+=
+= [crispy] demo progress bar
+=
+================================================================================
+*/
+
+static void G_DemoProgressBar (const int lumplength)
+{
+    int   numplayersingame = 0;
+    byte *demo_ptr = demo_p;
+
+    for (int i = 0; i < MAXPLAYERS; i++)
+    {
+        if (playeringame[i])
+        {
+            numplayersingame++;
+        }
+    }
+
+    deftotaldemotics = defdemotics = 0;
+
+    while (*demo_ptr != DEMOMARKER && (demo_ptr - demobuffer) < lumplength)
+    {
+        // [JN] Note: Heretic using extra two pointers: lookfly and arti,
+        // so unlike Doom (5 : 4) we using (7 : 6) here.
+        // Thanks to Roman Fomin for pointing out.
+        demo_ptr += numplayersingame * (longtics ? 7 : 6);
+        deftotaldemotics++;
+    }
+}
 
 /*
 ===================
@@ -2142,13 +2172,6 @@ void G_DeferedPlayDemo(char *name)
 {
     defdemoname = name;
     gameaction = ga_playdemo;
-
-    // [crispy] fast-forward demo up to the desired map
-    if (demowarp)
-    {
-        nodrawers = true;
-        singletics = true;
-    }
 }
 
 void G_DoPlayDemo(void)
@@ -2213,27 +2236,15 @@ void G_DoPlayDemo(void)
         netdemo = true;
     }
 
-    // [crispy] demo progress bar
+    // [crispy] fast-forward demo up to the desired map
+    if (demowarp)
     {
-        int i, numplayersingame = 0;
-        byte *demo_ptr = demo_p;
-
-        for (i = 0; i < MAXPLAYERS; i++)
-        {
-            if (playeringame[i])
-            {
-                numplayersingame++;
-            }
-        }
-
-        deftotaldemotics = defdemotics = 0;
-
-        while (*demo_ptr != DEMOMARKER && (demo_ptr - demobuffer) < lumplength)
-        {
-            demo_ptr += numplayersingame * (longtics ? 7 : 6);
-            deftotaldemotics++;
-        }
+        nodrawers = true;
+        singletics = true;
     }
+
+    // [crispy] demo progress bar
+    G_DemoProgressBar(lumplength);
 }
 
 
@@ -2285,16 +2296,16 @@ void G_TimeDemo(char *name)
         netgame = true;
     }
 
-    G_InitNew(skill, episode, map, 0);
-    starttime = I_GetTime();
-
     // Disable screen rendering entirely,
     // if command line parameter is present.
     nodrawers = M_CheckParm ("-nodraw");
+    timingdemo = true;
+
+    G_InitNew(skill, episode, map, 0);
+    starttime = I_GetTime();
 
     usergame = false;
     demoplayback = true;
-    timingdemo = true;
     singletics = true;
 
     if (netgame)
@@ -2303,26 +2314,7 @@ void G_TimeDemo(char *name)
     }
 
     // [crispy] demo progress bar
-    {
-        int i, numplayersingame = 0;
-        byte *demo_ptr = demo_p;
-
-        for (i = 0; i < MAXPLAYERS; i++)
-        {
-            if (playeringame[i])
-            {
-                numplayersingame++;
-            }
-        }
-
-        deftotaldemotics = defdemotics = 0;
-
-        while (*demo_ptr != DEMOMARKER && (demo_ptr - demobuffer) < lumplength)
-        {
-            demo_ptr += numplayersingame * (longtics ? 7 : 6);
-            deftotaldemotics++;
-        }
-    }
+    G_DemoProgressBar(lumplength);
 }
 
 

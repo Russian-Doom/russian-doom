@@ -17,10 +17,8 @@
 // F_finale.c
 
 
-
 #include <ctype.h>
-
-#include "doomdef.h"
+#include "hr_local.h"
 #include "deh_str.h"
 #include "i_swap.h"
 #include "i_video.h"
@@ -29,35 +27,37 @@
 #include "jn.h"
 
 
-int finalestage;                // 0 = text, 1 = art screen
-int finalecount;
+// Macros
 
-#define TEXTSPEED       3
-#define TEXTWAIT        250
+#define TEXTSPEED  3
+#define TEXTWAIT   250
 
-char *finaletext;
-char *finaleflat;
+// Private data
 
-int FontABaseLump;
-int FontFBaseLump;
+static int FontABaseLump;
+static int FontFBaseLump;
+static int finalestage;  // 0 = text, 1 = art screen
+static int finalecount;
 // [JN] F_DemonScroll values, should be reinitialized 
 // in F_StartFinale for repeated scrolling.
 static int yval;
 static int nextscroll;
 
+static char *finaletext;
+static char *finaleflat;
+
 static boolean reset_scroll_delay;
 
-extern void D_StartTitle(void);
 
 /*
-=======================
+================================================================================
 =
 = F_StartFinale
 =
-=======================
+================================================================================
 */
 
-void F_StartFinale(void)
+void F_StartFinale (void)
 {
     gameaction = ga_nothing;
     gamestate = GS_FINALE;
@@ -100,33 +100,39 @@ void F_StartFinale(void)
     S_StartSong(mus_cptd, true, false);
 }
 
+/*
+================================================================================
+=
+= F_StartFinale
+=
+================================================================================
+*/
 
-
-boolean F_Responder(event_t * event)
+const boolean F_Responder (const event_t *event)
 {
     if (event->type != ev_keydown)
     {
         return false;
     }
-    if (finalestage == 1 && gameepisode == 2)
-    {   // we're showing the water pic, make any key kick to demo mode
-        finalestage++;
 
+    if (finalestage == 1 && gameepisode == 2)
+    {
+        // we're showing the water pic, make any key kick to demo mode
+        finalestage++;
         return true;
     }
     return false;
 }
 
-
 /*
-=======================
+================================================================================
 =
 = F_Ticker
 =
-=======================
+================================================================================
 */
 
-void F_Ticker(void)
+void F_Ticker (void)
 {
     // [JN] If we are in single player mode, allow double skipping for 
     // intermission text. First skip printing all intermission text,
@@ -139,7 +145,8 @@ void F_Ticker(void)
             return;
         }
 
-        // [JN] Check for skipping. Allow double-press skiping, but don't skip immediately.
+        // [JN] Check for skipping. Allow double-press skiping,
+        // but don't skip immediately.
         if (finalecount > 10)
         {
             // [JN] Don't allow to skip by pressing "pause" button.
@@ -149,7 +156,8 @@ void F_Ticker(void)
             }
 
             // [JN] Double-skip by pressing "attack" button.
-            if (players[consoleplayer].cmd.buttons & BT_ATTACK && !menuactive && finalestage != 1)
+            if (players[consoleplayer].cmd.buttons & BT_ATTACK
+            && !menuactive && finalestage != 1)
             {
                 if (!players[consoleplayer].attackdown)
                 {
@@ -168,7 +176,8 @@ void F_Ticker(void)
             }
     
             // [JN] Double-skip by pressing "use" button.
-            if (players[consoleplayer].cmd.buttons & BT_USE && !menuactive && finalestage != 1)
+            if (players[consoleplayer].cmd.buttons & BT_USE
+            && !menuactive && finalestage != 1)
             {
                 if (!players[consoleplayer].usedown)
                 {
@@ -209,43 +218,44 @@ void F_Ticker(void)
     }
 }
 
-
 /*
-=======================
+================================================================================
 =
 = F_TextWrite
 =
-=======================
+================================================================================
 */
 
-void F_TextWrite(void)
+static void F_TextWrite (void)
 {
-    int count;
+    int count, c, cx, cy;
     char *ch;
-    int c;
-    int cx, cy;
     patch_t *w;
 
-//
-// erase the entire screen to a tiled background
-//
-    // [JN] Use unified function.
+    // Erase the entire screen to a tiled background.
+    // [JN] Use unified flat filling function.
     V_FillFlat(finaleflat);
-//
-// draw some of the text onto the screen
-//
+
+    // Draw some of the text onto the screen.
     cx = 20;
     cy = 5;
     ch = finaletext;
-
     count = (finalecount - 10) / TEXTSPEED;
+
     if (count < 0)
+    {
         count = 0;
-    for (; count; count--)
+    }
+
+    for ( ; count ; count--)
     {
         c = *ch++;
+
         if (!c)
+        {
             break;
+        }
+
         if (c == '\n')
         {
             cx = 20;
@@ -254,103 +264,35 @@ void F_TextWrite(void)
         }
 
         c = toupper(c);
+
         if (c < 33)
         {
             cx += 5;
             continue;
         }
 
-        w = W_CacheLumpNum((FontABaseLump) + c - 33, PU_CACHE);
+        w = W_CacheLumpNum((english_language ? FontABaseLump : FontFBaseLump)
+          + c - 33, PU_CACHE);
 
         if (cx + SHORT(w->width) > screenwidth)
+        {
             break;
-        V_DrawShadowedPatchRaven(cx + wide_delta, cy, w);
-        cx += SHORT(w->width);
-    }
-}
-
-//---------------------------------------------------------------------------
-//
-// F_TextWriteRUS
-//
-//---------------------------------------------------------------------------
-
-void F_TextWriteRUS(void)
-{
-    byte *src, *dest;
-    int x, y;
-    int count;
-    char *ch;
-    int c;
-    int cx, cy;
-    patch_t *w;
-
-//
-// erase the entire screen to a tiled background
-//
-    src = W_CacheLumpName(finaleflat, PU_CACHE);
-    dest = I_VideoBuffer;
-    for (y = 0; y < SCREENHEIGHT; y++)
-    {
-        for (x = 0; x < screenwidth / 64; x++)
-        {
-            memcpy(dest, src + ((y & 63) << 6), 64);
-            dest += 64;
-        }
-        if (screenwidth & 63)
-        {
-            memcpy(dest, src + ((y & 63) << 6), screenwidth & 63);
-            dest += (screenwidth & 63);
-        }
-    }
-
-//
-// draw some of the text onto the screen
-//
-    cx = 20;
-    cy = 5;
-    ch = finaletext;
-
-    count = (finalecount - 10) / TEXTSPEED;
-    if (count < 0)
-        count = 0;
-    for (; count; count--)
-    {
-        c = *ch++;
-        if (!c)
-            break;
-        if (c == '\n')
-        {
-            cx = 20;
-            cy += 9;
-            continue;
         }
 
-        c = toupper(c);
-        if (c < 33)
-        {
-            cx += 5;
-            continue;
-        }
-
-        w = W_CacheLumpNum((FontFBaseLump) + c - 33, PU_CACHE);
-
-        if (cx + SHORT(w->width) > screenwidth)
-            break;
         V_DrawShadowedPatchRaven(cx + wide_delta, cy, w);
         cx += SHORT(w->width);
     }
 }
 
 /*
-==================
+================================================================================
 =
 = F_DemonScroll
 =
-==================
+================================================================================
 */
 
-void F_DemonScroll(void)
+static void F_DemonScroll (void)
 {
     byte *p1;
     byte *p2;
@@ -366,6 +308,7 @@ void F_DemonScroll(void)
     {
         return;
     }
+
     p1 = W_CacheLumpName(DEH_String("FINAL1"), PU_LEVEL);
     p2 = W_CacheLumpName(DEH_String("FINAL2"), PU_LEVEL);
 
@@ -430,21 +373,20 @@ void F_DemonScroll(void)
 }
 
 /*
-==================
+================================================================================
 =
 = F_DrawUnderwater
 =
-==================
+================================================================================
 */
 
-void F_DrawUnderwater(void)
+static void F_DrawUnderwater (void)
 {
     static boolean underwawa = false;
-    extern boolean askforquit;
     char *lumpname;
     byte *palette;
-    patch_t *e2end = W_CacheLumpName("E2END", PU_CACHE);
-    patch_t *title = W_CacheLumpName("TITLE", PU_CACHE);
+    const patch_t *e2end = W_CacheLumpName("E2END", PU_CACHE);
+    const patch_t *title = W_CacheLumpName("TITLE", PU_CACHE);
 
     // The underwater screen has its own palette, which is rather annoying.
     // The palette doesn't correspond to the normal palette. Because of
@@ -464,9 +406,13 @@ void F_DrawUnderwater(void)
                 W_ReleaseLumpName(lumpname);
                 
                 if (e2end->width == 560)
-                V_DrawPatchFullScreen(e2end, false);
+                {
+                    V_DrawPatchFullScreen(e2end, false);
+                }
                 else
-                V_DrawRawScreen(W_CacheLumpName(DEH_String("E2END"), PU_CACHE));
+                {
+                    V_DrawRawScreen(W_CacheLumpName(DEH_String("E2END"), PU_CACHE));
+                }
             }
             paused = false;
             menuactive = false;
@@ -489,45 +435,48 @@ void F_DrawUnderwater(void)
             if (english_language)
             {
                 if (gamemode == retail && title->width == 560)
-                V_DrawPatchFullScreen(W_CacheLumpName("TITLE", PU_CACHE), false);
+                {
+                    V_DrawPatchFullScreen(W_CacheLumpName("TITLE", PU_CACHE), false);
+                }
                 else if (gamemode == registered || gamemode == shareware)
-                V_DrawPatchFullScreen(W_CacheLumpName("TITLEOLD", PU_CACHE), false);            
+                {
+                    V_DrawPatchFullScreen(W_CacheLumpName("TITLEOLD", PU_CACHE), false);            
+                }
                 else
-                V_DrawRawScreen(W_CacheLumpName(DEH_String("TITLE"), PU_CACHE));
+                {
+                    V_DrawRawScreen(W_CacheLumpName(DEH_String("TITLE"), PU_CACHE));
+                }
             }
             else
             {
                 V_DrawPatchFullScreen(W_CacheLumpName(gamemode == retail ?
                                                       "TITLE_RT" : "TITLEOLD",
                                                       PU_CACHE), false);
-
             }
         break;
     }
 }
 
 /*
-=======================
+================================================================================
 =
 = F_Drawer
 =
-=======================
+================================================================================
 */
 
-void F_Drawer(void)
+void F_Drawer (void)
 {
-    const patch_t *credit =  W_CacheLumpName("CREDIT", PU_CACHE);
-
     UpdateState |= I_FULLSCRN;
+
     if (!finalestage)
     {
-        if (english_language)
         F_TextWrite();
-        else
-        F_TextWriteRUS();
     }
     else
     {
+        const patch_t *credit = W_CacheLumpName("CREDIT", PU_CACHE);
+
         switch (gameepisode)
         {
             case 1:
@@ -543,9 +492,13 @@ void F_Drawer(void)
                     if (english_language)
                     {
                         if (credit->width == 560)
-                        V_DrawPatchFullScreen(W_CacheLumpName("CREDIT", PU_CACHE), false);
+                        {
+                            V_DrawPatchFullScreen(W_CacheLumpName("CREDIT", PU_CACHE), false);
+                        }
                         else
-                        V_DrawRawScreen(W_CacheLumpName("CREDIT", PU_CACHE));
+                        {
+                            V_DrawRawScreen(W_CacheLumpName("CREDIT", PU_CACHE));
+                        }
                     }
                     else
                     {
@@ -555,24 +508,25 @@ void F_Drawer(void)
                 }
                 break;
             case 2:
-                // [JN] No need to cleanup screen here, it is done in F_DrawUnderwater.
-                // V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
                 F_DrawUnderwater();
                 break;
             case 3:
-                // [JN] No need to cleanup screen here, it is done in F_DemonScroll.
-                // V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
                 F_DemonScroll();
                 break;
-            case 4:            // Just show credits screen for extended episodes
+            case 4:
             case 5:
+                // Just show credits screen for extended episodes
                 V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
                 if (english_language)
                 {
                     if (credit->width == 560)
-                    V_DrawPatchFullScreen(W_CacheLumpName("CREDIT", PU_CACHE), false);
+                    {
+                        V_DrawPatchFullScreen(W_CacheLumpName("CREDIT", PU_CACHE), false);
+                    }
                     else
-                    V_DrawRawScreen(W_CacheLumpName("CREDIT", PU_CACHE));
+                    {
+                        V_DrawRawScreen(W_CacheLumpName("CREDIT", PU_CACHE));
+                    }
                 }
                 else
                 {

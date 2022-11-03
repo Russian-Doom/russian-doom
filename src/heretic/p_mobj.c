@@ -17,23 +17,17 @@
 // P_mobj.c
 
 
-
-#include "doomdef.h"
+#include "hr_local.h"
 #include "i_system.h"
-#include "m_random.h"
 #include "p_local.h"
 #include "sounds.h"
 #include "s_sound.h"
 #include "jn.h"
 
 
-void G_PlayerReborn(int player);
-void P_SpawnMapThing(mapthing_t * mthing);
+// Private data
 
-mobjtype_t PuffType;
-mobj_t *MissileMobj;
-
-static fixed_t FloatBobOffsets[64] = {
+static const fixed_t FloatBobOffsets[64] = {
           0,   51389,  102283,  152192,
      200636,  247147,  291278,  332604,
      370727,  405280,  435929,  462380,
@@ -53,7 +47,7 @@ static fixed_t FloatBobOffsets[64] = {
 };
 
 // [JN] Halfed values from table above.
-static fixed_t FloatBobOffsetsHalfed[64] = {
+static const fixed_t FloatBobOffsetsHalfed[64] = {
           0,   25694,   51141,   76096,
      100318,  123573,  145639,  166302,
      185363,  202640,  217964,  231190,
@@ -72,6 +66,12 @@ static fixed_t FloatBobOffsetsHalfed[64] = {
     -100318,  -76096,  -51142,  -25694
 };
 
+// Public data
+
+mobjtype_t  PuffType;
+mobj_t     *MissileMobj;
+
+
 //----------------------------------------------------------------------------
 //
 // FUNC P_SetMobjState
@@ -80,7 +80,7 @@ static fixed_t FloatBobOffsetsHalfed[64] = {
 //
 //----------------------------------------------------------------------------
 
-boolean P_SetMobjState(mobj_t * mobj, statenum_t state)
+boolean P_SetMobjState (mobj_t *mobj, statenum_t state)
 {
     state_t *st;
 
@@ -110,7 +110,7 @@ boolean P_SetMobjState(mobj_t * mobj, statenum_t state)
 //
 //----------------------------------------------------------------------------
 
-boolean P_SetMobjStateNF(mobj_t * mobj, statenum_t state)
+boolean P_SetMobjStateNF (mobj_t *mobj, statenum_t state)
 {
     state_t *st;
 
@@ -193,7 +193,7 @@ void P_ThrustMobj(mobj_t * mo, angle_t angle, fixed_t move)
 //
 //----------------------------------------------------------------------------
 
-int P_FaceMobj(mobj_t * source, mobj_t * target, angle_t * delta)
+int P_FaceMobj (mobj_t *source, mobj_t *target, angle_t *delta)
 {
     angle_t diff;
     angle_t angle1;
@@ -240,7 +240,7 @@ int P_FaceMobj(mobj_t * source, mobj_t * target, angle_t * delta)
 //
 //----------------------------------------------------------------------------
 
-boolean P_SeekerMissile(mobj_t * actor, angle_t thresh, angle_t turnMax)
+boolean P_SeekerMissile(mobj_t *actor, angle_t thresh, angle_t turnMax)
 {
     int dir;
     int dist;
@@ -1263,6 +1263,11 @@ void P_SpawnPlayer(mapthing_t * mthing)
     p->extralight = 0;
     p->fixedcolormap = 0;
     p->viewheight = VIEWHEIGHT;
+    // [JN] Keep NOCLIP cheat across the levels.
+    if (p->cheats & CF_NOCLIP)
+    {
+        p->mo->flags |= MF_NOCLIP;
+    }
     skippsprinterp = true;
     P_SetupPsprites(p);         // setup gun psprite        
     if (deathmatch)
@@ -1555,7 +1560,7 @@ void P_RipperBlood(mobj_t * mo)
 //
 //---------------------------------------------------------------------------
 
-int P_GetThingFloorType(mobj_t * thing)
+int P_GetThingFloorType (mobj_t *thing)
 {
     return (TerrainTypes[thing->subsector->sector->floorpic]);
 }
@@ -1566,7 +1571,7 @@ int P_GetThingFloorType(mobj_t * thing)
 //
 //---------------------------------------------------------------------------
 
-int P_HitFloor(mobj_t * thing)
+int P_HitFloor (mobj_t *thing)
 {
     mobj_t *mo;
 
@@ -1614,7 +1619,7 @@ int P_HitFloor(mobj_t * thing)
 //
 //---------------------------------------------------------------------------
 
-boolean P_CheckMissileSpawn(mobj_t * missile)
+boolean P_CheckMissileSpawn(mobj_t *missile)
 {
     // move a little forward so an angle can be computed if it
     // immediately explodes

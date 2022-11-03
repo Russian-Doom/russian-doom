@@ -1,6 +1,6 @@
 if(COMPILE_HERETIC)
     add_library(heretic STATIC
-                am_map.c            am_map.h
+                am_map.c
                 ct_chat.c
                 deh_ammo.c
                 deh_frame.c
@@ -9,21 +9,20 @@ if(COMPILE_HERETIC)
                 deh_sound.c
                 deh_thing.c
                 deh_weapon.c
-                d_main.c
-                d_net.c
-                                    doomdata.h
-                                    doomdef.h
                 f_finale.c
                 g_game.c
+                                    hr_local.h
+                hr_main.c
+                hr_net.c
+                id_lang.c           id_lang.h
                 info.c              info.h
                 in_lude.c
-                m_random.c          m_random.h
+                m_random.c
                 mn_menu.c
-                                    p_action.h
                 p_ceilng.c
                 p_doors.c
                 p_enemy.c
-                p_fix.c             p_fix.h
+                p_fix.c
                 p_floor.c
                 p_inter.c
                 p_lights.c
@@ -36,12 +35,12 @@ if(COMPILE_HERETIC)
                 p_saveg.c
                 p_setup.c
                 p_sight.c
-                p_spec.c            p_spec.h
+                p_spec.c
                 p_switch.c
                 p_telept.c
                 p_tick.c
                 p_user.c
-                r_bmaps.c           r_bmaps.h
+                r_bmaps.c
                 r_bsp.c
                 r_data.c
                 r_draw.c
@@ -49,9 +48,8 @@ if(COMPILE_HERETIC)
                 r_main.c
                 r_plane.c
                 r_segs.c
-                r_swirl.c           r_swirl.h
+                r_swirl.c
                 r_things.c
-                rd_lang.c           rd_lang.h
                 sb_bar.c
                 sounds.c            sounds.h
                 s_sound.c           s_sound.h

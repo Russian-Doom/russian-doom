@@ -19,7 +19,7 @@
 
 #include <stdlib.h>
 #include <math.h>
-#include "doomdef.h"
+#include "hr_local.h"
 #include "r_local.h"
 #include "p_local.h"
 #include "v_video.h"

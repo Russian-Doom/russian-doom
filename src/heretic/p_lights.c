@@ -17,8 +17,7 @@
 
 
 
-#include "doomdef.h"
-#include "m_random.h"
+#include "hr_local.h"
 #include "p_local.h"
 #include "v_video.h"
 

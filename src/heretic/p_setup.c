@@ -24,12 +24,11 @@
 #include "SDL.h"
 #include "d_mode.h"
 #include "deh_str.h"
-#include "doomdef.h"
+#include "hr_local.h"
 #include "i_swap.h"
 #include "i_system.h"
 #include "m_argv.h"
 #include "m_bbox.h"
-#include "p_fix.h"
 #include "p_local.h"
 #include "s_sound.h"
 #include "jn.h"
@@ -39,8 +38,6 @@
 #include <zlib.h>
 #endif
 
-
-void P_SpawnMapThing(mapthing_t * mthing);
 
 int numvertexes;
 vertex_t *vertexes;

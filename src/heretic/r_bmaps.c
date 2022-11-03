@@ -20,8 +20,8 @@
 //
 
 
-#include "doomdef.h"
-#include "r_bmaps.h"
+#include "hr_local.h"
+#include "r_local.h"
 #include "jn.h"
 
 

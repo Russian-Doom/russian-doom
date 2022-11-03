@@ -18,13 +18,12 @@
 
 
 #include <stdlib.h> // [crispy] free()
-#include "doomdef.h"
+#include "hr_local.h"
 #include "deh_str.h"
 #include "i_system.h"
 #include "i_timer.h"
-#include "m_random.h"
 #include "p_local.h"
-#include "r_swirl.h"
+#include "r_local.h"
 #include "s_sound.h"
 #include "v_video.h"
 #include "jn.h"
@@ -1317,7 +1316,7 @@ void P_SpawnSpecials(void)
 //----------------------------------------------------------------------------
 
 // [crispy] fix ambient sounds stop playing
-static int (*Amb_Random)(void);
+static const int (*Amb_Random)(void);
 
 void P_InitAmbientSound(void)
 {

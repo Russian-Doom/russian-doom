@@ -17,38 +17,35 @@
 // P_user.c
 
 
-
 #include <stdlib.h>
-
-#include "doomdef.h"
+#include "hr_local.h"
 #include "deh_str.h"
-#include "m_random.h"
 #include "p_local.h"
 #include "s_sound.h"
 #include "jn.h"
 
-void P_PlayerNextArtifact(player_t * player);
 
 // Macros
 
-#define MAXBOB 0x100000         // 16 pixels of bob
+#define MAXBOB 0x100000     // 16 pixels of bob
 
-// Data
+// Private data
 
-boolean onground;
-int newtorch;                   // used in the torch flicker effect.
-int newtorchdelta;
+static int newtorch;        // used in the torch flicker effect.
+static int newtorchdelta;
 
-boolean WeaponInShareware[] = {
-    true,                       // Staff
-    true,                       // Gold wand
-    true,                       // Crossbow
-    true,                       // Blaster
-    false,                      // Skull rod
-    false,                      // Phoenix rod
-    false,                      // Mace
-    true,                       // Gauntlets
-    true                        // Beak
+static boolean onground;
+
+static boolean WeaponInShareware[] = {
+    true,                   // Staff
+    true,                   // Gold wand
+    true,                   // Crossbow
+    true,                   // Blaster
+    false,                  // Skull rod
+    false,                  // Phoenix rod
+    false,                  // Mace
+    true,                   // Gauntlets
+    true                    // Beak
 };
 
 /*
@@ -61,7 +58,7 @@ boolean WeaponInShareware[] = {
 ==================
 */
 
-void P_Thrust(player_t * player, angle_t angle, fixed_t move)
+void P_Thrust (player_t *player, angle_t angle, fixed_t move)
 {
     angle >>= ANGLETOFINESHIFT;
     if (player->powers[pw_flight] && !(player->mo->z <= player->mo->floorz))
@@ -568,7 +565,7 @@ boolean P_UndoPlayerChicken(player_t * player)
 //
 //----------------------------------------------------------------------------
 
-void P_PlayerThink(player_t * player)
+void P_PlayerThink(player_t *player)
 {
     ticcmd_t *cmd;
     weapontype_t newweapon;
@@ -585,15 +582,6 @@ void P_PlayerThink(player_t * player)
     player->oldviewz = player->viewz;
     player->oldlookdir = player->lookdir;
 
-    // No-clip cheat
-    if (player->cheats & CF_NOCLIP)
-    {
-        player->mo->flags |= MF_NOCLIP;
-    }
-    else
-    {
-        player->mo->flags &= ~MF_NOCLIP;
-    }
     cmd = &player->cmd;
     if (player->mo->flags & MF_JUSTATTACKED)
     {                           // Gauntlets attack auto forward motion
@@ -867,7 +855,7 @@ void P_ArtiTele(player_t * player)
 //
 //----------------------------------------------------------------------------
 
-void P_PlayerNextArtifact(player_t * player)
+void P_PlayerNextArtifact (player_t *player)
 {
     if (player == &players[consoleplayer])
     {
@@ -902,7 +890,7 @@ void P_PlayerNextArtifact(player_t * player)
 //
 //----------------------------------------------------------------------------
 
-void P_PlayerRemoveArtifact(player_t * player, int slot)
+void P_PlayerRemoveArtifact (player_t *player, int slot)
 {
     int i;
     player->artifactCount--;
@@ -945,7 +933,7 @@ void P_PlayerRemoveArtifact(player_t * player, int slot)
 //
 //----------------------------------------------------------------------------
 
-void P_PlayerUseArtifact(player_t * player, artitype_t arti)
+void P_PlayerUseArtifact (player_t *player, artitype_t arti)
 {
     int i;
 

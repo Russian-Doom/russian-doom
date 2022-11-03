@@ -27,7 +27,7 @@
 #include "deh_main.h"
 #include "deh_mapping.h"
 
-#include "doomdef.h"
+#include "hr_local.h"
 #include "i_sound.h"
 
 #include "sounds.h"

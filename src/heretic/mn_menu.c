@@ -21,9 +21,8 @@
 #include <SDL_scancode.h>
 
 #include "rd_io.h"
-#include "am_map.h"
 #include "deh_str.h"
-#include "doomdef.h"
+#include "hr_local.h"
 #include "i_controller.h"
 #include "i_input.h"
 #include "i_system.h"
@@ -58,9 +57,9 @@ static void DrawFilesMenu(void);
 static void MN_DrawInfo(void);
 static void DrawSaveLoadMenu(void);
 static void DrawOptionsMenu(void);
-void MN_LoadSlotText(void);
-void OnActivateMenu(void);
-void OnDeactivateMenu(void);
+static void MN_LoadSlotText(void);
+static void OnActivateMenu(void);
+static void OnDeactivateMenu(void);
 
 // -----------------------------------------------------------------------------
 // [JN] Custom RD menu
@@ -1851,7 +1850,7 @@ static void DrawSaveLoadMenu(void)
 //              Loads in the text message for each slot
 //===========================================================================
 
-void MN_LoadSlotText(void)
+static void MN_LoadSlotText(void)
 {
     FILE *fp;
     int i;
@@ -6498,7 +6497,7 @@ boolean MN_Responder(event_t * event)
 //
 //---------------------------------------------------------------------------
 
-void OnActivateMenu(void)
+static void OnActivateMenu(void)
 {
     if (paused)
     {
@@ -6518,7 +6517,7 @@ void OnActivateMenu(void)
 //
 //---------------------------------------------------------------------------
 
-void OnDeactivateMenu(void)
+static void OnDeactivateMenu(void)
 {
     S_ResumeSound();    // [JN] Fix vanilla Heretic bug: resume music playing
     if (FileMenuKeySteal)

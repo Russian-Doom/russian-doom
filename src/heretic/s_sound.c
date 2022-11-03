@@ -18,9 +18,8 @@
 
 #include <stdlib.h>
 
-#include "doomdef.h"
+#include "hr_local.h"
 #include "i_system.h"
-#include "m_random.h"
 #include "sounds.h"
 #include "s_sound.h"
 #include "i_sound.h"
@@ -87,6 +86,13 @@ void S_Start(void)
 void S_StartSong(int song, boolean loop, boolean replay)
 {
     int mus_len;
+
+    // [JN] Do not start music until demo warping is finished,
+    // or while -nodraw and -timedemo runs.
+    if (demowarp || (nodrawers && timingdemo))
+    {
+        return;
+    }
 
     // Don't replay an old song.
     if (song == mus_song)

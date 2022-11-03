@@ -18,7 +18,7 @@
 
 
 
-#include "doomdef.h"
+#include "hr_local.h"
 #include "deh_str.h"
 #include "d_name.h"
 #include "i_video.h"
@@ -26,12 +26,11 @@
 #include "i_timer.h"    // [JN] TICRATE
 #include "m_cheat.h"
 #include "m_misc.h"
-#include "m_random.h"
 #include "p_local.h"
 #include "s_sound.h"
 #include "v_video.h"
 #include "v_trans.h"
-#include "rd_lang.h"
+#include "id_lang.h"
 #include "jn.h"
 
 // Types
@@ -1831,8 +1830,16 @@ static void CheatNoClipFunc(player_t * player, Cheat_t * cheat)
 {
     NIGHTMARE_NETGAME_CHECK;
     player->cheats ^= CF_NOCLIP;
-    P_SetMessage(player, DEH_String(player->cheats & CF_NOCLIP ?
-                 txt_cheatnoclipon : txt_cheatnoclipoff), msg_system, false);
+    if (player->cheats & CF_NOCLIP)
+    {
+        player->mo->flags |= MF_NOCLIP;
+        P_SetMessage(player, DEH_String(txt_cheatnoclipon), msg_system, false);
+    }
+    else
+    {
+        player->mo->flags &= ~MF_NOCLIP;
+        P_SetMessage(player, DEH_String(txt_cheatnoclipoff), msg_system, false);
+    }
 }
 
 static void CheatWeaponsFunc(player_t * player, Cheat_t * cheat)
