@@ -359,7 +359,7 @@ void R_ClearSprites (void)
 ================================================================================
 */
 
-static vissprite_t *R_NewVisSprite (void)
+static const vissprite_t *R_NewVisSprite (void)
 {
     if (num_vissprite >= num_vissprite_alloc)   // [JN] killough
     {
@@ -386,7 +386,7 @@ static vissprite_t *R_NewVisSprite (void)
 ================================================================================
 */
 
-void R_DrawMaskedColumn(const column_t *column, signed const int baseclip)
+void R_DrawMaskedColumn (const column_t *column, signed const int baseclip)
 {
     int64_t	topscreen, bottomscreen; // [crispy] WiggleFix
     fixed_t	basetexturemid;
@@ -830,7 +830,7 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
     vis->brightmap = R_BrightmapForSprite(thing->state - states);
 
     // [JN] Colored blood
-    if (colored_blood && !vanillaparm &&  thing->type == MT_BLOODSPLATTER && thing->target)
+    if (colored_blood && !vanillaparm && thing->type == MT_BLOODSPLATTER && thing->target)
     {
         if (thing->target->type == MT_WIZARD)
         {
@@ -1293,7 +1293,7 @@ static void R_DrawPlayerSprites (void)
 
 // killough 9/2/98: merge sort
 
-static void msort(vissprite_t **s, vissprite_t **t, int n)
+static void msort (vissprite_t **s, vissprite_t **t, int n)
 {
     if (n >= 16)
     {

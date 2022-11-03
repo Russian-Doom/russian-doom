@@ -124,8 +124,9 @@ will have new column_ts generated.
 ================================================================================
 */
 
-static void R_DrawColumnInCache (column_t *patch, byte *cache, int originy,
-                                 int cacheheight, byte *marks)
+static void R_DrawColumnInCache (const column_t *patch, const byte *cache,
+                                 const int originy, const int cacheheight,
+                                 const byte *marks)
 {
     int    count;
     int    position;
@@ -187,27 +188,27 @@ static void R_DrawColumnInCache (column_t *patch, byte *cache, int originy,
 ================================================================================
 */
 
-static void R_GenerateComposite (int texnum)
+static void R_GenerateComposite (const int texnum)
 {
-    byte *block = Z_Malloc(texturecompositesize[texnum], PU_STATIC, 
-                          (void **) &texturecomposite[texnum]);
-    texture_t *texture = textures[texnum];
+    const byte *block = Z_Malloc(texturecompositesize[texnum], PU_STATIC, 
+                                (void **) &texturecomposite[texnum]);
+    const texture_t *texture = textures[texnum];
 
     // Composite the columns together.
-    texpatch_t *patch = texture->patches;
-    short *collump = texturecolumnlump[texnum];
-    unsigned *colofs = texturecolumnofs[texnum]; // killough 4/9/98: make 32-bit
+    const texpatch_t *patch = texture->patches;
+    const short *collump = texturecolumnlump[texnum];
+    unsigned const *colofs = texturecolumnofs[texnum]; // killough 4/9/98: make 32-bit
     int i = texture->patchcount;
 
     // killough 4/9/98: marks to identify transparent regions in merged textures
-    byte *marks = calloc(texture->width, texture->height), *source;
+    const byte *marks = calloc(texture->width, texture->height), *source;
 
     // [crispy] initialize composite background to black (index 0)
     memset(block, 0, texturecompositesize[texnum]);
 
     for ( ; --i >=0 ; patch++)
     {
-        patch_t *realpatch = W_CacheLumpNum(patch->patch, PU_CACHE);
+        const patch_t *realpatch = W_CacheLumpNum(patch->patch, PU_CACHE);
         int x, x1 = patch->originx, x2 = x1 + SHORT(realpatch->width);
         const int *cofs = realpatch->columnofs - x1;
 
@@ -270,11 +271,6 @@ static void R_GenerateComposite (int texnum)
 
     free(source);         // free temporary column
     free(marks);          // free transparency marks
-
-    // Now that the texture has been built in column cache,
-    // it is purgable from zone memory.
-
-    //Z_ChangeTag(block, PU_CACHE);
 }
 
 /*
@@ -287,7 +283,7 @@ static void R_GenerateComposite (int texnum)
 ================================================================================
 */
 
-static void R_GenerateLookup (int texnum)
+static void R_GenerateLookup (const int texnum)
 {
     const texture_t *texture = textures[texnum];
 
@@ -343,12 +339,12 @@ static void R_GenerateLookup (int texnum)
     if (texture->patchcount > 1 && texture->height < 256)
     {
         // killough 12/98: Warn about a common column construction bug
-        unsigned limit = texture->height*3+3; // absolute column size limit
+        unsigned const limit = texture->height*3+3; // absolute column size limit
         int badcol = devparm;                 // warn only if -devparm used
         
         for (i = texture->patchcount, patch = texture->patches; --i >= 0;)
         {
-            int pat = patch->patch;
+            const int pat = patch->patch;
             const patch_t *realpatch = W_CacheLumpNum(pat, PU_CACHE);
             int x, x1 = patch++->originx, x2 = x1 + SHORT(realpatch->width);
             const int *cofs = realpatch->columnofs - x1;
@@ -399,7 +395,7 @@ static void R_GenerateLookup (int texnum)
 
     {
         int x = texture->width;
-        int height = texture->height;
+        const int height = texture->height;
         int csize = 0, err = 0;        // killough 10/98
 
         while (--x >= 0)
@@ -491,7 +487,6 @@ const byte *R_GetColumn (const int tex, int col, const boolean opaque)
 static void GenerateTextureHashTable (void)
 {
     texture_t **rover;
-    int i;
     int key;
 
     textures_hashtable = Z_Malloc(sizeof(texture_t *) * numtextures, PU_STATIC, 0);
@@ -500,7 +495,7 @@ static void GenerateTextureHashTable (void)
 
     // Add all textures to hash table
 
-    for (i = 0; i < numtextures ; ++i)
+    for (int i = 0; i < numtextures ; ++i)
     {
         // Store index
 
@@ -542,10 +537,10 @@ static void GenerateTextureHashTable (void)
 
 static void R_InitTextures (void)
 {
-    maptexture_t*	mtexture;
-    texture_t*		texture;
-    mappatch_t*		mpatch;
-    texpatch_t*		patch;
+    maptexture_t *mtexture;
+    texture_t    *texture;
+    mappatch_t   *mpatch;
+    texpatch_t   *patch;
 
     int			i;
     int			j;
@@ -984,7 +979,7 @@ static void R_InitTransMaps (void)
         // [JN] We do. Generate tables dynamically.
 
         // Compose a default transparent filter map based on PLAYPAL.
-        unsigned char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
+        unsigned const char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
 
         // [JN] Fading effect for messages:
         transtable90 = Z_Malloc(256*256, PU_STATIC, 0);
@@ -1119,7 +1114,7 @@ void R_InitData (void)
 ================================================================================
 */
 
-int R_FlatNumForName (char *name)
+const int R_FlatNumForName (const char *name)
 {
     char  namet[9];
     int   i = W_CheckNumForNameFromTo (name, lastflat, firstflat);;
@@ -1151,10 +1146,10 @@ int R_FlatNumForName (char *name)
 ================================================================================
 */
 
-int R_CheckTextureNumForName (char *name)
+const int R_CheckTextureNumForName (const char *name)
 {
     texture_t *texture;
-    int        key = W_LumpNameHash(name) % numtextures;
+    const int  key = W_LumpNameHash(name) % numtextures;
 
     // "NoTexture" marker.
     if (name[0] == '-')
@@ -1162,7 +1157,7 @@ int R_CheckTextureNumForName (char *name)
         return 0;
     }
 
-    texture=textures_hashtable[key]; 
+    texture = textures_hashtable[key]; 
 
     while (texture != NULL)
     {
@@ -1185,9 +1180,9 @@ int R_CheckTextureNumForName (char *name)
 ================================================================================
 */
 
-int R_TextureNumForName (char *name)
+const int R_TextureNumForName (const char *name)
 {
-    int i = R_CheckTextureNumForName(name);
+    const int i = R_CheckTextureNumForName(name);
 
     if (i == -1)
     {

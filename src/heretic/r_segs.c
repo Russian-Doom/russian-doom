@@ -204,7 +204,7 @@ void R_RenderMaskedSegRange (drawseg_t *ds, const int x1, const int x2)
     lightnum = (frontsector->lightlevel >> LIGHTSEGSHIFT) + extralight;
 
     // [JN] Fake contrast: make optional
-    if (fake_contrast)
+    if (fake_contrast || vanillaparm)
     {
         if (curline->v1->y == curline->v2->y)
         {
@@ -516,7 +516,7 @@ static void R_RenderSegLoop (void)
 ================================================================================
 */
 
-static fixed_t R_ScaleFromGlobalAngle (const angle_t visangle)
+static const fixed_t R_ScaleFromGlobalAngle (const angle_t visangle)
 {
     const int     anglea = ANG90 + (visangle - viewangle);
     const int     angleb = ANG90 + (visangle - rw_normalangle);

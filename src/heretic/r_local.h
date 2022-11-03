@@ -23,11 +23,11 @@
 
 
 /*
-==============================================================================
+================================================================================
 
-					INTERNAL MAP TYPES
+                              INTERNAL MAP TYPES
 
-==============================================================================
+================================================================================
 */
 
 typedef struct
@@ -159,11 +159,11 @@ typedef struct
 } node_t;
 
 /*
-==============================================================================
+================================================================================
 
-						OTHER TYPES
+                              OTHER TYPES
 
-==============================================================================
+================================================================================
 */
 
 // [AM] Fractional part of the current tic, in the half-open
@@ -292,94 +292,20 @@ extern player_t *viewplayer;
 /*
 ================================================================================
 =
-= R_MAIN
+= R_BMAPS
 =
 ================================================================================
 */
 
-#define	FIELDOFVIEW 2048  // fineangles in the SCREENWIDTH wide window
-#define LOOKDIRMIN  160   // [crispy] -110, actually ([JN] increased to 160 (i.e. -160))
-#define LOOKDIRMAX  90
-#define LOOKDIRS    (LOOKDIRMIN+1+LOOKDIRMAX) // [crispy] lookdir range: -160..0..90
+#define MINBRIGHT  24  // [JN] Minimal COLORMAP level for half-brights.
 
-// Lighting constants
-#define	LIGHTLEVELS			16
-#define	LIGHTSEGSHIFT		4
-#define	MAXLIGHTSCALE		48
-#define	LIGHTSCALESHIFT		12
-// [crispy] & [JN] smoother diminished lighting
-#define MAXLIGHTZ			1024
-#define LIGHTZSHIFT			17
-// [JN] Vanilla values
-#define MAXLIGHTZ_VANILLA   128
-#define LIGHTZSHIFT_VANILLA 20
-#define	NUMCOLORMAPS		32      // number of diminishing
-#define	INVERSECOLORMAP		32
+extern void R_InitBrightmaps ();
 
-// Define the different areas for the dirty map
-#define I_NOUPDATE  0
-#define I_FULLVIEW  1
-#define I_STATBAR   2
-#define I_MESSAGES  4
-#define I_FULLSCRN  8
-
-// [AM] Interpolate between two angles.
-extern angle_t R_InterpolateAngle (const angle_t oangle, const angle_t nangle, const fixed_t scale);
-extern angle_t R_PointToAngle(const fixed_t x, const fixed_t y);
-extern angle_t R_PointToAngle2 (const fixed_t x1, const fixed_t y1, const fixed_t x2, const fixed_t y2);
-extern angle_t R_PointToAngleCrispy(fixed_t x, fixed_t y);
-
-extern boolean setsizeneeded;
-extern boolean BorderNeedRefresh;
-extern boolean BorderTopRefresh;
-
-extern fixed_t centerxfrac;
-extern fixed_t centeryfrac;
-extern fixed_t projection;
-extern fixed_t R_PointToDist(fixed_t x, fixed_t y);
-extern fixed_t viewcos, viewsin;
-
-extern int centerx, centery;
-extern int detailshift;  // 0 = high, 1 = low
-extern int extralight;
-extern int flyheight;
-extern int maxlightz, lightzshift;
-extern int R_CheckTextureNumForName (char *name);
-extern int R_FlatNumForName (char *name);
-extern int R_PointOnSegSide(fixed_t x, fixed_t y, const seg_t *line);
-extern int R_PointOnSide(fixed_t x, fixed_t y, const node_t *node);
-extern int R_TextureNumForName (char *name);
-extern int rendered_segs, rendered_visplanes, rendered_vissprites;
-extern int scaledviewwidth;
-extern int UpdateState;
-extern int validcount;
-extern int viewwidth, viewheight, scaledviewheight, viewwindowx, viewwindowy;
-
-extern lighttable_t **walllights;
-extern lighttable_t *fixedcolormap;
-extern lighttable_t *scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t *scalelightfixed[MAXLIGHTSCALE];
-extern lighttable_t *zlight[LIGHTLEVELS][MAXLIGHTZ];
-
-extern subsector_t *R_PointInSubsector(const fixed_t x, const fixed_t y);
-
-extern void (*basecolfunc) (void);
-extern void (*colfunc) (void);
-extern void (*extratlcolfunc) (void);
-extern void (*skycolfunc) (void);
-extern void (*spanfunc) (void);
-extern void (*tlcolfunc) (void);
-extern void (*transcolfunc) (void);
-extern void (*transtlcolfunc) (void);
-extern void R_ClearStats (void); // [JN] Used by perfomance counter.
-extern void R_DrawTopBorder(void);
-extern void R_DrawViewBorder(void);
-extern void R_ExecuteSetViewSize();
-extern void R_Init(void);
-extern void R_InitLightTables (void);
-extern void R_InterpolateTextureOffsets (void); // [crispy] smooth texture scrolling
-extern void R_RenderPlayerView(player_t * player);
-extern void R_SetViewSize(const int blocks, const int detail);
+extern const byte **texturebrightmap;
+extern const byte *R_BrightmapForTexName (const char *texname);
+extern const byte *R_BrightmapForSprite (const int state);
+extern const byte *R_BrightmapForFlatNum (const int num);
+extern const byte *R_BrightmapForState (const int state);
 
 /*
 ================================================================================
@@ -408,61 +334,12 @@ extern side_t   *sidedef;
 
 extern unsigned maxdrawsegs;  // [JN] killough: New code which removes 2s linedef limit
 
-extern void R_ClearClipSegs(void);
-extern void R_ClearDrawSegs(void);
+extern void R_ClearClipSegs (void);
+extern void R_ClearDrawSegs (void);
 extern void R_InitClipSegs (void);
-extern void R_InitSkyMap(void);
-extern void R_RenderBSPNode(int bspnum);
+extern void R_InitSkyMap (void);
+extern void R_RenderBSPNode (int bspnum);
 extern void R_StoreWallRange (const int start, const int stop);
-
-
-/*
-================================================================================
-=
-= R_SEGS
-=
-================================================================================
-*/
-
-// [BH] Compensate for rounding errors in DOOM's renderer by stretching wall
-//  columns by 1px. This eliminates the randomly-colored pixels ("sparkles")
-//  that appear at the bottom of some columns.
-#define SPARKLEFIX 64
-
-extern int rw_angle1;  // angle to line origin
-
-extern void R_RenderMaskedSegRange (drawseg_t *ds, const int x1, const int x2);
-
-/*
-================================================================================
-=
-= R_PLANE
-=
-================================================================================
-*/
-
-#define	ANGLETOSKYSHIFT 22  // sky map is 256*128*4 maps
-
-typedef void (*planefunction_t) (int top, int bottom);
-
-extern fixed_t *yslope, *distscale;
-extern fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
-
-extern int *floorclip, *ceilingclip; // [JN] dropoff overflow
-extern int *lastopening; // [crispy] 32-bit integer math
-extern int  skyflatnum;
-
-extern planefunction_t floorfunc, ceilingfunc;
-
-extern visplane_t *R_CheckPlane(visplane_t * pl, int start, int stop);
-extern visplane_t *R_DupPlane (const visplane_t *pl, const int start, const int stop);
-extern visplane_t *R_FindPlane(fixed_t height, const int picnum, const int lightlevel, const int special);
-
-extern void R_ClearPlanes(void);
-extern void R_DrawPlanes(void);
-extern void R_InitPlanes(void);
-extern void R_InitPlanesRes(void);
-extern void R_InitVisplanesRes(void);
 
 /*
 ================================================================================
@@ -472,7 +349,7 @@ extern void R_InitVisplanesRes(void);
 ================================================================================
 */
 
-extern const byte *R_GetColumn(const int tex, int col, const boolean opaque);
+extern const byte *R_GetColumn (const int tex, int col, const boolean opaque);
 
 extern fixed_t *spriteoffset;
 extern fixed_t *spritetopoffset;
@@ -490,44 +367,8 @@ extern int numflats;
 
 extern lighttable_t *colormaps;
 
-extern void R_InitData(void);
-extern void R_PrecacheLevel(void);
-
-/*
-================================================================================
-=
-= R_THINGS
-=
-================================================================================
-*/
-
-#define	BASEYCENTER  100
-#define	MINZ         (FRACUNIT*4)
-
-// constant arrays used for psprite clipping and initializing clipping
-extern int *negonearray;       // [JN] killough 2/8/98: // dropoff overflow
-extern int *screenheightarray; //      change to MAX_*  // dropoff overflow
-
-extern fixed_t pspritescale, pspriteiscale;
-extern fixed_t spryscale;
-
-extern int*  mceilingclip; // [crispy] 32-bit integer math
-extern int*  mfloorclip;   // [crispy] 32-bit integer math
-
-extern int64_t sprbotscreen;
-extern int64_t sprtopscreen;
-
-extern void R_AddPSprites(void);
-extern void R_AddSprites(const sector_t * sec);
-extern void R_ClearSprites(void);
-extern void R_ClipVisSprite(vissprite_t * vis, int xl, int xh);
-extern void R_DrawMasked(void);
-extern void R_DrawMaskedColumn(const column_t *column, signed const int baseclip);
-extern void R_DrawSprites(void);
-extern void R_InitSprites(char **namelist);
-extern void R_InitSpritesRes (void);
-extern void R_SortVisSprites(void);
-
+extern void R_InitData (void);
+extern void R_PrecacheLevel (void);
 
 /*
 ================================================================================
@@ -566,40 +407,162 @@ extern int ds_x2;
 extern int ds_y;
 extern int skytexturemid;
 
-extern void R_DrawColumn(void);
-extern void R_DrawColumnLow(void);
-extern void R_DrawExtraTLColumn(void);
-extern void R_DrawExtraTLColumnLow(void);
-extern void R_DrawSkyColumn(void);
-extern void R_DrawSkyColumnLow(void);
-extern void R_DrawSpan(void);
-extern void R_DrawSpanLow(void);
-extern void R_DrawTLColumn(void);
-extern void R_DrawTLColumnLow(void);
-extern void R_DrawTranslatedColumn(void);
-extern void R_DrawTranslatedColumnLow(void);
-extern void R_DrawTranslatedTLColumn(void);
-extern void R_DrawTranslatedTLColumnLow(void);
-extern void R_InitBuffer(const int width, const int height);
-
+extern void R_DrawColumn (void);
+extern void R_DrawColumnLow (void);
+extern void R_DrawExtraTLColumn (void);
+extern void R_DrawExtraTLColumnLow (void);
+extern void R_DrawSkyColumn (void);
+extern void R_DrawSkyColumnLow (void);
+extern void R_DrawSpan (void);
+extern void R_DrawSpanLow (void);
+extern void R_DrawTLColumn (void);
+extern void R_DrawTLColumnLow (void);
+extern void R_DrawTranslatedColumn (void);
+extern void R_DrawTranslatedColumnLow (void);
+extern void R_DrawTranslatedTLColumn (void);
+extern void R_DrawTranslatedTLColumnLow (void);
+extern void R_InitBuffer (const int width, const int height);
 
 /*
 ================================================================================
 =
-= R_BMAPS
+= R_MAIN
 =
 ================================================================================
 */
 
-#define MINBRIGHT  24  // [JN] Minimal COLORMAP level for half-brights.
+#define	FIELDOFVIEW 2048  // fineangles in the SCREENWIDTH wide window
+#define LOOKDIRMIN  160   // [crispy] -110, actually ([JN] increased to 160 (i.e. -160))
+#define LOOKDIRMAX  90
+#define LOOKDIRS    (LOOKDIRMIN+1+LOOKDIRMAX) // [crispy] lookdir range: -160..0..90
 
-extern void R_InitBrightmaps ();
+// Lighting constants
+#define	LIGHTLEVELS			16
+#define	LIGHTSEGSHIFT		4
+#define	MAXLIGHTSCALE		48
+#define	LIGHTSCALESHIFT		12
+// [crispy] & [JN] smoother diminished lighting
+#define MAXLIGHTZ			1024
+#define LIGHTZSHIFT			17
+// [JN] Vanilla values
+#define MAXLIGHTZ_VANILLA   128
+#define LIGHTZSHIFT_VANILLA 20
+#define	NUMCOLORMAPS		32      // number of diminishing
+#define	INVERSECOLORMAP		32
 
-extern const byte **texturebrightmap;
-extern const byte *R_BrightmapForTexName (const char *texname);
-extern const byte *R_BrightmapForSprite (const int state);
-extern const byte *R_BrightmapForFlatNum (const int num);
-extern const byte *R_BrightmapForState (const int state);
+// Define the different areas for the dirty map
+#define I_NOUPDATE  0
+#define I_FULLVIEW  1
+#define I_STATBAR   2
+#define I_MESSAGES  4
+#define I_FULLSCRN  8
+
+// [AM] Interpolate between two angles.
+extern const angle_t R_InterpolateAngle (const angle_t oangle, const angle_t nangle, const fixed_t scale);
+extern const angle_t R_PointToAngle2 (const fixed_t x1, const fixed_t y1, const fixed_t x2, const fixed_t y2);
+extern const angle_t R_PointToAngleCrispy (fixed_t x, fixed_t y);
+extern const angle_t R_PointToAngle (const fixed_t x, const fixed_t y);
+
+extern boolean setsizeneeded;
+extern boolean BorderNeedRefresh;
+extern boolean BorderTopRefresh;
+
+extern fixed_t centerxfrac;
+extern fixed_t centeryfrac;
+extern fixed_t projection;
+extern fixed_t R_PointToDist (fixed_t x, fixed_t y);
+extern fixed_t viewcos, viewsin;
+
+extern int centerx, centery;
+extern int detailshift;  // 0 = high, 1 = low
+extern int extralight;
+extern int flyheight;
+extern int maxlightz, lightzshift;
+extern int rendered_segs, rendered_visplanes, rendered_vissprites;
+extern int scaledviewwidth;
+extern int UpdateState;
+extern int validcount;
+extern int viewwidth, viewheight, scaledviewheight, viewwindowx, viewwindowy;
+extern const int R_CheckTextureNumForName (const char *name);
+extern const int R_FlatNumForName (const char *name);
+extern const int R_PointOnSegSide (fixed_t x, fixed_t y, const seg_t *line);
+extern const int R_PointOnSide (fixed_t x, fixed_t y, const node_t *node);
+extern const int R_TextureNumForName (const char *name);
+
+extern lighttable_t **walllights;
+extern lighttable_t *fixedcolormap;
+extern lighttable_t *scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t *scalelightfixed[MAXLIGHTSCALE];
+extern lighttable_t *zlight[LIGHTLEVELS][MAXLIGHTZ];
+
+extern const subsector_t *R_PointInSubsector (const fixed_t x, const fixed_t y);
+
+extern void (*basecolfunc) (void);
+extern void (*colfunc) (void);
+extern void (*extratlcolfunc) (void);
+extern void (*skycolfunc) (void);
+extern void (*spanfunc) (void);
+extern void (*tlcolfunc) (void);
+extern void (*transcolfunc) (void);
+extern void (*transtlcolfunc) (void);
+
+extern void R_ClearStats (void); // [JN] Used by perfomance counter.
+extern void R_DrawTopBorder (void);
+extern void R_DrawViewBorder (void);
+extern void R_ExecuteSetViewSize (void);
+extern void R_Init (void);
+extern void R_InitLightTables (void);
+extern void R_InterpolateTextureOffsets (void); // [crispy] smooth texture scrolling
+extern void R_RenderPlayerView (const player_t *player);
+extern void R_SetViewSize (const int blocks, const int detail);
+
+/*
+================================================================================
+=
+= R_PLANE
+=
+================================================================================
+*/
+
+#define	ANGLETOSKYSHIFT 22  // sky map is 256*128*4 maps
+
+typedef void (*planefunction_t) (int top, int bottom);
+
+extern fixed_t *yslope, *distscale;
+extern fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
+
+extern int *floorclip, *ceilingclip; // [JN] dropoff overflow
+extern int *lastopening; // [crispy] 32-bit integer math
+extern int  skyflatnum;
+
+extern planefunction_t floorfunc, ceilingfunc;
+
+extern const visplane_t *R_CheckPlane (visplane_t *pl, const int start, const int stop);
+extern const visplane_t *R_DupPlane (const visplane_t *pl, const int start, const int stop);
+extern const visplane_t *R_FindPlane (fixed_t height, const int picnum, const int lightlevel, const int special);
+
+extern void R_ClearPlanes (void);
+extern void R_DrawPlanes (void);
+extern void R_InitPlanes (void);
+extern void R_InitPlanesRes (void);
+extern void R_InitVisplanesRes (void);
+
+/*
+================================================================================
+=
+= R_SEGS
+=
+================================================================================
+*/
+
+// [BH] Compensate for rounding errors in DOOM's renderer by stretching wall
+//  columns by 1px. This eliminates the randomly-colored pixels ("sparkles")
+//  that appear at the bottom of some columns.
+#define SPARKLEFIX 64
+
+extern int rw_angle1;  // angle to line origin
+
+extern void R_RenderMaskedSegRange (drawseg_t *ds, const int x1, const int x2);
 
 /*
 ================================================================================
@@ -609,6 +572,41 @@ extern const byte *R_BrightmapForState (const int state);
 ================================================================================
 */
 
-extern char *R_DistortedFlat (int flatnum);
+extern const char *R_DistortedFlat (const int flatnum);
 
 extern void R_InitDistortedFlats ();
+
+/*
+================================================================================
+=
+= R_THINGS
+=
+================================================================================
+*/
+
+#define	BASEYCENTER  100
+#define	MINZ         (FRACUNIT*4)
+
+// constant arrays used for psprite clipping and initializing clipping
+extern int *negonearray;       // [JN] killough 2/8/98: // dropoff overflow
+extern int *screenheightarray; //      change to MAX_*  // dropoff overflow
+
+extern fixed_t pspritescale, pspriteiscale;
+extern fixed_t spryscale;
+
+extern int *mceilingclip; // [crispy] 32-bit integer math
+extern int *mfloorclip;   // [crispy] 32-bit integer math
+
+extern int64_t sprbotscreen;
+extern int64_t sprtopscreen;
+
+extern void R_AddPSprites (void);
+extern void R_AddSprites (const sector_t *sec);
+extern void R_ClearSprites (void);
+extern void R_ClipVisSprite (vissprite_t *vis, int xl, int xh);
+extern void R_DrawMasked (void);
+extern void R_DrawMaskedColumn (const column_t *column, signed const int baseclip);
+extern void R_DrawSprites (void);
+extern void R_InitSprites (char **namelist);
+extern void R_InitSpritesRes (void);
+extern void R_SortVisSprites (void);

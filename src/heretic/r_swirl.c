@@ -87,7 +87,7 @@ void R_InitDistortedFlats()
 	}
 }
 
-char *R_DistortedFlat(int flatnum)
+const char *R_DistortedFlat (const int flatnum)
 {
 	static int swirltic = -1;
 	static int swirlflat = -1;

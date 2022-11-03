@@ -98,7 +98,7 @@ void (*spanfunc) (void);
 ================================================================================
 */
 
-int R_PointOnSide (fixed_t x, fixed_t y, const node_t *node)
+const int R_PointOnSide (fixed_t x, fixed_t y, const node_t *node)
 {
     if (!node->dx)
     {
@@ -132,12 +132,12 @@ int R_PointOnSide (fixed_t x, fixed_t y, const node_t *node)
 ================================================================================
 */
 
-int R_PointOnSegSide (fixed_t x, fixed_t y, const seg_t *line)
+const int R_PointOnSegSide (fixed_t x, fixed_t y, const seg_t *line)
 {
-    fixed_t lx = line->v1->x;
-    fixed_t ly = line->v1->y;
-    fixed_t ldx = line->v2->x - lx;
-    fixed_t ldy = line->v2->y - ly;
+    const fixed_t lx = line->v1->x;
+    const fixed_t ly = line->v1->y;
+    const fixed_t ldx = line->v2->x - lx;
+    const fixed_t ldy = line->v2->y - ly;
 
     if (!ldx)
     {
@@ -272,7 +272,7 @@ static const angle_t R_PointToAngleSlope (fixed_t x, fixed_t y,
 ================================================================================
 */
 
-angle_t R_PointToAngle (const fixed_t x, const fixed_t y)
+const angle_t R_PointToAngle (const fixed_t x, const fixed_t y)
 {
     return R_PointToAngleSlope (x, y, SlopeDiv);
 }
@@ -288,11 +288,11 @@ angle_t R_PointToAngle (const fixed_t x, const fixed_t y)
 ================================================================================
 */
 
-angle_t R_PointToAngleCrispy (fixed_t x, fixed_t y)
+const angle_t R_PointToAngleCrispy (fixed_t x, fixed_t y)
 {
     // [crispy] fix overflows for very long distances
-    int64_t y_viewy = (int64_t)y - viewy;
-    int64_t x_viewx = (int64_t)x - viewx;
+    const int64_t y_viewy = (int64_t)y - viewy;
+    const int64_t x_viewx = (int64_t)x - viewx;
 
     // [crispy] the worst that could happen is e.g. INT_MIN-INT_MAX = 2*INT_MIN
     if (x_viewx < INT_MIN || x_viewx > INT_MAX
@@ -314,7 +314,8 @@ angle_t R_PointToAngleCrispy (fixed_t x, fixed_t y)
 ================================================================================
 */
 
-angle_t R_PointToAngle2 (const fixed_t x1, const fixed_t y1, const fixed_t x2, const fixed_t y2)
+const angle_t R_PointToAngle2 (const fixed_t x1, const fixed_t y1,
+                               const fixed_t x2, const fixed_t y2)
 {
     viewx = x1;
     viewy = y1;
@@ -333,7 +334,7 @@ angle_t R_PointToAngle2 (const fixed_t x1, const fixed_t y1, const fixed_t x2, c
 ================================================================================
 */
 
-angle_t R_InterpolateAngle (const angle_t oangle, const angle_t nangle, const fixed_t scale)
+const angle_t R_InterpolateAngle (const angle_t oangle, const angle_t nangle, const fixed_t scale)
 {
     if (nangle == oangle)
     {
@@ -512,15 +513,13 @@ void R_InitLightTables (void)
 
 static void R_InitTranslationTables (void)
 {
-    int i;
-
     V_LoadTintTable();
 
     // Allocate translation tables
     translationtables = Z_Malloc(256 * 3, PU_STATIC, 0);
 
     // Fill out the translation tables
-    for (i = 0; i < 256; i++)
+    for (int i = 0; i < 256; i++)
     {
         if (i >= 225 && i <= 240)
         {
@@ -770,7 +769,7 @@ void R_Init (void)
 ================================================================================
 */
 
-subsector_t *R_PointInSubsector (const fixed_t x, const fixed_t y)
+const subsector_t *R_PointInSubsector (const fixed_t x, const fixed_t y)
 {
     int nodenum = numnodes-1;
 
@@ -947,7 +946,7 @@ void R_ClearStats (void)
 ================================================================================
 */
 
-void R_RenderPlayerView(player_t *player)
+void R_RenderPlayerView (const player_t *player)
 {
     R_SetupFrame(player);
 

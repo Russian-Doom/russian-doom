@@ -318,7 +318,7 @@ void R_ClearPlanes (void)
 ================================================================================
 */
 
-static visplane_t *new_visplane (unsigned int hash)
+static const visplane_t *new_visplane (unsigned const int hash)
 {
     visplane_t *check = freetail;
 
@@ -343,7 +343,7 @@ static visplane_t *new_visplane (unsigned int hash)
 ================================================================================
 */
 
-visplane_t *R_FindPlane(fixed_t height, const int picnum, const int lightlevel, const int special)
+const visplane_t *R_FindPlane (fixed_t height, const int picnum, const int lightlevel, const int special)
 {
     visplane_t   *check;
     unsigned int  hash;
@@ -388,7 +388,7 @@ visplane_t *R_FindPlane(fixed_t height, const int picnum, const int lightlevel, 
 ================================================================================
 */
 
-visplane_t *R_DupPlane (const visplane_t *pl, const int start, const int stop)
+const visplane_t *R_DupPlane (const visplane_t *pl, const int start, const int stop)
 {
     unsigned int  hash = visplane_hash(pl->picnum, pl->lightlevel, pl->height);
     visplane_t   *new_pl = new_visplane(hash);
@@ -413,7 +413,7 @@ visplane_t *R_DupPlane (const visplane_t *pl, const int start, const int stop)
 ================================================================================
 */
 
-visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop)
+const visplane_t *R_CheckPlane (visplane_t *pl, const int start, const int stop)
 {
     int intrl, intrh, unionl, unionh, x;
 
@@ -494,7 +494,6 @@ void R_DrawPlanes (void)
     visplane_t  *pl;
     int          i;
     int          x;
-    int          angle;
 
     for (i = 0 ; i < MAXVISPLANES ; i++)
     for (pl = visplanes[i] ; pl ; pl = pl->next, rendered_visplanes++)
@@ -508,8 +507,8 @@ void R_DrawPlanes (void)
                 if ((dc_yl = pl->top[x]) != UINT_MAX && dc_yl <= (dc_yh = pl->bottom[x])) // [crispy] 32-bit integer math
                 {
                     // [crispy] Optionally draw skies horizontally linear.
-                    angle = ((viewangle + (linear_sky && !vanillaparm ? linearskyangle[x] : 
-                                           xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
+                    const int angle = ((viewangle + (linear_sky && !vanillaparm ?
+                                        linearskyangle[x] : xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
                     dc_x = x;
                     dc_source = R_GetColumn(skytexture, angle , false);
 
