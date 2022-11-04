@@ -28,6 +28,8 @@ see [COMPILING.md](COMPILING.md#building-international-doom-on-linux)<br/>
 Source code available in [zip](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/heretic-5.2.zip)
 and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/heretic-5.2.tar.gz) formats
 
+[**Antivirus FAQ**](https://github.com/JNechaevsky/inter-doom/wiki/Antivirus-FAQ)
+
 ### International Hexen 5.1 (released: June 12, 2022)
 
 **Windows:**
@@ -40,6 +42,8 @@ see [COMPILING.md](COMPILING.md#building-international-doom-on-linux)<br/>
 Source code available in [zip](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/hexen-5.1.zip)
 and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/hexen-5.1.tar.gz) formats
 
+[**Antivirus FAQ**](https://github.com/JNechaevsky/inter-doom/wiki/Antivirus-FAQ)
+
 ### Russian Doom for DOS 1.8 (released: June 9, 2020)
 
 DOS: [russian-doom-dos-1.8.zip](https://github.com/JNechaevsky/inter-doom/releases/download/dos-1.8/russian-doom-dos-1.8.zip)<br/>
@@ -51,7 +55,8 @@ PNG font atlases: [inter-doom-fonts-png.zip](https://jnechaevsky.github.io/inter
 
 ### History of changes
 
-Changelog available in [English](https://github.com/JNechaevsky/inter-doom/wiki/Changelog)
+Changelog for current and upcoming versions available
+in [English](https://github.com/JNechaevsky/inter-doom/wiki/Changelog)
 and [Russian](https://github.com/JNechaevsky/inter-doom/wiki/Changelog-(Rus)) languages.
 
 ### About
