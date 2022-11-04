@@ -5425,6 +5425,7 @@ static void M_RD_Change_HorizontalAiming(Direction_t direction)
 static void M_RD_Change_DefaultSkill(Direction_t direction)
 {
     RD_Menu_SpinInt(&default_skill, 0, 5, direction);
+    NewGameMenu.lastOn = default_skill;
 }
 
 static void M_RD_Change_FixMapErrors()
