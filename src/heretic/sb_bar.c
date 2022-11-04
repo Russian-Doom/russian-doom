@@ -97,27 +97,28 @@ static int playpalette;
 
 static void Crosshair_Colorize_inGame (void);
 
-patch_t *PatchLTFACE;
-patch_t *PatchRTFACE;
-patch_t *PatchBARBACK;
-patch_t *PatchCHAIN;
-patch_t *PatchSTATBAR;
-patch_t *PatchSTATBAR_RUS;
-patch_t *PatchLIFEGEM;
-patch_t *PatchLTFCTOP;
-patch_t *PatchRTFCTOP;
-patch_t *PatchSELECTBOX;
-patch_t *PatchINVLFGEM1;
-patch_t *PatchINVLFGEM2;
-patch_t *PatchINVRTGEM1;
-patch_t *PatchINVRTGEM2;
-patch_t *PatchINumbers[10];
-patch_t *PatchNEGATIVE;
-patch_t *PatchSmNumbers[10];
-patch_t *PatchBLACKSQ;
-patch_t *PatchINVBAR;
-patch_t *PatchARMCLEAR;
-patch_t *PatchCHAINBACK;
+static patch_t *PatchLTFACE;
+static patch_t *PatchRTFACE;
+static patch_t *PatchBARBACK;
+static patch_t *PatchCHAIN;
+static patch_t *PatchSTATBAR;
+static patch_t *PatchSTATBAR_RUS;
+static patch_t *PatchLIFEGEM[4];
+static patch_t *PatchLTFCTOP;
+static patch_t *PatchRTFCTOP;
+static patch_t *PatchSELECTBOX;
+static patch_t *PatchINVLFGEM1;
+static patch_t *PatchINVLFGEM2;
+static patch_t *PatchINVRTGEM1;
+static patch_t *PatchINVRTGEM2;
+static patch_t *PatchINumbers[10];
+static patch_t *PatchNEGATIVE;
+static patch_t *PatchSmNumbers[10];
+static patch_t *PatchBLACKSQ;
+static patch_t *PatchINVBAR;
+static patch_t *PatchARMCLEAR;
+static patch_t *PatchCHAINBACK;
+
 int FontBNumBase;
 int spinbooklump;
 int spinflylump;
@@ -223,14 +224,13 @@ void SB_Init(void)
         PatchSTATBAR = W_CacheLumpName(DEH_String("LIFEBAR"), PU_STATIC);
         PatchSTATBAR_RUS = W_CacheLumpName(DEH_String("RD_LFBAR"), PU_STATIC);
     }
-    if (!netgame)
-    {                           // single player game uses red life gem
-        PatchLIFEGEM = W_CacheLumpName(DEH_String("LIFEGEM2"), PU_STATIC);
-    }
-    else
+
+    // [JN] Life gem. Modified to array type for support of proper
+    // coloring while toggling spy mode in multiplayer game.
+    for (int i = 0 ; i < 4 ; i++)
     {
-        PatchLIFEGEM = W_CacheLumpNum(W_GetNumForName(DEH_String("LIFEGEM0"))
-                                      + consoleplayer, PU_STATIC);
+        PatchLIFEGEM[i] = W_CacheLumpNum(W_GetNumForName(DEH_String("LIFEGEM0"))
+                                         + i, PU_STATIC);
     }
     PatchLTFCTOP = W_CacheLumpName(DEH_String("LTFCTOP"), PU_STATIC);
     PatchRTFCTOP = W_CacheLumpName(DEH_String("RTFCTOP"), PU_STATIC);
@@ -276,7 +276,7 @@ static void SB_PaletteFlash (void)
     int         palette;
     const byte *pal;
 
-    CPlayer = &players[consoleplayer];
+    CPlayer = &players[displayplayer];
 
     if (CPlayer->damagecount)
     {
@@ -322,7 +322,7 @@ void SB_Ticker(void)
     int delta;
     int curHealth;
 
-    curHealth = players[consoleplayer].mo->health;
+    curHealth = players[displayplayer].mo->health;
 
     if (leveltime & 1 && curHealth > 0)
     {
@@ -693,6 +693,8 @@ void SB_Drawer(void)
     static boolean hitCenterFrame;
     const int wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0) + 2;
 
+    CPlayer = &players[displayplayer];
+
     // [JN] Draw horns separatelly in non wide screen mode
     if (aspect_ratio < 2 && screenblocks <= 10 && automapactive && automap_overlay)
     {
@@ -707,7 +709,6 @@ void SB_Drawer(void)
         const int time = leveltime / TICRATE;
         const int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
         const int net_y = netgame ? 10 : 0;  // [JN] Shift one line down for chat string.
-        CPlayer = &players[consoleplayer];
 
         if (((automapactive && automap_stats == 1) || automap_stats == 2))
         {
@@ -797,10 +798,10 @@ void SB_Drawer(void)
         if ((automapactive && automap_coords == 1) || automap_coords == 2)
         {
             M_snprintf(text, sizeof(text), "X: %d, Y: %d, Z: %d, ANG: %d",
-                       players[consoleplayer].mo->x >> FRACBITS,
-                       players[consoleplayer].mo->y >> FRACBITS,
-                       players[consoleplayer].mo->z >> FRACBITS,
-                       players[consoleplayer].mo->angle / ANG1);
+                       CPlayer->mo->x >> FRACBITS,
+                       CPlayer->mo->y >> FRACBITS,
+                       CPlayer->mo->z >> FRACBITS,
+                       CPlayer->mo->angle / ANG1);
             RD_M_DrawTextA(text, wide_4_3, 122);
         }
     }
@@ -810,8 +811,6 @@ void SB_Drawer(void)
     {
         DrawSoundInfo();
     }
-
-    CPlayer = &players[consoleplayer];
 
     // [JN] Draw crosshair
     if (crosshair_draw && !automapactive && !vanillaparm)
@@ -911,7 +910,7 @@ void SB_Drawer(void)
 
     // [JN] Apply golden eyes to HUD gargoyles while Ring of Invincibility
     if ((screenblocks <= 10 || (automapactive && !automap_overlay))
-    && (players[consoleplayer].cheats & CF_GODMODE
+    && (CPlayer->cheats & CF_GODMODE
     || (CPlayer->powers[pw_invulnerability] && !vanillaparm)))
     {
         V_DrawPatch(16 + wide_delta, 167,
@@ -1192,22 +1191,60 @@ void DrawCommonBar(void)
             (HealthMarker == CPlayer->mo->health) ? 191 : 191 + ChainWiggle;
         V_DrawPatch(0 + wide_delta, 190, PatchCHAINBACK, NULL);
         V_DrawPatch(2 + (healthPos % 17) + wide_delta, chainY, PatchCHAIN, NULL);
-        // [JN] Colorize health gem:
-        if (sbar_colored_gem && !vanillaparm && !netgame)
+
+        // [JN] Health gem:
         {
-            if ((CPlayer->cheats & CF_GODMODE) || CPlayer->powers[pw_invulnerability])
-            dp_translation = cr[CR_RED2WHITE_HERETIC];
-            else if (CPlayer->mo->health <= 0)
-            dp_translation = cr[CR_RED2BLACK_HERETIC];
-            else if (CPlayer->mo->health >= 67)
-            dp_translation = sbar_colored_gem == 1 ? cr[CR_RED2GREEN_HERETIC] : cr[CR_RED2MIDGREEN_HERETIC];
-            else if (CPlayer->mo->health >= 34)
-            dp_translation = sbar_colored_gem == 1 ? cr[CR_RED2YELLOW_HERETIC] : cr[CR_RED2GOLD_HERETIC];
+            // Set appropriate gem patch. "2" means LIFEGEM2 patch, 
+            // suitable for proper color red-to-x translation.
+            int gem_patch;
+            
+            if (netgame)
+            {
+                // In netgame, gem can be colored by player's health
+                // or represent current player color in spy mode.
+                gem_patch = sbar_colored_gem ? 2 : displayplayer;
+            }
             else
-            dp_translation = sbar_colored_gem == 2 ? cr[CR_RED2DARKRED_HERETIC] : NULL;
-		}
-        V_DrawPatch(17 + healthPos + wide_delta, chainY, PatchLIFEGEM, NULL);
-        dp_translation = NULL;
+            {
+                // In singleplayer, gem is always red patch.
+                gem_patch = 2;
+            }
+
+
+            if (sbar_colored_gem && !vanillaparm)
+            {
+                if (CPlayer->cheats & CF_GODMODE
+                ||  CPlayer->powers[pw_invulnerability])
+                {
+                    dp_translation = cr[CR_RED2WHITE_HERETIC];
+                }
+                else
+                if (CPlayer->mo->health <= 0)
+                {
+                    dp_translation = cr[CR_RED2BLACK_HERETIC];
+                }
+                else
+                if (CPlayer->mo->health >= 67)
+                {
+                    dp_translation = sbar_colored_gem == 1 ? cr[CR_RED2GREEN_HERETIC]
+                                                           : cr[CR_RED2MIDGREEN_HERETIC];
+                }
+                else
+                if (CPlayer->mo->health >= 34)
+                {
+                    dp_translation = sbar_colored_gem == 1 ? cr[CR_RED2YELLOW_HERETIC]
+                                                           : cr[CR_RED2GOLD_HERETIC];
+                }
+                else
+                {
+                    dp_translation = sbar_colored_gem == 2 ? cr[CR_RED2DARKRED_HERETIC]
+                                                           : NULL;
+                }
+            }
+            
+            V_DrawPatch(17 + healthPos + wide_delta, chainY, PatchLIFEGEM[gem_patch], NULL);
+            dp_translation = NULL;
+        }
         V_DrawPatch(0 + wide_delta, 190, PatchLTFACE, NULL);
         V_DrawPatch(276 + wide_delta, 190, PatchRTFACE, NULL);
         ShadeChain();
