@@ -173,7 +173,7 @@ boolean P_GiveWeapon(player_t * player, weapontype_t weapon)
         player->weaponowned[weapon] = true;
         P_GiveAmmo(player, wpnlev1info[weapon].ammo, GetWeaponAmmo[weapon]);
         player->pendingweapon = weapon;
-        if (player == &players[consoleplayer])
+        if (player == &players[displayplayer])
         {
             S_StartSound(NULL, sfx_wpnup);
         }
@@ -815,7 +815,7 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
         P_RemoveMobj(special);
     }
     player->bonuscount += BONUSADD;
-    if (player == &players[consoleplayer])
+    if (player == &players[displayplayer])
     {
         S_StartSound(NULL, sound);
     }
@@ -854,7 +854,7 @@ void P_KillMobj(mobj_t * source, mobj_t * target)
             else
             {
                 source->player->frags[target->player - players]++;
-                if (source->player == &players[consoleplayer])
+                if (source->player == &players[displayplayer])
                 {
                     S_StartSound(NULL, sfx_gfrag);
                 }
@@ -895,7 +895,8 @@ void P_KillMobj(mobj_t * source, mobj_t * target)
             P_SetMobjState(target, S_PLAY_FDTH1);
             return;
         }
-        if (target->player == &players[consoleplayer] && automapactive)
+        if (target->player == &players[consoleplayer] && automapactive
+        && !demoplayback) // [JN] Don't close automap while demo playing.
         {
             // [JN] Don't die in auto map, switch view prior to dying.
             AM_Stop ();

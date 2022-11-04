@@ -375,7 +375,7 @@ static const byte *ColorizeMessage (const MessageType_t messageType)
 
 static const int AlignMessage (const int align, const int english_language)
 {
-    player_t *player = &players[consoleplayer];
+    player_t *player = &players[displayplayer];
     const int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
     
     return
@@ -422,7 +422,7 @@ static const byte *FadeMessage (const int messageTics)
 
 void DrawMessage (void)
 {
-    player_t *player = &players[consoleplayer];
+    player_t *player = &players[displayplayer];
 
     // [JN] Activate message counter in non-level or paused states.
     // Make messages go away in menu, finale and help screens.
@@ -738,7 +738,7 @@ void D_DoomLoop(void)
         }
 
         // Move positional sounds
-        S_UpdateSounds(players[consoleplayer].mo);
+        S_UpdateSounds(players[displayplayer].mo);
     }
 }
 

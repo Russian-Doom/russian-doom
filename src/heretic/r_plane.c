@@ -514,8 +514,8 @@ void R_DrawPlanes (void)
 
                     if (invul_sky && !vanillaparm)
                     {
-                        if (players[consoleplayer].powers[pw_invulnerability] > BLINKTHRESHOLD
-                        || (players[consoleplayer].powers[pw_invulnerability] & 8))
+                        if (players[displayplayer].powers[pw_invulnerability] > BLINKTHRESHOLD
+                        || (players[displayplayer].powers[pw_invulnerability] & 8))
                         {
                             // [JN] Invulnerability effect will colorize sky texture,
                             // with out any changes in sky texture light level.

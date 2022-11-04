@@ -146,9 +146,9 @@ static mobj_t *GetSoundListener(void)
     // If we are at the title screen, the console player doesn't have an
     // object yet, so return a pointer to a static dummy listener instead.
 
-    if (players[consoleplayer].mo != NULL)
+    if (players[displayplayer].mo != NULL)
     {
-        return players[consoleplayer].mo;
+        return players[displayplayer].mo;
     }
     else
     {
@@ -397,11 +397,13 @@ void S_StartSoundAmbient(void *_origin, int sound_id)
     int priority;
     int absx, absy;
 
-    // [JN] Player is always listener.
-    listener = players[consoleplayer].mo;
-
     if (snd_MaxVolume == 0 || !snd_sfxdevice || (nodrawers && singletics))
+    {
         return;
+    }
+
+    // [JN] Player is always listener.
+    listener = players[displayplayer].mo;
 
     if (origin == NULL)
     {

@@ -944,7 +944,7 @@ void P_PlayerUseArtifact (player_t *player, artitype_t arti)
             if (P_UseArtifact(player, arti))
             {                   // Artifact was used - remove it from inventory
                 P_PlayerRemoveArtifact(player, i);
-                if (player == &players[consoleplayer])
+                if (player == &players[displayplayer])
                 {
                     S_StartSound(NULL, sfx_artiuse);
                     ArtifactFlash = 4;
