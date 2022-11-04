@@ -1288,7 +1288,7 @@ static MenuItem_t Gameplay4Items[] = {
     I_SWITCH("FLIP GAME LEVELS:",           "PTHRFKMYJT JNHF;TYBT EHJDYTQ:",   M_RD_FlipLevels),   // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
     I_SWITCH("IMITATE PLAYER'S BREATHING:", "BVBNFWBZ LS[FYBZ BUHJRF:",        M_RD_Breathing),    // ИМИТАЦИЯ ДЫХАНИЯ ИГРОКА
     I_SWITCH("WAND START GAME MODE:",       NULL, /* [JN] Joint EN/RU string*/ M_RD_WandStart),    // РЕЖИМ ИГРЫ "WAND START"
-    I_TITLE( "GAMEPLAY",                    "LTVJPFGBCB"), // ДЕМОЗАПИСИ
+    I_TITLE( "DEMOS",                       "LTVJPFGBCB"), // ДЕМОЗАПИСИ
     I_LRFUNC("SHOW DEMO TIMER:",            "JNJ,HF;FNM NFQVTH:",              M_RD_DemoTimer),    // ОТОБРАЖАТЬ ТАЙМЕР
     I_SWITCH("TIMER DIRECTION:",            "DHTVZ NFQVTHF:",                  M_RD_DemoTimerDir), // ВРЕМЯ ТАЙМЕРА
     I_SWITCH("SHOW PROGRESS BAR:",          "IRFKF GHJUHTCCF:",                M_RD_DemoBar),      // ШКАЛА ПРОГРЕССА
@@ -4252,7 +4252,7 @@ static void DrawGameplay1Menu(void)
         // Строго оригинальный режим
         RD_M_DrawTextSmallRUS(strict_mode ? "DRK" : "DSRK", 233 + wide_delta, 36,
                               strict_mode ? CR_GREEN : CR_RED);
-        
+
         //
         // ГРАФИКА
         //
@@ -4571,7 +4571,7 @@ static void M_RD_CrossHairType(Direction_t direction)
 static void Init_Gameplay_3(struct Menu_s* const menu)
 {
     const int status = strict_mode || netgame ? DISABLED : ENABLED;
-    
+
     menu->items[2].status = status;
     menu->items[8].status = status;
     menu->items[9].status = status;
