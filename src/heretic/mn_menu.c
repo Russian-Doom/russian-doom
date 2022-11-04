@@ -2673,11 +2673,11 @@ static void DrawMessagesMenu(void)
 
         // Fading effect 
         RD_M_DrawTextSmallENG(message_fade ? "ON" : "OFF",
-                              140 + wide_delta, 82, CR_GRAY);
+                              140 + wide_delta, 82, CR_NONE);
 
         // Text casts shadows
         RD_M_DrawTextSmallENG(draw_shadowed_text ? "ON" : "OFF",
-                              179 + wide_delta, 92, CR_GRAY);
+                              179 + wide_delta, 92, CR_NONE);
 
         // Local time
         RD_M_DrawTextSmallENG(local_time == 1 ? "12-HOUR (HH:MM)" :
