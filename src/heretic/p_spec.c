@@ -907,7 +907,7 @@ void P_PlayerInSpecialSector(player_t * player)
             if (secret_notification && !vanillaparm)
             {
                 // [JN] Notification of revealed secrets
-                P_SetMessage(&players[consoleplayer], txt_secret_found, msg_secret, true);
+                P_SetMessage(&players[displayplayer], txt_secret_found, msg_secret, true);
                 S_StartSound(NULL, sfx_chat);
             }
             break;

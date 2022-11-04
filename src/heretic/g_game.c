@@ -807,6 +807,9 @@ boolean G_Responder(event_t * ev)
         while (!playeringame[displayplayer]
                && displayplayer != consoleplayer);
                
+        // [JN] Update sound values for appropriate player.
+        S_UpdateSounds(players[displayplayer].mo);
+
         // [JN] Re-init automap variables for correct player arrow angle.
         if (automapactive)
         {
