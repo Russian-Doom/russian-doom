@@ -324,9 +324,6 @@ void SB_Ticker(void)
 
     curHealth = players[consoleplayer].mo->health;
 
-    // [JN] Do red-/gold-shifts from damage/items.
-    SB_PaletteFlash();
-
     if (leveltime & 1 && curHealth > 0)
     {
         ChainWiggle = P_Random() & 1;
@@ -361,6 +358,9 @@ void SB_Ticker(void)
         }
         HealthMarker += delta;
     }
+
+    // [JN] Do red-/gold-shifts from damage/items.
+    SB_PaletteFlash();
 }
 
 //---------------------------------------------------------------------------

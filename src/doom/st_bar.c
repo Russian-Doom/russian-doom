@@ -1276,9 +1276,6 @@ static void ST_DoPaletteStuff (void)
 
 void ST_Ticker (void)
 {
-    // Do red-/gold-shifts from damage/items
-    ST_DoPaletteStuff();
-
     // [JN] Allow to update background/belez before values update.
     st_bg_needsupdate = true;
 
@@ -1298,6 +1295,9 @@ void ST_Ticker (void)
     }
     
     st_oldhealth = plyr->health;
+
+    // Do red-/gold-shifts from damage/items
+    ST_DoPaletteStuff();
 }
 
 // -----------------------------------------------------------------------------
