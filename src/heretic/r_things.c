@@ -1148,7 +1148,7 @@ void R_DrawPSprite (const pspdef_t *psp)
 
     if (screenblocks >= 11)
     {
-        vis->texturemid -= PSpriteSY[players[consoleplayer].readyweapon];
+        vis->texturemid -= PSpriteSY[players[displayplayer].readyweapon];
     }
 
     vis->x1 = x1 < 0 ? 0 : x1;

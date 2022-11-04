@@ -437,8 +437,8 @@ void R_DrawFuzzColumnBW (void)
     byte    *dest;
     boolean  cutoff = false;
     const boolean greenfuzz = infragreen_visor
-                            &&  players[consoleplayer].powers[pw_infrared]
-                            && !players[consoleplayer].powers[pw_invulnerability];
+                            &&  players[displayplayer].powers[pw_infrared]
+                            && !players[displayplayer].powers[pw_invulnerability];
 
     if (!dc_yl)
     {
@@ -494,8 +494,8 @@ void R_DrawFuzzColumnLowBW (void)
     byte      *dest1, *dest2, *dest3, *dest4;
     boolean    cutoff = false;
     const boolean greenfuzz = infragreen_visor
-                            && players[consoleplayer].powers[pw_infrared]
-                            && !players[consoleplayer].powers[pw_invulnerability];
+                            && players[displayplayer].powers[pw_infrared]
+                            && !players[displayplayer].powers[pw_invulnerability];
 
     if (!dc_yl)
     {
@@ -687,8 +687,8 @@ void R_DrawFuzzColumnImprovedBW (void)
     byte   *dest;
     boolean cutoff = false;
     const boolean greenfuzz = infragreen_visor
-                            && players[consoleplayer].powers[pw_infrared]
-                            && !players[consoleplayer].powers[pw_invulnerability];
+                            && players[displayplayer].powers[pw_infrared]
+                            && !players[displayplayer].powers[pw_invulnerability];
 
     if (!dc_yl)
     {
@@ -745,8 +745,8 @@ void R_DrawFuzzColumnLowImprovedBW (void)
     byte      *dest1, *dest2, *dest3, *dest4;
     boolean    cutoff = false;
     const boolean greenfuzz = infragreen_visor
-                            && players[consoleplayer].powers[pw_infrared]
-                            && !players[consoleplayer].powers[pw_invulnerability];
+                            && players[displayplayer].powers[pw_infrared]
+                            && !players[displayplayer].powers[pw_invulnerability];
 
     if (!dc_yl)
     {
