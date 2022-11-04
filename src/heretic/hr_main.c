@@ -202,6 +202,7 @@ int crosshair_scale = 0;
 int crosshair_type = 1;
 
 // Gameplay: Gameplay
+int default_skill = 2;
 int fix_map_errors = 1;
 int flip_levels = 0;
 int breathing = 0;
@@ -1124,6 +1125,7 @@ void D_BindVariables(void)
     M_BindIntVariable("crosshair_type",         &crosshair_type); 
 
     // Gameplay: Gameplay
+    M_BindIntVariable("default_skill",          &default_skill);
     M_BindIntVariable("fix_map_errors",         &fix_map_errors);
     M_BindIntVariable("flip_levels",            &flip_levels);
     M_BindIntVariable("breathing",              &breathing);
@@ -1287,7 +1289,7 @@ void D_DoomMain(void)
 
     ravpic = M_ParmExists("-ravpic");
 
-    startskill = sk_medium;
+    startskill = default_skill;
     startepisode = 1;
     startmap = 1;
     autostart = false;
@@ -1771,7 +1773,7 @@ void D_DoomMain(void)
         BorderNeedRefresh = true;
         if (autostart || netgame)
         {
-            G_InitNew(startskill, startepisode, startmap, 0);
+            G_InitNew(default_skill, startepisode, startmap, 0);
         }
         else
         {

@@ -248,6 +248,7 @@ static void M_RD_FloatAmplitude(Direction_t direction);
 
 // Gameplay (page 4)
 static void DrawGameplay4Menu(void);
+static void M_RD_DefaultSkill();
 static void M_RD_FixMapErrors();
 static void M_RD_FlipLevels();
 static void M_RD_Breathing();
@@ -1279,16 +1280,16 @@ MENU_STATIC_PAGED(Gameplay3Menu,
 
 static MenuItem_t Gameplay4Items[] = {
     I_TITLE( "GAMEPLAY",                    "UTQVGKTQ"), // ГЕЙМПЛЕЙ
+    I_LRFUNC("DEFAULT SKILL LEVEL:",        "EHJDTYM CKJ;YJCNB GJ EVJKXFYB.:", M_RD_DefaultSkill), // УРОВЕНЬ СЛОЖНОСТИ ПО УМОЛЧАНИЮ
     I_SWITCH("FIX ERRORS ON VANILLA MAPS:", "ECNHFYZNM JIB,RB JHBU> EHJDYTQ:", M_RD_FixMapErrors), // УСТРАНЯТЬ ОШИБКИ ОРИГИНАЛЬНЫХ УРОВНЕЙ
-    I_SWITCH("FLIP GAME LEVELS:",           "PTHRFKMYJT JNHF;TYBT EHJDYTQ:",   M_RD_FlipLevels), // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
-    I_SWITCH("IMITATE PLAYER'S BREATHING:", "BVBNFWBZ LS[FYBZ BUHJRF:",        M_RD_Breathing), // ИМИТАЦИЯ ДЫХАНИЯ ИГРОКА
-    I_SWITCH("WAND START GAME MODE:",       NULL, /* [JN] Joint EN/RU string*/ M_RD_WandStart), // РЕЖИМ ИГРЫ "WAND START"
+    I_SWITCH("FLIP GAME LEVELS:",           "PTHRFKMYJT JNHF;TYBT EHJDYTQ:",   M_RD_FlipLevels),   // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
+    I_SWITCH("IMITATE PLAYER'S BREATHING:", "BVBNFWBZ LS[FYBZ BUHJRF:",        M_RD_Breathing),    // ИМИТАЦИЯ ДЫХАНИЯ ИГРОКА
+    I_SWITCH("WAND START GAME MODE:",       NULL, /* [JN] Joint EN/RU string*/ M_RD_WandStart),    // РЕЖИМ ИГРЫ "WAND START"
     I_TITLE( "GAMEPLAY",                    "LTVJPFGBCB"), // ДЕМОЗАПИСИ
-    I_LRFUNC("SHOW DEMO TIMER:",            "JNJ,HF;FNM NFQVTH:",              M_RD_DemoTimer), // ОТОБРАЖАТЬ ТАЙМЕР
+    I_LRFUNC("SHOW DEMO TIMER:",            "JNJ,HF;FNM NFQVTH:",              M_RD_DemoTimer),    // ОТОБРАЖАТЬ ТАЙМЕР
     I_SWITCH("TIMER DIRECTION:",            "DHTVZ NFQVTHF:",                  M_RD_DemoTimerDir), // ВРЕМЯ ТАЙМЕРА
-    I_SWITCH("SHOW PROGRESS BAR:",          "IRFKF GHJUHTCCF:",                M_RD_DemoBar), // ШКАЛА ПРОГРЕССА
-    I_SWITCH("PLAY INTERNAL DEMOS:",        "GHJBUHSDFNM LTVJPFGBCB:",         M_RD_NoDemos), // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
-    I_EMPTY,
+    I_SWITCH("SHOW PROGRESS BAR:",          "IRFKF GHJUHTCCF:",                M_RD_DemoBar),      // ШКАЛА ПРОГРЕССА
+    I_SWITCH("PLAY INTERNAL DEMOS:",        "GHJBUHSDFNM LTVJPFGBCB:",         M_RD_NoDemos),      // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
     I_EMPTY,
     I_EMPTY,
     I_EMPTY,
@@ -1645,6 +1646,9 @@ void MN_Init(void)
 
     HMainItems[1].pointer = OptionsMenu;
     MainMenu = &HMainMenu;
+
+    // [JN] Set cursor position in skill menu to default skill level.
+    SkillMenu.lastOn = default_skill;
 
     CurrentMenu = MainMenu;
     CurrentItPos = CurrentMenu->lastOn;
@@ -4714,6 +4718,29 @@ static void M_RD_FloatAmplitude(Direction_t direction)
 // DrawGameplay4Menu
 // -----------------------------------------------------------------------------
 
+// [JN] Note: Russian skill names are too wide to fit into 4:3
+// and abbreviations looks rather odd, so let's just use numbers.
+// Thanks Michael Day for correct English short names!
+static char *const DefSkillName[6][2] = {
+    { "1", "WET-NURSE"     },
+    { "2", "YELLOWBELLIES" },
+    { "3", "BRINGEST"      },
+    { "4", "SMITE-MEISTER" },
+    { "5", "BLACK PLAGUE"  },
+    { "6", "FOUL WRAITH"   }
+};
+
+static const Translation_CR_t DefSkillColor (const int skill)
+{
+    return
+        skill == 0 ? CR_OLIVE :
+        skill == 1 ? CR_DARKGREEN :
+        skill == 2 ? CR_GREEN :
+        skill == 3 ? CR_YELLOW :
+        skill == 4 ? CR_DARKGOLD :
+                     CR_RED;
+}
+
 static void DrawGameplay4Menu(void)
 {
     // Draw menu background.
@@ -4725,23 +4752,27 @@ static void DrawGameplay4Menu(void)
         // GAMEPLAY
         //
 
+        // Default skill level
+        RD_M_DrawTextSmallENG(DefSkillName[default_skill][english_language], 170 + wide_delta, 36,
+                              DefSkillColor(default_skill));
+
         // Fix errors of vanilla maps
-        RD_M_DrawTextSmallENG(fix_map_errors ? "ON" : "OFF", 226 + wide_delta, 36,
+        RD_M_DrawTextSmallENG(fix_map_errors ? "ON" : "OFF", 226 + wide_delta, 46,
                               fix_map_errors ? CR_GREEN : CR_RED);
 
         // Flip game levels
         RD_M_DrawTextSmallENG(flip_levels ? "ON" : "OFF",
-                              153 + wide_delta, 46,
+                              153 + wide_delta, 56,
                               flip_levels ? CR_GREEN : CR_RED);
 
         // Imitate player's breathing
         RD_M_DrawTextSmallENG(breathing ? "ON" : "OFF",
-                              224 + wide_delta, 56,
+                              224 + wide_delta, 66,
                               breathing ? CR_GREEN : CR_RED);
 
         // Wand start
         RD_M_DrawTextSmallENG(pistol_start ? "ON" : "OFF",
-                              193 + wide_delta, 66,
+                              193 + wide_delta, 76,
                               pistol_start ? CR_GREEN : CR_RED);
 
         //
@@ -4752,20 +4783,20 @@ static void DrawGameplay4Menu(void)
         RD_M_DrawTextSmallENG(demotimer == 1 ? "PLAYBACK" :
                               demotimer == 2 ? "RECORDING" :
                               demotimer == 3 ? "ALWAYS" :
-                              "OFF", 153 + wide_delta, 86,
+                              "OFF", 153 + wide_delta, 96,
                               demotimer > 0 ? CR_GREEN : CR_RED);
 
         // Timer direction
-        RD_M_DrawTextSmallENG(demotimerdir ? "BACKWARD" : "FORWARD", 147 + wide_delta, 96,
+        RD_M_DrawTextSmallENG(demotimerdir ? "BACKWARD" : "FORWARD", 147 + wide_delta, 106,
                               demotimer > 0 ? CR_GREEN : CR_RED);
 
         // Show progress bar 
-        RD_M_DrawTextSmallENG(demobar ? "ON" : "OFF", 174 + wide_delta, 106,
+        RD_M_DrawTextSmallENG(demobar ? "ON" : "OFF", 174 + wide_delta, 116,
                               demobar ? CR_GREEN : CR_RED);
 
         // Play internal demos
         RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON",
-                              179 + wide_delta, 116,
+                              179 + wide_delta, 126,
                               no_internal_demos ? CR_RED : CR_GREEN);
     }
     else
@@ -4774,25 +4805,30 @@ static void DrawGameplay4Menu(void)
         // ГЕЙМПЛЕЙ
         //
 
+        // Уровень сложности по умолчанию
+        RD_M_DrawTextSmallRUS(DefSkillName[default_skill][english_language], 269 + wide_delta, 36,
+                              DefSkillColor(default_skill));
+
+
         // Устранять ошибки оригинальных уровней
-        RD_M_DrawTextSmallRUS(fix_map_errors ? "DRK" : "DSRK", 257 + wide_delta, 36,
+        RD_M_DrawTextSmallRUS(fix_map_errors ? "DRK" : "DSRK", 257 + wide_delta, 46,
                               fix_map_errors ? CR_GREEN : CR_RED);
 
         // Зеркальное отражение уровней
         RD_M_DrawTextSmallRUS(flip_levels ? "DRK" : "DSRK",
-                              255 + wide_delta, 46,
+                              255 + wide_delta, 56,
                               flip_levels ? CR_GREEN : CR_RED);
 
         // Имитация дыхания игрока
         RD_M_DrawTextSmallRUS(breathing ? "DRK": "DSRK",
-                              214 + wide_delta, 56,
+                              214 + wide_delta, 66,
                               breathing ? CR_GREEN : CR_RED);
 
         // Режим игры "Wand start"
-        RD_M_DrawTextSmallRUS("HT;BV BUHS", 36 + wide_delta, 66, CR_NONE);
-        RD_M_DrawTextSmallENG("\"WAND START\":", 120 + wide_delta, 66, CR_NONE);
+        RD_M_DrawTextSmallRUS("HT;BV BUHS", 36 + wide_delta, 76, CR_NONE);
+        RD_M_DrawTextSmallENG("\"WAND START\":", 120 + wide_delta, 76, CR_NONE);
         RD_M_DrawTextSmallRUS(pistol_start ? "DRK" : "DSRK",
-                              217 + wide_delta, 66,
+                              217 + wide_delta, 76,
                               pistol_start ? CR_GREEN : CR_RED);
 
         //
@@ -4803,23 +4839,29 @@ static void DrawGameplay4Menu(void)
         RD_M_DrawTextSmallRUS(demotimer == 1 ? "GHB GHJBUHSDFYBB" :
                               demotimer == 2 ? "GHB PFGBCB" :
                               demotimer == 3 ? "DCTULF" :
-                              "DSRK", 175 + wide_delta, 86,
+                              "DSRK", 175 + wide_delta, 90,
                               demotimer > 0 ? CR_GREEN : CR_DARKRED);
 
         // Время таймера
-        RD_M_DrawTextSmallRUS(demotimerdir ? "JCNFDITTCZ" : "GHJITLITT", 142 + wide_delta, 96,
+        RD_M_DrawTextSmallRUS(demotimerdir ? "JCNFDITTCZ" : "GHJITLITT", 142 + wide_delta, 106,
                               demotimer > 0 ? CR_GREEN : CR_DARKRED);
 
         // Шкала прогресса
-        RD_M_DrawTextSmallRUS(demobar ? "DRK" : "DSRK", 161 + wide_delta, 106,
+        RD_M_DrawTextSmallRUS(demobar ? "DRK" : "DSRK", 161 + wide_delta, 116,
                               demobar ? CR_GREEN : CR_RED);
 
         // Проигрывать демозаписи
         RD_M_DrawTextSmallRUS(no_internal_demos ? "DSRK" : "DRK",
-                              211 + wide_delta, 116,
+                              211 + wide_delta, 126,
                               no_internal_demos ? CR_RED : CR_GREEN);        
     }
 
+}
+
+static void M_RD_DefaultSkill(Direction_t direction)
+{
+    RD_Menu_SpinInt(&default_skill, 0, 5, direction);
+    SkillMenu.lastOn = default_skill;
 }
 
 static void M_RD_FixMapErrors()
@@ -5559,6 +5601,7 @@ static void M_RD_BackToDefaults_Recommended(void)
     floating_powerups    = 1;
 
     // Gameplay (4)
+    default_skill        = 2;
     fix_map_errors       = 1;
     flip_levels          = 0;
     breathing            = 0;
@@ -5712,6 +5755,7 @@ static void M_RD_BackToDefaults_Original(void)
     floating_powerups    = 1;
 
     // Gameplay (4)
+    default_skill        = 2;
     fix_map_errors       = 0;
     flip_levels          = 0;
     breathing            = 0;
