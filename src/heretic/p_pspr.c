@@ -824,7 +824,7 @@ void A_BeakAttackPL1(player_t * player, pspdef_t * psp)
     angle = player->mo->angle;
     slope = P_AimLineAttack(player->mo, angle, MELEERANGE);
     // [JN] Also account vertical attack angles
-    if (singleplayer && !linetarget)
+    if (singleplayer && !strict_mode && !vanillaparm && !linetarget)
     {
         slope = (player->lookdir << FRACBITS) / 173;
     }
@@ -857,7 +857,7 @@ void A_BeakAttackPL2(player_t * player, pspdef_t * psp)
     angle = player->mo->angle;
     slope = P_AimLineAttack(player->mo, angle, MELEERANGE);
     // [JN] Also account vertical attack angles
-    if (singleplayer && !linetarget)
+    if (singleplayer && !strict_mode && !vanillaparm && !linetarget)
     {
         slope = (player->lookdir << FRACBITS) / 173;
     }
@@ -891,7 +891,7 @@ void A_StaffAttackPL1(player_t * player, pspdef_t * psp)
     angle += P_SubRandom() << 18;
     slope = P_AimLineAttack(player->mo, angle, MELEERANGE);
     // [JN] Also account vertical attack angles
-    if (singleplayer && !linetarget)
+    if (singleplayer && !strict_mode && !vanillaparm && !linetarget)
     {
         slope = (player->lookdir << FRACBITS) / 173;
     }
@@ -924,7 +924,7 @@ void A_StaffAttackPL2(player_t * player, pspdef_t * psp)
     angle += P_SubRandom() << 18;
     slope = P_AimLineAttack(player->mo, angle, MELEERANGE);
     // [JN] Also account vertical attack angles
-    if (singleplayer && !linetarget)
+    if (singleplayer && !strict_mode && !vanillaparm && !linetarget)
     {
         slope = (player->lookdir << FRACBITS) / 173;
     }
@@ -1789,7 +1789,7 @@ void A_GauntletAttack(player_t * player, pspdef_t * psp)
     }
     slope = P_AimLineAttack(player->mo, angle, dist);
     // [JN] Also account vertical attack angles
-    if (singleplayer && !linetarget)
+    if (singleplayer && !strict_mode && !vanillaparm && !linetarget)
     {
         slope = (player->lookdir << FRACBITS) / 173;
     }

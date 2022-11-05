@@ -152,7 +152,8 @@ void P_ExplodeMissile(mobj_t * mo)
     }
 
     // [JN] Allow missle attacks to make splashes on water/lava/sludge
-    if (singleplayer && mo->z <= mo->floorz + FRACUNIT*8 && !vanillaparm)
+    if (singleplayer && !strict_mode && !vanillaparm
+    && mo->z <= mo->floorz + FRACUNIT*8)
     {
         P_HitFloor(mo);
     }
@@ -380,7 +381,7 @@ void P_XYMovement(mobj_t * mo)
         //
         // Thanks AXDOOMER and Brad Harding!
 
-        if (improved_collision && singleplayer && !vanillaparm ? 
+        if (singleplayer && !strict_mode && !vanillaparm && improved_collision ? 
             mo->player ? ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) && (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)) 
                        : ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) || (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2))
                        :  (xmove > MAXMOVE/2 || ymove > MAXMOVE/2))
@@ -402,7 +403,8 @@ void P_XYMovement(mobj_t * mo)
             {                   // Try to slide along it
                 if (BlockingMobj == NULL          // [JN] Mobj is not blocking.
                 || BlockingMobj->health <= 0      // [JN] Allow to slightly bump into falling corpse.
-                ||  !improved_collision || !singleplayer || vanillaparm)  // [JN] Keep demo compatibility.
+                || !improved_collision || !singleplayer  // [JN] Keep demo compatibility.
+                || strict_mode || vanillaparm)
                 {   
                     // [JN] Slide movement.
                     P_SlideMove(mo);
@@ -439,8 +441,8 @@ void P_XYMovement(mobj_t * mo)
                     // [JN] Fix projectiles may sometimes dissapear in ledges.
                     // To keep demo sync and/or vanilla behaviour,
                     // remove missile. Otherwise, explode it normally.
-                    if (mo->z > ceilingline->backsector->ceilingheight
-                    || !singleplayer || vanillaparm)
+                    if (!singleplayer || strict_mode || vanillaparm
+                    || mo->z > ceilingline->backsector->ceilingheight)
                     {
                         // Hack to prevent missiles exploding against the sky
                         P_RemoveMobj(mo);
@@ -847,6 +849,12 @@ void P_MobjThinker(mobj_t * mobj)
 {
     mobj_t *onmo;
 
+    // [crispy] suppress interpolation of player missiles for the first tic
+    if (mobj->interp == -1)
+    {
+        mobj->interp = false;
+    }
+    else
     // [AM] Handle interpolation unless we're an active player.
     if (!(mobj->player != NULL && mobj == mobj->player->mo))
     {
@@ -874,7 +882,7 @@ void P_MobjThinker(mobj_t * mobj)
     if (mobj->flags2 & MF2_FLOATBOB)
     {
         // Floating item bobbing motion
-        if (singleplayer && !vanillaparm)
+        if (singleplayer && !strict_mode && !vanillaparm)
         {
             // [JN] Variable floating amplitude.
             mobj->z = mobj->floorz + (floating_powerups == 1 ? FloatBobOffsets[(mobj->health++) & 63] :
@@ -887,7 +895,7 @@ void P_MobjThinker(mobj_t * mobj)
         }
     }
     else if ((mobj->z != mobj->floorz) || mobj->momz 
-    || (BlockingMobj && improved_collision && singleplayer && !vanillaparm))
+    || (BlockingMobj && singleplayer && !strict_mode && !vanillaparm && improved_collision))
     {                           // Handle Z momentum and gravity
         if (mobj->flags2 & MF2_PASSMOBJ)
         {
@@ -1509,8 +1517,12 @@ void P_SpawnPuffSafe (fixed_t x, fixed_t y, fixed_t z, boolean safe)
             break;
     }
 
+    // [crispy] suppress interpolation for the first tic
+    puff->interp = -1;
+
     // [JN] Allow hitscan attacks to make splashes on water/lava/sludge
-    if (singleplayer && puff->z <= puff->floorz + FRACUNIT*8 && !vanillaparm)
+    if (singleplayer && !strict_mode && !vanillaparm
+    && puff->z <= puff->floorz + FRACUNIT*8)
     {
         P_HitFloor(puff);
     }
@@ -1577,7 +1589,8 @@ int P_HitFloor (mobj_t *thing)
 
     if (thing->floorz != thing->subsector->sector->floorheight
     // [JN] Don't let small splashes spawn big splashes.
-    || ((thing->type == MT_SPLASH || thing->type == MT_SLUDGECHUNK) && singleplayer))
+    || ((thing->type == MT_SPLASH || thing->type == MT_SLUDGECHUNK)
+    && singleplayer && !strict_mode && !vanillaparm))
     {   // don't splash if landing on the edge above water/lava/etc....
         return (FLOOR_SOLID);
     }

@@ -296,7 +296,7 @@ boolean P_Move(mobj_t * actor)
         //
         // Do NOT simply return false 1/4th of the time (causes monsters to
         // back out when they shouldn't, and creates secondary stickiness).
-        if (improved_collision && singleplayer && !vanillaparm)
+        if (improved_collision && singleplayer && !strict_mode && !vanillaparm)
         {
             blockline = spechit[numspechit];
         
@@ -565,9 +565,7 @@ boolean P_LookForPlayers(mobj_t * actor, boolean allaround)
     angle_t an;
     fixed_t dist;
 
-    // [JN] This is odd. Keep all monsters infighting
-    // bacchanalia behaviour only for demo sync and vanilla mode.
-    if ((!singleplayer || vanillaparm) && !netgame && players[0].health <= 0)
+    if (!netgame && players[0].health <= 0)
     {   // Single player game and player is dead, look for monsters
         return (P_LookForMonsters(actor));
     }
@@ -680,7 +678,7 @@ void A_Look(mobj_t * actor)
     // [JN] Original id Software's idea: 
     // If a monster yells at a player, it will 
     // alert other monsters to the player.
-    if (singleplayer && !vanillaparm && noise_alert_sfx)
+    if (singleplayer && !strict_mode && !vanillaparm && noise_alert_sfx)
     {
         P_NoiseAlert (actor->target, actor);
     }

@@ -210,6 +210,7 @@ static void M_RD_ResetControls_Original();
 
 // Gameplay (page 1)
 static void DrawGameplay1Menu(void);
+static void M_RD_StrictMode();
 static void M_RD_Brightmaps();
 static void M_RD_FakeContrast();
 static void M_RD_ExtraTrans();
@@ -236,6 +237,7 @@ int CrosshairShowcaseTimeout;
 
 // Gameplay (page 3)
 static void DrawGameplay3Menu(void);
+static void Init_Gameplay_3(struct Menu_s* menu);
 static void M_RD_ZAxisSFX();
 static void M_RD_AlertSFX();
 static void M_RD_SecretNotify();
@@ -1180,18 +1182,18 @@ static const PageDescriptor_t GameplayPageDescriptor = {
 };
 
 static MenuItem_t Gameplay1Items[] = {
-    I_TITLE("VISUAL",                       "UHFABRF"), // ГРАФИКА
-    I_SWITCH("BRIGHTMAPS:",                  ",HFQNVFGGBYU:",                  M_RD_Brightmaps), // БРАЙТМАППИНГ
-    I_SWITCH("FAKE CONTRAST:",               "BVBNFWBZ RJYNHFCNYJCNB:",        M_RD_FakeContrast), // ИМИТАЦИЯ КОНТРАСТНОСТИ
-    I_SWITCH("EXTRA TRANSLUCENCY:",          "LJGJKYBNTKMYFZ GHJPHFXYJCNM:",   M_RD_ExtraTrans), // ДОПОЛНИТЕЛЬНАЯ ПРОЗРАЧНОСТЬ
-    I_SWITCH("COLORED BLOOD:",               "HFPYJWDTNYFZ RHJDM:",            M_RD_ColoredBlood), // РАЗНОЦВЕТНАЯ КРОВЬ
+    I_TITLE( "GAME MECHANICS",               "BUHJDFZ VT[FYBRF"),                                     // ИГРОВАЯ МЕХАНИКА
+    I_SWITCH("STRICT VANILLA MODE:",         "CNHJUJ JHBUBYFKMYSQ HT;BV:",     M_RD_StrictMode),      // СТРОГО ОРИГИНАЛЬНЫЙ РЕЖИМ
+    I_TITLE( "VISUAL",                       "UHFABRF"),                                              // ГРАФИКА
+    I_SWITCH("BRIGHTMAPS:",                  ",HFQNVFGGBYU:",                  M_RD_Brightmaps),      // БРАЙТМАППИНГ
+    I_SWITCH("FAKE CONTRAST:",               "BVBNFWBZ RJYNHFCNYJCNB:",        M_RD_FakeContrast),    // ИМИТАЦИЯ КОНТРАСТНОСТИ
+    I_SWITCH("EXTRA TRANSLUCENCY:",          "LJGJKYBNTKMYFZ GHJPHFXYJCNM:",   M_RD_ExtraTrans),      // ДОПОЛНИТЕЛЬНАЯ ПРОЗРАЧНОСТЬ
+    I_SWITCH("COLORED BLOOD:",               "HFPYJWDTNYFZ RHJDM:",            M_RD_ColoredBlood),    // РАЗНОЦВЕТНАЯ КРОВЬ
     I_SWITCH("SWIRLING LIQUIDS:",            "EKEXITYYFZ FYBVFWBZ ;BLRJCNTQ:", M_RD_SwirlingLiquids), // УЛУЧШЕННАЯ АНИМАЦИЯ ЖИДКОСТЕЙ
-    I_SWITCH("INVULNERABILITY AFFECTS SKY:", "YTEZPDBVJCNM JRHFIBDFTN YT,J:",  M_RD_InvulSky), // НЕУЯЗВИМОСТЬ ОКРАШИВАЕТ НЕБО
-    I_SWITCH("SKY DRAWING MODE:",            "HT;BV JNHBCJDRB YT,F:",          M_RD_LinearSky), // РЕЖИМ ОТРИСОВКИ НЕБА
-    I_SWITCH("RANDOMLY MIRRORED CORPSES:",   "PTHRFKMYJT JNHF;TYBT NHEGJD:",   M_RD_FlipCorpses), // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ ТРУПОВ
-    I_SWITCH("FLIP WEAPONS:",                "PTHRFKMYJT JNHF;TYBT JHE;BZ:",   M_RD_FlipWeapons), // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ ОРУЖИЯ
-    I_EMPTY,
-    I_EMPTY,
+    I_SWITCH("INVULNERABILITY AFFECTS SKY:", "YTEZPDBVJCNM JRHFIBDFTN YT,J:",  M_RD_InvulSky),        // НЕУЯЗВИМОСТЬ ОКРАШИВАЕТ НЕБО
+    I_SWITCH("SKY DRAWING MODE:",            "HT;BV JNHBCJDRB YT,F:",          M_RD_LinearSky),       // РЕЖИМ ОТРИСОВКИ НЕБА
+    I_SWITCH("RANDOMLY MIRRORED CORPSES:",   "PTHRFKMYJT JNHF;TYBT NHEGJD:",   M_RD_FlipCorpses),     // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ ТРУПОВ
+    I_SWITCH("FLIP WEAPONS:",                "PTHRFKMYJT JNHF;TYBT JHE;BZ:",   M_RD_FlipWeapons),     // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ ОРУЖИЯ
     I_EMPTY,
     I_EMPTY,
     I_SETMENU("NEXT PAGE >", "CKTLE.OFZ CNHFYBWF `", &Gameplay2Menu), // СЛЕДУЮЩАЯ СТРАНИЦА >
@@ -1246,30 +1248,31 @@ MENU_STATIC_PAGED(Gameplay2Menu,
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Gameplay3Items[] = {
-    I_TITLE( "AUDIBLE",                         "PDER"), // ЗВУК
-    I_SWITCH("SOUND ATTENUATION AXISES:",       "PFNE[FYBT PDERF GJ JCZV:",       M_RD_ZAxisSFX), // ЗАТУХАНИЕ ЗВУКА ПО ОСЯМ
-    I_SWITCH("MONSTER ALERT WAKING UP OTHERS:", "J,OFZ NHTDJUF E VJYCNHJD:",      M_RD_AlertSFX), // ОБЩАЯ ТРЕВОГА У МОНСТРОВ
-    I_TITLE( "TACTICAL",                        "NFRNBRF"), // ТАКТИКА
-    I_SWITCH("NOTIFY OF REVEALED SECRETS:",     "CJJ,OFNM J YFQLTYYJV NFQYBRT:",  M_RD_SecretNotify), // СООБЩАТЬ О НАЙДЕННОМ ТАЙНИКЕ
-    I_SWITCH("SHOW ACTIVE ARTIFACTS:",          "BYLBRFWBZ FHNTAFRNJD:",          M_RD_ShowAllArti), // ИНДИКАЦИЯ АРТЕФАЕКТОВ
-    I_LRFUNC("ARTIFACTS TIMER:",                "NFQVTH FHNTAFRNJD:",             M_RD_ShowArtiTimer), // ТАЙМЕР АРТЕФАКТОВ
-    I_TITLE( "PHYSICAL",                        "ABPBRF"), // ФИЗИКА
-    I_SWITCH("COLLISION PHYSICS:",              "ABPBRF CNJKRYJDTYBQ:",           M_RD_Collision), // ФИЗИКА СТОЛКНОВЕНИЙ
-    I_SWITCH("CORPSES SLIDING FROM LEDGES:",    "NHEGS CGJKPF.N C DJPDSITYBQ:",   M_RD_Torque), // ТРУПЫ СПОЛЗАЮТ С ВОЗВЫШЕНИЙ
-    I_SWITCH("WEAPON BOBBING WHILE FIRING:",    "EKEXITYYJT GJRFXBDFYBT JHE;BZ:", M_RD_Bobbing), // УЛУЧШЕННОЕ ПОКАЧИВАНИЕ ОРУЖИЯ
+    I_TITLE( "AUDIBLE",                         "PDER"),                                                // ЗВУК
+    I_SWITCH("SOUND ATTENUATION AXISES:",       "PFNE[FYBT PDERF GJ JCZV:",       M_RD_ZAxisSFX),       // ЗАТУХАНИЕ ЗВУКА ПО ОСЯМ
+    I_SWITCH("MONSTER ALERT WAKING UP OTHERS:", "J,OFZ NHTDJUF E VJYCNHJD:",      M_RD_AlertSFX),       // ОБЩАЯ ТРЕВОГА У МОНСТРОВ
+    I_TITLE( "TACTICAL",                        "NFRNBRF"),                                             // ТАКТИКА
+    I_SWITCH("NOTIFY OF REVEALED SECRETS:",     "CJJ,OFNM J YFQLTYYJV NFQYBRT:",  M_RD_SecretNotify),   // СООБЩАТЬ О НАЙДЕННОМ ТАЙНИКЕ
+    I_SWITCH("SHOW ACTIVE ARTIFACTS:",          "BYLBRFWBZ FHNTAFRNJD:",          M_RD_ShowAllArti),    // ИНДИКАЦИЯ АРТЕФАЕКТОВ
+    I_LRFUNC("ARTIFACTS TIMER:",                "NFQVTH FHNTAFRNJD:",             M_RD_ShowArtiTimer),  // ТАЙМЕР АРТЕФАКТОВ
+    I_TITLE( "PHYSICAL",                        "ABPBRF"),                                              // ФИЗИКА
+    I_SWITCH("COLLISION PHYSICS:",              "ABPBRF CNJKRYJDTYBQ:",           M_RD_Collision),      // ФИЗИКА СТОЛКНОВЕНИЙ
+    I_SWITCH("CORPSES SLIDING FROM LEDGES:",    "NHEGS CGJKPF.N C DJPDSITYBQ:",   M_RD_Torque),         // ТРУПЫ СПОЛЗАЮТ С ВОЗВЫШЕНИЙ
     I_LRFUNC("FLOATING ITEMS AMPLITUDE:" ,      "KTDBNFWBZ GHTLVTNJD:",           M_RD_FloatAmplitude), // АМПЛИТУДА ЛЕВИТАЦИИ ПРЕДМЕТОВ
+    I_SWITCH("WEAPON BOBBING WHILE FIRING:",    "EKEXITYYJT GJRFXBDFYBT JHE;BZ:", M_RD_Bobbing),        // УЛУЧШЕННОЕ ПОКАЧИВАНИЕ ОРУЖИЯ
     I_EMPTY,
     I_EMPTY,
     I_SETMENU("NEXT PAGE >", "GJCKTLYZZ CNHFYBWF `",  &Gameplay4Menu), // СЛЕДУЮЩАЯ СТРАНИЦА >
     I_SETMENU("< PREV PAGE", "^ GHTLSLEOFZ CNHFYBWF", &Gameplay2Menu)  // < ПРЕДЫДУЩАЯ СТРАНИЦА
 };
 
-MENU_STATIC_PAGED(Gameplay3Menu,
+MENU_DYNAMIC_PAGED(Gameplay3Menu,
     36, 36,
     26,
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     Gameplay3Items, false,
     DrawGameplay3Menu,
+    Init_Gameplay_3,
     &RDOptionsMenu,
     &GameplayPageDescriptor
 );
@@ -4194,87 +4197,107 @@ static void DrawGameplay1Menu(void)
     if (english_language)
     {
         //
+        // GAMEPLAY MECHANICS
+        //
+        // Strict Vanilla mode
+        RD_M_DrawTextSmallENG(strict_mode ? "ON" : "OFF", 174 + wide_delta, 36,
+                              strict_mode ? CR_GREEN : CR_RED);
+
+        //
         // VISUAL
         //
 
         // Brightmaps
-        RD_M_DrawTextSmallENG(brightmaps ? "ON" : "OFF", 119 + wide_delta, 36,
+        RD_M_DrawTextSmallENG(brightmaps ? "ON" : "OFF", 119 + wide_delta, 56,
                               brightmaps ? CR_GREEN : CR_RED);
 
         // Fake contrast
-        RD_M_DrawTextSmallENG(fake_contrast ? "ON" : "OFF", 143 + wide_delta, 46,
+        RD_M_DrawTextSmallENG(fake_contrast ? "ON" : "OFF", 143 + wide_delta, 66,
                               fake_contrast ? CR_GREEN : CR_RED);
 
         // Extra translucency
-        RD_M_DrawTextSmallENG(translucency ? "ON" : "OFF", 180 + wide_delta, 56,
+        RD_M_DrawTextSmallENG(translucency ? "ON" : "OFF", 180 + wide_delta, 76,
                               translucency ? CR_GREEN : CR_RED);
 
         // Colored blood
-        RD_M_DrawTextSmallENG(colored_blood ? "ON" : "OFF", 139 + wide_delta, 66,
+        RD_M_DrawTextSmallENG(colored_blood ? "ON" : "OFF", 139 + wide_delta, 86,
                               colored_blood ? CR_GREEN : CR_RED);
 
         // Swirling liquids
-        RD_M_DrawTextSmallENG(swirling_liquids ? "ON" : "OFF", 147 + wide_delta, 76,
+        RD_M_DrawTextSmallENG(swirling_liquids ? "ON" : "OFF", 147 + wide_delta, 96,
                               swirling_liquids ? CR_GREEN : CR_RED);
 
         // Invulnerability affects sky
-        RD_M_DrawTextSmallENG(invul_sky ? "ON" : "OFF", 235 + wide_delta, 86,
+        RD_M_DrawTextSmallENG(invul_sky ? "ON" : "OFF", 235 + wide_delta, 106,
                               invul_sky ? CR_GREEN : CR_RED);
 
         // Sky drawing mode
-        RD_M_DrawTextSmallENG(linear_sky ? "LINEAR" : "ORIGINAL", 162 + wide_delta, 96,
+        RD_M_DrawTextSmallENG(linear_sky ? "LINEAR" : "ORIGINAL", 162 + wide_delta, 116,
                               linear_sky ? CR_GREEN : CR_RED);
 
         // Randomly flipped corpses
-        RD_M_DrawTextSmallENG(randomly_flipcorpses ? "ON" : "OFF", 232 + wide_delta, 106,
+        RD_M_DrawTextSmallENG(randomly_flipcorpses ? "ON" : "OFF", 232 + wide_delta, 126,
                               randomly_flipcorpses ? CR_GREEN : CR_RED);
 
         // Flip weapons
-        RD_M_DrawTextSmallENG(flip_weapons ? "ON" : "OFF", 130 + wide_delta, 116,
+        RD_M_DrawTextSmallENG(flip_weapons ? "ON" : "OFF", 130 + wide_delta, 136,
                               flip_weapons ? CR_GREEN : CR_RED);
     }
     else
     {
         //
+        // ИГРОВАЯ МЕХАНИКА
+        //
+
+        // Строго оригинальный режим
+        RD_M_DrawTextSmallRUS(strict_mode ? "DRK" : "DSRK", 233 + wide_delta, 36,
+                              strict_mode ? CR_GREEN : CR_RED);
+        
+        //
         // ГРАФИКА
         //
 
         // Брайтмаппинг
-        RD_M_DrawTextSmallRUS(brightmaps ? "DRK" : "DSRK", 133 + wide_delta, 36,
+        RD_M_DrawTextSmallRUS(brightmaps ? "DRK" : "DSRK", 133 + wide_delta, 56,
                               brightmaps ? CR_GREEN : CR_RED);
 
         // Имитация контрастности
-        RD_M_DrawTextSmallRUS(fake_contrast ? "DRK" : "DSRK", 205 + wide_delta, 46,
+        RD_M_DrawTextSmallRUS(fake_contrast ? "DRK" : "DSRK", 205 + wide_delta, 66,
                               fake_contrast ? CR_GREEN : CR_RED);
 
         // Дополнительная прозрачность
-        RD_M_DrawTextSmallRUS(translucency ? "DRK" : "DSRK", 245 + wide_delta, 56,
+        RD_M_DrawTextSmallRUS(translucency ? "DRK" : "DSRK", 245 + wide_delta, 76,
                               translucency ? CR_GREEN : CR_RED);
 
         // Разноцветная кровь
-        RD_M_DrawTextSmallRUS(colored_blood ? "DRK" : "DSRK", 178 + wide_delta, 66,
+        RD_M_DrawTextSmallRUS(colored_blood ? "DRK" : "DSRK", 178 + wide_delta, 86,
                               colored_blood ? CR_GREEN : CR_RED);
 
         // Улучшенная анимация жидкостей
-        RD_M_DrawTextSmallRUS(swirling_liquids ? "DRK" : "DSRK", 261 + wide_delta, 76,
+        RD_M_DrawTextSmallRUS(swirling_liquids ? "DRK" : "DSRK", 261 + wide_delta, 96,
                               swirling_liquids ? CR_GREEN : CR_RED);
 
         // Неуязвимость окрашивает небо
-        RD_M_DrawTextSmallRUS(invul_sky ? "DRK" : "DSRK", 253 + wide_delta, 86,
+        RD_M_DrawTextSmallRUS(invul_sky ? "DRK" : "DSRK", 253 + wide_delta, 106,
                               invul_sky ? CR_GREEN : CR_RED);
 
         // Режим отрисовки неба
-        RD_M_DrawTextSmallRUS(linear_sky ? "KBYTQYSQ" : "JHBUBYFKMYSQ", 195 + wide_delta, 96,
+        RD_M_DrawTextSmallRUS(linear_sky ? "KBYTQYSQ" : "JHBUBYFKMYSQ", 195 + wide_delta, 116,
                               linear_sky ? CR_GREEN : CR_RED);
 
         // Зеркальное отражение трупов
-        RD_M_DrawTextSmallRUS(randomly_flipcorpses ? "DRK" : "DSRK", 247 + wide_delta, 106,
+        RD_M_DrawTextSmallRUS(randomly_flipcorpses ? "DRK" : "DSRK", 247 + wide_delta, 126,
                               randomly_flipcorpses ? CR_GREEN : CR_RED);
 
         // Зеркальное отражение оружия
-        RD_M_DrawTextSmallRUS(flip_weapons ? "DRK" : "DSRK", 250 + wide_delta, 116,
+        RD_M_DrawTextSmallRUS(flip_weapons ? "DRK" : "DSRK", 250 + wide_delta, 136,
                               flip_weapons ? CR_GREEN : CR_RED);
     }
+}
+
+static void M_RD_StrictMode()
+{
+    strict_mode ^= 1;
 }
 
 static void M_RD_Brightmaps()
@@ -4545,6 +4568,16 @@ static void M_RD_CrossHairType(Direction_t direction)
 // DrawGameplay3Menu
 // -----------------------------------------------------------------------------
 
+static void Init_Gameplay_3(struct Menu_s* const menu)
+{
+    const int status = strict_mode || netgame ? DISABLED : ENABLED;
+    
+    menu->items[2].status = status;
+    menu->items[8].status = status;
+    menu->items[9].status = status;
+    menu->items[10].status = status;
+}
+
 static void DrawGameplay3Menu(void)
 {
     // Draw menu background.
@@ -4561,8 +4594,15 @@ static void DrawGameplay3Menu(void)
                               z_axis_sfx ? CR_GREEN : CR_RED);
 
         // Monster alert waking up others
-        RD_M_DrawTextSmallENG(noise_alert_sfx ? "ON" : "OFF", 262 + wide_delta, 46,
-                              noise_alert_sfx ? CR_GREEN : CR_RED);
+        if (strict_mode)
+        {
+            RD_M_DrawTextSmallENG("N/A", 262 + wide_delta, 46, CR_GRAY);
+        }
+        else
+        {
+            RD_M_DrawTextSmallENG(noise_alert_sfx ? "ON" : "OFF", 262 + wide_delta, 46,
+                                  noise_alert_sfx ? CR_GREEN : CR_RED);
+        }
 
         //
         // TACTICAL
@@ -4591,22 +4631,43 @@ static void DrawGameplay3Menu(void)
         //
        
         // Collision physics
-        RD_M_DrawTextSmallENG(improved_collision ? "IMPROVED" : "ORIGINAL", 159 + wide_delta, 106,
-                              improved_collision ? CR_GREEN : CR_RED);
+        if (strict_mode)
+        {
+            RD_M_DrawTextSmallENG("N/A", 159 + wide_delta, 106, CR_GRAY);
+        }
+        else
+        {
+            RD_M_DrawTextSmallENG(improved_collision ? "IMPROVED" : "ORIGINAL", 159 + wide_delta, 106,
+                                  improved_collision ? CR_GREEN : CR_RED);
+        }
        
         // Corpses sliding from the ledges
-        RD_M_DrawTextSmallENG(torque ? "ON" : "OFF", 238 + wide_delta, 116,
-                              torque ? CR_GREEN : CR_RED);
-
-        // Weapon bobbing while firing
-        RD_M_DrawTextSmallENG(weapon_bobbing ? "ON" : "OFF", 233 + wide_delta, 126,
-                              weapon_bobbing ? CR_GREEN : CR_RED);
+        if (strict_mode)
+        {
+            RD_M_DrawTextSmallENG("N/A", 238 + wide_delta, 116, CR_GRAY);
+        }
+        else
+        {
+            RD_M_DrawTextSmallENG(torque ? "ON" : "OFF", 238 + wide_delta, 116,
+                                  torque ? CR_GREEN : CR_RED);
+        }
 
         // Floating items amplitude
-        RD_M_DrawTextSmallENG(floating_powerups == 1 ? "STANDARD" :
-                              floating_powerups == 2 ? "HALFED" : "OFF",
-                              209 + wide_delta, 136,
-                              floating_powerups ? CR_GREEN : CR_RED);
+        if (strict_mode)
+        {
+            RD_M_DrawTextSmallENG("N/A", 209 + wide_delta, 126, CR_GRAY);
+        }
+        else
+        {
+            RD_M_DrawTextSmallENG(floating_powerups == 1 ? "STANDARD" :
+                                  floating_powerups == 2 ? "HALFED" : "OFF",
+                                  209 + wide_delta, 126,
+                                  floating_powerups ? CR_GREEN : CR_RED);
+        }
+
+        // Weapon bobbing while firing
+        RD_M_DrawTextSmallENG(weapon_bobbing ? "ON" : "OFF", 233 + wide_delta, 136,
+                              weapon_bobbing ? CR_GREEN : CR_RED);
     }
     else
     {
@@ -4620,8 +4681,15 @@ static void DrawGameplay3Menu(void)
                               z_axis_sfx ? CR_GREEN : CR_RED);
 
         // Общая тревога у монстров
-        RD_M_DrawTextSmallRUS(noise_alert_sfx ? "DRK" : "DSRK", 223 + wide_delta, 46,
-                              noise_alert_sfx ? CR_GREEN : CR_RED);
+        if (strict_mode)
+        {
+            RD_M_DrawTextSmallRUS("Y/L", 223 + wide_delta, 46, CR_GRAY);
+        }
+        else
+        {
+            RD_M_DrawTextSmallRUS(noise_alert_sfx ? "DRK" : "DSRK", 223 + wide_delta, 46,
+                                  noise_alert_sfx ? CR_GREEN : CR_RED);
+        }
 
         //
         // ТАКТИКА
@@ -4650,22 +4718,43 @@ static void DrawGameplay3Menu(void)
         //
 
         // Физика столкновений
-        RD_M_DrawTextSmallRUS(improved_collision ? "EKEXITYYFZ" : "JHBUBYFKMYFZ", 186 + wide_delta, 106,
-                              improved_collision ? CR_GREEN : CR_RED);
+        if (strict_mode)
+        {
+            RD_M_DrawTextSmallRUS("Y/L", 186 + wide_delta, 106, CR_GRAY);
+        }
+        else
+        {
+            RD_M_DrawTextSmallRUS(improved_collision ? "EKEXITYYFZ" : "JHBUBYFKMYFZ", 186 + wide_delta, 106,
+                                  improved_collision ? CR_GREEN : CR_RED);
+        }
 
         // Трупы сползают с возвышений
-        RD_M_DrawTextSmallRUS(torque ? "DRK" : "DSRK", 248 + wide_delta, 116,
-                              torque ? CR_GREEN : CR_RED);
-
-        // Улучшенное покачивание оружия
-        RD_M_DrawTextSmallRUS(weapon_bobbing ? "DRK" : "DSRK", 260 + wide_delta, 126,
-                              weapon_bobbing ? CR_GREEN : CR_RED);
+        if (strict_mode)
+        {
+            RD_M_DrawTextSmallRUS("Y/L", 248 + wide_delta, 116, CR_GRAY);
+        }
+        else
+        {
+            RD_M_DrawTextSmallRUS(torque ? "DRK" : "DSRK", 248 + wide_delta, 116,
+                                  torque ? CR_GREEN : CR_RED);
+        }
 
         // Амплитуда левитации предметов
-        RD_M_DrawTextSmallRUS(floating_powerups == 1 ? "CNFYLFHNYFZ" :
-                              floating_powerups == 2 ? "EVTHTYYFZ" : "DSRK",
-                              188 + wide_delta, 136,
-                              floating_powerups ? CR_GREEN : CR_RED);
+        if (strict_mode)
+        {
+            RD_M_DrawTextSmallRUS("Y/L", 188 + wide_delta, 126, CR_GRAY);
+        }
+        else
+        {
+            RD_M_DrawTextSmallRUS(floating_powerups == 1 ? "CNFYLFHNYFZ" :
+                                  floating_powerups == 2 ? "EVTHTYYFZ" : "DSRK",
+                                  188 + wide_delta, 126,
+                                  floating_powerups ? CR_GREEN : CR_RED);
+        }
+
+        // Улучшенное покачивание оружия
+        RD_M_DrawTextSmallRUS(weapon_bobbing ? "DRK" : "DSRK", 260 + wide_delta, 136,
+                              weapon_bobbing ? CR_GREEN : CR_RED);
     }
 }
 
@@ -4839,7 +4928,7 @@ static void DrawGameplay4Menu(void)
         RD_M_DrawTextSmallRUS(demotimer == 1 ? "GHB GHJBUHSDFYBB" :
                               demotimer == 2 ? "GHB PFGBCB" :
                               demotimer == 3 ? "DCTULF" :
-                              "DSRK", 175 + wide_delta, 90,
+                              "DSRK", 175 + wide_delta, 96,
                               demotimer > 0 ? CR_GREEN : CR_DARKRED);
 
         // Время таймера

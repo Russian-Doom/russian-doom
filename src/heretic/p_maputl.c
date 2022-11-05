@@ -183,7 +183,7 @@ void P_MakeDivline (line_t *li, divline_t *dl)
 
 fixed_t P_InterceptVector(divline_t *v2, divline_t *v1)
 {
-    if (singleplayer)
+    if (singleplayer && !strict_mode)
     {
         // [JN] cph - no precision/overflow problems
         int64_t den = (int64_t)v1->dy * v2->dx - (int64_t)v1->dx * v2->dy;
@@ -480,7 +480,7 @@ boolean P_BlockThingsIterator (int x, int y, boolean(*func) (mobj_t *))
     // [JN] Blockmap bug fix - add other mobjs from surrounding blocks that overlap this one.
     // The fix is written by Terry Hearst, thank you very much!
     // Fixes: http://doom2.net/doom2/research/things.html
-    if (improved_collision && singleplayer && !vanillaparm)
+    if (singleplayer && !strict_mode && !vanillaparm && improved_collision)
     {
         // Unwrapped for least number of bounding box checks
         // (-1, -1)

@@ -161,6 +161,9 @@ int snd_monomode = 0;
 // Controls
 extern int alwaysRun;
 
+// Gameplay: Game Mechanics
+int strict_mode = 0;
+
 // Gameplay: Graphical
 int brightmaps = 1;
 int fake_contrast = 0;
@@ -1082,6 +1085,9 @@ void D_BindVariables(void)
     M_BindIntVariable("mlook",                  &mlook);
     M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
     M_BindIntVariable("artiskip",               &artiskip);
+
+    // Gameplay: Game Mechanics
+    M_BindIntVariable("strict_mode",            &strict_mode);
 
     // Gameplay: Graphical
     M_BindIntVariable("brightmaps",             &brightmaps);

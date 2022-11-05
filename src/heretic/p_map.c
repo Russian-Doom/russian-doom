@@ -475,8 +475,8 @@ boolean PIT_CheckThing(mobj_t * thing)
 
     // [JN] Check if things are stuck and allow them to move further apart.
     // Taken from DOOM Retro, slightly adopted for Heretic.
-    if (improved_collision && singleplayer && !vanillaparm && !thing->player 
-    && (thing->flags & MF_SHOOTABLE && thing->type != MT_POD))
+    if (singleplayer && !strict_mode && !vanillaparm && improved_collision
+    && !thing->player && (thing->flags & MF_SHOOTABLE && thing->type != MT_POD))
     {
         if (tmx == tmthing->x && tmy == tmthing->y)
         {
@@ -1065,8 +1065,10 @@ void P_ApplyTorque(mobj_t *mo)
     int bx,by,flags = mo->intflags; // Remember the current state, for gear-change
 
     // [JN] No torque available in following modes:
-    if (!singleplayer || vanillaparm)
-    return;
+    if (!singleplayer || strict_mode || vanillaparm)
+    {
+        return;
+    }
 
     tmthing = mo;
     validcount++;   // prevents checking same line twice
@@ -1136,8 +1138,8 @@ boolean P_ThingHeightClip(mobj_t * thing)
         // [JN] Update player's view when on moving platform.
         // Idea by Brad Harding, code by Fabian Greffrath.
         // Thanks again, colleagues! (03.06.2018)
-        if (singleplayer && !vanillaparm && thing->player 
-        &&  thing->subsector->sector == movingsector)
+        if (singleplayer && !strict_mode && !vanillaparm
+        && thing->player && thing->subsector->sector == movingsector)
         {
             P_CalcHeight (thing->player);
         }
@@ -1237,8 +1239,8 @@ boolean PTR_SlideTraverse(intercept_t * in)
     li = in->d.line;
 
     // [JN] Treat two sided linedefs as single sided for smooth sliding.
-    if (li->flags & ML_BLOCKING && li->flags & ML_TWOSIDED
-    && improved_collision && singleplayer && !vanillaparm)
+    if (singleplayer && !strict_mode && !vanillaparm && improved_collision
+    && li->flags & ML_BLOCKING && li->flags & ML_TWOSIDED)
     {
         goto isblocking;
     }
@@ -1562,7 +1564,7 @@ boolean PTR_ShootTraverse(intercept_t * in)
         // [crispy] check if the hitscan puff's z-coordinate is below of above
         // its spawning sector's floor or ceiling, respectively, and move its
         // coordinates to the point where the trajectory hits the plane
-        if (aimslope)
+        if (!strict_mode && !vanillaparm && aimslope)
         {
             const int lineside = P_PointOnLineSide(x, y, li);
             int side;
