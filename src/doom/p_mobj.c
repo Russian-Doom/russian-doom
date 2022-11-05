@@ -702,6 +702,13 @@ void P_NightmareRespawn (mobj_t *mobj)
 
 void P_MobjThinker (mobj_t *mobj)
 {
+    // [crispy] suppress interpolation of player missiles for the first tic
+    // and Archvile fire to mitigate it being spawned at the wrong location
+    if (mobj->interp < 0)
+    {
+        mobj->interp++;
+    }
+    else
     // [AM] Handle interpolation unless we're an active player.
     if (!(mobj->player != NULL && mobj == mobj->player->mo))
     {
@@ -1538,6 +1545,9 @@ void P_SpawnPlayerMissile (mobj_t *source, const mobjtype_t type)
     th->momx = FixedMul( th->info->speed, finecosine[an]);
     th->momy = FixedMul( th->info->speed, finesine[an]);
     th->momz = FixedMul( th->info->speed, slope);
+
+    // [crispy] suppress interpolation of player missiles for the first tic
+    th->interp = -1;
 
     P_CheckMissileSpawn (th);
 }

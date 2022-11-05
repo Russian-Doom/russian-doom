@@ -5653,6 +5653,7 @@ static void M_RD_BackToDefaults_Recommended(void)
     artiskip           = 0;
 
     // Gameplay (1)
+    strict_mode          = 0;
     brightmaps           = 1;
     fake_contrast        = 0;
     translucency         = 1;
@@ -5807,6 +5808,7 @@ static void M_RD_BackToDefaults_Original(void)
     artiskip           = 1;
 
     // Gameplay (1)
+    strict_mode          = 1;
     brightmaps           = 0;
     fake_contrast        = 1;
     translucency         = 0;
