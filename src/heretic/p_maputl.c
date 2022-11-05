@@ -19,6 +19,7 @@
 
 #include <stdlib.h>
 #include <math.h>
+#include "i_system.h"  // [crispy] I_Realloc()
 #include "hr_local.h"
 #include "m_bbox.h"
 #include "p_local.h"
@@ -588,7 +589,35 @@ boolean P_BlockThingsIterator (int x, int y, boolean(*func) (mobj_t *))
 ================================================================================
 */
 
-intercept_t intercepts[MAXINTERCEPTS], *intercept_p;
+// [crispy] remove INTERCEPTS limit
+intercept_t *intercepts, *intercept_p; 
+
+// [JN] Slightly extended - report which funcion is triggered limit:
+//  0: PIT_AddLineIntercepts
+//  1: PIT_AddThingIntercepts
+//  2: P_SightBlockLinesIterator
+
+void check_intercept (const int func)
+{
+	static size_t num_intercepts;
+	const size_t offset = intercept_p - intercepts;
+
+	if (offset >= num_intercepts)
+	{
+		num_intercepts = num_intercepts ? num_intercepts * 2 : MAXINTERCEPTS;
+		intercepts = I_Realloc(intercepts, sizeof(*intercepts) * num_intercepts);
+		intercept_p = intercepts + offset;
+
+		if (num_intercepts == 2 * MAXINTERCEPTS)
+		{
+            printf(func == 0 ? "PIT_AddLineIntercepts: " :
+                   func == 1 ? "PIT_AddThingIntercepts: " :
+                               "P_SightBlockLinesIterator: ");
+            printf(english_language ? "Hit INTERCEPTS limit!\n" :
+                                      "превышен лимит INTERCEPTS!\n");
+		}
+	}
+}
 
 divline_t trace;
 boolean earlyout;
@@ -651,15 +680,11 @@ boolean PIT_AddLineIntercepts (line_t *ld)
         return false;
     }
 
+    check_intercept(0); // [crispy] remove INTERCEPTS limit
     intercept_p->frac = frac;
     intercept_p->isaline = true;
     intercept_p->d.line = ld;
     intercept_p++;
-    // [crispy] intercepts overflow guard
-    if (intercept_p - intercepts == MAXINTERCEPTS + 1)
-    {
-        return false;
-    }
 
     // continue
     return true;
@@ -721,15 +746,11 @@ boolean PIT_AddThingIntercepts (mobj_t *thing)
         return true;
     }
 
+    check_intercept(1); // [crispy] remove INTERCEPTS limit
     intercept_p->frac = frac;
     intercept_p->isaline = false;
     intercept_p->d.thing = thing;
     intercept_p++;
-    // [crispy] intercepts overflow guard
-    if (intercept_p - intercepts == MAXINTERCEPTS + 1)
-    {
-        return false;
-    }
 
     // keep going
     return true;

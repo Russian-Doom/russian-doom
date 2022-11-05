@@ -270,7 +270,7 @@ extern void P_ThrustMobj (mobj_t *mo, angle_t angle, fixed_t move);
 #define	PT_ADDTHINGS    2
 #define	PT_EARLYOUT     4
 
-#define	MAXINTERCEPTS   128*16 // [JN] Multiplied by 16 (TODO - realloc?)
+#define	MAXINTERCEPTS   128
 
 typedef struct
 {
@@ -283,7 +283,7 @@ typedef struct
     } d;
 } intercept_t;
 
-extern intercept_t intercepts[MAXINTERCEPTS], *intercept_p;
+extern intercept_t *intercepts, *intercept_p; // [crispy] remove INTERCEPTS limit
 
 typedef struct
 {
@@ -309,6 +309,7 @@ extern int P_BoxOnLineSide (const fixed_t *tmbox, const line_t *ld);
 extern int P_PointOnDivlineSide (fixed_t x, fixed_t y, const divline_t *line);
 extern int P_PointOnLineSide (fixed_t x, fixed_t y, const line_t *line);
 
+extern void check_intercept (const int func); // [crispy] remove INTERCEPTS limit
 extern void P_LineOpening (line_t *linedef);
 extern void P_MakeDivline (line_t *li, divline_t *dl);
 extern void P_SetThingPosition (mobj_t *thing);
@@ -338,6 +339,9 @@ extern boolean PIT_RadiusAttack(mobj_t * thing);
 
 extern fixed_t P_AimLineAttack(mobj_t * t1, angle_t angle, fixed_t distance);
 extern fixed_t tmfloorz, tmceilingz;  // within tmfloorz - tmceilingz
+
+extern int      numspechit;
+extern line_t **spechit;  // [crispy] remove SPECHIT limit
 
 extern line_t *ceilingline;
 
