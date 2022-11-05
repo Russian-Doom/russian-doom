@@ -26,7 +26,10 @@
 #include "id_lang.h"
 #include "jn.h"
 
-#define BONUSADD 6
+
+#define BONUSADD     6
+#define MAXBONUSTIME (4*TICRATE)
+
 
 int WeaponValue[] = {
     1,                          // staff
@@ -814,6 +817,13 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
     {
         P_RemoveMobj(special);
     }
+
+    // [JN] Limit bonus palette duration to 4 seconds.
+    if (player->bonuscount >= MAXBONUSTIME)
+    {
+        player->bonuscount = MAXBONUSTIME;
+    }
+
     player->bonuscount += BONUSADD;
     if (player == &players[displayplayer])
     {
