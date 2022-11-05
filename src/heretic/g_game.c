@@ -1390,8 +1390,11 @@ static void G_DoReborn (int playernum)
     int i;
 
     // quit demo unless -demoextend
-    if (!demoextend && G_CheckDemoStatus())
+    // [JN] Make -demoextend unnecessary for demo playing (not recording).
+    if ((!demoextend && !demoplayback) && G_CheckDemoStatus())
+    {
         return;
+    }
 
     if (!netgame)
     {
@@ -1464,7 +1467,8 @@ static void G_DoCompleted (void)
     gameaction = ga_nothing;
 
     // quit demo unless -demoextend
-    if (!demoextend && G_CheckDemoStatus())
+    // [JN] Make -demoextend unnecessary for demo playing (not recording).
+    if ((!demoextend && !demoplayback) && G_CheckDemoStatus())
     {
         return;
     }
