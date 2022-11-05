@@ -16,9 +16,6 @@
 //
 
 
-
-// G_game.c
-
 #include <stdlib.h>
 #include <string.h>
 #include "hr_local.h"
@@ -35,48 +32,41 @@
 
 // Macros
 
-#define MLOOKUNIT 8         // [crispy] for mouselook
+#define MLOOKUNIT       8   // [crispy] for mouselook
 #define MLOOKUNITLOWRES 16  // [crispy] for mouselook when recording
 
 // Functions
 
-boolean G_CheckDemoStatus(void);
-void G_ReadDemoTiccmd(ticcmd_t * cmd);
-void G_WriteDemoTiccmd(ticcmd_t * cmd);
+static void G_ReadDemoTiccmd (ticcmd_t *cmd);
+static void G_WriteDemoTiccmd (ticcmd_t *cmd);
+static void G_DoReborn (int playernum);
+static void G_DoLoadLevel (void);
+static void G_DoNewGame (void);
+static void G_DoPlayDemo (void);
+static void G_DoCompleted (void);
+static void G_DoWorldDone (void);
+static void G_DoSaveGame (void);
 
-void G_DoReborn(int playernum);
-
-void G_DoLoadLevel(void);
-void G_DoNewGame(void);
-void G_DoPlayDemo(void);
-void G_DoCompleted(void);
-void G_DoVictory(void);
-void G_DoWorldDone(void);
-void G_DoSaveGame(void);
-
-void D_PageTicker(void);
-void D_AdvanceDemo(void);
-
-struct
+static struct
 {
     int type;   // mobjtype_t
     int speed[2];
 } MonsterMissileInfo[] = {
-    { MT_IMPBALL, { 10, 20 } },
-    { MT_MUMMYFX1, { 9, 18 } },
-    { MT_KNIGHTAXE, { 9, 18 } },
-    { MT_REDAXE, { 9, 18 } },
-    { MT_BEASTBALL, { 12, 20 } },
-    { MT_WIZFX1, { 18, 24 } },
+    { MT_IMPBALL,    { 10, 20 } },
+    { MT_MUMMYFX1,   {  9, 18 } },
+    { MT_KNIGHTAXE,  {  9, 18 } },
+    { MT_REDAXE,     {  9, 18 } },
+    { MT_BEASTBALL,  { 12, 20 } },
+    { MT_WIZFX1,     { 18, 24 } },
     { MT_SNAKEPRO_A, { 14, 20 } },
     { MT_SNAKEPRO_B, { 14, 20 } },
-    { MT_HEADFX1, { 13, 20 } },
-    { MT_HEADFX3, { 10, 18 } },
-    { MT_MNTRFX1, { 20, 26 } },
-    { MT_MNTRFX2, { 14, 20 } },
-    { MT_SRCRFX1, { 20, 28 } },
-    { MT_SOR2FX1, { 20, 28 } },
-    { -1, { -1, -1 } }                 // Terminator
+    { MT_HEADFX1,    { 13, 20 } },
+    { MT_HEADFX3,    { 10, 18 } },
+    { MT_MNTRFX1,    { 20, 26 } },
+    { MT_MNTRFX2,    { 14, 20 } },
+    { MT_SRCRFX1,    { 20, 28 } },
+    { MT_SOR2FX1,    { 20, 28 } },
+    { -1,            { -1, -1 } }  // Terminator
 };
 
 gameaction_t gameaction;
@@ -116,8 +106,8 @@ boolean shortticfix;            // calculate lowres turning like doom
 boolean demoplayback;
 boolean netdemo;
 boolean demoextend;
-byte *demobuffer, *demo_p, *demoend;
 boolean singledemo;             // quit after playing a demo from cmdline
+static byte *demobuffer, *demo_p, *demoend;
 
 boolean precache = true;        // if true, load all graphics at start
 
@@ -132,7 +122,6 @@ int testcontrols_mousespeed;
 //
 // controls (have defaults)
 //
-
 
 #define MAXPLMOVE       0x32
 
@@ -178,22 +167,22 @@ static const struct
 
 #define SLOWTURNTICS    6
 
-int turnheld;                   // for accelerative turning
-int lookheld;
-
-int mousex, mousey;             // mouse values are used once
+static int turnheld;            // for accelerative turning
+static int lookheld;
+static int mousex;              // mouse values are used once
+static int mousey;
 
 #define MAX_JOY_BUTTONS 20
 
-int joyturn, joymove;         // joystick values are repeated
-int joystrafemove;
-int joyvlook;
+static int joyturn, joymove;    // joystick values are repeated
+static int joystrafemove;
+static int joyvlook;
 int alwaysRun = 1;              // is always run enabled
 
-int savegameslot;
-char savedescription[32];
+static int  savegameslot;
+static char savedescription[32];
 
-int inventoryTics;
+static int inventoryTics;
 
 // [crispy] demo progress bar and timer widget
 int defdemotics = 0, deftotaldemotics;
@@ -255,10 +244,6 @@ static int G_NextWeapon(int direction)
 = If recording a demo, write it out
 ====================
 */
-
-extern boolean inventory;
-extern int curpos;
-extern int inv_ptr;
 
 boolean usearti = true;
 
@@ -723,7 +708,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
 ==============
 */
 
-void G_DoLoadLevel(void)
+static void G_DoLoadLevel (void)
 {
     int i;
 
@@ -1400,7 +1385,7 @@ void G_DeathMatchSpawnPlayer(int playernum)
 ====================
 */
 
-void G_DoReborn(int playernum)
+static void G_DoReborn (int playernum)
 {
     int i;
 
@@ -1471,7 +1456,7 @@ void G_SecretExitLevel(void)
     gameaction = ga_completed;
 }
 
-void G_DoCompleted(void)
+static void G_DoCompleted (void)
 {
     int i;
     static int afterSecret[5] = { 7, 5, 5, 5, 4 };
@@ -1539,7 +1524,7 @@ void G_WorldDone(void)
 //
 //============================================================================
 
-void G_DoWorldDone(void)
+static void G_DoWorldDone (void)
 {
     idmusnum = -1;  // [JN] jff 3/17/98 allow new level's music to be loaded
     gamestate = GS_LEVEL;
@@ -1670,7 +1655,7 @@ void G_DeferedInitNew(skill_t skill, int episode, int map)
     gameaction = ga_newgame;
 }
 
-void G_DoNewGame(void)
+static void G_DoNewGame (void)
 {
     idmusnum = -1;  // [JN] e6y: allow new level's music to be loaded
     G_InitNew(d_skill, d_episode, d_map, 0);
@@ -1936,7 +1921,7 @@ void G_InitNew(skill_t skill, int episode, int map, int fast_monsters)
 #define DEMOHEADER_LONGTICS   0x10
 #define DEMOHEADER_NOMONSTERS 0x02
 
-void G_ReadDemoTiccmd(ticcmd_t * cmd)
+static void G_ReadDemoTiccmd(ticcmd_t *cmd)
 {
     if (*demo_p == DEMOMARKER)
     {                           // end of demo data stream
@@ -1995,7 +1980,7 @@ static void IncreaseDemoBuffer(void)
     demoend = demobuffer + new_length;
 }
 
-void G_WriteDemoTiccmd(ticcmd_t * cmd)
+static void G_WriteDemoTiccmd(ticcmd_t *cmd)
 {
     byte *demo_start;
 
@@ -2177,7 +2162,7 @@ void G_DeferedPlayDemo(char *name)
     gameaction = ga_playdemo;
 }
 
-void G_DoPlayDemo(void)
+static void G_DoPlayDemo (void)
 {
     skill_t skill;
     int i, lumpnum, episode, map;
@@ -2407,7 +2392,7 @@ void G_SaveGame(int slot, char *description)
 //
 //==========================================================================
 
-void G_DoSaveGame(void)
+static void G_DoSaveGame (void)
 {
     int i;
     char *filename;

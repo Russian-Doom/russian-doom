@@ -821,8 +821,10 @@ extern ticcmd_t *netcmds;
 ================================================================================
 */
 
+extern void D_AdvanceDemo (void);
 extern void D_DoomMain (void);
 extern void D_DoomLoop (void);
+extern void D_PageTicker (void);
 
 /*
 ================================================================================
@@ -894,6 +896,7 @@ extern void F_Ticker (void);
 ================================================================================
 */
 
+extern boolean G_CheckDemoStatus (void);
 extern boolean G_Responder(event_t * ev);
 extern boolean timingdemo;
 
@@ -977,9 +980,11 @@ extern void MN_Ticker (void);
 #define NUMREDPALS		8
 #define NUMBONUSPALS	4
 
-extern boolean SB_Responder(event_t *event);
+extern boolean inventory;
+extern boolean SB_Responder (event_t *event);
 
 extern int ArtifactFlash;
+extern int curpos, inv_ptr;
 extern int defdemotics, deftotaldemotics;
 extern int SB_state;
 

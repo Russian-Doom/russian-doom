@@ -6039,7 +6039,6 @@ boolean MN_Responder(event_t * event)
     int charTyped;
     MenuItem_t *item;
     extern void D_StartTitle(void);
-    extern void G_CheckDemoStatus(void);
     char *textBuffer;
 
     // In testcontrols mode, none of the function keys should do anything

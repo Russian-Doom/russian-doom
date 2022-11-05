@@ -258,7 +258,6 @@ int selective_arti_9 = 0;   // Torch
 void D_ConnectNetGame(void);
 void D_CheckNetGame(void);
 void D_PageDrawer(void);
-void D_AdvanceDemo(void);
 
 boolean hasDelayEvents = false;
 
@@ -766,7 +765,7 @@ char *pagename;
 ================
 */
 
-void D_PageTicker(void)
+void D_PageTicker (void)
 {
     if (--pagetic < 0)
         D_AdvanceDemo();
@@ -820,7 +819,7 @@ void D_PageDrawer(void)
 =================
 */
 
-void D_AdvanceDemo(void)
+void D_AdvanceDemo (void)
 {
     advancedemo = true;
 }
