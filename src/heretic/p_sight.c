@@ -17,71 +17,73 @@
 // P_sight.c
 
 
-
 #include <stdlib.h>
-
 #include "hr_local.h"
 #include "p_local.h"
 
+
 /*
-==============================================================================
+================================================================================
 
 							P_CheckSight
 
-This uses specialized forms of the maputils routines for optimized performance
+This uses specialized forms of the maputils routines for optimized performance.
 
-==============================================================================
+================================================================================
 */
 
-fixed_t sightzstart;            // eye z of looker
+static int sightcounts[3];
+static fixed_t sightzstart;     // eye z of looker
+
 fixed_t topslope, bottomslope;  // slopes to top and bottom of target
 
-int sightcounts[3];
-
 /*
-==============
+================================================================================
 =
 = PTR_SightTraverse
 =
-==============
+================================================================================
 */
 
-boolean PTR_SightTraverse(intercept_t * in)
+static const boolean PTR_SightTraverse (const intercept_t *in)
 {
-    line_t *li;
+    const line_t *li = in->d.line;
     fixed_t slope;
 
-    li = in->d.line;
-
-//
-// crosses a two sided line
-//
+    // Crosses a two sided line
     P_LineOpening(li);
 
-    if (openbottom >= opentop)  // quick test for totally closed doors
-        return false;           // stop
+    // Quick test for totally closed doors
+    if (openbottom >= opentop)
+    {
+        return false;  // stop
+    }
 
     if (li->frontsector->floorheight != li->backsector->floorheight)
     {
         slope = FixedDiv(openbottom - sightzstart, in->frac);
         if (slope > bottomslope)
+        {
             bottomslope = slope;
+        }
     }
 
     if (li->frontsector->ceilingheight != li->backsector->ceilingheight)
     {
         slope = FixedDiv(opentop - sightzstart, in->frac);
         if (slope < topslope)
+        {
             topslope = slope;
+        }
     }
 
     if (topslope <= bottomslope)
-        return false;           // stop
+    {
+        return false;  // stop
+    }
 
-    return true;                // keep going
+    return true;  // keep going
 }
-
-
 
 /*
 ==================
@@ -91,7 +93,7 @@ boolean PTR_SightTraverse(intercept_t * in)
 ===================
 */
 
-boolean P_SightBlockLinesIterator(int x, int y)
+static boolean P_SightBlockLinesIterator (const int x, const int y)
 {
     int offset;
     int32_t *list;
@@ -107,111 +109,115 @@ boolean P_SightBlockLinesIterator(int x, int y)
     {
         ld = &lines[*list];
         if (ld->validcount == validcount)
-            continue;           // line has already been checked
+        {
+            continue;  // line has already been checked
+        }
         ld->validcount = validcount;
 
         s1 = P_PointOnDivlineSide(ld->v1->x, ld->v1->y, &trace);
         s2 = P_PointOnDivlineSide(ld->v2->x, ld->v2->y, &trace);
         if (s1 == s2)
-            continue;           // line isn't crossed
+        {
+            continue;  // line isn't crossed
+        }
         P_MakeDivline(ld, &dl);
         s1 = P_PointOnDivlineSide(trace.x, trace.y, &dl);
-        s2 = P_PointOnDivlineSide(trace.x + trace.dx, trace.y + trace.dy,
-                                  &dl);
+        s2 = P_PointOnDivlineSide(trace.x + trace.dx, trace.y + trace.dy, &dl);
         if (s1 == s2)
-            continue;           // line isn't crossed
+        {
+            continue;  // line isn't crossed
+        }
 
         // try to early out the check
         if (!ld->backsector)
-            return false;       // stop checking
+        {
+            return false;  // stop checking
+        }
 
         // store the line for later intersection testing
         check_intercept(2); // [crispy] remove INTERCEPTS limit
         intercept_p->d.line = ld;
         intercept_p++;
-
     }
 
-    return true;                // everything was checked
+    return true;  // everything was checked
 }
 
 /*
-====================
+================================================================================
 =
 = P_SightTraverseIntercepts
 =
 = Returns true if the traverser function returns true for all lines
-====================
+================================================================================
 */
 
-boolean P_SightTraverseIntercepts(void)
+static boolean P_SightTraverseIntercepts (void)
 {
-    int count;
+    int count = intercept_p - intercepts;
     fixed_t dist;
-    intercept_t *scan, *in;
+    intercept_t *scan, *in = 0;
     divline_t dl;
-
-    count = intercept_p - intercepts;
-//
-// calculate intercept distance
-//
+    
+    // Calculate intercept distance
     for (scan = intercepts; scan < intercept_p; scan++)
     {
         P_MakeDivline(scan->d.line, &dl);
         scan->frac = P_InterceptVector(&trace, &dl);
     }
 
-//
-// go through in order
-//      
-    in = 0;                     // shut up compiler warning
-
+    // Go through in order
     while (count--)
     {
         dist = INT_MAX;
         for (scan = intercepts; scan < intercept_p; scan++)
+        {
             if (scan->frac < dist)
             {
                 dist = scan->frac;
                 in = scan;
             }
+        }
 
         if (!PTR_SightTraverse(in))
-            return false;       // don't bother going farther
+        {
+            return false;  // don't bother going farther
+        }
         in->frac = INT_MAX;
     }
 
-    return true;                // everything was traversed
+    return true;  // everything was traversed
 }
 
-
-
 /*
-==================
+================================================================================
 =
 = P_SightPathTraverse
 =
 = Traces a line from x1,y1 to x2,y2, calling the traverser function for each
 = Returns true if the traverser function returns true for all lines
-==================
+================================================================================
 */
 
-boolean P_SightPathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2)
+static boolean P_SightPathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2)
 {
     fixed_t xt1, yt1, xt2, yt2;
     fixed_t xstep, ystep;
     fixed_t partial;
     fixed_t xintercept, yintercept;
     int mapx, mapy, mapxstep, mapystep;
-    int count;
 
     validcount++;
     intercept_p = intercepts;
 
     if (((x1 - bmaporgx) & (MAPBLOCKSIZE - 1)) == 0)
-        x1 += FRACUNIT;         // don't side exactly on a line
+    {
+        x1 += FRACUNIT;  // don't side exactly on a line
+    }
     if (((y1 - bmaporgy) & (MAPBLOCKSIZE - 1)) == 0)
-        y1 += FRACUNIT;         // don't side exactly on a line
+    {
+        y1 += FRACUNIT;  // don't side exactly on a line
+    }
     trace.x = x1;
     trace.y = y1;
     trace.dx = x2 - x1;
@@ -227,11 +233,12 @@ boolean P_SightPathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2)
     xt2 = x2 >> MAPBLOCKSHIFT;
     yt2 = y2 >> MAPBLOCKSHIFT;
 
-// points should never be out of bounds, but check once instead of
-// each block
+    // Points should never be out of bounds, but check once instead of each block
     if (xt1 < 0 || yt1 < 0 || xt1 >= bmapwidth || yt1 >= bmapheight
-        || xt2 < 0 || yt2 < 0 || xt2 >= bmapwidth || yt2 >= bmapheight)
+    ||  xt2 < 0 || yt2 < 0 || xt2 >= bmapwidth || yt2 >= bmapheight)
+    {
         return false;
+    }
 
     if (xt2 > xt1)
     {
@@ -253,7 +260,6 @@ boolean P_SightPathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2)
     }
     yintercept = (y1 >> MAPBTOFRAC) + FixedMul(partial, ystep);
 
-
     if (yt2 > yt1)
     {
         mapystep = 1;
@@ -274,24 +280,23 @@ boolean P_SightPathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2)
     }
     xintercept = (x1 >> MAPBTOFRAC) + FixedMul(partial, xstep);
 
-
-//
-// step through map blocks
-// Count is present to prevent a round off error from skipping the break
+    // Step through map blocks.
+    // Count is present to prevent a round off error from skipping the break.
     mapx = xt1;
     mapy = yt1;
 
-
-    for (count = 0; count < 64; count++)
+    for (int count = 0; count < 64; count++)
     {
         if (!P_SightBlockLinesIterator(mapx, mapy))
         {
             sightcounts[1]++;
-            return false;       // early out
+            return false;  // early out
         }
 
         if (mapx == xt2 && mapy == yt2)
+        {
             break;
+        }
 
         if ((yintercept >> FRACBITS) == mapy)
         {
@@ -303,39 +308,31 @@ boolean P_SightPathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2)
             xintercept += xstep;
             mapy += mapystep;
         }
-
     }
 
-
-//
-// couldn't early out, so go through the sorted list
-//
+    // Couldn't early out, so go through the sorted list
     sightcounts[2]++;
 
     return P_SightTraverseIntercepts();
 }
 
-
-
 /*
-=====================
+================================================================================
 =
 = P_CheckSight
 =
 = Returns true if a straight line between t1 and t2 is unobstructed
 = look from eyes of t1 to any part of t2
 =
-=====================
+================================================================================
 */
 
-boolean P_CheckSight(mobj_t * t1, mobj_t * t2)
+boolean P_CheckSight (const mobj_t *t1, const mobj_t *t2)
 {
     int s1, s2;
     int pnum, bytenum, bitnum;
 
-//
-// check for trivial rejection
-//
+    // Check for trivial rejection
     s1 = (t1->subsector->sector - sectors);
     s2 = (t2->subsector->sector - sectors);
     pnum = s1 * numsectors + s2;
@@ -345,12 +342,10 @@ boolean P_CheckSight(mobj_t * t1, mobj_t * t2)
     if (rejectmatrix[bytenum] & bitnum)
     {
         sightcounts[0]++;
-        return false;           // can't possibly be connected
+        return false;  // can't possibly be connected
     }
 
-//
-// check precisely
-//              
+    // Check precisely
     sightzstart = t1->z + t1->height - (t1->height >> 2);
     topslope = (t2->z + t2->height) - sightzstart;
     bottomslope = (t2->z) - sightzstart;

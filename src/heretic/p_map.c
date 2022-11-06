@@ -17,15 +17,14 @@
 // P_map.c
 
 
-
 #include <stdlib.h>
-
 #include "hr_local.h"
 #include "i_system.h"
 #include "m_bbox.h"
 #include "p_local.h"
 #include "s_sound.h"
 #include "jn.h"
+
 
 /*
 ===============================================================================
@@ -1400,8 +1399,6 @@ int la_damage;
 fixed_t attackrange;
 
 fixed_t aimslope;
-
-extern fixed_t topslope, bottomslope;   // slopes to top and bottom of target
 
 /*
 ===============================================================================

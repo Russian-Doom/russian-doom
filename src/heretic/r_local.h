@@ -530,6 +530,9 @@ typedef void (*planefunction_t) (int top, int bottom);
 
 extern fixed_t *yslope, *distscale;
 extern fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
+// [JN] Smooth plane scrolling.
+extern fixed_t FlatScrollFactor_X, FlatScrollFactor_X_old;
+extern fixed_t FlatScrollFactor_Y, FlatScrollFactor_Y_old;
 
 extern int *floorclip, *ceilingclip; // [JN] dropoff overflow
 extern int *lastopening; // [crispy] 32-bit integer math

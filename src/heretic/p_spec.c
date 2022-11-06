@@ -22,11 +22,9 @@
 #include "deh_str.h"
 #include "i_system.h"
 #include "i_timer.h"
-#include "p_local.h"
-#include "r_local.h"
 #include "s_sound.h"
-#include "v_video.h"
 #include "jn.h"
+
 
 // Macros
 
@@ -48,24 +46,27 @@ typedef enum
 
 // [crispy] remove the ambient sound limit
 static int **LevelAmbientSfx = NULL;
-static int AmbSfxMax = 0;
-int *AmbSfxPtr;
-int AmbSfxCount;
-int AmbSfxTics;
-int AmbSfxVolume;
+static int   AmbSfxMax = 0;
+static int  *AmbSfxPtr;
+static int   AmbSfxCount;
+static int   AmbSfxTics;
+static int   AmbSfxVolume;
 
-int AmbSndSeqInit[] = {         // Startup
+static const int AmbSndSeqInit[] = {    // Startup
     afxcmd_end
 };
-int AmbSndSeq1[] = {            // Scream
+
+static const int AmbSndSeq1[] = {       // Scream
     afxcmd_play, sfx_amb1,
     afxcmd_end
 };
-int AmbSndSeq2[] = {            // Squish
+
+static const int AmbSndSeq2[] = {       // Squish
     afxcmd_play, sfx_amb2,
     afxcmd_end
 };
-int AmbSndSeq3[] = {            // Drops
+
+static const int AmbSndSeq3[] = {       // Drops
     afxcmd_play, sfx_amb3,
     afxcmd_delay, 16,
     afxcmd_delayrand, 31,
@@ -86,7 +87,8 @@ int AmbSndSeq3[] = {            // Drops
     afxcmd_delayrand, 31,
     afxcmd_end
 };
-int AmbSndSeq4[] = {            // SlowFootSteps
+
+static const int AmbSndSeq4[] = {       // SlowFootSteps
     afxcmd_play, sfx_amb4,
     afxcmd_delay, 15,
     afxcmd_playrelvol, sfx_amb11, -3,
@@ -104,7 +106,8 @@ int AmbSndSeq4[] = {            // SlowFootSteps
     afxcmd_playrelvol, sfx_amb11, -3,
     afxcmd_end
 };
-int AmbSndSeq5[] = {            // Heartbeat
+
+static const int AmbSndSeq5[] = {       // Heartbeat
     afxcmd_play, sfx_amb5,
     afxcmd_delay, 35,
     afxcmd_play, sfx_amb5,
@@ -114,7 +117,8 @@ int AmbSndSeq5[] = {            // Heartbeat
     afxcmd_play, sfx_amb5,
     afxcmd_end
 };
-int AmbSndSeq6[] = {            // Bells
+
+static const int AmbSndSeq6[] = {       // Bells
     afxcmd_play, sfx_amb6,
     afxcmd_delay, 17,
     afxcmd_playrelvol, sfx_amb6, -8,
@@ -124,15 +128,18 @@ int AmbSndSeq6[] = {            // Bells
     afxcmd_playrelvol, sfx_amb6, -8,
     afxcmd_end
 };
-int AmbSndSeq7[] = {            // Growl
+
+static const int AmbSndSeq7[] = {       // Growl
     afxcmd_play, sfx_bstsit,
     afxcmd_end
 };
-int AmbSndSeq8[] = {            // Magic
+
+static const int AmbSndSeq8[] = {       // Magic
     afxcmd_play, sfx_amb8,
     afxcmd_end
 };
-int AmbSndSeq9[] = {            // Laughter
+
+static const int AmbSndSeq9[] = {       // Laughter
     afxcmd_play, sfx_amb9,
     afxcmd_delay, 16,
     afxcmd_playrelvol, sfx_amb9, -4,
@@ -146,7 +153,8 @@ int AmbSndSeq9[] = {            // Laughter
     afxcmd_playrelvol, sfx_amb10, -4,
     afxcmd_end
 };
-int AmbSndSeq10[] = {           // FastFootsteps
+
+static const int AmbSndSeq10[] = {      // Fast footsteps
     afxcmd_play, sfx_amb4,
     afxcmd_delay, 8,
     afxcmd_playrelvol, sfx_amb11, -3,
@@ -165,7 +173,7 @@ int AmbSndSeq10[] = {           // FastFootsteps
     afxcmd_end
 };
 
-int *AmbientSfx[] = {
+static const int *AmbientSfx[] = {
     AmbSndSeq1,                 // Scream
     AmbSndSeq2,                 // Squish
     AmbSndSeq3,                 // Drops
@@ -178,75 +186,76 @@ int *AmbientSfx[] = {
     AmbSndSeq10                 // FastFootsteps
 };
 
-animdef_t animdefs[] = {
+static const animdef_t animdefs[] = {
     // false = flat
     // true = texture
-    {false, "FLTWAWA3", "FLTWAWA1", 9}, // Water (ex. 8)
-    {false, "FLTSLUD3", "FLTSLUD1", 9}, // Sludge (ex. 8)
-    {false, "FLTTELE4", "FLTTELE1", 6}, // Teleport
-    {false, "FLTFLWW3", "FLTFLWW1", 8}, // River - West (ex. 9)
-    {false, "FLTLAVA4", "FLTLAVA1", 8}, // Lava
-    {false, "FLATHUH4", "FLATHUH1", 9}, // Super Lava (ex. 8)
-    {true, "LAVAFL3", "LAVAFL1", 6},    // Texture: Lavaflow
-    {true, "WATRWAL3", "WATRWAL1", 4},  // Texture: Waterfall
-    {-1,    "",         "",         0},
+    { false, "FLTWAWA3", "FLTWAWA1", 9}, // Water (ex. 8)
+    { false, "FLTSLUD3", "FLTSLUD1", 9}, // Sludge (ex. 8)
+    { false, "FLTTELE4", "FLTTELE1", 6}, // Teleport
+    { false, "FLTFLWW3", "FLTFLWW1", 8}, // River - West (ex. 9)
+    { false, "FLTLAVA4", "FLTLAVA1", 8}, // Lava
+    { false, "FLATHUH4", "FLATHUH1", 9}, // Super Lava (ex. 8)
+    {  true,  "LAVAFL3",  "LAVAFL1", 6}, // Texture: Lavaflow
+    {  true, "WATRWAL3", "WATRWAL1", 4}, // Texture: Waterfall
+    {    -1,         "",         "", 0},
 };
 
-anim_t anims[MAXANIMS];
+anim_t  anims[MAXANIMS];
 anim_t *lastanim;
 
 int *TerrainTypes;
-struct
+
+static struct
 {
     char *name;
     int type;
 } TerrainTypeDefs[] =
 {
-    { "FLTWAWA1", FLOOR_WATER },
-    { "FLTFLWW1", FLOOR_WATER },
-    { "FLTLAVA1", FLOOR_LAVA },
-    { "FLATHUH1", FLOOR_LAVA },
+    { "FLTWAWA1", FLOOR_WATER  },
+    { "FLTFLWW1", FLOOR_WATER  },
+    { "FLTLAVA1", FLOOR_LAVA   },
+    { "FLATHUH1", FLOOR_LAVA   },
     { "FLTSLUD1", FLOOR_SLUDGE },
-    { "END", -1 }
+    {      "END", -1           }
 };
 
-mobj_t LavaInflictor;
+static mobj_t LavaInflictor;
 
-// [JN] Smooth plane scrolling.
-extern fixed_t FlatScrollFactor_X, FlatScrollFactor_X_old;
-extern fixed_t FlatScrollFactor_Y, FlatScrollFactor_Y_old;
 // [JN] How far scrolling factor can go before reset.
 #define FLATSCROLLLIMIT FRACUNIT*128
 
-//----------------------------------------------------------------------------
-//
-// PROC P_InitLava
-//
-//----------------------------------------------------------------------------
+/*
+================================================================================
+=
+= P_InitLava
+=
+================================================================================
+*/
 
-void P_InitLava(void)
+void P_InitLava (void)
 {
     memset(&LavaInflictor, 0, sizeof(mobj_t));
     LavaInflictor.type = MT_PHOENIXFX2;
     LavaInflictor.flags2 = MF2_FIREDAMAGE | MF2_NODMGTHRUST;
 }
 
-//----------------------------------------------------------------------------
-//
-// PROC P_InitTerrainTypes
-//
-//----------------------------------------------------------------------------
+/*
+================================================================================
+=
+= P_InitTerrainTypes
+=
+================================================================================
+*/
 
-void P_InitTerrainTypes(void)
+void P_InitTerrainTypes (void)
 {
-    int i;
     int lump;
     int size;
 
     size = (numflats + 1) * sizeof(int);
     TerrainTypes = Z_Malloc(size, PU_STATIC, 0);
     memset(TerrainTypes, 0, size);
-    for (i = 0; TerrainTypeDefs[i].type != -1; i++)
+    for (int i = 0; TerrainTypeDefs[i].type != -1; i++)
     {
         lump = W_CheckNumForName(TerrainTypeDefs[i].name);
         if (lump != -1)
@@ -256,20 +265,22 @@ void P_InitTerrainTypes(void)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// PROC P_InitPicAnims
-//
-//----------------------------------------------------------------------------
+/*
+================================================================================
+=
+= P_InitPicAnims
+=
+================================================================================
+*/
 
-void P_InitPicAnims(void)
+void P_InitPicAnims (void)
 {
     char *startname;
     char *endname;
-    int i;
 
     lastanim = anims;
-    for (i = 0; animdefs[i].istexture != -1; i++)
+
+    for (int i = 0; animdefs[i].istexture != -1; i++)
     {
         startname = DEH_String(animdefs[i].startname);
         endname = DEH_String(animdefs[i].endname);
@@ -309,22 +320,25 @@ void P_InitPicAnims(void)
 
     // [JN] Don't init in "-vanilla", since there is no swirling flats.
     if (!vanillaparm)
-    R_InitDistortedFlats();
+    {
+        R_InitDistortedFlats();
+    }
 }
 
 /*
-==============================================================================
+================================================================================
 
-							UTILITIES
+                                   UTILITIES
 
-==============================================================================
+================================================================================
 */
 
 //
 //      Will return a side_t* given the number of the current sector,
 //              the line number, and the side (0/1) that you want.
 //
-side_t *getSide(int currentSector, int line, int side)
+
+const side_t *getSide (const int currentSector, const int line, const int side)
 {
     return &sides[(sectors[currentSector].lines[line])->sidenum[side]];
 }
@@ -333,7 +347,8 @@ side_t *getSide(int currentSector, int line, int side)
 //      Will return a sector_t* given the number of the current sector,
 //              the line number and the side (0/1) that you want.
 //
-sector_t *getSector(int currentSector, int line, int side)
+
+const sector_t *getSector (const int currentSector, const int line, const int side)
 {
     return sides[(sectors[currentSector].lines[line])->sidenum[side]].sector;
 }
@@ -342,92 +357,110 @@ sector_t *getSector(int currentSector, int line, int side)
 //      Given the sector number and the line number, will tell you whether
 //              the line is two-sided or not.
 //
-int twoSided(int sector, int line)
+
+const int twoSided (const int sector, const int line)
 {
     return (sectors[sector].lines[line])->flags & ML_TWOSIDED;
 }
 
-//==================================================================
 //
 //      Return sector_t * of sector next to current. NULL if not two-sided line
 //
-//==================================================================
-sector_t *getNextSector(line_t * line, sector_t * sec)
+
+const sector_t *getNextSector (const line_t *line, const sector_t *sec)
 {
     if (!(line->flags & ML_TWOSIDED))
+    {
         return NULL;
+    }
 
     if (line->frontsector == sec)
+    {
         return line->backsector;
+    }
 
     return line->frontsector;
 }
 
-//==================================================================
-//
-//      FIND LOWEST FLOOR HEIGHT IN SURROUNDING SECTORS
-//
-//==================================================================
-fixed_t P_FindLowestFloorSurrounding(sector_t * sec)
-{
-    int i;
-    line_t *check;
-    sector_t *other;
-    fixed_t floor = sec->floorheight;
+/*
+================================================================================
 
-    for (i = 0; i < sec->linecount; i++)
+                FIND LOWEST FLOOR HEIGHT IN SURROUNDING SECTORS
+
+================================================================================
+*/
+
+const fixed_t P_FindLowestFloorSurrounding (const sector_t *sec)
+{
+    line_t   *check;
+    sector_t *other;
+    fixed_t   floor = sec->floorheight;
+
+    for (int i = 0 ; i < sec->linecount ; i++)
     {
         check = sec->lines[i];
         other = getNextSector(check, sec);
         if (!other)
+        {
             continue;
+        }
         if (other->floorheight < floor)
+        {
             floor = other->floorheight;
+        }
     }
     return floor;
 }
 
-//==================================================================
-//
-//      FIND HIGHEST FLOOR HEIGHT IN SURROUNDING SECTORS
-//
-//==================================================================
-fixed_t P_FindHighestFloorSurrounding(sector_t * sec)
-{
-    int i;
-    line_t *check;
-    sector_t *other;
-    fixed_t floor = -500 * FRACUNIT;
+/*
+================================================================================
 
-    for (i = 0; i < sec->linecount; i++)
+                FIND HIGHEST FLOOR HEIGHT IN SURROUNDING SECTORS
+
+================================================================================
+*/
+
+const fixed_t P_FindHighestFloorSurrounding (const sector_t *sec)
+{
+    line_t   *check;
+    sector_t *other;
+    fixed_t   floor = -500 * FRACUNIT;
+
+    for (int i = 0 ; i < sec->linecount ; i++)
     {
         check = sec->lines[i];
         other = getNextSector(check, sec);
         if (!other)
+        {
             continue;
+        }
         if (other->floorheight > floor)
+        {
             floor = other->floorheight;
+        }
     }
     return floor;
 }
 
-//==================================================================
-//
-//      FIND NEXT HIGHEST FLOOR IN SURROUNDING SECTORS
-//
-//==================================================================
-fixed_t P_FindNextHighestFloor(sector_t * sec, int currentheight)
+/*
+================================================================================
+
+                  FIND NEXT HIGHEST FLOOR IN SURROUNDING SECTORS
+
+================================================================================
+*/
+
+const fixed_t P_FindNextHighestFloor (const sector_t *sec, const int currentheight)
 {
-    int i;
-    int h;
-    fixed_t min;
-    line_t *check;
+    int       i, h;
+    fixed_t   min;
+    line_t   *check;
     sector_t *other;
-    fixed_t height = currentheight;
+    fixed_t   height = currentheight;
 
     min = INT_MAX;
 
-    for (i = 0, h = 0; i < sec->linecount; i++)
+    for (i = 0, h = 0 ; i < sec->linecount ; i++)
     {
         check = sec->lines[i];
         other = getNextSector(check, sec);
@@ -444,7 +477,6 @@ fixed_t P_FindNextHighestFloor(sector_t * sec, int currentheight)
     }
 
     // Compatibility note, in case of demo desyncs.
-
     if (h > 20)
     {
         fprintf(stderr, english_language ?
@@ -455,122 +487,146 @@ fixed_t P_FindNextHighestFloor(sector_t * sec, int currentheight)
     return min;
 }
 
-//==================================================================
-//
-//      FIND LOWEST CEILING IN THE SURROUNDING SECTORS
-//
-//==================================================================
-fixed_t P_FindLowestCeilingSurrounding(sector_t * sec)
-{
-    int i;
-    line_t *check;
-    sector_t *other;
-    fixed_t height = INT_MAX;
+/*
+================================================================================
 
-    for (i = 0; i < sec->linecount; i++)
+                  FIND LOWEST CEILING IN THE SURROUNDING SECTORS
+
+================================================================================
+*/
+
+const fixed_t P_FindLowestCeilingSurrounding (const sector_t *sec)
+{
+    line_t   *check;
+    sector_t *other;
+    fixed_t   height = INT_MAX;
+
+    for (int i = 0 ; i < sec->linecount ; i++)
     {
         check = sec->lines[i];
         other = getNextSector(check, sec);
         if (!other)
+        {
             continue;
+        }
         if (other->ceilingheight < height)
+        {
             height = other->ceilingheight;
+        }
     }
     return height;
 }
 
-//==================================================================
-//
-//      FIND HIGHEST CEILING IN THE SURROUNDING SECTORS
-//
-//==================================================================
-fixed_t P_FindHighestCeilingSurrounding(sector_t * sec)
-{
-    int i;
-    line_t *check;
-    sector_t *other;
-    fixed_t height = 0;
+/*
+================================================================================
 
-    for (i = 0; i < sec->linecount; i++)
+                  FIND HIGHEST CEILING IN THE SURROUNDING SECTORS
+
+================================================================================
+*/
+
+const fixed_t P_FindHighestCeilingSurrounding (const sector_t *sec)
+{
+    line_t   *check;
+    sector_t *other;
+    fixed_t   height = 0;
+
+    for (int i = 0 ; i < sec->linecount ; i++)
     {
         check = sec->lines[i];
         other = getNextSector(check, sec);
         if (!other)
+        {
             continue;
+        }
         if (other->ceilingheight > height)
+        {
             height = other->ceilingheight;
+        }
     }
     return height;
 }
 
-//==================================================================
-//
-//      RETURN NEXT SECTOR # THAT LINE TAG REFERS TO
-//
-//==================================================================
-int P_FindSectorFromLineTag(line_t * line, int start)
-{
-    int i;
+/*
+================================================================================
 
-    for (i = start + 1; i < numsectors; i++)
+                  RETURN NEXT SECTOR # THAT LINE TAG REFERS TO
+
+================================================================================
+*/
+
+const int P_FindSectorFromLineTag (const line_t *line, const int start)
+{
+    for (int i = start + 1; i < numsectors; i++)
+    {
         if (sectors[i].tag == line->tag)
+        {
             return i;
+        }
+    }
     return -1;
 }
 
-//==================================================================
-//
-//      Find minimum light from an adjacent sector
-//
-//==================================================================
-int P_FindMinSurroundingLight(sector_t * sector, int max)
+/*
+================================================================================
+
+                    Find minimum light from an adjacent sector
+
+================================================================================
+*/
+
+const int P_FindMinSurroundingLight (const sector_t *sector, const int max)
 {
-    int i;
-    int min;
-    line_t *line;
+    int       min;
+    line_t   *line;
     sector_t *check;
 
     min = max;
-    for (i = 0; i < sector->linecount; i++)
+
+    for (int i = 0 ; i < sector->linecount ; i++)
     {
         line = sector->lines[i];
         check = getNextSector(line, sector);
         if (!check)
+        {
             continue;
+        }
         if (check->lightlevel < min)
+        {
             min = check->lightlevel;
+        }
     }
     return min;
 }
 
 /*
-==============================================================================
+================================================================================
 
-							EVENTS
+                                EVENTS
 
-Events are operations triggered by using, crossing, or shooting special lines, or by timed thinkers
+          Events are operations triggered by using, crossing,
+            or shooting special lines, or by timed thinkers
 
-==============================================================================
+================================================================================
 */
 
 
 
 /*
-===============================================================================
+================================================================================
 =
 = P_CrossSpecialLine - TRIGGER
 =
 = Called every time a thing origin is about to cross
 = a line with a non 0 special
 =
-===============================================================================
+================================================================================
 */
 
-void P_CrossSpecialLine(int linenum, int side, mobj_t * thing)
+void P_CrossSpecialLine (const int linenum, const int side, const mobj_t *thing)
 {
-    line_t *line;
-
-    line = &lines[linenum];
+    line_t *line = &lines[linenum];
+    
     if (!thing->player)
     {                           // Check if trigger allowed by non-player mobj
         switch (line->special)
@@ -578,8 +634,6 @@ void P_CrossSpecialLine(int linenum, int side, mobj_t * thing)
             case 39:           // Trigger_TELEPORT
             case 97:           // Retrigger_TELEPORT
             case 4:            // Trigger_Raise_Door
-                //case 10:      // PLAT DOWN-WAIT-UP-STAY TRIGGER
-                //case 88:      // PLAT DOWN-WAIT-UP-STAY RETRIGGER
                 break;
             default:
                 return;
@@ -808,15 +862,17 @@ void P_CrossSpecialLine(int linenum, int side, mobj_t * thing)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// PROC P_ShootSpecialLine
-//
-// Called when a thing shoots a special line.
-//
-//----------------------------------------------------------------------------
+/*
+================================================================================
+=
+= P_ShootSpecialLine
+=
+= Called when a thing shoots a special line.
+=
+================================================================================
+*/
 
-void P_ShootSpecialLine(mobj_t * thing, line_t * line)
+void P_ShootSpecialLine (const mobj_t *thing, const line_t *line)
 {
     if (!thing->player)
     {                           // Check if trigger allowed by non-player mobj
@@ -846,18 +902,20 @@ void P_ShootSpecialLine(mobj_t * thing, line_t * line)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// PROC P_PlayerInSpecialSector
-//
-// Called every tic frame that the player origin is in a special sector.
-//
-//----------------------------------------------------------------------------
+/*
+================================================================================
+=
+= P_PlayerInSpecialSector
+=
+= Called every tic frame that the player origin is in a special sector.
+=
+================================================================================
+*/
 
-void P_PlayerInSpecialSector(player_t * player)
+void P_PlayerInSpecialSector (player_t *player)
 {
-    sector_t *sector;
-    static int pushTab[5] = {
+    sector_t *sector = player->mo->subsector->sector;
+    static const int pushTab[5] = {
         2048 * 5,
         2048 * 10,
         2048 * 25,
@@ -865,7 +923,6 @@ void P_PlayerInSpecialSector(player_t * player)
         2048 * 35
     };
 
-    sector = player->mo->subsector->sector;
     if (player->mo->z != sector->floorheight)
     {                           // Player is not touching the floor
         return;
@@ -973,23 +1030,6 @@ void P_PlayerInSpecialSector(player_t * player)
             // Only used in (P_mobj):P_XYMovement and (P_user):P_Thrust
             break;
 
-        // [JN] Custom sector effects for scrolling in any direction:
-        // Scroll_North
-        case 250: case 260: case 270: case 280: case 290:
-            P_Thrust(player, ANG90, pushTab[(sector->special/10) - 25]);
-        break;
-        // Scroll_East
-        case 200: case 210: case 220: case 230: case 240:
-            P_Thrust(player, 0, pushTab[(sector->special/10) - 20]);
-        break;
-        // Scroll_South
-        case 300: case 310: case 320: case 330: case 340:
-            P_Thrust(player, ANG270, pushTab[(sector->special/10) - 30]);
-        break;
-        // Scroll_West
-        case 350: case 360: case 370: case 380: case 390:
-            P_Thrust(player, ANG180, pushTab[(sector->special/10) - 35]);
-        break;
         // [JN] Made non-fatal:
         default:
             printf(english_language ? 
@@ -1000,15 +1040,17 @@ void P_PlayerInSpecialSector(player_t * player)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// PROC P_UpdateSpecials
-//
-// Animate planes, scroll walls, etc.
-//
-//----------------------------------------------------------------------------
+/*
+================================================================================
+=
+= P_UpdateSpecials
+=
+= Animate planes, scroll walls, etc.
+=
+================================================================================
+*/
 
-void P_UpdateSpecials(void)
+void P_UpdateSpecials (void)
 {
     int i;
     int pic;
@@ -1055,7 +1097,6 @@ void P_UpdateSpecials(void)
     {
         FlatScrollFactor_Y = 0;
     }
-
 
     // Update scrolling texture offsets
     for (i = 0; i < numlinespecials; i++)
@@ -1107,10 +1148,18 @@ void P_UpdateSpecials(void)
     }
 }
 
-// [crispy] smooth texture scrolling
-void R_InterpolateTextureOffsets()
+/*
+================================================================================
+=
+= R_InterpolateTextureOffsets
+=
+= [crispy] smooth texture scrolling
+=
+================================================================================
+*/
+
+void R_InterpolateTextureOffsets (void)
 {
-	int i;
 	fixed_t frac;
 
 	if (uncapped_fps && leveltime > oldleveltime)
@@ -1122,7 +1171,7 @@ void R_InterpolateTextureOffsets()
 		frac = FRACUNIT;
 	}
 
-	for (i = 0; i < numlinespecials; i++)
+	for (int i = 0 ; i < numlinespecials ; i++)
 	{
 		const line_t *line = linespeciallist[i];
 		side_t *const side = &sides[line->sidenum[0]];
@@ -1141,12 +1190,17 @@ void R_InterpolateTextureOffsets()
     FlatScrollFactor_Y = FlatScrollFactor_Y_old + frac;
 }
 
-//============================================================
-//
-//      Special Stuff that can't be categorized
-//
-//============================================================
-int EV_DoDonut(line_t * line)
+/*
+================================================================================
+=
+= EV_DoDonut
+=
+= Special Stuff that can't be categorized
+=
+================================================================================
+*/
+
+const int EV_DoDonut (const line_t *line)
 {
     sector_t *s1;
     sector_t *s2;
@@ -1215,26 +1269,27 @@ int EV_DoDonut(line_t * line)
 }
 
 /*
-==============================================================================
+================================================================================
 
 							SPECIAL SPAWNING
 
-==============================================================================
+================================================================================
 */
+
 /*
 ================================================================================
+=
 = P_SpawnSpecials
 =
-= After the map has been loaded, scan for specials that
-= spawn thinkers
+= After the map has been loaded, scan for specials that spawn thinkers
 =
-===============================================================================
+================================================================================
 */
 
-short numlinespecials;
 line_t *linespeciallist[MAXLINEANIMS];
+short   numlinespecials;
 
-void P_SpawnSpecials(void)
+void P_SpawnSpecials (void)
 {
     sector_t *sector;
     int i;
@@ -1243,10 +1298,12 @@ void P_SpawnSpecials(void)
     //      Init special SECTORs
     //
     sector = sectors;
-    for (i = 0; i < numsectors; i++, sector++)
+    for (i = 0 ; i < numsectors ; i++, sector++)
     {
         if (!sector->special)
+        {
             continue;
+        }
         switch (sector->special)
         {
             case 1:            // FLICKERING LIGHTS
@@ -1288,7 +1345,8 @@ void P_SpawnSpecials(void)
     //      Init line EFFECTs
     //
     numlinespecials = 0;
-    for (i = 0; i < numlines; i++)
+    for (i = 0 ; i < numlines ; i++)
+    {
         switch (lines[i].special)
         {
             case 48:           // Effect_Scroll_Left
@@ -1297,28 +1355,37 @@ void P_SpawnSpecials(void)
                 numlinespecials++;
                 break;
         }
+    }
 
     //
     //      Init other misc stuff
     //
     for (i = 0; i < MAXCEILINGS; i++)
+    {
         activeceilings[i] = NULL;
+    }
     for (i = 0; i < MAXPLATS; i++)
+    {
         activeplats[i] = NULL;
+    }
     for (i = 0; i < MAXBUTTONS; i++)
+    {
         memset(&buttonlist[i], 0, sizeof(button_t));
+    }
 }
 
-//----------------------------------------------------------------------------
-//
-// PROC P_InitAmbientSound
-//
-//----------------------------------------------------------------------------
+/*
+================================================================================
+=
+= P_InitAmbientSound
+=
+================================================================================
+*/
 
 // [crispy] fix ambient sounds stop playing
 static const int (*Amb_Random)(void);
 
-void P_InitAmbientSound(void)
+void P_InitAmbientSound (void)
 {
     AmbSfxCount = 0;
     AmbSfxVolume = 0;
@@ -1335,15 +1402,17 @@ void P_InitAmbientSound(void)
     Amb_Random = P_Random;
 }
 
-//----------------------------------------------------------------------------
-//
-// PROC P_AddAmbientSfx
-//
-// Called by (P_mobj):P_SpawnMapThing during (P_setup):P_SetupLevel.
-//
-//----------------------------------------------------------------------------
+/*
+================================================================================
+=
+= P_AddAmbientSfx
+=
+= Called by (P_mobj):P_SpawnMapThing during (P_setup):P_SetupLevel.
+=
+================================================================================
+*/
 
-void P_AddAmbientSfx(int sequence)
+void P_AddAmbientSfx (const int sequence)
 {
     // [crispy] remove the ambient sound limit
     if (AmbSfxCount >= AmbSfxMax)
@@ -1354,15 +1423,17 @@ void P_AddAmbientSfx(int sequence)
     LevelAmbientSfx[AmbSfxCount++] = AmbientSfx[sequence];
 }
 
-//----------------------------------------------------------------------------
-//
-// PROC P_AmbientSound
-//
-// Called every tic by (P_tick):P_Ticker.
-//
-//----------------------------------------------------------------------------
+/*
+================================================================================
+=
+= P_AmbientSound
+=
+= Called every tic by (P_tick):P_Ticker.
+=
+================================================================================
+*/
 
-void P_AmbientSound(void)
+void P_AmbientSound (void)
 {
     afxcmd_t cmd;
     int sound;

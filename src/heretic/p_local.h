@@ -330,7 +330,6 @@ extern void P_UnsetThingPosition (mobj_t *thing);
 extern boolean floatok;  // if true, move would be ok if
 extern boolean P_ChangeSector(sector_t * sector, boolean crunch);
 extern boolean P_CheckPosition(mobj_t * thing, fixed_t x, fixed_t y);
-extern boolean P_CheckSight(mobj_t * t1, mobj_t * t2);
 extern boolean P_TeleportMove(mobj_t * thing, fixed_t x, fixed_t y);
 extern boolean P_TestMobjLocation(mobj_t * mobj);
 extern boolean P_TryMove(mobj_t * thing, fixed_t x, fixed_t y);
@@ -432,6 +431,18 @@ extern void P_SetupLevel (int episode, int map, int playermask, skill_t skill);
 /*
 ================================================================================
 =
+= P_SIGHT
+=
+================================================================================
+*/
+
+extern boolean P_CheckSight (const mobj_t *t1, const mobj_t *t2);
+
+extern fixed_t topslope, bottomslope;   // slopes to top and bottom of target
+
+/*
+================================================================================
+=
 = P_SPEC
 =
 ================================================================================
@@ -476,7 +487,7 @@ extern void P_InitTerrainTypes (void);
 extern void P_InitLava (void);
 
 // At map load
-extern void P_AddAmbientSfx (int sequence);
+extern void P_AddAmbientSfx (const int sequence);
 extern void P_InitAmbientSound (void);
 extern void P_SpawnSpecials (void);
 
@@ -487,25 +498,25 @@ extern void P_UpdateSpecials (void);
 // When needed
 extern boolean P_UseSpecialLine (mobj_t *thing, line_t *line);
 
-extern fixed_t P_FindHighestCeilingSurrounding (sector_t *sec);
-extern fixed_t P_FindHighestFloorSurrounding (sector_t *sec);
-extern fixed_t P_FindLowestCeilingSurrounding (sector_t *sec);
-extern fixed_t P_FindLowestFloorSurrounding (sector_t *sec);
-extern fixed_t P_FindNextHighestFloor (sector_t *sec, int currentheight);
+extern const fixed_t P_FindHighestCeilingSurrounding (const sector_t *sec);
+extern const fixed_t P_FindHighestFloorSurrounding (const sector_t *sec);
+extern const fixed_t P_FindLowestCeilingSurrounding (const sector_t *sec);
+extern const fixed_t P_FindLowestFloorSurrounding (const sector_t *sec);
+extern const fixed_t P_FindNextHighestFloor (const sector_t *sec, const int currentheight);
 
-extern int EV_DoDonut (line_t *line);
-extern int P_FindMinSurroundingLight (sector_t *sector, int max);
-extern int P_FindSectorFromLineTag (line_t *line, int start);
-extern int twoSided (int sector, int line);
+extern const int EV_DoDonut (const line_t *line);
+extern const int P_FindMinSurroundingLight (const sector_t *sector, const int max);
+extern const int P_FindSectorFromLineTag (const line_t *line, const int start);
+extern const int twoSided (const int sector, const int line);
 
-extern sector_t *getNextSector (line_t *line, sector_t *sec);
-extern sector_t *getSector (int currentSector, int line, int side);
+extern const sector_t *getNextSector (const line_t *line, const sector_t *sec);
+extern const sector_t *getSector (const int currentSector, const int line, const int side);
 
-extern side_t *getSide (int currentSector, int line, int side);
+extern const side_t *getSide (const int currentSector, const int line, const int side);
 
-extern void P_CrossSpecialLine (int linenum, int side, mobj_t *thing);
+extern void P_CrossSpecialLine (const int linenum, const int side, const mobj_t *thing);
 extern void P_PlayerInSpecialSector (player_t *player);
-extern void P_ShootSpecialLine (mobj_t *thing, line_t *line);
+extern void P_ShootSpecialLine (const mobj_t *thing, const line_t *line);
 
 /*
 ================================================================================
