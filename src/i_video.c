@@ -130,8 +130,8 @@ int window_title_short = true;
 
 // Screen width and height, from configuration file.
 
-int window_width = SCREENWIDTH;
-int window_height = SCREENHEIGHT_4_3;
+int window_width = 852;                // SCREENWIDTH + 212
+int window_height = SCREENHEIGHT_4_3;  // (240 << hires)
 
 typedef enum
 {
