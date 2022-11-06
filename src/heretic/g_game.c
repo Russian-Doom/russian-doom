@@ -759,6 +759,23 @@ static void G_DoLoadLevel (void)
 
 boolean G_Responder(event_t * ev)
 {
+    // [crispy] demo pause (from prboom-plus)
+    if (gameaction == ga_nothing && (demoplayback || gamestate == GS_DEMOSCREEN))
+    {
+        if (BK_isKeyDown(ev, bk_pause))
+        {
+            if (paused ^= 2)
+            {
+                S_PauseSound();
+            }
+            else
+            {
+                S_ResumeSound();
+            }
+            return true;
+        }
+    }
+
     player_t *plr;
 
     plr = &players[consoleplayer];
@@ -1011,6 +1028,14 @@ void G_Ticker(void)
     }
 
 
+    // [JN] Allow to pause demo playback:
+    if (paused & 2 || (!demoplayback && menuactive && !netgame))
+    {
+        oldleveltime = leveltime;  // Supress interpolation for next frame.
+        return;                    // Don't go any farther.
+    }
+    else
+    {
 //
 // get commands, check consistancy, and build new consistancy check
 //
@@ -1099,6 +1124,7 @@ void G_Ticker(void)
                 }
             }
         }
+    }
     // turn inventory off after a certain amount of time
     if (inventory && !(--inventoryTics))
     {
