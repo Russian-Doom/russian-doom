@@ -496,7 +496,7 @@ extern void P_AmbientSound (void);
 extern void P_UpdateSpecials (void);
 
 // When needed
-extern boolean P_UseSpecialLine (mobj_t *thing, line_t *line);
+extern boolean P_UseSpecialLine (mobj_t *thing, const line_t *line);
 
 extern const fixed_t P_FindHighestCeilingSurrounding (const sector_t *sec);
 extern const fixed_t P_FindHighestFloorSurrounding (const sector_t *sec);
@@ -826,7 +826,7 @@ typedef struct
 
 extern button_t buttonlist[MAXBUTTONS];
 
-extern void P_ChangeSwitchTexture (line_t *line, int useAgain);
+extern void P_ChangeSwitchTexture (line_t *line, const boolean useAgain);
 extern void P_InitSwitchList (void);
 
 /*
@@ -837,5 +837,5 @@ extern void P_InitSwitchList (void);
 ================================================================================
 */
 
-extern boolean EV_Teleport (line_t *line, int side, mobj_t *thing);
+extern boolean EV_Teleport (const line_t *line, const int side, const mobj_t *thing);
 extern boolean P_Teleport (mobj_t *thing, fixed_t x, fixed_t y, angle_t angle);

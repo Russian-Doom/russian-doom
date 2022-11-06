@@ -16,7 +16,6 @@
 //
 
 
-
 #include "hr_local.h"
 #include "deh_str.h"
 #include "i_system.h"
@@ -25,43 +24,47 @@
 #include "v_video.h"
 #include "jn.h"
 
-//==================================================================
-//
-//      CHANGE THE TEXTURE OF A WALL SWITCH TO ITS OPPOSITE
-//
-//==================================================================
-switchlist_t alphSwitchList[] =
+
+/*
+================================================================================
+
+              CHANGE THE TEXTURE OF A WALL SWITCH TO ITS OPPOSITE
+
+================================================================================
+*/
+
+static const switchlist_t alphSwitchList[] =
 {
     {"SW1OFF", "SW1ON", 1},
     {"SW2OFF", "SW2ON", 1},
-    {"\0", "\0", 0}
+    {    "\0",    "\0", 0}
 };
 
-int switchlist[MAXSWITCHES * 2];
-int numswitches;
+static int switchlist[MAXSWITCHES * 2];
+static int numswitches;
+
 button_t buttonlist[MAXBUTTONS];
 
 /*
-===============
+================================================================================
 =
 = P_InitSwitchList
 =
-= Only called at game initialization
+= Only called at game initialization.
 =
-===============
+================================================================================
 */
 
-void P_InitSwitchList(void)
+void P_InitSwitchList (void)
 {
-    int i;
-    int index;
-    int episode;
+    int episode = 1;
 
-    episode = 1;
     if (gamemode != shareware)
+    {
         episode = 2;
+    }
 
-    for (index = 0, i = 0; i < MAXSWITCHES; i++)
+    for (int index = 0, i = 0; i < MAXSWITCHES; i++)
     {
         if (!alphSwitchList[i].episode)
         {
@@ -80,23 +83,28 @@ void P_InitSwitchList(void)
     }
 }
 
-//==================================================================
-//
-//      Start a button counting down till it turns off.
-//
-//==================================================================
-void P_StartButton(line_t * line, bwhere_e w, int texture, int time)
-{
-    int i;
+/*
+================================================================================
+=
+= P_StartButton
+=
+= Start a button counting down till it turns off.
+=
+================================================================================
+*/
 
-    for (i = 0; i < MAXBUTTONS; i++)
+static void P_StartButton (const line_t * line, const bwhere_e w,
+                           const int texture, const int time)
+{
+    for (int i = 0 ; i < MAXBUTTONS ; i++)
         if (!buttonlist[i].btimer)
         {
             buttonlist[i].line = line;
             buttonlist[i].where = w;
             buttonlist[i].btexture = texture;
             buttonlist[i].btimer = time;
-            buttonlist[i].soundorg = &line->soundorg; // [from-crispy] Corrected sound source
+            // [JN] [crispy] Corrected sound source.
+            buttonlist[i].soundorg = &line->soundorg;
             return;
         }
 
@@ -105,25 +113,31 @@ void P_StartButton(line_t * line, bwhere_e w, int texture, int time)
             "P_StartButton: превышен лимит слотов для переключателей!");
 }
 
-//==================================================================
-//
-//      Function that changes wall texture.
-//      Tell it if switch is ok to use again (1=yes, it's a button).
-//
-//==================================================================
-void P_ChangeSwitchTexture(line_t * line, int useAgain)
+/*
+================================================================================
+=
+= P_ChangeSwitchTexture
+=
+= Function that changes wall texture.
+= Tell it if switch is ok to use again (1=yes, it's a button).
+=
+================================================================================
+*/
+
+void P_ChangeSwitchTexture (line_t *line, const boolean useAgain)
 {
     int texTop;
     int texMid;
     int texBot;
-    int i;
     int sound;
     // [crispy] register up to three buttons at once 
     // for lines with more than one switch texture.
     boolean playsound = false;
 
     if (!useAgain)
+    {
         line->special = 0;
+    }
 
     texTop = sides[line->sidenum[0]].toptexture;
     texMid = sides[line->sidenum[0]].midtexture;
@@ -131,28 +145,34 @@ void P_ChangeSwitchTexture(line_t * line, int useAgain)
 
     sound = sfx_switch;
 
-    for (i = 0; i < numswitches * 2; i++)
+    for (int i = 0 ; i < numswitches * 2 ; i++)
     {
         if (switchlist[i] == texTop)
         {
             playsound = true;
             sides[line->sidenum[0]].toptexture = switchlist[i ^ 1];
             if (useAgain)
+            {
                 P_StartButton(line, top, switchlist[i], BUTTONTIME);
+            }
         }
         if (switchlist[i] == texMid)
         {
             playsound = true;
             sides[line->sidenum[0]].midtexture = switchlist[i ^ 1];
             if (useAgain)
+            {
                 P_StartButton(line, middle, switchlist[i], BUTTONTIME);
+            }
         }
         if (switchlist[i] == texBot)
         {
             playsound = true;
             sides[line->sidenum[0]].bottomtexture = switchlist[i ^ 1];
             if (useAgain)
+            {
                 P_StartButton(line, bottom, switchlist[i], BUTTONTIME);
+            }
         }
     }
 
@@ -186,16 +206,17 @@ void P_ChangeSwitchTexture(line_t * line, int useAgain)
 }
 
 /*
-==============================================================================
+================================================================================
 =
 = P_UseSpecialLine
 =
-= Called when a thing uses a special line
-= Only the front sides of lines are usable
-===============================================================================
+= Called when a thing uses a special line.
+= Only the front sides of lines are usable.
+=
+================================================================================
 */
 
-boolean P_UseSpecialLine(mobj_t * thing, line_t * line)
+boolean P_UseSpecialLine (mobj_t *thing, const line_t *line)
 {
     //
     //      Switches that other things can activate
@@ -203,7 +224,9 @@ boolean P_UseSpecialLine(mobj_t * thing, line_t * line)
     if (!thing->player)
     {
         if (line->flags & ML_SECRET)
+        {
             return false;       // never open secret doors
+        }
         switch (line->special)
         {
             case 1:            // MANUAL DOOR RAISE
@@ -221,9 +244,9 @@ boolean P_UseSpecialLine(mobj_t * thing, line_t * line)
     //      
     switch (line->special)
     {
-            //===============================================
-            //      MANUALS
-            //===============================================
+        //===============================================
+        //      MANUALS
+        //===============================================
         case 1:                // Vertical Door
         case 26:               // Blue Door/Locked
         case 27:               // Yellow Door /Locked
@@ -235,9 +258,9 @@ boolean P_UseSpecialLine(mobj_t * thing, line_t * line)
         case 34:               // Yellow locked door open
             EV_VerticalDoor(line, thing);
             break;
-            //===============================================
-            //      SWITCHES
-            //===============================================
+        //===============================================
+        //      SWITCHES
+        //===============================================
         case 7:                // Switch_Build_Stairs (8 pixel steps)
             if (EV_BuildStairs(line, 8 * FRACUNIT))
             {
@@ -322,9 +345,9 @@ boolean P_UseSpecialLine(mobj_t * thing, line_t * line)
             if (EV_DoDoor(line, vld_open, VDOORSPEED))
                 P_ChangeSwitchTexture(line, 0);
             break;
-            //===============================================
-            //      BUTTONS
-            //===============================================
+        //===============================================
+        //      BUTTONS
+        //===============================================
         case 42:               // Close Door
             if (EV_DoDoor(line, vld_close, VDOORSPEED))
                 P_ChangeSwitchTexture(line, 1);
