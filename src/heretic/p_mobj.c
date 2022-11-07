@@ -490,10 +490,11 @@ void P_XYMovement(mobj_t * mo)
     // killough 8/11/98: add bouncers
     // killough 9/15/98: add objects falling off ledges
     // killough 11/98: only include bouncers hanging off ledges
-    if ((mo->flags & MF_CORPSE || mo->intflags & MIF_FALLING) 
-    &&  (mo->momx > FRACUNIT/4 || mo->momx < -FRACUNIT/4
-    ||   mo->momy > FRACUNIT/4 || mo->momy < -FRACUNIT/4) 
-    &&   mo->floorz != mo->subsector->sector->floorheight)
+    if (singleplayer && !strict_mode && !vanillaparm
+    && (mo->flags & MF_CORPSE || mo->intflags & MIF_FALLING) 
+    && (mo->momx > FRACUNIT/4 || mo->momx < -FRACUNIT/4
+    ||  mo->momy > FRACUNIT/4 || mo->momy < -FRACUNIT/4) 
+    &&  mo->floorz != mo->subsector->sector->floorheight)
     {
         return;  // do not stop sliding if halfway off a step with some momentum
     }
@@ -941,16 +942,19 @@ void P_MobjThinker(mobj_t * mobj)
 
     // killough 9/12/98: objects fall off ledges if they are hanging off
     // slightly push off of ledge if hanging more than halfway off
-    // [JN] TODO: why it's not working with mobj->z > mobj->dropoffz ?
-    if (torque)
+    if (singleplayer && torque && !strict_mode && !vanillaparm)
     {
-        if (/*mobj->z > mobj->dropoffz      // Only objects contacting dropoff
-        &&*/ !(mobj->flags & MF_NOGRAVITY)  // Only objects which fall
-        && mobj->flags & MF_CORPSE          // [JN] And only for corpses
-        && mobj->geartics > 0)              // [JN] And only if torque tics are available
-        P_ApplyTorque(mobj);                // Apply torque
+        if (mobj->z > mobj->dropoffz        // Only objects contacting dropoff
+        && !(mobj->flags & MF_NOGRAVITY)    // Only objects which fall
+        &&  (mobj->flags & MF_CORPSE)       // [JN] And only for corpses
+        &&   mobj->geartics > 0)            // [JN] And only if torque tics are available.
+        {
+            P_ApplyTorque(mobj);            // Apply torque
+        }
         else
-        mobj->intflags &= ~MIF_FALLING, mobj->gear = 0;  // Reset torque
+        {
+            mobj->intflags &= ~MIF_FALLING, mobj->gear = 0;  // Reset torque
+        }
     }
     
 //

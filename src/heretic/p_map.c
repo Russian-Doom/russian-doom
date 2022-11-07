@@ -391,8 +391,11 @@ boolean PIT_CheckThing(mobj_t * thing)
     }
     
     // [JN] Torque: make sliding corpses passable
-    if (tmthing->intflags & MIF_FALLING)
-    return true;
+    if (singleplayer && !strict_mode && !vanillaparm
+    &&  torque && tmthing->intflags & MIF_FALLING)
+    {
+        return true;
+    }
     
     // Check for missile
     if (tmthing->flags & MF_MISSILE)
@@ -1062,12 +1065,6 @@ void P_ApplyTorque(mobj_t *mo)
     int yh = ((tmbbox[BOXTOP] = 
         mo->y + mo->radius) - bmaporgy) >> MAPBLOCKSHIFT;
     int bx,by,flags = mo->intflags; // Remember the current state, for gear-change
-
-    // [JN] No torque available in following modes:
-    if (!singleplayer || strict_mode || vanillaparm)
-    {
-        return;
-    }
 
     tmthing = mo;
     validcount++;   // prevents checking same line twice
