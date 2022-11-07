@@ -652,6 +652,15 @@ void R_DrawPlanes (void)
                 break;
             }
 
+            // [JN] Apply circular flowing effect to swirling liquids.
+            if (swirling_liquids && flattranslation[pl->picnum] == -1 && !vanillaparm)
+            {
+                const fixed_t FlowAmplitude = (FINEANGLES / 160 * leveltime) & FINEMASK;
+
+                FlatScrollDelta_X = finesine[FlowAmplitude] * 2;
+                FlatScrollDelta_Y = finecosine[FlowAmplitude] * 2;
+            }
+
             ds_source = tempSource;
             ds_brightmap = R_BrightmapForFlatNum(lumpnum-firstflat);
 
