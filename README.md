@@ -1,5 +1,14 @@
 ![](https://jnechaevsky.github.io/inter-doom/files/inter-doom-git.png)
 
+### About
+
+International Doom is a limit-removing source port of Doom, Heretic and Hexen.
+It has numerous vanilla bug fixes, enhanced 640x400 display resolution,
+improved game palettes and offers many optional aesthetic game enhancements
+along with maximum possible translation to the Russian language.
+
+For more information, visit [Project's Wiki](https://github.com/JNechaevsky/inter-doom/wiki).
+
 ### International Doom 6.0.1 (released: September 24, 2022)
 
 **Windows:**
@@ -59,7 +68,7 @@ Changelog for current and upcoming versions available
 in [English](https://github.com/JNechaevsky/inter-doom/wiki/Changelog)
 and [Russian](https://github.com/JNechaevsky/inter-doom/wiki/Changelog-(Rus)) languages.
 
-### About
+### License
 
 International Doom is based on [Chocolate Doom](https://www.chocolate-doom.org) by Simon Howard
 and [Crispy Doom](http://fabiangreffrath.github.io/crispy-doom) by Fabian Greffrath,
