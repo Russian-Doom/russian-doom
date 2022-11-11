@@ -1643,7 +1643,7 @@ static void AM_drawMarks (void)
 
 static void AM_drawCrosshair (void)
 {
-    V_DrawPatchUnscaled(screenwidth/2, 163, 
+    V_DrawPatchUnscaled(origwidth, 162, 
                         W_CacheLumpName("XHAIR_1", PU_STATIC), NULL);
 }
 

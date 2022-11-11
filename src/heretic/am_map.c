@@ -2241,7 +2241,7 @@ static void AM_drawkeys (void)
 
 static void AM_drawCrosshair (void)
 {
-    V_DrawPatchUnscaled(origwidth, 160, am_crosshair, NULL);
+    V_DrawPatchUnscaled(origwidth, 162, am_crosshair, NULL);
 }
 
 /*
