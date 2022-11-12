@@ -1098,6 +1098,14 @@ void P_UpdateSpecials (void)
         FlatScrollFactor_Y = 0;
     }
 
+    // [JN] Circular flowing effect for swirling liquids.
+    {
+        const fixed_t FlowAmplitude = (FINEANGLES / 160 * leveltime) & FINEMASK;
+
+        FlowAmplitude_X = finesine[FlowAmplitude] * 2;
+        FlowAmplitude_Y = finecosine[FlowAmplitude] * 2;
+    }
+
     // Update scrolling texture offsets
     for (i = 0; i < numlinespecials; i++)
     {

@@ -104,6 +104,8 @@ fixed_t FlatScrollFactor_X, FlatScrollFactor_X_old;
 fixed_t FlatScrollFactor_Y, FlatScrollFactor_Y_old;
 static fixed_t FlatScrollDelta_X;
 static fixed_t FlatScrollDelta_Y;
+// [JN] Circular flowing effect for swirling liquids.
+fixed_t FlowAmplitude_X, FlowAmplitude_Y;
 
 #define FLAT_SCROLL_SLOWEST  0.5;
 #define FLAT_SCROLL_MEDIUM   2;
@@ -655,10 +657,8 @@ void R_DrawPlanes (void)
             // [JN] Apply circular flowing effect to swirling liquids.
             if (swirling_liquids && flattranslation[pl->picnum] == -1 && !vanillaparm)
             {
-                const fixed_t FlowAmplitude = (FINEANGLES / 160 * leveltime) & FINEMASK;
-
-                FlatScrollDelta_X = finesine[FlowAmplitude] * 2;
-                FlatScrollDelta_Y = finecosine[FlowAmplitude] * 2;
+                FlatScrollDelta_X = FlowAmplitude_X;
+                FlatScrollDelta_Y = FlowAmplitude_Y;
             }
 
             ds_source = tempSource;
