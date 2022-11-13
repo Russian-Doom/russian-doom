@@ -344,7 +344,6 @@ extern line_t **spechit;  // [crispy] remove SPECHIT limit
 
 extern line_t *ceilingline;
 
-extern mobj_t *BlockingMobj;
 extern mobj_t *linetarget;  // who got hit (or NULL)
 extern mobj_t *P_CheckOnmobj(mobj_t * thing);
 

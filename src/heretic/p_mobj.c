@@ -375,16 +375,10 @@ void P_XYMovement(mobj_t * mo)
         // and it's same to: https://doomwiki.org/wiki/Mancubus_fireball_clipping
         //
         // Thanks to Jeff Doggett for simplifying!
-        //
-        // Additionally, wallrunning bug is fixed (mo->player condition):
-        // https://doomwiki.org/wiki/Wallrunning
-        //
-        // Thanks AXDOOMER and Brad Harding!
 
         if (singleplayer && !strict_mode && !vanillaparm && improved_collision ? 
-            mo->player ? ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) && (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)) 
-                       : ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) || (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2))
-                       :  (xmove > MAXMOVE/2 || ymove > MAXMOVE/2))
+           ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) || (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)) :
+            (xmove > MAXMOVE/2 || ymove > MAXMOVE/2))
         {
             ptryx = mo->x + xmove / 2;
             ptryy = mo->y + ymove / 2;
@@ -401,31 +395,8 @@ void P_XYMovement(mobj_t * mo)
         {                       // Blocked move
             if (mo->flags2 & MF2_SLIDE)
             {                   // Try to slide along it
-                if (BlockingMobj == NULL          // [JN] Mobj is not blocking.
-                || BlockingMobj->health <= 0      // [JN] Allow to slightly bump into falling corpse.
-                || !improved_collision || !singleplayer  // [JN] Keep demo compatibility.
-                || strict_mode || vanillaparm)
-                {   
-                    // [JN] Slide movement.
-                    P_SlideMove(mo);
-                }
-                else
-                {
-                    // [JN] Slide against mobj.
-                    // Remove X/Y momentum while moving on solid things.
-                    if (P_TryMove(mo, mo->x, ptryy))
-                    {
-                        mo->momx = 0;
-                    }
-                    else if (P_TryMove(mo, ptryx, mo->y))
-                    {
-                        mo->momy = 0;
-                    }
-                    else
-                    {
-                        mo->momx = mo->momy = 0;
-                    }
-                }
+
+                P_SlideMove(mo);
             }
             else if (mo->flags & MF_MISSILE)
             {   // Explode a missile
@@ -871,7 +842,6 @@ void P_MobjThinker(mobj_t * mobj)
     }
 
     // Handle X and Y momentums
-    BlockingMobj = NULL;
     if (mobj->momx || mobj->momy || (mobj->flags & MF_SKULLFLY))
     {
         P_XYMovement(mobj);
@@ -895,8 +865,7 @@ void P_MobjThinker(mobj_t * mobj)
             mobj->z = mobj->floorz + FloatBobOffsets[(mobj->health++) & 63];
         }
     }
-    else if ((mobj->z != mobj->floorz) || mobj->momz 
-    || (BlockingMobj && singleplayer && !strict_mode && !vanillaparm && improved_collision))
+    else if ((mobj->z != mobj->floorz) || mobj->momz)
     {                           // Handle Z momentum and gravity
         if (mobj->flags2 & MF2_PASSMOBJ)
         {
