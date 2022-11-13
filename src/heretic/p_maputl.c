@@ -56,9 +56,9 @@ fixed_t P_AproxDistance(fixed_t dx, fixed_t dy)
 ================================================================================
 */
 
-fixed_t P_ApproxDistanceZ(fixed_t dx, fixed_t dy, fixed_t dz)
+const int64_t P_ApproxDistanceZ (int64_t dx, int64_t dy, int64_t dz)
 {
-	fixed_t dxy;
+	int64_t dxy;
 
 	dx = abs(dx);
 	dy = abs(dy);

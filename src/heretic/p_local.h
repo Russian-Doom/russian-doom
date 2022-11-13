@@ -301,10 +301,10 @@ extern divline_t trace;
 
 extern fixed_t lowfloor;
 extern fixed_t opentop, openbottom, openrange;
-extern fixed_t P_ApproxDistanceZ (fixed_t dx, fixed_t dy, fixed_t dz);
 extern fixed_t P_AproxDistance (fixed_t dx, fixed_t dy);
 extern fixed_t P_InterceptVector (divline_t *v2, divline_t *v1);
 
+extern const int64_t P_ApproxDistanceZ (int64_t dx, int64_t dy, int64_t dz);
 extern int P_BoxOnLineSide (const fixed_t *tmbox, const line_t *ld);
 extern int P_PointOnDivlineSide (fixed_t x, fixed_t y, const divline_t *line);
 extern int P_PointOnLineSide (fixed_t x, fixed_t y, const line_t *line);

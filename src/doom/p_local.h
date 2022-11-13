@@ -382,7 +382,7 @@ extern fixed_t      lowfloor;
 boolean P_PathTraverse (fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2, int flags, boolean (*trav)(intercept_t *));
 const boolean P_BlockLinesIterator (const int x, const int y, boolean(*func)(line_t*));
 const boolean P_BlockThingsIterator (const int x, const int y, boolean(*func)(mobj_t*));
-const fixed_t P_ApproxDistanceZ (fixed_t dx, fixed_t dy, fixed_t dz);
+const int64_t P_ApproxDistanceZ (int64_t dx, int64_t dy, int64_t dz);
 const fixed_t P_AproxDistance (fixed_t dx, fixed_t dy);
 const fixed_t P_InterceptVector (const divline_t* v2, const divline_t* v1);
 const int P_BoxOnLineSide (const fixed_t *tmbox, const line_t *ld);

@@ -164,14 +164,12 @@ void S_StartSound(void *_origin, int sound_id)
 {
     mobj_t *origin = _origin;
     mobj_t *listener;
-    int dist, vol;
+    int vol;
     int i;
     int priority;
     int sep;
     int angle;
-    int absx;
-    int absy;
-    int absz;
+    int64_t dist, absx, absy, absz;
 
     static int sndcount = 0;
     int chan;

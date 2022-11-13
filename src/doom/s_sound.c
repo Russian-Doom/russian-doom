@@ -486,10 +486,10 @@ static int S_GetChannel (mobj_t *origin, sfxinfo_t *sfxinfo)
 static int S_AdjustSoundParams(const mobj_t *listener, const mobj_t *source,
                                int *vol, int *sep)
 {
-    fixed_t        approx_dist;
-    fixed_t        adx;
-    fixed_t        ady;
-    fixed_t        adz; // [JN] Z-axis sfx distance
+    int64_t        approx_dist;
+    int64_t        adx;
+    int64_t        ady;
+    int64_t        adz; // [JN] Z-axis sfx distance
     angle_t        angle;
 
     // calculate the distance to sound origin
