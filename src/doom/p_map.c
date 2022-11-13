@@ -64,8 +64,6 @@ int          numspechit;
 
 static void SpechitOverrun (line_t *ld);
 
-mobj_t *BlockingMobj;
-
 
 // =============================================================================
 // TELEPORT MOVE
@@ -349,8 +347,6 @@ static boolean PIT_CheckThing (mobj_t *thing)
         return true;
     }
 
-    BlockingMobj = thing;
-
     // check for skulls slamming into things
     if (tmthing->flags & MF_SKULLFLY)
     {
@@ -630,8 +626,6 @@ const boolean P_CheckPosition (mobj_t *thing, const fixed_t x, const fixed_t y)
     yl = (tmbbox[BOXBOTTOM] - bmaporgy - MAXRADIUS)>>MAPBLOCKSHIFT;
     yh = (tmbbox[BOXTOP] - bmaporgy + MAXRADIUS)>>MAPBLOCKSHIFT;
 
-    BlockingMobj = NULL;
-
     for (bx = xl ; bx <= xh ; bx++)
     {
         for (by = yl ; by <= yh ; by++)
@@ -644,8 +638,6 @@ const boolean P_CheckPosition (mobj_t *thing, const fixed_t x, const fixed_t y)
     }
 
     // check lines
-
-    BlockingMobj = NULL;
 
     xl = (tmbbox[BOXLEFT] - bmaporgx)>>MAPBLOCKSHIFT;
     xh = (tmbbox[BOXRIGHT] - bmaporgx)>>MAPBLOCKSHIFT;
@@ -1014,14 +1006,6 @@ static boolean PTR_SlideTraverse (intercept_t *in)
     }
 
     li = in->d.line;
-
-    // [JN] Treat two sided linedefs as single sided for smooth sliding.
-    if (singleplayer && improved_collision && 
-    li->flags & ML_BLOCKING && li->flags & ML_TWOSIDED
-    && !strict_mode && !vanillaparm)
-    {
-        goto isblocking;
-    }
 
     if (!(li->flags & ML_TWOSIDED))
     {
