@@ -1716,12 +1716,17 @@ static void ST_DrawElements (const boolean wide)
     else if (plyr->cards[it_redskull])
     V_DrawPatch(239 + right_delta, 191, keys[5], NULL);
 
-    // Ammo (current and max)
-    for (int i = 0, y = 173 ; i < 4 ; i++, y += 6)
-    {
-        ST_DrawSmallNumberY(plyr->ammo[i], 280 + right_delta, y);
-        ST_DrawSmallNumberY(plyr->maxammo[i], 306 + right_delta, y);
-    }
+    // Ammo (current)
+    ST_DrawSmallNumberY(plyr->ammo[0], 280 + right_delta, 173);
+    ST_DrawSmallNumberY(plyr->ammo[1], 280 + right_delta, 179);
+    ST_DrawSmallNumberY(plyr->ammo[3], 280 + right_delta, 185);
+    ST_DrawSmallNumberY(plyr->ammo[2], 280 + right_delta, 191);
+
+    // Ammo (max)
+    ST_DrawSmallNumberY(plyr->maxammo[0], 306 + right_delta, 173);
+    ST_DrawSmallNumberY(plyr->maxammo[1], 306 + right_delta, 179);
+    ST_DrawSmallNumberY(plyr->maxammo[3], 306 + right_delta, 185);
+    ST_DrawSmallNumberY(plyr->maxammo[2], 306 + right_delta, 191);
 }
 
 // -----------------------------------------------------------------------------
