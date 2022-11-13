@@ -322,7 +322,6 @@ extern fixed_t  tmceilingz;
 extern line_t  *ceilingline;
 extern line_t **spechit;
 extern int      numspechit;
-extern mobj_t  *BlockingMobj;
 extern mobj_t  *linetarget;
 extern fixed_t  attackrange;
 

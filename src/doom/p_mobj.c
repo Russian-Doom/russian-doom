@@ -288,16 +288,10 @@ void P_XYMovement (mobj_t* mo)
         // a missile explosion in the code below.
         //
         // Thanks to Jeff Doggett for simplifying!
-        //
-        // Additionally, wallrunning bug is fixed (mo->player condition):
-        // https://doomwiki.org/wiki/Wallrunning
-        //
-        // Thanks AXDOOMER and Brad Harding!
 
         if (singleplayer && improved_collision && !strict_mode && !vanillaparm ? 
-            mo->player ? ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) && (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)) 
-                       : ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) || (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2))
-                       :  (xmove > MAXMOVE/2 || ymove > MAXMOVE/2))
+           ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) || (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)) :
+            (xmove > MAXMOVE/2 || ymove > MAXMOVE/2))
         {
             ptryx = mo->x + xmove/2;
             ptryy = mo->y + ymove/2;
@@ -316,30 +310,7 @@ void P_XYMovement (mobj_t* mo)
             // blocked move
             if (mo->player)
             {	// try to slide along it
-                if (BlockingMobj == NULL          // [JN] Mobj is not blocking.
-                ||  BlockingMobj->health <= 0     // [JN] Allow to slightly bump into falling corpse.
-                || !singleplayer || !improved_collision || strict_mode || vanillaparm)  // [JN] Keep demo compatibility.
-                {   
-                    // [JN] Slide movement.
-                    P_SlideMove(mo);
-                }
-                else
-                {
-                    // [JN] Slide against mobj.
-                    // Remove X/Y momentum while moving on solid things.
-                    if (P_TryMove(mo, mo->x, ptryy))
-                    {
-                        mo->momx = 0;
-                    }
-                    else if (P_TryMove(mo, ptryx, mo->y))
-                    {
-                        mo->momy = 0;
-                    }
-                    else
-                    {
-                        mo->momx = mo->momy = 0;
-                    }
-                }
+                P_SlideMove(mo);
             }
             else if (mo->flags & MF_MISSILE)
             {
@@ -724,7 +695,6 @@ void P_MobjThinker (mobj_t *mobj)
     }
 
     // momentum movement
-    BlockingMobj = NULL;
     if (mobj->momx ||  mobj->momy || (mobj->flags&MF_SKULLFLY))
     {
         P_XYMovement (mobj);
@@ -736,8 +706,7 @@ void P_MobjThinker (mobj_t *mobj)
         }
     }
 
-    if ((mobj->z != mobj->floorz) || mobj->momz
-    || (singleplayer && BlockingMobj && improved_collision && !strict_mode && !vanillaparm))
+    if ((mobj->z != mobj->floorz) || mobj->momz)
     {
         P_ZMovement (mobj);
 

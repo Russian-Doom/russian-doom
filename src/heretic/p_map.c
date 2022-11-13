@@ -108,7 +108,6 @@ line_t **spechit;  // [crispy] remove SPECHIT limit
 int numspechit;
 
 mobj_t *onmobj;     //generic global onmobj...used for landing on pods/players
-mobj_t *BlockingMobj;
 
 /*
 ===============================================================================
@@ -360,7 +359,6 @@ boolean PIT_CheckThing(mobj_t * thing)
         return (true);
     }
 
-    BlockingMobj = thing;
     if (tmthing->flags2 & MF2_PASSMOBJ)
     {   // check if a mobj passed over/under another object
         if ((tmthing->type == MT_IMP || tmthing->type == MT_WIZARD)
@@ -647,7 +645,6 @@ boolean P_CheckPosition(mobj_t * thing, fixed_t x, fixed_t y)
     yl = (tmbbox[BOXBOTTOM] - bmaporgy - MAXRADIUS) >> MAPBLOCKSHIFT;
     yh = (tmbbox[BOXTOP] - bmaporgy + MAXRADIUS) >> MAPBLOCKSHIFT;
 
-    BlockingMobj = NULL;
     for (bx = xl; bx <= xh; bx++)
         for (by = yl; by <= yh; by++)
             if (!P_BlockThingsIterator(bx, by, PIT_CheckThing))
@@ -655,7 +652,6 @@ boolean P_CheckPosition(mobj_t * thing, fixed_t x, fixed_t y)
 //
 // check lines
 //
-    BlockingMobj = NULL;
     xl = (tmbbox[BOXLEFT] - bmaporgx) >> MAPBLOCKSHIFT;
     xh = (tmbbox[BOXRIGHT] - bmaporgx) >> MAPBLOCKSHIFT;
     yl = (tmbbox[BOXBOTTOM] - bmaporgy) >> MAPBLOCKSHIFT;
@@ -1233,13 +1229,6 @@ boolean PTR_SlideTraverse(intercept_t * in)
                 "PTR_SlideTraverse: не является линией?");
 
     li = in->d.line;
-
-    // [JN] Treat two sided linedefs as single sided for smooth sliding.
-    if (singleplayer && !strict_mode && !vanillaparm && improved_collision
-    && li->flags & ML_BLOCKING && li->flags & ML_TWOSIDED)
-    {
-        goto isblocking;
-    }
 
     if (!(li->flags & ML_TWOSIDED))
     {
