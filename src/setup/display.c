@@ -369,12 +369,10 @@ void ConfigDisplay(void)
                           "����������� ��������",
                           &graphical_startup)),
 
-#ifdef HAVE_LIBPNG
         TXT_NewCheckBox(english_language ?
                         "Save screenshots in PNG format" :
                         "��������� ��������� � ������� PNG",
                         &png_screenshots),
-#endif
 
     TXT_NewSeparator(english_language ?
                      "Video" :

@@ -70,7 +70,6 @@ jobs:
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_net
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_mixer
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libpng
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-wget
             unzip
 
@@ -80,7 +79,7 @@ jobs:
           sudo apt-get update --fix-missing
           sudo apt-get full-upgrade --fix-missing
           sudo apt-get install ${{ matrix.compiler.name }} gdb ninja-build python3 cmake \
-                               libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libpng-dev libsamplerate-dev
+                               libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libsamplerate-dev
 
       - uses: actions/checkout@v3
 

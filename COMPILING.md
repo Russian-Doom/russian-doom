@@ -41,14 +41,14 @@ and for the **mingw-w64-x86_64** toolchain (**64**-bit), use the **MSYS MinGW 64
 
 Open the terminal and install dependencies using the following command:
 ```shell
-pacman -S mingw-w64-{i686,x86_64}-{pkgconf,gcc,ninja,cmake,SDL2{,_net,_mixer},libpng} \
+pacman -S mingw-w64-{i686,x86_64}-{pkgconf,gcc,make,cmake,SDL2{,_net,_mixer}} \
        git
 ```
 
-If you want to use `MinGW Makefiles` or `MSYS Makefiles` cmake generators, you need
-to install `make` by the following command:
+If you want to use `Ninja` or `Ninja Multi-Config` cmake generators, you need
+to install `ninja` by the following command:
 ```shell
-pacman -S mingw-w64-{i686,x86_64}-make
+pacman -S mingw-w64-{i686,x86_64}-ninja
 ```
 
 If you want to run CTest tests, you must also install `gdb` by the following command:
@@ -63,14 +63,14 @@ and for the **mingw-w64-clang-x86_64** toolchain (**64**-bit), use the **MSYS Mi
 
 Open the terminal and install dependencies using the following command:
 ```shell
-pacman -S mingw-w64-clang-{i686,x86_64}-{pkgconf,clang,ninja,cmake,SDL2{,_net,_mixer},libpng} \
+pacman -S mingw-w64-clang-{i686,x86_64}-{pkgconf,clang,make,cmake,SDL2{,_net,_mixer}} \
        git
 ```
 
-If you want to use `MinGW Makefiles` or `MSYS Makefiles` cmake generators you need
-to install `make` by the following command:
+If you want to use `Ninja` or `Ninja Multi-Config` cmake generators, you need
+to install `ninja` by the following command:
 ```shell
-pacman -S mingw-w64-clang-{i686,x86_64}-make
+pacman -S mingw-w64-clang-{i686,x86_64}-ninja
 ```
 
 If you want to run CTest tests, you must also install `gdb` by the following command:
@@ -80,12 +80,11 @@ pacman -S mingw-w64-clang-{i686,x86_64}-gdb
 
 ## Step 2: Compiling International Doom
 
-There are several supported cmake generators: `Ninja`, `Ninja Multi-Config`, `MinGW Makefiles`, `MSYS Makefiles`.  
-**Note** that `* Makefiles` generators fail to compile 32-bit builds after GCC update to version 12 for some reason.
+There are several supported cmake generators: `MinGW Makefiles`, `MSYS Makefiles`, `Ninja`, `Ninja Multi-Config`.
 
 To configure the project, use the following command:
 ```shell
-cmake -G "Ninja" -D CMAKE_BUILD_TYPE="Release" -S . -B build
+cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE="Release" -S . -B build
 ```
 Available build types are `Release`, `Debug`, `RelWithDebInfo`, `MinSizeRel`.
 
@@ -140,35 +139,36 @@ Compiling on Linux is rather simple.
 First, make sure you have all the necessary dependencies for compilation.
 On Ubuntu Linux, they can be installed by the following command:
 ```shell
-sudo apt install gcc ninja-build python3 cmake \
-libsdl2-dev libsdl2-mixer-dev libsdl2-net-dev libpng-dev libsamplerate-dev
+sudo apt install gcc make python3 cmake \
+libsdl2-dev libsdl2-mixer-dev libsdl2-net-dev libsamplerate-dev
 ```
 On Fedora Linux, they can be installed by the following command:
 ```shell
-sudo dnf install gcc ninja-build python3 cmake \
-SDL2-devel SDL2_mixer-devel SDL2_net-devel libpng-devel libsamplerate-devel
+sudo dnf install gcc make python3 cmake \
+SDL2-devel SDL2_mixer-devel SDL2_net-devel libsamplerate-devel miniz-devel
 ```
 On Manjaro Linux, they can be installed by the following command:
 ```shell
-sudo pacman -S gcc ninja-build python3 cmake \
-sdl2 sdl2_mixer sdl2_net libpng libsamplerate
+sudo pacman -S gcc make python3 cmake \
+sdl2 sdl2_mixer sdl2_net libsamplerate
 ```
 
 The `gcc` compiler can de replaced with `clang`.
-If you want to use `Unix Makefiles` cmake generator, you need to install `make`.
+If you want to use `Ninja` or `Ninja Multi-Config` cmake generators, you need to install `ninja-build`.
 The `python3` is not mandatory, but required for generation of man pages and bash completion.
 If you want to run CTest tests, you must also install `gdb`.
+If your Linux distribution provides a package for `miniz` library, you can use it as a dependency instead of the bundled one.
 
 ## Step 2: Compiling International Doom
 
 Download source code archive of the latest release version and unpack it.
 Or clone repository from Git.
 
-There are several supported cmake generators: `Ninja`, `Ninja Multi-Config`, `Unix Makefiles`.
+There are several supported cmake generators: `Unix Makefiles`, `Ninja`, `Ninja Multi-Config`.
 
 To configure the project, use the following command:
 ```shell
-cmake -G "Ninja" -D CMAKE_BUILD_TYPE="Release" -S . -B build
+cmake -G "Unix Makefiles" -D CMAKE_BUILD_TYPE="Release" -S . -B build
 ```
 Available build types are `Release`, `Debug`, `RelWithDebInfo`, `MinSizeRel`.
 

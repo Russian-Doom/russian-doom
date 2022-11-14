@@ -52,7 +52,6 @@ jobs:
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_net
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_mixer
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libpng
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-wget
             unzip
 

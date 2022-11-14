@@ -116,7 +116,6 @@ set_target_properties(Game PROPERTIES
 )
 target_compile_definitions(Game PRIVATE
     "$<$<BOOL:${SAMPLERATE_FOUND}>:HAVE_LIBSAMPLERATE>"
-    "$<$<BOOL:${PNG_FOUND}>:HAVE_LIBPNG>"
     "$<$<BOOL:${HAVE_MMAP}>:HAVE_MMAP>"
     "$<$<BOOL:${BUILD_PORTABLE}>:BUILD_PORTABLE>"
     "$<$<BOOL:${HAVE_DIRENT_H}>:HAVE_DIRENT_H>"
@@ -131,8 +130,8 @@ target_link_libraries(Game PUBLIC
     textscreen
     pcsound
     opl
+    miniz::miniz
     "$<$<BOOL:${SAMPLERATE_FOUND}>:samplerate::samplerate>"
-    "$<$<BOOL:${PNG_FOUND}>:PNG::PNG>"
     "$<$<BOOL:${WIN32}>:winmm>"
 )
 
@@ -180,6 +179,9 @@ foreach(MODULE ${COMPILE_MODULES})
         )
         set_target_properties("${PROGRAM_PREFIX}${MODULE}" PROPERTIES
             PREFIX ""
+        )
+        target_link_options("${PROGRAM_PREFIX}${MODULE}" PRIVATE
+            "$<$<AND:$<C_COMPILER_ID:GNU>,$<STREQUAL:${ARCH},x86>>:-static-libgcc>"
         )
         add_dependencies("${PROGRAM_PREFIX}${MODULE}" win-libs)
 
