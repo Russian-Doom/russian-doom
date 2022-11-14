@@ -1880,7 +1880,7 @@ void I_ShutdownGraphics(void)
     }
 }
 
-void I_RenderReadPixels(byte **data, int *w, int *h, int *p)
+void I_RenderReadPixels(byte **data, int *w, int *h)
 {
 	SDL_Rect rect;
 	SDL_PixelFormat *format;
@@ -1924,7 +1924,6 @@ void I_RenderReadPixels(byte **data, int *w, int *h, int *p)
 	*data = pixels;
 	*w = rect.w;
 	*h = rect.h;
-	*p = temp;
 
 	SDL_FreeFormat(format);
 }

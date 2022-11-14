@@ -111,8 +111,14 @@ find_package(SDL2 2.0.18 REQUIRED)
 find_package(SDL2_mixer 2.0.2 REQUIRED)
 find_package(SDL2_net 2.0.0 REQUIRED)
 find_package(samplerate)
-find_package(PNG)
+find_package(miniz 2.0.0)
 find_package(m)
+
+# Use system of user-provided library if it exists
+if(NOT MINIZ_FOUND)
+    message(STATUS "Using vendored miniz library")
+    add_subdirectory("lib/thirdparty/miniz")
+endif()
 
 include(CheckSymbolExists)
 include(CheckIncludeFile)

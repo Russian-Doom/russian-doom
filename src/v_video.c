@@ -26,6 +26,10 @@
 #include <string.h>
 #include <math.h>
 
+#define MINIZ_NO_STDIO
+#define MINIZ_NO_ZLIB_APIS
+#include "miniz.h"
+
 #include "i_system.h"
 #include "doomtype.h"
 #include "deh_str.h"
@@ -39,10 +43,6 @@
 #include "z_zone.h"
 #include "v_trans.h"
 #include "jn.h"
-
-#ifdef HAVE_LIBPNG
-#include <png.h>
-#endif
 
 
 // TODO: There are separate RANGECHECK defines for different games, but this
@@ -1558,80 +1558,34 @@ void WritePCXfile (const char *filename, const byte *data,
     Z_Free (pcx);
 }
 
-#ifdef HAVE_LIBPNG
 //
 // WritePNGfile
 //
 
-static void error_fn(png_structp p, png_const_charp s)
+void WritePNGfile(char *filename)
 {
-    printf(english_language ?
-           "libpng error: %s\n" :
-           "ошибка libpng: %s\n",s);
-}
+    extern void I_RenderReadPixels(byte **data, int *w, int *h);
 
-static void warning_fn(png_structp p, png_const_charp s)
-{
-    printf(english_language ?
-           "libpng warning: %s\n" :
-           "предупреждение libpng: %s\n", s);
-}
+    byte* data;
+    int width, height;
 
-void WritePNGfile(char *filename, byte *data,
-                  int width, int height)
-{
-    png_structp ppng;
-    png_infop pinfo;
-    FILE *handle;
-    int i, j;
-    byte *rowbuf;
-    extern void I_RenderReadPixels(byte **data, int *w, int *h, int *p);
+    I_RenderReadPixels(&data, &width, &height);
 
-    handle = fopen(filename, "wb");
-    if (!handle)
+    size_t png_data_size = 0;
+    void *pPNG_data = tdefl_write_image_to_png_file_in_memory(data, width, height, 4, &png_data_size);
+    if(!pPNG_data)
     {
         return;
     }
-
-    ppng = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL,
-                                   error_fn, warning_fn);
-    if (!ppng)
+    else
     {
+        FILE *handle = fopen(filename, "wb");
+        fwrite(pPNG_data, 1, png_data_size, handle);
         fclose(handle);
-        return;
-    }
-
-    pinfo = png_create_info_struct(ppng);
-    if (!pinfo)
-    {
-        fclose(handle);
-        png_destroy_write_struct(&ppng, NULL);
-        return;
-    }
-
-    png_init_io(ppng, handle);
-
-    I_RenderReadPixels(&data, &width, &height, &j);
-    rowbuf = data;
-
-    png_set_IHDR(ppng, pinfo, width, height,
-                 8, PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,
-                 PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
-
-    png_write_info(ppng, pinfo);
-
-    for (i = 0; i < height; i++)
-    {
-        png_write_row(ppng, rowbuf);
-        rowbuf += j;
+        mz_free(pPNG_data);
     }
     free(data);
-
-    png_write_end(ppng, pinfo);
-    png_destroy_write_struct(&ppng, &pinfo);
-    fclose(handle);
 }
-#endif
 
 //
 // V_ScreenShot
@@ -1645,13 +1599,11 @@ void V_ScreenShot (const char *format)
     
     // find a file name to save it to
 
-#ifdef HAVE_LIBPNG
     if (png_screenshots)
     {
         ext = "png";
     }
     else
-#endif
     {
         ext = "pcx";
     }
@@ -1668,7 +1620,6 @@ void V_ScreenShot (const char *format)
 
     if (i == 10000) // [crispy] increase screenshot filename limit
     {
-#ifdef HAVE_LIBPNG
         if (png_screenshots)
         {
             I_Error (english_language ? 
@@ -1676,7 +1627,6 @@ void V_ScreenShot (const char *format)
                      "V_ScreenShot: ошибка сохранения PNG скриншота");
         }
         else
-#endif
         {
             I_Error (english_language ?
             "V_ScreenShot: Couldn't create a PCX" :
@@ -1684,14 +1634,11 @@ void V_ScreenShot (const char *format)
         }
     }
 
-#ifdef HAVE_LIBPNG
-    if (png_screenshots)
+    if(png_screenshots)
     {
-    WritePNGfile(lbmname, I_VideoBuffer,
-                 screenwidth, SCREENHEIGHT);
+        WritePNGfile(lbmname);
     }
     else
-#endif
     {
     // save the pcx file
     WritePCXfile(lbmname, I_VideoBuffer,
