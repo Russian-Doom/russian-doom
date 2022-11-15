@@ -215,7 +215,7 @@ endif()
 
 include(GNUInstallDirs)
 
-foreach(SUBDIR win_libs man textscreen opl pcsound src)
+foreach(SUBDIR lib win_libs man src)
     add_subdirectory("${SUBDIR}")
 endforeach()
 
