@@ -236,65 +236,14 @@ cheatseq_t cheat_amap_beta = CHEAT("eek", 0);  // [JN] Press Beta cheat code
 boolean automapactive = false;
 static boolean stopped = true;
 
+// [crispy] Antialiased lines from Heretic with more colors
+#define NUMSHADES 8
+#define NUMSHADES_BITS 3 // log2(NUMSHADES)
+static void DrawWuLine (const fline_t *fl, const int color);
+static byte color_shades[NUMSHADES * 256];
 
-// [JN] Automap line antialiasing:
-static const byte antialias[42][8] = {
-    // Doom colors:
-    {176, 177, 178, 179, 180, 181, 182, 183},   //  0.  WALLCOLORS
-    { 64,  65,  66,  67,  68,  69,  70,  71},   //  1.  FDWALLCOLORS
-    { 96,  97,  98,  99, 100, 101, 102, 103},   //  2.  TSWALLCOLORS
-    {231, 160, 161, 162, 163, 164, 165, 166},   //  3.  CDWALLCOLORS
-    {176, 177, 178, 179, 180, 181, 182, 183},   //  4.  SECRETWALLCOLORS
-    { 99, 100, 101, 102, 103, 104, 105, 106},   //  5.  GRAYS+3 (ML_DONTDRAW)
-    // Boom colors:
-    { 23,  24,  25,  26,  27,  28,  29,  30},   //  6.  One-sided wall
-    {119, 120, 121, 122, 123, 124, 125, 126},   //  7.  Various teleporters
-    {204, 204, 205, 205, 206, 206, 207, 207},   //  8.  BLUE locked doors
-    {175, 176, 177, 178, 179, 180, 181, 182},   //  9. RED locked doors
-    {208,  80,  81,  82,  83,  84,  85,  86},   // 10. non-secret closed door
-    { 55,  56,  57,  58,  59,  60,  61,  62},   // 11. floor level change
-    {215, 216, 217, 218, 219, 220, 221, 222},   // 12. ceiling level change
-    { 88,  89,  90,  91,  92,  93,  94,  95},   // 13. 2S lines that appear only in IDDT
-    // Jaguar colors:
-    { 32,  33,  34,  35,  36,  37,  38,  39},   // 14. RED_JAGUAR
-    {120, 121, 122, 123, 124, 125, 126, 127},   // 15. GREEN_JAGUAR
-    {254, 254, 254, 254, 254, 254, 254, 254},   // 16. MAGENTA_JAGUAR
-    {163, 163, 164, 164, 165, 165, 166, 167},   // 17. YELLOW_JAGUAR
-    // Raven colors:
-    {151, 151, 236, 236, 237, 237, 238, 239},   // 18. One-sided wall
-    {116, 117, 118, 119, 120, 121, 122, 123},   // 19. Various teleporters
-    {108, 109, 110, 111,   5,   6,   7,   8},   // 20. Secret door
-    {199, 200, 201, 202, 203, 204, 205, 206},   // 21. BLUE locked doors
-    {178, 179, 180, 181, 182, 183, 184, 185},   // 22. RED locked doors
-    {161, 162, 163, 164, 165, 166, 167, 167},   // 23. YELLOW locked doors
-    {239, 239, 239, 239, 239, 239, 239, 239},   // 24. floor level change
-    {133, 134, 135, 136, 137, 138, 139, 140},   // 25. ceiling level change
-    // Strife colors:
-    { 86,  87,  88,  89,  90,  91,  92,  93},   // 26. One-sided wall
-    {135, 136, 137, 138, 139, 140, 141, 142},   // 27. Various teleporters
-    {203, 204, 205, 206, 207, 240, 241, 242},   // 28. floor level change
-    {195, 196, 197, 198, 199, 200, 201, 202},   // 29. ceiling level change
-    { 98,  99, 100, 101, 102, 103, 104, 105},   // 30. One-sided wall (cheating)
-    {102, 103, 104, 105, 106, 107, 108, 109},   // 31. One-sided wall (ML_DONTDRAW)
-    // Unity colors:
-    {184, 185, 186, 187, 188, 189, 190, 191},   // 32. One sided wall / secret door
-    { 81,  83,  85,  87,  88,  90,  92,  94},   // 33. Various doors
-    {120, 121, 122, 123, 124, 125, 126, 127},   // 34. Various teleporters
-    {200, 201, 202, 203, 204, 205, 206, 207},   // 35. Blue locked door
-    {160, 160, 161, 161, 162, 162, 163, 164},   // 36. Yellow locked door
-    { 72,  73,  74,  75,  76,  77,  78,  78},   // 37. Floor level change
-    {252, 252, 253, 253, 254, 254, 254, 254},   // 38. Floor level change
-    // Common colors:
-    {209,  84,  85,  86,  87,  88,  89,  90},   // 39. YOURCOLORS: White player arrow
-    {112, 113, 114, 115, 116, 117, 118, 119},   // 40. THINGCOLORS: Green triangles (IDDT cheat)
-    {104, 105, 106, 107, 108, 109, 110, 111},   // 41. GRIDCOLORS: Automap grid
-};
 
-static void DrawWuLine(int X0, int Y0, int X1, int Y1, const byte * BaseColor,
-                       int NumLevels, unsigned short IntensityBits);
-
-// [crispy] automap rotate mode ...
-// ... needs these early on
+// [crispy] automap rotate mode needs these early on
 static void AM_rotate (int64_t *x, int64_t *y, angle_t a);
 static void AM_rotatePoint (mpoint_t *pt);
 static mpoint_t mapcenter;
@@ -502,6 +451,29 @@ void AM_initColors (void)
     automap_color_set = gamemission == jaguar ? 2 :
                                   vanillaparm ? 0 : 
                                  automap_color;
+}
+
+// -----------------------------------------------------------------------------
+// AM_initShades
+// [crispy] Precalculate color lookup tables for antialised line drawing using COLORMAP
+// -----------------------------------------------------------------------------
+
+void AM_initShades (void)
+{
+    for (int color = 0 ; color < 256 ; ++color)
+    {
+#define REINDEX(I) (color + I * 256)
+        // Pick a range of shades for a steep gradient to keep lines thin
+        int shade_index[NUMSHADES] =
+        {
+            REINDEX(0), REINDEX(1), REINDEX(2), REINDEX(3), REINDEX(7), REINDEX(15), REINDEX(23), REINDEX(31),
+        };
+#undef REINDEX
+        for (int shade = 0 ; shade < NUMSHADES ; ++shade)
+        {
+            color_shades[color * NUMSHADES + shade] = colormaps[shade_index[shade]];
+        }
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1185,23 +1157,23 @@ static void AM_drawFline (const fline_t *fl, const int color, const int automap_
             case 1:
             {
                 if (color == 23)    // Wall color
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[6][0]), 8, 3);
+                    DrawWuLine(fl, 23);
                 if (color == 119)   // Various teleporters
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[7][0]), 8, 3);
+                    DrawWuLine(fl, 119);
                 if (color == 204)   // BLUE locked doors
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[8][0]), 8, 3);
+                    DrawWuLine(fl, 204);
                 if (color == 175)   // RED locked doors
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[9][0]), 8, 3);
+                    DrawWuLine(fl, 175);
                 if (color == 231)   // YELLOW locked doors (using CDWALLCOLORS)
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[3][0]), 8, 3);
+                    DrawWuLine(fl, 231);
                 if (color == 208)   // non-secret closed door
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[10][0]), 8, 3);
+                    DrawWuLine(fl, 208);
                 if (color == 55)    // floor level change
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[11][0]), 8, 3);
+                    DrawWuLine(fl, 55);
                 if (color == 215)   // ceiling level change
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[12][0]), 8, 3);
+                    DrawWuLine(fl, 215);
                 if (color == 88)    // 2S lines that appear only in IDDT
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[13][0]), 8, 3);
+                    DrawWuLine(fl, 88);
                 break;
             }
             //
@@ -1210,17 +1182,17 @@ static void AM_drawFline (const fline_t *fl, const int color, const int automap_
             case 2:
             {
                 if (color == RED_JAGUAR)
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[14][0]), 8, 3);
+                    DrawWuLine(fl, RED_JAGUAR);
                 if (color == GREEN_JAGUAR)
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[15][0]), 8, 3);
+                    DrawWuLine(fl, GREEN_JAGUAR);
                 if (color == MAGENTA_JAGUAR)
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[16][0]), 8, 3);
+                    DrawWuLine(fl, MAGENTA_JAGUAR);
                 if (color == YELLOW_JAGUAR)
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[17][0]), 8, 3);
+                    DrawWuLine(fl, YELLOW_JAGUAR);
                 if (color == TSWALLCOLORS)  // Hidden gray walls
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[2][0]), 8, 3);
+                    DrawWuLine(fl, TSWALLCOLORS);
                 if (color == GRAYS+3)       // computermap visible lines
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[5][0]), 8, 3);
+                    DrawWuLine(fl, GRAYS+3);
                 break;
             }
             //
@@ -1229,23 +1201,23 @@ static void AM_drawFline (const fline_t *fl, const int color, const int automap_
             case 3:
             {
                 if (color == 151)   // One-sided wall
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[18][0]), 8, 3);
+                    DrawWuLine(fl, 151);
                 if (color == 116)   // Various teleporters
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[19][0]), 8, 3);
+                    DrawWuLine(fl, 116);
                 if (color == 108)   // Secret door
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[20][0]), 8, 3);
+                    DrawWuLine(fl, 108);
                 if (color == 199)   // BLUE locked doors
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[21][0]), 8, 3);
+                    DrawWuLine(fl, 199);
                 if (color == 178)   // RED locked doors
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[22][0]), 8, 3);
+                    DrawWuLine(fl, 178);
                 if (color == 161)   // YELLOW locked doors
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[23][0]), 8, 3);
+                    DrawWuLine(fl, 161);
                 if (color == 239)   // floor level change
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[24][0]), 8, 3);
+                    DrawWuLine(fl, 239);
                 if (color == 133)   // ceiling level change
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[25][0]), 8, 3);
+                    DrawWuLine(fl, 133);
                 if (color == 99)    // ceiling level change, cheating (using GRAYS+3 (ML_DONTDRAW))
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[5][0]), 8, 3);
+                    DrawWuLine(fl, 99);
                 break;
             }
             //
@@ -1254,46 +1226,46 @@ static void AM_drawFline (const fline_t *fl, const int color, const int automap_
             case 4:
             {
                 if (color == 119)   // Exit lines (using "Various teleporters")
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[7][0]), 8, 3);
+                    DrawWuLine(fl, 119);
                 if (color == 86)    // One-sided wall
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[26][0]), 8, 3);
+                    DrawWuLine(fl, 86);
                 if (color == 135)   // Various teleporters and secret door
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[27][0]), 8, 3);
+                    DrawWuLine(fl, 135);
                 if (color == 203)   // floor level change
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[28][0]), 8, 3);
+                    DrawWuLine(fl, 203);
                 if (color == 195)   // ceiling level change
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[29][0]), 8, 3);
+                    DrawWuLine(fl, 195);
                 if (color == 98)    // One-sided wall (cheating)
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[30][0]), 8, 3);
+                    DrawWuLine(fl, 98);
                 if (color == 102)   // One-sided wall (ML_DONTDRAW)
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[31][0]), 8, 3);
+                    DrawWuLine(fl, 102);
                 break;
             }
             //
-            //
+            // Unity colors
             //
             case 5:
             {
                 if (color == 184)   // [JN] One sided wall / secret door
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[32][0]), 8, 3);
+                    DrawWuLine(fl, 184);
                 if (color == 81)    // [JN] Various doors
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[33][0]), 8, 3);
+                    DrawWuLine(fl, 81);
                 if (color == 120)   // [JN] Various teleporters
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[34][0]), 8, 3);
+                    DrawWuLine(fl, 120);
                 if (color == 200)   // [JN] BLUE locked doors
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[35][0]), 8, 3);
+                    DrawWuLine(fl, 200);
                 if (color == 176)   // [JN] RED locked doors
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[0][0]), 8, 3);
+                    DrawWuLine(fl, 176);
                 if (color == 160)   // [JN] YELLOW locked doors
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[36][0]), 8, 3);
+                    DrawWuLine(fl, 161);
                 if (color == 72)    // [JN] Floor level change
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[37][0]), 8, 3);
+                    DrawWuLine(fl, 72);
                 if (color == 64)    // [JN] Ceiling level change
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[1][0]), 8, 3);
+                    DrawWuLine(fl, 64);
                 if (color == 96)    // [JN] IDDT visible lines
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[2][0]), 8, 3);
+                    DrawWuLine(fl, 96);
                 if (color == 252)   // [JN] Exit
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[38][0]), 8, 3);
+                    DrawWuLine(fl, 252);
                 break;
             }
             //
@@ -1302,17 +1274,17 @@ static void AM_drawFline (const fline_t *fl, const int color, const int automap_
             default:
             {
                 if (color == WALLCOLORS)
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[0][0]), 8, 3);
+                    DrawWuLine(fl, WALLCOLORS);
                 if (color == FDWALLCOLORS)
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[1][0]), 8, 3);
+                    DrawWuLine(fl, FDWALLCOLORS);
                 if (color == TSWALLCOLORS)
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[2][0]), 8, 3);
+                    DrawWuLine(fl, TSWALLCOLORS);
                 if (color == CDWALLCOLORS)
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[3][0]), 8, 3);
+                    DrawWuLine(fl, CDWALLCOLORS);
                 if (color == SECRETWALLCOLORS)
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[4][0]), 8, 3);
+                    DrawWuLine(fl, SECRETWALLCOLORS);
                 if (color == GRAYS+3)
-                    DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[5][0]), 8, 3);
+                    DrawWuLine(fl, GRAYS+3);
                 break;
             }
         }
@@ -1320,23 +1292,23 @@ static void AM_drawFline (const fline_t *fl, const int color, const int automap_
         // Common colors:
         //
         if (color == YOURCOLORS)    // White player arrow
-            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[39][0]), 8, 3);
+            DrawWuLine(fl, YOURCOLORS);
         if (color == THINGCOLORS)   // Green triangles (IDDT cheat)
-            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[40][0]), 8, 3);
+            DrawWuLine(fl, THINGCOLORS);
         if (color == 104)           // computermap visible lines
-            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[41][0]), 8, 3);
+            DrawWuLine(fl, 104);
 
         //
         // IDDT extended colors:
         //
         if (color == REDS_IDDT)     // Alive monster
-            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[0][0]), 8, 3);
+            DrawWuLine(fl, REDS_IDDT);
         if (color == GRAYS_IDDT)    // Dead monster or decorations
-            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[5][0]), 8, 3);
+            DrawWuLine(fl, GRAYS_IDDT);
         if (color == YELLOWS_IDDT)  // Lost Soul or Explosive Barrel
-            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[36][0]), 8, 3);
+            DrawWuLine(fl, YELLOWS_IDDT);
         if (color == GREENS_IDDT)   // Pickups
-            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[40][0]), 8, 3);
+            DrawWuLine(fl, GREENS_IDDT);
     }
     else
     {
@@ -1420,19 +1392,8 @@ static void PUTDOT (const short xx, const short yy, const byte *cc, const byte *
 {
     static int oldyy;
     static int oldyyshifted;
-    static int finit_height; // [JN] For different height between games.
     const byte *oldcc = cc;
 
-    finit_height = SCREENHEIGHT - (st_height << hires);
-
-    if (xx < 32)
-        cc += 7 - (xx >> 2);
-    else if (xx > (screenwidth - 32))
-        cc += 7 - ((screenwidth - xx) >> 2);
-    if (yy < 32)
-        cc += 7 - (yy >> 2);
-    else if (yy > (finit_height - 32))
-        cc += 7 - ((finit_height - yy) >> 2);
     if (cc > cm && cm != NULL)
     {
         cc = cm;
@@ -1463,9 +1424,11 @@ static void PUTDOT (const short xx, const short yy, const byte *cc, const byte *
 // DrawWuLine
 // -----------------------------------------------------------------------------
 
-static void DrawWuLine(int X0, int Y0, int X1, int Y1, const byte *BaseColor,
-                       const int NumLevels, const unsigned short IntensityBits)
+static void DrawWuLine (const fline_t *fl, const int color)
 {
+    int X0 = fl->a.x, Y0 = fl->a.y, X1 = fl->b.x, Y1 = fl->b.y;
+    const byte *BaseColor = &color_shades[color * NUMSHADES];
+    
     unsigned short IntensityShift, ErrorAdj, ErrorAcc;
     unsigned short ErrorAccTemp, Weighting, WeightingComplementMask;
     short DeltaX, DeltaY, Temp, XDir;
@@ -1532,10 +1495,10 @@ static void DrawWuLine(int X0, int Y0, int X1, int Y1, const byte *BaseColor,
     /* Line is not horizontal, diagonal, or vertical */
     ErrorAcc = 0;               /* initialize the line error accumulator to 0 */
     /* # of bits by which to shift ErrorAcc to get intensity level */
-    IntensityShift = 16 - IntensityBits;
+    IntensityShift = 16 - NUMSHADES_BITS;
     /* Mask used to flip all bits in an intensity weighting, producing the
        result (1 - intensity weighting) */
-    WeightingComplementMask = NumLevels - 1;
+    WeightingComplementMask = NUMSHADES - 1;
     /* Is this an X-major or Y-major line? */
     if (DeltaY > DeltaX)
     {

@@ -51,6 +51,10 @@ void AM_Stop (void);
 // Called at game startup or when scheme is changed.
 void AM_initColors (void);
 
+// [crispy] Precalculate color lookup tables
+// for antialised line drawing using COLORMAP.
+void AM_initShades (void);
+
 // [JN] Preload automap graphics once at game startup.
 void AM_initPics (void);
 

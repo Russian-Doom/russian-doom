@@ -3473,8 +3473,10 @@ void D_DoomMain (void)
     Crosshair_DefineOpacity();
     Crosshair_DefineDrawingFunc();
 
-    // [JN] Predifine automap color scheme, crosshair, marks and their color.
+    // [JN] Predifine automap color scheme, line smoothing,
+    // crosshair, marks and their color.
     AM_initColors();
+    AM_initShades();
     AM_initPics();
     AM_initMarksColor(automap_mark_color);
 
