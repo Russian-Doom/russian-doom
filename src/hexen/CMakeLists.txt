@@ -72,7 +72,7 @@ if(COMPILE_HEXEN)
         SDL2::SDL2
         SDL2::mixer
         SDL2::net
-        Game
+        Common
     )
     if(NOT NO_GIT_HASH)
         add_dependencies(hexen revision_check)

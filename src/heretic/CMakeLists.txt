@@ -68,7 +68,7 @@ if(COMPILE_HERETIC)
         SDL2::SDL2
         SDL2::mixer
         SDL2::net
-        Game
+        Common
     )
     if(NOT NO_GIT_HASH)
         add_dependencies(heretic revision_check)
