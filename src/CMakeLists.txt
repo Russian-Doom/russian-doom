@@ -1,57 +1,19 @@
-foreach(SUBDIR base doom heretic hexen strife setup)
+foreach(SUBDIR base doom heretic hexen strife)
     add_subdirectory("${SUBDIR}")
 endforeach()
 
 # Common library
 add_library(Common STATIC EXCLUDE_FROM_ALL
-                        doomtype.h
-    d_event.c           d_event.h
-                        d_name.h
-                        d_ticcmd.h
-                        jn.h
-    i_system.c          i_system.h
-    i_timer.c           i_timer.h
-    m_argv.c            m_argv.h
-    m_misc.c            m_misc.h
-    m_fixed.c           m_fixed.h
-                        rd_io.h
-    win_compat.c
-    z_zone.c            z_zone.h
-)
-target_include_directories(Common PUBLIC
-    "${CMAKE_CURRENT_SOURCE_DIR}"
-)
-set_target_properties(Common PROPERTIES
-    C_STANDARD "${RD_C_STANDARD}"
-    C_STANDARD_REQUIRED ON
-)
-target_compile_definitions(Common PRIVATE
-    "$<$<BOOL:${BUILD_PORTABLE}>:BUILD_PORTABLE>"
-    PACKAGE_TARNAME="${PACKAGE_TARNAME}"
-    PROGRAM_PREFIX="${PROGRAM_PREFIX}"
-    PUBLIC
-    "$<IF:$<BOOL:${HAVE_DECL_STRCASECMP}>,HAVE_DECL_STRCASECMP=1,HAVE_DECL_STRCASECMP=0>"
-    "$<IF:$<BOOL:${HAVE_DECL_STRNCASECMP}>,HAVE_DECL_STRNCASECMP=1,HAVE_DECL_STRNCASECMP=0>"
-)
-target_link_libraries(Common PUBLIC
-    "$<$<BOOL:${SDL2_MAIN_LIBRARY}>:SDL2::SDL2main>"
-    SDL2::SDL2
-)
-
-if(WIN32 AND MSVC)
-    target_sources(Common PRIVATE
-        win_opendir.c       win_opendir.h
-    )
-endif()
-
-# Game Library
-add_library(Game STATIC EXCLUDE_FROM_ALL
     aes_prng.c          aes_prng.h
                         doomkeys.h
                         doomfeatures.h
+                        doomtype.h
+    d_event.c           d_event.h
     d_iwad.c            d_iwad.h
+                        d_name.h
     d_loop.c            d_loop.h
     d_mode.c            d_mode.h
+                        d_ticcmd.h
     deh_str.c           deh_str.h
     gusconf.c           gusconf.h
     i_cdmus.c           i_cdmus.h
@@ -66,14 +28,20 @@ add_library(Game STATIC EXCLUDE_FROM_ALL
     i_sdlmusic.c
     i_oplmusic.c
     i_sound.c           i_sound.h
+    i_system.c          i_system.h
+    i_timer.c           i_timer.h
     i_video.c           i_video.h
     i_videohr.c         i_videohr.h
     i_winmusic.c        i_winmusic.h
+                        jn.h
     midifile.c          midifile.h
     mus2mid.c           mus2mid.h
+    m_argv.c            m_argv.h
     m_bbox.c            m_bbox.h
     m_cheat.c           m_cheat.h
     m_config.c          m_config.h
+    m_misc.c            m_misc.h
+    m_fixed.c           m_fixed.h
     net_client.c        net_client.h
     net_common.c        net_common.h
     net_dedicated.c     net_dedicated.h
@@ -86,6 +54,7 @@ add_library(Game STATIC EXCLUDE_FROM_ALL
     net_sdl.c           net_sdl.h
     net_server.c        net_server.h
     net_structrw.c      net_structrw.h
+                        rd_io.h
     rd_keybinds.c       rd_keybinds.h
     rd_menu.c           rd_menu.h
                         rd_menu_control.h
@@ -106,25 +75,37 @@ add_library(Game STATIC EXCLUDE_FROM_ALL
     w_file_posix.c
     w_file_win32.c
     w_merge.c           w_merge.h
+    win_compat.c
+    z_zone.c            z_zone.h
 )
-target_include_directories(Game PUBLIC
+if(WIN32 AND MSVC)
+    target_sources(Common PRIVATE
+        win_opendir.c       win_opendir.h
+    )
+endif()
+target_include_directories(Common PUBLIC
+    "${CMAKE_CURRENT_SOURCE_DIR}"
     "${PROJECT_BINARY_DIR}"
 )
-set_target_properties(Game PROPERTIES
+set_target_properties(Common PROPERTIES
     C_STANDARD "${RD_C_STANDARD}"
     C_STANDARD_REQUIRED ON
 )
-target_compile_definitions(Game PRIVATE
+target_compile_definitions(Common PRIVATE
     "$<$<BOOL:${SAMPLERATE_FOUND}>:HAVE_LIBSAMPLERATE>"
     "$<$<BOOL:${HAVE_MMAP}>:HAVE_MMAP>"
-    "$<$<BOOL:${BUILD_PORTABLE}>:BUILD_PORTABLE>"
     "$<$<BOOL:${HAVE_DIRENT_H}>:HAVE_DIRENT_H>"
     "$<IF:$<BOOL:${HAVE_DECL_SSCANF_S}>,HAVE_DECL_SSCANF_S=1,HAVE_DECL_SSCANF_S=0>"
+    "$<$<BOOL:${BUILD_PORTABLE}>:BUILD_PORTABLE>"
     PACKAGE_TARNAME="${PACKAGE_TARNAME}"
     PROGRAM_PREFIX="${PROGRAM_PREFIX}"
+    PUBLIC
+    "$<IF:$<BOOL:${HAVE_DECL_STRCASECMP}>,HAVE_DECL_STRCASECMP=1,HAVE_DECL_STRCASECMP=0>"
+    "$<IF:$<BOOL:${HAVE_DECL_STRNCASECMP}>,HAVE_DECL_STRNCASECMP=1,HAVE_DECL_STRNCASECMP=0>"
 )
-target_link_libraries(Game PUBLIC
-    Common
+target_link_libraries(Common PUBLIC
+    "$<$<BOOL:${SDL2_MAIN_LIBRARY}>:SDL2::SDL2main>"
+    SDL2::SDL2
     SDL2::mixer
     SDL2::net
     textscreen
@@ -134,41 +115,6 @@ target_link_libraries(Game PUBLIC
     "$<$<BOOL:${SAMPLERATE_FOUND}>:samplerate::samplerate>"
     "$<$<BOOL:${WIN32}>:winmm>"
 )
-
-# SetupCommon libraty
-if(COMPILE_SETUP)
-    add_library(SetupCommon STATIC EXCLUDE_FROM_ALL
-        deh_str.c           deh_str.h
-        d_mode.c            d_mode.h
-        d_iwad.c            d_iwad.h
-                            icon.h
-        m_config.c          m_config.h
-        net_io.c            net_io.h
-        net_packet.c        net_packet.h
-        net_sdl.c           net_sdl.h
-        net_query.c         net_query.h
-        net_structrw.c      net_structrw.h
-                            rd_migration.h
-        z_native.c
-    )
-    target_include_directories(SetupCommon PUBLIC
-        "${PROJECT_BINARY_DIR}"
-    )
-    set_target_properties(SetupCommon PROPERTIES
-        C_STANDARD "${RD_C_STANDARD}"
-        C_STANDARD_REQUIRED ON
-    )
-    target_compile_definitions(SetupCommon PRIVATE
-        "___RD_TARGET_SETUP___"
-        "$<$<BOOL:${BUILD_PORTABLE}>:BUILD_PORTABLE>"
-        PACKAGE_TARNAME="${PACKAGE_TARNAME}"
-    )
-    target_link_libraries(SetupCommon PUBLIC
-        Common
-        SDL2::net
-        textscreen
-    )
-endif()
 
 # Create executables
 foreach(MODULE ${COMPILE_MODULES})
@@ -263,7 +209,7 @@ foreach(MODULE ${COMPILE_MODULES})
     )
     target_link_libraries("${PROGRAM_PREFIX}${MODULE}" PRIVATE
         ${MODULE}
-        Game
+        Common
     )
     if(NOT NO_GIT_HASH)
         add_dependencies("${PROGRAM_PREFIX}${MODULE}" revision_check)
@@ -285,48 +231,6 @@ foreach(MODULE ${COMPILE_MODULES})
         COMMAND $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:${CMAKE_STRIP}> $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:"$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}>">
     )
 
-    if(COMPILE_SETUP)
-        add_executable("${PROGRAM_PREFIX}${MODULE}-setup" WIN32
-            i_main.c
-            "${PROJECT_SOURCE_DIR}/data/setup_icon.c"
-        )
-        set_target_properties("${PROGRAM_PREFIX}${MODULE}-setup" PROPERTIES
-            C_STANDARD "${RD_C_STANDARD}"
-            C_STANDARD_REQUIRED ON
-        )
-
-        if(WIN32)
-            add_dependencies("${PROGRAM_PREFIX}${MODULE}-setup" win-libs)
-            # Add resources for windows
-            target_sources("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE
-                win_launcher.c
-                "${CMAKE_CURRENT_BINARY_DIR}/setup/${MODULE}-resource.rc"
-            )
-            # Link options
-            target_link_options("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE
-                "$<$<BOOL:${MSVC}>:/MANIFEST:NO>"
-                "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:WINDOWS,-mwindows>"
-            )
-        endif()
-
-        target_compile_definitions("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE
-            "$<$<BOOL:${BUILD_PORTABLE}>:BUILD_PORTABLE>"
-            "___RD_TARGET_SETUP___"
-        )
-        target_link_libraries("${PROGRAM_PREFIX}${MODULE}-setup" PRIVATE
-            setup
-            SetupCommon
-        )
-        if(NOT NO_GIT_HASH)
-            add_dependencies("${PROGRAM_PREFIX}${MODULE}-setup" revision_check)
-        endif()
-
-        add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}-setup" POST_BUILD
-            MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-setup>"
-            COMMAND $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:${CMAKE_STRIP}> $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:"$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-setup>">
-        )
-    endif()
-
     # Tests
     add_test(NAME "${PROGRAM_PREFIX}${MODULE}"
         COMMAND gdb -ex run -ex quit --args $<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}$<$<BOOL:${WIN32}>:-exe>> -timedemo demo1 -nogui -nosound
@@ -346,9 +250,6 @@ foreach(MODULE ${COMPILE_MODULES})
     set(INSTALL_TARGETS "${PROGRAM_PREFIX}${MODULE}")
     if(WIN32)
         list(APPEND INSTALL_TARGETS "${PROGRAM_PREFIX}${MODULE}-exe" "${PROGRAM_PREFIX}${MODULE}-com")
-    endif()
-    if(COMPILE_SETUP)
-        list(APPEND INSTALL_TARGETS "${PROGRAM_PREFIX}${MODULE}-setup")
     endif()
     install(TARGETS ${INSTALL_TARGETS}
             DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${BUILD_PORTABLE}>>,.,${CMAKE_INSTALL_BINDIR}>
@@ -380,4 +281,3 @@ source_group("Doom" REGULAR_EXPRESSION "^${CMAKE_CURRENT_SOURCE_DIR}/doom/.+")
 source_group("Heretic" REGULAR_EXPRESSION "^${CMAKE_CURRENT_SOURCE_DIR}/heretic/.+")
 source_group("Hexen" REGULAR_EXPRESSION "^${CMAKE_CURRENT_SOURCE_DIR}/hexen/.+")
 source_group("Strife" REGULAR_EXPRESSION "^${CMAKE_CURRENT_SOURCE_DIR}/strife/.+")
-source_group("Setup" REGULAR_EXPRESSION "^${CMAKE_CURRENT_SOURCE_DIR}/setup/.+")
