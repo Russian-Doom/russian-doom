@@ -183,7 +183,6 @@ foreach(MODULE ${COMPILE_MODULES})
         target_link_options("${PROGRAM_PREFIX}${MODULE}" PRIVATE
             "$<$<AND:$<C_COMPILER_ID:GNU>,$<STREQUAL:${ARCH},x86>>:-static-libgcc>"
         )
-        add_dependencies("${PROGRAM_PREFIX}${MODULE}" win-libs)
 
         # .exe
         add_executable("${PROGRAM_PREFIX}${MODULE}-exe" WIN32
@@ -270,7 +269,7 @@ foreach(MODULE ${COMPILE_MODULES})
         add_dependencies("${PROGRAM_PREFIX}${MODULE}" revision_check)
     endif()
 
-    add_dependencies("${PROGRAM_PREFIX}${MODULE}" "${MODULE}-wads" gus-patches)
+    add_dependencies("${PROGRAM_PREFIX}${MODULE}" "${MODULE}-wads" gus-patches shared_libs)
     if(UNIX AND Python3_Interpreter_FOUND)
         add_dependencies("${PROGRAM_PREFIX}${MODULE}" "man-${MODULE}-en" "completion-${MODULE}")
     endif()

@@ -7,6 +7,7 @@ if(WIN32)
         return() # Unknown arch
     endif()
 
+    add_dependencies(shared_libs win-libs)
     install(FILES $<GENEX_EVAL:$<TARGET_PROPERTY:win-libs,OUT_FILES>>
         DESTINATION .
     )

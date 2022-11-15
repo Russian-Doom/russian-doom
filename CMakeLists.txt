@@ -215,7 +215,7 @@ endif()
 
 include(GNUInstallDirs)
 
-foreach(SUBDIR lib win_libs man src)
+foreach(SUBDIR lib man src)
     add_subdirectory("${SUBDIR}")
 endforeach()
 
