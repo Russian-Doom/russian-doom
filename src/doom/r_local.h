@@ -493,6 +493,8 @@ int R_TextureNumForName (char *name);
 void R_InitData (void);
 void R_PrecacheLevel (void);
 boolean R_IsPatchLump (const int lump);
+extern byte *blue_blood_set;
+extern byte *green_blood_set;
 
 // -----------------------------------------------------------------------------
 // R_DRAW
