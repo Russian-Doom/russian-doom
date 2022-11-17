@@ -233,8 +233,12 @@ foreach(MODULE ${COMPILE_MODULES})
     )
 
     # Tests
+    set(test_cmd $<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}$<$<BOOL:${WIN32}>:-exe>> -timedemo demo1 -nogui -nosound)
+    if(TEST_WITH_GDB)
+        set(gdb_cmd gdb -ex run -ex quit --args)
+    endif()
     add_test(NAME "${PROGRAM_PREFIX}${MODULE}"
-        COMMAND gdb -ex run -ex quit --args $<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}$<$<BOOL:${WIN32}>:-exe>> -timedemo demo1 -nogui -nosound
+        COMMAND ${gdb_cmd} ${test_cmd}
         WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/test_data"
     )
     set_tests_properties("${PROGRAM_PREFIX}${MODULE}" PROPERTIES
