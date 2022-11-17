@@ -57,13 +57,18 @@ if(UNIX AND Python3_Interpreter_FOUND)
             LANG ${Lang}
             SOURCE "\"${PROJECT_SOURCE_DIR}/src/m_argv.c\""
         )
-        list(APPEND Out_list ${Out})
+        add_custom_command(OUTPUT "${Out}.gz"
+            COMMAND gzip -k "${Out}"
+            MAIN_DEPENDENCY "${Out}"
+            WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+            COMMENT "Compressing ${Out}.gz"
+        )
 
         add_custom_target("man-${MODULE}-${Lang}"
-            DEPENDS ${Out_list}
+            DEPENDS "${Out}.gz"
         )
         set_target_properties("man-${MODULE}-${Lang}" PROPERTIES
-            OUT_FILES "${Out_list}"
+            OUT_FILES "${Out}.gz"
         )
     endfunction()
 
