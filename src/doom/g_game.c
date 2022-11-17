@@ -1063,7 +1063,7 @@ void G_Ticker (void)
 
     // [crispy] no pause at intermission screen during demo playback 
     // to avoid desyncs (from prboom-plus)
-    if ((paused & 2 || (!demoplayback && menuactive && !netgame)) && gamestate != GS_LEVEL)
+    if ((paused & 2 || (!demoplayback && menuactive && !netgame)) && gamestate == GS_INTERMISSION)
     {
         return;
     }
