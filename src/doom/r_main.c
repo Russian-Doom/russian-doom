@@ -24,12 +24,16 @@
 #include "p_local.h"
 #include "z_zone.h"
 #include "v_video.h"
+#include "w_wad.h"
 #include "jn.h"
 
 
 // Fineangles in the SCREENWIDTH wide window.
 #define FIELDOFVIEW 2048	
 
+
+// [JN] Will be false if modified PLAYPAL lump is loaded.
+boolean original_playpal = true;
 
 // [JN] Used by perfomance counter.
 int rendered_segs, rendered_visplanes, rendered_vissprites;
@@ -727,6 +731,12 @@ void R_Init (void)
             screenblocks = 9;
         if (screenblocks > 17)
             screenblocks = 17;
+    }
+
+    // [JN] Check for modified PLAYPAL lump.
+    if (W_CheckMultipleLumps("PLAYPAL") > 1)
+    {
+        original_playpal = false;
     }
 
     R_InitClipSegs ();

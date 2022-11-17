@@ -151,6 +151,9 @@ fixed_t    *spritewidth, *spriteoffset, *spritetopoffset;
 lighttable_t *colormaps;
 lighttable_t *colormaps_rd; // [JN] Infragreen vison and B&W fuzz effect
 
+// [JN] Blood and corpses coloring.
+byte *blue_blood_set;
+byte *green_blood_set;
 
 // =============================================================================
 // MAPTEXTURE_T CACHING
@@ -1035,6 +1038,21 @@ static void R_InitColormaps (void)
 
         W_ReleaseLumpName("PLAYPAL");
     }
+
+    // [JN] Check if we have a modified PLAYPAL palette to decide
+    // which type of blood coloring will be used: tablified or HSV.
+    if (original_playpal)
+    {
+        // We don't. Use tablified coloring for nicer looking.
+        blue_blood_set = cr[CR_RED2BLUE];
+        green_blood_set = cr[CR_RED2GREEN];
+    }
+    else
+    {
+        // We do. Use HSV coloring for better compatibility.
+        blue_blood_set = cr[CR_BLUE2];
+        green_blood_set = cr[CR_GREEN];
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1049,8 +1067,9 @@ enum {
 
 static void R_InitTransMaps (void)
 {
-    // [JN] Check if we have a modified PLAYPAL palette:
-    if (W_CheckMultipleLumps("PLAYPAL") == 1)
+    // [JN] Check if we have a modified PLAYPAL palette to decide
+    // how to load translucency tables: as pregenerated or as generated dynamically.
+    if (original_playpal)
     {
         // [JN] We don't. Load pregenerated tables for faster startup.
         transtable90 = W_CacheLumpNum(W_CheckNumForName("TRNSTB90"), PU_STATIC);

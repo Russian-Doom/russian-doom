@@ -876,12 +876,12 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
     { 
         if (thing->target->type == MT_HEAD)
         {
-            vis->translation =  cr[CR_RED2BLUE];
+            vis->translation = blue_blood_set;
         }
         else if (thing->target->type == MT_BRUISER
         || thing->target->type == MT_KNIGHT)
         {
-            vis->translation = cr[CR_RED2GREEN];
+            vis->translation = green_blood_set;
         }
     }
 }
