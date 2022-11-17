@@ -1029,7 +1029,7 @@ void G_Ticker(void)
 
 
     // [JN] Allow to pause demo playback:
-    if (paused & 2 || (!demoplayback && menuactive && !netgame))
+    if ((paused & 2 || (!demoplayback && menuactive && !netgame)) && gamestate != GS_DEMOSCREEN)
     {
         oldleveltime = leveltime;  // Supress interpolation for next frame.
         return;                    // Don't go any farther.
