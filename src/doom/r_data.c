@@ -151,7 +151,7 @@ fixed_t    *spritewidth, *spriteoffset, *spritetopoffset;
 lighttable_t *colormaps;
 lighttable_t *colormaps_rd; // [JN] Infragreen vison and B&W fuzz effect
 
-// [JN] Colored blood and corpses coloring.
+// [JN] Blood and corpses coloring.
 byte *blue_blood_set;
 byte *green_blood_set;
 
@@ -1068,7 +1068,7 @@ enum {
 static void R_InitTransMaps (void)
 {
     // [JN] Check if we have a modified PLAYPAL palette to decide
-    // how to load translucency tables: pregenerated on generated dynamically.
+    // how to load translucency tables: as pregenerated or as generated dynamically.
     if (original_playpal)
     {
         // [JN] We don't. Load pregenerated tables for faster startup.
