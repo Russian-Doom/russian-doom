@@ -139,23 +139,23 @@ Compiling on Linux is rather simple.
 First, make sure you have all the necessary dependencies for compilation.
 On Ubuntu Linux, they can be installed by the following command:
 ```shell
-sudo apt install gcc make python3 cmake \
+sudo apt install gcc make python3 gzip cmake \
 libsdl2-dev libsdl2-mixer-dev libsdl2-net-dev libsamplerate-dev
 ```
 On Fedora Linux, they can be installed by the following command:
 ```shell
-sudo dnf install gcc make python3 cmake \
+sudo dnf install gcc make python3 gzip cmake \
 SDL2-devel SDL2_mixer-devel SDL2_net-devel libsamplerate-devel miniz-devel
 ```
 On Manjaro Linux, they can be installed by the following command:
 ```shell
-sudo pacman -S gcc make python3 cmake \
+sudo pacman -S gcc make python3 gzip cmake \
 sdl2 sdl2_mixer sdl2_net libsamplerate
 ```
 
 The `gcc` compiler can de replaced with `clang`.
 If you want to use `Ninja` or `Ninja Multi-Config` cmake generators, you need to install `ninja-build`.
-The `python3` is not mandatory, but required for generation of man pages and bash completion.
+The `python3` and `gzip` is not mandatory, but required for generation of man pages and bash completion.
 If you want to run CTest tests, you must also install `gdb`.
 If your Linux distribution provides a package for `miniz` library, you can use it as a dependency instead of the bundled one.
 
