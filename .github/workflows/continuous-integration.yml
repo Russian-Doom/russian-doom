@@ -103,6 +103,7 @@ jobs:
                 -D SAMPLERATE_DIR="lib/thirdparty/libsamplerate-0.2.2-win${{ matrix.arch.bits }}" \
                 -D BUILD_VERSION_OVERWRITE="6.x.x" -D FORCE_GIT_HASH_SUFFIX=ON -D CMAKE_BUILD_TYPE=RelWithDebInfo \
                 $build_portable \
+                -D TEST_WITH_GDB="ON"\
                 -S . -B build
           sha_short=$(echo ${{ github.sha }} | cut -c1-7)
           echo "sha_short=$sha_short" >> $GITHUB_OUTPUT

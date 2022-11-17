@@ -16,6 +16,7 @@ Option(COMPILE_HERETIC "Compile Heretic module" ON)
 Option(COMPILE_HEXEN "Compile Hexen module" ON)
 # [Dasperal] Disable Strife by default. It won't compile until `JNechaevsky/inter-doom/pull/268` is implemented for Strife
 Option(COMPILE_STRIFE "Compile Strife module" OFF)
+Option(TEST_WITH_GDB "Attach gdb to CTest tests" OFF)
 
 include(CMakeDependentOption)
 find_package(Git)
