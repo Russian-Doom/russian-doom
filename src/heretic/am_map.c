@@ -108,6 +108,10 @@ static int m_zoomout;
 #define CXMTOF(x) (f_x + MTOF((x)-m_x))
 #define CYMTOF(y) (f_y + (f_h - MTOF((y)-m_y)))
 
+// [crispy] Used for automap background tiling
+#define MAPBGROUNDWIDTH        (ORIGWIDTH)
+#define MAPBGROUNDWIDTH_HIRES  (ORIGWIDTH << hires)
+#define MAPBGROUNDHEIGHT       (ORIGHEIGHT - 42)
 
 typedef struct
 {
@@ -211,7 +215,7 @@ static fixed_t scale_ftom;
 // the player represented by an arrow
 static player_t *plr;
 
-static patch_t *maplump;      // [JN] Automap background patch.
+static byte    *maplump;      // Automap background patch.
 static patch_t *am_crosshair; // [JN] Crosshair patch in non-follow mode.
 static patch_t *marknums[10]; // numbers used for marking by the automap
 
@@ -630,8 +634,7 @@ void AM_initPics (void)
 {
     char namebuf[9];
 
-    // Parallax problem: AUTOPAGE changed to unreplacable MAPEPAGE.
-    maplump = W_CacheLumpName(DEH_String("MAPEPAGE"), PU_STATIC);
+    maplump = W_CacheLumpName(DEH_String("AUTOPAGE"), PU_STATIC);
 
     // Load crosshair patch.
     am_crosshair = W_CacheLumpName("XHAIR_1", PU_STATIC);
@@ -1078,18 +1081,46 @@ void AM_Ticker (void)
 =
 = AM_drawBackground
 =
-= Updates on Game Tick.
+= Blit the automap background to the screen.
+=
+= [crispy] To support widescreen, increase the number of possible background
+= tiles from 2 to 3. To support rendering at 2x resolution, treat original
+= 320 x 158 tile image as 640 x 79.
 =
 ================================================================================
 */
 
 static void AM_drawBackground (void)
 {
-    // [JN] Draw automap background as tiled GFX patches.
-    V_DrawPatchUnscaled(0, 0, maplump, NULL);
-    V_DrawPatchUnscaled(560, 0, maplump, NULL);
-    V_DrawPatchUnscaled(0, 200, maplump, NULL);
-    V_DrawPatchUnscaled(560, 200, maplump, NULL); 
+    int j  = MAPBGROUNDWIDTH_HIRES;
+    int x2 = screenwidth;
+    int x3;
+    
+    if (x2 > MAPBGROUNDWIDTH_HIRES)
+    {
+        x2 = MAPBGROUNDWIDTH_HIRES;
+    }
+
+    x3 = screenwidth - x2;
+
+    for (int i = 0 ; i < finit_height ; i++)
+    {
+        memcpy(I_VideoBuffer + i * screenwidth,
+               maplump + j + MAPBGROUNDWIDTH_HIRES - x3, x3);
+
+        memcpy(I_VideoBuffer + i * screenwidth + x3,
+               maplump + j + MAPBGROUNDWIDTH_HIRES - x2, x2);
+
+        memcpy(I_VideoBuffer + i * screenwidth + x2 + x3,
+               maplump + j, 0);
+
+        j += MAPBGROUNDWIDTH_HIRES;
+
+        if (j >= MAPBGROUNDHEIGHT * MAPBGROUNDWIDTH)
+        {
+            j = 0;
+        }
+    }
 }
 
 /*
