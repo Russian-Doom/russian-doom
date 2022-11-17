@@ -569,6 +569,7 @@ void R_VideoErase (unsigned ofs, const int count);
 #define SKYFLATNAME "F_SKY1"    // Store the number for name.
 #define ANGLETOSKYSHIFT 22      // The sky map is 256*128*4 maps.
 
+extern boolean original_playpal;
 extern boolean scaled_sky;
 extern fixed_t centerxfrac, centeryfrac;
 extern fixed_t fractionaltic;
