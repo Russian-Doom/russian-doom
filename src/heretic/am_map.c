@@ -109,9 +109,8 @@ static int m_zoomout;
 #define CYMTOF(y) (f_y + (f_h - MTOF((y)-m_y)))
 
 // [crispy] Used for automap background tiling
-#define MAPBGROUNDWIDTH        (ORIGWIDTH)
-#define MAPBGROUNDWIDTH_HIRES  (ORIGWIDTH << hires)
-#define MAPBGROUNDHEIGHT       (ORIGHEIGHT - 42)
+#define MAPBGROUNDWIDTH   (ORIGWIDTH)
+#define MAPBGROUNDHEIGHT  (ORIGHEIGHT - 42)
 
 typedef struct
 {
@@ -1092,13 +1091,14 @@ void AM_Ticker (void)
 
 static void AM_drawBackground (void)
 {
-    int j  = MAPBGROUNDWIDTH_HIRES;
+    const int mapbgwidth_hires = ORIGWIDTH << hires;
+    int j = mapbgwidth_hires;
     int x2 = screenwidth;
     int x3;
     
-    if (x2 > MAPBGROUNDWIDTH_HIRES)
+    if (x2 > mapbgwidth_hires)
     {
-        x2 = MAPBGROUNDWIDTH_HIRES;
+        x2 = mapbgwidth_hires;
     }
 
     x3 = screenwidth - x2;
@@ -1106,15 +1106,15 @@ static void AM_drawBackground (void)
     for (int i = 0 ; i < finit_height ; i++)
     {
         memcpy(I_VideoBuffer + i * screenwidth,
-               maplump + j + MAPBGROUNDWIDTH_HIRES - x3, x3);
+               maplump + j + mapbgwidth_hires - x3, x3);
 
         memcpy(I_VideoBuffer + i * screenwidth + x3,
-               maplump + j + MAPBGROUNDWIDTH_HIRES - x2, x2);
+               maplump + j + mapbgwidth_hires - x2, x2);
 
         memcpy(I_VideoBuffer + i * screenwidth + x2 + x3,
                maplump + j, 0);
 
-        j += MAPBGROUNDWIDTH_HIRES;
+        j += mapbgwidth_hires;
 
         if (j >= MAPBGROUNDHEIGHT * MAPBGROUNDWIDTH)
         {
