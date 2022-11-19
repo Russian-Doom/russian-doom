@@ -2020,13 +2020,7 @@ void P_SetupLevel (int episode, int map, int playermask, skill_t skill)
     P_InitThinkers();
 
     // look for a regular (development) map first
-    lumpname[0] = 'E';
-    lumpname[1] = '0' + episode;
-    lumpname[2] = 'M';
-    lumpname[3] = '0' + map;
-    lumpname[4] = 0;
-    leveltime = 0;
-    oldleveltime = 0;  // [crispy] Track if game is running
+    DEH_snprintf(lumpname, 9, "E%dM%d", episode, map);
 
     lumpnum = W_GetNumForName(lumpname);
 
@@ -2040,6 +2034,9 @@ void P_SetupLevel (int episode, int map, int playermask, skill_t skill)
     {
         P_SetupFixes(episode, map);
     }
+
+    leveltime = 0;
+    oldleveltime = 0;  // [crispy] Track if game is running
 
     // [JN] Indicate the map we are loading
     fprintf(stderr, "P_SetupLevel: E%dM%d, ", gameepisode, gamemap);

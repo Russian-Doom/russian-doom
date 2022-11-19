@@ -89,7 +89,6 @@ char* txt_cheatartifacts1;
 char* txt_cheatartifacts2;
 char* txt_cheatartifacts3;
 char* txt_cheatartifactsfail;
-char* txt_cheatwarp;
 char* txt_cheatscreenshot;
 char* txt_cheatchickenon;
 char* txt_cheatchickenoff;
@@ -336,7 +335,6 @@ void RD_DefineLanguageStrings (void)
         txt_cheatartifacts2    = TXT_CHEATARTIFACTS2;
         txt_cheatartifacts3    = TXT_CHEATARTIFACTS3;
         txt_cheatartifactsfail = TXT_CHEATARTIFACTSFAIL;
-        txt_cheatwarp          = TXT_CHEATWARP;
         txt_cheatscreenshot    = TXT_CHEATSCREENSHOT;
         txt_cheatchickenon     = TXT_CHEATCHICKENON;
         txt_cheatchickenoff    = TXT_CHEATCHICKENOFF;
@@ -463,7 +461,6 @@ void RD_DefineLanguageStrings (void)
         txt_cheatartifacts2    = TXT_CHEATARTIFACTS2_RUS;
         txt_cheatartifacts3    = TXT_CHEATARTIFACTS3_RUS;
         txt_cheatartifactsfail = TXT_CHEATARTIFACTSFAIL_RUS;
-        txt_cheatwarp          = TXT_CHEATWARP_RUS;
         txt_cheatscreenshot    = TXT_CHEATSCREENSHOT_RUS;
         txt_cheatchickenon     = TXT_CHEATCHICKENON_RUS;
         txt_cheatchickenoff    = TXT_CHEATCHICKENOFF_RUS;

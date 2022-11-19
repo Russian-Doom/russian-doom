@@ -2045,7 +2045,6 @@ static void CheatWarpFunc(player_t * player, Cheat_t * cheat)
     if (D_ValidEpisodeMap(heretic, gamemode, episode, map))
     {
         G_DeferedInitNew(gameskill, episode, map);
-        P_SetMessage(player, DEH_String(txt_cheatwarp), msg_system, false);
     }
 }
 

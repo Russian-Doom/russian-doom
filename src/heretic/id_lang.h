@@ -97,7 +97,6 @@ extern char* txt_cheatartifacts1;
 extern char* txt_cheatartifacts2;
 extern char* txt_cheatartifacts3;
 extern char* txt_cheatartifactsfail;
-extern char* txt_cheatwarp;
 extern char* txt_cheatscreenshot;
 extern char* txt_cheatchickenon;
 extern char* txt_cheatchickenoff;
@@ -229,7 +228,6 @@ extern char* txt_mlook_off;
 #define TXT_CHEATARTIFACTS2     "HOW MANY ( 1 - 9 )"
 #define TXT_CHEATARTIFACTS3     "YOU GOT IT"
 #define TXT_CHEATARTIFACTSFAIL  "BAD INPUT"
-#define TXT_CHEATWARP           "LEVEL WARP"
 #define TXT_CHEATSCREENSHOT     "SCREENSHOT"
 #define TXT_CHEATCHICKENON      "CHICKEN ON"
 #define TXT_CHEATCHICKENOFF     "CHICKEN OFF"
@@ -459,7 +457,6 @@ extern char* txt_mlook_off;
 #define TXT_CHEATARTIFACTS2_RUS     "ERF;BNT RJKBXTCNDJ ( 1 - 9 )"          // УКАЖИТЕ КОЛИЧЕСТВО ( 1 - 9 )
 #define TXT_CHEATARTIFACTS3_RUS     "GJKEXTYJ"                              // ПОЛУЧЕНО 
 #define TXT_CHEATARTIFACTSFAIL_RUS  "YTRJHHTRNYSQ DDJL"                     // НЕКОРРЕНТНЫЙ ВВОД
-#define TXT_CHEATWARP_RUS           "GTHTVTOTYBT YF EHJDTYM"                // ПЕРЕМЕЩЕНИЕ НА УРОВЕНЬ
 #define TXT_CHEATSCREENSHOT_RUS     "CYBVJR 'RHFYF"                         // СНИМОК ЭКРАНА
 #define TXT_CHEATCHICKENON_RUS      "GHTDHFOTYBT D WSGKTYRF"                // ПРЕВРАЩЕНИЕ В ЦЫПЛЕНКА
 #define TXT_CHEATCHICKENOFF_RUS     "GHTDHFOTYBT D WSGKTYRF JNVTYTYJ"       // ПРЕВРАЩЕНИЕ В ЦЫПЛЕНКА ОТМЕНЕНО
