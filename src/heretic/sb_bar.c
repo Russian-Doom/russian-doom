@@ -687,6 +687,7 @@ int playerkeys = 0;
 
 void SB_Drawer(void)
 {
+    CPlayer = &players[displayplayer];
     int frame;
     int xval;
     const int xval_widget = demotimer || show_fps || local_time ? 50 : 0;
@@ -698,8 +699,25 @@ void SB_Drawer(void)
     // Different languages have different string widths. 
     // Use a pointer to prevent extra conditions hitting.
     int (*StringWidth)(char *text) = english_language ? RD_M_TextAWidth : RD_M_TextSmallRUSWidth;
+    // Predefine colors:
+    // (TODO - consider "dp_translation" to use "Translation_CR_t" type)
+    byte *cr_title_color, *cr_item_color, *cr_coord_color;
+    Translation_CR_t tr_title_color;
 
-    CPlayer = &players[displayplayer];
+    if (hud_stats_color)
+    {
+        cr_title_color = cr[CR_DARK];
+        cr_item_color  = cr[CR_GRAY];
+        cr_coord_color = cr[CR_DARKGREEN];
+        tr_title_color = CR_DARK;
+    }
+    else
+    {
+        cr_title_color = NULL;
+        cr_item_color  = NULL;
+        cr_coord_color = NULL;
+        tr_title_color = CR_NONE;
+    }
 
     // [JN] Draw horns separatelly in non wide screen mode
     if (aspect_ratio < 2 && screenblocks <= 10 && automapactive && automap_overlay)
@@ -727,7 +745,7 @@ void SB_Drawer(void)
                 if (english_language)
                 {
                     sprintf(str1, "K ");
-                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    dp_translation = cr_title_color;
                     RD_M_DrawTextA(str1, wide_4_3, 136 - map_active);
                     dp_translation = NULL;
 
@@ -748,8 +766,7 @@ void SB_Drawer(void)
                 else
                 {
                     sprintf(str1, "D ");
-                    RD_M_DrawTextSmallRUS(str1, wide_4_3, 136 - map_active,
-                                          hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                    RD_M_DrawTextSmallRUS(str1, wide_4_3, 136 - map_active, tr_title_color);
 
                     sprintf(str2, CPlayer->extrakillcount ? "%d+%d/%d " : "%d/%d ",
                                   CPlayer->killcount,
@@ -767,7 +784,7 @@ void SB_Drawer(void)
                 if (english_language)
                 {
                     sprintf(str3, "I ");
-                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    dp_translation = cr_title_color;
                     RD_M_DrawTextA(str3, wide_4_3 + StringWidth(str1)
                                                   + StringWidth(str2), 136 - map_active);
                     dp_translation = NULL;
@@ -789,8 +806,7 @@ void SB_Drawer(void)
                 {
                     sprintf(str3, "G ");
                     RD_M_DrawTextSmallRUS(str3, wide_4_3 + StringWidth(str1)
-                                                         + StringWidth(str2), 136 - map_active,
-                                                           hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                                                         + StringWidth(str2), 136 - map_active, tr_title_color);
 
                     sprintf(str4, "%d/%d ", CPlayer->itemcount, totalitems);
 
@@ -807,7 +823,7 @@ void SB_Drawer(void)
                 if (english_language)
                 {
                     sprintf(str5, "S ");
-                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    dp_translation = cr_title_color;
                     RD_M_DrawTextA(str5, wide_4_3 + StringWidth(str1)
                                                   + StringWidth(str2)
                                                   + StringWidth(str3)
@@ -834,8 +850,7 @@ void SB_Drawer(void)
                         RD_M_DrawTextSmallRUS(str5, wide_4_3 + StringWidth(str1)
                                                              + StringWidth(str2)
                                                              + StringWidth(str3)
-                                                             + StringWidth(str4), 136 - map_active,
-                                                               hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                                                             + StringWidth(str4), 136 - map_active, tr_title_color);
 
                         sprintf(str6, "%d/%d ", CPlayer->secretcount, totalsecret);
 
@@ -856,7 +871,7 @@ void SB_Drawer(void)
                     if (english_language)
                     {
                         sprintf(str7, "SKL ");
-                        dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                        dp_translation = cr_title_color;
                         RD_M_DrawTextA(str7, wide_4_3 + StringWidth(str1)
                                                       + StringWidth(str2)
                                                       + StringWidth(str3)
@@ -873,12 +888,11 @@ void SB_Drawer(void)
                                                              + StringWidth(str3)
                                                              + StringWidth(str4)
                                                              + StringWidth(str5)
-                                                             + StringWidth(str6), 136 - map_active,
-                                                               hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                                                             + StringWidth(str6), 136 - map_active, tr_title_color);
                     }
 
                     sprintf(str8, "%d", gameskill + 1);
-                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+                    dp_translation = cr_item_color;
                     RD_M_DrawTextA(str8, wide_4_3 + StringWidth(str1)
                                                   + StringWidth(str2)
                                                   + StringWidth(str3)
@@ -899,19 +913,18 @@ void SB_Drawer(void)
 
                 if (english_language)
                 {
-                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    dp_translation = cr_title_color;
                     RD_M_DrawTextA("LEVEL", wide_4_3, 126 - map_active);
                     dp_translation = NULL;
                 }
                 else
                 {
-                    RD_M_DrawTextSmallRUS("EHJDTYM", wide_4_3, 126 - map_active,
-                                          hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                    RD_M_DrawTextSmallRUS("EHJDTYM", wide_4_3, 126 - map_active, tr_title_color);
                 }
 
                 sprintf(str, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
 
-                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+                dp_translation = cr_item_color;
                 RD_M_DrawTextA(str, wide_4_3 + x_shift, 126 - map_active);
                 dp_translation = NULL;
             }
@@ -926,7 +939,7 @@ void SB_Drawer(void)
 
                 if (english_language)
                 {
-                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    dp_translation = cr_title_color;
                     sprintf(str1, "TOTAL");
                     RD_M_DrawTextA(str1, wide_4_3, 116 - map_active);
                     dp_translation = NULL;
@@ -934,13 +947,12 @@ void SB_Drawer(void)
                 else
                 {
                     sprintf(str1, "J,OTT");
-                    RD_M_DrawTextSmallRUS(str1, wide_4_3, 116 - map_active,
-                                          hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                    RD_M_DrawTextSmallRUS(str1, wide_4_3, 116 - map_active, tr_title_color);
                 }
 
                 sprintf(str2, "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
 
-                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+                dp_translation = cr_item_color;
                 RD_M_DrawTextA(str2, wide_4_3 + x_shift, 116 - map_active);
                 dp_translation = NULL;
             }
@@ -955,14 +967,14 @@ void SB_Drawer(void)
                     map_active += 20;
                 }
 
-                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                dp_translation = cr_coord_color;
                 RD_M_DrawTextA("X:", wide_4_3, 95 - map_active);
                 RD_M_DrawTextA("Y:", wide_4_3, 104 - map_active);
                 RD_M_DrawTextA("Z:", wide_4_3, 113 - map_active);
                 RD_M_DrawTextA("ANG:", wide_4_3, 122 - map_active);
                 dp_translation = NULL;
 
-                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+                dp_translation = cr_item_color;
                 sprintf(str, "%d", CPlayer->mo->x >> FRACBITS);
                 RD_M_DrawTextA(str, wide_4_3 + 16, 95 - map_active);
                 sprintf(str, "%d", CPlayer->mo->y >> FRACBITS);
@@ -994,13 +1006,13 @@ void SB_Drawer(void)
 
                 if (english_language)
                 {
-                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    dp_translation = cr_title_color;
                     RD_M_DrawTextA("K:", wide_4_3, 9 + net_y);
                     dp_translation = NULL;
                 }
                 else
                 {
-                    RD_M_DrawTextSmallRUS("D:", wide_4_3, 9 + net_y, hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                    RD_M_DrawTextSmallRUS("D:", wide_4_3, 9 + net_y, tr_title_color);
                 }
 
                 dp_translation = hud_stats_color == 0 ? NULL :
@@ -1015,13 +1027,13 @@ void SB_Drawer(void)
 
                 if (english_language)
                 {
-                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    dp_translation = cr_title_color;
                     RD_M_DrawTextA("I:", wide_4_3, 19 + net_y);
                     dp_translation = NULL;
                 }
                 else
                 {
-                    RD_M_DrawTextSmallRUS("G:", wide_4_3, 19 + net_y, hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                    RD_M_DrawTextSmallRUS("G:", wide_4_3, 19 + net_y, tr_title_color);
                 }
 
                 dp_translation = hud_stats_color == 0 ? NULL :
@@ -1036,13 +1048,13 @@ void SB_Drawer(void)
 
                 if (english_language)
                 {
-                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    dp_translation = cr_title_color;
                     RD_M_DrawTextA("S:", wide_4_3, 29 + net_y);
                     dp_translation = NULL;
                 }
                 else
                 {
-                    RD_M_DrawTextSmallRUS("N:", wide_4_3, 29 + net_y, hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                    RD_M_DrawTextSmallRUS("N:", wide_4_3, 29 + net_y, tr_title_color);
                 }
 
                 dp_translation = hud_stats_color == 0 ? NULL :
@@ -1060,16 +1072,16 @@ void SB_Drawer(void)
 
                 if (english_language)
                 {
-                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    dp_translation = cr_title_color;
                     RD_M_DrawTextA("SKL:", wide_4_3, 39 + net_y);
                     dp_translation = NULL;
                 }
                 else
                 {
-                    RD_M_DrawTextSmallRUS("CK;:", wide_4_3, 39 + net_y, hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                    RD_M_DrawTextSmallRUS("CK;:", wide_4_3, 39 + net_y, tr_title_color);
                 }
 
-                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+                dp_translation = cr_item_color;
                 RD_M_DrawTextA(text, wide_4_3 + (english_language ? 31 : 36), 39 + net_y);
                 dp_translation = NULL;
             }
@@ -1081,16 +1093,16 @@ void SB_Drawer(void)
 
                 if (english_language)
                 {
-                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    dp_translation = cr_title_color;
                     RD_M_DrawTextA("LEVEL", wide_4_3, 49);
                     dp_translation = NULL;
                 }
                 else
                 {
-                    RD_M_DrawTextSmallRUS("EHJDTYM", wide_4_3, 49, hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                    RD_M_DrawTextSmallRUS("EHJDTYM", wide_4_3, 49, tr_title_color);
                 }
 
-                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+                dp_translation = cr_coord_color;
                 RD_M_DrawTextA(text, wide_4_3, 59);
                 dp_translation = NULL;
             }
@@ -1102,13 +1114,13 @@ void SB_Drawer(void)
 
                 if (english_language)
                 {
-                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    dp_translation = cr_title_color;
                     RD_M_DrawTextA("TOTAL", wide_4_3, 69);
                     dp_translation = NULL;
                 }
                 else
                 {
-                    RD_M_DrawTextSmallRUS("J,OTT", wide_4_3, 69, hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                    RD_M_DrawTextSmallRUS("J,OTT", wide_4_3, 69, tr_title_color);
                 }
 
                 dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
@@ -1119,14 +1131,14 @@ void SB_Drawer(void)
             // [JN] Player coords
             if ((automapactive && automap_coords == 1) || automap_coords == 2)
             {
-                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                dp_translation = cr_coord_color;
                 RD_M_DrawTextA("X:", wide_4_3, 89);
                 RD_M_DrawTextA("Y:", wide_4_3, 99);
                 RD_M_DrawTextA("Z:", wide_4_3, 109);
                 RD_M_DrawTextA("ANG:", wide_4_3, 119);
                 dp_translation = NULL;
 
-                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+                dp_translation = cr_item_color;
                 M_snprintf(text, sizeof(text), "%d", CPlayer->mo->x >> FRACBITS);
                 RD_M_DrawTextA(text, wide_4_3 + 16, 89);
                 M_snprintf(text, sizeof(text), "%d", CPlayer->mo->y >> FRACBITS);
