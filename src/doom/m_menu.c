@@ -199,6 +199,7 @@ static void M_RD_Change_AutomapGridSize(Direction_t direction);
 
 // Stats
 static void M_RD_Draw_StatsSettings();
+static void M_RD_Change_StatsPlacement();
 static void M_RD_Change_AutomapStats(Direction_t direction);
 static void M_RD_Change_AutomapSkill(Direction_t direction);
 static void M_RD_Change_AutomapLevelTime(Direction_t direction);
@@ -833,6 +834,7 @@ MENU_STATIC_PAGED(AutomapMenu,
 
 static MenuItem_t StatsItems[] = {
     I_TITLE( "Statistics",              "Cnfnbcnbrf"), // Статистика
+    I_SWITCH("placement:",              "hfcgjkj;tybt:",            M_RD_Change_StatsPlacement), // Расположение:
     I_LRFUNC("level stats/frags:",      "cnfnbcnbrf ehjdyz*ahfub:", M_RD_Change_AutomapStats), // Статистика уровня/фраги:
     I_LRFUNC("skill level:",            "ehjdtym ckj;yjcnb:",       M_RD_Change_AutomapSkill), // Уровень сложности:
     I_LRFUNC("level/deathmatch timer:", "nfqvth ehjdyz*ltavfnx:",   M_RD_Change_AutomapLevelTime), // Таймер уровня/дефматч:
@@ -840,7 +842,6 @@ static MenuItem_t StatsItems[] = {
     I_LRFUNC("player coords:",          "rjjhlbyfns buhjrf:",       M_RD_Change_AutomapCoords), // Координаты игрока:
     I_SWITCH("level name:",             "yfpdfybt ehjdyz:",         M_RD_Change_HUDLevelName), // Название уровня:
     I_SWITCH("coloring:",               "jrhfibdfybt:",             M_RD_Change_HUDWidgetColors), // Окрашивание:
-    I_EMPTY,
     I_EMPTY,
     I_EMPTY,
     I_EMPTY,
@@ -2944,44 +2945,48 @@ static void M_RD_Draw_StatsSettings(void)
 {
     if (english_language)
     {
+        // Stats alignment
+        RD_M_DrawTextSmallENG(stats_placement ? "bottom" : "top",
+                              116 + wide_delta, 35, CR_NONE);
+        
         // Level stats/frags
         RD_M_DrawTextSmallENG(automap_stats == 1 ? "in automap" :
                               automap_stats == 2 ? "always" : "off",
-                              170 + wide_delta, 35,
+                              170 + wide_delta, 45,
                               automap_stats ? CR_GREEN : CR_DARKRED);
 
         // Skill level
         RD_M_DrawTextSmallENG(automap_skill == 1 ? "in automap" :
                               automap_skill == 2 ? "always" : "off",
-                              121 + wide_delta, 45,
+                              121 + wide_delta, 55,
                               automap_skill ? CR_GREEN : CR_DARKRED);
 
         // Level/deathmatch timer
         RD_M_DrawTextSmallENG(automap_level_time == 1 ? "in automap" :
                               automap_level_time == 2 ? "always" : "off",
-                              211 + wide_delta, 55,
+                              211 + wide_delta, 65,
                               automap_level_time ? CR_GREEN : CR_DARKRED);
 
         // Total time
         RD_M_DrawTextSmallENG(automap_total_time == 1 ? "in automap" :
                               automap_total_time == 2 ? "always" : "off",
-                              116 + wide_delta, 65,
+                              116 + wide_delta, 75,
                               automap_total_time ? CR_GREEN : CR_DARKRED);
 
         // Player coords
         RD_M_DrawTextSmallENG(automap_coords == 1 ? "in automap" :
                               automap_coords == 2 ? "always" : "off",
-                              142 + wide_delta, 75,
+                              142 + wide_delta, 85,
                               automap_coords ? CR_GREEN : CR_DARKRED);
 
         // Level name
         RD_M_DrawTextSmallENG(hud_level_name ? "always" : "in automap",
-                              119 + wide_delta, 85,
+                              119 + wide_delta, 95,
                               hud_level_name ? CR_GREEN : CR_DARKRED);
 
         // Coloring
         RD_M_DrawTextSmallENG(hud_stats_color ? "on" : "off",
-                              103 + wide_delta, 95,
+                              103 + wide_delta, 105,
                               hud_stats_color ? CR_GREEN : CR_DARKRED);
 
         //
@@ -2991,44 +2996,48 @@ static void M_RD_Draw_StatsSettings(void)
     }
     else
     {
+        // Расположение
+        RD_M_DrawTextSmallRUS(stats_placement ? "cybpe" : "cdth[e", // Снизу | Сверху
+                              143 + wide_delta, 35, CR_NONE);
+        
         // Статистика уровня/фраги
         RD_M_DrawTextSmallRUS(automap_stats == 1 ? "yf rfhnt" :
                               automap_stats == 2 ? "dctulf" :
-                              "dsrk", 224 + wide_delta, 35,
+                              "dsrk", 224 + wide_delta, 45,
                               automap_stats ? CR_GREEN : CR_DARKRED);
 
         // Уровень сложности
         RD_M_DrawTextSmallRUS(automap_skill == 1 ? "yf rfhnt" :
                               automap_skill == 2 ? "dctulf" :
-                              "dsrk", 179 + wide_delta, 45,
+                              "dsrk", 179 + wide_delta, 55,
                               automap_skill ? CR_GREEN : CR_DARKRED);
 
         // Таймер уровня/дефматч
         RD_M_DrawTextSmallRUS(automap_level_time == 1 ? "yf rfhnt" :
                               automap_level_time == 2 ? "dctulf" :
-                              "dsrk", 210 + wide_delta, 55,
+                              "dsrk", 210 + wide_delta, 65,
                               automap_level_time ? CR_GREEN : CR_DARKRED);
 
         // Общее время
         RD_M_DrawTextSmallRUS(automap_total_time == 1 ? "yf rfhnt" :
                               automap_total_time == 2 ? "dctulf" :
-                              "dsrk", 131 + wide_delta, 65,
+                              "dsrk", 131 + wide_delta, 75,
                               automap_total_time ? CR_GREEN : CR_DARKRED);
 
         // Координаты игрока
         RD_M_DrawTextSmallRUS(automap_coords == 1 ? "yf rfhnt" :
                               automap_coords == 2 ? "dctulf" :
-                              "dsrk", 178 + wide_delta, 75,
+                              "dsrk", 178 + wide_delta, 85,
                               automap_coords ? CR_GREEN : CR_DARKRED);
 
         // Название уровня
         RD_M_DrawTextSmallRUS(hud_level_name ? "dctulf" : "yf rfhnt",
-                              159 + wide_delta, 85,
+                              159 + wide_delta, 95,
                               hud_level_name ? CR_GREEN : CR_DARKRED);
 
         // Окрашивание
         RD_M_DrawTextSmallRUS(hud_stats_color ? "drk" : "dsrk",
-                              133 + wide_delta, 95,
+                              133 + wide_delta, 105,
                               hud_stats_color ? CR_GREEN : CR_DARKRED);
 
         //
@@ -3036,6 +3045,11 @@ static void M_RD_Draw_StatsSettings(void)
         //
         RD_M_DrawTextSmallRUS(RD_PREV_RUS, 35 + wide_delta, 145, CR_WHITE);
     }
+}
+
+static void M_RD_Change_StatsPlacement()
+{
+    stats_placement ^= 1;
 }
 
 static void M_RD_Change_AutomapStats(Direction_t direction)
@@ -6180,8 +6194,9 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     automap_grid_size  = 128;
 
     // Stats
+    stats_placement    = 0;
     automap_stats      = 1;
-    automap_skill      = 1;
+    automap_skill      = 0;
     automap_level_time = 1;
     automap_total_time = 0;
     automap_coords     = 0;
@@ -6373,6 +6388,7 @@ static void M_RD_BackToDefaults_Original(int choice)
     automap_grid_size  = 128;
 
     // Stats
+    stats_placement    = 0;
     automap_stats      = 0;
     automap_skill      = 0;
     automap_level_time = 0;

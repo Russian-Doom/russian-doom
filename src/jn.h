@@ -114,6 +114,7 @@ extern int message_color_quest;
 extern int automap_color;
 extern int automap_mark_color;
 extern int automap_antialias;
+extern int stats_placement;
 extern int automap_stats;
 extern int automap_skill;
 extern int automap_level_time;

@@ -551,6 +551,7 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(automap_color),
     CONFIG_VARIABLE_INT(automap_mark_color),
     CONFIG_VARIABLE_INT(automap_antialias),
+    CONFIG_VARIABLE_INT(stats_placement),
     CONFIG_VARIABLE_INT(automap_stats),
     CONFIG_VARIABLE_INT(automap_skill),
     CONFIG_VARIABLE_INT(automap_level_time),
