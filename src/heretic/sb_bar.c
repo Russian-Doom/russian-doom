@@ -692,6 +692,12 @@ void SB_Drawer(void)
     const int xval_widget = demotimer || show_fps || local_time ? 50 : 0;
     static boolean hitCenterFrame;
     const int wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0) + 2;
+    // If automap active or map name is always shown, shift
+    // widgets one line up to prevent drawing over map name.
+    int map_active = automapactive ? 10 : 0;
+    // Different languages have different string widths. 
+    // Use a pointer to prevent extra conditions hitting.
+    int (*StringWidth)(char *text) = english_language ? RD_M_TextAWidth : RD_M_TextSmallRUSWidth;
 
     CPlayer = &players[displayplayer];
 
@@ -705,104 +711,432 @@ void SB_Drawer(void)
     // [JN] Level stats widgets.
     if (screenblocks <= 11 && !vanillaparm)
     {
-        char text[128];
-        const int time = leveltime / TICRATE;
-        const int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
-        const int net_y = netgame ? 10 : 0;  // [JN] Shift one line down for chat string.
-
-        if (((automapactive && automap_stats == 1) || automap_stats == 2))
+        //
+        // Placed at the bottom
+        //
+        if (stats_placement)
         {
-            // Kills:
-            sprintf(text, CPlayer->extrakillcount ? "%d+%d/%d" : "%d/%d",
-                    CPlayer->killcount,
-                    CPlayer->extrakillcount ? CPlayer->extrakillcount : totalkills,
-                    totalkills);
+            char str1[8], str2[16];  // kills
+            char str3[8], str4[16];  // items
+            char str5[8], str6[16];  // secret
+            char str7[8], str8[16];  // skill
 
-            english_language ? RD_M_DrawTextA("K:", wide_4_3, 9 + net_y) :
-                               RD_M_DrawTextSmallRUS("D:", wide_4_3, 9 + net_y, CR_NONE);
+            if (((automapactive && automap_stats == 1) || automap_stats == 2))
+            {
+                // Kills:
+                if (english_language)
+                {
+                    sprintf(str1, "K ");
+                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    RD_M_DrawTextA(str1, wide_4_3, 136 - map_active);
+                    dp_translation = NULL;
 
-            dp_translation = hud_stats_color == 0 ? NULL :
-                             totalkills == 0 ? cr[CR_GREEN] :
-                             CPlayer->killcount == 0 ? cr[CR_RED] :
-                             CPlayer->killcount < totalkills ? cr[CR_YELLOW] : cr[CR_GREEN];
-            RD_M_DrawTextA(text, wide_4_3 + 16, 9 + net_y);
-            dp_translation = NULL;
+                    sprintf(str2, CPlayer->extrakillcount ? "%d+%d/%d " : "%d/%d ",
+                                  CPlayer->killcount,
+                                  CPlayer->extrakillcount ? CPlayer->extrakillcount : totalkills,
+                                  totalkills);
 
-            // Items:
-            sprintf(text, "%d/%d", CPlayer->itemcount, totalitems);
+                    dp_translation = hud_stats_color == 0 ? NULL :
+                                     totalkills == 0 ? cr[CR_GREEN] :
+                                     CPlayer->killcount == 0 ? cr[CR_RED] :
+                                     CPlayer->killcount < totalkills ? cr[CR_YELLOW] : cr[CR_GREEN];
 
-            english_language ? RD_M_DrawTextA("I:", wide_4_3, 19 + net_y) :
-                               RD_M_DrawTextSmallRUS("G:", wide_4_3, 19 + net_y, CR_NONE);
+                    RD_M_DrawTextA(str2, wide_4_3 + StringWidth(str1), 136 - map_active);
 
-            dp_translation = hud_stats_color == 0 ? NULL :
-                             totalitems == 0 ? cr[CR_GREEN] :
-                             CPlayer->itemcount == 0 ? cr[CR_RED] :
-                             CPlayer->itemcount < totalitems ? cr[CR_YELLOW] : cr[CR_GREEN];
-            RD_M_DrawTextA(text, wide_4_3 + 16, 19 + net_y);
-            dp_translation = NULL;
+                    dp_translation = NULL;
+                }
+                else
+                {
+                    sprintf(str1, "D ");
+                    RD_M_DrawTextSmallRUS(str1, wide_4_3, 136 - map_active,
+                                          hud_stats_color == 0 ? CR_NONE : CR_DARK);
 
-            // Secret:
-            sprintf(text, "%d/%d", CPlayer->secretcount, totalsecret);
+                    sprintf(str2, CPlayer->extrakillcount ? "%d+%d/%d " : "%d/%d ",
+                                  CPlayer->killcount,
+                                  CPlayer->extrakillcount ? CPlayer->extrakillcount : totalkills,
+                                  totalkills);
 
-            english_language ? RD_M_DrawTextA("S:", wide_4_3, 29 + net_y) :
-                               RD_M_DrawTextSmallRUS("N:", wide_4_3, 29 + net_y, CR_NONE);
+                    RD_M_DrawTextSmallRUS(str2, wide_4_3 + StringWidth(str1), 136 - map_active,
+                                          hud_stats_color == 0 ? CR_NONE :
+                                          totalkills == 0 ? CR_GREEN :
+                                          CPlayer->killcount == 0 ? CR_RED :
+                                          CPlayer->killcount < totalkills ? CR_YELLOW : CR_GREEN);
+                }
 
-            dp_translation = hud_stats_color == 0 ? NULL :
-                             totalsecret == 0 ? cr[CR_GREEN] :
-                             CPlayer->secretcount == 0 ? cr[CR_RED] :
-                             CPlayer->secretcount < totalsecret ? cr[CR_YELLOW] : cr[CR_GREEN];
-            RD_M_DrawTextA(text, wide_4_3 + 16, 29 + net_y);
-            dp_translation = NULL;
+                // Items:
+                if (english_language)
+                {
+                    sprintf(str3, "I ");
+                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    RD_M_DrawTextA(str3, wide_4_3 + StringWidth(str1)
+                                                  + StringWidth(str2), 136 - map_active);
+                    dp_translation = NULL;
+
+                    sprintf(str4, "%d/%d ", CPlayer->itemcount, totalitems);
+
+                    dp_translation = hud_stats_color == 0 ? NULL :
+                                     totalitems == 0 ? cr[CR_GREEN] :
+                                     CPlayer->itemcount == 0 ? cr[CR_RED] :
+                                     CPlayer->itemcount < totalitems ? cr[CR_YELLOW] : cr[CR_GREEN];
+
+                    RD_M_DrawTextA(str4, wide_4_3 + StringWidth(str1)
+                                                  + StringWidth(str2)
+                                                  + StringWidth(str3), 136 - map_active);
+
+                    dp_translation = NULL;
+                }
+                else
+                {
+                    sprintf(str3, "G ");
+                    RD_M_DrawTextSmallRUS(str3, wide_4_3 + StringWidth(str1)
+                                                         + StringWidth(str2), 136 - map_active,
+                                                           hud_stats_color == 0 ? CR_NONE : CR_DARK);
+
+                    sprintf(str4, "%d/%d ", CPlayer->itemcount, totalitems);
+
+                    RD_M_DrawTextSmallRUS(str4, wide_4_3 + StringWidth(str1)
+                                                         + StringWidth(str2)
+                                                         + StringWidth(str3), 136 - map_active,
+                                                         hud_stats_color == 0 ? CR_NONE :
+                                                         totalitems == 0 ? CR_GREEN :
+                                                         CPlayer->itemcount == 0 ? CR_RED :
+                                                         CPlayer->itemcount < totalitems ? CR_YELLOW : CR_GREEN);
+                }
+
+                // Secret:
+                if (english_language)
+                {
+                    sprintf(str5, "S ");
+                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    RD_M_DrawTextA(str5, wide_4_3 + StringWidth(str1)
+                                                  + StringWidth(str2)
+                                                  + StringWidth(str3)
+                                                  + StringWidth(str4), 136 - map_active);
+                    dp_translation = NULL;
+
+                    sprintf(str6, "%d/%d ", CPlayer->secretcount, totalsecret);
+
+                    dp_translation = hud_stats_color == 0 ? NULL :
+                                     totalsecret == 0 ? cr[CR_GREEN] :
+                                     CPlayer->secretcount == 0 ? cr[CR_RED] :
+                                     CPlayer->secretcount < totalsecret ? cr[CR_YELLOW] : cr[CR_GREEN];
+
+                    RD_M_DrawTextA(str6, wide_4_3 + StringWidth(str1)
+                                                  + StringWidth(str2)
+                                                  + StringWidth(str3)
+                                                  + StringWidth(str4)
+                                                  + StringWidth(str5), 136 - map_active);
+                    dp_translation = NULL;
+                }
+                else
+                {
+                        sprintf(str5, "N ");
+                        RD_M_DrawTextSmallRUS(str5, wide_4_3 + StringWidth(str1)
+                                                             + StringWidth(str2)
+                                                             + StringWidth(str3)
+                                                             + StringWidth(str4), 136 - map_active,
+                                                               hud_stats_color == 0 ? CR_NONE : CR_DARK);
+
+                        sprintf(str6, "%d/%d ", CPlayer->secretcount, totalsecret);
+
+                        RD_M_DrawTextSmallRUS(str6, wide_4_3 + StringWidth(str1)
+                                                             + StringWidth(str2)
+                                                             + StringWidth(str3)
+                                                             + StringWidth(str4)
+                                                             + StringWidth(str5), 136 - map_active,
+                                                             hud_stats_color == 0 ? CR_NONE :
+                                                             totalsecret == 0 ? CR_GREEN :
+                                                             CPlayer->secretcount == 0 ? CR_RED :
+                                                             CPlayer->secretcount < totalsecret ? CR_YELLOW : CR_GREEN);
+                }
+
+                // Skill Level:
+                if (((automapactive && automap_skill == 1) || automap_skill == 2))
+                {
+                    if (english_language)
+                    {
+                        sprintf(str7, "SKL ");
+                        dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                        RD_M_DrawTextA(str7, wide_4_3 + StringWidth(str1)
+                                                      + StringWidth(str2)
+                                                      + StringWidth(str3)
+                                                      + StringWidth(str4)
+                                                      + StringWidth(str5)
+                                                      + StringWidth(str6), 136 - map_active);
+                        dp_translation = NULL;
+                    }
+                    else
+                    {
+                        sprintf(str7, "CK; ");
+                        RD_M_DrawTextSmallRUS(str7, wide_4_3 + StringWidth(str1)
+                                                             + StringWidth(str2)
+                                                             + StringWidth(str3)
+                                                             + StringWidth(str4)
+                                                             + StringWidth(str5)
+                                                             + StringWidth(str6), 136 - map_active,
+                                                               hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                    }
+
+                    sprintf(str8, "%d", gameskill + 1);
+                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+                    RD_M_DrawTextA(str8, wide_4_3 + StringWidth(str1)
+                                                  + StringWidth(str2)
+                                                  + StringWidth(str3)
+                                                  + StringWidth(str4)
+                                                  + StringWidth(str5)
+                                                  + StringWidth(str6)
+                                                  + StringWidth(str7), 136 - map_active);
+                    dp_translation = NULL;
+                }
+            }
+
+            // Level time:
+            if (((automapactive && automap_level_time == 1) || automap_level_time == 2))
+            {
+                const int time = leveltime / TICRATE;
+                const int x_shift = english_language ? 40 : 58;
+                char str[16];
+
+                if (english_language)
+                {
+                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    RD_M_DrawTextA("LEVEL", wide_4_3, 126 - map_active);
+                    dp_translation = NULL;
+                }
+                else
+                {
+                    RD_M_DrawTextSmallRUS("EHJDTYM", wide_4_3, 126 - map_active,
+                                          hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                }
+
+                sprintf(str, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
+
+                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+                RD_M_DrawTextA(str, wide_4_3 + x_shift, 126 - map_active);
+                dp_translation = NULL;
+            }
+
+            // Total Time:
+            if (((automapactive && automap_total_time == 1) || automap_total_time == 2))
+            {
+                const int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
+                const int x_shift = english_language ? 40 : 58;
+                char str1[16];
+                char str2[16];
+
+                if (english_language)
+                {
+                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    sprintf(str1, "TOTAL");
+                    RD_M_DrawTextA(str1, wide_4_3, 116 - map_active);
+                    dp_translation = NULL;
+                }
+                else
+                {
+                    sprintf(str1, "J,OTT");
+                    RD_M_DrawTextSmallRUS(str1, wide_4_3, 116 - map_active,
+                                          hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                }
+
+                sprintf(str2, "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
+
+                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+                RD_M_DrawTextA(str2, wide_4_3 + x_shift, 116 - map_active);
+                dp_translation = NULL;
+            }
+
+            // Player coords:
+            if (((automapactive && automap_coords == 1) || automap_coords == 2))
+            {
+                char str[128];
+
+                if (stats_placement)
+                {
+                    map_active += 20;
+                }
+
+                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                RD_M_DrawTextA("X:", wide_4_3, 95 - map_active);
+                RD_M_DrawTextA("Y:", wide_4_3, 104 - map_active);
+                RD_M_DrawTextA("Z:", wide_4_3, 113 - map_active);
+                RD_M_DrawTextA("ANG:", wide_4_3, 122 - map_active);
+                dp_translation = NULL;
+
+                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+                sprintf(str, "%d", CPlayer->mo->x >> FRACBITS);
+                RD_M_DrawTextA(str, wide_4_3 + 16, 95 - map_active);
+                sprintf(str, "%d", CPlayer->mo->y >> FRACBITS);
+                RD_M_DrawTextA(str, wide_4_3 + 16, 104 - map_active);
+                sprintf(str, "%d", CPlayer->mo->z >> FRACBITS);
+                RD_M_DrawTextA(str, wide_4_3 + 16, 113 - map_active);
+                sprintf(str, "%d", CPlayer->mo->angle / ANG1);
+                RD_M_DrawTextA(str, wide_4_3 + 32, 122 - map_active);
+                dp_translation = NULL;
+            }
         }
-
-        // Skill Level:
-        if (((automapactive && automap_skill == 1) || automap_skill == 2))
+        //
+        // Placed at the top
+        //
+        else
         {
-            sprintf(text, "%d", gameskill+1);
+            char text[128];
+            const int time = leveltime / TICRATE;
+            const int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
+            const int net_y = netgame ? 10 : 0;  // [JN] Shift one line down for chat string.
 
-            english_language ? RD_M_DrawTextA("SKL:", wide_4_3, 39 + net_y) :
-                               RD_M_DrawTextSmallRUS("CK;:", wide_4_3, 39 + net_y, CR_NONE);
+            if (((automapactive && automap_stats == 1) || automap_stats == 2))
+            {
+                // Kills:
+                sprintf(text, CPlayer->extrakillcount ? "%d+%d/%d" : "%d/%d",
+                        CPlayer->killcount,
+                        CPlayer->extrakillcount ? CPlayer->extrakillcount : totalkills,
+                        totalkills);
 
-            dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
-            RD_M_DrawTextA(text, wide_4_3 + (english_language ? 31 : 36), 39 + net_y);
-            dp_translation = NULL;
-        }
+                if (english_language)
+                {
+                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    RD_M_DrawTextA("K:", wide_4_3, 9 + net_y);
+                    dp_translation = NULL;
+                }
+                else
+                {
+                    RD_M_DrawTextSmallRUS("D:", wide_4_3, 9 + net_y, hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                }
 
-        // Level Time:
-        if ((automapactive && automap_level_time == 1) || automap_level_time == 2)
-        {
-            sprintf(text, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
+                dp_translation = hud_stats_color == 0 ? NULL :
+                                 totalkills == 0 ? cr[CR_GREEN] :
+                                 CPlayer->killcount == 0 ? cr[CR_RED] :
+                                 CPlayer->killcount < totalkills ? cr[CR_YELLOW] : cr[CR_GREEN];
+                RD_M_DrawTextA(text, wide_4_3 + 16, 9 + net_y);
+                dp_translation = NULL;
 
-            english_language ? RD_M_DrawTextA("LEVEL", wide_4_3, 79) :
-                               RD_M_DrawTextSmallRUS("EHJDTYM", wide_4_3, 79, CR_NONE);
+                // Items:
+                sprintf(text, "%d/%d", CPlayer->itemcount, totalitems);
 
-            dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
-            RD_M_DrawTextA(text, wide_4_3, 89);
-            dp_translation = NULL;
-        }
+                if (english_language)
+                {
+                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    RD_M_DrawTextA("I:", wide_4_3, 19 + net_y);
+                    dp_translation = NULL;
+                }
+                else
+                {
+                    RD_M_DrawTextSmallRUS("G:", wide_4_3, 19 + net_y, hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                }
 
-        // Total Time:
-        if ((automapactive && automap_total_time == 1) || automap_total_time == 2)
-        {
-            sprintf(text, "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
+                dp_translation = hud_stats_color == 0 ? NULL :
+                                 totalitems == 0 ? cr[CR_GREEN] :
+                                 CPlayer->itemcount == 0 ? cr[CR_RED] :
+                                 CPlayer->itemcount < totalitems ? cr[CR_YELLOW] : cr[CR_GREEN];
+                RD_M_DrawTextA(text, wide_4_3 + 16, 19 + net_y);
+                dp_translation = NULL;
 
-            english_language ? RD_M_DrawTextA("TOTAL", wide_4_3, 99) :
-                               RD_M_DrawTextSmallRUS("J,OTT", wide_4_3, 99, CR_NONE);
+                // Secret:
+                sprintf(text, "%d/%d", CPlayer->secretcount, totalsecret);
 
-            dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
-            RD_M_DrawTextA(text, wide_4_3, 109);
-            dp_translation = NULL;
-        }
+                if (english_language)
+                {
+                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    RD_M_DrawTextA("S:", wide_4_3, 29 + net_y);
+                    dp_translation = NULL;
+                }
+                else
+                {
+                    RD_M_DrawTextSmallRUS("N:", wide_4_3, 29 + net_y, hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                }
 
-        // [JN] Player coords
-        if ((automapactive && automap_coords == 1) || automap_coords == 2)
-        {
-            M_snprintf(text, sizeof(text), "X: %d, Y: %d, Z: %d, ANG: %d",
-                       CPlayer->mo->x >> FRACBITS,
-                       CPlayer->mo->y >> FRACBITS,
-                       CPlayer->mo->z >> FRACBITS,
-                       CPlayer->mo->angle / ANG1);
-            RD_M_DrawTextA(text, wide_4_3, 122);
+                dp_translation = hud_stats_color == 0 ? NULL :
+                                 totalsecret == 0 ? cr[CR_GREEN] :
+                                 CPlayer->secretcount == 0 ? cr[CR_RED] :
+                                 CPlayer->secretcount < totalsecret ? cr[CR_YELLOW] : cr[CR_GREEN];
+                RD_M_DrawTextA(text, wide_4_3 + 16, 29 + net_y);
+                dp_translation = NULL;
+            }
+
+            // Skill Level:
+            if (((automapactive && automap_skill == 1) || automap_skill == 2))
+            {
+                sprintf(text, "%d", gameskill+1);
+
+                if (english_language)
+                {
+                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    RD_M_DrawTextA("SKL:", wide_4_3, 39 + net_y);
+                    dp_translation = NULL;
+                }
+                else
+                {
+                    RD_M_DrawTextSmallRUS("CK;:", wide_4_3, 39 + net_y, hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                }
+
+                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+                RD_M_DrawTextA(text, wide_4_3 + (english_language ? 31 : 36), 39 + net_y);
+                dp_translation = NULL;
+            }
+
+            // Level Time:
+            if ((automapactive && automap_level_time == 1) || automap_level_time == 2)
+            {
+                sprintf(text, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
+
+                if (english_language)
+                {
+                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    RD_M_DrawTextA("LEVEL", wide_4_3, 49);
+                    dp_translation = NULL;
+                }
+                else
+                {
+                    RD_M_DrawTextSmallRUS("EHJDTYM", wide_4_3, 49, hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                }
+
+                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+                RD_M_DrawTextA(text, wide_4_3, 59);
+                dp_translation = NULL;
+            }
+
+            // Total Time:
+            if ((automapactive && automap_total_time == 1) || automap_total_time == 2)
+            {
+                sprintf(text, "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
+
+                if (english_language)
+                {
+                    dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                    RD_M_DrawTextA("TOTAL", wide_4_3, 69);
+                    dp_translation = NULL;
+                }
+                else
+                {
+                    RD_M_DrawTextSmallRUS("J,OTT", wide_4_3, 69, hud_stats_color == 0 ? CR_NONE : CR_DARK);
+                }
+
+                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+                RD_M_DrawTextA(text, wide_4_3, 79);
+                dp_translation = NULL;
+            }
+
+            // [JN] Player coords
+            if ((automapactive && automap_coords == 1) || automap_coords == 2)
+            {
+                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARK];
+                RD_M_DrawTextA("X:", wide_4_3, 89);
+                RD_M_DrawTextA("Y:", wide_4_3, 99);
+                RD_M_DrawTextA("Z:", wide_4_3, 109);
+                RD_M_DrawTextA("ANG:", wide_4_3, 119);
+                dp_translation = NULL;
+
+                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+                M_snprintf(text, sizeof(text), "%d", CPlayer->mo->x >> FRACBITS);
+                RD_M_DrawTextA(text, wide_4_3 + 16, 89);
+                M_snprintf(text, sizeof(text), "%d", CPlayer->mo->y >> FRACBITS);
+                RD_M_DrawTextA(text, wide_4_3 + 16, 99);
+                M_snprintf(text, sizeof(text), "%d", CPlayer->mo->z >> FRACBITS);
+                RD_M_DrawTextA(text, wide_4_3 + 16, 109);
+                M_snprintf(text, sizeof(text), "%d", CPlayer->mo->angle / ANG1);
+                RD_M_DrawTextA(text, wide_4_3 + 32, 119);
+                dp_translation = NULL;
+            }
         }
     }
 
