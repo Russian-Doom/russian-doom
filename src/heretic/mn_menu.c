@@ -2194,7 +2194,7 @@ static void DrawRenderingMenu2(void)
         RD_M_DrawTextSmallENG(window_ontop ? "ON" : "OFF", 138 + wide_delta, 72, CR_NONE);
 
         // Preserve window aspect ratio
-        RD_M_DrawTextSmallENG(aspect_ratio_correct ? "ON" : "OFF", 249 + wide_delta, 82, CR_NONE);
+        RD_M_DrawTextSmallENG(preserve_window_aspect_ratio ? "ON" : "OFF", 249 + wide_delta, 82, CR_NONE);
 
         // Show ENDTEXT screen
         RD_M_DrawTextSmallENG(show_endoom ? "ON" : "OFF", 188 + wide_delta, 112, CR_NONE);
@@ -2230,7 +2230,7 @@ static void DrawRenderingMenu2(void)
         RD_M_DrawTextSmallRUS(window_ontop ? "DRK" : "DSRK", 177 + wide_delta, 72, CR_NONE);
 
         // Пропорции окна
-        RD_M_DrawTextSmallRUS(aspect_ratio_correct  ? "ABRCBHJDFYYST" : "CDJ,JLYST", 147 + wide_delta, 82, CR_NONE);
+        RD_M_DrawTextSmallRUS(preserve_window_aspect_ratio  ? "ABRCBHJDFYYST" : "CDJ,JLYST", 147 + wide_delta, 82, CR_NONE);
 
         // Показывать экран ENDTEXT
         RD_M_DrawTextSmallENG("ENDTEXT:", 160 + wide_delta, 112, CR_NONE);
@@ -2421,7 +2421,7 @@ static void M_RD_AlwaysOnTop()
 
 static void M_RD_WindowAspectRatio()
 {
-    aspect_ratio_correct ^= 1;
+    preserve_window_aspect_ratio ^= 1;
     
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
 }
@@ -5642,14 +5642,14 @@ static void M_RD_EndGame(int option)
 static void M_RD_BackToDefaults_Recommended(void)
 {
     // Rendering
-    vsync                   = 1;
-    aspect_ratio_correct    = 1;
-    max_fps                 = 200; uncapped_fps = 1;
-    show_fps                = 0;
-    smoothing               = 0;
-    vga_porch_flash         = 0;
-    smoothlight             = 1;
-    png_screenshots         = 1;
+    vsync                        = 1;
+    preserve_window_aspect_ratio = 1;
+    max_fps                      = 200; uncapped_fps = 1;
+    show_fps                     = 0;
+    smoothing                    = 0;
+    vga_porch_flash              = 0;
+    smoothlight                  = 1;
+    png_screenshots              = 1;
 
     // Display
     screenblocks        = 10;
@@ -5801,14 +5801,14 @@ static void M_RD_BackToDefaults_Recommended(void)
 static void M_RD_BackToDefaults_Original(void)
 {
     // Rendering
-    vsync                   = 1;
-    aspect_ratio_correct    = 1;
-    max_fps                 = 35; uncapped_fps = 0;
-    show_fps                = 0;
-    smoothing               = 0;
-    vga_porch_flash         = 0;
-    smoothlight             = 0;
-    png_screenshots         = 1;
+    vsync                        = 1;
+    preserve_window_aspect_ratio = 1;
+    max_fps                      = 35; uncapped_fps = 0;
+    show_fps                     = 0;
+    smoothing                    = 0;
+    vga_porch_flash              = 0;
+    smoothlight                  = 0;
+    png_screenshots              = 1;
 
     // Display
     screenblocks        = 10;

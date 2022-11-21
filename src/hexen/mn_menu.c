@@ -5457,13 +5457,13 @@ static void DrawOptions2Menu_Vanilla(void)
 void M_RD_BackToDefaults_Recommended (void)
 {
     // Rendering
-    vsync                   = 1;
-    aspect_ratio_correct    = 1;
-    max_fps                 = 200; uncapped_fps = 1;
-    show_fps                = 0;
-    smoothing               = 0;
-    vga_porch_flash         = 0;
-    png_screenshots         = 1;
+    vsync                        = 1;
+    preserve_window_aspect_ratio = 1;
+    max_fps                      = 200; uncapped_fps = 1;
+    show_fps                     = 0;
+    smoothing                    = 0;
+    vga_porch_flash              = 0;
+    png_screenshots              = 1;
 
     // Display
     screenblocks           = 10;
@@ -5572,13 +5572,13 @@ void M_RD_BackToDefaults_Recommended (void)
 static void M_RD_BackToDefaults_Original(void)
 {
     // Rendering
-    vsync                   = 1;
-    aspect_ratio_correct    = 1;
-    max_fps                 = 35; uncapped_fps = 1;
-    show_fps                = 0;
-    smoothing               = 0;
-    vga_porch_flash         = 0;
-    png_screenshots         = 1;
+    vsync                        = 1;
+    preserve_window_aspect_ratio = 1;
+    max_fps                      = 35; uncapped_fps = 1;
+    show_fps                     = 0;
+    smoothing                    = 0;
+    vga_porch_flash              = 0;
+    png_screenshots              = 1;
 
     // Display
     screenblocks           = 10;

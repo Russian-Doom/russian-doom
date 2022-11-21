@@ -1442,7 +1442,7 @@ void V_Init (void)
 
     screenwidth_low = screenwidth << hires;
 
-    if (aspect_ratio_correct)
+    if (preserve_window_aspect_ratio)
     {
         if (aspect_ratio == 1)
         actualheight = SCREENHEIGHT_5_4;

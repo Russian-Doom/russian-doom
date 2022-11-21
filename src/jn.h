@@ -66,7 +66,7 @@ extern int demowarp; // [JN] Demo warp from Crispy Doom.
 // -----------------------------------------------------------------------------
 
 extern int vsync;
-// extern int aspect_ratio_correct;
+// extern int preserve_window_aspect_ratio;
 extern int uncapped_fps;
 extern int show_fps, real_fps;
 extern int max_fps;
