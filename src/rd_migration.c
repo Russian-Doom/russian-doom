@@ -17,7 +17,6 @@
 
 #include <locale.h>
 #include <SDL_scancode.h>
-#include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include "d_name.h"
@@ -135,60 +134,84 @@ void M_ApplyMigration()
     if(config_version < 2)
     {
         defaultTracker_t* message_pickup_color = M_GetDefaultTracker("message_pickup_color");
-        defaultTracker_t* message_system_color = M_GetDefaultTracker("message_system_color");
-        defaultTracker_t* message_chat_color = M_GetDefaultTracker("message_chat_color");
-
-        if(message_pickup_color != NULL && message_pickup_color->found)
+        if(message_pickup_color != NULL
+        && message_pickup_color->found)
             message_color_pickup = message_pickup_color->value.i != 0 ? message_pickup_color->value.i + 1 : 0;
-        if(message_system_color != NULL && message_system_color->found)
+
+        defaultTracker_t* message_system_color = M_GetDefaultTracker("message_system_color");
+        if(message_system_color != NULL
+        && message_system_color->found)
             message_color_system = message_system_color->value.i != 0 ? message_system_color->value.i + 1 : 0;
-        if(message_chat_color != NULL && message_chat_color->found)
+
+        defaultTracker_t* message_chat_color = M_GetDefaultTracker("message_chat_color");
+        if(message_chat_color != NULL
+        && message_chat_color->found)
             message_color_chat = message_chat_color->value.i != 0 ? message_chat_color->value.i + 1 : 0;
 
-        if(RD_GameType != gt_Hexen && JN_getNotCommonIntVarPointer(v_message_color_secret) != NULL)
+        if(RD_GameType != gt_Hexen
+        && JN_getNotCommonIntVarPointer(v_message_color_secret) != NULL)
         {
             defaultTracker_t* message_secret_color = M_GetDefaultTracker("message_secret_color");
-            if(message_secret_color->found)
+            if(message_secret_color != NULL
+            && message_secret_color->found)
                 *JN_getNotCommonIntVarPointer(v_message_color_secret) = message_secret_color->value.i != 0 ? message_secret_color->value.i + 1 : 0;
         }
-        if(RD_GameType == gt_Hexen && JN_getNotCommonIntVarPointer(v_message_color_quest) != NULL)
+        if(RD_GameType == gt_Hexen
+        && JN_getNotCommonIntVarPointer(v_message_color_quest) != NULL)
         {
             defaultTracker_t* message_quest_color = M_GetDefaultTracker("message_quest_color");
-            if(message_quest_color->found)
+            if(message_quest_color != NULL
+            && message_quest_color->found)
                 *JN_getNotCommonIntVarPointer(v_message_color_quest) = message_quest_color->value.i != 0 ? message_quest_color->value.i + 1 : 0;
         }
 
         if(RD_GameType == gt_Doom)
         {
             defaultTracker_t* sbar_color_high = M_GetDefaultTracker("sbar_color_high");
-            defaultTracker_t* sbar_color_normal = M_GetDefaultTracker("sbar_color_normal");
-            defaultTracker_t* sbar_color_low = M_GetDefaultTracker("sbar_color_low");
-            defaultTracker_t* sbar_color_critical = M_GetDefaultTracker("sbar_color_critical");
-            defaultTracker_t* sbar_color_armor_1 = M_GetDefaultTracker("sbar_color_armor_1");
-            defaultTracker_t* sbar_color_armor_2 = M_GetDefaultTracker("sbar_color_armor_2");
-            defaultTracker_t* sbar_color_armor_0 = M_GetDefaultTracker("sbar_color_armor_0");
-
-            if(JN_getNotCommonIntVarPointer(v_stbar_color_high) != NULL && sbar_color_high->found)
+            if(sbar_color_high != NULL
+            && sbar_color_high->found
+            && JN_getNotCommonIntVarPointer(v_stbar_color_high) != NULL)
                 *JN_getNotCommonIntVarPointer(v_stbar_color_high) = sbar_color_high->value.i + 1;
-            if(JN_getNotCommonIntVarPointer(v_stbar_color_normal) != NULL && sbar_color_normal->found)
+
+            defaultTracker_t* sbar_color_normal = M_GetDefaultTracker("sbar_color_normal");
+            if(sbar_color_normal != NULL
+            && sbar_color_normal->found
+            && JN_getNotCommonIntVarPointer(v_stbar_color_normal) != NULL)
                 *JN_getNotCommonIntVarPointer(v_stbar_color_normal) = sbar_color_normal->value.i + 1;
-            if(JN_getNotCommonIntVarPointer(v_stbar_color_low) != NULL && sbar_color_low->found)
+
+            defaultTracker_t* sbar_color_low = M_GetDefaultTracker("sbar_color_low");
+            if(sbar_color_low != NULL
+            && sbar_color_low->found
+            && JN_getNotCommonIntVarPointer(v_stbar_color_low) != NULL)
                 *JN_getNotCommonIntVarPointer(v_stbar_color_low) = sbar_color_low->value.i + 1;
-            if(JN_getNotCommonIntVarPointer(v_stbar_color_critical) != NULL && sbar_color_critical->found)
+
+            defaultTracker_t* sbar_color_critical = M_GetDefaultTracker("sbar_color_critical");
+            if(sbar_color_critical != NULL
+            && sbar_color_critical->found
+            && JN_getNotCommonIntVarPointer(v_stbar_color_critical) != NULL)
                 *JN_getNotCommonIntVarPointer(v_stbar_color_critical) = sbar_color_critical->value.i + 1;
-            if(JN_getNotCommonIntVarPointer(v_stbar_color_armor_1) != NULL && sbar_color_armor_1->found)
+
+            defaultTracker_t* sbar_color_armor_1 = M_GetDefaultTracker("sbar_color_armor_1");
+            if(sbar_color_armor_1 != NULL
+            && sbar_color_armor_1->found
+            && JN_getNotCommonIntVarPointer(v_stbar_color_armor_1) != NULL)
                 *JN_getNotCommonIntVarPointer(v_stbar_color_armor_1) = sbar_color_armor_1->value.i + 1;
-            if(JN_getNotCommonIntVarPointer(v_stbar_color_armor_2) != NULL && sbar_color_armor_2->found)
+
+            defaultTracker_t* sbar_color_armor_2 = M_GetDefaultTracker("sbar_color_armor_2");
+            if(sbar_color_armor_2 != NULL
+            && sbar_color_armor_2->found
+            && JN_getNotCommonIntVarPointer(v_stbar_color_armor_2) != NULL)
                 *JN_getNotCommonIntVarPointer(v_stbar_color_armor_2) = sbar_color_armor_2->value.i + 1;
-            if(JN_getNotCommonIntVarPointer(v_stbar_color_armor_0) != NULL && sbar_color_armor_0->found)
+
+            defaultTracker_t* sbar_color_armor_0 = M_GetDefaultTracker("sbar_color_armor_0");
+            if(sbar_color_armor_0 != NULL
+            && sbar_color_armor_0->found
+            && JN_getNotCommonIntVarPointer(v_stbar_color_armor_0) != NULL)
                 *JN_getNotCommonIntVarPointer(v_stbar_color_armor_0) = sbar_color_armor_0->value.i + 1;
         }
 
         // Reread binds for bk_map_rotate, bk_map_rotate and bk_forward to prioritize them over multiplayer chat keys
         keybindsTracker_t* Map_rotate_tracker = M_GetKeybindsTracker("Map_rotate");
-        keybindsTracker_t* Map_Grid_tracker = M_GetKeybindsTracker("Map_grid");
-        keybindsTracker_t* Forward_tracker = M_GetKeybindsTracker("Forward");
-
         if(Map_rotate_tracker != NULL
         && !IsBindingsEqual(
             &Map_rotate_tracker->descriptors,
@@ -202,6 +225,7 @@ void M_ApplyMigration()
             SetKeyBindingsToTracked(bk_map_rotate, Map_rotate_tracker);
         }
 
+        keybindsTracker_t* Map_Grid_tracker = M_GetKeybindsTracker("Map_grid");
         if(Map_Grid_tracker != NULL
         && !IsBindingsEqual(
             &Map_Grid_tracker->descriptors,
@@ -214,6 +238,7 @@ void M_ApplyMigration()
             SetKeyBindingsToTracked(bk_map_grid, Map_Grid_tracker);
         }
 
+        keybindsTracker_t* Forward_tracker = M_GetKeybindsTracker("Forward");
         if(RD_GameType == gt_Hexen
         && Forward_tracker != NULL
         && !IsBindingsEqual(
