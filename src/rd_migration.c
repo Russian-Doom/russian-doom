@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include "d_name.h"
+#include "i_video.h"
 #include "jn.h"
 #include "m_misc.h"
 #include "rd_keybinds.h"
@@ -71,6 +72,29 @@ void M_RegisterTrackedFields()
         RegisterTrackedKeybind("Map_grid");
         if(RD_GameType == gt_Hexen)
             RegisterTrackedKeybind("Forward");
+    }
+
+    //
+    // Changed name of "aspect_ratio_correct" config entry to "preserve_window_aspect_ratio".
+    // Changed names of some of "automap_*" and "hud_*" config entries to "stats_*".
+    // Separated bindings for "Suicide" and "Detail level" in Hexen.
+    //
+    if(config_version < 3)
+    {
+        RegisterTrackedDefault("aspect_ratio_correct", DEFAULT_INT);
+
+        RegisterTrackedDefault("automap_stats", DEFAULT_INT);
+        RegisterTrackedDefault("automap_skill", DEFAULT_INT);
+        RegisterTrackedDefault("automap_level_time", DEFAULT_INT);
+        RegisterTrackedDefault("automap_total_time", DEFAULT_INT);
+        RegisterTrackedDefault("automap_coords", DEFAULT_INT);
+        RegisterTrackedDefault("hud_stats_color", DEFAULT_INT);
+
+        if(RD_GameType == gt_Doom)
+            RegisterTrackedDefault("hud_level_name", DEFAULT_INT);
+
+        if(RD_GameType == gt_Hexen)
+            RegisterTrackedKeybind("Detail");
     }
 }
 
@@ -198,6 +222,67 @@ void M_ApplyMigration()
         && IsBindingsListContains(&bind_descriptor[bk_multi_msg_player_5], keyboard, SDL_SCANCODE_W))
         {
             SetKeyBindingsToTracked(bk_forward, Forward_tracker);
+        }
+    }
+
+    //
+    // Changed name of "aspect_ratio_correct" config entry to "preserve_window_aspect_ratio".
+    // Changed names of some of "automap_*" and "hud_*" config entries to "stats_*".
+    // Separated bindings for "Suicide" and "Detail level" in Hexen.
+    //
+    if(config_version < 3)
+    {
+        defaultTracker_t* aspect_ratio_correct = M_GetDefaultTracker("aspect_ratio_correct");
+        if(aspect_ratio_correct != NULL
+        && aspect_ratio_correct->found)
+            preserve_window_aspect_ratio = aspect_ratio_correct->value.i;
+
+        defaultTracker_t* automap_stats = M_GetDefaultTracker("automap_stats");
+        if(automap_stats != NULL
+        && automap_stats->found)
+            stats_kis = automap_stats->value.i;
+
+        defaultTracker_t* automap_skill = M_GetDefaultTracker("automap_skill");
+        if(automap_skill != NULL
+        && automap_skill->found)
+            stats_skill = automap_skill->value.i;
+
+        defaultTracker_t* automap_level_time = M_GetDefaultTracker("automap_level_time");
+        if(automap_level_time != NULL
+        && automap_level_time->found)
+            stats_level_time = automap_level_time->value.i;
+
+        defaultTracker_t* automap_total_time = M_GetDefaultTracker("automap_total_time");
+        if(automap_total_time != NULL
+        && automap_total_time->found)
+            stats_total_time = automap_total_time->value.i;
+
+        defaultTracker_t* automap_coords = M_GetDefaultTracker("automap_coords");
+        if(automap_coords != NULL
+        && automap_coords->found)
+            stats_coords = automap_coords->value.i;
+
+        defaultTracker_t* hud_stats_color = M_GetDefaultTracker("hud_stats_color");
+        if(hud_stats_color != NULL
+        && hud_stats_color->found)
+            stats_color = hud_stats_color->value.i;
+
+        if(RD_GameType == gt_Doom)
+        {
+            defaultTracker_t* hud_level_name = M_GetDefaultTracker("hud_level_name");
+            if(hud_level_name != NULL
+            && hud_level_name->found)
+                stats_level_name = hud_level_name->value.i;
+        }
+
+        if(RD_GameType == gt_Hexen)
+        {
+            keybindsTracker_t* Detail_tracker = M_GetKeybindsTracker("Detail");
+            if(Detail_tracker != NULL)
+            {
+                BK_ClearBinds(bk_detail);
+                SetKeyBindingsToTracked(bk_suicide, Detail_tracker);
+            }
         }
     }
 

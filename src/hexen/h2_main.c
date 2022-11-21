@@ -184,6 +184,16 @@ int automap_grid = 0;
 int automap_grid_size = 128;
 int automap_mark_color = 3;
 
+// Stats
+int stats_placement = 0;
+int stats_kis = 1;
+int stats_skill = 0;
+int stats_level_time = 1;
+int stats_total_time = 0;
+int stats_coords = 0;
+int stats_level_name = 0;
+int stats_color = 1;
+
 // Sound
 int snd_monomode = 0;
 
