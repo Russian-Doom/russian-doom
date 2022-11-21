@@ -141,22 +141,24 @@ int message_color_chat = 3;
 
 // Display: Automap
 int automap_color = 0;
-int automap_mark_color = 10;
 int automap_antialias = 1;
-int stats_placement = 0;
-int automap_stats = 1;
-int automap_skill = 0;
-int automap_level_time = 1;
-int automap_total_time = 0;
-int automap_coords = 0;
-int automap_follow  = 1;
+int automap_rotate = 0;
 int automap_overlay = 0;
 int automap_overlay_bg = 0;
-int automap_rotate  = 0;
-int automap_grid    = 0;
+int automap_follow  = 1;
+int automap_grid = 0;
 int automap_grid_size = 128;
-int hud_stats_color = 1;
-int hud_level_name = 0;
+int automap_mark_color = 10;
+
+// Display: Stats
+int stats_placement = 0;
+int stats_kis = 1;
+int stats_skill = 0;
+int stats_level_time = 1;
+int stats_total_time = 0;
+int stats_coords = 0;
+int stats_level_name = 0;
+int stats_color = 1;
 
 // Sound
 int sfxVolume = 8;          // Maximum volume of a sound effect (internal: 0-15)
@@ -732,7 +734,7 @@ void D_Display (void)
             {
                 ST_WidgetsDrawer();
 
-                if (automapactive || hud_level_name)
+                if (automapactive || stats_level_name)
                 {
                     ST_MapNameDrawer();
                 }
@@ -750,7 +752,7 @@ void D_Display (void)
             {
                ST_WidgetsDrawer();
 
-               if (automapactive || hud_level_name)
+               if (automapactive || stats_level_name)
                {
                    ST_MapNameDrawer();
                }
@@ -907,22 +909,24 @@ void D_BindVariables(void)
 
     // Automap
     M_BindIntVariable("automap_color",          &automap_color);
-    M_BindIntVariable("automap_mark_color",     &automap_mark_color);
     M_BindIntVariable("automap_antialias",      &automap_antialias);
-    M_BindIntVariable("stats_placement",        &stats_placement);
-    M_BindIntVariable("automap_stats",          &automap_stats);
-    M_BindIntVariable("automap_skill",          &automap_skill);
-    M_BindIntVariable("automap_level_time",     &automap_level_time);
-    M_BindIntVariable("automap_total_time",     &automap_total_time);
-    M_BindIntVariable("automap_coords",         &automap_coords);
+    M_BindIntVariable("automap_rotate",         &automap_rotate);
     M_BindIntVariable("automap_overlay",        &automap_overlay);
     M_BindIntVariable("automap_overlay_bg",     &automap_overlay_bg);
-    M_BindIntVariable("automap_rotate",         &automap_rotate);
     M_BindIntVariable("automap_follow",         &automap_follow);
     M_BindIntVariable("automap_grid",           &automap_grid);
     M_BindIntVariable("automap_grid_size",      &automap_grid_size);
-    M_BindIntVariable("hud_stats_color",        &hud_stats_color);
-    M_BindIntVariable("hud_level_name",       &hud_level_name);
+    M_BindIntVariable("automap_mark_color",     &automap_mark_color);
+
+    // Stats
+    M_BindIntVariable("stats_placement",        &stats_placement);
+    M_BindIntVariable("stats_kis",              &stats_kis);
+    M_BindIntVariable("stats_skill",            &stats_skill);
+    M_BindIntVariable("stats_level_time",       &stats_level_time);
+    M_BindIntVariable("stats_total_time",       &stats_total_time);
+    M_BindIntVariable("stats_coords",           &stats_coords);
+    M_BindIntVariable("stats_level_name",       &stats_level_name);
+    M_BindIntVariable("stats_color",            &stats_color);
 
     // Sound
     M_BindIntVariable("sfx_volume",             &sfxVolume);

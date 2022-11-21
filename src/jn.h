@@ -111,24 +111,28 @@ extern int message_color_quest;
 // Automap
 // -----------------------------------------------------------------------------
 
-extern int automap_color;
-extern int automap_mark_color;
-extern int automap_antialias;
-extern int stats_placement;
-extern int automap_stats;
-extern int automap_skill;
-extern int automap_level_time;
-extern int automap_total_time;
-extern int automap_coords;
 extern int automap_overlay;
 extern int automap_overlay_bg;
 extern int automap_rotate;
 extern int automap_follow;
 extern int automap_grid;
 extern int automap_grid_size;
-extern int hud_stats_color;
-extern int hud_widget_colors;
-extern int hud_level_name;
+extern int automap_color;
+extern int automap_mark_color;
+extern int automap_antialias;
+
+// -----------------------------------------------------------------------------
+// Stats
+// -----------------------------------------------------------------------------
+
+extern int stats_placement;
+extern int stats_kis; // automap_stats
+extern int stats_skill;  // automap_skill
+extern int stats_level_time;  // automap_level_time
+extern int stats_total_time;  // automap_total_time
+extern int stats_coords;  // automap_coords
+extern int stats_level_name; // hud_level_name
+extern int stats_color;  // hud_stats_color
 
 // -----------------------------------------------------------------------------
 // Sound

@@ -1926,7 +1926,7 @@ void ST_WidgetsDrawer (void)
     const int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
     // If automap active or map name is always shown, shift
     // widgets one line up to prevent drawing over map name.
-    const int map_active = automapactive || hud_level_name ? 9 : 0;
+    const int map_active = automapactive || stats_level_name ? 9 : 0;
     // Different languages have different string widths. 
     // Use a pointer to prevent extra conditions hitting.
     int (*StringWidth)(char *text) = english_language ? RD_M_TextAWidth : RD_M_TextSmallRUSWidth;
@@ -1935,7 +1935,7 @@ void ST_WidgetsDrawer (void)
     byte *cr_title_color, *cr_item_color, *cr_coord_color;
     Translation_CR_t tr_title_color;
 
-    if (hud_stats_color)
+    if (stats_color)
     {
         cr_title_color = cr[CR_GRAY];
         cr_item_color  = cr[CR_WHITE];
@@ -1964,7 +1964,7 @@ void ST_WidgetsDrawer (void)
             char str5[8], str6[16];  // secret
             char str7[8], str8[16];  // skill
 
-            if ((automapactive && automap_stats == 1) || automap_stats == 2)
+            if ((automapactive && stats_kis == 1) || stats_kis == 2)
             {
                 // Kills:
                 if (english_language)
@@ -1979,7 +1979,7 @@ void ST_WidgetsDrawer (void)
                                   plyr->extrakillcount ? plyr->extrakillcount : totalkills,
                                   totalkills);
 
-                    dp_translation = hud_stats_color == 0 ? NULL :
+                    dp_translation = stats_color == 0 ? NULL :
                                      totalkills == 0 ? cr[CR_GREEN] :
                                      plyr->killcount == 0 ? cr[CR_RED] :
                                      plyr->killcount < totalkills ? cr[CR_YELLOW] : cr[CR_GREEN];
@@ -1999,7 +1999,7 @@ void ST_WidgetsDrawer (void)
                                   totalkills);
 
                     RD_M_DrawTextSmallRUS(str2, wide_4_3 + StringWidth(str1), 159 - map_active,
-                                          hud_stats_color == 0 ? CR_NONE :
+                                          stats_color == 0 ? CR_NONE :
                                           totalkills == 0 ? CR_GREEN :
                                           plyr->killcount == 0 ? CR_RED :
                                           plyr->killcount < totalkills ? CR_YELLOW : CR_GREEN);
@@ -2016,7 +2016,7 @@ void ST_WidgetsDrawer (void)
 
                     sprintf(str4, "%d/%d ", plyr->itemcount, totalitems);
 
-                    dp_translation = hud_stats_color == 0 ? NULL :
+                    dp_translation = stats_color == 0 ? NULL :
                                      totalitems == 0 ? cr[CR_GREEN] :
                                      plyr->itemcount == 0 ? cr[CR_RED] :
                                      plyr->itemcount < totalitems ? cr[CR_YELLOW] : cr[CR_GREEN];
@@ -2038,7 +2038,7 @@ void ST_WidgetsDrawer (void)
                     RD_M_DrawTextSmallRUS(str4, wide_4_3 + StringWidth(str1)
                                                          + StringWidth(str2)
                                                          + StringWidth(str3), 159 - map_active,
-                                                         hud_stats_color == 0 ? CR_NONE :
+                                                         stats_color == 0 ? CR_NONE :
                                                          totalitems == 0 ? CR_GREEN :
                                                          plyr->itemcount == 0 ? CR_RED :
                                                          plyr->itemcount < totalitems ? CR_YELLOW : CR_GREEN);
@@ -2057,7 +2057,7 @@ void ST_WidgetsDrawer (void)
 
                     sprintf(str6, "%d/%d ", plyr->secretcount, totalsecret);
 
-                    dp_translation = hud_stats_color == 0 ? NULL :
+                    dp_translation = stats_color == 0 ? NULL :
                                      totalsecret == 0 ? cr[CR_GREEN] :
                                      plyr->secretcount == 0 ? cr[CR_RED] :
                                      plyr->secretcount < totalsecret ? cr[CR_YELLOW] : cr[CR_GREEN];
@@ -2084,14 +2084,14 @@ void ST_WidgetsDrawer (void)
                                                          + StringWidth(str3)
                                                          + StringWidth(str4)
                                                          + StringWidth(str5), 159 - map_active,
-                                                         hud_stats_color == 0 ? CR_NONE :
+                                                         stats_color == 0 ? CR_NONE :
                                                          totalsecret == 0 ? CR_GREEN :
                                                          plyr->secretcount == 0 ? CR_RED :
                                                          plyr->secretcount < totalsecret ? CR_YELLOW : CR_GREEN);
                 }
 
                 // Skill Level:
-                if (((automapactive && automap_skill == 1) || automap_skill == 2))
+                if ((automapactive && stats_skill == 1) || stats_skill == 2)
                 {
                     if (english_language)
                     {
@@ -2139,7 +2139,7 @@ void ST_WidgetsDrawer (void)
             if (playeringame[0])
             {
                 sprintf(str1, "G ");
-                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GREEN];
+                dp_translation = stats_color == 0 ? NULL : cr[CR_GREEN];
                 RD_M_DrawTextA(str1, wide_4_3, 159 - map_active);
                 
                 sprintf(str2, "%d ", ST_UpdateFragsCounter(0, true));
@@ -2150,7 +2150,7 @@ void ST_WidgetsDrawer (void)
             if (playeringame[1])
             {
                 sprintf(str3, "I ");
-                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_DARKGRAY];
+                dp_translation = stats_color == 0 ? NULL : cr[CR_DARKGRAY];
                 RD_M_DrawTextA(str3, wide_4_3 + StringWidth(str1)
                                               + StringWidth(str2), 159 - map_active);
                 
@@ -2164,7 +2164,7 @@ void ST_WidgetsDrawer (void)
             if (playeringame[2])
             {
                 sprintf(str5, "B ");
-                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_BROWN];
+                dp_translation = stats_color == 0 ? NULL : cr[CR_BROWN];
                 RD_M_DrawTextA(str5, wide_4_3 + StringWidth(str1)
                                               + StringWidth(str2)
                                               + StringWidth(str3)
@@ -2182,7 +2182,7 @@ void ST_WidgetsDrawer (void)
             if (playeringame[3])
             {
                 sprintf(str7, "R ");
-                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_RED];
+                dp_translation = stats_color == 0 ? NULL : cr[CR_RED];
                 RD_M_DrawTextA(str7, wide_4_3 + StringWidth(str1)
                                               + StringWidth(str2)
                                               + StringWidth(str3)
@@ -2203,7 +2203,7 @@ void ST_WidgetsDrawer (void)
         }
 
         // Level / Deathmatch timer:
-        if (((automapactive && automap_level_time == 1) || automap_level_time == 2))
+        if ((automapactive && stats_level_time == 1) || stats_level_time == 2)
         {
             const int time = (deathmatch && levelTimer ? levelTimeCount : leveltime) / TICRATE;
             const int x_shift = english_language ? 44 : 60;
@@ -2228,7 +2228,7 @@ void ST_WidgetsDrawer (void)
         }
 
         // Total Time:
-        if (((automapactive && automap_total_time == 1) || automap_total_time == 2))
+        if ((automapactive && stats_total_time == 1) || stats_total_time == 2)
         {
             const int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
             const int x_shift = english_language ? 44 : 60;
@@ -2267,7 +2267,7 @@ void ST_WidgetsDrawer (void)
         // Level stats / Frags (in deathmatch):
         if (!deathmatch)
         {
-            if (((automapactive && automap_stats == 1) || automap_stats == 2))
+            if ((automapactive && stats_kis == 1) || stats_kis == 2)
             {
                 // Kills:
                 sprintf(str, plyr->extrakillcount ? "%d+%d/%d" : "%d/%d",
@@ -2286,7 +2286,7 @@ void ST_WidgetsDrawer (void)
                     RD_M_DrawTextSmallRUS("D:", wide_4_3, 9 + net_y, tr_title_color);
                 }
 
-                dp_translation = hud_stats_color == 0 ? NULL :
+                dp_translation = stats_color == 0 ? NULL :
                                  totalkills == 0 ? cr[CR_GREEN] :
                                  plyr->killcount == 0 ? cr[CR_RED] :
                                  plyr->killcount < totalkills ? cr[CR_YELLOW] : cr[CR_GREEN];
@@ -2307,7 +2307,7 @@ void ST_WidgetsDrawer (void)
                     RD_M_DrawTextSmallRUS("G:", wide_4_3, 17 + net_y, tr_title_color);
                 }
 
-                dp_translation = hud_stats_color == 0 ? NULL :
+                dp_translation = stats_color == 0 ? NULL :
                                  totalitems == 0 ? cr[CR_GREEN] :
                                  plyr->itemcount == 0 ? cr[CR_RED] :
                                  plyr->itemcount < totalitems ? cr[CR_YELLOW] : cr[CR_GREEN];
@@ -2328,7 +2328,7 @@ void ST_WidgetsDrawer (void)
                     RD_M_DrawTextSmallRUS("N:", wide_4_3, 25 + net_y, tr_title_color);
                 }
 
-                dp_translation = hud_stats_color == 0 ? NULL :
+                dp_translation = stats_color == 0 ? NULL :
                                  totalsecret == 0 ? cr[CR_GREEN] :
                                  plyr->secretcount == 0 ? cr[CR_RED] :
                                  plyr->secretcount < totalsecret ? cr[CR_YELLOW] : cr[CR_GREEN];
@@ -2337,7 +2337,7 @@ void ST_WidgetsDrawer (void)
             }
 
             // Skill Level:
-            if (((automapactive && automap_skill == 1) || automap_skill == 2))
+            if ((automapactive && stats_skill == 1) || stats_skill == 2)
             {
                 sprintf(str, "%d", gameskill+1);
 
@@ -2361,7 +2361,7 @@ void ST_WidgetsDrawer (void)
         {
             if (playeringame[0])
             {
-                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GREEN];
+                dp_translation = stats_color == 0 ? NULL : cr[CR_GREEN];
                 RD_M_DrawTextA("G:", wide_4_3, 17);
                 sprintf(str, "%d", ST_UpdateFragsCounter(0, true));
                 RD_M_DrawTextA(str, wide_4_3 + 16, 17);
@@ -2369,7 +2369,7 @@ void ST_WidgetsDrawer (void)
             }
             if (playeringame[1])
             {
-                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+                dp_translation = stats_color == 0 ? NULL : cr[CR_GRAY];
                 RD_M_DrawTextA("I:", wide_4_3, 25);
                 sprintf(str, "%d", ST_UpdateFragsCounter(1, true));
                 RD_M_DrawTextA(str, wide_4_3 + 16, 25);
@@ -2377,7 +2377,7 @@ void ST_WidgetsDrawer (void)
             }
             if (playeringame[2])
             {
-                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_BROWN];
+                dp_translation = stats_color == 0 ? NULL : cr[CR_BROWN];
                 RD_M_DrawTextA("B:", wide_4_3, 33);
                 sprintf(str, "%d", ST_UpdateFragsCounter(2, true));
                 RD_M_DrawTextA(str, wide_4_3 + 16, 33);
@@ -2385,7 +2385,7 @@ void ST_WidgetsDrawer (void)
             }
             if (playeringame[3])
             {
-                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_RED];
+                dp_translation = stats_color == 0 ? NULL : cr[CR_RED];
                 RD_M_DrawTextA("R:", wide_4_3, 41);
                 sprintf(str, "%d", ST_UpdateFragsCounter(3, true));
                 RD_M_DrawTextA(str, wide_4_3 + 16, 41);
@@ -2394,7 +2394,7 @@ void ST_WidgetsDrawer (void)
         }
 
         // Level / Deathmatch timer:
-        if (((automapactive && automap_level_time == 1) || automap_level_time == 2))
+        if ((automapactive && stats_level_time == 1) || stats_level_time == 2)
         {
             const int time = (deathmatch && levelTimer ? levelTimeCount : leveltime) / TICRATE;
 
@@ -2417,7 +2417,7 @@ void ST_WidgetsDrawer (void)
         }
 
         // Total Time:
-        if (((automapactive && automap_total_time == 1) || automap_total_time == 2))
+        if ((automapactive && stats_total_time == 1) || stats_total_time == 2)
         {
             const int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
 
@@ -2441,7 +2441,7 @@ void ST_WidgetsDrawer (void)
     }
 
     // Player Coords (same position for both alignments):
-    if (((automapactive && automap_coords == 1) || automap_coords == 2))
+    if ((automapactive && stats_coords == 1) || stats_coords == 2)
     {
         char str[128];
 
@@ -2500,14 +2500,14 @@ void ST_MapNameDrawer (void)
 
     if (english_language)
     {
-        dp_translation = (hud_stats_color && !vanillaparm) ? cr[CR_YELLOW] : NULL;
+        dp_translation = (stats_color && !vanillaparm) ? cr[CR_YELLOW] : NULL;
         RD_M_DrawTextA(str, wide_4_3, map_y);
         dp_translation = NULL;
     }
     else
     {
         RD_M_DrawTextSmallRUS(str, wide_4_3, map_y,
-                              (hud_stats_color && !vanillaparm) ? CR_YELLOW : CR_NONE);
+                              (stats_color && !vanillaparm) ? CR_YELLOW : CR_NONE);
     }
 }
 

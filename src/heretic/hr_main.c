@@ -144,13 +144,15 @@ int automap_follow = 1;
 int automap_grid = 0;
 int automap_grid_size = 128;
 int automap_mark_color = 6;
+
+// Stats
 int stats_placement = 0;
-int automap_stats = 1;
-int automap_skill = 0;
-int automap_level_time = 1;
-int automap_total_time = 0;
-int automap_coords = 0;
-int hud_stats_color = 1;
+int stats_kis = 1;
+int stats_skill = 0;
+int stats_level_time = 1;
+int stats_total_time = 0;
+int stats_coords = 0;
+int stats_color = 1;
 
 // Sound
 int snd_MaxVolume = 10;
@@ -1068,13 +1070,15 @@ void D_BindVariables(void)
     M_BindIntVariable("automap_grid",           &automap_grid);
     M_BindIntVariable("automap_grid_size",      &automap_grid_size);
     M_BindIntVariable("automap_mark_color",     &automap_mark_color);
+
+    // Stats
     M_BindIntVariable("stats_placement",        &stats_placement);
-    M_BindIntVariable("automap_stats",          &automap_stats);
-    M_BindIntVariable("automap_skill",          &automap_skill);
-    M_BindIntVariable("automap_level_time",     &automap_level_time);
-    M_BindIntVariable("automap_total_time",     &automap_total_time);
-    M_BindIntVariable("automap_coords",         &automap_coords);
-    M_BindIntVariable("hud_stats_color",        &hud_stats_color);
+    M_BindIntVariable("stats_kis",              &stats_kis);
+    M_BindIntVariable("stats_skill",            &stats_skill);
+    M_BindIntVariable("stats_level_time",       &stats_level_time);
+    M_BindIntVariable("stats_total_time",       &stats_total_time);
+    M_BindIntVariable("stats_coords",           &stats_coords);
+    M_BindIntVariable("stats_color",            &stats_color);
 
     // Sound
     M_BindIntVariable("sfx_volume",             &snd_MaxVolume);

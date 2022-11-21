@@ -704,7 +704,7 @@ void SB_Drawer(void)
     byte *cr_title_color, *cr_item_color, *cr_coord_color;
     Translation_CR_t tr_title_color;
 
-    if (hud_stats_color)
+    if (stats_color)
     {
         cr_title_color = cr[CR_DARK];
         cr_item_color  = cr[CR_GRAY];
@@ -739,7 +739,7 @@ void SB_Drawer(void)
             char str5[8], str6[16];  // secret
             char str7[8], str8[16];  // skill
 
-            if (((automapactive && automap_stats == 1) || automap_stats == 2))
+            if ((automapactive && stats_kis == 1) || stats_kis == 2)
             {
                 // Kills:
                 if (english_language)
@@ -754,7 +754,7 @@ void SB_Drawer(void)
                                   CPlayer->extrakillcount ? CPlayer->extrakillcount : totalkills,
                                   totalkills);
 
-                    dp_translation = hud_stats_color == 0 ? NULL :
+                    dp_translation = stats_color == 0 ? NULL :
                                      totalkills == 0 ? cr[CR_GREEN] :
                                      CPlayer->killcount == 0 ? cr[CR_RED] :
                                      CPlayer->killcount < totalkills ? cr[CR_YELLOW] : cr[CR_GREEN];
@@ -774,7 +774,7 @@ void SB_Drawer(void)
                                   totalkills);
 
                     RD_M_DrawTextSmallRUS(str2, wide_4_3 + StringWidth(str1), 136 - map_active,
-                                          hud_stats_color == 0 ? CR_NONE :
+                                          stats_color == 0 ? CR_NONE :
                                           totalkills == 0 ? CR_GREEN :
                                           CPlayer->killcount == 0 ? CR_RED :
                                           CPlayer->killcount < totalkills ? CR_YELLOW : CR_GREEN);
@@ -791,7 +791,7 @@ void SB_Drawer(void)
 
                     sprintf(str4, "%d/%d ", CPlayer->itemcount, totalitems);
 
-                    dp_translation = hud_stats_color == 0 ? NULL :
+                    dp_translation = stats_color == 0 ? NULL :
                                      totalitems == 0 ? cr[CR_GREEN] :
                                      CPlayer->itemcount == 0 ? cr[CR_RED] :
                                      CPlayer->itemcount < totalitems ? cr[CR_YELLOW] : cr[CR_GREEN];
@@ -813,7 +813,7 @@ void SB_Drawer(void)
                     RD_M_DrawTextSmallRUS(str4, wide_4_3 + StringWidth(str1)
                                                          + StringWidth(str2)
                                                          + StringWidth(str3), 136 - map_active,
-                                                         hud_stats_color == 0 ? CR_NONE :
+                                                         stats_color == 0 ? CR_NONE :
                                                          totalitems == 0 ? CR_GREEN :
                                                          CPlayer->itemcount == 0 ? CR_RED :
                                                          CPlayer->itemcount < totalitems ? CR_YELLOW : CR_GREEN);
@@ -832,7 +832,7 @@ void SB_Drawer(void)
 
                     sprintf(str6, "%d/%d ", CPlayer->secretcount, totalsecret);
 
-                    dp_translation = hud_stats_color == 0 ? NULL :
+                    dp_translation = stats_color == 0 ? NULL :
                                      totalsecret == 0 ? cr[CR_GREEN] :
                                      CPlayer->secretcount == 0 ? cr[CR_RED] :
                                      CPlayer->secretcount < totalsecret ? cr[CR_YELLOW] : cr[CR_GREEN];
@@ -859,14 +859,14 @@ void SB_Drawer(void)
                                                              + StringWidth(str3)
                                                              + StringWidth(str4)
                                                              + StringWidth(str5), 136 - map_active,
-                                                             hud_stats_color == 0 ? CR_NONE :
+                                                             stats_color == 0 ? CR_NONE :
                                                              totalsecret == 0 ? CR_GREEN :
                                                              CPlayer->secretcount == 0 ? CR_RED :
                                                              CPlayer->secretcount < totalsecret ? CR_YELLOW : CR_GREEN);
                 }
 
                 // Skill Level:
-                if (((automapactive && automap_skill == 1) || automap_skill == 2))
+                if ((automapactive && stats_skill == 1) || stats_skill == 2)
                 {
                     if (english_language)
                     {
@@ -905,7 +905,7 @@ void SB_Drawer(void)
             }
 
             // Level time:
-            if (((automapactive && automap_level_time == 1) || automap_level_time == 2))
+            if ((automapactive && stats_level_time == 1) || stats_level_time == 2)
             {
                 const int time = leveltime / TICRATE;
                 const int x_shift = english_language ? 40 : 58;
@@ -930,7 +930,7 @@ void SB_Drawer(void)
             }
 
             // Total Time:
-            if (((automapactive && automap_total_time == 1) || automap_total_time == 2))
+            if ((automapactive && stats_total_time == 1) || stats_total_time == 2)
             {
                 const int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
                 const int x_shift = english_language ? 40 : 58;
@@ -958,7 +958,7 @@ void SB_Drawer(void)
             }
 
             // Player coords:
-            if (((automapactive && automap_coords == 1) || automap_coords == 2))
+            if ((automapactive && stats_coords == 1) || stats_coords == 2)
             {
                 char str[128];
 
@@ -996,7 +996,7 @@ void SB_Drawer(void)
             const int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
             const int net_y = netgame ? 10 : 0;  // [JN] Shift one line down for chat string.
 
-            if (((automapactive && automap_stats == 1) || automap_stats == 2))
+            if ((automapactive && stats_kis == 1) || stats_kis == 2)
             {
                 // Kills:
                 sprintf(text, CPlayer->extrakillcount ? "%d+%d/%d" : "%d/%d",
@@ -1015,7 +1015,7 @@ void SB_Drawer(void)
                     RD_M_DrawTextSmallRUS("D:", wide_4_3, 9 + net_y, tr_title_color);
                 }
 
-                dp_translation = hud_stats_color == 0 ? NULL :
+                dp_translation = stats_color == 0 ? NULL :
                                  totalkills == 0 ? cr[CR_GREEN] :
                                  CPlayer->killcount == 0 ? cr[CR_RED] :
                                  CPlayer->killcount < totalkills ? cr[CR_YELLOW] : cr[CR_GREEN];
@@ -1036,7 +1036,7 @@ void SB_Drawer(void)
                     RD_M_DrawTextSmallRUS("G:", wide_4_3, 19 + net_y, tr_title_color);
                 }
 
-                dp_translation = hud_stats_color == 0 ? NULL :
+                dp_translation = stats_color == 0 ? NULL :
                                  totalitems == 0 ? cr[CR_GREEN] :
                                  CPlayer->itemcount == 0 ? cr[CR_RED] :
                                  CPlayer->itemcount < totalitems ? cr[CR_YELLOW] : cr[CR_GREEN];
@@ -1057,7 +1057,7 @@ void SB_Drawer(void)
                     RD_M_DrawTextSmallRUS("N:", wide_4_3, 29 + net_y, tr_title_color);
                 }
 
-                dp_translation = hud_stats_color == 0 ? NULL :
+                dp_translation = stats_color == 0 ? NULL :
                                  totalsecret == 0 ? cr[CR_GREEN] :
                                  CPlayer->secretcount == 0 ? cr[CR_RED] :
                                  CPlayer->secretcount < totalsecret ? cr[CR_YELLOW] : cr[CR_GREEN];
@@ -1066,7 +1066,7 @@ void SB_Drawer(void)
             }
 
             // Skill Level:
-            if (((automapactive && automap_skill == 1) || automap_skill == 2))
+            if ((automapactive && stats_skill == 1) || stats_skill == 2)
             {
                 sprintf(text, "%d", gameskill+1);
 
@@ -1087,7 +1087,7 @@ void SB_Drawer(void)
             }
 
             // Level Time:
-            if ((automapactive && automap_level_time == 1) || automap_level_time == 2)
+            if ((automapactive && stats_level_time == 1) || stats_level_time == 2)
             {
                 sprintf(text, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
 
@@ -1108,7 +1108,7 @@ void SB_Drawer(void)
             }
 
             // Total Time:
-            if ((automapactive && automap_total_time == 1) || automap_total_time == 2)
+            if ((automapactive && stats_total_time == 1) || stats_total_time == 2)
             {
                 sprintf(text, "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
 
@@ -1123,13 +1123,13 @@ void SB_Drawer(void)
                     RD_M_DrawTextSmallRUS("J,OTT", wide_4_3, 69, tr_title_color);
                 }
 
-                dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
+                dp_translation = stats_color == 0 ? NULL : cr[CR_GRAY];
                 RD_M_DrawTextA(text, wide_4_3, 79);
                 dp_translation = NULL;
             }
 
             // [JN] Player coords
-            if ((automapactive && automap_coords == 1) || automap_coords == 2)
+            if ((automapactive && stats_coords == 1) || stats_coords == 2)
             {
                 dp_translation = cr_coord_color;
                 RD_M_DrawTextA("X:", wide_4_3, 89);
