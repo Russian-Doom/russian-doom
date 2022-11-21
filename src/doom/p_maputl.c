@@ -55,9 +55,9 @@ const int64_t P_ApproxDistanceZ (int64_t dx, int64_t dy, int64_t dz)
 {
 	int64_t dxy;
 
-	dx = abs(dx);
-	dy = abs(dy);
-	dz = abs(dz);
+	dx = llabs(dx);
+	dy = llabs(dy);
+	dz = llabs(dz);
 
 	dxy = (dy > dx) ? dy + dx/2 : dx + dy/2;
 
