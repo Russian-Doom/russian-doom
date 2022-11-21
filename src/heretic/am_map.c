@@ -2287,10 +2287,6 @@ static void AM_drawCrosshair (void)
 
 void AM_Drawer (void)
 {
-    char *level_name;
-    const int numepisodes = gamemode == retail ? 5 : 3;
-    const int wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0) + 2;
-
     if (!automapactive)
     {
         return;
@@ -2364,37 +2360,5 @@ void AM_Drawer (void)
     if (gameskill == sk_baby)
     {
         AM_drawkeys();
-    }
-
-    if (gameepisode <= numepisodes && gamemap < 10)
-    {
-        level_name = english_language ?
-                     LevelNames[(gameepisode - 1) * 9 + gamemap - 1] :
-                     LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1];
-
-        // [JN] Wide screen: place level name higher in wide screen,
-        // do not place it under the status bar gargoyle's horn.
-        if (aspect_ratio >= 2)
-        {
-            if (english_language)
-            {
-                RD_M_DrawTextA(DEH_String(level_name), wide_4_3, 136);
-            }
-            else
-            {
-                RD_M_DrawTextSmallRUS(DEH_String(level_name), wide_4_3, 136, CR_NONE);
-            }
-        }
-        else
-        {
-            if (english_language)
-            {
-                RD_M_DrawTextA(DEH_String(level_name), 20, 146);
-            }
-            else
-            {
-                RD_M_DrawTextSmallRUS(DEH_String(level_name), 20, 146, CR_NONE);
-            }
-        }
     }
 }

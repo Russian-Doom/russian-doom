@@ -152,6 +152,7 @@ int stats_skill = 0;
 int stats_level_time = 1;
 int stats_total_time = 0;
 int stats_coords = 0;
+int stats_level_name = 0;
 int stats_color = 1;
 
 // Sound
@@ -622,7 +623,15 @@ void D_Display(void)
                 AM_Drawer();
             }
             else
+            {
                 R_RenderPlayerView(&players[displayplayer]);
+            }
+
+            if (automapactive || stats_level_name)
+            {
+                SB_MapNameDrawer();
+            }
+
             // [JN] Not used outside of multiplayer game.
             if (netgame && chatmodeon)
             {
@@ -1078,6 +1087,7 @@ void D_BindVariables(void)
     M_BindIntVariable("stats_level_time",       &stats_level_time);
     M_BindIntVariable("stats_total_time",       &stats_total_time);
     M_BindIntVariable("stats_coords",           &stats_coords);
+    M_BindIntVariable("stats_level_name",       &stats_level_name);
     M_BindIntVariable("stats_color",            &stats_color);
 
     // Sound

@@ -135,6 +135,7 @@ static void M_RD_StatsSkill(Direction_t direction);
 static void M_RD_StatsLevTime(Direction_t direction);
 static void M_RD_StatsTotTime(Direction_t direction);
 static void M_RD_StatsCoords(Direction_t direction);
+static void M_RD_StatsLevelName();
 static void M_RD_StatsColors();
 
 // Sound
@@ -726,8 +727,8 @@ static MenuItem_t StatsItems[] = {
     I_LRFUNC("LEVEL TIME:",    "DHTVZ EHJDYZ:",      M_RD_StatsLevTime),   // ВРЕМЯ УРОВНЯ
     I_LRFUNC("TOTAL TIME:",    "J,OTT EHJDYZ:",      M_RD_StatsTotTime),   // ОБЩЕЕ ВРЕМЯ
     I_LRFUNC("PLAYER COORDS:", "RJJHLBYFNS BUHJRF:", M_RD_StatsCoords),    // КООРДИНАТЫ ИГРОКА
+    I_SWITCH("LEVEL NAME:",    "YFPDFYBT EHJDYZ:",   M_RD_StatsLevelName), // НАЗВАНИЕ УРОВНЯ
     I_SWITCH("COLORING:",      "JRHFIBDFYBT:",       M_RD_StatsColors),    // ОКРАШИВАНИЕ
-    I_EMPTY,
     I_EMPTY,
     I_EMPTY,
     I_EMPTY,
@@ -3065,9 +3066,13 @@ static void DrawStatsMenu(void)
                               stats_coords == 2 ? "ALWAYS" : "OFF",
                               142 + wide_delta, 92, CR_NONE);
 
+        // Level name
+        RD_M_DrawTextSmallENG(stats_level_name ? "ALWAYS" : "IN AUTOMAP",
+                              115 + wide_delta, 102, CR_NONE);
+
         // Coloring
         RD_M_DrawTextSmallENG(stats_color ? "ON" : "OFF",
-                              101 + wide_delta, 102, CR_NONE);
+                              101 + wide_delta, 112, CR_NONE);
     }
     else
     {
@@ -3100,9 +3105,13 @@ static void DrawStatsMenu(void)
                               stats_coords == 2 ? "DCTULF" : "DSRK",
                               173 + wide_delta, 92, CR_NONE);
 
+        // Название уровня
+        RD_M_DrawTextSmallRUS(stats_level_name ? "DCTULF" : "YF RFHNT",
+                              154 + wide_delta, 102, CR_NONE);
+
         // Окрашивание
         RD_M_DrawTextSmallRUS(stats_color ? "DRK" : "DSRK",
-                              129 + wide_delta, 102, CR_NONE);
+                              129 + wide_delta, 112, CR_NONE);
     }
 }
 
@@ -3134,6 +3143,11 @@ static void M_RD_StatsTotTime(Direction_t direction)
 static void M_RD_StatsCoords(Direction_t direction)
 {
     RD_Menu_SpinInt(&stats_coords, 0, 2, direction);
+}
+
+static void M_RD_StatsLevelName()
+{
+    stats_level_name ^= 1;
 }
 
 static void M_RD_StatsColors()
@@ -5684,6 +5698,7 @@ static void M_RD_BackToDefaults_Recommended(void)
     stats_level_time = 0;
     stats_total_time = 0;
     stats_coords     = 0;
+    stats_level_name = 0;
     stats_color      = 1;
 
     // Audio
@@ -5842,6 +5857,7 @@ static void M_RD_BackToDefaults_Original(void)
     stats_level_time = 0;
     stats_total_time = 0;
     stats_coords     = 0;
+    stats_level_name = 0;
     stats_color      = 0;
 
     // Audio
