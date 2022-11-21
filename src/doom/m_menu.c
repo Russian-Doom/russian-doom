@@ -199,13 +199,14 @@ static void M_RD_Change_AutomapGridSize(Direction_t direction);
 
 // Stats
 static void M_RD_Draw_StatsSettings();
-static void M_RD_Change_AutomapStats(Direction_t direction);
-static void M_RD_Change_AutomapSkill(Direction_t direction);
-static void M_RD_Change_AutomapLevelTime(Direction_t direction);
-static void M_RD_Change_AutomapTotalTime(Direction_t direction);
-static void M_RD_Change_AutomapCoords(Direction_t direction);
-static void M_RD_Change_HUDLevelName();
-static void M_RD_Change_HUDWidgetColors();
+static void M_RD_Change_StatsPlacement();
+static void M_RD_Change_StatsKIS(Direction_t direction);
+static void M_RD_Change_StatsSkill(Direction_t direction);
+static void M_RD_Change_StatsLevelTime(Direction_t direction);
+static void M_RD_Change_StatsTotalTime(Direction_t direction);
+static void M_RD_Change_StatsCoords(Direction_t direction);
+static void M_RD_Change_StatsLevelName();
+static void M_RD_Change_StatsColors();
 
 // Sound
 static void M_RD_Draw_Audio();
@@ -833,14 +834,14 @@ MENU_STATIC_PAGED(AutomapMenu,
 
 static MenuItem_t StatsItems[] = {
     I_TITLE( "Statistics",              "Cnfnbcnbrf"), // Статистика
-    I_LRFUNC("level stats/frags:",      "cnfnbcnbrf ehjdyz*ahfub:", M_RD_Change_AutomapStats), // Статистика уровня/фраги:
-    I_LRFUNC("skill level:",            "ehjdtym ckj;yjcnb:",       M_RD_Change_AutomapSkill), // Уровень сложности:
-    I_LRFUNC("level/deathmatch timer:", "nfqvth ehjdyz*ltavfnx:",   M_RD_Change_AutomapLevelTime), // Таймер уровня/дефматч:
-    I_LRFUNC("total time:",             "j,ott dhtvz:",             M_RD_Change_AutomapTotalTime), // Общее время:
-    I_LRFUNC("player coords:",          "rjjhlbyfns buhjrf:",       M_RD_Change_AutomapCoords), // Координаты игрока:
-    I_SWITCH("level name:",             "yfpdfybt ehjdyz:",         M_RD_Change_HUDLevelName), // Название уровня:
-    I_SWITCH("coloring:",               "jrhfibdfybt:",             M_RD_Change_HUDWidgetColors), // Окрашивание:
-    I_EMPTY,
+    I_SWITCH("placement:",              "hfcgjkj;tybt:",            M_RD_Change_StatsPlacement), // Расположение:
+    I_LRFUNC("level stats/frags:",      "cnfnbcnbrf ehjdyz*ahfub:", M_RD_Change_StatsKIS), // Статистика уровня/фраги:
+    I_LRFUNC("skill level:",            "ehjdtym ckj;yjcnb:",       M_RD_Change_StatsSkill), // Уровень сложности:
+    I_LRFUNC("level/deathmatch timer:", "nfqvth ehjdyz*ltavfnx:",   M_RD_Change_StatsLevelTime), // Таймер уровня/дефматч:
+    I_LRFUNC("total time:",             "j,ott dhtvz:",             M_RD_Change_StatsTotalTime), // Общее время:
+    I_LRFUNC("player coords:",          "rjjhlbyfns buhjrf:",       M_RD_Change_StatsCoords), // Координаты игрока:
+    I_SWITCH("level name:",             "yfpdfybt ehjdyz:",         M_RD_Change_StatsLevelName), // Название уровня:
+    I_SWITCH("coloring:",               "jrhfibdfybt:",             M_RD_Change_StatsColors), // Окрашивание:
     I_EMPTY,
     I_EMPTY,
     I_EMPTY,
@@ -2944,45 +2945,49 @@ static void M_RD_Draw_StatsSettings(void)
 {
     if (english_language)
     {
+        // Stats alignment
+        RD_M_DrawTextSmallENG(stats_placement ? "bottom" : "top",
+                              116 + wide_delta, 35, CR_NONE);
+        
         // Level stats/frags
-        RD_M_DrawTextSmallENG(automap_stats == 1 ? "in automap" :
-                              automap_stats == 2 ? "always" : "off",
-                              170 + wide_delta, 35,
-                              automap_stats ? CR_GREEN : CR_DARKRED);
+        RD_M_DrawTextSmallENG(stats_kis == 1 ? "in automap" :
+                              stats_kis == 2 ? "always" : "off",
+                              170 + wide_delta, 45,
+                              stats_kis ? CR_GREEN : CR_DARKRED);
 
         // Skill level
-        RD_M_DrawTextSmallENG(automap_skill == 1 ? "in automap" :
-                              automap_skill == 2 ? "always" : "off",
-                              121 + wide_delta, 45,
-                              automap_skill ? CR_GREEN : CR_DARKRED);
+        RD_M_DrawTextSmallENG(stats_skill == 1 ? "in automap" :
+                              stats_skill == 2 ? "always" : "off",
+                              121 + wide_delta, 55,
+                              stats_skill ? CR_GREEN : CR_DARKRED);
 
         // Level/deathmatch timer
-        RD_M_DrawTextSmallENG(automap_level_time == 1 ? "in automap" :
-                              automap_level_time == 2 ? "always" : "off",
-                              211 + wide_delta, 55,
-                              automap_level_time ? CR_GREEN : CR_DARKRED);
+        RD_M_DrawTextSmallENG(stats_level_time == 1 ? "in automap" :
+                              stats_level_time == 2 ? "always" : "off",
+                              211 + wide_delta, 65,
+                              stats_level_time ? CR_GREEN : CR_DARKRED);
 
         // Total time
-        RD_M_DrawTextSmallENG(automap_total_time == 1 ? "in automap" :
-                              automap_total_time == 2 ? "always" : "off",
-                              116 + wide_delta, 65,
-                              automap_total_time ? CR_GREEN : CR_DARKRED);
+        RD_M_DrawTextSmallENG(stats_total_time == 1 ? "in automap" :
+                              stats_total_time == 2 ? "always" : "off",
+                              116 + wide_delta, 75,
+                              stats_total_time ? CR_GREEN : CR_DARKRED);
 
         // Player coords
-        RD_M_DrawTextSmallENG(automap_coords == 1 ? "in automap" :
-                              automap_coords == 2 ? "always" : "off",
-                              142 + wide_delta, 75,
-                              automap_coords ? CR_GREEN : CR_DARKRED);
+        RD_M_DrawTextSmallENG(stats_coords == 1 ? "in automap" :
+                              stats_coords == 2 ? "always" : "off",
+                              142 + wide_delta, 85,
+                              stats_coords ? CR_GREEN : CR_DARKRED);
 
         // Level name
-        RD_M_DrawTextSmallENG(hud_level_name ? "always" : "in automap",
-                              119 + wide_delta, 85,
-                              hud_level_name ? CR_GREEN : CR_DARKRED);
+        RD_M_DrawTextSmallENG(stats_level_name ? "always" : "in automap",
+                              119 + wide_delta, 95,
+                              stats_level_name ? CR_GREEN : CR_DARKRED);
 
         // Coloring
-        RD_M_DrawTextSmallENG(hud_stats_color ? "on" : "off",
-                              103 + wide_delta, 95,
-                              hud_stats_color ? CR_GREEN : CR_DARKRED);
+        RD_M_DrawTextSmallENG(stats_color ? "on" : "off",
+                              103 + wide_delta, 105,
+                              stats_color ? CR_GREEN : CR_DARKRED);
 
         //
         // Footer
@@ -2991,45 +2996,49 @@ static void M_RD_Draw_StatsSettings(void)
     }
     else
     {
+        // Расположение
+        RD_M_DrawTextSmallRUS(stats_placement ? "cybpe" : "cdth[e", // Снизу | Сверху
+                              143 + wide_delta, 35, CR_NONE);
+        
         // Статистика уровня/фраги
-        RD_M_DrawTextSmallRUS(automap_stats == 1 ? "yf rfhnt" :
-                              automap_stats == 2 ? "dctulf" :
-                              "dsrk", 224 + wide_delta, 35,
-                              automap_stats ? CR_GREEN : CR_DARKRED);
+        RD_M_DrawTextSmallRUS(stats_kis == 1 ? "yf rfhnt" :
+                              stats_kis == 2 ? "dctulf" :
+                              "dsrk", 224 + wide_delta, 45,
+                              stats_kis ? CR_GREEN : CR_DARKRED);
 
         // Уровень сложности
-        RD_M_DrawTextSmallRUS(automap_skill == 1 ? "yf rfhnt" :
-                              automap_skill == 2 ? "dctulf" :
-                              "dsrk", 179 + wide_delta, 45,
-                              automap_skill ? CR_GREEN : CR_DARKRED);
+        RD_M_DrawTextSmallRUS(stats_skill == 1 ? "yf rfhnt" :
+                              stats_skill == 2 ? "dctulf" :
+                              "dsrk", 179 + wide_delta, 55,
+                              stats_skill ? CR_GREEN : CR_DARKRED);
 
         // Таймер уровня/дефматч
-        RD_M_DrawTextSmallRUS(automap_level_time == 1 ? "yf rfhnt" :
-                              automap_level_time == 2 ? "dctulf" :
-                              "dsrk", 210 + wide_delta, 55,
-                              automap_level_time ? CR_GREEN : CR_DARKRED);
+        RD_M_DrawTextSmallRUS(stats_level_time == 1 ? "yf rfhnt" :
+                              stats_level_time == 2 ? "dctulf" :
+                              "dsrk", 210 + wide_delta, 65,
+                              stats_level_time ? CR_GREEN : CR_DARKRED);
 
         // Общее время
-        RD_M_DrawTextSmallRUS(automap_total_time == 1 ? "yf rfhnt" :
-                              automap_total_time == 2 ? "dctulf" :
-                              "dsrk", 131 + wide_delta, 65,
-                              automap_total_time ? CR_GREEN : CR_DARKRED);
+        RD_M_DrawTextSmallRUS(stats_total_time == 1 ? "yf rfhnt" :
+                              stats_total_time == 2 ? "dctulf" :
+                              "dsrk", 131 + wide_delta, 75,
+                              stats_total_time ? CR_GREEN : CR_DARKRED);
 
         // Координаты игрока
-        RD_M_DrawTextSmallRUS(automap_coords == 1 ? "yf rfhnt" :
-                              automap_coords == 2 ? "dctulf" :
-                              "dsrk", 178 + wide_delta, 75,
-                              automap_coords ? CR_GREEN : CR_DARKRED);
+        RD_M_DrawTextSmallRUS(stats_coords == 1 ? "yf rfhnt" :
+                              stats_coords == 2 ? "dctulf" :
+                              "dsrk", 178 + wide_delta, 85,
+                              stats_coords ? CR_GREEN : CR_DARKRED);
 
         // Название уровня
-        RD_M_DrawTextSmallRUS(hud_level_name ? "dctulf" : "yf rfhnt",
-                              159 + wide_delta, 85,
-                              hud_level_name ? CR_GREEN : CR_DARKRED);
+        RD_M_DrawTextSmallRUS(stats_level_name ? "dctulf" : "yf rfhnt",
+                              159 + wide_delta, 95,
+                              stats_level_name ? CR_GREEN : CR_DARKRED);
 
         // Окрашивание
-        RD_M_DrawTextSmallRUS(hud_stats_color ? "drk" : "dsrk",
-                              133 + wide_delta, 95,
-                              hud_stats_color ? CR_GREEN : CR_DARKRED);
+        RD_M_DrawTextSmallRUS(stats_color ? "drk" : "dsrk",
+                              133 + wide_delta, 105,
+                              stats_color ? CR_GREEN : CR_DARKRED);
 
         //
         // Footer
@@ -3038,39 +3047,44 @@ static void M_RD_Draw_StatsSettings(void)
     }
 }
 
-static void M_RD_Change_AutomapStats(Direction_t direction)
+static void M_RD_Change_StatsPlacement()
 {
-    RD_Menu_SpinInt(&automap_stats, 0, 2, direction);
+    stats_placement ^= 1;
 }
 
-static void M_RD_Change_AutomapSkill(Direction_t direction)
+static void M_RD_Change_StatsKIS(Direction_t direction)
 {
-    RD_Menu_SpinInt(&automap_skill, 0, 2, direction);
+    RD_Menu_SpinInt(&stats_kis, 0, 2, direction);
 }
 
-static void M_RD_Change_AutomapLevelTime(Direction_t direction)
+static void M_RD_Change_StatsSkill(Direction_t direction)
 {
-    RD_Menu_SpinInt(&automap_level_time, 0, 2, direction);
+    RD_Menu_SpinInt(&stats_skill, 0, 2, direction);
 }
 
-static void M_RD_Change_AutomapTotalTime(Direction_t direction)
+static void M_RD_Change_StatsLevelTime(Direction_t direction)
 {
-    RD_Menu_SpinInt(&automap_total_time, 0, 2, direction);
+    RD_Menu_SpinInt(&stats_level_time, 0, 2, direction);
 }
 
-static void M_RD_Change_AutomapCoords(Direction_t direction)
+static void M_RD_Change_StatsTotalTime(Direction_t direction)
 {
-    RD_Menu_SpinInt(&automap_coords, 0, 2, direction);
+    RD_Menu_SpinInt(&stats_total_time, 0, 2, direction);
 }
 
-static void M_RD_Change_HUDLevelName()
+static void M_RD_Change_StatsCoords(Direction_t direction)
 {
-    hud_level_name ^= 1;
+    RD_Menu_SpinInt(&stats_coords, 0, 2, direction);
 }
 
-static void M_RD_Change_HUDWidgetColors()
+static void M_RD_Change_StatsLevelName()
 {
-    hud_stats_color ^= 1;
+    stats_level_name ^= 1;
+}
+
+static void M_RD_Change_StatsColors()
+{
+    stats_color ^= 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -6170,7 +6184,6 @@ static void M_RD_BackToDefaults_Recommended(int choice)
 
     // Automap
     automap_color      = 0;
-    automap_mark_color = 10;
     automap_antialias  = 1;
     automap_rotate     = 0;
     automap_overlay    = 0;
@@ -6178,15 +6191,17 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     automap_follow     = 1;
     automap_grid       = 0;
     automap_grid_size  = 128;
+    automap_mark_color = 10;
 
     // Stats
-    automap_stats      = 1;
-    automap_skill      = 1;
-    automap_level_time = 1;
-    automap_total_time = 0;
-    automap_coords     = 0;
-    hud_stats_color    = 1;
-    hud_level_name     = 0;
+    stats_placement    = 0;
+    stats_kis          = 1;
+    stats_skill        = 0;
+    stats_level_time   = 1;
+    stats_total_time   = 0;
+    stats_coords       = 0;
+    stats_level_name   = 0;
+    stats_color        = 1;
 
     // Audio
     snd_sfxdevice        = 3;
@@ -6363,23 +6378,24 @@ static void M_RD_BackToDefaults_Original(int choice)
 
     // Automap
     automap_color      = 0;
-    automap_mark_color = 10;
     automap_antialias  = 0;
     automap_rotate     = 0;
     automap_overlay    = 0;
     automap_overlay_bg = 0;
     automap_follow     = 1;
     automap_grid       = 0;
-    automap_grid_size  = 128;
+    automap_grid_size  = 128;    
+    automap_mark_color = 10;
 
     // Stats
-    automap_stats      = 0;
-    automap_skill      = 0;
-    automap_level_time = 0;
-    automap_total_time = 0;
-    automap_coords     = 0;
-    hud_stats_color    = 0;
-    hud_level_name     = 0;
+    stats_placement    = 0;
+    stats_kis          = 0;
+    stats_skill        = 0;
+    stats_level_time   = 0;
+    stats_total_time   = 0;
+    stats_coords       = 0;
+    stats_level_name   = 0;
+    stats_color        = 0;
 
     // Audio
     snd_sfxdevice        = 3;

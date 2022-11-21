@@ -126,13 +126,16 @@ static void M_RD_AutoMapFollow();
 static void M_RD_AutoMapGrid();
 static void M_RD_AutoMapGridSize(Direction_t direction);
 static void M_RD_AutomapMarkColor(Direction_t direction);
+
 // Stats
-static void M_RD_AutoMapStats(Direction_t direction);
-static void M_RD_AutoMapSkill(Direction_t direction);
-static void M_RD_AutoMapLevTime(Direction_t direction);
-static void M_RD_AutoMapTotTime(Direction_t direction);
-static void M_RD_AutoMapCoords(Direction_t direction);
-static void M_RD_AutoMapWidgetColors();
+static void DrawStatsMenu(void);
+static void M_RD_StatsPlacement();
+static void M_RD_StatsKIS(Direction_t direction);
+static void M_RD_StatsSkill(Direction_t direction);
+static void M_RD_StatsLevTime(Direction_t direction);
+static void M_RD_StatsTotTime(Direction_t direction);
+static void M_RD_StatsCoords(Direction_t direction);
+static void M_RD_StatsColors();
 
 // Sound
 static void DrawSoundMenu(void);
@@ -420,6 +423,8 @@ static Menu_t DisplayMenu;
 static Menu_t ColorMenu;
 static Menu_t MessagesMenu;
 static Menu_t AutomapMenu;
+static Menu_t StatsMenu;
+static const Menu_t* AutomapMenuPages[] = {&AutomapMenu, &StatsMenu};
 static Menu_t SoundMenu;
 static Menu_t SoundSysMenu;
 static Menu_t ControlsMenu;
@@ -534,7 +539,7 @@ MENU_STATIC(RDOptionsMenu,
 // Video and Rendering
 // -----------------------------------------------------------------------------
 
-static const PageDescriptor_t RenderingDescriptor = { // pitto
+static const PageDescriptor_t RenderingDescriptor = {
     2, RenderingMenuPages,
     252, 162,
     CR_GRAY
@@ -677,8 +682,14 @@ MENU_STATIC(MessagesMenu,
 );
 
 // -----------------------------------------------------------------------------
-// Automap settings
+// Automap and statistics
 // -----------------------------------------------------------------------------
+
+static const PageDescriptor_t AutomapStatsDescriptor = {
+    2, AutomapMenuPages,
+    252, 162,
+    CR_GRAY
+};
 
 static MenuItem_t AutomapItems[] = {
     I_TITLE( "AUTOMAP",                     "RFHNF"), // КАРТА
@@ -690,22 +701,48 @@ static MenuItem_t AutomapItems[] = {
     I_SWITCH("GRID:",                       "CTNRF:",                          M_RD_AutoMapGrid), // СЕТКА
     I_LRFUNC("GRID SIZE:",                  "HFPVTH CTNRB:",                   M_RD_AutoMapGridSize), // РАЗМЕР СЕТКИ
     I_LRFUNC("MARK COLOR:",                 "WDTN JNVTNJR:",                   M_RD_AutomapMarkColor), // ЦВЕТ ОТМЕТОК
-    I_TITLE( "STATISTICS",                  "CNFNBCNBRF"), // СТАТИСТИКА
-    I_LRFUNC("LEVEL STATS:",                "CNFNBCNBRF EHJDYZ:",              M_RD_AutoMapStats), // СТАТИСТИКА УРОВНЯ
-    I_LRFUNC("SKILL LEVEL:",                "EHJDTYM CKJ;YJCNB:",              M_RD_AutoMapSkill), // УРОВЕНЬ СЛОЖНОСТИ
-    I_LRFUNC("LEVEL TIME:",                 "DHTVZ EHJDYZ:",                   M_RD_AutoMapLevTime), // ВРЕМЯ УРОВНЯ
-    I_LRFUNC("TOTAL TIME:",                 "J,OTT EHJDYZ:",                   M_RD_AutoMapTotTime), // ОБЩЕЕ ВРЕМЯ
-    I_LRFUNC("PLAYER COORDS:",              "RJJHLBYFNS BUHJRF:",              M_RD_AutoMapCoords), // КООРДИНАТЫ ИГРОКА
-    I_SWITCH("COLORING:",                   "JRHFIBDFYBT:",                    M_RD_AutoMapWidgetColors)  // ОКРАШИВАНИЕ
+    I_EMPTY,
+    I_EMPTY,
+    I_EMPTY,
+    I_EMPTY,
+    I_SETMENU("NEXT PAGE >", "LFKTT `", &StatsMenu),  // ДАЛЕЕ >
 };
 
-MENU_STATIC(AutomapMenu,
+MENU_STATIC_PAGED(AutomapMenu,
     36, 36,
     32,
     "AUTOMAP AND STATISTICS", "RFHNF B CNFNBCNBRF", false, // КАРТА И СТАТИСТИКА
     AutomapItems, false,
     DrawAutomapMenu,
-    &DisplayMenu
+    &DisplayMenu,
+    &AutomapStatsDescriptor
+);
+
+static MenuItem_t StatsItems[] = {
+    I_TITLE( "STATISTICS",     "CNFNBCNBRF"),                              // СТАТИСТИКА
+    I_SWITCH("PLACEMENT:",     "HFCGJKJ;TYBT:",      M_RD_StatsPlacement), // РАСПОЛОЖЕНИЕ:
+    I_LRFUNC("LEVEL STATS:",   "CNFNBCNBRF EHJDYZ:", M_RD_StatsKIS),       // СТАТИСТИКА УРОВНЯ
+    I_LRFUNC("SKILL LEVEL:",   "EHJDTYM CKJ;YJCNB:", M_RD_StatsSkill),     // УРОВЕНЬ СЛОЖНОСТИ
+    I_LRFUNC("LEVEL TIME:",    "DHTVZ EHJDYZ:",      M_RD_StatsLevTime),   // ВРЕМЯ УРОВНЯ
+    I_LRFUNC("TOTAL TIME:",    "J,OTT EHJDYZ:",      M_RD_StatsTotTime),   // ОБЩЕЕ ВРЕМЯ
+    I_LRFUNC("PLAYER COORDS:", "RJJHLBYFNS BUHJRF:", M_RD_StatsCoords),    // КООРДИНАТЫ ИГРОКА
+    I_SWITCH("COLORING:",      "JRHFIBDFYBT:",       M_RD_StatsColors),    // ОКРАШИВАНИЕ
+    I_EMPTY,
+    I_EMPTY,
+    I_EMPTY,
+    I_EMPTY,
+    I_EMPTY,
+    I_SETMENU("< PREV PAGE", "^ YFPFL", &AutomapMenu)  // < НАЗАД
+};
+
+MENU_STATIC_PAGED(StatsMenu,
+    36, 36,
+    32,
+    "AUTOMAP AND STATISTICS", "RFHNF B CNFNBCNBRF", false, // КАРТА И СТАТИСТИКА
+    StatsItems, false,
+    DrawStatsMenu,
+    &DisplayMenu,
+    &AutomapStatsDescriptor
 );
 
 // -----------------------------------------------------------------------------
@@ -2920,35 +2957,6 @@ static void DrawAutomapMenu(void)
         // Mark color
         RD_M_DrawTextSmallENG(M_RD_ColorName(automap_mark_color+1), 118 + wide_delta, 112,
                               M_RD_ColorTranslation(automap_mark_color+1));
-
-        // Level stats
-        RD_M_DrawTextSmallENG(automap_stats == 1 ? "IN AUTOMAP" :
-                              automap_stats == 2 ? "ALWAYS" : "OFF",
-                              121 + wide_delta, 132, CR_NONE);
-
-        // Skill level
-        RD_M_DrawTextSmallENG(automap_skill == 1 ? "IN AUTOMAP" :
-                              automap_skill == 2 ? "ALWAYS" : "OFF",
-                              113 + wide_delta, 142, CR_NONE);
-
-        // Level time
-        RD_M_DrawTextSmallENG(automap_level_time == 1 ? "IN AUTOMAP" :
-                              automap_level_time == 2 ? "ALWAYS" : "OFF",
-                              110 + wide_delta, 152, CR_NONE);
-
-        // Total time
-        RD_M_DrawTextSmallENG(automap_total_time == 1 ? "IN AUTOMAP" :
-                              automap_total_time == 2 ? "ALWAYS" : "OFF",
-                              111 + wide_delta, 162, CR_NONE);
-
-        // Player coords
-        RD_M_DrawTextSmallENG(automap_coords == 1 ? "IN AUTOMAP" :
-                              automap_coords == 2 ? "ALWAYS" : "OFF",
-                              142 + wide_delta, 172, CR_NONE);
-
-        // Coloring
-        RD_M_DrawTextSmallENG(hud_stats_color ? "ON" : "OFF",
-                              101 + wide_delta, 182, CR_NONE);
     }
     else
     {
@@ -2970,36 +2978,6 @@ static void DrawAutomapMenu(void)
         // Цвет отметок
         RD_M_DrawTextSmallRUS(M_RD_ColorName(automap_mark_color+1), 133 + wide_delta, 112,
                               M_RD_ColorTranslation(automap_mark_color+1));
-
-
-        // Статистика уровня
-        RD_M_DrawTextSmallRUS(automap_stats == 1 ? "YF RFHNT" :
-                              automap_stats == 2 ? "DCTULF" : "DSRK",
-                              168 + wide_delta, 132, CR_NONE);
-
-        // Уровень сложности
-        RD_M_DrawTextSmallRUS(automap_skill == 1 ? "YF RFHNT" :
-                              automap_skill == 2 ? "DCTULF" : "DSRK",
-                              174 + wide_delta, 142, CR_NONE);
-
-        // Время уровня
-        RD_M_DrawTextSmallRUS(automap_level_time == 1 ? "YF RFHNT" :
-                              automap_level_time == 2 ? "DCTULF" : "DSRK",
-                              133 + wide_delta, 152, CR_NONE);
-
-        // Общее время
-        RD_M_DrawTextSmallRUS(automap_total_time == 1 ? "YF RFHNT" :
-                              automap_total_time == 2 ? "DCTULF" : "DSRK",
-                              136 + wide_delta, 162, CR_NONE);
-
-        // Координаты игрока
-        RD_M_DrawTextSmallRUS(automap_coords == 1 ? "YF RFHNT" :
-                              automap_coords == 2 ? "DCTULF" : "DSRK",
-                              173 + wide_delta, 172, CR_NONE);
-
-        // Окрашивание
-        RD_M_DrawTextSmallRUS(hud_stats_color ? "DRK" : "DSRK",
-                              129 + wide_delta, 182, CR_NONE);
     }
 
     // Overlay background opacity
@@ -3047,34 +3025,120 @@ static void M_RD_AutomapMarkColor(Direction_t direction)
     AM_initMarksColor(automap_mark_color);
 }
 
-static void M_RD_AutoMapStats(Direction_t direction)
+// -----------------------------------------------------------------------------
+// DrawStatsMenu
+// -----------------------------------------------------------------------------
+
+static void DrawStatsMenu(void)
 {
-    RD_Menu_SpinInt(&automap_stats, 0, 2, direction);
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    if (english_language)
+    {
+        // Placement
+        RD_M_DrawTextSmallENG(stats_placement ? "BOTTOM" : "TOP",
+                              112 + wide_delta, 42, CR_NONE);
+
+        // Level stats
+        RD_M_DrawTextSmallENG(stats_kis == 1 ? "IN AUTOMAP" :
+                              stats_kis == 2 ? "ALWAYS" : "OFF",
+                              121 + wide_delta, 52, CR_NONE);
+
+        // Skill level
+        RD_M_DrawTextSmallENG(stats_skill == 1 ? "IN AUTOMAP" :
+                              stats_skill == 2 ? "ALWAYS" : "OFF",
+                              113 + wide_delta, 62, CR_NONE);
+
+        // Level time
+        RD_M_DrawTextSmallENG(stats_level_time == 1 ? "IN AUTOMAP" :
+                              stats_level_time == 2 ? "ALWAYS" : "OFF",
+                              110 + wide_delta, 72, CR_NONE);
+
+        // Total time
+        RD_M_DrawTextSmallENG(stats_total_time == 1 ? "IN AUTOMAP" :
+                              stats_total_time == 2 ? "ALWAYS" : "OFF",
+                              111 + wide_delta, 82, CR_NONE);
+
+        // Player coords
+        RD_M_DrawTextSmallENG(stats_coords == 1 ? "IN AUTOMAP" :
+                              stats_coords == 2 ? "ALWAYS" : "OFF",
+                              142 + wide_delta, 92, CR_NONE);
+
+        // Coloring
+        RD_M_DrawTextSmallENG(stats_color ? "ON" : "OFF",
+                              101 + wide_delta, 102, CR_NONE);
+    }
+    else
+    {
+        // Расположение
+        RD_M_DrawTextSmallRUS(stats_placement ? "CYBPE" : "CDTH[E", // Снизу | Сверху
+                              140 + wide_delta, 42, CR_NONE);
+
+        // Статистика уровня
+        RD_M_DrawTextSmallRUS(stats_kis == 1 ? "YF RFHNT" :
+                              stats_kis == 2 ? "DCTULF" : "DSRK",
+                              168 + wide_delta, 52, CR_NONE);
+
+        // Уровень сложности
+        RD_M_DrawTextSmallRUS(stats_skill == 1 ? "YF RFHNT" :
+                              stats_skill == 2 ? "DCTULF" : "DSRK",
+                              174 + wide_delta, 62, CR_NONE);
+
+        // Время уровня
+        RD_M_DrawTextSmallRUS(stats_level_time == 1 ? "YF RFHNT" :
+                              stats_level_time == 2 ? "DCTULF" : "DSRK",
+                              133 + wide_delta, 72, CR_NONE);
+
+        // Общее время
+        RD_M_DrawTextSmallRUS(stats_total_time == 1 ? "YF RFHNT" :
+                              stats_total_time == 2 ? "DCTULF" : "DSRK",
+                              136 + wide_delta, 82, CR_NONE);
+
+        // Координаты игрока
+        RD_M_DrawTextSmallRUS(stats_coords == 1 ? "YF RFHNT" :
+                              stats_coords == 2 ? "DCTULF" : "DSRK",
+                              173 + wide_delta, 92, CR_NONE);
+
+        // Окрашивание
+        RD_M_DrawTextSmallRUS(stats_color ? "DRK" : "DSRK",
+                              129 + wide_delta, 102, CR_NONE);
+    }
 }
 
-static void M_RD_AutoMapSkill(Direction_t direction)
+static void M_RD_StatsPlacement()
 {
-    RD_Menu_SpinInt(&automap_skill, 0, 2, direction);
+    stats_placement ^= 1;
 }
 
-static void M_RD_AutoMapLevTime(Direction_t direction)
+static void M_RD_StatsKIS(Direction_t direction)
 {
-    RD_Menu_SpinInt(&automap_level_time, 0, 2, direction);
+    RD_Menu_SpinInt(&stats_kis, 0, 2, direction);
 }
 
-static void M_RD_AutoMapTotTime(Direction_t direction)
+static void M_RD_StatsSkill(Direction_t direction)
 {
-    RD_Menu_SpinInt(&automap_total_time, 0, 2, direction);
+    RD_Menu_SpinInt(&stats_skill, 0, 2, direction);
 }
 
-static void M_RD_AutoMapCoords(Direction_t direction)
+static void M_RD_StatsLevTime(Direction_t direction)
 {
-    RD_Menu_SpinInt(&automap_coords, 0, 2, direction);
+    RD_Menu_SpinInt(&stats_level_time, 0, 2, direction);
 }
 
-static void M_RD_AutoMapWidgetColors()
+static void M_RD_StatsTotTime(Direction_t direction)
 {
-    hud_stats_color ^= 1;
+    RD_Menu_SpinInt(&stats_total_time, 0, 2, direction);
+}
+
+static void M_RD_StatsCoords(Direction_t direction)
+{
+    RD_Menu_SpinInt(&stats_coords, 0, 2, direction);
+}
+
+static void M_RD_StatsColors()
+{
+    stats_color ^= 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -5612,12 +5676,15 @@ static void M_RD_BackToDefaults_Recommended(void)
     automap_grid       = 0;
     automap_grid_size  = 128;    
     automap_mark_color = 6;
-    automap_stats      = 1;
-    automap_skill      = 1;
-    automap_level_time = 0;
-    automap_total_time = 0;
-    automap_coords     = 0;
-    hud_stats_color    = 1;
+
+    // Stats
+    stats_placement  = 0;
+    stats_kis        = 1;
+    stats_skill      = 0;
+    stats_level_time = 0;
+    stats_total_time = 0;
+    stats_coords     = 0;
+    stats_color      = 1;
 
     // Audio
     snd_MaxVolume   = 8;
@@ -5767,12 +5834,15 @@ static void M_RD_BackToDefaults_Original(void)
     automap_grid       = 0;
     automap_grid_size  = 128;    
     automap_mark_color = 6;
-    automap_stats      = 0;
-    automap_skill      = 0;
-    automap_level_time = 0;
-    automap_total_time = 0;
-    automap_coords     = 0;
-    hud_stats_color    = 0;
+
+    // Stats
+    stats_placement  = 0;
+    stats_kis        = 0;
+    stats_skill      = 0;
+    stats_level_time = 0;
+    stats_total_time = 0;
+    stats_coords     = 0;
+    stats_color      = 0;
 
     // Audio
     snd_MaxVolume   = 8;

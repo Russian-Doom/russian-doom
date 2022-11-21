@@ -547,24 +547,26 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(message_color_quest),
     CONFIG_VARIABLE_INT(draw_shadowed_text),
 
-    // Automap specific variables
+    // Automap
     CONFIG_VARIABLE_INT(automap_color),
-    CONFIG_VARIABLE_INT(automap_mark_color),
     CONFIG_VARIABLE_INT(automap_antialias),
-    CONFIG_VARIABLE_INT(automap_stats),
-    CONFIG_VARIABLE_INT(automap_skill),
-    CONFIG_VARIABLE_INT(automap_level_time),
-    CONFIG_VARIABLE_INT(automap_total_time),
-    CONFIG_VARIABLE_INT(automap_coords),
-    CONFIG_VARIABLE_INT(automap_overlay),
-    CONFIG_VARIABLE_INT(automap_overlay_bg),
     CONFIG_VARIABLE_INT(automap_rotate),
+    CONFIG_VARIABLE_INT(automap_overlay),
+    CONFIG_VARIABLE_INT(automap_overlay_bg),    
     CONFIG_VARIABLE_INT(automap_follow),
     CONFIG_VARIABLE_INT(automap_grid),
     CONFIG_VARIABLE_INT(automap_grid_size),
-    CONFIG_VARIABLE_INT(hud_stats_color),
-    CONFIG_VARIABLE_INT(hud_widget_colors),
-    CONFIG_VARIABLE_INT(hud_level_name),
+    CONFIG_VARIABLE_INT(automap_mark_color),
+
+    // Stats
+    CONFIG_VARIABLE_INT(stats_placement),
+    CONFIG_VARIABLE_INT(stats_kis),
+    CONFIG_VARIABLE_INT(stats_skill),
+    CONFIG_VARIABLE_INT(stats_level_time),
+    CONFIG_VARIABLE_INT(stats_total_time),
+    CONFIG_VARIABLE_INT(stats_coords),
+    CONFIG_VARIABLE_INT(stats_level_name),
+    CONFIG_VARIABLE_INT(stats_color),
 
     // Sound
     CONFIG_VARIABLE_INT(sfx_volume),
