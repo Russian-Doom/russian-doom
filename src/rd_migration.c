@@ -17,10 +17,10 @@
 
 #include <locale.h>
 #include <SDL_scancode.h>
-#include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include "d_name.h"
+#include "i_video.h"
 #include "jn.h"
 #include "m_misc.h"
 #include "rd_keybinds.h"
@@ -72,6 +72,29 @@ void M_RegisterTrackedFields()
         if(RD_GameType == gt_Hexen)
             RegisterTrackedKeybind("Forward");
     }
+
+    //
+    // Changed name of "aspect_ratio_correct" config entry to "preserve_window_aspect_ratio".
+    // Changed names of some of "automap_*" and "hud_*" config entries to "stats_*".
+    // Separated bindings for "Suicide" and "Detail level" in Hexen.
+    //
+    if(config_version < 3)
+    {
+        RegisterTrackedDefault("aspect_ratio_correct", DEFAULT_INT);
+
+        RegisterTrackedDefault("automap_stats", DEFAULT_INT);
+        RegisterTrackedDefault("automap_skill", DEFAULT_INT);
+        RegisterTrackedDefault("automap_level_time", DEFAULT_INT);
+        RegisterTrackedDefault("automap_total_time", DEFAULT_INT);
+        RegisterTrackedDefault("automap_coords", DEFAULT_INT);
+        RegisterTrackedDefault("hud_stats_color", DEFAULT_INT);
+
+        if(RD_GameType == gt_Doom)
+            RegisterTrackedDefault("hud_level_name", DEFAULT_INT);
+
+        if(RD_GameType == gt_Hexen)
+            RegisterTrackedKeybind("Detail");
+    }
 }
 
 void M_ApplyMigration()
@@ -111,60 +134,84 @@ void M_ApplyMigration()
     if(config_version < 2)
     {
         defaultTracker_t* message_pickup_color = M_GetDefaultTracker("message_pickup_color");
-        defaultTracker_t* message_system_color = M_GetDefaultTracker("message_system_color");
-        defaultTracker_t* message_chat_color = M_GetDefaultTracker("message_chat_color");
-
-        if(message_pickup_color != NULL && message_pickup_color->found)
+        if(message_pickup_color != NULL
+        && message_pickup_color->found)
             message_color_pickup = message_pickup_color->value.i != 0 ? message_pickup_color->value.i + 1 : 0;
-        if(message_system_color != NULL && message_system_color->found)
+
+        defaultTracker_t* message_system_color = M_GetDefaultTracker("message_system_color");
+        if(message_system_color != NULL
+        && message_system_color->found)
             message_color_system = message_system_color->value.i != 0 ? message_system_color->value.i + 1 : 0;
-        if(message_chat_color != NULL && message_chat_color->found)
+
+        defaultTracker_t* message_chat_color = M_GetDefaultTracker("message_chat_color");
+        if(message_chat_color != NULL
+        && message_chat_color->found)
             message_color_chat = message_chat_color->value.i != 0 ? message_chat_color->value.i + 1 : 0;
 
-        if(RD_GameType != gt_Hexen && JN_getNotCommonIntVarPointer(v_message_color_secret) != NULL)
+        if(RD_GameType != gt_Hexen
+        && JN_getNotCommonIntVarPointer(v_message_color_secret) != NULL)
         {
             defaultTracker_t* message_secret_color = M_GetDefaultTracker("message_secret_color");
-            if(message_secret_color->found)
+            if(message_secret_color != NULL
+            && message_secret_color->found)
                 *JN_getNotCommonIntVarPointer(v_message_color_secret) = message_secret_color->value.i != 0 ? message_secret_color->value.i + 1 : 0;
         }
-        if(RD_GameType == gt_Hexen && JN_getNotCommonIntVarPointer(v_message_color_quest) != NULL)
+        if(RD_GameType == gt_Hexen
+        && JN_getNotCommonIntVarPointer(v_message_color_quest) != NULL)
         {
             defaultTracker_t* message_quest_color = M_GetDefaultTracker("message_quest_color");
-            if(message_quest_color->found)
+            if(message_quest_color != NULL
+            && message_quest_color->found)
                 *JN_getNotCommonIntVarPointer(v_message_color_quest) = message_quest_color->value.i != 0 ? message_quest_color->value.i + 1 : 0;
         }
 
         if(RD_GameType == gt_Doom)
         {
             defaultTracker_t* sbar_color_high = M_GetDefaultTracker("sbar_color_high");
-            defaultTracker_t* sbar_color_normal = M_GetDefaultTracker("sbar_color_normal");
-            defaultTracker_t* sbar_color_low = M_GetDefaultTracker("sbar_color_low");
-            defaultTracker_t* sbar_color_critical = M_GetDefaultTracker("sbar_color_critical");
-            defaultTracker_t* sbar_color_armor_1 = M_GetDefaultTracker("sbar_color_armor_1");
-            defaultTracker_t* sbar_color_armor_2 = M_GetDefaultTracker("sbar_color_armor_2");
-            defaultTracker_t* sbar_color_armor_0 = M_GetDefaultTracker("sbar_color_armor_0");
-
-            if(JN_getNotCommonIntVarPointer(v_stbar_color_high) != NULL && sbar_color_high->found)
+            if(sbar_color_high != NULL
+            && sbar_color_high->found
+            && JN_getNotCommonIntVarPointer(v_stbar_color_high) != NULL)
                 *JN_getNotCommonIntVarPointer(v_stbar_color_high) = sbar_color_high->value.i + 1;
-            if(JN_getNotCommonIntVarPointer(v_stbar_color_normal) != NULL && sbar_color_normal->found)
+
+            defaultTracker_t* sbar_color_normal = M_GetDefaultTracker("sbar_color_normal");
+            if(sbar_color_normal != NULL
+            && sbar_color_normal->found
+            && JN_getNotCommonIntVarPointer(v_stbar_color_normal) != NULL)
                 *JN_getNotCommonIntVarPointer(v_stbar_color_normal) = sbar_color_normal->value.i + 1;
-            if(JN_getNotCommonIntVarPointer(v_stbar_color_low) != NULL && sbar_color_low->found)
+
+            defaultTracker_t* sbar_color_low = M_GetDefaultTracker("sbar_color_low");
+            if(sbar_color_low != NULL
+            && sbar_color_low->found
+            && JN_getNotCommonIntVarPointer(v_stbar_color_low) != NULL)
                 *JN_getNotCommonIntVarPointer(v_stbar_color_low) = sbar_color_low->value.i + 1;
-            if(JN_getNotCommonIntVarPointer(v_stbar_color_critical) != NULL && sbar_color_critical->found)
+
+            defaultTracker_t* sbar_color_critical = M_GetDefaultTracker("sbar_color_critical");
+            if(sbar_color_critical != NULL
+            && sbar_color_critical->found
+            && JN_getNotCommonIntVarPointer(v_stbar_color_critical) != NULL)
                 *JN_getNotCommonIntVarPointer(v_stbar_color_critical) = sbar_color_critical->value.i + 1;
-            if(JN_getNotCommonIntVarPointer(v_stbar_color_armor_1) != NULL && sbar_color_armor_1->found)
+
+            defaultTracker_t* sbar_color_armor_1 = M_GetDefaultTracker("sbar_color_armor_1");
+            if(sbar_color_armor_1 != NULL
+            && sbar_color_armor_1->found
+            && JN_getNotCommonIntVarPointer(v_stbar_color_armor_1) != NULL)
                 *JN_getNotCommonIntVarPointer(v_stbar_color_armor_1) = sbar_color_armor_1->value.i + 1;
-            if(JN_getNotCommonIntVarPointer(v_stbar_color_armor_2) != NULL && sbar_color_armor_2->found)
+
+            defaultTracker_t* sbar_color_armor_2 = M_GetDefaultTracker("sbar_color_armor_2");
+            if(sbar_color_armor_2 != NULL
+            && sbar_color_armor_2->found
+            && JN_getNotCommonIntVarPointer(v_stbar_color_armor_2) != NULL)
                 *JN_getNotCommonIntVarPointer(v_stbar_color_armor_2) = sbar_color_armor_2->value.i + 1;
-            if(JN_getNotCommonIntVarPointer(v_stbar_color_armor_0) != NULL && sbar_color_armor_0->found)
+
+            defaultTracker_t* sbar_color_armor_0 = M_GetDefaultTracker("sbar_color_armor_0");
+            if(sbar_color_armor_0 != NULL
+            && sbar_color_armor_0->found
+            && JN_getNotCommonIntVarPointer(v_stbar_color_armor_0) != NULL)
                 *JN_getNotCommonIntVarPointer(v_stbar_color_armor_0) = sbar_color_armor_0->value.i + 1;
         }
 
         // Reread binds for bk_map_rotate, bk_map_rotate and bk_forward to prioritize them over multiplayer chat keys
         keybindsTracker_t* Map_rotate_tracker = M_GetKeybindsTracker("Map_rotate");
-        keybindsTracker_t* Map_Grid_tracker = M_GetKeybindsTracker("Map_grid");
-        keybindsTracker_t* Forward_tracker = M_GetKeybindsTracker("Forward");
-
         if(Map_rotate_tracker != NULL
         && !IsBindingsEqual(
             &Map_rotate_tracker->descriptors,
@@ -178,6 +225,7 @@ void M_ApplyMigration()
             SetKeyBindingsToTracked(bk_map_rotate, Map_rotate_tracker);
         }
 
+        keybindsTracker_t* Map_Grid_tracker = M_GetKeybindsTracker("Map_grid");
         if(Map_Grid_tracker != NULL
         && !IsBindingsEqual(
             &Map_Grid_tracker->descriptors,
@@ -190,6 +238,7 @@ void M_ApplyMigration()
             SetKeyBindingsToTracked(bk_map_grid, Map_Grid_tracker);
         }
 
+        keybindsTracker_t* Forward_tracker = M_GetKeybindsTracker("Forward");
         if(RD_GameType == gt_Hexen
         && Forward_tracker != NULL
         && !IsBindingsEqual(
@@ -198,6 +247,67 @@ void M_ApplyMigration()
         && IsBindingsListContains(&bind_descriptor[bk_multi_msg_player_5], keyboard, SDL_SCANCODE_W))
         {
             SetKeyBindingsToTracked(bk_forward, Forward_tracker);
+        }
+    }
+
+    //
+    // Changed name of "aspect_ratio_correct" config entry to "preserve_window_aspect_ratio".
+    // Changed names of some of "automap_*" and "hud_*" config entries to "stats_*".
+    // Separated bindings for "Suicide" and "Detail level" in Hexen.
+    //
+    if(config_version < 3)
+    {
+        defaultTracker_t* aspect_ratio_correct = M_GetDefaultTracker("aspect_ratio_correct");
+        if(aspect_ratio_correct != NULL
+        && aspect_ratio_correct->found)
+            preserve_window_aspect_ratio = aspect_ratio_correct->value.i;
+
+        defaultTracker_t* automap_stats = M_GetDefaultTracker("automap_stats");
+        if(automap_stats != NULL
+        && automap_stats->found)
+            stats_kis = automap_stats->value.i;
+
+        defaultTracker_t* automap_skill = M_GetDefaultTracker("automap_skill");
+        if(automap_skill != NULL
+        && automap_skill->found)
+            stats_skill = automap_skill->value.i;
+
+        defaultTracker_t* automap_level_time = M_GetDefaultTracker("automap_level_time");
+        if(automap_level_time != NULL
+        && automap_level_time->found)
+            stats_level_time = automap_level_time->value.i;
+
+        defaultTracker_t* automap_total_time = M_GetDefaultTracker("automap_total_time");
+        if(automap_total_time != NULL
+        && automap_total_time->found)
+            stats_total_time = automap_total_time->value.i;
+
+        defaultTracker_t* automap_coords = M_GetDefaultTracker("automap_coords");
+        if(automap_coords != NULL
+        && automap_coords->found)
+            stats_coords = automap_coords->value.i;
+
+        defaultTracker_t* hud_stats_color = M_GetDefaultTracker("hud_stats_color");
+        if(hud_stats_color != NULL
+        && hud_stats_color->found)
+            stats_color = hud_stats_color->value.i;
+
+        if(RD_GameType == gt_Doom)
+        {
+            defaultTracker_t* hud_level_name = M_GetDefaultTracker("hud_level_name");
+            if(hud_level_name != NULL
+            && hud_level_name->found)
+                stats_level_name = hud_level_name->value.i;
+        }
+
+        if(RD_GameType == gt_Hexen)
+        {
+            keybindsTracker_t* Detail_tracker = M_GetKeybindsTracker("Detail");
+            if(Detail_tracker != NULL)
+            {
+                BK_ClearBinds(bk_detail);
+                SetKeyBindingsToTracked(bk_suicide, Detail_tracker);
+            }
         }
     }
 

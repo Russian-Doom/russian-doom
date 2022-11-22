@@ -880,7 +880,7 @@ static MenuItem_t Bindings3Items[] = {
     I_EFUNC("Open save menu",     "cj[hfytybt buhs",     BK_StartBindingKey, bk_menu_save),   // Сохранение игры
     I_EFUNC("Open load menu",     "pfuheprf buhs",       BK_StartBindingKey, bk_menu_load),   // Загрузка игры
     I_EFUNC("Open volume menu",   "yfcnhjqrb uhjvrjcnb", BK_StartBindingKey, bk_menu_volume), // Настройки громкости
-    I_EFUNC("Suicide",            "Cebwbl",              BK_StartBindingKey, bk_detail),      // СУИЦИД
+    I_EFUNC("Suicide",            "Cebwbl",              BK_StartBindingKey, bk_suicide),      // СУИЦИД
     I_EFUNC("QUICK SAVE",         ",SCNHJT CJ[HFYTYBT",  BK_StartBindingKey, bk_qsave),       // Быстрое сохранение
     I_EFUNC("End game",           "pfrjyxbnm buhe",      BK_StartBindingKey, bk_end_game),    // Закончить игру
     I_EFUNC("QUICK LOAD",         ",SCNHFZ PFUHEPRF",    BK_StartBindingKey, bk_qload),       // Быстрая загрузка
@@ -5457,13 +5457,13 @@ static void DrawOptions2Menu_Vanilla(void)
 void M_RD_BackToDefaults_Recommended (void)
 {
     // Rendering
-    vsync                   = 1;
-    aspect_ratio_correct    = 1;
-    max_fps                 = 200; uncapped_fps = 1;
-    show_fps                = 0;
-    smoothing               = 0;
-    vga_porch_flash         = 0;
-    png_screenshots         = 1;
+    vsync                        = 1;
+    preserve_window_aspect_ratio = 1;
+    max_fps                      = 200; uncapped_fps = 1;
+    show_fps                     = 0;
+    smoothing                    = 0;
+    vga_porch_flash              = 0;
+    png_screenshots              = 1;
 
     // Display
     screenblocks           = 10;
@@ -5572,13 +5572,13 @@ void M_RD_BackToDefaults_Recommended (void)
 static void M_RD_BackToDefaults_Original(void)
 {
     // Rendering
-    vsync                   = 1;
-    aspect_ratio_correct    = 1;
-    max_fps                 = 35; uncapped_fps = 1;
-    show_fps                = 0;
-    smoothing               = 0;
-    vga_porch_flash         = 0;
-    png_screenshots         = 1;
+    vsync                        = 1;
+    preserve_window_aspect_ratio = 1;
+    max_fps                      = 35; uncapped_fps = 1;
+    show_fps                     = 0;
+    smoothing                    = 0;
+    vga_porch_flash              = 0;
+    png_screenshots              = 1;
 
     // Display
     screenblocks           = 10;
@@ -6224,7 +6224,7 @@ boolean MN_Responder(event_t * event)
             slottextloaded = false; //reload the slot text, when needed
             return true;
         }
-        else if (BK_isKeyDown(event, bk_detail))         // F5 (suicide)
+        else if (BK_isKeyDown(event, bk_suicide))         // F5 (suicide)
         {
             // [JN] Allow to invoke only in game level state,
             // and only if player is alive.
@@ -6235,6 +6235,13 @@ boolean MN_Responder(event_t * event)
                 askforquit = true;
                 typeofask = 5;  // suicide
             }
+            return true;
+        }
+        else if (BK_isKeyDown(event, bk_detail))         // detail
+        {
+            // [JN] Restored variable detail mode.
+            M_RD_Detail();
+            S_StartSound(NULL, SFX_DOOR_LIGHT_CLOSE);
             return true;
         }
         else if (BK_isKeyDown(event, bk_qsave))          // F6 (quicksave)

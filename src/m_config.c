@@ -508,7 +508,7 @@ static default_t defaults_list[] =
 
     // Rendering
     CONFIG_VARIABLE_INT(vsync),
-    CONFIG_VARIABLE_INT(aspect_ratio_correct),
+    CONFIG_VARIABLE_INT(preserve_window_aspect_ratio),
     CONFIG_VARIABLE_INT(uncapped_fps),
     CONFIG_VARIABLE_INT(show_fps),
     CONFIG_VARIABLE_INT(smoothing),

@@ -113,6 +113,7 @@ typedef enum
     bk_pause,
     bk_finish_demo,
     bk_demo_speed, // [crispy] demo fast-forward
+    bk_suicide,
 
     // Toggles
     bk_toggle_crosshair,

@@ -60,7 +60,7 @@ extern int actualheight;
 
 void I_DrawBlackBorders (void);
 
-// Screen height used when aspect_ratio_correct=true.
+// Screen height used when preserve_window_aspect_ratio=true.
 
 #define SCREENHEIGHT_4_3 (240 << hires)
 
@@ -136,7 +136,7 @@ extern byte *I_VideoBuffer;
 extern int screen_width;
 extern int screen_height;
 extern int fullscreen;
-extern int aspect_ratio_correct;
+extern int preserve_window_aspect_ratio;
 extern int smoothing;
 extern int vga_porch_flash;
 extern int force_software_renderer;

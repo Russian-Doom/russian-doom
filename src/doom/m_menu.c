@@ -1892,7 +1892,7 @@ static void M_RD_Draw_Rendering_2 (void)
         RD_M_DrawTextSmallENG(window_ontop ? "on" : "off", 139 + wide_delta, 65, CR_NONE);
 
         // Preserve window aspect ratio
-        RD_M_DrawTextSmallENG(aspect_ratio_correct ? "on" : "off", 246 + wide_delta, 75, CR_NONE);
+        RD_M_DrawTextSmallENG(preserve_window_aspect_ratio ? "on" : "off", 246 + wide_delta, 75, CR_NONE);
 
         // Show disk icon
         RD_M_DrawTextSmallENG(show_diskicon == 1 ? "bottom" :
@@ -1946,7 +1946,7 @@ static void M_RD_Draw_Rendering_2 (void)
         RD_M_DrawTextSmallRUS(window_ontop ? "drk" : "dsrk", 182 + wide_delta, 65, CR_NONE);
 
         // Пропорции окна
-        RD_M_DrawTextSmallRUS(aspect_ratio_correct  ? "abrcbhjdfyyst" : "cdj,jlyst", 152 + wide_delta, 75, CR_NONE);
+        RD_M_DrawTextSmallRUS(preserve_window_aspect_ratio  ? "abrcbhjdfyyst" : "cdj,jlyst", 152 + wide_delta, 75, CR_NONE);
 
         // Отображать значок дискеты
         RD_M_DrawTextSmallRUS(show_diskicon == 1 ? "cybpe" :
@@ -2152,7 +2152,7 @@ static void M_RD_Change_AlwaysOnTop()
 
 static void M_RD_Change_WindowAspectRatio()
 {
-    aspect_ratio_correct ^= 1;
+    preserve_window_aspect_ratio ^= 1;
     
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
 }
@@ -6138,16 +6138,16 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     static char resetmsg[24];
 
     // Rendering
-    vsync                   = 1;
-    aspect_ratio_correct    = 1;
-    max_fps                 = 200; uncapped_fps = 1;
-    show_fps                = 0;
-    smoothing               = 0;
-    vga_porch_flash         = 0;
-    smoothlight             = 1;
-    show_diskicon           = 1;
-    screen_wiping           = 1;
-    png_screenshots         = 1;
+    vsync                        = 1;
+    preserve_window_aspect_ratio = 1;
+    max_fps                      = 200; uncapped_fps = 1;
+    show_fps                     = 0;
+    smoothing                    = 0;
+    vga_porch_flash              = 0;
+    smoothlight                  = 1;
+    show_diskicon                = 1;
+    screen_wiping                = 1;
+    png_screenshots              = 1;
 
     // Display
     screenblocks          = 10;
@@ -6332,16 +6332,16 @@ static void M_RD_BackToDefaults_Original(int choice)
     static char resetmsg[24];
 
     // Rendering
-    vsync                   = 1;
-    aspect_ratio_correct    = 1;
-    max_fps                 = 35; uncapped_fps = 0;
-    show_fps                = 0;
-    smoothing               = 0;
-    vga_porch_flash         = 0;
-    smoothlight             = 0;
-    show_diskicon           = 1;
-    screen_wiping           = 1;
-    png_screenshots         = 1;
+    vsync                        = 1;
+    preserve_window_aspect_ratio = 1;
+    max_fps                      = 35; uncapped_fps = 0;
+    show_fps                     = 0;
+    smoothing                    = 0;
+    vga_porch_flash              = 0;
+    smoothlight                  = 0;
+    show_diskicon                = 1;
+    screen_wiping                = 1;
+    png_screenshots              = 1;
 
     // Display
     screenblocks          = 10;
