@@ -1956,6 +1956,8 @@ void ST_WidgetsDrawer (void)
 
     if (stats_placement)
     {
+        const int j = gamemission == jaguar ? 8 : 0;
+
         // Level stats / Frags (in deathmatch):
         if (!deathmatch)
         {
@@ -1971,7 +1973,7 @@ void ST_WidgetsDrawer (void)
                 {
                     sprintf(str1, "K ");
                     dp_translation = cr_title_color;
-                    RD_M_DrawTextA(str1, wide_4_3, 159 - map_active);
+                    RD_M_DrawTextA(str1, wide_4_3, 159 - j - map_active);
                     dp_translation = NULL;
 
                     sprintf(str2, plyr->extrakillcount ? "%d+%d/%d " : "%d/%d ",
@@ -1984,21 +1986,21 @@ void ST_WidgetsDrawer (void)
                                      plyr->killcount == 0 ? cr[CR_RED] :
                                      plyr->killcount < totalkills ? cr[CR_YELLOW] : cr[CR_GREEN];
 
-                    RD_M_DrawTextA(str2, wide_4_3 + StringWidth(str1), 159 - map_active);
+                    RD_M_DrawTextA(str2, wide_4_3 + StringWidth(str1), 159 - j - map_active);
 
                     dp_translation = NULL;
                 }
                 else
                 {
                     sprintf(str1, "D ");
-                    RD_M_DrawTextSmallRUS(str1, wide_4_3, 159 - map_active, tr_title_color);
+                    RD_M_DrawTextSmallRUS(str1, wide_4_3, 159 - j - map_active, tr_title_color);
 
                     sprintf(str2, plyr->extrakillcount ? "%d+%d*%d " : "%d*%d ",
                                   plyr->killcount,
                                   plyr->extrakillcount ? plyr->extrakillcount : totalkills,
                                   totalkills);
 
-                    RD_M_DrawTextSmallRUS(str2, wide_4_3 + StringWidth(str1), 159 - map_active,
+                    RD_M_DrawTextSmallRUS(str2, wide_4_3 + StringWidth(str1), 159 - j - map_active,
                                           stats_color == 0 ? CR_NONE :
                                           totalkills == 0 ? CR_GREEN :
                                           plyr->killcount == 0 ? CR_RED :
@@ -2011,7 +2013,7 @@ void ST_WidgetsDrawer (void)
                     sprintf(str3, "I ");
                     dp_translation = cr_title_color;
                     RD_M_DrawTextA(str3, wide_4_3 + StringWidth(str1)
-                                                  + StringWidth(str2), 159 - map_active);
+                                                  + StringWidth(str2), 159 - j - map_active);
                     dp_translation = NULL;
 
                     sprintf(str4, "%d/%d ", plyr->itemcount, totalitems);
@@ -2023,7 +2025,7 @@ void ST_WidgetsDrawer (void)
                     
                     RD_M_DrawTextA(str4, wide_4_3 + StringWidth(str1)
                                                   + StringWidth(str2)
-                                                  + StringWidth(str3), 159 - map_active);
+                                                  + StringWidth(str3), 159 - j - map_active);
 
                     dp_translation = NULL;
                 }
@@ -2031,13 +2033,13 @@ void ST_WidgetsDrawer (void)
                 {
                     sprintf(str3, "G ");
                     RD_M_DrawTextSmallRUS(str3, wide_4_3 + StringWidth(str1)
-                                                         + StringWidth(str2), 159 - map_active, tr_title_color);
+                                                         + StringWidth(str2), 159 - j - map_active, tr_title_color);
 
                     sprintf(str4, "%d*%d ", plyr->itemcount, totalitems);
 
                     RD_M_DrawTextSmallRUS(str4, wide_4_3 + StringWidth(str1)
                                                          + StringWidth(str2)
-                                                         + StringWidth(str3), 159 - map_active,
+                                                         + StringWidth(str3), 159 - j - map_active,
                                                          stats_color == 0 ? CR_NONE :
                                                          totalitems == 0 ? CR_GREEN :
                                                          plyr->itemcount == 0 ? CR_RED :
@@ -2052,7 +2054,7 @@ void ST_WidgetsDrawer (void)
                     RD_M_DrawTextA(str5, wide_4_3 + StringWidth(str1)
                                                   + StringWidth(str2)
                                                   + StringWidth(str3)
-                                                  + StringWidth(str4), 159 - map_active);
+                                                  + StringWidth(str4), 159 - j - map_active);
                     dp_translation = NULL;
 
                     sprintf(str6, "%d/%d ", plyr->secretcount, totalsecret);
@@ -2066,7 +2068,7 @@ void ST_WidgetsDrawer (void)
                                                   + StringWidth(str2)
                                                   + StringWidth(str3)
                                                   + StringWidth(str4)
-                                                  + StringWidth(str5), 159 - map_active);
+                                                  + StringWidth(str5), 159 - j - map_active);
                     dp_translation = NULL;
                 }
                 else
@@ -2075,7 +2077,7 @@ void ST_WidgetsDrawer (void)
                     RD_M_DrawTextSmallRUS(str5, wide_4_3 + StringWidth(str1)
                                                          + StringWidth(str2)
                                                          + StringWidth(str3)
-                                                         + StringWidth(str4), 159 - map_active, tr_title_color);
+                                                         + StringWidth(str4), 159 - j - map_active, tr_title_color);
 
                     sprintf(str6, "%d*%d ", plyr->secretcount, totalsecret);
 
@@ -2083,7 +2085,7 @@ void ST_WidgetsDrawer (void)
                                                          + StringWidth(str2)
                                                          + StringWidth(str3)
                                                          + StringWidth(str4)
-                                                         + StringWidth(str5), 159 - map_active,
+                                                         + StringWidth(str5), 159 - j - map_active,
                                                          stats_color == 0 ? CR_NONE :
                                                          totalsecret == 0 ? CR_GREEN :
                                                          plyr->secretcount == 0 ? CR_RED :
@@ -2102,7 +2104,7 @@ void ST_WidgetsDrawer (void)
                                                       + StringWidth(str3)
                                                       + StringWidth(str4)
                                                       + StringWidth(str5)
-                                                      + StringWidth(str6), 159 - map_active);
+                                                      + StringWidth(str6), 159 - j - map_active);
                         dp_translation = NULL;
                     }
                     else
@@ -2113,7 +2115,7 @@ void ST_WidgetsDrawer (void)
                                                              + StringWidth(str3)
                                                              + StringWidth(str4)
                                                              + StringWidth(str5)
-                                                             + StringWidth(str6), 159 - map_active, tr_title_color);
+                                                             + StringWidth(str6), 159 - j - map_active, tr_title_color);
                     }
 
                     sprintf(str8, "%d", gameskill + 1);
@@ -2124,7 +2126,7 @@ void ST_WidgetsDrawer (void)
                                                   + StringWidth(str4)
                                                   + StringWidth(str5)
                                                   + StringWidth(str6)
-                                                  + StringWidth(str7), 159 - map_active);
+                                                  + StringWidth(str7), 159 - j - map_active);
                     dp_translation = NULL;
                 }
             }
@@ -2140,10 +2142,10 @@ void ST_WidgetsDrawer (void)
             {
                 sprintf(str1, "G ");
                 dp_translation = stats_color == 0 ? NULL : cr[CR_GREEN];
-                RD_M_DrawTextA(str1, wide_4_3, 159 - map_active);
+                RD_M_DrawTextA(str1, wide_4_3, 159 - j - map_active);
                 
                 sprintf(str2, "%d ", ST_UpdateFragsCounter(0, true));
-                RD_M_DrawTextA(str2, wide_4_3 + StringWidth(str1), 159 - map_active);
+                RD_M_DrawTextA(str2, wide_4_3 + StringWidth(str1), 159 - j - map_active);
                 dp_translation = NULL;
             }
 
@@ -2152,12 +2154,12 @@ void ST_WidgetsDrawer (void)
                 sprintf(str3, "I ");
                 dp_translation = stats_color == 0 ? NULL : cr[CR_DARKGRAY];
                 RD_M_DrawTextA(str3, wide_4_3 + StringWidth(str1)
-                                              + StringWidth(str2), 159 - map_active);
+                                              + StringWidth(str2), 159 - j - map_active);
                 
                 sprintf(str4, "%d ", ST_UpdateFragsCounter(1, true));
                 RD_M_DrawTextA(str4, wide_4_3 + StringWidth(str1)
                                               + StringWidth(str2)
-                                              + StringWidth(str3), 159 - map_active);
+                                              + StringWidth(str3), 159 - j - map_active);
                 dp_translation = NULL;
             }
 
@@ -2168,14 +2170,14 @@ void ST_WidgetsDrawer (void)
                 RD_M_DrawTextA(str5, wide_4_3 + StringWidth(str1)
                                               + StringWidth(str2)
                                               + StringWidth(str3)
-                                              + StringWidth(str4), 159 - map_active);
+                                              + StringWidth(str4), 159 - j - map_active);
                 
                 sprintf(str6, "%d ", ST_UpdateFragsCounter(2, true));
                 RD_M_DrawTextA(str6, wide_4_3 + StringWidth(str1)
                                               + StringWidth(str2)
                                               + StringWidth(str3)
                                               + StringWidth(str4)
-                                              + StringWidth(str5), 159 - map_active);
+                                              + StringWidth(str5), 159 - j - map_active);
                 dp_translation = NULL;
             }
 
@@ -2188,7 +2190,7 @@ void ST_WidgetsDrawer (void)
                                               + StringWidth(str3)
                                               + StringWidth(str4)
                                               + StringWidth(str5)
-                                              + StringWidth(str6), 159 - map_active);
+                                              + StringWidth(str6), 159 - j - map_active);
                 
                 sprintf(str8, "%d ", ST_UpdateFragsCounter(3, true));
                 RD_M_DrawTextA(str8, wide_4_3 + StringWidth(str1)
@@ -2197,7 +2199,7 @@ void ST_WidgetsDrawer (void)
                                               + StringWidth(str4)
                                               + StringWidth(str5)
                                               + StringWidth(str6)
-                                              + StringWidth(str7), 159 - map_active);
+                                              + StringWidth(str7), 159 - j - map_active);
                 dp_translation = NULL;
             }
         }
@@ -2212,18 +2214,18 @@ void ST_WidgetsDrawer (void)
             if (english_language)
             {
                 dp_translation = cr_title_color;
-                RD_M_DrawTextA(levelTimer ? "TIMER" : "LEVEL", wide_4_3, 150 - map_active);
+                RD_M_DrawTextA(levelTimer ? "TIMER" : "LEVEL", wide_4_3, 150 - j - map_active);
                 dp_translation = NULL;
             }
             else
             {
-                RD_M_DrawTextSmallRUS(levelTimer ? "NFQVTH" : "EHJDTYM", wide_4_3, 150 - map_active, tr_title_color);
+                RD_M_DrawTextSmallRUS(levelTimer ? "NFQVTH" : "EHJDTYM", wide_4_3, 150 - j - map_active, tr_title_color);
             }
 
             sprintf(str, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
 
             dp_translation = cr_item_color;
-            RD_M_DrawTextA(str, wide_4_3 + x_shift, 150 - map_active);
+            RD_M_DrawTextA(str, wide_4_3 + x_shift, 150 - j - map_active);
             dp_translation = NULL;
         }
 
@@ -2239,19 +2241,19 @@ void ST_WidgetsDrawer (void)
             {
                 dp_translation = cr_title_color;
                 sprintf(str1, "TOTAL ");
-                RD_M_DrawTextA(str1, wide_4_3, 141 - map_active);
+                RD_M_DrawTextA(str1, wide_4_3, 141 - j - map_active);
                 dp_translation = NULL;
             }
             else
             {
                 sprintf(str1, "J,OTT ");
-                RD_M_DrawTextSmallRUS(str1, wide_4_3, 141 - map_active, tr_title_color);
+                RD_M_DrawTextSmallRUS(str1, wide_4_3, 141 - j - map_active, tr_title_color);
             }
 
             sprintf(str2, "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
 
             dp_translation = cr_item_color;
-            RD_M_DrawTextA(str2, wide_4_3 + x_shift, 141 - map_active);
+            RD_M_DrawTextA(str2, wide_4_3 + x_shift, 141 - j - map_active);
             dp_translation = NULL;
         }
     }
