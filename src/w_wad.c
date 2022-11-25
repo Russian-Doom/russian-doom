@@ -326,6 +326,44 @@ lumpindex_t W_CheckNumForName(char* name)
     return -1;
 }
 
+lumpindex_t W_CheckNumForNameRevers(char* name)
+{
+    lumpindex_t i;
+
+    // Do we have a hash table yet?
+    if(lumphash != NULL)
+    {
+        // We do! Excellent.
+        int hash = W_LumpNameHash(name) % numlumps;
+        lumpindex_t lastFound = -1;
+
+        for(i = lumphash[hash]; i != -1; i = lumpinfo[i]->next)
+        {
+            if(!strncasecmp(lumpinfo[i]->name, name, 8))
+            {
+                lastFound = i;
+            }
+        }
+        return lastFound;
+    }
+    else
+    {
+        // We don't have a hash table generate yet. Linear search :-(
+        //
+        // Scan forwards to find original lump
+        for(i = 0; i < numlumps; i++)
+        {
+            if(!strncasecmp(lumpinfo[i]->name, name, 8))
+            {
+                return i;
+            }
+        }
+    }
+
+    // TFB. Not found.
+    return -1;
+}
+
 //
 // W_CheckMultipleLumps
 // Check if there's more than one of the same lump.
@@ -362,6 +400,21 @@ lumpindex_t W_GetNumForName(char* name)
                  name);
     }
  
+    return i;
+}
+
+lumpindex_t W_GetNumForNameRevers(char* name)
+{
+    lumpindex_t i = W_CheckNumForNameRevers(name);
+
+    if(i < 0)
+    {
+        I_Error(english_language ?
+                "W_GetNumForName: %s not found!" :
+                "W_GetNumForName: %s не обнаружен!",
+                name);
+    }
+
     return i;
 }
 
