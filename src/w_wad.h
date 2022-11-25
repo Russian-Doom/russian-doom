@@ -57,7 +57,18 @@ wad_file_t *W_AddFile(char *filename);
 void W_Reload(void);
 
 lumpindex_t W_CheckNumForName(char *name);
+
+/**
+ * Search for lump in reverse order relative to W_CheckNumForName i.e. find firstly loaded lump with given name.
+ * @Returns lump index or -1 if name not found.
+ */
+lumpindex_t W_CheckNumForNameRevers(char *name);
 lumpindex_t W_GetNumForName(char *name);
+
+/**
+ * Calls W_CheckNumForNameRevers, but bombs out if not found.
+ */
+lumpindex_t W_GetNumForNameRevers(char *name);
 lumpindex_t W_CheckNumForNameFromTo(const char *name, int from, int to);
 
 int W_LumpLength(lumpindex_t lump);
