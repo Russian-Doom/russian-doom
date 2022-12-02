@@ -692,6 +692,7 @@ void P_MobjThinker (mobj_t *mobj)
         mobj->oldy = mobj->y;
         mobj->oldz = mobj->z;
         mobj->oldangle = mobj->angle;
+        mobj->old_float_z = mobj->float_z;
     }
 
     // momentum movement
@@ -717,18 +718,18 @@ void P_MobjThinker (mobj_t *mobj)
         }
     }
 
-    // [JN] Activation of floating items
-    if (singleplayer && floating_powerups && !strict_mode && !vanillaparm
+    // [JN] Set amplitude of floating powerups:
+    if (floating_powerups && !vanillaparm
     && (mobj->type == MT_MEGA       // Megasphere
     ||  mobj->type == MT_MISC12     // Supercharge
     ||  mobj->type == MT_INV        // Invulnerability
     ||  mobj->type == MT_INS))      // Partial invisibility
     {
-        mobj->z = mobj->floorz 
-                + (floating_powerups == 1 ? FloatBobOffsetsS :  // Low amplitude
-                   floating_powerups == 2 ? FloatBobOffsetsM :  // Middle amplitude
-                                            FloatBobOffsetsB)   // High amplitude
-                                            [(mobj->health++) & 63];
+        mobj->float_z = mobj->floorz 
+                      + (floating_powerups == 1 ? FloatBobOffsetsS :  // Low amplitude
+                         floating_powerups == 2 ? FloatBobOffsetsM :  // Middle amplitude
+                                                  FloatBobOffsetsB)   // High amplitude
+                                                  [(mobj->health++) & 63];
     }
 
     // [JN] killough 9/12/98: objects fall off ledges if they are hanging off

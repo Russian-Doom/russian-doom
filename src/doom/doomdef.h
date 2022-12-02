@@ -557,6 +557,10 @@ typedef struct mobj_s
     fixed_t oldz;
     angle_t oldangle;
 
+    // [JN] Amplitude of floating powerups, used *only* while rendering.
+    fixed_t     float_z;
+    fixed_t old_float_z;
+
     // [JN] Animated brightmaps.
     int     bmap_flick;
     int     bmap_glow;

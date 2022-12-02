@@ -570,6 +570,23 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
         interpangle = thing->angle;
     }
 
+    // [JN] Apply amplitude to floating powerups:
+    if (floating_powerups && !vanillaparm
+    && (thing->type == MT_MEGA       // Megasphere
+    ||  thing->type == MT_MISC12     // Supercharge
+    ||  thing->type == MT_INV        // Invulnerability
+    ||  thing->type == MT_INS))      // Partial invisibility
+    {
+        if (leveltime > oldleveltime)
+        {
+            interpz = thing->old_float_z + FixedMul(thing->float_z - thing->old_float_z, fractionaltic);
+        }
+        else
+        {
+            interpz = thing->float_z;
+        }
+    }
+
     // transform the origin point
     tr_x = interpx - viewx;
     tr_y = interpy - viewy;
