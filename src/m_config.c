@@ -382,6 +382,14 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(mouse_threshold),
 
     //!
+    // Sound output sample rate, in Hz.
+    // Typical values to use are
+    // 11025, 22050, 44100 and 48000.
+    //
+
+    CONFIG_VARIABLE_INT(snd_samplerate),
+
+    //!
     // Maximum number of bytes to allocate for caching converted sound
     // effects in memory. If set to zero, there is no limit applied.
     //

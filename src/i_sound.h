@@ -228,7 +228,7 @@ boolean I_MusicIsPlaying(void);
 
 extern int snd_sfxdevice;
 extern int snd_musicdevice;
-extern int const snd_samplerate;
+extern int snd_samplerate;
 extern int snd_cachesize;
 extern int snd_maxslicetime_ms;
 extern char *snd_musiccmd;

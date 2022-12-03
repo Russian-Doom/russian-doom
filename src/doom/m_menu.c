@@ -218,6 +218,7 @@ static void M_RD_Change_SfxChannels(Direction_t direction);
 static void M_RD_Draw_Audio_System();
 static void M_RD_Change_SoundDevice(Direction_t direction);
 static void M_RD_Change_MusicDevice(Direction_t direction);
+static void M_RD_Change_Sampling(Direction_t direction);
 static void M_RD_Change_SndMode();
 static void M_RD_Change_PitchShifting();
 static void M_RD_Change_MuteInactive();
@@ -892,6 +893,8 @@ static MenuItem_t SoundSysItems[] = {
     I_TITLE( "sound system",          "pderjdfz cbcntvf"), // ЗВУКОВАЯ СИСТЕМА
     I_LRFUNC("sound effects:",        "pderjdst \'aatrns:",         M_RD_Change_SoundDevice), // Звуковые эффекты
     I_LRFUNC("music:",                "vepsrf:",                    M_RD_Change_MusicDevice), // Музыка
+    I_TITLE( "quality",               "rfxtcndj pdexfybz"), // Качество звучания
+    I_LRFUNC("sampling frequency:",   "xfcnjnf lbcrhtnbpfwbb:",     M_RD_Change_Sampling), // Частота дискретизации
     I_TITLE( "Miscellaneous",         "hfpyjt"), // Разное
     I_SWITCH("speaker test",          "ntcn pderjds[ rfyfkjd",      M_RD_SpeakerTest), // Тест звуковых каналов
     I_SWITCH("sound effects mode:",   "Ht;bv pderjds[ \'aatrnjd:",  M_RD_Change_SndMode), // Режим звуковых эффектов
@@ -3143,6 +3146,8 @@ static void M_RD_Change_SfxChannels(Direction_t direction)
 
 static void M_RD_Draw_Audio_System(void)
 {
+    static char snd_frequency[16];
+
     if (english_language)
     {
         // Sound effects
@@ -3182,14 +3187,18 @@ static void M_RD_Draw_Audio_System(void)
             RD_M_DrawTextSmallENG("MIDI/MP3/OGG/FLAC/TRACKER", 79 + wide_delta, 45, CR_NONE);
         }
 
+        // Sampling frequency
+        sprintf(snd_frequency, "%d HZ", snd_samplerate);
+        RD_M_DrawTextSmallENG(snd_frequency, 179 + wide_delta, 65, CR_NONE);
+
         // Sfx mode
-        RD_M_DrawTextSmallENG(snd_monomode ? "mono" : "stereo", 178 + wide_delta, 75, CR_NONE);
+        RD_M_DrawTextSmallENG(snd_monomode ? "mono" : "stereo", 178 + wide_delta, 95, CR_NONE);
 
         // Pitch-shifted sounds
-        RD_M_DrawTextSmallENG(snd_pitchshift ? "on" : "off", 186 + wide_delta, 85, CR_NONE);
+        RD_M_DrawTextSmallENG(snd_pitchshift ? "on" : "off", 186 + wide_delta, 105, CR_NONE);
 
         // Mute inactive window
-        RD_M_DrawTextSmallENG(mute_inactive_window ? "on" : "off", 185 + wide_delta, 95, CR_NONE);
+        RD_M_DrawTextSmallENG(mute_inactive_window ? "on" : "off", 185 + wide_delta, 115, CR_NONE);
     }
     else
     {
@@ -3239,14 +3248,18 @@ static void M_RD_Draw_Audio_System(void)
             RD_M_DrawTextSmallENG("MIDI/MP3/OGG/FLAC/TRACKER", 94 + wide_delta, 45, CR_NONE);
         }
 
+        // Частота дискретизации (ГЦ)
+        sprintf(snd_frequency, "%d UW", snd_samplerate);
+        RD_M_DrawTextSmallRUS(snd_frequency, 208 + wide_delta, 65, CR_NONE);
+
         // Режим звука
-        RD_M_DrawTextSmallRUS(snd_monomode ? "vjyj" : "cnthtj", 231 + wide_delta, 75, CR_NONE);
+        RD_M_DrawTextSmallRUS(snd_monomode ? "vjyj" : "cnthtj", 231 + wide_delta, 95, CR_NONE);
 
         // Произвольный питч-шифтинг
-        RD_M_DrawTextSmallRUS(snd_pitchshift ? "drk" : "dsrk", 242 + wide_delta, 85, CR_NONE);
+        RD_M_DrawTextSmallRUS(snd_pitchshift ? "drk" : "dsrk", 242 + wide_delta, 105, CR_NONE);
 
         // Звук в неактивном окне
-        RD_M_DrawTextSmallRUS(mute_inactive_window ? "dsrk" : "drk", 208 + wide_delta, 95, CR_NONE);
+        RD_M_DrawTextSmallRUS(mute_inactive_window ? "dsrk" : "drk", 208 + wide_delta, 115, CR_NONE);
     }
 
     // [JN] Speaker test routine.
@@ -3433,6 +3446,29 @@ static void M_RD_Change_MusicDevice(Direction_t direction)
 
     // Reinitialize music volume
     S_SetMusicVolume(musicVolume);
+
+    // Restart current music
+    S_ChangeMusic(music_num_rd, true);
+
+    RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
+}
+
+static void M_RD_Change_Sampling(Direction_t direction)
+{
+    RD_Menu_ShiftSpinInt(&snd_samplerate, 11025, 44100, direction);
+
+    // Shut down current music
+    S_StopMusic();
+
+    // Free all sound channels/usefulness
+    S_RD_Change_SoundDevice();
+
+    // Shut down sound/music system
+    I_ShutdownSound();
+
+    // Start sound/music system
+	I_InitSound(true);
+	S_Init (sfxVolume * 8, musicVolume);
 
     // Restart current music
     S_ChangeMusic(music_num_rd, true);
@@ -6192,6 +6228,7 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     stats_color        = 1;
 
     // Audio
+    snd_samplerate = 44100;
     snd_sfxdevice        = 3;
         I_ShutdownSound();                  // Shut down sound system
         InitSfxModule(snd_sfxdevice);       // Reinitialize SFX module
@@ -6386,6 +6423,7 @@ static void M_RD_BackToDefaults_Original(int choice)
     stats_color        = 0;
 
     // Audio
+    snd_samplerate = 44100;
     snd_sfxdevice        = 3;
         I_ShutdownSound();                  // Shut down sound system
         InitSfxModule(snd_sfxdevice);       // Reinitialize SFX module

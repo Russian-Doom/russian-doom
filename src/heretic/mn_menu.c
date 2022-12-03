@@ -148,6 +148,7 @@ static void M_RD_SfxChannels(Direction_t direction);
 static void DrawSoundSystemMenu(void);
 static void M_RD_SoundDevice();
 static void M_RD_MusicDevice(Direction_t direction);
+static void M_RD_Sampling(Direction_t direction);
 static void M_RD_SndMode();
 static void M_RD_PitchShifting();
 static void M_RD_MuteInactive();
@@ -780,6 +781,8 @@ static MenuItem_t SoundSysItems[] = {
     I_TITLE( "SOUND SYSTEM",          "PDERJDFZ CBCNTVF"), // ЗВУКВАЯ СИСТЕМА
     I_SWITCH("SOUND EFFECTS:",        "PDERJDST \'AATRNS:",         M_RD_SoundDevice), // ЗВУКОВЫЕ ЭФФЕКТЫ:
     I_LRFUNC("MUSIC:",                "VEPSRF:",                    M_RD_MusicDevice), // МУЗЫКА:
+    I_TITLE( "QUALITY",               "RFXTCNDJ PDEXFYBZ"), // КАЧЕСТВО ЗВУЧАНИЯ
+    I_LRFUNC("SAMPLING FREQUENCY:",   "XFCNJNF LBCRHTNBPFWBB:",     M_RD_Sampling), // ЧАСТОТА ДИСКРЕТИЗАЦИИ:
     I_TITLE( "MISCELLANEOUS",         "HFPYJT"), // РАЗНОЕ
     I_LRFUNC("SPEAKER TEST",          "NTCN PDERJDS[ RFYFKJD",      M_RD_SpeakerTest), // ТЕСТ ЗВУКОВЫХ КАНАЛОВ
     I_SWITCH("SOUND EFFECTS MODE:",   "HT;BV PDERJDS[ \'AATRNJD:",  M_RD_SndMode), // РЕЖИМ ЗВУКОВЫХ ЭФФЕКТОВ
@@ -3256,17 +3259,31 @@ static void DrawSoundSystemMenu(void)
             RD_M_DrawTextSmallENG("MIDI/MP3/OGG/FLAC", 80 + wide_delta, 52, CR_NONE);
         }
 
+        // Sampling frequency (hz)
+        if (snd_samplerate == 44100)
+        {
+            RD_M_DrawTextSmallENG("44100 HZ", 178 + wide_delta, 72, CR_NONE);
+        }
+        else if (snd_samplerate == 22050)
+        {
+            RD_M_DrawTextSmallENG("22050 HZ", 178 + wide_delta, 72, CR_NONE);
+        }
+        else if (snd_samplerate == 11025)
+        {
+            RD_M_DrawTextSmallENG("11025 HZ", 178 + wide_delta, 72, CR_NONE);
+        }
+
         // SFX Mode
-        RD_M_DrawTextSmallENG(snd_monomode ? "MONO" : "STEREO", 181 + wide_delta, 82, CR_NONE);
+        RD_M_DrawTextSmallENG(snd_monomode ? "MONO" : "STEREO", 181 + wide_delta, 102, CR_NONE);
 
         // Pitch-Shifted sounds
-        RD_M_DrawTextSmallENG(snd_pitchshift ? "ON" : "OFF", 189 + wide_delta, 92, CR_NONE);
+        RD_M_DrawTextSmallENG(snd_pitchshift ? "ON" : "OFF", 189 + wide_delta, 112, CR_NONE);
 
         // Mute inactive window
-        RD_M_DrawTextSmallENG(mute_inactive_window ? "ON" : "OFF", 184 + wide_delta, 102, CR_NONE);
+        RD_M_DrawTextSmallENG(mute_inactive_window ? "ON" : "OFF", 184 + wide_delta, 122, CR_NONE);
 
         // Informative message:
-        if (CurrentItPos == 1 || CurrentItPos == 2)
+        if (CurrentItPos == 1 || CurrentItPos == 2 || CurrentItPos == 4)
         {
             RD_M_DrawTextSmallENG("CHANGING WILL REQUIRE RESTART OF THE PROGRAM",
                                   3 + wide_delta, 132, CR_GREEN);
@@ -3316,17 +3333,31 @@ static void DrawSoundSystemMenu(void)
             RD_M_DrawTextSmallENG("MIDI/MP3/OGG/FLAC", 91 + wide_delta, 52, CR_NONE);
         }
 
+        // Частота дискретизации (гц)
+        if (snd_samplerate == 44100)
+        {
+            RD_M_DrawTextSmallRUS("44100 UW", 200 + wide_delta, 72, CR_NONE);
+        }
+        else if (snd_samplerate == 22050)
+        {
+            RD_M_DrawTextSmallRUS("22050 UW", 200 + wide_delta, 72, CR_NONE);
+        }
+        else if (snd_samplerate == 11025)
+        {
+            RD_M_DrawTextSmallRUS("11025 UW", 200 + wide_delta, 72, CR_NONE);
+        }
+
         // Режим звуковых эффектов
-        RD_M_DrawTextSmallRUS(snd_monomode ? "VJYJ" : "CNTHTJ", 226 + wide_delta, 82, CR_NONE);
+        RD_M_DrawTextSmallRUS(snd_monomode ? "VJYJ" : "CNTHTJ", 226 + wide_delta, 102, CR_NONE);
 
         // Произвольный питч-шифтинг
-        RD_M_DrawTextSmallRUS(snd_pitchshift ? "DRK" : "DSRK", 230 + wide_delta, 92, CR_NONE);
+        RD_M_DrawTextSmallRUS(snd_pitchshift ? "DRK" : "DSRK", 230 + wide_delta, 112, CR_NONE);
 
         // Звук в неактивном окне
-        RD_M_DrawTextSmallRUS(mute_inactive_window ? "DSRK" : "DRK", 201 + wide_delta, 102, CR_NONE);
+        RD_M_DrawTextSmallRUS(mute_inactive_window ? "DSRK" : "DRK", 201 + wide_delta, 122, CR_NONE);
 
         // Informative message: ИЗМЕНЕНИЕ ПОТРЕБУЕТ ПЕРЕЗАПУСК ПРОГРАММЫ
-        if (CurrentItPos == 1 || CurrentItPos == 2)
+        if (CurrentItPos == 1 || CurrentItPos == 2 || CurrentItPos == 4)
         {
             RD_M_DrawTextSmallRUS("BPVTYTYBT GJNHT,ETN GTHTPFGECR GHJUHFVVS",
                                   11 + wide_delta, 132, CR_GREEN);
@@ -3527,6 +3558,11 @@ static void M_RD_MusicDevice(Direction_t direction)
     // S_StartSong(mus_song, true, true);
 
     RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
+}
+
+static void M_RD_Sampling(Direction_t direction)
+{
+    RD_Menu_ShiftSpinInt(&snd_samplerate, 11025, 44100, direction);
 }
 
 static void M_RD_SndMode()
