@@ -31,9 +31,6 @@ For configuring and building International Doom,
 you **must** use the appropriate MSYS2 terminal (**mingw32.exe**, **mingw64.exe**, **clang32.exe**, **clang64.exe**)
 so that the $PATH environment variable points to the proper toolchain.
 
-You can also set up optional dependency - [libsamplerate](https://github.com/libsndfile/libsamplerate/releases).
-Download the corresponding package (win32 or win64) and unpack it to a known location.
-
 ### **1.a.a: MSYS2 GCC environment**
 
 For the **mingw-w64-i686** toolchain (**32**-bit), use the **MSYS MinGW 32-bit** start menu/screen shortcut
@@ -41,7 +38,7 @@ and for the **mingw-w64-x86_64** toolchain (**64**-bit), use the **MSYS MinGW 64
 
 Open the terminal and install dependencies using the following command:
 ```shell
-pacman -S mingw-w64-{i686,x86_64}-{pkgconf,gcc,make,cmake,SDL2{,_net,_mixer}} \
+pacman -S mingw-w64-{i686,x86_64}-{pkgconf,gcc,make,cmake,SDL2{,_net,_mixer},libsamplerate} \
        git
 ```
 
@@ -63,7 +60,7 @@ and for the **mingw-w64-clang-x86_64** toolchain (**64**-bit), use the **MSYS Mi
 
 Open the terminal and install dependencies using the following command:
 ```shell
-pacman -S mingw-w64-clang-{i686,x86_64}-{pkgconf,clang,make,cmake,SDL2{,_net,_mixer}} \
+pacman -S mingw-w64-clang-{i686,x86_64}-{pkgconf,clang,make,cmake,SDL2{,_net,_mixer},libsamplerate} \
        git
 ```
 
@@ -87,8 +84,6 @@ To configure the project, use the following command:
 cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE="Release" -S . -B build
 ```
 Available build types are `Release`, `Debug`, `RelWithDebInfo`, `MinSizeRel`.
-
-If you downloaded `libsamplerate` add `-D SAMPLERATE_DIR="<path to libsamplerate>"` to the cmake configuration command line.
 
 You can enable and disable the compilation of modules by changing cmake options:
 `COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE`, `COMPILE_SETUP`
