@@ -53,6 +53,10 @@
 // Follow a player exlusively for 3 seconds.
 #define	BASETHRESHOLD   100
 
+// [JN] Weapon positioning. Also used for centering while firing.
+#define WEAPONTOP       (32*FRACUNIT)
+#define WEAPONBOTTOM    (128*FRACUNIT)
+
 
 // -----------------------------------------------------------------------------
 // P_CEILNG

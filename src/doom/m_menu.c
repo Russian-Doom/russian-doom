@@ -337,7 +337,7 @@ static void M_RD_Change_Torque();
 static void M_RD_Change_SSGBlast();
 static void M_RD_Change_TossDrop();
 static void M_RD_Change_FloatPowerups(Direction_t direction);
-static void M_RD_Change_Bobbing();
+static void M_RD_Change_Bobbing(Direction_t direction);
 static void M_RD_Change_SecretNotify();
 static void M_RD_Change_InfraGreenVisor();
 static void M_RD_Change_HorizontalAiming();
@@ -1356,7 +1356,7 @@ static MenuItem_t Gameplay4Items[] = {
     I_SWITCH("Lethal pellet of a point-blank SSG:", "ldecndjkrf hfphsdftn dhfujd:",    M_RD_Change_SSGBlast), // Двустволка разрывает врагов
     I_SWITCH("Items are tossed when dropped:",      "Gjl,hfcsdfnm dsgfdibt ghtlvtns:", M_RD_Change_TossDrop), // Подбрасывать выпавшие предметы
     I_LRFUNC("Floating powerups amplitude:",        "gjrfxbdfybt cath-fhntafrnjd:",    M_RD_Change_FloatPowerups), // Покачивание сфер-артефактов
-    I_SWITCH("Weapon bobbing while firing:",        "Ekexityyjt gjrfxbdfybt jhe;bz:",  M_RD_Change_Bobbing), // Улучшенное покачивание оружия
+    I_LRFUNC("Weapon attack alignment:",            "jhe;bt ghb cnhtkm,t:",            M_RD_Change_Bobbing), // Оружие при стрельбе
     I_TITLE( "Tactical",                            "Nfrnbrf"), // Тактика
     I_SWITCH("Notify of revealed secrets:",         "Cjj,ofnm j yfqltyyjv nfqybrt:",   M_RD_Change_SecretNotify), // Сообщать о найденном тайнике
     I_SWITCH("Infragreen light amp. visor:",        "Byahfptktysq dbpjh jcdtotybz:",  M_RD_Change_InfraGreenVisor), // Инфразеленый визор освещения
@@ -4824,8 +4824,10 @@ static void M_RD_Draw_Gameplay_4(void)
                               floating_powerups == 3 ? "HIGH" : "OFF",
                               244 + wide_delta, 85, floating_powerups && !netgame ? CR_GREEN : CR_DARKRED);
 
-        // Weapon bobbing while firing
-        RD_M_DrawTextSmallENG(weapon_bobbing ? RD_ON : RD_OFF, 233 + wide_delta, 95,
+        // Weapon attack alignment
+        RD_M_DrawTextSmallENG(weapon_bobbing == 1 ? "BOBBING" :
+                              weapon_bobbing == 2 ? "CENTERED" : "ORIGINAL", 
+                              217 + wide_delta, 95,
                               weapon_bobbing ? CR_GREEN : CR_DARKRED);
 
         // Notify of revealed secrets
@@ -4923,8 +4925,10 @@ static void M_RD_Draw_Gameplay_4(void)
                               floating_powerups == 3 ? "CBKMYJT" : "DSRK",  // Сильное | Выкл
                               256 + wide_delta, 85, floating_powerups && !netgame ? CR_GREEN : CR_DARKRED);
 
-        // Улучшенное покачивание оружия
-        RD_M_DrawTextSmallRUS(weapon_bobbing ? RD_ON_RUS : RD_OFF_RUS, 271 + wide_delta, 95,
+        // Оружие при стрельбе
+        RD_M_DrawTextSmallRUS(weapon_bobbing == 1 ? "gjrfxbdftncz" :
+                              weapon_bobbing == 2 ? "wtynhbhetncz" : "cnfnbxyj", 
+                              191 + wide_delta, 95,
                               weapon_bobbing ? CR_GREEN : CR_DARKRED);
 
         // Сообщать о найденном тайнике
@@ -5377,9 +5381,9 @@ static void M_RD_Change_FloatPowerups(Direction_t direction)
     RD_Menu_SpinInt(&floating_powerups, 0, 3, direction);
 }
 
-static void M_RD_Change_Bobbing()
+static void M_RD_Change_Bobbing(Direction_t direction)
 {
-    weapon_bobbing ^= 1;
+    RD_Menu_SpinInt(&weapon_bobbing, 0, 2, direction);
 }
 
 //

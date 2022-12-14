@@ -30,8 +30,6 @@
 
 #define LOWERSPEED      FRACUNIT*6
 #define RAISESPEED      FRACUNIT*6
-#define WEAPONBOTTOM    128*FRACUNIT
-#define WEAPONTOP       32*FRACUNIT
 
 
 fixed_t bulletslope;

@@ -992,16 +992,26 @@ static void R_DrawPSprite (const pspdef_t *psp)
     lump = sprframe->lump[0];
     flip = (boolean)sprframe->flip[0] ^ flip_levels ^ flip_weapons;
 
+    // [JN] Weapon attack alignment. Common bobbing:
     if (weapon_bobbing && !vanillaparm)
     {
-        // [JN] Always apply bobbing for all states...
+        // Apply full bobbing to all states, except raising and lowering.
         if (state != winfo->downstate && state != winfo->upstate)
         {
-            R_ApplyWeaponBob(&psp_sx, true, &psp_sy, true);
+            if (weapon_bobbing == 2 && viewplayer->attackdown)
+            {
+                // Center weapon while firing.
+                psp_sx = FRACUNIT;
+                psp_sy = WEAPONTOP;
+            }
+            else
+            {
+                R_ApplyWeaponBob(&psp_sx, true, &psp_sy, true);
+            }
         }
-        // [JN] ...except X-bobbing only for raising and lowering states.
         else
         {
+            // Apply x-only bobbing to raising and lowering states.
             R_ApplyWeaponBob(&psp_sx, true, 0, false);
         }
 
