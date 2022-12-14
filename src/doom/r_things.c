@@ -1123,7 +1123,7 @@ static void R_DrawPSprite (const pspdef_t *psp)
     vis->brightmap = R_BrightmapForState(psp->state - states);
 	
     // [JN] Andrey Budko: interpolation for weapon bobbing
-    if (uncapped_fps && weapon_bobbing)
+    if (uncapped_fps)
     {
         typedef struct interpolate_s
         {
