@@ -22,6 +22,7 @@
 #include "deh_str.h"
 #include "i_swap.h"
 #include "i_system.h"
+#include "p_local.h"
 #include "r_local.h"
 #include "v_trans.h"
 #include "jn.h"
@@ -1084,7 +1085,16 @@ void R_DrawPSprite (const pspdef_t *psp)
         /* Firemace     */ state == S_MACEATK1_1     || state == S_MACEATK1_2     || state == S_MACEATK1_3     || state == S_MACEATK1_4     || state == S_MACEATK1_5     || state == S_MACEATK1_6     || state == S_MACEATK1_7     || state == S_MACEATK1_8 || state == S_MACEATK1_9 || state == S_MACEATK1_10 ||
         /* Firemace+    */ state == S_MACEATK2_1     || state == S_MACEATK2_2     || state == S_MACEATK2_3)
         {
-            R_ApplyWeaponFiringBob(&psp_sx, true, &psp_sy, true);
+            if (weapon_bobbing == 2 && viewplayer->attackdown)
+            {
+                // Center weapon while firing.
+                psp_sx = FRACUNIT;
+                psp_sy = WEAPONTOP;
+            }
+            else
+            {
+                R_ApplyWeaponFiringBob(&psp_sx, true, &psp_sy, true);
+            }
         }
 
         if (/* Gauntlets*/ state == S_GAUNTLETDOWN || state == S_GAUNTLETUP ||

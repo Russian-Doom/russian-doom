@@ -154,6 +154,10 @@ extern void P_Ticker (void);
 ================================================================================
 */
 
+// [JN] Weapon positioning. Also used for centering while firing.
+#define WEAPONBOTTOM    128*FRACUNIT
+#define WEAPONTOP        32*FRACUNIT
+
 #define USE_GWND_AMMO_1 1
 #define USE_GWND_AMMO_2 1
 #define USE_CBOW_AMMO_1 1

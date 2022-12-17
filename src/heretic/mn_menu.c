@@ -250,7 +250,7 @@ static void M_RD_ShowAllArti();
 static void M_RD_ShowArtiTimer(Direction_t direction);
 static void M_RD_Collision();
 static void M_RD_Torque();
-static void M_RD_Bobbing();
+static void M_RD_Bobbing(Direction_t direction);
 static void M_RD_FloatAmplitude(Direction_t direction);
 
 // Gameplay (page 4)
@@ -1300,7 +1300,7 @@ static MenuItem_t Gameplay3Items[] = {
     I_SWITCH("COLLISION PHYSICS:",              "ABPBRF CNJKRYJDTYBQ:",           M_RD_Collision),      // ФИЗИКА СТОЛКНОВЕНИЙ
     I_SWITCH("CORPSES SLIDING FROM LEDGES:",    "NHEGS CGJKPF.N C DJPDSITYBQ:",   M_RD_Torque),         // ТРУПЫ СПОЛЗАЮТ С ВОЗВЫШЕНИЙ
     I_LRFUNC("FLOATING ITEMS AMPLITUDE:" ,      "KTDBNFWBZ GHTLVTNJD:",           M_RD_FloatAmplitude), // АМПЛИТУДА ЛЕВИТАЦИИ ПРЕДМЕТОВ
-    I_SWITCH("WEAPON BOBBING WHILE FIRING:",    "EKEXITYYJT GJRFXBDFYBT JHE;BZ:", M_RD_Bobbing),        // УЛУЧШЕННОЕ ПОКАЧИВАНИЕ ОРУЖИЯ
+    I_LRFUNC("WEAPON ATTACK ALIGNMENT:",        "JHE;BT GHB CNHTKM,T:",           M_RD_Bobbing),        // ОРУЖИЕ ПРИ СТРЕЛЬБЕ
     I_EMPTY,
     I_EMPTY,
     I_SETMENU("NEXT PAGE >", "GJCKTLYZZ CNHFYBWF `",  &Gameplay4Menu), // СЛЕДУЮЩАЯ СТРАНИЦА >
@@ -4779,8 +4779,10 @@ static void DrawGameplay3Menu(void)
                                   floating_powerups ? CR_GREEN : CR_RED);
         }
 
-        // Weapon bobbing while firing
-        RD_M_DrawTextSmallENG(weapon_bobbing ? "ON" : "OFF", 233 + wide_delta, 136,
+        // Weapon attack alignment
+        RD_M_DrawTextSmallENG(weapon_bobbing == 1 ? "BOBBING" :
+                              weapon_bobbing == 2 ? "CENTERED" : "ORIGINAL", 
+                              212 + wide_delta, 136,
                               weapon_bobbing ? CR_GREEN : CR_RED);
     }
     else
@@ -4866,8 +4868,10 @@ static void DrawGameplay3Menu(void)
                                   floating_powerups ? CR_GREEN : CR_RED);
         }
 
-        // Улучшенное покачивание оружия
-        RD_M_DrawTextSmallRUS(weapon_bobbing ? "DRK" : "DSRK", 260 + wide_delta, 136,
+        // Оружие при стрельбе
+        RD_M_DrawTextSmallRUS(weapon_bobbing == 1 ? "GJRFXBDFTNCZ" :
+                              weapon_bobbing == 2 ? "WTYNHBHETNCZ" : "CNFNBXYJ", 
+                              187 + wide_delta, 136,
                               weapon_bobbing ? CR_GREEN : CR_RED);
     }
 }
@@ -4907,9 +4911,9 @@ static void M_RD_Torque()
     torque ^= 1;
 }
 
-static void M_RD_Bobbing()
+static void M_RD_Bobbing(Direction_t direction)
 {
-    weapon_bobbing ^= 1;
+    RD_Menu_SpinInt(&weapon_bobbing, 0, 2, direction);
 }
 
 static void M_RD_FloatAmplitude(Direction_t direction)
