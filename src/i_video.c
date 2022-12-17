@@ -981,14 +981,7 @@ void I_FinishUpdate (void)
     // Blit from the paletted 8-bit screen buffer to the intermediate
     // 32-bit RGBA buffer that we can load into the texture.
 
-    if (opengles_renderer)
-    {
-        SDL_BlitSurface(screenbuffer, &blit_rect, argbbuffer, &blit_rect);
-    }
-    else
-    {
-        SDL_LowerBlit(screenbuffer, &blit_rect, argbbuffer, &blit_rect);
-    }
+    SDL_BlitSurface(screenbuffer, &blit_rect, argbbuffer, &blit_rect);
 
     // Update the intermediate texture with the contents of the RGBA buffer.
 
