@@ -5,6 +5,6 @@
 | libopus-0.dll       | aa38c9a5818b7c49082df85bc6d61fae | Bundled with SDL2_mixer 2.6.1 |
 | libopusfile-0.dll   | 862400119982d02e6419d9c8c4b1be06 | Bundled with SDL2_mixer 2.6.1 |
 | libsamplerate-0.dll | 0ce4e907bbb130ebf8681297535a281b |            0.1.9-2            |
-| SDL2.dll            | 14b0ab22b7057354d9ba5ef1f7ddd381 |            2.26.0             |
+| SDL2.dll            | 3017f635234279f0dea0635cb51a80ff |            2.26.1             |
 | SDL2_mixer.dll      | f410700b6cf66990c23057a91b1722a4 |             2.6.1             |
 | SDL2_net.dll        | 9d8b6e7a088ea3686d2143eb94fdea8f |             2.2.0             |
