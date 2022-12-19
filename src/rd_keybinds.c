@@ -725,13 +725,13 @@ void BK_ApplyDefaultBindings()
     BK_AddBind(bk_menu_load, keyboard, SDL_SCANCODE_F3);
     BK_AddBind(bk_menu_volume, keyboard, SDL_SCANCODE_F4);
 
-    if(RD_GameType == gt_Doom || RD_GameType == gt_Heretic)
+    if(RD_GameType == gt_Hexen)
     {
-        BK_AddBind(bk_detail, keyboard, SDL_SCANCODE_F5);
+        BK_AddBind(bk_suicide, keyboard, SDL_SCANCODE_F5);
     }
     else
     {
-        BK_AddBind(bk_suicide, keyboard, SDL_SCANCODE_F5);
+        BK_AddBind(bk_detail, keyboard, SDL_SCANCODE_F5);
     }
 
     BK_AddBind(bk_qsave, keyboard, SDL_SCANCODE_F6);
@@ -904,13 +904,13 @@ void BK_ApplyVanilaBindings()
     BK_AddBind(bk_menu_load, keyboard, SDL_SCANCODE_F3);
     BK_AddBind(bk_menu_volume, keyboard, SDL_SCANCODE_F4);
 
-    if(RD_GameType == gt_Doom || RD_GameType == gt_Heretic)
+    if(RD_GameType == gt_Hexen)
     {
-        BK_AddBind(bk_detail, keyboard, SDL_SCANCODE_F5);
+        BK_AddBind(bk_suicide, keyboard, SDL_SCANCODE_F5);
     }
     else
     {
-        BK_AddBind(bk_suicide, keyboard, SDL_SCANCODE_F5);
+        BK_AddBind(bk_detail, keyboard, SDL_SCANCODE_F5);
     }
 
     BK_AddBind(bk_qsave, keyboard, SDL_SCANCODE_F6);
