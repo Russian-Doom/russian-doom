@@ -66,6 +66,12 @@ int PStateAttackEnd[NUMCLASSES] = {
 
 int ArmorMax[NUMCLASSES] = { 20, 18, 16, 1 };
 
+// [JN] Player's breathing imitation.
+static fixed_t breathing_val;
+static boolean breathing_dir;
+#define BREATHING_STEP 32
+#define BREATHING_MAX  1408
+
 /*
 ==================
 =
@@ -162,7 +168,26 @@ void P_CalcHeight(player_t * player, boolean safe)
         // [JN] Imitate player's breathing, but not in flying state.
         if (breathing && !vanillaparm && !(player->mo->flags2 & MF2_FLY))
         {
-            player->viewheight += finesine[(FINEANGLES / 160 * gametic) & FINEMASK] / 48;
+            if (breathing_dir)
+            {
+                // Inhale (camera up)
+                breathing_val += BREATHING_STEP;
+                if (breathing_val >= BREATHING_MAX)
+                {
+                    breathing_dir = false;
+                }
+            }
+            else
+            {
+                // Exhale (camera down)
+                breathing_val -= BREATHING_STEP;
+                if (breathing_val <= -BREATHING_MAX)
+                {
+                    breathing_dir = true;
+                }
+            }
+
+            player->viewheight += breathing_val;
         }
         if (player->viewheight > VIEWHEIGHT)
         {

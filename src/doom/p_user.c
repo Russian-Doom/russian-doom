@@ -28,31 +28,12 @@
 
 static boolean onground;
 
-static fixed_t BreathingTic;
-static const fixed_t BreathingOffset[177] = {
-        0,    32,    64,    96,   128,   160,   192,   224,
-      256,   288,   320,   352,   384,   416,   448,   480,
-      512,   544,   576,   608,   640,   672,   704,   736,
-      768,   800,   832,   864,   896,   928,   960,   992,
-     1024,  1056,  1088,  1120,  1152,  1184,  1216,  1248,
-     1280,  1312,  1344,  1376,  1408,  1376,  1344,  1312,
-     1280,  1248,  1216,  1184,  1152,  1120,  1088,  1056,
-     1024,   992,   960,   928,   896,   864,   832,   800,
-      768,   736,   704,   672,   640,   608,   576,   544,
-      512,   480,   448,   416,   384,   352,   320,   288,
-      256,   224,   192,   160,   128,    96,    64,    32,
-        0,   -32,   -64,   -96,  -128,  -160,  -192,  -224,
-     -256,  -288,  -320,  -352,  -384,  -416,  -448,  -480,
-     -512,  -544,  -576,  -608,  -640,  -672,  -704,  -736,
-     -768,  -800,  -832,  -864,  -896,  -928,  -960,  -992,
-    -1024, -1056, -1088, -1120, -1152, -1184, -1216, -1248,
-    -1280, -1312, -1344, -1376, -1408, -1376, -1344, -1312,
-    -1280, -1248, -1216, -1184, -1152, -1120, -1088, -1056,
-    -1024,  -992,  -960,  -928,  -896,  -864,  -832,  -800,
-     -768,  -736,  -704,  -672,  -640,  -608,  -576,  -544,
-     -512,  -480,  -448,  -416,  -384,  -352,  -320,  -288,
-     -256,  -224,  -192,  -160,  -128,   -96,   -64,   -32
-};
+// [JN] Player's breathing imitation.
+static fixed_t breathing_val;
+static boolean breathing_dir;
+#define BREATHING_STEP 32
+#define BREATHING_MAX  1408
+
 
 // -----------------------------------------------------------------------------
 // P_Thrust
@@ -130,16 +111,26 @@ void P_CalcHeight (player_t *player, boolean safe)
             // [JN] Imitate player's breathing.
             if (breathing && !vanillaparm)
             {
-                // Run breathing tics to set offset.
-                BreathingTic++;
-
-                // Reset offset once it reaches end of the LUT.
-                if (BreathingTic >= 178)
+                if (breathing_dir)
                 {
-                    BreathingTic = 0;
+                    // Inhale (camera up)
+                    breathing_val += BREATHING_STEP;
+                    if (breathing_val >= BREATHING_MAX)
+                    {
+                        breathing_dir = false;
+                    }
+                }
+                else
+                {
+                    // Exhale (camera down)
+                    breathing_val -= BREATHING_STEP;
+                    if (breathing_val <= -BREATHING_MAX)
+                    {
+                        breathing_dir = true;
+                    }
                 }
 
-                player->viewheight += BreathingOffset[BreathingTic];
+                player->viewheight += breathing_val;
             }
 
             if (player->viewheight > VIEWHEIGHT)
