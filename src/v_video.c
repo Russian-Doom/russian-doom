@@ -78,7 +78,7 @@ int dirtybox[4];
 static vpatchclipfunc_t patchclip_callback = NULL;
 
 // [JN] dest addendum for hires factor?
-static int x_hires;
+int x_hires;
 
 
 
