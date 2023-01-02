@@ -171,8 +171,8 @@ void V_DrawPatch (int x, int y, const patch_t *patch, const byte *table)
     int count;
     int col;
     column_t *column;
-    byte *desttop;
-    byte *dest;
+    byte *desttop, *desttop2;
+    byte *dest, *dest2;
     byte *source;
     byte *sourcetrans;
     int w, f;
@@ -192,21 +192,23 @@ void V_DrawPatch (int x, int y, const patch_t *patch, const byte *table)
     V_MarkRect(x, y, SHORT(patch->width), SHORT(patch->height));
 
     col = 0;
-    desttop = dest_screen + (y << hires) * screenwidth + x;
+    desttop  = dest_screen + (y << hires) * screenwidth + x;
+    desttop2 = dest_screen + ((y << hires) + x_hires) * screenwidth + x;
 
     w = SHORT(patch->width);
 
-    for ( ; col<w ; x++, col++, desttop++)
+    for ( ; col<w ; x++, col++, desttop++, desttop2++)
     {
         column = (column_t *)((byte *)patch + LONG(patch->columnofs[col]));
 
         // step through the posts in a column
         while (column->topdelta != 0xff)
         {
-            for (f = 0; f <= hires; f++)
+            for (f = 0; f <= (hires + x_hires); f++)
             {
             source = sourcetrans = (byte *)column + 3;
-            dest = desttop + column->topdelta*(screenwidth << hires) + (x * (hires + x_hires)) + f;
+            dest  =  desttop + column->topdelta*(screenwidth << hires) + (x * (hires + x_hires)) + f;
+            dest2 = desttop2 + column->topdelta*(screenwidth << hires) + (x * (hires + x_hires)) + f;
             count = column->length;
 
             // [crispy] prevent framebuffer overflows
@@ -232,6 +234,7 @@ void V_DrawPatch (int x, int y, const patch_t *patch, const byte *table)
                     source++;
                     sourcetrans++; // [Dasperal] Increment sourcetrans as well in case dp_translation is NULL
                     dest += (screenwidth << hires);
+                    dest2 += (screenwidth << hires);
                     tmpy++;
                 }
 
@@ -256,16 +259,23 @@ void V_DrawPatch (int x, int y, const patch_t *patch, const byte *table)
                 // [JN] If given table is a NULL, draw opaque patch.
                 if (table != NULL)
                 {
-                    *dest = table[((*dest) << 8) + *sourcetrans];
+                    *dest2 = *dest = table[((*dest) << 8) + *sourcetrans];
+                     dest2 += screenwidth * hires;
                      dest += screenwidth * hires;
-                    *dest = table[((*dest) << 8) + *sourcetrans++];
+                     
+                    *dest2 = *dest = table[((*dest) << 8) + *sourcetrans++];
+                     dest2 += screenwidth * hires;
                      dest += screenwidth * hires;
+                     
                 }
                 else
                 {
-                    *dest = *sourcetrans;
+                    *dest2 = *dest = *sourcetrans;
+                     dest2 += screenwidth * hires;
                      dest += screenwidth * hires;
-                    *dest = *sourcetrans++;
+
+                    *dest2 = *dest = *sourcetrans++;
+                     dest2 += screenwidth * hires;
                      dest += screenwidth * hires;
                 }
             }
@@ -748,6 +758,8 @@ void V_DrawShadowedPatchDoom (int x, int y, const patch_t *patch)
     column_t *column;
     byte *desttop, *dest, *source, *sourcetrans;
     byte *desttop2, *dest2;
+    
+    byte *desttop3, *dest3, *desttop4, *dest4;
     int w, f;
 
     y -= SHORT(patch->topoffset);
@@ -755,36 +767,42 @@ void V_DrawShadowedPatchDoom (int x, int y, const patch_t *patch)
 
     col = 0;
     desttop = dest_screen + (y << hires) * screenwidth + x;
+    desttop3 = dest_screen + ((y << hires) + x_hires) * screenwidth + x;
     
     if (draw_shadowed_text && !vanillaparm)
     {
-        desttop2 = dest_screen + ((y + 1) << hires) * screenwidth + x + 2;
+        desttop2 = dest_screen + ((y + 1) << hires) * screenwidth + x + 2 + x_hires;
+        desttop4 = dest_screen + (((y + 1) << hires) + x_hires) * screenwidth + x + 2 + x_hires;
     }
     else
     {
         desttop2 = NULL;
+        desttop4 = NULL;
     }
 
     w = SHORT(patch->width);
-    for (; col < w; x++, col++, desttop++, desttop2++)
+    for (; col < w; x++, col++, desttop++, desttop2++, desttop3++, desttop4++)
     {
         column = (column_t *) ((byte *) patch + LONG(patch->columnofs[col]));
 
         // step through the posts in a column
         while (column->topdelta != 0xff)
         {
-            for (f = 0; f <= hires; f++)
+            for (f = 0; f <= (hires + x_hires); f++)
             {
                 source = sourcetrans = (byte *) column + 3;
                 dest = desttop + column->topdelta * (screenwidth << hires) + (x * (hires + x_hires)) + f;
+                dest3 = desttop3 + column->topdelta * (screenwidth << hires) + (x * (hires + x_hires)) + f;
 
                 if (draw_shadowed_text && !vanillaparm)
                 {
                     dest2 = desttop2 + column->topdelta * (screenwidth << hires) + (x * (hires + x_hires)) + f;
+                    dest4 = desttop4 + column->topdelta * (screenwidth << hires) + (x * (hires + x_hires)) + f;
                 }
                 else 
                 {
                     dest2 = NULL;
+                    dest4 = NULL;
                 }
 
                 count = column->length;
@@ -836,19 +854,23 @@ void V_DrawShadowedPatchDoom (int x, int y, const patch_t *patch)
                     {
                         if (draw_shadowed_text && !vanillaparm)
                         {
-                            *dest2 = transtable60[((*dest2) << 8)];
+                            *dest4 = *dest2 = transtable60[((*dest2) << 8)];
+                            dest4 += screenwidth * hires;
                             dest2 += screenwidth * hires;
                         }
-                        *dest = *sourcetrans;
+                        *dest3 = *dest = *sourcetrans;
+                        dest3 += screenwidth * hires;
                         dest += screenwidth * hires;
                     }
 
                     if (draw_shadowed_text && !vanillaparm)
                     {
-                        *dest2 = transtable60[((*dest2) << 8)];
+                        *dest4 = *dest2 = transtable60[((*dest2) << 8)];
+                        dest4 += screenwidth * hires;
                         dest2 += screenwidth * hires;
                     }
-                    *dest = *sourcetrans++;
+                    *dest3 = *dest = *sourcetrans++;
+                    dest3 += screenwidth * hires;
                     dest += screenwidth * hires;
                 }
             }
