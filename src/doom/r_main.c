@@ -663,14 +663,19 @@ void R_ExecuteSetViewSize (void)
             {
                 dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift)) 
                    * (screenblocks < 9 ? screenblocks : 9) / 10)) << FRACBITS) + FRACUNIT / 2;
+
+                // [JN] TODO - what if hires == 0 ?
+                dy = abs(dy / hires);
             }
             else
             {
                 dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift))
                    * (screenblocks < 11 ? screenblocks : 11) / 10)) << FRACBITS) + FRACUNIT / 2;
+            
+                dy = abs(dy);
+            
             }
 
-            dy = abs(dy);
             yslopes[j][i] = FixedDiv (aspect_ratio >= 2 ? num_wide : num, dy);
         }
     }
