@@ -77,10 +77,16 @@ int dirtybox[4];
 // This is needed for Chocolate Strife, which clips patches to the screen.
 static vpatchclipfunc_t patchclip_callback = NULL;
 
-// [JN] Addendum for high resolution rendering.
+
+//
+// [JN] Extra resolution variables:
+//
+
+// Addendum for high resolution rendering.
 // Equals 1 for high detail, otherwise equals 0.
 int extrares;
-// [JN] Shortcut for patch drawing functions.
+
+// Shortcut for patch drawing functions.
 // Equals screenwidth * hires.
 static int fullscreenwidth;
 
@@ -1558,7 +1564,7 @@ void V_Init (void)
         origwidth = ORIGWIDTH;
         screenwidth = SCREENWIDTH;
         wide_delta = 0;
-        actualheight = SCREENHEIGHT_5_4;
+        actualheight = 256 << hires;
     }
     else if (aspect_ratio == 2)
     {
@@ -1587,9 +1593,9 @@ void V_Init (void)
     if (preserve_window_aspect_ratio)
     {
         if (aspect_ratio == 1)
-        actualheight = SCREENHEIGHT_5_4;
+        actualheight = 256 << hires;
         else
-        actualheight = SCREENHEIGHT_4_3;
+        actualheight = 240 << hires;
     }
     else
     {

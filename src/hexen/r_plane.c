@@ -522,7 +522,7 @@ void R_DrawPlanes(void)
     byte       *dest, *dest1, *dest2, *dest3, *dest4;
 
     extern byte *ylookup[SCREENHEIGHT];
-    extern int columnofs[WIDESCREENWIDTH];
+    extern int columnofs[MAXWIDTH];
 
     for (i = 0 ; i < MAXVISPLANES ; i++)
     for (pl = visplanes[i] ; pl ; pl = pl->next, rendered_visplanes++)

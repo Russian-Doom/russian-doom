@@ -77,7 +77,7 @@ static SDL_Texture *texture_upscaled = NULL;
 static SDL_Rect blit_rect = {
     0,
     0,
-    WIDESCREENWIDTH,
+    MAXWIDTH,
     SCREENHEIGHT
 };
 
@@ -130,8 +130,8 @@ int window_title_short = true;
 
 // Screen width and height, from configuration file.
 
-int window_width = 852;                // SCREENWIDTH + 212
-int window_height = SCREENHEIGHT_4_3;  // (240 << hires)
+int window_width = 852;
+int window_height = 480;
 
 typedef enum
 {
@@ -859,7 +859,7 @@ void I_DrawBlackBorders (void)
 
     rectangle_right.x = (wide_delta << hires) + SCREENWIDTH;
     rectangle_right.y = 0;
-    rectangle_right.w = WIDEORIGWIDTH;
+    rectangle_right.w = MAXWIDTH;
     rectangle_right.h = actualheight;
 
     SDL_RenderFillRect(renderer, &rectangle_left);
@@ -1811,9 +1811,9 @@ void I_ReInitGraphics (const int reinit)
 		if (preserve_window_aspect_ratio == 1)
 		{
  			if (aspect_ratio == 1)
- 			actualheight = SCREENHEIGHT_5_4;
+ 			actualheight = 256 << hires;
  			else
-			actualheight = SCREENHEIGHT_4_3;
+			actualheight = 240 << hires;
 		}
 		else
 		{

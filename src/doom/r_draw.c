@@ -49,7 +49,7 @@ int   viewheight, scaledviewheight;
 int   viewwindowx, viewwindowy; 
 
 static byte *ylookup[SCREENHEIGHT]; 
-static int   columnofs[WIDESCREENWIDTH]; 
+static int   columnofs[MAXWIDTH]; 
 
 // Backing buffer containing the bezel drawn around the screen and 
 // surrounding background.
