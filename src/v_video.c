@@ -77,8 +77,12 @@ int dirtybox[4];
 // This is needed for Chocolate Strife, which clips patches to the screen.
 static vpatchclipfunc_t patchclip_callback = NULL;
 
-// [JN] dest addendum for hires factor?
-int x_hires;
+// [JN] Addendum for high resolution rendering.
+// Equals 1 for high detail, otherwise equals 0.
+int extrares;
+// [JN] Shortcut for patch drawing functions.
+// Equals screenwidth * hires.
+static int fullscreenwidth;
 
 
 
@@ -168,13 +172,11 @@ void V_SetPatchClipCallback(vpatchclipfunc_t func)
 
 void V_DrawPatch (int x, int y, const patch_t *patch, const byte *table)
 { 
-    int count;
-    int col;
+    int col, count;
     column_t *column;
-    byte *desttop, *desttop2;
-    byte *dest, *dest2;
-    byte *source;
-    byte *sourcetrans;
+    byte *dest1, *desttop1; // Middle resolution
+    byte *dest2, *desttop2; // High resolution
+    byte *source, *sourcetrans;
     int w, f;
 
     y -= SHORT(patch->topoffset);
@@ -192,23 +194,25 @@ void V_DrawPatch (int x, int y, const patch_t *patch, const byte *table)
     V_MarkRect(x, y, SHORT(patch->width), SHORT(patch->height));
 
     col = 0;
-    desttop  = dest_screen + (y << hires) * screenwidth + x;
-    desttop2 = dest_screen + ((y << hires) + x_hires) * screenwidth + x;
+    desttop1 = dest_screen + (y << hires) * screenwidth + x;
+    desttop2 = dest_screen + ((y << hires) + extrares) * screenwidth + x;
 
     w = SHORT(patch->width);
 
-    for ( ; col<w ; x++, col++, desttop++, desttop2++)
+    for ( ; col<w ; x++, col++, desttop1++, desttop2++)
     {
         column = (column_t *)((byte *)patch + LONG(patch->columnofs[col]));
 
         // step through the posts in a column
         while (column->topdelta != 0xff)
         {
-            for (f = 0; f <= (hires + x_hires); f++)
+            for (f = 0; f <= (hires + extrares); f++)
             {
+            const int column_post = column->topdelta * (screenwidth << hires) + (x * (hires + extrares)) + f;
+
             source = sourcetrans = (byte *)column + 3;
-            dest  =  desttop + column->topdelta*(screenwidth << hires) + (x * (hires + x_hires)) + f;
-            dest2 = desttop2 + column->topdelta*(screenwidth << hires) + (x * (hires + x_hires)) + f;
+            dest1 = desttop1 + column_post;
+            dest2 = desttop2 + column_post;
             count = column->length;
 
             // [crispy] prevent framebuffer overflows
@@ -233,7 +237,8 @@ void V_DrawPatch (int x, int y, const patch_t *patch, const byte *table)
                     count--;
                     source++;
                     sourcetrans++; // [Dasperal] Increment sourcetrans as well in case dp_translation is NULL
-                    dest += (screenwidth << hires);
+                    dest1 += (screenwidth << hires);
+                    if (extrares)
                     dest2 += (screenwidth << hires);
                     tmpy++;
                 }
@@ -259,24 +264,44 @@ void V_DrawPatch (int x, int y, const patch_t *patch, const byte *table)
                 // [JN] If given table is a NULL, draw opaque patch.
                 if (table != NULL)
                 {
-                    *dest2 = *dest = table[((*dest) << 8) + *sourcetrans];
-                     dest2 += screenwidth * hires;
-                     dest += screenwidth * hires;
-                     
-                    *dest2 = *dest = table[((*dest) << 8) + *sourcetrans++];
-                     dest2 += screenwidth * hires;
-                     dest += screenwidth * hires;
-                     
+                    if (extrares)
+                    {
+                        *dest2 = *dest1 = table[((*dest1) << 8) + *sourcetrans];
+                        dest1 += fullscreenwidth;
+                        dest2 += fullscreenwidth;
+
+                        *dest2 = *dest1 = table[((*dest1) << 8) + *sourcetrans++];
+                        dest1 += fullscreenwidth;
+                        dest2 += fullscreenwidth;
+                    }
+                    else
+                    {
+                        *dest1 = table[((*dest1) << 8) + *sourcetrans];
+                        dest1 += fullscreenwidth;
+                        *dest1 = table[((*dest1) << 8) + *sourcetrans++];
+                        dest1 += fullscreenwidth;
+                    }
                 }
                 else
                 {
-                    *dest2 = *dest = *sourcetrans;
-                     dest2 += screenwidth * hires;
-                     dest += screenwidth * hires;
+                    if (extrares)
+                    {
+                        *dest2 = *dest1 = *sourcetrans;
+                        dest1 += fullscreenwidth;
+                        dest2 += fullscreenwidth;
 
-                    *dest2 = *dest = *sourcetrans++;
-                     dest2 += screenwidth * hires;
-                     dest += screenwidth * hires;
+                        *dest2 = *dest1 = *sourcetrans++;
+                        dest1 += fullscreenwidth;
+                        dest2 += fullscreenwidth;
+                    }
+                    else
+                    {
+                        *dest1 = *sourcetrans;
+                        dest1 += fullscreenwidth;
+                        
+                        *dest1 = *sourcetrans++;
+                        dest1 += fullscreenwidth;
+                    }
                 }
             }
             }
@@ -356,7 +381,7 @@ void V_DrawPatchFlipped (int x, int y, const patch_t *patch)
             for (f = 0; f <= hires; f++)
             {
             source = sourcetrans = (byte *)column + 3;
-            dest = desttop + column->topdelta*(screenwidth << hires) + (x * (hires + x_hires)) + f;
+            dest = desttop + column->topdelta*(screenwidth << hires) + (x * (hires + extrares)) + f;
             count = column->length;
 
             // [crispy] prevent framebuffer overflows
@@ -575,34 +600,62 @@ void V_DrawAltTLPatch (int x, int y, const patch_t *patch)
 // [JN] Draws colorized with variable transluceny, with given tinting table.
 // -----------------------------------------------------------------------------
 
-void V_DrawFadePatch(int x, int y, const patch_t *patch, const byte *table)
+void V_DrawFadePatch (int x, int y, const patch_t *patch, const byte *table)
 {
-    int       count, col, w, f;
-    byte     *desttop, *dest, *source, *sourcetrans;
-    byte     *desttop2, *dest2; // [JN] Casting shadow if appropriate.
+    int col, count;
     column_t *column;
+    byte *dest1, *desttop1; // Middle resolution (main patch)
+    byte *dest2, *desttop2; // High resolution (main patch)
+    byte *dest3, *desttop3; // Middle resolution (shadow)
+    byte *dest4, *desttop4; // High resolution (shadow)
+    byte *source, *sourcetrans;
+    int w, f;
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
     w  = SHORT(patch->width);
 
     col = 0;
-    desttop = dest_screen + (y << hires) * screenwidth + x;
-    desttop2 = draw_shadowed_text && !vanillaparm ?
-               dest_screen + ((y + 1) << hires) * screenwidth + x + 2 : NULL;
-
-    for (; col < w; x++, col++, desttop++, desttop2++)
+    desttop1 = dest_screen + (y << hires) * screenwidth + x;
+    desttop2 = dest_screen + ((y << hires) + extrares) * screenwidth + x;
+    
+    if (draw_shadowed_text && !vanillaparm)
+    {
+        desttop3 = dest_screen + ((y + 1) << hires) * screenwidth + x + 2 + extrares;
+        desttop4 = dest_screen + (((y + 1) << hires) + extrares) * screenwidth + x + 2 + extrares;
+    }
+    else
+    {
+        desttop3 = NULL;
+        desttop4 = NULL;
+    }
+    
+    for (; col < w; x++, col++, desttop1++, desttop2++, desttop3++, desttop4++)
     {
         column = (column_t *) ((byte *) patch + LONG(patch->columnofs[col]));
 
+        // step through the posts in a column
         while (column->topdelta != 0xff)
         {
-            for (f = 0; f <= hires; f++)
+            for (f = 0; f <= (hires + extrares); f++)
             {
+                const int column_post = column->topdelta * (screenwidth << hires) + (x * (hires + extrares)) + f;
+
                 source = sourcetrans = (byte *) column + 3;
-                dest = desttop + column->topdelta * (screenwidth << hires) + (x * (hires + x_hires)) + f;
-                dest2 = draw_shadowed_text && !vanillaparm ?
-                        desttop2 + column->topdelta * (screenwidth << hires) + (x * (hires + x_hires)) + f : NULL;
+                dest1 = desttop1 + column_post;
+                dest2 = desttop2 + column_post;
+
+                if (draw_shadowed_text && !vanillaparm)
+                {
+                    dest3 = desttop3 + column_post;
+                    dest4 = desttop4 + column_post;
+                }
+                else
+                {
+                    dest3 = NULL;
+                    dest4 = NULL;
+                }
+
                 count = column->length;
 
                 while (count--)
@@ -610,37 +663,72 @@ void V_DrawFadePatch(int x, int y, const patch_t *patch, const byte *table)
                     if (dp_translation)
                     sourcetrans = &dp_translation[*source++];
     
-                    if (hires)
+                    if (extrares)
                     {
                         if (draw_shadowed_text && !vanillaparm)
                         {
                             if (table == transtable90 || table == transtable80 || table == transtable70)
-                            *dest2 = transtable30[((*dest2) << 8)];
+                            *dest4 = *dest3 = transtable30[((*dest3) << 8)];
                             if (table == transtable60 || table == transtable50 || table == transtable40)
-                            *dest2 = transtable20[((*dest2) << 8)];
+                            *dest4 = *dest3 = transtable20[((*dest3) << 8)];
                             else
-                            *dest2 = transtable10[((*dest2) << 8)];
-
-                            dest2 += screenwidth;
+                            *dest4 = *dest3 = transtable10[((*dest3) << 8)];
+                        
+                            dest3 += fullscreenwidth;
+                            dest4 += fullscreenwidth;
                         }
-                        *dest = table[((*dest) << 8) + *sourcetrans];
-                        dest += screenwidth * hires;
-                    }
-                    
+                        *dest2 = *dest1 = table[((*dest1) << 8) + *sourcetrans];
+                        dest1 += fullscreenwidth;
+                        dest2 += fullscreenwidth;
+
                         if (draw_shadowed_text && !vanillaparm)
                         {
                             if (table == transtable90 || table == transtable80 || table == transtable70)
-                            *dest2 = transtable30[((*dest2) << 8)];
+                            *dest4 = *dest3 = transtable30[((*dest3) << 8)];
                             if (table == transtable60 || table == transtable50 || table == transtable40)
-                            *dest2 = transtable20[((*dest2) << 8)];
+                            *dest4 = *dest3 = transtable20[((*dest3) << 8)];
                             else
-                            *dest2 = transtable10[((*dest2) << 8)];
+                            *dest4 = *dest3 = transtable10[((*dest3) << 8)];
 
-                            dest2 += screenwidth * hires;
+                            dest3 += fullscreenwidth;
+                            dest4 += fullscreenwidth;
                         }
 
-                    *dest = table[((*dest) << 8) + *sourcetrans++];
-                    dest += screenwidth * hires;
+                        *dest2 = *dest1 = table[((*dest1) << 8) + *sourcetrans++];
+                        dest1 += fullscreenwidth;
+                        dest2 += fullscreenwidth;
+                    }
+                    else
+                    {
+                        if (draw_shadowed_text && !vanillaparm)
+                        {
+                            if (table == transtable90 || table == transtable80 || table == transtable70)
+                            *dest3 = transtable30[((*dest3) << 8)];
+                            if (table == transtable60 || table == transtable50 || table == transtable40)
+                            *dest3 = transtable20[((*dest3) << 8)];
+                            else
+                            *dest3 = transtable10[((*dest3) << 8)];
+                        
+                            dest3 += fullscreenwidth;
+                        }
+                        *dest1 = table[((*dest1) << 8) + *sourcetrans];
+                        dest1 += fullscreenwidth;
+
+                        if (draw_shadowed_text && !vanillaparm)
+                        {
+                            if (table == transtable90 || table == transtable80 || table == transtable70)
+                            *dest3 = transtable30[((*dest3) << 8)];
+                            if (table == transtable60 || table == transtable50 || table == transtable40)
+                            *dest3 = transtable20[((*dest3) << 8)];
+                            else
+                            *dest3 = transtable10[((*dest3) << 8)];
+
+                            dest3 += fullscreenwidth;
+                        }
+
+                        *dest1 = table[((*dest1) << 8) + *sourcetrans++];
+                        dest1 += fullscreenwidth;
+                    }
                 }
             }
 
@@ -658,8 +746,9 @@ void V_DrawShadowedPatch (int x, int y, const patch_t *patch)
 {
     int count, col;
     column_t *column;
-    byte *desttop, *dest, *source, *sourcetrans;
+    byte *dest, *desttop;
     byte *desttop2, *dest2;
+    byte *source, *sourcetrans;
     int w, f;
 
     y -= SHORT(patch->topoffset);
@@ -754,54 +843,57 @@ void V_DrawShadowedPatch (int x, int y, const patch_t *patch)
 
 void V_DrawShadowedPatchDoom (int x, int y, const patch_t *patch)
 {
-    int count, col;
+    int col, count;
     column_t *column;
-    byte *desttop, *dest, *source, *sourcetrans;
-    byte *desttop2, *dest2;
-    
-    byte *desttop3, *dest3, *desttop4, *dest4;
+    byte *dest1, *desttop1; // Middle resolution (main patch)
+    byte *dest2, *desttop2; // High resolution (main patch)
+    byte *dest3, *desttop3; // Middle resolution (shadow)
+    byte *dest4, *desttop4; // High resolution (shadow)
+    byte *source, *sourcetrans;
     int w, f;
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
 
     col = 0;
-    desttop = dest_screen + (y << hires) * screenwidth + x;
-    desttop3 = dest_screen + ((y << hires) + x_hires) * screenwidth + x;
+    desttop1 = dest_screen + (y << hires) * screenwidth + x;
+    desttop2 = dest_screen + ((y << hires) + extrares) * screenwidth + x;
     
     if (draw_shadowed_text && !vanillaparm)
     {
-        desttop2 = dest_screen + ((y + 1) << hires) * screenwidth + x + 2 + x_hires;
-        desttop4 = dest_screen + (((y + 1) << hires) + x_hires) * screenwidth + x + 2 + x_hires;
+        desttop3 = dest_screen + ((y + 1) << hires) * screenwidth + x + 2 + extrares;
+        desttop4 = dest_screen + (((y + 1) << hires) + extrares) * screenwidth + x + 2 + extrares;
     }
     else
     {
-        desttop2 = NULL;
+        desttop3 = NULL;
         desttop4 = NULL;
     }
 
     w = SHORT(patch->width);
-    for (; col < w; x++, col++, desttop++, desttop2++, desttop3++, desttop4++)
+    for (; col < w; x++, col++, desttop1++, desttop2++, desttop3++, desttop4++)
     {
         column = (column_t *) ((byte *) patch + LONG(patch->columnofs[col]));
 
         // step through the posts in a column
         while (column->topdelta != 0xff)
         {
-            for (f = 0; f <= (hires + x_hires); f++)
+            for (f = 0; f <= (hires + extrares); f++)
             {
+                const int column_post = column->topdelta * (screenwidth << hires) + (x * (hires + extrares)) + f;
+
                 source = sourcetrans = (byte *) column + 3;
-                dest = desttop + column->topdelta * (screenwidth << hires) + (x * (hires + x_hires)) + f;
-                dest3 = desttop3 + column->topdelta * (screenwidth << hires) + (x * (hires + x_hires)) + f;
+                dest1 = desttop1 + column_post;
+                dest2 = desttop2 + column_post;
 
                 if (draw_shadowed_text && !vanillaparm)
                 {
-                    dest2 = desttop2 + column->topdelta * (screenwidth << hires) + (x * (hires + x_hires)) + f;
-                    dest4 = desttop4 + column->topdelta * (screenwidth << hires) + (x * (hires + x_hires)) + f;
+                    dest3 = desttop3 + column_post;
+                    dest4 = desttop4 + column_post;
                 }
                 else 
                 {
-                    dest2 = NULL;
+                    dest3 = NULL;
                     dest4 = NULL;
                 }
 
@@ -828,7 +920,10 @@ void V_DrawShadowedPatchDoom (int x, int y, const patch_t *patch)
                     {
                         count--;
                         source++;
-                        dest += (screenwidth << hires);
+                        dest1 += (screenwidth << hires);
+                        dest2 += (screenwidth << hires);
+                        dest3 += (screenwidth << hires);
+                        dest4 += (screenwidth << hires);
                         tmpy++;
                     }
 
@@ -850,28 +945,46 @@ void V_DrawShadowedPatchDoom (int x, int y, const patch_t *patch)
                     if (dp_translation)
                     sourcetrans = &dp_translation[*source++];
 
-                    if (hires)
+                    if (extrares)
                     {
                         if (draw_shadowed_text && !vanillaparm)
                         {
-                            *dest4 = *dest2 = transtable60[((*dest2) << 8)];
-                            dest4 += screenwidth * hires;
-                            dest2 += screenwidth * hires;
+                            *dest4 = *dest3 = transtable60[((*dest3) << 8)];
+                            dest4 += fullscreenwidth;
+                            dest3 += fullscreenwidth;
                         }
-                        *dest3 = *dest = *sourcetrans;
-                        dest3 += screenwidth * hires;
-                        dest += screenwidth * hires;
-                    }
+                        *dest2 = *dest1 = *sourcetrans;
+                        dest2 += fullscreenwidth;
+                        dest1 += fullscreenwidth;
 
-                    if (draw_shadowed_text && !vanillaparm)
-                    {
-                        *dest4 = *dest2 = transtable60[((*dest2) << 8)];
-                        dest4 += screenwidth * hires;
-                        dest2 += screenwidth * hires;
+                        if (draw_shadowed_text && !vanillaparm)
+                        {
+                            *dest4 = *dest3 = transtable60[((*dest3) << 8)];
+                            dest4 += fullscreenwidth;
+                            dest3 += fullscreenwidth;
+                        }
+                        *dest2 = *dest1 = *sourcetrans++;
+                        dest2 += fullscreenwidth;
+                        dest1 += fullscreenwidth;
                     }
-                    *dest3 = *dest = *sourcetrans++;
-                    dest3 += screenwidth * hires;
-                    dest += screenwidth * hires;
+                    else
+                    {
+                        if (draw_shadowed_text && !vanillaparm)
+                        {
+                            *dest3 = transtable60[((*dest3) << 8)];
+                            dest3 += fullscreenwidth;
+                        }
+                        *dest1 = *sourcetrans;
+                        dest1 += fullscreenwidth;
+
+                        if (draw_shadowed_text && !vanillaparm)
+                        {
+                            *dest3 = transtable60[((*dest3) << 8)];
+                            dest3 += fullscreenwidth;
+                        }
+                        *dest1 = *sourcetrans++;
+                        dest1 += fullscreenwidth;
+                    }
                 }
             }
 
@@ -1483,7 +1596,8 @@ void V_Init (void)
         actualheight = SCREENHEIGHT;
     }
 
-    x_hires = hires > 1 ? 1 : 0;
+    extrares = hires > 1 ? 1 : 0;
+    fullscreenwidth = screenwidth * hires;
 }
 
 // Set the buffer that the code draws to.
