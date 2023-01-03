@@ -25,6 +25,7 @@
 #include "p_local.h"
 #include "r_local.h"
 #include "v_trans.h"
+#include "v_video.h"
 #include "jn.h"
 
 
@@ -1153,8 +1154,9 @@ void R_DrawPSprite (const pspdef_t *psp)
     vis->mobjflags = 0;
     vis->psprite = true;
     // [crispy] weapons drawn 1 pixel too high when player is idle
-    vis->texturemid = (BASEYCENTER<<FRACBITS)
-                    + FRACUNIT/4-(psp_sy-spritetopoffset[lump]);
+    vis->texturemid = (BASEYCENTER<<FRACBITS) + FRACUNIT/4
+                    - (psp_sy-spritetopoffset[lump])
+                    - extrares;
 
     if (screenblocks >= 11)
     {
