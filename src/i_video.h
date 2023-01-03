@@ -26,13 +26,16 @@
 
 // Screen width and height.
 
-#define hires 2
-
 #define ORIGWIDTH     320
 #define ORIGHEIGHT    200
-#define SCREENWIDTH   (ORIGWIDTH << hires)
-#define SCREENHEIGHT  (ORIGHEIGHT << hires)
+
 #define MAXWIDTH      2240
+#define MAXHEIGHT     800
+
+extern int hires;
+
+extern int SCREENWIDTH;
+extern int SCREENHEIGHT;
 
 // [JN] Aspect ratio macroses and variables. Available ratios are:
 // aspect_ratio = 0 (4:3)

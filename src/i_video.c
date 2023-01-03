@@ -78,7 +78,7 @@ static SDL_Rect blit_rect = {
     0,
     0,
     MAXWIDTH,
-    SCREENHEIGHT
+    MAXHEIGHT
 };
 
 static uint32_t pixel_format;
@@ -1926,6 +1926,7 @@ void I_RenderReadPixels(byte **data, int *w, int *h)
 void I_BindVideoVariables(void)
 {
     M_BindIntVariable("use_mouse",                   &usemouse);
+    M_BindIntVariable("hires",                       &hires);
     M_BindIntVariable("fullscreen",                  &fullscreen);
     M_BindIntVariable("aspect_ratio",                &aspect_ratio);
     M_BindIntVariable("opengles_renderer",           &opengles_renderer);

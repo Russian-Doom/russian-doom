@@ -28,7 +28,7 @@ int   viewwidth, scaledviewwidth;
 int   viewheight, scaledviewheight;
 int   viewwindowx, viewwindowy;
 
-byte *ylookup[SCREENHEIGHT];
+byte *ylookup[MAXHEIGHT];
 int   columnofs[MAXWIDTH];
 
 // R_DrawColumn. Source is the top of the column to scale.

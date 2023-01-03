@@ -474,7 +474,7 @@ extern int *lastopening; // [crispy] 32-bit integer math
 extern int *floorclip, *ceilingclip; // dropoff overflow
 
 extern fixed_t *yslope, *distscale;
-extern fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
+extern fixed_t yslopes[LOOKDIRS][MAXHEIGHT];
 
 void R_InitPlanesRes(void);
 void R_InitVisplanesRes(void);

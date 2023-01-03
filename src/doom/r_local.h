@@ -615,7 +615,7 @@ void R_SetViewSize (int blocks, int detail);
 // R_PLANE
 // -----------------------------------------------------------------------------
 
-extern fixed_t  yslopes[LOOKDIRS][SCREENHEIGHT];
+extern fixed_t  yslopes[LOOKDIRS][MAXHEIGHT];
 extern fixed_t *yslope, *distscale;
 extern int     *floorclip, *ceilingclip; // dropoff overflow
 extern int     *lastopening; // [crispy] 32-bit integer math

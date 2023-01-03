@@ -529,7 +529,7 @@ extern void R_SetViewSize (const int blocks, const int detail);
 typedef void (*planefunction_t) (int top, int bottom);
 
 extern fixed_t *yslope, *distscale;
-extern fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
+extern fixed_t yslopes[LOOKDIRS][MAXHEIGHT];
 // [JN] Smooth plane scrolling.
 extern fixed_t FlatScrollFactor_X, FlatScrollFactor_X_old;
 extern fixed_t FlatScrollFactor_Y, FlatScrollFactor_Y_old;

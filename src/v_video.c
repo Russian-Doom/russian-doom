@@ -82,6 +82,16 @@ static vpatchclipfunc_t patchclip_callback = NULL;
 // [JN] Extra resolution variables:
 //
 
+// Main variable, defining high resolution.
+// 0 =  320x200
+// 1 =  640x400
+// 2 = 1280x800
+int hires = 1;
+
+
+int SCREENWIDTH;
+int SCREENHEIGHT;
+
 // Addendum for high resolution rendering.
 // Equals 1 for high detail, otherwise equals 0.
 int extrares;
@@ -1551,6 +1561,9 @@ void V_DrawRawScreen (const byte *raw)
 
 void V_Init (void) 
 { 
+    SCREENWIDTH = ORIGWIDTH << hires;
+    SCREENHEIGHT = ORIGHEIGHT << hires;
+
     if (aspect_ratio == 0)
     {
         // 4:3

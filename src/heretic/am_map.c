@@ -180,7 +180,7 @@ static int cheating = 0;
 // [JN] Choosen mark color.
 static Translation_CR_t automap_mark_color_set;
 
-static int finit_height = SCREENHEIGHT - (42 << hires);
+static int finit_height;
 static int f_x, f_y;  // location of window on screen
 static int f_w, f_h;  // size of window on screen
 
@@ -659,6 +659,7 @@ void AM_initPics (void)
 
 static void AM_LevelInit (void)
 {
+    finit_height = SCREENHEIGHT - (42 << hires);
     f_x = f_y = 0;
     f_w = screenwidth;
     f_h = finit_height;

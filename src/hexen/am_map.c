@@ -38,7 +38,7 @@ static int leveljuststarted = 1;    // kluge until AM_LevelInit() is called
 
 boolean automapactive = false;
 
-static int finit_height = SCREENHEIGHT - SBARHEIGHT;
+static int finit_height;
 static int f_x, f_y;            // location of window on screen
 static int f_w, f_h;            // size of window on screen
 
@@ -438,6 +438,7 @@ static void AM_LevelInit(void)
 {
     leveljuststarted = 0;
 
+    finit_height = SCREENHEIGHT - SBARHEIGHT;
     f_x = f_y = 0;
     f_w = screenwidth;
     f_h = finit_height;
@@ -1574,9 +1575,9 @@ static void AM_drawThings(int colors, int colorrange)
 ================================================================================
 */
 
-static const int mark_w = 5 << hires;
-static const int mark_flip_1 = 1 << hires;
-static const int mark_flip_2 = 9 << hires;
+#define MARK_W      (5 << hires)
+#define MARK_FLIP_1 (1 << hires)
+#define MARK_FLIP_2 (9 << hires)
 
 static void AM_drawMarks (void)
 {
@@ -1610,7 +1611,7 @@ static void AM_drawMarks (void)
                 // killough 2/22/98: less spacing for '1'
                 if (d == 1)
                 {
-                    fx += (flip_levels ? -mark_flip_1 : mark_flip_1); // -1 : 1
+                    fx += (flip_levels ? -MARK_FLIP_1 : MARK_FLIP_1); // -1 : 1
                 }
 
                 if (fx >= f_x + 5 && fx <= f_w - 5
@@ -1623,7 +1624,7 @@ static void AM_drawMarks (void)
                 }
 
                 // killough 2/22/98: 1 space backwards
-                fx -= mark_w - (flip_levels ? mark_flip_2 : mark_flip_1); // 9 : 1
+                fx -= MARK_W - (flip_levels ? MARK_FLIP_2 : MARK_FLIP_1); // 9 : 1
 
                 j /= 10;
             } while (j > 0);
