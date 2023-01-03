@@ -653,8 +653,9 @@ void R_ExecuteSetViewSize (void)
     // planes
     for (i = 0 ; i < viewheight ; i++)
     {
-        const fixed_t num_wide = MIN(viewwidth<<detailshift, 320 << !detailshift)/2*FRACUNIT;
+        const fixed_t vwidth = hires ? viewwidth : ORIGWIDTH;
         const fixed_t num = (viewwidth<<(detailshift && !hires))/2*FRACUNIT;
+        const fixed_t num_wide = MIN(vwidth<<detailshift, ORIGWIDTH << !detailshift)/2*FRACUNIT;
 
         for (j = 0; j < LOOKDIRS; j++)
         {
@@ -662,14 +663,17 @@ void R_ExecuteSetViewSize (void)
             {
                 dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift)) 
                    * (screenblocks < 9 ? screenblocks : 9) / 10))<<FRACBITS)+FRACUNIT/2;
+
+                dy = abs(dy / (hires ? hires : 1));
             }
             else
             {
                 dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift))
                    * (screenblocks < 11 ? screenblocks : 11) / 10))<<FRACBITS)+FRACUNIT/2;
+
+                dy = abs(dy);
             }
 
-            dy = abs(dy);
             yslopes[j][i] = FixedDiv (aspect_ratio >= 2 ? num_wide : num, dy);
         }
     }
