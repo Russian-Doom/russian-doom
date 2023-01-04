@@ -70,6 +70,7 @@ static void DrawRenderingMenu1(void);
 static void DrawRenderingMenu2(void);
 
 // Page 1
+static void M_RD_Change_Resolution(Direction_t direction);
 static void M_RD_Change_Widescreen(Direction_t direction);
 static void M_RD_Change_Renderer();
 static void M_RD_Change_VSync();
@@ -92,7 +93,6 @@ static void M_RD_EndText();
 static void DrawDisplayMenu(void);
 static void M_RD_ScreenSize(Direction_t direction);
 static void M_RD_LevelBrightness(Direction_t direction);
-static void M_RD_Detail();
 
 // Color
 static void DrawColorMenu(void);
@@ -543,12 +543,13 @@ MENU_STATIC(RDOptionsMenu,
 
 static const PageDescriptor_t RenderingDescriptor = {
     2, RenderingMenuPages,
-    252, 162,
+    252, 172,
     CR_GRAY
 };
 
 static MenuItem_t Rendering1Items[] = {
     I_TITLE( "RENDERING",                 "HTYLTHBYU"), // РЕНДЕРИНГ
+    I_LRFUNC("RENDERING RESOLUTION:",     "HFPHTITYBT HTYLTHBYUF:",          M_RD_Change_Resolution),  // РАЗРЕШЕНИЕ РЕНДЕРИНГА
     I_LRFUNC("DISPLAY ASPECT RATIO:",     "CJJNYJITYBT CNJHJY \'RHFYF:",     M_RD_Change_Widescreen),  // СООТНОШЕНИЕ СТОРОН ЭКРАНА
     I_LRFUNC("SCREEN RENDERER:",          "HTYLTHTH \'RHFYF:",               M_RD_Change_Renderer),    // РЕНДЕРЕР ЭКРАНА
     I_SWITCH("VERTICAL SYNCHRONIZATION:", "DTHNBRFKMYFZ CBY[HJYBPFWBZ:",     M_RD_Change_VSync),       // ВЕРТИКАЛЬНАЯ СИНХРОНИЗАЦИЯ
@@ -613,7 +614,6 @@ static MenuItem_t DisplayItems[] = {
     I_EMPTY,
     I_LRFUNC( "LEVEL BRIGHTNESS",          "EHJDTYM JCDTOTYYJCNB",    M_RD_LevelBrightness), // УРОВЕНЬ ОСВЕЩЕННОСТИ
     I_EMPTY,
-    I_SWITCH( "GRAPHICS DETAIL:",          "LTNFKBPFWBZ UHFABRB:",    M_RD_Detail), // ДЕТАЛИЗАЦИЯ ГРАФИКИ
     I_SETMENU("COLOR OPTIONS...",          "YFCNHJQRB WDTNF>>>",      &ColorMenu), // НАСТРОЙКИ ЦВЕТА...
     I_TITLE(  "INTERFACE",                 "BYNTHATQC"), // ИНТЕРФЕЙС
     I_SETMENU("MESSAGES AND TEXTS...",     "CJJ,OTYBZ B NTRCNS>>>",   &MessagesMenu), // СООБЩЕНИЯ И ТЕКСТЫ...
@@ -1678,6 +1678,8 @@ void MN_Init(void)
     menuactive = false;
     SkullBaseLump = W_GetNumForName(DEH_String("M_SKL00"));
 
+    // [JN] Rendering resolution: set temp variable for rendering menu.
+    rendering_resolution_temp = rendering_resolution;
     // [JN] Widescreen: set temp variable for rendering menu.
     aspect_ratio_temp = aspect_ratio;
     // [JN] Screen renderer: set temp variable for rendering menu.
@@ -1976,18 +1978,23 @@ static void DrawRenderingMenu1(void)
 
     if (english_language)
     {
+        // Rendering resolution
+        RD_M_DrawTextSmallENG(rendering_resolution_temp == 1 ? "MIDDLE" :
+                              rendering_resolution_temp == 2 ? "HIGH" : "LOW",
+                              189 + wide_delta, 42, CR_NONE);
+        
         // Display aspect ratio
         RD_M_DrawTextSmallENG(aspect_ratio_temp == 1 ? "5:4" :
                               aspect_ratio_temp == 2 ? "16:9" :
                               aspect_ratio_temp == 3 ? "16:10" :
                               aspect_ratio_temp == 4 ? "21:9" :
                               "4:3",
-                              185 + wide_delta, 42, CR_NONE);
+                              185 + wide_delta, 52, CR_NONE);
 
         // Screen renderer
         if (force_software_renderer == 1)
         {
-            RD_M_DrawTextSmallENG("N/A", 161 + wide_delta, 52, CR_DARKRED);
+            RD_M_DrawTextSmallENG("N/A", 161 + wide_delta, 62, CR_DARKRED);
         }
         else
         {
@@ -1999,31 +2006,24 @@ static void DrawRenderingMenu1(void)
             // On other OSes it is unclear, so use OS preferred.
             "PREFERRED BY OS",
 #endif
-            161 + wide_delta, 52, CR_NONE);
-        }
-
-        // Informative message
-        if (aspect_ratio_temp != aspect_ratio || opengles_renderer_temp != opengles_renderer)
-        {
-            RD_M_DrawTextSmallENG("THE PROGRAM MUST BE RESTARTED",
-                                  51 + wide_delta, 132, MenuTime & 32 ? CR_GREEN : CR_DARKGREEN);
+            161 + wide_delta, 62, CR_NONE);
         }
 
         // Vertical sync
         if (force_software_renderer)
         {
-            RD_M_DrawTextSmallENG("N/A", 216 + wide_delta, 62, CR_GRAY);
+            RD_M_DrawTextSmallENG("N/A", 216 + wide_delta, 72, CR_GRAY);
         }
         else
         {
-            RD_M_DrawTextSmallENG(vsync ? "ON" : "OFF", 216 + wide_delta, 62, CR_NONE);
+            RD_M_DrawTextSmallENG(vsync ? "ON" : "OFF", 216 + wide_delta, 72, CR_NONE);
         }
 
         // FPS limit
-        RD_Menu_DrawSliderSmallInline(100, 72, 11, (max_fps-40) / 20);
+        RD_Menu_DrawSliderSmallInline(100, 82, 11, (max_fps-40) / 20);
         // Numerical representation of slider position
         M_snprintf(num, 4, "%d", max_fps);
-        RD_M_DrawTextSmallENG(num, 208 + wide_delta, 73, 
+        RD_M_DrawTextSmallENG(num, 208 + wide_delta, 83, 
                               max_fps < 60 ? CR_GRAY :
                               max_fps < 100 ? CR_NONE :
                               max_fps < 260 ? CR_GREEN : 
@@ -2032,23 +2032,33 @@ static void DrawRenderingMenu1(void)
         // Performance counter
         RD_M_DrawTextSmallENG(show_fps == 1 ? "FPS only" :
                               show_fps == 2 ? "FULL" : "OFF", 
-                              192 + wide_delta, 82, CR_NONE);
+                              192 + wide_delta, 92, CR_NONE);
 
         // Pixel scaling
         if (force_software_renderer)
         {
-            RD_M_DrawTextSmallENG("N/A", 131 + wide_delta, 92, CR_GRAY);
+            RD_M_DrawTextSmallENG("N/A", 131 + wide_delta, 102, CR_GRAY);
         }
         else
         {
-            RD_M_DrawTextSmallENG(smoothing ? "SMOOTH" : "SHARP", 131 + wide_delta, 92, CR_NONE);
+            RD_M_DrawTextSmallENG(smoothing ? "SMOOTH" : "SHARP", 131 + wide_delta, 102, CR_NONE);
         }
 
         // Porch palette changing
-        RD_M_DrawTextSmallENG(vga_porch_flash ? "ON" : "OFF", 205 + wide_delta, 102, CR_NONE);
+        RD_M_DrawTextSmallENG(vga_porch_flash ? "ON" : "OFF", 205 + wide_delta, 112, CR_NONE);
 
         // Diminished lighting
-        RD_M_DrawTextSmallENG(smoothlight ? "SMOOTH" : "ORIGINAL", 169 + wide_delta, 112, CR_NONE);
+        RD_M_DrawTextSmallENG(smoothlight ? "SMOOTH" : "ORIGINAL", 169 + wide_delta, 122, CR_NONE);
+
+
+        // Informative message
+        if (rendering_resolution_temp != rendering_resolution
+        ||  aspect_ratio_temp != aspect_ratio
+        ||  opengles_renderer_temp != opengles_renderer)
+        {
+            RD_M_DrawTextSmallENG("THE PROGRAM MUST BE RESTARTED",
+                                  51 + wide_delta, 132, MenuTime & 32 ? CR_GREEN : CR_DARKGREEN);
+        }
 
         // Tip for faster sliding
         if (CurrentItPos == 4)
@@ -2059,60 +2069,58 @@ static void DrawRenderingMenu1(void)
     }
     else
     {
+        // Разрешение рендеринга
+        RD_M_DrawTextSmallRUS(rendering_resolution_temp == 1 ? "CHTLYTT" :
+                              rendering_resolution_temp == 2 ? "DSCJRJT" : "YBPRJT",
+                              204 + wide_delta, 42, CR_NONE);
+
         // Соотношение сторон экрана
         RD_M_DrawTextSmallENG(aspect_ratio_temp == 1 ? "5:4" :
                               aspect_ratio_temp == 2 ? "16:9" :
                               aspect_ratio_temp == 3 ? "16:10" :
                               aspect_ratio_temp == 4 ? "21:9" :
                               "4:3",
-                              230 + wide_delta, 42, CR_NONE);
+                              230 + wide_delta, 52, CR_NONE);
 
         // Экрнанный рендерер
         if (force_software_renderer == 1)
         {
-            RD_M_DrawTextSmallRUS("Y/L", 158 + wide_delta, 52, CR_DARKRED); // Н/Д
+            RD_M_DrawTextSmallRUS("Y/L", 158 + wide_delta, 62, CR_DARKRED); // Н/Д
         }
         else
         {
             if (opengles_renderer_temp)
             {
-                RD_M_DrawTextSmallENG("OPENGL ES 2.0", 158 + wide_delta, 52, CR_NONE);
+                RD_M_DrawTextSmallENG("OPENGL ES 2.0", 158 + wide_delta, 62, CR_NONE);
             }
             else
             {
 #ifdef _WIN32
                 // On Windows, default is always Direct 3D 9.
-                RD_M_DrawTextSmallENG("DIRECT 3D", 158 + wide_delta, 52, CR_NONE);
+                RD_M_DrawTextSmallENG("DIRECT 3D", 158 + wide_delta, 62, CR_NONE);
 #else
                 // On other OSes it is unclear, so use OS preferred.
-                RD_M_DrawTextSmallRUS("GJ DS,JHE JC", 158 + wide_delta, 52, CR_NONE); // ПО ВЫБОРУ ОС
+                RD_M_DrawTextSmallRUS("GJ DS,JHE JC", 158 + wide_delta, 62, CR_NONE); // ПО ВЫБОРУ ОС
 #endif
             }
-        }
-
-        // Informative message: НЕОБХОДИМ ПЕРЕЗАПУСК ИГРЫ
-        if (aspect_ratio_temp != aspect_ratio || opengles_renderer_temp != opengles_renderer)
-        {
-            RD_M_DrawTextSmallRUS("YTJ,[JLBV GTHTPFGECR GHJUHFVVS",
-                                  46 + wide_delta, 132, MenuTime & 32 ? CR_GREEN : CR_DARKGREEN);
         }
 
         // Вертикальная синхронизация
         if (force_software_renderer)
         {
-            RD_M_DrawTextSmallRUS("Y/L", 236 + wide_delta, 62, CR_GRAY);
+            RD_M_DrawTextSmallRUS("Y/L", 236 + wide_delta, 72, CR_GRAY);
         }
         else
         {
-            RD_M_DrawTextSmallRUS(vsync ? "DRK" : "DSRK", 236 + wide_delta, 62, CR_NONE);
+            RD_M_DrawTextSmallRUS(vsync ? "DRK" : "DSRK", 236 + wide_delta, 72, CR_NONE);
         }
 
         // Ограничение FPS
-        RD_M_DrawTextSmallENG("FPS:", 123 + wide_delta, 72, CR_NONE);
-        RD_Menu_DrawSliderSmallInline(154, 72, 11, (max_fps-40) / 20);
+        RD_M_DrawTextSmallENG("FPS:", 123 + wide_delta, 82, CR_NONE);
+        RD_Menu_DrawSliderSmallInline(154, 82, 11, (max_fps-40) / 20);
         // Numerical representation of slider position
         M_snprintf(num, 4, "%d", max_fps);
-        RD_M_DrawTextSmallENG(num, 262 + wide_delta, 73, 
+        RD_M_DrawTextSmallENG(num, 262 + wide_delta, 83, 
                               max_fps < 60 ? CR_GRAY :
                               max_fps < 100 ? CR_NONE :
                               max_fps < 260 ? CR_GREEN : 
@@ -2121,25 +2129,34 @@ static void DrawRenderingMenu1(void)
         // Счетчик производительности
         RD_M_DrawTextSmallRUS(show_fps == 1 ? "" : // Print as US string below
                               show_fps == 2 ? "gjkysq" : "dsrk",
-                              236 + wide_delta, 82, CR_NONE);
+                              236 + wide_delta, 92, CR_NONE);
         // Print "FPS" separately, RU sting doesn't fit in 4:3 aspect ratio :(
-        if (show_fps == 1) RD_M_DrawTextSmallENG("fps", 236 + wide_delta, 82, CR_NONE);
+        if (show_fps == 1) RD_M_DrawTextSmallENG("fps", 236 + wide_delta, 92, CR_NONE);
 
         // Пиксельное сглаживание
         if (force_software_renderer)
         {
-            RD_M_DrawTextSmallRUS("Y/L", 211 + wide_delta, 92, CR_GRAY);
+            RD_M_DrawTextSmallRUS("Y/L", 211 + wide_delta, 102, CR_GRAY);
         }
         else
         {
-            RD_M_DrawTextSmallRUS(smoothing ? "DRK" : "DSRK", 211 + wide_delta, 92, CR_NONE);
+            RD_M_DrawTextSmallRUS(smoothing ? "DRK" : "DSRK", 211 + wide_delta, 102, CR_NONE);
         }
 
         // Изменение палитры краев экрана
-        RD_M_DrawTextSmallRUS(vga_porch_flash ? "DRK" : "DSRK", 265 + wide_delta, 102, CR_NONE);
+        RD_M_DrawTextSmallRUS(vga_porch_flash ? "DRK" : "DSRK", 265 + wide_delta, 112, CR_NONE);
 
         // Угасание освещения
-        RD_M_DrawTextSmallRUS(smoothlight ? "GKFDYJT" : "JHBUBYFKMYJT", 180 + wide_delta, 112, CR_NONE);
+        RD_M_DrawTextSmallRUS(smoothlight ? "GKFDYJT" : "JHBUBYFKMYJT", 180 + wide_delta, 122, CR_NONE);
+
+        // Informative message: НЕОБХОДИМ ПЕРЕЗАПУСК ИГРЫ
+        if (rendering_resolution_temp != rendering_resolution
+        || aspect_ratio_temp != aspect_ratio
+        || opengles_renderer_temp != opengles_renderer)
+        {
+            RD_M_DrawTextSmallRUS("YTJ,[JLBV GTHTPFGECR GHJUHFVVS",
+                                  46 + wide_delta, 132, MenuTime & 32 ? CR_GREEN : CR_DARKGREEN);
+        }
 
         // Для ускоренного пролистывания
         // удерживайте кнопку бега
@@ -2243,6 +2260,13 @@ static void DrawRenderingMenu2(void)
     // Screenshot format / Формат скриншотов (same english values)
     RD_M_DrawTextSmallENG(png_screenshots ? "PNG" : "PCX", 176 + wide_delta, 102, CR_NONE);
 
+}
+
+static void M_RD_Change_Resolution(Direction_t direction)
+{
+    // [JN] Rendering resolution: changing only temp variable here.
+    // Initially it is set in MN_Init and stored into config file in M_QuitResponse.
+    RD_Menu_SpinInt(&rendering_resolution_temp, 0, 2, direction);
 }
 
 static void M_RD_Change_Widescreen(Direction_t direction)
@@ -2452,17 +2476,6 @@ static void DrawDisplayMenu(void)
     if (gamestate != GS_LEVEL || (gamestate == GS_LEVEL && menubgwait < I_GetTime()))
         V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
-    if (english_language)
-    {
-        // Graphics detail
-        RD_M_DrawTextSmallENG(detailLevel ? "LOW" : "HIGH", 149 + wide_delta, 82, CR_NONE);
-    }
-    else
-    {
-        // Детализация графики
-        RD_M_DrawTextSmallRUS(detailLevel ? "YBPRFZ" : "DSCJRFZ", 188 + wide_delta, 82, CR_NONE);
-    }
-
     //
     // Sliders
     //
@@ -2509,7 +2522,7 @@ static void M_RD_ScreenSize(Direction_t direction)
             screenblocks = 12;
     }
 
-    R_SetViewSize(screenblocks, detailLevel);
+    R_SetViewSize(screenblocks);
 }
 
 static void M_RD_LevelBrightness(Direction_t direction)
@@ -2518,16 +2531,6 @@ static void M_RD_LevelBrightness(Direction_t direction)
     menubgwait = I_GetTime() + 25;
 
     RD_Menu_SlideInt(&extra_level_brightness, 0, 8, direction);
-}
-
-static void M_RD_Detail()
-{
-    detailLevel ^= 1;
-
-    R_SetViewSize (screenblocks, detailLevel);
-
-    P_SetMessage(&players[consoleplayer], detailLevel ?
-                 txt_detail_low : txt_detail_high, msg_system, false);
 }
 
 // -----------------------------------------------------------------------------
@@ -5694,7 +5697,6 @@ static void M_RD_BackToDefaults_Recommended(void)
     // Display
     screenblocks        = 10;
     extra_level_brightness = 0;
-    detailLevel         = 0;
 
     // Color options
     brightness       = 1.0f;
@@ -5829,7 +5831,7 @@ static void M_RD_BackToDefaults_Recommended(void)
     // Reset palette.
     I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
     
-    R_SetViewSize(screenblocks, detailLevel);
+    R_SetViewSize(screenblocks);
 
     BorderNeedRefresh = true;
 
@@ -5853,7 +5855,6 @@ static void M_RD_BackToDefaults_Original(void)
     // Display
     screenblocks        = 10;
     extra_level_brightness = 0;
-    detailLevel         = 1;
 
     // Color options
     brightness       = 1.0f;
@@ -5988,7 +5989,7 @@ static void M_RD_BackToDefaults_Original(void)
     // Reset palette.
     I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
 
-    R_SetViewSize(screenblocks, detailLevel);
+    R_SetViewSize(screenblocks);
 
     BorderNeedRefresh = true;
 
@@ -6265,6 +6266,8 @@ boolean MN_Responder(event_t * event)
     {
         if (event->type == ev_quit || BK_isKeyDown(event, bk_menu_activate) || BK_isKeyDown(event, bk_quit))
         {
+            // [JN] Rendering resolution: remember choosen widescreen variable before quit.
+            rendering_resolution = rendering_resolution_temp;
             // [JN] Widescreen: remember choosen widescreen variable before quit.
             aspect_ratio = aspect_ratio_temp;
             // [JN] Screen renderer: remember choosen renderer variable before quit.
@@ -6287,6 +6290,8 @@ boolean MN_Responder(event_t * event)
         {
             G_CheckDemoStatus();
 
+            // [JN] Rendering resolution: remember choosen widescreen variable before quit.
+            rendering_resolution = rendering_resolution_temp;
             // [JN] Widescreen: remember choosen widescreen variable before quit.
             aspect_ratio = aspect_ratio_temp;
             // [JN] Screen renderer: remember choosen renderer variable before quit.
@@ -6355,6 +6360,8 @@ boolean MN_Responder(event_t * event)
             {
                 case 1:
                     G_CheckDemoStatus();
+                    // [JN] Rendering resolution: remember choosen widescreen variable before quit.
+                    rendering_resolution = rendering_resolution_temp;
                     // [JN] Widescreen: remember choosen widescreen variable before quit.
                     aspect_ratio = aspect_ratio_temp;
                     // [JN] Screen renderer: remember choosen renderer variable before quit.
@@ -6500,8 +6507,7 @@ boolean MN_Responder(event_t * event)
         }
         else if (BK_isKeyDown(event, bk_detail))          // F5 (detail)
         {
-            // [JN] Restored variable detail mode.
-            M_RD_Detail();
+            // TODO - consider replacing with level restart.
             S_StartSound(NULL, sfx_chat);
             return true;
         }

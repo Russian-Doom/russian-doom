@@ -576,7 +576,6 @@ extern fixed_t fractionaltic;
 extern fixed_t projection;
 extern fixed_t viewcos, viewsin;
 extern int centerx, centery;
-extern int detailshift;
 extern int extralight;
 extern int maxlightz, lightzshift;
 extern int rendered_segs, rendered_visplanes, rendered_vissprites;
@@ -609,7 +608,7 @@ void R_ExecuteSetViewSize (void);
 void R_Init (void);
 void R_RenderMaskedSegRange (drawseg_t *ds, int x1, int x2);
 void R_RenderPlayerView (player_t *player);
-void R_SetViewSize (int blocks, int detail);
+void R_SetViewSize (int blocks);
 
 // -----------------------------------------------------------------------------
 // R_PLANE

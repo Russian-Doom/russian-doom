@@ -82,19 +82,24 @@ static vpatchclipfunc_t patchclip_callback = NULL;
 // [JN] Extra resolution variables:
 //
 
+int rendering_resolution = 1;
+int rendering_resolution_temp;
+int detailshift = 0;
+
 // Main variable, defining high resolution.
-// 0 =  320x200
+// 0 =  320x200 (emulated)
 // 1 =  640x400
 // 2 = 1280x800
-int hires = 1;
-
-
-int SCREENWIDTH;
-int SCREENHEIGHT;
+int hires;
 
 // Addendum for high resolution rendering.
 // Equals 1 for high detail, otherwise equals 0.
 int extrares;
+
+// Variable screen width and height values,
+// shifted by hires variable.
+int SCREENWIDTH;
+int SCREENHEIGHT;
 
 // Shortcut for patch drawing functions.
 // Equals screenwidth * hires.
@@ -1630,6 +1635,21 @@ void V_DrawRawScreen (const byte *raw)
 
 void V_Init (void) 
 { 
+    if (rendering_resolution)
+    {
+        // If running in middle or high resolution,
+        // use actial hires value and don't use low detail mode.
+        hires = rendering_resolution;
+        detailshift = 0;
+    }
+    else
+    {
+        // Else, emitate low resolution by using middle resolution
+        // and low detail mode.
+        hires = 1;
+        detailshift = 1;
+    }
+
     SCREENWIDTH = ORIGWIDTH << hires;
     SCREENHEIGHT = ORIGHEIGHT << hires;
 

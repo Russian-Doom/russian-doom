@@ -474,7 +474,6 @@ extern fixed_t R_PointToDist (fixed_t x, fixed_t y);
 extern fixed_t viewcos, viewsin;
 
 extern int centerx, centery;
-extern int detailshift;  // 0 = high, 1 = low
 extern int extralight;
 extern int flyheight;
 extern int maxlightz, lightzshift;
@@ -514,7 +513,7 @@ extern void R_Init (void);
 extern void R_InitLightTables (void);
 extern void R_InterpolateTextureOffsets (void); // [crispy] smooth texture scrolling
 extern void R_RenderPlayerView (const player_t *player);
-extern void R_SetViewSize (const int blocks, const int detail);
+extern void R_SetViewSize (const int blocks);
 
 /*
 ================================================================================

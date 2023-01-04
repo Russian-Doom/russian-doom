@@ -160,7 +160,6 @@ char* autoload_dir  = NULL;
 // Display
 int screenblocks = 10;
 int extra_level_brightness = 0;
-int detailLevel = 0;        // [JN] Blocky mode, 0 = high, 1 = normal
 int hud_detaillevel = 0;    // [JN] Blocky mode, 0 = high, 1 = normal
 
 // Messages and texts
@@ -340,7 +339,6 @@ void D_BindVariables(void)
     M_BindIntVariable("always_run",             &alwaysRun);
     M_BindIntVariable("mlook",                  &mlook);
     M_BindIntVariable("extra_level_brightness", &extra_level_brightness);
-    M_BindIntVariable("detaillevel",            &detailLevel);
     M_BindIntVariable("hud_detaillevel",        &hud_detaillevel);
     M_BindIntVariable("artiskip",               &artiskip);
 

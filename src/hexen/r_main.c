@@ -31,7 +31,6 @@
 // [JN] Used by perfomance counter.
 int rendered_segs, rendered_visplanes, rendered_vissprites;
 
-int       detailshift;                // 0 = high, 1 = low
 int       viewangleoffset;
 int       validcount = 1;             // increment every time a check is made
 int       centerx, centery;
@@ -42,7 +41,7 @@ angle_t   viewangle;
 fixed_t   viewcos, viewsin;
 player_t *viewplayer;
 
-int setblocks, setdetail;
+int setblocks;
 boolean setsizeneeded;
 
 // [crispy] lookup table for horizontal screen coordinates
@@ -551,11 +550,10 @@ static void R_InitLightTables(void)
 ================================================================================
 */
 
-void R_SetViewSize (int blocks, int detail)
+void R_SetViewSize (int blocks)
 {
     setsizeneeded = true;
     setblocks = blocks;
-    setdetail = detail;
 }
 
 /*
@@ -605,7 +603,6 @@ void R_ExecuteSetViewSize (void)
         }
     }
 
-    detailshift = setdetail;
     viewwidth = scaledviewwidth >> detailshift;
     viewheight = scaledviewheight >> (detailshift && hires);
 
@@ -754,8 +751,8 @@ void R_Init (void)
     R_InitVisplanesRes ();
 
     R_InitData();
-    // viewwidth / viewheight / detailLevel are set by the defaults
-    R_SetViewSize(screenblocks, detailLevel);
+    // viewwidth / viewheight  are set by the defaults
+    R_SetViewSize(screenblocks);
     R_InitLightTables();
     R_InitSkyMap();
     R_InitTranslationTables();

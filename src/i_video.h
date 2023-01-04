@@ -33,9 +33,13 @@
 #define MAXHEIGHT     800
 
 extern int hires;
+extern int detailshift;
 
 extern int SCREENWIDTH;
 extern int SCREENHEIGHT;
+
+extern int rendering_resolution;
+extern int rendering_resolution_temp;
 
 // [JN] Aspect ratio macroses and variables. Available ratios are:
 // aspect_ratio = 0 (4:3)

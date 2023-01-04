@@ -38,7 +38,6 @@ boolean original_playpal = true;
 // [JN] Used by perfomance counter.
 int rendered_segs, rendered_visplanes, rendered_vissprites;
 
-int           detailshift;      // 0 = high, 1 = low
 int           viewangleoffset;
 int           validcount = 1;   // increment every time a check is made
 int           centerx, centery;
@@ -50,7 +49,7 @@ fixed_t       viewcos, viewsin;
 player_t     *viewplayer;
 lighttable_t *fixedcolormap;
 
-int     setblocks, setdetail;
+int     setblocks;
 boolean setsizeneeded;
 // [crispy] lookup table for horizontal screen coordinates
 // [JN] Resolution limitation is removed.
@@ -532,11 +531,10 @@ static void R_InitTranslationTables (void)
 // middle of a refresh. The change will take effect next refresh.
 // -----------------------------------------------------------------------------
 
-void R_SetViewSize (const int blocks, const int detail)
+void R_SetViewSize (const int blocks)
 {
     setsizeneeded = true;
     setblocks = blocks;
-    setdetail = detail;
 }
 
 // -----------------------------------------------------------------------------
@@ -591,7 +589,6 @@ void R_ExecuteSetViewSize (void)
         }
     }
 
-    detailshift = setdetail;
     viewwidth = scaledviewwidth >> detailshift;
     viewheight = scaledviewheight >> (detailshift && hires);
 
@@ -754,8 +751,8 @@ void R_Init (void)
     
     R_InitData ();
     printf (".");
-    // viewwidth / viewheight / detailLevel are set by the defaults
-    R_SetViewSize (screenblocks, detailLevel);
+    // viewwidth / viewheight are set by the defaults
+    R_SetViewSize (screenblocks);
     printf (".");
     R_InitLightTables ();
     printf (".");
