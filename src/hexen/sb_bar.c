@@ -1699,6 +1699,20 @@ void DrawMainBar(void)
          for (j = 0; j <= hires; j++)
           for (k = 0; k <= hires; k++)
           {
+            if (extrares)
+            {
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((95 + wide_delta) << hires) + k)] = 0;
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((96 + wide_delta) << hires) + k)] = 0;
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((97 + wide_delta) << hires) + k)] = 0;
+
+            I_VideoBuffer[((i << hires) + j) * screenwidth + (((95 + wide_delta) << hires) + 1 + k)] = 0;
+            I_VideoBuffer[((i << hires) + j) * screenwidth + (((96 + wide_delta) << hires) + 1 + k)] = 0;
+            I_VideoBuffer[((i << hires) + j) * screenwidth + (((97 + wide_delta) << hires) + 1 + k)] = 0;
+
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((95 + wide_delta) << hires) + 1 + k)] = 0;
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((96 + wide_delta) << hires) + 1 + k)] = 0;
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((97 + wide_delta) << hires) + 1 + k)] = 0;
+            }
             I_VideoBuffer[((i << hires) + j) * screenwidth + (((95 + wide_delta) << hires) + k)] = 0;
             I_VideoBuffer[((i << hires) + j) * screenwidth + (((96 + wide_delta) << hires) + k)] = 0;
             I_VideoBuffer[((i << hires) + j) * screenwidth + (((97 + wide_delta) << hires) + k)] = 0;
@@ -1710,6 +1724,20 @@ void DrawMainBar(void)
          for (j = 0; j <= hires; j++)
           for (k = 0; k <= hires; k++)
           {
+            if (extrares)
+            {
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((103 + wide_delta) << hires) + k)] = 0;
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((104 + wide_delta) << hires) + k)] = 0;
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((105 + wide_delta) << hires) + k)] = 0;
+
+            I_VideoBuffer[((i << hires) + j) * screenwidth + (((103 + wide_delta) << hires) + 1 + k)] = 0;
+            I_VideoBuffer[((i << hires) + j) * screenwidth + (((104 + wide_delta) << hires) + 1 + k)] = 0;
+            I_VideoBuffer[((i << hires) + j) * screenwidth + (((105 + wide_delta) << hires) + 1 + k)] = 0;
+
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((103 + wide_delta) << hires) + 1 + k)] = 0;
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((104 + wide_delta) << hires) + 1 + k)] = 0;
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((105 + wide_delta) << hires) + 1 + k)] = 0;
+            }
             I_VideoBuffer[((i << hires) + j) * screenwidth + (((103 + wide_delta) << hires) + k)] = 0;
             I_VideoBuffer[((i << hires) + j) * screenwidth + (((104 + wide_delta) << hires) + k)] = 0;
             I_VideoBuffer[((i << hires) + j) * screenwidth + (((105 + wide_delta) << hires) + k)] = 0;
