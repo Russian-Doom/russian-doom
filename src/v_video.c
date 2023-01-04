@@ -760,10 +760,12 @@ void V_DrawFadePatch (int x, int y, const patch_t *patch, const byte *table)
 
 void V_DrawShadowedPatch (int x, int y, const patch_t *patch)
 {
-    int count, col;
+    int col, count;
     column_t *column;
-    byte *dest, *desttop;
-    byte *desttop2, *dest2;
+    byte *dest1, *desttop1; // Middle resolution (main patch)
+    byte *dest2, *desttop2; // High resolution (main patch)
+    byte *dest3, *desttop3; // Middle resolution (shadow)
+    byte *dest4, *desttop4; // High resolution (shadow)
     byte *source, *sourcetrans;
     int w, f;
 
@@ -771,82 +773,112 @@ void V_DrawShadowedPatch (int x, int y, const patch_t *patch)
     x -= SHORT(patch->leftoffset);
 
     col = 0;
-    desttop = dest_screen + (y << hires) * screenwidth + x;
-    desttop2 = dest_screen + ((y + 2) << hires) * screenwidth + x + 2;
+    desttop1 = dest_screen + (y << hires) * screenwidth + x;
+    desttop2 = dest_screen + ((y << hires) + extrares) * screenwidth + x;
+    desttop3 = dest_screen + ((y + 2) << hires) * screenwidth + x + 2 + extrares;
+    desttop4 = dest_screen + (((y + 2) << hires) + extrares) * screenwidth + x + 2 + extrares;
 
     w = SHORT(patch->width);
-    for (; col < w; x++, col++, desttop++, desttop2++)
+    for (; col < w; x++, col++, desttop1++, desttop2++, desttop3++, desttop4++)
     {
         column = (column_t *) ((byte *) patch + LONG(patch->columnofs[col]));
 
         // step through the posts in a column
-
         while (column->topdelta != 0xff)
         {
-            for (f = 0; f <= hires; f++)
+            for (f = 0; f <= (hires + extrares); f++)
             {
-            source = sourcetrans = (byte *) column + 3;
-            dest = desttop + column->topdelta * (screenwidth << hires) + (x * hires) + f;
-            dest2 = desttop2 + column->topdelta * (screenwidth << hires) + (x * hires) + f;
-            count = column->length;
+                const int column_post = column->topdelta * (screenwidth << hires) + (x * (hires + extrares)) + f;
 
-            // [crispy] prevent framebuffer overflows
-            {
-                int tmpy = y + column->topdelta;
+                source = sourcetrans = (byte *) column + 3;
+                dest1 = desttop1 + column_post;
+                dest2 = desttop2 + column_post;
+                dest3 = desttop3 + column_post;
+                dest4 = desttop4 + column_post;
 
-                // [crispy] too far left
-                if (x < 0)
+                count = column->length;
+
+                // [crispy] prevent framebuffer overflows
                 {
-                    continue;
+                    int tmpy = y + column->topdelta;
+
+                    // [crispy] too far left
+                    if (x < 0)
+                    {
+                        continue;
+                    }
+
+                    // [crispy] too far right / width
+                    if (x >= origwidth)
+                    {
+                        break;
+                    }
+
+                    // [crispy] too high
+                    while (tmpy < 0)
+                    {
+                        count--;
+                        source++;
+                        dest1 += (screenwidth << hires);
+                        dest2 += (screenwidth << hires);
+                        dest3 += (screenwidth << hires);
+                        dest4 += (screenwidth << hires);
+                        tmpy++;
+                    }
+
+                    // [crispy] too low / height
+                    while (tmpy + count > ORIGHEIGHT)
+                    {
+                        count--;
+                    }
+
+                    // [crispy] nothing left to draw?
+                    if (count < 1)
+                    {
+                        continue;
+                    }
                 }
 
-                // [crispy] too far right / width
-                if (x >= origwidth)
+                while (count--)
                 {
-                    break;
-                }
+                    if (dp_translation)
+                    sourcetrans = &dp_translation[*source++];
 
-                // [crispy] too high
-                while (tmpy < 0)
-                {
-                    count--;
-                    source++;
-                    dest += (screenwidth << hires);
-                    tmpy++;
-                }
+                    if (extrares)
+                    {
+                        *dest4 = *dest3 = tinttable[((*dest3) << 8)];
+                        dest4 += fullscreenwidth;
+                        dest3 += fullscreenwidth;
 
-                // [crispy] too low / height
-                while (tmpy + count > ORIGHEIGHT)
-                {
-                    count--;
-                }
+                        *dest2 = *dest1 = *sourcetrans;
+                        dest2 += fullscreenwidth;
+                        dest1 += fullscreenwidth;
 
-                // [crispy] nothing left to draw?
-                if (count < 1)
-                {
-                    continue;
+                        *dest4 = *dest3 = tinttable[((*dest3) << 8)];
+                        dest4 += fullscreenwidth;
+                        dest3 += fullscreenwidth;
+
+                        *dest2 = *dest1 = *sourcetrans++;
+                        dest2 += fullscreenwidth;
+                        dest1 += fullscreenwidth;
+                    }
+                    else
+                    {
+                        *dest3 = tinttable[((*dest3) << 8)];
+                        dest3 += fullscreenwidth;
+
+                        *dest1 = *sourcetrans;
+                        dest1 += fullscreenwidth;
+
+                        *dest3 = tinttable[((*dest3) << 8)];
+                        dest3 += fullscreenwidth;
+
+                        *dest1 = *sourcetrans++;
+                        dest1 += fullscreenwidth;
+                    }
                 }
             }
 
-            while (count--)
-            {
-                if (dp_translation)
-                sourcetrans = &dp_translation[*source++];
-
-                if (hires)
-                {
-                    *dest2 = tinttable[((*dest2) << 8)];
-                    dest2 += screenwidth * hires;
-                    *dest = *sourcetrans;
-                    dest += screenwidth * hires;
-                }
-                *dest2 = tinttable[((*dest2) << 8)];
-                dest2 += screenwidth * hires;
-                *dest = *sourcetrans++;
-                dest += screenwidth * hires;
-
-            }
-            }
             column = (column_t *) ((byte *) column + column->length + 4);
         }
     }
@@ -1017,114 +1049,151 @@ void V_DrawShadowedPatchDoom (int x, int y, const patch_t *patch)
 
 void V_DrawShadowedPatchRaven (int x, int y, const patch_t *patch)
 {
-    int count, col;
+    int col, count;
     column_t *column;
-    byte *desttop, *dest, *source, *sourcetrans;
-    byte *desttop2, *dest2;
+    byte *dest1, *desttop1; // Middle resolution (main patch)
+    byte *dest2, *desttop2; // High resolution (main patch)
+    byte *dest3, *desttop3; // Middle resolution (shadow)
+    byte *dest4, *desttop4; // High resolution (shadow)
+    byte *source, *sourcetrans;
     int w, f;
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
 
     col = 0;
-    desttop = dest_screen + (y << hires) * screenwidth + x;
+    desttop1 = dest_screen + (y << hires) * screenwidth + x;
+    desttop2 = dest_screen + ((y << hires) + extrares) * screenwidth + x;
+    
     if (draw_shadowed_text && !vanillaparm)
     {
-        desttop2 = dest_screen + ((y + 1) << hires) * screenwidth + x + 2;
+        desttop3 = dest_screen + ((y + 1) << hires) * screenwidth + x + 2 + extrares;
+        desttop4 = dest_screen + (((y + 1) << hires) + extrares) * screenwidth + x + 2 + extrares;
     }
     else
     {
-        desttop2 = NULL;
+        desttop3 = NULL;
+        desttop4 = NULL;
     }
 
     w = SHORT(patch->width);
-    for (; col < w; x++, col++, desttop++, desttop2++)
+    for (; col < w; x++, col++, desttop1++, desttop2++, desttop3++, desttop4++)
     {
         column = (column_t *) ((byte *) patch + LONG(patch->columnofs[col]));
 
         // step through the posts in a column
-
         while (column->topdelta != 0xff)
         {
-          for (f = 0; f <= hires; f++)
-          {
-            source = sourcetrans = (byte *) column + 3;
-            dest = desttop + column->topdelta * (screenwidth << hires) + (x * hires) + f;
-
-            if (draw_shadowed_text && !vanillaparm)
+            for (f = 0; f <= (hires + extrares); f++)
             {
-                dest2 = desttop2 + column->topdelta * (screenwidth << hires) + (x * hires) + f;
-            }
-            else 
-            {
-                dest2 = NULL;
-            }
+                const int column_post = column->topdelta * (screenwidth << hires) + (x * (hires + extrares)) + f;
 
-            count = column->length;
-
-            // [crispy] prevent framebuffer overflows
-            {
-                int tmpy = y + column->topdelta;
-
-                // [crispy] too far left
-                if (x < 0)
-                {
-                    continue;
-                }
-
-                // [crispy] too far right / width
-                if (x >= origwidth)
-                {
-                    break;
-                }
-
-                // [crispy] too high
-                while (tmpy < 0)
-                {
-                    count--;
-                    source++;
-                    dest += (screenwidth << hires);
-                    tmpy++;
-                }
-
-                // [crispy] too low / height
-                while (tmpy + count > ORIGHEIGHT)
-                {
-                    count--;
-                }
-
-                // [crispy] nothing left to draw?
-                if (count < 1)
-                {
-                    continue;
-                }
-            }
-
-            while (count--)
-            {
-                if (dp_translation)
-                sourcetrans = &dp_translation[*source++];
-
-                if (hires)
-                {
-                    if (draw_shadowed_text && !vanillaparm)
-                    {
-                        *dest2 = tinttable[((*dest2) << 8)];
-                        dest2 += screenwidth;
-                    }
-                    *dest = *sourcetrans;
-                    dest += screenwidth;
-                }
+                source = sourcetrans = (byte *) column + 3;
+                dest1 = desttop1 + column_post;
+                dest2 = desttop2 + column_post;
 
                 if (draw_shadowed_text && !vanillaparm)
                 {
-                    *dest2 = tinttable[((*dest2) << 8)];
-                    dest2 += screenwidth;
+                    dest3 = desttop3 + column_post;
+                    dest4 = desttop4 + column_post;
                 }
-                *dest = *sourcetrans++;
-                dest += screenwidth;
+                else 
+                {
+                    dest3 = NULL;
+                    dest4 = NULL;
+                }
+
+                count = column->length;
+
+                // [crispy] prevent framebuffer overflows
+                {
+                    int tmpy = y + column->topdelta;
+
+                    // [crispy] too far left
+                    if (x < 0)
+                    {
+                        continue;
+                    }
+
+                    // [crispy] too far right / width
+                    if (x >= origwidth)
+                    {
+                        break;
+                    }
+
+                    // [crispy] too high
+                    while (tmpy < 0)
+                    {
+                        count--;
+                        source++;
+                        dest1 += (screenwidth << hires);
+                        dest2 += (screenwidth << hires);
+                        dest3 += (screenwidth << hires);
+                        dest4 += (screenwidth << hires);
+                        tmpy++;
+                    }
+
+                    // [crispy] too low / height
+                    while (tmpy + count > ORIGHEIGHT)
+                    {
+                        count--;
+                    }
+
+                    // [crispy] nothing left to draw?
+                    if (count < 1)
+                    {
+                        continue;
+                    }
+                }
+
+                while (count--)
+                {
+                    if (dp_translation)
+                    sourcetrans = &dp_translation[*source++];
+
+                    if (extrares)
+                    {
+                        if (draw_shadowed_text && !vanillaparm)
+                        {
+                            *dest4 = *dest3 = tinttable[((*dest3) << 8)];
+                            dest4 += fullscreenwidth;
+                            dest3 += fullscreenwidth;
+                        }
+                        *dest2 = *dest1 = *sourcetrans;
+                        dest2 += fullscreenwidth;
+                        dest1 += fullscreenwidth;
+
+                        if (draw_shadowed_text && !vanillaparm)
+                        {
+                            *dest4 = *dest3 = tinttable[((*dest3) << 8)];
+                            dest4 += fullscreenwidth;
+                            dest3 += fullscreenwidth;
+                        }
+                        *dest2 = *dest1 = *sourcetrans++;
+                        dest2 += fullscreenwidth;
+                        dest1 += fullscreenwidth;
+                    }
+                    else
+                    {
+                        if (draw_shadowed_text && !vanillaparm)
+                        {
+                            *dest3 = tinttable[((*dest3) << 8)];
+                            dest3 += fullscreenwidth;
+                        }
+                        *dest1 = *sourcetrans;
+                        dest1 += fullscreenwidth;
+
+                        if (draw_shadowed_text && !vanillaparm)
+                        {
+                            *dest3 = tinttable[((*dest3) << 8)];
+                            dest3 += fullscreenwidth;
+                        }
+                        *dest1 = *sourcetrans++;
+                        dest1 += fullscreenwidth;
+                    }
+                }
             }
-          }
+
             column = (column_t *) ((byte *) column + column->length + 4);
         }
     }
