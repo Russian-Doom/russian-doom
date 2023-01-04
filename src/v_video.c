@@ -469,41 +469,58 @@ void V_DrawPatchFlipped (int x, int y, const patch_t *patch)
 
 void V_DrawTLPatch (int x, int y, const patch_t *patch)
 {
-    int count, col;
+    int col, count;
     column_t *column;
-    byte *desttop, *dest, *source;
+    byte *dest1, *desttop1; // Middle resolution (main patch)
+    byte *dest2, *desttop2; // High resolution (main patch)
+    byte *source;
     int w, f;
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
 
     col = 0;
-    desttop = dest_screen + (y << hires) * screenwidth + x;
+    desttop1 = dest_screen + (y << hires) * screenwidth + x;
+    desttop2 = dest_screen + ((y << hires) + extrares) * screenwidth + x;
 
     w = SHORT(patch->width);
-    for (; col < w; x++, col++, desttop++)
+
+    for (; col < w; x++, col++, desttop1++, desttop2++)
     {
         column = (column_t *) ((byte *) patch + LONG(patch->columnofs[col]));
 
         // step through the posts in a column
-
         while (column->topdelta != 0xff)
         {
-            for (f = 0; f <= hires; f++)
+            for (f = 0; f <= (hires + extrares); f++)
             {
+            const int column_post = column->topdelta * (screenwidth << hires) + (x * (hires + extrares)) + f;
+
             source = (byte *) column + 3;
-            dest = desttop + column->topdelta * (screenwidth << hires) + (x * hires) + f;
+            dest1 = desttop1 + column_post;
+            dest2 = desttop2 + column_post;
             count = column->length;
 
             while (count--)
             {
-                if (hires)
+                if (extrares)
                 {
-                    *dest = tinttable[((*dest) << 8) + *source];
-                    dest += screenwidth;
+                    *dest2 = *dest1 = tinttable[((*dest1) << 8) + *source];
+                    dest1 += fullscreenwidth;
+                    dest2 += fullscreenwidth;
+
+                    *dest2 = *dest1 = tinttable[((*dest1) << 8) + *source++];
+                    dest1 += fullscreenwidth;
+                    dest2 += fullscreenwidth;
                 }
-                *dest = tinttable[((*dest) << 8) + *source++];
-                dest += screenwidth;
+                else
+                {
+                    *dest1 = tinttable[((*dest1) << 8) + *source];
+                    dest1 += fullscreenwidth;
+                    
+                    *dest1 = tinttable[((*dest1) << 8) + *source++];
+                    dest1 += fullscreenwidth;
+                }
             }
             }
             column = (column_t *) ((byte *) column + column->length + 4);
@@ -1282,8 +1299,8 @@ void V_DrawPatchUnscaled (int x, int y, const patch_t *patch, const byte *table)
     byte *sourcetrans;
     int w;
 
-    y *= hires;
-    x *= hires;
+    x <<= extrares;
+    y <<= extrares;
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
@@ -1356,7 +1373,7 @@ void V_DrawPatchUnscaled (int x, int y, const patch_t *patch, const byte *table)
                 else
                 *dest = *sourcetrans++;    
 
-                dest += screenwidth;
+                dest += fullscreenwidth >> extrares;
             }
             column = (column_t *)((byte *)column + column->length + 4);
         }
