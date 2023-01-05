@@ -1087,11 +1087,26 @@ void AM_Ticker (void)
 = tiles from 2 to 3. To support rendering at 2x resolution, treat original
 = 320 x 158 tile image as 640 x 79.
 =
+= [JN] TODO - adapt for quadres, the code below is working but filling 
+= background incorrect.
+=
 ================================================================================
 */
 
 static void AM_drawBackground (void)
 {
+    int x, y;
+    byte *dest = I_VideoBuffer;
+
+    for (y = 0; y < finit_height; y++)
+    {
+        for (x = 0; x < screenwidth; x++)
+        {
+            *dest++ = maplump[(((y >> hud_detaillevel) & 63) << 6) 
+                             + ((x >> hud_detaillevel) & 63)];
+        }
+    }
+/*
     const int mapbgwidth_hires = ORIGWIDTH << hires;
     int j = mapbgwidth_hires;
     int x2 = screenwidth;
@@ -1122,6 +1137,7 @@ static void AM_drawBackground (void)
             j = 0;
         }
     }
+*/
 }
 
 /*

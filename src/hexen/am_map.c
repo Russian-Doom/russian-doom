@@ -128,7 +128,7 @@ static byte antialias_overlay[8][8] = {
     { 32,  31,  30,  29,  28,  27,  26,  25}    // WHITE
 };
 
-static patch_t *maplump;     // [JN] Pointer to the GFX patch for the automap background.
+static byte *maplump;        // Automap background patch.
 static short mapystart = 0;  // y-value for the start of the map bitmap...used in the parallax stuff.
 static short mapxstart = 0;  // x-value for the bitmap.
 
@@ -420,8 +420,7 @@ static void AM_loadPics(void)
     int  i;
     char namebuf[9];
 
-    // [JN] Parallax problem: AUTOPAGE changed to unreplacable MAPEPAGE.
-    maplump = W_CacheLumpName("MAPEPAGE", PU_STATIC);
+    maplump = W_CacheLumpName("AUTOPAGE", PU_STATIC);
 
     for (i = 0 ; i < 10 ; i++)
     {
@@ -775,51 +774,68 @@ void AM_Ticker(void)
     prev_m_y = m_y;
 }
 
+/*
+================================================================================
+=
+= AM_clearFB
+=
+= Blit the automap background to the screen.
+=
+= [crispy] To support widescreen, increase the number of possible background
+= tiles from 2 to 3. To support rendering at 2x resolution, treat original
+= 320 x 158 tile image as 640 x 79.
+=
+= [JN] TODO - adapt for quadres, the code below is working but filling 
+= background incorrect.
+=
+================================================================================
+*/
+
 static void AM_clearFB(int color)
 {
-    int dmapx;
-    int dmapy;
+    int x, y;
+    byte *dest = I_VideoBuffer;
 
-    if (automap_follow)
+    for (y = 0; y < finit_height; y++)
     {
-        dmapx = (MTOF(plr->mo->x) - MTOF(oldplr.x));    //fixed point
-        dmapy = (MTOF(oldplr.y) - MTOF(plr->mo->y));
-
-        oldplr.x = plr->mo->x;
-        oldplr.y = plr->mo->y;
-
-        mapxstart += dmapx >> 1;
-        mapystart += dmapy >> 1;
-
-        while (mapxstart >= (screenwidth >> hires))
-            mapxstart -= (screenwidth >> hires);
-        while (mapxstart < 0)
-            mapxstart += (screenwidth >> hires);
-        while (mapystart >= (finit_height >> hires))
-            mapystart -= (finit_height >> hires);
-        while (mapystart < 0)
-            mapystart += (finit_height >> hires);
+        for (x = 0; x < screenwidth; x++)
+        {
+            *dest++ = maplump[(((y >> hud_detaillevel) & 63) << 6) 
+                             + ((x >> hud_detaillevel) & 63)];
+        }
     }
-    else
+/*
+    const int mapbgwidth_hires = ORIGWIDTH << hires;
+    int j = mapbgwidth_hires;
+    int x2 = screenwidth;
+    int x3;
+    
+    if (x2 > mapbgwidth_hires)
     {
-        mapxstart += (MTOF(m_paninc.x) >> 1);
-        mapystart -= (MTOF(m_paninc.y) >> 1);
-
-        if (mapxstart >= (screenwidth >> hires))
-            mapxstart -= (screenwidth >> hires);
-        if (mapxstart < 0)
-            mapxstart += (screenwidth >> hires);
-        if (mapystart >= (finit_height >> hires))
-            mapystart -= (finit_height >> hires);
-        if (mapystart < 0)
-            mapystart += (finit_height >> hires);
+        x2 = mapbgwidth_hires;
     }
 
-    // [JN] Draw automap background as tiled GFX patches.
-    V_DrawPatchUnscaled(0, 0, maplump, NULL);
-    V_DrawPatchUnscaled(560, 0, maplump, NULL);
-    V_DrawPatchUnscaled(0, 200, maplump, NULL);
-    V_DrawPatchUnscaled(560, 200, maplump, NULL); 
+    x3 = screenwidth - x2;
+
+    for (int i = 0 ; i < finit_height ; i++)
+    {
+        memcpy(I_VideoBuffer + i * screenwidth,
+               maplump + j + mapbgwidth_hires - x3, x3);
+
+        memcpy(I_VideoBuffer + i * screenwidth + x3,
+               maplump + j + mapbgwidth_hires - x2, x2);
+
+        memcpy(I_VideoBuffer + i * screenwidth + x2 + x3,
+               maplump + j, 0);
+
+        j += mapbgwidth_hires;
+
+        if (j >= MAPBGROUNDHEIGHT * MAPBGROUNDWIDTH)
+        {
+            j = 0;
+        }
+    }
+*/
 }
 
 // Based on Cohen-Sutherland clipping algorithm but with a slightly
