@@ -1672,7 +1672,6 @@ void H2_PageTicker(void)
 
 static void PageDrawer(void)
 {
-    boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
     const patch_t *page = W_CacheLumpName(pagename, PU_CACHE);
 
     if (aspect_ratio >= 2)
@@ -1693,7 +1692,7 @@ static void PageDrawer(void)
 
     if (demosequence == 1)
     {
-        V_DrawShadowedPatchRaven(4 + (wide_4_3 ? wide_delta : 0), 160, 
+        V_DrawShadowedPatchRaven(4 + wide_delta, 160, 
                                  W_CacheLumpName( english_language ?
                                  "ADVISOR" : "RD_ADV" , PU_CACHE));
     }

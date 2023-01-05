@@ -90,7 +90,7 @@ static void M_RD_Screenshots();
 static void DrawDisplayMenu(void);
 static void M_RD_ScreenSize(Direction_t direction);
 static void M_RD_LevelBrightness(Direction_t direction);
-static void M_RD_SBar_Detail();
+static void M_RD_BG_Detail();
 
 // Color
 static void DrawColorMenu(void);
@@ -623,7 +623,7 @@ static MenuItem_t DisplayItems[] = {
     I_EMPTY,
     I_LRFUNC( "LEVEL BRIGHTNESS",        "EHJDTYM JCDTOTYYJCNB",    M_RD_LevelBrightness), // УРОВЕНЬ ОСВЕЩЕННОСТИ
     I_EMPTY,
-    I_SWITCH( "HUD BACKGROUND DETAIL: ", "LTNFKBPFWBZ AJYF",        M_RD_SBar_Detail), // ДЕТАЛИЗАЦИЯ ФОНА (HUD:)
+    I_SWITCH( "BACKGROUND DETAIL:",      "LTNFKBPFWBZ AJYF:",       M_RD_BG_Detail), // ДЕТАЛИЗАЦИЯ ФОНА
     I_SETMENU("COLOR OPTIONS...",        "YFCNHJQRB WDTNF>>>",      &ColorMenu), // НАСТРОЙКИ ЦВЕТА...
     I_TITLE(  "INTERFACE",               "BYNTHATQC"), // ИНТЕРФЕЙС
     I_SETMENU("MESSAGES AND TEXTS...",   "CJJ,OTYBZ B NTRCNS>>>",   &MessagesMenu), // СООБЩЕНИЯ И ТЕКСТЫ...
@@ -921,7 +921,7 @@ static MenuItem_t Bindings4Items[] = {
     I_EFUNC("ALWAYS RUN",            "GJCNJZYYSQ ,TU",        BK_StartBindingKey, bk_toggle_autorun),   // Постоянный бег
     I_EFUNC("CROSSHAIR",             "GHBWTK",                BK_StartBindingKey, bk_toggle_crosshair), // Прицел
     I_EFUNC("Messages",              "cjj,otybz",             BK_StartBindingKey, bk_messages),         // Сообщения
-    I_EFUNC("Detail level",          "ltnfkbpfwbz uhfabrb",   BK_StartBindingKey, bk_detail),           // Детализация графики
+    I_EFUNC("BACKGROUND DETAIL",     "LTNFKBPFWBZ AJYF",      BK_StartBindingKey, bk_detail),           // Детализация фона
     I_EFUNC("LEVEL FLIPPING",        "PTHRFKBHJDFYBT EHJDYZ", BK_StartBindingKey, bk_toggle_fliplvls),  // Зеркалирование уровня
     I_EMPTY,
     I_SETMENU("NEXT PAGE >", "CKTLE.OFZ CNHFYBWF `",  &Bindings5Menu), // Cледующая страница >
@@ -2421,14 +2421,13 @@ static void DrawDisplayMenu(void)
 
     if (english_language)
     {
-        // HUD background detail
-        RD_M_DrawTextSmallENG(hud_detaillevel ? "LOW" : "HIGH", 198 + wide_delta, 82, CR_NONE);
+        // Background detail
+        RD_M_DrawTextSmallENG(hud_detaillevel ? "LOW" : "HIGH", 169 + wide_delta, 82, CR_NONE);
     }
     else
     {
-        // Status Bar detail
-        RD_M_DrawTextSmallENG("HUD: c", 164 + wide_delta, 92, CR_NONE);
-        RD_M_DrawTextSmallRUS(hud_detaillevel ? "YBPRFZ" : "DSCJRFZ", 196 + wide_delta, 82, CR_NONE);
+        // Background detail
+        RD_M_DrawTextSmallRUS(hud_detaillevel ? "YBPRFZ" : "DSCJRFZ", 167 + wide_delta, 82, CR_NONE);
     }
 
     // Screen size
@@ -2638,7 +2637,7 @@ static void M_RD_LevelBrightness(Direction_t direction)
     RD_Menu_SlideInt(&extra_level_brightness, 0, 8, direction);
 }
 
-static void M_RD_SBar_Detail()
+static void M_RD_BG_Detail()
 {
     hud_detaillevel ^= 1;
 

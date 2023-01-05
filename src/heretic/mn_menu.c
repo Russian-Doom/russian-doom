@@ -93,6 +93,7 @@ static void M_RD_EndText();
 static void DrawDisplayMenu(void);
 static void M_RD_ScreenSize(Direction_t direction);
 static void M_RD_LevelBrightness(Direction_t direction);
+static void M_RD_BG_Detail();
 
 // Color
 static void DrawColorMenu(void);
@@ -614,6 +615,7 @@ static MenuItem_t DisplayItems[] = {
     I_EMPTY,
     I_LRFUNC( "LEVEL BRIGHTNESS",          "EHJDTYM JCDTOTYYJCNB",    M_RD_LevelBrightness), // УРОВЕНЬ ОСВЕЩЕННОСТИ
     I_EMPTY,
+    I_SWITCH( "BACKGROUND DETAIL:",        "LTNFKBPFWBZ AJYF:",       M_RD_BG_Detail), // ДЕТАЛИЗАЦИЯ ФОНА
     I_SETMENU("COLOR OPTIONS...",          "YFCNHJQRB WDTNF>>>",      &ColorMenu), // НАСТРОЙКИ ЦВЕТА...
     I_TITLE(  "INTERFACE",                 "BYNTHATQC"), // ИНТЕРФЕЙС
     I_SETMENU("MESSAGES AND TEXTS...",     "CJJ,OTYBZ B NTRCNS>>>",   &MessagesMenu), // СООБЩЕНИЯ И ТЕКСТЫ...
@@ -915,7 +917,7 @@ static MenuItem_t Bindings3Items[] = {
     I_EFUNC("ALWAYS RUN",     "GJCNJZYYSQ ,TU",        BK_StartBindingKey, bk_toggle_autorun),   // Постоянный бег
     I_EFUNC("CROSSHAIR",      "GHBWTK",                BK_StartBindingKey, bk_toggle_crosshair), // Прицел
     I_EFUNC("Messages",       "cjj,otybz",             BK_StartBindingKey, bk_messages),         // Сообщения
-    I_EFUNC("Detail level",   "ltnfkbpfwbz uhfabrb",   BK_StartBindingKey, bk_detail),           // Детализация графики
+    I_EFUNC("BACKGROUND DETAIL", "LTNFKBPFWBZ AJYF",   BK_StartBindingKey, bk_detail),           // Детализация фона
     I_EFUNC("LEVEL FLIPPING", "PTHRFKBHJDFYBT EHJDYZ", BK_StartBindingKey, bk_toggle_fliplvls),  // Зеркалирование уровня
     I_EMPTY,
     I_EMPTY,
@@ -2476,6 +2478,17 @@ static void DrawDisplayMenu(void)
     if (gamestate != GS_LEVEL || (gamestate == GS_LEVEL && menubgwait < I_GetTime()))
         V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
+    if (english_language)
+    {
+        // Background detail
+        RD_M_DrawTextSmallENG(hud_detaillevel ? "LOW" : "HIGH", 169 + wide_delta, 82, CR_NONE);
+    }
+    else
+    {
+        // Детализация фона
+        RD_M_DrawTextSmallRUS(hud_detaillevel ? "YBPRFZ" : "DSCJRFZ", 167 + wide_delta, 82, CR_NONE);
+    }
+
     //
     // Sliders
     //
@@ -2531,6 +2544,26 @@ static void M_RD_LevelBrightness(Direction_t direction)
     menubgwait = I_GetTime() + 25;
 
     RD_Menu_SlideInt(&extra_level_brightness, 0, 8, direction);
+}
+
+static void M_RD_BG_Detail()
+{
+    hud_detaillevel ^= 1;
+
+    // [JN] Update screen border.
+    setsizeneeded = true;
+    BorderNeedRefresh = true;
+
+    if (!hud_detaillevel)
+    {
+        P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
+                     TXT_DETAIL_HIGH : TXT_DETAIL_HIGH_RUS), msg_system, false);
+    }
+    else
+    {
+        P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
+                     TXT_DETAIL_LOW : TXT_DETAIL_LOW_RUS), msg_system, false);
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -6507,7 +6540,7 @@ boolean MN_Responder(event_t * event)
         }
         else if (BK_isKeyDown(event, bk_detail))          // F5 (detail)
         {
-            // TODO - consider replacing with level restart.
+            M_RD_BG_Detail();
             S_StartSound(NULL, sfx_chat);
             return true;
         }

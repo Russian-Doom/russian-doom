@@ -160,7 +160,7 @@ static void M_RD_Draw_Display();
 static void M_RD_Change_ScreenSize(Direction_t direction);
 static void M_RD_Change_LevelBrightness(Direction_t direction);
 static void M_RD_Change_MenuShading(Direction_t direction);
-static void M_RD_Change_HUD_Detail();
+static void M_RD_Change_BG_Detail();
 
 // Colors
 static void M_RD_Draw_Colors();
@@ -670,7 +670,6 @@ static MenuItem_t Rendering1Items[] = {
     I_EMPTY,
     I_EMPTY,
     I_EMPTY,
-    I_EMPTY,
     I_SETMENU(NULL, /* Next Page > */ NULL, &Rendering2Menu)  // Далее >
 };
 
@@ -723,7 +722,7 @@ static MenuItem_t DisplayItems[] = {
     I_EMPTY,
     I_LRFUNC( "menu shading",              "pfntvytybt ajyf vty.",    M_RD_Change_MenuShading),
     I_EMPTY,
-    I_SWITCH( "hud background detail:",    "ltnfkbpfwbz ajyf",        M_RD_Change_HUD_Detail),
+    I_SWITCH( "background detail:",        "ltnfkbpfwbz ajyf:",       M_RD_Change_BG_Detail),
     I_SETMENU("color options...",          "yfcnhjqrb wdtnf>>>",      &ColorMenu),
     I_TITLE(  "Interface",                 "bynthatqc"), // Интерфейс
     I_SETMENU("messages and texts...",     "cjj,otybz b ntrcns>>>",   &MessagesMenu),
@@ -1062,7 +1061,7 @@ static MenuItem_t Bindings4Items[] = {
     I_EFUNC("Always run",            "gjcnjzyysq ,tu",         BK_StartBindingKey, bk_toggle_autorun),   // Постоянный бег
     I_EFUNC("Crosshair",             "ghbwtk",                 BK_StartBindingKey, bk_toggle_crosshair), // Прицел
     I_EFUNC("Messages",              "cjj,otybz",              BK_StartBindingKey, bk_messages),         // Сообщения
-    I_EFUNC("Detail level",          "ltnfkbpfwbz uhfabrb",    BK_StartBindingKey, bk_detail),           // Детализация графики
+    I_EFUNC("Background detail",      "ltnfkbpfwbz ajyf",      BK_StartBindingKey, bk_detail),           // Детализация фона
     I_EFUNC("Level flipping",        "pthrfkbhjdfybt ehjdyz",  BK_StartBindingKey, bk_toggle_fliplvls),  // Зеркалирование уровня
     I_SETMENU(NULL, NULL, &Bindings5Menu), // Далее >
     I_SETMENU(NULL, NULL, &Bindings3Menu), // < Назад
@@ -2203,14 +2202,13 @@ static void M_RD_Draw_Display(void)
 
     if (english_language)
     {
-        // HUD background detail
-        RD_M_DrawTextSmallENG(hud_detaillevel ? "low" : "high", 199 + wide_delta, 95, CR_NONE);
+        // Background detail
+        RD_M_DrawTextSmallENG(hud_detaillevel ? "low" : "high", 171 + wide_delta, 95, CR_NONE);
     }
     else
     {
-        // Детализация фона HUD
-        RD_M_DrawTextSmallRUS(hud_detaillevel ? "ybprfz" : "dscjrfz", 199 + wide_delta, 95, CR_NONE);
-        RD_M_DrawTextSmallENG("HUD:", 167 + wide_delta, 95, CR_NONE);
+        // Детализация фона
+        RD_M_DrawTextSmallRUS(hud_detaillevel ? "ybprfz" : "dscjrfz", 171 + wide_delta, 95, CR_NONE);
     }
 
     // Screen size slider
@@ -2279,7 +2277,7 @@ static void M_RD_Change_MenuShading(Direction_t direction)
     RD_Menu_SlideInt_Step(&menu_shading, 0, 24, 4, direction);
 }
 
-static void M_RD_Change_HUD_Detail()
+static void M_RD_Change_BG_Detail()
 {
     extern boolean setsizeneeded;
 
@@ -2287,6 +2285,17 @@ static void M_RD_Change_HUD_Detail()
 
     // [JN] Update screen border.
     setsizeneeded = true;
+
+    if (!hud_detaillevel)
+    {
+        P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
+                     DETAILHI : DETAILHI_RUS), msg_system, false);
+    }
+    else
+    {
+        P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
+                     DETAILLO : DETAILLO_RUS), msg_system, false);
+    }
 }
 
 
@@ -7748,7 +7757,7 @@ boolean M_Responder (event_t* ev)
     // [JN] Allow detail toggle even while active menu.
     if (BK_isKeyDown(ev, bk_detail))
     {
-        // TODO - consider replacing with level restart.
+        M_RD_Change_BG_Detail();
         S_StartSound(NULL,sfx_swtchn);
         return true;
     }

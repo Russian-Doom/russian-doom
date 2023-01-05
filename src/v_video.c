@@ -1629,9 +1629,9 @@ void V_CopyScaledBuffer (byte *dest, const byte *src, const size_t size)
     {
         const int l = k / ORIGWIDTH; // current line in the source screen
         const int p = k - l * ORIGWIDTH; // current pixel in this line
-        for (i = 0; i <= hires; i++)
+        for (i = 0; i <= (hires + extrares); i++)
         {
-            for (j = 0; j <= hires; j++)
+            for (j = 0; j <= (hires + extrares); j++)
             {
                 *(dest + (p << hires) + ((l << hires) + i) * screenwidth + j 
                        + (wide_delta << hires)) = *(src + k);

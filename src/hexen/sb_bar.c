@@ -880,6 +880,7 @@ void SB_Drawer(void)
                 int x, y;
                 byte *src;
                 byte *dest;
+                const patch_t *const patch = W_CacheLumpName("bordb", PU_CACHE);
                 char *name = "F_022";
                 const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
         
@@ -897,20 +898,15 @@ void SB_Drawer(void)
                 }
         
                 // [JN] Draw bezel bottom edge.
-                if (scaledviewwidth == screenwidth)
+                for (x = 0; x < screenwidth; x += 8)
                 {
-                    patch_t *patch = W_CacheLumpName("bordb", PU_CACHE);
-                
-                    for (x = 0; x < screenwidth; x += 16)
+                    if (hud_detaillevel)
                     {
-                        if (hud_detaillevel)
-                        {
-                            V_DrawPatch(x, 0, patch, NULL);
-                        }
-                        else
-                        {
-                            V_DrawPatchUnscaled(x, 0, patch, NULL);
-                        }
+                        V_DrawPatch(x, 0, patch, NULL);
+                    }
+                    else
+                    {
+                        V_DrawPatchUnscaled(x, 0, patch, NULL);
                     }
                 }
             }

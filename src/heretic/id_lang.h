@@ -277,6 +277,8 @@ extern char* txt_mlook_off;
 #define TXT_CANT_START_IN_NETGAME "YOU CAN'T START A NEW GAME IN NETPLAY!"
 #define TXT_CANT_LOAD_IN_NETGAME  "YOU CAN'T LOAD A GAME IN NETPLAY!"
 #define TXT_REGISTERED_ONLY     "ONLY AVAILABLE IN THE REGISTERED VERSION"
+#define TXT_DETAIL_HIGH         "HIGH BACKGROUND DETAIL"
+#define TXT_DETAIL_LOW          "LOW BACKGROUND DETAIL"
 
 // F_finale.c
 #define E1TEXT  "with the destruction of the iron\n"\
@@ -505,6 +507,8 @@ extern char* txt_mlook_off;
 #define TXT_CANT_START_IN_NETGAME_RUS  "YTDJPVJ;YJ YFXFNM YJDE. BUHE D CTNTDJQ BUHT!" // НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
 #define TXT_CANT_LOAD_IN_NETGAME_RUS   "YTDJPVJ;YJ PFUHEPBNMCZ D CTNTDJQ BUHT!"       // НЕВОЗМОЖНО ЗАГРУЗИТЬСЯ В СЕТЕВОЙ ИГРЕ!
 #define TXT_REGISTERED_ONLY_RUS     "'GBPJL YTLJCNEGTY D LTVJDTHCBB"    // ЭПИЗОД НЕДОСТУПЕН В ДЕМОВЕРСИИ
+#define TXT_DETAIL_HIGH_RUS         "DSCJRFZ LTNFKBPFWBZ AJYF"  // ВЫСОКАЯ ДЕТАЛИЗАЦИЯ ФОНА
+#define TXT_DETAIL_LOW_RUS          "YBPRFZ LTNFKBPFWBZ AJYF"   // НИЗКАЯ ДЕТАЛИЗАЦИЯ ФОНА
 
 // F_finale.c
 #define E1TEXT_RUS  "C EYBXNJ;TYBTV ;TKTPYS[ KBXTQ\n"\

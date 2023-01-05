@@ -829,21 +829,19 @@ static void F_DrawPatchCol (const int x, const patch_t *patch, const int col)
     // step through the posts in a column
     while (column->topdelta != 0xff )
     {
-        for (f = 0; f <= hires; f++)
+        for (f = 0; f <= (hires + extrares); f++)
         {
             source = (byte *)column + 3;
-            dest = desttop + column->topdelta*(screenwidth << hires) + (x * hires) + f;
+            dest = desttop + column->topdelta*(screenwidth << hires) + (x * (hires + extrares)) + f;
             count = column->length;
 		
             while (count--)
             {
-                if (hires)
-                {
-                    *dest = *source;
-                    dest += screenwidth;
-                }
+                *dest = *source;
+                dest += screenwidth << extrares;
+
                 *dest = *source++;
-                dest += screenwidth;
+                dest += screenwidth << extrares;
             }
         }
     column = (column_t *)(  (byte *)column + column->length + 4 );
