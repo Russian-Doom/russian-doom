@@ -106,7 +106,7 @@ static fixed_t cachedystep[MAXHEIGHT];
 // [JN] e6y: resolution limitation is removed
 fixed_t *yslope = NULL;
 fixed_t *distscale = NULL;
-fixed_t yslopes[LOOKDIRS][MAXHEIGHT];
+fixed_t yslopes[MAXHEIGHT][MAXHEIGHT];
 
 // EXTERNAL DATA DECLARATIONS --------------------------------------------------
 

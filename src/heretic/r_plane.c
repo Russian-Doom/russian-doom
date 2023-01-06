@@ -97,7 +97,7 @@ fixed_t skytextureheight;
 // [JN] e6y: resolution limitation is removed
 fixed_t *yslope = NULL;
 fixed_t *distscale = NULL;
-fixed_t yslopes[LOOKDIRS][MAXHEIGHT];
+fixed_t yslopes[MAXHEIGHT][MAXHEIGHT];
 
 // [JN] Smooth plane scrolling.
 fixed_t FlatScrollFactor_X, FlatScrollFactor_X_old;

@@ -436,6 +436,11 @@ extern void R_InitBuffer (const int width, const int height);
 #define LOOKDIRMAX  90
 #define LOOKDIRS    (LOOKDIRMIN+1+LOOKDIRMAX) // [crispy] lookdir range: -160..0..90
 
+// [JN] Doubled versions for quad resolution, used only for rendering.
+#define LOOKDIRMIN2 (LOOKDIRMIN << extrares)
+#define LOOKDIRMAX2 (LOOKDIRMIN << extrares)
+#define LOOKDIRS2   (LOOKDIRMIN2+1+LOOKDIRMAX2)
+
 // Lighting constants
 #define	LIGHTLEVELS			16
 #define	LIGHTSEGSHIFT		4
@@ -528,7 +533,7 @@ extern void R_SetViewSize (const int blocks);
 typedef void (*planefunction_t) (int top, int bottom);
 
 extern fixed_t *yslope, *distscale;
-extern fixed_t yslopes[LOOKDIRS][MAXHEIGHT];
+extern fixed_t yslopes[MAXHEIGHT][MAXHEIGHT];
 // [JN] Smooth plane scrolling.
 extern fixed_t FlatScrollFactor_X, FlatScrollFactor_X_old;
 extern fixed_t FlatScrollFactor_Y, FlatScrollFactor_Y_old;

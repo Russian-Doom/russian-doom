@@ -25,6 +25,11 @@
 #define LOOKDIRMAX  90
 #define LOOKDIRS    (LOOKDIRMIN+1+LOOKDIRMAX) // [crispy] lookdir range: -160..0..90
 
+// [JN] Doubled versions for quad resolution, used only for rendering.
+#define LOOKDIRMIN2 (LOOKDIRMIN << extrares)
+#define LOOKDIRMAX2 (LOOKDIRMIN << extrares)
+#define LOOKDIRS2   (LOOKDIRMIN2+1+LOOKDIRMAX2)
+
 #define ANGLETOSKYSHIFT     22      // sky map is 256*128*4 maps
 #define BASEYCENTER         100
 #define MINZ                (FRACUNIT*4)
@@ -472,7 +477,7 @@ extern int *lastopening; // [crispy] 32-bit integer math
 extern int *floorclip, *ceilingclip; // dropoff overflow
 
 extern fixed_t *yslope, *distscale;
-extern fixed_t yslopes[LOOKDIRS][MAXHEIGHT];
+extern fixed_t yslopes[MAXHEIGHT][MAXHEIGHT];
 
 void R_InitPlanesRes(void);
 void R_InitVisplanesRes(void);

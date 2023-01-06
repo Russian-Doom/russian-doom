@@ -26,6 +26,7 @@
 #include "d_items.h"
 #include "i_video.h"
 #include "v_patch.h"
+#include "v_video.h"
 
 
 // -----------------------------------------------------------------------------
@@ -485,6 +486,11 @@ void R_StoreWallRange (const int start, const int stop);
 #define LOOKDIRMAX	90
 #define LOOKDIRS	(LOOKDIRMIN+1+LOOKDIRMAX) // [crispy] lookdir range: -110..0..90
 
+// [JN] Doubled versions for quad resolution, used only for rendering.
+#define LOOKDIRMIN2 (LOOKDIRMIN << extrares)
+#define LOOKDIRMAX2 (LOOKDIRMIN << extrares)
+#define LOOKDIRS2   (LOOKDIRMIN2+1+LOOKDIRMAX2)
+
 const byte *R_GetColumn (const int tex, int col);
 const byte *R_GetColumnMod (const int tex, int col);
 int R_CheckTextureNumForName (char *name);
@@ -614,7 +620,7 @@ void R_SetViewSize (int blocks);
 // R_PLANE
 // -----------------------------------------------------------------------------
 
-extern fixed_t  yslopes[LOOKDIRS][MAXHEIGHT];
+extern fixed_t  yslopes[MAXHEIGHT][MAXHEIGHT];
 extern fixed_t *yslope, *distscale;
 extern int     *floorclip, *ceilingclip; // dropoff overflow
 extern int     *lastopening; // [crispy] 32-bit integer math
