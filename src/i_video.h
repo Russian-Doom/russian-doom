@@ -26,15 +26,20 @@
 
 // Screen width and height.
 
-#define hires 1
+#define ORIGWIDTH     320
+#define ORIGHEIGHT    200
 
-#define ORIGWIDTH       320
-#define ORIGHEIGHT      200
+#define MAXWIDTH      2240
+#define MAXHEIGHT     800
 
-#define SCREENWIDTH     (ORIGWIDTH << hires)
-#define SCREENHEIGHT    (ORIGHEIGHT << hires)
+extern int hires;
+extern int detailshift;
 
-#define SCREENWIDTH_4_3 (256 << hires)
+extern int SCREENWIDTH;
+extern int SCREENHEIGHT;
+
+extern int rendering_resolution;
+extern int rendering_resolution_temp;
 
 // [JN] Aspect ratio macroses and variables. Available ratios are:
 // aspect_ratio = 0 (4:3)
@@ -42,11 +47,6 @@
 // aspect_ratio = 2 (16:9)
 // aspect_ratio = 3 (16:10)
 // aspect_ratio = 4 (21:9)
-
-#define WIDEORIGWIDTH   560
-#define WIDESCREENWIDTH (WIDEORIGWIDTH << hires)
-#define WIDE_DELTA      (WIDEORIGWIDTH - ORIGWIDTH) / 2
-#define SCREENHEIGHT_5_4 (256 << hires)
 
 extern int aspect_ratio;
 extern int aspect_ratio_temp;
@@ -59,10 +59,6 @@ extern int origwidth;
 extern int actualheight;
 
 void I_DrawBlackBorders (void);
-
-// Screen height used when preserve_window_aspect_ratio=true.
-
-#define SCREENHEIGHT_4_3 (240 << hires)
 
 void *I_GetSDLWindow(void);
 void *I_GetSDLRenderer(void);

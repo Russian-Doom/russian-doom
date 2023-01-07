@@ -549,13 +549,8 @@ void P_LoadSectors (int lump)
         ss->floor_yoffs = 0;
         ss->ceiling_xoffs = 0;
         ss->ceiling_yoffs = 0;
-
-        if (!detailLevel)
-        {
-           // [crispy] WiggleFix: [kb] for R_FixWiggle()
-            ss->cachedheight = 0;
-        }
-
+        // [crispy] WiggleFix: [kb] for R_FixWiggle()
+        ss->cachedheight = 0;
         // [AM] Sector interpolation.  Even if we're
         //      not running uncapped, the renderer still
         //      uses this data.

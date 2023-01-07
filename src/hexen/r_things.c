@@ -24,6 +24,7 @@
 #include "r_bmaps.h"
 #include "r_local.h"
 #include "v_trans.h"
+#include "v_video.h"
 
 
 // Sprite rotation 0 is facing the viewer, rotation 1 is one angle turn CLOCKWISE
@@ -1149,7 +1150,9 @@ void R_DrawPSprite(pspdef_t * psp)
     vis->class = 0;
     vis->psprite = true;
     // [crispy] weapons drawn 1 pixel too high when player is idle
-    vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/4-(psp->sy-spritetopoffset[lump]);
+    vis->texturemid = (BASEYCENTER << FRACBITS) + FRACUNIT/4
+                    - (psp->sy-spritetopoffset[lump])
+                    - quadres;
 
     if (screenblocks >= 11)
     {

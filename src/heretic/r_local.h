@@ -181,10 +181,10 @@ typedef struct visplane_s
     int special;
     int minx, maxx;
     unsigned int pad1;                // [crispy] hires / 32-bit integer math
-    unsigned int top[WIDESCREENWIDTH];// [crispy] hires / 32-bit integer math
+    unsigned int top[MAXWIDTH];       // [crispy] hires / 32-bit integer math
     unsigned int pad2;                // [crispy] hires / 32-bit integer math
     unsigned int pad3;                // [crispy] hires / 32-bit integer math
-    unsigned int bottom[WIDESCREENWIDTH]; // [crispy] hires / 32-bit integer math
+    unsigned int bottom[MAXWIDTH];    // [crispy] hires / 32-bit integer math
     unsigned int pad4;                // [crispy] hires / 32-bit integer math
 } visplane_t;
 
@@ -436,6 +436,11 @@ extern void R_InitBuffer (const int width, const int height);
 #define LOOKDIRMAX  90
 #define LOOKDIRS    (LOOKDIRMIN+1+LOOKDIRMAX) // [crispy] lookdir range: -160..0..90
 
+// [JN] Doubled versions for quad resolution, used only for rendering.
+#define LOOKDIRMIN2 (LOOKDIRMIN << quadres)
+#define LOOKDIRMAX2 (LOOKDIRMIN << quadres)
+#define LOOKDIRS2   (LOOKDIRMIN2+1+LOOKDIRMAX2)
+
 // Lighting constants
 #define	LIGHTLEVELS			16
 #define	LIGHTSEGSHIFT		4
@@ -474,7 +479,6 @@ extern fixed_t R_PointToDist (fixed_t x, fixed_t y);
 extern fixed_t viewcos, viewsin;
 
 extern int centerx, centery;
-extern int detailshift;  // 0 = high, 1 = low
 extern int extralight;
 extern int flyheight;
 extern int maxlightz, lightzshift;
@@ -514,7 +518,7 @@ extern void R_Init (void);
 extern void R_InitLightTables (void);
 extern void R_InterpolateTextureOffsets (void); // [crispy] smooth texture scrolling
 extern void R_RenderPlayerView (const player_t *player);
-extern void R_SetViewSize (const int blocks, const int detail);
+extern void R_SetViewSize (const int blocks);
 
 /*
 ================================================================================
@@ -529,7 +533,7 @@ extern void R_SetViewSize (const int blocks, const int detail);
 typedef void (*planefunction_t) (int top, int bottom);
 
 extern fixed_t *yslope, *distscale;
-extern fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
+extern fixed_t yslopes[MAXHEIGHT][MAXHEIGHT];
 // [JN] Smooth plane scrolling.
 extern fixed_t FlatScrollFactor_X, FlatScrollFactor_X_old;
 extern fixed_t FlatScrollFactor_Y, FlatScrollFactor_Y_old;

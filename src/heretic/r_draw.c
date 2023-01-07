@@ -31,8 +31,8 @@ int   viewwidth, scaledviewwidth;
 int   viewheight, scaledviewheight;
 int   viewwindowx, viewwindowy;
 
-static byte *ylookup[SCREENHEIGHT]; 
-static int   columnofs[WIDESCREENWIDTH]; 
+static byte *ylookup[MAXHEIGHT]; 
+static int   columnofs[MAXWIDTH]; 
 
 // R_DrawColumn. Source is the top of the column to scale.
 const lighttable_t *dc_colormap[2];  // [crispy] brightmaps

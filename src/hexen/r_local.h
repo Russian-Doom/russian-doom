@@ -25,6 +25,11 @@
 #define LOOKDIRMAX  90
 #define LOOKDIRS    (LOOKDIRMIN+1+LOOKDIRMAX) // [crispy] lookdir range: -160..0..90
 
+// [JN] Doubled versions for quad resolution, used only for rendering.
+#define LOOKDIRMIN2 (LOOKDIRMIN << quadres)
+#define LOOKDIRMAX2 (LOOKDIRMIN << quadres)
+#define LOOKDIRS2   (LOOKDIRMIN2+1+LOOKDIRMAX2)
+
 #define ANGLETOSKYSHIFT     22      // sky map is 256*128*4 maps
 #define BASEYCENTER         100
 #define MINZ                (FRACUNIT*4)
@@ -255,10 +260,10 @@ typedef struct visplane_s
     int special;
     int minx, maxx;
     unsigned int pad1;                    // [crispy] hires / 32-bit integer math
-    unsigned int top[WIDESCREENWIDTH];    // [crispy] hires / 32-bit integer math
+    unsigned int top[MAXWIDTH];           // [crispy] hires / 32-bit integer math
     unsigned int pad2;                    // [crispy] hires / 32-bit integer math
     unsigned int pad3;                    // [crispy] hires / 32-bit integer math
-    unsigned int bottom[WIDESCREENWIDTH]; // [crispy] hires / 32-bit integer math
+    unsigned int bottom[MAXWIDTH];        // [crispy] hires / 32-bit integer math
     unsigned int pad4;                    // [crispy] hires / 32-bit integer math
 } visplane_t;
 
@@ -387,8 +392,6 @@ extern lighttable_t *fixedcolormap;
 
 extern fixed_t viewcos, viewsin;
 
-extern int detailshift;         // 0 = high, 1 = low
-
 extern void (*colfunc) (void);
 extern void (*basecolfunc) (void);
 extern void (*tlcolfunc) (void);
@@ -474,7 +477,7 @@ extern int *lastopening; // [crispy] 32-bit integer math
 extern int *floorclip, *ceilingclip; // dropoff overflow
 
 extern fixed_t *yslope, *distscale;
-extern fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
+extern fixed_t yslopes[MAXHEIGHT][MAXHEIGHT];
 
 void R_InitPlanesRes(void);
 void R_InitVisplanesRes(void);

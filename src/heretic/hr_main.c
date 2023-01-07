@@ -121,7 +121,6 @@ int flashing_hom = 0;
 // Display
 int screenblocks = 10;
 int extra_level_brightness = 0;
-int detailLevel = 0;        // Blocky mode, 0 = high, 1 = normal
 int hud_detaillevel = 0;    // Blocky mode, 0 = high, 1 = normal
 
 // Messages and Texts
@@ -797,7 +796,6 @@ void D_PageTicker (void)
 
 void D_PageDrawer(void)
 {
-    boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
     const patch_t *page =  W_CacheLumpName(pagename, PU_CACHE);
 
     if (aspect_ratio >= 2)
@@ -818,7 +816,7 @@ void D_PageDrawer(void)
 
     if (demosequence == 1)
     {
-        V_DrawShadowedPatchRaven(4 + (wide_4_3 ? wide_delta : 0), 160,
+        V_DrawShadowedPatchRaven(4 + wide_delta, 160,
                                  W_CacheLumpName(DEH_String(english_language ?
                                  "ADVISOR" : "ADVIS_RU"), PU_CACHE));
     }
@@ -1057,7 +1055,6 @@ void D_BindVariables(void)
     // Display
     M_BindIntVariable("screenblocks",           &screenblocks);
     M_BindIntVariable("extra_level_brightness", &extra_level_brightness);
-    M_BindIntVariable("detaillevel",            &detailLevel);
 
     // Messages and Texts
     M_BindIntVariable("show_messages",          &show_messages);

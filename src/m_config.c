@@ -276,6 +276,12 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(fullscreen),
 
     //!
+    // [JN] Rendering resolution.
+    //
+
+    CONFIG_VARIABLE_INT(rendering_resolution),
+
+    //!
     // [JN] Aspect ratio.
     //
 

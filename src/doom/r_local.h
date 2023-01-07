@@ -26,6 +26,7 @@
 #include "d_items.h"
 #include "i_video.h"
 #include "v_patch.h"
+#include "v_video.h"
 
 
 // -----------------------------------------------------------------------------
@@ -432,11 +433,11 @@ typedef struct visplane_s
 
     unsigned int pad1;  // [crispy] hires / 32-bit integer math
     // Here lies the rub for all dynamic resize/change of resolution.
-    unsigned int top[WIDESCREENWIDTH];  // [crispy] hires / 32-bit integer math
+    unsigned int top[MAXWIDTH];  // [crispy] hires / 32-bit integer math
     unsigned int pad2;  // [crispy] hires / 32-bit integer math
     unsigned int pad3;  // [crispy] hires / 32-bit integer math
     // See above.
-    unsigned int bottom[WIDESCREENWIDTH];  // [crispy] hires / 32-bit integer math
+    unsigned int bottom[MAXWIDTH];  // [crispy] hires / 32-bit integer math
     unsigned int pad4;  // [crispy] hires / 32-bit integer math
 
 } visplane_t;
@@ -484,6 +485,11 @@ void R_StoreWallRange (const int start, const int stop);
 #define LOOKDIRMIN	110 // [crispy] -110, actually
 #define LOOKDIRMAX	90
 #define LOOKDIRS	(LOOKDIRMIN+1+LOOKDIRMAX) // [crispy] lookdir range: -110..0..90
+
+// [JN] Doubled versions for quad resolution, used only for rendering.
+#define LOOKDIRMIN2 (LOOKDIRMIN << quadres)
+#define LOOKDIRMAX2 (LOOKDIRMIN << quadres)
+#define LOOKDIRS2   (LOOKDIRMIN2+1+LOOKDIRMAX2)
 
 const byte *R_GetColumn (const int tex, int col);
 const byte *R_GetColumnMod (const int tex, int col);
@@ -576,7 +582,6 @@ extern fixed_t fractionaltic;
 extern fixed_t projection;
 extern fixed_t viewcos, viewsin;
 extern int centerx, centery;
-extern int detailshift;
 extern int extralight;
 extern int maxlightz, lightzshift;
 extern int rendered_segs, rendered_visplanes, rendered_vissprites;
@@ -609,13 +614,13 @@ void R_ExecuteSetViewSize (void);
 void R_Init (void);
 void R_RenderMaskedSegRange (drawseg_t *ds, int x1, int x2);
 void R_RenderPlayerView (player_t *player);
-void R_SetViewSize (int blocks, int detail);
+void R_SetViewSize (int blocks);
 
 // -----------------------------------------------------------------------------
 // R_PLANE
 // -----------------------------------------------------------------------------
 
-extern fixed_t  yslopes[LOOKDIRS][SCREENHEIGHT];
+extern fixed_t  yslopes[MAXHEIGHT][MAXHEIGHT];
 extern fixed_t *yslope, *distscale;
 extern int     *floorclip, *ceilingclip; // dropoff overflow
 extern int     *lastopening; // [crispy] 32-bit integer math

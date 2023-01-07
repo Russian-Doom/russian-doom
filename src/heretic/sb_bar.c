@@ -540,8 +540,12 @@ static void ShadeLine(int x, int y, int height, int shade)
     dest = I_VideoBuffer + y * screenwidth + x;
     while (height--)
     {
-        if (hires)
-           *(dest + 1) = *(shades + *dest);
+        if (quadres)
+        {
+            *(dest + 3) = *(shades + *dest);
+            *(dest + 2) = *(shades + *dest);
+        }
+        *(dest + 1) = *(shades + *dest);
         *(dest) = *(shades + *dest);
         dest += screenwidth;
     }
@@ -1185,6 +1189,7 @@ void SB_Drawer(void)
                 int x, y;
                 byte *src;
                 byte *dest;
+                const patch_t *const patch = W_CacheLumpName(DEH_String("BORDB"), PU_CACHE);
                 char *name = DEH_String(gamemode == shareware ? "FLOOR04" : "FLAT513");
                 const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
         
@@ -1202,13 +1207,15 @@ void SB_Drawer(void)
                 }
         
                 // [JN] Draw bezel bottom edge.
-                if (scaledviewwidth == screenwidth)
+                for (x = 0; x < screenwidth; x += 8)
                 {
-                    patch_t *patch = W_CacheLumpName(DEH_String("BORDB"), PU_CACHE);
-                
-                    for (x = 0; x < screenwidth; x += 16)
+                    if (hud_detaillevel)
                     {
                         V_DrawPatch(x, 0, patch, NULL);
+                    }
+                    else
+                    {
+                        V_DrawPatchUnscaled(x, 0, patch, NULL);
                     }
                 }
             }
@@ -2645,7 +2652,7 @@ static void Crosshair_Draw_Scaled (void)
 
 static void Crosshair_Draw_Unscaled (void)
 {
-    V_DrawPatchUnscaled(screenwidth/2, screenblocks <= 10 ? 162 : 204,
+    V_DrawPatchUnscaled(origwidth, screenblocks <= 10 ? 162 : 204,
                         CrosshairPatch, CrosshairOpacity);
 }
 
@@ -2737,24 +2744,24 @@ static void DrSmallAmmoNumber (int val, int x, int y, boolean opaque)
     if (val > 99)
     {
         patch = PatchINumbers[val / 100];
-        V_DrawPatchUnscaled(x << hires, y << hires, patch, opaque ? NULL : transtable60);
+        V_DrawPatchUnscaled(x << 1, y << 1, patch, opaque ? NULL : transtable60);
     }
     val = val % 100;
     if (val > 9 || oldval > 99)
     {
         patch = PatchINumbers[val / 10];
-        V_DrawPatchUnscaled((x + 5) << hires, y << hires, patch, opaque ? NULL : transtable60);
+        V_DrawPatchUnscaled((x + 5) << 1, y << 1, patch, opaque ? NULL : transtable60);
     }
     val = val % 10;
     patch = PatchINumbers[val];
-    V_DrawPatchUnscaled((x + 10) << hires, y << hires, patch, opaque ? NULL : transtable60);
+    V_DrawPatchUnscaled((x + 10) << 1, y << 1, patch, opaque ? NULL : transtable60);
 }
 
 static void SB_Draw_Ammo_Widget (void)
 {
     const int wide_4_3   = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta * 2 : 0;
-    const int xpos_pic   = (((ammo_widget == 1 ? 288 : 267) + wide_delta * 2) << hires) - wide_4_3;
-    const int xpos_slash = (((ammo_widget == 1 ? 288 : 296) + wide_delta * 2) << hires) - wide_4_3;
+    const int xpos_pic   = (((ammo_widget == 1 ? 288 : 267) + wide_delta * 2) << 1) - wide_4_3;
+    const int xpos_slash = (((ammo_widget == 1 ? 288 : 296) + wide_delta * 2) << 1) - wide_4_3;
     const int xpos_qty1  = ((ammo_widget == 1 ? 302 : 281) + wide_delta * 2) - (wide_4_3 / 2);
     const int xpos_qty2  = (302 + wide_delta * 2) - (wide_4_3 / 2);
     const int ammo1 = CPlayer->ammo[am_goldwand], fullammo1 = CPlayer->maxammo[am_goldwand];
@@ -2766,17 +2773,17 @@ static void SB_Draw_Ammo_Widget (void)
 
     // Ammo GFX patches
     //if (!(CPlayer->weaponowned[wp_goldwand])) dp_translation = cr[CR_MONOCHROME];
-    V_DrawPatchUnscaled(xpos_pic, 99 << hires, W_CacheLumpName(DEH_String("INAMGLD"), PU_CACHE),
+    V_DrawPatchUnscaled(xpos_pic, 198, W_CacheLumpName(DEH_String("INAMGLD"), PU_CACHE),
                        (CPlayer->readyweapon == wp_goldwand || (automapactive && !automap_overlay)) ? NULL : transtable60);
     dp_translation = NULL;
 
     if (!(CPlayer->weaponowned[wp_crossbow])) dp_translation = cr[CR_MONOCHROME];
-    V_DrawPatchUnscaled(xpos_pic, 106 << hires, W_CacheLumpName(DEH_String("INAMBOW"), PU_CACHE),
+    V_DrawPatchUnscaled(xpos_pic, 212, W_CacheLumpName(DEH_String("INAMBOW"), PU_CACHE),
                        (CPlayer->readyweapon == wp_crossbow || (automapactive && !automap_overlay)) ? NULL : transtable60);
     dp_translation = NULL;
 
     if (!(CPlayer->weaponowned[wp_blaster])) dp_translation = cr[CR_MONOCHROME];
-    V_DrawPatchUnscaled(xpos_pic, 113 << hires, W_CacheLumpName(DEH_String("INAMBST"), PU_CACHE),
+    V_DrawPatchUnscaled(xpos_pic, 226, W_CacheLumpName(DEH_String("INAMBST"), PU_CACHE),
                        (CPlayer->readyweapon == wp_blaster || (automapactive && !automap_overlay)) ? NULL : transtable60);
     dp_translation = NULL;
 
@@ -2784,17 +2791,17 @@ static void SB_Draw_Ammo_Widget (void)
     if (gamemode != shareware)
     {
         if (!(CPlayer->weaponowned[wp_skullrod])) dp_translation = cr[CR_MONOCHROME];
-        V_DrawPatchUnscaled(xpos_pic, 120 << hires, W_CacheLumpName(DEH_String("INAMRAM"), PU_CACHE),
+        V_DrawPatchUnscaled(xpos_pic, 240, W_CacheLumpName(DEH_String("INAMRAM"), PU_CACHE),
                            (CPlayer->readyweapon == wp_skullrod || (automapactive && !automap_overlay)) ? NULL : transtable60);
         dp_translation = NULL;
 
         if (!(CPlayer->weaponowned[wp_phoenixrod])) dp_translation = cr[CR_MONOCHROME];
-        V_DrawPatchUnscaled(xpos_pic, 127 << hires, W_CacheLumpName(DEH_String("INAMPNX"), PU_CACHE),
+        V_DrawPatchUnscaled(xpos_pic, 254, W_CacheLumpName(DEH_String("INAMPNX"), PU_CACHE),
                            (CPlayer->readyweapon == wp_phoenixrod || (automapactive && !automap_overlay)) ? NULL : transtable60);
         dp_translation = NULL;
 
         if (!(CPlayer->weaponowned[wp_mace])) dp_translation = cr[CR_MONOCHROME];
-        V_DrawPatchUnscaled(xpos_pic, 134 << hires, W_CacheLumpName(DEH_String("INAMLOB"), PU_CACHE),
+        V_DrawPatchUnscaled(xpos_pic, 268, W_CacheLumpName(DEH_String("INAMLOB"), PU_CACHE),
                            (CPlayer->readyweapon == wp_mace || (automapactive && !automap_overlay)) ? NULL : transtable60);
         dp_translation = NULL;
     }
@@ -2807,7 +2814,7 @@ static void SB_Draw_Ammo_Widget (void)
                      (CPlayer->readyweapon == wp_goldwand || (automapactive && !automap_overlay)) ? true : false);
     if (ammo_widget == 2)
     {
-        V_DrawPatchUnscaled(xpos_slash, 100 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
+        V_DrawPatchUnscaled(xpos_slash, 200, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
                            (CPlayer->readyweapon == wp_goldwand || (automapactive && !automap_overlay)) ? NULL : transtable60);
         DrSmallAmmoNumber(fullammo1, xpos_qty2, 100,
                          (CPlayer->readyweapon == wp_goldwand || (automapactive && !automap_overlay)) ? true : false);
@@ -2823,7 +2830,7 @@ static void SB_Draw_Ammo_Widget (void)
                      (CPlayer->readyweapon == wp_crossbow || (automapactive && !automap_overlay)) ? true : false);
     if (ammo_widget == 2)
     {
-        V_DrawPatchUnscaled(xpos_slash, 107 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
+        V_DrawPatchUnscaled(xpos_slash, 214, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
                            (CPlayer->readyweapon == wp_crossbow || (automapactive && !automap_overlay)) ? NULL : transtable60);
         DrSmallAmmoNumber(fullammo2, xpos_qty2, 107,
                          (CPlayer->readyweapon == wp_crossbow || (automapactive && !automap_overlay)) ? true : false);
@@ -2839,7 +2846,7 @@ static void SB_Draw_Ammo_Widget (void)
                      (CPlayer->readyweapon == wp_blaster || (automapactive && !automap_overlay)) ? true : false);
     if (ammo_widget == 2)
     {
-        V_DrawPatchUnscaled(xpos_slash, 114 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
+        V_DrawPatchUnscaled(xpos_slash, 228, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
                            (CPlayer->readyweapon == wp_blaster || (automapactive && !automap_overlay)) ? NULL : transtable60);
         DrSmallAmmoNumber(fullammo3, xpos_qty2, 114,
                          (CPlayer->readyweapon == wp_blaster || (automapactive && !automap_overlay)) ? true : false);
@@ -2858,7 +2865,7 @@ static void SB_Draw_Ammo_Widget (void)
                          (CPlayer->readyweapon == wp_skullrod || (automapactive && !automap_overlay)) ? true : false);
         if (ammo_widget == 2)
         {
-            V_DrawPatchUnscaled(xpos_slash, 121 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
+            V_DrawPatchUnscaled(xpos_slash, 242, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
                                (CPlayer->readyweapon == wp_skullrod || (automapactive && !automap_overlay)) ? NULL : transtable60);
             DrSmallAmmoNumber(fullammo4, xpos_qty2, 121,
                              (CPlayer->readyweapon == wp_skullrod || (automapactive && !automap_overlay)) ? true : false);
@@ -2874,7 +2881,7 @@ static void SB_Draw_Ammo_Widget (void)
                          (CPlayer->readyweapon == wp_phoenixrod || (automapactive && !automap_overlay)) ? true : false);
         if (ammo_widget == 2)
         {
-            V_DrawPatchUnscaled(xpos_slash, 128 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
+            V_DrawPatchUnscaled(xpos_slash, 256, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
                                (CPlayer->readyweapon == wp_phoenixrod || (automapactive && !automap_overlay)) ? NULL : transtable60);
             DrSmallAmmoNumber(fullammo5, xpos_qty2, 128,
                               (CPlayer->readyweapon == wp_phoenixrod || (automapactive && !automap_overlay)) ? true : false);
@@ -2890,7 +2897,7 @@ static void SB_Draw_Ammo_Widget (void)
                          (CPlayer->readyweapon == wp_mace || (automapactive && !automap_overlay)) ? true : false);
         if (ammo_widget == 2)
         {
-            V_DrawPatchUnscaled(xpos_slash, 135 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
+            V_DrawPatchUnscaled(xpos_slash, 270, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
                                (CPlayer->readyweapon == wp_mace || (automapactive && !automap_overlay)) ? NULL : transtable60);
             DrSmallAmmoNumber(fullammo6, xpos_qty2, 135,
                              (CPlayer->readyweapon == wp_mace || (automapactive && !automap_overlay)) ? true : false);

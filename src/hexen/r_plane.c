@@ -98,15 +98,15 @@ static int *spanstart = NULL;  // killough 2/8/98
 
 static lighttable_t **planezlight;
 static fixed_t planeheight;
-static fixed_t cachedheight[SCREENHEIGHT];
-static fixed_t cacheddistance[SCREENHEIGHT];
-static fixed_t cachedxstep[SCREENHEIGHT];
-static fixed_t cachedystep[SCREENHEIGHT];
+static fixed_t cachedheight[MAXHEIGHT];
+static fixed_t cacheddistance[MAXHEIGHT];
+static fixed_t cachedxstep[MAXHEIGHT];
+static fixed_t cachedystep[MAXHEIGHT];
 
 // [JN] e6y: resolution limitation is removed
 fixed_t *yslope = NULL;
 fixed_t *distscale = NULL;
-fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
+fixed_t yslopes[MAXHEIGHT][MAXHEIGHT];
 
 // EXTERNAL DATA DECLARATIONS --------------------------------------------------
 
@@ -517,12 +517,12 @@ void R_DrawPlanes(void)
     int         light, angle, angle2;
     int         offset, skyTexture, offset2, skyTexture2;
     int         heightmask;
-    int         count, frac, fracstep = FRACUNIT >> !detailshift;
+    int         count, frac, fracstep = (FRACUNIT >> !detailshift) >> quadres;
     byte       *source, *source2, *tempSource;
     byte       *dest, *dest1, *dest2, *dest3, *dest4;
 
-    extern byte *ylookup[SCREENHEIGHT];
-    extern int columnofs[WIDESCREENWIDTH];
+    extern byte *ylookup[MAXHEIGHT];
+    extern int columnofs[MAXWIDTH];
 
     for (i = 0 ; i < MAXVISPLANES ; i++)
     for (pl = visplanes[i] ; pl ; pl = pl->next, rendered_visplanes++)

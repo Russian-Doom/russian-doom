@@ -110,7 +110,12 @@ static int m_zoomout;
 
 // [crispy] Used for automap background tiling
 #define MAPBGROUNDWIDTH   (ORIGWIDTH)
-#define MAPBGROUNDHEIGHT  (ORIGHEIGHT - 42)
+#define MAPBGROUNDHEIGHT  (ORIGHEIGHT - (42 << quadres))
+
+// [JN] Pointer to background drawing functions.
+static void (*AM_drawBackground) (void);
+static void AM_drawBackgroundHigh (void);
+static void AM_drawBackgroundQuad (void);
 
 typedef struct
 {
@@ -180,7 +185,7 @@ static int cheating = 0;
 // [JN] Choosen mark color.
 static Translation_CR_t automap_mark_color_set;
 
-static int finit_height = SCREENHEIGHT - (42 << hires);
+static int finit_height;
 static int f_x, f_y;  // location of window on screen
 static int f_w, f_h;  // size of window on screen
 
@@ -644,6 +649,8 @@ void AM_initPics (void)
         DEH_snprintf(namebuf, 9, "MARKNUM%d", i);
         marknums[i] = W_CacheLumpName(namebuf, PU_STATIC);
     }
+
+    AM_drawBackground = quadres ? AM_drawBackgroundQuad : AM_drawBackgroundHigh;
 }
 
 /*
@@ -659,6 +666,7 @@ void AM_initPics (void)
 
 static void AM_LevelInit (void)
 {
+    finit_height = SCREENHEIGHT - (42 << hires);
     f_x = f_y = 0;
     f_w = screenwidth;
     f_h = finit_height;
@@ -1078,7 +1086,7 @@ void AM_Ticker (void)
 /*
 ================================================================================
 =
-= AM_drawBackground
+= AM_drawBackgroundHigh
 =
 = Blit the automap background to the screen.
 =
@@ -1089,7 +1097,7 @@ void AM_Ticker (void)
 ================================================================================
 */
 
-static void AM_drawBackground (void)
+static void AM_drawBackgroundHigh (void)
 {
     const int mapbgwidth_hires = ORIGWIDTH << hires;
     int j = mapbgwidth_hires;
@@ -1115,6 +1123,33 @@ static void AM_drawBackground (void)
                maplump + j, 0);
 
         j += mapbgwidth_hires;
+
+        if (j >= MAPBGROUNDHEIGHT * MAPBGROUNDWIDTH)
+        {
+            j = 0;
+        }
+    }
+}
+
+/*
+================================================================================
+=
+= AM_drawBackgroundQuad
+=
+= [JN] Blit the automap background to the screen, quad resolution version.
+=
+================================================================================
+*/
+
+static void AM_drawBackgroundQuad (void)
+{
+    int j = ORIGWIDTH;
+
+    for (int i = 0 ; i < finit_height ; i++)
+    {
+        memcpy(I_VideoBuffer + i * screenwidth, maplump + j + ORIGWIDTH, screenwidth);
+
+        j += ORIGWIDTH;
 
         if (j >= MAPBGROUNDHEIGHT * MAPBGROUNDWIDTH)
         {
@@ -2200,7 +2235,8 @@ static void AM_drawMarks (void)
                 {
                     // [JN] Use custom, precise patch versions and do coloring.
                     dp_translation = cr[automap_mark_color_set];
-                    V_DrawPatchUnscaled(flip_levels ? - fx : fx, fy, marknums[d], NULL);
+                    V_DrawPatchUnscaled((flip_levels ? - fx : fx) >> quadres,
+                                         fy >> quadres, marknums[d], NULL);
                     dp_translation = NULL;
                 }
 

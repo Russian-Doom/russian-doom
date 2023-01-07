@@ -160,7 +160,6 @@ char* autoload_dir  = NULL;
 // Display
 int screenblocks = 10;
 int extra_level_brightness = 0;
-int detailLevel = 0;        // [JN] Blocky mode, 0 = high, 1 = normal
 int hud_detaillevel = 0;    // [JN] Blocky mode, 0 = high, 1 = normal
 
 // Messages and texts
@@ -340,7 +339,6 @@ void D_BindVariables(void)
     M_BindIntVariable("always_run",             &alwaysRun);
     M_BindIntVariable("mlook",                  &mlook);
     M_BindIntVariable("extra_level_brightness", &extra_level_brightness);
-    M_BindIntVariable("detaillevel",            &detailLevel);
     M_BindIntVariable("hud_detaillevel",        &hud_detaillevel);
     M_BindIntVariable("artiskip",               &artiskip);
 
@@ -1674,7 +1672,6 @@ void H2_PageTicker(void)
 
 static void PageDrawer(void)
 {
-    boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
     const patch_t *page = W_CacheLumpName(pagename, PU_CACHE);
 
     if (aspect_ratio >= 2)
@@ -1695,7 +1692,7 @@ static void PageDrawer(void)
 
     if (demosequence == 1)
     {
-        V_DrawShadowedPatchRaven(4 + (wide_4_3 ? wide_delta : 0), 160, 
+        V_DrawShadowedPatchRaven(4 + wide_delta, 160, 
                                  W_CacheLumpName( english_language ?
                                  "ADVISOR" : "RD_ADV" , PU_CACHE));
     }

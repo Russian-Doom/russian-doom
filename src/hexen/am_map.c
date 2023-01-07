@@ -38,7 +38,7 @@ static int leveljuststarted = 1;    // kluge until AM_LevelInit() is called
 
 boolean automapactive = false;
 
-static int finit_height = SCREENHEIGHT - SBARHEIGHT;
+static int finit_height;
 static int f_x, f_y;            // location of window on screen
 static int f_w, f_h;            // size of window on screen
 
@@ -85,6 +85,11 @@ static int m_zoomout;
 #define M_ZOOMOUT_SLOW ((int) ((float)FRACUNIT / (1.04f + f_paninc / 200.0f)))
 #define M_ZOOMOUT_FAST ((int) ((float)FRACUNIT / (1.08f + f_paninc / 200.0f)))
 
+// [JN] Pointer to background drawing functions.
+static void (*AM_drawBackground) (void);
+static void AM_drawBackgroundHigh (void);
+static void AM_drawBackgroundQuad (void);
+
 static player_t *plr;           // the player represented by an arrow
 static vertex_t oldplr;
 
@@ -128,7 +133,7 @@ static byte antialias_overlay[8][8] = {
     { 32,  31,  30,  29,  28,  27,  26,  25}    // WHITE
 };
 
-static patch_t *maplump;     // [JN] Pointer to the GFX patch for the automap background.
+static byte *maplump;        // Automap background patch.
 static short mapystart = 0;  // y-value for the start of the map bitmap...used in the parallax stuff.
 static short mapxstart = 0;  // x-value for the bitmap.
 
@@ -420,8 +425,7 @@ static void AM_loadPics(void)
     int  i;
     char namebuf[9];
 
-    // [JN] Parallax problem: AUTOPAGE changed to unreplacable MAPEPAGE.
-    maplump = W_CacheLumpName("MAPEPAGE", PU_STATIC);
+    maplump = W_CacheLumpName("AUTOPAGE", PU_STATIC);
 
     for (i = 0 ; i < 10 ; i++)
     {
@@ -429,6 +433,8 @@ static void AM_loadPics(void)
         M_snprintf(namebuf, 9, "MARKNUM%d", i);
         marknums[i] = W_CacheLumpName(namebuf, PU_STATIC);
     }
+
+    AM_drawBackground = quadres ? AM_drawBackgroundQuad : AM_drawBackgroundHigh;
 }
 
 // should be called at the start of every level
@@ -438,6 +444,7 @@ static void AM_LevelInit(void)
 {
     leveljuststarted = 0;
 
+    finit_height = SCREENHEIGHT - SBARHEIGHT;
     f_x = f_y = 0;
     f_w = screenwidth;
     f_h = finit_height;
@@ -774,51 +781,79 @@ void AM_Ticker(void)
     prev_m_y = m_y;
 }
 
-static void AM_clearFB(int color)
+/*
+================================================================================
+=
+= AM_clearFB
+=
+= Blit the automap background to the screen.
+=
+= [crispy] To support widescreen, increase the number of possible background
+= tiles from 2 to 3. To support rendering at 2x resolution, treat original
+= 320 x 158 tile image as 640 x 79.
+=
+================================================================================
+*/
+
+static void AM_drawBackgroundHigh (void)
 {
-    int dmapx;
-    int dmapy;
-
-    if (automap_follow)
+    const int mapbgwidth_hires = ORIGWIDTH << hires;
+    int j = mapbgwidth_hires;
+    int x2 = screenwidth;
+    int x3;
+    
+    if (x2 > mapbgwidth_hires)
     {
-        dmapx = (MTOF(plr->mo->x) - MTOF(oldplr.x));    //fixed point
-        dmapy = (MTOF(oldplr.y) - MTOF(plr->mo->y));
-
-        oldplr.x = plr->mo->x;
-        oldplr.y = plr->mo->y;
-
-        mapxstart += dmapx >> 1;
-        mapystart += dmapy >> 1;
-
-        while (mapxstart >= (screenwidth >> hires))
-            mapxstart -= (screenwidth >> hires);
-        while (mapxstart < 0)
-            mapxstart += (screenwidth >> hires);
-        while (mapystart >= (finit_height >> hires))
-            mapystart -= (finit_height >> hires);
-        while (mapystart < 0)
-            mapystart += (finit_height >> hires);
-    }
-    else
-    {
-        mapxstart += (MTOF(m_paninc.x) >> 1);
-        mapystart -= (MTOF(m_paninc.y) >> 1);
-
-        if (mapxstart >= (screenwidth >> hires))
-            mapxstart -= (screenwidth >> hires);
-        if (mapxstart < 0)
-            mapxstart += (screenwidth >> hires);
-        if (mapystart >= (finit_height >> hires))
-            mapystart -= (finit_height >> hires);
-        if (mapystart < 0)
-            mapystart += (finit_height >> hires);
+        x2 = mapbgwidth_hires;
     }
 
-    // [JN] Draw automap background as tiled GFX patches.
-    V_DrawPatchUnscaled(0, 0, maplump, NULL);
-    V_DrawPatchUnscaled(560, 0, maplump, NULL);
-    V_DrawPatchUnscaled(0, 200, maplump, NULL);
-    V_DrawPatchUnscaled(560, 200, maplump, NULL); 
+    x3 = screenwidth - x2;
+
+    for (int i = 0 ; i < finit_height ; i++)
+    {
+        memcpy(I_VideoBuffer + i * screenwidth,
+               maplump + j + mapbgwidth_hires - x3, x3);
+
+        memcpy(I_VideoBuffer + i * screenwidth + x3,
+               maplump + j + mapbgwidth_hires - x2, x2);
+
+        memcpy(I_VideoBuffer + i * screenwidth + x2 + x3,
+               maplump + j, 0);
+
+        j += mapbgwidth_hires;
+
+        if (j >= MAPBGROUNDHEIGHT * MAPBGROUNDWIDTH)
+        {
+            j = 0;
+        }
+    }
+}
+
+/*
+================================================================================
+=
+= AM_drawBackgroundQuad
+=
+= [JN] Blit the automap background to the screen, quad resolution version.
+=
+================================================================================
+*/
+
+static void AM_drawBackgroundQuad (void)
+{
+    int j = ORIGWIDTH;
+
+    for (int i = 0 ; i < finit_height ; i++)
+    {
+        memcpy(I_VideoBuffer + i * screenwidth, maplump + j + ORIGWIDTH, screenwidth);
+
+        j += ORIGWIDTH;
+
+        if (j >= MAPBGROUNDHEIGHT * MAPBGROUNDWIDTH)
+        {
+            j = 0;
+        }
+    }
 }
 
 // Based on Cohen-Sutherland clipping algorithm but with a slightly
@@ -1574,9 +1609,9 @@ static void AM_drawThings(int colors, int colorrange)
 ================================================================================
 */
 
-static const int mark_w = 5 << hires;
-static const int mark_flip_1 = 1 << hires;
-static const int mark_flip_2 = 9 << hires;
+#define MARK_W      (5 << hires)
+#define MARK_FLIP_1 (1 << hires)
+#define MARK_FLIP_2 (9 << hires)
 
 static void AM_drawMarks (void)
 {
@@ -1610,7 +1645,7 @@ static void AM_drawMarks (void)
                 // killough 2/22/98: less spacing for '1'
                 if (d == 1)
                 {
-                    fx += (flip_levels ? -mark_flip_1 : mark_flip_1); // -1 : 1
+                    fx += (flip_levels ? -MARK_FLIP_1 : MARK_FLIP_1); // -1 : 1
                 }
 
                 if (fx >= f_x + 5 && fx <= f_w - 5
@@ -1618,12 +1653,13 @@ static void AM_drawMarks (void)
                 {
                     // [JN] Use custom, precise patch versions and do coloring.
                     dp_translation = cr[automap_mark_color_set];
-                    V_DrawPatchUnscaled(flip_levels ? - fx : fx, fy, marknums[d], NULL);
+                    V_DrawPatchUnscaled((flip_levels ? - fx : fx) >> quadres,
+                                         fy >> quadres, marknums[d], NULL);
                     dp_translation = NULL;
                 }
 
                 // killough 2/22/98: 1 space backwards
-                fx -= mark_w - (flip_levels ? mark_flip_2 : mark_flip_1); // 9 : 1
+                fx -= MARK_W - (flip_levels ? MARK_FLIP_2 : MARK_FLIP_1); // 9 : 1
 
                 j /= 10;
             } while (j > 0);
@@ -1691,7 +1727,7 @@ void AM_Drawer(void)
 
     if (!automap_overlay)
     {
-        AM_clearFB(BACKGROUND);
+        AM_drawBackground();
         skippsprinterp = true;
     }
     else

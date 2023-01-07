@@ -38,7 +38,6 @@ boolean original_playpal = true;
 // [JN] Used by perfomance counter.
 int rendered_segs, rendered_visplanes, rendered_vissprites;
 
-int           detailshift;      // 0 = high, 1 = low
 int           viewangleoffset;
 int           validcount = 1;   // increment every time a check is made
 int           centerx, centery;
@@ -50,12 +49,15 @@ fixed_t       viewcos, viewsin;
 player_t     *viewplayer;
 lighttable_t *fixedcolormap;
 
-int     setblocks, setdetail;
+int     setblocks;
 boolean setsizeneeded;
 // [crispy] lookup table for horizontal screen coordinates
 // [JN] Resolution limitation is removed.
 int *flipscreenwidth;
 int *flipviewwidth;
+
+// [JN] LOOKDIR variables for high/quad resolution, used only for rendering.
+static fixed_t lookdirmin, lookdirmax, lookdirs;
 
 int extralight;              // bumped light from gun blasts
 int lightzshift, maxlightz;  // [JN] Smooth and vanilla diminished lighting
@@ -532,11 +534,10 @@ static void R_InitTranslationTables (void)
 // middle of a refresh. The change will take effect next refresh.
 // -----------------------------------------------------------------------------
 
-void R_SetViewSize (const int blocks, const int detail)
+void R_SetViewSize (const int blocks)
 {
     setsizeneeded = true;
     setblocks = blocks;
-    setdetail = detail;
 }
 
 // -----------------------------------------------------------------------------
@@ -591,7 +592,6 @@ void R_ExecuteSetViewSize (void)
         }
     }
 
-    detailshift = setdetail;
     viewwidth = scaledviewwidth >> detailshift;
     viewheight = scaledviewheight >> (detailshift && hires);
 
@@ -655,27 +655,30 @@ void R_ExecuteSetViewSize (void)
     for (i = 0 ; i < viewheight ; i++)
     {
         const fixed_t num = (viewwidth << (detailshift && !hires)) / 2 * FRACUNIT;
-        const fixed_t num_wide = MIN(viewwidth << detailshift, 320 << !detailshift) / 2 * FRACUNIT;
+        const fixed_t num_wide = MIN(viewwidth << detailshift, ORIGWIDTH << !detailshift) / 2 * FRACUNIT;
 
-        for (j = 0; j < LOOKDIRS; j++)
+        for (j = 0; j < lookdirs; j++)
         {
             if (aspect_ratio >= 2)
             {
-                dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift)) 
+                dy = ((i-(viewheight/2 + ((j-lookdirmin) << (hires && !detailshift)) 
                    * (screenblocks < 9 ? screenblocks : 9) / 10)) << FRACBITS) + FRACUNIT / 2;
+
+                dy = abs(dy / hires);
             }
             else
             {
-                dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift))
+                dy = ((i-(viewheight/2 + ((j-lookdirmin) << (hires && !detailshift))
                    * (screenblocks < 11 ? screenblocks : 11) / 10)) << FRACBITS) + FRACUNIT / 2;
+            
+                dy = abs(dy);
             }
 
-            dy = abs(dy);
             yslopes[j][i] = FixedDiv (aspect_ratio >= 2 ? num_wide : num, dy);
         }
     }
 
-    yslope = yslopes[LOOKDIRMIN];
+    yslope = yslopes[lookdirmin];
 
     for (i = 0 ; i < viewwidth ; i++)
     {
@@ -733,6 +736,19 @@ void R_Init (void)
             screenblocks = 17;
     }
 
+    if (quadres)
+    {
+        lookdirmin = LOOKDIRMIN2;
+        lookdirmax = LOOKDIRMAX2;
+        lookdirs = LOOKDIRS2;
+    }
+    else
+    {
+        lookdirmin = LOOKDIRMIN;
+        lookdirmax = LOOKDIRMAX;
+        lookdirs = LOOKDIRS;
+    }
+
     // [JN] Check for modified PLAYPAL lump.
     if (W_CheckMultipleLumps("PLAYPAL") > 1)
     {
@@ -750,8 +766,8 @@ void R_Init (void)
     
     R_InitData ();
     printf (".");
-    // viewwidth / viewheight / detailLevel are set by the defaults
-    R_SetViewSize (screenblocks, detailLevel);
+    // viewwidth / viewheight are set by the defaults
+    R_SetViewSize (screenblocks);
     printf (".");
     R_InitLightTables ();
     printf (".");
@@ -830,13 +846,19 @@ static void R_SetupFrame (player_t *player)
     extralight = player->extralight;
     extralight += extra_level_brightness; // [JN] Level Brightness feature.
 
-    if (pitch > LOOKDIRMAX)
+    if (pitch > lookdirmax)
     {
-        pitch = LOOKDIRMAX;
+        pitch = lookdirmax;
     }
-    else if (pitch < -LOOKDIRMIN)
+    else if (pitch < -lookdirmin)
     {
-        pitch = -LOOKDIRMIN;
+        pitch = -lookdirmin;
+    }
+
+    // [JN] Extend pitch range in quad resolution.
+    if (quadres)
+    {
+        pitch <<= quadres;
     }
 
     // apply new yslope[] whenever "lookdir", "detailshift" or "screenblocks" change
@@ -856,7 +878,7 @@ static void R_SetupFrame (player_t *player)
     {
         centery = tempCentery;
         centeryfrac = centery << FRACBITS;
-        yslope = yslopes[LOOKDIRMIN + pitch];
+        yslope = yslopes[lookdirmin + pitch];
     }
 
     {

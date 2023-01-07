@@ -27,6 +27,7 @@
 #include "r_local.h"
 #include "doomstat.h"
 #include "p_local.h"
+#include "v_video.h"
 #include "jn.h"
 
 
@@ -1056,7 +1057,8 @@ static void R_DrawPSprite (const pspdef_t *psp)
     else
     {
         vis->texturemid = (BASEYCENTER << FRACBITS) + FRACUNIT/4
-                        - (psp_sy-spritetopoffset[lump]);
+                        - (psp_sy-spritetopoffset[lump])
+                        - quadres;
     }
 
     vis->x1 = x1 < 0 ? 0 : x1;
