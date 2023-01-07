@@ -110,7 +110,12 @@ static int m_zoomout;
 
 // [crispy] Used for automap background tiling
 #define MAPBGROUNDWIDTH   (ORIGWIDTH)
-#define MAPBGROUNDHEIGHT  (ORIGHEIGHT - 42)
+#define MAPBGROUNDHEIGHT  (ORIGHEIGHT - (42 << extrares))
+
+// [JN] Pointer to background drawing functions.
+static void (*AM_drawBackground) (void);
+static void AM_drawBackgroundHigh (void);
+static void AM_drawBackgroundQuad (void);
 
 typedef struct
 {
@@ -644,6 +649,8 @@ void AM_initPics (void)
         DEH_snprintf(namebuf, 9, "MARKNUM%d", i);
         marknums[i] = W_CacheLumpName(namebuf, PU_STATIC);
     }
+
+    AM_drawBackground = extrares ? AM_drawBackgroundQuad : AM_drawBackgroundHigh;
 }
 
 /*
@@ -1079,7 +1086,7 @@ void AM_Ticker (void)
 /*
 ================================================================================
 =
-= AM_drawBackground
+= AM_drawBackgroundHigh
 =
 = Blit the automap background to the screen.
 =
@@ -1087,26 +1094,11 @@ void AM_Ticker (void)
 = tiles from 2 to 3. To support rendering at 2x resolution, treat original
 = 320 x 158 tile image as 640 x 79.
 =
-= [JN] TODO - adapt for quadres, the code below is working but filling 
-= background incorrect.
-=
 ================================================================================
 */
 
-static void AM_drawBackground (void)
+static void AM_drawBackgroundHigh (void)
 {
-    int x, y;
-    byte *dest = I_VideoBuffer;
-
-    for (y = 0; y < finit_height; y++)
-    {
-        for (x = 0; x < screenwidth; x++)
-        {
-            *dest++ = maplump[(((y >> hud_detaillevel) & 63) << 6) 
-                             + ((x >> hud_detaillevel) & 63)];
-        }
-    }
-/*
     const int mapbgwidth_hires = ORIGWIDTH << hires;
     int j = mapbgwidth_hires;
     int x2 = screenwidth;
@@ -1137,7 +1129,33 @@ static void AM_drawBackground (void)
             j = 0;
         }
     }
+}
+
+/*
+================================================================================
+=
+= AM_drawBackgroundQuad
+=
+= [JN] Blit the automap background to the screen, quad resolution version.
+=
+================================================================================
 */
+
+static void AM_drawBackgroundQuad (void)
+{
+    int j = ORIGWIDTH;
+
+    for (int i = 0 ; i < finit_height ; i++)
+    {
+        memcpy(I_VideoBuffer + i * screenwidth, maplump + j + ORIGWIDTH, screenwidth);
+
+        j += ORIGWIDTH;
+
+        if (j >= MAPBGROUNDHEIGHT * MAPBGROUNDWIDTH)
+        {
+            j = 0;
+        }
+    }
 }
 
 /*

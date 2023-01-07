@@ -83,6 +83,9 @@
 #define CXMTOF(x)  (f_x + MTOF((x)-m_x))
 #define CYMTOF(y)  (f_y + (f_h - MTOF((y)-m_y)))
 
+// [crispy] Used for automap background tiling
+#define MAPBGROUNDWIDTH   (ORIGWIDTH)
+#define MAPBGROUNDHEIGHT  (ORIGHEIGHT - (42 << extrares))
 
 typedef struct
 {
