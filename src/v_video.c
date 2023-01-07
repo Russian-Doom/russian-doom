@@ -661,8 +661,8 @@ void V_DrawFadePatch (int x, int y, const patch_t *patch, const byte *table)
     
     if (draw_shadowed_text && !vanillaparm)
     {
-        desttop3 = dest_screen + ((y + 1) << hires) * screenwidth + x + 2 + quadres;
-        desttop4 = dest_screen + (((y + 1) << hires) + quadres) * screenwidth + x + 2 + quadres;
+        desttop3 = dest_screen + ((y + 1) << hires) * screenwidth + x + (2 << quadres);
+        desttop4 = dest_screen + (((y + 1) << hires) + quadres) * screenwidth + x + (2 << quadres);
     }
     else
     {
@@ -799,8 +799,8 @@ void V_DrawShadowedPatch (int x, int y, const patch_t *patch)
     col = 0;
     desttop1 = dest_screen + (y << hires) * screenwidth + x;
     desttop2 = dest_screen + ((y << hires) + quadres) * screenwidth + x;
-    desttop3 = dest_screen + ((y + 2) << hires) * screenwidth + x + 2 + quadres;
-    desttop4 = dest_screen + (((y + 2) << hires) + quadres) * screenwidth + x + 2 + quadres;
+    desttop3 = dest_screen + ((y + 2) << hires) * screenwidth + x + (2 << quadres);
+    desttop4 = dest_screen + (((y + 2) << hires) + quadres) * screenwidth + x + (2 << quadres);
 
     w = SHORT(patch->width);
     for (; col < w; x++, col++, desttop1++, desttop2++, desttop3++, desttop4++)
@@ -933,8 +933,8 @@ void V_DrawShadowedPatchDoom (int x, int y, const patch_t *patch)
     
     if (draw_shadowed_text && !vanillaparm)
     {
-        desttop3 = dest_screen + ((y + 1) << hires) * screenwidth + x + 2 + quadres;
-        desttop4 = dest_screen + (((y + 1) << hires) + quadres) * screenwidth + x + 2 + quadres;
+        desttop3 = dest_screen + ((y + 1) << hires) * screenwidth + x + (2 << quadres);
+        desttop4 = dest_screen + (((y + 1) << hires) + quadres) * screenwidth + x + (2 << quadres);
     }
     else
     {
@@ -1091,8 +1091,8 @@ void V_DrawShadowedPatchRaven (int x, int y, const patch_t *patch)
     
     if (draw_shadowed_text && !vanillaparm)
     {
-        desttop3 = dest_screen + ((y + 1) << hires) * screenwidth + x + 2 + quadres;
-        desttop4 = dest_screen + (((y + 1) << hires) + quadres) * screenwidth + x + 2 + quadres;
+        desttop3 = dest_screen + ((y + 1) << hires) * screenwidth + x + (2 << quadres);
+        desttop4 = dest_screen + (((y + 1) << hires) + quadres) * screenwidth + x + (2 << quadres);
     }
     else
     {
