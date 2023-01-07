@@ -826,14 +826,14 @@ static void F_DrawPatchCol (const int x, const patch_t *patch, const int col)
 
     column = (column_t *)((byte *)patch + LONG(patch->columnofs[col]));
     desttop = I_VideoBuffer + x;
-    desttop2 = extrares ? (I_VideoBuffer + x + screenwidth) : NULL;
+    desttop2 = quadres ? (I_VideoBuffer + x + screenwidth) : NULL;
 
     // step through the posts in a column
     while (column->topdelta != 0xff )
     {
-        for (f = 0; f <= (hires + extrares); f++)
+        for (f = 0; f <= (hires + quadres); f++)
         {
-            const int column_post = column->topdelta*(screenwidth << hires) + (x * (hires + extrares)) + f;
+            const int column_post = column->topdelta*(screenwidth << hires) + (x * (hires + quadres)) + f;
             
             source = (byte *)column + 3;
             dest = desttop + column_post;
@@ -842,15 +842,15 @@ static void F_DrawPatchCol (const int x, const patch_t *patch, const int col)
 		
             while (count--)
             {
-                if (extrares)
+                if (quadres)
                 {
                     *dest2 = *dest = *source;
-                    dest += screenwidth << extrares;
-                    dest2 += screenwidth << extrares;
+                    dest += screenwidth << quadres;
+                    dest2 += screenwidth << quadres;
                     
                     *dest2 = *dest = *source++;
-                    dest += screenwidth << extrares;
-                    dest2 += screenwidth << extrares;
+                    dest += screenwidth << quadres;
+                    dest2 += screenwidth << quadres;
                 }
                 else
                 {

@@ -540,7 +540,7 @@ static void ShadeLine(int x, int y, int height, int shade)
     dest = I_VideoBuffer + y * screenwidth + x;
     while (height--)
     {
-        if (extrares)
+        if (quadres)
         {
             *(dest + 3) = *(shades + *dest);
             *(dest + 2) = *(shades + *dest);

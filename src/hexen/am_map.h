@@ -85,7 +85,7 @@
 
 // [crispy] Used for automap background tiling
 #define MAPBGROUNDWIDTH   (ORIGWIDTH)
-#define MAPBGROUNDHEIGHT  (ORIGHEIGHT - (42 << extrares))
+#define MAPBGROUNDHEIGHT  (ORIGHEIGHT - (42 << quadres))
 
 typedef struct
 {

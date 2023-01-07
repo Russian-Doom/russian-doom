@@ -736,7 +736,7 @@ void R_Init (void)
             screenblocks = 17;
     }
 
-    if (extrares)
+    if (quadres)
     {
         lookdirmin = LOOKDIRMIN2;
         lookdirmax = LOOKDIRMAX2;
@@ -856,9 +856,9 @@ static void R_SetupFrame (player_t *player)
     }
 
     // [JN] Extend pitch range in quad resolution.
-    if (extrares)
+    if (quadres)
     {
-        pitch <<= extrares;
+        pitch <<= quadres;
     }
 
     // apply new yslope[] whenever "lookdir", "detailshift" or "screenblocks" change

@@ -2300,7 +2300,7 @@ static void DrawRenderingMenu(void)
     }
 
     // Screenshot format / Формат скриншотов (same english values)
-    RD_M_DrawTextSmallENG(png_screenshots ? "PNG" : "PCX", 175 + wide_delta, 112, CR_NONE);
+    RD_M_DrawTextSmallENG(png_screenshots ? "PNG" : "PCX", 175 + wide_delta, 122, CR_NONE);
 }
 
 static void M_RD_Change_Resolution(Direction_t direction)

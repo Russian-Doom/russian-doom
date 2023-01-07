@@ -26,8 +26,8 @@
 #define LOOKDIRS    (LOOKDIRMIN+1+LOOKDIRMAX) // [crispy] lookdir range: -160..0..90
 
 // [JN] Doubled versions for quad resolution, used only for rendering.
-#define LOOKDIRMIN2 (LOOKDIRMIN << extrares)
-#define LOOKDIRMAX2 (LOOKDIRMIN << extrares)
+#define LOOKDIRMIN2 (LOOKDIRMIN << quadres)
+#define LOOKDIRMAX2 (LOOKDIRMIN << quadres)
 #define LOOKDIRS2   (LOOKDIRMIN2+1+LOOKDIRMAX2)
 
 #define ANGLETOSKYSHIFT     22      // sky map is 256*128*4 maps

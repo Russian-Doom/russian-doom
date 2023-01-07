@@ -1156,7 +1156,7 @@ void R_DrawPSprite (const pspdef_t *psp)
     // [crispy] weapons drawn 1 pixel too high when player is idle
     vis->texturemid = (BASEYCENTER<<FRACBITS) + FRACUNIT/4
                     - (psp_sy-spritetopoffset[lump])
-                    - extrares;
+                    - quadres;
 
     if (screenblocks >= 11)
     {

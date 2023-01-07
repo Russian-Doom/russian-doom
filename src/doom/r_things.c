@@ -1058,7 +1058,7 @@ static void R_DrawPSprite (const pspdef_t *psp)
     {
         vis->texturemid = (BASEYCENTER << FRACBITS) + FRACUNIT/4
                         - (psp_sy-spritetopoffset[lump])
-                        - extrares;
+                        - quadres;
     }
 
     vis->x1 = x1 < 0 ? 0 : x1;

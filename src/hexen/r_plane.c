@@ -517,7 +517,7 @@ void R_DrawPlanes(void)
     int         light, angle, angle2;
     int         offset, skyTexture, offset2, skyTexture2;
     int         heightmask;
-    int         count, frac, fracstep = (FRACUNIT >> !detailshift) >> extrares;
+    int         count, frac, fracstep = (FRACUNIT >> !detailshift) >> quadres;
     byte       *source, *source2, *tempSource;
     byte       *dest, *dest1, *dest2, *dest3, *dest4;
 

@@ -434,7 +434,7 @@ static void AM_loadPics(void)
         marknums[i] = W_CacheLumpName(namebuf, PU_STATIC);
     }
 
-    AM_drawBackground = extrares ? AM_drawBackgroundQuad : AM_drawBackgroundHigh;
+    AM_drawBackground = quadres ? AM_drawBackgroundQuad : AM_drawBackgroundHigh;
 }
 
 // should be called at the start of every level
@@ -1653,8 +1653,8 @@ static void AM_drawMarks (void)
                 {
                     // [JN] Use custom, precise patch versions and do coloring.
                     dp_translation = cr[automap_mark_color_set];
-                    V_DrawPatchUnscaled((flip_levels ? - fx : fx) >> extrares,
-                                         fy >> extrares, marknums[d], NULL);
+                    V_DrawPatchUnscaled((flip_levels ? - fx : fx) >> quadres,
+                                         fy >> quadres, marknums[d], NULL);
                     dp_translation = NULL;
                 }
 

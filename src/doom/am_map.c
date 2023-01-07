@@ -2440,8 +2440,8 @@ static void AM_drawMarks (void)
                 {
                     // [JN] Use custom, precise patch versions and do coloring.
                     dp_translation = cr[automap_mark_color_set];
-                    V_DrawPatchUnscaled((flip_levels ? - fx : fx) >> extrares,
-                                         fy >> extrares, marknums[d], NULL);
+                    V_DrawPatchUnscaled((flip_levels ? - fx : fx) >> quadres,
+                                         fy >> quadres, marknums[d], NULL);
                     dp_translation = NULL;
                 }
 

@@ -269,12 +269,6 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(graphical_startup),
 
     //!
-    // [JN] High resolition rendering.
-    //
-
-    CONFIG_VARIABLE_INT(hires),
-
-    //!
     // If non-zero, the game will run in full screen mode.  If zero,
     // the game will run in a window.
     //

@@ -50,7 +50,7 @@ extern byte *transtable10;
 
 extern byte *dp_translation;
 
-extern int extrares;
+extern int quadres;
 
 // haleyjd 08/28/10: implemented for Strife support
 // haleyjd 08/28/10: Patch clipping callback, implemented to support Choco

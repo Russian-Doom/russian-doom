@@ -110,7 +110,7 @@ static int m_zoomout;
 
 // [crispy] Used for automap background tiling
 #define MAPBGROUNDWIDTH   (ORIGWIDTH)
-#define MAPBGROUNDHEIGHT  (ORIGHEIGHT - (42 << extrares))
+#define MAPBGROUNDHEIGHT  (ORIGHEIGHT - (42 << quadres))
 
 // [JN] Pointer to background drawing functions.
 static void (*AM_drawBackground) (void);
@@ -650,7 +650,7 @@ void AM_initPics (void)
         marknums[i] = W_CacheLumpName(namebuf, PU_STATIC);
     }
 
-    AM_drawBackground = extrares ? AM_drawBackgroundQuad : AM_drawBackgroundHigh;
+    AM_drawBackground = quadres ? AM_drawBackgroundQuad : AM_drawBackgroundHigh;
 }
 
 /*
@@ -2235,8 +2235,8 @@ static void AM_drawMarks (void)
                 {
                     // [JN] Use custom, precise patch versions and do coloring.
                     dp_translation = cr[automap_mark_color_set];
-                    V_DrawPatchUnscaled((flip_levels ? - fx : fx) >> extrares,
-                                         fy >> extrares, marknums[d], NULL);
+                    V_DrawPatchUnscaled((flip_levels ? - fx : fx) >> quadres,
+                                         fy >> quadres, marknums[d], NULL);
                     dp_translation = NULL;
                 }
 

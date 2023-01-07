@@ -487,8 +487,8 @@ void R_StoreWallRange (const int start, const int stop);
 #define LOOKDIRS	(LOOKDIRMIN+1+LOOKDIRMAX) // [crispy] lookdir range: -110..0..90
 
 // [JN] Doubled versions for quad resolution, used only for rendering.
-#define LOOKDIRMIN2 (LOOKDIRMIN << extrares)
-#define LOOKDIRMAX2 (LOOKDIRMIN << extrares)
+#define LOOKDIRMIN2 (LOOKDIRMIN << quadres)
+#define LOOKDIRMAX2 (LOOKDIRMIN << quadres)
 #define LOOKDIRS2   (LOOKDIRMIN2+1+LOOKDIRMAX2)
 
 const byte *R_GetColumn (const int tex, int col);

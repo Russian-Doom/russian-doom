@@ -94,7 +94,7 @@ int hires;
 
 // Addendum for high resolution rendering.
 // Equals 1 for high detail, otherwise equals 0.
-int extrares;
+int quadres;
 
 // Variable screen width and height values,
 // shifted by hires variable.
@@ -218,7 +218,7 @@ void V_DrawPatch (int x, int y, const patch_t *patch, const byte *table)
 
     col = 0;
     desttop1 = dest_screen + (y << hires) * screenwidth + x;
-    desttop2 = dest_screen + ((y << hires) + extrares) * screenwidth + x;
+    desttop2 = dest_screen + ((y << hires) + quadres) * screenwidth + x;
 
     w = SHORT(patch->width);
 
@@ -229,9 +229,9 @@ void V_DrawPatch (int x, int y, const patch_t *patch, const byte *table)
         // step through the posts in a column
         while (column->topdelta != 0xff)
         {
-            for (f = 0; f <= (hires + extrares); f++)
+            for (f = 0; f <= (hires + quadres); f++)
             {
-            const int column_post = column->topdelta * (screenwidth << hires) + (x * (hires + extrares)) + f;
+            const int column_post = column->topdelta * (screenwidth << hires) + (x * (hires + quadres)) + f;
 
             source = sourcetrans = (byte *)column + 3;
             dest1 = desttop1 + column_post;
@@ -261,7 +261,7 @@ void V_DrawPatch (int x, int y, const patch_t *patch, const byte *table)
                     source++;
                     sourcetrans++; // [Dasperal] Increment sourcetrans as well in case dp_translation is NULL
                     dest1 += (screenwidth << hires);
-                    if (extrares)
+                    if (quadres)
                     dest2 += (screenwidth << hires);
                     tmpy++;
                 }
@@ -287,7 +287,7 @@ void V_DrawPatch (int x, int y, const patch_t *patch, const byte *table)
                 // [JN] If given table is a NULL, draw opaque patch.
                 if (table != NULL)
                 {
-                    if (extrares)
+                    if (quadres)
                     {
                         *dest2 = *dest1 = table[((*dest1) << 8) + *sourcetrans];
                         dest1 += fullscreenwidth;
@@ -307,7 +307,7 @@ void V_DrawPatch (int x, int y, const patch_t *patch, const byte *table)
                 }
                 else
                 {
-                    if (extrares)
+                    if (quadres)
                     {
                         *dest2 = *dest1 = *sourcetrans;
                         dest1 += fullscreenwidth;
@@ -404,7 +404,7 @@ void V_DrawPatchFlipped (int x, int y, const patch_t *patch)
             for (f = 0; f <= hires; f++)
             {
             source = sourcetrans = (byte *)column + 3;
-            dest = desttop + column->topdelta*(screenwidth << hires) + (x * (hires + extrares)) + f;
+            dest = desttop + column->topdelta*(screenwidth << hires) + (x * (hires + quadres)) + f;
             count = column->length;
 
             // [crispy] prevent framebuffer overflows
@@ -483,7 +483,7 @@ void V_DrawTLPatch (int x, int y, const patch_t *patch)
 
     col = 0;
     desttop1 = dest_screen + (y << hires) * screenwidth + x;
-    desttop2 = dest_screen + ((y << hires) + extrares) * screenwidth + x;
+    desttop2 = dest_screen + ((y << hires) + quadres) * screenwidth + x;
 
     w = SHORT(patch->width);
 
@@ -494,9 +494,9 @@ void V_DrawTLPatch (int x, int y, const patch_t *patch)
         // step through the posts in a column
         while (column->topdelta != 0xff)
         {
-            for (f = 0; f <= (hires + extrares); f++)
+            for (f = 0; f <= (hires + quadres); f++)
             {
-            const int column_post = column->topdelta * (screenwidth << hires) + (x * (hires + extrares)) + f;
+            const int column_post = column->topdelta * (screenwidth << hires) + (x * (hires + quadres)) + f;
 
             source = (byte *) column + 3;
             dest1 = desttop1 + column_post;
@@ -505,7 +505,7 @@ void V_DrawTLPatch (int x, int y, const patch_t *patch)
 
             while (count--)
             {
-                if (extrares)
+                if (quadres)
                 {
                     *dest2 = *dest1 = tinttable[((*dest1) << 8) + *source];
                     dest1 += fullscreenwidth;
@@ -657,12 +657,12 @@ void V_DrawFadePatch (int x, int y, const patch_t *patch, const byte *table)
 
     col = 0;
     desttop1 = dest_screen + (y << hires) * screenwidth + x;
-    desttop2 = dest_screen + ((y << hires) + extrares) * screenwidth + x;
+    desttop2 = dest_screen + ((y << hires) + quadres) * screenwidth + x;
     
     if (draw_shadowed_text && !vanillaparm)
     {
-        desttop3 = dest_screen + ((y + 1) << hires) * screenwidth + x + 2 + extrares;
-        desttop4 = dest_screen + (((y + 1) << hires) + extrares) * screenwidth + x + 2 + extrares;
+        desttop3 = dest_screen + ((y + 1) << hires) * screenwidth + x + 2 + quadres;
+        desttop4 = dest_screen + (((y + 1) << hires) + quadres) * screenwidth + x + 2 + quadres;
     }
     else
     {
@@ -677,9 +677,9 @@ void V_DrawFadePatch (int x, int y, const patch_t *patch, const byte *table)
         // step through the posts in a column
         while (column->topdelta != 0xff)
         {
-            for (f = 0; f <= (hires + extrares); f++)
+            for (f = 0; f <= (hires + quadres); f++)
             {
-                const int column_post = column->topdelta * (screenwidth << hires) + (x * (hires + extrares)) + f;
+                const int column_post = column->topdelta * (screenwidth << hires) + (x * (hires + quadres)) + f;
 
                 source = sourcetrans = (byte *) column + 3;
                 dest1 = desttop1 + column_post;
@@ -703,7 +703,7 @@ void V_DrawFadePatch (int x, int y, const patch_t *patch, const byte *table)
                     if (dp_translation)
                     sourcetrans = &dp_translation[*source++];
     
-                    if (extrares)
+                    if (quadres)
                     {
                         if (draw_shadowed_text && !vanillaparm)
                         {
@@ -798,9 +798,9 @@ void V_DrawShadowedPatch (int x, int y, const patch_t *patch)
 
     col = 0;
     desttop1 = dest_screen + (y << hires) * screenwidth + x;
-    desttop2 = dest_screen + ((y << hires) + extrares) * screenwidth + x;
-    desttop3 = dest_screen + ((y + 2) << hires) * screenwidth + x + 2 + extrares;
-    desttop4 = dest_screen + (((y + 2) << hires) + extrares) * screenwidth + x + 2 + extrares;
+    desttop2 = dest_screen + ((y << hires) + quadres) * screenwidth + x;
+    desttop3 = dest_screen + ((y + 2) << hires) * screenwidth + x + 2 + quadres;
+    desttop4 = dest_screen + (((y + 2) << hires) + quadres) * screenwidth + x + 2 + quadres;
 
     w = SHORT(patch->width);
     for (; col < w; x++, col++, desttop1++, desttop2++, desttop3++, desttop4++)
@@ -810,9 +810,9 @@ void V_DrawShadowedPatch (int x, int y, const patch_t *patch)
         // step through the posts in a column
         while (column->topdelta != 0xff)
         {
-            for (f = 0; f <= (hires + extrares); f++)
+            for (f = 0; f <= (hires + quadres); f++)
             {
-                const int column_post = column->topdelta * (screenwidth << hires) + (x * (hires + extrares)) + f;
+                const int column_post = column->topdelta * (screenwidth << hires) + (x * (hires + quadres)) + f;
 
                 source = sourcetrans = (byte *) column + 3;
                 dest1 = desttop1 + column_post;
@@ -868,7 +868,7 @@ void V_DrawShadowedPatch (int x, int y, const patch_t *patch)
                     if (dp_translation)
                     sourcetrans = &dp_translation[*source++];
 
-                    if (extrares)
+                    if (quadres)
                     {
                         *dest4 = *dest3 = tinttable[((*dest3) << 8)];
                         dest4 += fullscreenwidth;
@@ -929,12 +929,12 @@ void V_DrawShadowedPatchDoom (int x, int y, const patch_t *patch)
 
     col = 0;
     desttop1 = dest_screen + (y << hires) * screenwidth + x;
-    desttop2 = dest_screen + ((y << hires) + extrares) * screenwidth + x;
+    desttop2 = dest_screen + ((y << hires) + quadres) * screenwidth + x;
     
     if (draw_shadowed_text && !vanillaparm)
     {
-        desttop3 = dest_screen + ((y + 1) << hires) * screenwidth + x + 2 + extrares;
-        desttop4 = dest_screen + (((y + 1) << hires) + extrares) * screenwidth + x + 2 + extrares;
+        desttop3 = dest_screen + ((y + 1) << hires) * screenwidth + x + 2 + quadres;
+        desttop4 = dest_screen + (((y + 1) << hires) + quadres) * screenwidth + x + 2 + quadres;
     }
     else
     {
@@ -950,9 +950,9 @@ void V_DrawShadowedPatchDoom (int x, int y, const patch_t *patch)
         // step through the posts in a column
         while (column->topdelta != 0xff)
         {
-            for (f = 0; f <= (hires + extrares); f++)
+            for (f = 0; f <= (hires + quadres); f++)
             {
-                const int column_post = column->topdelta * (screenwidth << hires) + (x * (hires + extrares)) + f;
+                const int column_post = column->topdelta * (screenwidth << hires) + (x * (hires + quadres)) + f;
 
                 source = sourcetrans = (byte *) column + 3;
                 dest1 = desttop1 + column_post;
@@ -1017,7 +1017,7 @@ void V_DrawShadowedPatchDoom (int x, int y, const patch_t *patch)
                     if (dp_translation)
                     sourcetrans = &dp_translation[*source++];
 
-                    if (extrares)
+                    if (quadres)
                     {
                         if (draw_shadowed_text && !vanillaparm)
                         {
@@ -1087,12 +1087,12 @@ void V_DrawShadowedPatchRaven (int x, int y, const patch_t *patch)
 
     col = 0;
     desttop1 = dest_screen + (y << hires) * screenwidth + x;
-    desttop2 = dest_screen + ((y << hires) + extrares) * screenwidth + x;
+    desttop2 = dest_screen + ((y << hires) + quadres) * screenwidth + x;
     
     if (draw_shadowed_text && !vanillaparm)
     {
-        desttop3 = dest_screen + ((y + 1) << hires) * screenwidth + x + 2 + extrares;
-        desttop4 = dest_screen + (((y + 1) << hires) + extrares) * screenwidth + x + 2 + extrares;
+        desttop3 = dest_screen + ((y + 1) << hires) * screenwidth + x + 2 + quadres;
+        desttop4 = dest_screen + (((y + 1) << hires) + quadres) * screenwidth + x + 2 + quadres;
     }
     else
     {
@@ -1108,9 +1108,9 @@ void V_DrawShadowedPatchRaven (int x, int y, const patch_t *patch)
         // step through the posts in a column
         while (column->topdelta != 0xff)
         {
-            for (f = 0; f <= (hires + extrares); f++)
+            for (f = 0; f <= (hires + quadres); f++)
             {
-                const int column_post = column->topdelta * (screenwidth << hires) + (x * (hires + extrares)) + f;
+                const int column_post = column->topdelta * (screenwidth << hires) + (x * (hires + quadres)) + f;
 
                 source = sourcetrans = (byte *) column + 3;
                 dest1 = desttop1 + column_post;
@@ -1175,7 +1175,7 @@ void V_DrawShadowedPatchRaven (int x, int y, const patch_t *patch)
                     if (dp_translation)
                     sourcetrans = &dp_translation[*source++];
 
-                    if (extrares)
+                    if (quadres)
                     {
                         if (draw_shadowed_text && !vanillaparm)
                         {
@@ -1372,7 +1372,7 @@ void V_DrawPatchUnscaledHigh (int x, int y, const patch_t *patch, const byte *ta
                 else
                 *dest = *sourcetrans++;    
 
-                dest += fullscreenwidth >> extrares;
+                dest += fullscreenwidth >> quadres;
             }
             column = (column_t *)((byte *)column + column->length + 4);
         }
@@ -1393,7 +1393,7 @@ void V_DrawPatchUnscaledQuad (int x, int y, const patch_t *patch, const byte *ta
     V_MarkRect(x, y, SHORT(patch->width), SHORT(patch->height));
 
     col = 0;
-    desttop = dest_screen + (y << extrares) * screenwidth + x;
+    desttop = dest_screen + (y << quadres) * screenwidth + x;
 
     w = SHORT(patch->width);
 
@@ -1404,9 +1404,9 @@ void V_DrawPatchUnscaledQuad (int x, int y, const patch_t *patch, const byte *ta
         // step through the posts in a column
         while (column->topdelta != 0xff)
         {
-            for (f = 0; f <= extrares; f++)
+            for (f = 0; f <= quadres; f++)
             {
-            const int column_post = column->topdelta * (screenwidth << extrares) + x + f;
+            const int column_post = column->topdelta * (screenwidth << quadres) + x + f;
 
             source = sourcetrans = (byte *)column + 3;
             dest = desttop + column_post;
@@ -1730,9 +1730,9 @@ void V_CopyScaledBuffer (byte *dest, const byte *src, const size_t size)
     {
         const int l = k / ORIGWIDTH; // current line in the source screen
         const int p = k - l * ORIGWIDTH; // current pixel in this line
-        for (i = 0; i <= (hires + extrares); i++)
+        for (i = 0; i <= (hires + quadres); i++)
         {
-            for (j = 0; j <= (hires + extrares); j++)
+            for (j = 0; j <= (hires + quadres); j++)
             {
                 *(dest + (p << hires) + ((l << hires) + i) * screenwidth + j 
                        + (wide_delta << hires)) = *(src + k);
@@ -1762,7 +1762,7 @@ void V_Init (void)
         
         if (hires == 2)
         {
-            extrares = 1;
+            quadres = 1;
             V_DrawPatchUnscaled = V_DrawPatchUnscaledQuad;
         }
         else
