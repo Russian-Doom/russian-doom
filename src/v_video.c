@@ -105,6 +105,8 @@ int SCREENHEIGHT;
 // Equals screenwidth * hires.
 static int fullscreenwidth;
 
+// Pointer to the function of drawing unscaled patches.
+void (*V_DrawPatchUnscaled) (int x, int y, const patch_t *patch, const byte *table);
 
 
 // -----------------------------------------------------------------------------
@@ -1288,7 +1290,7 @@ void V_DrawShadowedPatchStrife (int x, int y, const patch_t *patch)
 // [JN] hires independent version of V_DrawPatch.
 // -----------------------------------------------------------------------------
 
-void V_DrawPatchUnscaled (int x, int y, const patch_t *patch, const byte *table)
+void V_DrawPatchUnscaledHigh (int x, int y, const patch_t *patch, const byte *table)
 {
     int count;
     int col;
@@ -1298,9 +1300,6 @@ void V_DrawPatchUnscaled (int x, int y, const patch_t *patch, const byte *table)
     byte *source;
     byte *sourcetrans;
     int w;
-
-    x <<= extrares;
-    y <<= extrares;
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
@@ -1374,6 +1373,108 @@ void V_DrawPatchUnscaled (int x, int y, const patch_t *patch, const byte *table)
                 *dest = *sourcetrans++;    
 
                 dest += fullscreenwidth >> extrares;
+            }
+            column = (column_t *)((byte *)column + column->length + 4);
+        }
+    }
+}
+
+void V_DrawPatchUnscaledQuad (int x, int y, const patch_t *patch, const byte *table)
+{
+    int col, count;
+    column_t *column;
+    byte *dest, *desttop;
+    byte *source, *sourcetrans;
+    int w, f;
+
+    y -= SHORT(patch->topoffset);
+    x -= SHORT(patch->leftoffset);
+
+    V_MarkRect(x, y, SHORT(patch->width), SHORT(patch->height));
+
+    col = 0;
+    desttop = dest_screen + (y << extrares) * screenwidth + x;
+
+    w = SHORT(patch->width);
+
+    for ( ; col<w ; x++, col++, desttop++)
+    {
+        column = (column_t *)((byte *)patch + LONG(patch->columnofs[col]));
+
+        // step through the posts in a column
+        while (column->topdelta != 0xff)
+        {
+            for (f = 0; f <= extrares; f++)
+            {
+            const int column_post = column->topdelta * (screenwidth << extrares) + x + f;
+
+            source = sourcetrans = (byte *)column + 3;
+            dest = desttop + column_post;
+            count = column->length;
+
+            // [crispy] prevent framebuffer overflows
+            {
+                int tmpy = y + column->topdelta;
+
+                // [crispy] too far left
+                if (x < 0)
+                {
+                    continue;
+                }
+
+                // [crispy] too far right / width
+                if (x >= screenwidth)
+                {
+                    break;
+                }
+
+                // [crispy] too high
+                while (tmpy < 0)
+                {
+                    count--;
+                    source++;
+                    sourcetrans++; // [Dasperal] Increment sourcetrans as well in case dp_translation is NULL
+                    dest += (screenwidth << hires);
+                    tmpy++;
+                }
+
+                // [crispy] too low / height
+                while (tmpy + count > SCREENHEIGHT)
+                {
+                    count--;
+                }
+
+                // [crispy] nothing left to draw?
+                if (count < 1)
+                {
+                    continue;
+                }
+            }
+
+            while (count--)
+            {
+                if (dp_translation)
+                sourcetrans = &dp_translation[*source++];
+
+                // [JN] If given table is a NULL, draw opaque patch.
+                if (table != NULL)
+                {
+                    *dest = table[((*dest) << 8) + *sourcetrans];
+                    dest += screenwidth;
+
+                    *dest = table[((*dest) << 8) + *sourcetrans++];
+                    dest += screenwidth;
+
+                }
+                else
+                {
+                    *dest = *sourcetrans;
+                    dest += screenwidth;
+
+                    *dest = *sourcetrans++;
+                    dest += screenwidth;
+                }
+            }
             }
             column = (column_t *)((byte *)column + column->length + 4);
         }
@@ -1658,6 +1759,16 @@ void V_Init (void)
         // use actial hires value and don't use low detail mode.
         hires = rendering_resolution;
         detailshift = 0;
+        
+        if (hires == 2)
+        {
+            extrares = 1;
+            V_DrawPatchUnscaled = V_DrawPatchUnscaledQuad;
+        }
+        else
+        {
+            V_DrawPatchUnscaled = V_DrawPatchUnscaledHigh;
+        }
     }
     else
     {
@@ -1665,6 +1776,7 @@ void V_Init (void)
         // and low detail mode.
         hires = 1;
         detailshift = 1;
+        V_DrawPatchUnscaled = V_DrawPatchUnscaledHigh;
     }
 
     SCREENWIDTH = ORIGWIDTH << hires;
@@ -1721,7 +1833,6 @@ void V_Init (void)
         actualheight = SCREENHEIGHT;
     }
 
-    extrares = hires > 1 ? 1 : 0;
     fullscreenwidth = screenwidth * hires;
 }
 
