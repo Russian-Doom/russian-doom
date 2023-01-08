@@ -18,7 +18,7 @@ body:
         What version are you using? If you are building International doom from source, specify git commit SHA.
         You can check version by running International Doom with `--version` command line argument or by using `VERSION` ingame cheat.
         Make sure to update to latest [release](https://github.com/JNechaevsky/inter-doom/releases) version and test again before continuing.
-      placeholder: "International Doom 6.0.1 | International Heretic 5.2 | International Hexen 5.1"
+      placeholder: "International Doom 6.1 | International Heretic 6.0 | International Hexen 5.1"
     validations:
       required: true
   - type: dropdown
