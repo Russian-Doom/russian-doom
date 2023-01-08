@@ -100,6 +100,8 @@ extern boolean netgame;
 // 0=Cooperative; 1=Deathmatch; 2=Altdeath
 extern int deathmatch;
 
+// Start single player game with items spawns as in cooperative netgame.
+extern boolean coop_spawns;
 
 //
 // Internal parameters for sound rendering.

@@ -774,6 +774,7 @@ extern boolean ravpic;          // checkparm of -ravpic
 extern boolean realframe, skippsprinterp; // [JN] Interpolation for weapon bobbing
 extern boolean respawnmonsters;
 extern boolean respawnparm;     // checkparm of -respawn
+extern boolean coop_spawns;     // Single player game with netgame things spawn
 extern boolean singledemo;      // quit after playing a demo from cmdline
 extern boolean testcontrols;
 extern boolean usergame;        // ok to save / end game

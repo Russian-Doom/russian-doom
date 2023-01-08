@@ -70,6 +70,7 @@ char *gamedescription = "unknown";
 
 boolean nomonsters;             // checkparm of -nomonsters
 boolean respawnparm;            // checkparm of -respawn
+boolean coop_spawns;            // Single player game with netgame things spawn
 boolean ravpic;                 // checkparm of -ravpic
 boolean cdrom;                  // true if cd-rom mode active
 int artiskip = false;           // whether shift-enter skips an artifact
@@ -1298,6 +1299,14 @@ void D_DoomMain(void)
     //
 
     respawnparm = M_ParmExists("-respawn");
+
+    //!
+    // @category game
+    //
+    // Start single player game with items spawns as in cooperative netgame.
+    //
+
+    coop_spawns = M_CheckParm ("-coop_spawns");
 
     //!
     // @vanilla
