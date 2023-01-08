@@ -862,6 +862,9 @@ static mobj_t *P_SpawnMobjSafe (const fixed_t x, const fixed_t y, const fixed_t 
         mobj->z = z;
     }
 
+    // [JN] Set floating z value to actual mobj z coord.
+    mobj->old_float_z = mobj->float_z = mobj->z;
+
     // [AM] Do not interpolate on spawn.
     mobj->interp = false;
 
