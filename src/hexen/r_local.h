@@ -549,14 +549,14 @@ void R_ClipVisSprite(vissprite_t * vis, int xl, int xh);
 // R_draw.c
 //
 
-extern lighttable_t *dc_colormap[2];
+extern const lighttable_t *dc_colormap[2];
 extern int dc_x;
 extern int dc_yl;
 extern int dc_yh;
 extern fixed_t dc_iscale;
 extern fixed_t dc_texturemid;
 extern int dc_texheight;
-extern byte *dc_source;         // first pixel in a column
+extern const byte *dc_source;         // first pixel in a column
 extern const byte *dc_brightmap;
 
 void R_DrawColumn(void);
@@ -576,7 +576,7 @@ void R_DrawTranslatedTLColumnLow(void);
 extern int ds_y;
 extern int ds_x1;
 extern int ds_x2;
-extern lighttable_t *ds_colormap;
+extern const lighttable_t *ds_colormap;
 extern fixed_t ds_xfrac;
 extern fixed_t ds_yfrac;
 extern fixed_t ds_xstep;
