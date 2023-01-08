@@ -431,7 +431,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     if (BK_isKeyPressed(bk_jump))
     {
         // [JN] Fly UP by pressing JUMP key, if Wings are active.
-        if (players[consoleplayer].mo->flags2 & MF2_FLY)
+        if ((players[consoleplayer].mo->flags2 & MF2_FLY) && singleplayer)
         {
             flyheight = 5;
         }
