@@ -43,11 +43,11 @@
 #define MAXLIGHTSCALE       48
 #define LIGHTSCALESHIFT     12
 // [crispy] & [JN] smoother diminished lighting
-#define MAXLIGHTZ           1024
-#define LIGHTZSHIFT         17
+#define MAXLIGHTZ			1024
+#define LIGHTZSHIFT			17
 // [JN] Vanilla values
-// #define MAXLIGHTZ        128
-// #define LIGHTZSHIFT      20
+#define MAXLIGHTZ_VANILLA   128
+#define LIGHTZSHIFT_VANILLA 20
 #define NUMCOLORMAPS        32      // number of diminishing
 
 
@@ -388,6 +388,7 @@ extern lighttable_t *scalelightfixed[MAXLIGHTSCALE];
 extern lighttable_t *zlight[LIGHTLEVELS][MAXLIGHTZ];
 
 extern int extralight;
+extern int maxlightz, lightzshift;
 extern lighttable_t *fixedcolormap;
 
 extern fixed_t viewcos, viewsin;
@@ -401,6 +402,7 @@ extern void (*transcolfunc) (void);
 extern void (*transtlcolfunc) (void);
 extern void (*spanfunc) (void);
 extern void R_ExecuteSetViewSize();
+extern void R_InitLightTables (void);
 
 int R_PointOnSide(fixed_t x, fixed_t y, const node_t *node);
 int R_PointOnSegSide(fixed_t x, fixed_t y, const seg_t *line);

@@ -157,6 +157,9 @@ int english_language = 1;
 char* autoload_root = "";
 char* autoload_dir  = NULL;
 
+// Rendering
+int smoothlight = 1;
+
 // Display
 int screenblocks = 10;
 int extra_level_brightness = 0;
