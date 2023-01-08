@@ -1407,15 +1407,6 @@ static void SetVideoMode(void)
     "");
 #endif
 
-#ifdef _WIN32
-    // [JN] Windows 11 idiocy. Indicate that window using OpenGL mode (while it's
-    // a Direct3D in fact), so SDL texture will not be freezed upon vsync toggling.
-    if (!force_software_renderer)
-    {
-        window_flags |= SDL_WINDOW_OPENGL;
-    }
-#endif
-
     if (fullscreen)
     {
         if (fullscreen_width == 0 && fullscreen_height == 0)
@@ -1851,22 +1842,8 @@ void I_ShutdownGraphics(void)
         if (fullscreen)
         {
             SDL_WarpMouseGlobal(w / 2, h / 2);
-
-#ifdef _WIN32
-            // [JN] More Windows 11 idiocy. It possible to stuck in black
-            // screen after toggling vsync and quit program when using
-            // Open GL ES renderer, until Win+L or Ctrl+Alt+Del is pressed.
-            // Reason unknown. Toggling full screen right before closing 
-            // video system fixes this issue.
-
-            if (opengles_renderer)
-            {
-                I_ToggleFullScreen();
-            }
-#endif
         }
 
-        
         SDL_QuitSubSystem(SDL_INIT_VIDEO);
 
         initialized = false;
