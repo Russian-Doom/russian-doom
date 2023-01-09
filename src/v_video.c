@@ -368,14 +368,12 @@ void V_DrawPatchFullScreen (patch_t *patch, const boolean flipped)
 
 void V_DrawPatchFlipped (int x, int y, const patch_t *patch)
 {
-    int count;
-    int col; 
-    column_t *column; 
-    byte *desttop;
-    byte *dest;
-    byte *source; 
-    byte *sourcetrans;
-    int w, f; 
+    int col, count;
+    column_t *column;
+    byte *dest1, *desttop1; // Middle resolution
+    byte *dest2, *desttop2; // High resolution
+    byte *source, *sourcetrans;
+    int w, f;
  
     y -= SHORT(patch->topoffset); 
     x -= SHORT(patch->leftoffset); 
@@ -390,21 +388,25 @@ void V_DrawPatchFlipped (int x, int y, const patch_t *patch)
     V_MarkRect (x, y, SHORT(patch->width), SHORT(patch->height));
 
     col = 0;
-    desttop = dest_screen + (y << hires) * screenwidth + x;
+    desttop1 = dest_screen + (y << hires) * screenwidth + x;
+    desttop2 = dest_screen + ((y << hires) + quadres) * screenwidth + x;
 
     w = SHORT(patch->width);
 
-    for ( ; col<w ; x++, col++, desttop++)
+    for ( ; col<w ; x++, col++, desttop1++, desttop2++)
     {
         column = (column_t *)((byte *)patch + LONG(patch->columnofs[w-1-col]));
 
         // step through the posts in a column
         while (column->topdelta != 0xff )
         {
-            for (f = 0; f <= hires; f++)
+            for (f = 0; f <= (hires + quadres); f++)
             {
+            const int column_post = column->topdelta * (screenwidth << hires) + (x * (hires + quadres)) + f;
+
             source = sourcetrans = (byte *)column + 3;
-            dest = desttop + column->topdelta*(screenwidth << hires) + (x * (hires + quadres)) + f;
+            dest1 = desttop1 + column_post;
+            dest2 = desttop2 + column_post;
             count = column->length;
 
             // [crispy] prevent framebuffer overflows
@@ -428,7 +430,9 @@ void V_DrawPatchFlipped (int x, int y, const patch_t *patch)
                 {
                     count--;
                     source++;
-                    dest += (screenwidth << hires);
+                    dest1 += (screenwidth << hires);
+                    if (quadres)
+                    dest2 += (screenwidth << hires);
                     tmpy++;
                 }
 
@@ -450,13 +454,24 @@ void V_DrawPatchFlipped (int x, int y, const patch_t *patch)
                 if (dp_translation)
                 sourcetrans = &dp_translation[*source++];
 
-                if (hires)
+                if (quadres)
                 {
-                    *dest = *sourcetrans;
-                    dest += screenwidth;
+                    *dest2 = *dest1 = *sourcetrans;
+                    dest1 += fullscreenwidth;
+                    dest2 += fullscreenwidth;
+
+                    *dest2 = *dest1 = *sourcetrans++;
+                    dest1 += fullscreenwidth;
+                    dest2 += fullscreenwidth;
                 }
-                *dest = *sourcetrans++;
-                dest += screenwidth;
+                else
+                {
+                    *dest1 = *sourcetrans;
+                    dest1 += fullscreenwidth;
+
+                    *dest1 = *sourcetrans++;
+                    dest1 += fullscreenwidth;
+                }
             }
             }
             column = (column_t *)((byte *)column + column->length + 4);
