@@ -40,7 +40,7 @@ static struct
 {
     fixed_t x;
     fixed_t y;
-} MaceSpots[MAX_MACE_SPOTS];
+} *MaceSpots = NULL;
 
 static fixed_t bulletslope;
 
@@ -259,11 +259,19 @@ void P_OpenWeapons (void)
 
 void P_AddMaceSpot (const mapthing_t *mthing)
 {
-    if (MaceSpotCount == MAX_MACE_SPOTS)
+    static int MaceSpotCount_max = 0;
+
+    if(MaceSpotCount == MaceSpotCount_max)
     {
-        I_Error(english_language ?
-                "Too many mace spots." :
-                "Превышено количество спотов булавы.");
+        MaceSpotCount_max = MaceSpotCount_max ? MaceSpotCount_max * 2 : MAX_MACE_SPOTS;
+        MaceSpots = I_Realloc(MaceSpots, sizeof(*MaceSpots) * MaceSpotCount_max);
+
+        if(MaceSpotCount_max > MAX_MACE_SPOTS)
+        {
+            printf(english_language ?
+                   "P_AddMaceSpot: Too many mace spots\n" :
+                   "P_AddMaceSpot: Превышено количество спотов булавы\n");
+        }
     }
     MaceSpots[MaceSpotCount].x = mthing->x << FRACBITS;
     MaceSpots[MaceSpotCount].y = mthing->y << FRACBITS;
