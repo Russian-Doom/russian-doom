@@ -1500,6 +1500,7 @@ void V_DrawPatchUnscaledQuad (int x, int y, const patch_t *patch, const byte *ta
 // [JN] V_DrawPatchFinale
 // Draws pixel-doubled sprite. Used exclusively on casting sequence screen.
 // Written with extensive support of Fabian Greffrath, thanks! (16.01.2019)
+// Adapted for quad resolution by Roman Fomin, thanks as well! (10.01.2023)
 // -----------------------------------------------------------------------------
 
 void V_DrawPatchFinale (int x, int y, const patch_t *patch)
