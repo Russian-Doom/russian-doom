@@ -260,7 +260,7 @@ typedef PACKED_STRUCT (
 
 // [crispy] allow loading of Hexen-format maps
 // taken from chocolate-doom/src/hexen/xddefs.h:134-149
-typedef struct
+typedef PACKED_STRUCT (
 {
     short tid;
     short x;
@@ -275,7 +275,7 @@ typedef struct
     byte arg3;
     byte arg4;
     byte arg5;
-} PACKEDATTR mapthing_hexen_t;
+}) mapthing_hexen_t;
 
 #define	MTF_EASY        1
 #define	MTF_NORMAL      2
