@@ -37,11 +37,8 @@
 #include "m_misc.h"
 #include "jn.h"
 #include "rd_migration.h"
-
-#ifndef ___RD_TARGET_SETUP___
-    #include "rd_keybinds.h"
-    #include "i_controller.h"
-#endif
+#include "rd_keybinds.h"
+#include "i_controller.h"
 
 typedef struct section_s
 {
@@ -693,7 +690,7 @@ static sectionHandler_t defaultHandler = {
     DefaultHandler_Save,
     NULL
 };
-#ifndef ___RD_TARGET_SETUP___
+
 static sectionHandler_t keybindsHandler = {
     KeybindsHandler_isHandling,
     KeybindsHandler_HandleLine,
@@ -707,19 +704,13 @@ sectionHandler_t controllerHandler = {
     ControllerHandler_Save,
     ControllerHandler_onFinishHandling
 };
-#endif
+
 static sectionHandler_t* handlers[] = {
     &defaultHandler,
-#ifndef ___RD_TARGET_SETUP___
     &keybindsHandler,
     &controllerHandler
-#endif
+
 };
-#ifndef ___RD_TARGET_SETUP___
-static int handlersSize = 3;
-#else
-static int handlersSize = 1;
-#endif
 
 // Search a collection for a variable
 
@@ -780,17 +771,12 @@ static void SetVariable(default_t *def, char *value);
 static void DefaultHandler_HandleLine(char* keyName, char *value, size_t valueSize)
 {
     default_t *def;
-#ifndef ___RD_TARGET_SETUP___
     defaultTracker_t* tracker;
 
     tracker = M_GetDefaultTracker(keyName);
-#endif
     def = SearchCollection(&default_collection, keyName);
     if((def == NULL || !def->bound)
-#ifndef ___RD_TARGET_SETUP___
-    && tracker == NULL
-#endif
-    )
+    && tracker == NULL)
     {
         // Unknown variable?  Unbound variables are also treated as unknown.
         return;
@@ -818,10 +804,9 @@ static void DefaultHandler_HandleLine(char* keyName, char *value, size_t valueSi
 
     if(def != NULL && def->bound)
         SetVariable(def, value);
-#ifndef ___RD_TARGET_SETUP___
+
     if(tracker != NULL)
         M_SetTrackedValue(tracker, value);
-#endif
 }
 
 // Parses integer values in the configuration file
@@ -987,7 +972,7 @@ static void LoadSections(FILE *file)
     {
         if(fscanf(file, "[%99[^]]]%*1[\n]", sectionName) == 1)
         {
-            for(i = 0; i < handlersSize; ++i)
+            for(i = 0; i < arrlen(handlers); ++i)
             {
                 if(handlers[i]->isHandling(sectionName))
                 {
@@ -1023,10 +1008,8 @@ static void LoadSections(FILE *file)
 static void ApplyDefaults()
 {
     M_AppendConfigSection("General", &defaultHandler);
-#ifndef ___RD_TARGET_SETUP___
     BK_ApplyDefaultBindings();
     M_AppendConfigSection("Keybinds", &keybindsHandler);
-#endif
 }
 
 //
@@ -1089,16 +1072,13 @@ void M_LoadConfig(void)
         }
     }
 
-#ifndef ___RD_TARGET_SETUP___
     config_version = cfg_version;
     M_RegisterTrackedFields();
-#endif
 
     LoadSections(file);
 
     fclose(file);
 
-#ifndef ___RD_TARGET_SETUP___
     if(!isBindsLoaded)
     {
         BK_ApplyDefaultBindings();
@@ -1106,7 +1086,6 @@ void M_LoadConfig(void)
     }
 
     M_ApplyMigration();
-#endif
 }
 
 // Get a configuration file variable by its name
