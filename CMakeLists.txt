@@ -31,7 +31,7 @@ cmake_dependent_option(FORCE_GIT_HASH_SUFFIX "For Devs only! Always append hash 
 
 # Package related variables
 set(PACKAGE_TARNAME "inter-doom")
-set(PACKAGE_COPYRIGHT "Copyright \\xA9 2016-2022 Julian Nechaevsky. Licensed under GNU General Public License, version 2")
+set(PACKAGE_COPYRIGHT "Copyright \\xA9 2016-2023 Julian Nechaevsky. Copyright \\xA9 2020-2023 Leonid Murin (Dasperal). Licensed under GNU General Public License, version 2")
 
 # Check architecture
 if(WIN32)

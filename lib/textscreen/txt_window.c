@@ -1,6 +1,6 @@
 //
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -80,7 +80,7 @@ txt_window_t *TXT_NewWindow(char *title)
     win->key_listener = NULL;
     win->mouse_listener = NULL;
     win->help_url = NULL;       // [JN] English "Online help"
-    win->help_url_rus = NULL;   // [JN] Russian "Онлайн справка"
+    win->help_url_rus = NULL;   // [JN] Russian "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
 
     TXT_AddWidget(win, TXT_NewSeparator(NULL));
 
@@ -517,7 +517,7 @@ void TXT_SetWindowHelpURL(txt_window_t *window, char *help_url)
 }
 
 void TXT_SetWindowHelpURL_RUS(txt_window_t *window, char *help_url_rus)
-{   // [JN] Russian "Онлайн справка"
+{   // [JN] Russian "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
     window->help_url_rus = help_url_rus;
 }
 
@@ -568,7 +568,7 @@ void TXT_OpenWindowHelpURL(txt_window_t *window)
         TXT_OpenURL(window->help_url);
     }
 
-    // [JN] Russian "Онлайн справка"
+    // [JN] Russian "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
     if (window->help_url_rus != NULL)
     {
         TXT_OpenURL(window->help_url_rus);
