@@ -1,6 +1,6 @@
 # Findminiz.cmake
 #
-# Copyright (c) 2022, Murin Leonid (Dasperal) <Dasperal1@gmail.com>
+# Copyright (c) 2022-2023, Murin Leonid (Dasperal) <Dasperal1@gmail.com>
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
