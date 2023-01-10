@@ -6570,6 +6570,7 @@ boolean MN_Responder(event_t * event)
         else if (BK_isKeyDown(event, bk_detail))         // detail
         {
             // TODO - consider replacing with level restart.
+            M_RD_BG_Detail();
             S_StartSound(NULL, SFX_DOOR_LIGHT_CLOSE);
             return true;
         }

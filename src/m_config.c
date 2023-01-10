@@ -537,7 +537,6 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(screenblocks),
     CONFIG_VARIABLE_INT(extra_level_brightness),
     CONFIG_VARIABLE_INT(menu_shading),
-    CONFIG_VARIABLE_INT(detaillevel),
     CONFIG_VARIABLE_INT(hud_detaillevel),
 
     // Color options

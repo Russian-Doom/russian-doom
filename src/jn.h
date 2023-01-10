@@ -94,7 +94,6 @@ extern float g_color_factor;
 extern float b_color_factor;
 
 extern int local_time;
-extern int detailLevel;
 extern int hud_detaillevel;
 extern int showMessages;
 extern int message_fade;
