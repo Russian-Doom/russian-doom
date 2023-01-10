@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.15...3.25)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
+Option(VCPKG_MANIFEST_MODE "Operate in vcpkg manifest mode instead of classic mode" ON)
+
 project("International Doom" LANGUAGES C NONE)
 
 # Versions
@@ -105,6 +107,8 @@ else()
     string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
     string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
 endif()
+
+set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 
 find_package(SDL2 2.0.18 REQUIRED)
 find_package(SDL2_mixer 2.0.2 REQUIRED)

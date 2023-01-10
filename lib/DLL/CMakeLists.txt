@@ -1,4 +1,9 @@
 if(WIN32)
+    if(VCPKG_INSTALLED_DIR)
+        # vcpkg copies DLLs by itself
+        return()
+    endif()
+
     if("${ARCH}" MATCHES "x64")
         add_subdirectory(x64)
     elseif("${ARCH}" MATCHES "x86")
