@@ -138,11 +138,6 @@ typedef uint8_t byte;
 #define arrlen(array) (sizeof(array) / sizeof(*array))
 
 #ifdef _WIN32
-    #ifdef ___RD_TARGET_SETUP___
-        #define dll_import
-        #define dll_export
-    #else
-        #define dll_import __declspec(dllimport)
-        #define dll_export __declspec(dllexport)
-    #endif
+    #define dll_import __declspec(dllimport)
+    #define dll_export __declspec(dllexport)
 #endif
