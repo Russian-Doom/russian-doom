@@ -28,4 +28,5 @@ typedef enum
 extern char* RD_Project_Name;
 extern char* RD_Project_String;
 extern char* RD_Project_Version;
+extern char* RD_Project_TarName;
 extern GameType_t RD_GameType;
