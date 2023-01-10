@@ -18,8 +18,9 @@ For more information, visit [Project's Wiki](https://github.com/JNechaevsky/inte
 [**x64**](https://github.com/JNechaevsky/inter-doom/releases/download/6.1/inter-doom-6.1-windows-x64.zip)
 ([hash](https://github.com/JNechaevsky/inter-doom/releases/download/6.1/inter-doom-6.1-windows-x64.zip.sha256))<br/>
 **Linux:**
-Build from source code available,
-see [COMPILING.md](COMPILING.md#building-international-doom-on-linux)<br/>
+[**Arch(AUR)**](https://aur.archlinux.org/packages/inter-doom)<br/>
+Compilation from source code available for all platforms,
+see [COMPILING.md](COMPILING.md).<br/>
 Source code available in [zip](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/6.1.zip)
 and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/6.1.tar.gz) formats
 
@@ -34,8 +35,9 @@ and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/6.1.tar
 [**x64**](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-6.0/inter-heretic-6.0-windows-x64.zip)
 ([hash](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-6.0/inter-heretic-6.0-windows-x64.zip.sha256))<br/>
 **Linux:**
-Build from source code available,
-see [COMPILING.md](COMPILING.md#building-international-doom-on-linux)<br/>
+[**Arch(AUR)**](https://aur.archlinux.org/packages/inter-heretic)<br/>
+Compilation from source code available for all platforms,
+see [COMPILING.md](COMPILING.md).<br/>
 Source code available in [zip](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/heretic-6.0.zip)
 and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/heretic-6.0.tar.gz) formats
 
