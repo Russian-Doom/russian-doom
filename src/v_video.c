@@ -1524,7 +1524,7 @@ void V_DrawPatchFinale (int x, int y, const patch_t *patch)
 
     col = 0;
     desttop = dest_screen 
-            + (y * 4)                   // Proper vertical offset for Y * 4 factor
+            + (y * (4 << quadres)) // Proper vertical offset for Y * 4 factor
             * screenwidth + x;
 
     w = SHORT(patch->width);
@@ -1536,14 +1536,14 @@ void V_DrawPatchFinale (int x, int y, const patch_t *patch)
         // step through the posts in a column
         while (column->topdelta != 0xff)
         {
-            for (f = 0; f <= 3; f++)    // Make X scale factor * 4 (0, 1, 2, 3)
+            for (f = 0; f < (4 << quadres); f++)    // Make X scale factor * 4 (0, 1, 2, 3)
             {
             source = (byte *)column + 3;
 
             dest = desttop 
                  + column->topdelta 
-                 * (screenwidth * 4)    // Scale Y by 4
-                 + (x * 3)              // Scale X by 4
+                 * (screenwidth * (4 << quadres))    // Scale Y by 4
+                 + (x * ((4 << quadres) - 1))        // Scale X by 4
                  + f;
 
             count = column->length;
@@ -1552,7 +1552,7 @@ void V_DrawPatchFinale (int x, int y, const patch_t *patch)
             {
                 int g;
 
-                for (g = 0; g <= 3; g++)
+                for (g = 0; g < (4 << quadres); g++)
                 {
                     *dest = *source;
                     dest += screenwidth;
