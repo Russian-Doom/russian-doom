@@ -88,6 +88,7 @@
 char* RD_Project_Name = PACKAGE_PREFIX " Doom";
 char* RD_Project_String = PACKAGE_PREFIX " Doom " BUILD_DOOM_VERSION;
 char* RD_Project_Version = BUILD_DOOM_VERSION GIT_SHA_SUFFIX;
+char* RD_Project_TarName = PROGRAM_PREFIX "doom";
 GameType_t RD_GameType = gt_Doom;
 
 // -----------------------------------------------------------------------------

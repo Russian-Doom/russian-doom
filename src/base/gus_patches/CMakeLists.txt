@@ -197,14 +197,9 @@ add_copy_target(gus-patches SOURCE
     xylophon.pat
 )
 
-install(FILES $<GENEX_EVAL:$<TARGET_PROPERTY:gus-patches,OUT_FILES>>
-    DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${BUILD_PORTABLE}>>,base,${CMAKE_INSTALL_DATADIR}/${PACKAGE_TARNAME}>/gus_patches
-)
-# Same install rule but for component based install
 foreach(MODULE ${COMPILE_MODULES})
     install(FILES $<GENEX_EVAL:$<TARGET_PROPERTY:gus-patches,OUT_FILES>>
-        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${BUILD_PORTABLE}>>,base,${CMAKE_INSTALL_DATADIR}/${PACKAGE_TARNAME}>/gus_patches
+        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${BUILD_PORTABLE}>>,base,${CMAKE_INSTALL_DATADIR}/${PROGRAM_PREFIX}${MODULE}>/gus_patches
         COMPONENT "${MODULE}"
-        EXCLUDE_FROM_ALL
     )
 endforeach()
