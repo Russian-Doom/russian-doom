@@ -1,4 +1,4 @@
-# Findsamplerate.cmake
+# FindSampleRate.cmake
 #
 # Copyright (c) 2018, Alex Mayfield <alexmax2742@gmail.com>
 # All rights reserved.
@@ -55,7 +55,7 @@ find_library(SAMPLERATE_LIBRARY "samplerate"
     HINTS "${SAMPLERATE_DIR}/lib" ${PC_SAMPLERATE_LIBRARY_DIRS})
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(samplerate
+find_package_handle_standard_args(SampleRate
     FOUND_VAR SAMPLERATE_FOUND
     REQUIRED_VARS SAMPLERATE_INCLUDE_DIR SAMPLERATE_LIBRARY
     VERSION_VAR SAMPLERATE_VERSION
