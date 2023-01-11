@@ -83,6 +83,5 @@ if(SDL2_MIXER_FOUND)
     set_target_properties(SDL2_mixer::SDL2_mixer PROPERTIES
                           INTERFACE_COMPILE_OPTIONS "${PC_SDL2_MIXER_CFLAGS_OTHER}"
                           INTERFACE_INCLUDE_DIRECTORIES "${SDL2_MIXER_INCLUDE_DIR}"
-                          INTERFACE_LINK_LIBRARIES SDL2::SDL2
                           IMPORTED_LOCATION "${SDL2_MIXER_LIBRARY}")
 endif()
