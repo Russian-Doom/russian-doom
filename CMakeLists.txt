@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.15...3.25)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
+# CMP0077 supress some arcane CMake warning when using vcpkg.
+set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+# Automatically installs dependencies when using vcpkg.
+set(X_VCPKG_APPLOCAL_DEPS_INSTALL ON)
 Option(VCPKG_MANIFEST_MODE "Operate in vcpkg manifest mode instead of classic mode" ON)
 
 project("International Doom" LANGUAGES C NONE)
