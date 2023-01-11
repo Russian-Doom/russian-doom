@@ -69,9 +69,6 @@ if(COMPILE_HEXEN)
         PROGRAM_PREFIX="${PROGRAM_PREFIX}"
     )
     target_link_libraries(hexen PRIVATE
-        SDL2::SDL2
-        SDL2::mixer
-        SDL2::net
         Common
     )
     if(NOT NO_GIT_HASH)
