@@ -105,7 +105,7 @@ target_compile_definitions(Common PRIVATE
     "$<IF:$<BOOL:${HAVE_DECL_STRNCASECMP}>,HAVE_DECL_STRNCASECMP=1,HAVE_DECL_STRNCASECMP=0>"
 )
 target_link_libraries(Common PUBLIC
-    "$<$<BOOL:${SDL2_MAIN_LIBRARY}>:SDL2::SDL2main>"
+    "$<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>"
     SDL2::SDL2
     SDL2_mixer::SDL2_mixer
     SDL2_net::SDL2_net
@@ -150,7 +150,7 @@ foreach(MODULE ${COMPILE_MODULES})
             "$<IF:$<BOOL:${HAVE_DECL_STRNCASECMP}>,HAVE_DECL_STRNCASECMP=1,HAVE_DECL_STRNCASECMP=0>"
         )
         target_link_libraries("${PROGRAM_PREFIX}${MODULE}-exe" PRIVATE
-            "$<$<BOOL:${SDL2_MAIN_LIBRARY}>:SDL2::SDL2main>"
+            "$<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>"
             SDL2::SDL2
             "${PROGRAM_PREFIX}${MODULE}"
         )
@@ -179,7 +179,7 @@ foreach(MODULE ${COMPILE_MODULES})
             HAVE_CONSOLE
         )
         target_link_libraries("${PROGRAM_PREFIX}${MODULE}-com" PRIVATE
-            "$<$<BOOL:${SDL2_MAIN_LIBRARY}>:SDL2::SDL2main>"
+            "$<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>"
             SDL2::SDL2
             "${PROGRAM_PREFIX}${MODULE}"
         )
