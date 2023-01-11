@@ -23,5 +23,5 @@ target_compile_definitions(opl PRIVATE
     "$<$<BOOL:${HAVE_IOPERM}>:HAVE_IOPERM>"
 )
 target_link_libraries(opl PRIVATE
-    SDL2::mixer
+    SDL2_mixer::SDL2_mixer
 )
