@@ -107,13 +107,13 @@ target_compile_definitions(Common PRIVATE
 target_link_libraries(Common PUBLIC
     "$<$<BOOL:${SDL2_MAIN_LIBRARY}>:SDL2::SDL2main>"
     SDL2::SDL2
-    SDL2::mixer
-    SDL2::net
+    SDL2_mixer::SDL2_mixer
+    SDL2_net::SDL2_net
     textscreen
     pcsound
     opl
     miniz::miniz
-    "$<$<BOOL:${SAMPLERATE_FOUND}>:samplerate::samplerate>"
+    "$<$<BOOL:${SAMPLERATE_FOUND}>:SampleRate::samplerate>"
     "$<$<BOOL:${WIN32}>:winmm>"
 )
 

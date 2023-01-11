@@ -63,8 +63,8 @@ find_package_handle_standard_args(samplerate
 
 if(SAMPLERATE_FOUND)
     # Imported target.
-    add_library(samplerate::samplerate UNKNOWN IMPORTED)
-    set_target_properties(samplerate::samplerate PROPERTIES
+    add_library(SampleRate::samplerate UNKNOWN IMPORTED)
+    set_target_properties(SampleRate::samplerate PROPERTIES
         INTERFACE_COMPILE_OPTIONS "${PC_SAMPLERATE_CFLAGS_OTHER}"
         INTERFACE_INCLUDE_DIRECTORIES "${SAMPLERATE_INCLUDE_DIR}"
         IMPORTED_LOCATION "${SAMPLERATE_LIBRARY}")

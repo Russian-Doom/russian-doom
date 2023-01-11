@@ -19,5 +19,5 @@ target_compile_definitions(pcsound PRIVATE
     "$<$<BOOL:${HAVE_LINUX_KD_H}>:HAVE_LINUX_KD_H>"
 )
 target_link_libraries(pcsound PRIVATE
-    SDL2::mixer
+    SDL2_mixer::SDL2_mixer
 )
