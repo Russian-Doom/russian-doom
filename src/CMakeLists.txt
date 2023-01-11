@@ -92,7 +92,7 @@ set_target_properties(Common PROPERTIES
     C_STANDARD_REQUIRED ON
 )
 target_compile_definitions(Common PRIVATE
-    "$<$<BOOL:${SAMPLERATE_FOUND}>:HAVE_LIBSAMPLERATE>"
+    "$<$<BOOL:${SampleRate_FOUND}>:HAVE_LIBSAMPLERATE>"
     "$<$<BOOL:${HAVE_MMAP}>:HAVE_MMAP>"
     "$<$<BOOL:${HAVE_DIRENT_H}>:HAVE_DIRENT_H>"
     "$<IF:$<BOOL:${HAVE_DECL_SSCANF_S}>,HAVE_DECL_SSCANF_S=1,HAVE_DECL_SSCANF_S=0>"
@@ -113,7 +113,7 @@ target_link_libraries(Common PUBLIC
     pcsound
     opl
     miniz::miniz
-    "$<$<BOOL:${SAMPLERATE_FOUND}>:SampleRate::samplerate>"
+    "$<$<BOOL:${SampleRate_FOUND}>:SampleRate::samplerate>"
     "$<$<BOOL:${WIN32}>:winmm>"
 )
 

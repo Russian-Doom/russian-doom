@@ -114,7 +114,7 @@ find_package(miniz 2.0.0)
 find_package(m)
 
 # Use system of user-provided library if it exists
-if(NOT MINIZ_FOUND)
+if(NOT miniz_FOUND)
     message(STATUS "Using vendored miniz library")
     add_subdirectory("lib/thirdparty/miniz")
 endif()
