@@ -76,9 +76,6 @@ if(COMPILE_DOOM)
         PROGRAM_PREFIX="${PROGRAM_PREFIX}"
     )
     target_link_libraries(doom PRIVATE
-        SDL2::SDL2
-        SDL2::mixer
-        SDL2::net
         Common
     )
     if(NOT NO_GIT_HASH)
