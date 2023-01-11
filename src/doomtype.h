@@ -136,8 +136,3 @@ typedef uint8_t byte;
 #define RD_MAX_PATH 261
 
 #define arrlen(array) (sizeof(array) / sizeof(*array))
-
-#ifdef _WIN32
-    #define dll_import __declspec(dllimport)
-    #define dll_export __declspec(dllexport)
-#endif
