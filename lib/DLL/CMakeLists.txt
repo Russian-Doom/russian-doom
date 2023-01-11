@@ -1,6 +1,8 @@
 if(WIN32)
     if(VCPKG_INSTALLED_DIR)
-        # vcpkg copies DLLs by itself
+        # vcpkg copies DLLs for direct dependencies by itself
+        # TODO manually copy transitive dependencies from vcpkg if they exist (SDL_Mixer "plugins")
+        # TODO manually add install rules for transitive dependencies from vcpkg if they exist (SDL_Mixer "plugins")
         return()
     endif()
 
