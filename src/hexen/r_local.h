@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -25,6 +25,11 @@
 #define LOOKDIRMAX  90
 #define LOOKDIRS    (LOOKDIRMIN+1+LOOKDIRMAX) // [crispy] lookdir range: -160..0..90
 
+// [JN] Doubled versions for quad resolution, used only for rendering.
+#define LOOKDIRMIN2 (LOOKDIRMIN << quadres)
+#define LOOKDIRMAX2 (LOOKDIRMIN << quadres)
+#define LOOKDIRS2   (LOOKDIRMIN2+1+LOOKDIRMAX2)
+
 #define ANGLETOSKYSHIFT     22      // sky map is 256*128*4 maps
 #define BASEYCENTER         100
 #define MINZ                (FRACUNIT*4)
@@ -38,11 +43,11 @@
 #define MAXLIGHTSCALE       48
 #define LIGHTSCALESHIFT     12
 // [crispy] & [JN] smoother diminished lighting
-#define MAXLIGHTZ           1024
-#define LIGHTZSHIFT         17
+#define MAXLIGHTZ			1024
+#define LIGHTZSHIFT			17
 // [JN] Vanilla values
-// #define MAXLIGHTZ        128
-// #define LIGHTZSHIFT      20
+#define MAXLIGHTZ_VANILLA   128
+#define LIGHTZSHIFT_VANILLA 20
 #define NUMCOLORMAPS        32      // number of diminishing
 
 
@@ -255,10 +260,10 @@ typedef struct visplane_s
     int special;
     int minx, maxx;
     unsigned int pad1;                    // [crispy] hires / 32-bit integer math
-    unsigned int top[WIDESCREENWIDTH];    // [crispy] hires / 32-bit integer math
+    unsigned int top[MAXWIDTH];           // [crispy] hires / 32-bit integer math
     unsigned int pad2;                    // [crispy] hires / 32-bit integer math
     unsigned int pad3;                    // [crispy] hires / 32-bit integer math
-    unsigned int bottom[WIDESCREENWIDTH]; // [crispy] hires / 32-bit integer math
+    unsigned int bottom[MAXWIDTH];        // [crispy] hires / 32-bit integer math
     unsigned int pad4;                    // [crispy] hires / 32-bit integer math
 } visplane_t;
 
@@ -383,11 +388,10 @@ extern lighttable_t *scalelightfixed[MAXLIGHTSCALE];
 extern lighttable_t *zlight[LIGHTLEVELS][MAXLIGHTZ];
 
 extern int extralight;
+extern int maxlightz, lightzshift;
 extern lighttable_t *fixedcolormap;
 
 extern fixed_t viewcos, viewsin;
-
-extern int detailshift;         // 0 = high, 1 = low
 
 extern void (*colfunc) (void);
 extern void (*basecolfunc) (void);
@@ -398,6 +402,7 @@ extern void (*transcolfunc) (void);
 extern void (*transtlcolfunc) (void);
 extern void (*spanfunc) (void);
 extern void R_ExecuteSetViewSize();
+extern void R_InitLightTables (void);
 
 int R_PointOnSide(fixed_t x, fixed_t y, const node_t *node);
 int R_PointOnSegSide(fixed_t x, fixed_t y, const seg_t *line);
@@ -474,7 +479,7 @@ extern int *lastopening; // [crispy] 32-bit integer math
 extern int *floorclip, *ceilingclip; // dropoff overflow
 
 extern fixed_t *yslope, *distscale;
-extern fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
+extern fixed_t yslopes[MAXHEIGHT][MAXHEIGHT];
 
 void R_InitPlanesRes(void);
 void R_InitVisplanesRes(void);
@@ -544,14 +549,14 @@ void R_ClipVisSprite(vissprite_t * vis, int xl, int xh);
 // R_draw.c
 //
 
-extern lighttable_t *dc_colormap[2];
+extern const lighttable_t *dc_colormap[2];
 extern int dc_x;
 extern int dc_yl;
 extern int dc_yh;
 extern fixed_t dc_iscale;
 extern fixed_t dc_texturemid;
 extern int dc_texheight;
-extern byte *dc_source;         // first pixel in a column
+extern const byte *dc_source;         // first pixel in a column
 extern const byte *dc_brightmap;
 
 void R_DrawColumn(void);
@@ -571,7 +576,7 @@ void R_DrawTranslatedTLColumnLow(void);
 extern int ds_y;
 extern int ds_x1;
 extern int ds_x2;
-extern lighttable_t *ds_colormap;
+extern const lighttable_t *ds_colormap;
 extern fixed_t ds_xfrac;
 extern fixed_t ds_yfrac;
 extern fixed_t ds_xstep;

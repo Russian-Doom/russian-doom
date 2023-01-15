@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -41,6 +41,7 @@
 #endif
 
 #include "doomtype.h"
+#include "d_name.h"
 #include "i_system.h"
 #include "i_timer.h"
 #include "m_argv.h"
@@ -767,7 +768,7 @@ char* RD_M_FindInternalResource(char* resourceName)
 #elif defined(__APPLE__)
     retVal = M_StringJoin(packageResourcesDir, resourceName, NULL);
 #else // Linux
-    retVal = M_StringJoin("/usr/local/share", DIR_SEPARATOR_S, PACKAGE_TARNAME, DIR_SEPARATOR_S, resourceName, NULL);
+    retVal = M_StringJoin(PACKAGE_DATADIR, DIR_SEPARATOR_S, RD_Project_TarName, DIR_SEPARATOR_S, resourceName, NULL);
 #endif
     if(!M_FileExists(retVal))
     {

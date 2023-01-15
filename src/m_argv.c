@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -499,6 +499,12 @@ printf("  %-34s  %s\n", (keys), english_language ? (description_eng) : (descript
     CLI_Parameter("-fast",
                   "Monsters move faster",
                   "Монстры движутся быстрее");
+    if(RD_GameType == gt_Doom || RD_GameType == gt_Heretic)
+    {
+        CLI_Parameter("-coop_spawns",
+            "Single player game with additional spawns as in cooperative netgame",
+            "Одиночная игра с дополнительные предметами и врагами, как в кооперативной сетевой игре");
+    }
     if(RD_GameType == gt_Strife)
     {
         CLI_Parameter("-work",

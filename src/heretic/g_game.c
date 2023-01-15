@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -16,65 +16,57 @@
 //
 
 
-
-// G_game.c
-
 #include <stdlib.h>
 #include <string.h>
-#include "am_map.h"
-#include "doomdef.h"
+#include "hr_local.h"
 #include "deh_str.h"
 #include "i_timer.h"
 #include "i_system.h"
 #include "m_argv.h"
 #include "m_misc.h"
-#include "m_random.h"
 #include "p_local.h"
 #include "rd_keybinds.h"
 #include "s_sound.h"
 #include "v_video.h"
 #include "jn.h"
 
+// Macros
+
+#define MLOOKUNIT       8   // [crispy] for mouselook
+#define MLOOKUNITLOWRES 16  // [crispy] for mouselook when recording
+
 // Functions
 
-boolean G_CheckDemoStatus(void);
-void G_ReadDemoTiccmd(ticcmd_t * cmd);
-void G_WriteDemoTiccmd(ticcmd_t * cmd);
-void G_PlayerReborn(int player);
+static void G_ReadDemoTiccmd (ticcmd_t *cmd);
+static void G_WriteDemoTiccmd (ticcmd_t *cmd);
+static void G_DoReborn (int playernum);
+static void G_DoLoadLevel (void);
+static void G_DoNewGame (void);
+static void G_DoPlayDemo (void);
+static void G_DoCompleted (void);
+static void G_DoWorldDone (void);
+static void G_DoSaveGame (void);
 
-void G_DoReborn(int playernum);
-
-void G_DoLoadLevel(void);
-void G_DoNewGame(void);
-void G_DoPlayDemo(void);
-void G_DoCompleted(void);
-void G_DoVictory(void);
-void G_DoWorldDone(void);
-void G_DoSaveGame(void);
-
-void D_PageTicker(void);
-void D_AdvanceDemo(void);
-
-struct
+static struct
 {
     int type;   // mobjtype_t
     int speed[2];
 } MonsterMissileInfo[] = {
-    { MT_IMPBALL, { 10, 20 } },
-    { MT_MUMMYFX1, { 9, 18 } },
-    { MT_KNIGHTAXE, { 9, 18 } },
-    { MT_REDAXE, { 9, 18 } },
-    { MT_BEASTBALL, { 12, 20 } },
-    { MT_WIZFX1, { 18, 24 } },
+    { MT_IMPBALL,    { 10, 20 } },
+    { MT_MUMMYFX1,   {  9, 18 } },
+    { MT_KNIGHTAXE,  {  9, 18 } },
+    { MT_REDAXE,     {  9, 18 } },
+    { MT_BEASTBALL,  { 12, 20 } },
+    { MT_WIZFX1,     { 18, 24 } },
     { MT_SNAKEPRO_A, { 14, 20 } },
     { MT_SNAKEPRO_B, { 14, 20 } },
-    { MT_HEADFX1, { 13, 20 } },
-    { MT_HEADFX3, { 10, 18 } },
-    { MT_MNTRFX1, { 20, 26 } },
-    { MT_MNTRFX2, { 14, 20 } },
-    { MT_SRCRFX1, { 20, 28 } },
-    { MT_SOR2FX1, { 20, 28 } },
-    { -1, { -1, -1 } }                 // Terminator
+    { MT_HEADFX1,    { 13, 20 } },
+    { MT_HEADFX3,    { 10, 18 } },
+    { MT_MNTRFX1,    { 20, 26 } },
+    { MT_MNTRFX2,    { 14, 20 } },
+    { MT_SRCRFX1,    { 20, 28 } },
+    { MT_SOR2FX1,    { 20, 28 } },
+    { -1,            { -1, -1 } }  // Terminator
 };
 
 gameaction_t gameaction;
@@ -114,8 +106,8 @@ boolean shortticfix;            // calculate lowres turning like doom
 boolean demoplayback;
 boolean netdemo;
 boolean demoextend;
-byte *demobuffer, *demo_p, *demoend;
 boolean singledemo;             // quit after playing a demo from cmdline
+static byte *demobuffer, *demo_p, *demoend;
 
 boolean precache = true;        // if true, load all graphics at start
 
@@ -130,7 +122,6 @@ int testcontrols_mousespeed;
 //
 // controls (have defaults)
 //
-
 
 #define MAXPLMOVE       0x32
 
@@ -176,22 +167,25 @@ static const struct
 
 #define SLOWTURNTICS    6
 
-int turnheld;                   // for accelerative turning
-int lookheld;
-
-int mousex, mousey;             // mouse values are used once
+static int turnheld;            // for accelerative turning
+static int lookheld;
+static int mousex;              // mouse values are used once
+static int mousey;
 
 #define MAX_JOY_BUTTONS 20
 
-int joyturn, joymove;         // joystick values are repeated
-int joystrafemove;
-int joyvlook;
+static int joyturn, joymove;    // joystick values are repeated
+static int joystrafemove;
+static int joyvlook;
 int alwaysRun = 1;              // is always run enabled
 
-int savegameslot;
-char savedescription[32];
+static int  savegameslot;
+static char savedescription[32];
 
-int inventoryTics;
+static int inventoryTics;
+
+// [crispy] demo progress bar and timer widget
+int defdemotics = 0, deftotaldemotics;
 
 // haleyjd: removed WATCOMC
 
@@ -251,10 +245,6 @@ static int G_NextWeapon(int direction)
 ====================
 */
 
-extern boolean inventory;
-extern int curpos;
-extern int inv_ptr;
-
 boolean usearti = true;
 
 void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
@@ -265,7 +255,6 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     int forward, side;
     int look, arti;
     int flyheight;
-    extern boolean askforquit;
 
     // haleyjd: removed externdriver crap
 
@@ -566,29 +555,37 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         testcontrols_mousespeed = 0;
     }
 
-    // [JN] Mouselook: initials
-    // TODO: make it safe for network game
-    if (players[consoleplayer].playerstate == PST_LIVE && !netgame 
-    && !demoplayback && !menuactive && !askforquit && !paused)
+    // [crispy] Handle mouselook
+    if (mlook)
     {
-        if (mlook || novert)
+        if (demorecording || lowres_turn)
         {
-            cmd->lookdir += mouse_y_invert ? -mousey : mousey;
-            cmd->lookdir += FixedMul(angleturn[2], joyvlook);
+            // [crispy] Map mouse movement to look variable when recording
+            look += mouse_y_invert ? -mousey / MLOOKUNITLOWRES
+                                   :  mousey / MLOOKUNITLOWRES;
+
+            // [crispy] Limit to max speed of keyboard look up/down
+            if (look > 2)
+            {
+                look = 2;
+            }
+            else if (look < -2)
+            {
+                look = -2;
+            }
         }
-        else if (!novert)
+        else
         {
-            forward += mousey;
-            forward += FixedMul(forwardmove[speed], joyvlook);
+            cmd->lookdir = mouse_y_invert ? -mousey : mousey;
+            cmd->lookdir /= MLOOKUNIT;
         }
-        
-        if (players[consoleplayer].lookdir > LOOKDIRMAX * MLOOKUNIT)
-            players[consoleplayer].lookdir = LOOKDIRMAX * MLOOKUNIT;
-        else if (players[consoleplayer].lookdir < -LOOKDIRMIN * MLOOKUNIT)
-            players[consoleplayer].lookdir = -LOOKDIRMIN * MLOOKUNIT;
+    }
+    else if (!novert)
+    {
+        forward += mousey;
     }
 
-    // [JN] Mouselook: toggling
+    // [JN] Toggle mouselook
     if (BK_isKeyPressed(bk_toggle_mlook))
     {
         if (!mlook)
@@ -711,7 +708,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
 ==============
 */
 
-void G_DoLoadLevel(void)
+static void G_DoLoadLevel (void)
 {
     int i;
 
@@ -762,6 +759,23 @@ void G_DoLoadLevel(void)
 
 boolean G_Responder(event_t * ev)
 {
+    // [crispy] demo pause (from prboom-plus)
+    if (gameaction == ga_nothing && (demoplayback || gamestate == GS_DEMOSCREEN))
+    {
+        if (BK_isKeyDown(ev, bk_pause))
+        {
+            if (paused ^= 2)
+            {
+                S_PauseSound();
+            }
+            else
+            {
+                S_ResumeSound();
+            }
+            return true;
+        }
+    }
+
     player_t *plr;
 
     plr = &players[consoleplayer];
@@ -772,6 +786,13 @@ boolean G_Responder(event_t * ev)
             plr->readyArtifact = plr->inventory[inv_ptr].type;
         }
         usearti = true;
+    }
+
+    // [crispy] demo fast-forward
+    if (BK_isKeyDown(ev, bk_demo_speed) && (demoplayback || gamestate == GS_DEMOSCREEN))
+    {
+        singletics = !singletics;
+        return true;
     }
 
     // Check for spy mode player cycle
@@ -787,11 +808,21 @@ boolean G_Responder(event_t * ev)
         }
         while (!playeringame[displayplayer]
                && displayplayer != consoleplayer);
+               
+        // [JN] Update sound values for appropriate player.
+        S_UpdateSounds(players[displayplayer].mo);
+
+        // [JN] Re-init automap variables for correct player arrow angle.
+        if (automapactive)
+        {
+            AM_initVariables();
+        }
+
         return (true);
     }
 
     // any other key pops up menu if in demos
-    if (gameaction == ga_nothing && !singledemo && (demoplayback || gamestate == GS_DEMOSCREEN)) 
+    if (gameaction == ga_nothing && !singledemo && (demoplayback || gamestate == GS_DEMOSCREEN) && !askforquit) 
     { 
         if (ev->type == ev_keydown
         ||  ev->type == ev_mouse_keydown
@@ -997,6 +1028,14 @@ void G_Ticker(void)
     }
 
 
+    // [JN] Allow to pause demo playback:
+    if ((paused & 2 || (!demoplayback && menuactive && !netgame)) && gamestate != GS_DEMOSCREEN)
+    {
+        oldleveltime = leveltime;  // Supress interpolation for next frame.
+        return;                    // Don't go any farther.
+    }
+    else
+    {
 //
 // get commands, check consistancy, and build new consistancy check
 //
@@ -1030,6 +1069,12 @@ void G_Ticker(void)
                     consistancy[i][buf] = rndindex;
             }
         }
+
+    // [crispy] increase demo tics counter
+    if (demoplayback || demorecording)
+    {
+        defdemotics++;
+    }
 
 //
 // check for special buttons
@@ -1079,6 +1124,7 @@ void G_Ticker(void)
                 }
             }
         }
+    }
     // turn inventory off after a certain amount of time
     if (inventory && !(--inventoryTics))
     {
@@ -1102,7 +1148,11 @@ void G_Ticker(void)
             P_Ticker();
             SB_Ticker();
             AM_Ticker();
-            CT_Ticker();
+            // [JN] Not used outside of multiplayer game.
+            if (netgame)
+            {
+                CT_Ticker();
+            }
             break;
         case GS_INTERMISSION:
             IN_Ticker();
@@ -1361,13 +1411,16 @@ void G_DeathMatchSpawnPlayer(int playernum)
 ====================
 */
 
-void G_DoReborn(int playernum)
+static void G_DoReborn (int playernum)
 {
     int i;
 
     // quit demo unless -demoextend
-    if (!demoextend && G_CheckDemoStatus())
+    // [JN] Make -demoextend unnecessary for demo playing (not recording).
+    if ((!demoextend && !demoplayback) && G_CheckDemoStatus())
+    {
         return;
+    }
 
     if (!netgame)
     {
@@ -1432,7 +1485,7 @@ void G_SecretExitLevel(void)
     gameaction = ga_completed;
 }
 
-void G_DoCompleted(void)
+static void G_DoCompleted (void)
 {
     int i;
     static int afterSecret[5] = { 7, 5, 5, 5, 4 };
@@ -1440,7 +1493,8 @@ void G_DoCompleted(void)
     gameaction = ga_nothing;
 
     // quit demo unless -demoextend
-    if (!demoextend && G_CheckDemoStatus())
+    // [JN] Make -demoextend unnecessary for demo playing (not recording).
+    if ((!demoextend && !demoplayback) && G_CheckDemoStatus())
     {
         return;
     }
@@ -1500,7 +1554,7 @@ void G_WorldDone(void)
 //
 //============================================================================
 
-void G_DoWorldDone(void)
+static void G_DoWorldDone (void)
 {
     idmusnum = -1;  // [JN] jff 3/17/98 allow new level's music to be loaded
     gamestate = GS_LEVEL;
@@ -1631,7 +1685,7 @@ void G_DeferedInitNew(skill_t skill, int episode, int map)
     gameaction = ga_newgame;
 }
 
-void G_DoNewGame(void)
+static void G_DoNewGame (void)
 {
     idmusnum = -1;  // [JN] e6y: allow new level's music to be loaded
     G_InitNew(d_skill, d_episode, d_map, 0);
@@ -1655,6 +1709,8 @@ void G_DoSelectiveGame(int option)
     demoplayback = false; 
     netgame = false;
     deathmatch = false;
+    // [crispy] reset game speed after demo fast-forward
+    singletics = false;
     playeringame[1] = playeringame[2] = playeringame[3] = 0;
     consoleplayer = 0;
     gameaction = ga_nothing; 
@@ -1841,6 +1897,8 @@ void G_InitNew(skill_t skill, int episode, int map, int fast_monsters)
     demorecording = false;
     demoplayback = false;
     netdemo = false;
+    // [crispy] reset game speed after demo fast-forward
+    singletics = false;
     // [JN] Reset automap scale. Fixes:
     // https://doomwiki.org/wiki/Automap_scale_preserved_after_warps_in_Heretic_and_Hexen
     automapactive = false; 
@@ -1853,6 +1911,7 @@ void G_InitNew(skill_t skill, int episode, int map, int fast_monsters)
 
     // [crispy] CPhipps - total time for all completed levels
     totalleveltimes = 0;
+    defdemotics = 0;
 
     // Set the sky map
     if (episode > 5)
@@ -1892,7 +1951,7 @@ void G_InitNew(skill_t skill, int episode, int map, int fast_monsters)
 #define DEMOHEADER_LONGTICS   0x10
 #define DEMOHEADER_NOMONSTERS 0x02
 
-void G_ReadDemoTiccmd(ticcmd_t * cmd)
+static void G_ReadDemoTiccmd(ticcmd_t *cmd)
 {
     if (*demo_p == DEMOMARKER)
     {                           // end of demo data stream
@@ -1951,7 +2010,7 @@ static void IncreaseDemoBuffer(void)
     demoend = demobuffer + new_length;
 }
 
-void G_WriteDemoTiccmd(ticcmd_t * cmd)
+static void G_WriteDemoTiccmd(ticcmd_t *cmd)
 {
     byte *demo_start;
 
@@ -2082,6 +2141,40 @@ void G_RecordDemo(skill_t skill, int numplayers, int episode, int map,
     demorecording = true;
 }
 
+/*
+================================================================================
+=
+= G_DemoProgressBar
+=
+= [crispy] demo progress bar
+=
+================================================================================
+*/
+
+static void G_DemoProgressBar (const int lumplength)
+{
+    int   numplayersingame = 0;
+    byte *demo_ptr = demo_p;
+
+    for (int i = 0; i < MAXPLAYERS; i++)
+    {
+        if (playeringame[i])
+        {
+            numplayersingame++;
+        }
+    }
+
+    deftotaldemotics = defdemotics = 0;
+
+    while (*demo_ptr != DEMOMARKER && (demo_ptr - demobuffer) < lumplength)
+    {
+        // [JN] Note: Heretic using extra two pointers: lookfly and arti,
+        // so unlike Doom (5 : 4) we using (7 : 6) here.
+        // Thanks to Roman Fomin for pointing out.
+        demo_ptr += numplayersingame * (longtics ? 7 : 6);
+        deftotaldemotics++;
+    }
+}
 
 /*
 ===================
@@ -2097,24 +2190,28 @@ void G_DeferedPlayDemo(char *name)
 {
     defdemoname = name;
     gameaction = ga_playdemo;
-
-    // [crispy] fast-forward demo up to the desired map
-    if (demowarp)
-    {
-        nodrawers = true;
-        singletics = true;
-    }
 }
 
-void G_DoPlayDemo(void)
+static void G_DoPlayDemo (void)
 {
     skill_t skill;
     int i, lumpnum, episode, map;
+    int lumplength; // [crispy]
 
     gameaction = ga_nothing;
     lumpnum = W_GetNumForName(defdemoname);
     demobuffer = W_CacheLumpNum(lumpnum, PU_STATIC);
     demo_p = demobuffer;
+
+    // [crispy] ignore empty demo lumps
+    lumplength = W_LumpLength(lumpnum);
+    if (lumplength < 0xd)
+    {
+        demoplayback = true;
+        G_CheckDemoStatus();
+        return;
+    }
+
     skill = *demo_p++;
     episode = *demo_p++;
     map = *demo_p++;
@@ -2156,6 +2253,16 @@ void G_DoPlayDemo(void)
     {
         netdemo = true;
     }
+
+    // [crispy] fast-forward demo up to the desired map
+    if (demowarp)
+    {
+        nodrawers = true;
+        singletics = true;
+    }
+
+    // [crispy] demo progress bar
+    G_DemoProgressBar(lumplength);
 }
 
 
@@ -2171,8 +2278,20 @@ void G_TimeDemo(char *name)
 {
     skill_t skill;
     int episode, map, i;
+    int lumpnum, lumplength; // [crispy]
 
     demobuffer = demo_p = W_CacheLumpName(name, PU_STATIC);
+
+    // [crispy] ignore empty demo lumps
+    lumpnum = W_GetNumForName(name);
+    lumplength = W_LumpLength(lumpnum);
+    if (lumplength < 0xd)
+    {
+        demoplayback = true;
+        G_CheckDemoStatus();
+        return;
+    }
+
     skill = *demo_p++;
     episode = *demo_p++;
     map = *demo_p++;
@@ -2195,22 +2314,25 @@ void G_TimeDemo(char *name)
         netgame = true;
     }
 
-    G_InitNew(skill, episode, map, 0);
-    starttime = I_GetTime();
-
     // Disable screen rendering entirely,
     // if command line parameter is present.
     nodrawers = M_CheckParm ("-nodraw");
+    timingdemo = true;
+
+    G_InitNew(skill, episode, map, 0);
+    starttime = I_GetTime();
 
     usergame = false;
     demoplayback = true;
-    timingdemo = true;
     singletics = true;
 
     if (netgame)
     {
         netdemo = true;
     }
+
+    // [crispy] demo progress bar
+    G_DemoProgressBar(lumplength);
 }
 
 
@@ -2300,7 +2422,7 @@ void G_SaveGame(int slot, char *description)
 //
 //==========================================================================
 
-void G_DoSaveGame(void)
+static void G_DoSaveGame (void)
 {
     int i;
     char *filename;

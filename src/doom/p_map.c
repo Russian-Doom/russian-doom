@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard, Andrey Budko
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -63,8 +63,6 @@ int          numspechit;
 #define DEFAULT_SPECHIT_MAGIC       0x01C09C98
 
 static void SpechitOverrun (line_t *ld);
-
-mobj_t *BlockingMobj;
 
 
 // =============================================================================
@@ -349,8 +347,6 @@ static boolean PIT_CheckThing (mobj_t *thing)
         return true;
     }
 
-    BlockingMobj = thing;
-
     // check for skulls slamming into things
     if (tmthing->flags & MF_SKULLFLY)
     {
@@ -630,8 +626,6 @@ const boolean P_CheckPosition (mobj_t *thing, const fixed_t x, const fixed_t y)
     yl = (tmbbox[BOXBOTTOM] - bmaporgy - MAXRADIUS)>>MAPBLOCKSHIFT;
     yh = (tmbbox[BOXTOP] - bmaporgy + MAXRADIUS)>>MAPBLOCKSHIFT;
 
-    BlockingMobj = NULL;
-
     for (bx = xl ; bx <= xh ; bx++)
     {
         for (by = yl ; by <= yh ; by++)
@@ -644,8 +638,6 @@ const boolean P_CheckPosition (mobj_t *thing, const fixed_t x, const fixed_t y)
     }
 
     // check lines
-
-    BlockingMobj = NULL;
 
     xl = (tmbbox[BOXLEFT] - bmaporgx)>>MAPBLOCKSHIFT;
     xh = (tmbbox[BOXRIGHT] - bmaporgx)>>MAPBLOCKSHIFT;
@@ -1014,14 +1006,6 @@ static boolean PTR_SlideTraverse (intercept_t *in)
     }
 
     li = in->d.line;
-
-    // [JN] Treat two sided linedefs as single sided for smooth sliding.
-    if (singleplayer && improved_collision && 
-    li->flags & ML_BLOCKING && li->flags & ML_TWOSIDED
-    && !strict_mode && !vanillaparm)
-    {
-        goto isblocking;
-    }
 
     if (!(li->flags & ML_TWOSIDED))
     {
@@ -1424,7 +1408,7 @@ static boolean PTR_ShootTraverse (intercept_t* in)
         // [crispy] check if the pullet puff's z-coordinate is below of above
         // its spawning sector's floor or ceiling, respectively, and move its
         // coordinates to the point where the trajectory hits the plane
-        if (aimslope && !strict_mode && !vanillaparm)
+        if (aimslope && !vanillaparm)
         {
             const int lineside = P_PointOnLineSide(x, y, li);
             int side;
@@ -1438,8 +1422,13 @@ static boolean PTR_ShootTraverse (intercept_t* in)
                 {
                     z = BETWEEN(sector->floorheight, sector->ceilingheight, z);
                     frac = FixedDiv(z - shootz, FixedMul(aimslope, attackrange));
-                    x = trace.x + FixedMul (trace.dx, frac);
-                    y = trace.y + FixedMul (trace.dy, frac);
+                    // [JN] Shift X/Y coords only in non-strict mode
+                    // for preventing puff slippering to closest line.
+                    if (!strict_mode)
+                    {
+                        x = trace.x + FixedMul (trace.dx, frac);
+                        y = trace.y + FixedMul (trace.dy, frac);
+                    }
                 }
             }
         }

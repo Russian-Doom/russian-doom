@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -98,6 +98,7 @@ int             deathmatch; // only if started as net death
 boolean         netgame;    // only true if packets are broadcast
 boolean         playeringame[MAXPLAYERS];
 player_t        players[MAXPLAYERS];
+boolean         coop_spawns; // Single player game with netgame things spawn
 
 boolean         turbodetected[MAXPLAYERS];
 
@@ -1063,7 +1064,7 @@ void G_Ticker (void)
 
     // [crispy] no pause at intermission screen during demo playback 
     // to avoid desyncs (from prboom-plus)
-    if ((paused & 2 || (!demoplayback && menuactive && !netgame)) && gamestate != GS_LEVEL)
+    if ((paused & 2 || (!demoplayback && menuactive && !netgame)) && gamestate == GS_INTERMISSION)
     {
         return;
     }
@@ -2108,8 +2109,8 @@ void G_DoSelectiveGame (int choice)
     // Ammo
     plr->ammo[0] = selective_ammo_0; // bullets
     plr->ammo[1] = selective_ammo_1; // shells
-    plr->ammo[2] = selective_ammo_2; // rockets
-    plr->ammo[3] = selective_ammo_3; // cells
+    plr->ammo[2] = selective_ammo_2; // cells
+    plr->ammo[3] = selective_ammo_3; // rockets
 
     // Keys
     plr->cards[0] = selective_key_0; // blue keycard

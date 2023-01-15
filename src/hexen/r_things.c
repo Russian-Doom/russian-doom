@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@
 #include "r_bmaps.h"
 #include "r_local.h"
 #include "v_trans.h"
+#include "v_video.h"
 
 
 // Sprite rotation 0 is facing the viewer, rotation 1 is one angle turn CLOCKWISE
@@ -1149,7 +1150,9 @@ void R_DrawPSprite(pspdef_t * psp)
     vis->class = 0;
     vis->psprite = true;
     // [crispy] weapons drawn 1 pixel too high when player is idle
-    vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/4-(psp->sy-spritetopoffset[lump]);
+    vis->texturemid = (BASEYCENTER << FRACBITS) + FRACUNIT/4
+                    - (psp->sy-spritetopoffset[lump])
+                    - quadres;
 
     if (screenblocks >= 11)
     {

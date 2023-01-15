@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -48,8 +48,8 @@ int   viewwidth, scaledviewwidth;
 int   viewheight, scaledviewheight;
 int   viewwindowx, viewwindowy; 
 
-static byte *ylookup[SCREENHEIGHT]; 
-static int   columnofs[WIDESCREENWIDTH]; 
+static byte *ylookup[MAXHEIGHT]; 
+static int   columnofs[MAXWIDTH]; 
 
 // Backing buffer containing the bezel drawn around the screen and 
 // surrounding background.
@@ -437,8 +437,8 @@ void R_DrawFuzzColumnBW (void)
     byte    *dest;
     boolean  cutoff = false;
     const boolean greenfuzz = infragreen_visor
-                            &&  players[consoleplayer].powers[pw_infrared]
-                            && !players[consoleplayer].powers[pw_invulnerability];
+                            &&  players[displayplayer].powers[pw_infrared]
+                            && !players[displayplayer].powers[pw_invulnerability];
 
     if (!dc_yl)
     {
@@ -494,8 +494,8 @@ void R_DrawFuzzColumnLowBW (void)
     byte      *dest1, *dest2, *dest3, *dest4;
     boolean    cutoff = false;
     const boolean greenfuzz = infragreen_visor
-                            && players[consoleplayer].powers[pw_infrared]
-                            && !players[consoleplayer].powers[pw_invulnerability];
+                            && players[displayplayer].powers[pw_infrared]
+                            && !players[displayplayer].powers[pw_invulnerability];
 
     if (!dc_yl)
     {
@@ -687,8 +687,8 @@ void R_DrawFuzzColumnImprovedBW (void)
     byte   *dest;
     boolean cutoff = false;
     const boolean greenfuzz = infragreen_visor
-                            && players[consoleplayer].powers[pw_infrared]
-                            && !players[consoleplayer].powers[pw_invulnerability];
+                            && players[displayplayer].powers[pw_infrared]
+                            && !players[displayplayer].powers[pw_invulnerability];
 
     if (!dc_yl)
     {
@@ -745,8 +745,8 @@ void R_DrawFuzzColumnLowImprovedBW (void)
     byte      *dest1, *dest2, *dest3, *dest4;
     boolean    cutoff = false;
     const boolean greenfuzz = infragreen_visor
-                            && players[consoleplayer].powers[pw_infrared]
-                            && !players[consoleplayer].powers[pw_invulnerability];
+                            && players[displayplayer].powers[pw_infrared]
+                            && !players[displayplayer].powers[pw_invulnerability];
 
     if (!dc_yl)
     {

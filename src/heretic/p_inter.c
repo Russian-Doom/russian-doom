@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,18 +17,19 @@
 // P_inter.c
 
 
-#include "am_map.h"
-#include "doomdef.h"
+#include "hr_local.h"
 #include "deh_str.h"
 #include "i_system.h"
 #include "i_timer.h"
-#include "m_random.h"
 #include "p_local.h"
 #include "s_sound.h"
-#include "rd_lang.h"
+#include "id_lang.h"
 #include "jn.h"
 
-#define BONUSADD 6
+
+#define BONUSADD     6
+#define MAXBONUSTIME (4*TICRATE)
+
 
 int WeaponValue[] = {
     1,                          // staff
@@ -175,7 +176,7 @@ boolean P_GiveWeapon(player_t * player, weapontype_t weapon)
         player->weaponowned[weapon] = true;
         P_GiveAmmo(player, wpnlev1info[weapon].ammo, GetWeaponAmmo[weapon]);
         player->pendingweapon = weapon;
-        if (player == &players[consoleplayer])
+        if (player == &players[displayplayer])
         {
             S_StartSound(NULL, sfx_wpnup);
         }
@@ -816,11 +817,17 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
     {
         P_RemoveMobj(special);
     }
+
+    // [JN] Limit bonus palette duration to 4 seconds.
+    if (player->bonuscount >= MAXBONUSTIME)
+    {
+        player->bonuscount = MAXBONUSTIME;
+    }
+
     player->bonuscount += BONUSADD;
-    if (player == &players[consoleplayer])
+    if (player == &players[displayplayer])
     {
         S_StartSound(NULL, sound);
-        SB_PaletteFlash();
     }
 }
 
@@ -857,7 +864,7 @@ void P_KillMobj(mobj_t * source, mobj_t * target)
             else
             {
                 source->player->frags[target->player - players]++;
-                if (source->player == &players[consoleplayer])
+                if (source->player == &players[displayplayer])
                 {
                     S_StartSound(NULL, sfx_gfrag);
                 }
@@ -898,7 +905,8 @@ void P_KillMobj(mobj_t * source, mobj_t * target)
             P_SetMobjState(target, S_PLAY_FDTH1);
             return;
         }
-        if (target->player == &players[consoleplayer] && automapactive)
+        if (target->player == &players[consoleplayer] && automapactive
+        && !demoplayback) // [JN] Don't close automap while demo playing.
         {
             // [JN] Don't die in auto map, switch view prior to dying.
             AM_Stop ();
@@ -1393,10 +1401,6 @@ void P_DamageMobj
         if (player->damagecount > 100)
         {
             player->damagecount = 100;  // teleport stomp does 10k points...
-        }
-        if (player == &players[consoleplayer])
-        {
-            SB_PaletteFlash();
         }
     }
 

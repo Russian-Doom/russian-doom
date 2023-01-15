@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -82,15 +82,15 @@ static int *spanstart = NULL;  // killough 2/8/98
 
 static lighttable_t **planezlight;
 static fixed_t planeheight;
-static fixed_t cachedheight[SCREENHEIGHT];
-static fixed_t cacheddistance[SCREENHEIGHT];
-static fixed_t cachedxstep[SCREENHEIGHT];
-static fixed_t cachedystep[SCREENHEIGHT];
+static fixed_t cachedheight[MAXHEIGHT];
+static fixed_t cacheddistance[MAXHEIGHT];
+static fixed_t cachedxstep[MAXHEIGHT];
+static fixed_t cachedystep[MAXHEIGHT];
 
 // [JN] Andrey Budko: resolution limitation is removed
 fixed_t *yslope = NULL;
 fixed_t *distscale = NULL;
-fixed_t  yslopes[LOOKDIRS][SCREENHEIGHT];
+fixed_t  yslopes[MAXHEIGHT][MAXHEIGHT];
 
 
 // -----------------------------------------------------------------------------

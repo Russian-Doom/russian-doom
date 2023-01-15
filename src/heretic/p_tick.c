@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 
 
 
-#include "doomdef.h"
+#include "hr_local.h"
 #include "i_system.h"
 #include "p_local.h"
 #include "v_video.h"
@@ -65,7 +65,7 @@ void P_InitThinkers (void)
 ================================================================================
 */
 
-void P_AddThinker(thinker_t *thinker)
+void P_AddThinker (thinker_t *thinker)
 {
     thinkercap.prev->next = thinker;
     thinker->next = &thinkercap;
@@ -84,7 +84,7 @@ void P_AddThinker(thinker_t *thinker)
 ================================================================================
 */
 
-void P_RemoveThinker(thinker_t *thinker)
+void P_RemoveThinker (thinker_t *thinker)
 {
     thinker->function = (think_t) - 1;
 }

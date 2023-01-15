@@ -1,5 +1,5 @@
 //
-// Copyright(C) 2020-2022 Dasperal/Leonid Murin
+// Copyright(C) 2020-2023 Leonid Murin (Dasperal)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -121,6 +121,7 @@ static const char* bkToName[] = {
     "Pause",
     "Finish_demo",
     "Demo_speed",
+    "Suicide",
 
     // Toggles
     "Toggle_crosshair",
@@ -723,7 +724,16 @@ void BK_ApplyDefaultBindings()
     BK_AddBind(bk_menu_save, keyboard, SDL_SCANCODE_F2);
     BK_AddBind(bk_menu_load, keyboard, SDL_SCANCODE_F3);
     BK_AddBind(bk_menu_volume, keyboard, SDL_SCANCODE_F4);
-    BK_AddBind(bk_detail, keyboard, SDL_SCANCODE_F5);
+
+    if(RD_GameType == gt_Hexen)
+    {
+        BK_AddBind(bk_suicide, keyboard, SDL_SCANCODE_F5);
+    }
+    else
+    {
+        BK_AddBind(bk_detail, keyboard, SDL_SCANCODE_F5);
+    }
+
     BK_AddBind(bk_qsave, keyboard, SDL_SCANCODE_F6);
     BK_AddBind(bk_end_game, keyboard, SDL_SCANCODE_F7);
     BK_AddBind(bk_messages, keyboard, SDL_SCANCODE_F8);
@@ -893,7 +903,16 @@ void BK_ApplyVanilaBindings()
     BK_AddBind(bk_menu_save, keyboard, SDL_SCANCODE_F2);
     BK_AddBind(bk_menu_load, keyboard, SDL_SCANCODE_F3);
     BK_AddBind(bk_menu_volume, keyboard, SDL_SCANCODE_F4);
-    BK_AddBind(bk_detail, keyboard, SDL_SCANCODE_F5);
+
+    if(RD_GameType == gt_Hexen)
+    {
+        BK_AddBind(bk_suicide, keyboard, SDL_SCANCODE_F5);
+    }
+    else
+    {
+        BK_AddBind(bk_detail, keyboard, SDL_SCANCODE_F5);
+    }
+
     BK_AddBind(bk_qsave, keyboard, SDL_SCANCODE_F6);
     BK_AddBind(bk_end_game, keyboard, SDL_SCANCODE_F7);
     BK_AddBind(bk_messages, keyboard, SDL_SCANCODE_F8);

@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -18,9 +18,8 @@
 
 #include <stdlib.h>
 
-#include "doomdef.h"
+#include "hr_local.h"
 #include "i_system.h"
-#include "m_random.h"
 #include "sounds.h"
 #include "s_sound.h"
 #include "i_sound.h"
@@ -88,6 +87,13 @@ void S_StartSong(int song, boolean loop, boolean replay)
 {
     int mus_len;
 
+    // [JN] Do not start music until demo warping is finished,
+    // or while -nodraw and -timedemo runs.
+    if (demowarp || (nodrawers && timingdemo))
+    {
+        return;
+    }
+
     // Don't replay an old song.
     if (song == mus_song)
     {
@@ -140,9 +146,9 @@ static mobj_t *GetSoundListener(void)
     // If we are at the title screen, the console player doesn't have an
     // object yet, so return a pointer to a static dummy listener instead.
 
-    if (players[consoleplayer].mo != NULL)
+    if (players[displayplayer].mo != NULL)
     {
-        return players[consoleplayer].mo;
+        return players[displayplayer].mo;
     }
     else
     {
@@ -158,21 +164,19 @@ void S_StartSound(void *_origin, int sound_id)
 {
     mobj_t *origin = _origin;
     mobj_t *listener;
-    int dist, vol;
+    int vol;
     int i;
     int priority;
     int sep;
     int angle;
-    int absx;
-    int absy;
-    int absz;
+    int64_t dist, absx, absy, absz;
 
     static int sndcount = 0;
     int chan;
 
     listener = GetSoundListener();
 
-    if (sound_id == 0 || snd_MaxVolume == 0)
+    if (sound_id == 0 || snd_MaxVolume == 0 || !snd_sfxdevice || (nodrawers && singletics))
         return;
     if (origin == NULL)
     {
@@ -329,7 +333,7 @@ void S_StartSoundAtVolume(void *_origin, int sound_id, int volume)
 
     listener = GetSoundListener();
 
-    if (sound_id == 0 || snd_MaxVolume == 0)
+    if (sound_id == 0 || snd_MaxVolume == 0 || !snd_sfxdevice || (nodrawers && singletics))
         return;
     if (origin == NULL)
     {
@@ -391,8 +395,13 @@ void S_StartSoundAmbient(void *_origin, int sound_id)
     int priority;
     int absx, absy;
 
+    if (snd_MaxVolume == 0 || !snd_sfxdevice || (nodrawers && singletics))
+    {
+        return;
+    }
+
     // [JN] Player is always listener.
-    listener = players[consoleplayer].mo;
+    listener = players[displayplayer].mo;
 
     if (origin == NULL)
     {

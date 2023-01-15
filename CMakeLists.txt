@@ -5,9 +5,9 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 project("International Doom" LANGUAGES C NONE)
 
 # Versions
-set(BUILD_DOOM_VERSION "6.1")
-set(BUILD_HERETIC_VERSION "5.3")
-set(BUILD_HEXEN_VERSION "5.2")
+set(BUILD_DOOM_VERSION "6.2")
+set(BUILD_HERETIC_VERSION "6.1")
+set(BUILD_HEXEN_VERSION "6.0")
 set(BUILD_STRIFE_VERSION "0.0")
 
 # Compile modules
@@ -16,8 +16,7 @@ Option(COMPILE_HERETIC "Compile Heretic module" ON)
 Option(COMPILE_HEXEN "Compile Hexen module" ON)
 # [Dasperal] Disable Strife by default. It won't compile until `JNechaevsky/inter-doom/pull/268` is implemented for Strife
 Option(COMPILE_STRIFE "Compile Strife module" OFF)
-# [Dasperal] Disable Setup by default. Usage of Setup resets many of the settings available in the game menu, so we don't distribute it
-Option(COMPILE_SETUP "Compile Setup module" OFF)
+Option(TEST_WITH_GDB "Attach gdb to CTest tests" OFF)
 
 include(CMakeDependentOption)
 find_package(Git)
@@ -32,7 +31,7 @@ cmake_dependent_option(FORCE_GIT_HASH_SUFFIX "For Devs only! Always append hash 
 
 # Package related variables
 set(PACKAGE_TARNAME "inter-doom")
-set(PACKAGE_COPYRIGHT "Copyright \\xA9 2016-2022 Julian Nechaevsky. Licensed under GNU General Public License, version 2")
+set(PACKAGE_COPYRIGHT "Copyright \\xA9 2016-2023 Julian Nechaevsky. Copyright \\xA9 2020-2023 Leonid Murin (Dasperal). Licensed under GNU General Public License, version 2")
 
 # Check architecture
 if(WIN32)
@@ -110,9 +109,15 @@ endif()
 find_package(SDL2 2.0.18 REQUIRED)
 find_package(SDL2_mixer 2.0.2 REQUIRED)
 find_package(SDL2_net 2.0.0 REQUIRED)
-find_package(samplerate)
-find_package(PNG)
+find_package(SampleRate)
+find_package(miniz 2.0.0)
 find_package(m)
+
+# Use system of user-provided library if it exists
+if(NOT miniz_FOUND)
+    message(STATUS "Using vendored miniz library")
+    add_subdirectory("lib/thirdparty/miniz")
+endif()
 
 include(CheckSymbolExists)
 include(CheckIncludeFile)
@@ -170,22 +175,6 @@ if(COMPILE_STRIFE)
     set(GIT_INFO_TAG_PATTERN "strife-[0-9]*")
 endif()
 
-if(COMPILE_SETUP)
-    if(COMPILE_DOOM)
-        configure_file(src/setup/doom-resource.rc.in src/setup/doom-resource.rc @ONLY)
-    endif()
-    if(COMPILE_HERETIC)
-        configure_file(src/setup/heretic-resource.rc.in src/setup/heretic-resource.rc @ONLY)
-    endif()
-    if(COMPILE_HEXEN)
-        configure_file(src/setup/hexen-resource.rc.in src/setup/hexen-resource.rc @ONLY)
-    endif()
-    if(COMPILE_STRIFE)
-        configure_file(src/setup/strife-resource.rc.in src/setup/strife-resource.rc @ONLY)
-    endif()
-    configure_file(src/setup/setup-manifest.xml.in src/setup/setup-manifest.xml @ONLY)
-endif()
-
 enable_testing()
 
 # Update git_info.h
@@ -209,7 +198,7 @@ endif()
 
 include(GNUInstallDirs)
 
-foreach(SUBDIR win_libs man textscreen opl pcsound src)
+foreach(SUBDIR lib man src)
     add_subdirectory("${SUBDIR}")
 endforeach()
 

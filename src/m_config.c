@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -37,11 +37,8 @@
 #include "m_misc.h"
 #include "jn.h"
 #include "rd_migration.h"
-
-#ifndef ___RD_TARGET_SETUP___
-    #include "rd_keybinds.h"
-    #include "i_controller.h"
-#endif
+#include "rd_keybinds.h"
+#include "i_controller.h"
 
 typedef struct section_s
 {
@@ -276,6 +273,12 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(fullscreen),
 
     //!
+    // [JN] Rendering resolution.
+    //
+
+    CONFIG_VARIABLE_INT(rendering_resolution),
+
+    //!
     // [JN] Aspect ratio.
     //
 
@@ -380,6 +383,14 @@ static default_t defaults_list[] =
     //
 
     CONFIG_VARIABLE_INT(mouse_threshold),
+
+    //!
+    // Sound output sample rate, in Hz.
+    // Typical values to use are
+    // 11025, 22050, 44100 and 48000.
+    //
+
+    CONFIG_VARIABLE_INT(snd_samplerate),
 
     //!
     // Maximum number of bytes to allocate for caching converted sound
@@ -508,7 +519,7 @@ static default_t defaults_list[] =
 
     // Rendering
     CONFIG_VARIABLE_INT(vsync),
-    CONFIG_VARIABLE_INT(aspect_ratio_correct),
+    CONFIG_VARIABLE_INT(preserve_window_aspect_ratio),
     CONFIG_VARIABLE_INT(uncapped_fps),
     CONFIG_VARIABLE_INT(show_fps),
     CONFIG_VARIABLE_INT(smoothing),
@@ -523,7 +534,6 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(screenblocks),
     CONFIG_VARIABLE_INT(extra_level_brightness),
     CONFIG_VARIABLE_INT(menu_shading),
-    CONFIG_VARIABLE_INT(detaillevel),
     CONFIG_VARIABLE_INT(hud_detaillevel),
 
     // Color options
@@ -547,24 +557,26 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(message_color_quest),
     CONFIG_VARIABLE_INT(draw_shadowed_text),
 
-    // Automap specific variables
+    // Automap
     CONFIG_VARIABLE_INT(automap_color),
-    CONFIG_VARIABLE_INT(automap_mark_color),
     CONFIG_VARIABLE_INT(automap_antialias),
-    CONFIG_VARIABLE_INT(automap_stats),
-    CONFIG_VARIABLE_INT(automap_skill),
-    CONFIG_VARIABLE_INT(automap_level_time),
-    CONFIG_VARIABLE_INT(automap_total_time),
-    CONFIG_VARIABLE_INT(automap_coords),
-    CONFIG_VARIABLE_INT(automap_overlay),
-    CONFIG_VARIABLE_INT(automap_overlay_bg),
     CONFIG_VARIABLE_INT(automap_rotate),
+    CONFIG_VARIABLE_INT(automap_overlay),
+    CONFIG_VARIABLE_INT(automap_overlay_bg),    
     CONFIG_VARIABLE_INT(automap_follow),
     CONFIG_VARIABLE_INT(automap_grid),
     CONFIG_VARIABLE_INT(automap_grid_size),
-    CONFIG_VARIABLE_INT(hud_stats_color),
-    CONFIG_VARIABLE_INT(hud_widget_colors),
-    CONFIG_VARIABLE_INT(hud_level_name),
+    CONFIG_VARIABLE_INT(automap_mark_color),
+
+    // Stats
+    CONFIG_VARIABLE_INT(stats_placement),
+    CONFIG_VARIABLE_INT(stats_kis),
+    CONFIG_VARIABLE_INT(stats_skill),
+    CONFIG_VARIABLE_INT(stats_level_time),
+    CONFIG_VARIABLE_INT(stats_total_time),
+    CONFIG_VARIABLE_INT(stats_coords),
+    CONFIG_VARIABLE_INT(stats_level_name),
+    CONFIG_VARIABLE_INT(stats_color),
 
     // Sound
     CONFIG_VARIABLE_INT(sfx_volume),
@@ -679,7 +691,7 @@ static sectionHandler_t defaultHandler = {
     DefaultHandler_Save,
     NULL
 };
-#ifndef ___RD_TARGET_SETUP___
+
 static sectionHandler_t keybindsHandler = {
     KeybindsHandler_isHandling,
     KeybindsHandler_HandleLine,
@@ -693,19 +705,13 @@ sectionHandler_t controllerHandler = {
     ControllerHandler_Save,
     ControllerHandler_onFinishHandling
 };
-#endif
+
 static sectionHandler_t* handlers[] = {
     &defaultHandler,
-#ifndef ___RD_TARGET_SETUP___
     &keybindsHandler,
     &controllerHandler
-#endif
+
 };
-#ifndef ___RD_TARGET_SETUP___
-static int handlersSize = 3;
-#else
-static int handlersSize = 1;
-#endif
 
 // Search a collection for a variable
 
@@ -766,17 +772,12 @@ static void SetVariable(default_t *def, char *value);
 static void DefaultHandler_HandleLine(char* keyName, char *value, size_t valueSize)
 {
     default_t *def;
-#ifndef ___RD_TARGET_SETUP___
     defaultTracker_t* tracker;
 
     tracker = M_GetDefaultTracker(keyName);
-#endif
     def = SearchCollection(&default_collection, keyName);
     if((def == NULL || !def->bound)
-#ifndef ___RD_TARGET_SETUP___
-    && tracker == NULL
-#endif
-    )
+    && tracker == NULL)
     {
         // Unknown variable?  Unbound variables are also treated as unknown.
         return;
@@ -804,10 +805,9 @@ static void DefaultHandler_HandleLine(char* keyName, char *value, size_t valueSi
 
     if(def != NULL && def->bound)
         SetVariable(def, value);
-#ifndef ___RD_TARGET_SETUP___
+
     if(tracker != NULL)
         M_SetTrackedValue(tracker, value);
-#endif
 }
 
 // Parses integer values in the configuration file
@@ -973,7 +973,7 @@ static void LoadSections(FILE *file)
     {
         if(fscanf(file, "[%99[^]]]%*1[\n]", sectionName) == 1)
         {
-            for(i = 0; i < handlersSize; ++i)
+            for(i = 0; i < arrlen(handlers); ++i)
             {
                 if(handlers[i]->isHandling(sectionName))
                 {
@@ -1009,10 +1009,8 @@ static void LoadSections(FILE *file)
 static void ApplyDefaults()
 {
     M_AppendConfigSection("General", &defaultHandler);
-#ifndef ___RD_TARGET_SETUP___
     BK_ApplyDefaultBindings();
     M_AppendConfigSection("Keybinds", &keybindsHandler);
-#endif
 }
 
 //
@@ -1075,16 +1073,13 @@ void M_LoadConfig(void)
         }
     }
 
-#ifndef ___RD_TARGET_SETUP___
     config_version = cfg_version;
     M_RegisterTrackedFields();
-#endif
 
     LoadSections(file);
 
     fclose(file);
 
-#ifndef ___RD_TARGET_SETUP___
     if(!isBindsLoaded)
     {
         BK_ApplyDefaultBindings();
@@ -1092,7 +1087,6 @@ void M_LoadConfig(void)
     }
 
     M_ApplyMigration();
-#endif
 }
 
 // Get a configuration file variable by its name

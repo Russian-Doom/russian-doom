@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -27,6 +27,12 @@
 
 
 static boolean onground;
+
+// [JN] Player's breathing imitation.
+static fixed_t breathing_val;
+static boolean breathing_dir;
+#define BREATHING_STEP 32
+#define BREATHING_MAX  1408
 
 
 // -----------------------------------------------------------------------------
@@ -105,7 +111,26 @@ void P_CalcHeight (player_t *player, boolean safe)
             // [JN] Imitate player's breathing.
             if (breathing && !vanillaparm)
             {
-                player->viewheight += finesine[(FINEANGLES / 160 * gametic) & FINEMASK] / 48;
+                if (breathing_dir)
+                {
+                    // Inhale (camera up)
+                    breathing_val += BREATHING_STEP;
+                    if (breathing_val >= BREATHING_MAX)
+                    {
+                        breathing_dir = false;
+                    }
+                }
+                else
+                {
+                    // Exhale (camera down)
+                    breathing_val -= BREATHING_STEP;
+                    if (breathing_val <= -BREATHING_MAX)
+                    {
+                        breathing_dir = true;
+                    }
+                }
+
+                player->viewheight += breathing_val;
             }
 
             if (player->viewheight > VIEWHEIGHT)

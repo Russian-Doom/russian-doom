@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -19,11 +19,10 @@
 
 #include <stdlib.h>
 #include "i_system.h"
-#include "doomdef.h"
+#include "hr_local.h"
 #include "deh_str.h"
 #include "p_local.h"
 #include "rd_keybinds.h"
-#include "am_map.h"
 #include "v_video.h"
 #include "m_cheat.h"
 #include "m_misc.h"
@@ -109,6 +108,14 @@ static int m_zoomout;
 #define CXMTOF(x) (f_x + MTOF((x)-m_x))
 #define CYMTOF(y) (f_y + (f_h - MTOF((y)-m_y)))
 
+// [crispy] Used for automap background tiling
+#define MAPBGROUNDWIDTH   (ORIGWIDTH)
+#define MAPBGROUNDHEIGHT  (ORIGHEIGHT - (42 << quadres))
+
+// [JN] Pointer to background drawing functions.
+static void (*AM_drawBackground) (void);
+static void AM_drawBackgroundHigh (void);
+static void AM_drawBackgroundQuad (void);
 
 typedef struct
 {
@@ -178,7 +185,7 @@ static int cheating = 0;
 // [JN] Choosen mark color.
 static Translation_CR_t automap_mark_color_set;
 
-static int finit_height = SCREENHEIGHT - (42 << hires);
+static int finit_height;
 static int f_x, f_y;  // location of window on screen
 static int f_w, f_h;  // size of window on screen
 
@@ -212,7 +219,7 @@ static fixed_t scale_ftom;
 // the player represented by an arrow
 static player_t *plr;
 
-static patch_t *maplump;      // [JN] Automap background patch.
+static byte    *maplump;      // Automap background patch.
 static patch_t *am_crosshair; // [JN] Crosshair patch in non-follow mode.
 static patch_t *marknums[10]; // numbers used for marking by the automap
 
@@ -507,7 +514,7 @@ static void AM_addMark (void)
 ================================================================================
 */
 
-void AM_initMarksColor (int color)
+void AM_initMarksColor (const int color)
 {
     Translation_CR_t *colorVar = &automap_mark_color_set;
 
@@ -555,9 +562,8 @@ void AM_clearMarks (void)
 ================================================================================
 */
 
-static void AM_initVariables (void)
+void AM_initVariables (void)
 {
-    int        pnum;
     thinker_t *think;
     mobj_t    *mo;
 
@@ -570,19 +576,9 @@ static void AM_initVariables (void)
     m_w = FTOM(f_w);
     m_h = FTOM(f_h);
 
-    // Find player to center on initially
-    if (!playeringame[pnum = consoleplayer])
-    {
-        for (pnum = 0; pnum < MAXPLAYERS; pnum++)
-        {
-            if (playeringame[pnum])
-            {
-                break;
-            }
-        }
-    }
+    // [JN] Find player to center.
+    plr = &players[displayplayer];
 
-    plr = &players[pnum];
     m_x = (plr->mo->x >> FRACTOMAPBITS) - m_w / 2;
     m_y = (plr->mo->y >> FRACTOMAPBITS) - m_h / 2;
 
@@ -642,8 +638,7 @@ void AM_initPics (void)
 {
     char namebuf[9];
 
-    // Parallax problem: AUTOPAGE changed to unreplacable MAPEPAGE.
-    maplump = W_CacheLumpName(DEH_String("MAPEPAGE"), PU_STATIC);
+    maplump = W_CacheLumpName(DEH_String("AUTOPAGE"), PU_STATIC);
 
     // Load crosshair patch.
     am_crosshair = W_CacheLumpName("XHAIR_1", PU_STATIC);
@@ -654,6 +649,8 @@ void AM_initPics (void)
         DEH_snprintf(namebuf, 9, "MARKNUM%d", i);
         marknums[i] = W_CacheLumpName(namebuf, PU_STATIC);
     }
+
+    AM_drawBackground = quadres ? AM_drawBackgroundQuad : AM_drawBackgroundHigh;
 }
 
 /*
@@ -669,6 +666,7 @@ void AM_initPics (void)
 
 static void AM_LevelInit (void)
 {
+    finit_height = SCREENHEIGHT - (42 << hires);
     f_x = f_y = 0;
     f_w = screenwidth;
     f_h = finit_height;
@@ -778,7 +776,7 @@ static void AM_maxOutWindowScale (void)
 ================================================================================
 */
 
-const boolean AM_Responder(event_t *ev)
+const boolean AM_Responder (const event_t *ev)
 {
     boolean     rc;
     static int  bigstate = 0;
@@ -1088,20 +1086,76 @@ void AM_Ticker (void)
 /*
 ================================================================================
 =
-= AM_drawBackground
+= AM_drawBackgroundHigh
 =
-= Updates on Game Tick.
+= Blit the automap background to the screen.
+=
+= [crispy] To support widescreen, increase the number of possible background
+= tiles from 2 to 3. To support rendering at 2x resolution, treat original
+= 320 x 158 tile image as 640 x 79.
 =
 ================================================================================
 */
 
-static void AM_drawBackground (void)
+static void AM_drawBackgroundHigh (void)
 {
-    // [JN] Draw automap background as tiled GFX patches.
-    V_DrawPatchUnscaled(0, 0, maplump, NULL);
-    V_DrawPatchUnscaled(560, 0, maplump, NULL);
-    V_DrawPatchUnscaled(0, 200, maplump, NULL);
-    V_DrawPatchUnscaled(560, 200, maplump, NULL); 
+    const int mapbgwidth_hires = ORIGWIDTH << hires;
+    int j = mapbgwidth_hires;
+    int x2 = screenwidth;
+    int x3;
+    
+    if (x2 > mapbgwidth_hires)
+    {
+        x2 = mapbgwidth_hires;
+    }
+
+    x3 = screenwidth - x2;
+
+    for (int i = 0 ; i < finit_height ; i++)
+    {
+        memcpy(I_VideoBuffer + i * screenwidth,
+               maplump + j + mapbgwidth_hires - x3, x3);
+
+        memcpy(I_VideoBuffer + i * screenwidth + x3,
+               maplump + j + mapbgwidth_hires - x2, x2);
+
+        memcpy(I_VideoBuffer + i * screenwidth + x2 + x3,
+               maplump + j, 0);
+
+        j += mapbgwidth_hires;
+
+        if (j >= MAPBGROUNDHEIGHT * MAPBGROUNDWIDTH)
+        {
+            j = 0;
+        }
+    }
+}
+
+/*
+================================================================================
+=
+= AM_drawBackgroundQuad
+=
+= [JN] Blit the automap background to the screen, quad resolution version.
+=
+================================================================================
+*/
+
+static void AM_drawBackgroundQuad (void)
+{
+    int j = ORIGWIDTH;
+
+    for (int i = 0 ; i < finit_height ; i++)
+    {
+        memcpy(I_VideoBuffer + i * screenwidth, maplump + j + ORIGWIDTH, screenwidth);
+
+        j += ORIGWIDTH;
+
+        if (j >= MAPBGROUNDHEIGHT * MAPBGROUNDWIDTH)
+        {
+            j = 0;
+        }
+    }
 }
 
 /*
@@ -1963,11 +2017,12 @@ static void AM_drawPlayers (void)
     const int  their_colors[] = { GREENKEY, YELLOWKEY, BLOODRED, BLUEKEY };
     mpoint_t   pt;
     player_t  *p;
-    // [JN] Smooth player arrow rotation:
-    const angle_t smoothangle = automap_rotate ? plr->mo->angle : viewangle;
 
     if (!netgame)
     {
+        // [JN] Smooth player arrow rotation.
+        const angle_t smoothangle = automap_rotate ? plr->mo->angle : viewangle;
+
         // [JN] Interpolate player arrow.
         pt.x = viewx >> FRACTOMAPBITS;
         pt.y = viewy >> FRACTOMAPBITS;
@@ -1984,6 +2039,9 @@ static void AM_drawPlayers (void)
 
     for (i = 0 ; i < MAXPLAYERS ; i++)
     {
+        // [JN] Interpolate other player arrows angle.
+        angle_t smoothangle;
+
         their_color++;
         p = &players[i];
 
@@ -2006,15 +2064,29 @@ static void AM_drawPlayers (void)
             color = their_colors[their_color];
         }
 
-        pt.x = p->mo->x >> FRACTOMAPBITS;
-        pt.y = p->mo->y >> FRACTOMAPBITS;
+        // [JN] Interpolate other player arrows.
+        if (uncapped_fps && leveltime > oldleveltime)
+        {
+            pt.x = (p->mo->oldx + FixedMul(p->mo->x - p->mo->oldx, fractionaltic)) >> FRACTOMAPBITS;
+            pt.y = (p->mo->oldy + FixedMul(p->mo->y - p->mo->oldy, fractionaltic)) >> FRACTOMAPBITS;
+        }
+        else
+        {
+            pt.x = p->mo->x >> FRACTOMAPBITS;
+            pt.y = p->mo->y >> FRACTOMAPBITS;
+        }
 
         if (automap_rotate)
         {
             AM_rotatePoint(&pt);
+            smoothangle = p->mo->angle;
+        }
+        else
+        {
+            smoothangle = R_InterpolateAngle(p->mo->oldangle, p->mo->angle, fractionaltic);
         }
 
-        AM_drawLineCharacter(player_arrow, NUMPLYRLINES, 0, p->mo->angle,
+        AM_drawLineCharacter(player_arrow, NUMPLYRLINES, 0, smoothangle,
                              color, pt.x, pt.y);
     }
 }
@@ -2163,7 +2235,8 @@ static void AM_drawMarks (void)
                 {
                     // [JN] Use custom, precise patch versions and do coloring.
                     dp_translation = cr[automap_mark_color_set];
-                    V_DrawPatchUnscaled(flip_levels ? - fx : fx, fy, marknums[d], NULL);
+                    V_DrawPatchUnscaled((flip_levels ? - fx : fx) >> quadres,
+                                         fy >> quadres, marknums[d], NULL);
                     dp_translation = NULL;
                 }
 
@@ -2235,7 +2308,7 @@ static void AM_drawkeys (void)
 
 static void AM_drawCrosshair (void)
 {
-    V_DrawPatchUnscaled(origwidth, 160, am_crosshair, NULL);
+    V_DrawPatchUnscaled(origwidth, 162, am_crosshair, NULL);
 }
 
 /*
@@ -2250,10 +2323,6 @@ static void AM_drawCrosshair (void)
 
 void AM_Drawer (void)
 {
-    char *level_name;
-    const int numepisodes = gamemode == retail ? 5 : 3;
-    const int wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0) + 2;
-
     if (!automapactive)
     {
         return;
@@ -2327,37 +2396,5 @@ void AM_Drawer (void)
     if (gameskill == sk_baby)
     {
         AM_drawkeys();
-    }
-
-    if (gameepisode <= numepisodes && gamemap < 10)
-    {
-        level_name = english_language ?
-                     LevelNames[(gameepisode - 1) * 9 + gamemap - 1] :
-                     LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1];
-
-        // [JN] Wide screen: place level name higher in wide screen,
-        // do not place it under the status bar gargoyle's horn.
-        if (aspect_ratio >= 2)
-        {
-            if (english_language)
-            {
-                RD_M_DrawTextA(DEH_String(level_name), wide_4_3, 136);
-            }
-            else
-            {
-                RD_M_DrawTextSmallRUS(DEH_String(level_name), wide_4_3, 136, CR_NONE);
-            }
-        }
-        else
-        {
-            if (english_language)
-            {
-                RD_M_DrawTextA(DEH_String(level_name), 20, 146);
-            }
-            else
-            {
-                RD_M_DrawTextSmallRUS(DEH_String(level_name), 20, 146, CR_NONE);
-            }
-        }
     }
 }

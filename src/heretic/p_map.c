@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,16 +17,14 @@
 // P_map.c
 
 
-
 #include <stdlib.h>
-
-#include "doomdef.h"
+#include "hr_local.h"
 #include "i_system.h"
 #include "m_bbox.h"
-#include "m_random.h"
 #include "p_local.h"
 #include "s_sound.h"
 #include "jn.h"
+
 
 /*
 ===============================================================================
@@ -106,11 +104,10 @@ line_t *ceilingline;
 // keep track of special lines as they are hit, but don't process them
 // until the move is proven valid
 #define	MAXSPECIALCROSS		8
-line_t *spechit[MAXSPECIALCROSS];
+line_t **spechit;  // [crispy] remove SPECHIT limit
 int numspechit;
 
 mobj_t *onmobj;     //generic global onmobj...used for landing on pods/players
-mobj_t *BlockingMobj;
 
 /*
 ===============================================================================
@@ -234,6 +231,25 @@ boolean P_TeleportMove(mobj_t * thing, fixed_t x, fixed_t y)
 ===============================================================================
 */
 
+// [crispy] remove SPECHIT limit
+static void check_spechit (void)
+{
+	static int spechit_max;
+
+	if (numspechit >= spechit_max)
+	{
+		spechit_max = spechit_max ? spechit_max * 2 : MAXSPECIALCROSS;
+		spechit = I_Realloc(spechit, sizeof(*spechit) * spechit_max);
+
+		if (spechit_max == 2 * MAXSPECIALCROSS)
+		{
+            printf("PIT_CheckLine: ");
+            printf(english_language ? "Hit SPECHIT limit!\n" :
+                                      "превышен лимит SPECHIT!\n");
+		}
+	}
+}
+
 /*
 ==================
 =
@@ -273,6 +289,7 @@ boolean PIT_CheckLine(line_t * ld)
         {                       // Missiles can trigger impact specials
             if (ld->special)
             {
+                check_spechit(); // [crispy] remove SPECHIT limit
                 spechit[numspechit] = ld;
                 numspechit++;
             }
@@ -308,6 +325,7 @@ boolean PIT_CheckLine(line_t * ld)
     }
     if (ld->special)
     {                           // Contacted a special line, add it to the list
+        check_spechit(); // [crispy] remove SPECHIT limit
         spechit[numspechit] = ld;
         numspechit++;
     }
@@ -341,7 +359,6 @@ boolean PIT_CheckThing(mobj_t * thing)
         return (true);
     }
 
-    BlockingMobj = thing;
     if (tmthing->flags2 & MF2_PASSMOBJ)
     {   // check if a mobj passed over/under another object
         if ((tmthing->type == MT_IMP || tmthing->type == MT_WIZARD)
@@ -372,8 +389,11 @@ boolean PIT_CheckThing(mobj_t * thing)
     }
     
     // [JN] Torque: make sliding corpses passable
-    if (tmthing->intflags & MIF_FALLING)
-    return true;
+    if (singleplayer && !strict_mode && !vanillaparm
+    &&  torque && tmthing->intflags & MIF_FALLING)
+    {
+        return true;
+    }
     
     // Check for missile
     if (tmthing->flags & MF_MISSILE)
@@ -455,8 +475,8 @@ boolean PIT_CheckThing(mobj_t * thing)
 
     // [JN] Check if things are stuck and allow them to move further apart.
     // Taken from DOOM Retro, slightly adopted for Heretic.
-    if (improved_collision && singleplayer && !vanillaparm && !thing->player 
-    && (thing->flags & MF_SHOOTABLE && thing->type != MT_POD))
+    if (singleplayer && !strict_mode && !vanillaparm && improved_collision
+    && !thing->player && (thing->flags & MF_SHOOTABLE && thing->type != MT_POD))
     {
         if (tmx == tmthing->x && tmy == tmthing->y)
         {
@@ -625,7 +645,6 @@ boolean P_CheckPosition(mobj_t * thing, fixed_t x, fixed_t y)
     yl = (tmbbox[BOXBOTTOM] - bmaporgy - MAXRADIUS) >> MAPBLOCKSHIFT;
     yh = (tmbbox[BOXTOP] - bmaporgy + MAXRADIUS) >> MAPBLOCKSHIFT;
 
-    BlockingMobj = NULL;
     for (bx = xl; bx <= xh; bx++)
         for (by = yl; by <= yh; by++)
             if (!P_BlockThingsIterator(bx, by, PIT_CheckThing))
@@ -633,7 +652,6 @@ boolean P_CheckPosition(mobj_t * thing, fixed_t x, fixed_t y)
 //
 // check lines
 //
-    BlockingMobj = NULL;
     xl = (tmbbox[BOXLEFT] - bmaporgx) >> MAPBLOCKSHIFT;
     xh = (tmbbox[BOXRIGHT] - bmaporgx) >> MAPBLOCKSHIFT;
     yl = (tmbbox[BOXBOTTOM] - bmaporgy) >> MAPBLOCKSHIFT;
@@ -1044,10 +1062,6 @@ void P_ApplyTorque(mobj_t *mo)
         mo->y + mo->radius) - bmaporgy) >> MAPBLOCKSHIFT;
     int bx,by,flags = mo->intflags; // Remember the current state, for gear-change
 
-    // [JN] No torque available in following modes:
-    if (!singleplayer || vanillaparm)
-    return;
-
     tmthing = mo;
     validcount++;   // prevents checking same line twice
 
@@ -1116,8 +1130,8 @@ boolean P_ThingHeightClip(mobj_t * thing)
         // [JN] Update player's view when on moving platform.
         // Idea by Brad Harding, code by Fabian Greffrath.
         // Thanks again, colleagues! (03.06.2018)
-        if (singleplayer && !vanillaparm && thing->player 
-        &&  thing->subsector->sector == movingsector)
+        if (singleplayer && !strict_mode && !vanillaparm
+        && thing->player && thing->subsector->sector == movingsector)
         {
             P_CalcHeight (thing->player);
         }
@@ -1215,13 +1229,6 @@ boolean PTR_SlideTraverse(intercept_t * in)
                 "PTR_SlideTraverse: не является линией?");
 
     li = in->d.line;
-
-    // [JN] Treat two sided linedefs as single sided for smooth sliding.
-    if (li->flags & ML_BLOCKING && li->flags & ML_TWOSIDED
-    && improved_collision && singleplayer && !vanillaparm)
-    {
-        goto isblocking;
-    }
 
     if (!(li->flags & ML_TWOSIDED))
     {
@@ -1378,8 +1385,6 @@ int la_damage;
 fixed_t attackrange;
 
 fixed_t aimslope;
-
-extern fixed_t topslope, bottomslope;   // slopes to top and bottom of target
 
 /*
 ===============================================================================
@@ -1542,7 +1547,7 @@ boolean PTR_ShootTraverse(intercept_t * in)
         // [crispy] check if the hitscan puff's z-coordinate is below of above
         // its spawning sector's floor or ceiling, respectively, and move its
         // coordinates to the point where the trajectory hits the plane
-        if (aimslope)
+        if (!strict_mode && !vanillaparm && aimslope)
         {
             const int lineside = P_PointOnLineSide(x, y, li);
             int side;

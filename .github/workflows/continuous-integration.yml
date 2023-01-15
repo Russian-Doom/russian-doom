@@ -27,11 +27,11 @@ jobs:
         arch:
           -
             name: "x86"
-            msys_bits: "32"
+            bits: "32"
             msys_name: "i686"
           -
             name: "x64"
-            msys_bits: "64"
+            bits: "64"
             msys_name: "x86_64"
         compiler:
           -
@@ -59,7 +59,7 @@ jobs:
         timeout-minutes: 10
         uses: msys2/setup-msys2@v2
         with:
-          msystem: ${{ matrix.compiler.msys_msystem_prefix }}${{ matrix.arch.msys_bits }}
+          msystem: ${{ matrix.compiler.msys_msystem_prefix }}${{ matrix.arch.bits }}
           update: true
           install: >-
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-pkgconf
@@ -71,7 +71,6 @@ jobs:
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_net
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_mixer
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libsamplerate
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libpng
 
       - name: Setup Linux env
         if: matrix.os.name == 'Linux'
@@ -79,7 +78,7 @@ jobs:
           sudo apt-get update --fix-missing
           sudo apt-get full-upgrade --fix-missing
           sudo apt-get install ${{ matrix.compiler.name }} gdb ninja-build python3 cmake \
-                               libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libpng-dev libsamplerate-dev
+                               libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libsamplerate-dev
 
       - uses: actions/checkout@v3
 
@@ -95,6 +94,7 @@ jobs:
           cmake -G "Ninja" \
                 -D BUILD_VERSION_OVERWRITE="6.x.x" -D FORCE_GIT_HASH_SUFFIX=ON -D CMAKE_BUILD_TYPE=RelWithDebInfo \
                 $build_portable \
+                -D TEST_WITH_GDB="ON"\
                 -S . -B build
           sha_short=$(echo ${{ github.sha }} | cut -c1-7)
           echo "sha_short=$sha_short" >> $GITHUB_OUTPUT

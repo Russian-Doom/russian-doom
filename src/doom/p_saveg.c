@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -1800,6 +1800,9 @@ void P_UnArchiveThinkers (void)
         // Fix for falling down into a wall after savegame loaded:
 	    // mobj->floorz = mobj->subsector->sector->floorheight;
 	    // mobj->ceilingz = mobj->subsector->sector->ceilingheight;
+
+        // [JN] Restore floating z value to actual mobj z coord.
+        mobj->old_float_z = mobj->float_z = mobj->z;
 
 	    // [JN] Reset brightmap animations to full brightness.
 	    mobj->bmap_flick = 0;

@@ -1,5 +1,5 @@
 //
-// Copyright(C) 2022 Leonid Murin (Dasperal)
+// Copyright(C) 2022-2023 Leonid Murin (Dasperal)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -15,8 +15,8 @@
 #include "SDL.h"
 #include "doomtype.h"
 
-dll_import extern boolean console_connected;
-dll_import extern int InterDoom_Main(int argc, char** argv);
+__declspec(dllimport) extern boolean console_connected;
+__declspec(dllimport) extern int InterDoom_Main(int argc, char** argv);
 
 int main(int argc, char** argv)
 {

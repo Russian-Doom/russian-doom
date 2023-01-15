@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -228,7 +228,7 @@ boolean I_MusicIsPlaying(void);
 
 extern int snd_sfxdevice;
 extern int snd_musicdevice;
-extern int const snd_samplerate;
+extern int snd_samplerate;
 extern int snd_cachesize;
 extern int snd_maxslicetime_ms;
 extern char *snd_musiccmd;

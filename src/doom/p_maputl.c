@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
 // Copyright(C) 2005, 2006 Andrey Budko
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -51,13 +51,13 @@ const fixed_t P_AproxDistance (fixed_t dx, fixed_t dy)
 // Adapted from EDGE, converted to fixed point math.
 // -----------------------------------------------------------------------------
 
-const fixed_t P_ApproxDistanceZ (fixed_t dx, fixed_t dy, fixed_t dz)
+const int64_t P_ApproxDistanceZ (int64_t dx, int64_t dy, int64_t dz)
 {
-	fixed_t dxy;
+	int64_t dxy;
 
-	dx = abs(dx);
-	dy = abs(dy);
-	dz = abs(dz);
+	dx = llabs(dx);
+	dy = llabs(dy);
+	dz = llabs(dz);
 
 	dxy = (dy > dx) ? dy + dx/2 : dx + dy/2;
 

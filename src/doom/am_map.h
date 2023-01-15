@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -50,6 +50,10 @@ void AM_Stop (void);
 // [JN] Automap color scheme init.
 // Called at game startup or when scheme is changed.
 void AM_initColors (void);
+
+// [crispy] Precalculate color lookup tables
+// for antialised line drawing using COLORMAP.
+void AM_initShades (void);
 
 // [JN] Preload automap graphics once at game startup.
 void AM_initPics (void);

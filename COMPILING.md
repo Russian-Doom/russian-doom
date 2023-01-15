@@ -7,11 +7,12 @@
       * [1.a.b: MSYS2 Clang environment](#1ab-msys2-clang-environment)
   * [Step 2: Compiling International Doom](#step-2-compiling-international-doom)
   * [Step 3: Installing International Doom](#step-3-installing-international-doom)
-  * [Step 4: Packaging International Doom](#step-4-packaging-international-doom)
+  * [Packaging International Doom](#packaging-international-doom)
 * [Building International Doom on Linux](#building-international-doom-on-linux)
   * [Step 1: Setting up build environment](#step-1-setting-up-build-environment-1)
   * [Step 2: Compiling International Doom](#step-2-compiling-international-doom-1)
   * [Step 3: Installing International Doom](#step-3-installing-international-doom-1)
+  * [Packaging International Doom](#packaging-international-doom-1)
 * [Building a DOS version of International Doom](#building-a-dos-version-of-international-doom)
   * [Step 1: Setting up build environment](#step-1-setting-up-build-environment-2)
   * [Step 2: Compiling project](#step-2-compiling-project)
@@ -38,14 +39,14 @@ and for the **mingw-w64-x86_64** toolchain (**64**-bit), use the **MSYS MinGW 64
 
 Open the terminal and install dependencies using the following command:
 ```shell
-pacman -S mingw-w64-{i686,x86_64}-{pkgconf,gcc,ninja,cmake,SDL2{,_net,_mixer},libsamplerate,libpng} \
+pacman -S mingw-w64-{i686,x86_64}-{pkgconf,gcc,make,cmake,SDL2{,_net,_mixer},libsamplerate} \
        git
 ```
 
-If you want to use `MinGW Makefiles` or `MSYS Makefiles` cmake generators, you need
-to install `make` by the following command:
+If you want to use `Ninja` or `Ninja Multi-Config` cmake generators, you need
+to install `ninja` by the following command:
 ```shell
-pacman -S mingw-w64-{i686,x86_64}-make
+pacman -S mingw-w64-{i686,x86_64}-ninja
 ```
 
 If you want to run CTest tests, you must also install `gdb` by the following command:
@@ -60,14 +61,14 @@ and for the **mingw-w64-clang-x86_64** toolchain (**64**-bit), use the **MSYS Mi
 
 Open the terminal and install dependencies using the following command:
 ```shell
-pacman -S mingw-w64-clang-{i686,x86_64}-{pkgconf,clang,ninja,cmake,SDL2{,_net,_mixer},libsamplerate,libpng} \
+pacman -S mingw-w64-clang-{i686,x86_64}-{pkgconf,clang,make,cmake,SDL2{,_net,_mixer},libsamplerate} \
        git
 ```
 
-If you want to use `MinGW Makefiles` or `MSYS Makefiles` cmake generators you need
-to install `make` by the following command:
+If you want to use `Ninja` or `Ninja Multi-Config` cmake generators, you need
+to install `ninja` by the following command:
 ```shell
-pacman -S mingw-w64-clang-{i686,x86_64}-make
+pacman -S mingw-w64-clang-{i686,x86_64}-ninja
 ```
 
 If you want to run CTest tests, you must also install `gdb` by the following command:
@@ -77,12 +78,11 @@ pacman -S mingw-w64-clang-{i686,x86_64}-gdb
 
 ## Step 2: Compiling International Doom
 
-There are several supported cmake generators: `Ninja`, `Ninja Multi-Config`, `MinGW Makefiles`, `MSYS Makefiles`.  
-**Note** that `* Makefiles` generators fail to compile 32-bit builds after GCC update to version 12 for some reason.
+There are several supported cmake generators: `MinGW Makefiles`, `MSYS Makefiles`, `Ninja`, `Ninja Multi-Config`.
 
 To configure the project, use the following command:
 ```shell
-cmake -G "Ninja" -D CMAKE_BUILD_TYPE="Release" -S . -B build
+cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE="Release" -S . -B build
 ```
 Available build types are `Release`, `Debug`, `RelWithDebInfo`, `MinSizeRel`.
 
@@ -109,7 +109,16 @@ cmake --install build --prefix <install directory> --component <game>
 ```
 Available components are `doom`, `heretic`, `hexen`.
 
-## Step 4: Packaging International Doom
+## Packaging International Doom
+
+Packaging is performed using Cpack.
+
+It is **recommended** to configure, build and package only one component at a time,
+selecting it with the following cmake options by setting required one to `ON` and the rest to `OFF`:
+`COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE`.
+
+If you want to overwrite the package version, set `BUILD_VERSION_OVERWRITE` cmake variable at configuring time,
+instead of using `-R` Cpack parameter.
 
 To package International Doom, run the following commands:
 ```shell
@@ -118,13 +127,7 @@ cpack -G ZIP
 ```
 The resulting packages of the previously compiled components and their checksums can be found in the `build` directory.
 
-The only supported generators are [Archive Generators](https://cmake.org/cmake/help/latest/cpack_gen/archive.html).  
-If you want to overwrite the package version, set `BUILD_VERSION_OVERWRITE` cmake variable at configuring time,
-instead of using `-R` Cpack parameter.
-
-It is **recommended** to configure, build and package only one component at a time selecting it with the following cmake options
-by setting required one to `ON` and the rest to `OFF`:
-`COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE`.
+The only supported generators are [Archive Generators](https://cmake.org/cmake/help/latest/cpack_gen/archive.html).
 
 # Building International Doom on Linux
 
@@ -135,35 +138,36 @@ Compiling on Linux is rather simple.
 First, make sure you have all the necessary dependencies for compilation.
 On Ubuntu Linux, they can be installed by the following command:
 ```shell
-sudo apt install gcc ninja-build python3 cmake \
-libsdl2-dev libsdl2-mixer-dev libsdl2-net-dev libpng-dev libsamplerate-dev
+sudo apt install gcc make python3 gzip cmake \
+libsdl2-dev libsdl2-mixer-dev libsdl2-net-dev libsamplerate-dev
 ```
 On Fedora Linux, they can be installed by the following command:
 ```shell
-sudo dnf install gcc ninja-build python3 cmake \
-SDL2-devel SDL2_mixer-devel SDL2_net-devel libpng-devel libsamplerate-devel
+sudo dnf install gcc make python3 gzip cmake \
+SDL2-devel SDL2_mixer-devel SDL2_net-devel libsamplerate-devel miniz-devel
 ```
 On Manjaro Linux, they can be installed by the following command:
 ```shell
-sudo pacman -S gcc ninja-build python3 cmake \
-sdl2 sdl2_mixer sdl2_net libpng libsamplerate
+sudo pacman -S gcc make python3 gzip cmake \
+sdl2 sdl2_mixer sdl2_net libsamplerate
 ```
 
 The `gcc` compiler can de replaced with `clang`.
-If you want to use `Unix Makefiles` cmake generator, you need to install `make`.
-The `python3` is not mandatory, but required for generation of man pages and bash completion.
+If you want to use `Ninja` or `Ninja Multi-Config` cmake generators, you need to install `ninja-build`.
+The `python3` and `gzip` is not mandatory, but required for generation of man pages and bash completion.
 If you want to run CTest tests, you must also install `gdb`.
+If your Linux distribution provides a package for `miniz` library, you can use it as a dependency instead of the bundled one.
 
 ## Step 2: Compiling International Doom
 
 Download source code archive of the latest release version and unpack it.
 Or clone repository from Git.
 
-There are several supported cmake generators: `Ninja`, `Ninja Multi-Config`, `Unix Makefiles`.
+There are several supported cmake generators: `Unix Makefiles`, `Ninja`, `Ninja Multi-Config`.
 
 To configure the project, use the following command:
 ```shell
-cmake -G "Ninja" -D CMAKE_BUILD_TYPE="Release" -S . -B build
+cmake -G "Unix Makefiles" -D CMAKE_BUILD_TYPE="Release" -S . -B build
 ```
 Available build types are `Release`, `Debug`, `RelWithDebInfo`, `MinSizeRel`.
 
@@ -195,6 +199,22 @@ Available components are `doom`, `heretic`, `hexen`.
 
 For the portable version, you probably want to use `--prefix <install directory>` parameter to set install directory.
 Note that config files and savegames will be stored in that directory.
+
+## Packaging International Doom
+
+Packaging is performed using the standard process for your distribution.
+
+If you are packaging a non-portable version, during configuration, 
+you should set the value of the `CMAKE_INSTALL_PREFIX` cmake variable to match the installation path of your package.
+By default, it is `/usr/local` and you probably want to change it to `/usr`.
+You can then use `cmake --install build --prefix <path>` command to collect all distribution files in the `<path>`
+location to prepare them for packaging.
+
+It is **recommended** to configure, build and package only one component at a time,
+selecting it with the following cmake options by setting required one to `ON` and the rest to `OFF`:
+`COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE`.
+
+If you want to overwrite the package version, set `BUILD_VERSION_OVERWRITE` cmake variable.
 
 # Building a DOS version of International Doom
 

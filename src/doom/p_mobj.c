@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -288,16 +288,10 @@ void P_XYMovement (mobj_t* mo)
         // a missile explosion in the code below.
         //
         // Thanks to Jeff Doggett for simplifying!
-        //
-        // Additionally, wallrunning bug is fixed (mo->player condition):
-        // https://doomwiki.org/wiki/Wallrunning
-        //
-        // Thanks AXDOOMER and Brad Harding!
 
         if (singleplayer && improved_collision && !strict_mode && !vanillaparm ? 
-            mo->player ? ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) && (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)) 
-                       : ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) || (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2))
-                       :  (xmove > MAXMOVE/2 || ymove > MAXMOVE/2))
+           ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) || (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)) :
+            (xmove > MAXMOVE/2 || ymove > MAXMOVE/2))
         {
             ptryx = mo->x + xmove/2;
             ptryy = mo->y + ymove/2;
@@ -316,30 +310,7 @@ void P_XYMovement (mobj_t* mo)
             // blocked move
             if (mo->player)
             {	// try to slide along it
-                if (BlockingMobj == NULL          // [JN] Mobj is not blocking.
-                ||  BlockingMobj->health <= 0     // [JN] Allow to slightly bump into falling corpse.
-                || !singleplayer || !improved_collision || strict_mode || vanillaparm)  // [JN] Keep demo compatibility.
-                {   
-                    // [JN] Slide movement.
-                    P_SlideMove(mo);
-                }
-                else
-                {
-                    // [JN] Slide against mobj.
-                    // Remove X/Y momentum while moving on solid things.
-                    if (P_TryMove(mo, mo->x, ptryy))
-                    {
-                        mo->momx = 0;
-                    }
-                    else if (P_TryMove(mo, ptryx, mo->y))
-                    {
-                        mo->momy = 0;
-                    }
-                    else
-                    {
-                        mo->momx = mo->momy = 0;
-                    }
-                }
+                P_SlideMove(mo);
             }
             else if (mo->flags & MF_MISSILE)
             {
@@ -702,6 +673,13 @@ void P_NightmareRespawn (mobj_t *mobj)
 
 void P_MobjThinker (mobj_t *mobj)
 {
+    // [crispy] suppress interpolation of player missiles for the first tic
+    // and Archvile fire to mitigate it being spawned at the wrong location
+    if (mobj->interp < 0)
+    {
+        mobj->interp++;
+    }
+    else
     // [AM] Handle interpolation unless we're an active player.
     if (!(mobj->player != NULL && mobj == mobj->player->mo))
     {
@@ -714,10 +692,10 @@ void P_MobjThinker (mobj_t *mobj)
         mobj->oldy = mobj->y;
         mobj->oldz = mobj->z;
         mobj->oldangle = mobj->angle;
+        mobj->old_float_z = mobj->float_z;
     }
 
     // momentum movement
-    BlockingMobj = NULL;
     if (mobj->momx ||  mobj->momy || (mobj->flags&MF_SKULLFLY))
     {
         P_XYMovement (mobj);
@@ -729,8 +707,7 @@ void P_MobjThinker (mobj_t *mobj)
         }
     }
 
-    if ((mobj->z != mobj->floorz) || mobj->momz
-    || (singleplayer && BlockingMobj && improved_collision && !strict_mode && !vanillaparm))
+    if ((mobj->z != mobj->floorz) || mobj->momz)
     {
         P_ZMovement (mobj);
 
@@ -741,18 +718,18 @@ void P_MobjThinker (mobj_t *mobj)
         }
     }
 
-    // [JN] Activation of floating items
-    if (singleplayer && floating_powerups && !strict_mode && !vanillaparm
+    // [JN] Set amplitude of floating powerups:
+    if (floating_powerups && !vanillaparm
     && (mobj->type == MT_MEGA       // Megasphere
     ||  mobj->type == MT_MISC12     // Supercharge
     ||  mobj->type == MT_INV        // Invulnerability
     ||  mobj->type == MT_INS))      // Partial invisibility
     {
-        mobj->z = mobj->floorz 
-                + (floating_powerups == 1 ? FloatBobOffsetsS :  // Low amplitude
-                   floating_powerups == 2 ? FloatBobOffsetsM :  // Middle amplitude
-                                            FloatBobOffsetsB)   // High amplitude
-                                            [(mobj->health++) & 63];
+        mobj->float_z = mobj->floorz 
+                      + (floating_powerups == 1 ? FloatBobOffsetsS :  // Low amplitude
+                         floating_powerups == 2 ? FloatBobOffsetsM :  // Middle amplitude
+                                                  FloatBobOffsetsB)   // High amplitude
+                                                  [(mobj->health++) & 63];
     }
 
     // [JN] killough 9/12/98: objects fall off ledges if they are hanging off
@@ -884,6 +861,9 @@ static mobj_t *P_SpawnMobjSafe (const fixed_t x, const fixed_t y, const fixed_t 
     {
         mobj->z = z;
     }
+
+    // [JN] Set floating z value to actual mobj z coord.
+    mobj->old_float_z = mobj->float_z = mobj->z;
 
     // [AM] Do not interpolate on spawn.
     mobj->interp = false;
@@ -1171,7 +1151,7 @@ void P_SpawnMapThing (mapthing_t *mthing)
     }
 
     // check for apropriate skill level
-    if (!netgame && (mthing->options & 16))
+    if (!coop_spawns && !netgame && (mthing->options & 16))
     {
         return;
     }
@@ -1538,6 +1518,9 @@ void P_SpawnPlayerMissile (mobj_t *source, const mobjtype_t type)
     th->momx = FixedMul( th->info->speed, finecosine[an]);
     th->momy = FixedMul( th->info->speed, finesine[an]);
     th->momz = FixedMul( th->info->speed, slope);
+
+    // [crispy] suppress interpolation of player missiles for the first tic
+    th->interp = -1;
 
     P_CheckMissileSpawn (th);
 }

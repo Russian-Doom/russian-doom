@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,23 +17,17 @@
 // P_mobj.c
 
 
-
-#include "doomdef.h"
+#include "hr_local.h"
 #include "i_system.h"
-#include "m_random.h"
 #include "p_local.h"
 #include "sounds.h"
 #include "s_sound.h"
 #include "jn.h"
 
 
-void G_PlayerReborn(int player);
-void P_SpawnMapThing(mapthing_t * mthing);
+// Private data
 
-mobjtype_t PuffType;
-mobj_t *MissileMobj;
-
-static fixed_t FloatBobOffsets[64] = {
+static const fixed_t FloatBobOffsets[64] = {
           0,   51389,  102283,  152192,
      200636,  247147,  291278,  332604,
      370727,  405280,  435929,  462380,
@@ -53,7 +47,7 @@ static fixed_t FloatBobOffsets[64] = {
 };
 
 // [JN] Halfed values from table above.
-static fixed_t FloatBobOffsetsHalfed[64] = {
+static const fixed_t FloatBobOffsetsHalfed[64] = {
           0,   25694,   51141,   76096,
      100318,  123573,  145639,  166302,
      185363,  202640,  217964,  231190,
@@ -72,6 +66,12 @@ static fixed_t FloatBobOffsetsHalfed[64] = {
     -100318,  -76096,  -51142,  -25694
 };
 
+// Public data
+
+mobjtype_t  PuffType;
+mobj_t     *MissileMobj;
+
+
 //----------------------------------------------------------------------------
 //
 // FUNC P_SetMobjState
@@ -80,7 +80,7 @@ static fixed_t FloatBobOffsetsHalfed[64] = {
 //
 //----------------------------------------------------------------------------
 
-boolean P_SetMobjState(mobj_t * mobj, statenum_t state)
+boolean P_SetMobjState (mobj_t *mobj, statenum_t state)
 {
     state_t *st;
 
@@ -110,7 +110,7 @@ boolean P_SetMobjState(mobj_t * mobj, statenum_t state)
 //
 //----------------------------------------------------------------------------
 
-boolean P_SetMobjStateNF(mobj_t * mobj, statenum_t state)
+boolean P_SetMobjStateNF (mobj_t *mobj, statenum_t state)
 {
     state_t *st;
 
@@ -152,7 +152,8 @@ void P_ExplodeMissile(mobj_t * mo)
     }
 
     // [JN] Allow missle attacks to make splashes on water/lava/sludge
-    if (singleplayer && mo->z <= mo->floorz + FRACUNIT*8 && !vanillaparm)
+    if (singleplayer && !strict_mode && !vanillaparm
+    && mo->z <= mo->floorz + FRACUNIT*8)
     {
         P_HitFloor(mo);
     }
@@ -193,7 +194,7 @@ void P_ThrustMobj(mobj_t * mo, angle_t angle, fixed_t move)
 //
 //----------------------------------------------------------------------------
 
-int P_FaceMobj(mobj_t * source, mobj_t * target, angle_t * delta)
+int P_FaceMobj (mobj_t *source, mobj_t *target, angle_t *delta)
 {
     angle_t diff;
     angle_t angle1;
@@ -240,7 +241,7 @@ int P_FaceMobj(mobj_t * source, mobj_t * target, angle_t * delta)
 //
 //----------------------------------------------------------------------------
 
-boolean P_SeekerMissile(mobj_t * actor, angle_t thresh, angle_t turnMax)
+boolean P_SeekerMissile(mobj_t *actor, angle_t thresh, angle_t turnMax)
 {
     int dir;
     int dist;
@@ -374,16 +375,10 @@ void P_XYMovement(mobj_t * mo)
         // and it's same to: https://doomwiki.org/wiki/Mancubus_fireball_clipping
         //
         // Thanks to Jeff Doggett for simplifying!
-        //
-        // Additionally, wallrunning bug is fixed (mo->player condition):
-        // https://doomwiki.org/wiki/Wallrunning
-        //
-        // Thanks AXDOOMER and Brad Harding!
 
-        if (improved_collision && singleplayer && !vanillaparm ? 
-            mo->player ? ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) && (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)) 
-                       : ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) || (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2))
-                       :  (xmove > MAXMOVE/2 || ymove > MAXMOVE/2))
+        if (singleplayer && !strict_mode && !vanillaparm && improved_collision ? 
+           ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) || (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)) :
+            (xmove > MAXMOVE/2 || ymove > MAXMOVE/2))
         {
             ptryx = mo->x + xmove / 2;
             ptryy = mo->y + ymove / 2;
@@ -400,30 +395,8 @@ void P_XYMovement(mobj_t * mo)
         {                       // Blocked move
             if (mo->flags2 & MF2_SLIDE)
             {                   // Try to slide along it
-                if (BlockingMobj == NULL          // [JN] Mobj is not blocking.
-                || BlockingMobj->health <= 0      // [JN] Allow to slightly bump into falling corpse.
-                ||  !improved_collision || !singleplayer || vanillaparm)  // [JN] Keep demo compatibility.
-                {   
-                    // [JN] Slide movement.
-                    P_SlideMove(mo);
-                }
-                else
-                {
-                    // [JN] Slide against mobj.
-                    // Remove X/Y momentum while moving on solid things.
-                    if (P_TryMove(mo, mo->x, ptryy))
-                    {
-                        mo->momx = 0;
-                    }
-                    else if (P_TryMove(mo, ptryx, mo->y))
-                    {
-                        mo->momy = 0;
-                    }
-                    else
-                    {
-                        mo->momx = mo->momy = 0;
-                    }
-                }
+
+                P_SlideMove(mo);
             }
             else if (mo->flags & MF_MISSILE)
             {   // Explode a missile
@@ -439,8 +412,8 @@ void P_XYMovement(mobj_t * mo)
                     // [JN] Fix projectiles may sometimes dissapear in ledges.
                     // To keep demo sync and/or vanilla behaviour,
                     // remove missile. Otherwise, explode it normally.
-                    if (mo->z > ceilingline->backsector->ceilingheight
-                    || !singleplayer || vanillaparm)
+                    if (!singleplayer || strict_mode || vanillaparm
+                    || mo->z > ceilingline->backsector->ceilingheight)
                     {
                         // Hack to prevent missiles exploding against the sky
                         P_RemoveMobj(mo);
@@ -488,10 +461,11 @@ void P_XYMovement(mobj_t * mo)
     // killough 8/11/98: add bouncers
     // killough 9/15/98: add objects falling off ledges
     // killough 11/98: only include bouncers hanging off ledges
-    if ((mo->flags & MF_CORPSE || mo->intflags & MIF_FALLING) 
-    &&  (mo->momx > FRACUNIT/4 || mo->momx < -FRACUNIT/4
-    ||   mo->momy > FRACUNIT/4 || mo->momy < -FRACUNIT/4) 
-    &&   mo->floorz != mo->subsector->sector->floorheight)
+    if (singleplayer && !strict_mode && !vanillaparm
+    && (mo->flags & MF_CORPSE || mo->intflags & MIF_FALLING) 
+    && (mo->momx > FRACUNIT/4 || mo->momx < -FRACUNIT/4
+    ||  mo->momy > FRACUNIT/4 || mo->momy < -FRACUNIT/4) 
+    &&  mo->floorz != mo->subsector->sector->floorheight)
     {
         return;  // do not stop sliding if halfway off a step with some momentum
     }
@@ -642,7 +616,7 @@ void P_ZMovement(mobj_t * mo)
 
                 // haleyjd: removed externdriver crap
                 // [JN] Mouselook: disable centering while mouselook
-                if (!mlook)
+                if (!mlook || !singleplayer)
                 mo->player->centering = true;
             }
             mo->momz = 0;
@@ -847,6 +821,12 @@ void P_MobjThinker(mobj_t * mobj)
 {
     mobj_t *onmo;
 
+    // [crispy] suppress interpolation of player missiles for the first tic
+    if (mobj->interp == -1)
+    {
+        mobj->interp = false;
+    }
+    else
     // [AM] Handle interpolation unless we're an active player.
     if (!(mobj->player != NULL && mobj == mobj->player->mo))
     {
@@ -862,7 +842,6 @@ void P_MobjThinker(mobj_t * mobj)
     }
 
     // Handle X and Y momentums
-    BlockingMobj = NULL;
     if (mobj->momx || mobj->momy || (mobj->flags & MF_SKULLFLY))
     {
         P_XYMovement(mobj);
@@ -874,7 +853,7 @@ void P_MobjThinker(mobj_t * mobj)
     if (mobj->flags2 & MF2_FLOATBOB)
     {
         // Floating item bobbing motion
-        if (singleplayer && !vanillaparm)
+        if (singleplayer && !strict_mode && !vanillaparm)
         {
             // [JN] Variable floating amplitude.
             mobj->z = mobj->floorz + (floating_powerups == 1 ? FloatBobOffsets[(mobj->health++) & 63] :
@@ -886,8 +865,7 @@ void P_MobjThinker(mobj_t * mobj)
             mobj->z = mobj->floorz + FloatBobOffsets[(mobj->health++) & 63];
         }
     }
-    else if ((mobj->z != mobj->floorz) || mobj->momz 
-    || (BlockingMobj && improved_collision && singleplayer && !vanillaparm))
+    else if ((mobj->z != mobj->floorz) || mobj->momz)
     {                           // Handle Z momentum and gravity
         if (mobj->flags2 & MF2_PASSMOBJ)
         {
@@ -933,16 +911,19 @@ void P_MobjThinker(mobj_t * mobj)
 
     // killough 9/12/98: objects fall off ledges if they are hanging off
     // slightly push off of ledge if hanging more than halfway off
-    // [JN] TODO: why it's not working with mobj->z > mobj->dropoffz ?
-    if (torque)
+    if (singleplayer && torque && !strict_mode && !vanillaparm)
     {
-        if (/*mobj->z > mobj->dropoffz      // Only objects contacting dropoff
-        &&*/ !(mobj->flags & MF_NOGRAVITY)  // Only objects which fall
-        && mobj->flags & MF_CORPSE          // [JN] And only for corpses
-        && mobj->geartics > 0)              // [JN] And only if torque tics are available
-        P_ApplyTorque(mobj);                // Apply torque
+        if (mobj->z > mobj->dropoffz        // Only objects contacting dropoff
+        && !(mobj->flags & MF_NOGRAVITY)    // Only objects which fall
+        &&  (mobj->flags & MF_CORPSE)       // [JN] And only for corpses
+        &&   mobj->geartics > 0)            // [JN] And only if torque tics are available.
+        {
+            P_ApplyTorque(mobj);            // Apply torque
+        }
         else
-        mobj->intflags &= ~MIF_FALLING, mobj->gear = 0;  // Reset torque
+        {
+            mobj->intflags &= ~MIF_FALLING, mobj->gear = 0;  // Reset torque
+        }
     }
     
 //
@@ -1263,6 +1244,11 @@ void P_SpawnPlayer(mapthing_t * mthing)
     p->extralight = 0;
     p->fixedcolormap = 0;
     p->viewheight = VIEWHEIGHT;
+    // [JN] Keep NOCLIP cheat across the levels.
+    if (p->cheats & CF_NOCLIP)
+    {
+        p->mo->flags |= MF_NOCLIP;
+    }
     skippsprinterp = true;
     P_SetupPsprites(p);         // setup gun psprite        
     if (deathmatch)
@@ -1338,7 +1324,7 @@ void P_SpawnMapThing(mapthing_t * mthing)
     }
 
 // check for apropriate skill level
-    if (!netgame && (mthing->options & 16))
+    if (!coop_spawns && !netgame && (mthing->options & 16))
         return;
 
     if (gameskill == sk_baby)
@@ -1504,8 +1490,12 @@ void P_SpawnPuffSafe (fixed_t x, fixed_t y, fixed_t z, boolean safe)
             break;
     }
 
+    // [crispy] suppress interpolation for the first tic
+    puff->interp = -1;
+
     // [JN] Allow hitscan attacks to make splashes on water/lava/sludge
-    if (singleplayer && puff->z <= puff->floorz + FRACUNIT*8 && !vanillaparm)
+    if (singleplayer && !strict_mode && !vanillaparm
+    && puff->z <= puff->floorz + FRACUNIT*8)
     {
         P_HitFloor(puff);
     }
@@ -1555,7 +1545,7 @@ void P_RipperBlood(mobj_t * mo)
 //
 //---------------------------------------------------------------------------
 
-int P_GetThingFloorType(mobj_t * thing)
+int P_GetThingFloorType (mobj_t *thing)
 {
     return (TerrainTypes[thing->subsector->sector->floorpic]);
 }
@@ -1566,13 +1556,14 @@ int P_GetThingFloorType(mobj_t * thing)
 //
 //---------------------------------------------------------------------------
 
-int P_HitFloor(mobj_t * thing)
+int P_HitFloor (mobj_t *thing)
 {
     mobj_t *mo;
 
     if (thing->floorz != thing->subsector->sector->floorheight
     // [JN] Don't let small splashes spawn big splashes.
-    || ((thing->type == MT_SPLASH || thing->type == MT_SLUDGECHUNK) && singleplayer))
+    || ((thing->type == MT_SPLASH || thing->type == MT_SLUDGECHUNK)
+    && singleplayer && !strict_mode && !vanillaparm))
     {   // don't splash if landing on the edge above water/lava/etc....
         return (FLOOR_SOLID);
     }
@@ -1614,7 +1605,7 @@ int P_HitFloor(mobj_t * thing)
 //
 //---------------------------------------------------------------------------
 
-boolean P_CheckMissileSpawn(mobj_t * missile)
+boolean P_CheckMissileSpawn(mobj_t *missile)
 {
     // move a little forward so an angle can be computed if it
     // immediately explodes
@@ -1770,35 +1761,13 @@ mobj_t *P_SpawnPlayerMissile(mobj_t * source, mobjtype_t type)
         if (!linetarget)
         {
             an = source->angle;
-
-        if (aspect_ratio >= 2)
-        {
-            // [JN] Wide screen: new magic number :(
-            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 177;
-        }
-        else
-        {
-            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
-                    (screenblocks <= 10 ? 161 : 146);
-        }
+            slope = ((source->player->lookdir) << FRACBITS) / 173;
         }
     }
     x = source->x;
     y = source->y;
-
-    if (aspect_ratio >= 2)
-    {
-        // [JN] Wide screen: new magic number :(
-        z = source->z + 4 * 8 * FRACUNIT +
-        ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 177;
-    }
-    else
-    {
-        z = source->z + 4 * 8 * FRACUNIT +
-            ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
-            (screenblocks <= 10 ? 161 : 146);
-    }
-
+    z = source->z + 4 * 8 * FRACUNIT +
+        ((source->player->lookdir) << FRACBITS) / 173;
     if (source->flags2 & MF2_FEETARECLIPPED)
     {
         z -= FOOTCLIPSIZE;
@@ -1864,35 +1833,13 @@ mobj_t *P_SPMAngle(mobj_t * source, mobjtype_t type, angle_t angle)
         if (!linetarget)
         {
             an = angle;
-
-        if (aspect_ratio >= 2)
-        {
-            // [JN] Wide screen: new magic number :(
-            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 177;
-        }
-        else
-        {
-            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
-                    (screenblocks <= 10 ? 161 : 146);
-        }
+            slope = ((source->player->lookdir) << FRACBITS) / 173;
         }
     }
     x = source->x;
     y = source->y;
-
-    if (aspect_ratio >= 2)
-    {
-        // [JN] Wide screen: new magic number :(
-        z = source->z + 4 * 8 * FRACUNIT +
-        ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 177;
-    }
-    else
-    {
-        z = source->z + 4 * 8 * FRACUNIT +
-            ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
-            (screenblocks <= 10 ? 161 : 146);
-    }
-
+    z = source->z + 4 * 8 * FRACUNIT +
+        ((source->player->lookdir) << FRACBITS) / 173;
     if (source->flags2 & MF2_FEETARECLIPPED)
     {
         z -= FOOTCLIPSIZE;

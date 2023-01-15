@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -50,6 +50,8 @@ extern byte *transtable10;
 
 extern byte *dp_translation;
 
+extern int quadres;
+
 // haleyjd 08/28/10: implemented for Strife support
 // haleyjd 08/28/10: Patch clipping callback, implemented to support Choco
 // Strife.
@@ -77,7 +79,7 @@ void V_DrawShadowedPatchDoom (int x, int y, const patch_t *patch);
 void V_DrawShadowedPatchRaven (int x, int y, const patch_t *patch);
 void V_DrawShadowedPatchStrife (int x, int y, const patch_t *patch);
 void V_DrawXlaPatch (int x, int y, const patch_t *patch);     // villsa [STRIFE]
-void V_DrawPatchUnscaled (int x, int y, const patch_t *patch, const byte *table);
+extern void (*V_DrawPatchUnscaled) (int x, int y, const patch_t *patch, const byte *table);
 void V_DrawPatchFinale (int x, int y, const patch_t *patch);
 void V_FillFlat (char *lump);
 

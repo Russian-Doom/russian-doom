@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -18,12 +18,10 @@
 
 
 #include <stdlib.h>
-#include "doomdef.h"
+#include "hr_local.h"
 #include "deh_str.h"
 #include "i_system.h"
 #include "r_local.h"
-#include "r_bmaps.h"
-#include "r_swirl.h"
 #include "jn.h"
 
 
@@ -81,10 +79,10 @@ static int *spanstart = NULL;  // killough 2/8/98
 
 static lighttable_t **planezlight;
 static fixed_t planeheight;
-static fixed_t cachedheight[SCREENHEIGHT];
-static fixed_t cacheddistance[SCREENHEIGHT];
-static fixed_t cachedxstep[SCREENHEIGHT];
-static fixed_t cachedystep[SCREENHEIGHT];
+static fixed_t cachedheight[MAXHEIGHT];
+static fixed_t cacheddistance[MAXHEIGHT];
+static fixed_t cachedxstep[MAXHEIGHT];
+static fixed_t cachedystep[MAXHEIGHT];
 
 //
 // sky mapping
@@ -99,13 +97,15 @@ fixed_t skytextureheight;
 // [JN] e6y: resolution limitation is removed
 fixed_t *yslope = NULL;
 fixed_t *distscale = NULL;
-fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
+fixed_t yslopes[MAXHEIGHT][MAXHEIGHT];
 
 // [JN] Smooth plane scrolling.
 fixed_t FlatScrollFactor_X, FlatScrollFactor_X_old;
 fixed_t FlatScrollFactor_Y, FlatScrollFactor_Y_old;
 static fixed_t FlatScrollDelta_X;
 static fixed_t FlatScrollDelta_Y;
+// [JN] Circular flowing effect for swirling liquids.
+fixed_t FlowAmplitude_X, FlowAmplitude_Y;
 
 #define FLAT_SCROLL_SLOWEST  0.5;
 #define FLAT_SCROLL_MEDIUM   2;
@@ -255,11 +255,11 @@ static void R_MapPlane (const int y, const int x1, const int x2)
     }
     else
     {
-        index = distance >> LIGHTZSHIFT;
+        index = distance >> lightzshift;
 
-        if (index >= MAXLIGHTZ)
+        if (index >= maxlightz)
         {
-            index = MAXLIGHTZ - 1;
+            index = maxlightz - 1;
         }
 
         ds_colormap[0] = planezlight[index];
@@ -320,7 +320,7 @@ void R_ClearPlanes (void)
 ================================================================================
 */
 
-static visplane_t *new_visplane (unsigned int hash)
+static const visplane_t *new_visplane (unsigned const int hash)
 {
     visplane_t *check = freetail;
 
@@ -345,7 +345,7 @@ static visplane_t *new_visplane (unsigned int hash)
 ================================================================================
 */
 
-visplane_t *R_FindPlane(fixed_t height, const int picnum, const int lightlevel, const int special)
+const visplane_t *R_FindPlane (fixed_t height, const int picnum, const int lightlevel, const int special)
 {
     visplane_t   *check;
     unsigned int  hash;
@@ -390,7 +390,7 @@ visplane_t *R_FindPlane(fixed_t height, const int picnum, const int lightlevel, 
 ================================================================================
 */
 
-visplane_t *R_DupPlane (const visplane_t *pl, const int start, const int stop)
+const visplane_t *R_DupPlane (const visplane_t *pl, const int start, const int stop)
 {
     unsigned int  hash = visplane_hash(pl->picnum, pl->lightlevel, pl->height);
     visplane_t   *new_pl = new_visplane(hash);
@@ -415,7 +415,7 @@ visplane_t *R_DupPlane (const visplane_t *pl, const int start, const int stop)
 ================================================================================
 */
 
-visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop)
+const visplane_t *R_CheckPlane (visplane_t *pl, const int start, const int stop)
 {
     int intrl, intrh, unionl, unionh, x;
 
@@ -496,7 +496,6 @@ void R_DrawPlanes (void)
     visplane_t  *pl;
     int          i;
     int          x;
-    int          angle;
 
     for (i = 0 ; i < MAXVISPLANES ; i++)
     for (pl = visplanes[i] ; pl ; pl = pl->next, rendered_visplanes++)
@@ -510,15 +509,15 @@ void R_DrawPlanes (void)
                 if ((dc_yl = pl->top[x]) != UINT_MAX && dc_yl <= (dc_yh = pl->bottom[x])) // [crispy] 32-bit integer math
                 {
                     // [crispy] Optionally draw skies horizontally linear.
-                    angle = ((viewangle + (linear_sky && !vanillaparm ? linearskyangle[x] : 
-                                           xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
+                    const int angle = ((viewangle + (linear_sky && !vanillaparm ?
+                                        linearskyangle[x] : xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
                     dc_x = x;
                     dc_source = R_GetColumn(skytexture, angle , false);
 
                     if (invul_sky && !vanillaparm)
                     {
-                        if (players[consoleplayer].powers[pw_invulnerability] > BLINKTHRESHOLD
-                        || (players[consoleplayer].powers[pw_invulnerability] & 8))
+                        if (players[displayplayer].powers[pw_invulnerability] > BLINKTHRESHOLD
+                        || (players[displayplayer].powers[pw_invulnerability] & 8))
                         {
                             // [JN] Invulnerability effect will colorize sky texture,
                             // with out any changes in sky texture light level.
@@ -653,6 +652,13 @@ void R_DrawPlanes (void)
                     FlatScrollDelta_X = 0;
                     FlatScrollDelta_Y = 0;
                 break;
+            }
+
+            // [JN] Apply circular flowing effect to swirling liquids.
+            if (swirling_liquids && flattranslation[pl->picnum] == -1 && !vanillaparm)
+            {
+                FlatScrollDelta_X = FlowAmplitude_X;
+                FlatScrollDelta_Y = FlowAmplitude_Y;
             }
 
             ds_source = tempSource;

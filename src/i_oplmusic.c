@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@
 
 #define PERCUSSION_LOG_LEN 16
 
-typedef struct
+typedef PACKED_STRUCT (
 {
     byte tremolo;
     byte attack;
@@ -55,25 +55,25 @@ typedef struct
     byte waveform;
     byte scale;
     byte level;
-} PACKEDATTR genmidi_op_t;
+}) genmidi_op_t;
 
-typedef struct
+typedef PACKED_STRUCT (
 {
     genmidi_op_t modulator;
     byte feedback;
     genmidi_op_t carrier;
     byte unused;
     short base_note_offset;
-} PACKEDATTR genmidi_voice_t;
+}) genmidi_voice_t;
 
-typedef struct
+typedef PACKED_STRUCT (
 {
     unsigned short flags;
     byte fine_tuning;
     byte fixed_note;
 
     genmidi_voice_t voices[2];
-} PACKEDATTR genmidi_instr_t;
+}) genmidi_instr_t;
 
 // Data associated with a channel of a track that is currently playing.
 

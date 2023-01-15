@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 
 
 #include <stdlib.h>
-#include "doomdef.h"
+#include "hr_local.h"
 #include "m_bbox.h"
 #include "r_local.h"
 #include "jn.h"
@@ -48,7 +48,7 @@ unsigned   maxdrawsegs;
 ================================================================================
 */
 
-void R_InitClipSegs(void)
+void R_InitClipSegs (void)
 {
     solidcol = calloc(screenwidth, sizeof(*solidcol));
 }
@@ -61,7 +61,7 @@ void R_InitClipSegs(void)
 ================================================================================
 */
 
-void R_ClearDrawSegs(void)
+void R_ClearDrawSegs (void)
 {
     ds_p = drawsegs;
 }
@@ -78,9 +78,9 @@ void R_ClearDrawSegs(void)
 ================================================================================
 */
 
-static void R_ClipWallSegment (int first, int last, boolean solid)
+static void R_ClipWallSegment (int first, const int last, const boolean solid)
 {
-    byte *p;
+    const byte *p;
 
     while (first < last)
     {
@@ -218,7 +218,7 @@ static void R_RecalcLineFlags (line_t *linedef)
 ================================================================================
 */
 
-void R_ClearClipSegs(void)
+void R_ClearClipSegs (void)
 {
     memset(solidcol, 0, screenwidth);
 }
@@ -233,11 +233,12 @@ void R_ClearClipSegs(void)
 ================================================================================
 */
 
-void R_MaybeInterpolateSector (sector_t *sector)
+static void R_MaybeInterpolateSector (sector_t *sector)
 {
     if (uncapped_fps
     // Only if we moved the sector last tic.
-    && sector->oldgametic == gametic - 1)
+    && sector->oldgametic == gametic - 1
+    && sector->specialdata)
     {
         // Interpolate between current and last floor/ceiling position.
         if (sector->floorheight != sector->oldfloorheight)
@@ -278,7 +279,7 @@ void R_MaybeInterpolateSector (sector_t *sector)
 ================================================================================
 */
 
-static void R_AddLine(seg_t *line)
+static void R_AddLine (const seg_t *line)
 {
     int x1, x2;
     angle_t angle1, angle2, span, tspan;
@@ -402,7 +403,7 @@ static const int checkcoord[12][4] = {
 };
 
 
-static boolean R_CheckBBox (fixed_t *bspcoord)
+static const boolean R_CheckBBox (const fixed_t *bspcoord)
 {
     angle_t    angle1, angle2;
     int        boxpos;
@@ -476,7 +477,7 @@ static boolean R_CheckBBox (fixed_t *bspcoord)
 ================================================================================
 */
 
-static void R_Subsector (int num)
+static void R_Subsector (const int num)
 {
     subsector_t *sub = &subsectors[num];
     seg_t       *line = &segs[sub->firstline];

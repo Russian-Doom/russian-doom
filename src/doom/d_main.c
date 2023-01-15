@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -88,6 +88,7 @@
 char* RD_Project_Name = PACKAGE_PREFIX " Doom";
 char* RD_Project_String = PACKAGE_PREFIX " Doom " BUILD_DOOM_VERSION;
 char* RD_Project_Version = BUILD_DOOM_VERSION GIT_SHA_SUFFIX;
+char* RD_Project_TarName = PROGRAM_PREFIX "doom";
 GameType_t RD_GameType = gt_Doom;
 
 // -----------------------------------------------------------------------------
@@ -124,7 +125,6 @@ int flashing_hom = 0;
 int screenblocks = 10, screenSize;
 int extra_level_brightness = 0;
 int menu_shading = 0;
-int detailLevel = 0;        // Blocky mode, has default, 0 = high, 1 = normal
 int hud_detaillevel = 0;    // [JN] Also blocky mode, 0 = high, 1 = normal
 
 // Display: Messages
@@ -141,21 +141,24 @@ int message_color_chat = 3;
 
 // Display: Automap
 int automap_color = 0;
-int automap_mark_color = 10;
 int automap_antialias = 1;
-int automap_stats = 1;
-int automap_skill = 1;
-int automap_level_time = 1;
-int automap_total_time = 0;
-int automap_coords = 0;
-int automap_follow  = 1;
+int automap_rotate = 0;
 int automap_overlay = 0;
 int automap_overlay_bg = 0;
-int automap_rotate  = 0;
-int automap_grid    = 0;
+int automap_follow  = 1;
+int automap_grid = 0;
 int automap_grid_size = 128;
-int hud_stats_color = 1;
-int hud_level_name = 0;
+int automap_mark_color = 10;
+
+// Display: Stats
+int stats_placement = 0;
+int stats_kis = 1;
+int stats_skill = 0;
+int stats_level_time = 1;
+int stats_total_time = 0;
+int stats_coords = 0;
+int stats_level_name = 0;
+int stats_color = 1;
 
 // Sound
 int sfxVolume = 8;          // Maximum volume of a sound effect (internal: 0-15)
@@ -188,8 +191,8 @@ int selective_backpack = 0;
 
 int selective_ammo_0 = 50;  // bullets
 int selective_ammo_1 = 0;   // shells
-int selective_ammo_2 = 0;   // rockets
-int selective_ammo_3 = 0;   // cells
+int selective_ammo_2 = 0;   // cells
+int selective_ammo_3 = 0;   // rockets
 
 int selective_key_0 = 0;    // blue keycard
 int selective_key_1 = 0;    // yellow keycard
@@ -731,7 +734,7 @@ void D_Display (void)
             {
                 ST_WidgetsDrawer();
 
-                if (automapactive || hud_level_name)
+                if (automapactive || stats_level_name)
                 {
                     ST_MapNameDrawer();
                 }
@@ -749,7 +752,7 @@ void D_Display (void)
             {
                ST_WidgetsDrawer();
 
-               if (automapactive || hud_level_name)
+               if (automapactive || stats_level_name)
                {
                    ST_MapNameDrawer();
                }
@@ -889,7 +892,6 @@ void D_BindVariables(void)
     M_BindIntVariable("screenblocks",           &screenblocks);
     M_BindIntVariable("extra_level_brightness", &extra_level_brightness);
     M_BindIntVariable("menu_shading",           &menu_shading);
-    M_BindIntVariable("detaillevel",            &detailLevel);
     M_BindIntVariable("hud_detaillevel",        &hud_detaillevel);
 
     // Messages
@@ -906,21 +908,24 @@ void D_BindVariables(void)
 
     // Automap
     M_BindIntVariable("automap_color",          &automap_color);
-    M_BindIntVariable("automap_mark_color",     &automap_mark_color);
     M_BindIntVariable("automap_antialias",      &automap_antialias);
-    M_BindIntVariable("automap_stats",          &automap_stats);
-    M_BindIntVariable("automap_skill",          &automap_skill);
-    M_BindIntVariable("automap_level_time",     &automap_level_time);
-    M_BindIntVariable("automap_total_time",     &automap_total_time);
-    M_BindIntVariable("automap_coords",         &automap_coords);
+    M_BindIntVariable("automap_rotate",         &automap_rotate);
     M_BindIntVariable("automap_overlay",        &automap_overlay);
     M_BindIntVariable("automap_overlay_bg",     &automap_overlay_bg);
-    M_BindIntVariable("automap_rotate",         &automap_rotate);
     M_BindIntVariable("automap_follow",         &automap_follow);
     M_BindIntVariable("automap_grid",           &automap_grid);
     M_BindIntVariable("automap_grid_size",      &automap_grid_size);
-    M_BindIntVariable("hud_stats_color",        &hud_stats_color);
-    M_BindIntVariable("hud_level_name",       &hud_level_name);
+    M_BindIntVariable("automap_mark_color",     &automap_mark_color);
+
+    // Stats
+    M_BindIntVariable("stats_placement",        &stats_placement);
+    M_BindIntVariable("stats_kis",              &stats_kis);
+    M_BindIntVariable("stats_skill",            &stats_skill);
+    M_BindIntVariable("stats_level_time",       &stats_level_time);
+    M_BindIntVariable("stats_total_time",       &stats_total_time);
+    M_BindIntVariable("stats_coords",           &stats_coords);
+    M_BindIntVariable("stats_level_name",       &stats_level_name);
+    M_BindIntVariable("stats_color",            &stats_color);
 
     // Sound
     M_BindIntVariable("sfx_volume",             &sfxVolume);
@@ -2915,6 +2920,13 @@ void D_DoomMain (void)
     if (M_CheckParm ("-dm3"))
         deathmatch = 3;
 
+    //!
+    // @category game
+    //
+    // Start single player game with items spawns as in cooperative netgame.
+    //
+    coop_spawns = M_CheckParm ("-coop_spawns");
+
     // find which dir to use for config files
 
 #ifdef _WIN32
@@ -3473,8 +3485,10 @@ void D_DoomMain (void)
     Crosshair_DefineOpacity();
     Crosshair_DefineDrawingFunc();
 
-    // [JN] Predifine automap color scheme, crosshair, marks and their color.
+    // [JN] Predifine automap color scheme, line smoothing,
+    // crosshair, marks and their color.
     AM_initColors();
+    AM_initShades();
     AM_initPics();
     AM_initMarksColor(automap_mark_color);
 

@@ -1,8 +1,8 @@
 //
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
-// Copyright(C) 2021-2022 Dasperal/Leonid Murin
+// Copyright(C) 2016-2023 Julian Nechaevsky
+// Copyright(C) 2021-2023 Leonid Murin (Dasperal)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -39,6 +39,28 @@ typedef enum
     MENU_SOUND_BACK,
     MENU_SOUND_PAGE
 } MenuSound_t;
+
+typedef enum
+{
+    /**
+     * Menu item is rendered normally and CAN be selected and activated
+     */
+    ENABLED,
+    /**
+     * Menu item is rendered in darkened color and can NOT be selected nor activated
+     */
+    DISABLED,
+    /**
+     * Menu ite is NOT rendered and can NOT be selected nor activated.
+     * Next menu items are moved up to close the gap.
+     */
+    HIDDEN,
+    /**
+     * Menu ite is NOT rendered and can NOT be selected nor activated.
+     * Next menu items are NOT moved.
+     */
+    EMPTY
+} ItemStatus_t;
 
 typedef enum
 {
@@ -83,7 +105,8 @@ typedef enum
 
 typedef struct
 {
-    ItemType_t type;
+    const ItemType_t type;
+    ItemStatus_t status;
     const char* const text_eng;
     const char* const text_rus;
     /** Actual type and meaning of this field is determent by 'type' field. @see ItemType_t */
@@ -91,6 +114,14 @@ typedef struct
     /** Actual meaning of this field is determent by 'type' field. @see ItemType_t */
     int option;
 } MenuItem_t;
+
+#define I_EMPTY {ITT_EMPTY, ENABLED, NULL, NULL, NULL, 0}
+#define I_TITLE(text_eng, text_rus) {ITT_TITLE, ENABLED, text_eng, text_rus, NULL, 0}
+#define I_EFUNC(text_eng, text_rus, pointer, option) {ITT_EFUNC, ENABLED, text_eng, text_rus, pointer, option}
+#define I_LRFUNC(text_eng, text_rus, pointer) {ITT_LRFUNC, ENABLED, text_eng, text_rus, pointer, 0}
+#define I_SWITCH(text_eng, text_rus, pointer) {ITT_SWITCH, ENABLED, text_eng, text_rus, pointer, 0}
+#define I_SETMENU(text_eng, text_rus, pointer) {ITT_SETMENU, ENABLED, text_eng, text_rus, pointer, 0}
+#define I_SETMENU_NONET(text_eng, text_rus, pointer, option) {ITT_SETMENU_NONET, ENABLED, text_eng, text_rus, pointer, option}
 
 typedef struct
 {
@@ -101,6 +132,10 @@ typedef struct
     const Translation_CR_t translation;
 } PageDescriptor_t;
 
+struct Menu_s;
+
+typedef void (*MENU_INITIALIZER)(struct Menu_s* const menu);
+
 typedef struct Menu_s
 {
     int x_eng; //
@@ -110,18 +145,79 @@ typedef struct Menu_s
     const char* const title_rus;
     const boolean replaceableBigFont;
     const int itemCount;
-    const MenuItem_t* const items;
+    MenuItem_t* const items;
     const boolean bigFont;
     void (*drawFunc) (void);
+    const MENU_INITIALIZER initFunc;
+    const struct Menu_s* prevMenu;
+
     /** If the menu supports PageUp and PageDn this field must point to a pagination descriptor struct
      *  otherwise, this field must be NULL.
      */
     const PageDescriptor_t* const pageDescriptor;
-    const struct Menu_s* prevMenu;
 
-    /** The initial value of this field must be the index of the first clickable menu item */
     int lastOn;
 } Menu_t;
+
+#define MENU_STATIC(field,                \
+x_eng, x_rus,                             \
+y,                                        \
+title_eng, title_rus, replaceableBigFont, \
+items, bigFont,                           \
+drawFunc,                                 \
+prevMenu)                                 \
+static Menu_t field = {                   \
+x_eng, x_rus, y, title_eng, title_rus, replaceableBigFont, arrlen(items), items, \
+bigFont, drawFunc, NULL, prevMenu, NULL, -1}
+
+#define MENU_STATIC_SKILL(field,          \
+x_eng, x_rus,                             \
+y,                                        \
+title_eng, title_rus, replaceableBigFont, \
+items, bigFont,                           \
+drawFunc,                                 \
+prevMenu,                                 \
+lastOn)                                   \
+static Menu_t field = {                   \
+x_eng, x_rus, y, title_eng, title_rus, replaceableBigFont, arrlen(items), items, \
+bigFont, drawFunc, NULL, prevMenu, NULL, lastOn}
+
+#define MENU_DYNAMIC(field,               \
+x_eng, x_rus,                             \
+y,                                        \
+title_eng, title_rus, replaceableBigFont, \
+items, bigFont,                           \
+drawFunc,                                 \
+initFunc,                                 \
+prevMenu)                                 \
+static Menu_t field = {                   \
+x_eng, x_rus, y, title_eng, title_rus, replaceableBigFont, arrlen(items), items, \
+bigFont, drawFunc, initFunc, prevMenu, NULL, -1}
+
+#define MENU_STATIC_PAGED(field,          \
+x_eng, x_rus,                             \
+y,                                        \
+title_eng, title_rus, replaceableBigFont, \
+items, bigFont,                           \
+drawFunc,                                 \
+prevMenu,                                 \
+pageDescriptor)                           \
+static Menu_t field =                     \
+{x_eng, x_rus, y, title_eng, title_rus, replaceableBigFont, arrlen(items), items, \
+bigFont, drawFunc, NULL, prevMenu, pageDescriptor, -1}
+
+#define MENU_DYNAMIC_PAGED(field,         \
+x_eng, x_rus,                             \
+y,                                        \
+title_eng, title_rus, replaceableBigFont, \
+items, bigFont,                           \
+drawFunc,                                 \
+initFunc,                                 \
+prevMenu,                                 \
+pageDescriptor)                           \
+static Menu_t field =                     \
+{x_eng, x_rus, y, title_eng, title_rus, replaceableBigFont, arrlen(items), items, \
+bigFont, drawFunc, initFunc, prevMenu, pageDescriptor, -1}
 
 extern Menu_t* MainMenu;
 extern Menu_t* CurrentMenu;

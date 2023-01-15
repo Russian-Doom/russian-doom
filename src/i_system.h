@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -66,7 +66,7 @@ void I_AtExit(atexit_func_t func, boolean run_if_error);
 void I_BindVariables(void);
 
 #ifdef _WIN32
-dll_export extern boolean console_connected;
+__declspec(dllexport) extern boolean console_connected;
 
 void RD_CreateWindowsConsole(void);
 void I_ConsolePause(void);

@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,19 +17,21 @@
 // P_telept.c
 
 
-
-#include "doomdef.h"
+#include "hr_local.h"
 #include "p_local.h"
 #include "s_sound.h"
 #include "v_video.h"
 
-//----------------------------------------------------------------------------
-//
-// FUNC P_Teleport
-//
-//----------------------------------------------------------------------------
 
-boolean P_Teleport(mobj_t * thing, fixed_t x, fixed_t y, angle_t angle)
+/*
+================================================================================
+=
+= P_Teleport
+=
+================================================================================
+*/
+
+boolean P_Teleport (mobj_t * thing, fixed_t x, fixed_t y, angle_t angle)
 {
     fixed_t oldx;
     fixed_t oldy;
@@ -43,7 +45,9 @@ boolean P_Teleport(mobj_t * thing, fixed_t x, fixed_t y, angle_t angle)
     oldx = thing->x;
     oldy = thing->y;
     oldz = thing->z;
+
     aboveFloor = thing->z - thing->floorz;
+
     if (!P_TeleportMove(thing, x, y))
     {
         return (false);
@@ -92,8 +96,7 @@ boolean P_Teleport(mobj_t * thing, fixed_t x, fixed_t y, angle_t angle)
         thing->reactiontime = 18;
     }
     thing->angle = angle;
-    if (thing->flags2 & MF2_FOOTCLIP
-        && P_GetThingFloorType(thing) != FLOOR_SOLID)
+    if (thing->flags2 & MF2_FOOTCLIP && P_GetThingFloorType(thing) != FLOOR_SOLID)
     {
         thing->flags2 |= MF2_FEETARECLIPPED;
     }
@@ -114,13 +117,15 @@ boolean P_Teleport(mobj_t * thing, fixed_t x, fixed_t y, angle_t angle)
     return (true);
 }
 
-//----------------------------------------------------------------------------
-//
-// FUNC EV_Teleport
-//
-//----------------------------------------------------------------------------
+/*
+================================================================================
+=
+= EV_Teleport
+=
+================================================================================
+*/
 
-boolean EV_Teleport(line_t * line, int side, mobj_t * thing)
+boolean EV_Teleport (const line_t *line, const int side, const mobj_t *thing)
 {
     int i;
     int tag;

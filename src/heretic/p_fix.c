@@ -1,6 +1,6 @@
 //
 // Copyright(C) 2013-2018 Brad Harding
-// Copyright(C) 2021 Julian Nechaevsky
+// Copyright(C) 2021-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -34,8 +34,8 @@
 
 
 #include "d_mode.h"
-#include "doomdef.h"
-#include "p_fix.h"
+#include "hr_local.h"
+#include "p_local.h"
 
 
 #define LINEFIX_END       { -1, 0, 0, 0, 0, "", "", "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT }

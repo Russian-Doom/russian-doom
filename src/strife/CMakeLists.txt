@@ -77,11 +77,7 @@ if(COMPILE_STRIFE)
         PROGRAM_PREFIX="${PROGRAM_PREFIX}"
     )
     target_link_libraries(strife PRIVATE
-        textscreen
-        SDL2::SDL2
-        SDL2::mixer
-        SDL2::net
-        Game
+        Common
     )
     if(NOT NO_GIT_HASH)
         add_dependencies(strife revision_check)

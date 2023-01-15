@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -18,13 +18,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "doomdef.h"
+#include "hr_local.h"
 #include "deh_str.h"
 #include "i_swap.h"
 #include "i_system.h"
-#include "r_bmaps.h"
+#include "p_local.h"
 #include "r_local.h"
 #include "v_trans.h"
+#include "v_video.h"
 #include "jn.h"
 
 
@@ -360,7 +361,7 @@ void R_ClearSprites (void)
 ================================================================================
 */
 
-static vissprite_t *R_NewVisSprite (void)
+static const vissprite_t *R_NewVisSprite (void)
 {
     if (num_vissprite >= num_vissprite_alloc)   // [JN] killough
     {
@@ -387,7 +388,7 @@ static vissprite_t *R_NewVisSprite (void)
 ================================================================================
 */
 
-void R_DrawMaskedColumn(const column_t *column, signed const int baseclip)
+void R_DrawMaskedColumn (const column_t *column, signed const int baseclip)
 {
     int64_t	topscreen, bottomscreen; // [crispy] WiggleFix
     fixed_t	basetexturemid;
@@ -831,7 +832,7 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
     vis->brightmap = R_BrightmapForSprite(thing->state - states);
 
     // [JN] Colored blood
-    if (colored_blood && !vanillaparm &&  thing->type == MT_BLOODSPLATTER && thing->target)
+    if (colored_blood && !vanillaparm && thing->type == MT_BLOODSPLATTER && thing->target)
     {
         if (thing->target->type == MT_WIZARD)
         {
@@ -1054,7 +1055,7 @@ void R_DrawPSprite (const pspdef_t *psp)
 
     // [JN] Applying weapon bobbing for ready states, halfed for firing states 
     // and x-only for raise/lower states. "Plus" means activated Tome of Power.
-    if (weapon_bobbing && singleplayer && !vanillaparm)
+    if (weapon_bobbing && !vanillaparm)
     {
         if (/* Staff+   */ state == S_STAFFREADY2_1    || state == S_STAFFREADY2_2    || state == S_STAFFREADY2_3    ||
         /* Gauntlets+   */ state == S_GAUNTLETREADY2_1 || state == S_GAUNTLETREADY2_2 || state == S_GAUNTLETREADY2_3 ||
@@ -1085,7 +1086,16 @@ void R_DrawPSprite (const pspdef_t *psp)
         /* Firemace     */ state == S_MACEATK1_1     || state == S_MACEATK1_2     || state == S_MACEATK1_3     || state == S_MACEATK1_4     || state == S_MACEATK1_5     || state == S_MACEATK1_6     || state == S_MACEATK1_7     || state == S_MACEATK1_8 || state == S_MACEATK1_9 || state == S_MACEATK1_10 ||
         /* Firemace+    */ state == S_MACEATK2_1     || state == S_MACEATK2_2     || state == S_MACEATK2_3)
         {
-            R_ApplyWeaponFiringBob(&psp_sx, true, &psp_sy, true);
+            if (weapon_bobbing == 2 && viewplayer->attackdown)
+            {
+                // Center weapon while firing.
+                psp_sx = FRACUNIT;
+                psp_sy = WEAPONTOP;
+            }
+            else
+            {
+                R_ApplyWeaponFiringBob(&psp_sx, true, &psp_sy, true);
+            }
         }
 
         if (/* Gauntlets*/ state == S_GAUNTLETDOWN || state == S_GAUNTLETUP ||
@@ -1144,12 +1154,13 @@ void R_DrawPSprite (const pspdef_t *psp)
     vis->mobjflags = 0;
     vis->psprite = true;
     // [crispy] weapons drawn 1 pixel too high when player is idle
-    vis->texturemid = (BASEYCENTER<<FRACBITS)
-                    + FRACUNIT/4-(psp_sy-spritetopoffset[lump]);
+    vis->texturemid = (BASEYCENTER<<FRACBITS) + FRACUNIT/4
+                    - (psp_sy-spritetopoffset[lump])
+                    - quadres;
 
     if (screenblocks >= 11)
     {
-        vis->texturemid -= PSpriteSY[players[consoleplayer].readyweapon];
+        vis->texturemid -= PSpriteSY[players[displayplayer].readyweapon];
     }
 
     vis->x1 = x1 < 0 ? 0 : x1;
@@ -1203,7 +1214,7 @@ void R_DrawPSprite (const pspdef_t *psp)
     vis->brightmap = R_BrightmapForState(psp->state - states);
 
     // [JN] e6y: interpolation for weapon bobbing
-    if (uncapped_fps && weapon_bobbing)
+    if (uncapped_fps)
     {
         typedef struct interpolate_s
         {
@@ -1294,7 +1305,7 @@ static void R_DrawPlayerSprites (void)
 
 // killough 9/2/98: merge sort
 
-static void msort(vissprite_t **s, vissprite_t **t, int n)
+static void msort (vissprite_t **s, vissprite_t **t, int n)
 {
     if (n >= 16)
     {

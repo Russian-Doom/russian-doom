@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -136,13 +136,3 @@ typedef uint8_t byte;
 #define RD_MAX_PATH 261
 
 #define arrlen(array) (sizeof(array) / sizeof(*array))
-
-#ifdef _WIN32
-    #ifdef ___RD_TARGET_SETUP___
-        #define dll_import
-        #define dll_export
-    #else
-        #define dll_import __declspec(dllimport)
-        #define dll_export __declspec(dllexport)
-    #endif
-#endif

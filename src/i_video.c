@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -77,8 +77,8 @@ static SDL_Texture *texture_upscaled = NULL;
 static SDL_Rect blit_rect = {
     0,
     0,
-    WIDESCREENWIDTH,
-    SCREENHEIGHT
+    MAXWIDTH,
+    MAXHEIGHT
 };
 
 static uint32_t pixel_format;
@@ -130,8 +130,8 @@ int window_title_short = true;
 
 // Screen width and height, from configuration file.
 
-int window_width = SCREENWIDTH;
-int window_height = SCREENHEIGHT_4_3;
+int window_width = 852;
+int window_height = 480;
 
 typedef enum
 {
@@ -170,7 +170,7 @@ int vsync = true;
 
 // Aspect ratio correction mode
 
-int aspect_ratio_correct = true;
+int preserve_window_aspect_ratio = true;
 int actualheight;
 
 // [JN] Show FPS counter
@@ -363,11 +363,11 @@ static void SetShowCursor (const boolean show)
     }
 }
 
-// Adjust window_width / window_height variables to be an an aspect
-// ratio consistent with the aspect_ratio_correct variable.
+// Adjust window_width / window_height variables to be an aspect
+// ratio consistent with the preserve_window_aspect_ratio variable.
 void AdjustWindowSize(void)
 {
-    if (aspect_ratio_correct)
+    if (preserve_window_aspect_ratio)
     {
         switch(changedWindowSize)
         {
@@ -859,7 +859,7 @@ void I_DrawBlackBorders (void)
 
     rectangle_right.x = (wide_delta << hires) + SCREENWIDTH;
     rectangle_right.y = 0;
-    rectangle_right.w = WIDEORIGWIDTH;
+    rectangle_right.w = MAXWIDTH;
     rectangle_right.h = actualheight;
 
     SDL_RenderFillRect(renderer, &rectangle_left);
@@ -981,14 +981,7 @@ void I_FinishUpdate (void)
     // Blit from the paletted 8-bit screen buffer to the intermediate
     // 32-bit RGBA buffer that we can load into the texture.
 
-    if (opengles_renderer)
-    {
-        SDL_BlitSurface(screenbuffer, &blit_rect, argbbuffer, &blit_rect);
-    }
-    else
-    {
-        SDL_LowerBlit(screenbuffer, &blit_rect, argbbuffer, &blit_rect);
-    }
+    SDL_BlitSurface(screenbuffer, &blit_rect, argbbuffer, &blit_rect);
 
     // Update the intermediate texture with the contents of the RGBA buffer.
 
@@ -1414,15 +1407,6 @@ static void SetVideoMode(void)
     "");
 #endif
 
-#ifdef _WIN32
-    // [JN] Windows 11 idiocy. Indicate that window using OpenGL mode (while it's
-    // a Direct3D in fact), so SDL texture will not be freezed upon vsync toggling.
-    if (!force_software_renderer)
-    {
-        window_flags |= SDL_WINDOW_OPENGL;
-    }
-#endif
-
     if (fullscreen)
     {
         if (fullscreen_width == 0 && fullscreen_height == 0)
@@ -1552,7 +1536,7 @@ static void SetVideoMode(void)
     // time this also defines the aspect ratio that is preserved while scaling
     // and stretching the texture into the window.
 
-    if (aspect_ratio_correct)
+    if (preserve_window_aspect_ratio)
     {
         SDL_RenderSetLogicalSize(renderer,
                                 screenwidth,
@@ -1815,19 +1799,19 @@ void I_ReInitGraphics (const int reinit)
 	// [crispy] re-set logical rendering resolution
 	if (reinit & REINIT_ASPECTRATIO)
 	{
-		if (aspect_ratio_correct == 1)
+		if (preserve_window_aspect_ratio == 1)
 		{
  			if (aspect_ratio == 1)
- 			actualheight = SCREENHEIGHT_5_4;
+ 			actualheight = 256 << hires;
  			else
-			actualheight = SCREENHEIGHT_4_3;
+			actualheight = 240 << hires;
 		}
 		else
 		{
 			actualheight = SCREENHEIGHT;
 		}
 
-		if (aspect_ratio_correct)
+		if (preserve_window_aspect_ratio)
 		{
 			SDL_RenderSetLogicalSize(renderer,
 			                         screenwidth,
@@ -1858,29 +1842,15 @@ void I_ShutdownGraphics(void)
         if (fullscreen)
         {
             SDL_WarpMouseGlobal(w / 2, h / 2);
-
-#ifdef _WIN32
-            // [JN] More Windows 11 idiocy. It possible to stuck in black
-            // screen after toggling vsync and quit program when using
-            // Open GL ES renderer, until Win+L or Ctrl+Alt+Del is pressed.
-            // Reason unknown. Toggling full screen right before closing 
-            // video system fixes this issue.
-
-            if (opengles_renderer)
-            {
-                I_ToggleFullScreen();
-            }
-#endif
         }
 
-        
         SDL_QuitSubSystem(SDL_INIT_VIDEO);
 
         initialized = false;
     }
 }
 
-void I_RenderReadPixels(byte **data, int *w, int *h, int *p)
+void I_RenderReadPixels(byte **data, int *w, int *h)
 {
 	SDL_Rect rect;
 	SDL_PixelFormat *format;
@@ -1891,7 +1861,7 @@ void I_RenderReadPixels(byte **data, int *w, int *h, int *p)
 	// [crispy] adjust cropping rectangle if necessary
 	rect.x = rect.y = 0;
 	SDL_GetRendererOutputSize(renderer, &rect.w, &rect.h);
-	if (aspect_ratio_correct)
+	if (preserve_window_aspect_ratio)
 	{
 		if (rect.w * actualheight > rect.h * screenwidth)
 		{
@@ -1924,7 +1894,6 @@ void I_RenderReadPixels(byte **data, int *w, int *h, int *p)
 	*data = pixels;
 	*w = rect.w;
 	*h = rect.h;
-	*p = temp;
 
 	SDL_FreeFormat(format);
 }
@@ -1933,31 +1902,32 @@ void I_RenderReadPixels(byte **data, int *w, int *h, int *p)
 // file system.
 void I_BindVideoVariables(void)
 {
-    M_BindIntVariable("use_mouse",                 &usemouse);
-    M_BindIntVariable("fullscreen",                &fullscreen);
-    M_BindIntVariable("aspect_ratio",              &aspect_ratio);
-    M_BindIntVariable("opengles_renderer",         &opengles_renderer);
-    M_BindIntVariable("video_display",             &video_display);
-    M_BindIntVariable("vsync",                     &vsync);
-    M_BindIntVariable("show_fps",                  &show_fps);
-    M_BindIntVariable("aspect_ratio_correct",      &aspect_ratio_correct);
-    M_BindIntVariable("smoothing",                 &smoothing);
-    M_BindIntVariable("max_fps",                   &max_fps);
-    M_BindIntVariable("vga_porch_flash",           &vga_porch_flash);
-    M_BindIntVariable("startup_delay",             &startup_delay);
-    M_BindIntVariable("resize_delay",              &resize_delay);
-    M_BindIntVariable("fullscreen_width",          &fullscreen_width);
-    M_BindIntVariable("fullscreen_height",         &fullscreen_height);
-    M_BindIntVariable("window_title_short",        &window_title_short);
-    M_BindIntVariable("window_width",              &window_width);
-    M_BindIntVariable("window_height",             &window_height);
-    M_BindIntVariable("window_border",             &window_border);
-    M_BindIntVariable("window_ontop",              &window_ontop);
-    M_BindIntVariable("grabmouse",                 &grabmouse);
-    M_BindStringVariable("video_driver",           &video_driver);
-    M_BindIntVariable("window_position_x",         &window_position_x);
-    M_BindIntVariable("window_position_y",         &window_position_y);
-    M_BindIntVariable("png_screenshots",           &png_screenshots);
+    M_BindIntVariable("use_mouse",                   &usemouse);
+    M_BindIntVariable("rendering_resolution",        &rendering_resolution);
+    M_BindIntVariable("fullscreen",                  &fullscreen);
+    M_BindIntVariable("aspect_ratio",                &aspect_ratio);
+    M_BindIntVariable("opengles_renderer",           &opengles_renderer);
+    M_BindIntVariable("video_display",               &video_display);
+    M_BindIntVariable("vsync",                       &vsync);
+    M_BindIntVariable("show_fps",                    &show_fps);
+    M_BindIntVariable("preserve_window_aspect_ratio",&preserve_window_aspect_ratio);
+    M_BindIntVariable("smoothing",                   &smoothing);
+    M_BindIntVariable("max_fps",                     &max_fps);
+    M_BindIntVariable("vga_porch_flash",             &vga_porch_flash);
+    M_BindIntVariable("startup_delay",               &startup_delay);
+    M_BindIntVariable("resize_delay",                &resize_delay);
+    M_BindIntVariable("fullscreen_width",            &fullscreen_width);
+    M_BindIntVariable("fullscreen_height",           &fullscreen_height);
+    M_BindIntVariable("window_title_short",          &window_title_short);
+    M_BindIntVariable("window_width",                &window_width);
+    M_BindIntVariable("window_height",               &window_height);
+    M_BindIntVariable("window_border",               &window_border);
+    M_BindIntVariable("window_ontop",                &window_ontop);
+    M_BindIntVariable("grabmouse",                   &grabmouse);
+    M_BindStringVariable("video_driver",             &video_driver);
+    M_BindIntVariable("window_position_x",           &window_position_x);
+    M_BindIntVariable("window_position_y",           &window_position_y);
+    M_BindIntVariable("png_screenshots",             &png_screenshots);
 
     // Color options
     M_BindFloatVariable("brightness",              &brightness);

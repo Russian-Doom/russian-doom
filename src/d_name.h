@@ -1,5 +1,5 @@
 //
-// Copyright(C) 2021-2022 Dasperal/Leonid Murin
+// Copyright(C) 2021-2023 Leonid Murin (Dasperal)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -28,4 +28,5 @@ typedef enum
 extern char* RD_Project_Name;
 extern char* RD_Project_String;
 extern char* RD_Project_Version;
+extern char* RD_Project_TarName;
 extern GameType_t RD_GameType;

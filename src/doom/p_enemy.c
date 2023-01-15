@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -1527,6 +1527,11 @@ void A_Fire (mobj_t *actor)
     actor->y = dest->y + FixedMul (24*FRACUNIT, finesine[an]);
     actor->z = dest->z;
     P_SetThingPosition (actor);
+
+    // [crispy] suppress interpolation of Archvile fire
+    // to mitigate it being spawned at the wrong location
+    actor->interp = -actor->tics;
+
     // [crispy] update the Archvile fire's floorz and ceilingz values
     // to prevent it from jumping back and forth between the floor heights
     // of its (faulty) spawn sector and the target's actual sector.

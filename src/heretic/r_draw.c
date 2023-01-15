@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 // R_draw.c
 
 
-#include "doomdef.h"
+#include "hr_local.h"
 #include "deh_str.h"
 #include "r_local.h"
 #include "i_video.h"
@@ -31,8 +31,8 @@ int   viewwidth, scaledviewwidth;
 int   viewheight, scaledviewheight;
 int   viewwindowx, viewwindowy;
 
-static byte *ylookup[SCREENHEIGHT]; 
-static int   columnofs[WIDESCREENWIDTH]; 
+static byte *ylookup[MAXHEIGHT]; 
+static int   columnofs[MAXWIDTH]; 
 
 // R_DrawColumn. Source is the top of the column to scale.
 const lighttable_t *dc_colormap[2];  // [crispy] brightmaps
@@ -588,6 +588,7 @@ void R_DrawExtraTLColumn (void)
 
     {
         const byte *source = dc_source;
+        const byte *brightmap = dc_brightmap;
         const lighttable_t *const *colormap = dc_colormap;
         int heightmask = dc_texheight - 1;
 
@@ -604,7 +605,9 @@ void R_DrawExtraTLColumn (void)
 
             do
             {
-                *dest = transtable80[(*dest << 8) + colormap[0][source[frac >> FRACBITS]]];
+                const byte src = source[frac >> FRACBITS];
+
+                *dest = transtable80[(*dest << 8) + colormap[brightmap[src]][src]];
                 dest += screenwidth;
                 if ((frac += fracstep) >= heightmask)
                 {
@@ -616,7 +619,9 @@ void R_DrawExtraTLColumn (void)
         {
             do
             {
-                *dest = transtable80[(*dest << 8) + colormap[0][source[(frac >> FRACBITS) & heightmask]]];
+                const byte src = source[(frac >> FRACBITS) & heightmask];
+                
+                *dest = transtable80[(*dest << 8) + colormap[brightmap[src]][src]];
                 dest += screenwidth;
                 frac += fracstep;
             } while (count--);
@@ -665,6 +670,7 @@ void R_DrawExtraTLColumnLow (void)
 
     {
         const byte *source = dc_source;
+        const byte *brightmap = dc_brightmap;
         const lighttable_t *const *colormap = dc_colormap;
         int heightmask = dc_texheight - 1;
 
@@ -683,10 +689,10 @@ void R_DrawExtraTLColumnLow (void)
             {
                 const byte src = source[frac >> FRACBITS];
 
-                *dest1 = transtable80[(*dest1 << 8) + colormap[0][src]];
-                *dest2 = transtable80[(*dest2 << 8) + colormap[0][src]];
-                *dest4 = transtable80[(*dest4 << 8) + colormap[0][src]];
-                *dest3 = transtable80[(*dest3 << 8) + colormap[0][src]];
+                *dest1 = transtable80[(*dest1 << 8) + colormap[brightmap[src]][src]];
+                *dest2 = transtable80[(*dest2 << 8) + colormap[brightmap[src]][src]];
+                *dest4 = transtable80[(*dest4 << 8) + colormap[brightmap[src]][src]];
+                *dest3 = transtable80[(*dest3 << 8) + colormap[brightmap[src]][src]];
 
                 dest1 += screenwidth << hires;
                 dest2 += screenwidth << hires;
@@ -705,10 +711,10 @@ void R_DrawExtraTLColumnLow (void)
             {
                 const byte src = source[(frac>>FRACBITS)&heightmask];
 
-                *dest1 = transtable80[(*dest1 << 8) + colormap[0][src]];
-                *dest2 = transtable80[(*dest2 << 8) + colormap[0][src]];
-                *dest3 = transtable80[(*dest3 << 8) + colormap[0][src]];
-                *dest4 = transtable80[(*dest4 << 8) + colormap[0][src]];
+                *dest1 = transtable80[(*dest1 << 8) + colormap[brightmap[src]][src]];
+                *dest2 = transtable80[(*dest2 << 8) + colormap[brightmap[src]][src]];
+                *dest3 = transtable80[(*dest3 << 8) + colormap[brightmap[src]][src]];
+                *dest4 = transtable80[(*dest4 << 8) + colormap[brightmap[src]][src]];
 
                 dest1 += screenwidth << hires;
                 dest2 += screenwidth << hires;

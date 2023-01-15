@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -19,7 +19,8 @@
 
 #include <stdlib.h>
 #include <math.h>
-#include "doomdef.h"
+#include "i_system.h"  // [crispy] I_Realloc()
+#include "hr_local.h"
 #include "m_bbox.h"
 #include "p_local.h"
 #include "jn.h"
@@ -55,13 +56,13 @@ fixed_t P_AproxDistance(fixed_t dx, fixed_t dy)
 ================================================================================
 */
 
-fixed_t P_ApproxDistanceZ(fixed_t dx, fixed_t dy, fixed_t dz)
+const int64_t P_ApproxDistanceZ (int64_t dx, int64_t dy, int64_t dz)
 {
-	fixed_t dxy;
+	int64_t dxy;
 
-	dx = abs(dx);
-	dy = abs(dy);
-	dz = abs(dz);
+	dx = llabs(dx);
+	dy = llabs(dy);
+	dz = llabs(dz);
 
 	dxy = (dy > dx) ? dy + dx/2 : dx + dy/2;
 
@@ -182,7 +183,7 @@ void P_MakeDivline (line_t *li, divline_t *dl)
 
 fixed_t P_InterceptVector(divline_t *v2, divline_t *v1)
 {
-    if (singleplayer)
+    if (singleplayer && !strict_mode)
     {
         // [JN] cph - no precision/overflow problems
         int64_t den = (int64_t)v1->dy * v2->dx - (int64_t)v1->dx * v2->dy;
@@ -479,7 +480,7 @@ boolean P_BlockThingsIterator (int x, int y, boolean(*func) (mobj_t *))
     // [JN] Blockmap bug fix - add other mobjs from surrounding blocks that overlap this one.
     // The fix is written by Terry Hearst, thank you very much!
     // Fixes: http://doom2.net/doom2/research/things.html
-    if (improved_collision && singleplayer && !vanillaparm)
+    if (singleplayer && !strict_mode && !vanillaparm && improved_collision)
     {
         // Unwrapped for least number of bounding box checks
         // (-1, -1)
@@ -588,7 +589,35 @@ boolean P_BlockThingsIterator (int x, int y, boolean(*func) (mobj_t *))
 ================================================================================
 */
 
-intercept_t intercepts[MAXINTERCEPTS], *intercept_p;
+// [crispy] remove INTERCEPTS limit
+intercept_t *intercepts, *intercept_p; 
+
+// [JN] Slightly extended - report which funcion is triggered limit:
+//  0: PIT_AddLineIntercepts
+//  1: PIT_AddThingIntercepts
+//  2: P_SightBlockLinesIterator
+
+void check_intercept (const int func)
+{
+	static size_t num_intercepts;
+	const size_t offset = intercept_p - intercepts;
+
+	if (offset >= num_intercepts)
+	{
+		num_intercepts = num_intercepts ? num_intercepts * 2 : MAXINTERCEPTS;
+		intercepts = I_Realloc(intercepts, sizeof(*intercepts) * num_intercepts);
+		intercept_p = intercepts + offset;
+
+		if (num_intercepts == 2 * MAXINTERCEPTS)
+		{
+            printf(func == 0 ? "PIT_AddLineIntercepts: " :
+                   func == 1 ? "PIT_AddThingIntercepts: " :
+                               "P_SightBlockLinesIterator: ");
+            printf(english_language ? "Hit INTERCEPTS limit!\n" :
+                                      "превышен лимит INTERCEPTS!\n");
+		}
+	}
+}
 
 divline_t trace;
 boolean earlyout;
@@ -651,15 +680,11 @@ boolean PIT_AddLineIntercepts (line_t *ld)
         return false;
     }
 
+    check_intercept(0); // [crispy] remove INTERCEPTS limit
     intercept_p->frac = frac;
     intercept_p->isaline = true;
     intercept_p->d.line = ld;
     intercept_p++;
-    // [crispy] intercepts overflow guard
-    if (intercept_p - intercepts == MAXINTERCEPTS + 1)
-    {
-        return false;
-    }
 
     // continue
     return true;
@@ -721,15 +746,11 @@ boolean PIT_AddThingIntercepts (mobj_t *thing)
         return true;
     }
 
+    check_intercept(1); // [crispy] remove INTERCEPTS limit
     intercept_p->frac = frac;
     intercept_p->isaline = false;
     intercept_p->d.thing = thing;
     intercept_p++;
-    // [crispy] intercepts overflow guard
-    if (intercept_p - intercepts == MAXINTERCEPTS + 1)
-    {
-        return false;
-    }
 
     // keep going
     return true;

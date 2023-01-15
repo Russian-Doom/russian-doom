@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -18,9 +18,8 @@
 
 #include <stdlib.h>
 #include "i_system.h"
-#include "doomdef.h"
+#include "hr_local.h"
 #include "r_local.h"
-#include "r_bmaps.h"
 #include "jn.h"
 
 
@@ -205,7 +204,7 @@ void R_RenderMaskedSegRange (drawseg_t *ds, const int x1, const int x2)
     lightnum = (frontsector->lightlevel >> LIGHTSEGSHIFT) + extralight;
 
     // [JN] Fake contrast: make optional
-    if (fake_contrast)
+    if (fake_contrast || vanillaparm)
     {
         if (curline->v1->y == curline->v2->y)
         {
@@ -517,7 +516,7 @@ static void R_RenderSegLoop (void)
 ================================================================================
 */
 
-static fixed_t R_ScaleFromGlobalAngle (const angle_t visangle)
+static const fixed_t R_ScaleFromGlobalAngle (const angle_t visangle)
 {
     const int     anglea = ANG90 + (visangle - viewangle);
     const int     angleb = ANG90 + (visangle - rw_normalangle);

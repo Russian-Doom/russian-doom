@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
 // Copyright(C) 2013-2018 Brad Harding
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -52,6 +52,10 @@
 
 // Follow a player exlusively for 3 seconds.
 #define	BASETHRESHOLD   100
+
+// [JN] Weapon positioning. Also used for centering while firing.
+#define WEAPONTOP       (32*FRACUNIT)
+#define WEAPONBOTTOM    (128*FRACUNIT)
 
 
 // -----------------------------------------------------------------------------
@@ -322,7 +326,6 @@ extern fixed_t  tmceilingz;
 extern line_t  *ceilingline;
 extern line_t **spechit;
 extern int      numspechit;
-extern mobj_t  *BlockingMobj;
 extern mobj_t  *linetarget;
 extern fixed_t  attackrange;
 
@@ -383,7 +386,7 @@ extern fixed_t      lowfloor;
 boolean P_PathTraverse (fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2, int flags, boolean (*trav)(intercept_t *));
 const boolean P_BlockLinesIterator (const int x, const int y, boolean(*func)(line_t*));
 const boolean P_BlockThingsIterator (const int x, const int y, boolean(*func)(mobj_t*));
-const fixed_t P_ApproxDistanceZ (fixed_t dx, fixed_t dy, fixed_t dz);
+const int64_t P_ApproxDistanceZ (int64_t dx, int64_t dy, int64_t dz);
 const fixed_t P_AproxDistance (fixed_t dx, fixed_t dy);
 const fixed_t P_InterceptVector (const divline_t* v2, const divline_t* v1);
 const int P_BoxOnLineSide (const fixed_t *tmbox, const line_t *ld);

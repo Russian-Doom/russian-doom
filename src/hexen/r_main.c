@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -31,7 +31,6 @@
 // [JN] Used by perfomance counter.
 int rendered_segs, rendered_visplanes, rendered_vissprites;
 
-int       detailshift;                // 0 = high, 1 = low
 int       viewangleoffset;
 int       validcount = 1;             // increment every time a check is made
 int       centerx, centery;
@@ -42,7 +41,7 @@ angle_t   viewangle;
 fixed_t   viewcos, viewsin;
 player_t *viewplayer;
 
-int setblocks, setdetail;
+int setblocks;
 boolean setsizeneeded;
 
 // [crispy] lookup table for horizontal screen coordinates
@@ -50,8 +49,14 @@ boolean setsizeneeded;
 int *flipscreenwidth;
 int *flipviewwidth;
 
+// [JN] LOOKDIR variables for high/quad resolution, used only for rendering.
+static fixed_t lookdirmin, lookdirmax, lookdirs;
+
 // Bumped light from gun blasts.
 int extralight;
+
+// [JN] Smooth and vanilla diminished lighting
+int lightzshift, maxlightz;
 
 // Precalculated math tables.
 angle_t clipangle;
@@ -509,20 +514,24 @@ static void R_InitTextureMapping (void)
 
 #define		DISTMAP	2
 
-static void R_InitLightTables(void)
+void R_InitLightTables (void)
 {
-    int i, j;
     int level;
     int scale;
 
-    // Calculate the light levels to use for each level / distance combination.
-    for (i = 0 ; i < LIGHTLEVELS ; i++)
-    {
-        const int firstmap = ((LIGHTLEVELS - 1 - i) * 2) * NUMCOLORMAPS / LIGHTLEVELS;
+    // [JN] Define, which diminished lighting to use
+    lightzshift = smoothlight && !vanillaparm ? LIGHTZSHIFT : LIGHTZSHIFT_VANILLA;
+    maxlightz = smoothlight && !vanillaparm ? MAXLIGHTZ : MAXLIGHTZ_VANILLA;
 
-        for (j = 0 ; j < MAXLIGHTZ ; j++)
+    // Calculate the light levels to use for each level / distance combination.
+    for (int i = 0 ; i< LIGHTLEVELS ; i++)
+    {
+        const int firstmap = ((LIGHTLEVELS-1-i)*2)*NUMCOLORMAPS/LIGHTLEVELS;
+
+        for (int j = 0 ; j < maxlightz ; j++)
         {
-            scale = FixedDiv((320 / 2 * FRACUNIT), (j + 1) << LIGHTZSHIFT);
+            scale = FixedDiv((320 / 2 * FRACUNIT), ((j + 1) << lightzshift));
+
             scale >>= LIGHTSCALESHIFT;
             level = firstmap - scale / DISTMAP;
 
@@ -551,11 +560,10 @@ static void R_InitLightTables(void)
 ================================================================================
 */
 
-void R_SetViewSize (int blocks, int detail)
+void R_SetViewSize (int blocks)
 {
     setsizeneeded = true;
     setblocks = blocks;
-    setdetail = detail;
 }
 
 /*
@@ -605,7 +613,6 @@ void R_ExecuteSetViewSize (void)
         }
     }
 
-    detailshift = setdetail;
     viewwidth = scaledviewwidth >> detailshift;
     viewheight = scaledviewheight >> (detailshift && hires);
 
@@ -659,28 +666,31 @@ void R_ExecuteSetViewSize (void)
     // planes
     for (i = 0; i < viewheight; i++)
     {
-        const fixed_t num_wide = MIN(viewwidth<<detailshift, 320 << !detailshift)/2*FRACUNIT;
         const fixed_t num = (viewwidth<<(detailshift && !hires))/2*FRACUNIT;
+        const fixed_t num_wide = MIN(viewwidth<<detailshift, ORIGWIDTH << !detailshift)/2*FRACUNIT;
 
-        for (j = 0; j < LOOKDIRS; j++)
+        for (j = 0; j < lookdirs; j++)
         {
             if (aspect_ratio >= 2)
             {
-                dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift))
+                dy = ((i-(viewheight/2 + ((j-lookdirmin) << (hires && !detailshift))
                    * (screenblocks < 9 ? screenblocks : 9) / 10))<<FRACBITS)+FRACUNIT/2;
+
+                dy = abs(dy / hires);
             }
             else
             {
-                dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift))
+                dy = ((i-(viewheight/2 + ((j-lookdirmin) << (hires && !detailshift))
                    * (screenblocks < 11 ? screenblocks : 11) / 10))<<FRACBITS)+FRACUNIT/2;
+
+                dy = abs(dy);
             }
 
-            dy = abs(dy);
             yslopes[j][i] = FixedDiv (aspect_ratio >= 2 ? num_wide : num, dy);
         }
     }
 
-    yslope = yslopes[LOOKDIRMIN];
+    yslope = yslopes[lookdirmin];
 
     for (i = 0 ; i < viewwidth ; i++)
     {
@@ -744,14 +754,27 @@ void R_Init (void)
             screenblocks = 12;
     }
 
+    if (quadres)
+    {
+        lookdirmin = LOOKDIRMIN2;
+        lookdirmax = LOOKDIRMAX2;
+        lookdirs = LOOKDIRS2;
+    }
+    else
+    {
+        lookdirmin = LOOKDIRMIN;
+        lookdirmax = LOOKDIRMAX;
+        lookdirs = LOOKDIRS;
+    }
+
     R_InitClipSegs ();
     R_InitSpritesRes ();
     R_InitPlanesRes ();
     R_InitVisplanesRes ();
 
     R_InitData();
-    // viewwidth / viewheight / detailLevel are set by the defaults
-    R_SetViewSize(screenblocks, detailLevel);
+    // viewwidth / viewheight  are set by the defaults
+    R_SetViewSize(screenblocks);
     R_InitLightTables();
     R_InitSkyMap();
     R_InitTranslationTables();
@@ -857,13 +880,19 @@ static void R_SetupFrame (player_t *player)
     extralight = player->extralight;
     extralight += extra_level_brightness; // [JN] Level Brightness feature.
 
-    if (pitch > LOOKDIRMAX)
+    if (pitch > lookdirmax)
     {
-        pitch = LOOKDIRMAX;
+        pitch = lookdirmax;
     }
-    else if (pitch < -LOOKDIRMIN)
+    else if (pitch < -lookdirmin)
     {
-        pitch = -LOOKDIRMIN;
+        pitch = -lookdirmin;
+    }
+
+    // [JN] Extend pitch range in quad resolution.
+    if (quadres)
+    {
+        pitch <<= quadres;
     }
 
     // apply new yslope[] whenever "lookdir", "detailshift" or "screenblocks" change
@@ -882,7 +911,7 @@ static void R_SetupFrame (player_t *player)
     {
         centery = tempCentery;
         centeryfrac = centery << FRACBITS;
-        yslope = yslopes[LOOKDIRMIN + pitch];
+        yslope = yslopes[lookdirmin + pitch];
     }
 
     viewsin = finesine[viewangle>>ANGLETOFINESHIFT];

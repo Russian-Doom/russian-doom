@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 
 
 
-#include "doomdef.h"
+#include "hr_local.h"
 #include "deh_str.h"
 #include "d_name.h"
 #include "i_video.h"
@@ -26,12 +26,11 @@
 #include "i_timer.h"    // [JN] TICRATE
 #include "m_cheat.h"
 #include "m_misc.h"
-#include "m_random.h"
 #include "p_local.h"
 #include "s_sound.h"
 #include "v_video.h"
 #include "v_trans.h"
-#include "rd_lang.h"
+#include "id_lang.h"
 #include "jn.h"
 
 // Types
@@ -98,27 +97,28 @@ static int playpalette;
 
 static void Crosshair_Colorize_inGame (void);
 
-patch_t *PatchLTFACE;
-patch_t *PatchRTFACE;
-patch_t *PatchBARBACK;
-patch_t *PatchCHAIN;
-patch_t *PatchSTATBAR;
-patch_t *PatchSTATBAR_RUS;
-patch_t *PatchLIFEGEM;
-patch_t *PatchLTFCTOP;
-patch_t *PatchRTFCTOP;
-patch_t *PatchSELECTBOX;
-patch_t *PatchINVLFGEM1;
-patch_t *PatchINVLFGEM2;
-patch_t *PatchINVRTGEM1;
-patch_t *PatchINVRTGEM2;
-patch_t *PatchINumbers[10];
-patch_t *PatchNEGATIVE;
-patch_t *PatchSmNumbers[10];
-patch_t *PatchBLACKSQ;
-patch_t *PatchINVBAR;
-patch_t *PatchARMCLEAR;
-patch_t *PatchCHAINBACK;
+static patch_t *PatchLTFACE;
+static patch_t *PatchRTFACE;
+static patch_t *PatchBARBACK;
+static patch_t *PatchCHAIN;
+static patch_t *PatchSTATBAR;
+static patch_t *PatchSTATBAR_RUS;
+static patch_t *PatchLIFEGEM[4];
+static patch_t *PatchLTFCTOP;
+static patch_t *PatchRTFCTOP;
+static patch_t *PatchSELECTBOX;
+static patch_t *PatchINVLFGEM1;
+static patch_t *PatchINVLFGEM2;
+static patch_t *PatchINVRTGEM1;
+static patch_t *PatchINVRTGEM2;
+static patch_t *PatchINumbers[10];
+static patch_t *PatchNEGATIVE;
+static patch_t *PatchSmNumbers[10];
+static patch_t *PatchBLACKSQ;
+static patch_t *PatchINVBAR;
+static patch_t *PatchARMCLEAR;
+static patch_t *PatchCHAINBACK;
+
 int FontBNumBase;
 int spinbooklump;
 int spinflylump;
@@ -224,14 +224,13 @@ void SB_Init(void)
         PatchSTATBAR = W_CacheLumpName(DEH_String("LIFEBAR"), PU_STATIC);
         PatchSTATBAR_RUS = W_CacheLumpName(DEH_String("RD_LFBAR"), PU_STATIC);
     }
-    if (!netgame)
-    {                           // single player game uses red life gem
-        PatchLIFEGEM = W_CacheLumpName(DEH_String("LIFEGEM2"), PU_STATIC);
-    }
-    else
+
+    // [JN] Life gem. Modified to array type for support of proper
+    // coloring while toggling spy mode in multiplayer game.
+    for (int i = 0 ; i < 4 ; i++)
     {
-        PatchLIFEGEM = W_CacheLumpNum(W_GetNumForName(DEH_String("LIFEGEM0"))
-                                      + consoleplayer, PU_STATIC);
+        PatchLIFEGEM[i] = W_CacheLumpNum(W_GetNumForName(DEH_String("LIFEGEM0"))
+                                         + i, PU_STATIC);
     }
     PatchLTFCTOP = W_CacheLumpName(DEH_String("LTFCTOP"), PU_STATIC);
     PatchRTFCTOP = W_CacheLumpName(DEH_String("RTFCTOP"), PU_STATIC);
@@ -260,6 +259,58 @@ void SB_Init(void)
     spinflylump = W_GetNumForName(DEH_String("SPFLY0"));
 }
 
+/*
+================================================================================
+=
+= SB_PaletteFlash
+=
+= Sets the new palette based upon current values of player->damagecount
+= and player->bonuscount.
+=
+================================================================================
+*/
+
+static void SB_PaletteFlash (void)
+{
+    static int  sb_palette = 0;
+    int         palette;
+    const byte *pal;
+
+    CPlayer = &players[displayplayer];
+
+    if (CPlayer->damagecount)
+    {
+        palette = (CPlayer->damagecount + 7) >> 3;
+        if (palette >= NUMREDPALS)
+        {
+            palette = NUMREDPALS - 1;
+        }
+        palette += STARTREDPALS;
+    }
+    // [crispy] never show the yellow bonus palette for a dead player
+    else if (CPlayer->bonuscount && CPlayer->health > 0)
+    {
+        // [JN] One extra palette for pickup flashing
+        // https://doomwiki.org/wiki/PLAYPAL
+        palette = (CPlayer->bonuscount + 7) >> 3;
+        if (palette >= NUMBONUSPALS)
+        {
+            palette = NUMBONUSPALS;
+        }
+        palette += STARTBONUSPALS-1;
+    }
+    else
+    {
+        palette = 0;
+    }
+    if (palette != sb_palette)
+    {
+        sb_palette = palette;
+        pal = (byte *) W_CacheLumpNum(playpalette, PU_CACHE) + palette * 768;
+        I_SetPalette(pal);
+    }
+}
+
 //---------------------------------------------------------------------------
 //
 // PROC SB_Ticker
@@ -271,7 +322,7 @@ void SB_Ticker(void)
     int delta;
     int curHealth;
 
-    curHealth = players[consoleplayer].mo->health;
+    curHealth = players[displayplayer].mo->health;
 
     if (leveltime & 1 && curHealth > 0)
     {
@@ -307,6 +358,9 @@ void SB_Ticker(void)
         }
         HealthMarker += delta;
     }
+
+    // [JN] Do red-/gold-shifts from damage/items.
+    SB_PaletteFlash();
 }
 
 //---------------------------------------------------------------------------
@@ -486,8 +540,12 @@ static void ShadeLine(int x, int y, int height, int shade)
     dest = I_VideoBuffer + y * screenwidth + x;
     while (height--)
     {
-        if (hires)
-           *(dest + 1) = *(shades + *dest);
+        if (quadres)
+        {
+            *(dest + 3) = *(shades + *dest);
+            *(dest + 2) = *(shades + *dest);
+        }
+        *(dest + 1) = *(shades + *dest);
         *(dest) = *(shades + *dest);
         dest += screenwidth;
     }
@@ -633,11 +691,37 @@ int playerkeys = 0;
 
 void SB_Drawer(void)
 {
+    CPlayer = &players[displayplayer];
     int frame;
     int xval;
-    const int xval_widget = show_fps || local_time ? 50 : 0;
+    const int xval_widget = demotimer || show_fps || local_time ? 50 : 0;
     static boolean hitCenterFrame;
     const int wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0) + 2;
+    // If automap active or map name is always shown, shift
+    // widgets one line up to prevent drawing over map name.
+    int map_active = automapactive ? 10 : 0;
+    // Different languages have different string widths. 
+    // Use a pointer to prevent extra conditions hitting.
+    int (*StringWidth)(char *text) = english_language ? RD_M_TextAWidth : RD_M_TextSmallRUSWidth;
+    // Predefine colors:
+    // (TODO - consider "dp_translation" to use "Translation_CR_t" type)
+    byte *cr_title_color, *cr_item_color, *cr_coord_color;
+    Translation_CR_t tr_title_color;
+
+    if (stats_color)
+    {
+        cr_title_color = cr[CR_DARK];
+        cr_item_color  = cr[CR_GRAY];
+        cr_coord_color = cr[CR_DARKGREEN];
+        tr_title_color = CR_DARK;
+    }
+    else
+    {
+        cr_title_color = NULL;
+        cr_item_color  = NULL;
+        cr_coord_color = NULL;
+        tr_title_color = CR_NONE;
+    }
 
     // [JN] Draw horns separatelly in non wide screen mode
     if (aspect_ratio < 2 && screenblocks <= 10 && automapactive && automap_overlay)
@@ -649,104 +733,426 @@ void SB_Drawer(void)
     // [JN] Level stats widgets.
     if (screenblocks <= 11 && !vanillaparm)
     {
-        char text[128];
-        const int time = leveltime / TICRATE;
-        const int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
-        CPlayer = &players[consoleplayer];
-
-        if (((automapactive && automap_stats == 1) || automap_stats == 2))
+        //
+        // Placed at the bottom
+        //
+        if (stats_placement)
         {
-            // Kills:
-            sprintf(text, CPlayer->extrakillcount ? "%d+%d/%d" : "%d/%d",
-                    CPlayer->killcount,
-                    CPlayer->extrakillcount ? CPlayer->extrakillcount : totalkills,
-                    totalkills);
+            char str1[8], str2[16];  // kills
+            char str3[8], str4[16];  // items
+            char str5[8], str6[16];  // secret
+            char str7[8], str8[16];  // skill
 
-            english_language ? RD_M_DrawTextA("K:", wide_4_3, 9) :
-                               RD_M_DrawTextSmallRUS("D:", wide_4_3, 9, CR_NONE);
+            if ((automapactive && stats_kis == 1) || stats_kis == 2)
+            {
+                // Kills:
+                if (english_language)
+                {
+                    sprintf(str1, "K ");
+                    dp_translation = cr_title_color;
+                    RD_M_DrawTextA(str1, wide_4_3, 136 - map_active);
+                    dp_translation = NULL;
 
-            dp_translation = hud_stats_color == 0 ? NULL :
-                             totalkills == 0 ? cr[CR_GREEN] :
-                             CPlayer->killcount == 0 ? cr[CR_RED] :
-                             CPlayer->killcount < totalkills ? cr[CR_YELLOW] : cr[CR_GREEN];
-            RD_M_DrawTextA(text, wide_4_3 + 16, 9);
-            dp_translation = NULL;
+                    sprintf(str2, CPlayer->extrakillcount ? "%d+%d/%d " : "%d/%d ",
+                                  CPlayer->killcount,
+                                  CPlayer->extrakillcount ? CPlayer->extrakillcount : totalkills,
+                                  totalkills);
 
-            // Items:
-            sprintf(text, "%d/%d", CPlayer->itemcount, totalitems);
+                    dp_translation = stats_color == 0 ? NULL :
+                                     totalkills == 0 ? cr[CR_GREEN] :
+                                     CPlayer->killcount == 0 ? cr[CR_RED] :
+                                     CPlayer->killcount < totalkills ? cr[CR_YELLOW] : cr[CR_GREEN];
 
-            english_language ? RD_M_DrawTextA("I:", wide_4_3, 19) :
-                               RD_M_DrawTextSmallRUS("G:", wide_4_3, 19, CR_NONE);
+                    RD_M_DrawTextA(str2, wide_4_3 + StringWidth(str1), 136 - map_active);
 
-            dp_translation = hud_stats_color == 0 ? NULL :
-                             totalitems == 0 ? cr[CR_GREEN] :
-                             CPlayer->itemcount == 0 ? cr[CR_RED] :
-                             CPlayer->itemcount < totalitems ? cr[CR_YELLOW] : cr[CR_GREEN];
-            RD_M_DrawTextA(text, wide_4_3 + 16, 19);
-            dp_translation = NULL;
+                    dp_translation = NULL;
+                }
+                else
+                {
+                    sprintf(str1, "D ");
+                    RD_M_DrawTextSmallRUS(str1, wide_4_3, 136 - map_active, tr_title_color);
 
-            // Secret:
-            sprintf(text, "%d/%d", CPlayer->secretcount, totalsecret);
+                    sprintf(str2, CPlayer->extrakillcount ? "%d+%d/%d " : "%d/%d ",
+                                  CPlayer->killcount,
+                                  CPlayer->extrakillcount ? CPlayer->extrakillcount : totalkills,
+                                  totalkills);
 
-            english_language ? RD_M_DrawTextA("S:", wide_4_3, 29) :
-                               RD_M_DrawTextSmallRUS("N:", wide_4_3, 29, CR_NONE);
+                    RD_M_DrawTextSmallRUS(str2, wide_4_3 + StringWidth(str1), 136 - map_active,
+                                          stats_color == 0 ? CR_NONE :
+                                          totalkills == 0 ? CR_GREEN :
+                                          CPlayer->killcount == 0 ? CR_RED :
+                                          CPlayer->killcount < totalkills ? CR_YELLOW : CR_GREEN);
+                }
 
-            dp_translation = hud_stats_color == 0 ? NULL :
-                             totalsecret == 0 ? cr[CR_GREEN] :
-                             CPlayer->secretcount == 0 ? cr[CR_RED] :
-                             CPlayer->secretcount < totalsecret ? cr[CR_YELLOW] : cr[CR_GREEN];
-            RD_M_DrawTextA(text, wide_4_3 + 16, 29);
-            dp_translation = NULL;
+                // Items:
+                if (english_language)
+                {
+                    sprintf(str3, "I ");
+                    dp_translation = cr_title_color;
+                    RD_M_DrawTextA(str3, wide_4_3 + StringWidth(str1)
+                                                  + StringWidth(str2), 136 - map_active);
+                    dp_translation = NULL;
+
+                    sprintf(str4, "%d/%d ", CPlayer->itemcount, totalitems);
+
+                    dp_translation = stats_color == 0 ? NULL :
+                                     totalitems == 0 ? cr[CR_GREEN] :
+                                     CPlayer->itemcount == 0 ? cr[CR_RED] :
+                                     CPlayer->itemcount < totalitems ? cr[CR_YELLOW] : cr[CR_GREEN];
+
+                    RD_M_DrawTextA(str4, wide_4_3 + StringWidth(str1)
+                                                  + StringWidth(str2)
+                                                  + StringWidth(str3), 136 - map_active);
+
+                    dp_translation = NULL;
+                }
+                else
+                {
+                    sprintf(str3, "G ");
+                    RD_M_DrawTextSmallRUS(str3, wide_4_3 + StringWidth(str1)
+                                                         + StringWidth(str2), 136 - map_active, tr_title_color);
+
+                    sprintf(str4, "%d/%d ", CPlayer->itemcount, totalitems);
+
+                    RD_M_DrawTextSmallRUS(str4, wide_4_3 + StringWidth(str1)
+                                                         + StringWidth(str2)
+                                                         + StringWidth(str3), 136 - map_active,
+                                                         stats_color == 0 ? CR_NONE :
+                                                         totalitems == 0 ? CR_GREEN :
+                                                         CPlayer->itemcount == 0 ? CR_RED :
+                                                         CPlayer->itemcount < totalitems ? CR_YELLOW : CR_GREEN);
+                }
+
+                // Secret:
+                if (english_language)
+                {
+                    sprintf(str5, "S ");
+                    dp_translation = cr_title_color;
+                    RD_M_DrawTextA(str5, wide_4_3 + StringWidth(str1)
+                                                  + StringWidth(str2)
+                                                  + StringWidth(str3)
+                                                  + StringWidth(str4), 136 - map_active);
+                    dp_translation = NULL;
+
+                    sprintf(str6, "%d/%d ", CPlayer->secretcount, totalsecret);
+
+                    dp_translation = stats_color == 0 ? NULL :
+                                     totalsecret == 0 ? cr[CR_GREEN] :
+                                     CPlayer->secretcount == 0 ? cr[CR_RED] :
+                                     CPlayer->secretcount < totalsecret ? cr[CR_YELLOW] : cr[CR_GREEN];
+
+                    RD_M_DrawTextA(str6, wide_4_3 + StringWidth(str1)
+                                                  + StringWidth(str2)
+                                                  + StringWidth(str3)
+                                                  + StringWidth(str4)
+                                                  + StringWidth(str5), 136 - map_active);
+                    dp_translation = NULL;
+                }
+                else
+                {
+                        sprintf(str5, "N ");
+                        RD_M_DrawTextSmallRUS(str5, wide_4_3 + StringWidth(str1)
+                                                             + StringWidth(str2)
+                                                             + StringWidth(str3)
+                                                             + StringWidth(str4), 136 - map_active, tr_title_color);
+
+                        sprintf(str6, "%d/%d ", CPlayer->secretcount, totalsecret);
+
+                        RD_M_DrawTextSmallRUS(str6, wide_4_3 + StringWidth(str1)
+                                                             + StringWidth(str2)
+                                                             + StringWidth(str3)
+                                                             + StringWidth(str4)
+                                                             + StringWidth(str5), 136 - map_active,
+                                                             stats_color == 0 ? CR_NONE :
+                                                             totalsecret == 0 ? CR_GREEN :
+                                                             CPlayer->secretcount == 0 ? CR_RED :
+                                                             CPlayer->secretcount < totalsecret ? CR_YELLOW : CR_GREEN);
+                }
+
+                // Skill Level:
+                if ((automapactive && stats_skill == 1) || stats_skill == 2)
+                {
+                    if (english_language)
+                    {
+                        sprintf(str7, "SKL ");
+                        dp_translation = cr_title_color;
+                        RD_M_DrawTextA(str7, wide_4_3 + StringWidth(str1)
+                                                      + StringWidth(str2)
+                                                      + StringWidth(str3)
+                                                      + StringWidth(str4)
+                                                      + StringWidth(str5)
+                                                      + StringWidth(str6), 136 - map_active);
+                        dp_translation = NULL;
+                    }
+                    else
+                    {
+                        sprintf(str7, "CK; ");
+                        RD_M_DrawTextSmallRUS(str7, wide_4_3 + StringWidth(str1)
+                                                             + StringWidth(str2)
+                                                             + StringWidth(str3)
+                                                             + StringWidth(str4)
+                                                             + StringWidth(str5)
+                                                             + StringWidth(str6), 136 - map_active, tr_title_color);
+                    }
+
+                    sprintf(str8, "%d", gameskill + 1);
+                    dp_translation = cr_item_color;
+                    RD_M_DrawTextA(str8, wide_4_3 + StringWidth(str1)
+                                                  + StringWidth(str2)
+                                                  + StringWidth(str3)
+                                                  + StringWidth(str4)
+                                                  + StringWidth(str5)
+                                                  + StringWidth(str6)
+                                                  + StringWidth(str7), 136 - map_active);
+                    dp_translation = NULL;
+                }
+            }
+
+            // Level time:
+            if ((automapactive && stats_level_time == 1) || stats_level_time == 2)
+            {
+                const int time = leveltime / TICRATE;
+                const int x_shift = english_language ? 40 : 58;
+                char str[16];
+
+                if (english_language)
+                {
+                    dp_translation = cr_title_color;
+                    RD_M_DrawTextA("LEVEL", wide_4_3, 126 - map_active);
+                    dp_translation = NULL;
+                }
+                else
+                {
+                    RD_M_DrawTextSmallRUS("EHJDTYM", wide_4_3, 126 - map_active, tr_title_color);
+                }
+
+                sprintf(str, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
+
+                dp_translation = cr_item_color;
+                RD_M_DrawTextA(str, wide_4_3 + x_shift, 126 - map_active);
+                dp_translation = NULL;
+            }
+
+            // Total Time:
+            if ((automapactive && stats_total_time == 1) || stats_total_time == 2)
+            {
+                const int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
+                const int x_shift = english_language ? 40 : 58;
+                char str1[16];
+                char str2[16];
+
+                if (english_language)
+                {
+                    dp_translation = cr_title_color;
+                    sprintf(str1, "TOTAL");
+                    RD_M_DrawTextA(str1, wide_4_3, 116 - map_active);
+                    dp_translation = NULL;
+                }
+                else
+                {
+                    sprintf(str1, "J,OTT");
+                    RD_M_DrawTextSmallRUS(str1, wide_4_3, 116 - map_active, tr_title_color);
+                }
+
+                sprintf(str2, "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
+
+                dp_translation = cr_item_color;
+                RD_M_DrawTextA(str2, wide_4_3 + x_shift, 116 - map_active);
+                dp_translation = NULL;
+            }
+
+            // Player coords:
+            if ((automapactive && stats_coords == 1) || stats_coords == 2)
+            {
+                char str[128];
+
+                if (stats_placement)
+                {
+                    map_active += 20;
+                }
+
+                dp_translation = cr_coord_color;
+                RD_M_DrawTextA("X:", wide_4_3, 95 - map_active);
+                RD_M_DrawTextA("Y:", wide_4_3, 104 - map_active);
+                RD_M_DrawTextA("Z:", wide_4_3, 113 - map_active);
+                RD_M_DrawTextA("ANG:", wide_4_3, 122 - map_active);
+                dp_translation = NULL;
+
+                dp_translation = cr_item_color;
+                sprintf(str, "%d", CPlayer->mo->x >> FRACBITS);
+                RD_M_DrawTextA(str, wide_4_3 + 16, 95 - map_active);
+                sprintf(str, "%d", CPlayer->mo->y >> FRACBITS);
+                RD_M_DrawTextA(str, wide_4_3 + 16, 104 - map_active);
+                sprintf(str, "%d", CPlayer->mo->z >> FRACBITS);
+                RD_M_DrawTextA(str, wide_4_3 + 16, 113 - map_active);
+                sprintf(str, "%d", CPlayer->mo->angle / ANG1);
+                RD_M_DrawTextA(str, wide_4_3 + 32, 122 - map_active);
+                dp_translation = NULL;
+            }
         }
-
-        // Skill Level:
-        if (((automapactive && automap_skill == 1) || automap_skill == 2))
+        //
+        // Placed at the top
+        //
+        else
         {
-            sprintf(text, "%d", gameskill+1);
+            char text[128];
+            const int time = leveltime / TICRATE;
+            const int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
+            const int net_y = netgame ? 10 : 0;  // [JN] Shift one line down for chat string.
 
-            english_language ? RD_M_DrawTextA("SKL:", wide_4_3, 39) :
-                               RD_M_DrawTextSmallRUS("CK;:", wide_4_3, 39, CR_NONE);
+            if ((automapactive && stats_kis == 1) || stats_kis == 2)
+            {
+                // Kills:
+                sprintf(text, CPlayer->extrakillcount ? "%d+%d/%d" : "%d/%d",
+                        CPlayer->killcount,
+                        CPlayer->extrakillcount ? CPlayer->extrakillcount : totalkills,
+                        totalkills);
 
-            dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
-            RD_M_DrawTextA(text, wide_4_3 + (english_language ? 31 : 36), 39);
-            dp_translation = NULL;
-        }
+                if (english_language)
+                {
+                    dp_translation = cr_title_color;
+                    RD_M_DrawTextA("K:", wide_4_3, 9 + net_y);
+                    dp_translation = NULL;
+                }
+                else
+                {
+                    RD_M_DrawTextSmallRUS("D:", wide_4_3, 9 + net_y, tr_title_color);
+                }
 
-        // Level Time:
-        if ((automapactive && automap_level_time == 1) || automap_level_time == 2)
-        {
-            sprintf(text, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
+                dp_translation = stats_color == 0 ? NULL :
+                                 totalkills == 0 ? cr[CR_GREEN] :
+                                 CPlayer->killcount == 0 ? cr[CR_RED] :
+                                 CPlayer->killcount < totalkills ? cr[CR_YELLOW] : cr[CR_GREEN];
+                RD_M_DrawTextA(text, wide_4_3 + 16, 9 + net_y);
+                dp_translation = NULL;
 
-            english_language ? RD_M_DrawTextA("LEVEL", wide_4_3, 79) :
-                               RD_M_DrawTextSmallRUS("EHJDTYM", wide_4_3, 79, CR_NONE);
+                // Items:
+                sprintf(text, "%d/%d", CPlayer->itemcount, totalitems);
 
-            dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
-            RD_M_DrawTextA(text, wide_4_3, 89);
-            dp_translation = NULL;
-        }
+                if (english_language)
+                {
+                    dp_translation = cr_title_color;
+                    RD_M_DrawTextA("I:", wide_4_3, 19 + net_y);
+                    dp_translation = NULL;
+                }
+                else
+                {
+                    RD_M_DrawTextSmallRUS("G:", wide_4_3, 19 + net_y, tr_title_color);
+                }
 
-        // Total Time:
-        if ((automapactive && automap_total_time == 1) || automap_total_time == 2)
-        {
-            sprintf(text, "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
+                dp_translation = stats_color == 0 ? NULL :
+                                 totalitems == 0 ? cr[CR_GREEN] :
+                                 CPlayer->itemcount == 0 ? cr[CR_RED] :
+                                 CPlayer->itemcount < totalitems ? cr[CR_YELLOW] : cr[CR_GREEN];
+                RD_M_DrawTextA(text, wide_4_3 + 16, 19 + net_y);
+                dp_translation = NULL;
 
-            english_language ? RD_M_DrawTextA("TOTAL", wide_4_3, 99) :
-                               RD_M_DrawTextSmallRUS("J,OTT", wide_4_3, 99, CR_NONE);
+                // Secret:
+                sprintf(text, "%d/%d", CPlayer->secretcount, totalsecret);
 
-            dp_translation = hud_stats_color == 0 ? NULL : cr[CR_GRAY];
-            RD_M_DrawTextA(text, wide_4_3, 109);
-            dp_translation = NULL;
-        }
+                if (english_language)
+                {
+                    dp_translation = cr_title_color;
+                    RD_M_DrawTextA("S:", wide_4_3, 29 + net_y);
+                    dp_translation = NULL;
+                }
+                else
+                {
+                    RD_M_DrawTextSmallRUS("N:", wide_4_3, 29 + net_y, tr_title_color);
+                }
 
-        // [JN] Player coords
-        if ((automapactive && automap_coords == 1) || automap_coords == 2)
-        {
-            M_snprintf(text, sizeof(text), "X: %d, Y: %d, Z: %d, ANG: %d",
-                       players[consoleplayer].mo->x >> FRACBITS,
-                       players[consoleplayer].mo->y >> FRACBITS,
-                       players[consoleplayer].mo->z >> FRACBITS,
-                       players[consoleplayer].mo->angle / ANG1);
-            RD_M_DrawTextA(text, wide_4_3, 122);
+                dp_translation = stats_color == 0 ? NULL :
+                                 totalsecret == 0 ? cr[CR_GREEN] :
+                                 CPlayer->secretcount == 0 ? cr[CR_RED] :
+                                 CPlayer->secretcount < totalsecret ? cr[CR_YELLOW] : cr[CR_GREEN];
+                RD_M_DrawTextA(text, wide_4_3 + 16, 29 + net_y);
+                dp_translation = NULL;
+            }
+
+            // Skill Level:
+            if ((automapactive && stats_skill == 1) || stats_skill == 2)
+            {
+                sprintf(text, "%d", gameskill+1);
+
+                if (english_language)
+                {
+                    dp_translation = cr_title_color;
+                    RD_M_DrawTextA("SKL:", wide_4_3, 39 + net_y);
+                    dp_translation = NULL;
+                }
+                else
+                {
+                    RD_M_DrawTextSmallRUS("CK;:", wide_4_3, 39 + net_y, tr_title_color);
+                }
+
+                dp_translation = cr_item_color;
+                RD_M_DrawTextA(text, wide_4_3 + (english_language ? 31 : 36), 39 + net_y);
+                dp_translation = NULL;
+            }
+
+            // Level Time:
+            if ((automapactive && stats_level_time == 1) || stats_level_time == 2)
+            {
+                sprintf(text, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
+
+                if (english_language)
+                {
+                    dp_translation = cr_title_color;
+                    RD_M_DrawTextA("LEVEL", wide_4_3, 49);
+                    dp_translation = NULL;
+                }
+                else
+                {
+                    RD_M_DrawTextSmallRUS("EHJDTYM", wide_4_3, 49, tr_title_color);
+                }
+
+                dp_translation = cr_coord_color;
+                RD_M_DrawTextA(text, wide_4_3, 59);
+                dp_translation = NULL;
+            }
+
+            // Total Time:
+            if ((automapactive && stats_total_time == 1) || stats_total_time == 2)
+            {
+                sprintf(text, "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
+
+                if (english_language)
+                {
+                    dp_translation = cr_title_color;
+                    RD_M_DrawTextA("TOTAL", wide_4_3, 69);
+                    dp_translation = NULL;
+                }
+                else
+                {
+                    RD_M_DrawTextSmallRUS("J,OTT", wide_4_3, 69, tr_title_color);
+                }
+
+                dp_translation = stats_color == 0 ? NULL : cr[CR_GRAY];
+                RD_M_DrawTextA(text, wide_4_3, 79);
+                dp_translation = NULL;
+            }
+
+            // [JN] Player coords
+            if ((automapactive && stats_coords == 1) || stats_coords == 2)
+            {
+                dp_translation = cr_coord_color;
+                RD_M_DrawTextA("X:", wide_4_3, 89);
+                RD_M_DrawTextA("Y:", wide_4_3, 99);
+                RD_M_DrawTextA("Z:", wide_4_3, 109);
+                RD_M_DrawTextA("ANG:", wide_4_3, 119);
+                dp_translation = NULL;
+
+                dp_translation = cr_item_color;
+                M_snprintf(text, sizeof(text), "%d", CPlayer->mo->x >> FRACBITS);
+                RD_M_DrawTextA(text, wide_4_3 + 16, 89);
+                M_snprintf(text, sizeof(text), "%d", CPlayer->mo->y >> FRACBITS);
+                RD_M_DrawTextA(text, wide_4_3 + 16, 99);
+                M_snprintf(text, sizeof(text), "%d", CPlayer->mo->z >> FRACBITS);
+                RD_M_DrawTextA(text, wide_4_3 + 16, 109);
+                M_snprintf(text, sizeof(text), "%d", CPlayer->mo->angle / ANG1);
+                RD_M_DrawTextA(text, wide_4_3 + 32, 119);
+                dp_translation = NULL;
+            }
         }
     }
 
@@ -755,8 +1161,6 @@ void SB_Drawer(void)
     {
         DrawSoundInfo();
     }
-
-    CPlayer = &players[consoleplayer];
 
     // [JN] Draw crosshair
     if (crosshair_draw && !automapactive && !vanillaparm)
@@ -785,6 +1189,7 @@ void SB_Drawer(void)
                 int x, y;
                 byte *src;
                 byte *dest;
+                const patch_t *const patch = W_CacheLumpName(DEH_String("BORDB"), PU_CACHE);
                 char *name = DEH_String(gamemode == shareware ? "FLOOR04" : "FLAT513");
                 const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
         
@@ -802,13 +1207,15 @@ void SB_Drawer(void)
                 }
         
                 // [JN] Draw bezel bottom edge.
-                if (scaledviewwidth == screenwidth)
+                for (x = 0; x < screenwidth; x += 8)
                 {
-                    patch_t *patch = W_CacheLumpName(DEH_String("BORDB"), PU_CACHE);
-                
-                    for (x = 0; x < screenwidth; x += 16)
+                    if (hud_detaillevel)
                     {
                         V_DrawPatch(x, 0, patch, NULL);
+                    }
+                    else
+                    {
+                        V_DrawPatchUnscaled(x, 0, patch, NULL);
                     }
                 }
             }
@@ -853,11 +1260,10 @@ void SB_Drawer(void)
             SB_state = 1;
         }
     }
-    SB_PaletteFlash();
 
     // [JN] Apply golden eyes to HUD gargoyles while Ring of Invincibility
     if ((screenblocks <= 10 || (automapactive && !automap_overlay))
-    && (players[consoleplayer].cheats & CF_GODMODE
+    && (CPlayer->cheats & CF_GODMODE
     || (CPlayer->powers[pw_invulnerability] && !vanillaparm)))
     {
         V_DrawPatch(16 + wide_delta, 167,
@@ -1080,58 +1486,31 @@ void SB_Drawer(void)
         }
     }
 
+    // [crispy] demo timer widget
+    if (demoplayback && (demotimer == 1 || demotimer == 3))
+    {
+        SB_DrawDemoTimer(demotimerdir ? (deftotaldemotics - defdemotics) : defdemotics);
+    }
+    else if (demorecording && (demotimer == 2 || demotimer == 3))
+    {
+        SB_DrawDemoTimer(leveltime);
+    }
+
     // [JN] Draw ammo widget.
     if (ammo_widget && !vanillaparm)
     {
         SB_Draw_Ammo_Widget();
     }
 
+    // [crispy] demo progress bar
+    if (demoplayback && demobar)
+    {
+        SB_DemoProgressBar();
+    }
+
     // [JN] Always update whole status bar.
     // TODO: remove bunch of other update conditions.
     SB_state = -1;
-}
-
-// sets the new palette based upon current values of player->damagecount
-// and player->bonuscount
-void SB_PaletteFlash(void)
-{
-    static int sb_palette = 0;
-    int palette;
-    byte *pal;
-
-    CPlayer = &players[consoleplayer];
-
-    if (CPlayer->damagecount)
-    {
-        palette = (CPlayer->damagecount + 7) >> 3;
-        if (palette >= NUMREDPALS)
-        {
-            palette = NUMREDPALS - 1;
-        }
-        palette += STARTREDPALS;
-    }
-    // [crispy] never show the yellow bonus palette for a dead player
-    else if (CPlayer->bonuscount && CPlayer->health > 0)
-    {
-        // [JN] One extra palette for pickup flashing
-        // https://doomwiki.org/wiki/PLAYPAL
-        palette = (CPlayer->bonuscount + 7) >> 3;
-        if (palette >= NUMBONUSPALS)
-        {
-            palette = NUMBONUSPALS;
-        }
-        palette += STARTBONUSPALS-1;
-    }
-    else
-    {
-        palette = 0;
-    }
-    if (palette != sb_palette)
-    {
-        sb_palette = palette;
-        pal = (byte *) W_CacheLumpNum(playpalette, PU_CACHE) + palette * 768;
-        I_SetPalette(pal);
-    }
 }
 
 //---------------------------------------------------------------------------
@@ -1165,22 +1544,60 @@ void DrawCommonBar(void)
             (HealthMarker == CPlayer->mo->health) ? 191 : 191 + ChainWiggle;
         V_DrawPatch(0 + wide_delta, 190, PatchCHAINBACK, NULL);
         V_DrawPatch(2 + (healthPos % 17) + wide_delta, chainY, PatchCHAIN, NULL);
-        // [JN] Colorize health gem:
-        if (sbar_colored_gem && !vanillaparm && !netgame)
+
+        // [JN] Health gem:
         {
-            if ((CPlayer->cheats & CF_GODMODE) || CPlayer->powers[pw_invulnerability])
-            dp_translation = cr[CR_RED2WHITE_HERETIC];
-            else if (CPlayer->mo->health <= 0)
-            dp_translation = cr[CR_RED2BLACK_HERETIC];
-            else if (CPlayer->mo->health >= 67)
-            dp_translation = sbar_colored_gem == 1 ? cr[CR_RED2GREEN_HERETIC] : cr[CR_RED2MIDGREEN_HERETIC];
-            else if (CPlayer->mo->health >= 34)
-            dp_translation = sbar_colored_gem == 1 ? cr[CR_RED2YELLOW_HERETIC] : cr[CR_RED2GOLD_HERETIC];
+            // Set appropriate gem patch. "2" means LIFEGEM2 patch, 
+            // suitable for proper color red-to-x translation.
+            int gem_patch;
+            
+            if (netgame)
+            {
+                // In netgame, gem can be colored by player's health
+                // or represent current player color in spy mode.
+                gem_patch = sbar_colored_gem ? 2 : displayplayer;
+            }
             else
-            dp_translation = sbar_colored_gem == 2 ? cr[CR_RED2DARKRED_HERETIC] : NULL;
-		}
-        V_DrawPatch(17 + healthPos + wide_delta, chainY, PatchLIFEGEM, NULL);
-        dp_translation = NULL;
+            {
+                // In singleplayer, gem is always red patch.
+                gem_patch = 2;
+            }
+
+
+            if (sbar_colored_gem && !vanillaparm)
+            {
+                if (CPlayer->cheats & CF_GODMODE
+                ||  CPlayer->powers[pw_invulnerability])
+                {
+                    dp_translation = cr[CR_RED2WHITE_HERETIC];
+                }
+                else
+                if (CPlayer->mo->health <= 0)
+                {
+                    dp_translation = cr[CR_RED2BLACK_HERETIC];
+                }
+                else
+                if (CPlayer->mo->health >= 67)
+                {
+                    dp_translation = sbar_colored_gem == 1 ? cr[CR_RED2GREEN_HERETIC]
+                                                           : cr[CR_RED2MIDGREEN_HERETIC];
+                }
+                else
+                if (CPlayer->mo->health >= 34)
+                {
+                    dp_translation = sbar_colored_gem == 1 ? cr[CR_RED2YELLOW_HERETIC]
+                                                           : cr[CR_RED2GOLD_HERETIC];
+                }
+                else
+                {
+                    dp_translation = sbar_colored_gem == 2 ? cr[CR_RED2DARKRED_HERETIC]
+                                                           : NULL;
+                }
+            }
+            
+            V_DrawPatch(17 + healthPos + wide_delta, chainY, PatchLIFEGEM[gem_patch], NULL);
+            dp_translation = NULL;
+        }
         V_DrawPatch(0 + wide_delta, 190, PatchLTFACE, NULL);
         V_DrawPatch(276 + wide_delta, 190, PatchRTFACE, NULL);
         ShadeChain();
@@ -1814,8 +2231,16 @@ static void CheatNoClipFunc(player_t * player, Cheat_t * cheat)
 {
     NIGHTMARE_NETGAME_CHECK;
     player->cheats ^= CF_NOCLIP;
-    P_SetMessage(player, DEH_String(player->cheats & CF_NOCLIP ?
-                 txt_cheatnoclipon : txt_cheatnoclipoff), msg_system, false);
+    if (player->cheats & CF_NOCLIP)
+    {
+        player->mo->flags |= MF_NOCLIP;
+        P_SetMessage(player, DEH_String(txt_cheatnoclipon), msg_system, false);
+    }
+    else
+    {
+        player->mo->flags &= ~MF_NOCLIP;
+        P_SetMessage(player, DEH_String(txt_cheatnoclipoff), msg_system, false);
+    }
 }
 
 static void CheatWeaponsFunc(player_t * player, Cheat_t * cheat)
@@ -1973,7 +2398,6 @@ static void CheatWarpFunc(player_t * player, Cheat_t * cheat)
     if (D_ValidEpisodeMap(heretic, gamemode, episode, map))
     {
         G_DeferedInitNew(gameskill, episode, map);
-        P_SetMessage(player, DEH_String(txt_cheatwarp), msg_system, false);
     }
 }
 
@@ -2228,7 +2652,7 @@ static void Crosshair_Draw_Scaled (void)
 
 static void Crosshair_Draw_Unscaled (void)
 {
-    V_DrawPatchUnscaled(screenwidth/2, screenblocks <= 10 ? 162 : 204,
+    V_DrawPatchUnscaled(origwidth, screenblocks <= 10 ? 162 : 204,
                         CrosshairPatch, CrosshairOpacity);
 }
 
@@ -2256,6 +2680,53 @@ void Crosshair_Draw (void)
 /*
 ================================================================================
 =
+= SB_MapNameDrawer
+=
+================================================================================
+*/
+
+void SB_MapNameDrawer (void)
+{
+    char *level_name;
+    const int numepisodes = gamemode == retail ? 5 : 3;
+    const int wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0) + 2;
+
+    if (gameepisode <= numepisodes && gamemap < 10)
+    {
+        level_name = english_language ?
+                     LevelNames[(gameepisode - 1) * 9 + gamemap - 1] :
+                     LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1];
+
+        // [JN] Wide screen: place level name higher in wide screen,
+        // do not place it under the status bar gargoyle's horn.
+        if (aspect_ratio >= 2)
+        {
+            if (english_language)
+            {
+                RD_M_DrawTextA(DEH_String(level_name), wide_4_3, 136);
+            }
+            else
+            {
+                RD_M_DrawTextSmallRUS(DEH_String(level_name), wide_4_3, 136, CR_NONE);
+            }
+        }
+        else
+        {
+            if (english_language)
+            {
+                RD_M_DrawTextA(DEH_String(level_name), 20, 146);
+            }
+            else
+            {
+                RD_M_DrawTextSmallRUS(DEH_String(level_name), 20, 146, CR_NONE);
+            }
+        }
+    }
+}
+
+/*
+================================================================================
+=
 = [JN] Ammo widget. Drawing and coloring.
 =
 ================================================================================
@@ -2273,24 +2744,24 @@ static void DrSmallAmmoNumber (int val, int x, int y, boolean opaque)
     if (val > 99)
     {
         patch = PatchINumbers[val / 100];
-        V_DrawPatchUnscaled(x << hires, y << hires, patch, opaque ? NULL : transtable60);
+        V_DrawPatchUnscaled(x << 1, y << 1, patch, opaque ? NULL : transtable60);
     }
     val = val % 100;
     if (val > 9 || oldval > 99)
     {
         patch = PatchINumbers[val / 10];
-        V_DrawPatchUnscaled((x + 5) << hires, y << hires, patch, opaque ? NULL : transtable60);
+        V_DrawPatchUnscaled((x + 5) << 1, y << 1, patch, opaque ? NULL : transtable60);
     }
     val = val % 10;
     patch = PatchINumbers[val];
-    V_DrawPatchUnscaled((x + 10) << hires, y << hires, patch, opaque ? NULL : transtable60);
+    V_DrawPatchUnscaled((x + 10) << 1, y << 1, patch, opaque ? NULL : transtable60);
 }
 
 static void SB_Draw_Ammo_Widget (void)
 {
     const int wide_4_3   = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta * 2 : 0;
-    const int xpos_pic   = (((ammo_widget == 1 ? 288 : 267) + wide_delta * 2) << hires) - wide_4_3;
-    const int xpos_slash = (((ammo_widget == 1 ? 288 : 296) + wide_delta * 2) << hires) - wide_4_3;
+    const int xpos_pic   = (((ammo_widget == 1 ? 288 : 267) + wide_delta * 2) << 1) - wide_4_3;
+    const int xpos_slash = (((ammo_widget == 1 ? 288 : 296) + wide_delta * 2) << 1) - wide_4_3;
     const int xpos_qty1  = ((ammo_widget == 1 ? 302 : 281) + wide_delta * 2) - (wide_4_3 / 2);
     const int xpos_qty2  = (302 + wide_delta * 2) - (wide_4_3 / 2);
     const int ammo1 = CPlayer->ammo[am_goldwand], fullammo1 = CPlayer->maxammo[am_goldwand];
@@ -2302,17 +2773,17 @@ static void SB_Draw_Ammo_Widget (void)
 
     // Ammo GFX patches
     //if (!(CPlayer->weaponowned[wp_goldwand])) dp_translation = cr[CR_MONOCHROME];
-    V_DrawPatchUnscaled(xpos_pic, 99 << hires, W_CacheLumpName(DEH_String("INAMGLD"), PU_CACHE),
+    V_DrawPatchUnscaled(xpos_pic, 198, W_CacheLumpName(DEH_String("INAMGLD"), PU_CACHE),
                        (CPlayer->readyweapon == wp_goldwand || (automapactive && !automap_overlay)) ? NULL : transtable60);
     dp_translation = NULL;
 
     if (!(CPlayer->weaponowned[wp_crossbow])) dp_translation = cr[CR_MONOCHROME];
-    V_DrawPatchUnscaled(xpos_pic, 106 << hires, W_CacheLumpName(DEH_String("INAMBOW"), PU_CACHE),
+    V_DrawPatchUnscaled(xpos_pic, 212, W_CacheLumpName(DEH_String("INAMBOW"), PU_CACHE),
                        (CPlayer->readyweapon == wp_crossbow || (automapactive && !automap_overlay)) ? NULL : transtable60);
     dp_translation = NULL;
 
     if (!(CPlayer->weaponowned[wp_blaster])) dp_translation = cr[CR_MONOCHROME];
-    V_DrawPatchUnscaled(xpos_pic, 113 << hires, W_CacheLumpName(DEH_String("INAMBST"), PU_CACHE),
+    V_DrawPatchUnscaled(xpos_pic, 226, W_CacheLumpName(DEH_String("INAMBST"), PU_CACHE),
                        (CPlayer->readyweapon == wp_blaster || (automapactive && !automap_overlay)) ? NULL : transtable60);
     dp_translation = NULL;
 
@@ -2320,17 +2791,17 @@ static void SB_Draw_Ammo_Widget (void)
     if (gamemode != shareware)
     {
         if (!(CPlayer->weaponowned[wp_skullrod])) dp_translation = cr[CR_MONOCHROME];
-        V_DrawPatchUnscaled(xpos_pic, 120 << hires, W_CacheLumpName(DEH_String("INAMRAM"), PU_CACHE),
+        V_DrawPatchUnscaled(xpos_pic, 240, W_CacheLumpName(DEH_String("INAMRAM"), PU_CACHE),
                            (CPlayer->readyweapon == wp_skullrod || (automapactive && !automap_overlay)) ? NULL : transtable60);
         dp_translation = NULL;
 
         if (!(CPlayer->weaponowned[wp_phoenixrod])) dp_translation = cr[CR_MONOCHROME];
-        V_DrawPatchUnscaled(xpos_pic, 127 << hires, W_CacheLumpName(DEH_String("INAMPNX"), PU_CACHE),
+        V_DrawPatchUnscaled(xpos_pic, 254, W_CacheLumpName(DEH_String("INAMPNX"), PU_CACHE),
                            (CPlayer->readyweapon == wp_phoenixrod || (automapactive && !automap_overlay)) ? NULL : transtable60);
         dp_translation = NULL;
 
         if (!(CPlayer->weaponowned[wp_mace])) dp_translation = cr[CR_MONOCHROME];
-        V_DrawPatchUnscaled(xpos_pic, 134 << hires, W_CacheLumpName(DEH_String("INAMLOB"), PU_CACHE),
+        V_DrawPatchUnscaled(xpos_pic, 268, W_CacheLumpName(DEH_String("INAMLOB"), PU_CACHE),
                            (CPlayer->readyweapon == wp_mace || (automapactive && !automap_overlay)) ? NULL : transtable60);
         dp_translation = NULL;
     }
@@ -2343,7 +2814,7 @@ static void SB_Draw_Ammo_Widget (void)
                      (CPlayer->readyweapon == wp_goldwand || (automapactive && !automap_overlay)) ? true : false);
     if (ammo_widget == 2)
     {
-        V_DrawPatchUnscaled(xpos_slash, 100 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
+        V_DrawPatchUnscaled(xpos_slash, 200, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
                            (CPlayer->readyweapon == wp_goldwand || (automapactive && !automap_overlay)) ? NULL : transtable60);
         DrSmallAmmoNumber(fullammo1, xpos_qty2, 100,
                          (CPlayer->readyweapon == wp_goldwand || (automapactive && !automap_overlay)) ? true : false);
@@ -2359,7 +2830,7 @@ static void SB_Draw_Ammo_Widget (void)
                      (CPlayer->readyweapon == wp_crossbow || (automapactive && !automap_overlay)) ? true : false);
     if (ammo_widget == 2)
     {
-        V_DrawPatchUnscaled(xpos_slash, 107 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
+        V_DrawPatchUnscaled(xpos_slash, 214, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
                            (CPlayer->readyweapon == wp_crossbow || (automapactive && !automap_overlay)) ? NULL : transtable60);
         DrSmallAmmoNumber(fullammo2, xpos_qty2, 107,
                          (CPlayer->readyweapon == wp_crossbow || (automapactive && !automap_overlay)) ? true : false);
@@ -2375,7 +2846,7 @@ static void SB_Draw_Ammo_Widget (void)
                      (CPlayer->readyweapon == wp_blaster || (automapactive && !automap_overlay)) ? true : false);
     if (ammo_widget == 2)
     {
-        V_DrawPatchUnscaled(xpos_slash, 114 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
+        V_DrawPatchUnscaled(xpos_slash, 228, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
                            (CPlayer->readyweapon == wp_blaster || (automapactive && !automap_overlay)) ? NULL : transtable60);
         DrSmallAmmoNumber(fullammo3, xpos_qty2, 114,
                          (CPlayer->readyweapon == wp_blaster || (automapactive && !automap_overlay)) ? true : false);
@@ -2394,7 +2865,7 @@ static void SB_Draw_Ammo_Widget (void)
                          (CPlayer->readyweapon == wp_skullrod || (automapactive && !automap_overlay)) ? true : false);
         if (ammo_widget == 2)
         {
-            V_DrawPatchUnscaled(xpos_slash, 121 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
+            V_DrawPatchUnscaled(xpos_slash, 242, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
                                (CPlayer->readyweapon == wp_skullrod || (automapactive && !automap_overlay)) ? NULL : transtable60);
             DrSmallAmmoNumber(fullammo4, xpos_qty2, 121,
                              (CPlayer->readyweapon == wp_skullrod || (automapactive && !automap_overlay)) ? true : false);
@@ -2410,7 +2881,7 @@ static void SB_Draw_Ammo_Widget (void)
                          (CPlayer->readyweapon == wp_phoenixrod || (automapactive && !automap_overlay)) ? true : false);
         if (ammo_widget == 2)
         {
-            V_DrawPatchUnscaled(xpos_slash, 128 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
+            V_DrawPatchUnscaled(xpos_slash, 256, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
                                (CPlayer->readyweapon == wp_phoenixrod || (automapactive && !automap_overlay)) ? NULL : transtable60);
             DrSmallAmmoNumber(fullammo5, xpos_qty2, 128,
                               (CPlayer->readyweapon == wp_phoenixrod || (automapactive && !automap_overlay)) ? true : false);
@@ -2426,11 +2897,69 @@ static void SB_Draw_Ammo_Widget (void)
                          (CPlayer->readyweapon == wp_mace || (automapactive && !automap_overlay)) ? true : false);
         if (ammo_widget == 2)
         {
-            V_DrawPatchUnscaled(xpos_slash, 135 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
+            V_DrawPatchUnscaled(xpos_slash, 270, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
                                (CPlayer->readyweapon == wp_mace || (automapactive && !automap_overlay)) ? NULL : transtable60);
             DrSmallAmmoNumber(fullammo6, xpos_qty2, 135,
                              (CPlayer->readyweapon == wp_mace || (automapactive && !automap_overlay)) ? true : false);
         }
         dp_translation = NULL;
     }
+}
+
+/*
+================================================================================
+=
+= [crispy] Demo Timer widget
+=
+================================================================================
+*/
+
+void SB_DrawDemoTimer (const int time)
+{
+    const boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
+    const int hours = time / (3600 * TICRATE);
+    const int mins = time / (60 * TICRATE) % 60;
+    const float secs = (float)(time % (60 * TICRATE)) / TICRATE;
+    char n[16];
+    int x = 273;
+
+    if (hours)
+    {
+        M_snprintf(n, sizeof(n), "%02i:%02i:%05.02f", hours, mins, secs);
+    }
+    else
+    {
+        M_snprintf(n, sizeof(n), "%02i:%05.02f", mins, secs);
+        x += 12;
+    }
+
+    RD_M_DrawTextC(n, x + (wide_4_3 ? wide_delta : wide_delta*2), 11);
+}
+
+/*
+================================================================================
+=
+= [crispy] print a bar indicating demo progress at the bottom of the screen
+=
+================================================================================
+*/
+
+void SB_DemoProgressBar (void)
+{
+    int i, x;
+
+    // [JN] Clamp bar in emulated 4:3 display of wide screen mode.
+    if (aspect_ratio >= 2 && screenblocks == 9)
+    {
+        x = wide_delta * 2;
+        i = SCREENWIDTH * defdemotics / deftotaldemotics;
+    }
+    else
+    {
+        x = 0;
+        i = screenwidth * defdemotics / deftotaldemotics;
+    }
+
+    V_DrawHorizLine(x, SCREENHEIGHT - 2, i, 0);   // [crispy] black
+    V_DrawHorizLine(x, SCREENHEIGHT - 1, i, 255); // [crispy] white
 }

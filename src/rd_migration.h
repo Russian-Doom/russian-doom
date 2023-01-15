@@ -1,5 +1,5 @@
 //
-// Copyright(C) 2022 Dasperal/Leonid Murin
+// Copyright(C) 2022-2023 Leonid Murin (Dasperal)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -30,8 +30,11 @@ enum {
     *     Changed text representation of NumPad 'Del' key from 'KP_,' to 'KP_.'.\n
     * 2 - Changed names of 'message_*_color' and 'sbar_color_*' config entries.
     *     Fixed broken bk_map_rotate, bk_map_rotate and bk_forward.\n
+    * 3 - Changed name of "aspect_ratio_correct" config entry to "preserve_window_aspect_ratio".
+    *     Changed names of some of "automap_*" and "hud_*" config entries to "stats_*".
+    *     Separated bindings for "Suicide" and "Detail level" in Hexen.\n
     */
-    CURRENT_CONFIG_VERSION = 2
+    CURRENT_CONFIG_VERSION = 3
 };
 
 /**

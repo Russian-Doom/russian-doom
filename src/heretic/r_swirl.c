@@ -2,6 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2000, 2005-2014 Simon Howard
 // Copyright(C) 2019 Fabian Greffrath
+// Copyright(C) 2021-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -19,11 +20,11 @@
 
 // [crispy] adapted from smmu/r_ripple.c, by Simon Howard
 
-#include <tables.h>
-#include <i_system.h>
-#include <w_wad.h>
-#include <z_zone.h>
-#include "doomdef.h"
+#include "tables.h"
+#include "i_system.h"
+#include "w_wad.h"
+#include "z_zone.h"
+#include "hr_local.h"
 
 // swirl factors determine the number of waves per flat width
 
@@ -87,7 +88,7 @@ void R_InitDistortedFlats()
 	}
 }
 
-char *R_DistortedFlat(int flatnum)
+const char *R_DistortedFlat (const int flatnum)
 {
 	static int swirltic = -1;
 	static int swirlflat = -1;

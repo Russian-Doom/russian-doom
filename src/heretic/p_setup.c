@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -24,12 +24,11 @@
 #include "SDL.h"
 #include "d_mode.h"
 #include "deh_str.h"
-#include "doomdef.h"
+#include "hr_local.h"
 #include "i_swap.h"
 #include "i_system.h"
 #include "m_argv.h"
 #include "m_bbox.h"
-#include "p_fix.h"
 #include "p_local.h"
 #include "s_sound.h"
 #include "jn.h"
@@ -39,8 +38,6 @@
 #include <zlib.h>
 #endif
 
-
-void P_SpawnMapThing(mapthing_t * mthing);
 
 int numvertexes;
 vertex_t *vertexes;
@@ -552,13 +549,8 @@ void P_LoadSectors (int lump)
         ss->floor_yoffs = 0;
         ss->ceiling_xoffs = 0;
         ss->ceiling_yoffs = 0;
-
-        if (!detailLevel)
-        {
-           // [crispy] WiggleFix: [kb] for R_FixWiggle()
-            ss->cachedheight = 0;
-        }
-
+        // [crispy] WiggleFix: [kb] for R_FixWiggle()
+        ss->cachedheight = 0;
         // [AM] Sector interpolation.  Even if we're
         //      not running uncapped, the renderer still
         //      uses this data.
@@ -2023,13 +2015,7 @@ void P_SetupLevel (int episode, int map, int playermask, skill_t skill)
     P_InitThinkers();
 
     // look for a regular (development) map first
-    lumpname[0] = 'E';
-    lumpname[1] = '0' + episode;
-    lumpname[2] = 'M';
-    lumpname[3] = '0' + map;
-    lumpname[4] = 0;
-    leveltime = 0;
-    oldleveltime = 0;  // [crispy] Track if game is running
+    DEH_snprintf(lumpname, 9, "E%dM%d", episode, map);
 
     lumpnum = W_GetNumForName(lumpname);
 
@@ -2043,6 +2029,9 @@ void P_SetupLevel (int episode, int map, int playermask, skill_t skill)
     {
         P_SetupFixes(episode, map);
     }
+
+    leveltime = 0;
+    oldleveltime = 0;  // [crispy] Track if game is running
 
     // [JN] Indicate the map we are loading
     fprintf(stderr, "P_SetupLevel: E%dM%d, ", gameepisode, gamemap);

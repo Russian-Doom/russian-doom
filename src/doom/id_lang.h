@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -164,8 +164,8 @@ extern char* ststr_scrnsht;
 #define NETEND  "you can't end a netgame!\n\n"PRESSKEY
 #define ENDGAME "are you sure you want to end the game?\n\n"PRESSYN
 
-#define DETAILHI    "High detail"
-#define DETAILLO    "Low detail"
+#define DETAILHI    "High background detail"
+#define DETAILLO    "Low background detail"
 
 #define GAMMA_LEVEL         "gamma correction level "
 
@@ -1159,8 +1159,8 @@ extern patch_t *stysslsh;
 #define NETEND_RUS  "ytdjpvj;yj pfrjyxbnm ctntde. buhe!\n\n"PRESSKEY_RUS        // Невозможно закончить сетевую игру!
 #define ENDGAME_RUS "ds ltqcndbntkmyj [jnbnt pfrjyxbnm buhe?\n\n"PRESSYN_RUS    // Вы действительно хотите закончить игру?
 
-#define DETAILHI_RUS    "dscjrfz ltnfkbpfwbz"   // Высокая детализация
-#define DETAILLO_RUS    "ybprfz ltnfkbpfwbz"    // Низкая детализация
+#define DETAILHI_RUS    "dscjrfz ltnfkbpfwbz ajyf"   // Высокая детализация фона
+#define DETAILLO_RUS    "ybprfz ltnfkbpfwbz ajyf"    // Низкая детализация фона
 
 #define GAMMA_LEVEL_RUS         "ehjdtym ufvvf-rjhhtrwbb "  // Уровень гамма-коррекции
 

@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 #include <stdlib.h>
 #include <math.h>
-#include "doomdef.h"
+#include "hr_local.h"
 #include "r_local.h"
 #include "p_local.h"
 #include "v_video.h"
@@ -29,7 +29,6 @@
 // [JN] Used by perfomance counter.
 int rendered_segs, rendered_visplanes, rendered_vissprites;
 
-int           detailshift;      // 0 = high, 1 = low
 int           viewangleoffset;
 int           validcount = 1;   // increment every time a check is made
 int           centerx, centery;
@@ -41,7 +40,7 @@ angle_t       viewangle;
 player_t     *viewplayer;
 lighttable_t *fixedcolormap;
 
-int     setblocks, setdetail;
+int     setblocks;
 boolean setsizeneeded;
 
 // [crispy] lookup table for horizontal screen coordinates
@@ -49,8 +48,13 @@ boolean setsizeneeded;
 int *flipscreenwidth;
 int *flipviewwidth;
 
+// [JN] LOOKDIR variables for high/quad resolution, used only for rendering.
+static fixed_t lookdirmin, lookdirmax, lookdirs;
+
 // bumped light from gun blasts
 int extralight;
+// [JN] Smooth and vanilla diminished lighting
+int lightzshift, maxlightz;
 
 // precalculated math tables
 angle_t clipangle;
@@ -96,7 +100,7 @@ void (*spanfunc) (void);
 ================================================================================
 */
 
-int R_PointOnSide (fixed_t x, fixed_t y, const node_t *node)
+const int R_PointOnSide (fixed_t x, fixed_t y, const node_t *node)
 {
     if (!node->dx)
     {
@@ -130,12 +134,12 @@ int R_PointOnSide (fixed_t x, fixed_t y, const node_t *node)
 ================================================================================
 */
 
-int R_PointOnSegSide (fixed_t x, fixed_t y, const seg_t *line)
+const int R_PointOnSegSide (fixed_t x, fixed_t y, const seg_t *line)
 {
-    fixed_t lx = line->v1->x;
-    fixed_t ly = line->v1->y;
-    fixed_t ldx = line->v2->x - lx;
-    fixed_t ldy = line->v2->y - ly;
+    const fixed_t lx = line->v1->x;
+    const fixed_t ly = line->v1->y;
+    const fixed_t ldx = line->v2->x - lx;
+    const fixed_t ldy = line->v2->y - ly;
 
     if (!ldx)
     {
@@ -270,7 +274,7 @@ static const angle_t R_PointToAngleSlope (fixed_t x, fixed_t y,
 ================================================================================
 */
 
-angle_t R_PointToAngle (const fixed_t x, const fixed_t y)
+const angle_t R_PointToAngle (const fixed_t x, const fixed_t y)
 {
     return R_PointToAngleSlope (x, y, SlopeDiv);
 }
@@ -286,11 +290,11 @@ angle_t R_PointToAngle (const fixed_t x, const fixed_t y)
 ================================================================================
 */
 
-angle_t R_PointToAngleCrispy (fixed_t x, fixed_t y)
+const angle_t R_PointToAngleCrispy (fixed_t x, fixed_t y)
 {
     // [crispy] fix overflows for very long distances
-    int64_t y_viewy = (int64_t)y - viewy;
-    int64_t x_viewx = (int64_t)x - viewx;
+    const int64_t y_viewy = (int64_t)y - viewy;
+    const int64_t x_viewx = (int64_t)x - viewx;
 
     // [crispy] the worst that could happen is e.g. INT_MIN-INT_MAX = 2*INT_MIN
     if (x_viewx < INT_MIN || x_viewx > INT_MAX
@@ -312,7 +316,8 @@ angle_t R_PointToAngleCrispy (fixed_t x, fixed_t y)
 ================================================================================
 */
 
-angle_t R_PointToAngle2 (const fixed_t x1, const fixed_t y1, const fixed_t x2, const fixed_t y2)
+const angle_t R_PointToAngle2 (const fixed_t x1, const fixed_t y1,
+                               const fixed_t x2, const fixed_t y2)
 {
     viewx = x1;
     viewy = y1;
@@ -331,7 +336,7 @@ angle_t R_PointToAngle2 (const fixed_t x1, const fixed_t y1, const fixed_t x2, c
 ================================================================================
 */
 
-angle_t R_InterpolateAngle (const angle_t oangle, const angle_t nangle, const fixed_t scale)
+const angle_t R_InterpolateAngle (const angle_t oangle, const angle_t nangle, const fixed_t scale)
 {
     if (nangle == oangle)
     {
@@ -464,20 +469,26 @@ static void R_InitTextureMapping (void)
 
 #define		DISTMAP	2
 
-static void R_InitLightTables (void)
+void R_InitLightTables (void)
 {
-    int level, startmap;
+    int level;
     int scale;
 
-    // Calculate the light levels to use for each level / distance combination
-    for (int i = 0 ; i < LIGHTLEVELS; i++)
+    // [JN] Define, which diminished lighting to use
+    lightzshift = smoothlight && !vanillaparm ? LIGHTZSHIFT : LIGHTZSHIFT_VANILLA;
+    maxlightz = smoothlight && !vanillaparm ? MAXLIGHTZ : MAXLIGHTZ_VANILLA;
+
+    // Calculate the light levels to use for each level / distance combination.
+    for (int i = 0 ; i< LIGHTLEVELS ; i++)
     {
-        startmap = ((LIGHTLEVELS - 1 - i) * 2) * NUMCOLORMAPS / LIGHTLEVELS;
-        for (int j = 0; j < MAXLIGHTZ; j++)
+        const int firstmap = ((LIGHTLEVELS-1-i)*2)*NUMCOLORMAPS/LIGHTLEVELS;
+
+        for (int j = 0 ; j < maxlightz ; j++)
         {
-            scale = FixedDiv((320 / 2 * FRACUNIT), (j + 1) << LIGHTZSHIFT);
+            scale = FixedDiv((320 / 2 * FRACUNIT), ((j + 1) << lightzshift));
+
             scale >>= LIGHTSCALESHIFT;
-            level = startmap - scale / DISTMAP;
+            level = firstmap - scale / DISTMAP;
 
             if (level < 0)
             {
@@ -504,15 +515,13 @@ static void R_InitLightTables (void)
 
 static void R_InitTranslationTables (void)
 {
-    int i;
-
     V_LoadTintTable();
 
     // Allocate translation tables
     translationtables = Z_Malloc(256 * 3, PU_STATIC, 0);
 
     // Fill out the translation tables
-    for (i = 0; i < 256; i++)
+    for (int i = 0; i < 256; i++)
     {
         if (i >= 225 && i <= 240)
         {
@@ -539,11 +548,10 @@ static void R_InitTranslationTables (void)
 ================================================================================
 */
 
-void R_SetViewSize (const int blocks, const int detail)
+void R_SetViewSize (const int blocks)
 {
     setsizeneeded = true;
     setblocks = blocks;
-    setdetail = detail;
 }
 
 /*
@@ -591,7 +599,6 @@ void R_ExecuteSetViewSize (void)
         }
     }
 
-    detailshift = setdetail;
     viewwidth = scaledviewwidth >> detailshift;
     viewheight = scaledviewheight >> (detailshift && hires);
 
@@ -646,28 +653,31 @@ void R_ExecuteSetViewSize (void)
     // planes
     for (i = 0 ; i < viewheight ; i++)
     {
-        const fixed_t num_wide = MIN(viewwidth<<detailshift, 320 << !detailshift)/2*FRACUNIT;
         const fixed_t num = (viewwidth<<(detailshift && !hires))/2*FRACUNIT;
+        const fixed_t num_wide = MIN(viewwidth<<detailshift, ORIGWIDTH << !detailshift)/2*FRACUNIT;
 
-        for (j = 0; j < LOOKDIRS; j++)
+        for (j = 0; j < lookdirs; j++)
         {
             if (aspect_ratio >= 2)
             {
-                dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift)) 
+                dy = ((i-(viewheight/2 + ((j-lookdirmin) << (hires && !detailshift)) 
                    * (screenblocks < 9 ? screenblocks : 9) / 10))<<FRACBITS)+FRACUNIT/2;
+
+                dy = abs(dy / hires);
             }
             else
             {
-                dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift))
+                dy = ((i-(viewheight/2 + ((j-lookdirmin) << (hires && !detailshift))
                    * (screenblocks < 11 ? screenblocks : 11) / 10))<<FRACBITS)+FRACUNIT/2;
+
+                dy = abs(dy);
             }
 
-            dy = abs(dy);
             yslopes[j][i] = FixedDiv (aspect_ratio >= 2 ? num_wide : num, dy);
         }
     }
 
-    yslope = yslopes[LOOKDIRMIN];
+    yslope = yslopes[lookdirmin];
 
     for (i = 0 ; i < viewwidth ; i++)
     {
@@ -731,6 +741,19 @@ void R_Init (void)
             screenblocks = 12;
     }
 
+    if (quadres)
+    {
+        lookdirmin = LOOKDIRMIN2;
+        lookdirmax = LOOKDIRMAX2;
+        lookdirs = LOOKDIRS2;
+    }
+    else
+    {
+        lookdirmin = LOOKDIRMIN;
+        lookdirmax = LOOKDIRMAX;
+        lookdirs = LOOKDIRS;
+    }
+
     R_InitClipSegs();
     printf (".");
     R_InitSpritesRes ();
@@ -742,8 +765,8 @@ void R_Init (void)
 
     R_InitData();
     printf (".");
-    // viewwidth / viewheight / detailLevel are set by the defaults
-    R_SetViewSize(screenblocks, detailLevel);
+    // viewwidth / viewheight are set by the defaults
+    R_SetViewSize(screenblocks);
     R_InitLightTables();
     printf (".");
     R_InitSkyMap();
@@ -762,7 +785,7 @@ void R_Init (void)
 ================================================================================
 */
 
-subsector_t *R_PointInSubsector (const fixed_t x, const fixed_t y)
+const subsector_t *R_PointInSubsector (const fixed_t x, const fixed_t y)
 {
     int nodenum = numnodes-1;
 
@@ -826,8 +849,8 @@ static void R_SetupFrame (player_t *player)
                                        player->mo->angle, fractionaltic)
                                        + viewangleoffset;
 
-        pitch = (player->oldlookdir + (player->lookdir - player->oldlookdir)
-                                    * FIXED2DOUBLE(fractionaltic)) / MLOOKUNIT;
+        pitch = player->oldlookdir + (player->lookdir - player->oldlookdir)
+                                   * FIXED2DOUBLE(fractionaltic);
     }
     else
     {
@@ -836,21 +859,25 @@ static void R_SetupFrame (player_t *player)
         viewy = player->mo->y;
         viewz = player->viewz;
         viewangle = player->mo->angle + viewangleoffset;
-
-        // [crispy] pitch is actual lookdir /*and weapon pitch*/
-        pitch = player->lookdir / MLOOKUNIT;
+        pitch = player->lookdir; // [crispy]
     }
 
     extralight = player->extralight;
     extralight += extra_level_brightness; // [JN] Level Brightness feature.
 
-    if (pitch > LOOKDIRMAX)
+    if (pitch > lookdirmax)
     {
-        pitch = LOOKDIRMAX;
+        pitch = lookdirmax;
     }
-    else if (pitch < -LOOKDIRMIN)
+    else if (pitch < -lookdirmin)
     {
-        pitch = -LOOKDIRMIN;
+        pitch = -lookdirmin;
+    }
+
+    // [JN] Extend pitch range in quad resolution.
+    if (quadres)
+    {
+        pitch <<= quadres;
     }
 
     // apply new yslope[] whenever "lookdir", "detailshift" or "screenblocks" change
@@ -869,7 +896,7 @@ static void R_SetupFrame (player_t *player)
     {
         centery = tempCentery;
         centeryfrac = centery << FRACBITS;
-        yslope = yslopes[LOOKDIRMIN + pitch];
+        yslope = yslopes[lookdirmin + pitch];
     }
 
     {
@@ -941,7 +968,7 @@ void R_ClearStats (void)
 ================================================================================
 */
 
-void R_RenderPlayerView(player_t *player)
+void R_RenderPlayerView (const player_t *player)
 {
     R_SetupFrame(player);
 

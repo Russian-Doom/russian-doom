@@ -1,6 +1,6 @@
 //
 // Copyright(C) 2014 Fabian Greffrath
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -66,7 +66,7 @@ extern int demowarp; // [JN] Demo warp from Crispy Doom.
 // -----------------------------------------------------------------------------
 
 extern int vsync;
-// extern int aspect_ratio_correct;
+// extern int preserve_window_aspect_ratio;
 extern int uncapped_fps;
 extern int show_fps, real_fps;
 extern int max_fps;
@@ -94,7 +94,6 @@ extern float g_color_factor;
 extern float b_color_factor;
 
 extern int local_time;
-extern int detailLevel;
 extern int hud_detaillevel;
 extern int showMessages;
 extern int message_fade;
@@ -112,22 +111,27 @@ extern int message_color_quest;
 // -----------------------------------------------------------------------------
 
 extern int automap_color;
-extern int automap_mark_color;
 extern int automap_antialias;
-extern int automap_stats;
-extern int automap_skill;
-extern int automap_level_time;
-extern int automap_total_time;
-extern int automap_coords;
+extern int automap_rotate;
 extern int automap_overlay;
 extern int automap_overlay_bg;
-extern int automap_rotate;
 extern int automap_follow;
 extern int automap_grid;
 extern int automap_grid_size;
-extern int hud_stats_color;
-extern int hud_widget_colors;
-extern int hud_level_name;
+extern int automap_mark_color;
+
+// -----------------------------------------------------------------------------
+// Stats
+// -----------------------------------------------------------------------------
+
+extern int stats_placement;
+extern int stats_kis;
+extern int stats_skill;
+extern int stats_level_time;
+extern int stats_total_time;
+extern int stats_coords;
+extern int stats_level_name;
+extern int stats_color;
 
 // -----------------------------------------------------------------------------
 // Sound

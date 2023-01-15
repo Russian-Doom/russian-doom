@@ -53,7 +53,6 @@ jobs:
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_net
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_mixer
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libsamplerate
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libpng
 
       - uses: actions/checkout@v3
 

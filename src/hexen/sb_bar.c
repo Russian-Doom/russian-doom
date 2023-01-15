@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -880,6 +880,7 @@ void SB_Drawer(void)
                 int x, y;
                 byte *src;
                 byte *dest;
+                const patch_t *const patch = W_CacheLumpName("bordb", PU_CACHE);
                 char *name = "F_022";
                 const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
         
@@ -897,20 +898,15 @@ void SB_Drawer(void)
                 }
         
                 // [JN] Draw bezel bottom edge.
-                if (scaledviewwidth == screenwidth)
+                for (x = 0; x < screenwidth; x += 8)
                 {
-                    patch_t *patch = W_CacheLumpName("bordb", PU_CACHE);
-                
-                    for (x = 0; x < screenwidth; x += 16)
+                    if (hud_detaillevel)
                     {
-                        if (hud_detaillevel)
-                        {
-                            V_DrawPatch(x, 0, patch, NULL);
-                        }
-                        else
-                        {
-                            V_DrawPatchUnscaled(x, 0, patch, NULL);
-                        }
+                        V_DrawPatch(x, 0, patch, NULL);
+                    }
+                    else
+                    {
+                        V_DrawPatchUnscaled(x, 0, patch, NULL);
                     }
                 }
             }
@@ -1699,6 +1695,20 @@ void DrawMainBar(void)
          for (j = 0; j <= hires; j++)
           for (k = 0; k <= hires; k++)
           {
+            if (quadres)
+            {
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((95 + wide_delta) << hires) + k)] = 0;
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((96 + wide_delta) << hires) + k)] = 0;
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((97 + wide_delta) << hires) + k)] = 0;
+
+            I_VideoBuffer[((i << hires) + j) * screenwidth + (((95 + wide_delta) << hires) + 1 + k)] = 0;
+            I_VideoBuffer[((i << hires) + j) * screenwidth + (((96 + wide_delta) << hires) + 1 + k)] = 0;
+            I_VideoBuffer[((i << hires) + j) * screenwidth + (((97 + wide_delta) << hires) + 1 + k)] = 0;
+
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((95 + wide_delta) << hires) + 1 + k)] = 0;
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((96 + wide_delta) << hires) + 1 + k)] = 0;
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((97 + wide_delta) << hires) + 1 + k)] = 0;
+            }
             I_VideoBuffer[((i << hires) + j) * screenwidth + (((95 + wide_delta) << hires) + k)] = 0;
             I_VideoBuffer[((i << hires) + j) * screenwidth + (((96 + wide_delta) << hires) + k)] = 0;
             I_VideoBuffer[((i << hires) + j) * screenwidth + (((97 + wide_delta) << hires) + k)] = 0;
@@ -1710,6 +1720,20 @@ void DrawMainBar(void)
          for (j = 0; j <= hires; j++)
           for (k = 0; k <= hires; k++)
           {
+            if (quadres)
+            {
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((103 + wide_delta) << hires) + k)] = 0;
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((104 + wide_delta) << hires) + k)] = 0;
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((105 + wide_delta) << hires) + k)] = 0;
+
+            I_VideoBuffer[((i << hires) + j) * screenwidth + (((103 + wide_delta) << hires) + 1 + k)] = 0;
+            I_VideoBuffer[((i << hires) + j) * screenwidth + (((104 + wide_delta) << hires) + 1 + k)] = 0;
+            I_VideoBuffer[((i << hires) + j) * screenwidth + (((105 + wide_delta) << hires) + 1 + k)] = 0;
+
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((103 + wide_delta) << hires) + 1 + k)] = 0;
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((104 + wide_delta) << hires) + 1 + k)] = 0;
+            I_VideoBuffer[((i << hires) + 1 + j) * screenwidth + (((105 + wide_delta) << hires) + 1 + k)] = 0;
+            }
             I_VideoBuffer[((i << hires) + j) * screenwidth + (((103 + wide_delta) << hires) + k)] = 0;
             I_VideoBuffer[((i << hires) + j) * screenwidth + (((104 + wide_delta) << hires) + k)] = 0;
             I_VideoBuffer[((i << hires) + j) * screenwidth + (((105 + wide_delta) << hires) + k)] = 0;
@@ -2768,7 +2792,7 @@ static void Crosshair_Draw_Scaled (void)
 
 static void Crosshair_Draw_Unscaled (void)
 {
-    V_DrawPatchUnscaled(screenwidth/2, screenblocks <= 10 ? 162 : 204,
+    V_DrawPatchUnscaled(origwidth, screenblocks <= 10 ? 162 : 204,
                         CrosshairPatch, CrosshairOpacity);
 }
 

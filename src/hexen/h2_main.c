@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -104,6 +104,7 @@ extern int alwaysRun;
 char* RD_Project_Name = PACKAGE_PREFIX " Hexen";
 char* RD_Project_String = PACKAGE_PREFIX " Hexen " BUILD_HEXEN_VERSION;
 char* RD_Project_Version = BUILD_HEXEN_VERSION GIT_SHA_SUFFIX;
+char* RD_Project_TarName = PROGRAM_PREFIX "hexen";
 GameType_t RD_GameType = gt_Hexen;
 
 GameMode_t gamemode;
@@ -157,10 +158,12 @@ int english_language = 1;
 char* autoload_root = "";
 char* autoload_dir  = NULL;
 
+// Rendering
+int smoothlight = 1;
+
 // Display
 int screenblocks = 10;
 int extra_level_brightness = 0;
-int detailLevel = 0;        // [JN] Blocky mode, 0 = high, 1 = normal
 int hud_detaillevel = 0;    // [JN] Blocky mode, 0 = high, 1 = normal
 
 // Messages and texts
@@ -183,6 +186,16 @@ int automap_follow = 1;
 int automap_grid = 0;
 int automap_grid_size = 128;
 int automap_mark_color = 3;
+
+// Stats
+int stats_placement = 0;
+int stats_kis = 1;
+int stats_skill = 0;
+int stats_level_time = 1;
+int stats_total_time = 0;
+int stats_coords = 0;
+int stats_level_name = 0;
+int stats_color = 1;
 
 // Sound
 int snd_monomode = 0;
@@ -331,7 +344,6 @@ void D_BindVariables(void)
     M_BindIntVariable("always_run",             &alwaysRun);
     M_BindIntVariable("mlook",                  &mlook);
     M_BindIntVariable("extra_level_brightness", &extra_level_brightness);
-    M_BindIntVariable("detaillevel",            &detailLevel);
     M_BindIntVariable("hud_detaillevel",        &hud_detaillevel);
     M_BindIntVariable("artiskip",               &artiskip);
 
@@ -1666,7 +1678,6 @@ void H2_PageTicker(void)
 
 static void PageDrawer(void)
 {
-    boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
     const patch_t *page = W_CacheLumpName(pagename, PU_CACHE);
 
     if (aspect_ratio >= 2)
@@ -1687,7 +1698,7 @@ static void PageDrawer(void)
 
     if (demosequence == 1)
     {
-        V_DrawShadowedPatchRaven(4 + (wide_4_3 ? wide_delta : 0), 160, 
+        V_DrawShadowedPatchRaven(4 + wide_delta, 160, 
                                  W_CacheLumpName( english_language ?
                                  "ADVISOR" : "RD_ADV" , PU_CACHE));
     }

@@ -91,6 +91,7 @@
 char* RD_Project_Name = PACKAGE_PREFIX " Strife";
 char* RD_Project_String = PACKAGE_PREFIX " Strife " BUILD_STRIFE_VERSION;
 char* RD_Project_Version = BUILD_STRIFE_VERSION GIT_SHA_SUFFIX;
+char* RD_Project_TarName = PROGRAM_PREFIX "strife";
 GameType_t RD_GameType = gt_Strife;
 
 //

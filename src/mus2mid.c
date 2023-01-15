@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
 // Copyright(C) 2006 Ben Ryves 2006
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ typedef enum
 } midievent;
 
 // Structure to hold MUS file header
-typedef struct
+typedef PACKED_STRUCT (
 {
     byte id[4];
     unsigned short scorelength;
@@ -65,7 +65,7 @@ typedef struct
     unsigned short primarychannels;
     unsigned short secondarychannels;
     unsigned short instrumentcount;
-} PACKEDATTR musheader;
+}) musheader;
 
 // Standard MIDI type 0 header + track header
 static const byte midiheader[] =

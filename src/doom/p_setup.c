@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -731,13 +731,8 @@ static void P_LoadSectors (const int lump)
         ss->floor_yoffs = 0;
         ss->ceiling_xoffs = 0;
         ss->ceiling_yoffs = 0;
-
-        if (!detailLevel)
-        {
-            // [crispy] WiggleFix: [kb] for R_FixWiggle()
-            ss->cachedheight = 0;
-        }
-
+        // [crispy] WiggleFix: [kb] for R_FixWiggle()
+        ss->cachedheight = 0;
         // [AM] Sector interpolation.  Even if we're
         //      not running uncapped, the renderer still
         //      uses this data.

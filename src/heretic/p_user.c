@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,39 +17,42 @@
 // P_user.c
 
 
-
 #include <stdlib.h>
-
-#include "doomdef.h"
+#include "hr_local.h"
 #include "deh_str.h"
-#include "m_random.h"
 #include "p_local.h"
 #include "s_sound.h"
 #include "jn.h"
 
-void P_PlayerNextArtifact(player_t * player);
 
 // Macros
 
-#define MAXBOB 0x100000         // 16 pixels of bob
+#define MAXBOB 0x100000     // 16 pixels of bob
 
-// Data
+// Private data
 
-boolean onground;
-int newtorch;                   // used in the torch flicker effect.
-int newtorchdelta;
+static int newtorch;        // used in the torch flicker effect.
+static int newtorchdelta;
 
-boolean WeaponInShareware[] = {
-    true,                       // Staff
-    true,                       // Gold wand
-    true,                       // Crossbow
-    true,                       // Blaster
-    false,                      // Skull rod
-    false,                      // Phoenix rod
-    false,                      // Mace
-    true,                       // Gauntlets
-    true                        // Beak
+static boolean onground;
+
+static boolean WeaponInShareware[] = {
+    true,                   // Staff
+    true,                   // Gold wand
+    true,                   // Crossbow
+    true,                   // Blaster
+    false,                  // Skull rod
+    false,                  // Phoenix rod
+    false,                  // Mace
+    true,                   // Gauntlets
+    true                    // Beak
 };
+
+// [JN] Player's breathing imitation.
+static fixed_t breathing_val;
+static boolean breathing_dir;
+#define BREATHING_STEP 32
+#define BREATHING_MAX  1408
 
 /*
 ==================
@@ -61,7 +64,7 @@ boolean WeaponInShareware[] = {
 ==================
 */
 
-void P_Thrust(player_t * player, angle_t angle, fixed_t move)
+void P_Thrust (player_t *player, angle_t angle, fixed_t move)
 {
     angle >>= ANGLETOFINESHIFT;
     if (player->powers[pw_flight] && !(player->mo->z <= player->mo->floorz))
@@ -141,7 +144,25 @@ void P_CalcHeight(player_t * player)
         // [JN] Imitate player's breathing, but not in flying state.
         if (breathing && !vanillaparm && !(player->mo->flags2 & MF2_FLY))
         {
-            player->viewheight += finesine[(FINEANGLES / 160 * gametic) & FINEMASK] / 48;
+            if (breathing_dir)
+            {
+                // Inhale (camera up)
+                breathing_val += BREATHING_STEP;
+                if (breathing_val >= BREATHING_MAX)
+                {
+                    breathing_dir = false;
+                }
+            }
+            else
+            {
+                // Exhale (camera down)
+                breathing_val -= BREATHING_STEP;
+                if (breathing_val <= -BREATHING_MAX)
+                {
+                    breathing_dir = true;
+                }
+            }
+            player->viewheight += breathing_val;
         }
         if (player->viewheight > VIEWHEIGHT)
         {
@@ -269,31 +290,35 @@ void P_MovePlayer(player_t * player)
         }
         else
         {
-            cmd->lookdir = MLOOKUNIT * 5 * look;
+            player->lookdir += 5 * look;
+            if (player->lookdir > 90 || player->lookdir < -110)
+            {
+                player->lookdir -= 5 * look;
+            }
         }
+    }
+    // [crispy] Handle mouselook
+    // [JN] TODO - not working in netgame, causing desyncs!
+    if (!demoplayback && !netgame)
+    {
+        player->lookdir = BETWEEN(-110, 90, player->lookdir + cmd->lookdir);
     }
     if (player->centering)
     {
         if (player->lookdir > 0)
         {
-            player->lookdir -= 8 * MLOOKUNIT;
+            player->lookdir -= 8;
         }
         else if (player->lookdir < 0)
         {
-            player->lookdir += 8 * MLOOKUNIT;
+            player->lookdir += 8;
         }
-        if (abs(player->lookdir) < 8 * MLOOKUNIT)
+        if (abs(player->lookdir) < 8)
         {
             player->lookdir = 0;
             player->centering = false;
         }
     }
-        if (!menuactive && !demoplayback)
-        {
-        player->lookdir = BETWEEN(-LOOKDIRMIN * MLOOKUNIT,
-                                LOOKDIRMAX * MLOOKUNIT,
-                                player->lookdir + cmd->lookdir);
-        }
     fly = cmd->lookfly >> 4;
     if (fly > 7)
     {
@@ -339,8 +364,6 @@ void P_MovePlayer(player_t * player)
 */
 
 #define         ANG5    (ANG90/18)
-extern int inv_ptr;
-extern int curpos;
 
 void P_DeathThink(player_t * player)
 {
@@ -379,13 +402,14 @@ void P_DeathThink(player_t * player)
             player->viewheight -= FRACUNIT;
         if (player->viewheight < 6 * FRACUNIT)
             player->viewheight = 6 * FRACUNIT;
-
-        if (player->lookdir >  8 * MLOOKUNIT)
-            player->lookdir -= 8 * MLOOKUNIT;
-        else 
-        if (player->lookdir < -8 * MLOOKUNIT)
-            player->lookdir += 8 * MLOOKUNIT;
-        else
+        if (player->lookdir > 0)
+        {
+            player->lookdir -= 6;
+        }
+        else if (player->lookdir < 0)
+        {
+            player->lookdir += 6;
+        }
         if (abs(player->lookdir) < 6)
         {
             player->lookdir = 0;
@@ -563,7 +587,7 @@ boolean P_UndoPlayerChicken(player_t * player)
 //
 //----------------------------------------------------------------------------
 
-void P_PlayerThink(player_t * player)
+void P_PlayerThink(player_t *player)
 {
     ticcmd_t *cmd;
     weapontype_t newweapon;
@@ -580,15 +604,6 @@ void P_PlayerThink(player_t * player)
     player->oldviewz = player->viewz;
     player->oldlookdir = player->lookdir;
 
-    // No-clip cheat
-    if (player->cheats & CF_NOCLIP)
-    {
-        player->mo->flags |= MF_NOCLIP;
-    }
-    else
-    {
-        player->mo->flags &= ~MF_NOCLIP;
-    }
     cmd = &player->cmd;
     if (player->mo->flags & MF_JUSTATTACKED)
     {                           // Gauntlets attack auto forward motion
@@ -862,7 +877,7 @@ void P_ArtiTele(player_t * player)
 //
 //----------------------------------------------------------------------------
 
-void P_PlayerNextArtifact(player_t * player)
+void P_PlayerNextArtifact (player_t *player)
 {
     if (player == &players[consoleplayer])
     {
@@ -897,7 +912,7 @@ void P_PlayerNextArtifact(player_t * player)
 //
 //----------------------------------------------------------------------------
 
-void P_PlayerRemoveArtifact(player_t * player, int slot)
+void P_PlayerRemoveArtifact (player_t *player, int slot)
 {
     int i;
     player->artifactCount--;
@@ -940,7 +955,7 @@ void P_PlayerRemoveArtifact(player_t * player, int slot)
 //
 //----------------------------------------------------------------------------
 
-void P_PlayerUseArtifact(player_t * player, artitype_t arti)
+void P_PlayerUseArtifact (player_t *player, artitype_t arti)
 {
     int i;
 
@@ -951,7 +966,7 @@ void P_PlayerUseArtifact(player_t * player, artitype_t arti)
             if (P_UseArtifact(player, arti))
             {                   // Artifact was used - remove it from inventory
                 P_PlayerRemoveArtifact(player, i);
-                if (player == &players[consoleplayer])
+                if (player == &players[displayplayer])
                 {
                     S_StartSound(NULL, sfx_artiuse);
                     ArtifactFlash = 4;

@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -35,8 +35,8 @@
 
 // a weapon is found with two clip loads,
 // a big item has five clip loads
-int maxammo[NUMAMMO] = {200, 50, 50, 300};
-int clipammo[NUMAMMO] = {10, 4, 1, 20};
+int maxammo[NUMAMMO] = {200, 50, 300, 50};
+int clipammo[NUMAMMO] = {10, 4, 20, 1};
 
 
 //------------------------------------------------------------------------------

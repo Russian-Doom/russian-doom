@@ -2,7 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -98,15 +98,15 @@ static int *spanstart = NULL;  // killough 2/8/98
 
 static lighttable_t **planezlight;
 static fixed_t planeheight;
-static fixed_t cachedheight[SCREENHEIGHT];
-static fixed_t cacheddistance[SCREENHEIGHT];
-static fixed_t cachedxstep[SCREENHEIGHT];
-static fixed_t cachedystep[SCREENHEIGHT];
+static fixed_t cachedheight[MAXHEIGHT];
+static fixed_t cacheddistance[MAXHEIGHT];
+static fixed_t cachedxstep[MAXHEIGHT];
+static fixed_t cachedystep[MAXHEIGHT];
 
 // [JN] e6y: resolution limitation is removed
 fixed_t *yslope = NULL;
 fixed_t *distscale = NULL;
-fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
+fixed_t yslopes[MAXHEIGHT][MAXHEIGHT];
 
 // EXTERNAL DATA DECLARATIONS --------------------------------------------------
 
@@ -271,10 +271,10 @@ void R_MapPlane (int y, int x1, int x2)
     }
     else
     {
-        index = distance >> LIGHTZSHIFT;
-        if (index >= MAXLIGHTZ)
+        index = distance >> lightzshift;
+        if (index >= maxlightz)
         {
-            index = MAXLIGHTZ - 1;
+            index = maxlightz - 1;
         }
         ds_colormap = planezlight[index];
     }
@@ -517,12 +517,12 @@ void R_DrawPlanes(void)
     int         light, angle, angle2;
     int         offset, skyTexture, offset2, skyTexture2;
     int         heightmask;
-    int         count, frac, fracstep = FRACUNIT >> !detailshift;
+    int         count, frac, fracstep = (FRACUNIT >> !detailshift) >> quadres;
     byte       *source, *source2, *tempSource;
     byte       *dest, *dest1, *dest2, *dest3, *dest4;
 
-    extern byte *ylookup[SCREENHEIGHT];
-    extern int columnofs[WIDESCREENWIDTH];
+    extern byte *ylookup[MAXHEIGHT];
+    extern int columnofs[MAXWIDTH];
 
     for (i = 0 ; i < MAXVISPLANES ; i++)
     for (pl = visplanes[i] ; pl ; pl = pl->next, rendered_visplanes++)

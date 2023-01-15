@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -557,6 +557,10 @@ typedef struct mobj_s
     fixed_t oldz;
     angle_t oldangle;
 
+    // [JN] Amplitude of floating powerups, used *only* while rendering.
+    fixed_t     float_z;
+    fixed_t old_float_z;
+
     // [JN] Animated brightmaps.
     int     bmap_flick;
     int     bmap_glow;
@@ -616,8 +620,8 @@ typedef enum
 {
     am_clip,    // Pistol / chaingun ammo.
     am_shell,   // Shotgun / double barreled shotgun.
-    am_misl,    // Missile launcher.
     am_cell,    // Plasma rifle, BFG.
+    am_misl,    // Missile launcher.
     NUMAMMO,
     am_noammo   // Unlimited for chainsaw / fist.	
 } ammotype_t;

@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2022 Julian Nechaevsky
+// Copyright(C) 2016-2023 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@
 #include "r_local.h"
 #include "doomstat.h"
 #include "p_local.h"
+#include "v_video.h"
 #include "jn.h"
 
 
@@ -570,6 +571,23 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
         interpangle = thing->angle;
     }
 
+    // [JN] Apply amplitude to floating powerups:
+    if (floating_powerups && !vanillaparm
+    && (thing->type == MT_MEGA       // Megasphere
+    ||  thing->type == MT_MISC12     // Supercharge
+    ||  thing->type == MT_INV        // Invulnerability
+    ||  thing->type == MT_INS))      // Partial invisibility
+    {
+        if (leveltime > oldleveltime)
+        {
+            interpz = thing->old_float_z + FixedMul(thing->float_z - thing->old_float_z, fractionaltic);
+        }
+        else
+        {
+            interpz = thing->float_z;
+        }
+    }
+
     // transform the origin point
     tr_x = interpx - viewx;
     tr_y = interpy - viewy;
@@ -876,12 +894,12 @@ static void R_ProjectSprite (const mobj_t *thing, const int lightnum)
     { 
         if (thing->target->type == MT_HEAD)
         {
-            vis->translation =  cr[CR_RED2BLUE];
+            vis->translation = blue_blood_set;
         }
         else if (thing->target->type == MT_BRUISER
         || thing->target->type == MT_KNIGHT)
         {
-            vis->translation = cr[CR_RED2GREEN];
+            vis->translation = green_blood_set;
         }
     }
 }
@@ -975,16 +993,26 @@ static void R_DrawPSprite (const pspdef_t *psp)
     lump = sprframe->lump[0];
     flip = (boolean)sprframe->flip[0] ^ flip_levels ^ flip_weapons;
 
+    // [JN] Weapon attack alignment. Common bobbing:
     if (weapon_bobbing && !vanillaparm)
     {
-        // [JN] Always apply bobbing for all states...
+        // Apply full bobbing to all states, except raising and lowering.
         if (state != winfo->downstate && state != winfo->upstate)
         {
-            R_ApplyWeaponBob(&psp_sx, true, &psp_sy, true);
+            if (weapon_bobbing == 2 && viewplayer->attackdown)
+            {
+                // Center weapon while firing.
+                psp_sx = FRACUNIT;
+                psp_sy = WEAPONTOP;
+            }
+            else
+            {
+                R_ApplyWeaponBob(&psp_sx, true, &psp_sy, true);
+            }
         }
-        // [JN] ...except X-bobbing only for raising and lowering states.
         else
         {
+            // Apply x-only bobbing to raising and lowering states.
             R_ApplyWeaponBob(&psp_sx, true, 0, false);
         }
 
@@ -1029,7 +1057,8 @@ static void R_DrawPSprite (const pspdef_t *psp)
     else
     {
         vis->texturemid = (BASEYCENTER << FRACBITS) + FRACUNIT/4
-                        - (psp_sy-spritetopoffset[lump]);
+                        - (psp_sy-spritetopoffset[lump])
+                        - quadres;
     }
 
     vis->x1 = x1 < 0 ? 0 : x1;
@@ -1096,7 +1125,7 @@ static void R_DrawPSprite (const pspdef_t *psp)
     vis->brightmap = R_BrightmapForState(psp->state - states);
 	
     // [JN] Andrey Budko: interpolation for weapon bobbing
-    if (uncapped_fps && weapon_bobbing)
+    if (uncapped_fps)
     {
         typedef struct interpolate_s
         {

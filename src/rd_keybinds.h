@@ -1,5 +1,5 @@
 //
-// Copyright(C) 2020-2022 Dasperal/Leonid Murin
+// Copyright(C) 2020-2023 Leonid Murin (Dasperal)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -113,6 +113,7 @@ typedef enum
     bk_pause,
     bk_finish_demo,
     bk_demo_speed, // [crispy] demo fast-forward
+    bk_suicide,
 
     // Toggles
     bk_toggle_crosshair,

@@ -6,7 +6,12 @@
 [\fIOPTIONS\fR]
 .SH DESCRIPTION
 .PP
-See https://github.com/JNechaevsky/inter-doom/wiki for more information.
+@PACKAGE_PREFIX@ Strife is limit-removing port of Rogue Entertainment's 1996 game "Strife: Quest for the Sigil".
+It has numerous vanilla bug fixes, enhanced 640x400 display resolution,
+improved game palettes and offers many optional aesthetic game enhancements
+along with maximum possible translation to the Russian language.
+.br
+For more information, visit https://github.com/JNechaevsky/inter-doom/wiki
 .SH OPTIONS
 @content
 .SH FILES
