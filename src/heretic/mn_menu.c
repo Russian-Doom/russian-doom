@@ -2063,7 +2063,7 @@ static void DrawRenderingMenu1(void)
         }
 
         // Tip for faster sliding
-        if (CurrentItPos == 4)
+        if (CurrentItPos == 5)
         {
             RD_M_DrawTextSmallENG("HOLD RUN BUTTON FOR FASTER SLIDING",
                                   39 + wide_delta, 142, CR_DARKGREEN);
@@ -2162,7 +2162,7 @@ static void DrawRenderingMenu1(void)
 
         // Для ускоренного пролистывания
         // удерживайте кнопку бега
-        if (CurrentItPos == 4)
+        if (CurrentItPos == 5)
         {
             RD_M_DrawTextSmallRUS("LKZ ECRJHTYYJUJ GHJKBCNSDFYBZ",
                                   51 + wide_delta, 142, CR_DARKGREEN);

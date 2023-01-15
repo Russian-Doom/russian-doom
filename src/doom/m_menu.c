@@ -1742,7 +1742,7 @@ static void M_RD_Draw_Rendering_1 (void)
         RD_M_DrawTextSmallENG(smoothlight ? "smooth" : "original", 171 + wide_delta, 115, CR_NONE);
 
         // Tip for faster sliding
-        if (CurrentItPos == 4)
+        if (CurrentItPos == 5)
         {
             RD_M_DrawTextSmallCenteredENG("HOLD RUN BUTTON FOR FASTER SLIDING", 145, CR_GRAY);
         }
@@ -1843,7 +1843,7 @@ static void M_RD_Draw_Rendering_1 (void)
 
         // Для ускоренного пролистывания
         // удерживайте кнопку бега
-        if (CurrentItPos == 4)
+        if (CurrentItPos == 5)
         {
             RD_M_DrawTextSmallCenteredRUS("LKZ ECRJHTYYJUJ GHJKBCNSDFYBZ", 135, CR_GRAY);
             RD_M_DrawTextSmallCenteredRUS("ELTH;BDFQNT RYJGRE ,TUF", 145, CR_GRAY);
