@@ -772,7 +772,11 @@ byte V_Colorize (byte *playpal, Translation_CR_t cr, byte source, boolean keepgr
 
     rgb_to_hsv(&rgb, &hsv);
 
-    if (cr == CR_DARK)
+    if (cr == CR_BLACK)
+    {
+        hsv.z = 0;
+    }
+    else if (cr == CR_DARK)
     {
         hsv.z *= 0.666;
     }

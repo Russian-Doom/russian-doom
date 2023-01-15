@@ -231,6 +231,7 @@ static void M_RD_ColoredSBar();
 static void M_RD_ColoredGem(Direction_t direction);
 static void M_RD_NegativeHealth();
 static void M_RD_ShowArtiTimer(Direction_t direction);
+static void M_RD_WeaponWidget(Direction_t direction);
 static void M_RD_CrossHairDraw();
 static void M_RD_CrossHairShape(Direction_t direction);
 static void M_RD_CrossHairType();
@@ -1287,6 +1288,7 @@ static MenuItem_t Gameplay2Items[] = {
     I_LRFUNC("COLORED HEALTH GEM:",   "JRHFIBDFYBT RFVYZ PLJHJDMZ:", M_RD_ColoredGem), // ОКРАШИВАНИЕ КАМНЯ ЗДОРОВЬЯ
     I_SWITCH("SHOW NEGATIVE HEALTH:", "JNHBWFNTKMYJT PLJHJDMT:",     M_RD_NegativeHealth), // ОТРИЦАТЕЛЬНОЕ ЗДОРОВЬЕ
     I_LRFUNC("ARTIFACTS TIMER:",      "NFQVTH FHNTAFRNJD:",          M_RD_ShowArtiTimer), // ТАЙМЕР АРТЕФАКТОВ
+    I_LRFUNC("ASSEMBLED WEAPON WIDGET:", "DBL;TN CJ,HFYYJUJ JHE;BZ:", M_RD_WeaponWidget), // ВИДЖЕТ СОБРАННОГО ОРУЖИЯ
     I_TITLE( "CROSSHAIR",             "GHBWTK"), // ПРИЦЕЛ
     I_SWITCH("DRAW CROSSHAIR:",       "JNJ,HF;FNM GHBWTK:",          M_RD_CrossHairDraw), // ОТОБРАЖАТЬ ПРИЦЕЛ
     I_LRFUNC("SHAPE:",                "AJHVF:",                      M_RD_CrossHairShape), // ФОРМА
@@ -4586,12 +4588,18 @@ static void DrawGameplay2Menu(void)
                               show_artifacts_timer == 3 ? CR_GREEN :
                               CR_RED);
 
+        // Assembled weapon widget
+        RD_M_DrawTextSmallENG(weapon_widget == 1 ? "HORIZONTAL" :
+                              weapon_widget == 2 ? "VERTICAL" : "OFF",
+                              214 + wide_delta, 82,
+                              weapon_widget ? CR_GREEN : CR_RED);
+
         //
         // CROSSHAIR
         //
 
         // Draw crosshair
-        RD_M_DrawTextSmallENG(crosshair_draw ? "ON" : "OFF", 150 + wide_delta, 92,
+        RD_M_DrawTextSmallENG(crosshair_draw ? "ON" : "OFF", 150 + wide_delta, 102,
                               crosshair_draw ? CR_GREEN : CR_RED);
 
         // Shape
@@ -4601,14 +4609,14 @@ static void DrawGameplay2Menu(void)
                               crosshair_shape == 4 ? "ANGLE" :
                               crosshair_shape == 5 ? "TRIANGLE" :
                               crosshair_shape == 6 ? "DOT" : "CROSS",
-                              84 + wide_delta, 102, CR_GREEN);
+                              84 + wide_delta, 112, CR_GREEN);
 
         // Indication
-        RD_M_DrawTextSmallENG(crosshair_type == 1 ? "HEALTH" : "STATIC",  111 + wide_delta, 112,
+        RD_M_DrawTextSmallENG(crosshair_type == 1 ? "HEALTH" : "STATIC",  111 + wide_delta, 122,
                               crosshair_type ? CR_GREEN : CR_RED);
 
         // Increased size
-        RD_M_DrawTextSmallENG(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 122,
+        RD_M_DrawTextSmallENG(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 132,
                               crosshair_scale ? CR_GREEN : CR_RED);
     }
     else
@@ -4642,12 +4650,18 @@ static void DrawGameplay2Menu(void)
                               show_artifacts_timer == 3 ? CR_GREEN :
                               CR_RED);
 
+        // Виджет собранного оружия
+        RD_M_DrawTextSmallRUS(weapon_widget == 1 ? "UJHBPJYNFKMYSQ" :
+                              weapon_widget == 2 ? "DTHNBRFKMYSQ" : "DSRK",
+                              229 + wide_delta, 82,
+                              weapon_widget ? CR_GREEN : CR_RED);
+
         //
         // ПРИЦЕЛ
         //
 
         // Отображать прицел
-        RD_M_DrawTextSmallRUS(crosshair_draw ? "DRK" : "DSRK", 175 + wide_delta, 92,
+        RD_M_DrawTextSmallRUS(crosshair_draw ? "DRK" : "DSRK", 175 + wide_delta, 102,
                               crosshair_draw ? CR_GREEN : CR_RED);
 
         // Форма
@@ -4658,30 +4672,30 @@ static void DrawGameplay2Menu(void)
                               crosshair_shape == 5 ? "NHTEUJKMYBR" :  // ТРЕУГОЛЬНИК
                               crosshair_shape == 6 ? "NJXRF" :        // ТОЧКА
                                                      "RHTCN",         // КРЕСТ
-                              87 + wide_delta, 102, CR_GREEN);
+                              87 + wide_delta, 112, CR_GREEN);
 
         // Индикация
         RD_M_DrawTextSmallRUS(crosshair_type == 1 ? "PLJHJDMT" : // ЗДОРОВЬЕ
                                                     "CNFNBXYFZ", // СТАТИЧНАЯ
-                              111 + wide_delta, 112, crosshair_type ? CR_GREEN : CR_RED);
+                              111 + wide_delta, 122, crosshair_type ? CR_GREEN : CR_RED);
 
         // Увеличенный размер
-        RD_M_DrawTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 122,
+        RD_M_DrawTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 132,
                               crosshair_scale ? CR_GREEN : CR_RED);
     }
 
     // Draw crosshair background.
-    V_DrawPatch(235 + wide_delta, 103, W_CacheLumpName("XHAIRBOX", PU_CACHE), NULL);
+    V_DrawPatch(235 + wide_delta, 113, W_CacheLumpName("XHAIRBOX", PU_CACHE), NULL);
     // Colorize crosshair depending on it's type.
     Crosshair_Colorize_inMenu();
     // Draw crosshair preview.
     if (crosshair_scale)
     {
-        V_DrawPatch(250 + wide_delta, 118, CrosshairPatch, CrosshairOpacity);
+        V_DrawPatch(250 + wide_delta, 128, CrosshairPatch, CrosshairOpacity);
     }
     else
     {
-        V_DrawPatchUnscaled(500 + wide_delta*2, 236, CrosshairPatch, CrosshairOpacity);
+        V_DrawPatchUnscaled(500 + wide_delta*2, 256, CrosshairPatch, CrosshairOpacity);
     }
     // Clear colorization.
     dp_translation = NULL;
@@ -4696,7 +4710,7 @@ static void DrawGameplay2Menu(void)
                           crosshair_opacity == 6 ? "80%" :
                           crosshair_opacity == 7 ? "90%" : "100%",
                           (english_language ? 95 : 149) + wide_delta,
-                          132, CR_GRAY);
+                          142, CR_GRAY);
 }
 
 static void M_RD_ColoredSBar()
@@ -4717,6 +4731,11 @@ static void M_RD_NegativeHealth()
 static void M_RD_ShowArtiTimer(Direction_t direction)
 {
     RD_Menu_SpinInt(&show_artifacts_timer, 0, 3, direction);
+}
+
+static void M_RD_WeaponWidget(Direction_t direction)
+{
+    RD_Menu_SpinInt(&weapon_widget, 0, 2, direction);
 }
 
 static void M_RD_CrossHairDraw()
@@ -5861,6 +5880,7 @@ void M_RD_BackToDefaults_Recommended (void)
     sbar_colored_gem     = 0;
     negative_health      = 0;
     show_artifacts_timer = 0;
+    weapon_widget        = 0;
     // Gameplay (4)
     crosshair_draw       = 0;
     crosshair_shape      = 0;
@@ -5975,6 +5995,7 @@ static void M_RD_BackToDefaults_Original(void)
     sbar_colored_gem     = 0;
     negative_health      = 0;
     show_artifacts_timer = 0;
+    weapon_widget        = 0;
     // Gameplay (4)
     crosshair_draw       = 0;
     crosshair_shape      = 0;
