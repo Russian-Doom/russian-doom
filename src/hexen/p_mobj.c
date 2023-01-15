@@ -822,8 +822,16 @@ void P_ZMovement(mobj_t * mo)
     if (mo->player && mo->flags2 & MF2_FLY && !(mo->z <= mo->floorz)
         && leveltime & 2)
     {
-        // [JN] Smooth floating
-        mo->z += finesine[(FINEANGLES/160*gametic)&FINEMASK]/16;
+        if (singleplayer && !vanillaparm)
+        {
+            // [JN] Smooth floating amplitude.
+            mo->z += finesine[(FINEANGLES / 160 * gametic) & FINEMASK] / 16;
+        }
+        else
+        {
+            // [JN] Keep demo / netgame sync.
+            mo->z += finesine[(FINEANGLES / 20 * leveltime >> 2) & FINEMASK];
+        }
     }
 
 //
