@@ -12,19 +12,17 @@ macro(ret_var VAR)
     set(${VAR} "${${VAR}}" PARENT_SCOPE)
 endmacro()
 
-# Populate variables "Hash", "Hash_suffix", "Tag" and "Timestamp" with relevant information
-# from source repository.  If anything goes wrong return something in "Error."
-function(query_repo_info TagPattern)
+# Populate variables "Hash", "Hash_suffix", "Timestamp",
+# "GIT_TAG_DOOM", "GIT_TAG_HERETIC", "GIT_TAG_HEXEN" and "GIT_TAG_STRIFE" with relevant information
+# from source repository. If anything goes wrong return something in "Error."
+function(query_repo_info)
     execute_process(
-        COMMAND "${Git_executable}" describe --tags --dirty=-m --abbrev=7 --no-match --match ${TagPattern}
+        COMMAND "${Git_executable}" tag --points-at HEAD
         RESULT_VARIABLE Error
-        OUTPUT_VARIABLE Tag
+        OUTPUT_VARIABLE Tags
         ERROR_QUIET
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-    if(NOT "${Error}" STREQUAL "0")
-        set(Tag "<unknown>")
-    endif()
     execute_process(
         COMMAND "${Git_executable}" log -1 "--format=%ai;%H"
         RESULT_VARIABLE Error
@@ -40,10 +38,19 @@ function(query_repo_info TagPattern)
     list(GET CommitInfo 1 Hash)
     string(SUBSTRING " - ${Hash}" 0 10 Hash_suffix)
 
-    ret_var(Tag)
+    string(REGEX MATCH "^[0-9]+(\\.[0-9]+)+" GIT_TAG_DOOM "${Tags}")
+    string(REGEX MATCH "heretic-[0-9]+(\\.[0-9]+)+" GIT_TAG_HERETIC "${Tags}")
+    string(REGEX MATCH "hexen-[0-9]+(\\.[0-9]+)+" GIT_TAG_HEXEN "${Tags}")
+    string(REGEX MATCH "strife-[0-9]+(\\.[0-9]+)+" GIT_TAG_STRIFE "${Tags}")
+
     ret_var(Hash)
     ret_var(Hash_suffix)
     ret_var(Timestamp)
+
+    ret_var(GIT_TAG_DOOM)
+    ret_var(GIT_TAG_HERETIC)
+    ret_var(GIT_TAG_HEXEN)
+    ret_var(GIT_TAG_STRIFE)
 endfunction()
 
 # Although configure_file doesn't overwrite the file if the contents are the
@@ -61,8 +68,8 @@ function(get_existing_hash File)
 endfunction()
 
 function(main)
-    if(NOT CMAKE_ARGC EQUAL 6) # cmake -P UpdateRevision.cmake <OutputFile> <TagPattern> <path to git>
-        message(NOTICE "Usage: ${CMAKE_ARGV2} <path to git_info.h> <TagPattern> <path to git>")
+    if(NOT CMAKE_ARGC EQUAL 6) # cmake -P UpdateRevision.cmake <OutputFile> <Suffix:FORCE|NO|AUTO> <path to git>
+        message(NOTICE "Usage: ${CMAKE_ARGV2} <path to git_info.h> <Suffix:FORCE|NO|AUTO> <path to git>")
         return()
     endif()
     set(OutputFile "${CMAKE_ARGV3}")
@@ -70,20 +77,20 @@ function(main)
 
     get_filename_component(ScriptDir "${CMAKE_SCRIPT_MODE_FILE}" DIRECTORY)
 
-    if(CMAKE_ARGV4 STREQUAL "")
-        query_repo_info("*")
-    else()
-        query_repo_info("${CMAKE_ARGV4}")
-    endif()
+    query_repo_info()
 
     if(NOT Hash)
         message(NOTICE "Failed to get commit info: ${Error}")
-        set(Tag "<unknown>")
         set(Hash "<unknown>")
         set(Hash_suffix "")
         set(Timestamp "<unknown>")
     endif()
-    if((CMAKE_ARGV4 STREQUAL "") OR (NOT Tag MATCHES "-g"))
+    if(CMAKE_ARGV4 STREQUAL "FORCE")
+        unset(GIT_TAG_DOOM)
+        unset(GIT_TAG_HERETIC)
+        unset(GIT_TAG_HEXEN)
+        unset(GIT_TAG_STRIFE)
+    elseif(CMAKE_ARGV4 STREQUAL "NO")
         set(Hash_suffix "")
     endif()
 

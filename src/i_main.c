@@ -306,7 +306,6 @@ static void printVersion(void)
 {
     printf("%s %s\n", RD_Project_Name, RD_Project_Version);
     printf("Revision: %s (%s)\n", GIT_SHA, GIT_TIME);
-    printf("Tag: %s\n", GIT_TAG);
 #ifdef BUILD_PORTABLE
     printf("Portable version\n");
 #endif

@@ -53,7 +53,6 @@ endfunction()
 
 # configure_empty_git_info(<Template> <Output>)
 function(configure_empty_git_info Template Output)
-    set(Tag "<unknown>")
     set(Hash "<unknown>")
     set(Hash_suffix "")
     set(Timestamp "<unknown>")

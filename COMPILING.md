@@ -113,10 +113,6 @@ Available components are `doom`, `heretic`, `hexen`.
 
 Packaging is performed using Cpack.
 
-It is **recommended** to configure, build and package only one component at a time,
-selecting it with the following cmake options by setting required one to `ON` and the rest to `OFF`:
-`COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE`.
-
 If you want to overwrite the package version, set `BUILD_VERSION_OVERWRITE` cmake variable at configuring time,
 instead of using `-R` Cpack parameter.
 
@@ -209,10 +205,6 @@ you should set the value of the `CMAKE_INSTALL_PREFIX` cmake variable to match t
 By default, it is `/usr/local` and you probably want to change it to `/usr`.
 You can then use `cmake --install build --prefix <path>` command to collect all distribution files in the `<path>`
 location to prepare them for packaging.
-
-It is **recommended** to configure, build and package only one component at a time,
-selecting it with the following cmake options by setting required one to `ON` and the rest to `OFF`:
-`COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE`.
 
 If you want to overwrite the package version, set `BUILD_VERSION_OVERWRITE` cmake variable.
 
