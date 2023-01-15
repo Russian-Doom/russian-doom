@@ -5,7 +5,11 @@
 
 #pragma once
 
-#define GIT_TAG "@Tag@"
 #define GIT_SHA "@Hash@"
 #define GIT_SHA_SUFFIX "@Hash_suffix@"
 #define GIT_TIME "@Timestamp@"
+
+#cmakedefine01 GIT_TAG_DOOM
+#cmakedefine01 GIT_TAG_HERETIC
+#cmakedefine01 GIT_TAG_HEXEN
+#cmakedefine01 GIT_TAG_STRIFE

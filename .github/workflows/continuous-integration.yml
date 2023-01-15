@@ -71,6 +71,7 @@ jobs:
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_net
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_mixer
             ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libsamplerate
+            git
 
       - name: Setup Linux env
         if: matrix.os.name == 'Linux'
@@ -81,6 +82,8 @@ jobs:
                                libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libsamplerate-dev
 
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Configure
         id: configure
@@ -91,13 +94,17 @@ jobs:
           then
               build_portable='-D BUILD_PORTABLE=ON'
           fi
+          rev_number=$(git rev-list --count HEAD)
           cmake -G "Ninja" \
-                -D BUILD_VERSION_OVERWRITE="6.x.x" -D FORCE_GIT_HASH_SUFFIX=ON -D CMAKE_BUILD_TYPE=RelWithDebInfo \
+                -D BUILD_VERSION_OVERWRITE="r$rev_number" \
+                -D FORCE_GIT_HASH_SUFFIX=ON \
+                -D CMAKE_BUILD_TYPE=RelWithDebInfo \
                 $build_portable \
                 -D TEST_WITH_GDB="ON"\
                 -S . -B build
           sha_short=$(echo ${{ github.sha }} | cut -c1-7)
           echo "sha_short=$sha_short" >> $GITHUB_OUTPUT
+          echo "rev_number=r$rev_number" >> $GITHUB_OUTPUT
 
       - name: Build
         run: |
@@ -135,5 +142,5 @@ jobs:
           matrix.os.name == 'Windows'
         uses: actions/upload-artifact@v3
         with:
-          name: inter-doom-6.x.x-${{ steps.configure.outputs.sha_short }}-windows-${{ matrix.arch.name }}-${{ matrix.compiler.display_name }}
+          name: inter-doom-${{ steps.configure.outputs.rev_number }}-${{ steps.configure.outputs.sha_short }}-windows-${{ matrix.arch.name }}-${{ matrix.compiler.display_name }}
           path: ./build/install/

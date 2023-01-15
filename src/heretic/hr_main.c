@@ -62,7 +62,11 @@
 // -----------------------------------------------------------------------------
 char* RD_Project_Name = PACKAGE_PREFIX " Heretic";
 char* RD_Project_String = PACKAGE_PREFIX " Heretic " BUILD_HERETIC_VERSION;
+#if GIT_TAG_HERETIC
+char* RD_Project_Version = BUILD_HERETIC_VERSION;
+#else
 char* RD_Project_Version = BUILD_HERETIC_VERSION GIT_SHA_SUFFIX;
+#endif
 char* RD_Project_TarName = PROGRAM_PREFIX "heretic";
 GameType_t RD_GameType = gt_Heretic;
 
