@@ -9,14 +9,14 @@ along with maximum possible translation to the Russian language.
 
 For more information, visit [Project's Wiki](https://github.com/JNechaevsky/inter-doom/wiki).
 
-### International Doom 6.1 (released: December 31, 2022)
+### International Doom 6.2 (released: January 15, 2023)
 
 **Windows:**
-[**x86**](https://github.com/JNechaevsky/inter-doom/releases/download/6.1/inter-doom-6.1-windows-x86.zip)
-([hash](https://github.com/JNechaevsky/inter-doom/releases/download/6.1/inter-doom-6.1-windows-x86.zip.sha256))
+[**x86**](https://github.com/JNechaevsky/inter-doom/releases/download/6.2/inter-doom-6.2-windows-x86.zip)
+([hash](https://github.com/JNechaevsky/inter-doom/releases/download/6.2/inter-doom-6.2-windows-x86.zip.sha256))
 |
-[**x64**](https://github.com/JNechaevsky/inter-doom/releases/download/6.1/inter-doom-6.1-windows-x64.zip)
-([hash](https://github.com/JNechaevsky/inter-doom/releases/download/6.1/inter-doom-6.1-windows-x64.zip.sha256))<br/>
+[**x64**](https://github.com/JNechaevsky/inter-doom/releases/download/6.2/inter-doom-6.2-windows-x64.zip)
+([hash](https://github.com/JNechaevsky/inter-doom/releases/download/6.2/inter-doom-6.2-windows-x64.zip.sha256))<br/>
 **Linux:**
 [**Arch(AUR)**](https://aur.archlinux.org/packages/inter-doom)<br/>
 Compilation from source code available for all platforms,
@@ -26,14 +26,14 @@ and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/6.1.tar
 
 [**Antivirus FAQ**](https://github.com/JNechaevsky/inter-doom/wiki/Antivirus-FAQ)
 
-### International Heretic 6.0 (released: December 31, 2022)
+### International Heretic 6.1 (released: January 15, 2023)
 
 **Windows:**
-[**x86**](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-6.0/inter-heretic-6.0-windows-x86.zip)
-([hash](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-6.0/inter-heretic-6.0-windows-x86.zip.sha256))
+[**x86**](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-6.1/inter-heretic-6.1-windows-x86.zip)
+([hash](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-6.1/inter-heretic-6.1-windows-x86.zip.sha256))
 |
-[**x64**](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-6.0/inter-heretic-6.0-windows-x64.zip)
-([hash](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-6.0/inter-heretic-6.0-windows-x64.zip.sha256))<br/>
+[**x64**](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-6.1/inter-heretic-6.1-windows-x64.zip)
+([hash](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-6.1/inter-heretic-6.1-windows-x64.zip.sha256))<br/>
 **Linux:**
 [**Arch(AUR)**](https://aur.archlinux.org/packages/inter-heretic)<br/>
 Compilation from source code available for all platforms,
@@ -43,12 +43,14 @@ and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/heretic
 
 [**Antivirus FAQ**](https://github.com/JNechaevsky/inter-doom/wiki/Antivirus-FAQ)
 
-### International Hexen 5.1 (released: June 12, 2022)
+### International Hexen 6.0 (released: January 15, 2023)
 
 **Windows:**
-[**x86**](https://github.com/JNechaevsky/inter-doom/releases/download/hexen-5.1/inter-hexen-5.1-win32.zip)
+[**x86**](https://github.com/JNechaevsky/inter-doom/releases/download/hexen-6.0/inter-hexen-6.0-windows-x86.zip)
+([hash](https://github.com/JNechaevsky/inter-doom/releases/download/hexen-6.0/inter-hexen-6.0-windows-x86.zip.sha256))
 |
-[**x64**](https://github.com/JNechaevsky/inter-doom/releases/download/hexen-5.1/inter-hexen-5.1-win64.zip)<br/>
+[**x64**](https://github.com/JNechaevsky/inter-doom/releases/download/hexen-6.0/inter-hexen-6.0-windows-x64.zip)
+([hash](https://github.com/JNechaevsky/inter-doom/releases/download/hexen-6.0/inter-hexen-6.0-windows-x64.zip.sha256))<br/>
 **Linux:**
 Build from source code available,
 see [COMPILING.md](COMPILING.md#building-international-doom-on-linux)<br/>
@@ -88,5 +90,5 @@ The project, along with all its translation materials and source code,
 is available under the terms and conditions of
 [GNU General Public License version 2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
 
-Copyright &copy; 2016&ndash;2023 [Julian Nechaevsky](https://jnechaevsky.github.io/author.html)<br/>
+Copyright &copy; 2016&ndash;2023 [Julia Nechaevskaya](https://jnechaevsky.github.io/author.html)<br/>
 Copyright &copy; 2020&ndash;2023 [Leonid Murin (Dasperal)](https://github.com/Dasperal)
