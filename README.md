@@ -52,8 +52,9 @@ and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/heretic
 [**x64**](https://github.com/JNechaevsky/inter-doom/releases/download/hexen-6.0/inter-hexen-6.0-windows-x64.zip)
 ([hash](https://github.com/JNechaevsky/inter-doom/releases/download/hexen-6.0/inter-hexen-6.0-windows-x64.zip.sha256))<br/>
 **Linux:**
-Build from source code available,
-see [COMPILING.md](COMPILING.md#building-international-doom-on-linux)<br/>
+[**Arch(AUR)**](https://aur.archlinux.org/packages/inter-hexen)<br/>
+Compilation from source code available for all platforms,
+see [COMPILING.md](COMPILING.md).<br/>
 Source code available in [zip](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/hexen-5.1.zip)
 and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/hexen-5.1.tar.gz) formats
 
