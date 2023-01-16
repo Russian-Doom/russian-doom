@@ -26,6 +26,7 @@
 // by means of actual color space conversions in r_data:R_InitColormaps().
 // -----------------------------------------------------------------------------
 
+static byte cr_black[256];
 static byte cr_dark[256];
 static byte cr_thirdsaturtion[256];
 static byte cr_monochrome[256];
@@ -497,6 +498,7 @@ static byte cr_red2darkgray_hexen[256] =
 
 byte *cr[] =
 {
+    (byte *) cr_black,
     (byte *) &cr_dark,
     (byte *) &cr_thirdsaturtion,
     (byte *) &cr_monochrome,
