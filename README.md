@@ -9,54 +9,54 @@ along with maximum possible translation to the Russian language.
 
 For more information, visit [Project's Wiki](https://github.com/JNechaevsky/inter-doom/wiki).
 
-### International Doom 6.2 (released: January 15, 2023)
+### International Doom 6.2.1 (released: January 17, 2023)
 
 **Windows:**
-[**x86**](https://github.com/JNechaevsky/inter-doom/releases/download/6.2/inter-doom-6.2-windows-x86.zip)
-([hash](https://github.com/JNechaevsky/inter-doom/releases/download/6.2/inter-doom-6.2-windows-x86.zip.sha256))
+[**x86**](https://github.com/JNechaevsky/inter-doom/releases/download/6.2.1/inter-doom-6.2.1-windows-x86.zip)
+([hash](https://github.com/JNechaevsky/inter-doom/releases/download/6.2.1/inter-doom-6.2.1-windows-x86.zip.sha256))
 |
-[**x64**](https://github.com/JNechaevsky/inter-doom/releases/download/6.2/inter-doom-6.2-windows-x64.zip)
-([hash](https://github.com/JNechaevsky/inter-doom/releases/download/6.2/inter-doom-6.2-windows-x64.zip.sha256))<br/>
+[**x64**](https://github.com/JNechaevsky/inter-doom/releases/download/6.2.1/inter-doom-6.2.1-windows-x64.zip)
+([hash](https://github.com/JNechaevsky/inter-doom/releases/download/6.2.1/inter-doom-6.2.1-windows-x64.zip.sha256))<br/>
 **Linux:**
 [**Arch(AUR)**](https://aur.archlinux.org/packages/inter-doom)<br/>
 Compilation from source code available for all platforms,
 see [COMPILING.md](COMPILING.md).<br/>
-Source code available in [zip](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/6.1.zip)
-and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/6.1.tar.gz) formats
+Source code available in [zip](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/6.2.1.zip)
+and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/6.2.1.tar.gz) formats
 
 [**Antivirus FAQ**](https://github.com/JNechaevsky/inter-doom/wiki/Antivirus-FAQ)
 
-### International Heretic 6.1 (released: January 15, 2023)
+### International Heretic 6.1.1 (released: January 17, 2023)
 
 **Windows:**
-[**x86**](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-6.1/inter-heretic-6.1-windows-x86.zip)
-([hash](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-6.1/inter-heretic-6.1-windows-x86.zip.sha256))
+[**x86**](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-6.1.1/inter-heretic-6.1.1-windows-x86.zip)
+([hash](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-6.1.1/inter-heretic-6.1.1-windows-x86.zip.sha256))
 |
-[**x64**](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-6.1/inter-heretic-6.1-windows-x64.zip)
-([hash](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-6.1/inter-heretic-6.1-windows-x64.zip.sha256))<br/>
+[**x64**](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-6.1.1/inter-heretic-6.1.1-windows-x64.zip)
+([hash](https://github.com/JNechaevsky/inter-doom/releases/download/heretic-6.1.1/inter-heretic-6.1.1-windows-x64.zip.sha256))<br/>
 **Linux:**
 [**Arch(AUR)**](https://aur.archlinux.org/packages/inter-heretic)<br/>
 Compilation from source code available for all platforms,
 see [COMPILING.md](COMPILING.md).<br/>
-Source code available in [zip](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/heretic-6.0.zip)
-and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/heretic-6.0.tar.gz) formats
+Source code available in [zip](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/heretic-6.1.1.zip)
+and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/heretic-6.1.1.tar.gz) formats
 
 [**Antivirus FAQ**](https://github.com/JNechaevsky/inter-doom/wiki/Antivirus-FAQ)
 
-### International Hexen 6.0 (released: January 15, 2023)
+### International Hexen 6.0.1 (released: January 17, 2023)
 
 **Windows:**
-[**x86**](https://github.com/JNechaevsky/inter-doom/releases/download/hexen-6.0/inter-hexen-6.0-windows-x86.zip)
-([hash](https://github.com/JNechaevsky/inter-doom/releases/download/hexen-6.0/inter-hexen-6.0-windows-x86.zip.sha256))
+[**x86**](https://github.com/JNechaevsky/inter-doom/releases/download/hexen-6.0.1/inter-hexen-6.0.1-windows-x86.zip)
+([hash](https://github.com/JNechaevsky/inter-doom/releases/download/hexen-6.0.1/inter-hexen-6.0.1-windows-x86.zip.sha256))
 |
-[**x64**](https://github.com/JNechaevsky/inter-doom/releases/download/hexen-6.0/inter-hexen-6.0-windows-x64.zip)
-([hash](https://github.com/JNechaevsky/inter-doom/releases/download/hexen-6.0/inter-hexen-6.0-windows-x64.zip.sha256))<br/>
+[**x64**](https://github.com/JNechaevsky/inter-doom/releases/download/hexen-6.0.1/inter-hexen-6.0.1-windows-x64.zip)
+([hash](https://github.com/JNechaevsky/inter-doom/releases/download/hexen-6.0.1/inter-hexen-6.0.1-windows-x64.zip.sha256))<br/>
 **Linux:**
 [**Arch(AUR)**](https://aur.archlinux.org/packages/inter-hexen)<br/>
 Compilation from source code available for all platforms,
 see [COMPILING.md](COMPILING.md).<br/>
-Source code available in [zip](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/hexen-5.1.zip)
-and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/hexen-5.1.tar.gz) formats
+Source code available in [zip](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/hexen-6.0.1.zip)
+and [tar.gz](https://github.com/JNechaevsky/inter-doom/archive/refs/tags/hexen-6.0.1.tar.gz) formats
 
 [**Antivirus FAQ**](https://github.com/JNechaevsky/inter-doom/wiki/Antivirus-FAQ)
 
