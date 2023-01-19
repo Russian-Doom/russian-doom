@@ -2,10 +2,8 @@
 
 ### About
 
-International Doom is a limit-removing source port of Doom, Heretic and Hexen.
-It has numerous vanilla bug fixes, enhanced 640x400 display resolution,
-improved game palettes and offers many optional aesthetic game enhancements
-along with maximum possible translation to the Russian language.
+International Doom is a set of bilingual limit-removing source ports of Doom, Heretic and Hexen.
+It has numerous optional gameplay and aesthetic enhancements, higher 640x400 and 1280x800 rendering resolutions along with emulated Doom Press Beta and Jaguar Doom game modes.
 
 For more information, visit [Project's Wiki](https://github.com/JNechaevsky/inter-doom/wiki).
 
