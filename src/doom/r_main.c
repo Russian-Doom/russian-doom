@@ -100,7 +100,9 @@ void (*transcolfunc) (void);
 void (*tlcolfunc) (void);
 void (*transtlcolfunc) (void);
 void (*ghostcolfunc) (void);
-void (*spanfunc) (void);
+void (*spanfunc) (fixed_t x1, fixed_t x2, fixed_t const y,
+                  fixed_t ds_xfrac, const fixed_t ds_xstep,
+                  fixed_t ds_yfrac, const fixed_t ds_ystep);
 
 
 // -----------------------------------------------------------------------------
