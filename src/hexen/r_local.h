@@ -400,7 +400,9 @@ extern void (*alttlcolfunc) (void);
 extern void (*extratlcolfunc) (void);
 extern void (*transcolfunc) (void);
 extern void (*transtlcolfunc) (void);
-extern void (*spanfunc) (void);
+extern void (*spanfunc) (fixed_t x1, fixed_t x2, const fixed_t y,
+                         fixed_t ds_xfrac, const fixed_t ds_xstep,
+                         fixed_t ds_yfrac, const fixed_t ds_ystep);
 extern void R_ExecuteSetViewSize();
 extern void R_InitLightTables (void);
 
@@ -573,22 +575,19 @@ void R_DrawTranslatedTLColumn(void);
 void R_DrawTranslatedTLColumnLow(void);
 
 
-extern int ds_y;
-extern int ds_x1;
-extern int ds_x2;
 extern const lighttable_t *ds_colormap;
-extern fixed_t ds_xfrac;
-extern fixed_t ds_yfrac;
-extern fixed_t ds_xstep;
-extern fixed_t ds_ystep;
 extern byte *ds_source;         // start of a 64*64 tile image
 extern const byte *ds_brightmap;
 
 extern byte *translationtables;
 extern byte *dc_translation;
 
-void R_DrawSpan(void);
-void R_DrawSpanLow(void);
+void R_DrawSpan(fixed_t x1, fixed_t x2, const fixed_t y,
+                fixed_t ds_xfrac, const fixed_t ds_xstep,
+                fixed_t ds_yfrac, const fixed_t ds_ystep);
+void R_DrawSpanLow(fixed_t x1, fixed_t x2, const fixed_t y,
+                   fixed_t ds_xfrac, const fixed_t ds_xstep,
+                   fixed_t ds_yfrac, const fixed_t ds_ystep);
 
 void R_InitBuffer(int width, int height);
 void R_InitTranslationTables(void);

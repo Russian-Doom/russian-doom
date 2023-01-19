@@ -223,9 +223,11 @@ void R_InitSkyMap (void)
 
 void R_MapPlane (int y, int x1, int x2)
 {
-    fixed_t   distance;
     unsigned  index;
     int       dx, dy;
+    fixed_t   distance;
+    fixed_t   ds_xfrac, ds_yfrac;
+    fixed_t   ds_xstep, ds_ystep;
 
 #ifdef RANGECHECK
     if (x2 < x1 || x1 < 0 || x2 >= viewwidth || (unsigned) y > viewheight)
@@ -279,12 +281,8 @@ void R_MapPlane (int y, int x1, int x2)
         ds_colormap = planezlight[index];
     }
 
-    ds_y = y;
-    ds_x1 = x1;
-    ds_x2 = x2;
-
     // High or low detail
-    spanfunc();
+    spanfunc(x1, x2, y, ds_xfrac, ds_xstep, ds_yfrac, ds_ystep);
 }
 
 /*

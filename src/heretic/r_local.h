@@ -394,18 +394,10 @@ extern fixed_t dc_texturemid;
 extern fixed_t dc_x;
 extern fixed_t dc_yh;
 extern fixed_t dc_yl;
-extern fixed_t ds_xfrac;
-extern fixed_t ds_xstep;
-extern fixed_t ds_yfrac;
-extern fixed_t ds_ystep;
 extern fixed_t skyiscale;
 extern fixed_t skyiscale_low;
 extern fixed_t skytextureheight;
-
-extern int ds_x1;
-extern int ds_x2;
-extern int ds_y;
-extern int skytexturemid;
+extern int     skytexturemid;
 
 extern void R_DrawColumn (void);
 extern void R_DrawColumnLow (void);
@@ -413,14 +405,18 @@ extern void R_DrawExtraTLColumn (void);
 extern void R_DrawExtraTLColumnLow (void);
 extern void R_DrawSkyColumn (void);
 extern void R_DrawSkyColumnLow (void);
-extern void R_DrawSpan (void);
-extern void R_DrawSpanLow (void);
 extern void R_DrawTLColumn (void);
 extern void R_DrawTLColumnLow (void);
 extern void R_DrawTranslatedColumn (void);
 extern void R_DrawTranslatedColumnLow (void);
 extern void R_DrawTranslatedTLColumn (void);
 extern void R_DrawTranslatedTLColumnLow (void);
+extern void R_DrawSpan (fixed_t x1, fixed_t x2, const fixed_t y,
+                        fixed_t ds_xfrac, const fixed_t ds_xstep,
+                        fixed_t ds_yfrac, const fixed_t ds_ystep);
+extern void R_DrawSpanLow (fixed_t x1, fixed_t x2, const fixed_t y,
+                           fixed_t ds_xfrac, const fixed_t ds_xstep,
+                           fixed_t ds_yfrac, const fixed_t ds_ystep);
 extern void R_InitBuffer (const int width, const int height);
 
 /*
@@ -505,10 +501,12 @@ extern void (*basecolfunc) (void);
 extern void (*colfunc) (void);
 extern void (*extratlcolfunc) (void);
 extern void (*skycolfunc) (void);
-extern void (*spanfunc) (void);
 extern void (*tlcolfunc) (void);
 extern void (*transcolfunc) (void);
 extern void (*transtlcolfunc) (void);
+extern void (*spanfunc) (fixed_t x1, fixed_t x2, const fixed_t y,
+                         fixed_t ds_xfrac, const fixed_t ds_xstep,
+                         fixed_t ds_yfrac, const fixed_t ds_ystep);
 
 extern void R_ClearStats (void); // [JN] Used by perfomance counter.
 extern void R_DrawTopBorder (void);
