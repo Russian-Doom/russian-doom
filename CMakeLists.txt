@@ -112,7 +112,11 @@ else()
     string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
 endif()
 
-set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
+Option(CMAKE_FIND_PACKAGE_PREFER_CONFIG "Prefer dependency search in config mode over find module mode" OFF)
+
+if(VCPKG_INSTALLED_DIR)
+    set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
+endif()
 
 find_package(SDL2 2.0.18 REQUIRED)
 find_package(SDL2_mixer 2.0.2 REQUIRED)
