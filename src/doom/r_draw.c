@@ -82,11 +82,6 @@ static const int fuzzoffset[FUZZTABLE] =
 static int fuzzpos = 0;
 static int fuzzpos_tic;
 
-// Spans.
-fixed_t ds_y, ds_x1, ds_x2;
-fixed_t ds_xfrac, ds_yfrac;
-fixed_t ds_xstep, ds_ystep;
-
 const lighttable_t *ds_colormap[2];
 const byte         *ds_source;  // start of a 64*64 tile image 
 const byte         *ds_brightmap;
@@ -1456,20 +1451,22 @@ void R_DrawGhostColumnLow (void)
 // texture space u and v.
 // -----------------------------------------------------------------------------
 
-void R_DrawSpan (void) 
+void R_DrawSpan (fixed_t x1, fixed_t x2, const fixed_t y,
+                 fixed_t ds_xfrac, const fixed_t ds_xstep,
+                 fixed_t ds_yfrac, const fixed_t ds_ystep)
 { 
-    unsigned int count = ds_x2 - ds_x1;  // We do not check for zero spans here.
+    unsigned int count = x2 - x1;  // We do not check for zero spans here.
     const byte  *source = ds_source;
     const byte  *brightmap = ds_brightmap;
     const byte **colormap = ds_colormap;
 
 #ifdef RANGECHECK
-    if (ds_x2 < ds_x1 || ds_x1<0 || ds_x2>=screenwidth || (unsigned)ds_y>SCREENHEIGHT)
+    if (x2 < x1 || x1 < 0 || x2 >= screenwidth || (unsigned)y > SCREENHEIGHT)
     {
         I_Error(english_language ?
                 "R_DrawSpan: %i to %i at %i" :
                 "R_DrawSpan: %i к %i у %i",
-                ds_x1,ds_x2,ds_y);
+                x1, x2, y);
     }
 #endif
 
@@ -1480,13 +1477,11 @@ void R_DrawSpan (void)
 
     do
     {
-        byte *dest = ylookup[ds_y] + columnofs[flipviewwidth[ds_x1++]];
+        byte *dest = ylookup[y] + columnofs[flipviewwidth[x1++]];
 
         // Calculate current texture index in u,v.
         // [crispy] fix flats getting more distorted the closer they are to the right
-        unsigned const int ytemp = (ds_yfrac >> 10) & 0x0fc0;
-        unsigned const int xtemp = (ds_xfrac >> 16) & 0x3f;
-        unsigned const int spot = xtemp | ytemp;
+        unsigned const int spot = ((ds_xfrac >> 16) & 0x3f) | ((ds_yfrac >> 10) & 0x0fc0);
 
         // Lookup pixel from flat texture tile, re-index using light/colormap.
         *dest = colormap[brightmap[source[spot]]][source[spot]];
@@ -1501,28 +1496,30 @@ void R_DrawSpan (void)
 // Again..
 // -----------------------------------------------------------------------------
 
-void R_DrawSpanLow (void)
+void R_DrawSpanLow (fixed_t x1, fixed_t x2, const fixed_t y,
+                    fixed_t ds_xfrac, const fixed_t ds_xstep,
+                    fixed_t ds_yfrac, const fixed_t ds_ystep)
 {
-    unsigned int count = ds_x2 - ds_x1;  // We do not check for zero spans here.
-    const int    ds_y_low = ds_y << hires;
+    unsigned int count = x2 - x1;  // We do not check for zero spans here.
+    const int    ds_y_low = y << hires;
     const byte  *source = ds_source;
     const byte  *brightmap = ds_brightmap;
     const byte **colormap = ds_colormap;
     byte        *dest1, *dest2;
 
 #ifdef RANGECHECK
-    if (ds_x2 < ds_x1 || ds_x1<0 || ds_x2>=screenwidth || (unsigned)ds_y>SCREENHEIGHT)
+    if (x2 < x1 || x1<0 || x2>=screenwidth || (unsigned)y>SCREENHEIGHT)
     {
         I_Error(english_language ?
                 "R_DrawSpan: %i to %i at %i" :
                 "R_DrawSpan: %i к %i у %i",
-                ds_x1,ds_x2,ds_y);
+                x1,x2,y);
     }
 #endif
 
     // Blocky mode, need to multiply by 2.
-    ds_x1 <<= 1;
-    ds_x2 <<= 1;
+    x1 <<= 1;
+    x2 <<= 1;
 
     // Pack position and step variables into a single 32-bit integer,
     // with x in the top 16 bits and y in the bottom 16 bits.  For
@@ -1533,18 +1530,16 @@ void R_DrawSpanLow (void)
     {
         // Calculate current texture index in u,v.
         // [crispy] fix flats getting more distorted the closer they are to the right
-        unsigned const int ytemp = (ds_yfrac >> 10) & 0x0fc0;
-        unsigned const int xtemp = (ds_xfrac >> 16) & 0x3f;
-        unsigned const int spot = xtemp | ytemp;
+        unsigned const int spot = ((ds_xfrac >> 16) & 0x3f) | ((ds_yfrac >> 10) & 0x0fc0);
 
         // Lowres/blocky mode does it twice, while scale is adjusted appropriately.
-         dest1 = ylookup[ds_y_low] + columnofs[flipviewwidth[ds_x1]];
+         dest1 = ylookup[ds_y_low] + columnofs[flipviewwidth[x1]];
         *dest1 = colormap[brightmap[source[spot]]][source[spot]];
-         dest2 = ylookup[ds_y_low+1] + columnofs[flipviewwidth[ds_x1++]];
+         dest2 = ylookup[ds_y_low+1] + columnofs[flipviewwidth[x1++]];
         *dest2 = colormap[brightmap[source[spot]]][source[spot]];
-         dest1 = ylookup[ds_y_low] + columnofs[flipviewwidth[ds_x1]];
+         dest1 = ylookup[ds_y_low] + columnofs[flipviewwidth[x1]];
         *dest1 = colormap[brightmap[source[spot]]][source[spot]];
-         dest2 = ylookup[ds_y_low+1] + columnofs[flipviewwidth[ds_x1++]];
+         dest2 = ylookup[ds_y_low+1] + columnofs[flipviewwidth[x1++]];
         *dest2 = colormap[brightmap[source[spot]]][source[spot]];
 
         // position += step;

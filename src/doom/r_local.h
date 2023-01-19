@@ -516,10 +516,6 @@ extern fixed_t     dc_texturemid;
 extern const byte *dc_translation;
 extern byte       *translationtables;
 
-extern fixed_t ds_y, ds_x1, ds_x2;
-extern fixed_t ds_xfrac, ds_yfrac;
-extern fixed_t ds_xstep, ds_ystep;
-
 extern const lighttable_t *ds_colormap[2];
 extern const byte         *ds_source;
 extern const byte         *ds_brightmap;
@@ -538,8 +534,12 @@ void R_DrawFuzzColumnTranslucent (void);
 void R_DrawFuzzColumnTranslucentLow (void);
 void R_DrawGhostColumn (void);
 void R_DrawGhostColumnLow (void);
-void R_DrawSpan (void);
-void R_DrawSpanLow (void);
+void R_DrawSpan (fixed_t x1, fixed_t x2, const fixed_t y,
+                 fixed_t ds_xfrac, const fixed_t ds_xstep,
+                 fixed_t ds_yfrac, const fixed_t ds_ystep);
+void R_DrawSpanLow (fixed_t x1, fixed_t x2, const fixed_t y,
+                    fixed_t ds_xfrac, const fixed_t ds_xstep,
+                    fixed_t ds_yfrac, const fixed_t ds_ystep);
 void R_DrawTLColumn (void);
 void R_DrawTLColumnLow (void);
 void R_DrawTranslatedColumn (void);
@@ -595,11 +595,13 @@ extern lighttable_t *zlight[LIGHTLEVELS][MAXLIGHTZ];
 extern void (*basecolfunc) (void);
 extern void (*colfunc) (void);
 extern void (*fuzzcolfunc) (void);
-extern void (*spanfunc) (void);
 extern void (*tlcolfunc) (void);
 extern void (*transcolfunc) (void);
 extern void (*transtlcolfunc) (void);
 extern void (*ghostcolfunc) (void);
+extern void (*spanfunc) (fixed_t x1, fixed_t x2, fixed_t y,
+                         fixed_t ds_xfrac, const fixed_t ds_xstep,
+                         fixed_t ds_yfrac, const fixed_t ds_ystep);
 extern void R_InitLightTables (void);
 extern void R_ClearStats (void);
 

@@ -212,6 +212,8 @@ static void R_MapPlane (const int y, const int x1, const int x2)
     unsigned  index;
     int       dx, dy;
     fixed_t   distance;
+    fixed_t   ds_xfrac, ds_yfrac;
+    fixed_t   ds_xstep, ds_ystep;
 
 #ifdef RANGECHECK
     if (x2 < x1 || x1 < 0 || x2 >= viewwidth || (unsigned) y > viewheight)
@@ -266,12 +268,8 @@ static void R_MapPlane (const int y, const int x1, const int x2)
         ds_colormap[1] = colormaps;
     }
 
-    ds_y = y;
-    ds_x1 = x1;
-    ds_x2 = x2;
-
     // High or low detail
-    spanfunc();
+    spanfunc(x1, x2, y, ds_xfrac, ds_xstep, ds_yfrac, ds_ystep);
 }
 
 /*

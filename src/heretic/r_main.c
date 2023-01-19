@@ -84,7 +84,9 @@ void (*tlcolfunc) (void);
 void (*extratlcolfunc) (void);
 void (*transcolfunc) (void);
 void (*transtlcolfunc) (void);
-void (*spanfunc) (void);
+void (*spanfunc) (fixed_t x1, fixed_t x2, const fixed_t y,
+                  fixed_t ds_xfrac, const fixed_t ds_xstep,
+                  fixed_t ds_yfrac, const fixed_t ds_ystep);
 
 
 /*
