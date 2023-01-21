@@ -915,22 +915,6 @@ void I_FinishUpdate (void)
         return;
 #endif
 
-    // [crispy] variable rendering framerate
-    // [JN] Modified to have a variable FPS cap.
-    if (uncapped_fps && !singletics)
-    {
-        static int halftics_old;
-        int halftics;
-        extern uint64_t GetAdjustedTimeN(const int N);
-
-        while ((halftics = GetAdjustedTimeN(max_fps)) == halftics_old)
-        {
-            SDL_Delay(1);
-        }
-
-        halftics_old = halftics;
-    }
-
 	// [crispy] [AM] Real FPS counter
     if (show_fps)
 	{
@@ -1019,9 +1003,24 @@ void I_FinishUpdate (void)
 
     SDL_RenderPresent(renderer);
 
-    // [AM] Figure out how far into the current tic we're in as a fixed_t.
     if (uncapped_fps)
     {
+        // [crispy] variable rendering framerate
+        // [JN] Modified to have a variable FPS cap.
+        if (!singletics)
+        {
+            static uint64_t halftics_old;
+            uint64_t halftics;
+
+            while ((halftics = GetAdjustedTimeN(max_fps)) == halftics_old)
+            {
+                SDL_Delay(1);
+            }
+
+            halftics_old = halftics;
+        }
+
+        // [AM] Figure out how far into the current tic we're in as a fixed_t.
         fractionaltic = I_GetFracRealTime();
     }
 }

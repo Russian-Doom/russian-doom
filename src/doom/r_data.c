@@ -940,8 +940,6 @@ static void R_InitTextures (void)
 
 static void R_InitFlats (void)
 {
-    int i;
-
     firstflat = W_GetNumForName (DEH_String("F_START")) + 1;
     lastflat = W_GetNumForName (DEH_String("F_END")) - 1;
     numflats = lastflat - firstflat + 1;
@@ -949,7 +947,7 @@ static void R_InitFlats (void)
     // Create translation table for global animation.
     flattranslation = Z_Malloc ((numflats+1)*sizeof(*flattranslation), PU_STATIC, 0);
 
-    for (i=0 ; i < numflats ; i++)
+    for (int i = 0 ; i < numflats ; i++)
     {
         flattranslation[i] = i;
     }
@@ -964,8 +962,7 @@ static void R_InitFlats (void)
 
 static void R_InitSpriteLumps (void)
 {
-    int      i;
-    patch_t *patch;
+    const patch_t *patch;
 
     firstspritelump = W_GetNumForName (DEH_String("S_START")) + 1;
     lastspritelump = W_GetNumForName (DEH_String("S_END")) - 1;
@@ -975,7 +972,7 @@ static void R_InitSpriteLumps (void)
     spriteoffset = Z_Malloc (numspritelumps*sizeof(*spriteoffset), PU_STATIC, 0);
     spritetopoffset = Z_Malloc (numspritelumps*sizeof(*spritetopoffset), PU_STATIC, 0);
 
-    for (i=0 ; i< numspritelumps ; i++)
+    for (int i = 0 ; i < numspritelumps ; i++)
     {
         if (!(i&63))
         {
@@ -1240,7 +1237,7 @@ int R_FlatNumForName (char *name)
 
 int	R_CheckTextureNumForName (char *name)
 {
-    int key = W_LumpNameHash(name) % numtextures;
+    const int key = W_LumpNameHash(name) % numtextures;
     texture_t *texture;
 
     // "NoTexture" marker.
@@ -1270,9 +1267,9 @@ int	R_CheckTextureNumForName (char *name)
 // -----------------------------------------------------------------------------
 int	R_TextureNumForName (char *name)
 {
-    int i = R_CheckTextureNumForName(name);
+    const int i = R_CheckTextureNumForName(name);
 
-    if (i==-1)
+    if (i == -1)
     {
         // [crispy] make non-fatal
         fprintf (stderr, english_language ?
