@@ -21,6 +21,8 @@
 #pragma once
 
 #include "m_fixed.h" // [crispy]
+#include <stdint.h>
+
 
 
 #define TICRATE 35
@@ -31,8 +33,8 @@ int I_GetTime (void);
 
 // returns current time in ms
 int I_GetTimeMS (void);
-unsigned long long I_GetTimeMS64 (void);
-unsigned long long GetAdjustedTimeN (const int N);
+uint64_t I_GetTimeMS64 (void);
+uint64_t GetAdjustedTimeN (const int N);
 
 // Pause for a specified number of ms
 void I_Sleep(int ms);

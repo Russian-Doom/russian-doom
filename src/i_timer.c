@@ -62,7 +62,7 @@ int I_GetTimeMS(void)
     return ticks - basetime;
 }
 
-unsigned long long I_GetTimeMS64(void)
+uint64_t I_GetTimeMS64(void)
 {
     Uint64 ticks;
 
