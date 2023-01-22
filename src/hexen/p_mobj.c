@@ -1984,7 +1984,7 @@ void P_SpawnMapThing(mapthing_t * mthing)
         ||  mobj->type == MT_TABLE_SHIT2       // Small Silver Stein [8501]
         ||  mobj->type == MT_MISC1)            // Tiny Rock (mossy) [8501]
         {
-            mobj->health -= M_Random() & 1;
+            mobj->health -= rand() & 1;
         }
     }
 }

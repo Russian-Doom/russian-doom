@@ -1437,7 +1437,7 @@ void P_SpawnMapThing(mapthing_t * mthing)
         ||  mobj->type == MT_SKULLHANG45   // Hanging Skull 3 [25]
         ||  mobj->type == MT_SKULLHANG35)  // Hanging Skull 4 [26]
         {
-            mobj->health -= M_Random() & 1;
+            mobj->health -= rand() & 1;
         }
     }
 }

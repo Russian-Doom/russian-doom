@@ -1246,11 +1246,11 @@ void P_SpawnMapThing (mapthing_t *mthing)
     || mobj->info->spawnstate == S_SARG_DIE6
     || mobj->info->spawnstate == S_HEAD_DIE6)
     {
-        mobj->health -= Crispy_Random() & 1;
+        mobj->health -= rand() & 1;
         // [crispy] randomly colorize space marine corpse objects
         if (!netgame && colored_blood && !vanillaparm)
         {
-            mobj->flags |= (Crispy_Random() & 3) << MF_TRANSSHIFT;
+            mobj->flags |= (rand() & 3) << MF_TRANSSHIFT;
         }
     }
 
