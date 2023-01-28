@@ -567,6 +567,9 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
                 look += mouse_y_invert ? -mousey / MLOOKUNITLOWRES
                                        :  mousey / MLOOKUNITLOWRES;
 
+                // [Dasperal] Vertical look with gamepad
+                look += FixedMul(angleturn[2], joyvlook) / MLOOKUNITLOWRES;
+
                 // [crispy] Limit to max speed of keyboard look up/down
                 if(look > 2)
                 {
@@ -581,12 +584,14 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         else
         {
             cmd->lookdir = mouse_y_invert ? -mousey : mousey;
+            cmd->lookdir += FixedMul(angleturn[2], joyvlook);
             cmd->lookdir /= MLOOKUNIT;
         }
     }
     else if (!novert)
     {
         forward += mousey;
+        forward += FixedMul(forwardmove[speed], joyvlook);
     }
 
     // [JN] Toggle mouselook
