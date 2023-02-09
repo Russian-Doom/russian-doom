@@ -624,7 +624,11 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         {
             cmd->lookdir = mouse_y_invert ? -mousey : mousey;
             cmd->lookdir += FixedMul(angleturn[2], joyvlook);
-            cmd->lookdir /= MLOOKUNIT;
+            // [Dasperal] Allow precise vertical look with near 0 mouse/gamepad movement
+            if(cmd->lookdir > 0)
+                cmd->lookdir = (cmd->lookdir + MLOOKUNIT - 1) / MLOOKUNIT;
+            else
+                cmd->lookdir = (cmd->lookdir - MLOOKUNIT + 1) / MLOOKUNIT;
         }
     }
     else if (!novert)
