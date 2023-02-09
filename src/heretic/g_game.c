@@ -560,29 +560,42 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     {
         if (demorecording || lowres_turn)
         {
-            // [crispy] Map mouse movement to look variable when recording
-            look += mouse_y_invert ? -mousey / MLOOKUNITLOWRES
-                                   :  mousey / MLOOKUNITLOWRES;
+            // [Dasperal] Skip mouse look if it is TOCENTER cmd
+            if(look != TOCENTER)
+            {
+                // [crispy] Map mouse movement to look variable when recording
+                look += mouse_y_invert ? -mousey / MLOOKUNITLOWRES
+                                       :  mousey / MLOOKUNITLOWRES;
 
-            // [crispy] Limit to max speed of keyboard look up/down
-            if (look > 2)
-            {
-                look = 2;
-            }
-            else if (look < -2)
-            {
-                look = -2;
+                // [Dasperal] Vertical look with gamepad
+                look += FixedMul(angleturn[2], joyvlook) / MLOOKUNITLOWRES;
+
+                // [crispy] Limit to max speed of keyboard look up/down
+                if(look > 2)
+                {
+                    look = 2;
+                }
+                else if(look < -2)
+                {
+                    look = -2;
+                }
             }
         }
         else
         {
             cmd->lookdir = mouse_y_invert ? -mousey : mousey;
-            cmd->lookdir /= MLOOKUNIT;
+            cmd->lookdir += FixedMul(angleturn[2], joyvlook);
+            // [Dasperal] Allow precise vertical look with near 0 mouse/gamepad movement
+            if(cmd->lookdir > 0)
+                cmd->lookdir = (cmd->lookdir + MLOOKUNIT - 1) / MLOOKUNIT;
+            else
+                cmd->lookdir = (cmd->lookdir - MLOOKUNIT + 1) / MLOOKUNIT;
         }
     }
     else if (!novert)
     {
         forward += mousey;
+        forward += FixedMul(forwardmove[speed], joyvlook);
     }
 
     // [JN] Toggle mouselook
