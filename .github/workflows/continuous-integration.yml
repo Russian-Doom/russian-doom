@@ -143,7 +143,7 @@ jobs:
           if [[ '${{ matrix.compiler.display_name }}' == 'MSVC' ]]
           then
               msvc_gen_opts='${{ matrix.arch.msvc_gen_opts }}'
-              msvc_cmake_toolchain='-D CMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake'
+              msvc_cmake_toolchain="-D CMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
           fi
           if [[ '${{ matrix.os.name }}' == 'Linux' ]]
           then
