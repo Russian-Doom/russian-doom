@@ -4,7 +4,9 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # CMP0077 supress some arcane CMake warning when using vcpkg.
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
-# Automatically installs direct dependencies when using vcpkg.
+# Automatically copy dependencies into the output directory for executables when using vcpkg.
+set(VCPKG_APPLOCAL_DEPS ON)
+# Automatically installs dependencies when using vcpkg.
 set(X_VCPKG_APPLOCAL_DEPS_INSTALL ON)
 Option(VCPKG_MANIFEST_MODE "Operate in vcpkg manifest mode instead of classic mode" ON)
 
