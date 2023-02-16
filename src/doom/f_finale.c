@@ -61,7 +61,7 @@ static unsigned int finalecount;
 static unsigned int finaleendcount;
 
 // [JN] Was final wipe done?
-boolean finale_wipe_done = false;
+static boolean finale_wipe_done;
 
 typedef struct
 {
@@ -131,6 +131,7 @@ void F_StartFinale (void)
     gameaction = ga_nothing;
     gamestate = GS_FINALE;
     automapactive = false;
+    finale_wipe_done = false;
     players[consoleplayer].messageTics = 1;
     players[consoleplayer].message = NULL;
 

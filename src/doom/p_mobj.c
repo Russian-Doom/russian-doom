@@ -1091,7 +1091,6 @@ void P_SpawnPlayer (const mapthing_t *mthing)
         p->mo->flags |= MF_NOCLIP;
     }
     skippsprinterp = true;
-    finale_wipe_done = false;
 
     // setup gun psprite
     P_SetupPsprites (p);
