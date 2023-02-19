@@ -6712,7 +6712,8 @@ static void M_LoadSelect(int choice)
 //
 static void M_LoadGame ()
 {
-    if (netgame)
+    // [crispy] allow loading game while multiplayer demo playback
+    if (netgame && !demoplayback)
     {
         M_StartMessage(DEH_String(english_language ?
                                   LOADNET : LOADNET_RUS),
@@ -6886,7 +6887,8 @@ static void M_QuickLoadResponse(boolean confirmed)
 
 static void M_QuickLoad(void)
 {
-    if (netgame)
+    // [crispy] allow quickloading game while multiplayer demo playback
+    if (netgame && !demoplayback)
     {
         M_StartMessage(DEH_String(english_language ?
                                   QLOADNET : QLOADNET_RUS),
