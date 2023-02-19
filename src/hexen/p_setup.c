@@ -457,6 +457,7 @@ static void P_LoadSubsectors_DeePBSP (int lump)
     {
         subsectors[i].numlines = (int)data[i].numsegs;
         subsectors[i].firstline = (int)data[i].firstseg;
+        subsectors[i].poly = NULL;
     }
 
     W_ReleaseLumpNum(lump);
@@ -797,6 +798,7 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
 
         subsectors[i].firstline = currSeg;
         subsectors[i].numlines = mseg->numsegs;
+        subsectors[i].poly = NULL;
         currSeg += mseg->numsegs;
     }
 
