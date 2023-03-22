@@ -1375,7 +1375,7 @@ static MenuItem_t Level1Items[] = {
     I_SWITCH("GAUNTLETS:",         "GTHXFNRB:",         M_RD_SelectiveGauntlets), // ПЕРЧАТКИ
     I_SWITCH("ETHEREAL CROSSBOW:", "\'ABHYSQ FH,FKTN:", M_RD_SelectiveCrossbow), // ЭФИРНЫЙ АРБАЛЕТ
     I_SWITCH("DRAGON CLAW:",       "RJUJNM LHFRJYF:",   M_RD_SelectiveDragonClaw), // КОГОТЬ ДРАКОНА
-    I_SWITCH("HELLSTAFF:",         "GJCJ] FLF:",        M_RD_SelectiveHellStaff), // ПОСОХ АДА
+    I_SWITCH("HELLSTAFF:",         "GJCJ[ FLF:",        M_RD_SelectiveHellStaff), // ПОСОХ АДА
     I_SWITCH("PHOENIX ROD:",       ";TPK ATYBRCF:",     M_RD_SelectivePhoenixRod), // ЖЕЗЛ ФЕНИКСА
     I_SWITCH("FIREMACE:",          "JUYTYYFZ ,EKFDF:",  M_RD_SelectiveFireMace), // ОГНЕННАЯ БУЛАВА
     I_EMPTY,
