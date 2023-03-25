@@ -890,6 +890,12 @@ static void I_SDL_PrecacheSounds(sfxinfo_t *sounds, int num_sounds)
 {
     char namebuf[9];
     int i;
+    static boolean sounds_pracached = false;  // [JN] Precache sounds only once.
+
+    if (sounds_pracached)
+    {
+        return;
+    }
 
     printf(english_language ?
            "I_SDL_PrecacheSounds: Precaching all sound effects - " :
@@ -917,6 +923,8 @@ static void I_SDL_PrecacheSounds(sfxinfo_t *sounds, int num_sounds)
     printf("]");
 
     printf("\n");
+
+    sounds_pracached = true;
 }
 
 // Load a SFX chunk into memory and ensure that it is locked.
