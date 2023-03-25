@@ -247,7 +247,6 @@ static int resize_delay = 70; // [JN] Redused from 500 to 70
 float brightness = 1.0f;
 
 int  usegamma = 7;  // default gamma level is 0.85
-byte gammatable[18][256];
 
 float color_saturation = 1.0f;
 
@@ -256,18 +255,6 @@ int show_palette = 1;
 float r_color_factor  = 1.0f;
 float g_color_factor  = 1.0f;
 float b_color_factor  = 1.0f;
-
-static const float gammalevels[18] =
-{
-    // Darker
-    0.50f, 0.55f, 0.60f, 0.65f, 0.70f, 0.75f, 0.80f, 0.85f, 0.90f,
-
-    // No gamma correction
-    1.0f,
-
-    // Lighter
-    1.125f, 1.25f, 1.375f, 1.5f, 1.625f, 1.75f, 1.875f, 2.0f,
-};
 
 // [JN] Text representation of values above.
 
@@ -1035,23 +1022,6 @@ void I_ReadScreen (byte* scr)
 }
 
 // -----------------------------------------------------------------------------
-// I_InitGammaTables
-// [JN] Initialize and generate gamma-correction levels.
-// Based on implementation from DOOM Retro.
-// -----------------------------------------------------------------------------
-
-static void I_InitGammaTables (void)
-{
-    for (int i = 0; i < 18; i++)
-    {
-        for (int j = 0; j < 256; j++)
-        {
-            gammatable[i][j] = (byte)(pow(j / 255.0, 1.0 / gammalevels[i]) * 255.0 + 0.5);
-        }
-    }
-}
-
-// -----------------------------------------------------------------------------
 // I_CheckPaletteValues
 // [JN] Safe-guard conditions to fix possibly incorrect values.
 // -----------------------------------------------------------------------------
@@ -1672,10 +1642,6 @@ void I_InitGraphics(void)
     // Fixes not working Win-key combinations on SDL 2.0.14.
     SDL_SetHintWithPriority(SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS,
                             "1", SDL_HINT_OVERRIDE);
-
-    // [JN] Initialize and generate gamma-correction levels.
-
-    I_InitGammaTables();
 
     // Start with a clear black screen
     // (screen will be flipped after we set the palette)
