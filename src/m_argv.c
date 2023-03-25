@@ -302,7 +302,7 @@ enum
     FILETYPE_IWAD =    0x2,
     FILETYPE_PWAD =    0x4,
     FILETYPE_DEH =     0x8,
-    FILETYPE_LMP =     0x9,
+    FILETYPE_LMP =     0x10,
 };
 
 static int GuessFileType(const char *name)
@@ -312,7 +312,7 @@ static int GuessFileType(const char *name)
     char *lower;
     static boolean iwad_found = false;
 
-    base = M_BaseName(name);
+    base = M_FileName(name);
     lower = M_StringDuplicate(base);
     M_ForceLowercase(lower);
 
@@ -373,8 +373,8 @@ void M_AddLooseFiles(void)
 
     // allocate space for up to three additional regular parameters
 
-    arguments = malloc((myargc + 3) * sizeof(*arguments));
-    memset(arguments, 0, (myargc + 3) * sizeof(*arguments));
+    arguments = malloc((myargc + 4) * sizeof(*arguments));
+    memset(arguments, 0, (myargc + 4) * sizeof(*arguments));
 
     // check the command line and make sure it does not already
     // contain any regular parameters or response files
@@ -446,7 +446,7 @@ void M_AddLooseFiles(void)
     }
 
     free(arguments);
-
+    free(myargv);
     myargv = newargv;
 }
 #endif
