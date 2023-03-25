@@ -302,6 +302,7 @@ enum
     FILETYPE_IWAD =    0x2,
     FILETYPE_PWAD =    0x4,
     FILETYPE_DEH =     0x8,
+    FILETYPE_LMP =     0x9,
 };
 
 static int GuessFileType(const char *name)
@@ -322,8 +323,7 @@ static int GuessFileType(const char *name)
         ret = FILETYPE_IWAD;
         iwad_found = true;
     }
-    else if (M_StringEndsWith(lower, ".wad") ||
-             M_StringEndsWith(lower, ".lmp"))
+    else if (M_StringEndsWith(lower, ".wad"))
     {
         ret = FILETYPE_PWAD;
     }
@@ -333,6 +333,10 @@ static int GuessFileType(const char *name)
              M_StringEndsWith(lower, ".seh"))
     {
         ret = FILETYPE_DEH;
+    }
+    else if (M_StringEndsWith(lower, ".lmp"))
+    {
+        ret = FILETYPE_LMP;
     }
 
     free(lower);
@@ -418,6 +422,12 @@ void M_AddLooseFiles(void)
     {
         arguments[myargc].str = M_StringDuplicate("-deh");
         arguments[myargc].type = FILETYPE_DEH - 1;
+        myargc++;
+    }
+    if (types & FILETYPE_LMP)
+    {
+        arguments[myargc].str = M_StringDuplicate("-playdemo");
+        arguments[myargc].type = FILETYPE_LMP - 1;
         myargc++;
     }
 
