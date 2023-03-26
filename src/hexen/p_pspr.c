@@ -36,7 +36,6 @@
 // EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
 
 extern void P_ExplodeMissile(mobj_t * mo);
-extern void A_UnHideThing(mobj_t * actor);
 
 // PUBLIC FUNCTION PROTOTYPES ----------------------------------------------
 
@@ -493,7 +492,7 @@ void P_DropWeapon(player_t * player)
 //
 //---------------------------------------------------------------------------
 
-void A_WeaponReady (mobj_t *obj, player_t *player, pspdef_t *psp)
+void A_WeaponReady(mobj_t *obj, player_t *player, pspdef_t *psp)
 {
     int angle;
 
@@ -543,7 +542,7 @@ void A_WeaponReady (mobj_t *obj, player_t *player, pspdef_t *psp)
 //
 //---------------------------------------------------------------------------
 
-void A_ReFire (mobj_t *mobj, player_t *player, pspdef_t *psp)
+void A_ReFire(mobj_t *mobj, player_t *player, pspdef_t *psp)
 {
     if ((player->cmd.buttons & BT_ATTACK)
         && player->pendingweapon == WP_NOCHANGE && player->health)
@@ -564,7 +563,7 @@ void A_ReFire (mobj_t *mobj, player_t *player, pspdef_t *psp)
 //
 //---------------------------------------------------------------------------
 
-void A_Lower (mobj_t *mobj, player_t *player, pspdef_t *psp)
+void A_Lower(mobj_t *mobj, player_t *player, pspdef_t *psp)
 {
     if (player->morphTics)
     {
@@ -598,7 +597,7 @@ void A_Lower (mobj_t *mobj, player_t *player, pspdef_t *psp)
 //
 //---------------------------------------------------------------------------
 
-void A_Raise (mobj_t *mobj, player_t *player, pspdef_t *psp)
+void A_Raise(mobj_t *mobj, player_t *player, pspdef_t *psp)
 {
     psp->sy -= RAISESPEED;
     if (psp->sy > WEAPONTOP)
@@ -694,7 +693,7 @@ void AdjustPlayerAngle(mobj_t * pmo)
 //
 //============================================================================
 
-void A_SnoutAttack (mobj_t *mobj, player_t *player, pspdef_t *psp)
+void A_SnoutAttack(mobj_t *mobj, player_t *player, pspdef_t *psp)
 {
     angle_t angle;
     int damage;
@@ -727,7 +726,7 @@ void A_SnoutAttack (mobj_t *mobj, player_t *player, pspdef_t *psp)
 
 #define HAMMER_RANGE	(MELEERANGE+MELEERANGE/2)
 
-void A_FHammerAttack (mobj_t *mobj, player_t *player, pspdef_t *psp)
+void A_FHammerAttack(mobj_t *mobj, player_t *player, pspdef_t *psp)
 {
     angle_t angle;
     mobj_t *pmo = player->mo;
@@ -796,7 +795,7 @@ void A_FHammerAttack (mobj_t *mobj, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_FHammerThrow (mobj_t *mobj, player_t *player, pspdef_t *psp)
+void A_FHammerThrow(mobj_t *mobj, player_t * player, pspdef_t * psp)
 {
     mobj_t *mo;
 
@@ -818,7 +817,7 @@ void A_FHammerThrow (mobj_t *mobj, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_FSwordAttack (mobj_t *mobj, player_t *player, pspdef_t *psp)
+void A_FSwordAttack(mobj_t *mobj, player_t *player, pspdef_t *psp)
 {
     mobj_t *pmo;
 
@@ -883,7 +882,7 @@ void A_FSwordFlames(mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_MWandAttack (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_MWandAttack(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo;
 
@@ -903,7 +902,7 @@ void A_MWandAttack (mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_LightningReady (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_LightningReady(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     A_WeaponReady(actor, player, psp);
     if (P_Random() < 160)
@@ -920,7 +919,7 @@ void A_LightningReady (mobj_t *actor, player_t *player, pspdef_t *psp)
 
 #define ZAGSPEED	FRACUNIT
 
-void A_LightningClip (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_LightningClip(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *cMo;
     mobj_t *target = NULL;
@@ -982,7 +981,7 @@ void A_LightningClip (mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_LightningZap (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_LightningZap(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo;
     fixed_t deltaZ;
@@ -1095,7 +1094,7 @@ void A_MLightningAttack (mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_ZapMimic (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_ZapMimic(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo;
 
@@ -1121,7 +1120,7 @@ void A_ZapMimic (mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_LastZap (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_LastZap(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo;
 
@@ -1139,7 +1138,7 @@ void A_LastZap (mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_LightningRemove (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_LightningRemove(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo;
 
@@ -1175,7 +1174,7 @@ void MStaffSpawn(mobj_t * pmo, angle_t angle)
 //
 //============================================================================
 
-void A_MStaffAttack (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_MStaffAttack(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     angle_t angle;
     mobj_t *pmo;
@@ -1203,7 +1202,7 @@ void A_MStaffAttack (mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_MStaffPalette (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_MStaffPalette(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     int pal;
 
@@ -1224,7 +1223,7 @@ void A_MStaffPalette (mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_MStaffWeave (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_MStaffWeave(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     fixed_t newX, newY;
     int weaveXY, weaveZ;
@@ -1258,7 +1257,7 @@ void A_MStaffWeave (mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_MStaffTrack (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_MStaffTrack(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     if ((actor->special1.m == NULL) && (P_Random() < 50))
     {
@@ -1308,7 +1307,7 @@ void A_MStaffAttack2 (mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_FPunchAttack (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_FPunchAttack(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     angle_t angle;
     int damage;
@@ -1386,7 +1385,7 @@ void A_FPunchAttack (mobj_t *actor, player_t *player, pspdef_t *psp)
 
 #define AXERANGE	2.25*MELEERANGE
 
-void A_FAxeAttack (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_FAxeAttack(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     angle_t angle;
     mobj_t *pmo = player->mo;
@@ -1467,7 +1466,7 @@ void A_FAxeAttack (mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //===========================================================================
 
-void A_CMaceAttack (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_CMaceAttack(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     angle_t angle;
     int damage;
@@ -1515,7 +1514,7 @@ void A_CMaceAttack (mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_CStaffCheck (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_CStaffCheck(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *pmo;
     int damage;
@@ -1575,7 +1574,7 @@ void A_CStaffCheck (mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_CStaffAttack (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_CStaffAttack(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo;
     mobj_t *pmo;
@@ -1601,7 +1600,7 @@ void A_CStaffAttack (mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_CStaffMissileSlither (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_CStaffMissileSlither(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     fixed_t newX, newY;
     int weaveXY;
@@ -1624,7 +1623,7 @@ void A_CStaffMissileSlither (mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_CStaffInitBlink (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_CStaffInitBlink(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     player->mo->special1.i = (P_Random() >> 1) + 20;
 }
@@ -1635,7 +1634,7 @@ void A_CStaffInitBlink (mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_CStaffCheckBlink (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_CStaffCheckBlink(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     if (!--player->mo->special1.i)
     {
@@ -1653,7 +1652,7 @@ void A_CStaffCheckBlink (mobj_t *actor, player_t *player, pspdef_t *psp)
 #define FLAMESPEED	(0.45*FRACUNIT)
 #define CFLAMERANGE	(12*64*FRACUNIT)
 
-void A_CFlameAttack (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_CFlameAttack(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo;
 
@@ -1674,9 +1673,9 @@ void A_CFlameAttack (mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_CFlamePuff (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_CFlamePuff(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
-    A_UnHideThing(actor);
+    A_UnHideThing(actor, player, psp);
     actor->momx = 0;
     actor->momy = 0;
     actor->momz = 0;
@@ -1689,14 +1688,14 @@ void A_CFlamePuff (mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_CFlameMissile (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_CFlameMissile(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     int i;
     int an;
     fixed_t dist;
     mobj_t *mo;
 
-    A_UnHideThing(actor);
+    A_UnHideThing(actor, player, psp);
     S_StartSound(actor, SFX_CLERIC_FLAME_EXPLODE);
     if (BlockingMobj && BlockingMobj->flags & MF_SHOOTABLE)
     {                           // Hit something, so spawn the flame circle around the thing
@@ -1824,7 +1823,7 @@ void A_CFlameAttack(player_t *player, pspdef_t *psp)
 
 #define FLAMEROTSPEED	2*FRACUNIT
 
-void A_CFlameRotate (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_CFlameRotate(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     int an;
 
@@ -1842,7 +1841,7 @@ void A_CFlameRotate (mobj_t *actor, player_t *player, pspdef_t *psp)
 //      Spawns the spirits
 //============================================================================
 
-void A_CHolyAttack3 (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_CHolyAttack3(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     P_SpawnMissile(actor, actor->target, MT_HOLY_MISSILE);
     S_StartSound(actor, SFX_CHOLY_FIRE);
@@ -1856,7 +1855,7 @@ void A_CHolyAttack3 (mobj_t *actor, player_t *player, pspdef_t *psp)
 //      Spawns the spirits
 //============================================================================
 
-void A_CHolyAttack2 (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_CHolyAttack2(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     int j;
     int i;
@@ -1943,7 +1942,7 @@ void A_CHolyAttack (mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_CHolyPalette (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_CHolyPalette(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     int pal;
 
@@ -2092,7 +2091,7 @@ static void CHolyWeave(mobj_t * actor)
 //
 //============================================================================
 
-void A_CHolySeek (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_CHolySeek(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     actor->health--;
     if (actor->health <= 0)
@@ -2187,7 +2186,7 @@ static void CHolyTailRemove(mobj_t * actor)
 //
 //============================================================================
 
-void A_CHolyTail (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_CHolyTail(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *parent;
 
@@ -2221,7 +2220,7 @@ void A_CHolyTail (mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_CHolyCheckScream (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_CHolyCheckScream(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     A_CHolySeek(actor, player, psp);
     if (P_Random() < 20)
@@ -2240,7 +2239,7 @@ void A_CHolyCheckScream (mobj_t *actor, player_t *player, pspdef_t *psp)
 //
 //============================================================================
 
-void A_CHolySpawnPuff (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_CHolySpawnPuff(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     P_SpawnMobj(actor->x, actor->y, actor->z, MT_HOLY_MISSILE_PUFF);
 }
@@ -2256,7 +2255,7 @@ void A_CHolySpawnPuff (mobj_t *actor, player_t *player, pspdef_t *psp)
 #define SHARDSPAWN_UP		4
 #define SHARDSPAWN_DOWN		8
 
-void A_FireConePL1 (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_FireConePL1(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     angle_t angle;
     int damage;
@@ -2298,7 +2297,7 @@ void A_FireConePL1 (mobj_t *actor, player_t *player, pspdef_t *psp)
     }
 }
 
-void A_ShedShard (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_ShedShard(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo;
     int spawndir = actor->special1.i;
@@ -2402,7 +2401,7 @@ void A_FloatPuff(mobj_t *puff)
 }
 */
 
-void A_Light0 (mobj_t *actor, player_t *player, pspdef_t *psp)
+void A_Light0(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     player->extralight = 0;
 }

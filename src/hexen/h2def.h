@@ -1119,3 +1119,6 @@ void MN_DrTextSmallYellowRUS(char *text, int x, int y);
 void MN_DrTextSmallYellowRUSFade(char *text, int x, int y, byte *table);
 
 extern int messageson;
+
+#include "p_action.h"
+
