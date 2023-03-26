@@ -567,6 +567,7 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(automap_grid),
     CONFIG_VARIABLE_INT(automap_grid_size),
     CONFIG_VARIABLE_INT(automap_mark_color),
+    CONFIG_VARIABLE_INT(automap_secrets),
 
     // Stats
     CONFIG_VARIABLE_INT(stats_placement),

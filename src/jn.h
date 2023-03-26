@@ -119,6 +119,7 @@ extern int automap_follow;
 extern int automap_grid;
 extern int automap_grid_size;
 extern int automap_mark_color;
+extern int automap_secrets;
 
 // -----------------------------------------------------------------------------
 // Stats
