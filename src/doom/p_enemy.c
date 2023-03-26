@@ -78,6 +78,10 @@ int          numbraintargets = 0;  // [crispy] initialize
 static int   braintargeton = 0;
 static int   maxbraintargets;  // [crispy] remove braintargets limit
 
+void A_Fall (mobj_t *actor);
+void A_Fire (mobj_t *actor);
+void A_SpawnFly (mobj_t *mo);
+
 
 // =============================================================================
 // ENEMY THINKING
