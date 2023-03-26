@@ -34,7 +34,7 @@
 typedef struct
 {
     int offsets[deh_hhe_num_versions];
-    void (*func)();
+    void (*func)(struct mobj_s *, struct player_s *, struct pspdef_s *);
 } hhe_action_pointer_t;
 
 extern void A_FreeTargMobj();
