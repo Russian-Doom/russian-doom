@@ -149,6 +149,7 @@ int automap_follow = 1;
 int automap_grid = 0;
 int automap_grid_size = 128;
 int automap_mark_color = 6;
+int automap_secrets = 1;
 
 // Stats
 int stats_placement = 0;
@@ -1082,6 +1083,7 @@ void D_BindVariables(void)
     M_BindIntVariable("automap_grid",           &automap_grid);
     M_BindIntVariable("automap_grid_size",      &automap_grid_size);
     M_BindIntVariable("automap_mark_color",     &automap_mark_color);
+    M_BindIntVariable("automap_secrets",        &automap_secrets);
 
     // Stats
     M_BindIntVariable("stats_placement",        &stats_placement);

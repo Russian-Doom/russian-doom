@@ -127,6 +127,7 @@ static void M_RD_AutoMapFollow();
 static void M_RD_AutoMapGrid();
 static void M_RD_AutoMapGridSize(Direction_t direction);
 static void M_RD_AutomapMarkColor(Direction_t direction);
+static void M_RD_AutomapSecrets();
 
 // Stats
 static void DrawStatsMenu(void);
@@ -705,7 +706,7 @@ static MenuItem_t AutomapItems[] = {
     I_SWITCH("GRID:",                       "CTNRF:",                          M_RD_AutoMapGrid), // СЕТКА
     I_LRFUNC("GRID SIZE:",                  "HFPVTH CTNRB:",                   M_RD_AutoMapGridSize), // РАЗМЕР СЕТКИ
     I_LRFUNC("MARK COLOR:",                 "WDTN JNVTNJR:",                   M_RD_AutomapMarkColor), // ЦВЕТ ОТМЕТОК
-    I_EMPTY,
+    I_SWITCH("HIGHLIGHT SECRETS:",          "GJLCDTXBDFNM NFQYBRB:",           M_RD_AutomapSecrets), // ПОДСВЕЧИВАТЬ ТАЙНИКИ
     I_EMPTY,
     I_EMPTY,
     I_EMPTY,
@@ -2997,6 +2998,9 @@ static void DrawAutomapMenu(void)
         // Mark color
         RD_M_DrawTextSmallENG(M_RD_ColorName(automap_mark_color+1), 118 + wide_delta, 112,
                               M_RD_ColorTranslation(automap_mark_color+1));
+
+        // Highlight secrets
+        RD_M_DrawTextSmallENG(automap_secrets ? "ON" : "OFF", 164 + wide_delta, 122, CR_NONE);
     }
     else
     {
@@ -3018,6 +3022,9 @@ static void DrawAutomapMenu(void)
         // Цвет отметок
         RD_M_DrawTextSmallRUS(M_RD_ColorName(automap_mark_color+1), 133 + wide_delta, 112,
                               M_RD_ColorTranslation(automap_mark_color+1));
+
+        // Подсвечивать тайники
+        RD_M_DrawTextSmallRUS(automap_secrets ? "DRK" : "DSRK", 191 + wide_delta, 122, CR_NONE);
     }
 
     // Overlay background opacity
@@ -3063,6 +3070,11 @@ static void M_RD_AutomapMarkColor(Direction_t direction)
 
     // [JN] Reinitialize automap mark color.
     AM_initMarksColor(automap_mark_color);
+}
+
+static void M_RD_AutomapSecrets()
+{
+    automap_secrets ^= 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -5765,6 +5777,7 @@ static void M_RD_BackToDefaults_Recommended(void)
     automap_grid       = 0;
     automap_grid_size  = 128;    
     automap_mark_color = 6;
+    automap_secrets    = 1;
 
     // Stats
     stats_placement  = 0;
@@ -5923,6 +5936,7 @@ static void M_RD_BackToDefaults_Original(void)
     automap_grid       = 0;
     automap_grid_size  = 128;    
     automap_mark_color = 6;
+    automap_secrets    = 0;
 
     // Stats
     stats_placement  = 0;

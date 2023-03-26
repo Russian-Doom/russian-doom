@@ -62,7 +62,7 @@
 #define CDWALLRANGE	      YELLOWRANGE
 #define THINGCOLORS	      GREENS
 #define THINGRANGE	      GREENRANGE
-#define SECRETWALLCOLORS  WALLCOLORS
+#define SECRETWALLCOLORS  173
 #define SECRETWALLRANGE   WALLRANGE
 #define GRIDCOLORS	      (GRAYS + GRAYSRANGE/2)
 #define GRIDRANGE	      0
@@ -236,7 +236,7 @@ static boolean stopped = true;
 vertex_t KeyPoints[NUMKEYS];
 
 // Number of antialiased lines
-#define NUMALIAS 13
+#define NUMALIAS 14
 
 static byte antialias[NUMALIAS][8] = {
     { 96,  97,  98,  99, 100, 101, 102, 103},
@@ -251,7 +251,8 @@ static byte antialias[NUMALIAS][8] = {
     { 40,  40,  41,  41,  42,  42,  43,  43},   // GRAYS
     {  0,   2,   4,   6,   8,  10,  12,  14},   // BLACK
     {152, 153, 154, 155, 156, 157, 158, 159},   // REDS_RAVMAP
-    {127, 127, 128, 128, 129, 129, 130, 130}    // YELLOWS_RAVMAP
+    {127, 127, 128, 128, 129, 129, 130, 130},   // YELLOWS_RAVMAP
+    {170, 170, 171, 171, 172, 172, 173, 173}    // SECRETWALLCOLORS
 };
 
 // [JN] Use iverted colors for automap overlay mode (softly faded to darken).
@@ -268,7 +269,8 @@ static byte antialias_overlay[NUMALIAS][8] = {
     { 40,  39,  39,  38,  38,  37,  37,  36},   // GRAYS
     {  0,   0,   1,   1,   2,   2,   3,   4},   // BLACK
     {157, 157, 156, 156, 155, 155, 154, 154},   // REDS_RAVMAP
-    {129, 129, 128, 128, 127, 127, 126, 126}    // YELLOWS_RAVMAP
+    {129, 129, 128, 128, 127, 127, 126, 126},   // YELLOWS_RAVMAP
+    {175, 174, 173, 172, 171, 170, 169, 169}    // SECRETWALLCOLORS
 };
 
 static void DrawWuLine(int X0, int Y0, int X1, int Y1, byte *BaseColor,
@@ -1401,6 +1403,10 @@ static void AM_drawFline (const fline_t *fl, const int color)
             DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (automap_overlay ?
                        &antialias_overlay[12][0] : &antialias[12][0]), 8, 3);
             break;
+        // [JN] Apply antialiasing to highlighted secrets
+        case SECRETWALLCOLORS:
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (automap_overlay ?
+                       &antialias_overlay[13][0] : &antialias[13][0]), 8, 3);
         default:
             {
                 // For debugging only
@@ -1822,7 +1828,15 @@ static void AM_drawWalls (void)
 
             if (!lines[i].backsector)
             {
-                AM_drawMline(&l, WALLCOLORS);
+                // [JN] Highlight secret sectors
+                if (automap_secrets && lines[i].frontsector->special == 9)
+                {
+                    AM_drawMline(&l, SECRETWALLCOLORS);
+                }
+                else
+                {
+                    AM_drawMline(&l, WALLCOLORS);
+                }
             }
             else
             {
@@ -1838,6 +1852,13 @@ static void AM_drawWalls (void)
                         AM_drawMline(&l, 0);
                     else
                         AM_drawMline(&l, WALLCOLORS);
+                }
+                // [JN] Highlight secret sectors
+                else if (automap_secrets
+                && (lines[i].frontsector->special == 9
+                ||  lines[i].backsector->special == 9))
+                {
+                    AM_drawMline(&l, SECRETWALLCOLORS);
                 }
                 else  // Key-locked doors
                 if (lines[i].special > 25 && lines[i].special < 35)
