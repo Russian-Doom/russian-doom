@@ -1863,7 +1863,7 @@ mobj_t *P_SPMAngle(mobj_t * source, mobjtype_t type, angle_t angle)
 //
 //---------------------------------------------------------------------------
 
-void A_ContMobjSound(mobj_t * actor)
+void A_ContMobjSound(mobj_t * actor, player_t *player, pspdef_t *psp)
 {
     switch (actor->type)
     {
