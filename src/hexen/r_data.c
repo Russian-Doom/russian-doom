@@ -1123,7 +1123,7 @@ int R_FlatNumForName (char *name)
 
 int R_CheckTextureNumForName (char *name)
 {
-    int        key = W_LumpNameHash(name) % numtextures;
+    int key;
     texture_t *texture;
 
     // "NoTexture" marker.
@@ -1132,7 +1132,8 @@ int R_CheckTextureNumForName (char *name)
         return 0;
     }
 
-    texture=textures_hashtable[key]; 
+    key = W_LumpNameHash(name) % numtextures;
+    texture = textures_hashtable[key]; 
 
     while (texture != NULL)
     {

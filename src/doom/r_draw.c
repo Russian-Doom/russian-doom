@@ -180,7 +180,7 @@ void R_DrawColumn (void)
 
 void R_DrawColumnLow (void) 
 { 
-    const int x = dc_x << 1;  // Blocky mode, need to multiply by 2.
+    int       x;
     int       count = dc_yh - dc_yl; 
     byte     *dest1, *dest2, *dest3, *dest4;
     fixed_t   frac, fracstep;
@@ -190,6 +190,9 @@ void R_DrawColumnLow (void)
     {
         return; 
     }
+
+    // Blocky mode, need to multiply by 2.
+    x = dc_x << 1;
 
 #ifdef RANGECHECK 
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -356,7 +359,7 @@ void R_DrawFuzzColumn (void)
 void R_DrawFuzzColumnLow (void)
 {
     int        count;
-    const int  x = dc_x << 1;  // low detail mode, need to multiply by 2
+    int        x;
     byte      *dest1, *dest2, *dest3, *dest4;
     boolean    cutoff = false;
 
@@ -380,6 +383,9 @@ void R_DrawFuzzColumnLow (void)
     {
         return;
     }
+
+    // low detail mode, need to multiply by 2
+    x = dc_x << 1;
 
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -485,7 +491,7 @@ void R_DrawFuzzColumnBW (void)
 void R_DrawFuzzColumnLowBW (void)
 {
     int        count;
-    const int  x = dc_x << 1;
+    int        x;
     byte      *dest1, *dest2, *dest3, *dest4;
     boolean    cutoff = false;
     const boolean greenfuzz = infragreen_visor
@@ -509,6 +515,8 @@ void R_DrawFuzzColumnLowBW (void)
     {
         return;
     }
+
+    x = dc_x << 1;
 
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -612,7 +620,7 @@ void R_DrawFuzzColumnImproved (void)
 void R_DrawFuzzColumnLowImproved (void) 
 {
     int        count;
-    const int  x = dc_x << 1;
+    int        x;
     byte      *dest1, *dest2, *dest3, *dest4;
     boolean    cutoff = false;
 
@@ -633,6 +641,8 @@ void R_DrawFuzzColumnLowImproved (void)
     {
         return;
     }
+
+    x = dc_x << 1;
 
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -736,7 +746,7 @@ void R_DrawFuzzColumnImprovedBW (void)
 void R_DrawFuzzColumnLowImprovedBW (void) 
 {
     int        count;
-    const int  x = dc_x << 1;
+    int        x;
     byte      *dest1, *dest2, *dest3, *dest4;
     boolean    cutoff = false;
     const boolean greenfuzz = infragreen_visor
@@ -760,6 +770,8 @@ void R_DrawFuzzColumnLowImprovedBW (void)
     {
         return;
     }
+
+    x = dc_x << 1;
 
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -871,7 +883,7 @@ void R_DrawFuzzColumnTranslucent (void)
 
 void R_DrawFuzzColumnTranslucentLow (void)
 {
-    const int x = dc_x << 1;
+    int       x;
     int       count = dc_yh - dc_yl;
     byte     *dest1, *dest2, *dest3, *dest4;
     fixed_t   frac, fracstep;
@@ -880,6 +892,8 @@ void R_DrawFuzzColumnTranslucentLow (void)
     {
         return;
     }
+
+    x = dc_x << 1;
 
 #ifdef RANGECHECK
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -1011,7 +1025,7 @@ void R_DrawTranslatedColumn (void)
 
 void R_DrawTranslatedColumnLow (void) 
 {
-    int     x = dc_x << 1;  // low detail, need to scale by 2
+    int     x;
     int     count = dc_yh - dc_yl; 
     byte   *dest, *dest2, *dest3, *dest4;
     fixed_t frac;
@@ -1021,6 +1035,8 @@ void R_DrawTranslatedColumnLow (void)
     {
         return;
     }
+
+    x = dc_x << 1;
 
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -1126,7 +1142,7 @@ void R_DrawTLColumn (void)
 
 void R_DrawTLColumnLow (void)
 {
-    const int x = dc_x << 1;  // Blocky mode, need to multiply by 2.
+    int       x;
     int       count = dc_yh - dc_yl;
     byte     *dest1, *dest2, *dest3, *dest4;
     fixed_t   frac, fracstep;
@@ -1135,6 +1151,8 @@ void R_DrawTLColumnLow (void)
     {
         return;
     }
+
+    x = dc_x << 1;
 
 #ifdef RANGECHECK
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -1281,7 +1299,7 @@ void R_DrawTranslatedTLColumn (void)
 
 void R_DrawTranslatedTLColumnLow (void)
 {
-    const int x = dc_x << 1;  // Blocky mode, need to multiply by 2.
+    int       x;
     int       count = dc_yh - dc_yl;
     byte     *dest1, *dest2, *dest3, *dest4;
     fixed_t   frac, fracstep;
@@ -1290,6 +1308,8 @@ void R_DrawTranslatedTLColumnLow (void)
     {
         return;
     }
+
+    x = dc_x << 1;
 
 #ifdef RANGECHECK
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -1404,7 +1424,7 @@ void R_DrawGhostColumn (void)
 
 void R_DrawGhostColumnLow (void)
 {
-    const int x = dc_x << 1;
+    int       x;
     int       count = dc_yh - dc_yl;
     byte     *dest1, *dest2, *dest3, *dest4;
     fixed_t   frac, fracstep;
@@ -1413,6 +1433,8 @@ void R_DrawGhostColumnLow (void)
     {
         return;
     }
+
+    x = dc_x << 1;
 
     dest1 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
     dest2 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x+1]];
@@ -1600,6 +1622,12 @@ void R_FillBackScreen (void)
     char    *backscreen_flat;
     patch_t *patch;
 
+    // [JN] Function not used in widescreen rendering.
+    if (aspect_ratio >= 2)
+    {
+        return;
+    }
+
     if (gamemission == jaguar)
     {
          // Jaguar Doom background.
@@ -1614,12 +1642,6 @@ void R_FillBackScreen (void)
     {
         // DOOM background.
         backscreen_flat = W_CacheLumpName(DEH_String("FLOOR7_2"), PU_CACHE);
-    }
-
-    // [JN] Function not used in widescreen rendering.
-    if (aspect_ratio >= 2)
-    {
-        return;
     }
 
     // If we are running full screen, there is no need to do any of this,
