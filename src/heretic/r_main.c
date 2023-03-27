@@ -477,8 +477,16 @@ void R_InitLightTables (void)
     int scale;
 
     // [JN] Define, which diminished lighting to use
-    lightzshift = smoothlight && !vanillaparm ? LIGHTZSHIFT : LIGHTZSHIFT_VANILLA;
-    maxlightz = smoothlight && !vanillaparm ? MAXLIGHTZ : MAXLIGHTZ_VANILLA;
+    if (smoothlight && !vanillaparm)
+    {
+        lightzshift = LIGHTZSHIFT;
+        maxlightz = MAXLIGHTZ;
+    }
+    else
+    {
+        lightzshift = LIGHTZSHIFT_VANILLA;
+        maxlightz = MAXLIGHTZ_VANILLA;
+    }
 
     // Calculate the light levels to use for each level / distance combination.
     for (int i = 0 ; i< LIGHTLEVELS ; i++)
