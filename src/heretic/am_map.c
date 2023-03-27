@@ -1829,7 +1829,7 @@ static void AM_drawWalls (void)
             if (!lines[i].backsector)
             {
                 // [JN] Highlight secret sectors
-                if (automap_secrets && lines[i].frontsector->special == 9)
+                if (automap_secrets && !vanillaparm && lines[i].frontsector->special == 9)
                 {
                     AM_drawMline(&l, SECRETWALLCOLORS);
                 }
@@ -1854,7 +1854,7 @@ static void AM_drawWalls (void)
                         AM_drawMline(&l, WALLCOLORS);
                 }
                 // [JN] Highlight secret sectors
-                else if (automap_secrets
+                else if (automap_secrets && !vanillaparm
                 && (lines[i].frontsector->special == 9
                 ||  lines[i].backsector->special == 9))
                 {
