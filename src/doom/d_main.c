@@ -562,8 +562,7 @@ static void DrawTimeAndFPS (void)
                      local_time == 1 ? "%I:%M %p" :    // 12-hour (HH:MM designation)
                      local_time == 2 ? "%I:%M:%S %p" : // 12-hour (HH:MM:SS designation)
                      local_time == 3 ? "%H:%M" :       // 24-hour (HH:MM)
-                     local_time == 4 ? "%H:%M:%S" :    // 24-hour (HH:MM:SS)
-                                       "", tm);        // No time
+                                       "%H:%M:%S", tm);// 24-hour (HH:MM:SS)
     
             RD_M_DrawTextC(s, (local_time == 1 ? 282 :
                               local_time == 2 ? 270 :

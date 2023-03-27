@@ -984,7 +984,7 @@ static void SetDormantArtifact(mobj_t * arti)
 //
 //---------------------------------------------------------------------------
 
-void A_RestoreArtifact(mobj_t * arti)
+void A_RestoreArtifact(mobj_t *arti, player_t *player, pspdef_t *psp)
 {
     arti->flags |= MF_SPECIAL;
     arti->flags &= ~MF_EXTRATRANS;  // [JN] Restore artifact opacity.
@@ -1000,7 +1000,7 @@ void A_RestoreArtifact(mobj_t * arti)
 //
 //---------------------------------------------------------------------------
 
-void A_RestoreSpecialThing1(mobj_t * thing)
+void A_RestoreSpecialThing1(mobj_t * thing, player_t *player, pspdef_t *psp)
 {
     thing->flags2 &= ~MF2_DONTDRAW;
     S_StartSound(thing, SFX_RESPAWN);
@@ -1012,7 +1012,7 @@ void A_RestoreSpecialThing1(mobj_t * thing)
 //
 //---------------------------------------------------------------------------
 
-void A_RestoreSpecialThing2(mobj_t * thing)
+void A_RestoreSpecialThing2(mobj_t * thing, player_t *player, pspdef_t *psp)
 {
     thing->flags |= MF_SPECIAL;
     P_SetMobjState(thing, thing->info->spawnstate);

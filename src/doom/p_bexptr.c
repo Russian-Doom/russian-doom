@@ -24,6 +24,8 @@
 
 
 extern boolean P_CheckMeleeRange (mobj_t *actor);
+extern void A_Explode (mobj_t *thingy);
+extern void A_FaceTarget (mobj_t *actor);
 extern void P_Thrust (player_t* player, angle_t angle, fixed_t move);
 
 // killough 11/98: kill an object

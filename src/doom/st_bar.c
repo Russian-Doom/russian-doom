@@ -241,6 +241,7 @@ static const int ST_cheat_massacre (const boolean explode)
     int killcount = 0;
     thinker_t *th;
     extern int numbraintargets;
+    extern void A_PainDie (mobj_t *actor);
 
     for (th = thinkercap.next; th != &thinkercap; th = th->next)
     {

@@ -139,7 +139,7 @@ static void M_RD_Change_Widescreen(Direction_t direction);
 static void M_RD_Change_Renderer();
 static void M_RD_Change_VSync();
 static void M_RD_Change_MaxFPS(Direction_t direction);
-static void M_RD_Change_PerfCounter();
+static void M_RD_Change_PerfCounter(Direction_t direction);
 static void M_RD_Change_Smoothing();
 static void M_RD_Change_PorchFlashing();
 static void M_RD_Change_DiminishedLighting();
@@ -342,10 +342,10 @@ static void M_RD_Change_FloatPowerups(Direction_t direction);
 static void M_RD_Change_Bobbing(Direction_t direction);
 static void M_RD_Change_SecretNotify();
 static void M_RD_Change_InfraGreenVisor();
-static void M_RD_Change_HorizontalAiming();
+static void M_RD_Change_HorizontalAiming(Direction_t direction);
 
 // Page 5
-static void M_RD_Change_DefaultSkill();
+static void M_RD_Change_DefaultSkill(Direction_t direction);
 static void M_RD_Change_FixMapErrors();
 static void M_RD_Change_FlipLevels();
 static void M_RD_Change_PistolStart();
@@ -6165,7 +6165,7 @@ static void M_RD_Draw_Reset(void)
     }
 }
 
-static void M_RD_BackToDefaults_Recommended(int choice)
+static void M_RD_BackToDefaults_Recommended()
 {
     static char resetmsg[24];
 
@@ -6360,7 +6360,7 @@ static void M_RD_BackToDefaults_Recommended(int choice)
     P_SetMessage(&players[consoleplayer], resetmsg, msg_system, false);
 }
 
-static void M_RD_BackToDefaults_Original(int choice)
+static void M_RD_BackToDefaults_Original()
 {
     static char resetmsg[24];
 
@@ -7224,7 +7224,7 @@ static void M_EndGameResponse(boolean confirmed)
     D_StartTitle ();
 }
 
-static void M_EndGame(int choice)
+static void M_EndGame()
 {
     if (!usergame)
     {
@@ -7743,7 +7743,7 @@ boolean M_Responder (event_t* ev)
         else if (BK_isKeyDown(ev, bk_end_game))  // End game
         {
             S_StartSound(NULL,sfx_swtchn);
-            M_EndGame(0);
+            M_EndGame();
             return true;
         }
         else if (BK_isKeyDown(ev, bk_qload))    // Quickload

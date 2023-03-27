@@ -257,7 +257,7 @@ static void M_RD_FloatAmplitude(Direction_t direction);
 
 // Gameplay (page 4)
 static void DrawGameplay4Menu(void);
-static void M_RD_DefaultSkill();
+static void M_RD_DefaultSkill(Direction_t direction);
 static void M_RD_FixMapErrors();
 static void M_RD_FlipLevels();
 static void M_RD_Breathing();

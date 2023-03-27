@@ -150,7 +150,7 @@ void A_DripBlood(mobj_t *actor)
 //
 //============================================================================
 
-void A_PotteryExplode(mobj_t * actor)
+void A_PotteryExplode(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo = NULL;
     int i;
@@ -186,7 +186,7 @@ void A_PotteryExplode(mobj_t * actor)
 //
 //============================================================================
 
-void A_PotteryChooseBit(mobj_t * actor)
+void A_PotteryChooseBit(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     P_SetMobjState(actor, actor->info->deathstate + (P_Random() % 5) + 1);
     // [JN] Apply various enhancements for pottery shards:
@@ -209,7 +209,7 @@ void A_PotteryChooseBit(mobj_t * actor)
 //
 //============================================================================
 
-void A_PotteryCheck(mobj_t * actor)
+void A_PotteryCheck(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     int i;
     mobj_t *pmo;
@@ -257,7 +257,7 @@ void A_PotteryCheck(mobj_t * actor)
 //
 //============================================================================
 
-void A_CorpseBloodDrip(mobj_t * actor)
+void A_CorpseBloodDrip(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     if (P_Random() > 128)
     {
@@ -273,7 +273,7 @@ void A_CorpseBloodDrip(mobj_t * actor)
 //
 //============================================================================
 
-void A_CorpseExplode(mobj_t * actor)
+void A_CorpseExplode(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo;
     int i;
@@ -327,7 +327,7 @@ void A_CorpseExplode(mobj_t * actor)
 //
 //============================================================================
 
-void A_LeafSpawn(mobj_t * actor)
+void A_LeafSpawn(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo;
     int i;
@@ -358,7 +358,7 @@ void A_LeafSpawn(mobj_t * actor)
 //
 //============================================================================
 
-void A_LeafThrust(mobj_t * actor)
+void A_LeafThrust(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     if (P_Random() > 96)
     {
@@ -373,7 +373,7 @@ void A_LeafThrust(mobj_t * actor)
 //
 //============================================================================
 
-void A_LeafCheck(mobj_t * actor)
+void A_LeafCheck(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     // [JN] Leaf is landed into some sort of liquid:
     if (singleplayer)
@@ -522,7 +522,7 @@ void GenerateOrbitTable(void)
 //              target          pointer to center mobj
 //              args[0]         angle of ball
 
-void A_BridgeOrbit(mobj_t * actor)
+void A_BridgeOrbit(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     if (actor->target->special1.i)
     {
@@ -536,7 +536,7 @@ void A_BridgeOrbit(mobj_t * actor)
 }
 
 
-void A_BridgeInit(mobj_t * actor)
+void A_BridgeInit(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     byte startangle;
     mobj_t *ball1, *ball2, *ball3;
@@ -563,9 +563,9 @@ void A_BridgeInit(mobj_t * actor)
     ball3->args[0] = (startangle + 170) & 255;
     ball3->target = actor;
 
-    A_BridgeOrbit(ball1);
-    A_BridgeOrbit(ball2);
-    A_BridgeOrbit(ball3);
+    A_BridgeOrbit(ball1, NULL, NULL);
+    A_BridgeOrbit(ball2, NULL, NULL);
+    A_BridgeOrbit(ball3, NULL, NULL);
 }
 
 void A_BridgeRemove(mobj_t * actor)
@@ -608,7 +608,7 @@ void A_GhostOff(mobj_t *actor)
 //
 //==========================================================================
 
-void A_HideThing(mobj_t * actor)
+void A_HideThing(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     actor->flags2 |= MF2_DONTDRAW;
 }
@@ -619,7 +619,7 @@ void A_HideThing(mobj_t * actor)
 //
 //==========================================================================
 
-void A_UnHideThing(mobj_t * actor)
+void A_UnHideThing(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     actor->flags2 &= ~MF2_DONTDRAW;
 }
@@ -630,7 +630,7 @@ void A_UnHideThing(mobj_t * actor)
 //
 //==========================================================================
 
-void A_SetShootable(mobj_t * actor)
+void A_SetShootable(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     actor->flags2 &= ~MF2_NONSHOOTABLE;
     actor->flags |= MF_SHOOTABLE;
@@ -642,7 +642,7 @@ void A_SetShootable(mobj_t * actor)
 //
 //==========================================================================
 
-void A_UnSetShootable(mobj_t * actor)
+void A_UnSetShootable(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     actor->flags2 |= MF2_NONSHOOTABLE;
     actor->flags &= ~MF_SHOOTABLE;
@@ -654,7 +654,7 @@ void A_UnSetShootable(mobj_t * actor)
 //
 //==========================================================================
 
-void A_SetAltShadow(mobj_t * actor)
+void A_SetAltShadow(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     actor->flags &= ~MF_SHADOW;
     actor->flags |= MF_ALTSHADOW;
@@ -685,7 +685,7 @@ void A_UnSetAltShadow(mobj_t *actor)
 //
 //==========================================================================
 
-void A_ContMobjSound(mobj_t * actor)
+void A_ContMobjSound(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     switch (actor->type)
     {
@@ -709,7 +709,7 @@ void A_ContMobjSound(mobj_t * actor)
 //
 //==========================================================================
 
-void A_ESound(mobj_t * mo)
+void A_ESound(mobj_t *mo, player_t *player, pspdef_t *psp)
 {
     int sound;
 
@@ -732,7 +732,7 @@ void A_ESound(mobj_t * mo)
 //==========================================================================
 
 
-void A_Summon(mobj_t * actor)
+void A_Summon(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo;
     mobj_t *master;
@@ -787,7 +787,7 @@ void A_Summon(mobj_t * actor)
 //
 //==========================================================================
 
-void A_FogSpawn(mobj_t * actor)
+void A_FogSpawn(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo = NULL;
     angle_t delta;
@@ -828,7 +828,7 @@ void A_FogSpawn(mobj_t * actor)
 }
 
 
-void A_FogMove(mobj_t * actor)
+void A_FogMove(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     int speed = actor->args[0] << FRACBITS;
     angle_t angle;
@@ -861,7 +861,7 @@ void A_FogMove(mobj_t * actor)
 //
 //===========================================================================
 
-void A_PoisonBagInit(mobj_t * actor)
+void A_PoisonBagInit(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo;
 
@@ -886,7 +886,7 @@ void A_PoisonBagInit(mobj_t * actor)
 //
 //===========================================================================
 
-void A_PoisonBagCheck(mobj_t * actor)
+void A_PoisonBagCheck(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     if (!--actor->special1.i)
     {
@@ -904,13 +904,11 @@ void A_PoisonBagCheck(mobj_t * actor)
 //
 //===========================================================================
 
-void A_PoisonBagDamage(mobj_t * actor)
+void A_PoisonBagDamage(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     int bobIndex;
 
-    extern void A_Explode(mobj_t * actor);
-
-    A_Explode(actor);
+    A_Explode(actor, player, psp);
 
     bobIndex = actor->special2.i;
     actor->z += FloatBobOffsets[bobIndex] >> 4;
@@ -923,7 +921,7 @@ void A_PoisonBagDamage(mobj_t * actor)
 //
 //===========================================================================
 
-void A_PoisonShroom(mobj_t * actor)
+void A_PoisonShroom(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     actor->tics = 128 + (P_Random() << 1);
 }
@@ -934,7 +932,7 @@ void A_PoisonShroom(mobj_t * actor)
 //
 //===========================================================================
 
-void A_CheckThrowBomb(mobj_t * actor)
+void A_CheckThrowBomb(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     if (abs(actor->momx) < 1.5 * FRACUNIT && abs(actor->momy) < 1.5 * FRACUNIT
         && actor->momz < 2 * FRACUNIT
@@ -1007,7 +1005,7 @@ boolean A_LocalQuake(byte * args, mobj_t * actor)
 //===========================================================================
 int localQuakeHappening[MAXPLAYERS];
 
-void A_Quake(mobj_t * actor)
+void A_Quake(mobj_t *actor, player_t *player_param, pspdef_t *psp)
 {
     angle_t an;
     player_t *player;
@@ -1066,7 +1064,7 @@ void A_Quake(mobj_t * actor)
 
 #define TELEPORT_LIFE 1
 
-void A_TeloSpawnA(mobj_t * actor)
+void A_TeloSpawnA(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo;
 
@@ -1082,7 +1080,7 @@ void A_TeloSpawnA(mobj_t * actor)
     }
 }
 
-void A_TeloSpawnB(mobj_t * actor)
+void A_TeloSpawnB(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo;
 
@@ -1098,7 +1096,7 @@ void A_TeloSpawnB(mobj_t * actor)
     }
 }
 
-void A_TeloSpawnC(mobj_t * actor)
+void A_TeloSpawnC(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo;
 
@@ -1114,7 +1112,7 @@ void A_TeloSpawnC(mobj_t * actor)
     }
 }
 
-void A_TeloSpawnD(mobj_t * actor)
+void A_TeloSpawnD(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo;
 
@@ -1130,7 +1128,7 @@ void A_TeloSpawnD(mobj_t * actor)
     }
 }
 
-void A_CheckTeleRing(mobj_t * actor)
+void A_CheckTeleRing(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     if (actor->special1.i-- <= 0)
     {
@@ -1198,7 +1196,7 @@ void P_SpawnDirt(mobj_t * actor, fixed_t radius)
 //              args[1]         0 = normal,   1 = bloody
 //===========================================================================
 
-void A_ThrustInitUp(mobj_t * actor)
+void A_ThrustInitUp(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     actor->special2.i = 5;        // Raise speed
     actor->args[0] = 1;         // Mark as up
@@ -1208,7 +1206,7 @@ void A_ThrustInitUp(mobj_t * actor)
     actor->special1.m = NULL;
 }
 
-void A_ThrustInitDn(mobj_t * actor)
+void A_ThrustInitDn(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo;
     actor->special2.i = 5;        // Raise speed
@@ -1221,7 +1219,7 @@ void A_ThrustInitDn(mobj_t * actor)
 }
 
 
-void A_ThrustRaise(mobj_t * actor)
+void A_ThrustRaise(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     if (A_RaiseMobj(actor))
     {                           // Reached it's target height
@@ -1245,7 +1243,7 @@ void A_ThrustRaise(mobj_t * actor)
     actor->special2.i++;          // Increase raise speed
 }
 
-void A_ThrustLower(mobj_t * actor)
+void A_ThrustLower(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     if (A_SinkMobj(actor))
     {
@@ -1257,12 +1255,12 @@ void A_ThrustLower(mobj_t * actor)
     }
 }
 
-void A_ThrustBlock(mobj_t * actor)
+void A_ThrustBlock(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     actor->flags |= MF_SOLID;
 }
 
-void A_ThrustImpale(mobj_t * actor)
+void A_ThrustImpale(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     // Impale all shootables in radius
     PIT_ThrustSpike(actor);
@@ -1274,7 +1272,7 @@ void A_ThrustImpale(mobj_t * actor)
 //
 //===========================================================================
 
-void A_SoAExplode(mobj_t * actor)
+void A_SoAExplode(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo;
     int i;
@@ -1317,7 +1315,7 @@ void A_SoAExplode(mobj_t * actor)
 //
 //===========================================================================
 
-void A_BellReset1(mobj_t * actor)
+void A_BellReset1(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     actor->flags |= MF_NOGRAVITY;
     actor->height <<= 2;
@@ -1329,7 +1327,7 @@ void A_BellReset1(mobj_t * actor)
 //
 //===========================================================================
 
-void A_BellReset2(mobj_t * actor)
+void A_BellReset2(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     actor->flags |= MF_SHOOTABLE;
     actor->flags &= ~MF_CORPSE;
@@ -1343,7 +1341,7 @@ void A_BellReset2(mobj_t * actor)
 //
 //===========================================================================
 
-void A_FlameCheck(mobj_t * actor)
+void A_FlameCheck(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     if (!actor->args[0]--)      // Called every 8 tics
     {
@@ -1367,12 +1365,12 @@ void A_FlameCheck(mobj_t * actor)
 //      args[4]         turn amount per move (in degrees)
 //===========================================================================
 
-void A_BatSpawnInit(mobj_t * actor)
+void A_BatSpawnInit(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     actor->special1.i = 0;        // Frequency count
 }
 
-void A_BatSpawn(mobj_t * actor)
+void A_BatSpawn(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     mobj_t *mo;
     int delta;
@@ -1398,7 +1396,7 @@ void A_BatSpawn(mobj_t * actor)
 }
 
 
-void A_BatMove(mobj_t * actor)
+void A_BatMove(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     angle_t newangle;
     fixed_t speed;
@@ -1438,7 +1436,7 @@ void A_BatMove(mobj_t * actor)
 //
 //===========================================================================
 
-void A_TreeDeath(mobj_t * actor)
+void A_TreeDeath(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     if (!(actor->flags2 & MF2_FIREDAMAGE))
     {
@@ -1460,7 +1458,7 @@ void A_TreeDeath(mobj_t * actor)
 //
 //===========================================================================
 
-void A_NoGravity(mobj_t * actor)
+void A_NoGravity(mobj_t *actor, player_t *player, pspdef_t *psp)
 {
     actor->flags |= MF_NOGRAVITY;
 }

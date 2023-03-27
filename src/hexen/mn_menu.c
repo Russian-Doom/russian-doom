@@ -236,7 +236,7 @@ static void M_RD_CrossHairDraw();
 static void M_RD_CrossHairShape(Direction_t direction);
 static void M_RD_CrossHairType();
 static void M_RD_CrossHairScale();
-static void M_RD_CrossHairOpacity();
+static void M_RD_CrossHairOpacity(Direction_t direction);
 int CrosshairShowcaseTimeout;
 
 // Gameplay (page 3)
