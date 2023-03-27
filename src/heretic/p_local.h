@@ -250,9 +250,9 @@ extern mobj_t *P_SpawnPlayerMissile (mobj_t *source, mobjtype_t type);
 extern mobj_t *P_SPMAngle (mobj_t *source, mobjtype_t type, angle_t angle);
 
 extern void P_SpawnPuffSafe (fixed_t x, fixed_t y, fixed_t z, boolean safe);
-extern void P_BlasterMobjThinker (mobj_t *mobj);
+extern void P_BlasterMobjThinker (thinker_t *thinker);
 extern void P_BloodSplatter (fixed_t x, fixed_t y, fixed_t z, mobj_t *originator);
-extern void P_MobjThinker (mobj_t *mobj);
+extern void P_MobjThinker (thinker_t *thinker);
 extern void P_RemoveMobj (mobj_t *th);
 extern void P_RipperBlood (mobj_t *mo);
 extern void P_SpawnBlood (fixed_t x, fixed_t y, fixed_t z, int damage);
@@ -586,7 +586,7 @@ extern int EV_DoCeiling (line_t *line, ceiling_e type);
 extern void P_ActivateInStasisCeiling (line_t *line);
 extern void P_AddActiveCeiling (ceiling_t *c);
 extern void P_RemoveActiveCeiling (ceiling_t *c);
-extern void T_MoveCeiling (ceiling_t *ceiling);
+extern void T_MoveCeiling (thinker_t *thinker);
 
 /*
 ================================================================================
@@ -641,7 +641,7 @@ extern result_e T_MovePlane(sector_t *sector, fixed_t speed,
 extern int EV_BuildStairs (line_t *line, fixed_t stepDelta);
 extern int EV_DoFloor (line_t *line, floor_e floortype);
 
-extern void T_MoveFloor (floormove_t *floor);
+extern void T_MoveFloor (thinker_t *thinker);
 
 /*
 ================================================================================
@@ -681,7 +681,7 @@ extern int EV_DoDoor (line_t *line, vldoor_e type, fixed_t speed);
 extern void EV_VerticalDoor (line_t *line, mobj_t *thing);
 extern void P_SpawnDoorCloseIn30 (sector_t *sec);
 extern void P_SpawnDoorRaiseIn5Mins (sector_t *sec, int secnum);
-extern void T_VerticalDoor (vldoor_t *door);
+extern void T_VerticalDoor (thinker_t *thinker);
 
 /*
 ================================================================================
@@ -733,9 +733,9 @@ extern void EV_TurnTagLightsOff (line_t *line);
 extern void P_SpawnGlowingLight (sector_t *sector);
 extern void P_SpawnLightFlash (sector_t *sector);
 extern void P_SpawnStrobeFlash (sector_t *sector, int fastOrSlow, int inSync);
-extern void T_Glow (glow_t *g);
-extern void T_LightFlash (lightflash_t *flash);
-extern void T_StrobeFlash (strobe_t *flash);
+extern void T_Glow (thinker_t *thinker);
+extern void T_LightFlash (thinker_t *thinker);
+extern void T_StrobeFlash (thinker_t *thinker);
 
 
 /*
@@ -790,7 +790,7 @@ extern void EV_StopPlat (line_t *line);
 extern void P_ActivateInStasis (int tag);
 extern void P_AddActivePlat (plat_t *plat);
 extern void P_RemoveActivePlat (plat_t *plat);
-extern void T_PlatRaise (plat_t *plat);
+extern void T_PlatRaise (thinker_t *thinker);
 
 /*
 ================================================================================

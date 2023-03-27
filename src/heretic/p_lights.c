@@ -37,8 +37,10 @@
 //      that spawn thinkers
 //
 //==================================================================
-void T_LightFlash(lightflash_t * flash)
+void T_LightFlash(thinker_t *thinker)
 {
+    lightflash_t *flash = (lightflash_t *) thinker;
+
     if (--flash->count)
         return;
 
@@ -94,8 +96,10 @@ void P_SpawnLightFlash(sector_t * sector)
 //      After the map has been loaded, scan each sector for specials that spawn thinkers
 //
 //==================================================================
-void T_StrobeFlash(strobe_t * flash)
+void T_StrobeFlash(thinker_t *thinker)
 {
+    strobe_t *flash = (strobe_t *) thinker;
+
     if (--flash->count)
         return;
 
@@ -219,8 +223,10 @@ void EV_LightTurnOn(line_t * line, int bright)
 //      Spawn glowing light
 //
 //==================================================================
-void T_Glow(glow_t * g)
+void T_Glow(thinker_t *thinker)
 {
+    glow_t *g = (glow_t *) thinker;
+
     switch (g->direction)
     {
         case -1:               // DOWN
