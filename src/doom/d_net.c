@@ -284,15 +284,53 @@ void D_CheckNetGame (void)
     D_StartNetGame(&settings, NULL);
     LoadGameSettings(&settings);
 
-    DEH_printf(english_language ?
-               " startskill %i  deathmatch: %i  startmap: %i  startepisode: %i\n" :
-               " сложность: %i  дефматч: %i  уровень: %i  эпизод: %i\n",
-               startskill, deathmatch, startmap, startepisode);
+    DEH_printf("    ");
 
-    DEH_printf(english_language ?
-               " player %i of %i (%i nodes)\n" :
-               " игроки: %i из %i (узлов: %i)\n",
-               consoleplayer+1, settings.num_players, settings.num_players);
+    if (english_language)
+    {
+        if (gamemode != commercial)
+        {
+            DEH_printf("episode: %i, ", startepisode);
+        }
+
+        DEH_printf("level: %i, ", startmap);
+
+        DEH_printf("skill: %i, mode: ", startskill+1);
+
+        DEH_printf(netgame ? "cooperative"    :
+           deathmatch == 1 ? "deathmatch"     : 
+           deathmatch == 2 ? "deathmatch 2.0" : 
+           deathmatch == 3 ? "deathmatch 3.0" : 
+                             "single player");
+                             
+    }
+    else
+    {
+        if (gamemode != commercial)
+        {
+            DEH_printf("эпизод: %i, ", startepisode);
+        }
+
+        DEH_printf("уровень: %i, ", startmap);
+
+        DEH_printf("сложность: %i, режим: ", startskill+1);
+
+        DEH_printf(netgame ? "совместная игра" :
+           deathmatch == 1 ? "дефматч"         :
+           deathmatch == 2 ? "дефматч 2.0"     :
+           deathmatch == 3 ? "дефматч 3.0"     :
+                             "одиночная игра");
+    }
+
+    DEH_printf("\n");
+
+    if (netgame)
+    {
+        DEH_printf(english_language ?
+                   "    player %i of %i (%i nodes)\n" :
+                   "    игроки: %i из %i (узлов: %i)\n",
+                   consoleplayer+1, settings.num_players, settings.num_players);
+    }
 
     // Show players here; the server might have specified a time limit
 
