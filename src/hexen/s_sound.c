@@ -869,6 +869,7 @@ void S_Init(void)
     I_PrecacheSounds(S_sfx, NUMSFX);
 
     // Attempt to setup CD music
+#if 0
     if (snd_musicdevice == SNDDEVICE_CD)
     {
         ST_Message("    Attempting to initialize CD Music: ");
@@ -893,6 +894,7 @@ void S_Init(void)
 
         I_CDMusPrintStartup();
     }
+#endif
 }
 
 /*
