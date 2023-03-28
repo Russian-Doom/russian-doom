@@ -157,7 +157,7 @@ byte *I_ZoneBase (int *size)
     {
         printf(english_language ?
                "    zone memory: %p, %x MB allocated for zone\n" :
-               "    распределение памяти: %p, выделено %x Мбайт\n", 
+               "    зональная память: %p, выделено %x Мбайт\n", 
                zonemem, *size >> 20); // [crispy] human-understandable zone heap size
     }
 

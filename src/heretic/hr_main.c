@@ -77,7 +77,6 @@ boolean nomonsters;             // checkparm of -nomonsters
 boolean respawnparm;            // checkparm of -respawn
 boolean coop_spawns;            // Single player game with netgame things spawn
 boolean ravpic;                 // checkparm of -ravpic
-boolean cdrom;                  // true if cd-rom mode active
 int artiskip = false;           // whether shift-enter skips an artifact
 boolean realframe, skippsprinterp; // [JN] Interpolation for weapon bobbing
 
@@ -1009,8 +1008,8 @@ boolean D_AddFile(char *file)
     wad_file_t *handle;
 
     printf(english_language ?
-           " adding: %s\n" :
-           " добавление: %s\n",
+           "    adding: %s\n" :
+           "    добавление: %s\n",
            file);
 
     handle = W_AddFile(file);
@@ -1235,8 +1234,8 @@ void AutoloadFiles(const char* wadName)
     while((filename = I_NextGlob(glob)) != NULL)
     {
         printf(english_language ?
-               " [Autoload]" :
-               " [Автозагрузка]");
+               "    [autoload]" :
+               "    [автозагрузка]");
         LoadFile(filename, false);
     }
     I_EndGlob(glob);
@@ -1289,6 +1288,43 @@ void D_DoomMain(void)
     I_AtExit(I_ShutdownGraphics, true);
 
     I_AtExit(D_Endoom, false);
+
+    // Load defaults before initing other systems
+
+#ifdef _WIN32
+
+    //!
+    // @platform windows
+    // @vanilla
+    //
+    // Save configuration data and savegames in c:\heretic.cd,
+    // allowing play from CD.
+    //
+
+    if (M_ParmExists("-cdrom"))
+    {
+        M_SetConfigDir(DEH_String("c:\\heretic.cd"));
+    }
+    else
+#endif
+    {
+        // Auto-detect the configuration dir.
+        M_SetConfigDir(NULL);
+    }
+
+    M_SetConfigFilename(PROGRAM_PREFIX "heretic.ini");
+    D_BindVariables();
+    M_LoadConfig();
+
+    DEH_printf(english_language ?
+               "Z_Init: Init zone memory allocation daemon.\n" :
+               "Z_Init: Инициализация зональной памяти.\n");
+    Z_Init();
+
+    M_PrintConfigDir();
+    M_PrintConfigFile();
+
+    savegamedir = M_GetSaveGameDir();
 
     //!
     // @vanilla
@@ -1431,43 +1467,6 @@ void D_DoomMain(void)
         }
     }
 
-    // Check for -CDROM
-
-    cdrom = false;
-
-#ifdef _WIN32
-
-    //!
-    // @platform windows
-    // @vanilla
-    //
-    // Save configuration data and savegames in c:\heretic.cd,
-    // allowing play from CD.
-    //
-
-    if (M_CheckParm("-cdrom"))
-    {
-        cdrom = true;
-    }
-#endif
-
-    if (cdrom)
-    {
-        M_SetConfigDir(DEH_String("c:\\heretic.cd"));
-    }
-    else
-    {
-        M_SetConfigDir(NULL);
-    }
-
-    // Load defaults before initing other systems
-    DEH_printf(english_language ?
-               "M_LoadDefaults: Load system defaults.\n" :
-               "M_LoadDefaults: Загрузка системных стандартов.\n");
-    D_BindVariables();
-    M_SetConfigFilename(PROGRAM_PREFIX "heretic.ini");
-    M_LoadConfig();
-
     //
     // init subsystems
     //
@@ -1479,12 +1478,7 @@ void D_DoomMain(void)
     I_AtExit(M_SaveConfig, false);
 
     DEH_printf(english_language ?
-               "Z_Init: Init zone memory allocation daemon.\n" :
-               "Z_Init: Инициализация распределения памяти.\n");
-    Z_Init();
-
-    DEH_printf(english_language ?
-               "W_Init: Init WADfiles.\n" :
+               "W_Init: Init WAD files.\n" :
                "W_Init: Инициализация WAD-файлов.\n");
 
     iwadfile = D_FindIWAD(IWAD_MASK_HERETIC, &gamemission);
@@ -1647,8 +1641,6 @@ void D_DoomMain(void)
 
     I_SetWindowTitle(gamedescription);
 
-    savegamedir = M_GetSaveGameDir();
-
     if (M_ParmExists("-testcontrols"))
     {
         startepisode = 1;
@@ -1687,8 +1679,8 @@ void D_DoomMain(void)
     CT_Init();
 
     DEH_printf(english_language ?
-               "R_Init: Init Heretic rendering system - [" :
-               "R_Init: Инициализация системы рендеринга Heretic -[");
+               "R_Init: Init Heretic render system - [" :
+               "R_Init: Инициализация рендерера Heretic - [");
     R_Init();
     DEH_printf("]\n");
 
@@ -1814,16 +1806,16 @@ void D_DoomMain(void)
         }
     }
 
-    endtime = SDL_GetTicks() - starttime;
-    DEH_printf(english_language ? "Startup process took %d ms.\n" :
-                                  "Процесс запуска занял %d мс.\n", endtime);
-
     // [JN] Show the game we are playing
     DEH_printf(english_language ? "Starting game: " : "Запуск игры: ");
     DEH_printf("\"");
     DEH_printf(gamedescription);
     DEH_printf("\".");
     DEH_printf("\n");
+
+    endtime = SDL_GetTicks() - starttime;
+    DEH_printf(english_language ? "Startup process took %d ms.\n" :
+                                  "Процесс запуска занял %d мс.\n", endtime);
 
     D_DoomLoop();               // Never returns
 }
