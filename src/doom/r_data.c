@@ -1191,16 +1191,11 @@ void R_InitData (void)
     // R_GenerateComposite ivoking while level loading.
     R_InitFlats ();
     R_InitBrightmaps ();
-    printf (".");
     R_InitTextures ();
-    printf (".");
     R_InitSpriteLumps ();
-    printf (".");
     R_InitColormaps ();
-
     // [JN] Generate translucency tables
     R_InitTransMaps ();
-    printf (".");
 }
 
 // -----------------------------------------------------------------------------

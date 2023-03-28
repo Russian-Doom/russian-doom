@@ -766,13 +766,9 @@ void R_Init (void)
     }
 
     R_InitClipSegs ();
-    printf (".");
     R_InitSpritesRes ();
-    printf (".");
     R_InitPlanesRes ();
-    printf (".");
     R_InitVisplanesRes ();
-    printf (".");
     
     R_InitData ();
     printf (".");

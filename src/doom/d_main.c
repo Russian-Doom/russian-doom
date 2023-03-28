@@ -2300,8 +2300,8 @@ void D_SetGameDescription(void)
             }
         }
         printf(english_language ?
-        " loaded %i DEHACKED lumps from PWAD files.\n" :
-        " загружено блоков Dehacked из WAD-файлов: %i.\n", loaded);
+        "    loaded %i DEHACKED lumps from PWAD files.\n" :
+        "    загружено блоков Dehacked из WAD-файлов: %i.\n", loaded);
     }
 }
 
@@ -2314,8 +2314,8 @@ static boolean D_AddFile(char *filename)
     wad_file_t *handle;
 
     printf(english_language ?
-           " loading: %s\n" :
-           " загрузка: %s\n",
+           "    loading: %s\n" :
+           "    загрузка: %s\n",
            filename);
     handle = W_AddFile(filename);
 
@@ -2997,7 +2997,7 @@ void D_DoomMain (void)
 
     // init subsystems
     DEH_printf(english_language ?
-               "V_Init: allocate screens.\n" :
+               "V_Init: Init video.\n" :
                "V_Init: Инициализация видео.\n");
     V_Init ();
 
@@ -3456,8 +3456,8 @@ void D_DoomMain (void)
     CT_Init();
 
     DEH_printf(english_language ?
-               "R_Init: Init DOOM refresh daemon - [" :
-               "R_Init: Инициализация процесса запуска DOOM - [");
+               "R_Init: Init DOOM rendering system - [" :
+               "R_Init: Инициализация системы рендеринга DOOM - [");
     R_Init ();
     printf("]");
 
