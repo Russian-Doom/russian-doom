@@ -1936,8 +1936,8 @@ void AutoloadFiles(const char* wadName)
     while((filename = I_NextGlob(glob)) != NULL)
     {
         printf(english_language ?
-               " [Autoload]" :
-               " [Автозагрузка]");
+               "    [autoload]" :
+               "    [автозагрузка]");
         LoadFile(filename, false);
     }
     I_EndGlob(glob);
@@ -2824,11 +2824,13 @@ void D_DoomMain (void)
 
     DEH_printf(english_language ?
                "Z_Init: Init zone memory allocation daemon. \n" :
-               "Z_Init: Инициализация распределения памяти.\n");
+               "Z_Init: Инициализация зональной памяти.\n");
     Z_Init ();
 
     M_PrintConfigDir();
     M_PrintConfigFile();
+
+    savegamedir = M_GetSaveGameDir();
 
 #ifdef FEATURE_MULTIPLAYER
     //!
@@ -3025,7 +3027,7 @@ void D_DoomMain (void)
     modifiedgame = false;
 
     DEH_printf(english_language ?
-               "W_Init: Init WADfiles.\n" :
+               "W_Init: Init WAD files.\n" :
                "W_Init: Инициализация WAD-файлов.\n");
     D_AddFile(iwadfile);
     numiwadlumps = numlumps;
@@ -3196,8 +3198,6 @@ void D_DoomMain (void)
     // Set the gamedescription string. This is only possible now that
     // we've finished loading Dehacked patches.
     D_SetGameDescription();
-
-    savegamedir = M_GetSaveGameDir();
 
     // Check for -file in shareware
     if (modifiedgame && (gamevariant != freedoom))
@@ -3455,7 +3455,7 @@ void D_DoomMain (void)
     CT_Init();
 
     DEH_printf(english_language ?
-               "R_Init: Init DOOM rendering system - [" :
+               "R_Init: Init DOOM render system - [" :
                "R_Init: Инициализация рендерера DOOM - [");
     R_Init ();
     printf("]");
