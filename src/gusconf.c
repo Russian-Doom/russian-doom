@@ -316,8 +316,8 @@ boolean GUS_WriteConfig(char *path)
     }
 
     printf(english_language ?
-           "I_SDLMusic: Using GUS patch set from:\n \t%s\n" :
-           "I_SDLMusic: Используются патчи GUS из папки:\n \t%s\n",
+           "I_SDLMusic: Using GUS patch set from:\n    %s\n" :
+           "I_SDLMusic: Используются патчи GUS из папки:\n    %s\n",
            gus_patches_path);
 
     dmxconf = ReadDMXConfig();
