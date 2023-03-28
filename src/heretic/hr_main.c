@@ -1472,7 +1472,7 @@ void D_DoomMain(void)
     // init subsystems
     //
     DEH_printf(english_language ?
-               "V_Init: allocate screens.\n" :
+               "V_Init: Init video.\n" :
                "V_Init: Инициализация видео.\n");
     V_Init();
 
@@ -1687,10 +1687,10 @@ void D_DoomMain(void)
     CT_Init();
 
     DEH_printf(english_language ?
-               "R_Init: Init Heretic refresh daemon." :
-               "R_Init: Инициализация процесса запуска Heretic.");
+               "R_Init: Init Heretic rendering system - [" :
+               "R_Init: Инициализация системы рендеринга Heretic -[");
     R_Init();
-    DEH_printf("\n");
+    DEH_printf("]\n");
 
     DEH_printf(english_language ?
                "P_Init: Init Playloop state.\n" :

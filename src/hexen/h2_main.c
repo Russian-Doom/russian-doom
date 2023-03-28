@@ -784,7 +784,7 @@ void D_DoomMain(void)
     // Initialize subsystems
 
     ST_Message(english_language ?
-               "V_Init: allocate screens.\n" :
+               "V_Init: Init video.\n" :
                "V_Init: Инициализация видео.\n");
     V_Init();
 
@@ -878,10 +878,10 @@ void D_DoomMain(void)
 
     // Show version message now, so it's visible during R_Init()
     ST_Message(english_language ?
-               "R_Init: Init Hexen refresh daemon" :
-               "R_Init: Инициализация процесса запуска Hexen");
+               "R_Init: Init Hexen rendering system - [" :
+               "R_Init: Инициализация системы рендеринга Hexen - [");
     R_Init();
-    ST_Message("\n");
+    ST_Message("]\n");
 
     //if (M_CheckParm("-net"))
     //    ST_NetProgress();       // Console player found
