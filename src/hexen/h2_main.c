@@ -876,8 +876,8 @@ void D_DoomMain(void)
 
     // Show version message now, so it's visible during R_Init()
     ST_Message(english_language ?
-               "R_Init: Init Hexen rendering system - [" :
-               "R_Init: Инициализация системы рендеринга Hexen - [");
+               "R_Init: Init Hexen render system - [" :
+               "R_Init: Инициализация рендерера Hexen - [");
     R_Init();
     ST_Message("]\n");
 
