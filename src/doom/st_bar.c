@@ -177,9 +177,6 @@ static patch_t *keys[NUMCARDS+3];
 // [crispy] blinking key or skull in the status bar
 int st_keyorskull[3];
 
-// [JN] Update background/belez only every calculated tic, not framerate tic.
-static boolean st_bg_needsupdate;
-
 // [JN] Versions prior 1.4 does not have STTMINUS patch.
 // If case of using such versions, drawing negative health is not possible.
 static boolean no_sttminus = false;
@@ -796,12 +793,6 @@ const boolean ST_Responder (const event_t *ev)
 
 static void ST_DrawBackground (void)
 {
-    // [JN] No update needed, rely on buffered drawing.
-    if (!st_bg_needsupdate)
-    {
-       return;
-    }
-
     V_UseBuffer(st_backing_screen);
     
     // Draw side screen borders in wide screen mode.
@@ -876,9 +867,6 @@ static void ST_DrawBackground (void)
 
     // [JN] Draw/update elements. Only non-wide (false) drawing is needed here.
     ST_DrawElementsFunc(false);
-
-    // [JN] Done drawing, suppress update until next calculated tic.
-    st_bg_needsupdate = false;
 }
 
 // -----------------------------------------------------------------------------
@@ -1277,9 +1265,6 @@ static void ST_DoPaletteStuff (void)
 
 void ST_Ticker (void)
 {
-    // [JN] Allow to update background/belez before values update.
-    st_bg_needsupdate = true;
-
     // [JN] Use real random number generator
     // instead of M_Random LUT for faces stide.
     st_randomnumber = rand() % 3;
