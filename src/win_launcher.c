@@ -12,6 +12,13 @@
 // GNU General Public License for more details.
 //
 
+#ifdef HAVE_CONSOLE
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#endif
+
 #include "SDL.h"
 #include "doomtype.h"
 
@@ -22,6 +29,10 @@ int main(int argc, char** argv)
 {
 #ifdef HAVE_CONSOLE
     console_connected = true;
+
+    // [JN] Set a proper codepage and mode
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
 #endif
     return InterDoom_Main(argc, argv);
 }
