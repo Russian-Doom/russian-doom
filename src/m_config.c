@@ -978,9 +978,6 @@ static void LoadSections(FILE *file)
             {
                 if(handlers[i]->isHandling(sectionName))
                 {
-                    printf(english_language ?
-                           "\tM_Config: Loading section \"%s\"\n" :
-                           "\tM_Config: Загрузка секции \"%s\"\n", sectionName);
                     while(!feof(file))
                     {
                         if(fscanf(file, "%99[^\n =] = %299[^\n]%*1[\n]", keyName, value) != 2)
@@ -1001,7 +998,7 @@ static void LoadSections(FILE *file)
         }
         else
         {
-            printf("\tM_Config: Error: Failed to load config\n");
+            printf("    M_Config: Error: Failed to load config\n");
             break;
         }
     }
@@ -1041,11 +1038,6 @@ void M_LoadConfig(void)
         configPath = M_StringJoin(configdir, config_file_name, NULL);
     }
 
-    printf(english_language ?
-           "Loading config form %s\n" :
-           "Загрузка файла конфигурации:\n \t%s\n",
-           configPath);
-
     file = fopen(configPath, "r");
     if(file == NULL)
     {
@@ -1067,7 +1059,7 @@ void M_LoadConfig(void)
     {
         if(fscanf(file, "config_version = %i\n\n", &cfg_version) != 1)
         {
-            printf("\tM_Config: Error: Unsupported config format\n");
+            printf("    M_Config: Error: Unsupported config format\n");
             ApplyDefaults();
             fclose(file);
             return;
@@ -1088,6 +1080,14 @@ void M_LoadConfig(void)
     }
 
     M_ApplyMigration();
+}
+
+void M_PrintConfigFile (void)
+{
+    printf(english_language ?
+           "Loading configuration file:\n    %s\n" :
+           "Загрузка файла конфигурации:\n    %s\n",
+           configPath);
 }
 
 // Get a configuration file variable by its name
@@ -1204,17 +1204,20 @@ void M_SetConfigDir(char *dir)
         configdir = GetDefaultConfigDir();
     }
 
-    if (strcmp(configdir, "") != 0)
-    {
-        printf(english_language ?
-               "Using %s for configuration\n" :
-               "Настройки программы будут расположены в папке:\n \t%s\n",
-               configdir);
-    }
-
     // Make the directory if it doesn't already exist:
 
     M_MakeDirectory(configdir);
+}
+
+void M_PrintConfigDir (void)
+{
+    if (strcmp(configdir, "") != 0)
+    {
+        printf(english_language ?
+               "Configuration directory path:\n    %s\n" :
+               "Настройки программы будут расположены в папке:\n    %s\n",
+               configdir);
+    }
 }
 
 //
@@ -1260,8 +1263,8 @@ char *M_GetSaveGameDir()
         M_MakeDirectory(savegamedir);
     }
     printf(english_language ?
-            "Savegames folder:\n \t%s\n" :
-            "Сохраненные игры будут расположены в папке:\n \t%s\n",
+            "Savegames folder:\n    %s\n" :
+            "Сохраненные игры будут расположены в папке:\n    %s\n",
             savegamedir);
     return savegamedir;
 }

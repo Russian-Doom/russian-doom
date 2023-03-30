@@ -99,7 +99,7 @@ int PCSound_Init(pcsound_callback_func callback_func)
                 }
                 else
                 {
-                    printf("Failed to initialize PC sound driver: %s\n",
+                    printf("Failed to initialize PC sound driver: \'%s\'.\n",
                            drivers[i]->name);
                     break;
                 }
@@ -122,7 +122,7 @@ int PCSound_Init(pcsound_callback_func callback_func)
     
     if (pcsound_driver != NULL)
     {
-        printf("Using PC sound driver: %s\n", pcsound_driver->name);
+        printf("Using PC sound driver: \'%s\'.\n", pcsound_driver->name);
         return 1;
     }
     else

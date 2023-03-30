@@ -77,15 +77,15 @@ static boolean WriteWrapperTimidityConfig(char *write_path)
     }
 
     printf(english_language ?
-           "I_SDLMusic: Using Timidity config from:\n \t%s\n" :
-           "I_SDLMusic: Используется Timidity конфиг из файла:\n \t%s\n",
+           "I_SDLMusic: Using Timidity config from:\n    %s\n" :
+           "I_SDLMusic: Используется Timidity конфиг из файла:\n    %s\n",
            timidity_cfg_path);
 
     if(!LIB_VERSION_ATLEAST(sdl_mixer_version, 2, 5, 0) && strchr(timidity_cfg_path, ' '))
     {
         printf(english_language ?
-               "\tError: The path contains spaces, which are not supported by your SDL_mixer library. Update SDL_mixer to at least 2.5.0\n" :
-               "\tОшибка: Путь содержит пробелы, что не поддерживается вашей версией библиотеки SDL_mixer. Обновите SDL_mixer хотя бы до версии 2.5.0\n");
+               "\tError: The path contains spaces, which are not supported by your SDL_mixer library. Update SDL_mixer to at least 2.5.0.\n" :
+               "\tОшибка: Путь содержит пробелы, что не поддерживается вашей версией библиотеки SDL_mixer. Обновите SDL_mixer хотя бы до версии 2.5.0.\n");
     }
 
     fstream = fopen(write_path, "w");
@@ -93,8 +93,8 @@ static boolean WriteWrapperTimidityConfig(char *write_path)
     if(fstream == NULL)
     {
         printf(english_language ?
-               "Error: Could not write Timidity config\n" :
-               "Ошибка: Не удалось записать конфигурацию Timidity\n");
+               "Error: Could not write Timidity config.\n" :
+               "Ошибка: Не удалось записать конфигурацию Timidity.\n");
         return false;
     }
 
@@ -226,7 +226,7 @@ static boolean I_SDL_InitMusic(void)
         }
         else if (Mix_OpenAudioDevice(snd_samplerate, AUDIO_S16SYS, 2, 1024, NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE) < 0)
         {
-            fprintf(stderr, "Error initializing SDL_mixer: %s\n",
+            fprintf(stderr, "Error initializing SDL_mixer: \'%s\'.\n",
                     SDL_GetError());
             SDL_QuitSubSystem(SDL_INIT_AUDIO);
         }
@@ -257,8 +257,8 @@ static boolean I_SDL_InitMusic(void)
     if (snd_musicdevice != SNDDEVICE_GUS && strlen(fluidsynth_sf_path) > 0 && strlen(timidity_cfg_path) == 0)
     {
         printf(english_language ?
-               "I_SDLMusic: Using FluidSynth soundfont from:\n \t%s\n" :
-               "I_SDLMusic: Используется FluidSynth soundfont из файла:\n \t%s\n",
+               "I_SDLMusic: Using FluidSynth soundfont from:\n    %s\n" :
+               "I_SDLMusic: Используется FluidSynth soundfont из файла:\n    %s\n",
                fluidsynth_sf_path);
 
         Mix_SetSoundFonts(fluidsynth_sf_path);
@@ -267,8 +267,8 @@ static boolean I_SDL_InitMusic(void)
     if(snd_musicdevice != SNDDEVICE_GUS && strlen(fluidsynth_sf_path) == 0 && strlen(timidity_cfg_path) == 0)
     {
         printf(english_language ?
-               "I_SDLMusic: Using SDL-defined MIDI backend\n" :
-               "I_SDLMusic: Используется определённый SDL бэкэнд MIDI\n");
+               "I_SDLMusic: Using SDL-defined MIDI backend.\n" :
+               "I_SDLMusic: Используется MIDI бэкэнд определённый SDL.\n");
     }
 
     // If snd_musiccmd is set, we need to call Mix_SetMusicCMD to
@@ -552,7 +552,9 @@ static void *I_SDL_RegisterSong(void *data, int len)
         else
         {
             music = NULL;
-            fprintf(stderr, "Error loading midi: Failed to register song.\n");
+            fprintf(stderr, english_language ?
+                    "Error loading midi: Failed to register song.\n" :
+                    "Ошибка загрузки при регистрации midi файла.\n");
         }
     }
     else
@@ -562,7 +564,9 @@ static void *I_SDL_RegisterSong(void *data, int len)
         if (music == NULL)
         {
             // Failed to load
-            fprintf(stderr, "Error loading midi: %s\n", SDL_GetError());
+            fprintf(stderr, english_language ? 
+                    "Error loading midi: \'%s\'.\n" :
+                    "Ошибка загрузки midi: \'%s\'.\n", SDL_GetError());
         }
 
         // Remove the temporary MIDI file; however, when using an external

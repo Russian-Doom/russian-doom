@@ -1936,8 +1936,8 @@ void AutoloadFiles(const char* wadName)
     while((filename = I_NextGlob(glob)) != NULL)
     {
         printf(english_language ?
-               " [Autoload]" :
-               " [Автозагрузка]");
+               "    [autoload]" :
+               "    [автозагрузка]");
         LoadFile(filename, false);
     }
     I_EndGlob(glob);
@@ -2300,8 +2300,8 @@ void D_SetGameDescription(void)
             }
         }
         printf(english_language ?
-        " loaded %i DEHACKED lumps from PWAD files.\n" :
-        " загружено блоков Dehacked из WAD-файлов: %i.\n", loaded);
+        "    loaded %i DEHACKED lumps from PWAD files\n" :
+        "    загружено блоков DEHACKED из WAD-файлов: %i\n", loaded);
     }
 }
 
@@ -2314,8 +2314,8 @@ static boolean D_AddFile(char *filename)
     wad_file_t *handle;
 
     printf(english_language ?
-           " loading: %s\n" :
-           " загрузка: %s\n",
+           "    loading: %s\n" :
+           "    загрузка: %s\n",
            filename);
     handle = W_AddFile(filename);
 
@@ -2795,13 +2795,42 @@ void D_DoomMain (void)
 
     I_AtExit(D_Endoom, false);
 
-    if (devparm)
-    DEH_printf(english_language ? D_DEVSTR : D_DEVSTR_RUS);
+    // Load configuration files before initialising other subsystems.
+
+#ifdef _WIN32
+
+    //!
+    // @platform windows
+    // @vanilla
+    //
+    // Save configuration data and savegames in c:\doomdata,
+    // allowing play from CD.
+    //
+
+    if (M_ParmExists("-cdrom"))
+    {
+        // DEH_printf(english_language ? D_CDROM : D_CDROM_RUS);
+        M_SetConfigDir("c:\\doomdata\\");
+    }
+    else
+#endif
+    {
+        // Auto-detect the configuration dir.
+        M_SetConfigDir(NULL);
+    }
+    M_SetConfigFilename(PROGRAM_PREFIX "doom.ini");
+    D_BindVariables();
+    M_LoadConfig();
 
     DEH_printf(english_language ?
                "Z_Init: Init zone memory allocation daemon. \n" :
-               "Z_Init: Инициализация распределения памяти.\n");
+               "Z_Init: Инициализация зональной памяти.\n");
     Z_Init ();
+
+    M_PrintConfigDir();
+    M_PrintConfigFile();
+
+    savegamedir = M_GetSaveGameDir();
 
 #ifdef FEATURE_MULTIPLAYER
     //!
@@ -2934,27 +2963,7 @@ void D_DoomMain (void)
 
     // find which dir to use for config files
 
-#ifdef _WIN32
 
-    //!
-    // @platform windows
-    // @vanilla
-    //
-    // Save configuration data and savegames in c:\doomdata,
-    // allowing play from CD.
-    //
-
-    if (M_ParmExists("-cdrom"))
-    {
-        DEH_printf(english_language ? D_CDROM : D_CDROM_RUS);
-        M_SetConfigDir("c:\\doomdata\\");
-    }
-    else
-#endif
-    {
-        // Auto-detect the configuration dir.
-        M_SetConfigDir(NULL);
-    }
 
     //!
     // @arg <x>
@@ -2987,17 +2996,9 @@ void D_DoomMain (void)
         sidemove[1] = sidemove[1]*scale/100;
     }
 
-    // Load configuration files before initialising other subsystems.
-    DEH_printf(english_language ?
-               "M_LoadDefaults: Load system defaults.\n" :
-               "M_LoadDefaults: Загрузка системных стандартов.\n");
-    M_SetConfigFilename(PROGRAM_PREFIX "doom.ini");
-    D_BindVariables();
-    M_LoadConfig();
-
     // init subsystems
     DEH_printf(english_language ?
-               "V_Init: allocate screens.\n" :
+               "V_Init: Init video.\n" :
                "V_Init: Инициализация видео.\n");
     V_Init ();
 
@@ -3026,7 +3027,7 @@ void D_DoomMain (void)
     modifiedgame = false;
 
     DEH_printf(english_language ?
-               "W_Init: Init WADfiles.\n" :
+               "W_Init: Init WAD files.\n" :
                "W_Init: Инициализация WAD-файлов.\n");
     D_AddFile(iwadfile);
     numiwadlumps = numlumps;
@@ -3197,8 +3198,6 @@ void D_DoomMain (void)
     // Set the gamedescription string. This is only possible now that
     // we've finished loading Dehacked patches.
     D_SetGameDescription();
-
-    savegamedir = M_GetSaveGameDir();
 
     // Check for -file in shareware
     if (modifiedgame && (gamevariant != freedoom))
@@ -3456,8 +3455,8 @@ void D_DoomMain (void)
     CT_Init();
 
     DEH_printf(english_language ?
-               "R_Init: Init DOOM refresh daemon - [" :
-               "R_Init: Инициализация процесса запуска DOOM - [");
+               "R_Init: Init DOOM render system - [" :
+               "R_Init: Инициализация рендерера DOOM - [");
     R_Init ();
     printf("]");
 

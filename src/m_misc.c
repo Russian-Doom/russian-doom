@@ -348,7 +348,6 @@ const char *M_FileName(const char *path)
 void M_ExtractFileBase(char *path, char *dest)
 {
     char *src;
-    char *filename;
     int length;
 
     src = path + strlen(path) - 1;
@@ -358,8 +357,6 @@ void M_ExtractFileBase(char *path, char *dest)
     {
 	src--;
     }
-
-    filename = src;
 
     // Copy up to eight characters
     // Note: Vanilla Doom exits with an error if a filename is specified
@@ -371,15 +368,6 @@ void M_ExtractFileBase(char *path, char *dest)
 
     while (*src != '\0' && *src != '.')
     {
-        if (length >= 8)
-        {
-            printf(english_language ?
-                   "Warning: Truncated '%s' lump name to '%.8s'.\n" :
-                   "Внимание: название блока '%s' сокращено до '%.8s'.\n",
-                   filename, dest);
-            break;
-        }
-
 	dest[length++] = toupper((int)*src++);
     }
 }

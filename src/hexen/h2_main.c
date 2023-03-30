@@ -119,7 +119,6 @@ boolean nomonsters;             // checkparm of -nomonsters
 boolean respawnparm;            // checkparm of -respawn
 boolean randomclass;            // checkparm of -randclass
 boolean ravpic;                 // checkparm of -ravpic
-boolean cdrom = false;          // true if cd-rom mode active
 boolean cmdfrag;                // true if a CMD_FRAG packet should be sent out
 int artiskip = false;           // whether shift-enter skips an artifact
 int maxzone = 0x800000;         // Maximum allocated for zone heap (8meg default)
@@ -489,8 +488,8 @@ static void D_HexenQuitMessage(void)
 static void D_AddFile(char *filename)
 {
     printf(english_language ?
-    " adding: %s\n" :
-    " добавление: %s\n", filename);
+    "    adding: %s\n" :
+    "    добавление: %s\n", filename);
 
     W_AddFile(filename);
 }
@@ -619,8 +618,8 @@ void AutoloadFiles(char* wadName)
     while((filename = I_NextGlob(glob)) != NULL)
     {
         printf(english_language ?
-               " [Autoload]" :
-               " [Автозагрузка]");
+               "    [autoload]" :
+               "    [автозагрузка]");
         LoadFile(filename, false);
     }
     I_EndGlob(glob);
@@ -739,6 +738,10 @@ void D_DoomMain(void)
     ST_Message("\n");
 #endif
 
+    // Call I_ShutdownGraphics on quit
+
+    I_AtExit(I_ShutdownGraphics, true);
+
     I_AtExit(D_HexenQuitMessage, false);
     startepisode = 1;
     autostart = false;
@@ -747,10 +750,6 @@ void D_DoomMain(void)
     gamemode = commercial;
 
     // Load defaults before initing other systems
-    ST_Message(english_language ?
-               "M_LoadDefaults: Load system defaults.\n" :
-               "M_LoadDefaults: Загрузка системных стандартов.\n");
-    D_BindVariables();
 
 #ifdef _WIN32
 
@@ -762,46 +761,45 @@ void D_DoomMain(void)
     // allowing play from CD.
     //
 
-    cdrom = M_ParmExists("-cdrom");
-#endif
-
-    if (cdrom)
+    if (M_ParmExists("-cdrom"))
     {
         M_SetConfigDir("c:\\hexndata\\");
     }
     else
+#endif
     {
+        // Auto-detect the configuration dir.
         M_SetConfigDir(NULL);
     }
 
     M_SetConfigFilename(PROGRAM_PREFIX "hexen.ini");
+    D_BindVariables();
     M_LoadConfig();
 
-    // Call I_ShutdownGraphics on quit
+    ST_Message(english_language ?
+               "Z_Init: Init zone memory allocation daemon.\n" :
+               "Z_Init: Инициализация зональной памяти.\n");
+    Z_Init();
 
-    I_AtExit(I_ShutdownGraphics, true);
+    M_PrintConfigDir();
+    M_PrintConfigFile();
+
+    // Set the directory where hub savegames are saved.
+    SavePath = M_GetSaveGameDir();
 
     // Initialize subsystems
 
     ST_Message(english_language ?
-               "V_Init: allocate screens.\n" :
+               "V_Init: Init video.\n" :
                "V_Init: Инициализация видео.\n");
     V_Init();
 
     I_AtExit(M_SaveConfig, false);
 
-    // Set the directory where hub savegames are saved.
-    SavePath = M_GetSaveGameDir();
-
-    ST_Message(english_language ?
-               "Z_Init: Init zone memory allocation daemon.\n" :
-               "Z_Init: Инициализация распределения памяти.\n");
-    Z_Init();
-
     // haleyjd: removed WATCOMC
 
     ST_Message(english_language ?
-               "W_Init: Init WADfiles.\n" :
+               "W_Init: Init WAD files.\n" :
                "W_Init: Инициализация WAD-файлов.\n");
 
     iwadfile = D_FindIWAD(IWAD_MASK_HEXEN, &gamemission);
@@ -878,10 +876,10 @@ void D_DoomMain(void)
 
     // Show version message now, so it's visible during R_Init()
     ST_Message(english_language ?
-               "R_Init: Init Hexen refresh daemon" :
-               "R_Init: Инициализация процесса запуска Hexen");
+               "R_Init: Init Hexen render system - [" :
+               "R_Init: Инициализация рендерера Hexen - [");
     R_Init();
-    ST_Message("\n");
+    ST_Message("]\n");
 
     //if (M_CheckParm("-net"))
     //    ST_NetProgress();       // Console player found

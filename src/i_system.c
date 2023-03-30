@@ -121,6 +121,7 @@ byte *I_ZoneBase (int *size)
     int min_ram, default_ram;
     int p;
     static int i = 1;
+    static boolean printed = false;
 
     //!
     // @arg <mb>
@@ -152,10 +153,15 @@ byte *I_ZoneBase (int *size)
     // [crispy] if called again, allocate another zone twice as big
     i *= 2;
 
-    printf(english_language ?
-           "zone memory: %p, %x MB allocated for zone\n" :
-           "Распределение памяти: %p, выделено %x Мбайт.\n", 
-           zonemem, *size >> 20); // [crispy] human-understandable zone heap size
+    if (!printed)
+    {
+        printf(english_language ?
+               "    zone memory: %p, %x MB allocated for zone\n" :
+               "    зональная память: %p, выделено %x Мбайт\n", 
+               zonemem, *size >> 20); // [crispy] human-understandable zone heap size
+    }
+
+    printed = true;
 
     return zonemem;
 }

@@ -108,6 +108,8 @@ void RD_CreateWindowsConsole(void)
     // [JN] Head text outputs.
     ReopenConsoleHandles();
 
+    SetConsoleTitle("Console");
+
     // [JN] Set a proper codepage and mode
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
