@@ -295,7 +295,6 @@ void M_FindResponseFile(void)
     }
 }
 
-#if defined(_WIN32)
 enum
 {
     FILETYPE_UNKNOWN = 0x0,
@@ -521,7 +520,6 @@ void M_AddLooseFiles(void)
     free(myargv);
     myargv = newargv;
 }
-#endif
 
 // Return the name of the executable used to start the program:
 
