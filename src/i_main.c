@@ -265,11 +265,9 @@ int main(int argc, char **argv)
     // Check for -lang param before loading response file to show potential errors in the correct language
     CheckLangParam();
 
-#if defined(_WIN32)
     // compose a proper command line from loose file paths passed as arguments
-    // to allow for loading WADs and DEHACKED patches by drag-and-drop
+    // to allow for loading WADs and DEHACKED patches by drag-and-drop and "open with"
     M_AddLooseFiles();
-#endif
 
     M_FindResponseFile();
 
