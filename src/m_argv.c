@@ -307,7 +307,7 @@ enum
 static boolean FileIsDemoLump(const char *filename)
 {
     FILE *handle;
-    int count, ver;
+    int ver;
     byte buf[12], *p = buf;
 
     handle = fopen(filename, "rb");
@@ -317,7 +317,7 @@ static boolean FileIsDemoLump(const char *filename)
         return false;
     }
 
-    count = fread(buf, 1, sizeof(buf), handle);
+    size_t count = fread(buf, 1, sizeof(buf), handle);
     fclose(handle);
 
     if (count != sizeof(buf))
@@ -345,7 +345,6 @@ static boolean FileIsDemoLump(const char *filename)
                 break;
             default:
                 return false;
-                break;
         }
     }
 
@@ -357,7 +356,7 @@ static boolean FileIsDemoLump(const char *filename)
     {
         return false;
     }
-    if (*p++ > 99) // map
+    if (*p > 99) // map
     {
         return false;
     }
