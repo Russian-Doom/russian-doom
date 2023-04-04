@@ -62,6 +62,7 @@ void I_DrawBlackBorders (void);
 
 void *I_GetSDLWindow(void);
 void *I_GetSDLRenderer(void);
+extern boolean endoom_screen_active;
 
 typedef boolean (*grabmouse_callback_t)(void);
 

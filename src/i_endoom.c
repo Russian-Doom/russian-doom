@@ -39,6 +39,8 @@ void I_Endoom(byte *endoom_data)
     int y;
     int indent;
 
+    endoom_screen_active = true;
+
     // Set up text mode screen
     TXT_PreInit(I_GetSDLWindow(), I_GetSDLRenderer());
 
