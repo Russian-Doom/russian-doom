@@ -449,7 +449,12 @@ static void HandleWindowEvent (const SDL_WindowEvent *event)
                 video_display = i;
             }
             // [JN] Get X and Y coordinates after moving a window.
-            SDL_GetWindowPosition(screen, &window_position_x, &window_position_y);
+            // But do not get in fullscreen mode, since x and y becomes 0,
+            // which will cause position reset to "centered" in SetVideoMode.
+            if (!fullscreen)
+            {
+                SDL_GetWindowPosition(screen, &window_position_x, &window_position_y);
+            }
             break;
 
         default:
