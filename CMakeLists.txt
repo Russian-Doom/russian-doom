@@ -55,6 +55,11 @@ endif()
 # Any settings that should apply to all targets in this directory and all subdirectories should go here
 set(RD_C_STANDARD 99)
 
+# Enable LTO if available.
+include(CheckIPOSupported)
+check_ipo_supported(RESULT HAVE_LTO)
+cmake_dependent_option(ENABLE_LTO "Use link-time optimisation" ON "HAVE_LTO" OFF)
+
 include(Utils)
 
 # Parameters we want to check for on all compilers
