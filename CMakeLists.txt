@@ -88,7 +88,7 @@ add_compile_options_checked(
 )
 
 if(MSVC)
-    add_compile_definitions(
+    add_common_compile_definitions(
         # Silence the usual warnings for POSIX and standard C functions
         _CRT_NONSTDC_NO_DEPRECATE
         _CRT_SECURE_NO_WARNINGS

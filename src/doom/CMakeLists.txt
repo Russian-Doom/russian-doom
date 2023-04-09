@@ -66,10 +66,7 @@ if(COMPILE_DOOM)
                 st_bar.c        st_bar.h
                 wi_stuff.c      wi_stuff.h
     )
-    set_target_properties(doom PROPERTIES
-        C_STANDARD "${RD_C_STANDARD}"
-        C_STANDARD_REQUIRED ON
-    )
+    target_common_settings(doom)
     target_compile_definitions(doom PRIVATE
         BUILD_DOOM_VERSION="${BUILD_DOOM_VERSION}"
         PACKAGE_PREFIX="${PACKAGE_PREFIX}"

@@ -60,10 +60,7 @@ if(COMPILE_HEXEN)
                 sv_save.c
                                     xddefs.h
     )
-    set_target_properties(hexen PROPERTIES
-        C_STANDARD "${RD_C_STANDARD}"
-        C_STANDARD_REQUIRED ON
-    )
+    target_common_settings(hexen)
     target_compile_definitions(hexen PRIVATE
         BUILD_HEXEN_VERSION="${BUILD_HEXEN_VERSION}"
         PACKAGE_PREFIX="${PACKAGE_PREFIX}"
