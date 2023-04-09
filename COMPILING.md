@@ -24,7 +24,7 @@
 
 ## Step 1: Setting up build environment
 
-Download source code archive of the latest release version and unpack it.
+Download the source code archive of the latest release version and unpack it.
 Or clone repository from Git.
 The primary way of building International Doom on Windows is using an MSYS environment.
 
@@ -86,7 +86,7 @@ Download and install [Cmake](https://cmake.org/download/#latest) and
 
 If you want to build Windows XP compatible executables, you need to install `v141_xp` toolset.
 In the GUI installer it can be easily found on the "Individual components" tab by typing "XP" in the search field.
-Or you can run following command after installing base components:
+Or you can run the following command after installing base components:
 ```shell
 "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer" modify \
     --installPath "<path to install>" \
@@ -133,7 +133,7 @@ Cmake option `CMAKE_FIND_PACKAGE_PREFER_CONFIG` should be `OFF` (default) in ord
 Install and bootstrap [vcpkg](https://github.com/microsoft/vcpkg#quick-start-windows).
 
 By default, International Doom uses the manifest mode of vcpkg.
-In this mode all dependencies are obtained automatically during the project configuration stage.
+In this mode, all dependencies are obtained automatically during the project configuration stage.
 If you want to use vcpkg in the classic mode, use the following commands to download and build dependencies:
 ```shell
 vcpkg integrate install
@@ -243,7 +243,7 @@ If your Linux distribution provides a package for `miniz` library, you can use i
 
 ## Step 2: Compiling International Doom
 
-Download source code archive of the latest release version and unpack it.
+Download the source code archive of the latest release version and unpack it.
 Or clone repository from Git.
 
 There are several supported cmake generators: `Unix Makefiles`, `Ninja`, `Ninja Multi-Config`.
