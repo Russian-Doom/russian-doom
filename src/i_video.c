@@ -1714,6 +1714,23 @@ void I_InitGraphics(void)
     initialized = true;
 }
 
+// -----------------------------------------------------------------------------
+// I_ToggleVsync
+// [JN] Uses native SDL VSync toggling functions.
+// -----------------------------------------------------------------------------
+
+void I_ToggleVsync (void)
+{
+    if (opengles_renderer)
+    {
+        SDL_GL_SetSwapInterval(vsync);
+    }
+    else
+    {
+        SDL_RenderSetVSync(renderer, vsync);
+    }
+}
+
 // [crispy] re-initialize only the parts of the rendering stack that are really necessary
 
 void I_ReInitGraphics (const int reinit)

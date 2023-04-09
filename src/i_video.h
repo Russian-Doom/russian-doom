@@ -71,6 +71,9 @@ typedef boolean (*grabmouse_callback_t)(void);
 // and sets up the video mode
 void I_InitGraphics (void);
 
+// [JN] Calls native SDL vsync toggle.
+void I_ToggleVsync (void);
+
 // [crispy] re-initialize only the parts of the rendering stack that are really necessary
 void I_ReInitGraphics (const int reinit);
 

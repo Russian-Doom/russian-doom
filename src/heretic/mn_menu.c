@@ -2298,16 +2298,7 @@ static void M_RD_Change_VSync()
 
     vsync ^= 1;
 
-    if (opengles_renderer)
-    {
-        // [JN] Use native OpenGL vsync toggling.
-        SDL_GL_SetSwapInterval(vsync);
-    }
-    else
-    {
-        // Reinitialize graphics
-        I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
-    }
+    I_ToggleVsync();
 }
 
 static void M_RD_MaxFPS(Direction_t direction)
