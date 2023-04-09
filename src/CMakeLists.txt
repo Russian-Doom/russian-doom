@@ -87,10 +87,7 @@ target_include_directories(Common PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}"
     "${PROJECT_BINARY_DIR}"
 )
-set_target_properties(Common PROPERTIES
-    C_STANDARD "${RD_C_STANDARD}"
-    C_STANDARD_REQUIRED ON
-)
+target_common_settings(Common)
 target_compile_definitions(Common PRIVATE
     "$<$<BOOL:${SampleRate_FOUND}>:HAVE_LIBSAMPLERATE>"
     "$<$<BOOL:${HAVE_MMAP}>:HAVE_MMAP>"
@@ -140,9 +137,8 @@ foreach(MODULE ${COMPILE_MODULES})
             "$<$<BOOL:${MSVC}>:/MANIFEST:NO>"
             "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:WINDOWS,-mwindows>"
         )
+        target_common_settings("${PROGRAM_PREFIX}${MODULE}-exe")
         set_target_properties("${PROGRAM_PREFIX}${MODULE}-exe" PROPERTIES
-            C_STANDARD "${RD_C_STANDARD}"
-            C_STANDARD_REQUIRED ON
             RUNTIME_OUTPUT_NAME "${PROGRAM_PREFIX}${MODULE}"
         )
         target_compile_definitions("${PROGRAM_PREFIX}${MODULE}-exe" PRIVATE
@@ -167,9 +163,8 @@ foreach(MODULE ${COMPILE_MODULES})
             "$<$<BOOL:${MSVC}>:/MANIFEST:NO>"
             "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:CONSOLE,-mconsole>"
         )
+        target_common_settings("${PROGRAM_PREFIX}${MODULE}-com")
         set_target_properties("${PROGRAM_PREFIX}${MODULE}-com" PROPERTIES
-            C_STANDARD "${RD_C_STANDARD}"
-            C_STANDARD_REQUIRED ON
             RUNTIME_OUTPUT_NAME "${PROGRAM_PREFIX}${MODULE}"
             SUFFIX ".com"
         )
@@ -205,6 +200,7 @@ foreach(MODULE ${COMPILE_MODULES})
         )
     endif()
 
+    target_common_settings("${PROGRAM_PREFIX}${MODULE}")
     target_compile_definitions("${PROGRAM_PREFIX}${MODULE}" PRIVATE
         "$<$<BOOL:${BUILD_PORTABLE}>:BUILD_PORTABLE>"
     )
@@ -220,14 +216,6 @@ foreach(MODULE ${COMPILE_MODULES})
     if(UNIX AND Python3_Interpreter_FOUND)
         add_dependencies("${PROGRAM_PREFIX}${MODULE}" "man-${MODULE}-en" "completion-${MODULE}")
     endif()
-
-    # Properties
-    set_target_properties("${PROGRAM_PREFIX}${MODULE}" PROPERTIES
-        C_STANDARD "${RD_C_STANDARD}"
-        C_STANDARD_REQUIRED ON
-        INTERPROCEDURAL_OPTIMIZATION ${ENABLE_LTO}
-        INTERPROCEDURAL_OPTIMIZATION_DEBUG OFF
-    )
 
     add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}" POST_BUILD
         MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}>"

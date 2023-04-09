@@ -48,7 +48,7 @@ function(add_compile_options_checked)
             list(APPEND flag_list ${flag})
         endif()
     endforeach()
-    add_compile_options(${flag_list})
+    set(RD_compile_options ${RD_compile_options} ${flag_list} PARENT_SCOPE)
 endfunction()
 
 # configure_empty_git_info(<Template> <Output>)
@@ -57,4 +57,21 @@ function(configure_empty_git_info Template Output)
     set(Hash_suffix "")
     set(Timestamp "<unknown>")
     configure_file("${Template}" "${Output}" @ONLY)
+endfunction()
+
+# add_common_compile_definitions(<definition> ...)
+function(add_common_compile_definitions)
+    set(RD_compile_definitions ${RD_compile_definitions} ${ARGV} PARENT_SCOPE)
+endfunction()
+
+# target_common_settings(<target>)
+function(target_common_settings Target)
+    target_compile_options(${Target} PRIVATE ${RD_compile_options})
+    target_compile_definitions(${Target} PRIVATE ${RD_compile_definitions})
+    set_target_properties(${Target} PROPERTIES
+        C_STANDARD "${RD_C_STANDARD}"
+        C_STANDARD_REQUIRED ON
+        INTERPROCEDURAL_OPTIMIZATION ${ENABLE_LTO}
+        INTERPROCEDURAL_OPTIMIZATION_DEBUG OFF
+    )
 endfunction()

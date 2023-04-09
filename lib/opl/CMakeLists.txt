@@ -13,10 +13,7 @@ add_library(opl STATIC EXCLUDE_FROM_ALL
 target_include_directories(opl
     INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}"
 )
-set_target_properties(opl PROPERTIES
-    C_STANDARD "${RD_C_STANDARD}"
-    C_STANDARD_REQUIRED ON
-)
+target_common_settings(opl)
 target_compile_definitions(opl PRIVATE
     "$<$<BOOL:${HAVE_LIBI386}>:HAVE_LIBI386>"
     "$<$<BOOL:${HAVE_LIBAMD64}>:HAVE_LIBAMD64>"

@@ -9,10 +9,7 @@ add_library(pcsound STATIC EXCLUDE_FROM_ALL
 target_include_directories(pcsound
     INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}"
 )
-set_target_properties(pcsound PROPERTIES
-    C_STANDARD "${RD_C_STANDARD}"
-    C_STANDARD_REQUIRED ON
-)
+target_common_settings(pcsound)
 target_compile_definitions(pcsound PRIVATE
     "$<$<BOOL:${HAVE_DEV_ISA_SPKRIO_H}>:HAVE_DEV_ISA_SPKRIO_H>"
     "$<$<BOOL:${HAVE_DEV_SPEAKER_SPEAKER_H}>:HAVE_DEV_SPEAKER_SPEAKER_H>"

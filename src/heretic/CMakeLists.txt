@@ -55,10 +55,7 @@ if(COMPILE_HERETIC)
                 sounds.c            sounds.h
                 s_sound.c           s_sound.h
     )
-    set_target_properties(heretic PROPERTIES
-        C_STANDARD "${RD_C_STANDARD}"
-        C_STANDARD_REQUIRED ON
-    )
+    target_common_settings(heretic)
     target_compile_definitions(heretic PRIVATE
         BUILD_HERETIC_VERSION="${BUILD_HERETIC_VERSION}"
         PACKAGE_PREFIX="${PACKAGE_PREFIX}"

@@ -67,10 +67,7 @@ if(COMPILE_STRIFE)
             st_stuff.c      st_stuff.h
             wi_stuff.c      wi_stuff.h
     )
-    set_target_properties(strife PROPERTIES
-        C_STANDARD "${RD_C_STANDARD}"
-        C_STANDARD_REQUIRED ON
-    )
+    target_common_settings(strife)
     target_compile_definitions(strife PRIVATE
         BUILD_STRIFE_VERSION="${BUILD_STRIFE_VERSION}"
         PACKAGE_PREFIX="${PACKAGE_PREFIX}"
