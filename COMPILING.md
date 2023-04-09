@@ -173,6 +173,9 @@ to `ON` or `OFF`.
 To use configs provided by the installed libraries (for example, in the MSYS environment) instead of find-modules,
 set the `CMAKE_FIND_PACKAGE_PREFER_CONFIG` cmake option to `ON`.
 
+International Doom uses Link Time Optimization if it is available in the compiler.
+If it causes problems with your compiler, set `ENABLE_LTO` cmake option to `OFF`.
+
 To build the project, use the following command:
 ```shell
 cmake --build build
@@ -261,6 +264,9 @@ config files, and savegames in the installation directory among executables.
 
 To use configs provided by the installed libraries instead of find-modules,
 set the `CMAKE_FIND_PACKAGE_PREFER_CONFIG` cmake option to `ON`.
+
+International Doom uses Link Time Optimization if it is available in the compiler.
+If it causes problems with your compiler, set `ENABLE_LTO` cmake option to `OFF`.
 
 To build the project, use the following command:
 ```shell
