@@ -1005,21 +1005,33 @@ void I_FinishUpdate (void)
 
     SDL_RenderPresent(renderer);
 
-    if (uncapped_fps)
+    if (uncapped_fps && !singletics)
     {
-        // [crispy] variable rendering framerate
-        // [JN] Modified to have a variable FPS cap.
-        if (!singletics)
+        // Limit framerate
+        if (max_fps >= TICRATE)
         {
-            static uint64_t halftics_old;
-            uint64_t halftics;
+            uint64_t target_time = 1000000ull / max_fps;
+            static uint64_t start_time;
 
-            while ((halftics = GetAdjustedTimeN(max_fps)) == halftics_old)
+            while (1)
             {
-                SDL_Delay(1);
-            }
+                uint64_t current_time = I_GetTimeUS();
+                uint64_t elapsed_time = current_time - start_time;
+                uint64_t remaining_time = 0;
 
-            halftics_old = halftics;
+                if (elapsed_time >= target_time)
+                {
+                    start_time = current_time;
+                    break;
+                }
+
+                remaining_time = target_time - elapsed_time;
+
+                if (remaining_time > 1000)
+                {
+                    I_Sleep((remaining_time - 1000) / 1000);
+                }
+            }
         }
 
         // [AM] Figure out how far into the current tic we're in as a fixed_t.
