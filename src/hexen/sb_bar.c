@@ -1860,14 +1860,14 @@ void DrawKeyBar(void)
             if (CPlayer->armorpoints[i] <=
                 (ArmorIncrement[CPlayer->class][i] >> 2))
             {
-                V_DrawTLPatch(150 + 31 * i + wide_delta, 164,
+                V_DrawAltTLPatch(150 + 31 * i + wide_delta, 164,
                               W_CacheLumpNum(W_GetNumForName("armslot1") +
                                              i, PU_CACHE));
             }
             else if (CPlayer->armorpoints[i] <=
                      (ArmorIncrement[CPlayer->class][i] >> 1))
             {
-                V_DrawAltTLPatch(150 + 31 * i + wide_delta, 164,
+                V_DrawTLPatch(150 + 31 * i + wide_delta, 164,
                                  W_CacheLumpNum(W_GetNumForName("armslot1")
                                                 + i, PU_CACHE));
             }
@@ -2157,7 +2157,7 @@ void DrawFullScreenStuff(void)
         x = inv_ptr - curpos;
         for (i = 0; i < 7; i++)
         {
-            V_DrawTLPatch(50 + i * 31 + + wide_delta, 168, W_CacheLumpName("ARTIBOX",
+            V_DrawAltTLPatch(50 + i * 31 + +wide_delta, 168, W_CacheLumpName("ARTIBOX",
                                                             PU_CACHE));
             if (CPlayer->inventorySlotNum > x + i
                 && CPlayer->inventory[x + i].type != arti_none)
