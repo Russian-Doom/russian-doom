@@ -610,17 +610,20 @@ void V_DrawAltTLPatch (int x, int y, const patch_t *patch)
 {
     int count, col;
     column_t *column;
-    byte *desttop, *dest, *source;
+    byte *dest1, *desttop1; // Middle resolution (main patch)
+    byte *dest2, *desttop2; // High resolution (main patch)
+    byte *source;
     int w, f;
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
 
     col = 0;
-    desttop = dest_screen + (y << hires) * screenwidth + x;
+    desttop1 = dest_screen + (y << hires) * screenwidth + x;
+    desttop2 = dest_screen + ((y << hires) + quadres) * screenwidth + x;
 
     w = SHORT(patch->width);
-    for (; col < w; x++, col++, desttop++)
+    for (; col < w; x++, col++, desttop1++, desttop2++)
     {
         column = (column_t *) ((byte *) patch + LONG(patch->columnofs[col]));
 
@@ -628,22 +631,36 @@ void V_DrawAltTLPatch (int x, int y, const patch_t *patch)
 
         while (column->topdelta != 0xff)
         {
-            for (f = 0; f <= hires; f++)
+            for (f = 0; f <= (hires + quadres); f++)
             {
-            source = (byte *) column + 3;
-            dest = desttop + column->topdelta * (screenwidth << hires) + (x * hires) + f;
-            count = column->length;
+                const int column_post = column->topdelta * (screenwidth << hires) + (x * (hires + quadres)) + f;
 
-            while (count--)
-            {
-                if (hires)
+                source = (byte *) column + 3;
+                dest1 = desttop1 + column_post;
+                dest2 = desttop2 + column_post;
+                count = column->length;
+
+                while (count--)
                 {
-                    *dest = tinttable[((*dest) << 8) + *source];
-                    dest += screenwidth;
+                    if (quadres)
+                    {
+                        *dest2 = *dest1 = tinttable[((*dest1) << 8) + *source];
+                        dest1 += fullscreenwidth;
+                        dest2 += fullscreenwidth;
+
+                        *dest2 = *dest1 = tinttable[((*dest1) << 8) + *source++];
+                        dest1 += fullscreenwidth;
+                        dest2 += fullscreenwidth;
+                    }
+                    else
+                    {
+                        *dest1 = tinttable[((*dest1) << 8) + *source];
+                        dest1 += fullscreenwidth;
+
+                        *dest1 = tinttable[((*dest1) << 8) + *source++];
+                        dest1 += fullscreenwidth;
+                    }
                 }
-                *dest = tinttable[((*dest) << 8) + *source++];
-                dest += screenwidth;
-            }
             }
             column = (column_t *) ((byte *) column + column->length + 4);
         }
