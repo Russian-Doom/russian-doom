@@ -797,8 +797,8 @@ const boolean ST_Responder (const event_t *ev)
 static void ST_DrawBackground (void)
 {
     // [JN] No update needed, rely on buffered drawing.
-    // Hovewer, always update while menu shading.
-    if (!st_bg_needsupdate && !menu_shading)
+    // Hovewer, always update while active menu.
+    if (!st_bg_needsupdate && !menuactive)
     {
        return;
     }
