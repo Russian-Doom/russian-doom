@@ -482,6 +482,7 @@ void V_DrawPatchFlipped (int x, int y, const patch_t *patch)
 // -----------------------------------------------------------------------------
 // V_DrawTLPatch
 // Masks a column based translucent masked pic to the screen.
+// Uses "dest algorithm".
 // -----------------------------------------------------------------------------
 
 void V_DrawTLPatch (int x, int y, const patch_t *patch)
@@ -604,6 +605,7 @@ void V_DrawXlaPatch (int x, int y, const patch_t *patch)
 // -----------------------------------------------------------------------------
 // V_DrawAltTLPatch
 // Masks a column based translucent masked pic to the screen.
+// Uses "source algorithm".
 // -----------------------------------------------------------------------------
 
 void V_DrawAltTLPatch (int x, int y, const patch_t *patch)
@@ -644,20 +646,20 @@ void V_DrawAltTLPatch (int x, int y, const patch_t *patch)
                 {
                     if (quadres)
                     {
-                        *dest2 = *dest1 = tinttable[((*dest1) << 8) + *source];
+                        *dest2 = *dest1 = tinttable[*dest1 + ((*source)<<8)];
                         dest1 += fullscreenwidth;
                         dest2 += fullscreenwidth;
 
-                        *dest2 = *dest1 = tinttable[((*dest1) << 8) + *source++];
+                        *dest2 = *dest1 = tinttable[*dest1 + ((*source++)<<8)];
                         dest1 += fullscreenwidth;
                         dest2 += fullscreenwidth;
                     }
                     else
                     {
-                        *dest1 = tinttable[((*dest1) << 8) + *source];
+                        *dest1 = tinttable[*dest1 + ((*source)<<8)];
                         dest1 += fullscreenwidth;
 
-                        *dest1 = tinttable[((*dest1) << 8) + *source++];
+                        *dest1 = tinttable[*dest1 + ((*source++)<<8)];
                         dest1 += fullscreenwidth;
                     }
                 }
