@@ -65,11 +65,17 @@
 #define YELLOW_JAGUAR    163
 #define MAGENTA_JAGUAR   254
 
-// [JN] IDDT extended colors
-#define REDS_IDDT        REDS
-#define YELLOWS_IDDT     YELLOWS
-#define GREENS_IDDT      GREENS
-#define GRAYS_IDDT       GRAYS
+// [JN] ReMood-inspired IDDT monster coloring, slightly optimized
+// for uncapped framerate and uses different coloring logics:
+// Active monsters: up-up-up-up
+// Inactive monsters: up-down-up-down
+#define IDDT_REDS_RANGE (10)
+#define IDDT_REDS_MIN   (REDS)
+#define IDDT_REDS_MAX   (REDS + IDDT_REDS_RANGE)
+static int     iddt_reds_active;
+static int     iddt_reds_inactive = REDS;
+static boolean iddt_reds_direction = false;
+
 
 // [JN] FRACTOMAPBITS: overflow-safe coordinate system.
 // Written by Andrey Budko (entryway), adapted from prboom-plus/src/am_map.*
@@ -960,6 +966,40 @@ void AM_Ticker (void)
     prev_scale_mtof = scale_mtof;
     prev_m_x = m_x;
     prev_m_y = m_y;
+
+    // [JN] Animate IDDT monster colors:
+
+    // Inactive:
+    if (gametic & 1)
+    {
+        if (!iddt_reds_direction)
+        {
+            // Brightening
+            if (iddt_reds_inactive < IDDT_REDS_MAX)
+            {
+                iddt_reds_inactive++;
+            }
+            if (iddt_reds_inactive == IDDT_REDS_MAX)
+            {
+                iddt_reds_direction = true;
+            }
+        }
+        else
+        {
+            // Darkening
+            if (iddt_reds_inactive > IDDT_REDS_MIN)
+            {
+                iddt_reds_inactive--;
+            }
+            if (iddt_reds_inactive == IDDT_REDS_MIN)
+            {
+                iddt_reds_direction = false;
+            }
+        }
+    }
+
+    // Active:
+    iddt_reds_active = REDS + (gametic % IDDT_REDS_RANGE);
 }
 
 // -----------------------------------------------------------------------------
@@ -2259,6 +2299,9 @@ static void AM_drawThings (const int colors, const int colorrange)
     mpoint_t  pt;
     mobj_t   *t;
     angle_t   actualangle;
+    // [JN] RestlessRodent -- Carbon copy from ReMooD
+    int         color = colors;
+    extern void A_Look (mobj_t *actor);
 
     for (i = 0 ; i < numsectors ; i++)
     {
@@ -2301,20 +2344,30 @@ static void AM_drawThings (const int colors, const int colorrange)
                 if (t->type == MT_BLOOD || t->type == MT_PUFF)
                 {
                     AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy),
-                                         actualradius >> 2, actualangle, GRAYS_IDDT, pt.x, pt.y);
+                                         actualradius >> 2, actualangle, GRAYS, pt.x, pt.y);
                 }
                 else
                 {
+                    // [JN] ReMooD-inspired monsters coloring.
+                    if (t->target && t->state && t->state->action.acv != A_Look)
+                    {
+                        color = iddt_reds_active;
+                    }
+                    else
+                    {
+                        color = iddt_reds_inactive;
+                    }
+
                     AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy), 
                                          actualradius, actualangle, 
                                          // Monsters
-                                         t->flags & MF_COUNTKILL ? (t->health > 0 ? REDS_IDDT : GRAYS_IDDT) :
+                                         t->flags & MF_COUNTKILL ? (t->health > 0 ? color : GRAYS) :
                                          // Lost Souls and Explosive barrels (does not have a MF_COUNTKILL flag)
-                                         t->type == MT_SKULL || t->type == MT_BARREL ? YELLOWS_IDDT :
+                                         t->type == MT_SKULL || t->type == MT_BARREL ? YELLOWS :
                                          // Pickups
-                                         t->flags & MF_SPECIAL ? GREENS_IDDT :
+                                         t->flags & MF_COUNTITEM ? GREENS :
                                          // Everything else
-                                         GRAYS_IDDT,
+                                         GRAYS,
                                          pt.x, pt.y);
                 }
             }
