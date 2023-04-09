@@ -3003,7 +3003,7 @@ void D_DoomMain (void)
     V_Init ();
 
     // Save configuration at exit.
-    I_AtExit(M_SaveConfig, false);
+    I_AtExit(M_SaveConfig, true); // [crispy] always save configuration at exit
 
     // Find main IWAD file and load it.
     iwadfile = D_FindIWAD(IWAD_MASK_DOOM, &gamemission);

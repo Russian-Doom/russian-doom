@@ -1475,7 +1475,7 @@ void D_DoomMain(void)
                "V_Init: Инициализация видео.\n");
     V_Init();
 
-    I_AtExit(M_SaveConfig, false);
+    I_AtExit(M_SaveConfig, true); // [crispy] always save configuration at exit
 
     DEH_printf(english_language ?
                "W_Init: Init WAD files.\n" :
