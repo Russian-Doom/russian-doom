@@ -51,21 +51,19 @@ jobs:
             name: "cl"
             cmake_gen: "Visual Studio 16 2019" # Visual Studio 17 2022
         exclude:
-          - # Disable x86 build on linux
+          - # Disable x86 build on linux (require crosscompiling)
             os:
               name: "Linux"
             arch:
               name: "x86"
-          - # Disable MSVC compiler on Linux
+          - # Disable MSVC compiler on Linux (no MSVC for Linux)
             os:
               name: "Linux"
             compiler:
               display_name: "MSVC"
-          - # Disable MSVC compiler for x86
+          - # Disable MSVC compiler
             compiler:
               display_name: "MSVC"
-            arch:
-              name: "x86"
         include:
           -
             shell: "bash"
