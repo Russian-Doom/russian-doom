@@ -28,11 +28,13 @@ jobs:
             bits: "32"
             msys_name: "i686"
             msvc_gen_opts: "-T v141_xp -A Win32"
+            msvc_triplet: "x86-windows"
           -
             name: "x64"
             bits: "64"
             msys_name: "x86_64"
             msvc_gen_opts: "-A x64"
+            msvc_triplet: "x64-windows"
         compiler:
           -
             display_name: "GCC"
@@ -141,7 +143,7 @@ jobs:
 
 #         For classic mode:
 #         vcpkg integrate install
-#         vcpkg install --triplet=${{ matrix.arch.msvc_triplet }} sdl2 sdl2-mixer[core,nativemidi,libmodplug,opusfile] sdl2-net libsamplerate
+#         vcpkg install --triplet=${{ matrix.arch.msvc_triplet }} sdl2 sdl2-mixer[core,libflac,libmodplug,mpg123,opusfile] sdl2-net libsamplerate
 
       - name: Setup Linux env
         if: matrix.os.name == 'Linux'
