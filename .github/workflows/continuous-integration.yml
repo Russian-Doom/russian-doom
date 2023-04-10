@@ -61,9 +61,11 @@ jobs:
               name: "Linux"
             compiler:
               display_name: "MSVC"
-          - # Disable MSVC compiler
+          - # Disable MSVC compiler for x86
             compiler:
               display_name: "MSVC"
+            arch:
+              name: "x86"
         include:
           -
             shell: "bash"
