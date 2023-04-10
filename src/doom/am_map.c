@@ -986,7 +986,7 @@ void AM_Ticker (void)
     }
 
     // Active:
-    iddt_reds_active = REDS + (gametic % IDDT_REDS_RANGE);
+    iddt_reds_active = (REDS - 4) + ((gametic >> 1) % IDDT_REDS_RANGE);
 }
 
 // -----------------------------------------------------------------------------
