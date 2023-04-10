@@ -140,6 +140,7 @@ foreach(MODULE ${COMPILE_MODULES})
         target_common_settings("${PROGRAM_PREFIX}${MODULE}-exe")
         set_target_properties("${PROGRAM_PREFIX}${MODULE}-exe" PROPERTIES
             RUNTIME_OUTPUT_NAME "${PROGRAM_PREFIX}${MODULE}"
+            COMPILE_PDB_NAME "${PROGRAM_PREFIX}${MODULE}-exe"
         )
         target_compile_definitions("${PROGRAM_PREFIX}${MODULE}-exe" PRIVATE
             "$<IF:$<BOOL:${HAVE_DECL_STRCASECMP}>,HAVE_DECL_STRCASECMP=1,HAVE_DECL_STRCASECMP=0>"
@@ -166,6 +167,7 @@ foreach(MODULE ${COMPILE_MODULES})
         target_common_settings("${PROGRAM_PREFIX}${MODULE}-com")
         set_target_properties("${PROGRAM_PREFIX}${MODULE}-com" PROPERTIES
             RUNTIME_OUTPUT_NAME "${PROGRAM_PREFIX}${MODULE}"
+            COMPILE_PDB_NAME "${PROGRAM_PREFIX}${MODULE}-com"
             SUFFIX ".com"
         )
         target_compile_definitions("${PROGRAM_PREFIX}${MODULE}-com" PRIVATE
