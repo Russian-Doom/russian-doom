@@ -87,9 +87,7 @@ jobs:
       run:
         shell: ${{ matrix.shell }}
     env:
-      VCPKG_BINARY_SOURCES: "clear;nuget,GitHub,readwrite"
-    permissions:
-      packages: write # For VCPKG binary caching wint NuGet
+      VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
     steps:
       - name: Setup MSYS env
         if: |
@@ -125,6 +123,16 @@ jobs:
               --nocache --norestart --quiet
           echo "Installation of Microsoft.VisualStudio.Component.WinXP finished"
 
+      - name: Get GitHub Action Cache url and token
+        if: |
+          matrix.os.name == 'Windows' &&
+          matrix.compiler.display_name == 'MSVC'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+
       - name: Setup MSVC env
         if: |
           matrix.os.name == 'Windows' &&
@@ -133,17 +141,6 @@ jobs:
           cd $VCPKG_INSTALLATION_ROOT
           git pull
           ./bootstrap-vcpkg.sh -disableMetrics
-          nuget=$(./vcpkg.exe fetch nuget | tail -n 1)
-          owner="${GITHUB_REPOSITORY%/*}"
-          source_url="https://nuget.pkg.github.com/$owner/index.json"
-          "$nuget" sources add \
-            -source "$source_url" \
-            -storepasswordincleartext \
-            -name "GitHub" \
-            -username "$owner" \
-            -password "${{ secrets.GITHUB_TOKEN }}"
-          "$nuget" setapikey "${{ secrets.GITHUB_TOKEN }}" \
-            -source "$source_url"
 
 #         For classic mode:
 #         vcpkg integrate install
