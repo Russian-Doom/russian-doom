@@ -972,21 +972,16 @@ void AM_Ticker (void)
     // Inactive:
     if (gametic & 1)
     {
-        if (!iddt_reds_direction)
+        // Brightening
+        if (!iddt_reds_direction && ++iddt_reds_inactive == IDDT_REDS_MAX)
         {
-            // Brightening
-            if (++iddt_reds_inactive == IDDT_REDS_MAX)
-            {
-                iddt_reds_direction = true;
-            }
+            iddt_reds_direction = true;
         }
+        // Darkening
         else
+        if (iddt_reds_direction && --iddt_reds_inactive == IDDT_REDS_MIN)
         {
-            // Darkening
-            if (--iddt_reds_inactive == IDDT_REDS_MIN)
-            {
-                iddt_reds_direction = false;
-            }
+            iddt_reds_direction = false;
         }
     }
 
