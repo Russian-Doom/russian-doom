@@ -18,6 +18,7 @@
 
 
 #include "h2def.h"
+#include "jn.h"
 #include "m_random.h"
 #include "i_system.h"
 #include "m_bbox.h"
@@ -84,6 +85,8 @@ int numspechit;
 
 mobj_t *onmobj;                 // generic global onmobj...used for landing on pods/players
 mobj_t *BlockingMobj;
+
+#define USE_PUZZLE_ITEM_SPECIAL 129
 
 /*
 ===============================================================================
@@ -2113,6 +2116,69 @@ boolean PTR_UseTraverse(intercept_t * in)
     int sound;
     fixed_t pheight;
 
+    // [Dasperal] Implicit "if(singleplayer && !vanillaparm && !strict_mode)" because of P_PathTraverse flags
+    if(!in->isaline) // Thing
+    {
+        // With 129:UsePuzzleItem
+        mobj_t* hitThing = in->d.thing;
+        if(hitThing->special != USE_PUZZLE_ITEM_SPECIAL)
+        {
+            return true;
+        }
+
+        // Search player's inventory for puzzle items
+        player_t *player = usething->player;
+        for(int i = 0; i < player->artifactCount; i++)
+        {
+            artitype_t arti = player->inventory[i].type;
+            int type = arti - arti_firstpuzzitem;
+            if(type < 0)
+                continue;
+            if(type == hitThing->args[0])
+            {
+                // A puzzle item was found for the hitThing
+                if(P_UseArtifact(player, arti))
+                {
+                    // A puzzle item was found for the hitThing
+                    P_PlayerRemoveArtifact(player, i);
+                    if(player == &players[consoleplayer])
+                    {
+                        if(arti < arti_firstpuzzitem)
+                        {
+                            S_StartSound(NULL, SFX_ARTIFACT_USE);
+                        }
+                        else
+                        {
+                            S_StartSound(NULL, SFX_PUZZLE_SUCCESS);
+                        }
+                        ArtifactFlash = 4;
+                    }
+                    return false;
+                }
+            }
+        }
+
+        // [Dasperal] Implicit "if(!vanillaparm)" because of wrapping implicit if
+        switch (player->class)
+        {
+            case PCLASS_FIGHTER:
+                sound = SFX_PUZZLE_FAIL_FIGHTER;
+                break;
+            case PCLASS_CLERIC:
+                sound = SFX_PUZZLE_FAIL_CLERIC;
+                break;
+            case PCLASS_MAGE:
+                sound = SFX_PUZZLE_FAIL_MAGE;
+                break;
+            default:
+                sound = SFX_NONE;
+                break;
+        }
+        S_StartSound(usething, sound);
+
+        return false;
+    }
+
     if (!in->d.line->special)
     {
         P_LineOpening(in->d.line);
@@ -2203,7 +2269,11 @@ void P_UseLines(player_t * player)
     x2 = x1 + (USERANGE >> FRACBITS) * finecosine[angle];
     y2 = y1 + (USERANGE >> FRACBITS) * finesine[angle];
 
-    P_PathTraverse(x1, y1, x2, y2, PT_ADDLINES, PTR_UseTraverse);
+    int flags = PT_ADDLINES;
+    // [Dasperal] Add PT_ADDTHINGS to allow activating things with 129:UsePuzzleItem special
+    if(singleplayer && !vanillaparm /*TODO && !strict_mode*/)
+        flags |= PT_ADDTHINGS;
+    P_PathTraverse(x1, y1, x2, y2, flags, PTR_UseTraverse);
 }
 
 //==========================================================================
@@ -2211,8 +2281,6 @@ void P_UseLines(player_t * player)
 // PTR_PuzzleItemTraverse
 //
 //==========================================================================
-
-#define USE_PUZZLE_ITEM_SPECIAL 129
 
 static mobj_t *PuzzleItemUser;
 static int PuzzleItemType;
