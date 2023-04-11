@@ -29,6 +29,7 @@
 #include "p_local.h"            // for P_AproxDistance
 #include "sounds.h"
 #include "s_sound.h"
+#include "w_wad.h"
 
 #define RUS_KORAX_VOICE_OFFSET 16
 #define PRIORITY_MAX_ADJUST 10
@@ -1101,50 +1102,53 @@ void S_InitScript(void)
 {
     int i;
 
-    SC_OpenLump("sndinfo");
-
-    while (SC_GetString())
+    for(lumpindex_t sndinfo_index = W_GetNumForNameRevers("sndinfo"); sndinfo_index != -1;
+        sndinfo_index = W_CheckNextNum(sndinfo_index))
     {
-        if (*sc_String == '$')
+        SC_OpenLumpNum(sndinfo_index);
+        while(SC_GetString())
         {
-            if (!strcasecmp(sc_String, "$ARCHIVEPATH"))
+            if(*sc_String == '$')
             {
-                SC_MustGetString();
-            }
-            else if (!strcasecmp(sc_String, "$MAP"))
-            {
-                SC_MustGetNumber();
-                SC_MustGetString();
-                if (sc_Number)
-                {
-                    P_PutMapSongLump(sc_Number, sc_String);
-                }
-            }
-            continue;
-        }
-        else
-        {
-            for (i = 0; i < NUMSFX; i++)
-            {
-                if (!strcmp(S_sfx[i].tagname, sc_String))
+                if(!strcasecmp(sc_String, "$ARCHIVEPATH"))
                 {
                     SC_MustGetString();
-                    if (*sc_String != '?')
-                    {
-                        M_StringCopy(S_sfx[i].name, sc_String,
-                                     sizeof(S_sfx[i].name));
-                    }
-                    else
-                    {
-                        M_StringCopy(S_sfx[i].name, "default",
-                                     sizeof(S_sfx[i].name));
-                    }
-                    break;
                 }
+                else if(!strcasecmp(sc_String, "$MAP"))
+                {
+                    SC_MustGetNumber();
+                    SC_MustGetString();
+                    if(sc_Number)
+                    {
+                        P_PutMapSongLump(sc_Number, sc_String);
+                    }
+                }
+                continue;
             }
-            if (i == NUMSFX)
+            else
             {
-                SC_MustGetString();
+                for(i = 0; i < NUMSFX; i++)
+                {
+                    if(!strcmp(S_sfx[i].tagname, sc_String))
+                    {
+                        SC_MustGetString();
+                        if(*sc_String != '?')
+                        {
+                            M_StringCopy(S_sfx[i].name, sc_String,
+                                         sizeof(S_sfx[i].name));
+                        }
+                        else
+                        {
+                            M_StringCopy(S_sfx[i].name, "default",
+                                         sizeof(S_sfx[i].name));
+                        }
+                        break;
+                    }
+                }
+                if(i == NUMSFX)
+                {
+                    SC_MustGetString();
+                }
             }
         }
     }

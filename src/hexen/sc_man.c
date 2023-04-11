@@ -24,14 +24,20 @@
 #include "h2def.h"
 #include "i_system.h"
 #include "m_misc.h"
+#include "w_wad.h"
 
 // MACROS ------------------------------------------------------------------
 
 #define MAX_STRING_SIZE 64
 #define ASCII_COMMENT (';')
 #define ASCII_QUOTE (34)
-#define LUMP_SCRIPT 1
-#define FILE_ZONE_SCRIPT 2
+
+typedef enum
+{
+    LUMP_SCRIPT_NAME,
+    LUMP_SCRIPT_NUM,
+    FILE_ZONE_SCRIPT
+} script_type_t;
 
 // TYPES -------------------------------------------------------------------
 
@@ -42,7 +48,7 @@
 // PRIVATE FUNCTION PROTOTYPES ---------------------------------------------
 
 static void CheckOpen(void);
-static void OpenScript(char *name, int type);
+static void OpenScript(char *name, lumpindex_t lumpNum, script_type_t type);
 
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
 
@@ -58,7 +64,7 @@ char *sc_ScriptsDir = "";
 
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 
-static char ScriptName[16];
+static char ScriptName[30];
 static char *ScriptBuffer;
 static char *ScriptPtr;
 static char *ScriptEndPtr;
@@ -101,7 +107,12 @@ void SC_Open(char *name)
 
 void SC_OpenLump(char *name)
 {
-    OpenScript(name, LUMP_SCRIPT);
+    OpenScript(name, -1, LUMP_SCRIPT_NAME);
+}
+
+void SC_OpenLumpNum(lumpindex_t lumpNum)
+{
+    OpenScript(NULL, lumpNum, LUMP_SCRIPT_NUM);
 }
 
 //==========================================================================
@@ -115,7 +126,7 @@ void SC_OpenLump(char *name)
 
 void SC_OpenFile(char *name)
 {
-    OpenScript(name, FILE_ZONE_SCRIPT);
+    OpenScript(name, -1, FILE_ZONE_SCRIPT);
 }
 
 //==========================================================================
@@ -124,10 +135,10 @@ void SC_OpenFile(char *name)
 //
 //==========================================================================
 
-static void OpenScript(char *name, int type)
+static void OpenScript(char *name, lumpindex_t lumpNum, script_type_t type)
 {
     SC_Close();
-    if (type == LUMP_SCRIPT)
+    if (type == LUMP_SCRIPT_NAME)
     {                           // Lump script
         ScriptLumpNum = W_GetNumForName(name);
         ScriptBuffer = (char *) W_CacheLumpNum(ScriptLumpNum, PU_STATIC);
@@ -139,6 +150,16 @@ static void OpenScript(char *name, int type)
         ScriptLumpNum = -1;
         ScriptSize = M_ReadFile(name, (byte **) & ScriptBuffer);
         M_ExtractFileBase(name, ScriptName);
+    }
+    else if (type == LUMP_SCRIPT_NUM)
+    {
+        ScriptLumpNum = lumpNum;
+        ScriptBuffer = (char *) W_CacheLumpNum(ScriptLumpNum, PU_STATIC);
+        ScriptSize = W_LumpLength(ScriptLumpNum);
+        M_StringCopy(ScriptName, M_FileName(lumpinfo[ScriptLumpNum]->wad_file->path), sizeof(ScriptName));
+        size_t wad_name_length = strlen(ScriptName);
+        ScriptName[wad_name_length] = '/';
+        M_StringCopy(ScriptName + wad_name_length + 1, lumpinfo[ScriptLumpNum]->name, sizeof(ScriptName) - wad_name_length - 1);
     }
     ScriptPtr = ScriptBuffer;
     ScriptEndPtr = ScriptPtr + ScriptSize;
