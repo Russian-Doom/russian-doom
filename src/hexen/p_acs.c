@@ -19,6 +19,7 @@
 
 // HEADER FILES ------------------------------------------------------------
 
+#include "d_mode.h"
 #include "h2def.h"
 #include "m_misc.h"
 #include "m_random.h"
@@ -2036,7 +2037,10 @@ static int CmdGameType(void)
 
 static int CmdGameSkill(void)
 {
-    Push(gameskill);
+    if(gameskill == sk_ultranm) // TODO && !ultranm_aware UMAPINFO property?
+        Push(sk_nightmare);
+    else
+        Push(gameskill);
     return SCRIPT_CONTINUE;
 }
 
