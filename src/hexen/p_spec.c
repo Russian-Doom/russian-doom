@@ -21,6 +21,7 @@
 
 #include "h2def.h"
 #include "i_system.h"
+#include "jn.h"
 #include "m_misc.h"
 #include "p_local.h"
 #include "s_sound.h"
@@ -487,6 +488,28 @@ boolean EV_LineSearchForPuzzleItem(line_t * line, byte * args, mobj_t * mo)
             }
         }
     }
+
+    if(!vanillaparm)
+    {
+        int sound;
+        switch(player->class)
+        {
+            case PCLASS_FIGHTER:
+                sound = SFX_PUZZLE_FAIL_FIGHTER;
+                break;
+            case PCLASS_CLERIC:
+                sound = SFX_PUZZLE_FAIL_CLERIC;
+                break;
+            case PCLASS_MAGE:
+                sound = SFX_PUZZLE_FAIL_MAGE;
+                break;
+            default:
+                sound = SFX_NONE;
+                break;
+        }
+        S_StartSound(mo, sound);
+    }
+
     return false;
 }
 
