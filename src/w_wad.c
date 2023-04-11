@@ -433,6 +433,37 @@ lumpindex_t W_CheckNumForNameFromTo(const char *name, int from, int to)
     return -1;
 }
 
+lumpindex_t W_CheckNextNum(lumpindex_t lumpIndex)
+{
+    lumpindex_t i;
+
+    // Do we have a hash table yet?
+    if(lumphash != NULL)
+    {
+        // We do! Excellent.
+        for(i = lumpinfo[lumpIndex]->prev; i != -1; i = lumpinfo[i]->prev)
+        {
+            if(!strncasecmp(lumpinfo[i]->name, lumpinfo[lumpIndex]->name, 8))
+            {
+                return i;
+            }
+        }
+    }
+    else
+    {
+        // We don't have a hash table generate yet. Linear search :-(
+        // Scan forwards to find nex loaded lump
+        for(i = lumpIndex + 1; i < numlumps; i++)
+        {
+            if(!strncasecmp(lumpinfo[i]->name, lumpinfo[lumpIndex]->name, 8))
+            {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
 //
 // W_LumpLength
 // Returns the buffer size needed to load the given lump.
@@ -679,6 +710,9 @@ void W_GenerateHashTable(void)
             // Hook into the hash table
 
             lumpinfo[i]->next = lumphash[hash];
+            lumpinfo[i]->prev = -1;
+            if(lumphash[hash] != -1)
+                lumpinfo[lumphash[hash]]->prev = i;
             lumphash[hash] = i;
         }
     }

@@ -46,6 +46,7 @@ struct lumpinfo_s
 
     // Used for hash table lookups
     lumpindex_t next;
+    lumpindex_t prev;
 };
 
 int W_CheckMultipleLumps(char *name);
@@ -70,6 +71,13 @@ lumpindex_t W_GetNumForName(char *name);
  */
 lumpindex_t W_GetNumForNameRevers(char *name);
 lumpindex_t W_CheckNumForNameFromTo(const char *name, int from, int to);
+
+/**
+ * Search for next loaded lump with the same name as the given lump.
+ * The lumpIndex should be obtained from W_GetNumForNameRevers or previous call to W_CheckNextNum.
+ * @return lump index or -1 if name not found.
+ */
+lumpindex_t W_CheckNextNum(lumpindex_t lumpIndex);
 
 int W_LumpLength(lumpindex_t lump);
 void W_ReadLump(lumpindex_t lump, void *dest);
