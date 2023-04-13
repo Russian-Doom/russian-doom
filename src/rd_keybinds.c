@@ -122,6 +122,7 @@ static const char* bkToName[] = {
     "Finish_demo",
     "Demo_speed",
     "Suicide",
+    "Show_message_list",
 
     // Toggles
     "Toggle_crosshair",
@@ -746,6 +747,7 @@ void BK_ApplyDefaultBindings()
     BK_AddBind(bk_pause, keyboard, SDL_SCANCODE_PAUSE);
     BK_AddBind(bk_finish_demo, keyboard, SDL_SCANCODE_Q);
     BK_AddBind(bk_toggle_crosshair, keyboard, SDL_SCANCODE_X);
+    BK_AddBind(bk_show_message_list, keyboard, SDL_SCANCODE_BACKSLASH);
 
     BK_AddBind(bk_spy, keyboard, SDL_SCANCODE_F12);
     BK_AddBind(bk_multi_msg, keyboard, SDL_SCANCODE_T);
@@ -923,6 +925,11 @@ void BK_ApplyVanilaBindings()
     BK_AddBind(bk_screen_dec, keyboard, SDL_SCANCODE_MINUS);
     BK_AddBind(bk_screenshot, keyboard, SDL_SCANCODE_PRINTSCREEN);
     BK_AddBind(bk_pause, keyboard, SDL_SCANCODE_PAUSE);
+
+    if(RD_GameType == gt_Doom || RD_GameType == gt_Strife)
+    {
+        BK_AddBind(bk_show_message_list, keyboard, SDL_SCANCODE_RETURN);
+    }
 
     BK_AddBind(bk_spy, keyboard, SDL_SCANCODE_F12);
     BK_AddBind(bk_multi_msg, keyboard, SDL_SCANCODE_T);

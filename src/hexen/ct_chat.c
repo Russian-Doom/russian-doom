@@ -29,6 +29,7 @@
 #include "m_misc.h"
 #include "p_local.h"
 #include "v_video.h"
+#include "i_timer.h"
 
 #define NUMKEYS 256
 
@@ -169,6 +170,14 @@ boolean CT_Responder(event_t * ev)
     char *macro;
 
     int sendto;
+
+    if(BK_isKeyDown(ev, bk_show_message_list))
+    {
+        // TODO Show last N messages
+        players[consoleplayer].messageTics = messages_timeout * TICRATE;
+        BorderTopRefresh = true;
+        return true;
+    }
 
     if (!netgame)
     {

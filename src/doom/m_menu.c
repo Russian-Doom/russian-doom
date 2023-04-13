@@ -1051,19 +1051,19 @@ MENU_STATIC_PAGED(Bindings3Menu,
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Bindings4Items[] = {
-    I_EFUNC("Increase screen size",  "edtk> hfpvth 'rhfyf",    BK_StartBindingKey, bk_screen_inc),       // Увел. размер экрана
-    I_EFUNC("Decrease screen size",  "evtym> hfpvth 'rhfyf",   BK_StartBindingKey, bk_screen_dec),       // Умень. размер экрана
-    I_EFUNC("Save a screenshot",     "crhbyijn",               BK_StartBindingKey, bk_screenshot),       // Скриншот
-    I_EFUNC("Pause",                 "gfepf",                  BK_StartBindingKey, bk_pause),            // Пауза
-    I_EFUNC("Finish demo recording", "pfrjyxbnm pfgbcm ltvj",  BK_StartBindingKey, bk_finish_demo),      // Закончить запись демо
-    I_EFUNC("Demo fast-forward",     ",scnhfz gthtvjnrf ltvj", BK_StartBindingKey, bk_demo_speed),       // Быстрая перемотка демо
+    I_EFUNC("Increase screen size",  "edtk> hfpvth 'rhfyf",          BK_StartBindingKey, bk_screen_inc),        // Увел. размер экрана
+    I_EFUNC("Decrease screen size",  "evtym> hfpvth 'rhfyf",         BK_StartBindingKey, bk_screen_dec),        // Умень. размер экрана
+    I_EFUNC("Save a screenshot",     "crhbyijn",                     BK_StartBindingKey, bk_screenshot),        // Скриншот
+    I_EFUNC("Pause",                 "gfepf",                        BK_StartBindingKey, bk_pause),             // Пауза
+    I_EFUNC("Finish demo recording", "pfrjyxbnm pfgbcm ltvj",        BK_StartBindingKey, bk_finish_demo),       // Закончить запись демо
+    I_EFUNC("Demo fast-forward",     ",scnhfz gthtvjnrf ltvj",       BK_StartBindingKey, bk_demo_speed),        // Быстрая перемотка демо
+    I_EFUNC("Sow last message",      "Gjcktlytt cjj,otybt",          BK_StartBindingKey, bk_show_message_list), // Последнее сообщение
     I_TITLE("Toggleables",           "gthtrk.xtybt"),
-    I_EFUNC("Mouse look",            "j,pjh vsim.",            BK_StartBindingKey, bk_toggle_mlook),     // Обзор мышью
-    I_EFUNC("Always run",            "gjcnjzyysq ,tu",         BK_StartBindingKey, bk_toggle_autorun),   // Постоянный бег
-    I_EFUNC("Crosshair",             "ghbwtk",                 BK_StartBindingKey, bk_toggle_crosshair), // Прицел
-    I_EFUNC("Messages",              "cjj,otybz",              BK_StartBindingKey, bk_messages),         // Сообщения
-    I_EFUNC("Background detail",      "ltnfkbpfwbz ajyf",      BK_StartBindingKey, bk_detail),           // Детализация фона
-    I_EFUNC("Level flipping",        "pthrfkbhjdfybt ehjdyz",  BK_StartBindingKey, bk_toggle_fliplvls),  // Зеркалирование уровня
+    I_EFUNC("Mouse look",            "j,pjh vsim.",                  BK_StartBindingKey, bk_toggle_mlook),      // Обзор мышью
+    I_EFUNC("Always run",            "gjcnjzyysq ,tu",               BK_StartBindingKey, bk_toggle_autorun),    // Постоянный бег
+    I_EFUNC("Crosshair",             "ghbwtk",                       BK_StartBindingKey, bk_toggle_crosshair),  // Прицел
+    I_EFUNC("Messages",              "cjj,otybz",                    BK_StartBindingKey, bk_messages),          // Сообщения
+    I_EFUNC("Level flipping",        "pthrfkbhjdfybt ehjdyz",        BK_StartBindingKey, bk_toggle_fliplvls),   // Зеркалирование уровня
     I_SETMENU(NULL, NULL, &Bindings5Menu), // Далее >
     I_SETMENU(NULL, NULL, &Bindings3Menu), // < Назад
     I_EMPTY
@@ -1084,18 +1084,18 @@ MENU_STATIC_PAGED(Bindings4Menu,
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Bindings5Items[] = {
-    I_TITLE("Automap",          "rfhnf"),
-    I_EFUNC("Toggle automap",   "jnrhsnm rfhne",     BK_StartBindingKey, bk_map_toggle),    // Открыть карту
-    I_EFUNC("Zoom in",          "ghb,kbpbnm",        BK_StartBindingKey, bk_map_zoom_in),   // Приблизить
-    I_EFUNC("Zoom out",         "jnlfkbnm",          BK_StartBindingKey, bk_map_zoom_out),  // Отдалить
-    I_EFUNC("Maximum zoom out", "gjkysq vfcinf,",    BK_StartBindingKey, bk_map_zoom_max),  // Полный масштаб
-    I_EFUNC("Follow mode",      "ht;bv cktljdfybz",  BK_StartBindingKey, bk_map_follow),    // Режим следования
-    I_EFUNC("Overlay mode",     "ht;bv yfkj;tybz",   BK_StartBindingKey, bk_map_overlay),   // Режим наложения
-    I_EFUNC("Rotate mode",      "ht;bv dhfotybz",    BK_StartBindingKey, bk_map_rotate),    // Режим вращения
-    I_EFUNC("Toggle grid",      "ctnrf",             BK_StartBindingKey, bk_map_grid),      // Сетка
-    I_EFUNC("Mark location",    "gjcnfdbnm jnvtnre", BK_StartBindingKey, bk_map_mark),      // Поставить отметку
-    I_EFUNC("Clear last mark",  "elfkbnm jnvtnre",   BK_StartBindingKey, bk_map_clearmark), // Удалить отметку
-    I_EMPTY,
+    I_EFUNC("Background detail", "ltnfkbpfwbz ajyf",  BK_StartBindingKey, bk_detail),        // Детализация фона
+    I_TITLE("Automap",           "rfhnf"),
+    I_EFUNC("Toggle automap",    "jnrhsnm rfhne",     BK_StartBindingKey, bk_map_toggle),    // Открыть карту
+    I_EFUNC("Zoom in",           "ghb,kbpbnm",        BK_StartBindingKey, bk_map_zoom_in),   // Приблизить
+    I_EFUNC("Zoom out",          "jnlfkbnm",          BK_StartBindingKey, bk_map_zoom_out),  // Отдалить
+    I_EFUNC("Maximum zoom out",  "gjkysq vfcinf,",    BK_StartBindingKey, bk_map_zoom_max),  // Полный масштаб
+    I_EFUNC("Follow mode",       "ht;bv cktljdfybz",  BK_StartBindingKey, bk_map_follow),    // Режим следования
+    I_EFUNC("Overlay mode",      "ht;bv yfkj;tybz",   BK_StartBindingKey, bk_map_overlay),   // Режим наложения
+    I_EFUNC("Rotate mode",       "ht;bv dhfotybz",    BK_StartBindingKey, bk_map_rotate),    // Режим вращения
+    I_EFUNC("Toggle grid",       "ctnrf",             BK_StartBindingKey, bk_map_grid),      // Сетка
+    I_EFUNC("Mark location",     "gjcnfdbnm jnvtnre", BK_StartBindingKey, bk_map_mark),      // Поставить отметку
+    I_EFUNC("Clear last mark",   "elfkbnm jnvtnre",   BK_StartBindingKey, bk_map_clearmark), // Удалить отметку
     I_EMPTY,
     I_SETMENU(NULL, NULL, &Bindings6Menu), // Далее >
     I_SETMENU(NULL, NULL, &Bindings4Menu), // < Назад
