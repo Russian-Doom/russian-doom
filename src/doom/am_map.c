@@ -56,6 +56,9 @@
 #define GRIDCOLORS       104
 #define XHAIRCOLORS      GRAYS
 
+// [JN] Make wall colors of secret sectors palette-independent.
+static int secretwallcolors;
+
 // The MACRO!
 #define DOT(xx,yy,cc) I_VideoBuffer[(yy)*f_w+(flipscreenwidth[xx])]=(cc)
 
@@ -457,6 +460,10 @@ void AM_initColors (void)
     automap_color_set = gamemission == jaguar ? 2 :
                                   vanillaparm ? 0 : 
                                  automap_color;
+
+    secretwallcolors = original_playpal ? SECRETWALLCOLORS : 
+                       V_GetPaletteIndex(W_CacheLumpName("PLAYPAL", PU_CACHE),
+                                                                 255, 0, 255);
 }
 
 // -----------------------------------------------------------------------------
@@ -1576,7 +1583,7 @@ static void AM_drawWalls (const int automap_color_set)
                         // [JN] Highlight secret sectors
                         if (automap_secrets && lines[i].frontsector->special == 9)
                         {
-                            AM_drawMline(&l, SECRETWALLCOLORS);
+                            AM_drawMline(&l, secretwallcolors);
                         }
                         else
                         {
@@ -1601,7 +1608,7 @@ static void AM_drawWalls (const int automap_color_set)
                         && (lines[i].frontsector->special == 9
                         ||  lines[i].backsector->special == 9))
                         {
-                            AM_drawMline(&l, SECRETWALLCOLORS);
+                            AM_drawMline(&l, secretwallcolors);
                         }
                         // BLUE locked doors
                         else
@@ -1679,7 +1686,7 @@ static void AM_drawWalls (const int automap_color_set)
                         // [JN] Highlight secret sectors
                         if (automap_secrets && lines[i].frontsector->special == 9)
                         {
-                            AM_drawMline(&l, SECRETWALLCOLORS);
+                            AM_drawMline(&l, secretwallcolors);
                         }
                         else
                         {
@@ -1703,7 +1710,7 @@ static void AM_drawWalls (const int automap_color_set)
                         && (lines[i].frontsector->special == 9
                         ||  lines[i].backsector->special == 9))
                         {
-                            AM_drawMline(&l, SECRETWALLCOLORS);
+                            AM_drawMline(&l, secretwallcolors);
                         }
                         // Any special linedef
                         else if (lines[i].special)
@@ -1745,7 +1752,7 @@ static void AM_drawWalls (const int automap_color_set)
                         // [JN] Highlight secret sectors
                         if (automap_secrets && lines[i].frontsector->special == 9)
                         {
-                            AM_drawMline(&l, SECRETWALLCOLORS);
+                            AM_drawMline(&l, secretwallcolors);
                         }
                         else
                         {
@@ -1771,7 +1778,7 @@ static void AM_drawWalls (const int automap_color_set)
                         && (lines[i].frontsector->special == 9
                         ||  lines[i].backsector->special == 9))
                         {
-                            AM_drawMline(&l, SECRETWALLCOLORS);
+                            AM_drawMline(&l, secretwallcolors);
                         }
                         // [JN] BLUE locked doors
                         else
@@ -1839,7 +1846,7 @@ static void AM_drawWalls (const int automap_color_set)
                         // [JN] Highlight secret sectors
                         if (automap_secrets && lines[i].frontsector->special == 9)
                         {
-                            AM_drawMline(&l, SECRETWALLCOLORS);
+                            AM_drawMline(&l, secretwallcolors);
                         }
                         else
                         {
@@ -1865,7 +1872,7 @@ static void AM_drawWalls (const int automap_color_set)
                         && (lines[i].frontsector->special == 9
                         ||  lines[i].backsector->special == 9))
                         {
-                            AM_drawMline(&l, SECRETWALLCOLORS);
+                            AM_drawMline(&l, secretwallcolors);
                         }
                         // floor level change
                         else if (lines[i].backsector->floorheight != lines[i].frontsector->floorheight) 
@@ -1910,7 +1917,7 @@ static void AM_drawWalls (const int automap_color_set)
                         // [JN] Highlight secret sectors
                         if (automap_secrets && lines[i].frontsector->special == 9)
                         {    
-                            AM_drawMline(&l, SECRETWALLCOLORS);
+                            AM_drawMline(&l, secretwallcolors);
                         }
                         else
                         {
@@ -1929,7 +1936,7 @@ static void AM_drawWalls (const int automap_color_set)
                         && (lines[i].frontsector->special == 9
                         ||  lines[i].backsector->special == 9))
                         {
-                            AM_drawMline(&l, SECRETWALLCOLORS);
+                            AM_drawMline(&l, secretwallcolors);
                         }
                         // [JN] Various Doors
                         else
@@ -2014,7 +2021,7 @@ static void AM_drawWalls (const int automap_color_set)
                         if (automap_secrets && !vanillaparm
                         &&  lines[i].frontsector->special == 9)
                         {
-                            AM_drawMline(&l, SECRETWALLCOLORS);
+                            AM_drawMline(&l, secretwallcolors);
                         }
                         else
                         {
@@ -2038,7 +2045,7 @@ static void AM_drawWalls (const int automap_color_set)
                         && (lines[i].frontsector->special == 9
                         ||  lines[i].backsector->special == 9))
                         {
-                            AM_drawMline(&l, SECRETWALLCOLORS);
+                            AM_drawMline(&l, secretwallcolors);
                         }
                         // floor level change
                         else if (lines[i].backsector->floorheight != lines[i].frontsector->floorheight) 
