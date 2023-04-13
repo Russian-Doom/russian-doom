@@ -114,6 +114,7 @@ typedef enum
     bk_finish_demo,
     bk_demo_speed, // [crispy] demo fast-forward
     bk_suicide,
+    bk_show_message_list,
 
     // Toggles
     bk_toggle_crosshair,

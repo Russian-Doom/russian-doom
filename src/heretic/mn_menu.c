@@ -920,8 +920,8 @@ static MenuItem_t Bindings3Items[] = {
     I_EFUNC("Messages",       "cjj,otybz",             BK_StartBindingKey, bk_messages),         // Сообщения
     I_EFUNC("BACKGROUND DETAIL", "LTNFKBPFWBZ AJYF",   BK_StartBindingKey, bk_detail),           // Детализация фона
     I_EFUNC("LEVEL FLIPPING", "PTHRFKBHJDFYBT EHJDYZ", BK_StartBindingKey, bk_toggle_fliplvls),  // Зеркалирование уровня
-    I_EMPTY,
-    I_EMPTY,
+    I_TITLE("SHORTCUT KEYS",      ",SCNHSQ LJCNEG"),
+    I_EFUNC("Open help",          "'rhfy gjvjob",        BK_StartBindingKey, bk_menu_help),   // Экран помощи
     I_EMPTY,
     I_SETMENU("NEXT PAGE >", "CKTLE.OFZ CNHFYBWF `",  &Bindings4Menu), // Cледующая страница >
     I_SETMENU("< PREV PAGE", "^ GHTLSLEOFZ CNHFYBWF", &Bindings2Menu), // < Предыдущая страница
@@ -943,8 +943,6 @@ MENU_STATIC_PAGED(Bindings3Menu,
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Bindings4Items[] = {
-    I_TITLE("SHORTCUT KEYS",      ",SCNHSQ LJCNEG"),
-    I_EFUNC("Open help",          "'rhfy gjvjob",        BK_StartBindingKey, bk_menu_help),   // Экран помощи
     I_EFUNC("Open save menu",     "cj[hfytybt buhs",     BK_StartBindingKey, bk_menu_save),   // Сохранение игры
     I_EFUNC("Open load menu",     "pfuheprf buhs",       BK_StartBindingKey, bk_menu_load),   // Загрузка игры
     I_EFUNC("Open volume menu",   "yfcnhjqrb uhjvrjcnb", BK_StartBindingKey, bk_menu_volume), // Настройки громкости
@@ -955,6 +953,8 @@ static MenuItem_t Bindings4Items[] = {
     I_EFUNC("Change gamma level", "ehjdtym ufvvs",       BK_StartBindingKey, bk_gamma),       // Уровень гаммы
     I_EFUNC("GO TO NEXT LEVEL",   "CKTLE.OBQ EHJDTYM",   BK_StartBindingKey, bk_nextlevel),   // Следующий уровень
     I_EFUNC("RESTART LEVEL/DEMO", "GTHTPFGECR EHJDYZ",   BK_StartBindingKey, bk_reloadlevel), // Перезапуск уровня
+    I_EFUNC("Increase screen size",  "edtk> hfpvth 'rhfyf",   BK_StartBindingKey, bk_screen_inc),       // Увел. размер экрана
+    I_EFUNC("Decrease screen size",  "evtym> hfpvth 'rhfyf",  BK_StartBindingKey, bk_screen_dec),       // Умень. размер экрана
     I_EMPTY,
     I_SETMENU("NEXT PAGE >", "CKTLE.OFZ CNHFYBWF `",  &Bindings5Menu), // Cледующая страница >
     I_SETMENU("< PREV PAGE", "^ GHTLSLEOFZ CNHFYBWF", &Bindings3Menu), // < Предыдущая страница
@@ -976,12 +976,11 @@ MENU_STATIC_PAGED(Bindings4Menu,
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Bindings5Items[] = {
-    I_EFUNC("Increase screen size",  "edtk> hfpvth 'rhfyf",   BK_StartBindingKey, bk_screen_inc),       // Увел. размер экрана
-    I_EFUNC("Decrease screen size",  "evtym> hfpvth 'rhfyf",  BK_StartBindingKey, bk_screen_dec),       // Умень. размер экрана
-    I_EFUNC("SAVE A SCREENSHOT",     "CRHBYIJN",              BK_StartBindingKey, bk_screenshot),       // Скриншот
-    I_EFUNC("Pause",                 "gfepf",                 BK_StartBindingKey, bk_pause),            // Пауза
-    I_EFUNC("FINISH DEMO RECORDING", "PFRJYXBNM PFGBCM LTVJ", BK_StartBindingKey, bk_finish_demo),      // Закончить запись демо
-    I_EFUNC("DEMO FAST-FORWARD",     ",SCNHFZ GTHTVJNRF LTVJ",BK_StartBindingKey, bk_demo_speed),       // Быстрая перемотка демо
+    I_EFUNC("SAVE A SCREENSHOT",     "CRHBYIJN",              BK_StartBindingKey, bk_screenshot),        // Скриншот
+    I_EFUNC("Pause",                 "gfepf",                 BK_StartBindingKey, bk_pause),             // Пауза
+    I_EFUNC("FINISH DEMO RECORDING", "PFRJYXBNM PFGBCM LTVJ", BK_StartBindingKey, bk_finish_demo),       // Закончить запись демо
+    I_EFUNC("DEMO FAST-FORWARD",     ",SCNHFZ GTHTVJNRF LTVJ",BK_StartBindingKey, bk_demo_speed),        // Быстрая перемотка демо
+    I_EFUNC("Sow last message",      "Gjcktlytt cjj,otybt",   BK_StartBindingKey, bk_show_message_list), // Последнее сообщение
     I_TITLE("INVENTORY",             "BYDTYNFHM"),
     I_EFUNC("NEXT ITEM",             "CKTLE.OBQ GHTLVTN",     BK_StartBindingKey, bk_inv_right),
     I_EFUNC("PREVIOUS ITEM",         "GHTLSLEOBQ GHTLVTN",    BK_StartBindingKey, bk_inv_left),
@@ -989,6 +988,7 @@ static MenuItem_t Bindings5Items[] = {
     I_EFUNC("QUARTZ FLASK",          "RDFHWTDSQ AKFRJY",      BK_StartBindingKey, bk_arti_quartz),
     I_EFUNC("MYSTIC URN",            "VBCNBXTCRFZ EHYF",      BK_StartBindingKey, bk_arti_urn),
     I_EFUNC("TIME BOMB",             "XFCJDFZ ,JV,F",         BK_StartBindingKey, bk_arti_bomb),
+    I_EMPTY,
     I_SETMENU("NEXT PAGE >", "CKTLE.OFZ CNHFYBWF `",  &Bindings6Menu), // Cледующая страница >
     I_SETMENU("< PREV PAGE", "^ GHTLSLEOFZ CNHFYBWF", &Bindings4Menu), // < Предыдущая страница
     I_EMPTY

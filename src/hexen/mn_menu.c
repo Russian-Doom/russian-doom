@@ -969,18 +969,18 @@ MENU_STATIC_PAGED(Bindings3Menu,
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Bindings4Items[] = {
-    I_EFUNC("Increase screen size",  "edtk> hfpvth 'rhfyf",   BK_StartBindingKey, bk_screen_inc),       // Увел. размер экрана
-    I_EFUNC("Decrease screen size",  "evtym> hfpvth 'rhfyf",  BK_StartBindingKey, bk_screen_dec),       // Умень. размер экрана
-    I_EFUNC("SAVE A SCREENSHOT",     "CRHBYIJN",              BK_StartBindingKey, bk_screenshot),       // Скриншот
-    I_EFUNC("Pause",                 "gfepf",                 BK_StartBindingKey, bk_pause),            // Пауза
-    I_EFUNC("FINISH DEMO RECORDING", "PFRJYXBNM PFGBCM LTVJ", BK_StartBindingKey, bk_finish_demo),      // Закончить запись демо
+    I_EFUNC("Increase screen size",  "edtk> hfpvth 'rhfyf",   BK_StartBindingKey, bk_screen_inc),        // Увел. размер экрана
+    I_EFUNC("Decrease screen size",  "evtym> hfpvth 'rhfyf",  BK_StartBindingKey, bk_screen_dec),        // Умень. размер экрана
+    I_EFUNC("SAVE A SCREENSHOT",     "CRHBYIJN",              BK_StartBindingKey, bk_screenshot),        // Скриншот
+    I_EFUNC("Pause",                 "gfepf",                 BK_StartBindingKey, bk_pause),             // Пауза
+    I_EFUNC("FINISH DEMO RECORDING", "PFRJYXBNM PFGBCM LTVJ", BK_StartBindingKey, bk_finish_demo),       // Закончить запись демо
+    I_EFUNC("Sow last message",      "Gjcktlytt cjj,otybt",   BK_StartBindingKey, bk_show_message_list), // Последнее сообщение
     I_TITLE("TOGGLEABLES",           "GTHTRK.XTYBT"),
-    I_EFUNC("MOUSE LOOK",            "J,PJH VSIM.",           BK_StartBindingKey, bk_toggle_mlook),     // Обзор мышью
-    I_EFUNC("ALWAYS RUN",            "GJCNJZYYSQ ,TU",        BK_StartBindingKey, bk_toggle_autorun),   // Постоянный бег
-    I_EFUNC("CROSSHAIR",             "GHBWTK",                BK_StartBindingKey, bk_toggle_crosshair), // Прицел
-    I_EFUNC("Messages",              "cjj,otybz",             BK_StartBindingKey, bk_messages),         // Сообщения
-    I_EFUNC("BACKGROUND DETAIL",     "LTNFKBPFWBZ AJYF",      BK_StartBindingKey, bk_detail),           // Детализация фона
-    I_EFUNC("LEVEL FLIPPING",        "PTHRFKBHJDFYBT EHJDYZ", BK_StartBindingKey, bk_toggle_fliplvls),  // Зеркалирование уровня
+    I_EFUNC("MOUSE LOOK",            "J,PJH VSIM.",           BK_StartBindingKey, bk_toggle_mlook),      // Обзор мышью
+    I_EFUNC("ALWAYS RUN",            "GJCNJZYYSQ ,TU",        BK_StartBindingKey, bk_toggle_autorun),    // Постоянный бег
+    I_EFUNC("CROSSHAIR",             "GHBWTK",                BK_StartBindingKey, bk_toggle_crosshair),  // Прицел
+    I_EFUNC("Messages",              "cjj,otybz",             BK_StartBindingKey, bk_messages),          // Сообщения
+    I_EFUNC("LEVEL FLIPPING",        "PTHRFKBHJDFYBT EHJDYZ", BK_StartBindingKey, bk_toggle_fliplvls),   // Зеркалирование уровня
     I_EMPTY,
     I_SETMENU("NEXT PAGE >", "CKTLE.OFZ CNHFYBWF `",  &Bindings5Menu), // Cледующая страница >
     I_SETMENU("< PREV PAGE", "^ GHTLSLEOFZ CNHFYBWF", &Bindings3Menu), // < Предыдущая страница
@@ -1002,21 +1002,21 @@ MENU_STATIC_PAGED(Bindings4Menu,
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Bindings5Items[] = {
-    I_TITLE("AUTOMAP",          "RFHNF"),
-    I_EFUNC("TOGGLE AUTOMAP",   "JNRHSNM RFHNE",     BK_StartBindingKey, bk_map_toggle),    // Открыть карту
-    I_EFUNC("ZOOM IN",          "GHB,KBPBNM",        BK_StartBindingKey, bk_map_zoom_in),   // Приблизить
-    I_EFUNC("ZOOM OUT",         "JNLFKBNM",          BK_StartBindingKey, bk_map_zoom_out),  // Отдалить
-    I_EFUNC("MAXIMUM ZOOM OUT", "GJKYSQ VFCINF,",    BK_StartBindingKey, bk_map_zoom_max),  // Полный масштаб
-    I_EFUNC("FOLLOW MODE",      "HT;BV CKTLJDFYBZ",  BK_StartBindingKey, bk_map_follow),    // Режим следования
-    I_EFUNC("OVERLAY MODE",     "HT;BV YFKJ;TYBZ",   BK_StartBindingKey, bk_map_overlay),   // Режим наложения
-    I_EFUNC("ROTATE MODE",      "HT;BV DHFOTYBZ",    BK_StartBindingKey, bk_map_rotate),    // Режим вращения
-    I_EFUNC("TOGGLE GRID",      "CTNRF",             BK_StartBindingKey, bk_map_grid),      // Сетка
-    I_EFUNC("ADD MARK",         "GJCNFDBNM JNVTNRE", BK_StartBindingKey, bk_map_mark),      // Поставить отметку
-    I_EFUNC("CLEAR MARK",       "ELFKBNM JNVTNRE",   BK_StartBindingKey, bk_map_clearmark), // Удалить отметку
+    I_EFUNC("BACKGROUND DETAIL", "LTNFKBPFWBZ AJYF",  BK_StartBindingKey, bk_detail),        // Детализация фона
+    I_TITLE("AUTOMAP",           "RFHNF"),
+    I_EFUNC("TOGGLE AUTOMAP",    "JNRHSNM RFHNE",     BK_StartBindingKey, bk_map_toggle),    // Открыть карту
+    I_EFUNC("ZOOM IN",           "GHB,KBPBNM",        BK_StartBindingKey, bk_map_zoom_in),   // Приблизить
+    I_EFUNC("ZOOM OUT",          "JNLFKBNM",          BK_StartBindingKey, bk_map_zoom_out),  // Отдалить
+    I_EFUNC("MAXIMUM ZOOM OUT",  "GJKYSQ VFCINF,",    BK_StartBindingKey, bk_map_zoom_max),  // Полный масштаб
+    I_EFUNC("FOLLOW MODE",       "HT;BV CKTLJDFYBZ",  BK_StartBindingKey, bk_map_follow),    // Режим следования
+    I_EFUNC("OVERLAY MODE",      "HT;BV YFKJ;TYBZ",   BK_StartBindingKey, bk_map_overlay),   // Режим наложения
+    I_EFUNC("ROTATE MODE",       "HT;BV DHFOTYBZ",    BK_StartBindingKey, bk_map_rotate),    // Режим вращения
+    I_EFUNC("TOGGLE GRID",       "CTNRF",             BK_StartBindingKey, bk_map_grid),      // Сетка
+    I_EFUNC("ADD MARK",          "GJCNFDBNM JNVTNRE", BK_StartBindingKey, bk_map_mark),      // Поставить отметку
+    I_EFUNC("CLEAR MARK",        "ELFKBNM JNVTNRE",   BK_StartBindingKey, bk_map_clearmark), // Удалить отметку
     I_EMPTY,
-    I_EMPTY,
-    I_SETMENU("NEXT PAGE >", "CKTLE.OFZ CNHFYBWF `",  &Bindings6Menu), // Cледующая страница >
-    I_SETMENU("< PREV PAGE", "^ GHTLSLEOFZ CNHFYBWF", &Bindings4Menu), // < Предыдущая страница
+    I_SETMENU("NEXT PAGE >", "CKTLE.OFZ CNHFYBWF `",      &Bindings6Menu), // Cледующая страница >
+    I_SETMENU("< PREV PAGE", "^ GHTLSLEOFZ CNHFYBWF",     &Bindings4Menu), // < Предыдущая страница
     I_EMPTY
 };
 

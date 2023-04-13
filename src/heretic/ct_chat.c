@@ -30,6 +30,8 @@
 #include "rd_keybinds.h"
 #include "s_sound.h"
 #include "v_video.h"
+#include "jn.h"
+#include "i_timer.h"
 
 #define QUEUESIZE      128
 #define MESSAGESIZE    128
@@ -145,6 +147,14 @@ static const boolean ValidChatChar (const char c)
 
 const boolean CT_Responder (event_t *ev)
 {
+    if(BK_isKeyDown(ev, bk_show_message_list))
+    {
+        // TODO Show last N messages
+        players[consoleplayer].messageTics = messages_timeout * TICRATE;
+        BorderTopRefresh = true;
+        return true;
+    }
+
     if (!netgame)
     {
         return false;
