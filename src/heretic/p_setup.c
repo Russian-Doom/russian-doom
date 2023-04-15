@@ -34,9 +34,7 @@
 #include "jn.h"
 
 // [crispy] support maps with compressed ZDBSP nodes
-#ifdef HAVE_LIBZ
-#include <zlib.h>
-#endif
+#include "miniz.h"
 
 
 int numvertexes;
@@ -757,9 +755,7 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
 {
     byte *data;
     unsigned int i;
-#ifdef HAVE_LIBZ
     byte *output;
-#endif
 
     unsigned int orgVerts, newVerts;
     unsigned int numSubs, currSeg;
@@ -773,8 +769,7 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
 
     if (compressed)
     {
-#ifdef HAVE_LIBZ
-        const int len =  W_LumpLength(lump);
+        int len =  W_LumpLength(lump);
         int outlen, err;
         z_stream *zstream;
 
@@ -827,11 +822,6 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
         // release the original data lump
         W_ReleaseLumpNum(lump);
         free(zstream);
-#else
-        I_Error(english_language ?
-                "P_LoadNodes: Compressed ZDBSP nodes are not supported!" :
-                "P_LoadNodes: сжатые ноды формата ZDBSP не поддерживаются!");
-#endif
     }
     else
     {
@@ -1005,12 +995,10 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
 
     W_ReleaseLumpNum(lump);
 
-#ifdef HAVE_LIBZ
     if (compressed)
     {
         Z_Free(output);
     }
-#endif
 }
 
 /*
