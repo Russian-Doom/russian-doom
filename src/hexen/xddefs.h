@@ -134,30 +134,6 @@ typedef PACKED_STRUCT (
     unsigned short children[2]; // if NF_SUBSECTOR its a subsector
 }) mapnode_t;
 
-// [crispy] allow loading of maps with DeePBSP nodes
-// taken from prboom-plus/src/doomdata.h:216-225
-typedef PACKED_STRUCT (
-{
-    short x;
-    short y;
-    short dx;
-    short dy;
-    short bbox[2][4];
-    int children[2];
-}) mapnode_deepbsp_t;
-
-// [crispy] allow loading of maps with ZDBSP nodes
-// taken from prboom-plus/src/doomdata.h:227-136
-typedef PACKED_STRUCT (
-{
-    short x;
-    short y;
-    short dx;
-    short dy;
-    short bbox[2][4];
-    int children[2];
-}) mapnode_zdbsp_t;
-
 typedef PACKED_STRUCT (
 {
     short tid;
