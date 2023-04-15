@@ -270,7 +270,7 @@ static void P_LoadSegs (const int lump)
     {
         seg_t *li = segs+i;
         const mapseg_t *ml = data + i;
-        int side, linedef;
+        int side, linedef_id;
         line_t *ldef;
 
         li->v1 = &vertexes[(unsigned short)SHORT(ml->v1)];
@@ -278,8 +278,8 @@ static void P_LoadSegs (const int lump)
 
         li->angle = (SHORT(ml->angle)) << 16;
         li->offset = (SHORT(ml->offset)) << 16;
-        linedef = (unsigned short)SHORT(ml->linedef);
-        ldef = &lines[linedef];
+        linedef_id = (unsigned short)SHORT(ml->linedef);
+        ldef = &lines[linedef_id];
         li->linedef = ldef;
         side = SHORT(ml->side);
 
@@ -287,9 +287,9 @@ static void P_LoadSegs (const int lump)
         if ((unsigned)ldef->sidenum[side] >= (unsigned)numsides)
         {
             I_Error(english_language ?
-                    "P_LoadSegs: linedef %d for seg %d references a non-existent sidedef %d" :
+                    "P_LoadSegs: linedef_id %d for seg %d references a non-existent sidedef %d" :
                     "P_LoadSegs: линия %d для сегмента %d указывает на несуществующую сторону %d",
-                    linedef, i, (unsigned)ldef->sidenum[side]);
+                    linedef_id, i, (unsigned)ldef->sidenum[side]);
         }
 
         li->sidedef = &sides[ldef->sidenum[side]];
@@ -306,9 +306,9 @@ static void P_LoadSegs (const int lump)
 
             if (sidenum < 0 || sidenum >= numsides)
             {
-                // [crispy] linedef has two-sided flag set, but no valid second sidedef;
+                // [crispy] linedef_id has two-sided flag set, but no valid second sidedef;
                 // but since it has a midtexture, it is supposed to be rendered just
-                // like a regular one-sided linedef
+                // like a regular one-sided linedef_id
                 if (li->sidedef->midtexture)
                 {
                     li->backsector = 0;
@@ -359,15 +359,15 @@ static void P_LoadSegs_DeePBSP (int lump)
     {
         seg_t *li = segs + i;
         mapseg_deepbsp_t *ml = data + i;
-        int side, linedef;
+        int side, linedef_id;
         line_t *ldef;
 
         li->v1 = &vertexes[ml->v1];
         li->v2 = &vertexes[ml->v2];
         li->angle = (SHORT(ml->angle))<<16;
 
-        linedef = (unsigned short)SHORT(ml->linedef);
-        ldef = &lines[linedef];
+        linedef_id = (unsigned short)SHORT(ml->linedef);
+        ldef = &lines[linedef_id];
         li->linedef = ldef;
         side = SHORT(ml->side);
         li->sidedef = &sides[ldef->sidenum[side]];
@@ -813,7 +813,7 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
     for (i = 0; i < numsegs; i++)
     {
         line_t *ldef;
-        unsigned int linedef;
+        unsigned int linedef_id;
         unsigned char side;
         seg_t *li = segs + i;
         mapseg_zdbsp_t *ml = (mapseg_zdbsp_t *) data + i;
@@ -821,8 +821,8 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
         li->v1 = &vertexes[ml->v1];
         li->v2 = &vertexes[ml->v2];
 
-        linedef = (unsigned short)SHORT(ml->linedef);
-        ldef = &lines[linedef];
+        linedef_id = (unsigned short)SHORT(ml->linedef);
+        ldef = &lines[linedef_id];
         li->linedef = ldef;
         side = ml->side;
         li->sidedef = &sides[ldef->sidenum[side]];
@@ -1567,7 +1567,7 @@ static mapformat_t P_CheckMapFormat (int lumpnum)
 {
     int b;
     mapformat_t format = 0;
-    byte *nodes = NULL;
+    byte *nodes_lump_data = NULL;
 
     if ((b = lumpnum+ML_BLOCKMAP+1) < numlumps
     &&  !strncasecmp(lumpinfo[b]->name, "BEHAVIOR", 8))
@@ -1585,22 +1585,22 @@ static mapformat_t P_CheckMapFormat (int lumpnum)
     }
 
     if (!((b = lumpnum+ML_NODES) < numlumps
-    && (nodes = W_CacheLumpNum(b, PU_CACHE))
+    && (nodes_lump_data = W_CacheLumpNum(b, PU_CACHE))
     &&  W_LumpLength(b) > 0))
     {
-        fprintf(stderr, english_language ? "no nodes" : "ноды отсутствуют");
+        fprintf(stderr, english_language ? "no nodes_lump_data" : "ноды отсутствуют");
     }
-    else if (!memcmp(nodes, "xNd4\0\0\0\0", 8))
+    else if (!memcmp(nodes_lump_data, "xNd4\0\0\0\0", 8))
     {
         fprintf(stderr, "DeePBSP");
         format |= DEEPBSP;
     }
-    else if (!memcmp(nodes, "XNOD", 4))
+    else if (!memcmp(nodes_lump_data, "XNOD", 4))
     {
         fprintf(stderr, "ZDBSP");
         format |= ZDBSPX;
     }
-    else if (!memcmp(nodes, "ZNOD", 4))
+    else if (!memcmp(nodes_lump_data, "ZNOD", 4))
     {
         fprintf(stderr, english_language ? "compressed ZDBSP" : "сжатые ZDBSP");
         format |= ZDBSPZ;
@@ -1611,8 +1611,8 @@ static mapformat_t P_CheckMapFormat (int lumpnum)
     }
     fprintf(stderr, ")\n");
 
-    if (nodes)
-    W_ReleaseLumpNum(b);
+    if (nodes_lump_data)
+        W_ReleaseLumpNum(b);
 
     return format;
 }
