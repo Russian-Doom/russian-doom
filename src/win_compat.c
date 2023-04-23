@@ -26,6 +26,7 @@
 #include <errno.h>
 
 #include "SDL_syswm.h"
+#include "i_system.h"
 
 wchar_t* ConvertToUtf8(const char *str)
 {
@@ -181,6 +182,32 @@ int D_mkdir(const char *dirname)
 }
 
 typedef long (__stdcall *PRTLGETVERSION)(PRTL_OSVERSIONINFOEXW);
+
+int I_CheckWindowsVista(void)
+{
+    PRTLGETVERSION  pRtlGetVersion = (PRTLGETVERSION) GetProcAddress(GetModuleHandle("ntdll.dll"), "RtlGetVersion");
+
+    if(pRtlGetVersion)
+    {
+        OSVERSIONINFOEXW info;
+
+        memset(&info, 0, sizeof(OSVERSIONINFOEXW));
+        info.dwOSVersionInfoSize = sizeof(RTL_OSVERSIONINFOEXW);
+
+        pRtlGetVersion((PRTL_OSVERSIONINFOEXW)&info);
+
+        if(info.dwPlatformId == VER_PLATFORM_WIN32_NT)
+        {
+            if(info.dwMajorVersion == 6)
+            {
+                if(info.dwMinorVersion == 0)
+                    return 1;
+            }
+        }
+    }
+
+    return 0;
+}
 
 int I_CheckWindows11(void)
 {
