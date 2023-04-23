@@ -28,7 +28,9 @@
 
 #include "gusconf.h"
 #include "i_sound.h"
+#include "i_system.h"
 #include "i_video.h"
+#include "jn.h"
 #include "m_argv.h"
 #include "m_config.h"
 #include "m_misc.h"
@@ -221,6 +223,15 @@ void I_InitSound(boolean use_sfx_prefix)
 
     if (!nosound && !screensaver_mode)
     {
+#ifdef _WIN32
+        // [Dasperal] Set the recommended SDL audio driver to "directsound" (skip "wasapi")
+        // on Windows Vista to avoid sound stutters.
+        if(I_CheckWindowsVista())
+        {
+            SDL_SetHintWithPriority(SDL_HINT_AUDIODRIVER, "directsound", SDL_HINT_OVERRIDE);
+        }
+#endif
+
         // This is kind of a hack. If native MIDI is enabled, set up
         // the TIMIDITY_CFG environment variable here before SDL_mixer
         // is opened.
@@ -241,6 +252,10 @@ void I_InitSound(boolean use_sfx_prefix)
         {
             InitMusicModule();
         }
+        printf(english_language ?
+               "I_InitSound: SDL audio driver - %s\n" :
+               "I_InitSound: Аудио драйвер SDL - %s\n",
+            SDL_GetCurrentAudioDriver());
     }
 }
 
