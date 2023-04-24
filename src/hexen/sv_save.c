@@ -735,6 +735,12 @@ static void StreamInMobjSpecials(mobj_t *mobj)
         case MT_THRUSTFLOOR_DOWN:
         case MT_MINOTAUR:
         case MT_SORCFX1:
+        case MT_KORAX_SPIRIT1:
+        case MT_KORAX_SPIRIT2:
+        case MT_KORAX_SPIRIT3:
+        case MT_KORAX_SPIRIT4:
+        case MT_KORAX_SPIRIT5:
+        case MT_KORAX_SPIRIT6:
             SetMobjPtr(&mobj->special1.m, special1);
             break;
 
@@ -921,6 +927,12 @@ static void StreamOutMobjSpecials(mobj_t *mobj)
         case MT_MINOTAUR:
         case MT_SORCFX1:
         case MT_MSTAFF_FX2:
+        case MT_KORAX_SPIRIT1:
+        case MT_KORAX_SPIRIT2:
+        case MT_KORAX_SPIRIT3:
+        case MT_KORAX_SPIRIT4:
+        case MT_KORAX_SPIRIT5:
+        case MT_KORAX_SPIRIT6:
             if (corpse)
             {
                 special1 = MOBJ_NULL;
