@@ -871,31 +871,8 @@ static void saveg_read_mobj_t(mobj_t *str)
     // specialval_t special2;
     saveg_read_specialval_t(&str->special2);
 
-    // Now we have a bunch of hacks to try to NULL out special values
-    // where special[12] contained a mobj_t pointer that isn't valid
-    // any more. This isn't in Vanilla but at least it stops the game
-    // from crashing.
-
-    switch (str->type)
-    {
-        // Gas pods use special2.m to point to the pod generator
-        // that made it.
-        case MT_POD:
-            str->special2.m = NULL;
-            break;
-
-        // Several thing types use special1.m to mean 'target':
-        case MT_MACEFX4:     // A_DeathBallImpact
-        case MT_WHIRLWIND:   // A_WhirlwindSeek
-        case MT_MUMMYFX1:    // A_MummyFX1Seek
-        case MT_HORNRODFX2:  // A_SkullRodPL2Seek
-        case MT_PHOENIXFX1:  // A_PhoenixPuff
-            str->special1.m = NULL;
-            break;
-
-        default:
-            break;
-    }
+    // [Dasperal] If special1 or special2 contained a pointer,
+    // restore it later in P_RestoreTargets
 
     // int health;
     str->health = SV_ReadLong();
@@ -1017,6 +994,25 @@ static void saveg_write_mobj_t(mobj_t *str)
 
     // int flags2;
     SV_WriteLong(str->flags2);
+
+    // [Dasperal] Prepare the special1 or special2 field storing a pointer to mobj, converting it to thinker index
+    switch (str->type)
+    {
+        // Gas pods use special2.m to point to the pod generator that made it.
+        case MT_POD:
+            str->special2.m = (mobj_t*)(uintptr_t) P_ThinkerToIndex((thinker_t*) str->special2.m);
+            break;
+        // Several thing types use special1.m to mean 'target':
+        case MT_MACEFX4:     // A_DeathBallImpact
+        case MT_WHIRLWIND:   // A_WhirlwindSeek
+        case MT_MUMMYFX1:    // A_MummyFX1Seek
+        case MT_HORNRODFX2:  // A_SkullRodPL2Seek
+        case MT_PHOENIXFX1:  // A_PhoenixPuff
+            str->special1.m = (mobj_t*)(uintptr_t) P_ThinkerToIndex((thinker_t*) str->special1.m);
+            break;
+        default:
+            break;
+    }
 
     // specialval_t special1;
     saveg_write_specialval_t(&str->special1);
@@ -1804,6 +1800,25 @@ void P_RestoreTargets (void)
         {
             mo = (mobj_t*) think;
             mo->target = (mobj_t*) P_IndexToThinker((uintptr_t) mo->target);
+
+            // [Dasperal] Restore pointers for mobjs storing them in special1 or special2
+            switch (mo->type)
+            {
+                // Gas pods use special2.m to point to the pod generator that made it.
+                case MT_POD:
+                    mo->special2.m = (mobj_t*) P_IndexToThinker((uintptr_t) mo->special2.m);
+                    break;
+                // Several thing types use special1.m to mean 'target':
+                case MT_MACEFX4:     // A_DeathBallImpact
+                case MT_WHIRLWIND:   // A_WhirlwindSeek
+                case MT_MUMMYFX1:    // A_MummyFX1Seek
+                case MT_HORNRODFX2:  // A_SkullRodPL2Seek
+                case MT_PHOENIXFX1:  // A_PhoenixPuff
+                    mo->special1.m = (mobj_t*) P_IndexToThinker((uintptr_t) mo->special1.m);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
