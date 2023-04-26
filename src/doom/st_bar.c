@@ -2135,10 +2135,10 @@ void ST_WidgetsDrawer (void)
         }
         else
         {
-            char str1[8], str2[16];  // Green
-            char str3[8], str4[16];  // Indigo
-            char str5[8], str6[16];  // Brown
-            char str7[8], str8[16];  // Red
+            char str1[8] = {0}, str2[16] = {0};  // Green
+            char str3[8] = {0}, str4[16] = {0};  // Indigo
+            char str5[8] = {0}, str6[16] = {0};  // Brown
+            char str7[8] = {0}, str8[16] = {0};  // Red
 
             if (playeringame[0])
             {
