@@ -733,8 +733,10 @@ static void StreamInMobjSpecials(mobj_t *mobj)
         case MT_DRAGON:
         case MT_THRUSTFLOOR_UP:
         case MT_THRUSTFLOOR_DOWN:
+        case MT_SUMMON_FX:
         case MT_MINOTAUR:
         case MT_SORCFX1:
+        case MT_MSTAFF_FX2:
         case MT_KORAX_SPIRIT1:
         case MT_KORAX_SPIRIT2:
         case MT_KORAX_SPIRIT3:
@@ -924,6 +926,7 @@ static void StreamOutMobjSpecials(mobj_t *mobj)
         case MT_DRAGON:
         case MT_THRUSTFLOOR_UP:
         case MT_THRUSTFLOOR_DOWN:
+        case MT_SUMMON_FX:
         case MT_MINOTAUR:
         case MT_SORCFX1:
         case MT_MSTAFF_FX2:
