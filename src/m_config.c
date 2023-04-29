@@ -1285,15 +1285,7 @@ char *M_GetAutoloadDir(const char *iwadname)
     if (autoload_path == NULL || strlen(autoload_path) == 0)
     {
         char *prefdir;
-
-#ifdef _WIN32
-        // [JN] On Windows, create "autoload" directory in program folder.
-        prefdir = SDL_GetBasePath();
-#else
-        // [JN] On other OSes use system home folder.
         prefdir = SDL_GetPrefPath("", PACKAGE_TARNAME);
-#endif
-
         if (prefdir == NULL)
         {
             printf("M_GetAutoloadDir: SDL_GetPrefPath failed\n");
