@@ -109,13 +109,6 @@ int english_language = 1;
 #endif
 
 // -----------------------------------------------------------------------------
-// [JN] PWAD autoloading
-// -----------------------------------------------------------------------------
-
-char* autoload_root = "";
-char* autoload_dir  = NULL;
-
-// -----------------------------------------------------------------------------
 // [JN] Default values
 // -----------------------------------------------------------------------------
 
@@ -880,9 +873,6 @@ void D_BindVariables(void)
 
     // [JN] Support English/Russian language hot swapping
     M_BindIntVariable("english_language",       &english_language);
-
-    // [JN] PWAD autoloading
-    M_BindStringVariable("autoload_root", &autoload_root);
 
     // Rendering
     M_BindIntVariable("uncapped_fps",           &uncapped_fps);
@@ -1682,9 +1672,7 @@ void D_RD_LoadNerveAssets (void)
     gamedescription_rus = "DOOM 2: Нет покоя для живых";
 }
 
-void AutoloadFiles(const char* wadName);
-
-void LoadFile(char* filePath, boolean autoload)
+void LoadFile(char* filePath)
 {
     printf(english_language ?
            " adding: %s\n" :
@@ -1915,33 +1903,6 @@ void LoadFile(char* filePath, boolean autoload)
     {
         D_RD_LoadSigilAssets(true);
     }
-
-    if(autoload && M_StrCaseStr(fileName, ".wad"))
-    {
-        AutoloadFiles(fileName);
-    }
-}
-
-void AutoloadFiles(const char* wadName)
-{
-    char* autoload_subdir = M_StringDuplicate(wadName);
-    M_ForceLowercase(autoload_subdir);
-    char* autoload_path = M_StringJoin(autoload_dir, DIR_SEPARATOR_S, autoload_subdir, NULL);
-    free(autoload_subdir);
-
-    glob_t* glob;
-    char* filename;
-
-    glob = I_StartMultiGlob(autoload_path, GLOB_FLAG_NOCASE|GLOB_FLAG_SORTED, "*.*", NULL);
-    while((filename = I_NextGlob(glob)) != NULL)
-    {
-        printf(english_language ?
-               "    [autoload]" :
-               "    [автозагрузка]");
-        LoadFile(filename, false);
-    }
-    I_EndGlob(glob);
-    free(autoload_path);
 }
 
 // Set the gamedescription string
@@ -2105,27 +2066,6 @@ void D_SetGameDescription(void)
         }
     }
 
-    // [JN] PWAD autoloading routine. Scan through all 4 available variables,
-    // and don't load empty ones. There are two special cases: SIGIL and NERVE.
-    // P.S. You cannot use autoload with the shareware version (register!),
-    // as well as in Press Beta version.
-    int autoloadDir_param = M_CheckParmWithArgs("-autoloadroot", 1);
-    if(autoloadDir_param)
-    {
-        autoload_dir = myargv[autoloadDir_param + 1];
-    }
-    else
-    {
-        autoload_dir = autoload_root;
-    }
-
-    boolean allowAutoload = gamemode != shareware && gamemode != pressbeta && !M_ParmExists("-noautoload") && strcmp(autoload_dir, "") != 0;
-    if(allowAutoload)
-    {
-        AutoloadFiles("doom-all");
-        AutoloadFiles(iwadfile);
-    }
-
     // [JN] Параметр "-file" перенесен из w_main.c
     // Необходимо для того, что бы любые ресурсы из pwad-файлов
     // загружались после руссифицированных pwad-файлов.
@@ -2141,7 +2081,7 @@ void D_SetGameDescription(void)
         {
             char    *filename;
             filename = D_TryFindWADByName(myargv[newpwadfile]);
-            LoadFile(filename, allowAutoload);
+            LoadFile(filename);
         }
     }
 
@@ -3112,6 +3052,21 @@ void D_DoomMain (void)
 
         DEH_AddStringReplacement("M_GDHIGH", "M_MSGON");
         DEH_AddStringReplacement("M_GDLOW", "M_MSGOFF");
+    }
+
+    //!
+    // @category mod
+    //
+    // Disable auto-loading of .wad and .deh files.
+    //
+    if (!M_ParmExists("-noautoload") && strcmp(autoload_path, "") != 0
+    &&  gamemode != shareware && gamemode != pressbeta)
+    {
+        char *autoload_dir;
+        autoload_dir = M_GetAutoloadDir(D_SaveGameIWADName(gamemission, gamevariant));
+        DEH_AutoLoadPatches(autoload_dir);
+        W_AutoLoadWADs(autoload_dir);
+        free(autoload_dir);
     }
 
 #ifdef FEATURE_DEHACKED
