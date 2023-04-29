@@ -3059,8 +3059,7 @@ void D_DoomMain (void)
     //
     // Disable auto-loading of .wad and .deh files.
     //
-    if (!M_ParmExists("-noautoload") && strcmp(autoload_path, "") != 0
-    &&  gamemode != shareware && gamemode != pressbeta)
+    if (!M_ParmExists("-noautoload") && gamemode != shareware && gamemode != pressbeta)
     {
         char *autoload_dir;
         autoload_dir = M_GetAutoloadDir(D_SaveGameIWADName(gamemission, gamevariant));
