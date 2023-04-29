@@ -67,7 +67,5 @@ void M_BindFloatVariable(char *name, float *variable);
 void M_BindStringVariable(char *name, char **variable);
 void M_SetConfigFilename(char *name);
 char *M_GetSaveGameDir();
-char *M_GetAutoloadDir(const char *iwadname);
 
 extern char *configdir;
-extern char *autoload_path;

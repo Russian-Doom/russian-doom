@@ -55,8 +55,6 @@ static section_t* sections;
 // Default filenames for configuration files.
 static char *config_file_name;
 
-char *autoload_path = "";
-
 //
 // DEFAULTS
 //
@@ -115,7 +113,7 @@ static default_t defaults_list[] =
     // of this directory matching the IWAD name is checked to find the
     // files to load.
 
-    CONFIG_VARIABLE_STRING(autoload_path),
+    CONFIG_VARIABLE_STRING(autoload_root),
 
     //!
     // @game strife
@@ -1022,9 +1020,6 @@ void M_LoadConfig(void)
     FILE* file;
     int firstChar, cfg_version = 0;
  
-    // This variable is a special snowflake for no good reason.
-    M_BindStringVariable("autoload_path", &autoload_path);
- 
     // check for a custom default file
 
     //!
@@ -1272,41 +1267,4 @@ char *M_GetSaveGameDir()
             "Сохраненные игры будут расположены в папке:\n    %s\n",
             savegamedir);
     return savegamedir;
-}
-
-//
-// Calculate the path to the directory for autoloaded WADs/DEHs.
-// Creates the directory as necessary.
-//
-char *M_GetAutoloadDir(const char *iwadname)
-{
-    char *result;
-
-    if (autoload_path == NULL || strlen(autoload_path) == 0)
-    {
-        char *prefdir;
-
-#ifdef _WIN32
-        // [JN] On Windows, create "autoload" directory in program folder.
-        prefdir = SDL_GetBasePath();
-#else
-        // [JN] On other OSes use system home folder.
-        prefdir = SDL_GetPrefPath("", PACKAGE_TARNAME);
-#endif
-
-        if (prefdir == NULL)
-        {
-            printf("M_GetAutoloadDir: SDL_GetPrefPath failed\n");
-            return NULL;
-        }
-        autoload_path = M_StringJoin(prefdir, "autoload", NULL);
-        SDL_free(prefdir);
-    }
-
-    M_MakeDirectory(autoload_path);
-
-    result = M_StringJoin(autoload_path, DIR_SEPARATOR_S, iwadname, NULL);
-    M_MakeDirectory(result);
-
-    return result;
 }

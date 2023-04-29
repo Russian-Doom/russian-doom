@@ -105,6 +105,13 @@ int english_language = -1;
 int english_language = 1;
 #endif
 
+// -----------------------------------------------------------------------------
+// [JN] PWAD autoloading
+// -----------------------------------------------------------------------------
+
+char* autoload_root = "";
+char* autoload_dir  = NULL;
+
 //------------------------------------------------------------------------------
 //
 // [JN] Default variables and bindings.
@@ -1041,6 +1048,9 @@ void D_BindVariables(void)
     // [JN] Support for fallback to the English language.
     M_BindIntVariable("english_language",       &english_language);
 
+    // [JN] PWAD autoloading
+    M_BindStringVariable("autoload_root", &autoload_root);
+
     // Rendering
     M_BindIntVariable("uncapped_fps",           &uncapped_fps);
     M_BindIntVariable("smoothlight",            &smoothlight);
@@ -1190,13 +1200,46 @@ static void D_Endoom(void)
     I_Endoom(endoom_data);
 }
 
-void LoadFile(char* filePath)
+void AutoloadFiles(const char* wadName);
+
+void LoadFile(char* filePath, boolean autoload)
 {
     printf(english_language ?
            " adding: %s\n" :
            " добавление: %s\n",
            filePath);
     W_MergeFile(filePath);
+
+    char* fileName = M_FileName(filePath);
+
+    // * Add special wad support here
+
+    if(autoload && M_StrCaseStr(fileName, ".wad"))
+    {
+        AutoloadFiles(fileName);
+    }
+}
+
+void AutoloadFiles(const char* wadName)
+{
+    char* autoload_subdir = M_StringDuplicate(wadName);
+    M_ForceLowercase(autoload_subdir);
+    char* autoload_path = M_StringJoin(autoload_dir, DIR_SEPARATOR_S, autoload_subdir, NULL);
+    free(autoload_subdir);
+
+    glob_t* glob;
+    char* filename;
+
+    glob = I_StartMultiGlob(autoload_path, GLOB_FLAG_NOCASE|GLOB_FLAG_SORTED, "*.*", NULL);
+    while((filename = I_NextGlob(glob)) != NULL)
+    {
+        printf(english_language ?
+               "    [autoload]" :
+               "    [автозагрузка]");
+        LoadFile(filename, false);
+    }
+    I_EndGlob(glob);
+    free(autoload_path);
 }
 
 //---------------------------------------------------------------------------
@@ -1462,23 +1505,6 @@ void D_DoomMain(void)
     DEH_ParseCommandLine();
 #endif
 
-    //!
-    // @category mod
-    //
-    // Disable auto-loading of .wad files.
-    //
-    if (!M_ParmExists("-noautoload") && gamemode != shareware)
-    {
-        char *autoload_dir;
-        autoload_dir = M_GetAutoloadDir("heretic.wad");
-        if (autoload_dir != NULL)
-        {
-            DEH_AutoLoadPatches(autoload_dir);
-            W_AutoLoadWADs(autoload_dir);
-            free(autoload_dir);
-        }
-    }
-
     // Load PWAD files.
     W_ParseCommandLine();
 
@@ -1578,6 +1604,26 @@ void D_DoomMain(void)
         gamedescription = "Heretic";
     }
 
+    // [JN] PWAD autoloading routine. Scan through all 3 
+    // available variables, and don't load an empty ones. 
+    // Note: you cannot use autoload with the Shareware, buy a full version!
+    int autoloadDir_param = M_CheckParmWithArgs("-autoloadroot", 1);
+    if(autoloadDir_param)
+    {
+        autoload_dir = myargv[autoloadDir_param + 1];
+    }
+    else
+    {
+        autoload_dir = autoload_root;
+    }
+
+    boolean allowAutoload = gamemode != shareware && !M_ParmExists("-noautoload") && strcmp(autoload_dir, "") != 0;
+    if(allowAutoload)
+    {
+        AutoloadFiles("heretic-all");
+        AutoloadFiles(iwadfile);
+    }
+
     // [JN] Параметр "-file" перенесен из w_main.c
     // Необходимо для того, чтобы любые ресурсы из pwad-файлов
     // загружались после руссифицированных pwad-файлов.
@@ -1589,7 +1635,7 @@ void D_DoomMain(void)
         {
             char *filename;
             filename = D_TryFindWADByName(myargv[newpwadfile]);
-            LoadFile(filename);
+            LoadFile(filename, allowAutoload);
         }
     }
 

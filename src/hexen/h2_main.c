@@ -154,6 +154,13 @@ int english_language = -1;
 int english_language = 1;
 #endif
 
+// -----------------------------------------------------------------------------
+// [JN] PWAD autoloading
+// -----------------------------------------------------------------------------
+
+char* autoload_root = "";
+char* autoload_dir  = NULL;
+
 // Rendering
 int smoothlight = 1;
 
@@ -326,6 +333,9 @@ void D_BindVariables(void)
 #endif
 
     M_BindIntVariable("english_language",       &english_language);
+
+    // [JN] PWAD autoloading
+    M_BindStringVariable("autoload_root", &autoload_root);
 
     M_BindIntVariable("graphical_startup",      &graphical_startup);
     M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
@@ -559,7 +569,9 @@ static void PSX_DefineFunctions (void)
     }
 }
 
-void LoadFile(char* filePath)
+void AutoloadFiles(char* wadName);
+
+void LoadFile(char* filePath, boolean autoload)
 {
     printf(english_language ?
            " adding: %s\n" :
@@ -585,6 +597,33 @@ void LoadFile(char* filePath)
     {
         hasUnknownPWads = true;
     }
+
+    if(autoload && M_StrCaseStr(fileName, ".wad"))
+    {
+        AutoloadFiles(fileName);
+    }
+}
+
+void AutoloadFiles(char* wadName)
+{
+    char* autoload_subdir = M_StringDuplicate(wadName);
+    M_ForceLowercase(autoload_subdir);
+    char* autoload_path = M_StringJoin(autoload_dir, DIR_SEPARATOR_S, autoload_subdir, NULL);
+    free(autoload_subdir);
+
+    glob_t* glob;
+    char* filename;
+
+    glob = I_StartMultiGlob(autoload_path, GLOB_FLAG_NOCASE|GLOB_FLAG_SORTED, "*.*", NULL);
+    while((filename = I_NextGlob(glob)) != NULL)
+    {
+        printf(english_language ?
+               "    [autoload]" :
+               "    [автозагрузка]");
+        LoadFile(filename, false);
+    }
+    I_EndGlob(glob);
+    free(autoload_path);
 }
 
 // Set the gamedescription string.
@@ -617,6 +656,26 @@ void D_SetGameDescription(void)
         gamedescription = "Hexen";
     }
 
+    // [JN] PWAD autoloading routine. Scan through all 4 
+    // available variables, and don't load an empty ones. 
+    // Note: you cannot use autoload with the Shareware, buy a full version!
+    int autoloadDir_param = M_CheckParmWithArgs("-autoloadroot", 1);
+    if(autoloadDir_param)
+    {
+        autoload_dir = myargv[autoloadDir_param + 1];
+    }
+    else
+    {
+        autoload_dir = autoload_root;
+    }
+
+    boolean allowAutoload = gamemode != shareware && !M_ParmExists("-noautoload") && strcmp(autoload_dir, "") != 0;
+    if(allowAutoload)
+    {
+        AutoloadFiles("hexen-all");
+        AutoloadFiles(iwadfile);
+    }
+
 #ifdef WHEN_ITS_DONE
     if (M_CheckParm("-psx"))
     {
@@ -636,7 +695,7 @@ void D_SetGameDescription(void)
         while (++newpwadfile != myargc && myargv[newpwadfile][0] != '-')
         {
             char* filePath = D_TryFindWADByName(myargv[newpwadfile]);
-            LoadFile(filePath);
+            LoadFile(filePath, allowAutoload);
         }
     }
 }
@@ -764,23 +823,6 @@ void D_DoomMain(void)
     D_IdentifyVersion();
     D_SetGameDescription();
     AdjustForMacIWAD();
-
-    //!
-    // @category mod
-    //
-    // Disable auto-loading of .wad files.
-    //
-    if (!M_ParmExists("-noautoload"))
-    {
-        char *autoload_dir;
-        autoload_dir = M_GetAutoloadDir("hexen.wad");
-        if (autoload_dir != NULL)
-        {
-            // TODO? DEH_AutoLoadPatches(autoload_dir);
-            W_AutoLoadWADs(autoload_dir);
-            free(autoload_dir);
-        }
-    }
 
     HandleArgs();
 

@@ -948,50 +948,6 @@ const iwad_t **D_FindAllIWADs(int mask)
     return result;
 }
 
-//
-// Get the IWAD name used for savegames.
-//
-
-char *D_SaveGameIWADName(GameMission_t gamemission, GameVariant_t gamevariant)
-{
-    size_t i;
-
-    // Determine the IWAD name to use for savegames.
-    // This determines the directory the savegame files get put into.
-    //
-    // Note that we match on gamemission rather than on IWAD name.
-    // This ensures that doom1.wad and doom.wad saves are stored
-    // in the same place.
-
-    if (gamevariant == freedoom)
-    {
-        if (gamemission == doom)
-        {
-            return "freedoom1.wad";
-        }
-        else if (gamemission == doom2)
-        {
-            return "freedoom2.wad";
-        }
-    }
-    else if (gamevariant == freedm && gamemission == doom2)
-    {
-        return "freedm.wad";
-    }
-
-    for (i=0; i<arrlen(iwads); ++i)
-    {
-        if (gamemission == iwads[i].mission)
-        {
-            return iwads[i].name;
-        }
-    }
-
-    // Default fallback:
-
-    return "unknown.wad";
-}
-
 char *D_SuggestIWADName(GameMission_t mission, GameMode_t mode)
 {
     int i;

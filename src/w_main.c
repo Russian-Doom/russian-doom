@@ -20,7 +20,6 @@
 
 #include "doomfeatures.h"
 #include "d_iwad.h"
-#include "i_glob.h"
 #include "i_system.h"
 #include "m_argv.h"
 #include "w_main.h"
@@ -222,28 +221,6 @@ boolean W_ParseCommandLine(void)
 //    W_PrintDirectory();
 
     return modifiedgame;
-}
-
-// Load all WAD files from the given directory.
-void W_AutoLoadWADs(const char *path)
-{
-    glob_t *glob;
-    const char *filename;
-
-    glob = I_StartMultiGlob(path, GLOB_FLAG_NOCASE|GLOB_FLAG_SORTED,
-                            "*.wad", "*.lmp", NULL);
-    for (;;)
-    {
-        filename = I_NextGlob(glob);
-        if (filename == NULL)
-        {
-            break;
-        }
-        printf(english_language ? "    [auto] loading %s\n" : "    [авто] загрузка %s\n", filename);
-        W_MergeFile(filename);
-    }
-
-    I_EndGlob(glob);
 }
 
 // Lump names that are unique to particular game types. This lets us check
