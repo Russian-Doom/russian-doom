@@ -24,6 +24,7 @@
 #include <ctype.h>
 
 #include "doomtype.h"
+#include "i_glob.h"
 #include "i_system.h"
 #include "d_iwad.h"
 #include "m_argv.h"
@@ -384,7 +385,7 @@ static void DEH_ParseContext(deh_context_t *context)
 
 // Parses a dehacked file
 
-int DEH_LoadFile(char *filename)
+int DEH_LoadFile(const char *filename)
 {
     deh_context_t *context;
 
@@ -431,6 +432,27 @@ int DEH_LoadFile(char *filename)
     }
 
     return 1;
+}
+
+// Load all dehacked patches from the given directory.
+void DEH_AutoLoadPatches(const char *path)
+{
+    const char *filename;
+    glob_t *glob;
+
+    glob = I_StartGlob(path, "*.deh", GLOB_FLAG_NOCASE|GLOB_FLAG_SORTED);
+    for (;;)
+    {
+        filename = I_NextGlob(glob);
+        if (filename == NULL)
+        {
+            break;
+        }
+        printf(english_language ? "    [auto]" : "    [авто]");
+        DEH_LoadFile(filename);
+    }
+
+    I_EndGlob(glob);
 }
 
 // Load dehacked file from WAD lump.
