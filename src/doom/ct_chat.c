@@ -158,7 +158,7 @@ boolean CT_Responder (event_t *ev)
     int   sendto;
     const char *macro;
 
-    if(BK_isKeyDown(ev, bk_show_message_list))
+    if(BK_isKeyDown(ev, bk_show_message_list) && !chatmodeon)
     {
         // TODO Show last N messages
         players[consoleplayer].messageTics = messages_timeout * TICRATE;
