@@ -980,7 +980,7 @@ static MenuItem_t Bindings5Items[] = {
     I_EFUNC("Pause",                 "gfepf",                 BK_StartBindingKey, bk_pause),             // Пауза
     I_EFUNC("FINISH DEMO RECORDING", "PFRJYXBNM PFGBCM LTVJ", BK_StartBindingKey, bk_finish_demo),       // Закончить запись демо
     I_EFUNC("DEMO FAST-FORWARD",     ",SCNHFZ GTHTVJNRF LTVJ",BK_StartBindingKey, bk_demo_speed),        // Быстрая перемотка демо
-    I_EFUNC("Sow last message",      "Gjcktlytt cjj,otybt",   BK_StartBindingKey, bk_show_message_list), // Последнее сообщение
+    I_EFUNC("Show last message",     "Gjcktlytt cjj,otybt",   BK_StartBindingKey, bk_show_message_list), // Последнее сообщение
     I_TITLE("INVENTORY",             "BYDTYNFHM"),
     I_EFUNC("NEXT ITEM",             "CKTLE.OBQ GHTLVTN",     BK_StartBindingKey, bk_inv_right),
     I_EFUNC("PREVIOUS ITEM",         "GHTLSLEOBQ GHTLVTN",    BK_StartBindingKey, bk_inv_left),

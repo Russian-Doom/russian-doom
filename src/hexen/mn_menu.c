@@ -974,7 +974,7 @@ static MenuItem_t Bindings4Items[] = {
     I_EFUNC("SAVE A SCREENSHOT",     "CRHBYIJN",              BK_StartBindingKey, bk_screenshot),        // Скриншот
     I_EFUNC("Pause",                 "gfepf",                 BK_StartBindingKey, bk_pause),             // Пауза
     I_EFUNC("FINISH DEMO RECORDING", "PFRJYXBNM PFGBCM LTVJ", BK_StartBindingKey, bk_finish_demo),       // Закончить запись демо
-    I_EFUNC("Sow last message",      "Gjcktlytt cjj,otybt",   BK_StartBindingKey, bk_show_message_list), // Последнее сообщение
+    I_EFUNC("Show last message",     "Gjcktlytt cjj,otybt",   BK_StartBindingKey, bk_show_message_list), // Последнее сообщение
     I_TITLE("TOGGLEABLES",           "GTHTRK.XTYBT"),
     I_EFUNC("MOUSE LOOK",            "J,PJH VSIM.",           BK_StartBindingKey, bk_toggle_mlook),      // Обзор мышью
     I_EFUNC("ALWAYS RUN",            "GJCNJZYYSQ ,TU",        BK_StartBindingKey, bk_toggle_autorun),    // Постоянный бег

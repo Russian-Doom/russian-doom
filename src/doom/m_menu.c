@@ -1057,7 +1057,7 @@ static MenuItem_t Bindings4Items[] = {
     I_EFUNC("Pause",                 "gfepf",                        BK_StartBindingKey, bk_pause),             // Пауза
     I_EFUNC("Finish demo recording", "pfrjyxbnm pfgbcm ltvj",        BK_StartBindingKey, bk_finish_demo),       // Закончить запись демо
     I_EFUNC("Demo fast-forward",     ",scnhfz gthtvjnrf ltvj",       BK_StartBindingKey, bk_demo_speed),        // Быстрая перемотка демо
-    I_EFUNC("Sow last message",      "Gjcktlytt cjj,otybt",          BK_StartBindingKey, bk_show_message_list), // Последнее сообщение
+    I_EFUNC("Show last message",     "Gjcktlytt cjj,otybt",          BK_StartBindingKey, bk_show_message_list), // Последнее сообщение
     I_TITLE("Toggleables",           "gthtrk.xtybt"),
     I_EFUNC("Mouse look",            "j,pjh vsim.",                  BK_StartBindingKey, bk_toggle_mlook),      // Обзор мышью
     I_EFUNC("Always run",            "gjcnjzyysq ,tu",               BK_StartBindingKey, bk_toggle_autorun),    // Постоянный бег
