@@ -1200,7 +1200,7 @@ static void D_Endoom(void)
     I_Endoom(endoom_data);
 }
 
-void AutoloadFiles(const char* wadName);
+void AutoloadFiles(const char* wadName, boolean mkdir);
 
 void LoadFile(char* filePath, boolean autoload)
 {
@@ -1216,15 +1216,17 @@ void LoadFile(char* filePath, boolean autoload)
 
     if(autoload && M_StrCaseStr(fileName, ".wad"))
     {
-        AutoloadFiles(fileName);
+        AutoloadFiles(fileName, false);
     }
 }
 
-void AutoloadFiles(const char* wadName)
+void AutoloadFiles(const char* wadName, boolean mkdir)
 {
     char* autoload_subdir = M_StringDuplicate(wadName);
     M_ForceLowercase(autoload_subdir);
     char* autoload_path = M_StringJoin(autoload_dir, DIR_SEPARATOR_S, autoload_subdir, NULL);
+    if(mkdir)
+        M_MakeDirectory(autoload_path);
     free(autoload_subdir);
 
     glob_t* glob;
@@ -1604,9 +1606,15 @@ void D_DoomMain(void)
         gamedescription = "Heretic";
     }
 
-    // [JN] PWAD autoloading routine. Scan through all 3 
-    // available variables, and don't load an empty ones. 
-    // Note: you cannot use autoload with the Shareware, buy a full version!
+    // [Dasperal] Directory based autoload.
+    // Set the default value of autoload_root to M_GetDefaultConfigDir()
+    if(strcmp(autoload_root, "") == 0)
+    {
+        char* basePath = M_GetDefaultConfigDir();
+        autoload_root = M_StringJoin(basePath, "autoload", NULL);
+        free(basePath);
+    }
+
     int autoloadDir_param = M_CheckParmWithArgs("-autoloadroot", 1);
     if(autoloadDir_param)
     {
@@ -1620,8 +1628,8 @@ void D_DoomMain(void)
     boolean allowAutoload = gamemode != shareware && !M_ParmExists("-noautoload") && strcmp(autoload_dir, "") != 0;
     if(allowAutoload)
     {
-        AutoloadFiles("heretic-all");
-        AutoloadFiles(iwadfile);
+        AutoloadFiles("heretic-all", true);
+        AutoloadFiles(iwadfile, true);
     }
 
     // [JN] Параметр "-file" перенесен из w_main.c

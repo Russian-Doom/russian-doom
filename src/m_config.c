@@ -1152,7 +1152,7 @@ void M_BindStringVariable(char *name, char **location)
 // Get the path to the default configuration dir to use, if NULL
 // is passed to M_SetConfigDir.
 
-static char *GetDefaultConfigDir(void)
+char* M_GetDefaultConfigDir(void)
 {
     char *result;
     char* tempResult;
@@ -1201,7 +1201,7 @@ void M_SetConfigDir(char *dir)
     }
     else
     {
-        configdir = GetDefaultConfigDir();
+        configdir = M_GetDefaultConfigDir();
     }
 
     // Make the directory if it doesn't already exist:
