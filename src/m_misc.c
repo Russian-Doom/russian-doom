@@ -51,11 +51,15 @@
 
 
 //
-// Create a directory
+// Recursively create all directories that make up the given path, including the last component.
 //
 
 void M_MakeDirectory(char *path)
 {
+    char* parentDir = M_DirName(path);
+    if(!M_FileExists(parentDir))
+        M_MakeDirectory(parentDir);
+    free(parentDir);
 #ifdef _WIN32
     mkdir(path);
 #else
