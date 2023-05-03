@@ -121,7 +121,7 @@ endif()
 
 Option(CMAKE_FIND_PACKAGE_PREFER_CONFIG "Prefer dependency search in config mode over find module mode" OFF)
 
-if(VCPKG_INSTALLED_DIR)
+if(VCPKG_TOOLCHAIN)
     set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 endif()
 
