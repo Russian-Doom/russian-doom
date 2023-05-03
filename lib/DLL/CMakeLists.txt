@@ -1,5 +1,5 @@
 if(WIN32)
-    if(VCPKG_INSTALLED_DIR)
+    if(VCPKG_TOOLCHAIN)
         # vcpkg copies and installs DLLs for dependencies by itself
         return()
     endif()
