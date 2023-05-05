@@ -137,13 +137,9 @@ In this mode, all dependencies are obtained automatically during the project con
 If you want to use vcpkg in the classic mode, use the following commands to download and build dependencies:
 ```shell
 vcpkg integrate install
-vcpkg install --triplet=x86-windows sdl2 sdl2-mixer[core,libflac,libmodplug,mpg123,opusfile] sdl2-net libsamplerate
-vcpkg install --triplet=x64-windows sdl2 sdl2-mixer[core,libflac,libmodplug,mpg123,opusfile] sdl2-net libsamplerate
+vcpkg install --triplet=x86-windows sdl2 sdl2-mixer[libflac,libmodplug,mpg123,opusfile] sdl2-net libsamplerate
+vcpkg install --triplet=x64-windows sdl2 sdl2-mixer[libflac,libmodplug,mpg123,opusfile] sdl2-net libsamplerate
 ```
-
-**NOTE:** VCPKG [disabled timidity](https://github.com/microsoft/vcpkg/commit/812080c89a2b66f7e54ded1f25c62191d5b01d46)
-backend in SDL2_mixer used for GUS Emulation.
-**GUS Emulation will not work when International Doom is built using VCPKG!**
 
 Then, at the configuration step, add the following parameters to cmake:
 ```shell

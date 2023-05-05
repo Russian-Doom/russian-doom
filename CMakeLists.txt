@@ -4,6 +4,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # CMP0077 supress some arcane CMake warning when using vcpkg.
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+set(VCPKG_OVERLAY_TRIPLETS ${CMAKE_CURRENT_SOURCE_DIR}/cmake/triplets)
 # Automatically copy dependencies into the output directory for executables when using vcpkg.
 set(VCPKG_APPLOCAL_DEPS ON)
 # Automatically installs dependencies when using vcpkg.
