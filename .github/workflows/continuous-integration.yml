@@ -139,12 +139,11 @@ jobs:
           matrix.compiler.display_name == 'MSVC'
         run: |
           cd $VCPKG_INSTALLATION_ROOT
-          git pull
           ./bootstrap-vcpkg.sh -disableMetrics
 
 #         For classic mode:
 #         vcpkg integrate install
-#         vcpkg install --triplet=${{ matrix.arch.msvc_triplet }} sdl2 sdl2-mixer[core,libflac,libmodplug,mpg123,opusfile] sdl2-net libsamplerate
+#         vcpkg install --triplet=${{ matrix.arch.msvc_triplet }} sdl2 sdl2-mixer[libflac,libmodplug,mpg123,opusfile] sdl2-net libsamplerate
 
       - name: Setup Linux env
         if: matrix.os.name == 'Linux'
