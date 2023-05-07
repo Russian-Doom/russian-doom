@@ -42,14 +42,35 @@ cmake_dependent_option(FORCE_GIT_HASH_SUFFIX "For Devs only! Always append hash 
 set(PACKAGE_TARNAME "inter-doom")
 set(PACKAGE_COPYRIGHT "Copyright \\xA9 2016-2023 Julian Nechaevsky. Copyright \\xA9 2020-2023 Leonid Murin (Dasperal). Licensed under GNU General Public License, version 2")
 
-# Check architecture
-if(WIN32)
-    if("${CMAKE_C_COMPILER}" MATCHES "^(.*mingw64.*)|(.*clang64.*)" OR
-    (MSVC AND "${CMAKE_GENERATOR_PLATFORM}" STREQUAL "x64"))
-        set(ARCH x64)
-    elseif("${CMAKE_C_COMPILER}" MATCHES "^(.*mingw32.*)|(.*clang32.*)" OR
-    (MSVC AND "${CMAKE_GENERATOR_PLATFORM}" STREQUAL "Win32"))
+# Check target architecture
+if(MSVC)
+    # Shortcut for MSVC since it has explicit option for architecture
+    if(CMAKE_GENERATOR_PLATFORM STREQUAL Win32)
         set(ARCH x86)
+    elseif(CMAKE_GENERATOR_PLATFORM STREQUAL x64)
+        set(ARCH x64)
+    elseif(CMAKE_GENERATOR_PLATFORM STREQUAL ARM)
+        set(ARCH AArch32)
+    elseif(CMAKE_GENERATOR_PLATFORM STREQUAL ARM64)
+        set(ARCH AArch64)
+    endif()
+endif()
+if(NOT ARCH)
+    # Get target architecture from the compiler
+    include(TargetArch)
+    target_architecture(ARCH)
+    # Normalize
+    if(ARCH STREQUAL i386)
+        set(ARCH x86)
+    elseif(ARCH STREQUAL x86_64
+        OR ARCH STREQUAL ia64)
+        set(ARCH x64)
+    elseif(ARCH STREQUAL arm)
+        set(ARCH AArch32)
+    elseif(ARCH STREQUAL arm64)
+        set(ARCH AArch64)
+    elseif(ARCH STREQUAL unknown)
+        unset(ARCH)
     endif()
 endif()
 
