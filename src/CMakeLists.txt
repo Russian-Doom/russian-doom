@@ -138,10 +138,6 @@ foreach(MODULE ${COMPILE_MODULES})
             "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:WINDOWS,-mwindows>"
         )
         target_common_settings("${PROGRAM_PREFIX}${MODULE}-exe")
-        set_target_properties("${PROGRAM_PREFIX}${MODULE}-exe" PROPERTIES
-            RUNTIME_OUTPUT_NAME "${PROGRAM_PREFIX}${MODULE}"
-            COMPILE_PDB_NAME "${PROGRAM_PREFIX}${MODULE}-exe"
-        )
         target_compile_definitions("${PROGRAM_PREFIX}${MODULE}-exe" PRIVATE
             "$<IF:$<BOOL:${HAVE_DECL_STRCASECMP}>,HAVE_DECL_STRCASECMP=1,HAVE_DECL_STRCASECMP=0>"
             "$<IF:$<BOOL:${HAVE_DECL_STRNCASECMP}>,HAVE_DECL_STRNCASECMP=1,HAVE_DECL_STRNCASECMP=0>"
@@ -153,7 +149,11 @@ foreach(MODULE ${COMPILE_MODULES})
         )
         add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}-exe" POST_BUILD
             MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-exe>"
-            COMMAND $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:${CMAKE_STRIP}> $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:"$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-exe>">
+            COMMAND ${CMAKE_COMMAND} -E copy
+            "$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-exe>"
+            "$<TARGET_FILE_DIR:${PROGRAM_PREFIX}${MODULE}-exe>/${PROGRAM_PREFIX}${MODULE}.exe"
+            COMMAND $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:${CMAKE_STRIP}>
+            $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:"$<TARGET_FILE_DIR:${PROGRAM_PREFIX}${MODULE}-exe>/${PROGRAM_PREFIX}${MODULE}.exe">
         )
 
         # .com
@@ -165,11 +165,6 @@ foreach(MODULE ${COMPILE_MODULES})
             "$<IF:$<BOOL:${MSVC}>,/SUBSYSTEM:CONSOLE,-mconsole>"
         )
         target_common_settings("${PROGRAM_PREFIX}${MODULE}-com")
-        set_target_properties("${PROGRAM_PREFIX}${MODULE}-com" PROPERTIES
-            RUNTIME_OUTPUT_NAME "${PROGRAM_PREFIX}${MODULE}"
-            COMPILE_PDB_NAME "${PROGRAM_PREFIX}${MODULE}-com"
-            SUFFIX ".com"
-        )
         target_compile_definitions("${PROGRAM_PREFIX}${MODULE}-com" PRIVATE
             "$<IF:$<BOOL:${HAVE_DECL_STRCASECMP}>,HAVE_DECL_STRCASECMP=1,HAVE_DECL_STRCASECMP=0>"
             "$<IF:$<BOOL:${HAVE_DECL_STRNCASECMP}>,HAVE_DECL_STRNCASECMP=1,HAVE_DECL_STRNCASECMP=0>"
@@ -182,7 +177,11 @@ foreach(MODULE ${COMPILE_MODULES})
         )
         add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}-com" POST_BUILD
             MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-com>"
-            COMMAND $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:${CMAKE_STRIP}> $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:"$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-com>">
+            COMMAND ${CMAKE_COMMAND} -E copy
+            "$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-com>"
+            "$<TARGET_FILE_DIR:${PROGRAM_PREFIX}${MODULE}-com>/${PROGRAM_PREFIX}${MODULE}.com"
+            COMMAND $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:${CMAKE_STRIP}>
+            $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:"$<TARGET_FILE_DIR:${PROGRAM_PREFIX}${MODULE}-com>/${PROGRAM_PREFIX}${MODULE}.com">
         )
     else()
         add_executable("${PROGRAM_PREFIX}${MODULE}"
@@ -244,14 +243,21 @@ endforeach()
 list(REMOVE_ITEM COMPILE_MODULES "strife") # strife is not production ready
 
 foreach(MODULE ${COMPILE_MODULES})
-    set(INSTALL_TARGETS "${PROGRAM_PREFIX}${MODULE}")
+    set(_permissions PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE)
     if(WIN32)
-        list(APPEND INSTALL_TARGETS "${PROGRAM_PREFIX}${MODULE}-exe" "${PROGRAM_PREFIX}${MODULE}-com")
-    endif()
-    install(TARGETS ${INSTALL_TARGETS} RUNTIME
+        install(FILES
+            "$<TARGET_FILE_DIR:${PROGRAM_PREFIX}${MODULE}-exe>/${PROGRAM_PREFIX}${MODULE}.exe"
+            "$<TARGET_FILE_DIR:${PROGRAM_PREFIX}${MODULE}-com>/${PROGRAM_PREFIX}${MODULE}.com"
             DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${BUILD_PORTABLE}>>,.,${CMAKE_INSTALL_BINDIR}>
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
             COMPONENT "${MODULE}"
+        )
+        unset(_permissions)
+    endif()
+    install(TARGETS "${PROGRAM_PREFIX}${MODULE}" RUNTIME
+        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${BUILD_PORTABLE}>>,.,${CMAKE_INSTALL_BINDIR}>
+        COMPONENT "${MODULE}"
+        ${_permissions}
     )
 endforeach()
 
