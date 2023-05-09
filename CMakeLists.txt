@@ -74,6 +74,12 @@ if(NOT ARCH)
     endif()
 endif()
 
+# Enable by default for MinGW (MSYS) environments
+# Disabled for vcpkg, because it copies and installs DLLs for dependencies by itself
+cmake_dependent_option(ID_USE_SELECTED_DLL_SET
+    "Use 'Selected DLL set' instead of DLLs provided by build environment" "${MINGW}" "NOT VCPKG_TOOLCHAIN" OFF
+)
+
 # Any settings that should apply to all targets in this directory and all subdirectories should go here
 set(RD_C_STANDARD 99)
 
