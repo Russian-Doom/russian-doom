@@ -1,16 +1,14 @@
 if(WIN32)
-    if(VCPKG_TOOLCHAIN)
-        # vcpkg copies and installs DLLs for dependencies by itself
+    if(NOT ID_USE_SELECTED_DLL_SET)
         return()
     endif()
-
-    if("${ARCH}" MATCHES "x64")
-        add_subdirectory(x64)
-    elseif("${ARCH}" MATCHES "x86")
-        add_subdirectory(x86)
+    if(NOT ARCH)
+        message(WARNING "Can't use 'Selected DLL set' because target arhitecture is unknown")
+        return()
     else()
-        return() # Unknown arch
+        message("-- Using 'Selected DLL set' for ${ARCH}")
     endif()
+    add_subdirectory("${ARCH}")
 
     add_dependencies(shared_libs win-libs)
     install(FILES $<GENEX_EVAL:$<TARGET_PROPERTY:win-libs,OUT_FILES>>

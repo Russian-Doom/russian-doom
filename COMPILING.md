@@ -176,6 +176,10 @@ set the `CMAKE_FIND_PACKAGE_PREFER_CONFIG` cmake option to `ON`.
 International Doom uses Link Time Optimization if it is available in the compiler.
 If it causes problems with your compiler, set `ENABLE_LTO` cmake option to `OFF`.
 
+If you are using MSYS2 (or any other MinGW environment), by default DLLs from 'Selected DLL set'
+will be used instead of DLLs provided by MSYS2 environment.
+To disable 'Selected DLL set', set the `ID_USE_SELECTED_DLL_SET` cmake option to `OFF`.
+
 To build the project, use the following command:
 ```shell
 cmake --build build
