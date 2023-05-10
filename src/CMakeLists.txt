@@ -239,6 +239,13 @@ foreach(MODULE ${COMPILE_MODULES})
     )
 endforeach()
 
+# Applocal optional dlls
+if(NOT ID_USE_SELECTED_DLL_SET)
+    get_target_property(_opt_dll SDL2_mixer::SDL2_mixer OPTIONAL_DLLS)
+    copy_files(SOURCE ${_opt_dll} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+    unset(_opt_dll)
+endif()
+
 # Install rules
 list(REMOVE_ITEM COMPILE_MODULES "strife") # strife is not production ready
 
@@ -248,6 +255,7 @@ foreach(MODULE ${COMPILE_MODULES})
         install(FILES
             "$<TARGET_FILE_DIR:${PROGRAM_PREFIX}${MODULE}-exe>/${PROGRAM_PREFIX}${MODULE}.exe"
             "$<TARGET_FILE_DIR:${PROGRAM_PREFIX}${MODULE}-com>/${PROGRAM_PREFIX}${MODULE}.com"
+            $<$<NOT:$<BOOL:${ID_USE_SELECTED_DLL_SET}>>:$<TARGET_PROPERTY:SDL2_mixer::SDL2_mixer,OPTIONAL_DLLS>>
             DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${BUILD_PORTABLE}>>,.,${CMAKE_INSTALL_BINDIR}>
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
             COMPONENT "${MODULE}"

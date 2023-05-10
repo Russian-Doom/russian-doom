@@ -36,13 +36,14 @@ set(SDL2_NET_DIR "${SDL2_NET_DIR}" CACHE PATH "Location of SDL2_net library dire
 
 # Use pkg-config to find library locations in *NIX environments.
 find_package(PkgConfig QUIET)
-if(PKG_CONFIG_FOUND)
+if(PkgConfig_FOUND)
     pkg_search_module(PC_SDL2_NET QUIET SDL2_net)
 endif()
 
 # Find the include directory.
 find_path(SDL2_NET_INCLUDE_DIR "SDL_net.h"
-    HINTS "${SDL2_NET_DIR}/include" ${PC_SDL2_NET_INCLUDE_DIRS})
+    PATH_SUFFIXES "include/SDL2" include
+    HINTS "${SDL2_NET_DIR}" ${PC_SDL2_NET_INCLUDE_DIRS})
 
 # Find the version.  Taken and modified from CMake's FindSDL.cmake.
 if(SDL2_NET_INCLUDE_DIR AND EXISTS "${SDL2_NET_INCLUDE_DIR}/SDL_net.h")
@@ -61,28 +62,228 @@ if(SDL2_NET_INCLUDE_DIR AND EXISTS "${SDL2_NET_INCLUDE_DIR}/SDL_net.h")
     unset(SDL2_NET_VERSION_PATCH)
 endif()
 
-# Find the library.
-if(CMAKE_SIZEOF_VOID_P STREQUAL 8)
-    find_library(SDL2_NET_LIBRARY "SDL2_net"
-        HINTS "${SDL2_NET_DIR}/lib/x64" ${PC_SDL2_NET_LIBRARY_DIRS})
+if(${CMAKE_SIZEOF_VOID_P} STREQUAL 8)
+    set(_arch_suffix x64)
 else()
-    find_library(SDL2_NET_LIBRARY "SDL2_net"
-        HINTS "${SDL2_NET_DIR}/lib/x86" ${PC_SDL2_NET_LIBRARY_DIRS})
+    set(_arch_suffix x86)
+endif()
+
+# Find DLLs
+find_file(SDL2_NET_DLL_RELEASE
+    NAMES SDL2_net.dll
+    PATH_SUFFIXES "lib/${_arch_suffix}" bin
+    HINTS ${SDL2_NET_DIR} "${PC_SDL2_NET_PREFIX}"
+    )
+find_file(SDL2_NET_DLL_DEBUG
+    NAMES SDL2_netd.dll
+    PATH_SUFFIXES "lib/${_arch_suffix}" "debug/bin" bin
+    HINTS ${SDL2_NET_DIR} "${PC_SDL2_NET_PREFIX}"
+    )
+
+include(SelectDllConfigurations)
+select_dll_configurations(SDL2_NET)
+
+if(SDL2_NET_DLL)
+    set(_sdl2_net_shared_release_names "SDL2_net.lib" "libSDL2_net.dll.a")
+    set(_sdl2_net_static_release_names "SDL2_net-static.lib")
+    set(_sdl2_net_shared_debug_names "SDL2_netd.lib")
+    set(_sdl2_net_static_debug_names "SDL2_net-staticd.lib")
+else()
+    set(_sdl2_net_shared_release_names "")
+    set(_sdl2_net_static_release_names "SDL2_net.lib" "SDL2_net-static.lib")
+    set(_sdl2_net_shared_debug_names "")
+    set(_sdl2_net_static_debug_names "SDL2_netd.lib" "SDL2_net-staticd.lib")
+endif()
+
+set(_saved_suffixes ${CMAKE_FIND_LIBRARY_SUFFIXES})
+# Find the SDL2_net dynamic libraries
+set(CMAKE_FIND_LIBRARY_SUFFIXES "" ".so" ".dylib" ".dll.a")
+find_library(SDL2_NET_LIBRARY_RELEASE
+    NAMES ${_sdl2_net_shared_release_names} SDL2_net
+    PATH_SUFFIXES "lib/${_arch_suffix}" lib
+    HINTS ${SDL2_NET_DIR} "${PC_SDL2_NET_LIBDIR}"
+)
+find_library(SDL2_NET_LIBRARY_DEBUG
+    NAMES ${_sdl2_net_shared_debug_names} SDL2_netd
+    PATH_SUFFIXES "lib/${_arch_suffix}" "debug/lib" lib
+    HINTS ${SDL2_NET_DIR} "${PC_SDL2_NET_LIBDIR}"
+)
+
+# Find the SDL2_net static libraries
+set(CMAKE_FIND_LIBRARY_SUFFIXES "" ".a")
+find_library(SDL2_NET_STATIC_LIBRARY_RELEASE
+    NAMES ${_sdl2_net_static_release_names} SDL2_net
+    PATH_SUFFIXES "lib/${_arch_suffix}" lib
+    HINTS ${SDL2_NET_DIR} "${PC_SDL2_NET_LIBDIR}"
+)
+find_library(SDL2_NET_STATIC_LIBRARY_DEBUG
+    NAMES ${_sdl2_net_static_debug_names} SDL2_netd
+    PATH_SUFFIXES "lib/${_arch_suffix}" "debug/lib" lib
+    HINTS ${SDL2_NET_DIR} "${PC_SDL2_NET_LIBDIR}"
+)
+set(CMAKE_FIND_LIBRARY_SUFFIXES ${_saved_suffixes})
+
+unset(_saved_suffixes)
+unset(_arch_suffix)
+
+# Select libraries
+include(SelectLibraryConfigurations)
+select_library_configurations(SDL2_NET)
+select_library_configurations(SDL2_NET_STATIC)
+
+get_flags_from_pkg_config("SHARED" "PC_SDL2_NET" "_sdl2_net")
+get_flags_from_pkg_config("STATIC" "PC_SDL2_NET" "_sdl2_net_static")
+
+# Link flags for SDL2_net static library if PkgConfig not found
+if(SDL2_NET_STATIC_LIBRARY AND NOT PC_SDL2_NET_FOUND)
+    if(NOT SDL2_NET_LIBRARY)
+        set(SDL2_NET_STATIC_LINK_LIBRARIES "" CACHE STRING "Additional libraries to link to SDL2_net-static.")
+        set(SDL2_NET_STATIC_LINK_DIRECTORIES "" CACHE PATH "Additional directories to search libraries in for SDL2_net-static.")
+        set(_sdl2_net_static_link_libraries ${SDL2_NET_STATIC_LINK_LIBRARIES})
+        set(_sdl2_net_static_link_directories ${SDL2_NET_STATIC_LINK_DIRECTORIES})
+        if(NOT _sdl2_net_static_link_libraries)
+            message(WARNING
+                "pkg-config is unavailable and only a static version of SDL2_net was found.\n"
+                "Link failures are to be expected.\n"
+                "Set `SDL2_NET_STATIC_LINK_LIBRARIES` to a list of libraries SDL2_net depends on.\n"
+                "Set `SDL2_NET_STATIC_LINK_DIRECTORIES` to a list of directories to search for libraries in."
+            )
+        endif()
+    endif()
+endif()
+
+if(SDL2_NET_LIBRARY)
+    set(_SDL2_NET_LIBRARY "${SDL2_NET_LIBRARY}")
+else()
+    set(_SDL2_NET_LIBRARY "${SDL2_NET_STATIC_LIBRARY}")
 endif()
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(SDL2_net
     FOUND_VAR SDL2_NET_FOUND
-    REQUIRED_VARS SDL2_NET_INCLUDE_DIR SDL2_NET_LIBRARY
+    REQUIRED_VARS SDL2_NET_INCLUDE_DIR _SDL2_NET_LIBRARY
     VERSION_VAR SDL2_NET_VERSION
 )
+unset(_SDL2_NET_LIBRARY)
 
-if(SDL2_NET_FOUND)
-    # Imported target.
-    add_library(SDL2_net::SDL2_net UNKNOWN IMPORTED)
-    set_target_properties(SDL2_net::SDL2_net PROPERTIES
-                          INTERFACE_COMPILE_OPTIONS "${PC_SDL2_NET_CFLAGS_OTHER}"
-                          INTERFACE_INCLUDE_DIRECTORIES "${SDL2_NET_INCLUDE_DIR}"
-                          INTERFACE_LINK_LIBRARIES SDL2::SDL2
-                          IMPORTED_LOCATION "${SDL2_NET_LIBRARY}")
+# Cleanup macro
+macro(_cleanup)
+    unset(_sdl2_net_shared_release_names)
+    unset(_sdl2_net_static_release_names)
+    unset(_sdl2_net_shared_debug_names)
+    unset(_sdl2_net_static_debug_names)
+    unset(_sdl2_net_compile_options)
+    unset(_sdl2_net_link_libraries)
+    unset(_sdl2_net_link_directories)
+    unset(_sdl2_net_link_options)
+    unset(_sdl2_net_static_compile_options)
+    unset(_sdl2_net_static_link_libraries)
+    unset(_sdl2_net_static_link_directories)
+    unset(_sdl2_net_static_link_options)
+    mark_as_advanced(FORCE
+        SDL2_NET_INCLUDE_DIR
+        SDL2_NET_DLL_RELEASE
+        SDL2_NET_DLL_DEBUG
+        SDL2_NET_LIBRARY_RELEASE
+        SDL2_NET_LIBRARY_DEBUG
+        SDL2_NET_STATIC_LIBRARY_RELEASE
+        SDL2_NET_STATIC_LIBRARY_DEBUG
+        )
+endmacro()
+
+if(NOT SDL2_NET_FOUND)
+    _cleanup()
+    return()
 endif()
+
+# SDL2_net imported target
+if(SDL2_NET_LIBRARY)
+    add_library(SDL2_net::SDL2_net SHARED IMPORTED)
+    set_target_properties(SDL2_net::SDL2_net PROPERTIES
+        INTERFACE_INCLUDE_DIRECTORIES "${SDL2_NET_INCLUDE_DIR}"
+        INTERFACE_COMPILE_OPTIONS "${_sdl2_net_compile_options}"
+        INTERFACE_LINK_LIBRARIES "${_sdl2_net_link_libraries}"
+        INTERFACE_LINK_DIRECTORIES "${_sdl2_net_link_directories}"
+        INTERFACE_LINK_OPTIONS "${_sdl2_net_link_options}"
+    )
+    if(SDL2_NET_DLL)
+        set_target_properties(SDL2_net::SDL2_net PROPERTIES
+            IMPORTED_LOCATION "${SDL2_NET_DLL}"
+            IMPORTED_IMPLIB "${SDL2_NET_LIBRARY}"
+        )
+    else()
+        set_target_properties(SDL2_net::SDL2_net PROPERTIES
+            IMPORTED_LOCATION "${SDL2_NET_LIBRARY}"
+        )
+    endif()
+    if(SDL2_NET_LIBRARY_RELEASE)
+        set_property(TARGET SDL2_net::SDL2_net APPEND PROPERTY
+            IMPORTED_CONFIGURATIONS RELEASE
+        )
+        set_target_properties(SDL2_net::SDL2_net PROPERTIES
+            MAP_IMPORTED_CONFIG_MINSIZEREL RELEASE
+            MAP_IMPORTED_CONFIG_RELWITHDEBINFO RELEASE
+        )
+        if(SDL2_NET_DLL_RELEASE)
+            set_target_properties(SDL2_net::SDL2_net PROPERTIES
+                IMPORTED_LOCATION_RELEASE "${SDL2_NET_DLL_RELEASE}"
+                IMPORTED_IMPLIB_RELEASE "${SDL2_NET_LIBRARY_RELEASE}"
+            )
+        else()
+            set_target_properties(SDL2_net::SDL2_net PROPERTIES
+                IMPORTED_LOCATION_RELEASE "${SDL2_NET_LIBRARY_RELEASE}"
+            )
+        endif()
+    endif()
+    if(SDL2_NET_LIBRARY_DEBUG)
+        set_property(TARGET SDL2_net::SDL2_net APPEND PROPERTY
+            IMPORTED_CONFIGURATIONS DEBUG
+        )
+        if(SDL2_NET_DLL_DEBUG)
+            set_target_properties(SDL2_net::SDL2_net PROPERTIES
+                IMPORTED_LOCATION_DEBUG "${SDL2_NET_DLL_DEBUG}"
+                IMPORTED_IMPLIB_DEBUG "${SDL2_NET_LIBRARY_DEBUG}"
+            )
+        else()
+            set_target_properties(SDL2_net::SDL2_net PROPERTIES
+                IMPORTED_LOCATION_DEBUG "${SDL2_NET_LIBRARY_DEBUG}"
+            )
+        endif()
+    endif()
+endif()
+
+# SDL2_net-static imported target
+if(SDL2_NET_STATIC_LIBRARY)
+    add_library(SDL2_net::SDL2_net-static STATIC IMPORTED)
+    set_target_properties(SDL2_net::SDL2_net-static PROPERTIES
+        IMPORTED_LOCATION "${SDL2_NET_STATIC_LIBRARY}"
+        INTERFACE_INCLUDE_DIRECTORIES "${SDL2_NET_INCLUDE_DIR}"
+        INTERFACE_COMPILE_OPTIONS "${_sdl2_net_static_compile_options}"
+        INTERFACE_LINK_LIBRARIES "${_sdl2_net_static_link_libraries}"
+        INTERFACE_LINK_DIRECTORIES "${_sdl2_net_static_link_directories}"
+        INTERFACE_LINK_OPTIONS "${_sdl2_net_static_link_options}"
+    )
+    if(SDL2_NET_STATIC_LIBRARY_RELEASE)
+        set_property(TARGET SDL2_net::SDL2_net-static APPEND PROPERTY
+            IMPORTED_CONFIGURATIONS RELEASE
+        )
+        set_target_properties(SDL2_net::SDL2_net-static PROPERTIES
+            IMPORTED_LOCATION_RELEASE "${SDL2_NET_STATIC_LIBRARY_RELEASE}"
+            MAP_IMPORTED_CONFIG_MINSIZEREL RELEASE
+            MAP_IMPORTED_CONFIG_RELWITHDEBINFO RELEASE
+        )
+    endif()
+    if(SDL2_NET_STATIC_LIBRARY_DEBUG)
+        set_property(TARGET SDL2_net::SDL2_net-static APPEND PROPERTY
+            IMPORTED_CONFIGURATIONS DEBUG
+        )
+        set_target_properties(SDL2_net::SDL2_net-static PROPERTIES
+            IMPORTED_LOCATION_DEBUG "${SDL2_NET_STATIC_LIBRARY_DEBUG}"
+        )
+    endif()
+    if(NOT TARGET SDL2_net::SDL2_net)
+        add_library(SDL2_net::SDL2_net ALIAS SDL2_net::SDL2_net-static)
+    endif()
+endif()
+
+_cleanup()

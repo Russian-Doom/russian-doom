@@ -32,13 +32,15 @@ set(MINIZ_DIR "${MINIZ_DIR}" CACHE PATH "Location of Miniz library directory")
 
 # Use pkg-config to find library locations in *NIX environments
 find_package(PkgConfig QUIET)
-if(PKG_CONFIG_FOUND)
+if(PkgConfig_FOUND)
     pkg_search_module(PC_MINIZ QUIET miniz)
 endif()
 
 # Find the include directory
 find_path(MINIZ_INCLUDE_DIR "miniz.h"
-    HINTS ${PC_MINIZ_INCLUDE_DIRS} "${MINIZ_DIR}" "${MINIZ_DIR}/include" "${MINIZ_DIR}/include/miniz")
+    PATH_SUFFIXES "include/miniz" include
+    HINTS "${MINIZ_DIR}" ${PC_MINIZ_INCLUDE_DIRS}
+)
 
 # Find the version
 if(MINIZ_INCLUDE_DIR AND EXISTS "${MINIZ_INCLUDE_DIR}/miniz.h")
@@ -57,65 +59,258 @@ if(MINIZ_INCLUDE_DIR AND EXISTS "${MINIZ_INCLUDE_DIR}/miniz.h")
     unset(MINIZ_VERSION_PATCH)
 endif()
 
-# Find library
-if(CMAKE_SIZEOF_VOID_P STREQUAL 8)
-    find_library(MINIZ_LIBRARY "miniz"
-        HINTS ${PC_MINIZ_LIBRARY_DIRS} "${MINIZ_DIR}/lib/x64" "${MINIZ_DIR}/lib")
+# Find DLLs
+find_file(MINIZ_DLL_RELEASE
+    NAMES miniz.dll
+    PATH_SUFFIXES bin
+    HINTS ${MINIZ_DIR} "${PC_MINIZ_PREFIX}"
+)
+find_file(MINIZ_DLL_DEBUG
+    NAMES miniz.dll
+    PATH_SUFFIXES "debug/bin" bin
+    HINTS ${MINIZ_DIR} "${PC_MINIZ_PREFIX}"
+)
+
+include(SelectDllConfigurations)
+select_dll_configurations(MINIZ)
+
+if(MINIZ_DLL)
+    set(_miniz_shared_release_names "miniz.lib" "libminiz.dll.a")
+    set(_miniz_static_release_names "miniz-static.lib")
+    set(_miniz_shared_debug_names "miniz.lib")
+    set(_miniz_static_debug_names "miniz-static.lib")
 else()
-    find_library(MINIZ_LIBRARY "miniz"
-        HINTS ${PC_MINIZ_LIBRARY_DIRS} "${MINIZ_DIR}/lib/x86" "${MINIZ_DIR}/lib")
+    set(_miniz_shared_release_names "")
+    set(_miniz_static_release_names "miniz.lib" "miniz-static.lib")
+    set(_miniz_shared_debug_names "")
+    set(_miniz_static_debug_names "miniz.lib" "miniz-static.lib")
 endif()
 
-include(FindPackageHandleStandardArgs)
-
-if(EXISTS "${MINIZ_LIBRARY}")
-    # Have library
-    find_package_handle_standard_args(miniz
-        FOUND_VAR MINIZ_FOUND
-        REQUIRED_VARS MINIZ_INCLUDE_DIR MINIZ_LIBRARY
-        VERSION_VAR MINIZ_VERSION
+set(_saved_suffixes ${CMAKE_FIND_LIBRARY_SUFFIXES})
+# Find the samplerate dynamic libraries
+set(CMAKE_FIND_LIBRARY_SUFFIXES "" ".so" ".dylib" ".dll.a")
+find_library(MINIZ_LIBRARY_RELEASE
+    NAMES ${_miniz_shared_release_names} miniz
+    PATH_SUFFIXES lib
+    HINTS ${MINIZ_DIR} "${PC_MINIZ_LIBRARY_DIRS}"
     )
-else()
-    # No library. May be amalgamated sources? Find .h and .c files
-    find_file(MINIZ_C_FILE "miniz.c"
-        HINTS "${MINIZ_DIR}")
-    find_file(MINIZ_H_FILE "miniz.h"
-        HINTS "${MINIZ_DIR}")
-    find_package_handle_standard_args(miniz
-        FOUND_VAR MINIZ_FOUND
-        REQUIRED_VARS MINIZ_INCLUDE_DIR MINIZ_C_FILE MINIZ_H_FILE
-        VERSION_VAR MINIZ_VERSION
+find_library(MINIZ_LIBRARY_DEBUG
+    NAMES ${_miniz_shared_debug_names} miniz
+    PATH_SUFFIXES "debug/lib" lib
+    HINTS ${MINIZ_DIR} "${PC_MINIZ_LIBRARY_DIRS}"
     )
-endif()
 
-if(MINIZ_FOUND)
-    if(EXISTS "${MINIZ_LIBRARY}")
-        # Use imported library
-        add_library(miniz::miniz UNKNOWN IMPORTED)
-        set_target_properties(miniz::miniz PROPERTIES
-            INTERFACE_COMPILE_OPTIONS "${PC_MINIZ_CFLAGS_OTHER}"
-            INTERFACE_INCLUDE_DIRECTORIES "${MINIZ_INCLUDE_DIR}"
-            INTERFACE_miniz_MAJOR_VERSION "${MINIZ_VERSION_MAJOR}"
-            COMPATIBLE_INTERFACE_STRING "miniz_MAJOR_VERSION"
-            IMPORTED_LOCATION "${MINIZ_LIBRARY}"
-        )
-    else()
-        # Have only amalgamated sources, so build static library from them
-        add_library(miniz STATIC EXCLUDE_FROM_ALL
-            ${MINIZ_C_FILE}     ${MINIZ_H_FILE}
-        )
-        target_compile_definitions(miniz
-            PRIVATE $<$<C_COMPILER_ID:GNU>:_GNU_SOURCE>)
-        set_target_properties(miniz PROPERTIES
-            INTERFACE_COMPILE_OPTIONS "${PC_MINIZ_CFLAGS_OTHER}"
-            INTERFACE_INCLUDE_DIRECTORIES "${MINIZ_INCLUDE_DIR}"
-            INTERFACE_miniz_MAJOR_VERSION "${MINIZ_VERSION_MAJOR}"
-            COMPATIBLE_INTERFACE_STRING "miniz_MAJOR_VERSION"
-            C_STANDARD 90
-            C_STANDARD_REQUIRED ON
-        )
-        add_library(miniz::miniz ALIAS miniz)
+# Find the samplerate static libraries
+set(CMAKE_FIND_LIBRARY_SUFFIXES "" ".a")
+find_library(MINIZ_STATIC_LIBRARY_RELEASE
+    NAMES ${_miniz_static_release_names} miniz
+    PATH_SUFFIXES lib
+    HINTS ${MINIZ_DIR} "${PC_MINIZ_LIBRARY_DIRS}"
+    )
+find_library(MINIZ_STATIC_LIBRARY_DEBUG
+    NAMES ${_miniz_static_debug_names} miniz
+    PATH_SUFFIXES "debug/lib" lib
+    HINTS ${MINIZ_DIR} "${PC_MINIZ_LIBRARY_DIRS}"
+    )
+set(CMAKE_FIND_LIBRARY_SUFFIXES ${_saved_suffixes})
+
+unset(_saved_suffixes)
+
+# Select libraries
+include(SelectLibraryConfigurations)
+select_library_configurations(MINIZ)
+select_library_configurations(MINIZ_STATIC)
+
+get_flags_from_pkg_config("SHARED" "PC_MINIZ" "_miniz")
+get_flags_from_pkg_config("STATIC" "PC_MINIZ" "_miniz_static")
+
+# Link flags for samplerate static library if PkgConfig not found
+if(MINIZ_STATIC_LIBRARY AND NOT PC_MINIZ_FOUND)
+    if(NOT MINIZ_LIBRARY)
+        set(MINIZ_STATIC_LINK_LIBRARIES "" CACHE STRING "Additional libraries to link to miniz-static.")
+        set(MINIZ_STATIC_LINK_DIRECTORIES "" CACHE PATH "Additional directories to search libraries in for miniz-static.")
+        set(_miniz_static_link_libraries ${MINIZ_STATIC_LINK_LIBRARIES})
+        set(_miniz_static_link_directories ${MINIZ_STATIC_LINK_DIRECTORIES})
+        if(NOT _miniz_static_link_libraries)
+            message(WARNING
+                "pkg-config is unavailable and only a static version of miniz was found.\n"
+                "Link failures are to be expected.\n"
+                "Set `MINIZ_STATIC_LINK_LIBRARIES` to a list of libraries miniz depends on.\n"
+                "Set `MINIZ_STATIC_LINK_DIRECTORIES` to a list of directories to search for libraries in."
+            )
+        endif()
     endif()
 endif()
 
-unset(MINIZ_VERSION_MAJOR)
+if(MINIZ_LIBRARY)
+    set(_MINIZ_LIBRARY "${MINIZ_LIBRARY}")
+else()
+    set(_MINIZ_LIBRARY "${MINIZ_STATIC_LIBRARY}")
+endif()
+
+# No libraries, may be amalgamated sources? Find .c file
+if(NOT _MINIZ_LIBRARY)
+    find_file(MINIZ_C_FILE "miniz.c"
+        HINTS "${MINIZ_DIR}"
+    )
+    set(_MINIZ_LIBRARY "${MINIZ_C_FILE}")
+endif()
+
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(miniz
+    FOUND_VAR MINIZ_FOUND
+    REQUIRED_VARS MINIZ_INCLUDE_DIR _MINIZ_LIBRARY
+    VERSION_VAR MINIZ_VERSION
+)
+unset(_MINIZ_LIBRARY)
+
+# Cleanup macro
+macro(_cleanup)
+    unset(MINIZ_VERSION_MAJOR)
+    unset(_miniz_shared_release_names)
+    unset(_miniz_static_release_names)
+    unset(_miniz_shared_debug_names)
+    unset(_miniz_static_debug_names)
+    unset(_miniz_compile_options)
+    unset(_miniz_link_libraries)
+    unset(_miniz_link_directories)
+    unset(_miniz_link_options)
+    unset(_miniz_static_compile_options)
+    unset(_miniz_static_link_libraries)
+    unset(_miniz_static_link_directories)
+    unset(_miniz_static_link_options)
+    mark_as_advanced(FORCE
+        MINIZ_INCLUDE_DIR
+        MINIZ_DLL_RELEASE
+        MINIZ_DLL_DEBUG
+        MINIZ_LIBRARY_RELEASE
+        MINIZ_LIBRARY_DEBUG
+        MINIZ_STATIC_LIBRARY_RELEASE
+        MINIZ_STATIC_LIBRARY_DEBUG
+        MINIZ_C_FILE
+        )
+endmacro()
+
+if(NOT MINIZ_FOUND)
+    _cleanup()
+    return()
+endif()
+
+# miniz imported target
+if(MINIZ_LIBRARY)
+    add_library(miniz::miniz SHARED IMPORTED)
+    set_target_properties(miniz::miniz PROPERTIES
+        INTERFACE_INCLUDE_DIRECTORIES "${MINIZ_INCLUDE_DIR}"
+        INTERFACE_COMPILE_OPTIONS "${PC_MINIZ_CFLAGS_OTHER}"
+        INTERFACE_COMPILE_OPTIONS "${_miniz_compile_options}"
+        INTERFACE_LINK_LIBRARIES "${_miniz_link_libraries}"
+        INTERFACE_LINK_DIRECTORIES "${_miniz_link_directories}"
+        INTERFACE_LINK_OPTIONS "${_miniz_link_options}"
+        INTERFACE_miniz_MAJOR_VERSION "${MINIZ_VERSION_MAJOR}"
+        COMPATIBLE_INTERFACE_STRING "miniz_MAJOR_VERSION"
+    )
+    if(MINIZ_DLL)
+        set_target_properties(miniz::miniz PROPERTIES
+            IMPORTED_LOCATION "${MINIZ_DLL}"
+            IMPORTED_IMPLIB "${MINIZ_LIBRARY}"
+        )
+    else()
+        set_target_properties(miniz::miniz PROPERTIES
+            IMPORTED_LOCATION "${MINIZ_LIBRARY}"
+        )
+    endif()
+    if(MINIZ_LIBRARY_RELEASE)
+        set_property(TARGET miniz::miniz APPEND PROPERTY
+            IMPORTED_CONFIGURATIONS RELEASE
+        )
+        set_target_properties(miniz::miniz PROPERTIES
+            MAP_IMPORTED_CONFIG_MINSIZEREL RELEASE
+            MAP_IMPORTED_CONFIG_RELWITHDEBINFO RELEASE
+        )
+        if(MINIZ_DLL_RELEASE)
+            set_target_properties(miniz::miniz PROPERTIES
+                IMPORTED_LOCATION_RELEASE "${MINIZ_DLL_RELEASE}"
+                IMPORTED_IMPLIB_RELEASE "${MINIZ_LIBRARY_RELEASE}"
+            )
+        else()
+            set_target_properties(miniz::miniz PROPERTIES
+                IMPORTED_LOCATION_RELEASE "${MINIZ_LIBRARY_RELEASE}"
+            )
+        endif()
+    endif()
+    if(MINIZ_LIBRARY_DEBUG)
+        set_property(TARGET miniz::miniz APPEND PROPERTY
+            IMPORTED_CONFIGURATIONS DEBUG
+        )
+        if(MINIZ_DLL_DEBUG)
+            set_target_properties(miniz::miniz PROPERTIES
+                IMPORTED_LOCATION_DEBUG "${MINIZ_DLL_DEBUG}"
+                IMPORTED_IMPLIB_DEBUG "${MINIZ_LIBRARY_DEBUG}"
+            )
+        else()
+            set_target_properties(miniz::miniz PROPERTIES
+                IMPORTED_LOCATION_DEBUG "${MINIZ_LIBRARY_DEBUG}"
+            )
+        endif()
+    endif()
+endif()
+
+# miniz-static imported target
+if(MINIZ_STATIC_LIBRARY)
+    add_library(miniz::miniz-static STATIC IMPORTED)
+    set_target_properties(miniz::miniz-static PROPERTIES
+        IMPORTED_LOCATION "${MINIZ_STATIC_LIBRARY}"
+        INTERFACE_INCLUDE_DIRECTORIES "${SAMPLERATE_INCLUDE_DIR}"
+        INTERFACE_COMPILE_OPTIONS "${_miniz_static_compile_options}"
+        INTERFACE_LINK_LIBRARIES "${_miniz_static_link_libraries}"
+        INTERFACE_LINK_DIRECTORIES "${_miniz_static_link_directories}"
+        INTERFACE_LINK_OPTIONS "${_miniz_static_link_options}"
+        INTERFACE_miniz_MAJOR_VERSION "${MINIZ_VERSION_MAJOR}"
+        COMPATIBLE_INTERFACE_STRING "miniz_MAJOR_VERSION"
+    )
+    if(MINIZ_STATIC_LIBRARY_RELEASE)
+        set_property(TARGET miniz::miniz-static APPEND PROPERTY
+            IMPORTED_CONFIGURATIONS RELEASE
+        )
+        set_target_properties(miniz::miniz-static PROPERTIES
+            IMPORTED_LOCATION_RELEASE "${MINIZ_STATIC_LIBRARY_RELEASE}"
+            MAP_IMPORTED_CONFIG_MINSIZEREL RELEASE
+            MAP_IMPORTED_CONFIG_RELWITHDEBINFO RELEASE
+        )
+    endif()
+    if(MINIZ_STATIC_LIBRARY_DEBUG)
+        set_property(TARGET miniz::miniz-static APPEND PROPERTY
+            IMPORTED_CONFIGURATIONS DEBUG
+        )
+        set_target_properties(miniz::miniz-static PROPERTIES
+            IMPORTED_LOCATION_DEBUG "${MINIZ_STATIC_LIBRARY_DEBUG}"
+        )
+    endif()
+    if(NOT TARGET miniz::miniz)
+        add_library(miniz::miniz ALIAS miniz::miniz-static)
+    endif()
+endif()
+
+# Have only amalgamated sources, so build static library from them
+if(MINIZ_C_FILE) # Implicit "AND NOT MINIZ_LIBRARY AND NOT MINIZ_STATIC_LIBRARY"
+    add_library(miniz STATIC EXCLUDE_FROM_ALL
+        ${MINIZ_C_FILE}     "${MINIZ_INCLUDE_DIR}/miniz.h"
+    )
+    target_compile_definitions(miniz
+        PRIVATE $<$<C_COMPILER_ID:GNU>:_GNU_SOURCE>
+    )
+    set_target_properties(miniz PROPERTIES
+        INTERFACE_INCLUDE_DIRECTORIES "${MINIZ_INCLUDE_DIR}"
+        INTERFACE_COMPILE_OPTIONS "${_miniz_static_compile_options}"
+        INTERFACE_LINK_LIBRARIES "${_miniz_static_link_libraries}"
+        INTERFACE_LINK_DIRECTORIES "${_miniz_static_link_directories}"
+        INTERFACE_LINK_OPTIONS "${_miniz_static_link_options}"
+        INTERFACE_miniz_MAJOR_VERSION "${MINIZ_VERSION_MAJOR}"
+        COMPATIBLE_INTERFACE_STRING "miniz_MAJOR_VERSION"
+        C_STANDARD 90
+        C_STANDARD_REQUIRED ON
+    )
+    add_library(miniz::miniz ALIAS miniz)
+endif()
+
+_cleanup()
