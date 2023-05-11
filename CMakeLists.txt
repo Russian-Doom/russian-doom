@@ -166,6 +166,13 @@ if(NOT miniz_FOUND)
     add_subdirectory("lib/thirdparty/miniz")
 endif()
 
+# Construct path where to search
+if(WIN32 AND Python3_Interpreter_FOUND
+AND NOT VCPKG_TOOLCHAIN
+AND NOT ID_USE_SELECTED_DLL_SET)
+    applocal_search_path(APPLOCAL_SEARCH_PATH TARGETS "SDL2::SDL2" "SDL2_mixer::SDL2_mixer" "SDL2_net::SDL2_net" "SampleRate::samplerate" "miniz::miniz")
+endif()
+
 include(CheckSymbolExists)
 include(CheckIncludeFile)
 check_symbol_exists(strcasecmp "strings.h" HAVE_DECL_STRCASECMP)

@@ -43,8 +43,12 @@ and for the **mingw-w64-x86_64** toolchain (**64**-bit), use the **MSYS MinGW 64
 Open the terminal and install dependencies using the following command:
 ```shell
 pacman -S mingw-w64-{i686,x86_64}-{pkgconf,gcc,make,cmake,SDL2{,_net,_mixer},libsamplerate} \
-       git
+       git,python
 ```
+
+If `python` version from MSYS2 is not working on your OS,
+you can install a working version of [Python](https://www.python.org/downloads/) to the host system.
+Python is completely optional if you will be using 'Selected DLL set'.
 
 If you want to use `Ninja` or `Ninja Multi-Config` cmake generators, you need
 to install `ninja` by the following command:
@@ -65,8 +69,12 @@ and for the **mingw-w64-clang-x86_64** toolchain (**64**-bit), use the **MSYS Mi
 Open the terminal and install dependencies using the following command:
 ```shell
 pacman -S mingw-w64-clang-{i686,x86_64}-{pkgconf,clang,make,cmake,SDL2{,_net,_mixer},libsamplerate} \
-       git
+       git,python
 ```
+
+If `python` version from MSYS2 is not working on your OS,
+you can install a working version of [Python](https://www.python.org/downloads/) to the host system.
+Python is completely optional if you will be using 'Selected DLL set'.
 
 If you want to use `Ninja` or `Ninja Multi-Config` cmake generators, you need
 to install `ninja` by the following command:
@@ -128,6 +136,9 @@ Then pass the following parameters to cmake during configuration time:
 
 Cmake option `CMAKE_FIND_PACKAGE_PREFER_CONFIG` should be `OFF` (default) in order for `*_DIR` variables to work.
 
+**You also need to install [Python](https://www.python.org/downloads/),
+in order for automatic installation of DLLs to work.**
+
 ### **1.B.B: Providing required dependencies using VCPKG**
 
 Install and bootstrap [vcpkg](https://github.com/microsoft/vcpkg#quick-start-windows).
@@ -177,8 +188,9 @@ International Doom uses Link Time Optimization if it is available in the compile
 If it causes problems with your compiler, set `ENABLE_LTO` cmake option to `OFF`.
 
 If you are using MSYS2 (or any other MinGW environment), by default DLLs from 'Selected DLL set'
-will be used instead of DLLs provided by MSYS2 environment.
-To disable 'Selected DLL set', set the `ID_USE_SELECTED_DLL_SET` cmake option to `OFF`.
+will be used instead of DLLs provided by the build environment.
+To use DLLs provided by the build environment, set the `ID_USE_SELECTED_DLL_SET` cmake option to `OFF`.
+You will need `python` to be installed.
 
 To build the project, use the following command:
 ```shell
