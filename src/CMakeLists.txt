@@ -223,6 +223,14 @@ foreach(MODULE ${COMPILE_MODULES})
         COMMAND $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:${CMAKE_STRIP}> $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:"$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}>">
     )
 
+    # Applocal dlls
+    if(WIN32 AND Python3_Interpreter_FOUND
+        AND NOT VCPKG_TOOLCHAIN
+        AND NOT ID_USE_SELECTED_DLL_SET)
+        applocal_dependencies("${PROGRAM_PREFIX}${MODULE}"
+            "$<IF:$<CONFIG:DEBUG>,${APPLOCAL_SEARCH_PATH_DEBUG},${APPLOCAL_SEARCH_PATH_RELEASE}>")
+    endif()
+
     # Tests
     set(test_cmd $<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}$<$<BOOL:${WIN32}>:-exe>> -timedemo demo1 -nogui -nosound)
     if(TEST_WITH_GDB)
@@ -267,6 +275,12 @@ foreach(MODULE ${COMPILE_MODULES})
         COMPONENT "${MODULE}"
         ${_permissions}
     )
+    if(WIN32 AND Python3_Interpreter_FOUND
+        AND NOT VCPKG_TOOLCHAIN
+        AND NOT ID_USE_SELECTED_DLL_SET)
+        applocal_install_dependencies("${PROGRAM_PREFIX}${MODULE}"
+            "$<IF:$<CONFIG:DEBUG>,${APPLOCAL_SEARCH_PATH_DEBUG},${APPLOCAL_SEARCH_PATH_RELEASE}>" "${MODULE}")
+    endif()
 endforeach()
 
 install(FILES "${PROJECT_SOURCE_DIR}/LICENSE.txt"

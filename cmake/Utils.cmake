@@ -156,3 +156,90 @@ function(get_flags_from_pkg_config _library_type _pc_prefix _out_prefix)
         "${${_library_dirs}}"
         PARENT_SCOPE)
 endfunction()
+
+if(WIN32 AND Python3_Interpreter_FOUND)
+    # applocal_search_path(<out_var_prefix> TARGETS <targets> ...)
+    function(applocal_search_path out_var_prefix)
+        cmake_parse_arguments(PARSE_ARGV 1 "ARG"
+            ""            # List of Options
+            ""            # List of Values
+            "TARGETS"     # List of Lists
+        )
+        get_filename_component(search_paths_release "${CMAKE_C_COMPILER}" DIRECTORY)
+        set(search_paths_debug ${search_paths_release})
+        foreach(target ${ARG_TARGETS})
+            if(TARGET ${target})
+                get_target_property(target_type ${target} TYPE)
+                if(target_type STREQUAL "SHARED_LIBRARY")
+                    get_target_property(target_configs ${target} IMPORTED_CONFIGURATIONS)
+                    # Release and Debug
+                    if(RELEASE IN_LIST target_configs AND DEBUG IN_LIST target_configs)
+                        get_target_property(dll_dir ${target} IMPORTED_LOCATION_RELEASE)
+                        get_filename_component(dll_dir "${dll_dir}" DIRECTORY)
+                        if(NOT dll_dir IN_LIST search_paths_release)
+                            list(PREPEND search_paths_release ${dll_dir})
+                        endif()
+                        get_target_property(dll_dir ${target} IMPORTED_LOCATION_DEBUG)
+                        get_filename_component(dll_dir "${dll_dir}" DIRECTORY)
+                        if(NOT dll_dir IN_LIST search_paths_debug)
+                            list(PREPEND search_paths_debug ${dll_dir})
+                        endif()
+                    # Release Only
+                    elseif(RELEASE IN_LIST target_configs)
+                        get_target_property(dll_dir ${target} IMPORTED_LOCATION_RELEASE)
+                        get_filename_component(dll_dir "${dll_dir}" DIRECTORY)
+                        if(NOT dll_dir IN_LIST search_paths_release)
+                            list(PREPEND search_paths_release ${dll_dir})
+                        endif()
+                        if(NOT dll_dir IN_LIST search_paths_debug)
+                            list(PREPEND search_paths_debug ${dll_dir})
+                        endif()
+                    # Debug Only
+                    elseif(DEBUG IN_LIST target_configs)
+                        get_target_property(dll_dir ${target} IMPORTED_LOCATION_DEBUG)
+                        get_filename_component(dll_dir "${dll_dir}" DIRECTORY)
+                        if(NOT dll_dir IN_LIST search_paths_release)
+                            list(PREPEND search_paths_release ${dll_dir})
+                        endif()
+                        if(NOT dll_dir IN_LIST search_paths_debug)
+                            list(PREPEND search_paths_debug ${dll_dir})
+                        endif()
+                    # Generic
+                    else()
+                        get_target_property(dll_dir ${target} IMPORTED_LOCATION)
+                        get_filename_component(dll_dir "${dll_dir}" DIRECTORY)
+                        if(NOT dll_dir IN_LIST search_paths_release)
+                            list(PREPEND search_paths_release ${dll_dir})
+                        endif()
+                        if(NOT dll_dir IN_LIST search_paths_debug)
+                            list(PREPEND search_paths_debug ${dll_dir})
+                        endif()
+                    endif()
+                endif()
+            endif()
+        endforeach()
+        set(${out_var_prefix}_DEBUG ${search_paths_debug} PARENT_SCOPE)
+        set(${out_var_prefix}_RELEASE ${search_paths_release} PARENT_SCOPE)
+    endfunction()
+
+    # applocal_dependencies(<target> <search_paths>)
+    function(applocal_dependencies target_name search_paths)
+        add_custom_command(TARGET "${target_name}" POST_BUILD
+            DEPENDS "${PROJECT_SOURCE_DIR}/cmake/Applocal.py"
+            COMMAND ${CMAKE_COMMAND} -E env "APPLOCAL_BUNDLEDLLS_SEARCH_PATH=${search_paths}"
+            "$<TARGET_FILE:Python3::Interpreter>" "${PROJECT_SOURCE_DIR}/cmake/Applocal.py" --copy
+            "$<TARGET_FILE:${target_name}>"
+            COMMENT "Copying app dependencies for ${target_name}..."
+        )
+    endfunction()
+
+    # applocal_install_dependencies(<target> <search_paths> <component>)
+    function(applocal_install_dependencies target_name search_paths component_name)
+        install(CODE "message(STATUS \"Installing app dependencies for ${target_name}...\")
+            execute_process(COMMAND ${CMAKE_COMMAND} -E env \"APPLOCAL_BUNDLEDLLS_SEARCH_PATH=${search_paths}\"
+                \"$<TARGET_FILE:Python3::Interpreter>\" \"${PROJECT_SOURCE_DIR}/cmake/Applocal.py\" --copy
+                \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/$<TARGET_FILE_NAME:${target_name}>\")"
+            COMPONENT "${component_name}"
+        )
+    endfunction()
+endif()
