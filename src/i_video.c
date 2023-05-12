@@ -20,6 +20,7 @@
 
 
 #include <stdlib.h>
+#include <math.h>
 
 #include "SDL.h"
 #include "SDL_opengl.h"
@@ -51,7 +52,6 @@
 #include "z_zone.h"
 #include "txt_main.h"
 #include "jn.h"
-
 
 // These are (1) the window (or the full screen) that our game is rendered to
 // and (2) the renderer that scales the texture (see below) into this window.

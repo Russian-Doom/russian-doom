@@ -18,6 +18,7 @@
 //	set up initial state and misc. LUTs.
 //
 
+#include <math.h>
 
 #include "i_swap.h"
 #include "m_argv.h"
