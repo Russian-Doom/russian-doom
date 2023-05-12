@@ -224,7 +224,7 @@ foreach(MODULE ${COMPILE_MODULES})
     )
 
     # Applocal dlls
-    if(WIN32 AND Python3_Interpreter_FOUND
+    if(WIN32 AND (Python3_Interpreter_FOUND OR CMAKE_VERSION VERSION_GREATER_EQUAL 3.16)
         AND NOT VCPKG_TOOLCHAIN
         AND NOT ID_USE_SELECTED_DLL_SET)
         applocal_dependencies("${PROGRAM_PREFIX}${MODULE}"
@@ -275,7 +275,7 @@ foreach(MODULE ${COMPILE_MODULES})
         COMPONENT "${MODULE}"
         ${_permissions}
     )
-    if(WIN32 AND Python3_Interpreter_FOUND
+    if(WIN32 AND (Python3_Interpreter_FOUND OR CMAKE_VERSION VERSION_GREATER_EQUAL 3.16)
         AND NOT VCPKG_TOOLCHAIN
         AND NOT ID_USE_SELECTED_DLL_SET)
         applocal_install_dependencies("${PROGRAM_PREFIX}${MODULE}"
