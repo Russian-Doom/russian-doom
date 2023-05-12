@@ -306,7 +306,7 @@ endif()
 
 # SDL2main imported target
 if(SDL2_MAIN_LIBRARY)
-    if(MINGW)
+    if(MINGW AND NOT SDL2_DIR)
         # Gross hack to get mingw32 first in the linker order.
         add_library(SDL2::_SDL2main_detail STATIC IMPORTED)
         set_target_properties(SDL2::_SDL2main_detail PROPERTIES
