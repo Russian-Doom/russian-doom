@@ -136,8 +136,9 @@ Then pass the following parameters to cmake during configuration time:
 
 Cmake option `CMAKE_FIND_PACKAGE_PREFER_CONFIG` should be `OFF` (default) in order for `*_DIR` variables to work.
 
-**You also need to install [Python](https://www.python.org/downloads/),
-in order for automatic installation of DLLs to work.**
+**You also need to** install [Python](https://www.python.org/downloads/) (**Recommended**)
+or use Cmake 3.16+ (Can't update Dlls),
+**in order for automatic installation of DLLs to work.**
 
 ### **1.B.B: Providing required dependencies using VCPKG**
 
@@ -190,7 +191,7 @@ If it causes problems with your compiler, set `ENABLE_LTO` cmake option to `OFF`
 If you are using MSYS2 (or any other MinGW environment), by default DLLs from 'Selected DLL set'
 will be used instead of DLLs provided by the build environment.
 To use DLLs provided by the build environment, set the `ID_USE_SELECTED_DLL_SET` cmake option to `OFF`.
-You will need `python` to be installed.
+You will need `python` to be installed (**Recommended**) or use Cmake 3.16+ (Can't update Dlls).
 
 To build the project, use the following command:
 ```shell

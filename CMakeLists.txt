@@ -167,7 +167,7 @@ if(NOT miniz_FOUND)
 endif()
 
 # Construct path where to search
-if(WIN32 AND Python3_Interpreter_FOUND
+if(WIN32 AND (Python3_Interpreter_FOUND OR CMAKE_VERSION VERSION_GREATER_EQUAL 3.16)
 AND NOT VCPKG_TOOLCHAIN
 AND NOT ID_USE_SELECTED_DLL_SET)
     applocal_search_path(APPLOCAL_SEARCH_PATH TARGETS "SDL2::SDL2" "SDL2_mixer::SDL2_mixer" "SDL2_net::SDL2_net" "SampleRate::samplerate" "miniz::miniz")
