@@ -7,5 +7,6 @@ add_copy_target(win-libs SOURCE
     SDL2.dll
     SDL2_mixer.dll
     SDL2_net.dll
+    ucrtbase.dll
     DESTINATION "${PROJECT_BINARY_DIR}/src"
 )

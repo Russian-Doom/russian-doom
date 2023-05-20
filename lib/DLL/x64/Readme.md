@@ -8,3 +8,4 @@
 | SDL2.dll            | 53cffd21c3c0dfbc6c75a2d5a888bae8 |            2.26.5             |
 | SDL2_mixer.dll      | 44caaa2e7b5e719f7db0202171c6b256 |             2.6.3             |
 | SDL2_net.dll        | 600cf96c8d095e43a7603ce029c3f029 |             2.2.0             |
+| ucrtbase.dll        | b76f01ae50ce43187be1d701b51ca644 |  Win Kits 10 / 10.0.22621.0   |
