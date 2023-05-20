@@ -3,8 +3,9 @@
 * [Building International Doom on Windows](#building-international-doom-on-windows)
   * [Step 1: Setting up build environment](#step-1-setting-up-build-environment)
     * [1.A: MSYS2 environment](#1a-msys2-environment)
-      * [1.A.A: MSYS2 GCC environment](#1aa-msys2-gcc-environment)
-      * [1.A.B: MSYS2 Clang environment](#1ab-msys2-clang-environment)
+      * [1.A.A: MSYS2 UCRT environment](#1aa-msys2-ucrt-environment)
+      * [1.A.B: MSYS2 GCC environment](#1ab-msys2-gcc-environment)
+      * [1.A.C: MSYS2 Clang environment](#1ac-msys2-clang-environment)
     * [1.B: MSVC Visual Studio environment](#1b-msvc-visual-studio-environment)
       * [1.B.A: Providing required dependencies manually](#1ba-providing-required-dependencies-manually)
       * [1.B.B: Providing required dependencies using VCPKG](#1bb-providing-required-dependencies-using-vcpkg)
@@ -26,19 +27,45 @@
 
 Download the source code archive of the latest release version and unpack it.
 Or clone repository from Git.
-The primary way of building International Doom on Windows is using an MSYS environment.
+The primary way of building International Doom on Windows is using an MSYS GCC environment.
 
 ### 1.A: MSYS2 environment
 
 Download and install [MSYS2](https://www.msys2.org/).
 For configuring and building International Doom,
-you **must** use the appropriate MSYS2 terminal (**mingw32.exe**, **mingw64.exe**, **clang32.exe**, **clang64.exe**)
+you **must** use the appropriate MSYS2 terminal
+(**ucrt64.exe**, **mingw32.exe**, **mingw64.exe**, **clang32.exe**, **clang64.exe**)
 so that the $PATH environment variable points to the proper toolchain.
 
-### **1.A.A: MSYS2 GCC environment**
+### **1.A.A: MSYS2 UCRT environment**
 
-For the **mingw-w64-i686** toolchain (**32**-bit), use the **MSYS MinGW 32-bit** start menu/screen shortcut
-and for the **mingw-w64-x86_64** toolchain (**64**-bit), use the **MSYS MinGW 64-bit** start menu/screen shortcut.
+For the **mingw-w64-ucrt-x86_64** toolchain (**64**-bit), use the **ucrt64.exe** terminal.
+
+Open the terminal and install dependencies using the following command:
+```shell
+pacman -S mingw-w64-ucrt-x86_64-{pkgconf,gcc,make,cmake,SDL2{,_net,_mixer},libsamplerate} \
+       git,python
+```
+
+If `python` version from MSYS2 is not working on your OS,
+you can install a working version of [Python](https://www.python.org/downloads/) to the host system.
+Python is completely optional if you will be using 'Selected DLL set'.
+
+If you want to use `Ninja` or `Ninja Multi-Config` cmake generators, you need
+to install `ninja` by the following command:
+```shell
+pacman -S mingw-w64-ucrt-x86_64-ninja
+```
+
+If you want to run CTest tests, you must also install `gdb` by the following command:
+```shell
+pacman -S mingw-w64-ucrt-x86_64-gdb
+```
+
+### **1.A.B: MSYS2 GCC environment**
+
+For the **mingw-w64-i686** toolchain (**32**-bit), use the **mingw32.exe** terminal
+and for the **mingw-w64-x86_64** toolchain (**64**-bit), use the **mingw64.exe** terminal.
 
 Open the terminal and install dependencies using the following command:
 ```shell
@@ -61,10 +88,10 @@ If you want to run CTest tests, you must also install `gdb` by the following com
 pacman -S mingw-w64-{i686,x86_64}-gdb
 ```
 
-### **1.A.B: MSYS2 Clang environment**
+### **1.A.C: MSYS2 Clang environment**
 
-For the **mingw-w64-clang-i686** toolchain (**32**-bit), use the **MSYS MinGW Clang 32-bit** start menu/screen shortcut
-and for the **mingw-w64-clang-x86_64** toolchain (**64**-bit), use the **MSYS MinGW Clang 64-bit** start menu/screen shortcut.
+For the **mingw-w64-clang-i686** toolchain (**32**-bit), use the **clang32.exe** terminal
+and for the **mingw-w64-clang-x86_64** toolchain (**64**-bit), use the **clang64.exe** terminal.
 
 Open the terminal and install dependencies using the following command:
 ```shell

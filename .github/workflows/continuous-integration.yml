@@ -43,6 +43,12 @@ jobs:
             msys_package_prefix: "mingw-w64"
             cmake_gen: "Ninja"
           -
+            display_name: "GCC-Ucrt"
+            name: "gcc"
+            msys_msystem_prefix: "UCRT"
+            msys_package_prefix: "mingw-w64-ucrt"
+            cmake_gen: "Ninja"
+          -
             display_name: "Clang"
             name: "clang"
             msys_msystem_prefix: "CLANG"
@@ -63,6 +69,18 @@ jobs:
               name: "Linux"
             compiler:
               display_name: "MSVC"
+          - # Disable GCC-Ucrt compiler on Linux (no MSYS UCRT for Linux)
+            os:
+              name: "Linux"
+            compiler:
+              display_name: "GCC-Ucrt"
+          - # Disable GCC-Ucrt compiler for x86 (no MSYS UCRT32 env)
+            os:
+              name: "Windows"
+            compiler:
+              display_name: "GCC-Ucrt"
+            arch:
+              name: "x86"
           - # Disable MSVC compiler for x86
             compiler:
               display_name: "MSVC"
@@ -81,8 +99,30 @@ jobs:
             os:
               name: "Windows"
             compiler:
+              display_name: "GCC-Ucrt"
+            shell: "msys2 {0}"
+          -
+            os:
+              name: "Windows"
+            compiler:
               display_name: "Clang"
             shell: "msys2 {0}"
+          - # Add special config "GCC-Ucrt x86" using MSYS MINGW32 env and ucrt hack
+            os:
+              name: "Windows"
+              runner: "windows-2019" # windows-2022
+            arch:
+              name: "x86"
+              bits: "32"
+              msys_name: "i686"
+            compiler:
+              display_name: "GCC-Ucrt"
+              name: "gcc"
+              msys_msystem_prefix: "MINGW"
+              msys_package_prefix: "mingw-w64"
+              cmake_gen: "Ninja"
+            shell: "msys2 {0}"
+            cmake_opts: "-D ID_X_UCRT32=ON"
     defaults:
       run:
         shell: ${{ matrix.shell }}
@@ -175,6 +215,7 @@ jobs:
           cmake -G "${{ matrix.compiler.cmake_gen }}" \
                 $msvc_gen_opts \
                 $msvc_cmake_toolchain \
+                ${{ matrix.cmake_opts }} \
                 -D BUILD_VERSION_OVERWRITE="r$rev_number" \
                 -D FORCE_GIT_HASH_SUFFIX=ON \
                 -D CMAKE_BUILD_TYPE=RelWithDebInfo \
