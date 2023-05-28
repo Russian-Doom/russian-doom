@@ -2193,7 +2193,7 @@ void A_BrainAwake (mobj_t *mo)
 
                 if (maxbraintargets > 32)
                 {
-                    fprintf(stderr, english_language ?
+                    printf(english_language ?
                             "R_BrainAwake: Raised braintargets limit to %d.\n" :
                             "R_BrainAwake: увеличен лимит braintargets до (%d).\n",
                             maxbraintargets);

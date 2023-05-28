@@ -304,7 +304,7 @@ static void DEH_ParseContext(deh_context_t *context)
     if (!CheckSignatures(context))
     {
         // [crispy] make non-fatal
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                         "This is not a valid dehacked patch file!\n" :
                         "Загруженный блок Dehacked содержит ошибки!\n");
     }
@@ -412,7 +412,7 @@ int DEH_LoadFile(char *filename)
 
     if (context == NULL)
     {
-        fprintf(stderr, english_language?
+        printf(english_language?
                         "DEH_LoadFile: Unable to open %s\n" :
                         "DEH_LoadFile: невозможно открыть %s\n",
                         filename);
@@ -457,7 +457,7 @@ int DEH_LoadLump(int lumpnum, boolean allow_long, boolean allow_error)
 
     if (context == NULL)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                         "DEH_LoadFile: Unable to open lump %i\n" :
                         "DEH_LoadFile: невозможно открыть блок %i\n",
                         lumpnum);
@@ -488,7 +488,7 @@ int DEH_LoadLumpByName(char *name, boolean allow_long, boolean allow_error)
 
     if (lumpnum == -1)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
         "DEH_LoadLumpByName: '%s' lump not found\n" :
         "DEH_LoadLumpByName: блок '%s' не найден\n", name);
         return 0;

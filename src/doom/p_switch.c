@@ -165,7 +165,7 @@ void P_InitSwitchList (void)
 
             if (texture1 == -1 || texture2 == -1)
             {
-                fprintf(stderr, english_language ? 
+                printf(english_language ?
                         "P_InitSwitchList: could not add %s(%d)/%s(%d)\n" :
                         "P_InitSwitchList: невозможно добавить %s(%d)/%s(%d)\n",
                         name1, texture1, name2, texture2);

@@ -308,7 +308,7 @@ void P_InitPicAnims (void)
         if (lastanim->numpics < 2)
         {
             // [crispy] make non-fatal, skip invalid animation sequences
-            fprintf(stderr, english_language ?
+            printf(english_language ?
                     "P_InitPicAnims: bad cycle from %s to %s" :
                     "P_InitPicAnims: некорректный цикл от %s к %s",
                     startname, endname);
@@ -479,7 +479,7 @@ const fixed_t P_FindNextHighestFloor (const sector_t *sec, const int currentheig
     // Compatibility note, in case of demo desyncs.
     if (h > 20)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
         "P_FindNextHighestFloor: exceeded Vanilla limit\n" :
         "P_FindNextHighestFloor: достигнут лимит оригинальной игры\n");
     }

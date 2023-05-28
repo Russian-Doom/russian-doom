@@ -266,7 +266,7 @@ void P_LoadSegs(int lump)
                 if (li->sidedef->midtexture)
                 {
                     li->backsector = 0;
-                    fprintf(stderr, english_language ? 
+                    printf(english_language ?
                             "P_LoadSegs: Linedef %d has two-sided flag set, but no second sidedef\n" :
                             "P_LoadSegs: линия %d помечена как двусторонняя, но вторая сторона отсутствует\n", i);
                 }
@@ -395,7 +395,7 @@ static void P_LoadSegs_DeePBSP (int lump)
                 if (li->sidedef->midtexture)
                 {
                     li->backsector = 0;
-                    fprintf(stderr, english_language ?
+                    printf(english_language ?
                             "P_LoadSegs: Linedef %d has two-sided flag set, but no second sidedef\n" :
                             "P_LoadSegs: линия %d помечена как двусторонняя, но вторая сторона отсутствует\n", i);
                 }
@@ -695,7 +695,7 @@ static void P_LoadNodes_DeePBSP (int lump)
     {
         if (numsubsectors == 1)
         {
-            fprintf(stderr, english_language ?
+            printf(english_language ?
                     "P_LoadNodes: No nodes in map, but only one subsector\n" :
                     "P_LoadNodes: у уровня отсутствуют ноды, доступен только один подсектор\n");
         }
@@ -806,7 +806,7 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
                     "P_LoadNodes: Error during ZDBSP nodes decompression!" :
                     "P_LoadNodes: ошибка при распаковке нодов ZDBSP!");
 
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "P_LoadNodes: ZDBSP nodes compression ratio %.3f\n" :
                 "P_LoadNodes: степень сжатия нодов ZDBSP: %.3f\n",
                 (float)zstream->total_out/zstream->total_in);
@@ -943,7 +943,7 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
                 if (li->sidedef->midtexture)
                 {
                     li->backsector = 0;
-                    fprintf(stderr, english_language ?
+                    printf(english_language ?
                             "P_LoadSegs: Linedef %d has two-sided flag set, but no second sidedef\n" :
                             "P_LoadSegs: линия %d помечена как двусторонняя, но вторая сторона отсутствует\n", i);
                 }
@@ -1201,7 +1201,7 @@ void P_LoadLineDefs (int lump)
         if (ld->sidenum[0] == NO_INDEX)
         {
             ld->sidenum[0] = 0;
-            fprintf(stderr, english_language ?
+            printf(english_language ?
                     "P_LoadSegs: Linedef %d has two-sided flag set, but no second sidedef\n" :
                     "P_LoadSegs: линия %d помечена как двусторонняя, но вторая сторона отсутствует\n", i);
         }
@@ -1264,7 +1264,7 @@ static void P_LoadLineDefs_Hexen (int lump)
         // [crispy] warn about unknown linedef types
         if ((unsigned short) ld->special > 141)
         {
-            fprintf(stderr, english_language ?
+            printf(english_language ?
                     "P_LoadLineDefs: Unknown special %d at line %d\n" :
                     "P_LoadLineDefs: неизвестная специфика %d у линии %d\n",
                     ld->special, i);
@@ -1344,7 +1344,7 @@ static void P_LoadLineDefs_Hexen (int lump)
     // [crispy] warn about unknown linedef types
     if (warn)
     {
-        fprintf(stderr, "P_LoadLineDefs: Found %d line%s with unknown linedef type.\n"
+        printf("P_LoadLineDefs: Found %d line%s with unknown linedef type.\n"
                         "THIS MAP MAY NOT WORK AS EXPECTED!\n", warn, (warn > 1) ? "s" : "");
     }
 
@@ -1836,7 +1836,7 @@ static void PadRejectArray (byte *array, unsigned int len)
 
     if (len > sizeof(rejectpad))
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                         "PadRejectArray: REJECT lump too short to pad! (%i > %i)\n" :
                         "PadRejectArray: блок REJECT слишком мал для заполнения! (%i > %i)\n",
                         len, (int) sizeof(rejectpad));
@@ -1912,14 +1912,14 @@ mapformat_t P_CheckMapFormat (int lumpnum)
     if ((b = lumpnum+ML_BLOCKMAP+1) < numlumps
     &&  !strncasecmp(lumpinfo[b]->name, "BEHAVIOR", 8))
     {
-        fprintf(stderr, english_language ? 
+        printf(english_language ?
                 "Hexen format (" :
                 "формат Hexen (");
         format |= HEXEN;
     }
     else
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "Doom format (" :
                 "формат Doom (");
     }
@@ -1928,28 +1928,28 @@ mapformat_t P_CheckMapFormat (int lumpnum)
     && (nodes_lump_data = W_CacheLumpNum(b, PU_CACHE))
     &&  W_LumpLength(b) > 0))
     {
-        fprintf(stderr, english_language ? "no nodes_lump_data" : "ноды отсутствуют");
+        printf(english_language ? "no nodes_lump_data" : "ноды отсутствуют");
     }
     else if (!memcmp(nodes_lump_data, "xNd4\0\0\0\0", 8))
     {
-        fprintf(stderr, "DeePBSP");
+        printf("DeePBSP");
         format |= DEEPBSP;
     }
     else if (!memcmp(nodes_lump_data, "XNOD", 4))
     {
-        fprintf(stderr, "ZDBSP");
+        printf("ZDBSP");
         format |= ZDBSPX;
     }
     else if (!memcmp(nodes_lump_data, "ZNOD", 4))
     {
-        fprintf(stderr, english_language ? "compressed ZDBSP" : "сжатые ZDBSP");
+        printf(english_language ? "compressed ZDBSP" : "сжатые ZDBSP");
         format |= ZDBSPZ;
     }
     else
     {
-        fprintf(stderr, "BSP");
+        printf("BSP");
     }
-    fprintf(stderr, ") ");
+    printf(") ");
 
     if (nodes_lump_data)
     W_ReleaseLumpNum(b);
@@ -2022,7 +2022,7 @@ void P_SetupLevel (int episode, int map, int playermask, skill_t skill)
     oldleveltime = 0;  // [crispy] Track if game is running
 
     // [JN] Indicate the map we are loading
-    fprintf(stderr, "P_SetupLevel: E%dM%d, ", gameepisode, gamemap);
+    printf("P_SetupLevel: E%dM%d, ", gameepisode, gamemap);
 
     // [crispy] check and log map and nodes format
     crispy_mapformat = P_CheckMapFormat(lumpnum);

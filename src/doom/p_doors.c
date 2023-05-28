@@ -340,7 +340,7 @@ void EV_VerticalDoor (line_t *line, mobj_t *thing)
                 {
                     // This isn't a door OR a plat.  Now we're in trouble.
 
-                    fprintf(stderr, english_language ?
+                    printf(english_language ?
                                     "EV_VerticalDoor: Tried to close something that wasn't a door.\n" :
                                     "EV_VerticalDoor: попытка закрыть что-то, что не является дверью.\n");
 

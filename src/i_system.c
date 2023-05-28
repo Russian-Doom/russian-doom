@@ -222,7 +222,7 @@ void I_Error (char *error, ...)
 
     if (already_quitting)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                         "Warning: recursive call to I_Error detected.\n" :
                         "Внимание: обнаружен рекурсивный вызов в I_Error.\n");
         exit(-1);
@@ -234,11 +234,11 @@ void I_Error (char *error, ...)
 
     // Message first.
     va_start(argptr, error);
-    //fprintf(stderr, "\nError: ");
-    vfprintf(stderr, error, argptr);
-    fprintf(stderr, "\n\n");
+    //printf("\nError: ");
+    vprintf(error, argptr);
+    printf("\n\n");
     va_end(argptr);
-    fflush(stderr);
+    fflush(stdout);
 
     // Write a copy of the message into buffer.
     va_start(argptr, error);

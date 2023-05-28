@@ -59,7 +59,7 @@ static void MapFile(win32_wad_file_t *wad, char *filename)
 
     if (wad->handle_map == NULL)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "W_Win32_OpenFile: Unable to CreateFileMapping() for %s\n" :
                 "W_Win32_OpenFile: ошибка применения CreateFileMapping() к %s\n",
                 filename);
@@ -72,7 +72,7 @@ static void MapFile(win32_wad_file_t *wad, char *filename)
 
     if (wad->wad.mapped == NULL)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "W_Win32_OpenFile: Unable to MapViewOfFile() for %s\n" :
                 "W_Win32_OpenFile: ошибка применения MapViewOfFile() к %s\n",
                 filename);

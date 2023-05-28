@@ -801,7 +801,7 @@ static void R_InitTextures (void)
 		// [crispy] make non-fatal
         if (gamemode != shareware)
         {
-            fprintf (stderr, english_language ?
+            printf(english_language ?
                     "R_InitTextures: Missing patch in texture %s\n" :
                     "R_InitTextures: отсутствует патч в текстуре %s\n",
                     texturename);
@@ -1124,7 +1124,7 @@ const int R_FlatNumForName (const char *name)
         namet[8] = 0;
         memcpy(namet, name, 8);
         // [crispy] make non-fatal
-        fprintf (stderr, english_language ?
+        printf(english_language ?
                          "R_FlatNumForName: %s not found\n" :
                          "R_FlatNumForName: текстура поверхности %s не найдена\n",
                          namet);
@@ -1188,7 +1188,7 @@ const int R_TextureNumForName (const char *name)
     if (i == -1)
     {
         // [crispy] make non-fatal
-        fprintf (stderr, english_language ?
+        printf(english_language ?
                          "R_TextureNumForName: %s not found\n" :
                          "R_TextureNumForName: текстура %s не найдена\n",
                          name);

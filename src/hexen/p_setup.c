@@ -312,7 +312,7 @@ static void P_LoadSegs (const int lump)
                 if (li->sidedef->midtexture)
                 {
                     li->backsector = 0;
-                    fprintf(stderr, english_language ?
+                    printf(english_language ?
                             "P_LoadSegs: Linedef %d has two-sided flag set, but no second sidedef\n" :
                             "P_LoadSegs: линия %d помечена как двусторонняя, но вторая сторона отсутствует\n", i);
                 }
@@ -383,7 +383,7 @@ static void P_LoadSegs_DeePBSP (int lump)
                 if (li->sidedef->midtexture)
                 {
                     li->backsector = 0;
-                    fprintf(stderr, english_language ?
+                    printf(english_language ?
                             "P_LoadSegs: Linedef %d has two-sided flag set, but no second sidedef\n" :
                             "P_LoadSegs: линия %d помечена как двусторонняя, но вторая сторона отсутствует\n", i);
                 }
@@ -594,7 +594,7 @@ static void P_LoadNodes_DeePBSP (int lump)
     {
         if (numsubsectors == 1)
         {
-            fprintf(stderr, english_language ?
+            printf(english_language ?
                     "P_LoadNodes: No nodes in map, but only one subsector\n" :
                     "P_LoadNodes: у уровня отсутствуют ноды, доступен только один подсектор\n");
         }
@@ -705,7 +705,7 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
                     "P_LoadNodes: Error during ZDBSP nodes decompression!" :
                     "P_LoadNodes: ошибка при распаковке нодов ZDBSP!");
 
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "P_LoadNodes: ZDBSP nodes compression ratio %.3f\n" :
                 "P_LoadNodes: степень сжатия нодов ZDBSP: %.3f\n",
                 (float)zstream->total_out/zstream->total_in);
@@ -841,7 +841,7 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
                 if (li->sidedef->midtexture)
                 {
                     li->backsector = 0;
-                    fprintf(stderr, english_language ?
+                    printf(english_language ?
                             "P_LoadSegs: Linedef %d has two-sided flag set, but no second sidedef\n" :
                             "P_LoadSegs: линия %d помечена как двусторонняя, но вторая сторона отсутствует\n", i);
                 }
@@ -1572,14 +1572,14 @@ static mapformat_t P_CheckMapFormat (int lumpnum)
     if ((b = lumpnum+ML_BLOCKMAP+1) < numlumps
     &&  !strncasecmp(lumpinfo[b]->name, "BEHAVIOR", 8))
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "P_CheckMapFormat: Hexen format (" :
                 "P_CheckMapFormat: формат Hexen (");
         format |= HEXEN;
     }
     else
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "P_CheckMapFormat: Doom format (" :
                 "P_CheckMapFormat: формат Doom (");
     }
@@ -1588,28 +1588,28 @@ static mapformat_t P_CheckMapFormat (int lumpnum)
     && (nodes_lump_data = W_CacheLumpNum(b, PU_CACHE))
     &&  W_LumpLength(b) > 0))
     {
-        fprintf(stderr, english_language ? "no nodes_lump_data" : "ноды отсутствуют");
+        printf(english_language ? "no nodes_lump_data" : "ноды отсутствуют");
     }
     else if (!memcmp(nodes_lump_data, "xNd4\0\0\0\0", 8))
     {
-        fprintf(stderr, "DeePBSP");
+        printf("DeePBSP");
         format |= DEEPBSP;
     }
     else if (!memcmp(nodes_lump_data, "XNOD", 4))
     {
-        fprintf(stderr, "ZDBSP");
+        printf("ZDBSP");
         format |= ZDBSPX;
     }
     else if (!memcmp(nodes_lump_data, "ZNOD", 4))
     {
-        fprintf(stderr, english_language ? "compressed ZDBSP" : "сжатые ZDBSP");
+        printf(english_language ? "compressed ZDBSP" : "сжатые ZDBSP");
         format |= ZDBSPZ;
     }
     else
     {
-        fprintf(stderr, "BSP");
+        printf("BSP");
     }
-    fprintf(stderr, ")\n");
+    printf(")\n");
 
     if (nodes_lump_data)
         W_ReleaseLumpNum(b);

@@ -725,7 +725,7 @@ int main(int argc, char *argv[])
 
     if (mus2mid(src, dst))
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "mus2mid() failed\n" :
                 "ошибка mus2mid()\n");
         exit(-1);

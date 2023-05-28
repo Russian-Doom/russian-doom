@@ -510,7 +510,7 @@ void NET_WaitForLaunch(void)
 {
     if (!TXT_Init(0, 0))
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "Failed to initialize GUI\n" :
                 "Ошибка инициализации интерфейса\n");
         exit(-1);

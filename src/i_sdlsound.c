@@ -525,7 +525,7 @@ static boolean ExpandSoundData_SRC(sfxinfo_t *sfxinfo,
 
     if (clipped > 0)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                         "Sound '%s': clipped %u samples (%0.2f %%)\n" :
                         "Звук '%s': совершен клиппинг %u сэмплов (%0.2f %%)\n", 
                         sfxinfo->name, clipped,
@@ -1158,7 +1158,7 @@ static boolean I_SDL_InitSound(boolean _use_sfx_prefix)
 
     if (SDL_Init(SDL_INIT_AUDIO) < 0)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
         "Unable to set up sound.\n" :
         "Невозможно активировать звуковую систему.\n");
         return false;
@@ -1166,7 +1166,7 @@ static boolean I_SDL_InitSound(boolean _use_sfx_prefix)
 
     if (Mix_OpenAudioDevice(snd_samplerate, AUDIO_S16SYS, 2, GetSliceSize(), NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE) < 0)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                         "Error initialising SDL_mixer: %s\n" :
                         "Ошибка инициализации SDL_mixer: %s\n",
                         SDL_GetError());
@@ -1193,7 +1193,7 @@ static boolean I_SDL_InitSound(boolean _use_sfx_prefix)
 #else
     if (use_libsamplerate != 0)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "I_SDL_InitSound: use_libsamplerate=%i, but libsamplerate support not compiled in.\n" :
                 "I_SDL_InitSound: указано use_libsamplerate=%i, но код libsamplerate не скомпилирован.\n",
                 use_libsamplerate);

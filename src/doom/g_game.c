@@ -2820,9 +2820,9 @@ void G_DoPlayDemo (void)
         else
         {
             // [crispy] make non-fatal
-            fprintf(stderr, english_language ? message_eng : message_rus, demoversion,
+            printf(english_language ? message_eng : message_rus, demoversion,
                     G_VanillaVersionCode(), DemoVersionDescription(demoversion));
-            fprintf(stderr, "\n");
+            printf("\n");
             demoplayback = true;
             G_CheckDemoStatus();
             return;

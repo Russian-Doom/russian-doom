@@ -622,7 +622,7 @@ static boolean PIT_AddLineIntercepts (line_t *ld)
         else
         {
             // [crispy] print a warning
-            fprintf(stderr, english_language ?
+            printf(english_language ?
                     "PIT_AddThingIntercepts: Triggered INTERCEPTS overflow!\n" :
                     "PIT_AddThingIntercepts: произошло переполнение INTERCEPTS!\n");
         }
@@ -698,7 +698,7 @@ static boolean PIT_AddThingIntercepts (mobj_t *thing)
         else
         {
             // [crispy] print a warning
-            fprintf(stderr, english_language ?
+            printf(english_language ?
                     "PIT_AddThingIntercepts: Triggered INTERCEPTS overflow!\n" :
                     "PIT_AddThingIntercepts: произошло переполнение INTERCEPTS!\n");
         }

@@ -65,7 +65,7 @@ static void MapFile(posix_wad_file_t *wad, char *filename)
 
     if (result == NULL)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                         "W_POSIX_OpenFile: Unable to mmap() %s - %s\n" :
                         "W_POSIX_OpenFile: ошибка mmap() %s - %s\n",
                         filename, strerror(errno));
