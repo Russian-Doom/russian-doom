@@ -1360,7 +1360,7 @@ static void CenterWindow(int *x, int *y, const int w, const int h)
 
     if (SDL_GetDisplayBounds(video_display, &bounds) < 0)
     {
-        fprintf(stderr, "CenterWindow: Failed to read display bounds "
+        printf("CenterWindow: Failed to read display bounds "
                         "for display #%d!\n", video_display);
         return;
     }

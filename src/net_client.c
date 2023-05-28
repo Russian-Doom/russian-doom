@@ -1062,7 +1062,7 @@ void NET_CL_Disconnect(void)
 
             client_state = CLIENT_STATE_WAITING_START;
 
-            fprintf(stderr, english_language ?
+            printf(english_language ?
                     "NET_CL_Disconnect: Timeout while disconnecting from server\n" :
                     "NET_CL_Disconnect: тайм-аут при отсоединении от сервера\n");
             break;

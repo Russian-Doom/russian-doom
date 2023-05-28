@@ -202,7 +202,7 @@ void P_InitPicAnims (void)
         if (lastanim->numpics < 2)
         {
             // [crispy] make non-fatal, skip invalid animation sequences
-            fprintf (stderr, english_language ?
+            printf(english_language ?
                      "P_InitPicAnims: bad cycle from %s to %s" :
                      "P_InitPicAnims: некорректный цикл от %s до %s", 
                      startname, endname);
@@ -1120,7 +1120,7 @@ void P_PlayerInSpecialSector (player_t *player)
 
         default:
         // [JN] Made non-fatal
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "P_PlayerInSpecialSector: unknown special %i\n" :
                 "P_PlayerInSpecialSector: неизвестная специфика %i", sector->special);
         break;
@@ -1409,16 +1409,14 @@ static void DonutOverrun(fixed_t *s3_floorheight, short *s3_floorpic,
             {
                 if (english_language)
                 {
-                    fprintf(stderr,
-                            "DonutOverrun: The second parameter for \"-donut\" "
+                    printf("DonutOverrun: The second parameter for \"-donut\" "
                             "switch should be greater than 0 and less than number "
                             "of flats (%d). Using default value (%d) instead. \n",
                             numflats, DONUT_FLOORPIC_DEFAULT);
                 }
                 else
                 {
-                    fprintf(stderr,
-                            "DonutOverrun: Второй параметр \"-donut\" должен быть "
+                    printf("DonutOverrun: Второй параметр \"-donut\" должен быть "
                             "выше ноля и меньше количества текстур поверхностей (%d). "
                             "Выполнен откат на стандартное значение (%d). \n",
                             numflats, DONUT_FLOORPIC_DEFAULT);                    
@@ -1471,7 +1469,7 @@ int EV_DoDonut (line_t *line)
 
         if (s2 == NULL)
         {
-            fprintf(stderr, english_language ?
+            printf(english_language ?
                             "EV_DoDonut: linedef had no second sidedef! Unexpected behavior may occur in Vanilla Doom. \n" :
                             "EV_DoDonut: линии не назначена обратная сторона! В оригинальном Doom возможно критическая ошибка. \n");
         break;
@@ -1496,15 +1494,13 @@ int EV_DoDonut (line_t *line)
 
                 if (english_language)
                 {
-                    fprintf(stderr,
-                            "EV_DoDonut: WARNING: emulating buffer overrun due to "
+                    printf("EV_DoDonut: WARNING: emulating buffer overrun due to "
                             "NULL back sector. "
                             "Unexpected behavior may occur in Vanilla Doom.\n");
                 }
                 else
                 {
-                    fprintf(stderr,
-                            "EV_DoDonut: ВНИМАНИЕ: эмуляция переполнения буфера "
+                    printf("EV_DoDonut: ВНИМАНИЕ: эмуляция переполнения буфера "
                             "из за нулевого заднего сектора. "
                             "В оригинальном Doom возможно критическая ошибка.\n");
                 }

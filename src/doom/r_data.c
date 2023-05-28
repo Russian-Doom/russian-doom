@@ -457,7 +457,7 @@ static void R_GenerateLookup (int texnum)
 
             if (!R_IsPatchLump(pat))
             {
-                fprintf(stderr, english_language ?
+                printf(english_language ?
                         "\nR_GenerateLookup: Texture %.8s patch num %d (%.8s) is not valid" :
                         "\nR_GenerateLookup: некорректная текстура %.8s с номером патча %d (%.8s)",
                         texture->name, i, lumpinfo[pat]->name);
@@ -886,7 +886,7 @@ static void R_InitTextures (void)
                 texturename[8] = '\0';
                 memcpy (texturename, texture->name, 8);
                 // [crispy] make non-fatal
-                fprintf (stderr, english_language ? 
+                printf(english_language ?
                          "R_InitTextures: Missing patch in texture %s\n" :
                          "R_InitTextures: отсутствует патч в текстуре %s\n", texturename);
                 patch->patch = W_CheckNumForName("TNT1A0"); // [crispy] dummy patch
@@ -1213,7 +1213,7 @@ int R_FlatNumForName (char *name)
         namet[8] = 0;
         memcpy (namet, name,8);
         // [crispy] make non-fatal
-        fprintf (stderr, english_language ?
+        printf(english_language ?
                  "R_FlatNumForName: %s not found\n" :
                  "R_FlatNumForName: текстура поверхности %s не найдена\n",
                  namet);
@@ -1268,7 +1268,7 @@ int	R_TextureNumForName (char *name)
     if (i == -1)
     {
         // [crispy] make non-fatal
-        fprintf (stderr, english_language ?
+        printf(english_language ?
                  "R_TextureNumForName: %s not found\n" :
                  "R_TextureNumForName: текстура %s не найдена\n",
                  name);

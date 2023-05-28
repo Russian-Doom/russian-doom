@@ -163,7 +163,7 @@ static void ScanForBlock(void *start, void *end)
             {
                 if (start <= mem[i] && mem[i] <= end)
                 {
-                    fprintf(stderr, english_language ?
+                    printf(english_language ?
                             "%p has dangling pointer into freed block %p (%p -> %p)\n" :
                             "%p имеет обособленный указатель в освобожденный блок %p (%p -> %p)\n",
                             mem, start, &mem[i], mem[i]);

@@ -369,12 +369,12 @@ void DEH_Warning(deh_context_t *context, char *msg, ...)
 
     va_start(args, msg);
 
-    fprintf(stderr, english_language ?
+    printf(english_language ?
                     "%s:%i: warning: " :
                     "%s:%i: внимание: ",
                     context->filename, context->linenum);
-    vfprintf(stderr, msg, args);
-    fprintf(stderr, "\n");
+    vprintf(msg, args);
+    printf("\n");
 
     va_end(args);
 }
@@ -385,9 +385,9 @@ void DEH_Error(deh_context_t *context, char *msg, ...)
 
     va_start(args, msg);
 
-    fprintf(stderr, "%s:%i: ", context->filename, context->linenum);
-    vfprintf(stderr, msg, args);
-    fprintf(stderr, "\n");
+    printf("%s:%i: ", context->filename, context->linenum);
+    vprintf(msg, args);
+    printf("\n");
 
     va_end(args);
 

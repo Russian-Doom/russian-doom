@@ -374,7 +374,7 @@ void P_LoadACScripts(int lump)
         {
             if (english_language)
             {
-                fprintf(stderr, "Warning: ACS script #%i has %i arguments, more "
+                printf("Warning: ACS script #%i has %i arguments, more "
                                 "than the maximum of %i. Enforcing limit.\n"
                                 "If you are seeing this message, please report "
                                 "the name of the WAD where you saw it.\n",
@@ -382,7 +382,7 @@ void P_LoadACScripts(int lump)
             }
             else
             {
-                fprintf(stderr, "Внимание: скрипт ACS #%i использует %i аргумент(ов),"
+                printf("Внимание: скрипт ACS #%i использует %i аргумент(ов),"
                                 "что превышает допустимый лимит %i.\n"
                                 "Выполнено увеличение лимита.\n"
                                 "Если вы видите это сообщение, просьба сообщить\n"

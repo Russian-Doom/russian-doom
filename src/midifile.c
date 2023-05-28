@@ -99,7 +99,7 @@ static boolean CheckChunkHeader(chunk_header_t *chunk,
 
     if (!result)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                         "CheckChunkHeader: Expected '%s' chunk header, got '%c%c%c%c'\n" :
                         "CheckChunkHeader: ожидаемый заголовок: '%s', получен: '%c%c%c%c'\n",
                         expected_id,
@@ -120,7 +120,7 @@ static boolean ReadByte(byte *result, FILE *stream)
 
     if (c == EOF)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "ReadByte: Unexpected end of file\n" :
                 "ReadByte: неожиданный конец файла\n");
         return false;
@@ -146,7 +146,7 @@ static boolean ReadVariableLength(unsigned int *result, FILE *stream)
     {
         if (!ReadByte(&b, stream))
         {
-            fprintf(stderr, english_language ?
+            printf(english_language ?
                     "ReadVariableLength: Error while reading variable-length value\n" :
                     "ReadVariableLength: ошибка при чтении переменной длины\n");
             return false;
@@ -165,7 +165,7 @@ static boolean ReadVariableLength(unsigned int *result, FILE *stream)
         }
     }
 
-    fprintf(stderr, english_language ?
+    printf(english_language ?
             "ReadVariableLength: Variable-length value too long: maximum of four bytes\n" :
             "ReadVariableLength: превышел лимит переменной длины: максимум 4 байта\n");
     return false;
@@ -185,7 +185,7 @@ static void *ReadByteSequence(unsigned int num_bytes, FILE *stream)
 
     if (result == NULL)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "ReadByteSequence: Failed to allocate buffer\n" :
                 "ReadByteSequence: ошибка обнарушения буфера\n");
         return NULL;
@@ -197,7 +197,7 @@ static void *ReadByteSequence(unsigned int num_bytes, FILE *stream)
     {
         if (!ReadByte(&result[i], stream))
         {
-            fprintf(stderr, english_language ?
+            printf(english_language ?
                             "ReadByteSequence: Error while reading byte %u\n" :
                             "ReadByteSequence: ошибка чтения байта %u\n",
                             i);
@@ -228,7 +228,7 @@ static boolean ReadChannelEvent(midi_event_t *event,
 
     if (!ReadByte(&b, stream))
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "ReadChannelEvent: Error while reading channel event parameters\n" :
                 "ReadChannelEvent: ошибка чтения параметров событий канала\n");
         return false;
@@ -242,7 +242,7 @@ static boolean ReadChannelEvent(midi_event_t *event,
     {
         if (!ReadByte(&b, stream))
         {
-            fprintf(stderr, english_language ? 
+            printf(english_language ?
                     "ReadChannelEvent: Error while reading channel event parameters\n" :
                     "ReadChannelEvent: ошибка чтения параметров событий канала\n");
             return false;
@@ -263,7 +263,7 @@ static boolean ReadSysExEvent(midi_event_t *event, int event_type,
 
     if (!ReadVariableLength(&event->data.sysex.length, stream))
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "ReadSysExEvent: Failed to read length of SysEx block\n" :
                 "ReadSysExEvent: ошибка чтения длины блока SysEx\n");
         return false;
@@ -275,7 +275,7 @@ static boolean ReadSysExEvent(midi_event_t *event, int event_type,
 
     if (event->data.sysex.data == NULL)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "ReadSysExEvent: Failed while reading SysEx event\n" :
                 "ReadSysExEvent: ошибка чтения события SysEx\n");
         return false;
@@ -296,7 +296,7 @@ static boolean ReadMetaEvent(midi_event_t *event, FILE *stream)
 
     if (!ReadByte(&b, stream))
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "ReadMetaEvent: Failed to read meta event type\n" :
                 "ReadMetaEvent: ошибка чтения типа мета-события\n");
         return false;
@@ -308,7 +308,7 @@ static boolean ReadMetaEvent(midi_event_t *event, FILE *stream)
 
     if (!ReadVariableLength(&event->data.meta.length, stream))
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "ReadSysExEvent: Failed to read length of SysEx block\n" :
                 "ReadSysExEvent: ошибка чтения длины блока SysEx\n");
         return false;
@@ -320,7 +320,7 @@ static boolean ReadMetaEvent(midi_event_t *event, FILE *stream)
 
     if (event->data.meta.data == NULL)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "ReadSysExEvent: Failed while reading SysEx event\n" :
                 "ReadSysExEvent: ошибка чтения события SysEx\n");
         return false;
@@ -336,7 +336,7 @@ static boolean ReadEvent(midi_event_t *event, unsigned int *last_event_type,
 
     if (!ReadVariableLength(&event->delta_time, stream))
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "ReadEvent: Failed to read event timestamp\n" :
                 "ReadEvent: ошибка чтения временного штампа события\n");
         return false;
@@ -344,7 +344,7 @@ static boolean ReadEvent(midi_event_t *event, unsigned int *last_event_type,
 
     if (!ReadByte(&event_type, stream))
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "ReadEvent: Failed to read event type\n" :
                 "ReadEvent: ошибка чтения типа события\n");
         return false;
@@ -361,7 +361,7 @@ static boolean ReadEvent(midi_event_t *event, unsigned int *last_event_type,
 
         if (fseek(stream, -1, SEEK_CUR) < 0)
         {
-            fprintf(stderr, english_language ? 
+            printf(english_language ?
                     "ReadEvent: Unable to seek in stream\n" :
                     "ReadEvent: ошибка обнаружения временного штампа\n");
             return false;
@@ -410,7 +410,7 @@ static boolean ReadEvent(midi_event_t *event, unsigned int *last_event_type,
             break;
     }
 
-    fprintf(stderr, english_language ?
+    printf(english_language ?
             "ReadEvent: Unknown MIDI event type: 0x%x\n" :
             "ReadEvent: неизвестный тип события MIDI: 0x%x\n",
             event_type);
@@ -580,7 +580,7 @@ static boolean ReadFileHeader(midi_file_t *file, FILE *stream)
     if (!CheckChunkHeader(&file->header.chunk_header, HEADER_CHUNK_ID)
      || SDL_SwapBE32(file->header.chunk_header.chunk_size) != 6)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "ReadFileHeader: Invalid MIDI chunk header! chunk_size=%i\n" :
                 "ReadFileHeader: некорректный заголовок MIDI! chunk_size=%i\n",
                         SDL_SwapBE32(file->header.chunk_header.chunk_size));
@@ -593,7 +593,7 @@ static boolean ReadFileHeader(midi_file_t *file, FILE *stream)
     if ((format_type != 0 && format_type != 1)
      || file->num_tracks < 1)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "ReadFileHeader: Only type 0/1 MIDI files supported!\n" :
                 "ReadFileHeader: поддерживаются только 0/1 типы MIDI-файлов!\n");
         return false;
@@ -642,7 +642,7 @@ midi_file_t *MIDI_LoadFile(char *filename)
 
     if (stream == NULL)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "MIDI_LoadFile: Failed to open '%s'\n" :
                 "MIDI_LoadFile: ошибка открытия '%s'\n",
                 filename);
@@ -890,7 +890,7 @@ int main(int argc, char *argv[])
 
     if (file == NULL)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "Failed to open %s\n" :
                 "Ошибка открытия %s\n", 
                 argv[1]);

@@ -32,12 +32,14 @@
 #endif
 #include <windows.h>
 #include <stdlib.h>
+#include <io.h>
 
 #elif defined(__APPLE__)
 #include <mach-o/dyld.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <sys/syslimits.h>
+#include <unistd.h>
 #else
 #include <sys/stat.h>
 #include <unistd.h>
@@ -261,6 +263,8 @@ int main(int argc, char **argv)
         RD_CreateWindowsConsole();
     }
 #endif
+    // Route stderr messages to stdout
+    dup2(1, 2);
 
     // Check for -lang param before loading response file to show potential errors in the correct language
     CheckLangParam();

@@ -101,7 +101,7 @@ net_addr_t *NET_Query_ResolveMaster(net_context_t *context)
 
     if (addr == NULL)
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
                 "Warning: Failed to resolve address for master server: %s\n" :
                 "Внимание: ошибка получения адреса для центрального сервера: %s\n",
                 MASTER_SERVER_ADDRESS);
@@ -482,7 +482,7 @@ static void CheckTargetTimeouts(void)
 
             if (targets[i].type == QUERY_TARGET_MASTER)
             {
-                fprintf(stderr, english_language ?
+                printf(english_language ?
                         "NET_MasterQuery: no response from master server.\n" :
                         "NET_MasterQuery: ответ от центрального сервера не получен.\n");
             }

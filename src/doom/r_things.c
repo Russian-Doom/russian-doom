@@ -160,14 +160,14 @@ static void R_InstallSpriteLump (const int lump, unsigned const frame, char rot,
         // [crispy] make non-fatal
         if (sprtemp[frame].rotate == false)
         {
-            fprintf (stderr, "R_InitSprites: Sprite %s frame %c has "
+            printf("R_InitSprites: Sprite %s frame %c has "
                      "multip rot=0 lump\n", spritename, 'A'+frame);
         }
 
 	    // [crispy] make non-fatal
 	    if (sprtemp[frame].rotate == true)
         {
-	        fprintf (stderr, "R_InitSprites: Sprite %s frame %c has rotations "
+	        printf("R_InitSprites: Sprite %s frame %c has rotations "
 	    	         "and a rot=0 lump\n", spritename, 'A'+frame);
         }
 			
@@ -189,7 +189,7 @@ static void R_InstallSpriteLump (const int lump, unsigned const frame, char rot,
     // [crispy] make non-fatal
     if (sprtemp[frame].rotate == false)
     {
-        fprintf (stderr, "R_InitSprites: Sprite %s frame %c has rotations "
+        printf("R_InitSprites: Sprite %s frame %c has rotations "
                  "and a rot=0 lump\n", spritename, 'A'+frame);
     }
 		
@@ -199,7 +199,7 @@ static void R_InstallSpriteLump (const int lump, unsigned const frame, char rot,
     if (sprtemp[frame].lump[rotation] != -1)
     {
         // [crispy] make non-fatal
-        fprintf (stderr, "R_InitSprites: Sprite %s : %c : %c "
+        printf("R_InitSprites: Sprite %s : %c : %c "
                  "has two lumps mapped to it\n", spritename, 'A'+frame, '1'+rotation);
         return;
     }
@@ -307,7 +307,7 @@ static void R_InitSpriteDefs (char **namelist)
                 case -1:
                 // no rotations were found for that frame at all
                 // [crispy] make non-fatal
-                fprintf (stderr, english_language ?
+                printf(english_language ?
                          "R_InitSprites: No patches found for %s frame %c\n" :
                          "R_InitSprites: не найдены патчи для спрайта %s, фрейма %c\n", spritename, frame+'A');
                 break;

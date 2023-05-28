@@ -306,7 +306,7 @@ static boolean PIT_CheckLine (line_t *ld)
             // [crispy] print a warning
             if (numspechit == MAXSPECIALCROSS_ORIGINAL + 1)
             {
-                fprintf(stderr, "PIT_CheckLine: Triggered SPECHITS overflow!\n");
+                printf("PIT_CheckLine: Triggered SPECHITS overflow!\n");
             }
             SpechitOverrun(ld);
         }
@@ -1973,7 +1973,7 @@ static void SpechitOverrun (line_t *ld)
             nofit = addr; 
             break;
         default:
-            fprintf(stderr, "SpechitOverrun: Warning: unable to emulate"
+            printf("SpechitOverrun: Warning: unable to emulate"
                             "an overrun where numspechit=%i\n",
                             numspechit);
             break;

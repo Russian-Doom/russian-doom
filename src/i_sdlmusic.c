@@ -222,11 +222,11 @@ static boolean I_SDL_InitMusic(void)
     {
         if (SDL_Init(SDL_INIT_AUDIO) < 0)
         {
-            fprintf(stderr, "Unable to set up sound.\n");
+            printf("Unable to set up sound.\n");
         }
         else if (Mix_OpenAudioDevice(snd_samplerate, AUDIO_S16SYS, 2, 1024, NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE) < 0)
         {
-            fprintf(stderr, "Error initializing SDL_mixer: \'%s\'.\n",
+            printf("Error initializing SDL_mixer: \'%s\'.\n",
                     SDL_GetError());
             SDL_QuitSubSystem(SDL_INIT_AUDIO);
         }
@@ -552,7 +552,7 @@ static void *I_SDL_RegisterSong(void *data, int len)
         else
         {
             music = NULL;
-            fprintf(stderr, english_language ?
+            printf(english_language ?
                     "Error loading midi: Failed to register song.\n" :
                     "Ошибка загрузки при регистрации midi файла.\n");
         }
@@ -564,7 +564,7 @@ static void *I_SDL_RegisterSong(void *data, int len)
         if (music == NULL)
         {
             // Failed to load
-            fprintf(stderr, english_language ? 
+            printf(english_language ?
                     "Error loading midi: \'%s\'.\n" :
                     "Ошибка загрузки midi: \'%s\'.\n", SDL_GetError());
         }

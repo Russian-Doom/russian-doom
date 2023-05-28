@@ -89,17 +89,17 @@ static void SetHHEVersionByName(char *name)
         }
     }
 
-    fprintf(stderr, english_language ?
+    printf(english_language ?
                     "Unknown Heretic version: %s\n" :
                     "Некорректная версия Heretic: %s\n",
                     name);
-    fprintf(stderr, english_language ?
+    printf(english_language ?
                     "Valid versions:\n" :
                     "Корректные версии:\n");
 
     for (i=0; i<arrlen(hhe_versions); ++i)
     {
-        fprintf(stderr, "\t%s\n", hhe_versions[i]);
+        printf("\t%s\n", hhe_versions[i]);
     }
 }
 
@@ -192,8 +192,7 @@ void DEH_SuggestHereticVersion(deh_hhe_version_t version)
 {
     if (english_language)
     {
-        fprintf(stderr,
-        "\n"
+        printf("\n"
         "This patch may be for version %s. You are currently running in\n"
         "Heretic %s mode. For %s mode, add this to your command line:\n"
         "\n"
@@ -206,8 +205,7 @@ void DEH_SuggestHereticVersion(deh_hhe_version_t version)
     }
     else
     {
-        fprintf(stderr,
-        "\n"
+        printf("\n"
         "Предположительная версия патча Dehacked: %s, игра запущена в\n"
         "режиме эмуляции версии %s. Для эмуляции версии %s, запустите\n"
         "игре с параметром:\n"

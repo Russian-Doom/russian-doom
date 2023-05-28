@@ -101,7 +101,7 @@ static void MidiErrorMessageBox(DWORD dwError)
     }
     else
     {
-        fprintf(stderr, english_language ?
+        printf(english_language ?
 		        "Unknown midiStream error.\n" : "Неизвестная ошибка midiStream.\n");
     }
 }
@@ -502,7 +502,7 @@ boolean I_WIN_RegisterSong(char *filename)
 
     if (file == NULL)
     {
-        fprintf(stderr, english_language ? 
+        printf(english_language ?
 		        "I_WIN_RegisterSong: Failed to load MID.\n" :
 				"I_WIN_RegisterSong: ошибка загрузки MID.\n");
         return false;
