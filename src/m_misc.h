@@ -22,8 +22,14 @@
 
 #include <stdio.h>
 #include <stdarg.h>
-#include "doomtype.h"
+#include <sys/stat.h>
 
+#ifdef _WIN32
+#include <io.h>
+#include <direct.h>
+#endif
+
+#include "doomtype.h"
 
 boolean M_WriteFile(const char *name, void *source, int length);
 boolean M_WriteFileTimeout(const char *name, void *source, int length, int delay);
@@ -33,6 +39,30 @@ char *M_TempFile(char *s);
 boolean M_FileExists(char *file);
 char *M_FileCaseExists(char *file);
 long M_FileLength(FILE *handle);
+
+/**
+ * Cross platform version of fopen with UTF-8 support.
+ * M_fopen must be used instead of stdio.h/fopen
+ */
+FILE* M_fopen(const char* filename, const char* mode);
+
+/**
+ * Cross platform version of remove with UTF-8 support.
+ * M_remove must be used instead of stdio.h/remove
+ */
+int M_remove(const char* path);
+
+/**
+ * Cross platform version of rename with UTF-8 support.
+ * M_rename must be used instead of stdio.h/rename
+ */
+int M_rename(const char* oldname, const char* newname);
+
+/**
+ * Cross platform version of stat with UTF-8 support.
+ * M_stat must be used instead of stdio.h/stat
+ */
+int M_stat(const char* path, struct stat* buf);
 boolean M_StrToInt(const char *str, int *result);
 char *M_DirName(const char *path);
 const char *M_FileName(const char *path);

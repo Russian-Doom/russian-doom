@@ -23,7 +23,6 @@
 #include <ctype.h>
 #include <SDL_scancode.h>
 
-#include "rd_io.h"
 #include "doomdef.h"
 #include "d_main.h"
 #include "deh_main.h"
@@ -6628,7 +6627,7 @@ static void M_ReadSaveStrings()
     {
         M_StringCopy(name, P_SaveGameFile(i), sizeof(name));
 
-        handle = fopen(name, "rb");
+        handle = M_fopen(name, "rb");
         if (handle == NULL)
         {
             M_StringCopy(savegamestrings[i], EMPTYSTRING, SAVESTRINGSIZE);
@@ -8178,7 +8177,7 @@ static void M_ConfirmDeleteGameResponse(boolean confirmed)
         char name[256];
 
         M_StringCopy(name, P_SaveGameFile(CurrentItPos), sizeof(name));
-        remove(name);
+        M_remove(name);
         M_ReadSaveStrings();
     }
 }

@@ -19,7 +19,6 @@
 
 
 #include <ctype.h>
-#include "rd_io.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -90,7 +89,7 @@ static void LoadResponseFile(int argv_index, const char *filename)
     int i, k;
 
     // Read the response file into memory
-    handle = fopen(filename, "rb");
+    handle = M_fopen(filename, "rb");
 
     if (handle == NULL)
     {
@@ -310,7 +309,7 @@ static boolean FileIsDemoLump(const char *filename)
     int ver;
     byte buf[12], *p = buf;
 
-    handle = fopen(filename, "rb");
+    handle = M_fopen(filename, "rb");
 
     if (handle == NULL)
     {

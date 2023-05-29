@@ -23,13 +23,12 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include "rd_io.h"
 #include "doomdef.h"
 #include "doomkeys.h"
 
 #include "d_main.h"
 #include "deh_main.h"
-
+#include "m_misc.h"
 #include "i_input.h"
 #include "i_swap.h"
 #include "i_system.h"
@@ -791,7 +790,7 @@ void M_ReadSaveStrings(void)
             Z_Free(fname);
         fname = M_SafeFilePath(savegamedir, M_MakeStrifeSaveDir(i, "\\name"));
 
-        handle = fopen(fname, "rb");
+        handle = M_fopen(fname, "rb");
         if(handle == NULL)
         {
             M_StringCopy(savegamestrings[i], EMPTYSTRING,

@@ -20,7 +20,6 @@
 // HEADER FILES ------------------------------------------------------------
 
 // haleyjd: removed WATCOMC
-#include "rd_io.h"
 #include <stdlib.h>
 #include <time.h>
 

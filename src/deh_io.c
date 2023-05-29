@@ -19,7 +19,6 @@
 
 
 #include <stdarg.h>
-#include "rd_io.h"
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -94,7 +93,7 @@ deh_context_t *DEH_OpenFile(char *filename)
     FILE *fstream;
     deh_context_t *context;
 
-    fstream = fopen(filename, "r");
+    fstream = M_fopen(filename, "r");
 
     if (fstream == NULL)
         return NULL;

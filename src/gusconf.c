@@ -22,8 +22,6 @@
 //
 
 
-
-#include "rd_io.h"
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -243,7 +241,7 @@ static boolean WriteTimidityConfig(char *path, gus_config_t *config, char* gus_p
                "\tОшибка: Путь содержит пробелы, что не поддерживается вашей версией библиотеки SDL_mixer. Обновите SDL_mixer хотя бы до версии 2.5.0\n");
     }
 
-    fstream = fopen(path, "w");
+    fstream = M_fopen(path, "w");
 
     if (fstream == NULL)
     {

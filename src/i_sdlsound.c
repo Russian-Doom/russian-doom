@@ -19,7 +19,6 @@
 //
 
 
-#include "rd_io.h"
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
@@ -577,7 +576,7 @@ static void WriteWAV(char *filename, byte *data,
     unsigned int i;
     unsigned short s;
 
-    wav = fopen(filename, "wb");
+    wav = M_fopen(filename, "wb");
 
     // Header
 

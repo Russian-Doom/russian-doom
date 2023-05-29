@@ -19,13 +19,13 @@
 
  */
 
-#include "rd_io.h"
 #include <stdlib.h>
 #include <string.h>
 
 #include "doomdef.h"
 #include "d_mode.h"
 #include "m_argv.h"
+#include "m_misc.h"
 #include "statdump.h"
 #include "jn.h"
 
@@ -337,7 +337,7 @@ void StatDump(void)
 
         if (strcmp(myargv[i + 1], "-") != 0)
         {
-            dumpfile = fopen(myargv[i + 1], "w");
+            dumpfile = M_fopen(myargv[i + 1], "w");
         }
         else
         {

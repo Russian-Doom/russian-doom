@@ -18,9 +18,6 @@
 //
 
 
-
-#include "rd_io.h"
-
 #include "m_misc.h"
 #include "w_file.h"
 #include "z_zone.h"
@@ -38,7 +35,7 @@ static wad_file_t *W_StdC_OpenFile(char *path)
     stdc_wad_file_t *result;
     FILE *fstream;
 
-    fstream = fopen(path, "rb");
+    fstream = M_fopen(path, "rb");
 
     if (fstream == NULL)
     {

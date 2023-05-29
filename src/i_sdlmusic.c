@@ -18,8 +18,6 @@
 //
 
 
-
-#include "rd_io.h"
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -88,7 +86,7 @@ static boolean WriteWrapperTimidityConfig(char *write_path)
                "\tОшибка: Путь содержит пробелы, что не поддерживается вашей версией библиотеки SDL_mixer. Обновите SDL_mixer хотя бы до версии 2.5.0.\n");
     }
 
-    fstream = fopen(write_path, "w");
+    fstream = M_fopen(write_path, "w");
 
     if(fstream == NULL)
     {
@@ -170,7 +168,7 @@ static void RemoveTimidityConfig(void)
 {
     if (temp_timidity_cfg != NULL)
     {
-        remove(temp_timidity_cfg);
+        M_remove(temp_timidity_cfg);
         free(temp_timidity_cfg);
     }
 }
@@ -576,7 +574,7 @@ static void *I_SDL_RegisterSong(void *data, int len)
 
         if (strlen(snd_musiccmd) == 0)
         {
-            remove(filename);
+            M_remove(filename);
         }
     }
 

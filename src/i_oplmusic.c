@@ -18,8 +18,6 @@
 //
 
 
-
-#include "rd_io.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -1688,7 +1686,7 @@ static void *I_OPL_RegisterSong(void *data, int len)
 
     // remove file now
 
-    remove(filename);
+    M_remove(filename);
     free(filename);
 
     return result;

@@ -20,7 +20,6 @@
 // HEADER FILES ------------------------------------------------------------
 
 #include "h2def.h"
-#include "rd_io.h"
 #include "i_system.h"
 #include "m_misc.h"
 #include "i_swap.h"
@@ -3344,13 +3343,13 @@ void SV_ClearSaveSlot(int slot)
                    "%shexen-save-%d%02d.sav", SavePath, slot, i);
         if(M_FileExists(fileName))
         {
-            remove(fileName);
+            M_remove(fileName);
         }
     }
     M_snprintf(fileName, sizeof(fileName), "%shexen-save-%d.sav", SavePath, slot);
     if(M_FileExists(fileName))
     {
-        remove(fileName);
+        M_remove(fileName);
     }
 }
 
@@ -3407,7 +3406,7 @@ static void CopyFile(char *source_name, char *dest_name)
     FILE *read_handle, *write_handle;
     int buf_count, read_count, write_count;
 
-    read_handle = fopen(source_name, "rb");
+    read_handle = M_fopen(source_name, "rb");
     if (read_handle == NULL)
     {
         I_Error (english_language ?
@@ -3432,7 +3431,7 @@ static void CopyFile(char *source_name, char *dest_name)
     }
     */
 
-    write_handle = fopen(dest_name, "wb");
+    write_handle = M_fopen(dest_name, "wb");
     if (write_handle == NULL)
     {
         I_Error (english_language ?
@@ -3487,7 +3486,7 @@ static boolean ExistingFile(char *name)
 {
     FILE *fp;
 
-    if ((fp = fopen(name, "rb")) != NULL)
+    if ((fp = M_fopen(name, "rb")) != NULL)
     {
         fclose(fp);
         return true;
@@ -3506,12 +3505,12 @@ static boolean ExistingFile(char *name)
 
 static void SV_OpenRead(char *fileName)
 {
-    SavingFP = fopen(fileName, "rb");
+    SavingFP = M_fopen(fileName, "rb");
 }
 
 static void SV_OpenWrite(char *fileName)
 {
-    SavingFP = fopen(fileName, "wb");
+    SavingFP = M_fopen(fileName, "wb");
 }
 
 //==========================================================================
