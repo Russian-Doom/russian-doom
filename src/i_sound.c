@@ -34,6 +34,7 @@
 #include "m_argv.h"
 #include "m_config.h"
 #include "m_misc.h"
+#include "os_compat.h"
 
 // Sound sample rate to use for digital output (Hz)
 
@@ -226,7 +227,7 @@ void I_InitSound(boolean use_sfx_prefix)
 #ifdef _WIN32
         // [Dasperal] Set the recommended SDL audio driver to "directsound" (skip "wasapi")
         // on Windows Vista to avoid sound stutters.
-        if(I_CheckWindowsVista())
+        if(OS_getVersion() == Windows_Vista)
         {
             SDL_SetHintWithPriority(SDL_HINT_AUDIODRIVER, "directsound", SDL_HINT_OVERRIDE);
         }

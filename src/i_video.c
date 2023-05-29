@@ -45,6 +45,7 @@
 #include "m_argv.h"
 #include "m_config.h"
 #include "m_misc.h"
+#include "os_compat.h"
 #include "tables.h"
 #include "v_diskicon.h"
 #include "v_video.h"
@@ -1369,10 +1370,6 @@ static void CenterWindow(int *x, int *y, const int w, const int h)
     *y = bounds.y + SDL_max((bounds.h - h) / 2, 0);
 }
 
-#ifdef _WIN32
-extern void DisableWinRound(SDL_Window* screen);
-#endif
-
 static void SetVideoMode(void)
 {
     int w, h;
@@ -1521,7 +1518,7 @@ static void SetVideoMode(void)
 	// [JN] After window and renderer were created, unoptionally
 	// disable window corners rounding in Windows 11.
 #ifdef _WIN32
-	DisableWinRound(screen);
+    OS_DisableWindowCornersRounding(screen);
 #endif
 
     // [JN] Should we keep window above other windows?
