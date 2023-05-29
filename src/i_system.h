@@ -73,8 +73,6 @@ void I_ConsolePause(void);
 
 #define CONSOLE_PROLOG RD_CreateWindowsConsole();
 #define CONSOLE_EPILOG if(!console_connected) I_ConsolePause();
-
-int I_CheckWindowsVista(void);
 #else
 #define CONSOLE_PROLOG
 #define CONSOLE_EPILOG

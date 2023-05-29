@@ -54,6 +54,7 @@ add_library(Common STATIC EXCLUDE_FROM_ALL
     net_sdl.c           net_sdl.h
     net_server.c        net_server.h
     net_structrw.c      net_structrw.h
+    os_compat.c         os_compat.h
     rd_keybinds.c       rd_keybinds.h
     rd_menu.c           rd_menu.h
                         rd_menu_control.h
@@ -74,7 +75,6 @@ add_library(Common STATIC EXCLUDE_FROM_ALL
     w_file_posix.c
     w_file_win32.c
     w_merge.c           w_merge.h
-    win_compat.c
     z_zone.c            z_zone.h
 )
 if(WIN32 AND MSVC)

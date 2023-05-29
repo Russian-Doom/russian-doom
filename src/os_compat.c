@@ -17,94 +17,91 @@
 // DESCRIPTION:
 //  Several compatibility functions for Windows OS
 
+#include "os_compat.h"
+
 #ifdef _WIN32
+#ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
+#endif
 
-#include "SDL_syswm.h"
-#include "i_system.h"
+static os_version_t osVersion = 0;
 
-typedef long (__stdcall *PRTLGETVERSION)(PRTL_OSVERSIONINFOEXW);
-
-int I_CheckWindowsVista(void)
+os_version_t OS_getVersion(void)
 {
-    PRTLGETVERSION  pRtlGetVersion = (PRTLGETVERSION) GetProcAddress(GetModuleHandle("ntdll.dll"), "RtlGetVersion");
+    if(osVersion >= Unknown)
+        return osVersion;
+#ifdef _WIN32
+    typedef long (__stdcall *PRTLGETVERSION)(PRTL_OSVERSIONINFOEXW);
 
+    PRTLGETVERSION  pRtlGetVersion = (PRTLGETVERSION) GetProcAddress(GetModuleHandle("ntdll.dll"), "RtlGetVersion");
     if(pRtlGetVersion)
     {
         OSVERSIONINFOEXW info;
 
         memset(&info, 0, sizeof(OSVERSIONINFOEXW));
         info.dwOSVersionInfoSize = sizeof(RTL_OSVERSIONINFOEXW);
-
         pRtlGetVersion((PRTL_OSVERSIONINFOEXW)&info);
 
         if(info.dwPlatformId == VER_PLATFORM_WIN32_NT)
         {
-            if(info.dwMajorVersion == 6)
+            if(info.dwMajorVersion >= 10)
             {
-                if(info.dwMinorVersion == 0)
-                    return 1;
-            }
-        }
-    }
-
-    return 0;
-}
-
-int I_CheckWindows11(void)
-{
-    PRTLGETVERSION  pRtlGetVersion = (PRTLGETVERSION) GetProcAddress(GetModuleHandle("ntdll.dll"), "RtlGetVersion");
-
-    if(pRtlGetVersion)
-    {
-        OSVERSIONINFOEXW info;
-
-        memset(&info, 0, sizeof(OSVERSIONINFOEXW));
-        info.dwOSVersionInfoSize = sizeof(RTL_OSVERSIONINFOEXW);
-
-        pRtlGetVersion((PRTL_OSVERSIONINFOEXW)&info);
-
-        if(info.dwPlatformId == VER_PLATFORM_WIN32_NT)
-        {
-            if(info.dwMajorVersion == 10)
-            {
+                // if(info.dwMinorVersion >= 0)
                 if(info.dwBuildNumber >= 22000)
-                    return 1;
+                    return osVersion = Windows_11;
+                else
+                    return osVersion = Windows_10;
+            }
+            else if(info.dwMajorVersion >= 6)
+            {
+                if(info.dwMinorVersion >= 3)
+                    return osVersion = Windows_8_1;
+                else if(info.dwMinorVersion == 2)
+                    return osVersion = Windows_8;
+                else if(info.dwMinorVersion == 1)
+                    return osVersion = Windows_7;
+                else if(info.dwMinorVersion == 0)
+                    return osVersion = Windows_Vista;
+            }
+            else if(info.dwMajorVersion == 5)
+            {
+                if(info.dwMinorVersion >= 2)
+                    return osVersion = Windows_XP64;
+                else if(info.dwMinorVersion == 1)
+                    return osVersion = Windows_XP;
             }
         }
     }
-
-    return 0;
+#endif
+    return osVersion = Unknown;
 }
 
+#ifdef _WIN32
 typedef HRESULT (WINAPI *PDWMSETWINDOWATTRIBUTE)(HWND, DWORD, LPCVOID, DWORD);
 
-void DisableWinRound(SDL_Window* screen)
+void OS_DisableWindowCornersRounding(SDL_Window* window)
 {
-    HMODULE hDllDwmApi;
-    PDWMSETWINDOWATTRIBUTE pDwmSetWindowAttribute;
-    SDL_SysWMinfo wmInfo;
-    HWND hwnd;
-    int noround = 1; // DWMWCP_DONOTROUND
+    if(OS_getVersion() != Windows_11)
+        return;
 
-    if(!I_CheckWindows11())
-		return;
-
-    pDwmSetWindowAttribute = NULL;
-    hDllDwmApi = LoadLibrary("dwmapi.dll");
+    PDWMSETWINDOWATTRIBUTE pDwmSetWindowAttribute = NULL;
+    HMODULE hDllDwmApi = LoadLibrary("dwmapi.dll");
     if(hDllDwmApi != NULL)
     {
         pDwmSetWindowAttribute = (PDWMSETWINDOWATTRIBUTE) GetProcAddress(hDllDwmApi, "DwmSetWindowAttribute");
     }
     if(pDwmSetWindowAttribute != NULL)
     {
+        SDL_SysWMinfo wmInfo;
+        int noround = 1; // DWMWCP_DONOTROUND
+
         SDL_VERSION(&wmInfo.version);
-        SDL_GetWindowWMInfo(screen, &wmInfo);
-        hwnd = wmInfo.info.win.window;
+        SDL_GetWindowWMInfo(window, &wmInfo);
+        HWND hwnd = wmInfo.info.win.window;
         pDwmSetWindowAttribute(hwnd, 33, // DWMWA_WINDOW_CORNER_PREFERENCE
-                               &noround, sizeof(noround));
+            &noround, sizeof(noround));
     }
 }
-
 #endif
