@@ -20,7 +20,6 @@
 
 #include <stdlib.h>
 
-#include "rd_io.h"
 #include "hr_local.h"
 #include "i_swap.h"
 #include "i_system.h"
@@ -62,12 +61,12 @@ char *SV_Filename(int slot)
 
 void SV_Open(char *fileName)
 {
-    SaveGameFP = fopen(fileName, "wb");
+    SaveGameFP = M_fopen(fileName, "wb");
 }
 
 void SV_OpenRead(char *filename)
 {
-    SaveGameFP = fopen(filename, "rb");
+    SaveGameFP = M_fopen(filename, "rb");
 }
 
 //==========================================================================

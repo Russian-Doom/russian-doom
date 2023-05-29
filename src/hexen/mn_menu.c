@@ -21,7 +21,6 @@
 #include <ctype.h>
 #include <SDL_scancode.h>
 
-#include "rd_io.h"
 #include "h2def.h"
 #include "i_controller.h"
 #include "i_input.h"
@@ -2126,7 +2125,7 @@ static boolean ReadDescriptionForSlot(int slot, char *description)
 
     M_snprintf(name, sizeof(name), "%shexen-save-%d.sav", SavePath, slot);
 
-    fp = fopen(name, "rb");
+    fp = M_fopen(name, "rb");
 
     if (fp == NULL)
     {

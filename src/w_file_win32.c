@@ -19,9 +19,6 @@
 
 
 #ifdef _WIN32
-
-#include "rd_io.h"
-
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif

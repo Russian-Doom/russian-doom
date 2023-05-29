@@ -23,7 +23,6 @@
 
 #include "i_glob.h"
 #include "m_misc.h"
-#include "rd_io.h"
 
 #if defined(_MSC_VER)
 // For Visual C++, we need to include the win_opendir module.
@@ -59,7 +58,7 @@ static boolean IsDirectory(char *dir, struct dirent *de)
         int result;
 
         filename = M_StringJoin(dir, DIR_SEPARATOR_S, de->d_name, NULL);
-        result = stat(filename, &sb);
+        result = M_stat(filename, &sb);
         free(filename);
 
         if (result != 0)

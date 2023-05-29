@@ -21,8 +21,6 @@
 //
 
 
-
-#include "rd_io.h"
 #include <string.h>
 #include <math.h>
 
@@ -1995,7 +1993,7 @@ void WritePNGfile(char *filename)
     }
     else
     {
-        FILE *handle = fopen(filename, "wb");
+        FILE *handle = M_fopen(filename, "wb");
         fwrite(pPNG_data, 1, png_data_size, handle);
         fclose(handle);
         mz_free(pPNG_data);

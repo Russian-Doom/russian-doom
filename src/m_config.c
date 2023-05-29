@@ -19,8 +19,6 @@
 //
 
 
-
-#include "rd_io.h"
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -896,7 +894,7 @@ void M_SaveConfig (void)
     FILE *f;
     section_t* section;
 
-    f = fopen(configPath, "w");
+    f = M_fopen(configPath, "w");
     if(!f)
         return; // can't write the file, but don't complain
     fprintf(f, "config_version = %i\n\n", CURRENT_CONFIG_VERSION);
@@ -1038,7 +1036,7 @@ void M_LoadConfig(void)
         configPath = M_StringJoin(configdir, config_file_name, NULL);
     }
 
-    file = fopen(configPath, "r");
+    file = M_fopen(configPath, "r");
     if(file == NULL)
     {
         // File not opened, but don't complain.

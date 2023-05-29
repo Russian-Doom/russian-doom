@@ -17,14 +17,13 @@
 //
 
 
-
-#include "rd_io.h"
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 
-#include "i_system.h"
 #include "doomtype.h"
+#include "m_misc.h"
+#include "i_system.h"
 #include "i_swap.h"
 #include "midifile.h"
 #include "jn.h"
@@ -638,7 +637,7 @@ midi_file_t *MIDI_LoadFile(char *filename)
 
     // Open file
 
-    stream = fopen(filename, "rb");
+    stream = M_fopen(filename, "rb");
 
     if (stream == NULL)
     {

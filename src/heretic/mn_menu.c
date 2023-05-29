@@ -20,7 +20,6 @@
 #include <ctype.h>
 #include <SDL_scancode.h>
 
-#include "rd_io.h"
 #include "deh_str.h"
 #include "hr_local.h"
 #include "i_controller.h"
@@ -1912,7 +1911,7 @@ static void MN_LoadSlotText(void)
     for (i = 0; i < 7; i++)
     {
         filename = SV_Filename(i);
-        fp = fopen(filename, "rb+");
+        fp = M_fopen(filename, "rb+");
 	    free(filename);
 
         if (!fp)
@@ -6421,7 +6420,7 @@ boolean MN_Responder(event_t * event)
                 {
                     // Find name of saved game file.
                     name = SV_Filename(CurrentItPos);
-                    remove(name);
+                    M_remove(name);
                     free(name);
                     // Truncate text of saved game slot.
                     memset(SlotText[CurrentItPos], 0, SLOTTEXTLEN + 2);

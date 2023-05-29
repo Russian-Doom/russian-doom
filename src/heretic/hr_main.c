@@ -17,8 +17,6 @@
 // D_main.c
 
 
-
-#include "rd_io.h"
 #include <stdlib.h>
 #include <time.h>
 

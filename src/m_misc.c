@@ -19,8 +19,7 @@
 //
 
 
-
-#include "rd_io.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -31,17 +30,11 @@
 #define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
-#include <io.h>
-#ifdef _MSC_VER
-#include <direct.h>
-#endif
 #else
-#include <sys/stat.h>
 #include <sys/types.h>
 #endif
 
 #include "doomtype.h"
-#include "d_name.h"
 #include "i_system.h"
 #include "i_timer.h"
 #include "m_argv.h"
@@ -49,6 +42,7 @@
 #include "z_zone.h"
 #include "jn.h"
 
+wchar_t* ConvertToUtf8(const char* str);
 
 //
 // Recursively create all directories that make up the given path, including the last component.
@@ -61,7 +55,11 @@ void M_MakeDirectory(char *path)
         M_MakeDirectory(parentDir);
     free(parentDir);
 #ifdef _WIN32
-    mkdir(path);
+    wchar_t *wdir = ConvertToUtf8(path);
+    if(!wdir)
+        return;
+    _wmkdir(wdir);
+    free(wdir);
 #else
     mkdir(path, 0755);
 #endif
@@ -288,6 +286,87 @@ char *M_TempFile(char *s)
 #endif
 
     return M_StringJoin(tempdir, DIR_SEPARATOR_S, s, NULL);
+}
+
+FILE *M_fopen(const char *filename, const char *mode)
+{
+#ifdef _WIN32
+    wchar_t* wname = ConvertToUtf8(filename);
+    if(!wname)
+        return NULL;
+    wchar_t* wmode = ConvertToUtf8(mode);
+    if(!wmode)
+    {
+        free(wname);
+        return NULL;
+    }
+
+    FILE* file = _wfopen(wname, wmode);
+    free(wname);
+    free(wmode);
+    return file;
+#else
+    return fopen(filename, mode);
+#endif
+}
+
+int M_remove(const char* path)
+{
+#ifdef _WIN32
+    wchar_t* wpath = ConvertToUtf8(path);
+    if(!wpath)
+        return 0;
+    int ret = _wremove(wpath);
+    free(wpath);
+    return ret;
+#else
+    return remove(path);
+#endif
+}
+
+int M_rename(const char* oldname, const char* newname)
+{
+#ifdef _WIN32
+    wchar_t *wold = ConvertToUtf8(oldname);
+    if(!wold)
+        return 0;
+
+    wchar_t *wnew = ConvertToUtf8(newname);
+    if(!wnew)
+    {
+        free(wold);
+        return 0;
+    }
+
+    int ret = _wrename(wold, wnew);
+    free(wold);
+    free(wnew);
+    return ret;
+#else
+    return rename(oldname, newname);
+#endif
+}
+
+int M_stat(const char* path, struct stat* buf)
+{
+#ifdef _WIN32
+    struct _stat wbuf;
+
+    wchar_t* wpath = ConvertToUtf8(path);
+    if(!wpath)
+        return -1;
+
+    int ret = _wstat(wpath, &wbuf);
+
+    // The _wstat() function expects a struct _stat* parameter that is
+    // incompatible with struct stat*. We copy only the required compatible
+    // field.
+    buf->st_mode = wbuf.st_mode;
+    free(wpath);
+    return ret;
+#else
+    return stat(path, buf);
+#endif
 }
 
 boolean M_StrToInt(const char *str, int *result)
@@ -684,6 +763,33 @@ int M_snprintf(char *buf, size_t buf_len, const char *s, ...)
 }
 
 #ifdef _WIN32
+wchar_t* ConvertToUtf8(const char* str)
+{
+    int wlen = MultiByteToWideChar(CP_UTF8, 0, str, -1, NULL, 0);
+    if(!wlen)
+    {
+        errno = EINVAL;
+        printf("Warning: Failed to convert path to UTF8\n");
+        return NULL;
+    }
+
+    wchar_t* wstr = malloc(sizeof(wchar_t) * wlen);
+    if(!wstr)
+    {
+        printf("ConvertToUtf8: Failed to allocate new string\n");
+        return NULL;
+    }
+
+    if(MultiByteToWideChar(CP_UTF8, 0, str, -1, wstr, wlen) == 0)
+    {
+        errno = EINVAL;
+        printf("Warning: Failed to convert path to UTF8\n");
+        free(wstr);
+        return NULL;
+    }
+
+    return wstr;
+}
 
 char *M_OEMToUTF8(const char *oem)
 {
@@ -699,7 +805,6 @@ char *M_OEMToUTF8(const char *oem)
 
     return result;
 }
-
 #endif
 
 //

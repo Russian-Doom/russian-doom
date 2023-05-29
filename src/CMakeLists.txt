@@ -54,7 +54,6 @@ add_library(Common STATIC EXCLUDE_FROM_ALL
     net_sdl.c           net_sdl.h
     net_server.c        net_server.h
     net_structrw.c      net_structrw.h
-                        rd_io.h
     rd_keybinds.c       rd_keybinds.h
     rd_menu.c           rd_menu.h
                         rd_menu_control.h
