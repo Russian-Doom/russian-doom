@@ -1,4 +1,4 @@
-if(COMPILE_HEXEN)
+if(ID_COMPILE_HEXEN)
     add_library(hexen STATIC
                 a_action.c
                                     am_data.h
@@ -69,7 +69,7 @@ if(COMPILE_HEXEN)
     target_link_libraries(hexen PRIVATE
         Common
     )
-    if(NOT NO_GIT_HASH)
+    if(NOT ID_GIT_NO_HASH)
         add_dependencies(hexen revision_check)
     endif()
 endif()

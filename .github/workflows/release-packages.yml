@@ -84,7 +84,7 @@ jobs:
           fi
           echo "game=$game" >> $GITHUB_OUTPUT
           echo "version=$version" >> $GITHUB_OUTPUT
-          cmake -G "Ninja" -D COMPILE_DOOM="$compile_doom" -D COMPILE_HERETIC="$compile_heretic" -D COMPILE_HEXEN="$compile_hexen" -D COMPILE_STRIFE="$compile_strife" -D BUILD_VERSION_OVERWRITE="$version" -D CMAKE_BUILD_TYPE=Release -S . -B build
+          cmake -G "Ninja" -D ID_COMPILE_DOOM="$compile_doom" -D ID_COMPILE_HERETIC="$compile_heretic" -D ID_COMPILE_HEXEN="$compile_hexen" -D ID_COMPILE_STRIFE="$compile_strife" -D ID_BUILD_VERSION_OVERWRITE="$version" -D CMAKE_BUILD_TYPE=Release -S . -B build
 
       - name: Build
         run: |
