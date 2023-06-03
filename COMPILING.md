@@ -206,14 +206,13 @@ cmake -G "Visual Studio 17 2022" -A x64 \
 ```
 
 You can enable and disable the compilation of modules by changing cmake options:
-`COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE`, `COMPILE_SETUP`
-to `ON` or `OFF`.
+`ID_COMPILE_DOOM`, `ID_COMPILE_HERETIC`, `ID_COMPILE_HEXEN`, `ID_COMPILE_STRIFE` to `ON` or `OFF`.
 
 To use configs provided by the installed libraries (for example, in the MSYS environment) instead of find-modules,
 set the `CMAKE_FIND_PACKAGE_PREFER_CONFIG` cmake option to `ON`.
 
 International Doom uses Link Time Optimization if it is available in the compiler.
-If it causes problems with your compiler, set `ENABLE_LTO` cmake option to `OFF`.
+If it causes problems with your compiler, set `ID_ENABLE_LTO` cmake option to `OFF`.
 
 If you are using MSYS2 (or any other MinGW environment), by default DLLs from 'Selected DLL set'
 will be used instead of DLLs provided by the build environment.
@@ -244,7 +243,7 @@ Available components are `doom`, `heretic`, `hexen`.
 
 Packaging is performed using Cpack.
 
-If you want to overwrite the package version, set `BUILD_VERSION_OVERWRITE` cmake variable at configuring time,
+If you want to overwrite the package version, set `ID_BUILD_VERSION_OVERWRITE` cmake variable at configuring time,
 instead of using `-R` Cpack parameter.
 
 To package International Doom, run the following commands:
@@ -299,10 +298,9 @@ cmake -G "Unix Makefiles" -D CMAKE_BUILD_TYPE="Release" -S . -B build
 Available build types are `Release`, `Debug`, `RelWithDebInfo`, `MinSizeRel`.
 
 You can enable and disable the compilation of modules by changing cmake options:
-`COMPILE_DOOM`, `COMPILE_HERETIC`, `COMPILE_HEXEN`, `COMPILE_STRIFE`, `COMPILE_SETUP`
-to `ON` or `OFF`.
+`ID_COMPILE_DOOM`, `ID_COMPILE_HERETIC`, `ID_COMPILE_HEXEN`, `ID_COMPILE_STRIFE` to `ON` or `OFF`.
 
-If you want to use a portable version, like on Windows, set the `BUILD_PORTABLE` cmake option to `ON`.
+If you want to use a portable version, like on Windows, set the `ID_BUILD_PORTABLE` cmake option to `ON`.
 Portable version searches and stores internal resources,
 config files, and savegames in the installation directory among executables.
 
@@ -310,7 +308,7 @@ To use configs provided by the installed libraries instead of find-modules,
 set the `CMAKE_FIND_PACKAGE_PREFER_CONFIG` cmake option to `ON`.
 
 International Doom uses Link Time Optimization if it is available in the compiler.
-If it causes problems with your compiler, set `ENABLE_LTO` cmake option to `OFF`.
+If it causes problems with your compiler, set `ID_ENABLE_LTO` cmake option to `OFF`.
 
 To build the project, use the following command:
 ```shell
@@ -343,7 +341,7 @@ By default, it is `/usr/local` and you probably want to change it to `/usr`.
 You can then use `cmake --install build --prefix <path>` command to collect all distribution files in the `<path>`
 location to prepare them for packaging.
 
-If you want to overwrite the package version, set `BUILD_VERSION_OVERWRITE` cmake variable.
+If you want to overwrite the package version, set `ID_BUILD_VERSION_OVERWRITE` cmake variable.
 
 # Building a DOS version of International Doom
 
