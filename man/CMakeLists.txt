@@ -58,7 +58,7 @@ if(UNIX AND Python3_Interpreter_FOUND)
             SOURCE "\"${PROJECT_SOURCE_DIR}/src/m_argv.c\""
         )
         add_custom_command(OUTPUT "${Out}.gz"
-            COMMAND gzip -k "${Out}"
+            COMMAND gzip -f -k "${Out}"
             MAIN_DEPENDENCY "${Out}"
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
             COMMENT "Compressing ${Out}.gz"

@@ -35,6 +35,7 @@
 #endif
 
 #include "doomtype.h"
+#include "d_name.h"
 #include "i_system.h"
 #include "i_timer.h"
 #include "m_argv.h"
