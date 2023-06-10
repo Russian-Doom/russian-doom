@@ -8,6 +8,10 @@ on:
   pull_request:
     branches: ["*"]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   Cmake:
     name: ${{ matrix.os.name }} | ${{ matrix.arch.name }} | ${{ matrix.compiler.display_name }}
