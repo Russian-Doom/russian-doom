@@ -4,7 +4,7 @@
   * [Step 1: Setting up build environment](#step-1-setting-up-build-environment)
     * [1.A: MSYS2 environment](#1a-msys2-environment)
       * [1.A.A: MSYS2 UCRT environment](#1aa-msys2-ucrt-environment)
-      * [1.A.B: MSYS2 GCC environment](#1ab-msys2-gcc-environment)
+      * [1.A.B: MSYS2 MinGW environment](#1ab-msys2-mingw-environment)
       * [1.A.C: MSYS2 Clang environment](#1ac-msys2-clang-environment)
     * [1.B: MSVC Visual Studio environment](#1b-msvc-visual-studio-environment)
       * [1.B.A: Providing required dependencies manually](#1ba-providing-required-dependencies-manually)
@@ -27,7 +27,7 @@
 
 Download the source code archive of the latest release version and unpack it.
 Or clone repository from Git.
-The primary way of building International Doom on Windows is using an MSYS GCC environment.
+The primary way of building International Doom on Windows is using an MSYS UCRT64 and MINGW32 environments.
 
 ### 1.A: MSYS2 environment
 
@@ -62,7 +62,7 @@ If you want to run CTest tests, you must also install `gdb` by the following com
 pacman -S mingw-w64-ucrt-x86_64-gdb
 ```
 
-### **1.A.B: MSYS2 GCC environment**
+### **1.A.B: MSYS2 MinGW environment**
 
 For the **mingw-w64-i686** toolchain (**32**-bit), use the **mingw32.exe** terminal
 and for the **mingw-w64-x86_64** toolchain (**64**-bit), use the **mingw64.exe** terminal.
@@ -213,6 +213,9 @@ set the `CMAKE_FIND_PACKAGE_PREFER_CONFIG` cmake option to `ON`.
 
 International Doom uses Link Time Optimization if it is available in the compiler.
 If it causes problems with your compiler, set `ID_ENABLE_LTO` cmake option to `OFF`.
+
+Because MSYS doesn't have UCRT32 environment we use `ucrt` in MINGW32 environment.
+To disable this behavior and use `msvcrt` default, set `ID_UCRT32` cmake option to `OFF`.
 
 If you are using MSYS2 (or any other MinGW environment), by default DLLs from 'Selected DLL set'
 will be used instead of DLLs provided by the build environment.

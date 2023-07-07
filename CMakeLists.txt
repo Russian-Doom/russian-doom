@@ -89,8 +89,7 @@ check_ipo_supported(RESULT HAVE_LTO)
 cmake_dependent_option(ID_ENABLE_LTO "Use link-time optimisation" ON "HAVE_LTO" OFF)
 
 #MSYS MINGW32 to UCRT32 hack
-cmake_dependent_option(ID_X_UCRT32 "Use MSYS MINGW32 to UCRT32 hack (may be unstable)" OFF "WIN32;ARCH STREQUAL x86;MINGW;CMAKE_C_COMPILER_ID STREQUAL GNU" OFF)
-mark_as_advanced(ID_X_UCRT32)
+cmake_dependent_option(ID_UCRT32 "Use MSYS MINGW32 to UCRT32 hack" ON "WIN32;ARCH STREQUAL x86;MINGW;CMAKE_C_COMPILER_ID STREQUAL GNU" OFF)
 
 include(Utils)
 
@@ -145,9 +144,9 @@ if(MSVC)
     string(REPLACE "/O3" "/O2" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
     string(REPLACE "/O3" "/O2" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
 else()
-    if(ID_X_UCRT32)
+    if(ID_UCRT32)
         add_compile_definitions(
-            # Fix utf-8 text in console (somehow)
+            # Fixes utf-8 text in console
             _UCRT
         )
     endif()
