@@ -14,151 +14,132 @@ concurrency:
 
 jobs:
   Cmake:
-    name: ${{ matrix.os.name }} | ${{ matrix.arch.name }} | ${{ matrix.compiler.display_name }}
-    runs-on: ${{ matrix.os.runner }}
+    name: ${{ matrix.config.display_name }}
+    runs-on: ${{ matrix.config.runner }}
     strategy:
       fail-fast: false
       matrix:
-        os:
+        config:
           -
-            name: "Windows"
-            runner: "windows-2019" # windows-2022
+            display_name: "Windows | x86 | GCC"
+            runner: "windows-2022"
+            shell: "msys2 {0}"
+            msys_msystem: "MINGW32"
+            msys_prefix: "i686"
+            compiler_name: "gcc"
+            cmake_gen: "Ninja"
+            build_suffix: "x86-gcc"
           -
-            name: "Linux"
-            runner: "ubuntu-22.04"
-        arch:
+            display_name: "Windows | x64 | GCC"
+            runner: "windows-2022"
+            shell: "msys2 {0}"
+            msys_msystem: "UCRT64"
+            msys_prefix: "ucrt-x86_64"
+            compiler_name: "gcc"
+            cmake_gen: "Ninja"
+            build_suffix: "x64-gcc"
           -
-            name: "x86"
-            bits: "32"
-            msys_name: "i686"
-            msvc_gen_opts: "-T v141_xp -A Win32"
-            msvc_triplet: "x86-windows"
-          -
-            name: "x64"
-            bits: "64"
-            msys_name: "x86_64"
-            msvc_gen_opts: "-A x64"
-            msvc_triplet: "x64-windows"
-        compiler:
-          -
-            display_name: "GCC"
-            name: "gcc"
-            msys_msystem_prefix: "MINGW"
-            msys_package_prefix: "mingw-w64"
+            display_name: "Windows | x86 | GCC - msvcrt"
+            runner: "windows-2022"
+            shell: "msys2 {0}"
+            msys_msystem: "MINGW32"
+            msys_prefix: "i686"
+            compiler_name: "gcc"
             cmake_gen: "Ninja"
             cmake_opts: "-D ID_UCRT32=OFF"
+            build_suffix: "x86-gcc-msvcrt"
+#          -
+#            display_name: "Windows | x64 | GCC - msvcrt"
+#            runner: "windows-2022"
+#            shell: "msys2 {0}"
+#            msys_msystem: "MINGW64"
+#            msys_prefix: "x86_64"
+#            compiler_name: "gcc"
+#            cmake_gen: "Ninja"
+#            build_suffix: "x64-gcc-msvcrt"
+#          -
+#            display_name: "Windows | x86 | Clang"
+#            runner: "windows-2022"
+#            shell: "msys2 {0}"
+#            msys_msystem: "CLANG32"
+#            msys_prefix: "clang-i686"
+#            compiler_name: "clang"
+#            cmake_gen: "Ninja"
+#            build_suffix: "x86-clang"
           -
-            display_name: "GCC-Ucrt"
-            name: "gcc"
-            msys_msystem_prefix: "UCRT"
-            msys_package_prefix: "mingw-w64-ucrt"
+            display_name: "Windows | x64 | Clang"
+            runner: "windows-2022"
+            shell: "msys2 {0}"
+            msys_msystem: "CLANG64"
+            msys_prefix: "clang-x86_64"
+            compiler_name: "clang"
             cmake_gen: "Ninja"
+            build_suffix: "x64-clang"
+#          -
+#            display_name: "Windows | x86 | MSVC"
+#            runner: "windows-2019" # windows-2022
+#            shell: "bash"
+#            msvc_triplet: "x86-windows"
+#            compiler_name: "cl"
+#            cmake_gen: "Visual Studio 16 2019" # Visual Studio 17 2022
+#            cmake_opts: "-T v141_xp -A Win32"
+#            build_suffix: "x86-msvc"
           -
-            display_name: "Clang"
-            name: "clang"
-            msys_msystem_prefix: "CLANG"
-            msys_package_prefix: "mingw-w64-clang"
-            cmake_gen: "Ninja"
-          -
-            display_name: "MSVC"
-            name: "cl"
-            cmake_gen: "Visual Studio 16 2019" # Visual Studio 17 2022
-        exclude:
-          - # Disable x86 build on linux (require crosscompiling)
-            os:
-              name: "Linux"
-            arch:
-              name: "x86"
-          - # Disable MSVC compiler on Linux (no MSVC for Linux)
-            os:
-              name: "Linux"
-            compiler:
-              display_name: "MSVC"
-          - # Disable GCC-Ucrt compiler on Linux (no MSYS UCRT for Linux)
-            os:
-              name: "Linux"
-            compiler:
-              display_name: "GCC-Ucrt"
-          - # Disable GCC-Ucrt compiler for x86 (no MSYS UCRT32 env)
-            os:
-              name: "Windows"
-            compiler:
-              display_name: "GCC-Ucrt"
-            arch:
-              name: "x86"
-          - # Disable MSVC compiler for x86
-            compiler:
-              display_name: "MSVC"
-            arch:
-              name: "x86"
-        include:
-          -
+            display_name: "Windows | x64 | MSVC"
+            runner: "windows-2022"
             shell: "bash"
+            msvc_triplet: "x64-windows"
+            compiler_name: "cl"
+            cmake_gen: "Visual Studio 17 2022"
+            cmake_opts: "-A x64"
+            build_suffix: "x64-msvc"
           -
-            os:
-              name: "Windows"
-            compiler:
-              display_name: "GCC"
-            shell: "msys2 {0}"
-          -
-            os:
-              name: "Windows"
-            compiler:
-              display_name: "GCC-Ucrt"
-            shell: "msys2 {0}"
-          -
-            os:
-              name: "Windows"
-            compiler:
-              display_name: "Clang"
-            shell: "msys2 {0}"
-          - # Add special config "GCC-Ucrt x86" using MSYS MINGW32 env and ucrt hack
-            os:
-              name: "Windows"
-              runner: "windows-2019" # windows-2022
-            arch:
-              name: "x86"
-              bits: "32"
-              msys_name: "i686"
-            compiler:
-              display_name: "GCC-Ucrt"
-              name: "gcc"
-              msys_msystem_prefix: "MINGW"
-              msys_package_prefix: "mingw-w64"
-              cmake_gen: "Ninja"
-            shell: "msys2 {0}"
+            display_name: "Linux | x64 | GCC"
+            runner: "ubuntu-22.04"
+            shell: "bash"
+            compiler_name: "gcc"
+            cmake_gen: "Ninja"
+            cmake_opts: "-D ID_BUILD_PORTABLE=ON"
+#          -
+#            display_name: "Linux | x64 | Clang"
+#            runner: "ubuntu-22.04"
+#            shell: "bash"
+#            compiler_name: "clang"
+#            cmake_gen: "Ninja"
+#            cmake_opts: "-D ID_BUILD_PORTABLE=ON"
+
     defaults:
       run:
-        shell: ${{ matrix.shell }}
+        shell: ${{ matrix.config.shell }}
     env:
       VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
     steps:
       - name: Setup MSYS env
         if: |
-          matrix.os.name == 'Windows' &&
-          matrix.compiler.display_name != 'MSVC'
+          runner.os == 'Windows' &&
+          matrix.config.compiler_name != 'cl'
         timeout-minutes: 10
         uses: msys2/setup-msys2@v2
         with:
-          msystem: ${{ matrix.compiler.msys_msystem_prefix }}${{ matrix.arch.bits }}
+          msystem: ${{ matrix.config.msys_msystem }}
           update: true
           install: >-
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-pkgconf
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-${{ matrix.compiler.name }}
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-gdb
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-ninja
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-cmake
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_net
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_mixer
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libsamplerate
+            mingw-w64-${{ matrix.config.msys_prefix }}-pkgconf
+            mingw-w64-${{ matrix.config.msys_prefix }}-${{ matrix.config.compiler_name }}
+            mingw-w64-${{ matrix.config.msys_prefix }}-gdb
+            mingw-w64-${{ matrix.config.msys_prefix }}-ninja
+            mingw-w64-${{ matrix.config.msys_prefix }}-cmake
+            mingw-w64-${{ matrix.config.msys_prefix }}-SDL2
+            mingw-w64-${{ matrix.config.msys_prefix }}-SDL2_net
+            mingw-w64-${{ matrix.config.msys_prefix }}-SDL2_mixer
+            mingw-w64-${{ matrix.config.msys_prefix }}-libsamplerate
             git
 
       - name: Install MSVC XP toolset
         if: |
-          matrix.os.runner == 'windows-2022' &&
-          matrix.arch.name == 'x86' &&
-          matrix.compiler.display_name == 'MSVC'
+          runner.name == 'windows-2022' &&
+          runner.arch == 'X86' &&
+          matrix.config.compiler_name == 'cl'
         run: |
           echo "Installing Microsoft.VisualStudio.Component.WinXP"
           "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer" modify \
@@ -169,8 +150,8 @@ jobs:
 
       - name: Get GitHub Action Cache url and token
         if: |
-          matrix.os.name == 'Windows' &&
-          matrix.compiler.display_name == 'MSVC'
+          runner.os == 'Windows' &&
+          matrix.config.compiler_name == 'cl'
         uses: actions/github-script@v6
         with:
           script: |
@@ -179,8 +160,8 @@ jobs:
 
       - name: Setup MSVC env
         if: |
-          matrix.os.name == 'Windows' &&
-          matrix.compiler.display_name == 'MSVC'
+          runner.os == 'Windows' &&
+          matrix.config.compiler_name == 'cl'
         run: |
           cd $VCPKG_INSTALLATION_ROOT
           ./bootstrap-vcpkg.sh -disableMetrics
@@ -190,11 +171,11 @@ jobs:
 #         vcpkg install --triplet=${{ matrix.arch.msvc_triplet }} sdl2 sdl2-mixer[libflac,libmodplug,mpg123,opusfile] sdl2-net libsamplerate
 
       - name: Setup Linux env
-        if: matrix.os.name == 'Linux'
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update --fix-missing
           sudo apt-get full-upgrade --fix-missing
-          sudo apt-get install ${{ matrix.compiler.name }} gdb ninja-build python3 cmake \
+          sudo apt-get install ${{ matrix.config.compiler_name }} gdb ninja-build python3 cmake \
                                libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libsamplerate-dev
 
       - uses: actions/checkout@v3
@@ -204,26 +185,18 @@ jobs:
       - name: Configure
         id: configure
         env:
-          CC: ${{ matrix.compiler.name }}
+          CC: ${{ matrix.config.compiler_name }}
         run: |
-          if [[ '${{ matrix.compiler.display_name }}' == 'MSVC' ]]
+          if [[ '${{ matrix.config.compiler_name }}' == 'cl' ]]
           then
-              msvc_gen_opts='${{ matrix.arch.msvc_gen_opts }}'
               msvc_cmake_toolchain="-D CMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
           fi
-          if [[ '${{ matrix.os.name }}' == 'Linux' ]]
-          then
-              build_portable='-D ID_BUILD_PORTABLE=ON'
-          fi
           rev_number=$(git rev-list --count HEAD)
-          cmake -G "${{ matrix.compiler.cmake_gen }}" \
-                $msvc_gen_opts \
+          cmake -G "${{ matrix.config.cmake_gen }}" ${{ matrix.config.cmake_opts }} \
                 $msvc_cmake_toolchain \
-                ${{ matrix.compiler.cmake_opts }} \
                 -D ID_BUILD_VERSION_OVERWRITE="r$rev_number" \
                 -D ID_GIT_FORCE_HASH_SUFFIX=ON \
                 -D CMAKE_BUILD_TYPE=RelWithDebInfo \
-                $build_portable \
                 -D ID_TEST_WITH_GDB="ON"\
                 -S . -B build
           sha_short=$(echo ${{ github.sha }} | cut -c1-7)
@@ -236,13 +209,13 @@ jobs:
           cmake --build build --config RelWithDebInfo --parallel 2
 
       - name: Test Windows
-        if: ${{ matrix.os.name == 'Windows' }}
+        if: runner.os == 'Windows'
         run: |
           cd build
           ctest --output-on-failure -C RelWithDebInfo
 
       - name: Test Linux
-        if: ${{ matrix.os.name == 'Linux' }}
+        if: runner.os == 'Linux'
         env:
           SDL_VIDEODRIVER: dummy
         run: |
@@ -254,7 +227,7 @@ jobs:
           github.repository == 'JNechaevsky/inter-doom' &&
           github.event_name == 'push' &&
           github.ref == 'refs/heads/master' &&
-          matrix.os.name == 'Windows'
+          runner.os == 'Windows'
         run: |
           cmake --install build --config RelWithDebInfo --prefix "./build/install"
 
@@ -263,8 +236,8 @@ jobs:
           github.repository == 'JNechaevsky/inter-doom' &&
           github.event_name == 'push' &&
           github.ref == 'refs/heads/master' &&
-          matrix.os.name == 'Windows'
+          runner.os == 'Windows'
         uses: actions/upload-artifact@v3
         with:
-          name: inter-doom-${{ steps.configure.outputs.rev_number }}-${{ steps.configure.outputs.sha_short }}-windows-${{ matrix.arch.name }}-${{ matrix.compiler.display_name }}
+          name: inter-doom-${{ steps.configure.outputs.rev_number }}-${{ steps.configure.outputs.sha_short }}-windows-${{ matrix.config.build_suffix }}
           path: ./build/install/

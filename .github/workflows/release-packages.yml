@@ -12,47 +12,48 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os:
+        config:
           -
-            name: "Windows"
-            runner: "windows-latest"
+            display_name: "Windows | x86 | GCC"
+            runner: "windows-2022"
             shell: "msys2 {0}"
-        arch:
+            msys_msystem: "MINGW32"
+            msys_prefix: "i686"
+            compiler_name: "gcc"
+            cmake_gen: "Ninja"
+            build_suffix: "x86"
           -
-            name: "x86"
-            bits: "32"
-            msys_name: "i686"
-          -
-            name: "x64"
-            bits: "64"
-            msys_name: "x86_64"
-        compiler:
-          -
-            name: "gcc"
-            msys_msystem_prefix: "MINGW"
-            msys_package_prefix: "mingw-w64"
+            display_name: "Windows | x64 | GCC"
+            runner: "windows-2022"
+            shell: "msys2 {0}"
+            msys_msystem: "UCRT64"
+            msys_prefix: "ucrt-x86_64"
+            compiler_name: "gcc"
+            cmake_gen: "Ninja"
+            build_suffix: "x64"
+
     permissions:
       contents: write
     defaults:
       run:
-        shell: ${{ matrix.os.shell }}
+        shell: ${{ matrix.config.shell }}
     steps:
       - name: Setup MSYS env
-        if: ${{ matrix.os.name == 'Windows' }}
+        if: runner.os == 'Windows'
         timeout-minutes: 10
         uses: msys2/setup-msys2@v2
         with:
-          msystem: ${{ matrix.compiler.msys_msystem_prefix }}${{ matrix.arch.bits }}
+          msystem: ${{ matrix.config.msys_msystem }}
           update: true
           install: >-
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-pkgconf
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-${{ matrix.compiler.name }}
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-ninja
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-cmake
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_net
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-SDL2_mixer
-            ${{ matrix.compiler.msys_package_prefix }}-${{ matrix.arch.msys_name }}-libsamplerate
+            mingw-w64-${{ matrix.config.msys_prefix }}-pkgconf
+            mingw-w64-${{ matrix.config.msys_prefix }}-${{ matrix.compiler.name }}
+            mingw-w64-${{ matrix.config.msys_prefix }}-ninja
+            mingw-w64-${{ matrix.config.msys_prefix }}-cmake
+            mingw-w64-${{ matrix.config.msys_prefix }}-SDL2
+            mingw-w64-${{ matrix.config.msys_prefix }}-SDL2_net
+            mingw-w64-${{ matrix.config.msys_prefix }}-SDL2_mixer
+            mingw-w64-${{ matrix.config.msys_prefix }}-libsamplerate
 
       - uses: actions/checkout@v3
 
@@ -84,7 +85,14 @@ jobs:
           fi
           echo "game=$game" >> $GITHUB_OUTPUT
           echo "version=$version" >> $GITHUB_OUTPUT
-          cmake -G "Ninja" -D ID_COMPILE_DOOM="$compile_doom" -D ID_COMPILE_HERETIC="$compile_heretic" -D ID_COMPILE_HEXEN="$compile_hexen" -D ID_COMPILE_STRIFE="$compile_strife" -D ID_BUILD_VERSION_OVERWRITE="$version" -D CMAKE_BUILD_TYPE=Release -S . -B build
+          cmake -G "${{ matrix.config.cmake_gen }}" ${{ matrix.config.cmake_opts }} \
+                -D ID_COMPILE_DOOM="$compile_doom" \
+                -D ID_COMPILE_HERETIC="$compile_heretic" \
+                -D ID_COMPILE_HEXEN="$compile_hexen" \
+                -D ID_COMPILE_STRIFE="$compile_strife" \
+                -D ID_BUILD_VERSION_OVERWRITE="$version" \
+                -D CMAKE_BUILD_TYPE=Release \
+                -S . -B build
 
       - name: Build
         run: |
@@ -92,16 +100,16 @@ jobs:
           cmake --build build --parallel 2
 
       - name: Package Zip
-        if: ${{ matrix.os.name == 'Windows' }}
+        if: runner.os == 'Windows'
         run: |
           cd build
           cpack -G ZIP
 
       - name: Upload Zip
-        if: ${{ matrix.os.name == 'Windows' }}
+        if: runner.os == 'Windows'
         shell: bash
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: |
-          gh release upload ${{ github.event.release.tag_name }} ./build/inter-${{ steps.configure.outputs.game }}-${{ steps.configure.outputs.version }}-windows-${{ matrix.arch.name }}.zip
-          gh release upload ${{ github.event.release.tag_name }} ./build/inter-${{ steps.configure.outputs.game }}-${{ steps.configure.outputs.version }}-windows-${{ matrix.arch.name }}.zip.sha256
+          gh release upload ${{ github.event.release.tag_name }} ./build/inter-${{ steps.configure.outputs.game }}-${{ steps.configure.outputs.version }}-windows-${{ matrix.config.build_suffix }}.zip
+          gh release upload ${{ github.event.release.tag_name }} ./build/inter-${{ steps.configure.outputs.game }}-${{ steps.configure.outputs.version }}-windows-${{ matrix.config.build_suffix }}.zip.sha256
