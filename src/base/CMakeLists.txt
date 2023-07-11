@@ -49,15 +49,3 @@ if(RD_COMPILE_HEXEN)
         COMPONENT hexen
     )
 endif()
-
-if(RD_COMPILE_STRIFE)
-    add_copy_target(strife-wads SOURCE
-        strife-common.wad
-        strife-russian.wad
-    )
-
-    install(FILES $<GENEX_EVAL:$<TARGET_PROPERTY:strife-wads,OUT_FILES>>
-        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${RD_BUILD_PORTABLE}>>,base,${CMAKE_INSTALL_DATADIR}/${PROGRAM_PREFIX}strife>
-        COMPONENT strife
-    )
-endif()

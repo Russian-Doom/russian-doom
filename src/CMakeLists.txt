@@ -1,4 +1,4 @@
-foreach(SUBDIR base doom heretic hexen strife)
+foreach(SUBDIR base doom heretic hexen)
     add_subdirectory("${SUBDIR}")
 endforeach()
 
@@ -254,8 +254,6 @@ if(NOT RD_USE_SELECTED_DLL_SET)
 endif()
 
 # Install rules
-list(REMOVE_ITEM COMPILE_MODULES "strife") # strife is not production ready
-
 foreach(MODULE ${COMPILE_MODULES})
     set(_permissions PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE)
     if(WIN32)
@@ -304,4 +302,3 @@ source_group("Common sources" REGULAR_EXPRESSION "^${CMAKE_CURRENT_SOURCE_DIR}/.
 source_group("Doom" REGULAR_EXPRESSION "^${CMAKE_CURRENT_SOURCE_DIR}/doom/.+")
 source_group("Heretic" REGULAR_EXPRESSION "^${CMAKE_CURRENT_SOURCE_DIR}/heretic/.+")
 source_group("Hexen" REGULAR_EXPRESSION "^${CMAKE_CURRENT_SOURCE_DIR}/hexen/.+")
-source_group("Strife" REGULAR_EXPRESSION "^${CMAKE_CURRENT_SOURCE_DIR}/strife/.+")

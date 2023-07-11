@@ -63,7 +63,6 @@ jobs:
           compile_doom="OFF"
           compile_heretic="OFF"
           compile_hexen="OFF"
-          compile_strife="OFF"
           if [[ ${{ contains(github.ref_name, '-') }} == true ]]
           then
               game=$( echo "${{ github.ref_name }}" | cut -d'-' -f1 )
@@ -74,9 +73,6 @@ jobs:
               elif [[ $game == "hexen" ]]
               then
                   compile_hexen="ON"
-              elif [[ $game == "strife" ]]
-              then
-                  compile_strife="ON"
               fi
           else
               compile_doom="ON"
@@ -89,7 +85,6 @@ jobs:
                 -D RD_COMPILE_DOOM="$compile_doom" \
                 -D RD_COMPILE_HERETIC="$compile_heretic" \
                 -D RD_COMPILE_HEXEN="$compile_hexen" \
-                -D RD_COMPILE_STRIFE="$compile_strife" \
                 -D RD_BUILD_VERSION_OVERWRITE="$version" \
                 -D CMAKE_BUILD_TYPE=Release \
                 -S . -B build
