@@ -1,4 +1,4 @@
-if(ID_COMPILE_DOOM)
+if(RD_COMPILE_DOOM)
     add_library(doom STATIC
                 am_map.c        am_map.h
                 deh_ammo.c
@@ -75,7 +75,7 @@ if(ID_COMPILE_DOOM)
     target_link_libraries(doom PRIVATE
         Common
     )
-    if(NOT ID_GIT_NO_HASH)
+    if(NOT RD_GIT_NO_HASH)
         add_dependencies(doom revision_check)
     endif()
 endif()

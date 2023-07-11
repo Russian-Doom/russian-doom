@@ -9,7 +9,7 @@ on:
 jobs:
   Update-Wiki:
     name: Update Wiki
-    if: ${{ github.repository == 'JNechaevsky/inter-doom' }}
+    if: ${{ github.repository == 'Russian-Doom/russian-doom' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write

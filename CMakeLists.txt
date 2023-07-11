@@ -11,7 +11,7 @@ set(VCPKG_APPLOCAL_DEPS ON)
 set(X_VCPKG_APPLOCAL_DEPS_INSTALL ON)
 Option(VCPKG_MANIFEST_MODE "Operate in vcpkg manifest mode instead of classic mode" ON)
 
-project("International Doom" LANGUAGES C NONE)
+project("Russian Doom" LANGUAGES C NONE)
 
 # Versions
 set(BUILD_DOOM_VERSION "6.2")
@@ -20,26 +20,26 @@ set(BUILD_HEXEN_VERSION "6.0")
 set(BUILD_STRIFE_VERSION "0.0")
 
 # Compile modules
-Option(ID_COMPILE_DOOM "Compile Doom module" ON)
-Option(ID_COMPILE_HERETIC "Compile Heretic module" ON)
-Option(ID_COMPILE_HEXEN "Compile Hexen module" ON)
-# [Dasperal] Disable Strife by default. It won't compile until `JNechaevsky/inter-doom/pull/268` is implemented for Strife
-Option(ID_COMPILE_STRIFE "Compile Strife module" OFF)
-Option(ID_TEST_WITH_GDB "Attach gdb to CTest tests" OFF)
+Option(RD_COMPILE_DOOM "Compile Doom module" ON)
+Option(RD_COMPILE_HERETIC "Compile Heretic module" ON)
+Option(RD_COMPILE_HEXEN "Compile Hexen module" ON)
+# [Dasperal] Disable Strife by default. It won't compile until `Russian-Doom/russian-doom/pull/268` is implemented for Strife
+Option(RD_COMPILE_STRIFE "Compile Strife module" OFF)
+Option(RD_TEST_WITH_GDB "Attach gdb to CTest tests" OFF)
 
 include(CMakeDependentOption)
 find_package(Git)
 find_package(Python3 COMPONENTS Interpreter)
 
-cmake_dependent_option(ID_BUILD_PORTABLE "Build portable version with Windows like behavior (see COMPILING.MD)" OFF "NOT WIN32" OFF)
+cmake_dependent_option(RD_BUILD_PORTABLE "Build portable version with Windows like behavior (see COMPILING.MD)" OFF "NOT WIN32" OFF)
 
 # Hash suffix options
-cmake_dependent_option(ID_GIT_NO_HASH "For Devs only! Don't run 'revision_check' at all" OFF "GIT_FOUND" ON)
-cmake_dependent_option(ID_GIT_NO_HASH_SUFFIX "For Devs only! Never append hash suffix to project version" OFF "NOT NO_GIT_HASH" ON)
-cmake_dependent_option(ID_GIT_FORCE_HASH_SUFFIX "For Devs only! Always append hash suffix to project version" OFF "NOT NO_GIT_HASH_SUFFIX" OFF)
+cmake_dependent_option(RD_GIT_NO_HASH "For Devs only! Don't run 'revision_check' at all" OFF "GIT_FOUND" ON)
+cmake_dependent_option(RD_GIT_NO_HASH_SUFFIX "For Devs only! Never append hash suffix to project version" OFF "NOT NO_GIT_HASH" ON)
+cmake_dependent_option(RD_GIT_FORCE_HASH_SUFFIX "For Devs only! Always append hash suffix to project version" OFF "NOT NO_GIT_HASH_SUFFIX" OFF)
 
 # Package related variables
-set(PACKAGE_TARNAME "inter-doom")
+set(PACKAGE_TARNAME "russian-doom")
 set(PACKAGE_COPYRIGHT "Copyright \\xA9 2016-2023 Julian Nechaevsky. Copyright \\xA9 2020-2023 Leonid Murin (Dasperal). Licensed under GNU General Public License, version 2")
 
 # Check target architecture
@@ -76,7 +76,7 @@ endif()
 
 # Enable by default for MinGW (MSYS) environments
 # Disabled for vcpkg, because it copies and installs DLLs for dependencies by itself
-cmake_dependent_option(ID_USE_SELECTED_DLL_SET
+cmake_dependent_option(RD_USE_SELECTED_DLL_SET
     "Use 'Selected DLL set' instead of DLLs provided by build environment" "${MINGW}" "NOT VCPKG_TOOLCHAIN" OFF
 )
 
@@ -86,10 +86,10 @@ set(RD_C_STANDARD 99)
 # Enable LTO if available.
 include(CheckIPOSupported)
 check_ipo_supported(RESULT HAVE_LTO)
-cmake_dependent_option(ID_ENABLE_LTO "Use link-time optimisation" ON "HAVE_LTO" OFF)
+cmake_dependent_option(RD_ENABLE_LTO "Use link-time optimisation" ON "HAVE_LTO" OFF)
 
 #MSYS MINGW32 to UCRT32 hack
-cmake_dependent_option(ID_UCRT32 "Use MSYS MINGW32 to UCRT32 hack" ON "WIN32;ARCH STREQUAL x86;MINGW;CMAKE_C_COMPILER_ID STREQUAL GNU" OFF)
+cmake_dependent_option(RD_UCRT32 "Use MSYS MINGW32 to UCRT32 hack" ON "WIN32;ARCH STREQUAL x86;MINGW;CMAKE_C_COMPILER_ID STREQUAL GNU" OFF)
 
 include(Utils)
 
@@ -144,7 +144,7 @@ if(MSVC)
     string(REPLACE "/O3" "/O2" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
     string(REPLACE "/O3" "/O2" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
 else()
-    if(ID_UCRT32)
+    if(RD_UCRT32)
         add_compile_definitions(
             # Fixes utf-8 text in console
             _UCRT
@@ -178,7 +178,7 @@ endif()
 # Construct path where to search
 if(WIN32 AND (Python3_Interpreter_FOUND OR CMAKE_VERSION VERSION_GREATER_EQUAL 3.16)
 AND NOT VCPKG_TOOLCHAIN
-AND NOT ID_USE_SELECTED_DLL_SET)
+AND NOT RD_USE_SELECTED_DLL_SET)
     applocal_search_path(APPLOCAL_SEARCH_PATH TARGETS "SDL2::SDL2" "SDL2_mixer::SDL2_mixer" "SDL2_net::SDL2_net" "SampleRate::samplerate" "miniz::miniz")
 endif()
 
@@ -200,35 +200,35 @@ check_include_file("linux/kd.h" HAVE_LINUX_KD_H)
 string(REPLACE " Doom" "" PACKAGE_PREFIX "${PROJECT_NAME}")
 string(REPLACE "doom" "" PROGRAM_PREFIX "${PACKAGE_TARNAME}")
 
-# [Dasperal] ID_BUILD_VERSION_OVERWRITE variable is used on CI to replace version with git hash
-if(ID_COMPILE_DOOM)
+# [Dasperal] RD_BUILD_VERSION_OVERWRITE variable is used on CI to replace version with git hash
+if(RD_COMPILE_DOOM)
     string(REPLACE "." ", " WINDOWS_RC_DOOM_VERSION ${BUILD_DOOM_VERSION})
-    if(ID_BUILD_VERSION_OVERWRITE)
-        set(BUILD_DOOM_VERSION ${ID_BUILD_VERSION_OVERWRITE})
+    if(RD_BUILD_VERSION_OVERWRITE)
+        set(BUILD_DOOM_VERSION ${RD_BUILD_VERSION_OVERWRITE})
     endif()
     configure_file(src/doom/resource.rc.in src/doom/resource.rc @ONLY)
     list(APPEND COMPILE_MODULES "doom")
 endif()
-if(ID_COMPILE_HERETIC)
+if(RD_COMPILE_HERETIC)
     string(REPLACE "." ", " WINDOWS_RC_HERETIC_VERSION ${BUILD_HERETIC_VERSION})
-    if(ID_BUILD_VERSION_OVERWRITE)
-        set(BUILD_HERETIC_VERSION ${ID_BUILD_VERSION_OVERWRITE})
+    if(RD_BUILD_VERSION_OVERWRITE)
+        set(BUILD_HERETIC_VERSION ${RD_BUILD_VERSION_OVERWRITE})
     endif()
     configure_file(src/heretic/resource.rc.in src/heretic/resource.rc @ONLY)
     list(APPEND COMPILE_MODULES "heretic")
 endif()
-if(ID_COMPILE_HEXEN)
+if(RD_COMPILE_HEXEN)
     string(REPLACE "." ", " WINDOWS_RC_HEXEN_VERSION ${BUILD_HEXEN_VERSION})
-    if(ID_BUILD_VERSION_OVERWRITE)
-        set(BUILD_HEXEN_VERSION ${ID_BUILD_VERSION_OVERWRITE})
+    if(RD_BUILD_VERSION_OVERWRITE)
+        set(BUILD_HEXEN_VERSION ${RD_BUILD_VERSION_OVERWRITE})
     endif()
     configure_file(src/hexen/resource.rc.in src/hexen/resource.rc @ONLY)
     list(APPEND COMPILE_MODULES "hexen")
 endif()
-if(ID_COMPILE_STRIFE)
+if(RD_COMPILE_STRIFE)
     string(REPLACE "." ", " WINDOWS_RC_STRIFE_VERSION ${BUILD_STRIFE_VERSION})
-    if(ID_BUILD_VERSION_OVERWRITE)
-        set(BUILD_STRIFE_VERSION ${ID_BUILD_VERSION_OVERWRITE})
+    if(RD_BUILD_VERSION_OVERWRITE)
+        set(BUILD_STRIFE_VERSION ${RD_BUILD_VERSION_OVERWRITE})
     endif()
     configure_file(src/strife/resource.rc.in src/strife/resource.rc @ONLY)
     list(APPEND COMPILE_MODULES "strife")
@@ -237,13 +237,13 @@ endif()
 enable_testing()
 
 # Update git_info.h
-if(ID_GIT_NO_HASH)
+if(RD_GIT_NO_HASH)
     # Use a function to avoid accidentally messing the real variables
     configure_empty_git_info("cmake/git_info.h.in" "git_info.h")
 else()
-    if(ID_GIT_NO_HASH_SUFFIX)
+    if(RD_GIT_NO_HASH_SUFFIX)
         set(HASH_SUFFIX "NO")
-    elseif(ID_GIT_FORCE_HASH_SUFFIX)
+    elseif(RD_GIT_FORCE_HASH_SUFFIX)
         set(HASH_SUFFIX "FORCE")
     else()
         set(HASH_SUFFIX "AUTO")

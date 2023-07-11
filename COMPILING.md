@@ -1,6 +1,6 @@
 # Table of contents
 
-* [Building International Doom on Windows](#building-international-doom-on-windows)
+* [Building Russian Doom on Windows](#building-russian-doom-on-windows)
   * [Step 1: Setting up build environment](#step-1-setting-up-build-environment)
     * [1.A: MSYS2 environment](#1a-msys2-environment)
       * [1.A.A: MSYS2 UCRT environment](#1aa-msys2-ucrt-environment)
@@ -9,30 +9,30 @@
     * [1.B: MSVC Visual Studio environment](#1b-msvc-visual-studio-environment)
       * [1.B.A: Providing required dependencies manually](#1ba-providing-required-dependencies-manually)
       * [1.B.B: Providing required dependencies using VCPKG](#1bb-providing-required-dependencies-using-vcpkg)
-  * [Step 2: Compiling International Doom](#step-2-compiling-international-doom)
-  * [Step 3: Installing International Doom](#step-3-installing-international-doom)
-  * [Packaging International Doom](#packaging-international-doom)
-* [Building International Doom on Linux](#building-international-doom-on-linux)
+  * [Step 2: Compiling Russian Doom](#step-2-compiling-russian-doom)
+  * [Step 3: Installing Russian Doom](#step-3-installing-russian-doom)
+  * [Packaging Russian Doom](#packaging-russian-doom)
+* [Building Russian Doom on Linux](#building-russian-doom-on-linux)
   * [Step 1: Setting up build environment](#step-1-setting-up-build-environment-1)
-  * [Step 2: Compiling International Doom](#step-2-compiling-international-doom-1)
-  * [Step 3: Installing International Doom](#step-3-installing-international-doom-1)
-  * [Packaging International Doom](#packaging-international-doom-1)
-* [Building a DOS version of International Doom](#building-a-dos-version-of-international-doom)
+  * [Step 2: Compiling Russian Doom](#step-2-compiling-russian-doom-1)
+  * [Step 3: Installing Russian Doom](#step-3-installing-russian-doom-1)
+  * [Packaging Russian Doom](#packaging-russian-doom-1)
+* [Building a DOS version of Russian Doom](#building-a-dos-version-of-russian-doom)
   * [Step 1: Setting up build environment](#step-1-setting-up-build-environment-2)
   * [Step 2: Compiling project](#step-2-compiling-project)
 
-# Building International Doom on Windows
+# Building Russian Doom on Windows
 
 ## Step 1: Setting up build environment
 
 Download the source code archive of the latest release version and unpack it.
 Or clone repository from Git.
-The primary way of building International Doom on Windows is using an MSYS UCRT64 and MINGW32 environments.
+The primary way of building Russian Doom on Windows is using an MSYS UCRT64 and MINGW32 environments.
 
 ### 1.A: MSYS2 environment
 
 Download and install [MSYS2](https://www.msys2.org/).
-For configuring and building International Doom,
+For configuring and building Russian Doom,
 you **must** use the appropriate MSYS2 terminal
 (**ucrt64.exe**, **mingw32.exe**, **mingw64.exe**, **clang32.exe**, **clang64.exe**)
 so that the $PATH environment variable points to the proper toolchain.
@@ -171,7 +171,7 @@ or use Cmake 3.16+ (Can't update Dlls),
 
 Install and bootstrap [vcpkg](https://github.com/microsoft/vcpkg#quick-start-windows).
 
-By default, International Doom uses the manifest mode of vcpkg.
+By default, Russian Doom uses the manifest mode of vcpkg.
 In this mode, all dependencies are obtained automatically during the project configuration stage.
 If you want to use vcpkg in the classic mode, use the following commands to download and build dependencies:
 ```shell
@@ -187,7 +187,7 @@ Then, at the configuration step, add the following parameters to cmake:
 -D VCPKG_MANIFEST_MODE="OFF"
 ```
 
-## Step 2: Compiling International Doom
+## Step 2: Compiling Russian Doom
 
 There are several supported cmake generators: `MinGW Makefiles`, `MSYS Makefiles`, `Ninja`, `Ninja Multi-Config`,
 `Visual Studio 16 2019`, `Visual Studio 17 2022`.
@@ -206,20 +206,20 @@ cmake -G "Visual Studio 17 2022" -A x64 \
 ```
 
 You can enable and disable the compilation of modules by changing cmake options:
-`ID_COMPILE_DOOM`, `ID_COMPILE_HERETIC`, `ID_COMPILE_HEXEN`, `ID_COMPILE_STRIFE` to `ON` or `OFF`.
+`RD_COMPILE_DOOM`, `RD_COMPILE_HERETIC`, `RD_COMPILE_HEXEN`, `RD_COMPILE_STRIFE` to `ON` or `OFF`.
 
 To use configs provided by the installed libraries (for example, in the MSYS environment) instead of find-modules,
 set the `CMAKE_FIND_PACKAGE_PREFER_CONFIG` cmake option to `ON`.
 
-International Doom uses Link Time Optimization if it is available in the compiler.
-If it causes problems with your compiler, set `ID_ENABLE_LTO` cmake option to `OFF`.
+Russian Doom uses Link Time Optimization if it is available in the compiler.
+If it causes problems with your compiler, set `RD_ENABLE_LTO` cmake option to `OFF`.
 
 Because MSYS doesn't have UCRT32 environment we use `ucrt` in MINGW32 environment.
-To disable this behavior and use `msvcrt` default, set `ID_UCRT32` cmake option to `OFF`.
+To disable this behavior and use `msvcrt` default, set `RD_UCRT32` cmake option to `OFF`.
 
 If you are using MSYS2 (or any other MinGW environment), by default DLLs from 'Selected DLL set'
 will be used instead of DLLs provided by the build environment.
-To use DLLs provided by the build environment, set the `ID_USE_SELECTED_DLL_SET` cmake option to `OFF`.
+To use DLLs provided by the build environment, set the `RD_USE_SELECTED_DLL_SET` cmake option to `OFF`.
 You will need `python` to be installed (**Recommended**) or use Cmake 3.16+ (Can't update Dlls).
 
 To build the project, use the following command:
@@ -230,9 +230,9 @@ cmake --build build
 After successful compilation, the resulting binaries can be found in the `build\src\` folder or,
 if you used `Visual Studio *` or `Ninja Multi-Config` generators, in `build\src\<config>\` folder.
 
-## Step 3: Installing International Doom
+## Step 3: Installing Russian Doom
 
-To install International Doom to `<install directory>` use the following command:
+To install Russian Doom to `<install directory>` use the following command:
 ```shell
 cmake --install build --prefix <install directory>
 ```
@@ -242,14 +242,14 @@ cmake --install build --prefix <install directory> --component <game>
 ```
 Available components are `doom`, `heretic`, `hexen`.
 
-## Packaging International Doom
+## Packaging Russian Doom
 
 Packaging is performed using Cpack.
 
-If you want to overwrite the package version, set `ID_BUILD_VERSION_OVERWRITE` cmake variable at configuring time,
+If you want to overwrite the package version, set `RD_BUILD_VERSION_OVERWRITE` cmake variable at configuring time,
 instead of using `-R` Cpack parameter.
 
-To package International Doom, run the following commands:
+To package Russian Doom, run the following commands:
 ```shell
 cd build
 cpack -G ZIP
@@ -258,7 +258,7 @@ The resulting packages of the previously compiled components and their checksums
 
 The only supported generators are [Archive Generators](https://cmake.org/cmake/help/latest/cpack_gen/archive.html).
 
-# Building International Doom on Linux
+# Building Russian Doom on Linux
 
 Compiling on Linux is rather simple. 
 
@@ -287,7 +287,7 @@ The `python3` and `gzip` is not mandatory, but required for generation of man pa
 If you want to run CTest tests, you must also install `gdb`.
 If your Linux distribution provides a package for `miniz` library, you can use it as a dependency instead of the bundled one.
 
-## Step 2: Compiling International Doom
+## Step 2: Compiling Russian Doom
 
 Download the source code archive of the latest release version and unpack it.
 Or clone repository from Git.
@@ -301,17 +301,17 @@ cmake -G "Unix Makefiles" -D CMAKE_BUILD_TYPE="Release" -S . -B build
 Available build types are `Release`, `Debug`, `RelWithDebInfo`, `MinSizeRel`.
 
 You can enable and disable the compilation of modules by changing cmake options:
-`ID_COMPILE_DOOM`, `ID_COMPILE_HERETIC`, `ID_COMPILE_HEXEN`, `ID_COMPILE_STRIFE` to `ON` or `OFF`.
+`RD_COMPILE_DOOM`, `RD_COMPILE_HERETIC`, `RD_COMPILE_HEXEN`, `RD_COMPILE_STRIFE` to `ON` or `OFF`.
 
-If you want to use a portable version, like on Windows, set the `ID_BUILD_PORTABLE` cmake option to `ON`.
+If you want to use a portable version, like on Windows, set the `RD_BUILD_PORTABLE` cmake option to `ON`.
 Portable version searches and stores internal resources,
 config files, and savegames in the installation directory among executables.
 
 To use configs provided by the installed libraries instead of find-modules,
 set the `CMAKE_FIND_PACKAGE_PREFER_CONFIG` cmake option to `ON`.
 
-International Doom uses Link Time Optimization if it is available in the compiler.
-If it causes problems with your compiler, set `ID_ENABLE_LTO` cmake option to `OFF`.
+Russian Doom uses Link Time Optimization if it is available in the compiler.
+If it causes problems with your compiler, set `RD_ENABLE_LTO` cmake option to `OFF`.
 
 To build the project, use the following command:
 ```shell
@@ -319,9 +319,9 @@ cmake --build build
 ```
 After successful compilation, the resulting binaries can be found in the `build/src/` folder.
 
-## Step 3: Installing International Doom
+## Step 3: Installing Russian Doom
 
-To install International Doom, use the following command:
+To install Russian Doom, use the following command:
 ```shell
 sudo cmake --install build
 ```
@@ -334,7 +334,7 @@ Available components are `doom`, `heretic`, `hexen`.
 For the portable version, you probably want to use `--prefix <install directory>` parameter to set install directory.
 Note that config files and savegames will be stored in that directory.
 
-## Packaging International Doom
+## Packaging Russian Doom
 
 Packaging is performed using the standard process for your distribution.
 
@@ -344,13 +344,13 @@ By default, it is `/usr/local` and you probably want to change it to `/usr`.
 You can then use `cmake --install build --prefix <path>` command to collect all distribution files in the `<path>`
 location to prepare them for packaging.
 
-If you want to overwrite the package version, set `ID_BUILD_VERSION_OVERWRITE` cmake variable.
+If you want to overwrite the package version, set `RD_BUILD_VERSION_OVERWRITE` cmake variable.
 
-# Building a DOS version of International Doom
+# Building a DOS version of Russian Doom
 
 ## Step 1: Setting up build environment
 
-The primary IDE for building International Doom is Open Watcom C,
+The primary IDE for building Russian Doom is Open Watcom C,
 which may be downloaded on its [official site](http://www.openwatcom.org/download.php).
 
 ## Step 2: Compiling project

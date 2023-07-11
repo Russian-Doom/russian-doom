@@ -1,6 +1,6 @@
 add_subdirectory(gus_patches)
 
-if(ID_COMPILE_DOOM)
+if(RD_COMPILE_DOOM)
     add_copy_target(doom-wads SOURCE
         doom-beta.wad
         doom-common.wad
@@ -22,42 +22,42 @@ if(ID_COMPILE_DOOM)
     )
 
     install(FILES $<GENEX_EVAL:$<TARGET_PROPERTY:doom-wads,OUT_FILES>>
-        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${ID_BUILD_PORTABLE}>>,base,${CMAKE_INSTALL_DATADIR}/${PROGRAM_PREFIX}doom>
+        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${RD_BUILD_PORTABLE}>>,base,${CMAKE_INSTALL_DATADIR}/${PROGRAM_PREFIX}doom>
         COMPONENT doom
     )
 endif()
 
-if(ID_COMPILE_HERETIC)
+if(RD_COMPILE_HERETIC)
     add_copy_target(heretic-wads SOURCE
         heretic-common.wad
     )
 
     install(FILES $<GENEX_EVAL:$<TARGET_PROPERTY:heretic-wads,OUT_FILES>>
-        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${ID_BUILD_PORTABLE}>>,base,${CMAKE_INSTALL_DATADIR}/${PROGRAM_PREFIX}heretic>
+        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${RD_BUILD_PORTABLE}>>,base,${CMAKE_INSTALL_DATADIR}/${PROGRAM_PREFIX}heretic>
         COMPONENT heretic
     )
 endif()
 
-if(ID_COMPILE_HEXEN)
+if(RD_COMPILE_HEXEN)
     add_copy_target(hexen-wads SOURCE
         hexen-common.wad
 #        hexen-psx.wad
     )
 
     install(FILES $<GENEX_EVAL:$<TARGET_PROPERTY:hexen-wads,OUT_FILES>>
-        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${ID_BUILD_PORTABLE}>>,base,${CMAKE_INSTALL_DATADIR}/${PROGRAM_PREFIX}hexen>
+        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${RD_BUILD_PORTABLE}>>,base,${CMAKE_INSTALL_DATADIR}/${PROGRAM_PREFIX}hexen>
         COMPONENT hexen
     )
 endif()
 
-if(ID_COMPILE_STRIFE)
+if(RD_COMPILE_STRIFE)
     add_copy_target(strife-wads SOURCE
         strife-common.wad
         strife-russian.wad
     )
 
     install(FILES $<GENEX_EVAL:$<TARGET_PROPERTY:strife-wads,OUT_FILES>>
-        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${ID_BUILD_PORTABLE}>>,base,${CMAKE_INSTALL_DATADIR}/${PROGRAM_PREFIX}strife>
+        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${RD_BUILD_PORTABLE}>>,base,${CMAKE_INSTALL_DATADIR}/${PROGRAM_PREFIX}strife>
         COMPONENT strife
     )
 endif()

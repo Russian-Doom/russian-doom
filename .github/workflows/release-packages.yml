@@ -7,7 +7,7 @@ on:
 jobs:
   Release:
     name: ${{ matrix.os.name }} | ${{ matrix.arch.name }}
-    if: ${{ github.repository == 'JNechaevsky/inter-doom' && !startsWith(github.ref_name, 'dos-') }}
+    if: ${{ github.repository == 'Russian-Doom/russian-doom' && !startsWith(github.ref_name, 'dos-') }}
     runs-on: ${{ matrix.os.runner }}
     strategy:
       fail-fast: true
@@ -86,11 +86,11 @@ jobs:
           echo "game=$game" >> $GITHUB_OUTPUT
           echo "version=$version" >> $GITHUB_OUTPUT
           cmake -G "${{ matrix.config.cmake_gen }}" ${{ matrix.config.cmake_opts }} \
-                -D ID_COMPILE_DOOM="$compile_doom" \
-                -D ID_COMPILE_HERETIC="$compile_heretic" \
-                -D ID_COMPILE_HEXEN="$compile_hexen" \
-                -D ID_COMPILE_STRIFE="$compile_strife" \
-                -D ID_BUILD_VERSION_OVERWRITE="$version" \
+                -D RD_COMPILE_DOOM="$compile_doom" \
+                -D RD_COMPILE_HERETIC="$compile_heretic" \
+                -D RD_COMPILE_HEXEN="$compile_hexen" \
+                -D RD_COMPILE_STRIFE="$compile_strife" \
+                -D RD_BUILD_VERSION_OVERWRITE="$version" \
                 -D CMAKE_BUILD_TYPE=Release \
                 -S . -B build
 

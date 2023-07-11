@@ -1,4 +1,4 @@
-if(ID_COMPILE_STRIFE)
+if(RD_COMPILE_STRIFE)
     add_library(strife STATIC
             am_map.c        am_map.h
             deh_ammo.c
@@ -76,7 +76,7 @@ if(ID_COMPILE_STRIFE)
     target_link_libraries(strife PRIVATE
         Common
     )
-    if(NOT ID_GIT_NO_HASH)
+    if(NOT RD_GIT_NO_HASH)
         add_dependencies(strife revision_check)
     endif()
 endif()

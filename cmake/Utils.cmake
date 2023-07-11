@@ -101,7 +101,7 @@ function(target_common_settings Target)
     set_target_properties(${Target} PROPERTIES
         C_STANDARD "${RD_C_STANDARD}"
         C_STANDARD_REQUIRED ON
-        INTERPROCEDURAL_OPTIMIZATION ${ID_ENABLE_LTO}
+        INTERPROCEDURAL_OPTIMIZATION ${RD_ENABLE_LTO}
         INTERPROCEDURAL_OPTIMIZATION_DEBUG OFF
     )
 endfunction()

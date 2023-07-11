@@ -1,5 +1,5 @@
 if(WIN32)
-    if(NOT ID_USE_SELECTED_DLL_SET)
+    if(NOT RD_USE_SELECTED_DLL_SET)
         return()
     endif()
     if(NOT ARCH)

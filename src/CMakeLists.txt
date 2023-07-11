@@ -92,7 +92,7 @@ target_compile_definitions(Common PRIVATE
     "$<$<BOOL:${HAVE_MMAP}>:HAVE_MMAP>"
     "$<$<BOOL:${HAVE_DIRENT_H}>:HAVE_DIRENT_H>"
     "$<IF:$<BOOL:${HAVE_DECL_SSCANF_S}>,HAVE_DECL_SSCANF_S=1,HAVE_DECL_SSCANF_S=0>"
-    "$<$<BOOL:${ID_BUILD_PORTABLE}>:BUILD_PORTABLE>"
+    "$<$<BOOL:${RD_BUILD_PORTABLE}>:BUILD_PORTABLE>"
     PACKAGE_TARNAME="${PACKAGE_TARNAME}"
     PACKAGE_DATADIR="${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}"
     PROGRAM_PREFIX="${PROGRAM_PREFIX}"
@@ -202,13 +202,13 @@ foreach(MODULE ${COMPILE_MODULES})
 
     target_common_settings("${PROGRAM_PREFIX}${MODULE}")
     target_compile_definitions("${PROGRAM_PREFIX}${MODULE}" PRIVATE
-        "$<$<BOOL:${ID_BUILD_PORTABLE}>:BUILD_PORTABLE>"
+        "$<$<BOOL:${RD_BUILD_PORTABLE}>:BUILD_PORTABLE>"
     )
     target_link_libraries("${PROGRAM_PREFIX}${MODULE}" PRIVATE
         ${MODULE}
         Common
     )
-    if(NOT ID_GIT_NO_HASH)
+    if(NOT RD_GIT_NO_HASH)
         add_dependencies("${PROGRAM_PREFIX}${MODULE}" revision_check)
     endif()
 
@@ -225,14 +225,14 @@ foreach(MODULE ${COMPILE_MODULES})
     # Applocal dlls
     if(WIN32 AND (Python3_Interpreter_FOUND OR CMAKE_VERSION VERSION_GREATER_EQUAL 3.16)
         AND NOT VCPKG_TOOLCHAIN
-        AND NOT ID_USE_SELECTED_DLL_SET)
+        AND NOT RD_USE_SELECTED_DLL_SET)
         applocal_dependencies("${PROGRAM_PREFIX}${MODULE}"
             "$<IF:$<CONFIG:DEBUG>,${APPLOCAL_SEARCH_PATH_DEBUG},${APPLOCAL_SEARCH_PATH_RELEASE}>")
     endif()
 
     # Tests
     set(test_cmd $<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}$<$<BOOL:${WIN32}>:-exe>> -timedemo demo1 -nogui -nosound)
-    if(ID_TEST_WITH_GDB)
+    if(RD_TEST_WITH_GDB)
         set(gdb_cmd gdb -ex run -ex quit --args)
     endif()
     add_test(NAME "${PROGRAM_PREFIX}${MODULE}"
@@ -247,7 +247,7 @@ foreach(MODULE ${COMPILE_MODULES})
 endforeach()
 
 # Applocal optional dlls
-if(NOT ID_USE_SELECTED_DLL_SET)
+if(NOT RD_USE_SELECTED_DLL_SET)
     get_target_property(_opt_dll SDL2_mixer::SDL2_mixer OPTIONAL_DLLS)
     copy_files(SOURCE ${_opt_dll} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
     unset(_opt_dll)
@@ -262,21 +262,21 @@ foreach(MODULE ${COMPILE_MODULES})
         install(FILES
             "$<TARGET_FILE_DIR:${PROGRAM_PREFIX}${MODULE}-exe>/${PROGRAM_PREFIX}${MODULE}.exe"
             "$<TARGET_FILE_DIR:${PROGRAM_PREFIX}${MODULE}-com>/${PROGRAM_PREFIX}${MODULE}.com"
-            $<$<NOT:$<BOOL:${ID_USE_SELECTED_DLL_SET}>>:$<TARGET_PROPERTY:SDL2_mixer::SDL2_mixer,OPTIONAL_DLLS>>
-            DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${ID_BUILD_PORTABLE}>>,.,${CMAKE_INSTALL_BINDIR}>
+            $<$<NOT:$<BOOL:${RD_USE_SELECTED_DLL_SET}>>:$<TARGET_PROPERTY:SDL2_mixer::SDL2_mixer,OPTIONAL_DLLS>>
+            DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${RD_BUILD_PORTABLE}>>,.,${CMAKE_INSTALL_BINDIR}>
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
             COMPONENT "${MODULE}"
         )
         unset(_permissions)
     endif()
     install(TARGETS "${PROGRAM_PREFIX}${MODULE}" RUNTIME
-        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${ID_BUILD_PORTABLE}>>,.,${CMAKE_INSTALL_BINDIR}>
+        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${RD_BUILD_PORTABLE}>>,.,${CMAKE_INSTALL_BINDIR}>
         COMPONENT "${MODULE}"
         ${_permissions}
     )
     if(WIN32 AND (Python3_Interpreter_FOUND OR CMAKE_VERSION VERSION_GREATER_EQUAL 3.16)
         AND NOT VCPKG_TOOLCHAIN
-        AND NOT ID_USE_SELECTED_DLL_SET)
+        AND NOT RD_USE_SELECTED_DLL_SET)
         applocal_install_dependencies("${PROGRAM_PREFIX}${MODULE}"
             "$<IF:$<CONFIG:DEBUG>,${APPLOCAL_SEARCH_PATH_DEBUG},${APPLOCAL_SEARCH_PATH_RELEASE}>" "${MODULE}")
     endif()
@@ -284,13 +284,13 @@ endforeach()
 
 install(FILES "${PROJECT_SOURCE_DIR}/LICENSE.txt"
     RENAME "GPL.txt"
-    DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${ID_BUILD_PORTABLE}>>,.,${CMAKE_INSTALL_DATAROOTDIR}/doc/${PACKAGE_TARNAME}>
+    DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${RD_BUILD_PORTABLE}>>,.,${CMAKE_INSTALL_DATAROOTDIR}/doc/${PACKAGE_TARNAME}>
 )
 # Same install rule but for component based install
 foreach(MODULE ${COMPILE_MODULES})
     install(FILES "${PROJECT_SOURCE_DIR}/LICENSE.txt"
         RENAME "GPL.txt"
-        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${ID_BUILD_PORTABLE}>>,.,${CMAKE_INSTALL_DATAROOTDIR}/doc/${PACKAGE_TARNAME}>
+        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${RD_BUILD_PORTABLE}>>,.,${CMAKE_INSTALL_DATAROOTDIR}/doc/${PACKAGE_TARNAME}>
         COMPONENT "${MODULE}"
         EXCLUDE_FROM_ALL
     )

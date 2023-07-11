@@ -46,7 +46,7 @@ jobs:
             msys_prefix: "i686"
             compiler_name: "gcc"
             cmake_gen: "Ninja"
-            cmake_opts: "-D ID_UCRT32=OFF"
+            cmake_opts: "-D RD_UCRT32=OFF"
             build_suffix: "x86-gcc-msvcrt"
 #          -
 #            display_name: "Windows | x64 | GCC - msvcrt"
@@ -99,14 +99,14 @@ jobs:
             shell: "bash"
             compiler_name: "gcc"
             cmake_gen: "Ninja"
-            cmake_opts: "-D ID_BUILD_PORTABLE=ON"
+            cmake_opts: "-D RD_BUILD_PORTABLE=ON"
 #          -
 #            display_name: "Linux | x64 | Clang"
 #            runner: "ubuntu-22.04"
 #            shell: "bash"
 #            compiler_name: "clang"
 #            cmake_gen: "Ninja"
-#            cmake_opts: "-D ID_BUILD_PORTABLE=ON"
+#            cmake_opts: "-D RD_BUILD_PORTABLE=ON"
 
     defaults:
       run:
@@ -194,10 +194,10 @@ jobs:
           rev_number=$(git rev-list --count HEAD)
           cmake -G "${{ matrix.config.cmake_gen }}" ${{ matrix.config.cmake_opts }} \
                 $msvc_cmake_toolchain \
-                -D ID_BUILD_VERSION_OVERWRITE="r$rev_number" \
-                -D ID_GIT_FORCE_HASH_SUFFIX=ON \
+                -D RD_BUILD_VERSION_OVERWRITE="r$rev_number" \
+                -D RD_GIT_FORCE_HASH_SUFFIX=ON \
                 -D CMAKE_BUILD_TYPE=RelWithDebInfo \
-                -D ID_TEST_WITH_GDB="ON"\
+                -D RD_TEST_WITH_GDB="ON"\
                 -S . -B build
           sha_short=$(echo ${{ github.sha }} | cut -c1-7)
           echo "sha_short=$sha_short" >> $GITHUB_OUTPUT
@@ -224,7 +224,7 @@ jobs:
 
       - name: Install
         if: |
-          github.repository == 'JNechaevsky/inter-doom' &&
+          github.repository == 'Russian-Doom/russian-doom' &&
           github.event_name == 'push' &&
           github.ref == 'refs/heads/master' &&
           runner.os == 'Windows'
@@ -233,7 +233,7 @@ jobs:
 
       - name: Package Zip
         if: |
-          github.repository == 'JNechaevsky/inter-doom' &&
+          github.repository == 'Russian-Doom/russian-doom' &&
           github.event_name == 'push' &&
           github.ref == 'refs/heads/master' &&
           runner.os == 'Windows'

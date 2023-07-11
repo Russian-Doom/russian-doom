@@ -1,4 +1,4 @@
-Thanks for contributing to International Doom! Whatever your contribution,
+Thanks for contributing to Russian Doom! Whatever your contribution,
 whether it's code or just a bug report, it's greatly appreciated.
 
 The project is governed by the
@@ -9,20 +9,20 @@ terms. To report violations, please send an email to julia.nechaevskaya@live.com
 ### Reporting bugs
 
 Try searching [the GitHub issues
-list](https://github.com/JNechaevsky/inter-doom/issues) to see
+list](https://github.com/Russian-Doom/russian-doom/issues) to see
 if your bug has already been reported.
 
 If you're confident that you've found a bug (or even if you're
 not sure!) please go ahead and [file an issue on
-GitHub](https://github.com/JNechaevsky/inter-doom/issues/new/choose).
+GitHub](https://github.com/Russian-Doom/russian-doom/issues/new/choose).
 You'll need a GitHub account, but it's pretty easy to sign up.
 
 Please try to give as much information as possible:
 
-* What version of International Doom are you using? You can check version
-  by running International Doom with --version command line argument or by using VERSION ingame cheat.
+* What version of Russian Doom are you using? You can check version
+  by running Russian Doom with --version command line argument or by using VERSION ingame cheat.
 
-* International Doom runs on many different operating systems (not just
+* Russian Doom runs on many different operating systems (not just
   Windows!). Please say which operating system and what version of it
   you're using.
 
@@ -36,13 +36,13 @@ Please try to give as much information as possible:
 
 ### Feature requests
 
-International Doom is always open to new feature requests.
+Russian Doom is always open to new feature requests.
 To make a feature request, [file an issue on
-GitHub](https://github.com/JNechaevsky/inter-doom/issues/new/choose).
+GitHub](https://github.com/Russian-Doom/russian-doom/issues/new/choose).
 
 ### Bug fixes / code submission
 
-Thank you for contributing code to International Doom! Please check the
+Thank you for contributing code to Russian Doom! Please check the
 following guidelines before opening a pull request:
 
 * All code must be licensed under [the GNU General Public License,

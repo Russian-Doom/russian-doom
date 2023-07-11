@@ -1,4 +1,4 @@
-if(ID_COMPILE_HERETIC)
+if(RD_COMPILE_HERETIC)
     add_library(heretic STATIC
                 am_map.c
                 ct_chat.c
@@ -64,7 +64,7 @@ if(ID_COMPILE_HERETIC)
     target_link_libraries(heretic PRIVATE
         Common
     )
-    if(NOT ID_GIT_NO_HASH)
+    if(NOT RD_GIT_NO_HASH)
         add_dependencies(heretic revision_check)
     endif()
 endif()
