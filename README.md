@@ -63,10 +63,7 @@ and [tar.gz](https://github.com/Russian-Doom/russian-doom/archive/refs/tags/hexe
 
 [**Antivirus FAQ**](https://github.com/Russian-Doom/russian-doom/wiki/Antivirus-FAQ)
 
-### Russian Doom for DOS 1.8 (released: June 9, 2020)
-
-DOS: [russian-doom-dos-1.8.zip](https://github.com/Russian-Doom/russian-doom/releases/download/dos-1.8/russian-doom-dos-1.8.zip)  
-Source code available on [GitHub](https://github.com/Russian-Doom/russian-doom/tree/master/src_dos)
+### [Russian Doom for DOS](https://github.com/Russian-Doom/russian-doom-dos)
 
 ### Other
 

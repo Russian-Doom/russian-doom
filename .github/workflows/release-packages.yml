@@ -7,7 +7,7 @@ on:
 jobs:
   Release:
     name: ${{ matrix.os.name }} | ${{ matrix.arch.name }}
-    if: ${{ github.repository == 'Russian-Doom/russian-doom' && !startsWith(github.ref_name, 'dos-') }}
+    if: ${{ github.repository == 'Russian-Doom/russian-doom' }}
     runs-on: ${{ matrix.os.runner }}
     strategy:
       fail-fast: true
