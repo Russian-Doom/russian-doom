@@ -67,7 +67,8 @@ and [tar.gz](https://github.com/Russian-Doom/russian-doom/archive/refs/tags/hexe
 
 ### Other
 
-PNG font atlases: [inter-doom-fonts-png.zip](https://jnechaevsky.github.io/inter-doom/files/inter-doom-fonts-png.zip)
+PNG font atlases:
+[russian-doom-fonts-png.zip](https://github.com/Russian-Doom/rd-resources/raw/master/Files/russian-doom-fonts-png.zip)
 
 ### History of changes
 
