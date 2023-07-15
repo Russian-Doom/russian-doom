@@ -238,5 +238,5 @@ jobs:
           runner.os == 'Windows'
         uses: actions/upload-artifact@v3
         with:
-          name: inter-doom-${{ steps.configure.outputs.rev_number }}-${{ steps.configure.outputs.sha_short }}-windows-${{ matrix.config.build_suffix }}
+          name: russian-doom-${{ steps.configure.outputs.rev_number }}-${{ steps.configure.outputs.sha_short }}-windows-${{ matrix.config.build_suffix }}
           path: ./build/install/

@@ -106,5 +106,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: |
-          gh release upload ${{ github.event.release.tag_name }} ./build/inter-${{ steps.configure.outputs.game }}-${{ steps.configure.outputs.version }}-windows-${{ matrix.config.build_suffix }}.zip
-          gh release upload ${{ github.event.release.tag_name }} ./build/inter-${{ steps.configure.outputs.game }}-${{ steps.configure.outputs.version }}-windows-${{ matrix.config.build_suffix }}.zip.sha256
+          gh release upload ${{ github.event.release.tag_name }} ./build/russian-${{ steps.configure.outputs.game }}-${{ steps.configure.outputs.version }}-windows-${{ matrix.config.build_suffix }}.zip
+          gh release upload ${{ github.event.release.tag_name }} ./build/russian-${{ steps.configure.outputs.game }}-${{ steps.configure.outputs.version }}-windows-${{ matrix.config.build_suffix }}.zip.sha256
