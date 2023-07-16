@@ -11,12 +11,8 @@ set(VCPKG_APPLOCAL_DEPS ON)
 set(X_VCPKG_APPLOCAL_DEPS_INSTALL ON)
 Option(VCPKG_MANIFEST_MODE "Operate in vcpkg manifest mode instead of classic mode" ON)
 
-project("Russian Doom" LANGUAGES C NONE)
-
-# Versions
-set(BUILD_DOOM_VERSION "6.2")
-set(BUILD_HERETIC_VERSION "6.1")
-set(BUILD_HEXEN_VERSION "6.0")
+# Project Name and Version
+project("Russian Doom" VERSION 6.3 LANGUAGES C NONE)
 
 # Compile modules
 Option(RD_COMPILE_DOOM "Compile Doom module" ON)
@@ -196,29 +192,22 @@ check_include_file("linux/kd.h" HAVE_LINUX_KD_H)
 
 string(REPLACE " Doom" "" PACKAGE_PREFIX "${PROJECT_NAME}")
 string(REPLACE "doom" "" PROGRAM_PREFIX "${PACKAGE_TARNAME}")
+string(REPLACE "." ", " WINDOWS_RC_VERSION ${PROJECT_VERSION})
 
 # [Dasperal] RD_BUILD_VERSION_OVERWRITE variable is used on CI to replace version with git hash
+if(RD_BUILD_VERSION_OVERWRITE)
+    set(PROJECT_VERSION ${RD_BUILD_VERSION_OVERWRITE})
+endif()
+
 if(RD_COMPILE_DOOM)
-    string(REPLACE "." ", " WINDOWS_RC_DOOM_VERSION ${BUILD_DOOM_VERSION})
-    if(RD_BUILD_VERSION_OVERWRITE)
-        set(BUILD_DOOM_VERSION ${RD_BUILD_VERSION_OVERWRITE})
-    endif()
     configure_file(src/doom/resource.rc.in src/doom/resource.rc @ONLY)
     list(APPEND COMPILE_MODULES "doom")
 endif()
 if(RD_COMPILE_HERETIC)
-    string(REPLACE "." ", " WINDOWS_RC_HERETIC_VERSION ${BUILD_HERETIC_VERSION})
-    if(RD_BUILD_VERSION_OVERWRITE)
-        set(BUILD_HERETIC_VERSION ${RD_BUILD_VERSION_OVERWRITE})
-    endif()
     configure_file(src/heretic/resource.rc.in src/heretic/resource.rc @ONLY)
     list(APPEND COMPILE_MODULES "heretic")
 endif()
 if(RD_COMPILE_HEXEN)
-    string(REPLACE "." ", " WINDOWS_RC_HEXEN_VERSION ${BUILD_HEXEN_VERSION})
-    if(RD_BUILD_VERSION_OVERWRITE)
-        set(BUILD_HEXEN_VERSION ${RD_BUILD_VERSION_OVERWRITE})
-    endif()
     configure_file(src/hexen/resource.rc.in src/hexen/resource.rc @ONLY)
     list(APPEND COMPILE_MODULES "hexen")
 endif()

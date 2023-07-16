@@ -62,7 +62,7 @@ if(RD_COMPILE_HEXEN)
     )
     target_common_settings(hexen)
     target_compile_definitions(hexen PRIVATE
-        BUILD_HEXEN_VERSION="${BUILD_HEXEN_VERSION}"
+        PACKAGE_VERSION="${PROJECT_VERSION}"
         PACKAGE_PREFIX="${PACKAGE_PREFIX}"
         PROGRAM_PREFIX="${PROGRAM_PREFIX}"
     )

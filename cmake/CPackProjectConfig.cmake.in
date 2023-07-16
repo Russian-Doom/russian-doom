@@ -1,7 +1,7 @@
-set(doom_version "@BUILD_DOOM_VERSION@")
-set(heretic_version "@BUILD_HERETIC_VERSION@")
-set(hexen_version "@BUILD_HEXEN_VERSION@")
-set(strife_version "@BUILD_STRIFE_VERSION@")
+set(doom_version "@PROJECT_VERSION@")
+set(heretic_version "@PROJECT_VERSION@")
+set(hexen_version "@PROJECT_VERSION@")
+set(strife_version "@PROJECT_VERSION@")
 
 # Global generator settings
     # Archive Generator

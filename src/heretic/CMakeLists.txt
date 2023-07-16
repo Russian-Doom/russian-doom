@@ -57,7 +57,7 @@ if(RD_COMPILE_HERETIC)
     )
     target_common_settings(heretic)
     target_compile_definitions(heretic PRIVATE
-        BUILD_HERETIC_VERSION="${BUILD_HERETIC_VERSION}"
+        PACKAGE_VERSION="${PROJECT_VERSION}"
         PACKAGE_PREFIX="${PACKAGE_PREFIX}"
         PROGRAM_PREFIX="${PROGRAM_PREFIX}"
     )

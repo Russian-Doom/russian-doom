@@ -68,7 +68,7 @@ if(RD_COMPILE_DOOM)
     )
     target_common_settings(doom)
     target_compile_definitions(doom PRIVATE
-        BUILD_DOOM_VERSION="${BUILD_DOOM_VERSION}"
+        PACKAGE_VERSION="${PROJECT_VERSION}"
         PACKAGE_PREFIX="${PACKAGE_PREFIX}"
         PROGRAM_PREFIX="${PROGRAM_PREFIX}"
     )

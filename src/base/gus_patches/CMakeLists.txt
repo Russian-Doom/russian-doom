@@ -207,7 +207,7 @@ endif()
 # Extended install rule for component based install
 foreach(MODULE ${COMPILE_MODULES})
     install(FILES $<GENEX_EVAL:$<TARGET_PROPERTY:gus-patches,OUT_FILES>>
-        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${RD_BUILD_PORTABLE}>>,base,${CMAKE_INSTALL_DATADIR}/${PROGRAM_PREFIX}${MODULE}>/gus_patches
+        DESTINATION $<IF:$<OR:$<BOOL:${WIN32}>,$<BOOL:${RD_BUILD_PORTABLE}>>,base,${CMAKE_INSTALL_DATADIR}/${PACKAGE_TARNAME}>/gus_patches
         COMPONENT "${MODULE}"
         ${exclude_components}
     )
