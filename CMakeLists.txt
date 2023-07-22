@@ -240,18 +240,16 @@ endforeach()
 
 # CPack
 if(WIN32)
-    set(CPACK_GENERATOR ZIP)
+    set(CPACK_PACKAGE_NAME ${PACKAGE_TARNAME})
     set(CPACK_SYSTEM_NAME "windows-${ARCH}")
-
-    # Common CPack settings
-    set(CPACK_PACKAGE_NAME "${PROGRAM_PREFIX}$COMPONENT$") # Will be configured by CPackProjectConfig.cmake
-    set(CPACK_PACKAGE_VERSION "$VERSION$") # Will be configured by CPackProjectConfig.cmake
+    set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
     set(CPACK_PACKAGE_CHECKSUM SHA256)
+    set(CPACK_GENERATOR ZIP)
 
-    get_cmake_property(CPACK_COMPONENTS_ALL COMPONENTS)
-    list(REMOVE_ITEM CPACK_COMPONENTS_ALL "Unspecified")
+    # Archive Generator
+    set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
+    set(CPACK_ARCHIVE_COMPONENT_INSTALL OFF)
+    set(CPACK_ARCHIVE_THREADS 0) # For Cmake 3.18+
 
-    configure_file(cmake/CPackProjectConfig.cmake.in CPackProjectConfig.cmake @ONLY)
-    set(CPACK_PROJECT_CONFIG_FILE CPackProjectConfig.cmake)
     include(Cpack)
 endif()

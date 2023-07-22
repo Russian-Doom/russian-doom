@@ -251,7 +251,7 @@ To package Russian Doom, run the following commands:
 cd build
 cpack -G ZIP
 ```
-The resulting packages of the previously compiled components and their checksums can be found in the `build` directory.
+The resulting package of the previously compiled components and its checksum can be found in the `build` directory.
 
 The only supported generators are [Archive Generators](https://cmake.org/cmake/help/latest/cpack_gen/archive.html).
 
