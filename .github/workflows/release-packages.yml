@@ -6,15 +6,15 @@ on:
 
 jobs:
   Release:
-    name: ${{ matrix.os.name }} | ${{ matrix.arch.name }}
+    name: ${{ matrix.config.display_name }}
     if: ${{ github.repository == 'Russian-Doom/russian-doom' }}
-    runs-on: ${{ matrix.os.runner }}
+    runs-on: ${{ matrix.config.runner }}
     strategy:
       fail-fast: true
       matrix:
         config:
           -
-            display_name: "Windows | x86 | GCC"
+            display_name: "Windows | x86"
             runner: "windows-2022"
             shell: "msys2 {0}"
             msys_msystem: "MINGW32"
@@ -23,7 +23,7 @@ jobs:
             cmake_gen: "Ninja"
             build_suffix: "x86"
           -
-            display_name: "Windows | x64 | GCC"
+            display_name: "Windows | x64"
             runner: "windows-2022"
             shell: "msys2 {0}"
             msys_msystem: "UCRT64"
@@ -47,7 +47,7 @@ jobs:
           update: true
           install: >-
             mingw-w64-${{ matrix.config.msys_prefix }}-pkgconf
-            mingw-w64-${{ matrix.config.msys_prefix }}-${{ matrix.compiler.name }}
+            mingw-w64-${{ matrix.config.msys_prefix }}-${{ matrix.config.compiler_name }}
             mingw-w64-${{ matrix.config.msys_prefix }}-ninja
             mingw-w64-${{ matrix.config.msys_prefix }}-cmake
             mingw-w64-${{ matrix.config.msys_prefix }}-SDL2
@@ -58,34 +58,9 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Configure
-        id: configure
         run: |
-          compile_doom="OFF"
-          compile_heretic="OFF"
-          compile_hexen="OFF"
-          if [[ ${{ contains(github.ref_name, '-') }} == true ]]
-          then
-              game=$( echo "${{ github.ref_name }}" | cut -d'-' -f1 )
-              version=$( echo "${{ github.ref_name }}" | cut -d'-' -f2 )
-              if [[ $game == "heretic" ]]
-              then
-                  compile_heretic="ON"
-              elif [[ $game == "hexen" ]]
-              then
-                  compile_hexen="ON"
-              fi
-          else
-              compile_doom="ON"
-              game="doom"
-              version="${{ github.ref_name }}"
-          fi
-          echo "game=$game" >> $GITHUB_OUTPUT
-          echo "version=$version" >> $GITHUB_OUTPUT
           cmake -G "${{ matrix.config.cmake_gen }}" ${{ matrix.config.cmake_opts }} \
-                -D RD_COMPILE_DOOM="$compile_doom" \
-                -D RD_COMPILE_HERETIC="$compile_heretic" \
-                -D RD_COMPILE_HEXEN="$compile_hexen" \
-                -D RD_BUILD_VERSION_OVERWRITE="$version" \
+                -D RD_BUILD_VERSION_OVERWRITE="${{ github.ref_name }}" \
                 -D CMAKE_BUILD_TYPE=Release \
                 -S . -B build
 
@@ -106,5 +81,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: |
-          gh release upload ${{ github.event.release.tag_name }} ./build/russian-${{ steps.configure.outputs.game }}-${{ steps.configure.outputs.version }}-windows-${{ matrix.config.build_suffix }}.zip
-          gh release upload ${{ github.event.release.tag_name }} ./build/russian-${{ steps.configure.outputs.game }}-${{ steps.configure.outputs.version }}-windows-${{ matrix.config.build_suffix }}.zip.sha256
+          gh release upload ${{ github.event.release.tag_name }} ./build/russian-doom-${{ github.ref_name }}-windows-${{ matrix.config.build_suffix }}.zip
+          gh release upload ${{ github.event.release.tag_name }} ./build/russian-doom-${{ github.ref_name }}-windows-${{ matrix.config.build_suffix }}.zip.sha256
