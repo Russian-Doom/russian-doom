@@ -39,6 +39,7 @@ char *M_TempFile(char *s);
 boolean M_FileExists(char *file);
 char *M_FileCaseExists(char *file);
 long M_FileLength(FILE *handle);
+boolean M_PathWritable(const char* path);
 
 /**
  * Cross platform version of fopen with UTF-8 support.

@@ -32,6 +32,7 @@
 #include <windows.h>
 #else
 #include <sys/types.h>
+#include <unistd.h>
 #endif
 
 #include "doomtype.h"
@@ -183,6 +184,72 @@ long M_FileLength(FILE *handle)
     fseek(handle, savedpos, SEEK_SET);
 
     return length;
+}
+
+boolean M_PathWritable(const char* path)
+{
+    boolean ret = 0;
+    if(!M_FileExists(path))
+    {
+        const char* parentDir = M_DirName(path);
+        ret = M_PathWritable(parentDir);
+        free(parentDir);
+        return ret;
+    }
+
+#ifdef _WIN32
+    DWORD length = 0;
+    DWORD genericAccessRights = GENERIC_WRITE;
+
+    wchar_t* wpath = ConvertToUtf8(path);
+    if(!GetFileSecurityW(wpath, OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION, NULL,
+        0, &length) &&
+       ERROR_INSUFFICIENT_BUFFER == GetLastError())
+    {
+        PSECURITY_DESCRIPTOR security = malloc(length);
+
+        if(security &&
+           GetFileSecurityW(wpath, OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,
+               security, length, &length))
+        {
+            HANDLE hToken = NULL;
+
+            if(OpenProcessToken(GetCurrentProcess(),
+                TOKEN_IMPERSONATE | TOKEN_QUERY | TOKEN_DUPLICATE | STANDARD_RIGHTS_READ, &hToken))
+            {
+                HANDLE hImpersonatedToken = NULL;
+
+                if(DuplicateToken(hToken, SecurityImpersonation, &hImpersonatedToken))
+                {
+                    GENERIC_MAPPING mapping = {0xFFFFFFFF};
+                    PRIVILEGE_SET privileges = {0};
+                    DWORD grantedAccess = 0, privilegesLength = sizeof(privileges);
+                    BOOL result = FALSE;
+
+                    mapping.GenericRead = FILE_GENERIC_READ;
+                    mapping.GenericWrite = FILE_GENERIC_WRITE;
+                    mapping.GenericExecute = FILE_GENERIC_EXECUTE;
+                    mapping.GenericAll = FILE_ALL_ACCESS;
+
+                    MapGenericMask(&genericAccessRights, &mapping);
+
+                    if(AccessCheck(security, hImpersonatedToken, genericAccessRights,
+                        &mapping, &privileges, &privilegesLength, &grantedAccess, &result))
+                    {
+                        ret = result == TRUE;
+                    }
+                    CloseHandle(hImpersonatedToken);
+                }
+                CloseHandle(hToken);
+            }
+            free(security);
+        }
+    }
+    free(wpath);
+#else
+    ret = access(path, W_OK) == 0;
+#endif
+    return ret;
 }
 
 //
