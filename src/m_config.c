@@ -19,6 +19,7 @@
 //
 
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -27,6 +28,7 @@
 
 #include "SDL_filesystem.h"
 
+#include "d_name.h"
 #include "doomtype.h"
 #include "doomfeatures.h"
 #include "i_system.h"
@@ -38,6 +40,12 @@
 #include "rd_keybinds.h"
 #include "i_controller.h"
 
+typedef struct
+{
+    char* loadPath;
+    char* savePath;
+} config_path_t;
+
 typedef struct section_s
 {
     struct section_s* next;
@@ -46,12 +54,10 @@ typedef struct section_s
 } section_t;
 
 // Location where all configuration data is stored
-char *configdir, *configPath;
+config_path_t configPath;
+char* configdir;
 
 static section_t* sections;
-
-// Default filenames for configuration files.
-static char *config_file_name;
 
 //
 // DEFAULTS
@@ -878,13 +884,6 @@ static void SetVariable(default_t *def, char *value)
     }
 }
 
-// Set the default filenames to use for configuration files.
-
-void M_SetConfigFilename(char *name)
-{
-    config_file_name = name;
-}
-
 //
 // M_SaveConfig
 //
@@ -894,9 +893,32 @@ void M_SaveConfig (void)
     FILE *f;
     section_t* section;
 
-    f = M_fopen(configPath, "w");
+    if(!configPath.savePath)
+    {
+        printf(english_language ?
+               "No writable path to save configuration file\n" :
+               "Нет доступного для записи места для сохранения файла конфигурации\n");
+        return;
+    }
+
+    printf(english_language ?
+           "Saving configuration file:\n    %s\n" :
+           "Сохранение файла конфигурации:\n    %s\n",
+        configPath.savePath);
+
+    const char* config_dir = M_DirName(configPath.savePath);
+    M_MakeDirectory(config_dir);
+    free(config_dir);
+
+    f = M_fopen(configPath.savePath, "w");
     if(!f)
-        return; // can't write the file, but don't complain
+    {
+        printf(english_language ?
+               "Unable to open configuration file for writing\n" :
+               "Не удалось открыть файл конфигурации для записи\n");
+        return;
+    }
+
     fprintf(f, "config_version = %i\n\n", CURRENT_CONFIG_VERSION);
     section = sections;
     while(section)
@@ -908,27 +930,6 @@ void M_SaveConfig (void)
     }
 
     fclose(f);
-}
-
-//
-// Save default_collection to alternate filenames
-//
-
-void M_SaveDefaultAlternate(char *main)
-{
-    char *orig_main;
-
-    // Temporarily change the filenames
-
-    orig_main = configPath;
-
-    configPath = main;
-
-    M_SaveConfig();
-
-    // Restore normal filenames
-
-    configPath = orig_main;
 }
 
 void M_AppendConfigSection(const char* sectionName, sectionHandler_t* handler)
@@ -1009,6 +1010,118 @@ static void ApplyDefaults()
     M_AppendConfigSection("Keybinds", &keybindsHandler);
 }
 
+static const char** config_path_prefixes(const char* tarname)
+{
+    const char* sdl_pref_path = SDL_GetPrefPath(NULL, tarname);
+    const char* path_prefixes[] = {
+#ifdef _WIN32
+        // Exe dir or -cdrom
+        M_StringDuplicate(M_ParmExists("-cdrom") ? RD_Project_CDRom_Dir : exedir),
+#elif defined(BUILD_PORTABLE)
+        // Exe dir
+        M_StringDuplicate(exedir),
+#endif
+#ifndef _WIN32
+        /*
+         * On Windows: %AppData%\Roaming\tarname\
+         * On Linux: ~/.local/share/tarname/
+         * On Max OS: ~/Library/Application Support/tarname/
+         */
+        M_StringDuplicate(sdl_pref_path),
+#endif
+        // Working dir
+        M_StringJoin(".", DIR_SEPARATOR_S, NULL),
+        NULL
+    };
+
+    const size_t size = sizeof(path_prefixes);
+    const char** ret = malloc(size);
+
+    memcpy(ret, path_prefixes, size);
+    SDL_free((void*) sdl_pref_path);
+
+    return ret;
+};
+
+static boolean isSupportedConfig(char* config_path)
+{
+    FILE* file = M_fopen(config_path, "r");
+    if(file == NULL)
+        return false;
+
+    char buffer[14];
+    if(fread(&buffer, 1, 14, file) != 14)
+    {
+        fclose(file);
+        return false;
+    }
+    if(buffer[0] != '[' && strcmp(buffer, "config_version") != 0)
+    {
+        fclose(file);
+        return false;
+    }
+
+    fclose(file);
+    return true;
+}
+
+static config_path_t findConfigfilePaths(void)
+{
+    config_path_t ret = {NULL, NULL};
+
+    const char** RD_prefixes = config_path_prefixes(PACKAGE_TARNAME);
+    const char** ID_prefixes = config_path_prefixes("inter-doom");
+
+    const char** prefixes = RD_prefixes;
+    while(*prefixes != NULL && (!ret.loadPath || !ret.savePath))
+    {
+        char* config_path = M_StringJoin(*prefixes, RD_Project_TarName, ".ini", NULL);
+        boolean saved = false;
+        if(!ret.loadPath && M_FileExists(config_path))
+        {
+            ret.loadPath = config_path;
+            saved = true;
+        }
+        if(saved || (!ret.savePath && M_PathWritable(*prefixes)))
+        {
+            if(ret.savePath)
+                free(ret.savePath);
+
+            ret.savePath = config_path;
+            saved = true;
+        }
+
+        if(!saved)
+            free(config_path);
+
+        prefixes++;
+    }
+
+    // ID config compatibility
+    if(!ret.loadPath)
+    {
+        prefixes = ID_prefixes;
+        while(*prefixes != NULL)
+        {
+            char* config_path = M_StringJoin(*prefixes, ID_Project_TarName, ".ini", NULL);
+            if(M_FileExists(config_path) && isSupportedConfig(config_path))
+            {
+                ret.loadPath = config_path;
+                printf(english_language ?
+                       "Found compatible International Doom config file\n" :
+                       "Найден поддерживаемый файл конфигурации International Doom\n");
+                break;
+            }
+            free(config_path);
+            prefixes++;
+        }
+    }
+
+    M_FreeStringArray_NullTerminated(RD_prefixes);
+    M_FreeStringArray_NullTerminated(ID_prefixes);
+    return ret;
+}
+
 //
 // M_LoadConfig
 //
@@ -1029,14 +1142,14 @@ void M_LoadConfig(void)
 
     if(i)
     {
-        configPath = myargv[i + 1];
+        configPath.loadPath = configPath.savePath = myargv[i + 1];
     }
     else
     {
-        configPath = M_StringJoin(configdir, config_file_name, NULL);
+        configPath = findConfigfilePaths();
     }
 
-    file = M_fopen(configPath, "r");
+    file = M_fopen(configPath.loadPath, "r");
     if(file == NULL)
     {
         // File not opened, but don't complain.
@@ -1057,12 +1170,19 @@ void M_LoadConfig(void)
     {
         if(fscanf(file, "config_version = %i\n\n", &cfg_version) != 1)
         {
-            printf("    M_Config: Error: Unsupported config format\n");
+            printf(english_language ?
+                   "    M_Config: Error: Unsupported config format\n" :
+                   "    M_Config: Ошибка: Формат конфига не поддерживается\n");
             ApplyDefaults();
             fclose(file);
             return;
         }
     }
+
+    printf(english_language ?
+           "Loading configuration file:\n    %s\n" :
+           "Загрузка файла конфигурации:\n    %s\n",
+        configPath.loadPath);
 
     config_version = cfg_version;
     M_RegisterTrackedFields();
@@ -1078,14 +1198,6 @@ void M_LoadConfig(void)
     }
 
     M_ApplyMigration();
-}
-
-void M_PrintConfigFile (void)
-{
-    printf(english_language ?
-           "Loading configuration file:\n    %s\n" :
-           "Загрузка файла конфигурации:\n    %s\n",
-           configPath);
 }
 
 // Get a configuration file variable by its name
@@ -1205,17 +1317,6 @@ void M_SetConfigDir(char *dir)
     // Make the directory if it doesn't already exist:
 
     M_MakeDirectory(configdir);
-}
-
-void M_PrintConfigDir (void)
-{
-    if (strcmp(configdir, "") != 0)
-    {
-        printf(english_language ?
-               "Configuration directory path:\n    %s\n" :
-               "Настройки программы будут расположены в папке:\n    %s\n",
-               configdir);
-    }
 }
 
 //

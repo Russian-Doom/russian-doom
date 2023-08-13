@@ -786,6 +786,17 @@ char *M_StringJoin(const char *s, ...)
     return result;
 }
 
+void M_FreeStringArray_NullTerminated(const char** array)
+{
+    const char** temp = array;
+    while(*temp != NULL)
+    {
+        free(*temp);
+        temp++;
+    }
+    free(array);
+}
+
 // On Windows, vsnprintf() is _vsnprintf().
 #ifdef _WIN32
 #if _MSC_VER < 1400 /* not needed for Visual Studio 2008 */

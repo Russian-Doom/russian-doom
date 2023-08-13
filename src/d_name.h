@@ -29,4 +29,6 @@ extern char* RD_Project_Name;
 extern char* RD_Project_String;
 extern char* RD_Project_Version;
 extern char* RD_Project_TarName;
+extern char* ID_Project_TarName; // ID config compatibility
 extern GameType_t RD_GameType;
+extern char* RD_Project_CDRom_Dir;

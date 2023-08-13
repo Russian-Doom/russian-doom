@@ -66,7 +66,9 @@ char* RD_Project_Version = PACKAGE_VERSION;
 char* RD_Project_Version = PACKAGE_VERSION GIT_SHA_SUFFIX;
 #endif
 char* RD_Project_TarName = PROGRAM_PREFIX "heretic";
+char* ID_Project_TarName = "inter-heretic"; // ID config compatibility
 GameType_t RD_GameType = gt_Heretic;
+char* RD_Project_CDRom_Dir = "c:\\heretic.cd";
 
 GameMode_t gamemode = indetermined;
 char *gamedescription = "unknown";
@@ -1312,7 +1314,6 @@ void D_DoomMain(void)
         M_SetConfigDir(NULL);
     }
 
-    M_SetConfigFilename(PROGRAM_PREFIX "heretic.ini");
     D_BindVariables();
     M_LoadConfig();
 
@@ -1320,9 +1321,6 @@ void D_DoomMain(void)
                "Z_Init: Init zone memory allocation daemon.\n" :
                "Z_Init: Инициализация зональной памяти.\n");
     Z_Init();
-
-    M_PrintConfigDir();
-    M_PrintConfigFile();
 
     savegamedir = M_GetSaveGameDir();
 

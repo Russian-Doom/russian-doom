@@ -94,7 +94,9 @@ char* RD_Project_Version = PACKAGE_VERSION;
 char* RD_Project_Version = PACKAGE_VERSION GIT_SHA_SUFFIX;
 #endif
 char* RD_Project_TarName = PROGRAM_PREFIX "doom";
+char* ID_Project_TarName = "inter-doom"; // ID config compatibility
 GameType_t RD_GameType = gt_Doom;
+char* RD_Project_CDRom_Dir = "c:\\doomdata\\";
 
 // -----------------------------------------------------------------------------
 // [JN] Support for English language.
@@ -2826,7 +2828,6 @@ void D_DoomMain (void)
         // Auto-detect the configuration dir.
         M_SetConfigDir(NULL);
     }
-    M_SetConfigFilename(PROGRAM_PREFIX "doom.ini");
     D_BindVariables();
     M_LoadConfig();
 
@@ -2834,9 +2835,6 @@ void D_DoomMain (void)
                "Z_Init: Init zone memory allocation daemon. \n" :
                "Z_Init: Инициализация зональной памяти.\n");
     Z_Init ();
-
-    M_PrintConfigDir();
-    M_PrintConfigFile();
 
     savegamedir = M_GetSaveGameDir();
 
