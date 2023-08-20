@@ -1292,28 +1292,6 @@ void D_DoomMain(void)
     I_AtExit(D_Endoom, false);
 
     // Load defaults before initing other systems
-
-#ifdef _WIN32
-
-    //!
-    // @platform windows
-    // @vanilla
-    //
-    // Save configuration data and savegames in c:\heretic.cd,
-    // allowing play from CD.
-    //
-
-    if (M_ParmExists("-cdrom"))
-    {
-        M_SetConfigDir(DEH_String("c:\\heretic.cd"));
-    }
-    else
-#endif
-    {
-        // Auto-detect the configuration dir.
-        M_SetConfigDir(NULL);
-    }
-
     D_BindVariables();
     M_LoadConfig();
 

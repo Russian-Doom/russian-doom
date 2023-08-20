@@ -2806,28 +2806,6 @@ void D_DoomMain (void)
     I_AtExit(D_Endoom, false);
 
     // Load configuration files before initialising other subsystems.
-
-#ifdef _WIN32
-
-    //!
-    // @platform windows
-    // @vanilla
-    //
-    // Save configuration data and savegames in c:\doomdata,
-    // allowing play from CD.
-    //
-
-    if (M_ParmExists("-cdrom"))
-    {
-        // DEH_printf(english_language ? D_CDROM : D_CDROM_RUS);
-        M_SetConfigDir("c:\\doomdata\\");
-    }
-    else
-#endif
-    {
-        // Auto-detect the configuration dir.
-        M_SetConfigDir(NULL);
-    }
     D_BindVariables();
     M_LoadConfig();
 

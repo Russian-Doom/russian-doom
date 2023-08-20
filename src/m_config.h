@@ -58,9 +58,8 @@ typedef enum
 void M_LoadConfig(void);
 void M_SaveConfig(void);
 void M_AppendConfigSection(const char* sectionName, sectionHandler_t* handler);
-void M_SetConfigDir(char *dir);
 void M_BindIntVariable(char *name, int *variable);
 void M_BindFloatVariable(char *name, float *variable);
 void M_BindStringVariable(char *name, char **variable);
-char *M_GetSaveGameDir();
+char* M_GetSaveGameDir(void);
 char* M_GetDefaultConfigDir(void);

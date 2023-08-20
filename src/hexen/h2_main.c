@@ -759,28 +759,6 @@ void D_DoomMain(void)
     gamemode = commercial;
 
     // Load defaults before initing other systems
-
-#ifdef _WIN32
-
-    //!
-    // @platform windows
-    // @vanilla
-    //
-    // Save configuration data and savegames in c:\hexndata,
-    // allowing play from CD.
-    //
-
-    if (M_ParmExists("-cdrom"))
-    {
-        M_SetConfigDir("c:\\hexndata\\");
-    }
-    else
-#endif
-    {
-        // Auto-detect the configuration dir.
-        M_SetConfigDir(NULL);
-    }
-
     D_BindVariables();
     M_LoadConfig();
 

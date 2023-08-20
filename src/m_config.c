@@ -55,7 +55,6 @@ typedef struct section_s
 
 // Location where all configuration data is stored
 config_path_t configPath;
-char* configdir;
 
 static section_t* sections;
 
@@ -1294,70 +1293,73 @@ char* M_GetDefaultConfigDir(void)
     return result;
 }
 
-// 
-// SetConfigDir:
-//
-// Sets the location of the configuration directory, where configuration
-// files are stored - default.ini, chocolate-doom.ini, savegames, etc.
-//
-
-void M_SetConfigDir(char *dir)
+static const char** savegame_path_prefixes(void)
 {
-    // Use the directory that was passed, or find the default.
+    const char* sdl_pref_path = SDL_GetPrefPath(NULL, PACKAGE_TARNAME);
+    const char* path_prefixes[] = {
+#ifdef _WIN32
+        // Exe dir or -cdrom
+        M_StringJoin(M_ParmExists("-cdrom") ? RD_Project_CDRom_Dir : exedir, "savegames", DIR_SEPARATOR_S, NULL),
+        M_StringJoin(getenv("USERPROFILE"), DIR_SEPARATOR_S, "Saved Games", DIR_SEPARATOR_S, PACKAGE_TARNAME, DIR_SEPARATOR_S, NULL),
+#elif defined(BUILD_PORTABLE)
+        // Exe dir
+        M_StringJoin(exedir, "savegames", DIR_SEPARATOR_S, NULL),
+#endif
+#ifndef _WIN32
+        /*
+         * On Windows: %AppData%\Roaming\russian-doom\
+         * On Linux: ~/.local/share/russian-doom/
+         * On Max OS: ~/Library/Application Support/russian-doom/
+         */
+        M_StringJoin(sdl_pref_path, "savegames", DIR_SEPARATOR_S, NULL),
+#endif
+        // Working dir
+        M_StringJoin(".", DIR_SEPARATOR_S, "savegames", DIR_SEPARATOR_S, NULL),
+        NULL
+    };
 
-    if (dir != NULL)
-    {
-        configdir = dir;
-    }
-    else
-    {
-        configdir = M_GetDefaultConfigDir();
-    }
+    const size_t size = sizeof(path_prefixes);
+    const char** ret = malloc(size);
 
-    // Make the directory if it doesn't already exist:
+    memcpy(ret, path_prefixes, size);
+    SDL_free((void*) sdl_pref_path);
 
-    M_MakeDirectory(configdir);
-}
+    return ret;
+};
 
 //
 // Calculate the path to the directory to use to store save games.
 // Creates the directory as necessary.
 //
 
-char *M_GetSaveGameDir()
+char* M_GetSaveGameDir(void)
 {
-    char *savegamedir;
+    char* savegamedir = NULL;
 
     int p = M_CheckParmWithArgs("-savedir", 1);
-    if (p)
+    if(p)
     {
         savegamedir = M_StringJoin(myargv[p + 1], DIR_SEPARATOR_S, NULL);
     }
     else
     {
-#ifdef _WIN32
-        // In -cdrom mode, we write savegames to a specific directory
-        // in addition to configs.
-        if (M_ParmExists("-cdrom"))
-        {
-            savegamedir = configdir;
-        }
-        else if (0 == strcmp(configdir, ""))
-        {
-            char* topdir = M_StringJoin(getenv("USERPROFILE"), DIR_SEPARATOR_S, "Saved Games", NULL);
-            if (M_FileExists(topdir))
-                savegamedir = M_StringJoin(topdir, DIR_SEPARATOR_S, PACKAGE_TARNAME, DIR_SEPARATOR_S, NULL);
-            else
-                savegamedir = M_StringJoin("savegames", DIR_SEPARATOR_S, NULL);
+        const char** RD_prefixes = savegame_path_prefixes();
 
-            free(topdir);
+        const char** prefixes = RD_prefixes;
+        while(*prefixes != NULL)
+        {
+            if(M_PathWritable(*prefixes))
+            {
+                savegamedir = M_StringDuplicate(*prefixes);
+                break;
+            }
+            prefixes++;
         }
-        else
-#endif
-            savegamedir = M_StringJoin(configdir, "savegames", DIR_SEPARATOR_S, NULL);
+
+        M_FreeStringArray_NullTerminated(RD_prefixes);
     }
 
-    if (!M_FileExists(savegamedir))
+    if(!M_FileExists(savegamedir))
     {
         M_MakeDirectory(savegamedir);
     }
