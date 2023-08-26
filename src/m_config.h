@@ -62,4 +62,4 @@ void M_BindIntVariable(char *name, int *variable);
 void M_BindFloatVariable(char *name, float *variable);
 void M_BindStringVariable(char *name, char **variable);
 char* M_GetSaveGameDir(void);
-char* M_GetDefaultConfigDir(void);
+char* M_GetAutoloadDir(void);

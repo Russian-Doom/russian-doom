@@ -1258,41 +1258,6 @@ void M_BindStringVariable(char *name, char **location)
     variable->bound = true;
 }
 
-// Get the path to the default configuration dir to use, if NULL
-// is passed to M_SetConfigDir.
-
-char* M_GetDefaultConfigDir(void)
-{
-    char *result;
-    char* tempResult;
-#if defined(_WIN32) || defined(BUILD_PORTABLE)
-    result = M_StringDuplicate(exedir);
-    // [Dasperal] Try to check whether writing to exedir is possible by creating a savegames directory
-    tempResult = M_StringJoin(result, "savegames", NULL);
-    // If the savegames directory already exists, optimistically assume that writing is possible
-    if (!M_FileExists(tempResult))
-    {
-        M_MakeDirectory(tempResult);
-        if (!M_FileExists(tempResult))
-        {
-            free(result);
-            result = M_StringDuplicate("");
-        }
-    }
-    free(tempResult);
-#else
-    tempResult = SDL_GetPrefPath("", PACKAGE_TARNAME); // This might be ~/.local/share/inter-doom
-    if (tempResult != NULL)
-    {
-        result = M_StringDuplicate(tempResult);
-        SDL_free(tempResult);
-    }
-    else
-        result = M_StringDuplicate("");
-#endif
-    return result;
-}
-
 static const char** savegame_path_prefixes(void)
 {
     const char* sdl_pref_path = SDL_GetPrefPath(NULL, PACKAGE_TARNAME);
@@ -1368,4 +1333,12 @@ char* M_GetSaveGameDir(void)
             "Сохраненные игры будут расположены в папке:\n    %s\n",
             savegamedir);
     return savegamedir;
+}
+
+char* M_GetAutoloadDir(void)
+{
+    char* prefix = M_DirName(configPath.savePath);
+    char* autoload_path = M_StringJoin(prefix, DIR_SEPARATOR_S, "autoload", NULL);
+    free(prefix);
+    return autoload_path;
 }

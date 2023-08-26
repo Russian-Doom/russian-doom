@@ -2111,12 +2111,10 @@ void D_SetGameDescription(void)
     }
 
     // [Dasperal] Directory based autoload.
-    // Set the default value of autoload_root to M_GetDefaultConfigDir()
+    // Set the default value of autoload_root to M_GetAutoloadDir()
     if(strcmp(autoload_root, "") == 0)
     {
-        char* basePath = M_GetDefaultConfigDir();
-        autoload_root = M_StringJoin(basePath, "autoload", NULL);
-        free(basePath);
+        autoload_root = M_GetAutoloadDir();
     }
 
     int autoloadDir_param = M_CheckParmWithArgs("-autoloadroot", 1);
