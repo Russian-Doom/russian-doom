@@ -23,7 +23,7 @@
 #include "doomtype.h"
 
 __declspec(dllimport) extern boolean console_connected;
-__declspec(dllimport) extern int InterDoom_Main(int argc, char** argv);
+__declspec(dllimport) extern int RussianDoom_Main(int argc, char** argv);
 
 int main(int argc, char** argv)
 {
@@ -34,5 +34,5 @@ int main(int argc, char** argv)
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
 #endif
-    return InterDoom_Main(argc, argv);
+    return RussianDoom_Main(argc, argv);
 }

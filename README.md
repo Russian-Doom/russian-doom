@@ -78,7 +78,7 @@ and [Russian](https://github.com/Russian-Doom/russian-doom/wiki/Changelog-(Rus))
 
 ### License
 
-International Doom is based on [Chocolate Doom](https://www.chocolate-doom.org) by Simon Howard
+Russian Doom is based on [Chocolate Doom](https://www.chocolate-doom.org) by Simon Howard
 and [Crispy Doom](http://fabiangreffrath.github.io/crispy-doom) by Fabian Greffrath,
 with significant additions from [Doom Retro](http://doomretro.com) by Brad Harding,
 and is distributed with their approval.

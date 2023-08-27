@@ -246,7 +246,7 @@ char* ststr_behold;
 char* ststr_beholdx;
 char* ststr_beholdz;
 
-// International Doom specific
+// Russian Doom specific
 char* ststr_massacre;
 char* ststr_buddhaon;
 char* ststr_buddhaoff;
@@ -418,7 +418,7 @@ void ID_DefineLanguageStrings (void)
         ststr_beholdx   = STSTR_BEHOLDX;
         ststr_beholdz   = STSTR_BEHOLDZ;
 
-        // International Doom specific
+        // Russian Doom specific
         ststr_massacre  = STSTR_MASSACRE;
         ststr_buddhaon  = STSTR_BUDDHAON;
         ststr_buddhaoff = STSTR_BUDDHAOFF;
@@ -591,7 +591,7 @@ void ID_DefineLanguageStrings (void)
         ststr_beholdx   = STSTR_BEHOLDX_RUS;
         ststr_beholdz   = STSTR_BEHOLDZ_RUS;
 
-        // International Doom specific
+        // Russian Doom specific
         ststr_massacre  = STSTR_MASSACRE_RUS;
         ststr_buddhaon  = STSTR_BUDDHAON_RUS;
         ststr_buddhaoff = STSTR_BUDDHAOFF_RUS;

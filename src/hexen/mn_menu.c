@@ -6680,7 +6680,7 @@ boolean MN_Responder(event_t * event)
         {
             // F12 - reload current map (devmaps mode)
             // [JN] Allow only in devparm mode, see this comment:
-            // https://github.com/JNechaevsky/inter-doom/issues/210#issuecomment-702321075
+            // https://github.com/Russian-Doom/russian-doom/issues/210#issuecomment-702321075
 
             if (netgame || !devparm)
             {
