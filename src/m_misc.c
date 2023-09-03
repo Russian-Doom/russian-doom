@@ -74,7 +74,9 @@ boolean M_FileExists(char *filename)
 #ifdef _WIN32
     wchar_t *wpath = NULL;
     wpath = ConvertToUtf8(filename);
-    return INVALID_FILE_ATTRIBUTES != GetFileAttributesW(wpath);
+    boolean ret = INVALID_FILE_ATTRIBUTES != GetFileAttributesW(wpath);
+    free(wpath);
+    return ret;
 #else
     FILE *fstream;
 
