@@ -143,9 +143,9 @@ void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation, boolean fl
 
     if (frame >= 30 || rotation > 8)
     {
-        I_Error(english_language ?
-                "R_InstallSpriteLump: Bad frame characters in lump %i" :
-                "R_InstallSpriteLump: некорректные символы фрейма в блоке %i", lump);
+        I_QuitWithError(english_language ?
+                        "R_InstallSpriteLump: Bad frame characters in lump %i" :
+                        "R_InstallSpriteLump: некорректные символы фрейма в блоке %i", lump);
     }
 
     if ((int) frame > maxframe)
@@ -158,18 +158,18 @@ void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation, boolean fl
         // The lump should be used for all rotations.
         if (sprtemp[frame].rotate == false)
         {
-            I_Error(english_language ?
-                    "R_InitSprites: Sprite %s frame %c has multip rot=0 lump" :
-                    "R_InitSprites: фрейм %c спрайта %s имеет многократный блок rot=0",
-                    spritename, 'A' + frame);
+            I_QuitWithError(english_language ?
+                            "R_InitSprites: Sprite %s frame %c has multip rot=0 lump" :
+                            "R_InitSprites: фрейм %c спрайта %s имеет многократный блок rot=0",
+                            spritename, 'A' + frame);
         }
 
         if (sprtemp[frame].rotate == true)
         {
-            I_Error(english_language ?
-                    "R_InitSprites: Sprite %s frame %c has rotations and a rot=0 lump" :
-                    "R_InitSprites: фрейм %c спрайта %s имеет фреймы поворота и блок rot=0",
-                    spritename, 'A' + frame);
+            I_QuitWithError(english_language ?
+                            "R_InitSprites: Sprite %s frame %c has rotations and a rot=0 lump" :
+                            "R_InitSprites: фрейм %c спрайта %s имеет фреймы поворота и блок rot=0",
+                            spritename, 'A' + frame);
         }
 
         sprtemp[frame].rotate = false;
@@ -185,10 +185,10 @@ void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation, boolean fl
     // The lump is only used for one rotation.
     if (sprtemp[frame].rotate == false)
     {
-        I_Error(english_language ?
-                "R_InitSprites: Sprite %s frame %c has rotations and a rot=0 lump" :
-                "R_InitSprites: фрейм спрайта %c спрайта %s имеет фреймы поворота и блок rot=0",
-                spritename, 'A' + frame);
+        I_QuitWithError(english_language ?
+                        "R_InitSprites: Sprite %s frame %c has rotations and a rot=0 lump" :
+                        "R_InitSprites: фрейм спрайта %c спрайта %s имеет фреймы поворота и блок rot=0",
+                        spritename, 'A' + frame);
     }
 
     sprtemp[frame].rotate = true;
@@ -196,10 +196,10 @@ void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation, boolean fl
 
     if (sprtemp[frame].lump[rotation] != -1)
     {
-        I_Error(english_language ?
-                "R_InitSprites: Sprite %s : %c : %c has two lumps mapped to it" :
-                "R_InitSprites: спрайу %s : %c : %c назначено несколько одинаковых блоков",
-                spritename, 'A' + frame, '1' + rotation);
+        I_QuitWithError(english_language ?
+                        "R_InitSprites: Sprite %s : %c : %c has two lumps mapped to it" :
+                        "R_InitSprites: спрайу %s : %c : %c назначено несколько одинаковых блоков",
+                        spritename, 'A' + frame, '1' + rotation);
     }
 
     sprtemp[frame].lump[rotation] = lump - firstspritelump;
@@ -280,10 +280,10 @@ void R_InitSpriteDefs(char **namelist)
             {
                 continue;
             }
-            I_Error(english_language ?
-                    "R_InitSprites: No lumps found for sprite %s" :
-                    "R_InitSprites: не найдены блоки в спрайте %s",
-                    namelist[i]);
+            I_QuitWithError(english_language ?
+                            "R_InitSprites: No lumps found for sprite %s" :
+                            "R_InitSprites: не найдены блоки в спрайте %s",
+                            namelist[i]);
         }
 
         maxframe++;
@@ -294,22 +294,22 @@ void R_InitSpriteDefs(char **namelist)
             {
                 // No rotations were found for that frame at all.
                 case -1:
-                I_Error(english_language ?
-                        "R_InitSprites: No patches found for %s frame %c" :
-                        "R_InitSprites: не найдены патчи для спрайта %s, фрейма %c",
-                        namelist[i], frame + 'A');
+                    I_QuitWithError(english_language ?
+                                    "R_InitSprites: No patches found for %s frame %c" :
+                                    "R_InitSprites: не найдены патчи для спрайта %s, фрейма %c",
+                                    namelist[i], frame + 'A');
                 // Only the first rotation is needed.
                 case 0:
                 break;
 
                 // Must have all 8 frames.
                 case 1:
-                    for (rotation = 0; rotation < 8; rotation++)
-                        if (sprtemp[frame].lump[rotation] == -1)
-                            I_Error (english_language ?
-                                     "R_InitSprites: Sprite %s frame %c is missing rotations" :
-                                     "R_InitSprites: в фрейме %c спрайта %s отсутствует информация о вращении",
-                                     namelist[i], frame + 'A');
+                    for(rotation = 0; rotation < 8; rotation++)
+                        if(sprtemp[frame].lump[rotation] == -1)
+                            I_QuitWithError(english_language ?
+                                            "R_InitSprites: Sprite %s frame %c is missing rotations" :
+                                            "R_InitSprites: в фрейме %c спрайта %s отсутствует информация о вращении",
+                                            namelist[i], frame + 'A');
             }
         }
 
@@ -548,10 +548,10 @@ void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
     {
         texturecolumn = frac >> FRACBITS;
 #ifdef RANGECHECK
-        if (texturecolumn < 0 || texturecolumn >= SHORT(patch->width))
-            I_Error(english_language ?
-                    "R_DrawSpriteRange: bad texturecolumn" :
-                    "R_DrawSpriteRange: некорректныая информация texturecolumn");
+        if(texturecolumn < 0 || texturecolumn >= SHORT(patch->width))
+            I_QuitWithError(english_language ?
+                            "R_DrawSpriteRange: bad texturecolumn" :
+                            "R_DrawSpriteRange: некорректныая информация texturecolumn");
 #endif
         column = (column_t *) ((byte *) patch + LONG(patch->columnofs[texturecolumn]));
         R_DrawMaskedColumn(column, baseclip);
@@ -639,19 +639,19 @@ void R_ProjectSprite(mobj_t *thing, const int lightnum)
 
     // Decide which patch to use for sprite reletive to player.
 #ifdef RANGECHECK
-    if ((unsigned) thing->sprite >= numsprites)
-        I_Error(english_language ?
-                "R_ProjectSprite: invalid sprite number %i " :
-                "R_ProjectSprite: некорректный номер спрайта %i ",
-                thing->sprite);
+    if((unsigned) thing->sprite >= numsprites)
+        I_QuitWithError(english_language ?
+                        "R_ProjectSprite: invalid sprite number %i " :
+                        "R_ProjectSprite: некорректный номер спрайта %i ",
+                        thing->sprite);
 #endif
     sprdef = &sprites[thing->sprite];
 #ifdef RANGECHECK
-    if ((thing->frame & FF_FRAMEMASK) >= sprdef->numframes)
-        I_Error(english_language ?
-                "R_ProjectSprite: invalid sprite frame %i : %i " :
-                "R_ProjectSprite: некорректный фрейм спрайта %i : %i ",
-                thing->sprite, thing->frame);
+    if((thing->frame & FF_FRAMEMASK) >= sprdef->numframes)
+        I_QuitWithError(english_language ?
+                        "R_ProjectSprite: invalid sprite frame %i : %i " :
+                        "R_ProjectSprite: некорректный фрейм спрайта %i : %i ",
+                        thing->sprite, thing->frame);
 #endif
     sprframe = &sprdef->spriteframes[thing->frame & FF_FRAMEMASK];
 
@@ -1067,19 +1067,19 @@ void R_DrawPSprite(pspdef_t * psp)
 
     // Decide which patch to use.
 #ifdef RANGECHECK
-    if ((unsigned) psp->state->sprite >= numsprites)
-        I_Error(english_language ?
-                "R_ProjectSprite: invalid sprite number %i " :
-                "R_ProjectSprite: некорректный номер спрайта %i ",
-                psp->state->sprite);
+    if((unsigned) psp->state->sprite >= numsprites)
+        I_QuitWithError(english_language ?
+                        "R_ProjectSprite: invalid sprite number %i " :
+                        "R_ProjectSprite: некорректный номер спрайта %i ",
+                        psp->state->sprite);
 #endif
     sprdef = &sprites[psp->state->sprite];
 #ifdef RANGECHECK
-    if ((psp->state->frame & FF_FRAMEMASK) >= sprdef->numframes)
-        I_Error(english_language ?
-                "R_ProjectSprite: invalid sprite frame %i : %i " :
-                "R_ProjectSprite: некорректный фрейм спрайта %i : %i ",
-                psp->state->sprite, psp->state->frame);
+    if((psp->state->frame & FF_FRAMEMASK) >= sprdef->numframes)
+        I_QuitWithError(english_language ?
+                        "R_ProjectSprite: invalid sprite frame %i : %i " :
+                        "R_ProjectSprite: некорректный фрейм спрайта %i : %i ",
+                        psp->state->sprite, psp->state->frame);
 #endif
     sprframe = &sprdef->spriteframes[psp->state->frame & FF_FRAMEMASK];
 

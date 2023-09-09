@@ -588,9 +588,9 @@ void P_InitFTAnims(void)
         }
         if ((ignore == false) && (fd - ad->startFrameDef < 2))
         {
-            I_Error(english_language ?
-                    "P_InitFTAnims: AnimDef has framecount < 2." :
-                    "P_InitFTAnims: количество кадров AnimDef меньше 2х.");
+            I_QuitWithError(english_language ?
+                            "P_InitFTAnims: AnimDef has framecount < 2." :
+                            "P_InitFTAnims: количество кадров AnimDef меньше 2х.");
         }
         if (ignore == false)
         {

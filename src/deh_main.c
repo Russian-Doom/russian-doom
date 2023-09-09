@@ -425,9 +425,9 @@ int DEH_LoadFile(char *filename)
 
     if (DEH_HadError(context))
     {
-        I_Error(english_language ?
-                "Error parsing dehacked file" :
-                "Ошибка обработки файла Dehacked");
+        I_QuitWithError(english_language ?
+                        "Error parsing dehacked file" :
+                        "Ошибка обработки файла Dehacked");
     }
 
     return 1;
@@ -472,9 +472,9 @@ int DEH_LoadLump(int lumpnum, boolean allow_long, boolean allow_error)
     // errors to just be ignored if allow_error=true.
     if (!allow_error && DEH_HadError(context))
     {
-        I_Error(english_language ?
-                "Error parsing dehacked lump" :
-                "Ошибка обработки блока Dehacked");
+        I_QuitWithError(english_language ?
+                        "Error parsing dehacked lump" :
+                        "Ошибка обработки блока Dehacked");
     }
 
     return 1;

@@ -1190,10 +1190,10 @@ void P_SpawnSpecials(void)
                 {
                     if (TaggedLineCount == MAX_TAGGED_LINES)
                     {
-                        I_Error(english_language ?
-                                "P_SpawnSpecials: MAX_TAGGED_LINES (%d) exceeded." :
-                                "P_SpawnSpecials: превышен лимит MAX_TAGGED_LINES (%d).",
-                                MAX_TAGGED_LINES);
+                        I_QuitWithError(english_language ?
+                                        "P_SpawnSpecials: MAX_TAGGED_LINES (%d) exceeded." :
+                                        "P_SpawnSpecials: превышен лимит MAX_TAGGED_LINES (%d).",
+                                        MAX_TAGGED_LINES);
                     }
                     TaggedLines[TaggedLineCount].line = &lines[i];
                     TaggedLines[TaggedLineCount++].lineTag = lines[i].arg1;

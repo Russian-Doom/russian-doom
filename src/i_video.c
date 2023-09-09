@@ -704,9 +704,9 @@ static void LimitTextureSize(int *w_upscale, int *h_upscale)
     if ((*w_upscale < 1 && rinfo.max_texture_width > 0) ||
         (*h_upscale < 1 && rinfo.max_texture_height > 0))
     {
-        I_Error("CreateUpscaledTexture: Can't create a texture big enough for "
-                "the whole screen! Maximum texture size %dx%d",
-                rinfo.max_texture_width, rinfo.max_texture_height);
+        I_QuitWithError("CreateUpscaledTexture: Can't create a texture big enough for "
+                        "the whole screen! Maximum texture size %dx%d",
+                        rinfo.max_texture_width, rinfo.max_texture_height);
     }
 
     // We limit the amount of texture memory used for the intermediate buffer,
@@ -717,9 +717,9 @@ static void LimitTextureSize(int *w_upscale, int *h_upscale)
 
     if (max_scaling_buffer_pixels < screenwidth * SCREENHEIGHT)
     {
-        I_Error("CreateUpscaledTexture: max_scaling_buffer_pixels too small "
-                "to create a texture buffer: %d < %d",
-                max_scaling_buffer_pixels, screenwidth * SCREENHEIGHT);
+        I_QuitWithError("CreateUpscaledTexture: max_scaling_buffer_pixels too small "
+                        "to create a texture buffer: %d < %d",
+                        max_scaling_buffer_pixels, screenwidth * SCREENHEIGHT);
     }
 
     while (*w_upscale * *h_upscale * screenwidth * SCREENHEIGHT
@@ -1466,8 +1466,8 @@ static void SetVideoMode(void)
 
     if (SDL_GetCurrentDisplayMode(video_display, &mode) != 0)
     {
-        I_Error("Could not get display mode for video display #%d: %s",
-        video_display, SDL_GetError());
+        I_QuitWithError("Could not get display mode for video display #%d: %s",
+                        video_display, SDL_GetError());
     }
 
     // Turn on vsync if we aren't in a -timedemo
@@ -1644,10 +1644,10 @@ void I_InitGraphics(void)
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) 
     {
-        I_Error(english_language ?
-                "Failed to initialize video: %s" :
-                "Ошибка инициализации видео: %s",
-        SDL_GetError());
+        I_QuitWithError(english_language ?
+                        "Failed to initialize video: %s" :
+                        "Ошибка инициализации видео: %s",
+                        SDL_GetError());
     }
 
     // When in screensaver mode, run full screen and auto detect

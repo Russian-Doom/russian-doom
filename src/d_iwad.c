@@ -870,10 +870,10 @@ char *D_FindIWAD(int mask, GameMission_t *mission)
 
         if (result == NULL)
         {
-            I_Error(english_language ?
-                    "IWAD file '%s' not found!" :
-                    "IWAD-файл \"%s\" не найден!",
-                    iwadfile);
+            I_QuitWithError(english_language ?
+                            "IWAD file '%s' not found!" :
+                            "IWAD-файл \"%s\" не найден!",
+                            iwadfile);
         }
         
         *mission = IdentifyIWADByName(result, mask);

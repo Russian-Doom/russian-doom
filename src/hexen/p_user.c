@@ -581,10 +581,10 @@ boolean P_UndoPlayerMorph(player_t * player)
             mo = P_SpawnMobj(x, y, z, MT_PLAYER_MAGE);
             break;
         default:
-            I_Error(english_language ?
-                    "P_UndoPlayerMorph: Unknown player class %d\n" :
-                    "P_UndoPlayerMorph: неизвестный класс игрока (%d).\n",
-                    player->class);
+            I_QuitWithError(english_language ?
+                            "P_UndoPlayerMorph: Unknown player class %d\n" :
+                            "P_UndoPlayerMorph: неизвестный класс игрока (%d).\n",
+                            player->class);
             return false;
     }
     if (P_TestMobjLocation(mo) == false)

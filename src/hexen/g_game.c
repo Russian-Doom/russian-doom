@@ -1051,10 +1051,10 @@ void G_Ticker(void)
                 if (gametic > BACKUPTICS
                     && consistancy[i][buf] != cmd->consistancy)
                 {
-                    I_Error(english_language ?
-                            "Consistency failure (%i should be %i)" :
-                            "Нарушение последовательности (%i должно быть %i)",
-                            cmd->consistancy, consistancy[i][buf]);
+                    I_QuitWithError(english_language ?
+                                    "Consistency failure (%i should be %i)" :
+                                    "Нарушение последовательности (%i должно быть %i)",
+                                    cmd->consistancy, consistancy[i][buf]);
                 }
                 if (players[i].mo)
                     consistancy[i][buf] = players[i].mo->x;
@@ -1337,7 +1337,7 @@ void G_DeathMatchSpawnPlayer(int playernum)
 
     // This check has been moved to p_setup.c:P_LoadThings()
     //if (selections < 8)
-    //      I_Error ("Only %i deathmatch spots, 8 required", selections);
+    //      I_QuitWithError ("Only %i deathmatch spots, 8 required", selections);
 
     for (j = 0; j < 20; j++)
     {
@@ -2353,10 +2353,10 @@ boolean G_CheckDemoStatus(void)
         endtime = I_GetTime();
         realtics = endtime - starttime;
         fps = ((float) gametic * TICRATE) / realtics;
-        I_Error (english_language ?
-                 "Timed %i gametics in %i realtics (%f fps)" :
-                 "Насчитано %i gametics в %i realtics.\n Среднее значение FPS: %f.",
-                 gametic, realtics, fps);
+        I_QuitWithError(english_language ?
+                        "Timed %i gametics in %i realtics (%f fps)" :
+                        "Насчитано %i gametics в %i realtics.\n Среднее значение FPS: %f.",
+                        gametic, realtics, fps);
     }
 
     if (demoplayback)
@@ -2376,10 +2376,10 @@ boolean G_CheckDemoStatus(void)
         M_WriteFile(demoname, demobuffer, demo_p - demobuffer);
         Z_Free(demobuffer);
         demorecording = false;
-        I_Error(english_language?
-                "Demo %s recorded" :
-                "Демозапись %s завершена",
-                demoname);
+        I_QuitWithError(english_language ?
+                        "Demo %s recorded" :
+                        "Демозапись %s завершена",
+                        demoname);
     }
 
     return false;

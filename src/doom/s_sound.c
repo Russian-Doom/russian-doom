@@ -597,12 +597,12 @@ void S_StartSound (void *origin_p, const int sfx_id)
     }
 
     // check for bogus sound #
-    if (sfx_id < 1 || sfx_id > NUMSFX)
+    if(sfx_id < 1 || sfx_id > NUMSFX)
     {
-        I_Error(english_language ?
-                "Bad sfx #: %d" :
-                "Некорректный звук #: %d",
-                sfx_id);
+        I_QuitWithError(english_language ?
+                        "Bad sfx #: %d" :
+                        "Некорректный звук #: %d",
+                        sfx_id);
     }
 
     sfx = &S_sfx[sfx_id];
@@ -851,12 +851,12 @@ void S_UpdateSounds(mobj_t *listener)
 
 void S_SetMusicVolume (const int volume)
 {
-    if (volume < 0 || volume > 15)
+    if(volume < 0 || volume > 15)
     {
-        I_Error(english_language ?
-                "Attempt to set music volume at %d" :
-                "Попытка установить громкость музыки на %d",
-                volume);
+        I_QuitWithError(english_language ?
+                        "Attempt to set music volume at %d" :
+                        "Попытка установить громкость музыки на %d",
+                        volume);
     }
 
     // [crispy] & [JN] Fixed bug when music was hearable with zero volume
@@ -878,11 +878,11 @@ void S_SetMusicVolume (const int volume)
 
 void S_SetSfxVolume (const int volume)
 {
-    if (volume < 0 || volume > 127)
+    if(volume < 0 || volume > 127)
     {
-        I_Error(english_language ?
-                "Attempt to set sfx volume at %d" :
-                "Попытка установить громкость звука на %d", volume);
+        I_QuitWithError(english_language ?
+                        "Attempt to set sfx volume at %d" :
+                        "Попытка установить громкость звука на %d", volume);
     }
 
     snd_SfxVolume = volume;
@@ -929,12 +929,12 @@ void S_ChangeMusic (int musicnum, const int looping)
         musicnum = mus_introa;
     }
 
-    if (musicnum <= mus_None || musicnum >= NUMMUSIC)
+    if(musicnum <= mus_None || musicnum >= NUMMUSIC)
     {
-        I_Error(english_language ?
-                "Bad music number %d" :
-                "Некорректный номер музыки %d",
-                musicnum);
+        I_QuitWithError(english_language ?
+                        "Bad music number %d" :
+                        "Некорректный номер музыки %d",
+                        musicnum);
     }
     else
     {

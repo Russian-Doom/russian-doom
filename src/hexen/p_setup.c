@@ -286,10 +286,10 @@ static void P_LoadSegs (const int lump)
         // [JN] e6y: check for wrong indexes
         if ((unsigned)ldef->sidenum[side] >= (unsigned)numsides)
         {
-            I_Error(english_language ?
-                    "P_LoadSegs: linedef_id %d for seg %d references a non-existent sidedef %d" :
-                    "P_LoadSegs: линия %d для сегмента %d указывает на несуществующую сторону %d",
-                    linedef_id, i, (unsigned)ldef->sidenum[side]);
+            I_QuitWithError(english_language ?
+                            "P_LoadSegs: linedef_id %d for seg %d references a non-existent sidedef %d" :
+                            "P_LoadSegs: линия %d для сегмента %d указывает на несуществующую сторону %d",
+                            linedef_id, i, (unsigned) ldef->sidenum[side]);
         }
 
         li->sidedef = &sides[ldef->sidenum[side]];
@@ -600,9 +600,9 @@ static void P_LoadNodes_DeePBSP (int lump)
         }
         else
         {
-            I_Error(english_language ?
-                    "P_LoadNodes: No nodes in map!" :
-                    "P_LoadNodes: у уровня отсутсвуют ноды!");
+            I_QuitWithError(english_language ?
+                            "P_LoadNodes: No nodes in map!" :
+                            "P_LoadNodes: у уровня отсутсвуют ноды!");
         }
     }
 
@@ -686,9 +686,9 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
         zstream->avail_out = outlen;
 
         if (inflateInit(zstream) != Z_OK)
-            I_Error(english_language ?
-                    "P_LoadNodes: Error during ZDBSP nodes decompression initialization!" :
-                    "P_LoadNodes: ошибка при инициализации распаковки нодов ZDBSP!");
+            I_QuitWithError(english_language ?
+                            "P_LoadNodes: Error during ZDBSP nodes decompression initialization!" :
+                            "P_LoadNodes: ошибка при инициализации распаковки нодов ZDBSP!");
 
         // resize if output buffer runs full
         while ((err = inflate(zstream, Z_SYNC_FLUSH)) == Z_OK)
@@ -701,9 +701,9 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
         }
 
         if (err != Z_STREAM_END)
-            I_Error(english_language ?
-                    "P_LoadNodes: Error during ZDBSP nodes decompression!" :
-                    "P_LoadNodes: ошибка при распаковке нодов ZDBSP!");
+            I_QuitWithError(english_language ?
+                            "P_LoadNodes: Error during ZDBSP nodes decompression!" :
+                            "P_LoadNodes: ошибка при распаковке нодов ZDBSP!");
 
         printf(english_language ?
                 "P_LoadNodes: ZDBSP nodes compression ratio %.3f\n" :
@@ -714,9 +714,9 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
         len = zstream->total_out;
 
         if (inflateEnd(zstream) != Z_OK)
-            I_Error(english_language ?
-                    "P_LoadNodes: Error during ZDBSP nodes decompression shut-down!" :
-                    "P_LoadNodes: ошибка при завершении распаковки нодов ZDBSP!");
+            I_QuitWithError(english_language ?
+                            "P_LoadNodes: Error during ZDBSP nodes decompression shut-down!" :
+                            "P_LoadNodes: ошибка при завершении распаковки нодов ZDBSP!");
 
         // release the original data lump
         W_ReleaseLumpNum(lump);
@@ -775,9 +775,9 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
     data += sizeof(numSubs);
 
     if (numSubs < 1)
-	I_Error(english_language ?
-            "P_LoadNodes: No subsectors in map!" :
-            "P_LoadNodes: на уровне отсутствуют подсекторы!");
+        I_QuitWithError(english_language ?
+                        "P_LoadNodes: No subsectors in map!" :
+                        "P_LoadNodes: на уровне отсутствуют подсекторы!");
 
     numsubsectors = numSubs;
     subsectors = Z_Malloc(numsubsectors * sizeof(subsector_t), PU_LEVEL, 0);
@@ -802,9 +802,9 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
     // The number of stored segs should match the number of segs used by subsectors
     if (numSegs != currSeg)
     {
-        I_Error(english_language ?
-                "P_LoadNodes: Incorrect number of segs in ZDBSP nodes!" :
-                "P_LoadNodes: некорректное количество сегментов в нодах ZDBSP!");
+        I_QuitWithError(english_language ?
+                        "P_LoadNodes: Incorrect number of segs in ZDBSP nodes!" :
+                        "P_LoadNodes: некорректное количество сегментов в нодах ZDBSP!");
     }
 
     numsegs = numSegs;
@@ -955,9 +955,10 @@ static void P_LoadThings (const int lump)
     deathSpotsCount = deathmatch_p - deathmatchstarts;
     if (deathSpotsCount < playerCount)
     {
-        I_Error(english_language ?
-        "P_LoadThings: Player count (%d) exceeds deathmatch spots (%d)" :
-        "P_LoadThings: количество игроков (%d) превысило количество\n спотов режима Дефматч (%d).", playerCount, deathSpotsCount);
+        I_QuitWithError(english_language ?
+                        "P_LoadThings: Player count (%d) exceeds deathmatch spots (%d)" :
+                        "P_LoadThings: количество игроков (%d) превысило количество\n спотов режима Дефматч (%d).",
+                        playerCount, deathSpotsCount);
     }
 }
 
@@ -1391,9 +1392,9 @@ static void P_GroupLines (void)
             }
         }
         if (linebuffer - sector->lines != sector->linecount)
-            I_Error(english_language ?
-                    "P_GroupLines: miscounted" :
-                    "P_GroupLines: ошибка просчета");
+            I_QuitWithError(english_language ?
+                            "P_GroupLines: miscounted" :
+                            "P_GroupLines: ошибка просчета");
 
         // set the degenmobj_t to the middle of the bounding box
         sector->soundorg.x = (bbox[BOXRIGHT] + bbox[BOXLEFT]) / 2;

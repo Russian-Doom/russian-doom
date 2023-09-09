@@ -81,9 +81,9 @@ void R_DrawColumn (void)
         // [JN] Some widescreen assets (like CMCEB0) are notably
         // wider and placed outside of screen bounds farther than
         // this condition is checking, which may lead to unnecessary
-        // I_Error calling. If no action is taken, an overflow may
+        // I_QuitWithError calling. If no action is taken, an overflow may
         // happen as well as drawing column from opposite side of
-        // the screen. Thus, instead of I_Error just dont draw such column.
+        // the screen. Thus, instead of I_QuitWithError just dont draw such column.
         return;
     }
 #endif
@@ -178,9 +178,9 @@ void R_DrawColumnLow (void)
         // [JN] Some widescreen assets (like CMCEB0) are notably
         // wider and placed outside of screen bounds farther than
         // this condition is checking, which may lead to unnecessary
-        // I_Error calling. If no action is taken, an overflow may
+        // I_QuitWithError calling. If no action is taken, an overflow may
         // happen as well as drawing column from opposite side of
-        // the screen. Thus, instead of I_Error just dont draw such column.
+        // the screen. Thus, instead of I_QuitWithError just dont draw such column.
         return;
     }
 #endif
@@ -1016,10 +1016,10 @@ void R_DrawSpan (fixed_t x1, fixed_t x2, const fixed_t y,
 #ifdef RANGECHECK
     if (x2 < x1 || x1 < 0 || x2 >= screenwidth
         || (unsigned)y > SCREENHEIGHT)
-        I_Error(english_language ?
-                "R_DrawSpan: %i to %i at %i" :
-                "R_DrawSpan: %i к %i в %i",
-                x1, x2, y);
+        I_QuitWithError(english_language ?
+                        "R_DrawSpan: %i to %i at %i" :
+                        "R_DrawSpan: %i к %i в %i",
+                        x1, x2, y);
 #endif
 
     // Pack position and step variables into a single 32-bit integer,
@@ -1065,10 +1065,10 @@ void R_DrawSpanLow (fixed_t x1, fixed_t x2, const fixed_t y,
 #ifdef RANGECHECK
     if (x2 < x1 || x1<0 || x2>=screenwidth || (unsigned)y>SCREENHEIGHT)
     {
-        I_Error(english_language ?
-                "R_DrawSpan: %i to %i at %i" :
-                "R_DrawSpan: %i к %i у %i",
-                ds_x1, ds_x2, ds_y);
+        I_QuitWithError(english_language ?
+                        "R_DrawSpan: %i to %i at %i" :
+                        "R_DrawSpan: %i к %i у %i",
+                        ds_x1, ds_x2, ds_y);
     }
 #endif
 

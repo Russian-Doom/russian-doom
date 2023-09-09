@@ -82,11 +82,11 @@ unsigned int GetFileLength(HANDLE handle)
 
     result = SetFilePointer(handle, 0, NULL, FILE_END);
 
-    if (result == INVALID_SET_FILE_POINTER)
+    if(result == INVALID_SET_FILE_POINTER)
     {
-        I_Error(english_language?
-                "W_Win32_OpenFile: Failed to read file length" :
-                "W_Win32_OpenFile: ошибка чтения длины файла");
+        I_QuitWithError(english_language ?
+                        "W_Win32_OpenFile: Failed to read file length" :
+                        "W_Win32_OpenFile: ошибка чтения длины файла");
     }
 
     return result;
@@ -176,21 +176,21 @@ size_t W_Win32_Read(wad_file_t *wad, unsigned int offset,
 
     result = SetFilePointer(win32_wad->handle, offset, NULL, FILE_BEGIN);
 
-    if (result == INVALID_SET_FILE_POINTER)
+    if(result == INVALID_SET_FILE_POINTER)
     {
-        I_Error(english_language ?
-                "W_Win32_Read: Failed to set file pointer to %i" :
-                "W_Win32_Read: невозможно задать указатель файла %i",
-                offset);
+        I_QuitWithError(english_language ?
+                        "W_Win32_Read: Failed to set file pointer to %i" :
+                        "W_Win32_Read: невозможно задать указатель файла %i",
+                        offset);
     }
 
     // Read into the buffer.
 
     if (!ReadFile(win32_wad->handle, buffer, buffer_len, &bytes_read, NULL))
     {
-        I_Error(english_language ?
-                "W_Win32_Read: Error reading from file" :
-                "W_Win32_Read: ошибка чтения файла");
+        I_QuitWithError(english_language ?
+                        "W_Win32_Read: Error reading from file" :
+                        "W_Win32_Read: ошибка чтения файла");
     }
 
     return bytes_read;

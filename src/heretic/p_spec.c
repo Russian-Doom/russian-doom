@@ -1504,9 +1504,9 @@ void P_AmbientSound (void)
                 done = true;
                 break;
             default:
-                I_Error(english_language ?
-                        "P_AmbientSound: Unknown afxcmd %d" :
-                        "P_AmbientSound: неизвестный afxcmd %d", cmd);
+                I_QuitWithError(english_language ?
+                                "P_AmbientSound: Unknown afxcmd %d" :
+                                "P_AmbientSound: неизвестный afxcmd %d", cmd);
                 break;
         }
     }

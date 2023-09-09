@@ -49,7 +49,7 @@ ticcmd_t* I_BaseTiccmd (void);
 // Clean exit, displays sell blurb.
 void I_Quit (void);
 
-void I_Error (char *error, ...);
+void I_QuitWithError(char* error, ...);
 
 void *I_Realloc(void *ptr, size_t size);
 
@@ -57,7 +57,7 @@ boolean I_GetMemoryValue(unsigned int offset, void *value, int size);
 
 // Schedule a function to be called when the program exits.
 // If run_if_error is true, the function is called if the exit
-// is due to an error (I_Error)
+// is due to an error (I_QuitWithError)
 
 void I_AtExit(atexit_func_t func, boolean run_if_error);
 

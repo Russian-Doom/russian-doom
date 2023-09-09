@@ -1463,13 +1463,13 @@ void D_DoomMain(void)
     {
         if (english_language)
         {
-            I_Error("Game mode indeterminate. No IWAD was found. Try specifying\n"
-                    "one with the '-iwad' command line parameter.");
+            I_QuitWithError("Game mode indeterminate. No IWAD was found. Try specifying\n"
+                            "one with the '-iwad' command line parameter.");
         }
         else
         {
-            I_Error("Невозможно определить игру из за отсутствующего IWAD-файла.\n"
-                    "Попробуйте указать IWAD-файл командой '-iwad'.\n");
+            I_QuitWithError("Невозможно определить игру из за отсутствующего IWAD-файла.\n"
+                            "Попробуйте указать IWAD-файл командой '-iwad'.\n");
         }
     }
 

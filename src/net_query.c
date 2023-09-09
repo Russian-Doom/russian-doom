@@ -798,10 +798,10 @@ void NET_QueryAddress(char *addr_str)
 
     if (addr == NULL)
     {
-        I_Error(english_language ?
-                "NET_QueryAddress: Host '%s' not found!" :
-                "NET_QueryAddress: хост '%s' не найден!",
-                addr_str);
+        I_QuitWithError(english_language ?
+                        "NET_QueryAddress: Host '%s' not found!" :
+                        "NET_QueryAddress: хост '%s' не найден!",
+                        addr_str);
     }
 
     // Add the address to the list of targets.
@@ -824,10 +824,10 @@ void NET_QueryAddress(char *addr_str)
     }
     else
     {
-        I_Error(english_language ?
-                "No response from '%s'" :
-                "Ответ не получен от '%s'",
-                addr_str);
+        I_QuitWithError(english_language ?
+                        "No response from '%s'" :
+                        "Ответ не получен от '%s'",
+                        addr_str);
     }
 }
 

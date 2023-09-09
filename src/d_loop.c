@@ -272,9 +272,9 @@ static void D_Disconnected(void)
 
     if (drone)
     {
-        I_Error(english_language ?
-                "Disconnected from server in drone mode." :
-                "Отключение от сервера в режиме разделенного экрана");
+        I_QuitWithError(english_language ?
+                        "Disconnected from server in drone mode." :
+                        "Отключение от сервера в режиме разделенного экрана");
     }
 
     // disconnected from server
@@ -342,17 +342,17 @@ static void BlockUntilStart(net_gamesettings_t *settings,
 
         if (!net_client_connected)
         {
-            I_Error(english_language ?
-                    "Lost connection to server" :
-                    "Потеряно соединение с сервером");
+            I_QuitWithError(english_language ?
+                            "Lost connection to server" :
+                            "Потеряно соединение с сервером");
         }
 
         if (callback != NULL && !callback(net_client_wait_data.ready_players,
                                           net_client_wait_data.num_players))
         {
-            I_Error(english_language ?
-                    "Netgame startup aborted" :
-                    "Запуск сетевой игры отменен");
+            I_QuitWithError(english_language ?
+                            "Netgame startup aborted" :
+                            "Запуск сетевой игры отменен");
         }
 
         I_Sleep(100);
@@ -507,9 +507,9 @@ boolean D_InitNetGame(net_connect_data_t *connect_data)
 
             if (addr == NULL)
             {
-                I_Error(english_language ?
-                        "No server found on local LAN" :
-                        "Серверы не обнаружены в локальной сети");
+                I_QuitWithError(english_language ?
+                                "No server found on local LAN" :
+                                "Серверы не обнаружены в локальной сети");
             }
         }
 
@@ -530,10 +530,10 @@ boolean D_InitNetGame(net_connect_data_t *connect_data)
 
             if (addr == NULL)
             {
-                I_Error(english_language ?
-                        "Unable to resolve '%s'\n" :
-                        "Невозможно получить ответ от '%s'\n",
-                        myargv[i+1]);
+                I_QuitWithError(english_language ?
+                                "Unable to resolve '%s'\n" :
+                                "Невозможно получить ответ от '%s'\n",
+                                myargv[i + 1]);
             }
         }
     }
@@ -547,10 +547,10 @@ boolean D_InitNetGame(net_connect_data_t *connect_data)
 
         if (!NET_CL_Connect(addr, connect_data))
         {
-            I_Error(english_language ?
-                    "D_InitNetGame: Failed to connect to %s\n" :
-                    "D_InitNetGame: Невозможно соединиться с %s\n",
-                    NET_AddrToString(addr));
+            I_QuitWithError(english_language ?
+                            "D_InitNetGame: Failed to connect to %s\n" :
+                            "D_InitNetGame: Невозможно соединиться с %s\n",
+                            NET_AddrToString(addr));
         }
 		
         printf(english_language ?
@@ -803,7 +803,7 @@ void TryRunTics (void)
         lowtic = GetLowTic();
 
 	if (lowtic < gametic/ticdup)
-	    I_Error ("TryRunTics: lowtic < gametic");
+        I_QuitWithError("TryRunTics: lowtic < gametic");
 
         // Still no tics to run? Sleep until some are available.
         if (lowtic < gametic/ticdup + counts)
@@ -840,7 +840,7 @@ void TryRunTics (void)
 	for (i=0 ; i<ticdup ; i++)
 	{
             if (gametic/ticdup > lowtic)
-                I_Error ("gametic>lowtic");
+                I_QuitWithError("gametic>lowtic");
 
             memcpy(local_playeringame, set->ingame, sizeof(local_playeringame));
 

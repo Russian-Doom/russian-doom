@@ -194,10 +194,10 @@ void DEH_StructSHA1Sum(sha1_context_t *context, deh_mapping_t *mapping,
                 SHA1_UpdateInt32(context, *((uint32_t *) location));
                 break;
             default:
-                I_Error(english_language ?
-                        "Unknown dehacked mapping field type for '%s' (BUG)" :
-                        "Неизвестное поле в блоке Dehacked: '%s' (баг!)", 
-                        entry->name);
+                I_QuitWithError(english_language ?
+                                "Unknown dehacked mapping field type for '%s' (BUG)" :
+                                "Неизвестное поле в блоке Dehacked: '%s' (баг!)",
+                                entry->name);
                 break;
         }
     }

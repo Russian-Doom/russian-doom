@@ -81,9 +81,9 @@ static boolean P_GiveAmmo (player_t *player, const ammotype_t ammo, int num)
 
     if (ammo > NUMAMMO)
     {
-        I_Error (english_language ?
-                 "P_GiveAmmo: bad type %i" :
-                 "P_GiveAmmo: некорректный тип %i", ammo);
+        I_QuitWithError(english_language ?
+                        "P_GiveAmmo: bad type %i" :
+                        "P_GiveAmmo: некорректный тип %i", ammo);
     }
 
     if (player->ammo[ammo] == player->maxammo[ammo])
@@ -843,9 +843,9 @@ void P_TouchSpecialThing (const mobj_t *special, const mobj_t *toucher)
 
         default:
         {
-            I_Error (english_language ?
-                     "P_SpecialThing: Unknown gettable thing" :
-                     "P_SpecialThing: получен неизвестный предмет");
+            I_QuitWithError(english_language ?
+                            "P_SpecialThing: Unknown gettable thing" :
+                            "P_SpecialThing: получен неизвестный предмет");
         }
     }
 

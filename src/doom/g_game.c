@@ -999,11 +999,11 @@ void G_Ticker (void)
             { 
                 if (gametic > BACKUPTICS 
                 && consistancy[i][buf] != cmd->consistancy) 
-                { 
-                    I_Error (english_language ?
-                             "consistency failure (%i should be %i)" :
-                             "Нарушение последовательности (%i должно быть %i)",
-                    cmd->consistancy, consistancy[i][buf]); 
+                {
+                    I_QuitWithError(english_language ?
+                                    "consistency failure (%i should be %i)" :
+                                    "Нарушение последовательности (%i должно быть %i)",
+                                    cmd->consistancy, consistancy[i][buf]);
                 } 
                 if (players[i].mo)
                 {
@@ -1295,7 +1295,7 @@ boolean G_CheckSpot (int playernum, mapthing_t *mthing)
             break;
 
             default:
-            I_Error("G_CheckSpot: неопознанный угол %d\n", an);
+            I_QuitWithError("G_CheckSpot: неопознанный угол %d\n", an);
             xa = ya = 0;
             break;
         }
@@ -1325,10 +1325,10 @@ void G_DeathMatchSpawnPlayer (int playernum)
 
     if (selections < 4)
     {
-        I_Error (english_language ?
-                 "Only %i deathmatch spots, 4 required" :
-                 "Обнаружено %i стартовых точек для режима Дефтатч.\n Минимальное необходимое количество: 4",
-                 selections);
+        I_QuitWithError(english_language ?
+                        "Only %i deathmatch spots, 4 required" :
+                        "Обнаружено %i стартовых точек для режима Дефтатч.\n Минимальное необходимое количество: 4",
+                        selections);
     }
  
     for (j = 0 ; j < 20 ; j++) 
@@ -1870,9 +1870,9 @@ void G_DoLoadGame (void)
     P_RestoreTargets ();
  
     if (!P_ReadSaveGameEOF())
-    I_Error (english_language ?
-             "Bad savegame" :
-             "Некорректный файл сохранения");
+        I_QuitWithError(english_language ?
+                        "Bad savegame" :
+                        "Некорректный файл сохранения");
 
     fclose(save_stream);
     
@@ -1921,15 +1921,15 @@ void G_DoSaveGame (void)
     if (save_stream == NULL)
     {
         // Failed to save the game, so we're going to have to abort. But
-        // to be nice, save to somewhere else before we call I_Error().
+        // to be nice, save to somewhere else before we call I_QuitWithError().
         recovery_savegame_file = M_TempFile("recovery.dsg");
         save_stream = M_fopen(recovery_savegame_file, "wb");
         if (save_stream == NULL)
         {
-            I_Error(english_language ?
-                    "Failed to open either '%s' or '%s' to write savegame." :
-                    "Невозможно открыть '%s' или '%s' для записи файла сохранения.",
-                    temp_savegame_file, recovery_savegame_file);
+            I_QuitWithError(english_language ?
+                            "Failed to open either '%s' or '%s' to write savegame." :
+                            "Невозможно открыть '%s' или '%s' для записи файла сохранения.",
+                            temp_savegame_file, recovery_savegame_file);
         }
     }
 
@@ -1956,15 +1956,15 @@ void G_DoSaveGame (void)
         // with an error.
         if (english_language)
         {
-            I_Error("Failed to open savegame file '%s' for writing.\n"
-                    "But your game has been saved to '%s' for recovery.",
-                    temp_savegame_file, recovery_savegame_file);
+            I_QuitWithError("Failed to open savegame file '%s' for writing.\n"
+                            "But your game has been saved to '%s' for recovery.",
+                            temp_savegame_file, recovery_savegame_file);
         }
         else
         {
-            I_Error("Невозможно открыть файл '%s' для совершения записи.\n"
-                    "Сохранение было записано в '%s' для возможности восстановления.",
-                    temp_savegame_file, recovery_savegame_file);
+            I_QuitWithError("Невозможно открыть файл '%s' для совершения записи.\n"
+                            "Сохранение было записано в '%s' для возможности восстановления.",
+                            temp_savegame_file, recovery_savegame_file);
         }
     }
 
@@ -2813,8 +2813,8 @@ void G_DoPlayDemo (void)
 
         if (singledemo)
         {
-            I_Error(english_language ? message_eng : message_rus, demoversion,
-                    G_VanillaVersionCode(), DemoVersionDescription(demoversion));
+            I_QuitWithError(english_language ? message_eng : message_rus, demoversion,
+                            G_VanillaVersionCode(), DemoVersionDescription(demoversion));
         }
         else
         {
@@ -2946,13 +2946,13 @@ boolean G_CheckDemoStatus (void)
 
         if (english_language)
         {
-            I_Error ("Timed %i gametics in %i realtics (%f fps)",
-                        gametic, realtics, fps);
+            I_QuitWithError("Timed %i gametics in %i realtics (%f fps)",
+                            gametic, realtics, fps);
         }
         else
         {
-            I_Error ("Насчитано %i gametics в %i realtics.\n"
-                    "Среднее значение FPS: %f.", gametic, realtics, fps);
+            I_QuitWithError("Насчитано %i gametics в %i realtics.\n"
+                            "Среднее значение FPS: %f.", gametic, realtics, fps);
         }
     } 
 
@@ -2983,11 +2983,11 @@ boolean G_CheckDemoStatus (void)
 
         M_WriteFile (demoname, demobuffer, demo_p - demobuffer); 
         Z_Free (demobuffer); 
-        demorecording = false; 
-        I_Error (english_language ?
-                 "Demo %s recorded" :
-                 "Демозапись %s завершена",
-                 demoname); 
+        demorecording = false;
+        I_QuitWithError(english_language ?
+                        "Demo %s recorded" :
+                        "Демозапись %s завершена",
+                        demoname);
     } 
 
     return false; 

@@ -844,9 +844,9 @@ static void R_InitTextures (void)
 
         if (offset > maxoff)
         {
-            I_Error (english_language ?
-                     "R_InitTextures: bad texture directory" :
-                     "R_InitTextures: некорректная директория текстур");
+            I_QuitWithError(english_language ?
+                            "R_InitTextures: bad texture directory" :
+                            "R_InitTextures: некорректная директория текстур");
         }
 
         mtexture = (maptexture_t *) ( (byte *)maptex + offset);

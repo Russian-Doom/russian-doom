@@ -619,9 +619,9 @@ void IN_Drawer (void)
             }
             break;
         default:
-            I_Error(english_language ? 
-                    "IN_lude: Intermission state out of range.\n" :
-                    "IN_lude: Ошибка последовательности в межмиссионном экране.\n");
+            I_QuitWithError(english_language ?
+                            "IN_lude: Intermission state out of range.\n" :
+                            "IN_lude: Ошибка последовательности в межмиссионном экране.\n");
             break;
     }
 

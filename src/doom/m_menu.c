@@ -6997,9 +6997,9 @@ static void M_DrawReadThis1()
             break;
 
         default:
-            I_Error(english_language ?
-                    "Unknown game version" :
-                    "Версия игры не определена");
+            I_QuitWithError(english_language ?
+                            "Unknown game version" :
+                            "Версия игры не определена");
             break;
     }
 

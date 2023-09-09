@@ -145,11 +145,11 @@ void Z_Free (void* ptr)
 
     block = (memblock_t *) ((byte *)ptr - sizeof(memblock_t));
 
-    if (block->id != ZONEID)
+    if(block->id != ZONEID)
     {
-        I_Error (english_language ?
-                 "Z_Free: freed a pointer without ZONEID" :
-                 "Z_Free: высвобождение указателя без ZONEID");
+        I_QuitWithError(english_language ?
+                        "Z_Free: freed a pointer without ZONEID" :
+                        "Z_Free: высвобождение указателя без ZONEID");
     }
 		
     if (block->tag != PU_FREE && block->user != NULL)
@@ -241,37 +241,37 @@ void *Z_Malloc(int size, int tag, void *user)
     unsigned char *data;
     void *result;
 
-    if (tag < 0 || tag >= PU_NUM_TAGS || tag == PU_FREE)
+    if(tag < 0 || tag >= PU_NUM_TAGS || tag == PU_FREE)
     {
-        I_Error(english_language ?
-                "Z_Malloc: attempted to allocate a block with an invalid tag: %i" :
-                "Z_Malloc: попытка обнаружения блока с некорректным номером: %i",
-                tag);
+        I_QuitWithError(english_language ?
+                        "Z_Malloc: attempted to allocate a block with an invalid tag: %i" :
+                        "Z_Malloc: попытка обнаружения блока с некорректным номером: %i",
+                        tag);
     }
 
-    if (user == NULL && tag >= PU_PURGELEVEL)
+    if(user == NULL && tag >= PU_PURGELEVEL)
     {
-        I_Error (english_language ?
-                 "Z_Malloc: an owner is required for purgable blocks" :
-                 "Z_Malloc: для очищаемых блоков памяти требуется административный объект");
+        I_QuitWithError(english_language ?
+                        "Z_Malloc: an owner is required for purgable blocks" :
+                        "Z_Malloc: для очищаемых блоков памяти требуется административный объект");
     }
 
     // Malloc a block of the required size
     
     newblock = NULL;
 
-    while (newblock == NULL)
+    while(newblock == NULL)
     {
         newblock = (memblock_t *) malloc(sizeof(memblock_t) + size);
 
-        if (newblock == NULL)
+        if(newblock == NULL)
         {
-            if (!ClearCache(sizeof(memblock_t) + size))
+            if(!ClearCache(sizeof(memblock_t) + size))
             {
-                I_Error(english_language ?
-                        "Z_Malloc: failed on allocation of %i bytes" :
-                        "Z_Malloc: ошибка обнаружения %i байт памяти",
-                        size);
+                I_QuitWithError(english_language ?
+                                "Z_Malloc: failed on allocation of %i bytes" :
+                                "Z_Malloc: ошибка обнаружения %i байт памяти",
+                                size);
             }
         }
     }
@@ -428,24 +428,24 @@ void Z_CheckHeap (void)
 
     // Check all chains
 
-    for (i=0; i<PU_NUM_TAGS; ++i)
+    for(i=0; i<PU_NUM_TAGS; ++i)
     {
         prev = NULL;
 
-        for (block=allocated_blocks[i]; block != NULL; block = block->next)
+        for(block=allocated_blocks[i]; block != NULL; block = block->next)
         {
-            if (block->id != ZONEID)
+            if(block->id != ZONEID)
             {
-                I_Error(english_language ?
-                        "Z_CheckHeap: Block without a ZONEID!" :
-                        "Z_CheckHeap: блок без ZONEID!");
+                I_QuitWithError(english_language ?
+                                "Z_CheckHeap: Block without a ZONEID!" :
+                                "Z_CheckHeap: блок без ZONEID!");
             }
             
-            if (block->prev != prev)
+            if(block->prev != prev)
             {
-                I_Error(english_language ?
-                        "Z_CheckHeap: Doubly-linked list corrupted!" :
-                        "Z_CheckHeap: двусвязный блок поврежден!");
+                I_QuitWithError(english_language ?
+                                "Z_CheckHeap: Doubly-linked list corrupted!" :
+                                "Z_CheckHeap: двусвязный блок поврежден!");
             }
             
             prev = block;
@@ -466,17 +466,17 @@ void Z_ChangeTag2(void *ptr, int tag, char *file, int line)
 	
     block = (memblock_t *) ((byte *)ptr - sizeof(memblock_t));
 
-    if (block->id != ZONEID)
-        I_Error(english_language ?
-                "%s:%i: Z_ChangeTag: block without a ZONEID!" :
-                "%s:%i: Z_ChangeTag: блок без ZONEID!",
-                file, line);
+    if(block->id != ZONEID)
+        I_QuitWithError(english_language ?
+                        "%s:%i: Z_ChangeTag: block without a ZONEID!" :
+                        "%s:%i: Z_ChangeTag: блок без ZONEID!",
+                        file, line);
 
-    if (tag >= PU_PURGELEVEL && block->user == NULL)
-        I_Error(english_language ?
-                "%s:%i: Z_ChangeTag: an owner is required for purgable blocks" :
-                "%s:%i: Z_ChangeTag: для очищаемых блоков памяти требуется административный объект",
-                file, line);
+    if(tag >= PU_PURGELEVEL && block->user == NULL)
+        I_QuitWithError(english_language ?
+                        "%s:%i: Z_ChangeTag: an owner is required for purgable blocks" :
+                        "%s:%i: Z_ChangeTag: для очищаемых блоков памяти требуется административный объект",
+                        file, line);
 
     // Remove the block from its current list, and rehook it into
     // its new list.
@@ -492,11 +492,11 @@ void Z_ChangeUser(void *ptr, void **user)
 
     block = (memblock_t *) ((byte *)ptr - sizeof(memblock_t));
 
-    if (block->id != ZONEID)
+    if(block->id != ZONEID)
     {
-        I_Error(english_language ?
-                "Z_ChangeUser: Tried to change user for invalid block!" :
-                "Z_ChangeUser: попытка смены пользователя для некорректного блока!");
+        I_QuitWithError(english_language ?
+                        "Z_ChangeUser: Tried to change user for invalid block!" :
+                        "Z_ChangeUser: попытка смены пользователя для некорректного блока!");
     }
 
     block->user = user;

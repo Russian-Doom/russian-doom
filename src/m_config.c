@@ -1211,10 +1211,10 @@ static default_t *GetDefaultForName(char *name)
 
     if (result == NULL)
     {
-        I_Error(english_language ?
-                "Unknown configuration variable: '%s'" :
-                "Неизвестная переменная в файле конфигурации: '%s'",
-                name);
+        I_QuitWithError(english_language ?
+                        "Unknown configuration variable: '%s'" :
+                        "Неизвестная переменная в файле конфигурации: '%s'",
+                        name);
     }
 
     return result;

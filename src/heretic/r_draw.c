@@ -78,10 +78,10 @@ void R_DrawColumn (void)
 
 #ifdef RANGECHECK
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
-        I_Error (english_language ?
-                 "R_DrawColumn: %i to %i at %i" :
-                 "R_DrawColumn: %i к %i в %i",
-                 dc_yl, dc_yh, dc_x);
+        I_QuitWithError(english_language ?
+                     "R_DrawColumn: %i to %i at %i" :
+                     "R_DrawColumn: %i к %i в %i",
+                     dc_yl, dc_yh, dc_x);
 #endif
 
     dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
@@ -163,10 +163,10 @@ void R_DrawColumnLow (void)
 
 #ifdef RANGECHECK
     if ((unsigned) dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
-        I_Error(english_language ?
-                "R_DrawColumnLow: %i to %i at %i" :
-                "R_DrawColumnLow: %i к %i в %i",
-                dc_yl, dc_yh, dc_x);
+        I_QuitWithError(english_language ?
+                     "R_DrawColumnLow: %i to %i at %i" :
+                     "R_DrawColumnLow: %i к %i в %i",
+                     dc_yl, dc_yh, dc_x);
 #endif
 
     dest1 = ylookup[(dc_yl << hires)] + columnofs[flipviewwidth[x]];
@@ -405,10 +405,10 @@ void R_DrawTLColumn (void)
 #ifdef RANGECHECK
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawTLColumn: %i to %i at %i" :
-                 "R_DrawTLColumn: %i к %i у %i",
-                 dc_yl, dc_yh, dc_x);
+        I_QuitWithError(english_language ?
+                     "R_DrawTLColumn: %i to %i at %i" :
+                     "R_DrawTLColumn: %i к %i у %i",
+                     dc_yl, dc_yh, dc_x);
     }
 #endif
 
@@ -479,10 +479,10 @@ void R_DrawTLColumnLow (void)
 #ifdef RANGECHECK
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawTLColumnLow: %i to %i at %i" :
-                 "R_DrawTLColumnLow: %i к %i у %i",
-                 dc_yl, dc_yh, x);
+        I_QuitWithError(english_language ?
+                     "R_DrawTLColumnLow: %i to %i at %i" :
+                     "R_DrawTLColumnLow: %i к %i у %i",
+                     dc_yl, dc_yh, x);
     }
 #endif
 
@@ -575,10 +575,10 @@ void R_DrawExtraTLColumn (void)
 #ifdef RANGECHECK
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawTLColumn: %i to %i at %i" :
-                 "R_DrawTLColumn: %i к %i у %i",
-                 dc_yl, dc_yh, dc_x);
+        I_QuitWithError(english_language ?
+                     "R_DrawTLColumn: %i to %i at %i" :
+                     "R_DrawTLColumn: %i к %i у %i",
+                     dc_yl, dc_yh, dc_x);
     }
 #endif
 
@@ -654,10 +654,10 @@ void R_DrawExtraTLColumnLow (void)
 #ifdef RANGECHECK
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawExtraTLColumnLow: %i to %i at %i" :
-                 "R_DrawTLColumnLow: %i к %i у %i",
-                 dc_yl, dc_yh, x);
+        I_QuitWithError(english_language ?
+                     "R_DrawExtraTLColumnLow: %i to %i at %i" :
+                     "R_DrawTLColumnLow: %i к %i у %i",
+                     dc_yl, dc_yh, x);
     }
 #endif
 
@@ -749,10 +749,10 @@ void R_DrawTranslatedColumn (void)
 
 #ifdef RANGECHECK
     if ((unsigned) dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
-        I_Error(english_language ?
-                "R_DrawColumn: %i to %i at %i" :
-                "R_DrawColumn: %i к %i в %i",
-                dc_yl, dc_yh, dc_x);
+        I_QuitWithError(english_language ?
+                     "R_DrawColumn: %i to %i at %i" :
+                     "R_DrawColumn: %i к %i в %i",
+                     dc_yl, dc_yh, dc_x);
 #endif
 
     dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
@@ -791,10 +791,10 @@ void R_DrawTranslatedColumnLow (void)
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawTranslatedColumnLow: %i to %i at %i" :
-                 "R_DrawTranslatedColumnLow: %i к %i у %i",
-                 dc_yl, dc_yh, x);
+        I_QuitWithError(english_language ?
+                     "R_DrawTranslatedColumnLow: %i to %i at %i" :
+                     "R_DrawTranslatedColumnLow: %i к %i у %i",
+                     dc_yl, dc_yh, x);
     }
 #endif 
 
@@ -830,10 +830,10 @@ void R_DrawTranslatedTLColumn(void)
 
 #ifdef RANGECHECK
     if ((unsigned) dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
-        I_Error(english_language ?
-                "R_DrawColumn: %i to %i at %i" :
-                "R_DrawColumn: %i к %i в %i",
-                dc_yl, dc_yh, dc_x);
+        I_QuitWithError(english_language ?
+                     "R_DrawColumn: %i to %i at %i" :
+                     "R_DrawColumn: %i к %i в %i",
+                     dc_yl, dc_yh, dc_x);
 #endif
 
     dest = ylookup[dc_yl] + columnofs[flipviewwidth[dc_x]];
@@ -873,10 +873,10 @@ void R_DrawTranslatedTLColumnLow (void)
 #ifdef RANGECHECK
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawTranslatedTLColumnLow: %i to %i at %i" :
-                 "R_DrawTranslatedTLColumnLow: %i к %i у %i",
-                 dc_yl, dc_yh, x);
+        I_QuitWithError(english_language ?
+                     "R_DrawTranslatedTLColumnLow: %i to %i at %i" :
+                     "R_DrawTranslatedTLColumnLow: %i к %i у %i",
+                     dc_yl, dc_yh, x);
     }
 #endif
 
@@ -968,10 +968,10 @@ void R_DrawSpan (fixed_t x1, fixed_t x2, const fixed_t y,
 #ifdef RANGECHECK
     if (x2 < x1 || x1 < 0 || x2 >= screenwidth
         || (unsigned) y > SCREENHEIGHT)
-        I_Error(english_language ?
-                "R_DrawSpan: %i to %i at %i" :
-                "R_DrawSpan: %i к %i в %i",
-                x1, x2, y);
+        I_QuitWithError(english_language ?
+                     "R_DrawSpan: %i to %i at %i" :
+                     "R_DrawSpan: %i к %i в %i",
+                     x1, x2, y);
 #endif
 
     // Pack position and step variables into a single 32-bit integer,
@@ -1020,10 +1020,10 @@ void R_DrawSpanLow (fixed_t x1, fixed_t x2, const fixed_t y,
 #ifdef RANGECHECK
     if (x2 < x1 || x1 < 0 || x2 >= screenwidth || (unsigned)y > SCREENHEIGHT)
     {
-        I_Error(english_language ?
-                "R_DrawSpan: %i to %i at %i" :
-                "R_DrawSpan: %i к %i у %i",
-                x1, x2, y);
+        I_QuitWithError(english_language ?
+                     "R_DrawSpan: %i to %i at %i" :
+                     "R_DrawSpan: %i к %i у %i",
+                     x1, x2, y);
     }
 #endif
 

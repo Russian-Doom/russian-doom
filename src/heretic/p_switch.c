@@ -108,9 +108,9 @@ static void P_StartButton (const line_t * line, const bwhere_e w,
             return;
         }
 
-    I_Error(english_language ?
-            "P_StartButton: no button slots left!" :
-            "P_StartButton: превышен лимит слотов для переключателей!");
+    I_QuitWithError(english_language ?
+                    "P_StartButton: no button slots left!" :
+                    "P_StartButton: превышен лимит слотов для переключателей!");
 }
 
 /*

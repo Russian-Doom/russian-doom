@@ -127,17 +127,17 @@ static void SetupLists(void)
 
     if (!SetupList(&iwad_flats, &iwad, "F_START", "F_END", NULL, NULL))
     {
-        I_Error(english_language ?
-                "Flats section not found in IWAD" :
-                "В IWAD-файле не найден блок текстур поверхностей");
+        I_QuitWithError(english_language ?
+                        "Flats section not found in IWAD" :
+                        "В IWAD-файле не найден блок текстур поверхностей");
     }
 
     if (!SetupList(&iwad_sprites, &iwad, "S_START", "S_END", NULL, NULL))
 
     {
-        I_Error(english_language ?
-                "Sprites section not found in IWAD" :
-                "В IWAD-файле не найден блок спрайтов");
+        I_QuitWithError(english_language ?
+                        "Sprites section not found in IWAD" :
+                        "В IWAD-файле не найден блок спрайтов");
     }
     
     // PWAD

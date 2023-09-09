@@ -494,7 +494,7 @@ boolean P_StartACS(int number, int map, byte * args, mobj_t * activator,
     infoIndex = GetACSIndex(number);
     if (infoIndex == -1)
     {                           // Script not found
-        //I_Error("P_StartACS: Unknown script number %d", number);
+        //I_QuitWithError("P_StartACS: Unknown script number %d", number);
         M_snprintf(ErrorMsg, sizeof(ErrorMsg), "%s %d", txt_unknown_script, number); 
         P_SetMessage(&players[consoleplayer], ErrorMsg, msg_system, true);
     }
@@ -554,10 +554,10 @@ static boolean AddToACSStore(int map, int number, byte * args)
     {                           // Append required
         if (i == MAX_ACS_STORE)
         {
-            I_Error(english_language ?
-                    "AddToACSStore: MAX_ACS_STORE (%d) exceeded." :
-                    "AddToACSStore: превышено максимальное значение MAX_ACS_STORE (%d).",
-                    MAX_ACS_STORE);
+            I_QuitWithError(english_language ?
+                            "AddToACSStore: MAX_ACS_STORE (%d) exceeded." :
+                            "AddToACSStore: превышено максимальное значение MAX_ACS_STORE (%d).",
+                            MAX_ACS_STORE);
         }
         index = i;
         ACSStore[index + 1].map = 0;
@@ -844,10 +844,10 @@ void CheckACSPresent(int number)
 {
     if (GetACSIndex(number) == -1)
     {
-        I_Error(english_language ?
-                "Required ACS script %d not initialized" :
-                "Требуемый скрипт ACS (%d) не инициализирован",
-                number);
+        I_QuitWithError(english_language ?
+                        "Required ACS script %d not initialized" :
+                        "Требуемый скрипт ACS (%d) не инициализирован",
+                        number);
     }
 }
 

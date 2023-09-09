@@ -134,10 +134,10 @@ void SV_Read(void *buffer, int size)
     int retval = fread(buffer, 1, size, SaveGameFP);
     if (retval != size)
     {
-        I_Error(english_language ? 
-                "Incomplete read in SV_Read: Expected %d, got %d bytes" :
-                "Ошибка чтения в SV_Read: ожидаемо '%d', получено '%d' байт",
-                size, retval);
+        I_QuitWithError(english_language ?
+                        "Incomplete read in SV_Read: Expected %d, got %d bytes" :
+                        "Ошибка чтения в SV_Read: ожидаемо '%d', получено '%d' байт",
+                        size, retval);
     }
 }
 
@@ -1674,7 +1674,7 @@ void P_ArchiveThinkers(void)
             SV_WriteByte(tc_mobj);
             saveg_write_mobj_t((mobj_t *) th);
         }
-        //I_Error("P_ArchiveThinkers: Unknown thinker function");
+        //I_QuitWithError("P_ArchiveThinkers: Unknown thinker function");
     }
 
     // Add a terminating marker
@@ -1733,10 +1733,10 @@ void P_UnArchiveThinkers(void)
                 break;
 
             default:
-                I_Error(english_language ?
-                        "Could not load savegame %s" :
-                        "Ошибка сохраненной игры: неизвестный tclass %i",
-                        tclass);
+                I_QuitWithError(english_language ?
+                                "Could not load savegame %s" :
+                                "Ошибка сохраненной игры: неизвестный tclass %i",
+                                tclass);
         }
 
     }
@@ -2000,10 +2000,10 @@ void P_UnArchiveSpecials(void)
                 break;
 
             default:
-                I_Error (english_language ?
-                         "P_UnarchiveSpecials: unknown tclass %i in savegame" :
-                         "P_UnarchiveSpecials: неизвестный tclass %i в сохраненной игре",
-                         tclass);
+                I_QuitWithError(english_language ?
+                                "P_UnarchiveSpecials: unknown tclass %i in savegame" :
+                                "P_UnarchiveSpecials: неизвестный tclass %i в сохраненной игре",
+                                tclass);
         }
 
     }

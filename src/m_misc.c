@@ -306,10 +306,10 @@ int M_ReadFile(char *name, byte **buffer)
 	
     handle = fopen(name, "rb");
     if (handle == NULL)
-	I_Error (english_language ?
-             "Couldn't read file %s" :
-             "Невозможно прочитать файл %s",
-             name);
+        I_QuitWithError(english_language ?
+                        "Couldn't read file %s" :
+                        "Невозможно прочитать файл %s",
+                        name);
 
     // find the size of the file by seeking to the end and
     // reading the current position
@@ -321,10 +321,10 @@ int M_ReadFile(char *name, byte **buffer)
     fclose (handle);
 	
     if (count < length)
-	I_Error (english_language ?
-             "Couldn't read file %s" :
-             "Невозможно прочитать файл %s",
-             name);
+        I_QuitWithError(english_language ?
+                        "Couldn't read file %s" :
+                        "Невозможно прочитать файл %s",
+                        name);
 		
     *buffer = buf;
     return length;
@@ -608,10 +608,10 @@ char *M_StringDuplicate(const char *orig)
 
     if (result == NULL)
     {
-        I_Error(english_language ?
-                "Failed to duplicate string (length %zu)\n" :
-                "Невозможно дублировать строку (длина %zu)\n",
-                strlen(orig));
+        I_QuitWithError(english_language ?
+                        "Failed to duplicate string (length %zu)\n" :
+                        "Невозможно дублировать строку (длина %zu)\n",
+                        strlen(orig));
     }
 
     return result;
@@ -651,9 +651,9 @@ char *M_StringReplace(const char *haystack, const char *needle,
     result = malloc(result_len);
     if (result == NULL)
     {
-        I_Error(english_language ?
-                "M_StringReplace: Failed to allocate new string" :
-                "M_StringReplace: не удалось обнаружить новую строку");
+        I_QuitWithError(english_language ?
+                        "M_StringReplace: Failed to allocate new string" :
+                        "M_StringReplace: не удалось обнаружить новую строку");
         return NULL;
     }
 
@@ -764,9 +764,9 @@ char *M_StringJoin(const char *s, ...)
 
     if (result == NULL)
     {
-        I_Error(english_language ?
-                "M_StringJoin: Failed to allocate new string." :
-                "M_StringJoin: не удалось обнаружить новую строку");
+        I_QuitWithError(english_language ?
+                        "M_StringJoin: Failed to allocate new string." :
+                        "M_StringJoin: не удалось обнаружить новую строку");
         return NULL;
     }
 
@@ -950,10 +950,10 @@ char* RD_M_FindInternalResource(char* resourceName)
 #endif
     if(!M_FileExists(retVal))
     {
-        I_Error(english_language ?
-                "Internal resource \"%s\" not found!" :
-                "Внутренний ресурс \"%s\" не найден!",
-                retVal);
+        I_QuitWithError(english_language ?
+                        "Internal resource \"%s\" not found!" :
+                        "Внутренний ресурс \"%s\" не найден!",
+                        retVal);
         free(retVal);
         return NULL;
     }

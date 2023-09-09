@@ -1553,10 +1553,10 @@ static void SetMissionForPackName(char *pack_name)
         printf("\t%s\n", packs[i].name);
     }
 
-    I_Error(english_language ?
-            "Unknown mission pack name: %s" :
-            "Неизвестная серия игры: %s",
-            pack_name);
+    I_QuitWithError(english_language ?
+                    "Unknown mission pack name: %s" :
+                    "Неизвестная серия игры: %s",
+                    pack_name);
 }
 
 
@@ -1594,9 +1594,9 @@ void D_IdentifyVersion(void)
         {
             // Still no idea.  I don't think this is going to work.
 			// Unknown or invalid IWAD file.
-            I_Error(english_language ?
-                    "Unknown or invalid IWAD file." :
-                    "Неопознанный или некорректный IWAD-файл.");
+            I_QuitWithError(english_language ?
+                            "Unknown or invalid IWAD file." :
+                            "Неопознанный или некорректный IWAD-файл.");
         }
     }
 
@@ -2490,10 +2490,10 @@ static void InitGameVersion(void)
                 printf("\t%s (%s)\n", gameversions[i].cmdline, gameversions[i].description);
             }
 
-            I_Error(english_language ?
-                    "Unknown game version '%s'" :
-                    "Неизвестная версия игры \"%s\"",
-                    myargv[p+1]);
+            I_QuitWithError(english_language ?
+                            "Unknown game version '%s'" :
+                            "Неизвестная версия игры \"%s\"",
+                            myargv[p + 1]);
         }
     }
     else
@@ -2594,10 +2594,10 @@ static void InitGameVersion(void)
                                                "\t3 - Ultimate Doom\n"
                                                "\t4 - Final Doom\n";
 
-                I_Error(english_language ?
-                        "Invalid parameter '%s' for -complevel.\nValid parameters are:\n%s" :
-                        "Некорректный параметр '%s' для -complevel.\nДопустимые параметры:\n%s",
-                        myargv[i+1], valid_complevels);
+                I_QuitWithError(english_language ?
+                                "Invalid parameter '%s' for -complevel.\nValid parameters are:\n%s" :
+                                "Некорректный параметр '%s' для -complevel.\nДопустимые параметры:\n%s",
+                                myargv[i + 1], valid_complevels);
             }
         }
     }
@@ -2697,9 +2697,9 @@ static void LoadIwadDeh(void)
         {
             // "DEHACKED lump not found.  Please check that this is the "
             // "Hacx v1.2 IWAD."
-            I_Error(english_language ?
-                    "DEHACKED lump not found.  Please check that this is the Hacx v1.2 IWAD." :
-                    "Не найден блок DEHACKED.  Проверьте расположение данного блока в IWAD-файе Hacx v1.2 IWAD.");
+            I_QuitWithError(english_language ?
+                            "DEHACKED lump not found.  Please check that this is the Hacx v1.2 IWAD." :
+                            "Не найден блок DEHACKED.  Проверьте расположение данного блока в IWAD-файе Hacx v1.2 IWAD.");
         }
     }
 
@@ -2744,16 +2744,16 @@ static void LoadIwadDeh(void)
         // Still not found?
         if (chex_deh == NULL)
         {
-            I_Error("Unable to find Chex Quest dehacked file (chex.deh).\n"
-                    "The dehacked file is required in order to emulate\n"
-                    "chex.exe correctly.  It can be found in your nearest\n"
-                    "/idgames repository mirror at:\n\n"
-                    "   utils/exe_edit/patches/chexdeh.zip");
+            I_QuitWithError("Unable to find Chex Quest dehacked file (chex.deh).\n"
+                            "The dehacked file is required in order to emulate\n"
+                            "chex.exe correctly.  It can be found in your nearest\n"
+                            "/idgames repository mirror at:\n\n"
+                            "   utils/exe_edit/patches/chexdeh.zip");
         }
 
         if (!DEH_LoadFile(chex_deh))
         {
-            I_Error("Failed to load chex.deh needed for emulating chex.exe.");
+            I_QuitWithError("Failed to load chex.deh needed for emulating chex.exe.");
         }
     }
 }
@@ -2996,13 +2996,13 @@ void D_DoomMain (void)
     {
         if (english_language)
         {
-            I_Error("Game mode indeterminate.  No IWAD file was found.  Try\n"
-                    "specifying one with the '-iwad' command line parameter.\n");
+            I_QuitWithError("Game mode indeterminate.  No IWAD file was found.  Try\n"
+                            "specifying one with the '-iwad' command line parameter.\n");
         }
         else
         {
-            I_Error("Невозможно определить игру из за отсутствующего IWAD-файла.\n"
-                    "Попробуйте указать IWAD-файл командой '-iwad'.\n");
+            I_QuitWithError("Невозможно определить игру из за отсутствующего IWAD-файла.\n"
+                            "Попробуйте указать IWAD-файл командой '-iwad'.\n");
         }
     }
 
@@ -3194,18 +3194,18 @@ void D_DoomMain (void)
         };
 
         if (gamemode == shareware || gamemode == pressbeta)
-            I_Error(DEH_String(english_language ?
-                               "\nYou cannot -file with the shareware version. Register!" :
-                               "\nВы не можете использовать -file в демонстрационной версии. Приобретите полную версию!"));
+            I_QuitWithError(DEH_String(english_language ?
+                                       "\nYou cannot -file with the shareware version. Register!" :
+                                       "\nВы не можете использовать -file в демонстрационной версии. Приобретите полную версию!"));
 
         // Check for fake IWAD with right name,
         // but w/o all the lumps of the registered version. 
         if (gamemode == registered)
             for (int i = 0 ; i < 23 ; i++)
             if (W_CheckNumForName(name[i])<0)
-                I_Error(DEH_String(english_language ?
-                                   "\nThis is not the registered version." :
-                                   "\nДанная версия не является зарегистрированной."));
+                I_QuitWithError(DEH_String(english_language ?
+                                           "\nThis is not the registered version." :
+                                           "\nДанная версия не является зарегистрированной."));
     }
 
     PrintDehackedBanners();

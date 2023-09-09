@@ -1666,9 +1666,9 @@ void A_PhoenixPuff(mobj_t *actor, player_t *player, pspdef_t *psp)
 
 void A_RemovedPhoenixFunc(mobj_t *actor, player_t * player, pspdef_t * psp)
 {
-    I_Error(english_language ?
-            "Action function invoked for removed Phoenix action!" :
-            "Действие вызвано из удаленного действия Феникса!");
+    I_QuitWithError(english_language ?
+                    "Action function invoked for removed Phoenix action!" :
+                    "Действие вызвано из удаленного действия Феникса!");
 }
 
 //----------------------------------------------------------------------------

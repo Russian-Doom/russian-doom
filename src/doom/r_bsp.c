@@ -448,10 +448,10 @@ static void R_Subsector (const int num)
     int   count = sub->numlines;
 
 #ifdef RANGECHECK
-    if (num>=numsubsectors)
-	I_Error (english_language ?
-             "R_Subsector: ss %i with numss = %i" :
-             "R_Subsector: ss %i с numss = %i", num, numsubsectors);
+    if(num>=numsubsectors)
+        I_QuitWithError(english_language ?
+                        "R_Subsector: ss %i with numss = %i" :
+                        "R_Subsector: ss %i с numss = %i", num, numsubsectors);
 #endif
 
     frontsector = sub->sector;

@@ -314,8 +314,9 @@ static boolean P_Move (mobj_t*	actor)
 		
     if ((unsigned)actor->movedir >= 8)
     {
-	I_Error (english_language ? "Weird actor->movedir!" :
-                                "Некорректный actor->movedir!");
+        I_QuitWithError(english_language ?
+                        "Weird actor->movedir!" :
+                        "Некорректный actor->movedir!");
     }
 
     tryx = actor->x + actor->info->speed*xspeed[actor->movedir];
@@ -437,8 +438,9 @@ static void P_NewChaseDir (mobj_t *actor)
     
     if (!actor->target)
     {
-        I_Error (english_language ? "P_NewChaseDir: called with no target" :
-                                    "P_NewChaseDir: вызов без определения цели");
+        I_QuitWithError(english_language ?
+                        "P_NewChaseDir: called with no target" :
+                        "P_NewChaseDir: вызов без определения цели");
     }
 
     olddir = actor->movedir;

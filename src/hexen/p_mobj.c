@@ -1569,9 +1569,9 @@ void P_SpawnPlayer(mapthing_t * mthing)
             mobj = P_SpawnMobj(x, y, z, MT_PLAYER_MAGE);
             break;
         default:
-            I_Error(english_language ?
-                    "P_SpawnPlayer: Unknown class type" :
-                    "P_SpawnPlayer: неизвестный класс игрока");
+            I_QuitWithError(english_language ?
+                            "P_SpawnPlayer: Unknown class type" :
+                            "P_SpawnPlayer: неизвестный класс игрока");
             return;
     }
 
@@ -2015,10 +2015,10 @@ void P_CreateTIDList(void)
         {                       // Add to list
             if (i == MAX_TID_COUNT)
             {
-                I_Error(english_language ?
-                        "P_CreateTIDList: MAX_TID_COUNT (%d) exceeded." :
-                        "P_CreateTIDList: превышен лимит MAX_TID_COUNT (%d).",
-                        MAX_TID_COUNT);
+                I_QuitWithError(english_language ?
+                                "P_CreateTIDList: MAX_TID_COUNT (%d) exceeded." :
+                                "P_CreateTIDList: превышен лимит MAX_TID_COUNT (%d).",
+                                MAX_TID_COUNT);
             }
             TIDList[i] = mobj->tid;
             TIDMobj[i++] = mobj;
@@ -2052,10 +2052,10 @@ void P_InsertMobjIntoTIDList(mobj_t * mobj, int tid)
     {                           // Append required
         if (i == MAX_TID_COUNT)
         {
-            I_Error(english_language ?
-                    "P_InsertMobjIntoTIDList: MAX_TID_COUNT (%d) exceeded." :
-                    "P_InsertMobjIntoTIDList: превышен лимит MAX_TID_COUNT (%d).",
-                    MAX_TID_COUNT);
+            I_QuitWithError(english_language ?
+                            "P_InsertMobjIntoTIDList: MAX_TID_COUNT (%d) exceeded." :
+                            "P_InsertMobjIntoTIDList: превышен лимит MAX_TID_COUNT (%d).",
+                            MAX_TID_COUNT);
         }
         index = i;
         TIDList[index + 1] = 0;

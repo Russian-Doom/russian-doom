@@ -151,9 +151,9 @@ void V_CopyRect (int srcx, int srcy, byte *source,
      || desty < 0
      || desty + height > SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "Bad V_CopyRect" :
-                 "Ошибка V_CopyRect");
+        I_QuitWithError(english_language ?
+                        "Bad V_CopyRect" :
+                        "Ошибка V_CopyRect");
     }
 #endif 
 
@@ -1635,11 +1635,11 @@ void V_DrawBlock (const int x, const int y, const int width, int height, const b
     byte *dest; 
  
 #ifdef RANGECHECK 
-    if (x < 0 || x + width > screenwidth || y < 0 || y + height > SCREENHEIGHT)
+    if(x < 0 || x + width > screenwidth || y < 0 || y + height > SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                "Bad V_DrawBlock" :
-                "Ошибка V_DrawBlock");
+        I_QuitWithError(english_language ?
+                        "Bad V_DrawBlock" :
+                        "Ошибка V_DrawBlock");
     }
 #endif 
 
@@ -1666,9 +1666,9 @@ void V_DrawScaledBlock (const int x, const int y, int width, int height, const b
      || y < 0
      || y + height > ORIGHEIGHT)
     {
-	I_Error (english_language ?
-             "Bad V_DrawScaledBlock" :
-             "Ошибка V_DrawScaledBlock");
+        I_QuitWithError(english_language ?
+                        "Bad V_DrawScaledBlock" :
+                        "Ошибка V_DrawScaledBlock");
     }
 #endif
 
@@ -1750,12 +1750,12 @@ void V_CopyScaledBuffer (byte *dest, const byte *src, const size_t size)
     int i, j, k;
 
 #ifdef RANGECHECK
-    if (size < 0
-     || size > origwidth * ORIGHEIGHT)
+    if(size < 0
+    || size > origwidth * ORIGHEIGHT)
     {
-        I_Error(english_language ?
-                "Bad V_CopyScaledBuffer" :
-                "Ошибка V_CopyScaledBuffer");
+        I_QuitWithError(english_language ?
+                        "Bad V_CopyScaledBuffer" :
+                        "Ошибка V_CopyScaledBuffer");
     }
 #endif
 
@@ -2036,15 +2036,15 @@ void V_ScreenShot (const char *format)
     {
         if (png_screenshots)
         {
-            I_Error (english_language ? 
-                     "V_ScreenShot: Couldn't create a PNG" :
-                     "V_ScreenShot: ошибка сохранения PNG скриншота");
+            I_QuitWithError(english_language ?
+                            "V_ScreenShot: Couldn't create a PNG" :
+                            "V_ScreenShot: ошибка сохранения PNG скриншота");
         }
         else
         {
-            I_Error (english_language ?
-            "V_ScreenShot: Couldn't create a PCX" :
-            "V_ScreenShot: ошибка сохранения PCX скриншота");
+            I_QuitWithError(english_language ?
+                            "V_ScreenShot: Couldn't create a PCX" :
+                            "V_ScreenShot: ошибка сохранения PCX скриншота");
         }
     }
 

@@ -1745,7 +1745,7 @@ void P_ArchiveThinkers (void)
 	    continue;
 	}
 		
-	// I_Error ("P_ArchiveThinkers: Unknown thinker function");
+	// I_QuitWithError("P_ArchiveThinkers: Unknown thinker function");
     }
 
     // add a terminating marker
@@ -1813,10 +1813,10 @@ void P_UnArchiveThinkers (void)
 	    break;
 
 	  default:
-	    I_Error (english_language ?
-                 "Unknown tclass %i in savegame" :
-                 "Ошибка сохраненной игры: неизвестный tclass %i",
-                 tclass);
+          I_QuitWithError(english_language ?
+                          "Unknown tclass %i in savegame" :
+                          "Ошибка сохраненной игры: неизвестный tclass %i",
+                          tclass);
 	}
     }
 }
@@ -2156,10 +2156,10 @@ void P_UnArchiveSpecials (void)
         break;
 				
 	  default:
-	    I_Error (english_language ?
-                 "P_UnarchiveSpecials: Unknown tclass %i in savegame" :
-                 "P_UnarchiveSpecials: неизвестный tclass %i в сохраненной игре",
-                 tclass);
+          I_QuitWithError(english_language ?
+                          "P_UnarchiveSpecials: Unknown tclass %i in savegame" :
+                          "P_UnarchiveSpecials: неизвестный tclass %i в сохраненной игре",
+                          tclass);
 	}
 	
     }

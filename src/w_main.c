@@ -250,28 +250,26 @@ void W_CheckCorrectIWAD(GameMission_t mission)
 
             if (lumpnum >= 0)
             {
-                if (english_language)
+                if(english_language)
                 {
-                    I_Error("\nYou are trying to use a %s IWAD file with "
-                            "the %s%s binary.\nThis isn't going to work.\n"
-                            "You probably want to use the %s%s binary.",
-                            D_SuggestGameName(unique_lumps[i].mission,
-                                            indetermined),
-                            PROGRAM_PREFIX,
-                            D_GameMissionString(mission),
-                            PROGRAM_PREFIX,
-                            D_GameMissionString(unique_lumps[i].mission));
+                    I_QuitWithError("\nYou are trying to use a %s IWAD file with "
+                                    "the %s%s binary.\nThis isn't going to work.\n"
+                                    "You probably want to use the %s%s binary.",
+                                    D_SuggestGameName(unique_lumps[i].mission, indetermined),
+                                    PROGRAM_PREFIX,
+                                    D_GameMissionString(mission),
+                                    PROGRAM_PREFIX,
+                                    D_GameMissionString(unique_lumps[i].mission));
                 }
                 else
                 {
-                    I_Error("\nВы пытаетесь запусть IWAD-файл %s с исполняемым файлом %s%s.\n"
-                            "Запуск невозможен. Вам необходимо использовать исполняемый файл %s%s.",
-                            D_SuggestGameName(unique_lumps[i].mission,
-                                            indetermined),
-                            PROGRAM_PREFIX,
-                            D_GameMissionString(mission),
-                            PROGRAM_PREFIX,
-                            D_GameMissionString(unique_lumps[i].mission));
+                    I_QuitWithError("\nВы пытаетесь запусть IWAD-файл %s с исполняемым файлом %s%s.\n"
+                                    "Запуск невозможен. Вам необходимо использовать исполняемый файл %s%s.",
+                                    D_SuggestGameName(unique_lumps[i].mission, indetermined),
+                                    PROGRAM_PREFIX,
+                                    D_GameMissionString(mission),
+                                    PROGRAM_PREFIX,
+                                    D_GameMissionString(unique_lumps[i].mission));
                 }
             }
         }

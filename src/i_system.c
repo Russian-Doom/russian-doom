@@ -91,10 +91,10 @@ static byte *AutoAllocMemory(int *size, int default_ram, int min_ram)
 
         if (default_ram < min_ram)
         {
-            I_Error(english_language ?
-                    "Unable to allocate %i MiB of RAM for zone" :
-                    "Невозможно обнаружить %i МБ памяти для распределения",
-                    default_ram);
+            I_QuitWithError(english_language ?
+                            "Unable to allocate %i MiB of RAM for zone" :
+                            "Невозможно обнаружить %i МБ памяти для распределения",
+                            default_ram);
         }
 
         // Try to allocate the zone memory.
@@ -208,23 +208,21 @@ void I_Quit (void)
 
 
 //
-// I_Error
+// I_QuitWithError
 //
 
 static boolean already_quitting = false;
 
-void I_Error (char *error, ...)
+void I_QuitWithError(char* error, ...)
 {
     char msgbuf[512];
     va_list argptr;
-    atexit_listentry_t *entry;
-    boolean exit_gui_popup;
 
-    if (already_quitting)
+    if(already_quitting)
     {
         printf(english_language ?
-                        "Warning: recursive call to I_Error detected.\n" :
-                        "Внимание: обнаружен рекурсивный вызов в I_Error.\n");
+                        "Warning: recursive call to I_QuitWithError detected.\n" :
+                        "Внимание: обнаружен рекурсивный вызов в I_QuitWithError.\n");
         exit(-1);
     }
     else
@@ -234,7 +232,6 @@ void I_Error (char *error, ...)
 
     // Message first.
     va_start(argptr, error);
-    //printf("\nError: ");
     vprintf(error, argptr);
     printf("\n\n");
     va_end(argptr);
@@ -247,12 +244,10 @@ void I_Error (char *error, ...)
     va_end(argptr);
 
     // Shutdown. Here might be other errors.
-
-    entry = exit_funcs;
-
-    while (entry != NULL)
+    atexit_listentry_t* entry = exit_funcs;
+    while(entry != NULL)
     {
-        if (entry->run_on_error)
+        if(entry->run_on_error)
         {
             entry->func();
         }
@@ -260,32 +255,24 @@ void I_Error (char *error, ...)
         entry = entry->next;
     }
 
-    exit_gui_popup = !M_ParmExists("-nogui");
-
-    // Pop up a GUI dialog box to show the error message, if the
-    // game was not run from the console (and the user will
-    // therefore be unable to otherwise see the message).
-    if (exit_gui_popup && !I_ConsoleStdout())
+    // Pop up a GUI dialog box to show the error message
+    if(!M_ParmExists("-nogui"))
     {
 #ifdef _WIN32
-    // [JN] UTF-8 retranslations of error message and window title.
-    wchar_t win_error_message[1024];
-    wchar_t win_error_title[128];
+        // [JN] UTF-8 retranslations of error message and window title.
+        wchar_t win_error_message[1024];
+        wchar_t win_error_title[128];
 
-    // [JN] Use nicer Windows-styled dialog box.
-    MultiByteToWideChar(CP_UTF8, 0, msgbuf, -1, win_error_message, 1024);
-    MultiByteToWideChar(CP_UTF8, 0, RD_Project_String, -1, win_error_title, 128);
-    MessageBoxW(NULL, win_error_message, win_error_title, MB_ICONSTOP);
+        // [JN] Use nicer Windows-styled dialog box.
+        MultiByteToWideChar(CP_UTF8, 0, msgbuf, -1, win_error_message, 1024);
+        MultiByteToWideChar(CP_UTF8, 0, RD_Project_String, -1, win_error_title, 128);
+        MessageBoxW(NULL, win_error_message, win_error_title, MB_ICONSTOP);
 #else
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
-                                 RD_Project_String, msgbuf, NULL);
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, RD_Project_String, msgbuf, NULL);
 #endif
     }
 
-    // abort();
-
     SDL_Quit();
-
     exit(-1);
 }
 
@@ -301,10 +288,10 @@ void *I_Realloc(void *ptr, size_t size)
 
     if (size != 0 && new_ptr == NULL)
     {
-        I_Error (english_language ?
-                 "I_Realloc: failed on reallocation of %zu bytes" :
-                 "I_Realloc: ошибка переобнаружения %zu байт",
-                 size);
+        I_QuitWithError(english_language ?
+                        "I_Realloc: failed on reallocation of %zu bytes" :
+                        "I_Realloc: ошибка переобнаружения %zu байт",
+                        size);
     }
 
     return new_ptr;

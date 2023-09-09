@@ -55,18 +55,18 @@ static void CheckForClientOptions(void)
         {
             if (english_language)
             {
-                I_Error("The command line parameter '%s' was specified to a "
-                        "dedicated server.\nGame parameters should be specified "
-                        "to the first player to join a server, \nnot to the "
-                        "server itself. ",
-                        not_dedicated_options[i]);
+                I_QuitWithError("The command line parameter '%s' was specified to a "
+                                "dedicated server.\nGame parameters should be specified "
+                                "to the first player to join a server, \nnot to the "
+                                "server itself. ",
+                                not_dedicated_options[i]);
             }
             else
             {
-                I_Error("Параметр командной строки '%s' указан выделенному серверу.\n"
-                        "Параметры должны быть указаны первым игроком, присоединившемся\n"
-                        "к серверу, но не заданы самим сервером",
-                        not_dedicated_options[i]);
+                I_QuitWithError("Параметр командной строки '%s' указан выделенному серверу.\n"
+                                "Параметры должны быть указаны первым игроком, присоединившемся\n"
+                                "к серверу, но не заданы самим сервером",
+                                not_dedicated_options[i]);
             }
         }
     }

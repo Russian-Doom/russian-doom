@@ -145,9 +145,9 @@ static const boolean P_CrossSubsector (const int num)
 #ifdef RANGECHECK
     if (num>=numsubsectors)
     {
-        I_Error (english_language ? "P_CrossSubsector: ss %i with numss = %i" :
-                                    "P_CrossSubsector: ss %i с numss = %i",
-                                    num, numsubsectors);
+        I_QuitWithError(english_language ? "P_CrossSubsector: ss %i with numss = %i" :
+                        "P_CrossSubsector: ss %i с numss = %i",
+                        num, numsubsectors);
     }
 #endif
 

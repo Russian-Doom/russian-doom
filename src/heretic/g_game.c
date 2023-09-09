@@ -1071,10 +1071,10 @@ void G_Ticker(void)
                 if (gametic > BACKUPTICS
                     && consistancy[i][buf] != cmd->consistancy)
                 {
-                    I_Error(english_language ?
-                        "Consistency failure (%i should be %i)" :
-                        "Нарушение последовательности (%i должно быть %i)",
-                            cmd->consistancy, consistancy[i][buf]);
+                    I_QuitWithError(english_language ?
+                                    "Consistency failure (%i should be %i)" :
+                                    "Нарушение последовательности (%i должно быть %i)",
+                                    cmd->consistancy, consistancy[i][buf]);
                 }
                 if (players[i].mo)
                     consistancy[i][buf] = players[i].mo->x;
@@ -1392,12 +1392,12 @@ void G_DeathMatchSpawnPlayer(int playernum)
     {
         if (english_language)
         {
-            I_Error("Only %i deathmatch spots, 4 required", selections);
+            I_QuitWithError("Only %i deathmatch spots, 4 required", selections);
         }
         else
         {
-            I_Error ("Обнаружено %i стартовых точек для режима Дефтатч.\n"
-                    "Минимальное необходимое количество: 4", selections);
+            I_QuitWithError("Обнаружено %i стартовых точек для режима Дефтатч.\n"
+                            "Минимальное необходимое количество: 4", selections);
         }
     }
 
@@ -1667,9 +1667,9 @@ void G_DoLoadGame(void)
 
     if (SV_ReadByte() != SAVE_GAME_TERMINATOR)
     {                           // Missing savegame termination marker
-        I_Error(english_language ?
-                "Bad savegame" :
-                "Некорректный файл сохранения");
+        I_QuitWithError(english_language ?
+                        "Bad savegame" :
+                        "Некорректный файл сохранения");
     }
 
     P_SetMessage(&players[consoleplayer], DEH_String(txt_gameloaded), msg_system, false);
@@ -2372,13 +2372,13 @@ boolean G_CheckDemoStatus(void)
         
         if (english_language)
         {
-            I_Error("Timed %i gametics in %i realtics (%f fps)",
-                    gametic, realtics, fps);
+            I_QuitWithError("Timed %i gametics in %i realtics (%f fps)",
+                            gametic, realtics, fps);
         }
         else
         {
-            I_Error ("Насчитано %i gametics в %i realtics.\n"
-                    "Среднее значение FPS: %f.", gametic, realtics, fps);
+            I_QuitWithError("Насчитано %i gametics в %i realtics.\n"
+                            "Среднее значение FPS: %f.", gametic, realtics, fps);
         }
     }
 
@@ -2401,9 +2401,9 @@ boolean G_CheckDemoStatus(void)
         M_WriteFile(demoname, demobuffer, demo_p - demobuffer);
         Z_Free(demobuffer);
         demorecording = false;
-        I_Error(english_language ?
-                "Demo %s recorded" :
-                "Демозапись %s завершена",demoname); 
+        I_QuitWithError(english_language ?
+                        "Demo %s recorded" :
+                        "Демозапись %s завершена", demoname);
     }
 
     return false;

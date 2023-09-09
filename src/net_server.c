@@ -1262,10 +1262,10 @@ static void NET_SV_SendTics(net_client_t *client,
 
         if (i != cmd->seq)
         {
-            I_Error(english_language ?
-                    "Wanted to send %i, but %i is in its place" :
-                    "Попытка отправки %i, но %i расположен некорректно",
-                    i, cmd->seq);
+            I_QuitWithError(english_language ?
+                            "Wanted to send %i, but %i is in its place" :
+                            "Попытка отправки %i, но %i расположен некорректно",
+                            i, cmd->seq);
         }
 
         // Add command

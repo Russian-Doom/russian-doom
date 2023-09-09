@@ -1224,9 +1224,9 @@ boolean PTR_SlideTraverse(intercept_t * in)
     line_t *li;
 
     if (!in->isaline)
-        I_Error(english_language ?
-                "PTR_SlideTraverse: not a line?" :
-                "PTR_SlideTraverse: не является линией?");
+        I_QuitWithError(english_language ?
+                        "PTR_SlideTraverse: not a line?" :
+                        "PTR_SlideTraverse: не является линией?");
 
     li = in->d.line;
 

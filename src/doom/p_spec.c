@@ -1652,9 +1652,9 @@ void P_SpawnSpecials (void)
             case 85:
             if (numlinespecials >= MAXLINEANIMS)
             {
-                I_Error(english_language ?
-                        "Too many scrolling wall linedefs!\n (Vanilla limit is 64)" :
-                        "Превышен лимит линий со скроллингом текстур!\n (Оригинальный лимит равен 64)");
+                I_QuitWithError(english_language ?
+                                "Too many scrolling wall linedefs!\n (Vanilla limit is 64)" :
+                                "Превышен лимит линий со скроллингом текстур!\n (Оригинальный лимит равен 64)");
             }
             // EFFECT FIRSTCOL SCROLL+
             linespeciallist[numlinespecials] = &lines[i];

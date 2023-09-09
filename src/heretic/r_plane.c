@@ -217,10 +217,10 @@ static void R_MapPlane (const int y, const int x1, const int x2)
 
 #ifdef RANGECHECK
     if (x2 < x1 || x1 < 0 || x2 >= viewwidth || (unsigned) y > viewheight)
-        I_Error(english_language ?
-                "R_MapPlane: %i, %i at %i" :
-                "R_MapPlane: %i, %i в %i",
-                x1, x2, y);
+        I_QuitWithError(english_language ?
+                     "R_MapPlane: %i, %i at %i" :
+                     "R_MapPlane: %i, %i в %i",
+                     x1, x2, y);
 #endif
 
     // [crispy] visplanes with the same flats now match up far better than before

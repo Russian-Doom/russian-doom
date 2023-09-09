@@ -113,10 +113,10 @@ void R_DrawColumn (void)
 #ifdef RANGECHECK
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawColumn: %i to %i at %i" :
-                 "R_DrawColumn: %i к %i у %i",
-                 dc_yl, dc_yh, dc_x);
+        I_QuitWithError(english_language ?
+                        "R_DrawColumn: %i to %i at %i" :
+                        "R_DrawColumn: %i к %i у %i",
+                        dc_yl, dc_yh, dc_x);
     }
 #endif
 
@@ -197,10 +197,10 @@ void R_DrawColumnLow (void)
 #ifdef RANGECHECK 
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawColumnLow: %i to %i at %i" :
-                 "R_DrawColumnLow: %i к %i у %i",
-                 dc_yl, dc_yh, dc_x);
+        I_QuitWithError(english_language ?
+                        "R_DrawColumnLow: %i to %i at %i" :
+                        "R_DrawColumnLow: %i к %i у %i",
+                        dc_yl, dc_yh, dc_x);
     }
 #endif 
 
@@ -318,9 +318,9 @@ void R_DrawFuzzColumn (void)
 #ifdef RANGECHECK 
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawFuzzColumn: %i to %i at %i" :
-                 "R_DrawFuzzColumn: %i к %i у %i", dc_yl, dc_yh, dc_x);
+        I_QuitWithError(english_language ?
+                        "R_DrawFuzzColumn: %i to %i at %i" :
+                        "R_DrawFuzzColumn: %i к %i у %i", dc_yl, dc_yh, dc_x);
     }
 #endif
 
@@ -390,10 +390,10 @@ void R_DrawFuzzColumnLow (void)
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawFuzzColumnLow: %i to %i at %i" :
-                 "R_DrawFuzzColumnLow: %i к %i у %i",
-                 dc_yl, dc_yh, dc_x);
+        I_QuitWithError(english_language ?
+                        "R_DrawFuzzColumnLow: %i to %i at %i" :
+                        "R_DrawFuzzColumnLow: %i к %i у %i",
+                        dc_yl, dc_yh, dc_x);
     }
 #endif
 
@@ -462,9 +462,9 @@ void R_DrawFuzzColumnBW (void)
 #ifdef RANGECHECK 
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawFuzzColumnBW: %i to %i at %i" :
-                 "R_DrawFuzzColumnBW: %i к %i у %i", dc_yl, dc_yh, dc_x);
+        I_QuitWithError(english_language ?
+                        "R_DrawFuzzColumnBW: %i to %i at %i" :
+                        "R_DrawFuzzColumnBW: %i к %i у %i", dc_yl, dc_yh, dc_x);
     }
 #endif
 
@@ -521,10 +521,10 @@ void R_DrawFuzzColumnLowBW (void)
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawFuzzColumnLowBW: %i to %i at %i" :
-                 "R_DrawFuzzColumnLowBW: %i к %i у %i",
-                 dc_yl, dc_yh, dc_x);
+        I_QuitWithError(english_language ?
+                        "R_DrawFuzzColumnLowBW: %i to %i at %i" :
+                        "R_DrawFuzzColumnLowBW: %i к %i у %i",
+                        dc_yl, dc_yh, dc_x);
     }
 #endif
 
@@ -591,9 +591,9 @@ void R_DrawFuzzColumnImproved (void)
 #ifdef RANGECHECK 
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawFuzzColumnImproved: %i to %i at %i" :
-                 "R_DrawFuzzColumnImproved: %i к %i у %i", dc_yl, dc_yh, dc_x);
+        I_QuitWithError(english_language ?
+                        "R_DrawFuzzColumnImproved: %i to %i at %i" :
+                        "R_DrawFuzzColumnImproved: %i к %i у %i", dc_yl, dc_yh, dc_x);
     }
 #endif
 
@@ -647,10 +647,10 @@ void R_DrawFuzzColumnLowImproved (void)
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawFuzzColumnLowImproved: %i to %i at %i" :
-                 "R_DrawFuzzColumnLowImproved: %i к %i у %i",
-                 dc_yl, dc_yh, dc_x);
+        I_QuitWithError(english_language ?
+                        "R_DrawFuzzColumnLowImproved: %i to %i at %i" :
+                        "R_DrawFuzzColumnLowImproved: %i к %i у %i",
+                        dc_yl, dc_yh, dc_x);
     }
 #endif
 
@@ -716,9 +716,9 @@ void R_DrawFuzzColumnImprovedBW (void)
 #ifdef RANGECHECK 
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawFuzzColumnImprovedBW: %i to %i at %i" :
-                 "R_DrawFuzzColumnImprovedBW: %i к %i у %i", dc_yl, dc_yh, dc_x);
+        I_QuitWithError(english_language ?
+                        "R_DrawFuzzColumnImprovedBW: %i to %i at %i" :
+                        "R_DrawFuzzColumnImprovedBW: %i к %i у %i", dc_yl, dc_yh, dc_x);
     }
 #endif
 
@@ -776,10 +776,10 @@ void R_DrawFuzzColumnLowImprovedBW (void)
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawFuzzColumnLowImprovedBW: %i to %i at %i" :
-                 "R_DrawFuzzColumnLowImprovedBW: %i к %i у %i",
-                 dc_yl, dc_yh, dc_x);
+        I_QuitWithError(english_language ?
+                        "R_DrawFuzzColumnLowImprovedBW: %i to %i at %i" :
+                        "R_DrawFuzzColumnLowImprovedBW: %i к %i у %i",
+                        dc_yl, dc_yh, dc_x);
     }
 #endif
 
@@ -833,10 +833,10 @@ void R_DrawFuzzColumnTranslucent (void)
 #ifdef RANGECHECK
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawFuzzColumnTranslucent: %i to %i at %i" :
-                 "R_DrawFuzzColumnTranslucent: %i к %i у %i",
-                 dc_yl, dc_yh, dc_x);
+        I_QuitWithError(english_language ?
+                        "R_DrawFuzzColumnTranslucent: %i to %i at %i" :
+                        "R_DrawFuzzColumnTranslucent: %i к %i у %i",
+                        dc_yl, dc_yh, dc_x);
     }
 #endif
 
@@ -898,10 +898,10 @@ void R_DrawFuzzColumnTranslucentLow (void)
 #ifdef RANGECHECK
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawFuzzColumnTranslucentLow: %i to %i at %i" :
-                 "R_DrawFuzzColumnTranslucentLow: %i к %i у %i",
-                 dc_yl, dc_yh, x);
+        I_QuitWithError(english_language ?
+                        "R_DrawFuzzColumnTranslucentLow: %i to %i at %i" :
+                        "R_DrawFuzzColumnTranslucentLow: %i к %i у %i",
+                        dc_yl, dc_yh, x);
     }
 #endif
 
@@ -995,10 +995,10 @@ void R_DrawTranslatedColumn (void)
 #ifdef RANGECHECK 
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawColumn: %i to %i at %i" :
-                 "R_DrawColumn: %i к %i у %i",
-                 dc_yl, dc_yh, dc_x);
+        I_QuitWithError(english_language ?
+                        "R_DrawColumn: %i to %i at %i" :
+                        "R_DrawColumn: %i к %i у %i",
+                        dc_yl, dc_yh, dc_x);
     }    
 #endif 
 
@@ -1041,10 +1041,10 @@ void R_DrawTranslatedColumnLow (void)
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawColumn: %i to %i at %i" :
-                 "R_DrawColumn: %i к %i у %i",
-                 dc_yl, dc_yh, x);
+        I_QuitWithError(english_language ?
+                        "R_DrawColumn: %i to %i at %i" :
+                        "R_DrawColumn: %i к %i у %i",
+                        dc_yl, dc_yh, x);
     }
 #endif 
 
@@ -1087,10 +1087,10 @@ void R_DrawTLColumn (void)
 #ifdef RANGECHECK
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawTLColumn: %i to %i at %i" :
-                 "R_DrawTLColumn: %i к %i у %i",
-                 dc_yl, dc_yh, dc_x);
+        I_QuitWithError(english_language ?
+                        "R_DrawTLColumn: %i to %i at %i" :
+                        "R_DrawTLColumn: %i к %i у %i",
+                        dc_yl, dc_yh, dc_x);
     }
 #endif
 
@@ -1157,10 +1157,10 @@ void R_DrawTLColumnLow (void)
 #ifdef RANGECHECK
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawTLColumnLow: %i to %i at %i" :
-                 "R_DrawTLColumnLow: %i к %i у %i",
-                 dc_yl, dc_yh, x);
+        I_QuitWithError(english_language ?
+                        "R_DrawTLColumnLow: %i to %i at %i" :
+                        "R_DrawTLColumnLow: %i к %i у %i",
+                        dc_yl, dc_yh, x);
     }
 #endif
 
@@ -1248,10 +1248,10 @@ void R_DrawTranslatedTLColumn (void)
 #ifdef RANGECHECK
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawTranslatedTLColumn: %i to %i at %i" :
-                 "R_DrawTranslatedTLColumn: %i к %i у %i",
-                 dc_yl, dc_yh, dc_x);
+        I_QuitWithError(english_language ?
+                        "R_DrawTranslatedTLColumn: %i to %i at %i" :
+                        "R_DrawTranslatedTLColumn: %i к %i у %i",
+                        dc_yl, dc_yh, dc_x);
     }
 #endif
 
@@ -1314,10 +1314,10 @@ void R_DrawTranslatedTLColumnLow (void)
 #ifdef RANGECHECK
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error (english_language ?
-                 "R_DrawTranslatedTLColumnLow: %i to %i at %i" :
-                 "R_DrawTranslatedTLColumnLow: %i к %i у %i",
-                 dc_yl, dc_yh, x);
+        I_QuitWithError(english_language ?
+                        "R_DrawTranslatedTLColumnLow: %i to %i at %i" :
+                        "R_DrawTranslatedTLColumnLow: %i к %i у %i",
+                        dc_yl, dc_yh, x);
     }
 #endif
 
@@ -1485,10 +1485,10 @@ void R_DrawSpan (fixed_t x1, fixed_t x2, const fixed_t y,
 #ifdef RANGECHECK
     if (x2 < x1 || x1 < 0 || x2 >= screenwidth || (unsigned)y > SCREENHEIGHT)
     {
-        I_Error(english_language ?
-                "R_DrawSpan: %i to %i at %i" :
-                "R_DrawSpan: %i к %i у %i",
-                x1, x2, y);
+        I_QuitWithError(english_language ?
+                        "R_DrawSpan: %i to %i at %i" :
+                        "R_DrawSpan: %i к %i у %i",
+                        x1, x2, y);
     }
 #endif
 
@@ -1532,10 +1532,10 @@ void R_DrawSpanLow (fixed_t x1, fixed_t x2, const fixed_t y,
 #ifdef RANGECHECK
     if (x2 < x1 || x1<0 || x2>=screenwidth || (unsigned)y>SCREENHEIGHT)
     {
-        I_Error(english_language ?
-                "R_DrawSpan: %i to %i at %i" :
-                "R_DrawSpan: %i к %i у %i",
-                x1,x2,y);
+        I_QuitWithError(english_language ?
+                        "R_DrawSpan: %i to %i at %i" :
+                        "R_DrawSpan: %i к %i у %i",
+                        x1, x2, y);
     }
 #endif
 

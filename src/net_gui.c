@@ -537,9 +537,9 @@ void NET_WaitForLaunch(void)
 
         if (!net_client_connected)
         {
-            I_Error(english_language ?
-                    "Lost connection to server" :
-                    "Соединение с сервером потеряно");
+            I_QuitWithError(english_language ?
+                            "Lost connection to server" :
+                            "Соединение с сервером потеряно");
         }
 
         TXT_Sleep(100);

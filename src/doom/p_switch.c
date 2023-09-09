@@ -236,9 +236,9 @@ void P_StartButton (line_t *line, const bwhere_e w, const int texture, const int
         return P_StartButton(line, w, texture, time);
     }
 
-    I_Error(english_language ?
-            "P_StartButton: no button slots left!" :
-            "P_StartButton: превышен лимит слотов для переключателей!");
+    I_QuitWithError(english_language ?
+                    "P_StartButton: no button slots left!" :
+                    "P_StartButton: превышен лимит слотов для переключателей!");
 }
 
 // -----------------------------------------------------------------------------

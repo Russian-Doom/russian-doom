@@ -146,7 +146,7 @@ static void VerifySequencePtr(int *base, int *ptr)
 {
     if (ptr - base > SS_TEMPBUFFER_SIZE)
     {
-        I_Error("VerifySequencePtr:  tempPtr >= %d\n", SS_TEMPBUFFER_SIZE);
+        I_QuitWithError("VerifySequencePtr:  tempPtr >= %d\n", SS_TEMPBUFFER_SIZE);
     }
 }
 
@@ -212,7 +212,7 @@ void SN_InitSequenceScript(void)
             }
             if (i == SS_MAX_SCRIPTS)
             {
-                I_Error("Number of SS Scripts >= SS_MAX_SCRIPTS");
+                I_QuitWithError("Number of SS Scripts >= SS_MAX_SCRIPTS");
             }
             for (j = 0; j < SEQ_NUMSEQ; j++)
             {

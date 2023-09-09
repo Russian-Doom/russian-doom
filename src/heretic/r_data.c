@@ -762,7 +762,7 @@ static void R_InitTextures (void)
 	offset = LONG(*directory);
 
 	if (offset > maxoff)
-	    I_Error ("R_InitTextures: bad texture directory");
+        I_QuitWithError("R_InitTextures: bad texture directory");
 	
 	mtexture = (maptexture_t *) ( (byte *)maptex + offset);
 

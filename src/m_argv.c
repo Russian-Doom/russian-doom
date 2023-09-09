@@ -121,10 +121,10 @@ static void LoadResponseFile(int argv_index, const char *filename)
 
         if (k < 0)
         {
-            I_Error(english_language ?
-                    "Failed to read full contents of '%s'" :
-                    "Невозможно прочитать содержимое \"%s\"",
-                    filename);
+            I_QuitWithError(english_language ?
+                            "Failed to read full contents of '%s'" :
+                            "Невозможно прочитать содержимое \"%s\"",
+                            filename);
         }
 
         i += k;
@@ -185,10 +185,10 @@ static void LoadResponseFile(int argv_index, const char *filename)
 
             if (k >= size || infile[k] == '\n')
             {
-                I_Error(english_language ?
-                        "Quotes are not closed in the response file \"%s\"" :
-                        "Кавычки не закрыты в ответном файле \"%s\"",
-                        filename);
+                I_QuitWithError(english_language ?
+                                "Quotes are not closed in the response file \"%s\"" :
+                                "Кавычки не закрыты в ответном файле \"%s\"",
+                                filename);
             }
 
             // Cut off the string at the closing quote
