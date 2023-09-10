@@ -451,18 +451,16 @@ boolean M_StrToInt(const char *str, int *result)
 // slash separator character. If no directory is described in the path,
 // the string "." is returned. In either case, the result is newly allocated
 // and must be freed by the caller after use.
-char *M_DirName(const char *path)
+char* M_DirName(const char *path)
 {
-    char *p, *result;
-
-    p = strrchr(path, DIR_SEPARATOR);
-    if (p == NULL)
+    char* p = path ? strrchr(path, DIR_SEPARATOR) : NULL;
+    if(p == NULL)
     {
         return M_StringDuplicate(".");
     }
     else
     {
-        result = M_StringDuplicate(path);
+        char* result = M_StringDuplicate(path);
         result[p - path] = '\0';
         return result;
     }
