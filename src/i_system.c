@@ -18,6 +18,7 @@
 
 
 
+#include <SDL_messagebox.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -46,17 +47,23 @@
 #define DEFAULT_RAM 16*2 /* MiB */
 #define MIN_RAM     4*4  /* MiB */
 
-
-typedef struct atexit_listentry_s atexit_listentry_t;
-
-struct atexit_listentry_s
+typedef struct atexit_listentry_s
 {
+    struct atexit_listentry_s* next;
     atexit_func_t func;
     boolean run_on_error;
-    atexit_listentry_t *next;
-};
+} atexit_listentry_t;
 
-static atexit_listentry_t *exit_funcs = NULL;
+typedef struct message_s
+{
+    struct message_s* next;
+    unsigned int type;
+    char msgbuf[512];
+} message_t;
+
+static atexit_listentry_t* exit_funcs = NULL;
+static message_t* message_queue = NULL;
+static boolean already_quitting = false;
 
 void I_AtExit(atexit_func_t func, boolean run_on_error)
 {
@@ -186,49 +193,87 @@ boolean I_ConsoleStdout(void)
 // I_Quit
 //
 
-void I_Quit (void)
+static inline void do_quit(boolean is_error)
 {
-    atexit_listentry_t *entry;
-
-    // Run through all exit functions
- 
-    entry = exit_funcs; 
-
-    while (entry != NULL)
-    {
-        entry->func();
-        entry = entry->next;
-    }
-
-    SDL_Quit();
-
-    exit(0);
-}
-
-
-
-//
-// I_QuitWithError
-//
-
-static boolean already_quitting = false;
-
-void I_QuitWithError(char* error, ...)
-{
-    char msgbuf[512];
-    va_list argptr;
-
     if(already_quitting)
     {
         printf(english_language ?
-                        "Warning: recursive call to I_QuitWithError detected.\n" :
-                        "Внимание: обнаружен рекурсивный вызов в I_QuitWithError.\n");
+               "Warning: recursive call to I_Quit* detected.\n" :
+               "Внимание: обнаружен рекурсивный вызов I_Quit*.\n");
         exit(-1);
     }
     else
     {
         already_quitting = true;
     }
+
+    // Run through all exit functions
+    atexit_listentry_t* entry = exit_funcs;
+    while(entry != NULL)
+    {
+        if(!is_error || entry->run_on_error)
+        {
+            entry->func();
+        }
+        entry = entry->next;
+    }
+
+    // Pop up a GUI dialog box to show the error message
+    if(!M_ParmExists("-nogui"))
+    {
+        while(message_queue != NULL)
+        {
+            message_t* current_message = message_queue;
+#ifdef _WIN32
+            // [JN] UTF-8 retranslations of error message and window title.
+            wchar_t win_error_message[1024];
+            wchar_t win_error_title[128];
+
+            // [JN] Use nicer Windows-styled dialog box.
+            MultiByteToWideChar(CP_UTF8, 0, current_message->msgbuf, -1, win_error_message, 1024);
+            MultiByteToWideChar(CP_UTF8, 0, RD_Project_String, -1, win_error_title, 128);
+
+            MessageBoxW(NULL, win_error_message, win_error_title, current_message->type);
+#else
+            SDL_ShowSimpleMessageBox(current_message->type, RD_Project_String, current_message->msgbuf, NULL);
+#endif
+            message_queue = current_message->next;
+            free(current_message);
+        }
+    }
+
+    SDL_Quit();
+    exit(0);
+}
+
+void I_Quit(void)
+{
+    do_quit(false);
+}
+
+void I_QuitWithError(char* error, ...)
+{
+    va_list argptr;
+    va_start(argptr, error);
+    I_AddError(error, argptr);
+    va_end(argptr);
+
+    do_quit(true);
+}
+
+void I_QuitWithMessage(char* error, ...)
+{
+    va_list argptr;
+    va_start(argptr, error);
+    I_AddMessage(error, argptr);
+    va_end(argptr);
+
+    do_quit(false);
+}
+
+void I_AddError(char* error, ...)
+{
+    va_list argptr;
 
     // Message first.
     va_start(argptr, error);
@@ -237,44 +282,41 @@ void I_QuitWithError(char* error, ...)
     va_end(argptr);
     fflush(stdout);
 
-    // Write a copy of the message into buffer.
+    // Write a copy of the msg into buffer.
+    message_t* msg = malloc(sizeof(message_t));
     va_start(argptr, error);
-    memset(msgbuf, 0, sizeof(msgbuf));
-    M_vsnprintf(msgbuf, sizeof(msgbuf), error, argptr);
+    memset(msg->msgbuf, 0, sizeof(msg->msgbuf));
+    M_vsnprintf(msg->msgbuf, sizeof(msg->msgbuf), error, argptr);
     va_end(argptr);
 
-    // Shutdown. Here might be other errors.
-    atexit_listentry_t* entry = exit_funcs;
-    while(entry != NULL)
-    {
-        if(entry->run_on_error)
-        {
-            entry->func();
-        }
-
-        entry = entry->next;
-    }
-
-    // Pop up a GUI dialog box to show the error message
-    if(!M_ParmExists("-nogui"))
-    {
-#ifdef _WIN32
-        // [JN] UTF-8 retranslations of error message and window title.
-        wchar_t win_error_message[1024];
-        wchar_t win_error_title[128];
-
-        // [JN] Use nicer Windows-styled dialog box.
-        MultiByteToWideChar(CP_UTF8, 0, msgbuf, -1, win_error_message, 1024);
-        MultiByteToWideChar(CP_UTF8, 0, RD_Project_String, -1, win_error_title, 128);
-        MessageBoxW(NULL, win_error_message, win_error_title, MB_ICONSTOP);
-#else
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, RD_Project_String, msgbuf, NULL);
-#endif
-    }
-
-    SDL_Quit();
-    exit(-1);
+    msg->type = SDL_MESSAGEBOX_ERROR;
+    msg->next = message_queue;
+    message_queue = msg;
 }
+
+void I_AddMessage(char* message, ...)
+{
+    va_list argptr;
+
+    // Message first.
+    va_start(argptr, message);
+    vprintf(message, argptr);
+    printf("\n\n");
+    va_end(argptr);
+    fflush(stdout);
+
+    // Write a copy of the message into buffer.
+    message_t* msg = malloc(sizeof(message_t));
+    va_start(argptr, message);
+    memset(msg->msgbuf, 0, sizeof(msg->msgbuf));
+    M_vsnprintf(msg->msgbuf, sizeof(msg->msgbuf), message, argptr);
+    va_end(argptr);
+
+    msg->type = SDL_MESSAGEBOX_INFORMATION;
+    msg->next = message_queue;
+    message_queue = msg;
+}
+
 
 //
 // I_Realloc

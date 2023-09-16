@@ -44,12 +44,30 @@ boolean I_ConsoleStdout(void);
 // for normal input.
 ticcmd_t* I_BaseTiccmd (void);
 
+/**
+ * Initiate normal quit sequence
+ */
+void I_Quit(void);
 
-// Called by M_Responder when quit is selected.
-// Clean exit, displays sell blurb.
-void I_Quit (void);
-
+/**
+ * Add error message modal to queue and initiate error quit sequence
+ */
 void I_QuitWithError(char* error, ...);
+
+/**
+ * Add info message modal to queue and normal error quit sequence (call only callbacks with "run_if_error")
+ */
+void I_QuitWithMessage(char* message, ...);
+
+/**
+ * Add error message modal to queue
+ */
+void I_AddError(char* error, ...);
+
+/**
+ * Add info message modal to queue
+ */
+void I_AddMessage(char* message, ...);
 
 void *I_Realloc(void *ptr, size_t size);
 

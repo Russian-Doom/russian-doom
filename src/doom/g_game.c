@@ -2931,30 +2931,21 @@ boolean G_CheckDemoStatus (void)
 { 
     int endtime; 
 
-    if (timingdemo) 
+    if(timingdemo)
     { 
-        float fps;
-        int   realtics;
-
-        endtime = I_GetTime (); 
-        realtics = endtime - starttime;
-        fps = ((float) gametic * TICRATE) / realtics;
+        endtime = I_GetTime();
+        int realtics = endtime - starttime;
+        float fps = ((float) gametic * TICRATE) / realtics;
 
         // Prevent recursive calls
         timingdemo = false;
         demoplayback = false;
 
-        if (english_language)
-        {
-            I_QuitWithError("Timed %i gametics in %i realtics (%f fps)",
-                            gametic, realtics, fps);
-        }
-        else
-        {
-            I_QuitWithError("Насчитано %i gametics в %i realtics.\n"
-                            "Среднее значение FPS: %f.", gametic, realtics, fps);
-        }
-    } 
+        I_QuitWithMessage(english_language ?
+                          "Timed %i gametics in %i realtics (%f fps)" :
+                          "Насчитано %i gametics в %i realtics.\nСреднее значение FPS: %f.",
+                          gametic, realtics, fps);
+    }
 
     if (demoplayback)
     { 

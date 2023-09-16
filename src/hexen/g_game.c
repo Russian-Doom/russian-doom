@@ -2347,16 +2347,16 @@ boolean G_CheckDemoStatus(void)
 {
     int endtime, realtics;
 
-    if (timingdemo)
+    if(timingdemo)
     {
-        float fps;
         endtime = I_GetTime();
         realtics = endtime - starttime;
-        fps = ((float) gametic * TICRATE) / realtics;
-        I_QuitWithError(english_language ?
-                        "Timed %i gametics in %i realtics (%f fps)" :
-                        "Насчитано %i gametics в %i realtics.\n Среднее значение FPS: %f.",
-                        gametic, realtics, fps);
+        float fps = ((float) gametic * TICRATE) / realtics;
+
+        I_QuitWithMessage(english_language ?
+                          "Timed %i gametics in %i realtics (%f fps)" :
+                          "Насчитано %i gametics в %i realtics.\nСреднее значение FPS: %f.",
+                          gametic, realtics, fps);
     }
 
     if (demoplayback)

@@ -894,9 +894,9 @@ void M_SaveConfig (void)
 
     if(!configPath.savePath)
     {
-        printf(english_language ?
-               "No writable path to save configuration file\n" :
-               "Нет доступного для записи места для сохранения файла конфигурации\n");
+        I_AddError(english_language ?
+                   "No writable path to save configuration file\n" :
+                   "Нет доступного для записи места для сохранения файла конфигурации\n");
         return;
     }
 
@@ -912,9 +912,9 @@ void M_SaveConfig (void)
     f = M_fopen(configPath.savePath, "w");
     if(!f)
     {
-        printf(english_language ?
-               "Unable to open configuration file for writing\n" :
-               "Не удалось открыть файл конфигурации для записи\n");
+        I_AddError(english_language ?
+                   "Unable to open configuration file for writing\n" :
+                   "Не удалось открыть файл конфигурации для записи\n");
         return;
     }
 
