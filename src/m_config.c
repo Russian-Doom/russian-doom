@@ -1072,22 +1072,18 @@ static config_path_t findConfigfilePaths(void)
     const char** ID_prefixes = config_path_prefixes("inter-doom");
 
     const char** prefixes = RD_prefixes;
-    while(*prefixes != NULL && (!ret.loadPath || !ret.savePath))
+    while(*prefixes != NULL && !ret.savePath)
     {
         char* config_path = M_StringJoin(*prefixes, RD_Project_TarName, ".ini", NULL);
         boolean saved = false;
-        if(!ret.loadPath && M_FileExists(config_path))
+        if(M_PathWritable(*prefixes))
         {
-            ret.loadPath = config_path;
-            saved = true;
-        }
-        if(saved || (!ret.savePath && M_PathWritable(*prefixes)))
-        {
-            if(ret.savePath)
-                free(ret.savePath);
-
             ret.savePath = config_path;
             saved = true;
+            if(M_FileExists(config_path))
+            {
+                ret.loadPath = config_path;
+            }
         }
 
         if(!saved)
