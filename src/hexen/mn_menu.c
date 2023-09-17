@@ -4400,7 +4400,7 @@ static void DrawGameplay1Menu(void)
                               brightmaps ? CR_GREEN : CR_RED);
 
         // Fake contrast
-        RD_M_DrawTextSmallENG(fake_contrast ? "ON" : "OFF", 143 + wide_delta, 52,
+        RD_M_DrawTextSmallENG(fake_contrast ? "ORIGINAL" : "OFF", 143 + wide_delta, 52,
                               fake_contrast ? CR_GREEN : CR_RED);
 
         // Extra translucency
@@ -4452,7 +4452,7 @@ static void DrawGameplay1Menu(void)
                               brightmaps ? CR_GREEN : CR_RED);
 
         // Имитация контрастности
-        RD_M_DrawTextSmallRUS(fake_contrast ? "DRK" : "DSRK", 205 + wide_delta, 52,
+        RD_M_DrawTextSmallRUS(fake_contrast ? "JHBUBYFKMYFZ" : "DSRK", 205 + wide_delta, 52,
                               fake_contrast ? CR_GREEN : CR_RED);
 
         // Дополнительная прозрачность
