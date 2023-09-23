@@ -83,11 +83,6 @@ and [Crispy Doom](http://fabiangreffrath.github.io/crispy-doom) by Fabian Greffr
 with significant additions from [Doom Retro](http://doomretro.com) by Brad Harding,
 and is distributed with their approval.
 
-DOS version is based on [PCDoom](https://github.com/nukeykt/PCDoom-v2) by Alexey Khokholov
-and [Doom Vanille](https://github.com/AXDOOMER/doom-vanille) by Alexandre-Xavier Labonté-Lamoureux,
-with significant additions from [Crispy Doom](http://fabiangreffrath.github.io/crispy-doom) by Fabian Greffrath
-and [Doom Retro](http://doomretro.com) by Brad Harding, and is distributed with their approval.
-
 The project, along with all its translation materials and source code,
 is available under the terms and conditions of
 [GNU General Public License version 2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
