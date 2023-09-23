@@ -1,6 +1,7 @@
 //
 // Copyright(C) 2013-2018 Brad Harding
 // Copyright(C) 2018-2023 Julian Nechaevsky
+// Copyright(C) 2020-2023 Leonid Murin (Dasperal)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
