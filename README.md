@@ -12,54 +12,20 @@ For more information, visit [Project's Wiki](https://github.com/Russian-Doom/rus
 This is a continuation of the original Russian/International Doom codebase
 maintained by [Leonid Murin (Dasperal)](https://github.com/Dasperal)
 
-### International Doom 6.2.1 (released: January 17, 2023)
+### Russian Doom 6.3 (released: October 29, 2023)
 
 **Windows:**
-[**x86**](https://github.com/Russian-Doom/russian-doom/releases/download/6.2.1/inter-doom-6.2.1-windows-x86.zip)
-([hash](https://github.com/Russian-Doom/russian-doom/releases/download/6.2.1/inter-doom-6.2.1-windows-x86.zip.sha256))
+[**x86**](https://github.com/Russian-Doom/russian-doom/releases/download/6.3/russian-doom-6.3-windows-x86.zip)
+([hash](https://github.com/Russian-Doom/russian-doom/releases/download/6.3/russian-doom-6.3-windows-x86.zip.sha256))
 |
-[**x64**](https://github.com/Russian-Doom/russian-doom/releases/download/6.2.1/inter-doom-6.2.1-windows-x64.zip)
-([hash](https://github.com/Russian-Doom/russian-doom/releases/download/6.2.1/inter-doom-6.2.1-windows-x64.zip.sha256))  
+[**x64**](https://github.com/Russian-Doom/russian-doom/releases/download/6.3/russian-doom-6.3-windows-x64.zip)
+([hash](https://github.com/Russian-Doom/russian-doom/releases/download/6.3/russian-doom-6.3-windows-x64.zip.sha256))  
 **Linux:**
-[**Arch(AUR)**](https://aur.archlinux.org/packages/inter-doom)  
+[**Arch(AUR)**](https://aur.archlinux.org/packages/russian-doom)  
 Compilation from source code available for all platforms,
 see [COMPILING.md](COMPILING.md).  
-Source code available in [zip](https://github.com/Russian-Doom/russian-doom/archive/refs/tags/6.2.1.zip)
-and [tar.gz](https://github.com/Russian-Doom/russian-doom/archive/refs/tags/6.2.1.tar.gz) formats
-
-[**Antivirus FAQ**](https://github.com/Russian-Doom/russian-doom/wiki/Antivirus-FAQ)
-
-### International Heretic 6.1.1 (released: January 17, 2023)
-
-**Windows:**
-[**x86**](https://github.com/Russian-Doom/russian-doom/releases/download/heretic-6.1.1/inter-heretic-6.1.1-windows-x86.zip)
-([hash](https://github.com/Russian-Doom/russian-doom/releases/download/heretic-6.1.1/inter-heretic-6.1.1-windows-x86.zip.sha256))
-|
-[**x64**](https://github.com/Russian-Doom/russian-doom/releases/download/heretic-6.1.1/inter-heretic-6.1.1-windows-x64.zip)
-([hash](https://github.com/Russian-Doom/russian-doom/releases/download/heretic-6.1.1/inter-heretic-6.1.1-windows-x64.zip.sha256))  
-**Linux:**
-[**Arch(AUR)**](https://aur.archlinux.org/packages/inter-heretic)  
-Compilation from source code available for all platforms,
-see [COMPILING.md](COMPILING.md).  
-Source code available in [zip](https://github.com/Russian-Doom/russian-doom/archive/refs/tags/heretic-6.1.1.zip)
-and [tar.gz](https://github.com/Russian-Doom/russian-doom/archive/refs/tags/heretic-6.1.1.tar.gz) formats
-
-[**Antivirus FAQ**](https://github.com/Russian-Doom/russian-doom/wiki/Antivirus-FAQ)
-
-### International Hexen 6.0.1 (released: January 17, 2023)
-
-**Windows:**
-[**x86**](https://github.com/Russian-Doom/russian-doom/releases/download/hexen-6.0.1/inter-hexen-6.0.1-windows-x86.zip)
-([hash](https://github.com/Russian-Doom/russian-doom/releases/download/hexen-6.0.1/inter-hexen-6.0.1-windows-x86.zip.sha256))
-|
-[**x64**](https://github.com/Russian-Doom/russian-doom/releases/download/hexen-6.0.1/inter-hexen-6.0.1-windows-x64.zip)
-([hash](https://github.com/Russian-Doom/russian-doom/releases/download/hexen-6.0.1/inter-hexen-6.0.1-windows-x64.zip.sha256))  
-**Linux:**
-[**Arch(AUR)**](https://aur.archlinux.org/packages/inter-hexen)  
-Compilation from source code available for all platforms,
-see [COMPILING.md](COMPILING.md).  
-Source code available in [zip](https://github.com/Russian-Doom/russian-doom/archive/refs/tags/hexen-6.0.1.zip)
-and [tar.gz](https://github.com/Russian-Doom/russian-doom/archive/refs/tags/hexen-6.0.1.tar.gz) formats
+Source code available in [zip](https://github.com/Russian-Doom/russian-doom/archive/refs/tags/6.3.zip)
+and [tar.gz](https://github.com/Russian-Doom/russian-doom/archive/refs/tags/6.3.tar.gz) formats
 
 [**Antivirus FAQ**](https://github.com/Russian-Doom/russian-doom/wiki/Antivirus-FAQ)
 
