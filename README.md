@@ -10,9 +10,9 @@ along with the maximum possible translation to the Russian language.
 For more information, visit [Project's Wiki](https://github.com/Russian-Doom/russian-doom/wiki).
 
 This is a continuation of the original Russian/International Doom codebase
-maintained by [Leonid Murin (Dasperal)](https://github.com/Dasperal)
+maintained by [Leonid Murin (Dasperal)](https://github.com/Dasperal).
 
-### Russian Doom 6.3 (released: October 29, 2023)
+### Russian Doom 6.3 (Released: October 29, 2023)
 
 **Windows:**
 [**x86**](https://github.com/Russian-Doom/russian-doom/releases/download/6.3/russian-doom-6.3-windows-x86.zip)
@@ -40,7 +40,7 @@ PNG font atlases:
 
 Changelog for current and upcoming versions available
 in [English](https://github.com/Russian-Doom/russian-doom/wiki/Changelog)
-and [Russian](https://github.com/Russian-Doom/russian-doom/wiki/Changelog-(Rus)) languages.
+and [Russian](https://github.com/Russian-Doom/russian-doom/wiki/История-изменений) languages.
 
 ### License
 
