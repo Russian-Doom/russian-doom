@@ -7,6 +7,7 @@ if(RD_COMPILE_HEXEN)
                                     ct_chat.h
                 d_net.c
                 f_finale.c
+                g_sk_unm.c
                 g_game.c
                                     h2def.h
                 h2_main.c

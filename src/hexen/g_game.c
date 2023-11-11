@@ -19,6 +19,7 @@
 
 
 #include <string.h>
+#include "g_sk_unm.h"
 #include "m_random.h"
 #include "h2def.h"
 #include "s_sound.h"
@@ -1938,58 +1939,18 @@ void G_InitNew(skill_t skill, int episode, int map)
         usergame = true;            // will be set false if a demo
     }
 
-    // [JN] Ultra-Nightmare definitions
-    if (skill == sk_ultranm)
+    // [JN] Make sure speeds are really only applied once.
+    static boolean attrs_saved;
+    if (!attrs_saved)
     {
-        // Monster's speed                          // Old value   Who
-        mobjinfo[MT_FIREDEMON].speed = 20;          // 13          Affrit
-        
-        // Monster's missiles speed                             // Old value    What
-        mobjinfo[MT_FIREDEMON_FX6].speed = 13 * FRACUNIT;       // 10           Affrit fireball
-        mobjinfo[MT_DEMON2FX1].speed = 18 * FRACUNIT;           // 15           Brown Chaos Serpent fireball
-        mobjinfo[MT_BISH_FX].speed = 13 * FRACUNIT;             // 10           Dark Bishop fireball
-        mobjinfo[MT_DEMONFX1].speed = 18 * FRACUNIT;            // 15           Green Chaos Serpent fireball
-        mobjinfo[MT_WRAITHFX1].speed = 17 * FRACUNIT;           // 14           Reiver fireball
-        mobjinfo[MT_CENTAUR_FX].speed = 23 * FRACUNIT;          // 20           Slaughtaur fireball
-        mobjinfo[MT_SERPENTFX].speed = 18 * FRACUNIT;           // 15           Stalker fireball
-        mobjinfo[MT_ICEGUY_FX].speed = 17 * FRACUNIT;           // 14           Wendige fireball 1
-        mobjinfo[MT_ICEGUY_FX2].speed = 13 * FRACUNIT;          // 10           Wendige fireball 2
-        
-        // Monster's damage                         // Old value   What
-        mobjinfo[MT_FIREDEMON_FX6].damage = 2;      // 1           Fire Gargolye fireball
-        mobjinfo[MT_DEMON2FX1].damage = 6;          // 5           Brown Chaos Serpent fireball
-        mobjinfo[MT_BISH_FX].damage = 2;            // 1           Dark Bishop fireball
-        mobjinfo[MT_DEMONFX1].damage = 6;           // 5           Green Chaos Serpent fireball
-        mobjinfo[MT_WRAITHFX1].damage = 6;          // 5           Reiver fireball
-        mobjinfo[MT_CENTAUR_FX].damage = 5;         // 4           Slaughtaur fireball
-        mobjinfo[MT_SERPENTFX].damage = 5;          // 4           Stalker fireball
+        // First, keep original info as separated values.
+        // FIXME: Move UNM_Save_Atters call to bootstrap sequence before game starts
+        UNM_Save_Atters();
+        attrs_saved = true;
     }
-    // [JN] Fallback to standard values
-    else
-    {
-        // Monster's speed
-        mobjinfo[MT_FIREDEMON].speed = 13;
-        
-        // Monster's missiles speed
-        mobjinfo[MT_FIREDEMON_FX6].speed = 10 * FRACUNIT;
-        mobjinfo[MT_DEMON2FX1].speed = 15 * FRACUNIT;
-        mobjinfo[MT_BISH_FX].speed = 10 * FRACUNIT;
-        mobjinfo[MT_DEMONFX1].speed = 15 * FRACUNIT;
-        mobjinfo[MT_WRAITHFX1].speed = 14 * FRACUNIT;
-        mobjinfo[MT_CENTAUR_FX].speed = 20 * FRACUNIT;
-        mobjinfo[MT_SERPENTFX].speed = 15 * FRACUNIT;
-        mobjinfo[MT_ICEGUY_FX].speed = 14 * FRACUNIT;
-        mobjinfo[MT_ICEGUY_FX2].speed = 10 * FRACUNIT;
-        
-        // Monster's damage
-        mobjinfo[MT_FIREDEMON_FX6].damage = 1;
-        mobjinfo[MT_DEMON2FX1].damage = 5;
-        mobjinfo[MT_BISH_FX].damage = 1;
-        mobjinfo[MT_DEMONFX1].damage = 5;
-        mobjinfo[MT_WRAITHFX1].damage = 5;
-        mobjinfo[MT_CENTAUR_FX].damage = 4;
-        mobjinfo[MT_SERPENTFX].damage = 4;
-    }
+
+    // [JN] Ultra Nightmare definitions:
+    UNM_Apply_Restore_Atters(skill);
 
     paused = false;
     // [JN] Reset automap scale. Fixes:
