@@ -24,6 +24,7 @@ if(RD_COMPILE_DOOM)
                 f_finale.c      f_finale.h
                 f_wipe.c        f_wipe.h
                 g_game.c        g_game.h
+        g_sk_unm.c
                 info.c          info.h
                 id_lang.c       id_lang.h
                 m_menu.c        m_menu.h

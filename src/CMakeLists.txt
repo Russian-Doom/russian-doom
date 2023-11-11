@@ -15,6 +15,7 @@ add_library(Common STATIC EXCLUDE_FROM_ALL
     d_mode.c            d_mode.h
                         d_ticcmd.h
     deh_str.c           deh_str.h
+                        g_sk_unm.h
     gusconf.c           gusconf.h
     i_cdmus.c           i_cdmus.h
                         icon.h
@@ -34,6 +35,7 @@ add_library(Common STATIC EXCLUDE_FROM_ALL
     i_videohr.c         i_videohr.h
     i_winmusic.c        i_winmusic.h
                         jn.h
+                        l_sk_unm.h
     midifile.c          midifile.h
     mus2mid.c           mus2mid.h
     m_argv.c            m_argv.h

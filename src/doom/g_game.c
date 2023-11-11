@@ -27,6 +27,7 @@
 #include "doomstat.h"
 #include "deh_main.h"
 #include "deh_misc.h"
+#include "g_sk_unm.h"
 #include "z_zone.h"
 #include "f_finale.h"
 #include "m_argv.h"
@@ -2140,75 +2141,6 @@ void G_DoSelectiveGame (int choice)
     plr->cards[3] = selective_key_3; // blue skull key
     plr->cards[4] = selective_key_4; // yellow skull key
     plr->cards[5] = selective_key_5; // red skull key
-} 
-
-// -----------------------------------------------------------------------------
-// G_KeepOriginalSpeeds
-// [JN] Keep original or given by Dehacked mobj info as separated values,
-// so they can be safely toggled between common and UNM skill levels.
-// -----------------------------------------------------------------------------
-
-// Monster's speed                           
-static int MT_POSSESSED_speed;
-static int MT_SHOTGUY_speed;
-static int MT_CHAINGUY_speed;
-static int MT_TROOP_speed;
-static int MT_SKULL_speed;
-static int MT_HEAD_speed;
-static int MT_KNIGHT_speed;
-static int MT_BRUISER_speed;
-static int MT_BABY_speed;
-static int MT_PAIN_speed;
-static int MT_UNDEAD_speed;
-static int MT_FATSO_speed;
-static int MT_VILE_speed;
-static int MT_SPIDER_speed;
-static int MT_CYBORG_speed;
-static int MT_WOLFSS_speed;
-
-// Monster's missiles speed
-static int MT_ARACHPLAZ_speed;
-static int MT_FATSHOT_speed;
-
-// Monster's damage
-static int MT_TROOPSHOT_damage;
-static int MT_HEADSHOT_damage;
-static int MT_BRUISERSHOT_damage;
-static int MT_ARACHPLAZ_damage;
-static int MT_TRACER_damage;
-static int MT_FATSHOT_damage;
-
-static void G_KeepOriginalSpeeds (void)
-{
-    // Monster's speed                           
-    MT_POSSESSED_speed = mobjinfo[MT_POSSESSED].speed;
-    MT_SHOTGUY_speed = mobjinfo[MT_SHOTGUY].speed;
-    MT_CHAINGUY_speed = mobjinfo[MT_CHAINGUY].speed;
-    MT_TROOP_speed = mobjinfo[MT_TROOP].speed;
-    MT_SKULL_speed = mobjinfo[MT_SKULL].speed;
-    MT_HEAD_speed = mobjinfo[MT_HEAD].speed;
-    MT_KNIGHT_speed = mobjinfo[MT_KNIGHT].speed;
-    MT_BRUISER_speed = mobjinfo[MT_BRUISER].speed;
-    MT_BABY_speed = mobjinfo[MT_BABY].speed;
-    MT_PAIN_speed = mobjinfo[MT_PAIN].speed;
-    MT_UNDEAD_speed = mobjinfo[MT_UNDEAD].speed;
-    MT_FATSO_speed = mobjinfo[MT_FATSO].speed;
-    MT_VILE_speed = mobjinfo[MT_VILE].speed;
-    MT_SPIDER_speed = mobjinfo[MT_SPIDER].speed;
-    MT_CYBORG_speed = mobjinfo[MT_CYBORG].speed;
-    MT_WOLFSS_speed = mobjinfo[MT_WOLFSS].speed;
-
-    // Monster's missiles speed
-    MT_ARACHPLAZ_speed = mobjinfo[MT_ARACHPLAZ].speed;
-    MT_FATSHOT_speed = mobjinfo[MT_FATSHOT].speed;
-
-    // Monster's damage
-    MT_TROOPSHOT_damage = mobjinfo[MT_TROOPSHOT].damage;
-    MT_HEADSHOT_damage = mobjinfo[MT_HEADSHOT].damage;
-    MT_BRUISERSHOT_damage = mobjinfo[MT_BRUISERSHOT].damage;
-    MT_ARACHPLAZ_damage = mobjinfo[MT_ARACHPLAZ].damage;
-    MT_TRACER_damage = mobjinfo[MT_TRACER].damage;
-    MT_FATSHOT_damage = mobjinfo[MT_FATSHOT].damage;
 }
 
 void
@@ -2221,8 +2153,6 @@ G_InitNew
     int     i;
     // [crispy] make sure "fast" parameters are really only applied once
     static boolean fast_applied;
-    // [JN] Make sure speeds are really only applied once.
-    static boolean speeds_applied;
 
     if (paused)
     {
@@ -2326,86 +2256,19 @@ G_InitNew
         mobjinfo[MT_TROOPSHOT].speed = 10*FRACUNIT;
         fast_applied = false;
     }
-    
-    // [JN] Ultra Nightmare definitions:
+
+    // [JN] Make sure speeds are really only applied once.
+    static boolean attrs_saved;
+    if (!attrs_saved)
     {
         // First, keep original or given by Dehacked mobj info as separated values.
-        if (!speeds_applied)
-        {
-            G_KeepOriginalSpeeds();
-            speeds_applied = true;
-        }
-
-        // Next, properly assign values according to selected skill level.
-        // UNM definitions are might be not optimal for possible Dehacked mods, 
-        // but this skill itself is designed for original Doom, and UNM menu item
-        // will be hidden if replaced M_ROUGH gfx is provided in PWAD.
-
-        if (skill == sk_ultranm)
-        {
-            // Monster's speed                                      Who
-            mobjinfo[MT_POSSESSED].speed = MT_POSSESSED_speed + 4;  // Zombieman (8 to 12)
-            mobjinfo[MT_SHOTGUY].speed = MT_SHOTGUY_speed + 4;      // Shotgun guy (8 to 12)
-            mobjinfo[MT_CHAINGUY].speed = MT_CHAINGUY_speed + 4;    // Chaingunner (8 to 12)
-            mobjinfo[MT_TROOP].speed = MT_TROOP_speed + 5;          // Imp (8 to 13)
-            mobjinfo[MT_SKULL].speed = MT_SKULL_speed + 6;          // Lost Soul (8 to 14)
-            mobjinfo[MT_HEAD].speed = MT_HEAD_speed + 6;            // Cacodemon (8 to 14)
-            mobjinfo[MT_KNIGHT].speed = MT_KNIGHT_speed + 6;        // Hell Knight (8 to 14)
-            mobjinfo[MT_BRUISER].speed = MT_BRUISER_speed + 6;      // Baron of Hell (8 to 14)
-            mobjinfo[MT_BABY].speed = MT_BABY_speed + 5;            // Arachnotron (12 to 17)
-            mobjinfo[MT_PAIN].speed = MT_PAIN_speed + 6;            // Pain Elemental (8 to 14)
-            mobjinfo[MT_UNDEAD].speed = MT_UNDEAD_speed + 4;        // Revenant (10 to 14)
-            mobjinfo[MT_FATSO].speed = MT_FATSO_speed + 3;          // Mancubus (8 to 12)
-            mobjinfo[MT_VILE].speed = MT_VILE_speed + 3;            // Archvile (15 to 18)
-            mobjinfo[MT_SPIDER].speed = MT_SPIDER_speed + 5;        // Spider Mastermind (12 to 17)
-            mobjinfo[MT_CYBORG].speed = MT_CYBORG_speed + 4;        // Cyberdemon (16 to 20)
-            mobjinfo[MT_WOLFSS].speed = MT_WOLFSS_speed + 5;        // Wolf SS (8 to 13)
-
-            // Monster's missiles speed                                        What
-            mobjinfo[MT_ARACHPLAZ].speed = MT_ARACHPLAZ_speed + (5*FRACUNIT);  // Arachnotron (25 to 30)
-            mobjinfo[MT_FATSHOT].speed = MT_FATSHOT_speed + (5*FRACUNIT);      // Mancubus (20 to 25)
-
-            // Monster's damage                                           What
-            mobjinfo[MT_TROOPSHOT].damage = MT_TROOPSHOT_damage + 1;      // Imp (3 to 4)
-            mobjinfo[MT_HEADSHOT].damage = MT_HEADSHOT_damage + 2;        // Cacodemon (5 to 7)
-            mobjinfo[MT_BRUISERSHOT].damage = MT_BRUISERSHOT_damage + 2;  // Knight / Baron (8 to 10) 
-            mobjinfo[MT_ARACHPLAZ].damage = MT_ARACHPLAZ_damage + 2;      // Arachnotron (5 to 7)
-            mobjinfo[MT_TRACER].damage = MT_TRACER_damage + 2;            // Revenant (10 to 12)
-            mobjinfo[MT_FATSHOT].damage = MT_FATSHOT_damage + 4;          // Mancubus (8 to 12)
-        }
-        else
-        {
-            // Monster's speed
-            mobjinfo[MT_POSSESSED].speed = MT_POSSESSED_speed;
-            mobjinfo[MT_SHOTGUY].speed = MT_SHOTGUY_speed;
-            mobjinfo[MT_CHAINGUY].speed = MT_CHAINGUY_speed;
-            mobjinfo[MT_TROOP].speed = MT_TROOP_speed;
-            mobjinfo[MT_SKULL].speed = MT_SKULL_speed;
-            mobjinfo[MT_HEAD].speed = MT_HEAD_speed;
-            mobjinfo[MT_KNIGHT].speed = MT_KNIGHT_speed;
-            mobjinfo[MT_BRUISER].speed = MT_BRUISER_speed;
-            mobjinfo[MT_BABY].speed = MT_BABY_speed;
-            mobjinfo[MT_PAIN].speed = MT_PAIN_speed;
-            mobjinfo[MT_UNDEAD].speed = MT_UNDEAD_speed;
-            mobjinfo[MT_FATSO].speed = MT_FATSO_speed;
-            mobjinfo[MT_VILE].speed = MT_VILE_speed;
-            mobjinfo[MT_SPIDER].speed = MT_SPIDER_speed;
-            mobjinfo[MT_CYBORG].speed = MT_CYBORG_speed;
-            mobjinfo[MT_WOLFSS].speed = MT_WOLFSS_speed;
-
-            // Monster's missiles speed
-            mobjinfo[MT_ARACHPLAZ].speed = MT_ARACHPLAZ_speed;
-            mobjinfo[MT_FATSHOT].speed = MT_FATSHOT_speed;
-
-            // Monster's damage
-            mobjinfo[MT_TROOPSHOT].damage = MT_TROOPSHOT_damage;
-            mobjinfo[MT_HEADSHOT].damage = MT_HEADSHOT_damage;
-            mobjinfo[MT_BRUISERSHOT].damage = MT_BRUISERSHOT_damage;
-            mobjinfo[MT_ARACHPLAZ].damage = MT_ARACHPLAZ_damage;
-            mobjinfo[MT_TRACER].damage = MT_TRACER_damage;
-            mobjinfo[MT_FATSHOT].damage = MT_FATSHOT_damage;
-        }
+        // FIXME: Move UNM_Save_Atters call to bootstrap sequence after Dehacked is loaded, but before game starts
+        UNM_Save_Atters();
+        attrs_saved = true;
     }
+
+    // [JN] Ultra Nightmare definitions:
+    UNM_Apply_Restore_Atters(skill);
 
     // force players to be initialized upon first level load
     for (i=0 ; i<MAXPLAYERS ; i++)
