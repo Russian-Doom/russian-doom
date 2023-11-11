@@ -19,6 +19,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include "g_sk_unm.h"
 #include "hr_local.h"
 #include "deh_str.h"
 #include "i_timer.h"
@@ -1842,68 +1843,18 @@ void G_InitNew(skill_t skill, int episode, int map, int fast_monsters)
         players[i].didsecret = false;
     }
 
+    // [JN] Make sure speeds are really only applied once.
+    static boolean attrs_saved;
+    if (!attrs_saved)
+    {
+        // First, keep original or given by Hehacked mobj info as separated values.
+        // FIXME: Move UNM_Save_Atters call to bootstrap sequence after Dehacked is loaded, but before game starts
+        UNM_Save_Atters();
+        attrs_saved = true;
+    }
+
     // [JN] Ultra-Nightmare definitions
-    if (skill == sk_ultranm)
-    {
-        // Monster's speed                          // Old value   Who
-        mobjinfo[MT_IMP].speed = 17;                // 10          Gargolye
-        mobjinfo[MT_IMPLEADER].speed = 17;          // 10          Fire Gargolye
-        mobjinfo[MT_MUMMY].speed = 21;              // 12          Golem
-        mobjinfo[MT_MUMMYGHOST].speed = 21;         // 12          Golem Ghost
-        mobjinfo[MT_MUMMYLEADER].speed = 21;        // 12          Nitrogolem
-        mobjinfo[MT_MUMMYLEADERGHOST].speed = 21;   // 12          Nitrogolem Ghost
-        mobjinfo[MT_CLINK].speed = 21;              // 14          Sabreclaw
-        mobjinfo[MT_KNIGHT].speed = 19;             // 12          Undead Warrior
-        mobjinfo[MT_KNIGHTGHOST].speed = 19;        // 12          Undead Warrior Ghost
-        mobjinfo[MT_BEAST].speed = 21;              // 14          Weredragon
-        mobjinfo[MT_SNAKE].speed = 17;              // 10          Ophidian
-        mobjinfo[MT_WIZARD].speed = 19;             // 12          Disciple of D'Sparil
-        mobjinfo[MT_HEAD].speed = 13;               // 6           Iron Lich
-        mobjinfo[MT_MINOTAUR].speed = 21;           // 16          Maolotaur
-        mobjinfo[MT_SORCERER1].speed = 21;          // 16          D'Sparil (riding)
-        mobjinfo[MT_SORCERER2].speed = 20;          // 14          D'Sparil (walking)
-
-        // Monster's damage                         // Old value   What
-        mobjinfo[MT_IMPBALL].damage = 2;            // 1           Fire Gargolye fireball
-        mobjinfo[MT_MUMMYFX1].damage = 6;           // 4           Nitrogolem Ghost fireball
-        mobjinfo[MT_KNIGHTAXE].damage = 5;          // 3           Undead Warrior green axe
-        mobjinfo[MT_REDAXE].damage = 8;             // 7           Undead Warrior red axe
-        mobjinfo[MT_BEASTBALL].damage = 5;          // 4           Weredragon fireball
-        mobjinfo[MT_SNAKEPRO_A].damage = 2;         // 1           Ophidian fireball A
-        mobjinfo[MT_SNAKEPRO_B].damage = 4;         // 3           Ophidian fireball B
-        mobjinfo[MT_WIZFX1].damage = 4;             // 3           Disciple of D'Sparil fireball
-    }
-    // [JN] Fallback to standard values
-    else
-    {
-        // Monster's speed
-        mobjinfo[MT_IMP].speed = 10;
-        mobjinfo[MT_IMPLEADER].speed = 10;
-        mobjinfo[MT_MUMMY].speed = 12;
-        mobjinfo[MT_MUMMYGHOST].speed = 12;
-        mobjinfo[MT_MUMMYLEADER].speed = 12;
-        mobjinfo[MT_MUMMYLEADERGHOST].speed = 12;
-        mobjinfo[MT_CLINK].speed = 14;
-        mobjinfo[MT_KNIGHT].speed = 12;
-        mobjinfo[MT_KNIGHTGHOST].speed = 12;
-        mobjinfo[MT_BEAST].speed = 14;
-        mobjinfo[MT_SNAKE].speed = 10;
-        mobjinfo[MT_WIZARD].speed = 12;
-        mobjinfo[MT_HEAD].speed = 6;
-        mobjinfo[MT_MINOTAUR].speed = 16;
-        mobjinfo[MT_SORCERER1].speed = 16;
-        mobjinfo[MT_SORCERER2].speed = 14;
-
-        // Monster's damage
-        mobjinfo[MT_IMPBALL].damage = 1;
-        mobjinfo[MT_MUMMYFX1].damage = 4;
-        mobjinfo[MT_KNIGHTAXE].damage = 2;
-        mobjinfo[MT_REDAXE].damage = 7;
-        mobjinfo[MT_BEASTBALL].damage = 4;
-        mobjinfo[MT_SNAKEPRO_A].damage = 1;
-        mobjinfo[MT_SNAKEPRO_B].damage = 3;
-        mobjinfo[MT_WIZFX1].damage = 3;
-    }
+    UNM_Apply_Restore_Atters(skill);
 
     // Set up a bunch of globals
     usergame = true;            // will be set false if a demo
