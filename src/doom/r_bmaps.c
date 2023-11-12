@@ -176,7 +176,7 @@ static const byte redonly[256] =
 {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -466,7 +466,9 @@ static const fullbright_t fullbright_walls[] = {
     {"SW2STON2", DOOM1ONLY, redonly},
     {"SW2STON2", DOOM2ONLY, greenonly2},
     {"SW2STON6", DOOM1AND2, redonly},
-    {"SW2STONE", DOOM1AND2, greenonly2},
+    // [JN] beware!
+    {"SW2STONE", DOOM1ONLY, greenonly1},
+    {"SW2STONE", DOOM2ONLY, greenonly2},
     {"SW2STRTN", DOOM1AND2, greenonly1},
     {"SW2TEK",   DOOM1AND2, greenonly1},
     {"SW2VINE",  DOOM1AND2, greenonly1},
@@ -489,6 +491,9 @@ static const fullbright_t fullbright_walls[] = {
     {"SW2SATYR", DOOM1AND2, brighttan},
     {"SW2LION",  DOOM1AND2, brighttan},
     {"SW2GARG",  DOOM1AND2, brighttan},
+};
+
+static const fullbright_t fullbright_finaldoom[] = {
     // [crispy] Final Doom textures
     // TNT - Evilution exclusive
     {"PNK4EXIT", DOOM2ONLY, redonly},
@@ -541,6 +546,20 @@ const byte *R_BrightmapForTexName (const char *texname)
         }
     }
 
+    // Final Doom: Plutonia has no exclusive brightmaps
+    if (gamemission == pack_tnt /* || gamemission == pack_plut */ )
+    {
+        for (int i = 0; i < arrlen(fullbright_finaldoom); i++)
+        {
+            const fullbright_t *fullbright = &fullbright_finaldoom[i];
+
+            if (!strncasecmp(fullbright->texture, texname, 8))
+            {
+                return fullbright->colormask;
+            }
+        }
+    }
+
     return nobrightmap;
 }
 
@@ -556,6 +575,9 @@ const byte *R_BrightmapForSprite (const int type)
         {
             // Armor Bonus
             case SPR_BON2:
+            {
+                return greenonly1;
+            }
             // Cell Charge
             case SPR_CELL:
             {
