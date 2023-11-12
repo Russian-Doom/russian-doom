@@ -237,7 +237,7 @@ static const byte iron_lich_2[256] =
     0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-const byte *dc_brightmap = nobrightmap;
+const byte* dc_brightmap = nobrightmap;
 
 /*
 ================================================================================
@@ -249,8 +249,8 @@ const byte *dc_brightmap = nobrightmap;
 
 typedef struct
 {
-    const char *const texture;
-    const byte *colormask;
+    const char* const texture;
+    const byte* colormask;
 } fullbright_t;
 
 static const fullbright_t fullbright_walls[] = {
@@ -263,20 +263,20 @@ static const fullbright_t fullbright_walls[] = {
     {"SW2OFF",   surfaces},
 };
 
-const byte *R_BrightmapForTexName (const char *texname)
+const byte* R_BrightmapForTexName(const char* texname)
 {
-    if (vanillaparm)
+    if(vanillaparm)
     {
         return nobrightmap;
     }
 
-    for (int i = 0; i < arrlen(fullbright_walls); i++)
+    for(int i = 0; i < arrlen(fullbright_walls); i++)
     {
-        const fullbright_t *fullbright = &fullbright_walls[i];
+        const fullbright_t* brightmap = &fullbright_walls[i];
 
-        if (!strncasecmp(fullbright->texture, texname, 8))
+        if(!strncasecmp(brightmap->texture, texname, 8))
         {
-            return fullbright->colormask;
+            return brightmap->colormask;
         }
     }
 
@@ -291,11 +291,11 @@ const byte *R_BrightmapForTexName (const char *texname)
 ================================================================================
 */
 
-const byte *R_BrightmapForSprite (const int state)
+const byte* R_BrightmapForSprite(const int state)
 {
-    if (brightmaps && !vanillaparm)
+    if(brightmaps && !vanillaparm)
     {
-        switch (state)
+        switch(state)
         {
             // Enchanted Shield
             case S_ITEM_SHD2_1:
@@ -318,17 +318,11 @@ const byte *R_BrightmapForSprite (const int state)
             case S_WBOW:
             // Phoenix Rod
             case S_WPHX:
-            {
                 return consumables;
-                break;
-            }
 
             // Hell Staff (world)
             case S_WSKL:
-            {
                 return hellstaff_world;
-                break;
-            }
 
             // Flame Orb
             case S_AMP1_1:
@@ -380,20 +374,14 @@ const byte *R_BrightmapForSprite (const int state)
             case S_CLINK_DIE4:
             case S_CLINK_DIE5:
             case S_CLINK_DIE6:
-            {
                 return flame;
-                break;
-            }
 
             // Iron Lich (idle and attack states)
             case S_HEAD_LOOK:
             case S_HEAD_FLOAT:
             case S_HEAD_ATK1:
             case S_HEAD_ATK2:
-            {
                 return iron_lich_1;
-                break;
-            }
 
             // Iron Lich (death states)
             case S_HEAD_DIE1:
@@ -402,10 +390,7 @@ const byte *R_BrightmapForSprite (const int state)
             case S_HEAD_DIE4:
             case S_HEAD_DIE5:
             case S_HEAD_DIE6:
-            {
                 return iron_lich_2;
-                break;
-            }
 
             // Disciple of D'Sparil (attack, pain and death states)
             case S_WIZARD_ATK1:
@@ -448,10 +433,7 @@ const byte *R_BrightmapForSprite (const int state)
             case S_SOR2_DIE7:
             case S_SOR2_DIE8:
             case S_SOR2_DIE9:
-            {
                 return energy;
-                break;
-            }
 
             // Initially unlit objects:
             // Weredragon fireball
@@ -512,23 +494,18 @@ const byte *R_BrightmapForSprite (const int state)
             // Greater Runes:
             case S_AMS2_1:
             case S_AMS2_2:
-            {
                 return fullbright;
-                break;
-            }
+
             // Quiver of Ethereal Arrows
             case S_AMC2_1:
             case S_AMC2_2:
             case S_AMC2_3:
-            {
                 return consumables;
-                break;
-            }
         }
     }
     else
     {
-        switch (state)
+        switch(state)
         {
             // Fire Brazier
             case S_FIREBRAZIER1:
@@ -547,10 +524,7 @@ const byte *R_BrightmapForSprite (const int state)
             case S_WALLTORCH1:
             case S_WALLTORCH2:
             case S_WALLTORCH3:
-            {
                 return fullbright;
-                break;
-            }
         }
     }
 
@@ -567,15 +541,15 @@ const byte *R_BrightmapForSprite (const int state)
 
 static int bmapflatnum[12];
 
-const byte *R_BrightmapForFlatNum (const int num)
+const byte* R_BrightmapForFlatNum(const int num)
 {
-    if (brightmaps && !vanillaparm)
+    if(brightmaps && !vanillaparm)
     {
-        if (num == bmapflatnum[0]
-        ||  num == bmapflatnum[1]
-        ||  num == bmapflatnum[2]
-        ||  num == bmapflatnum[3]
-        ||  num == bmapflatnum[4])
+        if(num == bmapflatnum[0]
+        || num == bmapflatnum[1]
+        || num == bmapflatnum[2]
+        || num == bmapflatnum[3]
+        || num == bmapflatnum[4])
         {
             return surfaces;
         }
@@ -592,11 +566,11 @@ const byte *R_BrightmapForFlatNum (const int num)
 ================================================================================
 */
 
-const byte *R_BrightmapForState (const int state)
+const byte* R_BrightmapForState(const int state)
 {
-    if (brightmaps && !vanillaparm)
+    if(brightmaps && !vanillaparm)
     {
-        switch (state)
+        switch(state)
         {
             // Gauntlets of the Necromancer
             case S_GAUNTLETATK1_3:
@@ -604,10 +578,8 @@ const byte *R_BrightmapForState (const int state)
             case S_GAUNTLETATK1_5:
             case S_GAUNTLETATK1_6:
             case S_GAUNTLETATK1_7:
-            {
                 return consumables;
-                break;
-            }
+
             // Gauntlets of the Necromancer (powered)
             case S_GAUNTLETREADY2_1:
             case S_GAUNTLETREADY2_2:
@@ -619,10 +591,8 @@ const byte *R_BrightmapForState (const int state)
             case S_GAUNTLETATK2_5:
             case S_GAUNTLETATK2_6:
             case S_GAUNTLETATK2_7:
-            {
                 return flame;
-                break;
-            }
+
             // Elven Wand
             case S_GOLDWANDATK1_1:
             case S_GOLDWANDATK1_2:
@@ -632,10 +602,8 @@ const byte *R_BrightmapForState (const int state)
             case S_GOLDWANDATK2_2:
             case S_GOLDWANDATK2_3:
             case S_GOLDWANDATK2_4:
-            {
                 return flame;
-                break;
-            }
+
             // Ethereal Crossbow
             case S_CRBOW1:
             case S_CRBOW2:
@@ -673,10 +641,8 @@ const byte *R_BrightmapForState (const int state)
             case S_CRBOWATK2_6:
             case S_CRBOWATK2_7:
             case S_CRBOWATK2_8:
-            {
                 return ethereal;
-                break;
-            }
+
             // Dragon Claw
             case S_BLASTERATK1_1:
             case S_BLASTERATK1_2:
@@ -690,10 +656,8 @@ const byte *R_BrightmapForState (const int state)
             case S_BLASTERATK2_4:
             case S_BLASTERATK2_5:
             case S_BLASTERATK2_6:
-            {
                 return energy;
-                break;
-            }
+
             // Hell Staff:
             case S_HORNRODATK1_1:
             case S_HORNRODATK1_2:
@@ -707,16 +671,12 @@ const byte *R_BrightmapForState (const int state)
             case S_HORNRODATK2_7:
             case S_HORNRODATK2_8:
             case S_HORNRODATK2_9:
-            {
                 return hellstaff_attack;
-                break;
-            }
+
             // Phoenix Rod (idle)
             case S_PHOENIXREADY:
-            {
                 return consumables;
-                break;
-            }
+
             // Phoenix Rod (attack)
             case S_PHOENIXATK1_1:
             case S_PHOENIXATK1_2:
@@ -727,12 +687,9 @@ const byte *R_BrightmapForState (const int state)
             case S_PHOENIXATK2_2:
             case S_PHOENIXATK2_3:
             case S_PHOENIXATK2_4:
-            {
                 return fullbright;
-                break;
-            }
         }
-	}
+    }
 
     return nobrightmap;
 }
@@ -745,7 +702,7 @@ const byte *R_BrightmapForState (const int state)
 ================================================================================
 */
 
-void R_InitBrightmaps ()
+void R_InitBrightmaps(void)
 {
     // [crispy] only five select brightmapped flats
     bmapflatnum[0] = R_FlatNumForName("FLOOR21");

@@ -392,7 +392,7 @@ static const byte light_sources[256] =
     1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-const byte *dc_brightmap = nobrightmap;
+const byte* dc_brightmap = nobrightmap;
 
 // -----------------------------------------------------------------------------
 // [crispy] brightmaps for textures
@@ -407,9 +407,9 @@ enum
 
 typedef struct
 {
-    const char *const texture;
+    const char* const texture;
     const int game;
-    const byte *colormask;
+    const byte* colormask;
 } fullbright_t;
 
 static const fullbright_t fullbright_walls[] = {
@@ -520,42 +520,44 @@ static const fullbright_t fullbright_finaldoom[] = {
 //  {"SW2SKULL", DOOM2ONLY, redonly},
     // [JN] SIGIL
     {"SIGIL",    DOOM1ONLY, redonly},
-    
 };
 
-const byte *R_BrightmapForTexName (const char *texname)
+const byte* R_BrightmapForTexName(const char* texname)
 {
-    if (vanillaparm)
+    int i;
+    const fullbright_t* brightmap;
+
+    if(vanillaparm)
     {
         return nobrightmap;
     }
 
-    for (int i = 0; i < arrlen(fullbright_walls); i++)
+    for(i = 0; (size_t) i < arrlen(fullbright_walls); i++)
     {
-        const fullbright_t *fullbright = &fullbright_walls[i];
+        brightmap = &fullbright_walls[i];
 
-        if ((gamemission == doom && fullbright->game == DOOM2ONLY)
-        ||  (gamemission != doom && fullbright->game == DOOM1ONLY))
+        if((gamemission == doom && brightmap->game == DOOM2ONLY)
+        || (gamemission != doom && brightmap->game == DOOM1ONLY))
         {
             continue;
         }
 
-        if (!strncasecmp(fullbright->texture, texname, 8))
+        if(!strncasecmp(brightmap->texture, texname, 8))
         {
-            return fullbright->colormask;
+            return brightmap->colormask;
         }
     }
 
     // Final Doom: Plutonia has no exclusive brightmaps
-    if (gamemission == pack_tnt /* || gamemission == pack_plut */ )
+    if(gamemission == pack_tnt /* || gamemission == pack_plut */ )
     {
-        for (int i = 0; i < arrlen(fullbright_finaldoom); i++)
+        for(i = 0; (size_t) i < arrlen(fullbright_finaldoom); i++)
         {
-            const fullbright_t *fullbright = &fullbright_finaldoom[i];
+            brightmap = &fullbright_finaldoom[i];
 
-            if (!strncasecmp(fullbright->texture, texname, 8))
+            if(!strncasecmp(brightmap->texture, texname, 8))
             {
-                return fullbright->colormask;
+                return brightmap->colormask;
             }
         }
     }
@@ -567,55 +569,44 @@ const byte *R_BrightmapForTexName (const char *texname)
 // [crispy] brightmaps for sprites
 // -----------------------------------------------------------------------------
 
-const byte *R_BrightmapForSprite (const int type)
+const byte* R_BrightmapForSprite(const int type)
 {
-    if (brightmaps && !vanillaparm)
+    if(brightmaps && !vanillaparm)
     {
-        switch (type)
+        switch(type)
         {
             // Armor Bonus
             case SPR_BON2:
-            {
                 return greenonly1;
-            }
+
             // Cell Charge
             case SPR_CELL:
-            {
                 return greenonly2;
-                break;
-            }
+
             // Barrel
             case SPR_BAR1:
-            {
                 return greenonly3;
-                break;
-            }
+
             // Cell Charge Pack
             case SPR_CELP:
             // Floor Lamp
             case SPR_COLU:
             // Burning Barrel
             case SPR_FCAN:
-            {
                 return yellowonly;
-                break;
-            }
+
             // BFG9000
             case SPR_BFUG:
             // Plasmagun
             case SPR_PLAS:
-            {
                 return redonly;
-                break;
-            }
+
             // Candlestick
             case SPR_CAND:
             // Candelabra
             case SPR_CBRA:
-            {
                 return candle;
-                break;
-            }
+
             // Tall Blue Torch
             case SPR_TBLU:
             // Tall Green Torch
@@ -632,29 +623,22 @@ const byte *R_BrightmapForSprite (const int type)
             case SPR_TLMP:
             // Short Technocolumn
             case SPR_TLP2:
-            {
                 return light_sources;
-                break;
-            }
+
             // Evil Eye
             case SPR_CEYE:
-            {
                 return greenonly1;
-                break;
-            }
+
             // Floating Skull Rock
             case SPR_FSKU:
             // Pile of Skulls and Candles
             case SPR_POL3:
-            {
                 return fullbright;
-                break;
-            }
         }
     }
     else
     {
-        switch (type)
+        switch(type)
         {
             case SPR_FCAN:
             case SPR_CAND:
@@ -670,10 +654,7 @@ const byte *R_BrightmapForSprite (const int type)
             case SPR_SMBT:
             case SPR_SMGT:
             case SPR_SMRT:
-            {
                 return fullbright;
-                break;
-            }
         }
     }
 
@@ -686,14 +667,14 @@ const byte *R_BrightmapForSprite (const int type)
 
 static int bmapflatnum[4];
 
-const byte *R_BrightmapForFlatNum (const int num)
+const byte* R_BrightmapForFlatNum(const int num)
 {
-    if (brightmaps && !vanillaparm)
+    if(brightmaps && !vanillaparm)
     {
-        if (num == bmapflatnum[0]
-        ||  num == bmapflatnum[1]
-        ||  num == bmapflatnum[2]
-        ||  num == bmapflatnum[3])
+        if(num == bmapflatnum[0]
+        || num == bmapflatnum[1]
+        || num == bmapflatnum[2]
+        || num == bmapflatnum[3])
         {
             return notgrayorbrown;
         }
@@ -706,22 +687,19 @@ const byte *R_BrightmapForFlatNum (const int num)
 // [crispy] brightmaps for states
 // -----------------------------------------------------------------------------
 
-const byte *R_BrightmapForState (const int state)
+const byte* R_BrightmapForState(const int state)
 {
-    if (brightmaps && !vanillaparm)
+    if(brightmaps && !vanillaparm)
     {
-        switch (state)
+        switch(state)
         {
             case S_BFG1:
             case S_BFG2:
             case S_BFG3:
             case S_BFG4:
-            {
                 return redonly;
-                break;
-            }
         }
-	}
+    }
 
     return nobrightmap;
 }
@@ -730,7 +708,7 @@ const byte *R_BrightmapForState (const int state)
 // [crispy] initialize brightmaps
 // -----------------------------------------------------------------------------
 
-void R_InitBrightmaps ()
+void R_InitBrightmaps(void)
 {
     // [crispy] only four select brightmapped flats
     bmapflatnum[0] = R_FlatNumForName("CONS1_1");

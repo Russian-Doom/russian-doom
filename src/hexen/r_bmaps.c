@@ -26,8 +26,6 @@
 #include "jn.h"
 
 
-
-
 /*
 ================================================================================
 =
@@ -238,7 +236,7 @@ static const byte blueonly[256] =
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-const byte *dc_brightmap = nobrightmap;
+const byte* dc_brightmap = nobrightmap;
 
 /*
 ================================================================================
@@ -250,8 +248,8 @@ const byte *dc_brightmap = nobrightmap;
 
 typedef struct
 {
-    const char *const texture;
-    const byte *colormask;
+    const char* const texture;
+    const byte* colormask;
 } fullbright_t;
 
 static const fullbright_t fullbright_walls[] = {
@@ -281,20 +279,20 @@ static const fullbright_t fullbright_walls[] = {
 
 };
 
-const byte *R_BrightmapForTexName (const char *texname)
+const byte* R_BrightmapForTexName(const char* texname)
 {
-    if (vanillaparm)
+    if(vanillaparm)
     {
         return nobrightmap;
     }
 
-    for (int i = 0; i < arrlen(fullbright_walls); i++)
+    for(int i = 0; i < arrlen(fullbright_walls); i++)
     {
-        const fullbright_t *fullbright = &fullbright_walls[i];
+        const fullbright_t* brightmap = &fullbright_walls[i];
 
-        if (!strncasecmp(fullbright->texture, texname, 8))
+        if(!strncasecmp(brightmap->texture, texname, 8))
         {
-            return fullbright->colormask;
+            return brightmap->colormask;
         }
     }
 
@@ -309,11 +307,11 @@ const byte *R_BrightmapForTexName (const char *texname)
 ================================================================================
 */
 
-const byte *R_BrightmapForSprite (const int state)
+const byte* R_BrightmapForSprite(const int state)
 {
-    if (brightmaps && !vanillaparm)
+    if(brightmaps && !vanillaparm)
     {
-        switch (state)
+        switch(state)
         {
             // Banishment Device
             case S_ARTI_TELOTHER1:
@@ -379,10 +377,7 @@ const byte *R_BrightmapForSprite (const int state)
             case S_ZBLUE_CANDLE3:
             case S_ZBLUE_CANDLE4:
             case S_ZBLUE_CANDLE5:
-            {
                 return artifacts;
-                break;
-            }
 
             // Blue Mana
             case S_MANA1_1:
@@ -411,10 +406,7 @@ const byte *R_BrightmapForSprite (const int state)
             case S_MANA2_14:
             case S_MANA2_15:
             case S_MANA2_16:
-            {
                 return mana;
-                break;
-            }
 
             // Brazier
             case S_ZBRASSTORCH1:
@@ -438,10 +430,7 @@ const byte *R_BrightmapForSprite (const int state)
             case S_ZCAULDRON5:
             case S_ZCAULDRON6:
             case S_ZCAULDRON7:
-            {
                 return flame1;
-                break;
-            }
 
             // Afrit
             case S_FIRED_LOOK1:
@@ -502,10 +491,7 @@ const byte *R_BrightmapForSprite (const int state)
             case S_ZFIRETHING7:
             case S_ZFIRETHING8:
             case S_ZFIRETHING9:
-            {
                 return flame2;
-                break;
-            }
 
             // Fire Bull
             case S_ZFIREBULL1:
@@ -515,10 +501,7 @@ const byte *R_BrightmapForSprite (const int state)
             case S_ZFIREBULL5:
             case S_ZFIREBULL6:
             case S_ZFIREBULL7:
-            {
                 return firebull;
-                break;
-            }
 
             // Wendigo
             case S_ICEGUY_LOOK:
@@ -559,15 +542,12 @@ const byte *R_BrightmapForSprite (const int state)
             case S_KORAX_CHASEF:
             case S_KORAX_PAIN1:
             case S_KORAX_PAIN2:
-            {
                 return surfaces1;
-                break;
-            }
-        }            
+        }
     }
     else
     {
-        switch (state)
+        switch(state)
         {
             // Boots of Speed
             case S_ARTI_BOOTS1:
@@ -729,10 +709,7 @@ const byte *R_BrightmapForSprite (const int state)
             case S_FIRED_DEATH2:
             case S_FIRED_DEATH3:
             case S_FIRED_DEATH4:
-            {
                 return fullbright;
-                break;
-            }
         }
     }
 
@@ -747,11 +724,11 @@ const byte *R_BrightmapForSprite (const int state)
 ================================================================================
 */
 
-const byte *R_BrightmapForState (const int state)
+const byte* R_BrightmapForState(const int state)
 {
-    if (brightmaps && !vanillaparm)
+    if(brightmaps && !vanillaparm)
     {
-        switch (state)
+        switch(state)
         {
             // Fighter: Axe
             case S_FAXEDOWN_G:
@@ -865,10 +842,7 @@ const byte *R_BrightmapForState (const int state)
             case S_MSTAFFATK_5:
             case S_MSTAFFATK_6:
             case S_MSTAFFATK_7:
-            {
                 return surfaces1;
-                break;
-            }
 
             // Cleric: Serpent Staff
             case S_CSTAFFATK_1:
@@ -876,10 +850,7 @@ const byte *R_BrightmapForState (const int state)
             case S_CSTAFFATK_3:
             case S_CSTAFFATK_4:
             case S_CSTAFFATK2_1:
-            {
                 return greenonly;
-                break;
-            }
 
             // Mage: Frost
             case S_CONEATK1_2: 
@@ -927,15 +898,12 @@ const byte *R_BrightmapForState (const int state)
             case S_MLIGHTNINGATK_9:
             case S_MLIGHTNINGATK_10:
             case S_MLIGHTNINGATK_11:
-            {
                 return blueonly;
-                break;
-            }
         }
-	}
+    }
     else
     {
-        switch (state)
+        switch(state)
         {
             // Fighter: Sword
             case S_FSWORDDOWN:
@@ -1002,10 +970,7 @@ const byte *R_BrightmapForState (const int state)
             case S_MLIGHTNINGATK_9:
             case S_MLIGHTNINGATK_10:
             case S_MLIGHTNINGATK_11:
-            {
                 return fullbright;
-                break;
-            }
         }
     }
 
