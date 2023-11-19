@@ -1,10 +1,11 @@
 name: Update Wiki
 
 on:
-  push:
-    branches: ["master"]
-    paths: ["src/m_argv.c", "man/docgen.py", ".github/wiki_templates/*", ".github/workflows/update-wiki.yml"]
   workflow_dispatch:
+
+#  push:
+#    branches: ["master"]
+#    paths: ["src/m_argv.c", "man/docgen.py", ".github/wiki_templates/*", ".github/workflows/update-wiki.yml"]
 
 jobs:
   Update-Wiki:
