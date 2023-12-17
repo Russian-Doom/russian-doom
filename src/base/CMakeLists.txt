@@ -11,6 +11,7 @@ if(RD_COMPILE_DOOM)
         doom-mlevels.wad
         doom-nerve.wad
         doom-sigil.wad
+        doom-sigil2.wad
         doom-skies-doom1.wad
         doom-skies-doom2.wad
         doom-skies-plutonia.wad

@@ -1439,6 +1439,12 @@ static const int e5pars[10] =
     0, 90, 150, 360, 420, 780, 420, 780, 300, 660
 };
 
+// [Dasperal] Sigil 2 par times
+static const int e6pars[10] =
+{
+    0, 480, 300, 240, 420, 510, 840, 960, 390, 450
+};
+
 // [JN] Press Beta Par Times
 static const int bpars[4][10] =
 { 
@@ -1633,24 +1639,23 @@ void G_DoCompleted (void)
             switch (gameepisode) 
             { 
                 case 1:
-                wminfo.next = 3;
-                break;
-
+                    wminfo.next = 3;
+                    break;
                 case 2:
-                wminfo.next = 5;
-                break;
-
+                    wminfo.next = 5;
+                    break;
                 case 3:
-                wminfo.next = 6;
-                break;
-
+                    wminfo.next = 6;
+                    break;
                 case 4:
-                wminfo.next = 2;
-                break;
-
+                    wminfo.next = 2;
+                    break;
                 case 5: // [crispy] Sigil
-                wminfo.next = 6; 
-                break; 
+                    wminfo.next = 6;
+                    break;
+                case 6: // [Dasperal] Sigil 2
+                    wminfo.next = 3;
+                    break;
             }                
         }
 
@@ -1703,6 +1708,11 @@ void G_DoCompleted (void)
     {
         // [JN] Sigil
         wminfo.partime = TICRATE*e5pars[gamemap];
+    }
+    else if (gameepisode == 6)
+    {
+        // [Dasperal] Sigil 2
+        wminfo.partime = TICRATE*e6pars[gamemap];
     }
     else
     {
@@ -2193,23 +2203,29 @@ G_InitNew
     if (skill > sk_ultranm)
     skill = sk_ultranm;
 
-    if (gameversion >= exe_ultimate)
+    if(gameversion >= exe_ultimate)
     {
-        if (episode == 0)
-        {
+        if(episode == 0)
             episode = 4;
-        }
+        if(episode > 6)
+            episode = 6;
+        if(episode == 6 && !sgl2_loaded)
+            episode = 5;
+        if(episode == 5 && !sgl_loaded)
+            episode = 4;
     }
     else
     {
-        if (episode < 1)
-        {
+        if(episode < 1)
             episode = 1;
-        }
-        if ((episode > 3 && !sgl_loaded) || (episode == 4 && sgl_loaded))
-        {
+        if(episode == 4)
             episode = 3;
-        }
+        if(episode > 6)
+            episode = 6;
+        if(episode == 6 && !sgl2_loaded)
+            episode = 5;
+        if(episode == 5 && !sgl_loaded)
+            episode = 3;
     }
 
     if (episode > 1 && gamemode == shareware)
@@ -2335,6 +2351,14 @@ G_InitNew
             case 5: // [crispy] Sigil
             skytexturename = "SKY5_ZD";
             if (R_CheckTextureNumForName(DEH_String(skytexturename)) == -1)
+            {
+                skytexturename = "SKY3";
+            }
+            break;
+
+            case 6: // [Dasperal] Sigil 2
+            skytexturename = "SKY6_ZD";
+            if(R_CheckTextureNumForName(DEH_String(skytexturename)) == -1)
             {
                 skytexturename = "SKY3";
             }

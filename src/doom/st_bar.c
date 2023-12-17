@@ -95,7 +95,7 @@
 #define ST_MSGWIDTH 52
 
 
-extern boolean sgl_loaded;
+extern boolean sgl_loaded, sgl2_loaded;
 extern boolean old_godface;  // [JN] If false, we can use an extra GOD faces.
 
 // [JN] Pointer to a function for using different status bars.
@@ -515,9 +515,19 @@ const boolean ST_Responder (const event_t *ev)
                 {
                     musnum = mus_e1m1 + (buf[0]-'1')*9 + (buf[1]-'1');
 
-                    // [crispy] prevent crash with IDMUS0x or IDMUSx0
                     // [JN] Sigil: allow to choose E5MX music, otherwise don't allow to choose E4MX music.
-                    if ((((buf[0]-'1')*9 + buf[1]-'1') > (sgl_loaded ? 41 : 21) || buf[0] < '1' || buf[1] < '1'))
+                    boolean invalid_map = false;
+                    if(gamemode != retail && musnum >= mus_e4m1 && musnum <= mus_e4m9)
+                        invalid_map = true;
+                    if(!sgl_loaded && musnum >= mus_e5m1 && musnum <= mus_e5m9)
+                        invalid_map = true;
+                    if(!sgl2_loaded && musnum >= mus_e6m1 && musnum <= mus_e6m9)
+                        invalid_map = true;
+                    if(musnum >= NUMMUSIC)
+                        invalid_map = true;
+
+                    // [crispy] prevent crash with IDMUS0x or IDMUSx0
+                    if(invalid_map || buf[0] < '1' || buf[1] < '1')
                     {
                         P_SetMessage(plyr, DEH_String(ststr_nomus), msg_system, false);
                     }
@@ -662,8 +672,11 @@ const boolean ST_Responder (const event_t *ev)
                 if (epsd > 4)
                 {
                     // [crispy] Sigil
-                    if (!(sgl_loaded && epsd == 5))
-                    return false;
+                    if(epsd == 5 && !sgl_loaded)
+                        return false;
+                    // [Dasperal] Sigil 2
+                    if(epsd == 6 && !sgl2_loaded)
+                        return false;
                 }
                 if (epsd == 4 && gameversion < exe_ultimate)
                 {

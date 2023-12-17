@@ -586,7 +586,8 @@ static MenuItem_t EpisodeItems [] = {
     I_EFUNC("tM_EPI2", "gRD_EPI2", M_Episode, 1),
     I_EFUNC("iM_EPI3", "bRD_EPI3", M_Episode, 2),
     I_EFUNC("tM_EPI4", "nRD_EPI4", M_Episode, 3),
-    I_EFUNC("sM_EPI5", "cRD_EPI5", M_Episode, 4) // [crispy] Sigil
+    I_EFUNC("sM_EPI5", "cRD_EPI5", M_Episode, 4), // [crispy] Sigil
+    I_EFUNC("sM_EPI6", "cRD_EPI6", M_Episode, 5)  // [Dasperal] Sigil 2
 };
 
 MENU_DYNAMIC(EpisodeMenu,
@@ -5912,24 +5913,36 @@ static void M_RD_Change_Selective_Skill(Direction_t direction)
 
 static void M_RD_Change_Selective_Episode(Direction_t direction)
 {
-    int epiWas;
-
     // [JN] Shareware have only 1 episode,
     // Doom 2 doest not have episodes at all.
     if (gamemode == shareware || gamemode == commercial)
         return;
 
-    epiWas = selective_episode;
-    RD_Menu_SlideInt(&selective_episode, 1,
-                     (gamemode == pressbeta || (gamemode == registered && !sgl_loaded) ? 3 :
-                     (gamemode == retail && sgl_loaded) ? 5 : 4), direction);
-    // [Dasperal] Skip 4 episode for Registered with Sigil
-    if(gamemode == registered && sgl_loaded && selective_episode == 4)
+    int episode_count = 3;
+
+    if(gamemode == retail)
+        episode_count = 4;
+    if(sgl_loaded)
+        episode_count = 5;
+    if(sgl2_loaded)
+        episode_count = 6;
+
+    RD_Menu_SlideInt(&selective_episode, 1, episode_count, direction);
+
+    // [Dasperal] Skip not loaded episodes for if Sigil or Sigil II is loaded
+    if(direction == LEFT_DIR)
     {
-        if(epiWas == 5)
+        if(selective_episode == 5 && !sgl_loaded)
+            selective_episode = 4;
+        if(selective_episode == 4 && gamemode != retail)
             selective_episode = 3;
-        else
+    }
+    else // direction == RIGHT_DIR
+    {
+        if(selective_episode == 4 && gamemode != retail)
             selective_episode = 5;
+        if(selective_episode == 5 && !sgl_loaded)
+            selective_episode = 6;
     }
 }
 
@@ -7092,6 +7105,10 @@ static void M_InitEpisode(struct Menu_s* const menu)
     // [crispy] & [JN] & [Dasperal] Sigil
     if(!sgl_loaded)
         menu->items[4].status = HIDDEN;
+
+    // [Dasperal] Sigil 2
+    if(!sgl2_loaded)
+        menu->items[5].status = HIDDEN;
 }
 
 static void M_DrawEpisode()
@@ -7384,12 +7401,13 @@ static int G_ReloadLevel(void)
 
 static int G_GotoNextLevel(void)
 {
-    byte doom_next[5][9] = {
+    byte doom_next[6][9] = {
     {12, 13, 19, 15, 16, 17, 18, 21, 14},
     {22, 23, 24, 25, 29, 27, 28, 31, 26},
     {32, 33, 34, 35, 36, 39, 38, 41, 37},
-    {42, 49, 44, 45, 46, 47, 48, 51, 43},
-    {52, 53, 54, 55, 56, 59, 58, 11, 57},
+    {42, 49, 44, 45, 46, 47, 48, 51, 43}, // Ultimate
+    {52, 53, 54, 55, 56, 59, 58, 61, 57}, // Sigil
+    {62, 63, 69, 65, 66, 67, 68, 11, 64}, // Sigil II
     };
 
     byte doom2_next[33] = {
@@ -7453,6 +7471,11 @@ static int G_GotoNextLevel(void)
         if (!sgl_loaded)
         {
             doom_next[3][7] = 11;
+        }
+
+        if (!sgl2_loaded)
+        {
+            doom_next[4][7] = 11;
         }
 
         if (gamemode == pressbeta)

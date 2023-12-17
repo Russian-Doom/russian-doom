@@ -360,7 +360,7 @@ void S_Start (void)
             mus_e1m6,   // e4m9
         };
 
-        if (gameepisode < 4 || gameepisode == 5) // [crispy] Sigil 
+        if (gameepisode < 4 || gameepisode == 5 || gameepisode == 6) // [crispy] Sigil and Sigil 2
         {
             mnum = mus_e1m1 + (gameepisode-1)*9 + gamemap-1;
         }

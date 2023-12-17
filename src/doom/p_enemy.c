@@ -29,6 +29,7 @@
 #include "g_game.h"
 #include "doomstat.h"
 #include "jn.h"
+#include "d_main.h"
 
 
 #define	SKULLSPEED  (20*FRACUNIT)
@@ -1983,9 +1984,13 @@ static boolean CheckBossEnd (mobjtype_t motype)
             return (gamemap == 6 && motype == MT_CYBORG)
                 || (gamemap == 8 && motype == MT_SPIDER);
 
-            // [crispy] Sigil
+            // [crispy] no trigger for Sigil
             case 5:
-            return false; 
+            return (gamemap == 8 && !sgl_loaded);
+
+            // [crispy] no trigger for Sigil II
+            case 6:
+            return (gamemap == 8 && !sgl2_loaded);
 
             default:
             return gamemap == 8;

@@ -317,6 +317,8 @@ boolean oldest_version = false;
 // [JN] Loaded SIGIL PWAD
 boolean sgl_loaded;
 boolean sgl_compat_loaded;
+// Loaded SIGIL 2 PWAD
+boolean sgl2_loaded;
 // [JN] Loaded Master-Level PWAD
 boolean mlvls_loaded;
 // [JN] MAP33 "Betray" available?
@@ -1667,6 +1669,18 @@ void D_RD_LoadSigilAssets (boolean compat)
     }
 }
 
+void D_RD_LoadSigil2Assets(void)
+{
+    char* internalWadName = RD_M_FindInternalResource("doom-sigil2.wad");
+    W_MergeFile(internalWadName);
+    free(internalWadName);
+    gamedescription_eng = "SIGIL II";
+    gamedescription_rus = "СИГИЛ II";
+
+    sgl2_loaded = true;
+    DEH_AddStringReplacement("RD_EPI6", "RD_SGEP6");
+}
+
 //
 // [JN] Load assets for No Rest for the Living (NERVE.WAD)
 //
@@ -1918,6 +1932,11 @@ void LoadFile(char* filePath, boolean autoload)
             M_StrCaseStr(fileName, "sigil_compat_v1_21.wad"))
     {
         D_RD_LoadSigilAssets(true);
+    }
+    // [Dasperal] Support for SIGIL 2
+    else if(M_StrCaseStr(fileName, "sigil_ii_v1_0.wad"))
+    {
+        D_RD_LoadSigil2Assets();
     }
 
     if(autoload && M_StrCaseStr(fileName, ".wad"))

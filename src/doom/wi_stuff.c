@@ -1769,7 +1769,7 @@ static void WI_drawStats (void)
 
     WI_drawTime((origwidth/2 - SP_TIMEX)+wide_delta, SP_TIMEY, cnt_time, true);
 
-    if (wbs->epsd < 4+1) // [JN] Sigil: extra episode
+    if (wbs->epsd < 4+1+1) // [JN] Sigil + Sigil 2: extra episodes
     {
         V_DrawShadowedPatchDoom(origwidth/2 + SP_TIMEX, SP_TIMEY, 
                                 english_language ? par : par_rus);
@@ -2124,6 +2124,10 @@ static void WI_loadUnloadData (load_callback_t callback)
     {
         M_StringCopy(name, DEH_String("SIGILINT"), sizeof(name));
     }
+    else if (sgl2_loaded && wbs->epsd == 5 && W_CheckNumForName(DEH_String("SIGILIN2")) != -1) // [Dasperal] Sigil 2
+    {
+        M_StringCopy(name, DEH_String("SIGILIN2"), sizeof(name));
+    }
     else
     {
         DEH_snprintf(name, sizeof(name), "WIMAP%d", wbs->epsd);
@@ -2271,7 +2275,7 @@ static void WI_initVariables (wbstartstruct_t *wbstartstruct)
     if (!wbs->maxsecret)
     wbs->maxsecret = 1;
 
-    if (gamemode != retail && (!sgl_loaded || wbs->epsd == 3))
+    if(gamemode != retail && (!(sgl_loaded || sgl2_loaded) || wbs->epsd == 3))
         if (wbs->epsd > 2)
             wbs->epsd -= 3;
 }

@@ -44,6 +44,6 @@ void D_StartTitle (void);
 
 extern gameaction_t gameaction;
 extern boolean oldest_version;
-extern boolean sgl_loaded, sgl_compat_loaded, mlvls_loaded, havemap33;
+extern boolean sgl_loaded, sgl_compat_loaded, sgl2_loaded, mlvls_loaded, havemap33;
 
 extern void EnableLoadingDisk (void);

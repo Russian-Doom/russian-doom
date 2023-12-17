@@ -436,6 +436,7 @@ extern patch_t *stysslsh;
 #define HUSTR_E4M7  "E4M7: And Hell Followed"
 #define HUSTR_E4M8  "E4M8: Unto The Cruel"
 #define HUSTR_E4M9  "E4M9: Fear"
+// [JN] Sigil
 #define HUSTR_E5M1	"E5M1: Baphomet's Demesne"
 #define HUSTR_E5M2	"E5M2: Sheol"
 #define HUSTR_E5M3	"E5M3: Cages of the Damned"
@@ -445,6 +446,16 @@ extern patch_t *stysslsh;
 #define HUSTR_E5M7	"E5M7: Nightmare Underworld"
 #define HUSTR_E5M8	"E5M8: Halls of Perdition"
 #define HUSTR_E5M9	"E5M9: Realm of Iblis"
+// [Dasperal] Sigil 2
+#define HUSTR_E6M1	"E6M1: Cursed Darkness"
+#define HUSTR_E6M2	"E6M2: Violent Hatred"
+#define HUSTR_E6M3	"E6M3: Twilight Desolution"
+#define HUSTR_E6M4	"E6M4: Fragments of Sanity"
+#define HUSTR_E6M5	"E6M5: Wrathful Reckoning"
+#define HUSTR_E6M6	"E6M6: Vengeance Unleashed"
+#define HUSTR_E6M7	"E6M7: Descent Into Terror"
+#define HUSTR_E6M8	"E6M8: Abyss of Despair"
+#define HUSTR_E6M9	"E6M9: Shattered Homecoming"
 
 
 //
@@ -759,6 +770,16 @@ extern patch_t *stysslsh;
 "\n"\
 "\n"\
 "Lock and load. Rip and tear."
+
+#define E6TEXT \
+"Satan erred in casting you to Hell's\n" \
+"darker depths. His plan failed. He has\n" \
+"tried for so long to destroy you, and he\n" \
+"has lost every single time. His only\n" \
+"option is to flood Earth with demons\n" \
+"and hope you go down fighting.\n" \
+"\n" \
+"Prepare for HELLION!\n"
 
 // after level 6, put this:
 
@@ -1324,6 +1345,7 @@ extern patch_t *stysslsh;
 #define HUSTR_E4M7_RUS  "t4v7: b gjcktljdfk fl"                     // E4M7: И последовал Ад
 #define HUSTR_E4M8_RUS  "t4v8: lj ,tccthltxbz"                      // E4M8: До бессердечия
 #define HUSTR_E4M9_RUS  "t4v9: cnhf["                               // E4M9: Страх
+// [JN] Sigil
 #define HUSTR_E5M1_RUS  "t5v1: dkfltybz ,fajvtnf"                   // E5M1: Владения Бафомета
 #define HUSTR_E5M2_RUS  "t5v2: itjk"                                // E5M2: Шеол
 #define HUSTR_E5M3_RUS  "t5v3: rktnb ghjrkzns["                     // E5M3: Клети проклятых
@@ -1333,6 +1355,16 @@ extern patch_t *stysslsh;
 #define HUSTR_E5M7_RUS  "t5v7: j,bntkm rjivfhf"                     // E5M7: Обитель кошмара
 #define HUSTR_E5M8_RUS  "t5v8: pfks gjub,tkb"                       // E5M8: Залы погибели
 #define HUSTR_E5M9_RUS  "t5v9: wfhcndj b,kbcf"                      // E5M9: Царство Иблиса
+// [Dasperal] Sigil 2
+#define HUSTR_E6M1_RUS	"t6v1: rkznfz ntvtym"                       // E6M1: Клятая темень
+#define HUSTR_E6M2_RUS	"t6v2: ;tcnjrfz ytyfdbcnm"                  // E6M2: Жестокая ненависть
+#define HUSTR_E6M3_RUS	"t6v3: gjuhfybxyjt hfccnhjqcndj"            // E6M3: Пограничное расстройство
+#define HUSTR_E6M4_RUS	"t6v4: jcrjkrb hfpevf"                      // E6M4: Осколки разума
+#define HUSTR_E6M5_RUS	"t6v5: uhjpyjt djplfzybt"                   // E6M5: Грозное воздаяние
+#define HUSTR_E6M6_RUS	"t6v6: ckflrfz vtcnm"                       // E6M6: Сладкая месть
+#define HUSTR_E6M7_RUS	"t6v7: gjuhe;tybt d e;fc"                   // E6M7: Погружение в ужас
+#define HUSTR_E6M8_RUS	"t6v8: ,tplyf jnxfzybz"                     // E6M8: Бездна отчаяния
+#define HUSTR_E6M9_RUS	"t6v9: crdthyfz gj,sdrf"                    // E6M9: Скверная побывка
 
 
 //
@@ -1693,6 +1725,25 @@ extern patch_t *stysslsh;
 // на Землю.
 //
 // Никогда не сдавайтесь. Рвите и мечите!
+
+#define E6TEXT_RUS \
+"cfnfyf jib,cz< jnghfdbd nt,z d \n" \
+"xthnjub flf> tuj pfvsctk ghjdfkbkcz>\n" \
+"jy ljkuj gsnfkcz bpybxnj;bnm nt,z< b\n" \
+"dczrbq hfp ghjbuhsdfk> tlbycndtyysq\n" \
+"tuj bp,jh - yfdjlybnm ptvk. ytxbcnm.\n" \
+"b yfltznmcz< xnj ds gfltnt d ,j.>\n" \
+"\n" \
+"ghbujnjdmntcm r [tkkbjye!\n"
+
+// Сатана ошибся, отправив тебя в
+// чертоги Ада. Его замысел провалился.
+// Он долго пытался изничтожить тебя, и
+// всякий раз проигрывал. Единственный
+// его избор - наводнить Землю нечистью
+// и надеяться, что вы падёте в бою.
+//
+// Приготовьтесь к Хеллиону!
 
 // after level 6, put this:
 
