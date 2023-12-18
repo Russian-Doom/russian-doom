@@ -1761,10 +1761,10 @@ void G_DoSelectiveGame(int option)
     p->backpack = selective_backpack;
     if (selective_backpack)
     {
-        p->maxammo[0] *= 2;
-        p->maxammo[1] *= 2;
-        p->maxammo[2] *= 2;
-        p->maxammo[3] *= 2;
+        for (i = 0; i < NUMAMMO; i++)
+        {
+            p->maxammo[i] *= 2;
+        }
     }
 
     // Ammo.
