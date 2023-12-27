@@ -1921,6 +1921,8 @@ void LoadFile(char* filePath, boolean autoload)
     }
     // [JN] Support for SIGIL (main version)
     else if(M_StrCaseStr(fileName, "sigil.wad") ||
+            M_StrCaseStr(fileName, "sigil_v1_0.wad") ||
+            M_StrCaseStr(fileName, "sigil_v1_1.wad") ||
             M_StrCaseStr(fileName, "sigil_v1_2.wad") ||
             M_StrCaseStr(fileName, "sigil_v1_21.wad"))
     {
@@ -1928,13 +1930,16 @@ void LoadFile(char* filePath, boolean autoload)
     }
     // [JN] Support for SIGIL (compat version)
     else if(M_StrCaseStr(fileName, "sigil_compat.wad") ||
+            M_StrCaseStr(fileName, "sigil_compat_v1_0.wad") ||
+            M_StrCaseStr(fileName, "sigil_compat_v1_1.wad") ||
             M_StrCaseStr(fileName, "sigil_compat_v1_2.wad") ||
             M_StrCaseStr(fileName, "sigil_compat_v1_21.wad"))
     {
         D_RD_LoadSigilAssets(true);
     }
     // [Dasperal] Support for SIGIL 2
-    else if(M_StrCaseStr(fileName, "sigil_ii_v1_0.wad"))
+    else if(M_StrCaseStr(fileName, "sigil2.wad") ||
+            M_StrCaseStr(fileName, "sigil_ii_v1_0.wad"))
     {
         D_RD_LoadSigil2Assets();
     }
