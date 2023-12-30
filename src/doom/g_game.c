@@ -197,7 +197,10 @@ static char     savedescription[32];
 mobj_t*         bodyque[BODYQUESIZE]; 
 int             bodyqueslot; 
 
- 
+
+// [crispy] make sure "fast" parameters are really only applied once
+static boolean fast_applied;
+
 int G_CmdChecksum (ticcmd_t* cmd) 
 { 
     size_t  i;
@@ -2041,8 +2044,6 @@ void G_DoSelectiveGame (int choice)
 {
     int i;
     player_t *plr = &players[consoleplayer];
-    // [crispy] make sure "fast" parameters are really only applied once
-    static boolean fast_applied;
 
     demoplayback = false; 
     netdemo = false;
@@ -2151,8 +2152,6 @@ G_InitNew
 {
     char    *skytexturename;
     int     i;
-    // [crispy] make sure "fast" parameters are really only applied once
-    static boolean fast_applied;
 
     if (paused)
     {
