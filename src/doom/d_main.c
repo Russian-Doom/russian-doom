@@ -2318,18 +2318,23 @@ void D_SetGameDescription(void)
     // [crispy] load DEHACKED lumps by default, but allow overriding
     // [JN] Функция активируется после параметра "-file"
 
-    if (!M_ParmExists("-nodehlump") && !M_ParmExists("-nodeh"))
+    if(!M_ParmExists("-nodehlump") && !M_ParmExists("-nodeh"))
     {
-        int i, loaded = 0;
+        int i, loaded = 0, found = 0;
 
-        for (i = numiwadlumps; i < numlumps; ++i)
+        for(i = numiwadlumps; i < numlumps; ++i)
         {
-            // [JN] Sigil: do not load DEHACKED for 5th episode version,
-            // to keep proper episode 3 level names and gfx.
-            if (!strncmp(lumpinfo[i]->name, "DEHACKED", 8) && !sgl_loaded)
+            if(!strncmp(lumpinfo[i]->name, "DEHACKED", 8))
             {
-                DEH_LoadLump(i, true, true); // [crispy] allow long, allow error
-                loaded++;
+                found ++;
+                // [JN] Sigil: do not load DEHACKED for 5th episode version,
+                // to keep proper episode 3 level names and gfx.
+                // [Dasperal] Sigil + Sigil II: Skip first 2 DEHACKED lumps
+                if(!sgl_loaded || (sgl2_loaded && found > 2))
+                {
+                    DEH_LoadLump(i, true, true); // [crispy] allow long, allow error
+                    loaded++;
+                }
             }
         }
         printf(english_language ?
