@@ -2009,7 +2009,7 @@ void WritePNGfile(char *filename)
 void V_ScreenShot (const char *format)
 {
     int i;
-    char lbmname[32]; // haleyjd 20110213: BUG FIX - 12 is too small!
+    char lbmname[44] = "screenshots/"; // haleyjd 20110213: BUG FIX - 12 is too small!
     char *ext;        // [JN] lbmname extended from 16 to 32
     
     // find a file name to save it to
@@ -2025,7 +2025,7 @@ void V_ScreenShot (const char *format)
 
     for (i=0; i<=9999; i++) // [crispy] increase screenshot filename limit
     {
-        M_snprintf(lbmname, sizeof(lbmname), format, i, ext);
+        M_snprintf(lbmname + 12, sizeof(lbmname), format, i, ext);
 
         if (!M_FileExists(lbmname))
         {
@@ -2048,6 +2048,8 @@ void V_ScreenShot (const char *format)
                             "V_ScreenShot: ошибка сохранения PCX скриншота");
         }
     }
+
+    M_MakeDirectory("screenshots");
 
     if(png_screenshots)
     {
