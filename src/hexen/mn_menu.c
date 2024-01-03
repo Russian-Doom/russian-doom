@@ -4812,7 +4812,7 @@ static void DrawGameplay3Menu(void)
                               flip_levels ? CR_GREEN : CR_RED);
 
         // Проигрывать демозаписи
-        RD_M_DrawTextSmallRUS(no_internal_demos ? "DRK" : "DSRK", 211 + wide_delta, 62,
+        RD_M_DrawTextSmallRUS(no_internal_demos ? "DSRK" : "DRK", 211 + wide_delta, 62,
                               no_internal_demos ? CR_RED : CR_GREEN);
 
         // Имитация дыхания игрока
