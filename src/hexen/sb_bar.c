@@ -1936,7 +1936,16 @@ static const int PieceHor[NUMCLASSES][3] = {
     {  0,   0,   0}  // Pig is never used, still.
 };
 
-static const int PieceVert[NUMCLASSES][3] = {
+// positions for vertical widget on X axis
+static const int PieceVert_X[NUMCLASSES][3] = {
+    {617, 617, 617},
+    {617, 617, 617},
+    {616, 617, 617},
+    {  0,   0,   0}  // Oink!
+};
+
+// positions for vertical widget on Y axis
+static const int PieceVert_Y[NUMCLASSES][3] = {
     {300, 325, 338},
     {302, 319, 336},
     {292, 311, 334},
@@ -2000,15 +2009,15 @@ static void DrawAssembledWeaponWidget (const int type)
 
         if (CPlayer->pieces & WPIECE1)
         {
-            V_DrawPatchUnscaled(617 + delta, PieceVert[class][0], patch1, NULL);
+            V_DrawPatchUnscaled(PieceVert_X[class][0] + delta, PieceVert_Y[class][0], patch1, NULL);
         }
         if (CPlayer->pieces & WPIECE2)
         {
-            V_DrawPatchUnscaled(617 + delta, PieceVert[class][1], patch2, NULL);
+            V_DrawPatchUnscaled(PieceVert_X[class][1] + delta, PieceVert_Y[class][1], patch2, NULL);
         }
         if (CPlayer->pieces & WPIECE3)
         {
-            V_DrawPatchUnscaled(617 + delta, PieceVert[class][2], patch3, NULL);
+            V_DrawPatchUnscaled(PieceVert_X[class][2] + delta, PieceVert_Y[class][2], patch3, NULL);
         }
     }
 }
