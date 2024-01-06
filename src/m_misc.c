@@ -945,7 +945,7 @@ char* RD_M_FindInternalResource(char* resourceName)
 #elif defined(__APPLE__)
     retVal = M_StringJoin(packageResourcesDir, resourceName, NULL);
 #else // Linux
-    retVal = M_StringJoin(PACKAGE_DATADIR, DIR_SEPARATOR_S, RD_Project_TarName, DIR_SEPARATOR_S, resourceName, NULL);
+    retVal = M_StringJoin(PACKAGE_DATADIR, DIR_SEPARATOR_S, PACKAGE_TARNAME, DIR_SEPARATOR_S, resourceName, NULL);
 #endif
     if(!M_FileExists(retVal))
     {
