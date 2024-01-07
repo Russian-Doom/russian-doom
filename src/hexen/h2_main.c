@@ -223,6 +223,7 @@ int floating_powerups = 1;
 int sbar_colored = 0;
 int sbar_colored_gem = 0;
 int negative_health = 0;
+int show_all_artifacts = 0;
 int show_artifacts_timer = 0;
 int weapon_widget = 0;
 
@@ -392,6 +393,7 @@ void D_BindVariables(void)
     M_BindIntVariable("sbar_colored",           &sbar_colored);
     M_BindIntVariable("sbar_colored_gem",       &sbar_colored_gem);
     M_BindIntVariable("negative_health",        &negative_health);
+    M_BindIntVariable("show_all_artifacts",     &show_all_artifacts);
     M_BindIntVariable("show_artifacts_timer",   &show_artifacts_timer);
     M_BindIntVariable("weapon_widget",          &weapon_widget);
 

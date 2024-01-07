@@ -117,6 +117,7 @@ static int SpinFlylump;
 static int SpinMinotaurLump;
 static int SpinSpeedLump;
 static int SpinDefenseLump;
+static int TorchLump;
 
 static int FontBNumBase;
 
@@ -352,6 +353,7 @@ void SB_Init(void)
     SpinMinotaurLump = W_GetNumForName("SPMINO0");
     SpinSpeedLump = W_GetNumForName("SPBOOT0");
     SpinDefenseLump = W_GetNumForName("SPSHLD0");
+    TorchLump = W_GetNumForName("ARTITRCH");
 
     if (deathmatch)
     {
@@ -1042,6 +1044,34 @@ void SB_Drawer(void)
 
             dp_translation = NULL;
         }
+
+        // [JN] Draw all active artifacts.
+        if(show_all_artifacts)
+        {
+            // Torch Active
+            if(CPlayer->powers[pw_infrared])
+            {
+                xval = CPlayer->powers[pw_infrared] / TICRATE > 99 ? 0 :
+                       CPlayer->powers[pw_infrared] / TICRATE > 9 ? 2 : 4;
+
+                if(show_artifacts_timer == 2)
+                {
+                    dp_translation = cr[CR_GRAY];
+                }
+                if(show_artifacts_timer == 3)
+                {
+                    if(CPlayer->powers[pw_infrared] < FLIGHTTICS / 4)
+                        dp_translation = cr[CR_RED];
+                    else if(CPlayer->powers[pw_infrared] > FLIGHTTICS / 2)
+                        dp_translation = cr[CR_GREEN];
+                }
+
+                DrSmallNumber(CPlayer->powers[pw_infrared] / TICRATE,
+                              (83 - xval) + (wide_4_3 ? wide_delta : 0), 31);
+
+                dp_translation = NULL;
+            }
+        }
     }
 
     SB_PaletteFlash(false);
@@ -1141,6 +1171,22 @@ static void DrawAnimatedIcons(void)
         }
         BorderTopRefresh = true;
         UpdateState |= I_MESSAGES;
+    }
+
+    // [JN] Draw all active artifacts.
+    if(show_all_artifacts && !vanillaparm)
+    {
+        // Torch
+        if(CPlayer->powers[pw_infrared])
+        {
+            if(CPlayer->powers[pw_infrared] > BLINKTHRESHOLD
+            || !(CPlayer->powers[pw_infrared] & 16))
+            {
+                V_DrawPatch(75 + (wide_4_3 ? wide_delta : 0), 1, W_CacheLumpNum(TorchLump, PU_CACHE), NULL);
+            }
+            BorderTopRefresh = true;
+            UpdateState |= I_MESSAGES;
+        }
     }
 
     // [JN] Always update whole status bar.
