@@ -5018,19 +5018,23 @@ static void M_RD_SelectiveMap(Direction_t direction)
 {
     int map;
 
-    switch (direction)
+    switch(direction)
     {
         case LEFT_DIR:
             selective_map--;
             map = P_TranslateMap(selective_map);
             if(map == -1 || P_GetMapCluster(map) != selective_episode)
                 selective_map++;
+            else
+                RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
             break;
         case RIGHT_DIR:
             selective_map++;
             map = P_TranslateMap(selective_map);
             if(map == -1 || P_GetMapCluster(map) != selective_episode)
                 selective_map--;
+            else
+                RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
             break;
         default:
             break;
