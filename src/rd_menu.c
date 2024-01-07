@@ -172,7 +172,7 @@ inline void RD_Menu_SpinInt_Step(int* var, int minValue, int maxValue, int step,
  */
 inline void RD_Menu_SlideInt(int* var, int minValue, int maxValue, Direction_t direction)
 {
-    RD_Menu_SlideInt_Step(var, minValue, maxValue, 1, direction);
+    RD_Menu_SlideInt_Step(var, minValue, maxValue, BK_isKeyPressed(bk_speed) ? 10 : 1, direction);
 }
 
 /**
@@ -182,19 +182,27 @@ inline void RD_Menu_SlideInt(int* var, int minValue, int maxValue, Direction_t d
  */
 inline void RD_Menu_SlideInt_Step(int* var, int minValue, int maxValue, int step, Direction_t direction)
 {
-    switch (direction)
+    switch(direction)
     {
         case LEFT_DIR:
-            if (*var > minValue)
+            if(*var > minValue)
             {
                 (*var) -= step;
+                if(*var < minValue)
+                {
+                    (*var) = minValue;
+                }
                 RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
             }
             break;
         case RIGHT_DIR:
-            if (*var < maxValue)
+            if(*var < maxValue)
             {
                 (*var) += step;
+                if(*var > maxValue)
+                {
+                    (*var) = maxValue;
+                }
                 RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
             }
         default:

@@ -2017,36 +2017,10 @@ static void M_RD_Change_VSync()
 
 static void M_RD_Change_MaxFPS(Direction_t direction)
 {
-    switch (direction)
-    {
-        case LEFT_DIR:
-            max_fps -= BK_isKeyPressed(bk_speed) ? 10 : 1;
-            if (max_fps >= 35)
-            {
-                S_StartSound (NULL, sfx_stnmov);
-            }
-        break;
-        case RIGHT_DIR:
-            max_fps += BK_isKeyPressed(bk_speed) ? 10 : 1;
-            if (max_fps <= 999)
-            {
-                S_StartSound (NULL, sfx_stnmov);
-            }
-        break;
-    }
-
-    // Prevent overflows / incorrect values.
-    if (max_fps < 35)
-    {
-        max_fps = 35;
-    }
-    if (max_fps > 999)
-    {
-        max_fps = 999;
-    }
+    RD_Menu_SlideInt(&max_fps, 35, 999, direction);
 
     // Toggle internal variable for frame interpolation.
-    if (max_fps == 35)
+    if(max_fps == 35)
     {
         uncapped_fps = 0;
     }
