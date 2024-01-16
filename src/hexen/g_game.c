@@ -783,6 +783,23 @@ void G_DoLoadLevel(void)
     }
 }
 
+// TODO:common Heretic Hexen Strife?
+static const int init_inventory_cursor(const int num_of_items, const int selected_item)
+{
+    if(num_of_items < 7 || selected_item < 3)
+    {
+        return selected_item; // cursor on the left side
+    }
+    else if(num_of_items - selected_item <= 3)
+    {
+        return 7 - (num_of_items - selected_item); // cursor on the right side
+    }
+    else
+    {
+        return 3; // cursor in the middle
+    }
+}
+
 /*
 ===============================================================================
 =
@@ -853,48 +870,50 @@ boolean G_Responder(event_t * ev)
         next_weapon = 1;
     }
 
-    if (BK_isKeyDown(ev, bk_inv_left))
+    if(BK_isKeyDown(ev, bk_inv_left))
     {
         inventoryTics = 5 * 35;
-        if (!inventory)
+        if(!inventory)
         {
             inventory = true;
+            curpos = init_inventory_cursor(plr->inventorySlotNum, inv_ptr);
             return false;
         }
         inv_ptr--;
-        if (inv_ptr < 0)
+        if(inv_ptr < 0)
         {
             inv_ptr = 0;
         }
         else
         {
             curpos--;
-            if (curpos < 0)
+            if(curpos < 0)
             {
                 curpos = 0;
             }
         }
         return true;
     }
-    if (BK_isKeyDown(ev, bk_inv_right))
+    if(BK_isKeyDown(ev, bk_inv_right))
     {
         inventoryTics = 5 * 35;
-        if (!inventory)
+        if(!inventory)
         {
             inventory = true;
+            curpos = init_inventory_cursor(plr->inventorySlotNum, inv_ptr);
             return false;
         }
         inv_ptr++;
-        if (inv_ptr >= plr->inventorySlotNum)
+        if(inv_ptr >= plr->inventorySlotNum)
         {
             inv_ptr--;
-            if (inv_ptr < 0)
+            if(inv_ptr < 0)
                 inv_ptr = 0;
         }
         else
         {
             curpos++;
-            if (curpos > 6)
+            if(curpos > 6)
             {
                 curpos = 6;
             }
