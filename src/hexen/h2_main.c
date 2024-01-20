@@ -226,6 +226,7 @@ int negative_health = 0;
 int show_all_artifacts = 0;
 int show_artifacts_timer = 0;
 int weapon_widget = 0;
+int center_inventory_cursor = 1;
 
 // Gameplay: Crosshair
 int crosshair_draw = 0;
@@ -390,12 +391,13 @@ void D_BindVariables(void)
     M_BindIntVariable("floating_powerups",      &floating_powerups);
 
     // Gameplay: Status Bar
-    M_BindIntVariable("sbar_colored",           &sbar_colored);
-    M_BindIntVariable("sbar_colored_gem",       &sbar_colored_gem);
-    M_BindIntVariable("negative_health",        &negative_health);
-    M_BindIntVariable("show_all_artifacts",     &show_all_artifacts);
-    M_BindIntVariable("show_artifacts_timer",   &show_artifacts_timer);
-    M_BindIntVariable("weapon_widget",          &weapon_widget);
+    M_BindIntVariable("sbar_colored",            &sbar_colored);
+    M_BindIntVariable("sbar_colored_gem",        &sbar_colored_gem);
+    M_BindIntVariable("negative_health",         &negative_health);
+    M_BindIntVariable("show_all_artifacts",      &show_all_artifacts);
+    M_BindIntVariable("show_artifacts_timer",    &show_artifacts_timer);
+    M_BindIntVariable("weapon_widget",           &weapon_widget);
+    M_BindIntVariable("center_inventory_cursor", &center_inventory_cursor);
 
     // Gameplay: Gameplay
     M_BindIntVariable("fix_map_errors",         &fix_map_errors);

@@ -902,7 +902,10 @@ boolean G_Responder(event_t * ev)
         if(!inventory)
         {
             inventory = true;
-            curpos = init_inventory_cursor(plr->inventorySlotNum, inv_ptr);
+            if(center_inventory_cursor && !vanillaparm)
+            {
+                curpos = init_inventory_cursor(plr->inventorySlotNum, inv_ptr);
+            }
             return false;
         }
         inv_ptr--;
@@ -926,7 +929,10 @@ boolean G_Responder(event_t * ev)
         if(!inventory)
         {
             inventory = true;
-            curpos = init_inventory_cursor(plr->inventorySlotNum, inv_ptr);
+            if(center_inventory_cursor && !vanillaparm)
+            {
+                curpos = init_inventory_cursor(plr->inventorySlotNum, inv_ptr);
+            }
             return false;
         }
         inv_ptr++;

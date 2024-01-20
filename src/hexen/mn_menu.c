@@ -233,6 +233,7 @@ static void M_RD_NegativeHealth();
 static void M_RD_ShowAllArti();
 static void M_RD_ShowArtiTimer(Direction_t direction);
 static void M_RD_WeaponWidget(Direction_t direction);
+static void M_RD_CenterInventoryCursor();
 static void M_RD_CrossHairDraw();
 static void M_RD_CrossHairShape(Direction_t direction);
 static void M_RD_CrossHairType();
@@ -1291,11 +1292,11 @@ static MenuItem_t Gameplay2Items[] = {
     I_SWITCH("SHOW ACTIVE ARTIFACTS:",      "BYLBRFWBZ FHNTAFRNJD:",           M_RD_ShowAllArti),    // ИНДИКАЦИЯ АРТЕФАЕКТОВ
     I_LRFUNC("ARTIFACTS TIMER:",            "NFQVTH FHNTAFRNJD:",              M_RD_ShowArtiTimer),  // ТАЙМЕР АРТЕФАКТОВ
     I_LRFUNC("ASSEMBLED WEAPON WIDGET:",    "DBL;TN CJ,HFYYJUJ JHE;BZ:",       M_RD_WeaponWidget),   // ВИДЖЕТ СОБРАННОГО ОРУЖИЯ
+    I_SWITCH("CENTER INVENTORY CURSOR:",    "WTYNHBHJDFNM REHCJH BYDTYNFHZ:",  M_RD_CenterInventoryCursor), // ЦЕНТРИРОВАТЬ КУРСОР ИНВЕНТАРЯ
     I_TITLE( "GAMEPLAY",                    "UTQVGKTQ"), // ГЕЙМПЛЕЙ
     I_SWITCH("FIX ERRORS ON VANILLA MAPS:", "ECNHFYZNM JIB,RB JHBU> EHJDYTQ:", M_RD_FixMapErrors),   // УСТРАНЯТЬ ОШИБКИ ОРИГ. УРОВНЕЙ
     I_SWITCH("FLIP GAME LEVELS:",           "PTHRFKMYJT JNHF;TYBT EHJDYTQ:",   M_RD_FlipLevels),     // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
     I_SWITCH("PLAY INTERNAL DEMOS:",        "GHJBUHSDFNM LTVJPFGBCB:",         M_RD_NoDemos),        // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
-    I_SWITCH("IMITATE PLAYER'S BREATHING:", "BVBNFWBZ LS[FYBZ BUHJRF:",        M_RD_Breathing),      // ИМИТАЦИЯ ДЫХАНИЯ ИГРОКА
     I_EMPTY,
     I_SETMENU("LAST PAGE >",  "GJCKTLYZZ CNHFYBWF `", &Gameplay3Menu), // ПОСЛЕДНЯЯ СТРАНИЦА >
     I_SETMENU("< FIRST PAGE", "^ GTHDFZ CNHFYBWF",    &Gameplay1Menu)  // < ПЕРВАЯ СТРАНИЦА
@@ -1316,13 +1317,13 @@ MENU_STATIC_PAGED(Gameplay2Menu,
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Gameplay3Items[] = {
+    I_SWITCH("IMITATE PLAYER'S BREATHING:", "BVBNFWBZ LS[FYBZ BUHJRF:",        M_RD_Breathing),      // ИМИТАЦИЯ ДЫХАНИЯ ИГРОКА
     I_TITLE( "CROSSHAIR",       "GHBWTK"), // ПРИЦЕЛ
     I_SWITCH("DRAW CROSSHAIR:", "JNJ,HF;FNM GHBWTK:",  M_RD_CrossHairDraw),    // ОТОБРАЖАТЬ ПРИЦЕЛ
     I_LRFUNC("SHAPE:",          "AJHVF:",              M_RD_CrossHairShape),   // ФОРМА
     I_SWITCH("INDICATION:",     "BYLBRFWBZ:",          M_RD_CrossHairType),    // ИНДИКАЦИЯ
     I_SWITCH("INCREASED SIZE:", "EDTKBXTYYSQ HFPVTH:", M_RD_CrossHairScale),   // УВЕЛИЧЕННЫЙ РАЗМЕР
     I_LRFUNC("OPACITY:",        "YTGHJPHFXYJCNM:",     M_RD_CrossHairOpacity), // НЕПРОЗРАЧНОСТЬ
-    I_EMPTY,
     I_EMPTY,
     I_EMPTY,
     I_EMPTY,
@@ -4570,25 +4571,25 @@ static void DrawGameplay2Menu(void)
                               214 + wide_delta, 92,
                               weapon_widget ? CR_GREEN : CR_RED);
 
+        // Center inventory cursor
+        RD_M_DrawTextSmallENG(center_inventory_cursor ? "ON" : "OFF", 216 + wide_delta, 102,
+                              center_inventory_cursor ? CR_GREEN : CR_RED);
+
         //
         // GAMEPLAY
         //
 
         // Fix errors of vanilla maps
-        RD_M_DrawTextSmallENG(fix_map_errors ? "ON" : "OFF", 226 + wide_delta, 112,
+        RD_M_DrawTextSmallENG(fix_map_errors ? "ON" : "OFF", 226 + wide_delta, 122,
                               fix_map_errors ? CR_GREEN : CR_RED);
 
         // Flip game levels
-        RD_M_DrawTextSmallENG(flip_levels ? "ON" : "OFF", 153 + wide_delta, 122,
+        RD_M_DrawTextSmallENG(flip_levels ? "ON" : "OFF", 153 + wide_delta, 132,
                               flip_levels ? CR_GREEN : CR_RED);
 
         // Play internal demos
-        RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON", 179 + wide_delta, 132,
+        RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON", 179 + wide_delta, 142,
                               no_internal_demos ? CR_RED : CR_GREEN);
-
-        // Imitate player's breathing
-        RD_M_DrawTextSmallENG(breathing ? "ON" : "OFF", 224 + wide_delta, 142,
-                              breathing ? CR_GREEN : CR_RED);
     }
     else
     {
@@ -4631,25 +4632,25 @@ static void DrawGameplay2Menu(void)
                               229 + wide_delta, 92,
                               weapon_widget ? CR_GREEN : CR_RED);
 
+        // Центрировать курсор инвентаря
+        RD_M_DrawTextSmallRUS(center_inventory_cursor ? "DRK" : "DSRK", 257 + wide_delta, 102,
+                              center_inventory_cursor ? CR_GREEN : CR_RED);
+
         //
         // ГЕЙМПЛЕЙ
         //
 
         // Устранять ошибки оригинальных уровней
-        RD_M_DrawTextSmallRUS(fix_map_errors ? "DRK" : "DSRK", 257 + wide_delta, 112,
+        RD_M_DrawTextSmallRUS(fix_map_errors ? "DRK" : "DSRK", 257 + wide_delta, 122,
                               fix_map_errors ? CR_GREEN : CR_RED);
 
         // Зеркальное отражение уровней
-        RD_M_DrawTextSmallRUS(flip_levels ? "DRK" : "DSRK", 255 + wide_delta, 122,
+        RD_M_DrawTextSmallRUS(flip_levels ? "DRK" : "DSRK", 255 + wide_delta, 132,
                               flip_levels ? CR_GREEN : CR_RED);
 
         // Проигрывать демозаписи
-        RD_M_DrawTextSmallRUS(no_internal_demos ? "DSRK" : "DRK", 211 + wide_delta, 132,
+        RD_M_DrawTextSmallRUS(no_internal_demos ? "DSRK" : "DRK", 211 + wide_delta, 142,
                               no_internal_demos ? CR_RED : CR_GREEN);
-
-        // Имитация дыхания игрока
-        RD_M_DrawTextSmallRUS(breathing ? "DRK": "DSRK", 214 + wide_delta, 142,
-                              breathing ? CR_GREEN : CR_RED);
     }
 }
 
@@ -4681,6 +4682,11 @@ static void M_RD_ShowArtiTimer(Direction_t direction)
 static void M_RD_WeaponWidget(Direction_t direction)
 {
     RD_Menu_SpinInt(&weapon_widget, 0, 2, direction);
+}
+
+static void M_RD_CenterInventoryCursor()
+{
+    center_inventory_cursor ^= 1;
 }
 
 static void M_RD_CrossHairDraw()
@@ -4723,12 +4729,16 @@ static void DrawGameplay3Menu(void)
 
     if (english_language)
     {
+        // Imitate player's breathing
+        RD_M_DrawTextSmallENG(breathing ? "ON" : "OFF", 224 + wide_delta, 32,
+                              breathing ? CR_GREEN : CR_RED);
+
         //
         // CROSSHAIR
         //
 
         // Draw crosshair
-        RD_M_DrawTextSmallENG(crosshair_draw ? "ON" : "OFF", 150 + wide_delta, 42,
+        RD_M_DrawTextSmallENG(crosshair_draw ? "ON" : "OFF", 150 + wide_delta, 52,
                               crosshair_draw ? CR_GREEN : CR_RED);
 
         // Shape
@@ -4738,24 +4748,28 @@ static void DrawGameplay3Menu(void)
                               crosshair_shape == 4 ? "ANGLE" :
                               crosshair_shape == 5 ? "TRIANGLE" :
                               crosshair_shape == 6 ? "DOT" : "CROSS",
-                              84 + wide_delta, 52, CR_GREEN);
+                              84 + wide_delta, 62, CR_GREEN);
 
         // Indication
-        RD_M_DrawTextSmallENG(crosshair_type == 1 ? "HEALTH" : "STATIC",  111 + wide_delta, 62,
+        RD_M_DrawTextSmallENG(crosshair_type == 1 ? "HEALTH" : "STATIC",  111 + wide_delta, 72,
                               crosshair_type ? CR_GREEN : CR_RED);
 
         // Increased size
-        RD_M_DrawTextSmallENG(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 72,
+        RD_M_DrawTextSmallENG(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 82,
                               crosshair_scale ? CR_GREEN : CR_RED);
     }
     else
     {
+        // Имитация дыхания игрока
+        RD_M_DrawTextSmallRUS(breathing ? "DRK": "DSRK", 214 + wide_delta, 32,
+                              breathing ? CR_GREEN : CR_RED);
+
         //
         // ПРИЦЕЛ
         //
 
         // Отображать прицел
-        RD_M_DrawTextSmallRUS(crosshair_draw ? "DRK" : "DSRK", 175 + wide_delta, 42,
+        RD_M_DrawTextSmallRUS(crosshair_draw ? "DRK" : "DSRK", 175 + wide_delta, 52,
                               crosshair_draw ? CR_GREEN : CR_RED);
 
         // Форма
@@ -4766,30 +4780,30 @@ static void DrawGameplay3Menu(void)
                               crosshair_shape == 5 ? "NHTEUJKMYBR" :  // ТРЕУГОЛЬНИК
                               crosshair_shape == 6 ? "NJXRF" :        // ТОЧКА
                               "RHTCN",         // КРЕСТ
-                              87 + wide_delta, 52, CR_GREEN);
+                              87 + wide_delta, 62, CR_GREEN);
 
         // Индикация
         RD_M_DrawTextSmallRUS(crosshair_type == 1 ? "PLJHJDMT" : // ЗДОРОВЬЕ
                               "CNFNBXYFZ", // СТАТИЧНАЯ
-                              111 + wide_delta, 62, crosshair_type ? CR_GREEN : CR_RED);
+                              111 + wide_delta, 72, crosshair_type ? CR_GREEN : CR_RED);
 
         // Увеличенный размер
-        RD_M_DrawTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 72,
+        RD_M_DrawTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 82,
                               crosshair_scale ? CR_GREEN : CR_RED);
     }
 
     // Draw crosshair background.
-    V_DrawPatch(235 + wide_delta, 53, W_CacheLumpName("XHAIRBOX", PU_CACHE), NULL);
+    V_DrawPatch(235 + wide_delta, 63, W_CacheLumpName("XHAIRBOX", PU_CACHE), NULL);
     // Colorize crosshair depending on it's type.
     Crosshair_Colorize_inMenu();
     // Draw crosshair preview.
     if (crosshair_scale)
     {
-        V_DrawPatch(250 + wide_delta, 68, CrosshairPatch, CrosshairOpacity);
+        V_DrawPatch(250 + wide_delta, 78, CrosshairPatch, CrosshairOpacity);
     }
     else
     {
-        V_DrawPatchUnscaled(500 + wide_delta*2, 136, CrosshairPatch, CrosshairOpacity);
+        V_DrawPatchUnscaled(500 + wide_delta*2, 156, CrosshairPatch, CrosshairOpacity);
     }
     // Clear colorization.
     dp_translation = NULL;
@@ -4804,7 +4818,7 @@ static void DrawGameplay3Menu(void)
                           crosshair_opacity == 6 ? "80%" :
                           crosshair_opacity == 7 ? "90%" : "100%",
                           (english_language ? 95 : 149) + wide_delta,
-                          82, CR_GRAY);
+                          92, CR_GRAY);
 }
 
 static void M_RD_FixMapErrors()
@@ -5864,6 +5878,7 @@ void M_RD_BackToDefaults_Recommended (void)
     improved_collision   = 1;
     torque               = 1;
     floating_powerups    = 1;
+    center_inventory_cursor = 1;
     // Gameplay (3)
     sbar_colored         = 0;
     sbar_colored_gem     = 0;
@@ -5980,6 +5995,7 @@ static void M_RD_BackToDefaults_Original(void)
     improved_collision   = 0;
     torque               = 0;
     floating_powerups    = 1;
+    center_inventory_cursor = 0;
     // Gameplay (3)
     sbar_colored         = 0;
     sbar_colored_gem     = 0;

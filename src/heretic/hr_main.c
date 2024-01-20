@@ -189,6 +189,7 @@ int flip_weapons = 0;
 // Gameplay: Status bar
 int ammo_widget = 0;
 int ammo_widget_colored = 1;
+int center_inventory_cursor = 1;
 
 // Gameplay: Physical
 int improved_collision = 1;
@@ -1122,8 +1123,9 @@ void D_BindVariables(void)
     M_BindIntVariable("flip_weapons",           &flip_weapons);
 
     // Gameplay: Status bar
-    M_BindIntVariable("ammo_widget",            &ammo_widget);
-    M_BindIntVariable("ammo_widget_colored",    &ammo_widget_colored);
+    M_BindIntVariable("ammo_widget",             &ammo_widget);
+    M_BindIntVariable("ammo_widget_colored",     &ammo_widget_colored);
+    M_BindIntVariable("center_inventory_cursor", &center_inventory_cursor);
 
     // Gameplay: Physical
     M_BindIntVariable("improved_collision",     &improved_collision);

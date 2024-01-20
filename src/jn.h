@@ -289,6 +289,7 @@ extern int stbar_color_armor_0;
 extern int ammo_widget;
 extern int ammo_widget_colored;
 extern int weapon_widget;
+extern int center_inventory_cursor;
 
 // Gameplay: Audible
 extern int z_axis_sfx;

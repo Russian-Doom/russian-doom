@@ -629,6 +629,7 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(ammo_widget),
     CONFIG_VARIABLE_INT(ammo_widget_colored),
     CONFIG_VARIABLE_INT(weapon_widget),
+    CONFIG_VARIABLE_INT(center_inventory_cursor),
 
     // Gameplay: Audible
     CONFIG_VARIABLE_INT(z_axis_sfx),
