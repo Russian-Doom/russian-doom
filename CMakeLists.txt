@@ -33,7 +33,7 @@ cmake_dependent_option(RD_GIT_FORCE_HASH_SUFFIX "For Devs only! Always append ha
 
 # Package related variables
 set(PACKAGE_TARNAME "russian-doom")
-set(PACKAGE_COPYRIGHT "Copyright \\xA9 2016-2023 Julian Nechaevsky. Copyright \\xA9 2020-2023 Leonid Murin (Dasperal). Licensed under GNU General Public License, version 2")
+set(PACKAGE_COPYRIGHT "Copyright \\xA9 2016-2023 Julian Nechaevsky. Copyright \\xA9 2020-2024 Leonid Murin (Dasperal). Licensed under GNU General Public License, version 2")
 
 # Check target architecture
 if(MSVC)

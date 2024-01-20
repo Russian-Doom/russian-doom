@@ -3,7 +3,7 @@
 // Copyright(C) 2000, 2005-2014 Simon Howard
 // Copyright(C) 2019 Fabian Greffrath
 // Copyright(C) 2021-2023 Julian Nechaevsky
-// Copyright(C) 2021-2023 Leonid Murin (Dasperal)
+// Copyright(C) 2021-2024 Leonid Murin (Dasperal)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
