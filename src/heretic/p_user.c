@@ -973,8 +973,9 @@ void P_PlayerUseArtifact (player_t *player, artitype_t arti)
                     ArtifactFlash = 4;
                 }
             }
-            else
-            {                   // Unable to use artifact, advance pointer
+            else if(skip_unusable_artifact || vanillaparm || !singleplayer)
+            {
+                // Unable to use artifact, advance pointer
                 P_PlayerNextArtifact(player);
             }
             break;
