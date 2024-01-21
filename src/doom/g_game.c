@@ -1410,12 +1410,15 @@ void G_ScreenShot (void)
 
 
 // DOOM Par Times
-static const int pars[4][10] =
+static const int pars[7][10] =
 { 
     {0}, 
-    {0, 30, 75, 120,  90, 165, 180, 180, 30, 165},  // Episode 1
-    {0, 90, 90,  90, 120,  90, 360, 240, 30, 170},  // Episode 2
-    {0, 90, 45,  90, 150,  90,  90, 165, 30, 135}   // Episode 3
+    {0, 30,  75,  120, 90,  165, 180, 180, 30,  165}, // Episode 1
+    {0, 90,  90,  90,  120, 90,  360, 240, 30,  170}, // Episode 2
+    {0, 90,  45,  90,  150, 90,  90,  165, 30,  135}, // Episode 3
+    {0, 165, 255, 135, 150, 180, 390, 135, 360, 180}, // [crispy] Episode 4 par times from the BFG Edition
+    {0, 90,  150, 360, 420, 780, 420, 780, 300, 660}, // [JN] Episode 5 par times from Sigil v1.21
+    {0, 480, 300, 240, 420, 510, 840, 960, 390, 450}  // [Dasperal] Episode 6 par times from Sigil II v1.0
 }; 
 
 // DOOM II Par Times
@@ -1425,24 +1428,6 @@ static const int cpars[32] =
     210, 150, 150, 150, 210, 150, 420, 150, 210, 150,   // 11-20
     240, 150, 180, 150, 150, 300, 330, 420, 300, 180,   // 21-30
     120, 30                                             // 31-32
-};
-
-// [crispy] Episode 4 par times from the BFG Edition
-static const int e4pars[10] =
-{
-    0, 165, 255, 135, 150, 180, 390, 135, 360, 180
-};
-
-// [JN] Sigil par times
-static const int e5pars[10] =
-{
-    0, 90, 150, 360, 420, 780, 420, 780, 300, 660
-};
-
-// [Dasperal] Sigil 2 par times
-static const int e6pars[10] =
-{
-    0, 480, 300, 240, 420, 510, 840, 960, 390, 450
 };
 
 // [JN] Press Beta Par Times
@@ -1639,6 +1624,7 @@ void G_DoCompleted (void)
             switch (gameepisode) 
             { 
                 case 1:
+                case 6: // [Dasperal] Sigil 2
                     wminfo.next = 3;
                     break;
                 case 2:
@@ -1652,9 +1638,6 @@ void G_DoCompleted (void)
                     break;
                 case 5: // [crispy] Sigil
                     wminfo.next = 6;
-                    break;
-                case 6: // [Dasperal] Sigil 2
-                    wminfo.next = 3;
                     break;
             }                
         }
@@ -1690,29 +1673,20 @@ void G_DoCompleted (void)
             wminfo.partime = TICRATE*cpars[gamemap-1];
         }
     }
-    else if (gameepisode < 4)
+    else if(gameepisode < 4
+         || (gameepisode == 4 && singleplayer)
+         || gameepisode == 5
+         || gameepisode == 6)
     {
         // [crispy] support [PARS] sections in BEX files
-        if (bex_pars[gameepisode][gamemap])
+        if(bex_pars[gameepisode][gamemap])
         {
             wminfo.partime = TICRATE*bex_pars[gameepisode][gamemap];
         }
         else
-        wminfo.partime = TICRATE*pars[gameepisode][gamemap];
-    }
-    else if (gameepisode == 4 && singleplayer)
-    {
-        wminfo.partime = TICRATE*e4pars[gamemap];
-    }
-    else if (gameepisode == 5)
-    {
-        // [JN] Sigil
-        wminfo.partime = TICRATE*e5pars[gamemap];
-    }
-    else if (gameepisode == 6)
-    {
-        // [Dasperal] Sigil 2
-        wminfo.partime = TICRATE*e6pars[gamemap];
+        {
+            wminfo.partime = TICRATE * pars[gameepisode][gamemap];
+        }
     }
     else
     {

@@ -1769,7 +1769,10 @@ static void WI_drawStats (void)
 
     WI_drawTime((origwidth/2 - SP_TIMEX)+wide_delta, SP_TIMEY, cnt_time, true);
 
-    if (wbs->epsd < 4+1+1) // [JN] Sigil + Sigil 2: extra episodes
+    if(wbs->epsd < 3
+    || (wbs->epsd == 3 && singleplayer) // [crispy] Episode 4
+    || wbs->epsd == 4  // [crispy] Sigil
+    || wbs->epsd == 5) // [crispy] Sigil 2
     {
         V_DrawShadowedPatchDoom(origwidth/2 + SP_TIMEX, SP_TIMEY, 
                                 english_language ? par : par_rus);
