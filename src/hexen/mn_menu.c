@@ -1399,7 +1399,7 @@ static MenuItem_t Level2Items_F[] = {
     I_SWITCH("BLADE OF QUIETUS:",      "KTPDBT GJCKTLYTUJ LJDJLF:",  M_RD_SelectiveWp_P_2), // ЛЕЗВИЕ ПОСЛЕДНЕГО ДОВОДА
     I_TITLE( "MANA",                   "VFYF"), // МАНА
     I_LRFUNC("BLUE:",                  "CBYZZ:",                     M_RD_SelectiveAmmo_0), // СИНЯЯ
-    I_LRFUNC("GREEN:",                 "PTK~YFZ:",                   M_RD_SelectiveAmmo_1), // ЗЕЛЁНАЯ
+    I_LRFUNC("GREEN:",                 "PTKTYFZ:",                   M_RD_SelectiveAmmo_1), // ЗЕЛЁНАЯ
     I_TITLE( "ARTIFACTS",              "FHNTAFRNS"), // АРТЕФАКТЫ
     I_LRFUNC("QUARTZ FLASK:",          "RDFHWTDSQ AKFRJY:",          M_RD_SelectiveArti_0), // КВАРЦЕВЫЙ ФЛАКОН
     I_LRFUNC("MYSTIC URN:",            "VBCNBXTCRFZ EHYF:",          M_RD_SelectiveArti_1), // МИСТИЧЕСКАЯ УРНА
