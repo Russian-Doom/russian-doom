@@ -151,7 +151,7 @@ jobs:
         if: |
           runner.os == 'Windows' &&
           matrix.config.compiler_name == 'cl'
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
@@ -177,7 +177,7 @@ jobs:
           sudo apt-get install ${{ matrix.config.compiler_name }} gdb ninja-build python3 cmake \
                                libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libsamplerate-dev
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -236,7 +236,7 @@ jobs:
           github.event_name == 'push' &&
           github.ref == 'refs/heads/master' &&
           runner.os == 'Windows'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: russian-doom-${{ steps.configure.outputs.rev_number }}-${{ steps.configure.outputs.sha_short }}-windows-${{ matrix.config.build_suffix }}
           path: ./build/install/
