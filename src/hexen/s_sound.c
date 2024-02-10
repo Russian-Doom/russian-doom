@@ -202,7 +202,7 @@ void S_StartSong(int song, boolean loop)
 
         RegisteredSong = I_RegisterSong(Mus_SndPtr, length);
         // [JN] Set proper music volume.
-        I_SetMusicVolume(snd_MusicVolume);
+        S_SetMusicVolume();
         I_PlaySong(RegisteredSong, loop);
         Mus_Song = song;
 
@@ -1020,8 +1020,13 @@ boolean S_GetSoundPlayingInfo(mobj_t * mobj, int sound_id)
 //
 //==========================================================================
 
+static boolean sound_muted = false;
 void S_SetMusicVolume(void)
 {
+    if(sound_muted)
+    {
+        return;
+    }
     if (cdmusic)
     {
         I_CDMusSetVolume(snd_MusicVolume * 16); // 0-255
@@ -1077,6 +1082,7 @@ void S_MuteSound(void)
     S_StopAllSound();
 
     volume_needs_update = false;
+    sound_muted = true;
 }
 
 // -----------------------------------------------------------------------------
@@ -1091,6 +1097,7 @@ void S_UnMuteSound(void)
     snd_MaxVolume = snd_MaxVolume_tmp;
 
     volume_needs_update = false;
+    sound_muted = false;
 }
 
 //==========================================================================

@@ -817,9 +817,14 @@ void S_SetMaxVolume(boolean fullprocess)
     }
 }
 
-static boolean musicPaused;
+static boolean musicPaused = false;
+static boolean sound_muted = false;
 void S_SetMusicVolume(void)
 {
+    if(sound_muted)
+    {
+        return;
+    }
     I_SetMusicVolume(snd_MusicVolume);
     if (snd_MusicVolume == 0)
     {
@@ -862,6 +867,7 @@ void S_MuteSound(void)
     }
 
     volume_needs_update = false;
+    sound_muted = true;
 }
 
 // -----------------------------------------------------------------------------
@@ -877,4 +883,5 @@ void S_UnMuteSound(void)
     S_SetMaxVolume(true);
 
     volume_needs_update = false;
+    sound_muted = false;
 }
