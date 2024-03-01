@@ -1429,7 +1429,7 @@ static MenuItem_t Level2Items_C[] = {
     I_SWITCH("HEAD OF WRAITHVERGE:",  "YFDTHITYBT ;TPKF LE[JD:", M_RD_SelectiveWp_P_2), // НАВЕРШЕНИЕ ЖЕЗЛА ДУХОВ
     I_TITLE( "MANA",                  "VFYF"), // МАНА
     I_LRFUNC("BLUE:",                 "CBYZZ:",                  M_RD_SelectiveAmmo_0), // СИНЯЯ
-    I_LRFUNC("GREEN:",                "PTK~YFZ:",                M_RD_SelectiveAmmo_1), // ЗЕЛЁНАЯ
+    I_LRFUNC("GREEN:",                "PTKTYFZ:",                M_RD_SelectiveAmmo_1), // ЗЕЛЁНАЯ
     I_TITLE( "ARTIFACTS",             "FHNTAFRNS"), // АРТЕФАКТЫ
     I_LRFUNC("QUARTZ FLASK:",         "RDFHWTDSQ AKFRJY:",       M_RD_SelectiveArti_0), // КВАРЦЕВЫЙ ФЛАКОН
     I_LRFUNC("MYSTIC URN:",           "VBCNBXTCRFZ EHYF:",       M_RD_SelectiveArti_1), // МИСТИЧЕСКАЯ УРНА
@@ -1459,7 +1459,7 @@ static MenuItem_t Level2Items_M[] = {
     I_SWITCH("KNOB OF BLOODSCOURGE:",   "YF,FKLFIYBR RHJDFDJUJ ,BXF:", M_RD_SelectiveWp_P_2), // НАБАЛДАШНИК КРОВАВОГО БИЧА
     I_TITLE( "MANA",                    "VFYF"), // МАНА
     I_LRFUNC("BLUE:",                   "CBYZZ:",                      M_RD_SelectiveAmmo_0), // СИНЯЯ
-    I_LRFUNC("GREEN:",                  "PTK~YFZ:",                    M_RD_SelectiveAmmo_1), // ЗЕЛЁНАЯ
+    I_LRFUNC("GREEN:",                  "PTKTYFZ:",                    M_RD_SelectiveAmmo_1), // ЗЕЛЁНАЯ
     I_TITLE( "ARTIFACTS",               "FHNTAFRNS"), // АРТЕФАКТЫ
     I_LRFUNC("QUARTZ FLASK:",           "RDFHWTDSQ AKFRJY:",           M_RD_SelectiveArti_0), // КВАРЦЕВЫЙ ФЛАКОН
     I_LRFUNC("MYSTIC URN:",             "VBCNBXTCRFZ EHYF:",           M_RD_SelectiveArti_1), // МИСТИЧЕСКАЯ УРНА
