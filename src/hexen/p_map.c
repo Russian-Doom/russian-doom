@@ -2129,7 +2129,7 @@ boolean PTR_UseTraverse(intercept_t * in)
 
         // Search player's inventory for puzzle items
         player_t *player = usething->player;
-        for(int i = 0; i < player->artifactCount; i++)
+        for(int i = 0; i < player->inventorySlotNum; i++)
         {
             artitype_t arti = player->inventory[i].type;
             int type = arti - arti_firstpuzzitem;

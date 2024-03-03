@@ -460,7 +460,7 @@ boolean EV_LineSearchForPuzzleItem(line_t * line, byte * args, mobj_t * mo)
         return false;
 
     // Search player's inventory for puzzle items
-    for (i = 0; i < player->artifactCount; i++)
+    for (i = 0; i < player->inventorySlotNum; i++)
     {
         arti = player->inventory[i].type;
         type = arti - arti_firstpuzzitem;
