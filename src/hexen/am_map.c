@@ -1758,11 +1758,11 @@ void AM_Drawer(void)
 
     if (english_language)
     {
-        RD_M_DrawTextA(P_GetMapName(gamemap), 38 + wide_delta, 144);
+        RD_M_DrawTextA(P_GetMapName(gamemap), 38 + wide_delta, 139);
     }
     else
     {
-        RD_M_DrawTextSmallRUS(P_GetMapName(gamemap), 38 + wide_delta, 144, CR_NONE);
+        RD_M_DrawTextSmallRUS(P_GetMapName(gamemap), 38 + wide_delta, 139, CR_NONE);
     }
 
     if (ShowKills && netgame && deathmatch)
