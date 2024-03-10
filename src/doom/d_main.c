@@ -285,6 +285,9 @@ int demobar = 0;
 int no_internal_demos = 0;
 
 
+// Dummy
+int skip_unused_artifact;
+
 void D_ConnectNetGame(void);
 void D_CheckNetGame(void);
 
