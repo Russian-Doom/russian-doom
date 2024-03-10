@@ -670,7 +670,7 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(breathing),
     CONFIG_VARIABLE_INT(unlimited_lost_souls),
     CONFIG_VARIABLE_INT(fast_quickload),
-    CONFIG_VARIABLE_INT(skip_unusable_artifact),
+    CONFIG_VARIABLE_INT(skip_unused_artifact),
 
     // Gameplay: Demos
     CONFIG_VARIABLE_INT(demotimer),

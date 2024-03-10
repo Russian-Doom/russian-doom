@@ -95,6 +95,15 @@ void M_RegisterTrackedFields()
         if(RD_GameType == gt_Hexen)
             RegisterTrackedKeybind("Detail");
     }
+
+    //
+    // Heretic & Hexen: Renamed skip_unusable_artifact to skip_unused_artifact
+    //
+    if(config_version < 4)
+    {
+        if(RD_GameType == gt_Heretic || RD_GameType == gt_Hexen)
+            RegisterTrackedDefault("skip_unusable_artifact", DEFAULT_INT);
+    }
 }
 
 void M_ApplyMigration()
@@ -308,6 +317,20 @@ void M_ApplyMigration()
                 BK_ClearBinds(bk_detail);
                 SetKeyBindingsToTracked(bk_suicide, Detail_tracker);
             }
+        }
+    }
+
+    //
+    // Heretic & Hexen: Renamed skip_unusable_artifact to skip_unused_artifact
+    //
+    if(config_version < 4)
+    {
+        if(RD_GameType == gt_Heretic || RD_GameType == gt_Hexen)
+        {
+            defaultTracker_t* skip_unusable_artifact = M_GetDefaultTracker("skip_unusable_artifact");
+            if(skip_unusable_artifact != NULL
+            && skip_unusable_artifact->found)
+                skip_unused_artifact = skip_unusable_artifact->value.i;
         }
     }
 

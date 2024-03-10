@@ -263,7 +263,7 @@ static void M_RD_FlipLevels();
 static void M_RD_Breathing();
 static void M_RD_WandStart();
 static void M_RD_CenterInventoryCursor();
-static void M_RD_SkipUnusableArtifact();
+static void M_RD_SkipUnusedArtifact();
 static void M_RD_DemoTimer(Direction_t direction);
 static void M_RD_DemoTimerDir();
 static void M_RD_DemoBar();
@@ -1335,7 +1335,7 @@ static MenuItem_t Gameplay4Items[] = {
     I_SWITCH("IMITATE PLAYER'S BREATHING:", "BVBNFWBZ LS[FYBZ BUHJRF:",        M_RD_Breathing),    // ИМИТАЦИЯ ДЫХАНИЯ ИГРОКА
     I_SWITCH("WAND START GAME MODE:",       NULL, /* [JN] Joint EN/RU string*/ M_RD_WandStart),    // РЕЖИМ ИГРЫ "WAND START"
     I_SWITCH("CENTER INVENTORY CURSOR:",    "WTYNHBHJDFNM REHCJH BYDTYNFHZ:",  M_RD_CenterInventoryCursor), // ЦЕНТРИРОВАТЬ КУРСОР ИНВЕНТАРЯ
-    I_SWITCH("SKIP UNUSABLE ARTIFACT:",     "CRBG YTGHBVTYBVJUJ FHNTAFRNF:",   M_RD_SkipUnusableArtifact), // СКИП НЕПРИМЕНИМОГО АРТEФАКТА
+    I_SWITCH("SKIP UNUSED ARTIFACT:",       "CRBG YTGHBVTYTYYJUJ FHNTAFRNF:",  M_RD_SkipUnusedArtifact), // СКИП НЕПРИМЕНЁННОГО АРТEФАКТА
     I_TITLE( "DEMOS",                       "LTVJPFGBCB"), // ДЕМОЗАПИСИ
     I_LRFUNC("SHOW DEMO TIMER:",            "JNJ,HF;FNM NFQVTH:",              M_RD_DemoTimer),    // ОТОБРАЖАТЬ ТАЙМЕР
     I_SWITCH("TIMER DIRECTION:",            "DHTVZ NFQVTHF:",                  M_RD_DemoTimerDir), // ВРЕМЯ ТАЙМЕРА
@@ -5001,9 +5001,9 @@ static void DrawGameplay4Menu(void)
         RD_M_DrawTextSmallENG(center_inventory_cursor ? "ON" : "OFF", 216 + wide_delta, 86,
                               center_inventory_cursor ? CR_GREEN : CR_RED);
 
-        // Skip unusable artifact
-        RD_M_DrawTextSmallENG(skip_unusable_artifact ? "ON" : "OFF", 202 + wide_delta, 96,
-                              skip_unusable_artifact ? CR_GREEN : CR_RED);
+        // Skip unused artifact
+        RD_M_DrawTextSmallENG(skip_unused_artifact ? "ON" : "OFF", 187 + wide_delta, 96,
+                              skip_unused_artifact ? CR_GREEN : CR_RED);
 
         //
         // DEMOS
@@ -5066,8 +5066,8 @@ static void DrawGameplay4Menu(void)
                               center_inventory_cursor ? CR_GREEN : CR_RED);
 
         // Скип неприменимого артефакта
-        RD_M_DrawTextSmallRUS(skip_unusable_artifact ? "DRK" : "DSRK", 253 + wide_delta, 96,
-                              skip_unusable_artifact ? CR_GREEN : CR_RED);
+        RD_M_DrawTextSmallRUS(skip_unused_artifact ? "DRK" : "DSRK", 260 + wide_delta, 96,
+                              skip_unused_artifact ? CR_GREEN : CR_RED);
 
         //
         // ДЕМОЗАПИСИ
@@ -5130,9 +5130,9 @@ static void M_RD_CenterInventoryCursor()
     center_inventory_cursor ^= 1;
 }
 
-static void M_RD_SkipUnusableArtifact()
+static void M_RD_SkipUnusedArtifact()
 {
-    skip_unusable_artifact ^= 1;
+    skip_unused_artifact ^= 1;
 }
 
 static void M_RD_DemoTimer(Direction_t direction)
@@ -5860,7 +5860,7 @@ static void M_RD_BackToDefaults_Recommended(void)
     breathing            = 0;
     pistol_start         = 0;
     center_inventory_cursor = 1;
-    skip_unusable_artifact = 0;
+    skip_unused_artifact = 0;
     demotimer            = 0;
     demotimerdir         = 0;
     demobar              = 0;
@@ -6021,7 +6021,7 @@ static void M_RD_BackToDefaults_Original(void)
     breathing            = 0;
     pistol_start         = 0;
     center_inventory_cursor = 0;
-    skip_unusable_artifact = 1;
+    skip_unused_artifact = 1;
     demotimer            = 0;
     demotimerdir         = 0;
     demobar              = 0;

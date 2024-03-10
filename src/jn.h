@@ -330,7 +330,7 @@ extern int pistol_start;
 extern int breathing;
 extern int unlimited_lost_souls;
 extern int fast_quickload;
-extern int skip_unusable_artifact;
+extern int skip_unused_artifact;
 
 // Gameplay: Demos
 extern int demotimer;

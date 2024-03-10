@@ -247,7 +247,7 @@ static void M_RD_FixMapErrors();
 static void M_RD_FlipLevels();
 static void M_RD_NoDemos();
 static void M_RD_Breathing();
-static void M_RD_SkipUnusableArtifact();
+static void M_RD_SkipUnusedArtifact();
 
 // Level Select (1)
 static void DrawLevelSelect1Menu(void);
@@ -1319,7 +1319,7 @@ MENU_STATIC_PAGED(Gameplay2Menu,
 
 static MenuItem_t Gameplay3Items[] = {
     I_SWITCH("IMITATE PLAYER'S BREATHING:", "BVBNFWBZ LS[FYBZ BUHJRF:",        M_RD_Breathing),      // ИМИТАЦИЯ ДЫХАНИЯ ИГРОКА
-    I_SWITCH("SKIP UNUSABLE ARTIFACT:",     "CRBG YTGHBVTYBVJUJ FHNTAFRNF:",   M_RD_SkipUnusableArtifact), // СКИП НЕПРИМЕНИМОГО АРТEФАКТА
+    I_SWITCH("SKIP UNUSED ARTIFACT:",       "CRBG YTGHBVTYTYYJUJ FHNTAFRNF:",  M_RD_SkipUnusedArtifact), // СКИП НЕПРИМЕНЁННОГО АРТEФАКТА
     I_TITLE( "CROSSHAIR",       "GHBWTK"), // ПРИЦЕЛ
     I_SWITCH("DRAW CROSSHAIR:", "JNJ,HF;FNM GHBWTK:",  M_RD_CrossHairDraw),    // ОТОБРАЖАТЬ ПРИЦЕЛ
     I_LRFUNC("SHAPE:",          "AJHVF:",              M_RD_CrossHairShape),   // ФОРМА
@@ -4734,9 +4734,9 @@ static void DrawGameplay3Menu(void)
         RD_M_DrawTextSmallENG(breathing ? "ON" : "OFF", 224 + wide_delta, 32,
                               breathing ? CR_GREEN : CR_RED);
 
-        // Skip unusable artifact
-        RD_M_DrawTextSmallENG(skip_unusable_artifact ? "ON" : "OFF", 202 + wide_delta, 42,
-                              skip_unusable_artifact ? CR_GREEN : CR_RED);
+        // Skip unused artifact
+        RD_M_DrawTextSmallENG(skip_unused_artifact ? "ON" : "OFF", 187 + wide_delta, 42,
+                              skip_unused_artifact ? CR_GREEN : CR_RED);
 
         //
         // CROSSHAIR
@@ -4770,8 +4770,8 @@ static void DrawGameplay3Menu(void)
                               breathing ? CR_GREEN : CR_RED);
 
         // Скип неприменимого артефакта
-        RD_M_DrawTextSmallRUS(skip_unusable_artifact ? "DRK" : "DSRK", 253 + wide_delta, 42,
-                              skip_unusable_artifact ? CR_GREEN : CR_RED);
+        RD_M_DrawTextSmallRUS(skip_unused_artifact ? "DRK" : "DSRK", 260 + wide_delta, 42,
+                              skip_unused_artifact ? CR_GREEN : CR_RED);
 
         //
         // ПРИЦЕЛ
@@ -4853,9 +4853,9 @@ static void M_RD_Breathing()
     breathing ^= 1;
 }
 
-static void M_RD_SkipUnusableArtifact()
+static void M_RD_SkipUnusedArtifact()
 {
-    skip_unusable_artifact ^= 1;
+    skip_unused_artifact ^= 1;
 }
 
 //---------------------------------------------------------------------------
@@ -5899,7 +5899,7 @@ void M_RD_BackToDefaults_Recommended (void)
     show_all_artifacts   = 0;
     show_artifacts_timer = 0;
     weapon_widget        = 0;
-    skip_unusable_artifact = 0;
+    skip_unused_artifact = 0;
     // Gameplay (4)
     crosshair_draw       = 0;
     crosshair_shape      = 0;
@@ -6017,7 +6017,7 @@ static void M_RD_BackToDefaults_Original(void)
     show_all_artifacts   = 0;
     show_artifacts_timer = 0;
     weapon_widget        = 0;
-    skip_unusable_artifact = 1;
+    skip_unused_artifact = 1;
     // Gameplay (4)
     crosshair_draw       = 0;
     crosshair_shape      = 0;

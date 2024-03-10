@@ -920,9 +920,9 @@ void P_PlayerRemoveArtifact (player_t *player, int slot)
         return;
     // Used last of a type - compact the artifact list
 
-    // [Dasperal] if skip_unusable_artifact option is enabled (vanilla) then
+    // [Dasperal] if skip_unused_artifact option is enabled (vanilla) then
     // don't change the selected artifact if it is not the one being removed
-    if(skip_unusable_artifact || vanillaparm || !singleplayer
+    if(skip_unused_artifact || vanillaparm || !singleplayer
     || player->readyArtifact == player->inventory[slot].type)
     {
         player->readyArtifact = arti_none;
@@ -937,9 +937,9 @@ void P_PlayerRemoveArtifact (player_t *player, int slot)
     if(player != &players[consoleplayer])
         return;
 
-    // [Dasperal] if skip_unusable_artifact option is enabled (vanilla) then
+    // [Dasperal] if skip_unused_artifact option is enabled (vanilla) then
     // don't change the selected artifact if it is not the one being removed
-    if(!(skip_unusable_artifact || vanillaparm || !singleplayer) && slot > inv_ptr)
+    if(!(skip_unused_artifact || vanillaparm || !singleplayer) && slot > inv_ptr)
         return;
 
     // Set position markers and get next readyArtifact
@@ -986,7 +986,7 @@ void P_PlayerUseArtifact (player_t *player, artitype_t arti)
                     ArtifactFlash = 4;
                 }
             }
-            else if(skip_unusable_artifact || vanillaparm || !singleplayer)
+            else if(skip_unused_artifact || vanillaparm || !singleplayer)
             {
                 // Unable to use artifact, advance pointer
                 P_PlayerNextArtifact(player);

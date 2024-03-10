@@ -221,7 +221,7 @@ int fix_map_errors = 1;
 int flip_levels = 0;
 int breathing = 0;
 int pistol_start = 0;
-int skip_unusable_artifact = 0;
+int skip_unused_artifact = 0;
 
 // Gameplay: Demos
 int demotimer = 0;
@@ -1158,7 +1158,7 @@ void D_BindVariables(void)
     M_BindIntVariable("flip_levels",            &flip_levels);
     M_BindIntVariable("breathing",              &breathing);
     M_BindIntVariable("pistol_start",           &pistol_start);
-    M_BindIntVariable("skip_unusable_artifact", &skip_unusable_artifact);
+    M_BindIntVariable("skip_unused_artifact",   &skip_unused_artifact);
 
     // Gameplay: Demos
     M_BindIntVariable("demotimer",              &demotimer);
