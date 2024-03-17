@@ -1479,7 +1479,7 @@ void G_SecretExitLevel (void)
 void G_DoCompleted (void) 
 { 
     int i; 
-    extern int bex_pars[4][10], bex_cpars[32]; // [crispy] support [PARS] sections in BEX files
+    extern int bex_pars[7][10], bex_cpars[32]; // [crispy] support [PARS] sections in BEX files
 
     gameaction = ga_nothing; 
 
