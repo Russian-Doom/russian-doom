@@ -2463,9 +2463,25 @@ void G_RecordDemo (char *name)
     int     maxsize;
 
     usergame = false;
-    demoname_size = strlen(name) + 5;
-    demoname = Z_Malloc(demoname_size, PU_STATIC, NULL);
-    M_snprintf(demoname, demoname_size, "%s.lmp", name);
+
+    char* uc_filename = strdup(name);
+    M_ForceUppercase(uc_filename);
+    // [Dasperal] With Vanilla you have to specify the file without extension,
+    // but make that optional.
+    if(M_StringEndsWith(uc_filename, ".LMP"))
+    {
+        demoname_size = strlen(name) + 1;
+        demoname = Z_Malloc(demoname_size, PU_STATIC, NULL);
+        M_StringCopy(demoname, name, demoname_size);
+    }
+    else
+    {
+        demoname_size = strlen(name) + 5;
+        demoname = Z_Malloc(demoname_size, PU_STATIC, NULL);
+        M_snprintf(demoname, demoname_size, "%s.lmp", name);
+    }
+    free(uc_filename);
+
     maxsize = 0x20000;
 
     //!
