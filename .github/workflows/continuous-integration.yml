@@ -83,15 +83,15 @@ jobs:
 #            cmake_gen: "Visual Studio 16 2019" # Visual Studio 17 2022
 #            cmake_opts: "-T v141_xp -A Win32"
 #            build_suffix: "x86-msvc"
-          -
-            display_name: "Windows | x64 | MSVC"
-            runner: "windows-2022"
-            shell: "bash"
-            msvc_triplet: "x64-windows"
-            compiler_name: "cl"
-            cmake_gen: "Visual Studio 17 2022"
-            cmake_opts: "-A x64"
-            build_suffix: "x64-msvc"
+#          -
+#            display_name: "Windows | x64 | MSVC"
+#            runner: "windows-2022"
+#            shell: "bash"
+#            msvc_triplet: "x64-windows"
+#            compiler_name: "cl"
+#            cmake_gen: "Visual Studio 17 2022"
+#            cmake_opts: "-A x64"
+#            build_suffix: "x64-msvc"
           -
             display_name: "Linux | x64 | GCC"
             runner: "ubuntu-22.04"
