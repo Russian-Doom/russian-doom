@@ -462,6 +462,14 @@ void D_StartNetGame(net_gamesettings_t *settings, const netgame_startup_callback
     ticdup = settings->ticdup;
     new_sync = settings->new_sync;
 
+    if(ticdup < 1)
+    {
+        I_QuitWithError(english_language ?
+            "D_StartNetGame: Invalid ticdup value (%d)" :
+            "D_StartNetGame: Недопустимое значение ticdup (%d)",
+            ticdup);
+    }
+
     // TODO: Message disabled until we fix new_sync.
     //if(!new_sync)
     //{
