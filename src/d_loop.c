@@ -360,11 +360,8 @@ static void BlockUntilStart(net_gamesettings_t *settings,
     }
 }
 
-void D_StartNetGame(net_gamesettings_t *settings,
-                    netgame_startup_callback_t callback)
+void D_StartNetGame(net_gamesettings_t *settings, const netgame_startup_callback_t callback)
 {
-    int i;
-
     offsetms = 0;
     recvtic = 0;
 
@@ -379,10 +376,14 @@ void D_StartNetGame(net_gamesettings_t *settings,
     // sync code. This is currently disabled by default because it
     // has some bugs.
     //
-    if (M_CheckParm("-newsync") > 0)
+    if(M_CheckParm("-newsync") > 0)
+    {
         settings->new_sync = 1;
+    }
     else
+    {
         settings->new_sync = 0;
+    }
 
     // TODO: New sync code is not enabled by default because it's
     // currently broken. 
@@ -399,12 +400,16 @@ void D_StartNetGame(net_gamesettings_t *settings,
     // packets.
     //
 
-    i = M_CheckParmWithArgs("-extratics", 1);
+    int i = M_CheckParmWithArgs("-extratics", 1);
 
-    if (i > 0)
+    if(i > 0)
+    {
         settings->extratics = atoi(myargv[i+1]);
+    }
     else
+    {
         settings->extratics = 1;
+    }
 
     //!
     // @category net
@@ -416,12 +421,16 @@ void D_StartNetGame(net_gamesettings_t *settings,
 
     i = M_CheckParmWithArgs("-dup", 1);
 
-    if (i > 0)
+    if(i > 0)
+    {
         settings->ticdup = atoi(myargv[i+1]);
+    }
     else
+    {
         settings->ticdup = 1;
+    }
 
-    if (net_client_connected)
+    if(net_client_connected)
     {
         // Send our game settings and block until game start is received
         // from the server.
@@ -434,7 +443,7 @@ void D_StartNetGame(net_gamesettings_t *settings,
         NET_CL_GetSettings(settings);
     }
 
-    if (drone)
+    if(drone)
     {
         settings->consoleplayer = 0;
     }
@@ -443,7 +452,7 @@ void D_StartNetGame(net_gamesettings_t *settings,
 
     localplayer = settings->consoleplayer;
 
-    for (i = 0; i < NET_MAXPLAYERS; ++i)
+    for(i = 0; i < NET_MAXPLAYERS; ++i)
     {
         local_playeringame[i] = i < settings->num_players;
     }
@@ -454,7 +463,7 @@ void D_StartNetGame(net_gamesettings_t *settings,
     new_sync = settings->new_sync;
 
     // TODO: Message disabled until we fix new_sync.
-    //if (!new_sync)
+    //if(!new_sync)
     //{
     //    printf("Syncing netgames like Vanilla Doom.\n");
     //}
