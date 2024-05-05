@@ -6236,7 +6236,7 @@ static void M_RD_BackToDefaults_Recommended()
     mute_inactive_window = 0;
 
     // Controls
-    mlook            = 0;  players[consoleplayer].centering = true;
+    mlook            = true;
     mouseSensitivity = 5;
     mouse_acceleration = 2.0F;
     mouse_threshold  = 10;
@@ -6431,7 +6431,7 @@ static void M_RD_BackToDefaults_Original()
     mute_inactive_window = 0;
 
     // Controls
-    mlook              = 0;  players[consoleplayer].centering = true;
+    mlook              = false;  players[consoleplayer].centering = true;
     mouseSensitivity   = 5;
     mouse_acceleration = 2.0F;
     mouse_threshold    = 10;

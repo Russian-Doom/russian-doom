@@ -5873,7 +5873,7 @@ void M_RD_BackToDefaults_Recommended (void)
 
     // Controls
     mouseSensitivity   = 5;
-    mlook              = 0; players[consoleplayer].centering = true;
+    mlook              = true;
     mouse_acceleration = 2.0F;
     mouse_threshold    = 10;
     novert             = 1;
@@ -5991,7 +5991,7 @@ static void M_RD_BackToDefaults_Original(void)
 
     // Controls
     mouseSensitivity   = 5;
-    mlook              = 0; players[consoleplayer].centering = true;
+    mlook              = false; players[consoleplayer].centering = true;
     mouse_acceleration = 2.0F;
     mouse_threshold    = 10;
     novert             = 1;

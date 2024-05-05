@@ -91,8 +91,8 @@ static unsigned int mouse_button_state = 0;
 // [JN] Вертикальное перемещение отключено по умолчанию.
 int novert = 1;
 
-// [JN] Mouselook: disabled by default.
-int mlook = 0;
+// [Dasperal] Mouselook: Enabled by default.
+int mlook = true;
 
 // If true, keyboard mapping is ignored, like in Vanilla Doom.
 // The sensible thing to do is to disable this if you have a non-US
