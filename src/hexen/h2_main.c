@@ -241,6 +241,7 @@ int flip_levels = 0;
 int no_internal_demos = 0;
 int breathing = 0;
 int skip_unused_artifact = 0;
+int pistol_start = 0;
 
 int selective_class = 0;
 int selective_skill = 2;
@@ -406,6 +407,7 @@ void D_BindVariables(void)
     M_BindIntVariable("no_internal_demos",      &no_internal_demos);
     M_BindIntVariable("breathing",              &breathing);
     M_BindIntVariable("skip_unused_artifact",   &skip_unused_artifact);
+    M_BindIntVariable("pistol_start",   &pistol_start);
 
     // Gameplay: Crosshair
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);
