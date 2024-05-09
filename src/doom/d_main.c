@@ -2693,7 +2693,7 @@ static void D_Endoom(void)
 	// [JN] Use original, replacable ENDOOM screen for English language.
     // Use various unreplacable translated screens for Russian language.
 
-    if (english_language)
+    if(english_language || W_CheckNumForName("FREEDOOM") >= 0 || W_CheckNumForName("FREEDM") >= 0)
     {
         endoom = W_CacheLumpName(DEH_String("ENDOOM"), PU_STATIC);
     }
