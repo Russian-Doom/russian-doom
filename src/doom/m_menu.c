@@ -1357,7 +1357,7 @@ static MenuItem_t Gameplay4Items[] = {
     I_SWITCH("Collision physics:",                  "abpbrf cnjkryjdtybq:",            M_RD_Change_ImprovedCollision), // Физика столкновений
     I_SWITCH("Walk over and under monsters:",       "Gthtvtotybt gjl*yfl vjycnhfvb:",  M_RD_Change_WalkOverUnder), // Перемещение над/под монстрами
     I_SWITCH("Corpses sliding from the ledges:",    "Nhegs cgjkpf.n c djpdsitybq:",    M_RD_Change_Torque), // Трупы сползают с возвышений
-    I_SWITCH("Lethal pellet of a point-blank SSG:", "ldecndjkrf hfphsdftn dhfujd:",    M_RD_Change_SSGBlast), // Двустволка разрывает врагов
+    I_SWITCH("SSG gibs enemies:",                   "ldecndjkrf hfphsdftn dhfujd:",    M_RD_Change_SSGBlast), // Двустволка разрывает врагов
     I_SWITCH("Items are tossed when dropped:",      "Gjl,hfcsdfnm dsgfdibt ghtlvtns:", M_RD_Change_TossDrop), // Подбрасывать выпавшие предметы
     I_LRFUNC("Floating powerups amplitude:",        "gjrfxbdfybt cath-fhntafrnjd:",    M_RD_Change_FloatPowerups), // Покачивание сфер-артефактов
     I_LRFUNC("Weapon attack alignment:",            "jhe;bt ghb cnhtkm,t:",            M_RD_Change_Bobbing), // Оружие при стрельбе
@@ -4806,14 +4806,14 @@ static void M_RD_Draw_Gameplay_4(void)
                                   torque && !netgame ? CR_GREEN : CR_DARKRED);
         }
 
-        // Lethal pellet of a point-blank SSG
+        // SSG gibs enemies
         if (strict_mode)
         {
-            RD_M_DrawTextSmallENG("N/A", 287 + wide_delta, 65, CR_DARKRED);
+            RD_M_DrawTextSmallENG("N/A", 153 + wide_delta, 65, CR_DARKRED);
         }
         else
         {
-            RD_M_DrawTextSmallENG(ssg_blast_enemies ? RD_ON : RD_OFF, 287 + wide_delta, 65,
+            RD_M_DrawTextSmallENG(ssg_blast_enemies ? RD_ON : RD_OFF, 153 + wide_delta, 65,
                                   ssg_blast_enemies && !netgame ? CR_GREEN : CR_DARKRED);
         }
 
