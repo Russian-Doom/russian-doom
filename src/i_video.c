@@ -130,6 +130,7 @@ int video_display = 0;
 // false - game name, port name and version will appear.
 
 int window_title_short = true;
+char* window_title_custom = "";
 
 // Screen width and height, from configuration file.
 
@@ -1148,8 +1149,16 @@ void I_InitWindowTitle(void)
 {
     char *buf;
 
-    buf = M_StringJoin(window_title, window_title_short ? 
-                       NULL : " - ", RD_Project_Name, " ", RD_Project_Version, NULL);
+    if(window_title_custom && strlen(window_title_custom) > 0)
+    {
+        buf = M_StringDuplicate(window_title_custom);
+    }
+    else
+    {
+        buf = M_StringJoin(window_title,
+                           window_title_short ? NULL : " - ",
+                           RD_Project_Name, " ", RD_Project_Version, NULL);
+    }
     SDL_SetWindowTitle(screen, buf);
     free(buf);
 }
@@ -1926,6 +1935,7 @@ void I_BindVideoVariables(void)
     M_BindIntVariable("fullscreen_width",            &fullscreen_width);
     M_BindIntVariable("fullscreen_height",           &fullscreen_height);
     M_BindIntVariable("window_title_short",          &window_title_short);
+    M_BindStringVariable("window_title_custom",      &window_title_custom);
     M_BindIntVariable("window_width",                &window_width);
     M_BindIntVariable("window_height",               &window_height);
     M_BindIntVariable("window_border",               &window_border);

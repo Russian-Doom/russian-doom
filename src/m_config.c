@@ -350,6 +350,12 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(window_border),
 
     //!
+    // [Dasperal] UNDOCUMENTED FEATURE. Defines custom text in window title.
+    //
+
+    CONFIG_VARIABLE_STRING(window_title_custom),
+
+    //!
     // Width for screen mode when running fullscreen.
     // If this and fullscreen_height are both set to zero, we run
     // fullscreen as a desktop window that covers the entire screen,
