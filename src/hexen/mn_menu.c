@@ -5919,6 +5919,7 @@ void M_RD_BackToDefaults_Recommended (void)
     weapon_widget        = 0;
     skip_unused_artifact = 0;
     pistol_start = 0;
+    heresiarch_zero_cast_time_fix = 1;
     // Gameplay (4)
     crosshair_draw       = 0;
     crosshair_shape      = 0;
@@ -6038,6 +6039,7 @@ static void M_RD_BackToDefaults_Original(void)
     weapon_widget        = 0;
     skip_unused_artifact = 1;
     pistol_start = 0;
+    heresiarch_zero_cast_time_fix = 0;
     // Gameplay (4)
     crosshair_draw       = 0;
     crosshair_shape      = 0;

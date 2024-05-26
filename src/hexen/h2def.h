@@ -731,6 +731,9 @@ extern boolean skippsprinterp;
 
 extern int artiskip;            // whether shift-enter skips an artifact
 
+// [Dasperal] Vanila bugs fixes
+extern int heresiarch_zero_cast_time_fix;
+
 /*
 ===============================================================================
 

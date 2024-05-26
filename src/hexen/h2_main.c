@@ -243,6 +243,9 @@ int breathing = 0;
 int skip_unused_artifact = 0;
 int pistol_start = 0;
 
+// [Dasperal] Vanila bugs fixes
+int heresiarch_zero_cast_time_fix = 1;
+
 int selective_class = 0;
 int selective_skill = 2;
 int selective_episode = 1;
@@ -408,6 +411,9 @@ void D_BindVariables(void)
     M_BindIntVariable("breathing",              &breathing);
     M_BindIntVariable("skip_unused_artifact",   &skip_unused_artifact);
     M_BindIntVariable("pistol_start",   &pistol_start);
+
+    // [Dasperal] Vanila bugs fixes
+    M_BindIntVariable("heresiarch_zero_cast_time_fix", &heresiarch_zero_cast_time_fix);
 
     // Gameplay: Crosshair
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);

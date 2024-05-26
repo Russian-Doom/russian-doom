@@ -678,6 +678,9 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(fast_quickload),
     CONFIG_VARIABLE_INT(skip_unused_artifact),
 
+    // [Dasperal] Vanila bugs fixes
+    CONFIG_VARIABLE_INT(heresiarch_zero_cast_time_fix),
+
     // Gameplay: Demos
     CONFIG_VARIABLE_INT(demotimer),
     CONFIG_VARIABLE_INT(demotimerdir),
