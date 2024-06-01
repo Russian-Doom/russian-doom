@@ -727,14 +727,15 @@ void A_Chase(mobj_t *actor, player_t *player, pspdef_t *psp)
             return;
         }
 
-        if(heresiarch_zero_cast_time_fix && actor->type == MT_SORCBOSS)
+        if(vanilla_gameplay_bug_fix(heresiarch_zero_cast_time_fix) && actor->type == MT_SORCBOSS)
         {
             // Bug:
             // When Heresiarch loses his target, he switches to Spawn state and
             // spawns another set of his cubes. Each additional cube reduces cast time
             // until it becomes instant. This leads to permanent invulnerability spell.
             // Fix:
-            // When Heresiarch looses his target, switch to the third frame of Spawn state, skipping spawn of cubes.
+            // When Heresiarch loses his target, switch to the third frame of Spawn state,
+            // skipping spawn of cubes.
             P_SetMobjState(actor, S_SORC_LOOK1);
         }
         else

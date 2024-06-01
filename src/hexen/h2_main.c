@@ -205,6 +205,9 @@ int stats_color = 1;
 // Sound
 int snd_monomode = 0;
 
+// Gameplay: Game Mechanics
+int strict_mode = 0;
+
 // Gameplay: Graphical
 int brightmaps = 1;
 int fake_contrast = 0;
