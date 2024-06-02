@@ -1433,7 +1433,7 @@ void P_PlayerRemoveArtifact(player_t * player, int slot)
 
     // [Dasperal] if skip_unused_artifact option is enabled (vanilla) then
     // don't change the selected artifact if it is not the one being removed
-    if(skip_unused_artifact || vanillaparm || !singleplayer
+    if(vanilla_gameplay_feature(skip_unused_artifact)
     || player->readyArtifact == player->inventory[slot].type)
     {
         player->readyArtifact = arti_none;
@@ -1450,7 +1450,7 @@ void P_PlayerRemoveArtifact(player_t * player, int slot)
 
     // [Dasperal] if skip_unused_artifact option is enabled (vanilla) then
     // don't change the selected artifact if it is not the one being removed
-    if(!(skip_unused_artifact || vanillaparm || !singleplayer) && slot > inv_ptr)
+    if(!vanilla_gameplay_feature(skip_unused_artifact) && slot > inv_ptr)
         return;
 
     // Set position markers and get next readyArtifact
@@ -1504,7 +1504,7 @@ void P_PlayerUseArtifact(player_t * player, artitype_t arti)
                     ArtifactFlash = 4;
                 }
             }
-            else if(arti < arti_firstpuzzitem && (skip_unused_artifact || vanillaparm || !singleplayer))
+            else if(arti < arti_firstpuzzitem && vanilla_gameplay_feature(skip_unused_artifact))
             {
                 // Unable to use artifact, advance pointer
                 P_PlayerNextArtifact(player);

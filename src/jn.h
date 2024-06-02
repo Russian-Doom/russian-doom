@@ -50,6 +50,21 @@
  */
 #define vanilla_gameplay_bug_fix(option) (!vanillaparm && !strict_mode && singleplayer && (option))
 
+/**
+ * Macro for vanilla gameplay feature condition.
+ * It accounts for '-vanilla' cli param, the 'strict gameplay mode' option,
+ * demo playback/record and netgame
+ *
+ * Vanilla gameplay features that can be disabled should be wrapped in if statement with this macro as condition.
+ *
+ * @param option - Name of the config option.
+ *		  It should be true if the feature is enabled, i.e., vanilla behavior.
+ *		  And it should be false if the feature is disabled.
+ * @returns True - when feature should be enabled, i.e., vanilla behavior.
+ *			False - when feature should be disabled.
+ */
+#define vanilla_gameplay_feature(option) (vanillaparm || strict_mode || !singleplayer || (option))
+
 void *crispy_realloc (void *ptr, size_t size);
 
 enum
