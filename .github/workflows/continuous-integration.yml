@@ -190,17 +190,13 @@ jobs:
           then
               msvc_cmake_toolchain="-D CMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
           fi
-          rev_number=$(git rev-list --count HEAD)
           cmake -G "${{ matrix.config.cmake_gen }}" ${{ matrix.config.cmake_opts }} \
                 $msvc_cmake_toolchain \
-                -D RD_BUILD_VERSION_OVERWRITE="r$rev_number" \
-                -D RD_GIT_FORCE_HASH_SUFFIX=ON \
                 -D CMAKE_BUILD_TYPE=RelWithDebInfo \
                 -D RD_TEST_WITH_GDB="ON"\
                 -S . -B build
-          sha_short=$(echo ${{ github.sha }} | cut -c1-7)
-          echo "sha_short=$sha_short" >> $GITHUB_OUTPUT
-          echo "rev_number=r$rev_number" >> $GITHUB_OUTPUT
+          git_version=$(cmake -P ./cmake/UpdateRevision.cmake "git" 2>&1)
+          echo "version=$git_version" >> $GITHUB_OUTPUT
 
       - name: Build
         run: |
@@ -238,5 +234,5 @@ jobs:
           runner.os == 'Windows'
         uses: actions/upload-artifact@v4
         with:
-          name: russian-doom-${{ steps.configure.outputs.rev_number }}-${{ steps.configure.outputs.sha_short }}-windows-${{ matrix.config.build_suffix }}
+          name: russian-doom-${{ steps.configure.outputs.version }}-windows-${{ matrix.config.build_suffix }}
           path: ./build/install/

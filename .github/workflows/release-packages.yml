@@ -60,7 +60,6 @@ jobs:
       - name: Configure
         run: |
           cmake -G "${{ matrix.config.cmake_gen }}" ${{ matrix.config.cmake_opts }} \
-                -D RD_BUILD_VERSION_OVERWRITE="${{ github.ref_name }}" \
                 -D CMAKE_BUILD_TYPE=Release \
                 -S . -B build
 

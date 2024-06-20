@@ -12,17 +12,9 @@ macro(ret_var VAR)
     set(${VAR} "${${VAR}}" PARENT_SCOPE)
 endmacro()
 
-# Populate variables "Hash", "Hash_suffix", "Timestamp",
-# "GIT_TAG_DOOM", "GIT_TAG_HERETIC", "GIT_TAG_HEXEN" and "GIT_TAG_STRIFE" with relevant information
+# Populate variables "Hash", "Timestamp", "Version_suffix" with relevant information
 # from source repository. If anything goes wrong return something in "Error."
-function(query_repo_info)
-    execute_process(
-        COMMAND "${Git_executable}" tag --points-at HEAD
-        RESULT_VARIABLE Error
-        OUTPUT_VARIABLE Tags
-        ERROR_QUIET
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
+function(query_repo_info Tag)
     execute_process(
         COMMAND "${Git_executable}" log -1 "--format=%ai;%H"
         RESULT_VARIABLE Error
@@ -36,21 +28,65 @@ function(query_repo_info)
     endif()
     list(GET CommitInfo 0 Timestamp)
     list(GET CommitInfo 1 Hash)
-    string(SUBSTRING " - ${Hash}" 0 10 Hash_suffix)
-
-    string(REGEX MATCH "^[0-9]+(\\.[0-9]+)+" GIT_TAG_DOOM "${Tags}")
-    string(REGEX MATCH "heretic-[0-9]+(\\.[0-9]+)+" GIT_TAG_HERETIC "${Tags}")
-    string(REGEX MATCH "hexen-[0-9]+(\\.[0-9]+)+" GIT_TAG_HEXEN "${Tags}")
-    string(REGEX MATCH "strife-[0-9]+(\\.[0-9]+)+" GIT_TAG_STRIFE "${Tags}")
 
     ret_var(Hash)
-    ret_var(Hash_suffix)
     ret_var(Timestamp)
 
-    ret_var(GIT_TAG_DOOM)
-    ret_var(GIT_TAG_HERETIC)
-    ret_var(GIT_TAG_HEXEN)
-    ret_var(GIT_TAG_STRIFE)
+    execute_process(
+        COMMAND "${Git_executable}" rev-list "${Tag}.." --count
+        RESULT_VARIABLE Error
+        OUTPUT_VARIABLE Commits_from_release
+        ERROR_QUIET
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+
+    if(NOT "${Error}" STREQUAL "0")
+        return()
+    endif()
+
+    if("${Commits_from_release}" STREQUAL "0")
+        return()
+    endif()
+
+    execute_process(
+        COMMAND "${Git_executable}" rev-parse --abbrev-ref HEAD
+        RESULT_VARIABLE Error
+        OUTPUT_VARIABLE Branch
+        ERROR_QUIET
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+
+    if(NOT "${Error}" STREQUAL "0")
+        return()
+    endif()
+
+    if("${Branch}" STREQUAL "master")
+        set(Version_suffix "~${Commits_from_release}")
+        set(Display_version_suffix "-${Commits_from_release}")
+        ret_var(Version_suffix)
+        ret_var(Display_version_suffix)
+        return()
+    endif()
+
+    execute_process(
+        COMMAND "${Git_executable}" rev-list origin/master.. --count
+        RESULT_VARIABLE Error
+        OUTPUT_VARIABLE Commits_in_branch
+        ERROR_QUIET
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+
+    if(NOT "${Error}" STREQUAL "0")
+        return()
+    endif()
+
+    math(EXPR Commits_from_master "${Commits_from_release} - ${Commits_in_branch}" OUTPUT_FORMAT DECIMAL)
+    string(SUBSTRING "${Branch}" 0 1 Branch_short)
+
+    set(Version_suffix "~${Commits_from_master}+${Branch_short}${Commits_in_branch}")
+    set(Display_version_suffix "-${Commits_from_master}-${Branch_short}${Commits_in_branch}")
+    ret_var(Version_suffix)
+    ret_var(Display_version_suffix)
 endfunction()
 
 # Although configure_file doesn't overwrite the file if the contents are the
@@ -67,42 +103,66 @@ function(get_existing_hash File)
     endif()
 endfunction()
 
+function(get_project_version CmakeFile)
+    file(STRINGS "${CmakeFile}" Project_statement REGEX "project\(.*\)")
+    string(REGEX REPLACE "[()\" ]" ";" Project_statement "${Project_statement}")
+    if(Project_statement)
+        cmake_parse_arguments("PROJECT"
+            ""        # List of Options
+            "VERSION" # List of Values
+            ""        # List of Lists
+            ${Project_statement}
+        )
+        ret_var(PROJECT_VERSION)
+    endif()
+endfunction()
+
 function(main)
-    if(NOT CMAKE_ARGC EQUAL 6) # cmake -P UpdateRevision.cmake <OutputFile> <Suffix:FORCE|NO|AUTO> <path to git>
-        message(NOTICE "Usage: ${CMAKE_ARGV2} <path to git_info.h> <Suffix:FORCE|NO|AUTO> <path to git>")
+    if(CMAKE_ARGC LESS 4) # cmake -P UpdateRevision.cmake <path to git> [<OutputFile>]
+        message(NOTICE "Usage: ${CMAKE_ARGV2} <path to git> [<path to git_info.h>]")
         return()
     endif()
-    set(OutputFile "${CMAKE_ARGV3}")
-    set(Git_executable "${CMAKE_ARGV5}")
+    set(Git_executable "${CMAKE_ARGV3}")
 
     get_filename_component(ScriptDir "${CMAKE_SCRIPT_MODE_FILE}" DIRECTORY)
+    get_filename_component(ProjectDir "${ScriptDir}" DIRECTORY)
+    get_project_version("${ProjectDir}/CMakeLists.txt")
 
-    query_repo_info()
+    query_repo_info("${PROJECT_VERSION}")
 
     if(NOT Hash)
         message(NOTICE "Failed to get commit info: ${Error}")
         set(Hash "<unknown>")
-        set(Hash_suffix "")
         set(Timestamp "<unknown>")
-    endif()
-    if(CMAKE_ARGV4 STREQUAL "FORCE")
-        unset(GIT_TAG_DOOM)
-        unset(GIT_TAG_HERETIC)
-        unset(GIT_TAG_HEXEN)
-        unset(GIT_TAG_STRIFE)
-    elseif(CMAKE_ARGV4 STREQUAL "NO")
-        set(Hash_suffix "")
+        set(Version_suffix "")
+        set(Display_version_suffix "")
+    else()
+        string(SUBSTRING "${Hash}" 0 7 Hash_suffix)
+
+        if(NOT Version_suffix)
+            set(Version_suffix "")
+            set(Display_version_suffix "")
+        else()
+            String(APPEND Display_version_suffix " ${Hash_suffix}")
+        endif()
+
+        string(SUBSTRING "${Timestamp}" 0 10 Date)
+        String(APPEND Display_version_suffix " (${Date})")
     endif()
 
-    get_existing_hash("${OutputFile}")
-    if("${Hash}${Hash_suffix}" STREQUAL OldHash)
-        return()
+    if(CMAKE_ARGV4)
+        set(OutputFile "${CMAKE_ARGV4}")
+        get_existing_hash("${OutputFile}")
+        if("${Hash}${Version_suffix}" STREQUAL OldHash)
+            return()
+        endif()
+
+        configure_file("${ScriptDir}/git_info.h.in" "${OutputFile}" @ONLY)
+
+        message(STATUS "Configuring ${OutputFile} - updated to commit ${Hash_suffix}")
+    else()
+        message(NOTICE "${PROJECT_VERSION}${Version_suffix}-${Hash_suffix}")
     endif()
-
-    configure_file("${ScriptDir}/git_info.h.in" "${OutputFile}" @ONLY)
-
-    string(SUBSTRING "${Hash}" 0 7 Hash)
-    message(STATUS "Configuring ${OutputFile} - updated to commit ${Hash}")
 endfunction()
 
 main()

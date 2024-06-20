@@ -103,11 +103,7 @@ extern int alwaysRun;
 // -----------------------------------------------------------------------------
 char* RD_Project_Name = PACKAGE_PREFIX " Hexen";
 char* RD_Project_String = PACKAGE_PREFIX " Hexen " PACKAGE_VERSION;
-#if GIT_TAG_HEXEN
-char* RD_Project_Version = PACKAGE_VERSION;
-#else
-char* RD_Project_Version = PACKAGE_VERSION GIT_SHA_SUFFIX;
-#endif
+char* RD_Project_Version = PACKAGE_VERSION GIT_DISPLAY_VERSION_SUFFIX;
 char* RD_Project_TarName = PROGRAM_PREFIX "hexen";
 char* ID_Project_TarName = "inter-hexen"; // ID config compatibility
 GameType_t RD_GameType = gt_Hexen;
