@@ -14,9 +14,10 @@ endmacro()
 
 # Populate variables "Hash", "Timestamp", "Version_suffix" with relevant information
 # from source repository. If anything goes wrong return something in "Error."
-function(query_repo_info Tag)
+function(query_repo_info Tag ProjectDir)
     execute_process(
         COMMAND "${Git_executable}" log -1 "--format=%ai;%H"
+        WORKING_DIRECTORY "${ProjectDir}"
         RESULT_VARIABLE Error
         OUTPUT_VARIABLE CommitInfo
         ERROR_QUIET
@@ -34,6 +35,7 @@ function(query_repo_info Tag)
 
     execute_process(
         COMMAND "${Git_executable}" rev-list "${Tag}.." --count
+        WORKING_DIRECTORY "${ProjectDir}"
         RESULT_VARIABLE Error
         OUTPUT_VARIABLE Commits_from_release
         ERROR_QUIET
@@ -50,6 +52,7 @@ function(query_repo_info Tag)
 
     execute_process(
         COMMAND "${Git_executable}" rev-parse --abbrev-ref HEAD
+        WORKING_DIRECTORY "${ProjectDir}"
         RESULT_VARIABLE Error
         OUTPUT_VARIABLE Branch
         ERROR_QUIET
@@ -70,6 +73,7 @@ function(query_repo_info Tag)
 
     execute_process(
         COMMAND "${Git_executable}" rev-list origin/master.. --count
+        WORKING_DIRECTORY "${ProjectDir}"
         RESULT_VARIABLE Error
         OUTPUT_VARIABLE Commits_in_branch
         ERROR_QUIET
@@ -128,7 +132,7 @@ function(main)
     get_filename_component(ProjectDir "${ScriptDir}" DIRECTORY)
     get_project_version("${ProjectDir}/CMakeLists.txt")
 
-    query_repo_info("${PROJECT_VERSION}")
+    query_repo_info("${PROJECT_VERSION}" "${ProjectDir}")
 
     if(NOT Hash)
         message(NOTICE "Failed to get commit info: ${Error}")
