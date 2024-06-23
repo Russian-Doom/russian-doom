@@ -353,7 +353,7 @@ static default_t defaults_list[] =
     // [Dasperal] UNDOCUMENTED FEATURE. Defines custom text in window title.
     //
 
-    CONFIG_VARIABLE_STRING(window_title_custom),
+    CONFIG_VARIABLE_STRING(window_title_custom_prefix),
 
     //!
     // Width for screen mode when running fullscreen.

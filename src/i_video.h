@@ -146,5 +146,5 @@ extern int window_border;
 extern int window_width;
 extern int window_height;
 extern int window_title_short;
-extern char* window_title_custom;
+extern char* window_title_custom_prefix;
 extern int window_ontop;
