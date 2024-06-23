@@ -320,15 +320,15 @@ static void printVersion(void)
 #ifdef BUILD_PORTABLE
     printf("Portable version\n");
 #endif
-    printf("\nCompiled with SDL version: %d.%d.%d\n", SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_PATCHLEVEL);
+    printf("SDL version\n\tCompiled: %d.%d.%d\n", SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_PATCHLEVEL);
     SDL_version sdlVersion;
     SDL_GetVersion(&sdlVersion);
-    printf("\tRuntime SDL version: %d.%d.%d\n", sdlVersion.major, sdlVersion.minor, sdlVersion.patch);
-    printf("Compiled with SDL_mixer version: %d.%d.%d\n", SDL_MIXER_MAJOR_VERSION, SDL_MIXER_MINOR_VERSION, SDL_MIXER_PATCHLEVEL);
+    printf("\tRuntime: %d.%d.%d\n", sdlVersion.major, sdlVersion.minor, sdlVersion.patch);
+    printf("SDL_mixer version\n\tCompiled: %d.%d.%d\n", SDL_MIXER_MAJOR_VERSION, SDL_MIXER_MINOR_VERSION, SDL_MIXER_PATCHLEVEL);
     const SDL_version* sdl_mixerVersion = Mix_Linked_Version();
-    printf("\tRuntime SDL_mixer version: %d.%d.%d\n", sdl_mixerVersion->major, sdl_mixerVersion->minor, sdl_mixerVersion->patch);
-    printf("Compiled with SDL_net version: %d.%d.%d\n", SDL_NET_MAJOR_VERSION, SDL_NET_MINOR_VERSION, SDL_NET_PATCHLEVEL);
+    printf("\tRuntime: %d.%d.%d\n", sdl_mixerVersion->major, sdl_mixerVersion->minor, sdl_mixerVersion->patch);
+    printf("SDL_net version\n\tCompiled: %d.%d.%d\n", SDL_NET_MAJOR_VERSION, SDL_NET_MINOR_VERSION, SDL_NET_PATCHLEVEL);
     const SDL_version* sdl_netVersion = SDLNet_Linked_Version();
-    printf("\tRuntime SDL_net version: %d.%d.%d\n", sdl_netVersion->major, sdl_netVersion->minor, sdl_netVersion->patch);
+    printf("\tRuntime: %d.%d.%d\n", sdl_netVersion->major, sdl_netVersion->minor, sdl_netVersion->patch);
 }
 
