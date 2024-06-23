@@ -63,6 +63,24 @@ function(query_repo_info Tag ProjectDir)
         return()
     endif()
 
+    if("${Branch}" STREQUAL "makepkg")
+        execute_process(
+            COMMAND "${Git_executable}" log -n 1 "--pretty='%(decorate:separator=;,prefix=,suffix=)'" HEAD
+            WORKING_DIRECTORY "${ProjectDir}"
+            RESULT_VARIABLE Error
+            OUTPUT_VARIABLE Branch
+            ERROR_QUIET
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
+
+        if(NOT "${Error}" STREQUAL "0")
+            return()
+        endif()
+
+        list(GET Branch 1 Branch)
+        string(REPLACE "origin/" "" Branch "${Branch}")
+    endif()
+
     if("${Branch}" STREQUAL "master")
         set(Version_suffix "~${Commits_from_release}")
         set(Display_version_suffix "-${Commits_from_release}")
