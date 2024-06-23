@@ -243,9 +243,6 @@ Available components are `doom`, `heretic`, `hexen`.
 
 Packaging is performed using Cpack.
 
-If you want to overwrite the package version, set `RD_BUILD_VERSION_OVERWRITE` cmake variable at configuring time,
-instead of using `-R` Cpack parameter.
-
 To package Russian Doom, run the following commands:
 ```shell
 cd build
@@ -340,5 +337,3 @@ you should set the value of the `CMAKE_INSTALL_PREFIX` cmake variable to match t
 By default, it is `/usr/local` and you probably want to change it to `/usr`.
 You can then use `cmake --install build --prefix <path>` command to collect all distribution files in the `<path>`
 location to prepare them for packaging.
-
-If you want to overwrite the package version, set `RD_BUILD_VERSION_OVERWRITE` cmake variable.

@@ -192,11 +192,6 @@ string(REPLACE " Doom" "" PACKAGE_PREFIX "${PROJECT_NAME}")
 string(REPLACE "doom" "" PROGRAM_PREFIX "${PACKAGE_TARNAME}")
 string(REPLACE "." ", " WINDOWS_RC_VERSION ${PROJECT_VERSION})
 
-# [Dasperal] RD_BUILD_VERSION_OVERWRITE variable is used on CI to replace version with git hash
-if(RD_BUILD_VERSION_OVERWRITE)
-    set(PROJECT_VERSION ${RD_BUILD_VERSION_OVERWRITE})
-endif()
-
 if(RD_COMPILE_DOOM)
     configure_file(src/doom/resource.rc.in src/doom/resource.rc @ONLY)
     list(APPEND COMPILE_MODULES "doom")
