@@ -192,6 +192,7 @@ string(REPLACE " Doom" "" PACKAGE_PREFIX "${PROJECT_NAME}")
 string(REPLACE "doom" "" PROGRAM_PREFIX "${PACKAGE_TARNAME}")
 string(REPLACE "." ", " WINDOWS_RC_VERSION ${PROJECT_VERSION})
 
+# TODO account for git version (configure in build time?)
 if(RD_COMPILE_DOOM)
     configure_file(src/doom/resource.rc.in src/doom/resource.rc @ONLY)
     list(APPEND COMPILE_MODULES "doom")

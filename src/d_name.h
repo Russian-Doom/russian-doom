@@ -25,9 +25,9 @@ typedef enum
 } GameType_t;
 
 // [Dasperal] Those vars should be defined in game-specific code
-extern char* RD_Project_Name;
-extern char* RD_Project_String;
-extern char* RD_Project_Version;
+extern char* RD_Project_Name; // Just project name
+extern char* RD_Project_String; // Project name with the full version
+extern char* RD_Project_Version; // Just full version with short sha and date (for 'version' cheat only)
 extern char* RD_Project_TarName;
 extern char* ID_Project_TarName; // ID config compatibility
 extern GameType_t RD_GameType;

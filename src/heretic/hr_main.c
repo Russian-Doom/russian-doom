@@ -60,7 +60,7 @@
 // [Dasperal] d_name.h var definition
 // -----------------------------------------------------------------------------
 char* RD_Project_Name = PACKAGE_PREFIX " Heretic";
-char* RD_Project_String = PACKAGE_PREFIX " Heretic " PACKAGE_VERSION;
+char* RD_Project_String = PACKAGE_PREFIX " Heretic " PACKAGE_VERSION GIT_VERSION_SUFFIX;
 char* RD_Project_Version = PACKAGE_VERSION GIT_DISPLAY_VERSION_SUFFIX;
 char* RD_Project_TarName = PROGRAM_PREFIX "heretic";
 char* ID_Project_TarName = "inter-heretic"; // ID config compatibility

@@ -102,7 +102,7 @@ extern int alwaysRun;
 // [Dasperal] d_name.h var definition
 // -----------------------------------------------------------------------------
 char* RD_Project_Name = PACKAGE_PREFIX " Hexen";
-char* RD_Project_String = PACKAGE_PREFIX " Hexen " PACKAGE_VERSION;
+char* RD_Project_String = PACKAGE_PREFIX " Hexen " PACKAGE_VERSION GIT_VERSION_SUFFIX;
 char* RD_Project_Version = PACKAGE_VERSION GIT_DISPLAY_VERSION_SUFFIX;
 char* RD_Project_TarName = PROGRAM_PREFIX "hexen";
 char* ID_Project_TarName = "inter-hexen"; // ID config compatibility

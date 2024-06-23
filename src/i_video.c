@@ -1157,7 +1157,7 @@ void I_InitWindowTitle(void)
     {
         buf = M_StringJoin(window_title,
                            window_title_short ? NULL : " - ",
-                           RD_Project_Name, " ", RD_Project_Version, NULL);
+                           RD_Project_String, NULL);
     }
     SDL_SetWindowTitle(screen, buf);
     free(buf);

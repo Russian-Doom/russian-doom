@@ -88,7 +88,7 @@
 // [Dasperal] d_name.h var definition
 // -----------------------------------------------------------------------------
 char* RD_Project_Name = PACKAGE_PREFIX " Doom";
-char* RD_Project_String = PACKAGE_PREFIX " Doom " PACKAGE_VERSION;
+char* RD_Project_String = PACKAGE_PREFIX " Doom " PACKAGE_VERSION GIT_VERSION_SUFFIX;
 char* RD_Project_Version = PACKAGE_VERSION GIT_DISPLAY_VERSION_SUFFIX;
 char* RD_Project_TarName = PROGRAM_PREFIX "doom";
 char* ID_Project_TarName = "inter-doom"; // ID config compatibility

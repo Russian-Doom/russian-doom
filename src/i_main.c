@@ -315,7 +315,7 @@ int main(int argc, char **argv)
 
 static void printVersion(void)
 {
-    printf("%s %s\n", RD_Project_Name, RD_Project_Version);
+    printf("%s\n", RD_Project_String);
     printf("Revision: %s (%s)\n", GIT_SHA, GIT_TIME);
 #ifdef BUILD_PORTABLE
     printf("Portable version\n");
