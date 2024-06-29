@@ -1,6 +1,7 @@
 1 ICON "@CMAKE_CURRENT_SOURCE_DIR@/data/doom.ico"
 
 #include <winuser.h>
+#include <git_info.h>
 
 CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "@CMAKE_CURRENT_SOURCE_DIR@/src/manifest.xml"
 
@@ -14,9 +15,9 @@ FILETYPE 1
   BLOCK "040904E4"
   {
      VALUE "ProductName", "@PACKAGE_PREFIX@ Doom"
-     VALUE "ProductVersion", "@PROJECT_VERSION@"
-     VALUE "FileVersion", "@PROJECT_VERSION@"
-     VALUE "FileDescription", "@PACKAGE_PREFIX@ Doom @PROJECT_VERSION@"
+     VALUE "ProductVersion", "@PROJECT_VERSION@" GIT_VERSION_SUFFIX
+     VALUE "FileVersion", "@PROJECT_VERSION@" GIT_VERSION_SUFFIX
+     VALUE "FileDescription", "@PACKAGE_PREFIX@ Doom @PROJECT_VERSION@" GIT_VERSION_SUFFIX
      VALUE "LegalCopyright", "@PACKAGE_COPYRIGHT@"
   }
  }

@@ -148,6 +148,9 @@ foreach(MODULE ${COMPILE_MODULES})
             SDL2::SDL2
             "${PROGRAM_PREFIX}${MODULE}"
         )
+        target_include_directories("${PROGRAM_PREFIX}${MODULE}-exe" PRIVATE
+            "${PROJECT_BINARY_DIR}"
+        )
         add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}-exe" POST_BUILD
             MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-exe>"
             COMMAND ${CMAKE_COMMAND} -E copy
