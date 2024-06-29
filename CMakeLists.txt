@@ -238,5 +238,5 @@ if(WIN32)
     set(CPACK_ARCHIVE_COMPONENT_INSTALL OFF)
     set(CPACK_ARCHIVE_THREADS 0) # For Cmake 3.18+
 
-    include(Cpack)
+    include(CPack)
 endif()
