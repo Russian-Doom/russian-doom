@@ -1,7 +1,7 @@
-1 ICON "@CMAKE_CURRENT_SOURCE_DIR@/data/hexen.ico"
-
 #include <Winver.h>
 #include <git_info.h>
+
+1 ICON "@CMAKE_CURRENT_SOURCE_DIR@/data/hexen.ico"
 
 CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "@CMAKE_CURRENT_SOURCE_DIR@/src/manifest.xml"
 

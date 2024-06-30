@@ -1,7 +1,7 @@
-1 ICON "@CMAKE_CURRENT_SOURCE_DIR@/data/heretic.ico"
-
 #include <Winver.h>
 #include <git_info.h>
+
+1 ICON "@CMAKE_CURRENT_SOURCE_DIR@/data/heretic.ico"
 
 CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "@CMAKE_CURRENT_SOURCE_DIR@/src/manifest.xml"
 
