@@ -163,6 +163,7 @@ foreach(MODULE ${COMPILE_MODULES})
         # .com
         add_executable("${PROGRAM_PREFIX}${MODULE}-com" WIN32
             win_launcher.c
+            "${CMAKE_CURRENT_BINARY_DIR}/${MODULE}/resource.rc"
         )
         target_link_options("${PROGRAM_PREFIX}${MODULE}-com" PRIVATE
             "$<$<BOOL:${MSVC}>:/MANIFEST:NO>"
@@ -178,6 +179,9 @@ foreach(MODULE ${COMPILE_MODULES})
             "$<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>"
             SDL2::SDL2
             "${PROGRAM_PREFIX}${MODULE}"
+        )
+        target_include_directories("${PROGRAM_PREFIX}${MODULE}-com" PRIVATE
+            "${PROJECT_BINARY_DIR}"
         )
         add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}-com" POST_BUILD
             MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-com>"
