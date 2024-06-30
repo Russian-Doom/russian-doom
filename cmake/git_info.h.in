@@ -9,3 +9,5 @@
 #define GIT_VERSION_SUFFIX "@Version_suffix@"
 #define GIT_DISPLAY_VERSION_SUFFIX "@Display_version_suffix@"
 #define GIT_TIME "@Timestamp@"
+
+#cmakedefine01 GIT_IS_RELEASE

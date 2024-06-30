@@ -47,6 +47,8 @@ function(query_repo_info Tag ProjectDir)
     endif()
 
     if("${Commits_from_release}" STREQUAL "0")
+        set(GIT_IS_RELEASE 1)
+        ret_var(GIT_IS_RELEASE)
         return()
     endif()
 
