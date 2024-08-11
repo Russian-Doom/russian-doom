@@ -1,0 +1,97 @@
+{
+  "version": 6,
+  "include": [
+    "Base_configurations.json",
+    "Linux.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "ci-linux-dev",
+      "inherits": ["linux", "dev", "ci"],
+      "displayName": "Linux (CI|Dev)",
+      "description": "Configuration for CI Dev builds using Linux toolchain",
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
+    },
+    {
+      "name": "ci-linux-release",
+      "inherits": ["linux", "release", "ci"],
+      "displayName": "Linux (CI|Release)",
+      "description": "Configuration for CI Release builds using Linux toolchain",
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "ci-linux-dev",
+      "configurePreset": "ci-linux-dev",
+      "displayName": "Linux (CI|Dev)",
+      "description": "Cmake build configuration for CI Dev builds using Linux toolchain",
+      "jobs": 4,
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
+    },
+    {
+      "name": "ci-linux-release",
+      "configurePreset": "ci-linux-release",
+      "displayName": "Linux (CI|Release)",
+      "description": "Cmake build configuration for CI Release builds using Linux toolchain",
+      "jobs": 4,
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "ci-linux-dev",
+      "configurePreset": "ci-linux-dev",
+      "displayName": "Linux (Local|Release)",
+      "description": "Cmake build configuration for Local Release builds using Linux toolchain",
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      },
+      "output": {
+        "outputOnFailure": true
+      },
+      "environment": {
+        "SDL_VIDEODRIVER": "dummy"
+      }
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "ci-linux-dev",
+      "displayName": "Linux (CI|Dev)",
+      "description": "Workflow for CI Dev builds using Linux toolchain",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ci-linux-dev"
+        },
+        {
+          "type": "build",
+          "name": "ci-linux-dev"
+        },
+        {
+          "type": "test",
+          "name": "ci-linux-dev"
+        }
+      ]
+    }
+  ]
+}

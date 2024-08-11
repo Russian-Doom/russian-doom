@@ -1,0 +1,51 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "release",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      },
+      "warnings": {
+        "dev": false,
+        "deprecated": false,
+        "uninitialized": false
+      },
+      "errors": {
+        "dev": false,
+        "deprecated": false
+      }
+    },
+    {
+      "name": "dev",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      },
+      "warnings": {
+        "dev": false,
+        "deprecated": true,
+        "uninitialized": true
+      },
+      "errors": {
+        "dev": false,
+        "deprecated": true
+      }
+    },
+    {
+      "name": "ci",
+      "hidden": true,
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      },
+      "cacheVariables": {
+        "RD_BUILD_PORTABLE": "ON",
+        "RD_TEST_WITH_GDB": "ON"
+      },
+      "binaryDir": "${sourceDir}/build"
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "version": 6,
+  "include": [
+    "Base_configurations.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "linux",
+      "hidden": true,
+      "generator": "Unix Makefiles",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    },
+    {
+      "name": "local-linux-dev",
+      "hidden": true,
+      "inherits": ["linux", "dev"],
+      "displayName": "Linux (Local|Dev)",
+      "description": "Configuration for local Dev builds using Linux toolchain",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    },
+    {
+      "name": "local-linux-release",
+      "inherits": ["linux", "release"],
+      "displayName": "Linux (Local|Release)",
+      "description": "Configuration for local Release builds using Linux toolchain",
+      "binaryDir": "${sourceDir}/build",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "local-linux-release",
+      "configurePreset": "local-linux-release",
+      "displayName": "Linux (Local|Release)",
+      "description": "Cmake build configuration for Local Release builds using Linux toolchain",
+      "jobs": 4,
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "local-linux-release",
+      "displayName": "Linux (Local|Release)",
+      "description": "Workflow for Local Release builds using Linux toolchain",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "local-linux-release"
+        },
+        {
+          "type": "build",
+          "name": "local-linux-release"
+        }
+      ]
+    }
+  ]
+}

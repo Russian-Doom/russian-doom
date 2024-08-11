@@ -1,0 +1,48 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "clion",
+      "hidden": true,
+      "cacheVariables": {
+        "RD_BUILD_PORTABLE": "ON",
+        "RD_GIT_NO_HASH": "OFF"
+      },
+      "vendor": {
+        "jetbrains.com/clion": {
+          "toolchain": "Linux x64 native"
+        }
+      }
+    },
+    {
+      "name": "clion-linux-dev",
+      "inherits": ["local-linux-dev", "clion"],
+      "displayName": "Linux (Clion|Dev)",
+      "description": "Configuration for Clion Dev builds using Linux toolchain",
+      "binaryDir": "${sourceDir}/build-Linux-64-dev"
+    },
+    {
+      "name": "clion-linux-release",
+      "inherits": ["local-linux-release", "clion"],
+      "displayName": "Linux (Clion|Release)",
+      "description": "Configuration for Clion Release builds using Linux toolchain",
+      "binaryDir": "${sourceDir}/build-Linux-64-release"
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "clion-linux-dev",
+      "configurePreset": "clion-linux-dev",
+      "displayName": "Linux (CI|Dev)",
+      "description": "Cmake build configuration for Clion Dev builds using Linux toolchain",
+      "jobs": 14
+    },
+    {
+      "name": "clion-linux-release",
+      "configurePreset": "clion-linux-release",
+      "displayName": "Linux (CI|Release)",
+      "description": "Cmake build configuration for Clion Release builds using Linux toolchain",
+      "jobs": 14
+    }
+  ]
+}
