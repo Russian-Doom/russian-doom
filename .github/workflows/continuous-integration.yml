@@ -26,7 +26,7 @@ jobs:
             msys_msystem: "MINGW32"
             msys_prefix: "i686"
             compiler_name: "gcc"
-            cmake_gen: "Ninja"
+            cmake_preset: 'ci-msys2-dev'
             build_suffix: "x86-gcc"
           -
             display_name: "Windows | x64 | GCC"
@@ -35,7 +35,7 @@ jobs:
             msys_msystem: "UCRT64"
             msys_prefix: "ucrt-x86_64"
             compiler_name: "gcc"
-            cmake_gen: "Ninja"
+            cmake_preset: 'ci-msys2-dev'
             build_suffix: "x64-gcc"
           -
             display_name: "Windows | x86 | GCC - msvcrt"
@@ -44,8 +44,7 @@ jobs:
             msys_msystem: "MINGW32"
             msys_prefix: "i686"
             compiler_name: "gcc"
-            cmake_gen: "Ninja"
-            cmake_opts: "-D RD_UCRT32=OFF"
+            cmake_preset: 'ci-msys2-msvcrt-dev'
             build_suffix: "x86-gcc-msvcrt"
 #          -
 #            display_name: "Windows | x64 | GCC - msvcrt"
@@ -54,7 +53,7 @@ jobs:
 #            msys_msystem: "MINGW64"
 #            msys_prefix: "x86_64"
 #            compiler_name: "gcc"
-#            cmake_gen: "Ninja"
+#            cmake_preset: 'ci-msys2-dev'
 #            build_suffix: "x64-gcc-msvcrt"
 #          -
 #            display_name: "Windows | x86 | Clang"
@@ -63,7 +62,7 @@ jobs:
 #            msys_msystem: "CLANG32"
 #            msys_prefix: "clang-i686"
 #            compiler_name: "clang"
-#            cmake_gen: "Ninja"
+#            cmake_preset: 'ci-msys2-dev'
 #            build_suffix: "x86-clang"
           -
             display_name: "Windows | x64 | Clang"
@@ -72,7 +71,7 @@ jobs:
             msys_msystem: "CLANG64"
             msys_prefix: "clang-x86_64"
             compiler_name: "clang"
-            cmake_gen: "Ninja"
+            cmake_preset: 'ci-msys2-dev'
             build_suffix: "x64-clang"
 #          -
 #            display_name: "Windows | x86 | MSVC"
@@ -80,8 +79,7 @@ jobs:
 #            shell: "bash"
 #            msvc_triplet: "x86-windows"
 #            compiler_name: "cl"
-#            cmake_gen: "Visual Studio 16 2019" # Visual Studio 17 2022
-#            cmake_opts: "-T v141_xp -A Win32"
+#            cmake_preset: 'ci-msvc-86-dev'
 #            build_suffix: "x86-msvc"
 #          -
 #            display_name: "Windows | x64 | MSVC"
@@ -89,23 +87,20 @@ jobs:
 #            shell: "bash"
 #            msvc_triplet: "x64-windows"
 #            compiler_name: "cl"
-#            cmake_gen: "Visual Studio 17 2022"
-#            cmake_opts: "-A x64"
+#            cmake_preset: 'ci-msvc-64-dev'
 #            build_suffix: "x64-msvc"
           -
             display_name: "Linux | x64 | GCC"
             runner: "ubuntu-22.04"
             shell: "bash"
             compiler_name: "gcc"
-            cmake_gen: "Ninja"
-            cmake_opts: "-D RD_BUILD_PORTABLE=ON"
+            cmake_preset: 'ci-linux-dev'
 #          -
 #            display_name: "Linux | x64 | Clang"
 #            runner: "ubuntu-22.04"
 #            shell: "bash"
 #            compiler_name: "clang"
-#            cmake_gen: "Ninja"
-#            cmake_opts: "-D RD_BUILD_PORTABLE=ON"
+#            cmake_preset: 'ci-linux-dev'
 
     defaults:
       run:
@@ -181,41 +176,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Configure
+      - name: Configure & Build & Test
         id: configure
         env:
           CC: ${{ matrix.config.compiler_name }}
         run: |
-          if [[ '${{ matrix.config.compiler_name }}' == 'cl' ]]
-          then
-              msvc_cmake_toolchain="-D CMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
-          fi
-          cmake -G "${{ matrix.config.cmake_gen }}" ${{ matrix.config.cmake_opts }} \
-                $msvc_cmake_toolchain \
-                -D CMAKE_BUILD_TYPE=RelWithDebInfo \
-                -D RD_TEST_WITH_GDB="ON"\
-                -S . -B build
+          export MAKEFLAGS=--keep-going
+          cmake --workflow --preset "${{ matrix.config.cmake_preset }}"
           git_version=$(cmake -P ./cmake/UpdateRevision.cmake "git" 2>&1)
           echo "version=$git_version" >> $GITHUB_OUTPUT
-
-      - name: Build
-        run: |
-          export MAKEFLAGS=--keep-going
-          cmake --build build --config RelWithDebInfo --parallel 2
-
-      - name: Test Windows
-        if: runner.os == 'Windows'
-        run: |
-          cd build
-          ctest --output-on-failure -C RelWithDebInfo
-
-      - name: Test Linux
-        if: runner.os == 'Linux'
-        env:
-          SDL_VIDEODRIVER: dummy
-        run: |
-          cd build
-          ctest --output-on-failure
 
       - name: Install
         if: |
