@@ -1,15 +1,15 @@
 {
   "version": 6,
   "include": [
-    "Base_configurations.json",
-    "Linux.json"
+    "../Base_configurations.json",
+    "../Linux.json"
   ],
   "configurePresets": [
     {
       "name": "ci-linux-dev",
       "inherits": ["linux", "dev", "ci"],
-      "displayName": "Linux (CI|Dev)",
-      "description": "Configuration for CI Dev builds using Linux toolchain",
+      "displayName": "Linux (CI|Native|Dev)",
+      "description": "Configuration for CI Dev builds for Linux using native toolchain",
       "condition": {
         "type": "equals",
         "lhs": "$penv{CI}",
@@ -19,8 +19,8 @@
     {
       "name": "ci-linux-release",
       "inherits": ["linux", "release", "ci"],
-      "displayName": "Linux (CI|Release)",
-      "description": "Configuration for CI Release builds using Linux toolchain",
+      "displayName": "Linux (CI|Native|Release)",
+      "description": "Configuration for CI Release builds for Linux using native toolchain",
       "condition": {
         "type": "equals",
         "lhs": "$penv{CI}",
@@ -32,8 +32,8 @@
     {
       "name": "ci-linux-dev",
       "configurePreset": "ci-linux-dev",
-      "displayName": "Linux (CI|Dev)",
-      "description": "Cmake build configuration for CI Dev builds using Linux toolchain",
+      "displayName": "Linux (CI|Native|Dev)",
+      "description": "Cmake build configuration for CI Dev builds for Linux using native toolchain",
       "jobs": 4,
       "condition": {
         "type": "equals",
@@ -44,8 +44,8 @@
     {
       "name": "ci-linux-release",
       "configurePreset": "ci-linux-release",
-      "displayName": "Linux (CI|Release)",
-      "description": "Cmake build configuration for CI Release builds using Linux toolchain",
+      "displayName": "Linux (CI|Native|Release)",
+      "description": "Cmake build configuration for CI Release builds for Linux using native toolchain",
       "jobs": 4,
       "condition": {
         "type": "equals",
@@ -58,8 +58,8 @@
     {
       "name": "ci-linux-dev",
       "configurePreset": "ci-linux-dev",
-      "displayName": "Linux (Local|Release)",
-      "description": "Cmake build configuration for Local Release builds using Linux toolchain",
+      "displayName": "Linux (CI|Native|Dev)",
+      "description": "Cmake build configuration for Local Release builds for Linux using native toolchain",
       "condition": {
         "type": "equals",
         "lhs": "$penv{CI}",
@@ -76,8 +76,8 @@
   "workflowPresets": [
     {
       "name": "ci-linux-dev",
-      "displayName": "Linux (CI|Dev)",
-      "description": "Workflow for CI Dev builds using Linux toolchain",
+      "displayName": "Linux (CI|Native|Dev)",
+      "description": "Workflow for CI Dev builds for Linux using native toolchain",
       "steps": [
         {
           "type": "configure",

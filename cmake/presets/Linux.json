@@ -18,7 +18,7 @@
       "name": "local-linux-dev",
       "hidden": true,
       "inherits": ["linux", "dev"],
-      "displayName": "Linux (Local|Dev)",
+      "displayName": "Linux (Local|Native|Dev)",
       "description": "Configuration for local Dev builds using Linux toolchain",
       "condition": {
         "type": "equals",
@@ -29,7 +29,7 @@
     {
       "name": "local-linux-release",
       "inherits": ["linux", "release"],
-      "displayName": "Linux (Local|Release)",
+      "displayName": "Linux (Local|Native|Release)",
       "description": "Configuration for local Release builds using Linux toolchain",
       "binaryDir": "${sourceDir}/build",
       "condition": {
@@ -43,7 +43,7 @@
     {
       "name": "local-linux-release",
       "configurePreset": "local-linux-release",
-      "displayName": "Linux (Local|Release)",
+      "displayName": "Linux (Local|Native|Release)",
       "description": "Cmake build configuration for Local Release builds using Linux toolchain",
       "jobs": 4,
       "condition": {
@@ -56,7 +56,7 @@
   "workflowPresets": [
     {
       "name": "local-linux-release",
-      "displayName": "Linux (Local|Release)",
+      "displayName": "Linux (Local|Native|Release)",
       "description": "Workflow for Local Release builds using Linux toolchain",
       "steps": [
         {

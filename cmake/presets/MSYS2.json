@@ -1,0 +1,94 @@
+{
+  "version": 6,
+  "include": [
+    "Base_configurations.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "msys2",
+      "hidden": true,
+      "generator": "Ninja",
+      "cacheVariables": {
+        "RD_USE_SELECTED_DLL_SET": "ON"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "local-msys2-dev",
+      "hidden": true,
+      "inherits": ["msys2", "dev"],
+      "displayName": "Windows (Local|MSYS2|Dev)",
+      "description": "Configuration for local Dev builds for Windows using MSYS2 toolchain",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "local-msys2-release",
+      "inherits": ["msys2", "release"],
+      "displayName": "Windows (Local|MSYS2|Release)",
+      "description": "Configuration for local Release builds for Windows using MSYS2 toolchain",
+      "binaryDir": "${sourceDir}/build",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "local-msys2-release",
+      "configurePreset": "local-msys2-release",
+      "displayName": "Windows (Local|MSYS2|Release)",
+      "description": "Cmake build configuration for Local Release builds for Windows using MSYS2 toolchain",
+      "jobs": 4,
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "local-msys2-release",
+      "configurePreset": "local-msys2-release",
+      "displayName": "Windows (Local|MSYS2|Release)",
+      "description": "Cpack configuration for Local Release builds for Windows using MSYS2 toolchain",
+      "generators": ["ZIP"],
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "local-msys2-release",
+      "displayName": "Windows (Local|MSYS2|Release)",
+      "description": "Workflow for Local Release builds for Windows using MSYS2 toolchain",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "local-msys2-release"
+        },
+        {
+          "type": "build",
+          "name": "local-msys2-release"
+        },
+        {
+          "type": "package",
+          "name": "local-msys2-release"
+        }
+      ]
+    }
+  ]
+}
