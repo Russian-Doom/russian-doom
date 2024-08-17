@@ -17,6 +17,17 @@
       }
     },
     {
+      "name": "ci-msys2-msvcrt-dev",
+      "inherits": ["msys2-msvcrt", "dev", "ci"],
+      "displayName": "Windows (CI|MSYS2(msvcrt)|Dev)",
+      "description": "Configuration for CI Dev builds for Windows using MSYS2 toolchain and msvcrt",
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
+    },
+    {
       "name": "ci-msys2-release",
       "inherits": ["msys2", "release", "ci"],
       "displayName": "Windows (CI|MSYS2|Release)",
@@ -34,6 +45,18 @@
       "configurePreset": "ci-msys2-dev",
       "displayName": "Windows (CI|MSYS2|Dev)",
       "description": "Cmake build configuration for CI Dev builds for Windows using MSYS2 toolchain",
+      "jobs": 4,
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
+    },
+    {
+      "name": "ci-msys2-msvcrt-dev",
+      "configurePreset": "ci-msys2-msvcrt-dev",
+      "displayName": "Windows (CI|MSYS2(msvcrt)|Dev)",
+      "description": "Cmake build configuration for CI Dev builds for Windows using MSYS2 toolchain and msvcrt",
       "jobs": 4,
       "condition": {
         "type": "equals",
@@ -60,6 +83,20 @@
       "configurePreset": "ci-msys2-dev",
       "displayName": "Windows (CI|MSYS2|Dev)",
       "description": "Cmake build configuration for Local Release builds for Windows using MSYS2 toolchain",
+      "output": {
+        "outputOnFailure": true
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
+    },
+    {
+      "name": "ci-msys2-msvcrt-dev",
+      "configurePreset": "ci-msys2-msvcrt-dev",
+      "displayName": "Windows (CI|MSYS2(msvcrt)|Dev)",
+      "description": "Cmake build configuration for Local Release builds for Windows using MSYS2 toolchain and msvcrt",
       "output": {
         "outputOnFailure": true
       },
@@ -101,6 +138,25 @@
         {
           "type": "test",
           "name": "ci-msys2-dev"
+        }
+      ]
+    },
+    {
+      "name": "ci-msys2-msvcrt-dev",
+      "displayName": "Windows (CI|MSYS2(msvcrt)|Dev)",
+      "description": "Workflow for CI Dev builds for Windows using MSYS2 toolchain and msvcrt",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ci-msys2-msvcrt-dev"
+        },
+        {
+          "type": "build",
+          "name": "ci-msys2-msvcrt-dev"
+        },
+        {
+          "type": "test",
+          "name": "ci-msys2-msvcrt-dev"
         }
       ]
     },
