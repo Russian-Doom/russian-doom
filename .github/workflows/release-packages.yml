@@ -20,7 +20,7 @@ jobs:
             msys_msystem: "MINGW32"
             msys_prefix: "i686"
             compiler_name: "gcc"
-            cmake_gen: "Ninja"
+            cmake_preset: 'ci-msys2-release'
             build_suffix: "x86"
           -
             display_name: "Windows | x64"
@@ -29,7 +29,7 @@ jobs:
             msys_msystem: "UCRT64"
             msys_prefix: "ucrt-x86_64"
             compiler_name: "gcc"
-            cmake_gen: "Ninja"
+            cmake_preset: 'ci-msys2-release'
             build_suffix: "x64"
 
     permissions:
@@ -57,22 +57,10 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - name: Configure
-        run: |
-          cmake -G "${{ matrix.config.cmake_gen }}" ${{ matrix.config.cmake_opts }} \
-                -D CMAKE_BUILD_TYPE=Release \
-                -S . -B build
-
-      - name: Build
+      - name: Configure & Build & Package
         run: |
           export MAKEFLAGS=--keep-going
-          cmake --build build --parallel 2
-
-      - name: Package Zip
-        if: runner.os == 'Windows'
-        run: |
-          cd build
-          cpack -G ZIP
+          cmake --workflow --preset "${{ matrix.config.cmake_preset }}"
 
       - name: Upload Zip
         if: runner.os == 'Windows'
