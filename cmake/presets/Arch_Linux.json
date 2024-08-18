@@ -1,0 +1,55 @@
+{
+  "version": 6,
+  "include": [
+    "Base_configurations.json",
+    "Linux.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "arch-linux-release",
+      "inherits": ["linux", "release"],
+      "displayName": "Arch Linux Release",
+      "description": "Configuration for Arch Linux Release builds",
+      "binaryDir": "${sourceDir}/../build",
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "/usr"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "arch-linux-release",
+      "configurePreset": "arch-linux-release",
+      "displayName": "Arch Linux Release",
+      "description": "Cmake build configuration for Arch Linux Release builds",
+      "jobs": 4,
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "arch-linux-release",
+      "displayName": "Arch Linux Release",
+      "description": "Workflow for Arch Linux Release builds",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "arch-linux-release"
+        },
+        {
+          "type": "build",
+          "name": "arch-linux-release"
+        }
+      ]
+    }
+  ]
+}
