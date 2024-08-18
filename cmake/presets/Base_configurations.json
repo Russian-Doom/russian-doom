@@ -46,6 +46,49 @@
         "RD_TEST_WITH_GDB": "ON"
       },
       "binaryDir": "${sourceDir}/build"
+    },
+    {
+      "name": "ci-vcpkg",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "$penv{VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "release",
+      "hidden": true,
+      "configuration": "Release"
+    },
+    {
+      "name": "dev",
+      "hidden": true,
+      "configuration": "RelWithDebInfo"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "release",
+      "hidden": true,
+      "configuration": "Release"
+    },
+    {
+      "name": "dev",
+      "hidden": true,
+      "configuration": "RelWithDebInfo"
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "release",
+      "hidden": true,
+      "configurations": ["Release"]
+    },
+    {
+      "name": "dev",
+      "hidden": true,
+      "configurations": ["RelWithDebInfo"]
     }
   ]
 }

@@ -1,0 +1,167 @@
+{
+  "version": 6,
+  "include": [
+    "../Base_configurations.json",
+    "../MSVC.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "ci-msvc-86",
+      "inherits": ["msvc-86", "ci", "ci-vcpkg"],
+      "displayName": "Windows (CI|MSVC|x86|Dev)",
+      "description": "Workflow for CI Dev builds for Windows using MSVC x86 toolchain",
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
+    },
+    {
+      "name": "ci-msvc-64",
+      "inherits": ["msvc-64", "ci", "ci-vcpkg"],
+      "displayName": "Windows (CI|MSVC|x64|Dev)",
+      "description": "Workflow for CI Dev builds for Windows using MSVC x64 toolchain",
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "ci-msvc-86-dev",
+      "configurePreset": "ci-msvc-86",
+      "inherits": ["dev"],
+      "displayName": "Windows (CI|MSVC|x86|Dev)",
+      "description": "Workflow for CI Dev builds for Windows using MSVC x86 toolchain",
+      "jobs": 4,
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
+    },
+    {
+      "name": "ci-msvc-64-dev",
+      "configurePreset": "ci-msvc-64",
+      "inherits": ["dev"],
+      "displayName": "Windows (CI|MSVC|x64|Dev)",
+      "description": "Workflow for CI Dev builds for Windows using MSVC x64 toolchain",
+      "jobs": 4,
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "ci-msvc-86-dev",
+      "configurePreset": "ci-msvc-86",
+      "inherits": ["dev"],
+      "displayName": "Windows (CI|MSVC|x86|Dev)",
+      "description": "Workflow for CI Dev builds for Windows using MSVC x86 toolchain",
+      "output": {
+        "outputOnFailure": true
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
+    },
+    {
+      "name": "ci-msvc-64-dev",
+      "configurePreset": "ci-msvc-64",
+      "inherits": ["dev"],
+      "displayName": "Windows (CI|MSVC|x64|Dev)",
+      "description": "Workflow for CI Dev builds for Windows using MSVC x64 toolchain",
+      "output": {
+        "outputOnFailure": true
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "ci-msvc-86-dev",
+      "configurePreset": "ci-msvc-86",
+      "inherits": ["dev"],
+      "displayName": "Windows (CI|MSVC|x86|Dev)",
+      "description": "Workflow for CI Dev builds for Windows using MSVC x86 toolchain",
+      "generators": ["ZIP"],
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
+    },
+    {
+      "name": "ci-msvc-64-dev",
+      "configurePreset": "ci-msvc-64",
+      "inherits": ["dev"],
+      "displayName": "Windows (CI|MSVC|x64|Dev)",
+      "description": "Workflow for CI Dev builds for Windows using MSVC x64 toolchain",
+      "generators": ["ZIP"],
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "ci-msvc-86-dev",
+      "displayName": "Windows (CI|MSVC|x86|Dev)",
+      "description": "Workflow for CI Dev builds for Windows using MSVC x86 toolchain",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ci-msvc-86"
+        },
+        {
+          "type": "build",
+          "name": "ci-msvc-86-dev"
+        },
+        {
+          "type": "test",
+          "name": "ci-msvc-86-dev"
+        },
+        {
+          "type": "package",
+          "name": "ci-msvc-86-dev"
+        }
+      ]
+    },
+    {
+      "name": "ci-msvc-64-dev",
+      "displayName": "Windows (CI|MSVC|x64|Dev)",
+      "description": "Workflow for CI Dev builds for Windows using MSVC x64 toolchain",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ci-msvc-64"
+        },
+        {
+          "type": "build",
+          "name": "ci-msvc-64-dev"
+        },
+        {
+          "type": "test",
+          "name": "ci-msvc-64-dev"
+        },
+        {
+          "type": "package",
+          "name": "ci-msvc-64-dev"
+        }
+      ]
+    }
+  ]
+}

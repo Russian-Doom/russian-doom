@@ -1,0 +1,31 @@
+{
+  "version": 6,
+  "include": [
+    "Base_configurations.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "msvc-86",
+      "hidden": true,
+      "generator": "Visual Studio 16 2019",
+      "architecture": "Win32",
+      "toolset": "v141_xp",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "msvc-64",
+      "hidden": true,
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    }
+  ]
+}
