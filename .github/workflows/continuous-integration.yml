@@ -73,22 +73,22 @@ jobs:
             compiler_name: "clang"
             cmake_preset: 'ci-msys2-dev'
             build_suffix: "x64-clang"
-#          -
-#            display_name: "Windows | x86 | MSVC"
-#            runner: "windows-2019" # windows-2022
-#            shell: "bash"
-#            msvc_triplet: "x86-windows"
-#            compiler_name: "cl"
-#            cmake_preset: 'ci-msvc-86-dev'
-#            build_suffix: "x86-msvc"
-#          -
-#            display_name: "Windows | x64 | MSVC"
-#            runner: "windows-2022"
-#            shell: "bash"
-#            msvc_triplet: "x64-windows"
-#            compiler_name: "cl"
-#            cmake_preset: 'ci-msvc-64-dev'
-#            build_suffix: "x64-msvc"
+          -
+            display_name: "Windows | x86 | MSVC"
+            runner: "windows-2019" # windows-2022
+            shell: "bash"
+            msvc_triplet: "x86-windows"
+            compiler_name: "cl"
+            cmake_preset: 'ci-msvc-86-dev'
+            build_suffix: "x86-msvc"
+          -
+            display_name: "Windows | x64 | MSVC"
+            runner: "windows-2022"
+            shell: "bash"
+            msvc_triplet: "x64-windows"
+            compiler_name: "cl"
+            cmake_preset: 'ci-msvc-64-dev'
+            build_suffix: "x64-msvc"
           -
             display_name: "Linux | x64 | GCC"
             runner: "ubuntu-22.04"
@@ -158,6 +158,7 @@ jobs:
           matrix.config.compiler_name == 'cl'
         run: |
           cd $VCPKG_INSTALLATION_ROOT
+          echo "vcpkg revision: $(git rev-parse HEAD)"
           ./bootstrap-vcpkg.sh -disableMetrics
 
 #         For classic mode:
