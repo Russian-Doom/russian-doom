@@ -38,9 +38,9 @@ if(UNIX AND Python3_Interpreter_FOUND)
         list(APPEND DOCGEN_ARGS -o "\"${OUT}\"" ${MAN_SOURCE})
 
         add_custom_command(OUTPUT "${OUT}"
-            COMMAND Python3::Interpreter "\"${PROJECT_SOURCE_DIR}/man/docgen.py\"" ${DOCGEN_ARGS}
+            COMMAND Python3::Interpreter "\"${PROJECT_SOURCE_DIR}/data/man/docgen.py\"" ${DOCGEN_ARGS}
             MAIN_DEPENDENCY "${SOURCE}"
-            DEPENDS ${DEPENDS} "${PROJECT_SOURCE_DIR}/man/docgen.py"
+            DEPENDS ${DEPENDS} "${PROJECT_SOURCE_DIR}/data/man/docgen.py"
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
             COMMENT "Generating ${OUT}"
         )

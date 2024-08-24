@@ -220,7 +220,7 @@ endif()
 
 include(GNUInstallDirs)
 
-foreach(SUBDIR lib man src)
+foreach(SUBDIR lib data src)
     add_subdirectory("${SUBDIR}")
 endforeach()
 
