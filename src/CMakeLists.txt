@@ -120,7 +120,7 @@ foreach(MODULE ${COMPILE_MODULES})
     if(WIN32)
         add_library("${PROGRAM_PREFIX}${MODULE}" SHARED EXCLUDE_FROM_ALL
             i_main.c
-            "${PROJECT_SOURCE_DIR}/data/${MODULE}_icon.c"
+            "${PROJECT_SOURCE_DIR}/data/icons/${MODULE}_icon.c"
         )
         set_target_properties("${PROGRAM_PREFIX}${MODULE}" PROPERTIES
             PREFIX ""
@@ -194,7 +194,7 @@ foreach(MODULE ${COMPILE_MODULES})
     else()
         add_executable("${PROGRAM_PREFIX}${MODULE}"
             i_main.c
-            "${PROJECT_SOURCE_DIR}/data/${MODULE}_icon.c"
+            "${PROJECT_SOURCE_DIR}/data/icons/${MODULE}_icon.c"
         )
     endif()
 
