@@ -1,4 +1,4 @@
-if(UNIX AND Python3_Interpreter_FOUND)
+if(Python3_Interpreter_FOUND)
     function(add_docgen OUT)
         cmake_parse_arguments(PARSE_ARGV 1 "MAN"
             "" # List of Options

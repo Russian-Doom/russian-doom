@@ -1,0 +1,17 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+
+Name=@PACKAGE_PREFIX@ @MODULE_NAME@
+Icon=@PACKAGE_ID@.@MODULE@
+Comment=Limit-removing @MODULE_NAME@ source port
+Comment[ru]=Снимающий ограничения порт игры @MODULE_NAME@
+
+Categories=Game;Shooter;ActionGame;
+Keywords=first;person;shooter;vanilla;pwad;iwad;
+Keywords[ru]=шутер;от;первого;лица;ванильный;снимающий;ограничения;русский
+
+MimeType=application/x-doom-wad;
+TryExec=@PROGRAM_PREFIX@@MODULE@
+Exec=@PROGRAM_PREFIX@@MODULE@ %F
+Terminal=false

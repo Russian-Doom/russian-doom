@@ -261,3 +261,9 @@ if(WIN32 AND (Python3_Interpreter_FOUND OR CMAKE_VERSION VERSION_GREATER_EQUAL 3
         endif()
     endfunction()
 endif()
+
+# configure_desktop_file(<template> <out> <MODULE> <MODULE_NAME>)
+# Just set MODULE MODULE_NAME variables for configure_file
+function(configure_desktop_file template out MODULE MODULE_NAME)
+    configure_file("${template}" "${out}" @ONLY)
+endfunction()

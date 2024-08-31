@@ -13,6 +13,7 @@ Option(VCPKG_MANIFEST_MODE "Operate in vcpkg manifest mode instead of classic mo
 
 # Project Name and Version
 project("Russian Doom" VERSION 6.3 LANGUAGES C NONE)
+set(PACKAGE_ID "io.github.russian_doom.russian_doom")
 
 # Compile modules
 Option(RD_COMPILE_DOOM "Compile Doom module" ON)
