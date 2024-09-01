@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2024 Leonid Murin (Dasperal) -->
+<component type="desktop-application">
+    <id>@PACKAGE_ID@</id>
+
+    <name translate="no">Russian Doom</name>
+    <summary>Limit-removing source port of Doom, Heretic and Hexen</summary>
+    <summary xml:lang="ru">Снимающий ограничения порт игр Doom, Heretic и Hexen</summary>
+    <developer id="io.github.dasperal">
+        <name>Leonid Murin (Dasperal)</name>
+        <name xml:lang="ru">Леонид Мурин (Dasperal)</name>
+    </developer>
+    <icon type="stock">@PACKAGE_ID@.doom</icon>
+
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>GPL-2.0-only</project_license>
+
+    <description>
+        <p>
+            Russian Doom has many vanilla bug fixes, enhanced rendering resolutions,
+            improved game palettes and offers many optional aesthetic game enhancements
+            along with the maximum possible translation to the Russian language.
+        </p>
+        <p xml:lang="ru">
+            В Russian Doom исправлены оригинальные баги, улучшено разрешение рендеринга и игровые палитры,
+            а так же присутствует множество дополнительных эстетических улучшений
+            наряду с максимально возможным переводом на Русский язык.
+        </p>
+
+        <p>
+            Russian Doom can automatically find base WAD-files (IWADs) in the following locations:
+        </p>
+        <p xml:lang="ru">
+            Russian Doom может автоматически находить базовые WAD-файлы (IWADы) в следующих местах:
+        </p>
+        <ul>
+            <li>Steam Релизы of Doom, Heretic and Hexen</li>
+            <li>Working directory</li>
+            <li>${XDG_DATA_HOME}/games/doom</li>
+            <li>${XDG_DATA_DIRS}/games/doom</li>
+            <li>${DOOMWADDIR}</li>
+            <li>${DOOMWADPATH}</li>
+            <li xml:lang="ru">Релизы Doom, Heretic и Hexen Steam</li>
+            <li xml:lang="ru">Рабочая директория</li>
+            <li xml:lang="ru">${XDG_DATA_HOME}/games/doom</li>
+            <li xml:lang="ru">${XDG_DATA_DIRS}/games/doom</li>
+            <li xml:lang="ru">${DOOMWADDIR}</li>
+            <li xml:lang="ru">${DOOMWADPATH}</li>
+        </ul>
+        <p>
+            If you want to load additional WAD-files (or your IWADs present in other locations) and/or deh/bex patches,
+            you can select them and open with Russian Doom.
+        </p>
+        <p xml:lang="ru">
+            Если вы хотите загрузить дополнительные WAD-файлы (или ваши IWADы, находящиеся в других местах) и/или deh/bex патчи,
+            вы можете выделить их и открыть с помощью Russian Doom.
+        </p>
+        <p>
+            In case files fail to load properly, you can use CLI.
+        </p>
+        <p xml:lang="ru">
+            В случае, если файлы не загружаются должным образом, вы можете использовать CLI.
+        </p>
+    </description>
+
+    <url type="homepage">https://github.com/Russian-Doom/russian-doom</url>
+    <url type="bugtracker">https://github.com/Russian-Doom/russian-doom/issues</url>
+    <url type="help">https://github.com/Russian-Doom/russian-doom/wiki</url>
+    <url type="vcs-browser">https://github.com/Russian-Doom/russian-doom</url>
+    <url type="contribute">https://github.com/Russian-Doom/russian-doom/blob/master/CONTRIBUTING.md</url>
+
+    <content_rating type="oars-1.1">
+        <content_attribute id="violence-fantasy">intense</content_attribute>
+        <content_attribute id="violence-realistic">intense</content_attribute>
+        <content_attribute id="violence-bloodshed">intense</content_attribute>
+        <content_attribute id="violence-desecration">intense</content_attribute>
+        <content_attribute id="social-chat">intense</content_attribute>
+    </content_rating>
+
+    <languages>
+        <lang percentage="100">en_US</lang>
+        <lang percentage="100">ru_RU</lang>
+    </languages>
+
+    <categories>
+        <category>Game</category>
+        <category>Shooter</category>
+        <category>ActionGame</category>
+    </categories>
+    <keywords>
+        <keyword>doom</keyword>
+        <keyword>heretic</keyword>
+        <keyword>hexen</keyword>
+        <keyword>first</keyword>
+        <keyword>person</keyword>
+        <keyword>shooter</keyword>
+        <keyword>vanilla</keyword>
+        <keyword>limit-removing</keyword>
+        <keyword>pwad</keyword>
+        <keyword>iwad</keyword>
+        <keyword>russian</keyword>
+        <keyword xml:lang="ru">дум</keyword>
+        <keyword xml:lang="ru">еретик</keyword>
+        <keyword xml:lang="ru">хексен</keyword>
+        <keyword xml:lang="ru">шутер</keyword>
+        <keyword xml:lang="ru">от</keyword>
+        <keyword xml:lang="ru">первого</keyword>
+        <keyword xml:lang="ru">лица</keyword>
+        <keyword xml:lang="ru">ванильный</keyword>
+        <keyword xml:lang="ru">снимающий</keyword>
+        <keyword xml:lang="ru">ограничения</keyword>
+        <keyword xml:lang="ru">pwad</keyword>
+        <keyword xml:lang="ru">iwad</keyword>
+        <keyword xml:lang="ru">русский</keyword>
+    </keywords>
+
+    <recommends>
+        <display_length compare="ge">640</display_length>
+    </recommends>
+    <supports>
+        <control>pointing</control>
+        <control>keyboard</control>
+        <control>gamepad</control>
+    </supports>
+
+    <launchable type="desktop-id">@PACKAGE_ID@.desktop</launchable>
+    <launchable type="desktop-id">@PACKAGE_ID@.heretic.desktop</launchable>
+    <launchable type="desktop-id">@PACKAGE_ID@.hexen.desktop</launchable>
+    <provides>
+        <mediatype>application/x-doom-wad</mediatype>
+        <binary>russian-doom</binary>
+        <binary>russian-heretic</binary>
+        <binary>russian-hexen</binary>
+    </provides>
+
+    <releases>
+        <release version="6.3" date="2023-10-29">
+            <url type="details">https://github.com/Russian-Doom/russian-doom/wiki/Changelog#russian-doom-63-2023-10-29</url>
+            <url type="details" xml:lang="ru">https://github.com/Russian-Doom/russian-doom/wiki/%D0%98%D1%81%D1%82%D0%BE%D1%80%D0%B8%D1%8F-%D0%B8%D0%B7%D0%BC%D0%B5%D0%BD%D0%B5%D0%BD%D0%B8%D0%B9#russian-doom-63-2023-10-29</url>
+            <description>
+                <p>Updated release package to Russian Doom 6.3</p>
+                <p xml:lang="ru">Пакет обновлён до Russian Doom 6.3</p>
+            </description>
+        </release>
+    </releases>
+</component>
