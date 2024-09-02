@@ -45,11 +45,14 @@ static const iwad_t iwads[] =
     { "doom.wad",     doom,      retail,     "Doom" },
     { "doomunity.wad",     doom,      retail,     "Doom" }, // [JN] Unity edition
     { "doom1.wad",    doom,      shareware,  "Doom Shareware" },
+    { "doom2f.wad",   doom2,     commercial, "Doom II: L'Enfer sur Terre" },
 //  { "chex.wad",     pack_chex, retail,     "Chex Quest" },
 //  { "hacx.wad",     pack_hacx, commercial, "Hacx" },
     { "freedm.wad",   doom2,     commercial, "FreeDM" },
     { "freedoom2.wad", doom2,    commercial, "Freedoom: Phase 2" },
     { "freedoom1.wad", doom,     retail,     "Freedoom: Phase 1" },
+//  { "rekkrsa.wad",  doom,      retail,     "REKKR" }, // [Dasperal] TODO  // [crispy] REKKR
+//  { "rekkrsl.wad",  doom,      retail,     "REKKR: Sunken Land" }, // [Dasperal] TODO  // [crispy] REKKR: Sunken Land (Steam retail)
     { "heretic.wad",  heretic,   retail,     "Heretic" },
     { "heretic1.wad", heretic,   shareware,  "Heretic Shareware" },
     { "hexen.wad",    hexen,     commercial, "Hexen" },
@@ -186,6 +189,14 @@ static registry_value_t root_path_keys[] =
         "PATH",
     },
 
+    // Doom 3: BFG Edition
+
+    {
+        HKEY_LOCAL_MACHINE,
+        SOFTWARE_KEY "\\GOG.com\\Games\\1135892318",
+        "PATH",
+    },
+
     // Final Doom
 
     {
@@ -200,6 +211,30 @@ static registry_value_t root_path_keys[] =
         HKEY_LOCAL_MACHINE,
         SOFTWARE_KEY "\\GOG.com\\Games\\1435827232",
         "PATH",
+    },
+
+    // [crispy] DOOM Unity port
+
+    {
+        HKEY_LOCAL_MACHINE,
+        SOFTWARE_KEY "\\GOG.com\\Games\\2015545325",
+        "PATH"
+    },
+
+    // [crispy] DOOM II Unity port
+
+    {
+        HKEY_LOCAL_MACHINE,
+        SOFTWARE_KEY "\\GOG.com\\Games\\1426071866",
+        "PATH"
+    },
+
+    // [crispy] DOOM + DOOM II
+
+    {
+        HKEY_LOCAL_MACHINE,
+        SOFTWARE_KEY "\\GOG.com\\Games\\1413291984",
+        "PATH"
     },
 
     // Strife: Veteran Edition
@@ -245,6 +280,7 @@ static char *root_path_subdirs[] =
     "Ultimate Doom",
     "Plutonia",
     "TNT",
+    "base\\wads"
 };
 
 // Location where Steam is installed
@@ -261,22 +297,23 @@ static registry_value_t steam_install_location =
 static char *steam_install_subdirs[] =
 {
     "steamapps\\common\\doom 2\\base",
-    "steamapps\\common\\Doom 2\\rerelease\\doom ii_data\\streamingassets",
     "steamapps\\common\\doom 2\\finaldoombase",
     "steamapps\\common\\doom 2\\masterbase\\master\\wads",
     "steamapps\\common\\final doom\\base",
     "steamapps\\common\\ultimate doom\\base",
-    "steamapps\\common\\Ultimate Doom\\rerelease\\doom_data\\streamingassets",
     "steamapps\\common\\heretic shadow of the serpent riders\\base",
     "steamapps\\common\\hexen\\base",
     "steamapps\\common\\hexen deathkings of the dark citadel\\base",
 
     // From Doom 3: BFG Edition:
-
     "steamapps\\common\\DOOM 3 BFG Edition\\base\\wads",
 
-    // From Strife: Veteran Edition:
+    // [crispy] Doom 1 + Doom 2:
+    "steamapps\\common\\Doom 2\\rerelease\\DOOM II_Data\\StreamingAssets",
+    "steamapps\\common\\Ultimate Doom\\rerelease",
+    "steamapps\\common\\Ultimate Doom\\rerelease\\DOOM_Data\\StreamingAssets",
 
+    // From Strife: Veteran Edition:
     "steamapps\\common\\Strife",
 };
 
@@ -660,6 +697,12 @@ static void AddXdgDirs(void)
     // source ports is /usr/share/games/doom - we support this through the
     // XDG_DATA_DIRS mechanism, through which it can be overridden.
     AddIWADPath(env, "/games/doom");
+    AddIWADPath(env, "/doom");
+
+    // The convention set by RBDOOM-3-BFG is to install Doom 3: BFG
+    // Edition into this directory, under which includes the Doom
+    // Classic WADs.
+    AddIWADPath(env, "/games/doom3bfg/base/wads");
 }
 
 #ifndef __MACOSX__
@@ -681,18 +724,26 @@ static void AddSteamDirs(void)
     steampath = M_StringJoin(homedir, "/.steam/root/steamapps/common", NULL);
 
     AddIWADPath(steampath, "/Doom 2/base");
-    AddIWADPath(steampath, "/Doom 2/rerelease/DOOM II_Data/StreamingAssets");
     AddIWADPath(steampath, "/Doom 2/finaldoombase");
     AddIWADPath(steampath, "/Doom 2/masterbase/master/wads");
     AddIWADPath(steampath, "/Master Levels of Doom/doom2");
-    AddIWADPath(steampath, "/Ultimate Doom/base");
-    AddIWADPath(steampath, "/Ultimate Doom/rerelease/DOOM_Data/StreamingAssets");
     AddIWADPath(steampath, "/Final Doom/base");
-    AddIWADPath(steampath, "/DOOM 3 BFG Edition/base/wads");
+    AddIWADPath(steampath, "/Ultimate Doom/base");
     AddIWADPath(steampath, "/Heretic Shadow of the Serpent Riders/base");
     AddIWADPath(steampath, "/Hexen/base");
     AddIWADPath(steampath, "/Hexen Deathkings of the Dark Citadel/base");
+
+    // From Doom 3: BFG Edition:
+    AddIWADPath(steampath, "/DOOM 3 BFG Edition/base/wads");
+
+    // [crispy] Doom 1 + Doom 2:
+    AddIWADPath(steampath, "/Doom 2/rerelease/DOOM II_Data/StreamingAssets");
+    AddIWADPath(steampath, "/Ultimate Doom/rerelease");
+    AddIWADPath(steampath, "/Ultimate Doom/rerelease/DOOM_Data/StreamingAssets");
+
+    // From Strife: Veteran Edition:
     AddIWADPath(steampath, "/Strife");
+
     free(steampath);
 }
 #endif // __MACOSX__
