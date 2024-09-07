@@ -302,6 +302,7 @@ enum
     FILETYPE_PWAD =    0x4,
     FILETYPE_DEH =     0x8,
     FILETYPE_DEMO =    0x10,
+    REGULAR_ARG =      0x20
 };
 
 static boolean FileIsDemoLump(const char *filename)
@@ -431,77 +432,69 @@ static int CompareByFileType(const void *a, const void *b)
 
 void M_AddLooseFiles(void)
 {
-    int i, types = 0;
-    char **newargv;
-    argument_t *arguments;
-
-    if (myargc < 2)
-    {
-        return;
-    }
+    if(myargc < 2) return;
 
     // allocate space for up to four additional regular parameters
-    // (-iwad, -merge, -deh, -playdemo)
-
-    arguments = malloc((myargc + 4) * sizeof(*arguments));
+    // (-iwad, -file, -deh, -playdemo)
+    argument_t* arguments = malloc((myargc + 4) * sizeof(*arguments));
     memset(arguments, 0, (myargc + 4) * sizeof(*arguments));
 
-    // check the command line and make sure it does not already
-    // contain any regular parameters or response files
-    // but only fully-qualified LFS or UNC file paths
-
-    for (i = 1; i < myargc; i++)
+    // check the command line for lazy parameters
+    int types = 0;
+    boolean encountered_normal_arg = false;
+    for(int i = 1; i < myargc; i++)
     {
-        char *arg = myargv[i];
-        int type;
+        char* arg = myargv[i];
 
-        if (strlen(arg) < 3 ||
-            arg[0] == '-' ||
-            arg[0] == '@' ||
-            ((!isalpha(arg[0]) || arg[1] != ':' || arg[2] != '\\') &&
-            (arg[0] != '\\' || arg[1] != '\\')))
-        {
-            free(arguments);
-            return;
-        }
-
-        type = GuessFileType(arg);
         arguments[i].str = arg;
-        arguments[i].type = type;
         arguments[i].stable = i;
-        types |= type;
+
+        // Check if we encountered regular parameter or response file,
+        // then treat all next args as regular parameter.
+        // Otherwise, gues the type of lazy parameter.
+        if(encountered_normal_arg || arg[0] == '-' || arg[0] == '@')
+        {
+            arguments[i].type = REGULAR_ARG;
+            encountered_normal_arg = true;
+        }
+        else
+        {
+            int type = GuessFileType(arg);
+            arguments[i].type = type;
+            types |= type;
+        }
     }
 
     // add space for one additional regular parameter
-    // for each discovered file type in the new argument  list
+    // for each discovered file type in the new argument list
     // and sort parameters right before their corresponding file paths
 
-    if (types & FILETYPE_IWAD)
+    if(types & FILETYPE_IWAD)
     {
         arguments[myargc].str = M_StringDuplicate("-iwad");
         arguments[myargc].type = FILETYPE_IWAD - 1;
         myargc++;
     }
-    if (types & FILETYPE_PWAD)
+    if(types & FILETYPE_PWAD)
     {
         arguments[myargc].str = M_StringDuplicate("-file");
         arguments[myargc].type = FILETYPE_PWAD - 1;
         myargc++;
     }
-    if (types & FILETYPE_DEH)
+    if(types & FILETYPE_DEH)
     {
         arguments[myargc].str = M_StringDuplicate("-deh");
         arguments[myargc].type = FILETYPE_DEH - 1;
         myargc++;
     }
-    if (types & FILETYPE_DEMO)
+    if(types & FILETYPE_DEMO)
     {
         arguments[myargc].str = M_StringDuplicate("-playdemo");
         arguments[myargc].type = FILETYPE_DEMO - 1;
         myargc++;
     }
 
-    newargv = malloc(myargc * sizeof(*newargv));
+    char** newargv = malloc(myargc * sizeof(*newargv));
 
     // sort the argument list by file type, except for the zeroth argument
     // which is the executable invocation itself
@@ -510,7 +503,7 @@ void M_AddLooseFiles(void)
 
     newargv[0] = myargv[0];
 
-    for (i = 1; i < myargc; i++)
+    for(int i = 1; i < myargc; i++)
     {
         newargv[i] = arguments[i].str;
     }
