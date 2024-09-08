@@ -252,72 +252,75 @@ void I_Quit(void)
     do_quit(false);
 }
 
-void I_QuitWithError(char* error, ...)
+void _add_error(char* error, va_list argptr)
 {
-    va_list argptr;
-    va_start(argptr, error);
-    I_AddError(error, argptr);
-    va_end(argptr);
-
-    do_quit(true);
-}
-
-void I_QuitWithMessage(char* error, ...)
-{
-    va_list argptr;
-    va_start(argptr, error);
-    I_AddMessage(error, argptr);
-    va_end(argptr);
-
-    do_quit(false);
-}
-
-void I_AddError(char* error, ...)
-{
-    va_list argptr;
-
     // Message first.
-    va_start(argptr, error);
     vprintf(error, argptr);
     printf("\n\n");
-    va_end(argptr);
     fflush(stdout);
 
     // Write a copy of the msg into buffer.
     message_t* msg = malloc(sizeof(message_t));
-    va_start(argptr, error);
     memset(msg->msgbuf, 0, sizeof(msg->msgbuf));
     M_vsnprintf(msg->msgbuf, sizeof(msg->msgbuf), error, argptr);
-    va_end(argptr);
 
     msg->type = SDL_MESSAGEBOX_ERROR;
     msg->next = message_queue;
     message_queue = msg;
 }
 
-void I_AddMessage(char* message, ...)
+void I_QuitWithError(char* error, ...)
 {
     va_list argptr;
+    va_start(argptr, error);
+    _add_error(error, argptr);
+    va_end(argptr);
 
+    do_quit(true);
+}
+
+void I_AddError(char* error, ...)
+{
+    va_list argptr;
+    va_start(argptr, error);
+    _add_error(error, argptr);
+    va_end(argptr);
+}
+
+void _add_message(char* message, va_list argptr)
+{
     // Message first.
-    va_start(argptr, message);
     vprintf(message, argptr);
     printf("\n\n");
-    va_end(argptr);
     fflush(stdout);
 
     // Write a copy of the message into buffer.
     message_t* msg = malloc(sizeof(message_t));
-    va_start(argptr, message);
     memset(msg->msgbuf, 0, sizeof(msg->msgbuf));
     M_vsnprintf(msg->msgbuf, sizeof(msg->msgbuf), message, argptr);
-    va_end(argptr);
 
     msg->type = SDL_MESSAGEBOX_INFORMATION;
     msg->next = message_queue;
     message_queue = msg;
 }
 
+void I_QuitWithMessage(char* error, ...)
+{
+    va_list argptr;
+    va_start(argptr, error);
+    _add_message(error, argptr);
+    va_end(argptr);
+
+    do_quit(false);
+}
+
+void I_AddMessage(char* message, ...)
+{
+    va_list argptr;
+    va_start(argptr, message);
+    _add_message(message, argptr);
+    va_end(argptr);
+}
 
 //
 // I_Realloc
