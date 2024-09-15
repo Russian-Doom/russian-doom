@@ -12,7 +12,10 @@ set(X_VCPKG_APPLOCAL_DEPS_INSTALL ON)
 Option(VCPKG_MANIFEST_MODE "Operate in vcpkg manifest mode instead of classic mode" ON)
 
 # Project Name and Version
-project("Russian Doom" VERSION 6.3 LANGUAGES C NONE)
+project("Russian Doom" VERSION 6.3
+        LANGUAGES C NONE
+        HOMEPAGE_URL "https://github.com/Russian-Doom/russian-doom"
+)
 set(PACKAGE_ID "io.github.russian_doom.russian_doom")
 
 Option(RD_TEST_WITH_GDB "Attach gdb to CTest tests" OFF)
@@ -190,18 +193,32 @@ foreach(SUBDIR lib data src)
 endforeach()
 
 # CPack
-if(WIN32)
-    set(CPACK_PACKAGE_NAME ${PACKAGE_TARNAME})
-    set(CPACK_PACKAGE_CHECKSUM SHA256)
-    set(CPACK_PROJECT_CONFIG_FILE "CPackProjectConfig.cmake")
+set(CPACK_PACKAGE_NAME ${PACKAGE_TARNAME})
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A limit-removing source port of Doom, Heretic and Hexen")
+set(CPACK_PACKAGE_DESCRIPTION "Russian Doom has many vanilla bug fixes, enhanced rendering resolutions, improved game palettes and offers many optional aesthetic game enhancements along with the maximum possible translation to the Russian language.")
+set(CPACK_PACKAGE_CHECKSUM SHA256)
+set(CPACK_PROJECT_CONFIG_FILE "CPackProjectConfig.cmake")
 
+if(WIN32)
     set(CPACK_GENERATOR ZIP)
     set(CPACK_SYSTEM_NAME "windows-${ARCH}")
 
-    # Archive Generator
+    # Archive generator
     set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
     set(CPACK_ARCHIVE_COMPONENT_INSTALL OFF)
     set(CPACK_ARCHIVE_THREADS 0) # For Cmake 3.18+
+elseif(LINUX)
+    set(CPACK_GENERATOR DEB)
 
-    include(CPack)
+    # Debian package generator
+    set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
+    set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Leonid Murin (Dasperal)")
+    set(CPACK_DEBIAN_PACKAGE_SECTION "games")
+    set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libsdl2-2.0-0 (>= 2.0.18), libsdl2-mixer-2.0-0 (>= 2.0.2), libsdl2-net-2.0-0 (>= 2.0.0), libsamplerate0")
+    set(CPACK_DEBIAN_PACKAGE_PROVIDES "doom-engine, heretic-engine, hexen-engine")
+    set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "game-data-packager")
+    set(CPACK_DEBIAN_PACKAGE_SUGGESTS "freedoom, doom-wad-shareware")
 endif()
+
+include(CPack)
