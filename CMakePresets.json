@@ -9,6 +9,7 @@
     "cmake/presets/Linux.json",
     "cmake/presets/Arch_Linux.json",
     "cmake/presets/Debian_Linux.json",
+    "cmake/presets/Fedora_Linux.json",
     "cmake/presets/MSYS2.json",
     "cmake/presets/MSVC.json",
     "cmake/presets/CI/Linux.json",

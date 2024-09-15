@@ -66,6 +66,19 @@
         "lhs": "${hostSystemName}",
         "rhs": "Linux"
       }
+    },
+    {
+      "name": "local-linux-release-fedora-rpm",
+      "configurePreset": "local-linux-release",
+      "inherits": ["release"],
+      "displayName": "Linux (Local|Native|Release|Fedora RPM)",
+      "description": "Cmake package configuration for Local Release builds of RPM (Fedora) packages using Linux toolchain",
+      "generators": ["RPM"],
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
     }
   ],
   "workflowPresets": [
@@ -100,6 +113,25 @@
         {
           "type": "package",
           "name": "local-linux-release-deb"
+        }
+      ]
+    },
+    {
+      "name": "local-linux-release-fedora-rpm",
+      "displayName": "Linux (Local|Native|Release|Fedora RPM)",
+      "description": "Workflow for Local Release builds of RPM (Fedora) packages using Linux toolchain",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "local-linux-release"
+        },
+        {
+          "type": "build",
+          "name": "local-linux-release"
+        },
+        {
+          "type": "package",
+          "name": "local-linux-release-fedora-rpm"
         }
       ]
     }

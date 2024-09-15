@@ -208,7 +208,7 @@ if(WIN32)
     set(CPACK_ARCHIVE_COMPONENT_INSTALL OFF)
     set(CPACK_ARCHIVE_THREADS 0) # For Cmake 3.18+
 elseif(LINUX)
-    set(CPACK_GENERATOR DEB)
+    set(CPACK_GENERATOR DEB RPM)
 
     # Debian package generator
     set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
@@ -219,6 +219,14 @@ elseif(LINUX)
     set(CPACK_DEBIAN_PACKAGE_PROVIDES "doom-engine, heretic-engine, hexen-engine")
     set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "game-data-packager")
     set(CPACK_DEBIAN_PACKAGE_SUGGESTS "freedoom, doom-wad-shareware")
+
+    # RPM package generator
+    set(CPACK_RPM_FILE_NAME RPM-DEFAULT)
+    set(CPACK_RPM_PACKAGE_VENDOR "Leonid Murin (Dasperal)")
+    set(CPACK_RPM_PACKAGE_RELEASE_DIST ON)
+    set(CPACK_RPM_PACKAGE_LICENSE "GPL-2.0-only")
+    set(CPACK_RPM_PACKAGE_DESCRIPTION ${CPACK_PACKAGE_DESCRIPTION})
+    set(CPACK_RPM_PACKAGE_REQUIRES "SDL2 >= 2.0.18, SDL2_mixer >= 2.0.2, SDL2_net >= 2.0.0, libsamplerate")
 endif()
 
 include(CPack)
