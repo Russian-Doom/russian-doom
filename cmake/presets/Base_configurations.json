@@ -42,7 +42,6 @@
         "rhs": "true"
       },
       "cacheVariables": {
-        "RD_BUILD_PORTABLE": "ON",
         "RD_TEST_WITH_GDB": "ON"
       },
       "binaryDir": "${sourceDir}/build"

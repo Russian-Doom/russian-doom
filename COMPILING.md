@@ -293,10 +293,6 @@ Available build types are `Release`, `Debug`, `RelWithDebInfo`, `MinSizeRel`.
 You can enable and disable the compilation of modules by changing cmake options:
 `RD_COMPILE_DOOM`, `RD_COMPILE_HERETIC`, `RD_COMPILE_HEXEN`, `RD_COMPILE_STRIFE` to `ON` or `OFF`.
 
-If you want to use a portable version, like on Windows, set the `RD_BUILD_PORTABLE` cmake option to `ON`.
-Portable version searches and stores internal resources,
-config files, and savegames in the installation directory among executables.
-
 To use configs provided by the installed libraries instead of find-modules,
 set the `CMAKE_FIND_PACKAGE_PREFER_CONFIG` cmake option to `ON`.
 

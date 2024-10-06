@@ -1028,7 +1028,7 @@ static const char** config_path_prefixes(const char* tarname)
 #ifdef _WIN32
         // Exe dir or -cdrom
         M_StringDuplicate(M_ParmExists("-cdrom") ? RD_Project_CDRom_Dir : exedir),
-#elif defined(BUILD_PORTABLE)
+#else
         // Exe dir
         M_StringDuplicate(exedir),
 #endif
@@ -1274,7 +1274,7 @@ static const char** savegame_path_prefixes(void)
         // Exe dir or -cdrom
         M_StringJoin(M_ParmExists("-cdrom") ? RD_Project_CDRom_Dir : exedir, "savegames", DIR_SEPARATOR_S, NULL),
         M_StringJoin(getenv("USERPROFILE"), DIR_SEPARATOR_S, "Saved Games", DIR_SEPARATOR_S, PACKAGE_TARNAME, DIR_SEPARATOR_S, NULL),
-#elif defined(BUILD_PORTABLE)
+#else
         // Exe dir
         M_StringJoin(exedir, "savegames", DIR_SEPARATOR_S, NULL),
 #endif

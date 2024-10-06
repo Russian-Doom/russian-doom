@@ -25,8 +25,6 @@ include(CMakeDependentOption)
 find_package(Git)
 find_package(Python3 COMPONENTS Interpreter)
 
-cmake_dependent_option(RD_BUILD_PORTABLE "Build portable version with Windows like behavior (see COMPILING.MD)" OFF "NOT WIN32" OFF)
-
 # Git info options
 cmake_dependent_option(RD_GIT_NO_HASH "For Devs only! Don't run 'revision_check' at all" OFF "GIT_FOUND" ON)
 

@@ -5,7 +5,6 @@
       "name": "clion",
       "hidden": true,
       "cacheVariables": {
-        "RD_BUILD_PORTABLE": "ON",
         "RD_GIT_NO_HASH": "OFF"
       },
       "vendor": {

@@ -317,9 +317,6 @@ static void printVersion(void)
 {
     printf("%s\n", RD_Project_String);
     printf("Revision: %s (%s)\n", GIT_SHA, GIT_TIME);
-#ifdef BUILD_PORTABLE
-    printf("Portable version\n");
-#endif
     printf("SDL version\n\tCompiled: %d.%d.%d\n", SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_PATCHLEVEL);
     SDL_version sdlVersion;
     SDL_GetVersion(&sdlVersion);

@@ -937,13 +937,36 @@ void M_NormalizeSlashes(char *str)
 char* RD_M_FindInternalResource(char* resourceName)
 {
     char* retVal;
-#if defined(_WIN32) || defined(BUILD_PORTABLE)
-    retVal = M_StringJoin(exedir, "base", DIR_SEPARATOR_S, resourceName, NULL);
-#elif defined(__APPLE__)
-    retVal = M_StringJoin(packageResourcesDir, resourceName, NULL);
-#else // Linux
-    retVal = M_StringJoin(PACKAGE_DATADIR, DIR_SEPARATOR_S, PACKAGE_TARNAME, DIR_SEPARATOR_S, resourceName, NULL);
+#ifndef __APPLE__
+    if(!packageResourcesDir)
+    {
+    #ifndef _WIN32
+        if(M_StringStartsWith(exedir, "/usr/"))
+        {
+            char* temp = M_DirName(exedir);
+            char* pkg_dir = M_DirName(temp);
+            packageResourcesDir = M_StringJoin(pkg_dir, DIR_SEPARATOR_S, "share", DIR_SEPARATOR_S, PACKAGE_TARNAME, DIR_SEPARATOR_S, NULL);
+            free(pkg_dir);
+            free(temp);
+        }
+        else if(M_StringStartsWith(exedir, "/opt/"))
+        {
+            char* temp = M_DirName(exedir);
+            char* pkg_dir = M_DirName(temp);
+            packageResourcesDir = M_StringJoin(pkg_dir, DIR_SEPARATOR_S, "share", DIR_SEPARATOR_S, NULL);
+            free(pkg_dir);
+            free(temp);
+        }
+        else
+        {
+    #endif
+            packageResourcesDir = M_StringJoin(exedir, "base", DIR_SEPARATOR_S, NULL);
+    #ifndef _WIN32
+        }
+    #endif
+    }
 #endif
+    retVal = M_StringJoin(packageResourcesDir, resourceName, NULL);
     if(!M_FileExists(retVal))
     {
         I_QuitWithError(english_language ?

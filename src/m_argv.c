@@ -532,9 +532,7 @@ char *M_GetExecutableName(void)
 }
 
 char* exedir = NULL;
-#ifdef __APPLE__
 char* packageResourcesDir = NULL;
-#endif
 
 void M_PrintHelp(void)
 {
