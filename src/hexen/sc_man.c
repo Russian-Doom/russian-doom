@@ -150,7 +150,7 @@ static void OpenScript(char *name, lumpindex_t lumpNum, script_type_t type)
     {                           // File script - zone
         ScriptLumpNum = -1;
         ScriptSize = M_ReadFile(name, (byte **) & ScriptBuffer);
-        M_ExtractFileBase(name, ScriptName);
+        M_ExtractFileBase(name, ScriptName, 30);
     }
     else if (type == LUMP_SCRIPT_NUM)
     {

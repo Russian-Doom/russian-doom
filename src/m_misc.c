@@ -497,17 +497,14 @@ const char *M_FileName(const char *path)
     }
 }
 
-void M_ExtractFileBase(char *path, char *dest)
+void M_ExtractFileBase(const char* path, char* dest, const int dest_size)
 {
-    char *src;
-    int length;
-
-    src = path + strlen(path) - 1;
+    const char* src = path + strlen(path) - 1;
 
     // back up until a \ or the start
-    while (src != path && *(src - 1) != DIR_SEPARATOR)
+    while(src != path && *(src - 1) != DIR_SEPARATOR)
     {
-	src--;
+        src--;
     }
 
     // Copy up to eight characters
@@ -515,12 +512,12 @@ void M_ExtractFileBase(char *path, char *dest)
     // with a base of more than eight characters.  To remove the 8.3
     // filename limit, instead we simply truncate the name.
 
-    length = 0;
+    int length = 0;
     memset(dest, 0, 8);
 
-    while (*src != '\0' && *src != '.')
+    while(*src != '\0' && *src != '.' && length < 8)
     {
-	dest[length++] = toupper((int)*src++);
+        dest[length++] = toupper((int)*src++);
     }
 }
 

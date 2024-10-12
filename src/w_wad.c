@@ -167,7 +167,7 @@ wad_file_t *W_AddFile (char *filename)
         // Name the lump after the base of the filename (without the
         // extension).
 
-	M_ExtractFileBase (filename, fileinfo->name);
+	M_ExtractFileBase(filename, fileinfo->name, 8);
 	numfilelumps = 1;
     }
     else
