@@ -194,7 +194,7 @@ boolean I_ConsoleStdout(void)
 // I_Quit
 //
 
-static inline void do_quit(boolean is_error)
+static inline void do_quit(const boolean is_error)
 {
     if(already_quitting)
     {
@@ -203,13 +203,11 @@ static inline void do_quit(boolean is_error)
                "Внимание: обнаружен рекурсивный вызов I_Quit*.\n");
         exit(-1);
     }
-    else
-    {
-        already_quitting = true;
-    }
+
+    already_quitting = true;
 
     // Run through all exit functions
-    atexit_listentry_t* entry = exit_funcs;
+    const atexit_listentry_t* entry = exit_funcs;
     while(entry != NULL)
     {
         if(!is_error || entry->run_on_error)
@@ -252,74 +250,72 @@ void I_Quit(void)
     do_quit(false);
 }
 
-void _add_error(char* error, va_list argptr)
+static inline message_t* _enqueue_message(const char* error, va_list arg_ptr)
 {
-    // Message first.
-    vprintf(error, argptr);
+    // Log message first
+    va_list arg_ptr_2;
+    va_copy(arg_ptr_2, arg_ptr);
+    vprintf(error, arg_ptr_2);
+    va_end(arg_ptr_2);
     printf("\n\n");
     fflush(stdout);
 
     // Write a copy of the msg into buffer.
     message_t* msg = malloc(sizeof(message_t));
     memset(msg->msgbuf, 0, sizeof(msg->msgbuf));
-    M_vsnprintf(msg->msgbuf, sizeof(msg->msgbuf), error, argptr);
+    M_vsnprintf(msg->msgbuf, sizeof(msg->msgbuf), error, arg_ptr);
 
-    msg->type = SDL_MESSAGEBOX_ERROR;
+    // Link to message queue
     msg->next = message_queue;
     message_queue = msg;
+
+    return msg;
+}
+
+static inline void _add_message(const char* message, const va_list arg_ptr)
+{
+    _enqueue_message(message, arg_ptr)->type = SDL_MESSAGEBOX_INFORMATION;
+}
+
+static inline void _add_error(const char* error, const va_list arg_ptr)
+{
+    _enqueue_message(error, arg_ptr)->type = SDL_MESSAGEBOX_ERROR;
 }
 
 void I_QuitWithError(char* error, ...)
 {
-    va_list argptr;
-    va_start(argptr, error);
-    _add_error(error, argptr);
-    va_end(argptr);
+    va_list arg_ptr;
+    va_start(arg_ptr, error);
+    _add_error(error, arg_ptr);
+    va_end(arg_ptr);
 
     do_quit(true);
 }
 
 void I_AddError(char* error, ...)
 {
-    va_list argptr;
-    va_start(argptr, error);
-    _add_error(error, argptr);
-    va_end(argptr);
+    va_list arg_ptr;
+    va_start(arg_ptr, error);
+    _add_error(error, arg_ptr);
+    va_end(arg_ptr);
 }
 
-void _add_message(char* message, va_list argptr)
+void I_QuitWithMessage(char* message, ...)
 {
-    // Message first.
-    vprintf(message, argptr);
-    printf("\n\n");
-    fflush(stdout);
-
-    // Write a copy of the message into buffer.
-    message_t* msg = malloc(sizeof(message_t));
-    memset(msg->msgbuf, 0, sizeof(msg->msgbuf));
-    M_vsnprintf(msg->msgbuf, sizeof(msg->msgbuf), message, argptr);
-
-    msg->type = SDL_MESSAGEBOX_INFORMATION;
-    msg->next = message_queue;
-    message_queue = msg;
-}
-
-void I_QuitWithMessage(char* error, ...)
-{
-    va_list argptr;
-    va_start(argptr, error);
-    _add_message(error, argptr);
-    va_end(argptr);
+    va_list arg_ptr;
+    va_start(arg_ptr, message);
+    _add_message(message, arg_ptr);
+    va_end(arg_ptr);
 
     do_quit(false);
 }
 
 void I_AddMessage(char* message, ...)
 {
-    va_list argptr;
-    va_start(argptr, message);
-    _add_message(message, argptr);
-    va_end(argptr);
+    va_list arg_ptr;
+    va_start(arg_ptr, message);
+    _add_message(message, arg_ptr);
+    va_end(arg_ptr);
 }
 
 //
