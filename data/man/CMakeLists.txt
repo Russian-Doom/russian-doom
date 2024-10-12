@@ -79,7 +79,6 @@ if(Python3_Interpreter_FOUND)
 
 		install(FILES $<TARGET_PROPERTY:man-${MODULE}-en,OUT_FILES>
 			DESTINATION "${CMAKE_INSTALL_MANDIR}/man6"
-			COMPONENT ${MODULE}
 		)
 	endforeach()
 

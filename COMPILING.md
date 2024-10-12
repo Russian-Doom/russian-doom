@@ -201,9 +201,6 @@ cmake -G "Visual Studio 17 2022" -A x64 \
 -D CMAKE_BUILD_TYPE="Release" -S . -B build
 ```
 
-You can enable and disable the compilation of modules by changing cmake options:
-`RD_COMPILE_DOOM`, `RD_COMPILE_HERETIC`, `RD_COMPILE_HEXEN`, `RD_COMPILE_STRIFE` to `ON` or `OFF`.
-
 To use configs provided by the installed libraries (for example, in the MSYS environment) instead of find-modules,
 set the `CMAKE_FIND_PACKAGE_PREFER_CONFIG` cmake option to `ON`.
 
@@ -289,9 +286,6 @@ To configure the project, use the following command:
 cmake -G "Unix Makefiles" -D CMAKE_BUILD_TYPE="Release" -S . -B build
 ```
 Available build types are `Release`, `Debug`, `RelWithDebInfo`, `MinSizeRel`.
-
-You can enable and disable the compilation of modules by changing cmake options:
-`RD_COMPILE_DOOM`, `RD_COMPILE_HERETIC`, `RD_COMPILE_HEXEN`, `RD_COMPILE_STRIFE` to `ON` or `OFF`.
 
 To use configs provided by the installed libraries instead of find-modules,
 set the `CMAKE_FIND_PACKAGE_PREFER_CONFIG` cmake option to `ON`.

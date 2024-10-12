@@ -21,6 +21,5 @@ foreach(MODULE ${COMPILE_MODULES})
 
     install(FILES $<TARGET_PROPERTY:completion-${MODULE},OUT_FILES>
         DESTINATION "${CMAKE_INSTALL_DATADIR}/bash-completion/completions"
-        COMPONENT ${MODULE}
     )
 endforeach()

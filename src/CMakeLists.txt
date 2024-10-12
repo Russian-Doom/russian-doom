@@ -267,13 +267,11 @@ foreach(MODULE ${COMPILE_MODULES})
             $<$<NOT:$<BOOL:${RD_USE_SELECTED_DLL_SET}>>:$<TARGET_PROPERTY:SDL2_mixer::SDL2_mixer,OPTIONAL_DLLS>>
             DESTINATION $<IF:$<BOOL:${WIN32}>,.,${CMAKE_INSTALL_BINDIR}>
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
-            COMPONENT "${MODULE}"
         )
         unset(_permissions)
     endif()
     install(TARGETS "${PROGRAM_PREFIX}${MODULE}" RUNTIME
         DESTINATION $<IF:$<BOOL:${WIN32}>,.,${CMAKE_INSTALL_BINDIR}>
-        COMPONENT "${MODULE}"
         ${_permissions}
     )
     if(WIN32 AND (Python3_Interpreter_FOUND OR CMAKE_VERSION VERSION_GREATER_EQUAL 3.16)
@@ -288,15 +286,6 @@ install(FILES "${PROJECT_SOURCE_DIR}/LICENSE.txt"
     RENAME "GPL.txt"
     DESTINATION $<IF:$<BOOL:${WIN32}>,.,${CMAKE_INSTALL_DATAROOTDIR}/doc/${PACKAGE_TARNAME}>
 )
-# Same install rule but for component based install
-foreach(MODULE ${COMPILE_MODULES})
-    install(FILES "${PROJECT_SOURCE_DIR}/LICENSE.txt"
-        RENAME "GPL.txt"
-        DESTINATION $<IF:$<BOOL:${WIN32}>,.,${CMAKE_INSTALL_DATAROOTDIR}/doc/${PACKAGE_TARNAME}>
-        COMPONENT "${MODULE}"
-        EXCLUDE_FROM_ALL
-    )
-endforeach()
 
 # Source groups
 source_group("Opl" REGULAR_EXPRESSION "^${PROJECT_SOURCE_DIR}/opl/.+")

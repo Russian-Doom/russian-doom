@@ -15,10 +15,6 @@ Option(VCPKG_MANIFEST_MODE "Operate in vcpkg manifest mode instead of classic mo
 project("Russian Doom" VERSION 6.3 LANGUAGES C NONE)
 set(PACKAGE_ID "io.github.russian_doom.russian_doom")
 
-# Compile modules
-Option(RD_COMPILE_DOOM "Compile Doom module" ON)
-Option(RD_COMPILE_HERETIC "Compile Heretic module" ON)
-Option(RD_COMPILE_HEXEN "Compile Hexen module" ON)
 Option(RD_TEST_WITH_GDB "Attach gdb to CTest tests" OFF)
 
 include(CMakeDependentOption)
@@ -182,18 +178,11 @@ string(REPLACE " Doom" "" PACKAGE_PREFIX "${PROJECT_NAME}")
 string(REPLACE "doom" "" PROGRAM_PREFIX "${PACKAGE_TARNAME}")
 string(REPLACE "." ", " WINDOWS_RC_VERSION ${PROJECT_VERSION})
 
-if(RD_COMPILE_DOOM)
-    configure_file(src/doom/resource.rc.in src/doom/resource.rc @ONLY)
-    list(APPEND COMPILE_MODULES "doom")
-endif()
-if(RD_COMPILE_HERETIC)
-    configure_file(src/heretic/resource.rc.in src/heretic/resource.rc @ONLY)
-    list(APPEND COMPILE_MODULES "heretic")
-endif()
-if(RD_COMPILE_HEXEN)
-    configure_file(src/hexen/resource.rc.in src/hexen/resource.rc @ONLY)
-    list(APPEND COMPILE_MODULES "hexen")
-endif()
+configure_file(src/doom/resource.rc.in src/doom/resource.rc @ONLY)
+configure_file(src/heretic/resource.rc.in src/heretic/resource.rc @ONLY)
+configure_file(src/hexen/resource.rc.in src/hexen/resource.rc @ONLY)
+
+set(COMPILE_MODULES "doom" "heretic" "hexen")
 
 enable_testing()
 

@@ -7,6 +7,5 @@ foreach(MODULE ${COMPILE_MODULES})
 
 	install(FILES $<TARGET_PROPERTY:man-${MODULE}-ru,OUT_FILES>
 		DESTINATION "${CMAKE_INSTALL_MANDIR}/man6/ru"
-		COMPONENT ${MODULE}
 	)
 endforeach()
