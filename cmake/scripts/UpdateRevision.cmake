@@ -2,10 +2,11 @@
 
 # UpdateRevision.cmake
 #
-# Public domain. This program uses git commands command to get
+# Public domain. This program uses git commands to get
 # various bits of repository status for a particular directory
-# and writes it into a header file so that it can be used for a
+# and writes it into a header file and a CPackProjectConfig file so that it can be used for a
 # project's versioning.
+# It also outputs the evaluated version to std out if no optional arguments provided.
 
 # Boilerplate to return a variable from a function.
 macro(ret_var VAR)
@@ -144,14 +145,15 @@ function(get_project_version CmakeFile)
 endfunction()
 
 function(main)
-    if(CMAKE_ARGC LESS 4) # cmake -P UpdateRevision.cmake <path to git> [<OutputFile>]
-        message(NOTICE "Usage: ${CMAKE_ARGV2} <path to git> [<path to git_info.h>]")
+    if(CMAKE_ARGC LESS 4) # cmake -P UpdateRevision.cmake <path to git> [<HeaderOutputFile>] [<CPackOutputFile>]
+        message(NOTICE "Usage: ${CMAKE_ARGV2} <path to git> [<path to git_info.h>] [<path to CPackConfig.cmake>]")
         return()
     endif()
     set(Git_executable "${CMAKE_ARGV3}")
 
     get_filename_component(ScriptDir "${CMAKE_SCRIPT_MODE_FILE}" DIRECTORY)
-    get_filename_component(ProjectDir "${ScriptDir}" DIRECTORY)
+    get_filename_component(ModulesDir "${ScriptDir}" DIRECTORY)
+    get_filename_component(ProjectDir "${ModulesDir}" DIRECTORY)
     get_project_version("${ProjectDir}/CMakeLists.txt")
 
     query_repo_info("${PROJECT_VERSION}" "${ProjectDir}")
@@ -179,13 +181,19 @@ function(main)
     if(CMAKE_ARGV4)
         set(OutputFile "${CMAKE_ARGV4}")
         get_existing_hash("${OutputFile}")
-        if("${Hash}${Version_suffix}" STREQUAL OldHash)
-            return()
+        if(NOT "${Hash}${Version_suffix}" STREQUAL OldHash)
+            configure_file("${ModulesDir}/git_info.h.in" "${OutputFile}" @ONLY)
+            message(STATUS "Configuring ${OutputFile} - updated to commit ${Hash_suffix}")
         endif()
 
-        configure_file("${ScriptDir}/git_info.h.in" "${OutputFile}" @ONLY)
-
-        message(STATUS "Configuring ${OutputFile} - updated to commit ${Hash_suffix}")
+        if(CMAKE_ARGV5)
+            set(OutputFile "${CMAKE_ARGV5}")
+            get_existing_hash("${OutputFile}")
+            if(NOT "${Hash}${Version_suffix}" STREQUAL OldHash)
+                configure_file("${ModulesDir}/CPackConfig.cmake.in" "${OutputFile}" @ONLY)
+                message(STATUS "Configuring ${OutputFile} - updated to commit ${Hash_suffix}")
+            endif()
+        endif()
     else()
         if(On_master_branch)
             message(NOTICE "${PROJECT_VERSION}${Version_suffix}")

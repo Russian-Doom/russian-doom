@@ -18,11 +18,7 @@ set(PACKAGE_ID "io.github.russian_doom.russian_doom")
 Option(RD_TEST_WITH_GDB "Attach gdb to CTest tests" OFF)
 
 include(CMakeDependentOption)
-find_package(Git)
 find_package(Python3 COMPONENTS Interpreter)
-
-# Git info options
-cmake_dependent_option(RD_GIT_NO_HASH "For Devs only! Don't run 'revision_check' at all" OFF "GIT_FOUND" ON)
 
 # Package related variables
 set(PACKAGE_TARNAME "russian-doom")
@@ -75,6 +71,7 @@ check_ipo_supported(RESULT HAVE_LTO)
 cmake_dependent_option(RD_ENABLE_LTO "Use link-time optimisation" ON "HAVE_LTO" OFF)
 
 include(Utils)
+include(VersionFromGit)
 
 # Parameters we want to check for on all compilers
 #
@@ -186,17 +183,6 @@ set(COMPILE_MODULES "doom" "heretic" "hexen")
 
 enable_testing()
 
-# Update git_info.h
-if(RD_GIT_NO_HASH)
-    # Use a function to avoid accidentally messing the real variables
-    configure_empty_git_info("cmake/git_info.h.in" "git_info.h")
-else()
-    add_custom_target(revision_check
-        COMMAND "${CMAKE_COMMAND}" -P "\"${PROJECT_SOURCE_DIR}/cmake/UpdateRevision.cmake\"" "${GIT_EXECUTABLE}" "\"git_info.h\""
-        WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-    )
-endif()
-
 include(GNUInstallDirs)
 
 foreach(SUBDIR lib data src)
@@ -206,10 +192,11 @@ endforeach()
 # CPack
 if(WIN32)
     set(CPACK_PACKAGE_NAME ${PACKAGE_TARNAME})
-    set(CPACK_SYSTEM_NAME "windows-${ARCH}")
-    set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
     set(CPACK_PACKAGE_CHECKSUM SHA256)
+    set(CPACK_PROJECT_CONFIG_FILE "CPackProjectConfig.cmake")
+
     set(CPACK_GENERATOR ZIP)
+    set(CPACK_SYSTEM_NAME "windows-${ARCH}")
 
     # Archive Generator
     set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
