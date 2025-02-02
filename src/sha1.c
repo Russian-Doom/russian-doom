@@ -1,6 +1,6 @@
 //
 // Copyright(C) 2016-2023 Julian Nechaevsky
-// Copyright(C) 2020-2024 Leonid Murin (Dasperal)
+// Copyright(C) 2020-2025 Leonid Murin (Dasperal)
 //
 
 /* sha1.c - SHA1 hash function

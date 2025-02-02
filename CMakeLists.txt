@@ -32,7 +32,7 @@ cmake_dependent_option(RD_GIT_NO_HASH "For Devs only! Don't run 'revision_check'
 
 # Package related variables
 set(PACKAGE_TARNAME "russian-doom")
-set(PACKAGE_COPYRIGHT "Copyright \\xA9 2016-2023 Julian Nechaevsky. Copyright \\xA9 2020-2024 Leonid Murin (Dasperal). Licensed under GNU General Public License, version 2")
+set(PACKAGE_COPYRIGHT "Copyright \\xA9 2016-2023 Julian Nechaevsky. Copyright \\xA9 2020-2025 Leonid Murin (Dasperal). Licensed under GNU General Public License, version 2")
 
 # Check target architecture
 if(MSVC)

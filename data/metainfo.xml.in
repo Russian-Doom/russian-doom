@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2024 Leonid Murin (Dasperal) -->
+<!-- Copyright 2024-2525 Leonid Murin (Dasperal) -->
 <component type="desktop-application">
     <id>@PACKAGE_ID@</id>
 

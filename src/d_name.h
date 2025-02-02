@@ -1,5 +1,5 @@
 //
-// Copyright(C) 2021-2024 Leonid Murin (Dasperal)
+// Copyright(C) 2021-2025 Leonid Murin (Dasperal)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
