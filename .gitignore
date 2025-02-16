@@ -1,4 +1,4 @@
-build*
+/build*/
 CMakeUserPresets.json
 
 # Windows image file caches

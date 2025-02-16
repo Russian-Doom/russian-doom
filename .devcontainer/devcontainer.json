@@ -1,0 +1,28 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.209.6/containers/docker-existing-dockerfile
+{
+  "name": "Debian Dev Container",
+  "context": "..",
+  "dockerFile": "./Debian.dockerfile",
+
+  // Required to not bleed "root" permission files into the host volume
+  "containerUser": "rddev",
+
+  // VSCode on Linux specific, for creating X11 and sound forwarding
+  // Comment out manually if working on non-Linux
+  "initializeCommand": "${localWorkspaceFolder}/.devcontainer/initialize-linux.sh",
+  "mounts": [
+    "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind"
+  ],
+  "containerEnv": {
+    "DISPLAY": "${localEnv:DISPLAY}",
+    "XAUTHORITY": "${containerWorkspaceFolder}/.devcontainer/share/devcontainer.xauth"
+  },
+  "runArgs": [
+    // "--gpus", "all",  // Uncomment for GPU support
+    "--device", "/dev/snd"
+    // TODO: pulseaudio? https://github.com/mviereck/x11docker/wiki/Container-sound:-ALSA-or-Pulseaudio
+  ]
+
+  // TODO: X11/sound forwarding configs for MacOS (XQuartz) and Windows (Xming)
+}
