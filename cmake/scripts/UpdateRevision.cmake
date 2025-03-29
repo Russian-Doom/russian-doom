@@ -13,21 +13,27 @@ macro(ret_var VAR)
     set(${VAR} "${${VAR}}" PARENT_SCOPE)
 endmacro()
 
+# Boilerplate to print process error and exit function
+macro(handle_error)
+    if(NOT "${Error_code}" STREQUAL "0")
+        message(STATUS "Failed to get commit info - ${Error}")
+        return()
+    endif()
+endmacro()
+
 # Populate variables "Hash", "Timestamp", "Version_suffix" with relevant information
 # from source repository. If anything goes wrong return something in "Error."
 function(query_repo_info Tag ProjectDir)
     execute_process(
         COMMAND "${Git_executable}" log -1 "--format=%ai;%H"
         WORKING_DIRECTORY "${ProjectDir}"
-        RESULT_VARIABLE Error
+        RESULT_VARIABLE Error_code
         OUTPUT_VARIABLE CommitInfo
-        ERROR_QUIET
+        ERROR_VARIABLE Error
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-    if(NOT "${Error}" STREQUAL "0")
-        ret_var(Error)
-        return()
-    endif()
+    handle_error()
+
     list(GET CommitInfo 0 Timestamp)
     list(GET CommitInfo 1 Hash)
 
@@ -37,15 +43,12 @@ function(query_repo_info Tag ProjectDir)
     execute_process(
         COMMAND "${Git_executable}" rev-list "${Tag}.." --count
         WORKING_DIRECTORY "${ProjectDir}"
-        RESULT_VARIABLE Error
+        RESULT_VARIABLE Error_code
         OUTPUT_VARIABLE Commits_from_release
-        ERROR_QUIET
+        ERROR_VARIABLE Error
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-
-    if(NOT "${Error}" STREQUAL "0")
-        return()
-    endif()
+    handle_error()
 
     if("${Commits_from_release}" STREQUAL "0")
         set(GIT_IS_RELEASE 1)
@@ -56,29 +59,23 @@ function(query_repo_info Tag ProjectDir)
     execute_process(
         COMMAND "${Git_executable}" rev-parse --abbrev-ref HEAD
         WORKING_DIRECTORY "${ProjectDir}"
-        RESULT_VARIABLE Error
+        RESULT_VARIABLE Error_code
         OUTPUT_VARIABLE Branch
-        ERROR_QUIET
+        ERROR_VARIABLE Error
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-
-    if(NOT "${Error}" STREQUAL "0")
-        return()
-    endif()
+    handle_error()
 
     if("${Branch}" STREQUAL "makepkg")
         execute_process(
             COMMAND "${Git_executable}" log -n 1 "--pretty='%(decorate:separator=;,prefix=,suffix=)'" HEAD
             WORKING_DIRECTORY "${ProjectDir}"
-            RESULT_VARIABLE Error
+            RESULT_VARIABLE Error_code
             OUTPUT_VARIABLE Branch
-            ERROR_QUIET
+            ERROR_VARIABLE Error
             OUTPUT_STRIP_TRAILING_WHITESPACE
         )
-
-        if(NOT "${Error}" STREQUAL "0")
-            return()
-        endif()
+        handle_error()
 
         list(GET Branch 1 Branch)
         string(REPLACE "origin/" "" Branch "${Branch}")
@@ -97,15 +94,12 @@ function(query_repo_info Tag ProjectDir)
     execute_process(
         COMMAND "${Git_executable}" rev-list origin/master.. --count
         WORKING_DIRECTORY "${ProjectDir}"
-        RESULT_VARIABLE Error
+        RESULT_VARIABLE Error_code
         OUTPUT_VARIABLE Commits_in_branch
-        ERROR_QUIET
+        ERROR_VARIABLE Error
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-
-    if(NOT "${Error}" STREQUAL "0")
-        return()
-    endif()
+    handle_error()
 
     math(EXPR Commits_from_master "${Commits_from_release} - ${Commits_in_branch}" OUTPUT_FORMAT DECIMAL)
     string(SUBSTRING "${Branch}" 0 1 Branch_short)
@@ -159,7 +153,6 @@ function(main)
     query_repo_info("${PROJECT_VERSION}" "${ProjectDir}")
 
     if(NOT Hash)
-        message(NOTICE "Failed to get commit info: ${Error}")
         set(Hash "<unknown>")
         set(Timestamp "<unknown>")
         set(Version_suffix "")
