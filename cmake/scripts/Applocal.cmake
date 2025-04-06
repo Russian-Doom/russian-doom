@@ -29,7 +29,7 @@
 # Known bugs: Can't update DLLs. If DLLs already present in output dir, `file(GET_RUNTIME_DEPENDENCIES ...)` will find
 # EXACTLY those DLLs ignoring additional search paths.
 
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.16...4.1)
 
 function(main)
     if(NOT CMAKE_ARGC GREATER_EQUAL 4) # cmake -P Applocal.cmake <input_file> <search_path> ...
