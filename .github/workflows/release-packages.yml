@@ -13,15 +13,7 @@ jobs:
       fail-fast: true
       matrix:
         config:
-          -
-            display_name: "Windows | x86"
-            runner: "windows-2022"
-            shell: "msys2 {0}"
-            msys_msystem: "MINGW32"
-            msys_prefix: "i686"
-            compiler_name: "gcc"
-            cmake_preset: 'ci-msys2-release'
-            build_suffix: "x86"
+          # TODO: Add MSVC x86 Windows build
           -
             display_name: "Windows | x64"
             runner: "windows-2022"

@@ -18,36 +18,11 @@
       }
     },
     {
-      "name": "msys2-msvcrt",
-      "hidden": true,
-      "inherits": ["msys2"],
-      "cacheVariables": {
-        "RD_UCRT32": "OFF"
-      },
-      "condition": {
-        "type": "equals",
-        "lhs": "${hostSystemName}",
-        "rhs": "Windows"
-      }
-    },
-    {
       "name": "local-msys2-dev",
       "hidden": true,
       "inherits": ["msys2", "dev"],
       "displayName": "Windows (Local|MSYS2|Dev)",
       "description": "Configuration for local Dev builds for Windows using MSYS2 toolchain",
-      "condition": {
-        "type": "equals",
-        "lhs": "${hostSystemName}",
-        "rhs": "Windows"
-      }
-    },
-    {
-      "name": "local-msys2-msvcrt-dev",
-      "hidden": true,
-      "inherits": ["msys2-msvcrt", "dev"],
-      "displayName": "Windows (Local|MSYS2(msvcrt)|Dev)",
-      "description": "Configuration for local Dev builds for Windows using MSYS2 toolchain and msvcrt",
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",

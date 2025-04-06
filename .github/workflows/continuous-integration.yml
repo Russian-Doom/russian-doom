@@ -20,15 +20,6 @@ jobs:
       matrix:
         config:
           -
-            display_name: "Windows | x86 | GCC"
-            runner: "windows-2022"
-            shell: "msys2 {0}"
-            msys_msystem: "MINGW32"
-            msys_prefix: "i686"
-            compiler_name: "gcc"
-            cmake_preset: 'ci-msys2-dev'
-            build_suffix: "x86-gcc"
-          -
             display_name: "Windows | x64 | GCC"
             runner: "windows-2022"
             shell: "msys2 {0}"
@@ -37,33 +28,6 @@ jobs:
             compiler_name: "gcc"
             cmake_preset: 'ci-msys2-dev'
             build_suffix: "x64-gcc"
-          -
-            display_name: "Windows | x86 | GCC - msvcrt"
-            runner: "windows-2022"
-            shell: "msys2 {0}"
-            msys_msystem: "MINGW32"
-            msys_prefix: "i686"
-            compiler_name: "gcc"
-            cmake_preset: 'ci-msys2-msvcrt-dev'
-            build_suffix: "x86-gcc-msvcrt"
-#          -
-#            display_name: "Windows | x64 | GCC - msvcrt"
-#            runner: "windows-2022"
-#            shell: "msys2 {0}"
-#            msys_msystem: "MINGW64"
-#            msys_prefix: "x86_64"
-#            compiler_name: "gcc"
-#            cmake_preset: 'ci-msys2-dev'
-#            build_suffix: "x64-gcc-msvcrt"
-#          -
-#            display_name: "Windows | x86 | Clang"
-#            runner: "windows-2022"
-#            shell: "msys2 {0}"
-#            msys_msystem: "CLANG32"
-#            msys_prefix: "clang-i686"
-#            compiler_name: "clang"
-#            cmake_preset: 'ci-msys2-dev'
-#            build_suffix: "x86-clang"
           -
             display_name: "Windows | x64 | Clang"
             runner: "windows-2022"

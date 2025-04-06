@@ -80,9 +80,6 @@ include(CheckIPOSupported)
 check_ipo_supported(RESULT HAVE_LTO)
 cmake_dependent_option(RD_ENABLE_LTO "Use link-time optimisation" ON "HAVE_LTO" OFF)
 
-#MSYS MINGW32 to UCRT32 hack
-cmake_dependent_option(RD_UCRT32 "Use MSYS MINGW32 to UCRT32 hack" ON "WIN32;ARCH STREQUAL x86;MINGW;CMAKE_C_COMPILER_ID STREQUAL GNU" OFF)
-
 include(Utils)
 
 # Parameters we want to check for on all compilers
@@ -136,12 +133,6 @@ if(MSVC)
     string(REPLACE "/O3" "/O2" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
     string(REPLACE "/O3" "/O2" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
 else()
-    if(RD_UCRT32)
-        add_compile_definitions(
-            # Fixes utf-8 text in console
-            _UCRT
-        )
-    endif()
     # We only want -Wall on GCC compilers, since /Wall on MSVC is noisy
     add_compile_options_checked(-Wall)
     string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
