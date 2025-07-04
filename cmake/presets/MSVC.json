@@ -7,7 +7,7 @@
     {
       "name": "msvc-86",
       "hidden": true,
-      "generator": "Visual Studio 16 2019",
+      "generator": "Visual Studio 17 2022",
       "architecture": "Win32",
       "toolset": "v141_xp",
       "condition": {

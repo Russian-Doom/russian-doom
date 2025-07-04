@@ -16,7 +16,7 @@ jobs:
           # TODO: Add MSVC x86 Windows build
           -
             display_name: "Windows | x64"
-            runner: "windows-2022"
+            runner: "windows-2025"
             shell: "msys2 {0}"
             msys_msystem: "UCRT64"
             msys_prefix: "ucrt-x86_64"
