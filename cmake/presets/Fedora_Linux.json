@@ -6,14 +6,23 @@
   ],
   "configurePresets": [
     {
-      "name": "fedora-linux-release",
-      "inherits": ["linux", "release"],
-      "displayName": "Fedora Linux Release",
-      "description": "Configuration for Fedora Linux Release builds",
-      "binaryDir": "${sourceDir}/build-fedora",
+      "name": "fedora",
+      "hidden": true,
       "cacheVariables": {
         "CMAKE_INSTALL_PREFIX": "/usr"
       },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    },
+    {
+      "name": "fedora-linux-release",
+      "inherits": ["linux", "fedora", "release"],
+      "displayName": "Fedora Linux Release",
+      "description": "Configuration for Fedora Linux Release builds",
+      "binaryDir": "${sourceDir}/build-fedora",
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",

@@ -6,14 +6,23 @@
   ],
   "configurePresets": [
     {
-      "name": "debian-linux-release",
-      "inherits": ["linux", "release"],
-      "displayName": "Debian Linux Release",
-      "description": "Configuration for Debian Linux Release builds",
-      "binaryDir": "${sourceDir}/build-debian",
+      "name": "debian",
+      "hidden": true,
       "cacheVariables": {
         "CMAKE_INSTALL_PREFIX": "/usr"
       },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    },
+    {
+      "name": "debian-linux-release",
+      "inherits": ["linux", "debian", "release"],
+      "displayName": "Debian Linux Release",
+      "description": "Configuration for Debian Linux Release builds",
+      "binaryDir": "${sourceDir}/build-debian",
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",

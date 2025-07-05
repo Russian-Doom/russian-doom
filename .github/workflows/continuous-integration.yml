@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  Cmake:
+  Windows:
     name: ${{ matrix.config.display_name }}
     runs-on: ${{ matrix.config.runner }}
     strategy:
@@ -53,18 +53,6 @@ jobs:
             compiler_name: "cl"
             cmake_preset: 'ci-msvc-64-dev'
             build_suffix: "x64-msvc"
-          -
-            display_name: "Linux | x64 | GCC"
-            runner: "ubuntu-24.04"
-            shell: "bash"
-            compiler_name: "gcc"
-            cmake_preset: 'ci-linux-dev'
-#          -
-#            display_name: "Linux | x64 | Clang"
-#            runner: "ubuntu-22.04"
-#            shell: "bash"
-#            compiler_name: "clang"
-#            cmake_preset: 'ci-linux-dev'
 
     defaults:
       run:
@@ -73,9 +61,7 @@ jobs:
       VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
     steps:
       - name: Setup MSYS env
-        if: |
-          runner.os == 'Windows' &&
-          matrix.config.compiler_name != 'cl'
+        if: matrix.config.compiler_name != 'cl'
         timeout-minutes: 10
         uses: msys2/setup-msys2@v2
         with:
@@ -104,9 +90,7 @@ jobs:
           echo "Installation of Microsoft.VisualStudio.Component.WinXP finished"
 
       - name: Get GitHub Action Cache url and token
-        if: |
-          runner.os == 'Windows' &&
-          matrix.config.compiler_name == 'cl'
+        if: matrix.config.compiler_name == 'cl'
         uses: actions/github-script@v7
         with:
           script: |
@@ -114,9 +98,7 @@ jobs:
             core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
 
       - name: Setup MSVC env
-        if: |
-          runner.os == 'Windows' &&
-          matrix.config.compiler_name == 'cl'
+        if: matrix.config.compiler_name == 'cl'
         run: |
           cd $VCPKG_INSTALLATION_ROOT
           echo "vcpkg revision: $(git rev-parse HEAD)"
@@ -125,14 +107,6 @@ jobs:
 #         For classic mode:
 #         vcpkg integrate install
 #         vcpkg install --triplet=${{ matrix.arch.msvc_triplet }} sdl2 sdl2-mixer[libflac,libmodplug,mpg123,opusfile] sdl2-net libsamplerate
-
-      - name: Setup Linux env
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update --fix-missing
-          sudo apt-get full-upgrade --fix-missing
-          sudo apt-get install ${{ matrix.config.compiler_name }} gdb ninja-build python3 cmake \
-                               libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libsamplerate-dev
 
       - uses: actions/checkout@v4
         with:
@@ -152,8 +126,7 @@ jobs:
         if: |
           github.repository == 'Russian-Doom/russian-doom' &&
           github.event_name == 'push' &&
-          github.ref == 'refs/heads/master' &&
-          runner.os == 'Windows'
+          github.ref == 'refs/heads/master'
         run: |
           cmake --install build --config RelWithDebInfo --prefix "./build/install"
 
@@ -161,9 +134,75 @@ jobs:
         if: |
           github.repository == 'Russian-Doom/russian-doom' &&
           github.event_name == 'push' &&
-          github.ref == 'refs/heads/master' &&
-          runner.os == 'Windows'
+          github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v4
         with:
           name: russian-doom-${{ steps.configure.outputs.version }}-windows-${{ matrix.config.build_suffix }}
           path: ./build/install/
+
+  Linux:
+    name: Linux | ${{ matrix.distro.display_name }} | ${{ matrix.platform.arch }}
+    runs-on: ${{ matrix.platform.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        distro:
+          -
+            display_name: Debian
+            distro: debian
+            package: deb
+            dockerfile: '.devcontainer/Debian.dockerfile'
+          -
+            display_name: Fedora
+            distro: fedora
+            package: rpm
+            dockerfile: '.devcontainer/Fedora.dockerfile'
+        platform:
+          -
+            runner: 'ubuntu-24.04'
+            arch: "x64"
+          -
+            runner: 'ubuntu-24.04-arm'
+            arch: "arm64"
+
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          install: true
+          driver: docker
+
+      # Invalidate cache for docker toolchain images every month to update dependencies
+      - name: Get build month for Docker cache
+        id: date
+        run: echo "date=$(date +'%Y%m')" >> $GITHUB_OUTPUT
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Cache Docker images
+        uses: AndreKurait/docker-cache@0.6.0
+        with:
+          key: docker-${{ matrix.platform.arch }}-${{ hashFiles(matrix.distro.dockerfile) }}-${{ steps.date.outputs.date }}
+
+      - name: Toolchain & Configure & Build & Test & Package
+        id: configure
+        run: |
+          chmod 777 .
+          ./crosscompile_linux_packages.sh ci ${{ matrix.distro.distro }}
+          git_version=$(cmake -P ./cmake/scripts/UpdateRevision.cmake "git" 2>&1)
+          echo "version=$git_version" >> $GITHUB_OUTPUT
+
+      - name: Upload package
+        if: |
+          github.repository == 'Russian-Doom/russian-doom' &&
+          github.event_name == 'push' &&
+          github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@v4
+        with:
+          name: russian-doom-${{ steps.configure.outputs.version }}-linux-${{ matrix.distro.package }}-${{ matrix.platform.arch }}
+          path: ./build/*.${{ matrix.distro.package }}

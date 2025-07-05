@@ -1,15 +1,36 @@
 #!/bin/bash
 
-# Build toolchain images
-bash ./build_toolchain_images.sh "$@"
+# Check args
+case $1 in
+  ci)
+   preset='ci-%s-linux-dev'
+   ci='export CI=true &&'
+   ;;
+ release)
+   preset='%s-linux-release'
+   ;;
+ *)
+   echo 'crosscompile_linux_packages.sh {ci,release} [debian,fedora]...'
+   exit 1
+   ;;
+esac
 
-# Execute cmake in workflow mode
-args=("$@")
-if [ $# -eq 0 ]; then
-    args=('debian' 'fedora')
+# Default distros
+distros=("${@:2}")
+if [ $# -eq 1 ]; then
+    distros=('debian' 'fedora')
 fi
 
-for distro in "${args[@]}"; do
-    docker run --rm -v ".:/tmp/russian-doom" "toolchain-russian-doom-${distro}" \
-           /bin/bash -c "cd /tmp/russian-doom && cmake --workflow --preset '${distro}-linux-release'"
+# Build toolchain images
+bash ./toolchain_images.sh build "${distros[@]}"
+
+# Execute cmake in workflow mode for each distro
+for distro in "${distros[@]}"; do
+    # shellcheck disable=SC2059
+    docker run --rm -v ".:/tmp/russian-doom" "toolchain-russian-doom-${distro}" /bin/bash -c "
+        git config --global --add safe.directory '/tmp/russian-doom' &&
+        cd /tmp/russian-doom &&
+        export MAKEFLAGS=--keep-going &&
+        ${ci}
+        cmake --workflow --preset '$(printf "${preset}" "${distro}")'"
 done

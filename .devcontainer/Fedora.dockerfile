@@ -12,7 +12,7 @@ ARG USER_GID=1001
 # TODO: pulseaudio, so this isn't necessary?
 RUN dnf -y update && dnf -y upgrade && \
     dnf -y install wget procps python3-pillow \
-                   gcc make cmake pkg-config git python3 gzip rpmbuild \
+                   gcc make cmake pkg-config git python3 gzip rpmbuild gdb \
                    SDL2-devel SDL2_mixer-devel SDL2_net-devel libsamplerate-devel miniz-devel && \
     dnf -y autoremove && \
     \

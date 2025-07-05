@@ -12,7 +12,7 @@ ARG USER_GID=1001
 # TODO: pulseaudio, so this isn't necessary?
 RUN apt -y update && apt -y upgrade && \
     apt -y install wget procps python3-pillow \
-                   gcc make cmake pkg-config git python3 gzip dpkg \
+                   gcc make cmake pkg-config git python3 gzip dpkg gdb \
                    libsdl2-dev libsdl2-mixer-dev libsdl2-net-dev libsamplerate-dev && \
     apt -y autoremove && \
     \
