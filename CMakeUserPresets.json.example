@@ -34,14 +34,14 @@
       "configurePreset": "clion-linux-dev",
       "displayName": "Linux (CI|Dev)",
       "description": "Cmake build configuration for Clion Dev builds using Linux toolchain",
-      "jobs": 14
+      "jobs": 16
     },
     {
       "name": "clion-linux-release",
       "configurePreset": "clion-linux-release",
       "displayName": "Linux (CI|Release)",
       "description": "Cmake build configuration for Clion Release builds using Linux toolchain",
-      "jobs": 14
+      "jobs": 16
     }
   ]
 }

@@ -45,7 +45,7 @@
       "configurePreset": "local-linux-release",
       "displayName": "Linux (Local|Native|Release)",
       "description": "Cmake build configuration for Local Release builds using Linux toolchain",
-      "jobs": 4,
+      "jobs": 16,
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",
