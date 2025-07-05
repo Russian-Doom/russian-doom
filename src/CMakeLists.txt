@@ -150,7 +150,6 @@ foreach(MODULE ${COMPILE_MODULES})
             "${PROJECT_BINARY_DIR}"
         )
         add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}-exe" POST_BUILD
-            MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-exe>"
             COMMAND ${CMAKE_COMMAND} -E copy
             "$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-exe>"
             "$<TARGET_FILE_DIR:${PROGRAM_PREFIX}${MODULE}-exe>/${PROGRAM_PREFIX}${MODULE}.exe"
@@ -182,7 +181,6 @@ foreach(MODULE ${COMPILE_MODULES})
             "${PROJECT_BINARY_DIR}"
         )
         add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}-com" POST_BUILD
-            MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-com>"
             COMMAND ${CMAKE_COMMAND} -E copy
             "$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}-com>"
             "$<TARGET_FILE_DIR:${PROGRAM_PREFIX}${MODULE}-com>/${PROGRAM_PREFIX}${MODULE}.com"
@@ -222,7 +220,6 @@ foreach(MODULE ${COMPILE_MODULES})
     endif()
 
     add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}" POST_BUILD
-        MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}>"
         COMMAND $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:${CMAKE_STRIP}> $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:"$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}>">
     )
 
