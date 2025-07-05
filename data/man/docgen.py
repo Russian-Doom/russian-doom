@@ -34,12 +34,12 @@ import re
 import getopt
 
 TEXT_WRAP_WIDTH = 78
-INCLUDE_STATEMENT_RE = re.compile("@include\s+(\S+)")
-CLI_PARAMETER_LINE1_RE = re.compile('^\s*CLI_Parameter\("(.*)",')
-CLI_PARAMETER_LINE2_RE = re.compile('^\s*"(.*)",')
-CLI_PARAMETER_LINE3_RE = re.compile('^\s*"(.*)"\)')
-IFDEF_RE = re.compile('^\s*#ifdef (.*)')
-IF_RE = re.compile('^\s*(else)?\s*if\((.*)\)')
+INCLUDE_STATEMENT_RE = re.compile(r"@include\s+(\S+)")
+CLI_PARAMETER_LINE1_RE = re.compile(r'^\s*CLI_Parameter\("(.*)",')
+CLI_PARAMETER_LINE2_RE = re.compile(r'^\s*"(.*)",')
+CLI_PARAMETER_LINE3_RE = re.compile(r'^\s*"(.*)"\)')
+IFDEF_RE = re.compile(r'^\s*#ifdef (.*)')
+IF_RE = re.compile(r'^\s*(else)?\s*if\((.*)\)')
 
 
 # Use appropriate stdout function for Python 2 or 3
@@ -128,7 +128,7 @@ class Variable:
         if len(text) <= 0:
             pass
         elif text[0] == "@":
-            match = re.match('@(\S+)\s*(.*)', text)
+            match = re.match(r'@(\S+)\s*(.*)', text)
 
             if not match:
                 raise "Malformed option line: %s" % text
@@ -147,7 +147,7 @@ class Variable:
         result = '\\fB' + result + '\\fR'
         result += "\n"
 
-        result += re.sub('\\\\', '\\\\\\\\', self.text)
+        result += re.sub(r'\\\\', '\\\\\\\\', self.text)
         return result
 
     def markdown_output(self):
@@ -175,7 +175,7 @@ class Variable:
 
         # Build the complete text for the argument
         # Split the description into words and add a word at a time
-        words = [word for word in re.split('\s+', description) if word]
+        words = [word for word in re.split(r'\s+', description) if word]
         maxlen = TEXT_WRAP_WIDTH - indent
         outlines = [[]]
         for word in words:
@@ -200,7 +200,7 @@ def add_variable(var, line, config_file):
 
     # Documenting a configuration file variable?
 
-    match = re.search('CONFIG_VARIABLE_\S+\s*\(\s*(\S+?)\),', line)
+    match = re.search(r'CONFIG_VARIABLE_\S+\s*\(\s*(\S+?)\),', line)
 
     if match:
         var.name = match.group(1)
@@ -267,7 +267,7 @@ class CLIParam:
     def __init__(self, name):
         self.names = []
         self.args = []
-        names = re.split(' ', name)
+        names = re.split(r' ', name)
         for s in names:
             if s.startswith('-'):
                 self.names.append(s.replace(',', '').rstrip())
@@ -301,7 +301,7 @@ class CLIParam:
             result += '\nAvailable only on: Windows' if doc_lang == 'en' else '\nДоступно только на: Windows'
 
         text: str = self.rus_text if doc_lang == 'ru' else self.eng_text
-        result += "\n" + re.sub("\\\\", "\\\\\\\\", text) + "\n"
+        result += "\n" + re.sub(r"\\\\", "\\\\\\\\", text) + "\n"
 
         return result
 
@@ -354,7 +354,7 @@ class CLIParam:
 
         # Build the complete text for the argument
         # Split the description into words and add a word at a time
-        words = [word for word in re.split('\s+', description) if word]
+        words = [word for word in re.split(r'\s+', description) if word]
         maxlen = TEXT_WRAP_WIDTH - indent
         outlines = [[]]
         for word in words:
@@ -413,7 +413,7 @@ def process_file(filename):
             line = line.rstrip()
 
             # Ignore empty lines
-            if re.match('\s*$', line):
+            if re.match(r'\s*$', line):
                 continue
 
             # Parse CLI help
@@ -446,27 +446,27 @@ def process_file(filename):
                             cli_env.add_game(game)
 
                 # End of #ifdef
-                if re.match('^\s*#endif', line):
+                if re.match(r'^\s*#endif', line):
                     cli_env.set_platform(None)
 
                 # End of if
-                if re.match('^\s*}', line) and not (cli_env.games is None):
+                if re.match(r'^\s*}', line) and not (cli_env.games is None):
                     cli_env.games = []
                     continue
 
                 # End of CLI help
-                if re.match('^}', line):
+                if re.match(r'^}', line):
                     cli_env = None
                 continue
 
             # Check for the start of CLI help
-            if re.match('^void M_PrintHelp\(void\)', line):
+            if re.match(r'^void M_PrintHelp\(void\)', line):
                 cli_env = CLIEnv()
 
             # Currently reading a doc comment?
             if var:
                 # End of doc comment
-                if not re.match('^\s*//', line):
+                if not re.match(r'^\s*//', line):
                     waiting_for_checkparm = True
 
                 # The first non-empty line after the documentation comment
@@ -480,13 +480,13 @@ def process_file(filename):
                         var = None
                 else:
                     # More documentation text
-                    munged_line = re.sub('\s*//\s*', '', line, 1)
-                    munged_line = re.sub('\s*$', '', munged_line)
+                    munged_line = re.sub(r'\s*//\s*', '', line, count=1)
+                    munged_line = re.sub(r'\s*$', '', munged_line)
                     var.add_text(munged_line)
 
             # Check for start of a doc comment
-            if re.search("//!", line):
-                match = re.search("@begin_config_file\s*(\S+)", line)
+            if re.search(r"//!", line):
+                match = re.search(r"@begin_config_file\s*(\S+)", line)
 
                 if match:
                     # Beginning a configuration file
