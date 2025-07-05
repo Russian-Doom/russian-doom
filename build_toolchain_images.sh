@@ -20,5 +20,11 @@ if !  docker info > /dev/null 2>&1; then
 fi
 
 # Build toolchain images
-docker build "./.devcontainer" -f "./.devcontainer/Debian.dockerfile" -t toolchain-russian-doom-debian
-docker build "./.devcontainer" -f "./.devcontainer/Fedora.dockerfile" -t toolchain-russian-doom-fedora
+args=("$@")
+if [ $# -eq 0 ]; then
+    args=('debian' 'fedora')
+fi
+
+for distro in "${args[@]}"; do
+    docker build "./.devcontainer" -f "./.devcontainer/${distro^}.dockerfile" -t "toolchain-russian-doom-${distro}"
+done
