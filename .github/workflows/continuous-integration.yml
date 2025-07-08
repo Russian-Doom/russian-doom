@@ -42,6 +42,7 @@ jobs:
             runner: "windows-2025"
             shell: "bash"
             msvc_triplet: "x86-windows"
+            msvc_triplet_path: 'cmake/triplets/x86-windows.cmake'
             compiler_name: "cl"
             cmake_preset: 'ci-msvc-86-dev'
             build_suffix: "x86-msvc"
@@ -50,15 +51,18 @@ jobs:
             runner: "windows-2025"
             shell: "bash"
             msvc_triplet: "x64-windows"
+            msvc_triplet_path: 'cmake/triplets/x64-windows.cmake'
             compiler_name: "cl"
             cmake_preset: 'ci-msvc-64-dev'
             build_suffix: "x64-msvc"
 
+    permissions:
+      actions: write
     defaults:
       run:
         shell: ${{ matrix.config.shell }}
     env:
-      VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
+      VCPKG_BINARY_SOURCES: "clear;files,${{ github.workspace }}/vcpkg_cache,readwrite"
     steps:
       - name: Setup MSYS env
         if: matrix.config.compiler_name != 'cl'
@@ -89,14 +93,6 @@ jobs:
               --nocache --norestart --quiet
           echo "Installation of Microsoft.VisualStudio.Component.WinXP finished"
 
-      - name: Get GitHub Action Cache url and token
-        if: matrix.config.compiler_name == 'cl'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
-
       - name: Setup MSVC env
         if: matrix.config.compiler_name == 'cl'
         run: |
@@ -104,13 +100,19 @@ jobs:
           echo "vcpkg revision: $(git rev-parse HEAD)"
           ./bootstrap-vcpkg.sh -disableMetrics
 
-#         For classic mode:
-#         vcpkg integrate install
-#         vcpkg install --triplet=${{ matrix.arch.msvc_triplet }} sdl2 sdl2-mixer[libflac,libmodplug,mpg123,opusfile] sdl2-net libsamplerate
-
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Restore VCPKG dependencies cache
+        if: matrix.config.compiler_name == 'cl'
+        id: vcpkg_cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ github.workspace }}/vcpkg_cache
+          key: vcpkg-${{ matrix.config.msvc_triplet }}-${{ hashFiles('vcpkg.json', matrix.config.msvc_triplet_path) }}
+          restore-keys: vcpkg-${{ matrix.config.msvc_triplet }}-
+
 
       - name: Configure & Build & Test
         id: configure
@@ -121,6 +123,23 @@ jobs:
           cmake --workflow --preset "${{ matrix.config.cmake_preset }}"
           git_version=$(cmake -P ./cmake/scripts/UpdateRevision.cmake "git" 2>&1)
           echo "version=$git_version" >> $GITHUB_OUTPUT
+
+      # Delete the old cache on hit to emulate a cache update.
+      # The actions/cache@v4 action doesn't update cache on hit,
+      # and we don't have a way to add package versions to key before they are installed.
+      - name: Delete VCPKG dependencies cache
+        if: matrix.config.compiler_name == 'cl' && steps.vcpkg_cache.outputs.cache-hit
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh cache delete --repo ${{ github.repository }} ${{ steps.vcpkg_cache.outputs.cache-primary-key }}
+
+      - name: Save VCPKG dependencies cache
+        if: matrix.config.compiler_name == 'cl'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ github.workspace }}/vcpkg_cache
+          key: ${{ steps.vcpkg_cache.outputs.cache-primary-key }}
 
       - name: Install
         if: |
