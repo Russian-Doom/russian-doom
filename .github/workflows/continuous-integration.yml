@@ -83,8 +83,23 @@ jobs:
             mingw-w64-${{ matrix.config.msys_prefix }}-libsamplerate
             git
 
-      - name: Install MSVC XP toolset
+      - name: Restore MSVC toolset cache
         if: matrix.config.build_suffix == 'x86-msvc'
+        id: msvc_toolset_cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/Common7/IDE/CommonExtensions/Microsoft/VC/*.14.16.pkgdef
+            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/Common7/IDE/VC/vcpackages/vcproject.factories.txt
+            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/MSBuild/Microsoft/VC/v150
+            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/14.16
+            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/*.v141.*
+            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Redist/MSVC/14.16.*
+            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.16.*
+          key: vs-${{ matrix.config.msvc_triplet }}
+
+      - name: Install MSVC XP toolset
+        if: matrix.config.build_suffix == 'x86-msvc' && !steps.msvc_toolset_cache.outputs.cache-hit
         run: |
           echo "Installing Microsoft.VisualStudio.Component.WinXP"
           "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer" modify \
@@ -93,7 +108,31 @@ jobs:
               --nocache --norestart --quiet
           echo "Installation of Microsoft.VisualStudio.Component.WinXP finished"
 
-      - name: Setup MSVC env
+      # Delete the old cache on hit to emulate a cache update.
+      # The actions/cache@v4 action doesn't update cache on hit,
+      # and we don't have a way to add a toolset version to key before it is installed.
+      - name: Delete MSVC toolset cache
+        if: matrix.config.build_suffix == 'x86-msvc' && steps.msvc_toolset_cache.outputs.cache-hit
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh cache delete --repo ${{ github.repository }} ${{ steps.msvc_toolset_cache.outputs.cache-primary-key }}
+
+      - name: Save MSVC toolset cache
+        if: matrix.config.build_suffix == 'x86-msvc'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/Common7/IDE/CommonExtensions/Microsoft/VC/*.14.16.pkgdef
+            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/Common7/IDE/VC/vcpackages/vcproject.factories.txt
+            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/MSBuild/Microsoft/VC/v150
+            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/14.16
+            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/*.v141.*
+            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Redist/MSVC/14.16.*
+            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.16.*
+          key: ${{ steps.msvc_toolset_cache.outputs.cache-primary-key }}
+
+      - name: Bootstrap VCPKG
         if: matrix.config.compiler_name == 'cl'
         run: |
           cd $VCPKG_INSTALLATION_ROOT
@@ -112,7 +151,6 @@ jobs:
           path: ${{ github.workspace }}/vcpkg_cache
           key: vcpkg-${{ matrix.config.msvc_triplet }}-${{ hashFiles('vcpkg.json', matrix.config.msvc_triplet_path) }}
           restore-keys: vcpkg-${{ matrix.config.msvc_triplet }}-
-
 
       - name: Configure & Build & Test
         id: configure
