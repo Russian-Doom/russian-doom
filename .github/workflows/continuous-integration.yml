@@ -83,54 +83,49 @@ jobs:
             mingw-w64-${{ matrix.config.msys_prefix }}-libsamplerate
             git
 
-      - name: Restore MSVC toolset cache
+      - name: Restore MSVC cache
         if: matrix.config.build_suffix == 'x86-msvc'
-        id: msvc_toolset_cache
+        id: msvc_cache
         uses: actions/cache/restore@v4
         with:
-          path: |
-            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/Common7/IDE/CommonExtensions/Microsoft/VC/*.14.16.pkgdef
-            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/Common7/IDE/VC/vcpackages/vcproject.factories.txt
-            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/MSBuild/Microsoft/VC/v150
-            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/14.16
-            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/*.v141.*
-            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Redist/MSVC/14.16.*
-            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.16.*
+          path: ${{ github.workspace }}/choco_cache
           key: vs-${{ matrix.config.msvc_triplet }}
 
-      - name: Install MSVC XP toolset
-        if: matrix.config.build_suffix == 'x86-msvc' && !steps.msvc_toolset_cache.outputs.cache-hit
+      - name: Install MSVC 2019
+        if: matrix.config.build_suffix == 'x86-msvc'
         run: |
-          echo "Installing Microsoft.VisualStudio.Component.WinXP"
-          "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer" modify \
-              --installPath "C:\Program Files\Microsoft Visual Studio\2022\Enterprise" \
-              --add Microsoft.VisualStudio.Component.WinXP \
-              --nocache --norestart --quiet
-          echo "Installation of Microsoft.VisualStudio.Component.WinXP finished"
+          choco config set cacheLocation "${{ github.workspace }}/choco_cache"
+          choco install visualstudio2019buildtools --package-parameters " \
+            --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
+            --add Microsoft.VisualStudio.Component.WinXP \
+            --add Microsoft.VisualStudio.Component.VC.v141.x86.x64"
+          cd "${{ github.workspace }}/choco_cache" && rm **.log **log.txt
+
+# cp "${{ github.workspace }}/choco_cache/$(cd "${{ github.workspace }}/choco_cache" && ls | grep -E "dd_setup_[0-9]+.log" | tail -1)" "${{ github.workspace }}/vs_log.txt"
+
+#      - name: upload log
+#        if: matrix.config.build_suffix == 'x86-msvc'
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: vs_log
+#          path: vs_log.txt
 
       # Delete the old cache on hit to emulate a cache update.
       # The actions/cache@v4 action doesn't update cache on hit,
       # and we don't have a way to add a toolset version to key before it is installed.
-      - name: Delete MSVC toolset cache
-        if: matrix.config.build_suffix == 'x86-msvc' && steps.msvc_toolset_cache.outputs.cache-hit
+      - name: Delete MSVC cache
+        if: matrix.config.build_suffix == 'x86-msvc' && steps.msvc_cache.outputs.cache-hit
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh cache delete --repo ${{ github.repository }} ${{ steps.msvc_toolset_cache.outputs.cache-primary-key }}
+        run: gh cache delete --repo ${{ github.repository }} ${{ steps.msvc_cache.outputs.cache-primary-key }}
 
-      - name: Save MSVC toolset cache
+      - name: Save MSVC cache
         if: matrix.config.build_suffix == 'x86-msvc'
         uses: actions/cache/save@v4
         with:
-          path: |
-            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/Common7/IDE/CommonExtensions/Microsoft/VC/*.14.16.pkgdef
-            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/Common7/IDE/VC/vcpackages/vcproject.factories.txt
-            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/MSBuild/Microsoft/VC/v150
-            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/14.16
-            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/*.v141.*
-            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Redist/MSVC/14.16.*
-            C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.16.*
-          key: ${{ steps.msvc_toolset_cache.outputs.cache-primary-key }}
+          path: ${{ github.workspace }}/choco_cache
+          key: ${{ steps.msvc_cache.outputs.cache-primary-key }}
 
       - name: Bootstrap VCPKG
         if: matrix.config.compiler_name == 'cl'
