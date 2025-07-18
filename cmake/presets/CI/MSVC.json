@@ -133,10 +133,6 @@
         {
           "type": "test",
           "name": "ci-msvc-86-dev"
-        },
-        {
-          "type": "package",
-          "name": "ci-msvc-86-dev"
         }
       ]
     },
@@ -155,10 +151,6 @@
         },
         {
           "type": "test",
-          "name": "ci-msvc-64-dev"
-        },
-        {
-          "type": "package",
           "name": "ci-msvc-64-dev"
         }
       ]
