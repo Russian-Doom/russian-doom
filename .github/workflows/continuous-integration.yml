@@ -38,23 +38,23 @@ jobs:
             cmake_preset: 'ci-msys2-dev'
             build_suffix: "x64-clang"
           -
-            display_name: "Windows | x86 | MSVC"
+            display_name: "Windows | x86"
             runner: "windows-2025"
             shell: "bash"
             msvc_triplet: "x86-windows"
             msvc_triplet_path: 'cmake/triplets/x86-windows.cmake'
             compiler_name: "cl"
             cmake_preset: 'ci-msvc-86-dev'
-            build_suffix: "x86-msvc"
+            build_suffix: "x86"
           -
-            display_name: "Windows | x64 | MSVC"
+            display_name: "Windows | x64"
             runner: "windows-2025"
             shell: "bash"
             msvc_triplet: "x64-windows"
             msvc_triplet_path: 'cmake/triplets/x64-windows.cmake'
             compiler_name: "cl"
             cmake_preset: 'ci-msvc-64-dev'
-            build_suffix: "x64-msvc"
+            build_suffix: "x64"
 
     permissions:
       actions: write
@@ -84,7 +84,7 @@ jobs:
             git
 
       - name: Restore MSVC cache
-        if: matrix.config.build_suffix == 'x86-msvc'
+        if: matrix.config.build_suffix == 'x86'
         id: msvc_cache
         uses: actions/cache/restore@v4
         with:
@@ -92,7 +92,7 @@ jobs:
           key: vs-${{ matrix.config.msvc_triplet }}
 
       - name: Install MSVC 2019
-        if: matrix.config.build_suffix == 'x86-msvc'
+        if: matrix.config.build_suffix == 'x86'
         run: |
           choco config set cacheLocation "${{ github.workspace }}/choco_cache"
           choco install visualstudio2019buildtools --package-parameters " \
@@ -104,7 +104,7 @@ jobs:
 # cp "${{ github.workspace }}/choco_cache/$(cd "${{ github.workspace }}/choco_cache" && ls | grep -E "dd_setup_[0-9]+.log" | tail -1)" "${{ github.workspace }}/vs_log.txt"
 
 #      - name: upload log
-#        if: matrix.config.build_suffix == 'x86-msvc'
+#        if: matrix.config.build_suffix == 'x86'
 #        uses: actions/upload-artifact@v4
 #        with:
 #          name: vs_log
@@ -114,14 +114,14 @@ jobs:
       # The actions/cache@v4 action doesn't update cache on hit,
       # and we don't have a way to add a toolset version to key before it is installed.
       - name: Delete MSVC cache
-        if: matrix.config.build_suffix == 'x86-msvc' && steps.msvc_cache.outputs.cache-hit
+        if: matrix.config.build_suffix == 'x86' && steps.msvc_cache.outputs.cache-hit
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh cache delete --repo ${{ github.repository }} ${{ steps.msvc_cache.outputs.cache-primary-key }}
 
       - name: Save MSVC cache
-        if: matrix.config.build_suffix == 'x86-msvc'
+        if: matrix.config.build_suffix == 'x86'
         uses: actions/cache/save@v4
         with:
           path: ${{ github.workspace }}/choco_cache
