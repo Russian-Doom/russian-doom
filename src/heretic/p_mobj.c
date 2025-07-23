@@ -948,7 +948,7 @@ void P_MobjThinker(thinker_t *thinker)
     }
     else
     {                           // Check for monster respawn
-        if (!(mobj->flags & MF_COUNTKILL))
+        if (!(mobj->flags & MF_COUNTKILL || mobj->flags & MF_COUNTEXTRAKILL))
         {
             return;
         }
