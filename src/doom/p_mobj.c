@@ -765,7 +765,7 @@ void P_MobjThinker (mobj_t *mobj)
     else
     {
         // check for nightmare respawn
-        if (!(mobj->flags & MF_COUNTKILL))
+        if (!(mobj->flags & MF_COUNTKILL || mobj->flags & MF_COUNTEXTRAKILL))
         {
             return;
         }
