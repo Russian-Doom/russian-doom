@@ -7,7 +7,18 @@
     },
     {
       "name": "sdl2-mixer",
-      "features": [ "timidity", "libflac", "libmodplug", "mpg123", "opusfile" ]
+      "default-features": false,
+      "features": [
+        "timidity",
+        "libflac",
+        "libmodplug",
+        "mpg123",
+        "opusfile",
+        {
+          "name": "wavpack",
+          "platform": "!(windows & x86)"
+        }
+      ]
     },
     "sdl2-net",
     "libsamplerate"
