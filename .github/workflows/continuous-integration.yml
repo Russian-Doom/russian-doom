@@ -101,15 +101,6 @@ jobs:
             --add Microsoft.VisualStudio.Component.VC.v141.x86.x64"
           cd "${{ github.workspace }}/choco_cache" && rm **.log **log.txt
 
-# cp "${{ github.workspace }}/choco_cache/$(cd "${{ github.workspace }}/choco_cache" && ls | grep -E "dd_setup_[0-9]+.log" | tail -1)" "${{ github.workspace }}/vs_log.txt"
-
-#      - name: upload log
-#        if: matrix.config.build_suffix == 'x86'
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: vs_log
-#          path: vs_log.txt
-
       # Delete the old cache on hit to emulate a cache update.
       # The actions/cache@v4 action doesn't update cache on hit,
       # and we don't have a way to add a toolset version to key before it is installed.
