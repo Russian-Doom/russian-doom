@@ -22,17 +22,15 @@ jobs:
           -
             display_name: "Windows | x86"
             runner: "windows-2025"
-            msvc_triplet: "x86-windows"
-            msvc_triplet_path: 'cmake/triplets/x86-windows.cmake'
             cmake_preset: 'ci-msvc-86-dev'
             build_suffix: "x86"
+            msvc_triplet_path: 'cmake/triplets/x86-windows.cmake'
           -
             display_name: "Windows | x64"
             runner: "windows-2025"
-            msvc_triplet: "x64-windows"
-            msvc_triplet_path: 'cmake/triplets/x64-windows.cmake'
             cmake_preset: 'ci-msvc-64-dev'
             build_suffix: "x64"
+            msvc_triplet_path: 'cmake/triplets/x64-windows.cmake'
 
     permissions:
       actions: write
@@ -48,7 +46,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: ${{ github.workspace }}/choco_cache
-          key: vs-${{ matrix.config.msvc_triplet }}
+          key: vs-${{ matrix.config.build_suffix }}
 
       - name: Install MSVC 2019
         if: matrix.config.build_suffix == 'x86'
@@ -92,8 +90,8 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: ${{ github.workspace }}/vcpkg_cache
-          key: vcpkg-${{ matrix.config.msvc_triplet }}-${{ hashFiles('vcpkg.json', matrix.config.msvc_triplet_path) }}
-          restore-keys: vcpkg-${{ matrix.config.msvc_triplet }}-
+          key: vcpkg-${{ matrix.config.build_suffix }}-${{ hashFiles('vcpkg.json', matrix.config.msvc_triplet_path) }}
+          restore-keys: vcpkg-${{ matrix.config.build_suffix }}-
 
       - name: Configure & Build & Test
         id: configure
