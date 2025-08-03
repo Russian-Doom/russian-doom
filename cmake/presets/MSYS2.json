@@ -8,9 +8,6 @@
       "name": "msys2",
       "hidden": true,
       "generator": "Ninja",
-      "cacheVariables": {
-        "RD_USE_SELECTED_DLL_SET": "ON"
-      },
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",

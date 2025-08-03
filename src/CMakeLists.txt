@@ -214,7 +214,7 @@ foreach(MODULE ${COMPILE_MODULES})
         add_dependencies("${PROGRAM_PREFIX}${MODULE}" revision_check)
     endif()
 
-    add_dependencies("${PROGRAM_PREFIX}${MODULE}" "${MODULE}-wads" gus-patches shared_libs)
+    add_dependencies("${PROGRAM_PREFIX}${MODULE}" "${MODULE}-wads" gus-patches)
     if(UNIX AND Python3_Interpreter_FOUND)
         add_dependencies("${PROGRAM_PREFIX}${MODULE}" "man-${MODULE}-en" "completion-${MODULE}")
     endif()
@@ -223,10 +223,8 @@ foreach(MODULE ${COMPILE_MODULES})
         COMMAND $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:${CMAKE_STRIP}> $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:"$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}>">
     )
 
-    # Applocal dlls
-    if(WIN32 AND (Python3_Interpreter_FOUND OR CMAKE_VERSION VERSION_GREATER_EQUAL 3.16)
-        AND NOT VCPKG_TOOLCHAIN
-        AND NOT RD_USE_SELECTED_DLL_SET)
+    # Applocal dlls (already checked for python or cmake 3.16)
+    if(WIN32 AND NOT VCPKG_TOOLCHAIN)
         applocal_dependencies("${PROGRAM_PREFIX}${MODULE}"
             "$<IF:$<CONFIG:DEBUG>,${APPLOCAL_SEARCH_PATH_DEBUG},${APPLOCAL_SEARCH_PATH_RELEASE}>")
     endif()
@@ -248,7 +246,7 @@ foreach(MODULE ${COMPILE_MODULES})
 endforeach()
 
 # Applocal optional dlls
-if(NOT RD_USE_SELECTED_DLL_SET)
+if(WIN32 AND NOT VCPKG_TOOLCHAIN)
     get_target_property(_opt_dll SDL2_mixer::SDL2_mixer OPTIONAL_DLLS)
     copy_files(SOURCE ${_opt_dll} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
     unset(_opt_dll)
@@ -261,7 +259,7 @@ foreach(MODULE ${COMPILE_MODULES})
         install(FILES
             "$<TARGET_FILE_DIR:${PROGRAM_PREFIX}${MODULE}-exe>/${PROGRAM_PREFIX}${MODULE}.exe"
             "$<TARGET_FILE_DIR:${PROGRAM_PREFIX}${MODULE}-com>/${PROGRAM_PREFIX}${MODULE}.com"
-            $<$<NOT:$<BOOL:${RD_USE_SELECTED_DLL_SET}>>:$<TARGET_PROPERTY:SDL2_mixer::SDL2_mixer,OPTIONAL_DLLS>>
+            $<$<NOT:$<BOOL:${VCPKG_TOOLCHAIN}>>:$<TARGET_PROPERTY:SDL2_mixer::SDL2_mixer,OPTIONAL_DLLS>>
             DESTINATION $<IF:$<BOOL:${WIN32}>,.,${CMAKE_INSTALL_BINDIR}>
             ${_permissions}
         )
@@ -271,9 +269,9 @@ foreach(MODULE ${COMPILE_MODULES})
         DESTINATION $<IF:$<BOOL:${WIN32}>,.,${CMAKE_INSTALL_BINDIR}>
         ${_permissions}
     )
-    if(WIN32 AND (Python3_Interpreter_FOUND OR CMAKE_VERSION VERSION_GREATER_EQUAL 3.16)
-        AND NOT VCPKG_TOOLCHAIN
-        AND NOT RD_USE_SELECTED_DLL_SET)
+
+    # Applocal dlls (already checked for python or cmake 3.16)
+    if(WIN32 AND  NOT VCPKG_TOOLCHAIN)
         applocal_install_dependencies("${PROGRAM_PREFIX}${MODULE}"
             "$<IF:$<CONFIG:DEBUG>,${APPLOCAL_SEARCH_PATH_DEBUG},${APPLOCAL_SEARCH_PATH_RELEASE}>" "${MODULE}")
     endif()

@@ -59,12 +59,6 @@ if(NOT ARCH)
     endif()
 endif()
 
-# Enable by default for MinGW (MSYS) environments
-# Disabled for vcpkg, because it copies and installs DLLs for dependencies by itself
-cmake_dependent_option(RD_USE_SELECTED_DLL_SET
-    "Use 'Selected DLL set' instead of DLLs provided by build environment" "${MINGW}" "NOT VCPKG_TOOLCHAIN" OFF
-)
-
 # Any settings that should apply to all targets in this directory and all subdirectories should go here
 set(RD_C_STANDARD 99)
 
@@ -152,11 +146,19 @@ if(NOT miniz_FOUND)
     add_subdirectory("lib/thirdparty/miniz")
 endif()
 
-# Construct path where to search
-if(WIN32 AND (Python3_Interpreter_FOUND OR CMAKE_VERSION VERSION_GREATER_EQUAL 3.16)
-AND NOT VCPKG_TOOLCHAIN
-AND NOT RD_USE_SELECTED_DLL_SET)
-    applocal_search_path(APPLOCAL_SEARCH_PATH TARGETS "SDL2::SDL2" "SDL2_mixer::SDL2_mixer" "SDL2_net::SDL2_net" "SampleRate::samplerate" "miniz::miniz")
+# Construct path where to search for applocal dlls
+if(WIN32 AND NOT VCPKG_TOOLCHAIN)
+    if(Python3_Interpreter_FOUND OR CMAKE_VERSION VERSION_GREATER_EQUAL 3.16)
+        applocal_search_path(APPLOCAL_SEARCH_PATH TARGETS
+            "SDL2::SDL2"
+            "SDL2_mixer::SDL2_mixer"
+            "SDL2_net::SDL2_net"
+            "SampleRate::samplerate"
+            "miniz::miniz"
+        )
+    else()
+        message(FATAL_ERROR "Python 3 or Cmake 3.16 is required")
+    endif()
 endif()
 
 include(CheckSymbolExists)

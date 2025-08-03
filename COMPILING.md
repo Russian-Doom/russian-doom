@@ -47,7 +47,6 @@ pacman -S mingw-w64-ucrt-x86_64-{pkgconf,gcc,make,cmake,SDL2{,_net,_mixer},libsa
 
 If `python` version from MSYS2 is not working on your OS,
 you can install a working version of [Python](https://www.python.org/downloads/) to the host system.
-Python is completely optional if you will be using 'Selected DLL set'.
 
 If you want to use `Ninja` or `Ninja Multi-Config` cmake generators, you need
 to install `ninja` by the following command:
@@ -97,7 +96,6 @@ pacman -S mingw-w64-clang-x86_64-{pkgconf,clang,make,cmake,SDL2{,_net,_mixer},li
 
 If `python` version from MSYS2 is not working on your OS,
 you can install a working version of [Python](https://www.python.org/downloads/) to the host system.
-Python is completely optional if you will be using 'Selected DLL set'.
 
 If you want to use `Ninja` or `Ninja Multi-Config` cmake generators, you need
 to install `ninja` by the following command:
@@ -193,6 +191,7 @@ To configure the project, use the following command:
 cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE="Release" -S . -B build
 ```
 Available build types are `Release`, `Debug`, `RelWithDebInfo`, `MinSizeRel`.
+You will need `python` to be installed (**Recommended**) or use Cmake 3.16+ (Can't update Dlls).
 
 For Visual Studio with vcpkg, you can use this command:
 ```shell
@@ -206,11 +205,6 @@ set the `CMAKE_FIND_PACKAGE_PREFER_CONFIG` cmake option to `ON`.
 
 Russian Doom uses Link Time Optimization if it is available in the compiler.
 If it causes problems with your compiler, set `RD_ENABLE_LTO` cmake option to `OFF`.
-
-If you are using MSYS2 (or any other MinGW environment), by default DLLs from 'Selected DLL set'
-will be used instead of DLLs provided by the build environment.
-To use DLLs provided by the build environment, set the `RD_USE_SELECTED_DLL_SET` cmake option to `OFF`.
-You will need `python` to be installed (**Recommended**) or use Cmake 3.16+ (Can't update Dlls).
 
 To build the project, use the following command:
 ```shell
