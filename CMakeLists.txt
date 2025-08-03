@@ -148,17 +148,14 @@ endif()
 
 # Construct path where to search for applocal dlls
 if(WIN32 AND NOT VCPKG_TOOLCHAIN)
-    if(Python3_Interpreter_FOUND OR CMAKE_VERSION VERSION_GREATER_EQUAL 3.16)
-        applocal_search_path(APPLOCAL_SEARCH_PATH TARGETS
-            "SDL2::SDL2"
-            "SDL2_mixer::SDL2_mixer"
-            "SDL2_net::SDL2_net"
-            "SampleRate::samplerate"
-            "miniz::miniz"
-        )
-    else()
-        message(FATAL_ERROR "Python 3 or Cmake 3.16 is required")
-    endif()
+    include(Applocal)
+    applocal_search_path(APPLOCAL_SEARCH_PATH TARGETS
+        "SDL2::SDL2"
+        "SDL2_mixer::SDL2_mixer"
+        "SDL2_net::SDL2_net"
+        "SampleRate::samplerate"
+        "miniz::miniz"
+    )
 endif()
 
 include(CheckSymbolExists)
