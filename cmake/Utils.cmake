@@ -218,7 +218,6 @@ if(WIN32 AND (Python3_Interpreter_FOUND OR CMAKE_VERSION VERSION_GREATER_EQUAL 3
     function(applocal_dependencies target_name search_paths)
         if(Python3_Interpreter_FOUND) # Applocal.py
             add_custom_command(TARGET "${target_name}" POST_BUILD
-                DEPENDS "${PROJECT_SOURCE_DIR}/cmake/scripts/Applocal.py"
                 COMMAND ${CMAKE_COMMAND} -E env "APPLOCAL_BUNDLEDLLS_SEARCH_PATH=${search_paths}"
                 "$<TARGET_FILE:Python3::Interpreter>" "${PROJECT_SOURCE_DIR}/cmake/scripts/Applocal.py" --copy
                 "$<TARGET_FILE:${target_name}>"
@@ -226,7 +225,6 @@ if(WIN32 AND (Python3_Interpreter_FOUND OR CMAKE_VERSION VERSION_GREATER_EQUAL 3
             )
         else() # Applocal.cmake
             add_custom_command(TARGET "${target_name}" POST_BUILD
-                DEPENDS "${PROJECT_SOURCE_DIR}/cmake/scripts/Applocal.cmake"
                 COMMAND ${CMAKE_COMMAND} -P "${PROJECT_SOURCE_DIR}/cmake/scripts/Applocal.cmake"
                 "$<TARGET_FILE:${target_name}>" ${search_paths}
                 COMMENT "Copying app dependencies for ${target_name} (WARNING: DLLs won't be updated) ..."
