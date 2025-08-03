@@ -10,10 +10,8 @@
     "cmake/presets/Arch_Linux.json",
     "cmake/presets/Debian_Linux.json",
     "cmake/presets/Fedora_Linux.json",
-    "cmake/presets/MSYS2.json",
     "cmake/presets/MSVC.json",
     "cmake/presets/CI/Linux.json",
-    "cmake/presets/CI/MSYS2.json",
     "cmake/presets/CI/MSVC.json"
   ]
 }
