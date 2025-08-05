@@ -81,6 +81,45 @@
         "lhs": "$penv{CI}",
         "rhs": "true"
       }
+    },
+    {
+      "name": "ci-msvc-86-release",
+      "configurePreset": "ci-msvc-86",
+      "inherits": ["release"],
+      "displayName": "Windows x86 Release (CI)",
+      "description": "Cmake build configuration for Windows x86 CI Release builds",
+      "jobs": 4,
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
+    },
+    {
+      "name": "ci-msvc-64-release",
+      "configurePreset": "ci-msvc-64",
+      "inherits": ["release"],
+      "displayName": "Windows x64 Release (CI)",
+      "description": "Cmake build configuration for Windows x64 CI Release builds",
+      "jobs": 4,
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
+    },
+    {
+      "name": "ci-msvc-arm64-release",
+      "configurePreset": "ci-msvc-arm64",
+      "inherits": ["release"],
+      "displayName": "Windows AArch64 Release (CI)",
+      "description": "Cmake build configuration for Windows AArch64 CI Release builds",
+      "jobs": 4,
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
     }
   ],
   "testPresets": [
@@ -156,6 +195,45 @@
         "lhs": "$penv{CI}",
         "rhs": "true"
       }
+    },
+    {
+      "name": "ci-msvc-86-release",
+      "configurePreset": "ci-msvc-86",
+      "inherits": ["release"],
+      "displayName": "Windows x86 Release (CI)",
+      "description": "Cmake package configuration for Windows x86 CI Release builds",
+      "generators": ["ZIP"],
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
+    },
+    {
+      "name": "ci-msvc-64-release",
+      "configurePreset": "ci-msvc-64",
+      "inherits": ["release"],
+      "displayName": "Windows x64 Release (CI)",
+      "description": "Cmake package configuration for Windows x64 CI Release builds",
+      "generators": ["ZIP"],
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
+    },
+    {
+      "name": "ci-msvc-arm64-release",
+      "configurePreset": "ci-msvc-arm64",
+      "inherits": ["release"],
+      "displayName": "Windows AArch64 Release (CI)",
+      "description": "Cmake package configuration for Windows AArch64 CI Release builds",
+      "generators": ["ZIP"],
+      "condition": {
+        "type": "equals",
+        "lhs": "$penv{CI}",
+        "rhs": "true"
+      }
     }
   ],
   "workflowPresets": [
@@ -213,6 +291,63 @@
         {
           "type": "test",
           "name": "ci-msvc-arm64-dev"
+        }
+      ]
+    },
+    {
+      "name": "ci-msvc-86-release",
+      "displayName": "Windows x86 Release (CI)",
+      "description": "Workflow for Windows x86 CI Release builds",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ci-msvc-86"
+        },
+        {
+          "type": "build",
+          "name": "ci-msvc-86-release"
+        },
+        {
+          "type": "package",
+          "name": "ci-msvc-86-release"
+        }
+      ]
+    },
+    {
+      "name": "ci-msvc-64-release",
+      "displayName": "Windows x64 Release (CI)",
+      "description": "Workflow for Windows x64 CI Release builds",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ci-msvc-64"
+        },
+        {
+          "type": "build",
+          "name": "ci-msvc-64-release"
+        },
+        {
+          "type": "package",
+          "name": "ci-msvc-64-release"
+        }
+      ]
+    },
+    {
+      "name": "ci-msvc-arm64-release",
+      "displayName": "Windows AArch64 Release (CI)",
+      "description": "Workflow for Windows AArch64 CI Release builds",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ci-msvc-arm64"
+        },
+        {
+          "type": "build",
+          "name": "ci-msvc-arm64-release"
+        },
+        {
+          "type": "package",
+          "name": "ci-msvc-arm64-release"
         }
       ]
     }

@@ -105,7 +105,6 @@ jobs:
         env:
           CC: cl
         run: |
-          export MAKEFLAGS=--keep-going
           cmake --workflow --preset "${{ matrix.config.cmake_preset }}"
           git_version=$(cmake -P ./cmake/scripts/UpdateRevision.cmake "git" 2>&1)
           echo "version=$git_version" >> $GITHUB_OUTPUT

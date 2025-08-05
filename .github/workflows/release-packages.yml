@@ -13,44 +13,71 @@ jobs:
       fail-fast: true
       matrix:
         config:
-          # TODO: Add MSVC x86 Windows build
+          -
+            display_name: "Windows | x86"
+            runner: "windows-2025"
+            cmake_preset: 'ci-msvc-86-release'
+            build_suffix: "x86"
+            msvc_triplet_path: 'cmake/triplets/x86-windows.cmake'
           -
             display_name: "Windows | x64"
             runner: "windows-2025"
-            shell: "msys2 {0}"
-            msys_msystem: "UCRT64"
-            msys_prefix: "ucrt-x86_64"
-            compiler_name: "gcc"
-            cmake_preset: 'ci-msys2-release'
+            cmake_preset: 'ci-msvc-64-release'
+            build_suffix: "x64"
+            msvc_triplet_path: 'cmake/triplets/x64-windows.cmake'
+          -
+            display_name: "Windows | AArch64"
+            runner: "windows-11-arm"
+            cmake_preset: 'ci-msvc-arm64-release'
+            build_suffix: "aarch64"
+            # msvc_triplet_path: '${{ VCPKG_INSTALLATION_ROOT }}/triplets/arm64-windows.cmake'
+            msvc_triplet_path: 'C:/vcpkg/triplets/arm64-windows.cmake'
 
     permissions:
       contents: write
     defaults:
       run:
-        shell: ${{ matrix.config.shell }}
+        shell: bash
+    env:
+      VCPKG_BINARY_SOURCES: "clear;files,${{ github.workspace }}/vcpkg_cache,readwrite"
     steps:
-      - name: Setup MSYS env
-        timeout-minutes: 10
-        uses: msys2/setup-msys2@v2
+      - name: Restore MSVC cache
+        if: matrix.config.build_suffix == 'x86'
+        id: msvc_cache
+        uses: actions/cache/restore@v4
         with:
-          msystem: ${{ matrix.config.msys_msystem }}
-          update: true
-          install: >-
-            mingw-w64-${{ matrix.config.msys_prefix }}-pkgconf
-            mingw-w64-${{ matrix.config.msys_prefix }}-${{ matrix.config.compiler_name }}
-            mingw-w64-${{ matrix.config.msys_prefix }}-ninja
-            mingw-w64-${{ matrix.config.msys_prefix }}-cmake
-            mingw-w64-${{ matrix.config.msys_prefix }}-SDL2
-            mingw-w64-${{ matrix.config.msys_prefix }}-SDL2_net
-            mingw-w64-${{ matrix.config.msys_prefix }}-SDL2_mixer
-            mingw-w64-${{ matrix.config.msys_prefix }}-libsamplerate
+          path: ${{ github.workspace }}/choco_cache
+          key: vs-${{ matrix.config.build_suffix }}
+
+      - name: Install MSVC 2019
+        if: matrix.config.build_suffix == 'x86'
+        run: |
+          choco config set cacheLocation "${{ github.workspace }}/choco_cache"
+          choco install visualstudio2019buildtools --package-parameters " \
+            --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
+            --add Microsoft.VisualStudio.Component.WinXP \
+            --add Microsoft.VisualStudio.Component.VC.v141.x86.x64"
+
+      - name: Bootstrap VCPKG
+        run: |
+          cd $VCPKG_INSTALLATION_ROOT
+          echo "vcpkg revision: $(git rev-parse HEAD)"
+          ./bootstrap-vcpkg.sh -disableMetrics
 
       - uses: actions/checkout@v4
 
+      - name: Restore VCPKG dependencies cache
+        id: vcpkg_cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ github.workspace }}/vcpkg_cache
+          key: vcpkg-${{ matrix.config.build_suffix }}-${{ hashFiles('vcpkg.json', matrix.config.msvc_triplet_path) }}
+          restore-keys: vcpkg-${{ matrix.config.build_suffix }}-
+
       - name: Configure & Build & Package
-        run: |
-          export MAKEFLAGS=--keep-going
-          cmake --workflow --preset "${{ matrix.config.cmake_preset }}"
+        env:
+          CC: cl
+        run: cmake --workflow --preset "${{ matrix.config.cmake_preset }}"
 
       - name: Upload Zip
         shell: bash
