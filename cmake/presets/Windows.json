@@ -6,7 +6,6 @@
   "configurePresets": [
     {
       "name": "windows-86",
-      "hidden": true,
       "generator": "Visual Studio 16 2019",
       "architecture": "Win32",
       "toolset": "v141_xp",
@@ -18,7 +17,6 @@
     },
     {
       "name": "windows-64",
-      "hidden": true,
       "generator": "Visual Studio 17 2022",
       "architecture": "x64",
       "condition": {
@@ -29,9 +27,46 @@
     },
     {
       "name": "windows-arm64",
-      "hidden": true,
       "generator": "Visual Studio 17 2022",
       "architecture": "ARM64",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "windows-86-release",
+      "configurePreset": "windows-86",
+      "inherits": "release",
+      "displayName": "Windows x86 Release",
+      "description": "Cmake build configuration for Windows x86 Release builds",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "windows-64-release",
+      "configurePreset": "windows-64",
+      "inherits": "release",
+      "displayName": "Windows x64 Release",
+      "description": "Cmake build configuration for Windows x64 Release builds",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "windows-arm64-release",
+      "configurePreset": "windows-arm64",
+      "inherits": "release",
+      "displayName": "Windows AArch64 Release",
+      "description": "Cmake build configuration for Windows AArch64 Release builds",
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",
@@ -44,6 +79,101 @@
       "name": "windows",
       "hidden": true,
       "generators": ["ZIP"]
+    },
+    {
+      "name": "windows-86-release",
+      "configurePreset": "windows-86",
+      "inherits": ["windows", "release"],
+      "displayName": "Windows x86 Release",
+      "description": "Cmake package configuration for Windows x86 Release builds",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "windows-64-release",
+      "configurePreset": "windows-64",
+      "inherits": ["windows", "release"],
+      "displayName": "Windows x64 Release",
+      "description": "Cmake package configuration for Windows x64 Release builds",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "windows-arm64-release",
+      "configurePreset": "windows-arm64",
+      "inherits": ["windows", "release"],
+      "displayName": "Windows AArch64 Release",
+      "description": "Cmake package configuration for Windows AArch64 Release builds",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "windows-86-release",
+      "displayName": "Windows x86 Release",
+      "description": "Workflow for Windows x86 Release builds",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "windows-86"
+        },
+        {
+          "type": "build",
+          "name": "windows-86-release"
+        },
+        {
+          "type": "package",
+          "name": "windows-86-release"
+        }
+      ]
+    },
+    {
+      "name": "windows-64-release",
+      "displayName": "Windows x64 Release",
+      "description": "Workflow for Windows x64 Release builds",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "windows-64"
+        },
+        {
+          "type": "build",
+          "name": "windows-64-release"
+        },
+        {
+          "type": "package",
+          "name": "windows-64-release"
+        }
+      ]
+    },
+    {
+      "name": "windows-arm64-release",
+      "displayName": "Windows AArch64 Release",
+      "description": "Workflow for Windows AArch64 Release builds",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "windows-arm64"
+        },
+        {
+          "type": "build",
+          "name": "windows-arm64-release"
+        },
+        {
+          "type": "package",
+          "name": "windows-arm64-release"
+        }
+      ]
     }
   ]
 }
