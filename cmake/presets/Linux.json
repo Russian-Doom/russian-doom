@@ -8,43 +8,35 @@
       "name": "linux",
       "hidden": true,
       "generator": "Unix Makefiles",
-      "condition": {
-        "type": "equals",
-        "lhs": "${hostSystemName}",
-        "rhs": "Linux"
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "/usr"
       }
     },
     {
-      "name": "local-linux-dev",
+      "name": "linux-dev",
       "hidden": true,
       "inherits": ["linux", "dev"],
-      "displayName": "Linux (Local|Native|Dev)",
-      "description": "Configuration for local Dev builds using Linux toolchain",
-      "condition": {
-        "type": "equals",
-        "lhs": "${hostSystemName}",
-        "rhs": "Linux"
+      "displayName": "Linux Dev",
+      "description": "Configuration for Linux Dev builds",
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "/usr/local"
       }
     },
     {
-      "name": "local-linux-release",
+      "name": "linux-release",
       "inherits": ["linux", "release"],
-      "displayName": "Linux (Local|Native|Release)",
-      "description": "Configuration for local Release builds using Linux toolchain",
-      "binaryDir": "${sourceDir}/build",
-      "condition": {
-        "type": "equals",
-        "lhs": "${hostSystemName}",
-        "rhs": "Linux"
-      }
+      "displayName": "Linux Release",
+      "description": "Configuration for Linux Release builds",
+      "binaryDir": "${sourceDir}/build"
     }
   ],
   "buildPresets": [
     {
-      "name": "local-linux-release",
-      "configurePreset": "local-linux-release",
-      "displayName": "Linux (Local|Native|Release)",
-      "description": "Cmake build configuration for Local Release builds using Linux toolchain",
+      "name": "linux-release",
+      "configurePreset": "linux-release",
+      "inherits": "release",
+      "displayName": "Linux Release",
+      "description": "Cmake build configuration for Linux Release builds",
       "jobs": 16,
       "condition": {
         "type": "equals",
@@ -55,12 +47,21 @@
   ],
   "packagePresets": [
     {
-      "name": "local-linux-release-deb",
-      "configurePreset": "local-linux-release",
-      "inherits": ["release"],
-      "displayName": "Linux (Local|Native|Release|DEB)",
-      "description": "Cmake package configuration for Local Release builds of DEB packages using Linux toolchain",
-      "generators": ["DEB"],
+      "name": "deb",
+      "hidden": true,
+      "generators": ["DEB"]
+    },
+    {
+      "name": "rpm",
+      "hidden": true,
+      "generators": ["RPM"]
+    },
+    {
+      "name": "linux-release-deb",
+      "configurePreset": "linux-release",
+      "inherits": ["release", "deb"],
+      "displayName": "Linux Release (DEB)",
+      "description": "Cmake package configuration for Linux Release DEB builds",
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",
@@ -68,12 +69,11 @@
       }
     },
     {
-      "name": "local-linux-release-fedora-rpm",
-      "configurePreset": "local-linux-release",
-      "inherits": ["release"],
-      "displayName": "Linux (Local|Native|Release|Fedora RPM)",
-      "description": "Cmake package configuration for Local Release builds of RPM (Fedora) packages using Linux toolchain",
-      "generators": ["RPM"],
+      "name": "linux-release-fedora-rpm",
+      "configurePreset": "linux-release",
+      "inherits": ["release", "rpm"],
+      "displayName": "Linux Release (Fedora RPM)",
+      "description": "Cmake package configuration for Linux Release RPM (Fedora) builds",
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",
@@ -83,55 +83,55 @@
   ],
   "workflowPresets": [
     {
-      "name": "local-linux-release",
-      "displayName": "Linux (Local|Native|Release)",
-      "description": "Workflow for Local Release builds using Linux toolchain",
+      "name": "linux-release",
+      "displayName": "Linux Release",
+      "description": "Workflow for Linux Release builds",
       "steps": [
         {
           "type": "configure",
-          "name": "local-linux-release"
+          "name": "linux-release"
         },
         {
           "type": "build",
-          "name": "local-linux-release"
+          "name": "linux-release"
         }
       ]
     },
     {
-      "name": "local-linux-release-deb",
-      "displayName": "Linux (Local|Native|Release|DEB)",
-      "description": "Workflow for Local Release builds of DEB packages using Linux toolchain",
+      "name": "linux-release-deb",
+      "displayName": "Linux Release (DEB)",
+      "description": "Workflow for Linux Release DEB builds",
       "steps": [
         {
           "type": "configure",
-          "name": "local-linux-release"
+          "name": "linux-release"
         },
         {
           "type": "build",
-          "name": "local-linux-release"
+          "name": "linux-release"
         },
         {
           "type": "package",
-          "name": "local-linux-release-deb"
+          "name": "linux-release-deb"
         }
       ]
     },
     {
-      "name": "local-linux-release-fedora-rpm",
-      "displayName": "Linux (Local|Native|Release|Fedora RPM)",
-      "description": "Workflow for Local Release builds of RPM (Fedora) packages using Linux toolchain",
+      "name": "linux-release-fedora-rpm",
+      "displayName": "Linux Release (Fedora RPM)",
+      "description": "Workflow for Linux Release RPM (Fedora) builds",
       "steps": [
         {
           "type": "configure",
-          "name": "local-linux-release"
+          "name": "linux-release"
         },
         {
           "type": "build",
-          "name": "local-linux-release"
+          "name": "linux-release"
         },
         {
           "type": "package",
-          "name": "local-linux-release-fedora-rpm"
+          "name": "linux-release-fedora-rpm"
         }
       ]
     }

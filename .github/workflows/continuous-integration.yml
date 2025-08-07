@@ -22,19 +22,19 @@ jobs:
           -
             display_name: "Windows | x86"
             runner: "windows-2025"
-            cmake_preset: 'ci-msvc-86-dev'
+            cmake_preset: 'ci-windows-86-dev'
             build_suffix: "x86"
             msvc_triplet_path: 'cmake/triplets/x86-windows.cmake'
           -
             display_name: "Windows | x64"
             runner: "windows-2025"
-            cmake_preset: 'ci-msvc-64-dev'
+            cmake_preset: 'ci-windows-64-dev'
             build_suffix: "x64"
             msvc_triplet_path: 'cmake/triplets/x64-windows.cmake'
           -
             display_name: "Windows | AArch64"
             runner: "windows-11-arm"
-            cmake_preset: 'ci-msvc-arm64-dev'
+            cmake_preset: 'ci-windows-arm64-dev'
             build_suffix: "aarch64"
             # msvc_triplet_path: '${{ VCPKG_INSTALLATION_ROOT }}/triplets/arm64-windows.cmake'
             msvc_triplet_path: 'C:/vcpkg/triplets/arm64-windows.cmake'
@@ -155,11 +155,13 @@ jobs:
             distro: debian
             package: deb
             dockerfile: '.devcontainer/Debian.dockerfile'
+            preset_suffix: deb
           -
             display_name: Fedora
             distro: fedora
             package: rpm
             dockerfile: '.devcontainer/Fedora.dockerfile'
+            preset_suffix: fedora-rpm
         platform:
           -
             runner: 'ubuntu-24.04'
@@ -196,7 +198,7 @@ jobs:
         id: configure
         run: |
           chmod 777 .
-          ./crosscompile_linux_packages.sh ci ${{ matrix.distro.distro }}
+          ./crosscompile_linux_packages.sh "ci-linux-dev-${{ matrix.distro.preset_suffix }}" ${{ matrix.distro.distro }}
           git_version=$(cmake -P ./cmake/scripts/UpdateRevision.cmake "git" 2>&1)
           echo "version=$git_version" >> $GITHUB_OUTPUT
 

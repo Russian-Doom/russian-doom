@@ -2,173 +2,297 @@
   "version": 6,
   "include": [
     "../Base_configurations.json",
-    "../Linux.json",
-    "../Debian_Linux.json",
-    "../Fedora_Linux.json"
+    "../Linux.json"
   ],
   "configurePresets": [
     {
-      "name": "ci-debian-linux-dev",
-      "inherits": ["linux", "dev", "debian", "ci"],
-      "displayName": "Debian Linux CI Dev",
-      "description": "Configuration for Debian Linux CI Dev builds",
+      "name": "ci-linux-dev",
+      "inherits": ["linux", "ci", "dev"],
+      "displayName": "Linux Dev (CI)",
+      "description": "Configuration for Linux CI Dev builds",
       "condition": {
-        "type": "equals",
-        "lhs": "$penv{CI}",
-        "rhs": "true"
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Linux"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
       }
     },
     {
-      "name": "ci-fedora-linux-dev",
-      "inherits": ["linux", "dev", "fedora", "ci"],
-      "displayName": "Fedora Linux CI Dev",
-      "description": "Configuration for Fedora Linux CI Dev builds",
+      "name": "ci-linux-release",
+      "inherits": ["linux", "ci", "release"],
+      "displayName": "Linux Release (CI)",
+      "description": "Configuration for Linux CI Release builds",
       "condition": {
-        "type": "equals",
-        "lhs": "$penv{CI}",
-        "rhs": "true"
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Linux"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
       }
     }
   ],
   "buildPresets": [
     {
-      "name": "ci-debian-linux-dev",
-      "configurePreset": "ci-debian-linux-dev",
-      "displayName": "Debian Linux CI Dev",
-      "description": "Cmake build configuration for Debian Linux CI Dev builds",
-      "jobs": 4,
+      "name": "ci-linux-dev",
+      "configurePreset": "ci-linux-dev",
+      "inherits": ["ci", "dev"],
+      "displayName": "Linux Dev (CI)",
+      "description": "Cmake build configuration for Linux CI Dev builds",
       "condition": {
-        "type": "equals",
-        "lhs": "$penv{CI}",
-        "rhs": "true"
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Linux"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
       }
     },
     {
-      "name": "ci-fedora-linux-dev",
-      "configurePreset": "ci-fedora-linux-dev",
-      "displayName": "Fedora Linux CI Dev",
-      "description": "Cmake build configuration for Fedora Linux CI Dev builds",
-      "jobs": 4,
+      "name": "ci-linux-release",
+      "configurePreset": "ci-linux-release",
+      "inherits": ["ci", "release"],
+      "displayName": "Linux Release (CI)",
+      "description": "Cmake build configuration for Linux CI Release builds",
       "condition": {
-        "type": "equals",
-        "lhs": "$penv{CI}",
-        "rhs": "true"
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Linux"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
       }
     }
   ],
   "testPresets": [
     {
-      "name": "ci-linux",
-      "hidden": true,
-      "condition": {
-        "type": "equals",
-        "lhs": "$penv{CI}",
-        "rhs": "true"
-      },
-      "output": {
-        "outputOnFailure": true
-      },
+      "name": "ci-linux-dev",
+      "inherits": ["ci", "dev"],
+      "configurePreset": "ci-linux-dev",
+      "displayName": "Linux Dev (CI)",
+      "description": "Cmake test configuration for Linux CI Dev builds",
       "environment": {
         "SDL_VIDEODRIVER": "dummy"
-      }
-    },
-    {
-      "name": "ci-debian-linux-dev",
-      "inherits": ["ci-linux"],
-      "configurePreset": "ci-debian-linux-dev",
-      "displayName": "Debian Linux CI Dev",
-      "description": "Cmake test configuration for Debian Linux CI Dev builds",
+      },
       "condition": {
-        "type": "equals",
-        "lhs": "$penv{CI}",
-        "rhs": "true"
-      }
-    },
-    {
-      "name": "ci-fedora-linux-dev",
-      "inherits": ["ci-linux"],
-      "configurePreset": "ci-fedora-linux-dev",
-      "displayName": "Fedora Linux CI Dev",
-      "description": "Cmake test configuration for Fedora Linux CI Dev builds",
-      "condition": {
-        "type": "equals",
-        "lhs": "$penv{CI}",
-        "rhs": "true"
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Linux"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
       }
     }
   ],
   "packagePresets": [
     {
-      "name": "ci-debian-linux-dev",
-      "configurePreset": "ci-debian-linux-dev",
-      "inherits": ["dev"],
-      "displayName": "Debian Linux CI Dev",
+      "name": "ci-linux-dev-deb",
+      "configurePreset": "ci-linux-dev",
+      "inherits": ["dev", "deb"],
+      "displayName": "Debian Linux Dev (CI)",
       "description": "Cmake package configuration for Debian Linux CI Dev builds",
-      "generators": ["DEB"],
       "condition": {
-        "type": "equals",
-        "lhs": "${hostSystemName}",
-        "rhs": "Linux"
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Linux"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
       }
     },
     {
-      "name": "ci-fedora-linux-dev",
-      "configurePreset": "ci-fedora-linux-dev",
-      "inherits": ["dev"],
-      "displayName": "Fedora Linux CI Dev",
+      "name": "ci-linux-dev-fedora-rpm",
+      "configurePreset": "ci-linux-dev",
+      "inherits": ["dev", "rpm"],
+      "displayName": "Fedora Linux Dev (CI)",
       "description": "Cmake package configuration for Fedora Linux CI Dev builds",
-      "generators": ["RPM"],
       "condition": {
-        "type": "equals",
-        "lhs": "${hostSystemName}",
-        "rhs": "Linux"
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Linux"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ci-linux-release-deb",
+      "configurePreset": "ci-linux-release",
+      "inherits": ["release", "deb"],
+      "displayName": "Debian Linux Release (CI)",
+      "description": "Cmake package configuration for Debian Linux CI Release builds",
+      "condition": {
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Linux"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ci-linux-release-fedora-rpm",
+      "configurePreset": "ci-linux-release",
+      "inherits": ["release", "rpm"],
+      "displayName": "Fedora Linux Release (CI)",
+      "description": "Cmake package configuration for Fedora Linux CI Release builds",
+      "condition": {
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Linux"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
       }
     }
   ],
   "workflowPresets": [
     {
-      "name": "ci-debian-linux-dev",
-      "displayName": "Debian Linux CI Dev",
+      "name": "ci-linux-dev-deb",
+      "displayName": "Debian Linux Dev (CI)",
       "description": "Workflow for Debian Linux CI Dev builds",
       "steps": [
         {
           "type": "configure",
-          "name": "ci-debian-linux-dev"
+          "name": "ci-linux-dev"
         },
         {
           "type": "build",
-          "name": "ci-debian-linux-dev"
+          "name": "ci-linux-dev"
         },
         {
           "type": "test",
-          "name": "ci-debian-linux-dev"
+          "name": "ci-linux-dev"
         },
         {
           "type": "package",
-          "name": "ci-debian-linux-dev"
+          "name": "ci-linux-dev-deb"
         }
       ]
     },
     {
-      "name": "ci-fedora-linux-dev",
-      "displayName": "Fedora Linux CI Dev",
+      "name": "ci-linux-dev-fedora-rpm",
+      "displayName": "Fedora Linux Dev (CI)",
       "description": "Workflow for Fedora Linux CI Dev builds",
       "steps": [
         {
           "type": "configure",
-          "name": "ci-fedora-linux-dev"
+          "name": "ci-linux-dev"
         },
         {
           "type": "build",
-          "name": "ci-fedora-linux-dev"
+          "name": "ci-linux-dev"
         },
         {
           "type": "test",
-          "name": "ci-fedora-linux-dev"
+          "name": "ci-linux-dev"
         },
         {
           "type": "package",
-          "name": "ci-fedora-linux-dev"
+          "name": "ci-linux-dev-fedora-rpm"
+        }
+      ]
+    },
+    {
+      "name": "ci-linux-release-deb",
+      "displayName": "Debian Linux Release (CI)",
+      "description": "Workflow for Debian Linux CI Release builds",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ci-linux-release"
+        },
+        {
+          "type": "build",
+          "name": "ci-linux-release"
+        },
+        {
+          "type": "package",
+          "name": "ci-linux-release-deb"
+        }
+      ]
+    },
+    {
+      "name": "ci-linux-release-fedora-rpm",
+      "displayName": "Fedora Linux Release (CI)",
+      "description": "Workflow for Fedora Linux CI Release builds",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ci-linux-release"
+        },
+        {
+          "type": "build",
+          "name": "ci-linux-release"
+        },
+        {
+          "type": "package",
+          "name": "ci-linux-release-fedora-rpm"
         }
       ]
     }

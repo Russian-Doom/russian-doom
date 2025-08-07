@@ -5,7 +5,7 @@
   ],
   "configurePresets": [
     {
-      "name": "msvc-86",
+      "name": "windows-86",
       "hidden": true,
       "generator": "Visual Studio 16 2019",
       "architecture": "Win32",
@@ -17,7 +17,7 @@
       }
     },
     {
-      "name": "msvc-64",
+      "name": "windows-64",
       "hidden": true,
       "generator": "Visual Studio 17 2022",
       "architecture": "x64",
@@ -28,7 +28,7 @@
       }
     },
     {
-      "name": "msvc-arm64",
+      "name": "windows-arm64",
       "hidden": true,
       "generator": "Visual Studio 17 2022",
       "architecture": "ARM64",
@@ -37,6 +37,13 @@
         "lhs": "${hostSystemName}",
         "rhs": "Windows"
       }
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "windows",
+      "hidden": true,
+      "generators": ["ZIP"]
     }
   ]
 }

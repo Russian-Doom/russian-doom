@@ -15,33 +15,58 @@
     },
     {
       "name": "clion-linux-dev",
-      "inherits": ["local-linux-dev", "clion"],
-      "displayName": "Linux (Clion|Dev)",
-      "description": "Configuration for Clion Dev builds using Linux toolchain",
-      "binaryDir": "${sourceDir}/build-Linux-64-dev"
+      "inherits": ["linux-dev", "clion"],
+      "displayName": "Linux Dev (Clion)",
+      "description": "Configuration for Linux Dev builds in Clion",
+      "binaryDir": "${sourceDir}/build-Linux-64-dev",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
     },
     {
       "name": "clion-linux-release",
-      "inherits": ["local-linux-release", "clion"],
-      "displayName": "Linux (Clion|Release)",
-      "description": "Configuration for Clion Release builds using Linux toolchain",
-      "binaryDir": "${sourceDir}/build-Linux-64-release"
+      "inherits": ["linux-release", "clion"],
+      "displayName": "Linux Release (Clion)",
+      "description": "Configuration for Linux Release builds in Clion",
+      "binaryDir": "${sourceDir}/build-Linux-64-release",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
     }
   ],
   "buildPresets": [
     {
+      "name": "clion",
+      "hidden": true,
+      "jobs": 16
+    },
+    {
       "name": "clion-linux-dev",
       "configurePreset": "clion-linux-dev",
-      "displayName": "Linux (CI|Dev)",
-      "description": "Cmake build configuration for Clion Dev builds using Linux toolchain",
-      "jobs": 16
+      "inherits": "clion",
+      "displayName": "Linux Dev (Clion)",
+      "description": "Cmake build configuration for Linux Dev builds in Clion",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
     },
     {
       "name": "clion-linux-release",
       "configurePreset": "clion-linux-release",
-      "displayName": "Linux (CI|Release)",
-      "description": "Cmake build configuration for Clion Release builds using Linux toolchain",
-      "jobs": 16
+      "inherits": "clion",
+      "displayName": "Linux Release (Clion)",
+      "description": "Cmake build configuration for Linux Release builds in Clion",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
     }
   ]
 }

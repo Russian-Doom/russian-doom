@@ -36,11 +36,6 @@
     {
       "name": "ci",
       "hidden": true,
-      "condition": {
-        "type": "equals",
-        "lhs": "$penv{CI}",
-        "rhs": "true"
-      },
       "cacheVariables": {
         "RD_TEST_WITH_GDB": "ON"
       },
@@ -64,6 +59,11 @@
       "name": "dev",
       "hidden": true,
       "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "ci",
+      "hidden": true,
+      "jobs": 4
     }
   ],
   "testPresets": [
@@ -76,6 +76,13 @@
       "name": "dev",
       "hidden": true,
       "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "ci",
+      "hidden": true,
+      "output": {
+        "outputOnFailure": true
+      }
     }
   ],
   "packagePresets": [

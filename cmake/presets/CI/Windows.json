@@ -1,0 +1,461 @@
+{
+  "version": 6,
+  "include": [
+    "../Base_configurations.json",
+    "../Windows.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "ci-windows-86",
+      "inherits": ["windows-86", "ci", "ci-vcpkg"],
+      "displayName": "Windows x86 (CI)",
+      "description": "Configuration for Windows x86 CI builds",
+      "condition": {
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Windows"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ci-windows-64",
+      "inherits": ["windows-64", "ci", "ci-vcpkg"],
+      "displayName": "Windows x64 (CI)",
+      "description": "Configuration for Windows x64 CI builds",
+      "condition": {
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Windows"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ci-windows-arm64",
+      "inherits": ["windows-arm64", "ci", "ci-vcpkg"],
+      "displayName": "Windows AArch64 (CI)",
+      "description": "Configuration for Windows AArch64 CI builds",
+      "cacheVariables": {
+        "RD_TEST_WITH_GDB": "OFF"
+      },
+      "condition": {
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Windows"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "ci-windows-86-dev",
+      "configurePreset": "ci-windows-86",
+      "inherits": ["ci" ,"dev"],
+      "displayName": "Windows x86 Dev (CI)",
+      "description": "Cmake build configuration for Windows x86 CI Dev builds",
+      "condition": {
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Windows"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ci-windows-64-dev",
+      "configurePreset": "ci-windows-64",
+      "inherits": ["ci" ,"dev"],
+      "displayName": "Windows x64 Dev (CI)",
+      "description": "Cmake build configuration for Windows x64 CI Dev builds",
+      "condition": {
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Windows"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ci-windows-arm64-dev",
+      "configurePreset": "ci-windows-arm64",
+      "inherits": ["ci" ,"dev"],
+      "displayName": "Windows AArch64 Dev (CI)",
+      "description": "Cmake build configuration for Windows AArch64 CI Dev builds",
+      "condition": {
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Windows"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ci-windows-86-release",
+      "configurePreset": "ci-windows-86",
+      "inherits": ["ci", "release"],
+      "displayName": "Windows x86 Release (CI)",
+      "description": "Cmake build configuration for Windows x86 CI Release builds",
+      "condition": {
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Windows"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ci-windows-64-release",
+      "configurePreset": "ci-windows-64",
+      "inherits": ["ci", "release"],
+      "displayName": "Windows x64 Release (CI)",
+      "description": "Cmake build configuration for Windows x64 CI Release builds",
+      "condition": {
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Windows"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ci-windows-arm64-release",
+      "configurePreset": "ci-windows-arm64",
+      "inherits": ["ci", "release"],
+      "displayName": "Windows AArch64 Release (CI)",
+      "description": "Cmake build configuration for Windows AArch64 CI Release builds",
+      "condition": {
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Windows"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
+      }
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "ci-windows-86-dev",
+      "configurePreset": "ci-windows-86",
+      "inherits": ["ci" ,"dev"],
+      "displayName": "Windows x86 Dev (CI)",
+      "description": "Cmake test configuration for Windows x64 CI Dev builds",
+      "condition": {
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Windows"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ci-windows-64-dev",
+      "configurePreset": "ci-windows-64",
+      "inherits": ["ci" ,"dev"],
+      "displayName": "Windows x64 Dev (CI)",
+      "description": "Cmake test configuration for Windows x64 CI Dev builds",
+      "condition": {
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Windows"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ci-windows-arm64-dev",
+      "configurePreset": "ci-windows-arm64",
+      "inherits": ["ci" ,"dev"],
+      "displayName": "Windows AArch64 Dev (CI)",
+      "description": "Cmake test configuration for Windows AArch64 CI Dev builds",
+      "condition": {
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Windows"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
+      }
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "ci-windows-86-release",
+      "configurePreset": "ci-windows-86",
+      "inherits": ["windows", "release"],
+      "displayName": "Windows x86 Release (CI)",
+      "description": "Cmake package configuration for Windows x86 CI Release builds",
+      "condition": {
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Windows"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ci-windows-64-release",
+      "configurePreset": "ci-windows-64",
+      "inherits": ["windows", "release"],
+      "displayName": "Windows x64 Release (CI)",
+      "description": "Cmake package configuration for Windows x64 CI Release builds",
+      "condition": {
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Windows"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ci-windows-arm64-release",
+      "configurePreset": "ci-windows-arm64",
+      "inherits": ["windows", "release"],
+      "displayName": "Windows AArch64 Release (CI)",
+      "description": "Cmake package configuration for Windows AArch64 CI Release builds",
+      "condition": {
+        "type": "allOf",
+        "conditions": [
+          {
+            "type": "equals",
+            "lhs": "${hostSystemName}",
+            "rhs": "Windows"
+          },
+          {
+            "type": "equals",
+            "lhs": "$penv{CI}",
+            "rhs": "true"
+          }
+        ]
+      }
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "ci-windows-86-dev",
+      "displayName": "Windows x86 Dev (CI)",
+      "description": "Workflow for Windows x86 CI Dev builds",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ci-windows-86"
+        },
+        {
+          "type": "build",
+          "name": "ci-windows-86-dev"
+        },
+        {
+          "type": "test",
+          "name": "ci-windows-86-dev"
+        }
+      ]
+    },
+    {
+      "name": "ci-windows-64-dev",
+      "displayName": "Windows x64 Dev (CI)",
+      "description": "Workflow for Windows x64 CI Dev builds",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ci-windows-64"
+        },
+        {
+          "type": "build",
+          "name": "ci-windows-64-dev"
+        },
+        {
+          "type": "test",
+          "name": "ci-windows-64-dev"
+        }
+      ]
+    },
+    {
+      "name": "ci-windows-arm64-dev",
+      "displayName": "Windows AArch64 Dev (CI)",
+      "description": "Workflow for Windows AArch64 CI Dev builds",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ci-windows-arm64"
+        },
+        {
+          "type": "build",
+          "name": "ci-windows-arm64-dev"
+        },
+        {
+          "type": "test",
+          "name": "ci-windows-arm64-dev"
+        }
+      ]
+    },
+    {
+      "name": "ci-windows-86-release",
+      "displayName": "Windows x86 Release (CI)",
+      "description": "Workflow for Windows x86 CI Release builds",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ci-windows-86"
+        },
+        {
+          "type": "build",
+          "name": "ci-windows-86-release"
+        },
+        {
+          "type": "package",
+          "name": "ci-windows-86-release"
+        }
+      ]
+    },
+    {
+      "name": "ci-windows-64-release",
+      "displayName": "Windows x64 Release (CI)",
+      "description": "Workflow for Windows x64 CI Release builds",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ci-windows-64"
+        },
+        {
+          "type": "build",
+          "name": "ci-windows-64-release"
+        },
+        {
+          "type": "package",
+          "name": "ci-windows-64-release"
+        }
+      ]
+    },
+    {
+      "name": "ci-windows-arm64-release",
+      "displayName": "Windows AArch64 Release (CI)",
+      "description": "Workflow for Windows AArch64 CI Release builds",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ci-windows-arm64"
+        },
+        {
+          "type": "build",
+          "name": "ci-windows-arm64-release"
+        },
+        {
+          "type": "package",
+          "name": "ci-windows-arm64-release"
+        }
+      ]
+    }
+  ]
+}

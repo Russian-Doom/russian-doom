@@ -25,9 +25,10 @@
     {
       "name": "arch-linux-release",
       "configurePreset": "arch-linux-release",
+      "inherits": "release",
       "displayName": "Arch Linux Release",
       "description": "Cmake build configuration for Arch Linux Release builds",
-      "jobs": 4,
+      "jobs": 8,
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",

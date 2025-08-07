@@ -16,19 +16,19 @@ jobs:
           -
             display_name: "Windows | x86"
             runner: "windows-2025"
-            cmake_preset: 'ci-msvc-86-release'
+            cmake_preset: 'ci-windows-86-release'
             build_suffix: "x86"
             msvc_triplet_path: 'cmake/triplets/x86-windows.cmake'
           -
             display_name: "Windows | x64"
             runner: "windows-2025"
-            cmake_preset: 'ci-msvc-64-release'
+            cmake_preset: 'ci-windows-64-release'
             build_suffix: "x64"
             msvc_triplet_path: 'cmake/triplets/x64-windows.cmake'
           -
             display_name: "Windows | AArch64"
             runner: "windows-11-arm"
-            cmake_preset: 'ci-msvc-arm64-release'
+            cmake_preset: 'ci-windows-arm64-release'
             build_suffix: "aarch64"
             # msvc_triplet_path: '${{ VCPKG_INSTALLATION_ROOT }}/triplets/arm64-windows.cmake'
             msvc_triplet_path: 'C:/vcpkg/triplets/arm64-windows.cmake'
@@ -43,7 +43,6 @@ jobs:
     steps:
       - name: Restore MSVC cache
         if: matrix.config.build_suffix == 'x86'
-        id: msvc_cache
         uses: actions/cache/restore@v4
         with:
           path: ${{ github.workspace }}/choco_cache
@@ -67,7 +66,6 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Restore VCPKG dependencies cache
-        id: vcpkg_cache
         uses: actions/cache/restore@v4
         with:
           path: ${{ github.workspace }}/vcpkg_cache
@@ -97,10 +95,14 @@ jobs:
             display_name: Debian
             distro: debian
             package: deb
+            dockerfile: '.devcontainer/Debian.dockerfile'
+            preset_suffix: deb
           -
             display_name: Fedora
-            distro: debian
+            distro: fedora
             package: rpm
+            dockerfile: '.devcontainer/Fedora.dockerfile'
+            preset_suffix: fedora-rpm
         platform:
           -
             runner: 'ubuntu-24.04'
@@ -125,15 +127,21 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Restore Docker images
+        uses: AndreKurait/docker-cache@0.6.0
+        with:
+          read-only: true
+          key: docker-${{ matrix.platform.arch }}-${{ hashFiles(matrix.distro.dockerfile) }}-
+
       - name: Toolchain & Configure & Build & Package
         run: |
           chmod 777 .
-          ./crosscompile_linux_packages.sh release ${{ matrix.distro.distro }}
+          ./crosscompile_linux_packages.sh "ci-linux-release-${{ matrix.distro.preset_suffix }}" ${{ matrix.distro.distro }}
 
       - name: Upload packages
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: >-
           gh release upload ${{ github.event.release.tag_name }}
-            ./build-${{ matrix.distro.distro }}/*.${{ matrix.distro.package }}
-            ./build-${{ matrix.distro.distro }}/*.${{ matrix.distro.package }}.sha256
+            ./build/*.${{ matrix.distro.package }}
+            ./build/*.${{ matrix.distro.package }}.sha256

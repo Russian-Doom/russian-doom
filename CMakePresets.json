@@ -8,10 +8,8 @@
   "include": [
     "cmake/presets/Linux.json",
     "cmake/presets/Arch_Linux.json",
-    "cmake/presets/Debian_Linux.json",
-    "cmake/presets/Fedora_Linux.json",
-    "cmake/presets/MSVC.json",
+    "cmake/presets/Windows.json",
     "cmake/presets/CI/Linux.json",
-    "cmake/presets/CI/MSVC.json"
+    "cmake/presets/CI/Windows.json"
   ]
 }

@@ -1,36 +1,18 @@
 #!/bin/bash
 
 # Check args
-case $1 in
-  ci)
-   preset='ci-%s-linux-dev'
-   ci='export CI=true &&'
-   ;;
- release)
-   preset='%s-linux-release'
-   ;;
- *)
-   echo 'crosscompile_linux_packages.sh {ci,release} [debian,fedora]...'
-   exit 1
-   ;;
-esac
-
-# Default distros
-distros=("${@:2}")
-if [ $# -eq 1 ]; then
-    distros=('debian' 'fedora')
+if [ $# -lt 2 ]; then
+    echo 'crosscompile_linux_packages.sh %preset% {debian,fedora}'
+    exit 1
 fi
 
 # Build toolchain images
-bash ./toolchain_images.sh build "${distros[@]}"
+bash ./toolchain_images.sh build "$2"
 
-# Execute cmake in workflow mode for each distro
-for distro in "${distros[@]}"; do
-    # shellcheck disable=SC2059
-    docker run --rm -v ".:/tmp/russian-doom" "toolchain-russian-doom-${distro}" /bin/bash -c "
-        git config --global --add safe.directory '/tmp/russian-doom' &&
-        cd /tmp/russian-doom &&
-        export MAKEFLAGS=--keep-going &&
-        ${ci}
-        cmake --workflow --preset '$(printf "${preset}" "${distro}")'"
-done
+# Execute cmake in workflow mode
+docker run --rm -v ".:/tmp/russian-doom" "toolchain-russian-doom-$2" /bin/bash -c "
+    git config --global --add safe.directory '/tmp/russian-doom' &&
+    cd /tmp/russian-doom &&
+    export MAKEFLAGS=--keep-going &&
+    export CI=true &&
+    cmake --workflow --preset '$1'"
