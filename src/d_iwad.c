@@ -268,6 +268,14 @@ static registry_value_t root_path_keys[] =
         SOFTWARE_KEY "\\GOG.com\\Games\\1983497091",
         "PATH",
     },
+
+    // Heretic + Hexen 2025
+
+    {
+        HKEY_LOCAL_MACHINE,
+        SOFTWARE_KEY "\\GOG.com\\Games\\1776058590",
+        "PATH",
+    },
 };
 
 // Subdirectories of the above install path, where IWADs are installed.
@@ -280,7 +288,10 @@ static char *root_path_subdirs[] =
     "Ultimate Doom",
     "Plutonia",
     "TNT",
-    "base\\wads"
+    "base\\wads",
+    "dos\\base\\heretic",
+    "dos\\base\\hexen",
+    "dos\\base\\hexendk"
 };
 
 // Location where Steam is installed
