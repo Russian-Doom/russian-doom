@@ -766,6 +766,17 @@ static void AddSteamDirs(void)
     // From Strife: Veteran Edition:
     AddIWADPath(steampath, "/Strife");
 
+    // From "Heretic + Hexen" 2025
+    AddIWADPath(steampath, "/Heretic + Hexen/dos/base/heretic");
+    AddIWADPath(steampath, "/Heretic + Hexen/dos/base/hexen");
+    AddIWADPath(steampath, "/Heretic + Hexen/dos/base/hexendk");
+
+    AddIWADPath(steampath, "/Heretic + Hexen/base/heretic");
+    AddIWADPath(steampath, "/Heretic + Hexen/base/hexen");
+    AddIWADPath(steampath, "/Heretic + Hexen/base/hexendk");
+
+    AddIWADPath(steampath, "/Heretic + Hexen");
+
     free(steampath);
 }
 #endif // __MACOSX__
