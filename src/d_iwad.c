@@ -315,6 +315,17 @@ static char *steam_install_subdirs[] =
 
     // From Strife: Veteran Edition:
     "steamapps\\common\\Strife",
+
+    // From "Heretic + Hexen" remaster 2025
+    "steamapps\\common\\Heretic + Hexen\\dos\\base\\heretic",
+    "steamapps\\common\\Heretic + Hexen\\dos\\base\\hexen",
+    "steamapps\\common\\Heretic + Hexen\\dos\\base\\hexendk",
+
+    "steamapps\\common\\Heretic + Hexen\\base\\heretic",
+    "steamapps\\common\\Heretic + Hexen\\base\\hexen",
+    "steamapps\\common\\Heretic + Hexen\\base\\hexendk",
+
+    "steamapps\\common\\Heretic + Hexen",
 };
 
 static char *GetRegistryString(registry_value_t *reg_val)
