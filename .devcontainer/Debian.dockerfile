@@ -1,4 +1,4 @@
-FROM debian:12-slim
+FROM debian:stable-slim
 
 ARG TERM=vt100
 
