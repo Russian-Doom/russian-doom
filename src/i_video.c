@@ -1731,13 +1731,10 @@ void I_InitGraphics(void)
 
 void I_ToggleVsync (void)
 {
-    if (opengles_renderer)
+    if(SDL_RenderSetVSync(renderer, vsync) != 0)
     {
-        SDL_GL_SetSwapInterval(vsync);
-    }
-    else
-    {
-        SDL_RenderSetVSync(renderer, vsync);
+        // failed, cnhange option back
+        vsync ^= 1;
     }
 }
 
