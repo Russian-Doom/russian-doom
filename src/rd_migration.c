@@ -19,6 +19,8 @@
 #include <SDL_scancode.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <video_config.h>
+
 #include "d_name.h"
 #include "i_video.h"
 #include "jn.h"
@@ -103,6 +105,14 @@ void M_RegisterTrackedFields()
     {
         if(RD_GameType == gt_Heretic || RD_GameType == gt_Hexen)
             RegisterTrackedDefault("skip_unusable_artifact", DEFAULT_INT);
+    }
+
+    //
+    // Replace opengles_renderer with render_driver
+    //
+    if(config_version < 5)
+    {
+        RegisterTrackedDefault("opengles_renderer", DEFAULT_INT);
     }
 }
 
@@ -331,6 +341,22 @@ void M_ApplyMigration()
             if(skip_unusable_artifact != NULL
             && skip_unusable_artifact->found)
                 skip_unused_artifact = skip_unusable_artifact->value.i;
+        }
+    }
+
+    //
+    // Replace opengles_renderer with render_driver
+    //
+    if(config_version < 5)
+    {
+        const defaultTracker_t* opengles_renderer = M_GetDefaultTracker("opengles_renderer");
+        if(opengles_renderer != NULL && opengles_renderer->found)
+        {
+#ifdef _WIN32
+            render_driver_option = opengles_renderer->value.i == 1 ? "opengles2" : "direct3d";
+#else
+            render_driver_option = opengles_renderer->value.i == 1 ? "opengles2" : NULL;
+#endif
         }
     }
 

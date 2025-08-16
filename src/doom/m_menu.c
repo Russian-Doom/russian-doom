@@ -43,6 +43,9 @@
 #include "s_sound.h"
 #include "doomstat.h"
 #include "m_menu.h"
+
+#include <video_config.h>
+
 #include "st_bar.h"
 #include "v_trans.h"
 #include "am_map.h"         // [JN] AM_initColors();
@@ -136,7 +139,7 @@ static void M_RD_Draw_Rendering_2();
 // Page 1
 static void M_RD_Change_Resolution(Direction_t direction);
 static void M_RD_Change_Widescreen(Direction_t direction);
-static void M_RD_Change_Renderer();
+static void M_RD_Change_Renderer(Direction_t direction);
 static void M_RD_Change_VSync();
 static void M_RD_Change_MaxFPS(Direction_t direction);
 static void M_RD_Change_PerfCounter(Direction_t direction);
@@ -1683,21 +1686,14 @@ static void M_RD_Draw_Rendering_1 (void)
         }
         else
         {
-            RD_M_DrawTextSmallENG(opengles_renderer_temp ? "OPENGL ES 2.0" :
-#ifdef _WIN32
-            // On Windows, default is always Direct 3D 9.
-            "DIRECT 3D",
-#else
-            // On other OSes it is unclear, so use OS preferred.
-            "PREFERRED BY OS",
-#endif
-            158 + wide_delta, 55, CR_NONE);
+            RD_M_DrawTextSmallENG(available_render_drivers[render_driver_cursor],
+                                  158 + wide_delta, 55, CR_NONE);
         }
 
         // Informative messages
         if (rendering_resolution_temp != rendering_resolution
         ||  aspect_ratio_temp != aspect_ratio
-        ||  opengles_renderer_temp != opengles_renderer)
+        ||  render_driver_cursor != render_driver_index)
         {
             RD_M_DrawTextSmallCenteredENG("PROGRAM MUST BE RESTARTED", 135, MenuTime & 32 ? CR_WHITE : CR_GRAY);
         }
@@ -1775,26 +1771,14 @@ static void M_RD_Draw_Rendering_1 (void)
         }
         else
         {
-            if (opengles_renderer_temp)
-            {
-                RD_M_DrawTextSmallENG("OPENGL ES 2.0", 160 + wide_delta, 55, CR_NONE);
-            }
-            else
-            {
-#ifdef _WIN32
-                // On Windows, default is always Direct 3D 9.
-                RD_M_DrawTextSmallENG("DIRECT 3D", 160 + wide_delta, 55, CR_NONE);
-#else
-                // On other OSes it is unclear, so use OS preferred.
-                RD_M_DrawTextSmallRUS("GJ DS,JHE JC", 160 + wide_delta, 55, CR_NONE); // ПО ВЫБОРУ ОС
-#endif
-            }
+            RD_M_DrawTextSmallENG(available_render_drivers[render_driver_cursor],
+                                  160 + wide_delta, 55, CR_NONE);
         }
 
         // Informative message: Необходим перезапуск программы
         if (rendering_resolution_temp != rendering_resolution 
         ||  aspect_ratio_temp != aspect_ratio
-        ||  opengles_renderer_temp != opengles_renderer)
+        ||  render_driver_cursor != render_driver_index)
         {
             RD_M_DrawTextSmallCenteredRUS("ytj,[jlbv gthtpfgecr ghjuhfvvs", 125, MenuTime & 32 ? CR_WHITE : CR_GRAY);
         }
@@ -1992,7 +1976,7 @@ static void M_RD_Change_Widescreen(Direction_t direction)
     RD_Menu_SpinInt(&aspect_ratio_temp, 0, 4, direction);
 }
 
-static void M_RD_Change_Renderer()
+static void M_RD_Change_Renderer(Direction_t direction)
 {
     // [JN] Disable toggling in software renderer
     if (force_software_renderer == 1)
@@ -2000,7 +1984,7 @@ static void M_RD_Change_Renderer()
         return;
     }
 
-    opengles_renderer_temp ^= 1;
+    RD_Menu_SpinInt(&render_driver_cursor, 0, num_of_available_render_drivers - 1, direction);
 }
 
 static void M_RD_Change_VSync()
@@ -7311,7 +7295,7 @@ static void M_QuitResponse(boolean confirmed)
     // [JN] Widescreen: remember choosen widescreen variable before quit.
     aspect_ratio = aspect_ratio_temp;
     // [JN] Screen renderer: remember choosen renderer variable before quit.
-    opengles_renderer = opengles_renderer_temp;
+    render_driver_option = available_render_drivers[render_driver_cursor];
 
     I_Quit ();
 }
@@ -8077,8 +8061,6 @@ void M_Init (void)
     rendering_resolution_temp = rendering_resolution;
     // [JN] Widescreen: set temp variable for rendering menu.
     aspect_ratio_temp = aspect_ratio;
-    // [JN] Screen renderer: set temp variable for rendering menu.
-    opengles_renderer_temp = opengles_renderer;
 
     menuactive = 0;
     whichSkull = 0;

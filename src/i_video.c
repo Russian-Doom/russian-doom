@@ -45,6 +45,7 @@
 #include "i_video.h"
 #include "m_argv.h"
 #include "m_config.h"
+#include "video_config.h"
 #include "m_misc.h"
 #include "os_compat.h"
 #include "tables.h"
@@ -162,8 +163,6 @@ int fullscreen = true;
 
 int aspect_ratio = 2;
 int aspect_ratio_temp; // used for in-game toggling
-int opengles_renderer = 0;
-int opengles_renderer_temp; // used for in-game toggling
 int wide_delta;
 int screenwidth;
 int screenwidth_low; // [JN] Used in low detail column drawing.
@@ -1403,16 +1402,6 @@ static void SetVideoMode(void)
     // retina displays, especially when using small window sizes.
     window_flags |= SDL_WINDOW_ALLOW_HIGHDPI;
 
-    // [JN] Set screen renderer...
-    SDL_SetHint(SDL_HINT_RENDER_DRIVER, opengles_renderer ? "opengles2" : 
-#ifdef _WIN32
-    // ... On Windows, default is always Direct 3D 9.
-    "direct3d");
-#else
-    // ... On other OSes it is unclear, so don't set a hint at all.
-    "");
-#endif
-
     if (fullscreen)
     {
         if (fullscreen_width == 0 && fullscreen_height == 0)
@@ -1509,23 +1498,70 @@ static void SetVideoMode(void)
         texture_upscaled = NULL;
     }
 
-    renderer = SDL_CreateRenderer(screen, -1, renderer_flags);
+    const int8_t requested_driver_index = get_render_driver_index(render_driver_option);
+    renderer = SDL_CreateRenderer(screen, requested_driver_index, renderer_flags);
+
+    if(renderer == NULL && requested_driver_index != -1)
+    {
+        // Unable to create requested (or available) renderer
+        printf("I_InitGraphics: %s\n", SDL_GetError());
+        SDL_ClearError();
+
+        renderer = SDL_CreateRenderer(screen, -1, renderer_flags);
+    }
 
     // If we could not find a matching render driver,
     // try again without hardware acceleration.
 
-    if (renderer == NULL && !force_software_renderer)
+    if(renderer == NULL && !force_software_renderer)
     {
+        // Unable to create available renderer
+        printf("I_InitGraphics: %s\n", SDL_GetError());
+        SDL_ClearError();
+
         renderer_flags |= SDL_RENDERER_SOFTWARE;
         renderer_flags &= ~SDL_RENDERER_PRESENTVSYNC;
 
         renderer = SDL_CreateRenderer(screen, -1, renderer_flags);
 
         // If this helped, save the setting for later.
-        if (renderer != NULL)
+        if(renderer != NULL)
         {
             force_software_renderer = 1;
         }
+        else
+        {
+            // Unable to create fallback renderer
+            printf("I_InitGraphics: %s\n", SDL_GetError());
+            SDL_ClearError();
+        }
+    }
+
+    if(renderer != NULL)
+    {
+        // save the actual renderer name for later checks
+        SDL_RendererInfo driver_info;
+        if(SDL_GetRendererInfo(renderer, &driver_info) == 0)
+        {
+            printf(english_language ?
+                    "I_InitGraphics: SDL render driver - %s\n" :
+                    "I_InitGraphics: Драйвер рендера SDL - %s\n",
+                   driver_info.name);
+            render_driver_option = M_StringDuplicate(driver_info.name);
+            render_driver_index = render_driver_cursor = get_render_driver_index(driver_info.name);
+        }
+        else
+        {
+            // No driver info
+            printf("I_InitGraphics: %s\n", SDL_GetError());
+            SDL_ClearError();
+        }
+    }
+    else
+    {
+        I_QuitWithError(english_language ?
+                        "I_InitGraphics: Unable to init render driver" :
+                        "I_InitGraphics: Не удалось проинициализировать драйвер рендера");
     }
 
 	// [JN] After window and renderer were created, unoptionally
@@ -1918,11 +1954,13 @@ void I_RenderReadPixels(byte **data, int *w, int *h)
 // file system.
 void I_BindVideoVariables(void)
 {
+    init_available_render_drivers();
+
     M_BindIntVariable("use_mouse",                   &usemouse);
     M_BindIntVariable("rendering_resolution",        &rendering_resolution);
     M_BindIntVariable("fullscreen",                  &fullscreen);
     M_BindIntVariable("aspect_ratio",                &aspect_ratio);
-    M_BindIntVariable("opengles_renderer",           &opengles_renderer);
+    M_BindStringVariable("render_driver",            &render_driver_option);
     M_BindIntVariable("video_display",               &video_display);
     M_BindIntVariable("vsync",                       &vsync);
     M_BindIntVariable("show_fps",                    &show_fps);

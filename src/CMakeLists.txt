@@ -113,6 +113,8 @@ target_link_libraries(Common PUBLIC
     "$<$<BOOL:${WIN32}>:winmm>"
 )
 
+add_subdirectory("video")
+
 # Create executables
 foreach(MODULE ${COMPILE_MODULES})
     if(WIN32)

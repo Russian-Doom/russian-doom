@@ -289,10 +289,10 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(aspect_ratio),
 
     //!
-    // [JN] OpenGL ES 2.0 video renderer.
+    // SDL render driver
     //
 
-    CONFIG_VARIABLE_INT(opengles_renderer),
+    CONFIG_VARIABLE_STRING(render_driver),
 
     //!
     // Index of the display on which the game should run. This has no

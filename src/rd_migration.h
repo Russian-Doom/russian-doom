@@ -34,8 +34,9 @@ enum {
     *     Changed names of some of "automap_*" and "hud_*" config entries to "stats_*".
     *     Separated bindings for "Suicide" and "Detail level" in Hexen.\n
     * 4 - Heretic & Hexen: Renamed skip_unusable_artifact to skip_unused_artifact.\n
+    * 5 - Replace opengles_renderer with render_driver.\n
     */
-    CURRENT_CONFIG_VERSION = 4
+    CURRENT_CONFIG_VERSION = 5
 };
 
 /**

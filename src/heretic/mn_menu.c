@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <SDL_scancode.h>
+#include <video_config.h>
 
 #include "deh_str.h"
 #include "hr_local.h"
@@ -72,7 +73,7 @@ static void DrawRenderingMenu2(void);
 // Page 1
 static void M_RD_Change_Resolution(Direction_t direction);
 static void M_RD_Change_Widescreen(Direction_t direction);
-static void M_RD_Change_Renderer();
+static void M_RD_Change_Renderer(Direction_t direction);
 static void M_RD_Change_VSync();
 static void M_RD_MaxFPS(Direction_t direction);
 static void M_RD_PerfCounter(Direction_t direction);
@@ -1688,8 +1689,6 @@ void MN_Init(void)
     rendering_resolution_temp = rendering_resolution;
     // [JN] Widescreen: set temp variable for rendering menu.
     aspect_ratio_temp = aspect_ratio;
-    // [JN] Screen renderer: set temp variable for rendering menu.
-    opengles_renderer_temp = opengles_renderer;
 
     if(vanillaparm)
         OptionsMenu = &VanillaOptionsMenu;
@@ -2004,15 +2003,8 @@ static void DrawRenderingMenu1(void)
         }
         else
         {
-            RD_M_DrawTextSmallENG(opengles_renderer_temp ? "OPENGL ES 2.0" :
-#ifdef _WIN32
-            // On Windows, default is always Direct 3D 9.
-            "DIRECT 3D",
-#else
-            // On other OSes it is unclear, so use OS preferred.
-            "PREFERRED BY OS",
-#endif
-            161 + wide_delta, 62, CR_NONE);
+            RD_M_DrawTextSmallENG(available_render_drivers[render_driver_cursor],
+                                  161 + wide_delta, 62, CR_NONE);
         }
 
         // Vertical sync
@@ -2060,7 +2052,7 @@ static void DrawRenderingMenu1(void)
         // Informative message
         if (rendering_resolution_temp != rendering_resolution
         ||  aspect_ratio_temp != aspect_ratio
-        ||  opengles_renderer_temp != opengles_renderer)
+        ||  render_driver_cursor != render_driver_index)
         {
             RD_M_DrawTextSmallENG("THE PROGRAM MUST BE RESTARTED",
                                   51 + wide_delta, 132, MenuTime & 32 ? CR_GREEN : CR_DARKGREEN);
@@ -2095,20 +2087,8 @@ static void DrawRenderingMenu1(void)
         }
         else
         {
-            if (opengles_renderer_temp)
-            {
-                RD_M_DrawTextSmallENG("OPENGL ES 2.0", 158 + wide_delta, 62, CR_NONE);
-            }
-            else
-            {
-#ifdef _WIN32
-                // On Windows, default is always Direct 3D 9.
-                RD_M_DrawTextSmallENG("DIRECT 3D", 158 + wide_delta, 62, CR_NONE);
-#else
-                // On other OSes it is unclear, so use OS preferred.
-                RD_M_DrawTextSmallRUS("GJ DS,JHE JC", 158 + wide_delta, 62, CR_NONE); // ПО ВЫБОРУ ОС
-#endif
-            }
+            RD_M_DrawTextSmallENG(available_render_drivers[render_driver_cursor],
+                                  158 + wide_delta, 62, CR_NONE);
         }
 
         // Вертикальная синхронизация
@@ -2158,7 +2138,7 @@ static void DrawRenderingMenu1(void)
         // Informative message: НЕОБХОДИМ ПЕРЕЗАПУСК ИГРЫ
         if (rendering_resolution_temp != rendering_resolution
         || aspect_ratio_temp != aspect_ratio
-        || opengles_renderer_temp != opengles_renderer)
+        || render_driver_cursor != render_driver_index)
         {
             RD_M_DrawTextSmallRUS("YTJ,[JLBV GTHTPFGECR GHJUHFVVS",
                                   46 + wide_delta, 132, MenuTime & 32 ? CR_GREEN : CR_DARKGREEN);
@@ -2282,7 +2262,7 @@ static void M_RD_Change_Widescreen(Direction_t direction)
     RD_Menu_SpinInt(&aspect_ratio_temp, 0, 4, direction);
 }
 
-static void M_RD_Change_Renderer()
+static void M_RD_Change_Renderer(Direction_t direction)
 {
     // [JN] Disable toggling in software renderer
     if (force_software_renderer == 1)
@@ -2290,7 +2270,7 @@ static void M_RD_Change_Renderer()
         return;
     }
 
-    opengles_renderer_temp ^= 1;
+    RD_Menu_SpinInt(&render_driver_cursor, 0, num_of_available_render_drivers - 1, direction);
 }
 
 static void M_RD_Change_VSync()
@@ -6315,7 +6295,7 @@ boolean MN_Responder(event_t * event)
             // [JN] Widescreen: remember choosen widescreen variable before quit.
             aspect_ratio = aspect_ratio_temp;
             // [JN] Screen renderer: remember choosen renderer variable before quit.
-            opengles_renderer = opengles_renderer_temp;
+            render_driver_option = available_render_drivers[render_driver_cursor];
 
             I_Quit();
             return true;
@@ -6339,7 +6319,7 @@ boolean MN_Responder(event_t * event)
             // [JN] Widescreen: remember choosen widescreen variable before quit.
             aspect_ratio = aspect_ratio_temp;
             // [JN] Screen renderer: remember choosen renderer variable before quit.
-            opengles_renderer = opengles_renderer_temp;
+            render_driver_option = available_render_drivers[render_driver_cursor];
             I_Quit();
         }
         else
@@ -6409,7 +6389,7 @@ boolean MN_Responder(event_t * event)
                     // [JN] Widescreen: remember choosen widescreen variable before quit.
                     aspect_ratio = aspect_ratio_temp;
                     // [JN] Screen renderer: remember choosen renderer variable before quit.
-                    opengles_renderer = opengles_renderer_temp;
+                    render_driver_option = available_render_drivers[render_driver_cursor];
                     I_Quit();
                     return false;
 
