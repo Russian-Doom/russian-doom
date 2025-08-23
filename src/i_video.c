@@ -1498,7 +1498,9 @@ static void SetVideoMode(void)
         texture_upscaled = NULL;
     }
 
-    const int8_t requested_driver_index = get_render_driver_index(render_driver_option);
+    const int8_t render_driver_option_index = get_render_driver_option_index(render_driver_option);
+    const int8_t requested_driver_index =
+        (render_driver_option_index >= 0) ? _render_driver_options[render_driver_option_index].driver_index : -1;
     renderer = SDL_CreateRenderer(screen, requested_driver_index, renderer_flags);
 
     if(renderer == NULL && requested_driver_index != -1)
@@ -1507,6 +1509,8 @@ static void SetVideoMode(void)
         printf("I_InitGraphics: %s\n", SDL_GetError());
         SDL_ClearError();
 
+        printf(english_language ? "I_InitGraphics: Initializing default SDL render driver\n" :
+                                  "I_InitGraphics: Инициализируется драйвер рендера SDL по умолчанию\n");
         renderer = SDL_CreateRenderer(screen, -1, renderer_flags);
     }
 
@@ -1548,7 +1552,7 @@ static void SetVideoMode(void)
                     "I_InitGraphics: Драйвер рендера SDL - %s\n",
                    driver_info.name);
             render_driver_option = M_StringDuplicate(driver_info.name);
-            render_driver_index = render_driver_cursor = get_render_driver_index(driver_info.name);
+            render_driver_index = render_driver_cursor = get_render_driver_option_index(driver_info.name);
         }
         else
         {
@@ -1826,7 +1830,7 @@ void I_ReInitGraphics (const int reinit)
 		}
 
 		SDL_DestroyRenderer(renderer);
-		renderer = SDL_CreateRenderer(screen, -1, flags);
+		renderer = SDL_CreateRenderer(screen, _render_driver_options[render_driver_index].driver_index, flags);
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 

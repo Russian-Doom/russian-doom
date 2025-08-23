@@ -18,13 +18,34 @@
 
 #pragma once
 
+#include <doomtype.h>
 #include <stdint.h>
 
-extern const char** available_render_drivers;
-extern int8_t num_of_available_render_drivers;
+typedef enum
+{
+    direct_x12,
+    direct_x11,
+    direct_x,
+    metal,
+    opengl,
+    opengles2,
+    vulkan,
+    gpu,
+    software
+} render_drivers_t;
+
+typedef struct
+{
+    const char* display_name;
+    const char* const driver_name;
+    boolean active;
+    int8_t driver_index;
+} render_driver_option_t;
+
+extern render_driver_option_t _render_driver_options[9];
 extern char* render_driver_option;
 extern int32_t render_driver_cursor;
 extern int8_t render_driver_index;
 
 void init_available_render_drivers();
-int8_t get_render_driver_index(const char* driver_name);
+int8_t get_render_driver_option_index(const char* driver_name);

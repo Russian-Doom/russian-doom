@@ -1686,7 +1686,7 @@ static void M_RD_Draw_Rendering_1 (void)
         }
         else
         {
-            RD_M_DrawTextSmallENG(available_render_drivers[render_driver_cursor],
+            RD_M_DrawTextSmallENG(_render_driver_options[render_driver_cursor].display_name,
                                   158 + wide_delta, 55, CR_NONE);
         }
 
@@ -1771,7 +1771,7 @@ static void M_RD_Draw_Rendering_1 (void)
         }
         else
         {
-            RD_M_DrawTextSmallENG(available_render_drivers[render_driver_cursor],
+            RD_M_DrawTextSmallENG(_render_driver_options[render_driver_cursor].display_name,
                                   160 + wide_delta, 55, CR_NONE);
         }
 
@@ -1979,12 +1979,42 @@ static void M_RD_Change_Widescreen(Direction_t direction)
 static void M_RD_Change_Renderer(Direction_t direction)
 {
     // [JN] Disable toggling in software renderer
-    if (force_software_renderer == 1)
+    if(render_driver_cursor == software || render_driver_cursor == gpu)
     {
         return;
     }
 
-    RD_Menu_SpinInt(&render_driver_cursor, 0, num_of_available_render_drivers - 1, direction);
+    const int32_t guard = render_driver_cursor;
+    int32_t step;
+    switch(direction)
+    {
+        case LEFT_DIR:
+        {
+            step = -1;
+            break;
+        }
+        case RIGHT_DIR:
+        {
+            step = 1;
+            break;
+        }
+        default: return;
+    }
+
+    do
+    {
+        render_driver_cursor += step;
+        if(render_driver_cursor < 0)
+        {
+            render_driver_cursor = arrlen(_render_driver_options) - 1;
+        }
+        else if(render_driver_cursor >= arrlen(_render_driver_options))
+        {
+            render_driver_cursor = 0;
+        }
+    } while(render_driver_cursor != guard && !_render_driver_options[render_driver_cursor].active);
+
+    RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
 }
 
 static void M_RD_Change_VSync()
@@ -7295,7 +7325,7 @@ static void M_QuitResponse(boolean confirmed)
     // [JN] Widescreen: remember choosen widescreen variable before quit.
     aspect_ratio = aspect_ratio_temp;
     // [JN] Screen renderer: remember choosen renderer variable before quit.
-    render_driver_option = available_render_drivers[render_driver_cursor];
+    render_driver_option = _render_driver_options[render_driver_cursor].driver_name;
 
     I_Quit ();
 }
