@@ -1680,15 +1680,8 @@ static void M_RD_Draw_Rendering_1 (void)
                               aspect_ratio_temp == 4 ? "21:9" : "4:3", 185 + wide_delta, 45, CR_NONE);
 
         // Screen renderer
-        if (force_software_renderer == 1)
-        {
-            RD_M_DrawTextSmallENG("n/a", 158 + wide_delta, 55, CR_DARKRED);
-        }
-        else
-        {
-            RD_M_DrawTextSmallENG(_render_driver_options[render_driver_cursor].display_name,
-                                  158 + wide_delta, 55, CR_NONE);
-        }
+        RD_M_DrawTextSmallENG(_render_driver_options[render_driver_cursor].display_name, 158 + wide_delta, 55,
+                              (render_driver_index == software || render_driver_index == gpu) ? CR_DARKRED : CR_NONE);
 
         // Informative messages
         if (rendering_resolution_temp != rendering_resolution
@@ -1699,7 +1692,7 @@ static void M_RD_Draw_Rendering_1 (void)
         }
 
         // Vertical synchronization
-        if (force_software_renderer == 1)
+        if (render_driver_index == software)
         {
             RD_M_DrawTextSmallENG("n/a", 216 + wide_delta, 65, CR_DARKRED);
         }
@@ -1724,7 +1717,7 @@ static void M_RD_Draw_Rendering_1 (void)
                               192 + wide_delta, 85, CR_NONE);
 
         // Pixel scaling
-        if (force_software_renderer == 1)
+        if (render_driver_index == software)
         {
             RD_M_DrawTextSmallENG("n/a", 135 + wide_delta, 95, CR_DARKRED);
         }
@@ -1765,15 +1758,8 @@ static void M_RD_Draw_Rendering_1 (void)
                               "4:3", 238 + wide_delta, 45, CR_NONE);
 
         // Экрнанный рендерер
-        if (force_software_renderer == 1)
-        {
-            RD_M_DrawTextSmallRUS("y*l", 158 + wide_delta, 55, CR_DARKRED); // Н/Д
-        }
-        else
-        {
-            RD_M_DrawTextSmallENG(_render_driver_options[render_driver_cursor].display_name,
-                                  160 + wide_delta, 55, CR_NONE);
-        }
+        RD_M_DrawTextSmallENG(_render_driver_options[render_driver_cursor].display_name, 160 + wide_delta, 55,
+                              (render_driver_index == software || render_driver_index == gpu) ? CR_DARKRED : CR_NONE);
 
         // Informative message: Необходим перезапуск программы
         if (rendering_resolution_temp != rendering_resolution 
@@ -1784,7 +1770,7 @@ static void M_RD_Draw_Rendering_1 (void)
         }
 
         // Вертикальная синхронизация
-        if (force_software_renderer == 1)
+        if (render_driver_index == software)
         {
             RD_M_DrawTextSmallRUS("y*l", 249 + wide_delta, 65, CR_DARKRED); // Н/Д
         }
@@ -1812,7 +1798,7 @@ static void M_RD_Draw_Rendering_1 (void)
         if (show_fps == 1) RD_M_DrawTextSmallENG("fps", 246 + wide_delta, 85, CR_NONE);
 
         // Пиксельное сглаживание
-        if (force_software_renderer == 1)
+        if (render_driver_index == software)
         {
             RD_M_DrawTextSmallRUS("y*l", 219 + wide_delta, 95, CR_DARKRED); // Н/Д
         }
@@ -1979,7 +1965,7 @@ static void M_RD_Change_Widescreen(Direction_t direction)
 static void M_RD_Change_Renderer(Direction_t direction)
 {
     // [JN] Disable toggling in software renderer
-    if(render_driver_cursor == software || render_driver_cursor == gpu)
+    if(render_driver_index == software || render_driver_index == gpu)
     {
         return;
     }
@@ -2020,7 +2006,7 @@ static void M_RD_Change_Renderer(Direction_t direction)
 static void M_RD_Change_VSync()
 {
     // [JN] Disable "vsync" toggling in software renderer
-    if (force_software_renderer == 1)
+    if (render_driver_index == software)
     {
         return;
     }
@@ -2053,7 +2039,7 @@ static void M_RD_Change_PerfCounter(Direction_t direction)
 static void M_RD_Change_Smoothing()
 {
     // [JN] Disable "vsync" toggling in sofrware renderer
-    if (force_software_renderer == 1)
+    if (render_driver_index == software)
         return;
 
     smoothing ^= 1;

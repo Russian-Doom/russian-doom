@@ -189,11 +189,6 @@ int smoothing = false;
 
 int vga_porch_flash = false;
 
-// Force software rendering, for systems which lack effective hardware
-// acceleration
-
-int force_software_renderer = false;
-
 // Time to wait for the screen to settle on startup before starting the
 // game (ms)
 
@@ -1483,7 +1478,14 @@ static void SetVideoMode(void)
     }
 
     // [JN] Note: vsync is always disabled in software rendering mode.
-    if (force_software_renderer)
+    const int8_t render_driver_option_index = get_render_driver_option_index(render_driver_option);
+    if(render_driver_option_index >= 0)
+    {
+        printf(english_language ? "I_InitGraphics: Requested SDL render driver - %s\n" :
+                                  "I_InitGraphics: Запрашиваемый драйвер рендера SDL - %s\n",
+               _render_driver_options[render_driver_option_index].driver_name);
+    }
+    if(render_driver_option_index == software)
     {
         renderer_flags &= ~SDL_RENDERER_PRESENTVSYNC;
         renderer_flags |= SDL_RENDERER_SOFTWARE;
@@ -1498,7 +1500,6 @@ static void SetVideoMode(void)
         texture_upscaled = NULL;
     }
 
-    const int8_t render_driver_option_index = get_render_driver_option_index(render_driver_option);
     const int8_t requested_driver_index =
         (render_driver_option_index >= 0) ? _render_driver_options[render_driver_option_index].driver_index : -1;
     renderer = SDL_CreateRenderer(screen, requested_driver_index, renderer_flags);
@@ -1517,7 +1518,7 @@ static void SetVideoMode(void)
     // If we could not find a matching render driver,
     // try again without hardware acceleration.
 
-    if(renderer == NULL && !force_software_renderer)
+    if(renderer == NULL && render_driver_option_index != software)
     {
         // Unable to create available renderer
         printf("I_InitGraphics: %s\n", SDL_GetError());
@@ -1529,11 +1530,7 @@ static void SetVideoMode(void)
         renderer = SDL_CreateRenderer(screen, -1, renderer_flags);
 
         // If this helped, save the setting for later.
-        if(renderer != NULL)
-        {
-            force_software_renderer = 1;
-        }
-        else
+        if(renderer == NULL)
         {
             // Unable to create fallback renderer
             printf("I_InitGraphics: %s\n", SDL_GetError());

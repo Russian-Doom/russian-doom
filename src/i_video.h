@@ -138,7 +138,6 @@ extern int fullscreen;
 extern int preserve_window_aspect_ratio;
 extern int smoothing;
 extern int vga_porch_flash;
-extern int force_software_renderer;
 
 extern int window_border;
 extern int window_width;
