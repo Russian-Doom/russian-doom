@@ -102,14 +102,14 @@ int8_t get_render_driver_option_index(const char* driver_name)
 
 void init_available_render_drivers()
 {
+    printf(english_language ? "Available SDL render drivers:\n" :
+                              "Доступные драйверы рендера SDL:\n");
     const int8_t num_of_available_render_drivers = SDL_GetNumRenderDrivers();
     SDL_RendererInfo driver_info;
     for(int8_t index = 0; index < num_of_available_render_drivers; index++)
     {
         SDL_GetRenderDriverInfo(index, &driver_info);
         const int8_t option_index = get_render_driver_option_index(driver_info.name);
-        printf(english_language ? "Available SDL render drivers:\n" :
-                                  "Доступные драйверы рендера SDL:\n");
         if(option_index >= 0)
         {
             _render_driver_options[option_index].driver_index = index;
