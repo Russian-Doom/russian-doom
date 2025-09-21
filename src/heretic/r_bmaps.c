@@ -281,6 +281,14 @@ static const fullbright_t fullbright_walls[] = {
     {"SW1OFF",   surfaces},
     {"SW2ON",    surfaces},
     {"SW2OFF",   surfaces},
+    // [JN] 2.1 IWAD textures
+    {"CANDLES1", serptorch},
+    {"CANDLES2", serptorch},
+    {"CANDLES3", serptorch},
+    {"DOOREXI3", surfaces},
+    {"DOOREXI4", surfaces},
+    {"METLSIG1", surfaces},
+    {"METLSIG2", surfaces},
 };
 
 const byte* R_BrightmapForTexName(const char* texname)
