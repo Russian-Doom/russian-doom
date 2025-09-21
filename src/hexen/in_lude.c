@@ -129,7 +129,11 @@ void IN_Start(void)
 
 void WaitStop(void)
 {
-    if (!--cnt)
+    // [JN] In single-player mode, remove the pointless ~0.3 sec delay.
+    // It only served as a pre-delay before actual level loading and
+    // does not affect the duration of the Ethereal Travel banner.
+    // (10 tics = 10 / 35 TICRATE = 0.2857… seconds)
+    if(!--cnt || singleplayer)
     {
         Stop();
 //              gamestate = GS_LEVEL;
