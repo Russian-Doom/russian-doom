@@ -217,6 +217,10 @@ static struct
     { "FLTLAVA1", FLOOR_LAVA   },
     { "FLATHUH1", FLOOR_LAVA   },
     { "FLTSLUD1", FLOOR_SLUDGE },
+    // [JN] Support terrain types for 2.1 IWAD
+    { "FLTFLWS1", FLOOR_WATER  },
+    { "FLTLAVF1", FLOOR_LAVA   },
+    { "FLTLAVS1", FLOOR_LAVA   },
     {      "END", -1           }
 };
 
