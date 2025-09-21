@@ -5262,15 +5262,38 @@ static void M_RD_SelectiveSkill(Direction_t direction)
 static void M_RD_SelectiveEpisode(Direction_t direction)
 {
     // [JN] Shareware have only 1 episode.
-    if (gamemode == shareware)
+    if(gamemode == shareware)
+    {
         return;
+    }
 
-    RD_Menu_SlideInt(&selective_episode, 1, gamemode == retail ? 5 : 3, direction);
+    RD_Menu_SlideInt(&selective_episode, 1, gamemode == retail ? 6 : 4, direction);
+    if(gamemode == retail && selective_episode == 6 && selective_map > 3)
+    {
+        selective_map = 3;
+    }
+    else if(gamemode == registered && selective_episode == 4 && selective_map > 1)
+    {
+        selective_map = 1;
+    }
 }
 
 static void M_RD_SelectiveMap(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_map, 1, 9, direction);
+    int max_map;
+    if(gamemode == retail && selective_episode == 6)
+    {
+        max_map = 3;
+    }
+    else if(gamemode == registered && selective_episode == 4)
+    {
+        max_map = 1;
+    }
+    else
+    {
+        max_map = 9;
+    }
+    RD_Menu_SlideInt(&selective_map, 1, max_map, direction);
 }
 
 static void M_RD_SelectiveHealth(Direction_t direction)
