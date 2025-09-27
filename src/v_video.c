@@ -2188,3 +2188,83 @@ void V_DrawMouseSpeedBox (const int speed)
     }
 }
 
+// [FG] check if the lump can be a Doom patch
+boolean V_IsPatchLump(const lumpindex_t lump_num)
+{
+    if(lump_num < 0)
+    {
+        return false;
+    }
+
+    const int size = W_LumpLength(lump_num);
+    // Minimum length of a valid Doom patch
+    if(size < 13)
+    {
+        return false;
+    }
+
+    const patch_t* patch = W_CacheLumpNum(lump_num, PU_CACHE);
+
+    // [FG] detect patches in PNG format early
+    if(!memcmp(patch, "\211PNG\r\n\032\n", 8))
+    {
+        return false;
+    }
+
+    const int width = SHORT(patch->width);
+    const int height = SHORT(patch->height);
+
+    boolean result = height > 0 && height <= 16384 &&
+                     width > 0 && width <= 16384 && width < size / 4;
+
+    if(result)
+    {
+        // The dimensions seem like they might be valid for a patch, so
+        // check the column directory for extra security.
+        // All columns must begin after the column directory, and none of them must
+        // point past the end of the patch.
+
+        for(int x = 0; x < width; x++)
+        {
+            const unsigned int ofs = LONG(patch->columnofs[x]);
+
+            // Need one byte for an empty column
+            // (but there's patches that don't know that!)
+            if(ofs < (unsigned int) width * 4 + 8 ||
+               ofs >= (unsigned int) size)
+            {
+                result = false;
+                break;
+            }
+        }
+    }
+
+    return result;
+}
+
+void V_DrawFullScreenLumpName(const char* lump_name)
+{
+    V_DrawFullScreenLumpNum(W_GetNumForName(lump_name));
+}
+
+void V_DrawFullScreenLumpNum(const lumpindex_t lump_num)
+{
+    // [JN] For checking of modified fullscreen graphics
+    const void* lump_data = W_CacheLumpNum(lump_num, PU_CACHE);
+    const int size = W_LumpLength(lump_num);
+    if(V_IsPatchLump(lump_num))
+    {
+        V_DrawPatchFullScreen((patch_t*) lump_data, false);
+    }
+    else if(size % ORIGHEIGHT == 0)
+    {
+        V_DrawRawScreen(lump_data);
+    }
+    else
+    {
+        I_QuitWithError(english_language ?
+                        "Invalid fullscreen graphic \"%.8s\" in wad \"%s\"" :
+                        "Недопустимая полноэкранное изображение \"%.8s\" в wad файле \"%s\"",
+                        lumpinfo[lump_num]->name,  lumpinfo[lump_num]->wad_file->path);
+    }
+}

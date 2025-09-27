@@ -25,6 +25,8 @@
 
 #include "doomtype.h"
 
+// Needed because we are using lumpindex_t
+#include <w_wad.h>
 // Needed because we are refering to patches.
 #include "v_patch.h"
 
@@ -131,3 +133,7 @@ void V_LoadTintTable(void);
 void V_LoadXlaTable(void);
 
 void V_DrawMouseSpeedBox (const int speed);
+
+boolean V_IsPatchLump(lumpindex_t lump_num);
+void V_DrawFullScreenLumpName(const char* lump_name);
+void V_DrawFullScreenLumpNum(lumpindex_t lump_num);
