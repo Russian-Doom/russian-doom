@@ -66,7 +66,6 @@ static int FinaleLumpNum;
 static int FontABaseLump;
 static int FontFBaseLump; // [JN] Small Russian font
 static char *FinaleText;
-static char *FinaleLumpWide;  // [JN] Wide screen background assets.
 
 static fixed_t *Palette;
 static fixed_t *PaletteDelta;
@@ -93,7 +92,6 @@ void F_StartFinale(void)
     FinaleText = GetFinaleText(0);
     FinaleEndCount = 70;
     FinaleLumpNum = W_GetNumForName("FINALE1");
-    FinaleLumpWide = "FINALE1";
     FontABaseLump = W_GetNumForName("FONTA_S") + 1;
     FontFBaseLump = W_GetNumForName("FONTF_S") + 1;
     InitializeFade(1);
@@ -141,7 +139,6 @@ void F_Ticker(void)
                 FinaleText = GetFinaleText(1);
                 FinaleEndCount = strlen(FinaleText) * TEXTSPEED + TEXTWAIT;
                 FinaleLumpNum = W_GetNumForName("FINALE2");
-                FinaleLumpWide = "FINALE2";
                 S_StartSongName("orb", false);
                 break;
             case 3:            // Pic 2 -- Fade out
@@ -151,7 +148,6 @@ void F_Ticker(void)
                 break;
             case 4:            // Pic 3 -- Fade in
                 FinaleLumpNum = W_GetNumForName("FINALE3");
-                FinaleLumpWide = "FINALE3";
                 FinaleEndCount = 71;
                 DeInitializeFade();
                 InitializeFade(1);
@@ -248,7 +244,6 @@ static void TextWrite(void)
     int c;
     int cx, cy;
     patch_t *w;
-    const patch_t *finale_gfx = W_CacheLumpName("FINALE1", PU_CACHE);
 
     if (aspect_ratio >= 2)
     {
@@ -256,16 +251,7 @@ static void TextWrite(void)
         V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
     }
 
-    // [JN] For checking of modified fullscreen graphics.
-    if (finale_gfx->width == 560)
-    {
-        V_DrawPatchFullScreen(W_CacheLumpName(FinaleLumpWide, PU_CACHE), false);
-    }
-    else
-    {
-        V_CopyScaledBuffer(I_VideoBuffer, W_CacheLumpNum(FinaleLumpNum, PU_CACHE),
-                           ORIGWIDTH * ORIGHEIGHT);
-    }
+    V_DrawFullScreenLumpNum(FinaleLumpNum);
 
     if (FinaleStage == 5)
     {                           // Chess pic, draw the correct character graphic
@@ -413,24 +399,13 @@ static void FadePic(void)
 
 static void DrawPic(void)
 {
-    const patch_t *finale_gfx = W_CacheLumpName("FINALE1", PU_CACHE);
-
     if (aspect_ratio >= 2)
     {
         // [JN] Clean up remainings of the wide screen before drawing
         V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
     }
 
-    // [JN] For checking of modified fullscreen graphics.
-    if (finale_gfx->width == 560)
-    {
-        V_DrawPatchFullScreen(W_CacheLumpName(FinaleLumpWide, PU_CACHE), false);
-    }
-    else
-    {
-        V_CopyScaledBuffer(I_VideoBuffer, W_CacheLumpNum(FinaleLumpNum, PU_CACHE),
-                           ORIGWIDTH * ORIGHEIGHT);
-    }
+    V_DrawFullScreenLumpNum(FinaleLumpNum);
 
     if (FinaleStage == 4 || FinaleStage == 5)
     {                           // Chess pic, draw the correct character graphic

@@ -1674,25 +1674,15 @@ void H2_PageTicker(void)
 
 static void PageDrawer(void)
 {
-    const patch_t *page = W_CacheLumpName(pagename, PU_CACHE);
-
-    if (aspect_ratio >= 2)
+    if(aspect_ratio >= 2)
     {
         // [JN] Clean up remainings of the wide screen before drawing
         V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
     }
 
-    // [JN] For checking of modified fullscreen graphics.
-    if (page->width == 560)
-    {
-        V_DrawPatchFullScreen(W_CacheLumpName(pagename, PU_CACHE), false);
-    }
-    else
-    {
-        V_DrawRawScreen(W_CacheLumpName(pagename, PU_CACHE));
-    }
+    V_DrawFullScreenLumpName(pagename);
 
-    if (demosequence == 1)
+    if(demosequence == 1)
     {
         V_DrawShadowedPatchRaven(4 + wide_delta, 160, 
                                  W_CacheLumpName( english_language ?

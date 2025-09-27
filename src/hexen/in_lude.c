@@ -77,7 +77,6 @@ static int intertime = -1;
 static gametype_t gametype;
 static int cnt;
 static int slaughterboy;        // in DM, the player with the most kills
-static patch_t *patchINTERPIC;
 static patch_t *FontBNumbers[10];
 static patch_t *FontBNegative;
 static patch_t *FontBSlash;
@@ -301,7 +300,6 @@ static void LoadPics(void)
 
     if (HubCount || gametype == DEATHMATCH)
     {
-        patchINTERPIC = W_CacheLumpName("INTERPIC", PU_STATIC);
         FontBLumpBase = W_GetNumForName("FONTB16");
         for (i = 0; i < 10; i++)
         {
@@ -329,9 +327,6 @@ static void UnloadPics(void)
 
     if (HubCount || gametype == DEATHMATCH)
     {
-        W_ReleaseLumpName("INTERPIC");
-
-        patchINTERPIC = W_CacheLumpName("INTERPIC", PU_STATIC);
         FontBLumpBase = W_GetNumForName("FONTB16");
         for (i = 0; i < 10; i++)
         {
@@ -521,8 +516,6 @@ static void CheckForSkipSingle (void)
 
 void IN_Drawer(void)
 {
-    const patch_t *interpic_gfx = W_CacheLumpName("INTERPIC", PU_CACHE);
-
     if (!intermission)
     {
         return;
@@ -540,15 +533,7 @@ void IN_Drawer(void)
 
     UpdateState |= I_FULLSCRN;
 
-    // [JN] For checking of modified fullscreen graphics.
-    if (interpic_gfx->width == 560)
-    {
-        V_DrawPatchFullScreen(W_CacheLumpName("INTERPIC", PU_CACHE), false);
-    }
-    else
-    {
-        V_CopyScaledBuffer(I_VideoBuffer, (byte *) patchINTERPIC, ORIGWIDTH * ORIGHEIGHT);
-    }
+    V_DrawFullScreenLumpName("INTERPIC");
 
     if (gametype == SINGLE)
     {

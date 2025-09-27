@@ -93,7 +93,7 @@ void PSX_PageDrawer (void)
     else
     {
         // Draw title graphics normally.
-        V_DrawPatchFullScreen(W_CacheLumpName(pagename, PU_CACHE), false);
+        V_DrawFullScreenLumpName(pagename);
 
         // Show informative message.
         if (!menuactive && gametic & 32 && !button_pressed)
