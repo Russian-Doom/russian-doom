@@ -200,6 +200,21 @@ static const animdef_t animdefs[] = {
     { false, "FLATHUH4", "FLATHUH1", 8 | SWIRL_FLAG}, // Super Lava
     {  true,  "LAVAFL3",  "LAVAFL1", 6},              // Texture: Lavaflow
     {  true, "WATRWAL3", "WATRWAL1", 4},              // Texture: Waterfall
+    // [JN] Support animated textures from 2.1 IWAD.
+    {false, "FLTFLWS3", "FLTFLWS1", 9 | SWIRL_FLAG},  // River - South
+    {false, "FLTLAVF3", "FLTLAVF1", 6 | SWIRL_FLAG},  // River Lava - West
+    {false, "FLTLAVS3", "FLTLAVS1", 6 | SWIRL_FLAG},  // River Lava - South
+    {false, "FLTBLOD3", "FLTBLOD1", 8 | SWIRL_FLAG},  // Blood
+    {true, "BLUEGLO4", "BLUEGLO1", 6},                // Texture: Blue Glowing Gem
+    {true, "CANDLES3", "CANDLES1", 6},                // Texture: Candles
+    {true, "CISTDRN3", "CISTDRN1", 8},                // Texture: Cistern Drain
+    {true, "CISTERN3", "CISTERN1", 8},                // Texture: Cistern
+    {true, "IRONLMP4", "IRONLMP1", 8},                // Texture: Iron Lava Lamp
+    {true, "LAMPLAV4", "LAMPLAV1", 8},                // Texture: Double Lava Lamp
+    {true, "SEWPIP3", "SEWPIP1", 4},                  // Texture: Sewer Pipe
+    {true, "WLLBLOD3", "WLLBLOD1", 6},                // Texture: Bloodfall
+    {true, "WLLMURK3", "WLLMURK1", 6},                // Texture: Murkyfall
+    {true, "WLLSLUD3", "WLLSLUD1", 6},                // Texture: Sludgefall
     {    -1,         "",         "", 0},
 };
 
