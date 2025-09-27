@@ -433,7 +433,7 @@ static void F_TextWrite (void)
         // Leaving MAP23, end game. Special background.
         if (gamemap == 23)
         {
-            V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE), false);
+            V_DrawFullScreenLumpName(DEH_String("ENDPIC"));
         }
     }
     // [JN] Draw special background on entering Wolfenstein and Grosse levels
@@ -442,13 +442,13 @@ static void F_TextWrite (void)
         // [JN] Leaving MAP15, entering MAP31: blue Wolfenstein 3D background.
         if (gamemap == 15)
         {
-            V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("WLFBACK1"), PU_CACHE), false);
+            V_DrawFullScreenLumpName(DEH_String("WLFBACK1"));
         }
 
         // Leaving MAP31, entering MAP32: red Wolfenstein 3D background.
         if (gamemap == 31)
         {
-            V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("WLFBACK2"), PU_CACHE), false);
+            V_DrawFullScreenLumpName(DEH_String("WLFBACK2"));
         }
     }
 
@@ -788,9 +788,9 @@ void F_CastDrawer (void)
 
     // erase the entire screen to a background
     if (!english_language && logical_gamemission == pack_plut)
-    V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("BOSSBACP"), PU_CACHE), false);
+        V_DrawFullScreenLumpName(DEH_String("BOSSBACP"));
     else
-    V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("BOSSBACK"), PU_CACHE), false);
+        V_DrawFullScreenLumpName(DEH_String("BOSSBACK"));
 
     F_CastPrint (DEH_String(english_language ?
                             castorder[castnum].name_eng :
@@ -1042,9 +1042,7 @@ static void F_ArtScreenDrawer (void)
             }
         }
 
-        lumpname = DEH_String(lumpname);
-
-        V_DrawPatchFullScreen(W_CacheLumpName(lumpname, PU_CACHE), false);
+        V_DrawFullScreenLumpName(DEH_String(lumpname));
     }
 }
 
@@ -1095,7 +1093,7 @@ static void F_TextWriteJaguar (void)
     patch_t    *w;
 
     // Leaving MAP23, end game. Special background.
-    V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE), false);
+    V_DrawFullScreenLumpName(DEH_String("ENDPIC"));
 
     // draw some of the text onto the screen
     cx = 10;
@@ -1265,7 +1263,7 @@ void F_CastDrawerJaguar (void)
     patch_t         *patch;
 
     // erase the entire screen to a background
-    V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("VICPIC"), PU_CACHE), false);
+    V_DrawFullScreenLumpName(DEH_String("VICPIC"));
 
     F_CastPrintJaguar (DEH_String(english_language ?
                                   castorder_jaguar[castnum].name_eng :

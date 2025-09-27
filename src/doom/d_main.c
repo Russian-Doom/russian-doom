@@ -292,6 +292,13 @@ void D_CheckNetGame(void);
 // блоков DEHACKED, а также в цикле D_DoomMain.
 int numiwadlumps; 
 
+//
+//  DEMO LOOP
+//
+int     demosequence;
+int     pagetic;
+char    *pagename;
+
 
 //
 // D-DoomLoop()
@@ -679,7 +686,7 @@ void D_Display (void)
         break;
 
         case GS_DEMOSCREEN:
-        D_PageDrawer ();
+            V_DrawFullScreenLumpName(pagename);
         break;
     }
 
@@ -1134,14 +1141,6 @@ void D_DoomLoop (void)
 
 
 //
-//  DEMO LOOP
-//
-int     demosequence;
-int     pagetic;
-char    *pagename;
-
-
-//
 // D_PageTicker
 // Handles timing for warped projection
 //
@@ -1150,16 +1149,6 @@ void D_PageTicker (void)
 {
     if (--pagetic < 0)
     D_AdvanceDemo ();
-}
-
-
-//
-// D_PageDrawer
-//
-
-void D_PageDrawer (void)
-{
-    V_DrawPatchFullScreen (W_CacheLumpName(pagename, PU_CACHE), false);
 }
 
 

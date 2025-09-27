@@ -4229,7 +4229,7 @@ static void M_RD_Draw_Gameplay_1(void)
     // Jaguar: hide game background, don't draw lines over the HUD
     if (gamemission == jaguar)
     {
-        V_DrawPatchFullScreen(W_CacheLumpName(DEH_String("INTERPIC"), PU_CACHE), false);
+        V_DrawFullScreenLumpName(DEH_String("INTERPIC"));
     }
 
     if (english_language)
@@ -4371,7 +4371,7 @@ static void M_RD_Draw_Gameplay_2(void)
     // Jaguar: hide game background, don't draw lines over the HUD
     if (gamemission == jaguar)
     {
-        V_DrawPatchFullScreen(W_CacheLumpName(DEH_String("INTERPIC"), PU_CACHE), false);
+        V_DrawFullScreenLumpName(DEH_String("INTERPIC"));
     }
 
     if (english_language)
@@ -4591,7 +4591,7 @@ static void M_RD_Draw_Gameplay_3(void)
     // Jaguar: hide game background, don't draw lines over the HUD
     if (gamemission == jaguar)
     {
-        V_DrawPatchFullScreen(W_CacheLumpName(DEH_String("INTERPIC"), PU_CACHE), false);
+        V_DrawFullScreenLumpName(DEH_String("INTERPIC"));
     }
 
     if (english_language)
@@ -4768,7 +4768,7 @@ static void M_RD_Draw_Gameplay_4(void)
     // Jaguar: hide game background, don't draw lines over the HUD
     if (gamemission == jaguar)
     {
-        V_DrawPatchFullScreen(W_CacheLumpName(DEH_String("INTERPIC"), PU_CACHE), false);
+        V_DrawFullScreenLumpName(DEH_String("INTERPIC"));
     }
 
     if (english_language)
@@ -5016,7 +5016,7 @@ static void M_RD_Draw_Gameplay_5(void)
     // Jaguar: hide game background, don't draw lines over the HUD
     if (gamemission == jaguar)
     {
-        V_DrawPatchFullScreen(W_CacheLumpName(DEH_String("INTERPIC"), PU_CACHE), false);
+        V_DrawFullScreenLumpName(DEH_String("INTERPIC"));
     }
 
     if (english_language)
@@ -7006,9 +7006,7 @@ static void M_DrawReadThis1()
             skully = 175;
     }
 
-    lumpname = DEH_String(lumpname);
-
-    V_DrawPatchFullScreen (W_CacheLumpName(lumpname, PU_CACHE), false);
+    V_DrawFullScreenLumpName(DEH_String(lumpname));
 
     V_DrawShadowedPatchDoom(skullx + -32 + wide_delta, skully - 5,
                             W_CacheLumpName(DEH_String(skullName[whichSkull]), PU_CACHE));
@@ -7020,8 +7018,7 @@ static void M_DrawReadThis1()
 //
 static void M_DrawReadThis2()
 {
-    V_DrawPatchFullScreen(W_CacheLumpName(DEH_String
-               (english_language ? "HELP1" : "HELP1R"), PU_CACHE), false);
+    V_DrawFullScreenLumpName(DEH_String(english_language ? "HELP1" : "HELP1R"));
 
     V_DrawShadowedPatchDoom(298 + wide_delta, 175 - 5,
                             W_CacheLumpName(DEH_String(skullName[whichSkull]), PU_CACHE));
