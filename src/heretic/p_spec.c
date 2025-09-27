@@ -187,17 +187,19 @@ static const int *AmbientSfx[] = {
     AmbSndSeq10                 // FastFootsteps
 };
 
+#define SWIRL_FLAG 0b10000000000000000
+
 static const animdef_t animdefs[] = {
     // false = flat
     // true = texture
-    { false, "FLTWAWA3", "FLTWAWA1", 9}, // Water (ex. 8)
-    { false, "FLTSLUD3", "FLTSLUD1", 9}, // Sludge (ex. 8)
-    { false, "FLTTELE4", "FLTTELE1", 6}, // Teleport
-    { false, "FLTFLWW3", "FLTFLWW1", 8}, // River - West (ex. 9)
-    { false, "FLTLAVA4", "FLTLAVA1", 8}, // Lava
-    { false, "FLATHUH4", "FLATHUH1", 9}, // Super Lava (ex. 8)
-    {  true,  "LAVAFL3",  "LAVAFL1", 6}, // Texture: Lavaflow
-    {  true, "WATRWAL3", "WATRWAL1", 4}, // Texture: Waterfall
+    { false, "FLTWAWA3", "FLTWAWA1", 8 | SWIRL_FLAG}, // Water
+    { false, "FLTSLUD3", "FLTSLUD1", 8 | SWIRL_FLAG}, // Sludge
+    { false, "FLTTELE4", "FLTTELE1", 6},              // Teleport
+    { false, "FLTFLWW3", "FLTFLWW1", 9 | SWIRL_FLAG}, // River - West
+    { false, "FLTLAVA4", "FLTLAVA1", 8},              // Lava
+    { false, "FLATHUH4", "FLATHUH1", 8 | SWIRL_FLAG}, // Super Lava
+    {  true,  "LAVAFL3",  "LAVAFL1", 6},              // Texture: Lavaflow
+    {  true, "WATRWAL3", "WATRWAL1", 4},              // Texture: Waterfall
     {    -1,         "",         "", 0},
 };
 
@@ -1057,27 +1059,20 @@ void P_PlayerInSpecialSector (player_t *player)
 
 void P_UpdateSpecials (void)
 {
-    int i;
-    int pic;
-    anim_t *anim;
-    line_t *line;
-
     // Animate flats and textures
-    for (anim = anims; anim < lastanim; anim++)
+    for(const anim_t* anim = anims; anim < lastanim; anim++)
     {
-        for (i = anim->basepic; i < anim->basepic + anim->numpics; i++)
+        for(int i = anim->basepic; i < anim->basepic + anim->numpics; i++)
         {
-            pic =
-                anim->basepic +
-                ((leveltime / anim->speed + i) % anim->numpics);
-            if (anim->istexture)
+            const int pic = anim->basepic + ((leveltime / (anim->speed ^ SWIRL_FLAG) + i) % anim->numpics);
+            if(anim->istexture)
             {
                 texturetranslation[i] = pic;
             }
             // [crispy] add support for SMMU swirling flats
-            // [JN] Animate only surface with animation == 9,
+            // [JN] Animate only surface with SWIRL_FLAG,
             // i.e. only those ones, which defined in animdefs.
-            else if (anim->speed == 9 && swirling_liquids && !vanillaparm)
+            else if((anim->speed & SWIRL_FLAG) == SWIRL_FLAG && swirling_liquids && !vanillaparm)
             {
                 flattranslation[i] = -1;
             }
@@ -1112,10 +1107,10 @@ void P_UpdateSpecials (void)
     }
 
     // Update scrolling texture offsets
-    for (i = 0; i < numlinespecials; i++)
+    for(int i = 0; i < numlinespecials; i++)
     {
-        line = linespeciallist[i];
-        switch (line->special)
+        const line_t* line = linespeciallist[i];
+        switch(line->special)
         {
             case 48:           // Effect_Scroll_Left
                 // [crispy] smooth texture scrolling
@@ -1132,26 +1127,23 @@ void P_UpdateSpecials (void)
         }
     }
     // Handle buttons
-    for (i = 0; i < MAXBUTTONS; i++)
+    for(int i = 0; i < MAXBUTTONS; i++)
     {
-        if (buttonlist[i].btimer)
+        if(buttonlist[i].btimer)
         {
             buttonlist[i].btimer--;
-            if (!buttonlist[i].btimer)
+            if(!buttonlist[i].btimer)
             {
-                switch (buttonlist[i].where)
+                switch(buttonlist[i].where)
                 {
                     case top:
-                        sides[buttonlist[i].line->sidenum[0]].toptexture =
-                            buttonlist[i].btexture;
+                        sides[buttonlist[i].line->sidenum[0]].toptexture = buttonlist[i].btexture;
                         break;
                     case middle:
-                        sides[buttonlist[i].line->sidenum[0]].midtexture =
-                            buttonlist[i].btexture;
+                        sides[buttonlist[i].line->sidenum[0]].midtexture = buttonlist[i].btexture;
                         break;
                     case bottom:
-                        sides[buttonlist[i].line->sidenum[0]].bottomtexture =
-                            buttonlist[i].btexture;
+                        sides[buttonlist[i].line->sidenum[0]].bottomtexture = buttonlist[i].btexture;
                         break;
                 }
                 S_StartSound(buttonlist[i].soundorg, sfx_switch);
