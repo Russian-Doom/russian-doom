@@ -1746,31 +1746,36 @@ void V_DrawBox (const int x, const int y, const int w, const int h, const int c)
 // Draw a "raw" screen (lump containing raw data to blit directly to the screen)
 // -----------------------------------------------------------------------------
 
-void V_CopyScaledBuffer (byte *dest, const byte *src, const size_t size)
+void V_CopyScaledBuffer(byte* __restrict dest, const byte* __restrict src, const size_t size)
 {
-    int i, j, k;
+    const int16_t src_width = size / ORIGHEIGHT;
+    const int16_t rect_width = src_width > origwidth ? origwidth : src_width;
+    const int16_t src_x_offset = (src_width - rect_width) / 2;
+    const int16_t dest_x_offset = (screenwidth - (rect_width << hires)) / 2;
+    const int8_t dup_boundary = hires | 1;
 
-#ifdef RANGECHECK
-    if(size < 0
-    || size > origwidth * ORIGHEIGHT)
+    int dest_line = 0;
+    for(int16_t src_line = 0; src_line < ORIGHEIGHT; src_line++)
     {
-        I_QuitWithError(english_language ?
-                        "Bad V_CopyScaledBuffer" :
-                        "Ошибка V_CopyScaledBuffer");
-    }
-#endif
+        const int32_t src_line_offset = src_line * src_width;
 
-    for (k = 0; k < size; k++)
-    {
-        const int l = k / ORIGWIDTH; // current line in the source screen
-        const int p = k - l * ORIGWIDTH; // current pixel in this line
-        for (i = 0; i <= (hires + quadres); i++)
+        for(int8_t line_dup = 0; line_dup <= dup_boundary; line_dup++)
         {
-            for (j = 0; j <= (hires + quadres); j++)
+            const int32_t dest_line_offset = dest_line * screenwidth;
+
+            int dest_col = 0;
+            for(int16_t src_col = 0; src_col < rect_width; src_col++)
             {
-                *(dest + (p << hires) + ((l << hires) + i) * screenwidth + j 
-                       + (wide_delta << hires)) = *(src + k);
+                const int16_t src_coll_offset = src_x_offset + src_col;
+
+                for(int8_t col_dup = 0; col_dup <= dup_boundary; col_dup++)
+                {
+                    *(dest + dest_line_offset + dest_x_offset + dest_col) =
+                        *(src + src_line_offset + src_coll_offset);
+                    dest_col++;
+                }
             }
+            dest_line++;
         }
     }
 }
@@ -2253,7 +2258,7 @@ void V_DrawFullScreenLumpNum(const lumpindex_t lump_num)
     }
     else if(size % ORIGHEIGHT == 0)
     {
-        V_CopyScaledBuffer(dest_screen, lump_data, ORIGWIDTH * ORIGHEIGHT);
+        V_CopyScaledBuffer(dest_screen, lump_data, size);
     }
     else
     {

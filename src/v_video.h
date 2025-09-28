@@ -97,7 +97,7 @@ void V_DrawFilledBox (const int x, const int y, const int w, const int h, const 
 void V_DrawHorizLine (const int x, const int y, const int w, const int c);
 void V_DrawVertLine (const int x, const int y, const int h, const int c);
 void V_DrawBox (const int x, const int y, const int w, const int h, const int c);
-void V_CopyScaledBuffer (byte *dest, const byte *src, const size_t size);
+void V_CopyScaledBuffer(byte* __restrict dest, const byte* __restrict src, size_t size);
 
 // Temporarily switch to using a different buffer to draw graphics, etc.
 
