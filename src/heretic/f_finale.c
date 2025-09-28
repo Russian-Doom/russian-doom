@@ -295,80 +295,81 @@ static void F_TextWrite (void)
 
 static void F_DemonScroll (void)
 {
-    byte *p1;
-    byte *p2;
-
-    if (!reset_scroll_delay)
+    if(!reset_scroll_delay)
     {
         // [JN] Reset finalecount to 0 after text screen has been skipped.
         finalecount = 0;
         reset_scroll_delay = true;
     }
 
-    if (finalecount < nextscroll)
+    if(finalecount < nextscroll)
     {
         return;
     }
 
-    p1 = W_CacheLumpName(DEH_String("FINAL1"), PU_LEVEL);
-    p2 = W_CacheLumpName(DEH_String("FINAL2"), PU_LEVEL);
-
-    if (screenwidth != ORIGWIDTH)
+    if(screenwidth != ORIGWIDTH)
     {
         // [JN] Clean up remainings of the wide screen before drawing.
         V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
     }
 
-    if (((patch_t*) p1)->width == 560)
+    const lumpindex_t finale1_lump = W_GetNumForName(DEH_String("FINAL1"));
+    const lumpindex_t finale2_lump = W_GetNumForName(DEH_String("FINAL2"));
+
+    if(V_IsPatchLump(finale1_lump))
     {
-        // Scroll patches
-        int x = ((screenwidth >> hires) - SHORT(((patch_t*) p1)->width)) / 2;
-        if (finalecount < 70)
+        if(finalecount < 70)
         {
-            V_DrawPatchFullScreen((patch_t*) p1, false);
+            V_DrawFullScreenLumpNum(finale1_lump);
             nextscroll = finalecount;
             return;
         }
-        if (yval < 200)
+        if(yval < 200)
         {
-            V_DrawPatch(x, -((patch_t*) p2)->height + yval, (patch_t*) p2, NULL);
-            V_DrawPatch(x, yval, (patch_t*) p1, NULL);
-            if (!paused)
+            // Scroll patches
+            const patch_t* p1 = W_CacheLumpNum(finale1_lump, PU_CACHE);
+            const patch_t* p2 = W_CacheLumpNum(finale2_lump, PU_CACHE);
+            const int x = ((screenwidth >> hires) - SHORT(p1->width)) / 2;
+            V_DrawPatch(x, -p2->height + yval, p2, NULL);
+            V_DrawPatch(x, yval, p1, NULL);
+            if(!paused)
             {
                 yval++;
                 nextscroll = finalecount + 3;
             }
-            
         }
         else
-        {   //else, we'll just sit here and wait, for now
-            V_DrawPatchFullScreen((patch_t*) p2, false);
+        {
+            //else, we'll just sit here and wait, for now
+            V_DrawFullScreenLumpNum(finale2_lump);
         }
     }
     else
     {
         // Scroll Raws
-        if (finalecount < 70)
+        if(finalecount < 70)
         {
-            V_CopyScaledBuffer(I_VideoBuffer, p1, ORIGHEIGHT * ORIGWIDTH);
+            V_DrawFullScreenLumpNum(finale1_lump);
             nextscroll = finalecount;
             return;
         }
-        if (yval < 64000)
+        if(yval < 64000)
         {
-            V_CopyScaledBuffer(I_VideoBuffer,
-                               p2 + ORIGHEIGHT * ORIGWIDTH - yval, yval);
+            const byte* p1 = W_CacheLumpNum(finale1_lump, PU_CACHE);
+            const byte* p2 = W_CacheLumpNum(finale2_lump, PU_CACHE);
+            V_CopyScaledBuffer(I_VideoBuffer, p2 + ORIGHEIGHT * ORIGWIDTH - yval, yval);
             V_CopyScaledBuffer(I_VideoBuffer + screenwidth * ((yval / ORIGWIDTH) << hires),
                                p1, ORIGHEIGHT * ORIGWIDTH - yval);
-            if (!paused)
+            if(!paused)
             {
                 yval += ORIGWIDTH;
                 nextscroll = finalecount + 3;
             }
         }
         else
-        {   //else, we'll just sit here and wait, for now
-            V_CopyScaledBuffer(I_VideoBuffer, p2, ORIGWIDTH * ORIGHEIGHT);
+        {
+            //else, we'll just sit here and wait, for now
+            V_DrawFullScreenLumpNum(finale2_lump);
         }
     }
 }
@@ -386,8 +387,6 @@ static void F_DrawUnderwater (void)
     static boolean underwawa = false;
     char *lumpname;
     byte *palette;
-    const patch_t *e2end = W_CacheLumpName("E2END", PU_CACHE);
-    const patch_t *title = W_CacheLumpName("TITLE", PU_CACHE);
 
     // The underwater screen has its own palette, which is rather annoying.
     // The palette doesn't correspond to the normal palette. Because of
@@ -405,15 +404,8 @@ static void F_DrawUnderwater (void)
                 palette = W_CacheLumpName(lumpname, PU_STATIC);
                 I_SetPalette(palette);
                 W_ReleaseLumpName(lumpname);
-                
-                if (e2end->width == 560)
-                {
-                    V_DrawPatchFullScreen(e2end, false);
-                }
-                else
-                {
-                    V_DrawRawScreen(W_CacheLumpName(DEH_String("E2END"), PU_CACHE));
-                }
+
+                V_DrawFullScreenLumpName(DEH_String("E2END"));
             }
             paused = false;
             menuactive = false;
@@ -433,26 +425,24 @@ static void F_DrawUnderwater (void)
             // drawing a TITLE screen.
             V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
 
-            if (english_language)
+            if(english_language)
             {
-                if (gamemode == retail && title->width == 560)
+                if(gamemode == retail)
                 {
-                    V_DrawPatchFullScreen(W_CacheLumpName("TITLE", PU_CACHE), false);
+                    V_DrawFullScreenLumpName("TITLE");
                 }
-                else if (gamemode == registered || gamemode == shareware)
+                else if(gamemode == registered || gamemode == shareware)
                 {
-                    V_DrawPatchFullScreen(W_CacheLumpName("TITLEOLD", PU_CACHE), false);            
+                    V_DrawFullScreenLumpName("TITLEOLD");
                 }
                 else
                 {
-                    V_DrawRawScreen(W_CacheLumpName(DEH_String("TITLE"), PU_CACHE));
+                   V_DrawFullScreenLumpName(DEH_String("TITLE"));
                 }
             }
             else
             {
-                V_DrawPatchFullScreen(W_CacheLumpName(gamemode == retail ?
-                                                      "TITLE_RT" : "TITLEOLD",
-                                                      PU_CACHE), false);
+               V_DrawFullScreenLumpName(gamemode == retail ? "TITLE_RT" : "TITLEOLD");
             }
         break;
     }
@@ -470,76 +460,67 @@ void F_Drawer (void)
 {
     UpdateState |= I_FULLSCRN;
 
-    if (!finalestage)
+    if(!finalestage)
     {
         F_TextWrite();
     }
     else
     {
-        const patch_t *credit = W_CacheLumpName("CREDIT", PU_CACHE);
-
-        switch (gameepisode)
+        switch(gameepisode)
         {
             case 1:
+            {
                 // [JN] Clean up remainings of the wide screen
                 V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
-                if (gamemode == shareware)
+                if(gamemode == shareware)
                 {
-                    V_DrawPatchFullScreen(W_CacheLumpName(english_language ? 
-                                          "ORDER" : "ORDER_R", PU_CACHE), false);
+                    V_DrawFullScreenLumpName(english_language ?  "ORDER" : "ORDER_R");
                 }
                 else
                 {
-                    if (english_language)
+                    if(english_language)
                     {
-                        if (credit->width == 560)
-                        {
-                            V_DrawPatchFullScreen(W_CacheLumpName("CREDIT", PU_CACHE), false);
-                        }
-                        else
-                        {
-                            V_DrawRawScreen(W_CacheLumpName("CREDIT", PU_CACHE));
-                        }
+                        V_DrawFullScreenLumpName("CREDIT");
                     }
                     else
                     {
-                        V_DrawPatchFullScreen(W_CacheLumpName(gamemode == retail ?
-                                              "CRED_RT" : "CRED_RG", PU_CACHE), false);
+                        V_DrawFullScreenLumpName(gamemode == retail ? "CRED_RT" : "CRED_RG");
                     }
                 }
                 break;
+            }
             case 2:
+            {
                 F_DrawUnderwater();
                 break;
+            }
             case 3:
+            {
                 F_DemonScroll();
                 break;
+            }
             case 4:
             case 5:
+            {
                 // Just show credits screen for extended episodes
                 V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
-                if (english_language)
+                if(english_language)
                 {
-                    if (credit->width == 560)
-                    {
-                        V_DrawPatchFullScreen(W_CacheLumpName("CREDIT", PU_CACHE), false);
-                    }
-                    else
-                    {
-                        V_DrawRawScreen(W_CacheLumpName("CREDIT", PU_CACHE));
-                    }
+                    V_DrawFullScreenLumpName("CREDIT");
                 }
                 else
                 {
-                    V_DrawPatchFullScreen(W_CacheLumpName(gamemode == retail ?
-                                                    "CRED_RT" : "CRED_RG", PU_CACHE), false);
+                    V_DrawFullScreenLumpName(gamemode == retail ? "CRED_RT" : "CRED_RG");
                 }
+                break;
+            }
+            default:
                 break;
         }
     }
 
     // [crispy] demo progress bar
-    if (demoplayback && demobar)
+    if(demoplayback && demobar)
     {
         SB_DemoProgressBar();
     }

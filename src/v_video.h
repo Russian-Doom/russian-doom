@@ -99,10 +99,6 @@ void V_DrawVertLine (const int x, const int y, const int h, const int c);
 void V_DrawBox (const int x, const int y, const int w, const int h, const int c);
 void V_CopyScaledBuffer (byte *dest, const byte *src, const size_t size);
 
-// Draw a raw screen lump
-
-void V_DrawRawScreen (const byte *raw);
-
 // Temporarily switch to using a different buffer to draw graphics, etc.
 
 void V_UseBuffer (byte *buffer);

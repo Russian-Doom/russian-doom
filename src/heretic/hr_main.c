@@ -800,8 +800,6 @@ void D_PageTicker (void)
 
 void D_PageDrawer(void)
 {
-    const patch_t *page =  W_CacheLumpName(pagename, PU_CACHE);
-
     if (aspect_ratio >= 2)
     {
         // [JN] Clean up remainings of the wide screen before
@@ -809,14 +807,7 @@ void D_PageDrawer(void)
         V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
     }
 
-    if (page->width == 560)
-    {
-        V_DrawPatchFullScreen(W_CacheLumpName(pagename, PU_CACHE), false);
-    }
-    else
-    {
-        V_DrawRawScreen(W_CacheLumpName(pagename, PU_CACHE));
-    }
+    V_DrawFullScreenLumpName(pagename);
 
     if (demosequence == 1)
     {

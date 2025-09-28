@@ -336,20 +336,20 @@ void V_DrawPatch (int x, int y, const patch_t *patch, const byte *table)
 // V_DrawPatchFullScreen
 // -----------------------------------------------------------------------------
 
-void V_DrawPatchFullScreen (patch_t *patch, const boolean flipped)
+void V_DrawPatchFullScreen(patch_t* patch, const boolean flipped)
 {
-    int x = ((screenwidth >> hires) - SHORT(patch->width)) / 2;
+    const int x = ((screenwidth >> hires) - SHORT(patch->width)) / 2;
 
     patch->leftoffset = 0;
     patch->topoffset = 0;
 
     // [crispy] fill pillarboxes in widescreen mode
-    if (screenwidth != ORIGWIDTH)
+    if(screenwidth != ORIGWIDTH)
     {
         V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
     }
 
-    if (flipped)
+    if(flipped)
     {
         V_DrawPatchFlipped(x, 0, patch);
     }
@@ -1774,11 +1774,6 @@ void V_CopyScaledBuffer (byte *dest, const byte *src, const size_t size)
         }
     }
 }
- 
-void V_DrawRawScreen (const byte *raw)
-{
-    V_CopyScaledBuffer(dest_screen, raw, ORIGWIDTH * ORIGHEIGHT);
-}
 
 // -----------------------------------------------------------------------------
 // V_Init
@@ -2258,7 +2253,7 @@ void V_DrawFullScreenLumpNum(const lumpindex_t lump_num)
     }
     else if(size % ORIGHEIGHT == 0)
     {
-        V_DrawRawScreen(lump_data);
+        V_CopyScaledBuffer(dest_screen, lump_data, ORIGWIDTH * ORIGHEIGHT);
     }
     else
     {

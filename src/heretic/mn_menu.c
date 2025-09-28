@@ -1967,7 +1967,7 @@ static void DrawOptionsMenu(void)
     sfxbgdraw = true;
 
     // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    V_DrawFullScreenLumpName("MENUBG");
 }
 
 // -----------------------------------------------------------------------------
@@ -1979,7 +1979,7 @@ static void DrawRenderingMenu1(void)
 	static char num[4];
 
     // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    V_DrawFullScreenLumpName("MENUBG");
 
     if (english_language)
     {
@@ -2154,7 +2154,7 @@ static void DrawRenderingMenu2(void)
     window_size = M_StringJoin(win_width, "x", win_height, NULL);
 
     // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    V_DrawFullScreenLumpName("MENUBG");
 
     if (english_language)
     {
@@ -2440,7 +2440,7 @@ static void DrawDisplayMenu(void)
     // Draw menu background. Hide it for a moment while changing 
     // screen size, gamma and level brightness in GS_LEVEL game state.
     if (gamestate != GS_LEVEL || (gamestate == GS_LEVEL && menubgwait < I_GetTime()))
-        V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+        V_DrawFullScreenLumpName("MENUBG");
 
     if (english_language)
     {
@@ -2546,7 +2546,7 @@ static void DrawColorMenu(void)
     // Draw menu background. Hide it for a moment while changing 
     // screen size, gamma and level brightness in GS_LEVEL game state.
     if (gamestate != GS_LEVEL || (gamestate == GS_LEVEL && menubgwait < I_GetTime()))
-        V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+        V_DrawFullScreenLumpName("MENUBG");
 
     if (english_language)
     {
@@ -2691,7 +2691,7 @@ void M_RD_BLUE_Color(Direction_t direction)
 static void DrawMessagesMenu(void)
 {
     // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    V_DrawFullScreenLumpName("MENUBG");
 
     if (english_language)
     {
@@ -2939,7 +2939,7 @@ static void DrawAutomapMenu(void)
     M_snprintf(num, 4, "%d", automap_grid_size);
 
     // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    V_DrawFullScreenLumpName("MENUBG");
 
     if (english_language)
     {
@@ -3047,7 +3047,7 @@ static void M_RD_AutomapSecrets()
 static void DrawStatsMenu(void)
 {
     // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    V_DrawFullScreenLumpName("MENUBG");
 
     if (english_language)
     {
@@ -3179,7 +3179,7 @@ static void DrawSoundMenu(void)
 
     // Draw menu background. Don't draw if menu is invoked by pressing F4.
     if (sfxbgdraw)
-        V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+        V_DrawFullScreenLumpName("MENUBG");
 
     //
     // Sliders
@@ -3233,7 +3233,7 @@ static void DrawSoundSystemMenu(void)
 {
     // Draw menu background. Don't draw if menu is invoked by pressing F4.
     if (sfxbgdraw)
-        V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+        V_DrawFullScreenLumpName("MENUBG");
 
     if (english_language)
     {
@@ -3611,7 +3611,7 @@ static void DrawControlsMenu(void)
     char  num[4];
 
     // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    V_DrawFullScreenLumpName("MENUBG");
 
     if (english_language)
     {
@@ -3721,7 +3721,7 @@ static void M_RD_Novert()
 static void M_RD_Draw_Bindings()
 {
     // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    V_DrawFullScreenLumpName("MENUBG");
 
     if (english_language)
     {
@@ -3749,7 +3749,7 @@ static void M_RD_Draw_Bindings()
 static void DrawResetControlsMenu()
 {
     // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    V_DrawFullScreenLumpName("MENUBG");
 
     if (english_language)
     {
@@ -3832,7 +3832,7 @@ static void DrawGamepadSelectMenu()
     static char name[30];
 
     // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    V_DrawFullScreenLumpName("MENUBG");
 
     if(english_language)
     {
@@ -3915,7 +3915,7 @@ static void DrawGamepadMenu_1()
     static char num[5];
 
     // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    V_DrawFullScreenLumpName("MENUBG");
 
     if(english_language)
     {
@@ -4115,7 +4115,7 @@ static void DrawGamepadMenu_2()
     static char num[5];
 
     // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    V_DrawFullScreenLumpName("MENUBG");
 
     if(english_language)
     {
@@ -4317,7 +4317,7 @@ static void M_RD_DeadZoneAxis_RT(Direction_t direction)
 static void DrawGameplay1Menu(void)
 {
     // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    V_DrawFullScreenLumpName("MENUBG");
 
     if (english_language)
     {
@@ -4477,7 +4477,7 @@ static void M_RD_FlipWeapons()
 static void DrawGameplay2Menu(void)
 {
     // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    V_DrawFullScreenLumpName("MENUBG");
 
     if (english_language)
     {
@@ -4706,7 +4706,7 @@ static void Init_Gameplay_3(struct Menu_s* const menu)
 static void DrawGameplay3Menu(void)
 {
     // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    V_DrawFullScreenLumpName("MENUBG");
 
     if (english_language)
     {
@@ -4962,7 +4962,7 @@ static const Translation_CR_t DefSkillColor (const int skill)
 static void DrawGameplay4Menu(void)
 {
     // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    V_DrawFullScreenLumpName("MENUBG");
 
     if (english_language)
     {
@@ -5160,7 +5160,7 @@ static void DrawLevelSelect1Menu(void)
     char  num[4];
 
     // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    V_DrawFullScreenLumpName("MENUBG");
 
     if (english_language)
     {
@@ -5357,7 +5357,7 @@ static void DrawLevelSelect2Menu(void)
     char  num[4];
 
     // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    V_DrawFullScreenLumpName("MENUBG");
 
     if (english_language)
     {
@@ -5540,7 +5540,7 @@ static void DrawLevelSelect3Menu(void)
     char  num[4];
 
     // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    V_DrawFullScreenLumpName("MENUBG");
 
     // Quartz Flask
     M_snprintf(num, 4, "%d", selective_arti_0);
@@ -5640,7 +5640,7 @@ static void M_RD_SelectiveArti_9(Direction_t direction)
 static void DrawResetSettingsMenu(void)
 {
     // Draw menu background.
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+    V_DrawFullScreenLumpName("MENUBG");
 
     if (english_language)
     {
@@ -6874,12 +6874,6 @@ static void OnDeactivateMenu(void)
 
 void MN_DrawInfo(void)
 {
-    // [JN] For checking of modified fullscreen graphics.
-    patch_t *page0_gfx = W_CacheLumpName("TITLE", PU_CACHE);
-    patch_t *page1_gfx = W_CacheLumpName("HELP1", PU_CACHE);
-    patch_t *page2_gfx = W_CacheLumpName("HELP2", PU_CACHE);
-    patch_t *page3_gfx = W_CacheLumpName("CREDIT", PU_CACHE);
-
     if (aspect_ratio_temp >= 2)
     {
         // [JN] Clean up remainings of the wide screen before 
@@ -6895,54 +6889,46 @@ void MN_DrawInfo(void)
     // Check if have a modified graphics:
     // - If we don't, we can draw a GFX wide version.
     // - If we do, draw it as a RAW screen instead.
-
-    if (english_language)
+    char* lump_name;
+    switch(InfoType)
     {
-        switch (InfoType)
+        case 0:
         {
-            case 0:
-                if (page0_gfx->width == 560)
-                    V_DrawPatchFullScreen(W_CacheLumpName("TITLE", PU_CACHE), false);
-                else
-                    V_DrawRawScreen(W_CacheLumpName("TITLE", PU_CACHE));
-                break;
-            case 1:
-                if (page1_gfx->width == 560)
-                    V_DrawPatchFullScreen(W_CacheLumpName("HELP1", PU_CACHE), false);
-                else
-                    V_DrawRawScreen(W_CacheLumpName("HELP1", PU_CACHE));
-                break;
-            case 2:
-                if (page2_gfx->width == 560)
-                    V_DrawPatchFullScreen(W_CacheLumpName("HELP2", PU_CACHE), false);
-                else
-                    V_DrawRawScreen(W_CacheLumpName("HELP2", PU_CACHE));
-                break;
-            case 3:
-                if (page3_gfx->width == 560)
-                    V_DrawPatchFullScreen(W_CacheLumpName("CREDIT", PU_CACHE), false);
-                else
-                    V_DrawRawScreen(W_CacheLumpName("CREDIT", PU_CACHE));
-                break;
-            case 4:
-                // [JN] Available only in Shareware, can't be replaced.
-                V_DrawPatchFullScreen(W_CacheLumpName("ORDER", PU_CACHE), false);
-            default:
-                break;
+            if(english_language)
+                lump_name = "TITLE";
+            else
+                lump_name = gamemode == retail ? "TITLE_RT" : "TITLE";
+            break;
+        }
+        case 1:
+        {
+            lump_name = english_language ? "HELP1" : "HELP1_R";
+            break;
+        }
+        case 2:
+        {
+            lump_name = english_language ? "HELP2" : "HELP2_R";
+            break;
+        }
+        case 3:
+        {
+            if(english_language)
+                lump_name = "CREDIT";
+            else
+                lump_name = (gamemode == retail ? "CRED_RT" : "CRED_RG");
+            break;
+        }
+        case 4:
+            // [JN] Available only in Shareware, can't be replaced.
+            lump_name = "ORDER";
+        default:
+        {
+            // Unreachable
+            lump_name = "TITLE";
+            break;
         }
     }
-    else
-    {
-        V_DrawPatchFullScreen(W_CacheLumpNum
-                       (W_GetNumForName
-                       (InfoType == 0 ? 
-                       (gamemode == retail ? "TITLE_RT" : "TITLE") :
-                        InfoType == 1 ? "HELP1_R" : 
-                        InfoType == 2 ? "HELP2_R" :
-                        InfoType == 3 ?
-                       (gamemode == retail ? "CRED_RT" : "CRED_RG") :
-                                             "ORDER_R"), PU_CACHE), false);
-    }
+    V_DrawFullScreenLumpName(lump_name);
 }
 
 void RD_Menu_StartSound(MenuSound_t sound)
