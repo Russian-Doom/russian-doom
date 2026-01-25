@@ -1214,7 +1214,7 @@ void LoadFile(char* filePath, boolean autoload)
 
 void AutoloadFiles(const char* wadName, boolean mkdir)
 {
-    char* autoload_subdir = M_StringDuplicate(wadName);
+    char* autoload_subdir = M_StringDuplicate(M_FileName(wadName));
     M_ForceLowercase(autoload_subdir);
     char* autoload_path = M_StringJoin(autoload_dir, DIR_SEPARATOR_S, autoload_subdir, NULL);
     if(mkdir)
