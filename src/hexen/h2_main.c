@@ -674,23 +674,21 @@ void D_SetGameDescription(void)
     }
 
     // [Dasperal] Directory based autoload.
-    // Set the default value of autoload_root to M_GetAutoloadDir()
-    if(strcmp(autoload_root, "") == 0)
-    {
-        autoload_root = M_GetAutoloadDir();
-    }
-
-    int autoloadDir_param = M_CheckParmWithArgs("-autoloadroot", 1);
+    const int autoloadDir_param = M_CheckParmWithArgs("-autoloadroot", 1);
     if(autoloadDir_param)
     {
         autoload_dir = myargv[autoloadDir_param + 1];
+    }
+    else if(strcmp(autoload_root, "") == 0)
+    {
+        autoload_dir = M_GetAutoloadDir();
     }
     else
     {
         autoload_dir = autoload_root;
     }
 
-    boolean allowAutoload = gamemode != shareware && !M_ParmExists("-noautoload") && strcmp(autoload_dir, "") != 0;
+    const boolean allowAutoload = gamemode != shareware && !M_ParmExists("-noautoload");
     if(allowAutoload)
     {
         AutoloadFiles("hexen-all", true);
