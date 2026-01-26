@@ -156,6 +156,7 @@ int english_language = 1;
 // [JN] PWAD autoloading
 // -----------------------------------------------------------------------------
 
+int enable_autoload = 1;
 char* autoload_root = "";
 char* autoload_dir  = NULL;
 
@@ -343,6 +344,7 @@ void D_BindVariables(void)
     M_BindIntVariable("english_language",       &english_language);
 
     // [JN] PWAD autoloading
+    M_BindIntVariable("enable_autoload", &enable_autoload);
     M_BindStringVariable("autoload_root", &autoload_root);
 
     M_BindIntVariable("graphical_startup",      &graphical_startup);
@@ -688,7 +690,7 @@ void D_SetGameDescription(void)
         autoload_dir = autoload_root;
     }
 
-    const boolean allowAutoload = gamemode != shareware && !M_ParmExists("-noautoload");
+    const boolean allowAutoload = gamemode != shareware && enable_autoload && !M_ParmExists("-noautoload");
     if(allowAutoload)
     {
         AutoloadFiles("hexen-all", true);

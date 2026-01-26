@@ -112,6 +112,11 @@ static default_t defaults_list[] =
     CONFIG_VARIABLE_INT(english_language),
 
     //!
+    // Enable directory based autoload.
+
+    CONFIG_VARIABLE_INT(enable_autoload),
+
+    //!
     // Full path to a directory in which WAD files and dehacked patches
     // can be placed to be automatically loaded on startup. A subdirectory
     // of this directory matching the IWAD name is checked to find the
