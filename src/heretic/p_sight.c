@@ -102,6 +102,15 @@ static boolean P_SightBlockLinesIterator (const int x, const int y)
     int s1, s2;
     divline_t dl;
 
+    // [Dsaperal] There is a check in P_SightPathTraverse for that
+    // the start and the end cells of the trace are in bounds of BLOCKMAP.
+    // It implies that all cells along the trace will be in bounds of BLOCKMAP.
+    // But on rare occasions the trace misses the end cell and goes out of BLOCKMAP bounds.
+    if(x < 0 || x >= bmapwidth || y < 0 || y >= bmapheight)
+    {
+        return false;
+    }
+
     offset = y * bmapwidth + x;
 
     offset = *(blockmap + offset);
