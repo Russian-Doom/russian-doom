@@ -1457,6 +1457,17 @@ void P_SpawnPlayerMissile (mobj_t *source, const mobjtype_t type)
     fixed_t  y;
     fixed_t  z;
     fixed_t  slope;
+    fixed_t  factor;
+
+    if(aspect_ratio >= 2)
+    {
+        // [JN] Wide screen: new magic number :(
+        factor = 180;
+    }
+    else
+    {
+        factor = (screenblocks <= 10) ? 160 : 146;
+    }
 
     // see which target is to be aimed at
     an = source->angle;
@@ -1465,39 +1476,23 @@ void P_SpawnPlayerMissile (mobj_t *source, const mobjtype_t type)
     if (!linetarget)
     {
         // [JN] Optional horizontal aiming.
-        if ((horizontal_autoaim == 1 || horizontal_autoaim == 3)
-        || !singleplayer || strict_mode || vanillaparm)
+        if(vanilla_gameplay_feature(autoaim_horizonal))
         {
             an += 1 << 26;
             slope = P_AimLineAttack (source, an, 16*64*FRACUNIT);
-
             if (!linetarget)
             {
                 an -= 2<<26;
                 slope = P_AimLineAttack (source, an, 16*64*FRACUNIT);
             }
-
             if (!linetarget)
             {
-                an = source->angle;
-                slope = 0;
+                slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / factor;
             }
         }
-
-        // [JN] Mouselook: also count vertical angles
-        if (singleplayer && !linetarget && mlook && !strict_mode && !vanillaparm)
+        else
         {
-            an = source->angle;
-
-            if (aspect_ratio >= 2)
-            {
-                // [JN] Wide screen: new magic number :(
-                slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 180;
-            }
-            else
-            {
-                slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / (screenblocks <= 10 ? 160 : 146);
-            }
+            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / factor;
         }
     }
 

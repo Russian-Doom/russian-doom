@@ -114,6 +114,14 @@ void M_RegisterTrackedFields()
     {
         RegisterTrackedDefault("opengles_renderer", DEFAULT_INT);
     }
+
+    //
+    // Replace horizontal_autoaim with autoaim_horizonal.
+    //
+    if(config_version < 6)
+    {
+        RegisterTrackedDefault("horizontal_autoaim", DEFAULT_INT);
+    }
 }
 
 void M_ApplyMigration()
@@ -357,6 +365,22 @@ void M_ApplyMigration()
 #else
             render_driver_option = opengles_renderer->value.i == 1 ? "opengles2" : NULL;
 #endif
+        }
+    }
+
+    //
+    // Replace horizontal_autoaim with autoaim_horizonal.
+    //
+    if(config_version < 6)
+    {
+        const defaultTracker_t* horizontal_autoaim = M_GetDefaultTracker("horizontal_autoaim");
+        if(horizontal_autoaim != NULL && horizontal_autoaim->found)
+        {
+            // 0 = hitscans only    -> 1 = on
+            // 1 = projectiles only -> 1 = on
+            // 2 = off              -> 0 = off
+            // 3 = on               -> 1 = on
+            autoaim_horizonal = (horizontal_autoaim->value.i != 2);
         }
     }
 

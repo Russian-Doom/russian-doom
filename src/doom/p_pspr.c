@@ -666,6 +666,17 @@ void A_FirePlasma (mobj_t *mobj, player_t *player, pspdef_t *psp)
 static void P_BulletSlope (mobj_t *mo)
 {
     angle_t	an;
+    fixed_t  factor;
+
+    if(aspect_ratio >= 2)
+    {
+        // [JN] Wide screen: new magic number :(
+        factor = 180;
+    }
+    else
+    {
+        factor = (screenblocks <= 10) ? 160 : 146;
+    }
 
     // see which target is to be aimed at
     an = mo->angle;
@@ -674,31 +685,24 @@ static void P_BulletSlope (mobj_t *mo)
     if (!linetarget)
     {
         // [JN] Optional horizontal aiming.
-        if ((horizontal_autoaim == 0 || horizontal_autoaim == 3)
-        || !singleplayer || strict_mode || vanillaparm)
+        if(vanilla_gameplay_feature(autoaim_horizonal))
         {
             an += 1<<26;
             bulletslope = P_AimLineAttack (mo, an, 16*64*FRACUNIT);
-
             if (!linetarget)
             {
                 an -= 2<<26;
                 bulletslope = P_AimLineAttack (mo, an, 16*64*FRACUNIT);
             }
+            if(!linetarget)
+            {
+                an = mo->angle;
+                bulletslope = (mo->player->lookdir / MLOOKUNIT << FRACBITS) / factor;
+            }
         }
-
-        // [JN] Mouselook: also count vertical angles
-        if (singleplayer && !linetarget && mlook && !strict_mode && !vanillaparm)
+        else
         {
-            if (aspect_ratio >= 2)
-            {
-                // [JN] Wide screen: new magic number :(
-                bulletslope = (mo->player->lookdir / MLOOKUNIT << FRACBITS) / 180;
-            }
-            else
-            {
-                bulletslope = (mo->player->lookdir / MLOOKUNIT << FRACBITS) / (screenblocks <= 10 ? 160 : 146);
-            }
+            bulletslope = (mo->player->lookdir / MLOOKUNIT << FRACBITS) / factor;
         }
     }
 }

@@ -1525,11 +1525,30 @@ const fixed_t P_AimLineAttack (mobj_t *t1, angle_t angle, const fixed_t distance
     y2 = t1->y + (distance>>FRACBITS)*finesine[angle];
     shootz = t1->z + (t1->height>>1) + 8*FRACUNIT;
 
-    // can't shoot outside view angles
-    // [JN] Widescreen support: SCREENWIDTH is replaced with (ORIGWIDTH << hires),
-    // this value must not be changed for demo compatibily and other stuff.
-    topslope = (SCREENHEIGHT/2)*FRACUNIT/((ORIGWIDTH << hires)/2);	
-    bottomslope = -(SCREENHEIGHT/2)*FRACUNIT/((ORIGWIDTH << hires)/2);
+    if (!t1->player || vanilla_gameplay_feature(autoaim_vertical))
+    {
+        // can't shoot outside view angles
+        // [JN] Widescreen support: SCREENWIDTH is replaced with (ORIGWIDTH << hires),
+        // this value must not be changed for demo compatibily and other stuff.
+        topslope = (SCREENHEIGHT/2)*FRACUNIT/((ORIGWIDTH << hires)/2);
+        bottomslope = -(SCREENHEIGHT/2)*FRACUNIT/((ORIGWIDTH << hires)/2);
+    }
+    else
+    {
+        // Player and vertical autoaim disabled
+        fixed_t factor;
+        if(aspect_ratio >= 2)
+        {
+            // [JN] Wide screen: new magic number :(
+            factor = 180;
+        }
+        else
+        {
+            factor = (screenblocks <= 10) ? 160 : 146;
+        }
+        topslope = ((t1->player->lookdir / MLOOKUNIT) << FRACBITS) / factor + 5;
+        bottomslope = ((t1->player->lookdir / MLOOKUNIT) << FRACBITS) / factor - 5;
+    }
 
     attackrange = distance;
     linetarget = NULL;

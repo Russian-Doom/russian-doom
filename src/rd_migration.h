@@ -35,8 +35,9 @@ enum {
     *     Separated bindings for "Suicide" and "Detail level" in Hexen.\n
     * 4 - Heretic & Hexen: Renamed skip_unusable_artifact to skip_unused_artifact.\n
     * 5 - Replace opengles_renderer with render_driver.\n
+    * 6 - Replace horizontal_autoaim with autoaim_horizonal.\n
     */
-    CURRENT_CONFIG_VERSION = 5
+    CURRENT_CONFIG_VERSION = 6
 };
 
 /**

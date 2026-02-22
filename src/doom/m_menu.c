@@ -345,7 +345,7 @@ static void M_RD_Change_FloatPowerups(Direction_t direction);
 static void M_RD_Change_Bobbing(Direction_t direction);
 static void M_RD_Change_SecretNotify();
 static void M_RD_Change_InfraGreenVisor();
-static void M_RD_Change_HorizontalAiming(Direction_t direction);
+static void M_RD_AutoAimHorizonal();
 
 // Page 5
 static void M_RD_Change_DefaultSkill(Direction_t direction);
@@ -1367,7 +1367,7 @@ static MenuItem_t Gameplay4Items[] = {
     I_TITLE( "Tactical",                            "Nfrnbrf"), // Тактика
     I_SWITCH("Notify of revealed secrets:",         "Cjj,ofnm j yfqltyyjv nfqybrt:",   M_RD_Change_SecretNotify), // Сообщать о найденном тайнике
     I_SWITCH("Infragreen light amp. visor:",        "Byahfptktysq dbpjh jcdtotybz:",  M_RD_Change_InfraGreenVisor), // Инфразеленый визор освещения
-    I_LRFUNC("Horizontal autoaiming:",              "ujh> fdnjghbwtkbdfybt:",         M_RD_Change_HorizontalAiming), // Гор. Автоприцеливание
+    I_SWITCH("Horizontal autoaiming:",              "ujh> fdnjghbwtkbdfybt:",         M_RD_AutoAimHorizonal), // Гор. Автоприцеливание
     I_SETMENU(NULL, /* Next page >   */ NULL, &Gameplay5Menu), // Далее >
     I_SETMENU(NULL, /* < Prev page > */ NULL, &Gameplay3Menu)  // < Назад
 };
@@ -4855,15 +4855,8 @@ static void M_RD_Draw_Gameplay_4(void)
         }
         else
         {
-            RD_M_DrawTextSmallENG(horizontal_autoaim == 0 ? "hitscans only" : 
-                                  horizontal_autoaim == 1 ? "projectiles only" :
-                                  horizontal_autoaim == 2 ? "off" : 
-                                                            "on", 195 + wide_delta, 135,
-                                                  netgame ? CR_DARKRED :
-                                  horizontal_autoaim == 0 ? CR_DARKGREEN :
-                                  horizontal_autoaim == 1 ? CR_DARKGREEN :
-                                  horizontal_autoaim == 2 ? CR_DARKRED : 
-                                                            CR_GREEN);
+            RD_M_DrawTextSmallENG(autoaim_horizonal ? "ON" : "OFF", 195 + wide_delta, 135,
+                                  autoaim_horizonal ? CR_GREEN : CR_DARKRED);
         }
 
         //
@@ -4956,15 +4949,8 @@ static void M_RD_Draw_Gameplay_4(void)
         }
         else
         {
-            RD_M_DrawTextSmallRUS(horizontal_autoaim == 0 ? "[bncrfys" :  // хитсканы
-                                  horizontal_autoaim == 1 ? "cyfhzls" :   // снаряды
-                                  horizontal_autoaim == 2 ? "dsrk" : 
-                                                            "drk", 204 + wide_delta, 135,
-                                                  netgame ? CR_DARKRED :
-                                  horizontal_autoaim == 0 ? CR_DARKGREEN :
-                                  horizontal_autoaim == 1 ? CR_DARKGREEN :
-                                  horizontal_autoaim == 2 ? CR_DARKRED : 
-                                                            CR_GREEN);
+            RD_M_DrawTextSmallRUS(autoaim_horizonal ? "DRK" : "DSRK", 204 + wide_delta, 135,
+                                  autoaim_horizonal ? CR_GREEN : CR_DARKRED);
         }
 
 
@@ -5425,9 +5411,9 @@ static void M_RD_Change_InfraGreenVisor()
     }
 }
 
-static void M_RD_Change_HorizontalAiming(Direction_t direction)
+static void M_RD_AutoAimHorizonal()
 {
-    RD_Menu_SpinInt(&horizontal_autoaim, 0, 3, direction);
+    autoaim_horizonal ^= 1;
 }
 
 //
@@ -6290,7 +6276,6 @@ static void M_RD_BackToDefaults_Recommended()
     secret_notification = 1;
     negative_health     = 0;
     infragreen_visor    = 0;
-    horizontal_autoaim  = 3;
     autoaim_horizonal   = 1;
     autoaim_vertical    = 1;
 
@@ -6496,7 +6481,6 @@ static void M_RD_BackToDefaults_Original()
     secret_notification = 0;
     negative_health     = 0;
     infragreen_visor    = 0;
-    horizontal_autoaim  = 3;
     autoaim_horizonal   = 1;
     autoaim_vertical    = 1;
 

@@ -264,7 +264,6 @@ int weapon_bobbing = 1;
 // Gameplay: Tactical
 int secret_notification = 1;
 int infragreen_visor = 0;
-int horizontal_autoaim = 3;
 // [kmeaw] Autoaim horizonal and vertical: Both enabled by default.
 int autoaim_horizonal = 1;
 int autoaim_vertical = 1;
@@ -998,7 +997,6 @@ void D_BindVariables(void)
     // Gameplay: Tactical
     M_BindIntVariable("secret_notification",    &secret_notification);
     M_BindIntVariable("infragreen_visor",       &infragreen_visor);
-    M_BindIntVariable("horizontal_autoaim",     &horizontal_autoaim);
     M_BindIntVariable("autoaim_horizonal",      &autoaim_horizonal);
     M_BindIntVariable("autoaim_vertical",       &autoaim_vertical);
 
