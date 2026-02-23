@@ -1311,7 +1311,7 @@ extern patch_t *stysslsh;
 
 #define HUSTR_E1M1_RUS  "t1v1: fyufh"                               // E1M1: Ангар
 #define HUSTR_E1M2_RUS  "t1v2: fnjvyfz 'ktrnhjcnfywbz"              // E1M2: Атомная электростанция
-#define HUSTR_E1M3_RUS  "t1v3: pfdjl gj gththf,jnrt zlj[bvbrfnjd"   // E1M3: Завод по переработке ядохимикатов
+#define HUSTR_E1M3_RUS  "t1v3: pfdjl gj gththf,jnrt njrcbyjd"       // E1M3: Завод по переработке токсинов
 #define HUSTR_E1M4_RUS  "t1v4: rjvfylysq geyrn"                     // E1M4: Командный пункт
 #define HUSTR_E1M5_RUS  "t1v5: kf,jhfnjhbz yf aj,jct"               // E1M5: Лаборатория на Фобосе
 #define HUSTR_E1M6_RUS  "t1v6: wtynhfkmysq geyrn j,hf,jnrb"         // E1M6: Центральный пункт обработки
@@ -1373,7 +1373,7 @@ extern patch_t *stysslsh;
 
 #define HUSTR_1_RUS     "ehjdtym 1: gfhflysq d[jl"                  // Уровень 1: Парадный вход
 #define HUSTR_2_RUS     "ehjdtym 2: gjlptvyst pfks"                 // Уровень 2: Подземные залы
-#define HUSTR_3_RUS     "ehjdtym 3: dspjd ,hjity"                   // Уровень 3: Вызов брошен
+#define HUSTR_3_RUS     "ehjdtym 3: cehjdjt bcgsnfybt"              // Уровень 3: Суровое испытание
 #define HUSTR_4_RUS     "ehjdtym 4: chtljnjxbt"                     // Уровень 4: Средоточие
 #define HUSTR_5_RUS     "ehjdtym 5: cnjxyst neyytkb"                // Уровень 5: Сточные туннели
 #define HUSTR_6_RUS     "ehjdtym 6: ghtcc"                          // Уровень 6: Пресс
@@ -1383,8 +1383,8 @@ extern patch_t *stysslsh;
 #define HUSTR_10_RUS    "ehjdtym 10: pfghfdjxyfz ,fpf"              // Уровень 10: Заправочная база
 #define HUSTR_11_RUS    "ehjdtym 11: ^j^ hfpheitybz!"               // Уровень 11: "o" разрушения!
 #define HUSTR_12_RUS    "ehjdtym 12: af,hbrf"                       // Уровень 12: Фабрика
-#define HUSTR_13_RUS    "ehjdtym 13: ltkjdjq hfqjy"                 // Уровень 13: Деловой район
-#define HUSTR_14_RUS    "ehjdtym 14: uke,jxfqibt kjujdbof"          // Уровень 14: Глубочайшие логовища
+#define HUSTR_13_RUS    "ehjdtym 13: wtynh ujhjlf"                  // Уровень 13: Центр города
+#define HUSTR_14_RUS    "ehjdtym 14: uke,jrbt pfrjekrb"             // Уровень 14: Глубокие закоулки
 #define HUSTR_15_RUS    "ehjdtym 15: ghjvsiktyyfz pjyf"             // Уровень 15: Промышленная зона
 #define HUSTR_16_RUS    "ehjdtym 16: ghbujhjl"                      // Уровень 16: Пригород 
 #define HUSTR_17_RUS    "ehjdtym 17: dkfltybz"                      // Уровень 17: Владения 
@@ -1393,7 +1393,7 @@ extern patch_t *stysslsh;
 #define HUSTR_20_RUS    "ehjdtym 20: gjgfkcz!"                      // Уровень 20: Попался!
 #define HUSTR_21_RUS    "ehjdtym 21: ybhdfyf"                       // Уровень 21: Нирвана 
 #define HUSTR_22_RUS    "ehjdtym 22: rfnfrjv,s"                     // Уровень 22: Катакомбы 
-#define HUSTR_23_RUS    "ehjdtym 23: wtkst ,jxrb dtctkmz"           // Уровень 23: Целые бочки веселья
+#define HUSTR_23_RUS    "ehjdtym 23: ,jxrb dtctkmz"                 // Уровень 23: Бочки веселья
 #define HUSTR_24_RUS    "ehjdtym 24: ghjgfcnm"                      // Уровень 24: Пропасть 
 #define HUSTR_25_RUS    "ehjdtym 25: rhjdjgfls"                     // Уровень 25: Кровопады
 #define HUSTR_26_RUS    "ehjdtym 26: pf,hjityyst if[ns"             // Уровень 26: Заброшенные шахты
@@ -1426,24 +1426,24 @@ extern patch_t *stysslsh;
 
 #define MLSTR_1_RUS     "yfgfltybt"                // ATTACK.WAD   - Нападение
 #define MLSTR_2_RUS     "xthyfz ,fiyz"             // BLACKTWR.WAD - Черная Башня
-#define MLSTR_3_RUS     "rhtgjcnm d rhjdfdjv vjht" // BLOODSEA.WAD - Крепость в Кровавом море
+#define MLSTR_3_RUS     "rhtgjcnm rhjdfdjuj vjhz"  // BLOODSEA.WAD - Крепость Кровавого моря
 #define MLSTR_4_RUS     "rfymjy"                   // CANYON.WAD   - Каньон
 #define MLSTR_5_RUS     "gjvjcn"                   // CATWALK.WAD  - Помост
 #define MLSTR_6_RUS     "rjv,byfn"                 // COMBINE.WAD  - Комбинат
 #define MLSTR_7_RUS     "abcnekf"                  // FISTULA.WAD  - Фистула
 #define MLSTR_8_RUS     "ufhybpjy"                 // GARRISON.WAD - Гарнизон
 #define MLSTR_9_RUS     "uthbjy"                   // GERYON.WAD   - Герион
-#define MLSTR_10_RUS    "gjvtcnmt ubufynf"         // MANOR.WAD    - Поместье Гиганта
+#define MLSTR_10_RUS    "gjvtcnmt nbnfyf"          // MANOR.WAD    - Поместье Титана
 #define MLSTR_11_RUS    "vfdpjktq vtabcnjatkz"     // MEPHISTO.WAD - Мавзолей Мефистофеля
 #define MLSTR_12_RUS    "ghbujdjh vbyjcf"          // MINOS.WAD    - Приговор Миноса
-#define MLSTR_13_RUS    "ytcc"                     // NESSUS.WAD   - Несс
+#define MLSTR_13_RUS    "ytccec"                   // NESSUS.WAD   - Нессус
 #define MLSTR_14_RUS    "gfhfljrc"                 // PARADOX.WAD  - Парадокс
 #define MLSTR_15_RUS    "gjlghjcnhfycndj"          // SUBSPACE.WAD - Подпространство
 #define MLSTR_16_RUS    "gjlptvtkmt"               // SUBTERRA.WAD - Подземелье
 #define MLSTR_17_RUS    "neh,jkban d ghtbcgjly.."  // TEETH.WAD    - Турболифт в Преисподнюю
 #define MLSTR_18_RUS    "lehyjq cjy"               //              - Дурной сон
 #define MLSTR_19_RUS    "pfcnhzdibq yf nbnfyt"     // TTRAP.WAD    - Застрявший на Титане
-#define MLSTR_20_RUS    "dtxth"                    // VESPERAS.WAD - Вечер
+#define MLSTR_20_RUS    "dtxthz"                   // VESPERAS.WAD - Вечеря
 #define MLSTR_21_RUS    "djkz dthubkbz"            // VIRGIL.WAD   - Воля Вергилия
 
 
@@ -1454,17 +1454,17 @@ extern patch_t *stysslsh;
 #define PHUSTR_1_RUS    "ehjdtym 1: rjyuj"                  // Уровень 1: Конго
 #define PHUSTR_2_RUS    "ehjdtym 2: rjkjltw lei"            // Уровень 2: Колодец душ
 #define PHUSTR_3_RUS    "ehjdtym 3: fwntr"                  // Уровень 3: Ацтек
-#define PHUSTR_4_RUS    "ehjdtym 4: pfgthnsq d rktnrt"      // Уровень 4: Запертый в клетке
+#define PHUSTR_4_RUS    "ehjdtym 4: d rktnrt"               // Уровень 4: В клетке
 #define PHUSTR_5_RUS    "ehjdtym 5: ujhjl-ghbphfr"          // Уровень 5: Город-призрак
 #define PHUSTR_6_RUS    "ehjdtym 6: kjujdj ,fhjyf"          // Уровень 6: Логово Барона
 #define PHUSTR_7_RUS    "ehjdtym 7: ldjh-kjdeirf"           // Уровень 7: Двор-ловушка
 #define PHUSTR_8_RUS    "ehjdtym 8: wfhcndj"                // Уровень 8: Царство
-#define PHUSTR_9_RUS    "ehjdtym 9: f,,fncndj"              // Уровень 9: Аббатство
+#define PHUSTR_9_RUS    "ehjdtym 9: crjnj,jqyz"             // Уровень 9: Скотобойня
 #define PHUSTR_10_RUS   "ehjdtym 10: yfnbcr"                // Уровень 10: Натиск
 #define PHUSTR_11_RUS   "ehjdtym 11: ghtcktletvsq"          // Уровень 11: Преследуемый
 #define PHUSTR_12_RUS   "ehjdtym 12: crjhjcnm"              // Уровень 12: Скорость
 #define PHUSTR_13_RUS   "ehjdtym 13: crktg"                 // Уровень 13: Склеп
-#define PHUSTR_14_RUS   "ehjdtym 14: pfhj;ltybt"            // Уровень 14: Зарождение
+#define PHUSTR_14_RUS   "ehjdtym 14: utytpbc"               // Уровень 14: Генезис
 #define PHUSTR_15_RUS   "ehjdtym 15: cevthrb"               // Уровень 15: Сумерки
 #define PHUSTR_16_RUS   "ehjdtym 16: ghtlpyfvtyjdfybt"      // Уровень 16: Предзнаменование
 #define PHUSTR_17_RUS   "ehjdtym 17: rjvgfeyl"              // Уровень 17: Компаунд
@@ -1492,9 +1492,9 @@ extern patch_t *stysslsh;
 #define THUSTR_1_RUS    "ehjdtym 1: wtynh eghfdktybz cbcntvjq"      // Уровень 1: Центр управления системой
 #define THUSTR_2_RUS    "ehjdtym 2: ,fh,tr. bp xtkjdtxbys"          // Уровень 2: Барбекю из человечины
 #define THUSTR_3_RUS    "ehjdtym 3: wtynh eghfdktybz gbnfybtv"      // Уровень 3: Центр управления питанием
-#define THUSTR_4_RUS    "ehjdtym 4: lshf dj dhtvtyb"                // Уровень 4: Дыра во времени
+#define THUSTR_4_RUS    "ehjdtym 4: xthdjnjxbyf"                    // Уровень 4: Червоточина
 #define THUSTR_5_RUS    "ehjdtym 5: dbctkbwf"                       // Уровень 5: Виселица
-#define THUSTR_6_RUS    "ehjdtym 6: jnrhsnsq ctpjy"                 // Уровень 6: Открытый сезон
+#define THUSTR_6_RUS    "ehjdtym 6: ctpjy j[jns"                    // Уровень 6: Сезон охоты
 #define THUSTR_7_RUS    "ehjdtym 7: n.hmvf"                         // Уровень 7: Тюрьма
 #define THUSTR_8_RUS    "ehjdtym 8: vtnfkk"                         // Уровень 8: Металл
 #define THUSTR_9_RUS    "ehjdtym 9: rhtgjcnm"                       // Уровень 9: Крепость
@@ -1504,7 +1504,7 @@ extern patch_t *stysslsh;
 #define THUSTR_13_RUS   "ehjdtym 13: gththf,jnrf zlthys[ jn[jljd"   // Уровень 13: Переработка ядерных отходов
 #define THUSTR_14_RUS   "ehjdtym 14: cnfktkbntqysq pfdjl"           // Уровень 14: Cталелитейный завод
 #define THUSTR_15_RUS   "ehjdtym 15: vthndfz pjyf"                  // Уровень 15: Мертвая зона
-#define THUSTR_16_RUS   "ehjdtym 16: uke,jxfqibt ljcnb;tybz"        // Уровень 16: Глубочайшие достижения
+#define THUSTR_16_RUS   "ehjdtym 16: uke,jrbt ytlhf"                // Уровень 16: Глубокие недра
 #define THUSTR_17_RUS   "ehjdtym 17: pjyf j,hf,jnrb"                // Уровень 17: Зона обработки
 #define THUSTR_18_RUS   "ehjdtym 18: pfdjl"                         // Уровень 18: Завод
 #define THUSTR_19_RUS   "ehjdtym 19: gjuheprf*jnghfdrf"             // Уровень 19: Погрузка/отправка
