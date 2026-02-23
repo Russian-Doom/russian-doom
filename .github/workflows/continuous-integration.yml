@@ -173,9 +173,9 @@ jobs:
         shell: bash
     steps:
       - name: Set up Docker Buildx
+        id: setup-buildx
         uses: docker/setup-buildx-action@v3
         with:
-          install: true
           driver: docker
 
       # Invalidate cache for docker toolchain images every month to update dependencies
@@ -194,6 +194,8 @@ jobs:
 
       - name: Toolchain & Configure & Build & Test & Package
         id: configure
+        env:
+          BUILDX_BUILDER: ${{ steps.setup-buildx.outputs.name }}
         run: |
           chmod 777 .
           ./crosscompile_linux_packages.sh "ci-linux-dev-${{ matrix.distro.preset_suffix }}" ${{ matrix.distro.distro }}
