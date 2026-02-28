@@ -426,7 +426,6 @@ void R_DrawTLColumnLow (void)
 
 void R_DrawAltTLColumn(void)
 {
-    int      count = dc_yh - dc_yl;
     int      heightmask = dc_texheight-1;
     byte    *dest;
     fixed_t  frac;
@@ -440,6 +439,7 @@ void R_DrawAltTLColumn(void)
         dc_yh = viewheight - 2;
     }
 
+    int count = dc_yh - dc_yl;
     if (count < 0)
     {
         return;
