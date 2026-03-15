@@ -265,6 +265,8 @@ static void M_RD_SelectiveArmor_1(Direction_t direction);
 static void M_RD_SelectiveArmor_2(Direction_t direction);
 static void M_RD_SelectiveArmor_3(Direction_t direction);
 
+static void M_RD_set_values_from_game(void);
+
 // Level Select (2)
 static void DrawLevelSelect2Menu(void);
 static void M_RD_SelectiveWp_0();
@@ -1373,7 +1375,7 @@ static MenuItem_t Level1Items[] = {
     I_LRFUNC("AMULET OF WARDING:", "FVEKTN CNHF;F:",   M_RD_SelectiveArmor_3), // АМУЛЕТ СТРАЖА
     I_EMPTY,
     I_EMPTY,
-    I_EMPTY,
+    I_EFUNC("SET STATE FROM CURRENT GAME", "ECNFYJDBNM CJCNJZYBT BP NTREOTQ BUHS", M_RD_set_values_from_game, 0), // УСТАНОВИТЬ СОСТОЯНИЕ ИЗ ТЕКУЩЕЙ ИГРЫ
     I_EMPTY,
     I_SETMENU("NEXT PAGE >", "CKTLE.OFZ CNHFYBWF `", &LevelSelectMenu2_F), // СЛЕДУЮЩАЯ СТРАНИЦА >
     I_EFUNC("START GAME",    "YFXFNM BUHE",          G_DoSelectiveGame, 0) // НАЧАТЬ ИГРУ
@@ -5125,6 +5127,113 @@ static void M_RD_SelectiveArmor_2(Direction_t direction)
 static void M_RD_SelectiveArmor_3(Direction_t direction)
 {
     RD_Menu_SlideInt(&selective_armor_3, 0, ArmorMax[selective_class][ARMOR_AMULET] + 1, direction);
+}
+
+static int arti_count(const player_t* player, const artitype_t arti)
+{
+    for(int i = 0; i < player->inventorySlotNum; i++)
+    {
+        if(player->inventory[i].type == arti)
+        {
+            return player->inventory[i].count;
+        }
+    }
+    return 0;
+}
+
+static void M_RD_set_values_from_game(void)
+{
+    if(gamemap == 0)
+    {
+        return;
+    }
+
+    const player_t* p = &players[consoleplayer];
+
+    selective_class = PlayerClass[consoleplayer];
+    selective_episode = P_GetMapCluster(gamemap);
+    selective_map = P_GetMapWarpTrans(gamemap);
+    selective_skill = gameskill;
+
+    selective_health = p->health;
+    selective_armor_0 = p->armorpoints[ARMOR_ARMOR] / 5 / FRACUNIT;
+    selective_armor_1 = p->armorpoints[ARMOR_SHIELD] / 5 / FRACUNIT;
+    selective_armor_2 = p->armorpoints[ARMOR_HELMET] / 5 / FRACUNIT;
+    selective_armor_3 = p->armorpoints[ARMOR_AMULET] / 5 / FRACUNIT;
+
+    selective_wp_second = p->weaponowned[WP_SECOND];
+    selective_wp_third = p->weaponowned[WP_THIRD];
+    selective_wp_fourth = p->weaponowned[WP_FOURTH];
+    selective_wp_piece_2 = (p->pieces & 0b001) > 0;
+    selective_wp_piece_1 = (p->pieces & 0b010) > 0;
+    selective_wp_piece_0 = (p->pieces & 0b100) > 0;
+
+    selective_ammo_0 = p->mana[0];
+    selective_ammo_1 = p->mana[1];
+
+    selective_arti_0 = arti_count(p, arti_health);
+    selective_arti_1 = arti_count(p, arti_superhealth);
+    selective_arti_2 = arti_count(p, arti_poisonbag);
+    selective_arti_3 = arti_count(p, arti_blastradius);
+    selective_arti_4 = arti_count(p, arti_invulnerability);
+    selective_arti_5 = arti_count(p, arti_egg);
+    selective_arti_6 = arti_count(p, arti_teleport);
+    selective_arti_7 = arti_count(p, arti_teleportother);
+    selective_arti_8 = arti_count(p, arti_fly);
+    selective_arti_9 = arti_count(p, arti_torch);
+    selective_arti_10 = arti_count(p, arti_boostmana);
+    selective_arti_11 = arti_count(p, arti_boostarmor);
+    selective_arti_12 = arti_count(p, arti_summon);
+    selective_arti_13 = arti_count(p, arti_speed);
+    selective_arti_14 = arti_count(p, arti_healingradius);
+
+    selective_key_0 = (p->keys & (1 << KEY_5)) > 0;
+    selective_key_1 = (p->keys & (1 << KEY_7)) > 0;
+    selective_key_2 = (p->keys & (1 << KEY_4)) > 0;
+    selective_key_3 = (p->keys & (1 << KEY_1)) > 0;
+    selective_key_4 = (p->keys & (1 << KEY_9)) > 0;
+    selective_key_5 = (p->keys & (1 << KEY_2)) > 0;
+    selective_key_6 = (p->keys & (1 << KEY_B)) > 0;
+    selective_key_7 = (p->keys & (1 << KEY_A)) > 0;
+    selective_key_8 = (p->keys & (1 << KEY_8)) > 0;
+    selective_key_9 = (p->keys & (1 << KEY_6)) > 0;
+    selective_key_10 = (p->keys & (1 << KEY_3)) > 0;
+
+    selective_puzzle_0 = arti_count(p, arti_puzzskull2);
+    selective_puzzle_1 = arti_count(p, arti_puzzgembig);
+    selective_puzzle_2 = arti_count(p, arti_puzzgemred);
+    selective_puzzle_3 = arti_count(p, arti_puzzgemgreen1);
+    selective_puzzle_4 = arti_count(p, arti_puzzgemgreen2);
+    selective_puzzle_5 = arti_count(p, arti_puzzgemblue1);
+    selective_puzzle_6 = arti_count(p, arti_puzzgemblue2);
+    selective_puzzle_7 = arti_count(p, arti_puzzgear1);
+    selective_puzzle_8 = arti_count(p, arti_puzzgear2);
+    selective_puzzle_9 = arti_count(p, arti_puzzgear3);
+    selective_puzzle_10 = arti_count(p, arti_puzzgear4);
+    selective_puzzle_11 = arti_count(p, arti_puzzbook1);
+    selective_puzzle_12 = arti_count(p, arti_puzzbook2);
+    selective_puzzle_13 = arti_count(p, arti_puzzskull);
+    selective_puzzle_14 = arti_count(p, arti_puzzfweapon);
+    selective_puzzle_15 = arti_count(p, arti_puzzcweapon);
+    selective_puzzle_16 = arti_count(p, arti_puzzmweapon);
+
+    switch(selective_class)
+    {
+        case PCLASS_FIGHTER:
+            Level1Items[15].pointer = &LevelSelectMenu2_F;
+            LevelSelectMenuPages[1] = &LevelSelectMenu2_F;
+            break;
+        case PCLASS_CLERIC:
+            Level1Items[15].pointer = &LevelSelectMenu2_C;
+            LevelSelectMenuPages[1] = &LevelSelectMenu2_C;
+            break;
+        case PCLASS_MAGE:
+            Level1Items[15].pointer = &LevelSelectMenu2_M;
+            LevelSelectMenuPages[1] = &LevelSelectMenu2_M;
+            break;
+        default:
+            break;
+    }
 }
 
 //---------------------------------------------------------------------------
