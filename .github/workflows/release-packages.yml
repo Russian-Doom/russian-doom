@@ -43,7 +43,7 @@ jobs:
     steps:
       - name: Restore MSVC cache
         if: matrix.config.build_suffix == 'x86'
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ${{ github.workspace }}/choco_cache
           key: vs-${{ matrix.config.build_suffix }}
@@ -63,10 +63,10 @@ jobs:
           echo "vcpkg revision: $(git rev-parse HEAD)"
           ./bootstrap-vcpkg.sh -disableMetrics
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Restore VCPKG dependencies cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ${{ github.workspace }}/vcpkg_cache
           key: vcpkg-${{ matrix.config.build_suffix }}-${{ hashFiles('vcpkg.json', matrix.config.msvc_triplet_path) }}
@@ -118,22 +118,24 @@ jobs:
         shell: bash
     steps:
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        id: setup-buildx
+        uses: docker/setup-buildx-action@v4
         with:
-          install: true
           driver: docker
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Restore Docker images
-        uses: AndreKurait/docker-cache@0.6.0
+        uses: designmynight/docker-cache@0.7.0
         with:
           read-only: true
           key: docker-${{ matrix.platform.arch }}-${{ hashFiles(matrix.distro.dockerfile) }}-
 
       - name: Toolchain & Configure & Build & Package
+        env:
+          BUILDX_BUILDER: ${{ steps.setup-buildx.outputs.name }}
         run: |
           chmod 777 .
           ./crosscompile_linux_packages.sh "ci-linux-release-${{ matrix.distro.preset_suffix }}" ${{ matrix.distro.distro }}

@@ -50,7 +50,7 @@ jobs:
       - name: Restore MSVC cache
         if: matrix.config.build_suffix == 'x86'
         id: msvc_cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ${{ github.workspace }}/choco_cache
           key: vs-${{ matrix.config.build_suffix }}
@@ -77,7 +77,7 @@ jobs:
 
       - name: Save MSVC cache
         if: matrix.config.build_suffix == 'x86'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: ${{ github.workspace }}/choco_cache
           key: ${{ steps.msvc_cache.outputs.cache-primary-key }}
@@ -88,13 +88,13 @@ jobs:
           echo "vcpkg revision: $(git rev-parse HEAD)"
           ./bootstrap-vcpkg.sh -disableMetrics
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Restore VCPKG dependencies cache
         id: vcpkg_cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ${{ github.workspace }}/vcpkg_cache
           key: vcpkg-${{ matrix.config.build_suffix }}-${{ hashFiles('vcpkg.json', matrix.config.msvc_triplet_path) }}
@@ -120,7 +120,7 @@ jobs:
         run: gh cache delete --repo ${{ github.repository }} ${{ steps.vcpkg_cache.outputs.cache-primary-key }}
 
       - name: Save VCPKG dependencies cache
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: ${{ github.workspace }}/vcpkg_cache
           key: ${{ steps.vcpkg_cache.outputs.cache-primary-key }}
@@ -136,7 +136,7 @@ jobs:
         if: |
           github.repository == 'Russian-Doom/russian-doom' ||
           github.repository == 'Dasperal/russian-doom'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: russian-doom-${{ steps.configure.outputs.version }}-windows-${{ matrix.config.build_suffix }}
           path: ./build/install/
@@ -174,7 +174,7 @@ jobs:
     steps:
       - name: Set up Docker Buildx
         id: setup-buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
         with:
           driver: docker
 
@@ -183,12 +183,12 @@ jobs:
         id: date
         run: echo "date=$(date +'%Y%m')" >> $GITHUB_OUTPUT
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Cache Docker images
-        uses: AndreKurait/docker-cache@0.6.0
+        uses: designmynight/docker-cache@0.7.0
         with:
           key: docker-${{ matrix.platform.arch }}-${{ hashFiles(matrix.distro.dockerfile) }}-${{ steps.date.outputs.date }}
 
@@ -206,7 +206,7 @@ jobs:
         if: |
           github.repository == 'Russian-Doom/russian-doom' ||
           github.repository == 'Dasperal/russian-doom'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: russian-doom-${{ steps.configure.outputs.version }}-linux-${{ matrix.distro.package }}-${{ matrix.platform.arch }}
           path: ./build/*.${{ matrix.distro.package }}
