@@ -805,12 +805,12 @@ extern void T_PlatRaise (thinker_t *thinker);
 #define	MAXBUTTONS	16      // 4 players, 4 buttons each at once, max.
 #define BUTTONTIME	35      // 1 second
 
-typedef struct
+typedef PACKED_STRUCT (
 {
     char name1[9];
     char name2[9];
     short episode;
-} switchlist_t;
+}) switchlist_t;
 
 typedef enum
 {
@@ -828,7 +828,8 @@ typedef struct
     void *soundorg;
 } button_t;
 
-extern button_t buttonlist[MAXBUTTONS];
+extern button_t *buttonlist;
+extern int maxbuttons;
 
 extern void P_ChangeSwitchTexture (line_t *line, const boolean useAgain);
 extern void P_InitSwitchList (void);

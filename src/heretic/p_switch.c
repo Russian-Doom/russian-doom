@@ -3,6 +3,7 @@
 // Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
 // Copyright(C) 2016-2023 Julian Nechaevsky
+// Copyright(C) 2023 SilverMiner
 // Copyright(C) 2020-2026 Leonid Murin (Dasperal)
 //
 // This program is free software; you can redistribute it and/or
@@ -23,6 +24,8 @@
 #include "p_local.h"
 #include "s_sound.h"
 #include "v_video.h"
+#include "i_swap.h"
+#include "w_wad.h"
 #include "jn.h"
 
 
@@ -34,17 +37,19 @@
 ================================================================================
 */
 
-static const switchlist_t alphSwitchList[] =
+static const switchlist_t alphSwitchList_vanilla[] =
 {
     {"SW1OFF", "SW1ON", 1},
     {"SW2OFF", "SW2ON", 1},
     {    "\0",    "\0", 0}
 };
 
-static int switchlist[MAXSWITCHES * 2];
+static size_t maxswitches;
+static int *switchlist;
 static int numswitches;
+int maxbuttons;
 
-button_t buttonlist[MAXBUTTONS];
+button_t *buttonlist;
 
 /*
 ================================================================================
@@ -59,29 +64,77 @@ button_t buttonlist[MAXBUTTONS];
 void P_InitSwitchList (void)
 {
     int episode = 1;
+    int index = 0;
+    int lumpnum;
+    const boolean from_lump = (lumpnum = W_CheckNumForName("SWITCHES")) != -1;
+    const switchlist_t *alphSwitchList = from_lump
+                                       ? W_CacheLumpNum(lumpnum, PU_STATIC)
+                                       : alphSwitchList_vanilla;
 
     if (gamemode != shareware)
     {
         episode = 2;
     }
 
-    for (int index = 0, i = 0; i < MAXSWITCHES; i++)
+    for (int i = 0; alphSwitchList[i].episode; ++i)
     {
-        if (!alphSwitchList[i].episode)
+        const short switch_episode = from_lump
+                                   ? SHORT(alphSwitchList[i].episode)
+                                   : alphSwitchList[i].episode;
+
+        if (index + 1 >= maxswitches)
         {
-            numswitches = index / 2;
-            switchlist[index] = -1;
-            break;
+            size_t newmax = maxswitches ? 2 * maxswitches : MAXSWITCHES;
+            switchlist = I_Realloc(switchlist, newmax * sizeof(*switchlist));
+            maxswitches = newmax;
         }
 
-        if (alphSwitchList[i].episode <= episode)
+        if (switch_episode <= episode)
         {
-            switchlist[index++] =
-                R_TextureNumForName(DEH_String(alphSwitchList[i].name1));
-            switchlist[index++] =
-                R_TextureNumForName(DEH_String(alphSwitchList[i].name2));
+            char *name1 = DEH_String(alphSwitchList[i].name1);
+            char *name2 = DEH_String(alphSwitchList[i].name2);
+            const int texture1 = R_CheckTextureNumForName(name1);
+            const int texture2 = R_CheckTextureNumForName(name2);
+
+            if (texture1 == -1 || texture2 == -1)
+            {
+                printf(english_language ?
+                       "P_InitSwitchList: could not add %s(%d)/%s(%d)\n" :
+                       "P_InitSwitchList: невозможно добавить %s(%d)/%s(%d)\n",
+                       name1, texture1, name2, texture2);
+                continue;
+            }
+
+            switchlist[index++] = texture1;
+            switchlist[index++] = texture2;
         }
     }
+
+    if (index >= maxswitches)
+    {
+        size_t newmax = maxswitches ? 2 * maxswitches : MAXSWITCHES;
+        switchlist = I_Realloc(switchlist, newmax * sizeof(*switchlist));
+        maxswitches = newmax;
+    }
+
+    numswitches = index / 2;
+    switchlist[index] = -1;
+
+    if (from_lump)
+    {
+        W_ReleaseLumpNum(lumpnum);
+    }
+
+    if (!buttonlist)
+    {
+        buttonlist = I_Realloc(NULL, sizeof(*buttonlist) * (maxbuttons = MAXBUTTONS));
+    }
+    else if (maxbuttons < MAXBUTTONS)
+    {
+        buttonlist = I_Realloc(buttonlist, sizeof(*buttonlist) * MAXBUTTONS);
+        maxbuttons = MAXBUTTONS;
+    }
+    memset(buttonlist, 0, sizeof(*buttonlist) * maxbuttons);
 }
 
 /*
@@ -97,7 +150,7 @@ void P_InitSwitchList (void)
 static void P_StartButton (const line_t * line, const bwhere_e w,
                            const int texture, const int time)
 {
-    for (int i = 0 ; i < MAXBUTTONS ; i++)
+    for (int i = 0 ; i < maxbuttons ; i++)
         if (!buttonlist[i].btimer)
         {
             buttonlist[i].line = line;
@@ -109,9 +162,10 @@ static void P_StartButton (const line_t * line, const bwhere_e w,
             return;
         }
 
-    I_QuitWithError(english_language ?
-                    "P_StartButton: no button slots left!" :
-                    "P_StartButton: превышен лимит слотов для переключателей!");
+    maxbuttons *= 2;
+    buttonlist = I_Realloc(buttonlist, sizeof(*buttonlist) * maxbuttons);
+    memset(buttonlist + maxbuttons / 2, 0, sizeof(*buttonlist) * maxbuttons / 2);
+    P_StartButton(line, w, texture, time);
 }
 
 /*
