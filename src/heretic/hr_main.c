@@ -276,6 +276,10 @@ void D_PageDrawer(void);
 
 boolean hasDelayEvents = false;
 
+// [JN] Сделана глобальной, нужна для функции автоподргузки
+// блоков DEHACKED, а также в цикле D_DoomMain.
+int numiwadlumps;
+
 int* JN_getNotCommonIntVarPointer(notCommonVar_t var)
 {
     if(var == v_message_color_secret)
@@ -1614,6 +1618,29 @@ void D_DoomMain(void)
             filename = D_TryFindWADByName(myargv[newpwadfile]);
             LoadFile(filename, allowAutoload);
         }
+    }
+
+    // Автоматическая загрузка блока HEHACKED
+    //
+    // [crispy] load HEHACKED lumps by default, but allow overriding
+    // [JN] Функция активируется после параметра "-file"
+
+    if(!M_ParmExists("-nodehlump") && !M_ParmExists("-nodeh"))
+    {
+        int i, loaded = 0, found = 0;
+
+        for(i = numiwadlumps; i < numlumps; ++i)
+        {
+            if(!strncmp(lumpinfo[i]->name, "HEHACKED", 8))
+            {
+                found ++;
+		DEH_LoadLump(i, true, true); // [crispy] allow long, allow error
+		loaded++;
+            }
+        }
+        printf(english_language ?
+        "    loaded %i HEHACKED lumps from PWAD files\n" :
+        "    загружено блоков HEHACKED из WAD-файлов: %i\n", loaded);
     }
 
     I_SetWindowTitle(gamedescription);
