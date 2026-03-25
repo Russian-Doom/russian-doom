@@ -467,15 +467,15 @@ typedef struct
 } anim_t;
 
 // Source animation definition
-typedef struct
+typedef PACKED_STRUCT (
 {
-    int  istexture;  // if false, it's a flat
+    signed char istexture;  // if false, it's a flat
     char endname[9];
     char startname[9];
     int  speed;
-} animdef_t;
+}) animdef_t;
 
-extern anim_t  anims[MAXANIMS], *lastanim;
+extern anim_t *anims, *lastanim;
 extern int    *TerrainTypes;
 
 // Animating line specials

@@ -22,8 +22,10 @@
 #include "hr_local.h"
 #include "deh_str.h"
 #include "i_system.h"
+#include "i_swap.h"
 #include "i_timer.h"
 #include "s_sound.h"
+#include "w_wad.h"
 #include "jn.h"
 
 
@@ -189,7 +191,7 @@ static const int *AmbientSfx[] = {
 
 #define SWIRL_FLAG 0b10000000000000000
 
-static const animdef_t animdefs[] = {
+static const animdef_t animdefs_vanilla[] = {
     // false = flat
     // true = texture
     { false, "FLTWAWA3", "FLTWAWA1", 8 | SWIRL_FLAG}, // Water
@@ -218,8 +220,9 @@ static const animdef_t animdefs[] = {
     {    -1,         "",         "", 0},
 };
 
-anim_t  anims[MAXANIMS];
+anim_t *anims;
 anim_t *lastanim;
+static size_t maxanims;
 
 int *TerrainTypes;
 
@@ -299,11 +302,26 @@ void P_InitPicAnims (void)
 {
     char *startname;
     char *endname;
+    boolean init_swirl = false;
+    int lumpnum;
+    const boolean from_lump = (lumpnum = W_CheckNumForName("ANIMATED")) != -1;
+    const animdef_t *animdefs = from_lump
+                              ? W_CacheLumpNum(lumpnum, PU_STATIC)
+                              : animdefs_vanilla;
 
     lastanim = anims;
 
     for (int i = 0; animdefs[i].istexture != -1; i++)
     {
+        if (!maxanims || lastanim >= anims + maxanims)
+        {
+            const size_t newmax = maxanims ? 2 * maxanims : MAXANIMS;
+            const size_t used = maxanims ? (size_t) (lastanim - anims) : 0;
+            anims = I_Realloc(anims, newmax * sizeof(*anims));
+            maxanims = newmax;
+            lastanim = anims + used;
+        }
+
         startname = DEH_String(animdefs[i].startname);
         endname = DEH_String(animdefs[i].endname);
 
@@ -327,7 +345,13 @@ void P_InitPicAnims (void)
         }
         lastanim->istexture = animdefs[i].istexture;
         lastanim->numpics = lastanim->picnum - lastanim->basepic + 1;
-        if (lastanim->numpics < 2)
+        lastanim->speed = from_lump ? LONG(animdefs[i].speed) : animdefs[i].speed;
+
+        if (lastanim->speed > 65535 || lastanim->numpics == 1)
+        {
+            init_swirl = true;
+        }
+        else if (lastanim->numpics < 2)
         {
             // [crispy] make non-fatal, skip invalid animation sequences
             printf(english_language ?
@@ -336,12 +360,16 @@ void P_InitPicAnims (void)
                     startname, endname);
             continue;
         }
-        lastanim->speed = animdefs[i].speed;
         lastanim++;
     }
 
+    if (from_lump)
+    {
+        W_ReleaseLumpNum(lumpnum);
+    }
+
     // [JN] Don't init in "-vanilla", since there is no swirling flats.
-    if (!vanillaparm)
+    if (init_swirl && !vanillaparm)
     {
         R_InitDistortedFlats();
     }
@@ -1077,9 +1105,11 @@ void P_UpdateSpecials (void)
     // Animate flats and textures
     for(const anim_t* anim = anims; anim < lastanim; anim++)
     {
+        const int anim_speed = anim->speed & ~SWIRL_FLAG;
+
         for(int i = anim->basepic; i < anim->basepic + anim->numpics; i++)
         {
-            const int pic = anim->basepic + ((leveltime / (anim->speed ^ SWIRL_FLAG) + i) % anim->numpics);
+            const int pic = anim->basepic + ((leveltime / anim_speed + i) % anim->numpics);
             if(anim->istexture)
             {
                 texturetranslation[i] = pic;
