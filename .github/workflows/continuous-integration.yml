@@ -126,16 +126,10 @@ jobs:
           key: ${{ steps.vcpkg_cache.outputs.cache-primary-key }}
 
       - name: Install
-        if: |
-          github.repository == 'Russian-Doom/russian-doom' ||
-          github.repository == 'Dasperal/russian-doom'
         run: |
           cmake --install build --config RelWithDebInfo --prefix "./build/install"
 
       - name: Package Zip
-        if: |
-          github.repository == 'Russian-Doom/russian-doom' ||
-          github.repository == 'Dasperal/russian-doom'
         uses: actions/upload-artifact@v7
         with:
           name: russian-doom-${{ steps.configure.outputs.version }}-windows-${{ matrix.config.build_suffix }}
@@ -203,9 +197,6 @@ jobs:
           echo "version=$git_version" >> $GITHUB_OUTPUT
 
       - name: Upload package
-        if: |
-          github.repository == 'Russian-Doom/russian-doom' ||
-          github.repository == 'Dasperal/russian-doom'
         uses: actions/upload-artifact@v7
         with:
           name: russian-doom-${{ steps.configure.outputs.version }}-linux-${{ matrix.distro.package }}-${{ matrix.platform.arch }}
