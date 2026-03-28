@@ -700,7 +700,7 @@ void SB_Drawer(void)
     const int wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0) + 2;
     // If automap active or map name is always shown, shift
     // widgets one line up to prevent drawing over map name.
-    int map_active = automapactive ? 10 : 0;
+    int map_active = (automapactive && aspect_ratio >= 2) ? 10 : 0;
     // Different languages have different string widths. 
     // Use a pointer to prevent extra conditions hitting.
     int (*StringWidth)(char *text) = english_language ? RD_M_TextAWidth : RD_M_TextSmallRUSWidth;
