@@ -2713,13 +2713,16 @@ void SB_MapNameDrawer (void)
         }
         else
         {
+            // [Dasperal] If no status bar present on game screen,
+            // draw level name on the edge of the screen
+            const int x_offset = (automapactive || screenblocks < 11) ? 20 : 0;
             if (english_language)
             {
-                RD_M_DrawTextA(DEH_String(level_name), 20, 146);
+                RD_M_DrawTextA(DEH_String(level_name), x_offset, 146);
             }
             else
             {
-                RD_M_DrawTextSmallRUS(DEH_String(level_name), 20, 146, CR_NONE);
+                RD_M_DrawTextSmallRUS(DEH_String(level_name), x_offset, 146, CR_NONE);
             }
         }
     }
