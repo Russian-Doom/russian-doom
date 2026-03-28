@@ -698,9 +698,12 @@ void SB_Drawer(void)
     const int xval_widget = demotimer || show_fps || local_time ? 50 : 0;
     static boolean hitCenterFrame;
     const int wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0) + 2;
-    // If automap active or map name is always shown, shift
-    // widgets one line up to prevent drawing over map name.
-    int map_active = (automapactive && aspect_ratio >= 2) ? 10 : 0;
+    // If widescreen and (automap active and KIS is shown,
+    // or level name and KIS shown on game screen),
+    // shift widgets one line up to prevent drawing over map name.
+    int map_active = aspect_ratio >= 2 &&
+        ((automapactive && stats_kis) ||
+            (stats_level_name && stats_kis == 2)) ? 10 : 0;
     // Different languages have different string widths. 
     // Use a pointer to prevent extra conditions hitting.
     int (*StringWidth)(char *text) = english_language ? RD_M_TextAWidth : RD_M_TextSmallRUSWidth;
