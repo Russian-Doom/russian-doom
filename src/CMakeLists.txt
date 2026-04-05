@@ -221,9 +221,16 @@ foreach(MODULE ${COMPILE_MODULES})
         add_dependencies("${PROGRAM_PREFIX}${MODULE}" "man-${MODULE}-en" "completion-${MODULE}")
     endif()
 
-    add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}" POST_BUILD
-        COMMAND $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:${CMAKE_STRIP}> $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:"$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}>">
-    )
+    if(WIN32)
+        add_custom_command(TARGET "${PROGRAM_PREFIX}${MODULE}" POST_BUILD
+            COMMAND
+            $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:${CMAKE_STRIP}>
+            $<$<OR:$<CONFIG:RELEASE>,$<CONFIG:MINSIZEREL>>:"$<TARGET_FILE:${PROGRAM_PREFIX}${MODULE}>">
+        )
+    else()
+        # Split debug
+        attach_split_debug("${PROGRAM_PREFIX}${MODULE}")
+    endif()
 
     # Applocal dlls (already checked for python or cmake 3.16)
     if(WIN32 AND NOT VCPKG_TOOLCHAIN)

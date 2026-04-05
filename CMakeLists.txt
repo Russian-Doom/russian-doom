@@ -67,6 +67,11 @@ include(CheckIPOSupported)
 check_ipo_supported(RESULT HAVE_LTO)
 cmake_dependent_option(RD_ENABLE_LTO "Use link-time optimisation" ON "HAVE_LTO" OFF)
 
+# Split debug
+if(NOT WIN32)
+    include(SplitDebug)
+endif()
+
 include(Utils)
 include(VersionFromGit)
 
@@ -120,11 +125,21 @@ if(MSVC)
     )
     string(REPLACE "/O3" "/O2" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
     string(REPLACE "/O3" "/O2" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
+
+    # Generate PDB files for release builds
+    string(APPEND CMAKE_C_FLAGS_RELEASE " /Zi")
+    # But retain linker optimisations:
+    # OPT:REF - Don't preserve unused data
+    # OPT:ICF - Fold duplicate data
+    string(APPEND CMAKE_SHARED_LINKER_FLAGS_RELEASE " /DEBUG /OPT:REF /OPT:ICF")
 else()
     # We only want -Wall on GCC compilers, since /Wall on MSVC is noisy
     add_compile_options_checked(-Wall)
     string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
     string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
+
+    # Generate debug info for later extraction to separate ELF-files
+    string(APPEND CMAKE_C_FLAGS_RELEASE " -g")
 endif()
 
 Option(CMAKE_FIND_PACKAGE_PREFER_CONFIG "Prefer dependency search in config mode over find module mode" OFF)
