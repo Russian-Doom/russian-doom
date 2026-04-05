@@ -83,6 +83,12 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: gh release upload ${{ github.event.release.tag_name }} ./build/*.zip ./build/*.zip.sha256
 
+      - name: Upload debug symbols
+        uses: actions/upload-artifact@v7
+        with:
+          name: debug-symbols-${{ github.event.release.tag_name }}-windows-${{ matrix.config.build_suffix }}
+          path: ./build/**/*.pdb
+
   Linux:
     name: Linux | ${{ matrix.distro.display_name }} | ${{ matrix.platform.arch }}
     if: ${{ github.repository == 'Russian-Doom/russian-doom' }}
@@ -147,3 +153,9 @@ jobs:
           gh release upload ${{ github.event.release.tag_name }}
             ./build/*.${{ matrix.distro.package }}
             ./build/*.${{ matrix.distro.package }}.sha256
+
+      - name: Upload debug symbols
+        uses: actions/upload-artifact@v7
+        with:
+          name: debug-symbols-${{ github.event.release.tag_name }}-${{ matrix.distro.distro }}-${{ matrix.platform.arch }}
+          path: ./build/src/*.debug
