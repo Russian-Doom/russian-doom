@@ -996,11 +996,13 @@ static void saveg_write_mobj_t(mobj_t *str)
     SV_WriteLong(str->flags2);
 
     // [Dasperal] Prepare the special1 or special2 field storing a pointer to mobj, converting it to thinker index
-    switch (str->type)
+    specialval_t special1 = str->special1;
+    specialval_t special2 = str->special2;
+    switch(str->type)
     {
         // Gas pods use special2.m to point to the pod generator that made it.
         case MT_POD:
-            str->special2.m = (mobj_t*)(uintptr_t) P_ThinkerToIndex((thinker_t*) str->special2.m);
+            special2.i = P_ThinkerToIndex((thinker_t*) str->special2.m);
             break;
         // Several thing types use special1.m to mean 'target':
         case MT_MACEFX4:     // A_DeathBallImpact
@@ -1008,17 +1010,17 @@ static void saveg_write_mobj_t(mobj_t *str)
         case MT_MUMMYFX1:    // A_MummyFX1Seek
         case MT_HORNRODFX2:  // A_SkullRodPL2Seek
         case MT_PHOENIXFX1:  // A_PhoenixPuff
-            str->special1.m = (mobj_t*)(uintptr_t) P_ThinkerToIndex((thinker_t*) str->special1.m);
+            special1.i = P_ThinkerToIndex((thinker_t*) str->special1.m);
             break;
         default:
             break;
     }
 
     // specialval_t special1;
-    saveg_write_specialval_t(&str->special1);
+    saveg_write_specialval_t(&special1);
 
     // specialval_t special2;
-    saveg_write_specialval_t(&str->special2);
+    saveg_write_specialval_t(&special2);
 
     // int health;
     SV_WriteLong(str->health);
